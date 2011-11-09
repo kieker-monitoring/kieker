@@ -55,8 +55,7 @@ public class TestOperationExecutionRecord extends TestCase { // NOCS (MissingCto
 
 		final Object[] r1Array = r1.toArray();
 
-		final OperationExecutionRecord r2 = new OperationExecutionRecord();
-		r2.initFromArray(r1Array);
+		final OperationExecutionRecord r2 = new OperationExecutionRecord(r1Array);
 
 		Assert.assertEquals(r1, r2);
 	}

@@ -25,13 +25,21 @@ package kieker.common.record;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-public final class OperationExecutionRecord extends AbstractMonitoringRecord {
+public final class OperationExecutionRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+	public static final Class<?>[] TYPES = {
+		int.class, // experimentId
+		String.class, // component + op
+		String.class, // sessionId
+		long.class, // traceId
+		long.class, // tin
+		long.class, // tout
+		String.class, // hostName
+		int.class, // eoi
+		int.class, // ess
+	};
+
 	private static final String DEFAULT_VALUE = "N/A";
 	private static final long serialVersionUID = 1180L;
-
-	/** Used to identify the type of CSV records */
-	// Not 10 because className and operationName are serialized to a single field (separated by '.')
-	private static final int NUMRECORDFIELDS = 9;
 
 	private volatile int experimentId = -1;
 	private volatile String hostName = OperationExecutionRecord.DEFAULT_VALUE;
@@ -136,31 +144,10 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 		this.ess = ess;
 	}
 
-	@Override
-	public final Object[] toArray() {
-		return new Object[] { this.experimentId, this.className + "." + this.operationName, (this.sessionId == null) ? "NULL" : this.sessionId, this.traceId, // NOCS
-			this.tin, this.tout, (this.hostName == null) ? "NULLHOST" : this.hostName, this.eoi, this.ess }; // NOCS
-	}
-
-	@Override
-	public final Class<?>[] getValueTypes() {
-		return new Class[] { int.class, // experimentId
-			String.class, // component + op
-			String.class, // sessionId
-			long.class, // traceId
-			long.class, // tin
-			long.class, // tout
-			String.class, // hostName
-			int.class, // eoi
-			int.class, // ess
-		};
-	}
-
-	@Override
-	public final void initFromArray(final Object[] values) throws IllegalArgumentException { // NOPMD by jwa on 20.09.11 14:30
+	public OperationExecutionRecord(final Object[] values) {
 		try {
-			if (values.length != OperationExecutionRecord.NUMRECORDFIELDS) {
-				throw new IllegalArgumentException("Expecting vector with " + OperationExecutionRecord.NUMRECORDFIELDS + " elements but found:" + values.length);
+			if (values.length != OperationExecutionRecord.TYPES.length) {
+				throw new IllegalArgumentException("Expecting vector with " + OperationExecutionRecord.TYPES.length + " elements but found:" + values.length);
 			}
 			this.experimentId = (Integer) values[0];
 			final String name = (String) values[1];
@@ -188,6 +175,31 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord {
 		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
+	}
+
+	@Override
+	public final Object[] toArray() {
+		return new Object[] {
+			this.experimentId,
+			this.className + "." + this.operationName,
+			(this.sessionId == null) ? "NULL" : this.sessionId, // NOCS
+			this.traceId,
+			this.tin,
+			this.tout,
+			(this.hostName == null) ? "NULLHOST" : this.hostName, // NOCS
+			this.eoi,
+			this.ess };
+	}
+
+	@Override
+	@Deprecated
+	public void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return BranchingRecord.TYPES.clone();
 	}
 
 	/**

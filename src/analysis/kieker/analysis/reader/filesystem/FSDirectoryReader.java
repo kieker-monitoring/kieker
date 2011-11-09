@@ -36,6 +36,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import kieker.common.exception.MonitoringRecordException;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
@@ -51,15 +52,14 @@ import kieker.common.record.OperationExecutionRecord;
 final class FSDirectoryReader implements Runnable {
 	private static final Log LOG = LogFactory.getLog(FSDirectoryReader.class);
 
-	private static final String OLD_KIEKEREXECUTIONRECORD_CLASSNAME = "kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord";
 	private static final String LEGACY_FILE_PREFIX = "tpmon";
 	private static final String NORMAL_FILE_PREFIX = "kieker";
 	private static final String NORMAL_FILE_POSTFIX = ".dat";
 	private static final String BINARY_FILE_POSTFIX = ".bin";
 
 	private final Map<Integer, String> stringRegistry = new HashMap<Integer, String>();
-	// This set of classnames is used to filter only records of a specific type. The value null means all record types are read.
-	private final Set<String> recordTypeSelector;
+	// This set of classes is used to filter only records of a specific type. The value null means all record types are read.
+	private final Set<Class<? extends IMonitoringRecord>> recordTypeSelector;
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final File inputDir;
 	private String filePrefix = FSDirectoryReader.NORMAL_FILE_PREFIX;
@@ -79,9 +79,9 @@ final class FSDirectoryReader implements Runnable {
 		this.inputDir = new File(inputDirName);
 		this.recordReceiver = recordReceiver;
 		if (readOnlyRecordsOfType != null) {
-			this.recordTypeSelector = new HashSet<String>();
+			this.recordTypeSelector = new HashSet<Class<? extends IMonitoringRecord>>();
 			for (final Class<? extends IMonitoringRecord> recordType : readOnlyRecordsOfType) {
-				this.recordTypeSelector.add(recordType.getName());
+				this.recordTypeSelector.add(recordType);
 			}
 		} else {
 			this.recordTypeSelector = null; // NOPMD (read records of any type)
@@ -217,29 +217,23 @@ final class FSDirectoryReader implements Runnable {
 							continue; // skip this record
 						}
 						final Integer id = Integer.valueOf(recordFields[0].substring(1));
-						String classname = this.stringRegistry.get(id);
+						final String classname = this.stringRegistry.get(id);
 						if (classname == null) {
 							FSDirectoryReader.LOG.error("Missing classname mapping for record type id " + "'" + id + "'");
 							continue; // skip this record
 						}
-						if (classname.equals(FSDirectoryReader.OLD_KIEKEREXECUTIONRECORD_CLASSNAME)) {
-							classname = OperationExecutionRecord.class.getName();
-						}
-						if ((this.recordTypeSelector != null) && !this.recordTypeSelector.contains(classname)) {
+						final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.getClass(classname);
+						if ((this.recordTypeSelector != null) && !this.recordTypeSelector.contains(clazz)) {
 							continue; // skip this ignored record
 						}
-						Class<? extends IMonitoringRecord> clazz = null;
-						clazz = Class.forName(classname).asSubclass(IMonitoringRecord.class);
-						record = clazz.newInstance();
-						record.setLoggingTimestamp(Long.valueOf(recordFields[1]));
+						final long loggingTimestamp = Long.valueOf(recordFields[1]);
 						recordFields = Arrays.copyOfRange(recordFields, 2, recordFields.length);
+						record = AbstractMonitoringRecord.createFromStringArray(clazz, recordFields);
+						record.setLoggingTimestamp(loggingTimestamp);
 					} else { // legacy record
-						record = new OperationExecutionRecord(); // NOPMD (new in loop)
+						record = AbstractMonitoringRecord.createFromStringArray(OperationExecutionRecord.class, recordFields);
 					}
-					final Object[] typedArray = AbstractMonitoringRecord.fromStringArrayToTypedArray(recordFields, record.getValueTypes());
-					record.initFromArray(typedArray);
-				} catch (final Exception ex) { // NOCS // NOPMD
-					// ClassNotFoundException ClassCastException InstantiationException IllegalAccessException NumberFormatException IllegalArgumentException
+				} catch (final MonitoringRecordException ex) {
 					FSDirectoryReader.LOG.error("Error loading record type", ex);
 					continue; // skip this record
 				}
@@ -282,12 +276,20 @@ final class FSDirectoryReader implements Runnable {
 					FSDirectoryReader.LOG.error("Missing classname mapping for record type id " + "'" + id + "'");
 					break; // we can't easily recover on errors
 				}
-				Class<? extends IMonitoringRecord> clazz = null;
-				clazz = Class.forName(classname).asSubclass(IMonitoringRecord.class);
-				final IMonitoringRecord record = clazz.newInstance();
-				record.setLoggingTimestamp(in.readLong());
+
+				final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.getClass(classname);
+				final boolean factoryPresent = IMonitoringRecord.Factory.class.isAssignableFrom(clazz);
+				final Class<?>[] typeArray;
+				IMonitoringRecord record = null;
+				if (factoryPresent) {
+					typeArray = (Class<?>[]) clazz.getDeclaredField("TYPES").get(null);
+				} else {
+					record = clazz.newInstance();
+					typeArray = record.getValueTypes();
+				}
+
 				// read record
-				final Class<?>[] typeArray = record.getValueTypes();
+				final long loggingTimestamp = in.readLong();
 				final Object[] objectArray = new Object[typeArray.length]; // NOPMD (new in loop)
 				int idx = -1;
 				for (final Class<?> type : typeArray) {
@@ -324,8 +326,13 @@ final class FSDirectoryReader implements Runnable {
 						objectArray[idx] = null;
 					}
 				}
-				record.initFromArray(objectArray);
-				if (((this.recordTypeSelector == null) || this.recordTypeSelector.contains(classname)) && !this.recordReceiver.newMonitoringRecord(record)) {
+				if (factoryPresent) {
+					record = clazz.getConstructor(Object[].class).newInstance((Object) objectArray);
+				} else {
+					record.initFromArray(objectArray);
+				}
+				record.setLoggingTimestamp(loggingTimestamp);
+				if (((this.recordTypeSelector == null) || this.recordTypeSelector.contains(clazz)) && !this.recordReceiver.newMonitoringRecord(record)) {
 					this.terminated = true;
 					break; // we got the signal to stop processing
 				}

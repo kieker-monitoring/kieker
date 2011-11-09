@@ -27,16 +27,16 @@ package kieker.common.record;
  * @author Andre van Hoorn
  * 
  */
-public class ResourceUtilizationRecord extends AbstractMonitoringRecord {
+public class ResourceUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+	public static final Class<?>[] TYPES = {
+		long.class,
+		String.class,
+		String.class,
+		double.class
+	};
 
 	private static final String DEFAULT_VALUE = "N/A";
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 17676L;
-
-	private static final Class<?>[] VALUE_TYPES = { long.class, String.class, String.class, double.class };
 
 	/**
 	 * Date/time of measurement. The value should be interpreted as the number
@@ -79,14 +79,10 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord {
 		this.utilization = utilization;
 	}
 
-	/*
-	 * {@inheritdoc}
-	 */
-	@Override
-	public void initFromArray(final Object[] values) throws IllegalArgumentException { // NOPMD by jwa on 20.09.11 14:32
+	public ResourceUtilizationRecord(final Object[] values) {
 		try {
-			if (values.length != ResourceUtilizationRecord.VALUE_TYPES.length) {
-				throw new IllegalArgumentException("Expecting vector with " + ResourceUtilizationRecord.VALUE_TYPES.length + " elements but found:" + values.length);
+			if (values.length != ResourceUtilizationRecord.TYPES.length) {
+				throw new IllegalArgumentException("Expecting vector with " + ResourceUtilizationRecord.TYPES.length + " elements but found:" + values.length);
 			}
 
 			this.timestamp = (Long) values[0]; // NOCS
@@ -99,20 +95,20 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord {
 		}
 	}
 
-	/*
-	 * {@inheritdoc}
-	 */
 	@Override
 	public Object[] toArray() {
 		return new Object[] { this.timestamp, this.hostName, this.resourceName, this.utilization, };
 	}
 
-	/*
-	 * {@inheritdoc}
-	 */
+	@Override
+	@Deprecated
+	public void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
 	@Override
 	public Class<?>[] getValueTypes() {
-		return ResourceUtilizationRecord.VALUE_TYPES.clone();
+		return BranchingRecord.TYPES.clone();
 	}
 
 	/**

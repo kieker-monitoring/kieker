@@ -228,7 +228,7 @@ public class AnalysisController {
 	 *            if true, the method returns immediately when a consumer
 	 *            reports an error
 	 * @return
-	 * @throws kieker.common.record.MonitoringRecordReceiverException
+	 * @throws kieker.common.exception.MonitoringRecordReceiverException
 	 *             true if no consumer reported an error; false if at least one
 	 *             consumer reported an error
 	 */

@@ -20,7 +20,7 @@
 
 package kieker.analysis.reader;
 
-import kieker.common.record.MonitoringRecordReceiverException;
+import kieker.common.exception.MonitoringRecordReceiverException;
 
 /**
  * 
