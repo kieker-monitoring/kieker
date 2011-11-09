@@ -76,9 +76,13 @@ final class FSDirectoryReader implements Runnable {
 		}
 		this.inputDir = new File(inputDirName);
 		this.recordReceiver = recordReceiver;
-		this.recordTypeSelector = new HashSet<String>(readOnlyRecordsOfType.length);
-		for (final String recordType : readOnlyRecordsOfType) {
-			this.recordTypeSelector.add(recordType);
+		if (readOnlyRecordsOfType != null) {
+			this.recordTypeSelector = new HashSet<String>(readOnlyRecordsOfType.length);
+			for (final String recordType : readOnlyRecordsOfType) {
+				this.recordTypeSelector.add(recordType);
+			}
+		} else {
+			this.recordTypeSelector = null;
 		}
 	}
 

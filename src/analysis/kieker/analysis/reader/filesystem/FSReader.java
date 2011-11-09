@@ -20,6 +20,7 @@
 
 package kieker.analysis.reader.filesystem;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.PriorityQueue;
@@ -51,7 +52,7 @@ public class FSReader extends AbstractMonitoringReader implements IMonitoringRec
 	private static final Log LOG = LogFactory.getLog(FSReader.class);
 
 	private static final Collection<Class<?>> OUT_CLASSES = Collections
-			.unmodifiableCollection(new CopyOnWriteArrayList<>(new Class<?>[] { IMonitoringRecord.class }));
+			.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { IMonitoringRecord.class }));
 
 	private final String[] readOnlyRecordsOfType;
 	private final String[] inputDirs;

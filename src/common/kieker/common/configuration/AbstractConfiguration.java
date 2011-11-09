@@ -20,6 +20,7 @@
 
 package kieker.common.configuration;
 
+import java.util.Arrays;
 import java.util.Properties;
 
 import kieker.common.logging.Log;
@@ -78,7 +79,7 @@ public abstract class AbstractConfiguration extends Properties {
 			return new String[0];
 		}
 		else {
-			return s.split("|");
+			return s.split("\\|");
 		}
 	}
 

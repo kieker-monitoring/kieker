@@ -22,7 +22,9 @@ package kieker.analysis;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,6 +43,7 @@ import kieker.analysis.model.analysisMetaModel.IOutputPort;
 import kieker.analysis.model.analysisMetaModel.IPlugin;
 import kieker.analysis.model.analysisMetaModel.IPort;
 import kieker.analysis.model.analysisMetaModel.IProject;
+import kieker.analysis.model.analysisMetaModel.IProperty;
 import kieker.analysis.model.analysisMetaModel.IReader;
 import kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
@@ -143,19 +146,20 @@ public class AnalysisController {
 		// Run through the "configurables" to extract all plugins.
 		for (final IPlugin p : plugins) {
 			// We found a plugin. Not we have to determine whether this is a reader or a normal plugin.
+			final EList<IProperty> properties = p.getProperties();
+			final Configuration configuration = new Configuration(null);
+			for (IProperty prop : properties) {
+				configuration.setProperty(prop.getName(), prop.getValue());
+			}
+			
 			if (p instanceof IReader) {
 				System.out.println("Reader gefunden: " + p.getName());
-				// TODO: Initialize Configuration!
-				final Configuration configuration = new Configuration(null);
-				final IMonitoringReader reader = AnalysisController.createAndInitialize(IMonitoringReader.class, p.getClassname(), configuration);
+				final IMonitoringReader reader = (IMonitoringReader) Class.forName(p.getClassname()).getConstructor(Configuration.class).newInstance(configuration);
 				this.setReader(reader);
 				pluginObjMap.put(p, reader);
 			} else {
 				System.out.println("Plugin gefunden: " + p.getName());
-				// TODO: Initialize Configuration!
-				final Configuration configuration = new Configuration(null);
-				final kieker.analysis.plugin.IAnalysisPlugin plugin = AnalysisController.createAndInitialize(kieker.analysis.plugin.IAnalysisPlugin.class,
-						p.getClassname(), configuration);
+				final kieker.analysis.plugin.IAnalysisPlugin plugin = (kieker.analysis.plugin.IAnalysisPlugin) Class.forName(p.getClassname()).getConstructor(Configuration.class).newInstance(configuration);
 				pluginObjMap.put(p, plugin);
 			}
 
