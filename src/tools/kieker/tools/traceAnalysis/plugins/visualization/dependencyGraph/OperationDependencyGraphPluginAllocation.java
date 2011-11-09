@@ -29,7 +29,6 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import kieker.analysis.model.analysisMetaModel.IInputPort;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -251,7 +250,7 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 	};
 
 	@Override
-	public IInputPort<MessageTrace> getMessageTraceInputPort() {
+	public AbstractInputPort getMessageTraceInputPort() {
 		return this.messageTraceInputPort;
 	}
 }

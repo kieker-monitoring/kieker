@@ -25,7 +25,6 @@ import java.util.StringTokenizer;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
-import kieker.analysis.plugin.configuration.IOutputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -52,10 +51,12 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 
 	private static final Collection<Class<? extends IMonitoringRecord>> RECORD_TYPE_SUBSCRIPTION_LIST = new CopyOnWriteArrayList<Class<? extends IMonitoringRecord>>();
 
-	private final OutputPort<Execution> executionOutputPort = new OutputPort<Execution>("Execution output stream");
+	private final OutputPort executionOutputPort = new OutputPort("Execution output stream", null);
 
 	public ExecutionRecordTransformationFilter(final String name, final SystemModelRepository systemFactory) {
 		super(name, systemFactory);
+
+		registerOutputPort("out", executionOutputPort);
 	}
 
 	static {
@@ -151,7 +152,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 		// nothing to do
 	}
 
-	public IOutputPort<Execution> getExecutionOutputPort() {
+	public OutputPort getExecutionOutputPort() {
 		return this.executionOutputPort;
 	}
 }

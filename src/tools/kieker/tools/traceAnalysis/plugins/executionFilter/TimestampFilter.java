@@ -20,10 +20,11 @@
 
 package kieker.tools.traceAnalysis.plugins.executionFilter;
 
-import kieker.analysis.plugin.IAnalysisPlugin;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import kieker.analysis.configuration.Configuration;
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.configuration.IInputPort;
-import kieker.analysis.plugin.configuration.IOutputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 
@@ -32,7 +33,7 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * 
  * @author Andre van Hoorn
  */
-public class TimestampFilter implements IAnalysisPlugin {
+public class TimestampFilter extends AbstractAnalysisPlugin {
 
 	public static final long MAX_TIMESTAMP = Long.MAX_VALUE;
 	public static final long MIN_TIMESTAMP = 0;
@@ -40,7 +41,7 @@ public class TimestampFilter implements IAnalysisPlugin {
 	private final long ignoreExecutionsBeforeTimestamp;
 	private final long ignorExecutionsAfterTimestamp;
 
-	private final OutputPort<Execution> executionOutputPort = new OutputPort<Execution>("Execution output");
+	private final OutputPort executionOutputPort = new OutputPort("Execution output", new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { Execution.class }));
 
 	/**
 	 * Creates a filter instance that only passes Execution objects <i>e</i>
@@ -51,23 +52,27 @@ public class TimestampFilter implements IAnalysisPlugin {
 	 * @param ignoreExecutionsAfterTimestamp
 	 */
 	public TimestampFilter(final long ignoreExecutionsBeforeTimestamp, final long ignoreExecutionsAfterTimestamp) {
+		super(new Configuration(null));
 		this.ignoreExecutionsBeforeTimestamp = ignoreExecutionsBeforeTimestamp;
 		this.ignorExecutionsAfterTimestamp = ignoreExecutionsAfterTimestamp;
+
+		super.registerOutputPort("out", executionOutputPort);
 	}
 
-	public IInputPort<Execution> getExecutionInputPort() {
+	public AbstractInputPort getExecutionInputPort() {
 		return this.executionInputPort;
 	}
 
-	private final IInputPort<Execution> executionInputPort = new AbstractInputPort<Execution>("Execution input") {
+	private final AbstractInputPort executionInputPort = new AbstractInputPort("Execution input", null) {
 
 		@Override
-		public void newEvent(final Execution event) {
+		public void newEvent(final Object obj) {
+			final Execution event = (Execution) obj;
 			TimestampFilter.this.newExecution(event);
 		}
 	};
 
-	public IOutputPort<Execution> getExecutionOutputPort() {
+	public OutputPort getExecutionOutputPort() {
 		return this.executionOutputPort;
 	}
 

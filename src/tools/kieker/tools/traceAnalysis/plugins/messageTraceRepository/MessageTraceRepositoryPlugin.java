@@ -24,8 +24,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.configuration.IInputPort;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
+import kieker.tools.traceAnalysis.systemModel.AbstractTrace;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
@@ -45,16 +45,16 @@ public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessing
 		super(name, systemEntityFactory);
 	}
 
-	private final IInputPort<MessageTrace> messageTraceInputPort = new AbstractInputPort<MessageTrace>("Message traces") {
+	private final AbstractInputPort messageTraceInputPort = new AbstractInputPort("Message traces", null) {
 
 		@Override
-		public void newEvent(final MessageTrace mt) {
-			MessageTraceRepositoryPlugin.this.repo.put(mt.getTraceId(), mt);
+		public void newEvent(final Object mt) {
+			MessageTraceRepositoryPlugin.this.repo.put(((AbstractTrace) mt).getTraceId(), (MessageTrace) mt);
 		}
 	};
 
 	@Override
-	public IInputPort<MessageTrace> getMessageTraceInputPort() {
+	public AbstractInputPort getMessageTraceInputPort() {
 		return this.messageTraceInputPort;
 	}
 

@@ -26,8 +26,6 @@ import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.configuration.IInputPort;
-import kieker.analysis.plugin.configuration.IOutputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -35,7 +33,6 @@ import kieker.tools.traceAnalysis.plugins.AbstractExecutionTraceProcessingPlugin
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
-import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
@@ -55,8 +52,8 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	/** Representative x # of equivalents */
 	private final Map<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap = new HashMap<AbstractExecutionTraceHashContainer, AtomicInteger>(); // NOPMD
 
-	private final OutputPort<MessageTrace> messageTraceOutputPort = new OutputPort<MessageTrace>("Message Traces");
-	private final OutputPort<ExecutionTrace> executionTraceOutputPort = new OutputPort<ExecutionTrace>("Execution Traces");
+	private final OutputPort messageTraceOutputPort = new OutputPort("Message Traces", null);
+	private final OutputPort executionTraceOutputPort = new OutputPort("Execution Traces", null);
 
 	public TraceEquivalenceClassFilter(final String name, final SystemModelRepository systemEntityFactory, final TraceEquivalenceClassModes traceEquivalenceCallMode) {
 		super(name, systemEntityFactory);
@@ -99,23 +96,23 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	}
 
 	@Override
-	public IInputPort<ExecutionTrace> getExecutionTraceInputPort() {
+	public AbstractInputPort getExecutionTraceInputPort() {
 		return this.executionTraceInputPort;
 	}
 
-	private final IInputPort<ExecutionTrace> executionTraceInputPort = new AbstractInputPort<ExecutionTrace>("Execution traces") {
+	private final AbstractInputPort executionTraceInputPort = new AbstractInputPort("Execution traces", null) {
 
 		@Override
-		public void newEvent(final ExecutionTrace mt) {
-			TraceEquivalenceClassFilter.this.newExecutionTrace(mt);
+		public void newEvent(final Object mt) {
+			TraceEquivalenceClassFilter.this.newExecutionTrace((ExecutionTrace) mt);
 		}
 	};
 
-	public IOutputPort<MessageTrace> getMessageTraceOutputPort() {
+	public OutputPort getMessageTraceOutputPort() {
 		return this.messageTraceOutputPort;
 	}
 
-	public IOutputPort<ExecutionTrace> getExecutionTraceOutputPort() {
+	public OutputPort getExecutionTraceOutputPort() {
 		return this.executionTraceOutputPort;
 	}
 

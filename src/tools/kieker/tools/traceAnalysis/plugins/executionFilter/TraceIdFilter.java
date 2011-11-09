@@ -21,11 +21,11 @@
 package kieker.tools.traceAnalysis.plugins.executionFilter;
 
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.plugin.IAnalysisPlugin;
+import kieker.analysis.configuration.Configuration;
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.configuration.IInputPort;
-import kieker.analysis.plugin.configuration.IOutputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 
@@ -34,11 +34,11 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * 
  * @author Andre van Hoorn
  */
-public class TraceIdFilter implements IAnalysisPlugin {
+public class TraceIdFilter extends AbstractAnalysisPlugin {
 
 	private final Set<Long> selectedTraces;
 
-	private final OutputPort<Execution> executionOutputPort = new OutputPort<Execution>("Execution output");
+	private final OutputPort executionOutputPort = new OutputPort("Execution output", new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { Execution.class }));
 
 	/**
 	 * Creates a filter instance that only passes Execution objects <i>e</i>
@@ -47,22 +47,25 @@ public class TraceIdFilter implements IAnalysisPlugin {
 	 * @param selectedTraces
 	 */
 	public TraceIdFilter(final Set<Long> selectedTraces) {
+		super(new Configuration(null));
 		this.selectedTraces = selectedTraces;
+		
+		super.registerOutputPort("out", executionOutputPort);
 	}
 
-	public IInputPort<Execution> getExecutionInputPort() {
+	public AbstractInputPort getExecutionInputPort() {
 		return this.executionInputPort;
 	}
 
-	private final IInputPort<Execution> executionInputPort = new AbstractInputPort<Execution>("Execution input") {
+	private final AbstractInputPort executionInputPort = new AbstractInputPort("Execution input", null) {
 
 		@Override
-		public void newEvent(final Execution event) {
-			TraceIdFilter.this.newExecution(event);
+		public void newEvent(final Object obj) {
+			TraceIdFilter.this.newExecution((Execution) obj);
 		}
 	};
 
-	public IOutputPort<Execution> getExecutionOutputPort() {
+	public OutputPort getExecutionOutputPort() {
 		return this.executionOutputPort;
 	}
 

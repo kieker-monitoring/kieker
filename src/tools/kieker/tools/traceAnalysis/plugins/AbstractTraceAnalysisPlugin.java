@@ -20,14 +20,14 @@
 
 package kieker.tools.traceAnalysis.plugins;
 
-import kieker.analysis.plugin.IAnalysisPlugin;
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * 
  * @author Andre van Hoorn
  */
-public abstract class AbstractTraceAnalysisPlugin implements IAnalysisPlugin {
+public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin {
 	private final String name;
 	private final SystemModelRepository systemEntityFactory;
 
