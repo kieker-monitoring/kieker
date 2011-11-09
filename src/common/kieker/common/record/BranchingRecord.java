@@ -23,8 +23,8 @@ package kieker.common.record;
 /**
  * @author Andre van Hoorn
  */
-public class BranchingRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	public static final Class<?>[] TYPES = {
+public final class BranchingRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+	protected static final Class<?>[] TYPES = {
 		long.class, // timestamp
 		int.class, // branchId
 		int.class, // branchingOutcome

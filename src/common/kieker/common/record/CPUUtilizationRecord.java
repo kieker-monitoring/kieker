@@ -24,8 +24,8 @@ package kieker.common.record;
  * @author Andre van Hoorn
  * 
  */
-public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	public static final Class<?>[] TYPES = {
+public final class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+	protected static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
 		String.class,
@@ -170,7 +170,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 
 	@Override
 	public Class<?>[] getValueTypes() {
-		return BranchingRecord.TYPES.clone();
+		return CPUUtilizationRecord.TYPES.clone();
 	}
 
 	/**

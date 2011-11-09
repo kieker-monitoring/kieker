@@ -209,7 +209,7 @@ final class FSDirectoryReader implements Runnable {
 					continue; // ignore empty lines
 				}
 				IMonitoringRecord record = null;
-				String[] recordFields = line.split(";");
+				final String[] recordFields = line.split(";");
 				try {
 					if (recordFields[0].charAt(0) == '$') { // modern record
 						if (recordFields.length < 3) { // NOCS (magic number)
@@ -222,13 +222,12 @@ final class FSDirectoryReader implements Runnable {
 							FSDirectoryReader.LOG.error("Missing classname mapping for record type id " + "'" + id + "'");
 							continue; // skip this record
 						}
-						final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.getClass(classname);
+						final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(classname);
 						if ((this.recordTypeSelector != null) && !this.recordTypeSelector.contains(clazz)) {
 							continue; // skip this ignored record
 						}
 						final long loggingTimestamp = Long.valueOf(recordFields[1]);
-						recordFields = Arrays.copyOfRange(recordFields, 2, recordFields.length);
-						record = AbstractMonitoringRecord.createFromStringArray(clazz, recordFields);
+						record = AbstractMonitoringRecord.createFromStringArray(clazz, Arrays.copyOfRange(recordFields, 2, recordFields.length));
 						record.setLoggingTimestamp(loggingTimestamp);
 					} else { // legacy record
 						record = AbstractMonitoringRecord.createFromStringArray(OperationExecutionRecord.class, recordFields);
@@ -277,16 +276,8 @@ final class FSDirectoryReader implements Runnable {
 					break; // we can't easily recover on errors
 				}
 
-				final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.getClass(classname);
-				final boolean factoryPresent = IMonitoringRecord.Factory.class.isAssignableFrom(clazz);
-				final Class<?>[] typeArray;
-				IMonitoringRecord record = null;
-				if (factoryPresent) {
-					typeArray = (Class<?>[]) clazz.getDeclaredField("TYPES").get(null);
-				} else {
-					record = clazz.newInstance();
-					typeArray = record.getValueTypes();
-				}
+				final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(classname);
+				final Class<?>[] typeArray = AbstractMonitoringRecord.typesForClass(clazz);
 
 				// read record
 				final long loggingTimestamp = in.readLong();
@@ -326,11 +317,7 @@ final class FSDirectoryReader implements Runnable {
 						objectArray[idx] = null;
 					}
 				}
-				if (factoryPresent) {
-					record = clazz.getConstructor(Object[].class).newInstance((Object) objectArray);
-				} else {
-					record.initFromArray(objectArray);
-				}
+				final IMonitoringRecord record = AbstractMonitoringRecord.createFromArray(clazz, objectArray);
 				record.setLoggingTimestamp(loggingTimestamp);
 				if (((this.recordTypeSelector == null) || this.recordTypeSelector.contains(clazz)) && !this.recordReceiver.newMonitoringRecord(record)) {
 					this.terminated = true;

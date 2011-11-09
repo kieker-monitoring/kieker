@@ -23,8 +23,9 @@ package kieker.common.record;
 /**
  * @author Andre van Hoorn
  */
+// This class my not be final!
 public class DummyMonitoringRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	public static final Class<?>[] TYPES = {};
+	protected static final Class<?>[] TYPES = {};
 
 	private static final long serialVersionUID = 11767633L;
 
@@ -52,6 +53,6 @@ public class DummyMonitoringRecord extends AbstractMonitoringRecord implements I
 
 	@Override
 	public Class<?>[] getValueTypes() {
-		return BranchingRecord.TYPES.clone();
+		return DummyMonitoringRecord.TYPES.clone();
 	}
 }

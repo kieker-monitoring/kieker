@@ -148,7 +148,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		return typedArray;
 	}
 
-	public static final Class<? extends IMonitoringRecord> getClass(final String classname) throws MonitoringRecordException {
+	public static final Class<? extends IMonitoringRecord> classForName(final String classname) throws MonitoringRecordException {
 		final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.OLD_KIEKERRECORDS.get(classname);
 		if (clazz != null) {
 			return clazz;
@@ -161,14 +161,52 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		}
 	}
 
+	public static final Class<?>[] typesForClass(final Class<? extends IMonitoringRecord> clazz) throws MonitoringRecordException {
+		if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
+			try {
+				return ((Class<?>[]) clazz.getDeclaredField("TYPES").get(null)).clone();
+			} catch (final Exception ex) {
+				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
+			}
+		} else {
+			try {
+				return clazz.newInstance().getValueTypes();
+			} catch (final Exception ex) {
+				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
+			}
+		}
+	}
+
+	public static final IMonitoringRecord createFromArray(final Class<? extends IMonitoringRecord> clazz, final Object[] values)
+			throws MonitoringRecordException {
+		if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
+			// Factory interface present
+			try {
+				final Constructor<? extends IMonitoringRecord> constructor = clazz.getConstructor(Object[].class);
+				return constructor.newInstance((Object) values);
+			} catch (final Exception ex) {
+				throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+			}
+		} else {
+			// try ordinary method
+			try {
+				final IMonitoringRecord record = clazz.newInstance();
+				record.initFromArray(values);
+				return record;
+			} catch (final Exception ex) {
+				throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+			}
+		}
+	}
+
 	public static final IMonitoringRecord createFromStringArray(final Class<? extends IMonitoringRecord> clazz, final String[] values)
 			throws MonitoringRecordException {
 		if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
 			// Factory interface present
 			try {
 				final Constructor<? extends IMonitoringRecord> constructor = clazz.getConstructor(Object[].class);
-				final Class<?>[] typeArray = (Class<?>[]) clazz.getDeclaredField("TYPES").get(null);
-				return constructor.newInstance((Object) AbstractMonitoringRecord.fromStringArrayToTypedArray(values, typeArray));
+				return constructor.newInstance((Object) AbstractMonitoringRecord.fromStringArrayToTypedArray(values, (Class<?>[]) clazz.getDeclaredField("TYPES")
+						.get(null)));
 			} catch (final Exception ex) {
 				throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
 			}

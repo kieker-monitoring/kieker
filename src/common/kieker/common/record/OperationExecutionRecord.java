@@ -26,7 +26,7 @@ package kieker.common.record;
  * @author Andre van Hoorn, Jan Waller
  */
 public final class OperationExecutionRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	public static final Class<?>[] TYPES = {
+	protected static final Class<?>[] TYPES = {
 		int.class, // experimentId
 		String.class, // component + op
 		String.class, // sessionId
@@ -199,7 +199,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 
 	@Override
 	public Class<?>[] getValueTypes() {
-		return BranchingRecord.TYPES.clone();
+		return OperationExecutionRecord.TYPES.clone();
 	}
 
 	/**

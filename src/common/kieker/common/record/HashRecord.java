@@ -25,7 +25,7 @@ package kieker.common.record;
  * @author Jan Waller
  */
 public final class HashRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	public static final Class<?>[] TYPES = new Class<?>[] {
+	protected static final Class<?>[] TYPES = new Class<?>[] {
 		int.class, // id
 		Object.class, // object
 	};
@@ -65,7 +65,7 @@ public final class HashRecord extends AbstractMonitoringRecord implements IMonit
 
 	@Override
 	public Class<?>[] getValueTypes() {
-		return BranchingRecord.TYPES.clone();
+		return HashRecord.TYPES.clone();
 	}
 
 	/**
