@@ -20,6 +20,7 @@
 
 package kieker.tools.traceAnalysis.plugins;
 
+import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
@@ -31,7 +32,15 @@ public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin
 	private final String name;
 	private final SystemModelRepository systemEntityFactory;
 
+	public AbstractTraceAnalysisPlugin(Configuration configuration) {
+		super(configuration);
+		// TODO: Initialize from configuration.
+		systemEntityFactory = null;
+		name = null;
+	}
+
 	public AbstractTraceAnalysisPlugin(final String name, final SystemModelRepository systemEntityFactory) {
+		super(new Configuration(null));
 		this.systemEntityFactory = systemEntityFactory;
 		this.name = name;
 	}

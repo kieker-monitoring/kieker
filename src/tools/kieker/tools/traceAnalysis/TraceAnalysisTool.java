@@ -41,6 +41,7 @@ import java.util.TreeSet;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.configuration.Configuration;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -259,7 +260,10 @@ public final class TraceAnalysisTool {
 				 */
 				final Collection<Class<? extends IMonitoringRecord>> recordTypeSelectorSet = new CopyOnWriteArrayList<Class<? extends IMonitoringRecord>>();
 				recordTypeSelectorSet.add(OperationExecutionRecord.class);
-				analysisInstance.setReader(new FSReader(TraceAnalysisTool.inputDirs, recordTypeSelectorSet));
+				final Configuration conf = new Configuration(null);
+				conf.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(TraceAnalysisTool.inputDirs));
+				conf.setProperty(FSReader.CONFIG_ONLYRECORDS, Configuration.toProperty((String[]) recordTypeSelectorSet.toArray()));
+				analysisInstance.setReader(new FSReader(conf));
 			}
 
 			final ExecutionRecordTransformationFilter execRecTransformer = new ExecutionRecordTransformationFilter(Constants.EXEC_TRACE_RECONSTR_COMPONENT_NAME,

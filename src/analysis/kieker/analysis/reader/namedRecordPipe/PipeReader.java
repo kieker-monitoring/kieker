@@ -22,7 +22,7 @@ package kieker.analysis.reader.namedRecordPipe;
 
 import java.util.concurrent.CountDownLatch;
 
-import kieker.analysis.reader.AbstractMonitoringReader;
+import kieker.analysis.plugin.AbstractMonitoringReader;
 import kieker.analysis.util.PropertyMap;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;

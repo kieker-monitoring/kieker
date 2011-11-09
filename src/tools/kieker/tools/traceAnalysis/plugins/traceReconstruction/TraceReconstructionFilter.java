@@ -28,8 +28,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.configuration.IInputPort;
-import kieker.analysis.plugin.configuration.IOutputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -62,9 +60,9 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	private final Execution rootExecution;
 	private final long maxTraceDurationNanos;
 
-	private final OutputPort<MessageTrace> messageTraceOutputPort = new OutputPort<MessageTrace>("Reconstructed Message Traces");
-	private final OutputPort<ExecutionTrace> executionTraceOutputPort = new OutputPort<ExecutionTrace>("Reconstructed Execution Traces");
-	private final OutputPort<InvalidExecutionTrace> invalidExecutionTraceOutputPort = new OutputPort<InvalidExecutionTrace>("Invalid Execution Traces");
+	private final OutputPort messageTraceOutputPort = new OutputPort("Reconstructed Message Traces", null);
+	private final OutputPort executionTraceOutputPort = new OutputPort("Reconstructed Execution Traces", null);
+	private final OutputPort invalidExecutionTraceOutputPort = new OutputPort("Invalid Execution Traces", null);
 
 	/** Pending traces sorted by tin timestamps */
 	private final NavigableSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() {
@@ -280,27 +278,27 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 		System.out.println("Last timestamp: " + maxToutStr);
 	}
 
-	public IInputPort<Execution> getExecutionInputPort() {
+	public AbstractInputPort getExecutionInputPort() {
 		return this.executionInputPort;
 	}
 
-	private final IInputPort<Execution> executionInputPort = new AbstractInputPort<Execution>("Execution input") {
+	private final AbstractInputPort executionInputPort = new AbstractInputPort("Execution input", null) {
 
 		@Override
-		public void newEvent(final Execution event) {
-			TraceReconstructionFilter.this.newExecution(event);
+		public void newEvent(final Object event) {
+			TraceReconstructionFilter.this.newExecution((Execution) event);
 		}
 	};
 
-	public IOutputPort<MessageTrace> getMessageTraceOutputPort() {
+	public OutputPort getMessageTraceOutputPort() {
 		return this.messageTraceOutputPort;
 	}
 
-	public IOutputPort<ExecutionTrace> getExecutionTraceOutputPort() {
+	public OutputPort getExecutionTraceOutputPort() {
 		return this.executionTraceOutputPort;
 	}
 
-	public IOutputPort<InvalidExecutionTrace> getInvalidExecutionTraceOutputPort() {
+	public OutputPort getInvalidExecutionTraceOutputPort() {
 		return this.invalidExecutionTraceOutputPort;
 	}
 }

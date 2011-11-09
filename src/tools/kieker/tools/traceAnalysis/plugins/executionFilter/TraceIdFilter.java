@@ -40,6 +40,14 @@ public class TraceIdFilter extends AbstractAnalysisPlugin {
 
 	private final OutputPort executionOutputPort = new OutputPort("Execution output", new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { Execution.class }));
 
+	public TraceIdFilter(final Configuration configuration) {
+		super(configuration);
+		// TODO: Initialize from the variable.
+		this.selectedTraces = null;
+		
+		super.registerOutputPort("out", executionOutputPort);
+	}
+
 	/**
 	 * Creates a filter instance that only passes Execution objects <i>e</i>
 	 * whose traceId (<i>e.traceId</i>) is element of the set <i>selectedTraces</i>.
@@ -49,7 +57,7 @@ public class TraceIdFilter extends AbstractAnalysisPlugin {
 	public TraceIdFilter(final Set<Long> selectedTraces) {
 		super(new Configuration(null));
 		this.selectedTraces = selectedTraces;
-		
+
 		super.registerOutputPort("out", executionOutputPort);
 	}
 

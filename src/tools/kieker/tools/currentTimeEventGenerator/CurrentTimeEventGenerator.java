@@ -20,9 +20,12 @@
 
 package kieker.tools.currentTimeEventGenerator;
 
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.tools.traceAnalysis.systemModel.Execution;
 
 /**
  * Generates time events with a given resolution based on the timestamps of
@@ -67,8 +70,8 @@ public class CurrentTimeEventGenerator {
 
 	private final long timerResolution;
 
-	private final OutputPort<TimestampEvent> currentTimeOutputPort = new OutputPort<TimestampEvent>("Provides current time events");
-
+	private final OutputPort currentTimeOutputPort = new OutputPort("Provides current time events", new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { TimestampEvent.class }));
+	
 	/**
 	 * Creates an event generator which generates time events with the given
 	 * resolution in nanoseconds via the output port {@link #getCurrentTimeOutputPort()}.
@@ -77,7 +80,6 @@ public class CurrentTimeEventGenerator {
 	 */
 	public CurrentTimeEventGenerator(final long timeResolution) {
 		this.timerResolution = timeResolution;
-
 	}
 
 	/**
@@ -111,7 +113,7 @@ public class CurrentTimeEventGenerator {
 		}
 	}
 
-	public OutputPort<TimestampEvent> getCurrentTimeOutputPort() {
+	public OutputPort getCurrentTimeOutputPort() {
 		return this.currentTimeOutputPort;
 	}
 }

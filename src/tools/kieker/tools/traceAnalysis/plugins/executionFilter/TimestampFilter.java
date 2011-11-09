@@ -44,6 +44,20 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 	private final OutputPort executionOutputPort = new OutputPort("Execution output", new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { Execution.class }));
 
 	/**
+	 * Creates a new instance of the class {@link TimestampFilter} with the
+	 * given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration used to initialize this instance.
+	 */
+	public TimestampFilter(final Configuration configuration) {
+		super(configuration);
+		// TODO: Initialize the timestamps based on the configuration.
+		ignoreExecutionsBeforeTimestamp = 0;
+		ignorExecutionsAfterTimestamp = 0;
+	}
+
+	/**
 	 * Creates a filter instance that only passes Execution objects <i>e</i>
 	 * with the property <i>e.tin &gt;= ignoreExecutionsBeforeTimestamp</i> and
 	 * <i>e.tout &lt;= ignoreExecutionsAfterTimestamp</i>.

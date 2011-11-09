@@ -26,8 +26,9 @@ import java.util.StringTokenizer;
 import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.configuration.Configuration;
+import kieker.analysis.plugin.AbstractMonitoringReader;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
-import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.analysis.util.PropertyMap;
 import kieker.common.logging.Log;
@@ -50,16 +51,22 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 	/** Reader will wait for this latch before read() returns */
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
 
+	public FSReaderRealtime(Configuration configuration) {
+		super(configuration);
+		// TODO: Load from configuration.
+	}
+
 	/**
 	 * Constructor for FSReaderRealtime. Requires a subsequent call to the init
 	 * method in order to specify the input directory and number of workers
 	 * using the parameter @a inputDirName.
 	 */
 	public FSReaderRealtime() {
-		// nothing to do
+		this(new Configuration(null));
 	}
 
 	public FSReaderRealtime(final String[] inputDirNames, final int numWorkers) {
+		this(new Configuration(null));
 		this.initInstanceFromArgs(inputDirNames, numWorkers);
 	}
 
