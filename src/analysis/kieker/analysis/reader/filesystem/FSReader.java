@@ -22,15 +22,19 @@ package kieker.analysis.reader.filesystem;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.analysis.reader.AbstractMonitoringReader;
+import kieker.common.exception.MonitoringRecordException;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
@@ -51,7 +55,7 @@ public class FSReader extends AbstractMonitoringReader implements IMonitoringRec
 	private static final Collection<Class<?>> OUT_CLASSES = Collections
 			.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { IMonitoringRecord.class }));
 
-	private final String[] readOnlyRecordsOfType;
+	private final Set<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType;
 	private final String[] inputDirs;
 	private final PriorityQueue<IMonitoringRecord> recordQueue;
 	private final OutputPort outputPort;
@@ -66,7 +70,14 @@ public class FSReader extends AbstractMonitoringReader implements IMonitoringRec
 		if (onlyrecords.length == 0) {
 			this.readOnlyRecordsOfType = null;
 		} else {
-			this.readOnlyRecordsOfType = onlyrecords;
+			this.readOnlyRecordsOfType = new HashSet<Class<? extends IMonitoringRecord>>(onlyrecords.length);
+			for (final String classname : onlyrecords) {
+				try {
+					this.readOnlyRecordsOfType.add(AbstractMonitoringRecord.classForName(classname));
+				} catch (final MonitoringRecordException ex) {
+					FSReader.LOG.warn(ex.getMessage(), ex.getCause());
+				}
+			}
 		}
 		this.outputPort = new OutputPort("Output Port of the FSReader", FSReader.OUT_CLASSES);
 		super.registerOutputPort("out", this.outputPort);
