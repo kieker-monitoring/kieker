@@ -26,11 +26,11 @@ package kieker.common.record;
  * @author Andre van Hoorn
  */
 public final class CurrentTimeRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	protected static final Class<?>[] TYPES = {
+	private static final long serialVersionUID = -7166224794391621087L;
+	private static final Class<?>[] TYPES = {
 		long.class, // timestamp
 	};
 
-	private static final long serialVersionUID = 112213L;
 	private volatile long currentTime = -1;
 
 	/**

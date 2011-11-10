@@ -28,15 +28,14 @@ package kieker.common.record;
  * 
  */
 public final class ResourceUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	protected static final Class<?>[] TYPES = {
+	private static final long serialVersionUID = -7386791367687652550L;
+	private static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
 		String.class,
 		double.class
 	};
-
 	private static final String DEFAULT_VALUE = "N/A";
-	private static final long serialVersionUID = 17676L;
 
 	/**
 	 * Date/time of measurement. The value should be interpreted as the number

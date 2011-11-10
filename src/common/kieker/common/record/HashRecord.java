@@ -25,12 +25,11 @@ package kieker.common.record;
  * @author Jan Waller
  */
 public final class HashRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	protected static final Class<?>[] TYPES = new Class<?>[] {
+	private static final long serialVersionUID = 4566332478835872121L;
+	private static final Class<?>[] TYPES = new Class<?>[] {
 		int.class, // id
 		Object.class, // object
 	};
-
-	private static final long serialVersionUID = 1L;
 
 	private final int id;
 	private final Object object;

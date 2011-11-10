@@ -21,6 +21,7 @@
 package kieker.common.record;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -32,7 +33,6 @@ import kieker.common.exception.MonitoringRecordException;
  */
 public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	private static final long serialVersionUID = 1L;
-
 	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> OLD_KIEKERRECORDS = new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>();
 	static {
 		AbstractMonitoringRecord.OLD_KIEKERRECORDS.put("kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord", OperationExecutionRecord.class);
@@ -87,14 +87,11 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	public final boolean equals(final Object obj) {
 		if (obj == null) {
 			return false;
-		}
-		if (this == obj) {
+		} else if (this == obj) {
 			return true;
-		}
-		if (obj.getClass() != this.getClass()) {
+		} else if (obj.getClass() != this.getClass()) {
 			return false;
-		}
-		if (this.loggingTimestamp != ((AbstractMonitoringRecord) obj).getLoggingTimestamp()) {
+		} else if (this.loggingTimestamp != ((AbstractMonitoringRecord) obj).getLoggingTimestamp()) {
 			return false;
 		}
 		return Arrays.equals(((AbstractMonitoringRecord) obj).toArray(), this.toArray());
@@ -106,14 +103,44 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	}
 
 	public static final void checkArray(final Object[] values, final Class<?>[] valueTypes) {
-		if (values.length != HashRecord.TYPES.length) {
+		if (values.length != valueTypes.length) {
 			throw new IllegalArgumentException("Expecting array with " + valueTypes.length + " elements but found " + values.length + " elements.");
 		}
-		for (int i = 0; i < valueTypes.length; i++) {
-			if (!values[i].getClass().equals(valueTypes[i])) {
-				throw new IllegalArgumentException("Expecting " + valueTypes[i].getName() + " but found " + values[i].getClass().getName() + " at position " + i
-						+ "of the array.");
+		for (int curIdx = 0; curIdx < valueTypes.length; curIdx++) {
+			if ((valueTypes[curIdx] == int.class) || (valueTypes[curIdx] == Integer.class)) {
+				if (values[curIdx] instanceof Integer) {
+					continue;
+				}
+			} else if ((valueTypes[curIdx] == long.class) || (valueTypes[curIdx] == Long.class)) {
+				if (values[curIdx] instanceof Long) {
+					continue;
+				}
+			} else if ((valueTypes[curIdx] == float.class) || (valueTypes[curIdx] == Float.class)) {
+				if (values[curIdx] instanceof Float) {
+					continue;
+				}
+			} else if ((valueTypes[curIdx] == double.class) || (valueTypes[curIdx] == Double.class)) {
+				if (values[curIdx] instanceof Double) {
+					continue;
+				}
+			} else if ((valueTypes[curIdx] == byte.class) || (valueTypes[curIdx] == Byte.class)) {
+				if (values[curIdx] instanceof Byte) {
+					continue;
+				}
+			} else if ((valueTypes[curIdx] == short.class) || (valueTypes[curIdx] == Short.class)) { // NOPMD
+				if (values[curIdx] instanceof Short) {
+					continue;
+				}
+			} else if ((valueTypes[curIdx] == boolean.class) || (valueTypes[curIdx] == Boolean.class)) {
+				if (values[curIdx] instanceof Boolean) {
+					continue;
+				}
+			} else if (valueTypes[curIdx].equals(values[curIdx].getClass())) {
+				continue;
 			}
+			throw new IllegalArgumentException("Expecting " + valueTypes[curIdx].getName() + " but found " + values[curIdx].getClass().getName()
+					+ " at position " + curIdx + " of the array.");
+
 		}
 	}
 
@@ -176,7 +203,9 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	public static final Class<?>[] typesForClass(final Class<? extends IMonitoringRecord> clazz) throws MonitoringRecordException {
 		if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
 			try {
-				return ((Class<?>[]) clazz.getDeclaredField("TYPES").get(null)).clone();
+				final Field types = clazz.getDeclaredField("TYPES");
+				types.setAccessible(true);
+				return ((Class<?>[]) types.get(null)).clone();
 			} catch (final Exception ex) {
 				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
 			}
@@ -189,8 +218,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		}
 	}
 
-	public static final IMonitoringRecord createFromArray(final Class<? extends IMonitoringRecord> clazz, final Object[] values)
-			throws MonitoringRecordException {
+	public static final IMonitoringRecord createFromArray(final Class<? extends IMonitoringRecord> clazz, final Object[] values) throws MonitoringRecordException {
 		if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
 			// Factory interface present
 			try {
@@ -217,8 +245,9 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 			// Factory interface present
 			try {
 				final Constructor<? extends IMonitoringRecord> constructor = clazz.getConstructor(Object[].class);
-				return constructor.newInstance((Object) AbstractMonitoringRecord.fromStringArrayToTypedArray(values, (Class<?>[]) clazz.getDeclaredField("TYPES")
-						.get(null)));
+				final Field types = clazz.getDeclaredField("TYPES");
+				types.setAccessible(true);
+				return constructor.newInstance((Object) AbstractMonitoringRecord.fromStringArrayToTypedArray(values, (Class<?>[]) types.get(null)));
 			} catch (final Exception ex) {
 				throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
 			}

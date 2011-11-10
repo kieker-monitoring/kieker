@@ -26,7 +26,8 @@ package kieker.common.record;
  * @author Andre van Hoorn, Jan Waller
  */
 public final class OperationExecutionRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	protected static final Class<?>[] TYPES = {
+	private static final long serialVersionUID = -2323438859915450903L;
+	private static final Class<?>[] TYPES = {
 		int.class, // experimentId
 		String.class, // component + op
 		String.class, // sessionId
@@ -37,9 +38,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 		int.class, // eoi
 		int.class, // ess
 	};
-
 	private static final String DEFAULT_VALUE = "N/A";
-	private static final long serialVersionUID = 1180L;
 
 	private volatile int experimentId = -1;
 	private volatile String hostName = OperationExecutionRecord.DEFAULT_VALUE;

@@ -25,9 +25,8 @@ package kieker.common.record;
  */
 // This class my not be final!
 public class DummyMonitoringRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	protected static final Class<?>[] TYPES = {};
-
-	private static final long serialVersionUID = 11767633L;
+	private static final long serialVersionUID = 901997073704192022L;
+	private static final Class<?>[] TYPES = {};
 
 	/**
 	 * Constructs a {@link DummyMonitoringRecord}.

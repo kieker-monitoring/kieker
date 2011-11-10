@@ -25,7 +25,8 @@ package kieker.common.record;
  * 
  */
 public final class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	protected static final Class<?>[] TYPES = {
+	private static final long serialVersionUID = -8267026568234433190L;
+	private static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
 		String.class,
@@ -37,10 +38,9 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 		double.class,
 		double.class,
 	};
+	private static final String DEFAULT_VALUE = "N/A";
 
 	public static final double UNDEFINED_DOUBLE = -1;
-	private static final String DEFAULT_VALUE = "N/A";
-	private static final long serialVersionUID = 17677676L;
 
 	/**
 	 * Date/time of measurement. The value should be interpreted as the number of nano-seconds elapsed since Jan 1st, 1970 UTC.

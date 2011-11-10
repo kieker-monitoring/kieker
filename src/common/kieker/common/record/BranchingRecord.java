@@ -24,13 +24,12 @@ package kieker.common.record;
  * @author Andre van Hoorn
  */
 public final class BranchingRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	protected static final Class<?>[] TYPES = {
+	private static final long serialVersionUID = -4569387448110349137L;
+	private static final Class<?>[] TYPES = {
 		long.class, // timestamp
 		int.class, // branchId
 		int.class, // branchingOutcome
 	};
-
-	private static final long serialVersionUID = 1113L;
 
 	private volatile long timestamp = -1;
 	private volatile int branchID = -1;
