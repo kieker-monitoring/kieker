@@ -20,13 +20,23 @@
 
 package kieker.common.record;
 
+import java.lang.reflect.Constructor;
 import java.util.Arrays;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+import kieker.common.exception.MonitoringRecordException;
 
 /**
  * @author Andre van Hoorn, Jan Waller
  */
 public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	private static final long serialVersionUID = 1L;
+
+	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> OLD_KIEKERRECORDS = new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>();
+	static {
+		AbstractMonitoringRecord.OLD_KIEKERRECORDS.put("kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord", OperationExecutionRecord.class);
+	}
 
 	private volatile long loggingTimestamp = -1;
 
@@ -100,43 +110,115 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 			throw new IllegalArgumentException("Expected " + valueTypes.length + " record fields, but found " + recordFields.length);
 		}
 		final Object[] typedArray = new Object[recordFields.length];
-		int curIdx = -1;
-		for (final Class<?> clazz : valueTypes) {
-			curIdx++;
-			if (clazz == String.class) {
+		for (int curIdx = 0; curIdx < typedArray.length; curIdx++) {
+			if (valueTypes[curIdx] == String.class) {
 				typedArray[curIdx] = recordFields[curIdx];
 				continue;
 			}
-			if ((clazz == int.class) || (clazz == Integer.class)) {
+			if ((valueTypes[curIdx] == int.class) || (valueTypes[curIdx] == Integer.class)) {
 				typedArray[curIdx] = Integer.valueOf(recordFields[curIdx]);
 				continue;
 			}
-			if ((clazz == long.class) || (clazz == Long.class)) {
+			if ((valueTypes[curIdx] == long.class) || (valueTypes[curIdx] == Long.class)) {
 				typedArray[curIdx] = Long.valueOf(recordFields[curIdx]);
 				continue;
 			}
-			if ((clazz == float.class) || (clazz == Float.class)) {
+			if ((valueTypes[curIdx] == float.class) || (valueTypes[curIdx] == Float.class)) {
 				typedArray[curIdx] = Float.valueOf(recordFields[curIdx]);
 				continue;
 			}
-			if ((clazz == double.class) || (clazz == Double.class)) {
+			if ((valueTypes[curIdx] == double.class) || (valueTypes[curIdx] == Double.class)) {
 				typedArray[curIdx] = Double.valueOf(recordFields[curIdx]);
 				continue;
 			}
-			if ((clazz == byte.class) || (clazz == Byte.class)) {
+			if ((valueTypes[curIdx] == byte.class) || (valueTypes[curIdx] == Byte.class)) {
 				typedArray[curIdx] = Byte.valueOf(recordFields[curIdx]);
 				continue;
 			}
-			if ((clazz == short.class) || (clazz == Short.class)) { // NOPMD
+			if ((valueTypes[curIdx] == short.class) || (valueTypes[curIdx] == Short.class)) { // NOPMD
 				typedArray[curIdx] = Short.valueOf(recordFields[curIdx]); // NOPMD
 				continue;
 			}
-			if ((clazz == boolean.class) || (clazz == Boolean.class)) {
+			if ((valueTypes[curIdx] == boolean.class) || (valueTypes[curIdx] == Boolean.class)) {
 				typedArray[curIdx] = Boolean.valueOf(recordFields[curIdx]);
 				continue;
 			}
-			throw new IllegalArgumentException("Unsupported type: " + clazz.getName());
+			throw new IllegalArgumentException("Unsupported type: " + valueTypes[curIdx].getName());
 		}
 		return typedArray;
+	}
+
+	public static final Class<? extends IMonitoringRecord> classForName(final String classname) throws MonitoringRecordException {
+		final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.OLD_KIEKERRECORDS.get(classname);
+		if (clazz != null) {
+			return clazz;
+		} else {
+			try {
+				return Class.forName(classname).asSubclass(IMonitoringRecord.class);
+			} catch (final Exception ex) {
+				throw new MonitoringRecordException("Failed to get record of name " + classname, ex);
+			}
+		}
+	}
+
+	public static final Class<?>[] typesForClass(final Class<? extends IMonitoringRecord> clazz) throws MonitoringRecordException {
+		if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
+			try {
+				return ((Class<?>[]) clazz.getDeclaredField("TYPES").get(null)).clone();
+			} catch (final Exception ex) {
+				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
+			}
+		} else {
+			try {
+				return clazz.newInstance().getValueTypes();
+			} catch (final Exception ex) {
+				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
+			}
+		}
+	}
+
+	public static final IMonitoringRecord createFromArray(final Class<? extends IMonitoringRecord> clazz, final Object[] values)
+			throws MonitoringRecordException {
+		if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
+			// Factory interface present
+			try {
+				final Constructor<? extends IMonitoringRecord> constructor = clazz.getConstructor(Object[].class);
+				return constructor.newInstance((Object) values);
+			} catch (final Exception ex) {
+				throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+			}
+		} else {
+			// try ordinary method
+			try {
+				final IMonitoringRecord record = clazz.newInstance();
+				record.initFromArray(values);
+				return record;
+			} catch (final Exception ex) {
+				throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+			}
+		}
+	}
+
+	public static final IMonitoringRecord createFromStringArray(final Class<? extends IMonitoringRecord> clazz, final String[] values)
+			throws MonitoringRecordException {
+		if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
+			// Factory interface present
+			try {
+				final Constructor<? extends IMonitoringRecord> constructor = clazz.getConstructor(Object[].class);
+				return constructor.newInstance((Object) AbstractMonitoringRecord.fromStringArrayToTypedArray(values, (Class<?>[]) clazz.getDeclaredField("TYPES")
+						.get(null)));
+			} catch (final Exception ex) {
+				throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+			}
+		} else {
+			// try ordinary method
+			try {
+				final IMonitoringRecord record = clazz.newInstance();
+				record.initFromArray(AbstractMonitoringRecord.fromStringArrayToTypedArray(values, record.getValueTypes()));
+				return record;
+			} catch (final Exception ex) {
+				throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+			}
+		}
 	}
 }

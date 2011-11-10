@@ -33,6 +33,7 @@ import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.analysis.reader.filesystem.FSReader;
+import kieker.common.configuration.AbstractConfiguration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
@@ -72,14 +73,14 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 	 *            <li>The property {@code numWorkers}
 	 *            </ul>
 	 */
-	public FSReaderRealtime(Configuration configuration) {
+	public FSReaderRealtime(final Configuration configuration) {
 		super(configuration);
 
 		/* Register the output port. */
 		this.outputPort = new OutputPort("Output Port of the JMXReader", FSReaderRealtime.OUT_CLASSES);
 		super.registerOutputPort("out", this.outputPort);
 
-		init(configuration);
+		this.init(configuration);
 	}
 
 	public FSReaderRealtime(final String[] inputDirNames, final int numWorkers) {
@@ -141,7 +142,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 
 		final Configuration configuration = new Configuration(null);
 		configuration.setProperty(FSReader.CONFIG_INPUTDIRS,
-				Configuration.toProperty(inputDirNames));
+				AbstractConfiguration.toProperty(inputDirNames));
 		final AbstractMonitoringReader fsReader = new FSReader(configuration);
 		final IMonitoringRecordConsumerPlugin rtCons = new FSReaderRealtimeCons(this);
 		this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, this.terminationLatch);

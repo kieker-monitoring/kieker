@@ -27,7 +27,17 @@ package kieker.common.record;
  * @author Andre van Hoorn
  * 
  */
-public class MemSwapUsageRecord extends AbstractMonitoringRecord {
+public final class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+	protected static final Class<?>[] TYPES = {
+		long.class,
+		String.class,
+		long.class,
+		long.class,
+		long.class,
+		long.class,
+		long.class,
+		long.class,
+	};
 
 	public static final double UNDEFINED_DOUBLE = -1;
 	public static final long UNDEFINED_LONG = -1;
@@ -35,8 +45,6 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	private static final String DEFAULT_VALUE = "N/A";
 
 	private static final long serialVersionUID = 1762476L;
-
-	private static final Class<?>[] VALUE_TYPES = { long.class, String.class, long.class, long.class, long.class, long.class, long.class, long.class, };
 
 	private volatile long memUsed = MemSwapUsageRecord.UNDEFINED_LONG;
 	private volatile long memFree = MemSwapUsageRecord.UNDEFINED_LONG;
@@ -79,6 +87,43 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 		this.swapTotal = swapTotal;
 		this.swapUsed = swapUsed;
 		this.swapFree = swapFree;
+	}
+
+	public MemSwapUsageRecord(final Object[] values) {
+		try {
+			if (values.length != MemSwapUsageRecord.TYPES.length) {
+				throw new IllegalArgumentException("Expecting vector with " + MemSwapUsageRecord.TYPES.length + " elements but found:" + values.length);
+			}
+			this.timestamp = (Long) values[0]; // NOCS
+			this.hostName = (String) values[1]; // NOCS
+			this.memTotal = (Long) values[2]; // NOCS
+			this.memUsed = (Long) values[3]; // NOCS
+			this.memFree = (Long) values[4]; // NOCS
+			this.swapTotal = (Long) values[5]; // NOCS
+			this.swapUsed = (Long) values[6]; // NOCS
+			this.swapFree = (Long) values[7]; // NOCS
+		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
+			throw new IllegalArgumentException("Failed to init", exc);
+		}
+	}
+
+	/*
+	 * {@inheritdoc}
+	 */
+	@Override
+	public Object[] toArray() {
+		return new Object[] { this.timestamp, this.hostName, this.memTotal, this.memUsed, this.memFree, this.swapTotal, this.swapUsed, this.swapFree, };
+	}
+
+	@Override
+	@Deprecated
+	public void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return MemSwapUsageRecord.TYPES.clone();
 	}
 
 	/**
@@ -169,46 +214,6 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	 */
 	public final void setSwapFree(final long swapFree) {
 		this.swapFree = swapFree;
-	}
-
-	/*
-	 * {@inheritdoc}
-	 */
-	@Override
-	public void initFromArray(final Object[] values) throws IllegalArgumentException { // NOPMD by jwa on 20.09.11 14:24
-		try {
-			if (values.length != MemSwapUsageRecord.VALUE_TYPES.length) {
-				throw new IllegalArgumentException("Expecting vector with " + MemSwapUsageRecord.VALUE_TYPES.length + " elements but found:" + values.length);
-			}
-
-			this.timestamp = (Long) values[0]; // NOCS
-			this.hostName = (String) values[1]; // NOCS
-			this.memTotal = (Long) values[2]; // NOCS
-			this.memUsed = (Long) values[3]; // NOCS
-			this.memFree = (Long) values[4]; // NOCS
-			this.swapTotal = (Long) values[5]; // NOCS
-			this.swapUsed = (Long) values[6]; // NOCS
-			this.swapFree = (Long) values[7]; // NOCS
-
-		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
-			throw new IllegalArgumentException("Failed to init", exc);
-		}
-	}
-
-	/*
-	 * {@inheritdoc}
-	 */
-	@Override
-	public Object[] toArray() {
-		return new Object[] { this.timestamp, this.hostName, this.memTotal, this.memUsed, this.memFree, this.swapTotal, this.swapUsed, this.swapFree, };
-	}
-
-	/*
-	 * {@inheritdoc}
-	 */
-	@Override
-	public Class<?>[] getValueTypes() {
-		return MemSwapUsageRecord.VALUE_TYPES.clone();
 	}
 
 	/**

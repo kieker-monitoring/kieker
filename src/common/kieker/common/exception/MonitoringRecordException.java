@@ -18,21 +18,20 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record;
+package kieker.common.exception;
 
 /**
  * 
- * @author Andre van Hoorn
+ * @author Jan Waller
  */
-public class MonitoringRecordReceiverException extends Exception {
+public class MonitoringRecordException extends Exception {
+	private static final long serialVersionUID = -619093518689867366L;
 
-	private static final long serialVersionUID = 76576L;
-
-	public MonitoringRecordReceiverException(final String messString) {
+	public MonitoringRecordException(final String messString) {
 		super(messString);
 	}
 
-	public MonitoringRecordReceiverException(final String messString, final Throwable cause) {
+	public MonitoringRecordException(final String messString, final Throwable cause) {
 		super(messString, cause);
 	}
 }

@@ -24,23 +24,48 @@ package kieker.common.record;
  * 
  * @author Jan Waller
  */
-public final class HashRecord extends AbstractMonitoringRecord {
-	private static final long serialVersionUID = 1L;
-	private static final Class<?>[] TYPES = new Class<?>[] {
+public final class HashRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+	protected static final Class<?>[] TYPES = new Class<?>[] {
 		int.class, // id
 		Object.class, // object
 	};
 
-	private int id;
-	private Object object;
+	private static final long serialVersionUID = 1L;
 
-	public HashRecord() {
-		// do nothing
-	}
+	private final int id;
+	private final Object object;
 
 	public HashRecord(final int id, final Object object) {
 		this.id = id;
 		this.object = object;
+	}
+
+	public HashRecord(final Object[] values) {
+		try {
+			if (values.length != HashRecord.TYPES.length) {
+				throw new IllegalArgumentException("Expecting array with " + HashRecord.TYPES.length + " elements but found " + values.length + ".");
+			}
+			this.id = (Integer) values[0];
+			this.object = values[1];
+		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
+			throw new IllegalArgumentException("Failed to init record from array.", ex);
+		}
+	}
+
+	@Override
+	public Object[] toArray() {
+		return new Object[] { this.id, this.object };
+	}
+
+	@Override
+	@Deprecated
+	public void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return HashRecord.TYPES.clone();
 	}
 
 	/**
@@ -51,48 +76,9 @@ public final class HashRecord extends AbstractMonitoringRecord {
 	}
 
 	/**
-	 * @param id
-	 *            the id to set
-	 */
-	public void setId(final int id) {
-		this.id = id;
-	}
-
-	/**
 	 * @return the object
 	 */
 	public Object getObject() {
 		return this.object;
-	}
-
-	/**
-	 * @param object
-	 *            the object to set
-	 */
-	public void setObject(final Object object) {
-		this.object = object;
-	}
-
-	@Override
-	public void initFromArray(final Object[] values) {
-		try {
-			if (values.length != HashRecord.TYPES.length) {
-				throw new IllegalArgumentException("Expecting array with " + HashRecord.TYPES.length + " elements but found " + values.length + ".");
-			}
-			this.setId((Integer) values[0]);
-			this.setObject(values[1]);
-		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
-			throw new IllegalArgumentException("Failed to init record from array.", ex);
-		}
-	}
-
-	@Override
-	public Object[] toArray() {
-		return new Object[] { this.getId(), this.getObject() };
-	}
-
-	@Override
-	public final Class<?>[] getValueTypes() {
-		return HashRecord.TYPES.clone();
 	}
 }

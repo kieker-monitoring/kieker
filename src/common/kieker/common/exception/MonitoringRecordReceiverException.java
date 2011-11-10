@@ -18,30 +18,21 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record;
-
-import java.io.Serializable;
+package kieker.common.exception;
 
 /**
  * 
  * @author Andre van Hoorn
  */
-public class MonitoringRecordTypeClassnameMapping implements Serializable {
-	private static final long serialVersionUID = 5477L;
-	private final int typeId;
-	private final String className;
+public class MonitoringRecordReceiverException extends Exception {
 
-	public MonitoringRecordTypeClassnameMapping(final int id, final String className) {
-		this.typeId = id;
-		this.className = className;
+	private static final long serialVersionUID = 76576L;
+
+	public MonitoringRecordReceiverException(final String messString) {
+		super(messString);
 	}
 
-	public int getTypeId() {
-		return this.typeId;
+	public MonitoringRecordReceiverException(final String messString, final Throwable cause) {
+		super(messString, cause);
 	}
-
-	public String getClassName() {
-		return this.className;
-	}
-
 }

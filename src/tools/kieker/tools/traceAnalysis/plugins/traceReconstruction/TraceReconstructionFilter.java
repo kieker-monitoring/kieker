@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 package kieker.tools.traceAnalysis.plugins.traceReconstruction;
-
 import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.Map;
@@ -39,6 +38,7 @@ import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.util.LoggingTimestampConverter;
+
 
 /**
  * 

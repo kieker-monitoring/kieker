@@ -24,23 +24,26 @@ package kieker.common.record;
  * @author Andre van Hoorn
  * 
  */
-public class CPUUtilizationRecord extends AbstractMonitoringRecord {
+public final class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+	protected static final Class<?>[] TYPES = {
+		long.class,
+		String.class,
+		String.class,
+		double.class,
+		double.class,
+		double.class,
+		double.class,
+		double.class,
+		double.class,
+		double.class,
+	};
 
 	public static final double UNDEFINED_DOUBLE = -1;
-
 	private static final String DEFAULT_VALUE = "N/A";
-
-	private static final Class<?>[] VALUE_TYPES = { long.class, String.class, String.class, double.class, double.class, double.class, double.class, double.class,
-		double.class, double.class, };
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 17677676L;
 
 	/**
-	 * Date/time of measurement. The value should be interpreted as the number
-	 * of nano-seconds elapsed since Jan 1st, 1970 UTC.
+	 * Date/time of measurement. The value should be interpreted as the number of nano-seconds elapsed since Jan 1st, 1970 UTC.
 	 */
 	private volatile long timestamp = -1;
 
@@ -131,16 +134,11 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 		this.idle = idle;
 	}
 
-	/*
-	 * {@inheritdoc}
-	 */
-	@Override
-	public void initFromArray(final Object[] values) throws IllegalArgumentException { // NOPMD by jwa on 20.09.11 14:23
+	public CPUUtilizationRecord(final Object[] values) {
 		try {
-			if (values.length != CPUUtilizationRecord.VALUE_TYPES.length) {
-				throw new IllegalArgumentException("Expecting vector with " + CPUUtilizationRecord.VALUE_TYPES.length + " elements but found:" + values.length);
+			if (values.length != CPUUtilizationRecord.TYPES.length) {
+				throw new IllegalArgumentException("Expecting vector with " + CPUUtilizationRecord.TYPES.length + " elements but found:" + values.length);
 			}
-
 			this.timestamp = (Long) values[0]; // NOCS
 			this.hostName = (String) values[1]; // NOCS
 			this.cpuID = (String) values[2]; // NOCS
@@ -151,7 +149,6 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 			this.irq = (Double) values[7]; // NOCS
 			this.totalUtilization = (Double) values[8]; // NOCS
 			this.idle = (Double) values[9]; // NOCS
-
 		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
@@ -165,12 +162,15 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord {
 		return new Object[] { this.timestamp, this.hostName, this.cpuID, this.user, this.system, this.wait, this.nice, this.irq, this.totalUtilization, this.idle };
 	}
 
-	/*
-	 * {@inheritdoc}
-	 */
+	@Override
+	@Deprecated
+	public void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
 	@Override
 	public Class<?>[] getValueTypes() {
-		return CPUUtilizationRecord.VALUE_TYPES.clone();
+		return CPUUtilizationRecord.TYPES.clone();
 	}
 
 	/**

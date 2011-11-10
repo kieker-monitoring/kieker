@@ -44,8 +44,8 @@ public class TraceIdFilter extends AbstractAnalysisPlugin {
 		super(configuration);
 		// TODO: Initialize from the variable.
 		this.selectedTraces = null;
-		
-		super.registerOutputPort("out", executionOutputPort);
+
+		super.registerOutputPort("out", this.executionOutputPort);
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class TraceIdFilter extends AbstractAnalysisPlugin {
 		super(new Configuration(null));
 		this.selectedTraces = selectedTraces;
 
-		super.registerOutputPort("out", executionOutputPort);
+		super.registerOutputPort("out", this.executionOutputPort);
 	}
 
 	public AbstractInputPort getExecutionInputPort() {

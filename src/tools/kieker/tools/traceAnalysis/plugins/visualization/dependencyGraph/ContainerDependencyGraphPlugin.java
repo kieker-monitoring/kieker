@@ -111,7 +111,7 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 
 		@Override
 		public void newEvent(final Object obj) {
-			final MessageTrace t = (MessageTrace)obj;
+			final MessageTrace t = (MessageTrace) obj;
 			for (final AbstractMessage m : t.getSequenceAsVector()) {
 				if (m instanceof SynchronousReplyMessage) {
 					continue;

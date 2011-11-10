@@ -21,15 +21,16 @@
 package kieker.common.record;
 
 /**
- * Record type which can be used to store the current time
- * in the field {@link #currentTime}.
+ * Record type which can be used to store the current time in the field {@link #currentTime}.
  * 
  * @author Andre van Hoorn
  */
-public class CurrentTimeRecord extends AbstractMonitoringRecord {
+public final class CurrentTimeRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+	protected static final Class<?>[] TYPES = {
+		long.class, // timestamp
+	};
 
 	private static final long serialVersionUID = 112213L;
-	private static int numRecordFields = 1;
 	private volatile long currentTime = -1;
 
 	/**
@@ -42,6 +43,33 @@ public class CurrentTimeRecord extends AbstractMonitoringRecord {
 
 	public CurrentTimeRecord(final long timestamp) {
 		this.currentTime = timestamp;
+	}
+
+	public CurrentTimeRecord(final Object[] values) {
+		try {
+			if (values.length != CurrentTimeRecord.TYPES.length) {
+				throw new IllegalArgumentException("Expecting vector with " + CurrentTimeRecord.TYPES.length + " elements but found:" + values.length);
+			}
+			this.currentTime = (Long) values[0];
+		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
+			throw new IllegalArgumentException("Failed to init", exc);
+		}
+	}
+
+	@Override
+	public Object[] toArray() {
+		return new Object[] { this.currentTime, };
+	}
+
+	@Override
+	@Deprecated
+	public void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return CurrentTimeRecord.TYPES.clone();
 	}
 
 	/**
@@ -60,28 +88,5 @@ public class CurrentTimeRecord extends AbstractMonitoringRecord {
 	 */
 	public void setCurrentTime(final long currentTime) {
 		this.currentTime = currentTime;
-	}
-
-	@Override
-	public Class<?>[] getValueTypes() {
-		return new Class[] { long.class, // timestamp
-		};
-	}
-
-	@Override
-	public void initFromArray(final Object[] values) throws IllegalArgumentException { // NOPMD by jwa on 20.09.11 14:24
-		try {
-			if (values.length != CurrentTimeRecord.numRecordFields) {
-				throw new IllegalArgumentException("Expecting vector with " + CurrentTimeRecord.numRecordFields + " elements but found:" + values.length);
-			}
-			this.currentTime = (Long) values[0];
-		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
-			throw new IllegalArgumentException("Failed to init", exc);
-		}
-	}
-
-	@Override
-	public Object[] toArray() {
-		return new Object[] { this.currentTime, };
 	}
 }

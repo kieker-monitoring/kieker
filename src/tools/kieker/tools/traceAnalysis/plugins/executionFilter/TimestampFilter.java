@@ -53,8 +53,8 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 	public TimestampFilter(final Configuration configuration) {
 		super(configuration);
 		// TODO: Initialize the timestamps based on the configuration.
-		ignoreExecutionsBeforeTimestamp = 0;
-		ignorExecutionsAfterTimestamp = 0;
+		this.ignoreExecutionsBeforeTimestamp = 0;
+		this.ignorExecutionsAfterTimestamp = 0;
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 		this.ignoreExecutionsBeforeTimestamp = ignoreExecutionsBeforeTimestamp;
 		this.ignorExecutionsAfterTimestamp = ignoreExecutionsAfterTimestamp;
 
-		super.registerOutputPort("out", executionOutputPort);
+		super.registerOutputPort("out", this.executionOutputPort);
 	}
 
 	public AbstractInputPort getExecutionInputPort() {

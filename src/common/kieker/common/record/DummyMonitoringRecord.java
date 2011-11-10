@@ -23,7 +23,9 @@ package kieker.common.record;
 /**
  * @author Andre van Hoorn
  */
-public class DummyMonitoringRecord extends AbstractMonitoringRecord {
+// This class my not be final!
+public class DummyMonitoringRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+	protected static final Class<?>[] TYPES = {};
 
 	private static final long serialVersionUID = 11767633L;
 
@@ -34,8 +36,7 @@ public class DummyMonitoringRecord extends AbstractMonitoringRecord {
 		// nothing to do
 	}
 
-	@Override
-	public void initFromArray(final Object[] values) {
+	public DummyMonitoringRecord(final Object[] values) {
 		// nothing to do
 	}
 
@@ -45,7 +46,13 @@ public class DummyMonitoringRecord extends AbstractMonitoringRecord {
 	}
 
 	@Override
+	@Deprecated
+	public void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public Class<?>[] getValueTypes() {
-		return new Class[] {};
+		return DummyMonitoringRecord.TYPES.clone();
 	}
 }

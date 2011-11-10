@@ -56,7 +56,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 	public ExecutionRecordTransformationFilter(final String name, final SystemModelRepository systemFactory) {
 		super(name, systemFactory);
 
-		registerOutputPort("out", executionOutputPort);
+		this.registerOutputPort("out", this.executionOutputPort);
 	}
 
 	static {

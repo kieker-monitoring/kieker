@@ -23,10 +23,15 @@ package kieker.common.record;
 /**
  * @author Andre van Hoorn
  */
-public class BranchingRecord extends AbstractMonitoringRecord {
+public final class BranchingRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+	protected static final Class<?>[] TYPES = {
+		long.class, // timestamp
+		int.class, // branchId
+		int.class, // branchingOutcome
+	};
 
 	private static final long serialVersionUID = 1113L;
-	private static int numRecordFields = 3; // NOCS
+
 	private volatile long timestamp = -1;
 	private volatile int branchID = -1;
 	private volatile int branchingOutcome = -1;
@@ -39,6 +44,35 @@ public class BranchingRecord extends AbstractMonitoringRecord {
 		this.timestamp = timestamp;
 		this.branchID = branchID;
 		this.branchingOutcome = branchingOutcome;
+	}
+
+	public BranchingRecord(final Object[] values) {
+		try {
+			if (values.length != BranchingRecord.TYPES.length) {
+				throw new IllegalArgumentException("Expecting vector with " + BranchingRecord.TYPES.length + " elements but found:" + values.length);
+			}
+			this.timestamp = (Long) values[0];
+			this.branchID = (Integer) values[1];
+			this.branchingOutcome = (Integer) values[2];
+		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
+			throw new IllegalArgumentException("Failed to init", exc);
+		}
+	}
+
+	@Override
+	public Object[] toArray() {
+		return new Object[] { this.timestamp, this.branchID, this.branchingOutcome };
+	}
+
+	@Override
+	@Deprecated
+	public void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return BranchingRecord.TYPES.clone();
 	}
 
 	/**
@@ -84,32 +118,5 @@ public class BranchingRecord extends AbstractMonitoringRecord {
 	 */
 	public final void setBranchingOutcome(final int branchingOutcome) {
 		this.branchingOutcome = branchingOutcome;
-	}
-
-	@Override
-	public Class<?>[] getValueTypes() {
-		return new Class[] { long.class, // timestamp
-			int.class, // branchId
-			int.class, // branchingOutcome
-		};
-	}
-
-	@Override
-	public void initFromArray(final Object[] values) throws IllegalArgumentException { // NOPMD by jwa on 20.09.11 14:20
-		try {
-			if (values.length != BranchingRecord.numRecordFields) {
-				throw new IllegalArgumentException("Expecting vector with " + BranchingRecord.numRecordFields + " elements but found:" + values.length);
-			}
-			this.timestamp = (Long) values[0];
-			this.branchID = (Integer) values[1];
-			this.branchingOutcome = (Integer) values[2];
-		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
-			throw new IllegalArgumentException("Failed to init", exc);
-		}
-	}
-
-	@Override
-	public Object[] toArray() {
-		return new Object[] { this.timestamp, this.branchID, this.branchingOutcome };
 	}
 }

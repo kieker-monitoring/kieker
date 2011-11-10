@@ -232,6 +232,7 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 
 	private final AbstractInputPort messageTraceInputPort = new AbstractInputPort("Message traces", null) {
 
+		@Override
 		public void newEvent(final Object obj) {
 			final MessageTrace mt = (MessageTrace) obj;
 			try {
