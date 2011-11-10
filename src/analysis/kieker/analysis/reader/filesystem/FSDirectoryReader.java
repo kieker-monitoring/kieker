@@ -79,10 +79,7 @@ final class FSDirectoryReader implements Runnable {
 		this.inputDir = new File(inputDirName);
 		this.recordReceiver = recordReceiver;
 		if (readOnlyRecordsOfType != null) {
-			this.recordTypeSelector = new HashSet<Class<? extends IMonitoringRecord>>();
-			for (final Class<? extends IMonitoringRecord> recordType : readOnlyRecordsOfType) {
-				this.recordTypeSelector.add(recordType);
-			}
+			this.recordTypeSelector = new HashSet<Class<? extends IMonitoringRecord>>(readOnlyRecordsOfType);
 		} else {
 			this.recordTypeSelector = null; // NOPMD (read records of any type)
 		}
