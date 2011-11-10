@@ -146,19 +146,20 @@ public class AnalysisController {
 			// We found a plugin. Not we have to determine whether this is a reader or a normal plugin.
 			final EList<IProperty> properties = p.getProperties();
 			final Configuration configuration = new Configuration(null);
-			for (IProperty prop : properties) {
+			for (final IProperty prop : properties) {
 				configuration.setProperty(prop.getName(), prop.getValue());
 			}
 
 			if (p instanceof IReader) {
 				System.out.println("Reader gefunden: " + p.getName());
-				final IMonitoringReader reader = (IMonitoringReader) Class.forName(p.getClassname()).getConstructor(Configuration.class).newInstance(configuration);
+				final IMonitoringReader reader = (IMonitoringReader) Class.forName(p.getClassname()).getConstructor(Configuration.class)
+						.newInstance(configuration.getPropertiesStartingWith(p.getClassname()));
 				this.setReader(reader);
 				pluginObjMap.put(p, reader);
 			} else {
 				System.out.println("Plugin gefunden: " + p.getName());
 				final kieker.analysis.plugin.IAnalysisPlugin plugin = (kieker.analysis.plugin.IAnalysisPlugin) Class.forName(p.getClassname())
-						.getConstructor(Configuration.class).newInstance(configuration);
+						.getConstructor(Configuration.class).newInstance(configuration.getPropertiesStartingWith(p.getClassname()));
 				pluginObjMap.put(p, plugin);
 			}
 
