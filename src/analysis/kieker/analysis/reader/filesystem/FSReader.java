@@ -23,6 +23,7 @@ package kieker.analysis.reader.filesystem;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.PriorityQueue;
+import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.configuration.Configuration;
@@ -41,15 +42,12 @@ import kieker.common.record.IMonitoringRecordReceiver;
  * @author Andre van Hoorn, Jan Waller
  */
 public class FSReader extends AbstractMonitoringReader implements IMonitoringRecordReceiver {
-
-	private static final String PREFIX = AbstractMonitoringReader.class.getName() + ".";
-	public static final String CONFIG_INPUTDIRS = FSReader.PREFIX + "inputDirs";
-	public static final String CONFIG_ONLYRECORDS = FSReader.PREFIX + "readOnlyRecordsOfType";
+	public static final String CONFIG_INPUTDIRS = AbstractMonitoringReader.class.getName() + ".inputDirs";
+	public static final String CONFIG_ONLYRECORDS = AbstractMonitoringReader.class.getName() + ".readOnlyRecordsOfType";
 
 	public static final IMonitoringRecord EOF = new DummyMonitoringRecord();
 
 	private static final Log LOG = LogFactory.getLog(FSReader.class);
-
 	private static final Collection<Class<?>> OUT_CLASSES = Collections
 			.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { IMonitoringRecord.class }));
 
@@ -70,9 +68,16 @@ public class FSReader extends AbstractMonitoringReader implements IMonitoringRec
 		} else {
 			this.readOnlyRecordsOfType = onlyrecords;
 		}
-		// TODO: improve description string
 		this.outputPort = new OutputPort("Output Port of the FSReader", FSReader.OUT_CLASSES);
 		super.registerOutputPort("out", this.outputPort);
+	}
+
+	@Override
+	protected Properties getDefaultProperties() {
+		final Properties defaultProperties = new Properties();
+		defaultProperties.setProperty(FSReader.CONFIG_INPUTDIRS, "");
+		defaultProperties.setProperty(FSReader.CONFIG_ONLYRECORDS, "");
+		return defaultProperties;
 	}
 
 	@Override

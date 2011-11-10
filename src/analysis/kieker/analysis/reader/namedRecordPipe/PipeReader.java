@@ -22,6 +22,7 @@ package kieker.analysis.reader.namedRecordPipe;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
@@ -40,47 +41,46 @@ import kieker.common.record.IMonitoringRecord;
  * @author Andre van Hoorn
  */
 public final class PipeReader extends AbstractMonitoringReader implements IPipeReader {
-	public static final String PROPERTY_PIPE_NAME = "pipeName";
+	public static final String CONFIG_PIPENAME = PipeReader.class.getName() + ".pipeName";
+
 	private static final Log LOG = LogFactory.getLog(PipeReader.class);
+	private static final Collection<Class<?>> OUT_CLASSES = Collections
+			.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { IMonitoringRecord.class }));
 
 	private volatile Pipe pipe;
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
 	private final OutputPort outputPort;
-	/**
-	 * This field determines which classes are transported through the output port.
-	 */
-	private static final Collection<Class<?>> OUT_CLASSES = Collections
-			.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { IMonitoringRecord.class }));
 
 	/**
 	 * Creates a new instance of this class using the given parameter.
 	 * 
 	 * @param configuration
-	 *            The configuration used to load the pipe name. It
-	 *            <b>must</b> contain the property {@code pipeName}.
+	 *            The configuration used to load the pipe name. It <b>must</b> contain the property {@link CONFIG_PIPENAME}.
 	 * @throws IllegalArgumentException
 	 *             If the pipe name was invalid.
 	 */
 	public PipeReader(final Configuration configuration) throws IllegalArgumentException {
 		super(configuration);
+		final String pipeName = this.configuration.getStringProperty(PipeReader.CONFIG_PIPENAME);
+		this.pipe = Broker.getInstance().acquirePipe(pipeName);
+		if (this.pipe == null) {
+			throw new IllegalArgumentException("Failed to get Pipe with name " + pipeName);
+		} else {
+			PipeReader.LOG.debug("Connected to named pipe '" + this.pipe.getName() + "'"); // NOCS (MultipleStringLiteralsCheck)
+		}
+		// TODO: escaping this in constructor! very bad practice!
+		this.pipe.setPipeReader(this);
 
 		/* Register the output port. */
 		this.outputPort = new OutputPort("Output Port of the PipeReader", PipeReader.OUT_CLASSES);
 		super.registerOutputPort("out", this.outputPort);
-
-		init(configuration);
 	}
 
-	private void initPipe(final String pipeName) throws IllegalArgumentException {
-		this.pipe = Broker.getInstance().acquirePipe(pipeName);
-		if (this.pipe == null) {
-			final String errorMsg = "Failed to get Pipe with name " + pipeName;
-			PipeReader.LOG.error(errorMsg);
-			throw new IllegalArgumentException(errorMsg);
-		} else {
-			PipeReader.LOG.debug("Connected to named pipe '" + this.pipe.getName() + "'"); // NOCS (MultipleStringLiteralsCheck)
-		}
-		this.pipe.setPipeReader(this);
+	@Override
+	protected Properties getDefaultProperties() {
+		final Properties defaultProperties = new Properties();
+		defaultProperties.setProperty(PipeReader.CONFIG_PIPENAME, "kieker-pipe");
+		return defaultProperties;
 	}
 
 	/**
@@ -99,14 +99,9 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 		return true;
 	}
 
-	public void init(final Configuration configuration) throws IllegalArgumentException {
-		this.initPipe(configuration.getProperty(PipeReader.PROPERTY_PIPE_NAME));
-		PipeReader.LOG.debug("Connected to pipe '" + this.pipe.getName() + "'" + " (" + this.pipe + ")"); // NOCS (MultipleStringLiteralsCheck)
-	}
-
 	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord rec) {
-		return outputPort.deliver(rec);
+		return this.outputPort.deliver(rec);
 	}
 
 	@Override

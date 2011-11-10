@@ -2,12 +2,16 @@ package kieker.analysis.plugin;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 
 public abstract class AbstractPlugin {
+	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
 
 	// TODO: should probably be ConcurrentHashMap ? also in many other cases?
 	private final Map<String, AbstractInputPort> inputPorts = new HashMap<String, AbstractInputPort>();
@@ -16,13 +20,22 @@ public abstract class AbstractPlugin {
 	protected final Configuration configuration;
 
 	/**
-	 * Each Plugin requires a constructor with a single Configuration object.
-	 * 
-	 * @author jwa
+	 * Each Plugin requires a constructor with a single Configuration object!
 	 */
 	public AbstractPlugin(final Configuration configuration) {
+		try {
+			// somewhat dirty hack...
+			final Properties defaultProps = this.getDefaultProperties(); // NOPMD
+			if (defaultProps != null) {
+				configuration.setDefaultProperties(defaultProps);
+			}
+		} catch (final IllegalAccessException ex) {
+			AbstractPlugin.LOG.error("Unable to set plugin default properties");
+		}
 		this.configuration = configuration;
 	}
+
+	protected abstract Properties getDefaultProperties();
 
 	public final AbstractInputPort getInputPort(final String name) {
 		return this.inputPorts.get(name);
@@ -41,10 +54,10 @@ public abstract class AbstractPlugin {
 	}
 
 	public final AbstractInputPort[] getAllInputPorts() {
-		return inputPorts.values().toArray(new AbstractInputPort[0]);
+		return this.inputPorts.values().toArray(new AbstractInputPort[0]);
 	}
 
 	public final OutputPort[] getAllOutputPorts() {
-		return outputPorts.values().toArray(new OutputPort[0]);
+		return this.outputPorts.values().toArray(new OutputPort[0]);
 	}
 }

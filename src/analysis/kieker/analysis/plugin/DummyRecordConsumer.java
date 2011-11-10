@@ -20,8 +20,13 @@
 
 package kieker.analysis.plugin;
 
-import java.util.ArrayList;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Properties;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
@@ -29,40 +34,59 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * 
- * @author matthias
+ * @author Matthias Rohr, Jan Waller
  */
-public class DummyRecordConsumer extends AbstractAnalysisPlugin {
+public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
+	public static final String CONFIG_STREAM = DummyRecordConsumer.class.getName() + ".Stream";
 
-	/**
-	 * Constructs a {@link DummyRecordConsumer}.
-	 */
-	public DummyRecordConsumer(final Configuration configuration) {
+	private static final Collection<Class<?>> OUT_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { IMonitoringRecord.class }));
+
+	private final PrintStream printStream;
+
+	public DummyRecordConsumer(final Configuration configuration) throws FileNotFoundException {
 		super(configuration);
-		final Collection<Class<?>> eventTypes = new ArrayList<Class<?>>();
-		eventTypes.add(IMonitoringRecord.class);
-		super.registerInputPort("in", new AbstractInputPort("in", eventTypes) {
 
+		final String printStreamName = this.configuration.getStringProperty(DummyRecordConsumer.CONFIG_STREAM);
+		if ("STDOUT".equals(printStreamName)) {
+			this.printStream = System.out;
+		} else if ("STDERR".equals(printStreamName)) {
+			this.printStream = System.err;
+		} else {
+			this.printStream = new PrintStream(new FileOutputStream(printStreamName));
+		}
+
+		super.registerInputPort("in", new AbstractInputPort("in", DummyRecordConsumer.OUT_CLASSES) {
 			@Override
 			public void newEvent(final Object event) {
+				// TODO: very bad style: escaping this in constructor! this should be assigned in execute()
 				DummyRecordConsumer.this.newMonitoringRecord((IMonitoringRecord) event);
 			}
 		});
 	}
 
-	public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		System.out.println("DummyRecordConsumer consumed (" + monitoringRecord.getClass().getSimpleName() + ") " + monitoringRecord);
+	@Override
+	protected final Properties getDefaultProperties() {
+		final Properties defaultProperties = new Properties();
+		defaultProperties.setProperty(DummyRecordConsumer.CONFIG_STREAM, "STDOUT");
+		return defaultProperties;
+	}
+
+	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
+		this.printStream.println("DummyRecordConsumer consumed (" + monitoringRecord.getClass().getSimpleName() + ") " + monitoringRecord);
 		return true;
 	}
 
 	@Override
-	public boolean execute() {
-		System.out.println("DummyRecordConsumer.execute()");
+	public final boolean execute() {
+		this.printStream.println("DummyRecordConsumer.execute()");
 		return true;
 	}
 
 	@Override
-	public void terminate(final boolean error) {
-		// nothing to do
+	public final void terminate(final boolean error) {
+		if ((this.printStream != System.out) && (this.printStream != System.err)) {
+			this.printStream.close();
+		}
 	}
-
 }

@@ -25,8 +25,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import kieker.analysis.exception.MonitoringRecordConsumerException;
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
-import kieker.analysis.plugin.MonitoringRecordConsumerException;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;

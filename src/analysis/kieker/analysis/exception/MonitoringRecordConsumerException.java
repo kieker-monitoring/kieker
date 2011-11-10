@@ -18,20 +18,21 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.plugin;
+package kieker.analysis.exception;
 
 /**
  * 
  * @author Andre van Hoorn
  */
-public class EventProcessingException extends Exception {
-	private static final long serialVersionUID = 345L;
+public class MonitoringRecordConsumerException extends Exception {
 
-	public EventProcessingException(final String msg) {
-		super(msg);
+	private static final long serialVersionUID = 1L;
+
+	public MonitoringRecordConsumerException(final String messString) {
+		super(messString);
 	}
 
-	public EventProcessingException(final String msg, final Throwable t) {
-		super(msg, t);
+	public MonitoringRecordConsumerException(final String messString, final Throwable cause) {
+		super(messString, cause);
 	}
 }

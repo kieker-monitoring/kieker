@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.reader;
+package kieker.analysis.exception;
 
 import kieker.common.record.MonitoringRecordReceiverException;
 

@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
@@ -49,68 +50,65 @@ import kieker.common.record.IMonitoringRecord;
 /**
  * 
  * @author Jan Waller
- * 
  */
 public final class JMXReader extends AbstractMonitoringReader {
+	public static final String CONFIG_SERVER = JMXReader.class.getName() + ".server";
+	public static final String CONFIG_PORT = JMXReader.class.getName() + ".port";
+	public static final String CONFIG_SERVICEURL = JMXReader.class.getName() + ".serviceURL";
+	public static final String CONFIG_DOMAIN = JMXReader.class.getName() + ".domain";
+	public static final String CONFIG_LOGNAME = JMXReader.class.getName() + ".logname";
+	public static final String CONFIG_SILENT = JMXReader.class.getName() + ".silentreconnect";
+
 	private static final Log LOG = LogFactory.getLog(JMXReader.class);
 
-	private JMXServiceURL serviceURL;
-	private ObjectName monitoringLog;
-	private final boolean silentreconnect;
-	private final CountDownLatch cdLatch = new CountDownLatch(1);
-	private final OutputPort outputPort;
-	/**
-	 * This field determines which classes are transported through the output port.
-	 */
 	private static final Collection<Class<?>> OUT_CLASSES = Collections
 			.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { IMonitoringRecord.class }));
 
-	public JMXReader(final Configuration configuation) {
-		this(configuation, false);
-	}
+	private final JMXServiceURL serviceURL;
+	private final ObjectName monitoringLog;
+	private final boolean silentreconnect;
+	private final OutputPort outputPort;
+	private final CountDownLatch cdLatch = new CountDownLatch(1);
 
-	public JMXReader(final Configuration configuation, final boolean silentreconnect) {
+	public JMXReader(final Configuration configuation) throws IllegalArgumentException {
 		super(configuation);
-		this.silentreconnect = silentreconnect;
-
-		/* Register the output port. */
-		this.outputPort = new OutputPort("Output Port of the JMXReader", JMXReader.OUT_CLASSES);
-		super.registerOutputPort("out", this.outputPort);
-
-		init(configuation);
-	}
-
-	/**
-	 * known properties are
-	 * server, port, serviceURL, domain, logname
-	 * 
-	 * either port or serviceURL are mandatory
-	 */
-	private final boolean init(final Configuration configuration) {
+		final String server = this.configuration.getStringProperty(JMXReader.CONFIG_SERVER);
+		final int port = this.configuration.getIntProperty(JMXReader.CONFIG_PORT);
+		final String tmpServiceURL;
+		if (port > 0) {
+			tmpServiceURL = "service:jmx:rmi:///jndi/rmi://" + server + ":" + port + "/jmxrmi";
+		} else {
+			tmpServiceURL = this.configuration.getStringProperty(JMXReader.CONFIG_SERVICEURL);
+		}
+		final String domain = this.configuration.getStringProperty(JMXReader.CONFIG_DOMAIN);
+		final String logname = this.configuration.getStringProperty(JMXReader.CONFIG_LOGNAME);
+		if (tmpServiceURL == null) {
+			throw new IllegalArgumentException("JMXReader has not sufficient parameters. serviceURL is null");
+		}
 		try {
-			final String server = configuration.getProperty("server", "localhost");
-			final int port = Integer.parseInt(configuration.getProperty("port", "0"));
-			final String tmpServiceURL;
-			if (port > 0) {
-				tmpServiceURL = "service:jmx:rmi:///jndi/rmi://" + server + ":" + port + "/jmxrmi";
-			} else {
-				tmpServiceURL = configuration.getProperty("serviceURL", null);
-			}
-			final String domain = configuration.getProperty("domain", "kieker.monitoring");
-			final String logname = configuration.getProperty("logname", "MonitoringLog");
-			if (tmpServiceURL == null) {
-				throw new IllegalArgumentException("JMXReader has not sufficient parameters. serviceURL is null");
-			}
 			this.serviceURL = new JMXServiceURL(tmpServiceURL);
 			this.monitoringLog = new ObjectName(domain, "type", logname);
 		} catch (final MalformedObjectNameException e) {
-			JMXReader.LOG.error("Failed to parse configuration: " + e.getMessage()); // NOCS (MultipleStringLiteralsCheck)
-			return false;
+			throw new IllegalArgumentException("Failed to parse configuration.", e);
 		} catch (final MalformedURLException e) {
-			JMXReader.LOG.error("Failed to parse configuration: " + e.getMessage()); // NOCS (MultipleStringLiteralsCheck)
-			return false;
+			throw new IllegalArgumentException("Failed to parse configuration.", e);
 		}
-		return true;
+		this.silentreconnect = this.configuration.getBooleanProperty(JMXReader.CONFIG_SILENT);
+		/* Register the output port. */
+		this.outputPort = new OutputPort("Output Port of the JMXReader", JMXReader.OUT_CLASSES);
+		super.registerOutputPort("out", this.outputPort);
+	}
+
+	@Override
+	protected Properties getDefaultProperties() {
+		final Properties defaultProperties = new Properties();
+		defaultProperties.setProperty(JMXReader.CONFIG_SERVER, "localhost");
+		defaultProperties.setProperty(JMXReader.CONFIG_PORT, "0");
+		defaultProperties.setProperty(JMXReader.CONFIG_SERVICEURL, "");
+		defaultProperties.setProperty(JMXReader.CONFIG_DOMAIN, "kieker.monitoring");
+		defaultProperties.setProperty(JMXReader.CONFIG_LOGNAME, "MonitoringLog");
+		defaultProperties.setProperty(JMXReader.CONFIG_SILENT, "false");
+		return defaultProperties;
 	}
 
 	@Override
@@ -261,7 +259,7 @@ public final class JMXReader extends AbstractMonitoringReader {
 
 		@Override
 		public final void handleNotification(final Notification notification, final Object handback) {
-			JMXReader.this.outputPort.deliver((IMonitoringRecord) notification.getUserData());
+			JMXReader.this.outputPort.deliver(notification.getUserData());
 		}
 	}
 

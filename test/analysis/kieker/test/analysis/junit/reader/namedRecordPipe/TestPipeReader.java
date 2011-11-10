@@ -51,7 +51,7 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 	public void testNamedPipeReaderReceivesFromPipe() {
 		final String pipeName = NamedPipeFactory.createPipeName();
 		final Configuration configuration = new Configuration(null);
-		configuration.setProperty(PipeReader.PROPERTY_PIPE_NAME, pipeName);
+		configuration.setProperty(PipeReader.CONFIG_PIPENAME, pipeName);
 		final PipeReader pipeReader = new PipeReader(configuration);
 
 		final List<IMonitoringRecord> receivedRecords = Collections.synchronizedList(new ArrayList<IMonitoringRecord>());
