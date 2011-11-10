@@ -77,13 +77,7 @@ public class AnalysisController {
 	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
 
 	private IMonitoringReader logReader;
-	/** This are the consumers for data that are coming into Kieker by readers (files or system under monitoring) */
-	private final Collection<IMonitoringRecordConsumerPlugin> consumers = new CopyOnWriteArrayList<IMonitoringRecordConsumerPlugin>();
-	/** Contains all consumers which consume records of any type */
-	private final Collection<IMonitoringRecordConsumerPlugin> anyTypeConsumers = new CopyOnWriteArrayList<IMonitoringRecordConsumerPlugin>();
-	/** Contains mapping of record types to subscribed consumers */
-	private final ConcurrentMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>> specificTypeConsumers = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Collection<IMonitoringRecordConsumerPlugin>>();
-	private final Collection<kieker.analysis.plugin.IAnalysisPlugin> plugins = new CopyOnWriteArrayList<kieker.analysis.plugin.IAnalysisPlugin>();
+	private final Collection<AbstractAnalysisPlugin> plugins = new CopyOnWriteArrayList<AbstractAnalysisPlugin>();
 	/** Will be count down after the analysis is set-up. */
 	private final CountDownLatch initializationLatch = new CountDownLatch(1);
 
@@ -128,7 +122,7 @@ public class AnalysisController {
 	}
 
 	private final void loadFromModelProject(final IProject project) throws Exception {
-		System.out.println(project.getName());
+		AnalysisController.LOG.info("Found Project " + project.getName());
 
 		/*
 		 * While we run through a project, we have to remember different things:
@@ -151,15 +145,16 @@ public class AnalysisController {
 			}
 
 			if (p instanceof IReader) {
-				System.out.println("Reader gefunden: " + p.getName());
+				AnalysisController.LOG.info("Register Reader " + p.getName());
 				final IMonitoringReader reader = (IMonitoringReader) Class.forName(p.getClassname()).getConstructor(Configuration.class)
 						.newInstance(configuration.getPropertiesStartingWith(p.getClassname()));
 				this.setReader(reader);
 				pluginObjMap.put(p, reader);
 			} else {
-				System.out.println("Plugin gefunden: " + p.getName());
+				AnalysisController.LOG.info("Register Plugin " + p.getName());
 				final kieker.analysis.plugin.IAnalysisPlugin plugin = (kieker.analysis.plugin.IAnalysisPlugin) Class.forName(p.getClassname())
 						.getConstructor(Configuration.class).newInstance(configuration.getPropertiesStartingWith(p.getClassname()));
+				this.plugins.add((AbstractAnalysisPlugin) plugin);
 				pluginObjMap.put(p, plugin);
 			}
 
@@ -188,7 +183,7 @@ public class AnalysisController {
 			/* We can get the plugins via the map. */
 			final IPlugin in = portPluginMap.get(c.getDstInputPort());
 			final IPlugin out = portPluginMap.get(c.getSicOutputPort());
-			System.out.format("Connector gefunden. Verbinde Output von " + "%s mit Input von %s\n", out.getName(), in.getName());
+			AnalysisController.LOG.info(String.format("Found Connector. Connect output from %s with the input of %s\n", out.getName(), in.getName()));
 
 			final AbstractPlugin outObj = (AbstractPlugin) pluginObjMap.get(out);
 			final AbstractAnalysisPlugin inObj = (AbstractAnalysisPlugin) pluginObjMap.get(in);
@@ -235,6 +230,19 @@ public class AnalysisController {
 		}
 
 		return resource.getContents();
+	}
+
+	/**
+	 * This method stores the current configuration of this instance to the
+	 * given file. The file can later be loaded by the constructor again.
+	 * 
+	 * @param file
+	 *            The file where to save the configuration.
+	 * @return true iff the configuration has been saved successfully.
+	 */
+	public final boolean saveToFile(final File file) {
+		// TODO: Implement!
+		return false;
 	}
 
 	/**
@@ -376,10 +384,11 @@ public class AnalysisController {
 	}
 
 	/**
-	 * Registers the passed plug-in <i>c<i>. If <i>c</i> is an instance of the interface <i>IMonitoringRecordConsumerPlugin</i> it is also registered as a record
-	 * consumer.
+	 * Registers the passed plug-in <i>c<i>. If <i>c</i> is an instance of the
+	 * interface <i>IMonitoringRecordConsumerPlugin</i> it is also registered
+	 * as a record consumer.
 	 */
-	public void registerPlugin(final kieker.analysis.plugin.IAnalysisPlugin plugin) {
+	public void registerPlugin(final AbstractAnalysisPlugin plugin) {
 		this.plugins.add(plugin);
 		AnalysisController.LOG.debug("Registered plugin " + plugin);
 
