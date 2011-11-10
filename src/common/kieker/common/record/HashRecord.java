@@ -41,10 +41,8 @@ public final class HashRecord extends AbstractMonitoringRecord implements IMonit
 	}
 
 	public HashRecord(final Object[] values) {
+		AbstractMonitoringRecord.checkArray(values, HashRecord.TYPES);
 		try {
-			if (values.length != HashRecord.TYPES.length) {
-				throw new IllegalArgumentException("Expecting array with " + HashRecord.TYPES.length + " elements but found " + values.length + ".");
-			}
 			this.id = (Integer) values[0];
 			this.object = values[1];
 		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD

@@ -47,10 +47,8 @@ public final class BranchingRecord extends AbstractMonitoringRecord implements I
 	}
 
 	public BranchingRecord(final Object[] values) {
+		AbstractMonitoringRecord.checkArray(values, BranchingRecord.TYPES);
 		try {
-			if (values.length != BranchingRecord.TYPES.length) {
-				throw new IllegalArgumentException("Expecting vector with " + BranchingRecord.TYPES.length + " elements but found:" + values.length);
-			}
 			this.timestamp = (Long) values[0];
 			this.branchID = (Integer) values[1];
 			this.branchingOutcome = (Integer) values[2];

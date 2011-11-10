@@ -105,6 +105,18 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		return (31 * Arrays.hashCode(this.toArray())) + (int) (this.loggingTimestamp ^ (this.loggingTimestamp >>> 32)); // NOCS (magic number)
 	}
 
+	public static final void checkArray(final Object[] values, final Class<?>[] valueTypes) {
+		if (values.length != HashRecord.TYPES.length) {
+			throw new IllegalArgumentException("Expecting array with " + valueTypes.length + " elements but found " + values.length + " elements.");
+		}
+		for (int i = 0; i < valueTypes.length; i++) {
+			if (!values[i].getClass().equals(valueTypes[i])) {
+				throw new IllegalArgumentException("Expecting " + valueTypes[i].getName() + " but found " + values[i].getClass().getName() + " at position " + i
+						+ "of the array.");
+			}
+		}
+	}
+
 	public static final Object[] fromStringArrayToTypedArray(final String[] recordFields, final Class<?>[] valueTypes) throws IllegalArgumentException {
 		if (recordFields.length != valueTypes.length) {
 			throw new IllegalArgumentException("Expected " + valueTypes.length + " record fields, but found " + recordFields.length);

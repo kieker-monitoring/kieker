@@ -80,16 +80,12 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 	}
 
 	public ResourceUtilizationRecord(final Object[] values) {
+		AbstractMonitoringRecord.checkArray(values, ResourceUtilizationRecord.TYPES);
 		try {
-			if (values.length != ResourceUtilizationRecord.TYPES.length) {
-				throw new IllegalArgumentException("Expecting vector with " + ResourceUtilizationRecord.TYPES.length + " elements but found:" + values.length);
-			}
-
 			this.timestamp = (Long) values[0]; // NOCS
 			this.hostName = (String) values[1]; // NOCS
 			this.resourceName = (String) values[2]; // NOCS
 			this.utilization = (Double) values[3]; // NOCS
-
 		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
 			throw new IllegalArgumentException("Failed to init", exc);
 		}

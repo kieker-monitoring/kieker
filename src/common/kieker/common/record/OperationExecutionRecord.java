@@ -145,10 +145,8 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	}
 
 	public OperationExecutionRecord(final Object[] values) {
+		AbstractMonitoringRecord.checkArray(values, OperationExecutionRecord.TYPES);
 		try {
-			if (values.length != OperationExecutionRecord.TYPES.length) {
-				throw new IllegalArgumentException("Expecting vector with " + OperationExecutionRecord.TYPES.length + " elements but found:" + values.length);
-			}
 			this.experimentId = (Integer) values[0];
 			final String name = (String) values[1];
 			final int posParen = name.lastIndexOf('(');

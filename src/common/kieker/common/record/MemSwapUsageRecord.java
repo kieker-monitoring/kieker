@@ -90,10 +90,8 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	}
 
 	public MemSwapUsageRecord(final Object[] values) {
+		AbstractMonitoringRecord.checkArray(values, MemSwapUsageRecord.TYPES);
 		try {
-			if (values.length != MemSwapUsageRecord.TYPES.length) {
-				throw new IllegalArgumentException("Expecting vector with " + MemSwapUsageRecord.TYPES.length + " elements but found:" + values.length);
-			}
 			this.timestamp = (Long) values[0]; // NOCS
 			this.hostName = (String) values[1]; // NOCS
 			this.memTotal = (Long) values[2]; // NOCS

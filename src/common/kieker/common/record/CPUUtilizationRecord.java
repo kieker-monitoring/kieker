@@ -135,10 +135,8 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 	}
 
 	public CPUUtilizationRecord(final Object[] values) {
+		AbstractMonitoringRecord.checkArray(values, CPUUtilizationRecord.TYPES);
 		try {
-			if (values.length != CPUUtilizationRecord.TYPES.length) {
-				throw new IllegalArgumentException("Expecting vector with " + CPUUtilizationRecord.TYPES.length + " elements but found:" + values.length);
-			}
 			this.timestamp = (Long) values[0]; // NOCS
 			this.hostName = (String) values[1]; // NOCS
 			this.cpuID = (String) values[2]; // NOCS
