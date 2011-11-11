@@ -262,7 +262,12 @@ public final class TraceAnalysisTool {
 				recordTypeSelectorSet.add(OperationExecutionRecord.class);
 				final Configuration conf = new Configuration(null);
 				conf.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(TraceAnalysisTool.inputDirs));
-				conf.setProperty(FSReader.CONFIG_ONLYRECORDS, Configuration.toProperty((String[]) recordTypeSelectorSet.toArray()));
+				
+				final Collection<String> recordTypeSelectorNameSet  = new CopyOnWriteArrayList<String>();
+				for (Class<? extends IMonitoringRecord> c : recordTypeSelectorSet) {
+					recordTypeSelectorNameSet.add(c.getName());
+				}
+				conf.setProperty(FSReader.CONFIG_ONLYRECORDS, Configuration.toProperty(recordTypeSelectorNameSet.toArray(new String[0])));
 				analysisInstance.setReader(new FSReader(conf));
 			}
 

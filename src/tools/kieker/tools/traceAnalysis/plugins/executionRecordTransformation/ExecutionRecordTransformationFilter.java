@@ -52,7 +52,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 
 	private static final Log LOG = LogFactory.getLog(ExecutionRecordTransformationFilter.class);
 
-	private static final Collection<Class<?>> RECORD_TYPE_SUBSCRIPTION_LIST = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>());
+	private static final Collection<Class<?>> RECORD_TYPE_SUBSCRIPTION_LIST = new CopyOnWriteArrayList<Class<?>>();
 	private static final Collection<Class<?>> OUT_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
 			new Class<?>[] { Execution.class }));
 
