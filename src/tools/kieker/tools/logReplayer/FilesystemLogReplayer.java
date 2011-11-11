@@ -22,10 +22,15 @@ package kieker.tools.logReplayer;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Properties;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.configuration.AbstractInputPort;
+import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.configuration.AbstractConfiguration;
@@ -52,13 +57,13 @@ public class FilesystemLogReplayer {
 	private final long ignoreRecordsAfterTimestamp;
 
 	/** Each record is delegated to this receiver. */
-	private final IMonitoringRecordReceiver recordReceiver;
+	private final AbstractAnalysisPlugin recordReceiver;
 	private final String[] inputDirs;
 	private final boolean realtimeMode;
 	private final int numRealtimeWorkerThreads;
 
 	/** Normal replay mode (i.e., non-real-time). */
-	public FilesystemLogReplayer(final IMonitoringRecordReceiver monitoringController, final String[] inputDirs) {
+	public FilesystemLogReplayer(final IMonitoringController monitoringController, final String[] inputDirs) {
 		this(monitoringController, inputDirs, false, -1);
 	}
 
@@ -69,7 +74,7 @@ public class FilesystemLogReplayer {
 	 * @param realtimeMode
 	 * @param numRealtimeWorkerThreads
 	 */
-	public FilesystemLogReplayer(final IMonitoringRecordReceiver monitoringController, final String[] inputDirs, final boolean realtimeMode,
+	public FilesystemLogReplayer(final AbstractAnalysisPlugin monitoringController, final String[] inputDirs, final boolean realtimeMode,
 			final int numRealtimeWorkerThreads) {
 		this(monitoringController, inputDirs, realtimeMode, numRealtimeWorkerThreads, FilesystemLogReplayer.MIN_TIMESTAMP, FilesystemLogReplayer.MAX_TIMESTAMP);
 	}
@@ -84,7 +89,7 @@ public class FilesystemLogReplayer {
 	 * @param ignoreRecordsBeforeTimestamp
 	 * @param ignoreRecordsAfterTimestamp
 	 */
-	public FilesystemLogReplayer(final IMonitoringRecordReceiver monitoringController, final String[] inputDirs, final boolean realtimeMode,
+	public FilesystemLogReplayer(final AbstractAnalysisPlugin monitoringController, final String[] inputDirs, final boolean realtimeMode,
 			final int numRealtimeWorkerThreads, final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp) {
 		this.recordReceiver = monitoringController;
 		this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
@@ -137,34 +142,60 @@ class RecordDelegationPlugin extends AbstractAnalysisPlugin {
 
 	private static final Log LOG = LogFactory.getLog(RecordDelegationPlugin.class);
 
-	private final IMonitoringRecordReceiver rec;
+	private final AbstractAnalysisPlugin rec;
 
 	private final long ignoreRecordsBeforeTimestamp;
 	private final long ignoreRecordsAfterTimestamp;
 
-	/**
-	 * Must not be used for construction.
-	 */
-	@SuppressWarnings("unused")
-	private RecordDelegationPlugin() {
-		this(null, FilesystemLogReplayer.MIN_TIMESTAMP, FilesystemLogReplayer.MAX_TIMESTAMP);
+	private static final Collection<Class<?>> OUT_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { IMonitoringRecord.class }));
+	private static final Collection<Class<?>> IN_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { IMonitoringRecord.class }));
+
+	private final AbstractInputPort input = new AbstractInputPort("in", RecordDelegationPlugin.IN_CLASSES) {
+		@Override
+		public void newEvent(final Object event) {
+			RecordDelegationPlugin.this.newMonitoringRecord((IMonitoringRecord) event);
+		}
+	};
+
+	private final OutputPort output = new OutputPort("out", RecordDelegationPlugin.OUT_CLASSES);
+
+	public RecordDelegationPlugin(final Configuration configuration) {
+		super(configuration);
+
+		// TODO: Load from configuration.
+		this.rec = null;
+		this.ignoreRecordsBeforeTimestamp = 0;
+		this.ignoreRecordsAfterTimestamp = 0;
+
+		super.registerInputPort("in", input);
+		super.registerOutputPort("out", output);
 	}
 
+	/**
+	 * Data is only sent via the first input port of the given plugin.
+	 * 
+	 * @param rec
+	 * @param ignoreRecordsBeforeTimestamp
+	 * @param ignoreRecordsAfterTimestamp
+	 */
 	public RecordDelegationPlugin(final AbstractAnalysisPlugin rec, final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp) {
+		super(new Configuration(null));
+
 		this.rec = rec;
+		this.output.subscribe(this.rec.getAllInputPorts()[0]);
 		this.ignoreRecordsBeforeTimestamp = ignoreRecordsBeforeTimestamp;
 		this.ignoreRecordsAfterTimestamp = ignoreRecordsAfterTimestamp;
+
+		super.registerInputPort("in", input);
+		super.registerOutputPort("out", output);
 	}
 
-	/*
-	 * {@inheritdoc}
-	 */
-	@Override
-	public boolean newMonitoringRecord(final IMonitoringRecord record) {
-		if ((record.getLoggingTimestamp() < this.ignoreRecordsBeforeTimestamp) || (record.getLoggingTimestamp() > this.ignoreRecordsAfterTimestamp)) {
-			return true;
+	private void newMonitoringRecord(final IMonitoringRecord record) {
+		if ((record.getLoggingTimestamp() >= this.ignoreRecordsBeforeTimestamp) && (record.getLoggingTimestamp() <= this.ignoreRecordsAfterTimestamp)) {
+			this.output.deliver(record);
 		}
-		return this.rec.newMonitoringRecord(record);
 	}
 
 	/*
@@ -187,11 +218,8 @@ class RecordDelegationPlugin extends AbstractAnalysisPlugin {
 		// nothing to do
 	}
 
-	/*
-	 * {@inheritdoc}
-	 */
 	@Override
-	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-		return null; // receive records of any type
+	protected Properties getDefaultProperties() {
+		return new Properties();
 	}
 }
