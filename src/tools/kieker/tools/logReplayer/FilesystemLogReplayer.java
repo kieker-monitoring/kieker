@@ -38,7 +38,6 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
-import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
@@ -58,13 +57,13 @@ public class FilesystemLogReplayer {
 	private final long ignoreRecordsAfterTimestamp;
 
 	/** Each record is delegated to this receiver. */
-	private final IMonitoringController recordReceiver;
+	private final AbstractAnalysisPlugin recordReceiver;
 	private final String[] inputDirs;
 	private final boolean realtimeMode;
 	private final int numRealtimeWorkerThreads;
 
 	/** Normal replay mode (i.e., non-real-time). */
-	public FilesystemLogReplayer(final IMonitoringController monitoringController, final String[] inputDirs) {
+	public FilesystemLogReplayer(final AbstractAnalysisPlugin monitoringController, final String[] inputDirs) {
 		this(monitoringController, inputDirs, false, -1);
 	}
 
@@ -75,7 +74,7 @@ public class FilesystemLogReplayer {
 	 * @param realtimeMode
 	 * @param numRealtimeWorkerThreads
 	 */
-	public FilesystemLogReplayer(final IMonitoringController monitoringController, final String[] inputDirs, final boolean realtimeMode,
+	public FilesystemLogReplayer(final AbstractAnalysisPlugin monitoringController, final String[] inputDirs, final boolean realtimeMode,
 			final int numRealtimeWorkerThreads) {
 		this(monitoringController, inputDirs, realtimeMode, numRealtimeWorkerThreads, FilesystemLogReplayer.MIN_TIMESTAMP, FilesystemLogReplayer.MAX_TIMESTAMP);
 	}
@@ -90,7 +89,7 @@ public class FilesystemLogReplayer {
 	 * @param ignoreRecordsBeforeTimestamp
 	 * @param ignoreRecordsAfterTimestamp
 	 */
-	public FilesystemLogReplayer(final IMonitoringController monitoringController, final String[] inputDirs, final boolean realtimeMode,
+	public FilesystemLogReplayer(final AbstractAnalysisPlugin monitoringController, final String[] inputDirs, final boolean realtimeMode,
 			final int numRealtimeWorkerThreads, final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp) {
 		this.recordReceiver = monitoringController;
 		this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);

@@ -24,13 +24,12 @@ import java.util.Properties;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.monitoring.core.configuration.Configuration;
 
 /**
  * @author Jan Waller
  */
 public abstract class AbstractConfiguration extends Properties {
-	private static final Log LOG = LogFactory.getLog(Configuration.class);
+	private static final Log LOG = LogFactory.getLog(AbstractConfiguration.class);
 	private static final long serialVersionUID = 1L;
 
 	public AbstractConfiguration(final Properties defaults) {

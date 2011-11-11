@@ -29,8 +29,6 @@ import java.util.TimeZone;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.configuration.Configuration;
-import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.core.controller.MonitoringController;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -232,7 +230,9 @@ public final class FilesystemLogReplayerStarter {
 			configuration.setProperty(Configuration.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(true));
 		}
 
-		final IMonitoringController monitoringController = MonitoringController.createInstance(configuration);
+		// FIXME: Repair the problem with the monitoring controller...
+		/*
+		final AbstractAnalysisPlugin monitoringController = MonitoringController.createInstance(configuration);
 
 		final FilesystemLogReplayer player = new FilesystemLogReplayer(monitoringController, FilesystemLogReplayerStarter.inputDirs,
 				FilesystemLogReplayerStarter.realtimeMode, FilesystemLogReplayerStarter.numRealtimeWorkerThreads,
@@ -244,5 +244,6 @@ public final class FilesystemLogReplayerStarter {
 			System.err.println("See 'kieker.log' for details");
 			System.exit(1);
 		}
+		*/
 	}
 }
