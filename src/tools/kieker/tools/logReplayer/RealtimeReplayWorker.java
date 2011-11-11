@@ -47,15 +47,13 @@ public class RealtimeReplayWorker implements Runnable {
 	 * @param rd
 	 *            The distributor.
 	 * @param cons
-	 *            The plugin which receives the record. The plugin <b>must</b> have at least one input port.
-	 * @param inputPort
-	 *            The name of the input port of the plugin to which the monitoring record will be send.
+	 *            The plugin which receives the record. The plugin <b>must</b> have at least one input port. The data will be send to the first input.
 	 */
-	public RealtimeReplayWorker(final IMonitoringRecord monRec, final RealtimeReplayDistributor rd, final AbstractAnalysisPlugin cons, final String inputPort) {
+	public RealtimeReplayWorker(final IMonitoringRecord monRec, final RealtimeReplayDistributor rd, final AbstractAnalysisPlugin cons) {
 		this.monRec = monRec;
 		this.rd = rd;
 
-		output.subscribe(cons.getInputPort(inputPort));
+		output.subscribe(cons.getAllInputPorts()[0]);
 	}
 
 	@Override

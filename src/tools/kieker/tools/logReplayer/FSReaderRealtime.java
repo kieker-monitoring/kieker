@@ -23,13 +23,15 @@ package kieker.tools.logReplayer;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.configuration.Configuration;
-import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.analysis.reader.filesystem.FSReader;
@@ -144,7 +146,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 		configuration.setProperty(FSReader.CONFIG_INPUTDIRS,
 				AbstractConfiguration.toProperty(inputDirNames));
 		final AbstractMonitoringReader fsReader = new FSReader(configuration);
-		final IMonitoringRecordConsumerPlugin rtCons = new FSReaderRealtimeCons(this);
+		final AbstractAnalysisPlugin rtCons = new FSReaderRealtimeCons(this);
 		this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, this.terminationLatch);
 		this.analysis.setReader(fsReader);
 		this.analysis.registerPlugin(this.rtDistributor);
@@ -176,20 +178,37 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 	 * Acts as a consumer to the rtDistributor and delegates incoming records to
 	 * the FSReaderRealtime instance.
 	 */
-	private static class FSReaderRealtimeCons implements IMonitoringRecordConsumerPlugin {
+	private static class FSReaderRealtimeCons extends AbstractAnalysisPlugin {
 
 		private final FSReaderRealtime master;
+		private final OutputPort output = new OutputPort("out", null);
+		private final AbstractInputPort input = new AbstractInputPort("in", null) {
+			@Override
+			public void newEvent(final Object event) {
+				FSReaderRealtimeCons.this.newMonitoringRecord((IMonitoringRecord) event);
+
+				output.deliver(event);
+			}
+		};
+
+		public FSReaderRealtimeCons(Configuration configuration) {
+			super(configuration);
+			master = null;
+
+			// TODO: Load from configuration.
+
+			registerInputPort("in", input);
+			registerOutputPort("out", output);
+		}
 
 		public FSReaderRealtimeCons(final FSReaderRealtime master) {
+			super(new Configuration(null));
 			this.master = master;
+
+			registerInputPort("in", input);
+			registerOutputPort("out", output);
 		}
 
-		@Override
-		public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-			return null;
-		}
-
-		@Override
 		public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 			if (!this.master.outputPort.deliver(monitoringRecord)) {
 				FSReaderRealtime.LOG.error("LogReaderExecutionException");
@@ -208,5 +227,15 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 		public void terminate(final boolean error) {
 			// nothing to do
 		}
+
+		@Override
+		protected Properties getDefaultProperties() {
+			return new Properties();
+		}
+	}
+
+	@Override
+	protected Properties getDefaultProperties() {
+		return new Properties();
 	}
 }

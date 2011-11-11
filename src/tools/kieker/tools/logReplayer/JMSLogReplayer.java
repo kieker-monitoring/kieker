@@ -20,17 +20,18 @@
 
 package kieker.tools.logReplayer;
 
-import java.util.Collection;
+import java.util.Properties;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.configuration.Configuration;
-import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.configuration.AbstractInputPort;
+import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.analysis.reader.IMonitoringReader;
 import kieker.analysis.reader.jms.JMSReader;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.IMonitoringRecordReceiver;
 
 /**
  * Listens to a JMS queue and simply passes each record to a specified {@link IMonitoringRecordReceiver}.
@@ -41,7 +42,7 @@ public class JMSLogReplayer {
 
 	private static final Log LOG = LogFactory.getLog(JMSLogReplayer.class);
 	/** Each record is delegated to this receiver. */
-	private final IMonitoringRecordReceiver recordReceiver;
+	private final AbstractAnalysisPlugin recordReceiver;
 
 	private final String jmsProviderUrl;
 	private final String jmsDestination;
@@ -63,7 +64,7 @@ public class JMSLogReplayer {
 	 * @throws IllegalArgumentException
 	 *             if passed parameters are null or empty.
 	 */
-	public JMSLogReplayer(final IMonitoringRecordReceiver recordReceiver, final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
+	public JMSLogReplayer(final AbstractAnalysisPlugin recordReceiver, final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
 		this.recordReceiver = recordReceiver;
 		this.jmsProviderUrl = jmsProviderUrl;
 		this.jmsDestination = jmsDestination;
@@ -110,26 +111,43 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 
 	private static final Log LOG = LogFactory.getLog(RecordDelegationPlugin2.class);
 
-	private final AbstractAnalysisPlugin rec;
+	private final OutputPort output = new OutputPort("out", null);
+	private final AbstractInputPort input = new AbstractInputPort("in", null) {
+		@Override
+		public void newEvent(final Object event) {
+			RecordDelegationPlugin2.this.newMonitoringRecord((IMonitoringRecord) event);
+
+			output.deliver(event);
+		}
+	};
 
 	/**
 	 * Must not be used for construction.
 	 */
 	@SuppressWarnings("unused")
 	private RecordDelegationPlugin2() {
-		this(null);
+		this((AbstractAnalysisPlugin) null);
 	}
 
-	public RecordDelegationPlugin2(final IMonitoringRecordReceiver rec) {
-		this.rec = rec;
+	public RecordDelegationPlugin2(Configuration configuration) {
+		super(configuration);
+		// TODO: Load from configuration
+
+		registerInputPort("in", input);
+		registerOutputPort("out", output);
 	}
 
-	/*
-	 * {@inheritdoc}
-	 */
-	@Override
+	public RecordDelegationPlugin2(final AbstractAnalysisPlugin rec) {
+		super(new Configuration(null));
+
+		output.subscribe(rec.getAllInputPorts()[0]);
+
+		registerInputPort("in", input);
+		registerOutputPort("out", output);
+	}
+
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
-		return this.rec.newMonitoringRecord(record);
+		return output.deliver(record);
 	}
 
 	/*
@@ -149,11 +167,8 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 		// nothing to do
 	}
 
-	/*
-	 * {@inheritdoc}
-	 */
 	@Override
-	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-		return null; // receive records of any type
+	protected Properties getDefaultProperties() {
+		return new Properties();
 	}
 }

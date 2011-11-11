@@ -21,16 +21,17 @@
 package kieker.test.analysis.junit.reader.namedRecordPipe;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.configuration.Configuration;
-import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.reader.namedRecordPipe.PipeReader;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
@@ -58,32 +59,11 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 
 		final IMonitoringRecordReceiver writer = kieker.test.analysis.junit.util.NamedPipeFactory.createAndRegisterNamedPipeRecordWriter(pipeName);
 
-		final IMonitoringRecordConsumerPlugin receiver = new IMonitoringRecordConsumerPlugin() {
-
-			@Override
-			public boolean newMonitoringRecord(final IMonitoringRecord record) {
-				return receivedRecords.add(record);
-			}
-
-			@Override
-			public boolean execute() {
-				/* no need to do anything */
-				return true;
-			}
-
-			@Override
-			public void terminate(final boolean error) { /* do nothing */
-			}
-
-			@Override
-			public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-				// receive records of any type
-				return null;
-			}
-		};
+		final Receiver receiver = new Receiver(receivedRecords);
 
 		final AnalysisController analysis = new AnalysisController();
 		analysis.setReader(pipeReader);
+		pipeReader.getAllOutputPorts()[0].subscribe(receiver.getInputPort());
 		analysis.registerPlugin(receiver);
 		final AnalysisControllerThread analysisThread = new AnalysisControllerThread(analysis);
 		analysisThread.start();
@@ -102,5 +82,43 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 		 * Make sure that numRecordsToSend where read.
 		 */
 		Assert.assertEquals("Unexpected number of records received", numRecordsToSend, receivedRecords.size());
+	}
+
+	class Receiver extends AbstractAnalysisPlugin {
+
+		private final List<IMonitoringRecord> receivedRecords;
+
+		public Receiver(final List<IMonitoringRecord> receivedRecords) {
+			super(new Configuration(null));
+			this.receivedRecords = receivedRecords;
+		}
+
+		private final AbstractInputPort input = new AbstractInputPort("in", null) {
+
+			@Override
+			public void newEvent(Object event) {
+				receivedRecords.add((IMonitoringRecord) event);
+			}
+		};
+
+		@Override
+		public boolean execute() {
+			/* no need to do anything */
+			return true;
+		}
+
+		@Override
+		public void terminate(final boolean error) {
+			/* do nothing */
+		}
+
+		@Override
+		protected Properties getDefaultProperties() {
+			return new Properties();
+		}
+
+		public AbstractInputPort getInputPort() {
+			return input;
+		}
 	}
 }

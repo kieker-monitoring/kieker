@@ -20,13 +20,16 @@
 
 package kieker.tools.logReplayer;
 
-import java.util.Collection;
+import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import kieker.analysis.configuration.Configuration;
 import kieker.analysis.exception.MonitoringRecordConsumerException;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.configuration.AbstractInputPort;
+import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
@@ -59,6 +62,30 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 	private final int maxQueueSize;
 	private final CountDownLatch terminationLatch;
 
+	private final OutputPort output = new OutputPort("out", null);
+	private final AbstractInputPort input = new AbstractInputPort("in", null) {
+		@Override
+		public void newEvent(final Object event) {
+			RealtimeReplayDistributor.this.newMonitoringRecord((IMonitoringRecord) event);
+
+			output.deliver(event);
+		}
+	};
+
+	public RealtimeReplayDistributor(final Configuration configuration) {
+		super(configuration);
+
+		// TODO: Load from configuration.
+		this.numWorkers = 0;
+		this.cons = null;
+		this.maxQueueSize = 0;
+		this.executor = null;
+		this.terminationLatch = null;
+
+		registerInputPort("in", input);
+		registerOutputPort("out", output);
+	}
+
 	/**
 	 * Constructs a RealtimeReplayDistributor.
 	 * 
@@ -70,6 +97,7 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 	 *            will be decremented after the last record was replayed
 	 */
 	public RealtimeReplayDistributor(final int numWorkers, final AbstractAnalysisPlugin cons, final CountDownLatch terminationLatch) {
+		super(new Configuration(null));
 		this.numWorkers = numWorkers;
 		this.cons = cons;
 		this.maxQueueSize = numWorkers * RealtimeReplayDistributor.QUEUE_SIZE_FACTOR;
@@ -77,9 +105,11 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 		this.executor.setExecuteExistingDelayedTasksAfterShutdownPolicy(true);
 		this.executor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
 		this.terminationLatch = terminationLatch;
+
+		registerInputPort("in", input);
+		registerOutputPort("out", output);
 	}
 
-	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		if (this.startTime == -1) { // init on first record
 			this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp() - (1 * RealtimeReplayDistributor.MILLISECOND);
@@ -119,11 +149,6 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 		return true;
 	}
 
-	@Override
-	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-		return null;
-	}
-
 	public final long getOffset() {
 		return this.offset;
 	}
@@ -160,5 +185,10 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 
 	public int getNumWorkers() {
 		return this.numWorkers;
+	}
+
+	@Override
+	protected Properties getDefaultProperties() {
+		return new Properties();
 	}
 }
