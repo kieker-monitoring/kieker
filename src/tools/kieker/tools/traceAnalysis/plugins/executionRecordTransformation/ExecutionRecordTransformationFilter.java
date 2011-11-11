@@ -21,11 +21,13 @@
 package kieker.tools.traceAnalysis.plugins.executionRecordTransformation;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.analysis.configuration.Configuration;
+import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -46,27 +48,39 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn
  */
-public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPlugin implements IMonitoringRecordConsumerPlugin {
+public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPlugin {
 
 	private static final Log LOG = LogFactory.getLog(ExecutionRecordTransformationFilter.class);
 
-	private static final Collection<Class<? extends IMonitoringRecord>> RECORD_TYPE_SUBSCRIPTION_LIST = new CopyOnWriteArrayList<Class<? extends IMonitoringRecord>>();
+	private static final Collection<Class<?>> RECORD_TYPE_SUBSCRIPTION_LIST = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>());
+	private static final Collection<Class<?>> OUT_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { Execution.class }));
 
-	private final OutputPort executionOutputPort = new OutputPort("Execution output stream", null);
+	private final OutputPort executionOutputPort = new OutputPort("Execution output stream", RECORD_TYPE_SUBSCRIPTION_LIST);
+	private final AbstractInputPort input = new AbstractInputPort("in", OUT_CLASSES) {
 
-	public ExecutionRecordTransformationFilter(final String name, final SystemModelRepository systemFactory) {
-		super(name, systemFactory);
+		@Override
+		public void newEvent(Object event) {
+			ExecutionRecordTransformationFilter.this.newMonitoringRecord((IMonitoringRecord) event);
+		}
 
-		this.registerOutputPort("out", this.executionOutputPort);
-	}
+	};
 
 	static {
 		ExecutionRecordTransformationFilter.RECORD_TYPE_SUBSCRIPTION_LIST.add(OperationExecutionRecord.class);
 	}
 
-	@Override
-	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-		return ExecutionRecordTransformationFilter.RECORD_TYPE_SUBSCRIPTION_LIST;
+	public ExecutionRecordTransformationFilter(final Configuration configuration) {
+		super(configuration);
+
+		// TODO: Load from configuration
+
+		this.registerInputPort("in", this.input);
+		this.registerOutputPort("out", this.executionOutputPort);
+	}
+
+	public ExecutionRecordTransformationFilter(final String name, final SystemModelRepository systemEntityFactory) {
+		super(name, systemEntityFactory);
 	}
 
 	private Signature createSignature(final String operationSignatureStr) {
@@ -89,7 +103,6 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 		return new Signature(name, returnType, paramTypeList);
 	}
 
-	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		if (!(record instanceof OperationExecutionRecord)) {
 			ExecutionRecordTransformationFilter.LOG.error("Can only process records of type" + OperationExecutionRecord.class.getName() + " but received"
@@ -159,7 +172,6 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 
 	@Override
 	protected Properties getDefaultProperties() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Properties();
 	}
 }

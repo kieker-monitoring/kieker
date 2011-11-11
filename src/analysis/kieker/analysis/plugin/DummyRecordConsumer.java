@@ -30,6 +30,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
+import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.common.record.IMonitoringRecord;
 
 /**
@@ -41,8 +42,20 @@ public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
 
 	private static final Collection<Class<?>> OUT_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
 			new Class<?>[] { IMonitoringRecord.class }));
+	private static final Collection<Class<?>> IN_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { IMonitoringRecord.class }));
 
 	private final PrintStream printStream;
+	private final AbstractInputPort input = new AbstractInputPort("in", DummyRecordConsumer.IN_CLASSES) {
+		@Override
+		public void newEvent(final Object event) {
+			// TODO: very bad style: escaping this in constructor! this should be assigned in execute()
+			DummyRecordConsumer.this.newMonitoringRecord((IMonitoringRecord) event);
+			output.deliver(event);
+		}
+	};
+
+	private final OutputPort output = new OutputPort("out", DummyRecordConsumer.OUT_CLASSES);
 
 	public DummyRecordConsumer(final Configuration configuration) throws FileNotFoundException {
 		super(configuration);
@@ -56,13 +69,8 @@ public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
 			this.printStream = new PrintStream(new FileOutputStream(printStreamName));
 		}
 
-		super.registerInputPort("in", new AbstractInputPort("in", DummyRecordConsumer.OUT_CLASSES) {
-			@Override
-			public void newEvent(final Object event) {
-				// TODO: very bad style: escaping this in constructor! this should be assigned in execute()
-				DummyRecordConsumer.this.newMonitoringRecord((IMonitoringRecord) event);
-			}
-		});
+		super.registerInputPort("in", input);
+		super.registerOutputPort("out", output);
 	}
 
 	@Override
