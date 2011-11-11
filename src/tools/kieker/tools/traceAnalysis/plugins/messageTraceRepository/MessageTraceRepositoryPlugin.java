@@ -21,6 +21,7 @@
 package kieker.tools.traceAnalysis.plugins.messageTraceRepository;
 
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
@@ -66,5 +67,11 @@ public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessing
 	@Override
 	public void terminate(final boolean error) {
 		// no need to do anything here
+	}
+
+	@Override
+	protected Properties getDefaultProperties() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

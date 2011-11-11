@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.common.logging.Log;
@@ -200,4 +201,10 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 			ComponentDependencyGraphPluginAllocation.this.reportSuccess(t.getTraceId());
 		}
 	};
+
+	@Override
+	protected Properties getDefaultProperties() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

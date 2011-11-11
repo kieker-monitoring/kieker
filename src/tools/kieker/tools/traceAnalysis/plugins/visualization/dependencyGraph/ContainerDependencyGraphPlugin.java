@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collection;
+import java.util.Properties;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.common.logging.Log;
@@ -141,5 +142,11 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 	@Override
 	public AbstractInputPort getMessageTraceInputPort() {
 		return this.messageTraceInputPort;
+	}
+
+	@Override
+	protected Properties getDefaultProperties() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

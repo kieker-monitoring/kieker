@@ -22,6 +22,7 @@ package kieker.tools.traceAnalysis.plugins.traceFilter;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -132,5 +133,11 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 			map.put(entry.getKey().getExecutionTrace(), entry.getValue().intValue());
 		}
 		return map;
+	}
+	
+	@Override
+	protected Properties getDefaultProperties() {
+		final Properties defaultProperties = new Properties();
+		return defaultProperties;
 	}
 }

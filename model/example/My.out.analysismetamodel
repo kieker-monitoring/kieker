@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="ASCII"?>
+<Project xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="platform:/resource/Kieker/model/AnalysisMetaModel.ecore" name="SomeProject">
+  <plugins xsi:type="Reader" name="kieker.analysis.reader.filesystem.FSReader@2708c175" classname="kieker.analysis.reader.filesystem.FSReader"/>
+  <plugins xsi:type="AnalysisPlugin" name="kieker.analysis.plugin.DummyRecordConsumer@8fc095" classname="kieker.analysis.plugin.DummyRecordConsumer"/>
+</Project>

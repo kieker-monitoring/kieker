@@ -22,6 +22,7 @@ package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Properties;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.common.logging.Log;
@@ -107,4 +108,10 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 			}
 		}
 	};
+
+	@Override
+	protected Properties getDefaultProperties() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

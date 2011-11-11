@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.common.logging.Log;
@@ -252,5 +253,11 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 	@Override
 	public AbstractInputPort getMessageTraceInputPort() {
 		return this.messageTraceInputPort;
+	}
+
+	@Override
+	protected Properties getDefaultProperties() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

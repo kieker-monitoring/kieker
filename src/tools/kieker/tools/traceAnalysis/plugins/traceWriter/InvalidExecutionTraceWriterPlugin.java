@@ -22,6 +22,7 @@ package kieker.tools.traceAnalysis.plugins.traceWriter;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Properties;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.common.logging.Log;
@@ -90,4 +91,10 @@ public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionT
 			}
 		}
 	};
+
+	@Override
+	protected Properties getDefaultProperties() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -26,6 +26,7 @@ import java.io.PrintStream;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Stack;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
@@ -252,4 +253,10 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 			}
 		}
 	};
+
+	@Override
+	protected Properties getDefaultProperties() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

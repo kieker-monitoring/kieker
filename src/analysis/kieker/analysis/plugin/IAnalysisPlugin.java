@@ -23,7 +23,7 @@ package kieker.analysis.plugin;
 /**
  * @author Andre van Hoorn
  */
-public interface IAnalysisPlugin {
+interface IAnalysisPlugin {
 	/**
 	 * Initiates the start of a component.
 	 * This method is called once when a TpanInstance's run() method is called.

@@ -23,6 +23,7 @@ import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.NavigableSet;
+import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -300,5 +301,11 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 
 	public OutputPort getInvalidExecutionTraceOutputPort() {
 		return this.invalidExecutionTraceOutputPort;
+	}
+
+	@Override
+	protected Properties getDefaultProperties() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

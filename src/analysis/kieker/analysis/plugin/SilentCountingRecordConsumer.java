@@ -20,35 +20,38 @@
 
 package kieker.analysis.plugin;
 
-import java.util.Collection;
+import java.util.Properties;
 import java.util.concurrent.atomic.AtomicLong;
 
-import kieker.common.record.IMonitoringRecord;
+import kieker.analysis.configuration.Configuration;
+import kieker.analysis.plugin.configuration.AbstractInputPort;
+import kieker.analysis.plugin.configuration.OutputPort;
 
 /**
  * 
  * @author Jan Waller
  */
-public final class SilentCountingRecordConsumer implements IMonitoringRecordConsumerPlugin {
+public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
 
 	private final AtomicLong counter = new AtomicLong();
+	private final OutputPort output = new OutputPort("out", null);
+	private final AbstractInputPort input = new AbstractInputPort("in", null) {
+		@Override
+		public void newEvent(final Object event) {
+			SilentCountingRecordConsumer.this.counter.incrementAndGet();
+
+			output.deliver(event);
+		}
+	};
 
 	/**
 	 * Constructs a {@link SilentCountingRecordConsumer}.
 	 */
-	public SilentCountingRecordConsumer() {
-		// nothing to do
-	}
+	public SilentCountingRecordConsumer(final Configuration configuration) {
+		super(configuration);
 
-	@Override
-	public final Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-		return null;
-	}
-
-	@Override
-	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		this.counter.incrementAndGet();
-		return true;
+		registerInputPort("in", input);
+		registerOutputPort("out", output);
 	}
 
 	@Override
@@ -63,5 +66,10 @@ public final class SilentCountingRecordConsumer implements IMonitoringRecordCons
 
 	public final long getMessageCount() {
 		return this.counter.get();
+	}
+
+	@Override
+	protected Properties getDefaultProperties() {
+		return new Properties();
 	}
 }

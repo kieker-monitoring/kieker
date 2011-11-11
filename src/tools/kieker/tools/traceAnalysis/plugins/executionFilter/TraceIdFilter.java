@@ -20,6 +20,7 @@
 
 package kieker.tools.traceAnalysis.plugins.executionFilter;
 
+import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -93,6 +94,12 @@ public class TraceIdFilter extends AbstractAnalysisPlugin {
 	@Override
 	public void terminate(final boolean error) {
 		// do nothing
+	}
+
+	@Override
+	protected Properties getDefaultProperties() {
+		final Properties defaultProperties = new Properties();
+		return defaultProperties;
 	}
 
 }

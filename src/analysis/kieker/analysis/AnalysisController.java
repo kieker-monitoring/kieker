@@ -22,14 +22,13 @@ package kieker.analysis;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
@@ -43,16 +42,15 @@ import kieker.analysis.model.analysisMetaModel.IPort;
 import kieker.analysis.model.analysisMetaModel.IProject;
 import kieker.analysis.model.analysisMetaModel.IProperty;
 import kieker.analysis.model.analysisMetaModel.IReader;
+import kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelFactory;
 import kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.analysis.reader.IMonitoringReader;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.common.record.IMonitoringRecord;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -63,6 +61,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 
 /**
@@ -117,12 +116,19 @@ public class AnalysisController {
 		if (!content.isEmpty()) {
 			// The first (and only) element should be the project. Use it to configure this instance.
 			final IProject project = (IProject) content.get(0);
-			this.loadFromModelProject(project);
+			try {
+				this.loadFromModelProject(project);
+			} catch (Exception ex) {
+				AnalysisController.LOG.error("Could not load the configuration from the given file: " + file.getName());
+				// TODO: Throw something more specific.
+				throw ex;
+			}
 		}
 	}
 
-	private final void loadFromModelProject(final IProject project) throws Exception {
-		AnalysisController.LOG.info("Found Project " + project.getName());
+	private final void loadFromModelProject(final IProject project) throws InstantiationException, IllegalAccessException, IllegalArgumentException,
+			InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
+		AnalysisController.LOG.debug("Found Project " + project.getName());
 
 		/*
 		 * While we run through a project, we have to remember different things:
@@ -143,24 +149,23 @@ public class AnalysisController {
 			for (final IProperty prop : properties) {
 				configuration.setProperty(prop.getName(), prop.getValue());
 			}
+			Object newObj = Class.forName(p.getClassname()).getConstructor(Configuration.class)
+					.newInstance(configuration.getPropertiesStartingWith(p.getClassname()));
 
 			if (p instanceof IReader) {
-				AnalysisController.LOG.info("Register Reader " + p.getName());
-				final IMonitoringReader reader = (IMonitoringReader) Class.forName(p.getClassname()).getConstructor(Configuration.class)
-						.newInstance(configuration.getPropertiesStartingWith(p.getClassname()));
+				final IMonitoringReader reader = (IMonitoringReader) newObj;
 				this.setReader(reader);
 				pluginObjMap.put(p, reader);
 			} else {
-				AnalysisController.LOG.info("Register Plugin " + p.getName());
-				final kieker.analysis.plugin.IAnalysisPlugin plugin = (kieker.analysis.plugin.IAnalysisPlugin) Class.forName(p.getClassname())
-						.getConstructor(Configuration.class).newInstance(configuration.getPropertiesStartingWith(p.getClassname()));
+				final AbstractAnalysisPlugin plugin = (AbstractAnalysisPlugin) newObj;
 				this.plugins.add((AbstractAnalysisPlugin) plugin);
 				pluginObjMap.put(p, plugin);
 			}
 
 			/*
-			 * Now we run through all ports of the current plugin. We remember them to have a connection between the ports and their parent. We will also accumulate
-			 * all Connectors.
+			 * Now we run through all ports of the current plugin. We remember
+			 * them to have a connection between the ports and their parent.
+			 * We will also accumulate all Connectors.
 			 */
 
 			for (final IOutputPort oPort : p.getOutputPorts()) {
@@ -177,13 +182,14 @@ public class AnalysisController {
 		}
 
 		/*
-		 * Now we should have initialized all plugins. We can start to assemble the structure.
+		 * Now we should have initialized all plugins. We can start to assemble
+		 * the structure.
 		 */
 		for (final IConnector c : connectors) {
 			/* We can get the plugins via the map. */
 			final IPlugin in = portPluginMap.get(c.getDstInputPort());
 			final IPlugin out = portPluginMap.get(c.getSicOutputPort());
-			AnalysisController.LOG.info(String.format("Found Connector. Connect output from %s with the input of %s\n", out.getName(), in.getName()));
+			AnalysisController.LOG.debug(String.format("Found Connector. Connect output from %s with the input of %s\n", out.getName(), in.getName()));
 
 			final AbstractPlugin outObj = (AbstractPlugin) pluginObjMap.get(out);
 			final AbstractAnalysisPlugin inObj = (AbstractAnalysisPlugin) pluginObjMap.get(in);
@@ -238,11 +244,48 @@ public class AnalysisController {
 	 * 
 	 * @param file
 	 *            The file where to save the configuration.
+	 * @param name
+	 *            The name to be used for the new project.
 	 * @return true iff the configuration has been saved successfully.
 	 */
-	public final boolean saveToFile(final File file) {
-		// TODO: Implement!
-		return false;
+	public final boolean saveToFile(final File file, final String name) {
+		// TODO: Implement connection!
+		final AnalysisMetaModelFactory factory = new AnalysisMetaModelFactory();
+
+		IProject project = factory.createProject();
+		project.setName(name);
+
+		List<IPlugin> plugins = new ArrayList<IPlugin>();
+		if (logReader != null) {
+			IReader reader = factory.createReader();
+			reader.setClassname(logReader.getClass().getName());
+			reader.setName(logReader.toString());
+			plugins.add(reader);
+			project.getPlugins().add(reader);
+		}
+		for (AbstractAnalysisPlugin plugin : this.plugins) {
+			IAnalysisPlugin newPlugin = factory.createAnalysisPlugin();
+			newPlugin.setClassname(plugin.getClass().getName());
+			newPlugin.setName(plugin.toString());
+			plugins.add(newPlugin);
+			project.getPlugins().add(newPlugin);
+		}
+
+		/* Save the whole project. */
+		final ResourceSet resourceSet = new ResourceSetImpl();
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(
+				"*", new XMIResourceFactoryImpl());
+		Resource resource = resourceSet.createResource(URI.createFileURI(file.getAbsolutePath()));
+		resource.getContents().add(project);
+
+		try {
+			resource.save(null);
+		} catch (IOException e) {
+			AnalysisController.LOG.error("Could not save the configuration file.");
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -258,7 +301,7 @@ public class AnalysisController {
 			/**
 			 * Call execute() method of all plug-ins.
 			 */
-			for (final kieker.analysis.plugin.IAnalysisPlugin c : this.plugins) {
+			for (final AbstractAnalysisPlugin c : this.plugins) {
 				if (!c.execute()) {
 					AnalysisController.LOG.error("A plug-in's execute message failed");
 					success = false;
@@ -271,31 +314,6 @@ public class AnalysisController {
 			if (this.logReader == null) {
 				AnalysisController.LOG.error("No log reader registered.");
 				success = false;
-			}
-
-			/**
-			 * Add delegation receiver to reader.
-			 */
-			if (success) {
-				/*
-				 * this.logReader
-				 * .addRecordReceiver(new IMonitoringRecordReceiver() {
-				 * 
-				 * /**
-				 * Delegates the records provided by the reader to
-				 * the registered record consumers
-				 */
-				/*
-				 * @Override
-				 * public boolean newMonitoringRecord(
-				 * final IMonitoringRecord monitoringRecord) {
-				 * // abort on consumer error
-				 * return AnalysisController.this
-				 * .deliverRecordToConsumers(
-				 * monitoringRecord, true);
-				 * }
-				 * });
-				 */
 			}
 
 			/**
@@ -316,7 +334,7 @@ public class AnalysisController {
 			// to make sure that all waiting threads are released
 			this.initializationLatch.countDown();
 			try {
-				for (final kieker.analysis.plugin.IAnalysisPlugin c : this.plugins) {
+				for (final AbstractAnalysisPlugin c : this.plugins) {
 					c.terminate(!success); // normal termination (w/o error)
 				}
 			} catch (final Exception e) { // NOCS // NOPMD
@@ -359,43 +377,17 @@ public class AnalysisController {
 	 */
 	public void setReader(final IMonitoringReader reader) {
 		this.logReader = reader;
+		AnalysisController.LOG.debug("Registered reader " + reader);
 	}
 
 	/**
-	 * Adds the given consumer to the analysis.
-	 * 
-	 * @param consumer
-	 */
-	private void addRecordConsumer(final IMonitoringRecordConsumerPlugin consumer) {
-		this.consumers.add(consumer);
-		final Collection<Class<? extends IMonitoringRecord>> recordTypeSubscriptionList = consumer.getRecordTypeSubscriptionList();
-		if (recordTypeSubscriptionList == null) {
-			this.anyTypeConsumers.add(consumer);
-		} else {
-			for (final Class<? extends IMonitoringRecord> recordType : recordTypeSubscriptionList) {
-				Collection<IMonitoringRecordConsumerPlugin> cList = this.specificTypeConsumers.get(recordType);
-				if (cList == null) {
-					cList = new CopyOnWriteArrayList<IMonitoringRecordConsumerPlugin>(); // NOPMD (new in loops)
-					this.specificTypeConsumers.put(recordType, cList);
-				}
-				cList.add(consumer);
-			}
-		}
-	}
-
-	/**
-	 * Registers the passed plug-in <i>c<i>. If <i>c</i> is an instance of the
-	 * interface <i>IMonitoringRecordConsumerPlugin</i> it is also registered
-	 * as a record consumer.
+	 * Registers the passed plug-in <i>c<i>. All plugins which have been
+	 * registered before calling the <i>run</i>-method, will be started once
+	 * the analysis is started.
 	 */
 	public void registerPlugin(final AbstractAnalysisPlugin plugin) {
 		this.plugins.add(plugin);
 		AnalysisController.LOG.debug("Registered plugin " + plugin);
-
-		if (plugin instanceof IMonitoringRecordConsumerPlugin) {
-			AnalysisController.LOG.debug("Plugin " + plugin + " also registered as record consumer");
-			this.addRecordConsumer((IMonitoringRecordConsumerPlugin) plugin);
-		}
 	}
 
 	@SuppressWarnings("unchecked")

@@ -20,6 +20,7 @@
 
 package kieker.analysis.reader.filesystem;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -46,8 +47,8 @@ import kieker.common.record.IMonitoringRecordReceiver;
  * @author Andre van Hoorn, Jan Waller
  */
 public class FSReader extends AbstractMonitoringReader implements IMonitoringRecordReceiver {
-	public static final String CONFIG_INPUTDIRS = AbstractMonitoringReader.class.getName() + ".inputDirs";
-	public static final String CONFIG_ONLYRECORDS = AbstractMonitoringReader.class.getName() + ".readOnlyRecordsOfType";
+	public static final String CONFIG_INPUTDIRS = FSReader.class.getName() + ".inputDirs";
+	public static final String CONFIG_ONLYRECORDS = FSReader.class.getName() + ".readOnlyRecordsOfType";
 
 	public static final IMonitoringRecord EOF = new DummyMonitoringRecord();
 
@@ -65,6 +66,7 @@ public class FSReader extends AbstractMonitoringReader implements IMonitoringRec
 	public FSReader(final Configuration configuration) {
 		super(configuration);
 		this.inputDirs = this.configuration.getStringArrayProperty(FSReader.CONFIG_INPUTDIRS);
+		System.out.println(Arrays.toString(inputDirs));
 		this.recordQueue = new PriorityQueue<IMonitoringRecord>(this.inputDirs.length);
 		final String[] onlyrecords = this.configuration.getStringArrayProperty(FSReader.CONFIG_ONLYRECORDS);
 		if (onlyrecords.length == 0) {

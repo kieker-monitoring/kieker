@@ -20,6 +20,7 @@
 
 package kieker.tools.traceAnalysis.plugins.executionFilter;
 
+import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.configuration.Configuration;
@@ -105,6 +106,12 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 	@Override
 	public void terminate(final boolean error) {
 		// do nothing
+	}
+
+	@Override
+	protected Properties getDefaultProperties() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

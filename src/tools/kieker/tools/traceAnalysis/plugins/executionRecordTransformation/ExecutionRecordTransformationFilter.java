@@ -21,6 +21,7 @@
 package kieker.tools.traceAnalysis.plugins.executionRecordTransformation;
 
 import java.util.Collection;
+import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -154,5 +155,11 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 
 	public OutputPort getExecutionOutputPort() {
 		return this.executionOutputPort;
+	}
+
+	@Override
+	protected Properties getDefaultProperties() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

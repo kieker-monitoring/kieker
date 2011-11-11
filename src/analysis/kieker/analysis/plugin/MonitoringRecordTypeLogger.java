@@ -20,8 +20,11 @@
 
 package kieker.analysis.plugin;
 
-import java.util.Collection;
+import java.util.Properties;
 
+import kieker.analysis.configuration.Configuration;
+import kieker.analysis.plugin.configuration.AbstractInputPort;
+import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
@@ -29,37 +32,44 @@ import kieker.common.record.IMonitoringRecord;
 /**
  * @author Andre van Hoorn
  */
-public class MonitoringRecordTypeLogger implements IMonitoringRecordConsumerPlugin {
+public class MonitoringRecordTypeLogger extends AbstractAnalysisPlugin {
 
 	private static final Log LOG = LogFactory.getLog(MonitoringRecordTypeLogger.class);
+	private final OutputPort output = new OutputPort("out", null);
+	private final AbstractInputPort input = new AbstractInputPort("in", null) {
+		@Override
+		public void newEvent(final Object event) {
+			IMonitoringRecord monitoringRecord = (IMonitoringRecord) event;
+
+			MonitoringRecordTypeLogger.LOG.info("Consumed record:" + monitoringRecord.getClass().getName());
+			MonitoringRecordTypeLogger.LOG.info(monitoringRecord.toString());
+
+			output.deliver(event);
+		}
+	};
 
 	/**
 	 * Constructs a {@link MonitoringRecordTypeLogger}.
 	 */
-	public MonitoringRecordTypeLogger() {
+	public MonitoringRecordTypeLogger(final Configuration configuration) {
+		super(configuration);
+
+		registerInputPort("in", input);
+		registerOutputPort("out", output);
+	}
+
+	@Override
+	public final boolean execute() {
+		return true;
+	}
+
+	@Override
+	public final void terminate(final boolean error) {
 		// nothing to do
 	}
 
 	@Override
-	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-		return null; // receive records of any type
-	}
-
-	@Override
-	public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		MonitoringRecordTypeLogger.LOG.info("Consumed record:" + monitoringRecord.getClass().getName());
-		MonitoringRecordTypeLogger.LOG.info(monitoringRecord.toString());
-		return true;
-	}
-
-	@Override
-	public boolean execute() {
-		/* We consume synchronously */
-		return true;
-	}
-
-	@Override
-	public void terminate(final boolean error) {
-		/* We consume synchronously */
+	protected Properties getDefaultProperties() {
+		return new Properties();
 	}
 }
