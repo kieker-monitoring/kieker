@@ -100,8 +100,10 @@
 			<fileset dir="${lib.dir}">
 				<include name="rabbitmq-client.jar" />
 				<include name="javax.jms-*.jar" />
+				<include name="org.eclipse.*.jar" />
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
+			<pathelement location="${build.kieker.analysis.model.dir}/" />
 		</path>
 
 		<path id="kieker.tools-compile-classpath">
@@ -160,7 +162,15 @@
 		</war>
 	</target>
 
-	<target name="-compile-kieker.analysis" depends="-init,-compile-kieker.common" description="Compiles the sources of the Kieker.Analysis component">
+	<target name="-compile-kieker.analysis.model" depends="-init" description="Compiles the sources of the Analysis Meta-Model">
+		<delete dir="${build.kieker.analysis.model.dir}" />
+		<mkdir dir="${build.kieker.analysis.model.dir}" />
+		<javac destDir="${build.kieker.analysis.model.dir}" source="1.6" target="1.6" srcdir="${src.gen.kieker.analysis.dir}" debug="true" classpathref="kieker.analysis-compile-classpath" includeAntRuntime="false">
+			<compilerarg value="-Xlint:all" /> <!-- ,-path -->
+		</javac>
+	</target>
+	
+	<target name="-compile-kieker.analysis" depends="-init,-compile-kieker.common,-compile-kieker.analysis.model" description="Compiles the sources of the Kieker.Analysis component">
 		<delete dir="${build.kieker.analysis.dir}" />
 		<mkdir dir="${build.kieker.analysis.dir}" />
 		<javac destDir="${build.kieker.analysis.dir}" source="1.6" target="1.6" srcdir="${src.kieker.analysis.dir}" debug="true" classpathref="kieker.analysis-compile-classpath" includeAntRuntime="false">
