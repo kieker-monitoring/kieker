@@ -106,11 +106,11 @@ public class JMSLogReplayer {
  * @author Andre van Hoorn
  * 
  */
-class RecordDelegationPlugin2 implements IMonitoringRecordConsumerPlugin {
+class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 
 	private static final Log LOG = LogFactory.getLog(RecordDelegationPlugin2.class);
 
-	private final IMonitoringRecordReceiver rec;
+	private final AbstractAnalysisPlugin rec;
 
 	/**
 	 * Must not be used for construction.

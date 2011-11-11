@@ -26,7 +26,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.exception.MonitoringRecordConsumerException;
-import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
@@ -40,7 +40,7 @@ import kieker.monitoring.timer.ITimeSource;
  * @author Robert von Massow
  * 
  */
-public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugin {
+public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 	private static final Log LOG = LogFactory.getLog(RealtimeReplayDistributor.class);
 
 	private static final ITimeSource TIMESOURCE = DefaultSystemTimer.getInstance();
@@ -49,7 +49,7 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 	private static final int REPLAY_OFFSET = 2 * 1000 * RealtimeReplayDistributor.MILLISECOND;
 
 	private final int numWorkers;
-	private final IMonitoringRecordConsumerPlugin cons;
+	private final AbstractAnalysisPlugin cons;
 	private volatile long startTime = -1;
 	private volatile long offset = -1;
 	private volatile long firstLoggingTimestamp;
@@ -69,7 +69,7 @@ public class RealtimeReplayDistributor implements IMonitoringRecordConsumerPlugi
 	 * @param terminationLatch
 	 *            will be decremented after the last record was replayed
 	 */
-	public RealtimeReplayDistributor(final int numWorkers, final IMonitoringRecordConsumerPlugin cons, final CountDownLatch terminationLatch) {
+	public RealtimeReplayDistributor(final int numWorkers, final AbstractAnalysisPlugin cons, final CountDownLatch terminationLatch) {
 		this.numWorkers = numWorkers;
 		this.cons = cons;
 		this.maxQueueSize = numWorkers * RealtimeReplayDistributor.QUEUE_SIZE_FACTOR;

@@ -25,7 +25,7 @@ import java.util.Collection;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.configuration.Configuration;
-import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.configuration.AbstractConfiguration;
@@ -133,7 +133,7 @@ public class FilesystemLogReplayer {
  * @author Andre van Hoorn
  * 
  */
-class RecordDelegationPlugin implements IMonitoringRecordConsumerPlugin {
+class RecordDelegationPlugin extends AbstractAnalysisPlugin {
 
 	private static final Log LOG = LogFactory.getLog(RecordDelegationPlugin.class);
 
@@ -150,7 +150,7 @@ class RecordDelegationPlugin implements IMonitoringRecordConsumerPlugin {
 		this(null, FilesystemLogReplayer.MIN_TIMESTAMP, FilesystemLogReplayer.MAX_TIMESTAMP);
 	}
 
-	public RecordDelegationPlugin(final IMonitoringRecordReceiver rec, final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp) {
+	public RecordDelegationPlugin(final AbstractAnalysisPlugin rec, final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp) {
 		this.rec = rec;
 		this.ignoreRecordsBeforeTimestamp = ignoreRecordsBeforeTimestamp;
 		this.ignoreRecordsAfterTimestamp = ignoreRecordsAfterTimestamp;

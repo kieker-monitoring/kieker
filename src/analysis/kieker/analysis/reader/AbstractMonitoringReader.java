@@ -6,6 +6,15 @@ import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
 
 // TODO rename to AbstractReaderPlugin ?
+/**
+ * This class should be used as a base for every reader used within <i>Kieker</i>. Every reader should follow the following behaviour:<br>
+ * <ul>
+ * <li>It should create and register its ports (only output).
+ * <li>The readed data should be send to the output ports.
+ * </ul>
+ * 
+ * @author Nils Christian Ehmke
+ */
 public abstract class AbstractMonitoringReader extends AbstractPlugin implements IMonitoringReader {
 
 	public AbstractMonitoringReader(final Configuration configuration) {
