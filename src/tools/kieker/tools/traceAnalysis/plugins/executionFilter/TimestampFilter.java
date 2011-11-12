@@ -20,6 +20,7 @@
 
 package kieker.tools.traceAnalysis.plugins.executionFilter;
 
+import java.util.Collections;
 import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -78,7 +79,9 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 		return this.executionInputPort;
 	}
 
-	private final AbstractInputPort executionInputPort = new AbstractInputPort("Execution input", null) {
+	private final AbstractInputPort executionInputPort = new AbstractInputPort("Execution input",
+			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+					new Class<?>[] { Execution.class }))) {
 
 		@Override
 		public void newEvent(final Object obj) {
@@ -110,8 +113,7 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 
 	@Override
 	protected Properties getDefaultProperties() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Properties();
 	}
 
 }

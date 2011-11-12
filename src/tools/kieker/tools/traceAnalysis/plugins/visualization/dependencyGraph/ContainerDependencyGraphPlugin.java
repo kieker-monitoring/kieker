@@ -24,7 +24,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Properties;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.common.logging.Log;
@@ -108,7 +110,9 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 		}
 	}
 
-	private final AbstractInputPort messageTraceInputPort = new AbstractInputPort("Message traces", null) {
+	private final AbstractInputPort messageTraceInputPort = new AbstractInputPort("Message traces",
+			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+					new Class<?>[] { MessageTrace.class }))) {
 
 		@Override
 		public void newEvent(final Object obj) {
@@ -146,7 +150,6 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 
 	@Override
 	protected Properties getDefaultProperties() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Properties();
 	}
 }

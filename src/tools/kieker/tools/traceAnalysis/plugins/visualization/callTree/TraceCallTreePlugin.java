@@ -24,10 +24,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Stack;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.common.logging.Log;
@@ -231,7 +233,9 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 		return this.messageTraceInputPort;
 	}
 
-	private final AbstractInputPort messageTraceInputPort = new AbstractInputPort("Message traces", null) {
+	private final AbstractInputPort messageTraceInputPort = new AbstractInputPort("Message traces",
+			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+					new Class<?>[] { MessageTrace.class }))) {
 
 		@Override
 		public void newEvent(final Object obj) {

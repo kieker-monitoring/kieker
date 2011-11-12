@@ -288,7 +288,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 		return this.executionInputPort;
 	}
 
-	private final AbstractInputPort executionInputPort = new AbstractInputPort("Execution input", null) {
+	private final AbstractInputPort executionInputPort = new AbstractInputPort("Execution input", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { Execution.class }))) {
 
 		@Override
 		public void newEvent(final Object event) {
@@ -310,7 +311,6 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 
 	@Override
 	protected Properties getDefaultProperties() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Properties();
 	}
 }

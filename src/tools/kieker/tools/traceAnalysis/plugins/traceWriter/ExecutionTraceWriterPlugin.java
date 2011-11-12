@@ -23,7 +23,9 @@ package kieker.tools.traceAnalysis.plugins.traceWriter;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Properties;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.common.logging.Log;
@@ -76,7 +78,8 @@ public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessing
 		return this.executionTraceInputPort;
 	}
 
-	private final AbstractInputPort executionTraceInputPort = new AbstractInputPort("Execution traces", null) {
+	private final AbstractInputPort executionTraceInputPort = new AbstractInputPort("Execution traces", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { ExecutionTrace.class }))) {
 
 		@Override
 		public void newEvent(final Object obj) {
@@ -93,7 +96,6 @@ public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessing
 
 	@Override
 	protected Properties getDefaultProperties() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Properties();
 	}
 }

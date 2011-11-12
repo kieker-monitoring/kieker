@@ -28,9 +28,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.common.logging.Log;
@@ -145,7 +147,9 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 		return this.messageTraceInputPort;
 	}
 
-	private final AbstractInputPort messageTraceInputPort = new AbstractInputPort("Message traces", null) {
+	private final AbstractInputPort messageTraceInputPort = new AbstractInputPort("Message traces",
+			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+					new Class<?>[] { MessageTrace.class }))) {
 
 		@Override
 		public void newEvent(final Object mt) {
@@ -324,7 +328,6 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 
 	@Override
 	protected Properties getDefaultProperties() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Properties();
 	}
 }

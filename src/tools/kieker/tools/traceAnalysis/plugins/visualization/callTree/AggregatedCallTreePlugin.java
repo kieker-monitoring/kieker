@@ -22,7 +22,9 @@ package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Properties;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.common.logging.Log;
@@ -94,7 +96,9 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 		return this.messageTraceInputPort;
 	}
 
-	private final AbstractInputPort messageTraceInputPort = new AbstractInputPort("Message traces", null) {
+	private final AbstractInputPort messageTraceInputPort = new AbstractInputPort("Message traces",
+			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+					new Class<?>[] { MessageTrace.class }))) {
 
 		@Override
 		public void newEvent(final Object obj) {
@@ -111,7 +115,6 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 
 	@Override
 	protected Properties getDefaultProperties() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Properties();
 	}
 }

@@ -20,10 +20,12 @@
 
 package kieker.tools.traceAnalysis.plugins.traceFilter;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Map.Entry;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
@@ -34,6 +36,7 @@ import kieker.tools.traceAnalysis.plugins.AbstractExecutionTraceProcessingPlugin
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
+import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
@@ -53,8 +56,10 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	/** Representative x # of equivalents */
 	private final Map<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap = new HashMap<AbstractExecutionTraceHashContainer, AtomicInteger>(); // NOPMD
 
-	private final OutputPort messageTraceOutputPort = new OutputPort("Message Traces", null);
-	private final OutputPort executionTraceOutputPort = new OutputPort("Execution Traces", null);
+	private final OutputPort messageTraceOutputPort = new OutputPort("Message Traces", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { MessageTrace.class })));
+	private final OutputPort executionTraceOutputPort = new OutputPort("Execution Traces", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { ExecutionTrace.class })));
 
 	public TraceEquivalenceClassFilter(final String name, final SystemModelRepository systemEntityFactory, final TraceEquivalenceClassModes traceEquivalenceCallMode) {
 		super(name, systemEntityFactory);
@@ -101,7 +106,8 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 		return this.executionTraceInputPort;
 	}
 
-	private final AbstractInputPort executionTraceInputPort = new AbstractInputPort("Execution traces", null) {
+	private final AbstractInputPort executionTraceInputPort = new AbstractInputPort("Execution traces", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { ExecutionTrace.class }))) {
 
 		@Override
 		public void newEvent(final Object mt) {
@@ -134,7 +140,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 		}
 		return map;
 	}
-	
+
 	@Override
 	protected Properties getDefaultProperties() {
 		final Properties defaultProperties = new Properties();
