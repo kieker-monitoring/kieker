@@ -33,7 +33,6 @@ import kieker.tools.traceAnalysis.plugins.AbstractInvalidExecutionTraceProcessin
 import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
-
 /**
  * 
  * @author Andre van Hoorn
