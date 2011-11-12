@@ -49,7 +49,7 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 
 	private volatile Pipe pipe;
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
-	private final OutputPort outputPort;
+	private final OutputPort outputPort = new OutputPort("Output Port of the PipeReader", PipeReader.OUT_CLASSES);
 
 	/**
 	 * Creates a new instance of this class using the given parameter.
@@ -62,6 +62,17 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 	public PipeReader(final Configuration configuration) throws IllegalArgumentException {
 		super(configuration);
 		final String pipeName = this.configuration.getStringProperty(PipeReader.CONFIG_PIPENAME);
+
+		initialize(pipeName);
+	}
+
+	public PipeReader(final String pipeName) {
+		super(new Configuration(null));
+
+		initialize(pipeName);
+	}
+
+	private void initialize(final String pipeName) {
 		this.pipe = Broker.getInstance().acquirePipe(pipeName);
 		if (this.pipe == null) {
 			throw new IllegalArgumentException("Failed to get Pipe with name " + pipeName);
@@ -72,7 +83,6 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 		this.pipe.setPipeReader(this);
 
 		/* Register the output port. */
-		this.outputPort = new OutputPort("Output Port of the PipeReader", PipeReader.OUT_CLASSES);
 		super.registerOutputPort("out", this.outputPort);
 	}
 

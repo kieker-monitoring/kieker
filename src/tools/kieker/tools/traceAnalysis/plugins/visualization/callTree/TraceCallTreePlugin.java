@@ -256,7 +256,6 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 
 	@Override
 	protected Properties getDefaultProperties() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Properties();
 	}
 }

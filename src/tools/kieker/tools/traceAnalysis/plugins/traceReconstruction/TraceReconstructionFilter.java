@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 package kieker.tools.traceAnalysis.plugins.traceReconstruction;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.Map;
@@ -26,6 +27,7 @@ import java.util.NavigableSet;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
@@ -61,10 +63,13 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	private final Execution rootExecution;
 	private final long maxTraceDurationNanos;
 
-	private final OutputPort messageTraceOutputPort = new OutputPort("Reconstructed Message Traces", null);
-	private final OutputPort executionTraceOutputPort = new OutputPort("Reconstructed Execution Traces", null);
-	private final OutputPort invalidExecutionTraceOutputPort = new OutputPort("Invalid Execution Traces", null);
-
+	private final OutputPort messageTraceOutputPort = new OutputPort("Reconstructed Message Traces", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { MessageTrace.class }))); 
+	private final OutputPort executionTraceOutputPort = new OutputPort("Reconstructed Execution Traces", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { ExecutionTrace.class }))); 
+	private final OutputPort invalidExecutionTraceOutputPort = new OutputPort("Invalid Execution Traces", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { InvalidExecutionTrace.class }))); 
+	
 	/** Pending traces sorted by tin timestamps */
 	private final NavigableSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() {
 
