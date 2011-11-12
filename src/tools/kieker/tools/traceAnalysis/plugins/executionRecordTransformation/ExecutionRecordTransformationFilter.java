@@ -52,12 +52,13 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 
 	private static final Log LOG = LogFactory.getLog(ExecutionRecordTransformationFilter.class);
 
-	private static final Collection<Class<?>> RECORD_TYPE_SUBSCRIPTION_LIST = new CopyOnWriteArrayList<Class<?>>();
 	private static final Collection<Class<?>> OUT_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
 			new Class<?>[] { Execution.class }));
+	private static final Collection<Class<?>> IN_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { OperationExecutionRecord.class }));
 
-	private final OutputPort executionOutputPort = new OutputPort("Execution output stream", RECORD_TYPE_SUBSCRIPTION_LIST);
-	private final AbstractInputPort input = new AbstractInputPort("in", OUT_CLASSES) {
+	private final OutputPort executionOutputPort = new OutputPort("Execution output stream", OUT_CLASSES);
+	private final AbstractInputPort input = new AbstractInputPort("in", IN_CLASSES) {
 
 		@Override
 		public void newEvent(Object event) {
@@ -65,10 +66,6 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 		}
 
 	};
-
-	static {
-		ExecutionRecordTransformationFilter.RECORD_TYPE_SUBSCRIPTION_LIST.add(OperationExecutionRecord.class);
-	}
 
 	public ExecutionRecordTransformationFilter(final Configuration configuration) {
 		super(configuration);
@@ -81,6 +78,9 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 
 	public ExecutionRecordTransformationFilter(final String name, final SystemModelRepository systemEntityFactory) {
 		super(name, systemEntityFactory);
+		
+		this.registerInputPort("in", this.input);
+		this.registerOutputPort("out", this.executionOutputPort);
 	}
 
 	private Signature createSignature(final String operationSignatureStr) {
@@ -168,6 +168,10 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 
 	public OutputPort getExecutionOutputPort() {
 		return this.executionOutputPort;
+	}
+	
+	public AbstractInputPort getExecutionInputPort() {
+		return this.input;
 	}
 
 	@Override

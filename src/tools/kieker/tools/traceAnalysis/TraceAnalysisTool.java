@@ -254,6 +254,7 @@ public final class TraceAnalysisTool {
 		try {
 			final AnalysisController analysisInstance = new AnalysisController();
 
+			FSReader reader;
 			{ // NOCS (NestedBlock)
 				/*
 				 * Register an FSReader which only reads records of type OperationExecutionRecord
@@ -268,12 +269,15 @@ public final class TraceAnalysisTool {
 					recordTypeSelectorNameSet.add(c.getName());
 				}
 				conf.setProperty(FSReader.CONFIG_ONLYRECORDS, Configuration.toProperty(recordTypeSelectorNameSet.toArray(new String[0])));
-				analysisInstance.setReader(new FSReader(conf));
+				reader = new FSReader(conf);
+				analysisInstance.setReader(reader);
 			}
 
 			final ExecutionRecordTransformationFilter execRecTransformer = new ExecutionRecordTransformationFilter(Constants.EXEC_TRACE_RECONSTR_COMPONENT_NAME,
 					TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 			analysisInstance.registerPlugin(execRecTransformer);
+			/* Make sure that the execRecTransformer gets the output from the reader! */
+			reader.getMonitoringRecordOutputPort().subscribe(execRecTransformer.getExecutionInputPort());
 
 			final TimestampFilter executionFilterByTimestamp = new TimestampFilter(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp,
 					TraceAnalysisTool.ignoreExecutionsAfterTimestamp);

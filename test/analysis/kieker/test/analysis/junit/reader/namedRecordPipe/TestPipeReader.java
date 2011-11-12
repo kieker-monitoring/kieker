@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -93,7 +94,8 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 			this.receivedRecords = receivedRecords;
 		}
 
-		private final AbstractInputPort input = new AbstractInputPort("in", null) {
+		private final AbstractInputPort input = new AbstractInputPort("in", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+				new Class<?>[] { IMonitoringRecord.class }))) {
 
 			@Override
 			public void newEvent(Object event) {

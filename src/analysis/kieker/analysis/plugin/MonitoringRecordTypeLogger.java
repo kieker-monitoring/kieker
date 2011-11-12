@@ -20,7 +20,9 @@
 
 package kieker.analysis.plugin;
 
+import java.util.Collections;
 import java.util.Properties;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
@@ -35,8 +37,10 @@ import kieker.common.record.IMonitoringRecord;
 public class MonitoringRecordTypeLogger extends AbstractAnalysisPlugin {
 
 	private static final Log LOG = LogFactory.getLog(MonitoringRecordTypeLogger.class);
-	private final OutputPort output = new OutputPort("out", null);
-	private final AbstractInputPort input = new AbstractInputPort("in", null) {
+	private final OutputPort output = new OutputPort("out", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { IMonitoringRecord.class })));
+	private final AbstractInputPort input = new AbstractInputPort("in", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { IMonitoringRecord.class }))) {
 		@Override
 		public void newEvent(final Object event) {
 			IMonitoringRecord monitoringRecord = (IMonitoringRecord) event;

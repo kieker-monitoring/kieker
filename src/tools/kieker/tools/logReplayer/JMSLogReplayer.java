@@ -20,7 +20,9 @@
 
 package kieker.tools.logReplayer;
 
+import java.util.Collections;
 import java.util.Properties;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.configuration.Configuration;
@@ -32,6 +34,7 @@ import kieker.analysis.reader.jms.JMSReader;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.IMonitoringRecordReceiver;
 
 /**
  * Listens to a JMS queue and simply passes each record to a specified {@link IMonitoringRecordReceiver}.
@@ -111,8 +114,10 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 
 	private static final Log LOG = LogFactory.getLog(RecordDelegationPlugin2.class);
 
-	private final OutputPort output = new OutputPort("out", null);
-	private final AbstractInputPort input = new AbstractInputPort("in", null) {
+	private final OutputPort output = new OutputPort("out", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { IMonitoringRecord.class })));
+	private final AbstractInputPort input = new AbstractInputPort("in", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { IMonitoringRecord.class }))) {
 		@Override
 		public void newEvent(final Object event) {
 			RecordDelegationPlugin2.this.newMonitoringRecord((IMonitoringRecord) event);

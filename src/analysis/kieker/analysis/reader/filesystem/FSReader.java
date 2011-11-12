@@ -148,4 +148,8 @@ public class FSReader extends AbstractMonitoringReader implements IMonitoringRec
 		}
 		return this.running;
 	}
+	
+	public OutputPort getMonitoringRecordOutputPort() {
+		return outputPort;
+	}
 }

@@ -22,7 +22,9 @@ package kieker.test.tools.junit.currentTimeEventGeneratorFilter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -97,7 +99,8 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 
 		final List<Long> receivedTimestamps = new ArrayList<Long>();
 
-		filter.getCurrentTimeOutputPort().subscribe(new AbstractInputPort("", null) {
+		filter.getCurrentTimeOutputPort().subscribe(new AbstractInputPort("", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+				new Class<?>[] { TimestampEvent.class }))) {
 			@Override
 			public void newEvent(final Object event) {
 				receivedTimestamps.add(((TimestampEvent) event).getTimestamp());

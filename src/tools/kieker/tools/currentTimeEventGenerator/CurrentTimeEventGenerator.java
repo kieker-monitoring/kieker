@@ -69,8 +69,9 @@ public class CurrentTimeEventGenerator {
 
 	private final long timerResolution;
 
-	private final OutputPort currentTimeOutputPort = new OutputPort("Provides current time events", new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { TimestampEvent.class }));
-	
+	private final OutputPort currentTimeOutputPort = new OutputPort("Provides current time events", new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { TimestampEvent.class }));
+
 	/**
 	 * Creates an event generator which generates time events with the given
 	 * resolution in nanoseconds via the output port {@link #getCurrentTimeOutputPort()}.

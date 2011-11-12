@@ -181,8 +181,10 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 	private static class FSReaderRealtimeCons extends AbstractAnalysisPlugin {
 
 		private final FSReaderRealtime master;
-		private final OutputPort output = new OutputPort("out", null);
-		private final AbstractInputPort input = new AbstractInputPort("in", null) {
+		private final OutputPort output = new OutputPort("out", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+				new Class<?>[] { IMonitoringRecord.class })));
+		private final AbstractInputPort input = new AbstractInputPort("in", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+				new Class<?>[] { IMonitoringRecord.class }))) {
 			@Override
 			public void newEvent(final Object event) {
 				FSReaderRealtimeCons.this.newMonitoringRecord((IMonitoringRecord) event);

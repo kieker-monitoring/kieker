@@ -44,8 +44,8 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 	public static final String CONFIG_PIPENAME = PipeReader.class.getName() + ".pipeName";
 
 	private static final Log LOG = LogFactory.getLog(PipeReader.class);
-	private static final Collection<Class<?>> OUT_CLASSES = Collections
-			.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { IMonitoringRecord.class }));
+	private static final Collection<Class<?>> OUT_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { IMonitoringRecord.class }));
 
 	private volatile Pipe pipe;
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);

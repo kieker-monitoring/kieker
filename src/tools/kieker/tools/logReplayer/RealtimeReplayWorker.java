@@ -20,6 +20,9 @@
 
 package kieker.tools.logReplayer;
 
+import java.util.Collections;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.common.logging.Log;
@@ -37,7 +40,8 @@ public class RealtimeReplayWorker implements Runnable {
 	private static final Log LOG = LogFactory.getLog(RealtimeReplayWorker.class);
 	private final IMonitoringRecord monRec;
 	private final RealtimeReplayDistributor rd;
-	private final OutputPort output = new OutputPort("out", null);
+	private final OutputPort output = new OutputPort("out", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { IMonitoringRecord.class })));
 
 	/**
 	 * Creates a new instance of this class using the given parameters.

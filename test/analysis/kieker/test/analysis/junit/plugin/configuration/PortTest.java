@@ -21,7 +21,7 @@ import org.junit.Test;
 public class PortTest {
 
 	@Test
-	public void testPorts() {
+	public void testPortsA() {
 		final AtomicInteger counter = new AtomicInteger();
 		final OutputPort oport = new OutputPort("out", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
 				new Class<?>[] { Number.class, Character.class })));
@@ -29,7 +29,7 @@ public class PortTest {
 
 			@Override
 			public void newEvent(Object event) {
-				assertTrue(Number.class.isInstance(event) || 
+				assertTrue(Number.class.isInstance(event) ||
 						Character.class.isInstance(event));
 				counter.incrementAndGet();
 			}
@@ -79,4 +79,28 @@ public class PortTest {
 		assertEquals(3, counter.get());
 	}
 
+	@Test
+	public void testPortsB() {
+		final AtomicInteger counter = new AtomicInteger();
+		final OutputPort oport = new OutputPort("out", null);
+		final AbstractInputPort iport = new AbstractInputPort(null, null) {
+
+			@Override
+			public void newEvent(Object event) {
+				counter.incrementAndGet();
+			}
+		};
+
+		// Connect the ports!
+		oport.subscribe(iport);
+
+		// Every object should reach the input port
+
+		oport.deliver(new Object());
+		oport.deliver(new Float(0.0));
+		oport.deliver(new Character('a'));
+		oport.deliver(new String());
+
+		assertEquals(4, counter.get());
+	}
 }
