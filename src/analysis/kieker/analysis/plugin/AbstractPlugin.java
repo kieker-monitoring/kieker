@@ -1,8 +1,8 @@
 package kieker.analysis.plugin;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
 import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
@@ -19,9 +19,8 @@ import kieker.common.logging.LogFactory;
 public abstract class AbstractPlugin {
 	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
 
-	// TODO: should probably be ConcurrentHashMap ? also in many other cases?
-	private final Map<String, AbstractInputPort> inputPorts = new HashMap<String, AbstractInputPort>();
-	private final Map<String, OutputPort> outputPorts = new HashMap<String, OutputPort>();
+	private final Map<String, AbstractInputPort> inputPorts = new ConcurrentHashMap<String, AbstractInputPort>();
+	private final Map<String, OutputPort> outputPorts = new ConcurrentHashMap<String, OutputPort>();
 
 	protected final Configuration configuration;
 

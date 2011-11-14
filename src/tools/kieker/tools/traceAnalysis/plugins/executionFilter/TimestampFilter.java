@@ -37,6 +37,8 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  */
 public class TimestampFilter extends AbstractAnalysisPlugin {
 
+	public static final String CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP = TimestampFilter.class.getName() + ".ignoreExecutionsBeforeTimestamp";
+	public static final String CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP = TimestampFilter.class.getName() + ".ignorExecutionsAfterTimestamp";
 	public static final long MAX_TIMESTAMP = Long.MAX_VALUE;
 	public static final long MIN_TIMESTAMP = 0;
 
@@ -50,13 +52,15 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 	 * given parameters.
 	 * 
 	 * @param configuration
-	 *            The configuration used to initialize this instance.
+	 *            The configuration used to initialize this instance. It should
+	 *            contain the properties for the minimum and maximum timestamp.
 	 */
 	public TimestampFilter(final Configuration configuration) {
 		super(configuration);
-		// TODO: Initialize the timestamps based on the configuration.
-		this.ignoreExecutionsBeforeTimestamp = 0;
-		this.ignorExecutionsAfterTimestamp = 0;
+
+		/* Load the content for the fields from the given configuration. */
+		this.ignoreExecutionsBeforeTimestamp = configuration.getLongProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP);
+		this.ignorExecutionsAfterTimestamp = configuration.getLongProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
 	}
 
 	/**
@@ -80,8 +84,7 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 	}
 
 	private final AbstractInputPort executionInputPort = new AbstractInputPort("Execution input",
-			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-					new Class<?>[] { Execution.class }))) {
+			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { Execution.class }))) {
 
 		@Override
 		public void newEvent(final Object obj) {
@@ -113,7 +116,12 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 
 	@Override
 	protected Properties getDefaultProperties() {
-		return new Properties();
+		final Properties properties = new Properties();
+
+		properties.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP, Long.toString(TimestampFilter.MAX_TIMESTAMP));
+		properties.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, Long.toString(TimestampFilter.MIN_TIMESTAMP));
+
+		return properties;
 	}
 
 }

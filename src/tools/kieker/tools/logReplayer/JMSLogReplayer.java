@@ -103,8 +103,10 @@ public class JMSLogReplayer {
 }
 
 /**
- * Kieker analysis plugin that delegates each record to the configured {@link IMonitoringRecordReceiver}.
+ * Kieker analysis plugin that delegates each record to the configured {@link IMonitoringRecordReceiver}.<br>
  * 
+ * <b>Don't</b> change the visibility modificator to public. The class does not have the necessary <i>Configuration</i>-Constructor in order to be used by the
+ * analysis meta model. <br>
  * TODO: We need to extract this class and merge it with that of {@link FilesystemLogReplayer} See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/173
  * 
  * @author Andre van Hoorn
@@ -132,14 +134,6 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 	@SuppressWarnings("unused")
 	private RecordDelegationPlugin2() {
 		this((AbstractAnalysisPlugin) null);
-	}
-
-	public RecordDelegationPlugin2(Configuration configuration) {
-		super(configuration);
-		// TODO: Load from configuration
-
-		registerInputPort("in", input);
-		registerOutputPort("out", output);
 	}
 
 	public RecordDelegationPlugin2(final AbstractAnalysisPlugin rec) {
