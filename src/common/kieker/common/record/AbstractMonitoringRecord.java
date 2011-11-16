@@ -140,7 +140,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 			}
 			throw new IllegalArgumentException("Expecting " + valueTypes[curIdx].getName() + " but found " + values[curIdx].getClass().getName()
 					+ " at position " + curIdx + " of the array.");
-
 		}
 	}
 
