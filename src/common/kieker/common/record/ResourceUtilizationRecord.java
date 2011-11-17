@@ -28,15 +28,14 @@ package kieker.common.record;
  * 
  */
 public final class ResourceUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	protected static final Class<?>[] TYPES = {
+	private static final long serialVersionUID = -7386791367687652550L;
+	private static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
 		String.class,
 		double.class
 	};
-
 	private static final String DEFAULT_VALUE = "N/A";
-	private static final long serialVersionUID = 17676L;
 
 	/**
 	 * Date/time of measurement. The value should be interpreted as the number
@@ -80,16 +79,12 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 	}
 
 	public ResourceUtilizationRecord(final Object[] values) {
+		AbstractMonitoringRecord.checkArray(values, ResourceUtilizationRecord.TYPES);
 		try {
-			if (values.length != ResourceUtilizationRecord.TYPES.length) {
-				throw new IllegalArgumentException("Expecting vector with " + ResourceUtilizationRecord.TYPES.length + " elements but found:" + values.length);
-			}
-
 			this.timestamp = (Long) values[0]; // NOCS
 			this.hostName = (String) values[1]; // NOCS
 			this.resourceName = (String) values[2]; // NOCS
 			this.utilization = (Double) values[3]; // NOCS
-
 		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
 			throw new IllegalArgumentException("Failed to init", exc);
 		}

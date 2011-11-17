@@ -50,7 +50,7 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * 
 	 * <ul>
 	 * <li>a constructor accepting a single Object[] as argument.
-	 * <li>a <code>protected static final Class<?>[] TYPES</code> specifying the types of the records, usually returned via {@link getValueTypes()}.
+	 * <li>a <code>private static final Class<?>[] TYPES</code> specifying the types of the records, usually returned via {@link getValueTypes()}.
 	 * </ul>
 	 */
 	public static interface Factory {

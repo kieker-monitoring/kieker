@@ -28,7 +28,8 @@ package kieker.common.record;
  * 
  */
 public final class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	protected static final Class<?>[] TYPES = {
+	private static final long serialVersionUID = 320361406631781156L;
+	private static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
 		long.class,
@@ -38,13 +39,10 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 		long.class,
 		long.class,
 	};
+	private static final String DEFAULT_VALUE = "N/A";
 
 	public static final double UNDEFINED_DOUBLE = -1;
 	public static final long UNDEFINED_LONG = -1;
-
-	private static final String DEFAULT_VALUE = "N/A";
-
-	private static final long serialVersionUID = 1762476L;
 
 	private volatile long memUsed = MemSwapUsageRecord.UNDEFINED_LONG;
 	private volatile long memFree = MemSwapUsageRecord.UNDEFINED_LONG;
@@ -90,10 +88,8 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	}
 
 	public MemSwapUsageRecord(final Object[] values) {
+		AbstractMonitoringRecord.checkArray(values, MemSwapUsageRecord.TYPES);
 		try {
-			if (values.length != MemSwapUsageRecord.TYPES.length) {
-				throw new IllegalArgumentException("Expecting vector with " + MemSwapUsageRecord.TYPES.length + " elements but found:" + values.length);
-			}
 			this.timestamp = (Long) values[0]; // NOCS
 			this.hostName = (String) values[1]; // NOCS
 			this.memTotal = (Long) values[2]; // NOCS

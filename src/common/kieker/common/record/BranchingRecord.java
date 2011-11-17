@@ -24,13 +24,12 @@ package kieker.common.record;
  * @author Andre van Hoorn
  */
 public final class BranchingRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	protected static final Class<?>[] TYPES = {
+	private static final long serialVersionUID = -4569387448110349137L;
+	private static final Class<?>[] TYPES = {
 		long.class, // timestamp
 		int.class, // branchId
 		int.class, // branchingOutcome
 	};
-
-	private static final long serialVersionUID = 1113L;
 
 	private volatile long timestamp = -1;
 	private volatile int branchID = -1;
@@ -47,10 +46,8 @@ public final class BranchingRecord extends AbstractMonitoringRecord implements I
 	}
 
 	public BranchingRecord(final Object[] values) {
+		AbstractMonitoringRecord.checkArray(values, BranchingRecord.TYPES);
 		try {
-			if (values.length != BranchingRecord.TYPES.length) {
-				throw new IllegalArgumentException("Expecting vector with " + BranchingRecord.TYPES.length + " elements but found:" + values.length);
-			}
 			this.timestamp = (Long) values[0];
 			this.branchID = (Integer) values[1];
 			this.branchingOutcome = (Integer) values[2];

@@ -26,11 +26,11 @@ package kieker.common.record;
  * @author Andre van Hoorn
  */
 public final class CurrentTimeRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	protected static final Class<?>[] TYPES = {
+	private static final long serialVersionUID = -7166224794391621087L;
+	private static final Class<?>[] TYPES = {
 		long.class, // timestamp
 	};
 
-	private static final long serialVersionUID = 112213L;
 	private volatile long currentTime = -1;
 
 	/**
@@ -46,10 +46,8 @@ public final class CurrentTimeRecord extends AbstractMonitoringRecord implements
 	}
 
 	public CurrentTimeRecord(final Object[] values) {
+		AbstractMonitoringRecord.checkArray(values, CurrentTimeRecord.TYPES);
 		try {
-			if (values.length != CurrentTimeRecord.TYPES.length) {
-				throw new IllegalArgumentException("Expecting vector with " + CurrentTimeRecord.TYPES.length + " elements but found:" + values.length);
-			}
 			this.currentTime = (Long) values[0];
 		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
 			throw new IllegalArgumentException("Failed to init", exc);

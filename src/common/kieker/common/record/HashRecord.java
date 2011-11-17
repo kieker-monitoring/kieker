@@ -25,12 +25,11 @@ package kieker.common.record;
  * @author Jan Waller
  */
 public final class HashRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	protected static final Class<?>[] TYPES = new Class<?>[] {
+	private static final long serialVersionUID = 4566332478835872121L;
+	private static final Class<?>[] TYPES = new Class<?>[] {
 		int.class, // id
 		Object.class, // object
 	};
-
-	private static final long serialVersionUID = 1L;
 
 	private final int id;
 	private final Object object;
@@ -41,10 +40,8 @@ public final class HashRecord extends AbstractMonitoringRecord implements IMonit
 	}
 
 	public HashRecord(final Object[] values) {
+		AbstractMonitoringRecord.checkArray(values, HashRecord.TYPES);
 		try {
-			if (values.length != HashRecord.TYPES.length) {
-				throw new IllegalArgumentException("Expecting array with " + HashRecord.TYPES.length + " elements but found " + values.length + ".");
-			}
 			this.id = (Integer) values[0];
 			this.object = values[1];
 		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
