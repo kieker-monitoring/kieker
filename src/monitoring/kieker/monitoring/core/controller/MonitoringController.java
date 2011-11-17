@@ -250,9 +250,6 @@ public final class MonitoringController extends AbstractController implements IM
 	 * SINGLETON
 	 */
 	private static final class LazyHolder { // NOCS
-		static {
-			INSTANCE = MonitoringController.createInstance(Configuration.createSingletonConfiguration());
-		}
-		private static final IMonitoringController INSTANCE;
+		private static final IMonitoringController INSTANCE = MonitoringController.createInstance(Configuration.createSingletonConfiguration());
 	}
 }

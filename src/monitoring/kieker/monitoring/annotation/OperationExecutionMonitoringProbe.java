@@ -26,14 +26,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author Matthias Rohr, Thilo Focke
- * 
- *         History:
- *         2008/01/14: Refactoring for the first release of Kieker and publication under an open source licence
- *         2007/03/05: New Prototype
+ * @author Matthias Rohr, Thilo Focke, Jan Waller
  */
-
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
+@Target({ ElementType.METHOD, ElementType.CONSTRUCTOR })
 public @interface OperationExecutionMonitoringProbe {
 }
