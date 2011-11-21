@@ -12,7 +12,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
 /**
- * Don't inherit directly from this class! Instead inherit from {@link AbstractAnalysisPlugin} or {@link AbstractMonitoringReader}.
+ * <b>Do not</b> inherit directly from this class! Instead inherit from {@link AbstractAnalysisPlugin} or {@link AbstractMonitoringReader}.
  * 
  * @author Nils Christian Ehmke
  */
@@ -72,26 +72,66 @@ public abstract class AbstractPlugin {
 		return this.outputPorts.get(name);
 	}
 
+	/**
+	 * This method registers the given input port and makes sure that other
+	 * classes calling the getter-methods can find this port.
+	 * 
+	 * @param name
+	 *            The name under which the port should be accessible. If the
+	 *            name is already in use, the old port will be replaced.
+	 * @param port
+	 *            The port to be registered.
+	 */
 	protected void registerInputPort(final String name, final AbstractInputPort port) {
 		this.inputPorts.put(name, port);
 	}
 
+	/**
+	 * This method registers the given output port and makes sure that other
+	 * classes calling the getter-methods can find this port.
+	 * 
+	 * @param name
+	 *            The name under which the port should be accessible. If the
+	 *            name is already in use, the old port will be replaced.
+	 * @param port
+	 *            The port to be registered.
+	 */
 	protected void registerOutputPort(final String name, final OutputPort port) {
 		this.outputPorts.put(name, port);
 	}
 
+	/**
+	 * Delivers an array containing all input ports of this instance.
+	 * 
+	 * @return An array with all input ports.
+	 */
 	public final AbstractInputPort[] getAllInputPorts() {
 		return this.inputPorts.values().toArray(new AbstractInputPort[0]);
 	}
 
+	/**
+	 * Delivers an array containing all output ports of this instance.
+	 * 
+	 * @return An array with all output ports.
+	 */
 	public final OutputPort[] getAllOutputPorts() {
 		return this.outputPorts.values().toArray(new OutputPort[0]);
 	}
-	
+
+	/**
+	 * Delivers an array containing all output port names of this instance.
+	 * 
+	 * @return An array with the names of all output ports.
+	 */
 	public final String[] getAllOutputPortNames() {
 		return this.outputPorts.keySet().toArray(new String[0]);
 	}
 
+	/**
+	 * Delivers an array containing all input port names of this instance.
+	 * 
+	 * @return An array with the names of all input ports.
+	 */
 	public String[] getAllInputPortNames() {
 		return this.inputPorts.keySet().toArray(new String[0]);
 	}

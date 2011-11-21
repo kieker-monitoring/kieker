@@ -29,7 +29,10 @@ import kieker.analysis.plugin.configuration.OutputPort;
 
 /**
  * This class has exactly one input port named "in" and one output ports named
- * "out".
+ * "out". An instance of this class receives any objects, increments an intern
+ * tread-safe counter without printing any message and delivers the objects
+ * unmodified to the output. The value of the counter can later be retrieved by
+ * using a corresponding method.
  * 
  * @author Jan Waller
  */
@@ -52,6 +55,7 @@ public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
 	public SilentCountingRecordConsumer(final Configuration configuration) {
 		super(configuration);
 
+		/* Register the necessary ports. */
 		registerInputPort("in", input);
 		registerOutputPort("out", output);
 	}

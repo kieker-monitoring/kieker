@@ -33,7 +33,9 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * This class has exactly one input port named "in" and one output ports named
- * "out".
+ * "out". An instance of this class receives only objects implementing the
+ * interface {@link IMonitoringRecord}, prints a log message for every single
+ * received record and passes them unmodified to the output port.
  * 
  * @author Andre van Hoorn
  */

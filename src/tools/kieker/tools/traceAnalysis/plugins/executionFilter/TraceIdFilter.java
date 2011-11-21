@@ -35,7 +35,9 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * Allows to filter Execution objects based on their traceId.<br>
  * 
  * This class has exactly one input port named "in" and one output ports named
- * "out".
+ * "out". It receives only objects inheriting from the class {@link Execution}.
+ * If the received object contains the defined traceID, the object is delivered
+ * unmodified to the output port.
  * 
  * @author Andre van Hoorn
  */

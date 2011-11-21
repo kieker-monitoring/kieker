@@ -70,7 +70,7 @@ public final class OutputPort extends AbstractPort implements IOutputPort {
 					break;
 				}
 			}
-			if (!isRegistered) 
+			if (!isRegistered)
 				return false;
 		}
 		/* Seems like it's okay. Deliver it to the subscribers. */

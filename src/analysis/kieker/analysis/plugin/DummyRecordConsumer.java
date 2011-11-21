@@ -35,7 +35,12 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * This class has exactly one input port named "in" and one output ports named
- * "out".
+ * "out". An instance of this class receives only objects implementing the
+ * interface {@link IMonitoringRecord} via "in", prints a simple message on the
+ * output stream that they received the objects and delegates the object to the
+ * output port.<br>
+ * In other words: The plugin prints a message for every record and passes it
+ * unmodified to the output.
  * 
  * @author Matthias Rohr, Jan Waller
  */
@@ -71,6 +76,7 @@ public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
 			this.printStream = new PrintStream(new FileOutputStream(printStreamName));
 		}
 
+		/* Register the ports. */
 		super.registerInputPort("in", input);
 		super.registerOutputPort("out", output);
 	}
