@@ -31,7 +31,10 @@ import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 
 /**
- * Allows to filter Execution objects based on their tin and tout timestamps.
+ * Allows to filter Execution objects based on their tin and tout timestamps.<br>
+ * 
+ * This class has exactly one input port named "in" and one output ports named
+ * "out".
  * 
  * @author Andre van Hoorn
  */
@@ -61,6 +64,9 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 		/* Load the content for the fields from the given configuration. */
 		this.ignoreExecutionsBeforeTimestamp = configuration.getLongProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP);
 		this.ignorExecutionsAfterTimestamp = configuration.getLongProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
+		
+		super.registerOutputPort("out", this.executionOutputPort);
+		super.registerInputPort("in", executionInputPort);
 	}
 
 	/**
@@ -73,10 +79,12 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 	 */
 	public TimestampFilter(final long ignoreExecutionsBeforeTimestamp, final long ignoreExecutionsAfterTimestamp) {
 		super(new Configuration(null));
+		
 		this.ignoreExecutionsBeforeTimestamp = ignoreExecutionsBeforeTimestamp;
 		this.ignorExecutionsAfterTimestamp = ignoreExecutionsAfterTimestamp;
 
 		super.registerOutputPort("out", this.executionOutputPort);
+		super.registerInputPort("in", executionInputPort);
 	}
 
 	public AbstractInputPort getExecutionInputPort() {

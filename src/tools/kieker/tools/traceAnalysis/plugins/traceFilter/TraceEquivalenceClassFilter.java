@@ -40,6 +40,8 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
+ * This class has exactly one input port named "in" and two output ports named
+ * "messageTraceOutput", "executionTraceOutput".
  * 
  * @author Andre van Hoorn
  */
@@ -65,6 +67,11 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 		super(name, systemEntityFactory);
 		this.rootExecution = systemEntityFactory.getRootExecution();
 		this.equivalenceMode = traceEquivalenceCallMode;
+		
+		/* Register all ports. */
+		super.registerInputPort("in", executionTraceInputPort);
+		super.registerOutputPort("messageTraceOutput", messageTraceOutputPort);
+		super.registerOutputPort("executionTraceOutput", executionTraceOutputPort);
 	}
 
 	private void newExecutionTrace(final ExecutionTrace et) {

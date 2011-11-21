@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 package kieker.tools.traceAnalysis.plugins.traceReconstruction;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
@@ -43,6 +44,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
+ * This class has exactly one input port named "in" and three output ports named
+ * "messageTraceOutput", "executionTraceOutput", "invalidExecutionTraceOutput"
  * 
  * @author Andre van Hoorn
  */
@@ -62,13 +65,16 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	private final Execution rootExecution;
 	private final long maxTraceDurationNanos;
 
-	private final OutputPort messageTraceOutputPort = new OutputPort("Reconstructed Message Traces", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { MessageTrace.class }))); 
-	private final OutputPort executionTraceOutputPort = new OutputPort("Reconstructed Execution Traces", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { ExecutionTrace.class }))); 
-	private final OutputPort invalidExecutionTraceOutputPort = new OutputPort("Invalid Execution Traces", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { InvalidExecutionTrace.class }))); 
-	
+	private final OutputPort messageTraceOutputPort = new OutputPort("Reconstructed Message Traces",
+			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+					new Class<?>[] { MessageTrace.class })));
+	private final OutputPort executionTraceOutputPort = new OutputPort("Reconstructed Execution Traces",
+			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+					new Class<?>[] { ExecutionTrace.class })));
+	private final OutputPort invalidExecutionTraceOutputPort = new OutputPort("Invalid Execution Traces",
+			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+					new Class<?>[] { InvalidExecutionTrace.class })));
+
 	/** Pending traces sorted by tin timestamps */
 	private final NavigableSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() {
 
@@ -106,6 +112,12 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 			this.maxTraceDurationNanos = maxTraceDurationMillis * (1000 * 1000); // NOCS (MagicNumberCheck)
 		}
 		this.ignoreInvalidTraces = ignoreInvalidTraces;
+
+		/* Register all ports. */
+		super.registerInputPort("in", executionInputPort);
+		super.registerOutputPort("messageTraceOutput", messageTraceOutputPort);
+		super.registerOutputPort("executionTraceOutput", executionTraceOutputPort);
+		super.registerOutputPort("invalidExecutionTraceOutput", invalidExecutionTraceOutputPort);
 	}
 
 	/**
@@ -287,8 +299,9 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 		return this.executionInputPort;
 	}
 
-	private final AbstractInputPort executionInputPort = new AbstractInputPort("Execution input", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { Execution.class }))) {
+	private final AbstractInputPort executionInputPort = new AbstractInputPort("Execution input",
+			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+					new Class<?>[] { Execution.class }))) {
 
 		@Override
 		public void newEvent(final Object event) {

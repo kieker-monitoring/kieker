@@ -32,7 +32,10 @@ import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 
 /**
- * Allows to filter Execution objects based on their traceId.
+ * Allows to filter Execution objects based on their traceId.<br>
+ * 
+ * This class has exactly one input port named "in" and one output ports named
+ * "out".
  * 
  * @author Andre van Hoorn
  */
@@ -47,6 +50,7 @@ public class TraceIdFilter extends AbstractAnalysisPlugin {
 		// TODO: Initialize from the variable.
 		this.selectedTraces = null;
 
+		super.registerInputPort("in", executionInputPort);
 		super.registerOutputPort("out", this.executionOutputPort);
 	}
 

@@ -34,6 +34,8 @@ import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.common.record.IMonitoringRecord;
 
 /**
+ * This class has exactly one input port named "in" and one output ports named
+ * "out".
  * 
  * @author Matthias Rohr, Jan Waller
  */

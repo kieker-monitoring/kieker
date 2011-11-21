@@ -51,7 +51,10 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * Plugin providing the creation of calling trees both for individual traces
- * and an aggregated form mulitple traces.
+ * and an aggregated form mulitple traces.<br>
+ * 
+ * This class has exactly one input port named "in". The data which is send to
+ * this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn
  */
@@ -74,6 +77,8 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 						this.systemEntityFactory.getOperationFactory().getRootOperation()));
 		this.outputFnBase = outputFnBase;
 		this.shortLabels = shortLabels;
+		
+		super.registerInputPort("in", messageTraceInputPort);
 	}
 
 	private static final String nodeLabel(final CallTreeNode node, final boolean shortLabels) {

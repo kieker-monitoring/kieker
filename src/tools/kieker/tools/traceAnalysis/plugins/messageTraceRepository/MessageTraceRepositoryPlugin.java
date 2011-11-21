@@ -33,6 +33,9 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
+ * This class has exactly one input port named "in". The data which is send to
+ * this plugin is not delegated in any way.
+ * 
  * @author Andre van Hoorn
  */
 public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessingPlugin {
@@ -46,6 +49,9 @@ public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessing
 
 	public MessageTraceRepositoryPlugin(final String name, final SystemModelRepository systemEntityFactory) {
 		super(name, systemEntityFactory);
+		
+		/* Register the input port. */
+		super.registerInputPort("in", messageTraceInputPort);
 	}
 
 	private final AbstractInputPort messageTraceInputPort = new AbstractInputPort("Message traces",

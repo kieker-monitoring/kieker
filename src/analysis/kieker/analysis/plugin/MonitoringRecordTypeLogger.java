@@ -32,6 +32,9 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 
 /**
+ * This class has exactly one input port named "in" and one output ports named
+ * "out".
+ * 
  * @author Andre van Hoorn
  */
 public class MonitoringRecordTypeLogger extends AbstractAnalysisPlugin {

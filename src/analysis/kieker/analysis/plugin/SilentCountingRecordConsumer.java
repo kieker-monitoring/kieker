@@ -28,6 +28,8 @@ import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
 
 /**
+ * This class has exactly one input port named "in" and one output ports named
+ * "out".
  * 
  * @author Jan Waller
  */

@@ -34,6 +34,8 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
+ * This class has exactly one input port named "in". The data which is send to
+ * this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn
  */
@@ -53,6 +55,8 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 		this.dotOutputFile = dotOutputFile;
 		this.includeWeights = includeWeights;
 		this.shortLabels = shortLabels;
+		
+		super.registerInputPort("in", messageTraceInputPort);
 	}
 
 	public void saveTreeToDotFile() throws IOException {

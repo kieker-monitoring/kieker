@@ -40,7 +40,10 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * IMonitoringRecordConsumerPlugin that distributes the log records to the worker
- * thread for "real time" replays.
+ * thread for "real time" replays.<br>
+ * 
+ * This class has exactly one input port named "in" and one output ports named
+ * "out".
  * 
  * @author Robert von Massow
  * 
@@ -86,6 +89,7 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 		this.executor = null;
 		this.terminationLatch = null;
 
+		/* Register the ports. */
 		registerInputPort("in", input);
 		registerOutputPort("out", output);
 	}

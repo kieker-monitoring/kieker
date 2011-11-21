@@ -49,7 +49,10 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationPair;
 
 /**
- * Refactored copy from LogAnalysis-legacy tool
+ * Refactored copy from LogAnalysis-legacy tool<br>
+ * 
+ * This class has exactly one input port named "in". The data which is send to
+ * this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
@@ -74,6 +77,8 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 		this.includeWeights = includeWeights;
 		this.shortLabels = shortLabels;
 		this.includeSelfLoops = includeSelfLoops;
+		
+		super.registerInputPort("in", messageTraceInputPort);
 	}
 
 	private String containerNodeLabel(final ExecutionContainer container) {

@@ -49,7 +49,10 @@ import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
- * Refactored copy from LogAnalysis-legacy tool
+ * Refactored copy from LogAnalysis-legacy tool<br>
+ * 
+ * This class has exactly one input port named "in". The data which is send to
+ * this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn, Nils Sommer
  */
@@ -117,6 +120,9 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 		this.sdmode = sdmode;
 		this.outputFnBase = outputFnBase;
 		this.shortLabels = shortLabels;
+		
+		/* Register the input port. */
+		super.registerInputPort("in", messageTraceInputPort);
 	}
 
 	@Override

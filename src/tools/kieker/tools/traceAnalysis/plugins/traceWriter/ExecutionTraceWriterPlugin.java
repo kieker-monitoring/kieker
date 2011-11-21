@@ -35,6 +35,8 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
+ * This class has exactly one input port named "in". The data which is send to
+ * this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn
  */
@@ -48,6 +50,8 @@ public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessing
 		super(name, systemEntityFactory);
 		this.outputFn = outputFn;
 		this.ps = new BufferedWriter(new FileWriter(outputFn));
+		
+		super.registerInputPort("in", executionTraceInputPort);
 	}
 
 	@Override

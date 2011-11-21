@@ -44,7 +44,10 @@ import kieker.tools.traceAnalysis.systemModel.Signature;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
- * Transforms KiekerExecutionRecords into Execution objects.
+ * Transforms KiekerExecutionRecords into Execution objects.<br>
+ * 
+ * This class has exactly one input port named "in" and one output ports named
+ * "out".
  * 
  * @author Andre van Hoorn
  */
