@@ -87,4 +87,12 @@ public abstract class AbstractPlugin {
 	public final OutputPort[] getAllOutputPorts() {
 		return this.outputPorts.values().toArray(new OutputPort[0]);
 	}
+	
+	public final String[] getAllOutputPortNames() {
+		return this.outputPorts.keySet().toArray(new String[0]);
+	}
+
+	public String[] getAllInputPortNames() {
+		return this.inputPorts.keySet().toArray(new String[0]);
+	}
 }

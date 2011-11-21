@@ -48,6 +48,7 @@ import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
+import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.analysis.reader.IMonitoringReader;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -262,6 +263,12 @@ public class AnalysisController {
 			reader.setName(logReader.toString());
 			plugins.add(reader);
 			project.getPlugins().add(reader);
+			final String outs[] = ((AbstractPlugin)logReader).getAllOutputPortNames();
+			for (String out : outs) {
+				IOutputPort outputPort = factory.createOutputPort();
+				outputPort.setName(out);
+				reader.getOutputPorts().add(outputPort);
+			}
 		}
 		for (AbstractAnalysisPlugin plugin : this.plugins) {
 			IAnalysisPlugin newPlugin = factory.createAnalysisPlugin();
@@ -269,6 +276,20 @@ public class AnalysisController {
 			newPlugin.setName(plugin.toString());
 			plugins.add(newPlugin);
 			project.getPlugins().add(newPlugin);
+			
+			final String outs[] = plugin.getAllOutputPortNames();
+			for (String out : outs) {
+				IOutputPort outputPort = factory.createOutputPort();
+				outputPort.setName(out);
+				newPlugin.getOutputPorts().add(outputPort);
+			}
+			
+			final String ins[] = plugin.getAllInputPortNames();
+			for (String in : ins) {
+				IInputPort inputPort = factory.createInputPort();
+				inputPort.setName(in);
+				newPlugin.getInputPorts().add(inputPort);
+			}
 		}
 
 		/* Save the whole project. */

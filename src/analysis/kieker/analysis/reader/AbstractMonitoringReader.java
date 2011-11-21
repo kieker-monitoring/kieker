@@ -30,4 +30,5 @@ public abstract class AbstractMonitoringReader extends AbstractPlugin implements
 	final protected void registerOutputPort(final String name, final OutputPort port) {
 		super.registerOutputPort(name, port);
 	}
+
 }
