@@ -144,10 +144,11 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	}
 
 	public OperationExecutionRecord(final Object[] values) {
-		AbstractMonitoringRecord.checkArray(values, OperationExecutionRecord.TYPES);
+		final Object[] myValues = values.clone();
+		AbstractMonitoringRecord.checkArray(myValues, OperationExecutionRecord.TYPES);
 		try {
-			this.experimentId = (Integer) values[0];
-			final String name = (String) values[1];
+			this.experimentId = (Integer) myValues[0];
+			final String name = (String) myValues[1];
 			final int posParen = name.lastIndexOf('(');
 			int posDot;
 			if (posParen != -1) {
@@ -162,13 +163,13 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 				this.className = name.substring(0, posDot);
 				this.operationName = name.substring(posDot + 1);
 			}
-			this.sessionId = (String) values[2]; // NOCS
-			this.traceId = (Long) values[3]; // NOCS
-			this.tin = (Long) values[4]; // NOCS
-			this.tout = (Long) values[5]; // NOCS
-			this.hostName = (String) values[6]; // NOCS
-			this.eoi = (Integer) values[7]; // NOCS
-			this.ess = (Integer) values[8]; // NOCS
+			this.sessionId = (String) myValues[2]; // NOCS
+			this.traceId = (Long) myValues[3]; // NOCS
+			this.tin = (Long) myValues[4]; // NOCS
+			this.tout = (Long) myValues[5]; // NOCS
+			this.hostName = (String) myValues[6]; // NOCS
+			this.eoi = (Integer) myValues[7]; // NOCS
+			this.ess = (Integer) myValues[8]; // NOCS
 		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
@@ -185,7 +186,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 			this.tout,
 			(this.hostName == null) ? "NULLHOST" : this.hostName, // NOCS
 			this.eoi,
-			this.ess };
+			this.ess, };
 	}
 
 	@Override

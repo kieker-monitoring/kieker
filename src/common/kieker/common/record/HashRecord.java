@@ -40,10 +40,11 @@ public final class HashRecord extends AbstractMonitoringRecord implements IMonit
 	}
 
 	public HashRecord(final Object[] values) {
-		AbstractMonitoringRecord.checkArray(values, HashRecord.TYPES);
+		final Object[] myValues = values.clone();
+		AbstractMonitoringRecord.checkArray(myValues, HashRecord.TYPES);
 		try {
-			this.id = (Integer) values[0];
-			this.object = values[1];
+			this.id = (Integer) myValues[0];
+			this.object = myValues[1];
 		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
 			throw new IllegalArgumentException("Failed to init record from array.", ex);
 		}

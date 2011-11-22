@@ -184,7 +184,10 @@
 
         <!-- Verifies that both the java.lang.Deprecated import is present and the @deprecated Javadoc tag is present when either is present. !-->
         <!-- See http://checkstyle.sourceforge.net/config_annotation.html#MissingDeprecated !-->
-        <module name="MissingDeprecated"/>
+        <!-- KIEKER -->
+        <module name="MissingDeprecated">
+            <property name="severity" value="info"/>        
+        </module>
 
         <!-- Verifies that the java.lang.Override annotation is present when the {@inheritDoc} javadoc tag is present. !-->
         <!-- See http://checkstyle.sourceforge.net/config_annotation.html#MissingOverride !-->

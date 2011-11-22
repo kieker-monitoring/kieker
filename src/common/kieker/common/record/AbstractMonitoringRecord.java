@@ -22,6 +22,8 @@ package kieker.common.record;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.security.PrivilegedAction;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -193,72 +195,104 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		} else {
 			try {
 				return Class.forName(classname).asSubclass(IMonitoringRecord.class);
-			} catch (final Exception ex) {
+			} catch (final ClassNotFoundException ex) {
+				throw new MonitoringRecordException("Failed to get record of name " + classname, ex);
+			} catch (final ClassCastException ex) {
 				throw new MonitoringRecordException("Failed to get record of name " + classname, ex);
 			}
 		}
 	}
 
 	public static final Class<?>[] typesForClass(final Class<? extends IMonitoringRecord> clazz) throws MonitoringRecordException {
-		if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
-			try {
+		try {
+			if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
 				final Field types = clazz.getDeclaredField("TYPES");
-				types.setAccessible(true);
+				java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
+					@Override
+					public Object run() {
+						types.setAccessible(true);
+						return null;
+					}
+				});
 				return ((Class<?>[]) types.get(null)).clone();
-			} catch (final Exception ex) {
-				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
-			}
-		} else {
-			try {
+			} else {
 				return clazz.newInstance().getValueTypes();
-			} catch (final Exception ex) {
-				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
 			}
+		} catch (final SecurityException ex) {
+			throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
+		} catch (final NoSuchFieldException ex) {
+			throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
+		} catch (final IllegalArgumentException ex) {
+			throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
+		} catch (final IllegalAccessException ex) {
+			throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
+		} catch (final InstantiationException ex) {
+			throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
 		}
 	}
 
 	public static final IMonitoringRecord createFromArray(final Class<? extends IMonitoringRecord> clazz, final Object[] values) throws MonitoringRecordException {
-		if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
-			// Factory interface present
-			try {
+		try {
+			if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
+				// Factory interface present
 				final Constructor<? extends IMonitoringRecord> constructor = clazz.getConstructor(Object[].class);
 				return constructor.newInstance((Object) values);
-			} catch (final Exception ex) {
-				throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
-			}
-		} else {
-			// try ordinary method
-			try {
+			} else {
+				// try ordinary method
 				final IMonitoringRecord record = clazz.newInstance();
 				record.initFromArray(values);
 				return record;
-			} catch (final Exception ex) {
-				throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
 			}
+		} catch (final SecurityException ex) {
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+		} catch (final NoSuchMethodException ex) {
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+		} catch (final IllegalArgumentException ex) {
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+		} catch (final InstantiationException ex) {
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+		} catch (final IllegalAccessException ex) {
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+		} catch (final InvocationTargetException ex) {
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
 		}
 	}
 
 	public static final IMonitoringRecord createFromStringArray(final Class<? extends IMonitoringRecord> clazz, final String[] values)
 			throws MonitoringRecordException {
-		if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
-			// Factory interface present
-			try {
+		try {
+			if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
+				// Factory interface present
 				final Constructor<? extends IMonitoringRecord> constructor = clazz.getConstructor(Object[].class);
 				final Field types = clazz.getDeclaredField("TYPES");
-				types.setAccessible(true);
+				java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
+					@Override
+					public Object run() {
+						types.setAccessible(true);
+						return null;
+					}
+				});
 				return constructor.newInstance((Object) AbstractMonitoringRecord.fromStringArrayToTypedArray(values, (Class<?>[]) types.get(null)));
-			} catch (final Exception ex) {
-				throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
-			}
-		} else {
-			// try ordinary method
-			try {
+			} else {
+				// try ordinary method
 				final IMonitoringRecord record = clazz.newInstance();
 				record.initFromArray(AbstractMonitoringRecord.fromStringArrayToTypedArray(values, record.getValueTypes()));
 				return record;
-			} catch (final Exception ex) {
-				throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
 			}
+		} catch (final SecurityException ex) {
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+		} catch (final NoSuchMethodException ex) {
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+		} catch (final NoSuchFieldException ex) {
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+		} catch (final IllegalArgumentException ex) {
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+		} catch (final InstantiationException ex) {
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+		} catch (final IllegalAccessException ex) {
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+		} catch (final InvocationTargetException ex) {
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
 		}
 	}
 }

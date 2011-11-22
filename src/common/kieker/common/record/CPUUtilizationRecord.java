@@ -39,8 +39,7 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 		double.class,
 	};
 	private static final String DEFAULT_VALUE = "N/A";
-
-	public static final double UNDEFINED_DOUBLE = -1;
+	private static final double UNDEFINED_DOUBLE = -1;
 
 	/**
 	 * Date/time of measurement. The value should be interpreted as the number of nano-seconds elapsed since Jan 1st, 1970 UTC.
@@ -135,18 +134,19 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 	}
 
 	public CPUUtilizationRecord(final Object[] values) {
-		AbstractMonitoringRecord.checkArray(values, CPUUtilizationRecord.TYPES);
+		final Object[] myValues = values.clone();
+		AbstractMonitoringRecord.checkArray(myValues, CPUUtilizationRecord.TYPES);
 		try {
-			this.timestamp = (Long) values[0]; // NOCS
-			this.hostName = (String) values[1]; // NOCS
-			this.cpuID = (String) values[2]; // NOCS
-			this.user = (Double) values[3]; // NOCS
-			this.system = (Double) values[4]; // NOCS
-			this.wait = (Double) values[5]; // NOCS
-			this.nice = (Double) values[6]; // NOCS
-			this.irq = (Double) values[7]; // NOCS
-			this.totalUtilization = (Double) values[8]; // NOCS
-			this.idle = (Double) values[9]; // NOCS
+			this.timestamp = (Long) myValues[0]; // NOCS
+			this.hostName = (String) myValues[1]; // NOCS
+			this.cpuID = (String) myValues[2]; // NOCS
+			this.user = (Double) myValues[3]; // NOCS
+			this.system = (Double) myValues[4]; // NOCS
+			this.wait = (Double) myValues[5]; // NOCS
+			this.nice = (Double) myValues[6]; // NOCS
+			this.irq = (Double) myValues[7]; // NOCS
+			this.totalUtilization = (Double) myValues[8]; // NOCS
+			this.idle = (Double) myValues[9]; // NOCS
 		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
 			throw new IllegalArgumentException("Failed to init", exc);
 		}

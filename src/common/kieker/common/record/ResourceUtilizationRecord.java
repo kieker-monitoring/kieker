@@ -33,7 +33,7 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 		long.class,
 		String.class,
 		String.class,
-		double.class
+		double.class,
 	};
 	private static final String DEFAULT_VALUE = "N/A";
 
@@ -79,12 +79,13 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 	}
 
 	public ResourceUtilizationRecord(final Object[] values) {
-		AbstractMonitoringRecord.checkArray(values, ResourceUtilizationRecord.TYPES);
+		final Object[] myValues = values.clone();
+		AbstractMonitoringRecord.checkArray(myValues, ResourceUtilizationRecord.TYPES);
 		try {
-			this.timestamp = (Long) values[0]; // NOCS
-			this.hostName = (String) values[1]; // NOCS
-			this.resourceName = (String) values[2]; // NOCS
-			this.utilization = (Double) values[3]; // NOCS
+			this.timestamp = (Long) myValues[0]; // NOCS
+			this.hostName = (String) myValues[1]; // NOCS
+			this.resourceName = (String) myValues[2]; // NOCS
+			this.utilization = (Double) myValues[3]; // NOCS
 		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
