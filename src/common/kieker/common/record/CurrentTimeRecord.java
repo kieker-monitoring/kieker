@@ -46,9 +46,10 @@ public final class CurrentTimeRecord extends AbstractMonitoringRecord implements
 	}
 
 	public CurrentTimeRecord(final Object[] values) {
-		AbstractMonitoringRecord.checkArray(values, CurrentTimeRecord.TYPES);
+		final Object[] myValues = values.clone();
+		AbstractMonitoringRecord.checkArray(myValues, CurrentTimeRecord.TYPES);
 		try {
-			this.currentTime = (Long) values[0];
+			this.currentTime = (Long) myValues[0];
 		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
 			throw new IllegalArgumentException("Failed to init", exc);
 		}

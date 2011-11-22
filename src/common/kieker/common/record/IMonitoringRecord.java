@@ -53,7 +53,7 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * <li>a <code>private static final Class<?>[] TYPES</code> specifying the types of the records, usually returned via {@link getValueTypes()}.
 	 * </ul>
 	 */
-	public static interface Factory {
+	public static interface Factory { // NOCS (name)
 		// empty marker interface
 	}
 }

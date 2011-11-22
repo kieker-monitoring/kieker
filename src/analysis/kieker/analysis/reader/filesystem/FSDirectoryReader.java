@@ -57,7 +57,7 @@ final class FSDirectoryReader implements Runnable {
 	private static final String NORMAL_FILE_POSTFIX = ".dat";
 	private static final String BINARY_FILE_POSTFIX = ".bin";
 
-	private final Map<Integer, String> stringRegistry = new HashMap<Integer, String>();
+	private final Map<Integer, String> stringRegistry = new HashMap<Integer, String>(); // NOPMD (no synchronization needed)
 	// This set of classes is used to filter only records of a specific type. The value null means all record types are read.
 	private final Set<Class<? extends IMonitoringRecord>> recordTypeSelector;
 	private final IMonitoringRecordReceiver recordReceiver;

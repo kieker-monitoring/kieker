@@ -46,11 +46,12 @@ public final class BranchingRecord extends AbstractMonitoringRecord implements I
 	}
 
 	public BranchingRecord(final Object[] values) {
-		AbstractMonitoringRecord.checkArray(values, BranchingRecord.TYPES);
+		final Object[] myValues = values.clone();
+		AbstractMonitoringRecord.checkArray(myValues, BranchingRecord.TYPES);
 		try {
-			this.timestamp = (Long) values[0];
-			this.branchID = (Integer) values[1];
-			this.branchingOutcome = (Integer) values[2];
+			this.timestamp = (Long) myValues[0];
+			this.branchID = (Integer) myValues[1];
+			this.branchingOutcome = (Integer) myValues[2];
 		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
 			throw new IllegalArgumentException("Failed to init", exc);
 		}

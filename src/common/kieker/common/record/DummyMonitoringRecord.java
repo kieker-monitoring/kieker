@@ -35,7 +35,7 @@ public class DummyMonitoringRecord extends AbstractMonitoringRecord implements I
 		// nothing to do
 	}
 
-	public DummyMonitoringRecord(final Object[] values) {
+	public DummyMonitoringRecord(final Object[] values) { // NOPMD (UnusedFormalParameter)
 		// nothing to do
 	}
 

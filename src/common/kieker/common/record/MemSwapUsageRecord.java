@@ -40,9 +40,7 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 		long.class,
 	};
 	private static final String DEFAULT_VALUE = "N/A";
-
-	public static final double UNDEFINED_DOUBLE = -1;
-	public static final long UNDEFINED_LONG = -1;
+	private static final long UNDEFINED_LONG = -1;
 
 	private volatile long memUsed = MemSwapUsageRecord.UNDEFINED_LONG;
 	private volatile long memFree = MemSwapUsageRecord.UNDEFINED_LONG;
@@ -88,16 +86,17 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	}
 
 	public MemSwapUsageRecord(final Object[] values) {
-		AbstractMonitoringRecord.checkArray(values, MemSwapUsageRecord.TYPES);
+		final Object[] myValues = values.clone();
+		AbstractMonitoringRecord.checkArray(myValues, MemSwapUsageRecord.TYPES);
 		try {
-			this.timestamp = (Long) values[0]; // NOCS
-			this.hostName = (String) values[1]; // NOCS
-			this.memTotal = (Long) values[2]; // NOCS
-			this.memUsed = (Long) values[3]; // NOCS
-			this.memFree = (Long) values[4]; // NOCS
-			this.swapTotal = (Long) values[5]; // NOCS
-			this.swapUsed = (Long) values[6]; // NOCS
-			this.swapFree = (Long) values[7]; // NOCS
+			this.timestamp = (Long) myValues[0]; // NOCS
+			this.hostName = (String) myValues[1]; // NOCS
+			this.memTotal = (Long) myValues[2]; // NOCS
+			this.memUsed = (Long) myValues[3]; // NOCS
+			this.memFree = (Long) myValues[4]; // NOCS
+			this.swapTotal = (Long) myValues[5]; // NOCS
+			this.swapUsed = (Long) myValues[6]; // NOCS
+			this.swapFree = (Long) myValues[7]; // NOCS
 		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
