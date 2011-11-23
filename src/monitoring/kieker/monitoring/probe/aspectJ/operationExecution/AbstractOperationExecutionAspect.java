@@ -38,7 +38,7 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 
 	protected static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	protected static final String VMNAME = AbstractOperationExecutionAspect.CTRLINST.getHostName();
-	protected static final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.getInstance();
+	protected static final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.INSTANCE;
 	protected static final ITimeSource TIMESOURCE = AbstractOperationExecutionAspect.CTRLINST.getTimeSource();
 
 	protected OperationExecutionRecord initExecutionData(final ProceedingJoinPoint thisJoinPoint) {

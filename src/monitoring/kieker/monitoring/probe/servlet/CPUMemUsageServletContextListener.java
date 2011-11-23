@@ -182,7 +182,7 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 	 * for later removal in the {@link Collection} {@link #samplerJobs}.
 	 */
 	private void initSensors() {
-		final ISigarSamplerFactory sigarFactory = SigarSamplerFactory.getInstance();
+		final ISigarSamplerFactory sigarFactory = SigarSamplerFactory.INSTANCE;
 
 		// Log utilization of each CPU every X seconds
 		final CPUsDetailedPercSampler cpuSensor = sigarFactory.createSensorCPUsDetailedPerc();

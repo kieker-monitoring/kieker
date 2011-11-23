@@ -32,8 +32,8 @@ import org.springframework.web.context.request.WebRequestInterceptor;
  */
 public class OperationExecutionWebRequestRegistrationInterceptor implements WebRequestInterceptor {
 
-	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.getInstance();
-	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.getInstance();
+	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
+	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 
 	public OperationExecutionWebRequestRegistrationInterceptor() {
 		// nothing to do

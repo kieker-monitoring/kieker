@@ -38,8 +38,8 @@ import org.aopalliance.intercept.MethodInvocation;
 public abstract class AbstractOperationExecutionMethodInvocationInterceptor implements MethodInterceptor, IMonitoringProbe {
 
 	protected static final IMonitoringController CONTROLLER = MonitoringController.getInstance();
-	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.getInstance();
-	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.getInstance();
+	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
+	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	protected static final ITimeSource TIMESOURCE = AbstractOperationExecutionMethodInvocationInterceptor.CONTROLLER.getTimeSource();
 	protected static final String VM_NAME = AbstractOperationExecutionMethodInvocationInterceptor.CONTROLLER.getHostName();
 

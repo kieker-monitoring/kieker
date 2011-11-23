@@ -54,8 +54,8 @@ import org.w3c.dom.Element;
  * @author Dennis Kieselhorst, Andre van Hoorn
  */
 public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutFilterInterceptor implements IMonitoringProbe {
-	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.getInstance();
-	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.getInstance();
+	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
+	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
 	protected static final ITimeSource TIMESOURCE = OperationExecutionSOAPResponseOutInterceptor.CRTR_INST.getTimeSource();
 

@@ -27,24 +27,17 @@ import kieker.common.logging.LogFactory;
 
 /**
  * 
- * @author Andre van Hoorn
+ * @author Andre van Hoorn, Jan Waller
  */
-public final class Broker {
-	private static final Log LOG = LogFactory.getLog(Broker.class);
+public enum Broker { // Singleton pattern (Effective Java #3)
+	INSTANCE;
+
+	private static final Log LOG = LogFactory.getLog(Broker.class); // NOPMD (Logger on enum)
 
 	/**
 	 * Access synchronized through synchronized method {@link #acquirePipe(String)} !
 	 */
 	private final ConcurrentHashMap<String, Pipe> pipeMap = new ConcurrentHashMap<String, Pipe>();
-
-	/**
-	 * Used for constructing the singleton instance {@link #getInstance()}.
-	 */
-	private Broker() {}
-
-	public static Broker getInstance() {
-		return LazyHolder.INSTANCE;
-	}
 
 	/**
 	 * Returns a connection with name @a pipeName. If a connection with this
@@ -65,12 +58,5 @@ public final class Broker {
 			}
 		}
 		return conn;
-	}
-
-	/**
-	 * SINGLETON
-	 */
-	private static final class LazyHolder { // NOCS (MissingCtorCheck)
-		private static final Broker INSTANCE = new Broker(); // NOPMD (AccessorClassGeneration)
 	}
 }

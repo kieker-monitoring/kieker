@@ -180,7 +180,7 @@ public class CPUsCombinedServletContextListener implements ServletContextListene
 	 * for later removal in the {@link Collection} {@link #samplerJobs}.
 	 */
 	private void initSensors() {
-		final ISigarSamplerFactory sigarFactory = SigarSamplerFactory.getInstance();
+		final ISigarSamplerFactory sigarFactory = SigarSamplerFactory.INSTANCE;
 
 		// Log utilization of each CPU every 30 seconds
 		final CPUsCombinedPercSampler cpuSensor = sigarFactory.createSensorCPUsCombinedPerc();

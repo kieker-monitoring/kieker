@@ -51,7 +51,7 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 	}
 
 	private void initPipe(final String pipeName) throws IllegalArgumentException {
-		this.pipe = Broker.getInstance().acquirePipe(pipeName);
+		this.pipe = Broker.INSTANCE.acquirePipe(pipeName);
 		if (this.pipe == null) {
 			final String errorMsg = "Failed to get Pipe with name " + pipeName;
 			PipeReader.LOG.error(errorMsg);
