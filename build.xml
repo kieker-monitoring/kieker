@@ -1038,8 +1038,8 @@
 	</target>
 	
 	<target name="checkstyle" depends="build-all,compile-tests" description="Uses Checkstyle to find potential problems">
-    <taskdef resource="checkstyletask.properties" classpath="${lib.dir}/checkstyle-5.4/lib/checkstyle-5.4-all.jar"/>
-		<checkstyle config="${lib.dir}/checkstyle-5.4/cs-conf.xml" failOnViolation="false">
+    <taskdef resource="checkstyletask.properties" classpath="${lib.dir}/checkstyle-5.5/lib/checkstyle-5.5-all.jar"/>
+		<checkstyle config="${lib.dir}/checkstyle-5.5/cs-conf.xml" failOnViolation="false">
       <classpath>
       	<fileset dir="${lib.dir}">
           <include name="*.jar" />
