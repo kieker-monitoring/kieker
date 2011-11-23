@@ -211,10 +211,14 @@ public class AnalysisController {
 	 */
 	public void registerPlugin(final IAnalysisPlugin plugin) {
 		this.plugins.add(plugin);
-		AnalysisController.LOG.debug("Registered plugin " + plugin);
+		if (AnalysisController.LOG.isDebugEnabled()) {
+			AnalysisController.LOG.debug("Registered plugin " + plugin);
+		}
 
 		if (plugin instanceof IMonitoringRecordConsumerPlugin) {
-			AnalysisController.LOG.debug("Plugin " + plugin + " also registered as record consumer");
+			if (AnalysisController.LOG.isDebugEnabled()) {
+				AnalysisController.LOG.debug("Plugin " + plugin + " also registered as record consumer");
+			}
 			this.addRecordConsumer((IMonitoringRecordConsumerPlugin) plugin);
 		}
 	}

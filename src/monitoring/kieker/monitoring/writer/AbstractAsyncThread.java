@@ -68,7 +68,9 @@ public abstract class AbstractAsyncThread extends Thread {
 
 	@Override
 	public final void run() {
-		AbstractAsyncThread.LOG.debug(this.getClass().getName() + " running");
+		if (AbstractAsyncThread.LOG.isDebugEnabled()) {
+			AbstractAsyncThread.LOG.debug(this.getClass().getName() + " running");
+		}
 		try {
 			// making it a local variable for faster access
 			final BlockingQueue<IMonitoringRecord> writeQueue = this.writeQueue; // NOPMD // NOCS
@@ -76,7 +78,9 @@ public abstract class AbstractAsyncThread extends Thread {
 				try {
 					IMonitoringRecord monitoringRecord = writeQueue.take();
 					if (monitoringRecord == AbstractAsyncThread.END_OF_MONITORING_MARKER) {
-						AbstractAsyncThread.LOG.debug("Terminating writer thread, " + writeQueue.size() + " entries remaining");
+						if (AbstractAsyncThread.LOG.isDebugEnabled()) {
+							AbstractAsyncThread.LOG.debug("Terminating writer thread, " + writeQueue.size() + " entries remaining");
+						}
 						monitoringRecord = writeQueue.poll();
 						while (monitoringRecord != null) {
 							if (monitoringRecord != AbstractAsyncThread.END_OF_MONITORING_MARKER) {

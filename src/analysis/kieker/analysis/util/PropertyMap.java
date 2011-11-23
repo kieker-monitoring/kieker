@@ -111,7 +111,9 @@ public class PropertyMap {
 				}
 				final String key = keyValTokens.nextToken().trim();
 				final String val = keyValTokens.nextToken().trim();
-				PropertyMap.LOG.debug("Found key/value pair: " + key + "=" + val);
+				if (PropertyMap.LOG.isDebugEnabled()) {
+					PropertyMap.LOG.debug("Found key/value pair: " + key + "=" + val);
+				}
 				this.map.put(key, val);
 			}
 		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD

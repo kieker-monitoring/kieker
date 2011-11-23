@@ -57,7 +57,9 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 			PipeReader.LOG.error(errorMsg);
 			throw new IllegalArgumentException(errorMsg);
 		} else {
-			PipeReader.LOG.debug("Connected to named pipe '" + this.pipe.getName() + "'"); // NOCS (MultipleStringLiteralsCheck)
+			if (PipeReader.LOG.isDebugEnabled()) {
+				PipeReader.LOG.debug("Connected to named pipe '" + this.pipe.getName() + "'"); // NOCS (MultipleStringLiteralsCheck)
+			}
 		}
 		this.pipe.setPipeReader(this);
 	}
@@ -83,7 +85,9 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 		try {
 			final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws IllegalArgumentException
 			this.initPipe(propertyMap.getProperty(PipeReader.PROPERTY_PIPE_NAME));
-			PipeReader.LOG.debug("Connected to pipe '" + this.pipe.getName() + "'" + " (" + this.pipe + ")"); // NOCS (MultipleStringLiteralsCheck)
+			if (PipeReader.LOG.isDebugEnabled()) {
+				PipeReader.LOG.debug("Connected to pipe '" + this.pipe.getName() + "'" + " (" + this.pipe + ")"); // NOCS (MultipleStringLiteralsCheck)
+			}
 		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
 			PipeReader.LOG.error("Failed to parse initString '" + initString + "': " + exc.getMessage());
 			return false;

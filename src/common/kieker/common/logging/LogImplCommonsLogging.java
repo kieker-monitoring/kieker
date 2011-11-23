@@ -21,7 +21,6 @@
 package kieker.common.logging;
 
 /**
- * 
  * @author Jan Waller
  */
 public final class LogImplCommonsLogging implements Log {
@@ -29,6 +28,11 @@ public final class LogImplCommonsLogging implements Log {
 
 	protected LogImplCommonsLogging(final String name) {
 		this.log = org.apache.commons.logging.impl.Jdk14LoggerPatched.getLog(name);
+	}
+
+	@Override
+	public boolean isDebugEnabled() {
+		return this.log.isDebugEnabled();
 	}
 
 	@Override
