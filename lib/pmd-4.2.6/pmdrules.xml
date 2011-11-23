@@ -63,7 +63,14 @@
     <exclude name="SignatureDeclareThrowsException"/>
   </rule>
 
-  <rule ref="rulesets/strings.xml"/>
+  <rule ref="rulesets/strings.xml">
+    <exclude name="AvoidDuplicateLiterals"/>
+  </rule>
+  <rule ref="rulesets/strings.xml/AvoidDuplicateLiterals">
+    <properties>
+      <property name="skipAnnotations" value="true"/>
+    </properties>
+  </rule>
 
   <rule ref="rulesets/sunsecure.xml"/>
   
