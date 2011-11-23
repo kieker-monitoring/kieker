@@ -161,14 +161,17 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 
 		configuration.setProperty(FSReader.CONFIG_INPUTDIRS, AbstractConfiguration.toProperty(this.inputDirs));
 		/* Extract the names of the record-classes again. */
-		final int len = this.readOnlyRecordsOfType.size();
-		final String onlyRecords[] = new String[len];
-		final Iterator<Class<? extends IMonitoringRecord>> iter = this.readOnlyRecordsOfType.iterator();
-		for (int i = 0; i < len; i++) {
-			onlyRecords[i] = iter.next().getName();
+		if (this.readOnlyRecordsOfType == null) {
+			configuration.setProperty(FSReader.CONFIG_ONLYRECORDS, AbstractConfiguration.toProperty(new String[] {}));
+		} else {
+			final int len = this.readOnlyRecordsOfType.size();
+			final String onlyRecords[] = new String[len];
+			final Iterator<Class<? extends IMonitoringRecord>> iter = this.readOnlyRecordsOfType.iterator();
+			for (int i = 0; i < len; i++) {
+				onlyRecords[i] = iter.next().getName();
+			}
+			configuration.setProperty(FSReader.CONFIG_ONLYRECORDS, AbstractConfiguration.toProperty(onlyRecords));
 		}
-		configuration.setProperty(FSReader.CONFIG_ONLYRECORDS, AbstractConfiguration.toProperty(onlyRecords));
-
 		return configuration;
 	}
 }

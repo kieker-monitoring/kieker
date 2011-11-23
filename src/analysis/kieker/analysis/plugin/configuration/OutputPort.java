@@ -24,6 +24,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import kieker.analysis.exception.InvalidPortSubscriberException;
+
 /**
  * 
  * @author Andre van Hoorn
@@ -83,7 +85,30 @@ public final class OutputPort extends AbstractPort implements IOutputPort {
 	}
 
 	@Override
-	public final void subscribe(final IInputPort subscriber) {
+	public final void subscribe(final IInputPort subscriber) throws InvalidPortSubscriberException {
+		final AbstractPort asubscriber = (AbstractPort) subscriber;
+		/* If this port uses null as event type, everything can be delivered. */
+		if ((this.eventTypes == null) && (asubscriber.eventTypes != null)) {
+			throw new InvalidPortSubscriberException();
+		}
+		/* If the port uses null, it can receive anything. */
+		if (!(asubscriber.eventTypes == null)) {
+			/*
+			 * Otherwise the port has to be able to handle every possible
+			 * output of this instance.
+			 */
+			for (final Class<?> eventType : this.eventTypes) {
+				boolean accepted = false;
+				for (final Class<?> inputEventTypes : asubscriber.eventTypes) {
+					if (inputEventTypes.isAssignableFrom(eventType)) {
+						accepted = true;
+					}
+				}
+				if (!accepted) {
+					throw new InvalidPortSubscriberException();
+				}
+			}
+		}
 		this.subscribers.add(subscriber);
 	}
 

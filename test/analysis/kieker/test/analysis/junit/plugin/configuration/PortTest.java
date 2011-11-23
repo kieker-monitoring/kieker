@@ -1,7 +1,5 @@
 package kieker.test.analysis.junit.plugin.configuration;
 
-import static org.junit.Assert.*;
-
 import java.util.Collections;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -9,6 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -28,8 +27,8 @@ public class PortTest {
 		final AbstractInputPort iport = new AbstractInputPort(null, null) {
 
 			@Override
-			public void newEvent(Object event) {
-				assertTrue(Number.class.isInstance(event) ||
+			public void newEvent(final Object event) {
+				Assert.assertTrue(Number.class.isInstance(event) ||
 						Character.class.isInstance(event));
 				counter.incrementAndGet();
 			}
@@ -72,7 +71,7 @@ public class PortTest {
 		// Shouldn't reach the input port!
 		oport.deliver(new String());
 
-		assertEquals(3, counter.get());
+		Assert.assertEquals(3, counter.get());
 	}
 
 	@Test
@@ -82,7 +81,7 @@ public class PortTest {
 		final AbstractInputPort iport = new AbstractInputPort(null, null) {
 
 			@Override
-			public void newEvent(Object event) {
+			public void newEvent(final Object event) {
 				counter.incrementAndGet();
 			}
 		};
@@ -97,6 +96,72 @@ public class PortTest {
 		oport.deliver(new Character('a'));
 		oport.deliver(new String());
 
-		assertEquals(4, counter.get());
+		Assert.assertEquals(4, counter.get());
+	}
+
+	@Test
+	public void testPortsC() {
+		final OutputPort port = new OutputPort("", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+				new Class<?>[] { Float.class, String.class })));
+		final AbstractInputPort ip1 = new AbstractInputPort("", null) {
+
+			@Override
+			public void newEvent(final Object event) {
+
+			}
+		};
+
+		final AbstractInputPort ip2 = new AbstractInputPort("", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+				new Class<?>[] { String.class, Float.class }))) {
+
+			@Override
+			public void newEvent(final Object event) {
+
+			}
+		};
+
+		final AbstractInputPort ip3 = new AbstractInputPort("", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+				new Class<?>[] { Float.class }))) {
+
+			@Override
+			public void newEvent(final Object event) {
+
+			}
+		};
+
+		final AbstractInputPort ip4 = new AbstractInputPort("", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+				new Class<?>[] { String.class, Number.class }))) {
+
+			@Override
+			public void newEvent(final Object event) {
+
+			}
+		};
+
+		final AbstractInputPort ip5 = new AbstractInputPort("", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+				new Class<?>[] { Double.class }))) {
+
+			@Override
+			public void newEvent(final Object event) {
+
+			}
+		};
+
+		port.subscribe(ip1);
+		port.subscribe(ip2);
+		int exCounter = 0;
+		try {
+			port.subscribe(ip3);
+		} catch (final Exception ex) {
+			exCounter++;
+		}
+		Assert.assertEquals(1, exCounter);
+		port.subscribe(ip4);
+		try {
+			port.subscribe(ip5);
+		} catch (final Exception ex) {
+			exCounter++;
+		}
+		Assert.assertEquals(2, exCounter);
 	}
 }

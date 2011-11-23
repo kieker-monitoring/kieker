@@ -29,6 +29,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
@@ -47,6 +49,7 @@ import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
+import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.reader.IMonitoringReader;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -269,6 +272,15 @@ public class AnalysisController {
 				outputPort.setName(out);
 				reader.getOutputPorts().add(outputPort);
 			}
+
+			final Configuration configuration = ((AbstractReaderPlugin) this.logReader).getCurrentConfiguration();
+			final Set<Entry<Object, Object>> configSet = configuration.entrySet();
+			for (final Entry<Object, Object> configEntry : configSet) {
+				final IProperty property = factory.createProperty();
+				property.setName(configEntry.getKey().toString());
+				property.setValue(configEntry.getValue().toString());
+				reader.getProperties().add(property);
+			}
 		}
 		for (final AbstractAnalysisPlugin plugin : this.plugins) {
 			final IAnalysisPlugin newPlugin = factory.createAnalysisPlugin();
@@ -289,6 +301,15 @@ public class AnalysisController {
 				final IInputPort inputPort = factory.createInputPort();
 				inputPort.setName(in);
 				newPlugin.getInputPorts().add(inputPort);
+			}
+
+			final Configuration configuration = plugin.getCurrentConfiguration();
+			final Set<Entry<Object, Object>> configSet = configuration.entrySet();
+			for (final Entry<Object, Object> configEntry : configSet) {
+				final IProperty property = factory.createProperty();
+				property.setName(configEntry.getKey().toString());
+				property.setValue(configEntry.getValue().toString());
+				newPlugin.getProperties().add(property);
 			}
 		}
 
