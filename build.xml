@@ -1024,12 +1024,12 @@
 
 	<target name="pmd" description="Performs a source code analysis employing PMD">
     <path id="pmd.libs">
-      <fileset dir="${lib.dir}/pmd-4.2.6/lib">
+      <fileset dir="${lib.dir}/pmd-4.3/lib">
         <include name="*.jar" />
       </fileset>
     </path>
 		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.libs"/>
-		<pmd shortFilenames="true" rulesetfiles="${lib.dir}/pmd-4.2.6/pmdrules.xml" targetjdk="1.6" >
+		<pmd shortFilenames="true" rulesetfiles="${lib.dir}/pmd-4.3/pmdrules.xml" targetjdk="1.6" >
 			<formatter type="xml" toFile="${tmp.dir}/pmd_report.xml" />
 			<fileset dir="${src.dir}" includes="**/*.java" />
 			<fileset dir="${test.dir}" includes="**/*.java" />
