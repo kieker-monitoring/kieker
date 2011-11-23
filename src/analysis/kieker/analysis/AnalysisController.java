@@ -39,7 +39,6 @@ import kieker.analysis.model.analysisMetaModel.IAnalysisPlugin;
 import kieker.analysis.model.analysisMetaModel.IInputPort;
 import kieker.analysis.model.analysisMetaModel.IOutputPort;
 import kieker.analysis.model.analysisMetaModel.IPlugin;
-import kieker.analysis.model.analysisMetaModel.IPort;
 import kieker.analysis.model.analysisMetaModel.IProject;
 import kieker.analysis.model.analysisMetaModel.IProperty;
 import kieker.analysis.model.analysisMetaModel.IReader;
@@ -116,7 +115,10 @@ public class AnalysisController {
 		/* Try to load everything. */
 		final EList<EObject> content = AnalysisController.openModelFile(file);
 		if (!content.isEmpty()) {
-			// The first (and only) element should be the project. Use it to configure this instance.
+			/*
+			 * The first (and only) element should be the project. Use it to
+			 * configure this instance.
+			 */
 			final IProject project = (IProject) content.get(0);
 			try {
 				this.loadFromModelProject(project);
@@ -128,78 +130,64 @@ public class AnalysisController {
 		}
 	}
 
-	private final void loadFromModelProject(final IProject project) throws InstantiationException, IllegalAccessException, IllegalArgumentException,
+	private final void loadFromModelProject(final IProject mproject) throws InstantiationException, IllegalAccessException, IllegalArgumentException,
 			InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
-		AnalysisController.LOG.debug("Found Project " + project.getName());
-
 		/*
-		 * While we run through a project, we have to remember different things:
-		 * 1) The connection between the ports and their "parent" plugins (as a map).
-		 * 2) The connection between the plugins and their created counterpart (as a map).
-		 * 3) The "real" connection within the model.
+		 * We run through the project and collect all plugins. As we create an
+		 * actual object for every plugin within the model, we have to remember
+		 * the mapping between the plugins within the model and the actual
+		 * objects we create.
 		 */
-		final EList<IPlugin> plugins = project.getPlugins();
-		final Map<IPort, IPlugin> portPluginMap = new HashMap<IPort, IPlugin>();
-		final Map<IPlugin, Object> pluginObjMap = new HashMap<IPlugin, Object>();
+		final EList<IPlugin> mPlugins = mproject.getPlugins();
+		final Map<IPlugin, AbstractPlugin> pluginMap = new HashMap<IPlugin, AbstractPlugin>();
+		final Map<IInputPort, AbstractPlugin> portToPluginMap = new HashMap<IInputPort, AbstractPlugin>();
 
-		// Run through the "configurables" to extract all plugins.
-		for (final IPlugin p : plugins) {
-			// We found a plugin. Not we have to determine whether this is a reader or a normal plugin.
-			final EList<IProperty> properties = p.getProperties();
+		/* Now run through all plugins. */
+		for (final IPlugin mPlugin : mPlugins) {
+			/* Extract the necessary informations to create the plugin. */
+			final EList<IProperty> mProperties = mPlugin.getProperties();
 			final Configuration configuration = new Configuration(null);
-			for (final IProperty prop : properties) {
-				configuration.setProperty(prop.getName(), prop.getValue());
+			for (final IProperty mProperty : mProperties) {
+				configuration.setProperty(mProperty.getName(), mProperty.getValue());
 			}
-			final Object newObj = Class.forName(p.getClassname()).getConstructor(Configuration.class)
-					.newInstance(configuration.getPropertiesStartingWith(p.getClassname()));
 
-			if (p instanceof IReader) {
-				final IMonitoringReader reader = (IMonitoringReader) newObj;
-				this.setReader(reader);
-				pluginObjMap.put(p, reader);
+			/* Create the plugin and put it into our map. */
+			final AbstractPlugin plugin = (AbstractPlugin) Class.forName(mPlugin.getClassname()).getConstructor(Configuration.class)
+					.newInstance(configuration.getPropertiesStartingWith(mPlugin.getClassname()));
+			pluginMap.put(mPlugin, plugin);
+
+			plugin.setName(mPlugin.getName());
+
+			/* Add the plugin to our controller instance. */
+			if (mPlugin instanceof IReader) {
+				this.setReader((AbstractReaderPlugin) plugin);
 			} else {
-				final AbstractAnalysisPlugin plugin = (AbstractAnalysisPlugin) newObj;
-				this.plugins.add(plugin);
-				pluginObjMap.put(p, plugin);
-			}
-
-			/*
-			 * Now we run through all ports of the current plugin. We remember
-			 * them to have a connection between the ports and their parent.
-			 * We will also accumulate all Connectors.
-			 */
-
-			for (final IOutputPort oPort : p.getOutputPorts()) {
-				portPluginMap.put(oPort, p);
-			}
-
-			if (p instanceof IAnalysisPlugin) {
-				for (final IInputPort iPort : ((IAnalysisPlugin) p).getInputPorts()) {
-					portPluginMap.put(iPort, p);
+				this.registerPlugin((AbstractAnalysisPlugin) plugin);
+				/*
+				 * Remember the connection between the input ports (of the model)
+				 * and the "parent" plugin (as a real object). That will make
+				 * things much easier later.
+				 */
+				final EList<IInputPort> mPluginIPorts = ((IAnalysisPlugin) mPlugin).getInputPorts();
+				for (final IInputPort mPluginIPort : mPluginIPorts) {
+					portToPluginMap.put(mPluginIPort, plugin);
 				}
 			}
 		}
 
-		/*
-		 * Now we should have initialized all plugins. We can start to assemble
-		 * the structure.
-		 */
-		for (final IPort port : portPluginMap.keySet()) {
-			if (port instanceof IOutputPort) {
-				final EList<IInputPort> subscribers = ((IOutputPort) port).getSubscribers();
-				for (final IInputPort iPort : subscribers) {
-					/* We can get the plugins via the map. */
-					final IPlugin in = portPluginMap.get(iPort);
-					final IPlugin out = portPluginMap.get(port);
-					AnalysisController.LOG.debug(String.format("Connect output from %s with the input of %s\n", out.getName(), in.getName()));
-
-					final AbstractPlugin outObj = (AbstractPlugin) pluginObjMap.get(out);
-					final AbstractAnalysisPlugin inObj = (AbstractAnalysisPlugin) pluginObjMap.get(in);
-
-					final OutputPort outPort = outObj.getOutputPort(port.getName());
-					final AbstractInputPort inPort = inObj.getInputPort(iPort.getName());
-
-					outPort.subscribe(inPort);
+		/* Now we have all plugins. We can start to assemble the wiring. */
+		for (final IPlugin mPlugin : mPlugins) {
+			final EList<IOutputPort> mPluginOPorts = mPlugin.getOutputPorts();
+			for (final IOutputPort mPluginOPort : mPluginOPorts) {
+				/* Get all ports which should be subscribed to this port. */
+				final EList<IInputPort> mSubscribers = mPluginOPort.getSubscribers();
+				final String outputPortName = mPluginOPort.getName();
+				final OutputPort pluginOPort = pluginMap.get(mPlugin).getOutputPort(outputPortName);
+				for (final IInputPort mSubscriber : mSubscribers) {
+					/* Find the mapping and subscribe */
+					final String inputPortName = mSubscriber.getName();
+					final AbstractInputPort subscriber = ((AbstractAnalysisPlugin) portToPluginMap.get(mSubscriber)).getInputPort(inputPortName);
+					pluginOPort.subscribe(subscriber);
 				}
 			}
 		}
@@ -248,75 +236,72 @@ public class AnalysisController {
 	 * 
 	 * @param file
 	 *            The file where to save the configuration.
-	 * @param name
+	 * @param projectName
 	 *            The name to be used for the new project.
 	 * @return true iff the configuration has been saved successfully.
 	 */
-	public final boolean saveToFile(final File file, final String name) {
-		// TODO: Implement connection!
+	public final boolean saveToFile(final File file, final String projectName) {
+		/* Create a factory to create all other model instances. */
 		final AnalysisMetaModelFactory factory = new AnalysisMetaModelFactory();
 
+		final Map<AbstractPlugin, IPlugin> pluginMap = new HashMap<AbstractPlugin, IPlugin>();
+		final Map<AbstractInputPort, IPlugin> portToPluginMap = new HashMap<AbstractInputPort, IPlugin>();
 		final IProject project = factory.createProject();
-		project.setName(name);
+		project.setName(projectName);
 
-		final List<IPlugin> plugins = new ArrayList<IPlugin>();
-		if (this.logReader != null) {
-			final IReader reader = factory.createReader();
-			reader.setClassname(this.logReader.getClass().getName());
-			reader.setName(this.logReader.toString());
-			plugins.add(reader);
-			project.getPlugins().add(reader);
-			final String outs[] = ((AbstractPlugin) this.logReader).getAllOutputPortNames();
-			for (final String out : outs) {
-				final IOutputPort outputPort = factory.createOutputPort();
-				outputPort.setName(out);
-				reader.getOutputPorts().add(outputPort);
-			}
+		final List<AbstractPlugin> plugins = new ArrayList<AbstractPlugin>(this.plugins);
+		plugins.add((AbstractPlugin) this.logReader);
+		/* Run through all plugins and create the model-counterparts. */
+		for (final AbstractPlugin plugin : plugins) {
+			final IPlugin mPlugin = plugin instanceof AbstractReaderPlugin ? factory.createReader() : factory.createAnalysisPlugin();
 
-			final Configuration configuration = ((AbstractReaderPlugin) this.logReader).getCurrentConfiguration();
-			final Set<Entry<Object, Object>> configSet = configuration.entrySet();
-			for (final Entry<Object, Object> configEntry : configSet) {
-				final IProperty property = factory.createProperty();
-				property.setName(configEntry.getKey().toString());
-				property.setValue(configEntry.getValue().toString());
-				reader.getProperties().add(property);
-			}
-		}
-		for (final AbstractAnalysisPlugin plugin : this.plugins) {
-			final IAnalysisPlugin newPlugin = factory.createAnalysisPlugin();
-			newPlugin.setClassname(plugin.getClass().getName());
-			newPlugin.setName(plugin.toString());
-			plugins.add(newPlugin);
-			project.getPlugins().add(newPlugin);
+			/* Remember the mapping. */
+			pluginMap.put(plugin, mPlugin);
 
-			final String outs[] = plugin.getAllOutputPortNames();
-			for (final String out : outs) {
-				final IOutputPort outputPort = factory.createOutputPort();
-				outputPort.setName(out);
-				newPlugin.getOutputPorts().add(outputPort);
-			}
+			mPlugin.setClassname(plugin.getClass().getName());
+			mPlugin.setName(plugin.getName());
 
-			final String ins[] = plugin.getAllInputPortNames();
-			for (final String in : ins) {
-				final IInputPort inputPort = factory.createInputPort();
-				inputPort.setName(in);
-				newPlugin.getInputPorts().add(inputPort);
-			}
-
+			/* Extract the configuration. */
 			final Configuration configuration = plugin.getCurrentConfiguration();
 			final Set<Entry<Object, Object>> configSet = configuration.entrySet();
 			for (final Entry<Object, Object> configEntry : configSet) {
 				final IProperty property = factory.createProperty();
 				property.setName(configEntry.getKey().toString());
 				property.setValue(configEntry.getValue().toString());
-				newPlugin.getProperties().add(property);
+				mPlugin.getProperties().add(property);
+			}
+
+			/* Create the ports. */
+			final String outs[] = plugin.getAllOutputPortNames();
+			for (final String out : outs) {
+				final IOutputPort mOutputPort = factory.createOutputPort();
+				mOutputPort.setName(out);
+				mPlugin.getOutputPorts().add(mOutputPort);
+			}
+
+			final String ins[] = plugin.getAllInputPortNames();
+			for (final String in : ins) {
+				final IInputPort mInputPort = factory.createInputPort();
+				mInputPort.setName(in);
+				((IAnalysisPlugin) mPlugin).getInputPorts().add(mInputPort);
+				portToPluginMap.put(plugin.getInputPort(in), mPlugin);
+			}
+
+			project.getPlugins().add(mPlugin);
+		}
+
+		/* Now connect them. */
+		for (final AbstractPlugin plugin : plugins) {
+			final OutputPort outputPorts[] = plugin.getAllOutputPorts();
+			for (final OutputPort outputPort : outputPorts) {
+				// TODO: Connection
+				//
 			}
 		}
 
 		/* Save the whole project. */
 		final ResourceSet resourceSet = new ResourceSetImpl();
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(
-				"*", new XMIResourceFactoryImpl());
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 		final Resource resource = resourceSet.createResource(URI.createFileURI(file.getAbsolutePath()));
 		resource.getContents().add(project);
 

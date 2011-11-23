@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="ASCII"?>
 <Project xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="platform:/resource/Kieker/model/AnalysisMetaModel.ecore" name="Foo">
-  <plugins xsi:type="Reader" name="kieker.analysis.reader.filesystem.FSReader@76af7fab" classname="kieker.analysis.reader.filesystem.FSReader">
-    <outputPorts name="out"/>
-    <properties name="kieker.analysis.reader.filesystem.FSReader.readOnlyRecordsOfType" value=""/>
-    <properties name="kieker.analysis.reader.filesystem.FSReader.inputDirs" value="C:/HiWi - Kieker/kieker working copy (git)/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC"/>
-  </plugins>
-  <plugins xsi:type="AnalysisPlugin" name="kieker.analysis.plugin.DummyRecordConsumer@1829ad81" classname="kieker.analysis.plugin.DummyRecordConsumer">
+  <plugins xsi:type="AnalysisPlugin" name="Final Consumer" classname="kieker.analysis.plugin.DummyRecordConsumer">
     <outputPorts name="out"/>
     <properties name="kieker.analysis.plugin.DummyRecordConsumer.Stream" value="STDOUT"/>
     <inputPorts name="in"/>
+  </plugins>
+  <plugins xsi:type="Reader" name="The Reader" classname="kieker.analysis.reader.filesystem.FSReader">
+    <outputPorts name="out"/>
+    <properties name="kieker.analysis.reader.filesystem.FSReader.readOnlyRecordsOfType" value=""/>
+    <properties name="kieker.analysis.reader.filesystem.FSReader.inputDirs" value="C:/HiWi - Kieker/kieker working copy (git)/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC"/>
   </plugins>
 </Project>
