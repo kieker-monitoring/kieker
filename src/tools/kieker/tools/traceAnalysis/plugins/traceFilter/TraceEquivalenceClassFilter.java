@@ -23,11 +23,12 @@ package kieker.tools.traceAnalysis.plugins.traceFilter;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.common.logging.Log;
@@ -67,11 +68,11 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 		super(name, systemEntityFactory);
 		this.rootExecution = systemEntityFactory.getRootExecution();
 		this.equivalenceMode = traceEquivalenceCallMode;
-		
+
 		/* Register all ports. */
-		super.registerInputPort("in", executionTraceInputPort);
-		super.registerOutputPort("messageTraceOutput", messageTraceOutputPort);
-		super.registerOutputPort("executionTraceOutput", executionTraceOutputPort);
+		super.registerInputPort("in", this.executionTraceInputPort);
+		super.registerOutputPort("messageTraceOutput", this.messageTraceOutputPort);
+		super.registerOutputPort("executionTraceOutput", this.executionTraceOutputPort);
 	}
 
 	private void newExecutionTrace(final ExecutionTrace et) {
@@ -113,8 +114,9 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 		return this.executionTraceInputPort;
 	}
 
-	private final AbstractInputPort executionTraceInputPort = new AbstractInputPort("Execution traces", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { ExecutionTrace.class }))) {
+	private final AbstractInputPort executionTraceInputPort = new AbstractInputPort("Execution traces",
+			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+					new Class<?>[] { ExecutionTrace.class }))) {
 
 		@Override
 		public void newEvent(final Object mt) {
@@ -152,5 +154,14 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	protected Properties getDefaultProperties() {
 		final Properties defaultProperties = new Properties();
 		return defaultProperties;
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration(null);
+
+		// TODO: Save the current configuration
+
+		return configuration;
 	}
 }

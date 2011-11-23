@@ -34,6 +34,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -120,9 +121,9 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 		this.sdmode = sdmode;
 		this.outputFnBase = outputFnBase;
 		this.shortLabels = shortLabels;
-		
+
 		/* Register the input port. */
-		super.registerInputPort("in", messageTraceInputPort);
+		super.registerInputPort("in", this.messageTraceInputPort);
 	}
 
 	@Override
@@ -335,5 +336,14 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 	@Override
 	protected Properties getDefaultProperties() {
 		return new Properties();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration(null);
+
+		// TODO: Save the current configuration
+
+		return configuration;
 	}
 }

@@ -75,7 +75,7 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 		public void newEvent(final Object event) {
 			RealtimeReplayDistributor.this.newMonitoringRecord((IMonitoringRecord) event);
 
-			output.deliver(event);
+			RealtimeReplayDistributor.this.output.deliver(event);
 		}
 	};
 
@@ -90,8 +90,8 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 		this.terminationLatch = null;
 
 		/* Register the ports. */
-		registerInputPort("in", input);
-		registerOutputPort("out", output);
+		this.registerInputPort("in", this.input);
+		this.registerOutputPort("out", this.output);
 	}
 
 	/**
@@ -114,8 +114,8 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 		this.executor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
 		this.terminationLatch = terminationLatch;
 
-		registerInputPort("in", input);
-		registerOutputPort("out", output);
+		this.registerInputPort("in", this.input);
+		this.registerOutputPort("out", this.output);
 	}
 
 	public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
@@ -198,5 +198,14 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 	@Override
 	protected Properties getDefaultProperties() {
 		return new Properties();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration(null);
+
+		// TODO: Save the current configuration
+
+		return configuration;
 	}
 }

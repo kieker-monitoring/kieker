@@ -52,7 +52,7 @@ public class TraceIdFilter extends AbstractAnalysisPlugin {
 		// TODO: Initialize from the variable.
 		this.selectedTraces = null;
 
-		super.registerInputPort("in", executionInputPort);
+		super.registerInputPort("in", this.executionInputPort);
 		super.registerOutputPort("out", this.executionOutputPort);
 	}
 
@@ -109,6 +109,15 @@ public class TraceIdFilter extends AbstractAnalysisPlugin {
 	protected Properties getDefaultProperties() {
 		final Properties defaultProperties = new Properties();
 		return defaultProperties;
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration(null);
+
+		// TODO: Save the current configuration
+
+		return configuration;
 	}
 
 }

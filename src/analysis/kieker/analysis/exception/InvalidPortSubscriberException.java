@@ -1,4 +1,4 @@
-package kieker.analysis.plugin.configuration;
+package kieker.analysis.exception;
 
 public class InvalidPortSubscriberException extends RuntimeException {
 

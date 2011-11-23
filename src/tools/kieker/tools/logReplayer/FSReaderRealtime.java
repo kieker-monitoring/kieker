@@ -233,10 +233,28 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		protected Properties getDefaultProperties() {
 			return new Properties();
 		}
+
+		@Override
+		public Configuration getCurrentConfiguration() {
+			final Configuration configuration = new Configuration(null);
+
+			// TODO: Save the current configuration
+
+			return configuration;
+		}
 	}
 
 	@Override
 	protected Properties getDefaultProperties() {
 		return new Properties();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration(null);
+
+		// TODO: Save the current configuration
+
+		return configuration;
 	}
 }

@@ -61,11 +61,11 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 	private static final Collection<Class<?>> IN_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
 			new Class<?>[] { OperationExecutionRecord.class }));
 
-	private final OutputPort executionOutputPort = new OutputPort("Execution output stream", OUT_CLASSES);
-	private final AbstractInputPort input = new AbstractInputPort("in", IN_CLASSES) {
+	private final OutputPort executionOutputPort = new OutputPort("Execution output stream", ExecutionRecordTransformationFilter.OUT_CLASSES);
+	private final AbstractInputPort input = new AbstractInputPort("in", ExecutionRecordTransformationFilter.IN_CLASSES) {
 
 		@Override
-		public void newEvent(Object event) {
+		public void newEvent(final Object event) {
 			ExecutionRecordTransformationFilter.this.newMonitoringRecord((IMonitoringRecord) event);
 		}
 
@@ -181,5 +181,14 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 	@Override
 	protected Properties getDefaultProperties() {
 		return new Properties();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration(null);
+
+		// TODO: Save the current configuration
+
+		return configuration;
 	}
 }

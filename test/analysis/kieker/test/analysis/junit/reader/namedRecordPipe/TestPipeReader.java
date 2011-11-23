@@ -98,8 +98,8 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 				new Class<?>[] { IMonitoringRecord.class }))) {
 
 			@Override
-			public void newEvent(Object event) {
-				receivedRecords.add((IMonitoringRecord) event);
+			public void newEvent(final Object event) {
+				Receiver.this.receivedRecords.add((IMonitoringRecord) event);
 			}
 		};
 
@@ -120,7 +120,16 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 		}
 
 		public AbstractInputPort getInputPort() {
-			return input;
+			return this.input;
+		}
+
+		@Override
+		public Configuration getCurrentConfiguration() {
+			final Configuration configuration = new Configuration(null);
+
+			// TODO: Save the current configuration
+
+			return configuration;
 		}
 	}
 }

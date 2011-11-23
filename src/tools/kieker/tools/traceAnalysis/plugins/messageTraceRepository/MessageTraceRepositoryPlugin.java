@@ -26,6 +26,7 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.systemModel.AbstractTrace;
@@ -49,9 +50,9 @@ public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessing
 
 	public MessageTraceRepositoryPlugin(final String name, final SystemModelRepository systemEntityFactory) {
 		super(name, systemEntityFactory);
-		
+
 		/* Register the input port. */
-		super.registerInputPort("in", messageTraceInputPort);
+		super.registerInputPort("in", this.messageTraceInputPort);
 	}
 
 	private final AbstractInputPort messageTraceInputPort = new AbstractInputPort("Message traces",
@@ -82,5 +83,14 @@ public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessing
 	@Override
 	protected Properties getDefaultProperties() {
 		return new Properties();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration(null);
+
+		// TODO: Save the current configuration
+
+		return configuration;
 	}
 }

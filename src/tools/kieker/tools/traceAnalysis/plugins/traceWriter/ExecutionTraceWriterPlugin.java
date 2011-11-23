@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -50,8 +51,8 @@ public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessing
 		super(name, systemEntityFactory);
 		this.outputFn = outputFn;
 		this.ps = new BufferedWriter(new FileWriter(outputFn));
-		
-		super.registerInputPort("in", executionTraceInputPort);
+
+		super.registerInputPort("in", this.executionTraceInputPort);
 	}
 
 	@Override
@@ -82,8 +83,9 @@ public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessing
 		return this.executionTraceInputPort;
 	}
 
-	private final AbstractInputPort executionTraceInputPort = new AbstractInputPort("Execution traces", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { ExecutionTrace.class }))) {
+	private final AbstractInputPort executionTraceInputPort = new AbstractInputPort("Execution traces",
+			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+					new Class<?>[] { ExecutionTrace.class }))) {
 
 		@Override
 		public void newEvent(final Object obj) {
@@ -101,5 +103,14 @@ public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessing
 	@Override
 	protected Properties getDefaultProperties() {
 		return new Properties();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration(null);
+
+		// TODO: Save the current configuration
+
+		return configuration;
 	}
 }

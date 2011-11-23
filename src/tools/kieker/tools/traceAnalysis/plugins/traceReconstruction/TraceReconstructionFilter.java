@@ -30,6 +30,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.common.logging.Log;
@@ -114,10 +115,10 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 		this.ignoreInvalidTraces = ignoreInvalidTraces;
 
 		/* Register all ports. */
-		super.registerInputPort("in", executionInputPort);
-		super.registerOutputPort("messageTraceOutput", messageTraceOutputPort);
-		super.registerOutputPort("executionTraceOutput", executionTraceOutputPort);
-		super.registerOutputPort("invalidExecutionTraceOutput", invalidExecutionTraceOutputPort);
+		super.registerInputPort("in", this.executionInputPort);
+		super.registerOutputPort("messageTraceOutput", this.messageTraceOutputPort);
+		super.registerOutputPort("executionTraceOutput", this.executionTraceOutputPort);
+		super.registerOutputPort("invalidExecutionTraceOutput", this.invalidExecutionTraceOutputPort);
 	}
 
 	/**
@@ -324,5 +325,14 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	@Override
 	protected Properties getDefaultProperties() {
 		return new Properties();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration(null);
+
+		// TODO: Save the current configuration
+
+		return configuration;
 	}
 }

@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.Properties;
 import java.util.Set;
@@ -32,6 +33,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.configuration.OutputPort;
 import kieker.analysis.reader.AbstractReaderPlugin;
+import kieker.common.configuration.AbstractConfiguration;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -151,5 +153,22 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 
 	public OutputPort getMonitoringRecordOutputPort() {
 		return this.outputPort;
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration(null);
+
+		configuration.setProperty(FSReader.CONFIG_INPUTDIRS, AbstractConfiguration.toProperty(this.inputDirs));
+		/* Extract the names of the record-classes again. */
+		final int len = this.readOnlyRecordsOfType.size();
+		final String onlyRecords[] = new String[len];
+		final Iterator<Class<? extends IMonitoringRecord>> iter = this.readOnlyRecordsOfType.iterator();
+		for (int i = 0; i < len; i++) {
+			onlyRecords[i] = iter.next().getName();
+		}
+		configuration.setProperty(FSReader.CONFIG_ONLYRECORDS, AbstractConfiguration.toProperty(onlyRecords));
+
+		return configuration;
 	}
 }

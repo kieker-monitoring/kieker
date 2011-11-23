@@ -69,7 +69,7 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 		this.ignorExecutionsAfterTimestamp = configuration.getLongProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
 
 		super.registerOutputPort("out", this.executionOutputPort);
-		super.registerInputPort("in", executionInputPort);
+		super.registerInputPort("in", this.executionInputPort);
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 		this.ignorExecutionsAfterTimestamp = ignoreExecutionsAfterTimestamp;
 
 		super.registerOutputPort("out", this.executionOutputPort);
-		super.registerInputPort("in", executionInputPort);
+		super.registerInputPort("in", this.executionInputPort);
 	}
 
 	public AbstractInputPort getExecutionInputPort() {
@@ -135,4 +135,12 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 		return properties;
 	}
 
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration(null);
+
+		// TODO: Save the current configuration
+
+		return configuration;
+	}
 }

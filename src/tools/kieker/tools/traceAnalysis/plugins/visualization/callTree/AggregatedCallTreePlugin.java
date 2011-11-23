@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -55,8 +56,8 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 		this.dotOutputFile = dotOutputFile;
 		this.includeWeights = includeWeights;
 		this.shortLabels = shortLabels;
-		
-		super.registerInputPort("in", messageTraceInputPort);
+
+		super.registerInputPort("in", this.messageTraceInputPort);
 	}
 
 	public void saveTreeToDotFile() throws IOException {
@@ -120,5 +121,14 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 	@Override
 	protected Properties getDefaultProperties() {
 		return new Properties();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration(null);
+
+		// TODO: Save the current configuration
+
+		return configuration;
 	}
 }

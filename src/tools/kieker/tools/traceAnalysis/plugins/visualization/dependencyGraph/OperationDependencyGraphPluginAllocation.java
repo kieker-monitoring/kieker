@@ -32,6 +32,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -77,8 +78,8 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 		this.includeWeights = includeWeights;
 		this.shortLabels = shortLabels;
 		this.includeSelfLoops = includeSelfLoops;
-		
-		super.registerInputPort("in", messageTraceInputPort);
+
+		super.registerInputPort("in", this.messageTraceInputPort);
 	}
 
 	private String containerNodeLabel(final ExecutionContainer container) {
@@ -267,5 +268,14 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 	@Override
 	protected Properties getDefaultProperties() {
 		return new Properties();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration(null);
+
+		// TODO: Save the current configuration
+
+		return configuration;
 	}
 }

@@ -215,4 +215,15 @@ public final class JMSReader extends AbstractReaderPlugin {
 		JMSReader.LOG.info("Shutdown of JMSReader requested.");
 		this.unblock();
 	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration(null);
+
+		configuration.setProperty(JMSReader.CONFIG_PROVIDERURL, this.jmsProviderUrl);
+		configuration.setProperty(JMSReader.CONFIG_DESTINATION, this.jmsDestination);
+		configuration.setProperty(JMSReader.CONFIG_FACTORYLOOKUP, this.jmsFactoryLookupName);
+
+		return configuration;
+	}
 }

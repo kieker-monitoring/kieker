@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -62,8 +63,8 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 		this.includeWeights = includeWeights;
 		this.shortLabels = shortLabels;
 		this.includeSelfLoops = includeSelfLoops;
-		
-		super.registerInputPort("in", messageTraceInputPort);
+
+		super.registerInputPort("in", this.messageTraceInputPort);
 	}
 
 	private String nodeLabel(final AssemblyComponent curComponent) {
@@ -159,5 +160,14 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 	@Override
 	protected Properties getDefaultProperties() {
 		return new Properties();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration(null);
+
+		// TODO: Save the current configuration
+
+		return configuration;
 	}
 }

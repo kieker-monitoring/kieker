@@ -31,6 +31,7 @@ import java.util.Properties;
 import java.util.Stack;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -77,8 +78,8 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 						this.systemEntityFactory.getOperationFactory().getRootOperation()));
 		this.outputFnBase = outputFnBase;
 		this.shortLabels = shortLabels;
-		
-		super.registerInputPort("in", messageTraceInputPort);
+
+		super.registerInputPort("in", this.messageTraceInputPort);
 	}
 
 	private static final String nodeLabel(final CallTreeNode node, final boolean shortLabels) {
@@ -266,5 +267,14 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 	@Override
 	protected Properties getDefaultProperties() {
 		return new Properties();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration(null);
+
+		// TODO: Save the current configuration
+
+		return configuration;
 	}
 }

@@ -124,7 +124,7 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 		public void newEvent(final Object event) {
 			RecordDelegationPlugin2.this.newMonitoringRecord((IMonitoringRecord) event);
 
-			output.deliver(event);
+			RecordDelegationPlugin2.this.output.deliver(event);
 		}
 	};
 
@@ -139,14 +139,14 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 	public RecordDelegationPlugin2(final AbstractAnalysisPlugin rec) {
 		super(new Configuration(null));
 
-		output.subscribe(rec.getAllInputPorts()[0]);
+		this.output.subscribe(rec.getAllInputPorts()[0]);
 
-		registerInputPort("in", input);
-		registerOutputPort("out", output);
+		this.registerInputPort("in", this.input);
+		this.registerOutputPort("out", this.output);
 	}
 
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
-		return output.deliver(record);
+		return this.output.deliver(record);
 	}
 
 	/*
@@ -169,5 +169,14 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 	@Override
 	protected Properties getDefaultProperties() {
 		return new Properties();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration(null);
+
+		// TODO: Save the current configuration
+
+		return configuration;
 	}
 }

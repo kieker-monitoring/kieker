@@ -22,6 +22,8 @@ package kieker.analysis.plugin.configuration;
 
 import java.util.List;
 
+import kieker.analysis.exception.InvalidPortSubscriberException;
+
 /**
  * 
  * @author Andre van Hoorn
