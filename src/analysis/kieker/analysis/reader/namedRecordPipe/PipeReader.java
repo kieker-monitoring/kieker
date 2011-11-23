@@ -28,7 +28,7 @@ import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.configuration.OutputPort;
-import kieker.analysis.reader.AbstractMonitoringReader;
+import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.namedRecordPipe.Broker;
@@ -40,7 +40,7 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @author Andre van Hoorn
  */
-public final class PipeReader extends AbstractMonitoringReader implements IPipeReader {
+public final class PipeReader extends AbstractReaderPlugin implements IPipeReader {
 	public static final String CONFIG_PIPENAME = PipeReader.class.getName() + ".pipeName";
 
 	private static final Log LOG = LogFactory.getLog(PipeReader.class);
@@ -63,13 +63,13 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 		super(configuration);
 		final String pipeName = this.configuration.getStringProperty(PipeReader.CONFIG_PIPENAME);
 
-		initialize(pipeName);
+		this.initialize(pipeName);
 	}
 
 	public PipeReader(final String pipeName) {
 		super(new Configuration(null));
 
-		initialize(pipeName);
+		this.initialize(pipeName);
 	}
 
 	private void initialize(final String pipeName) {

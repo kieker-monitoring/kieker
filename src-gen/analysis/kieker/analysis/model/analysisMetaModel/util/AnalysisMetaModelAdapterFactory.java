@@ -80,10 +80,6 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 				return createPluginAdapter();
 			}
 			@Override
-			public Adapter caseConnector(IConnector object) {
-				return createConnectorAdapter();
-			}
-			@Override
 			public Adapter casePort(IPort object) {
 				return createPortAdapter();
 			}
@@ -152,20 +148,6 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPluginAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link kieker.analysis.model.analysisMetaModel.IConnector <em>Connector</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see kieker.analysis.model.analysisMetaModel.IConnector
-	 * @generated
-	 */
-	public Adapter createConnectorAdapter() {
 		return null;
 	}
 

@@ -7,7 +7,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
-import kieker.analysis.reader.AbstractMonitoringReader;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
@@ -21,6 +20,7 @@ public abstract class AbstractPlugin {
 
 	private final Map<String, AbstractInputPort> inputPorts = new ConcurrentHashMap<String, AbstractInputPort>();
 	private final Map<String, OutputPort> outputPorts = new ConcurrentHashMap<String, OutputPort>();
+	private String name = null;
 
 	protected final Configuration configuration;
 
@@ -49,6 +49,16 @@ public abstract class AbstractPlugin {
 	 * @return The default properties.
 	 */
 	protected abstract Properties getDefaultProperties();
+
+	/**
+	 * This method should deliver a {@code Configuration} object containing the
+	 * current configuration of this instance. In other words: The constructor
+	 * should be able to use the given object to initialize a new instance of
+	 * this class with the same intern properties.
+	 * 
+	 * @return A complete filled configuration object.
+	 */
+	public abstract Configuration getCurrentConfiguration();
 
 	/**
 	 * Delivers the input port with the given name.
@@ -134,5 +144,26 @@ public abstract class AbstractPlugin {
 	 */
 	public String[] getAllInputPortNames() {
 		return this.inputPorts.keySet().toArray(new String[0]);
+	}
+
+	/**
+	 * This method delivers the current name of this plugin. The name does not
+	 * have to be unique.
+	 * 
+	 * @return The name of the plugin.
+	 */
+	public final String getName() {
+		return this.name;
+	}
+
+	/**
+	 * This method sets the current name of this plugin. The name does not
+	 * have to be unique.
+	 * 
+	 * @param name
+	 *            The new name of the plugin.
+	 */
+	public final void setName(final String name) {
+		this.name = name;
 	}
 }

@@ -45,7 +45,7 @@ import javax.naming.NameNotFoundException;
 
 import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.configuration.OutputPort;
-import kieker.analysis.reader.AbstractMonitoringReader;
+import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
@@ -56,7 +56,7 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @author Andre van Hoorn, Matthias Rohr
  */
-public final class JMSReader extends AbstractMonitoringReader {
+public final class JMSReader extends AbstractReaderPlugin {
 	public static final String CONFIG_PROVIDERURL = JMSReader.class.getName() + ".jmsProviderUrl";
 	public static final String CONFIG_DESTINATION = JMSReader.class.getName() + ".jmsDestination";
 	public static final String CONFIG_FACTORYLOOKUP = JMSReader.class.getName() + ".jmsFactoryLookupName";

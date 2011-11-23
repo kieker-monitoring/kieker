@@ -9,7 +9,6 @@ package kieker.analysis.model.analysisMetaModel.impl;
 import kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelFactory;
 import kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage;
 import kieker.analysis.model.analysisMetaModel.IAnalysisPlugin;
-import kieker.analysis.model.analysisMetaModel.IConnector;
 import kieker.analysis.model.analysisMetaModel.IInputPort;
 import kieker.analysis.model.analysisMetaModel.IOutputPort;
 import kieker.analysis.model.analysisMetaModel.IPlugin;
@@ -45,13 +44,6 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 	 * @generated
 	 */
 	private EClass pluginEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass connectorEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -233,33 +225,6 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getConnector() {
-		return connectorEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getConnector_DstInputPort() {
-		return (EReference)connectorEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getConnector_SicOutputPort() {
-		return (EReference)connectorEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getPort() {
 		return portEClass;
 	}
@@ -296,15 +261,6 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getInputPort_InConnector() {
-		return (EReference)inputPortEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getOutputPort() {
 		return outputPortEClass;
 	}
@@ -314,7 +270,7 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getOutputPort_OutConnector() {
+	public EReference getOutputPort_Subscribers() {
 		return (EReference)outputPortEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -410,19 +366,14 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 		createEAttribute(pluginEClass, PLUGIN__CLASSNAME);
 		createEReference(pluginEClass, PLUGIN__PROPERTIES);
 
-		connectorEClass = createEClass(CONNECTOR);
-		createEReference(connectorEClass, CONNECTOR__DST_INPUT_PORT);
-		createEReference(connectorEClass, CONNECTOR__SIC_OUTPUT_PORT);
-
 		portEClass = createEClass(PORT);
 		createEAttribute(portEClass, PORT__NAME);
 		createEAttribute(portEClass, PORT__EVENT_TYPES);
 
 		inputPortEClass = createEClass(INPUT_PORT);
-		createEReference(inputPortEClass, INPUT_PORT__IN_CONNECTOR);
 
 		outputPortEClass = createEClass(OUTPUT_PORT);
-		createEReference(outputPortEClass, OUTPUT_PORT__OUT_CONNECTOR);
+		createEReference(outputPortEClass, OUTPUT_PORT__SUBSCRIBERS);
 
 		propertyEClass = createEClass(PROPERTY);
 		createEAttribute(propertyEClass, PROPERTY__NAME);
@@ -478,19 +429,14 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 		initEAttribute(getPlugin_Classname(), ecorePackage.getEString(), "classname", null, 1, 1, IPlugin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPlugin_Properties(), this.getProperty(), null, "properties", null, 0, -1, IPlugin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(connectorEClass, IConnector.class, "Connector", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getConnector_DstInputPort(), this.getInputPort(), this.getInputPort_InConnector(), "dstInputPort", null, 1, 1, IConnector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getConnector_SicOutputPort(), this.getOutputPort(), this.getOutputPort_OutConnector(), "sicOutputPort", null, 1, 1, IConnector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
 		initEClass(portEClass, IPort.class, "Port", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPort_Name(), ecorePackage.getEString(), "name", null, 1, 1, IPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_EventTypes(), ecorePackage.getEString(), "eventTypes", null, 1, -1, IPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(inputPortEClass, IInputPort.class, "InputPort", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getInputPort_InConnector(), this.getConnector(), this.getConnector_DstInputPort(), "inConnector", null, 0, -1, IInputPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(outputPortEClass, IOutputPort.class, "OutputPort", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getOutputPort_OutConnector(), this.getConnector(), this.getConnector_SicOutputPort(), "outConnector", null, 0, -1, IOutputPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getOutputPort_Subscribers(), this.getInputPort(), null, "subscribers", null, 0, -1, IOutputPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(propertyEClass, IProperty.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getProperty_Name(), ecorePackage.getEString(), "name", null, 1, 1, IProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -34,7 +34,6 @@ import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.configuration.Configuration;
 import kieker.analysis.model.analysisMetaModel.IAnalysisPlugin;
-import kieker.analysis.model.analysisMetaModel.IConnector;
 import kieker.analysis.model.analysisMetaModel.IInputPort;
 import kieker.analysis.model.analysisMetaModel.IOutputPort;
 import kieker.analysis.model.analysisMetaModel.IPlugin;
@@ -118,7 +117,7 @@ public class AnalysisController {
 			final IProject project = (IProject) content.get(0);
 			try {
 				this.loadFromModelProject(project);
-			} catch (Exception ex) {
+			} catch (final Exception ex) {
 				AnalysisController.LOG.error("Could not load the configuration from the given file: " + file.getName());
 				// TODO: Throw something more specific.
 				throw ex;
@@ -137,7 +136,6 @@ public class AnalysisController {
 		 * 3) The "real" connection within the model.
 		 */
 		final EList<IPlugin> plugins = project.getPlugins();
-		final List<IConnector> connectors = new ArrayList<IConnector>();
 		final Map<IPort, IPlugin> portPluginMap = new HashMap<IPort, IPlugin>();
 		final Map<IPlugin, Object> pluginObjMap = new HashMap<IPlugin, Object>();
 
@@ -149,7 +147,7 @@ public class AnalysisController {
 			for (final IProperty prop : properties) {
 				configuration.setProperty(prop.getName(), prop.getValue());
 			}
-			Object newObj = Class.forName(p.getClassname()).getConstructor(Configuration.class)
+			final Object newObj = Class.forName(p.getClassname()).getConstructor(Configuration.class)
 					.newInstance(configuration.getPropertiesStartingWith(p.getClassname()));
 
 			if (p instanceof IReader) {
@@ -158,7 +156,7 @@ public class AnalysisController {
 				pluginObjMap.put(p, reader);
 			} else {
 				final AbstractAnalysisPlugin plugin = (AbstractAnalysisPlugin) newObj;
-				this.plugins.add((AbstractAnalysisPlugin) plugin);
+				this.plugins.add(plugin);
 				pluginObjMap.put(p, plugin);
 			}
 
@@ -169,8 +167,6 @@ public class AnalysisController {
 			 */
 
 			for (final IOutputPort oPort : p.getOutputPorts()) {
-				connectors.addAll(oPort.getOutConnector());
-
 				portPluginMap.put(oPort, p);
 			}
 
@@ -185,19 +181,24 @@ public class AnalysisController {
 		 * Now we should have initialized all plugins. We can start to assemble
 		 * the structure.
 		 */
-		for (final IConnector c : connectors) {
-			/* We can get the plugins via the map. */
-			final IPlugin in = portPluginMap.get(c.getDstInputPort());
-			final IPlugin out = portPluginMap.get(c.getSicOutputPort());
-			AnalysisController.LOG.debug(String.format("Found Connector. Connect output from %s with the input of %s\n", out.getName(), in.getName()));
+		for (final IPort port : portPluginMap.keySet()) {
+			if (port instanceof IOutputPort) {
+				final EList<IInputPort> subscribers = ((IOutputPort) port).getSubscribers();
+				for (final IInputPort iPort : subscribers) {
+					/* We can get the plugins via the map. */
+					final IPlugin in = portPluginMap.get(iPort);
+					final IPlugin out = portPluginMap.get(port);
+					AnalysisController.LOG.debug(String.format("Connect output from %s with the input of %s\n", out.getName(), in.getName()));
 
-			final AbstractPlugin outObj = (AbstractPlugin) pluginObjMap.get(out);
-			final AbstractAnalysisPlugin inObj = (AbstractAnalysisPlugin) pluginObjMap.get(in);
+					final AbstractPlugin outObj = (AbstractPlugin) pluginObjMap.get(out);
+					final AbstractAnalysisPlugin inObj = (AbstractAnalysisPlugin) pluginObjMap.get(in);
 
-			final OutputPort outPort = outObj.getOutputPort(c.getSicOutputPort().getName());
-			final AbstractInputPort inPort = inObj.getInputPort(c.getDstInputPort().getName());
+					final OutputPort outPort = outObj.getOutputPort(port.getName());
+					final AbstractInputPort inPort = inObj.getInputPort(iPort.getName());
 
-			outPort.subscribe(inPort);
+					outPort.subscribe(inPort);
+				}
+			}
 		}
 	}
 
@@ -252,40 +253,40 @@ public class AnalysisController {
 		// TODO: Implement connection!
 		final AnalysisMetaModelFactory factory = new AnalysisMetaModelFactory();
 
-		IProject project = factory.createProject();
+		final IProject project = factory.createProject();
 		project.setName(name);
 
-		List<IPlugin> plugins = new ArrayList<IPlugin>();
-		if (logReader != null) {
-			IReader reader = factory.createReader();
-			reader.setClassname(logReader.getClass().getName());
-			reader.setName(logReader.toString());
+		final List<IPlugin> plugins = new ArrayList<IPlugin>();
+		if (this.logReader != null) {
+			final IReader reader = factory.createReader();
+			reader.setClassname(this.logReader.getClass().getName());
+			reader.setName(this.logReader.toString());
 			plugins.add(reader);
 			project.getPlugins().add(reader);
-			final String outs[] = ((AbstractPlugin) logReader).getAllOutputPortNames();
-			for (String out : outs) {
-				IOutputPort outputPort = factory.createOutputPort();
+			final String outs[] = ((AbstractPlugin) this.logReader).getAllOutputPortNames();
+			for (final String out : outs) {
+				final IOutputPort outputPort = factory.createOutputPort();
 				outputPort.setName(out);
 				reader.getOutputPorts().add(outputPort);
 			}
 		}
-		for (AbstractAnalysisPlugin plugin : this.plugins) {
-			IAnalysisPlugin newPlugin = factory.createAnalysisPlugin();
+		for (final AbstractAnalysisPlugin plugin : this.plugins) {
+			final IAnalysisPlugin newPlugin = factory.createAnalysisPlugin();
 			newPlugin.setClassname(plugin.getClass().getName());
 			newPlugin.setName(plugin.toString());
 			plugins.add(newPlugin);
 			project.getPlugins().add(newPlugin);
 
 			final String outs[] = plugin.getAllOutputPortNames();
-			for (String out : outs) {
-				IOutputPort outputPort = factory.createOutputPort();
+			for (final String out : outs) {
+				final IOutputPort outputPort = factory.createOutputPort();
 				outputPort.setName(out);
 				newPlugin.getOutputPorts().add(outputPort);
 			}
 
 			final String ins[] = plugin.getAllInputPortNames();
-			for (String in : ins) {
-				IInputPort inputPort = factory.createInputPort();
+			for (final String in : ins) {
+				final IInputPort inputPort = factory.createInputPort();
 				inputPort.setName(in);
 				newPlugin.getInputPorts().add(inputPort);
 			}
@@ -295,12 +296,12 @@ public class AnalysisController {
 		final ResourceSet resourceSet = new ResourceSetImpl();
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(
 				"*", new XMIResourceFactoryImpl());
-		Resource resource = resourceSet.createResource(URI.createFileURI(file.getAbsolutePath()));
+		final Resource resource = resourceSet.createResource(URI.createFileURI(file.getAbsolutePath()));
 		resource.getContents().add(project);
 
 		try {
 			resource.save(null);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			AnalysisController.LOG.error("Could not save the configuration file.");
 			return false;
 		}

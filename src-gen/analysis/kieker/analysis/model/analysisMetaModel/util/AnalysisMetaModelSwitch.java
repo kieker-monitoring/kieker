@@ -82,12 +82,6 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case IAnalysisMetaModelPackage.CONNECTOR: {
-				IConnector connector = (IConnector)theEObject;
-				T result = caseConnector(connector);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case IAnalysisMetaModelPackage.PORT: {
 				IPort port = (IPort)theEObject;
 				T result = casePort(port);
@@ -159,21 +153,6 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePlugin(IPlugin object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Connector</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Connector</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseConnector(IConnector object) {
 		return null;
 	}
 

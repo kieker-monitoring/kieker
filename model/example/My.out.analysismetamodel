@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="ASCII"?>
-<Project xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="platform:/resource/Kieker/model/AnalysisMetaModel.ecore" name="SomeProject">
-  <plugins xsi:type="Reader" name="kieker.analysis.reader.filesystem.FSReader@3abdd3e7" classname="kieker.analysis.reader.filesystem.FSReader">
+<Project xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="platform:/resource/Kieker/model/AnalysisMetaModel.ecore" name="Foo">
+  <plugins xsi:type="Reader" name="kieker.analysis.reader.filesystem.FSReader@4de8b404" classname="kieker.analysis.reader.filesystem.FSReader">
     <outputPorts name="out"/>
   </plugins>
-  <plugins xsi:type="AnalysisPlugin" name="kieker.analysis.plugin.DummyRecordConsumer@9dae16a" classname="kieker.analysis.plugin.DummyRecordConsumer">
+  <plugins xsi:type="AnalysisPlugin" name="kieker.analysis.plugin.DummyRecordConsumer@7eaddd24" classname="kieker.analysis.plugin.DummyRecordConsumer">
     <outputPorts name="out"/>
     <inputPorts name="in"/>
   </plugins>

@@ -9,18 +9,14 @@ package kieker.analysis.model.analysisMetaModel.impl;
 import java.util.Collection;
 
 import kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage;
-import kieker.analysis.model.analysisMetaModel.IConnector;
+import kieker.analysis.model.analysisMetaModel.IInputPort;
 import kieker.analysis.model.analysisMetaModel.IOutputPort;
-
-import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
 
-import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
-import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,7 +25,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.OutputPort#getOutConnector <em>Out Connector</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.OutputPort#getSubscribers <em>Subscribers</em>}</li>
  * </ul>
  * </p>
  *
@@ -37,14 +33,14 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class OutputPort extends Port implements IOutputPort {
 	/**
-	 * The cached value of the '{@link #getOutConnector() <em>Out Connector</em>}' containment reference list.
+	 * The cached value of the '{@link #getSubscribers() <em>Subscribers</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getOutConnector()
+	 * @see #getSubscribers()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<IConnector> outConnector;
+	protected EList<IInputPort> subscribers;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -70,40 +66,11 @@ public class OutputPort extends Port implements IOutputPort {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<IConnector> getOutConnector() {
-		if (outConnector == null) {
-			outConnector = new EObjectContainmentWithInverseEList<IConnector>(IConnector.class, this, IAnalysisMetaModelPackage.OUTPUT_PORT__OUT_CONNECTOR, IAnalysisMetaModelPackage.CONNECTOR__SIC_OUTPUT_PORT);
+	public EList<IInputPort> getSubscribers() {
+		if (subscribers == null) {
+			subscribers = new EObjectResolvingEList<IInputPort>(IInputPort.class, this, IAnalysisMetaModelPackage.OUTPUT_PORT__SUBSCRIBERS);
 		}
-		return outConnector;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case IAnalysisMetaModelPackage.OUTPUT_PORT__OUT_CONNECTOR:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getOutConnector()).basicAdd(otherEnd, msgs);
-		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case IAnalysisMetaModelPackage.OUTPUT_PORT__OUT_CONNECTOR:
-				return ((InternalEList<?>)getOutConnector()).basicRemove(otherEnd, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
+		return subscribers;
 	}
 
 	/**
@@ -114,8 +81,8 @@ public class OutputPort extends Port implements IOutputPort {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.OUTPUT_PORT__OUT_CONNECTOR:
-				return getOutConnector();
+			case IAnalysisMetaModelPackage.OUTPUT_PORT__SUBSCRIBERS:
+				return getSubscribers();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -129,9 +96,9 @@ public class OutputPort extends Port implements IOutputPort {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.OUTPUT_PORT__OUT_CONNECTOR:
-				getOutConnector().clear();
-				getOutConnector().addAll((Collection<? extends IConnector>)newValue);
+			case IAnalysisMetaModelPackage.OUTPUT_PORT__SUBSCRIBERS:
+				getSubscribers().clear();
+				getSubscribers().addAll((Collection<? extends IInputPort>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -145,8 +112,8 @@ public class OutputPort extends Port implements IOutputPort {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.OUTPUT_PORT__OUT_CONNECTOR:
-				getOutConnector().clear();
+			case IAnalysisMetaModelPackage.OUTPUT_PORT__SUBSCRIBERS:
+				getSubscribers().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -160,8 +127,8 @@ public class OutputPort extends Port implements IOutputPort {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.OUTPUT_PORT__OUT_CONNECTOR:
-				return outConnector != null && !outConnector.isEmpty();
+			case IAnalysisMetaModelPackage.OUTPUT_PORT__SUBSCRIBERS:
+				return subscribers != null && !subscribers.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

@@ -152,43 +152,6 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	int PLUGIN_FEATURE_COUNT = 4;
 
 	/**
-	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.Connector <em>Connector</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see kieker.analysis.model.analysisMetaModel.impl.Connector
-	 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getConnector()
-	 * @generated
-	 */
-	int CONNECTOR = 2;
-
-	/**
-	 * The feature id for the '<em><b>Dst Input Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONNECTOR__DST_INPUT_PORT = 0;
-
-	/**
-	 * The feature id for the '<em><b>Sic Output Port</b></em>' container reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONNECTOR__SIC_OUTPUT_PORT = 1;
-
-	/**
-	 * The number of structural features of the '<em>Connector</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONNECTOR_FEATURE_COUNT = 2;
-
-	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.Port <em>Port</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -196,7 +159,7 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getPort()
 	 * @generated
 	 */
-	int PORT = 3;
+	int PORT = 2;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -233,7 +196,7 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getInputPort()
 	 * @generated
 	 */
-	int INPUT_PORT = 4;
+	int INPUT_PORT = 3;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -254,22 +217,13 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	int INPUT_PORT__EVENT_TYPES = PORT__EVENT_TYPES;
 
 	/**
-	 * The feature id for the '<em><b>In Connector</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INPUT_PORT__IN_CONNECTOR = PORT_FEATURE_COUNT + 0;
-
-	/**
 	 * The number of structural features of the '<em>Input Port</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INPUT_PORT_FEATURE_COUNT = PORT_FEATURE_COUNT + 1;
+	int INPUT_PORT_FEATURE_COUNT = PORT_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.OutputPort <em>Output Port</em>}' class.
@@ -279,7 +233,7 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getOutputPort()
 	 * @generated
 	 */
-	int OUTPUT_PORT = 5;
+	int OUTPUT_PORT = 4;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -300,13 +254,13 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	int OUTPUT_PORT__EVENT_TYPES = PORT__EVENT_TYPES;
 
 	/**
-	 * The feature id for the '<em><b>Out Connector</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Subscribers</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OUTPUT_PORT__OUT_CONNECTOR = PORT_FEATURE_COUNT + 0;
+	int OUTPUT_PORT__SUBSCRIBERS = PORT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Output Port</em>' class.
@@ -325,7 +279,7 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getProperty()
 	 * @generated
 	 */
-	int PROPERTY = 6;
+	int PROPERTY = 5;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -362,7 +316,7 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getAnalysisPlugin()
 	 * @generated
 	 */
-	int ANALYSIS_PLUGIN = 7;
+	int ANALYSIS_PLUGIN = 6;
 
 	/**
 	 * The feature id for the '<em><b>Output Ports</b></em>' containment reference list.
@@ -426,7 +380,7 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getReader()
 	 * @generated
 	 */
-	int READER = 8;
+	int READER = 7;
 
 	/**
 	 * The feature id for the '<em><b>Output Ports</b></em>' containment reference list.
@@ -561,38 +515,6 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	EReference getPlugin_Properties();
 
 	/**
-	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.IConnector <em>Connector</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Connector</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IConnector
-	 * @generated
-	 */
-	EClass getConnector();
-
-	/**
-	 * Returns the meta object for the reference '{@link kieker.analysis.model.analysisMetaModel.IConnector#getDstInputPort <em>Dst Input Port</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Dst Input Port</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IConnector#getDstInputPort()
-	 * @see #getConnector()
-	 * @generated
-	 */
-	EReference getConnector_DstInputPort();
-
-	/**
-	 * Returns the meta object for the container reference '{@link kieker.analysis.model.analysisMetaModel.IConnector#getSicOutputPort <em>Sic Output Port</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the container reference '<em>Sic Output Port</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IConnector#getSicOutputPort()
-	 * @see #getConnector()
-	 * @generated
-	 */
-	EReference getConnector_SicOutputPort();
-
-	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.IPort <em>Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -635,17 +557,6 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	EClass getInputPort();
 
 	/**
-	 * Returns the meta object for the reference list '{@link kieker.analysis.model.analysisMetaModel.IInputPort#getInConnector <em>In Connector</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>In Connector</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IInputPort#getInConnector()
-	 * @see #getInputPort()
-	 * @generated
-	 */
-	EReference getInputPort_InConnector();
-
-	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.IOutputPort <em>Output Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -656,15 +567,15 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	EClass getOutputPort();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.IOutputPort#getOutConnector <em>Out Connector</em>}'.
+	 * Returns the meta object for the reference list '{@link kieker.analysis.model.analysisMetaModel.IOutputPort#getSubscribers <em>Subscribers</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Out Connector</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IOutputPort#getOutConnector()
+	 * @return the meta object for the reference list '<em>Subscribers</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.IOutputPort#getSubscribers()
 	 * @see #getOutputPort()
 	 * @generated
 	 */
-	EReference getOutputPort_OutConnector();
+	EReference getOutputPort_Subscribers();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.IProperty <em>Property</em>}'.
@@ -820,32 +731,6 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 		EReference PLUGIN__PROPERTIES = eINSTANCE.getPlugin_Properties();
 
 		/**
-		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.Connector <em>Connector</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see kieker.analysis.model.analysisMetaModel.impl.Connector
-		 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getConnector()
-		 * @generated
-		 */
-		EClass CONNECTOR = eINSTANCE.getConnector();
-
-		/**
-		 * The meta object literal for the '<em><b>Dst Input Port</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CONNECTOR__DST_INPUT_PORT = eINSTANCE.getConnector_DstInputPort();
-
-		/**
-		 * The meta object literal for the '<em><b>Sic Output Port</b></em>' container reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CONNECTOR__SIC_OUTPUT_PORT = eINSTANCE.getConnector_SicOutputPort();
-
-		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.Port <em>Port</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -882,14 +767,6 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 		EClass INPUT_PORT = eINSTANCE.getInputPort();
 
 		/**
-		 * The meta object literal for the '<em><b>In Connector</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference INPUT_PORT__IN_CONNECTOR = eINSTANCE.getInputPort_InConnector();
-
-		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.OutputPort <em>Output Port</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -900,12 +777,12 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 		EClass OUTPUT_PORT = eINSTANCE.getOutputPort();
 
 		/**
-		 * The meta object literal for the '<em><b>Out Connector</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Subscribers</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference OUTPUT_PORT__OUT_CONNECTOR = eINSTANCE.getOutputPort_OutConnector();
+		EReference OUTPUT_PORT__SUBSCRIBERS = eINSTANCE.getOutputPort_Subscribers();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.Property <em>Property</em>}' class.

@@ -31,7 +31,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.configuration.OutputPort;
-import kieker.analysis.reader.AbstractMonitoringReader;
+import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -46,7 +46,7 @@ import kieker.common.record.IMonitoringRecordReceiver;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-public class FSReader extends AbstractMonitoringReader implements IMonitoringRecordReceiver {
+public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 	public static final String CONFIG_INPUTDIRS = FSReader.class.getName() + ".inputDirs";
 	public static final String CONFIG_ONLYRECORDS = FSReader.class.getName() + ".readOnlyRecordsOfType";
 
@@ -66,7 +66,7 @@ public class FSReader extends AbstractMonitoringReader implements IMonitoringRec
 	public FSReader(final Configuration configuration) {
 		super(configuration);
 		this.inputDirs = this.configuration.getStringArrayProperty(FSReader.CONFIG_INPUTDIRS);
-		System.out.println(Arrays.toString(inputDirs));
+		System.out.println(Arrays.toString(this.inputDirs));
 		this.recordQueue = new PriorityQueue<IMonitoringRecord>(this.inputDirs.length);
 		final String[] onlyrecords = this.configuration.getStringArrayProperty(FSReader.CONFIG_ONLYRECORDS);
 		if (onlyrecords.length == 0) {
@@ -148,8 +148,8 @@ public class FSReader extends AbstractMonitoringReader implements IMonitoringRec
 		}
 		return this.running;
 	}
-	
+
 	public OutputPort getMonitoringRecordOutputPort() {
-		return outputPort;
+		return this.outputPort;
 	}
 }

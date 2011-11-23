@@ -31,7 +31,7 @@ import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
-import kieker.analysis.reader.AbstractMonitoringReader;
+import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.configuration.AbstractConfiguration;
 import kieker.common.logging.Log;
@@ -108,7 +108,7 @@ public class FilesystemLogReplayer {
 	public boolean replay() {
 		boolean success = true;
 
-		AbstractMonitoringReader fsReader;
+		AbstractReaderPlugin fsReader;
 		if (this.realtimeMode) {
 			fsReader = new FSReaderRealtime(this.inputDirs, this.numRealtimeWorkerThreads);
 		} else {
@@ -179,8 +179,8 @@ class RecordDelegationPlugin extends AbstractAnalysisPlugin {
 		this.ignoreRecordsBeforeTimestamp = ignoreRecordsBeforeTimestamp;
 		this.ignoreRecordsAfterTimestamp = ignoreRecordsAfterTimestamp;
 
-		super.registerInputPort("in", input);
-		super.registerOutputPort("out", output);
+		super.registerInputPort("in", this.input);
+		super.registerOutputPort("out", this.output);
 	}
 
 	private void newMonitoringRecord(final IMonitoringRecord record) {

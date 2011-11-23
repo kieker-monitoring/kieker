@@ -33,7 +33,7 @@ import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
-import kieker.analysis.reader.AbstractMonitoringReader;
+import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.configuration.AbstractConfiguration;
 import kieker.common.logging.Log;
@@ -41,10 +41,9 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 
 /**
- * 
  * @author Andre van Hoorn
  */
-public class FSReaderRealtime extends AbstractMonitoringReader {
+public class FSReaderRealtime extends AbstractReaderPlugin {
 	private static final Log LOG = LogFactory.getLog(FSReaderRealtime.class);
 
 	private static final String PROP_NAME_NUM_WORKERS = "numWorkers";
@@ -145,7 +144,7 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 		final Configuration configuration = new Configuration(null);
 		configuration.setProperty(FSReader.CONFIG_INPUTDIRS,
 				AbstractConfiguration.toProperty(inputDirNames));
-		final AbstractMonitoringReader fsReader = new FSReader(configuration);
+		final AbstractReaderPlugin fsReader = new FSReader(configuration);
 		final AbstractAnalysisPlugin rtCons = new FSReaderRealtimeCons(this);
 		this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, this.terminationLatch);
 		this.analysis.setReader(fsReader);
@@ -189,26 +188,26 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 			public void newEvent(final Object event) {
 				FSReaderRealtimeCons.this.newMonitoringRecord((IMonitoringRecord) event);
 
-				output.deliver(event);
+				FSReaderRealtimeCons.this.output.deliver(event);
 			}
 		};
 
-		public FSReaderRealtimeCons(Configuration configuration) {
+		public FSReaderRealtimeCons(final Configuration configuration) {
 			super(configuration);
-			master = null;
+			this.master = null;
 
 			// TODO: Load from configuration.
 
-			registerInputPort("in", input);
-			registerOutputPort("out", output);
+			this.registerInputPort("in", this.input);
+			this.registerOutputPort("out", this.output);
 		}
 
 		public FSReaderRealtimeCons(final FSReaderRealtime master) {
 			super(new Configuration(null));
 			this.master = master;
 
-			registerInputPort("in", input);
-			registerOutputPort("out", output);
+			this.registerInputPort("in", this.input);
+			this.registerOutputPort("out", this.output);
 		}
 
 		public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {

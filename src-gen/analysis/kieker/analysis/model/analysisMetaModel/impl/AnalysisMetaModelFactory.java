@@ -61,7 +61,6 @@ public class AnalysisMetaModelFactory extends EFactoryImpl implements IAnalysisM
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case IAnalysisMetaModelPackage.PROJECT: return createProject();
-			case IAnalysisMetaModelPackage.CONNECTOR: return createConnector();
 			case IAnalysisMetaModelPackage.INPUT_PORT: return createInputPort();
 			case IAnalysisMetaModelPackage.OUTPUT_PORT: return createOutputPort();
 			case IAnalysisMetaModelPackage.PROPERTY: return createProperty();
@@ -80,16 +79,6 @@ public class AnalysisMetaModelFactory extends EFactoryImpl implements IAnalysisM
 	public IProject createProject() {
 		Project project = new Project();
 		return project;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public IConnector createConnector() {
-		Connector connector = new Connector();
-		return connector;
 	}
 
 	/**

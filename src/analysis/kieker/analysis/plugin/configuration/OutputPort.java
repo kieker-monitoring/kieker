@@ -21,6 +21,7 @@
 package kieker.analysis.plugin.configuration;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -63,15 +64,16 @@ public final class OutputPort extends AbstractPort implements IOutputPort {
 	public boolean deliver(final Object event) {
 		/* Check whether the class of the given event is registered. */
 		boolean isRegistered = false;
-		if (eventTypes != null) {
-			for (Class<?> c : eventTypes) {
+		if (this.eventTypes != null) {
+			for (final Class<?> c : this.eventTypes) {
 				if (c.isInstance(event)) {
 					isRegistered = true;
 					break;
 				}
 			}
-			if (!isRegistered)
+			if (!isRegistered) {
 				return false;
+			}
 		}
 		/* Seems like it's okay. Deliver it to the subscribers. */
 		for (final IInputPort l : this.subscribers) {
@@ -88,5 +90,10 @@ public final class OutputPort extends AbstractPort implements IOutputPort {
 	@Override
 	public final void unsubscribe(final IInputPort subscriber) {
 		this.subscribers.remove(subscriber);
+	}
+
+	@Override
+	public List<IInputPort> getSubscribers() {
+		return new CopyOnWriteArrayList<IInputPort>(this.subscribers);
 	}
 }

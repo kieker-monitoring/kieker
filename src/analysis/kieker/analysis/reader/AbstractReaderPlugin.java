@@ -5,7 +5,6 @@ import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.configuration.AbstractInputPort;
 import kieker.analysis.plugin.configuration.OutputPort;
 
-// TODO rename to AbstractReaderPlugin ?
 /**
  * This class should be used as a base for every reader used within
  * <i>Kieker</i>. Every reader should follow the following behaviour:<br>
@@ -16,7 +15,7 @@ import kieker.analysis.plugin.configuration.OutputPort;
  * 
  * @author Nils Christian Ehmke
  */
-public abstract class AbstractMonitoringReader extends AbstractPlugin implements IMonitoringReader {
+public abstract class AbstractReaderPlugin extends AbstractPlugin implements IMonitoringReader {
 
 	/**
 	 * Each Plugin requires a constructor with a single Configuration object.
@@ -25,12 +24,12 @@ public abstract class AbstractMonitoringReader extends AbstractPlugin implements
 	 *            The configuration which should be used to initialize the
 	 *            object.
 	 */
-	public AbstractMonitoringReader(final Configuration configuration) {
+	public AbstractReaderPlugin(final Configuration configuration) {
 		super(configuration);
 	}
 
 	/**
-	 * As classes extending the <i>AbstractMonitoringReader</i> cannot have
+	 * As classes extending the <i>AbstractReaderPlugin</i> cannot have
 	 * input ports, this method doesn't register the given port.
 	 * 
 	 * @param name

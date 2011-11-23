@@ -42,7 +42,7 @@ import javax.management.remote.JMXServiceURL;
 
 import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.configuration.OutputPort;
-import kieker.analysis.reader.AbstractMonitoringReader;
+import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
@@ -51,7 +51,7 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @author Jan Waller
  */
-public final class JMXReader extends AbstractMonitoringReader {
+public final class JMXReader extends AbstractReaderPlugin {
 	public static final String CONFIG_SERVER = JMXReader.class.getName() + ".server";
 	public static final String CONFIG_PORT = JMXReader.class.getName() + ".port";
 	public static final String CONFIG_SERVICEURL = JMXReader.class.getName() + ".serviceURL";

@@ -35,15 +35,6 @@ public interface IAnalysisMetaModelFactory extends EFactory {
 	IProject createProject();
 
 	/**
-	 * Returns a new object of class '<em>Connector</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Connector</em>'.
-	 * @generated
-	 */
-	IConnector createConnector();
-
-	/**
 	 * Returns a new object of class '<em>Input Port</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

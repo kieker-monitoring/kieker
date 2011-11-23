@@ -20,14 +20,39 @@
 
 package kieker.analysis.plugin.configuration;
 
+import java.util.List;
+
 /**
  * 
  * @author Andre van Hoorn
  */
 interface IOutputPort extends IPort {
 
-	public void subscribe(IInputPort subscriber);
+	/**
+	 * This method registers a given input port as a subscriber. Everything
+	 * which is sent to this port is send directly to the subscribers.
+	 * 
+	 * @param subscriber
+	 *            The port to be registered. The port should be able to handle
+	 *            all possible outputs of this port.
+	 * @throws InvalidPortSubscriberException
+	 *             If the given port cannot handle all outputs of this port.
+	 */
+	public void subscribe(IInputPort subscriber) throws InvalidPortSubscriberException;
 
+	/**
+	 * This method unregisters a given input port.
+	 * 
+	 * @param subscriber
+	 *            The subscriber to be removed. If the subscriber is not
+	 *            registered, nothing happens.
+	 */
 	public void unsubscribe(IInputPort subscriber);
 
+	/**
+	 * Delivers a list containing all subscribers of this port.
+	 * 
+	 * @return All registered input ports.
+	 */
+	public List<IInputPort> getSubscribers();
 }
