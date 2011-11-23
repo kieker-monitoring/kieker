@@ -45,7 +45,7 @@ public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
 		public void newEvent(final Object event) {
 			SilentCountingRecordConsumer.this.counter.incrementAndGet();
 
-			output.deliver(event);
+			SilentCountingRecordConsumer.this.output.deliver(event);
 		}
 	};
 
@@ -56,8 +56,8 @@ public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
 		super(configuration);
 
 		/* Register the necessary ports. */
-		registerInputPort("in", input);
-		registerOutputPort("out", output);
+		this.registerInputPort("in", this.input);
+		this.registerOutputPort("out", this.output);
 	}
 
 	@Override
@@ -77,5 +77,10 @@ public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
 	@Override
 	protected Properties getDefaultProperties() {
 		return new Properties();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		return new Configuration(null);
 	}
 }

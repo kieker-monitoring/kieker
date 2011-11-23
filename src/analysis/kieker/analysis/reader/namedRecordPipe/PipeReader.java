@@ -48,6 +48,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 			new Class<?>[] { IMonitoringRecord.class }));
 
 	private volatile Pipe pipe;
+	private final String pipeName;
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
 	private final OutputPort outputPort = new OutputPort("Output Port of the PipeReader", PipeReader.OUT_CLASSES);
 
@@ -63,12 +64,14 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 		super(configuration);
 		final String pipeName = this.configuration.getStringProperty(PipeReader.CONFIG_PIPENAME);
 
+		this.pipeName = pipeName;
 		this.initialize(pipeName);
 	}
 
 	public PipeReader(final String pipeName) {
 		super(new Configuration(null));
 
+		this.pipeName = pipeName;
 		this.initialize(pipeName);
 	}
 
@@ -124,5 +127,14 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	public void terminate() {
 		// will lead to notifyPipeClosed() and the subsequent termination of read()
 		this.pipe.close();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration(null);
+
+		configuration.setProperty(PipeReader.CONFIG_PIPENAME, this.pipeName);
+
+		return configuration;
 	}
 }

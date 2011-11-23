@@ -53,32 +53,38 @@ public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
 			new Class<?>[] { IMonitoringRecord.class }));
 
 	private final PrintStream printStream;
+	private final String printStreamName;
+	private final OutputPort output = new OutputPort("out", DummyRecordConsumer.OUT_CLASSES);
 	private final AbstractInputPort input = new AbstractInputPort("in", DummyRecordConsumer.IN_CLASSES) {
 		@Override
 		public void newEvent(final Object event) {
 			// TODO: very bad style: escaping this in constructor! this should be assigned in execute()
 			DummyRecordConsumer.this.newMonitoringRecord((IMonitoringRecord) event);
-			output.deliver(event);
+			DummyRecordConsumer.this.output.deliver(event);
 		}
 	};
-
-	private final OutputPort output = new OutputPort("out", DummyRecordConsumer.OUT_CLASSES);
 
 	public DummyRecordConsumer(final Configuration configuration) throws FileNotFoundException {
 		super(configuration);
 
+		/* Get the name of the stream. */
 		final String printStreamName = this.configuration.getStringProperty(DummyRecordConsumer.CONFIG_STREAM);
+
+		/* Decide which stream to be used - but remember the name! */
 		if ("STDOUT".equals(printStreamName)) {
 			this.printStream = System.out;
+			this.printStreamName = null;
 		} else if ("STDERR".equals(printStreamName)) {
 			this.printStream = System.err;
+			this.printStreamName = null;
 		} else {
 			this.printStream = new PrintStream(new FileOutputStream(printStreamName));
+			this.printStreamName = printStreamName;
 		}
 
 		/* Register the ports. */
-		super.registerInputPort("in", input);
-		super.registerOutputPort("out", output);
+		super.registerInputPort("in", this.input);
+		super.registerOutputPort("out", this.output);
 	}
 
 	@Override
@@ -104,5 +110,21 @@ public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
 		if ((this.printStream != System.out) && (this.printStream != System.err)) {
 			this.printStream.close();
 		}
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration(null);
+
+		/* We reverse the if-decisions within the constructor. */
+		if (this.printStream == System.out) {
+			configuration.setProperty(DummyRecordConsumer.CONFIG_STREAM, "STDOUT");
+		} else if (this.printStream == System.err) {
+			configuration.setProperty(DummyRecordConsumer.CONFIG_STREAM, "STDERR");
+		} else {
+			configuration.setProperty(DummyRecordConsumer.CONFIG_STREAM, this.printStreamName);
+		}
+
+		return configuration;
 	}
 }

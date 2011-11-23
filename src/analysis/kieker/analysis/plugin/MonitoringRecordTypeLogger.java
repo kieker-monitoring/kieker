@@ -48,12 +48,12 @@ public class MonitoringRecordTypeLogger extends AbstractAnalysisPlugin {
 			new Class<?>[] { IMonitoringRecord.class }))) {
 		@Override
 		public void newEvent(final Object event) {
-			IMonitoringRecord monitoringRecord = (IMonitoringRecord) event;
+			final IMonitoringRecord monitoringRecord = (IMonitoringRecord) event;
 
 			MonitoringRecordTypeLogger.LOG.info("Consumed record:" + monitoringRecord.getClass().getName());
 			MonitoringRecordTypeLogger.LOG.info(monitoringRecord.toString());
 
-			output.deliver(event);
+			MonitoringRecordTypeLogger.this.output.deliver(event);
 		}
 	};
 
@@ -63,8 +63,8 @@ public class MonitoringRecordTypeLogger extends AbstractAnalysisPlugin {
 	public MonitoringRecordTypeLogger(final Configuration configuration) {
 		super(configuration);
 
-		registerInputPort("in", input);
-		registerOutputPort("out", output);
+		this.registerInputPort("in", this.input);
+		this.registerOutputPort("out", this.output);
 	}
 
 	@Override
@@ -80,5 +80,10 @@ public class MonitoringRecordTypeLogger extends AbstractAnalysisPlugin {
 	@Override
 	protected Properties getDefaultProperties() {
 		return new Properties();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		return new Configuration(null);
 	}
 }
