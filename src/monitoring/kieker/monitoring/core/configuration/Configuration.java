@@ -56,7 +56,9 @@ public final class Configuration extends AbstractConfiguration implements Keys {
 	 * @return the configuration for the singleton controller
 	 */
 	public static final Configuration createSingletonConfiguration() {
-		Configuration.LOG.debug("Searching for JVM argument '" + Keys.CUSTOM_PROPERTIES_LOCATION_JVM + "' ...");
+		if (Configuration.LOG.isDebugEnabled()) {
+			Configuration.LOG.debug("Searching for JVM argument '" + Keys.CUSTOM_PROPERTIES_LOCATION_JVM + "' ...");
+		}
 		final Configuration defaultConfiguration = Configuration.defaultConfiguration();
 		// ignore default default-name and set to KIEKER-SINGLETON
 		defaultConfiguration.setProperty(Keys.CONTROLLER_NAME, "KIEKER-SINGLETON");

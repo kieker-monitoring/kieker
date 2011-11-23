@@ -21,20 +21,14 @@
 package kieker.monitoring.core.registry;
 
 /**
- * @author Andre van Hoorn
+ * @author Andre van Hoorn, Jan Waller
  */
-public final class SessionRegistry {
+public enum SessionRegistry { // Singleton (Effective Java #3)
+	INSTANCE;
 
 	private final ThreadLocal<String> threadLocalSessionId = new ThreadLocal<String>();
 
 	private SessionRegistry() {}
-
-	/**
-	 * @return the singleton instance of SessionRegistry
-	 */
-	public static final SessionRegistry getInstance() {
-		return LazyHolder.INSTANCE;
-	}
 
 	/**
 	 * Used by the spring aspect to explicitly register a sessionid that is to be collected within
@@ -61,12 +55,5 @@ public final class SessionRegistry {
 	 */
 	public final void unsetThreadLocalSessionId() {
 		this.threadLocalSessionId.remove();
-	}
-
-	/**
-	 * SINGLETON
-	 */
-	private static final class LazyHolder { // NOCS (MissingCtorCheck)
-		private static final SessionRegistry INSTANCE = new SessionRegistry(); // NOPMD (AccessorClassGeneration)
 	}
 }

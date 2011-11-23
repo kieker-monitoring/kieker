@@ -429,7 +429,9 @@ public class AnalysisController {
 	 */
 	public void registerPlugin(final AbstractAnalysisPlugin plugin) {
 		this.plugins.add(plugin);
-		AnalysisController.LOG.debug("Registered plugin " + plugin);
+		if (AnalysisController.LOG.isDebugEnabled()) {
+			AnalysisController.LOG.debug("Registered plugin " + plugin);
+		}
 	}
 
 	@SuppressWarnings("unchecked")

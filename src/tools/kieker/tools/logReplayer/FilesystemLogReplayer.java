@@ -189,7 +189,9 @@ class RecordDelegationPlugin extends AbstractAnalysisPlugin {
 	 */
 	@Override
 	public boolean execute() {
-		RecordDelegationPlugin.LOG.debug(RecordDelegationPlugin.class.getName() + " starting ...");
+		if (RecordDelegationPlugin.LOG.isDebugEnabled()) {
+			RecordDelegationPlugin.LOG.debug(RecordDelegationPlugin.class.getName() + " starting ...");
+		}
 		RecordDelegationPlugin.LOG
 				.info("Ignoring records before " + LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.ignoreRecordsBeforeTimestamp));
 		RecordDelegationPlugin.LOG.info("Ignoring records after " + LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.ignoreRecordsAfterTimestamp));

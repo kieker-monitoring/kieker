@@ -47,7 +47,7 @@ public final class PipeWriter extends AbstractMonitoringWriter {
 			PipeWriter.LOG.error(errorMsg);
 			throw new IllegalArgumentException(errorMsg);
 		}
-		this.pipe = Broker.getInstance().acquirePipe(pipeName);
+		this.pipe = Broker.INSTANCE.acquirePipe(pipeName);
 	}
 
 	@Override

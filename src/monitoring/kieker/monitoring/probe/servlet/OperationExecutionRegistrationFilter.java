@@ -55,8 +55,8 @@ import kieker.monitoring.probe.IMonitoringProbe;
  */
 public class OperationExecutionRegistrationFilter implements Filter, IMonitoringProbe {
 
-	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.getInstance();
-	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.getInstance();
+	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
+	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 
 	/**
 	 * Constructs an {@link OperationExecutionRegistrationFilter}.

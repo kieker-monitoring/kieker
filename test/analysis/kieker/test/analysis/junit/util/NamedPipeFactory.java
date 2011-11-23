@@ -57,7 +57,7 @@ public final class NamedPipeFactory {
 	 * @return the {@link kieker.common.record.IMonitoringRecordReceiver}
 	 */
 	public static final IMonitoringRecordReceiver createAndRegisterNamedPipeRecordWriter(final String pipeName) {
-		final Pipe namedPipe = Broker.getInstance().acquirePipe(pipeName);
+		final Pipe namedPipe = Broker.INSTANCE.acquirePipe(pipeName);
 		final IMonitoringRecordReceiver writer = new IMonitoringRecordReceiver() {
 			@Override
 			public boolean newMonitoringRecord(final IMonitoringRecord record) {

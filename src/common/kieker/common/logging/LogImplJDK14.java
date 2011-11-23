@@ -59,6 +59,11 @@ public final class LogImplJDK14 implements Log {
 	}
 
 	@Override
+	public boolean isDebugEnabled() {
+		return this.logger.isLoggable(Level.FINE);
+	}
+
+	@Override
 	public final void debug(final String message) {
 		this.log(Level.FINE, message, null);
 	}

@@ -60,8 +60,8 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 
 	private static final String COMPONENT_NAME = OperationExecutionRegistrationAndLoggingFilter.class.getName();
 	private static final String OP_NAME = "doFilter(ServletRequest request, ServletResponse response, FilterChain chain)";
-	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.getInstance();
-	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.getInstance();
+	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
+	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	private static final IMonitoringController CTRL_INST = MonitoringController.getInstance();
 	private static final ITimeSource TIMESOURCE = OperationExecutionRegistrationAndLoggingFilter.CTRL_INST.getTimeSource();
 	private static final String VM_NAME = OperationExecutionRegistrationAndLoggingFilter.CTRL_INST.getHostName();

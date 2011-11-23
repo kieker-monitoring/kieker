@@ -41,6 +41,19 @@ public interface Log { // NOCS (Name of Interface)
 
 	/**
 	 * <p>
+	 * Is debug logging currently enabled?
+	 * </p>
+	 * 
+	 * <p>
+	 * Call this method to prevent having to perform expensive operations (for example, <code>String</code> concatenation) when the log level is more than debug.
+	 * </p>
+	 * 
+	 * @return true if debug is enabled in the underlying logger.
+	 */
+	public boolean isDebugEnabled();
+
+	/**
+	 * <p>
 	 * Log a message with debug log level.
 	 * </p>
 	 * 

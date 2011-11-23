@@ -33,7 +33,7 @@ import org.aspectj.lang.annotation.Aspect;
 @Aspect
 public abstract class AbstractOperationExecutionAspectServlet extends AbstractOperationExecutionAspect {
 
-	protected static final SessionRegistry SESSIONREGISTRY = SessionRegistry.getInstance();
+	protected static final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
 
 	public Object doServletEntryProfiling(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOPMD // NOCS (IllegalThrowsCheck)
 		final HttpServletRequest req = (HttpServletRequest) thisJoinPoint.getArgs()[0];

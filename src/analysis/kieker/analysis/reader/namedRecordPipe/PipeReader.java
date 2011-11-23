@@ -75,12 +75,14 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 		this.initialize(pipeName);
 	}
 
-	private void initialize(final String pipeName) {
-		this.pipe = Broker.getInstance().acquirePipe(pipeName);
+	private void initialize(final String pipeName) throws IllegalArgumentException {
+		this.pipe = Broker.INSTANCE.acquirePipe(pipeName);
 		if (this.pipe == null) {
 			throw new IllegalArgumentException("Failed to get Pipe with name " + pipeName);
 		} else {
-			PipeReader.LOG.debug("Connected to named pipe '" + this.pipe.getName() + "'"); // NOCS (MultipleStringLiteralsCheck)
+			if (PipeReader.LOG.isDebugEnabled()) {
+				PipeReader.LOG.debug("Connected to named pipe '" + this.pipe.getName() + "'"); // NOCS (MultipleStringLiteralsCheck)
+			}
 		}
 		// TODO: escaping this in constructor! very bad practice!
 		this.pipe.setPipeReader(this);

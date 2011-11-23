@@ -102,7 +102,7 @@ public final class NamedPipeFactory {
 	 */
 	public static List<IMonitoringRecord> createAndRegisterNamedPipeRecordCollector(final String pipeName) {
 		final List<IMonitoringRecord> receivedRecords = Collections.synchronizedList(new ArrayList<IMonitoringRecord>());
-		final Pipe namedPipe = Broker.getInstance().acquirePipe(pipeName);
+		final Pipe namedPipe = Broker.INSTANCE.acquirePipe(pipeName);
 		namedPipe.setPipeReader(new IPipeReader() {
 
 			@Override

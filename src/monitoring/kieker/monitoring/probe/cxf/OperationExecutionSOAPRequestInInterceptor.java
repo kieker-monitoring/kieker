@@ -50,8 +50,8 @@ import org.w3c.dom.Element;
  */
 public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterceptor implements IMonitoringProbe {
 
-	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.getInstance();
-	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.getInstance();
+	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
+	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
 	protected static final ITimeSource TIMESOURCE = DefaultSystemTimer.getInstance();
 

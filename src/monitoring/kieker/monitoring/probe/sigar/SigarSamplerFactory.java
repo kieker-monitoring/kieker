@@ -31,10 +31,10 @@ import org.hyperic.sigar.SigarProxy;
 /**
  * Provides factory methods for {@link kieker.monitoring.probe.sigar.samplers.AbstractSigarSampler}s.
  * 
- * @author Andre van Hoorn
+ * @author Andre van Hoorn, Jan Waller
  */
-public final class SigarSamplerFactory implements ISigarSamplerFactory {
-	// private static final Log log = LogFactory.getLog(SigarSamplerFactory.class);
+public enum SigarSamplerFactory implements ISigarSamplerFactory { // Singleton pattern (Effective Java #3)
+	INSTANCE;
 
 	/**
 	 * {@link SigarProxy} instance used to retrieve the data to be logged.
@@ -45,23 +45,8 @@ public final class SigarSamplerFactory implements ISigarSamplerFactory {
 	 * Used by {@link #getInstance()} to construct the singleton instance.
 	 */
 	private SigarSamplerFactory() {
-		this(new Humidor(new Sigar()));
-	}
-
-	/**
-	 * Constructs a {@link SigarSamplerFactory} with the given parameters.
-	 * 
-	 * @param humidor
-	 */
-	public SigarSamplerFactory(final Humidor humidor) {
+		final Humidor humidor = new Humidor(new Sigar());
 		this.sigar = humidor.getSigar();
-	}
-
-	/**
-	 * Returns the singleton instance of the {@link SigarSamplerFactory}.
-	 */
-	public static final SigarSamplerFactory getInstance() {
-		return LazyHolder.INSTANCE;
 	}
 
 	/**
@@ -86,12 +71,5 @@ public final class SigarSamplerFactory implements ISigarSamplerFactory {
 	@Override
 	public MemSwapUsageSampler createSensorMemSwapUsage() {
 		return new MemSwapUsageSampler(this.sigar);
-	}
-
-	/**
-	 * SINGLETON
-	 */
-	private static final class LazyHolder { // NOCS (MissingCtorCheck)
-		private static final SigarSamplerFactory INSTANCE = new SigarSamplerFactory(); // NOPMD (AccessorClassGeneration)
 	}
 }

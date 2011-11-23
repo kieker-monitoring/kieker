@@ -29,33 +29,24 @@ import kieker.common.logging.LogFactory;
 /**
  * @author Andre van Hoorn, Jan Waller
  */
-public final class ControlFlowRegistry {
-	private static final Log LOG = LogFactory.getLog(ControlFlowRegistry.class);
+public enum ControlFlowRegistry { // Singleton (Effective Java #3)
+	INSTANCE;
 
-	private final AtomicLong lastThreadId;
+	private static final Log LOG = LogFactory.getLog(ControlFlowRegistry.class); // NOPMD (enum logger)
+
+	/*
+	 * In order to (probabilistically!) avoid that other instances in our system (on another node, in another vm, ...) generate the same thread ids, we fill the
+	 * left-most 16 bits of the thread id with a uniquely distributed random number (0,0000152587890625 = 0,00152587890625 %). As a consequence, this constitutes
+	 * a uniquely distributed offset of size 2^(64-1-16) = 2^47 = 140737488355328L in the worst case. Note that we restrict ourselves to the positive long values
+	 * so far. Of course, negative values may occur (as a result of an overflow) -- this does not hurt!
+	 */
+	private final AtomicLong lastThreadId = new AtomicLong((long) new Random().nextInt(65536) << (Long.SIZE - 16 - 1)); // NOCS (MagicNumber)
 	private final ThreadLocal<Long> threadLocalTraceId = new ThreadLocal<Long>();
 	private final ThreadLocal<Integer> threadLocalEoi = new ThreadLocal<Integer>();
 	private final ThreadLocal<Integer> threadLocalEss = new ThreadLocal<Integer>();
 
-	private ControlFlowRegistry() {
-		/*
-		 * In order to (probabilistically!) avoid that other instances in our system (on another node, in another vm, ...) generate the same thread ids, we fill the
-		 * left-most 16 bits of the thread id with a uniquely distributed random number (0,0000152587890625 = 0,00152587890625 %). As a consequence, this constitutes
-		 * a uniquely distributed offset of size 2^(64-1-16) = 2^47 = 140737488355328L in the worst case. Note that we restrict ourselves to the positive long values
-		 * so far. Of course, negative values may occur (as a result of an overflow) -- this does not hurt!
-		 */
-		final Random r = new Random();
-		final long base = ((long) r.nextInt(65536) << (Long.SIZE - 16 - 1)); // NOCS
-
-		this.lastThreadId = new AtomicLong(base);
-		ControlFlowRegistry.LOG.info("First threadId will be " + (base + 1));
-	}
-
-	/**
-	 * @return the singleton instance of ControlFlowRegistry
-	 */
-	public static final ControlFlowRegistry getInstance() {
-		return LazyHolder.INSTANCE;
+	static {
+		ControlFlowRegistry.LOG.info("First threadId will be " + INSTANCE.lastThreadId.get());
 	}
 
 	/**
@@ -203,12 +194,5 @@ public final class ControlFlowRegistry {
 	 */
 	public final void unsetThreadLocalESS() {
 		this.threadLocalEss.remove();
-	}
-
-	/**
-	 * SINGLETON
-	 */
-	private static final class LazyHolder { // NOCS (MissingCtorCheck)
-		private static final ControlFlowRegistry INSTANCE = new ControlFlowRegistry(); // NOPMD (AccessorClassGeneration)
 	}
 }
