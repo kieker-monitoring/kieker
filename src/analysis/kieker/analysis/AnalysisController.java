@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -243,7 +244,9 @@ public final class AnalysisController {
 		final AnalysisMetaModelFactory factory = new AnalysisMetaModelFactory();
 
 		final Map<AbstractPlugin, IPlugin> pluginMap = new HashMap<AbstractPlugin, IPlugin>();
-		final Map<AbstractInputPort, IPlugin> portToPluginMap = new HashMap<AbstractInputPort, IPlugin>();
+		final Map<AbstractInputPort, IPlugin> portToMPluginMap = new HashMap<AbstractInputPort, IPlugin>();
+		final Map<AbstractInputPort, AbstractPlugin> portToPluginMap = new HashMap<AbstractInputPort, AbstractPlugin>();
+		final Map<AbstractInputPort, String> portToNameMap = new HashMap<AbstractInputPort, String>();
 		final IProject project = factory.createProject();
 		project.setName(projectName);
 
@@ -282,7 +285,9 @@ public final class AnalysisController {
 				final IInputPort mInputPort = factory.createInputPort();
 				mInputPort.setName(in);
 				((IAnalysisPlugin) mPlugin).getInputPorts().add(mInputPort);
-				portToPluginMap.put(plugin.getInputPort(in), mPlugin);
+				portToMPluginMap.put(plugin.getInputPort(in), mPlugin);
+				portToPluginMap.put(plugin.getInputPort(in), plugin);
+				portToNameMap.put(plugin.getInputPort(in), in);
 			}
 
 			project.getPlugins().add(mPlugin);
@@ -290,10 +295,18 @@ public final class AnalysisController {
 
 		/* Now connect them. */
 		for (final AbstractPlugin plugin : plugins) {
+			final IPlugin mOutputPlugin = pluginMap.get(plugin);
 			final String outputPortNames[] = plugin.getAllOutputPortNames();
-			final String outputPortName : outputPortNames) {
+			for (final String outputPortName : outputPortNames) {
+				final IOutputPort mOutputPort = AnalysisController.findOutputPort(mOutputPlugin, outputPortName);
 				final List<AbstractInputPort> subscribers = plugin.getOutputPort(outputPortName).getSubscribers();
-				// TODO: Connection
+				for (final AbstractInputPort subscriber : subscribers) {
+					final AbstractPlugin subscriberPlugin = portToPluginMap.get(subscriber);
+					final IPlugin mSubscriberPlugin = pluginMap.get(subscriberPlugin);
+					final IInputPort mInputPort = AnalysisController.findInputPort((IAnalysisPlugin) mSubscriberPlugin, portToNameMap.get(subscriber));
+
+					mOutputPort.getSubscribers().add(mInputPort);
+				}
 			}
 		}
 
@@ -311,6 +324,28 @@ public final class AnalysisController {
 		}
 
 		return true;
+	}
+
+	static private IInputPort findInputPort(final IAnalysisPlugin mPlugin, final String name) {
+		final Iterator<IInputPort> iter = mPlugin.getInputPorts().iterator();
+		while (iter.hasNext()) {
+			final IInputPort port = iter.next();
+			if (port.getName().equals(name)) {
+				return port;
+			}
+		}
+		return null;
+	}
+
+	static private IOutputPort findOutputPort(final IPlugin mPlugin, final String name) {
+		final Iterator<IOutputPort> iter = mPlugin.getOutputPorts().iterator();
+		while (iter.hasNext()) {
+			final IOutputPort port = iter.next();
+			if (port.getName().equals(name)) {
+				return port;
+			}
+		}
+		return null;
 	}
 
 	/**

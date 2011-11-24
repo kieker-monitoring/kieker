@@ -20,6 +20,8 @@
 
 package kieker.analysis.plugin.configuration;
 
+import java.util.Collection;
+
 /**
  * 
  * @author Andre van Hoorn
@@ -28,4 +30,5 @@ interface IPort {
 
 	public String getDescription();
 
+	public Collection<Class<?>> getEventTypes();
 }

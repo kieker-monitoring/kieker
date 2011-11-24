@@ -57,6 +57,7 @@ abstract class AbstractPort implements IPort {
 	 * 
 	 * @return A list of the event types.
 	 */
+	@Override
 	public Collection<Class<?>> getEventTypes() {
 		return eventTypes;
 	}

@@ -6,7 +6,7 @@
     <inputPorts name="in"/>
   </plugins>
   <plugins xsi:type="Reader" name="The Reader" classname="kieker.analysis.reader.filesystem.FSReader">
-    <outputPorts name="out"/>
+    <outputPorts name="out" subscribers="//@plugins.0/@inputPorts.0"/>
     <properties name="kieker.analysis.reader.filesystem.FSReader.readOnlyRecordsOfType" value=""/>
     <properties name="kieker.analysis.reader.filesystem.FSReader.inputDirs" value="C:/HiWi - Kieker/kieker working copy (git)/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC"/>
   </plugins>
