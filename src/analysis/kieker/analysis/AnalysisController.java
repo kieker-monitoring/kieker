@@ -292,10 +292,10 @@ public class AnalysisController {
 
 		/* Now connect them. */
 		for (final AbstractPlugin plugin : plugins) {
-			final OutputPort outputPorts[] = plugin.getAllOutputPorts();
-			for (final OutputPort outputPort : outputPorts) {
+			final String outputPortNames[] = plugin.getAllOutputPortNames();
+			final String outputPortName : outputPortNames) {
+				final List<AbstractInputPort> subscribers = plugin.getOutputPort(outputPortName).getSubscribers();
 				// TODO: Connection
-				//
 			}
 		}
 

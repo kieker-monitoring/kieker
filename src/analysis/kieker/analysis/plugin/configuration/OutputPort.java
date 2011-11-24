@@ -32,7 +32,7 @@ import kieker.analysis.exception.InvalidPortSubscriberException;
  */
 public final class OutputPort extends AbstractPort implements IOutputPort {
 
-	private final Collection<IInputPort> subscribers = new CopyOnWriteArrayList<IInputPort>();
+	private final Collection<AbstractInputPort> subscribers = new CopyOnWriteArrayList<AbstractInputPort>();
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -86,7 +86,7 @@ public final class OutputPort extends AbstractPort implements IOutputPort {
 
 	@Override
 	public final void subscribe(final IInputPort subscriber) throws InvalidPortSubscriberException {
-		final AbstractPort asubscriber = (AbstractPort) subscriber;
+		final AbstractInputPort asubscriber = (AbstractInputPort) subscriber;
 		/* If this port uses null as event type, everything can be delivered. */
 		if ((this.eventTypes == null) && (asubscriber.eventTypes != null)) {
 			throw new InvalidPortSubscriberException();
@@ -109,7 +109,7 @@ public final class OutputPort extends AbstractPort implements IOutputPort {
 				}
 			}
 		}
-		this.subscribers.add(subscriber);
+		this.subscribers.add(asubscriber);
 	}
 
 	@Override
@@ -117,8 +117,12 @@ public final class OutputPort extends AbstractPort implements IOutputPort {
 		this.subscribers.remove(subscriber);
 	}
 
-	@Override
-	public List<IInputPort> getSubscribers() {
-		return new CopyOnWriteArrayList<IInputPort>(this.subscribers);
+	/**
+	 * Delivers a list containing all subscribers of this port.
+	 * 
+	 * @return All registered input ports.
+	 */
+	public List<AbstractInputPort> getSubscribers() {
+		return new CopyOnWriteArrayList<AbstractInputPort>(this.subscribers);
 	}
 }

@@ -49,7 +49,7 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 	public static final long MIN_TIMESTAMP = 0;
 
 	private final long ignoreExecutionsBeforeTimestamp;
-	private final long ignorExecutionsAfterTimestamp;
+	private final long ignoreExecutionsAfterTimestamp;
 
 	private final OutputPort executionOutputPort = new OutputPort("Execution output", new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { Execution.class }));
 
@@ -66,7 +66,7 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 
 		/* Load the content for the fields from the given configuration. */
 		this.ignoreExecutionsBeforeTimestamp = configuration.getLongProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP);
-		this.ignorExecutionsAfterTimestamp = configuration.getLongProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
+		this.ignoreExecutionsAfterTimestamp = configuration.getLongProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
 
 		super.registerOutputPort("out", this.executionOutputPort);
 		super.registerInputPort("in", this.executionInputPort);
@@ -84,7 +84,7 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 		super(new Configuration(null));
 
 		this.ignoreExecutionsBeforeTimestamp = ignoreExecutionsBeforeTimestamp;
-		this.ignorExecutionsAfterTimestamp = ignoreExecutionsAfterTimestamp;
+		this.ignoreExecutionsAfterTimestamp = ignoreExecutionsAfterTimestamp;
 
 		super.registerOutputPort("out", this.executionOutputPort);
 		super.registerInputPort("in", this.executionInputPort);
@@ -109,7 +109,7 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 	}
 
 	private void newExecution(final Execution execution) {
-		if ((execution.getTin() < this.ignoreExecutionsBeforeTimestamp) || (execution.getTout() > this.ignorExecutionsAfterTimestamp)) {
+		if ((execution.getTin() < this.ignoreExecutionsBeforeTimestamp) || (execution.getTout() > this.ignoreExecutionsAfterTimestamp)) {
 			return;
 		}
 		this.executionOutputPort.deliver(execution);
@@ -139,7 +139,8 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);
 
-		// TODO: Save the current configuration
+		configuration.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP, Long.toString(this.ignoreExecutionsAfterTimestamp));
+		configuration.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, Long.toString(this.ignoreExecutionsBeforeTimestamp));
 
 		return configuration;
 	}

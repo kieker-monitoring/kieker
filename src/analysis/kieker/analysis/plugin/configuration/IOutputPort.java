@@ -20,8 +20,6 @@
 
 package kieker.analysis.plugin.configuration;
 
-import java.util.List;
-
 import kieker.analysis.exception.InvalidPortSubscriberException;
 
 /**
@@ -50,11 +48,4 @@ interface IOutputPort extends IPort {
 	 *            registered, nothing happens.
 	 */
 	public void unsubscribe(IInputPort subscriber);
-
-	/**
-	 * Delivers a list containing all subscribers of this port.
-	 * 
-	 * @return All registered input ports.
-	 */
-	public List<IInputPort> getSubscribers();
 }
