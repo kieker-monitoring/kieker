@@ -73,7 +73,7 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
  * 
  * @author Andre van Hoorn, Matthias Rohr
  */
-public class AnalysisController {
+public final class AnalysisController {
 	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
 
 	private IMonitoringReader logReader;
@@ -86,6 +86,7 @@ public class AnalysisController {
 	 */
 	public AnalysisController() {
 		// do nothing
+		// TODO: is this needed? Else we could move loadFromModelProject to constructor and make logReader final
 	}
 
 	/**
@@ -115,28 +116,24 @@ public class AnalysisController {
 		/* Try to load everything. */
 		final EList<EObject> content = AnalysisController.openModelFile(file);
 		if (!content.isEmpty()) {
-			/*
-			 * The first (and only) element should be the project. Use it to
-			 * configure this instance.
-			 */
+			// The first (and only) element should be the project. Use it to configure this instance.
 			final IProject project = (IProject) content.get(0);
 			try {
 				this.loadFromModelProject(project);
 			} catch (final Exception ex) {
-				AnalysisController.LOG.error("Could not load the configuration from the given file: " + file.getName());
-				// TODO: Throw something more specific.
+				AnalysisController.LOG.error("Could not load the configuration from the given file: " + file.getName(), ex);
+				// TODO: Throw something more specific. Best would be either log or throw, thus throw a new specific exception with ex as cause instead of logging
+				// TODO: perhaps it would be better, if we always return a correct AnalysisController, thus perhaps one with an empty Project.
 				throw ex;
 			}
-		}
+		} // TODO: handle else!
 	}
 
 	private final void loadFromModelProject(final IProject mproject) throws InstantiationException, IllegalAccessException, IllegalArgumentException,
 			InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
 		/*
-		 * We run through the project and collect all plugins. As we create an
-		 * actual object for every plugin within the model, we have to remember
-		 * the mapping between the plugins within the model and the actual
-		 * objects we create.
+		 * We run through the project and collect all plugins. As we create an actual object for every plugin within the model, we have to remember
+		 * the mapping between the plugins within the model and the actual objects we create.
 		 */
 		final EList<IPlugin> mPlugins = mproject.getPlugins();
 		final Map<IPlugin, AbstractPlugin> pluginMap = new HashMap<IPlugin, AbstractPlugin>();
@@ -200,7 +197,7 @@ public class AnalysisController {
 	 *            The file to be opened.
 	 * @return A list with the content of the file.
 	 */
-	static EList<EObject> openModelFile(final File file) {
+	private final static EList<EObject> openModelFile(final File file) {
 		/* Create a resource set to work with. */
 		final ResourceSet resourceSet = new ResourceSetImpl();
 
@@ -225,6 +222,7 @@ public class AnalysisController {
 			resource.load(Collections.EMPTY_MAP);
 		} catch (final IOException e) {
 			AnalysisController.LOG.error("Could not open the given file.");
+			// TODO: what happens if this fails? what will be returned?
 		}
 
 		return resource.getContents();
@@ -402,7 +400,7 @@ public class AnalysisController {
 	 * 
 	 * @param reader
 	 */
-	public void setReader(final IMonitoringReader reader) {
+	public void setReader(final IMonitoringReader reader) { // TODO: is this really still needed? Should be done with Project...
 		this.logReader = reader;
 		AnalysisController.LOG.debug("Registered reader " + reader);
 	}
@@ -412,7 +410,7 @@ public class AnalysisController {
 	 * registered before calling the <i>run</i>-method, will be started once
 	 * the analysis is started.
 	 */
-	public void registerPlugin(final AbstractAnalysisPlugin plugin) {
+	public void registerPlugin(final AbstractAnalysisPlugin plugin) { // TODO: is this really still needed? Should be done with Project...
 		this.plugins.add(plugin);
 		if (AnalysisController.LOG.isDebugEnabled()) {
 			AnalysisController.LOG.debug("Registered plugin " + plugin);
