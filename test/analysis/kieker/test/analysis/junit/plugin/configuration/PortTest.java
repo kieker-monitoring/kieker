@@ -4,8 +4,8 @@ import java.util.Collections;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.configuration.OutputPort;
+import kieker.analysis.plugin.port.AbstractInputPort;
+import kieker.analysis.plugin.port.OutputPort;
 
 import org.junit.Assert;
 import org.junit.Test;

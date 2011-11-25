@@ -24,30 +24,20 @@ import java.util.Properties;
 import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.analysis.configuration.Configuration;
-import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.configuration.OutputPort;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.port.OutputPort;
 
 /**
- * This class has exactly one input port named "in" and one output ports named
- * "out". An instance of this class receives any objects, increments an intern
- * tread-safe counter without printing any message and delivers the objects
- * unmodified to the output. The value of the counter can later be retrieved by
+ * This class has exactly one input port named "in" and one output ports named "out". An instance of this class receives any objects, increments an intern
+ * tread-safe counter without printing any message and delivers the objects unmodified to the output. The value of the counter can later be retrieved by
  * using a corresponding method.
  * 
  * @author Jan Waller
  */
-public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
-
+public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin implements ISingleInputPort {
 	private final AtomicLong counter = new AtomicLong();
 	private final OutputPort output = new OutputPort("out", null);
-	private final AbstractInputPort input = new AbstractInputPort("in", null) {
-		@Override
-		public void newEvent(final Object event) {
-			SilentCountingRecordConsumer.this.counter.incrementAndGet();
-
-			SilentCountingRecordConsumer.this.output.deliver(event);
-		}
-	};
+	private final InputPort input = new InputPort("in", null, this); // TODO: escaping this in constructor!
 
 	/**
 	 * Constructs a {@link SilentCountingRecordConsumer}.
@@ -61,6 +51,16 @@ public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
 	}
 
 	@Override
+	public final void newEvent(final Object event) {
+		SilentCountingRecordConsumer.this.counter.incrementAndGet();
+		SilentCountingRecordConsumer.this.output.deliver(event);
+	}
+
+	public final long getMessageCount() {
+		return this.counter.get();
+	}
+
+	@Override
 	public final boolean execute() {
 		return true;
 	}
@@ -68,10 +68,6 @@ public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
 	@Override
 	public final void terminate(final boolean error) {
 		// nothing to do
-	}
-
-	public final long getMessageCount() {
-		return this.counter.get();
 	}
 
 	@Override

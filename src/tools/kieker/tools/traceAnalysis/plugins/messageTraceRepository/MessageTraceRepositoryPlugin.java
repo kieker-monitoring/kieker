@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.configuration.Configuration;
-import kieker.analysis.plugin.configuration.AbstractInputPort;
+import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.systemModel.AbstractTrace;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;

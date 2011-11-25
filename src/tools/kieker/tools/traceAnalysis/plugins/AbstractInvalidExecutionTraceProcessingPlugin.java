@@ -20,7 +20,7 @@
 
 package kieker.tools.traceAnalysis.plugins;
 
-import kieker.analysis.plugin.configuration.AbstractInputPort;
+import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**

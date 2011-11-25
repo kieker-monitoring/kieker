@@ -22,7 +22,7 @@ package kieker.test.tools.junit.traceAnalysis.plugins;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.analysis.plugin.configuration.AbstractInputPort;
+import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;

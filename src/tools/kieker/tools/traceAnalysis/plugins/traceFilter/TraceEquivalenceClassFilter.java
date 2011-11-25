@@ -29,8 +29,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.analysis.configuration.Configuration;
-import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.configuration.OutputPort;
+import kieker.analysis.plugin.port.AbstractInputPort;
+import kieker.analysis.plugin.port.OutputPort;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractExecutionTraceProcessingPlugin;

@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.plugin.configuration;
+package kieker.analysis.plugin.port;
 
 import java.util.Collection;
 
@@ -59,7 +59,7 @@ abstract class AbstractPort implements IPort {
 	 */
 	@Override
 	public Collection<Class<?>> getEventTypes() {
-		return eventTypes;
+		return this.eventTypes;
 	}
 
 	/**
@@ -68,6 +68,7 @@ abstract class AbstractPort implements IPort {
 	 * 
 	 * @returns The description of this instance.
 	 */
+	@Override
 	public final String getDescription() {
 		return this.description;
 	}

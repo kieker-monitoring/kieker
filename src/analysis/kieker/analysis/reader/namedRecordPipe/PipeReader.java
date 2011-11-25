@@ -27,7 +27,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.configuration.Configuration;
-import kieker.analysis.plugin.configuration.OutputPort;
+import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;

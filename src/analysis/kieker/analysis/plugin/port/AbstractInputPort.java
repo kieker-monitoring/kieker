@@ -18,12 +18,11 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.plugin.configuration;
+package kieker.analysis.plugin.port;
 
 import java.util.Collection;
 
 /**
- * 
  * @author Andre van Hoorn
  */
 public abstract class AbstractInputPort extends AbstractPort implements IInputPort {

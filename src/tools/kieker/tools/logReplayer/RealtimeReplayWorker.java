@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.configuration.OutputPort;
+import kieker.analysis.plugin.port.OutputPort;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;

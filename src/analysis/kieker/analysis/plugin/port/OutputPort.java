@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.plugin.configuration;
+package kieker.analysis.plugin.port;
 
 import java.util.Collection;
 import java.util.List;
@@ -27,7 +27,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import kieker.analysis.exception.InvalidPortSubscriberException;
 
 /**
- * 
  * @author Andre van Hoorn
  */
 public final class OutputPort extends AbstractPort implements IOutputPort {
@@ -63,7 +62,7 @@ public final class OutputPort extends AbstractPort implements IOutputPort {
 	 * 
 	 * @return true iff the event has been treated by this instance.
 	 */
-	public boolean deliver(final Object event) {
+	public final boolean deliver(final Object event) {
 		/* Check whether the class of the given event is registered. */
 		boolean isRegistered = false;
 		if (this.eventTypes != null) {
@@ -122,7 +121,7 @@ public final class OutputPort extends AbstractPort implements IOutputPort {
 	 * 
 	 * @return All registered input ports.
 	 */
-	public List<AbstractInputPort> getSubscribers() {
+	public final List<AbstractInputPort> getSubscribers() {
 		return new CopyOnWriteArrayList<AbstractInputPort>(this.subscribers);
 	}
 }

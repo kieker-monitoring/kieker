@@ -29,7 +29,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.configuration.AbstractInputPort;
+import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.configuration.AbstractConfiguration;

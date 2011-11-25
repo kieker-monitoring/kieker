@@ -31,7 +31,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.configuration.Configuration;
-import kieker.analysis.plugin.configuration.OutputPort;
+import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.common.configuration.AbstractConfiguration;
 import kieker.common.exception.MonitoringRecordException;

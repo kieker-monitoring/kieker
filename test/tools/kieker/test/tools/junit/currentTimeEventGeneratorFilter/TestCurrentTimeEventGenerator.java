@@ -28,7 +28,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.analysis.plugin.configuration.AbstractInputPort;
+import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.tools.currentTimeEventGenerator.CurrentTimeEventGenerator;
 import kieker.tools.currentTimeEventGenerator.TimestampEvent;
 

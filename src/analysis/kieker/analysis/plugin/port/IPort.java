@@ -18,34 +18,17 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.plugin.configuration;
+package kieker.analysis.plugin.port;
 
-import kieker.analysis.exception.InvalidPortSubscriberException;
+import java.util.Collection;
 
 /**
  * 
  * @author Andre van Hoorn
  */
-interface IOutputPort extends IPort {
+interface IPort {
 
-	/**
-	 * This method registers a given input port as a subscriber. Everything
-	 * which is sent to this port is send directly to the subscribers.
-	 * 
-	 * @param subscriber
-	 *            The port to be registered. The port should be able to handle
-	 *            all possible outputs of this port.
-	 * @throws InvalidPortSubscriberException
-	 *             If the given port cannot handle all outputs of this port.
-	 */
-	public void subscribe(IInputPort subscriber) throws InvalidPortSubscriberException;
+	public String getDescription();
 
-	/**
-	 * This method unregisters a given input port.
-	 * 
-	 * @param subscriber
-	 *            The subscriber to be removed. If the subscriber is not
-	 *            registered, nothing happens.
-	 */
-	public void unsubscribe(IInputPort subscriber);
+	public Collection<Class<?>> getEventTypes();
 }

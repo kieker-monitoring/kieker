@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.analysis.plugin.configuration.AbstractInputPort;
+import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
 import kieker.tools.traceAnalysis.plugins.executionFilter.TimestampFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;

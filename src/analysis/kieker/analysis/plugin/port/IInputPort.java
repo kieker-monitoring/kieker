@@ -18,17 +18,13 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.plugin.configuration;
-
-import java.util.Collection;
+package kieker.analysis.plugin.port;
 
 /**
- * 
  * @author Andre van Hoorn
  */
-interface IPort {
+public interface IInputPort extends IPort {
 
-	public String getDescription();
+	public void newEvent(Object event);
 
-	public Collection<Class<?>> getEventTypes();
 }

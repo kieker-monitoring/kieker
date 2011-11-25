@@ -44,7 +44,7 @@ import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 
 import kieker.analysis.configuration.Configuration;
-import kieker.analysis.plugin.configuration.OutputPort;
+import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
