@@ -20,15 +20,14 @@
 
 package kieker.analysis.reader.filesystem;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.Properties;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.port.OutputPort;
@@ -55,8 +54,8 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	public static final IMonitoringRecord EOF = new DummyMonitoringRecord();
 
 	private static final Log LOG = LogFactory.getLog(FSReader.class);
-	private static final Collection<Class<?>> OUT_CLASSES = Collections
-			.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { IMonitoringRecord.class }));
+	// private static final Collection<Class<?>> OUT_CLASSES = Collections
+	// .unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { IMonitoringRecord.class }));
 
 	private final Set<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType;
 	private final String[] inputDirs;
@@ -67,23 +66,28 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 
 	public FSReader(final Configuration configuration) {
 		super(configuration);
+		Collection<Class<?>> outClasses;
 		this.inputDirs = this.configuration.getStringArrayProperty(FSReader.CONFIG_INPUTDIRS);
 		System.out.println(Arrays.toString(this.inputDirs));
 		this.recordQueue = new PriorityQueue<IMonitoringRecord>(this.inputDirs.length);
 		final String[] onlyrecords = this.configuration.getStringArrayProperty(FSReader.CONFIG_ONLYRECORDS);
 		if (onlyrecords.length == 0) {
 			this.readOnlyRecordsOfType = null;
+			outClasses = null;
 		} else {
+			outClasses = new ArrayList<Class<?>>();
 			this.readOnlyRecordsOfType = new HashSet<Class<? extends IMonitoringRecord>>(onlyrecords.length);
 			for (final String classname : onlyrecords) {
 				try {
-					this.readOnlyRecordsOfType.add(AbstractMonitoringRecord.classForName(classname));
+					final Class<? extends IMonitoringRecord> recClass = AbstractMonitoringRecord.classForName(classname);
+					this.readOnlyRecordsOfType.add(recClass);
+					outClasses.add(recClass);
 				} catch (final MonitoringRecordException ex) {
 					FSReader.LOG.warn(ex.getMessage(), ex.getCause());
 				}
 			}
 		}
-		this.outputPort = new OutputPort("Output Port of the FSReader", FSReader.OUT_CLASSES);
+		this.outputPort = new OutputPort("Output Port of the FSReader", outClasses);
 		super.registerOutputPort("out", this.outputPort);
 	}
 
