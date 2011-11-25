@@ -193,6 +193,7 @@
 		<jar destfile="${dist.dir}/${dist.kieker.main.jar}">
 			<fileset dir="${build.kieker.common.dir}" />
 			<fileset dir="${build.kieker.analysis.dir}" />
+			<fileset dir="${build.kieker.analysis.model.dir}" />
 			<fileset dir="${build.kieker.monitoring.dir}" />
 			<fileset dir="${build.kieker.tools.dir}" />
 			<fileset dir="." includes="LICENSE" />
@@ -203,6 +204,7 @@
 		<jar destfile="${tmp.dir}/${src.jar}">
 			<fileset dir="${src.kieker.common.dir}" />
 			<fileset dir="${src.kieker.analysis.dir}" />
+			<fileset dir="${build.kieker.analysis.model.dir}" />
 			<fileset dir="${src.kieker.monitoring.dir}" />
 			<fileset dir="${src.kieker.tools.dir}" />
 			<fileset dir="." includes="LICENSE" />
