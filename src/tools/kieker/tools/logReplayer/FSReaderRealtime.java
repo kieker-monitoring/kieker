@@ -46,8 +46,8 @@ import kieker.common.record.IMonitoringRecord;
 public class FSReaderRealtime extends AbstractReaderPlugin {
 	private static final Log LOG = LogFactory.getLog(FSReaderRealtime.class);
 
-	private static final String PROP_NAME_NUM_WORKERS = "numWorkers";
-	private static final String PROP_NAME_INPUTDIRNAMES = "inputDirs";
+	private static final String PROP_NAME_NUM_WORKERS = FSReaderRealtime.class + "numWorkers";
+	private static final String PROP_NAME_INPUTDIRNAMES = FSReaderRealtime.class + "inputDirs";
 
 	/* manages the life-cycle of the reader and consumers */
 	private final AnalysisController analysis = new AnalysisController();
@@ -55,6 +55,9 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 	/** Reader will wait for this latch before read() returns */
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
 	private final OutputPort outputPort;
+	private int numWorkers;
+	private String[] inputDirs;
+
 	/**
 	 * This field determines which classes are transported through the output port.
 	 */
@@ -92,16 +95,16 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 	public boolean init(final Configuration configuration) {
 		try {
 			final String numWorkersString = configuration.getProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS);
-			int numWorkers = -1;
+			this.numWorkers = -1;
 			if (numWorkersString == null) {
 				throw new IllegalArgumentException("Missing init parameter '" + FSReaderRealtime.PROP_NAME_NUM_WORKERS + "'");
 			}
 			try {
-				numWorkers = Integer.parseInt(numWorkersString);
+				this.numWorkers = Integer.parseInt(numWorkersString);
 			} catch (final NumberFormatException ex) { // NOPMD (value of numWorkers remains -1)
 			}
-
-			this.initInstanceFromArgs(this.inputDirNameListToArray(configuration.getProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES)), numWorkers);
+			this.inputDirs = this.inputDirNameListToArray(configuration.getProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES));
+			this.initInstanceFromArgs(this.inputDirs, this.numWorkers);
 		} catch (final IllegalArgumentException exc) {
 			FSReaderRealtime.LOG.error("Failed to load configuration: " + exc.getMessage());
 			return false;
@@ -173,9 +176,34 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		this.analysis.terminate();
 	}
 
+	@Override
+	protected Properties getDefaultProperties() {
+		final Properties defaultProperties = new Properties();
+
+		// TODO: Provide better default properties.
+		defaultProperties.setProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS, "1");
+		defaultProperties.setProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES, "");
+
+		return defaultProperties;
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration(null);
+
+		configuration.setProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS, Integer.toString(this.numWorkers));
+		configuration.setProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES, AbstractConfiguration.toProperty(this.inputDirs));
+
+		return configuration;
+	}
+
 	/**
 	 * Acts as a consumer to the rtDistributor and delegates incoming records to
-	 * the FSReaderRealtime instance.
+	 * the FSReaderRealtime instance.<br>
+	 * 
+	 * Do <b>not</b> use this as an outer class. It does not have the necessary
+	 * constructors and method-implementations in order to be used as an outer
+	 * class.
 	 */
 	private static class FSReaderRealtimeCons extends AbstractAnalysisPlugin {
 
@@ -191,16 +219,6 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 				FSReaderRealtimeCons.this.output.deliver(event);
 			}
 		};
-
-		public FSReaderRealtimeCons(final Configuration configuration) {
-			super(configuration);
-			this.master = null;
-
-			// TODO: Load from configuration.
-
-			this.registerInputPort("in", this.input);
-			this.registerOutputPort("out", this.output);
-		}
 
 		public FSReaderRealtimeCons(final FSReaderRealtime master) {
 			super(new Configuration(null));
@@ -236,25 +254,7 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 
 		@Override
 		public Configuration getCurrentConfiguration() {
-			final Configuration configuration = new Configuration(null);
-
-			// TODO: Save the current configuration
-
-			return configuration;
+			return new Configuration(null);
 		}
-	}
-
-	@Override
-	protected Properties getDefaultProperties() {
-		return new Properties();
-	}
-
-	@Override
-	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration(null);
-
-		// TODO: Save the current configuration
-
-		return configuration;
 	}
 }

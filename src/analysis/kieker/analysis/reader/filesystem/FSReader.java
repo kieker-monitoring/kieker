@@ -43,7 +43,13 @@ import kieker.common.record.IMonitoringRecordReceiver;
 
 /**
  * Filesystem reader which reads from multiple directories simultaneously ordered by the logging timestamp.
- * TODO: check correct handling of errors!
+ * TODO: check correct handling of errors!<br>
+ * 
+ * Keep in mind that the given <i>readOnlyRecordsOfType</i>-configuration
+ * defines also the possible output of the output port of the Reader. If this is
+ * <i>null</i> (and the reader therefore reads <b>all</b> records), the reader
+ * delivers only instances implementing the interface <i>IMonitoringRecord</i>
+ * via the port.
  * 
  * @author Andre van Hoorn, Jan Waller
  */
@@ -54,8 +60,6 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	public static final IMonitoringRecord EOF = new DummyMonitoringRecord();
 
 	private static final Log LOG = LogFactory.getLog(FSReader.class);
-	// private static final Collection<Class<?>> OUT_CLASSES = Collections
-	// .unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { IMonitoringRecord.class }));
 
 	private final Set<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType;
 	private final String[] inputDirs;
@@ -71,11 +75,11 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 		System.out.println(Arrays.toString(this.inputDirs));
 		this.recordQueue = new PriorityQueue<IMonitoringRecord>(this.inputDirs.length);
 		final String[] onlyrecords = this.configuration.getStringArrayProperty(FSReader.CONFIG_ONLYRECORDS);
+		outClasses = new ArrayList<Class<?>>();
 		if (onlyrecords.length == 0) {
 			this.readOnlyRecordsOfType = null;
-			outClasses = null;
+			outClasses.add(IMonitoringRecord.class);
 		} else {
-			outClasses = new ArrayList<Class<?>>();
 			this.readOnlyRecordsOfType = new HashSet<Class<? extends IMonitoringRecord>>(onlyrecords.length);
 			for (final String classname : onlyrecords) {
 				try {

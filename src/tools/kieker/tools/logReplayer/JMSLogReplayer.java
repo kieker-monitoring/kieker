@@ -51,7 +51,10 @@ public class JMSLogReplayer {
 	private final String jmsDestination;
 	private final String jmsFactoryLookupName;
 
-	/** Must not be used for construction */
+	/**
+	 * Must not be used for construction<br>
+	 * TODO: Do we need this?
+	 */
 	@SuppressWarnings("unused")
 	private JMSLogReplayer() {
 		this(null, null, null, null);
@@ -123,7 +126,6 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 		@Override
 		public void newEvent(final Object event) {
 			RecordDelegationPlugin2.this.newMonitoringRecord((IMonitoringRecord) event);
-
 			RecordDelegationPlugin2.this.output.deliver(event);
 		}
 	};
@@ -149,8 +151,8 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 		return this.output.deliver(record);
 	}
 
-	/*
-	 * {@inheritdoc}
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean execute() {
@@ -158,25 +160,27 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 		return true;
 	}
 
-	/*
-	 * {@inheritdoc}
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void terminate(final boolean error) {
 		// nothing to do
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected Properties getDefaultProperties() {
 		return new Properties();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration(null);
-
-		// TODO: Save the current configuration
-
-		return configuration;
+		return new Configuration(null);
 	}
 }

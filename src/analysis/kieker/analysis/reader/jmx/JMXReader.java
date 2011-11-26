@@ -69,25 +69,29 @@ public final class JMXReader extends AbstractReaderPlugin {
 	private final boolean silentreconnect;
 	private final OutputPort outputPort;
 	private final CountDownLatch cdLatch = new CountDownLatch(1);
+	private final String domain;
+	private final String logname;
+	private final int port;
+	private final String server;
 
 	public JMXReader(final Configuration configuation) throws IllegalArgumentException {
 		super(configuation);
-		final String server = this.configuration.getStringProperty(JMXReader.CONFIG_SERVER);
-		final int port = this.configuration.getIntProperty(JMXReader.CONFIG_PORT);
+		this.server = this.configuration.getStringProperty(JMXReader.CONFIG_SERVER);
+		this.port = this.configuration.getIntProperty(JMXReader.CONFIG_PORT);
 		final String tmpServiceURL;
-		if (port > 0) {
-			tmpServiceURL = "service:jmx:rmi:///jndi/rmi://" + server + ":" + port + "/jmxrmi";
+		if (this.port > 0) {
+			tmpServiceURL = "service:jmx:rmi:///jndi/rmi://" + this.server + ":" + this.port + "/jmxrmi";
 		} else {
 			tmpServiceURL = this.configuration.getStringProperty(JMXReader.CONFIG_SERVICEURL);
 		}
-		final String domain = this.configuration.getStringProperty(JMXReader.CONFIG_DOMAIN);
-		final String logname = this.configuration.getStringProperty(JMXReader.CONFIG_LOGNAME);
+		this.domain = this.configuration.getStringProperty(JMXReader.CONFIG_DOMAIN);
+		this.logname = this.configuration.getStringProperty(JMXReader.CONFIG_LOGNAME);
 		if (tmpServiceURL == null) {
 			throw new IllegalArgumentException("JMXReader has not sufficient parameters. serviceURL is null");
 		}
 		try {
 			this.serviceURL = new JMXServiceURL(tmpServiceURL);
-			this.monitoringLog = new ObjectName(domain, "type", logname);
+			this.monitoringLog = new ObjectName(this.domain, "type", this.logname);
 		} catch (final MalformedObjectNameException e) {
 			throw new IllegalArgumentException("Failed to parse configuration.", e);
 		} catch (final MalformedURLException e) {
@@ -297,7 +301,12 @@ public final class JMXReader extends AbstractReaderPlugin {
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);
 
-		// TODO: Save the current configuration
+		configuration.setProperty(JMXReader.CONFIG_SERVER, this.server);
+		configuration.setProperty(JMXReader.CONFIG_PORT, Integer.toString(this.port));
+		configuration.setProperty(JMXReader.CONFIG_SERVICEURL, this.serviceURL.toString());
+		configuration.setProperty(JMXReader.CONFIG_DOMAIN, this.domain);
+		configuration.setProperty(JMXReader.CONFIG_LOGNAME, this.logname);
+		configuration.setProperty(JMXReader.CONFIG_SILENT, Boolean.toString(this.silentreconnect));
 
 		return configuration;
 	}

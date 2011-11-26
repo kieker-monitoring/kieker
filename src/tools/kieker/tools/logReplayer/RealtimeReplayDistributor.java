@@ -43,7 +43,11 @@ import kieker.monitoring.timer.ITimeSource;
  * thread for "real time" replays.<br>
  * 
  * This class has exactly one input port named "in" and one output ports named
- * "out".
+ * "out".<br>
+ * 
+ * TODO: Currently this class <b>can not</b> be used for the later analysis
+ * tool, as the objects for the constructor cannot be configured with a
+ * configuration object.
  * 
  * @author Robert von Massow
  * 
@@ -197,6 +201,7 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 
 	@Override
 	protected Properties getDefaultProperties() {
+		// TODO: Deliver default properties
 		return new Properties();
 	}
 

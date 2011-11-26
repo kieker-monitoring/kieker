@@ -184,8 +184,8 @@ class RecordDelegationPlugin extends AbstractAnalysisPlugin {
 		}
 	}
 
-	/*
-	 * {@inheritdoc}
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean execute() {
@@ -198,25 +198,28 @@ class RecordDelegationPlugin extends AbstractAnalysisPlugin {
 		return true;
 	}
 
-	/*
-	 * {@inheritdoc}
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void terminate(final boolean error) {
 		// nothing to do
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected Properties getDefaultProperties() {
 		return new Properties();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration(null);
-
-		// TODO: Save the current configuration
-
-		return configuration;
+		/* No configuration possible. */
+		return new Configuration(null);
 	}
 }
