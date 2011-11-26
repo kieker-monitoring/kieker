@@ -1,4 +1,4 @@
-package kieker.test.analysis.junit.plugin.configuration;
+package kieker.test.analysis.junit.plugin.port;
 
 import java.util.Collections;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -20,7 +20,7 @@ import org.junit.Test;
 public class PortTest {
 
 	@Test
-	public void testPortsA() {
+	public void testPortDelivering() {
 		final AtomicInteger counter = new AtomicInteger();
 		final OutputPort oport = new OutputPort("out", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
 				new Class<?>[] { Number.class, Character.class })));
@@ -75,7 +75,7 @@ public class PortTest {
 	}
 
 	@Test
-	public void testPortsB() {
+	public void testPortAllDelivering() {
 		final AtomicInteger counter = new AtomicInteger();
 		final OutputPort oport = new OutputPort("out", null);
 		final AbstractInputPort iport = new AbstractInputPort(null, null) {
@@ -100,7 +100,7 @@ public class PortTest {
 	}
 
 	@Test
-	public void testPortsC() {
+	public void testPortConnections() {
 		final OutputPort port = new OutputPort("", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
 				new Class<?>[] { Float.class, String.class })));
 		final AbstractInputPort ip1 = new AbstractInputPort("", null) {
@@ -147,9 +147,11 @@ public class PortTest {
 			}
 		};
 
+		/* It should be possible to register the first two as suscriber. */
 		port.subscribe(ip1);
 		port.subscribe(ip2);
 		int exCounter = 0;
+		/* Not this one. */
 		try {
 			port.subscribe(ip3);
 		} catch (final Exception ex) {
