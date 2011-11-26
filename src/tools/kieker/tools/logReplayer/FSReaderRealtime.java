@@ -46,8 +46,8 @@ import kieker.common.record.IMonitoringRecord;
 public class FSReaderRealtime extends AbstractReaderPlugin {
 	private static final Log LOG = LogFactory.getLog(FSReaderRealtime.class);
 
-	private static final String PROP_NAME_NUM_WORKERS = FSReaderRealtime.class + "numWorkers";
-	private static final String PROP_NAME_INPUTDIRNAMES = FSReaderRealtime.class + "inputDirs";
+	private static final String PROP_NAME_NUM_WORKERS = FSReaderRealtime.class + ".numWorkers";
+	private static final String PROP_NAME_INPUTDIRNAMES = FSReaderRealtime.class + ".inputDirs";
 
 	/* manages the life-cycle of the reader and consumers */
 	private final AnalysisController analysis = new AnalysisController();

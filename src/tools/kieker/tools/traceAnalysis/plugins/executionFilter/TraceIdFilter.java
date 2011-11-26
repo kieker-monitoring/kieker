@@ -21,6 +21,7 @@
 package kieker.tools.traceAnalysis.plugins.executionFilter;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -29,6 +30,7 @@ import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.analysis.plugin.port.OutputPort;
+import kieker.common.configuration.AbstractConfiguration;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 
 /**
@@ -43,6 +45,7 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  */
 public class TraceIdFilter extends AbstractAnalysisPlugin {
 
+	public static final String CONFIG_SELECTED_TRACES = TraceIdFilter.class.getName() + ".selectedTraces";
 	private final Set<Long> selectedTraces;
 
 	private final OutputPort executionOutputPort = new OutputPort("Execution output", new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { Execution.class }));
@@ -108,6 +111,7 @@ public class TraceIdFilter extends AbstractAnalysisPlugin {
 	@Override
 	protected Properties getDefaultProperties() {
 		final Properties defaultProperties = new Properties();
+		// TODO: Provide default properties.
 		return defaultProperties;
 	}
 
@@ -115,9 +119,15 @@ public class TraceIdFilter extends AbstractAnalysisPlugin {
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);
 
-		// TODO: Save the current configuration
+		final String selectedTracesArr[] = new String[this.selectedTraces.size()];
+		final Iterator<Long> iter = this.selectedTraces.iterator();
+		int i = 0;
+		while (iter.hasNext()) {
+			selectedTracesArr[i++] = iter.next().toString();
+		}
+
+		configuration.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, AbstractConfiguration.toProperty(selectedTracesArr));
 
 		return configuration;
 	}
-
 }
