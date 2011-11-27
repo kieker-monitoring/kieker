@@ -303,9 +303,12 @@ public final class AnalysisController {
 				for (final AbstractInputPort subscriber : subscribers) {
 					final AbstractPlugin subscriberPlugin = portToPluginMap.get(subscriber);
 					final IPlugin mSubscriberPlugin = pluginMap.get(subscriberPlugin);
-					final IInputPort mInputPort = AnalysisController.findInputPort((IAnalysisPlugin) mSubscriberPlugin, portToNameMap.get(subscriber));
+					// TODO: It seems like mSubscriberPlugin can sometimes be null. Why?
+					if (mSubscriberPlugin != null) {
+						final IInputPort mInputPort = AnalysisController.findInputPort((IAnalysisPlugin) mSubscriberPlugin, portToNameMap.get(subscriber));
 
-					mOutputPort.getSubscribers().add(mInputPort);
+						mOutputPort.getSubscribers().add(mInputPort);
+					}
 				}
 			}
 		}

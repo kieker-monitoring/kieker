@@ -119,15 +119,15 @@ public class TraceIdFilter extends AbstractAnalysisPlugin {
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);
 
-		final String selectedTracesArr[] = new String[this.selectedTraces.size()];
-		final Iterator<Long> iter = this.selectedTraces.iterator();
-		int i = 0;
-		while (iter.hasNext()) {
-			selectedTracesArr[i++] = iter.next().toString();
+		if (this.selectedTraces != null) {
+			final String selectedTracesArr[] = new String[this.selectedTraces.size()];
+			final Iterator<Long> iter = this.selectedTraces.iterator();
+			int i = 0;
+			while (iter.hasNext()) {
+				selectedTracesArr[i++] = iter.next().toString();
+			}
+			configuration.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, AbstractConfiguration.toProperty(selectedTracesArr));
 		}
-
-		configuration.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, AbstractConfiguration.toProperty(selectedTracesArr));
-
 		return configuration;
 	}
 }
