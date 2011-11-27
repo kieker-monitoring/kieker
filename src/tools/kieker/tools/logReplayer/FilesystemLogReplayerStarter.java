@@ -232,8 +232,6 @@ public final class FilesystemLogReplayerStarter {
 			configuration.setProperty(Configuration.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(true));
 		}
 
-		// FIXME: Repair the problem with the monitoring controller...
-
 		final IMonitoringController monitoringController = MonitoringController.createInstance(configuration);
 
 		final FilesystemLogReplayer player = new FilesystemLogReplayer(monitoringController, FilesystemLogReplayerStarter.inputDirs,

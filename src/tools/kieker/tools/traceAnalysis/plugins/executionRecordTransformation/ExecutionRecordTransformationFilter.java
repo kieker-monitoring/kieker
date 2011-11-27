@@ -59,7 +59,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 	private static final Collection<Class<?>> OUT_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
 			new Class<?>[] { Execution.class }));
 	private static final Collection<Class<?>> IN_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { OperationExecutionRecord.class }));
+			new Class<?>[] { IMonitoringRecord.class }));
 
 	private final OutputPort executionOutputPort = new OutputPort("Execution output stream", ExecutionRecordTransformationFilter.OUT_CLASSES);
 	private final AbstractInputPort input = new AbstractInputPort("in", ExecutionRecordTransformationFilter.IN_CLASSES) {

@@ -17,6 +17,12 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * A simple test for the plugins in general. It tests for example if the
+ * chaining of different plugins does work.
+ * 
+ * @author Nils Christian Ehmke
+ */
 public class GeneralPluginTest {
 
 	@Test

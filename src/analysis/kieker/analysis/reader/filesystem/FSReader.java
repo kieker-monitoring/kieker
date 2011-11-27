@@ -20,14 +20,15 @@
 
 package kieker.analysis.reader.filesystem;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.port.OutputPort;
@@ -43,13 +44,7 @@ import kieker.common.record.IMonitoringRecordReceiver;
 
 /**
  * Filesystem reader which reads from multiple directories simultaneously ordered by the logging timestamp.
- * TODO: check correct handling of errors!<br>
- * 
- * Keep in mind that the given <i>readOnlyRecordsOfType</i>-configuration
- * defines also the possible output of the output port of the Reader. If this is
- * <i>null</i> (and the reader therefore reads <b>all</b> records), the reader
- * delivers only instances implementing the interface <i>IMonitoringRecord</i>
- * via the port.
+ * TODO: check correct handling of errors!
  * 
  * @author Andre van Hoorn, Jan Waller
  */
@@ -60,38 +55,35 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	public static final IMonitoringRecord EOF = new DummyMonitoringRecord();
 
 	private static final Log LOG = LogFactory.getLog(FSReader.class);
+	private static final Collection<Class<?>> OUT_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { IMonitoringRecord.class }));
 
 	private final Set<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType;
 	private final String[] inputDirs;
 	private final PriorityQueue<IMonitoringRecord> recordQueue;
-	private final OutputPort outputPort;
+	private final OutputPort outputPort = new OutputPort("Output Port of the FSReader", FSReader.OUT_CLASSES);;
 
 	private volatile boolean running = true;
 
 	public FSReader(final Configuration configuration) {
 		super(configuration);
-		Collection<Class<?>> outClasses;
 		this.inputDirs = this.configuration.getStringArrayProperty(FSReader.CONFIG_INPUTDIRS);
 		System.out.println(Arrays.toString(this.inputDirs));
 		this.recordQueue = new PriorityQueue<IMonitoringRecord>(this.inputDirs.length);
 		final String[] onlyrecords = this.configuration.getStringArrayProperty(FSReader.CONFIG_ONLYRECORDS);
-		outClasses = new ArrayList<Class<?>>();
 		if (onlyrecords.length == 0) {
 			this.readOnlyRecordsOfType = null;
-			outClasses.add(IMonitoringRecord.class);
 		} else {
 			this.readOnlyRecordsOfType = new HashSet<Class<? extends IMonitoringRecord>>(onlyrecords.length);
 			for (final String classname : onlyrecords) {
 				try {
 					final Class<? extends IMonitoringRecord> recClass = AbstractMonitoringRecord.classForName(classname);
 					this.readOnlyRecordsOfType.add(recClass);
-					outClasses.add(recClass);
 				} catch (final MonitoringRecordException ex) {
 					FSReader.LOG.warn(ex.getMessage(), ex.getCause());
 				}
 			}
 		}
-		this.outputPort = new OutputPort("Output Port of the FSReader", outClasses);
 		super.registerOutputPort("out", this.outputPort);
 	}
 
