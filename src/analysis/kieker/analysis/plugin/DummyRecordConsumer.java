@@ -30,6 +30,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.port.AbstractInputPort;
+import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.common.record.IMonitoringRecord;
 
@@ -44,7 +45,7 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @author Matthias Rohr, Jan Waller
  */
-public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
+public final class DummyRecordConsumer extends AbstractAnalysisPlugin implements ISingleInputPort {
 	public static final String CONFIG_STREAM = DummyRecordConsumer.class.getName() + ".Stream";
 
 	private static final Collection<Class<?>> OUT_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
@@ -55,14 +56,7 @@ public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
 	private final PrintStream printStream;
 	private final String printStreamName;
 	private final OutputPort output = new OutputPort("out", DummyRecordConsumer.OUT_CLASSES);
-	private final AbstractInputPort input = new AbstractInputPort("in", DummyRecordConsumer.IN_CLASSES) {
-		@Override
-		public void newEvent(final Object event) {
-			// TODO: very bad style: escaping this in constructor! this should be assigned in execute()
-			DummyRecordConsumer.this.newMonitoringRecord((IMonitoringRecord) event);
-			DummyRecordConsumer.this.output.deliver(event);
-		}
-	};
+	private final AbstractInputPort input = new InputPort("in", DummyRecordConsumer.IN_CLASSES, this);
 
 	public DummyRecordConsumer(final Configuration configuration) throws FileNotFoundException {
 		super(configuration);
@@ -85,6 +79,12 @@ public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
 		/* Register the ports. */
 		super.registerInputPort("in", this.input);
 		super.registerOutputPort("out", this.output);
+	}
+
+	@Override
+	public void newEvent(final Object event) {
+		DummyRecordConsumer.this.newMonitoringRecord((IMonitoringRecord) event);
+		DummyRecordConsumer.this.output.deliver(event);
 	}
 
 	@Override

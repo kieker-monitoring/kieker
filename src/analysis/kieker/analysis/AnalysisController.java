@@ -116,7 +116,7 @@ public final class AnalysisController {
 	public AnalysisController(final File file) throws Exception {
 		/* Try to load everything. */
 		final EList<EObject> content = AnalysisController.openModelFile(file);
-		if (!content.isEmpty()) {
+		if ((content != null) && !content.isEmpty()) {
 			// The first (and only) element should be the project. Use it to configure this instance.
 			final IProject project = (IProject) content.get(0);
 			try {
@@ -192,11 +192,13 @@ public final class AnalysisController {
 	}
 
 	/**
-	 * Opens a given file which should contain an instance of the analysis meta modell and delivers a list with the whole content.
+	 * Opens a given file which should contain an instance of the analysis meta
+	 * model and delivers a list with the whole content.
 	 * 
 	 * @param file
 	 *            The file to be opened.
-	 * @return A list with the content of the file.
+	 * @return A list with the content of the file or null if the loading did
+	 *         fail
 	 */
 	private final static EList<EObject> openModelFile(final File file) {
 		/* Create a resource set to work with. */
@@ -221,12 +223,11 @@ public final class AnalysisController {
 
 		try {
 			resource.load(Collections.EMPTY_MAP);
+			return resource.getContents();
 		} catch (final IOException e) {
 			AnalysisController.LOG.error("Could not open the given file.");
-			// TODO: what happens if this fails? what will be returned?
+			return null;
 		}
-
-		return resource.getContents();
 	}
 
 	/**
