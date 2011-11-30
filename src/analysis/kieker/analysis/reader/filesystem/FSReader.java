@@ -174,4 +174,8 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 		}
 		return configuration;
 	}
+
+	public OutputPort getDefaultOutputPort() {
+		return this.outputPort;
+	}
 }

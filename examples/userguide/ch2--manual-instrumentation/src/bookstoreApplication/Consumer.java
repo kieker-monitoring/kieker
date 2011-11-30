@@ -21,30 +21,37 @@
 package bookstoreApplication;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Properties;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.analysis.configuration.Configuration;
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.ISingleInputPort;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
 
-public class Consumer implements IMonitoringRecordConsumerPlugin {
+public class Consumer extends AbstractAnalysisPlugin implements ISingleInputPort {
 
 	private final long maxResponseTime;
+	private final InputPort inputPort = new InputPort("input", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { IMonitoringRecord.class })), this);
 
 	public Consumer(final long maxResponseTime) {
+		super(new Configuration(null));
 		this.maxResponseTime = maxResponseTime;
+
+		super.registerInputPort("input", inputPort);
 	}
 
 	@Override
-	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-		return null;
-	}
-
-	@Override
-	public boolean newMonitoringRecord(final IMonitoringRecord record) {
-		if (!(record instanceof OperationExecutionRecord)) {
-			return true;
+	public void newEvent(final Object event) {
+		if (!(event instanceof OperationExecutionRecord)) {
+			return;
 		}
-		final OperationExecutionRecord rec = (OperationExecutionRecord) record;
+		final OperationExecutionRecord rec = (OperationExecutionRecord) event;
 		/* Derive response time from the record. */
 		final long responseTime = rec.getTout() - rec.getTin();
 		/* Now compare with the response time threshold: */
@@ -56,7 +63,7 @@ public class Consumer implements IMonitoringRecordConsumerPlugin {
 			System.out.println("response time accepted: " + rec.getClassName()
 					+ "." + rec.getOperationName());
 		}
-		return true;
+		return;
 	}
 
 	@Override
@@ -67,4 +74,15 @@ public class Consumer implements IMonitoringRecordConsumerPlugin {
 	@Override
 	public void terminate(final boolean error) {}
 
+	public InputPort getInputPort() {
+		return inputPort;
+	}
+
+	public Properties getDefaultProperties() {
+		return new Properties();
+	}
+
+	public Configuration getCurrentConfiguration() {
+		return new Configuration(null);
+	}
 }

@@ -20,30 +20,42 @@
 
 package bookstoreApplication;
 
+import java.util.Properties;
+
 import kieker.analysis.AnalysisController;
-import kieker.analysis.plugin.MonitoringRecordConsumerException;
-import kieker.analysis.reader.MonitoringReaderException;
+import kieker.analysis.configuration.Configuration;
+import kieker.analysis.exception.MonitoringRecordConsumerException;
+import kieker.analysis.reader.IMonitoringReader;
+import kieker.analysis.exception.MonitoringReaderException;
 import kieker.analysis.reader.filesystem.FSReader;
+import kieker.analysis.configuration.Configuration;
 
 public class BookstoreAnalysisStarter {
 
-    public static void main(final String[] args)
-            throws MonitoringReaderException, MonitoringRecordConsumerException {
-       
-        if (args.length == 0) {
-            return;
-        }
+	public static void main(final String[] args)
+			throws MonitoringReaderException, MonitoringRecordConsumerException {
 
-        /* Create Kieker.Analysis instance */
-        final AnalysisController analysisInstance = new AnalysisController();
-        /* Register our own consumer; set the max. response time to 1.9 ms */
-        analysisInstance.registerPlugin(new Consumer(1900000));
+		if (args.length == 0) {
+			return;
+		}
 
-        /* Set filesystem monitoring log input directory for our analysis */
-        final String inputDirs[] = {args[0]};
-        analysisInstance.setReader(new FSReader(inputDirs));
+		/* Create Kieker.Analysis instance */
+		final AnalysisController analysisInstance = new AnalysisController();
+		/* Register our own consumer; set the max. response time to 1.9 ms */
+		final Consumer consumer = new Consumer(1900000);
+		analysisInstance.registerPlugin(consumer);
 
-        /* Start the analysis */
-        analysisInstance.run();
-    }
+		/* Set filesystem monitoring log input directory for our analysis */
+		final Configuration configuration = new Configuration(null);
+		configuration.setProperty(FSReader.CONFIG_INPUTDIRS, args[0]);
+
+		final FSReader reader = new FSReader(configuration);
+		analysisInstance.setReader(reader);
+
+		/* Connect the output of the reader with the input of the plugin. */
+		reader.getDefaultOutputPort().subscribe(consumer.getInputPort());
+
+		/* Start the analysis */
+		analysisInstance.run();
+	}
 }
