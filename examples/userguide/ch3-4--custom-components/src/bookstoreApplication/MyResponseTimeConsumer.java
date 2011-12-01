@@ -21,35 +21,37 @@
 package bookstoreApplication;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.ISingleInputPort;
+import kieker.analysis.plugin.port.AbstractInputPort;
+import kieker.analysis.plugin.port.InputPort;
 import kieker.common.record.IMonitoringRecord;
 
-public class MyResponseTimeConsumer implements IMonitoringRecordConsumerPlugin {
+public class MyResponseTimeConsumer extends AbstractAnalysisPlugin implements ISingleInputPort {
+	
+	private static final Collection<Class<?>> IN_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { IMonitoringRecord.class }));
+	private final AbstractInputPort input = new InputPort("in", MyResponseTimeConsumer.IN_CLASSES, this);
 
-    @Override
-    public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-        return null;
-    }
+	@Override
+	public void newEvent(Object event) {
+		if (event instanceof MyResponseTimeRecord) {
+			/* Write the content to the standard output stream. */
+			MyResponseTimeRecord myRecord = (MyResponseTimeRecord) event;
+			System.out.println("[Consumer] " + myRecord.getLoggingTimestamp()
+					+ ": " + myRecord.className + ", " + myRecord.methodName
+					+ ", " + myRecord.responseTimeNanos);
+		}
+	}
 
-    @Override
-    public boolean newMonitoringRecord(IMonitoringRecord record) {
-        if (record instanceof MyResponseTimeRecord) {
-            /* Write the content to the standard output stream. */
-            MyResponseTimeRecord myRecord = (MyResponseTimeRecord) record;
-            System.out.println("[Consumer] " + myRecord.getLoggingTimestamp()
-                    + ": " + myRecord.className + ", " + myRecord.methodName
-                    + ", " + myRecord.responseTimeNanos);
-        }
-        return true;
-    }
+	@Override
+	public boolean execute() {
+		return true;
+	}
 
-    @Override
-    public boolean execute() {
-        return true;
-    }
-
-    @Override
-    public void terminate(boolean error) {
-    }
+	@Override
+	public void terminate(boolean error) {}
 }
