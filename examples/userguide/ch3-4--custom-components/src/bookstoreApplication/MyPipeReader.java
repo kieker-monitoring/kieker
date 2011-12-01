@@ -20,14 +20,14 @@
 
 package bookstoreApplication;
 
-import java.util.Iterator;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Properties;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.configuration.Configuration;
+import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.reader.AbstractReaderPlugin;
-import kieker.analysis.reader.filesystem.FSReader;
-import kieker.common.configuration.AbstractConfiguration;
-import kieker.common.record.IMonitoringRecord;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,32 +37,41 @@ public class MyPipeReader extends AbstractReaderPlugin {
 	private static final Log log = LogFactory.getLog(MyPipeReader.class);
 
 	private static final String PROPERTY_PIPE_NAME = MyPipeReader.class + ".pipeName";
-	private static final String pipeName;
+	private final String pipeName;
 	private volatile MyPipe pipe;
+
+	private static final Collection<Class<?>> OUT_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { MyResponseTimeRecord.class }));
+
+	private final OutputPort outputPort = new OutputPort("output", MyPipeReader.OUT_CLASSES);
 
 	public MyPipeReader() {
 		super(new Configuration(null));
+		this.pipeName = "kieker-pipe";
+		this.init();
 	}
 
 	public MyPipeReader(final Configuration configuration) {
 		super(configuration);
-		this.pipeName = "kieker-pipe";
+
+		this.pipeName = configuration.getStringProperty(MyPipeReader.PROPERTY_PIPE_NAME);
+
+		this.init();
 	}
 
 	public MyPipeReader(final String pipeName) {
 		super(new Configuration(null));
+
 		this.pipeName = pipeName;
-		this.init(MyPipeReader.PROPERTY_PIPE_NAME + "=" + pipeName);
+
+		this.init();
 	}
 
-	@Override
-	public boolean init(final String initString) throws IllegalArgumentException {
+	public boolean init() {
 		try {
-			final PropertyMap propertyMap = new PropertyMap(initString, "|", "=");
-			final String pipeName = propertyMap.getProperty(MyPipeReader.PROPERTY_PIPE_NAME);
-			this.pipe = MyNamedPipeManager.getInstance().acquirePipe(pipeName);
+			this.pipe = MyNamedPipeManager.getInstance().acquirePipe(this.pipeName);
 		} catch (final Exception exc) {
-			MyPipeReader.log.error("Failed to parse initString '" + initString
+			MyPipeReader.log.error("Failed to acquire pipe '" + this.pipeName
 					+ "': " + exc.getMessage());
 			return false;
 		}
@@ -80,7 +89,7 @@ public class MyPipeReader extends AbstractReaderPlugin {
 				record.initFromArray(data.getRecordData());
 				record.setLoggingTimestamp(data.getLoggingTimestamp());
 				/* ...and delegate the task of delivering to the super class. */
-				this.deliverRecord(record);
+				this.outputPort.deliver(record);
 			}
 		} catch (final InterruptedException e) {
 			return false; // signal error
@@ -97,16 +106,20 @@ public class MyPipeReader extends AbstractReaderPlugin {
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);
 
-		configuration.setProperty(PROPERTY_PIPE_NAME, "kieker-pipe");
+		configuration.setProperty(MyPipeReader.PROPERTY_PIPE_NAME, this.pipeName);
 
 		return configuration;
+	}
+
+	public OutputPort getDefaultOutputPort() {
+		return this.outputPort;
 	}
 
 	@Override
 	protected Properties getDefaultProperties() {
 		final Properties defaultProperties = new Properties();
 
-		defaultProperties.setProperty(PROPERTY_PIPE_NAME, pipeName);
+		defaultProperties.setProperty(MyPipeReader.PROPERTY_PIPE_NAME, "kieker-pipe");
 
 		return defaultProperties;
 	}

@@ -21,8 +21,6 @@
 package bookstoreApplication;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.reader.AbstractReaderPlugin;
-import kieker.analysis.reader.IMonitoringReader;
 
 public class Starter {
 
@@ -45,12 +43,14 @@ public class Starter {
 
 		/* Start an analysis of the response times */
 		final AnalysisController analyisController = new AnalysisController();
-		final IMonitoringReader reader =
+		final MyPipeReader reader =
 				new MyPipeReader("somePipe");
-		final AbstractReaderPlugin consumer =
+		final MyResponseTimeConsumer consumer =
 				new MyResponseTimeConsumer();
 		analyisController.setReader(reader);
 		analyisController.registerPlugin(consumer);
+
+		reader.getDefaultOutputPort().subscribe(consumer.getDefaultInputPort());
 		analyisController.run();
 	}
 }
