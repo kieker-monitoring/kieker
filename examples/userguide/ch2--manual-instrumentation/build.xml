@@ -3,10 +3,13 @@
 	<property file="build.properties" />
 
 	<condition property="not-all-files-available">
-		<resourcecount property="num.requiredLibsFound" when="ne" count="2">
+		<resourcecount property="num.requiredLibsFound" when="ne" count="5">
 			<fileset dir="${lib.dir}">
 				<include name="${jar.file.commons-logging}" />
 				<include name="${jar.file.kieker}" />
+				<include name="${jar.file.common}" />
+				<include name="${jar.file.ecore}" />
+				<include name="${jar.file.ecore.xmi}" />
 			</fileset>
 		</resourcecount>
 	</condition>
