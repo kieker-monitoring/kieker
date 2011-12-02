@@ -20,15 +20,22 @@
 
 package bookstoreTracing;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Properties;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
-import kieker.analysis.plugin.MonitoringRecordConsumerException;
-import kieker.analysis.reader.MonitoringReaderException;
+import kieker.analysis.configuration.Configuration;
+import kieker.analysis.exception.MonitoringReaderException;
+import kieker.analysis.exception.MonitoringRecordConsumerException;
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.ISingleInputPort;
+import kieker.analysis.plugin.port.AbstractInputPort;
+import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.reader.filesystem.FSReader;
+import kieker.common.configuration.AbstractConfiguration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
@@ -45,32 +52,32 @@ public class BookstoreHostnameRewriter {
 
 		/* Create Kieker.Analysis instance */
 		final AnalysisController analysisInstance = new AnalysisController();
-		analysisInstance.registerPlugin(new HostNameRewriterPlugin());
+
+		final HostNameRewriterPlugin plugin = new HostNameRewriterPlugin();
+		analysisInstance.registerPlugin(plugin);
 
 		/* Set filesystem monitoring log input directory for our analysis */
 		final String inputDirs[] = { args[0] };
-		analysisInstance.setReader(new FSReader(inputDirs));
+		final Configuration configuration = new Configuration(null);
+		configuration.setProperty(FSReader.CONFIG_INPUTDIRS, AbstractConfiguration.toProperty(inputDirs));
+		final FSReader reader = new FSReader(configuration);
+		analysisInstance.setReader(reader);
+
+		/* Connect the reader with the plugin. */
+		reader.getDefaultOutputPort().subscribe(plugin.getDefaultInputPort());
 
 		/* Start the analysis */
 		analysisInstance.run();
 	}
 }
 
-class HostNameRewriterPlugin implements IMonitoringRecordConsumerPlugin {
+class HostNameRewriterPlugin extends AbstractAnalysisPlugin implements ISingleInputPort {
 
 	private static final IMonitoringController MONITORING_CTRL =
 			MonitoringController.getInstance();
-	private static final Collection<Class<? extends IMonitoringRecord>> RECORDTYPE_SUBSCR_LIST =
-			new ArrayList<Class<? extends IMonitoringRecord>>();
-
-	static {
-		HostNameRewriterPlugin.RECORDTYPE_SUBSCR_LIST.add(OperationExecutionRecord.class);
-	}
-
-	@Override
-	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-		return HostNameRewriterPlugin.RECORDTYPE_SUBSCR_LIST;
-	}
+	private static final Collection<Class<?>> IN_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
+			new Class<?>[] { IMonitoringRecord.class }));
+	private final AbstractInputPort inputPort = new InputPort("Input", HostNameRewriterPlugin.IN_CLASSES, this);
 
 	private static final String BOOKSTORE_HOSTNAME = "SRV0";
 	private static final Random rnd = new Random();
@@ -78,14 +85,17 @@ class HostNameRewriterPlugin implements IMonitoringRecordConsumerPlugin {
 	private static final String[] CATALOG_HOSTNAMES = { "SRV0", "SRV1" };
 	private static final String CRM_HOSTNAME = "SRV0";
 
+	public HostNameRewriterPlugin() {
+		super(new Configuration(null));
+	}
+
 	@Override
-	public boolean newMonitoringRecord(final IMonitoringRecord record) {
-		if (!(record instanceof OperationExecutionRecord)) {
-			return true;
+	public void newEvent(final Object event) {
+		if (!(event instanceof OperationExecutionRecord)) {
+			return;
 		}
 
-		final OperationExecutionRecord execution =
-				(OperationExecutionRecord) record;
+		final OperationExecutionRecord execution = (OperationExecutionRecord) event;
 
 		if (execution.getClassName().equals(Bookstore.class.getName())) {
 			execution.setHostName(HostNameRewriterPlugin.BOOKSTORE_HOSTNAME);
@@ -98,9 +108,7 @@ class HostNameRewriterPlugin implements IMonitoringRecordConsumerPlugin {
 				execution.setHostName(HostNameRewriterPlugin.CATALOG_HOSTNAMES[1]);
 			}
 		}
-		HostNameRewriterPlugin.MONITORING_CTRL.newMonitoringRecord(record);
-
-		return true;
+		HostNameRewriterPlugin.MONITORING_CTRL.newMonitoringRecord(execution);
 	}
 
 	@Override
@@ -111,5 +119,19 @@ class HostNameRewriterPlugin implements IMonitoringRecordConsumerPlugin {
 	@Override
 	public void terminate(final boolean error) {
 		return; // do nothing
+	}
+
+	@Override
+	protected Properties getDefaultProperties() {
+		return new Properties();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		return new Configuration(null);
+	}
+
+	public AbstractInputPort getDefaultInputPort() {
+		return this.inputPort;
 	}
 }

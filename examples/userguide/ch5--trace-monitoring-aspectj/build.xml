@@ -7,11 +7,14 @@
 	</path>
 
 	<condition property="not-all-files-available">
-		<resourcecount property="num.requiredLibsFound" when="ne" count="3">
+		<resourcecount property="num.requiredLibsFound" when="ne" count="6">
 			<fileset dir="${lib.dir}">
 				<include name="${jar.file.commonslogging}" />
 				<include name="${jar.file.kieker}" />
 				<include name="${jar.file.aspectjweaver}" />
+				<include name="${jar.file.common}" />
+				<include name="${jar.file.ecore}" />
+				<include name="${jar.file.ecore.xmi}" />
 			</fileset>
 		</resourcecount>
 	</condition>
