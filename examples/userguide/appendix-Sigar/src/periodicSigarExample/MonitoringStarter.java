@@ -37,7 +37,7 @@ public class MonitoringStarter {
     	final IMonitoringController monitoringController = 
     		MonitoringController.getInstance();
     	
-		final ISigarSamplerFactory sigarFactory = SigarSamplerFactory.getInstance();
+		final ISigarSamplerFactory sigarFactory = SigarSamplerFactory.INSTANCE;
     	
     	final CPUsDetailedPercSampler cpuSampler = sigarFactory.createSensorCPUsDetailedPerc();
     	final MemSwapUsageSampler memSwapSampler = sigarFactory.createSensorMemSwapUsage();
