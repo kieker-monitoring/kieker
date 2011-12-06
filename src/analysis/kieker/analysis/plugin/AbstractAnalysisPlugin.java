@@ -20,9 +20,9 @@
 
 package kieker.analysis.plugin;
 
-import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.analysis.plugin.port.OutputPort;
+import kieker.common.configuration.Configuration;
 
 /**
  * This class should be used as a base for every plugin used within

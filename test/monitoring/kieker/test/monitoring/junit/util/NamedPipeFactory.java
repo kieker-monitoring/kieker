@@ -27,11 +27,12 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.namedRecordPipe.Broker;
 import kieker.common.namedRecordPipe.IPipeReader;
 import kieker.common.namedRecordPipe.Pipe;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.Configuration;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
@@ -80,8 +81,8 @@ public final class NamedPipeFactory {
 	 * @return the created IMonitoringController instance
 	 */
 	public static IMonitoringController createMonitoringControllerWithNamedPipe(final String pipeName, final Properties additionalProperties) {
-		final Configuration configuration = Configuration.createDefaultConfiguration();
-		configuration.setProperty(Configuration.WRITER_CLASSNAME, PipeWriter.class.getName());
+		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
+		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, PipeWriter.class.getName());
 		configuration.setProperty(PipeWriter.CONFIG_PIPENAME, pipeName);
 
 		if (additionalProperties != null) {

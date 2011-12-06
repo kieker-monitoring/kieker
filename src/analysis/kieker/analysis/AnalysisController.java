@@ -35,7 +35,6 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
-import kieker.analysis.configuration.Configuration;
 import kieker.analysis.model.analysisMetaModel.IAnalysisPlugin;
 import kieker.analysis.model.analysisMetaModel.IInputPort;
 import kieker.analysis.model.analysisMetaModel.IOutputPort;
@@ -51,6 +50,7 @@ import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.reader.IMonitoringReader;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 

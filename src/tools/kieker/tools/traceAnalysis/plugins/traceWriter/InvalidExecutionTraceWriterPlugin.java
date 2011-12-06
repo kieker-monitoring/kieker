@@ -24,11 +24,10 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.port.AbstractInputPort;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractInvalidExecutionTraceProcessingPlugin;
@@ -98,13 +97,13 @@ public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionT
 	};
 
 	@Override
-	protected Properties getDefaultProperties() {
-		return new Properties();
+	protected Configuration getDefaultConfiguration() {
+		return new Configuration();
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration(null);
+		final Configuration configuration = new Configuration();
 
 		// TODO: Save the current configuration
 

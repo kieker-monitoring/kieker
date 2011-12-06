@@ -22,12 +22,11 @@ package kieker.tools.traceAnalysis.plugins.messageTraceRepository;
 
 import java.util.Collections;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.port.AbstractInputPort;
+import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.systemModel.AbstractTrace;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
@@ -81,13 +80,13 @@ public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessing
 	}
 
 	@Override
-	protected Properties getDefaultProperties() {
-		return new Properties();
+	protected Configuration getDefaultConfiguration() {
+		return new Configuration();
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration(null);
+		final Configuration configuration = new Configuration();
 
 		// TODO: Save the current configuration
 

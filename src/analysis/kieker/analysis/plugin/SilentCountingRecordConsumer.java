@@ -20,12 +20,11 @@
 
 package kieker.analysis.plugin;
 
-import java.util.Properties;
 import java.util.concurrent.atomic.AtomicLong;
 
-import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.plugin.port.OutputPort;
+import kieker.common.configuration.Configuration;
 
 /**
  * This class has exactly one input port named "in" and one output ports named "out". An instance of this class receives any objects, increments an intern
@@ -71,12 +70,12 @@ public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin i
 	}
 
 	@Override
-	protected Properties getDefaultProperties() {
-		return new Properties();
+	protected Configuration getDefaultConfiguration() {
+		return new Configuration();
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		return new Configuration(null);
+		return new Configuration();
 	}
 }

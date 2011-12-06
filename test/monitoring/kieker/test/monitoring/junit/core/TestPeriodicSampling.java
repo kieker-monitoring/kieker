@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.monitoring.core.configuration.Configuration;
+import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.sampler.ISampler;

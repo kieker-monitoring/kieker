@@ -29,13 +29,12 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.port.AbstractInputPort;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
@@ -334,13 +333,13 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 	}
 
 	@Override
-	protected Properties getDefaultProperties() {
-		return new Properties();
+	protected Configuration getDefaultConfiguration() {
+		return new Configuration();
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration(null);
+		final Configuration configuration = new Configuration();
 
 		// TODO: Save the current configuration
 

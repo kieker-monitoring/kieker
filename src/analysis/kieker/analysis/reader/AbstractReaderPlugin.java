@@ -1,9 +1,9 @@
 package kieker.analysis.reader;
 
-import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.analysis.plugin.port.OutputPort;
+import kieker.common.configuration.Configuration;
 
 /**
  * This class should be used as a base for every reader used within

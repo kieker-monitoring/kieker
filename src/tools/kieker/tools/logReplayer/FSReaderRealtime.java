@@ -23,19 +23,17 @@ package kieker.tools.logReplayer;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.reader.filesystem.FSReader;
-import kieker.common.configuration.AbstractConfiguration;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
@@ -146,7 +144,7 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 
 		final Configuration configuration = new Configuration(null);
 		configuration.setProperty(FSReader.CONFIG_INPUTDIRS,
-				AbstractConfiguration.toProperty(inputDirNames));
+				Configuration.toProperty(inputDirNames));
 		final AbstractReaderPlugin fsReader = new FSReader(configuration);
 		final AbstractAnalysisPlugin rtCons = new FSReaderRealtimeCons(this);
 		this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, this.terminationLatch);
@@ -177,14 +175,14 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 	}
 
 	@Override
-	protected Properties getDefaultProperties() {
-		final Properties defaultProperties = new Properties();
+	protected Configuration getDefaultConfiguration() {
+		final Configuration defaultConfiguration = new Configuration();
 
 		// TODO: Provide better default properties.
-		defaultProperties.setProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS, "1");
-		defaultProperties.setProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES, "");
+		defaultConfiguration.setProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS, "1");
+		defaultConfiguration.setProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES, "");
 
-		return defaultProperties;
+		return defaultConfiguration;
 	}
 
 	@Override
@@ -192,7 +190,7 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		final Configuration configuration = new Configuration(null);
 
 		configuration.setProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS, Integer.toString(this.numWorkers));
-		configuration.setProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES, AbstractConfiguration.toProperty(this.inputDirs));
+		configuration.setProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES, Configuration.toProperty(this.inputDirs));
 
 		return configuration;
 	}
@@ -248,13 +246,13 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		}
 
 		@Override
-		protected Properties getDefaultProperties() {
-			return new Properties();
+		protected Configuration getDefaultConfiguration() {
+			return new Configuration();
 		}
 
 		@Override
 		public Configuration getCurrentConfiguration() {
-			return new Configuration(null);
+			return new Configuration();
 		}
 	}
 }

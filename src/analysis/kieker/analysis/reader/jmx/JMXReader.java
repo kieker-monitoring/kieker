@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
@@ -40,9 +39,9 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
-import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.reader.AbstractReaderPlugin;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
@@ -104,15 +103,15 @@ public final class JMXReader extends AbstractReaderPlugin {
 	}
 
 	@Override
-	protected Properties getDefaultProperties() {
-		final Properties defaultProperties = new Properties();
-		defaultProperties.setProperty(JMXReader.CONFIG_SERVER, "localhost");
-		defaultProperties.setProperty(JMXReader.CONFIG_PORT, "0");
-		defaultProperties.setProperty(JMXReader.CONFIG_SERVICEURL, "");
-		defaultProperties.setProperty(JMXReader.CONFIG_DOMAIN, "kieker.monitoring");
-		defaultProperties.setProperty(JMXReader.CONFIG_LOGNAME, "MonitoringLog");
-		defaultProperties.setProperty(JMXReader.CONFIG_SILENT, "false");
-		return defaultProperties;
+	protected Configuration getDefaultConfiguration() {
+		final Configuration defaultConfiguration = new Configuration();
+		defaultConfiguration.setProperty(JMXReader.CONFIG_SERVER, "localhost");
+		defaultConfiguration.setProperty(JMXReader.CONFIG_PORT, "0");
+		defaultConfiguration.setProperty(JMXReader.CONFIG_SERVICEURL, "");
+		defaultConfiguration.setProperty(JMXReader.CONFIG_DOMAIN, "kieker.monitoring");
+		defaultConfiguration.setProperty(JMXReader.CONFIG_LOGNAME, "MonitoringLog");
+		defaultConfiguration.setProperty(JMXReader.CONFIG_SILENT, "false");
+		return defaultConfiguration;
 	}
 
 	@Override
@@ -299,7 +298,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration(null);
+		final Configuration configuration = new Configuration();
 
 		configuration.setProperty(JMXReader.CONFIG_SERVER, this.server);
 		configuration.setProperty(JMXReader.CONFIG_PORT, Integer.toString(this.port));

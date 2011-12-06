@@ -24,7 +24,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Hashtable;
-import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
@@ -43,9 +42,9 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 
-import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.reader.AbstractReaderPlugin;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
@@ -105,13 +104,13 @@ public final class JMSReader extends AbstractReaderPlugin {
 	}
 
 	@Override
-	protected Properties getDefaultProperties() {
-		final Properties defaultProperties = new Properties();
+	protected Configuration getDefaultConfiguration() {
+		final Configuration defaultConfiguration = new Configuration();
 		// TODO: provide default values!
-		defaultProperties.setProperty(JMSReader.CONFIG_PROVIDERURL, "");
-		defaultProperties.setProperty(JMSReader.CONFIG_DESTINATION, "");
-		defaultProperties.setProperty(JMSReader.CONFIG_FACTORYLOOKUP, "");
-		return defaultProperties;
+		defaultConfiguration.setProperty(JMSReader.CONFIG_PROVIDERURL, "");
+		defaultConfiguration.setProperty(JMSReader.CONFIG_DESTINATION, "");
+		defaultConfiguration.setProperty(JMSReader.CONFIG_FACTORYLOOKUP, "");
+		return defaultConfiguration;
 	}
 
 	/**
@@ -218,7 +217,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration(null);
+		final Configuration configuration = new Configuration();
 
 		configuration.setProperty(JMSReader.CONFIG_PROVIDERURL, this.jmsProviderUrl);
 		configuration.setProperty(JMSReader.CONFIG_DESTINATION, this.jmsDestination);

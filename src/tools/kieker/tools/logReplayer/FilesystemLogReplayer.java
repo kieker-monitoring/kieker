@@ -23,16 +23,14 @@ package kieker.tools.logReplayer;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.reader.filesystem.FSReader;
-import kieker.common.configuration.AbstractConfiguration;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
@@ -113,7 +111,7 @@ public class FilesystemLogReplayer {
 			fsReader = new FSReaderRealtime(this.inputDirs, this.numRealtimeWorkerThreads);
 		} else {
 			final Configuration configuration = new Configuration(null);
-			configuration.setProperty(FSReader.CONFIG_INPUTDIRS, AbstractConfiguration.toProperty(this.inputDirs));
+			configuration.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(this.inputDirs));
 			fsReader = new FSReader(configuration);
 		}
 		final AnalysisController tpanInstance = new AnalysisController();
@@ -210,8 +208,8 @@ class RecordDelegationPlugin extends AbstractAnalysisPlugin {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected Properties getDefaultProperties() {
-		return new Properties();
+	protected Configuration getDefaultConfiguration() {
+		return new Configuration();
 	}
 
 	/**

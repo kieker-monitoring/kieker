@@ -23,17 +23,16 @@ package kieker.test.analysis.junit.reader.namedRecordPipe;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.AnalysisControllerThread;
-import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.analysis.reader.namedRecordPipe.PipeReader;
+import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.test.analysis.junit.util.DummyRecord;
@@ -115,8 +114,8 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 		}
 
 		@Override
-		protected Properties getDefaultProperties() {
-			return new Properties();
+		protected Configuration getDefaultConfiguration() {
+			return new Configuration();
 		}
 
 		public AbstractInputPort getInputPort() {
@@ -125,7 +124,7 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 
 		@Override
 		public Configuration getCurrentConfiguration() {
-			final Configuration configuration = new Configuration(null);
+			final Configuration configuration = new Configuration();
 
 			// TODO: Save the current configuration
 

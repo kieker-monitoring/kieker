@@ -22,13 +22,12 @@ package kieker.analysis.reader.namedRecordPipe;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
-import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.reader.AbstractReaderPlugin;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.namedRecordPipe.Broker;
@@ -92,10 +91,10 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	}
 
 	@Override
-	protected Properties getDefaultProperties() {
-		final Properties defaultProperties = new Properties();
-		defaultProperties.setProperty(PipeReader.CONFIG_PIPENAME, "kieker-pipe");
-		return defaultProperties;
+	protected Configuration getDefaultConfiguration() {
+		final Configuration defaultConfiguration = new Configuration();
+		defaultConfiguration.setProperty(PipeReader.CONFIG_PIPENAME, "kieker-pipe");
+		return defaultConfiguration;
 	}
 
 	/**

@@ -22,8 +22,8 @@ package kieker.test.monitoring.junit.util;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.writer.DummyWriter;
 
 /**

@@ -26,13 +26,19 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
 /**
+ * A Configuration
+ * 
  * @author Jan Waller
  */
-public abstract class AbstractConfiguration extends Properties {
-	private static final Log LOG = LogFactory.getLog(AbstractConfiguration.class);
-	private static final long serialVersionUID = 1L;
+public final class Configuration extends Properties {
+	private static final long serialVersionUID = 3364877592243422259L;
+	private static final Log LOG = LogFactory.getLog(Configuration.class);
 
-	public AbstractConfiguration(final Properties defaults) {
+	public Configuration() {
+		this(null);
+	}
+
+	public Configuration(final Properties defaults) {
 		super(defaults);
 	}
 
@@ -50,7 +56,7 @@ public abstract class AbstractConfiguration extends Properties {
 		try {
 			return Integer.parseInt(s);
 		} catch (final NumberFormatException ex) {
-			AbstractConfiguration.LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0");
+			Configuration.LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0");
 			return 0;
 		}
 	}
@@ -60,7 +66,7 @@ public abstract class AbstractConfiguration extends Properties {
 		try {
 			return Long.parseLong(s);
 		} catch (final NumberFormatException ex) {
-			AbstractConfiguration.LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0");
+			Configuration.LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0");
 			return 0;
 		}
 	}
@@ -119,13 +125,8 @@ public abstract class AbstractConfiguration extends Properties {
 	 * @param prefix
 	 * @return
 	 */
-	public abstract AbstractConfiguration getPropertiesStartingWith(final String prefix);
-
-	/**
-	 * @param configuration
-	 *            an empty Configuration object
-	 */
-	protected final AbstractConfiguration getPropertiesStartingWith(final AbstractConfiguration configuration, final String prefix) {
+	public final Configuration getPropertiesStartingWith(final String prefix) {
+		final Configuration configuration = new Configuration(null);
 		for (final String property : this.stringPropertyNames()) {
 			if (property.startsWith(prefix)) {
 				configuration.setProperty(property, this.getProperty(property));
@@ -138,13 +139,13 @@ public abstract class AbstractConfiguration extends Properties {
 	 * You should know what you do if you use this method!
 	 * Currently it is used for a (dirty) hack to implement writers.
 	 * 
-	 * @param defaultProperties
+	 * @param defaultConfiguration
 	 * @throws IllegalAccessException
 	 */
-	public final void setDefaultProperties(final Properties defaultProperties) throws IllegalAccessException {
+	public final void setDefaultConfiguration(final Configuration defaultConfiguration) throws IllegalAccessException {
 		if (this.defaults == null) {
-			this.defaults = defaultProperties;
-		} else if (defaultProperties != null) {
+			this.defaults = defaultConfiguration;
+		} else if (defaultConfiguration != null) {
 			throw new IllegalAccessException();
 		}
 	}

@@ -21,12 +21,11 @@
 package kieker.analysis.plugin;
 
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
-import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.analysis.plugin.port.OutputPort;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
@@ -50,9 +49,9 @@ public abstract class AbstractPlugin {
 	public AbstractPlugin(final Configuration configuration) {
 		try {
 			// somewhat dirty hack...
-			final Properties defaultProps = this.getDefaultProperties(); // NOPMD
-			if (defaultProps != null) {
-				configuration.setDefaultProperties(defaultProps);
+			final Configuration defaultConfig = this.getDefaultConfiguration(); // NOPMD
+			if (defaultConfig != null) {
+				configuration.setDefaultConfiguration(defaultConfig);
 			}
 		} catch (final IllegalAccessException ex) {
 			AbstractPlugin.LOG.error("Unable to set plugin default properties");
@@ -68,7 +67,7 @@ public abstract class AbstractPlugin {
 	 * 
 	 * @return The default properties.
 	 */
-	protected abstract Properties getDefaultProperties();
+	protected abstract Configuration getDefaultConfiguration();
 
 	/**
 	 * This method should deliver a {@code Configuration} object containing the

@@ -25,13 +25,12 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.plugin.port.OutputPort;
+import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 
 /**
@@ -83,15 +82,15 @@ public final class DummyRecordConsumer extends AbstractAnalysisPlugin implements
 
 	@Override
 	public void newEvent(final Object event) {
-		DummyRecordConsumer.this.newMonitoringRecord((IMonitoringRecord) event);
+		this.newMonitoringRecord((IMonitoringRecord) event);
 		DummyRecordConsumer.this.output.deliver(event);
 	}
 
 	@Override
-	protected final Properties getDefaultProperties() {
-		final Properties defaultProperties = new Properties();
-		defaultProperties.setProperty(DummyRecordConsumer.CONFIG_STREAM, "STDOUT");
-		return defaultProperties;
+	protected final Configuration getDefaultConfiguration() {
+		final Configuration defaultConfiguration = new Configuration(null);
+		defaultConfiguration.setProperty(DummyRecordConsumer.CONFIG_STREAM, "STDOUT");
+		return defaultConfiguration;
 	}
 
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {

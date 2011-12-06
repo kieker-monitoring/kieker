@@ -21,13 +21,12 @@
 package kieker.tools.traceAnalysis.plugins.executionFilter;
 
 import java.util.Collections;
-import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.analysis.plugin.port.OutputPort;
+import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 
 /**
@@ -126,13 +125,13 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 	}
 
 	@Override
-	protected Properties getDefaultProperties() {
-		final Properties properties = new Properties();
+	protected Configuration getDefaultConfiguration() {
+		final Configuration configuration = new Configuration();
 
-		properties.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP, Long.toString(TimestampFilter.MAX_TIMESTAMP));
-		properties.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, Long.toString(TimestampFilter.MIN_TIMESTAMP));
+		configuration.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP, Long.toString(TimestampFilter.MAX_TIMESTAMP));
+		configuration.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, Long.toString(TimestampFilter.MIN_TIMESTAMP));
 
-		return properties;
+		return configuration;
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 package kieker.test.analysis.junit.plugin;
 
-import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.SilentCountingRecordConsumer;
 import kieker.analysis.plugin.port.OutputPort;
+import kieker.common.configuration.Configuration;
 
 import org.junit.Assert;
 import org.junit.Test;

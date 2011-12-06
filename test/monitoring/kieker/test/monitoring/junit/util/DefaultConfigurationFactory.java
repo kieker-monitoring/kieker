@@ -20,7 +20,8 @@
 
 package kieker.test.monitoring.junit.util;
 
-import kieker.monitoring.core.configuration.Configuration;
+import kieker.common.configuration.Configuration;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.writer.DummyWriter;
 
 /**
@@ -34,10 +35,10 @@ public final class DefaultConfigurationFactory {
 	private DefaultConfigurationFactory() {}
 
 	public static Configuration createDefaultConfigurationWithDummyWriter() {
-		final Configuration configuration = Configuration.createDefaultConfiguration();
-		configuration.setProperty(Configuration.CONTROLLER_NAME, "jUnit");
-		configuration.setProperty(Configuration.WRITER_CLASSNAME, DefaultConfigurationFactory.WRITER_NAME);
-		configuration.setProperty(Configuration.PREFIX + "jUnit", "true");
+		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
+		configuration.setProperty(ConfigurationFactory.CONTROLLER_NAME, "jUnit");
+		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, DefaultConfigurationFactory.WRITER_NAME);
+		configuration.setProperty(ConfigurationFactory.PREFIX + "jUnit", "true");
 		configuration.setProperty(DefaultConfigurationFactory.WRITER_NAME + ".jUnit", "true");
 		return configuration;
 	}

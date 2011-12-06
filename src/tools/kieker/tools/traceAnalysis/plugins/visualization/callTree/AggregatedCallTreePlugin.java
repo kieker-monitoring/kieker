@@ -23,11 +23,10 @@ package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.port.AbstractInputPort;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceProcessingException;
@@ -119,13 +118,13 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 	};
 
 	@Override
-	protected Properties getDefaultProperties() {
-		return new Properties();
+	protected Configuration getDefaultConfiguration() {
+		return new Configuration();
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration(null);
+		final Configuration configuration = new Configuration();
 
 		// TODO: Save the current configuration
 

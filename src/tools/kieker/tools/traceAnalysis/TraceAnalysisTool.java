@@ -41,9 +41,8 @@ import java.util.TreeSet;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.configuration.Configuration;
 import kieker.analysis.reader.filesystem.FSReader;
-import kieker.common.configuration.AbstractConfiguration;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
@@ -263,13 +262,13 @@ public final class TraceAnalysisTool {
 				final Collection<Class<? extends IMonitoringRecord>> recordTypeSelectorSet = new CopyOnWriteArrayList<Class<? extends IMonitoringRecord>>();
 				recordTypeSelectorSet.add(OperationExecutionRecord.class);
 				final Configuration conf = new Configuration(null);
-				conf.setProperty(FSReader.CONFIG_INPUTDIRS, AbstractConfiguration.toProperty(TraceAnalysisTool.inputDirs));
+				conf.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(TraceAnalysisTool.inputDirs));
 
 				final Collection<String> recordTypeSelectorNameSet = new CopyOnWriteArrayList<String>();
 				for (final Class<? extends IMonitoringRecord> c : recordTypeSelectorSet) {
 					recordTypeSelectorNameSet.add(c.getName());
 				}
-				conf.setProperty(FSReader.CONFIG_ONLYRECORDS, AbstractConfiguration.toProperty(recordTypeSelectorNameSet.toArray(new String[0])));
+				conf.setProperty(FSReader.CONFIG_ONLYRECORDS, Configuration.toProperty(recordTypeSelectorNameSet.toArray(new String[0])));
 				reader = new FSReader(conf);
 				analysisInstance.setReader(reader);
 			}

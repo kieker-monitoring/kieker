@@ -21,7 +21,6 @@
 package kieker.monitoring.writer;
 
 import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -29,10 +28,10 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.Configuration;
 
 /**
  * @author Jan Waller
@@ -71,13 +70,13 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	 * Make sure that the three required properties always have default values!
 	 */
 	@Override
-	protected Properties getDefaultProperties() {
-		final Properties properties = new Properties(super.getDefaultProperties());
+	protected Configuration getDefaultConfiguration() {
+		final Configuration configuration = new Configuration(super.getDefaultConfiguration());
 		final String prefix = this.getClass().getName() + "."; // can't use this.prefix, maybe uninitialized
-		properties.setProperty(prefix + AbstractAsyncWriter.QUEUESIZE, "10000");
-		properties.setProperty(prefix + AbstractAsyncWriter.BEHAVIOR, "0");
-		properties.setProperty(prefix + AbstractAsyncWriter.SHUTDOWNDELAY, "-1");
-		return properties;
+		configuration.setProperty(prefix + AbstractAsyncWriter.QUEUESIZE, "10000");
+		configuration.setProperty(prefix + AbstractAsyncWriter.BEHAVIOR, "0");
+		configuration.setProperty(prefix + AbstractAsyncWriter.SHUTDOWNDELAY, "-1");
+		return configuration;
 	}
 
 	/**

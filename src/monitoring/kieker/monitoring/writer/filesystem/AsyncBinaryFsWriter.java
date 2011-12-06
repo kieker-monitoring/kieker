@@ -22,8 +22,8 @@ package kieker.monitoring.writer.filesystem;
 
 import java.util.concurrent.BlockingQueue;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.writer.filesystem.async.AbstractFsWriterThread;
 import kieker.monitoring.writer.filesystem.async.BinaryFsWriterThread;

@@ -20,13 +20,12 @@
 
 package kieker.monitoring.writer;
 
-import java.util.Properties;
 import java.util.Set;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.core.controller.IMonitoringController;
 
 /**
@@ -46,9 +45,9 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	protected AbstractMonitoringWriter(final Configuration configuration) {
 		try {
 			// somewhat dirty hack...
-			final Properties defaultProps = this.getDefaultProperties(); // NOPMD
-			if (defaultProps != null) {
-				configuration.setDefaultProperties(defaultProps);
+			final Configuration defaultConfiguration = this.getDefaultConfiguration(); // NOPMD
+			if (defaultConfiguration != null) {
+				configuration.setDefaultConfiguration(defaultConfiguration);
 			}
 		} catch (final IllegalAccessException ex) {
 			AbstractMonitoringWriter.LOG.error("Unable to set writer custom default properties");
@@ -62,7 +61,7 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	 * 
 	 * @return
 	 */
-	protected Properties getDefaultProperties() { // NOPMD
+	protected Configuration getDefaultConfiguration() { // NOPMD
 		return null;
 	}
 

@@ -26,23 +26,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import kieker.common.configuration.AbstractConfiguration;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.controller.MonitoringController;
 
 /**
- * A Configuration for kieker.monitoring
+ * A ConfigurationFactory for kieker.monitoring
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-public final class Configuration extends AbstractConfiguration implements Keys {
-	private static final long serialVersionUID = 1L;
-	private static final Log LOG = LogFactory.getLog(Configuration.class);
-
-	private Configuration(final Properties defaultValues) {
-		super(defaultValues);
-	}
+public abstract class ConfigurationFactory implements Keys {
+	private static final Log LOG = LogFactory.getLog(ConfigurationFactory.class);
 
 	/*
 	 * factory methods
@@ -56,26 +51,26 @@ public final class Configuration extends AbstractConfiguration implements Keys {
 	 * @return the configuration for the singleton controller
 	 */
 	public static final Configuration createSingletonConfiguration() {
-		if (Configuration.LOG.isDebugEnabled()) {
-			Configuration.LOG.debug("Searching for JVM argument '" + Keys.CUSTOM_PROPERTIES_LOCATION_JVM + "' ...");
+		if (ConfigurationFactory.LOG.isDebugEnabled()) {
+			ConfigurationFactory.LOG.debug("Searching for JVM argument '" + Keys.CUSTOM_PROPERTIES_LOCATION_JVM + "' ...");
 		}
-		final Configuration defaultConfiguration = Configuration.defaultConfiguration();
+		final Configuration defaultConfiguration = ConfigurationFactory.defaultConfiguration();
 		// ignore default default-name and set to KIEKER-SINGLETON
 		defaultConfiguration.setProperty(Keys.CONTROLLER_NAME, "KIEKER-SINGLETON");
 		// Searching for configuration file location passed to JVM
 		String configurationFile = System.getProperty(Keys.CUSTOM_PROPERTIES_LOCATION_JVM);
 		final Configuration loadConfiguration;
 		if (configurationFile != null) {
-			Configuration.LOG.info("Loading configuration from JVM-specified location: '" + configurationFile + "'"); // NOCS (MultipleStringLiteralsCheck)
-			loadConfiguration = Configuration.loadConfigurationFromFile(configurationFile, defaultConfiguration);
+			ConfigurationFactory.LOG.info("Loading configuration from JVM-specified location: '" + configurationFile + "'"); // NOCS (MultipleStringLiteralsCheck)
+			loadConfiguration = ConfigurationFactory.loadConfigurationFromFile(configurationFile, defaultConfiguration);
 		} else {
 			// No JVM property; Trying to find configuration file in classpath
 			configurationFile = Keys.CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
-			Configuration.LOG.info("Loading properties from properties file in classpath: '" + configurationFile + "'");
-			loadConfiguration = Configuration.loadConfigurationFromResource(configurationFile, defaultConfiguration);
+			ConfigurationFactory.LOG.info("Loading properties from properties file in classpath: '" + configurationFile + "'");
+			loadConfiguration = ConfigurationFactory.loadConfigurationFromResource(configurationFile, defaultConfiguration);
 		}
 		// 1.JVM-params -> 2.properties file -> 3.default properties file
-		return Configuration.getSystemPropertiesStartingWith(Keys.PREFIX, loadConfiguration);
+		return ConfigurationFactory.getSystemPropertiesStartingWith(Keys.PREFIX, loadConfiguration);
 	}
 
 	/**
@@ -84,7 +79,7 @@ public final class Configuration extends AbstractConfiguration implements Keys {
 	 * @return default configuration
 	 */
 	public static final Configuration createDefaultConfiguration() {
-		return new Configuration(Configuration.defaultConfiguration());
+		return new Configuration(ConfigurationFactory.defaultConfiguration());
 	}
 
 	/**
@@ -96,7 +91,7 @@ public final class Configuration extends AbstractConfiguration implements Keys {
 	 * @return the created Configuration
 	 */
 	public static final Configuration createConfigurationFromFile(final String configurationFile) {
-		return Configuration.loadConfigurationFromFile(configurationFile, Configuration.defaultConfiguration());
+		return ConfigurationFactory.loadConfigurationFromFile(configurationFile, ConfigurationFactory.defaultConfiguration());
 	}
 
 	/**
@@ -105,7 +100,7 @@ public final class Configuration extends AbstractConfiguration implements Keys {
 	 * @return
 	 */
 	private static final Configuration defaultConfiguration() {
-		return Configuration.loadConfigurationFromResource(Keys.DEFAULT_PROPERTIES_LOCATION_CLASSPATH, null);
+		return ConfigurationFactory.loadConfigurationFromResource(Keys.DEFAULT_PROPERTIES_LOCATION_CLASSPATH, null);
 	}
 
 	/**
@@ -125,15 +120,15 @@ public final class Configuration extends AbstractConfiguration implements Keys {
 			properties.load(is);
 			return properties;
 		} catch (final FileNotFoundException ex) {
-			Configuration.LOG.warn("File '" + propertiesFn + "' not found"); // NOCS (MultipleStringLiteralsCheck)
+			ConfigurationFactory.LOG.warn("File '" + propertiesFn + "' not found"); // NOCS (MultipleStringLiteralsCheck)
 		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
-			Configuration.LOG.error("Error reading file '" + propertiesFn + "'", ex); // NOCS (MultipleStringLiteralsCheck)
+			ConfigurationFactory.LOG.error("Error reading file '" + propertiesFn + "'", ex); // NOCS (MultipleStringLiteralsCheck)
 		} finally {
 			if (is != null) {
 				try {
 					is.close();
 				} catch (final IOException ex) {
-					Configuration.LOG.warn("Failed to close FileInputStream", ex);
+					ConfigurationFactory.LOG.warn("Failed to close FileInputStream", ex);
 				}
 			}
 		}
@@ -152,19 +147,19 @@ public final class Configuration extends AbstractConfiguration implements Keys {
 	private static final Configuration loadConfigurationFromResource(final String propertiesFn, final Configuration defaultValues) {
 		final InputStream is = MonitoringController.class.getClassLoader().getResourceAsStream(propertiesFn);
 		if (is == null) {
-			Configuration.LOG.warn("File '" + propertiesFn + "' not found in classpath"); // NOCS (MultipleStringLiteralsCheck)
+			ConfigurationFactory.LOG.warn("File '" + propertiesFn + "' not found in classpath"); // NOCS (MultipleStringLiteralsCheck)
 		} else {
 			try {
 				final Configuration properties = new Configuration(defaultValues);
 				properties.load(is);
 				return properties;
 			} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
-				Configuration.LOG.error("Error reading file '" + propertiesFn + "'", ex); // NOCS (MultipleStringLiteralsCheck)
+				ConfigurationFactory.LOG.error("Error reading file '" + propertiesFn + "'", ex); // NOCS (MultipleStringLiteralsCheck)
 			} finally {
 				try {
 					is.close();
 				} catch (final IOException ex) {
-					Configuration.LOG.warn("Failed to close RessourceInputStream", ex);
+					ConfigurationFactory.LOG.warn("Failed to close RessourceInputStream", ex);
 				}
 			}
 		}
@@ -187,10 +182,5 @@ public final class Configuration extends AbstractConfiguration implements Keys {
 			}
 		}
 		return configuration;
-	}
-
-	@Override
-	public final Configuration getPropertiesStartingWith(final String prefix) {
-		return (Configuration) this.getPropertiesStartingWith(new Configuration(null), prefix);
 	}
 }

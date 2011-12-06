@@ -21,17 +21,16 @@
 package kieker.tools.logReplayer;
 
 import java.util.Collections;
-import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import kieker.analysis.configuration.Configuration;
 import kieker.analysis.exception.MonitoringRecordConsumerException;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.analysis.plugin.port.OutputPort;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
@@ -200,14 +199,14 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 	}
 
 	@Override
-	protected Properties getDefaultProperties() {
-		// TODO: Deliver default properties
-		return new Properties();
+	protected Configuration getDefaultConfiguration() {
+		// TODO: Deliver default configuration
+		return new Configuration();
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration(null);
+		final Configuration configuration = new Configuration();
 
 		// TODO: Save the current configuration
 

@@ -21,16 +21,15 @@
 package kieker.tools.logReplayer;
 
 import java.util.Collections;
-import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.reader.IMonitoringReader;
 import kieker.analysis.reader.jms.JMSReader;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
@@ -172,8 +171,8 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected Properties getDefaultProperties() {
-		return new Properties();
+	protected Configuration getDefaultConfiguration() {
+		return new Configuration();
 	}
 
 	/**
@@ -181,6 +180,6 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 	 */
 	@Override
 	public Configuration getCurrentConfiguration() {
-		return new Configuration(null);
+		return new Configuration();
 	}
 }

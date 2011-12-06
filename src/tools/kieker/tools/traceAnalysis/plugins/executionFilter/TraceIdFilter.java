@@ -22,15 +22,13 @@ package kieker.tools.traceAnalysis.plugins.executionFilter;
 
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.configuration.Configuration;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.analysis.plugin.port.OutputPort;
-import kieker.common.configuration.AbstractConfiguration;
+import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 
 /**
@@ -109,10 +107,10 @@ public class TraceIdFilter extends AbstractAnalysisPlugin {
 	}
 
 	@Override
-	protected Properties getDefaultProperties() {
-		final Properties defaultProperties = new Properties();
+	protected Configuration getDefaultConfiguration() {
+		final Configuration defaultConfiguration = new Configuration();
 		// TODO: Provide default properties.
-		return defaultProperties;
+		return defaultConfiguration;
 	}
 
 	@Override
@@ -126,7 +124,7 @@ public class TraceIdFilter extends AbstractAnalysisPlugin {
 			while (iter.hasNext()) {
 				selectedTracesArr[i++] = iter.next().toString();
 			}
-			configuration.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, AbstractConfiguration.toProperty(selectedTracesArr));
+			configuration.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, Configuration.toProperty(selectedTracesArr));
 		}
 		return configuration;
 	}
