@@ -20,17 +20,16 @@
 
 package kieker.tools.traceAnalysis.plugins.traceReconstruction;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.plugin.port.AbstractInputPort;
-import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.AInputPort;
+import kieker.analysis.plugin.port.AOutputPort;
+import kieker.analysis.plugin.port.APlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -44,12 +43,27 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
- * This class has exactly one input port named "in" and three output ports named
- * "messageTraceOutput", "executionTraceOutput", "invalidExecutionTraceOutput"
- * 
  * @author Andre van Hoorn
  */
+@APlugin(outputPorts = {
+	@AOutputPort(
+			name = TraceReconstructionFilter.MESSAGE_TRACE_OUTPUT,
+			description = "Reconstructed Message Traces",
+			eventTypes = { MessageTrace.class }),
+	@AOutputPort(
+			name = TraceReconstructionFilter.EXECUTION_TRACE_OUTPUT,
+			description = "Reconstructed Execution Traces",
+			eventTypes = { ExecutionTrace.class }),
+	@AOutputPort(
+			name = TraceReconstructionFilter.INVALID_EXECUTION_TRACE_OUTPUT,
+			description = "Invalid Execution Traces",
+			eventTypes = { InvalidExecutionTrace.class })
+})
 public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
+
+	public static final String MESSAGE_TRACE_OUTPUT = "MessageTraceOutput";
+	public static final String EXECUTION_TRACE_OUTPUT = "ExecutionTraceOutput";
+	public static final String INVALID_EXECUTION_TRACE_OUTPUT = "InvalidExecutionTraceOutput";
 
 	public static final int MAX_DURATION_MILLIS = Integer.MAX_VALUE;
 	private static final Log LOG = LogFactory.getLog(TraceReconstructionFilter.class);
@@ -64,16 +78,6 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	private final boolean ignoreInvalidTraces;
 	private final Execution rootExecution;
 	private final long maxTraceDurationNanos;
-
-	private final OutputPort messageTraceOutputPort = new OutputPort("Reconstructed Message Traces",
-			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-					new Class<?>[] { MessageTrace.class })));
-	private final OutputPort executionTraceOutputPort = new OutputPort("Reconstructed Execution Traces",
-			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-					new Class<?>[] { ExecutionTrace.class })));
-	private final OutputPort invalidExecutionTraceOutputPort = new OutputPort("Invalid Execution Traces",
-			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-					new Class<?>[] { InvalidExecutionTrace.class })));
 
 	/** Pending traces sorted by tin timestamps */
 	private final NavigableSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() {
@@ -112,12 +116,6 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 			this.maxTraceDurationNanos = maxTraceDurationMillis * (1000 * 1000); // NOCS (MagicNumberCheck)
 		}
 		this.ignoreInvalidTraces = ignoreInvalidTraces;
-
-		/* Register all ports. */
-		super.registerInputPort("in", this.executionInputPort);
-		super.registerOutputPort("messageTraceOutput", this.messageTraceOutputPort);
-		super.registerOutputPort("executionTraceOutput", this.executionTraceOutputPort);
-		super.registerOutputPort("invalidExecutionTraceOutput", this.invalidExecutionTraceOutputPort);
 	}
 
 	/**
@@ -152,7 +150,9 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 		return true; // no need to do anything here
 	}
 
-	private void newExecution(final Execution execution) {
+	@AInputPort(description = "The input port", eventTypes = { Execution.class })
+	public void newExecution(final Object data) {
+		final Execution execution = (Execution) data;
 		final long traceId = execution.getTraceId();
 
 		this.minTin = ((this.minTin < 0) || (execution.getTin() < this.minTin)) ? execution.getTin() : this.minTin; // NOCS
@@ -210,18 +210,18 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 			 */
 			if (!this.invalidTraces.contains(mt.getTraceId())) {
 				/* Not completing part of an invalid trace */
-				this.messageTraceOutputPort.deliver(mt);
-				this.executionTraceOutputPort.deliver(executionTrace);
+				super.deliver(TraceReconstructionFilter.MESSAGE_TRACE_OUTPUT, mt);
+				super.deliver(TraceReconstructionFilter.EXECUTION_TRACE_OUTPUT, executionTrace);
 				this.reportSuccess(curTraceId);
 			} else {
 				/* mt is the completing part of an invalid trace */
-				this.invalidExecutionTraceOutputPort.deliver(new InvalidExecutionTrace(executionTrace));
+				super.deliver(TraceReconstructionFilter.INVALID_EXECUTION_TRACE_OUTPUT, new InvalidExecutionTrace(executionTrace));
 				// the statistics have been updated on the first
 				// occurrence of artifacts of this trace
 			}
 		} catch (final InvalidTraceException ex) {
 			/* Transformation failed (i.e., trace invalid) */
-			this.invalidExecutionTraceOutputPort.deliver(new InvalidExecutionTrace(executionTrace));
+			super.deliver(TraceReconstructionFilter.INVALID_EXECUTION_TRACE_OUTPUT, new InvalidExecutionTrace(executionTrace));
 			if (!this.invalidTraces.contains(curTraceId)) {
 				// only once per traceID (otherwise, we would report all
 				// trace fragments)
@@ -293,32 +293,6 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 				.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.maxTout)).append(")").toString();
 		System.out.println("First timestamp: " + minTinStr);
 		System.out.println("Last timestamp: " + maxToutStr);
-	}
-
-	public AbstractInputPort getExecutionInputPort() {
-		return this.executionInputPort;
-	}
-
-	private final AbstractInputPort executionInputPort = new AbstractInputPort("Execution input",
-			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-					new Class<?>[] { Execution.class }))) {
-
-		@Override
-		public void newEvent(final Object event) {
-			TraceReconstructionFilter.this.newExecution((Execution) event);
-		}
-	};
-
-	public OutputPort getMessageTraceOutputPort() {
-		return this.messageTraceOutputPort;
-	}
-
-	public OutputPort getExecutionTraceOutputPort() {
-		return this.executionTraceOutputPort;
-	}
-
-	public OutputPort getInvalidExecutionTraceOutputPort() {
-		return this.invalidExecutionTraceOutputPort;
 	}
 
 	@Override

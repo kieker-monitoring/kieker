@@ -20,11 +20,9 @@
 
 package kieker.analysis.plugin;
 
-import java.util.Collections;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-import kieker.analysis.plugin.port.AbstractInputPort;
-import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.AInputPort;
+import kieker.analysis.plugin.port.AOutputPort;
+import kieker.analysis.plugin.port.APlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -38,32 +36,30 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @author Andre van Hoorn
  */
+@APlugin(outputPorts = {
+	@AOutputPort(name = MonitoringRecordTypeLogger.OUTPUT_PORT, eventTypes = { IMonitoringRecord.class })
+})
 public class MonitoringRecordTypeLogger extends AbstractAnalysisPlugin {
 
+	public static final String OUTPUT_PORT = "output";
+
 	private static final Log LOG = LogFactory.getLog(MonitoringRecordTypeLogger.class);
-	private final OutputPort output = new OutputPort("out", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { IMonitoringRecord.class })));
-	private final AbstractInputPort input = new AbstractInputPort("in", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { IMonitoringRecord.class }))) {
-		@Override
-		public void newEvent(final Object event) {
-			final IMonitoringRecord monitoringRecord = (IMonitoringRecord) event;
 
-			MonitoringRecordTypeLogger.LOG.info("Consumed record:" + monitoringRecord.getClass().getName());
-			MonitoringRecordTypeLogger.LOG.info(monitoringRecord.toString());
+	@AInputPort(eventTypes = { IMonitoringRecord.class })
+	public void newEvent(final Object event) {
+		final IMonitoringRecord monitoringRecord = (IMonitoringRecord) event;
 
-			MonitoringRecordTypeLogger.this.output.deliver(event);
-		}
-	};
+		MonitoringRecordTypeLogger.LOG.info("Consumed record:" + monitoringRecord.getClass().getName());
+		MonitoringRecordTypeLogger.LOG.info(monitoringRecord.toString());
+
+		super.deliver(MonitoringRecordTypeLogger.OUTPUT_PORT, event);
+	}
 
 	/**
 	 * Constructs a {@link MonitoringRecordTypeLogger}.
 	 */
 	public MonitoringRecordTypeLogger(final Configuration configuration) {
 		super(configuration);
-
-		this.registerInputPort("in", this.input);
-		this.registerOutputPort("out", this.output);
 	}
 
 	@Override

@@ -20,8 +20,6 @@
 
 package kieker.analysis.plugin;
 
-import kieker.analysis.plugin.port.AbstractInputPort;
-import kieker.analysis.plugin.port.OutputPort;
 import kieker.common.configuration.Configuration;
 
 /**
@@ -40,19 +38,4 @@ public abstract class AbstractAnalysisPlugin extends AbstractPlugin implements I
 		super(configuration);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected final void registerInputPort(final String name, final AbstractInputPort port) {
-		super.registerInputPort(name, port);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected final void registerOutputPort(final String name, final OutputPort port) {
-		super.registerOutputPort(name, port);
-	}
 }

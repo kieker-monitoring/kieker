@@ -20,15 +20,27 @@
 
 package kieker.analysis.plugin.port;
 
-import java.util.Collection;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
+ * This annotation can be used to describe the output ports of a plugin. It can
+ * only be used <b>within</b> other annotations. It allows to specify the name
+ * of the output port and the corresponding event types. There is also a field
+ * for a human-readable description available.
  * 
- * @author Andre van Hoorn
+ * @author Nils Christian Ehmke
  */
-interface IPort {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.ANNOTATION_TYPE)
+public @interface AOutputPort {
 
-	public String getDescription();
+	String description();
 
-	public Collection<Class<?>> getEventTypes();
+	String name();
+
+	Class<?>[] eventTypes();
+
 }

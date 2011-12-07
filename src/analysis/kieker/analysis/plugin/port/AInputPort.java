@@ -20,24 +20,27 @@
 
 package kieker.analysis.plugin.port;
 
-import java.util.Collection;
-
-import kieker.analysis.plugin.ISingleInputPort;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * @author Jan Waller
+ * This annotation can be used to mark methods as input ports. The corresponding
+ * methods should only get an instance of the class <code>Objec</code> and
+ * nothing else.<br>
+ * Furthermore the port allows to specify the event types for this port, but not
+ * the name. The name is determined by the name of the target-method. There is
+ * also a field for a human-readable description available.
+ * 
+ * @author Nils Christian Ehmke
  */
-public final class InputPort extends AbstractInputPort {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface AInputPort {
 
-	private final ISingleInputPort plugin; // the associated plugin
+	String description();
 
-	public InputPort(final String description, final Collection<Class<?>> eventTypes, final ISingleInputPort plugin) {
-		super(description, eventTypes);
-		this.plugin = plugin;
-	}
+	Class<?>[] eventTypes();
 
-	@Override
-	public final void newEvent(final Object event) {
-		this.plugin.newEvent(event);
-	}
 }

@@ -23,13 +23,10 @@ package kieker.analysis.plugin;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.plugin.port.AbstractInputPort;
-import kieker.analysis.plugin.port.InputPort;
-import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.AInputPort;
+import kieker.analysis.plugin.port.AOutputPort;
+import kieker.analysis.plugin.port.APlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 
@@ -44,18 +41,19 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @author Matthias Rohr, Jan Waller
  */
-public final class DummyRecordConsumer extends AbstractAnalysisPlugin implements ISingleInputPort {
-	public static final String CONFIG_STREAM = DummyRecordConsumer.class.getName() + ".Stream";
+@APlugin(outputPorts = {
+	@AOutputPort(
+			name = DummyRecordConsumer.OUTPUT_PORT,
+			description = "Unmodified output port",
+			eventTypes = { IMonitoringRecord.class })
+})
+public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
 
-	private static final Collection<Class<?>> OUT_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { IMonitoringRecord.class }));
-	private static final Collection<Class<?>> IN_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { IMonitoringRecord.class }));
+	public static final String OUTPUT_PORT = "output";
+	public static final String CONFIG_STREAM = DummyRecordConsumer.class.getName() + ".Stream";
 
 	private final PrintStream printStream;
 	private final String printStreamName;
-	private final OutputPort output = new OutputPort("out", DummyRecordConsumer.OUT_CLASSES);
-	private final AbstractInputPort input = new InputPort("in", DummyRecordConsumer.IN_CLASSES, this);
 
 	public DummyRecordConsumer(final Configuration configuration) throws FileNotFoundException {
 		super(configuration);
@@ -74,16 +72,6 @@ public final class DummyRecordConsumer extends AbstractAnalysisPlugin implements
 			this.printStream = new PrintStream(new FileOutputStream(printStreamName));
 			this.printStreamName = printStreamName;
 		}
-
-		/* Register the ports. */
-		super.registerInputPort("in", this.input);
-		super.registerOutputPort("out", this.output);
-	}
-
-	@Override
-	public void newEvent(final Object event) {
-		this.newMonitoringRecord((IMonitoringRecord) event);
-		DummyRecordConsumer.this.output.deliver(event);
 	}
 
 	@Override
@@ -93,9 +81,12 @@ public final class DummyRecordConsumer extends AbstractAnalysisPlugin implements
 		return defaultConfiguration;
 	}
 
-	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
+	@AInputPort(
+			description = "Input port",
+			eventTypes = { IMonitoringRecord.class })
+	public final void newMonitoringRecord(final Object monitoringRecord) {
 		this.printStream.println("DummyRecordConsumer consumed (" + monitoringRecord.getClass().getSimpleName() + ") " + monitoringRecord);
-		return true;
+		super.deliver(DummyRecordConsumer.OUTPUT_PORT, monitoringRecord);
 	}
 
 	@Override

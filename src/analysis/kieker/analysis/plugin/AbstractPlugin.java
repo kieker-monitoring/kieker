@@ -20,25 +20,23 @@
 
 package kieker.analysis.plugin;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import kieker.analysis.plugin.port.AbstractInputPort;
-import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.APlugin;
+import kieker.analysis.reader.IMonitoringReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
 /**
- * <b>Do not</b> inherit directly from this class! Instead inherit from {@link AbstractAnalysisPlugin} or {@link AbstractMonitoringReader}.
+ * <b>Do not</b> inherit directly from this class! Instead inherit from the
+ * class {@link AbstractAnalysisPlugin} or {@link AbstractMonitoringReader}.
  * 
  * @author Nils Christian Ehmke
  */
+@APlugin(outputPorts = {})
 public abstract class AbstractPlugin {
+
 	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
 
-	private final Map<String, AbstractInputPort> inputPorts = new ConcurrentHashMap<String, AbstractInputPort>();
-	private final Map<String, OutputPort> outputPorts = new ConcurrentHashMap<String, OutputPort>();
 	private String name = null;
 
 	protected final Configuration configuration;
@@ -80,92 +78,6 @@ public abstract class AbstractPlugin {
 	public abstract Configuration getCurrentConfiguration();
 
 	/**
-	 * Delivers the input port with the given name.
-	 * 
-	 * @param name
-	 *            The name of the input port.
-	 * @return The input port with the given name or null if the name is invalid.
-	 */
-	public final AbstractInputPort getInputPort(final String name) {
-		return this.inputPorts.get(name);
-	}
-
-	/**
-	 * Delivers the output port with the given name.
-	 * 
-	 * @param name
-	 *            The name of the output port.
-	 * @return The output port with the given name or null if the name is invalid.
-	 */
-	public final OutputPort getOutputPort(final String name) {
-		return this.outputPorts.get(name);
-	}
-
-	/**
-	 * This method registers the given input port and makes sure that other
-	 * classes calling the getter-methods can find this port.
-	 * 
-	 * @param name
-	 *            The name under which the port should be accessible. If the
-	 *            name is already in use, the old port will be replaced.
-	 * @param port
-	 *            The port to be registered.
-	 */
-	protected void registerInputPort(final String name, final AbstractInputPort port) {
-		this.inputPorts.put(name, port);
-	}
-
-	/**
-	 * This method registers the given output port and makes sure that other
-	 * classes calling the getter-methods can find this port.
-	 * 
-	 * @param name
-	 *            The name under which the port should be accessible. If the
-	 *            name is already in use, the old port will be replaced.
-	 * @param port
-	 *            The port to be registered.
-	 */
-	protected void registerOutputPort(final String name, final OutputPort port) {
-		this.outputPorts.put(name, port);
-	}
-
-	/**
-	 * Delivers an array containing all input ports of this instance.
-	 * 
-	 * @return An array with all input ports.
-	 */
-	public final AbstractInputPort[] getAllInputPorts() {
-		return this.inputPorts.values().toArray(new AbstractInputPort[0]);
-	}
-
-	/**
-	 * Delivers an array containing all output ports of this instance.
-	 * 
-	 * @return An array with all output ports.
-	 */
-	public final OutputPort[] getAllOutputPorts() {
-		return this.outputPorts.values().toArray(new OutputPort[0]);
-	}
-
-	/**
-	 * Delivers an array containing all output port names of this instance.
-	 * 
-	 * @return An array with the names of all output ports.
-	 */
-	public final String[] getAllOutputPortNames() {
-		return this.outputPorts.keySet().toArray(new String[0]);
-	}
-
-	/**
-	 * Delivers an array containing all input port names of this instance.
-	 * 
-	 * @return An array with the names of all input ports.
-	 */
-	public String[] getAllInputPortNames() {
-		return this.inputPorts.keySet().toArray(new String[0]);
-	}
-
-	/**
 	 * This method delivers the current name of this plugin. The name does not
 	 * have to be unique.
 	 * 
@@ -184,5 +96,21 @@ public abstract class AbstractPlugin {
 	 */
 	public final void setName(final String name) {
 		this.name = name;
+	}
+
+	protected final void deliver(final String outputPort, final Object data) {
+		// TODO
+		// data muss passen
+	}
+
+	public static final void connect(final AbstractPlugin src, final String output, final AbstractPlugin dst, final String input) {
+		if (dst instanceof IMonitoringReader) {
+			throw new InvalidConnectionException("");
+		}
+
+		// TODO
+		// dst darf kein reader sein
+		// ports müssen passen
+		// ports müssen exisieren
 	}
 }

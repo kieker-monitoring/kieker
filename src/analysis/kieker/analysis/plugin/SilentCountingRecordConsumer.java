@@ -22,8 +22,9 @@ package kieker.analysis.plugin;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import kieker.analysis.plugin.port.InputPort;
-import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.AInputPort;
+import kieker.analysis.plugin.port.AOutputPort;
+import kieker.analysis.plugin.port.APlugin;
 import kieker.common.configuration.Configuration;
 
 /**
@@ -33,26 +34,26 @@ import kieker.common.configuration.Configuration;
  * 
  * @author Jan Waller
  */
-public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin implements ISingleInputPort {
+@APlugin(outputPorts = {
+	@AOutputPort(name = SilentCountingRecordConsumer.OUTPUT_PORT, eventTypes = {})
+})
+public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
+
+	public static final String OUTPUT_PORT = "output";
+
 	private final AtomicLong counter = new AtomicLong();
-	private final OutputPort output = new OutputPort("out", null);
-	private final InputPort input = new InputPort("in", null, this); // TODO: escaping this in constructor!
 
 	/**
 	 * Constructs a {@link SilentCountingRecordConsumer}.
 	 */
 	public SilentCountingRecordConsumer(final Configuration configuration) {
 		super(configuration);
-
-		/* Register the necessary ports. */
-		this.registerInputPort("in", this.input);
-		this.registerOutputPort("out", this.output);
 	}
 
-	@Override
+	@AInputPort(eventTypes = {})
 	public final void newEvent(final Object event) {
 		SilentCountingRecordConsumer.this.counter.incrementAndGet();
-		SilentCountingRecordConsumer.this.output.deliver(event);
+		super.deliver(SilentCountingRecordConsumer.OUTPUT_PORT, event);
 	}
 
 	public final long getMessageCount() {
