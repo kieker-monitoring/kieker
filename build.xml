@@ -34,7 +34,7 @@
 		</replaceregexp>
 	</target>
 
-	<target name="build-all" depends="clean,-init,build-kieker.main,build-kieker.monitoring-servlet,create-eclipse-sample-files" description="Compiles and packages the Kieker Jar and War files (calls the 'build-kieker-*' targets)">
+	<target name="build-all" depends="clean,-init,build-kieker.main,build-kieker.main.aspectj,build-kieker.monitoring-servlet" description="Compiles and packages the Kieker Jar and War files (calls the 'build-kieker-*' targets)">
 	</target>
 
 	<target name="-init" depends="-update-version,-init-compile-classpaths" description="Initializes variables and creates directories">
@@ -202,10 +202,14 @@
 	</target>
 	
 	<target name="build-kieker.main.aspectj" depends="-init,build-kieker.main" description="Compiles and packages the Kieker Jar file including the aspectweaver">
-		<jar destfile="${dist.dir}/${dist.kieker.main.aspectj.jar}" filesetmanifest="mergewithoutmain" index="true" indexMetaInf="true" flattenAttributes="true">
+		<jar destfile="${dist.dir}/${dist.kieker.main.aspectj.jar}" filesetmanifest="merge" index="true"> <!--  indexMetaInf="true" flattenAttributes="true" -->
 			<zipfileset src="${dist.dir}/${dist.kieker.main.jar}" />
 			<zipfileset src="${aspectjweaverjar}" />
 			<fileset dir="${lib.dir}" includes="aspectjweaver-*.LICENSE" />
+			<manifest>
+				<attribute name="Premain-Class" value="org.aspectj.weaver.loadtime.Agent"/>
+				<attribute name="Can-Redefine-Classes" value="true"/>
+			</manifest>
 		</jar>
 	</target>
 	
@@ -560,8 +564,8 @@
 		<replaceregexp file="${src.userguide.example.manual.dir}/README.txt" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
 		<replaceregexp file="${src.userguide.example.extended.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
 		<replaceregexp file="${src.userguide.example.extended.dir}/README.txt" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
-		<replaceregexp file="${src.userguide.example.aspectj.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
-		<replaceregexp file="${src.userguide.example.aspectj.dir}/README.txt" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.aspectj.dir}/.classpath" match="kieker-weaver-.*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.aspectj.dir}/README.txt" match="kieker-weaver-.*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g" />
 		<replaceregexp file="${src.userguide.example.jms.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
 		<replaceregexp file="${src.userguide.example.sigar.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
 	</target>

@@ -7,11 +7,9 @@
 	</path>
 
 	<condition property="not-all-files-available">
-		<resourcecount property="num.requiredLibsFound" when="ne" count="3">
+		<resourcecount property="num.requiredLibsFound" when="ne" count="1">
 			<fileset dir="${lib.dir}">
-				<include name="${jar.file.commonslogging}" />
 				<include name="${jar.file.kieker}" />
-				<include name="${jar.file.aspectjweaver}" />
 			</fileset>
 		</resourcecount>
 	</condition>
@@ -26,8 +24,8 @@
 				<path refid="classpath" />
 				<path location="${jar.file}" />
 			</classpath>
-                        <arg line="${num.requests}" />
-			<jvmarg value="-javaagent:${lib.dir}/${jar.file.aspectjweaver}" />
+            <arg line="${num.requests}" />
+			<jvmarg value="-javaagent:${lib.dir}/${jar.file.kieker}" />
 			<jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true" />
 			<jvmarg value="-Daj.weaving.verbose=true" />
 		</java>
