@@ -7,11 +7,13 @@
 
 	<target name="-init-version" description="Initializes variables based on the Kieker version number">
 		<tstamp />
+		<property name="kieker.name" value="Kieker Framework" />
 		<property name="kieker.version" value="1.5-SNAPSHOT" />
 		<property name="year" value="2011" />
 		<property name="copyright" value="the Kieker Project" />
 		<property name="dist.kieker.monitoring.servlet.war" value="${kieker.monitoring.servlet.packagenamebase}-${kieker.version}.war" />
 		<property name="dist.kieker.main.jar" value="${kieker.main.packagenamebase}-${kieker.version}.jar" />
+		<property name="dist.kieker.main.aspectj.jar" value="${kieker.main.packagenamebase}-weaver-${kieker.version}.jar" />
 
 		<property name="kieker.dist.name" value="${kieker.packagenamebase}-${kieker.version}" />
 		<property name="dist.kieker.srcBaseName" value="${kieker.dist.name}_${kieker-src.suffix}" />
@@ -186,6 +188,24 @@
 			<fileset dir="${build.kieker.monitoring.dir}" />
 			<fileset dir="${build.kieker.tools.dir}" />
 			<fileset dir="." includes="LICENSE" />
+			<manifest>
+				<section name="kieker">
+					<attribute name="Specification-Title" value="${kieker.name}"/>
+					<attribute name="Specification-Version" value="${kieker.version}"/>
+					<attribute name="Specification-Vendor" value="${copyright}"/>
+					<attribute name="Implementation-Title" value="${kieker.name}"/>
+					<attribute name="Implementation-Version" value="${kieker.version} (${TODAY})"/> 
+					<attribute name="Implementation-Vendor" value="${copyright}"/>
+				</section>
+			</manifest>
+		</jar>
+	</target>
+	
+	<target name="build-kieker.main.aspectj" depends="-init,build-kieker.main" description="Compiles and packages the Kieker Jar file including the aspectweaver">
+		<jar destfile="${dist.dir}/${dist.kieker.main.aspectj.jar}" filesetmanifest="mergewithoutmain" index="true" indexMetaInf="true" flattenAttributes="true">
+			<zipfileset src="${dist.dir}/${dist.kieker.main.jar}" />
+			<zipfileset src="${aspectjweaverjar}" />
+			<fileset dir="${lib.dir}" includes="aspectjweaver-*.LICENSE" />
 		</jar>
 	</target>
 	
