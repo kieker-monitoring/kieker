@@ -21,13 +21,11 @@
 package kieker.tools.logReplayer;
 
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.port.AbstractInputPort;
+import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.plugin.port.AInputPort;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
@@ -116,7 +114,10 @@ public class FilesystemLogReplayer {
 		}
 		final AnalysisController tpanInstance = new AnalysisController();
 		tpanInstance.setReader(fsReader);
-		tpanInstance.registerPlugin(new RecordDelegationPlugin(this.recordReceiver, this.ignoreRecordsBeforeTimestamp, this.ignoreRecordsAfterTimestamp));
+		final RecordDelegationPlugin delegationPlugin = new RecordDelegationPlugin(this.recordReceiver, this.ignoreRecordsBeforeTimestamp,
+				this.ignoreRecordsAfterTimestamp);
+		tpanInstance.registerPlugin(delegationPlugin);
+		AbstractPlugin.connect(fsReader, FSReader.OUTPUT_PORT, delegationPlugin, RecordDelegationPlugin.INPUT_PORT);
 		try {
 			tpanInstance.run();
 			success = true;
@@ -141,22 +142,13 @@ public class FilesystemLogReplayer {
  */
 class RecordDelegationPlugin extends AbstractAnalysisPlugin {
 
+	public static final String INPUT_PORT = "input";
 	private static final Log LOG = LogFactory.getLog(RecordDelegationPlugin.class);
 
 	private final IMonitoringController rec;
 
 	private final long ignoreRecordsBeforeTimestamp;
 	private final long ignoreRecordsAfterTimestamp;
-
-	private static final Collection<Class<?>> IN_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { IMonitoringRecord.class }));
-
-	private final AbstractInputPort input = new AbstractInputPort("in", RecordDelegationPlugin.IN_CLASSES) {
-		@Override
-		public void newEvent(final Object event) {
-			RecordDelegationPlugin.this.newMonitoringRecord((IMonitoringRecord) event);
-		}
-	};
 
 	/**
 	 * Data is only sent via the first input port of the given plugin.
@@ -171,11 +163,11 @@ class RecordDelegationPlugin extends AbstractAnalysisPlugin {
 		this.rec = rec;
 		this.ignoreRecordsBeforeTimestamp = ignoreRecordsBeforeTimestamp;
 		this.ignoreRecordsAfterTimestamp = ignoreRecordsAfterTimestamp;
-
-		super.registerInputPort("in", this.input);
 	}
 
-	private void newMonitoringRecord(final IMonitoringRecord record) {
+	@AInputPort(eventTypes = { IMonitoringRecord.class }, description = RecordDelegationPlugin.INPUT_PORT)
+	public void newMonitoringRecord(final Object data) {
+		final IMonitoringRecord record = (IMonitoringRecord) data;
 		if ((record.getLoggingTimestamp() >= this.ignoreRecordsBeforeTimestamp) && (record.getLoggingTimestamp() <= this.ignoreRecordsAfterTimestamp)) {
 			/* Delegate the record to the monitoring controller. */
 			this.rec.newMonitoringRecord(record);

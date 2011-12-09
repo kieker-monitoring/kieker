@@ -21,15 +21,13 @@
 package kieker.analysis.reader.filesystem;
 
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.AOutputPort;
+import kieker.analysis.plugin.port.APlugin;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.MonitoringRecordException;
@@ -46,20 +44,22 @@ import kieker.common.record.IMonitoringRecordReceiver;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
+@APlugin(outputPorts = {
+	@AOutputPort(name = FSReader.OUTPUT_PORT, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader")
+})
 public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
+
+	public static final String OUTPUT_PORT = "output";
 	public static final String CONFIG_INPUTDIRS = FSReader.class.getName() + ".inputDirs";
 	public static final String CONFIG_ONLYRECORDS = FSReader.class.getName() + ".readOnlyRecordsOfType";
 
 	public static final IMonitoringRecord EOF = new DummyMonitoringRecord();
 
 	private static final Log LOG = LogFactory.getLog(FSReader.class);
-	private static final Collection<Class<?>> OUT_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { IMonitoringRecord.class }));
 
 	private final Set<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType;
 	private final String[] inputDirs;
 	private final PriorityQueue<IMonitoringRecord> recordQueue;
-	private final OutputPort outputPort = new OutputPort("Output Port of the FSReader", FSReader.OUT_CLASSES);;
 
 	private volatile boolean running = true;
 
@@ -82,7 +82,6 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 				}
 			}
 		}
-		super.registerOutputPort("out", this.outputPort);
 	}
 
 	@Override
@@ -124,7 +123,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 			if (record == FSReader.EOF) {
 				readingReaders--;
 			} else {
-				this.outputPort.deliver(record);
+				super.deliver(FSReader.OUTPUT_PORT, record);
 			}
 		}
 		return true;
@@ -149,10 +148,6 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 		return this.running;
 	}
 
-	public OutputPort getMonitoringRecordOutputPort() {
-		return this.outputPort;
-	}
-
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
@@ -173,7 +168,4 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 		return configuration;
 	}
 
-	public OutputPort getDefaultOutputPort() {
-		return this.outputPort;
-	}
 }

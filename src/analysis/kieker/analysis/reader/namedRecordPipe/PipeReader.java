@@ -20,12 +20,10 @@
 
 package kieker.analysis.reader.namedRecordPipe;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
-import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.AOutputPort;
+import kieker.analysis.plugin.port.APlugin;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -39,17 +37,19 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @author Andre van Hoorn
  */
+@APlugin(outputPorts = {
+	@AOutputPort(name = PipeReader.OUTPUT_PORT, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the PipeReader")
+})
 public final class PipeReader extends AbstractReaderPlugin implements IPipeReader {
+
+	public static final String OUTPUT_PORT = "output";
 	public static final String CONFIG_PIPENAME = PipeReader.class.getName() + ".pipeName";
 
 	private static final Log LOG = LogFactory.getLog(PipeReader.class);
-	private static final Collection<Class<?>> OUT_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { IMonitoringRecord.class }));
 
 	private volatile Pipe pipe;
 	private final String pipeName;
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
-	private final OutputPort outputPort = new OutputPort("Output Port of the PipeReader", PipeReader.OUT_CLASSES);
 
 	/**
 	 * Creates a new instance of this class using the given parameter.
@@ -85,9 +85,6 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 		}
 		// TODO: escaping this in constructor! very bad practice!
 		this.pipe.setPipeReader(this);
-
-		/* Register the output port. */
-		super.registerOutputPort("out", this.outputPort);
 	}
 
 	@Override
@@ -115,7 +112,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 
 	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord rec) {
-		return this.outputPort.deliver(rec);
+		return super.deliver(PipeReader.OUTPUT_PORT, rec);
 	}
 
 	@Override

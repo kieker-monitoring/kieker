@@ -21,16 +21,15 @@
 package kieker.tools.logReplayer;
 
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.StringTokenizer;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.port.AbstractInputPort;
-import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.plugin.port.AInputPort;
+import kieker.analysis.plugin.port.AOutputPort;
+import kieker.analysis.plugin.port.APlugin;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
@@ -41,7 +40,12 @@ import kieker.common.record.IMonitoringRecord;
 /**
  * @author Andre van Hoorn
  */
+@APlugin(outputPorts = {
+	@AOutputPort(name = FSReaderRealtime.OUTPUT_PORT, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReaderRealtime")
+})
 public class FSReaderRealtime extends AbstractReaderPlugin {
+
+	public static final String OUTPUT_PORT = "output";
 	private static final Log LOG = LogFactory.getLog(FSReaderRealtime.class);
 
 	private static final String PROP_NAME_NUM_WORKERS = FSReaderRealtime.class + ".numWorkers";
@@ -52,15 +56,8 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 	private RealtimeReplayDistributor rtDistributor = null;
 	/** Reader will wait for this latch before read() returns */
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
-	private final OutputPort outputPort;
 	private int numWorkers;
 	private String[] inputDirs;
-
-	/**
-	 * This field determines which classes are transported through the output port.
-	 */
-	private static final Collection<Class<?>> OUT_CLASSES = Collections
-			.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { IMonitoringRecord.class }));
 
 	/**
 	 * Creates a new instance of this class using the given parameters to
@@ -77,10 +74,6 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 	 */
 	public FSReaderRealtime(final Configuration configuration) {
 		super(configuration);
-
-		/* Register the output port. */
-		this.outputPort = new OutputPort("Output Port of the JMXReader", FSReaderRealtime.OUT_CLASSES);
-		super.registerOutputPort("out", this.outputPort);
 
 		this.init(configuration);
 	}
@@ -149,6 +142,7 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		final AbstractAnalysisPlugin rtCons = new FSReaderRealtimeCons(this);
 		this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, this.terminationLatch);
 		this.analysis.setReader(fsReader);
+		AbstractPlugin.connect(fsReader, FSReader.OUTPUT_PORT, this.rtDistributor, FSReaderRealtimeCons.INPUT_PORT);
 		this.analysis.registerPlugin(this.rtDistributor);
 	}
 
@@ -203,35 +197,33 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 	 * constructors and method-implementations in order to be used as an outer
 	 * class.
 	 */
+	@APlugin(
+			outputPorts = { @AOutputPort(name = FSReaderRealtimeCons.OUTPUT_PORT, description = "Output port", eventTypes = { IMonitoringRecord.class })
+			})
 	private static class FSReaderRealtimeCons extends AbstractAnalysisPlugin {
 
+		public static final String OUTPUT_PORT = "output";
+		public static final String INPUT_PORT = "input";
 		private final FSReaderRealtime master;
-		private final OutputPort output = new OutputPort("out", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-				new Class<?>[] { IMonitoringRecord.class })));
-		private final AbstractInputPort input = new AbstractInputPort("in", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-				new Class<?>[] { IMonitoringRecord.class }))) {
-			@Override
-			public void newEvent(final Object event) {
-				FSReaderRealtimeCons.this.newMonitoringRecord((IMonitoringRecord) event);
-
-				FSReaderRealtimeCons.this.output.deliver(event);
-			}
-		};
 
 		public FSReaderRealtimeCons(final FSReaderRealtime master) {
 			super(new Configuration(null));
 			this.master = master;
-
-			this.registerInputPort("in", this.input);
-			this.registerOutputPort("out", this.output);
 		}
 
-		public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-			if (!this.master.outputPort.deliver(monitoringRecord)) {
+		/**
+		 * The supress-warning-tag is only necessary because the method is being used via reflection...
+		 * 
+		 * @param data
+		 */
+		@SuppressWarnings("unused")
+		@AInputPort(description = FSReaderRealtimeCons.INPUT_PORT, eventTypes = { IMonitoringRecord.class })
+		public void newMonitoringRecord(final Object data) {
+			final IMonitoringRecord record = (IMonitoringRecord) data;
+			if (!this.master.deliver(FSReaderRealtime.OUTPUT_PORT, record)) {
 				FSReaderRealtime.LOG.error("LogReaderExecutionException");
-				return false;
 			}
-			return true;
+			super.deliver(FSReaderRealtimeCons.OUTPUT_PORT, data);
 		}
 
 		@Override

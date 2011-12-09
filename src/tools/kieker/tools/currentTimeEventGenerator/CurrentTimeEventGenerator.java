@@ -22,7 +22,7 @@ package kieker.tools.currentTimeEventGenerator;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.model.analysisMetaModel.impl.OutputPort;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 

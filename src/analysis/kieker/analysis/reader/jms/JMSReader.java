@@ -21,10 +21,7 @@
 package kieker.analysis.reader.jms;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Hashtable;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import javax.jms.Connection;
@@ -42,7 +39,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 
-import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.AOutputPort;
+import kieker.analysis.plugin.port.APlugin;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -55,20 +53,21 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @author Andre van Hoorn, Matthias Rohr
  */
+@APlugin(outputPorts = {
+	@AOutputPort(name = JMSReader.OUTPUT_PORT, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMSReader")
+})
 public final class JMSReader extends AbstractReaderPlugin {
+
+	public static final String OUTPUT_PORT = "output";
 	public static final String CONFIG_PROVIDERURL = JMSReader.class.getName() + ".jmsProviderUrl";
 	public static final String CONFIG_DESTINATION = JMSReader.class.getName() + ".jmsDestination";
 	public static final String CONFIG_FACTORYLOOKUP = JMSReader.class.getName() + ".jmsFactoryLookupName";
 
 	private static final Log LOG = LogFactory.getLog(JMSReader.class);
 
-	private static final Collection<Class<?>> OUT_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { IMonitoringRecord.class }));
-
 	private final String jmsProviderUrl;
 	private final String jmsDestination;
 	private final String jmsFactoryLookupName;
-	private final OutputPort outputPort;
 	private final CountDownLatch cdLatch = new CountDownLatch(1);
 
 	/**
@@ -98,9 +97,6 @@ public final class JMSReader extends AbstractReaderPlugin {
 			throw new IllegalArgumentException("JMSReader has not sufficient parameters. jmsProviderUrl ('" + this.jmsProviderUrl + "'), jmsDestination ('"
 					+ this.jmsDestination + "'), or factoryLookupName ('" + this.jmsFactoryLookupName + "') is null");
 		}
-		/* Register the one and only output port. */
-		this.outputPort = new OutputPort("Output Port of the JMSReader", JMSReader.OUT_CLASSES);
-		super.registerOutputPort("out", this.outputPort);
 	}
 
 	@Override
@@ -156,7 +152,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 						try {
 							final ObjectMessage om = (ObjectMessage) jmsMessage;
 							final Serializable omo = om.getObject();
-							if ((omo instanceof IMonitoringRecord) && (!JMSReader.this.outputPort.deliver(omo))) {
+							if ((omo instanceof IMonitoringRecord) && (!JMSReader.super.deliver(JMSReader.OUTPUT_PORT, omo))) {
 								final String errorMsg = "deliverRecord returned false";
 								JMSReader.LOG.error(errorMsg);
 							}

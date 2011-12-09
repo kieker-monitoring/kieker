@@ -1,8 +1,6 @@
 package kieker.analysis.reader;
 
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.port.AbstractInputPort;
-import kieker.analysis.plugin.port.OutputPort;
 import kieker.common.configuration.Configuration;
 
 /**
@@ -26,28 +24,6 @@ public abstract class AbstractReaderPlugin extends AbstractPlugin implements IMo
 	 */
 	public AbstractReaderPlugin(final Configuration configuration) {
 		super(configuration);
-	}
-
-	/**
-	 * As classes extending the <i>AbstractReaderPlugin</i> cannot have
-	 * input ports, this method doesn't register the given port.
-	 * 
-	 * @param name
-	 *            The name for the port. It is not used.
-	 * @param port
-	 *            The port to be registered. It is not used.
-	 */
-	@Override
-	final protected void registerInputPort(final String name, final AbstractInputPort port) {
-		return;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	final protected void registerOutputPort(final String name, final OutputPort port) {
-		super.registerOutputPort(name, port);
 	}
 
 }

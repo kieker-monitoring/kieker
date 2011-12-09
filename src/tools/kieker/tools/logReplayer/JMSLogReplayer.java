@@ -24,9 +24,11 @@ import java.util.Collections;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.model.analysisMetaModel.impl.OutputPort;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.port.AbstractInputPort;
-import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.AInputPort;
+import kieker.analysis.plugin.port.AOutputPort;
+import kieker.analysis.plugin.port.APlugin;
 import kieker.analysis.reader.IMonitoringReader;
 import kieker.analysis.reader.jms.JMSReader;
 import kieker.common.configuration.Configuration;
@@ -114,17 +116,19 @@ public class JMSLogReplayer {
  * @author Andre van Hoorn
  * 
  */
+@APlugin(
+		outputPorts = { @AOutputPort(name = RecordDelegationPlugin2.OUTPUT_PORT, description = "Output port", eventTypes = { IMonitoringRecord.class })
+		})
 class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 
+	public static final String OUTPUT_PORT = "output";
+	public static final String INPUT_PORT = "input";
 	private static final Log LOG = LogFactory.getLog(RecordDelegationPlugin2.class);
 
-	private final OutputPort output = new OutputPort("out", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { IMonitoringRecord.class })));
-	private final AbstractInputPort input = new AbstractInputPort("in", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { IMonitoringRecord.class }))) {
+
 		@Override
 		public void newEvent(final Object event) {
-			RecordDelegationPlugin2.this.newMonitoringRecord((IMonitoringRecord) event);
+			RecordDelegationPlugin2.this.newMonitoringRecord(event);
 			RecordDelegationPlugin2.this.output.deliver(event);
 		}
 	};
@@ -140,14 +144,21 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 	public RecordDelegationPlugin2(final AbstractAnalysisPlugin rec) {
 		super(new Configuration(null));
 
-		this.output.subscribe(rec.getAllInputPorts()[0]);
-
-		this.registerInputPort("in", this.input);
-		this.registerOutputPort("out", this.output);
+		// TODO: Connect with given object
+	//	super.connect(this, OUTPUT_PORT, re, input)
+		//this.output.subscribe(rec.getAllInputPorts()[0]);
 	}
 
-	public boolean newMonitoringRecord(final IMonitoringRecord record) {
-		return this.output.deliver(record);
+	/**
+	 * The supress-warning-tag is only necessary because the method is being used via reflection...
+	 * 
+	 * @param data
+	 */
+	@SuppressWarnings("unused")
+	@AInputPort(description = RecordDelegationPlugin2.INPUT_PORT, eventTypes = { IMonitoringRecord.class })
+	public boolean newMonitoringRecord(final Object data) {
+		final IMonitoringRecord record = (IMonitoringRecord) data;
+		return super.deliver(RecordDelegationPlugin2.OUTPUT_PORT, data);
 	}
 
 	/**

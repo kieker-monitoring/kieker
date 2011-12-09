@@ -98,14 +98,15 @@ public abstract class AbstractPlugin {
 		this.name = name;
 	}
 
-	protected final void deliver(final String outputPort, final Object data) {
+	protected final boolean deliver(final String outputPort, final Object data) {
 		// TODO
 		// data muss passen
+		return true;
 	}
 
 	public static final void connect(final AbstractPlugin src, final String output, final AbstractPlugin dst, final String input) {
 		if (dst instanceof IMonitoringReader) {
-			throw new InvalidConnectionException("");
+			// throw new InvalidConnectionException("");
 		}
 
 		// TODO

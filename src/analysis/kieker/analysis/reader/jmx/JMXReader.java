@@ -22,9 +22,6 @@ package kieker.analysis.reader.jmx;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import javax.management.InstanceNotFoundException;
@@ -39,7 +36,8 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
-import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.AOutputPort;
+import kieker.analysis.plugin.port.APlugin;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -50,7 +48,12 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @author Jan Waller
  */
+@APlugin(outputPorts = {
+	@AOutputPort(name = JMXReader.OUTPUT_PORT, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMXReader")
+})
 public final class JMXReader extends AbstractReaderPlugin {
+
+	public static final String OUTPUT_PORT = "output";
 	public static final String CONFIG_SERVER = JMXReader.class.getName() + ".server";
 	public static final String CONFIG_PORT = JMXReader.class.getName() + ".port";
 	public static final String CONFIG_SERVICEURL = JMXReader.class.getName() + ".serviceURL";
@@ -60,13 +63,9 @@ public final class JMXReader extends AbstractReaderPlugin {
 
 	private static final Log LOG = LogFactory.getLog(JMXReader.class);
 
-	private static final Collection<Class<?>> OUT_CLASSES = Collections
-			.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { IMonitoringRecord.class }));
-
 	private final JMXServiceURL serviceURL;
 	private final ObjectName monitoringLog;
 	private final boolean silentreconnect;
-	private final OutputPort outputPort;
 	private final CountDownLatch cdLatch = new CountDownLatch(1);
 	private final String domain;
 	private final String logname;
@@ -97,9 +96,6 @@ public final class JMXReader extends AbstractReaderPlugin {
 			throw new IllegalArgumentException("Failed to parse configuration.", e);
 		}
 		this.silentreconnect = this.configuration.getBooleanProperty(JMXReader.CONFIG_SILENT);
-		/* Register the output port. */
-		this.outputPort = new OutputPort("Output Port of the JMXReader", JMXReader.OUT_CLASSES);
-		super.registerOutputPort("out", this.outputPort);
 	}
 
 	@Override
@@ -262,7 +258,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 
 		@Override
 		public final void handleNotification(final Notification notification, final Object handback) {
-			JMXReader.this.outputPort.deliver(notification.getUserData());
+			JMXReader.super.deliver(JMXReader.OUTPUT_PORT, notification.getUserData());
 		}
 	}
 

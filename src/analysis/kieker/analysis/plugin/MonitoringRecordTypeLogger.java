@@ -37,7 +37,7 @@ import kieker.common.record.IMonitoringRecord;
  * @author Andre van Hoorn
  */
 @APlugin(outputPorts = {
-	@AOutputPort(name = MonitoringRecordTypeLogger.OUTPUT_PORT, eventTypes = { IMonitoringRecord.class })
+	@AOutputPort(name = MonitoringRecordTypeLogger.OUTPUT_PORT, eventTypes = { IMonitoringRecord.class }, description = "Default output port")
 })
 public class MonitoringRecordTypeLogger extends AbstractAnalysisPlugin {
 
@@ -45,7 +45,7 @@ public class MonitoringRecordTypeLogger extends AbstractAnalysisPlugin {
 
 	private static final Log LOG = LogFactory.getLog(MonitoringRecordTypeLogger.class);
 
-	@AInputPort(eventTypes = { IMonitoringRecord.class })
+	@AInputPort(eventTypes = { IMonitoringRecord.class }, description = "Default input port")
 	public void newEvent(final Object event) {
 		final IMonitoringRecord monitoringRecord = (IMonitoringRecord) event;
 
