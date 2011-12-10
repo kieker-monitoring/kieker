@@ -19,7 +19,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
@@ -72,9 +72,24 @@ public class AnalysisPlugin extends Plugin implements IAnalysisPlugin {
 	 */
 	public EList<IInputPort> getInputPorts() {
 		if (inputPorts == null) {
-			inputPorts = new EObjectContainmentEList<IInputPort>(IInputPort.class, this, IAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS);
+			inputPorts = new EObjectContainmentWithInverseEList<IInputPort>(IInputPort.class, this, IAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS, IAnalysisMetaModelPackage.INPUT_PORT__PARENT);
 		}
 		return inputPorts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case IAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getInputPorts()).basicAdd(otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**

@@ -80,6 +80,15 @@ public interface IAnalysisMetaModelFactory extends EFactory {
 	IReader createReader();
 
 	/**
+	 * Returns a new object of class '<em>Repository</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Repository</em>'.
+	 * @generated
+	 */
+	IRepository createRepository();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

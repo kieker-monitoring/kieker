@@ -28,6 +28,7 @@ public interface IAnalysisPlugin extends IPlugin {
 	/**
 	 * Returns the value of the '<em><b>Input Ports</b></em>' containment reference list.
 	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.IInputPort}.
+	 * It is bidirectional and its opposite is '{@link kieker.analysis.model.analysisMetaModel.IInputPort#getParent <em>Parent</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Input Ports</em>' containment reference list isn't clear,
@@ -36,7 +37,8 @@ public interface IAnalysisPlugin extends IPlugin {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Input Ports</em>' containment reference list.
 	 * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage#getAnalysisPlugin_InputPorts()
-	 * @model containment="true"
+	 * @see kieker.analysis.model.analysisMetaModel.IInputPort#getParent
+	 * @model opposite="parent" containment="true"
 	 * @generated
 	 */
 	EList<IInputPort> getInputPorts();

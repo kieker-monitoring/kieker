@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.IProject#getPlugins <em>Plugins</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.IProject#getName <em>Name</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.IProject#getRepositories <em>Repositories</em>}</li>
  * </ul>
  * </p>
  *
@@ -69,5 +70,21 @@ public interface IProject extends EObject {
 	 * @generated
 	 */
 	void setName(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Repositories</b></em>' containment reference list.
+	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.IRepository}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Repositories</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Repositories</em>' containment reference list.
+	 * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage#getProject_Repositories()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<IRepository> getRepositories();
 
 } // IProject

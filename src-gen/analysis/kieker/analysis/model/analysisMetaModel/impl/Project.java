@@ -11,6 +11,7 @@ import java.util.Collection;
 import kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage;
 import kieker.analysis.model.analysisMetaModel.IPlugin;
 import kieker.analysis.model.analysisMetaModel.IProject;
+import kieker.analysis.model.analysisMetaModel.IRepository;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -35,6 +36,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.Project#getPlugins <em>Plugins</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.Project#getName <em>Name</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.Project#getRepositories <em>Repositories</em>}</li>
  * </ul>
  * </p>
  *
@@ -70,6 +72,16 @@ public class Project extends EObjectImpl implements IProject {
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getRepositories() <em>Repositories</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRepositories()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<IRepository> repositories;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -128,11 +140,25 @@ public class Project extends EObjectImpl implements IProject {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<IRepository> getRepositories() {
+		if (repositories == null) {
+			repositories = new EObjectContainmentEList<IRepository>(IRepository.class, this, IAnalysisMetaModelPackage.PROJECT__REPOSITORIES);
+		}
+		return repositories;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case IAnalysisMetaModelPackage.PROJECT__PLUGINS:
 				return ((InternalEList<?>)getPlugins()).basicRemove(otherEnd, msgs);
+			case IAnalysisMetaModelPackage.PROJECT__REPOSITORIES:
+				return ((InternalEList<?>)getRepositories()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -149,6 +175,8 @@ public class Project extends EObjectImpl implements IProject {
 				return getPlugins();
 			case IAnalysisMetaModelPackage.PROJECT__NAME:
 				return getName();
+			case IAnalysisMetaModelPackage.PROJECT__REPOSITORIES:
+				return getRepositories();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -169,6 +197,10 @@ public class Project extends EObjectImpl implements IProject {
 			case IAnalysisMetaModelPackage.PROJECT__NAME:
 				setName((String)newValue);
 				return;
+			case IAnalysisMetaModelPackage.PROJECT__REPOSITORIES:
+				getRepositories().clear();
+				getRepositories().addAll((Collection<? extends IRepository>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -187,6 +219,9 @@ public class Project extends EObjectImpl implements IProject {
 			case IAnalysisMetaModelPackage.PROJECT__NAME:
 				setName(NAME_EDEFAULT);
 				return;
+			case IAnalysisMetaModelPackage.PROJECT__REPOSITORIES:
+				getRepositories().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -203,6 +238,8 @@ public class Project extends EObjectImpl implements IProject {
 				return plugins != null && !plugins.isEmpty();
 			case IAnalysisMetaModelPackage.PROJECT__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case IAnalysisMetaModelPackage.PROJECT__REPOSITORIES:
+				return repositories != null && !repositories.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

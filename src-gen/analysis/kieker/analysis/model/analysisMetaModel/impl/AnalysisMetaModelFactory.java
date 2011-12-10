@@ -66,6 +66,7 @@ public class AnalysisMetaModelFactory extends EFactoryImpl implements IAnalysisM
 			case IAnalysisMetaModelPackage.PROPERTY: return createProperty();
 			case IAnalysisMetaModelPackage.ANALYSIS_PLUGIN: return createAnalysisPlugin();
 			case IAnalysisMetaModelPackage.READER: return createReader();
+			case IAnalysisMetaModelPackage.REPOSITORY: return createRepository();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -129,6 +130,16 @@ public class AnalysisMetaModelFactory extends EFactoryImpl implements IAnalysisM
 	public IReader createReader() {
 		Reader reader = new Reader();
 		return reader;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public IRepository createRepository() {
+		Repository repository = new Repository();
+		return repository;
 	}
 
 	/**

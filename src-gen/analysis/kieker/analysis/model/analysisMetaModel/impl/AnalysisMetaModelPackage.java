@@ -16,6 +16,7 @@ import kieker.analysis.model.analysisMetaModel.IPort;
 import kieker.analysis.model.analysisMetaModel.IProject;
 import kieker.analysis.model.analysisMetaModel.IProperty;
 import kieker.analysis.model.analysisMetaModel.IReader;
+import kieker.analysis.model.analysisMetaModel.IRepository;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -86,6 +87,13 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 	 * @generated
 	 */
 	private EClass readerEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass repositoryEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -180,6 +188,15 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getProject_Repositories() {
+		return (EReference)projectEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getPlugin() {
 		return pluginEClass;
 	}
@@ -189,17 +206,8 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getPlugin_OutputPorts() {
-		return (EReference)pluginEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EAttribute getPlugin_Name() {
-		return (EAttribute)pluginEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)pluginEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -208,7 +216,7 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 	 * @generated
 	 */
 	public EAttribute getPlugin_Classname() {
-		return (EAttribute)pluginEClass.getEStructuralFeatures().get(2);
+		return (EAttribute)pluginEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -217,7 +225,25 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 	 * @generated
 	 */
 	public EReference getPlugin_Properties() {
+		return (EReference)pluginEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPlugin_Repositories() {
 		return (EReference)pluginEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPlugin_OutputPorts() {
+		return (EReference)pluginEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -261,6 +287,15 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getInputPort_Parent() {
+		return (EReference)inputPortEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getOutputPort() {
 		return outputPortEClass;
 	}
@@ -272,6 +307,15 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 	 */
 	public EReference getOutputPort_Subscribers() {
 		return (EReference)outputPortEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getOutputPort_Parent() {
+		return (EReference)outputPortEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -333,6 +377,33 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getRepository() {
+		return repositoryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getRepository_Properties() {
+		return (EReference)repositoryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getRepository_Classname() {
+		return (EAttribute)repositoryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public IAnalysisMetaModelFactory getAnalysisMetaModelFactory() {
 		return (IAnalysisMetaModelFactory)getEFactoryInstance();
 	}
@@ -359,21 +430,25 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 		projectEClass = createEClass(PROJECT);
 		createEReference(projectEClass, PROJECT__PLUGINS);
 		createEAttribute(projectEClass, PROJECT__NAME);
+		createEReference(projectEClass, PROJECT__REPOSITORIES);
 
 		pluginEClass = createEClass(PLUGIN);
-		createEReference(pluginEClass, PLUGIN__OUTPUT_PORTS);
 		createEAttribute(pluginEClass, PLUGIN__NAME);
 		createEAttribute(pluginEClass, PLUGIN__CLASSNAME);
 		createEReference(pluginEClass, PLUGIN__PROPERTIES);
+		createEReference(pluginEClass, PLUGIN__REPOSITORIES);
+		createEReference(pluginEClass, PLUGIN__OUTPUT_PORTS);
 
 		portEClass = createEClass(PORT);
 		createEAttribute(portEClass, PORT__NAME);
 		createEAttribute(portEClass, PORT__EVENT_TYPES);
 
 		inputPortEClass = createEClass(INPUT_PORT);
+		createEReference(inputPortEClass, INPUT_PORT__PARENT);
 
 		outputPortEClass = createEClass(OUTPUT_PORT);
 		createEReference(outputPortEClass, OUTPUT_PORT__SUBSCRIBERS);
+		createEReference(outputPortEClass, OUTPUT_PORT__PARENT);
 
 		propertyEClass = createEClass(PROPERTY);
 		createEAttribute(propertyEClass, PROPERTY__NAME);
@@ -383,6 +458,10 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 		createEReference(analysisPluginEClass, ANALYSIS_PLUGIN__INPUT_PORTS);
 
 		readerEClass = createEClass(READER);
+
+		repositoryEClass = createEClass(REPOSITORY);
+		createEReference(repositoryEClass, REPOSITORY__PROPERTIES);
+		createEAttribute(repositoryEClass, REPOSITORY__CLASSNAME);
 	}
 
 	/**
@@ -422,30 +501,38 @@ public class AnalysisMetaModelPackage extends EPackageImpl implements IAnalysisM
 		initEClass(projectEClass, IProject.class, "Project", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getProject_Plugins(), this.getPlugin(), null, "plugins", null, 0, -1, IProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getProject_Name(), ecorePackage.getEString(), "name", null, 1, 1, IProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getProject_Repositories(), this.getRepository(), null, "repositories", null, 0, -1, IProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(pluginEClass, IPlugin.class, "Plugin", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getPlugin_OutputPorts(), this.getOutputPort(), null, "outputPorts", null, 0, -1, IPlugin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPlugin_Name(), ecorePackage.getEString(), "name", null, 1, 1, IPlugin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPlugin_Classname(), ecorePackage.getEString(), "classname", null, 1, 1, IPlugin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPlugin_Properties(), this.getProperty(), null, "properties", null, 0, -1, IPlugin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPlugin_Repositories(), this.getRepository(), null, "repositories", null, 0, -1, IPlugin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPlugin_OutputPorts(), this.getOutputPort(), this.getOutputPort_Parent(), "outputPorts", null, 0, -1, IPlugin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(portEClass, IPort.class, "Port", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPort_Name(), ecorePackage.getEString(), "name", null, 1, 1, IPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_EventTypes(), ecorePackage.getEString(), "eventTypes", null, 1, -1, IPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(inputPortEClass, IInputPort.class, "InputPort", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getInputPort_Parent(), this.getAnalysisPlugin(), this.getAnalysisPlugin_InputPorts(), "parent", null, 1, 1, IInputPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(outputPortEClass, IOutputPort.class, "OutputPort", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getOutputPort_Subscribers(), this.getInputPort(), null, "subscribers", null, 0, -1, IOutputPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getOutputPort_Parent(), this.getPlugin(), this.getPlugin_OutputPorts(), "parent", null, 1, 1, IOutputPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(propertyEClass, IProperty.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getProperty_Name(), ecorePackage.getEString(), "name", null, 1, 1, IProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getProperty_Value(), ecorePackage.getEString(), "value", null, 1, 1, IProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(analysisPluginEClass, IAnalysisPlugin.class, "AnalysisPlugin", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getAnalysisPlugin_InputPorts(), this.getInputPort(), null, "inputPorts", null, 0, -1, IAnalysisPlugin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAnalysisPlugin_InputPorts(), this.getInputPort(), this.getInputPort_Parent(), "inputPorts", null, 0, -1, IAnalysisPlugin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(readerEClass, IReader.class, "Reader", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(repositoryEClass, IRepository.class, "Repository", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getRepository_Properties(), this.getProperty(), null, "properties", null, 0, -1, IRepository.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRepository_Classname(), ecorePackage.getEString(), "classname", null, 1, 1, IRepository.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

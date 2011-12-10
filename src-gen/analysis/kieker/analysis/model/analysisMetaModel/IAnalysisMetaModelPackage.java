@@ -88,13 +88,22 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	int PROJECT__NAME = 1;
 
 	/**
+	 * The feature id for the '<em><b>Repositories</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROJECT__REPOSITORIES = 2;
+
+	/**
 	 * The number of structural features of the '<em>Project</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROJECT_FEATURE_COUNT = 2;
+	int PROJECT_FEATURE_COUNT = 3;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.Plugin <em>Plugin</em>}' class.
@@ -107,22 +116,13 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	int PLUGIN = 1;
 
 	/**
-	 * The feature id for the '<em><b>Output Ports</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PLUGIN__OUTPUT_PORTS = 0;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PLUGIN__NAME = 1;
+	int PLUGIN__NAME = 0;
 
 	/**
 	 * The feature id for the '<em><b>Classname</b></em>' attribute.
@@ -131,7 +131,7 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLUGIN__CLASSNAME = 2;
+	int PLUGIN__CLASSNAME = 1;
 
 	/**
 	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
@@ -140,7 +140,25 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLUGIN__PROPERTIES = 3;
+	int PLUGIN__PROPERTIES = 2;
+
+	/**
+	 * The feature id for the '<em><b>Repositories</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PLUGIN__REPOSITORIES = 3;
+
+	/**
+	 * The feature id for the '<em><b>Output Ports</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PLUGIN__OUTPUT_PORTS = 4;
 
 	/**
 	 * The number of structural features of the '<em>Plugin</em>' class.
@@ -149,7 +167,7 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLUGIN_FEATURE_COUNT = 4;
+	int PLUGIN_FEATURE_COUNT = 5;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.Port <em>Port</em>}' class.
@@ -217,13 +235,22 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	int INPUT_PORT__EVENT_TYPES = PORT__EVENT_TYPES;
 
 	/**
+	 * The feature id for the '<em><b>Parent</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PORT__PARENT = PORT_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Input Port</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INPUT_PORT_FEATURE_COUNT = PORT_FEATURE_COUNT + 0;
+	int INPUT_PORT_FEATURE_COUNT = PORT_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.OutputPort <em>Output Port</em>}' class.
@@ -263,13 +290,22 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	int OUTPUT_PORT__SUBSCRIBERS = PORT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Parent</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PORT__PARENT = PORT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Output Port</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OUTPUT_PORT_FEATURE_COUNT = PORT_FEATURE_COUNT + 1;
+	int OUTPUT_PORT_FEATURE_COUNT = PORT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.Property <em>Property</em>}' class.
@@ -319,15 +355,6 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	int ANALYSIS_PLUGIN = 6;
 
 	/**
-	 * The feature id for the '<em><b>Output Ports</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ANALYSIS_PLUGIN__OUTPUT_PORTS = PLUGIN__OUTPUT_PORTS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -353,6 +380,24 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int ANALYSIS_PLUGIN__PROPERTIES = PLUGIN__PROPERTIES;
+
+	/**
+	 * The feature id for the '<em><b>Repositories</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYSIS_PLUGIN__REPOSITORIES = PLUGIN__REPOSITORIES;
+
+	/**
+	 * The feature id for the '<em><b>Output Ports</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYSIS_PLUGIN__OUTPUT_PORTS = PLUGIN__OUTPUT_PORTS;
 
 	/**
 	 * The feature id for the '<em><b>Input Ports</b></em>' containment reference list.
@@ -383,15 +428,6 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	int READER = 7;
 
 	/**
-	 * The feature id for the '<em><b>Output Ports</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int READER__OUTPUT_PORTS = PLUGIN__OUTPUT_PORTS;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -419,6 +455,24 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	int READER__PROPERTIES = PLUGIN__PROPERTIES;
 
 	/**
+	 * The feature id for the '<em><b>Repositories</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int READER__REPOSITORIES = PLUGIN__REPOSITORIES;
+
+	/**
+	 * The feature id for the '<em><b>Output Ports</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int READER__OUTPUT_PORTS = PLUGIN__OUTPUT_PORTS;
+
+	/**
 	 * The number of structural features of the '<em>Reader</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -426,6 +480,43 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int READER_FEATURE_COUNT = PLUGIN_FEATURE_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.Repository <em>Repository</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.analysis.model.analysisMetaModel.impl.Repository
+	 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getRepository()
+	 * @generated
+	 */
+	int REPOSITORY = 8;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REPOSITORY__PROPERTIES = 0;
+
+	/**
+	 * The feature id for the '<em><b>Classname</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REPOSITORY__CLASSNAME = 1;
+
+	/**
+	 * The number of structural features of the '<em>Repository</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REPOSITORY_FEATURE_COUNT = 2;
 
 
 	/**
@@ -461,6 +552,17 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	EAttribute getProject_Name();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.IProject#getRepositories <em>Repositories</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Repositories</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.IProject#getRepositories()
+	 * @see #getProject()
+	 * @generated
+	 */
+	EReference getProject_Repositories();
+
+	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.IPlugin <em>Plugin</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -469,17 +571,6 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getPlugin();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.IPlugin#getOutputPorts <em>Output Ports</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Output Ports</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IPlugin#getOutputPorts()
-	 * @see #getPlugin()
-	 * @generated
-	 */
-	EReference getPlugin_OutputPorts();
 
 	/**
 	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.IPlugin#getName <em>Name</em>}'.
@@ -513,6 +604,28 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getPlugin_Properties();
+
+	/**
+	 * Returns the meta object for the reference list '{@link kieker.analysis.model.analysisMetaModel.IPlugin#getRepositories <em>Repositories</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Repositories</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.IPlugin#getRepositories()
+	 * @see #getPlugin()
+	 * @generated
+	 */
+	EReference getPlugin_Repositories();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.IPlugin#getOutputPorts <em>Output Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Output Ports</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.IPlugin#getOutputPorts()
+	 * @see #getPlugin()
+	 * @generated
+	 */
+	EReference getPlugin_OutputPorts();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.IPort <em>Port</em>}'.
@@ -557,6 +670,17 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	EClass getInputPort();
 
 	/**
+	 * Returns the meta object for the container reference '{@link kieker.analysis.model.analysisMetaModel.IInputPort#getParent <em>Parent</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>Parent</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.IInputPort#getParent()
+	 * @see #getInputPort()
+	 * @generated
+	 */
+	EReference getInputPort_Parent();
+
+	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.IOutputPort <em>Output Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -576,6 +700,17 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getOutputPort_Subscribers();
+
+	/**
+	 * Returns the meta object for the container reference '{@link kieker.analysis.model.analysisMetaModel.IOutputPort#getParent <em>Parent</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>Parent</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.IOutputPort#getParent()
+	 * @see #getOutputPort()
+	 * @generated
+	 */
+	EReference getOutputPort_Parent();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.IProperty <em>Property</em>}'.
@@ -641,6 +776,38 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	EClass getReader();
 
 	/**
+	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.IRepository <em>Repository</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Repository</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.IRepository
+	 * @generated
+	 */
+	EClass getRepository();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.IRepository#getProperties <em>Properties</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Properties</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.IRepository#getProperties()
+	 * @see #getRepository()
+	 * @generated
+	 */
+	EReference getRepository_Properties();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.IRepository#getClassname <em>Classname</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Classname</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.IRepository#getClassname()
+	 * @see #getRepository()
+	 * @generated
+	 */
+	EAttribute getRepository_Classname();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -689,6 +856,14 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 		EAttribute PROJECT__NAME = eINSTANCE.getProject_Name();
 
 		/**
+		 * The meta object literal for the '<em><b>Repositories</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PROJECT__REPOSITORIES = eINSTANCE.getProject_Repositories();
+
+		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.Plugin <em>Plugin</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -697,14 +872,6 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EClass PLUGIN = eINSTANCE.getPlugin();
-
-		/**
-		 * The meta object literal for the '<em><b>Output Ports</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PLUGIN__OUTPUT_PORTS = eINSTANCE.getPlugin_OutputPorts();
 
 		/**
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
@@ -729,6 +896,22 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PLUGIN__PROPERTIES = eINSTANCE.getPlugin_Properties();
+
+		/**
+		 * The meta object literal for the '<em><b>Repositories</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PLUGIN__REPOSITORIES = eINSTANCE.getPlugin_Repositories();
+
+		/**
+		 * The meta object literal for the '<em><b>Output Ports</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PLUGIN__OUTPUT_PORTS = eINSTANCE.getPlugin_OutputPorts();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.Port <em>Port</em>}' class.
@@ -767,6 +950,14 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 		EClass INPUT_PORT = eINSTANCE.getInputPort();
 
 		/**
+		 * The meta object literal for the '<em><b>Parent</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INPUT_PORT__PARENT = eINSTANCE.getInputPort_Parent();
+
+		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.OutputPort <em>Output Port</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -783,6 +974,14 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference OUTPUT_PORT__SUBSCRIBERS = eINSTANCE.getOutputPort_Subscribers();
+
+		/**
+		 * The meta object literal for the '<em><b>Parent</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference OUTPUT_PORT__PARENT = eINSTANCE.getOutputPort_Parent();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.Property <em>Property</em>}' class.
@@ -837,6 +1036,32 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EClass READER = eINSTANCE.getReader();
+
+		/**
+		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.Repository <em>Repository</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.analysis.model.analysisMetaModel.impl.Repository
+		 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getRepository()
+		 * @generated
+		 */
+		EClass REPOSITORY = eINSTANCE.getRepository();
+
+		/**
+		 * The meta object literal for the '<em><b>Properties</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference REPOSITORY__PROPERTIES = eINSTANCE.getRepository_Properties();
+
+		/**
+		 * The meta object literal for the '<em><b>Classname</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REPOSITORY__CLASSNAME = eINSTANCE.getRepository_Classname();
 
 	}
 

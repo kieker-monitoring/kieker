@@ -18,10 +18,11 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.IPlugin#getOutputPorts <em>Output Ports</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.IPlugin#getName <em>Name</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.IPlugin#getClassname <em>Classname</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.IPlugin#getProperties <em>Properties</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.IPlugin#getRepositories <em>Repositories</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.IPlugin#getOutputPorts <em>Output Ports</em>}</li>
  * </ul>
  * </p>
  *
@@ -30,22 +31,6 @@ import org.eclipse.emf.ecore.EObject;
  * @generated
  */
 public interface IPlugin extends EObject {
-	/**
-	 * Returns the value of the '<em><b>Output Ports</b></em>' containment reference list.
-	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.IOutputPort}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Output Ports</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Output Ports</em>' containment reference list.
-	 * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage#getPlugin_OutputPorts()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<IOutputPort> getOutputPorts();
-
 	/**
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -113,5 +98,39 @@ public interface IPlugin extends EObject {
 	 * @generated
 	 */
 	EList<IProperty> getProperties();
+
+	/**
+	 * Returns the value of the '<em><b>Repositories</b></em>' reference list.
+	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.IRepository}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Repositories</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Repositories</em>' reference list.
+	 * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage#getPlugin_Repositories()
+	 * @model
+	 * @generated
+	 */
+	EList<IRepository> getRepositories();
+
+	/**
+	 * Returns the value of the '<em><b>Output Ports</b></em>' containment reference list.
+	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.IOutputPort}.
+	 * It is bidirectional and its opposite is '{@link kieker.analysis.model.analysisMetaModel.IOutputPort#getParent <em>Parent</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Output Ports</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Output Ports</em>' containment reference list.
+	 * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage#getPlugin_OutputPorts()
+	 * @see kieker.analysis.model.analysisMetaModel.IOutputPort#getParent
+	 * @model opposite="parent" containment="true"
+	 * @generated
+	 */
+	EList<IOutputPort> getOutputPorts();
 
 } // IPlugin
