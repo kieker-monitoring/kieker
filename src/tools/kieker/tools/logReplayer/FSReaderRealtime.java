@@ -140,7 +140,7 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 				Configuration.toProperty(inputDirNames));
 		final AbstractReaderPlugin fsReader = new FSReader(configuration);
 		final AbstractAnalysisPlugin rtCons = new FSReaderRealtimeCons(this);
-		this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, this.terminationLatch);
+		this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, this.terminationLatch, FSReaderRealtimeCons.INPUT_PORT);
 		this.analysis.setReader(fsReader);
 		AbstractPlugin.connect(fsReader, FSReader.OUTPUT_PORT, this.rtDistributor, FSReaderRealtimeCons.INPUT_PORT);
 		this.analysis.registerPlugin(this.rtDistributor);

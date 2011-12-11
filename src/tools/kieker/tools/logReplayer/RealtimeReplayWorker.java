@@ -20,11 +20,11 @@
 
 package kieker.tools.logReplayer;
 
-import java.util.Collections;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.plugin.port.AOutputPort;
+import kieker.analysis.plugin.port.APlugin;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
@@ -35,13 +35,14 @@ import kieker.common.record.IMonitoringRecord;
  * @author Robert von Massow
  * 
  */
-public class RealtimeReplayWorker implements Runnable {
-
+@APlugin(outputPorts = {
+	@AOutputPort(name = RealtimeReplayWorker.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
+})
+public class RealtimeReplayWorker extends AbstractAnalysisPlugin implements Runnable {
+	public static final String OUTPUT_PORT_NAME = "outputPort";
 	private static final Log LOG = LogFactory.getLog(RealtimeReplayWorker.class);
 	private final IMonitoringRecord monRec;
 	private final RealtimeReplayDistributor rd;
-	private final OutputPort output = new OutputPort("out", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { IMonitoringRecord.class })));
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -53,22 +54,53 @@ public class RealtimeReplayWorker implements Runnable {
 	 * @param cons
 	 *            The plugin which receives the record. The plugin <b>must</b> have at least one input port. The data will be send to the first input.
 	 */
-	public RealtimeReplayWorker(final IMonitoringRecord monRec, final RealtimeReplayDistributor rd, final AbstractAnalysisPlugin cons) {
+	public RealtimeReplayWorker(final IMonitoringRecord monRec, final RealtimeReplayDistributor rd, final AbstractAnalysisPlugin cons,
+			final String constInputPortName) {
+		super(new Configuration());
 		this.monRec = monRec;
 		this.rd = rd;
 
-		output.subscribe(cons.getAllInputPorts()[0]);
+		AbstractPlugin.connect(this, RealtimeReplayWorker.OUTPUT_PORT_NAME, cons, constInputPortName);
+	}
+
+	public RealtimeReplayWorker() {
+		super(new Configuration());
+		this.monRec = null;
+		this.rd = null;
 	}
 
 	@Override
 	public void run() {
 		if (this.monRec != null) {
-			if (!output.deliver(this.monRec)) {
+			if (!super.deliver(RealtimeReplayWorker.OUTPUT_PORT_NAME, this.monRec)) {
 				// TODO: check what to do
 				// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/145
 				RealtimeReplayWorker.LOG.error("Consumer returned with error");
 			}
 			this.rd.decreaseActive();
 		}
+	}
+
+	@Override
+	public boolean execute() {
+		// TODO Prepare
+		return true;
+	}
+
+	@Override
+	public void terminate(final boolean error) {
+		// TODO Terminate
+	}
+
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		// TODO Default Configuration
+		return new Configuration();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		// TODO Current Configuration
+		return new Configuration();
 	}
 }

@@ -44,7 +44,6 @@ import kieker.common.record.IMonitoringRecord;
 @APlugin(outputPorts = {
 	@AOutputPort(
 			name = DummyRecordConsumer.OUTPUT_PORT,
-			description = "Unmodified output port",
 			eventTypes = { IMonitoringRecord.class })
 })
 public final class DummyRecordConsumer extends AbstractAnalysisPlugin {

@@ -20,6 +20,15 @@
 
 package kieker.analysis.plugin;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import kieker.analysis.plugin.port.AInputPort;
+import kieker.analysis.plugin.port.AOutputPort;
 import kieker.analysis.plugin.port.APlugin;
 import kieker.analysis.reader.IMonitoringReader;
 import kieker.common.configuration.Configuration;
@@ -40,6 +49,9 @@ public abstract class AbstractPlugin {
 	private String name = null;
 
 	protected final Configuration configuration;
+	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<Method>> registeredMethods;
+	private final AOutputPort outputPorts[];
+	private final AInputPort inputPorts[];
 
 	/**
 	 * Each Plugin requires a constructor with a single Configuration object!
@@ -55,6 +67,26 @@ public abstract class AbstractPlugin {
 			AbstractPlugin.LOG.error("Unable to set plugin default properties");
 		}
 		this.configuration = configuration;
+
+		this.registeredMethods = new ConcurrentHashMap<String, ConcurrentLinkedQueue<Method>>();
+		/*
+		 * Create a linked queue for every outputport of the class. KEEP IN MIND: although we use "this",
+		 * it points to the actual class. Not to AbstractPlugin!!
+		 */
+		final APlugin annotation = this.getClass().getAnnotation(APlugin.class);
+		this.outputPorts = annotation.outputPorts();
+		for (final AOutputPort outputPort : this.outputPorts) {
+			this.registeredMethods.put(outputPort.name(), new ConcurrentLinkedQueue<Method>());
+		}
+		final Method allMethods[] = this.getClass().getMethods();
+		final List<AInputPort> inputPorts = new ArrayList<AInputPort>();
+		for (final Method method : allMethods) {
+			final AInputPort inputPort = method.getAnnotation(AInputPort.class);
+			if (inputPort != null) {
+				inputPorts.add(inputPort);
+			}
+		}
+		this.inputPorts = inputPorts.toArray(new AInputPort[0]);
 	}
 
 	/**
@@ -99,19 +131,35 @@ public abstract class AbstractPlugin {
 	}
 
 	protected final boolean deliver(final String outputPort, final Object data) {
-		// TODO
-		// data muss passen
-		return true;
+		// TODO Make sure the given data fits
+		final ConcurrentLinkedQueue<Method> registeredMethods = this.registeredMethods.get(outputPort);
+		if (registeredMethods == null) {
+			return false;
+		}
+		boolean result = true;
+		final Iterator<Method> methodIterator = registeredMethods.iterator();
+		while (methodIterator.hasNext()) {
+			try {
+				methodIterator.next().invoke(this, data);
+			} catch (final Exception e) {
+				result = false;
+			}
+		}
+		return result;
 	}
 
 	public static final void connect(final AbstractPlugin src, final String output, final AbstractPlugin dst, final String input) {
 		if (dst instanceof IMonitoringReader) {
-			// throw new InvalidConnectionException("");
+			// TODO Throw exception
 		}
+		// TODO Check whether the ports are suitable or not
 
-		// TODO
-		// dst darf kein reader sein
-		// ports müssen passen
-		// ports müssen exisieren
+		// TODO Check whether the ports exist or not
+
+		try {
+			src.registeredMethods.get(output).add(dst.getClass().getMethod(input, Object.class));
+		} catch (final Exception e) {
+			// TODO Throw exception
+		}
 	}
 }

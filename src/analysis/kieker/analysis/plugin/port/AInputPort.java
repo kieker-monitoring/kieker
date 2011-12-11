@@ -21,13 +21,14 @@
 package kieker.analysis.plugin.port;
 
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
  * This annotation can be used to mark methods as input ports. The corresponding
- * methods should only get an instance of the class <code>Objec</code> and
+ * methods should only get an instance of the class <code>Object</code> and
  * nothing else.<br>
  * Furthermore the port allows to specify the event types for this port, but not
  * the name. The name is determined by the name of the target-method. There is
@@ -37,10 +38,11 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
+@Inherited
 public @interface AInputPort {
 
-	String description();
+	String description() default "Input Port";
 
-	Class<?>[] eventTypes();
+	Class<?>[] eventTypes() default {};
 
 }

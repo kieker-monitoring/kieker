@@ -42,12 +42,11 @@ import kieker.analysis.model.analysisMetaModel.IPlugin;
 import kieker.analysis.model.analysisMetaModel.IProject;
 import kieker.analysis.model.analysisMetaModel.IProperty;
 import kieker.analysis.model.analysisMetaModel.IReader;
+import kieker.analysis.model.analysisMetaModel.IRepository;
 import kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelFactory;
 import kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.port.AbstractInputPort;
-import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.reader.IMonitoringReader;
 import kieker.common.configuration.Configuration;
@@ -132,6 +131,11 @@ public final class AnalysisController {
 
 	private final void loadFromModelProject(final IProject mproject) throws InstantiationException, IllegalAccessException, IllegalArgumentException,
 			InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
+
+		/* Get all repositories. */
+		final EList<IRepository> mRepositories = mproject.getRepositories();
+		// TODO Create the repositories and use them, once this is possible.
+
 		/*
 		 * We run through the project and collect all plugins. As we create an actual object for every plugin within the model, we have to remember
 		 * the mapping between the plugins within the model and the actual objects we create.
@@ -180,12 +184,12 @@ public final class AnalysisController {
 				/* Get all ports which should be subscribed to this port. */
 				final EList<IInputPort> mSubscribers = mPluginOPort.getSubscribers();
 				final String outputPortName = mPluginOPort.getName();
-				final OutputPort pluginOPort = pluginMap.get(mPlugin).getOutputPort(outputPortName);
+				final AbstractPlugin srcPlugin = pluginMap.get(mPlugin);
 				for (final IInputPort mSubscriber : mSubscribers) {
 					/* Find the mapping and subscribe */
 					final String inputPortName = mSubscriber.getName();
-					final AbstractInputPort subscriber = ((AbstractAnalysisPlugin) portToPluginMap.get(mSubscriber)).getInputPort(inputPortName);
-					pluginOPort.subscribe(subscriber);
+					final AbstractPlugin dstPlugin = portToPluginMap.get(mSubscriber);
+					AbstractPlugin.connect(srcPlugin, outputPortName, dstPlugin, inputPortName);
 				}
 			}
 		}

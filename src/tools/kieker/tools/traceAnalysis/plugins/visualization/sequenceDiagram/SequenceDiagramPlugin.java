@@ -28,12 +28,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -120,9 +117,6 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 		this.sdmode = sdmode;
 		this.outputFnBase = outputFnBase;
 		this.shortLabels = shortLabels;
-
-		/* Register the input port. */
-		super.registerInputPort("in", this.messageTraceInputPort);
 	}
 
 	@Override
@@ -149,27 +143,17 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 	}
 
 	@Override
-	public AbstractInputPort getMessageTraceInputPort() {
-		return this.messageTraceInputPort;
-	}
-
-	private final AbstractInputPort messageTraceInputPort = new AbstractInputPort("Message traces",
-			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-					new Class<?>[] { MessageTrace.class }))) {
-
-		@Override
-		public void newEvent(final Object mt) {
-			try {
-				SequenceDiagramPlugin.writePicForMessageTrace(SequenceDiagramPlugin.this.getSystemEntityFactory(), (MessageTrace) mt,
-						SequenceDiagramPlugin.this.sdmode,
-						SequenceDiagramPlugin.this.outputFnBase + "-" + ((AbstractTrace) mt).getTraceId() + ".pic", SequenceDiagramPlugin.this.shortLabels);
-				SequenceDiagramPlugin.this.reportSuccess(((AbstractTrace) mt).getTraceId());
-			} catch (final FileNotFoundException ex) {
-				SequenceDiagramPlugin.this.reportError(((AbstractTrace) mt).getTraceId());
-				SequenceDiagramPlugin.LOG.error("File not found", ex);
-			}
+	public void msgTraceInput(final Object mt) {
+		try {
+			SequenceDiagramPlugin.writePicForMessageTrace(SequenceDiagramPlugin.this.getSystemEntityFactory(), (MessageTrace) mt,
+					SequenceDiagramPlugin.this.sdmode,
+					SequenceDiagramPlugin.this.outputFnBase + "-" + ((AbstractTrace) mt).getTraceId() + ".pic", SequenceDiagramPlugin.this.shortLabels);
+			SequenceDiagramPlugin.this.reportSuccess(((AbstractTrace) mt).getTraceId());
+		} catch (final FileNotFoundException ex) {
+			SequenceDiagramPlugin.this.reportError(((AbstractTrace) mt).getTraceId());
+			SequenceDiagramPlugin.LOG.error("File not found", ex);
 		}
-	};
+	}
 
 	private static String assemblyComponentLabel(final AssemblyComponent component, final boolean shortLabels) {
 		final String assemblyComponentName = component.getName();

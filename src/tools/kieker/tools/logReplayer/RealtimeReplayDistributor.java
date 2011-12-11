@@ -20,16 +20,15 @@
 
 package kieker.tools.logReplayer;
 
-import java.util.Collections;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.exception.MonitoringRecordConsumerException;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.port.AbstractInputPort;
-import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.AInputPort;
+import kieker.analysis.plugin.port.AOutputPort;
+import kieker.analysis.plugin.port.APlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -51,7 +50,12 @@ import kieker.monitoring.timer.ITimeSource;
  * @author Robert von Massow
  * 
  */
+@APlugin(outputPorts = {
+	@AOutputPort(name = RealtimeReplayDistributor.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
+})
 public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
+	public static final String OUTPUT_PORT_NAME = "outputPort";
+	public static final String INPUT_PORT_NAME = "newEvent";
 	private static final Log LOG = LogFactory.getLog(RealtimeReplayDistributor.class);
 
 	private static final ITimeSource TIMESOURCE = DefaultSystemTimer.getInstance();
@@ -61,6 +65,7 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 
 	private final int numWorkers;
 	private final AbstractAnalysisPlugin cons;
+	private final String constInputPortName;
 	private volatile long startTime = -1;
 	private volatile long offset = -1;
 	private volatile long firstLoggingTimestamp;
@@ -70,17 +75,12 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 	private final int maxQueueSize;
 	private final CountDownLatch terminationLatch;
 
-	private final OutputPort output = new OutputPort("out", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { IMonitoringRecord.class })));
-	private final AbstractInputPort input = new AbstractInputPort("in", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { IMonitoringRecord.class }))) {
-		@Override
-		public void newEvent(final Object event) {
-			RealtimeReplayDistributor.this.newMonitoringRecord((IMonitoringRecord) event);
+	@AInputPort(eventTypes = { IMonitoringRecord.class })
+	public void newEvent(final Object event) {
+		this.newMonitoringRecord((IMonitoringRecord) event);
 
-			RealtimeReplayDistributor.this.output.deliver(event);
-		}
-	};
+		super.deliver(RealtimeReplayDistributor.OUTPUT_PORT_NAME, event);
+	}
 
 	public RealtimeReplayDistributor(final Configuration configuration) {
 		super(configuration);
@@ -91,10 +91,7 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 		this.maxQueueSize = 0;
 		this.executor = null;
 		this.terminationLatch = null;
-
-		/* Register the ports. */
-		this.registerInputPort("in", this.input);
-		this.registerOutputPort("out", this.output);
+		this.constInputPortName = null;
 	}
 
 	/**
@@ -107,7 +104,7 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 	 * @param terminationLatch
 	 *            will be decremented after the last record was replayed
 	 */
-	public RealtimeReplayDistributor(final int numWorkers, final AbstractAnalysisPlugin cons, final CountDownLatch terminationLatch) {
+	public RealtimeReplayDistributor(final int numWorkers, final AbstractAnalysisPlugin cons, final CountDownLatch terminationLatch, final String constInputPortName) {
 		super(new Configuration(null));
 		this.numWorkers = numWorkers;
 		this.cons = cons;
@@ -116,9 +113,7 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 		this.executor.setExecuteExistingDelayedTasksAfterShutdownPolicy(true);
 		this.executor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
 		this.terminationLatch = terminationLatch;
-
-		this.registerInputPort("in", this.input);
-		this.registerOutputPort("out", this.output);
+		this.constInputPortName = constInputPortName;
 	}
 
 	public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
@@ -148,7 +143,10 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 				}
 			}
 			this.active++;
-			this.executor.schedule(new RealtimeReplayWorker(monitoringRecord, this, this.cons), schedTime, TimeUnit.NANOSECONDS); // *relative* delay from now
+			this.executor.schedule(new RealtimeReplayWorker(monitoringRecord, this, this.cons, this.constInputPortName), schedTime, TimeUnit.NANOSECONDS); // *relative*
+																																							// delay
+																																							// from
+																																							// now
 
 		}
 		this.lTime = this.lTime < monitoringRecord.getLoggingTimestamp() ? monitoringRecord.getLoggingTimestamp() : this.lTime; // NOCS

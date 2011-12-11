@@ -17,6 +17,6 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface APlugin {
 
-	AOutputPort[] outputPorts();
+	AOutputPort[] outputPorts() default {};
 
 }

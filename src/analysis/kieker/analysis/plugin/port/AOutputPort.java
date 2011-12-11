@@ -37,10 +37,10 @@ import java.lang.annotation.Target;
 @Target(ElementType.ANNOTATION_TYPE)
 public @interface AOutputPort {
 
-	String description();
+	String description() default "Output Port";
 
 	String name();
 
-	Class<?>[] eventTypes();
+	Class<?>[] eventTypes() default {};
 
 }
