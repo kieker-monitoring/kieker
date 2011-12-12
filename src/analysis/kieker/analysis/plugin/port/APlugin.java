@@ -7,8 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This method can be used to mark plugins and to describe the corresponding
- * output ports.
+ * This method can be used to mark plugins and to describe the corresponding output ports.
  * 
  * @author Nils Christian Ehmke
  */
@@ -17,6 +16,11 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface APlugin {
 
+	/**
+	 * The output ports which the current plugin has.
+	 * 
+	 * @return The output ports of this annotation.
+	 */
 	AOutputPort[] outputPorts() default {};
 
 }

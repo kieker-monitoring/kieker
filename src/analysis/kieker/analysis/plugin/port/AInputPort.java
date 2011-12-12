@@ -27,12 +27,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This annotation can be used to mark methods as input ports. The corresponding
- * methods should only get an instance of the class <code>Object</code> and
- * nothing else.<br>
- * Furthermore the port allows to specify the event types for this port, but not
- * the name. The name is determined by the name of the target-method. There is
- * also a field for a human-readable description available.
+ * This annotation can be used to mark methods as input ports. The corresponding methods should only get an instance of the class <code>Object</code> and nothing
+ * else.<br>
+ * Furthermore the port allows to specify the event types for this port, but not the name. The name is determined by the name of the target-method. There is also a
+ * field for a human-readable description available.
  * 
  * @author Nils Christian Ehmke
  */
@@ -41,8 +39,18 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface AInputPort {
 
+	/**
+	 * The human-readable description of this port.
+	 * 
+	 * @return The description for this port.
+	 */
 	String description() default "Input Port";
 
+	/**
+	 * The event types which are used for this port. If this is empty, everything can be send through the port.
+	 * 
+	 * @return The event types for this class.
+	 */
 	Class<?>[] eventTypes() default {};
 
 }

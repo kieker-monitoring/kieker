@@ -23,12 +23,7 @@ package kieker.analysis.plugin;
 import kieker.common.configuration.Configuration;
 
 /**
- * This class should be used as a base for every plugin used within
- * <i>Kieker</i>. Every plugin should follow the following behavior:<br>
- * <ul>
- * <li>It should create and register its ports (input + output).
- * <li>The input ports should do whatever with the data and pass them to their output ports if necessary.
- * </ul>
+ * This class should be used as a base for every analysis plugin used within <i>Kieker</i>.
  * 
  * @author Nils Christian Ehmke
  */

@@ -21,9 +21,9 @@
 package kieker.analysis.plugin;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -36,8 +36,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
 /**
- * <b>Do not</b> inherit directly from this class! Instead inherit from the
- * class {@link AbstractAnalysisPlugin} or {@link AbstractMonitoringReader}.
+ * <b>Do not</b> inherit directly from this class! Instead inherit from the class {@link AbstractAnalysisPlugin} or {@link AbstractMonitoringReader}.
  * 
  * @author Nils Christian Ehmke
  */
@@ -50,15 +49,15 @@ public abstract class AbstractPlugin {
 
 	protected final Configuration configuration;
 	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<Method>> registeredMethods;
-	private final AOutputPort outputPorts[];
-	private final AInputPort inputPorts[];
+	private final HashMap<String, AOutputPort> outputPorts;
+	private final HashMap<String, AInputPort> inputPorts;
 
 	/**
 	 * Each Plugin requires a constructor with a single Configuration object!
 	 */
 	public AbstractPlugin(final Configuration configuration) {
 		try {
-			// somewhat dirty hack...
+			// TODO: somewhat dirty hack...
 			final Configuration defaultConfig = this.getDefaultConfiguration(); // NOPMD
 			if (defaultConfig != null) {
 				configuration.setDefaultConfiguration(defaultConfig);
@@ -68,50 +67,49 @@ public abstract class AbstractPlugin {
 		}
 		this.configuration = configuration;
 
-		this.registeredMethods = new ConcurrentHashMap<String, ConcurrentLinkedQueue<Method>>();
-		/*
-		 * Create a linked queue for every outputport of the class. KEEP IN MIND: although we use "this",
-		 * it points to the actual class. Not to AbstractPlugin!!
-		 */
+		/* KEEP IN MIND: Although we use "this" in the following code, it points to the actual class. Not to AbstractPlugin!! */
+
+		/* Get all output ports. */
+		this.outputPorts = new HashMap<String, AOutputPort>();
 		final APlugin annotation = this.getClass().getAnnotation(APlugin.class);
-		this.outputPorts = annotation.outputPorts();
-		for (final AOutputPort outputPort : this.outputPorts) {
-			this.registeredMethods.put(outputPort.name(), new ConcurrentLinkedQueue<Method>());
+		for (final AOutputPort outputPort : annotation.outputPorts()) {
+			this.outputPorts.put(outputPort.name(), outputPort);
 		}
+		/* Get all input ports. */
+		this.inputPorts = new HashMap<String, AInputPort>();
 		final Method allMethods[] = this.getClass().getMethods();
-		final List<AInputPort> inputPorts = new ArrayList<AInputPort>();
 		for (final Method method : allMethods) {
 			final AInputPort inputPort = method.getAnnotation(AInputPort.class);
 			if (inputPort != null) {
-				inputPorts.add(inputPort);
+				this.inputPorts.put(method.getName(), inputPort);
 			}
 		}
-		this.inputPorts = inputPorts.toArray(new AInputPort[0]);
+
+		/* Now create a linked queue for every output port of the class, to store the registered methods. */
+		this.registeredMethods = new ConcurrentHashMap<String, ConcurrentLinkedQueue<Method>>();
+		for (final AOutputPort outputPort : annotation.outputPorts()) {
+			this.registeredMethods.put(outputPort.name(), new ConcurrentLinkedQueue<Method>());
+		}
 	}
 
 	/**
-	 * This method should deliver an instance of {@code Properties} containing
-	 * the default properties for this class. In other words: Every class
-	 * inheriting from {@code AbstractPlugin} should implement this method to
-	 * deliver an object which can be used for the constructor of this clas.
+	 * This method should deliver an instance of {@code Properties} containing the default properties for this class. In other words: Every class inheriting from
+	 * {@code AbstractPlugin} should implement this method to deliver an object which can be used for the constructor of this class.
 	 * 
 	 * @return The default properties.
 	 */
 	protected abstract Configuration getDefaultConfiguration();
 
 	/**
-	 * This method should deliver a {@code Configuration} object containing the
-	 * current configuration of this instance. In other words: The constructor
-	 * should be able to use the given object to initialize a new instance of
-	 * this class with the same intern properties.
+	 * This method should deliver a {@code Configuration} object containing the current configuration of this instance. In other words: The constructor should be
+	 * able to use the given object to initialize a new instance of this class with the same intern properties.
 	 * 
 	 * @return A complete filled configuration object.
 	 */
 	public abstract Configuration getCurrentConfiguration();
 
 	/**
-	 * This method delivers the current name of this plugin. The name does not
-	 * have to be unique.
+	 * This method delivers the current name of this plugin. The name does not have to be unique.
 	 * 
 	 * @return The name of the plugin.
 	 */
@@ -120,8 +118,7 @@ public abstract class AbstractPlugin {
 	}
 
 	/**
-	 * This method sets the current name of this plugin. The name does not
-	 * have to be unique.
+	 * This method sets the current name of this plugin. The name does not have to be unique.
 	 * 
 	 * @param name
 	 *            The new name of the plugin.
@@ -130,36 +127,108 @@ public abstract class AbstractPlugin {
 		this.name = name;
 	}
 
-	protected final boolean deliver(final String outputPort, final Object data) {
-		// TODO Make sure the given data fits
-		final ConcurrentLinkedQueue<Method> registeredMethods = this.registeredMethods.get(outputPort);
-		if (registeredMethods == null) {
+	/**
+	 * Delivers the given data to all registered input ports of the given output port.
+	 * 
+	 * @param outputPortName
+	 *            The output port to be used to send the given data.
+	 * @param data
+	 *            The data to be send.
+	 * @return true if and only if the given output port does exist the data is not null and if it suits the port's event types.
+	 */
+	protected final boolean deliver(final String outputPortName, final Object data) {
+		/* First step: Check the data. */
+		if (data == null) {
 			return false;
 		}
-		boolean result = true;
-		final Iterator<Method> methodIterator = registeredMethods.iterator();
-		while (methodIterator.hasNext()) {
-			try {
-				methodIterator.next().invoke(this, data);
-			} catch (final Exception e) {
-				result = false;
+
+		/* Second step: Get the output port. */
+		final AOutputPort outputPort = this.outputPorts.get(outputPortName);
+		if (outputPort == null) {
+			return false;
+		}
+
+		/* Third step: Check whether the data fits the event types. */
+		for (final Class<?> eventType : outputPort.eventTypes()) {
+			if (!eventType.isInstance(data)) {
+				return false;
 			}
 		}
-		return result;
+
+		/* Fourth step: Send everything to the registered ports. */
+		final ConcurrentLinkedQueue<Method> registeredMethods = this.registeredMethods.get(outputPort);
+
+		final Iterator<Method> methodIterator = registeredMethods.iterator();
+		while (methodIterator.hasNext()) {
+			final Method method = methodIterator.next();
+			try {
+				method.invoke(this, data);
+			} catch (final Exception e) {
+				AbstractPlugin.LOG.warn(String.format("OutputPort %s couldn't send data to InputPort %s\n", outputPort.name(), method.getName()));
+			}
+		}
+
+		return true;
 	}
 
-	public static final void connect(final AbstractPlugin src, final String output, final AbstractPlugin dst, final String input) {
-		if (dst instanceof IMonitoringReader) {
-			// TODO Throw exception
+	/**
+	 * This method connects two plugins.
+	 * 
+	 * @param src
+	 *            The source plugin.
+	 * @param output
+	 *            The output port of the source plugin.
+	 * @param dst
+	 *            The destination plugin.
+	 * @param input
+	 *            The input port of the destination port.
+	 * @return true if and only if both given plugins are valid, the output and input ports exist and if they are compatible. Furthermore the destination plugin must
+	 *         not be a reader.
+	 */
+	public static final boolean connect(final AbstractPlugin src, final String output, final AbstractPlugin dst, final String input) {
+		/* First step: Check whether the plugins are valid. */
+		if ((src == null) || (dst == null) || (dst instanceof IMonitoringReader)) {
+			return false;
 		}
-		// TODO Check whether the ports are suitable or not
 
-		// TODO Check whether the ports exist or not
+		/* Second step: Check whether the ports exist. */
+		final AOutputPort outputPort = src.outputPorts.get(output);
+		final AInputPort inputPort = dst.inputPorts.get(input);
+		if ((outputPort == null) || (inputPort == null)) {
+			return false;
+		}
 
+		/* Third step: Make sure the ports are compatible. */
+		if (inputPort.eventTypes().length != 0) {
+			if (outputPort.eventTypes().length == 0) {
+				// Output port can deliver everything
+				if (!Arrays.asList(inputPort.eventTypes()).contains(Object.class)) {
+					// But the input port cannot get everything.
+					return false;
+				}
+			} else {
+				for (final Class<?> srcEventType : outputPort.eventTypes()) {
+					boolean compatible = false;
+					for (final Class<?> dstEventType : inputPort.eventTypes()) {
+						if (srcEventType.isAssignableFrom(dstEventType)) {
+							compatible = true;
+						}
+					}
+					if (!compatible) {
+						return false;
+					}
+				}
+			}
+		}
+
+		/* Connect the ports. */
 		try {
 			src.registeredMethods.get(output).add(dst.getClass().getMethod(input, Object.class));
 		} catch (final Exception e) {
-			// TODO Throw exception
+			AbstractPlugin.LOG.warn(String.format("Couldn't connect OutputPort %s with InputPort %s\n", output, input));
+			return false;
 		}
+
+		return true;
 	}
 }
