@@ -20,13 +20,11 @@
 
 package kieker.tools.traceAnalysis.plugins.executionRecordTransformation;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.StringTokenizer;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.plugin.port.AbstractInputPort;
-import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.AInputPort;
+import kieker.analysis.plugin.port.AOutputPort;
+import kieker.analysis.plugin.port.APlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -51,39 +49,24 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn
  */
+@APlugin(
+		outputPorts = {
+			@AOutputPort(name = ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME, description = "Execution output stream", eventTypes = { Execution.class })
+		})
 public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPlugin {
 
+	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
+	public static final String OUTPUT_PORT_NAME = "outputPort";
 	private static final Log LOG = LogFactory.getLog(ExecutionRecordTransformationFilter.class);
-
-	private static final Collection<Class<?>> OUT_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { Execution.class }));
-	private static final Collection<Class<?>> IN_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { IMonitoringRecord.class }));
-
-	private final OutputPort executionOutputPort = new OutputPort("Execution output stream", ExecutionRecordTransformationFilter.OUT_CLASSES);
-	private final AbstractInputPort input = new AbstractInputPort("in", ExecutionRecordTransformationFilter.IN_CLASSES) {
-
-		@Override
-		public void newEvent(final Object event) {
-			ExecutionRecordTransformationFilter.this.newMonitoringRecord((IMonitoringRecord) event);
-		}
-
-	};
 
 	public ExecutionRecordTransformationFilter(final Configuration configuration) {
 		super(configuration);
 
 		// TODO: Load from configuration
-
-		this.registerInputPort("in", this.input);
-		this.registerOutputPort("out", this.executionOutputPort);
 	}
 
 	public ExecutionRecordTransformationFilter(final String name, final SystemModelRepository systemEntityFactory) {
 		super(name, systemEntityFactory);
-
-		this.registerInputPort("in", this.input);
-		this.registerOutputPort("out", this.executionOutputPort);
 	}
 
 	private Signature createSignature(final String operationSignatureStr) {
@@ -106,7 +89,9 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 		return new Signature(name, returnType, paramTypeList);
 	}
 
-	public boolean newMonitoringRecord(final IMonitoringRecord record) {
+	@AInputPort(description = "Input", eventTypes = { IMonitoringRecord.class })
+	public boolean newMonitoringRecord(final Object data) {
+		final IMonitoringRecord record = (IMonitoringRecord) data;
 		if (!(record instanceof OperationExecutionRecord)) {
 			ExecutionRecordTransformationFilter.LOG.error("Can only process records of type" + OperationExecutionRecord.class.getName() + " but received"
 					+ record.getClass().getName());
@@ -155,7 +140,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 
 		final Execution execution = new Execution(op, allocInst, execRec.getTraceId(), execRec.getSessionId(), execRec.getEoi(), execRec.getEss(), execRec.getTin(),
 				execRec.getTout());
-		this.executionOutputPort.deliver(execution);
+		super.deliver(ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME, execution);
 		return true;
 	}
 
@@ -167,14 +152,6 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 	@Override
 	public void terminate(final boolean error) {
 		// nothing to do
-	}
-
-	public OutputPort getExecutionOutputPort() {
-		return this.executionOutputPort;
-	}
-
-	public AbstractInputPort getExecutionInputPort() {
-		return this.input;
 	}
 
 	@Override

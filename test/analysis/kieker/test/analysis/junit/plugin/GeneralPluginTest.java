@@ -5,9 +5,13 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import kieker.analysis.plugin.port.AbstractInputPort;
-import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.plugin.port.AOutputPort;
+import kieker.analysis.plugin.port.APlugin;
+import kieker.analysis.reader.AbstractReaderPlugin;
+import kieker.common.configuration.Configuration;
 import kieker.common.record.OperationExecutionRecord;
+import kieker.test.analysis.junit.util.SinkClass;
 import kieker.tools.traceAnalysis.plugins.executionFilter.TimestampFilter;
 import kieker.tools.traceAnalysis.plugins.executionFilter.TraceIdFilter;
 import kieker.tools.traceAnalysis.plugins.executionRecordTransformation.ExecutionRecordTransformationFilter;
@@ -27,26 +31,9 @@ public class GeneralPluginTest {
 
 	@Test
 	public void testChaining() {
-
-		final ConcurrentLinkedQueue<Execution> lst = new ConcurrentLinkedQueue<Execution>();
-		final OutputPort source = new OutputPort("", Arrays.asList(new Class<?>[] { OperationExecutionRecord.class }));
-		final AbstractInputPort dst = new AbstractInputPort("", Arrays.asList(new Class<?>[] { Execution.class })) {
-
-			@Override
-			public void newEvent(final Object event) {
-				lst.add((Execution) event);
-			}
-		};
-
 		final ExecutionRecordTransformationFilter transformer = new ExecutionRecordTransformationFilter("", new SystemModelRepository());
 		final TraceIdFilter filter1 = new TraceIdFilter(new HashSet<Long>(Arrays.asList(new Long[] { 1l })));
 		final TimestampFilter filter2 = new TimestampFilter(10, 20);
-
-		/* Connect them. */
-		source.subscribe(transformer.getExecutionInputPort());
-		transformer.getExecutionOutputPort().subscribe(filter1.getExecutionInputPort());
-		filter1.getExecutionOutputPort().subscribe(filter2.getExecutionInputPort());
-		filter2.getExecutionOutputPort().subscribe(dst);
 
 		/* The records we will send. */
 		final OperationExecutionRecord opExRec1 = new OperationExecutionRecord("", "", 1, 14, 15);
@@ -57,16 +44,18 @@ public class GeneralPluginTest {
 		final OperationExecutionRecord opExRec6 = new OperationExecutionRecord("", "", 2, 14, 21);
 		final OperationExecutionRecord opExRec7 = new OperationExecutionRecord("", "", 1, 9, 21);
 		final OperationExecutionRecord opExRec8 = new OperationExecutionRecord("", "", 1, 10, 20);
+		final SourceClass src = new SourceClass(opExRec1, opExRec2, opExRec3, opExRec4, opExRec5, opExRec6, opExRec7, opExRec8);
+		final SinkClass dst = new SinkClass(null);
 
-		source.deliver(opExRec1);
-		source.deliver(opExRec2);
-		source.deliver(opExRec3);
-		source.deliver(opExRec4);
-		source.deliver(opExRec5);
-		source.deliver(opExRec6);
-		source.deliver(opExRec7);
-		source.deliver(opExRec8);
+		/* Connect the plugins. */
+		Assert.assertTrue(AbstractPlugin.connect(src, SourceClass.OUTPUT_PORT_NAME, transformer, ExecutionRecordTransformationFilter.INPUT_PORT_NAME));
+		Assert.assertTrue(AbstractPlugin.connect(transformer, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME, filter1, TraceIdFilter.INPUT_PORT_NAME));
+		Assert.assertTrue(AbstractPlugin.connect(filter1, TraceIdFilter.OUTPUT_PORT_NAME, filter2, TimestampFilter.INPUT_PORT_NAME));
+		Assert.assertTrue(AbstractPlugin.connect(filter2, TimestampFilter.OUTPUT_PORT_NAME, dst, SinkClass.INPUT_PORT_NAME));
 
+		src.read();
+
+		final ConcurrentLinkedQueue<Execution> lst = dst.getList();
 		Assert.assertEquals(2, lst.size());
 
 		boolean okay1 = false, okay2 = false;
@@ -86,4 +75,41 @@ public class GeneralPluginTest {
 		Assert.assertTrue(okay1);
 		Assert.assertTrue(okay2);
 	}
+}
+
+@APlugin(
+		outputPorts = {
+			@AOutputPort(name = SourceClass.OUTPUT_PORT_NAME, eventTypes = { OperationExecutionRecord.class })
+		})
+class SourceClass extends AbstractReaderPlugin {
+
+	private final OperationExecutionRecord records[];
+	public static final String OUTPUT_PORT_NAME = "output";
+
+	public SourceClass(final OperationExecutionRecord... records) {
+		super(new Configuration());
+		this.records = records;
+	}
+
+	@Override
+	public boolean read() {
+		for (final OperationExecutionRecord record : this.records) {
+			Assert.assertTrue(super.deliver(SourceClass.OUTPUT_PORT_NAME, record));
+		}
+		return true;
+	}
+
+	@Override
+	public void terminate() {}
+
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		return null;
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		return null;
+	}
+
 }

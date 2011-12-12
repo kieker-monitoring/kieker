@@ -48,7 +48,7 @@ public abstract class AbstractPlugin {
 	private String name = null;
 
 	protected final Configuration configuration;
-	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<Method>> registeredMethods;
+	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<Pair<Object, Method>>> registeredMethods;
 	private final HashMap<String, AOutputPort> outputPorts;
 	private final HashMap<String, AInputPort> inputPorts;
 
@@ -86,9 +86,9 @@ public abstract class AbstractPlugin {
 		}
 
 		/* Now create a linked queue for every output port of the class, to store the registered methods. */
-		this.registeredMethods = new ConcurrentHashMap<String, ConcurrentLinkedQueue<Method>>();
+		this.registeredMethods = new ConcurrentHashMap<String, ConcurrentLinkedQueue<Pair<Object, Method>>>();
 		for (final AOutputPort outputPort : annotation.outputPorts()) {
-			this.registeredMethods.put(outputPort.name(), new ConcurrentLinkedQueue<Method>());
+			this.registeredMethods.put(outputPort.name(), new ConcurrentLinkedQueue<Pair<Object, Method>>());
 		}
 	}
 
@@ -156,15 +156,16 @@ public abstract class AbstractPlugin {
 		}
 
 		/* Fourth step: Send everything to the registered ports. */
-		final ConcurrentLinkedQueue<Method> registeredMethods = this.registeredMethods.get(outputPort);
+		final ConcurrentLinkedQueue<Pair<Object, Method>> registeredMethods = this.registeredMethods.get(outputPortName);
 
-		final Iterator<Method> methodIterator = registeredMethods.iterator();
+		final Iterator<Pair<Object, Method>> methodIterator = registeredMethods.iterator();
 		while (methodIterator.hasNext()) {
-			final Method method = methodIterator.next();
+			final Pair<Object, Method> methodPair = methodIterator.next();
 			try {
-				method.invoke(this, data);
+				System.out.println(methodPair.fst + ", " + methodPair.snd);
+				methodPair.snd.invoke(methodPair.fst, data);
 			} catch (final Exception e) {
-				AbstractPlugin.LOG.warn(String.format("OutputPort %s couldn't send data to InputPort %s\n", outputPort.name(), method.getName()));
+				AbstractPlugin.LOG.warn(String.format("OutputPort %s couldn't send data to InputPort %s\n", outputPort.name(), methodPair.snd.getName()));
 			}
 		}
 
@@ -210,7 +211,7 @@ public abstract class AbstractPlugin {
 				for (final Class<?> srcEventType : outputPort.eventTypes()) {
 					boolean compatible = false;
 					for (final Class<?> dstEventType : inputPort.eventTypes()) {
-						if (srcEventType.isAssignableFrom(dstEventType)) {
+						if (dstEventType.isAssignableFrom(srcEventType)) {
 							compatible = true;
 						}
 					}
@@ -223,12 +224,22 @@ public abstract class AbstractPlugin {
 
 		/* Connect the ports. */
 		try {
-			src.registeredMethods.get(output).add(dst.getClass().getMethod(input, Object.class));
+			src.registeredMethods.get(output).add(new Pair<Object, Method>(dst, dst.getClass().getMethod(input, Object.class)));
 		} catch (final Exception e) {
 			AbstractPlugin.LOG.warn(String.format("Couldn't connect OutputPort %s with InputPort %s\n", output, input));
 			return false;
 		}
 
 		return true;
+	}
+}
+
+class Pair<T1, T2> {
+	public T1 fst;
+	public T2 snd;
+
+	public Pair(final T1 fst, final T2 snd) {
+		this.fst = fst;
+		this.snd = snd;
 	}
 }

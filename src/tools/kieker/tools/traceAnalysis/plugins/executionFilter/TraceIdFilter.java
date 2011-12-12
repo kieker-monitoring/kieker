@@ -20,14 +20,13 @@
 
 package kieker.tools.traceAnalysis.plugins.executionFilter;
 
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.port.AbstractInputPort;
-import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.AInputPort;
+import kieker.analysis.plugin.port.AOutputPort;
+import kieker.analysis.plugin.port.APlugin;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 
@@ -41,20 +40,21 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * 
  * @author Andre van Hoorn
  */
+@APlugin(
+		outputPorts = {
+			@AOutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME, description = "Execution output", eventTypes = { Execution.class })
+		})
 public class TraceIdFilter extends AbstractAnalysisPlugin {
 
+	public static final String INPUT_PORT_NAME = "newExecution";
+	public static final String OUTPUT_PORT_NAME = "outputPort";
 	public static final String CONFIG_SELECTED_TRACES = TraceIdFilter.class.getName() + ".selectedTraces";
 	private final Set<Long> selectedTraces;
-
-	private final OutputPort executionOutputPort = new OutputPort("Execution output", new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { Execution.class }));
 
 	public TraceIdFilter(final Configuration configuration) {
 		super(configuration);
 		// TODO: Initialize from the variable.
 		this.selectedTraces = null;
-
-		super.registerInputPort("in", this.executionInputPort);
-		super.registerOutputPort("out", this.executionOutputPort);
 	}
 
 	/**
@@ -66,34 +66,16 @@ public class TraceIdFilter extends AbstractAnalysisPlugin {
 	public TraceIdFilter(final Set<Long> selectedTraces) {
 		super(new Configuration(null));
 		this.selectedTraces = selectedTraces;
-
-		super.registerOutputPort("out", this.executionOutputPort);
 	}
 
-	public AbstractInputPort getExecutionInputPort() {
-		return this.executionInputPort;
-	}
-
-	private final AbstractInputPort executionInputPort = new AbstractInputPort("Execution input",
-			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-					new Class<?>[] { Execution.class }))) {
-
-		@Override
-		public void newEvent(final Object obj) {
-			TraceIdFilter.this.newExecution((Execution) obj);
-		}
-	};
-
-	public OutputPort getExecutionOutputPort() {
-		return this.executionOutputPort;
-	}
-
-	private void newExecution(final Execution execution) {
+	@AInputPort(description = "Execution input", eventTypes = { Execution.class })
+	public void newExecution(final Object data) {
+		final Execution execution = (Execution) data;
 		if ((this.selectedTraces != null) && !this.selectedTraces.contains(execution.getTraceId())) {
 			// not interested in this trace
 			return;
 		}
-		this.executionOutputPort.deliver(execution);
+		super.deliver(TraceIdFilter.OUTPUT_PORT_NAME, data);
 	}
 
 	@Override

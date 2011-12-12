@@ -20,12 +20,10 @@
 
 package kieker.tools.traceAnalysis.plugins.executionFilter;
 
-import java.util.Collections;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.port.AbstractInputPort;
-import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.AInputPort;
+import kieker.analysis.plugin.port.AOutputPort;
+import kieker.analysis.plugin.port.APlugin;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 
@@ -40,8 +38,14 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * 
  * @author Andre van Hoorn
  */
+@APlugin(
+		outputPorts = {
+			@AOutputPort(name = TimestampFilter.OUTPUT_PORT_NAME, description = "Execution output", eventTypes = { Execution.class })
+		})
 public class TimestampFilter extends AbstractAnalysisPlugin {
 
+	public static final String INPUT_PORT_NAME = "newExecution";
+	public static final String OUTPUT_PORT_NAME = "outputPort";
 	public static final String CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP = TimestampFilter.class.getName() + ".ignoreExecutionsBeforeTimestamp";
 	public static final String CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP = TimestampFilter.class.getName() + ".ignorExecutionsAfterTimestamp";
 	public static final long MAX_TIMESTAMP = Long.MAX_VALUE;
@@ -49,8 +53,6 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 
 	private final long ignoreExecutionsBeforeTimestamp;
 	private final long ignoreExecutionsAfterTimestamp;
-
-	private final OutputPort executionOutputPort = new OutputPort("Execution output", new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { Execution.class }));
 
 	/**
 	 * Creates a new instance of the class {@link TimestampFilter} with the
@@ -66,9 +68,6 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 		/* Load the content for the fields from the given configuration. */
 		this.ignoreExecutionsBeforeTimestamp = configuration.getLongProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP);
 		this.ignoreExecutionsAfterTimestamp = configuration.getLongProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
-
-		super.registerOutputPort("out", this.executionOutputPort);
-		super.registerInputPort("in", this.executionInputPort);
 	}
 
 	/**
@@ -84,34 +83,15 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 
 		this.ignoreExecutionsBeforeTimestamp = ignoreExecutionsBeforeTimestamp;
 		this.ignoreExecutionsAfterTimestamp = ignoreExecutionsAfterTimestamp;
-
-		super.registerOutputPort("out", this.executionOutputPort);
-		super.registerInputPort("in", this.executionInputPort);
 	}
 
-	public AbstractInputPort getExecutionInputPort() {
-		return this.executionInputPort;
-	}
-
-	private final AbstractInputPort executionInputPort = new AbstractInputPort("Execution input",
-			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(new Class<?>[] { Execution.class }))) {
-
-		@Override
-		public void newEvent(final Object obj) {
-			final Execution event = (Execution) obj;
-			TimestampFilter.this.newExecution(event);
-		}
-	};
-
-	public OutputPort getExecutionOutputPort() {
-		return this.executionOutputPort;
-	}
-
-	private void newExecution(final Execution execution) {
+	@AInputPort(description = "Execution input", eventTypes = { Execution.class })
+	public void newExecution(final Object data) {
+		final Execution execution = (Execution) data;
 		if ((execution.getTin() < this.ignoreExecutionsBeforeTimestamp) || (execution.getTout() > this.ignoreExecutionsAfterTimestamp)) {
 			return;
 		}
-		this.executionOutputPort.deliver(execution);
+		super.deliver(TimestampFilter.OUTPUT_PORT_NAME, execution);
 	}
 
 	@Override
