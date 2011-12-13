@@ -24,13 +24,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Stack;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -77,8 +74,6 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 						this.systemEntityFactory.getOperationFactory().getRootOperation()));
 		this.outputFnBase = outputFnBase;
 		this.shortLabels = shortLabels;
-
-		super.registerInputPort("in", this.messageTraceInputPort);
 	}
 
 	private static final String nodeLabel(final CallTreeNode node, final boolean shortLabels) {
@@ -234,36 +229,6 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 	}
 
 	@Override
-	public AbstractInputPort getMessageTraceInputPort() {
-		return this.messageTraceInputPort;
-	}
-
-	private final AbstractInputPort messageTraceInputPort = new AbstractInputPort("Message traces",
-			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-					new Class<?>[] { MessageTrace.class }))) {
-
-		@Override
-		public void newEvent(final Object obj) {
-			final MessageTrace mt = (MessageTrace) obj;
-			try {
-				final TraceCallTreeNode rootNode = new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, TraceCallTreePlugin.this.systemEntityFactory,
-						TraceCallTreePlugin.this.allocationComponentOperationPairFactory,
-						TraceCallTreePlugin.this.allocationComponentOperationPairFactory.getRootPair(),
-						true); // rootNode
-				AbstractCallTreePlugin.writeDotForMessageTrace(TraceCallTreePlugin.this.systemEntityFactory, rootNode, mt, TraceCallTreePlugin.this.outputFnBase
-						+ "-" + mt.getTraceId(), false, TraceCallTreePlugin.this.shortLabels); // no weights
-				TraceCallTreePlugin.this.reportSuccess(mt.getTraceId());
-			} catch (final TraceProcessingException ex) {
-				TraceCallTreePlugin.this.reportError(mt.getTraceId());
-				TraceCallTreePlugin.LOG.error("TraceProcessingException", ex);
-			} catch (final FileNotFoundException ex) {
-				TraceCallTreePlugin.this.reportError(mt.getTraceId());
-				TraceCallTreePlugin.LOG.error("File not found", ex);
-			}
-		}
-	};
-
-	@Override
 	protected Configuration getDefaultConfiguration() {
 		return new Configuration();
 	}
@@ -275,5 +240,25 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 		// TODO: Save the current configuration
 
 		return configuration;
+	}
+
+	@Override
+	public void msgTraceInput(final Object obj) {
+		final MessageTrace mt = (MessageTrace) obj;
+		try {
+			final TraceCallTreeNode rootNode = new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, TraceCallTreePlugin.this.systemEntityFactory,
+					TraceCallTreePlugin.this.allocationComponentOperationPairFactory,
+					TraceCallTreePlugin.this.allocationComponentOperationPairFactory.getRootPair(),
+					true); // rootNode
+			AbstractCallTreePlugin.writeDotForMessageTrace(TraceCallTreePlugin.this.systemEntityFactory, rootNode, mt, TraceCallTreePlugin.this.outputFnBase
+					+ "-" + mt.getTraceId(), false, TraceCallTreePlugin.this.shortLabels); // no weights
+			TraceCallTreePlugin.this.reportSuccess(mt.getTraceId());
+		} catch (final TraceProcessingException ex) {
+			TraceCallTreePlugin.this.reportError(mt.getTraceId());
+			TraceCallTreePlugin.LOG.error("TraceProcessingException", ex);
+		} catch (final FileNotFoundException ex) {
+			TraceCallTreePlugin.this.reportError(mt.getTraceId());
+			TraceCallTreePlugin.LOG.error("File not found", ex);
+		}
 	}
 }

@@ -41,6 +41,7 @@ import java.util.TreeSet;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -277,7 +278,7 @@ public final class TraceAnalysisTool {
 					TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 			analysisInstance.registerPlugin(execRecTransformer);
 			/* Make sure that the execRecTransformer gets the output from the reader! */
-			reader.getMonitoringRecordOutputPort().subscribe(execRecTransformer.getExecutionInputPort());
+			AbstractPlugin.connect(reader, FSReader.OUTPUT_PORT, execRecTransformer, ExecutionRecordTransformationFilter.INPUT_PORT_NAME);
 
 			final TimestampFilter executionFilterByTimestamp = new TimestampFilter(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp,
 					TraceAnalysisTool.ignoreExecutionsAfterTimestamp);

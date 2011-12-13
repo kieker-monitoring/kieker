@@ -24,10 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -65,9 +62,6 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 		this.includeWeights = includeWeights;
 		this.shortLabels = shortLabels;
 		this.includeSelfLoops = includeSelfLoops;
-
-		/* Register input port. */
-		super.registerInputPort("in", this.messageTraceInputPort);
 	}
 
 	@Override
@@ -116,44 +110,6 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 		}
 	}
 
-	private final AbstractInputPort messageTraceInputPort = new AbstractInputPort("Message traces",
-			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-					new Class<?>[] { MessageTrace.class }))) {
-
-		@Override
-		public void newEvent(final Object obj) {
-			final MessageTrace t = (MessageTrace) obj;
-			for (final AbstractMessage m : t.getSequenceAsVector()) {
-				if (m instanceof SynchronousReplyMessage) {
-					continue;
-				}
-				final AllocationComponent senderComponent = m.getSendingExecution().getAllocationComponent();
-				final AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
-				final ExecutionContainer senderContainer = senderComponent.getExecutionContainer();
-				final ExecutionContainer receiverContainer = receiverComponent.getExecutionContainer();
-				DependencyGraphNode<ExecutionContainer> senderNode = ContainerDependencyGraphPlugin.this.dependencyGraph.getNode(senderContainer.getId());
-				DependencyGraphNode<ExecutionContainer> receiverNode = ContainerDependencyGraphPlugin.this.dependencyGraph.getNode(receiverContainer.getId());
-
-				if (senderNode == null) {
-					senderNode = new DependencyGraphNode<ExecutionContainer>(senderContainer.getId(), senderContainer);
-					ContainerDependencyGraphPlugin.this.dependencyGraph.addNode(senderContainer.getId(), senderNode);
-				}
-				if (receiverNode == null) {
-					receiverNode = new DependencyGraphNode<ExecutionContainer>(receiverContainer.getId(), receiverContainer);
-					ContainerDependencyGraphPlugin.this.dependencyGraph.addNode(receiverContainer.getId(), receiverNode);
-				}
-				senderNode.addOutgoingDependency(receiverNode);
-				receiverNode.addIncomingDependency(senderNode);
-			}
-			ContainerDependencyGraphPlugin.this.reportSuccess(t.getTraceId());
-		}
-	};
-
-	@Override
-	public AbstractInputPort getMessageTraceInputPort() {
-		return this.messageTraceInputPort;
-	}
-
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		return new Configuration();
@@ -166,5 +122,33 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 		// TODO: Save the current configuration
 
 		return configuration;
+	}
+
+	@Override
+	public void msgTraceInput(final Object obj) {
+		final MessageTrace t = (MessageTrace) obj;
+		for (final AbstractMessage m : t.getSequenceAsVector()) {
+			if (m instanceof SynchronousReplyMessage) {
+				continue;
+			}
+			final AllocationComponent senderComponent = m.getSendingExecution().getAllocationComponent();
+			final AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
+			final ExecutionContainer senderContainer = senderComponent.getExecutionContainer();
+			final ExecutionContainer receiverContainer = receiverComponent.getExecutionContainer();
+			DependencyGraphNode<ExecutionContainer> senderNode = ContainerDependencyGraphPlugin.this.dependencyGraph.getNode(senderContainer.getId());
+			DependencyGraphNode<ExecutionContainer> receiverNode = ContainerDependencyGraphPlugin.this.dependencyGraph.getNode(receiverContainer.getId());
+
+			if (senderNode == null) {
+				senderNode = new DependencyGraphNode<ExecutionContainer>(senderContainer.getId(), senderContainer);
+				ContainerDependencyGraphPlugin.this.dependencyGraph.addNode(senderContainer.getId(), senderNode);
+			}
+			if (receiverNode == null) {
+				receiverNode = new DependencyGraphNode<ExecutionContainer>(receiverContainer.getId(), receiverContainer);
+				ContainerDependencyGraphPlugin.this.dependencyGraph.addNode(receiverContainer.getId(), receiverNode);
+			}
+			senderNode.addOutgoingDependency(receiverNode);
+			receiverNode.addIncomingDependency(senderNode);
+		}
+		ContainerDependencyGraphPlugin.this.reportSuccess(t.getTraceId());
 	}
 }

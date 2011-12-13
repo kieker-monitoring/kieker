@@ -25,13 +25,10 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -68,8 +65,6 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 		this.includeWeights = includeWeights;
 		this.shortLabels = shortLabels;
 		this.includeSelfLoops = includeSelfLoops;
-
-		super.registerInputPort("in", this.messageTraceInputPort);
 	}
 
 	private String componentNodeLabel(final DependencyGraphNode<AllocationComponent> node, final boolean shortLabelsL) {
@@ -176,42 +171,6 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 	}
 
 	@Override
-	public AbstractInputPort getMessageTraceInputPort() {
-		return this.messageTraceInputPort;
-	}
-
-	private final AbstractInputPort messageTraceInputPort = new AbstractInputPort("Message traces",
-			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-					new Class<?>[] { MessageTrace.class }))) {
-
-		@Override
-		public void newEvent(final Object obj) {
-			final MessageTrace t = (MessageTrace) obj;
-			for (final AbstractMessage m : t.getSequenceAsVector()) {
-				if (m instanceof SynchronousReplyMessage) {
-					continue;
-				}
-				final AllocationComponent senderComponent = m.getSendingExecution().getAllocationComponent();
-				final AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
-				DependencyGraphNode<AllocationComponent> senderNode = ComponentDependencyGraphPluginAllocation.this.dependencyGraph.getNode(senderComponent.getId());
-				DependencyGraphNode<AllocationComponent> receiverNode = ComponentDependencyGraphPluginAllocation.this.dependencyGraph.getNode(receiverComponent
-						.getId());
-				if (senderNode == null) {
-					senderNode = new DependencyGraphNode<AllocationComponent>(senderComponent.getId(), senderComponent);
-					ComponentDependencyGraphPluginAllocation.this.dependencyGraph.addNode(senderNode.getId(), senderNode);
-				}
-				if (receiverNode == null) {
-					receiverNode = new DependencyGraphNode<AllocationComponent>(receiverComponent.getId(), receiverComponent);
-					ComponentDependencyGraphPluginAllocation.this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
-				}
-				senderNode.addOutgoingDependency(receiverNode);
-				receiverNode.addIncomingDependency(senderNode);
-			}
-			ComponentDependencyGraphPluginAllocation.this.reportSuccess(t.getTraceId());
-		}
-	};
-
-	@Override
 	protected Configuration getDefaultConfiguration() {
 		return new Configuration();
 	}
@@ -223,5 +182,31 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 		// TODO: Save the current configuration
 
 		return configuration;
+	}
+
+	@Override
+	public void msgTraceInput(final Object obj) {
+		final MessageTrace t = (MessageTrace) obj;
+		for (final AbstractMessage m : t.getSequenceAsVector()) {
+			if (m instanceof SynchronousReplyMessage) {
+				continue;
+			}
+			final AllocationComponent senderComponent = m.getSendingExecution().getAllocationComponent();
+			final AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
+			DependencyGraphNode<AllocationComponent> senderNode = ComponentDependencyGraphPluginAllocation.this.dependencyGraph.getNode(senderComponent.getId());
+			DependencyGraphNode<AllocationComponent> receiverNode = ComponentDependencyGraphPluginAllocation.this.dependencyGraph.getNode(receiverComponent
+					.getId());
+			if (senderNode == null) {
+				senderNode = new DependencyGraphNode<AllocationComponent>(senderComponent.getId(), senderComponent);
+				ComponentDependencyGraphPluginAllocation.this.dependencyGraph.addNode(senderNode.getId(), senderNode);
+			}
+			if (receiverNode == null) {
+				receiverNode = new DependencyGraphNode<AllocationComponent>(receiverComponent.getId(), receiverComponent);
+				ComponentDependencyGraphPluginAllocation.this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
+			}
+			senderNode.addOutgoingDependency(receiverNode);
+			receiverNode.addIncomingDependency(senderNode);
+		}
+		ComponentDependencyGraphPluginAllocation.this.reportSuccess(t.getTraceId());
 	}
 }

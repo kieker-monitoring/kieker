@@ -22,10 +22,7 @@ package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -55,8 +52,6 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 		this.dotOutputFile = dotOutputFile;
 		this.includeWeights = includeWeights;
 		this.shortLabels = shortLabels;
-
-		super.registerInputPort("in", this.messageTraceInputPort);
 	}
 
 	public void saveTreeToDotFile() throws IOException {
@@ -96,28 +91,6 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 	}
 
 	@Override
-	public AbstractInputPort getMessageTraceInputPort() {
-		return this.messageTraceInputPort;
-	}
-
-	private final AbstractInputPort messageTraceInputPort = new AbstractInputPort("Message traces",
-			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-					new Class<?>[] { MessageTrace.class }))) {
-
-		@Override
-		public void newEvent(final Object obj) {
-			final MessageTrace t = (MessageTrace) obj;
-			try {
-				AbstractCallTreePlugin.addTraceToTree(AggregatedCallTreePlugin.this.root, t, true); // aggregated
-				AggregatedCallTreePlugin.this.reportSuccess(t.getTraceId());
-			} catch (final TraceProcessingException ex) {
-				AggregatedCallTreePlugin.LOG.error("TraceProcessingException", ex);
-				AggregatedCallTreePlugin.this.reportError(t.getTraceId());
-			}
-		}
-	};
-
-	@Override
 	protected Configuration getDefaultConfiguration() {
 		return new Configuration();
 	}
@@ -129,5 +102,17 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 		// TODO: Save the current configuration
 
 		return configuration;
+	}
+
+	@Override
+	public void msgTraceInput(final Object obj) {
+		final MessageTrace t = (MessageTrace) obj;
+		try {
+			AbstractCallTreePlugin.addTraceToTree(AggregatedCallTreePlugin.this.root, t, true); // aggregated
+			AggregatedCallTreePlugin.this.reportSuccess(t.getTraceId());
+		} catch (final TraceProcessingException ex) {
+			AggregatedCallTreePlugin.LOG.error("TraceProcessingException", ex);
+			AggregatedCallTreePlugin.this.reportError(t.getTraceId());
+		}
 	}
 }
