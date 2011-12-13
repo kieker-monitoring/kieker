@@ -303,7 +303,7 @@ public final class TraceAnalysisTool {
 				 * report. That's why we only activate it in case this options
 				 * is requested.
 				 */
-				mtReconstrFilter.getExecutionTraceOutputPort().subscribe(traceAllocationEquivClassFilter.getExecutionTraceInputPort());
+				mtReconstrFilter.getExecutionTraceOutputPort().subscribe(traceAllocationEquivClassFilter.getExecutionTraceInputPortName());
 				analysisInstance.registerPlugin(traceAllocationEquivClassFilter);
 				allTraceProcessingComponents.add(traceAllocationEquivClassFilter);
 			}
@@ -316,7 +316,7 @@ public final class TraceAnalysisTool {
 				 * report. That's why we only activate it in case this options
 				 * is requested.
 				 */
-				mtReconstrFilter.getExecutionTraceOutputPort().subscribe(traceAssemblyEquivClassFilter.getExecutionTraceInputPort());
+				mtReconstrFilter.getExecutionTraceOutputPort().subscribe(traceAssemblyEquivClassFilter.getExecutionTraceInputPortName());
 				analysisInstance.registerPlugin(traceAssemblyEquivClassFilter);
 				allTraceProcessingComponents.add(traceAssemblyEquivClassFilter);
 			}
@@ -338,7 +338,7 @@ public final class TraceAnalysisTool {
 				componentPrintExecTrace = new ExecutionTraceWriterPlugin(Constants.PRINTEXECTRACE_COMPONENT_NAME, TraceAnalysisTool.SYSTEM_ENTITY_FACTORY,
 						new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.EXECUTION_TRACES_FN_PREFIX + ".txt")
 								.getCanonicalPath());
-				mtReconstrFilter.getExecutionTraceOutputPort().subscribe(componentPrintExecTrace.getExecutionTraceInputPort());
+				mtReconstrFilter.getExecutionTraceOutputPort().subscribe(componentPrintExecTrace.getExecutionTraceInputPortName());
 				analysisInstance.registerPlugin(componentPrintExecTrace);
 				allTraceProcessingComponents.add(componentPrintExecTrace);
 			}
@@ -348,7 +348,7 @@ public final class TraceAnalysisTool {
 				componentPrintInvalidTrace = new InvalidExecutionTraceWriterPlugin(Constants.PRINTINVALIDEXECTRACE_COMPONENT_NAME,
 						TraceAnalysisTool.SYSTEM_ENTITY_FACTORY, new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix
 								+ Constants.INVALID_TRACES_FN_PREFIX + ".txt").getCanonicalPath());
-				mtReconstrFilter.getInvalidExecutionTraceOutputPort().subscribe(componentPrintInvalidTrace.getInvalidExecutionTraceInputPort());
+				mtReconstrFilter.getInvalidExecutionTraceOutputPort().subscribe(componentPrintInvalidTrace.getInvalidExecutionTraceInputPortName());
 				analysisInstance.registerPlugin(componentPrintInvalidTrace);
 				allTraceProcessingComponents.add(componentPrintInvalidTrace);
 			}

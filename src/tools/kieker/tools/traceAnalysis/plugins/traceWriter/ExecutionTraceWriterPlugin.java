@@ -23,10 +23,8 @@ package kieker.tools.traceAnalysis.plugins.traceWriter;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.plugin.port.AbstractInputPort;
+import kieker.analysis.plugin.port.AInputPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -42,6 +40,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  */
 public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessingPlugin {
 
+	public static final String EXECUTION_TRACES_INPUT_PORT_NAME = "newEvent";
 	private static final Log LOG = LogFactory.getLog(ExecutionTraceWriterPlugin.class);
 	private final String outputFn;
 	private final BufferedWriter ps;
@@ -50,8 +49,6 @@ public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessing
 		super(name, systemEntityFactory);
 		this.outputFn = outputFn;
 		this.ps = new BufferedWriter(new FileWriter(outputFn));
-
-		super.registerInputPort("in", this.executionTraceInputPort);
 	}
 
 	@Override
@@ -78,26 +75,21 @@ public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessing
 	}
 
 	@Override
-	public AbstractInputPort getExecutionTraceInputPort() {
-		return this.executionTraceInputPort;
+	public String getExecutionTraceInputPortName() {
+		return ExecutionTraceWriterPlugin.EXECUTION_TRACES_INPUT_PORT_NAME;
 	}
 
-	private final AbstractInputPort executionTraceInputPort = new AbstractInputPort("Execution traces",
-			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-					new Class<?>[] { ExecutionTrace.class }))) {
-
-		@Override
-		public void newEvent(final Object obj) {
-			final ExecutionTrace et = (ExecutionTrace) obj;
-			try {
-				ExecutionTraceWriterPlugin.this.ps.append(et.toString());
-				ExecutionTraceWriterPlugin.this.reportSuccess(et.getTraceId());
-			} catch (final IOException ex) {
-				ExecutionTraceWriterPlugin.this.reportError(et.getTraceId());
-				ExecutionTraceWriterPlugin.LOG.error("", ex);
-			}
+	@AInputPort(description = "Execution traces", eventTypes = { ExecutionTrace.class })
+	public void newEvent(final Object obj) {
+		final ExecutionTrace et = (ExecutionTrace) obj;
+		try {
+			ExecutionTraceWriterPlugin.this.ps.append(et.toString());
+			ExecutionTraceWriterPlugin.this.reportSuccess(et.getTraceId());
+		} catch (final IOException ex) {
+			ExecutionTraceWriterPlugin.this.reportError(et.getTraceId());
+			ExecutionTraceWriterPlugin.LOG.error("", ex);
 		}
-	};
+	}
 
 	@Override
 	protected Configuration getDefaultConfiguration() {

@@ -35,11 +35,12 @@ import kieker.common.configuration.Configuration;
  * @author Jan Waller
  */
 @APlugin(outputPorts = {
-	@AOutputPort(name = SilentCountingRecordConsumer.OUTPUT_PORT, eventTypes = {}, description = "Default output port")
+	@AOutputPort(name = SilentCountingRecordConsumer.OUTPUT_PORT_NAME, eventTypes = {}, description = "Default output port")
 })
 public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
 
-	public static final String OUTPUT_PORT = "output";
+	public static final String OUTPUT_PORT_NAME = "output";
+	public static final String INPUT_PORT_NAME = "newEvent";
 
 	private final AtomicLong counter = new AtomicLong();
 
@@ -53,7 +54,7 @@ public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
 	@AInputPort(eventTypes = {}, description = "Default input port")
 	public final void newEvent(final Object event) {
 		SilentCountingRecordConsumer.this.counter.incrementAndGet();
-		super.deliver(SilentCountingRecordConsumer.OUTPUT_PORT, event);
+		super.deliver(SilentCountingRecordConsumer.OUTPUT_PORT_NAME, event);
 	}
 
 	public final long getMessageCount() {

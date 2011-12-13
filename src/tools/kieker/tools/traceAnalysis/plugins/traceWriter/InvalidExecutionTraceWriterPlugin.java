@@ -23,10 +23,8 @@ package kieker.tools.traceAnalysis.plugins.traceWriter;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.plugin.port.AbstractInputPort;
+import kieker.analysis.plugin.port.AInputPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -40,6 +38,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  */
 public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionTraceProcessingPlugin {
 
+	public static final String INVALID_EXECUTION_TRACES_INPUT_PORT_NAME = "newEvent";
 	private static final Log LOG = LogFactory.getLog(InvalidExecutionTraceWriterPlugin.class);
 	private final String outputFn;
 	private final BufferedWriter ps;
@@ -75,26 +74,21 @@ public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionT
 	}
 
 	@Override
-	public AbstractInputPort getInvalidExecutionTraceInputPort() {
-		return this.invalidExecutionTraceInputPort;
+	public String getInvalidExecutionTraceInputPortName() {
+		return InvalidExecutionTraceWriterPlugin.INVALID_EXECUTION_TRACES_INPUT_PORT_NAME;
 	}
 
-	private final AbstractInputPort invalidExecutionTraceInputPort = new AbstractInputPort("Invalid execution traces",
-			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-					new Class<?>[] { InvalidExecutionTrace.class }))) {
-
-		@Override
-		public void newEvent(final Object obj) {
-			final InvalidExecutionTrace et = (InvalidExecutionTrace) obj;
-			try {
-				InvalidExecutionTraceWriterPlugin.this.ps.append(et.getInvalidExecutionTraceArtifacts().toString());
-				InvalidExecutionTraceWriterPlugin.this.reportSuccess(et.getInvalidExecutionTraceArtifacts().getTraceId());
-			} catch (final IOException ex) {
-				InvalidExecutionTraceWriterPlugin.this.reportError(et.getInvalidExecutionTraceArtifacts().getTraceId());
-				InvalidExecutionTraceWriterPlugin.LOG.error("", ex);
-			}
+	@AInputPort(description = "Invalid Execution traces", eventTypes = { InvalidExecutionTrace.class })
+	public void newEvent(final Object obj) {
+		final InvalidExecutionTrace et = (InvalidExecutionTrace) obj;
+		try {
+			InvalidExecutionTraceWriterPlugin.this.ps.append(et.getInvalidExecutionTraceArtifacts().toString());
+			InvalidExecutionTraceWriterPlugin.this.reportSuccess(et.getInvalidExecutionTraceArtifacts().getTraceId());
+		} catch (final IOException ex) {
+			InvalidExecutionTraceWriterPlugin.this.reportError(et.getInvalidExecutionTraceArtifacts().getTraceId());
+			InvalidExecutionTraceWriterPlugin.LOG.error("", ex);
 		}
-	};
+	}
 
 	@Override
 	protected Configuration getDefaultConfiguration() {

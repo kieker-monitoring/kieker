@@ -1,24 +1,25 @@
 package kieker.test.analysis.junit.util;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.List;
 
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.AInputPort;
 import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.systemModel.Execution;
+import kieker.common.record.IMonitoringRecord;
 
-public class SinkClass extends AbstractAnalysisPlugin {
+public class MonitoringSinkClass extends AbstractAnalysisPlugin {
 
 	public static final String INPUT_PORT_NAME = "doJob";
-	private final ConcurrentLinkedQueue<Execution> lst = new ConcurrentLinkedQueue<Execution>();
+	private final List<IMonitoringRecord> receivedRecords;
 
-	public SinkClass(final Configuration configuration) {
-		super(configuration);
+	public MonitoringSinkClass(final List<IMonitoringRecord> receivedRecords) {
+		super(new Configuration());
+		this.receivedRecords = receivedRecords;
 	}
 
 	@Override
 	public boolean execute() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -34,12 +35,8 @@ public class SinkClass extends AbstractAnalysisPlugin {
 		return null;
 	}
 
-	@AInputPort(eventTypes = { Execution.class })
+	@AInputPort(eventTypes = { IMonitoringRecord.class })
 	public void doJob(final Object data) {
-		this.lst.add((Execution) data);
-	}
-
-	public ConcurrentLinkedQueue<Execution> getList() {
-		return this.lst;
+		this.receivedRecords.add((IMonitoringRecord) data);
 	}
 }

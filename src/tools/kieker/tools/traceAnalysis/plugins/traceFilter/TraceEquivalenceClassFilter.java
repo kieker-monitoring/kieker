@@ -20,15 +20,14 @@
 
 package kieker.tools.traceAnalysis.plugins.traceFilter;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import kieker.analysis.plugin.port.AbstractInputPort;
-import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.AInputPort;
+import kieker.analysis.plugin.port.AOutputPort;
+import kieker.analysis.plugin.port.APlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -45,8 +44,15 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn
  */
+@APlugin(outputPorts = {
+	@AOutputPort(name = TraceEquivalenceClassFilter.MSG_TRACES_OUTPUT_PORT_NAME, description = "Message Traces", eventTypes = { MessageTrace.class }),
+	@AOutputPort(name = TraceEquivalenceClassFilter.EXECUTION_TRACES_OUTPUT_PORT_NAME, description = "Execution Traces", eventTypes = { ExecutionTrace.class })
+})
 public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessingPlugin {
 
+	public static final String MSG_TRACES_OUTPUT_PORT_NAME = "messageTracesOutput";
+	public static final String EXECUTION_TRACES_OUTPUT_PORT_NAME = "executionTracesOutput";
+	public static final String EXECUTION_TRACES_INPUT_PORT_NAME = "newExecutionTrace";
 	private static final Log LOG = LogFactory.getLog(TraceEquivalenceClassFilter.class);
 
 	public static enum TraceEquivalenceClassModes {
@@ -58,27 +64,21 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	/** Representative x # of equivalents */
 	private final Map<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap = new HashMap<AbstractExecutionTraceHashContainer, AtomicInteger>(); // NOPMD
 
-	private final OutputPort messageTraceOutputPort = new OutputPort("Message Traces", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { MessageTrace.class })));
-	private final OutputPort executionTraceOutputPort = new OutputPort("Execution Traces", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { ExecutionTrace.class })));
-
 	public TraceEquivalenceClassFilter(final String name, final SystemModelRepository systemEntityFactory, final TraceEquivalenceClassModes traceEquivalenceCallMode) {
 		super(name, systemEntityFactory);
 		this.rootExecution = systemEntityFactory.getRootExecution();
 		this.equivalenceMode = traceEquivalenceCallMode;
 
 		/* Register all ports. */
-		super.registerInputPort("in", this.executionTraceInputPort);
-		super.registerOutputPort("messageTraceOutput", this.messageTraceOutputPort);
-		super.registerOutputPort("executionTraceOutput", this.executionTraceOutputPort);
 	}
 
-	private void newExecutionTrace(final ExecutionTrace et) {
+	@AInputPort(description = "Execution traces", eventTypes = { ExecutionTrace.class })
+	public void newExecutionTrace(final Object data) {
+		final ExecutionTrace et = (ExecutionTrace) data;
 		try {
 			if (this.equivalenceMode == TraceEquivalenceClassFilter.TraceEquivalenceClassModes.DISABLED) {
-				this.executionTraceOutputPort.deliver(et);
-				this.messageTraceOutputPort.deliver(et.toMessageTrace(this.rootExecution));
+				super.deliver(TraceEquivalenceClassFilter.EXECUTION_TRACES_OUTPUT_PORT_NAME, et);
+				super.deliver(TraceEquivalenceClassFilter.MSG_TRACES_OUTPUT_PORT_NAME, et.toMessageTrace(this.rootExecution));
 			} else { // mode is ASSEMBLY or ALLOCATION
 				final AbstractExecutionTraceHashContainer polledTraceHashContainer;
 				if (this.equivalenceMode == TraceEquivalenceClassFilter.TraceEquivalenceClassModes.ASSEMBLY) {
@@ -95,8 +95,8 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 				if (numOccurences == null) {
 					numOccurences = new AtomicInteger(1);
 					this.eTracesEquivClassesMap.put(polledTraceHashContainer, numOccurences);
-					this.executionTraceOutputPort.deliver(et);
-					this.messageTraceOutputPort.deliver(et.toMessageTrace(this.rootExecution));
+					super.deliver(TraceEquivalenceClassFilter.EXECUTION_TRACES_OUTPUT_PORT_NAME, et);
+					super.deliver(TraceEquivalenceClassFilter.MSG_TRACES_OUTPUT_PORT_NAME, et.toMessageTrace(this.rootExecution));
 				} else {
 					numOccurences.incrementAndGet();
 				}
@@ -106,29 +106,6 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 			TraceEquivalenceClassFilter.LOG.error("InvalidTraceException", ex);
 			this.reportError(et.getTraceId());
 		}
-	}
-
-	@Override
-	public AbstractInputPort getExecutionTraceInputPort() {
-		return this.executionTraceInputPort;
-	}
-
-	private final AbstractInputPort executionTraceInputPort = new AbstractInputPort("Execution traces",
-			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-					new Class<?>[] { ExecutionTrace.class }))) {
-
-		@Override
-		public void newEvent(final Object mt) {
-			TraceEquivalenceClassFilter.this.newExecutionTrace((ExecutionTrace) mt);
-		}
-	};
-
-	public OutputPort getMessageTraceOutputPort() {
-		return this.messageTraceOutputPort;
-	}
-
-	public OutputPort getExecutionTraceOutputPort() {
-		return this.executionTraceOutputPort;
 	}
 
 	@Override
@@ -162,5 +139,10 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 		// TODO: Save the current configuration
 
 		return configuration;
+	}
+
+	@Override
+	public String getExecutionTraceInputPortName() {
+		return TraceEquivalenceClassFilter.EXECUTION_TRACES_INPUT_PORT_NAME;
 	}
 }

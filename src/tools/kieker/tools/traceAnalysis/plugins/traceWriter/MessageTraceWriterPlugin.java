@@ -23,10 +23,7 @@ package kieker.tools.traceAnalysis.plugins.traceWriter;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -40,6 +37,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  */
 public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlugin {
 
+	public static final String MSG_TRACES_INPUT_PORT_NAME = "newEvent";
 	private static final Log LOG = LogFactory.getLog(MessageTraceWriterPlugin.class);
 	private final String outputFn;
 	private final BufferedWriter ps;
@@ -74,28 +72,6 @@ public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlug
 	}
 
 	@Override
-	public AbstractInputPort getMessageTraceInputPort() {
-		return this.messageTraceInputPort;
-	}
-
-	private final AbstractInputPort messageTraceInputPort = new AbstractInputPort("Message traces",
-			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-					new Class<?>[] { MessageTrace.class }))) {
-
-		@Override
-		public void newEvent(final Object obj) {
-			final MessageTrace mt = (MessageTrace) obj;
-			try {
-				MessageTraceWriterPlugin.this.ps.append(mt.toString());
-				MessageTraceWriterPlugin.this.reportSuccess(mt.getTraceId());
-			} catch (final IOException ex) {
-				MessageTraceWriterPlugin.LOG.error("IOException", ex);
-				MessageTraceWriterPlugin.this.reportError(mt.getTraceId());
-			}
-		}
-	};
-
-	@Override
 	protected Configuration getDefaultConfiguration() {
 		return new Configuration();
 	}
@@ -107,5 +83,17 @@ public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlug
 		// TODO: Save the current configuration
 
 		return configuration;
+	}
+
+	@Override
+	public void msgTraceInput(final Object obj) {
+		final MessageTrace mt = (MessageTrace) obj;
+		try {
+			MessageTraceWriterPlugin.this.ps.append(mt.toString());
+			MessageTraceWriterPlugin.this.reportSuccess(mt.getTraceId());
+		} catch (final IOException ex) {
+			MessageTraceWriterPlugin.LOG.error("IOException", ex);
+			MessageTraceWriterPlugin.this.reportError(mt.getTraceId());
+		}
 	}
 }

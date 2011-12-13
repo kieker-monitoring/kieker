@@ -11,7 +11,7 @@ import kieker.analysis.plugin.port.APlugin;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.OperationExecutionRecord;
-import kieker.test.analysis.junit.util.SinkClass;
+import kieker.test.analysis.junit.util.ExecutionSinkClass;
 import kieker.tools.traceAnalysis.plugins.executionFilter.TimestampFilter;
 import kieker.tools.traceAnalysis.plugins.executionFilter.TraceIdFilter;
 import kieker.tools.traceAnalysis.plugins.executionRecordTransformation.ExecutionRecordTransformationFilter;
@@ -45,13 +45,13 @@ public class GeneralPluginTest {
 		final OperationExecutionRecord opExRec7 = new OperationExecutionRecord("", "", 1, 9, 21);
 		final OperationExecutionRecord opExRec8 = new OperationExecutionRecord("", "", 1, 10, 20);
 		final SourceClass src = new SourceClass(opExRec1, opExRec2, opExRec3, opExRec4, opExRec5, opExRec6, opExRec7, opExRec8);
-		final SinkClass dst = new SinkClass(null);
+		final ExecutionSinkClass dst = new ExecutionSinkClass(null);
 
 		/* Connect the plugins. */
 		Assert.assertTrue(AbstractPlugin.connect(src, SourceClass.OUTPUT_PORT_NAME, transformer, ExecutionRecordTransformationFilter.INPUT_PORT_NAME));
 		Assert.assertTrue(AbstractPlugin.connect(transformer, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME, filter1, TraceIdFilter.INPUT_PORT_NAME));
 		Assert.assertTrue(AbstractPlugin.connect(filter1, TraceIdFilter.OUTPUT_PORT_NAME, filter2, TimestampFilter.INPUT_PORT_NAME));
-		Assert.assertTrue(AbstractPlugin.connect(filter2, TimestampFilter.OUTPUT_PORT_NAME, dst, SinkClass.INPUT_PORT_NAME));
+		Assert.assertTrue(AbstractPlugin.connect(filter2, TimestampFilter.OUTPUT_PORT_NAME, dst, ExecutionSinkClass.INPUT_PORT_NAME));
 
 		src.read();
 

@@ -134,35 +134,29 @@ public abstract class AbstractPlugin {
 	 *            The output port to be used to send the given data.
 	 * @param data
 	 *            The data to be send.
-	 * @return true if and only if the given output port does exist the data is not null and if it suits the port's event types.
+	 * @return true if and only if the given output port does exist and if the data suits the port's event types.
 	 */
 	protected final boolean deliver(final String outputPortName, final Object data) {
-		/* First step: Check the data. */
-		if (data == null) {
-			return false;
-		}
-
-		/* Second step: Get the output port. */
+		/* First step: Get the output port. */
 		final AOutputPort outputPort = this.outputPorts.get(outputPortName);
 		if (outputPort == null) {
 			return false;
 		}
 
-		/* Third step: Check whether the data fits the event types. */
+		/* Second step: Check whether the data fits the event types. */
 		for (final Class<?> eventType : outputPort.eventTypes()) {
 			if (!eventType.isInstance(data)) {
 				return false;
 			}
 		}
 
-		/* Fourth step: Send everything to the registered ports. */
+		/* Third step: Send everything to the registered ports. */
 		final ConcurrentLinkedQueue<Pair<Object, Method>> registeredMethods = this.registeredMethods.get(outputPortName);
 
 		final Iterator<Pair<Object, Method>> methodIterator = registeredMethods.iterator();
 		while (methodIterator.hasNext()) {
 			final Pair<Object, Method> methodPair = methodIterator.next();
 			try {
-				System.out.println(methodPair.fst + ", " + methodPair.snd);
 				methodPair.snd.invoke(methodPair.fst, data);
 			} catch (final Exception e) {
 				AbstractPlugin.LOG.warn(String.format("OutputPort %s couldn't send data to InputPort %s\n", outputPort.name(), methodPair.snd.getName()));

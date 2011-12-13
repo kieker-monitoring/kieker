@@ -20,12 +20,9 @@
 
 package kieker.tools.traceAnalysis.plugins.messageTraceRepository;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.systemModel.AbstractTrace;
@@ -40,6 +37,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  */
 public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessingPlugin {
 
+	public static final String MSG_TRACE_INPUT_PORT_NAME = "newEvent";
 	// private static final Log log = LogFactory.getLog(MessageTraceRepositoryPlugin.class);
 
 	private final Map<Long, MessageTrace> repo = new ConcurrentHashMap<Long, MessageTrace>(); // NOPMD
@@ -49,24 +47,6 @@ public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessing
 
 	public MessageTraceRepositoryPlugin(final String name, final SystemModelRepository systemEntityFactory) {
 		super(name, systemEntityFactory);
-
-		/* Register the input port. */
-		super.registerInputPort("in", this.messageTraceInputPort);
-	}
-
-	private final AbstractInputPort messageTraceInputPort = new AbstractInputPort("Message traces",
-			Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-					new Class<?>[] { MessageTrace.class }))) {
-
-		@Override
-		public void newEvent(final Object mt) {
-			MessageTraceRepositoryPlugin.this.repo.put(((AbstractTrace) mt).getTraceId(), (MessageTrace) mt);
-		}
-	};
-
-	@Override
-	public AbstractInputPort getMessageTraceInputPort() {
-		return this.messageTraceInputPort;
 	}
 
 	@Override
@@ -91,5 +71,10 @@ public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessing
 		// TODO: Save the current configuration
 
 		return configuration;
+	}
+
+	@Override
+	public void msgTraceInput(final Object mt) {
+		MessageTraceRepositoryPlugin.this.repo.put(((AbstractTrace) mt).getTraceId(), (MessageTrace) mt);
 	}
 }

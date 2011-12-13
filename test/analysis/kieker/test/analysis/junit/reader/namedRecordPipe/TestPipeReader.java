@@ -23,19 +23,18 @@ package kieker.test.analysis.junit.reader.namedRecordPipe;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.AnalysisControllerThread;
-import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.port.AbstractInputPort;
+import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.reader.namedRecordPipe.PipeReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.test.analysis.junit.util.DummyRecord;
+import kieker.test.analysis.junit.util.MonitoringSinkClass;
 import kieker.test.analysis.junit.util.NamedPipeFactory;
 
 import org.junit.Test;
@@ -59,11 +58,11 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 
 		final IMonitoringRecordReceiver writer = kieker.test.analysis.junit.util.NamedPipeFactory.createAndRegisterNamedPipeRecordWriter(pipeName);
 
-		final Receiver receiver = new Receiver(receivedRecords);
+		final MonitoringSinkClass receiver = new MonitoringSinkClass(receivedRecords);
 
 		final AnalysisController analysis = new AnalysisController();
 		analysis.setReader(pipeReader);
-		pipeReader.getAllOutputPorts()[0].subscribe(receiver.getInputPort());
+		AbstractPlugin.connect(pipeReader, PipeReader.OUTPUT_PORT, receiver, MonitoringSinkClass.INPUT_PORT_NAME);
 		analysis.registerPlugin(receiver);
 		final AnalysisControllerThread analysisThread = new AnalysisControllerThread(analysis);
 		analysisThread.start();
@@ -82,53 +81,5 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 		 * Make sure that numRecordsToSend where read.
 		 */
 		Assert.assertEquals("Unexpected number of records received", numRecordsToSend, receivedRecords.size());
-	}
-
-	class Receiver extends AbstractAnalysisPlugin {
-
-		private final List<IMonitoringRecord> receivedRecords;
-
-		public Receiver(final List<IMonitoringRecord> receivedRecords) {
-			super(new Configuration(null));
-			this.receivedRecords = receivedRecords;
-		}
-
-		private final AbstractInputPort input = new AbstractInputPort("in", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-				new Class<?>[] { IMonitoringRecord.class }))) {
-
-			@Override
-			public void newEvent(final Object event) {
-				Receiver.this.receivedRecords.add((IMonitoringRecord) event);
-			}
-		};
-
-		@Override
-		public boolean execute() {
-			/* no need to do anything */
-			return true;
-		}
-
-		@Override
-		public void terminate(final boolean error) {
-			/* do nothing */
-		}
-
-		@Override
-		protected Configuration getDefaultConfiguration() {
-			return new Configuration();
-		}
-
-		public AbstractInputPort getInputPort() {
-			return this.input;
-		}
-
-		@Override
-		public Configuration getCurrentConfiguration() {
-			final Configuration configuration = new Configuration();
-
-			// TODO: Save the current configuration
-
-			return configuration;
-		}
 	}
 }
