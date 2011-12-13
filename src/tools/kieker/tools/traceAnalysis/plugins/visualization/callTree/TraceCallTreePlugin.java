@@ -28,6 +28,7 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Stack;
 
+import kieker.analysis.plugin.port.AInputPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -243,6 +244,7 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 	}
 
 	@Override
+	@AInputPort(description = "Message traces", eventTypes = { MessageTrace.class })
 	public void msgTraceInput(final Object obj) {
 		final MessageTrace mt = (MessageTrace) obj;
 		try {

@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collection;
 
+import kieker.analysis.plugin.port.AInputPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -125,6 +126,7 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 	}
 
 	@Override
+	@AInputPort(description = "Message traces", eventTypes = { MessageTrace.class })
 	public void msgTraceInput(final Object obj) {
 		final MessageTrace t = (MessageTrace) obj;
 		for (final AbstractMessage m : t.getSequenceAsVector()) {
