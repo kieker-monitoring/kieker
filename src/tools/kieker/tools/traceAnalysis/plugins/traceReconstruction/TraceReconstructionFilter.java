@@ -61,6 +61,7 @@ import kieker.tools.util.LoggingTimestampConverter;
 })
 public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 
+	public static final String EXECUTION_TRACE_INPUT_PORT_NAME = "newExecution";
 	public static final String MESSAGE_TRACE_OUTPUT = "MessageTraceOutput";
 	public static final String EXECUTION_TRACE_OUTPUT = "ExecutionTraceOutput";
 	public static final String INVALID_EXECUTION_TRACE_OUTPUT = "InvalidExecutionTraceOutput";
