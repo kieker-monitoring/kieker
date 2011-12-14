@@ -218,7 +218,9 @@ public abstract class AbstractPlugin {
 
 		/* Connect the ports. */
 		try {
-			src.registeredMethods.get(output).add(new Pair<Object, Method>(dst, dst.getClass().getMethod(input, Object.class)));
+			final Method method = dst.getClass().getMethod(input, Object.class);
+			method.setAccessible(true);
+			src.registeredMethods.get(output).add(new Pair<Object, Method>(dst, method));
 		} catch (final Exception e) {
 			AbstractPlugin.LOG.warn(String.format("Couldn't connect OutputPort %s with InputPort %s\n", output, input));
 			return false;

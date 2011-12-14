@@ -28,13 +28,14 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.AnalysisControllerThread;
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.plugin.port.AInputPort;
 import kieker.analysis.reader.namedRecordPipe.PipeReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.test.analysis.junit.util.DummyRecord;
-import kieker.test.analysis.junit.util.MonitoringSinkClass;
 import kieker.test.analysis.junit.util.NamedPipeFactory;
 
 import org.junit.Test;
@@ -81,5 +82,39 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 		 * Make sure that numRecordsToSend where read.
 		 */
 		Assert.assertEquals("Unexpected number of records received", numRecordsToSend, receivedRecords.size());
+	}
+}
+
+class MonitoringSinkClass extends AbstractAnalysisPlugin {
+
+	public static final String INPUT_PORT_NAME = "doJob";
+	private final List<IMonitoringRecord> receivedRecords;
+
+	public MonitoringSinkClass(final List<IMonitoringRecord> receivedRecords) {
+		super(new Configuration());
+		this.receivedRecords = receivedRecords;
+	}
+
+	@Override
+	public boolean execute() {
+		return true;
+	}
+
+	@Override
+	public void terminate(final boolean error) {}
+
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		return null;
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		return null;
+	}
+
+	@AInputPort(eventTypes = { IMonitoringRecord.class })
+	public void doJob(final Object data) {
+		this.receivedRecords.add((IMonitoringRecord) data);
 	}
 }
