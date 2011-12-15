@@ -21,9 +21,11 @@
 package kieker.analysis.plugin;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -228,6 +230,28 @@ public abstract class AbstractPlugin {
 
 		return true;
 	}
+
+	public final String[] getAllOutputPortNames() {
+		final List<String> outputNames = new ArrayList<String>();
+		final APlugin annotation = this.getClass().getAnnotation(APlugin.class);
+		for (final AOutputPort outputPort : annotation.outputPorts()) {
+			outputNames.add(outputPort.name());
+		}
+		return outputNames.toArray(new String[0]);
+	}
+
+	public final String[] getAllInputPortNames() {
+		final List<String> inputNames = new ArrayList<String>();
+		final Method allMethods[] = this.getClass().getMethods();
+		for (final Method method : allMethods) {
+			final AInputPort inputPort = method.getAnnotation(AInputPort.class);
+			if (inputPort != null) {
+				inputNames.add(method.getName());
+			}
+		}
+		return inputNames.toArray(new String[0]);
+	}
+
 }
 
 class Pair<T1, T2> {
