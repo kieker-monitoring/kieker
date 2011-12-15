@@ -96,7 +96,7 @@ public class JMSLogReplayer {
 		tpanInstance.setReader(logReader);
 		final RecordDelegationPlugin2 recordReceiver = new RecordDelegationPlugin2(this.recordReceiver, this.recordReceiverInputPortName);
 		tpanInstance.registerPlugin(recordReceiver);
-		AbstractPlugin.connect((AbstractPlugin) logReader, JMSReader.OUTPUT_PORT, recordReceiver, RecordDelegationPlugin2.INPUT_PORT);
+		AbstractPlugin.connect((AbstractPlugin) logReader, JMSReader.OUTPUT_PORT_NAME, recordReceiver, RecordDelegationPlugin2.INPUT_PORT);
 		try {
 			tpanInstance.run();
 			success = true;
@@ -119,12 +119,12 @@ public class JMSLogReplayer {
  * 
  */
 @APlugin(
-		outputPorts = { @AOutputPort(name = RecordDelegationPlugin2.OUTPUT_PORT, eventTypes = { IMonitoringRecord.class })
+		outputPorts = { @AOutputPort(name = RecordDelegationPlugin2.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
 		})
 class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 
-	public static final String OUTPUT_PORT = "output";
-	public static final String INPUT_PORT = "input";
+	public static final String OUTPUT_PORT_NAME = "defaultOutput";
+	public static final String INPUT_PORT = "newMonitoringRecord";
 	private static final Log LOG = LogFactory.getLog(RecordDelegationPlugin2.class);
 
 	/**
@@ -138,7 +138,7 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 	public RecordDelegationPlugin2(final AbstractAnalysisPlugin rec, final String inputPortName) {
 		super(new Configuration(null));
 
-		AbstractPlugin.connect(this, RecordDelegationPlugin2.OUTPUT_PORT, rec, inputPortName);
+		AbstractPlugin.connect(this, RecordDelegationPlugin2.OUTPUT_PORT_NAME, rec, inputPortName);
 	}
 
 	/**
@@ -147,10 +147,10 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 	 * @param data
 	 */
 	@SuppressWarnings("unused")
-	@AInputPort(description = RecordDelegationPlugin2.INPUT_PORT, eventTypes = { IMonitoringRecord.class })
+	@AInputPort(eventTypes = { IMonitoringRecord.class })
 	public boolean newMonitoringRecord(final Object data) {
 		final IMonitoringRecord record = (IMonitoringRecord) data;
-		return super.deliver(RecordDelegationPlugin2.OUTPUT_PORT, data);
+		return super.deliver(RecordDelegationPlugin2.OUTPUT_PORT_NAME, data);
 	}
 
 	/**

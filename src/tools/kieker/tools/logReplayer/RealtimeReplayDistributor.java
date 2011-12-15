@@ -54,7 +54,7 @@ import kieker.monitoring.timer.ITimeSource;
 	@AOutputPort(name = RealtimeReplayDistributor.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
 })
 public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
-	public static final String OUTPUT_PORT_NAME = "outputPort";
+	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	public static final String INPUT_PORT_NAME = "newEvent";
 	private static final Log LOG = LogFactory.getLog(RealtimeReplayDistributor.class);
 

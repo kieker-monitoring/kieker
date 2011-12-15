@@ -45,11 +45,11 @@ import kieker.common.record.IMonitoringRecordReceiver;
  * @author Andre van Hoorn, Jan Waller
  */
 @APlugin(outputPorts = {
-	@AOutputPort(name = FSReader.OUTPUT_PORT, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader")
+	@AOutputPort(name = FSReader.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader")
 })
 public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 
-	public static final String OUTPUT_PORT = "output";
+	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	public static final String CONFIG_INPUTDIRS = FSReader.class.getName() + ".inputDirs";
 	public static final String CONFIG_ONLYRECORDS = FSReader.class.getName() + ".readOnlyRecordsOfType";
 
@@ -123,7 +123,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 			if (record == FSReader.EOF) {
 				readingReaders--;
 			} else {
-				super.deliver(FSReader.OUTPUT_PORT, record);
+				super.deliver(FSReader.OUTPUT_PORT_NAME, record);
 			}
 		}
 		return true;

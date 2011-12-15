@@ -33,10 +33,8 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
 /**
  * Allows to filter Execution objects based on their traceId.<br>
  * 
- * This class has exactly one input port named "in" and one output ports named
- * "out". It receives only objects inheriting from the class {@link Execution}.
- * If the received object contains the defined traceID, the object is delivered
- * unmodified to the output port.
+ * This class has exactly one input port named and one output port. It receives only objects inheriting from the class {@link Execution}. If the received object
+ * contains the defined traceID, the object is delivered unmodified to the output port.
  * 
  * @author Andre van Hoorn
  */
@@ -47,7 +45,7 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
 public class TraceIdFilter extends AbstractAnalysisPlugin {
 
 	public static final String INPUT_PORT_NAME = "newExecution";
-	public static final String OUTPUT_PORT_NAME = "outputPort";
+	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	public static final String CONFIG_SELECTED_TRACES = TraceIdFilter.class.getName() + ".selectedTraces";
 	private final Set<Long> selectedTraces;
 

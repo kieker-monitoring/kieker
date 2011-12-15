@@ -54,11 +54,11 @@ import kieker.common.record.IMonitoringRecord;
  * @author Andre van Hoorn, Matthias Rohr
  */
 @APlugin(outputPorts = {
-	@AOutputPort(name = JMSReader.OUTPUT_PORT, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMSReader")
+	@AOutputPort(name = JMSReader.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMSReader")
 })
 public final class JMSReader extends AbstractReaderPlugin {
 
-	public static final String OUTPUT_PORT = "output";
+	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	public static final String CONFIG_PROVIDERURL = JMSReader.class.getName() + ".jmsProviderUrl";
 	public static final String CONFIG_DESTINATION = JMSReader.class.getName() + ".jmsDestination";
 	public static final String CONFIG_FACTORYLOOKUP = JMSReader.class.getName() + ".jmsFactoryLookupName";
@@ -152,7 +152,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 						try {
 							final ObjectMessage om = (ObjectMessage) jmsMessage;
 							final Serializable omo = om.getObject();
-							if ((omo instanceof IMonitoringRecord) && (!JMSReader.super.deliver(JMSReader.OUTPUT_PORT, omo))) {
+							if ((omo instanceof IMonitoringRecord) && (!JMSReader.super.deliver(JMSReader.OUTPUT_PORT_NAME, omo))) {
 								final String errorMsg = "deliverRecord returned false";
 								JMSReader.LOG.error(errorMsg);
 							}

@@ -20,15 +20,15 @@
 
 package kieker.test.tools.junit.currentTimeEventGeneratorFilter;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.analysis.plugin.port.AbstractInputPort;
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.plugin.port.AInputPort;
+import kieker.common.configuration.Configuration;
 import kieker.tools.currentTimeEventGenerator.CurrentTimeEventGenerator;
 import kieker.tools.currentTimeEventGenerator.TimestampEvent;
 
@@ -97,23 +97,16 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 	private void compareInputAndOutput(final long timerResolution, final long[] inputTimestamps, final long[] expectedOutputTimerEvents) {
 		final CurrentTimeEventGenerator filter = new CurrentTimeEventGenerator(timerResolution);
 
-		final List<Long> receivedTimestamps = new ArrayList<Long>();
-
-		filter.getCurrentTimeOutputPort().subscribe(new AbstractInputPort("", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-				new Class<?>[] { TimestampEvent.class }))) {
-			@Override
-			public void newEvent(final Object event) {
-				receivedTimestamps.add(((TimestampEvent) event).getTimestamp());
-			}
-		});
+		final DstClass dst = new DstClass();
+		AbstractPlugin.connect(filter, CurrentTimeEventGenerator.CURRENT_TIME_OUTPUT_PORT_NAME, dst, DstClass.INPUT_PORT_NAME);
 
 		for (final long timestamp : inputTimestamps) {
 			filter.newTimestamp(timestamp);
 		}
 
-		final Long[] receivedTimestampsArr = receivedTimestamps.toArray(new Long[receivedTimestamps.size()]);
+		final Long[] receivedTimestampsArr = dst.getList().toArray(new Long[dst.getList().size()]);
 
-		if (expectedOutputTimerEvents.length != receivedTimestamps.size()) {
+		if (expectedOutputTimerEvents.length != dst.getList().size()) {
 			Assert.fail("Mismatach in sequence length while comparing timer event sequences" + "Expected: " + Arrays.toString(expectedOutputTimerEvents)
 					+ " Found: " + Arrays.toString(receivedTimestampsArr));
 		}
@@ -129,6 +122,43 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 		if (firstMismatchIdx >= 0) {
 			Assert.fail("Mismatch at index " + firstMismatchIdx + " while comparing timer event sequences" + "Expected: "
 					+ Arrays.toString(expectedOutputTimerEvents) + " Found: " + Arrays.toString(receivedTimestampsArr));
+		}
+	}
+
+	class DstClass extends AbstractAnalysisPlugin {
+
+		public static final String INPUT_PORT_NAME = "doJob";
+		private final ConcurrentLinkedQueue<Long> receivedTimestamps = new ConcurrentLinkedQueue<Long>();
+
+		public DstClass() {
+			super(new Configuration(null));
+		}
+
+		@Override
+		public boolean execute() {
+			return false;
+		}
+
+		@Override
+		public void terminate(final boolean error) {}
+
+		@Override
+		protected Configuration getDefaultConfiguration() {
+			return null;
+		}
+
+		@Override
+		public Configuration getCurrentConfiguration() {
+			return null;
+		}
+
+		@AInputPort(eventTypes = { TimestampEvent.class })
+		public void doJob(final Object data) {
+			this.receivedTimestamps.add(((TimestampEvent) data).getTimestamp());
+		}
+
+		public ConcurrentLinkedQueue<Long> getList() {
+			return this.receivedTimestamps;
 		}
 	}
 }

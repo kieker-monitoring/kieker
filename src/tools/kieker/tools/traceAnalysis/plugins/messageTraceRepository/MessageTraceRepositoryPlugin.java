@@ -23,6 +23,7 @@ package kieker.tools.traceAnalysis.plugins.messageTraceRepository;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import kieker.analysis.plugin.port.AInputPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.systemModel.AbstractTrace;
@@ -30,14 +31,13 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
- * This class has exactly one input port named "in". The data which is send to
- * this plugin is not delegated in any way.
+ * This class has exactly one input port. The data which is send to this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn
  */
 public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessingPlugin {
 
-	public static final String MSG_TRACE_INPUT_PORT_NAME = "newEvent";
+	public static final String MSG_TRACE_INPUT_PORT_NAME = "msgTraceInput";
 	// private static final Log log = LogFactory.getLog(MessageTraceRepositoryPlugin.class);
 
 	private final Map<Long, MessageTrace> repo = new ConcurrentHashMap<Long, MessageTrace>(); // NOPMD
@@ -73,6 +73,7 @@ public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessing
 		return configuration;
 	}
 
+	@AInputPort(description = "Message traces", eventTypes = { MessageTrace.class })
 	@Override
 	public void msgTraceInput(final Object mt) {
 		MessageTraceRepositoryPlugin.this.repo.put(((AbstractTrace) mt).getTraceId(), (MessageTrace) mt);

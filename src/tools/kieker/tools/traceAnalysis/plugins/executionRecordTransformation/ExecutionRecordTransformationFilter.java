@@ -43,9 +43,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 /**
  * Transforms KiekerExecutionRecords into Execution objects.<br>
  * 
- * This class has exactly one input port named "in" and one output ports named
- * "out". It receives objects inheriting from {@link OperationExecutionRecord}.
- * The received object is transformed into an instance of {@link Execution}.
+ * This class has exactly one input port and one output port. It receives objects inheriting from {@link OperationExecutionRecord}. The received object is
+ * transformed into an instance of {@link Execution}.
  * 
  * @author Andre van Hoorn
  */
@@ -56,7 +55,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPlugin {
 
 	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
-	public static final String OUTPUT_PORT_NAME = "outputPort";
+	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	private static final Log LOG = LogFactory.getLog(ExecutionRecordTransformationFilter.class);
 
 	public ExecutionRecordTransformationFilter(final Configuration configuration) {

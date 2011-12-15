@@ -20,15 +20,23 @@
 
 package kieker.analysis.plugin;
 
+import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 
 /**
- * This class should be used as a base for every analysis plugin used within <i>Kieker</i>.
+ * This class should be used as a base for every analysis plugin used within <i>Kieker</i>. For reader plugins, the class {@link AbstractReaderPlugin} should be used
+ * instead.
  * 
  * @author Nils Christian Ehmke
  */
 public abstract class AbstractAnalysisPlugin extends AbstractPlugin implements IAnalysisPlugin {
 
+	/**
+	 * The constructor for the plugin. Every plugin must have this constructor.
+	 * 
+	 * @param configuration
+	 *            The configuration to use for this plugin.
+	 */
 	public AbstractAnalysisPlugin(final Configuration configuration) {
 		super(configuration);
 	}

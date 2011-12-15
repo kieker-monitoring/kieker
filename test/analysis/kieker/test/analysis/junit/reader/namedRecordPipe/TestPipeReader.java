@@ -63,7 +63,7 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 
 		final AnalysisController analysis = new AnalysisController();
 		analysis.setReader(pipeReader);
-		AbstractPlugin.connect(pipeReader, PipeReader.OUTPUT_PORT, receiver, MonitoringSinkClass.INPUT_PORT_NAME);
+		AbstractPlugin.connect(pipeReader, PipeReader.OUTPUT_PORT_NAME, receiver, MonitoringSinkClass.INPUT_PORT_NAME);
 		analysis.registerPlugin(receiver);
 		final AnalysisControllerThread analysisThread = new AnalysisControllerThread(analysis);
 		analysisThread.start();

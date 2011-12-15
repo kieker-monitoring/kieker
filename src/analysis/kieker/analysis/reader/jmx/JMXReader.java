@@ -49,11 +49,11 @@ import kieker.common.record.IMonitoringRecord;
  * @author Jan Waller
  */
 @APlugin(outputPorts = {
-	@AOutputPort(name = JMXReader.OUTPUT_PORT, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMXReader")
+	@AOutputPort(name = JMXReader.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMXReader")
 })
 public final class JMXReader extends AbstractReaderPlugin {
 
-	public static final String OUTPUT_PORT = "output";
+	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	public static final String CONFIG_SERVER = JMXReader.class.getName() + ".server";
 	public static final String CONFIG_PORT = JMXReader.class.getName() + ".port";
 	public static final String CONFIG_SERVICEURL = JMXReader.class.getName() + ".serviceURL";
@@ -258,7 +258,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 
 		@Override
 		public final void handleNotification(final Notification notification, final Object handback) {
-			JMXReader.super.deliver(JMXReader.OUTPUT_PORT, notification.getUserData());
+			JMXReader.super.deliver(JMXReader.OUTPUT_PORT_NAME, notification.getUserData());
 		}
 	}
 

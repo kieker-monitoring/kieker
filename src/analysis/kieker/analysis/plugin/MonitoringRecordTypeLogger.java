@@ -29,19 +29,21 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 
 /**
- * This class has exactly one input port named "in" and one output ports named
- * "out". An instance of this class receives only objects implementing the
- * interface {@link IMonitoringRecord}, prints a log message for every single
- * received record and passes them unmodified to the output port.
+ * This class has exactly one input port and one output port. An instance of this class receives only objects implementing the interface {@link IMonitoringRecord},
+ * prints a log message for every single received record and passes them unmodified to the output port.
  * 
  * @author Andre van Hoorn
  */
 @APlugin(outputPorts = {
-	@AOutputPort(name = MonitoringRecordTypeLogger.OUTPUT_PORT, eventTypes = { IMonitoringRecord.class }, description = "Default output port")
+	@AOutputPort(
+			name = MonitoringRecordTypeLogger.OUTPUT_PORT_NAME,
+			eventTypes = { IMonitoringRecord.class },
+			description = "Default output port")
 })
 public class MonitoringRecordTypeLogger extends AbstractAnalysisPlugin {
 
-	public static final String OUTPUT_PORT = "output";
+	public static final String OUTPUT_PORT_NAME = "defaultOutput";
+	public static final String INPUT_PORT_NAME = "newEvent";
 
 	private static final Log LOG = LogFactory.getLog(MonitoringRecordTypeLogger.class);
 
@@ -49,10 +51,12 @@ public class MonitoringRecordTypeLogger extends AbstractAnalysisPlugin {
 	public void newEvent(final Object event) {
 		final IMonitoringRecord monitoringRecord = (IMonitoringRecord) event;
 
+		/* Print a simple message to the output stream */
 		MonitoringRecordTypeLogger.LOG.info("Consumed record:" + monitoringRecord.getClass().getName());
 		MonitoringRecordTypeLogger.LOG.info(monitoringRecord.toString());
 
-		super.deliver(MonitoringRecordTypeLogger.OUTPUT_PORT, event);
+		/* Delegate the monitoring record. */
+		super.deliver(MonitoringRecordTypeLogger.OUTPUT_PORT_NAME, event);
 	}
 
 	/**

@@ -45,8 +45,14 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn
  */
 @APlugin(outputPorts = {
-	@AOutputPort(name = TraceEquivalenceClassFilter.MSG_TRACES_OUTPUT_PORT_NAME, description = "Message Traces", eventTypes = { MessageTrace.class }),
-	@AOutputPort(name = TraceEquivalenceClassFilter.EXECUTION_TRACES_OUTPUT_PORT_NAME, description = "Execution Traces", eventTypes = { ExecutionTrace.class })
+	@AOutputPort(
+			name = TraceEquivalenceClassFilter.MSG_TRACES_OUTPUT_PORT_NAME,
+			description = "Message Traces",
+			eventTypes = { MessageTrace.class }),
+	@AOutputPort(
+			name = TraceEquivalenceClassFilter.EXECUTION_TRACES_OUTPUT_PORT_NAME,
+			description = "Execution Traces",
+			eventTypes = { ExecutionTrace.class })
 })
 public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessingPlugin {
 

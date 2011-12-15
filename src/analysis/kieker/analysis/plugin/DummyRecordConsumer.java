@@ -31,24 +31,21 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 
 /**
- * This class has exactly one input port named "in" and one output ports named
- * "out". An instance of this class receives only objects implementing the
- * interface {@link IMonitoringRecord} via "in", prints a simple message on the
- * output stream that they received the objects and delegates the object to the
- * output port.<br>
- * In other words: The plugin prints a message for every record and passes it
- * unmodified to the output.
+ * This class has exactly one input port and one output port. An instance of this class receives only objects implementing the interface {@link IMonitoringRecord},
+ * prints a simple message on the output stream that it received the object and delegates the object unmodified to the output port.
  * 
  * @author Matthias Rohr, Jan Waller
  */
 @APlugin(outputPorts = {
 	@AOutputPort(
-			name = DummyRecordConsumer.OUTPUT_PORT,
+			name = DummyRecordConsumer.OUTPUT_PORT_NAME,
+			description = "Output port",
 			eventTypes = { IMonitoringRecord.class })
 })
 public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
 
-	public static final String OUTPUT_PORT = "output";
+	public static final String OUTPUT_PORT_NAME = "defaultOutput";
+	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
 	public static final String CONFIG_STREAM = DummyRecordConsumer.class.getName() + ".Stream";
 
 	private final PrintStream printStream;
@@ -76,7 +73,9 @@ public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
 	@Override
 	protected final Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration(null);
+
 		defaultConfiguration.setProperty(DummyRecordConsumer.CONFIG_STREAM, "STDOUT");
+
 		return defaultConfiguration;
 	}
 
@@ -85,7 +84,7 @@ public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
 			eventTypes = { IMonitoringRecord.class })
 	public final void newMonitoringRecord(final Object monitoringRecord) {
 		this.printStream.println("DummyRecordConsumer consumed (" + monitoringRecord.getClass().getSimpleName() + ") " + monitoringRecord);
-		super.deliver(DummyRecordConsumer.OUTPUT_PORT, monitoringRecord);
+		super.deliver(DummyRecordConsumer.OUTPUT_PORT_NAME, monitoringRecord);
 	}
 
 	@Override

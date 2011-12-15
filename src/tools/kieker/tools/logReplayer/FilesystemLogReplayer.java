@@ -117,7 +117,7 @@ public class FilesystemLogReplayer {
 		final RecordDelegationPlugin delegationPlugin = new RecordDelegationPlugin(this.recordReceiver, this.ignoreRecordsBeforeTimestamp,
 				this.ignoreRecordsAfterTimestamp);
 		tpanInstance.registerPlugin(delegationPlugin);
-		AbstractPlugin.connect(fsReader, FSReader.OUTPUT_PORT, delegationPlugin, RecordDelegationPlugin.INPUT_PORT);
+		AbstractPlugin.connect(fsReader, FSReader.OUTPUT_PORT_NAME, delegationPlugin, RecordDelegationPlugin.INPUT_PORT_NAME);
 		try {
 			tpanInstance.run();
 			success = true;
@@ -142,7 +142,7 @@ public class FilesystemLogReplayer {
  */
 class RecordDelegationPlugin extends AbstractAnalysisPlugin {
 
-	public static final String INPUT_PORT = "input";
+	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
 	private static final Log LOG = LogFactory.getLog(RecordDelegationPlugin.class);
 
 	private final IMonitoringController rec;
@@ -165,7 +165,7 @@ class RecordDelegationPlugin extends AbstractAnalysisPlugin {
 		this.ignoreRecordsAfterTimestamp = ignoreRecordsAfterTimestamp;
 	}
 
-	@AInputPort(eventTypes = { IMonitoringRecord.class }, description = RecordDelegationPlugin.INPUT_PORT)
+	@AInputPort(eventTypes = { IMonitoringRecord.class }, description = RecordDelegationPlugin.INPUT_PORT_NAME)
 	public void newMonitoringRecord(final Object data) {
 		final IMonitoringRecord record = (IMonitoringRecord) data;
 		if ((record.getLoggingTimestamp() >= this.ignoreRecordsBeforeTimestamp) && (record.getLoggingTimestamp() <= this.ignoreRecordsAfterTimestamp)) {

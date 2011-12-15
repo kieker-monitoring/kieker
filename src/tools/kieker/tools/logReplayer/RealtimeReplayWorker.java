@@ -39,7 +39,7 @@ import kieker.common.record.IMonitoringRecord;
 	@AOutputPort(name = RealtimeReplayWorker.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
 })
 public class RealtimeReplayWorker extends AbstractAnalysisPlugin implements Runnable {
-	public static final String OUTPUT_PORT_NAME = "outputPort";
+	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	private static final Log LOG = LogFactory.getLog(RealtimeReplayWorker.class);
 	private final IMonitoringRecord monRec;
 	private final RealtimeReplayDistributor rd;

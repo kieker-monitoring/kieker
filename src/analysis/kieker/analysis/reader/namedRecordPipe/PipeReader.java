@@ -38,11 +38,11 @@ import kieker.common.record.IMonitoringRecord;
  * @author Andre van Hoorn
  */
 @APlugin(outputPorts = {
-	@AOutputPort(name = PipeReader.OUTPUT_PORT, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the PipeReader")
+	@AOutputPort(name = PipeReader.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the PipeReader")
 })
 public final class PipeReader extends AbstractReaderPlugin implements IPipeReader {
 
-	public static final String OUTPUT_PORT = "output";
+	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	public static final String CONFIG_PIPENAME = PipeReader.class.getName() + ".pipeName";
 
 	private static final Log LOG = LogFactory.getLog(PipeReader.class);
@@ -112,7 +112,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 
 	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord rec) {
-		return super.deliver(PipeReader.OUTPUT_PORT, rec);
+		return super.deliver(PipeReader.OUTPUT_PORT_NAME, rec);
 	}
 
 	@Override

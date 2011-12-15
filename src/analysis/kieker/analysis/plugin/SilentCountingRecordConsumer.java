@@ -28,9 +28,8 @@ import kieker.analysis.plugin.port.APlugin;
 import kieker.common.configuration.Configuration;
 
 /**
- * This class has exactly one input port named "in" and one output ports named "out". An instance of this class receives any objects, increments an intern
- * tread-safe counter without printing any message and delivers the objects unmodified to the output. The value of the counter can later be retrieved by
- * using a corresponding method.
+ * This class has exactly one input port and one output port. An instance of this class receives any objects, increments an intern tread-safe counter without
+ * printing any message and delivers the objects unmodified to the output. The value of the counter can later be retrieved by using a corresponding method.
  * 
  * @author Jan Waller
  */
@@ -39,7 +38,7 @@ import kieker.common.configuration.Configuration;
 })
 public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
 
-	public static final String OUTPUT_PORT_NAME = "output";
+	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	public static final String INPUT_PORT_NAME = "newEvent";
 
 	private final AtomicLong counter = new AtomicLong();

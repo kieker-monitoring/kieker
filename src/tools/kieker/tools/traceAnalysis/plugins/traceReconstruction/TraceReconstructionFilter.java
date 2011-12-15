@@ -47,24 +47,24 @@ import kieker.tools.util.LoggingTimestampConverter;
  */
 @APlugin(outputPorts = {
 	@AOutputPort(
-			name = TraceReconstructionFilter.MESSAGE_TRACE_OUTPUT,
+			name = TraceReconstructionFilter.MESSAGE_TRACE_OUTPUT_PORT_NAME,
 			description = "Reconstructed Message Traces",
 			eventTypes = { MessageTrace.class }),
 	@AOutputPort(
-			name = TraceReconstructionFilter.EXECUTION_TRACE_OUTPUT,
+			name = TraceReconstructionFilter.EXECUTION_TRACE_OUTPUT_PORT_NAME,
 			description = "Reconstructed Execution Traces",
 			eventTypes = { ExecutionTrace.class }),
 	@AOutputPort(
-			name = TraceReconstructionFilter.INVALID_EXECUTION_TRACE_OUTPUT,
+			name = TraceReconstructionFilter.INVALID_EXECUTION_TRACE_OUTPUT_PORT_NAME,
 			description = "Invalid Execution Traces",
 			eventTypes = { InvalidExecutionTrace.class })
 })
 public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 
 	public static final String EXECUTION_TRACE_INPUT_PORT_NAME = "newExecution";
-	public static final String MESSAGE_TRACE_OUTPUT = "MessageTraceOutput";
-	public static final String EXECUTION_TRACE_OUTPUT = "ExecutionTraceOutput";
-	public static final String INVALID_EXECUTION_TRACE_OUTPUT = "InvalidExecutionTraceOutput";
+	public static final String MESSAGE_TRACE_OUTPUT_PORT_NAME = "MessageTraceOutput";
+	public static final String EXECUTION_TRACE_OUTPUT_PORT_NAME = "ExecutionTraceOutput";
+	public static final String INVALID_EXECUTION_TRACE_OUTPUT_PORT_NAME = "InvalidExecutionTraceOutput";
 
 	public static final int MAX_DURATION_MILLIS = Integer.MAX_VALUE;
 	private static final Log LOG = LogFactory.getLog(TraceReconstructionFilter.class);
@@ -211,18 +211,18 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 			 */
 			if (!this.invalidTraces.contains(mt.getTraceId())) {
 				/* Not completing part of an invalid trace */
-				super.deliver(TraceReconstructionFilter.MESSAGE_TRACE_OUTPUT, mt);
-				super.deliver(TraceReconstructionFilter.EXECUTION_TRACE_OUTPUT, executionTrace);
+				super.deliver(TraceReconstructionFilter.MESSAGE_TRACE_OUTPUT_PORT_NAME, mt);
+				super.deliver(TraceReconstructionFilter.EXECUTION_TRACE_OUTPUT_PORT_NAME, executionTrace);
 				this.reportSuccess(curTraceId);
 			} else {
 				/* mt is the completing part of an invalid trace */
-				super.deliver(TraceReconstructionFilter.INVALID_EXECUTION_TRACE_OUTPUT, new InvalidExecutionTrace(executionTrace));
+				super.deliver(TraceReconstructionFilter.INVALID_EXECUTION_TRACE_OUTPUT_PORT_NAME, new InvalidExecutionTrace(executionTrace));
 				// the statistics have been updated on the first
 				// occurrence of artifacts of this trace
 			}
 		} catch (final InvalidTraceException ex) {
 			/* Transformation failed (i.e., trace invalid) */
-			super.deliver(TraceReconstructionFilter.INVALID_EXECUTION_TRACE_OUTPUT, new InvalidExecutionTrace(executionTrace));
+			super.deliver(TraceReconstructionFilter.INVALID_EXECUTION_TRACE_OUTPUT_PORT_NAME, new InvalidExecutionTrace(executionTrace));
 			if (!this.invalidTraces.contains(curTraceId)) {
 				// only once per traceID (otherwise, we would report all
 				// trace fragments)

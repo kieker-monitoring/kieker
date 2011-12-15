@@ -24,6 +24,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import kieker.analysis.plugin.port.AInputPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -37,7 +38,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  */
 public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlugin {
 
-	public static final String MSG_TRACES_INPUT_PORT_NAME = "newEvent";
+	public static final String MSG_TRACES_INPUT_PORT_NAME = "msgTraceInput";
 	private static final Log LOG = LogFactory.getLog(MessageTraceWriterPlugin.class);
 	private final String outputFn;
 	private final BufferedWriter ps;
@@ -85,6 +86,7 @@ public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlug
 		return configuration;
 	}
 
+	@AInputPort(description = "Message traces", eventTypes = { MessageTrace.class })
 	@Override
 	public void msgTraceInput(final Object obj) {
 		final MessageTrace mt = (MessageTrace) obj;

@@ -41,11 +41,11 @@ import kieker.common.record.IMonitoringRecord;
  * @author Andre van Hoorn
  */
 @APlugin(outputPorts = {
-	@AOutputPort(name = FSReaderRealtime.OUTPUT_PORT, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReaderRealtime")
+	@AOutputPort(name = FSReaderRealtime.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReaderRealtime")
 })
 public class FSReaderRealtime extends AbstractReaderPlugin {
 
-	public static final String OUTPUT_PORT = "output";
+	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	private static final Log LOG = LogFactory.getLog(FSReaderRealtime.class);
 
 	private static final String PROP_NAME_NUM_WORKERS = FSReaderRealtime.class + ".numWorkers";
@@ -142,7 +142,7 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		final AbstractAnalysisPlugin rtCons = new FSReaderRealtimeCons(this);
 		this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, this.terminationLatch, FSReaderRealtimeCons.INPUT_PORT);
 		this.analysis.setReader(fsReader);
-		AbstractPlugin.connect(fsReader, FSReader.OUTPUT_PORT, this.rtDistributor, FSReaderRealtimeCons.INPUT_PORT);
+		AbstractPlugin.connect(fsReader, FSReader.OUTPUT_PORT_NAME, this.rtDistributor, FSReaderRealtimeCons.INPUT_PORT);
 		this.analysis.registerPlugin(this.rtDistributor);
 	}
 
@@ -198,12 +198,12 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 	 * class.
 	 */
 	@APlugin(
-			outputPorts = { @AOutputPort(name = FSReaderRealtimeCons.OUTPUT_PORT, description = "Output port", eventTypes = { IMonitoringRecord.class })
+			outputPorts = { @AOutputPort(name = FSReaderRealtimeCons.OUTPUT_PORT_NAME, description = "Output port", eventTypes = { IMonitoringRecord.class })
 			})
 	private static class FSReaderRealtimeCons extends AbstractAnalysisPlugin {
 
-		public static final String OUTPUT_PORT = "output";
-		public static final String INPUT_PORT = "input";
+		public static final String OUTPUT_PORT_NAME = "defaultOutput";
+		public static final String INPUT_PORT = "newMonitoringRecord";
 		private final FSReaderRealtime master;
 
 		public FSReaderRealtimeCons(final FSReaderRealtime master) {
@@ -217,13 +217,13 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		 * @param data
 		 */
 		@SuppressWarnings("unused")
-		@AInputPort(description = FSReaderRealtimeCons.INPUT_PORT, eventTypes = { IMonitoringRecord.class })
+		@AInputPort(eventTypes = { IMonitoringRecord.class })
 		public void newMonitoringRecord(final Object data) {
 			final IMonitoringRecord record = (IMonitoringRecord) data;
-			if (!this.master.deliver(FSReaderRealtime.OUTPUT_PORT, record)) {
+			if (!this.master.deliver(FSReaderRealtime.OUTPUT_PORT_NAME, record)) {
 				FSReaderRealtime.LOG.error("LogReaderExecutionException");
 			}
-			super.deliver(FSReaderRealtimeCons.OUTPUT_PORT, data);
+			super.deliver(FSReaderRealtimeCons.OUTPUT_PORT_NAME, data);
 		}
 
 		@Override
