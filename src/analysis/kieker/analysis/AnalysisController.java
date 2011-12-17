@@ -42,7 +42,6 @@ import kieker.analysis.model.analysisMetaModel.IOutputPort;
 import kieker.analysis.model.analysisMetaModel.IPlugin;
 import kieker.analysis.model.analysisMetaModel.IProject;
 import kieker.analysis.model.analysisMetaModel.IProperty;
-import kieker.analysis.model.analysisMetaModel.IRepository;
 import kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelFactory;
 import kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
@@ -143,14 +142,13 @@ public final class AnalysisController {
 
 	private final void loadFromModelProject(final IProject mproject) throws InstantiationException, IllegalAccessException, IllegalArgumentException,
 			InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
-
 		/* Get all repositories. */
-		final EList<IRepository> mRepositories = mproject.getRepositories();
+		// final EList<IRepository> mRepositories = mproject.getRepositories();
 		// TODO Create the repositories and use them, once this is possible.
 
 		/*
-		 * We run through the project and collect all plugins. As we create an actual object for every plugin within the model, we have to remember
-		 * the mapping between the plugins within the model and the actual objects we create.
+		 * We run through the project and collect all plugins. As we create an actual object for every plugin within the model, we have to remember the mapping
+		 * between the plugins within the model and the actual objects we create.
 		 */
 		final EList<IPlugin> mPlugins = mproject.getPlugins();
 		final Map<IPlugin, AbstractPlugin> pluginMap = new HashMap<IPlugin, AbstractPlugin>();
@@ -235,104 +233,124 @@ public final class AnalysisController {
 	}
 
 	/**
-	 * This method stores the current configuration of this instance to the
-	 * given file. The file can later be loaded by the constructor again.
+	 * This method can be used to store the current configuration of this analysis controller in a specified file. The file can later be used to initialize the
+	 * analysis controller.
 	 * 
 	 * @param file
-	 *            The file where to save the configuration.
+	 *            The file in which the configuration will be stored.
 	 * @param projectName
-	 *            The name to be used for the new project.
+	 *            The name which is used for the new project.
 	 * @return true iff the configuration has been saved successfully.
 	 */
 	public final boolean saveToFile(final File file, final String projectName) {
-		/* Create a factory to create all other model instances. */
-		final AnalysisMetaModelFactory factory = new AnalysisMetaModelFactory();
+		final IProject project = this.getCurrentConfiguration(projectName);
+		final boolean success = this.saveProject(file, project);
 
-		final Map<AbstractPlugin, IPlugin> pluginMap = new HashMap<AbstractPlugin, IPlugin>();
-		// final Map<AInputPort, IPlugin> portToMPluginMap = new HashMap<AInputPort, IPlugin>();
-		// final Map<AInputPort, AbstractPlugin> portToPluginMap = new HashMap<AInputPort, AbstractPlugin>();
-		// final Map<AInputPort, String> portToNameMap = new HashMap<AInputPort, String>();
-		final IProject project = factory.createProject();
-		project.setName(projectName);
+		return success;
 
-		final List<AbstractPlugin> plugins = new ArrayList<AbstractPlugin>(this.plugins);
-		plugins.add((AbstractPlugin) this.logReader);
-		/* Run through all plugins and create the model-counterparts. */
-		for (final AbstractPlugin plugin : plugins) {
-			final IPlugin mPlugin = plugin instanceof AbstractReaderPlugin ? factory.createReader() : factory.createAnalysisPlugin();
+	}
 
-			/* Remember the mapping. */
-			pluginMap.put(plugin, mPlugin);
-
-			mPlugin.setClassname(plugin.getClass().getName());
-			mPlugin.setName(plugin.getName());
-
-			/* Extract the configuration. */
-			final Configuration configuration = plugin.getCurrentConfiguration();
-			final Set<Entry<Object, Object>> configSet = configuration.entrySet();
-			for (final Entry<Object, Object> configEntry : configSet) {
-				final IProperty property = factory.createProperty();
-				property.setName(configEntry.getKey().toString());
-				property.setValue(configEntry.getValue().toString());
-				mPlugin.getProperties().add(property);
-			}
-
-			/* Create the ports. */
-			final String outs[] = plugin.getAllOutputPortNames();
-			for (final String out : outs) {
-				final IOutputPort mOutputPort = factory.createOutputPort();
-				mOutputPort.setName(out);
-				mPlugin.getOutputPorts().add(mOutputPort);
-			}
-
-			final String ins[] = plugin.getAllInputPortNames();
-			for (final String in : ins) {
-				final IInputPort mInputPort = factory.createInputPort();
-				mInputPort.setName(in);
-				((IAnalysisPlugin) mPlugin).getInputPorts().add(mInputPort);
-				// portToMPluginMap.put(plugin.getInputPort(in), mPlugin);
-				// portToPluginMap.put(plugin.getInputPort(in), plugin);
-				// portToNameMap.put(plugin.getInputPort(in), in);
-			}
-
-			project.getPlugins().add(mPlugin);
-		}
-
-		/* Now connect them. */
-
-		for (final AbstractPlugin plugin : plugins) {
-			final IPlugin mOutputPlugin = pluginMap.get(plugin);
-			final String outputPortNames[] = plugin.getAllOutputPortNames();
-			for (final String outputPortName : outputPortNames) {
-				final IOutputPort mOutputPort = AnalysisController.findOutputPort(mOutputPlugin, outputPortName);
-				final List<Pair<AbstractPlugin, String>> subscribers = plugin.getConnectedPlugins(outputPortName);
-				for (final Pair<AbstractPlugin, String> subscriber : subscribers) {
-					final AbstractPlugin subscriberPlugin = subscriber.getFst();
-					final IPlugin mSubscriberPlugin = pluginMap.get(subscriberPlugin);
-					// TODO: It seems like mSubscriberPlugin can sometimes be null. Why?
-					if (mSubscriberPlugin != null) {
-						final IInputPort mInputPort = AnalysisController.findInputPort((IAnalysisPlugin) mSubscriberPlugin, subscriber.getSnd());
-
-						mOutputPort.getSubscribers().add(mInputPort);
-					}
-				}
-			}
-		}
-
-		/* Save the whole project. */
+	private boolean saveProject(final File file, final IProject project) {
+		/* Create a resource and put the given project into it. */
 		final ResourceSet resourceSet = new ResourceSetImpl();
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 		final Resource resource = resourceSet.createResource(URI.createFileURI(file.getAbsolutePath()));
 		resource.getContents().add(project);
 
+		/* Now try to save the resource. */
 		try {
 			resource.save(null);
 		} catch (final IOException e) {
-			AnalysisController.LOG.error("Could not save the configuration file.");
+			AnalysisController.LOG.error(String.format("Unable to save configuration file '%s'.", file.getAbsolutePath()));
 			return false;
 		}
 
 		return true;
+	}
+
+	private IProject getCurrentConfiguration(final String projectName) {
+		try {
+			/* Create a factory to create all other model instances. */
+			final AnalysisMetaModelFactory factory = new AnalysisMetaModelFactory();
+			final IProject project = factory.createProject();
+			final Map<AbstractPlugin, IPlugin> pluginMap = new HashMap<AbstractPlugin, IPlugin>();
+
+			project.setName(projectName);
+
+			/* Run through all plugins and create he model-counterparts. */
+			final List<AbstractPlugin> plugins = new ArrayList<AbstractPlugin>(this.plugins);
+			plugins.add((AbstractPlugin) this.logReader);
+
+			for (final AbstractPlugin plugin : plugins) {
+				final IPlugin mPlugin = (plugin instanceof AbstractReaderPlugin) ? factory.createReader() : factory.createAnalysisPlugin();
+
+				/* Remember the mapping. */
+				pluginMap.put(plugin, mPlugin);
+
+				mPlugin.setClassname(plugin.getClass().getName());
+				mPlugin.setName(plugin.getName());
+
+				/* Extract the configuration. */
+				final Configuration configuration = plugin.getCurrentConfiguration();
+				final Set<Entry<Object, Object>> configSet = configuration.entrySet();
+				for (final Entry<Object, Object> configEntry : configSet) {
+					final IProperty property = factory.createProperty();
+					property.setName(configEntry.getKey().toString());
+					property.setValue(configEntry.getValue().toString());
+					mPlugin.getProperties().add(property);
+				}
+
+				/* Create the ports. */
+				final String outs[] = plugin.getAllOutputPortNames();
+				for (final String out : outs) {
+					final IOutputPort mOutputPort = factory.createOutputPort();
+					mOutputPort.setName(out);
+					mPlugin.getOutputPorts().add(mOutputPort);
+				}
+
+				final String ins[] = plugin.getAllInputPortNames();
+				for (final String in : ins) {
+					final IInputPort mInputPort = factory.createInputPort();
+					mInputPort.setName(in);
+					((IAnalysisPlugin) mPlugin).getInputPorts().add(mInputPort);
+				}
+
+				project.getPlugins().add(mPlugin);
+			}
+
+			/* Now connect the plugins. */
+			for (final AbstractPlugin plugin : plugins) {
+				final IPlugin mOutputPlugin = pluginMap.get(plugin);
+				final String outputPortNames[] = plugin.getAllOutputPortNames();
+
+				/* Check all output ports of the original plugin. */
+				for (final String outputPortName : outputPortNames) {
+					/* Get the corresponding port of the model counterpart and get also the plugins which are currently connected with the original plugin. */
+					final IOutputPort mOutputPort = AnalysisController.findOutputPort(mOutputPlugin, outputPortName);
+					final List<Pair<AbstractPlugin, String>> subscribers = plugin.getConnectedPlugins(outputPortName);
+
+					/* Run through all connected plugins. */
+					for (final Pair<AbstractPlugin, String> subscriber : subscribers) {
+						final AbstractPlugin subscriberPlugin = subscriber.getFst();
+						final IPlugin mSubscriberPlugin = pluginMap.get(subscriberPlugin);
+						// TODO: It seems like mSubscriberPlugin can sometimes be null. Why?
+						/* Now connect them. */
+						if (mSubscriberPlugin != null) {
+							final IInputPort mInputPort = AnalysisController.findInputPort((IAnalysisPlugin) mSubscriberPlugin, subscriber.getSnd());
+
+							mOutputPort.getSubscribers().add(mInputPort);
+						}
+					}
+				}
+			}
+
+			/* We are finished. Return the finished project. */
+			return project;
+		} catch (final Exception ex) {
+			AnalysisController.LOG.error("Unable to save configuration.");
+			return null;
+		}
+
 	}
 
 	static private IInputPort findInputPort(final IAnalysisPlugin mPlugin, final String name) {
