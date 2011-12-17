@@ -50,7 +50,7 @@ public abstract class AbstractPlugin {
 	private String name = null;
 
 	protected final Configuration configuration;
-	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<Pair<Object, Method>>> registeredMethods;
+	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<Pair<AbstractPlugin, Method>>> registeredMethods;
 	private final HashMap<String, AOutputPort> outputPorts;
 	private final HashMap<String, AInputPort> inputPorts;
 
@@ -88,9 +88,9 @@ public abstract class AbstractPlugin {
 		}
 
 		/* Now create a linked queue for every output port of the class, to store the registered methods. */
-		this.registeredMethods = new ConcurrentHashMap<String, ConcurrentLinkedQueue<Pair<Object, Method>>>();
+		this.registeredMethods = new ConcurrentHashMap<String, ConcurrentLinkedQueue<Pair<AbstractPlugin, Method>>>();
 		for (final AOutputPort outputPort : annotation.outputPorts()) {
-			this.registeredMethods.put(outputPort.name(), new ConcurrentLinkedQueue<Pair<Object, Method>>());
+			this.registeredMethods.put(outputPort.name(), new ConcurrentLinkedQueue<Pair<AbstractPlugin, Method>>());
 		}
 	}
 
@@ -153,15 +153,15 @@ public abstract class AbstractPlugin {
 		}
 
 		/* Third step: Send everything to the registered ports. */
-		final ConcurrentLinkedQueue<Pair<Object, Method>> registeredMethods = this.registeredMethods.get(outputPortName);
+		final ConcurrentLinkedQueue<Pair<AbstractPlugin, Method>> registeredMethods = this.registeredMethods.get(outputPortName);
 
-		final Iterator<Pair<Object, Method>> methodIterator = registeredMethods.iterator();
+		final Iterator<Pair<AbstractPlugin, Method>> methodIterator = registeredMethods.iterator();
 		while (methodIterator.hasNext()) {
-			final Pair<Object, Method> methodPair = methodIterator.next();
+			final Pair<AbstractPlugin, Method> methodPair = methodIterator.next();
 			try {
-				methodPair.snd.invoke(methodPair.fst, data);
+				methodPair.getSnd().invoke(methodPair.getFst(), data);
 			} catch (final Exception e) {
-				AbstractPlugin.LOG.warn(String.format("OutputPort %s couldn't send data to InputPort %s\n", outputPort.name(), methodPair.snd.getName()));
+				AbstractPlugin.LOG.warn(String.format("OutputPort %s couldn't send data to InputPort %s\n", outputPort.name(), methodPair.getSnd().getName()));
 			}
 		}
 
@@ -222,7 +222,7 @@ public abstract class AbstractPlugin {
 		try {
 			final Method method = dst.getClass().getMethod(input, Object.class);
 			method.setAccessible(true);
-			src.registeredMethods.get(output).add(new Pair<Object, Method>(dst, method));
+			src.registeredMethods.get(output).add(new Pair<AbstractPlugin, Method>(dst, method));
 		} catch (final Exception e) {
 			AbstractPlugin.LOG.warn(String.format("Couldn't connect OutputPort %s with InputPort %s\n", output, input));
 			return false;
@@ -252,14 +252,30 @@ public abstract class AbstractPlugin {
 		return inputNames.toArray(new String[0]);
 	}
 
-}
+	/**
+	 * Delivers the plugins with their ports which are connected with the given output port.
+	 * 
+	 * @param outputPortName
+	 *            The name of the output port.
+	 * @return An array of pairs, whereat the first element is the plugin and the second one the name of the input port. If the given output port is invalid, null is
+	 *         returned
+	 */
+	public final List<Pair<AbstractPlugin, String>> getConnectedPlugins(final String outputPortName) {
+		/* Make sure that the output port exists */
+		final AOutputPort outputPort = this.outputPorts.get(outputPortName);
+		if (outputPort == null) {
+			return null;
+		}
 
-class Pair<T1, T2> {
-	public T1 fst;
-	public T2 snd;
+		/* Now get the connections. */
+		final ConcurrentLinkedQueue<Pair<AbstractPlugin, Method>> currRegisteredMethods = this.registeredMethods.get(outputPortName);
+		final Iterator<Pair<AbstractPlugin, Method>> iterator = currRegisteredMethods.iterator();
+		final List<Pair<AbstractPlugin, String>> result = new ArrayList<Pair<AbstractPlugin, String>>();
+		while (iterator.hasNext()) {
+			final Pair<AbstractPlugin, Method> currElem = iterator.next();
+			result.add(new Pair<AbstractPlugin, String>(currElem.getFst(), currElem.getSnd().getName()));
+		}
 
-	public Pair(final T1 fst, final T2 snd) {
-		this.fst = fst;
-		this.snd = snd;
+		return result;
 	}
 }

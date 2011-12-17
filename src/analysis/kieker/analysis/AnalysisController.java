@@ -47,7 +47,7 @@ import kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelFactory;
 import kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.port.AInputPort;
+import kieker.analysis.plugin.Pair;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.reader.IMonitoringReader;
 import kieker.common.configuration.Configuration;
@@ -249,9 +249,9 @@ public final class AnalysisController {
 		final AnalysisMetaModelFactory factory = new AnalysisMetaModelFactory();
 
 		final Map<AbstractPlugin, IPlugin> pluginMap = new HashMap<AbstractPlugin, IPlugin>();
-		final Map<AInputPort, IPlugin> portToMPluginMap = new HashMap<AInputPort, IPlugin>();
-		final Map<AInputPort, AbstractPlugin> portToPluginMap = new HashMap<AInputPort, AbstractPlugin>();
-		final Map<AInputPort, String> portToNameMap = new HashMap<AInputPort, String>();
+		// final Map<AInputPort, IPlugin> portToMPluginMap = new HashMap<AInputPort, IPlugin>();
+		// final Map<AInputPort, AbstractPlugin> portToPluginMap = new HashMap<AInputPort, AbstractPlugin>();
+		// final Map<AInputPort, String> portToNameMap = new HashMap<AInputPort, String>();
 		final IProject project = factory.createProject();
 		project.setName(projectName);
 
@@ -299,26 +299,25 @@ public final class AnalysisController {
 		}
 
 		/* Now connect them. */
-		/*
-		 * for (final AbstractPlugin plugin : plugins) {
-		 * final IPlugin mOutputPlugin = pluginMap.get(plugin);
-		 * final String outputPortNames[] = plugin.getAllOutputPortNames();
-		 * for (final String outputPortName : outputPortNames) {
-		 * final IOutputPort mOutputPort = AnalysisController.findOutputPort(mOutputPlugin, outputPortName);
-		 * final List<AbstractInputPort> subscribers = plugin.getSubscribers(outputPortName);
-		 * for (final AbstractInputPort subscriber : subscribers) {
-		 * final AbstractPlugin subscriberPlugin = portToPluginMap.get(subscriber);
-		 * final IPlugin mSubscriberPlugin = pluginMap.get(subscriberPlugin);
-		 * // TODO: It seems like mSubscriberPlugin can sometimes be null. Why?
-		 * if (mSubscriberPlugin != null) {
-		 * final IInputPort mInputPort = AnalysisController.findInputPort((IAnalysisPlugin) mSubscriberPlugin, portToNameMap.get(subscriber));
-		 * 
-		 * mOutputPort.getSubscribers().add(mInputPort);
-		 * }
-		 * }
-		 * }
-		 * }
-		 */
+
+		for (final AbstractPlugin plugin : plugins) {
+			final IPlugin mOutputPlugin = pluginMap.get(plugin);
+			final String outputPortNames[] = plugin.getAllOutputPortNames();
+			for (final String outputPortName : outputPortNames) {
+				final IOutputPort mOutputPort = AnalysisController.findOutputPort(mOutputPlugin, outputPortName);
+				final List<Pair<AbstractPlugin, String>> subscribers = plugin.getConnectedPlugins(outputPortName);
+				for (final Pair<AbstractPlugin, String> subscriber : subscribers) {
+					final AbstractPlugin subscriberPlugin = subscriber.getFst();
+					final IPlugin mSubscriberPlugin = pluginMap.get(subscriberPlugin);
+					// TODO: It seems like mSubscriberPlugin can sometimes be null. Why?
+					if (mSubscriberPlugin != null) {
+						final IInputPort mInputPort = AnalysisController.findInputPort((IAnalysisPlugin) mSubscriberPlugin, subscriber.getSnd());
+
+						mOutputPort.getSubscribers().add(mInputPort);
+					}
+				}
+			}
+		}
 
 		/* Save the whole project. */
 		final ResourceSet resourceSet = new ResourceSetImpl();
@@ -334,6 +333,17 @@ public final class AnalysisController {
 		}
 
 		return true;
+	}
+
+	static private IInputPort findInputPort(final IAnalysisPlugin mPlugin, final String name) {
+		final Iterator<IInputPort> iter = mPlugin.getInputPorts().iterator();
+		while (iter.hasNext()) {
+			final IInputPort port = iter.next();
+			if (port.getName().equals(name)) {
+				return port;
+			}
+		}
+		return null;
 	}
 
 	static private IOutputPort findOutputPort(final IPlugin mPlugin, final String name) {
