@@ -8,11 +8,11 @@ package kieker.analysis.model.analysisMetaModel.impl;
 
 import java.util.Collection;
 
-import kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage;
-import kieker.analysis.model.analysisMetaModel.IOutputPort;
-import kieker.analysis.model.analysisMetaModel.IPlugin;
-import kieker.analysis.model.analysisMetaModel.IProperty;
-import kieker.analysis.model.analysisMetaModel.IRepository;
+import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
+import kieker.analysis.model.analysisMetaModel.MIOutputPort;
+import kieker.analysis.model.analysisMetaModel.MIPlugin;
+import kieker.analysis.model.analysisMetaModel.MIProperty;
+import kieker.analysis.model.analysisMetaModel.MIRepository;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -37,17 +37,17 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.Plugin#getName <em>Name</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.Plugin#getClassname <em>Classname</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.Plugin#getProperties <em>Properties</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.Plugin#getRepositories <em>Repositories</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.Plugin#getOutputPorts <em>Output Ports</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MPlugin#getName <em>Name</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MPlugin#getClassname <em>Classname</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MPlugin#getProperties <em>Properties</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MPlugin#getRepositories <em>Repositories</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MPlugin#getOutputPorts <em>Output Ports</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public abstract class Plugin extends EObjectImpl implements IPlugin {
+public abstract class MPlugin extends EObjectImpl implements MIPlugin {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -96,7 +96,7 @@ public abstract class Plugin extends EObjectImpl implements IPlugin {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<IProperty> properties;
+	protected EList<MIProperty> properties;
 
 	/**
 	 * The cached value of the '{@link #getRepositories() <em>Repositories</em>}' reference list.
@@ -106,7 +106,7 @@ public abstract class Plugin extends EObjectImpl implements IPlugin {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<IRepository> repositories;
+	protected EList<MIRepository> repositories;
 
 	/**
 	 * The cached value of the '{@link #getOutputPorts() <em>Output Ports</em>}' containment reference list.
@@ -116,14 +116,14 @@ public abstract class Plugin extends EObjectImpl implements IPlugin {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<IOutputPort> outputPorts;
+	protected EList<MIOutputPort> outputPorts;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected Plugin() {
+	protected MPlugin() {
 		super();
 	}
 
@@ -134,7 +134,7 @@ public abstract class Plugin extends EObjectImpl implements IPlugin {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return IAnalysisMetaModelPackage.Literals.PLUGIN;
+		return MIAnalysisMetaModelPackage.Literals.PLUGIN;
 	}
 
 	/**
@@ -155,7 +155,7 @@ public abstract class Plugin extends EObjectImpl implements IPlugin {
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, IAnalysisMetaModelPackage.PLUGIN__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.PLUGIN__NAME, oldName, name));
 	}
 
 	/**
@@ -176,7 +176,7 @@ public abstract class Plugin extends EObjectImpl implements IPlugin {
 		String oldClassname = classname;
 		classname = newClassname;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, IAnalysisMetaModelPackage.PLUGIN__CLASSNAME, oldClassname, classname));
+			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.PLUGIN__CLASSNAME, oldClassname, classname));
 	}
 
 	/**
@@ -184,9 +184,9 @@ public abstract class Plugin extends EObjectImpl implements IPlugin {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<IProperty> getProperties() {
+	public EList<MIProperty> getProperties() {
 		if (properties == null) {
-			properties = new EObjectContainmentEList<IProperty>(IProperty.class, this, IAnalysisMetaModelPackage.PLUGIN__PROPERTIES);
+			properties = new EObjectContainmentEList<MIProperty>(MIProperty.class, this, MIAnalysisMetaModelPackage.PLUGIN__PROPERTIES);
 		}
 		return properties;
 	}
@@ -196,9 +196,9 @@ public abstract class Plugin extends EObjectImpl implements IPlugin {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<IRepository> getRepositories() {
+	public EList<MIRepository> getRepositories() {
 		if (repositories == null) {
-			repositories = new EObjectResolvingEList<IRepository>(IRepository.class, this, IAnalysisMetaModelPackage.PLUGIN__REPOSITORIES);
+			repositories = new EObjectResolvingEList<MIRepository>(MIRepository.class, this, MIAnalysisMetaModelPackage.PLUGIN__REPOSITORIES);
 		}
 		return repositories;
 	}
@@ -208,9 +208,9 @@ public abstract class Plugin extends EObjectImpl implements IPlugin {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<IOutputPort> getOutputPorts() {
+	public EList<MIOutputPort> getOutputPorts() {
 		if (outputPorts == null) {
-			outputPorts = new EObjectContainmentWithInverseEList<IOutputPort>(IOutputPort.class, this, IAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS, IAnalysisMetaModelPackage.OUTPUT_PORT__PARENT);
+			outputPorts = new EObjectContainmentWithInverseEList<MIOutputPort>(MIOutputPort.class, this, MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS, MIAnalysisMetaModelPackage.OUTPUT_PORT__PARENT);
 		}
 		return outputPorts;
 	}
@@ -224,7 +224,7 @@ public abstract class Plugin extends EObjectImpl implements IPlugin {
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
+			case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getOutputPorts()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
@@ -238,9 +238,9 @@ public abstract class Plugin extends EObjectImpl implements IPlugin {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PLUGIN__PROPERTIES:
+			case MIAnalysisMetaModelPackage.PLUGIN__PROPERTIES:
 				return ((InternalEList<?>)getProperties()).basicRemove(otherEnd, msgs);
-			case IAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
+			case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
 				return ((InternalEList<?>)getOutputPorts()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -254,15 +254,15 @@ public abstract class Plugin extends EObjectImpl implements IPlugin {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PLUGIN__NAME:
+			case MIAnalysisMetaModelPackage.PLUGIN__NAME:
 				return getName();
-			case IAnalysisMetaModelPackage.PLUGIN__CLASSNAME:
+			case MIAnalysisMetaModelPackage.PLUGIN__CLASSNAME:
 				return getClassname();
-			case IAnalysisMetaModelPackage.PLUGIN__PROPERTIES:
+			case MIAnalysisMetaModelPackage.PLUGIN__PROPERTIES:
 				return getProperties();
-			case IAnalysisMetaModelPackage.PLUGIN__REPOSITORIES:
+			case MIAnalysisMetaModelPackage.PLUGIN__REPOSITORIES:
 				return getRepositories();
-			case IAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
+			case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
 				return getOutputPorts();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -277,23 +277,23 @@ public abstract class Plugin extends EObjectImpl implements IPlugin {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PLUGIN__NAME:
+			case MIAnalysisMetaModelPackage.PLUGIN__NAME:
 				setName((String)newValue);
 				return;
-			case IAnalysisMetaModelPackage.PLUGIN__CLASSNAME:
+			case MIAnalysisMetaModelPackage.PLUGIN__CLASSNAME:
 				setClassname((String)newValue);
 				return;
-			case IAnalysisMetaModelPackage.PLUGIN__PROPERTIES:
+			case MIAnalysisMetaModelPackage.PLUGIN__PROPERTIES:
 				getProperties().clear();
-				getProperties().addAll((Collection<? extends IProperty>)newValue);
+				getProperties().addAll((Collection<? extends MIProperty>)newValue);
 				return;
-			case IAnalysisMetaModelPackage.PLUGIN__REPOSITORIES:
+			case MIAnalysisMetaModelPackage.PLUGIN__REPOSITORIES:
 				getRepositories().clear();
-				getRepositories().addAll((Collection<? extends IRepository>)newValue);
+				getRepositories().addAll((Collection<? extends MIRepository>)newValue);
 				return;
-			case IAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
+			case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
 				getOutputPorts().clear();
-				getOutputPorts().addAll((Collection<? extends IOutputPort>)newValue);
+				getOutputPorts().addAll((Collection<? extends MIOutputPort>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -307,19 +307,19 @@ public abstract class Plugin extends EObjectImpl implements IPlugin {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PLUGIN__NAME:
+			case MIAnalysisMetaModelPackage.PLUGIN__NAME:
 				setName(NAME_EDEFAULT);
 				return;
-			case IAnalysisMetaModelPackage.PLUGIN__CLASSNAME:
+			case MIAnalysisMetaModelPackage.PLUGIN__CLASSNAME:
 				setClassname(CLASSNAME_EDEFAULT);
 				return;
-			case IAnalysisMetaModelPackage.PLUGIN__PROPERTIES:
+			case MIAnalysisMetaModelPackage.PLUGIN__PROPERTIES:
 				getProperties().clear();
 				return;
-			case IAnalysisMetaModelPackage.PLUGIN__REPOSITORIES:
+			case MIAnalysisMetaModelPackage.PLUGIN__REPOSITORIES:
 				getRepositories().clear();
 				return;
-			case IAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
+			case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
 				getOutputPorts().clear();
 				return;
 		}
@@ -334,15 +334,15 @@ public abstract class Plugin extends EObjectImpl implements IPlugin {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PLUGIN__NAME:
+			case MIAnalysisMetaModelPackage.PLUGIN__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case IAnalysisMetaModelPackage.PLUGIN__CLASSNAME:
+			case MIAnalysisMetaModelPackage.PLUGIN__CLASSNAME:
 				return CLASSNAME_EDEFAULT == null ? classname != null : !CLASSNAME_EDEFAULT.equals(classname);
-			case IAnalysisMetaModelPackage.PLUGIN__PROPERTIES:
+			case MIAnalysisMetaModelPackage.PLUGIN__PROPERTIES:
 				return properties != null && !properties.isEmpty();
-			case IAnalysisMetaModelPackage.PLUGIN__REPOSITORIES:
+			case MIAnalysisMetaModelPackage.PLUGIN__REPOSITORIES:
 				return repositories != null && !repositories.isEmpty();
-			case IAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
+			case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
 				return outputPorts != null && !outputPorts.isEmpty();
 		}
 		return super.eIsSet(featureID);
@@ -366,4 +366,4 @@ public abstract class Plugin extends EObjectImpl implements IPlugin {
 		return result.toString();
 	}
 
-} //Plugin
+} //MPlugin

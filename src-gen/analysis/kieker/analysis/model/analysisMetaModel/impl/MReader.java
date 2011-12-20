@@ -6,8 +6,8 @@
  */
 package kieker.analysis.model.analysisMetaModel.impl;
 
-import kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage;
-import kieker.analysis.model.analysisMetaModel.IReader;
+import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
+import kieker.analysis.model.analysisMetaModel.MIReader;
 
 import org.eclipse.emf.ecore.EClass;
 
@@ -20,13 +20,13 @@ import org.eclipse.emf.ecore.EClass;
  *
  * @generated
  */
-public class Reader extends Plugin implements IReader {
+public class MReader extends MPlugin implements MIReader {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected Reader() {
+	protected MReader() {
 		super();
 	}
 
@@ -37,7 +37,7 @@ public class Reader extends Plugin implements IReader {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return IAnalysisMetaModelPackage.Literals.READER;
+		return MIAnalysisMetaModelPackage.Literals.READER;
 	}
 
-} //Reader
+} //MReader

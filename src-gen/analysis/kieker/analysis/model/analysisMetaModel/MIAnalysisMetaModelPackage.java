@@ -22,11 +22,11 @@ import org.eclipse.emf.ecore.EReference;
  *   <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
- * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelFactory
+ * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelFactory
  * @model kind="package"
  * @generated
  */
-public interface IAnalysisMetaModelPackage extends EPackage {
+public interface MIAnalysisMetaModelPackage extends EPackage {
 	/**
 	 * The package name.
 	 * <!-- begin-user-doc -->
@@ -57,14 +57,14 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	IAnalysisMetaModelPackage eINSTANCE = kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage.init();
+	MIAnalysisMetaModelPackage eINSTANCE = kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage.init();
 
 	/**
-	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.Project <em>Project</em>}' class.
+	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MProject <em>Project</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see kieker.analysis.model.analysisMetaModel.impl.Project
-	 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getProject()
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MProject
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getProject()
 	 * @generated
 	 */
 	int PROJECT = 0;
@@ -106,11 +106,11 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	int PROJECT_FEATURE_COUNT = 3;
 
 	/**
-	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.Plugin <em>Plugin</em>}' class.
+	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MPlugin <em>Plugin</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see kieker.analysis.model.analysisMetaModel.impl.Plugin
-	 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getPlugin()
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MPlugin
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getPlugin()
 	 * @generated
 	 */
 	int PLUGIN = 1;
@@ -170,11 +170,11 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	int PLUGIN_FEATURE_COUNT = 5;
 
 	/**
-	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.Port <em>Port</em>}' class.
+	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MPort <em>Port</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see kieker.analysis.model.analysisMetaModel.impl.Port
-	 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getPort()
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MPort
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getPort()
 	 * @generated
 	 */
 	int PORT = 2;
@@ -207,11 +207,11 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	int PORT_FEATURE_COUNT = 2;
 
 	/**
-	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.InputPort <em>Input Port</em>}' class.
+	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MInputPort <em>Input Port</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see kieker.analysis.model.analysisMetaModel.impl.InputPort
-	 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getInputPort()
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MInputPort
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getInputPort()
 	 * @generated
 	 */
 	int INPUT_PORT = 3;
@@ -253,11 +253,11 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	int INPUT_PORT_FEATURE_COUNT = PORT_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.OutputPort <em>Output Port</em>}' class.
+	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MOutputPort <em>Output Port</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see kieker.analysis.model.analysisMetaModel.impl.OutputPort
-	 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getOutputPort()
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MOutputPort
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getOutputPort()
 	 * @generated
 	 */
 	int OUTPUT_PORT = 4;
@@ -308,11 +308,11 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	int OUTPUT_PORT_FEATURE_COUNT = PORT_FEATURE_COUNT + 2;
 
 	/**
-	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.Property <em>Property</em>}' class.
+	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MProperty <em>Property</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see kieker.analysis.model.analysisMetaModel.impl.Property
-	 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getProperty()
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MProperty
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getProperty()
 	 * @generated
 	 */
 	int PROPERTY = 5;
@@ -345,11 +345,11 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	int PROPERTY_FEATURE_COUNT = 2;
 
 	/**
-	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.AnalysisPlugin <em>Analysis Plugin</em>}' class.
+	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MAnalysisPlugin <em>Analysis Plugin</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisPlugin
-	 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getAnalysisPlugin()
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisPlugin
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getAnalysisPlugin()
 	 * @generated
 	 */
 	int ANALYSIS_PLUGIN = 6;
@@ -418,11 +418,11 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	int ANALYSIS_PLUGIN_FEATURE_COUNT = PLUGIN_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.Reader <em>Reader</em>}' class.
+	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MReader <em>Reader</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see kieker.analysis.model.analysisMetaModel.impl.Reader
-	 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getReader()
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MReader
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getReader()
 	 * @generated
 	 */
 	int READER = 7;
@@ -482,11 +482,11 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	int READER_FEATURE_COUNT = PLUGIN_FEATURE_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.Repository <em>Repository</em>}' class.
+	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MRepository <em>Repository</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see kieker.analysis.model.analysisMetaModel.impl.Repository
-	 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getRepository()
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MRepository
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getRepository()
 	 * @generated
 	 */
 	int REPOSITORY = 8;
@@ -520,288 +520,288 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 
 
 	/**
-	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.IProject <em>Project</em>}'.
+	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIProject <em>Project</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Project</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IProject
+	 * @see kieker.analysis.model.analysisMetaModel.MIProject
 	 * @generated
 	 */
 	EClass getProject();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.IProject#getPlugins <em>Plugins</em>}'.
+	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIProject#getPlugins <em>Plugins</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Plugins</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IProject#getPlugins()
+	 * @see kieker.analysis.model.analysisMetaModel.MIProject#getPlugins()
 	 * @see #getProject()
 	 * @generated
 	 */
 	EReference getProject_Plugins();
 
 	/**
-	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.IProject#getName <em>Name</em>}'.
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIProject#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IProject#getName()
+	 * @see kieker.analysis.model.analysisMetaModel.MIProject#getName()
 	 * @see #getProject()
 	 * @generated
 	 */
 	EAttribute getProject_Name();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.IProject#getRepositories <em>Repositories</em>}'.
+	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIProject#getRepositories <em>Repositories</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Repositories</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IProject#getRepositories()
+	 * @see kieker.analysis.model.analysisMetaModel.MIProject#getRepositories()
 	 * @see #getProject()
 	 * @generated
 	 */
 	EReference getProject_Repositories();
 
 	/**
-	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.IPlugin <em>Plugin</em>}'.
+	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIPlugin <em>Plugin</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Plugin</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IPlugin
+	 * @see kieker.analysis.model.analysisMetaModel.MIPlugin
 	 * @generated
 	 */
 	EClass getPlugin();
 
 	/**
-	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.IPlugin#getName <em>Name</em>}'.
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IPlugin#getName()
+	 * @see kieker.analysis.model.analysisMetaModel.MIPlugin#getName()
 	 * @see #getPlugin()
 	 * @generated
 	 */
 	EAttribute getPlugin_Name();
 
 	/**
-	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.IPlugin#getClassname <em>Classname</em>}'.
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getClassname <em>Classname</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Classname</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IPlugin#getClassname()
+	 * @see kieker.analysis.model.analysisMetaModel.MIPlugin#getClassname()
 	 * @see #getPlugin()
 	 * @generated
 	 */
 	EAttribute getPlugin_Classname();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.IPlugin#getProperties <em>Properties</em>}'.
+	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getProperties <em>Properties</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Properties</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IPlugin#getProperties()
+	 * @see kieker.analysis.model.analysisMetaModel.MIPlugin#getProperties()
 	 * @see #getPlugin()
 	 * @generated
 	 */
 	EReference getPlugin_Properties();
 
 	/**
-	 * Returns the meta object for the reference list '{@link kieker.analysis.model.analysisMetaModel.IPlugin#getRepositories <em>Repositories</em>}'.
+	 * Returns the meta object for the reference list '{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getRepositories <em>Repositories</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Repositories</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IPlugin#getRepositories()
+	 * @see kieker.analysis.model.analysisMetaModel.MIPlugin#getRepositories()
 	 * @see #getPlugin()
 	 * @generated
 	 */
 	EReference getPlugin_Repositories();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.IPlugin#getOutputPorts <em>Output Ports</em>}'.
+	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getOutputPorts <em>Output Ports</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Output Ports</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IPlugin#getOutputPorts()
+	 * @see kieker.analysis.model.analysisMetaModel.MIPlugin#getOutputPorts()
 	 * @see #getPlugin()
 	 * @generated
 	 */
 	EReference getPlugin_OutputPorts();
 
 	/**
-	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.IPort <em>Port</em>}'.
+	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIPort <em>Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Port</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IPort
+	 * @see kieker.analysis.model.analysisMetaModel.MIPort
 	 * @generated
 	 */
 	EClass getPort();
 
 	/**
-	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.IPort#getName <em>Name</em>}'.
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIPort#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IPort#getName()
+	 * @see kieker.analysis.model.analysisMetaModel.MIPort#getName()
 	 * @see #getPort()
 	 * @generated
 	 */
 	EAttribute getPort_Name();
 
 	/**
-	 * Returns the meta object for the attribute list '{@link kieker.analysis.model.analysisMetaModel.IPort#getEventTypes <em>Event Types</em>}'.
+	 * Returns the meta object for the attribute list '{@link kieker.analysis.model.analysisMetaModel.MIPort#getEventTypes <em>Event Types</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute list '<em>Event Types</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IPort#getEventTypes()
+	 * @see kieker.analysis.model.analysisMetaModel.MIPort#getEventTypes()
 	 * @see #getPort()
 	 * @generated
 	 */
 	EAttribute getPort_EventTypes();
 
 	/**
-	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.IInputPort <em>Input Port</em>}'.
+	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIInputPort <em>Input Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Input Port</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IInputPort
+	 * @see kieker.analysis.model.analysisMetaModel.MIInputPort
 	 * @generated
 	 */
 	EClass getInputPort();
 
 	/**
-	 * Returns the meta object for the container reference '{@link kieker.analysis.model.analysisMetaModel.IInputPort#getParent <em>Parent</em>}'.
+	 * Returns the meta object for the container reference '{@link kieker.analysis.model.analysisMetaModel.MIInputPort#getParent <em>Parent</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the container reference '<em>Parent</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IInputPort#getParent()
+	 * @see kieker.analysis.model.analysisMetaModel.MIInputPort#getParent()
 	 * @see #getInputPort()
 	 * @generated
 	 */
 	EReference getInputPort_Parent();
 
 	/**
-	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.IOutputPort <em>Output Port</em>}'.
+	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIOutputPort <em>Output Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Output Port</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IOutputPort
+	 * @see kieker.analysis.model.analysisMetaModel.MIOutputPort
 	 * @generated
 	 */
 	EClass getOutputPort();
 
 	/**
-	 * Returns the meta object for the reference list '{@link kieker.analysis.model.analysisMetaModel.IOutputPort#getSubscribers <em>Subscribers</em>}'.
+	 * Returns the meta object for the reference list '{@link kieker.analysis.model.analysisMetaModel.MIOutputPort#getSubscribers <em>Subscribers</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Subscribers</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IOutputPort#getSubscribers()
+	 * @see kieker.analysis.model.analysisMetaModel.MIOutputPort#getSubscribers()
 	 * @see #getOutputPort()
 	 * @generated
 	 */
 	EReference getOutputPort_Subscribers();
 
 	/**
-	 * Returns the meta object for the container reference '{@link kieker.analysis.model.analysisMetaModel.IOutputPort#getParent <em>Parent</em>}'.
+	 * Returns the meta object for the container reference '{@link kieker.analysis.model.analysisMetaModel.MIOutputPort#getParent <em>Parent</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the container reference '<em>Parent</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IOutputPort#getParent()
+	 * @see kieker.analysis.model.analysisMetaModel.MIOutputPort#getParent()
 	 * @see #getOutputPort()
 	 * @generated
 	 */
 	EReference getOutputPort_Parent();
 
 	/**
-	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.IProperty <em>Property</em>}'.
+	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIProperty <em>Property</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Property</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IProperty
+	 * @see kieker.analysis.model.analysisMetaModel.MIProperty
 	 * @generated
 	 */
 	EClass getProperty();
 
 	/**
-	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.IProperty#getName <em>Name</em>}'.
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIProperty#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IProperty#getName()
+	 * @see kieker.analysis.model.analysisMetaModel.MIProperty#getName()
 	 * @see #getProperty()
 	 * @generated
 	 */
 	EAttribute getProperty_Name();
 
 	/**
-	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.IProperty#getValue <em>Value</em>}'.
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIProperty#getValue <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Value</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IProperty#getValue()
+	 * @see kieker.analysis.model.analysisMetaModel.MIProperty#getValue()
 	 * @see #getProperty()
 	 * @generated
 	 */
 	EAttribute getProperty_Value();
 
 	/**
-	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.IAnalysisPlugin <em>Analysis Plugin</em>}'.
+	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIAnalysisPlugin <em>Analysis Plugin</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Analysis Plugin</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IAnalysisPlugin
+	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisPlugin
 	 * @generated
 	 */
 	EClass getAnalysisPlugin();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.IAnalysisPlugin#getInputPorts <em>Input Ports</em>}'.
+	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIAnalysisPlugin#getInputPorts <em>Input Ports</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Input Ports</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IAnalysisPlugin#getInputPorts()
+	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisPlugin#getInputPorts()
 	 * @see #getAnalysisPlugin()
 	 * @generated
 	 */
 	EReference getAnalysisPlugin_InputPorts();
 
 	/**
-	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.IReader <em>Reader</em>}'.
+	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIReader <em>Reader</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Reader</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IReader
+	 * @see kieker.analysis.model.analysisMetaModel.MIReader
 	 * @generated
 	 */
 	EClass getReader();
 
 	/**
-	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.IRepository <em>Repository</em>}'.
+	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIRepository <em>Repository</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Repository</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IRepository
+	 * @see kieker.analysis.model.analysisMetaModel.MIRepository
 	 * @generated
 	 */
 	EClass getRepository();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.IRepository#getProperties <em>Properties</em>}'.
+	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIRepository#getProperties <em>Properties</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Properties</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IRepository#getProperties()
+	 * @see kieker.analysis.model.analysisMetaModel.MIRepository#getProperties()
 	 * @see #getRepository()
 	 * @generated
 	 */
 	EReference getRepository_Properties();
 
 	/**
-	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.IRepository#getClassname <em>Classname</em>}'.
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIRepository#getClassname <em>Classname</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Classname</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.IRepository#getClassname()
+	 * @see kieker.analysis.model.analysisMetaModel.MIRepository#getClassname()
 	 * @see #getRepository()
 	 * @generated
 	 */
@@ -814,7 +814,7 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	 * @return the factory that creates the instances of the model.
 	 * @generated
 	 */
-	IAnalysisMetaModelFactory getAnalysisMetaModelFactory();
+	MIAnalysisMetaModelFactory getAnalysisMetaModelFactory();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -830,11 +830,11 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.Project <em>Project</em>}' class.
+		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MProject <em>Project</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see kieker.analysis.model.analysisMetaModel.impl.Project
-		 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getProject()
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MProject
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getProject()
 		 * @generated
 		 */
 		EClass PROJECT = eINSTANCE.getProject();
@@ -864,11 +864,11 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 		EReference PROJECT__REPOSITORIES = eINSTANCE.getProject_Repositories();
 
 		/**
-		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.Plugin <em>Plugin</em>}' class.
+		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MPlugin <em>Plugin</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see kieker.analysis.model.analysisMetaModel.impl.Plugin
-		 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getPlugin()
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MPlugin
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getPlugin()
 		 * @generated
 		 */
 		EClass PLUGIN = eINSTANCE.getPlugin();
@@ -914,11 +914,11 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 		EReference PLUGIN__OUTPUT_PORTS = eINSTANCE.getPlugin_OutputPorts();
 
 		/**
-		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.Port <em>Port</em>}' class.
+		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MPort <em>Port</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see kieker.analysis.model.analysisMetaModel.impl.Port
-		 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getPort()
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MPort
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getPort()
 		 * @generated
 		 */
 		EClass PORT = eINSTANCE.getPort();
@@ -940,11 +940,11 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 		EAttribute PORT__EVENT_TYPES = eINSTANCE.getPort_EventTypes();
 
 		/**
-		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.InputPort <em>Input Port</em>}' class.
+		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MInputPort <em>Input Port</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see kieker.analysis.model.analysisMetaModel.impl.InputPort
-		 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getInputPort()
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MInputPort
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getInputPort()
 		 * @generated
 		 */
 		EClass INPUT_PORT = eINSTANCE.getInputPort();
@@ -958,11 +958,11 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 		EReference INPUT_PORT__PARENT = eINSTANCE.getInputPort_Parent();
 
 		/**
-		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.OutputPort <em>Output Port</em>}' class.
+		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MOutputPort <em>Output Port</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see kieker.analysis.model.analysisMetaModel.impl.OutputPort
-		 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getOutputPort()
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MOutputPort
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getOutputPort()
 		 * @generated
 		 */
 		EClass OUTPUT_PORT = eINSTANCE.getOutputPort();
@@ -984,11 +984,11 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 		EReference OUTPUT_PORT__PARENT = eINSTANCE.getOutputPort_Parent();
 
 		/**
-		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.Property <em>Property</em>}' class.
+		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MProperty <em>Property</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see kieker.analysis.model.analysisMetaModel.impl.Property
-		 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getProperty()
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MProperty
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getProperty()
 		 * @generated
 		 */
 		EClass PROPERTY = eINSTANCE.getProperty();
@@ -1010,11 +1010,11 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 		EAttribute PROPERTY__VALUE = eINSTANCE.getProperty_Value();
 
 		/**
-		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.AnalysisPlugin <em>Analysis Plugin</em>}' class.
+		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MAnalysisPlugin <em>Analysis Plugin</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisPlugin
-		 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getAnalysisPlugin()
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisPlugin
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getAnalysisPlugin()
 		 * @generated
 		 */
 		EClass ANALYSIS_PLUGIN = eINSTANCE.getAnalysisPlugin();
@@ -1028,21 +1028,21 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 		EReference ANALYSIS_PLUGIN__INPUT_PORTS = eINSTANCE.getAnalysisPlugin_InputPorts();
 
 		/**
-		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.Reader <em>Reader</em>}' class.
+		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MReader <em>Reader</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see kieker.analysis.model.analysisMetaModel.impl.Reader
-		 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getReader()
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MReader
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getReader()
 		 * @generated
 		 */
 		EClass READER = eINSTANCE.getReader();
 
 		/**
-		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.Repository <em>Repository</em>}' class.
+		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MRepository <em>Repository</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see kieker.analysis.model.analysisMetaModel.impl.Repository
-		 * @see kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage#getRepository()
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MRepository
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getRepository()
 		 * @generated
 		 */
 		EClass REPOSITORY = eINSTANCE.getRepository();
@@ -1065,4 +1065,4 @@ public interface IAnalysisMetaModelPackage extends EPackage {
 
 	}
 
-} //IAnalysisMetaModelPackage
+} //MIAnalysisMetaModelPackage

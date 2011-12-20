@@ -36,14 +36,14 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
-import kieker.analysis.model.analysisMetaModel.IAnalysisPlugin;
-import kieker.analysis.model.analysisMetaModel.IInputPort;
-import kieker.analysis.model.analysisMetaModel.IOutputPort;
-import kieker.analysis.model.analysisMetaModel.IPlugin;
-import kieker.analysis.model.analysisMetaModel.IProject;
-import kieker.analysis.model.analysisMetaModel.IProperty;
-import kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelFactory;
-import kieker.analysis.model.analysisMetaModel.impl.AnalysisMetaModelPackage;
+import kieker.analysis.model.analysisMetaModel.MIAnalysisPlugin;
+import kieker.analysis.model.analysisMetaModel.MIInputPort;
+import kieker.analysis.model.analysisMetaModel.MIOutputPort;
+import kieker.analysis.model.analysisMetaModel.MIPlugin;
+import kieker.analysis.model.analysisMetaModel.MIProject;
+import kieker.analysis.model.analysisMetaModel.MIProperty;
+import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelFactory;
+import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.Pair;
@@ -96,7 +96,7 @@ public final class AnalysisController {
 	 *            The project instance for the analysis.
 	 * @throws Exception
 	 */
-	public AnalysisController(final IProject project) throws Exception {
+	public AnalysisController(final MIProject project) throws Exception {
 		this.loadFromModelProject(project);
 	}
 
@@ -117,7 +117,7 @@ public final class AnalysisController {
 		final EList<EObject> content = AnalysisController.openModelFile(file);
 		if ((content != null) && !content.isEmpty()) {
 			// The first (and only) element should be the project. Use it to configure this instance.
-			final IProject project = (IProject) content.get(0);
+			final MIProject project = (MIProject) content.get(0);
 			try {
 				this.loadFromModelProject(project);
 			} catch (final Exception ex) {
@@ -131,16 +131,16 @@ public final class AnalysisController {
 		}
 	}
 
-	private final Configuration modelPropertiesToConfiguration(final EList<IProperty> mProperties) {
+	private final Configuration modelPropertiesToConfiguration(final EList<MIProperty> mProperties) {
 		final Configuration configuration = new Configuration(null);
 		/* Run through the properties and convert every single of them. */
-		for (final IProperty mProperty : mProperties) {
+		for (final MIProperty mProperty : mProperties) {
 			configuration.setProperty(mProperty.getName(), mProperty.getValue());
 		}
 		return configuration;
 	}
 
-	private final void loadFromModelProject(final IProject mproject) throws InstantiationException, IllegalAccessException, IllegalArgumentException,
+	private final void loadFromModelProject(final MIProject mproject) throws InstantiationException, IllegalAccessException, IllegalArgumentException,
 			InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
 		/* Get all repositories. */
 		// final EList<IRepository> mRepositories = mproject.getRepositories();
@@ -150,11 +150,11 @@ public final class AnalysisController {
 		 * We run through the project and collect all plugins. As we create an actual object for every plugin within the model, we have to remember the mapping
 		 * between the plugins within the model and the actual objects we create.
 		 */
-		final EList<IPlugin> mPlugins = mproject.getPlugins();
-		final Map<IPlugin, AbstractPlugin> pluginMap = new HashMap<IPlugin, AbstractPlugin>();
+		final EList<MIPlugin> mPlugins = mproject.getPlugins();
+		final Map<MIPlugin, AbstractPlugin> pluginMap = new HashMap<MIPlugin, AbstractPlugin>();
 
 		/* Now run through all plugins. */
-		for (final IPlugin mPlugin : mPlugins) {
+		for (final MIPlugin mPlugin : mPlugins) {
 			/* Extract the necessary informations to create the plugin. */
 			final Configuration configuration = this.modelPropertiesToConfiguration(mPlugin.getProperties());
 
@@ -175,14 +175,14 @@ public final class AnalysisController {
 		}
 
 		/* Now we have all plugins. We can start to assemble the wiring. */
-		for (final IPlugin mPlugin : mPlugins) {
-			final EList<IOutputPort> mPluginOPorts = mPlugin.getOutputPorts();
-			for (final IOutputPort mPluginOPort : mPluginOPorts) {
+		for (final MIPlugin mPlugin : mPlugins) {
+			final EList<MIOutputPort> mPluginOPorts = mPlugin.getOutputPorts();
+			for (final MIOutputPort mPluginOPort : mPluginOPorts) {
 				final String outputPortName = mPluginOPort.getName();
 				final AbstractPlugin srcPlugin = pluginMap.get(mPlugin);
 				/* Get all ports which should be subscribed to this port. */
-				final EList<IInputPort> mSubscribers = mPluginOPort.getSubscribers();
-				for (final IInputPort mSubscriber : mSubscribers) {
+				final EList<MIInputPort> mSubscribers = mPluginOPort.getSubscribers();
+				for (final MIInputPort mSubscriber : mSubscribers) {
 					/* Find the mapping and subscribe */
 					final String inputPortName = mSubscriber.getName();
 					final AbstractPlugin dstPlugin = pluginMap.get(mSubscriber.getParent());
@@ -207,7 +207,7 @@ public final class AnalysisController {
 		final ResourceSet resourceSet = new ResourceSetImpl();
 
 		/* Initialize the package information */
-		AnalysisMetaModelPackage.init();
+		MAnalysisMetaModelPackage.init();
 
 		/* Set OPTION_RECORD_UNKNOWN_FEATURE prior to calling getResource. */
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*",
@@ -243,14 +243,14 @@ public final class AnalysisController {
 	 * @return true iff the configuration has been saved successfully.
 	 */
 	public final boolean saveToFile(final File file, final String projectName) {
-		final IProject project = this.getCurrentConfiguration(projectName);
+		final MIProject project = this.getCurrentConfiguration(projectName);
 		final boolean success = this.saveProject(file, project);
 
 		return success;
 
 	}
 
-	private boolean saveProject(final File file, final IProject project) {
+	private boolean saveProject(final File file, final MIProject project) {
 		/* Create a resource and put the given project into it. */
 		final ResourceSet resourceSet = new ResourceSetImpl();
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
@@ -268,12 +268,12 @@ public final class AnalysisController {
 		return true;
 	}
 
-	private IProject getCurrentConfiguration(final String projectName) {
+	private MIProject getCurrentConfiguration(final String projectName) {
 		try {
 			/* Create a factory to create all other model instances. */
-			final AnalysisMetaModelFactory factory = new AnalysisMetaModelFactory();
-			final IProject project = factory.createProject();
-			final Map<AbstractPlugin, IPlugin> pluginMap = new HashMap<AbstractPlugin, IPlugin>();
+			final MAnalysisMetaModelFactory factory = new MAnalysisMetaModelFactory();
+			final MIProject project = factory.createProject();
+			final Map<AbstractPlugin, MIPlugin> pluginMap = new HashMap<AbstractPlugin, MIPlugin>();
 
 			project.setName(projectName);
 
@@ -282,7 +282,7 @@ public final class AnalysisController {
 			plugins.add((AbstractPlugin) this.logReader);
 
 			for (final AbstractPlugin plugin : plugins) {
-				final IPlugin mPlugin = (plugin instanceof AbstractReaderPlugin) ? factory.createReader() : factory.createAnalysisPlugin();
+				final MIPlugin mPlugin = (plugin instanceof AbstractReaderPlugin) ? factory.createReader() : factory.createAnalysisPlugin();
 
 				/* Remember the mapping. */
 				pluginMap.put(plugin, mPlugin);
@@ -294,7 +294,7 @@ public final class AnalysisController {
 				final Configuration configuration = plugin.getCurrentConfiguration();
 				final Set<Entry<Object, Object>> configSet = configuration.entrySet();
 				for (final Entry<Object, Object> configEntry : configSet) {
-					final IProperty property = factory.createProperty();
+					final MIProperty property = factory.createProperty();
 					property.setName(configEntry.getKey().toString());
 					property.setValue(configEntry.getValue().toString());
 					mPlugin.getProperties().add(property);
@@ -303,16 +303,16 @@ public final class AnalysisController {
 				/* Create the ports. */
 				final String outs[] = plugin.getAllOutputPortNames();
 				for (final String out : outs) {
-					final IOutputPort mOutputPort = factory.createOutputPort();
+					final MIOutputPort mOutputPort = factory.createOutputPort();
 					mOutputPort.setName(out);
 					mPlugin.getOutputPorts().add(mOutputPort);
 				}
 
 				final String ins[] = plugin.getAllInputPortNames();
 				for (final String in : ins) {
-					final IInputPort mInputPort = factory.createInputPort();
+					final MIInputPort mInputPort = factory.createInputPort();
 					mInputPort.setName(in);
-					((IAnalysisPlugin) mPlugin).getInputPorts().add(mInputPort);
+					((MIAnalysisPlugin) mPlugin).getInputPorts().add(mInputPort);
 				}
 
 				project.getPlugins().add(mPlugin);
@@ -320,23 +320,23 @@ public final class AnalysisController {
 
 			/* Now connect the plugins. */
 			for (final AbstractPlugin plugin : plugins) {
-				final IPlugin mOutputPlugin = pluginMap.get(plugin);
+				final MIPlugin mOutputPlugin = pluginMap.get(plugin);
 				final String outputPortNames[] = plugin.getAllOutputPortNames();
 
 				/* Check all output ports of the original plugin. */
 				for (final String outputPortName : outputPortNames) {
 					/* Get the corresponding port of the model counterpart and get also the plugins which are currently connected with the original plugin. */
-					final IOutputPort mOutputPort = AnalysisController.findOutputPort(mOutputPlugin, outputPortName);
+					final MIOutputPort mOutputPort = AnalysisController.findOutputPort(mOutputPlugin, outputPortName);
 					final List<Pair<AbstractPlugin, String>> subscribers = plugin.getConnectedPlugins(outputPortName);
 
 					/* Run through all connected plugins. */
 					for (final Pair<AbstractPlugin, String> subscriber : subscribers) {
 						final AbstractPlugin subscriberPlugin = subscriber.getFst();
-						final IPlugin mSubscriberPlugin = pluginMap.get(subscriberPlugin);
+						final MIPlugin mSubscriberPlugin = pluginMap.get(subscriberPlugin);
 						// TODO: It seems like mSubscriberPlugin can sometimes be null. Why?
 						/* Now connect them. */
 						if (mSubscriberPlugin != null) {
-							final IInputPort mInputPort = AnalysisController.findInputPort((IAnalysisPlugin) mSubscriberPlugin, subscriber.getSnd());
+							final MIInputPort mInputPort = AnalysisController.findInputPort((MIAnalysisPlugin) mSubscriberPlugin, subscriber.getSnd());
 
 							mOutputPort.getSubscribers().add(mInputPort);
 						}
@@ -353,10 +353,10 @@ public final class AnalysisController {
 
 	}
 
-	static private IInputPort findInputPort(final IAnalysisPlugin mPlugin, final String name) {
-		final Iterator<IInputPort> iter = mPlugin.getInputPorts().iterator();
+	static private MIInputPort findInputPort(final MIAnalysisPlugin mPlugin, final String name) {
+		final Iterator<MIInputPort> iter = mPlugin.getInputPorts().iterator();
 		while (iter.hasNext()) {
-			final IInputPort port = iter.next();
+			final MIInputPort port = iter.next();
 			if (port.getName().equals(name)) {
 				return port;
 			}
@@ -364,10 +364,10 @@ public final class AnalysisController {
 		return null;
 	}
 
-	static private IOutputPort findOutputPort(final IPlugin mPlugin, final String name) {
-		final Iterator<IOutputPort> iter = mPlugin.getOutputPorts().iterator();
+	static private MIOutputPort findOutputPort(final MIPlugin mPlugin, final String name) {
+		final Iterator<MIOutputPort> iter = mPlugin.getOutputPorts().iterator();
 		while (iter.hasNext()) {
-			final IOutputPort port = iter.next();
+			final MIOutputPort port = iter.next();
 			if (port.getName().equals(name)) {
 				return port;
 			}

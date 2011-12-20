@@ -22,16 +22,16 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
  * <!-- end-user-doc -->
  * @generated
  */
-public class AnalysisMetaModelFactory extends EFactoryImpl implements IAnalysisMetaModelFactory {
+public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysisMetaModelFactory {
 	/**
 	 * Creates the default factory implementation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static IAnalysisMetaModelFactory init() {
+	public static MIAnalysisMetaModelFactory init() {
 		try {
-			IAnalysisMetaModelFactory theAnalysisMetaModelFactory = (IAnalysisMetaModelFactory)EPackage.Registry.INSTANCE.getEFactory("platform:/resource/Kieker/model/AnalysisMetaModel.ecore"); 
+			MIAnalysisMetaModelFactory theAnalysisMetaModelFactory = (MIAnalysisMetaModelFactory)EPackage.Registry.INSTANCE.getEFactory("platform:/resource/Kieker/model/AnalysisMetaModel.ecore"); 
 			if (theAnalysisMetaModelFactory != null) {
 				return theAnalysisMetaModelFactory;
 			}
@@ -39,7 +39,7 @@ public class AnalysisMetaModelFactory extends EFactoryImpl implements IAnalysisM
 		catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
-		return new AnalysisMetaModelFactory();
+		return new MAnalysisMetaModelFactory();
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class AnalysisMetaModelFactory extends EFactoryImpl implements IAnalysisM
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AnalysisMetaModelFactory() {
+	public MAnalysisMetaModelFactory() {
 		super();
 	}
 
@@ -60,13 +60,13 @@ public class AnalysisMetaModelFactory extends EFactoryImpl implements IAnalysisM
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case IAnalysisMetaModelPackage.PROJECT: return createProject();
-			case IAnalysisMetaModelPackage.INPUT_PORT: return createInputPort();
-			case IAnalysisMetaModelPackage.OUTPUT_PORT: return createOutputPort();
-			case IAnalysisMetaModelPackage.PROPERTY: return createProperty();
-			case IAnalysisMetaModelPackage.ANALYSIS_PLUGIN: return createAnalysisPlugin();
-			case IAnalysisMetaModelPackage.READER: return createReader();
-			case IAnalysisMetaModelPackage.REPOSITORY: return createRepository();
+			case MIAnalysisMetaModelPackage.PROJECT: return createProject();
+			case MIAnalysisMetaModelPackage.INPUT_PORT: return createInputPort();
+			case MIAnalysisMetaModelPackage.OUTPUT_PORT: return createOutputPort();
+			case MIAnalysisMetaModelPackage.PROPERTY: return createProperty();
+			case MIAnalysisMetaModelPackage.ANALYSIS_PLUGIN: return createAnalysisPlugin();
+			case MIAnalysisMetaModelPackage.READER: return createReader();
+			case MIAnalysisMetaModelPackage.REPOSITORY: return createRepository();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -77,8 +77,8 @@ public class AnalysisMetaModelFactory extends EFactoryImpl implements IAnalysisM
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public IProject createProject() {
-		Project project = new Project();
+	public MIProject createProject() {
+		MProject project = new MProject();
 		return project;
 	}
 
@@ -87,8 +87,8 @@ public class AnalysisMetaModelFactory extends EFactoryImpl implements IAnalysisM
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public IInputPort createInputPort() {
-		InputPort inputPort = new InputPort();
+	public MIInputPort createInputPort() {
+		MInputPort inputPort = new MInputPort();
 		return inputPort;
 	}
 
@@ -97,8 +97,8 @@ public class AnalysisMetaModelFactory extends EFactoryImpl implements IAnalysisM
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public IOutputPort createOutputPort() {
-		OutputPort outputPort = new OutputPort();
+	public MIOutputPort createOutputPort() {
+		MOutputPort outputPort = new MOutputPort();
 		return outputPort;
 	}
 
@@ -107,8 +107,8 @@ public class AnalysisMetaModelFactory extends EFactoryImpl implements IAnalysisM
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public IProperty createProperty() {
-		Property property = new Property();
+	public MIProperty createProperty() {
+		MProperty property = new MProperty();
 		return property;
 	}
 
@@ -117,8 +117,8 @@ public class AnalysisMetaModelFactory extends EFactoryImpl implements IAnalysisM
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public IAnalysisPlugin createAnalysisPlugin() {
-		AnalysisPlugin analysisPlugin = new AnalysisPlugin();
+	public MIAnalysisPlugin createAnalysisPlugin() {
+		MAnalysisPlugin analysisPlugin = new MAnalysisPlugin();
 		return analysisPlugin;
 	}
 
@@ -127,8 +127,8 @@ public class AnalysisMetaModelFactory extends EFactoryImpl implements IAnalysisM
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public IReader createReader() {
-		Reader reader = new Reader();
+	public MIReader createReader() {
+		MReader reader = new MReader();
 		return reader;
 	}
 
@@ -137,8 +137,8 @@ public class AnalysisMetaModelFactory extends EFactoryImpl implements IAnalysisM
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public IRepository createRepository() {
-		Repository repository = new Repository();
+	public MIRepository createRepository() {
+		MRepository repository = new MRepository();
 		return repository;
 	}
 
@@ -147,8 +147,8 @@ public class AnalysisMetaModelFactory extends EFactoryImpl implements IAnalysisM
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public IAnalysisMetaModelPackage getAnalysisMetaModelPackage() {
-		return (IAnalysisMetaModelPackage)getEPackage();
+	public MIAnalysisMetaModelPackage getAnalysisMetaModelPackage() {
+		return (MIAnalysisMetaModelPackage)getEPackage();
 	}
 
 	/**
@@ -158,8 +158,8 @@ public class AnalysisMetaModelFactory extends EFactoryImpl implements IAnalysisM
 	 * @generated
 	 */
 	@Deprecated
-	public static IAnalysisMetaModelPackage getPackage() {
-		return IAnalysisMetaModelPackage.eINSTANCE;
+	public static MIAnalysisMetaModelPackage getPackage() {
+		return MIAnalysisMetaModelPackage.eINSTANCE;
 	}
 
-} //AnalysisMetaModelFactory
+} //MAnalysisMetaModelFactory

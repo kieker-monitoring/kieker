@@ -18,16 +18,16 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.IPort#getName <em>Name</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.IPort#getEventTypes <em>Event Types</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.MIPort#getName <em>Name</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.MIPort#getEventTypes <em>Event Types</em>}</li>
  * </ul>
  * </p>
  *
- * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage#getPort()
+ * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getPort()
  * @model abstract="true"
  * @generated
  */
-public interface IPort extends EObject {
+public interface MIPort extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -38,14 +38,14 @@ public interface IPort extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
-	 * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage#getPort_Name()
+	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getPort_Name()
 	 * @model required="true"
 	 * @generated
 	 */
 	String getName();
 
 	/**
-	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.IPort#getName <em>Name</em>}' attribute.
+	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIPort#getName <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Name</em>' attribute.
@@ -64,10 +64,10 @@ public interface IPort extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Event Types</em>' attribute list.
-	 * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage#getPort_EventTypes()
+	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getPort_EventTypes()
 	 * @model required="true"
 	 * @generated
 	 */
 	EList<String> getEventTypes();
 
-} // IPort
+} // MIPort

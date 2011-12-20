@@ -23,7 +23,7 @@ import org.eclipse.emf.ecore.util.Switch;
  * until a non-null result is returned,
  * which is the result of the switch.
  * <!-- end-user-doc -->
- * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage
+ * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage
  * @generated
  */
 public class AnalysisMetaModelSwitch<T> extends Switch<T> {
@@ -33,7 +33,7 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected static IAnalysisMetaModelPackage modelPackage;
+	protected static MIAnalysisMetaModelPackage modelPackage;
 
 	/**
 	 * Creates an instance of the switch.
@@ -43,7 +43,7 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 */
 	public AnalysisMetaModelSwitch() {
 		if (modelPackage == null) {
-			modelPackage = IAnalysisMetaModelPackage.eINSTANCE;
+			modelPackage = MIAnalysisMetaModelPackage.eINSTANCE;
 		}
 	}
 
@@ -70,60 +70,60 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case IAnalysisMetaModelPackage.PROJECT: {
-				IProject project = (IProject)theEObject;
+			case MIAnalysisMetaModelPackage.PROJECT: {
+				MIProject project = (MIProject)theEObject;
 				T result = caseProject(project);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case IAnalysisMetaModelPackage.PLUGIN: {
-				IPlugin plugin = (IPlugin)theEObject;
+			case MIAnalysisMetaModelPackage.PLUGIN: {
+				MIPlugin plugin = (MIPlugin)theEObject;
 				T result = casePlugin(plugin);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case IAnalysisMetaModelPackage.PORT: {
-				IPort port = (IPort)theEObject;
+			case MIAnalysisMetaModelPackage.PORT: {
+				MIPort port = (MIPort)theEObject;
 				T result = casePort(port);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case IAnalysisMetaModelPackage.INPUT_PORT: {
-				IInputPort inputPort = (IInputPort)theEObject;
+			case MIAnalysisMetaModelPackage.INPUT_PORT: {
+				MIInputPort inputPort = (MIInputPort)theEObject;
 				T result = caseInputPort(inputPort);
 				if (result == null) result = casePort(inputPort);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case IAnalysisMetaModelPackage.OUTPUT_PORT: {
-				IOutputPort outputPort = (IOutputPort)theEObject;
+			case MIAnalysisMetaModelPackage.OUTPUT_PORT: {
+				MIOutputPort outputPort = (MIOutputPort)theEObject;
 				T result = caseOutputPort(outputPort);
 				if (result == null) result = casePort(outputPort);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case IAnalysisMetaModelPackage.PROPERTY: {
-				IProperty property = (IProperty)theEObject;
+			case MIAnalysisMetaModelPackage.PROPERTY: {
+				MIProperty property = (MIProperty)theEObject;
 				T result = caseProperty(property);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case IAnalysisMetaModelPackage.ANALYSIS_PLUGIN: {
-				IAnalysisPlugin analysisPlugin = (IAnalysisPlugin)theEObject;
+			case MIAnalysisMetaModelPackage.ANALYSIS_PLUGIN: {
+				MIAnalysisPlugin analysisPlugin = (MIAnalysisPlugin)theEObject;
 				T result = caseAnalysisPlugin(analysisPlugin);
 				if (result == null) result = casePlugin(analysisPlugin);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case IAnalysisMetaModelPackage.READER: {
-				IReader reader = (IReader)theEObject;
+			case MIAnalysisMetaModelPackage.READER: {
+				MIReader reader = (MIReader)theEObject;
 				T result = caseReader(reader);
 				if (result == null) result = casePlugin(reader);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case IAnalysisMetaModelPackage.REPOSITORY: {
-				IRepository repository = (IRepository)theEObject;
+			case MIAnalysisMetaModelPackage.REPOSITORY: {
+				MIRepository repository = (MIRepository)theEObject;
 				T result = caseRepository(repository);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -143,7 +143,7 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseProject(IProject object) {
+	public T caseProject(MIProject object) {
 		return null;
 	}
 
@@ -158,7 +158,7 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T casePlugin(IPlugin object) {
+	public T casePlugin(MIPlugin object) {
 		return null;
 	}
 
@@ -173,7 +173,7 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T casePort(IPort object) {
+	public T casePort(MIPort object) {
 		return null;
 	}
 
@@ -188,7 +188,7 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseInputPort(IInputPort object) {
+	public T caseInputPort(MIInputPort object) {
 		return null;
 	}
 
@@ -203,7 +203,7 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseOutputPort(IOutputPort object) {
+	public T caseOutputPort(MIOutputPort object) {
 		return null;
 	}
 
@@ -218,7 +218,7 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseProperty(IProperty object) {
+	public T caseProperty(MIProperty object) {
 		return null;
 	}
 
@@ -233,7 +233,7 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseAnalysisPlugin(IAnalysisPlugin object) {
+	public T caseAnalysisPlugin(MIAnalysisPlugin object) {
 		return null;
 	}
 
@@ -248,7 +248,7 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseReader(IReader object) {
+	public T caseReader(MIReader object) {
 		return null;
 	}
 
@@ -263,7 +263,7 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseRepository(IRepository object) {
+	public T caseRepository(MIRepository object) {
 		return null;
 	}
 

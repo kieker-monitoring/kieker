@@ -16,16 +16,16 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.IProperty#getName <em>Name</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.IProperty#getValue <em>Value</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.MIProperty#getName <em>Name</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.MIProperty#getValue <em>Value</em>}</li>
  * </ul>
  * </p>
  *
- * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage#getProperty()
+ * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getProperty()
  * @model
  * @generated
  */
-public interface IProperty extends EObject {
+public interface MIProperty extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -36,14 +36,14 @@ public interface IProperty extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
-	 * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage#getProperty_Name()
+	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getProperty_Name()
 	 * @model required="true"
 	 * @generated
 	 */
 	String getName();
 
 	/**
-	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.IProperty#getName <em>Name</em>}' attribute.
+	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIProperty#getName <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Name</em>' attribute.
@@ -62,14 +62,14 @@ public interface IProperty extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Value</em>' attribute.
 	 * @see #setValue(String)
-	 * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage#getProperty_Value()
+	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getProperty_Value()
 	 * @model required="true"
 	 * @generated
 	 */
 	String getValue();
 
 	/**
-	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.IProperty#getValue <em>Value</em>}' attribute.
+	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIProperty#getValue <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Value</em>' attribute.
@@ -78,4 +78,4 @@ public interface IProperty extends EObject {
 	 */
 	void setValue(String value);
 
-} // IProperty
+} // MIProperty

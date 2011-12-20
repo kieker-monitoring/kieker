@@ -13,9 +13,9 @@ package kieker.analysis.model.analysisMetaModel;
  * <!-- end-user-doc -->
  *
  *
- * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage#getReader()
+ * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getReader()
  * @model
  * @generated
  */
-public interface IReader extends IPlugin {
-} // IReader
+public interface MIReader extends MIPlugin {
+} // MIReader

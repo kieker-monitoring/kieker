@@ -6,8 +6,8 @@
  */
 package kieker.analysis.model.analysisMetaModel.impl;
 
-import kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage;
-import kieker.analysis.model.analysisMetaModel.IProperty;
+import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
+import kieker.analysis.model.analysisMetaModel.MIProperty;
 
 import org.eclipse.emf.common.notify.Notification;
 
@@ -23,14 +23,14 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.Property#getName <em>Name</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.Property#getValue <em>Value</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MProperty#getName <em>Name</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MProperty#getValue <em>Value</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class Property extends EObjectImpl implements IProperty {
+public class MProperty extends EObjectImpl implements MIProperty {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -76,7 +76,7 @@ public class Property extends EObjectImpl implements IProperty {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected Property() {
+	protected MProperty() {
 		super();
 	}
 
@@ -87,7 +87,7 @@ public class Property extends EObjectImpl implements IProperty {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return IAnalysisMetaModelPackage.Literals.PROPERTY;
+		return MIAnalysisMetaModelPackage.Literals.PROPERTY;
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class Property extends EObjectImpl implements IProperty {
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, IAnalysisMetaModelPackage.PROPERTY__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.PROPERTY__NAME, oldName, name));
 	}
 
 	/**
@@ -129,7 +129,7 @@ public class Property extends EObjectImpl implements IProperty {
 		String oldValue = value;
 		value = newValue;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, IAnalysisMetaModelPackage.PROPERTY__VALUE, oldValue, value));
+			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.PROPERTY__VALUE, oldValue, value));
 	}
 
 	/**
@@ -140,9 +140,9 @@ public class Property extends EObjectImpl implements IProperty {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PROPERTY__NAME:
+			case MIAnalysisMetaModelPackage.PROPERTY__NAME:
 				return getName();
-			case IAnalysisMetaModelPackage.PROPERTY__VALUE:
+			case MIAnalysisMetaModelPackage.PROPERTY__VALUE:
 				return getValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -156,10 +156,10 @@ public class Property extends EObjectImpl implements IProperty {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PROPERTY__NAME:
+			case MIAnalysisMetaModelPackage.PROPERTY__NAME:
 				setName((String)newValue);
 				return;
-			case IAnalysisMetaModelPackage.PROPERTY__VALUE:
+			case MIAnalysisMetaModelPackage.PROPERTY__VALUE:
 				setValue((String)newValue);
 				return;
 		}
@@ -174,10 +174,10 @@ public class Property extends EObjectImpl implements IProperty {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PROPERTY__NAME:
+			case MIAnalysisMetaModelPackage.PROPERTY__NAME:
 				setName(NAME_EDEFAULT);
 				return;
-			case IAnalysisMetaModelPackage.PROPERTY__VALUE:
+			case MIAnalysisMetaModelPackage.PROPERTY__VALUE:
 				setValue(VALUE_EDEFAULT);
 				return;
 		}
@@ -192,9 +192,9 @@ public class Property extends EObjectImpl implements IProperty {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PROPERTY__NAME:
+			case MIAnalysisMetaModelPackage.PROPERTY__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case IAnalysisMetaModelPackage.PROPERTY__VALUE:
+			case MIAnalysisMetaModelPackage.PROPERTY__VALUE:
 				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
 		}
 		return super.eIsSet(featureID);
@@ -218,4 +218,4 @@ public class Property extends EObjectImpl implements IProperty {
 		return result.toString();
 	}
 
-} //Property
+} //MProperty

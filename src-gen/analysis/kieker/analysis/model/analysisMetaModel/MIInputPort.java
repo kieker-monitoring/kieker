@@ -15,18 +15,18 @@ package kieker.analysis.model.analysisMetaModel;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.IInputPort#getParent <em>Parent</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.MIInputPort#getParent <em>Parent</em>}</li>
  * </ul>
  * </p>
  *
- * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage#getInputPort()
+ * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getInputPort()
  * @model
  * @generated
  */
-public interface IInputPort extends IPort {
+public interface MIInputPort extends MIPort {
 	/**
 	 * Returns the value of the '<em><b>Parent</b></em>' container reference.
-	 * It is bidirectional and its opposite is '{@link kieker.analysis.model.analysisMetaModel.IAnalysisPlugin#getInputPorts <em>Input Ports</em>}'.
+	 * It is bidirectional and its opposite is '{@link kieker.analysis.model.analysisMetaModel.MIAnalysisPlugin#getInputPorts <em>Input Ports</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Parent</em>' container reference isn't clear,
@@ -34,22 +34,22 @@ public interface IInputPort extends IPort {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Parent</em>' container reference.
-	 * @see #setParent(IAnalysisPlugin)
-	 * @see kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage#getInputPort_Parent()
-	 * @see kieker.analysis.model.analysisMetaModel.IAnalysisPlugin#getInputPorts
+	 * @see #setParent(MIAnalysisPlugin)
+	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getInputPort_Parent()
+	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisPlugin#getInputPorts
 	 * @model opposite="inputPorts" required="true" transient="false"
 	 * @generated
 	 */
-	IAnalysisPlugin getParent();
+	MIAnalysisPlugin getParent();
 
 	/**
-	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.IInputPort#getParent <em>Parent</em>}' container reference.
+	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIInputPort#getParent <em>Parent</em>}' container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Parent</em>' container reference.
 	 * @see #getParent()
 	 * @generated
 	 */
-	void setParent(IAnalysisPlugin value);
+	void setParent(MIAnalysisPlugin value);
 
-} // IInputPort
+} // MIInputPort

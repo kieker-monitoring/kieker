@@ -8,8 +8,8 @@ package kieker.analysis.model.analysisMetaModel.impl;
 
 import java.util.Collection;
 
-import kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage;
-import kieker.analysis.model.analysisMetaModel.IPort;
+import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
+import kieker.analysis.model.analysisMetaModel.MIPort;
 
 import org.eclipse.emf.common.notify.Notification;
 
@@ -29,14 +29,14 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.Port#getName <em>Name</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.Port#getEventTypes <em>Event Types</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MPort#getName <em>Name</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MPort#getEventTypes <em>Event Types</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public abstract class Port extends EObjectImpl implements IPort {
+public abstract class MPort extends EObjectImpl implements MIPort {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -72,7 +72,7 @@ public abstract class Port extends EObjectImpl implements IPort {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected Port() {
+	protected MPort() {
 		super();
 	}
 
@@ -83,7 +83,7 @@ public abstract class Port extends EObjectImpl implements IPort {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return IAnalysisMetaModelPackage.Literals.PORT;
+		return MIAnalysisMetaModelPackage.Literals.PORT;
 	}
 
 	/**
@@ -104,7 +104,7 @@ public abstract class Port extends EObjectImpl implements IPort {
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, IAnalysisMetaModelPackage.PORT__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.PORT__NAME, oldName, name));
 	}
 
 	/**
@@ -114,7 +114,7 @@ public abstract class Port extends EObjectImpl implements IPort {
 	 */
 	public EList<String> getEventTypes() {
 		if (eventTypes == null) {
-			eventTypes = new EDataTypeUniqueEList<String>(String.class, this, IAnalysisMetaModelPackage.PORT__EVENT_TYPES);
+			eventTypes = new EDataTypeUniqueEList<String>(String.class, this, MIAnalysisMetaModelPackage.PORT__EVENT_TYPES);
 		}
 		return eventTypes;
 	}
@@ -127,9 +127,9 @@ public abstract class Port extends EObjectImpl implements IPort {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PORT__NAME:
+			case MIAnalysisMetaModelPackage.PORT__NAME:
 				return getName();
-			case IAnalysisMetaModelPackage.PORT__EVENT_TYPES:
+			case MIAnalysisMetaModelPackage.PORT__EVENT_TYPES:
 				return getEventTypes();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -144,10 +144,10 @@ public abstract class Port extends EObjectImpl implements IPort {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PORT__NAME:
+			case MIAnalysisMetaModelPackage.PORT__NAME:
 				setName((String)newValue);
 				return;
-			case IAnalysisMetaModelPackage.PORT__EVENT_TYPES:
+			case MIAnalysisMetaModelPackage.PORT__EVENT_TYPES:
 				getEventTypes().clear();
 				getEventTypes().addAll((Collection<? extends String>)newValue);
 				return;
@@ -163,10 +163,10 @@ public abstract class Port extends EObjectImpl implements IPort {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PORT__NAME:
+			case MIAnalysisMetaModelPackage.PORT__NAME:
 				setName(NAME_EDEFAULT);
 				return;
-			case IAnalysisMetaModelPackage.PORT__EVENT_TYPES:
+			case MIAnalysisMetaModelPackage.PORT__EVENT_TYPES:
 				getEventTypes().clear();
 				return;
 		}
@@ -181,9 +181,9 @@ public abstract class Port extends EObjectImpl implements IPort {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.PORT__NAME:
+			case MIAnalysisMetaModelPackage.PORT__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case IAnalysisMetaModelPackage.PORT__EVENT_TYPES:
+			case MIAnalysisMetaModelPackage.PORT__EVENT_TYPES:
 				return eventTypes != null && !eventTypes.isEmpty();
 		}
 		return super.eIsSet(featureID);
@@ -207,4 +207,4 @@ public abstract class Port extends EObjectImpl implements IPort {
 		return result.toString();
 	}
 
-} //Port
+} //MPort

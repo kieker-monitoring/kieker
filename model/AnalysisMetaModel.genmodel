@@ -5,37 +5,32 @@
     editDirectory="/Kieker.edit/src-gen" editorDirectory="/Kieker.editor/src-gen"
     modelPluginID="Kieker" modelName="AnalysisMetaModel" updateClasspath="false" testsDirectory="/Kieker.tests/src-gen"
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0" copyrightFields="false"
-    interfaceNamePattern="I{0}" classNamePattern="{0}">
+    interfaceNamePattern="MI{0}" classNamePattern="M{0}">
   <foreignModel>AnalysisMetaModel.ecore</foreignModel>
   <genPackages prefix="AnalysisMetaModel" basePackage="kieker.analysis.model" disposableProviderFactory="true"
       ecorePackage="AnalysisMetaModel.ecore#/">
     <genClasses ecoreClass="AnalysisMetaModel.ecore#//Project">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//Project/configurables"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//Project/plugins"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AnalysisMetaModel.ecore#//Project/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//Project/repositories"/>
     </genClasses>
     <genClasses ecoreClass="AnalysisMetaModel.ecore#//Plugin">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//Plugin/outputPorts"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AnalysisMetaModel.ecore#//Plugin/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AnalysisMetaModel.ecore#//Plugin/classname"/>
-    </genClasses>
-    <genClasses ecoreClass="AnalysisMetaModel.ecore#//Connector">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//Connector/dstInputPort"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//Connector/sicOutputPort"/>
-    </genClasses>
-    <genClasses ecoreClass="AnalysisMetaModel.ecore#//Configurable">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AnalysisMetaModel.ecore#//Configurable/name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//Configurable/properties"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//Plugin/properties"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//Plugin/repositories"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//Plugin/outputPorts"/>
     </genClasses>
     <genClasses ecoreClass="AnalysisMetaModel.ecore#//Port">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//Port/eventTypes"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AnalysisMetaModel.ecore#//Port/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute AnalysisMetaModel.ecore#//Port/eventTypes"/>
     </genClasses>
     <genClasses ecoreClass="AnalysisMetaModel.ecore#//InputPort">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//InputPort/inConnector"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//InputPort/parent"/>
     </genClasses>
     <genClasses ecoreClass="AnalysisMetaModel.ecore#//OutputPort">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//OutputPort/outConnector"/>
-    </genClasses>
-    <genClasses ecoreClass="AnalysisMetaModel.ecore#//Class">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AnalysisMetaModel.ecore#//Class/classname"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//OutputPort/subscribers"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//OutputPort/parent"/>
     </genClasses>
     <genClasses ecoreClass="AnalysisMetaModel.ecore#//Property">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AnalysisMetaModel.ecore#//Property/name"/>
@@ -44,8 +39,10 @@
     <genClasses ecoreClass="AnalysisMetaModel.ecore#//AnalysisPlugin">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//AnalysisPlugin/inputPorts"/>
     </genClasses>
-    <genClasses ecoreClass="AnalysisMetaModel.ecore#//Reader">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AnalysisMetaModel.ecore#//Reader/initString"/>
+    <genClasses ecoreClass="AnalysisMetaModel.ecore#//Reader"/>
+    <genClasses ecoreClass="AnalysisMetaModel.ecore#//Repository">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//Repository/properties"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AnalysisMetaModel.ecore#//Repository/classname"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

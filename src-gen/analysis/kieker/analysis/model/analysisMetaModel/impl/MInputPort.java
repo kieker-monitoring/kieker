@@ -6,9 +6,9 @@
  */
 package kieker.analysis.model.analysisMetaModel.impl;
 
-import kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage;
-import kieker.analysis.model.analysisMetaModel.IAnalysisPlugin;
-import kieker.analysis.model.analysisMetaModel.IInputPort;
+import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
+import kieker.analysis.model.analysisMetaModel.MIAnalysisPlugin;
+import kieker.analysis.model.analysisMetaModel.MIInputPort;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -27,19 +27,19 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.InputPort#getParent <em>Parent</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MInputPort#getParent <em>Parent</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class InputPort extends Port implements IInputPort {
+public class MInputPort extends MPort implements MIInputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected InputPort() {
+	protected MInputPort() {
 		super();
 	}
 
@@ -50,7 +50,7 @@ public class InputPort extends Port implements IInputPort {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return IAnalysisMetaModelPackage.Literals.INPUT_PORT;
+		return MIAnalysisMetaModelPackage.Literals.INPUT_PORT;
 	}
 
 	/**
@@ -58,9 +58,9 @@ public class InputPort extends Port implements IInputPort {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public IAnalysisPlugin getParent() {
-		if (eContainerFeatureID() != IAnalysisMetaModelPackage.INPUT_PORT__PARENT) return null;
-		return (IAnalysisPlugin)eContainer();
+	public MIAnalysisPlugin getParent() {
+		if (eContainerFeatureID() != MIAnalysisMetaModelPackage.INPUT_PORT__PARENT) return null;
+		return (MIAnalysisPlugin)eContainer();
 	}
 
 	/**
@@ -68,8 +68,8 @@ public class InputPort extends Port implements IInputPort {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetParent(IAnalysisPlugin newParent, NotificationChain msgs) {
-		msgs = eBasicSetContainer((InternalEObject)newParent, IAnalysisMetaModelPackage.INPUT_PORT__PARENT, msgs);
+	public NotificationChain basicSetParent(MIAnalysisPlugin newParent, NotificationChain msgs) {
+		msgs = eBasicSetContainer((InternalEObject)newParent, MIAnalysisMetaModelPackage.INPUT_PORT__PARENT, msgs);
 		return msgs;
 	}
 
@@ -78,20 +78,20 @@ public class InputPort extends Port implements IInputPort {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setParent(IAnalysisPlugin newParent) {
-		if (newParent != eInternalContainer() || (eContainerFeatureID() != IAnalysisMetaModelPackage.INPUT_PORT__PARENT && newParent != null)) {
+	public void setParent(MIAnalysisPlugin newParent) {
+		if (newParent != eInternalContainer() || (eContainerFeatureID() != MIAnalysisMetaModelPackage.INPUT_PORT__PARENT && newParent != null)) {
 			if (EcoreUtil.isAncestor(this, newParent))
 				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
 			NotificationChain msgs = null;
 			if (eInternalContainer() != null)
 				msgs = eBasicRemoveFromContainer(msgs);
 			if (newParent != null)
-				msgs = ((InternalEObject)newParent).eInverseAdd(this, IAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS, IAnalysisPlugin.class, msgs);
+				msgs = ((InternalEObject)newParent).eInverseAdd(this, MIAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS, MIAnalysisPlugin.class, msgs);
 			msgs = basicSetParent(newParent, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, IAnalysisMetaModelPackage.INPUT_PORT__PARENT, newParent, newParent));
+			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.INPUT_PORT__PARENT, newParent, newParent));
 	}
 
 	/**
@@ -102,10 +102,10 @@ public class InputPort extends Port implements IInputPort {
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.INPUT_PORT__PARENT:
+			case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
 				if (eInternalContainer() != null)
 					msgs = eBasicRemoveFromContainer(msgs);
-				return basicSetParent((IAnalysisPlugin)otherEnd, msgs);
+				return basicSetParent((MIAnalysisPlugin)otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -118,7 +118,7 @@ public class InputPort extends Port implements IInputPort {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.INPUT_PORT__PARENT:
+			case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
 				return basicSetParent(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -132,8 +132,8 @@ public class InputPort extends Port implements IInputPort {
 	@Override
 	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
 		switch (eContainerFeatureID()) {
-			case IAnalysisMetaModelPackage.INPUT_PORT__PARENT:
-				return eInternalContainer().eInverseRemove(this, IAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS, IAnalysisPlugin.class, msgs);
+			case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
+				return eInternalContainer().eInverseRemove(this, MIAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS, MIAnalysisPlugin.class, msgs);
 		}
 		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
@@ -146,7 +146,7 @@ public class InputPort extends Port implements IInputPort {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.INPUT_PORT__PARENT:
+			case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
 				return getParent();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -160,8 +160,8 @@ public class InputPort extends Port implements IInputPort {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.INPUT_PORT__PARENT:
-				setParent((IAnalysisPlugin)newValue);
+			case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
+				setParent((MIAnalysisPlugin)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -175,8 +175,8 @@ public class InputPort extends Port implements IInputPort {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.INPUT_PORT__PARENT:
-				setParent((IAnalysisPlugin)null);
+			case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
+				setParent((MIAnalysisPlugin)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -190,10 +190,10 @@ public class InputPort extends Port implements IInputPort {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.INPUT_PORT__PARENT:
+			case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
 				return getParent() != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //InputPort
+} //MInputPort

@@ -8,9 +8,9 @@ package kieker.analysis.model.analysisMetaModel.impl;
 
 import java.util.Collection;
 
-import kieker.analysis.model.analysisMetaModel.IAnalysisMetaModelPackage;
-import kieker.analysis.model.analysisMetaModel.IProperty;
-import kieker.analysis.model.analysisMetaModel.IRepository;
+import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
+import kieker.analysis.model.analysisMetaModel.MIProperty;
+import kieker.analysis.model.analysisMetaModel.MIRepository;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -33,14 +33,14 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.Repository#getProperties <em>Properties</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.Repository#getClassname <em>Classname</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MRepository#getProperties <em>Properties</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MRepository#getClassname <em>Classname</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class Repository extends EObjectImpl implements IRepository {
+public class MRepository extends EObjectImpl implements MIRepository {
 	/**
 	 * The cached value of the '{@link #getProperties() <em>Properties</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -49,7 +49,7 @@ public class Repository extends EObjectImpl implements IRepository {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<IProperty> properties;
+	protected EList<MIProperty> properties;
 
 	/**
 	 * The default value of the '{@link #getClassname() <em>Classname</em>}' attribute.
@@ -76,7 +76,7 @@ public class Repository extends EObjectImpl implements IRepository {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected Repository() {
+	protected MRepository() {
 		super();
 	}
 
@@ -87,7 +87,7 @@ public class Repository extends EObjectImpl implements IRepository {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return IAnalysisMetaModelPackage.Literals.REPOSITORY;
+		return MIAnalysisMetaModelPackage.Literals.REPOSITORY;
 	}
 
 	/**
@@ -95,9 +95,9 @@ public class Repository extends EObjectImpl implements IRepository {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<IProperty> getProperties() {
+	public EList<MIProperty> getProperties() {
 		if (properties == null) {
-			properties = new EObjectContainmentEList<IProperty>(IProperty.class, this, IAnalysisMetaModelPackage.REPOSITORY__PROPERTIES);
+			properties = new EObjectContainmentEList<MIProperty>(MIProperty.class, this, MIAnalysisMetaModelPackage.REPOSITORY__PROPERTIES);
 		}
 		return properties;
 	}
@@ -120,7 +120,7 @@ public class Repository extends EObjectImpl implements IRepository {
 		String oldClassname = classname;
 		classname = newClassname;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, IAnalysisMetaModelPackage.REPOSITORY__CLASSNAME, oldClassname, classname));
+			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.REPOSITORY__CLASSNAME, oldClassname, classname));
 	}
 
 	/**
@@ -131,7 +131,7 @@ public class Repository extends EObjectImpl implements IRepository {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.REPOSITORY__PROPERTIES:
+			case MIAnalysisMetaModelPackage.REPOSITORY__PROPERTIES:
 				return ((InternalEList<?>)getProperties()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -145,9 +145,9 @@ public class Repository extends EObjectImpl implements IRepository {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.REPOSITORY__PROPERTIES:
+			case MIAnalysisMetaModelPackage.REPOSITORY__PROPERTIES:
 				return getProperties();
-			case IAnalysisMetaModelPackage.REPOSITORY__CLASSNAME:
+			case MIAnalysisMetaModelPackage.REPOSITORY__CLASSNAME:
 				return getClassname();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -162,11 +162,11 @@ public class Repository extends EObjectImpl implements IRepository {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.REPOSITORY__PROPERTIES:
+			case MIAnalysisMetaModelPackage.REPOSITORY__PROPERTIES:
 				getProperties().clear();
-				getProperties().addAll((Collection<? extends IProperty>)newValue);
+				getProperties().addAll((Collection<? extends MIProperty>)newValue);
 				return;
-			case IAnalysisMetaModelPackage.REPOSITORY__CLASSNAME:
+			case MIAnalysisMetaModelPackage.REPOSITORY__CLASSNAME:
 				setClassname((String)newValue);
 				return;
 		}
@@ -181,10 +181,10 @@ public class Repository extends EObjectImpl implements IRepository {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.REPOSITORY__PROPERTIES:
+			case MIAnalysisMetaModelPackage.REPOSITORY__PROPERTIES:
 				getProperties().clear();
 				return;
-			case IAnalysisMetaModelPackage.REPOSITORY__CLASSNAME:
+			case MIAnalysisMetaModelPackage.REPOSITORY__CLASSNAME:
 				setClassname(CLASSNAME_EDEFAULT);
 				return;
 		}
@@ -199,9 +199,9 @@ public class Repository extends EObjectImpl implements IRepository {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case IAnalysisMetaModelPackage.REPOSITORY__PROPERTIES:
+			case MIAnalysisMetaModelPackage.REPOSITORY__PROPERTIES:
 				return properties != null && !properties.isEmpty();
-			case IAnalysisMetaModelPackage.REPOSITORY__CLASSNAME:
+			case MIAnalysisMetaModelPackage.REPOSITORY__CLASSNAME:
 				return CLASSNAME_EDEFAULT == null ? classname != null : !CLASSNAME_EDEFAULT.equals(classname);
 		}
 		return super.eIsSet(featureID);
@@ -223,4 +223,4 @@ public class Repository extends EObjectImpl implements IRepository {
 		return result.toString();
 	}
 
-} //Repository
+} //MRepository
