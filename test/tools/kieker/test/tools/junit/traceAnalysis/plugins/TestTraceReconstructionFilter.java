@@ -24,10 +24,11 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.analysis.plugin.port.AbstractInputPort;
+import kieker.analysis.plugin.AbstractPlugin;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
+import kieker.test.tools.junit.traceAnalysis.util.SimpleSinkPlugin;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceReconstructionFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
@@ -105,10 +106,6 @@ public class TestTraceReconstructionFilter extends TestCase {
 	 */
 	@Test
 	public void testValidBookstoreTracePassed() {
-		final AtomicReference<Boolean> receivedTheValidExecutionTrace = new AtomicReference<Boolean>(Boolean.FALSE);
-		final AtomicReference<Boolean> receivedTheValidMessageTrace = new AtomicReference<Boolean>(Boolean.FALSE);
-		final AtomicReference<Boolean> receivedAnInvalidExecutionTrace = new AtomicReference<Boolean>(Boolean.FALSE);
-
 		/*
 		 * These are the trace representations we want to be reconstructed by
 		 * the filter
@@ -130,48 +127,27 @@ public class TestTraceReconstructionFilter extends TestCase {
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout",
 				validExecutionTrace.getDurationInNanos() <= filter.getMaxTraceDurationNanos());
 
+		final SimpleSinkPlugin executionTraceSinkPlugin = new SimpleSinkPlugin();
+		final SimpleSinkPlugin messageTraceSinkPlugin = new SimpleSinkPlugin();
+		final SimpleSinkPlugin invalidExecutionTraceSinkPlugin = new SimpleSinkPlugin();
 		/*
 		 * Register a handler for reconstructed (valid) execution traces.
 		 * This handler MUST receive exactly this trace (and no other).
 		 */
-		filter.getExecutionTraceOutputPort().subscribe(new AbstractInputPort("Execution traces", null) {
 
-			@Override
-			public void newEvent(final Object event) {
-				if (event.equals(validExecutionTrace)) {
-					receivedTheValidExecutionTrace.set(Boolean.TRUE);
-				}
-				Assert.assertEquals("Unexpected execution trace", validExecutionTrace, event);
-			}
-		});
-
+		AbstractPlugin.connect(filter, TraceReconstructionFilter.EXECUTION_TRACE_OUTPUT_PORT_NAME, executionTraceSinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 		/*
 		 * Register a handler for reconstructed (valid) message traces.
 		 * This handler MUST receive exactly this trace (and no other).
 		 */
-		filter.getMessageTraceOutputPort().subscribe(new AbstractInputPort("Message traces", null) {
-
-			@Override
-			public void newEvent(final Object event) {
-				if (event.equals(validMessageTrace)) {
-					receivedTheValidMessageTrace.set(Boolean.TRUE);
-				}
-				Assert.assertEquals("Unexpected message trace", validMessageTrace, event);
-			}
-		});
+		AbstractPlugin.connect(filter, TraceReconstructionFilter.MESSAGE_TRACE_OUTPUT_PORT_NAME, messageTraceSinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
 		/*
 		 * Register a handler for invalid execution traces.
 		 * This handler MUST not be invoked.
 		 */
-		filter.getInvalidExecutionTraceOutputPort().subscribe(new AbstractInputPort("Invalid execution trace", null) {
-
-			@Override
-			public void newEvent(final Object event) {
-				receivedAnInvalidExecutionTrace.set(Boolean.TRUE);
-				Assert.fail("Received an invalid execution trace" + event);
-			}
-		});
+		AbstractPlugin.connect(filter, TraceReconstructionFilter.INVALID_EXECUTION_TRACE_OUTPUT_PORT_NAME, invalidExecutionTraceSinkPlugin,
+				SimpleSinkPlugin.INPUT_PORT_NAME);
 
 		if (!filter.execute()) {
 			Assert.fail("Execution of filter failed");
@@ -182,21 +158,28 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Pass executions of the trace to be reconstructed.
 		 */
 		for (final Execution curExec : validExecutionTrace.getTraceAsSortedExecutionSet()) {
-			filter.getExecutionInputPort().newEvent(curExec);
+			filter.newExecution(curExec);
 		}
 
 		filter.terminate(false);
 
 		/* Analyse result of test case execution */
-		if (!receivedTheValidExecutionTrace.get()) {
+		if (executionTraceSinkPlugin.getList().isEmpty()) {
 			Assert.fail("Execution trace didn't pass the filter");
+		} else {
+			Assert.assertEquals("Unexpected execution trace", validExecutionTrace, executionTraceSinkPlugin.getList().get(0));
 		}
-		if (!receivedTheValidMessageTrace.get()) {
+
+		if (messageTraceSinkPlugin.getList().isEmpty()) {
 			Assert.fail("Message trace didn't pass the filter");
+		} else {
+			Assert.assertEquals("Unexpected message trace", validMessageTrace, messageTraceSinkPlugin.getList().get(0));
 		}
-		if (receivedAnInvalidExecutionTrace.get()) {
+
+		if (!invalidExecutionTraceSinkPlugin.getList().isEmpty()) {
 			Assert.fail("Received invalid trace from filter");
 		}
+
 	}
 
 	/**
@@ -234,10 +217,6 @@ public class TestTraceReconstructionFilter extends TestCase {
 	 */
 	@Test
 	public void testBrokenBookstoreTracePassed() {
-		final AtomicReference<Boolean> receivedValidExecutionTrace = new AtomicReference<Boolean>(Boolean.FALSE);
-		final AtomicReference<Boolean> receivedValidMessageTrace = new AtomicReference<Boolean>(Boolean.FALSE);
-		final AtomicReference<Boolean> receivedTheInvalidExecutionTrace = new AtomicReference<Boolean>(Boolean.FALSE);
-
 		/*
 		 * These are the trace representations we want to be reconstructed by
 		 * the filter
@@ -257,46 +236,28 @@ public class TestTraceReconstructionFilter extends TestCase {
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout",
 				invalidExecutionTrace.getDurationInNanos() <= filter.getMaxTraceDurationNanos());
 
+		final SimpleSinkPlugin executionTraceSinkPlugin = new SimpleSinkPlugin();
+		final SimpleSinkPlugin messageTraceSinkPlugin = new SimpleSinkPlugin();
+		final SimpleSinkPlugin invalidExecutionTraceSinkPlugin = new SimpleSinkPlugin();
+
 		/*
 		 * Register a handler for reconstructed (valid) execution traces.
 		 * This handler MUST not be invoked.
 		 */
-		filter.getExecutionTraceOutputPort().subscribe(new AbstractInputPort("Execution traces", null) {
 
-			@Override
-			public void newEvent(final Object event) {
-				receivedValidExecutionTrace.set(Boolean.TRUE);
-				Assert.fail("Received a valid execution trace" + event);
-			}
-		});
-
+		AbstractPlugin.connect(filter, TraceReconstructionFilter.EXECUTION_TRACE_OUTPUT_PORT_NAME, executionTraceSinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 		/*
 		 * Register a handler for reconstructed (valid) message traces.
 		 * This handler MUST not be invoked.
 		 */
-		filter.getMessageTraceOutputPort().subscribe(new AbstractInputPort("Message traces", null) {
-
-			@Override
-			public void newEvent(final Object event) {
-				receivedValidMessageTrace.set(Boolean.TRUE);
-				Assert.fail("Received a valid message trace" + event);
-			}
-		});
+		AbstractPlugin.connect(filter, TraceReconstructionFilter.MESSAGE_TRACE_OUTPUT_PORT_NAME, messageTraceSinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
 		/*
 		 * Register a handler for invalid execution traces.
 		 * This handler MUST receive exactly this trace (and no other).
 		 */
-		filter.getInvalidExecutionTraceOutputPort().subscribe(new AbstractInputPort("Invalid execution trace", null) {
-
-			@Override
-			public void newEvent(final Object event) {
-				if (((InvalidExecutionTrace) event).getInvalidExecutionTraceArtifacts().equals(invalidExecutionTrace)) {
-					receivedTheInvalidExecutionTrace.set(Boolean.TRUE);
-				}
-				Assert.assertEquals("Unexpected invalid execution trace", invalidExecutionTrace, ((InvalidExecutionTrace) event).getInvalidExecutionTraceArtifacts());
-			}
-		});
+		AbstractPlugin.connect(filter, TraceReconstructionFilter.INVALID_EXECUTION_TRACE_OUTPUT_PORT_NAME, invalidExecutionTraceSinkPlugin,
+				SimpleSinkPlugin.INPUT_PORT_NAME);
 
 		if (!filter.execute()) {
 			Assert.fail("Execution of filter failed");
@@ -307,21 +268,27 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Pass executions of the trace to be reconstructed.
 		 */
 		for (final Execution curExec : invalidExecutionTrace.getTraceAsSortedExecutionSet()) {
-			filter.getExecutionInputPort().newEvent(curExec);
+			filter.newExecution(curExec);
 		}
 
 		TestTraceReconstructionFilter.LOG.info("This test triggers a FATAL warning about an ess skip <0,3> which can simply be ignored because it is desired");
 		filter.terminate(false);
 
 		/* Analyse result of test case execution */
-		if (receivedValidExecutionTrace.get()) {
+		/* Analyse result of test case execution */
+		if (!executionTraceSinkPlugin.getList().isEmpty()) {
 			Assert.fail("A valid execution trace passed the filter");
 		}
-		if (receivedValidMessageTrace.get()) {
+
+		if (!messageTraceSinkPlugin.getList().isEmpty()) {
 			Assert.fail("A message trace passed the filter");
 		}
-		if (!receivedTheInvalidExecutionTrace.get()) {
+
+		if (invalidExecutionTraceSinkPlugin.getList().isEmpty()) {
 			Assert.fail("Invalid trace didn't pass the filter");
+		} else {
+			Assert.assertEquals("Unexpected invalid execution trace", invalidExecutionTrace,
+					((InvalidExecutionTrace) invalidExecutionTraceSinkPlugin.getList().get(0)).getInvalidExecutionTraceArtifacts());
 		}
 	}
 
