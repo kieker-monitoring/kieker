@@ -22,9 +22,9 @@ package kieker.analysis.plugin;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import kieker.analysis.plugin.port.AInputPort;
-import kieker.analysis.plugin.port.AOutputPort;
-import kieker.analysis.plugin.port.APlugin;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
 import kieker.common.configuration.Configuration;
 
 /**
@@ -33,8 +33,8 @@ import kieker.common.configuration.Configuration;
  * 
  * @author Jan Waller
  */
-@APlugin(outputPorts = {
-	@AOutputPort(name = SilentCountingRecordConsumer.OUTPUT_PORT_NAME, eventTypes = {}, description = "Default output port")
+@Plugin(outputPorts = {
+	@OutputPort(name = SilentCountingRecordConsumer.OUTPUT_PORT_NAME, eventTypes = {}, description = "Default output port")
 })
 public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
 
@@ -50,7 +50,7 @@ public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
 		super(configuration);
 	}
 
-	@AInputPort(eventTypes = {}, description = "Default input port")
+	@InputPort(eventTypes = {}, description = "Default input port")
 	public final void newEvent(final Object event) {
 		SilentCountingRecordConsumer.this.counter.incrementAndGet();
 		super.deliver(SilentCountingRecordConsumer.OUTPUT_PORT_NAME, event);

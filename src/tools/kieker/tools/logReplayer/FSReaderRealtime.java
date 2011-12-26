@@ -27,9 +27,9 @@ import java.util.concurrent.CountDownLatch;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.port.AInputPort;
-import kieker.analysis.plugin.port.AOutputPort;
-import kieker.analysis.plugin.port.APlugin;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
@@ -40,8 +40,8 @@ import kieker.common.record.IMonitoringRecord;
 /**
  * @author Andre van Hoorn
  */
-@APlugin(outputPorts = {
-	@AOutputPort(name = FSReaderRealtime.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReaderRealtime")
+@Plugin(outputPorts = {
+	@OutputPort(name = FSReaderRealtime.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReaderRealtime")
 })
 public class FSReaderRealtime extends AbstractReaderPlugin {
 
@@ -197,8 +197,8 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 	 * constructors and method-implementations in order to be used as an outer
 	 * class.
 	 */
-	@APlugin(
-			outputPorts = { @AOutputPort(name = FSReaderRealtimeCons.OUTPUT_PORT_NAME, description = "Output port", eventTypes = { IMonitoringRecord.class })
+	@Plugin(
+			outputPorts = { @OutputPort(name = FSReaderRealtimeCons.OUTPUT_PORT_NAME, description = "Output port", eventTypes = { IMonitoringRecord.class })
 			})
 	private static class FSReaderRealtimeCons extends AbstractAnalysisPlugin {
 
@@ -217,7 +217,7 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		 * @param data
 		 */
 		@SuppressWarnings("unused")
-		@AInputPort(eventTypes = { IMonitoringRecord.class })
+		@InputPort(eventTypes = { IMonitoringRecord.class })
 		public void newMonitoringRecord(final Object data) {
 			final IMonitoringRecord record = (IMonitoringRecord) data;
 			if (!this.master.deliver(FSReaderRealtime.OUTPUT_PORT_NAME, record)) {

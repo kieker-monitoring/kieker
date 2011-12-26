@@ -35,7 +35,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface AInputPort {
+public @interface InputPort {
 
 	/**
 	 * The human-readable description of this port.
@@ -45,7 +45,7 @@ public @interface AInputPort {
 	String description() default "Input Port";
 
 	/**
-	 * The event types which are used for this port. If this is empty, everything can be send through the port.
+	 * The event types which are used for this port. If this is empty, everything can be received through the port.
 	 * 
 	 * @return The event types for this class.
 	 */

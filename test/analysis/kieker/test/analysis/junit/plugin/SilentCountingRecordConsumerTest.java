@@ -3,8 +3,8 @@ package kieker.test.analysis.junit.plugin;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.SilentCountingRecordConsumer;
-import kieker.analysis.plugin.port.AOutputPort;
-import kieker.analysis.plugin.port.APlugin;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
 import kieker.common.configuration.Configuration;
 
 import org.junit.Assert;
@@ -92,9 +92,9 @@ public class SilentCountingRecordConsumerTest {
 		Assert.assertEquals(3, consumer.getMessageCount());
 	}
 
-	@APlugin(
+	@Plugin(
 			outputPorts = {
-				@AOutputPort(name = SourceClass.OUTPUT_PORT_NAME, eventTypes = {})
+				@OutputPort(name = SourceClass.OUTPUT_PORT_NAME, eventTypes = {})
 			})
 	static class SourceClass extends AbstractAnalysisPlugin {
 

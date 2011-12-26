@@ -24,9 +24,9 @@ import java.util.Iterator;
 import java.util.Set;
 
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.port.AInputPort;
-import kieker.analysis.plugin.port.AOutputPort;
-import kieker.analysis.plugin.port.APlugin;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 
@@ -38,9 +38,9 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * 
  * @author Andre van Hoorn
  */
-@APlugin(
+@Plugin(
 		outputPorts = {
-			@AOutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME, description = "Execution output", eventTypes = { Execution.class })
+			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME, description = "Execution output", eventTypes = { Execution.class })
 		})
 public class TraceIdFilter extends AbstractAnalysisPlugin {
 
@@ -66,7 +66,7 @@ public class TraceIdFilter extends AbstractAnalysisPlugin {
 		this.selectedTraces = selectedTraces;
 	}
 
-	@AInputPort(description = "Execution input", eventTypes = { Execution.class })
+	@InputPort(description = "Execution input", eventTypes = { Execution.class })
 	public void newExecution(final Object data) {
 		final Execution execution = (Execution) data;
 		if ((this.selectedTraces != null) && !this.selectedTraces.contains(execution.getTraceId())) {

@@ -1,15 +1,15 @@
 package kieker.test.tools.junit.traceAnalysis.util;
 
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.port.AOutputPort;
-import kieker.analysis.plugin.port.APlugin;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
 import kieker.common.configuration.Configuration;
 
 import org.junit.Assert;
 
-@APlugin(
+@Plugin(
 		outputPorts = {
-			@AOutputPort(name = SimpleSourcePlugin.OUTPUT_PORT_NAME, eventTypes = {})
+			@OutputPort(name = SimpleSourcePlugin.OUTPUT_PORT_NAME, eventTypes = {})
 		})
 public class SimpleSourcePlugin extends AbstractAnalysisPlugin {
 

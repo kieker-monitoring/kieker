@@ -30,7 +30,7 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.port.AInputPort;
+import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.reader.namedRecordPipe.PipeReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
@@ -113,7 +113,7 @@ class MonitoringSinkClass extends AbstractAnalysisPlugin {
 		return null;
 	}
 
-	@AInputPort(eventTypes = { IMonitoringRecord.class })
+	@InputPort(eventTypes = { IMonitoringRecord.class })
 	public void doJob(final Object data) {
 		this.receivedRecords.add((IMonitoringRecord) data);
 	}

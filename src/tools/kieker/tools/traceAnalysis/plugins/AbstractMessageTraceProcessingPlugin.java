@@ -20,7 +20,7 @@
 
 package kieker.tools.traceAnalysis.plugins;
 
-import kieker.analysis.plugin.port.AInputPort;
+import kieker.analysis.plugin.port.InputPort;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
@@ -36,7 +36,7 @@ public abstract class AbstractMessageTraceProcessingPlugin extends AbstractTrace
 		super(name, systemEntityFactory);
 	}
 
-	@AInputPort(description = "Message traces", eventTypes = { MessageTrace.class })
+	@InputPort(description = "Message traces", eventTypes = { MessageTrace.class })
 	public abstract void msgTraceInput(final Object obj);
 
 }

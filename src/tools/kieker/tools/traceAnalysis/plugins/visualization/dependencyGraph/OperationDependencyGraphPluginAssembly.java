@@ -29,7 +29,7 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import kieker.analysis.plugin.port.AInputPort;
+import kieker.analysis.plugin.port.InputPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -197,7 +197,7 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 	}
 
 	@Override
-	@AInputPort(description = "Message traces", eventTypes = { MessageTrace.class })
+	@InputPort(description = "Message traces", eventTypes = { MessageTrace.class })
 	public void msgTraceInput(final Object obj) {
 		final MessageTrace t = (MessageTrace) obj;
 		for (final AbstractMessage m : t.getSequenceAsVector()) {

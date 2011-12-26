@@ -9,6 +9,7 @@ package kieker.analysis.model.analysisMetaModel.impl;
 import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelFactory;
 import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
 import kieker.analysis.model.analysisMetaModel.MIAnalysisPlugin;
+import kieker.analysis.model.analysisMetaModel.MIDependency;
 import kieker.analysis.model.analysisMetaModel.MIInputPort;
 import kieker.analysis.model.analysisMetaModel.MIOutputPort;
 import kieker.analysis.model.analysisMetaModel.MIPlugin;
@@ -94,6 +95,13 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	 * @generated
 	 */
 	private EClass repositoryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass dependencyEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -190,6 +198,15 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	 */
 	public EReference getProject_Repositories() {
 		return (EReference)projectEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getProject_Dependencies() {
+		return (EReference)projectEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -404,6 +421,24 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getDependency() {
+		return dependencyEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getDependency_FilePath() {
+		return (EAttribute)dependencyEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public MIAnalysisMetaModelFactory getAnalysisMetaModelFactory() {
 		return (MIAnalysisMetaModelFactory)getEFactoryInstance();
 	}
@@ -431,6 +466,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 		createEReference(projectEClass, PROJECT__PLUGINS);
 		createEAttribute(projectEClass, PROJECT__NAME);
 		createEReference(projectEClass, PROJECT__REPOSITORIES);
+		createEReference(projectEClass, PROJECT__DEPENDENCIES);
 
 		pluginEClass = createEClass(PLUGIN);
 		createEAttribute(pluginEClass, PLUGIN__NAME);
@@ -462,6 +498,9 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 		repositoryEClass = createEClass(REPOSITORY);
 		createEReference(repositoryEClass, REPOSITORY__PROPERTIES);
 		createEAttribute(repositoryEClass, REPOSITORY__CLASSNAME);
+
+		dependencyEClass = createEClass(DEPENDENCY);
+		createEAttribute(dependencyEClass, DEPENDENCY__FILE_PATH);
 	}
 
 	/**
@@ -502,6 +541,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 		initEReference(getProject_Plugins(), this.getPlugin(), null, "plugins", null, 0, -1, MIProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getProject_Name(), ecorePackage.getEString(), "name", null, 1, 1, MIProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getProject_Repositories(), this.getRepository(), null, "repositories", null, 0, -1, MIProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getProject_Dependencies(), this.getDependency(), null, "dependencies", null, 0, -1, MIProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(pluginEClass, MIPlugin.class, "Plugin", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPlugin_Name(), ecorePackage.getEString(), "name", null, 1, 1, MIPlugin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -533,6 +573,9 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 		initEClass(repositoryEClass, MIRepository.class, "Repository", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRepository_Properties(), this.getProperty(), null, "properties", null, 0, -1, MIRepository.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRepository_Classname(), ecorePackage.getEString(), "classname", null, 1, 1, MIRepository.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(dependencyEClass, MIDependency.class, "Dependency", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getDependency_FilePath(), ecorePackage.getEString(), "filePath", null, 1, 1, MIDependency.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

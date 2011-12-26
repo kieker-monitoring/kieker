@@ -22,8 +22,8 @@ package kieker.tools.logReplayer;
 
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.port.AOutputPort;
-import kieker.analysis.plugin.port.APlugin;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -35,8 +35,8 @@ import kieker.common.record.IMonitoringRecord;
  * @author Robert von Massow
  * 
  */
-@APlugin(outputPorts = {
-	@AOutputPort(name = RealtimeReplayWorker.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
+@Plugin(outputPorts = {
+	@OutputPort(name = RealtimeReplayWorker.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
 })
 public class RealtimeReplayWorker extends AbstractAnalysisPlugin implements Runnable {
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";

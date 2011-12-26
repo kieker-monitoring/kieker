@@ -21,9 +21,9 @@
 package kieker.tools.traceAnalysis.plugins.executionFilter;
 
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.port.AInputPort;
-import kieker.analysis.plugin.port.AOutputPort;
-import kieker.analysis.plugin.port.APlugin;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 
@@ -36,9 +36,9 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * 
  * @author Andre van Hoorn
  */
-@APlugin(
+@Plugin(
 		outputPorts = {
-			@AOutputPort(name = TimestampFilter.OUTPUT_PORT_NAME, description = "Execution output", eventTypes = { Execution.class })
+			@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME, description = "Execution output", eventTypes = { Execution.class })
 		})
 public class TimestampFilter extends AbstractAnalysisPlugin {
 
@@ -83,7 +83,7 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 		this.ignoreExecutionsAfterTimestamp = ignoreExecutionsAfterTimestamp;
 	}
 
-	@AInputPort(description = "Execution input", eventTypes = { Execution.class })
+	@InputPort(description = "Execution input", eventTypes = { Execution.class })
 	public void newExecution(final Object data) {
 		final Execution execution = (Execution) data;
 		if ((execution.getTin() < this.ignoreExecutionsBeforeTimestamp) || (execution.getTout() > this.ignoreExecutionsAfterTimestamp)) {

@@ -22,9 +22,9 @@ package kieker.tools.traceAnalysis.plugins.executionRecordTransformation;
 
 import java.util.StringTokenizer;
 
-import kieker.analysis.plugin.port.AInputPort;
-import kieker.analysis.plugin.port.AOutputPort;
-import kieker.analysis.plugin.port.APlugin;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -48,9 +48,9 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn
  */
-@APlugin(
+@Plugin(
 		outputPorts = {
-			@AOutputPort(name = ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME, description = "Execution output stream", eventTypes = { Execution.class })
+			@OutputPort(name = ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME, description = "Execution output stream", eventTypes = { Execution.class })
 		})
 public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPlugin {
 
@@ -88,7 +88,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 		return new Signature(name, returnType, paramTypeList);
 	}
 
-	@AInputPort(description = "Input", eventTypes = { IMonitoringRecord.class })
+	@InputPort(description = "Input", eventTypes = { IMonitoringRecord.class })
 	public boolean newMonitoringRecord(final Object data) {
 		final IMonitoringRecord record = (IMonitoringRecord) data;
 		if (!(record instanceof OperationExecutionRecord)) {

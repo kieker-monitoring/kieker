@@ -21,8 +21,8 @@
 package kieker.tools.currentTimeEventGenerator;
 
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.port.AOutputPort;
-import kieker.analysis.plugin.port.APlugin;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -49,8 +49,8 @@ import kieker.common.logging.LogFactory;
  * @author Andre van Hoorn
  * 
  */
-@APlugin(outputPorts =
-		@AOutputPort(name = CurrentTimeEventGenerator.CURRENT_TIME_OUTPUT_PORT_NAME, eventTypes = { TimestampEvent.class }, description = "Provides current time events"))
+@Plugin(outputPorts =
+		@OutputPort(name = CurrentTimeEventGenerator.CURRENT_TIME_OUTPUT_PORT_NAME, eventTypes = { TimestampEvent.class }, description = "Provides current time events"))
 public class CurrentTimeEventGenerator extends AbstractPlugin {
 
 	public static final String CURRENT_TIME_OUTPUT_PORT_NAME = "currentTimeOutputPort";

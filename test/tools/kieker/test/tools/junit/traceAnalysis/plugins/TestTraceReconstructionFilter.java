@@ -20,8 +20,6 @@
 
 package kieker.test.tools.junit.traceAnalysis.plugins;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.plugin.AbstractPlugin;
@@ -320,12 +318,6 @@ public class TestTraceReconstructionFilter extends TestCase {
 	 */
 	@Test
 	public void testIncompleteTraceDueToTimeout() {
-
-		final AtomicReference<Boolean> receivedTheValidTriggerExecutionTrace = new AtomicReference<Boolean>(Boolean.FALSE);
-		final AtomicReference<Boolean> receivedTheValidTriggerMessageTrace = new AtomicReference<Boolean>(Boolean.FALSE);
-		final AtomicReference<Boolean> receivedTheIncompleteExecutionTraceArtifact = new AtomicReference<Boolean>(Boolean.FALSE);
-		final AtomicReference<Boolean> receivedTheCompletingExecutionTraceArtifact = new AtomicReference<Boolean>(Boolean.FALSE);
-
 		/*
 		 * This trace is incomplete.
 		 */
@@ -379,6 +371,10 @@ public class TestTraceReconstructionFilter extends TestCase {
 		final TraceReconstructionFilter filter = new TraceReconstructionFilter("TraceReconstructionFilter", this.systemEntityFactory,
 				((triggerExecutionTrace.getMaxTout() - incompleteExecutionTrace.getMinTin()) / (1000 * 1000)) - 1, true); // NOCS
 
+		final SimpleSinkPlugin executionTraceSink = new SimpleSinkPlugin();
+		final SimpleSinkPlugin messageTraceSink = new SimpleSinkPlugin();
+		final SimpleSinkPlugin invalidExecutionTraceSink = new SimpleSinkPlugin();
+
 		Assert.assertTrue("Test invalid: NOT (tout of trigger trace - tin of incomplete > filter max. duration)\n" + "triggerExecutionTrace.getMaxTout()"
 				+ triggerExecutionTrace.getMaxTout() + "\n" + "incompleteExecutionTrace.getMinTin()" + incompleteExecutionTrace.getMinTin() + "\n"
 				+ "filter.getMaxTraceDurationNanos()" + filter.getMaxTraceDurationNanos(),
@@ -388,55 +384,23 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Register a handler for reconstructed (valid) execution traces.
 		 * This handler MUST not be invoked.
 		 */
-		filter.getExecutionTraceOutputPort().subscribe(new AbstractInputPort("Execution traces", null) {
-
-			@Override
-			public void newEvent(final Object event) {
-				if (event.equals(triggerExecutionTrace)) {
-					receivedTheValidTriggerExecutionTrace.set(Boolean.TRUE);
-				} else {
-					// TODO: for consistency reasons we would need to set an additional flag here
-					// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/147
-					Assert.fail("Received an unexpected valid execution trace " + event);
-				}
-			}
-		});
+		AbstractPlugin.connect(filter, TraceReconstructionFilter.EXECUTION_TRACE_OUTPUT_PORT_NAME, executionTraceSink, SimpleSinkPlugin.INPUT_PORT_NAME);
+		Assert.assertTrue(executionTraceSink.getList().isEmpty());
 
 		/*
 		 * Register a handler for reconstructed (valid) message traces.
 		 * This handler MUST not be invoked.
 		 */
-		filter.getMessageTraceOutputPort().subscribe(new AbstractInputPort("Message traces", null) {
-
-			@Override
-			public void newEvent(final Object event) {
-				if (event.equals(triggerMessageTrace)) {
-					receivedTheValidTriggerMessageTrace.set(Boolean.TRUE);
-				} else {
-					// TODO: for consistency reasons we would need to set an additional flag here
-					// http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/148
-					Assert.fail("Received an unexpected message trace " + event);
-				}
-			}
-		});
+		AbstractPlugin.connect(filter, TraceReconstructionFilter.MESSAGE_TRACE_OUTPUT_PORT_NAME, messageTraceSink, SimpleSinkPlugin.INPUT_PORT_NAME);
+		Assert.assertTrue(messageTraceSink.getList().isEmpty());
 
 		/*
 		 * Register a handler for invalid execution traces.
 		 * This handler MUST receive exactly this trace (and no other).
 		 */
-		filter.getInvalidExecutionTraceOutputPort().subscribe(new AbstractInputPort("Invalid execution trace", null) {
-
-			@Override
-			public void newEvent(final Object event) {
-				if (((InvalidExecutionTrace) event).getInvalidExecutionTraceArtifacts().equals(incompleteExecutionTrace)) {
-					receivedTheIncompleteExecutionTraceArtifact.set(Boolean.TRUE);
-				} else if (((InvalidExecutionTrace) event).getInvalidExecutionTraceArtifacts().equals(completingExecutionTrace)) {
-					receivedTheCompletingExecutionTraceArtifact.set(Boolean.TRUE);
-				} else {
-					Assert.fail("Received an unexpected invalid execution trace: " + event);
-				}
-			}
-		});
+		AbstractPlugin.connect(filter, TraceReconstructionFilter.INVALID_EXECUTION_TRACE_OUTPUT_PORT_NAME, invalidExecutionTraceSink,
+				SimpleSinkPlugin.INPUT_PORT_NAME);
+		Assert.assertTrue(invalidExecutionTraceSink.getList().isEmpty());
 
 		if (!filter.execute()) {
 			Assert.fail("Execution of filter failed");
@@ -447,13 +411,13 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Pass the executions of the incomplete trace intended to time out
 		 */
 		for (final Execution curExec : incompleteExecutionTrace.getTraceAsSortedExecutionSet()) {
-			filter.getExecutionInputPort().newEvent(curExec);
+			filter.newExecution(curExec);
 		}
 
 		/**
 		 * Pass the timeout "trigger execution"
 		 */
-		filter.getExecutionInputPort().newEvent(exec0_0__bookstore_searchBook__trigger);
+		filter.newExecution(exec0_0__bookstore_searchBook__trigger);
 
 		/**
 		 * Now, will pass the execution that would make the incomplete trace
@@ -461,7 +425,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * to be timeout already. Thus, the completing execution trace should
 		 * appear as a single incomplete execution trace.
 		 */
-		filter.getExecutionInputPort().newEvent(this.exec0_0__bookstore_searchBook);
+		filter.newExecution(this.exec0_0__bookstore_searchBook);
 
 		/**
 		 * Terminate the filter
@@ -469,17 +433,24 @@ public class TestTraceReconstructionFilter extends TestCase {
 		filter.terminate(false); // no error
 
 		/* Analyse result of test case execution */
-		if (!receivedTheValidTriggerExecutionTrace.get()) {
-			Assert.fail("Valid execution trace didn't pass the filter");
-		}
-		if (!receivedTheValidTriggerMessageTrace.get()) {
-			Assert.fail("Message trace didn't pass the filter");
-		}
-		if (!receivedTheIncompleteExecutionTraceArtifact.get()) {
-			Assert.fail("Incomplete trace didn't pass the filter");
-		}
-		if (!receivedTheCompletingExecutionTraceArtifact.get()) {
-			Assert.fail("Completing trace didn't pass the filter");
+		Assert.assertFalse("Valid execution trace didn't pass the filter", executionTraceSink.getList().isEmpty());
+		Assert.assertEquals("Received an unexpected valid execution trace " + executionTraceSink.getList().get(0), triggerExecutionTrace, executionTraceSink
+				.getList().get(0));
+
+		Assert.assertFalse("Message trace didn't pass the filter", messageTraceSink.getList().isEmpty());
+		Assert.assertEquals("Received an unexpected message trace " + messageTraceSink.getList().get(0), triggerMessageTrace, messageTraceSink
+				.getList().get(0));
+
+		Assert.assertEquals("An incomplete or complete trace didn't pass the filter", 2, invalidExecutionTraceSink.getList().size());
+		for (int i = 0; i < 2; i++) {
+			final InvalidExecutionTrace event = (InvalidExecutionTrace) invalidExecutionTraceSink.getList().get(i);
+			if (event.getInvalidExecutionTraceArtifacts().equals(incompleteExecutionTrace)) {
+				// Nothing to do
+			} else if (event.getInvalidExecutionTraceArtifacts().equals(completingExecutionTrace)) {
+				// Nothing to do
+			} else {
+				Assert.fail("Received an unexpected invalid execution trace: " + event);
+			}
 		}
 	}
 }

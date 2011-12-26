@@ -24,7 +24,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import kieker.analysis.plugin.port.AInputPort;
+import kieker.analysis.plugin.port.InputPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -79,7 +79,7 @@ public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessing
 		return ExecutionTraceWriterPlugin.EXECUTION_TRACES_INPUT_PORT_NAME;
 	}
 
-	@AInputPort(description = "Execution traces", eventTypes = { ExecutionTrace.class })
+	@InputPort(description = "Execution traces", eventTypes = { ExecutionTrace.class })
 	public void newEvent(final Object obj) {
 		final ExecutionTrace et = (ExecutionTrace) obj;
 		try {

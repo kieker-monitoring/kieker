@@ -26,9 +26,9 @@ import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.exception.MonitoringRecordConsumerException;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.port.AInputPort;
-import kieker.analysis.plugin.port.AOutputPort;
-import kieker.analysis.plugin.port.APlugin;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -50,8 +50,8 @@ import kieker.monitoring.timer.ITimeSource;
  * @author Robert von Massow
  * 
  */
-@APlugin(outputPorts = {
-	@AOutputPort(name = RealtimeReplayDistributor.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
+@Plugin(outputPorts = {
+	@OutputPort(name = RealtimeReplayDistributor.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
 })
 public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
@@ -75,7 +75,7 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 	private final int maxQueueSize;
 	private final CountDownLatch terminationLatch;
 
-	@AInputPort(eventTypes = { IMonitoringRecord.class })
+	@InputPort(eventTypes = { IMonitoringRecord.class })
 	public void newEvent(final Object event) {
 		this.newMonitoringRecord((IMonitoringRecord) event);
 

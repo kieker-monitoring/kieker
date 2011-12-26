@@ -26,8 +26,8 @@ import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.Set;
 
-import kieker.analysis.plugin.port.AOutputPort;
-import kieker.analysis.plugin.port.APlugin;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.MonitoringRecordException;
@@ -44,8 +44,8 @@ import kieker.common.record.IMonitoringRecordReceiver;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-@APlugin(outputPorts = {
-	@AOutputPort(name = FSReader.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader")
+@Plugin(outputPorts = {
+	@OutputPort(name = FSReader.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader")
 })
 public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 

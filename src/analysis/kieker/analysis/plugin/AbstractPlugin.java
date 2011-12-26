@@ -29,9 +29,9 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import kieker.analysis.plugin.port.AInputPort;
-import kieker.analysis.plugin.port.AOutputPort;
-import kieker.analysis.plugin.port.APlugin;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.reader.IMonitoringReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -42,7 +42,7 @@ import kieker.common.logging.LogFactory;
  * 
  * @author Nils Christian Ehmke
  */
-@APlugin(outputPorts = {})
+@Plugin(outputPorts = {})
 public abstract class AbstractPlugin {
 
 	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
@@ -51,8 +51,8 @@ public abstract class AbstractPlugin {
 
 	protected final Configuration configuration;
 	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<Pair<AbstractPlugin, Method>>> registeredMethods;
-	private final HashMap<String, AOutputPort> outputPorts;
-	private final HashMap<String, AInputPort> inputPorts;
+	private final HashMap<String, OutputPort> outputPorts;
+	private final HashMap<String, InputPort> inputPorts;
 
 	/**
 	 * Each Plugin requires a constructor with a single Configuration object!
@@ -72,16 +72,16 @@ public abstract class AbstractPlugin {
 		/* KEEP IN MIND: Although we use "this" in the following code, it points to the actual class. Not to AbstractPlugin!! */
 
 		/* Get all output ports. */
-		this.outputPorts = new HashMap<String, AOutputPort>();
-		final APlugin annotation = this.getClass().getAnnotation(APlugin.class);
-		for (final AOutputPort outputPort : annotation.outputPorts()) {
+		this.outputPorts = new HashMap<String, OutputPort>();
+		final Plugin annotation = this.getClass().getAnnotation(Plugin.class);
+		for (final OutputPort outputPort : annotation.outputPorts()) {
 			this.outputPorts.put(outputPort.name(), outputPort);
 		}
 		/* Get all input ports. */
-		this.inputPorts = new HashMap<String, AInputPort>();
+		this.inputPorts = new HashMap<String, InputPort>();
 		final Method allMethods[] = this.getClass().getMethods();
 		for (final Method method : allMethods) {
-			final AInputPort inputPort = method.getAnnotation(AInputPort.class);
+			final InputPort inputPort = method.getAnnotation(InputPort.class);
 			if (inputPort != null) {
 				this.inputPorts.put(method.getName(), inputPort);
 			}
@@ -89,7 +89,7 @@ public abstract class AbstractPlugin {
 
 		/* Now create a linked queue for every output port of the class, to store the registered methods. */
 		this.registeredMethods = new ConcurrentHashMap<String, ConcurrentLinkedQueue<Pair<AbstractPlugin, Method>>>();
-		for (final AOutputPort outputPort : annotation.outputPorts()) {
+		for (final OutputPort outputPort : annotation.outputPorts()) {
 			this.registeredMethods.put(outputPort.name(), new ConcurrentLinkedQueue<Pair<AbstractPlugin, Method>>());
 		}
 	}
@@ -140,7 +140,7 @@ public abstract class AbstractPlugin {
 	 */
 	protected final boolean deliver(final String outputPortName, final Object data) {
 		/* First step: Get the output port. */
-		final AOutputPort outputPort = this.outputPorts.get(outputPortName);
+		final OutputPort outputPort = this.outputPorts.get(outputPortName);
 		if (outputPort == null) {
 			return false;
 		}
@@ -169,7 +169,7 @@ public abstract class AbstractPlugin {
 	}
 
 	/**
-	 * This method connects two plugins.
+	 * This method checks whether two plugins can be connected.
 	 * 
 	 * @param src
 	 *            The source plugin.
@@ -182,15 +182,15 @@ public abstract class AbstractPlugin {
 	 * @return true if and only if both given plugins are valid, the output and input ports exist and if they are compatible. Furthermore the destination plugin must
 	 *         not be a reader.
 	 */
-	public static final boolean connect(final AbstractPlugin src, final String output, final AbstractPlugin dst, final String input) {
+	public static final boolean isConnectionAllowed(final AbstractPlugin src, final String output, final AbstractPlugin dst, final String input) {
 		/* First step: Check whether the plugins are valid. */
 		if ((src == null) || (dst == null) || (dst instanceof IMonitoringReader)) {
 			return false;
 		}
 
 		/* Second step: Check whether the ports exist. */
-		final AOutputPort outputPort = src.outputPorts.get(output);
-		final AInputPort inputPort = dst.inputPorts.get(input);
+		final OutputPort outputPort = src.outputPorts.get(output);
+		final InputPort inputPort = dst.inputPorts.get(input);
 		if ((outputPort == null) || (inputPort == null)) {
 			return false;
 		}
@@ -218,6 +218,29 @@ public abstract class AbstractPlugin {
 			}
 		}
 
+		/* Seems like the connection is okay. */
+		return true;
+	}
+
+	/**
+	 * This method connects two plugins.
+	 * 
+	 * @param src
+	 *            The source plugin.
+	 * @param output
+	 *            The output port of the source plugin.
+	 * @param dst
+	 *            The destination plugin.
+	 * @param input
+	 *            The input port of the destination port.
+	 * @return true if and only if both given plugins are valid, the output and input ports exist and if they are compatible. Furthermore the destination plugin must
+	 *         not be a reader.
+	 */
+	public static final boolean connect(final AbstractPlugin src, final String output, final AbstractPlugin dst, final String input) {
+		if (!AbstractPlugin.isConnectionAllowed(src, output, dst, input)) {
+			return false;
+		}
+
 		/* Connect the ports. */
 		try {
 			final Method method = dst.getClass().getMethod(input, Object.class);
@@ -233,8 +256,8 @@ public abstract class AbstractPlugin {
 
 	public final String[] getAllOutputPortNames() {
 		final List<String> outputNames = new ArrayList<String>();
-		final APlugin annotation = this.getClass().getAnnotation(APlugin.class);
-		for (final AOutputPort outputPort : annotation.outputPorts()) {
+		final Plugin annotation = this.getClass().getAnnotation(Plugin.class);
+		for (final OutputPort outputPort : annotation.outputPorts()) {
 			outputNames.add(outputPort.name());
 		}
 		return outputNames.toArray(new String[0]);
@@ -244,7 +267,7 @@ public abstract class AbstractPlugin {
 		final List<String> inputNames = new ArrayList<String>();
 		final Method allMethods[] = this.getClass().getMethods();
 		for (final Method method : allMethods) {
-			final AInputPort inputPort = method.getAnnotation(AInputPort.class);
+			final InputPort inputPort = method.getAnnotation(InputPort.class);
 			if (inputPort != null) {
 				inputNames.add(method.getName());
 			}
@@ -262,7 +285,7 @@ public abstract class AbstractPlugin {
 	 */
 	public final List<Pair<AbstractPlugin, String>> getConnectedPlugins(final String outputPortName) {
 		/* Make sure that the output port exists */
-		final AOutputPort outputPort = this.outputPorts.get(outputPortName);
+		final OutputPort outputPort = this.outputPorts.get(outputPortName);
 		if (outputPort == null) {
 			return null;
 		}

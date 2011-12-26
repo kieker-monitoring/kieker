@@ -23,7 +23,7 @@ package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 import java.io.File;
 import java.io.IOException;
 
-import kieker.analysis.plugin.port.AInputPort;
+import kieker.analysis.plugin.port.InputPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -106,7 +106,7 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 	}
 
 	@Override
-	@AInputPort(description = "Message traces", eventTypes = { MessageTrace.class })
+	@InputPort(description = "Message traces", eventTypes = { MessageTrace.class })
 	public void msgTraceInput(final Object obj) {
 		final MessageTrace t = (MessageTrace) obj;
 		try {

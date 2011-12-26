@@ -97,13 +97,22 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int PROJECT__REPOSITORIES = 2;
 
 	/**
+	 * The feature id for the '<em><b>Dependencies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROJECT__DEPENDENCIES = 3;
+
+	/**
 	 * The number of structural features of the '<em>Project</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROJECT_FEATURE_COUNT = 3;
+	int PROJECT_FEATURE_COUNT = 4;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MPlugin <em>Plugin</em>}' class.
@@ -520,6 +529,35 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDependency <em>Dependency</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MDependency
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getDependency()
+	 * @generated
+	 */
+	int DEPENDENCY = 9;
+
+	/**
+	 * The feature id for the '<em><b>File Path</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPENDENCY__FILE_PATH = 0;
+
+	/**
+	 * The number of structural features of the '<em>Dependency</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPENDENCY_FEATURE_COUNT = 1;
+
+
+	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIProject <em>Project</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -561,6 +599,17 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getProject_Repositories();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIProject#getDependencies <em>Dependencies</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Dependencies</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIProject#getDependencies()
+	 * @see #getProject()
+	 * @generated
+	 */
+	EReference getProject_Dependencies();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIPlugin <em>Plugin</em>}'.
@@ -808,6 +857,27 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	EAttribute getRepository_Classname();
 
 	/**
+	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIDependency <em>Dependency</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Dependency</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIDependency
+	 * @generated
+	 */
+	EClass getDependency();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIDependency#getFilePath <em>File Path</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>File Path</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIDependency#getFilePath()
+	 * @see #getDependency()
+	 * @generated
+	 */
+	EAttribute getDependency_FilePath();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -862,6 +932,14 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PROJECT__REPOSITORIES = eINSTANCE.getProject_Repositories();
+
+		/**
+		 * The meta object literal for the '<em><b>Dependencies</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PROJECT__DEPENDENCIES = eINSTANCE.getProject_Dependencies();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MPlugin <em>Plugin</em>}' class.
@@ -1062,6 +1140,24 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute REPOSITORY__CLASSNAME = eINSTANCE.getRepository_Classname();
+
+		/**
+		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDependency <em>Dependency</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MDependency
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getDependency()
+		 * @generated
+		 */
+		EClass DEPENDENCY = eINSTANCE.getDependency();
+
+		/**
+		 * The meta object literal for the '<em><b>File Path</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DEPENDENCY__FILE_PATH = eINSTANCE.getDependency_FilePath();
 
 	}
 

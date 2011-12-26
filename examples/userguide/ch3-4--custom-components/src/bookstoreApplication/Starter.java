@@ -21,6 +21,8 @@
 package bookstoreApplication;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.reader.filesystem.FSReader;
 
 public class Starter {
 
@@ -50,7 +52,8 @@ public class Starter {
 		analyisController.setReader(reader);
 		analyisController.registerPlugin(consumer);
 
-		reader.getDefaultOutputPort().subscribe(consumer.getDefaultInputPort());
+		AbstractPlugin.connect(reader, MyPipeReader.OUTPUT_PORT_NAME, consumer, MyResponseTimeConsumer.INPUT_PORT_NAME);
+
 		analyisController.run();
 	}
 }

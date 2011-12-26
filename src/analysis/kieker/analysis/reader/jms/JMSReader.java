@@ -39,8 +39,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 
-import kieker.analysis.plugin.port.AOutputPort;
-import kieker.analysis.plugin.port.APlugin;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -53,8 +53,8 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @author Andre van Hoorn, Matthias Rohr
  */
-@APlugin(outputPorts = {
-	@AOutputPort(name = JMSReader.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMSReader")
+@Plugin(outputPorts = {
+	@OutputPort(name = JMSReader.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMSReader")
 })
 public final class JMSReader extends AbstractReaderPlugin {
 

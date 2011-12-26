@@ -22,7 +22,6 @@ package kieker.test.tools.junit.traceAnalysis.plugins;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
@@ -65,13 +64,16 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase { //
 		/*
 		 * Register a handler for equivalence class representatives.
 		 */
-		filter.getExecutionTraceOutputPort().subscribe(new AbstractInputPort("Execution traces", null) {
-
-			@Override
-			public void newEvent(final Object event) {
-				throw new UnsupportedOperationException("Not supported yet.");
-			}
-		});
+		// TODO: Implement the handler for equivalence class representatives.
+		/*
+		 * filter.getExecutionTraceOutputPort().subscribe(new AbstractInputPort("Execution traces", null) {
+		 * 
+		 * @Override
+		 * public void newEvent(final Object event) {
+		 * throw new UnsupportedOperationException("Not supported yet.");
+		 * }
+		 * });
+		 */
 	}
 
 	private ExecutionTrace genValidBookstoreTrace(final long traceId, final long offset) throws InvalidTraceException {

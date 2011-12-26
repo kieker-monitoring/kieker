@@ -24,9 +24,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 
-import kieker.analysis.plugin.port.AInputPort;
-import kieker.analysis.plugin.port.AOutputPort;
-import kieker.analysis.plugin.port.APlugin;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 
@@ -36,8 +36,8 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @author Matthias Rohr, Jan Waller
  */
-@APlugin(outputPorts = {
-	@AOutputPort(
+@Plugin(outputPorts = {
+	@OutputPort(
 			name = DummyRecordConsumer.OUTPUT_PORT_NAME,
 			description = "Output port",
 			eventTypes = { IMonitoringRecord.class })
@@ -79,7 +79,7 @@ public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
 		return defaultConfiguration;
 	}
 
-	@AInputPort(
+	@InputPort(
 			description = "Input port",
 			eventTypes = { IMonitoringRecord.class })
 	public final void newMonitoringRecord(final Object monitoringRecord) {

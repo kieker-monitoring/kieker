@@ -23,7 +23,7 @@ package bookstoreApplication;
 import java.util.Properties;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.Configuration;
+import kieker.common.configuration.Configuration;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
 public class MyPipeWriter extends AbstractMonitoringWriter {
@@ -49,10 +49,10 @@ public class MyPipeWriter extends AbstractMonitoringWriter {
 	}
 
 	@Override
-	protected Properties getDefaultProperties() {
-		final Properties properties = new Properties(super.getDefaultProperties());
-		properties.setProperty(MyPipeWriter.PROPERTY_PIPE_NAME, "myPipeName");
-		return properties;
+	protected Configuration getDefaultConfiguration() {
+		final Configuration configuration = new Configuration(super.getDefaultConfiguration());
+		configuration.setProperty(MyPipeWriter.PROPERTY_PIPE_NAME, "myPipeName");
+		return configuration;
 	}
 	
 	@Override

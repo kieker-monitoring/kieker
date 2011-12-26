@@ -23,9 +23,9 @@ package kieker.tools.logReplayer;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.port.AInputPort;
-import kieker.analysis.plugin.port.AOutputPort;
-import kieker.analysis.plugin.port.APlugin;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.reader.IMonitoringReader;
 import kieker.analysis.reader.jms.JMSReader;
 import kieker.common.configuration.Configuration;
@@ -118,8 +118,8 @@ public class JMSLogReplayer {
  * @author Andre van Hoorn
  * 
  */
-@APlugin(
-		outputPorts = { @AOutputPort(name = RecordDelegationPlugin2.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
+@Plugin(
+		outputPorts = { @OutputPort(name = RecordDelegationPlugin2.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
 		})
 class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 
@@ -147,7 +147,7 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 	 * @param data
 	 */
 	@SuppressWarnings("unused")
-	@AInputPort(eventTypes = { IMonitoringRecord.class })
+	@InputPort(eventTypes = { IMonitoringRecord.class })
 	public boolean newMonitoringRecord(final Object data) {
 		final IMonitoringRecord record = (IMonitoringRecord) data;
 		return super.deliver(RecordDelegationPlugin2.OUTPUT_PORT_NAME, data);

@@ -25,17 +25,13 @@ import java.util.Collections;
 import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.configuration.Configuration;
+import kieker.common.configuration.Configuration;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.ISingleInputPort;
-import kieker.analysis.plugin.port.AbstractInputPort;
 import kieker.analysis.plugin.port.InputPort;
 
-public class MyResponseTimeConsumer extends AbstractAnalysisPlugin implements ISingleInputPort {
+public class MyResponseTimeConsumer extends AbstractAnalysisPlugin {
 
-	private static final Collection<Class<?>> IN_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { MyResponseTimeRecord.class }));
-	private final AbstractInputPort input = new InputPort("in", MyResponseTimeConsumer.IN_CLASSES, this);
+	public static final String INPUT_PORT_NAME = "newEvent";
 
 	public MyResponseTimeConsumer(final Configuration configuration) {
 		super(configuration);
@@ -45,7 +41,7 @@ public class MyResponseTimeConsumer extends AbstractAnalysisPlugin implements IS
 		super(new Configuration(null));
 	}
 
-	@Override
+	@InputPort(eventTypes = { MyResponseTimeRecord.class })
 	public void newEvent(final Object event) {
 		if (event instanceof MyResponseTimeRecord) {
 			/* Write the content to the standard output stream. */
@@ -54,10 +50,6 @@ public class MyResponseTimeConsumer extends AbstractAnalysisPlugin implements IS
 					+ ": " + myRecord.className + ", " + myRecord.methodName
 					+ ", " + myRecord.responseTimeNanos);
 		}
-	}
-
-	public AbstractInputPort getDefaultInputPort() {
-		return this.input;
 	}
 
 	@Override
@@ -69,8 +61,8 @@ public class MyResponseTimeConsumer extends AbstractAnalysisPlugin implements IS
 	public void terminate(final boolean error) {}
 
 	@Override
-	protected Properties getDefaultProperties() {
-		return new Properties();
+	protected Configuration getDefaultConfiguration() {
+		return new Configuration();
 	}
 
 	@Override

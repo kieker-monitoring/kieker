@@ -25,28 +25,24 @@ import java.util.Collections;
 import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.configuration.Configuration;
+import kieker.common.configuration.Configuration;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.ISingleInputPort;
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
 
-public class Consumer extends AbstractAnalysisPlugin implements ISingleInputPort {
+public class Consumer extends AbstractAnalysisPlugin {
 
 	private final long maxResponseTime;
-	private final InputPort inputPort = new InputPort("input", Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { IMonitoringRecord.class })), this);
+	public static final String INPUT_PORT_NAME = "newEvent";
 
 	public Consumer(final long maxResponseTime) {
 		super(new Configuration(null));
 		this.maxResponseTime = maxResponseTime;
-
-		super.registerInputPort("input", inputPort);
 	}
 
-	@Override
+	@InputPort(eventTypes = { IMonitoringRecord.class })
 	public void newEvent(final Object event) {
 		if (!(event instanceof OperationExecutionRecord)) {
 			return;
@@ -74,15 +70,11 @@ public class Consumer extends AbstractAnalysisPlugin implements ISingleInputPort
 	@Override
 	public void terminate(final boolean error) {}
 
-	public InputPort getInputPort() {
-		return inputPort;
-	}
-
-	public Properties getDefaultProperties() {
-		return new Properties();
+	public Configuration getDefaultConfiguration() {
+		return new Configuration();
 	}
 
 	public Configuration getCurrentConfiguration() {
-		return new Configuration(null);
+		return new Configuration();
 	}
 }

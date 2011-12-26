@@ -7,9 +7,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.port.AInputPort;
-import kieker.analysis.plugin.port.AOutputPort;
-import kieker.analysis.plugin.port.APlugin;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.OperationExecutionRecord;
@@ -78,9 +78,9 @@ public class GeneralPluginTest {
 	}
 }
 
-@APlugin(
+@Plugin(
 		outputPorts = {
-			@AOutputPort(name = SourceClass.OUTPUT_PORT_NAME, eventTypes = { OperationExecutionRecord.class })
+			@OutputPort(name = SourceClass.OUTPUT_PORT_NAME, eventTypes = { OperationExecutionRecord.class })
 		})
 class SourceClass extends AbstractReaderPlugin {
 
@@ -142,7 +142,7 @@ class ExecutionSinkClass extends AbstractAnalysisPlugin {
 		return null;
 	}
 
-	@AInputPort(eventTypes = { Execution.class })
+	@InputPort(eventTypes = { Execution.class })
 	public void doJob(final Object data) {
 		this.lst.add((Execution) data);
 	}

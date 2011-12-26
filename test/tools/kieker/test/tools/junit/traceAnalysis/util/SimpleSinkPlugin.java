@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.port.AInputPort;
+import kieker.analysis.plugin.port.InputPort;
 import kieker.common.configuration.Configuration;
 
 public class SimpleSinkPlugin extends AbstractAnalysisPlugin {
@@ -16,7 +16,7 @@ public class SimpleSinkPlugin extends AbstractAnalysisPlugin {
 		super(new Configuration());
 	}
 
-	@AInputPort()
+	@InputPort()
 	public void input(final Object data) {
 		this.list.add(data);
 	}

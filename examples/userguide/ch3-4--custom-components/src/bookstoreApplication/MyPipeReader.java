@@ -25,25 +25,25 @@ import java.util.Collections;
 import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.configuration.Configuration;
+import kieker.common.configuration.Configuration;
 import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.reader.AbstractReaderPlugin;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+@Plugin(outputPorts = {
+	@OutputPort(eventTypes = { MyResponseTimeRecord.class }, name = MyPipeReader.OUTPUT_PORT_NAME)
+})
 public class MyPipeReader extends AbstractReaderPlugin {
 
+	public static final String OUTPUT_PORT_NAME = "outputPort";
 	private static final Log log = LogFactory.getLog(MyPipeReader.class);
 
 	private static final String PROPERTY_PIPE_NAME = MyPipeReader.class + ".pipeName";
 	private final String pipeName;
 	private volatile MyPipe pipe;
-
-	private static final Collection<Class<?>> OUT_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { MyResponseTimeRecord.class }));
-
-	private final OutputPort outputPort = new OutputPort("output", MyPipeReader.OUT_CLASSES);
 
 	public MyPipeReader() {
 		super(new Configuration(null));
@@ -89,7 +89,7 @@ public class MyPipeReader extends AbstractReaderPlugin {
 				record.initFromArray(data.getRecordData());
 				record.setLoggingTimestamp(data.getLoggingTimestamp());
 				/* ...and delegate the task of delivering to the super class. */
-				this.outputPort.deliver(record);
+				super.deliver(OUTPUT_PORT_NAME, record);
 			}
 		} catch (final InterruptedException e) {
 			return false; // signal error
@@ -111,16 +111,12 @@ public class MyPipeReader extends AbstractReaderPlugin {
 		return configuration;
 	}
 
-	public OutputPort getDefaultOutputPort() {
-		return this.outputPort;
-	}
-
 	@Override
-	protected Properties getDefaultProperties() {
-		final Properties defaultProperties = new Properties();
+	protected Configuration getDefaultConfiguration() {
+		final Configuration defaultConfiguration = new Configuration();
 
-		defaultProperties.setProperty(MyPipeReader.PROPERTY_PIPE_NAME, "kieker-pipe");
+		defaultConfiguration.setProperty(MyPipeReader.PROPERTY_PIPE_NAME, "kieker-pipe");
 
-		return defaultProperties;
+		return defaultConfiguration;
 	}
 }

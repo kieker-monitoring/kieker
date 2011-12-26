@@ -25,7 +25,7 @@ import java.util.Arrays;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.port.AInputPort;
+import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
@@ -165,7 +165,7 @@ class RecordDelegationPlugin extends AbstractAnalysisPlugin {
 		this.ignoreRecordsAfterTimestamp = ignoreRecordsAfterTimestamp;
 	}
 
-	@AInputPort(eventTypes = { IMonitoringRecord.class }, description = RecordDelegationPlugin.INPUT_PORT_NAME)
+	@InputPort(eventTypes = { IMonitoringRecord.class }, description = RecordDelegationPlugin.INPUT_PORT_NAME)
 	public void newMonitoringRecord(final Object data) {
 		final IMonitoringRecord record = (IMonitoringRecord) data;
 		if ((record.getLoggingTimestamp() >= this.ignoreRecordsBeforeTimestamp) && (record.getLoggingTimestamp() <= this.ignoreRecordsAfterTimestamp)) {

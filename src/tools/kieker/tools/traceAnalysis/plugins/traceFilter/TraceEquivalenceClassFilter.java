@@ -25,9 +25,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import kieker.analysis.plugin.port.AInputPort;
-import kieker.analysis.plugin.port.AOutputPort;
-import kieker.analysis.plugin.port.APlugin;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -44,12 +44,12 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn
  */
-@APlugin(outputPorts = {
-	@AOutputPort(
+@Plugin(outputPorts = {
+	@OutputPort(
 			name = TraceEquivalenceClassFilter.MSG_TRACES_OUTPUT_PORT_NAME,
 			description = "Message Traces",
 			eventTypes = { MessageTrace.class }),
-	@AOutputPort(
+	@OutputPort(
 			name = TraceEquivalenceClassFilter.EXECUTION_TRACES_OUTPUT_PORT_NAME,
 			description = "Execution Traces",
 			eventTypes = { ExecutionTrace.class })
@@ -78,7 +78,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 		/* Register all ports. */
 	}
 
-	@AInputPort(description = "Execution traces", eventTypes = { ExecutionTrace.class })
+	@InputPort(description = "Execution traces", eventTypes = { ExecutionTrace.class })
 	public void newExecutionTrace(final Object data) {
 		final ExecutionTrace et = (ExecutionTrace) data;
 		try {

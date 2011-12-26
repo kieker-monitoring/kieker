@@ -24,7 +24,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import kieker.analysis.plugin.port.AInputPort;
+import kieker.analysis.plugin.port.InputPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -78,7 +78,7 @@ public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionT
 		return InvalidExecutionTraceWriterPlugin.INVALID_EXECUTION_TRACES_INPUT_PORT_NAME;
 	}
 
-	@AInputPort(description = "Invalid Execution traces", eventTypes = { InvalidExecutionTrace.class })
+	@InputPort(description = "Invalid Execution traces", eventTypes = { InvalidExecutionTrace.class })
 	public void newEvent(final Object obj) {
 		final InvalidExecutionTrace et = (InvalidExecutionTrace) obj;
 		try {

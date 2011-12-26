@@ -33,7 +33,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.ANNOTATION_TYPE)
-public @interface AOutputPort {
+public @interface OutputPort {
 
 	/**
 	 * The human-readable description of this port.
@@ -50,7 +50,7 @@ public @interface AOutputPort {
 	String name();
 
 	/**
-	 * The event types which are used for this port. If this is empty, everything can be send through the port.
+	 * The event types which are used for this port. If this is empty, everything can be sent through the port.
 	 * 
 	 * @return The event types for this class.
 	 */

@@ -27,7 +27,7 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.port.AInputPort;
+import kieker.analysis.plugin.port.InputPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.currentTimeEventGenerator.CurrentTimeEventGenerator;
 import kieker.tools.currentTimeEventGenerator.TimestampEvent;
@@ -152,7 +152,7 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 			return null;
 		}
 
-		@AInputPort(eventTypes = { TimestampEvent.class })
+		@InputPort(eventTypes = { TimestampEvent.class })
 		public void doJob(final Object data) {
 			this.receivedTimestamps.add(((TimestampEvent) data).getTimestamp());
 		}

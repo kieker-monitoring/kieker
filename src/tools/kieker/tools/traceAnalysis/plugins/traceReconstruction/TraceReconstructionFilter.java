@@ -27,9 +27,9 @@ import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
 
-import kieker.analysis.plugin.port.AInputPort;
-import kieker.analysis.plugin.port.AOutputPort;
-import kieker.analysis.plugin.port.APlugin;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -45,16 +45,16 @@ import kieker.tools.util.LoggingTimestampConverter;
 /**
  * @author Andre van Hoorn
  */
-@APlugin(outputPorts = {
-	@AOutputPort(
+@Plugin(outputPorts = {
+	@OutputPort(
 			name = TraceReconstructionFilter.MESSAGE_TRACE_OUTPUT_PORT_NAME,
 			description = "Reconstructed Message Traces",
 			eventTypes = { MessageTrace.class }),
-	@AOutputPort(
+	@OutputPort(
 			name = TraceReconstructionFilter.EXECUTION_TRACE_OUTPUT_PORT_NAME,
 			description = "Reconstructed Execution Traces",
 			eventTypes = { ExecutionTrace.class }),
-	@AOutputPort(
+	@OutputPort(
 			name = TraceReconstructionFilter.INVALID_EXECUTION_TRACE_OUTPUT_PORT_NAME,
 			description = "Invalid Execution Traces",
 			eventTypes = { InvalidExecutionTrace.class })
@@ -151,7 +151,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 		return true; // no need to do anything here
 	}
 
-	@AInputPort(description = "The input port", eventTypes = { Execution.class })
+	@InputPort(description = "The input port", eventTypes = { Execution.class })
 	public void newExecution(final Object data) {
 		final Execution execution = (Execution) data;
 		final long traceId = execution.getTraceId();

@@ -14,13 +14,13 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Inherited
-public @interface APlugin {
+public @interface Plugin {
 
 	/**
 	 * The output ports which the current plugin has.
 	 * 
 	 * @return The output ports of this annotation.
 	 */
-	AOutputPort[] outputPorts() default {};
+	OutputPort[] outputPorts() default {};
 
 }
