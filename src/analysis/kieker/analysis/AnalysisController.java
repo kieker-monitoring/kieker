@@ -273,13 +273,16 @@ public final class AnalysisController {
 			/* Create a factory to create all other model instances. */
 			final MAnalysisMetaModelFactory factory = new MAnalysisMetaModelFactory();
 			final MIProject project = factory.createProject();
+
 			final Map<AbstractPlugin, MIPlugin> pluginMap = new HashMap<AbstractPlugin, MIPlugin>();
 
 			project.setName(projectName);
 
 			/* Run through all plugins and create he model-counterparts. */
 			final List<AbstractPlugin> plugins = new ArrayList<AbstractPlugin>(this.plugins);
-			plugins.add((AbstractPlugin) this.logReader);
+			if (this.logReader != null) {
+				plugins.add((AbstractPlugin) this.logReader);
+			}
 
 			for (final AbstractPlugin plugin : plugins) {
 				final MIPlugin mPlugin = (plugin instanceof AbstractReaderPlugin) ? factory.createReader() : factory.createAnalysisPlugin();
