@@ -268,7 +268,7 @@ public final class AnalysisController {
 		return true;
 	}
 
-	private MIProject getCurrentConfiguration(final String projectName) {
+	public MIProject getCurrentConfiguration(final String projectName) {
 		try {
 			/* Create a factory to create all other model instances. */
 			final MAnalysisMetaModelFactory factory = new MAnalysisMetaModelFactory();

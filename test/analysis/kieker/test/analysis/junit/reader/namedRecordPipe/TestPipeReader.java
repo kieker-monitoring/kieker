@@ -37,6 +37,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.test.analysis.junit.util.DummyRecord;
 import kieker.test.analysis.junit.util.NamedPipeFactory;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 import org.junit.Test;
 
@@ -53,7 +54,7 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 		final String pipeName = NamedPipeFactory.createPipeName();
 		final Configuration configuration = new Configuration(null);
 		configuration.setProperty(PipeReader.CONFIG_PIPENAME, pipeName);
-		final PipeReader pipeReader = new PipeReader(configuration);
+		final PipeReader pipeReader = new PipeReader(configuration, new AbstractRepository[0]);
 
 		final List<IMonitoringRecord> receivedRecords = Collections.synchronizedList(new ArrayList<IMonitoringRecord>());
 
@@ -91,7 +92,7 @@ class MonitoringSinkClass extends AbstractAnalysisPlugin {
 	private final List<IMonitoringRecord> receivedRecords;
 
 	public MonitoringSinkClass(final List<IMonitoringRecord> receivedRecords) {
-		super(new Configuration());
+		super(new Configuration(), new AbstractRepository[0]);
 		this.receivedRecords = receivedRecords;
 	}
 
@@ -116,5 +117,15 @@ class MonitoringSinkClass extends AbstractAnalysisPlugin {
 	@InputPort(eventTypes = { IMonitoringRecord.class })
 	public void doJob(final Object data) {
 		this.receivedRecords.add((IMonitoringRecord) data);
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return null;
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return null;
 	}
 }

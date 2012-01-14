@@ -46,6 +46,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * Reads monitoring records from a (remote or local) JMS queue.
@@ -85,9 +86,9 @@ public final class JMSReader extends AbstractReaderPlugin {
 	 * @throws IllegalArgumentException
 	 *             If one of the properties is empty.
 	 */
-	public JMSReader(final Configuration configuration) throws IllegalArgumentException {
+	public JMSReader(final Configuration configuration, final AbstractRepository repositories[]) throws IllegalArgumentException {
 		/* Call the inherited constructor. */
-		super(configuration);
+		super(configuration, repositories);
 		/* Initialize the reader bases on the given configuration. */
 		this.jmsProviderUrl = configuration.getStringProperty("jmsProviderUrl");
 		this.jmsDestination = configuration.getStringProperty("jmsDestination");
@@ -220,5 +221,15 @@ public final class JMSReader extends AbstractReaderPlugin {
 		configuration.setProperty(JMSReader.CONFIG_FACTORYLOOKUP, this.jmsFactoryLookupName);
 
 		return configuration;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
 	}
 }

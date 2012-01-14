@@ -33,6 +33,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * Listens to a JMS queue and simply passes each record to a specified {@link IMonitoringRecordReceiver}.
@@ -91,7 +92,7 @@ public class JMSLogReplayer {
 		configuration.setProperty("msProviderUrl", this.jmsProviderUrl);
 		configuration.setProperty("jmsDestination", this.jmsDestination);
 		configuration.setProperty("jmsFactoryLookupName", this.jmsFactoryLookupName);
-		final IMonitoringReader logReader = new JMSReader(configuration);
+		final IMonitoringReader logReader = new JMSReader(configuration, new AbstractRepository[0]);
 		final AnalysisController tpanInstance = new AnalysisController();
 		tpanInstance.setReader(logReader);
 		final RecordDelegationPlugin2 recordReceiver = new RecordDelegationPlugin2(this.recordReceiver, this.recordReceiverInputPortName);
@@ -136,7 +137,7 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 	}
 
 	public RecordDelegationPlugin2(final AbstractAnalysisPlugin rec, final String inputPortName) {
-		super(new Configuration(null));
+		super(new Configuration(null), new AbstractRepository[0]);
 
 		AbstractPlugin.connect(this, RecordDelegationPlugin2.OUTPUT_PORT_NAME, rec, inputPortName);
 	}
@@ -184,5 +185,15 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
 	}
 }

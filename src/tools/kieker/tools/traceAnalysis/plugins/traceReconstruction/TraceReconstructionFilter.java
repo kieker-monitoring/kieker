@@ -39,6 +39,7 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.util.LoggingTimestampConverter;
 
@@ -309,4 +310,10 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 
 		return configuration;
 	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
 }

@@ -26,6 +26,7 @@ import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
 import kieker.common.configuration.Configuration;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * This class has exactly one input port and one output port. An instance of this class receives any objects, increments an intern tread-safe counter without
@@ -46,8 +47,8 @@ public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
 	/**
 	 * Constructs a {@link SilentCountingRecordConsumer}.
 	 */
-	public SilentCountingRecordConsumer(final Configuration configuration) {
-		super(configuration);
+	public SilentCountingRecordConsumer(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
 	}
 
 	@InputPort(eventTypes = {}, description = "Default input port")
@@ -78,5 +79,15 @@ public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
 	}
 }

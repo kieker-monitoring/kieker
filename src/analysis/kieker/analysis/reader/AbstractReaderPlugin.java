@@ -2,6 +2,7 @@ package kieker.analysis.reader;
 
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.common.configuration.Configuration;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * This class should be used as a base for every reader used within <i>Kieker</i>.
@@ -16,8 +17,7 @@ public abstract class AbstractReaderPlugin extends AbstractPlugin implements IMo
 	 * @param configuration
 	 *            The configuration which should be used to initialize the object.
 	 */
-	public AbstractReaderPlugin(final Configuration configuration) {
-		super(configuration);
+	public AbstractReaderPlugin(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
 	}
-
 }

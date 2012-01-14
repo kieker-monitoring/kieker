@@ -28,7 +28,7 @@ import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.systemModel.AbstractTrace;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * This class has exactly one input port. The data which is send to this plugin is not delegated in any way.
@@ -45,8 +45,8 @@ public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessing
 	// TODO: handle equivalence classes
 	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/150
 
-	public MessageTraceRepositoryPlugin(final String name, final SystemModelRepository systemEntityFactory) {
-		super(name, systemEntityFactory);
+	public MessageTraceRepositoryPlugin(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
 	}
 
 	@Override
@@ -77,5 +77,10 @@ public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessing
 	@Override
 	public void msgTraceInput(final Object mt) {
 		MessageTraceRepositoryPlugin.this.repo.put(((AbstractTrace) mt).getTraceId(), (MessageTrace) mt);
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
 	}
 }

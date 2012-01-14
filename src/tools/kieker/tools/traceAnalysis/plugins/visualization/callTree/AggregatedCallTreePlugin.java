@@ -29,6 +29,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceProcessingException;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
@@ -116,5 +117,10 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 			AggregatedCallTreePlugin.LOG.error("TraceProcessingException", ex);
 			AggregatedCallTreePlugin.this.reportError(t.getTraceId());
 		}
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
 	}
 }

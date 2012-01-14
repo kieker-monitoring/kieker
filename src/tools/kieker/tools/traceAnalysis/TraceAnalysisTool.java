@@ -100,7 +100,7 @@ import org.apache.commons.cli.ParseException;
 public final class TraceAnalysisTool {
 	public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
 	private static final Log LOG = LogFactory.getLog(TraceAnalysisTool.class);
-	private static final SystemModelRepository SYSTEM_ENTITY_FACTORY = new SystemModelRepository();
+	private static final SystemModelRepository SYSTEM_ENTITY_FACTORY = new SystemModelRepository(new Configuration());
 	private static final AllocationComponentOperationPairFactory ALLOCATION_COMPONENT_OPERATION_PAIR_FACTORY = new AllocationComponentOperationPairFactory(
 			TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 	private static final AssemblyComponentOperationPairFactory ASSEMBLY_COMPONENT_OPERATION_PAIR_FACTORY = new AssemblyComponentOperationPairFactory(

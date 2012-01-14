@@ -43,6 +43,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * 
@@ -72,8 +73,8 @@ public final class JMXReader extends AbstractReaderPlugin {
 	private final int port;
 	private final String server;
 
-	public JMXReader(final Configuration configuation) throws IllegalArgumentException {
-		super(configuation);
+	public JMXReader(final Configuration configuation, final AbstractRepository repositories[]) throws IllegalArgumentException {
+		super(configuation, repositories);
 		this.server = this.configuration.getStringProperty(JMXReader.CONFIG_SERVER);
 		this.port = this.configuration.getIntProperty(JMXReader.CONFIG_PORT);
 		final String tmpServiceURL;
@@ -304,5 +305,15 @@ public final class JMXReader extends AbstractReaderPlugin {
 		configuration.setProperty(JMXReader.CONFIG_SILENT, Boolean.toString(this.silentreconnect));
 
 		return configuration;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
 	}
 }

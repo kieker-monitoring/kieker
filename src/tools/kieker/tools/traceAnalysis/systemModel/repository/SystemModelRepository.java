@@ -25,6 +25,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Collection;
 
+import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.ComponentType;
@@ -37,7 +38,7 @@ import kieker.tools.traceAnalysis.systemModel.Signature;
  * 
  * @author Andre van Hoorn
  */
-public class SystemModelRepository {
+public class SystemModelRepository extends AbstractRepository {
 
 	private final TypeRepository typeRepositoryFactory;
 	private final AssemblyRepository assemblyFactory;
@@ -46,7 +47,8 @@ public class SystemModelRepository {
 	private final OperationRepository operationFactory;
 	private final Execution rootExecution;
 
-	public SystemModelRepository() {
+	public SystemModelRepository(final Configuration configuration) {
+		super(configuration);
 		final ComponentType rootComponentType = new ComponentType(AbstractSystemSubRepository.ROOT_ELEMENT_ID, "$");
 		this.typeRepositoryFactory = new TypeRepository(this, rootComponentType);
 		final AssemblyComponent rootAssemblyComponentInstance = new AssemblyComponent(AbstractSystemSubRepository.ROOT_ELEMENT_ID, "$", rootComponentType);
@@ -211,5 +213,15 @@ public class SystemModelRepository {
 		ps.println("</body></html>");
 		ps.flush();
 		ps.close();
+	}
+
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		return new Configuration();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		return new Configuration();
 	}
 }

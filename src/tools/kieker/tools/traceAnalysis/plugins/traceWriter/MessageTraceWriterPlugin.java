@@ -30,6 +30,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
@@ -97,5 +98,10 @@ public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlug
 			MessageTraceWriterPlugin.LOG.error("IOException", ex);
 			MessageTraceWriterPlugin.this.reportError(mt.getTraceId());
 		}
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
 	}
 }

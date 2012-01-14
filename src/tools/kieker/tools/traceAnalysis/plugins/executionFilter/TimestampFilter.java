@@ -26,6 +26,7 @@ import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.Execution;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * Allows to filter Execution objects based on their given tin and tout
@@ -60,8 +61,8 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 	 *            The configuration used to initialize this instance. It should
 	 *            contain the properties for the minimum and maximum timestamp.
 	 */
-	public TimestampFilter(final Configuration configuration) {
-		super(configuration);
+	public TimestampFilter(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
 
 		/* Load the content for the fields from the given configuration. */
 		this.ignoreExecutionsBeforeTimestamp = configuration.getLongProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP);
@@ -77,7 +78,7 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 	 * @param ignoreExecutionsAfterTimestamp
 	 */
 	public TimestampFilter(final long ignoreExecutionsBeforeTimestamp, final long ignoreExecutionsAfterTimestamp) {
-		super(new Configuration(null));
+		super(new Configuration(null), new AbstractRepository[0]);
 
 		this.ignoreExecutionsBeforeTimestamp = ignoreExecutionsBeforeTimestamp;
 		this.ignoreExecutionsAfterTimestamp = ignoreExecutionsAfterTimestamp;
@@ -120,5 +121,15 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 		configuration.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, Long.toString(this.ignoreExecutionsBeforeTimestamp));
 
 		return configuration;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
 	}
 }

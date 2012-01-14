@@ -43,6 +43,7 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.Signature;
 import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOperationPairFactory;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
@@ -263,4 +264,10 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 			TraceCallTreePlugin.LOG.error("File not found", ex);
 		}
 	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
 }

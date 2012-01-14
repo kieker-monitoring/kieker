@@ -30,6 +30,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractExecutionTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
@@ -103,5 +104,10 @@ public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessing
 		// TODO: Save the current configuration
 
 		return configuration;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
 	}
 }

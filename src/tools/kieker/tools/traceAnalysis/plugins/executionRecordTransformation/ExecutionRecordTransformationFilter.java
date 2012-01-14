@@ -38,7 +38,7 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.Signature;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * Transforms KiekerExecutionRecords into Execution objects.<br>
@@ -58,14 +58,8 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	private static final Log LOG = LogFactory.getLog(ExecutionRecordTransformationFilter.class);
 
-	public ExecutionRecordTransformationFilter(final Configuration configuration) {
-		super(configuration);
-
-		// TODO: Load from configuration
-	}
-
-	public ExecutionRecordTransformationFilter(final String name, final SystemModelRepository systemEntityFactory) {
-		super(name, systemEntityFactory);
+	public ExecutionRecordTransformationFilter(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
 	}
 
 	private Signature createSignature(final String operationSignatureStr) {
@@ -165,5 +159,10 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 		// TODO: Save the current configuration
 
 		return configuration;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
 	}
 }

@@ -22,6 +22,7 @@ package kieker.analysis.plugin;
 
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * This class should be used as a base for every analysis plugin used within <i>Kieker</i>. For reader plugins, the class {@link AbstractReaderPlugin} should be used
@@ -37,8 +38,8 @@ public abstract class AbstractAnalysisPlugin extends AbstractPlugin implements I
 	 * @param configuration
 	 *            The configuration to use for this plugin.
 	 */
-	public AbstractAnalysisPlugin(final Configuration configuration) {
-		super(configuration);
+	public AbstractAnalysisPlugin(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
 	}
 
 }

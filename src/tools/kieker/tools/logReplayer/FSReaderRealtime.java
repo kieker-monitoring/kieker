@@ -36,6 +36,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * @author Andre van Hoorn
@@ -72,14 +73,15 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 	 *            <li>The property {@code numWorkers}
 	 *            </ul>
 	 */
-	public FSReaderRealtime(final Configuration configuration) {
-		super(configuration);
+	public FSReaderRealtime(final Configuration configuration, final AbstractRepository[] repositories) {
+		super(configuration, repositories);
 
 		this.init(configuration);
 	}
 
+	// TODO: Remove this constructor
 	public FSReaderRealtime(final String[] inputDirNames, final int numWorkers) {
-		this(new Configuration(null));
+		this(new Configuration(null), new AbstractRepository[0]);
 		this.initInstanceFromArgs(inputDirNames, numWorkers);
 	}
 
@@ -138,7 +140,7 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		final Configuration configuration = new Configuration(null);
 		configuration.setProperty(FSReader.CONFIG_INPUTDIRS,
 				Configuration.toProperty(inputDirNames));
-		final AbstractReaderPlugin fsReader = new FSReader(configuration);
+		final AbstractReaderPlugin fsReader = new FSReader(configuration, new AbstractRepository[0]);
 		final AbstractAnalysisPlugin rtCons = new FSReaderRealtimeCons(this);
 		this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, this.terminationLatch, FSReaderRealtimeCons.INPUT_PORT);
 		this.analysis.setReader(fsReader);
@@ -189,6 +191,16 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		return configuration;
 	}
 
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
+	}
+
 	/**
 	 * Acts as a consumer to the rtDistributor and delegates incoming records to
 	 * the FSReaderRealtime instance.<br>
@@ -207,7 +219,7 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		private final FSReaderRealtime master;
 
 		public FSReaderRealtimeCons(final FSReaderRealtime master) {
-			super(new Configuration(null));
+			super(new Configuration(null), new AbstractRepository[0]);
 			this.master = master;
 		}
 
@@ -245,6 +257,16 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		@Override
 		public Configuration getCurrentConfiguration() {
 			return new Configuration();
+		}
+
+		@Override
+		protected AbstractRepository[] getDefaultRepositories() {
+			return new AbstractRepository[0];
+		}
+
+		@Override
+		public AbstractRepository[] getCurrentRepositories() {
+			return new AbstractRepository[0];
 		}
 	}
 }

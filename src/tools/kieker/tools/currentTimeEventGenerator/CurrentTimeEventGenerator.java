@@ -26,6 +26,7 @@ import kieker.analysis.plugin.port.Plugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * Generates time events with a given resolution based on the timestamps of
@@ -81,8 +82,8 @@ public class CurrentTimeEventGenerator extends AbstractPlugin {
 	 * 
 	 * @param timeResolution
 	 */
-	public CurrentTimeEventGenerator(final long timeResolution) {
-		super(new Configuration());
+	public CurrentTimeEventGenerator(final long timeResolution, final AbstractRepository repositories[]) {
+		super(new Configuration(), repositories);
 		this.timerResolution = timeResolution;
 	}
 
@@ -133,5 +134,15 @@ public class CurrentTimeEventGenerator extends AbstractPlugin {
 		configuration.setProperty(CurrentTimeEventGenerator.CONFIG_TIME_RESOLUTION, Long.toString(this.timerResolution));
 
 		return configuration;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
 	}
 }

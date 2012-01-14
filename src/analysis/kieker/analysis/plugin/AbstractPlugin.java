@@ -36,6 +36,7 @@ import kieker.analysis.reader.IMonitoringReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * <b>Do not</b> inherit directly from this class! Instead inherit from the class {@link AbstractAnalysisPlugin} or {@link AbstractMonitoringReader}.
@@ -55,9 +56,9 @@ public abstract class AbstractPlugin {
 	private final HashMap<String, InputPort> inputPorts;
 
 	/**
-	 * Each Plugin requires a constructor with a single Configuration object!
+	 * Each Plugin requires a constructor with a single Configuration object and an array of repositories!
 	 */
-	public AbstractPlugin(final Configuration configuration) {
+	public AbstractPlugin(final Configuration configuration, final AbstractRepository repositories[]) {
 		try {
 			// TODO: somewhat dirty hack...
 			final Configuration defaultConfig = this.getDefaultConfiguration(); // NOPMD
@@ -103,12 +104,28 @@ public abstract class AbstractPlugin {
 	protected abstract Configuration getDefaultConfiguration();
 
 	/**
+	 * This method should deliver an array of {@code AbstractRepository} containing the default repositories for this class. In other words: Every class inheriting
+	 * from {@code AbstractPlugin} should implement this method to deliver an object which can be used for the constructor of this class.
+	 * 
+	 * @return The default repositories (which can be an empty array if necessary).
+	 */
+	protected abstract AbstractRepository[] getDefaultRepositories();
+
+	/**
 	 * This method should deliver a {@code Configuration} object containing the current configuration of this instance. In other words: The constructor should be
 	 * able to use the given object to initialize a new instance of this class with the same intern properties.
 	 * 
-	 * @return A complete filled configuration object.
+	 * @return A completely filled configuration object.
 	 */
 	public abstract Configuration getCurrentConfiguration();
+
+	/**
+	 * This method should deliver an array of {@code AbstractRepository} containing the current repositories of this instance. In other words: The constructor should
+	 * be able to use the given object to initialize a new instance of this class with the same intern properties.
+	 * 
+	 * @return An (possible empty) array of repositories.
+	 */
+	public abstract AbstractRepository[] getCurrentRepositories();
 
 	/**
 	 * This method delivers the current name of this plugin. The name does not have to be unique.

@@ -29,6 +29,7 @@ import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * This class has exactly one input port and one output port. An instance of this class receives only objects implementing the interface {@link IMonitoringRecord},
@@ -51,8 +52,8 @@ public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
 	private final PrintStream printStream;
 	private final String printStreamName;
 
-	public DummyRecordConsumer(final Configuration configuration) throws FileNotFoundException {
-		super(configuration);
+	public DummyRecordConsumer(final Configuration configuration, final AbstractRepository repositories[]) throws FileNotFoundException {
+		super(configuration, repositories);
 
 		/* Get the name of the stream. */
 		final String printStreamName = this.configuration.getStringProperty(DummyRecordConsumer.CONFIG_STREAM);
@@ -114,5 +115,15 @@ public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
 		}
 
 		return configuration;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
 	}
 }

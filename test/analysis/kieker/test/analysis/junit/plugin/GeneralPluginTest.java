@@ -17,6 +17,7 @@ import kieker.tools.traceAnalysis.plugins.executionFilter.TimestampFilter;
 import kieker.tools.traceAnalysis.plugins.executionFilter.TraceIdFilter;
 import kieker.tools.traceAnalysis.plugins.executionRecordTransformation.ExecutionRecordTransformationFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 import org.junit.Assert;
@@ -32,7 +33,8 @@ public class GeneralPluginTest {
 
 	@Test
 	public void testChaining() {
-		final ExecutionRecordTransformationFilter transformer = new ExecutionRecordTransformationFilter("", new SystemModelRepository());
+		final ExecutionRecordTransformationFilter transformer = new ExecutionRecordTransformationFilter(new Configuration(),
+				new AbstractRepository[] { new SystemModelRepository(new Configuration()) });
 		final TraceIdFilter filter1 = new TraceIdFilter(new HashSet<Long>(Arrays.asList(new Long[] { 1l })));
 		final TimestampFilter filter2 = new TimestampFilter(10, 20);
 
@@ -46,7 +48,7 @@ public class GeneralPluginTest {
 		final OperationExecutionRecord opExRec7 = new OperationExecutionRecord("", "", 1, 9, 21);
 		final OperationExecutionRecord opExRec8 = new OperationExecutionRecord("", "", 1, 10, 20);
 		final SourceClass src = new SourceClass(opExRec1, opExRec2, opExRec3, opExRec4, opExRec5, opExRec6, opExRec7, opExRec8);
-		final ExecutionSinkClass dst = new ExecutionSinkClass(null);
+		final ExecutionSinkClass dst = new ExecutionSinkClass(new Configuration(), new AbstractRepository[0]);
 
 		/* Connect the plugins. */
 		Assert.assertTrue(AbstractPlugin.connect(src, SourceClass.OUTPUT_PORT_NAME, transformer, ExecutionRecordTransformationFilter.INPUT_PORT_NAME));
@@ -88,7 +90,7 @@ class SourceClass extends AbstractReaderPlugin {
 	public static final String OUTPUT_PORT_NAME = "output";
 
 	public SourceClass(final OperationExecutionRecord... records) {
-		super(new Configuration());
+		super(new Configuration(), new AbstractRepository[0]);
 		this.records = records;
 	}
 
@@ -113,6 +115,16 @@ class SourceClass extends AbstractReaderPlugin {
 		return null;
 	}
 
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return null;
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return null;
+	}
+
 }
 
 class ExecutionSinkClass extends AbstractAnalysisPlugin {
@@ -120,8 +132,8 @@ class ExecutionSinkClass extends AbstractAnalysisPlugin {
 	public static final String INPUT_PORT_NAME = "doJob";
 	private final ConcurrentLinkedQueue<Execution> lst = new ConcurrentLinkedQueue<Execution>();
 
-	public ExecutionSinkClass(final Configuration configuration) {
-		super(configuration);
+	public ExecutionSinkClass(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
 	}
 
 	@Override
@@ -149,5 +161,15 @@ class ExecutionSinkClass extends AbstractAnalysisPlugin {
 
 	public ConcurrentLinkedQueue<Execution> getList() {
 		return this.lst;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return null;
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return null;
 	}
 }

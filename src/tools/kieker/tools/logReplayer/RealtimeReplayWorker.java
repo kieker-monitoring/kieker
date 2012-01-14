@@ -28,6 +28,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * A Runnable to be scheduled via the RealtimeReplayDistributor
@@ -56,7 +57,7 @@ public class RealtimeReplayWorker extends AbstractAnalysisPlugin implements Runn
 	 */
 	public RealtimeReplayWorker(final IMonitoringRecord monRec, final RealtimeReplayDistributor rd, final AbstractAnalysisPlugin cons,
 			final String constInputPortName) {
-		super(new Configuration());
+		super(new Configuration(), new AbstractRepository[0]);
 		this.monRec = monRec;
 		this.rd = rd;
 
@@ -64,7 +65,7 @@ public class RealtimeReplayWorker extends AbstractAnalysisPlugin implements Runn
 	}
 
 	public RealtimeReplayWorker() {
-		super(new Configuration());
+		super(new Configuration(), new AbstractRepository[0]);
 		this.monRec = null;
 		this.rd = null;
 	}
@@ -102,5 +103,15 @@ public class RealtimeReplayWorker extends AbstractAnalysisPlugin implements Runn
 	public Configuration getCurrentConfiguration() {
 		// TODO Current Configuration
 		return new Configuration();
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
 	}
 }

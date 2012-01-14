@@ -35,6 +35,7 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.timer.DefaultSystemTimer;
 import kieker.monitoring.timer.ITimeSource;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * IMonitoringRecordConsumerPlugin that distributes the log records to the worker
@@ -82,8 +83,8 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 		super.deliver(RealtimeReplayDistributor.OUTPUT_PORT_NAME, event);
 	}
 
-	public RealtimeReplayDistributor(final Configuration configuration) {
-		super(configuration);
+	public RealtimeReplayDistributor(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
 
 		// TODO: Load from configuration.
 		this.numWorkers = 0;
@@ -105,7 +106,7 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 	 *            will be decremented after the last record was replayed
 	 */
 	public RealtimeReplayDistributor(final int numWorkers, final AbstractAnalysisPlugin cons, final CountDownLatch terminationLatch, final String constInputPortName) {
-		super(new Configuration(null));
+		super(new Configuration(null), new AbstractRepository[0]);
 		this.numWorkers = numWorkers;
 		this.cons = cons;
 		this.maxQueueSize = numWorkers * RealtimeReplayDistributor.QUEUE_SIZE_FACTOR;
@@ -209,5 +210,15 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 		// TODO: Save the current configuration
 
 		return configuration;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
 	}
 }

@@ -37,6 +37,7 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * Filesystem reader which reads from multiple directories simultaneously ordered by the logging timestamp.
@@ -63,8 +64,8 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 
 	private volatile boolean running = true;
 
-	public FSReader(final Configuration configuration) {
-		super(configuration);
+	public FSReader(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
 		this.inputDirs = this.configuration.getStringArrayProperty(FSReader.CONFIG_INPUTDIRS);
 		System.out.println(Arrays.toString(this.inputDirs));
 		this.recordQueue = new PriorityQueue<IMonitoringRecord>(this.inputDirs.length);
@@ -166,6 +167,16 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 			configuration.setProperty(FSReader.CONFIG_ONLYRECORDS, Configuration.toProperty(onlyRecords));
 		}
 		return configuration;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
 	}
 
 }

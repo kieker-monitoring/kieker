@@ -27,6 +27,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * This class has exactly one input port and one output port. An instance of this class receives only objects implementing the interface {@link IMonitoringRecord},
@@ -62,8 +63,8 @@ public class MonitoringRecordTypeLogger extends AbstractAnalysisPlugin {
 	/**
 	 * Constructs a {@link MonitoringRecordTypeLogger}.
 	 */
-	public MonitoringRecordTypeLogger(final Configuration configuration) {
-		super(configuration);
+	public MonitoringRecordTypeLogger(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
 	}
 
 	@Override
@@ -84,5 +85,15 @@ public class MonitoringRecordTypeLogger extends AbstractAnalysisPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
 	}
 }

@@ -32,6 +32,7 @@ import kieker.common.namedRecordPipe.Broker;
 import kieker.common.namedRecordPipe.IPipeReader;
 import kieker.common.namedRecordPipe.Pipe;
 import kieker.common.record.IMonitoringRecord;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * 
@@ -59,16 +60,17 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	 * @throws IllegalArgumentException
 	 *             If the pipe name was invalid.
 	 */
-	public PipeReader(final Configuration configuration) throws IllegalArgumentException {
-		super(configuration);
+	public PipeReader(final Configuration configuration, final AbstractRepository repositories[]) throws IllegalArgumentException {
+		super(configuration, repositories);
 		final String pipeName = this.configuration.getStringProperty(PipeReader.CONFIG_PIPENAME);
 
 		this.pipeName = pipeName;
 		this.initialize(pipeName);
 	}
 
+	// TODO Remove the constructor
 	public PipeReader(final String pipeName) {
-		super(new Configuration(null));
+		super(new Configuration(null), new AbstractRepository[0]);
 
 		this.pipeName = pipeName;
 		this.initialize(pipeName);
@@ -134,5 +136,15 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 		configuration.setProperty(PipeReader.CONFIG_PIPENAME, this.pipeName);
 
 		return configuration;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
 	}
 }

@@ -34,6 +34,7 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
@@ -110,7 +111,7 @@ public class FilesystemLogReplayer {
 		} else {
 			final Configuration configuration = new Configuration(null);
 			configuration.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(this.inputDirs));
-			fsReader = new FSReader(configuration);
+			fsReader = new FSReader(configuration, new AbstractRepository[0]);
 		}
 		final AnalysisController tpanInstance = new AnalysisController();
 		tpanInstance.setReader(fsReader);
@@ -158,7 +159,7 @@ class RecordDelegationPlugin extends AbstractAnalysisPlugin {
 	 * @param ignoreRecordsAfterTimestamp
 	 */
 	public RecordDelegationPlugin(final IMonitoringController rec, final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp) {
-		super(new Configuration(null));
+		super(new Configuration(null), new AbstractRepository[0]);
 
 		this.rec = rec;
 		this.ignoreRecordsBeforeTimestamp = ignoreRecordsBeforeTimestamp;
@@ -211,5 +212,15 @@ class RecordDelegationPlugin extends AbstractAnalysisPlugin {
 	public Configuration getCurrentConfiguration() {
 		/* No configuration possible. */
 		return new Configuration(null);
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
 	}
 }

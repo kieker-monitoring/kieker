@@ -29,6 +29,7 @@ import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.Execution;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * Allows to filter Execution objects based on their traceId.<br>
@@ -49,8 +50,8 @@ public class TraceIdFilter extends AbstractAnalysisPlugin {
 	public static final String CONFIG_SELECTED_TRACES = TraceIdFilter.class.getName() + ".selectedTraces";
 	private final Set<Long> selectedTraces;
 
-	public TraceIdFilter(final Configuration configuration) {
-		super(configuration);
+	public TraceIdFilter(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
 		// TODO: Initialize from the variable.
 		this.selectedTraces = null;
 	}
@@ -62,7 +63,7 @@ public class TraceIdFilter extends AbstractAnalysisPlugin {
 	 * @param selectedTraces
 	 */
 	public TraceIdFilter(final Set<Long> selectedTraces) {
-		super(new Configuration(null));
+		super(new Configuration(null), new AbstractRepository[0]);
 		this.selectedTraces = selectedTraces;
 	}
 
@@ -107,5 +108,15 @@ public class TraceIdFilter extends AbstractAnalysisPlugin {
 			configuration.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, Configuration.toProperty(selectedTracesArr));
 		}
 		return configuration;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
 	}
 }

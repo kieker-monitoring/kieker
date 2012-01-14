@@ -36,6 +36,7 @@ import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceExcept
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
@@ -150,5 +151,10 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	@Override
 	public String getExecutionTraceInputPortName() {
 		return TraceEquivalenceClassFilter.EXECUTION_TRACES_INPUT_PORT_NAME;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
 	}
 }
