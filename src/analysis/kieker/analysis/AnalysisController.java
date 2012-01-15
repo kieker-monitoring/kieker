@@ -73,6 +73,7 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
  * 
  * @author Andre van Hoorn, Matthias Rohr
  */
+// TODO auf neue Konstruktoren der Plugins umstellen
 public final class AnalysisController {
 	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
 
