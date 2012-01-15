@@ -4,6 +4,7 @@ import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
 import kieker.common.configuration.Configuration;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 import org.junit.Assert;
 
@@ -16,7 +17,7 @@ public class SimpleSourcePlugin extends AbstractAnalysisPlugin {
 	public static final String OUTPUT_PORT_NAME = "output";
 
 	public SimpleSourcePlugin() {
-		super(new Configuration());
+		super(new Configuration(), new AbstractRepository[0]);
 	}
 
 	public void deliver(final Object data) {
@@ -40,4 +41,14 @@ public class SimpleSourcePlugin extends AbstractAnalysisPlugin {
 
 	@Override
 	public void terminate(final boolean error) {}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
+	}
 }

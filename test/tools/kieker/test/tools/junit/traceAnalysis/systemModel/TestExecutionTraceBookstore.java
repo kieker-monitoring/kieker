@@ -24,6 +24,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
@@ -46,7 +47,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 
 	private static final Log LOG = LogFactory.getLog(TestExecutionTraceBookstore.class);
 	private static final long TRACE_ID = 69898L;
-	private final SystemModelRepository systemEntityFactory = new SystemModelRepository();
+	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration());
 	private final ExecutionFactory eFactory = new ExecutionFactory(this.systemEntityFactory);
 	private final long minTin;
 	private final long maxTout;

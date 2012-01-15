@@ -71,12 +71,17 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	/** Representative x # of equivalents */
 	private final Map<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap = new HashMap<AbstractExecutionTraceHashContainer, AtomicInteger>(); // NOPMD
 
-	public TraceEquivalenceClassFilter(final String name, final SystemModelRepository systemEntityFactory, final TraceEquivalenceClassModes traceEquivalenceCallMode) {
-		super(name, systemEntityFactory);
-		this.rootExecution = systemEntityFactory.getRootExecution();
+	// TODO Change constructor to plugin-default-constructor
+	public TraceEquivalenceClassFilter(final Configuration configuration, final AbstractRepository repositories[],
+			final TraceEquivalenceClassModes traceEquivalenceCallMode) {
+		super(configuration, repositories);
+		/* Load the root execution from the repository if possible. */
+		if ((repositories.length >= 1) && (repositories[0] instanceof SystemModelRepository)) {
+			this.rootExecution = ((SystemModelRepository) repositories[0]).getRootExecution();
+		} else {
+			this.rootExecution = null;
+		}
 		this.equivalenceMode = traceEquivalenceCallMode;
-
-		/* Register all ports. */
 	}
 
 	@InputPort(description = "Execution traces", eventTypes = { ExecutionTrace.class })

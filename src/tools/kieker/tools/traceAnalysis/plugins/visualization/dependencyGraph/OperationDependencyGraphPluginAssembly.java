@@ -40,6 +40,7 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.Signature;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.AssemblyComponentOperationPairFactory;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
@@ -55,6 +56,11 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  */
 public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGraphPlugin<AssemblyComponentOperationPair> {
 
+	public static final String CONFIG_DOT_OUTPUT_FILE = OperationDependencyGraphPluginAssembly.class.getName() + ".dotOutputFile";
+	public static final String CONFIG_INCLUDE_WEIGHTS = OperationDependencyGraphPluginAssembly.class.getName() + ".includeWeights";
+	public static final String CONFIG_SHORT_LABELS = OperationDependencyGraphPluginAssembly.class.getName() + ".shortLabels";
+	public static final String CONFIG_INCLUDE_SELF_LOOPS = OperationDependencyGraphPluginAssembly.class.getName() + ".includeSelfLoops";
+
 	private static final Log LOG = LogFactory.getLog(OperationDependencyGraphPluginAssembly.class);
 	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
 	private final AssemblyComponentOperationPairFactory pairFactory;
@@ -63,16 +69,17 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 	private final boolean shortLabels;
 	private final boolean includeSelfLoops;
 
-	public OperationDependencyGraphPluginAssembly(final String name, final SystemModelRepository systemEntityFactory, final File dotOutputFile,
-			final boolean includeWeights, final boolean shortLabels, final boolean includeSelfLoops) {
-		super(name, systemEntityFactory, new DependencyGraph<AssemblyComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-				new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID, systemEntityFactory.getOperationFactory().getRootOperation(),
-						systemEntityFactory.getAssemblyFactory().getRootAssemblyComponent())));
-		this.pairFactory = new AssemblyComponentOperationPairFactory(systemEntityFactory);
-		this.dotOutputFile = dotOutputFile;
-		this.includeWeights = includeWeights;
-		this.shortLabels = shortLabels;
-		this.includeSelfLoops = includeSelfLoops;
+	public OperationDependencyGraphPluginAssembly(final Configuration configuration, final AbstractRepository repositories[]) {
+		// TODO Check type conversion
+		super(configuration, repositories, new DependencyGraph<AssemblyComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+				new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID, ((SystemModelRepository) repositories[0]).getOperationFactory()
+						.getRootOperation(),
+						((SystemModelRepository) repositories[0]).getAssemblyFactory().getRootAssemblyComponent())));
+		this.pairFactory = new AssemblyComponentOperationPairFactory(((SystemModelRepository) repositories[0]));
+		this.dotOutputFile = new File(this.configuration.getStringProperty(OperationDependencyGraphPluginAssembly.CONFIG_DOT_OUTPUT_FILE));
+		this.includeWeights = this.configuration.getBooleanProperty(OperationDependencyGraphPluginAssembly.CONFIG_INCLUDE_WEIGHTS);
+		this.shortLabels = this.configuration.getBooleanProperty(OperationDependencyGraphPluginAssembly.CONFIG_SHORT_LABELS);
+		this.includeSelfLoops = this.configuration.getBooleanProperty(OperationDependencyGraphPluginAssembly.CONFIG_INCLUDE_SELF_LOOPS);
 	}
 
 	private String componentNodeLabel(final AssemblyComponent component) {
@@ -233,5 +240,10 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 			receiverNode.addIncomingDependency(senderNode);
 		}
 		OperationDependencyGraphPluginAssembly.this.reportSuccess(t.getTraceId());
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
 	}
 }

@@ -23,16 +23,19 @@ package kieker.test.tools.junit.traceAnalysis.plugins;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.plugin.AbstractPlugin;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
 import kieker.test.tools.junit.traceAnalysis.util.SimpleSinkPlugin;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceReconstructionFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 import org.junit.Test;
@@ -45,7 +48,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 
 	private static final Log LOG = LogFactory.getLog(TestTraceReconstructionFilter.class);
 	private static final long TRACE_ID = 62298L;
-	private final SystemModelRepository systemEntityFactory = new SystemModelRepository();
+	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration());
 	private final ExecutionFactory executionFactory = new ExecutionFactory(this.systemEntityFactory);
 
 	/* Executions of a valid trace */
@@ -119,9 +122,12 @@ public class TestTraceReconstructionFilter extends TestCase {
 			return;
 		}
 
-		final TraceReconstructionFilter filter = new TraceReconstructionFilter("TraceReconstructionFilter", this.systemEntityFactory,
-				TraceReconstructionFilter.MAX_DURATION_MILLIS, // maxTraceDurationMillis
-				true); // ignoreInvalidTraces
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, "TraceReconstructionFilter");
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, "true");
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Integer.toString(TraceReconstructionFilter.MAX_DURATION_MILLIS));
+		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, new AbstractRepository[] { this.systemEntityFactory });
+
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout",
 				validExecutionTrace.getDurationInNanos() <= filter.getMaxTraceDurationNanos());
 
@@ -228,9 +234,11 @@ public class TestTraceReconstructionFilter extends TestCase {
 			return;
 		}
 
-		final TraceReconstructionFilter filter = new TraceReconstructionFilter("TraceReconstructionFilter", this.systemEntityFactory,
-				TraceReconstructionFilter.MAX_DURATION_MILLIS, // maxTraceDurationMillis
-				true); // ignoreInvalidTraces
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, "TraceReconstructionFilter");
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, "true");
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Integer.toString(TraceReconstructionFilter.MAX_DURATION_MILLIS));
+		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, new AbstractRepository[] { this.systemEntityFactory });
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout",
 				invalidExecutionTrace.getDurationInNanos() <= filter.getMaxTraceDurationNanos());
 
@@ -368,8 +376,12 @@ public class TestTraceReconstructionFilter extends TestCase {
 		/**
 		 * Instantiate reconstruction filter with timeout.
 		 */
-		final TraceReconstructionFilter filter = new TraceReconstructionFilter("TraceReconstructionFilter", this.systemEntityFactory,
-				((triggerExecutionTrace.getMaxTout() - incompleteExecutionTrace.getMinTin()) / (1000 * 1000)) - 1, true); // NOCS
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, "TraceReconstructionFilter");
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, "true");
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Long.toString(
+				((triggerExecutionTrace.getMaxTout() - incompleteExecutionTrace.getMinTin()) / (1000 * 1000)) - 1));
+		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, new AbstractRepository[] { this.systemEntityFactory });
 
 		final SimpleSinkPlugin executionTraceSink = new SimpleSinkPlugin();
 		final SimpleSinkPlugin messageTraceSink = new SimpleSinkPlugin();

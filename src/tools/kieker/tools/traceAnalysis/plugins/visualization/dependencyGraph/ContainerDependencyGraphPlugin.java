@@ -35,6 +35,7 @@ import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
@@ -47,6 +48,10 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  */
 public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugin<ExecutionContainer> {
 
+	public static final String CONFIG_DOT_OUTPUT_FILE = ContainerDependencyGraphPlugin.class.getName() + ".dotOutputFile";
+	public static final String CONFIG_INCLUDE_WEIGHTS = ContainerDependencyGraphPlugin.class.getName() + ".includeWeights";
+	public static final String CONFIG_SHORT_LABELS = ContainerDependencyGraphPlugin.class.getName() + ".shortLabels";
+	public static final String CONFIG_INCLUDE_SELF_LOOPS = ContainerDependencyGraphPlugin.class.getName() + ".includeSelfLoops";
 	private static final Log LOG = LogFactory.getLog(ContainerDependencyGraphPlugin.class);
 
 	private final File dotOutputFile;
@@ -54,15 +59,16 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 	private final boolean shortLabels;
 	private final boolean includeSelfLoops;
 
-	public ContainerDependencyGraphPlugin(final String name, final SystemModelRepository systemEntityFactory, final File dotOutputFile,
-			final boolean includeWeights, final boolean shortLabels, final boolean includeSelfLoops) {
-		super(name, systemEntityFactory, new DependencyGraph<ExecutionContainer>(
-				systemEntityFactory.getExecutionEnvironmentFactory().getRootExecutionContainer().getId(),
-				systemEntityFactory.getExecutionEnvironmentFactory().getRootExecutionContainer()));
-		this.dotOutputFile = dotOutputFile;
-		this.includeWeights = includeWeights;
-		this.shortLabels = shortLabels;
-		this.includeSelfLoops = includeSelfLoops;
+	public ContainerDependencyGraphPlugin(final Configuration configuration, final AbstractRepository repositories[]) {
+		// TODO Check type conversion
+		super(configuration, repositories, new DependencyGraph<ExecutionContainer>(
+				((SystemModelRepository) repositories[0]).getExecutionEnvironmentFactory().getRootExecutionContainer().getId(),
+				((SystemModelRepository) repositories[0]).getExecutionEnvironmentFactory().getRootExecutionContainer()));
+
+		this.dotOutputFile = new File(configuration.getStringProperty(ContainerDependencyGraphPlugin.CONFIG_DOT_OUTPUT_FILE));
+		this.includeWeights = configuration.getBooleanProperty(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_WEIGHTS);
+		this.shortLabels = configuration.getBooleanProperty(ContainerDependencyGraphPlugin.CONFIG_SHORT_LABELS);
+		this.includeSelfLoops = configuration.getBooleanProperty(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_SELF_LOOPS);
 	}
 
 	@Override
@@ -113,14 +119,24 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
+		final Configuration configuration = new Configuration();
+
+		configuration.put(ContainerDependencyGraphPlugin.CONFIG_DOT_OUTPUT_FILE, "");
+		configuration.put(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_WEIGHTS, false);
+		configuration.put(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_SELF_LOOPS, false);
+		configuration.put(ContainerDependencyGraphPlugin.CONFIG_SHORT_LABELS, false);
+
+		return configuration;
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		// TODO: Save the current configuration
+		configuration.put(ContainerDependencyGraphPlugin.CONFIG_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
+		configuration.put(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_WEIGHTS, this.includeWeights);
+		configuration.put(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_SELF_LOOPS, this.includeSelfLoops);
+		configuration.put(ContainerDependencyGraphPlugin.CONFIG_SHORT_LABELS, this.shortLabels);
 
 		return configuration;
 	}
@@ -152,5 +168,10 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 			receiverNode.addIncomingDependency(senderNode);
 		}
 		ContainerDependencyGraphPlugin.this.reportSuccess(t.getTraceId());
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
 	}
 }

@@ -39,6 +39,7 @@ import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
@@ -58,10 +59,14 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 	private final boolean shortLabels;
 	private final boolean includeSelfLoops;
 
-	public ComponentDependencyGraphPluginAllocation(final String name, final SystemModelRepository systemEntityFactory, final File dotOutputFile,
+	// TODO Change constructor to plugin-default-constructor
+	public ComponentDependencyGraphPluginAllocation(final Configuration configuration, final AbstractRepository repositories[], final File dotOutputFile,
 			final boolean includeWeights, final boolean shortLabels, final boolean includeSelfLoops) {
-		super(name, systemEntityFactory, new DependencyGraph<AllocationComponent>(systemEntityFactory.getAllocationFactory().getRootAllocationComponent().getId(),
-				systemEntityFactory.getAllocationFactory().getRootAllocationComponent()));
+		// TODO Check type conversion
+		super(configuration, repositories, new DependencyGraph<AllocationComponent>(((SystemModelRepository) repositories[0]).getAllocationFactory()
+				.getRootAllocationComponent()
+				.getId(),
+				((SystemModelRepository) repositories[0]).getAllocationFactory().getRootAllocationComponent()));
 		this.dotOutputFile = dotOutputFile;
 		this.includeWeights = includeWeights;
 		this.shortLabels = shortLabels;
@@ -210,5 +215,10 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 			receiverNode.addIncomingDependency(senderNode);
 		}
 		ComponentDependencyGraphPluginAllocation.this.reportSuccess(t.getTraceId());
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
 	}
 }

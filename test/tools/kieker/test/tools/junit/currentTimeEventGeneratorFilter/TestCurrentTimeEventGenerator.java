@@ -31,6 +31,7 @@ import kieker.analysis.plugin.port.InputPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.currentTimeEventGenerator.CurrentTimeEventGenerator;
 import kieker.tools.currentTimeEventGenerator.TimestampEvent;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 import org.junit.Test;
 
@@ -95,7 +96,7 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 	 * @param expectedOutputTimerEvents
 	 */
 	private void compareInputAndOutput(final long timerResolution, final long[] inputTimestamps, final long[] expectedOutputTimerEvents) {
-		final CurrentTimeEventGenerator filter = new CurrentTimeEventGenerator(timerResolution);
+		final CurrentTimeEventGenerator filter = new CurrentTimeEventGenerator(timerResolution, new AbstractRepository[0]);
 
 		final DstClass dst = new DstClass();
 		AbstractPlugin.connect(filter, CurrentTimeEventGenerator.CURRENT_TIME_OUTPUT_PORT_NAME, dst, DstClass.INPUT_PORT_NAME);
@@ -131,7 +132,7 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 		private final ConcurrentLinkedQueue<Long> receivedTimestamps = new ConcurrentLinkedQueue<Long>();
 
 		public DstClass() {
-			super(new Configuration(null));
+			super(new Configuration(null), new AbstractRepository[0]);
 		}
 
 		@Override
@@ -159,6 +160,16 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 
 		public ConcurrentLinkedQueue<Long> getList() {
 			return this.receivedTimestamps;
+		}
+
+		@Override
+		protected AbstractRepository[] getDefaultRepositories() {
+			return new AbstractRepository[0];
+		}
+
+		@Override
+		public AbstractRepository[] getCurrentRepositories() {
+			return new AbstractRepository[0];
 		}
 	}
 }

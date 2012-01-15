@@ -6,6 +6,7 @@ import java.util.List;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.InputPort;
 import kieker.common.configuration.Configuration;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 public class SimpleSinkPlugin extends AbstractAnalysisPlugin {
 
@@ -13,7 +14,7 @@ public class SimpleSinkPlugin extends AbstractAnalysisPlugin {
 	private final List<Object> list = new ArrayList<Object>();
 
 	public SimpleSinkPlugin() {
-		super(new Configuration());
+		super(new Configuration(), new AbstractRepository[0]);
 	}
 
 	@InputPort()
@@ -46,4 +47,14 @@ public class SimpleSinkPlugin extends AbstractAnalysisPlugin {
 
 	@Override
 	public void terminate(final boolean error) {}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
+	}
 }

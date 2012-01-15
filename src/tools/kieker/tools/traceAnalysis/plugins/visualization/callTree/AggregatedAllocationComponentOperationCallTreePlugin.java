@@ -22,9 +22,11 @@ package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 
 import java.io.File;
 
+import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOperationPairFactory;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
@@ -36,10 +38,13 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  */
 public class AggregatedAllocationComponentOperationCallTreePlugin extends AggregatedCallTreePlugin<AllocationComponentOperationPair> {
 
-	public AggregatedAllocationComponentOperationCallTreePlugin(final String name,
-			final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory, final SystemModelRepository systemEntityFactory,
+	// TODO Change constructor to plugin-default-constructor
+	public AggregatedAllocationComponentOperationCallTreePlugin(final Configuration configuration, final AbstractRepository repositories[],
+			final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory,
 			final File dotOutputFile, final boolean includeWeights, final boolean shortLabels) {
-		super(name, systemEntityFactory, new AggregatedAllocationComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, systemEntityFactory,
+		// TODO Check type conversion
+		super(configuration, repositories, new AggregatedAllocationComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+				(SystemModelRepository) repositories[0],
 				allocationComponentOperationPairFactory, allocationComponentOperationPairFactory.getRootPair(), true), // root node
 				dotOutputFile, includeWeights, shortLabels);
 	}

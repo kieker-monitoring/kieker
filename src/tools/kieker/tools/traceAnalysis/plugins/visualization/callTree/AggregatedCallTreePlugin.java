@@ -30,7 +30,6 @@ import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceProcessingException;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * This class has exactly one input port named "in". The data which is send to
@@ -47,9 +46,10 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 	private final boolean shortLabels;
 	private int numGraphsSaved = 0;
 
-	public AggregatedCallTreePlugin(final String name, final SystemModelRepository systemEntityFactory, final AbstractAggregatedCallTreeNode<T> root,
+	// TODO Change constructor to plugin-default-constructor
+	public AggregatedCallTreePlugin(final Configuration configuration, final AbstractRepository repositories[], final AbstractAggregatedCallTreeNode<T> root,
 			final File dotOutputFile, final boolean includeWeights, final boolean shortLabels) {
-		super(name, systemEntityFactory);
+		super(configuration, repositories);
 		this.root = root;
 		this.dotOutputFile = dotOutputFile;
 		this.includeWeights = includeWeights;

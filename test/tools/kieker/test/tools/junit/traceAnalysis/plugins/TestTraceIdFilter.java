@@ -26,6 +26,7 @@ import java.util.TreeSet;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.plugin.AbstractPlugin;
+import kieker.common.configuration.Configuration;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
 import kieker.test.tools.junit.traceAnalysis.util.SimpleSinkPlugin;
 import kieker.tools.traceAnalysis.plugins.executionFilter.TraceIdFilter;
@@ -42,7 +43,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 
 	// private static final Log log = LogFactory.getLog(TestTraceIdFilter.class);
 
-	private final SystemModelRepository systemEntityFactory = new SystemModelRepository();
+	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration());
 	private final ExecutionFactory eFactory = new ExecutionFactory(this.systemEntityFactory);
 
 	/**

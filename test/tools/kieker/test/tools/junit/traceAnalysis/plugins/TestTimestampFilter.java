@@ -23,6 +23,7 @@ package kieker.test.tools.junit.traceAnalysis.plugins;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.plugin.AbstractPlugin;
+import kieker.common.configuration.Configuration;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
 import kieker.test.tools.junit.traceAnalysis.util.SimpleSinkPlugin;
 import kieker.tools.traceAnalysis.plugins.executionFilter.TimestampFilter;
@@ -42,7 +43,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 	private static final long IGNORE_EXECUTIONS_BEFORE_TIMESTAMP = 50;
 	private static final long IGNORE_EXECUTIONS_AFTER_TIMESTAMP = 100;
 
-	private final SystemModelRepository systemEntityFactory = new SystemModelRepository();
+	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration());
 	private final ExecutionFactory eFactory = new ExecutionFactory(this.systemEntityFactory);
 
 	/**

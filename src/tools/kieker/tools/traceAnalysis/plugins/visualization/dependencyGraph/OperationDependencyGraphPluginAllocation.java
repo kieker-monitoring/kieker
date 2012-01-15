@@ -41,6 +41,7 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.Signature;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOperationPairFactory;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
@@ -56,6 +57,11 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  */
 public class OperationDependencyGraphPluginAllocation extends AbstractDependencyGraphPlugin<AllocationComponentOperationPair> {
 
+	public static final String CONFIG_DOT_OUTPUT_FILE = OperationDependencyGraphPluginAllocation.class.getName() + ".dotOutputFile";
+	public static final String CONFIG_INCLUDE_WEIGHTS = OperationDependencyGraphPluginAllocation.class.getName() + ".includeWeights";
+	public static final String CONFIG_SHORT_LABELS = OperationDependencyGraphPluginAllocation.class.getName() + ".shortLabels";
+	public static final String CONFIG_INCLUDE_SELF_LOOPS = OperationDependencyGraphPluginAllocation.class.getName() + ".includeSelfLoops";
+
 	private static final Log LOG = LogFactory.getLog(OperationDependencyGraphPluginAllocation.class);
 	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
 	private static final String CONTAINER_NODE_ID_PREFIX = "container_";
@@ -65,16 +71,17 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 	private final boolean shortLabels;
 	private final boolean includeSelfLoops;
 
-	public OperationDependencyGraphPluginAllocation(final String name, final SystemModelRepository systemEntityFactory, final File dotOutputFile,
-			final boolean includeWeights, final boolean shortLabels, final boolean includeSelfLoops) {
-		super(name, systemEntityFactory, new DependencyGraph<AllocationComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-				new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID, systemEntityFactory.getOperationFactory().getRootOperation(),
-						systemEntityFactory.getAllocationFactory().getRootAllocationComponent())));
-		this.pairFactory = new AllocationComponentOperationPairFactory(systemEntityFactory);
-		this.dotOutputFile = dotOutputFile;
-		this.includeWeights = includeWeights;
-		this.shortLabels = shortLabels;
-		this.includeSelfLoops = includeSelfLoops;
+	public OperationDependencyGraphPluginAllocation(final Configuration configuration, final AbstractRepository repositories[]) {
+		// TODO Check type conversion
+		super(configuration, repositories, new DependencyGraph<AllocationComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+				new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID, ((SystemModelRepository) repositories[0]).getOperationFactory()
+						.getRootOperation(),
+						((SystemModelRepository) repositories[0]).getAllocationFactory().getRootAllocationComponent())));
+		this.pairFactory = new AllocationComponentOperationPairFactory(((SystemModelRepository) repositories[0]));
+		this.dotOutputFile = new File(this.configuration.getStringProperty(OperationDependencyGraphPluginAllocation.CONFIG_DOT_OUTPUT_FILE));
+		this.includeWeights = this.configuration.getBooleanProperty(OperationDependencyGraphPluginAllocation.CONFIG_INCLUDE_WEIGHTS);
+		this.shortLabels = this.configuration.getBooleanProperty(OperationDependencyGraphPluginAllocation.CONFIG_SHORT_LABELS);
+		this.includeSelfLoops = this.configuration.getBooleanProperty(OperationDependencyGraphPluginAllocation.CONFIG_INCLUDE_SELF_LOOPS);
 	}
 
 	private String containerNodeLabel(final ExecutionContainer container) {
@@ -214,14 +221,24 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
+		final Configuration configuration = new Configuration();
+
+		configuration.put(OperationDependencyGraphPluginAllocation.CONFIG_DOT_OUTPUT_FILE, "");
+		configuration.put(OperationDependencyGraphPluginAllocation.CONFIG_INCLUDE_WEIGHTS, false);
+		configuration.put(OperationDependencyGraphPluginAllocation.CONFIG_INCLUDE_SELF_LOOPS, false);
+		configuration.put(OperationDependencyGraphPluginAllocation.CONFIG_SHORT_LABELS, false);
+
+		return configuration;
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		// TODO: Save the current configuration
+		configuration.put(OperationDependencyGraphPluginAllocation.CONFIG_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
+		configuration.put(OperationDependencyGraphPluginAllocation.CONFIG_INCLUDE_WEIGHTS, this.includeWeights);
+		configuration.put(OperationDependencyGraphPluginAllocation.CONFIG_INCLUDE_SELF_LOOPS, this.includeSelfLoops);
+		configuration.put(OperationDependencyGraphPluginAllocation.CONFIG_SHORT_LABELS, this.shortLabels);
 
 		return configuration;
 	}
@@ -263,5 +280,10 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 			receiverNode.addIncomingDependency(senderNode);
 		}
 		OperationDependencyGraphPluginAllocation.this.reportSuccess(t.getTraceId());
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
 	}
 }

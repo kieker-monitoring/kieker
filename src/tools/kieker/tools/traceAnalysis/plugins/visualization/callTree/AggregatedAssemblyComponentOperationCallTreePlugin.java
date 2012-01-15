@@ -22,9 +22,11 @@ package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 
 import java.io.File;
 
+import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.AssemblyComponentOperationPairFactory;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
@@ -36,9 +38,13 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  */
 public class AggregatedAssemblyComponentOperationCallTreePlugin extends AggregatedCallTreePlugin<AssemblyComponentOperationPair> {
 
-	public AggregatedAssemblyComponentOperationCallTreePlugin(final String name, final AssemblyComponentOperationPairFactory assemblyComponentOperationPairFactory,
-			final SystemModelRepository systemEntityFactory, final File dotOutputFile, final boolean includeWeights, final boolean shortLabels) {
-		super(name, systemEntityFactory, new AggregatedAssemblyComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, systemEntityFactory,
+	// TODO Change constructor to plugin-default-constructor
+	public AggregatedAssemblyComponentOperationCallTreePlugin(final Configuration configuration, final AbstractRepository repositories[],
+			final AssemblyComponentOperationPairFactory assemblyComponentOperationPairFactory,
+			final File dotOutputFile, final boolean includeWeights, final boolean shortLabels) {
+		// TODO Check type conversion
+		super(configuration, repositories, new AggregatedAssemblyComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+				(SystemModelRepository) repositories[0],
 				assemblyComponentOperationPairFactory, assemblyComponentOperationPairFactory.getRootPair(), true), // root node
 				dotOutputFile, includeWeights, shortLabels);
 	}

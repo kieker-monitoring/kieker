@@ -66,11 +66,14 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 	private final String outputFnBase;
 	private final boolean shortLabels;
 
-	public TraceCallTreePlugin(final String name, final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory,
-			final SystemModelRepository systemEntityFactory, final String outputFnBase, final boolean shortLabels) {
-		super(name, systemEntityFactory);
+	// TODO Change constructor to plugin-default-constructor
+	public TraceCallTreePlugin(final Configuration configuration, final AbstractRepository repositories[],
+			final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory,
+			final String outputFnBase, final boolean shortLabels) {
+		super(configuration, repositories);
 		this.allocationComponentOperationPairFactory = allocationComponentOperationPairFactory;
-		this.systemEntityFactory = systemEntityFactory;
+		// TODO Check type conversion
+		this.systemEntityFactory = (SystemModelRepository) repositories[0];
 		this.root = new CallTreeNode(null, // null: root node has no parent
 				new CallTreeOperationHashKey(this.systemEntityFactory.getAllocationFactory().getRootAllocationComponent(),
 						this.systemEntityFactory.getOperationFactory().getRootOperation()));

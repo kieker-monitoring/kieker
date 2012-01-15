@@ -66,6 +66,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	public static final String MESSAGE_TRACE_OUTPUT_PORT_NAME = "MessageTraceOutput";
 	public static final String EXECUTION_TRACE_OUTPUT_PORT_NAME = "ExecutionTraceOutput";
 	public static final String INVALID_EXECUTION_TRACE_OUTPUT_PORT_NAME = "InvalidExecutionTraceOutput";
+	public static final String CONFIG_MAX_TRACE_DURATION_MILLIS = TraceReconstructionFilter.class.getName() + ".maxTraceDurationMillis";
+	public static final String CONFIG_IGNORE_INVALID_TRACES = TraceReconstructionFilter.class.getName() + ".ignoreInvalidTraces";
 
 	public static final int MAX_DURATION_MILLIS = Integer.MAX_VALUE;
 	private static final Log LOG = LogFactory.getLog(TraceReconstructionFilter.class);
@@ -80,6 +82,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	private final boolean ignoreInvalidTraces;
 	private final Execution rootExecution;
 	private final long maxTraceDurationNanos;
+	private final long maxTraceDurationMillis;
 
 	/** Pending traces sorted by tin timestamps */
 	private final NavigableSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() {
@@ -105,19 +108,28 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 		}
 	});
 
-	public TraceReconstructionFilter(final String name, final SystemModelRepository systemEntityFactory, final long maxTraceDurationMillis,
-			final boolean ignoreInvalidTraces) {
-		super(name, systemEntityFactory);
-		this.rootExecution = systemEntityFactory.getRootExecution();
-		if (maxTraceDurationMillis < 0) {
-			throw new IllegalArgumentException("value maxTraceDurationMillis must not be negative (found: " + maxTraceDurationMillis + ")");
+	public TraceReconstructionFilter(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
+
+		/* Load the root execution from the repository if possible. */
+		if ((repositories.length >= 1) && (repositories[0] instanceof SystemModelRepository)) {
+			this.rootExecution = ((SystemModelRepository) repositories[0]).getRootExecution();
+		} else {
+			this.rootExecution = null;
 		}
-		if (maxTraceDurationMillis == TraceReconstructionFilter.MAX_DURATION_MILLIS) {
+
+		/* Load from the configuration. */
+		this.maxTraceDurationMillis = configuration.getLongProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS);
+		this.ignoreInvalidTraces = configuration.getBooleanProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES);
+
+		if (this.maxTraceDurationMillis < 0) {
+			throw new IllegalArgumentException("value maxTraceDurationMillis must not be negative (found: " + this.maxTraceDurationMillis + ")");
+		}
+		if (this.maxTraceDurationMillis == TraceReconstructionFilter.MAX_DURATION_MILLIS) {
 			this.maxTraceDurationNanos = TraceReconstructionFilter.MAX_DURATION_NANOS;
 		} else {
-			this.maxTraceDurationNanos = maxTraceDurationMillis * (1000 * 1000); // NOCS (MagicNumberCheck)
+			this.maxTraceDurationNanos = this.maxTraceDurationMillis * (1000 * 1000); // NOCS (MagicNumberCheck)
 		}
-		this.ignoreInvalidTraces = ignoreInvalidTraces;
 	}
 
 	/**
@@ -299,14 +311,20 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
+		final Configuration configuration = new Configuration();
+
+		configuration.put(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, TraceReconstructionFilter.MAX_DURATION_MILLIS);
+		configuration.put(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, true);
+
+		return configuration;
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		// TODO: Save the current configuration
+		configuration.put(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, this.maxTraceDurationMillis);
+		configuration.put(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, this.ignoreInvalidTraces);
 
 		return configuration;
 	}

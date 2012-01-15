@@ -43,6 +43,7 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.Signature;
 import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
@@ -111,9 +112,10 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 
 	private final SDModes sdmode;
 
-	public SequenceDiagramPlugin(final String name, final SystemModelRepository systemEntityFactory, final SDModes sdmode, final String outputFnBase,
+	// TODO Change constructor to plugin-default-constructor
+	public SequenceDiagramPlugin(final Configuration configuration, final AbstractRepository repositories[], final SDModes sdmode, final String outputFnBase,
 			final boolean shortLabels) {
-		super(name, systemEntityFactory);
+		super(configuration, repositories);
 		this.sdmode = sdmode;
 		this.outputFnBase = outputFnBase;
 		this.shortLabels = shortLabels;
@@ -328,5 +330,10 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 		// TODO: Save the current configuration
 
 		return configuration;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
 	}
 }

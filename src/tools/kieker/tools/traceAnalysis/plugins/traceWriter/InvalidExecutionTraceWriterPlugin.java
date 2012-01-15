@@ -31,7 +31,6 @@ import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractInvalidExecutionTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * 
@@ -39,16 +38,17 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  */
 public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionTraceProcessingPlugin {
 
+	public static final String CONFIG_OUTPUT_FN = InvalidExecutionTraceWriterPlugin.class.getName() + ".outputFn";
 	public static final String INVALID_EXECUTION_TRACES_INPUT_PORT_NAME = "newEvent";
 	private static final Log LOG = LogFactory.getLog(InvalidExecutionTraceWriterPlugin.class);
 	private final String outputFn;
 	private final BufferedWriter ps;
 
-	public InvalidExecutionTraceWriterPlugin(final String name, final SystemModelRepository systemEntityFactory, final String outputFn)
+	public InvalidExecutionTraceWriterPlugin(final Configuration configuration, final AbstractRepository repositories[])
 			throws IOException {
-		super(name, systemEntityFactory);
-		this.outputFn = outputFn;
-		this.ps = new BufferedWriter(new FileWriter(outputFn));
+		super(configuration, repositories);
+		this.outputFn = configuration.getStringProperty(InvalidExecutionTraceWriterPlugin.CONFIG_OUTPUT_FN);
+		this.ps = new BufferedWriter(new FileWriter(this.outputFn));
 	}
 
 	@Override
@@ -93,14 +93,18 @@ public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionT
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
+		final Configuration configuration = new Configuration();
+
+		configuration.put(InvalidExecutionTraceWriterPlugin.CONFIG_OUTPUT_FN, "");
+
+		return configuration;
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		// TODO: Save the current configuration
+		configuration.put(InvalidExecutionTraceWriterPlugin.CONFIG_OUTPUT_FN, this.outputFn);
 
 		return configuration;
 	}
