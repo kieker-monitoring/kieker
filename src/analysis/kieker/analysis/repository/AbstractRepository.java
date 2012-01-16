@@ -1,4 +1,4 @@
-package kieker.tools.traceAnalysis.systemModel.repository;
+package kieker.analysis.repository;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
