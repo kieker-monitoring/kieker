@@ -22,6 +22,7 @@ package kieker.test.tools.junit.traceAnalysis.plugins;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -31,7 +32,6 @@ import kieker.tools.traceAnalysis.plugins.traceFilter.TraceEquivalenceClassFilte
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
-import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 import org.junit.Test;

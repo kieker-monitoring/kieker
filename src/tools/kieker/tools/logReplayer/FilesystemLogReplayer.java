@@ -28,13 +28,13 @@ import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.reader.filesystem.FSReader;
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**

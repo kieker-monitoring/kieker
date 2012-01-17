@@ -29,6 +29,7 @@ import java.util.Set;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.reader.AbstractReaderPlugin;
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.logging.Log;
@@ -37,7 +38,6 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
-import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * Filesystem reader which reads from multiple directories simultaneously ordered by the logging timestamp.

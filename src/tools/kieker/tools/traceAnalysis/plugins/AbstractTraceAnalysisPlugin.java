@@ -21,8 +21,8 @@
 package kieker.tools.traceAnalysis.plugins;
 
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**

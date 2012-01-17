@@ -21,9 +21,9 @@
 package kieker.tools.traceAnalysis.plugins;
 
 import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
-import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * 

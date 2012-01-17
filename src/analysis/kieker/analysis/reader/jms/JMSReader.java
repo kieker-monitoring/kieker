@@ -42,11 +42,11 @@ import javax.naming.NameNotFoundException;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.reader.AbstractReaderPlugin;
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * Reads monitoring records from a (remote or local) JMS queue.

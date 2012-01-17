@@ -28,12 +28,12 @@ import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.reader.IMonitoringReader;
 import kieker.analysis.reader.jms.JMSReader;
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
-import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * Listens to a JMS queue and simply passes each record to a specified {@link IMonitoringRecordReceiver}.

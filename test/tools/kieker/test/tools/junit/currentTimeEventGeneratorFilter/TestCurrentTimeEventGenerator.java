@@ -28,10 +28,10 @@ import junit.framework.TestCase;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.tools.currentTimeEventGenerator.CurrentTimeEventGenerator;
 import kieker.tools.currentTimeEventGenerator.TimestampEvent;
-import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 import org.junit.Test;
 

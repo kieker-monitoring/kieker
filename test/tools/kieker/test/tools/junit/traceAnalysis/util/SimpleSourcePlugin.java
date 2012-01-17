@@ -3,8 +3,8 @@ package kieker.test.tools.junit.traceAnalysis.util;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 import org.junit.Assert;
 

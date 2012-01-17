@@ -25,12 +25,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractInvalidExecutionTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
-import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * 

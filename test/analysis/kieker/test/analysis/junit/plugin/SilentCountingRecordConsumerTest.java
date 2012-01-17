@@ -5,8 +5,8 @@ import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.SilentCountingRecordConsumer;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 import org.junit.Assert;
 import org.junit.Test;

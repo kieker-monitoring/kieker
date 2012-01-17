@@ -24,11 +24,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.systemModel.AbstractTrace;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
-import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * This class has exactly one input port. The data which is send to this plugin is not delegated in any way.

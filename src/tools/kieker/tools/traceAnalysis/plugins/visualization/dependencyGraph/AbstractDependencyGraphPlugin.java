@@ -25,10 +25,10 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Collection;
 
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
-import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool

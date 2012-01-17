@@ -1,8 +1,8 @@
 package kieker.analysis.reader;
 
 import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * This class should be used as a base for every reader used within <i>Kieker</i>.

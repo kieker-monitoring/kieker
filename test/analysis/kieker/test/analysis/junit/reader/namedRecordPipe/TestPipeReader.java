@@ -32,12 +32,12 @@ import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.reader.namedRecordPipe.PipeReader;
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.test.analysis.junit.util.DummyRecord;
 import kieker.test.analysis.junit.util.NamedPipeFactory;
-import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 import org.junit.Test;
 

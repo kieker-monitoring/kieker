@@ -22,11 +22,11 @@ package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 
 import java.io.File;
 
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
-import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOperationPairFactory;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;

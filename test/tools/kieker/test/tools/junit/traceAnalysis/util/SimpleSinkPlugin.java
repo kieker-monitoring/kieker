@@ -5,8 +5,8 @@ import java.util.List;
 
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 public class SimpleSinkPlugin extends AbstractAnalysisPlugin {
 

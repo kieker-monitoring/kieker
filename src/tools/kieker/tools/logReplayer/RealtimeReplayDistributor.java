@@ -29,13 +29,13 @@ import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.timer.DefaultSystemTimer;
 import kieker.monitoring.timer.ITimeSource;
-import kieker.tools.traceAnalysis.systemModel.repository.AbstractRepository;
 
 /**
  * IMonitoringRecordConsumerPlugin that distributes the log records to the worker

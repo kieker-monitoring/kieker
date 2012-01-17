@@ -25,6 +25,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Collection;
 
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
