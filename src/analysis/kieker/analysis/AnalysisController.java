@@ -42,6 +42,7 @@ import kieker.analysis.model.analysisMetaModel.MIOutputPort;
 import kieker.analysis.model.analysisMetaModel.MIPlugin;
 import kieker.analysis.model.analysisMetaModel.MIProject;
 import kieker.analysis.model.analysisMetaModel.MIProperty;
+import kieker.analysis.model.analysisMetaModel.MIRepository;
 import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelFactory;
 import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
@@ -49,6 +50,7 @@ import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.Pair;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.reader.IMonitoringReader;
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -144,8 +146,25 @@ public final class AnalysisController {
 	private final void loadFromModelProject(final MIProject mproject) throws InstantiationException, IllegalAccessException, IllegalArgumentException,
 			InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
 		/* Get all repositories. */
-		// final EList<IRepository> mRepositories = mproject.getRepositories();
-		// TODO Create the repositories and use them, once this is possible.
+		final EList<MIRepository> mRepositories = mproject.getRepositories();
+		final Map<MIRepository, AbstractRepository> repositoryMap = new HashMap<MIRepository, AbstractRepository>();
+
+		/* Create the repositories. */
+		for (final MIRepository mRepository : mRepositories) {
+			/* Extract the necessary informations to create the repository. */
+			final Configuration configuration = this.modelPropertiesToConfiguration(mRepository.getProperties());
+
+			Constructor<?> repositoryConstructor;
+			try {
+				repositoryConstructor = Class.forName(mRepository.getClassname()).getConstructor(Configuration.class);
+			} catch (final Exception ex) {
+				AnalysisController.LOG.error("Could not load repository: " + mRepository.getClassname());
+				continue;
+			}
+			final AbstractRepository repository = (AbstractRepository) repositoryConstructor.newInstance(configuration.getPropertiesStartingWith(mRepository
+					.getClassname()));
+			repositoryMap.put(mRepository, repository);
+		}
 
 		/*
 		 * We run through the project and collect all plugins. As we create an actual object for every plugin within the model, we have to remember the mapping
@@ -158,10 +177,24 @@ public final class AnalysisController {
 		for (final MIPlugin mPlugin : mPlugins) {
 			/* Extract the necessary informations to create the plugin. */
 			final Configuration configuration = this.modelPropertiesToConfiguration(mPlugin.getProperties());
+			final EList<MIRepository> mPluginRepositories = mPlugin.getRepositories();
+			final int len = mPluginRepositories.size();
+			final AbstractRepository pluginRepositories[] = new AbstractRepository[len];
+			for (int i = 0; i < len; i++) {
+				pluginRepositories[i] = repositoryMap.get(mPluginRepositories.get(i));
+			}
 
 			/* Create the plugin and put it into our map. */
-			final Constructor<?> pluginConstructor = Class.forName(mPlugin.getClassname()).getConstructor(Configuration.class);
-			final AbstractPlugin plugin = (AbstractPlugin) pluginConstructor.newInstance(configuration.getPropertiesStartingWith(mPlugin.getClassname()));
+			Constructor<?> pluginConstructor;
+			try {
+				pluginConstructor = Class.forName(mPlugin.getClassname()).getConstructor(Configuration.class, AbstractRepository[].class);
+			} catch (final Exception ex) {
+				AnalysisController.LOG.error("Could not load plugin: " + mPlugin.getClassname());
+				continue;
+			}
+
+			final AbstractPlugin plugin = (AbstractPlugin) pluginConstructor.newInstance(configuration.getPropertiesStartingWith(mPlugin.getClassname()),
+					pluginRepositories);
 			pluginMap.put(mPlugin, plugin);
 
 			/* Set the other properties of the plugin. */
