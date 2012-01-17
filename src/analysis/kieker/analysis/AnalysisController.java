@@ -303,6 +303,7 @@ public final class AnalysisController {
 	}
 
 	public MIProject getCurrentConfiguration(final String projectName) {
+		// TODO Use the repositories here as well!
 		try {
 			/* Create a factory to create all other model instances. */
 			final MAnalysisMetaModelFactory factory = new MAnalysisMetaModelFactory();

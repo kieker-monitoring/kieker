@@ -32,6 +32,7 @@ import kieker.analysis.reader.AbstractReaderPlugin;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import kieker.analysis.repository.AbstractRepository;
 
 @Plugin(outputPorts = {
 	@OutputPort(eventTypes = { MyResponseTimeRecord.class }, name = MyPipeReader.OUTPUT_PORT_NAME)
@@ -46,13 +47,13 @@ public class MyPipeReader extends AbstractReaderPlugin {
 	private volatile MyPipe pipe;
 
 	public MyPipeReader() {
-		super(new Configuration(null));
+		super(new Configuration(null), new AbstractRepository[0]);
 		this.pipeName = "kieker-pipe";
 		this.init();
 	}
 
-	public MyPipeReader(final Configuration configuration) {
-		super(configuration);
+	public MyPipeReader(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
 
 		this.pipeName = configuration.getStringProperty(MyPipeReader.PROPERTY_PIPE_NAME);
 
@@ -60,7 +61,7 @@ public class MyPipeReader extends AbstractReaderPlugin {
 	}
 
 	public MyPipeReader(final String pipeName) {
-		super(new Configuration(null));
+		super(new Configuration(null), new AbstractRepository[0]);
 
 		this.pipeName = pipeName;
 
@@ -118,5 +119,13 @@ public class MyPipeReader extends AbstractReaderPlugin {
 		defaultConfiguration.setProperty(MyPipeReader.PROPERTY_PIPE_NAME, "kieker-pipe");
 
 		return defaultConfiguration;
+	}
+	
+	public AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
 	}
 }

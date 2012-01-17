@@ -20,15 +20,13 @@
 
 package bookstoreApplication;
 
-import java.util.Properties;
-
 import kieker.analysis.AnalysisController;
-import kieker.common.configuration.Configuration;
+import kieker.analysis.exception.MonitoringReaderException;
 import kieker.analysis.exception.MonitoringRecordConsumerException;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.reader.IMonitoringReader;
-import kieker.analysis.exception.MonitoringReaderException;
 import kieker.analysis.reader.filesystem.FSReader;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 
 public class BookstoreAnalysisStarter {
 
@@ -49,7 +47,7 @@ public class BookstoreAnalysisStarter {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(FSReader.CONFIG_INPUTDIRS, args[0]);
 
-		final FSReader reader = new FSReader(configuration);
+		final FSReader reader = new FSReader(configuration, new AbstractRepository[0]);
 		analysisInstance.setReader(reader);
 
 		/* Connect the output of the reader with the input of the plugin. */

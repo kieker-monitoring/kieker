@@ -31,6 +31,7 @@ import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
+import kieker.analysis.repository.AbstractRepository;
 
 public class Consumer extends AbstractAnalysisPlugin {
 
@@ -38,7 +39,7 @@ public class Consumer extends AbstractAnalysisPlugin {
 	public static final String INPUT_PORT_NAME = "newEvent";
 
 	public Consumer(final long maxResponseTime) {
-		super(new Configuration(null));
+		super(new Configuration(null), new AbstractRepository[0]);
 		this.maxResponseTime = maxResponseTime;
 	}
 
@@ -76,5 +77,13 @@ public class Consumer extends AbstractAnalysisPlugin {
 
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
+	}
+	
+	public AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
 	}
 }

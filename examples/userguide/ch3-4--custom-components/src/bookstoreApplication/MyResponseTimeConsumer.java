@@ -28,17 +28,18 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import kieker.common.configuration.Configuration;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.repository.AbstractRepository;
 
 public class MyResponseTimeConsumer extends AbstractAnalysisPlugin {
 
 	public static final String INPUT_PORT_NAME = "newEvent";
 
-	public MyResponseTimeConsumer(final Configuration configuration) {
-		super(configuration);
+	public MyResponseTimeConsumer(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
 	}
 
 	public MyResponseTimeConsumer() {
-		super(new Configuration(null));
+		super(new Configuration(null), new AbstractRepository[0]);
 	}
 
 	@InputPort(eventTypes = { MyResponseTimeRecord.class })
@@ -68,5 +69,13 @@ public class MyResponseTimeConsumer extends AbstractAnalysisPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration(null);
+	}
+	
+	public AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
 	}
 }
