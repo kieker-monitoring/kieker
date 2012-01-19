@@ -27,19 +27,17 @@ import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.configuration.Configuration;
+import kieker.common.configuration.Configuration;
 import kieker.analysis.exception.MonitoringReaderException;
 import kieker.analysis.exception.MonitoringRecordConsumerException;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.ISingleInputPort;
-import kieker.analysis.plugin.port.AbstractInputPort;
-import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.reader.filesystem.FSReader;
-import kieker.common.configuration.AbstractConfiguration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.repository.AbstractRepository;
 
 public class BookstoreHostnameRewriter {
 
@@ -59,26 +57,24 @@ public class BookstoreHostnameRewriter {
 		/* Set filesystem monitoring log input directory for our analysis */
 		final String inputDirs[] = { args[0] };
 		final Configuration configuration = new Configuration(null);
-		configuration.setProperty(FSReader.CONFIG_INPUTDIRS, AbstractConfiguration.toProperty(inputDirs));
-		final FSReader reader = new FSReader(configuration);
+		configuration.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(inputDirs));
+		final FSReader reader = new FSReader(configuration, new AbstractRepository[0]);
 		analysisInstance.setReader(reader);
 
 		/* Connect the reader with the plugin. */
-		reader.getDefaultOutputPort().subscribe(plugin.getDefaultInputPort());
+		AbstractAnalysisPlugin.connect(reader, FSReader.OUTPUT_PORT_NAME, plugin, HostNameRewriterPlugin.INPUT_PORT_NAME);
 
 		/* Start the analysis */
 		analysisInstance.run();
 	}
 }
 
-class HostNameRewriterPlugin extends AbstractAnalysisPlugin implements ISingleInputPort {
+class HostNameRewriterPlugin extends AbstractAnalysisPlugin {
 
+	public static final String INPUT_PORT_NAME = "newEvent";
+	
 	private static final IMonitoringController MONITORING_CTRL =
 			MonitoringController.getInstance();
-	private static final Collection<Class<?>> IN_CLASSES = Collections.unmodifiableCollection(new CopyOnWriteArrayList<Class<?>>(
-			new Class<?>[] { IMonitoringRecord.class }));
-	private final AbstractInputPort inputPort = new InputPort("Input", HostNameRewriterPlugin.IN_CLASSES, this);
-
 	private static final String BOOKSTORE_HOSTNAME = "SRV0";
 	private static final Random rnd = new Random();
 	private static final int RND_PERCENTILE_HOST_IDX_1 = 34;
@@ -86,10 +82,10 @@ class HostNameRewriterPlugin extends AbstractAnalysisPlugin implements ISingleIn
 	private static final String CRM_HOSTNAME = "SRV0";
 
 	public HostNameRewriterPlugin() {
-		super(new Configuration(null));
+		super(new Configuration(null), new AbstractRepository[0]);
 	}
 
-	@Override
+	@InputPort(eventTypes = { IMonitoringRecord.class })
 	public void newEvent(final Object event) {
 		if (!(event instanceof OperationExecutionRecord)) {
 			return;
@@ -122,8 +118,8 @@ class HostNameRewriterPlugin extends AbstractAnalysisPlugin implements ISingleIn
 	}
 
 	@Override
-	protected Properties getDefaultProperties() {
-		return new Properties();
+	protected Configuration getDefaultConfiguration() {
+		return new Configuration(null);
 	}
 
 	@Override
@@ -131,7 +127,13 @@ class HostNameRewriterPlugin extends AbstractAnalysisPlugin implements ISingleIn
 		return new Configuration(null);
 	}
 
-	public AbstractInputPort getDefaultInputPort() {
-		return this.inputPort;
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
 	}
 }

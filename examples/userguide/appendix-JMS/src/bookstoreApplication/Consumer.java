@@ -23,14 +23,19 @@ package bookstoreApplication;
 import java.util.Collection;
 
 import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
 
 public class Consumer implements IMonitoringRecordConsumerPlugin {
 
+	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
 	private final long maxResponseTime;
 
 	public Consumer(final long maxResponseTime) {
+		super(new Configuration(null), new AbstractRepository[0]);
 		this.maxResponseTime = maxResponseTime;
 	}
 
@@ -39,8 +44,8 @@ public class Consumer implements IMonitoringRecordConsumerPlugin {
 		return null;
 	}
 
-	@Override
-	public boolean newMonitoringRecord(final IMonitoringRecord record) {
+	@InputPort(eventTypes = { IMonitoringRecord.class })
+	public boolean newMonitoringRecord(final Object record) {
 		if (!(record instanceof OperationExecutionRecord)) {
 			return true;
 		}
@@ -66,5 +71,22 @@ public class Consumer implements IMonitoringRecordConsumerPlugin {
 
 	@Override
 	public void terminate(final boolean error) {}
+	
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		return new Configuration();
+	}
 
+	@Override
+	public Configuration getCurrentConfiguration() {
+		return new Configuration(null);
+	}
+	
+	public AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
+	}
 }
