@@ -11,12 +11,10 @@ The default execution of the benchmark requires a 64Bit JVM!
 This can be changed in the respective .sh scripts.
 
 Files required in /lib:
-  kieker-*.jar         (a current build of Kieker)
+  kieker-weaver*.jar         (a current build of Kieker)
   aspectjrt-*.jar
   aspectjtools-*.jar
-  aspectjweaver-*.jar
   commons-cli-1.2.jar
-  commons-logging-1.1.1.jar
 
 Initially, the following steps are required:
 1. You should check whether you installed ant (http://ant.apache.org/), 

@@ -21,7 +21,6 @@
     <path id="compile-classpath">
       <fileset dir="lib/">
         <include name="commons-cli-*.jar"/>
-        <include name="commons-logging-*.jar"/>
         <include name="kieker-*.jar"/>
       </fileset>
     </path>
@@ -36,7 +35,6 @@
     <path id="compile-ajc-classpath">
       <fileset dir="lib/">
         <include name="aspectjrt-*.jar"/>
-        <include name="commons-logging-*.jar"/>
         <include name="kieker-*.jar"/>
       </fileset>
       <pathelement location="build"/>
