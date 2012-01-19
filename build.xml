@@ -881,6 +881,7 @@
 		<path id="kieker.test-junit-run-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="junit-*.jar" />
+				<include name="org.eclipse.emf.*.jar" />
 			</fileset>
 			<pathelement location="${build.tests.dir}/" />
 			<fileset dir="${dist.dir}">
@@ -891,7 +892,7 @@
 		<delete dir="${tests.junit-results.dir}" />
 		<mkdir dir="${tests.junit-results.dir}" />
 
-		<junit fork="true" printsummary="yes" haltonfailure="no" forkmode="once">
+		<junit fork="false" printsummary="yes" haltonfailure="no">
 			<classpath refid="kieker.test-junit-run-classpath" />
 
 			<formatter type="xml" />
@@ -904,7 +905,7 @@
 			<!-- Serenity JVM command line. -->
 			<jvmarg line="-javaagent:${lib.dir}/serenity-0.4/serenity.jar" />
 
-			<batchtest fork="yes" todir="${tests.junit-results.dir}">
+			<batchtest fork="false" todir="${tests.junit-results.dir}">
 				<fileset dir="${build.tests.dir}/">
 					<include name="**/junit/**/*Test*.class" />
 					<exclude name="**/*$*.class" />
