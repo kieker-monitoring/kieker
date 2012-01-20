@@ -202,12 +202,9 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 	 * constructors and method-implementations in order to be used as an outer
 	 * class.
 	 */
-	@Plugin(
-			outputPorts = { @OutputPort(name = FSReaderRealtimeCons.OUTPUT_PORT_NAME, description = "Output port", eventTypes = { IMonitoringRecord.class })
-			})
+	@Plugin
 	private static class FSReaderRealtimeCons extends AbstractAnalysisPlugin {
 
-		public static final String OUTPUT_PORT_NAME = "defaultOutput";
 		public static final String INPUT_PORT = "newMonitoringRecord";
 		private final FSReaderRealtime master;
 
@@ -228,7 +225,6 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 			if (!this.master.deliver(FSReaderRealtime.OUTPUT_PORT_NAME, record)) {
 				FSReaderRealtime.LOG.error("LogReaderExecutionException");
 			}
-			super.deliver(FSReaderRealtimeCons.OUTPUT_PORT_NAME, data);
 		}
 
 		@Override

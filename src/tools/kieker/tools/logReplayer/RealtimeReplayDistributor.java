@@ -27,7 +27,6 @@ import java.util.concurrent.TimeUnit;
 import kieker.analysis.exception.MonitoringRecordConsumerException;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.InputPort;
-import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
@@ -51,12 +50,9 @@ import kieker.monitoring.timer.ITimeSource;
  * @author Robert von Massow
  * 
  */
-@Plugin(outputPorts = {
-	@OutputPort(name = RealtimeReplayDistributor.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
-})
+@Plugin
 public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
-	public static final String OUTPUT_PORT_NAME = "defaultOutput";
-	public static final String INPUT_PORT_NAME = "newEvent";
+	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
 	private static final Log LOG = LogFactory.getLog(RealtimeReplayDistributor.class);
 
 	private static final ITimeSource TIMESOURCE = DefaultSystemTimer.getInstance();
@@ -75,13 +71,6 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 	private volatile int active;
 	private final int maxQueueSize;
 	private final CountDownLatch terminationLatch;
-
-	@InputPort(eventTypes = { IMonitoringRecord.class })
-	public void newEvent(final Object event) {
-		this.newMonitoringRecord((IMonitoringRecord) event);
-
-		super.deliver(RealtimeReplayDistributor.OUTPUT_PORT_NAME, event);
-	}
 
 	public RealtimeReplayDistributor(final Configuration configuration, final AbstractRepository repositories[]) {
 		super(configuration, repositories);
@@ -117,7 +106,9 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 		this.constInputPortName = constInputPortName;
 	}
 
-	public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
+	@InputPort(eventTypes = { IMonitoringRecord.class })
+	public void newMonitoringRecord(final Object data) {
+		final IMonitoringRecord monitoringRecord = (IMonitoringRecord) data;
 		if (this.startTime == -1) { // init on first record
 			this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp() - (1 * RealtimeReplayDistributor.MILLISECOND);
 			this.offset = RealtimeReplayDistributor.REPLAY_OFFSET - this.firstLoggingTimestamp;
@@ -127,14 +118,12 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 			final MonitoringRecordConsumerException e = new MonitoringRecordConsumerException("Timestamp of current record "
 					+ monitoringRecord.getLoggingTimestamp() + " < firstLoggingTimestamp " + this.firstLoggingTimestamp);
 			RealtimeReplayDistributor.LOG.error("RecordConsumerExecutionException", e);
-			return false;
 		}
 		final long schedTime = (monitoringRecord.getLoggingTimestamp() + this.offset) // relative to 1st record
 				- (RealtimeReplayDistributor.TIMESOURCE.getTime() - this.startTime); // substract elapsed time
 		if (schedTime < 0) {
 			final MonitoringRecordConsumerException e = new MonitoringRecordConsumerException("negative scheduling time: " + schedTime);
 			RealtimeReplayDistributor.LOG.error("RecordConsumerExecutionException", e);
-			return false;
 		}
 		synchronized (this) {
 			while (this.active > this.maxQueueSize) {
@@ -145,13 +134,8 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 			}
 			this.active++;
 			this.executor.schedule(new RealtimeReplayWorker(monitoringRecord, this, this.cons, this.constInputPortName), schedTime, TimeUnit.NANOSECONDS); // *relative*
-																																							// delay
-																																							// from
-																																							// now
-
 		}
 		this.lTime = this.lTime < monitoringRecord.getLoggingTimestamp() ? monitoringRecord.getLoggingTimestamp() : this.lTime; // NOCS
-		return true;
 	}
 
 	@Override
