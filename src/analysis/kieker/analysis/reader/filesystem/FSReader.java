@@ -20,7 +20,6 @@
 
 package kieker.analysis.reader.filesystem;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.PriorityQueue;
@@ -67,7 +66,6 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	public FSReader(final Configuration configuration, final AbstractRepository repositories[]) {
 		super(configuration, repositories);
 		this.inputDirs = this.configuration.getStringArrayProperty(FSReader.CONFIG_INPUTDIRS);
-		System.out.println(Arrays.toString(this.inputDirs));
 		this.recordQueue = new PriorityQueue<IMonitoringRecord>(this.inputDirs.length);
 		final String[] onlyrecords = this.configuration.getStringArrayProperty(FSReader.CONFIG_ONLYRECORDS);
 		if (onlyrecords.length == 0) {

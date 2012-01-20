@@ -49,8 +49,8 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	private static final Log LOG = LogFactory.getLog(FSReaderRealtime.class);
 
-	private static final String PROP_NAME_NUM_WORKERS = FSReaderRealtime.class + ".numWorkers";
-	private static final String PROP_NAME_INPUTDIRNAMES = FSReaderRealtime.class + ".inputDirs";
+	public static final String PROP_NAME_NUM_WORKERS = FSReaderRealtime.class + ".numWorkers";
+	public static final String PROP_NAME_INPUTDIRNAMES = FSReaderRealtime.class + ".inputDirs";
 
 	/* manages the life-cycle of the reader and consumers */
 	private final AnalysisController analysis = new AnalysisController();
@@ -79,15 +79,9 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		this.init(configuration);
 	}
 
-	// TODO: Remove this constructor
-	public FSReaderRealtime(final String[] inputDirNames, final int numWorkers) {
-		this(new Configuration(null), new AbstractRepository[0]);
-		this.initInstanceFromArgs(inputDirNames, numWorkers);
-	}
-
 	public boolean init(final Configuration configuration) {
 		try {
-			final String numWorkersString = configuration.getProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS);
+			final String numWorkersString = configuration.getStringProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS);
 			this.numWorkers = -1;
 			if (numWorkersString == null) {
 				throw new IllegalArgumentException("Missing init parameter '" + FSReaderRealtime.PROP_NAME_NUM_WORKERS + "'");
@@ -96,7 +90,7 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 				this.numWorkers = Integer.parseInt(numWorkersString);
 			} catch (final NumberFormatException ex) { // NOPMD (value of numWorkers remains -1)
 			}
-			this.inputDirs = this.inputDirNameListToArray(configuration.getProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES));
+			this.inputDirs = this.inputDirNameListToArray(configuration.getStringProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES));
 			this.initInstanceFromArgs(this.inputDirs, this.numWorkers);
 		} catch (final IllegalArgumentException exc) {
 			FSReaderRealtime.LOG.error("Failed to load configuration: " + exc.getMessage());
@@ -138,13 +132,12 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		}
 
 		final Configuration configuration = new Configuration(null);
-		configuration.setProperty(FSReader.CONFIG_INPUTDIRS,
-				Configuration.toProperty(inputDirNames));
+		configuration.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(inputDirNames));
 		final AbstractReaderPlugin fsReader = new FSReader(configuration, new AbstractRepository[0]);
 		final AbstractAnalysisPlugin rtCons = new FSReaderRealtimeCons(this);
 		this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, this.terminationLatch, FSReaderRealtimeCons.INPUT_PORT);
 		this.analysis.setReader(fsReader);
-		AbstractPlugin.connect(fsReader, FSReader.OUTPUT_PORT_NAME, this.rtDistributor, FSReaderRealtimeCons.INPUT_PORT);
+		AbstractPlugin.connect(fsReader, FSReader.OUTPUT_PORT_NAME, this.rtDistributor, RealtimeReplayDistributor.INPUT_PORT_NAME);
 		this.analysis.registerPlugin(this.rtDistributor);
 	}
 
