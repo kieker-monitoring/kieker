@@ -118,12 +118,14 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 			final MonitoringRecordConsumerException e = new MonitoringRecordConsumerException("Timestamp of current record "
 					+ monitoringRecord.getLoggingTimestamp() + " < firstLoggingTimestamp " + this.firstLoggingTimestamp);
 			RealtimeReplayDistributor.LOG.error("RecordConsumerExecutionException", e);
+			return;
 		}
 		final long schedTime = (monitoringRecord.getLoggingTimestamp() + this.offset) // relative to 1st record
 				- (RealtimeReplayDistributor.TIMESOURCE.getTime() - this.startTime); // substract elapsed time
 		if (schedTime < 0) {
 			final MonitoringRecordConsumerException e = new MonitoringRecordConsumerException("negative scheduling time: " + schedTime);
 			RealtimeReplayDistributor.LOG.error("RecordConsumerExecutionException", e);
+			return;
 		}
 		synchronized (this) {
 			while (this.active > this.maxQueueSize) {
