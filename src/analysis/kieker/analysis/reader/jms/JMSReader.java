@@ -90,9 +90,9 @@ public final class JMSReader extends AbstractReaderPlugin {
 		/* Call the inherited constructor. */
 		super(configuration, repositories);
 		/* Initialize the reader bases on the given configuration. */
-		this.jmsProviderUrl = configuration.getStringProperty("jmsProviderUrl");
-		this.jmsDestination = configuration.getStringProperty("jmsDestination");
-		this.jmsFactoryLookupName = configuration.getStringProperty("jmsFactoryLookupName");
+		this.jmsProviderUrl = configuration.getStringProperty(JMSReader.CONFIG_PROVIDERURL);
+		this.jmsDestination = configuration.getStringProperty(JMSReader.CONFIG_DESTINATION);
+		this.jmsFactoryLookupName = configuration.getStringProperty(JMSReader.CONFIG_FACTORYLOOKUP);
 		// simple sanity check
 		if (this.jmsProviderUrl.isEmpty() || this.jmsDestination.isEmpty() || this.jmsFactoryLookupName.isEmpty()) {
 			throw new IllegalArgumentException("JMSReader has not sufficient parameters. jmsProviderUrl ('" + this.jmsProviderUrl + "'), jmsDestination ('"

@@ -22,26 +22,24 @@ package bookstoreApplication;
 
 import java.util.Collection;
 
-import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
 
-public class Consumer implements IMonitoringRecordConsumerPlugin {
+public class Consumer extends AbstractAnalysisPlugin {
 
+	public static final String CONFIG_MAX_RESPONSE_TIME = Consumer.class.getName() + ".maxResponseTime";
 	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
 	private final long maxResponseTime;
 
-	public Consumer(final long maxResponseTime) {
-		super(new Configuration(null), new AbstractRepository[0]);
-		this.maxResponseTime = maxResponseTime;
-	}
-
-	@Override
-	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-		return null;
+	public Consumer(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
+		
+		this.maxResponseTime = configuration.getLongProperty(CONFIG_MAX_RESPONSE_TIME);
+		System.out.println(this.maxResponseTime);
 	}
 
 	@InputPort(eventTypes = { IMonitoringRecord.class })
@@ -74,18 +72,28 @@ public class Consumer implements IMonitoringRecordConsumerPlugin {
 	
 	@Override
 	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
+		final Configuration configuration = new Configuration();
+		
+		configuration.setProperty(CONFIG_MAX_RESPONSE_TIME, Long.toString(Long.MAX_VALUE));
+		
+		return configuration;
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		return new Configuration(null);
+		final Configuration configuration = new Configuration();
+		
+		configuration.setProperty(CONFIG_MAX_RESPONSE_TIME, Long.toString(this.maxResponseTime));
+		
+		return configuration;
 	}
 	
+	@Override
 	public AbstractRepository[] getDefaultRepositories() {
 		return new AbstractRepository[0];
 	}
-
+	
+	@Override
 	public AbstractRepository[] getCurrentRepositories() {
 		return new AbstractRepository[0];
 	}
