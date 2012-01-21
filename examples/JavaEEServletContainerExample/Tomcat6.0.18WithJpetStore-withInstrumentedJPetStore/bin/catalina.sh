@@ -186,7 +186,7 @@ if [ -r "$CATALINA_BASE"/conf/logging.properties ]; then
 fi
 
 # Activate Kieker with AspectJ load-time-weaving agent and custom conguration
-JAVA_OPTS="${JAVA_OPTS} -javaagent:$CATALINA_BASE/lib/aspectjweaver-1.6.11.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
+JAVA_OPTS="${JAVA_OPTS} -javaagent:$CATALINA_BASE/lib/aspectjweaver-1.6.12.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
 JAVA_OPTS="${JAVA_OPTS} -Dkieker.monitoring.configuration=$CATALINA_BASE/lib/META-INF/kieker.monitoring.properties"
 
 HEAPSIZEINIT_DEFAULT=256m
