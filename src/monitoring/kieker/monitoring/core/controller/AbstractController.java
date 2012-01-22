@@ -22,9 +22,9 @@ package kieker.monitoring.core.controller;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.monitoring.core.configuration.Configuration;
 
 /**
  * @author Jan Waller

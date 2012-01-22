@@ -20,10 +20,10 @@
 
 package kieker.monitoring.writer;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.Configuration;
 
 /**
  * A writer that does nothing but consuming records.

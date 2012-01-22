@@ -21,35 +21,61 @@
 package bookstoreApplication;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Properties;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
-import kieker.common.record.IMonitoringRecord;
+import kieker.common.configuration.Configuration;
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.repository.AbstractRepository;
 
-public class MyResponseTimeConsumer implements IMonitoringRecordConsumerPlugin {
+public class MyResponseTimeConsumer extends AbstractAnalysisPlugin {
 
-    @Override
-    public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-        return null;
-    }
+	public static final String INPUT_PORT_NAME = "newEvent";
 
-    @Override
-    public boolean newMonitoringRecord(IMonitoringRecord record) {
-        if (record instanceof MyResponseTimeRecord) {
-            /* Write the content to the standard output stream. */
-            MyResponseTimeRecord myRecord = (MyResponseTimeRecord) record;
-            System.out.println("[Consumer] " + myRecord.getLoggingTimestamp()
-                    + ": " + myRecord.className + ", " + myRecord.methodName
-                    + ", " + myRecord.responseTimeNanos);
-        }
-        return true;
-    }
+	public MyResponseTimeConsumer(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
+	}
 
-    @Override
-    public boolean execute() {
-        return true;
-    }
+	public MyResponseTimeConsumer() {
+		super(new Configuration(null), new AbstractRepository[0]);
+	}
 
-    @Override
-    public void terminate(boolean error) {
-    }
+	@InputPort(eventTypes = { MyResponseTimeRecord.class })
+	public void newEvent(final Object event) {
+		if (event instanceof MyResponseTimeRecord) {
+			/* Write the content to the standard output stream. */
+			final MyResponseTimeRecord myRecord = (MyResponseTimeRecord) event;
+			System.out.println("[Consumer] " + myRecord.getLoggingTimestamp()
+					+ ": " + myRecord.className + ", " + myRecord.methodName
+					+ ", " + myRecord.responseTimeNanos);
+		}
+	}
+
+	@Override
+	public boolean execute() {
+		return true;
+	}
+
+	@Override
+	public void terminate(final boolean error) {}
+
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		return new Configuration();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		return new Configuration(null);
+	}
+	
+	public AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
+	}
 }

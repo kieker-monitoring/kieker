@@ -20,9 +20,10 @@
 
 package kieker.monitoring.core.controller;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.monitoring.core.configuration.Configuration;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.timer.ITimeSource;
 
 /**
@@ -36,7 +37,8 @@ public final class TimeSourceController extends AbstractController implements IT
 
 	protected TimeSourceController(final Configuration configuration) {
 		super(configuration);
-		this.timeSource = AbstractController.createAndInitialize(ITimeSource.class, configuration.getStringProperty(Configuration.TIMER_CLASSNAME), configuration);
+		this.timeSource = AbstractController.createAndInitialize(ITimeSource.class, configuration.getStringProperty(ConfigurationFactory.TIMER_CLASSNAME),
+				configuration);
 		if (this.timeSource == null) {
 			this.terminate();
 		}

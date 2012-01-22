@@ -21,30 +21,34 @@
 package bookstoreApplication;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Properties;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.common.configuration.Configuration;
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
+import kieker.analysis.repository.AbstractRepository;
 
-public class Consumer implements IMonitoringRecordConsumerPlugin {
+public class Consumer extends AbstractAnalysisPlugin {
 
 	private final long maxResponseTime;
+	public static final String INPUT_PORT_NAME = "newEvent";
 
 	public Consumer(final long maxResponseTime) {
+		super(new Configuration(null), new AbstractRepository[0]);
 		this.maxResponseTime = maxResponseTime;
 	}
 
-	@Override
-	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-		return null;
-	}
-
-	@Override
-	public boolean newMonitoringRecord(final IMonitoringRecord record) {
-		if (!(record instanceof OperationExecutionRecord)) {
-			return true;
+	@InputPort(eventTypes = { IMonitoringRecord.class })
+	public void newEvent(final Object event) {
+		if (!(event instanceof OperationExecutionRecord)) {
+			return;
 		}
-		final OperationExecutionRecord rec = (OperationExecutionRecord) record;
+		final OperationExecutionRecord rec = (OperationExecutionRecord) event;
 		/* Derive response time from the record. */
 		final long responseTime = rec.getTout() - rec.getTin();
 		/* Now compare with the response time threshold: */
@@ -56,7 +60,7 @@ public class Consumer implements IMonitoringRecordConsumerPlugin {
 			System.out.println("response time accepted: " + rec.getClassName()
 					+ "." + rec.getOperationName());
 		}
-		return true;
+		return;
 	}
 
 	@Override
@@ -67,4 +71,19 @@ public class Consumer implements IMonitoringRecordConsumerPlugin {
 	@Override
 	public void terminate(final boolean error) {}
 
+	public Configuration getDefaultConfiguration() {
+		return new Configuration();
+	}
+
+	public Configuration getCurrentConfiguration() {
+		return new Configuration();
+	}
+	
+	public AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
+	}
 }

@@ -25,9 +25,10 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Collection;
 
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool
@@ -47,8 +48,9 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 	protected final DependencyGraph<T> dependencyGraph;
 	private int numGraphsSaved = 0;
 
-	public AbstractDependencyGraphPlugin(final String name, final SystemModelRepository systemEntityFactory, final DependencyGraph<T> dependencyGraph) {
-		super(name, systemEntityFactory);
+	// TODO Change constructor to plugin-default-constructor
+	public AbstractDependencyGraphPlugin(final Configuration configuration, final AbstractRepository repositories[], final DependencyGraph<T> dependencyGraph) {
+		super(configuration, repositories);
 		this.dependencyGraph = dependencyGraph;
 	}
 
@@ -103,4 +105,5 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 		super.printStatusMessage();
 		System.out.println("Saved " + this.numGraphsSaved + " dependency graph" + (this.numGraphsSaved > 1 ? "s" : "")); // NOCS
 	}
+
 }

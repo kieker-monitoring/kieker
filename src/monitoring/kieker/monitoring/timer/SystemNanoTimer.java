@@ -22,7 +22,7 @@ package kieker.monitoring.timer;
 
 import java.util.Date;
 
-import kieker.monitoring.core.configuration.Configuration;
+import kieker.common.configuration.Configuration;
 
 /**
  * A timer implementation, counting in nanoseconds since a specified offset.

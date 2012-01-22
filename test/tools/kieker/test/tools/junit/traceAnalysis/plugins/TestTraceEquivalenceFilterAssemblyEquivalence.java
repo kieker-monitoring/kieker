@@ -22,10 +22,12 @@ package kieker.test.tools.junit.traceAnalysis.plugins;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.analysis.plugin.configuration.AbstractInputPort;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.traceFilter.TraceEquivalenceClassFilter;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.systemModel.Execution;
@@ -41,7 +43,7 @@ import org.junit.Test;
 public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase { // NOCS
 	private static final Log LOG = LogFactory.getLog(TestTraceEquivalenceFilterAssemblyEquivalence.class);
 
-	private final SystemModelRepository systemEntityFactory = new SystemModelRepository();
+	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration());
 	private final ExecutionFactory executionFactory = new ExecutionFactory(this.systemEntityFactory);
 
 	@Test
@@ -59,19 +61,25 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase { //
 		}
 		Assert.assertEquals(trace0, trace1);
 
-		final TraceEquivalenceClassFilter filter = new TraceEquivalenceClassFilter("TraceEquivalenceClassFilter", this.systemEntityFactory,
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, "TraceEquivalenceClassFilter");
+
+		final TraceEquivalenceClassFilter filter = new TraceEquivalenceClassFilter(configuration, new AbstractRepository[] { this.systemEntityFactory },
 				TraceEquivalenceClassFilter.TraceEquivalenceClassModes.ASSEMBLY);
 
 		/*
 		 * Register a handler for equivalence class representatives.
 		 */
-		filter.getExecutionTraceOutputPort().subscribe(new AbstractInputPort<ExecutionTrace>("Execution traces") {
-
-			@Override
-			public void newEvent(final ExecutionTrace event) {
-				throw new UnsupportedOperationException("Not supported yet.");
-			}
-		});
+		// TODO: Implement the handler for equivalence class representatives.
+		/*
+		 * filter.getExecutionTraceOutputPort().subscribe(new AbstractInputPort("Execution traces", null) {
+		 * 
+		 * @Override
+		 * public void newEvent(final Object event) {
+		 * throw new UnsupportedOperationException("Not supported yet.");
+		 * }
+		 * });
+		 */
 	}
 
 	private ExecutionTrace genValidBookstoreTrace(final long traceId, final long offset) throws InvalidTraceException {

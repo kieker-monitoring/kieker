@@ -20,7 +20,7 @@
 
 package kieker.monitoring.core.controller;
 
-import kieker.monitoring.core.configuration.Configuration;
+import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.registry.IRegistry;
 import kieker.monitoring.core.registry.Registry;
 

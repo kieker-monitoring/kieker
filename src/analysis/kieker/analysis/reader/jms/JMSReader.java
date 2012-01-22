@@ -39,8 +39,11 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 
-import kieker.analysis.reader.AbstractMonitoringReader;
-import kieker.analysis.util.PropertyMap;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.reader.AbstractReaderPlugin;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
@@ -51,67 +54,60 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @author Andre van Hoorn, Matthias Rohr
  */
-public class JMSReader extends AbstractMonitoringReader {
+@Plugin(outputPorts = {
+	@OutputPort(name = JMSReader.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMSReader")
+})
+public final class JMSReader extends AbstractReaderPlugin {
+
+	public static final String OUTPUT_PORT_NAME = "defaultOutput";
+	public static final String CONFIG_PROVIDERURL = JMSReader.class.getName() + ".jmsProviderUrl";
+	public static final String CONFIG_DESTINATION = JMSReader.class.getName() + ".jmsDestination";
+	public static final String CONFIG_FACTORYLOOKUP = JMSReader.class.getName() + ".jmsFactoryLookupName";
 
 	private static final Log LOG = LogFactory.getLog(JMSReader.class);
-	private String jmsProviderUrl = null;
-	private String jmsDestination = null;
-	private String jmsFactoryLookupName = null;
 
+	private final String jmsProviderUrl;
+	private final String jmsDestination;
+	private final String jmsFactoryLookupName;
 	private final CountDownLatch cdLatch = new CountDownLatch(1);
 
 	/**
-	 * @param jmsProviderUrl
-	 *            = for instance "tcp://127.0.0.1:3035/"
-	 * @param jmsDestination
-	 *            = for instance "queue1"
-	 * @param jmsFactoryLookupName
-	 *            = for instance "org.exolab.jms.jndi.InitialContextFactory" (OpenJMS)
+	 * Creates a new instance of this class using the given parameters to
+	 * configure the reader.
+	 * 
+	 * @param configuration
+	 *            The configuration used to initialize the whole reader. Keep in mind that the configuration should contain the following properties:
+	 *            <ul>
+	 *            <li>The property {@link CONFIG_PROVIDERURL}, e.g. {@code tcp://localhost:3035/}
+	 *            <li>The property {@link CONFIG_DESTINATION}, e.g. {@code queue1}
+	 *            <li>The property {@link CONFIG_FACTORYLOOKUP}, e.g. {@code org.exolab.jms.jndi.InitialContextFactory}
+	 *            </ul>
+	 * 
 	 * @throws IllegalArgumentException
-	 *             if passed parameters are null or empty.
+	 *             If one of the properties is empty.
 	 */
-	public JMSReader(final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
-		this.initInstanceFromArgs(jmsProviderUrl, jmsDestination, jmsFactoryLookupName); // throws IllegalArgumentException
+	public JMSReader(final Configuration configuration, final AbstractRepository repositories[]) throws IllegalArgumentException {
+		/* Call the inherited constructor. */
+		super(configuration, repositories);
+		/* Initialize the reader bases on the given configuration. */
+		this.jmsProviderUrl = configuration.getStringProperty(JMSReader.CONFIG_PROVIDERURL);
+		this.jmsDestination = configuration.getStringProperty(JMSReader.CONFIG_DESTINATION);
+		this.jmsFactoryLookupName = configuration.getStringProperty(JMSReader.CONFIG_FACTORYLOOKUP);
+		// simple sanity check
+		if (this.jmsProviderUrl.isEmpty() || this.jmsDestination.isEmpty() || this.jmsFactoryLookupName.isEmpty()) {
+			throw new IllegalArgumentException("JMSReader has not sufficient parameters. jmsProviderUrl ('" + this.jmsProviderUrl + "'), jmsDestination ('"
+					+ this.jmsDestination + "'), or factoryLookupName ('" + this.jmsFactoryLookupName + "') is null");
+		}
 	}
-
-	/**
-	 * Constructor for JMSReader. Requires a subsequent call to the init method.
-	 */
-	public JMSReader() {
-		// nothing to do
-	}
-
-	/**
-	 * Valid key/value pair: jmsProviderUrl=tcp://localhost:3035/ | jmsDestination=queue1 | jmsFactoryLookupName=org.exolab.jms.jndi.InitialContextFactory
-	 */
 
 	@Override
-	public boolean init(final String initString) {
-		try {
-			final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws IllegalArgumentException
-
-			final String jmsProviderUrlP = propertyMap.getProperty("jmsProviderUrl", null);
-			final String jmsDestinationP = propertyMap.getProperty("jmsDestination", null);
-			final String jmsFactoryLookupNameP = propertyMap.getProperty("jmsFactoryLookupName", null);
-			this.initInstanceFromArgs(jmsProviderUrlP, jmsDestinationP, jmsFactoryLookupNameP); // throws IllegalArgumentException
-		} catch (final Exception exc) { // NOCS // NOPMD
-			JMSReader.LOG.error("Failed to parse initString '" + initString + "': " + exc.getMessage());
-			return false;
-		}
-		return true;
-	}
-
-	private void initInstanceFromArgs(final String tmpJmsProviderUrl, final String tmpJmsDestination, final String factoryLookupName)
-			throws IllegalArgumentException {
-		if ((tmpJmsProviderUrl == null) || tmpJmsProviderUrl.isEmpty() || (tmpJmsDestination == null) || tmpJmsDestination.isEmpty() || (factoryLookupName == null)
-				|| (factoryLookupName.isEmpty())) {
-			throw new IllegalArgumentException("JMSReader has not sufficient parameters. jmsProviderUrl ('" + tmpJmsProviderUrl + "'), jmsDestination ('"
-					+ tmpJmsDestination + "'), or factoryLookupName ('" + factoryLookupName + "') is null");
-		}
-
-		this.jmsProviderUrl = tmpJmsProviderUrl;
-		this.jmsDestination = tmpJmsDestination;
-		this.jmsFactoryLookupName = factoryLookupName;
+	protected Configuration getDefaultConfiguration() {
+		final Configuration defaultConfiguration = new Configuration();
+		// TODO: provide default values!
+		defaultConfiguration.setProperty(JMSReader.CONFIG_PROVIDERURL, "");
+		defaultConfiguration.setProperty(JMSReader.CONFIG_DESTINATION, "");
+		defaultConfiguration.setProperty(JMSReader.CONFIG_FACTORYLOOKUP, "");
+		return defaultConfiguration;
 	}
 
 	/**
@@ -134,16 +130,10 @@ public class JMSReader extends AbstractMonitoringReader {
 
 			Destination destination;
 			try {
-				/*
-				 * As a first step, try a JNDI lookup (this seems to fail with
-				 * ActiveMQ sometimes)
-				 */
+				// As a first step, try a JNDI lookup (this seems to fail with ActiveMQ sometimes)
 				destination = (Destination) context.lookup(this.jmsDestination);
 			} catch (final NameNotFoundException exc) {
-				/*
-				 * JNDI lookup failed, try manual creation (this seems to fail
-				 * with ActiveMQ sometimes)
-				 */
+				// JNDI lookup failed, try manual creation (this seems to fail with ActiveMQ sometimes)
 				JMSReader.LOG.warn("Failed to lookup queue '" + this.jmsDestination + "' via JNDI: " + exc.getMessage());
 				JMSReader.LOG.info("Attempting to create queue ...");
 				destination = session.createQueue(this.jmsDestination);
@@ -153,7 +143,6 @@ public class JMSReader extends AbstractMonitoringReader {
 			final MessageConsumer receiver = session.createConsumer(destination);
 			receiver.setMessageListener(new MessageListener() {
 				// the MessageListener will read onMessage each time a message comes in
-
 				@Override
 				public void onMessage(final Message jmsMessage) {
 					if (jmsMessage instanceof TextMessage) {
@@ -164,7 +153,7 @@ public class JMSReader extends AbstractMonitoringReader {
 						try {
 							final ObjectMessage om = (ObjectMessage) jmsMessage;
 							final Serializable omo = om.getObject();
-							if ((omo instanceof IMonitoringRecord) && (!JMSReader.this.deliverRecord((IMonitoringRecord) omo))) {
+							if ((omo instanceof IMonitoringRecord) && (!JMSReader.super.deliver(JMSReader.OUTPUT_PORT_NAME, omo))) {
 								final String errorMsg = "deliverRecord returned false";
 								JMSReader.LOG.error(errorMsg);
 							}
@@ -221,5 +210,26 @@ public class JMSReader extends AbstractMonitoringReader {
 	public void terminate() {
 		JMSReader.LOG.info("Shutdown of JMSReader requested.");
 		this.unblock();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration();
+
+		configuration.setProperty(JMSReader.CONFIG_PROVIDERURL, this.jmsProviderUrl);
+		configuration.setProperty(JMSReader.CONFIG_DESTINATION, this.jmsDestination);
+		configuration.setProperty(JMSReader.CONFIG_FACTORYLOOKUP, this.jmsFactoryLookupName);
+
+		return configuration;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
 	}
 }

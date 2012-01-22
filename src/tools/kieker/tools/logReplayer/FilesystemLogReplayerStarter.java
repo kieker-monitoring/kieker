@@ -26,9 +26,10 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.monitoring.core.configuration.Configuration;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 
@@ -224,12 +225,12 @@ public final class FilesystemLogReplayerStarter {
 		 * Force the controller to keep the original logging timestamps of the
 		 * monitoring records.
 		 */
-		final Configuration configuration = Configuration.createDefaultConfiguration();
+		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
 
 		if (FilesystemLogReplayerStarter.keepOriginalLoggingTimestamps) {
-			configuration.setProperty(Configuration.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(false));
+			configuration.setProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(false));
 		} else {
-			configuration.setProperty(Configuration.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(true));
+			configuration.setProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(true));
 		}
 
 		final IMonitoringController monitoringController = MonitoringController.createInstance(configuration);
@@ -244,5 +245,6 @@ public final class FilesystemLogReplayerStarter {
 			System.err.println("See 'kieker.log' for details");
 			System.exit(1);
 		}
+
 	}
 }

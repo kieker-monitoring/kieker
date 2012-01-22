@@ -29,8 +29,9 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.configuration.IInputPort;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
@@ -46,11 +47,19 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPair;
 
 /**
- * Refactored copy from LogAnalysis-legacy tool
+ * Refactored copy from LogAnalysis-legacy tool<br>
+ * 
+ * This class has exactly one input port named "in". The data which is send to
+ * this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
 public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGraphPlugin<AssemblyComponentOperationPair> {
+
+	public static final String CONFIG_DOT_OUTPUT_FILE = OperationDependencyGraphPluginAssembly.class.getName() + ".dotOutputFile";
+	public static final String CONFIG_INCLUDE_WEIGHTS = OperationDependencyGraphPluginAssembly.class.getName() + ".includeWeights";
+	public static final String CONFIG_SHORT_LABELS = OperationDependencyGraphPluginAssembly.class.getName() + ".shortLabels";
+	public static final String CONFIG_INCLUDE_SELF_LOOPS = OperationDependencyGraphPluginAssembly.class.getName() + ".includeSelfLoops";
 
 	private static final Log LOG = LogFactory.getLog(OperationDependencyGraphPluginAssembly.class);
 	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
@@ -60,16 +69,17 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 	private final boolean shortLabels;
 	private final boolean includeSelfLoops;
 
-	public OperationDependencyGraphPluginAssembly(final String name, final SystemModelRepository systemEntityFactory, final File dotOutputFile,
-			final boolean includeWeights, final boolean shortLabels, final boolean includeSelfLoops) {
-		super(name, systemEntityFactory, new DependencyGraph<AssemblyComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-				new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID, systemEntityFactory.getOperationFactory().getRootOperation(),
-						systemEntityFactory.getAssemblyFactory().getRootAssemblyComponent())));
-		this.pairFactory = new AssemblyComponentOperationPairFactory(systemEntityFactory);
-		this.dotOutputFile = dotOutputFile;
-		this.includeWeights = includeWeights;
-		this.shortLabels = shortLabels;
-		this.includeSelfLoops = includeSelfLoops;
+	public OperationDependencyGraphPluginAssembly(final Configuration configuration, final AbstractRepository repositories[]) {
+		// TODO Check type conversion
+		super(configuration, repositories, new DependencyGraph<AssemblyComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+				new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID, ((SystemModelRepository) repositories[0]).getOperationFactory()
+						.getRootOperation(),
+						((SystemModelRepository) repositories[0]).getAssemblyFactory().getRootAssemblyComponent())));
+		this.pairFactory = new AssemblyComponentOperationPairFactory(((SystemModelRepository) repositories[0]));
+		this.dotOutputFile = new File(this.configuration.getStringProperty(OperationDependencyGraphPluginAssembly.CONFIG_DOT_OUTPUT_FILE));
+		this.includeWeights = this.configuration.getBooleanProperty(OperationDependencyGraphPluginAssembly.CONFIG_INCLUDE_WEIGHTS);
+		this.shortLabels = this.configuration.getBooleanProperty(OperationDependencyGraphPluginAssembly.CONFIG_SHORT_LABELS);
+		this.includeSelfLoops = this.configuration.getBooleanProperty(OperationDependencyGraphPluginAssembly.CONFIG_INCLUDE_SELF_LOOPS);
 	}
 
 	private String componentNodeLabel(final AssemblyComponent component) {
@@ -179,48 +189,61 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 		}
 	}
 
-	private final IInputPort<MessageTrace> messageTraceInputPort = new AbstractInputPort<MessageTrace>("Message traces") {
-
-		@Override
-		public void newEvent(final MessageTrace t) {
-			for (final AbstractMessage m : t.getSequenceAsVector()) {
-				if (m instanceof SynchronousReplyMessage) {
-					continue;
-				}
-				final AssemblyComponent senderComponent = m.getSendingExecution().getAllocationComponent().getAssemblyComponent();
-				final AssemblyComponent receiverComponent = m.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
-				final int rootOperationId = OperationDependencyGraphPluginAssembly.this.getSystemEntityFactory().getOperationFactory().getRootOperation().getId();
-				final Operation senderOperation = m.getSendingExecution().getOperation();
-				final Operation receiverOperation = m.getReceivingExecution().getOperation();
-				/* The following two get-calls to the factory return s.th. in either case */
-				final AssemblyComponentOperationPair senderPair = (senderOperation.getId() == rootOperationId) ? OperationDependencyGraphPluginAssembly.this.dependencyGraph // NOCS
-						.getRootNode().getEntity()
-						: OperationDependencyGraphPluginAssembly.this.pairFactory.getPairInstanceByPair(senderComponent, senderOperation);
-				final AssemblyComponentOperationPair receiverPair = (receiverOperation.getId() == rootOperationId) ? OperationDependencyGraphPluginAssembly.this.dependencyGraph // NOCS
-						.getRootNode().getEntity()
-						: OperationDependencyGraphPluginAssembly.this.pairFactory.getPairInstanceByPair(receiverComponent, receiverOperation);
-
-				DependencyGraphNode<AssemblyComponentOperationPair> senderNode = OperationDependencyGraphPluginAssembly.this.dependencyGraph.getNode(senderPair
-						.getId());
-				DependencyGraphNode<AssemblyComponentOperationPair> receiverNode = OperationDependencyGraphPluginAssembly.this.dependencyGraph.getNode(receiverPair
-						.getId());
-				if (senderNode == null) {
-					senderNode = new DependencyGraphNode<AssemblyComponentOperationPair>(senderPair.getId(), senderPair);
-					OperationDependencyGraphPluginAssembly.this.dependencyGraph.addNode(senderNode.getId(), senderNode);
-				}
-				if (receiverNode == null) {
-					receiverNode = new DependencyGraphNode<AssemblyComponentOperationPair>(receiverPair.getId(), receiverPair);
-					OperationDependencyGraphPluginAssembly.this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
-				}
-				senderNode.addOutgoingDependency(receiverNode);
-				receiverNode.addIncomingDependency(senderNode);
-			}
-			OperationDependencyGraphPluginAssembly.this.reportSuccess(t.getTraceId());
-		}
-	};
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		return new Configuration();
+	}
 
 	@Override
-	public IInputPort<MessageTrace> getMessageTraceInputPort() {
-		return this.messageTraceInputPort;
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration();
+
+		// TODO: Save the current configuration
+
+		return configuration;
+	}
+
+	@Override
+	@InputPort(description = "Message traces", eventTypes = { MessageTrace.class })
+	public void msgTraceInput(final Object obj) {
+		final MessageTrace t = (MessageTrace) obj;
+		for (final AbstractMessage m : t.getSequenceAsVector()) {
+			if (m instanceof SynchronousReplyMessage) {
+				continue;
+			}
+			final AssemblyComponent senderComponent = m.getSendingExecution().getAllocationComponent().getAssemblyComponent();
+			final AssemblyComponent receiverComponent = m.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
+			final int rootOperationId = OperationDependencyGraphPluginAssembly.this.getSystemEntityFactory().getOperationFactory().getRootOperation().getId();
+			final Operation senderOperation = m.getSendingExecution().getOperation();
+			final Operation receiverOperation = m.getReceivingExecution().getOperation();
+			/* The following two get-calls to the factory return s.th. in either case */
+			final AssemblyComponentOperationPair senderPair = (senderOperation.getId() == rootOperationId) ? OperationDependencyGraphPluginAssembly.this.dependencyGraph // NOCS
+					.getRootNode().getEntity()
+					: OperationDependencyGraphPluginAssembly.this.pairFactory.getPairInstanceByPair(senderComponent, senderOperation);
+			final AssemblyComponentOperationPair receiverPair = (receiverOperation.getId() == rootOperationId) ? OperationDependencyGraphPluginAssembly.this.dependencyGraph // NOCS
+					.getRootNode().getEntity()
+					: OperationDependencyGraphPluginAssembly.this.pairFactory.getPairInstanceByPair(receiverComponent, receiverOperation);
+
+			DependencyGraphNode<AssemblyComponentOperationPair> senderNode = OperationDependencyGraphPluginAssembly.this.dependencyGraph.getNode(senderPair
+					.getId());
+			DependencyGraphNode<AssemblyComponentOperationPair> receiverNode = OperationDependencyGraphPluginAssembly.this.dependencyGraph.getNode(receiverPair
+					.getId());
+			if (senderNode == null) {
+				senderNode = new DependencyGraphNode<AssemblyComponentOperationPair>(senderPair.getId(), senderPair);
+				OperationDependencyGraphPluginAssembly.this.dependencyGraph.addNode(senderNode.getId(), senderNode);
+			}
+			if (receiverNode == null) {
+				receiverNode = new DependencyGraphNode<AssemblyComponentOperationPair>(receiverPair.getId(), receiverPair);
+				OperationDependencyGraphPluginAssembly.this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
+			}
+			senderNode.addOutgoingDependency(receiverNode);
+			receiverNode.addIncomingDependency(senderNode);
+		}
+		OperationDependencyGraphPluginAssembly.this.reportSuccess(t.getTraceId());
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
 	}
 }

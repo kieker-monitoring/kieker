@@ -119,7 +119,7 @@ set JAVA_OPTS=%JAVA_OPTS% -Djava.util.logging.manager=org.apache.juli.ClassLoade
 :noJuli
 
 rem Activate Kieker with AspectJ load-time-weaving agent and custom configuration
-set JAVA_OPTS=%JAVA_OPTS% -javaagent:%CATALINA_BASE%\lib\aspectjweaver-1.6.11.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false
+set JAVA_OPTS=%JAVA_OPTS% -javaagent:%CATALINA_BASE%\lib\aspectjweaver-1.6.12.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false
 set JAVA_OPTS=%JAVA_OPTS% -Dkieker.monitoring.configuration=%CATALINA_BASE%\lib\META-INF\kieker.monitoring.properties
 
 rem ----- Execute The Requested Command ---------------------------------------

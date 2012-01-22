@@ -22,12 +22,13 @@ package kieker.test.tools.junit.traceAnalysis.plugins;
 
 import java.util.NavigableSet;
 import java.util.TreeSet;
-import java.util.concurrent.atomic.AtomicReference;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.analysis.plugin.configuration.AbstractInputPort;
+import kieker.analysis.plugin.AbstractPlugin;
+import kieker.common.configuration.Configuration;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
+import kieker.test.tools.junit.traceAnalysis.util.SimpleSinkPlugin;
 import kieker.tools.traceAnalysis.plugins.executionFilter.TraceIdFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
@@ -42,7 +43,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 
 	// private static final Log log = LogFactory.getLog(TestTraceIdFilter.class);
 
-	private final SystemModelRepository systemEntityFactory = new SystemModelRepository();
+	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration());
 	private final ExecutionFactory eFactory = new ExecutionFactory(this.systemEntityFactory);
 
 	/**
@@ -57,27 +58,18 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 		idsToPass.add(7l); // NOCS (MagicNumberCheck)
 
 		final TraceIdFilter filter = new TraceIdFilter(idsToPass);
-
+		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
 		final Execution exec = this.eFactory.genExecution(11l, // traceId (must not be element of idsToPass) // NOCS (MagicNumberCheck)
 				5, // tin (value not important) // NOCS (MagicNumberCheck)
 				10, // tout (value not important) // NOCS (MagicNumberCheck)
 				0, 0); // eoi, ess (values not important) // NOCS (MagicNumberCheck)
 		Assert.assertTrue("Testcase invalid", !idsToPass.contains(exec.getTraceId()));
 
-		final AtomicReference<Boolean> filterPassedRecord = new AtomicReference<Boolean>(Boolean.FALSE);
-
-		filter.getExecutionOutputPort().subscribe(new AbstractInputPort<Execution>("Execution input") {
-
-			/**
-			 * In this test, this method should not be called.
-			 */
-			@Override
-			public void newEvent(final Execution event) {
-				filterPassedRecord.set(Boolean.TRUE);
-			}
-		});
-		filter.getExecutionInputPort().newEvent(exec);
-		Assert.assertFalse("Filter passed execution " + exec + " although traceId not element of " + idsToPass, filterPassedRecord.get());
+		Assert.assertTrue(sinkPlugin.getList().isEmpty());
+		AbstractPlugin.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+		filter.newExecution(exec);
+		Assert.assertTrue("Filter passed execution " + exec + " although traceId not element of " + idsToPass, sinkPlugin.getList()
+				.isEmpty());
 	}
 
 	/**
@@ -92,27 +84,20 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 		idsToPass.add(7l); // NOCS (MagicNumberCheck)
 
 		final TraceIdFilter filter = new TraceIdFilter(idsToPass);
-
+		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
 		final Execution exec = this.eFactory.genExecution(7l, // traceId (must be element of idsToPass) // NOCS (MagicNumberCheck)
 				5, // tin (value not important) // NOCS (MagicNumberCheck)
 				10, // tout (value not important) // NOCS (MagicNumberCheck)
 				0, 0); // eoi, ess (values not important) // NOCS (MagicNumberCheck)
 		Assert.assertTrue("Testcase invalid", idsToPass.contains(exec.getTraceId()));
 
-		final AtomicReference<Boolean> filterPassedRecord = new AtomicReference<Boolean>(Boolean.FALSE);
+		Assert.assertTrue(sinkPlugin.getList().isEmpty());
+		AbstractPlugin.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+		filter.newExecution(exec);
+		Assert.assertFalse("Filter didn't pass execution " + exec + " although traceId element of " + idsToPass, sinkPlugin.getList()
+				.isEmpty());
 
-		filter.getExecutionOutputPort().subscribe(new AbstractInputPort<Execution>("Execution input") {
-
-			/**
-			 * In this test, this method must be called.
-			 */
-			@Override
-			public void newEvent(final Execution event) {
-				filterPassedRecord.set(Boolean.TRUE);
-				Assert.assertSame(exec, event);
-			}
-		});
-		filter.getExecutionInputPort().newEvent(exec);
-		Assert.assertTrue("Filter didn't pass execution " + exec + " although traceId element of " + idsToPass, filterPassedRecord.get());
+		Assert.assertTrue(sinkPlugin.getList().size() == 1);
+		Assert.assertSame(sinkPlugin.getList().get(0), exec);
 	}
 }

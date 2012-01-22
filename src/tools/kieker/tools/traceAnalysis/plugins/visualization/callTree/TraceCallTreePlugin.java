@@ -28,8 +28,9 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Stack;
 
-import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.configuration.IInputPort;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
@@ -49,7 +50,10 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * Plugin providing the creation of calling trees both for individual traces
- * and an aggregated form mulitple traces.
+ * and an aggregated form mulitple traces.<br>
+ * 
+ * This class has exactly one input port named "in". The data which is send to
+ * this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn
  */
@@ -62,11 +66,14 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 	private final String outputFnBase;
 	private final boolean shortLabels;
 
-	public TraceCallTreePlugin(final String name, final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory,
-			final SystemModelRepository systemEntityFactory, final String outputFnBase, final boolean shortLabels) {
-		super(name, systemEntityFactory);
+	// TODO Change constructor to plugin-default-constructor
+	public TraceCallTreePlugin(final Configuration configuration, final AbstractRepository repositories[],
+			final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory,
+			final String outputFnBase, final boolean shortLabels) {
+		super(configuration, repositories);
 		this.allocationComponentOperationPairFactory = allocationComponentOperationPairFactory;
-		this.systemEntityFactory = systemEntityFactory;
+		// TODO Check type conversion
+		this.systemEntityFactory = (SystemModelRepository) repositories[0];
 		this.root = new CallTreeNode(null, // null: root node has no parent
 				new CallTreeOperationHashKey(this.systemEntityFactory.getAllocationFactory().getRootAllocationComponent(),
 						this.systemEntityFactory.getOperationFactory().getRootOperation()));
@@ -227,29 +234,43 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 	}
 
 	@Override
-	public IInputPort<MessageTrace> getMessageTraceInputPort() {
-		return this.messageTraceInputPort;
+	protected Configuration getDefaultConfiguration() {
+		return new Configuration();
 	}
 
-	private final IInputPort<MessageTrace> messageTraceInputPort = new AbstractInputPort<MessageTrace>("Message traces") {
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration();
 
-		@Override
-		public void newEvent(final MessageTrace mt) {
-			try {
-				final TraceCallTreeNode rootNode = new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, TraceCallTreePlugin.this.systemEntityFactory,
-						TraceCallTreePlugin.this.allocationComponentOperationPairFactory,
-						TraceCallTreePlugin.this.allocationComponentOperationPairFactory.getRootPair(),
-						true); // rootNode
-				AbstractCallTreePlugin.writeDotForMessageTrace(TraceCallTreePlugin.this.systemEntityFactory, rootNode, mt, TraceCallTreePlugin.this.outputFnBase
-						+ "-" + mt.getTraceId(), false, TraceCallTreePlugin.this.shortLabels); // no weights
-				TraceCallTreePlugin.this.reportSuccess(mt.getTraceId());
-			} catch (final TraceProcessingException ex) {
-				TraceCallTreePlugin.this.reportError(mt.getTraceId());
-				TraceCallTreePlugin.LOG.error("TraceProcessingException", ex);
-			} catch (final FileNotFoundException ex) {
-				TraceCallTreePlugin.this.reportError(mt.getTraceId());
-				TraceCallTreePlugin.LOG.error("File not found", ex);
-			}
+		// TODO: Save the current configuration
+
+		return configuration;
+	}
+
+	@Override
+	@InputPort(description = "Message traces", eventTypes = { MessageTrace.class })
+	public void msgTraceInput(final Object obj) {
+		final MessageTrace mt = (MessageTrace) obj;
+		try {
+			final TraceCallTreeNode rootNode = new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, TraceCallTreePlugin.this.systemEntityFactory,
+					TraceCallTreePlugin.this.allocationComponentOperationPairFactory,
+					TraceCallTreePlugin.this.allocationComponentOperationPairFactory.getRootPair(),
+					true); // rootNode
+			AbstractCallTreePlugin.writeDotForMessageTrace(TraceCallTreePlugin.this.systemEntityFactory, rootNode, mt, TraceCallTreePlugin.this.outputFnBase
+					+ "-" + mt.getTraceId(), false, TraceCallTreePlugin.this.shortLabels); // no weights
+			TraceCallTreePlugin.this.reportSuccess(mt.getTraceId());
+		} catch (final TraceProcessingException ex) {
+			TraceCallTreePlugin.this.reportError(mt.getTraceId());
+			TraceCallTreePlugin.LOG.error("TraceProcessingException", ex);
+		} catch (final FileNotFoundException ex) {
+			TraceCallTreePlugin.this.reportError(mt.getTraceId());
+			TraceCallTreePlugin.LOG.error("File not found", ex);
 		}
-	};
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
 }

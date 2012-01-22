@@ -22,11 +22,12 @@ package kieker.monitoring.core.controller;
 
 import java.util.concurrent.TimeUnit;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.Version;
-import kieker.monitoring.core.configuration.Configuration;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 import kieker.monitoring.timer.ITimeSource;
@@ -250,6 +251,6 @@ public final class MonitoringController extends AbstractController implements IM
 	 * SINGLETON
 	 */
 	private static final class LazyHolder { // NOCS
-		private static final IMonitoringController INSTANCE = MonitoringController.createInstance(Configuration.createSingletonConfiguration());
+		private static final IMonitoringController INSTANCE = MonitoringController.createInstance(ConfigurationFactory.createSingletonConfiguration());
 	}
 }

@@ -26,9 +26,10 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.monitoring.core.configuration.Configuration;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 
@@ -47,7 +48,7 @@ public final class SamplingController extends AbstractController implements ISam
 	 */
 	protected SamplingController(final Configuration configuration) {
 		super(configuration);
-		final int threadPoolSize = configuration.getIntProperty(Configuration.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE);
+		final int threadPoolSize = configuration.getIntProperty(ConfigurationFactory.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE);
 		this.periodicSensorsPoolExecutor = new ScheduledThreadPoolExecutor(threadPoolSize,
 				// Handler for failed sensor executions that simply logs notifications.
 				new RejectedExecutionHandler() {

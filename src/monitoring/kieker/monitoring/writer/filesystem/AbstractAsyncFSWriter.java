@@ -24,12 +24,11 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
-import java.util.Properties;
 import java.util.TimeZone;
 import java.util.concurrent.BlockingQueue;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.Configuration;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.writer.AbstractAsyncWriter;
 import kieker.monitoring.writer.filesystem.async.AbstractFsWriterThread;
@@ -50,13 +49,13 @@ public abstract class AbstractAsyncFSWriter extends AbstractAsyncWriter {
 	 * Make sure that the required properties always have default values!
 	 */
 	@Override
-	protected Properties getDefaultProperties() {
-		final Properties properties = new Properties(super.getDefaultProperties());
+	protected Configuration getDefaultConfiguration() {
+		final Configuration configuration = new Configuration(super.getDefaultConfiguration());
 		final String prefix = this.getClass().getName() + "."; // can't use this.prefix, maybe uninitialized
-		properties.setProperty(prefix + AbstractAsyncFSWriter.CONFIG_PATH, ".");
-		properties.setProperty(prefix + AbstractAsyncFSWriter.CONFIG_TEMP, "true");
-		properties.setProperty(prefix + AbstractAsyncFSWriter.CONFIG_MAXENTRIESINFILE, "25000");
-		return properties;
+		configuration.setProperty(prefix + AbstractAsyncFSWriter.CONFIG_PATH, ".");
+		configuration.setProperty(prefix + AbstractAsyncFSWriter.CONFIG_TEMP, "true");
+		configuration.setProperty(prefix + AbstractAsyncFSWriter.CONFIG_MAXENTRIESINFILE, "25000");
+		return configuration;
 	}
 
 	@Override

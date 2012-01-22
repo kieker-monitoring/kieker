@@ -20,18 +20,19 @@
 
 package kieker.tools.traceAnalysis.plugins;
 
-import kieker.analysis.plugin.configuration.IInputPort;
-import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 
 /**
  * 
  * @author Andre van Hoorn
  */
 public abstract class AbstractExecutionTraceProcessingPlugin extends AbstractTraceProcessingPlugin {
-	public AbstractExecutionTraceProcessingPlugin(final String name, final SystemModelRepository systemEntityFactory) {
-		super(name, systemEntityFactory);
+
+	public AbstractExecutionTraceProcessingPlugin(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
 	}
 
-	public abstract IInputPort<ExecutionTrace> getExecutionTraceInputPort();
+	public abstract String getExecutionTraceInputPortName();
+
 }

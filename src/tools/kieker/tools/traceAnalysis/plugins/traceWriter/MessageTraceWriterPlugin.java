@@ -24,13 +24,13 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.configuration.IInputPort;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * 
@@ -38,14 +38,16 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  */
 public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlugin {
 
+	public static final String CONFIG_OUTPUT_FN = MessageTraceWriterPlugin.class.getName() + ".outputFn";
+	public static final String MSG_TRACES_INPUT_PORT_NAME = "msgTraceInput";
 	private static final Log LOG = LogFactory.getLog(MessageTraceWriterPlugin.class);
 	private final String outputFn;
 	private final BufferedWriter ps;
 
-	public MessageTraceWriterPlugin(final String name, final SystemModelRepository systemEntityFactory, final String outputFn) throws IOException {
-		super(name, systemEntityFactory);
-		this.outputFn = outputFn;
-		this.ps = new BufferedWriter(new FileWriter(outputFn));
+	public MessageTraceWriterPlugin(final Configuration configuration, final AbstractRepository repositories[]) throws IOException {
+		super(configuration, repositories);
+		this.outputFn = this.configuration.getStringProperty(MessageTraceWriterPlugin.CONFIG_OUTPUT_FN);
+		this.ps = new BufferedWriter(new FileWriter(this.outputFn));
 	}
 
 	@Override
@@ -72,21 +74,38 @@ public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlug
 	}
 
 	@Override
-	public IInputPort<MessageTrace> getMessageTraceInputPort() {
-		return this.messageTraceInputPort;
+	protected Configuration getDefaultConfiguration() {
+		final Configuration configuration = new Configuration();
+
+		configuration.put(MessageTraceWriterPlugin.CONFIG_OUTPUT_FN, "");
+
+		return configuration;
 	}
 
-	private final IInputPort<MessageTrace> messageTraceInputPort = new AbstractInputPort<MessageTrace>("Message traces") {
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration();
 
-		@Override
-		public void newEvent(final MessageTrace mt) {
-			try {
-				MessageTraceWriterPlugin.this.ps.append(mt.toString());
-				MessageTraceWriterPlugin.this.reportSuccess(mt.getTraceId());
-			} catch (final IOException ex) {
-				MessageTraceWriterPlugin.LOG.error("IOException", ex);
-				MessageTraceWriterPlugin.this.reportError(mt.getTraceId());
-			}
+		configuration.put(MessageTraceWriterPlugin.CONFIG_OUTPUT_FN, this.outputFn);
+
+		return configuration;
+	}
+
+	@InputPort(description = "Message traces", eventTypes = { MessageTrace.class })
+	@Override
+	public void msgTraceInput(final Object obj) {
+		final MessageTrace mt = (MessageTrace) obj;
+		try {
+			MessageTraceWriterPlugin.this.ps.append(mt.toString());
+			MessageTraceWriterPlugin.this.reportSuccess(mt.getTraceId());
+		} catch (final IOException ex) {
+			MessageTraceWriterPlugin.LOG.error("IOException", ex);
+			MessageTraceWriterPlugin.this.reportError(mt.getTraceId());
 		}
-	};
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
 }

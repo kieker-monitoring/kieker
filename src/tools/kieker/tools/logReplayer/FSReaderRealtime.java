@@ -21,69 +21,79 @@
 package kieker.tools.logReplayer;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.StringTokenizer;
 import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
-import kieker.analysis.reader.AbstractMonitoringReader;
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.reader.filesystem.FSReader;
-import kieker.analysis.util.PropertyMap;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 
 /**
- * 
  * @author Andre van Hoorn
  */
-public class FSReaderRealtime extends AbstractMonitoringReader {
+@Plugin(outputPorts = {
+	@OutputPort(name = FSReaderRealtime.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReaderRealtime")
+})
+public class FSReaderRealtime extends AbstractReaderPlugin {
+
+	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	private static final Log LOG = LogFactory.getLog(FSReaderRealtime.class);
 
-	private static final String PROP_NAME_NUM_WORKERS = "numWorkers";
-	private static final String PROP_NAME_INPUTDIRNAMES = "inputDirs";
+	public static final String PROP_NAME_NUM_WORKERS = FSReaderRealtime.class + ".numWorkers";
+	public static final String PROP_NAME_INPUTDIRNAMES = FSReaderRealtime.class + ".inputDirs";
 
 	/* manages the life-cycle of the reader and consumers */
 	private final AnalysisController analysis = new AnalysisController();
 	private RealtimeReplayDistributor rtDistributor = null;
 	/** Reader will wait for this latch before read() returns */
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
+	private int numWorkers;
+	private String[] inputDirs;
 
 	/**
-	 * Constructor for FSReaderRealtime. Requires a subsequent call to the init
-	 * method in order to specify the input directory and number of workers
-	 * using the parameter @a inputDirName.
+	 * Creates a new instance of this class using the given parameters to
+	 * configure the reader.
+	 * 
+	 * @param configuration
+	 *            The configuration used to initialize the whole reader. Keep in
+	 *            mind that the configuration should contain the following
+	 *            properties:
+	 *            <ul>
+	 *            <li>The property {@code inputDirNames}, e.g. {@code INPUTDIRECTORY1;...;INPUTDIRECTORYN }
+	 *            <li>The property {@code numWorkers}
+	 *            </ul>
 	 */
-	public FSReaderRealtime() {
-		// nothing to do
+	public FSReaderRealtime(final Configuration configuration, final AbstractRepository[] repositories) {
+		super(configuration, repositories);
+
+		this.init(configuration);
 	}
 
-	public FSReaderRealtime(final String[] inputDirNames, final int numWorkers) {
-		this.initInstanceFromArgs(inputDirNames, numWorkers);
-	}
-
-	/**
-	 * Valid key/value pair: inputDirNames=INPUTDIRECTORY1;...;INPUTDIRECTORYN |
-	 * numWorkers=XX
-	 */
-	@Override
-	public boolean init(final String initString) {
+	public boolean init(final Configuration configuration) {
 		try {
-			final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws IllegalArgumentException
-			final String numWorkersString = propertyMap.getProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS);
-			int numWorkers = -1;
+			final String numWorkersString = configuration.getStringProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS);
+			this.numWorkers = -1;
 			if (numWorkersString == null) {
 				throw new IllegalArgumentException("Missing init parameter '" + FSReaderRealtime.PROP_NAME_NUM_WORKERS + "'");
 			}
 			try {
-				numWorkers = Integer.parseInt(numWorkersString);
+				this.numWorkers = Integer.parseInt(numWorkersString);
 			} catch (final NumberFormatException ex) { // NOPMD (value of numWorkers remains -1)
 			}
-
-			this.initInstanceFromArgs(this.inputDirNameListToArray(propertyMap.getProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES)), numWorkers);
+			this.inputDirs = this.inputDirNameListToArray(configuration.getStringProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES));
+			this.initInstanceFromArgs(this.inputDirs, this.numWorkers);
 		} catch (final IllegalArgumentException exc) {
-			FSReaderRealtime.LOG.error("Failed to initString '" + initString + "': " + exc.getMessage());
+			FSReaderRealtime.LOG.error("Failed to load configuration: " + exc.getMessage());
 			return false;
 		}
 		return true;
@@ -121,10 +131,13 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 																																			// (MultipleStringLiteralsCheck)
 		}
 
-		final AbstractMonitoringReader fsReader = new FSReader(inputDirNames);
-		final IMonitoringRecordConsumerPlugin rtCons = new FSReaderRealtimeCons(this);
-		this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, this.terminationLatch);
+		final Configuration configuration = new Configuration(null);
+		configuration.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(inputDirNames));
+		final AbstractReaderPlugin fsReader = new FSReader(configuration, new AbstractRepository[0]);
+		final AbstractAnalysisPlugin rtCons = new FSReaderRealtimeCons(this);
+		this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, this.terminationLatch, FSReaderRealtimeCons.INPUT_PORT);
 		this.analysis.setReader(fsReader);
+		AbstractPlugin.connect(fsReader, FSReader.OUTPUT_PORT_NAME, this.rtDistributor, RealtimeReplayDistributor.INPUT_PORT_NAME);
 		this.analysis.registerPlugin(this.rtDistributor);
 	}
 
@@ -150,30 +163,68 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 		this.analysis.terminate();
 	}
 
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		final Configuration defaultConfiguration = new Configuration();
+
+		// TODO: Provide better default properties.
+		defaultConfiguration.setProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS, "1");
+		defaultConfiguration.setProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES, "");
+
+		return defaultConfiguration;
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration(null);
+
+		configuration.setProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS, Integer.toString(this.numWorkers));
+		configuration.setProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES, Configuration.toProperty(this.inputDirs));
+
+		return configuration;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
+	}
+
 	/**
 	 * Acts as a consumer to the rtDistributor and delegates incoming records to
-	 * the FSReaderRealtime instance.
+	 * the FSReaderRealtime instance.<br>
+	 * 
+	 * Do <b>not</b> use this as an outer class. It does not have the necessary
+	 * constructors and method-implementations in order to be used as an outer
+	 * class.
 	 */
-	private static class FSReaderRealtimeCons implements IMonitoringRecordConsumerPlugin {
+	@Plugin
+	private static class FSReaderRealtimeCons extends AbstractAnalysisPlugin {
 
+		public static final String INPUT_PORT = "newMonitoringRecord";
 		private final FSReaderRealtime master;
 
 		public FSReaderRealtimeCons(final FSReaderRealtime master) {
+			super(new Configuration(null), new AbstractRepository[0]);
 			this.master = master;
 		}
 
-		@Override
-		public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-			return null;
-		}
-
-		@Override
-		public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-			if (!this.master.deliverRecord(monitoringRecord)) {
+		/**
+		 * The supress-warning-tag is only necessary because the method is being used via reflection...
+		 * 
+		 * @param data
+		 */
+		@SuppressWarnings("unused")
+		@InputPort(eventTypes = { IMonitoringRecord.class })
+		public void newMonitoringRecord(final Object data) {
+			final IMonitoringRecord record = (IMonitoringRecord) data;
+			if (!this.master.deliver(FSReaderRealtime.OUTPUT_PORT_NAME, record)) {
 				FSReaderRealtime.LOG.error("LogReaderExecutionException");
-				return false;
 			}
-			return true;
 		}
 
 		@Override
@@ -185,6 +236,26 @@ public class FSReaderRealtime extends AbstractMonitoringReader {
 		@Override
 		public void terminate(final boolean error) {
 			// nothing to do
+		}
+
+		@Override
+		protected Configuration getDefaultConfiguration() {
+			return new Configuration();
+		}
+
+		@Override
+		public Configuration getCurrentConfiguration() {
+			return new Configuration();
+		}
+
+		@Override
+		protected AbstractRepository[] getDefaultRepositories() {
+			return new AbstractRepository[0];
+		}
+
+		@Override
+		public AbstractRepository[] getCurrentRepositories() {
+			return new AbstractRepository[0];
 		}
 	}
 }

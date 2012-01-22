@@ -22,7 +22,8 @@ package kieker.test.monitoring.junit.core;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.monitoring.core.configuration.Configuration;
+import kieker.common.configuration.Configuration;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.test.monitoring.junit.util.DefaultConfigurationFactory;
@@ -41,14 +42,18 @@ public class TestControllerConstruction extends TestCase { // NOCS
 		{// Test with default values // NOCS
 			final IMonitoringController kieker = MonitoringController.createInstance(configuration);
 			Assert.assertEquals("monitoring should not be terminated", false, kieker.isMonitoringTerminated());
-			Assert.assertEquals("monitoringEnabled values differ", configuration.getBooleanProperty(Configuration.MONITORING_ENABLED), kieker.isMonitoringEnabled());
+			Assert.assertEquals("monitoringEnabled values differ", configuration.getBooleanProperty(ConfigurationFactory.MONITORING_ENABLED),
+					kieker.isMonitoringEnabled());
 			kieker.terminateMonitoring();
 		}
 		{// NOCS
-			configuration.setProperty(Configuration.MONITORING_ENABLED, Boolean.toString(!configuration.getBooleanProperty(Configuration.MONITORING_ENABLED)));
+			configuration
+					.setProperty(ConfigurationFactory.MONITORING_ENABLED,
+							Boolean.toString(!configuration.getBooleanProperty(ConfigurationFactory.MONITORING_ENABLED)));
 			final IMonitoringController kieker = MonitoringController.createInstance(configuration);
 			Assert.assertEquals("monitoring should not be terminated", false, kieker.isMonitoringTerminated());
-			Assert.assertEquals("monitoringEnabled values differ", configuration.getBooleanProperty(Configuration.MONITORING_ENABLED), kieker.isMonitoringEnabled());
+			Assert.assertEquals("monitoringEnabled values differ", configuration.getBooleanProperty(ConfigurationFactory.MONITORING_ENABLED),
+					kieker.isMonitoringEnabled());
 			kieker.terminateMonitoring();
 		}
 	}

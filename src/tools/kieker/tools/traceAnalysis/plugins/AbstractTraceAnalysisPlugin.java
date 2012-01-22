@@ -20,20 +20,37 @@
 
 package kieker.tools.traceAnalysis.plugins;
 
-import kieker.analysis.plugin.IAnalysisPlugin;
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * 
  * @author Andre van Hoorn
  */
-public abstract class AbstractTraceAnalysisPlugin implements IAnalysisPlugin {
+public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin {
+
+	public static final String CONFIG_NAME = AbstractTraceAnalysisPlugin.class.getName() + ".name";
 	private final String name;
 	private final SystemModelRepository systemEntityFactory;
 
-	public AbstractTraceAnalysisPlugin(final String name, final SystemModelRepository systemEntityFactory) {
-		this.systemEntityFactory = systemEntityFactory;
-		this.name = name;
+	public AbstractTraceAnalysisPlugin(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
+
+		/* Use the given repository if possible. */
+		if ((repositories.length >= 1) && (repositories[0] instanceof SystemModelRepository)) {
+			this.systemEntityFactory = (SystemModelRepository) repositories[0];
+		} else {
+			this.systemEntityFactory = null;
+		}
+
+		/* Try to load the name from the given configuration. */
+		if (configuration.containsKey(AbstractTraceAnalysisPlugin.CONFIG_NAME)) {
+			this.name = configuration.getStringProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME);
+		} else {
+			this.name = null;
+		}
 	}
 
 	protected void printMessage(final String[] lines) {
@@ -47,5 +64,10 @@ public abstract class AbstractTraceAnalysisPlugin implements IAnalysisPlugin {
 
 	protected final SystemModelRepository getSystemEntityFactory() {
 		return this.systemEntityFactory;
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[] { this.systemEntityFactory };
 	}
 }

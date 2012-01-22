@@ -22,10 +22,11 @@ package kieker.monitoring.core.controller;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.Configuration;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.writer.IMonitoringWriter;
 
 /**
@@ -43,8 +44,9 @@ public final class WriterController extends AbstractController implements IWrite
 
 	public WriterController(final Configuration configuration) {
 		super(configuration);
-		this.autoSetLoggingTimestamp = configuration.getBooleanProperty(Configuration.AUTO_SET_LOGGINGTSTAMP);
-		this.monitoringWriter = AbstractController.createAndInitialize(IMonitoringWriter.class, configuration.getStringProperty(Configuration.WRITER_CLASSNAME),
+		this.autoSetLoggingTimestamp = configuration.getBooleanProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP);
+		this.monitoringWriter = AbstractController.createAndInitialize(IMonitoringWriter.class,
+				configuration.getStringProperty(ConfigurationFactory.WRITER_CLASSNAME),
 				configuration);
 		if (this.monitoringWriter == null) {
 			this.terminate();

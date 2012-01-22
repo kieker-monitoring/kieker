@@ -29,7 +29,7 @@ import java.util.Properties;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.Configuration;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.test.monitoring.junit.util.DummyRecord;
 import kieker.test.monitoring.junit.util.NamedPipeFactory;
@@ -54,10 +54,10 @@ public class TestAutoSetLoggingTimestamp extends TestCase { // NOCS
 		final Properties additionalConfigurationProperties = new Properties();
 		if (setLoggingTimestampEnabled) {
 			// auto set logging timestamps enabled
-			additionalConfigurationProperties.put(Configuration.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(true));
+			additionalConfigurationProperties.put(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(true));
 		} else {
 			// auto set logging timestamps disabled
-			additionalConfigurationProperties.put(Configuration.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(false));
+			additionalConfigurationProperties.put(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(false));
 		}
 
 		final IMonitoringController monitoringController = NamedPipeFactory.createMonitoringControllerWithNamedPipe(pipeName, additionalConfigurationProperties);

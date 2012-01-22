@@ -20,12 +20,16 @@
 
 package kieker.tools.logReplayer;
 
-import java.util.Collection;
-
 import kieker.analysis.AnalysisController;
-import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.reader.IMonitoringReader;
 import kieker.analysis.reader.jms.JMSReader;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
@@ -40,16 +44,20 @@ public class JMSLogReplayer {
 
 	private static final Log LOG = LogFactory.getLog(JMSLogReplayer.class);
 	/** Each record is delegated to this receiver. */
-	private final IMonitoringRecordReceiver recordReceiver;
+	private final AbstractAnalysisPlugin recordReceiver;
 
 	private final String jmsProviderUrl;
 	private final String jmsDestination;
 	private final String jmsFactoryLookupName;
+	private final String recordReceiverInputPortName;
 
-	/** Must not be used for construction */
+	/**
+	 * Must not be used for construction<br>
+	 * TODO: Do we need this?
+	 */
 	@SuppressWarnings("unused")
 	private JMSLogReplayer() {
-		this(null, null, null, null);
+		this(null, null, null, null, null);
 	}
 
 	/**
@@ -62,11 +70,13 @@ public class JMSLogReplayer {
 	 * @throws IllegalArgumentException
 	 *             if passed parameters are null or empty.
 	 */
-	public JMSLogReplayer(final IMonitoringRecordReceiver recordReceiver, final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
+	public JMSLogReplayer(final AbstractAnalysisPlugin recordReceiver, final String recordReceiverInputPortName, final String jmsProviderUrl,
+			final String jmsDestination, final String jmsFactoryLookupName) {
 		this.recordReceiver = recordReceiver;
 		this.jmsProviderUrl = jmsProviderUrl;
 		this.jmsDestination = jmsDestination;
 		this.jmsFactoryLookupName = jmsFactoryLookupName;
+		this.recordReceiverInputPortName = recordReceiverInputPortName;
 	}
 
 	/**
@@ -78,10 +88,16 @@ public class JMSLogReplayer {
 	public boolean replay() {
 		boolean success = true;
 
-		final IMonitoringReader logReader = new JMSReader(this.jmsProviderUrl, this.jmsDestination, this.jmsFactoryLookupName);
+		final Configuration configuration = new Configuration(null);
+		configuration.setProperty("msProviderUrl", this.jmsProviderUrl);
+		configuration.setProperty("jmsDestination", this.jmsDestination);
+		configuration.setProperty("jmsFactoryLookupName", this.jmsFactoryLookupName);
+		final IMonitoringReader logReader = new JMSReader(configuration, new AbstractRepository[0]);
 		final AnalysisController tpanInstance = new AnalysisController();
 		tpanInstance.setReader(logReader);
-		tpanInstance.registerPlugin(new RecordDelegationPlugin2(this.recordReceiver));
+		final RecordDelegationPlugin2 recordReceiver = new RecordDelegationPlugin2(this.recordReceiver, this.recordReceiverInputPortName);
+		tpanInstance.registerPlugin(recordReceiver);
+		AbstractPlugin.connect((AbstractPlugin) logReader, JMSReader.OUTPUT_PORT_NAME, recordReceiver, RecordDelegationPlugin2.INPUT_PORT);
 		try {
 			tpanInstance.run();
 			success = true;
@@ -94,41 +110,52 @@ public class JMSLogReplayer {
 }
 
 /**
- * Kieker analysis plugin that delegates each record to the configured {@link IMonitoringRecordReceiver}.
+ * Kieker analysis plugin that delegates each record to the configured {@link IMonitoringRecordReceiver}.<br>
  * 
+ * <b>Don't</b> change the visibility modificator to public. The class does not have the necessary <i>Configuration</i>-Constructor in order to be used by the
+ * analysis meta model. <br>
  * TODO: We need to extract this class and merge it with that of {@link FilesystemLogReplayer} See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/173
  * 
  * @author Andre van Hoorn
  * 
  */
-class RecordDelegationPlugin2 implements IMonitoringRecordConsumerPlugin {
+@Plugin(
+		outputPorts = { @OutputPort(name = RecordDelegationPlugin2.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
+		})
+class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 
+	public static final String OUTPUT_PORT_NAME = "defaultOutput";
+	public static final String INPUT_PORT = "newMonitoringRecord";
 	private static final Log LOG = LogFactory.getLog(RecordDelegationPlugin2.class);
-
-	private final IMonitoringRecordReceiver rec;
 
 	/**
 	 * Must not be used for construction.
 	 */
 	@SuppressWarnings("unused")
 	private RecordDelegationPlugin2() {
-		this(null);
+		this((AbstractAnalysisPlugin) null, "");
 	}
 
-	public RecordDelegationPlugin2(final IMonitoringRecordReceiver rec) {
-		this.rec = rec;
+	public RecordDelegationPlugin2(final AbstractAnalysisPlugin rec, final String inputPortName) {
+		super(new Configuration(null), new AbstractRepository[0]);
+
+		AbstractPlugin.connect(this, RecordDelegationPlugin2.OUTPUT_PORT_NAME, rec, inputPortName);
 	}
 
-	/*
-	 * {@inheritdoc}
+	/**
+	 * The supress-warning-tag is only necessary because the method is being used via reflection...
+	 * 
+	 * @param data
 	 */
-	@Override
-	public boolean newMonitoringRecord(final IMonitoringRecord record) {
-		return this.rec.newMonitoringRecord(record);
+	@SuppressWarnings("unused")
+	@InputPort(eventTypes = { IMonitoringRecord.class })
+	public boolean newMonitoringRecord(final Object data) {
+		final IMonitoringRecord record = (IMonitoringRecord) data;
+		return super.deliver(RecordDelegationPlugin2.OUTPUT_PORT_NAME, data);
 	}
 
-	/*
-	 * {@inheritdoc}
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean execute() {
@@ -136,19 +163,37 @@ class RecordDelegationPlugin2 implements IMonitoringRecordConsumerPlugin {
 		return true;
 	}
 
-	/*
-	 * {@inheritdoc}
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void terminate(final boolean error) {
 		// nothing to do
 	}
 
-	/*
-	 * {@inheritdoc}
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
-	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-		return null; // receive records of any type
+	protected Configuration getDefaultConfiguration() {
+		return new Configuration();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Configuration getCurrentConfiguration() {
+		return new Configuration();
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
 	}
 }

@@ -20,35 +20,45 @@
 
 package kieker.analysis.plugin;
 
-import java.util.Collection;
 import java.util.concurrent.atomic.AtomicLong;
 
-import kieker.common.record.IMonitoringRecord;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 
 /**
+ * This class has exactly one input port and one output port. An instance of this class receives any objects, increments an intern tread-safe counter without
+ * printing any message and delivers the objects unmodified to the output. The value of the counter can later be retrieved by using a corresponding method.
  * 
  * @author Jan Waller
  */
-public final class SilentCountingRecordConsumer implements IMonitoringRecordConsumerPlugin {
+@Plugin(outputPorts = {
+	@OutputPort(name = SilentCountingRecordConsumer.OUTPUT_PORT_NAME, eventTypes = {}, description = "Default output port")
+})
+public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
+
+	public static final String OUTPUT_PORT_NAME = "defaultOutput";
+	public static final String INPUT_PORT_NAME = "newEvent";
 
 	private final AtomicLong counter = new AtomicLong();
 
 	/**
 	 * Constructs a {@link SilentCountingRecordConsumer}.
 	 */
-	public SilentCountingRecordConsumer() {
-		// nothing to do
+	public SilentCountingRecordConsumer(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
 	}
 
-	@Override
-	public final Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-		return null;
+	@InputPort(eventTypes = {}, description = "Default input port")
+	public final void newEvent(final Object event) {
+		SilentCountingRecordConsumer.this.counter.incrementAndGet();
+		super.deliver(SilentCountingRecordConsumer.OUTPUT_PORT_NAME, event);
 	}
 
-	@Override
-	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		this.counter.incrementAndGet();
-		return true;
+	public final long getMessageCount() {
+		return this.counter.get();
 	}
 
 	@Override
@@ -61,7 +71,23 @@ public final class SilentCountingRecordConsumer implements IMonitoringRecordCons
 		// nothing to do
 	}
 
-	public final long getMessageCount() {
-		return this.counter.get();
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		return new Configuration();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		return new Configuration();
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
 	}
 }

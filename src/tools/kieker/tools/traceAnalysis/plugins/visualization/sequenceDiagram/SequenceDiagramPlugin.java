@@ -31,12 +31,13 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
 
-import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.configuration.IInputPort;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
+import kieker.tools.traceAnalysis.systemModel.AbstractTrace;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
@@ -46,7 +47,10 @@ import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
- * Refactored copy from LogAnalysis-legacy tool
+ * Refactored copy from LogAnalysis-legacy tool<br>
+ * 
+ * This class has exactly one input port named "in". The data which is send to
+ * this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn, Nils Sommer
  */
@@ -108,9 +112,10 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 
 	private final SDModes sdmode;
 
-	public SequenceDiagramPlugin(final String name, final SystemModelRepository systemEntityFactory, final SDModes sdmode, final String outputFnBase,
+	// TODO Change constructor to plugin-default-constructor
+	public SequenceDiagramPlugin(final Configuration configuration, final AbstractRepository repositories[], final SDModes sdmode, final String outputFnBase,
 			final boolean shortLabels) {
-		super(name, systemEntityFactory);
+		super(configuration, repositories);
 		this.sdmode = sdmode;
 		this.outputFnBase = outputFnBase;
 		this.shortLabels = shortLabels;
@@ -140,24 +145,17 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 	}
 
 	@Override
-	public IInputPort<MessageTrace> getMessageTraceInputPort() {
-		return this.messageTraceInputPort;
-	}
-
-	private final IInputPort<MessageTrace> messageTraceInputPort = new AbstractInputPort<MessageTrace>("Message traces") {
-
-		@Override
-		public void newEvent(final MessageTrace mt) {
-			try {
-				SequenceDiagramPlugin.writePicForMessageTrace(SequenceDiagramPlugin.this.getSystemEntityFactory(), mt, SequenceDiagramPlugin.this.sdmode,
-						SequenceDiagramPlugin.this.outputFnBase + "-" + mt.getTraceId() + ".pic", SequenceDiagramPlugin.this.shortLabels);
-				SequenceDiagramPlugin.this.reportSuccess(mt.getTraceId());
-			} catch (final FileNotFoundException ex) {
-				SequenceDiagramPlugin.this.reportError(mt.getTraceId());
-				SequenceDiagramPlugin.LOG.error("File not found", ex);
-			}
+	public void msgTraceInput(final Object mt) {
+		try {
+			SequenceDiagramPlugin.writePicForMessageTrace(SequenceDiagramPlugin.this.getSystemEntityFactory(), (MessageTrace) mt,
+					SequenceDiagramPlugin.this.sdmode,
+					SequenceDiagramPlugin.this.outputFnBase + "-" + ((AbstractTrace) mt).getTraceId() + ".pic", SequenceDiagramPlugin.this.shortLabels);
+			SequenceDiagramPlugin.this.reportSuccess(((AbstractTrace) mt).getTraceId());
+		} catch (final FileNotFoundException ex) {
+			SequenceDiagramPlugin.this.reportError(((AbstractTrace) mt).getTraceId());
+			SequenceDiagramPlugin.LOG.error("File not found", ex);
 		}
-	};
+	}
 
 	private static String assemblyComponentLabel(final AssemblyComponent component, final boolean shortLabels) {
 		final String assemblyComponentName = component.getName();
@@ -318,5 +316,24 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 		SequenceDiagramPlugin.picFromMessageTrace(systemEntityFactory, msgTrace, sdMode, ps, shortLabels);
 		ps.flush();
 		ps.close();
+	}
+
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		return new Configuration();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration();
+
+		// TODO: Save the current configuration
+
+		return configuration;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
 	}
 }

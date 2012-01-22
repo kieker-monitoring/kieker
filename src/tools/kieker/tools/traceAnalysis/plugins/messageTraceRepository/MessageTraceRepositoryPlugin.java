@@ -23,17 +23,21 @@ package kieker.tools.traceAnalysis.plugins.messageTraceRepository;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.configuration.IInputPort;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
+import kieker.tools.traceAnalysis.systemModel.AbstractTrace;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
+ * This class has exactly one input port. The data which is send to this plugin is not delegated in any way.
+ * 
  * @author Andre van Hoorn
  */
 public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessingPlugin {
 
+	public static final String MSG_TRACE_INPUT_PORT_NAME = "msgTraceInput";
 	// private static final Log log = LogFactory.getLog(MessageTraceRepositoryPlugin.class);
 
 	private final Map<Long, MessageTrace> repo = new ConcurrentHashMap<Long, MessageTrace>(); // NOPMD
@@ -41,21 +45,8 @@ public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessing
 	// TODO: handle equivalence classes
 	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/150
 
-	public MessageTraceRepositoryPlugin(final String name, final SystemModelRepository systemEntityFactory) {
-		super(name, systemEntityFactory);
-	}
-
-	private final IInputPort<MessageTrace> messageTraceInputPort = new AbstractInputPort<MessageTrace>("Message traces") {
-
-		@Override
-		public void newEvent(final MessageTrace mt) {
-			MessageTraceRepositoryPlugin.this.repo.put(mt.getTraceId(), mt);
-		}
-	};
-
-	@Override
-	public IInputPort<MessageTrace> getMessageTraceInputPort() {
-		return this.messageTraceInputPort;
+	public MessageTraceRepositoryPlugin(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
 	}
 
 	@Override
@@ -66,5 +57,30 @@ public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessing
 	@Override
 	public void terminate(final boolean error) {
 		// no need to do anything here
+	}
+
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		return new Configuration();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration();
+
+		// TODO: Save the current configuration
+
+		return configuration;
+	}
+
+	@InputPort(description = "Message traces", eventTypes = { MessageTrace.class })
+	@Override
+	public void msgTraceInput(final Object mt) {
+		MessageTraceRepositoryPlugin.this.repo.put(((AbstractTrace) mt).getTraceId(), (MessageTrace) mt);
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
 	}
 }

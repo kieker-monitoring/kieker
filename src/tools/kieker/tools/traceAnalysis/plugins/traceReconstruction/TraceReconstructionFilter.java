@@ -27,10 +27,11 @@ import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
 
-import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.configuration.IInputPort;
-import kieker.analysis.plugin.configuration.IOutputPort;
-import kieker.analysis.plugin.configuration.OutputPort;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceProcessingPlugin;
@@ -43,10 +44,30 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
- * 
  * @author Andre van Hoorn
  */
+@Plugin(outputPorts = {
+	@OutputPort(
+			name = TraceReconstructionFilter.MESSAGE_TRACE_OUTPUT_PORT_NAME,
+			description = "Reconstructed Message Traces",
+			eventTypes = { MessageTrace.class }),
+	@OutputPort(
+			name = TraceReconstructionFilter.EXECUTION_TRACE_OUTPUT_PORT_NAME,
+			description = "Reconstructed Execution Traces",
+			eventTypes = { ExecutionTrace.class }),
+	@OutputPort(
+			name = TraceReconstructionFilter.INVALID_EXECUTION_TRACE_OUTPUT_PORT_NAME,
+			description = "Invalid Execution Traces",
+			eventTypes = { InvalidExecutionTrace.class })
+})
 public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
+
+	public static final String EXECUTION_TRACE_INPUT_PORT_NAME = "newExecution";
+	public static final String MESSAGE_TRACE_OUTPUT_PORT_NAME = "MessageTraceOutput";
+	public static final String EXECUTION_TRACE_OUTPUT_PORT_NAME = "ExecutionTraceOutput";
+	public static final String INVALID_EXECUTION_TRACE_OUTPUT_PORT_NAME = "InvalidExecutionTraceOutput";
+	public static final String CONFIG_MAX_TRACE_DURATION_MILLIS = TraceReconstructionFilter.class.getName() + ".maxTraceDurationMillis";
+	public static final String CONFIG_IGNORE_INVALID_TRACES = TraceReconstructionFilter.class.getName() + ".ignoreInvalidTraces";
 
 	public static final int MAX_DURATION_MILLIS = Integer.MAX_VALUE;
 	private static final Log LOG = LogFactory.getLog(TraceReconstructionFilter.class);
@@ -61,10 +82,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	private final boolean ignoreInvalidTraces;
 	private final Execution rootExecution;
 	private final long maxTraceDurationNanos;
-
-	private final OutputPort<MessageTrace> messageTraceOutputPort = new OutputPort<MessageTrace>("Reconstructed Message Traces");
-	private final OutputPort<ExecutionTrace> executionTraceOutputPort = new OutputPort<ExecutionTrace>("Reconstructed Execution Traces");
-	private final OutputPort<InvalidExecutionTrace> invalidExecutionTraceOutputPort = new OutputPort<InvalidExecutionTrace>("Invalid Execution Traces");
+	private final long maxTraceDurationMillis;
 
 	/** Pending traces sorted by tin timestamps */
 	private final NavigableSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() {
@@ -90,19 +108,28 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 		}
 	});
 
-	public TraceReconstructionFilter(final String name, final SystemModelRepository systemEntityFactory, final long maxTraceDurationMillis,
-			final boolean ignoreInvalidTraces) {
-		super(name, systemEntityFactory);
-		this.rootExecution = systemEntityFactory.getRootExecution();
-		if (maxTraceDurationMillis < 0) {
-			throw new IllegalArgumentException("value maxTraceDurationMillis must not be negative (found: " + maxTraceDurationMillis + ")");
+	public TraceReconstructionFilter(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
+
+		/* Load the root execution from the repository if possible. */
+		if ((repositories.length >= 1) && (repositories[0] instanceof SystemModelRepository)) {
+			this.rootExecution = ((SystemModelRepository) repositories[0]).getRootExecution();
+		} else {
+			this.rootExecution = null;
 		}
-		if (maxTraceDurationMillis == TraceReconstructionFilter.MAX_DURATION_MILLIS) {
+
+		/* Load from the configuration. */
+		this.maxTraceDurationMillis = configuration.getLongProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS);
+		this.ignoreInvalidTraces = configuration.getBooleanProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES);
+
+		if (this.maxTraceDurationMillis < 0) {
+			throw new IllegalArgumentException("value maxTraceDurationMillis must not be negative (found: " + this.maxTraceDurationMillis + ")");
+		}
+		if (this.maxTraceDurationMillis == TraceReconstructionFilter.MAX_DURATION_MILLIS) {
 			this.maxTraceDurationNanos = TraceReconstructionFilter.MAX_DURATION_NANOS;
 		} else {
-			this.maxTraceDurationNanos = maxTraceDurationMillis * (1000 * 1000); // NOCS (MagicNumberCheck)
+			this.maxTraceDurationNanos = this.maxTraceDurationMillis * (1000 * 1000); // NOCS (MagicNumberCheck)
 		}
-		this.ignoreInvalidTraces = ignoreInvalidTraces;
 	}
 
 	/**
@@ -137,7 +164,9 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 		return true; // no need to do anything here
 	}
 
-	private void newExecution(final Execution execution) {
+	@InputPort(description = "The input port", eventTypes = { Execution.class })
+	public void newExecution(final Object data) {
+		final Execution execution = (Execution) data;
 		final long traceId = execution.getTraceId();
 
 		this.minTin = ((this.minTin < 0) || (execution.getTin() < this.minTin)) ? execution.getTin() : this.minTin; // NOCS
@@ -195,18 +224,18 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 			 */
 			if (!this.invalidTraces.contains(mt.getTraceId())) {
 				/* Not completing part of an invalid trace */
-				this.messageTraceOutputPort.deliver(mt);
-				this.executionTraceOutputPort.deliver(executionTrace);
+				super.deliver(TraceReconstructionFilter.MESSAGE_TRACE_OUTPUT_PORT_NAME, mt);
+				super.deliver(TraceReconstructionFilter.EXECUTION_TRACE_OUTPUT_PORT_NAME, executionTrace);
 				this.reportSuccess(curTraceId);
 			} else {
 				/* mt is the completing part of an invalid trace */
-				this.invalidExecutionTraceOutputPort.deliver(new InvalidExecutionTrace(executionTrace));
+				super.deliver(TraceReconstructionFilter.INVALID_EXECUTION_TRACE_OUTPUT_PORT_NAME, new InvalidExecutionTrace(executionTrace));
 				// the statistics have been updated on the first
 				// occurrence of artifacts of this trace
 			}
 		} catch (final InvalidTraceException ex) {
 			/* Transformation failed (i.e., trace invalid) */
-			this.invalidExecutionTraceOutputPort.deliver(new InvalidExecutionTrace(executionTrace));
+			super.deliver(TraceReconstructionFilter.INVALID_EXECUTION_TRACE_OUTPUT_PORT_NAME, new InvalidExecutionTrace(executionTrace));
 			if (!this.invalidTraces.contains(curTraceId)) {
 				// only once per traceID (otherwise, we would report all
 				// trace fragments)
@@ -280,27 +309,29 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 		System.out.println("Last timestamp: " + maxToutStr);
 	}
 
-	public IInputPort<Execution> getExecutionInputPort() {
-		return this.executionInputPort;
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		final Configuration configuration = new Configuration();
+
+		configuration.put(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, TraceReconstructionFilter.MAX_DURATION_MILLIS);
+		configuration.put(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, true);
+
+		return configuration;
 	}
 
-	private final IInputPort<Execution> executionInputPort = new AbstractInputPort<Execution>("Execution input") {
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration();
 
-		@Override
-		public void newEvent(final Execution event) {
-			TraceReconstructionFilter.this.newExecution(event);
-		}
-	};
+		configuration.put(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, this.maxTraceDurationMillis);
+		configuration.put(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, this.ignoreInvalidTraces);
 
-	public IOutputPort<MessageTrace> getMessageTraceOutputPort() {
-		return this.messageTraceOutputPort;
+		return configuration;
 	}
 
-	public IOutputPort<ExecutionTrace> getExecutionTraceOutputPort() {
-		return this.executionTraceOutputPort;
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
 	}
 
-	public IOutputPort<InvalidExecutionTrace> getInvalidExecutionTraceOutputPort() {
-		return this.invalidExecutionTraceOutputPort;
-	}
 }

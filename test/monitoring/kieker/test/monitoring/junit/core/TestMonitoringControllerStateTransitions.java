@@ -22,7 +22,8 @@ package kieker.test.monitoring.junit.core;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.monitoring.core.configuration.Configuration;
+import kieker.common.configuration.Configuration;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.test.monitoring.junit.util.DefaultConfigurationFactory;
@@ -36,7 +37,7 @@ public class TestMonitoringControllerStateTransitions extends TestCase { // NOCS
 	@Test
 	public void testMonitoringEnabledToDisabled() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
-		configuration.setProperty(Configuration.MONITORING_ENABLED, "true");
+		configuration.setProperty(ConfigurationFactory.MONITORING_ENABLED, "true");
 		final IMonitoringController kieker = MonitoringController.createInstance(configuration);
 		{ /* Check values when enabled */// NOCS
 			Assert.assertEquals("Unexpected monitoringEnabled value", true, kieker.isMonitoringEnabled()); // NOPMD
@@ -56,7 +57,7 @@ public class TestMonitoringControllerStateTransitions extends TestCase { // NOCS
 	@Test
 	public void testMonitoringDisabledToEnabled() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
-		configuration.setProperty(Configuration.MONITORING_ENABLED, "false");
+		configuration.setProperty(ConfigurationFactory.MONITORING_ENABLED, "false");
 		final IMonitoringController kieker = MonitoringController.createInstance(configuration);
 		{ /* Check values when disabled */// NOCS
 			Assert.assertEquals("Unexpected monitoringEnabled value", false, kieker.isMonitoringEnabled());
@@ -76,7 +77,7 @@ public class TestMonitoringControllerStateTransitions extends TestCase { // NOCS
 	@Test
 	public void testMonitoringEnabledToTerminated() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
-		configuration.setProperty(Configuration.MONITORING_ENABLED, "true");
+		configuration.setProperty(ConfigurationFactory.MONITORING_ENABLED, "true");
 		final IMonitoringController kieker = MonitoringController.createInstance(configuration);
 		/* Change to terminated */
 		kieker.terminateMonitoring();
@@ -90,7 +91,7 @@ public class TestMonitoringControllerStateTransitions extends TestCase { // NOCS
 	@Test
 	public void testMonitoringDisabledToTerminated() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
-		configuration.setProperty(Configuration.MONITORING_ENABLED, "false");
+		configuration.setProperty(ConfigurationFactory.MONITORING_ENABLED, "false");
 		final IMonitoringController kieker = MonitoringController.createInstance(configuration);
 		/* Change to terminated */
 		kieker.terminateMonitoring();

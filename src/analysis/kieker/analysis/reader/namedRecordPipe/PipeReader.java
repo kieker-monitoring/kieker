@@ -22,8 +22,11 @@ package kieker.analysis.reader.namedRecordPipe;
 
 import java.util.concurrent.CountDownLatch;
 
-import kieker.analysis.reader.AbstractMonitoringReader;
-import kieker.analysis.util.PropertyMap;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.reader.AbstractReaderPlugin;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.namedRecordPipe.Broker;
@@ -35,33 +38,62 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @author Andre van Hoorn
  */
-public final class PipeReader extends AbstractMonitoringReader implements IPipeReader {
-	public static final String PROPERTY_PIPE_NAME = "pipeName";
+@Plugin(outputPorts = {
+	@OutputPort(name = PipeReader.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the PipeReader")
+})
+public final class PipeReader extends AbstractReaderPlugin implements IPipeReader {
+
+	public static final String OUTPUT_PORT_NAME = "defaultOutput";
+	public static final String CONFIG_PIPENAME = PipeReader.class.getName() + ".pipeName";
+
 	private static final Log LOG = LogFactory.getLog(PipeReader.class);
 
 	private volatile Pipe pipe;
+	private final String pipeName;
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
 
-	public PipeReader() {
-		// nothing to do
+	/**
+	 * Creates a new instance of this class using the given parameter.
+	 * 
+	 * @param configuration
+	 *            The configuration used to load the pipe name. It <b>must</b> contain the property {@link CONFIG_PIPENAME}.
+	 * @throws IllegalArgumentException
+	 *             If the pipe name was invalid.
+	 */
+	public PipeReader(final Configuration configuration, final AbstractRepository repositories[]) throws IllegalArgumentException {
+		super(configuration, repositories);
+		final String pipeName = this.configuration.getStringProperty(PipeReader.CONFIG_PIPENAME);
+
+		this.pipeName = pipeName;
+		this.initialize(pipeName);
 	}
 
+	// TODO Remove the constructor
 	public PipeReader(final String pipeName) {
-		this.initPipe(pipeName);
+		super(new Configuration(null), new AbstractRepository[0]);
+
+		this.pipeName = pipeName;
+		this.initialize(pipeName);
 	}
 
-	private void initPipe(final String pipeName) throws IllegalArgumentException {
+	private void initialize(final String pipeName) throws IllegalArgumentException {
 		this.pipe = Broker.INSTANCE.acquirePipe(pipeName);
 		if (this.pipe == null) {
-			final String errorMsg = "Failed to get Pipe with name " + pipeName;
-			PipeReader.LOG.error(errorMsg);
-			throw new IllegalArgumentException(errorMsg);
+			throw new IllegalArgumentException("Failed to get Pipe with name " + pipeName);
 		} else {
 			if (PipeReader.LOG.isDebugEnabled()) {
 				PipeReader.LOG.debug("Connected to named pipe '" + this.pipe.getName() + "'"); // NOCS (MultipleStringLiteralsCheck)
 			}
 		}
+		// TODO: escaping this in constructor! very bad practice!
 		this.pipe.setPipeReader(this);
+	}
+
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		final Configuration defaultConfiguration = new Configuration();
+		defaultConfiguration.setProperty(PipeReader.CONFIG_PIPENAME, "kieker-pipe");
+		return defaultConfiguration;
 	}
 
 	/**
@@ -81,23 +113,8 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 	}
 
 	@Override
-	public boolean init(final String initString) {
-		try {
-			final PropertyMap propertyMap = new PropertyMap(initString, "|", "="); // throws IllegalArgumentException
-			this.initPipe(propertyMap.getProperty(PipeReader.PROPERTY_PIPE_NAME));
-			if (PipeReader.LOG.isDebugEnabled()) {
-				PipeReader.LOG.debug("Connected to pipe '" + this.pipe.getName() + "'" + " (" + this.pipe + ")"); // NOCS (MultipleStringLiteralsCheck)
-			}
-		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
-			PipeReader.LOG.error("Failed to parse initString '" + initString + "': " + exc.getMessage());
-			return false;
-		}
-		return true;
-	}
-
-	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord rec) {
-		return super.deliverRecord(rec);
+		return super.deliver(PipeReader.OUTPUT_PORT_NAME, rec);
 	}
 
 	@Override
@@ -110,5 +127,24 @@ public final class PipeReader extends AbstractMonitoringReader implements IPipeR
 	public void terminate() {
 		// will lead to notifyPipeClosed() and the subsequent termination of read()
 		this.pipe.close();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration(null);
+
+		configuration.setProperty(PipeReader.CONFIG_PIPENAME, this.pipeName);
+
+		return configuration;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
 	}
 }

@@ -20,7 +20,11 @@
 
 package kieker.tools.currentTimeEventGenerator;
 
-import kieker.analysis.plugin.configuration.OutputPort;
+import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
@@ -46,7 +50,12 @@ import kieker.common.logging.LogFactory;
  * @author Andre van Hoorn
  * 
  */
-public class CurrentTimeEventGenerator {
+@Plugin(outputPorts =
+		@OutputPort(name = CurrentTimeEventGenerator.CURRENT_TIME_OUTPUT_PORT_NAME, eventTypes = { TimestampEvent.class }, description = "Provides current time events"))
+public class CurrentTimeEventGenerator extends AbstractPlugin {
+
+	public static final String CURRENT_TIME_OUTPUT_PORT_NAME = "currentTimeOutputPort";
+	public static final String CONFIG_TIME_RESOLUTION = CurrentTimeEventGenerator.class.getName() + ".timeResolution";
 	private static final Log LOG = LogFactory.getLog(CurrentTimeEventGenerator.class);
 
 	/**
@@ -67,17 +76,15 @@ public class CurrentTimeEventGenerator {
 
 	private final long timerResolution;
 
-	private final OutputPort<TimestampEvent> currentTimeOutputPort = new OutputPort<TimestampEvent>("Provides current time events");
-
 	/**
 	 * Creates an event generator which generates time events with the given
 	 * resolution in nanoseconds via the output port {@link #getCurrentTimeOutputPort()}.
 	 * 
 	 * @param timeResolution
 	 */
-	public CurrentTimeEventGenerator(final long timeResolution) {
+	public CurrentTimeEventGenerator(final long timeResolution, final AbstractRepository repositories[]) {
+		super(new Configuration(), repositories);
 		this.timerResolution = timeResolution;
-
 	}
 
 	/**
@@ -96,7 +103,7 @@ public class CurrentTimeEventGenerator {
 			 */
 			this.maxTimestamp = timestamp;
 			this.firstTimestamp = timestamp;
-			this.getCurrentTimeOutputPort().deliver(new TimestampEvent(timestamp));
+			super.deliver(CurrentTimeEventGenerator.CURRENT_TIME_OUTPUT_PORT_NAME, new TimestampEvent(timestamp));
 			this.mostRecentEventFired = timestamp;
 		} else if (timestamp > this.maxTimestamp) {
 			this.maxTimestamp = timestamp;
@@ -105,13 +112,37 @@ public class CurrentTimeEventGenerator {
 			 */
 			for (long nextTimerEventAt = this.mostRecentEventFired + this.timerResolution; timestamp >= nextTimerEventAt; nextTimerEventAt = this.mostRecentEventFired
 					+ this.timerResolution) {
-				this.getCurrentTimeOutputPort().deliver(new TimestampEvent(nextTimerEventAt)); // NOPMD (new in loop)
+				super.deliver(CurrentTimeEventGenerator.CURRENT_TIME_OUTPUT_PORT_NAME, new TimestampEvent(nextTimerEventAt)); // NOPMD (new in loop)
 				this.mostRecentEventFired = nextTimerEventAt;
 			}
 		}
 	}
 
-	public OutputPort<TimestampEvent> getCurrentTimeOutputPort() {
-		return this.currentTimeOutputPort;
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		final Configuration configuration = new Configuration();
+
+		configuration.setProperty(CurrentTimeEventGenerator.CONFIG_TIME_RESOLUTION, Long.toString(1000l));
+
+		return configuration;
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration();
+
+		configuration.setProperty(CurrentTimeEventGenerator.CONFIG_TIME_RESOLUTION, Long.toString(this.timerResolution));
+
+		return configuration;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
 	}
 }

@@ -24,28 +24,32 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.configuration.IInputPort;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractExecutionTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
+ * This class has exactly one input port named "in". The data which is send to
+ * this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn
  */
 public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessingPlugin {
 
+	public static final String CONFIG_OUTPUT_FN = ExecutionTraceWriterPlugin.class.getName() + ".outputFn";
+	public static final String EXECUTION_TRACES_INPUT_PORT_NAME = "newEvent";
 	private static final Log LOG = LogFactory.getLog(ExecutionTraceWriterPlugin.class);
 	private final String outputFn;
 	private final BufferedWriter ps;
 
-	public ExecutionTraceWriterPlugin(final String name, final SystemModelRepository systemEntityFactory, final String outputFn) throws IOException {
-		super(name, systemEntityFactory);
-		this.outputFn = outputFn;
-		this.ps = new BufferedWriter(new FileWriter(outputFn));
+	public ExecutionTraceWriterPlugin(final Configuration configuration, final AbstractRepository repositories[]) throws IOException {
+		super(configuration, repositories);
+		this.outputFn = configuration.getStringProperty(ExecutionTraceWriterPlugin.CONFIG_OUTPUT_FN);
+		this.ps = new BufferedWriter(new FileWriter(this.outputFn));
 	}
 
 	@Override
@@ -72,21 +76,42 @@ public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessing
 	}
 
 	@Override
-	public IInputPort<ExecutionTrace> getExecutionTraceInputPort() {
-		return this.executionTraceInputPort;
+	public String getExecutionTraceInputPortName() {
+		return ExecutionTraceWriterPlugin.EXECUTION_TRACES_INPUT_PORT_NAME;
 	}
 
-	private final IInputPort<ExecutionTrace> executionTraceInputPort = new AbstractInputPort<ExecutionTrace>("Execution traces") {
-
-		@Override
-		public void newEvent(final ExecutionTrace et) {
-			try {
-				ExecutionTraceWriterPlugin.this.ps.append(et.toString());
-				ExecutionTraceWriterPlugin.this.reportSuccess(et.getTraceId());
-			} catch (final IOException ex) {
-				ExecutionTraceWriterPlugin.this.reportError(et.getTraceId());
-				ExecutionTraceWriterPlugin.LOG.error("", ex);
-			}
+	@InputPort(description = "Execution traces", eventTypes = { ExecutionTrace.class })
+	public void newEvent(final Object obj) {
+		final ExecutionTrace et = (ExecutionTrace) obj;
+		try {
+			ExecutionTraceWriterPlugin.this.ps.append(et.toString());
+			ExecutionTraceWriterPlugin.this.reportSuccess(et.getTraceId());
+		} catch (final IOException ex) {
+			ExecutionTraceWriterPlugin.this.reportError(et.getTraceId());
+			ExecutionTraceWriterPlugin.LOG.error("", ex);
 		}
-	};
+	}
+
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		final Configuration configuration = new Configuration();
+
+		configuration.put(ExecutionTraceWriterPlugin.CONFIG_OUTPUT_FN, "");
+
+		return configuration;
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration();
+
+		configuration.put(ExecutionTraceWriterPlugin.CONFIG_OUTPUT_FN, this.outputFn);
+
+		return configuration;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
 }

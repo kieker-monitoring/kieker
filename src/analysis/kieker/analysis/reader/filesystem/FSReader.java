@@ -20,14 +20,20 @@
 
 package kieker.analysis.reader.filesystem;
 
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.PriorityQueue;
+import java.util.Set;
 
-import kieker.analysis.reader.AbstractMonitoringReader;
-import kieker.analysis.util.PropertyMap;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.reader.AbstractReaderPlugin;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
+import kieker.common.exception.MonitoringRecordException;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
@@ -38,69 +44,51 @@ import kieker.common.record.IMonitoringRecordReceiver;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-public class FSReader extends AbstractMonitoringReader implements IMonitoringRecordReceiver {
+@Plugin(outputPorts = {
+	@OutputPort(name = FSReader.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader")
+})
+public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 
-	/**
-	 * Semicolon-separated list of directories
-	 */
-	public static final String PROP_NAME_INPUTDIRS = "inputDirs";
+	public static final String OUTPUT_PORT_NAME = "defaultOutput";
+	public static final String CONFIG_INPUTDIRS = FSReader.class.getName() + ".inputDirs";
+	public static final String CONFIG_ONLYRECORDS = FSReader.class.getName() + ".readOnlyRecordsOfType";
+
 	public static final IMonitoringRecord EOF = new DummyMonitoringRecord();
 
 	private static final Log LOG = LogFactory.getLog(FSReader.class);
 
-	private String[] inputDirs;
-	private final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType;
+	private final Set<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType;
+	private final String[] inputDirs;
 	private final PriorityQueue<IMonitoringRecord> recordQueue;
+
 	private volatile boolean running = true;
 
-	/**
-	 * 
-	 * @param inputDirs
-	 * @param readOnlyRecordsOfType
-	 *            select only records of this type; null selects all
-	 */
-	public FSReader(final String[] inputDirs, final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType) { // NOPMD
-		this.readOnlyRecordsOfType = readOnlyRecordsOfType;
-		if (inputDirs != null) {
-			this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
-			this.recordQueue = new PriorityQueue<IMonitoringRecord>(inputDirs.length);
+	public FSReader(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
+		this.inputDirs = this.configuration.getStringArrayProperty(FSReader.CONFIG_INPUTDIRS);
+		this.recordQueue = new PriorityQueue<IMonitoringRecord>(this.inputDirs.length);
+		final String[] onlyrecords = this.configuration.getStringArrayProperty(FSReader.CONFIG_ONLYRECORDS);
+		if (onlyrecords.length == 0) {
+			this.readOnlyRecordsOfType = null;
 		} else {
-			this.inputDirs = null; // NOPMD
-			this.recordQueue = new PriorityQueue<IMonitoringRecord>();
+			this.readOnlyRecordsOfType = new HashSet<Class<? extends IMonitoringRecord>>(onlyrecords.length);
+			for (final String classname : onlyrecords) {
+				try {
+					final Class<? extends IMonitoringRecord> recClass = AbstractMonitoringRecord.classForName(classname);
+					this.readOnlyRecordsOfType.add(recClass);
+				} catch (final MonitoringRecordException ex) {
+					FSReader.LOG.warn(ex.getMessage(), ex.getCause());
+				}
+			}
 		}
 	}
 
-	/**
-	 * 
-	 * @param inputDirs
-	 */
-	public FSReader(final String[] inputDirs) {
-		this(inputDirs, null);
-	}
-
-	/**
-	 * Default constructor used for construction by reflection.
-	 */
-	public FSReader() {
-		this(null, null);
-	}
-
-	/**
-	 * Initializes the reader based on the given key/value pair initString. For the key {@value #PROP_NAME_INPUTDIRS}, the method expects a list of input directories
-	 * separated by semicolon.
-	 * 
-	 * Example: <code>inputDirs=dir0;...;dir1</code>
-	 */
 	@Override
-	public boolean init(final String initString) {
-		final PropertyMap propertyMap = new PropertyMap(initString, "|", "=");
-		final String dirList = propertyMap.getProperty(FSReader.PROP_NAME_INPUTDIRS);
-		if (dirList == null) {
-			FSReader.LOG.error("Missing value for property " + FSReader.PROP_NAME_INPUTDIRS);
-			return false;
-		}
-		this.inputDirs = dirList.split(";");
-		return true;
+	protected Configuration getDefaultConfiguration() {
+		final Configuration defaultConfiguration = new Configuration();
+		defaultConfiguration.setProperty(FSReader.CONFIG_INPUTDIRS, "");
+		defaultConfiguration.setProperty(FSReader.CONFIG_ONLYRECORDS, "");
+		return defaultConfiguration;
 	}
 
 	@Override
@@ -134,7 +122,7 @@ public class FSReader extends AbstractMonitoringReader implements IMonitoringRec
 			if (record == FSReader.EOF) {
 				readingReaders--;
 			} else {
-				this.deliverRecord(record);
+				super.deliver(FSReader.OUTPUT_PORT_NAME, record);
 			}
 		}
 		return true;
@@ -158,4 +146,35 @@ public class FSReader extends AbstractMonitoringReader implements IMonitoringRec
 		}
 		return this.running;
 	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration();
+
+		configuration.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(this.inputDirs));
+		/* Extract the names of the record-classes again. */
+		if (this.readOnlyRecordsOfType == null) {
+			configuration.setProperty(FSReader.CONFIG_ONLYRECORDS, Configuration.toProperty(new String[] {}));
+		} else {
+			final int len = this.readOnlyRecordsOfType.size();
+			final String onlyRecords[] = new String[len];
+			final Iterator<Class<? extends IMonitoringRecord>> iter = this.readOnlyRecordsOfType.iterator();
+			for (int i = 0; i < len; i++) {
+				onlyRecords[i] = iter.next().getName();
+			}
+			configuration.setProperty(FSReader.CONFIG_ONLYRECORDS, Configuration.toProperty(onlyRecords));
+		}
+		return configuration;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
+	}
+
 }

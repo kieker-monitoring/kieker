@@ -24,13 +24,13 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.configuration.IInputPort;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractInvalidExecutionTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * 
@@ -38,15 +38,17 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  */
 public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionTraceProcessingPlugin {
 
+	public static final String CONFIG_OUTPUT_FN = InvalidExecutionTraceWriterPlugin.class.getName() + ".outputFn";
+	public static final String INVALID_EXECUTION_TRACES_INPUT_PORT_NAME = "newEvent";
 	private static final Log LOG = LogFactory.getLog(InvalidExecutionTraceWriterPlugin.class);
 	private final String outputFn;
 	private final BufferedWriter ps;
 
-	public InvalidExecutionTraceWriterPlugin(final String name, final SystemModelRepository systemEntityFactory, final String outputFn)
+	public InvalidExecutionTraceWriterPlugin(final Configuration configuration, final AbstractRepository repositories[])
 			throws IOException {
-		super(name, systemEntityFactory);
-		this.outputFn = outputFn;
-		this.ps = new BufferedWriter(new FileWriter(outputFn));
+		super(configuration, repositories);
+		this.outputFn = configuration.getStringProperty(InvalidExecutionTraceWriterPlugin.CONFIG_OUTPUT_FN);
+		this.ps = new BufferedWriter(new FileWriter(this.outputFn));
 	}
 
 	@Override
@@ -73,21 +75,42 @@ public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionT
 	}
 
 	@Override
-	public IInputPort<InvalidExecutionTrace> getInvalidExecutionTraceInputPort() {
-		return this.invalidExecutionTraceInputPort;
+	public String getInvalidExecutionTraceInputPortName() {
+		return InvalidExecutionTraceWriterPlugin.INVALID_EXECUTION_TRACES_INPUT_PORT_NAME;
 	}
 
-	private final IInputPort<InvalidExecutionTrace> invalidExecutionTraceInputPort = new AbstractInputPort<InvalidExecutionTrace>("Invalid execution traces") {
-
-		@Override
-		public void newEvent(final InvalidExecutionTrace et) {
-			try {
-				InvalidExecutionTraceWriterPlugin.this.ps.append(et.getInvalidExecutionTraceArtifacts().toString());
-				InvalidExecutionTraceWriterPlugin.this.reportSuccess(et.getInvalidExecutionTraceArtifacts().getTraceId());
-			} catch (final IOException ex) {
-				InvalidExecutionTraceWriterPlugin.this.reportError(et.getInvalidExecutionTraceArtifacts().getTraceId());
-				InvalidExecutionTraceWriterPlugin.LOG.error("", ex);
-			}
+	@InputPort(description = "Invalid Execution traces", eventTypes = { InvalidExecutionTrace.class })
+	public void newEvent(final Object obj) {
+		final InvalidExecutionTrace et = (InvalidExecutionTrace) obj;
+		try {
+			InvalidExecutionTraceWriterPlugin.this.ps.append(et.getInvalidExecutionTraceArtifacts().toString());
+			InvalidExecutionTraceWriterPlugin.this.reportSuccess(et.getInvalidExecutionTraceArtifacts().getTraceId());
+		} catch (final IOException ex) {
+			InvalidExecutionTraceWriterPlugin.this.reportError(et.getInvalidExecutionTraceArtifacts().getTraceId());
+			InvalidExecutionTraceWriterPlugin.LOG.error("", ex);
 		}
-	};
+	}
+
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		final Configuration configuration = new Configuration();
+
+		configuration.put(InvalidExecutionTraceWriterPlugin.CONFIG_OUTPUT_FN, "");
+
+		return configuration;
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration();
+
+		configuration.put(InvalidExecutionTraceWriterPlugin.CONFIG_OUTPUT_FN, this.outputFn);
+
+		return configuration;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
 }

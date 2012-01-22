@@ -20,46 +20,80 @@
 
 package kieker.analysis.plugin;
 
-import java.util.Collection;
-
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 
 /**
+ * This class has exactly one input port and one output port. An instance of this class receives only objects implementing the interface {@link IMonitoringRecord},
+ * prints a log message for every single received record and passes them unmodified to the output port.
+ * 
  * @author Andre van Hoorn
  */
-public class MonitoringRecordTypeLogger implements IMonitoringRecordConsumerPlugin {
+@Plugin(outputPorts = {
+	@OutputPort(
+			name = MonitoringRecordTypeLogger.OUTPUT_PORT_NAME,
+			eventTypes = { IMonitoringRecord.class },
+			description = "Default output port")
+})
+public class MonitoringRecordTypeLogger extends AbstractAnalysisPlugin {
+
+	public static final String OUTPUT_PORT_NAME = "defaultOutput";
+	public static final String INPUT_PORT_NAME = "newEvent";
 
 	private static final Log LOG = LogFactory.getLog(MonitoringRecordTypeLogger.class);
+
+	@InputPort(eventTypes = { IMonitoringRecord.class }, description = "Default input port")
+	public void newEvent(final Object event) {
+		final IMonitoringRecord monitoringRecord = (IMonitoringRecord) event;
+
+		/* Print a simple message to the output stream */
+		MonitoringRecordTypeLogger.LOG.info("Consumed record:" + monitoringRecord.getClass().getName());
+		MonitoringRecordTypeLogger.LOG.info(monitoringRecord.toString());
+
+		/* Delegate the monitoring record. */
+		super.deliver(MonitoringRecordTypeLogger.OUTPUT_PORT_NAME, event);
+	}
 
 	/**
 	 * Constructs a {@link MonitoringRecordTypeLogger}.
 	 */
-	public MonitoringRecordTypeLogger() {
+	public MonitoringRecordTypeLogger(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
+	}
+
+	@Override
+	public final boolean execute() {
+		return true;
+	}
+
+	@Override
+	public final void terminate(final boolean error) {
 		// nothing to do
 	}
 
 	@Override
-	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-		return null; // receive records of any type
+	protected Configuration getDefaultConfiguration() {
+		return new Configuration();
 	}
 
 	@Override
-	public boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		MonitoringRecordTypeLogger.LOG.info("Consumed record:" + monitoringRecord.getClass().getName());
-		MonitoringRecordTypeLogger.LOG.info(monitoringRecord.toString());
-		return true;
+	public Configuration getCurrentConfiguration() {
+		return new Configuration();
 	}
 
 	@Override
-	public boolean execute() {
-		/* We consume synchronously */
-		return true;
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
 	}
 
 	@Override
-	public void terminate(final boolean error) {
-		/* We consume synchronously */
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
 	}
 }

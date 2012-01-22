@@ -23,9 +23,10 @@ package kieker.monitoring.core.controller;
 import java.net.UnknownHostException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.monitoring.core.configuration.Configuration;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -40,10 +41,10 @@ public final class StateController extends AbstractController implements IStateC
 
 	protected StateController(final Configuration configuration) {
 		super(configuration);
-		this.name = configuration.getStringProperty(Configuration.CONTROLLER_NAME);
-		this.experimentId.set(configuration.getIntProperty(Configuration.EXPERIMENT_ID));
-		this.monitoringEnabled = configuration.getBooleanProperty(Configuration.MONITORING_ENABLED);
-		String hostnameTmp = configuration.getStringProperty(Configuration.HOST_NAME);
+		this.name = configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME);
+		this.experimentId.set(configuration.getIntProperty(ConfigurationFactory.EXPERIMENT_ID));
+		this.monitoringEnabled = configuration.getBooleanProperty(ConfigurationFactory.MONITORING_ENABLED);
+		String hostnameTmp = configuration.getStringProperty(ConfigurationFactory.HOST_NAME);
 		if (hostnameTmp.isEmpty()) {
 			hostnameTmp = "<UNKNOWN>";
 			try {

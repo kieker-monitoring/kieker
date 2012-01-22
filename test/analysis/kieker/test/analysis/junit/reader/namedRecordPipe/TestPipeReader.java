@@ -21,7 +21,6 @@
 package kieker.test.analysis.junit.reader.namedRecordPipe;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,8 +28,12 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.AnalysisControllerThread;
-import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.reader.namedRecordPipe.PipeReader;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.test.analysis.junit.util.DummyRecord;
@@ -39,9 +42,9 @@ import kieker.test.analysis.junit.util.NamedPipeFactory;
 import org.junit.Test;
 
 /**
+ * A simple test for the class <code>PipeReader</code>.
  * 
  * @author Andre van Hoorn
- * 
  */
 public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 	// private static final Log log = LogFactory.getLog(TestPipeReader.class);
@@ -49,38 +52,19 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 	@Test
 	public void testNamedPipeReaderReceivesFromPipe() {
 		final String pipeName = NamedPipeFactory.createPipeName();
-		final PipeReader pipeReader = new PipeReader(pipeName);
+		final Configuration configuration = new Configuration(null);
+		configuration.setProperty(PipeReader.CONFIG_PIPENAME, pipeName);
+		final PipeReader pipeReader = new PipeReader(configuration, new AbstractRepository[0]);
 
 		final List<IMonitoringRecord> receivedRecords = Collections.synchronizedList(new ArrayList<IMonitoringRecord>());
 
 		final IMonitoringRecordReceiver writer = kieker.test.analysis.junit.util.NamedPipeFactory.createAndRegisterNamedPipeRecordWriter(pipeName);
 
-		final IMonitoringRecordConsumerPlugin receiver = new IMonitoringRecordConsumerPlugin() {
-
-			@Override
-			public boolean newMonitoringRecord(final IMonitoringRecord record) {
-				return receivedRecords.add(record);
-			}
-
-			@Override
-			public boolean execute() {
-				/* no need to do anything */
-				return true;
-			}
-
-			@Override
-			public void terminate(final boolean error) { /* do nothing */
-			}
-
-			@Override
-			public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-				// receive records of any type
-				return null;
-			}
-		};
+		final MonitoringSinkClass receiver = new MonitoringSinkClass(receivedRecords);
 
 		final AnalysisController analysis = new AnalysisController();
 		analysis.setReader(pipeReader);
+		AbstractPlugin.connect(pipeReader, PipeReader.OUTPUT_PORT_NAME, receiver, MonitoringSinkClass.INPUT_PORT_NAME);
 		analysis.registerPlugin(receiver);
 		final AnalysisControllerThread analysisThread = new AnalysisControllerThread(analysis);
 		analysisThread.start();
@@ -99,5 +83,49 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 		 * Make sure that numRecordsToSend where read.
 		 */
 		Assert.assertEquals("Unexpected number of records received", numRecordsToSend, receivedRecords.size());
+	}
+}
+
+class MonitoringSinkClass extends AbstractAnalysisPlugin {
+
+	public static final String INPUT_PORT_NAME = "doJob";
+	private final List<IMonitoringRecord> receivedRecords;
+
+	public MonitoringSinkClass(final List<IMonitoringRecord> receivedRecords) {
+		super(new Configuration(), new AbstractRepository[0]);
+		this.receivedRecords = receivedRecords;
+	}
+
+	@Override
+	public boolean execute() {
+		return true;
+	}
+
+	@Override
+	public void terminate(final boolean error) {}
+
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		return null;
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		return null;
+	}
+
+	@InputPort(eventTypes = { IMonitoringRecord.class })
+	public void doJob(final Object data) {
+		this.receivedRecords.add((IMonitoringRecord) data);
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return null;
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return null;
 	}
 }

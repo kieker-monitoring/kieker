@@ -30,7 +30,6 @@ import kieker.common.logging.LogFactory;
  * {@link kieker.analysis.AnalysisController#terminate()} method.
  * 
  * @author Andre van Hoorn
- * 
  */
 public class AnalysisControllerThread extends Thread {
 	private static final Log LOG = LogFactory.getLog(AnalysisControllerThread.class);
@@ -52,12 +51,7 @@ public class AnalysisControllerThread extends Thread {
 	public void start() {
 		synchronized (this) {
 			super.start();
-			try {
-				// wait until AnalysisController is initialized
-				this.analysisInstance.getInitializationLatch().await();
-			} catch (final InterruptedException e) {
-				AnalysisControllerThread.LOG.error("Interrupted while waiting for AnalysisController to be initialized: " + e.getMessage(), e);
-			}
+			this.analysisInstance.awaitInitialization(); // wait until AnalysisController is initialized
 		}
 	}
 
@@ -65,7 +59,6 @@ public class AnalysisControllerThread extends Thread {
 	 * Initiates a termination of the executed {@link AnalysisController}.
 	 */
 	public void terminate() {
-		/* terminate the analysis instance */
 		this.analysisInstance.terminate();
 	}
 }

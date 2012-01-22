@@ -20,60 +20,112 @@
 
 package bookstoreApplication;
 
-import kieker.analysis.reader.AbstractMonitoringReader;
-import kieker.analysis.util.PropertyMap;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Properties;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import kieker.common.configuration.Configuration;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.reader.AbstractReaderPlugin;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import kieker.analysis.repository.AbstractRepository;
 
-public class MyPipeReader extends AbstractMonitoringReader {
+@Plugin(outputPorts = {
+	@OutputPort(eventTypes = { MyResponseTimeRecord.class }, name = MyPipeReader.OUTPUT_PORT_NAME)
+})
+public class MyPipeReader extends AbstractReaderPlugin {
 
+	public static final String OUTPUT_PORT_NAME = "outputPort";
 	private static final Log log = LogFactory.getLog(MyPipeReader.class);
-	
-    private static final String PROPERTY_PIPE_NAME = "pipeName";
-    private volatile MyPipe pipe;
 
-    public MyPipeReader () {}
+	private static final String PROPERTY_PIPE_NAME = MyPipeReader.class + ".pipeName";
+	private final String pipeName;
+	private volatile MyPipe pipe;
 
-    public MyPipeReader (final String pipeName) {
-        this.init(MyPipeReader.PROPERTY_PIPE_NAME+"="+pipeName);
-    }
-    
-    @Override
-    public boolean init(final String initString) throws IllegalArgumentException {
-    	try {
-        final PropertyMap propertyMap = new PropertyMap(initString, "|", "=");
-        final String pipeName = propertyMap.getProperty(MyPipeReader.PROPERTY_PIPE_NAME);
-        this.pipe = MyNamedPipeManager.getInstance().acquirePipe(pipeName);
+	public MyPipeReader() {
+		super(new Configuration(null), new AbstractRepository[0]);
+		this.pipeName = "kieker-pipe";
+		this.init();
+	}
+
+	public MyPipeReader(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
+
+		this.pipeName = configuration.getStringProperty(MyPipeReader.PROPERTY_PIPE_NAME);
+
+		this.init();
+	}
+
+	public MyPipeReader(final String pipeName) {
+		super(new Configuration(null), new AbstractRepository[0]);
+
+		this.pipeName = pipeName;
+
+		this.init();
+	}
+
+	public boolean init() {
+		try {
+			this.pipe = MyNamedPipeManager.getInstance().acquirePipe(this.pipeName);
 		} catch (final Exception exc) {
-			MyPipeReader.log.error("Failed to parse initString '" + initString
+			MyPipeReader.log.error("Failed to acquire pipe '" + this.pipeName
 					+ "': " + exc.getMessage());
 			return false;
 		}
 		return true;
-    }
-
-    @Override
-    public boolean read() {
-        try {
-        	PipeData data;
-            /* Wait max. 4 seconds for the next data. */
-            while ((data = this.pipe.poll(4)) != null) {
-                /* Create new record, init from received array ... */
-                final MyResponseTimeRecord record = new MyResponseTimeRecord();
-                record.initFromArray(data.getRecordData());
-                record.setLoggingTimestamp(data.getLoggingTimestamp());
-                /* ...and delegate the task of delivering to the super class. */
-                this.deliverRecord(record);
-            }
-        } catch (final InterruptedException e) {
-            return false; // signal error
-        }
-        return true;
-    }
+	}
 
 	@Override
-	public void terminate() { 
+	public boolean read() {
+		try {
+			PipeData data;
+			/* Wait max. 4 seconds for the next data. */
+			while ((data = this.pipe.poll(4)) != null) {
+				/* Create new record, init from received array ... */
+				final MyResponseTimeRecord record = new MyResponseTimeRecord();
+				record.initFromArray(data.getRecordData());
+				record.setLoggingTimestamp(data.getLoggingTimestamp());
+				/* ...and delegate the task of delivering to the super class. */
+				super.deliver(OUTPUT_PORT_NAME, record);
+			}
+		} catch (final InterruptedException e) {
+			return false; // signal error
+		}
+		return true;
+	}
+
+	@Override
+	public void terminate() {
 		// currently no termination code (could be refined)
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration(null);
+
+		configuration.setProperty(MyPipeReader.PROPERTY_PIPE_NAME, this.pipeName);
+
+		return configuration;
+	}
+
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		final Configuration defaultConfiguration = new Configuration();
+
+		defaultConfiguration.setProperty(MyPipeReader.PROPERTY_PIPE_NAME, "kieker-pipe");
+
+		return defaultConfiguration;
+	}
+	
+	public AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
 	}
 }

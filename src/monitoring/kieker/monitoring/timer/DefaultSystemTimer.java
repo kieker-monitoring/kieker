@@ -20,9 +20,10 @@
 
 package kieker.monitoring.timer;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.monitoring.core.configuration.Configuration;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 
 /**
  * A timer implementation, counting in nanoseconds since 1970-1-1.
@@ -43,7 +44,7 @@ public final class DefaultSystemTimer extends AbstractTimeSource {
 		super(configuration);
 		DefaultSystemTimer.LOG.warn("This timer is deprecated, use 'kieker.monitoring.timer.SystemNanoTimer' instead.");
 		final Configuration nanoConfiguration = configuration.getPropertiesStartingWith(SystemNanoTimer.class.getName());
-		nanoConfiguration.setDefaultProperties(Configuration.createDefaultConfiguration());
+		nanoConfiguration.setDefaultConfiguration(ConfigurationFactory.createDefaultConfiguration());
 		nanoConfiguration.setProperty(SystemNanoTimer.CONFIG_OFFSET, "0");
 		this.timeSource = new SystemNanoTimer(nanoConfiguration.getPropertiesStartingWith(SystemNanoTimer.class.getName()));
 	}
@@ -69,7 +70,7 @@ public final class DefaultSystemTimer extends AbstractTimeSource {
 	 * SINGLETON
 	 */
 	private static final class LazyHolder { // NOCS (MissingCtorCheck)
-		private static final ITimeSource INSTANCE = new SystemNanoTimer(Configuration.createDefaultConfiguration().getPropertiesStartingWith(
+		private static final ITimeSource INSTANCE = new SystemNanoTimer(ConfigurationFactory.createDefaultConfiguration().getPropertiesStartingWith(
 				SystemNanoTimer.class.getName()));
 	}
 }

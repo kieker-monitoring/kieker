@@ -102,8 +102,10 @@
 			<fileset dir="${lib.dir}">
 				<include name="rabbitmq-client.jar" />
 				<include name="javax.jms-*.jar" />
+				<include name="org.eclipse.*.jar" />
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
+			<pathelement location="${build.kieker.analysis.model.dir}/" />
 		</path>
 
 		<path id="kieker.tools-compile-classpath">
@@ -162,7 +164,15 @@
 		</war>
 	</target>
 
-	<target name="-compile-kieker.analysis" depends="-init,-compile-kieker.common" description="Compiles the sources of the Kieker.Analysis component">
+	<target name="-compile-kieker.analysis.model" depends="-init" description="Compiles the sources of the Analysis Meta-Model">
+		<delete dir="${build.kieker.analysis.model.dir}" />
+		<mkdir dir="${build.kieker.analysis.model.dir}" />
+		<javac destDir="${build.kieker.analysis.model.dir}" source="1.6" target="1.6" srcdir="${src.gen.kieker.analysis.dir}" debug="true" classpathref="kieker.analysis-compile-classpath" includeAntRuntime="false">
+			<compilerarg value="-Xlint:all" /> <!-- ,-path -->
+		</javac>
+	</target>
+	
+	<target name="-compile-kieker.analysis" depends="-init,-compile-kieker.common,-compile-kieker.analysis.model" description="Compiles the sources of the Kieker.Analysis component">
 		<delete dir="${build.kieker.analysis.dir}" />
 		<mkdir dir="${build.kieker.analysis.dir}" />
 		<javac destDir="${build.kieker.analysis.dir}" source="1.6" target="1.6" srcdir="${src.kieker.analysis.dir}" debug="true" classpathref="kieker.analysis-compile-classpath" includeAntRuntime="false">
@@ -185,6 +195,7 @@
 		<jar destfile="${dist.dir}/${dist.kieker.main.jar}">
 			<fileset dir="${build.kieker.common.dir}" />
 			<fileset dir="${build.kieker.analysis.dir}" />
+			<fileset dir="${build.kieker.analysis.model.dir}" />
 			<fileset dir="${build.kieker.monitoring.dir}" />
 			<fileset dir="${build.kieker.tools.dir}" />
 			<fileset dir="." includes="LICENSE" />
@@ -217,6 +228,7 @@
 		<jar destfile="${tmp.dir}/${src.jar}">
 			<fileset dir="${src.kieker.common.dir}" />
 			<fileset dir="${src.kieker.analysis.dir}" />
+			<fileset dir="${build.kieker.analysis.model.dir}" />
 			<fileset dir="${src.kieker.monitoring.dir}" />
 			<fileset dir="${src.kieker.tools.dir}" />
 			<fileset dir="." includes="LICENSE" />
@@ -893,6 +905,7 @@
 		<path id="kieker.test-junit-run-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="junit-*.jar" />
+				<include name="org.eclipse.emf.*.jar" />
 			</fileset>
 			<pathelement location="${build.tests.dir}/" />
 			<fileset dir="${dist.dir}">
@@ -903,7 +916,7 @@
 		<delete dir="${tests.junit-results.dir}" />
 		<mkdir dir="${tests.junit-results.dir}" />
 
-		<junit fork="true" printsummary="yes" haltonfailure="no" forkmode="once">
+		<junit fork="false" printsummary="yes" haltonfailure="no">
 			<classpath refid="kieker.test-junit-run-classpath" />
 
 			<formatter type="xml" />
@@ -916,7 +929,7 @@
 			<!-- Serenity JVM command line. -->
 			<jvmarg line="-javaagent:${lib.dir}/serenity-0.4/serenity.jar" />
 
-			<batchtest fork="yes" todir="${tests.junit-results.dir}">
+			<batchtest fork="false" todir="${tests.junit-results.dir}">
 				<fileset dir="${build.tests.dir}/">
 					<include name="**/junit/**/*Test*.class" />
 					<exclude name="**/*$*.class" />
@@ -959,6 +972,8 @@
 				<classpathentry kind="src" path="${test.kieker.analysis.dir}"/>
 				<classpathentry kind="src" path="${test.kieker.monitoring.dir}"/>
 				<classpathentry kind="src" path="${test.kieker.tools.dir}"/>
+				<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+				<classpathentry kind="src" path="${src.gen.kieker.analysis.dir}"/>
 				<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 				<classpathentry kind="lib" path="${eclipse.entries}"/>
 				<classpathentry kind="output" path="build-eclipse"/>

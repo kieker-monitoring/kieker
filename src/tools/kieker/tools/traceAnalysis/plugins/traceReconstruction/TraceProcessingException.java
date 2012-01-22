@@ -20,7 +20,7 @@
 
 package kieker.tools.traceAnalysis.plugins.traceReconstruction;
 
-import kieker.analysis.plugin.EventProcessingException;
+import kieker.analysis.exception.EventProcessingException;
 
 /**
  * 

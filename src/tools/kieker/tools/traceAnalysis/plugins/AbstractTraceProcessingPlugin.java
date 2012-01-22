@@ -20,7 +20,8 @@
 
 package kieker.tools.traceAnalysis.plugins;
 
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 
 /**
  * 
@@ -34,8 +35,8 @@ public abstract class AbstractTraceProcessingPlugin extends AbstractTraceAnalysi
 	private long lastTraceIdSuccess = -1;
 	private long lastTraceIdError = -1;
 
-	public AbstractTraceProcessingPlugin(final String name, final SystemModelRepository systemEntityFactory) {
-		super(name, systemEntityFactory);
+	public AbstractTraceProcessingPlugin(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
 	}
 
 	protected final void reportSuccess(final long traceId) {

@@ -25,8 +25,9 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collection;
 
-import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.configuration.IInputPort;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
@@ -38,12 +39,19 @@ import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
- * Refactored copy from LogAnalysis-legacy tool
+ * Refactored copy from LogAnalysis-legacy tool<br>
+ * 
+ * This class has exactly one input port named "in". The data which is send to
+ * this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
 public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugin<ExecutionContainer> {
 
+	public static final String CONFIG_DOT_OUTPUT_FILE = ContainerDependencyGraphPlugin.class.getName() + ".dotOutputFile";
+	public static final String CONFIG_INCLUDE_WEIGHTS = ContainerDependencyGraphPlugin.class.getName() + ".includeWeights";
+	public static final String CONFIG_SHORT_LABELS = ContainerDependencyGraphPlugin.class.getName() + ".shortLabels";
+	public static final String CONFIG_INCLUDE_SELF_LOOPS = ContainerDependencyGraphPlugin.class.getName() + ".includeSelfLoops";
 	private static final Log LOG = LogFactory.getLog(ContainerDependencyGraphPlugin.class);
 
 	private final File dotOutputFile;
@@ -51,15 +59,16 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 	private final boolean shortLabels;
 	private final boolean includeSelfLoops;
 
-	public ContainerDependencyGraphPlugin(final String name, final SystemModelRepository systemEntityFactory, final File dotOutputFile,
-			final boolean includeWeights, final boolean shortLabels, final boolean includeSelfLoops) {
-		super(name, systemEntityFactory, new DependencyGraph<ExecutionContainer>(
-				systemEntityFactory.getExecutionEnvironmentFactory().getRootExecutionContainer().getId(),
-				systemEntityFactory.getExecutionEnvironmentFactory().getRootExecutionContainer()));
-		this.dotOutputFile = dotOutputFile;
-		this.includeWeights = includeWeights;
-		this.shortLabels = shortLabels;
-		this.includeSelfLoops = includeSelfLoops;
+	public ContainerDependencyGraphPlugin(final Configuration configuration, final AbstractRepository repositories[]) {
+		// TODO Check type conversion
+		super(configuration, repositories, new DependencyGraph<ExecutionContainer>(
+				((SystemModelRepository) repositories[0]).getExecutionEnvironmentFactory().getRootExecutionContainer().getId(),
+				((SystemModelRepository) repositories[0]).getExecutionEnvironmentFactory().getRootExecutionContainer()));
+
+		this.dotOutputFile = new File(configuration.getStringProperty(ContainerDependencyGraphPlugin.CONFIG_DOT_OUTPUT_FILE));
+		this.includeWeights = configuration.getBooleanProperty(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_WEIGHTS);
+		this.shortLabels = configuration.getBooleanProperty(ContainerDependencyGraphPlugin.CONFIG_SHORT_LABELS);
+		this.includeSelfLoops = configuration.getBooleanProperty(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_SELF_LOOPS);
 	}
 
 	@Override
@@ -108,38 +117,61 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 		}
 	}
 
-	private final IInputPort<MessageTrace> messageTraceInputPort = new AbstractInputPort<MessageTrace>("Message traces") {
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		final Configuration configuration = new Configuration();
 
-		@Override
-		public void newEvent(final MessageTrace t) {
-			for (final AbstractMessage m : t.getSequenceAsVector()) {
-				if (m instanceof SynchronousReplyMessage) {
-					continue;
-				}
-				final AllocationComponent senderComponent = m.getSendingExecution().getAllocationComponent();
-				final AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
-				final ExecutionContainer senderContainer = senderComponent.getExecutionContainer();
-				final ExecutionContainer receiverContainer = receiverComponent.getExecutionContainer();
-				DependencyGraphNode<ExecutionContainer> senderNode = ContainerDependencyGraphPlugin.this.dependencyGraph.getNode(senderContainer.getId());
-				DependencyGraphNode<ExecutionContainer> receiverNode = ContainerDependencyGraphPlugin.this.dependencyGraph.getNode(receiverContainer.getId());
+		configuration.put(ContainerDependencyGraphPlugin.CONFIG_DOT_OUTPUT_FILE, "");
+		configuration.put(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_WEIGHTS, false);
+		configuration.put(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_SELF_LOOPS, false);
+		configuration.put(ContainerDependencyGraphPlugin.CONFIG_SHORT_LABELS, false);
 
-				if (senderNode == null) {
-					senderNode = new DependencyGraphNode<ExecutionContainer>(senderContainer.getId(), senderContainer);
-					ContainerDependencyGraphPlugin.this.dependencyGraph.addNode(senderContainer.getId(), senderNode);
-				}
-				if (receiverNode == null) {
-					receiverNode = new DependencyGraphNode<ExecutionContainer>(receiverContainer.getId(), receiverContainer);
-					ContainerDependencyGraphPlugin.this.dependencyGraph.addNode(receiverContainer.getId(), receiverNode);
-				}
-				senderNode.addOutgoingDependency(receiverNode);
-				receiverNode.addIncomingDependency(senderNode);
-			}
-			ContainerDependencyGraphPlugin.this.reportSuccess(t.getTraceId());
-		}
-	};
+		return configuration;
+	}
 
 	@Override
-	public IInputPort<MessageTrace> getMessageTraceInputPort() {
-		return this.messageTraceInputPort;
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration();
+
+		configuration.put(ContainerDependencyGraphPlugin.CONFIG_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
+		configuration.put(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_WEIGHTS, this.includeWeights);
+		configuration.put(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_SELF_LOOPS, this.includeSelfLoops);
+		configuration.put(ContainerDependencyGraphPlugin.CONFIG_SHORT_LABELS, this.shortLabels);
+
+		return configuration;
+	}
+
+	@Override
+	@InputPort(description = "Message traces", eventTypes = { MessageTrace.class })
+	public void msgTraceInput(final Object obj) {
+		final MessageTrace t = (MessageTrace) obj;
+		for (final AbstractMessage m : t.getSequenceAsVector()) {
+			if (m instanceof SynchronousReplyMessage) {
+				continue;
+			}
+			final AllocationComponent senderComponent = m.getSendingExecution().getAllocationComponent();
+			final AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
+			final ExecutionContainer senderContainer = senderComponent.getExecutionContainer();
+			final ExecutionContainer receiverContainer = receiverComponent.getExecutionContainer();
+			DependencyGraphNode<ExecutionContainer> senderNode = ContainerDependencyGraphPlugin.this.dependencyGraph.getNode(senderContainer.getId());
+			DependencyGraphNode<ExecutionContainer> receiverNode = ContainerDependencyGraphPlugin.this.dependencyGraph.getNode(receiverContainer.getId());
+
+			if (senderNode == null) {
+				senderNode = new DependencyGraphNode<ExecutionContainer>(senderContainer.getId(), senderContainer);
+				ContainerDependencyGraphPlugin.this.dependencyGraph.addNode(senderContainer.getId(), senderNode);
+			}
+			if (receiverNode == null) {
+				receiverNode = new DependencyGraphNode<ExecutionContainer>(receiverContainer.getId(), receiverContainer);
+				ContainerDependencyGraphPlugin.this.dependencyGraph.addNode(receiverContainer.getId(), receiverNode);
+			}
+			senderNode.addOutgoingDependency(receiverNode);
+			receiverNode.addIncomingDependency(senderNode);
+		}
+		ContainerDependencyGraphPlugin.this.reportSuccess(t.getTraceId());
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
 	}
 }

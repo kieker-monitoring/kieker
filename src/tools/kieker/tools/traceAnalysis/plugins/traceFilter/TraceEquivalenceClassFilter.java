@@ -25,10 +25,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.configuration.IInputPort;
-import kieker.analysis.plugin.configuration.IOutputPort;
-import kieker.analysis.plugin.configuration.OutputPort;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractExecutionTraceProcessingPlugin;
@@ -39,11 +40,26 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
+ * This class has exactly one input port named "in" and two output ports named
+ * "messageTraceOutput", "executionTraceOutput".
  * 
  * @author Andre van Hoorn
  */
+@Plugin(outputPorts = {
+	@OutputPort(
+			name = TraceEquivalenceClassFilter.MSG_TRACES_OUTPUT_PORT_NAME,
+			description = "Message Traces",
+			eventTypes = { MessageTrace.class }),
+	@OutputPort(
+			name = TraceEquivalenceClassFilter.EXECUTION_TRACES_OUTPUT_PORT_NAME,
+			description = "Execution Traces",
+			eventTypes = { ExecutionTrace.class })
+})
 public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessingPlugin {
 
+	public static final String MSG_TRACES_OUTPUT_PORT_NAME = "messageTracesOutput";
+	public static final String EXECUTION_TRACES_OUTPUT_PORT_NAME = "executionTracesOutput";
+	public static final String EXECUTION_TRACES_INPUT_PORT_NAME = "newExecutionTrace";
 	private static final Log LOG = LogFactory.getLog(TraceEquivalenceClassFilter.class);
 
 	public static enum TraceEquivalenceClassModes {
@@ -55,20 +71,26 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	/** Representative x # of equivalents */
 	private final Map<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap = new HashMap<AbstractExecutionTraceHashContainer, AtomicInteger>(); // NOPMD
 
-	private final OutputPort<MessageTrace> messageTraceOutputPort = new OutputPort<MessageTrace>("Message Traces");
-	private final OutputPort<ExecutionTrace> executionTraceOutputPort = new OutputPort<ExecutionTrace>("Execution Traces");
-
-	public TraceEquivalenceClassFilter(final String name, final SystemModelRepository systemEntityFactory, final TraceEquivalenceClassModes traceEquivalenceCallMode) {
-		super(name, systemEntityFactory);
-		this.rootExecution = systemEntityFactory.getRootExecution();
+	// TODO Change constructor to plugin-default-constructor
+	public TraceEquivalenceClassFilter(final Configuration configuration, final AbstractRepository repositories[],
+			final TraceEquivalenceClassModes traceEquivalenceCallMode) {
+		super(configuration, repositories);
+		/* Load the root execution from the repository if possible. */
+		if ((repositories.length >= 1) && (repositories[0] instanceof SystemModelRepository)) {
+			this.rootExecution = ((SystemModelRepository) repositories[0]).getRootExecution();
+		} else {
+			this.rootExecution = null;
+		}
 		this.equivalenceMode = traceEquivalenceCallMode;
 	}
 
-	private void newExecutionTrace(final ExecutionTrace et) {
+	@InputPort(description = "Execution traces", eventTypes = { ExecutionTrace.class })
+	public void newExecutionTrace(final Object data) {
+		final ExecutionTrace et = (ExecutionTrace) data;
 		try {
 			if (this.equivalenceMode == TraceEquivalenceClassFilter.TraceEquivalenceClassModes.DISABLED) {
-				this.executionTraceOutputPort.deliver(et);
-				this.messageTraceOutputPort.deliver(et.toMessageTrace(this.rootExecution));
+				super.deliver(TraceEquivalenceClassFilter.EXECUTION_TRACES_OUTPUT_PORT_NAME, et);
+				super.deliver(TraceEquivalenceClassFilter.MSG_TRACES_OUTPUT_PORT_NAME, et.toMessageTrace(this.rootExecution));
 			} else { // mode is ASSEMBLY or ALLOCATION
 				final AbstractExecutionTraceHashContainer polledTraceHashContainer;
 				if (this.equivalenceMode == TraceEquivalenceClassFilter.TraceEquivalenceClassModes.ASSEMBLY) {
@@ -85,8 +107,8 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 				if (numOccurences == null) {
 					numOccurences = new AtomicInteger(1);
 					this.eTracesEquivClassesMap.put(polledTraceHashContainer, numOccurences);
-					this.executionTraceOutputPort.deliver(et);
-					this.messageTraceOutputPort.deliver(et.toMessageTrace(this.rootExecution));
+					super.deliver(TraceEquivalenceClassFilter.EXECUTION_TRACES_OUTPUT_PORT_NAME, et);
+					super.deliver(TraceEquivalenceClassFilter.MSG_TRACES_OUTPUT_PORT_NAME, et.toMessageTrace(this.rootExecution));
 				} else {
 					numOccurences.incrementAndGet();
 				}
@@ -96,27 +118,6 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 			TraceEquivalenceClassFilter.LOG.error("InvalidTraceException", ex);
 			this.reportError(et.getTraceId());
 		}
-	}
-
-	@Override
-	public IInputPort<ExecutionTrace> getExecutionTraceInputPort() {
-		return this.executionTraceInputPort;
-	}
-
-	private final IInputPort<ExecutionTrace> executionTraceInputPort = new AbstractInputPort<ExecutionTrace>("Execution traces") {
-
-		@Override
-		public void newEvent(final ExecutionTrace mt) {
-			TraceEquivalenceClassFilter.this.newExecutionTrace(mt);
-		}
-	};
-
-	public IOutputPort<MessageTrace> getMessageTraceOutputPort() {
-		return this.messageTraceOutputPort;
-	}
-
-	public IOutputPort<ExecutionTrace> getExecutionTraceOutputPort() {
-		return this.executionTraceOutputPort;
 	}
 
 	@Override
@@ -135,5 +136,30 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 			map.put(entry.getKey().getExecutionTrace(), entry.getValue().intValue());
 		}
 		return map;
+	}
+
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		final Configuration defaultConfiguration = new Configuration();
+		return defaultConfiguration;
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration();
+
+		// TODO: Save the current configuration
+
+		return configuration;
+	}
+
+	@Override
+	public String getExecutionTraceInputPortName() {
+		return TraceEquivalenceClassFilter.EXECUTION_TRACES_INPUT_PORT_NAME;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
 	}
 }

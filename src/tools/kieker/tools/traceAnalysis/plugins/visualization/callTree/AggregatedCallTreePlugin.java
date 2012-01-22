@@ -23,15 +23,17 @@ package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 import java.io.File;
 import java.io.IOException;
 
-import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.configuration.IInputPort;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceProcessingException;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
+ * This class has exactly one input port named "in". The data which is send to
+ * this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn
  */
@@ -44,9 +46,10 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 	private final boolean shortLabels;
 	private int numGraphsSaved = 0;
 
-	public AggregatedCallTreePlugin(final String name, final SystemModelRepository systemEntityFactory, final AbstractAggregatedCallTreeNode<T> root,
+	// TODO Change constructor to plugin-default-constructor
+	public AggregatedCallTreePlugin(final Configuration configuration, final AbstractRepository repositories[], final AbstractAggregatedCallTreeNode<T> root,
 			final File dotOutputFile, final boolean includeWeights, final boolean shortLabels) {
-		super(name, systemEntityFactory);
+		super(configuration, repositories);
 		this.root = root;
 		this.dotOutputFile = dotOutputFile;
 		this.includeWeights = includeWeights;
@@ -90,21 +93,34 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 	}
 
 	@Override
-	public IInputPort<MessageTrace> getMessageTraceInputPort() {
-		return this.messageTraceInputPort;
+	protected Configuration getDefaultConfiguration() {
+		return new Configuration();
 	}
 
-	private final IInputPort<MessageTrace> messageTraceInputPort = new AbstractInputPort<MessageTrace>("Message traces") {
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration();
 
-		@Override
-		public void newEvent(final MessageTrace t) {
-			try {
-				AbstractCallTreePlugin.addTraceToTree(AggregatedCallTreePlugin.this.root, t, true); // aggregated
-				AggregatedCallTreePlugin.this.reportSuccess(t.getTraceId());
-			} catch (final TraceProcessingException ex) {
-				AggregatedCallTreePlugin.LOG.error("TraceProcessingException", ex);
-				AggregatedCallTreePlugin.this.reportError(t.getTraceId());
-			}
+		// TODO: Save the current configuration
+
+		return configuration;
+	}
+
+	@Override
+	@InputPort(description = "Message traces", eventTypes = { MessageTrace.class })
+	public void msgTraceInput(final Object obj) {
+		final MessageTrace t = (MessageTrace) obj;
+		try {
+			AbstractCallTreePlugin.addTraceToTree(AggregatedCallTreePlugin.this.root, t, true); // aggregated
+			AggregatedCallTreePlugin.this.reportSuccess(t.getTraceId());
+		} catch (final TraceProcessingException ex) {
+			AggregatedCallTreePlugin.LOG.error("TraceProcessingException", ex);
+			AggregatedCallTreePlugin.this.reportError(t.getTraceId());
 		}
-	};
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
 }

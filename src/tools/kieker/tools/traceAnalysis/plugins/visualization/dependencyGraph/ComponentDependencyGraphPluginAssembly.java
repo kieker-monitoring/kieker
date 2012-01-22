@@ -25,8 +25,9 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collection;
 
-import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.configuration.IInputPort;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
@@ -37,11 +38,19 @@ import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
- * Refactored copy from LogAnalysis-legacy tool
+ * Refactored copy from LogAnalysis-legacy tool<br>
+ * 
+ * This class has exactly one input port named "in". The data which is send to
+ * this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
 public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGraphPlugin<AssemblyComponent> {
+
+	public static final String CONFIG_DOT_OUTPUT_FILE = ComponentDependencyGraphPluginAssembly.class.getName() + ".dotOutputFile";
+	public static final String CONFIG_INCLUDE_WEIGHTS = ComponentDependencyGraphPluginAssembly.class.getName() + ".includeWeights";
+	public static final String CONFIG_SHORT_LABELS = ComponentDependencyGraphPluginAssembly.class.getName() + ".shortLabels";
+	public static final String CONFIG_INCLUDE_SELF_LOOPS = ComponentDependencyGraphPluginAssembly.class.getName() + ".includeSelfLoops";
 
 	private static final Log LOG = LogFactory.getLog(ComponentDependencyGraphPluginAssembly.class);
 	private final File dotOutputFile;
@@ -49,14 +58,15 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 	private final boolean shortLabels;
 	private final boolean includeSelfLoops;
 
-	public ComponentDependencyGraphPluginAssembly(final String name, final SystemModelRepository systemEntityFactory, final File dotOutputFile,
-			final boolean includeWeights, final boolean shortLabels, final boolean includeSelfLoops) {
-		super(name, systemEntityFactory, new DependencyGraph<AssemblyComponent>(systemEntityFactory.getAssemblyFactory().getRootAssemblyComponent().getId(),
-				systemEntityFactory.getAssemblyFactory().getRootAssemblyComponent()));
-		this.dotOutputFile = dotOutputFile;
-		this.includeWeights = includeWeights;
-		this.shortLabels = shortLabels;
-		this.includeSelfLoops = includeSelfLoops;
+	public ComponentDependencyGraphPluginAssembly(final Configuration configuration, final AbstractRepository repositories[]) {
+		// TODO Check type conversion
+		super(configuration, repositories, new DependencyGraph<AssemblyComponent>(((SystemModelRepository) repositories[0]).getAssemblyFactory()
+				.getRootAssemblyComponent().getId(),
+				((SystemModelRepository) repositories[0]).getAssemblyFactory().getRootAssemblyComponent()));
+		this.dotOutputFile = new File(configuration.getStringProperty(ComponentDependencyGraphPluginAssembly.CONFIG_DOT_OUTPUT_FILE));
+		this.includeWeights = configuration.getBooleanProperty(ComponentDependencyGraphPluginAssembly.CONFIG_INCLUDE_WEIGHTS);
+		this.shortLabels = configuration.getBooleanProperty(ComponentDependencyGraphPluginAssembly.CONFIG_SHORT_LABELS);
+		this.includeSelfLoops = configuration.getBooleanProperty(ComponentDependencyGraphPluginAssembly.CONFIG_INCLUDE_SELF_LOOPS);
 	}
 
 	private String nodeLabel(final AssemblyComponent curComponent) {
@@ -115,34 +125,57 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 	}
 
 	@Override
-	public IInputPort<MessageTrace> getMessageTraceInputPort() {
-		return this.messageTraceInputPort;
+	protected Configuration getDefaultConfiguration() {
+		final Configuration configuration = new Configuration();
+
+		configuration.put(ComponentDependencyGraphPluginAssembly.CONFIG_DOT_OUTPUT_FILE, "");
+		configuration.put(ComponentDependencyGraphPluginAssembly.CONFIG_INCLUDE_WEIGHTS, false);
+		configuration.put(ComponentDependencyGraphPluginAssembly.CONFIG_INCLUDE_SELF_LOOPS, false);
+		configuration.put(ComponentDependencyGraphPluginAssembly.CONFIG_SHORT_LABELS, false);
+
+		return configuration;
 	}
 
-	private final IInputPort<MessageTrace> messageTraceInputPort = new AbstractInputPort<MessageTrace>("Message traces") {
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration();
 
-		@Override
-		public void newEvent(final MessageTrace t) {
-			for (final AbstractMessage m : t.getSequenceAsVector()) {
-				if (m instanceof SynchronousReplyMessage) {
-					continue;
-				}
-				final AssemblyComponent senderComponent = m.getSendingExecution().getAllocationComponent().getAssemblyComponent();
-				final AssemblyComponent receiverComponent = m.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
-				DependencyGraphNode<AssemblyComponent> senderNode = ComponentDependencyGraphPluginAssembly.this.dependencyGraph.getNode(senderComponent.getId());
-				DependencyGraphNode<AssemblyComponent> receiverNode = ComponentDependencyGraphPluginAssembly.this.dependencyGraph.getNode(receiverComponent.getId());
-				if (senderNode == null) {
-					senderNode = new DependencyGraphNode<AssemblyComponent>(senderComponent.getId(), senderComponent);
-					ComponentDependencyGraphPluginAssembly.this.dependencyGraph.addNode(senderNode.getId(), senderNode);
-				}
-				if (receiverNode == null) {
-					receiverNode = new DependencyGraphNode<AssemblyComponent>(receiverComponent.getId(), receiverComponent);
-					ComponentDependencyGraphPluginAssembly.this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
-				}
-				senderNode.addOutgoingDependency(receiverNode);
-				receiverNode.addIncomingDependency(senderNode);
+		configuration.put(ComponentDependencyGraphPluginAssembly.CONFIG_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
+		configuration.put(ComponentDependencyGraphPluginAssembly.CONFIG_INCLUDE_WEIGHTS, this.includeWeights);
+		configuration.put(ComponentDependencyGraphPluginAssembly.CONFIG_INCLUDE_SELF_LOOPS, this.includeSelfLoops);
+		configuration.put(ComponentDependencyGraphPluginAssembly.CONFIG_SHORT_LABELS, this.shortLabels);
+
+		return configuration;
+	}
+
+	@Override
+	@InputPort(description = "Message traces", eventTypes = { MessageTrace.class })
+	public void msgTraceInput(final Object obj) {
+		final MessageTrace t = (MessageTrace) obj;
+		for (final AbstractMessage m : t.getSequenceAsVector()) {
+			if (m instanceof SynchronousReplyMessage) {
+				continue;
 			}
-			ComponentDependencyGraphPluginAssembly.this.reportSuccess(t.getTraceId());
+			final AssemblyComponent senderComponent = m.getSendingExecution().getAllocationComponent().getAssemblyComponent();
+			final AssemblyComponent receiverComponent = m.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
+			DependencyGraphNode<AssemblyComponent> senderNode = ComponentDependencyGraphPluginAssembly.this.dependencyGraph.getNode(senderComponent.getId());
+			DependencyGraphNode<AssemblyComponent> receiverNode = ComponentDependencyGraphPluginAssembly.this.dependencyGraph.getNode(receiverComponent.getId());
+			if (senderNode == null) {
+				senderNode = new DependencyGraphNode<AssemblyComponent>(senderComponent.getId(), senderComponent);
+				ComponentDependencyGraphPluginAssembly.this.dependencyGraph.addNode(senderNode.getId(), senderNode);
+			}
+			if (receiverNode == null) {
+				receiverNode = new DependencyGraphNode<AssemblyComponent>(receiverComponent.getId(), receiverComponent);
+				ComponentDependencyGraphPluginAssembly.this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
+			}
+			senderNode.addOutgoingDependency(receiverNode);
+			receiverNode.addIncomingDependency(senderNode);
 		}
-	};
+		ComponentDependencyGraphPluginAssembly.this.reportSuccess(t.getTraceId());
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
 }

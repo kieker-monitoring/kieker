@@ -20,25 +20,41 @@
 
 package kieker.tools.traceAnalysis.plugins.executionFilter;
 
+import java.util.Iterator;
 import java.util.Set;
 
-import kieker.analysis.plugin.IAnalysisPlugin;
-import kieker.analysis.plugin.configuration.AbstractInputPort;
-import kieker.analysis.plugin.configuration.IInputPort;
-import kieker.analysis.plugin.configuration.IOutputPort;
-import kieker.analysis.plugin.configuration.OutputPort;
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 
 /**
- * Allows to filter Execution objects based on their traceId.
+ * Allows to filter Execution objects based on their traceId.<br>
+ * 
+ * This class has exactly one input port named and one output port. It receives only objects inheriting from the class {@link Execution}. If the received object
+ * contains the defined traceID, the object is delivered unmodified to the output port.
  * 
  * @author Andre van Hoorn
  */
-public class TraceIdFilter implements IAnalysisPlugin {
+@Plugin(
+		outputPorts = {
+			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME, description = "Execution output", eventTypes = { Execution.class })
+		})
+public class TraceIdFilter extends AbstractAnalysisPlugin {
 
+	public static final String INPUT_PORT_NAME = "newExecution";
+	public static final String OUTPUT_PORT_NAME = "defaultOutput";
+	public static final String CONFIG_SELECTED_TRACES = TraceIdFilter.class.getName() + ".selectedTraces";
 	private final Set<Long> selectedTraces;
 
-	private final OutputPort<Execution> executionOutputPort = new OutputPort<Execution>("Execution output");
+	public TraceIdFilter(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
+		// TODO: Initialize from the variable.
+		this.selectedTraces = null;
+	}
 
 	/**
 	 * Creates a filter instance that only passes Execution objects <i>e</i>
@@ -47,31 +63,18 @@ public class TraceIdFilter implements IAnalysisPlugin {
 	 * @param selectedTraces
 	 */
 	public TraceIdFilter(final Set<Long> selectedTraces) {
+		super(new Configuration(null), new AbstractRepository[0]);
 		this.selectedTraces = selectedTraces;
 	}
 
-	public IInputPort<Execution> getExecutionInputPort() {
-		return this.executionInputPort;
-	}
-
-	private final IInputPort<Execution> executionInputPort = new AbstractInputPort<Execution>("Execution input") {
-
-		@Override
-		public void newEvent(final Execution event) {
-			TraceIdFilter.this.newExecution(event);
-		}
-	};
-
-	public IOutputPort<Execution> getExecutionOutputPort() {
-		return this.executionOutputPort;
-	}
-
-	private void newExecution(final Execution execution) {
+	@InputPort(description = "Execution input", eventTypes = { Execution.class })
+	public void newExecution(final Object data) {
+		final Execution execution = (Execution) data;
 		if ((this.selectedTraces != null) && !this.selectedTraces.contains(execution.getTraceId())) {
 			// not interested in this trace
 			return;
 		}
-		this.executionOutputPort.deliver(execution);
+		super.deliver(TraceIdFilter.OUTPUT_PORT_NAME, data);
 	}
 
 	@Override
@@ -84,4 +87,36 @@ public class TraceIdFilter implements IAnalysisPlugin {
 		// do nothing
 	}
 
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		final Configuration defaultConfiguration = new Configuration();
+		// TODO: Provide default properties.
+		return defaultConfiguration;
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration(null);
+
+		if (this.selectedTraces != null) {
+			final String selectedTracesArr[] = new String[this.selectedTraces.size()];
+			final Iterator<Long> iter = this.selectedTraces.iterator();
+			int i = 0;
+			while (iter.hasNext()) {
+				selectedTracesArr[i++] = iter.next().toString();
+			}
+			configuration.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, Configuration.toProperty(selectedTracesArr));
+		}
+		return configuration;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
+	}
+
+	@Override
+	public AbstractRepository[] getCurrentRepositories() {
+		return new AbstractRepository[0];
+	}
 }

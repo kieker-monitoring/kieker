@@ -28,6 +28,8 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Stack;
 
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
@@ -56,8 +58,8 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
 
 	private static final Log LOG = LogFactory.getLog(AbstractCallTreePlugin.class);
 
-	public AbstractCallTreePlugin(final String name, final SystemModelRepository systemEntityFactory) {
-		super(name, systemEntityFactory);
+	public AbstractCallTreePlugin(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
 	}
 
 	private static final String assemblyComponentOperationPairNodeLabel(final AbstractCallTreeNode<AssemblyComponentOperationPair> node, final boolean shortLabels) {
@@ -218,5 +220,10 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
 			final String outputFilename, final boolean includeWeights, final boolean shortLabels) throws FileNotFoundException, TraceProcessingException {
 		AbstractCallTreePlugin.addTraceToTree(root, msgTrace, false); // false: no aggregation
 		AbstractCallTreePlugin.saveTreeToDotFile(systemEntityFactory, root, outputFilename, includeWeights, true, shortLabels); // includeEois
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
 	}
 }

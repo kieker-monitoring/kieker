@@ -20,13 +20,13 @@
 
 package kieker.tools.traceAnalysis.plugins.executionRecordTransformation;
 
-import java.util.Collection;
 import java.util.StringTokenizer;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.plugin.IMonitoringRecordConsumerPlugin;
-import kieker.analysis.plugin.configuration.IOutputPort;
-import kieker.analysis.plugin.configuration.OutputPort;
+import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.port.OutputPort;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
@@ -39,32 +39,27 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.Signature;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
- * Transforms KiekerExecutionRecords into Execution objects.
+ * Transforms KiekerExecutionRecords into Execution objects.<br>
+ * 
+ * This class has exactly one input port and one output port. It receives objects inheriting from {@link OperationExecutionRecord}. The received object is
+ * transformed into an instance of {@link Execution}.
  * 
  * @author Andre van Hoorn
  */
-public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPlugin implements IMonitoringRecordConsumerPlugin {
+@Plugin(
+		outputPorts = {
+			@OutputPort(name = ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME, description = "Execution output stream", eventTypes = { Execution.class })
+		})
+public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPlugin {
 
+	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
+	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	private static final Log LOG = LogFactory.getLog(ExecutionRecordTransformationFilter.class);
 
-	private static final Collection<Class<? extends IMonitoringRecord>> RECORD_TYPE_SUBSCRIPTION_LIST = new CopyOnWriteArrayList<Class<? extends IMonitoringRecord>>();
-
-	private final OutputPort<Execution> executionOutputPort = new OutputPort<Execution>("Execution output stream");
-
-	public ExecutionRecordTransformationFilter(final String name, final SystemModelRepository systemFactory) {
-		super(name, systemFactory);
-	}
-
-	static {
-		ExecutionRecordTransformationFilter.RECORD_TYPE_SUBSCRIPTION_LIST.add(OperationExecutionRecord.class);
-	}
-
-	@Override
-	public Collection<Class<? extends IMonitoringRecord>> getRecordTypeSubscriptionList() {
-		return ExecutionRecordTransformationFilter.RECORD_TYPE_SUBSCRIPTION_LIST;
+	public ExecutionRecordTransformationFilter(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
 	}
 
 	private Signature createSignature(final String operationSignatureStr) {
@@ -87,8 +82,9 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 		return new Signature(name, returnType, paramTypeList);
 	}
 
-	@Override
-	public boolean newMonitoringRecord(final IMonitoringRecord record) {
+	@InputPort(description = "Input", eventTypes = { IMonitoringRecord.class })
+	public boolean newMonitoringRecord(final Object data) {
+		final IMonitoringRecord record = (IMonitoringRecord) data;
 		if (!(record instanceof OperationExecutionRecord)) {
 			ExecutionRecordTransformationFilter.LOG.error("Can only process records of type" + OperationExecutionRecord.class.getName() + " but received"
 					+ record.getClass().getName());
@@ -137,7 +133,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 
 		final Execution execution = new Execution(op, allocInst, execRec.getTraceId(), execRec.getSessionId(), execRec.getEoi(), execRec.getEss(), execRec.getTin(),
 				execRec.getTout());
-		this.executionOutputPort.deliver(execution);
+		super.deliver(ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME, execution);
 		return true;
 	}
 
@@ -151,7 +147,22 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 		// nothing to do
 	}
 
-	public IOutputPort<Execution> getExecutionOutputPort() {
-		return this.executionOutputPort;
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		return new Configuration();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration();
+
+		// TODO: Save the current configuration
+
+		return configuration;
+	}
+
+	@Override
+	protected AbstractRepository[] getDefaultRepositories() {
+		return new AbstractRepository[0];
 	}
 }
