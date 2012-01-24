@@ -1,7 +1,8 @@
 data_fn="tmp/"
-folder_fn="results-benchmark-recursive"
+folder_fn="results-S1"
 results_fn=paste(data_fn,folder_fn,"/results.csv",sep="")
 output_fn=paste(data_fn,folder_fn,"/results-bars.pdf",sep="")
+outtxt_fn=paste(data_fn,folder_fn,"/results-text.txt",sep="")
 
 configs.loop=10
 configs.recursion=c(1)
@@ -12,7 +13,7 @@ results.skip =1000000
 
 ## "[ recursion , config , loop ]"
 meanvalues <- array(dim=c(length(configs.recursion),configs.count,configs.loop,2),dimnames=list(configs.recursion,configs.labels,c(1:configs.loop),c("mean","ci95%")))
-medianvalues <- array(dim=c(length(configs.recursion),configs.count,configs.loop,3),dimnames=list(configs.recursion,configs.labels,c(1:configs.loop),c("25%","50%","75%")))
+medianvalues <- array(dim=c(length(configs.recursion),configs.count,configs.loop,3),dimnames=list(configs.recursion,configs.labels,c(1:configs.loop),c("md25%","md50%","md75%")))
 resultsBIG <- array(dim=c(length(configs.recursion),configs.count,configs.loop*(results.count-results.skip)),dimnames=list(configs.recursion,configs.labels,c(1:(configs.loop*(results.count-results.skip)))))
 for (cr in configs.recursion) {
   for (cc in (1:configs.count)) {
@@ -36,26 +37,28 @@ axis(2)
 title(xlab="Recursion Depth (Number of Executions)",ylab="Execution Time (µs)")
 for (cr in (1:length(configs.recursion))) {
   cc=1
-  printvalues = matrix(nrow=5,ncol=1,dimnames=list(c("mean","ci95%","25%","50%","75%"),c(1:configs.count)))
+  printvalues = matrix(nrow=5,ncol=1,dimnames=list(c("mean","ci95%","md25%","md50%","md75%"),c(1:configs.count)))
   printvalues["mean",cc] = mean(resultsBIG[cr,cc,]) #mean(meanvalues[cr,cc,,"mean"])
   printvalues["ci95%",cc] = qnorm(0.975) * sd(resultsBIG[cr,cc,]) / sqrt(length(resultsBIG[cr,cc,])) #mean(meanvalues[cr,cc,,"ci95%"])
-  printvalues[c("25%","50%","75%"),cc] = quantile(resultsBIG[cr,cc,],probs=c(0.25,0.5,0.75)) #mean(medianvalues[cr,cc,,"25%"])
-  #printvalues["50%",cc]=mean(medianvalues[cr,cc,,"50%"])
-  #printvalues["75%",cc]=mean(medianvalues[cr,cc,,"75%"])
+  printvalues[c("md25%","md50%","md75%"),cc] = quantile(resultsBIG[cr,cc,],probs=c(0.25,0.5,0.75)) #mean(medianvalues[cr,cc,,"md25%"])
+  #printvalues["md50%",cc]=mean(medianvalues[cr,cc,,"md50%"])
+  #printvalues["md75%",cc]=mean(medianvalues[cr,cc,,"md75%"])
   #meanvalues
   rect(cr-0.3,0,cr+0.5,printvalues["mean",1])
   lines(c(cr+0.41,cr+0.49),c(printvalues["mean",cc]+printvalues["ci95%",cc],printvalues["mean",cc]+printvalues["ci95%",cc]),col="red")
   lines(c(cr+0.45,cr+0.45),c(printvalues["mean",cc]-printvalues["ci95%",cc],printvalues["mean",cc]+printvalues["ci95%",cc]),col="red")
   lines(c(cr+0.41,cr+0.49),c(printvalues["mean",cc]-printvalues["ci95%",cc],printvalues["mean",cc]-printvalues["ci95%",cc]),col="red")
   #median
-  rect(cr-0.4,0,cr+0.4,printvalues["50%",1],col="white",border="black")
-  rect(cr-0.4,0,cr+0.4,printvalues["50%",1],angle=135,density=5)
-  lines(c(cr-0.39,cr-0.31),c(printvalues["75%",cc],printvalues["75%",cc]),col="red")
-  lines(c(cr-0.35,cr-0.35),c(printvalues["25%",cc],printvalues["75%",cc]),col="red")
-  lines(c(cr-0.39,cr-0.31),c(printvalues["25%",cc],printvalues["25%",cc]),col="red")
-  labeltext=formatC(printvalues["50%",cc]-printvalues["50%",cc-1],format="f",digits=1)
-    rect(cr-(strwidth(labeltext)*0.5),printvalues["50%",cc]-strheight(labeltext),cr+(strwidth(labeltext)*0.5),printvalues["50%",cc],col="white",border="black")
-    text(cr,printvalues["50%",cc],labels=labeltext,cex=0.75,col="black",pos=1,offset=0.1)
-  print(formatC(printvalues,format="f",digits=4,width=8))
+  rect(cr-0.4,0,cr+0.4,printvalues["md50%",1],col="white",border="black")
+  rect(cr-0.4,0,cr+0.4,printvalues["md50%",1],angle=135,density=5)
+  lines(c(cr-0.39,cr-0.31),c(printvalues["md75%",cc],printvalues["md75%",cc]),col="red")
+  lines(c(cr-0.35,cr-0.35),c(printvalues["md25%",cc],printvalues["md75%",cc]),col="red")
+  lines(c(cr-0.39,cr-0.31),c(printvalues["md25%",cc],printvalues["md25%",cc]),col="red")
+  labeltext=formatC(printvalues["md50%",cc]-printvalues["md50%",cc-1],format="f",digits=1)
+    rect(cr-(strwidth(labeltext)*0.5),printvalues["md50%",cc]-strheight(labeltext),cr+(strwidth(labeltext)*0.5),printvalues["md50%",cc],col="white",border="black")
+    text(cr,printvalues["md50%",cc],labels=labeltext,cex=0.75,col="black",pos=1,offset=0.1)
+  resultstext=formatC(printvalues,format="f",digits=4,width=8)
+  print(resultstext)
+  write.table(resultstext,file=outtxt_fn,append=TRUE,quote=FALSE,sep="\t",col.names=FALSE)
 }
 invisible(dev.off())
