@@ -283,6 +283,8 @@
 			<!-- a file META-INF/kieker.monitoring.properties will be added during packaging -->
 			<include name="src/**/*.java" />
 			<include name="src/**/META-INF/*" />
+			<include name="${src.gen}/**/*.java" />
+			<include name="${src.model.dir}/*.ecore" />
 			<include name="test/**/*.java" />
 			<include name="test/**/META-INF/*" />
 			<include name="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/WEB-INF/**" />
