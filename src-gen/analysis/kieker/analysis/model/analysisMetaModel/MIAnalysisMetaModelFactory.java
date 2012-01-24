@@ -98,6 +98,15 @@ public interface MIAnalysisMetaModelFactory extends EFactory {
 	MIDependency createDependency();
 
 	/**
+	 * Returns a new object of class '<em>Repository Connector</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Repository Connector</em>'.
+	 * @generated
+	 */
+	MIRepositoryConnector createRepositoryConnector();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

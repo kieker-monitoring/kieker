@@ -177,7 +177,8 @@ public final class AnalysisController {
 		for (final MIPlugin mPlugin : mPlugins) {
 			/* Extract the necessary informations to create the plugin. */
 			final Configuration configuration = this.modelPropertiesToConfiguration(mPlugin.getProperties());
-			final EList<MIRepository> mPluginRepositories = mPlugin.getRepositories();
+			// TODO Correct this method for the new model-structure
+			final EList<MIRepository> mPluginRepositories = null;// mPlugin.getRepositories();
 			final int len = mPluginRepositories.size();
 			final AbstractRepository pluginRepositories[] = new AbstractRepository[len];
 			for (int i = 0; i < len; i++) {

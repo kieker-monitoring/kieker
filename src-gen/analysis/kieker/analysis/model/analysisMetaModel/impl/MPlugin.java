@@ -12,6 +12,7 @@ import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
 import kieker.analysis.model.analysisMetaModel.MIOutputPort;
 import kieker.analysis.model.analysisMetaModel.MIPlugin;
 import kieker.analysis.model.analysisMetaModel.MIProperty;
+import kieker.analysis.model.analysisMetaModel.MIRepositoryConnector;
 import kieker.analysis.model.analysisMetaModel.MIRepository;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -106,7 +107,7 @@ public abstract class MPlugin extends EObjectImpl implements MIPlugin {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<MIRepository> repositories;
+	protected EList<MIRepositoryConnector> repositories;
 
 	/**
 	 * The cached value of the '{@link #getOutputPorts() <em>Output Ports</em>}' containment reference list.
@@ -196,9 +197,9 @@ public abstract class MPlugin extends EObjectImpl implements MIPlugin {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<MIRepository> getRepositories() {
+	public EList<MIRepositoryConnector> getRepositories() {
 		if (repositories == null) {
-			repositories = new EObjectResolvingEList<MIRepository>(MIRepository.class, this, MIAnalysisMetaModelPackage.PLUGIN__REPOSITORIES);
+			repositories = new EObjectResolvingEList<MIRepositoryConnector>(MIRepositoryConnector.class, this, MIAnalysisMetaModelPackage.PLUGIN__REPOSITORIES);
 		}
 		return repositories;
 	}
@@ -289,7 +290,7 @@ public abstract class MPlugin extends EObjectImpl implements MIPlugin {
 				return;
 			case MIAnalysisMetaModelPackage.PLUGIN__REPOSITORIES:
 				getRepositories().clear();
-				getRepositories().addAll((Collection<? extends MIRepository>)newValue);
+				getRepositories().addAll((Collection<? extends MIRepositoryConnector>)newValue);
 				return;
 			case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
 				getOutputPorts().clear();

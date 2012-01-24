@@ -112,6 +112,10 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 				return createDependencyAdapter();
 			}
 			@Override
+			public Adapter caseRepositoryConnector(MIRepositoryConnector object) {
+				return createRepositoryConnectorAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -268,6 +272,20 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createDependencyAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link kieker.analysis.model.analysisMetaModel.MIRepositoryConnector <em>Repository Connector</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see kieker.analysis.model.analysisMetaModel.MIRepositoryConnector
+	 * @generated
+	 */
+	public Adapter createRepositoryConnectorAdapter() {
 		return null;
 	}
 

@@ -101,7 +101,7 @@ public interface MIPlugin extends EObject {
 
 	/**
 	 * Returns the value of the '<em><b>Repositories</b></em>' reference list.
-	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.MIRepository}.
+	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.MIRepositoryConnector}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Repositories</em>' reference list isn't clear,
@@ -113,7 +113,7 @@ public interface MIPlugin extends EObject {
 	 * @model
 	 * @generated
 	 */
-	EList<MIRepository> getRepositories();
+	EList<MIRepositoryConnector> getRepositories();
 
 	/**
 	 * Returns the value of the '<em><b>Output Ports</b></em>' containment reference list.

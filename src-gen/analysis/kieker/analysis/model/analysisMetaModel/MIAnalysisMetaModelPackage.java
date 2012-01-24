@@ -558,6 +558,44 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MRepositoryConnector <em>Repository Connector</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MRepositoryConnector
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getRepositoryConnector()
+	 * @generated
+	 */
+	int REPOSITORY_CONNECTOR = 10;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REPOSITORY_CONNECTOR__NAME = 0;
+
+	/**
+	 * The feature id for the '<em><b>Repository</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REPOSITORY_CONNECTOR__REPOSITORY = 1;
+
+	/**
+	 * The number of structural features of the '<em>Repository Connector</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REPOSITORY_CONNECTOR_FEATURE_COUNT = 2;
+
+
+	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIProject <em>Project</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -878,6 +916,38 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	EAttribute getDependency_FilePath();
 
 	/**
+	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIRepositoryConnector <em>Repository Connector</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Repository Connector</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIRepositoryConnector
+	 * @generated
+	 */
+	EClass getRepositoryConnector();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIRepositoryConnector#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIRepositoryConnector#getName()
+	 * @see #getRepositoryConnector()
+	 * @generated
+	 */
+	EAttribute getRepositoryConnector_Name();
+
+	/**
+	 * Returns the meta object for the reference '{@link kieker.analysis.model.analysisMetaModel.MIRepositoryConnector#getRepository <em>Repository</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Repository</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIRepositoryConnector#getRepository()
+	 * @see #getRepositoryConnector()
+	 * @generated
+	 */
+	EReference getRepositoryConnector_Repository();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1158,6 +1228,32 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DEPENDENCY__FILE_PATH = eINSTANCE.getDependency_FilePath();
+
+		/**
+		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MRepositoryConnector <em>Repository Connector</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MRepositoryConnector
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getRepositoryConnector()
+		 * @generated
+		 */
+		EClass REPOSITORY_CONNECTOR = eINSTANCE.getRepositoryConnector();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REPOSITORY_CONNECTOR__NAME = eINSTANCE.getRepositoryConnector_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Repository</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference REPOSITORY_CONNECTOR__REPOSITORY = eINSTANCE.getRepositoryConnector_Repository();
 
 	}
 

@@ -134,6 +134,12 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR: {
+				MIRepositoryConnector repositoryConnector = (MIRepositoryConnector)theEObject;
+				T result = caseRepositoryConnector(repositoryConnector);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -285,6 +291,21 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseDependency(MIDependency object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Repository Connector</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Repository Connector</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseRepositoryConnector(MIRepositoryConnector object) {
 		return null;
 	}
 
