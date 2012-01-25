@@ -25,9 +25,8 @@ import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 
 @Plugin(outputPorts = {
 	@OutputPort(eventTypes = { MyResponseTimeRecord.class }, name = MyPipeReader.OUTPUT_PORT_NAME)
