@@ -18,30 +18,15 @@
  * limitations under the License.
  ***************************************************************************/
 
-package bookstoreApplication;
+package kieker.examples.userguide.ch2bookstore.manual;
 
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
+public class BookstoreStarter {
 
-public class MyPipe {
-	private final String pipeName;
-	private final LinkedBlockingQueue<PipeData> buffer =
-                new LinkedBlockingQueue<PipeData>();
-
-	public MyPipe(final String pipeName) {
-		this.pipeName = pipeName;
+	public static void main(final String[] args) {
+		final Bookstore bookstore = new Bookstore();
+		for (int i = 0; i < 5; i++) {
+			System.out.println("Bookstore.main: Starting request " + i);
+			bookstore.searchBook();
+		}
 	}
-
-	public String getPipeName() {
-		return this.pipeName;
-	}
-
-	public void put(final PipeData data) throws InterruptedException {
-		this.buffer.put(data);
-	}
-
-	public PipeData poll(final long timeout) throws InterruptedException {
-		return this.buffer.poll(timeout, TimeUnit.SECONDS);
-	}
-
 }

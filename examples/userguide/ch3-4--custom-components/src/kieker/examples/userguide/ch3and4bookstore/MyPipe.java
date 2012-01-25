@@ -18,20 +18,30 @@
  * limitations under the License.
  ***************************************************************************/
 
-package bookstoreTracing;
+package kieker.examples.userguide.ch3and4bookstore;
 
-import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
-public class Catalog {
+public class MyPipe {
+	private final String pipeName;
+	private final LinkedBlockingQueue<PipeData> buffer =
+			new LinkedBlockingQueue<PipeData>();
 
-    @OperationExecutionMonitoringProbe
-    public void getBook(final boolean complexQuery) {
-        try {
-            if (complexQuery) {
-                Thread.sleep(20);
-            } else {
-                Thread.sleep(2);
-            }
-        } catch (InterruptedException ex) {}
-    }
+	public MyPipe(final String pipeName) {
+		this.pipeName = pipeName;
+	}
+
+	public String getPipeName() {
+		return this.pipeName;
+	}
+
+	public void put(final PipeData data) throws InterruptedException {
+		this.buffer.put(data);
+	}
+
+	public PipeData poll(final long timeout) throws InterruptedException {
+		return this.buffer.poll(timeout, TimeUnit.SECONDS);
+	}
+
 }

@@ -18,18 +18,17 @@
  * limitations under the License.
  ***************************************************************************/
 
-package bookstoreTracing;
+package kieker.examples.userguide.ch3and4bookstore;
 
-import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
-
-public class Bookstore {
-
-    private final Catalog catalog = new Catalog();
-    private final CRM crm = new CRM(catalog);
-
-    @OperationExecutionMonitoringProbe
-    public void searchBook() {
-        catalog.getBook(false);
-        crm.getOffers();
-    }
+public class Catalog {
+	public void getBook(final boolean complexQuery) {
+		try {
+			if (complexQuery) {
+				Thread.sleep(20);
+			} else {
+				Thread.sleep(2);
+			}
+		} catch (final InterruptedException ex) {
+		}
+	}
 }

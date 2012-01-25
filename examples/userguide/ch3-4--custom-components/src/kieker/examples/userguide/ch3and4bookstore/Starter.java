@@ -18,11 +18,10 @@
  * limitations under the License.
  ***************************************************************************/
 
-package bookstoreApplication;
+package kieker.examples.userguide.ch3and4bookstore;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.reader.filesystem.FSReader;
 
 public class Starter {
 

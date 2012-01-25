@@ -18,49 +18,34 @@
  * limitations under the License.
  ***************************************************************************/
 
-package bookstoreApplication;
+package kieker.examples.userguide.ch3and4bookstore;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Properties;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-import kieker.common.configuration.Configuration;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.InputPort;
-import kieker.analysis.reader.filesystem.FSReader;
-import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.OperationExecutionRecord;
 import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 
-public class Consumer extends AbstractAnalysisPlugin {
+public class MyResponseTimeConsumer extends AbstractAnalysisPlugin {
 
-	private final long maxResponseTime;
 	public static final String INPUT_PORT_NAME = "newEvent";
 
-	public Consumer(final long maxResponseTime) {
-		super(new Configuration(null), new AbstractRepository[0]);
-		this.maxResponseTime = maxResponseTime;
+	public MyResponseTimeConsumer(final Configuration configuration, final AbstractRepository repositories[]) {
+		super(configuration, repositories);
 	}
 
-	@InputPort(eventTypes = { IMonitoringRecord.class })
+	public MyResponseTimeConsumer() {
+		super(new Configuration(null), new AbstractRepository[0]);
+	}
+
+	@InputPort(eventTypes = { MyResponseTimeRecord.class })
 	public void newEvent(final Object event) {
-		if (!(event instanceof OperationExecutionRecord)) {
-			return;
+		if (event instanceof MyResponseTimeRecord) {
+			/* Write the content to the standard output stream. */
+			final MyResponseTimeRecord myRecord = (MyResponseTimeRecord) event;
+			System.out.println("[Consumer] " + myRecord.getLoggingTimestamp()
+					+ ": " + myRecord.className + ", " + myRecord.methodName
+					+ ", " + myRecord.responseTimeNanos);
 		}
-		final OperationExecutionRecord rec = (OperationExecutionRecord) event;
-		/* Derive response time from the record. */
-		final long responseTime = rec.getTout() - rec.getTin();
-		/* Now compare with the response time threshold: */
-		if (responseTime > this.maxResponseTime) {
-			System.err.println("maximum response time exceeded by "
-					+ (responseTime - this.maxResponseTime) + " ns: " + rec.getClassName()
-					+ "." + rec.getOperationName());
-		} else {
-			System.out.println("response time accepted: " + rec.getClassName()
-					+ "." + rec.getOperationName());
-		}
-		return;
 	}
 
 	@Override
@@ -71,18 +56,22 @@ public class Consumer extends AbstractAnalysisPlugin {
 	@Override
 	public void terminate(final boolean error) {}
 
-	public Configuration getDefaultConfiguration() {
+	@Override
+	protected Configuration getDefaultConfiguration() {
 		return new Configuration();
 	}
 
+	@Override
 	public Configuration getCurrentConfiguration() {
-		return new Configuration();
+		return new Configuration(null);
 	}
-	
+
+	@Override
 	public AbstractRepository[] getDefaultRepositories() {
 		return new AbstractRepository[0];
 	}
 
+	@Override
 	public AbstractRepository[] getCurrentRepositories() {
 		return new AbstractRepository[0];
 	}

@@ -9,6 +9,10 @@
 	<classpathentry kind="src" path="test/analysis"/>
 	<classpathentry kind="src" path="test/monitoring"/>
 	<classpathentry kind="src" path="test/tools"/>
+	<classpathentry kind="src" path="examples/userguide/ch2--bookstore-application/src"/>
+	<classpathentry kind="src" path="examples/userguide/ch2--manual-instrumentation/src"/>
+	<classpathentry kind="src" path="examples/userguide/ch3-4--custom-components/src"/>
+	<classpathentry kind="src" path="examples/userguide/ch5--trace-monitoring-aspectj/src"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src-gen/analysis"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>

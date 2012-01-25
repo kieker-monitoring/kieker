@@ -18,12 +18,10 @@
  * limitations under the License.
  ***************************************************************************/
 
-package bookstoreApplication;
+package kieker.examples.userguide.ch3and4bookstore;
 
-import java.util.Properties;
-
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.configuration.Configuration;
+import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
 public class MyPipeWriter extends AbstractMonitoringWriter {
@@ -54,7 +52,7 @@ public class MyPipeWriter extends AbstractMonitoringWriter {
 		configuration.setProperty(MyPipeWriter.PROPERTY_PIPE_NAME, "myPipeName");
 		return configuration;
 	}
-	
+
 	@Override
 	protected void init() throws Exception {
 		this.pipeName =
@@ -64,5 +62,5 @@ public class MyPipeWriter extends AbstractMonitoringWriter {
 	}
 
 	@Override
-	public void terminate() { }
+	public void terminate() {}
 }

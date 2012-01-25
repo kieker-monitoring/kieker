@@ -18,22 +18,21 @@
  * limitations under the License.
  ***************************************************************************/
 
-package bookstoreApplication;
+package kieker.examples.userguide.ch5bookstore;
 
-public class PipeData {
-	private final long loggingTimestamp;
-	private final Object[] recordData;
+import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
-	public PipeData(final long loggingTimestamp, final Object[] recordData) {
-		this.loggingTimestamp = loggingTimestamp;
-		this.recordData = recordData;
+public class Catalog {
+
+	@OperationExecutionMonitoringProbe
+	public void getBook(final boolean complexQuery) {
+		try {
+			if (complexQuery) {
+				Thread.sleep(20);
+			} else {
+				Thread.sleep(2);
+			}
+		} catch (final InterruptedException ex) {
+		}
 	}
-
-	public final long getLoggingTimestamp() {
-		return this.loggingTimestamp;
-	}
-
-	public final Object[] getRecordData() {
-		return this.recordData;
-	}	
 }

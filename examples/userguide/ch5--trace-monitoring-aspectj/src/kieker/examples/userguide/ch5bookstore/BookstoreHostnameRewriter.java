@@ -18,26 +18,23 @@
  * limitations under the License.
  ***************************************************************************/
 
-package bookstoreTracing;
+package kieker.examples.userguide.ch5bookstore;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Properties;
 import java.util.Random;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.AnalysisController;
-import kieker.common.configuration.Configuration;
 import kieker.analysis.exception.MonitoringReaderException;
 import kieker.analysis.exception.MonitoringRecordConsumerException;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.reader.filesystem.FSReader;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.analysis.plugin.port.InputPort;
-import kieker.analysis.repository.AbstractRepository;
 
 public class BookstoreHostnameRewriter {
 
@@ -62,7 +59,7 @@ public class BookstoreHostnameRewriter {
 		analysisInstance.setReader(reader);
 
 		/* Connect the reader with the plugin. */
-		AbstractAnalysisPlugin.connect(reader, FSReader.OUTPUT_PORT_NAME, plugin, HostNameRewriterPlugin.INPUT_PORT_NAME);
+		AbstractPlugin.connect(reader, FSReader.OUTPUT_PORT_NAME, plugin, HostNameRewriterPlugin.INPUT_PORT_NAME);
 
 		/* Start the analysis */
 		analysisInstance.run();
@@ -72,7 +69,7 @@ public class BookstoreHostnameRewriter {
 class HostNameRewriterPlugin extends AbstractAnalysisPlugin {
 
 	public static final String INPUT_PORT_NAME = "newEvent";
-	
+
 	private static final IMonitoringController MONITORING_CTRL =
 			MonitoringController.getInstance();
 	private static final String BOOKSTORE_HOSTNAME = "SRV0";

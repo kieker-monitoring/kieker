@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package bookstoreApplication;
+package kieker.examples.userguide.ch2bookstore.manual;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.MonitoringReaderException;

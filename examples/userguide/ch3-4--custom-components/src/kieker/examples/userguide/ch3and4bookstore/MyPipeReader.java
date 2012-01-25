@@ -18,21 +18,16 @@
  * limitations under the License.
  ***************************************************************************/
 
-package bookstoreApplication;
+package kieker.examples.userguide.ch3and4bookstore;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Properties;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-import kieker.common.configuration.Configuration;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.reader.AbstractReaderPlugin;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import kieker.analysis.repository.AbstractRepository;
 
 @Plugin(outputPorts = {
 	@OutputPort(eventTypes = { MyResponseTimeRecord.class }, name = MyPipeReader.OUTPUT_PORT_NAME)
@@ -90,7 +85,7 @@ public class MyPipeReader extends AbstractReaderPlugin {
 				record.initFromArray(data.getRecordData());
 				record.setLoggingTimestamp(data.getLoggingTimestamp());
 				/* ...and delegate the task of delivering to the super class. */
-				super.deliver(OUTPUT_PORT_NAME, record);
+				super.deliver(MyPipeReader.OUTPUT_PORT_NAME, record);
 			}
 		} catch (final InterruptedException e) {
 			return false; // signal error
@@ -120,11 +115,13 @@ public class MyPipeReader extends AbstractReaderPlugin {
 
 		return defaultConfiguration;
 	}
-	
+
+	@Override
 	public AbstractRepository[] getDefaultRepositories() {
 		return new AbstractRepository[0];
 	}
 
+	@Override
 	public AbstractRepository[] getCurrentRepositories() {
 		return new AbstractRepository[0];
 	}

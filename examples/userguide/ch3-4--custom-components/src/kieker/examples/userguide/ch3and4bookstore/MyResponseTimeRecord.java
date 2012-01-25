@@ -18,34 +18,34 @@
  * limitations under the License.
  ***************************************************************************/
 
-package bookstoreApplication;
+package kieker.examples.userguide.ch3and4bookstore;
 
 import kieker.common.record.AbstractMonitoringRecord;
 
 public class MyResponseTimeRecord extends AbstractMonitoringRecord {
 
-    private static final long serialVersionUID = 1775L;
-    private final static String NA_VAL = "N/A";
+	private static final long serialVersionUID = 1775L;
+	private final static String NA_VAL = "N/A";
 
-    /* Attributes storing the actual monitoring data: */
-    public volatile String className = MyResponseTimeRecord.NA_VAL;
-    public volatile String methodName = MyResponseTimeRecord.NA_VAL;
-    public volatile long responseTimeNanos = -1;
+	/* Attributes storing the actual monitoring data: */
+	public volatile String className = MyResponseTimeRecord.NA_VAL;
+	public volatile String methodName = MyResponseTimeRecord.NA_VAL;
+	public volatile long responseTimeNanos = -1;
 
-    @Override
-    public final void initFromArray(final Object[] values) {
-            this.className = (String) values[0];
-            this.methodName = (String) values[1];
-            this.responseTimeNanos = (Long) values[2];
-    }
+	@Override
+	public final void initFromArray(final Object[] values) {
+		this.className = (String) values[0];
+		this.methodName = (String) values[1];
+		this.responseTimeNanos = (Long) values[2];
+	}
 
-    @Override
-    public final Object[] toArray() {
-        return new Object[]{this.className, this.methodName, this.responseTimeNanos};
-    }
+	@Override
+	public final Object[] toArray() {
+		return new Object[] { this.className, this.methodName, this.responseTimeNanos };
+	}
 
-    @Override
-    public Class<?>[] getValueTypes() {
-        return new Class[]{String.class, String.class, long.class};
-    }
+	@Override
+	public Class<?>[] getValueTypes() {
+		return new Class[] { String.class, String.class, long.class };
+	}
 }
