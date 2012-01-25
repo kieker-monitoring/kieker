@@ -18,13 +18,13 @@
  * limitations under the License.
  ***************************************************************************/
 
-package bookstoreApplication;
+package kieker.examples.userguide.appendixJMS;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.reader.jms.JMSReader;
-import kieker.common.configuration.Configuration;
 import kieker.analysis.repository.AbstractRepository;
+import kieker.common.configuration.Configuration;
 
 /**
  * 
@@ -54,32 +54,32 @@ public class JMSAnalysisStarter {
 	private static String queue;
 
 	public static void main(final String[] args) {
-    	if (!JMSAnalysisStarter.parseArguments(args)) {
-    		// invalid parameters
-    		JMSAnalysisStarter.printUsage();
-    		System.exit(1);
-    	}
-    	
-        final AnalysisController analysisInstance = new AnalysisController();
-        
-        final Configuration logReaderConfiguration = new Configuration();
-        logReaderConfiguration.setProperty(JMSReader.CONFIG_PROVIDERURL, JMSAnalysisStarter.providerUrl);
-        logReaderConfiguration.setProperty(JMSReader.CONFIG_FACTORYLOOKUP, JMSAnalysisStarter.connectionFactory);
-        logReaderConfiguration.setProperty(JMSReader.CONFIG_DESTINATION, JMSAnalysisStarter.queue);
-        
-        final JMSReader logReader = new JMSReader(logReaderConfiguration, new AbstractRepository[0]);
-        analysisInstance.setReader(logReader);
-        
-        final Configuration consumerConfiguration = new Configuration();
-        consumerConfiguration.setProperty(Consumer.CONFIG_MAX_RESPONSE_TIME, Long.toString(MAX_RT_NANOS));
-        
-        final Consumer consumer = new Consumer(consumerConfiguration, new AbstractRepository[0]);
-        analysisInstance.registerPlugin(consumer);
+		if (!JMSAnalysisStarter.parseArguments(args)) {
+			// invalid parameters
+			JMSAnalysisStarter.printUsage();
+			System.exit(1);
+		}
 
-        AbstractPlugin.connect(logReader, JMSReader.OUTPUT_PORT_NAME, consumer, Consumer.INPUT_PORT_NAME);
-        
-        analysisInstance.run();
-    }
+		final AnalysisController analysisInstance = new AnalysisController();
+
+		final Configuration logReaderConfiguration = new Configuration();
+		logReaderConfiguration.setProperty(JMSReader.CONFIG_PROVIDERURL, JMSAnalysisStarter.providerUrl);
+		logReaderConfiguration.setProperty(JMSReader.CONFIG_FACTORYLOOKUP, JMSAnalysisStarter.connectionFactory);
+		logReaderConfiguration.setProperty(JMSReader.CONFIG_DESTINATION, JMSAnalysisStarter.queue);
+
+		final JMSReader logReader = new JMSReader(logReaderConfiguration, new AbstractRepository[0]);
+		analysisInstance.setReader(logReader);
+
+		final Configuration consumerConfiguration = new Configuration();
+		consumerConfiguration.setProperty(Consumer.CONFIG_MAX_RESPONSE_TIME, Long.toString(JMSAnalysisStarter.MAX_RT_NANOS));
+
+		final Consumer consumer = new Consumer(consumerConfiguration, new AbstractRepository[0]);
+		analysisInstance.registerPlugin(consumer);
+
+		AbstractPlugin.connect(logReader, JMSReader.OUTPUT_PORT_NAME, consumer, Consumer.INPUT_PORT_NAME);
+
+		analysisInstance.run();
+	}
 
 	/**
 	 * Parses the given arguments and initializes the variables {@link #connectionFactory} and {@link #providerUrl}.

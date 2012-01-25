@@ -18,10 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package periodicSigarExample;
-
-import java.util.ArrayList;
-import java.util.Collection;
+package kieker.examples.userguide.appendixSigar;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
@@ -71,8 +68,8 @@ class StdOutDumpConsumer extends AbstractAnalysisPlugin {
 	public StdOutDumpConsumer(final Configuration configuration, final AbstractRepository[] repositories) {
 		super(configuration, repositories);
 	}
-	
-	@InputPort(eventTypes = { IMonitoringRecord.class})
+
+	@InputPort(eventTypes = { IMonitoringRecord.class })
 	public void newMonitoringRecord(final Object record) {
 		if (record instanceof CPUUtilizationRecord) {
 			final CPUUtilizationRecord cpuUtilizationRecord =

@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package periodicSigarExample;
+package kieker.examples.userguide.appendixSigar;
 
 import java.util.concurrent.TimeUnit;
 
@@ -31,26 +31,26 @@ import kieker.monitoring.probe.sigar.samplers.MemSwapUsageSampler;
 
 public class MonitoringStarter {
 
-    public static void main(final String[] args) throws InterruptedException {
-        System.out.println("Monitoring CPU and Mem/Swap for 30 seconds in 5 seconds steps () with an offset of two seconds");
-    	
-    	final IMonitoringController monitoringController = 
-    		MonitoringController.getInstance();
-    	
+	public static void main(final String[] args) throws InterruptedException {
+		System.out.println("Monitoring CPU and Mem/Swap for 30 seconds in 5 seconds steps () with an offset of two seconds");
+
+		final IMonitoringController monitoringController =
+				MonitoringController.getInstance();
+
 		final ISigarSamplerFactory sigarFactory = SigarSamplerFactory.INSTANCE;
-    	
-    	final CPUsDetailedPercSampler cpuSampler = sigarFactory.createSensorCPUsDetailedPerc();
-    	final MemSwapUsageSampler memSwapSampler = sigarFactory.createSensorMemSwapUsage();
-    	
-    	final long offset = 2; // start after 2 seconds
-    	final long period = 5; // monitor every 5 seconds
-    	
-    	monitoringController.schedulePeriodicSampler(cpuSampler, offset, period, TimeUnit.SECONDS);
-    	monitoringController.schedulePeriodicSampler(memSwapSampler, offset, period, TimeUnit.SECONDS);
-    	
-    	Thread.sleep(30000);
-    	
-        System.out.println("Terminating");
-        monitoringController.terminateMonitoring();
-    }
+
+		final CPUsDetailedPercSampler cpuSampler = sigarFactory.createSensorCPUsDetailedPerc();
+		final MemSwapUsageSampler memSwapSampler = sigarFactory.createSensorMemSwapUsage();
+
+		final long offset = 2; // start after 2 seconds
+		final long period = 5; // monitor every 5 seconds
+
+		monitoringController.schedulePeriodicSampler(cpuSampler, offset, period, TimeUnit.SECONDS);
+		monitoringController.schedulePeriodicSampler(memSwapSampler, offset, period, TimeUnit.SECONDS);
+
+		Thread.sleep(30000);
+
+		System.out.println("Terminating");
+		monitoringController.terminateMonitoring();
+	}
 }

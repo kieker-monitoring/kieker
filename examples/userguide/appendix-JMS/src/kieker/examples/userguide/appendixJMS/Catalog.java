@@ -18,15 +18,18 @@
  * limitations under the License.
  ***************************************************************************/
 
-package bookstoreApplication;
+package kieker.examples.userguide.appendixJMS;
 
-public class BookstoreStarter {
+public class Catalog {
 
-    public static void main(String[] args) {
-        Bookstore bookstore = new Bookstore();
-        for (int i = 0; i < 5; i++) {
-            System.out.println("Bookstore.main: Starting request " + i);
-            bookstore.searchBook();
-        }
-    }
+	public void getBook(final boolean complexQuery) {
+		try {
+			if (complexQuery) {
+				Thread.sleep(20);
+			} else {
+				Thread.sleep(2);
+			}
+		} catch (final InterruptedException ex) {
+		}
+	}
 }
