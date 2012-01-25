@@ -18,15 +18,15 @@
  * limitations under the License.
  ***************************************************************************/
 
-package bookstoreApplication;
+package kieker.examples.userguide.ch2bookstore;
 
-public class BookstoreStarter {
+public class Bookstore {
 
-    public static void main(String[] args) {
-        Bookstore bookstore = new Bookstore();
-        for (int i = 0; i < 5; i++) {
-            System.out.println("Bookstore.main: Starting request " + i);
-            bookstore.searchBook();
-        }
-    }
+	private final Catalog catalog = new Catalog();
+	private final CRM crm = new CRM(this.catalog);
+
+	public void searchBook() {
+		this.catalog.getBook(false);
+		this.crm.getOffers();
+	}
 }

@@ -18,9 +18,9 @@
  * limitations under the License.
  ***************************************************************************/
 
-package bookstoreApplication;
+package kieker.examples.userguide.ch2bookstore;
 
 public class Catalog {
 
-    public void getBook(final boolean complexQuery) { }
+	public void getBook(final boolean complexQuery) {}
 }

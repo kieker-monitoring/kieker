@@ -18,16 +18,16 @@
  * limitations under the License.
  ***************************************************************************/
 
-package bookstoreApplication;
+package kieker.examples.userguide.ch2bookstore;
 
-public class CRM {    
-    private final Catalog catalog;
+public class CRM {
+	private final Catalog catalog;
 
-    public CRM(final Catalog catalog) {
-        this.catalog = catalog;
-    }
+	public CRM(final Catalog catalog) {
+		this.catalog = catalog;
+	}
 
-    public void getOffers() {
-        catalog.getBook(false);
-    }
+	public void getOffers() {
+		this.catalog.getBook(false);
+	}
 }
