@@ -1,5 +1,8 @@
 package kieker.test.analysis.junit.plugin;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.SilentCountingRecordConsumer;
@@ -21,7 +24,7 @@ public class SilentCountingRecordConsumerTest {
 	@Test
 	public void testNormal() {
 		/* Establish the connection. */
-		final SilentCountingRecordConsumer consumer = new SilentCountingRecordConsumer(new Configuration(), new AbstractRepository[0]);
+		final SilentCountingRecordConsumer consumer = new SilentCountingRecordConsumer(new Configuration(), new HashMap<String, AbstractRepository>());
 		final SourceClass src = new SourceClass();
 		Assert.assertTrue(AbstractPlugin.connect(src, SourceClass.OUTPUT_PORT_NAME, consumer, SilentCountingRecordConsumer.INPUT_PORT_NAME));
 
@@ -38,7 +41,7 @@ public class SilentCountingRecordConsumerTest {
 	@Test
 	public void testConcurrently() {
 		/* Establish the connection. */
-		final SilentCountingRecordConsumer consumer = new SilentCountingRecordConsumer(new Configuration(), new AbstractRepository[0]);
+		final SilentCountingRecordConsumer consumer = new SilentCountingRecordConsumer(new Configuration(), new HashMap<String, AbstractRepository>());
 		final SourceClass src = new SourceClass();
 		Assert.assertTrue(AbstractPlugin.connect(src, SourceClass.OUTPUT_PORT_NAME, consumer, SilentCountingRecordConsumer.INPUT_PORT_NAME));
 
@@ -80,7 +83,7 @@ public class SilentCountingRecordConsumerTest {
 	@Test
 	public void testDifferentClasses() {
 		/* Establish the connection. */
-		final SilentCountingRecordConsumer consumer = new SilentCountingRecordConsumer(new Configuration(), new AbstractRepository[0]);
+		final SilentCountingRecordConsumer consumer = new SilentCountingRecordConsumer(new Configuration(), new HashMap<String, AbstractRepository>());
 		final SourceClass src = new SourceClass();
 		Assert.assertTrue(AbstractPlugin.connect(src, SourceClass.OUTPUT_PORT_NAME, consumer, SilentCountingRecordConsumer.INPUT_PORT_NAME));
 
@@ -102,7 +105,7 @@ public class SilentCountingRecordConsumerTest {
 		public static final String OUTPUT_PORT_NAME = "output";
 
 		public SourceClass() {
-			super(new Configuration(), new AbstractRepository[0]);
+			super(new Configuration(), new HashMap<String, AbstractRepository>());
 		}
 
 		public void deliver(final Object data) {
@@ -128,12 +131,12 @@ public class SilentCountingRecordConsumerTest {
 		public void terminate(final boolean error) {}
 
 		@Override
-		protected AbstractRepository[] getDefaultRepositories() {
+		protected Map<String, AbstractRepository> getDefaultRepositories() {
 			return null;
 		}
 
 		@Override
-		public AbstractRepository[] getCurrentRepositories() {
+		public Map<String, AbstractRepository> getCurrentRepositories() {
 			return null;
 		}
 

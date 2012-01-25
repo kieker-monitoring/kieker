@@ -20,6 +20,7 @@
 
 package kieker.tools.traceAnalysis.plugins.messageTraceRepository;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -45,7 +46,7 @@ public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessing
 	// TODO: handle equivalence classes
 	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/150
 
-	public MessageTraceRepositoryPlugin(final Configuration configuration, final AbstractRepository repositories[]) {
+	public MessageTraceRepositoryPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		super(configuration, repositories);
 	}
 
@@ -80,7 +81,7 @@ public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessing
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 }

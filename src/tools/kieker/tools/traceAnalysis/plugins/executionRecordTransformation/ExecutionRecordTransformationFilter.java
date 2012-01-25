@@ -20,6 +20,8 @@
 
 package kieker.tools.traceAnalysis.plugins.executionRecordTransformation;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import kieker.analysis.plugin.port.InputPort;
@@ -58,7 +60,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	private static final Log LOG = LogFactory.getLog(ExecutionRecordTransformationFilter.class);
 
-	public ExecutionRecordTransformationFilter(final Configuration configuration, final AbstractRepository repositories[]) {
+	public ExecutionRecordTransformationFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		super(configuration, repositories);
 	}
 
@@ -162,7 +164,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 }

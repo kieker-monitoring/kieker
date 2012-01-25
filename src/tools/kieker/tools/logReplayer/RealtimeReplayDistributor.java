@@ -20,6 +20,8 @@
 
 package kieker.tools.logReplayer;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -72,7 +74,7 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 	private final int maxQueueSize;
 	private final CountDownLatch terminationLatch;
 
-	public RealtimeReplayDistributor(final Configuration configuration, final AbstractRepository repositories[]) {
+	public RealtimeReplayDistributor(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		super(configuration, repositories);
 
 		// TODO: Load from configuration.
@@ -95,7 +97,7 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 	 *            will be decremented after the last record was replayed
 	 */
 	public RealtimeReplayDistributor(final int numWorkers, final AbstractAnalysisPlugin cons, final CountDownLatch terminationLatch, final String constInputPortName) {
-		super(new Configuration(null), new AbstractRepository[0]);
+		super(new Configuration(null), new HashMap<String, AbstractRepository>());
 		this.numWorkers = numWorkers;
 		this.cons = cons;
 		this.maxQueueSize = numWorkers * RealtimeReplayDistributor.QUEUE_SIZE_FACTOR;
@@ -199,12 +201,12 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>(0);
 	}
 
 	@Override
-	public AbstractRepository[] getCurrentRepositories() {
-		return new AbstractRepository[0];
+	public Map<String, AbstractRepository> getCurrentRepositories() {
+		return new HashMap<String, AbstractRepository>(0);
 	}
 }

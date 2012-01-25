@@ -22,6 +22,8 @@ package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.repository.AbstractRepository;
@@ -120,7 +122,7 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 }

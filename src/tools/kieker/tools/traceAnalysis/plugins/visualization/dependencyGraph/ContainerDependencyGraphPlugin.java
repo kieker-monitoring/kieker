@@ -24,6 +24,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.repository.AbstractRepository;
@@ -171,7 +173,7 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 }

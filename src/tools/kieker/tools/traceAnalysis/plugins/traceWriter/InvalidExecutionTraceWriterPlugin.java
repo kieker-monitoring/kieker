@@ -23,6 +23,8 @@ package kieker.tools.traceAnalysis.plugins.traceWriter;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.repository.AbstractRepository;
@@ -44,7 +46,7 @@ public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionT
 	private final String outputFn;
 	private final BufferedWriter ps;
 
-	public InvalidExecutionTraceWriterPlugin(final Configuration configuration, final AbstractRepository repositories[])
+	public InvalidExecutionTraceWriterPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories)
 			throws IOException {
 		super(configuration, repositories);
 		this.outputFn = configuration.getStringProperty(InvalidExecutionTraceWriterPlugin.CONFIG_OUTPUT_FN);
@@ -110,7 +112,7 @@ public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionT
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 }

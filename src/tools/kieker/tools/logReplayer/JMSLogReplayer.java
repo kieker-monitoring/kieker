@@ -20,6 +20,9 @@
 
 package kieker.tools.logReplayer;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
@@ -92,7 +95,7 @@ public class JMSLogReplayer {
 		configuration.setProperty("msProviderUrl", this.jmsProviderUrl);
 		configuration.setProperty("jmsDestination", this.jmsDestination);
 		configuration.setProperty("jmsFactoryLookupName", this.jmsFactoryLookupName);
-		final IMonitoringReader logReader = new JMSReader(configuration, new AbstractRepository[0]);
+		final IMonitoringReader logReader = new JMSReader(configuration, new HashMap<String, AbstractRepository>());
 		final AnalysisController tpanInstance = new AnalysisController();
 		tpanInstance.setReader(logReader);
 		final RecordDelegationPlugin2 recordReceiver = new RecordDelegationPlugin2(this.recordReceiver, this.recordReceiverInputPortName);
@@ -137,7 +140,7 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 	}
 
 	public RecordDelegationPlugin2(final AbstractAnalysisPlugin rec, final String inputPortName) {
-		super(new Configuration(null), new AbstractRepository[0]);
+		super(new Configuration(null), new HashMap<String, AbstractRepository>());
 
 		AbstractPlugin.connect(this, RecordDelegationPlugin2.OUTPUT_PORT_NAME, rec, inputPortName);
 	}
@@ -188,12 +191,12 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override
-	public AbstractRepository[] getCurrentRepositories() {
-		return new AbstractRepository[0];
+	public Map<String, AbstractRepository> getCurrentRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 }

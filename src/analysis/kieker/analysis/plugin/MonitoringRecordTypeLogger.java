@@ -20,6 +20,9 @@
 
 package kieker.analysis.plugin;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
@@ -63,7 +66,7 @@ public class MonitoringRecordTypeLogger extends AbstractAnalysisPlugin {
 	/**
 	 * Constructs a {@link MonitoringRecordTypeLogger}.
 	 */
-	public MonitoringRecordTypeLogger(final Configuration configuration, final AbstractRepository repositories[]) {
+	public MonitoringRecordTypeLogger(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		super(configuration, repositories);
 	}
 
@@ -88,12 +91,12 @@ public class MonitoringRecordTypeLogger extends AbstractAnalysisPlugin {
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override
-	public AbstractRepository[] getCurrentRepositories() {
-		return new AbstractRepository[0];
+	public Map<String, AbstractRepository> getCurrentRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 }

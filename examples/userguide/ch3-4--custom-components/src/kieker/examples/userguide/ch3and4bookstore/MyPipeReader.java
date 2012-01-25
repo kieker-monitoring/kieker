@@ -20,6 +20,8 @@
 
 package kieker.examples.userguide.ch3and4bookstore;
 
+import java.util.HashMap;
+
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.reader.AbstractReaderPlugin;
@@ -41,12 +43,12 @@ public class MyPipeReader extends AbstractReaderPlugin {
 	private volatile MyPipe pipe;
 
 	public MyPipeReader() {
-		super(new Configuration(null), new AbstractRepository[0]);
+		super(new Configuration(null), new HashMap<String, AbstractRepository>());
 		this.pipeName = "kieker-pipe";
 		this.init();
 	}
 
-	public MyPipeReader(final Configuration configuration, final AbstractRepository repositories[]) {
+	public MyPipeReader(final Configuration configuration, final HashMap<String, AbstractRepository> repositories) {
 		super(configuration, repositories);
 
 		this.pipeName = configuration.getStringProperty(MyPipeReader.PROPERTY_PIPE_NAME);
@@ -55,7 +57,7 @@ public class MyPipeReader extends AbstractReaderPlugin {
 	}
 
 	public MyPipeReader(final String pipeName) {
-		super(new Configuration(null), new AbstractRepository[0]);
+		super(new Configuration(null), new HashMap<String, AbstractRepository>());
 
 		this.pipeName = pipeName;
 
@@ -116,12 +118,12 @@ public class MyPipeReader extends AbstractReaderPlugin {
 	}
 
 	@Override
-	public AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	public HashMap<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override
-	public AbstractRepository[] getCurrentRepositories() {
-		return new AbstractRepository[0];
+	public HashMap<String, AbstractRepository> getCurrentRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 }

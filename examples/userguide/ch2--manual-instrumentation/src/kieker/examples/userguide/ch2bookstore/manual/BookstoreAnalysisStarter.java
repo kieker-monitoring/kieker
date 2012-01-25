@@ -20,6 +20,8 @@
 
 package kieker.examples.userguide.ch2bookstore.manual;
 
+import java.util.HashMap;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.MonitoringReaderException;
 import kieker.analysis.exception.MonitoringRecordConsumerException;
@@ -47,7 +49,7 @@ public class BookstoreAnalysisStarter {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(FSReader.CONFIG_INPUTDIRS, args[0]);
 
-		final FSReader reader = new FSReader(configuration, new AbstractRepository[0]);
+		final FSReader reader = new FSReader(configuration, new HashMap<String, AbstractRepository>());
 		analysisInstance.setReader(reader);
 
 		/* Connect the output of the reader with the input of the plugin. */

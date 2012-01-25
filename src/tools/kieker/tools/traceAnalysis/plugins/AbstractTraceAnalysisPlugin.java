@@ -20,6 +20,9 @@
 
 package kieker.tools.traceAnalysis.plugins;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
@@ -32,15 +35,17 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin {
 
 	public static final String CONFIG_NAME = AbstractTraceAnalysisPlugin.class.getName() + ".name";
+	public static final String SYSTEM_MODEL_REPOSITORY_NAME = AbstractTraceAnalysisPlugin.class.getName() + ".systemModelRepository";
 	private final String name;
 	private final SystemModelRepository systemEntityFactory;
 
-	public AbstractTraceAnalysisPlugin(final Configuration configuration, final AbstractRepository repositories[]) {
+	public AbstractTraceAnalysisPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		super(configuration, repositories);
 
 		/* Use the given repository if possible. */
-		if ((repositories.length >= 1) && (repositories[0] instanceof SystemModelRepository)) {
-			this.systemEntityFactory = (SystemModelRepository) repositories[0];
+		if ((repositories.containsKey(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME) && (repositories
+				.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME) instanceof SystemModelRepository))) {
+			this.systemEntityFactory = (SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME);
 		} else {
 			this.systemEntityFactory = null;
 		}
@@ -67,7 +72,10 @@ public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin
 	}
 
 	@Override
-	public AbstractRepository[] getCurrentRepositories() {
-		return new AbstractRepository[] { this.systemEntityFactory };
+	public Map<String, AbstractRepository> getCurrentRepositories() {
+		final Map<String, AbstractRepository> map = new HashMap<String, AbstractRepository>();
+		map.put(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
+
+		return map;
 	}
 }

@@ -20,6 +20,9 @@
 
 package kieker.tools.traceAnalysis.plugins.executionFilter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.plugin.port.OutputPort;
@@ -61,7 +64,7 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 	 *            The configuration used to initialize this instance. It should
 	 *            contain the properties for the minimum and maximum timestamp.
 	 */
-	public TimestampFilter(final Configuration configuration, final AbstractRepository repositories[]) {
+	public TimestampFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		super(configuration, repositories);
 
 		/* Load the content for the fields from the given configuration. */
@@ -78,7 +81,7 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 	 * @param ignoreExecutionsAfterTimestamp
 	 */
 	public TimestampFilter(final long ignoreExecutionsBeforeTimestamp, final long ignoreExecutionsAfterTimestamp) {
-		super(new Configuration(null), new AbstractRepository[0]);
+		super(new Configuration(null), new HashMap<String, AbstractRepository>());
 
 		this.ignoreExecutionsBeforeTimestamp = ignoreExecutionsBeforeTimestamp;
 		this.ignoreExecutionsAfterTimestamp = ignoreExecutionsAfterTimestamp;
@@ -124,12 +127,12 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override
-	public AbstractRepository[] getCurrentRepositories() {
-		return new AbstractRepository[0];
+	public Map<String, AbstractRepository> getCurrentRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 }

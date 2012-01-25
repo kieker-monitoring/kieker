@@ -21,6 +21,8 @@
 package kieker.test.tools.junit.currentTimeEventGeneratorFilter;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import junit.framework.Assert;
@@ -96,7 +98,7 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 	 * @param expectedOutputTimerEvents
 	 */
 	private void compareInputAndOutput(final long timerResolution, final long[] inputTimestamps, final long[] expectedOutputTimerEvents) {
-		final CurrentTimeEventGenerator filter = new CurrentTimeEventGenerator(timerResolution, new AbstractRepository[0]);
+		final CurrentTimeEventGenerator filter = new CurrentTimeEventGenerator(timerResolution, new HashMap<String, AbstractRepository>());
 
 		final DstClass dst = new DstClass();
 		AbstractPlugin.connect(filter, CurrentTimeEventGenerator.CURRENT_TIME_OUTPUT_PORT_NAME, dst, DstClass.INPUT_PORT_NAME);
@@ -132,7 +134,7 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 		private final ConcurrentLinkedQueue<Long> receivedTimestamps = new ConcurrentLinkedQueue<Long>();
 
 		public DstClass() {
-			super(new Configuration(null), new AbstractRepository[0]);
+			super(new Configuration(null), new HashMap<String, AbstractRepository>());
 		}
 
 		@Override
@@ -163,13 +165,13 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 		}
 
 		@Override
-		protected AbstractRepository[] getDefaultRepositories() {
-			return new AbstractRepository[0];
+		protected Map<String, AbstractRepository> getDefaultRepositories() {
+			return new HashMap<String, AbstractRepository>();
 		}
 
 		@Override
-		public AbstractRepository[] getCurrentRepositories() {
-			return new AbstractRepository[0];
+		public Map<String, AbstractRepository> getCurrentRepositories() {
+			return new HashMap<String, AbstractRepository>();
 		}
 	}
 }

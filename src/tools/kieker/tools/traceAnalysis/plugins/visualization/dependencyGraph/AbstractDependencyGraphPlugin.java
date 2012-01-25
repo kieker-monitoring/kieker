@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Collection;
+import java.util.Map;
 
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
@@ -49,7 +50,8 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 	private int numGraphsSaved = 0;
 
 	// TODO Change constructor to plugin-default-constructor
-	public AbstractDependencyGraphPlugin(final Configuration configuration, final AbstractRepository repositories[], final DependencyGraph<T> dependencyGraph) {
+	public AbstractDependencyGraphPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories,
+			final DependencyGraph<T> dependencyGraph) {
 		super(configuration, repositories);
 		this.dependencyGraph = dependencyGraph;
 	}

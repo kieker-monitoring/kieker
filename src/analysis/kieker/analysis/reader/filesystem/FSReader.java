@@ -20,8 +20,10 @@
 
 package kieker.analysis.reader.filesystem;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 
@@ -63,7 +65,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 
 	private volatile boolean running = true;
 
-	public FSReader(final Configuration configuration, final AbstractRepository repositories[]) {
+	public FSReader(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		super(configuration, repositories);
 		this.inputDirs = this.configuration.getStringArrayProperty(FSReader.CONFIG_INPUTDIRS);
 		this.recordQueue = new PriorityQueue<IMonitoringRecord>(this.inputDirs.length);
@@ -168,13 +170,12 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override
-	public AbstractRepository[] getCurrentRepositories() {
-		return new AbstractRepository[0];
+	public Map<String, AbstractRepository> getCurrentRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
-
 }

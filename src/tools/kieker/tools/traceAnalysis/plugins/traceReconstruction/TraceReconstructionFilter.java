@@ -21,6 +21,7 @@
 package kieker.tools.traceAnalysis.plugins.traceReconstruction;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.NavigableSet;
@@ -108,7 +109,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 		}
 	});
 
-	public TraceReconstructionFilter(final Configuration configuration, final AbstractRepository repositories[]) {
+	public TraceReconstructionFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		super(configuration, repositories);
 
 		/* Load the root execution from the repository if possible. */
@@ -330,8 +331,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 
 }

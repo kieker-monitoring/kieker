@@ -20,6 +20,9 @@
 
 package kieker.examples.userguide.ch2bookstore.manual;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.repository.AbstractRepository;
@@ -33,7 +36,7 @@ public class Consumer extends AbstractAnalysisPlugin {
 	public static final String INPUT_PORT_NAME = "newEvent";
 
 	public Consumer(final long maxResponseTime) {
-		super(new Configuration(null), new AbstractRepository[0]);
+		super(new Configuration(null), new HashMap<String, AbstractRepository>());
 		this.maxResponseTime = maxResponseTime;
 	}
 
@@ -76,12 +79,12 @@ public class Consumer extends AbstractAnalysisPlugin {
 	}
 
 	@Override
-	public AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	public Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override
-	public AbstractRepository[] getCurrentRepositories() {
-		return new AbstractRepository[0];
+	public Map<String, AbstractRepository> getCurrentRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 }

@@ -20,6 +20,8 @@
 
 package kieker.analysis.reader.namedRecordPipe;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.plugin.port.OutputPort;
@@ -60,7 +62,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	 * @throws IllegalArgumentException
 	 *             If the pipe name was invalid.
 	 */
-	public PipeReader(final Configuration configuration, final AbstractRepository repositories[]) throws IllegalArgumentException {
+	public PipeReader(final Configuration configuration, final Map<String, AbstractRepository> repositories) throws IllegalArgumentException {
 		super(configuration, repositories);
 		final String pipeName = this.configuration.getStringProperty(PipeReader.CONFIG_PIPENAME);
 
@@ -70,7 +72,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 
 	// TODO Remove the constructor
 	public PipeReader(final String pipeName) {
-		super(new Configuration(null), new AbstractRepository[0]);
+		super(new Configuration(null), new HashMap<String, AbstractRepository>());
 
 		this.pipeName = pipeName;
 		this.initialize(pipeName);
@@ -139,12 +141,12 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override
-	public AbstractRepository[] getCurrentRepositories() {
-		return new AbstractRepository[0];
+	public Map<String, AbstractRepository> getCurrentRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 }

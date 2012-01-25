@@ -20,7 +20,10 @@
 
 package kieker.tools.currentTimeEventGenerator;
 
-import kieker.analysis.plugin.AbstractPlugin;
+import java.util.HashMap;
+import java.util.Map;
+
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.repository.AbstractRepository;
@@ -52,7 +55,7 @@ import kieker.common.logging.LogFactory;
  */
 @Plugin(outputPorts =
 		@OutputPort(name = CurrentTimeEventGenerator.CURRENT_TIME_OUTPUT_PORT_NAME, eventTypes = { TimestampEvent.class }, description = "Provides current time events"))
-public class CurrentTimeEventGenerator extends AbstractPlugin {
+public class CurrentTimeEventGenerator extends AbstractAnalysisPlugin {
 
 	public static final String CURRENT_TIME_OUTPUT_PORT_NAME = "currentTimeOutputPort";
 	public static final String CONFIG_TIME_RESOLUTION = CurrentTimeEventGenerator.class.getName() + ".timeResolution";
@@ -82,7 +85,7 @@ public class CurrentTimeEventGenerator extends AbstractPlugin {
 	 * 
 	 * @param timeResolution
 	 */
-	public CurrentTimeEventGenerator(final long timeResolution, final AbstractRepository repositories[]) {
+	public CurrentTimeEventGenerator(final long timeResolution, final Map<String, AbstractRepository> repositories) {
 		super(new Configuration(), repositories);
 		this.timerResolution = timeResolution;
 	}
@@ -137,12 +140,20 @@ public class CurrentTimeEventGenerator extends AbstractPlugin {
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override
-	public AbstractRepository[] getCurrentRepositories() {
-		return new AbstractRepository[0];
+	public Map<String, AbstractRepository> getCurrentRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
+
+	@Override
+	public boolean execute() {
+		return false;
+	}
+
+	@Override
+	public void terminate(final boolean error) {}
 }

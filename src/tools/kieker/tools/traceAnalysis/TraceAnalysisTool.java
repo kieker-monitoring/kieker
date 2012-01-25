@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -273,7 +274,7 @@ public final class TraceAnalysisTool {
 					recordTypeSelectorNameSet.add(c.getName());
 				}
 				conf.setProperty(FSReader.CONFIG_ONLYRECORDS, Configuration.toProperty(recordTypeSelectorNameSet.toArray(new String[0])));
-				reader = new FSReader(conf, new AbstractRepository[0]);
+				reader = new FSReader(conf, new HashMap<String, AbstractRepository>());
 				analysisInstance.setReader(reader);
 			}
 

@@ -28,6 +28,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -113,7 +115,8 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 	private final SDModes sdmode;
 
 	// TODO Change constructor to plugin-default-constructor
-	public SequenceDiagramPlugin(final Configuration configuration, final AbstractRepository repositories[], final SDModes sdmode, final String outputFnBase,
+	public SequenceDiagramPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories, final SDModes sdmode,
+			final String outputFnBase,
 			final boolean shortLabels) {
 		super(configuration, repositories);
 		this.sdmode = sdmode;
@@ -333,7 +336,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 }

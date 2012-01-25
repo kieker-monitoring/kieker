@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Stack;
@@ -67,7 +68,7 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 	private final boolean shortLabels;
 
 	// TODO Change constructor to plugin-default-constructor
-	public TraceCallTreePlugin(final Configuration configuration, final AbstractRepository repositories[],
+	public TraceCallTreePlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories,
 			final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory,
 			final String outputFnBase, final boolean shortLabels) {
 		super(configuration, repositories);
@@ -269,8 +270,7 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
-
 }

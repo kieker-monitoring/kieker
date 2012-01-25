@@ -20,6 +20,9 @@
 
 package kieker.tools.logReplayer;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.port.OutputPort;
@@ -57,7 +60,7 @@ public class RealtimeReplayWorker extends AbstractAnalysisPlugin implements Runn
 	 */
 	public RealtimeReplayWorker(final IMonitoringRecord monRec, final RealtimeReplayDistributor rd, final AbstractAnalysisPlugin cons,
 			final String constInputPortName) {
-		super(new Configuration(), new AbstractRepository[0]);
+		super(new Configuration(), new HashMap<String, AbstractRepository>());
 		this.monRec = monRec;
 		this.rd = rd;
 
@@ -65,7 +68,7 @@ public class RealtimeReplayWorker extends AbstractAnalysisPlugin implements Runn
 	}
 
 	public RealtimeReplayWorker() {
-		super(new Configuration(), new AbstractRepository[0]);
+		super(new Configuration(), new HashMap<String, AbstractRepository>());
 		this.monRec = null;
 		this.rd = null;
 	}
@@ -106,12 +109,12 @@ public class RealtimeReplayWorker extends AbstractAnalysisPlugin implements Runn
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override
-	public AbstractRepository[] getCurrentRepositories() {
-		return new AbstractRepository[0];
+	public Map<String, AbstractRepository> getCurrentRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 }

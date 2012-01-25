@@ -20,6 +20,9 @@
 
 package kieker.examples.userguide.appendixSigar;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
@@ -50,7 +53,7 @@ public class AnalysisStarter {
 		final Configuration readerConfiguration = new Configuration();
 		final String inputDirs[] = { args[0] };
 		readerConfiguration.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(inputDirs));
-		final FSReader fsReader = new FSReader(readerConfiguration, new AbstractRepository[0]);
+		final FSReader fsReader = new FSReader(readerConfiguration, new HashMap<String, AbstractRepository>());
 		analysisInstance.setReader(fsReader);
 
 		/* Connect both components. */
@@ -65,7 +68,7 @@ class StdOutDumpConsumer extends AbstractAnalysisPlugin {
 
 	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
 
-	public StdOutDumpConsumer(final Configuration configuration, final AbstractRepository[] repositories) {
+	public StdOutDumpConsumer(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		super(configuration, repositories);
 	}
 
@@ -128,13 +131,13 @@ class StdOutDumpConsumer extends AbstractAnalysisPlugin {
 	}
 
 	@Override
-	public AbstractRepository[] getCurrentRepositories() {
-		return new AbstractRepository[0];
+	public Map<String, AbstractRepository> getCurrentRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override
-	public AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	public Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 
 }

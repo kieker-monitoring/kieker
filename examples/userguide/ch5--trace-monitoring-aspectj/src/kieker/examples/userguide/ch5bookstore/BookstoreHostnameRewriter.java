@@ -20,6 +20,7 @@
 
 package kieker.examples.userguide.ch5bookstore;
 
+import java.util.HashMap;
 import java.util.Random;
 
 import kieker.analysis.AnalysisController;
@@ -55,7 +56,7 @@ public class BookstoreHostnameRewriter {
 		final String inputDirs[] = { args[0] };
 		final Configuration configuration = new Configuration(null);
 		configuration.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(inputDirs));
-		final FSReader reader = new FSReader(configuration, new AbstractRepository[0]);
+		final FSReader reader = new FSReader(configuration, new HashMap<String, AbstractRepository>(0));
 		analysisInstance.setReader(reader);
 
 		/* Connect the reader with the plugin. */
@@ -79,7 +80,7 @@ class HostNameRewriterPlugin extends AbstractAnalysisPlugin {
 	private static final String CRM_HOSTNAME = "SRV0";
 
 	public HostNameRewriterPlugin() {
-		super(new Configuration(null), new AbstractRepository[0]);
+		super(new Configuration(null), new HashMap<String, AbstractRepository>());
 	}
 
 	@InputPort(eventTypes = { IMonitoringRecord.class })
@@ -125,12 +126,12 @@ class HostNameRewriterPlugin extends AbstractAnalysisPlugin {
 	}
 
 	@Override
-	public AbstractRepository[] getCurrentRepositories() {
-		return new AbstractRepository[0];
+	public HashMap<String, AbstractRepository> getCurrentRepositories() {
+		return new HashMap<String, AbstractRepository>(0);
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected HashMap<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>(0);
 	}
 }

@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -60,7 +61,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 	private final boolean includeSelfLoops;
 
 	// TODO Change constructor to plugin-default-constructor
-	public ComponentDependencyGraphPluginAllocation(final Configuration configuration, final AbstractRepository repositories[], final File dotOutputFile,
+	public ComponentDependencyGraphPluginAllocation(final Configuration configuration, final Map<String, AbstractRepository> repositories, final File dotOutputFile,
 			final boolean includeWeights, final boolean shortLabels, final boolean includeSelfLoops) {
 		// TODO Check type conversion
 		super(configuration, repositories, new DependencyGraph<AllocationComponent>(((SystemModelRepository) repositories[0]).getAllocationFactory()
@@ -218,7 +219,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 }

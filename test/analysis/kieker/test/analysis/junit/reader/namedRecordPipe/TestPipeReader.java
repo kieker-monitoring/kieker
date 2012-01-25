@@ -22,7 +22,9 @@ package kieker.test.analysis.junit.reader.namedRecordPipe;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -54,7 +56,7 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 		final String pipeName = NamedPipeFactory.createPipeName();
 		final Configuration configuration = new Configuration(null);
 		configuration.setProperty(PipeReader.CONFIG_PIPENAME, pipeName);
-		final PipeReader pipeReader = new PipeReader(configuration, new AbstractRepository[0]);
+		final PipeReader pipeReader = new PipeReader(configuration, new HashMap<String, AbstractRepository>());
 
 		final List<IMonitoringRecord> receivedRecords = Collections.synchronizedList(new ArrayList<IMonitoringRecord>());
 
@@ -92,7 +94,7 @@ class MonitoringSinkClass extends AbstractAnalysisPlugin {
 	private final List<IMonitoringRecord> receivedRecords;
 
 	public MonitoringSinkClass(final List<IMonitoringRecord> receivedRecords) {
-		super(new Configuration(), new AbstractRepository[0]);
+		super(new Configuration(), new HashMap<String, AbstractRepository>());
 		this.receivedRecords = receivedRecords;
 	}
 
@@ -120,12 +122,12 @@ class MonitoringSinkClass extends AbstractAnalysisPlugin {
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
 		return null;
 	}
 
 	@Override
-	public AbstractRepository[] getCurrentRepositories() {
+	public Map<String, AbstractRepository> getCurrentRepositories() {
 		return null;
 	}
 }

@@ -20,6 +20,8 @@
 
 package kieker.examples.userguide.appendixJMS;
 
+import java.util.HashMap;
+
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.repository.AbstractRepository;
@@ -33,7 +35,7 @@ public class Consumer extends AbstractAnalysisPlugin {
 	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
 	private final long maxResponseTime;
 
-	public Consumer(final Configuration configuration, final AbstractRepository repositories[]) {
+	public Consumer(final Configuration configuration, final HashMap<String, AbstractRepository> repositories) {
 		super(configuration, repositories);
 
 		this.maxResponseTime = configuration.getLongProperty(Consumer.CONFIG_MAX_RESPONSE_TIME);
@@ -87,12 +89,12 @@ public class Consumer extends AbstractAnalysisPlugin {
 	}
 
 	@Override
-	public AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	public HashMap<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override
-	public AbstractRepository[] getCurrentRepositories() {
-		return new AbstractRepository[0];
+	public HashMap<String, AbstractRepository> getCurrentRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 }

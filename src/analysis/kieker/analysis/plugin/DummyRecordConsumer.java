@@ -23,6 +23,8 @@ package kieker.analysis.plugin;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.plugin.port.OutputPort;
@@ -52,7 +54,7 @@ public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
 	private final PrintStream printStream;
 	private final String printStreamName;
 
-	public DummyRecordConsumer(final Configuration configuration, final AbstractRepository repositories[]) throws FileNotFoundException {
+	public DummyRecordConsumer(final Configuration configuration, final Map<String, AbstractRepository> repositories) throws FileNotFoundException {
 		super(configuration, repositories);
 
 		/* Get the name of the stream. */
@@ -118,12 +120,12 @@ public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override
-	public AbstractRepository[] getCurrentRepositories() {
-		return new AbstractRepository[0];
+	public Map<String, AbstractRepository> getCurrentRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 }

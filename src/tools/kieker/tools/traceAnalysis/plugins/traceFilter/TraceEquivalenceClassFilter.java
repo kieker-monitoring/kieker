@@ -60,6 +60,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	public static final String MSG_TRACES_OUTPUT_PORT_NAME = "messageTracesOutput";
 	public static final String EXECUTION_TRACES_OUTPUT_PORT_NAME = "executionTracesOutput";
 	public static final String EXECUTION_TRACES_INPUT_PORT_NAME = "newExecutionTrace";
+	public static final String ROOT_EXECUTION_REPOSITORY_NAME = TraceEquivalenceClassFilter.class.getName() + ".rootExecution";
 	private static final Log LOG = LogFactory.getLog(TraceEquivalenceClassFilter.class);
 
 	public static enum TraceEquivalenceClassModes {
@@ -72,12 +73,13 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	private final Map<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap = new HashMap<AbstractExecutionTraceHashContainer, AtomicInteger>(); // NOPMD
 
 	// TODO Change constructor to plugin-default-constructor
-	public TraceEquivalenceClassFilter(final Configuration configuration, final AbstractRepository repositories[],
+	public TraceEquivalenceClassFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories,
 			final TraceEquivalenceClassModes traceEquivalenceCallMode) {
 		super(configuration, repositories);
 		/* Load the root execution from the repository if possible. */
-		if ((repositories.length >= 1) && (repositories[0] instanceof SystemModelRepository)) {
-			this.rootExecution = ((SystemModelRepository) repositories[0]).getRootExecution();
+		if (repositories.containsKey(TraceEquivalenceClassFilter.ROOT_EXECUTION_REPOSITORY_NAME)
+				&& (repositories.get(TraceEquivalenceClassFilter.ROOT_EXECUTION_REPOSITORY_NAME) instanceof SystemModelRepository)) {
+			this.rootExecution = ((SystemModelRepository) repositories.get(TraceEquivalenceClassFilter.ROOT_EXECUTION_REPOSITORY_NAME)).getRootExecution();
 		} else {
 			this.rootExecution = null;
 		}
@@ -159,7 +161,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 }

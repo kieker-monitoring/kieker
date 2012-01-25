@@ -1,7 +1,9 @@
 package kieker.test.tools.junit.traceAnalysis.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.InputPort;
@@ -14,7 +16,7 @@ public class SimpleSinkPlugin extends AbstractAnalysisPlugin {
 	private final List<Object> list = new ArrayList<Object>();
 
 	public SimpleSinkPlugin() {
-		super(new Configuration(), new AbstractRepository[0]);
+		super(new Configuration(), new HashMap<String, AbstractRepository>());
 	}
 
 	@InputPort()
@@ -49,12 +51,12 @@ public class SimpleSinkPlugin extends AbstractAnalysisPlugin {
 	public void terminate(final boolean error) {}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override
-	public AbstractRepository[] getCurrentRepositories() {
-		return new AbstractRepository[0];
+	public Map<String, AbstractRepository> getCurrentRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 }

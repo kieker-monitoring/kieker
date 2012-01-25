@@ -20,6 +20,8 @@
 
 package kieker.tools.traceAnalysis.plugins;
 
+import java.util.Map;
+
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
@@ -33,7 +35,7 @@ public abstract class AbstractMessageTraceProcessingPlugin extends AbstractTrace
 
 	public static final String MESSAGE_TRACE_INPUT_PORT_NAME = "msgTraceInput";
 
-	public AbstractMessageTraceProcessingPlugin(final Configuration configuration, final AbstractRepository repositories[]) {
+	public AbstractMessageTraceProcessingPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		super(configuration, repositories);
 	}
 

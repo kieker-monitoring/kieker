@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -58,7 +59,7 @@ public abstract class AbstractPlugin {
 	/**
 	 * Each Plugin requires a constructor with a single Configuration object and an array of repositories!
 	 */
-	public AbstractPlugin(final Configuration configuration, final AbstractRepository repositories[]) {
+	public AbstractPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		try {
 			// TODO: somewhat dirty hack...
 			final Configuration defaultConfig = this.getDefaultConfiguration(); // NOPMD
@@ -109,7 +110,7 @@ public abstract class AbstractPlugin {
 	 * 
 	 * @return The default repositories (which can be an empty array if necessary).
 	 */
-	protected abstract AbstractRepository[] getDefaultRepositories();
+	protected abstract Map<String, AbstractRepository> getDefaultRepositories();
 
 	/**
 	 * This method should deliver a {@code Configuration} object containing the current configuration of this instance. In other words: The constructor should be
@@ -125,7 +126,7 @@ public abstract class AbstractPlugin {
 	 * 
 	 * @return An (possible empty) array of repositories.
 	 */
-	public abstract AbstractRepository[] getCurrentRepositories();
+	public abstract Map<String, AbstractRepository> getCurrentRepositories();
 
 	/**
 	 * This method delivers the current name of this plugin. The name does not have to be unique.

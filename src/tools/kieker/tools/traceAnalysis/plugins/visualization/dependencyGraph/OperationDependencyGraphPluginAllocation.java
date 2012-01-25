@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -71,7 +72,7 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 	private final boolean shortLabels;
 	private final boolean includeSelfLoops;
 
-	public OperationDependencyGraphPluginAllocation(final Configuration configuration, final AbstractRepository repositories[]) {
+	public OperationDependencyGraphPluginAllocation(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		// TODO Check type conversion
 		super(configuration, repositories, new DependencyGraph<AllocationComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 				new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID, ((SystemModelRepository) repositories[0]).getOperationFactory()
@@ -283,7 +284,7 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 }

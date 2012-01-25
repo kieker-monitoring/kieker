@@ -1,8 +1,10 @@
 package kieker.test.analysis.junit.plugin;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
@@ -33,8 +35,9 @@ public class GeneralPluginTest {
 
 	@Test
 	public void testChaining() {
-		final ExecutionRecordTransformationFilter transformer = new ExecutionRecordTransformationFilter(new Configuration(),
-				new AbstractRepository[] { new SystemModelRepository(new Configuration()) });
+		final Map<String, AbstractRepository> repoHashMap = new HashMap<String, AbstractRepository>();
+		repoHashMap.put(ExecutionRecordTransformationFilter.SYSTEM_MODEL_REPOSITORY_NAME, new SystemModelRepository(new Configuration()));
+		final ExecutionRecordTransformationFilter transformer = new ExecutionRecordTransformationFilter(new Configuration(), repoHashMap);
 		final TraceIdFilter filter1 = new TraceIdFilter(new HashSet<Long>(Arrays.asList(new Long[] { 1l })));
 		final TimestampFilter filter2 = new TimestampFilter(10, 20);
 
@@ -48,7 +51,7 @@ public class GeneralPluginTest {
 		final OperationExecutionRecord opExRec7 = new OperationExecutionRecord("", "", 1, 9, 21);
 		final OperationExecutionRecord opExRec8 = new OperationExecutionRecord("", "", 1, 10, 20);
 		final SourceClass src = new SourceClass(opExRec1, opExRec2, opExRec3, opExRec4, opExRec5, opExRec6, opExRec7, opExRec8);
-		final ExecutionSinkClass dst = new ExecutionSinkClass(new Configuration(), new AbstractRepository[0]);
+		final ExecutionSinkClass dst = new ExecutionSinkClass(new Configuration(), new HashMap<String, AbstractRepository>());
 
 		/* Connect the plugins. */
 		Assert.assertTrue(AbstractPlugin.connect(src, SourceClass.OUTPUT_PORT_NAME, transformer, ExecutionRecordTransformationFilter.INPUT_PORT_NAME));
@@ -90,7 +93,7 @@ class SourceClass extends AbstractReaderPlugin {
 	public static final String OUTPUT_PORT_NAME = "output";
 
 	public SourceClass(final OperationExecutionRecord... records) {
-		super(new Configuration(), new AbstractRepository[0]);
+		super(new Configuration(), new HashMap<String, AbstractRepository>());
 		this.records = records;
 	}
 
@@ -116,12 +119,12 @@ class SourceClass extends AbstractReaderPlugin {
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
 		return null;
 	}
 
 	@Override
-	public AbstractRepository[] getCurrentRepositories() {
+	public Map<String, AbstractRepository> getCurrentRepositories() {
 		return null;
 	}
 
@@ -132,7 +135,7 @@ class ExecutionSinkClass extends AbstractAnalysisPlugin {
 	public static final String INPUT_PORT_NAME = "doJob";
 	private final ConcurrentLinkedQueue<Execution> lst = new ConcurrentLinkedQueue<Execution>();
 
-	public ExecutionSinkClass(final Configuration configuration, final AbstractRepository repositories[]) {
+	public ExecutionSinkClass(final Configuration configuration, final HashMap<String, AbstractRepository> repositories) {
 		super(configuration, repositories);
 	}
 
@@ -164,12 +167,12 @@ class ExecutionSinkClass extends AbstractAnalysisPlugin {
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
 		return null;
 	}
 
 	@Override
-	public AbstractRepository[] getCurrentRepositories() {
+	public Map<String, AbstractRepository> getCurrentRepositories() {
 		return null;
 	}
 }

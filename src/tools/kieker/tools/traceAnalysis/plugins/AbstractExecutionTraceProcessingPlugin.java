@@ -20,6 +20,8 @@
 
 package kieker.tools.traceAnalysis.plugins;
 
+import java.util.Map;
+
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 
@@ -29,7 +31,7 @@ import kieker.common.configuration.Configuration;
  */
 public abstract class AbstractExecutionTraceProcessingPlugin extends AbstractTraceProcessingPlugin {
 
-	public AbstractExecutionTraceProcessingPlugin(final Configuration configuration, final AbstractRepository repositories[]) {
+	public AbstractExecutionTraceProcessingPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		super(configuration, repositories);
 	}
 

@@ -21,7 +21,9 @@
 package kieker.analysis.reader.jms;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import javax.jms.Connection;
@@ -86,7 +88,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 	 * @throws IllegalArgumentException
 	 *             If one of the properties is empty.
 	 */
-	public JMSReader(final Configuration configuration, final AbstractRepository repositories[]) throws IllegalArgumentException {
+	public JMSReader(final Configuration configuration, final Map<String, AbstractRepository> repositories) throws IllegalArgumentException {
 		/* Call the inherited constructor. */
 		super(configuration, repositories);
 		/* Initialize the reader bases on the given configuration. */
@@ -224,12 +226,12 @@ public final class JMSReader extends AbstractReaderPlugin {
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override
-	public AbstractRepository[] getCurrentRepositories() {
-		return new AbstractRepository[0];
+	public Map<String, AbstractRepository> getCurrentRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 }

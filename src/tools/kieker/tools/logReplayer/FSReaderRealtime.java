@@ -21,6 +21,8 @@
 package kieker.tools.logReplayer;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.concurrent.CountDownLatch;
 
@@ -73,7 +75,7 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 	 *            <li>The property {@code numWorkers}
 	 *            </ul>
 	 */
-	public FSReaderRealtime(final Configuration configuration, final AbstractRepository[] repositories) {
+	public FSReaderRealtime(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		super(configuration, repositories);
 
 		this.init(configuration);
@@ -133,7 +135,7 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 
 		final Configuration configuration = new Configuration(null);
 		configuration.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(inputDirNames));
-		final AbstractReaderPlugin fsReader = new FSReader(configuration, new AbstractRepository[0]);
+		final AbstractReaderPlugin fsReader = new FSReader(configuration, new HashMap<String, AbstractRepository>());
 		final AbstractAnalysisPlugin rtCons = new FSReaderRealtimeCons(this);
 		this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, this.terminationLatch, FSReaderRealtimeCons.INPUT_PORT);
 		this.analysis.setReader(fsReader);
@@ -185,13 +187,13 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override
-	public AbstractRepository[] getCurrentRepositories() {
-		return new AbstractRepository[0];
+	public Map<String, AbstractRepository> getCurrentRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 
 	/**
@@ -209,7 +211,7 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		private final FSReaderRealtime master;
 
 		public FSReaderRealtimeCons(final FSReaderRealtime master) {
-			super(new Configuration(null), new AbstractRepository[0]);
+			super(new Configuration(null), new HashMap<String, AbstractRepository>());
 			this.master = master;
 		}
 
@@ -249,13 +251,13 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		}
 
 		@Override
-		protected AbstractRepository[] getDefaultRepositories() {
-			return new AbstractRepository[0];
+		protected Map<String, AbstractRepository> getDefaultRepositories() {
+			return new HashMap<String, AbstractRepository>();
 		}
 
 		@Override
-		public AbstractRepository[] getCurrentRepositories() {
-			return new AbstractRepository[0];
+		public Map<String, AbstractRepository> getCurrentRepositories() {
+			return new HashMap<String, AbstractRepository>();
 		}
 	}
 }

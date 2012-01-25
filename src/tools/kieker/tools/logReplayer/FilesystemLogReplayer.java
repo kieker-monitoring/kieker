@@ -21,6 +21,8 @@
 package kieker.tools.logReplayer;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
@@ -110,11 +112,11 @@ public class FilesystemLogReplayer {
 			final Configuration configuration = new Configuration();
 			configuration.setProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES, Configuration.toProperty(this.inputDirs));
 			configuration.setProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS, Integer.toString(this.numRealtimeWorkerThreads));
-			fsReader = new FSReaderRealtime(configuration, new AbstractRepository[0]);
+			fsReader = new FSReaderRealtime(configuration, new HashMap<String, AbstractRepository>());
 		} else {
 			final Configuration configuration = new Configuration(null);
 			configuration.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(this.inputDirs));
-			fsReader = new FSReader(configuration, new AbstractRepository[0]);
+			fsReader = new FSReader(configuration, new HashMap<String, AbstractRepository>());
 		}
 		final AnalysisController tpanInstance = new AnalysisController();
 		tpanInstance.setReader(fsReader);
@@ -162,7 +164,7 @@ class RecordDelegationPlugin extends AbstractAnalysisPlugin {
 	 * @param ignoreRecordsAfterTimestamp
 	 */
 	public RecordDelegationPlugin(final IMonitoringController rec, final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp) {
-		super(new Configuration(null), new AbstractRepository[0]);
+		super(new Configuration(null), new HashMap<String, AbstractRepository>());
 
 		this.rec = rec;
 		this.ignoreRecordsBeforeTimestamp = ignoreRecordsBeforeTimestamp;
@@ -218,12 +220,12 @@ class RecordDelegationPlugin extends AbstractAnalysisPlugin {
 	}
 
 	@Override
-	protected AbstractRepository[] getDefaultRepositories() {
-		return new AbstractRepository[0];
+	protected Map<String, AbstractRepository> getDefaultRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override
-	public AbstractRepository[] getCurrentRepositories() {
-		return new AbstractRepository[0];
+	public Map<String, AbstractRepository> getCurrentRepositories() {
+		return new HashMap<String, AbstractRepository>();
 	}
 }
