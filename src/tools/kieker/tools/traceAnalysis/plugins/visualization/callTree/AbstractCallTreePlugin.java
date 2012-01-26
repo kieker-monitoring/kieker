@@ -59,7 +59,7 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
 
 	private static final Log LOG = LogFactory.getLog(AbstractCallTreePlugin.class);
 
-	public AbstractCallTreePlugin(final Configuration configuration, final AbstractRepository repositories[]) {
+	public AbstractCallTreePlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		super(configuration, repositories);
 	}
 

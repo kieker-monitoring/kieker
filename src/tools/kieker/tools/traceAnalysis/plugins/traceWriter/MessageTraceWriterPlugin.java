@@ -46,7 +46,7 @@ public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlug
 	private final String outputFn;
 	private final BufferedWriter ps;
 
-	public MessageTraceWriterPlugin(final Configuration configuration, final AbstractRepository repositories[]) throws IOException {
+	public MessageTraceWriterPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories) throws IOException {
 		super(configuration, repositories);
 		this.outputFn = this.configuration.getStringProperty(MessageTraceWriterPlugin.CONFIG_OUTPUT_FN);
 		this.ps = new BufferedWriter(new FileWriter(this.outputFn));

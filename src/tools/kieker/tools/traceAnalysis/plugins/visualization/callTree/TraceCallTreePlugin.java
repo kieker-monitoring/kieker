@@ -35,6 +35,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceProcessingException;
 import kieker.tools.traceAnalysis.plugins.visualization.util.IntContainer;
 import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
@@ -74,7 +75,7 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 		super(configuration, repositories);
 		this.allocationComponentOperationPairFactory = allocationComponentOperationPairFactory;
 		// TODO Check type conversion
-		this.systemEntityFactory = (SystemModelRepository) repositories[0];
+		this.systemEntityFactory = (SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME);
 		this.root = new CallTreeNode(null, // null: root node has no parent
 				new CallTreeOperationHashKey(this.systemEntityFactory.getAllocationFactory().getRootAllocationComponent(),
 						this.systemEntityFactory.getOperationFactory().getRootOperation()));

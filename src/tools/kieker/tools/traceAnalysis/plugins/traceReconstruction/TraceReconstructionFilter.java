@@ -35,6 +35,7 @@ import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.plugins.executionRecordTransformation.ExecutionEventProcessingException;
 import kieker.tools.traceAnalysis.systemModel.Execution;
@@ -113,8 +114,9 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 		super(configuration, repositories);
 
 		/* Load the root execution from the repository if possible. */
-		if ((repositories.length >= 1) && (repositories[0] instanceof SystemModelRepository)) {
-			this.rootExecution = ((SystemModelRepository) repositories[0]).getRootExecution();
+		if ((repositories.containsKey(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME) && (repositories
+				.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME) instanceof SystemModelRepository))) {
+			this.rootExecution = ((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getRootExecution();
 		} else {
 			this.rootExecution = null;
 		}

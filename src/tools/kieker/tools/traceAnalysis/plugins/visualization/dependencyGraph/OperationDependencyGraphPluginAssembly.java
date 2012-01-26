@@ -35,6 +35,7 @@ import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
@@ -70,13 +71,16 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 	private final boolean shortLabels;
 	private final boolean includeSelfLoops;
 
-	public OperationDependencyGraphPluginAssembly(final Configuration configuration, final AbstractRepository repositories[]) {
+	public OperationDependencyGraphPluginAssembly(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		// TODO Check type conversion
 		super(configuration, repositories, new DependencyGraph<AssemblyComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-				new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID, ((SystemModelRepository) repositories[0]).getOperationFactory()
-						.getRootOperation(),
-						((SystemModelRepository) repositories[0]).getAssemblyFactory().getRootAssemblyComponent())));
-		this.pairFactory = new AssemblyComponentOperationPairFactory(((SystemModelRepository) repositories[0]));
+				new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+						((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getOperationFactory()
+								.getRootOperation(),
+						((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getAssemblyFactory()
+								.getRootAssemblyComponent())));
+		this.pairFactory = new AssemblyComponentOperationPairFactory(
+				((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)));
 		this.dotOutputFile = new File(this.configuration.getStringProperty(OperationDependencyGraphPluginAssembly.CONFIG_DOT_OUTPUT_FILE));
 		this.includeWeights = this.configuration.getBooleanProperty(OperationDependencyGraphPluginAssembly.CONFIG_INCLUDE_WEIGHTS);
 		this.shortLabels = this.configuration.getBooleanProperty(OperationDependencyGraphPluginAssembly.CONFIG_SHORT_LABELS);

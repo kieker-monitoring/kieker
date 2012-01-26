@@ -46,7 +46,7 @@ public class AnalysisStarter {
 		/* Create Kieker.Analysis instance */
 		final AnalysisController analysisInstance = new AnalysisController();
 		/* Create a register our own consumer */
-		final StdOutDumpConsumer consumer = new StdOutDumpConsumer(new Configuration(), new AbstractRepository[0]);
+		final StdOutDumpConsumer consumer = new StdOutDumpConsumer(new Configuration(), new HashMap<String, AbstractRepository>());
 		analysisInstance.registerPlugin(consumer);
 
 		/* Set filesystem monitoring log input directory for our analysis */

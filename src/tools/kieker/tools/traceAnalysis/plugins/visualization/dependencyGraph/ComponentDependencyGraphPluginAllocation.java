@@ -35,6 +35,7 @@ import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
@@ -64,10 +65,13 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 	public ComponentDependencyGraphPluginAllocation(final Configuration configuration, final Map<String, AbstractRepository> repositories, final File dotOutputFile,
 			final boolean includeWeights, final boolean shortLabels, final boolean includeSelfLoops) {
 		// TODO Check type conversion
-		super(configuration, repositories, new DependencyGraph<AllocationComponent>(((SystemModelRepository) repositories[0]).getAllocationFactory()
-				.getRootAllocationComponent()
-				.getId(),
-				((SystemModelRepository) repositories[0]).getAllocationFactory().getRootAllocationComponent()));
+		super(configuration, repositories, new DependencyGraph<AllocationComponent>(
+				((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME))
+						.getAllocationFactory()
+						.getRootAllocationComponent()
+						.getId(),
+				((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getAllocationFactory()
+						.getRootAllocationComponent()));
 		this.dotOutputFile = dotOutputFile;
 		this.includeWeights = includeWeights;
 		this.shortLabels = shortLabels;

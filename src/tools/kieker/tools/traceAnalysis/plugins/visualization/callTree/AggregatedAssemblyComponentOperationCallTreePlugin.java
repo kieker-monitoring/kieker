@@ -21,9 +21,11 @@
 package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 
 import java.io.File;
+import java.util.Map;
 
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
@@ -39,12 +41,12 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
 public class AggregatedAssemblyComponentOperationCallTreePlugin extends AggregatedCallTreePlugin<AssemblyComponentOperationPair> {
 
 	// TODO Change constructor to plugin-default-constructor
-	public AggregatedAssemblyComponentOperationCallTreePlugin(final Configuration configuration, final AbstractRepository repositories[],
+	public AggregatedAssemblyComponentOperationCallTreePlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories,
 			final AssemblyComponentOperationPairFactory assemblyComponentOperationPairFactory,
 			final File dotOutputFile, final boolean includeWeights, final boolean shortLabels) {
 		// TODO Check type conversion
 		super(configuration, repositories, new AggregatedAssemblyComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-				(SystemModelRepository) repositories[0],
+				(SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME),
 				assemblyComponentOperationPairFactory, assemblyComponentOperationPairFactory.getRootPair(), true), // root node
 				dotOutputFile, includeWeights, shortLabels);
 	}

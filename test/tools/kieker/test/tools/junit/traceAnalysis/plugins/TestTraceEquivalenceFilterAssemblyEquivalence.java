@@ -20,6 +20,9 @@
 
 package kieker.test.tools.junit.traceAnalysis.plugins;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.repository.AbstractRepository;
@@ -64,7 +67,9 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase { //
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, "TraceEquivalenceClassFilter");
 
-		final TraceEquivalenceClassFilter filter = new TraceEquivalenceClassFilter(configuration, new AbstractRepository[] { this.systemEntityFactory },
+		final Map<String, AbstractRepository> repositoryMap = new HashMap<String, AbstractRepository>();
+		repositoryMap.put(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
+		final TraceEquivalenceClassFilter filter = new TraceEquivalenceClassFilter(configuration, repositoryMap,
 				TraceEquivalenceClassFilter.TraceEquivalenceClassModes.ASSEMBLY);
 
 		/*

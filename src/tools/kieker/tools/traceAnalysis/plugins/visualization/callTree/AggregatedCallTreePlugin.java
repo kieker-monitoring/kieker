@@ -49,7 +49,8 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 	private int numGraphsSaved = 0;
 
 	// TODO Change constructor to plugin-default-constructor
-	public AggregatedCallTreePlugin(final Configuration configuration, final AbstractRepository repositories[], final AbstractAggregatedCallTreeNode<T> root,
+	public AggregatedCallTreePlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories,
+			final AbstractAggregatedCallTreeNode<T> root,
 			final File dotOutputFile, final boolean includeWeights, final boolean shortLabels) {
 		super(configuration, repositories);
 		this.root = root;

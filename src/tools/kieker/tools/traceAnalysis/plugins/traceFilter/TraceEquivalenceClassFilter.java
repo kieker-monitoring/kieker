@@ -33,6 +33,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractExecutionTraceProcessingPlugin;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
@@ -60,7 +61,6 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	public static final String MSG_TRACES_OUTPUT_PORT_NAME = "messageTracesOutput";
 	public static final String EXECUTION_TRACES_OUTPUT_PORT_NAME = "executionTracesOutput";
 	public static final String EXECUTION_TRACES_INPUT_PORT_NAME = "newExecutionTrace";
-	public static final String ROOT_EXECUTION_REPOSITORY_NAME = TraceEquivalenceClassFilter.class.getName() + ".rootExecution";
 	private static final Log LOG = LogFactory.getLog(TraceEquivalenceClassFilter.class);
 
 	public static enum TraceEquivalenceClassModes {
@@ -77,9 +77,9 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 			final TraceEquivalenceClassModes traceEquivalenceCallMode) {
 		super(configuration, repositories);
 		/* Load the root execution from the repository if possible. */
-		if (repositories.containsKey(TraceEquivalenceClassFilter.ROOT_EXECUTION_REPOSITORY_NAME)
-				&& (repositories.get(TraceEquivalenceClassFilter.ROOT_EXECUTION_REPOSITORY_NAME) instanceof SystemModelRepository)) {
-			this.rootExecution = ((SystemModelRepository) repositories.get(TraceEquivalenceClassFilter.ROOT_EXECUTION_REPOSITORY_NAME)).getRootExecution();
+		if (repositories.containsKey(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)
+				&& (repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME) instanceof SystemModelRepository)) {
+			this.rootExecution = ((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getRootExecution();
 		} else {
 			this.rootExecution = null;
 		}

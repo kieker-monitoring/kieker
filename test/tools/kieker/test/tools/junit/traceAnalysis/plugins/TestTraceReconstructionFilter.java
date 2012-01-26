@@ -20,6 +20,9 @@
 
 package kieker.test.tools.junit.traceAnalysis.plugins;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.plugin.AbstractPlugin;
@@ -126,7 +129,9 @@ public class TestTraceReconstructionFilter extends TestCase {
 		configuration.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, "TraceReconstructionFilter");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, "true");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Integer.toString(TraceReconstructionFilter.MAX_DURATION_MILLIS));
-		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, new AbstractRepository[] { this.systemEntityFactory });
+		final Map<String, AbstractRepository> repositoryMap = new HashMap<String, AbstractRepository>();
+		repositoryMap.put(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
+		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, repositoryMap);
 
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout",
 				validExecutionTrace.getDurationInNanos() <= filter.getMaxTraceDurationNanos());
@@ -238,7 +243,9 @@ public class TestTraceReconstructionFilter extends TestCase {
 		configuration.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, "TraceReconstructionFilter");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, "true");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Integer.toString(TraceReconstructionFilter.MAX_DURATION_MILLIS));
-		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, new AbstractRepository[] { this.systemEntityFactory });
+		final Map<String, AbstractRepository> repositoryMap = new HashMap<String, AbstractRepository>();
+		repositoryMap.put(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
+		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, repositoryMap);
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout",
 				invalidExecutionTrace.getDurationInNanos() <= filter.getMaxTraceDurationNanos());
 
@@ -381,7 +388,9 @@ public class TestTraceReconstructionFilter extends TestCase {
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, "true");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Long.toString(
 				((triggerExecutionTrace.getMaxTout() - incompleteExecutionTrace.getMinTin()) / (1000 * 1000)) - 1));
-		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, new AbstractRepository[] { this.systemEntityFactory });
+		final Map<String, AbstractRepository> repositoryMap = new HashMap<String, AbstractRepository>();
+		repositoryMap.put(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
+		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, repositoryMap);
 
 		final SimpleSinkPlugin executionTraceSink = new SimpleSinkPlugin();
 		final SimpleSinkPlugin messageTraceSink = new SimpleSinkPlugin();

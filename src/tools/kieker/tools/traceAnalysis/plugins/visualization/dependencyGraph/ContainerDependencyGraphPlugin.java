@@ -32,6 +32,7 @@ import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
@@ -61,11 +62,13 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 	private final boolean shortLabels;
 	private final boolean includeSelfLoops;
 
-	public ContainerDependencyGraphPlugin(final Configuration configuration, final AbstractRepository repositories[]) {
+	public ContainerDependencyGraphPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		// TODO Check type conversion
 		super(configuration, repositories, new DependencyGraph<ExecutionContainer>(
-				((SystemModelRepository) repositories[0]).getExecutionEnvironmentFactory().getRootExecutionContainer().getId(),
-				((SystemModelRepository) repositories[0]).getExecutionEnvironmentFactory().getRootExecutionContainer()));
+				((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getExecutionEnvironmentFactory()
+						.getRootExecutionContainer().getId(),
+				((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getExecutionEnvironmentFactory()
+						.getRootExecutionContainer()));
 
 		this.dotOutputFile = new File(configuration.getStringProperty(ContainerDependencyGraphPlugin.CONFIG_DOT_OUTPUT_FILE));
 		this.includeWeights = configuration.getBooleanProperty(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_WEIGHTS);

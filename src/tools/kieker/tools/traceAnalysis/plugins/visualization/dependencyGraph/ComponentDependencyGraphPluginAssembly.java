@@ -32,6 +32,7 @@ import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
@@ -60,11 +61,14 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 	private final boolean shortLabels;
 	private final boolean includeSelfLoops;
 
-	public ComponentDependencyGraphPluginAssembly(final Configuration configuration, final AbstractRepository repositories[]) {
+	public ComponentDependencyGraphPluginAssembly(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		// TODO Check type conversion
-		super(configuration, repositories, new DependencyGraph<AssemblyComponent>(((SystemModelRepository) repositories[0]).getAssemblyFactory()
-				.getRootAssemblyComponent().getId(),
-				((SystemModelRepository) repositories[0]).getAssemblyFactory().getRootAssemblyComponent()));
+		super(configuration, repositories,
+				new DependencyGraph<AssemblyComponent>(
+						((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getAssemblyFactory()
+								.getRootAssemblyComponent().getId(),
+						((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getAssemblyFactory()
+								.getRootAssemblyComponent()));
 		this.dotOutputFile = new File(configuration.getStringProperty(ComponentDependencyGraphPluginAssembly.CONFIG_DOT_OUTPUT_FILE));
 		this.includeWeights = configuration.getBooleanProperty(ComponentDependencyGraphPluginAssembly.CONFIG_INCLUDE_WEIGHTS);
 		this.shortLabels = configuration.getBooleanProperty(ComponentDependencyGraphPluginAssembly.CONFIG_SHORT_LABELS);

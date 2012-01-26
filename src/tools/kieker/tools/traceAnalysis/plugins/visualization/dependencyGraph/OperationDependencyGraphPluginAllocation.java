@@ -35,6 +35,7 @@ import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
@@ -75,10 +76,13 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 	public OperationDependencyGraphPluginAllocation(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		// TODO Check type conversion
 		super(configuration, repositories, new DependencyGraph<AllocationComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-				new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID, ((SystemModelRepository) repositories[0]).getOperationFactory()
-						.getRootOperation(),
-						((SystemModelRepository) repositories[0]).getAllocationFactory().getRootAllocationComponent())));
-		this.pairFactory = new AllocationComponentOperationPairFactory(((SystemModelRepository) repositories[0]));
+				new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+						((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getOperationFactory()
+								.getRootOperation(),
+						((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getAllocationFactory()
+								.getRootAllocationComponent())));
+		this.pairFactory = new AllocationComponentOperationPairFactory(
+				((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)));
 		this.dotOutputFile = new File(this.configuration.getStringProperty(OperationDependencyGraphPluginAllocation.CONFIG_DOT_OUTPUT_FILE));
 		this.includeWeights = this.configuration.getBooleanProperty(OperationDependencyGraphPluginAllocation.CONFIG_INCLUDE_WEIGHTS);
 		this.shortLabels = this.configuration.getBooleanProperty(OperationDependencyGraphPluginAllocation.CONFIG_SHORT_LABELS);
