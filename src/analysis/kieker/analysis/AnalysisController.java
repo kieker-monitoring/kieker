@@ -117,10 +117,9 @@ public final class AnalysisController {
 	 */
 	public AnalysisController(final File file) throws Exception {
 		/* Try to load everything. */
-		final EList<EObject> content = AnalysisController.openModelFile(file);
-		if ((content != null) && !content.isEmpty()) {
-			// The first (and only) element should be the project. Use it to configure this instance.
-			final MIProject project = (MIProject) content.get(0);
+		final MIProject project = AnalysisController.loadFromFile(file);
+		if (project != null) {
+			// Use the project to configure this instance.
 			try {
 				this.loadFromModelProject(project);
 			} catch (final Exception ex) {
@@ -132,6 +131,15 @@ public final class AnalysisController {
 		} else {
 			// TODO: handle else!
 		}
+	}
+
+	public static final MIProject loadFromFile(final File file) throws Exception {
+		final EList<EObject> content = AnalysisController.openModelFile(file);
+		if ((content != null) && !content.isEmpty()) {
+			// The first (and only) element should be the project.
+			return (MIProject) content.get(0);
+		}
+		return null;
 	}
 
 	private final Configuration modelPropertiesToConfiguration(final EList<MIProperty> mProperties) {
