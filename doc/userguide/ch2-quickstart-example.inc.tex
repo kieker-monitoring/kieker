@@ -102,23 +102,23 @@ The directory structure of the Bookstore example is shown in Figure~\ref{fig:Pla
 
 \setJavaCodeListing
 
-\lstinputlisting[caption=BookstoreStarter.java,label=lst:class:BookstoreStarter,firstline=21,firstnumber=21]{\plainBookstoreApplicationDir/src/bookstoreApplication/BookstoreStarter.java}
+\lstinputlisting[caption=BookstoreStarter.java,label=lst:class:BookstoreStarter,firstline=21,firstnumber=21]{\plainBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/BookstoreStarter.java}
 
 \noindent The \class{Bookstore}, shown in Listing~\ref{lst:class:Bookstore}, contains a catalog and a CRM object, representing the catalog of the bookstore and a customer relationship management system which can provide offers for books out of the catalog. The business method of the bookstore is \method{searchBook()} which will first check the catalog for books and then check for offers.
 
 In a real application these methods would pass objects to ensure the results of the catalog search will be available to the offer collecting method. However, for our example we omitted such code. 
 
-\lstinputlisting[caption=Bookstore.java,label=lst:class:Bookstore,firstline=21,firstnumber=21]{\plainBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
+\lstinputlisting[caption=Bookstore.java,label=lst:class:Bookstore,firstline=21,firstnumber=21]{\plainBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/Bookstore.java}
 
 \noindent The customer relationship management for this application is modeled in the \class{CRM} class shown in Listing~\ref{lst:class:CRM}. It only provides a business method to collect offers which uses the catalog for some lookup. The additional catalog lookup is later used to illustrate different traces in the application.
 
-\lstinputlisting[caption=CRM.java,label=lst:class:CRM,firstline=21,firstnumber=21]{\plainBookstoreApplicationDir/src/bookstoreApplication/CRM.java}
+\lstinputlisting[caption=CRM.java,label=lst:class:CRM,firstline=21,firstnumber=21]{\plainBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/CRM.java}
 
 \pagebreak
 
 \noindent The final class is \class{Catalog} shown in Listing~\ref{lst:class:Catalog}. It resembles the catalog component in the application.
 
-\lstinputlisting[caption=Catalog.java,label=lst:class:Catalog,firstline=21,firstnumber=21]{\plainBookstoreApplicationDir/src/bookstoreApplication/Catalog.java}
+\lstinputlisting[caption=Catalog.java,label=lst:class:Catalog,firstline=21,firstnumber=21]{\plainBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/Catalog.java}
 
 \noindent After this brief introduction of the application and its implementation, the next step is to see the example running. To compile and run the example, the commands in Listing~\ref{lst:bookstoreStarterNoInstr} can be executed. This document assumes that the reader enters the commands in the example directory. For this first example this is \dir{examples/userquide/ch2--bookstore-application/}.
 \\
@@ -219,7 +219,7 @@ Listing~\ref{lst:cuttingBookstore} shows the instrumentation of the \class{Books
 
 \setJavaCodeListing
 \lstinputlisting[linerange={32-50}, firstnumber=32, caption=Instrumentation of the \method{getBook()} call in Bookstore.java, label=lst:cuttingBookstore]%
-{\manualInstrumentedBookstoreApplicationDir/src/bookstoreApplication/Bookstore.java}
+{\manualInstrumentedBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/manual/Bookstore.java}
  
 \noindent The lines 38 and 40 are used to determine the current time in nanoseconds before and after the \method{getBook()} call. In lines 41 to 44, a monitoring record for this measurement is created and initialized with the two time values. Additionally, the record has an attribute for the involved class \verb!Catalog! and the called method \method{getBook()}. Finally the record is handed over to the monitoring controller which calls a monitoring writer to persist the record. %
 In this example, the filesystem writer is used---\Kieker{} uses this writer by default when no other writer is specified, %
@@ -231,7 +231,7 @@ Finally, a record is created (see lines 43--46) and stored by calling the monito
 
 \setJavaCodeListing
 \lstinputlisting[firstline=37, firstnumber=37, lastline=48, caption=Instrumentation of the \method{getBook()} call in CRM.java, label=lst:cuttingCRM]%
-{\manualInstrumentedBookstoreApplicationDir/src/bookstoreApplication/CRM.java}
+{\manualInstrumentedBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/manual/CRM.java}
 
 % \enlargethispage{0.5cm}
 
@@ -344,7 +344,7 @@ Listing \ref{lst:Consumer} on page~\pageref{lst:Consumer} shows the content of t
 
 \setJavaCodeListing       
 
-\lstinputlisting[float,caption=Consumer.java, label=lst:Consumer,firstline=21,firstnumber=21]{\manualInstrumentedBookstoreApplicationDir/src/bookstoreApplication/Consumer.java}
+\lstinputlisting[float,caption=Consumer.java, label=lst:Consumer,firstline=21,firstnumber=21]{\manualInstrumentedBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/manual/Consumer.java}
 
 \noindent The consumer checks if the response time of each method call, in this case \method{getBook()}, is below %
 a specified threshold value. %Meaning the maximal response time has not been exceeded. 
@@ -370,7 +370,7 @@ file shown in Listing~\ref{lst:BookstoreAnalysisStarter}.
 
 \setJavaCodeListing       
 \lstinputlisting[caption=BookstoreAnalysisStarter.java,label=lst:BookstoreAnalysisStarter,firstline=21,firstnumber=21]%
-{\manualInstrumentedBookstoreApplicationDir/src/bookstoreApplication/BookstoreAnalysisStarter.java}
+{\manualInstrumentedBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/manual/BookstoreAnalysisStarter.java}
 
 \noindent The \class{BookstoreAnalysisStarter} follows a simple scheme. Each %
 analysis tool has to create at least one \class{AnalysisController} which can be %
