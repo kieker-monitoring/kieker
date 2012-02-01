@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/kieker-1.5-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="lib/sigar-1.6.4.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Kieker"/>
+	<classpathentry kind="lib" path="/Kieker/lib/sigar-1.6.4.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>
