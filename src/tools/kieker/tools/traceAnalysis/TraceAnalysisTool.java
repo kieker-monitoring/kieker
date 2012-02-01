@@ -273,7 +273,8 @@ public final class TraceAnalysisTool {
 				for (final Class<? extends IMonitoringRecord> c : recordTypeSelectorSet) {
 					recordTypeSelectorNameSet.add(c.getName());
 				}
-				conf.setProperty(FSReader.CONFIG_ONLYRECORDS, Configuration.toProperty(recordTypeSelectorNameSet.toArray(new String[0])));
+				conf.setProperty(FSReader.CONFIG_ONLYRECORDS,
+						Configuration.toProperty(recordTypeSelectorNameSet.toArray(new String[recordTypeSelectorNameSet.size()])));
 				reader = new FSReader(conf, new HashMap<String, AbstractRepository>());
 				analysisInstance.setReader(reader);
 			}
