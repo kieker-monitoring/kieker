@@ -26,6 +26,8 @@ package kieker.common.record.flow;
 public abstract class TraceEvent extends Event {
 	private static final long serialVersionUID = 1L;
 
+	// TODO: sessionId?
+
 	private final long traceId;
 	private final int orderIndex;
 

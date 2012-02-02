@@ -23,11 +23,8 @@ package kieker.common.record.flow;
 /**
  * @author Andre van Hoorn, Holger Knoche, Jan Waller
  */
-public final class OperationCallEvent extends OperationEvent {
+public final class CallOperationEvent extends OperationEvent {
 	private static final long serialVersionUID = -63172423466638L;
-
-	private final String calleeOperationName;
-
 	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
@@ -36,13 +33,15 @@ public final class OperationCallEvent extends OperationEvent {
 		String.class, // calleeOperationName
 	};
 
-	public OperationCallEvent(final long timestamp, final long traceId, final int orderIndex, final String operationName, final String calleeOperationName) {
+	private final String calleeOperationName;
+
+	public CallOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationName, final String calleeOperationName) {
 		super(timestamp, traceId, orderIndex, operationName);
 		this.calleeOperationName = calleeOperationName;
 	}
 
-	public OperationCallEvent(final Object[] values) {
-		super(values, OperationCallEvent.TYPES); // values[0..3]
+	public CallOperationEvent(final Object[] values) {
+		super(values, CallOperationEvent.TYPES); // values[0..3]
 		this.calleeOperationName = (String) values[4];
 	}
 
@@ -53,7 +52,7 @@ public final class OperationCallEvent extends OperationEvent {
 
 	@Override
 	public final Class<?>[] getValueTypes() {
-		return OperationCallEvent.TYPES.clone();
+		return CallOperationEvent.TYPES.clone();
 	}
 
 	public final String getCallerOperationName() {
