@@ -273,7 +273,8 @@ public final class TraceAnalysisTool {
 				for (final Class<? extends IMonitoringRecord> c : recordTypeSelectorSet) {
 					recordTypeSelectorNameSet.add(c.getName());
 				}
-				conf.setProperty(FSReader.CONFIG_ONLYRECORDS, Configuration.toProperty(recordTypeSelectorNameSet.toArray(new String[0])));
+				conf.setProperty(FSReader.CONFIG_ONLYRECORDS,
+						Configuration.toProperty(recordTypeSelectorNameSet.toArray(new String[recordTypeSelectorNameSet.size()])));
 				reader = new FSReader(conf, new HashMap<String, AbstractRepository>());
 				analysisInstance.setReader(reader);
 			}
@@ -427,8 +428,8 @@ public final class TraceAnalysisTool {
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG)) {
 				numRequestedTasks++;
 				final Configuration componentPlotAllocationComponentDepGraphConfig = new Configuration();
-				componentPlotAllocationComponentDepGraphConfig
-						.put(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.PLOTALLOCATIONCOMPONENTDEPGRAPH_COMPONENT_NAME);
+				componentPlotAllocationComponentDepGraphConfig.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME,
+						Constants.PLOTALLOCATIONCOMPONENTDEPGRAPH_COMPONENT_NAME);
 				componentPlotAllocationComponentDepGraph = new ComponentDependencyGraphPluginAllocation(componentPlotAllocationComponentDepGraphConfig,
 						traceAnalysisRepositoryMap,
 						new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix
@@ -466,12 +467,12 @@ public final class TraceAnalysisTool {
 				numRequestedTasks++;
 				final Configuration componentPlotContainerDepGraphConfig = new Configuration();
 				componentPlotContainerDepGraphConfig.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.PLOTCONTAINERDEPGRAPH_COMPONENT_NAME);
-				componentPlotContainerDepGraphConfig.setProperty(ComponentDependencyGraphPluginAssembly.CONFIG_SHORT_LABELS,
+				componentPlotContainerDepGraphConfig.setProperty(ContainerDependencyGraphPlugin.CONFIG_SHORT_LABELS,
 						Boolean.toString(TraceAnalysisTool.shortLabels));
-				componentPlotContainerDepGraphConfig.setProperty(ComponentDependencyGraphPluginAssembly.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(true));
-				componentPlotContainerDepGraphConfig.setProperty(ComponentDependencyGraphPluginAssembly.CONFIG_INCLUDE_SELF_LOOPS,
+				componentPlotContainerDepGraphConfig.setProperty(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(true));
+				componentPlotContainerDepGraphConfig.setProperty(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_SELF_LOOPS,
 						Boolean.toString(TraceAnalysisTool.includeSelfLoops));
-				componentPlotContainerDepGraphConfig.setProperty(ComponentDependencyGraphPluginAssembly.CONFIG_DOT_OUTPUT_FILE, new File(TraceAnalysisTool.outputDir
+				componentPlotContainerDepGraphConfig.setProperty(ContainerDependencyGraphPlugin.CONFIG_DOT_OUTPUT_FILE, new File(TraceAnalysisTool.outputDir
 						+ File.separator + TraceAnalysisTool.outputFnPrefix
 						+ Constants.CONTAINER_DEPENDENCY_GRAPH_FN_PREFIX).getAbsolutePath());
 
@@ -488,13 +489,13 @@ public final class TraceAnalysisTool {
 
 				final Configuration componentPlotAllocationOperationDepGraphConfig = new Configuration();
 				componentPlotAllocationOperationDepGraphConfig
-						.put(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.PLOTALLOCATIONOPERATIONDEPGRAPH_COMPONENT_NAME);
+						.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.PLOTALLOCATIONOPERATIONDEPGRAPH_COMPONENT_NAME);
 				componentPlotAllocationOperationDepGraphConfig
-						.setProperty(ComponentDependencyGraphPluginAssembly.CONFIG_SHORT_LABELS, Boolean.toString(TraceAnalysisTool.shortLabels));
-				componentPlotAllocationOperationDepGraphConfig.setProperty(ComponentDependencyGraphPluginAssembly.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(true));
-				componentPlotAllocationOperationDepGraphConfig.setProperty(ComponentDependencyGraphPluginAssembly.CONFIG_INCLUDE_SELF_LOOPS,
+						.setProperty(OperationDependencyGraphPluginAllocation.CONFIG_SHORT_LABELS, Boolean.toString(TraceAnalysisTool.shortLabels));
+				componentPlotAllocationOperationDepGraphConfig.setProperty(OperationDependencyGraphPluginAllocation.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(true));
+				componentPlotAllocationOperationDepGraphConfig.setProperty(OperationDependencyGraphPluginAllocation.CONFIG_INCLUDE_SELF_LOOPS,
 						Boolean.toString(TraceAnalysisTool.includeSelfLoops));
-				componentPlotAllocationOperationDepGraphConfig.setProperty(ComponentDependencyGraphPluginAssembly.CONFIG_DOT_OUTPUT_FILE, new File(
+				componentPlotAllocationOperationDepGraphConfig.setProperty(OperationDependencyGraphPluginAllocation.CONFIG_DOT_OUTPUT_FILE, new File(
 						TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix
 								+ Constants.ALLOCATION_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX).getAbsolutePath());
 
@@ -511,13 +512,13 @@ public final class TraceAnalysisTool {
 
 				final Configuration componentPlotAssemblyOperationDepGraphConfig = new Configuration();
 				componentPlotAssemblyOperationDepGraphConfig
-						.put(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.PLOTASSEMBLYOPERATIONDEPGRAPH_COMPONENT_NAME);
+						.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.PLOTASSEMBLYOPERATIONDEPGRAPH_COMPONENT_NAME);
 				componentPlotAssemblyOperationDepGraphConfig.setProperty(ComponentDependencyGraphPluginAssembly.CONFIG_SHORT_LABELS,
 						Boolean.toString(TraceAnalysisTool.shortLabels));
-				componentPlotAssemblyOperationDepGraphConfig.setProperty(ComponentDependencyGraphPluginAssembly.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(true));
-				componentPlotAssemblyOperationDepGraphConfig.setProperty(ComponentDependencyGraphPluginAssembly.CONFIG_INCLUDE_SELF_LOOPS,
+				componentPlotAssemblyOperationDepGraphConfig.setProperty(OperationDependencyGraphPluginAssembly.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(true));
+				componentPlotAssemblyOperationDepGraphConfig.setProperty(OperationDependencyGraphPluginAssembly.CONFIG_INCLUDE_SELF_LOOPS,
 						Boolean.toString(TraceAnalysisTool.includeSelfLoops));
-				componentPlotAssemblyOperationDepGraphConfig.setProperty(ComponentDependencyGraphPluginAssembly.CONFIG_DOT_OUTPUT_FILE, new File(
+				componentPlotAssemblyOperationDepGraphConfig.setProperty(OperationDependencyGraphPluginAssembly.CONFIG_DOT_OUTPUT_FILE, new File(
 						TraceAnalysisTool.outputDir
 								+ File.separator + TraceAnalysisTool.outputFnPrefix
 								+ Constants.ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX).getAbsolutePath());
