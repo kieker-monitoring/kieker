@@ -56,7 +56,7 @@
   
   <Match>
     <Class name="kieker.monitoring.core.controller.JMXController" />
-    <Method name="&lt;init&gt;" params="kieker.monitoring.core.configuration.Configuration" returns="void" />
+    <Method name="&lt;init&gt;" params="kieker.common.configuration.Configuration" returns="void" />
     <Bug pattern="REC_CATCH_EXCEPTION" />
   </Match>
 
