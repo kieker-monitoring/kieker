@@ -128,7 +128,7 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 		}
 	}
 
-	class DstClass extends AbstractAnalysisPlugin {
+	static class DstClass extends AbstractAnalysisPlugin {
 
 		public static final String INPUT_PORT_NAME = "doJob";
 		private final ConcurrentLinkedQueue<Long> receivedTimestamps = new ConcurrentLinkedQueue<Long>();

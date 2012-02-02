@@ -145,15 +145,8 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 		AbstractPlugin.connect(this, RecordDelegationPlugin2.OUTPUT_PORT_NAME, rec, inputPortName);
 	}
 
-	/**
-	 * The supress-warning-tag is only necessary because the method is being used via reflection...
-	 * 
-	 * @param data
-	 */
-	@SuppressWarnings("unused")
 	@InputPort(eventTypes = { IMonitoringRecord.class })
 	public boolean newMonitoringRecord(final Object data) {
-		final IMonitoringRecord record = (IMonitoringRecord) data;
 		return super.deliver(RecordDelegationPlugin2.OUTPUT_PORT_NAME, data);
 	}
 
