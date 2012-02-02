@@ -90,7 +90,7 @@ public class SilentCountingRecordConsumerTest {
 		Assert.assertEquals(0, consumer.getMessageCount());
 
 		/* Now send some other data. */
-		src.deliver(new Long(10));
+		src.deliver(Long.valueOf(10));
 		src.deliver(null);
 		src.deliver("");
 		Assert.assertEquals(3, consumer.getMessageCount());

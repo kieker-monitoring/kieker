@@ -179,7 +179,7 @@ public abstract class AbstractPlugin {
 			try {
 				methodPair.getSnd().invoke(methodPair.getFst(), data);
 			} catch (final Exception e) {
-				AbstractPlugin.LOG.warn(String.format("OutputPort %s couldn't send data to InputPort %s\n", outputPort.name(), methodPair.getSnd().getName()));
+				AbstractPlugin.LOG.warn(String.format("OutputPort %s couldn't send data to InputPort %s%n", outputPort.name(), methodPair.getSnd().getName()));
 			}
 		}
 
@@ -265,7 +265,7 @@ public abstract class AbstractPlugin {
 			method.setAccessible(true);
 			src.registeredMethods.get(output).add(new Pair<AbstractPlugin, Method>(dst, method));
 		} catch (final Exception e) {
-			AbstractPlugin.LOG.warn(String.format("Couldn't connect OutputPort %s with InputPort %s\n", output, input));
+			AbstractPlugin.LOG.warn(String.format("Couldn't connect OutputPort %s with InputPort %s%n", output, input));
 			return false;
 		}
 
@@ -278,7 +278,7 @@ public abstract class AbstractPlugin {
 		for (final OutputPort outputPort : annotation.outputPorts()) {
 			outputNames.add(outputPort.name());
 		}
-		return outputNames.toArray(new String[0]);
+		return outputNames.toArray(new String[outputNames.size()]);
 	}
 
 	public final String[] getAllInputPortNames() {
@@ -290,7 +290,7 @@ public abstract class AbstractPlugin {
 				inputNames.add(method.getName());
 			}
 		}
-		return inputNames.toArray(new String[0]);
+		return inputNames.toArray(new String[inputNames.size()]);
 	}
 
 	/**

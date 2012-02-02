@@ -20,18 +20,12 @@
 
 package kieker.test.tools.junit.traceAnalysis.plugins;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
-import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
-import kieker.tools.traceAnalysis.plugins.traceFilter.TraceEquivalenceClassFilter;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
@@ -64,14 +58,15 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase { //
 		}
 		Assert.assertEquals(trace0, trace1);
 
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, "TraceEquivalenceClassFilter");
-
-		final Map<String, AbstractRepository> repositoryMap = new HashMap<String, AbstractRepository>();
-		repositoryMap.put(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
-		final TraceEquivalenceClassFilter filter = new TraceEquivalenceClassFilter(configuration, repositoryMap,
-				TraceEquivalenceClassFilter.TraceEquivalenceClassModes.ASSEMBLY);
-
+		/*
+		 * final Configuration configuration = new Configuration();
+		 * configuration.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, "TraceEquivalenceClassFilter");
+		 * 
+		 * final Map<String, AbstractRepository> repositoryMap = new HashMap<String, AbstractRepository>();
+		 * repositoryMap.put(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
+		 * final TraceEquivalenceClassFilter filter = new TraceEquivalenceClassFilter(configuration, repositoryMap,
+		 * TraceEquivalenceClassFilter.TraceEquivalenceClassModes.ASSEMBLY);
+		 */
 		/*
 		 * Register a handler for equivalence class representatives.
 		 */

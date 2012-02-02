@@ -8,7 +8,7 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.AfterOperationEvent;
 import kieker.common.record.flow.BeforeOperationEvent;
-import kieker.common.record.flow.OperationCallEvent;
+import kieker.common.record.flow.CallOperationEvent;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 
@@ -78,12 +78,12 @@ public class EventRecordFactory {
 		EventRecordFactory.traceId++;
 
 		final BeforeOperationEvent entry0_0__bookstore_searchBook; // NOCS
-		final OperationCallEvent call1_1__catalog_getBook; // NOCS
+		final CallOperationEvent call1_1__catalog_getBook; // NOCS
 		final BeforeOperationEvent entry1_1__catalog_getBook; // NOCS
 		final AfterOperationEvent exit1_1__catalog_getBook; // NOCS
-		final OperationCallEvent call2_1__crm_getOrders; // NOCS
+		final CallOperationEvent call2_1__crm_getOrders; // NOCS
 		final BeforeOperationEvent entry2_1__crm_getOrders; // NOCS
-		final OperationCallEvent call3_2__catalog_getBook; // NOCS
+		final CallOperationEvent call3_2__catalog_getBook; // NOCS
 		final BeforeOperationEvent entry3_2__catalog_getBook; // NOCS
 		final AfterOperationEvent exit3_2__catalog_getBook; // NOCS
 		final AfterOperationEvent exit2_1__crm_getOrders; // NOCS
@@ -91,19 +91,19 @@ public class EventRecordFactory {
 
 		entry0_0__bookstore_searchBook = new BeforeOperationEvent(EventRecordFactory.curTime++, EventRecordFactory.traceId, curOrderIndex++,
 				EventRecordFactory.FQ_OP_BOOKSTORE_SEARCH_BOOK);
-		call1_1__catalog_getBook = new OperationCallEvent(EventRecordFactory.curTime++, EventRecordFactory.traceId, curOrderIndex++,
+		call1_1__catalog_getBook = new CallOperationEvent(EventRecordFactory.curTime++, EventRecordFactory.traceId, curOrderIndex++,
 				EventRecordFactory.FQ_OP_BOOKSTORE_SEARCH_BOOK,
 				EventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
 		entry1_1__catalog_getBook = new BeforeOperationEvent(EventRecordFactory.curTime++, EventRecordFactory.traceId, curOrderIndex++,
 				EventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
 		exit1_1__catalog_getBook = new AfterOperationEvent(EventRecordFactory.curTime++, EventRecordFactory.traceId, curOrderIndex++,
 				EventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
-		call2_1__crm_getOrders = new OperationCallEvent(EventRecordFactory.curTime++, EventRecordFactory.traceId, curOrderIndex++,
+		call2_1__crm_getOrders = new CallOperationEvent(EventRecordFactory.curTime++, EventRecordFactory.traceId, curOrderIndex++,
 				EventRecordFactory.FQ_OP_BOOKSTORE_SEARCH_BOOK,
 				EventRecordFactory.FQ_OP_CRM_GET_ORDERS);
 		entry2_1__crm_getOrders = new BeforeOperationEvent(EventRecordFactory.curTime++, EventRecordFactory.traceId, curOrderIndex++,
 				EventRecordFactory.FQ_OP_CRM_GET_ORDERS);
-		call3_2__catalog_getBook = new OperationCallEvent(EventRecordFactory.curTime++, EventRecordFactory.traceId, curOrderIndex++,
+		call3_2__catalog_getBook = new CallOperationEvent(EventRecordFactory.curTime++, EventRecordFactory.traceId, curOrderIndex++,
 				EventRecordFactory.FQ_OP_CRM_GET_ORDERS,
 				EventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
 		entry3_2__catalog_getBook = new BeforeOperationEvent(EventRecordFactory.curTime++, EventRecordFactory.traceId, curOrderIndex++,
@@ -140,12 +140,12 @@ public class EventRecordFactory {
 		EventRecordFactory.traceId++;
 
 		final BeforeOperationEvent entry0_0__bookstore_searchBook; // NOCS
-		final OperationCallEvent call1_1__catalog_getBook; // NOCS
+		final CallOperationEvent call1_1__catalog_getBook; // NOCS
 		final BeforeOperationEvent entry1_1__catalog_getBook; // NOCS
 		final AfterOperationEvent exit1_1__catalog_getBook; // NOCS
-		final OperationCallEvent call2_1__crm_getOrders; // NOCS
+		final CallOperationEvent call2_1__crm_getOrders; // NOCS
 		// assumed to be uninstrumented: final BeforeOperationEvent entry2_1__crm_getOrders; // NOCS
-		final OperationCallEvent call3_2__catalog_getBook; // NOCS
+		final CallOperationEvent call3_2__catalog_getBook; // NOCS
 		final BeforeOperationEvent entry3_2__catalog_getBook; // NOCS
 		final AfterOperationEvent exit3_2__catalog_getBook; // NOCS
 		// assumed to be uninstrumented: final AfterOperationEvent exit2_1__crm_getOrders; // NOCS
@@ -153,19 +153,19 @@ public class EventRecordFactory {
 
 		entry0_0__bookstore_searchBook = new BeforeOperationEvent(EventRecordFactory.curTime++, EventRecordFactory.traceId, curOrderIndex++,
 				EventRecordFactory.FQ_OP_BOOKSTORE_SEARCH_BOOK);
-		call1_1__catalog_getBook = new OperationCallEvent(EventRecordFactory.curTime++, EventRecordFactory.traceId, curOrderIndex++,
+		call1_1__catalog_getBook = new CallOperationEvent(EventRecordFactory.curTime++, EventRecordFactory.traceId, curOrderIndex++,
 				EventRecordFactory.FQ_OP_BOOKSTORE_SEARCH_BOOK,
 				EventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
 		entry1_1__catalog_getBook = new BeforeOperationEvent(EventRecordFactory.curTime++, EventRecordFactory.traceId, curOrderIndex++,
 				EventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
 		exit1_1__catalog_getBook = new AfterOperationEvent(EventRecordFactory.curTime++, EventRecordFactory.traceId, curOrderIndex++,
 				EventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
-		call2_1__crm_getOrders = new OperationCallEvent(EventRecordFactory.curTime++, EventRecordFactory.traceId, curOrderIndex++,
+		call2_1__crm_getOrders = new CallOperationEvent(EventRecordFactory.curTime++, EventRecordFactory.traceId, curOrderIndex++,
 				EventRecordFactory.FQ_OP_BOOKSTORE_SEARCH_BOOK,
 				EventRecordFactory.FQ_OP_CRM_GET_ORDERS);
 		// assumed to be uninstrumented:
 		// entry2_1__crm_getOrders = new BeforeOperationEvent(curTime++, traceId, curOrderIndex++, EventRecordFactory.FQ_OP_CRM_GET_ORDERS);
-		call3_2__catalog_getBook = new OperationCallEvent(EventRecordFactory.curTime++, EventRecordFactory.traceId, curOrderIndex++,
+		call3_2__catalog_getBook = new CallOperationEvent(EventRecordFactory.curTime++, EventRecordFactory.traceId, curOrderIndex++,
 				EventRecordFactory.FQ_OP_CRM_GET_ORDERS,
 				EventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
 		entry3_2__catalog_getBook = new BeforeOperationEvent(EventRecordFactory.curTime++, EventRecordFactory.traceId, curOrderIndex++,

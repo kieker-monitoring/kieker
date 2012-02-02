@@ -151,6 +151,7 @@ public final class AnalysisController {
 		return configuration;
 	}
 
+	// TODO Correct this method for the new model-structure
 	private final void loadFromModelProject(final MIProject mproject) throws InstantiationException, IllegalAccessException, IllegalArgumentException,
 			InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
 		/* Get all repositories. */
@@ -185,25 +186,25 @@ public final class AnalysisController {
 		for (final MIPlugin mPlugin : mPlugins) {
 			/* Extract the necessary informations to create the plugin. */
 			final Configuration configuration = this.modelPropertiesToConfiguration(mPlugin.getProperties());
-			// TODO Correct this method for the new model-structure
-			final EList<MIRepository> mPluginRepositories = null;// mPlugin.getRepositories();
-			final int len = mPluginRepositories.size();
-			final AbstractRepository pluginRepositories[] = new AbstractRepository[len];
-			for (int i = 0; i < len; i++) {
-				pluginRepositories[i] = repositoryMap.get(mPluginRepositories.get(i));
-			}
+
+			// final EList<MIRepository> mPluginRepositories = null;// mPlugin.getRepositories();
+			// final int len = mPluginRepositories.size();
+			// final AbstractRepository pluginRepositories[] = new AbstractRepository[len];
+			// for (int i = 0; i < len; i++) {
+			// pluginRepositories[i] = repositoryMap.get(mPluginRepositories.get(i));
+			// }
 
 			/* Create the plugin and put it into our map. */
 			Constructor<?> pluginConstructor;
 			try {
-				pluginConstructor = Class.forName(mPlugin.getClassname()).getConstructor(Configuration.class, AbstractRepository[].class);
+				pluginConstructor = Class.forName(mPlugin.getClassname()).getConstructor(Configuration.class, Map.class);
 			} catch (final Exception ex) {
 				AnalysisController.LOG.error("Could not load plugin: " + mPlugin.getClassname());
 				continue;
 			}
 
 			final AbstractPlugin plugin = (AbstractPlugin) pluginConstructor.newInstance(configuration.getPropertiesStartingWith(mPlugin.getClassname()),
-					pluginRepositories);
+					new HashMap<String, AbstractRepository>());
 			pluginMap.put(mPlugin, plugin);
 
 			/* Set the other properties of the plugin. */

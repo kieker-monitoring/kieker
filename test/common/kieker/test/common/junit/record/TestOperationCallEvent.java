@@ -22,7 +22,7 @@ package kieker.test.common.junit.record;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.common.record.flow.OperationCallEvent;
+import kieker.common.record.flow.CallOperationEvent;
 
 import org.junit.Test;
 
@@ -51,8 +51,8 @@ public class TestOperationCallEvent extends TestCase { // NOCS (MissingCtorCheck
 	@Test
 	public void testSerializeDeserializeEquals() {
 
-		final OperationCallEvent call1 =
-				new OperationCallEvent(TestOperationCallEvent.TSTAMP, TestOperationCallEvent.TRACE_ID, TestOperationCallEvent.ORDER_INDEX,
+		final CallOperationEvent call1 =
+				new CallOperationEvent(TestOperationCallEvent.TSTAMP, TestOperationCallEvent.TRACE_ID, TestOperationCallEvent.ORDER_INDEX,
 						TestOperationCallEvent.FQ_CALLER_OPERATION, TestOperationCallEvent.FQ_CALLEE_OPERATION);
 
 		Assert.assertEquals("Unexpected timestamp", TestOperationCallEvent.TSTAMP, call1.getTimestamp());
@@ -63,7 +63,7 @@ public class TestOperationCallEvent extends TestCase { // NOCS (MissingCtorCheck
 
 		final Object[] call1Array = call1.toArray();
 
-		final OperationCallEvent call2 = new OperationCallEvent(call1Array);
+		final CallOperationEvent call2 = new CallOperationEvent(call1Array);
 
 		Assert.assertEquals(call1, call2);
 	}
