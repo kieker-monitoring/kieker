@@ -995,16 +995,16 @@
 	<target name="static-analysis" depends="findbugs, pmd, checkstyle" description="Performs static analysis of Kieker's source and binary code employing FindBugs and PMD" />
 	
   <target name="findbugs" depends="build-all,compile-tests" description="Performs a byte code analysis to find potential bugs employing findbugs">
-    <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpath="${lib.dir}/findbugs-1.3.9/lib/findbugs-ant.jar"/>
-		<findbugs home="${lib.dir}/findbugs-1.3.9"
+    <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpath="${lib.dir}/findbugs-2.0.0/lib/findbugs-ant.jar"/>
+		<findbugs home="${lib.dir}/findbugs-2.0.0"
 				reportLevel="low"
 				effort="max"
-				excludeFilter="${lib.dir}/findbugs-1.3.9/fb-filter.xml"
+				excludeFilter="${lib.dir}/findbugs-2.0.0/fb-filter.xml"
 				output="xml"
 				outputFile="${tmp.dir}/kieker-fb.xml" >
 			<auxClasspath>
 				<fileset dir="${lib.dir}" includes="*.jar"/>
-				<fileset dir="${lib.dir}/findbugs-1.3.9/auxlib" includes="*.jar"/>
+				<fileset dir="${lib.dir}/findbugs-2.0.0/auxlib" includes="*.jar"/>
 			</auxClasspath>
 			<sourcePath path="${src.dir}" />
 			<sourcePath path="${test.dir}" />
