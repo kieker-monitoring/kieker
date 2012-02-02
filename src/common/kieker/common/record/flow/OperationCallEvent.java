@@ -36,8 +36,8 @@ public final class OperationCallEvent extends OperationEvent {
 		String.class, // calleeOperationName
 	};
 
-	public OperationCallEvent(final long timestamp, final long traceId, final int orderIndex, final String operationName, final String calleeOperationName) {
-		super(timestamp, traceId, orderIndex, operationName);
+	public OperationCallEvent(final long timestamp, final long traceId, final int orderIndex, final String callerOperationName, final String calleeOperationName) {
+		super(timestamp, traceId, orderIndex, callerOperationName);
 		this.calleeOperationName = calleeOperationName;
 	}
 

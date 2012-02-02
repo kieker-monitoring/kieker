@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.common.junit;
+package kieker.test.common.junit.record;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
