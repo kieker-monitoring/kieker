@@ -697,6 +697,7 @@
 
         <module name="JavadocType">
             <property name="severity" value="warning"/>
+            <property name="scope" value="package"/>
             <property name="authorFormat" value="\S"/>
         </module>
 
