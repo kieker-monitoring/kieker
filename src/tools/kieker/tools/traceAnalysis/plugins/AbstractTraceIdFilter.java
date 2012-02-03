@@ -23,7 +23,9 @@ package kieker.tools.traceAnalysis.plugins;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.repository.AbstractRepository;
@@ -37,14 +39,16 @@ import kieker.common.configuration.Configuration;
  */
 public abstract class AbstractTraceIdFilter extends AbstractAnalysisPlugin {
 	/**
-	 * List of trace IDs to accept.
+	 * List of trace IDs to accept. Set null to accept any ID.
 	 */
 	private final Set<Long> selectedTraceIds;
 
 	/**
 	 * 
 	 * @param configuration
+	 *            ignored
 	 * @param repositories
+	 *            ignored
 	 * @param selectedTraceIds
 	 */
 	public AbstractTraceIdFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories, final Set<Long> selectedTraceIds) {
@@ -53,12 +57,26 @@ public abstract class AbstractTraceIdFilter extends AbstractAnalysisPlugin {
 	}
 
 	/**
+	 * Convenience function for inheriting filters.
 	 * 
 	 * @param configuration
-	 * @param repositories
+	 * @param configurationPropertySelectAllTraces
+	 * @param configurationPropertySelectedTraces
+	 * @return
 	 */
-	public AbstractTraceIdFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
-		this(configuration, repositories, null);
+	protected static Set<Long> extractIDsFromConfiguration(final Configuration configuration, final String configurationPropertySelectAllTraces,
+			final String configurationPropertySelectedTraces) {
+		final boolean passAll = configuration.getBooleanProperty(configurationPropertySelectAllTraces);
+		if (passAll) {
+			return null;
+		} else {
+			final NavigableSet<Long> idsToPass = new TreeSet<Long>();
+			final String[] ids = configuration.getStringArrayProperty(configurationPropertySelectedTraces);
+			for (final String id : ids) {
+				idsToPass.add(Long.parseLong(id));
+			}
+			return idsToPass;
+		}
 	}
 
 	@Override
@@ -96,6 +114,14 @@ public abstract class AbstractTraceIdFilter extends AbstractAnalysisPlugin {
 
 	/**
 	 * Inheriting properties must provide the name of the configuration
+	 * property used to indicate whether or not to select any ID.
+	 * 
+	 * @return
+	 */
+	protected abstract String getConfigurationPropertySelectAllTraces();
+
+	/**
+	 * Inheriting properties must provide the name of the configuration
 	 * property used to store the set of selected trace IDs.
 	 * 
 	 * @return
@@ -107,6 +133,7 @@ public abstract class AbstractTraceIdFilter extends AbstractAnalysisPlugin {
 		final Configuration configuration = new Configuration(null);
 
 		if (this.selectedTraceIds != null) {
+			configuration.setProperty(this.getConfigurationPropertySelectAllTraces(), Boolean.toString(true));
 			final String selectedTracesArr[] = new String[this.selectedTraceIds.size()];
 			final Iterator<Long> iter = this.selectedTraceIds.iterator();
 			int i = 0;
@@ -114,6 +141,9 @@ public abstract class AbstractTraceIdFilter extends AbstractAnalysisPlugin {
 				selectedTracesArr[i++] = iter.next().toString();
 			}
 			configuration.setProperty(this.getConfigurationPropertySelectedTraces(), Configuration.toProperty(selectedTracesArr));
+		} else {
+			configuration.setProperty(this.getConfigurationPropertySelectAllTraces(), Boolean.toString(true));
+			configuration.setProperty(this.getConfigurationPropertySelectedTraces(), "");
 		}
 		return configuration;
 	}

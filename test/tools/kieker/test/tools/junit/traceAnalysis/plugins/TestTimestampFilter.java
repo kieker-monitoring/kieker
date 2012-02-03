@@ -20,9 +20,12 @@
 
 package kieker.test.tools.junit.traceAnalysis.plugins;
 
+import java.util.HashMap;
+
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
 import kieker.test.tools.junit.traceAnalysis.util.SimpleSinkPlugin;
@@ -47,13 +50,28 @@ public class TestTimestampFilter extends TestCase { // NOCS
 	private final ExecutionFactory eFactory = new ExecutionFactory(this.systemEntityFactory);
 
 	/**
+	 * Creates a {@link TimestampFilter} with the given properties
+	 * using the constructor {@link TimestampFilter#TimestampFilter(kieker.common.configuration.Configuration, java.util.Map)}
+	 * 
+	 * @param ignoreExecutionsBeforeTimestamp
+	 * @param ignoreExecutionsAfterTimestamp
+	 * @return
+	 */
+	private static TimestampFilter createTimestampFilter(final long ignoreExecutionsBeforeTimestamp, final long ignoreExecutionsAfterTimestamp) {
+		final Configuration cfg = new Configuration();
+		cfg.put(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, Long.toString(ignoreExecutionsBeforeTimestamp));
+		cfg.put(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP, Long.toString(ignoreExecutionsAfterTimestamp));
+		return new TimestampFilter(cfg, new HashMap<String, AbstractRepository>());
+	}
+
+	/**
 	 * Given a TimestampFilter selecting records within an interval <i>[a,b]</i>,
 	 * assert that a record <i>r</i> with <i>r.tin &lt; a</i> and <i>r.tout
 	 * &gt; a </i>, <i>r.tout &lt; b</i> does not pass the filter.
 	 */
 	@Test
 	public void testRecordTinBeforeToutWithinIgnored() {
-		final TimestampFilter filter = new TimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
+		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
 		final Execution exec = this.eFactory.genExecution(77, // traceId (value not important)
@@ -76,7 +94,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 	 */
 	@Test
 	public void testRecordTinWithinToutAfterIgnored() {
-		final TimestampFilter filter = new TimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
+		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
 		final Execution exec = this.eFactory.genExecution(15, // traceId (value not important)
@@ -99,7 +117,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 	 */
 	@Test
 	public void testRecordTinToutOnBordersPassed() {
-		final TimestampFilter filter = new TimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
+		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
 		final Execution exec = this.eFactory.genExecution(159, // traceId (value not important)
@@ -125,7 +143,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 	 */
 	@Test
 	public void testRecordTinToutWithinRangePassed() {
-		final TimestampFilter filter = new TimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
+		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
 		final Execution exec = this.eFactory.genExecution(159, // traceId (value not important)

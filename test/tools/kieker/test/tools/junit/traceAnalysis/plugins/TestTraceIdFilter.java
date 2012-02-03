@@ -20,15 +20,20 @@
 
 package kieker.test.tools.junit.traceAnalysis.plugins;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.NavigableSet;
+import java.util.Set;
 import java.util.TreeSet;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
 import kieker.test.tools.junit.traceAnalysis.util.SimpleSinkPlugin;
+import kieker.tools.traceAnalysis.plugins.executionFilter.TimestampFilter;
 import kieker.tools.traceAnalysis.plugins.executionFilter.TraceIdFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
@@ -47,6 +52,34 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 	private final ExecutionFactory eFactory = new ExecutionFactory(this.systemEntityFactory);
 
 	/**
+	 * Creates a {@link TimestampFilter} with the given properties
+	 * using the constructor {@link TimestampFilter#TimestampFilter(kieker.common.configuration.Configuration, java.util.Map)}
+	 * 
+	 * @param ignoreExecutionsBeforeTimestamp
+	 * @param ignoreExecutionsAfterTimestamp
+	 * @return
+	 */
+	private static TraceIdFilter createTraceIdFilter(final Set<Long> selectedTraces) {
+		final Configuration cfg = new Configuration();
+
+		if (selectedTraces != null) {
+			final String selectedTracesArr[] = new String[selectedTraces.size()];
+			final Iterator<Long> iter = selectedTraces.iterator();
+			int i = 0;
+			while (iter.hasNext()) {
+				selectedTracesArr[i++] = iter.next().toString();
+			}
+			cfg.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.toString(false));
+			cfg.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, Configuration.toProperty(selectedTracesArr));
+		} else {
+			cfg.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.toString(true));
+			cfg.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, "");
+		}
+
+		return new TraceIdFilter(cfg, new HashMap<String, AbstractRepository>());
+	}
+
+	/**
 	 * Given a TraceIdFilter that passes traceIds included in a set <i>idsToPass</i>,
 	 * assert that an Execution object <i>exec</i> with traceId not element of
 	 * <i>idsToPass</i> is not passed through the filter.
@@ -57,7 +90,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 		idsToPass.add(5l); // NOCS (MagicNumberCheck)
 		idsToPass.add(7l); // NOCS (MagicNumberCheck)
 
-		final TraceIdFilter filter = new TraceIdFilter(idsToPass);
+		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(idsToPass);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
 		final Execution exec = this.eFactory.genExecution(11l, // traceId (must not be element of idsToPass) // NOCS (MagicNumberCheck)
 				5, // tin (value not important) // NOCS (MagicNumberCheck)
@@ -83,13 +116,38 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 		idsToPass.add(5l); // NOCS (MagicNumberCheck)
 		idsToPass.add(7l); // NOCS (MagicNumberCheck)
 
-		final TraceIdFilter filter = new TraceIdFilter(idsToPass);
+		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(idsToPass);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
 		final Execution exec = this.eFactory.genExecution(7l, // traceId (must be element of idsToPass) // NOCS (MagicNumberCheck)
 				5, // tin (value not important) // NOCS (MagicNumberCheck)
 				10, // tout (value not important) // NOCS (MagicNumberCheck)
 				0, 0); // eoi, ess (values not important) // NOCS (MagicNumberCheck)
 		Assert.assertTrue("Testcase invalid", idsToPass.contains(exec.getTraceId()));
+
+		Assert.assertTrue(sinkPlugin.getList().isEmpty());
+		AbstractPlugin.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+		filter.newExecution(exec);
+		Assert.assertFalse("Filter didn't pass execution " + exec + " although traceId element of " + idsToPass, sinkPlugin.getList()
+				.isEmpty());
+
+		Assert.assertTrue(sinkPlugin.getList().size() == 1);
+		Assert.assertSame(sinkPlugin.getList().get(0), exec);
+	}
+
+	/**
+	 * Given a TraceIdFilter that passes all traceIds, assert that an Execution
+	 * object <i>exec</i> is passed through the filter.
+	 */
+	@Test
+	public void testAssertPassTraceIdWhenPassAll() {
+		final NavigableSet<Long> idsToPass = null; // i.e., pass all
+
+		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(idsToPass);
+		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
+		final Execution exec = this.eFactory.genExecution(7l, // traceId (must be element of idsToPass) // NOCS (MagicNumberCheck)
+				5, // tin (value not important) // NOCS (MagicNumberCheck)
+				10, // tout (value not important) // NOCS (MagicNumberCheck)
+				0, 0); // eoi, ess (values not important) // NOCS (MagicNumberCheck)
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 		AbstractPlugin.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);

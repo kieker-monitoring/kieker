@@ -48,11 +48,14 @@ public class TraceIdFilter extends AbstractTraceIdFilter {
 
 	public static final String INPUT_PORT_NAME = "newExecution";
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
+
+	public static final String CONFIG_SELECT_ALL_TRACES = TraceIdFilter.class.getName() + ".selectedAll";
 	public static final String CONFIG_SELECTED_TRACES = TraceIdFilter.class.getName() + ".selectedTraces";
 
 	public TraceIdFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
-		// TODO: Initialize trace IDs from the variable.
-		super(configuration, repositories, null);
+		super(configuration, repositories,
+				AbstractTraceIdFilter.extractIDsFromConfiguration(configuration, TraceIdFilter.CONFIG_SELECT_ALL_TRACES,
+						TraceIdFilter.CONFIG_SELECTED_TRACES));
 	}
 
 	/**
@@ -71,6 +74,11 @@ public class TraceIdFilter extends AbstractTraceIdFilter {
 		if (super.passId(execution.getTraceId())) {
 			super.deliver(TraceIdFilter.OUTPUT_PORT_NAME, data);
 		}
+	}
+
+	@Override
+	protected String getConfigurationPropertySelectAllTraces() {
+		return TraceIdFilter.CONFIG_SELECT_ALL_TRACES;
 	}
 
 	@Override

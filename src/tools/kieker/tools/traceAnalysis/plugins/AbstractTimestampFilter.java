@@ -41,6 +41,15 @@ public abstract class AbstractTimestampFilter extends AbstractAnalysisPlugin {
 	private final long ignoreBeforeTimestamp;
 	private final long ignoreAfterTimestamp;
 
+	/**
+	 * 
+	 * @param configuration
+	 *            ignored
+	 * @param repositories
+	 *            ignored
+	 * @param ignoreExecutionsBeforeTimestamp
+	 * @param ignoreExecutionsAfterTimestamp
+	 */
 	public AbstractTimestampFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories,
 			final long ignoreExecutionsBeforeTimestamp, final long ignoreExecutionsAfterTimestamp) {
 		super(configuration, repositories);

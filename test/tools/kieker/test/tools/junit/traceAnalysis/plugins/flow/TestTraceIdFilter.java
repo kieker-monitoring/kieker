@@ -107,4 +107,31 @@ public class TestTraceIdFilter extends TestCase {
 		// Somehow redundant but records MIGHT be generated randomly ;-)
 		Assert.assertEquals("Unexpected number of output records", sinkPlugin.getList().size(), trace.size());
 	}
+
+	/**
+	 * Given a TraceIdFilter that passes all traceIds, assert that an {@link TraceEvent} object <i>exec</i> is passed through the filter.
+	 */
+	@Test
+	public void testAssertPassTraceIdWhenPassAll() {
+		final long firstTimestamp = 53222; // any number fits // NOCS (MagicNumberCheck)
+		final long traceIdToPass = 11l; // (must be element of idsToPass) // NOCS (MagicNumberCheck)
+
+		final NavigableSet<Long> idsToPass = null; // i.e., pass all
+
+		final TraceIdFilter filter = new TraceIdFilter(idsToPass);
+		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
+
+		final List<TraceEvent> trace =
+				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass); // NOCS (MagicNumberCheck)
+
+		Assert.assertTrue(sinkPlugin.getList().isEmpty());
+		AbstractPlugin.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+
+		for (final TraceEvent e : trace) {
+			filter.inputTraceEvent(e);
+			Assert.assertTrue("Expected event " + e + " to pass the filter", sinkPlugin.getList().contains(e));
+		}
+		// Somehow redundant but records MIGHT be generated randomly ;-)
+		Assert.assertEquals("Unexpected number of output records", sinkPlugin.getList().size(), trace.size());
+	}
 }
