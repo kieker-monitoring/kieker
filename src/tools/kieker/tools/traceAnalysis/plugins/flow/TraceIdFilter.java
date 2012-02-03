@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.traceAnalysis.plugins.executionFilter;
+package kieker.tools.traceAnalysis.plugins.flow;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,25 +29,24 @@ import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
+import kieker.common.record.flow.TraceEvent;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceIdFilter;
-import kieker.tools.traceAnalysis.systemModel.Execution;
 
 /**
- * Allows to filter Execution objects based on their trace Id.<br>
+ * Allows to filter {@link TraceEvent} objects based on their {@link TraceEvent#getTraceId()}s.<br>
  * 
- * This class has exactly one input port named and one output port. It receives only objects inheriting from the class {@link Execution}. If the received object
+ * This class has exactly one input port and one output port. If the received object
  * contains the defined traceID, the object is delivered unmodified to the output port.
  * 
  * @author Andre van Hoorn
  */
 @Plugin(
-		outputPorts = {
-			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME, description = "Execution output", eventTypes = { Execution.class })
+		outputPorts = { @OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME, description = "Trace event output", eventTypes = { TraceEvent.class })
 		})
 public class TraceIdFilter extends AbstractTraceIdFilter {
-
-	public static final String INPUT_PORT_NAME = "newExecution";
+	public static final String INPUT_PORT_NAME = "inputTraceEvent";
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
+
 	public static final String CONFIG_SELECTED_TRACES = TraceIdFilter.class.getName() + ".selectedTraces";
 
 	public TraceIdFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
@@ -56,7 +55,7 @@ public class TraceIdFilter extends AbstractTraceIdFilter {
 	}
 
 	/**
-	 * Creates a filter instance that only passes Execution objects <i>e</i>
+	 * Creates a filter instance that only passes {@link TraceEvent} objects <i>e</i>
 	 * whose traceId (<i>e.traceId</i>) is element of the set <i>selectedTraces</i>.
 	 * 
 	 * @param selectedTraces
@@ -65,10 +64,10 @@ public class TraceIdFilter extends AbstractTraceIdFilter {
 		super(new Configuration(null), new HashMap<String, AbstractRepository>(), selectedTraces);
 	}
 
-	@InputPort(description = "Execution input", eventTypes = { Execution.class })
-	public void newExecution(final Object data) {
-		final Execution execution = (Execution) data;
-		if (super.passId(execution.getTraceId())) {
+	@InputPort(description = "Trace event input", eventTypes = { TraceEvent.class })
+	public void inputTraceEvent(final Object data) {
+		final TraceEvent event = (TraceEvent) data;
+		if (super.passId(event.getTraceId())) {
 			super.deliver(TraceIdFilter.OUTPUT_PORT_NAME, data);
 		}
 	}

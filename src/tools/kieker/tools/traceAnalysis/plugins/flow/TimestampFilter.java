@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.traceAnalysis.plugins.executionFilter;
+package kieker.tools.traceAnalysis.plugins.flow;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,12 +28,12 @@ import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
+import kieker.common.record.flow.TraceEvent;
 import kieker.tools.traceAnalysis.plugins.AbstractTimestampFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 
 /**
- * Allows to filter Execution objects based on their given tin and tout
- * timestamps. <br>
+ * Allows to filter {@link TraceEvent} objects based on their {@link TraceEvent#getTimestamp()}s.<br>
  * 
  * This class has exactly one input port and one output port. It receives only objects inheriting from the class {@link Execution}. If the received object is within
  * the defined timestamps, the object is delivered unmodified to the output port.
@@ -41,12 +41,11 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * @author Andre van Hoorn
  */
 @Plugin(
-		outputPorts = {
-			@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME, description = "Execution output", eventTypes = { Execution.class })
+		outputPorts = { @OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME, description = "Trace event output", eventTypes = { TraceEvent.class })
 		})
 public class TimestampFilter extends AbstractTimestampFilter {
 
-	public static final String INPUT_PORT_NAME = "newExecution";
+	public static final String INPUT_PORT_NAME = "inputTraceEvent";
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 
 	public static final String CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP = TimestampFilter.class.getName() + ".ignoreExecutionsBeforeTimestamp";
@@ -71,9 +70,9 @@ public class TimestampFilter extends AbstractTimestampFilter {
 	}
 
 	/**
-	 * Creates a filter instance that only passes Execution objects <i>e</i>
-	 * with the property <i>e.tin &gt;= ignoreExecutionsBeforeTimestamp</i> and
-	 * <i>e.tout &lt;= ignoreExecutionsAfterTimestamp</i>.
+	 * Creates a filter instance that only passes {@link TraceEvent} objects <i>e</i>
+	 * with the property <i>e.timestamp &gt;= ignoreExecutionsBeforeTimestamp</i> and
+	 * <i>e.timestamp &lt;= ignoreExecutionsAfterTimestamp</i>.
 	 * 
 	 * @param ignoreExecutionsBeforeTimestamp
 	 * @param ignoreExecutionsAfterTimestamp
@@ -82,11 +81,11 @@ public class TimestampFilter extends AbstractTimestampFilter {
 		super(new Configuration(null), new HashMap<String, AbstractRepository>(), ignoreExecutionsBeforeTimestamp, ignoreExecutionsAfterTimestamp);
 	}
 
-	@InputPort(description = "Execution input", eventTypes = { Execution.class })
-	public void newExecution(final Object data) {
-		final Execution execution = (Execution) data;
-		if (this.inRange(execution.getTin()) && this.inRange(execution.getTout())) {
-			super.deliver(TimestampFilter.OUTPUT_PORT_NAME, execution);
+	@InputPort(description = "Trace event input", eventTypes = { TraceEvent.class })
+	public void inputTraceEvent(final Object data) {
+		final TraceEvent event = (TraceEvent) data;
+		if (this.inRange(event.getTimestamp())) {
+			super.deliver(TimestampFilter.OUTPUT_PORT_NAME, event);
 		}
 	}
 
