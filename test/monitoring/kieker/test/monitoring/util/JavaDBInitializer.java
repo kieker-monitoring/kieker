@@ -58,16 +58,17 @@ public final class JavaDBInitializer {
 		try {
 			dbConnection = DriverManager.getConnection(JavaDBInitializer.dbConnectionAddress + ";create=true");
 			JavaDBInitializer.createTables(dbConnection);
-
 		} catch (final SQLException ex) {
 			JavaDBInitializer.LOG.error("", ex);
 			System.exit(1);
 		} finally {
-			try {
-				dbConnection.close();
-			} catch (final SQLException ex) {
-				JavaDBInitializer.LOG.error("", ex);
-				System.exit(1);
+			if (dbConnection != null) {
+				try {
+					dbConnection.close();
+				} catch (final SQLException ex) {
+					JavaDBInitializer.LOG.error("", ex);
+					System.exit(1);
+				}
 			}
 		}
 		JavaDBInitializer.LOG.info(JavaDBInitializer.class.getName() + ".main(..) done");
