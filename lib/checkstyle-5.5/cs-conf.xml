@@ -81,6 +81,10 @@
         <property name="allowLegacy" value="false"/>
     </module>
 
+    <module name="JavadocPackage">
+        <property name="severity" value="warning"/>
+        <property name="authorFormat" value="\S"/>
+    </module>
 
     <!--
      !________________________________________________________________________________________
