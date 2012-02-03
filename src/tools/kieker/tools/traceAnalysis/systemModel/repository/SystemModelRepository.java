@@ -23,6 +23,7 @@ package kieker.tools.traceAnalysis.systemModel.repository;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 
 import kieker.analysis.repository.AbstractRepository;
@@ -40,6 +41,8 @@ import kieker.tools.traceAnalysis.systemModel.Signature;
  * @author Andre van Hoorn
  */
 public class SystemModelRepository extends AbstractRepository {
+
+	private static final String ENCODING = "UTF-8";
 
 	private final TypeRepository typeRepositoryFactory;
 	private final AssemblyRepository assemblyFactory;
@@ -138,8 +141,8 @@ public class SystemModelRepository extends AbstractRepository {
 		ps.println(strBuild.toString());
 	}
 
-	public void saveSystemToHTMLFile(final String outputFnBase) throws FileNotFoundException {
-		final PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".html"));
+	public void saveSystemToHTMLFile(final String outputFnBase) throws FileNotFoundException, UnsupportedEncodingException {
+		final PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".html"), false, SystemModelRepository.ENCODING);
 		ps.println("<html><head><title>System Model Reconstructed by Kieker.TraceAnalysis</title>");
 		ps.println("<style type=\"text/css\">\n" + ".colTitle { font-family:sans; font-size:11px; }\n" + ".cell { font-family:monospace; font-size:10px; }\n"
 				+ "h1 { font-family:sans; font-size:14px; }\n" + "</style>");

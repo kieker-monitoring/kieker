@@ -27,6 +27,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -72,6 +73,8 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	public static final String CONFIG_FLUSH = SyncFsWriter.PREFIX + "flush"; // NOCS (afterPREFIX)
 
 	private static final Log LOG = LogFactory.getLog(SyncFsWriter.class);
+
+	private static final String ENCODING = "UTF-8";
 
 	// internal variables
 	private final boolean autoflush;
@@ -162,17 +165,19 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 
 	/**
 	 * Determines and sets a new filename
+	 * 
+	 * @throws UnsupportedEncodingException
 	 */
-	private final void prepareFile() throws FileNotFoundException {
+	private final void prepareFile() throws FileNotFoundException, UnsupportedEncodingException {
 		if (++this.entriesInCurrentFileCounter > this.maxEntriesInFile) {
 			this.entriesInCurrentFileCounter = 1;
 			if (this.pos != null) {
 				this.pos.close();
 			}
 			if (this.autoflush) {
-				this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.getFilename())), true);
+				this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.getFilename()), SyncFsWriter.ENCODING), true);
 			} else {
-				this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.getFilename()))), false);
+				this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.getFilename()), SyncFsWriter.ENCODING)), false);
 			}
 			this.pos.flush();
 		}

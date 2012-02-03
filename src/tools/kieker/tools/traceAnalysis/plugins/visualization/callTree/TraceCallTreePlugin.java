@@ -23,6 +23,7 @@ package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -62,6 +63,9 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 
 	private static final Log LOG = LogFactory.getLog(TraceCallTreePlugin.class);
+
+	private static final String ENCODING = "UTF-8";
+
 	private final CallTreeNode root;
 	private final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory;
 	private final SystemModelRepository systemEntityFactory;
@@ -162,14 +166,15 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 	}
 
 	private static void saveTreeToDotFile(final SystemModelRepository systemEntityFactory, final CallTreeNode root, final String outputFnBase,
-			final boolean includeWeights, final boolean shortLabels) throws FileNotFoundException {
-		final PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"));
+			final boolean includeWeights, final boolean shortLabels) throws FileNotFoundException, UnsupportedEncodingException {
+		final PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"), false, TraceCallTreePlugin.ENCODING);
 		TraceCallTreePlugin.dotFromCallingTree(systemEntityFactory, root, ps, includeWeights, shortLabels);
 		ps.flush();
 		ps.close();
 	}
 
-	public void saveTreeToDotFile(final String outputFnBaseL, final boolean includeWeightsL, final boolean shortLabelsL) throws FileNotFoundException {
+	public void saveTreeToDotFile(final String outputFnBaseL, final boolean includeWeightsL, final boolean shortLabelsL) throws FileNotFoundException,
+			UnsupportedEncodingException {
 		TraceCallTreePlugin.saveTreeToDotFile(this.systemEntityFactory, this.root, outputFnBaseL, includeWeightsL, shortLabelsL);
 		this.printMessage(new String[] { "Wrote call tree to file '" + outputFnBaseL + ".dot" + "'", "Dot file can be converted using the dot tool",
 			"Example: dot -T svg " + outputFnBaseL + ".dot" + " > " + outputFnBaseL + ".svg", });
@@ -206,7 +211,7 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 	}
 
 	public static void writeDotForMessageTrace(final SystemModelRepository systemEntityFactory, final MessageTrace msgTrace, final String outputFilename,
-			final boolean includeWeights, final boolean shortLabels) throws FileNotFoundException, TraceProcessingException {
+			final boolean includeWeights, final boolean shortLabels) throws FileNotFoundException, TraceProcessingException, UnsupportedEncodingException {
 		final CallTreeNode root = new CallTreeNode(null, new CallTreeOperationHashKey(systemEntityFactory.getAllocationFactory().getRootAllocationComponent(),
 				systemEntityFactory.getOperationFactory().getRootOperation()));
 		TraceCallTreePlugin.addTraceToTree(root, msgTrace, false); // false: no aggregation
@@ -267,6 +272,9 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 		} catch (final FileNotFoundException ex) {
 			TraceCallTreePlugin.this.reportError(mt.getTraceId());
 			TraceCallTreePlugin.LOG.error("File not found", ex);
+		} catch (final UnsupportedEncodingException ex) {
+			TraceCallTreePlugin.this.reportError(mt.getTraceId());
+			TraceCallTreePlugin.LOG.error("Encoding not supported", ex);
 		}
 	}
 
