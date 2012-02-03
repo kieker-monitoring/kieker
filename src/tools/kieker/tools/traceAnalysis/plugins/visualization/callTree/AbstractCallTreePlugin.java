@@ -23,6 +23,7 @@ package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -58,6 +59,8 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
 public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProcessingPlugin {
 
 	private static final Log LOG = LogFactory.getLog(AbstractCallTreePlugin.class);
+
+	private static final String ENCODING = "UTF-8";
 
 	public AbstractCallTreePlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		super(configuration, repositories);
@@ -184,8 +187,8 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
 	}
 
 	protected static void saveTreeToDotFile(final SystemModelRepository systemEntityFactory, final AbstractCallTreeNode<?> root, final String outputFnBase,
-			final boolean includeWeights, final boolean includeEois, final boolean shortLabels) throws FileNotFoundException {
-		final PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"));
+			final boolean includeWeights, final boolean includeEois, final boolean shortLabels) throws FileNotFoundException, UnsupportedEncodingException {
+		final PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"), false, AbstractCallTreePlugin.ENCODING);
 		AbstractCallTreePlugin.dotFromCallingTree(systemEntityFactory, root, ps, includeWeights, includeEois, shortLabels);
 		ps.flush();
 		ps.close();
@@ -218,7 +221,8 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
 	}
 
 	public static void writeDotForMessageTrace(final SystemModelRepository systemEntityFactory, final AbstractCallTreeNode<?> root, final MessageTrace msgTrace,
-			final String outputFilename, final boolean includeWeights, final boolean shortLabels) throws FileNotFoundException, TraceProcessingException {
+			final String outputFilename, final boolean includeWeights, final boolean shortLabels) throws FileNotFoundException, TraceProcessingException,
+			UnsupportedEncodingException {
 		AbstractCallTreePlugin.addTraceToTree(root, msgTrace, false); // false: no aggregation
 		AbstractCallTreePlugin.saveTreeToDotFile(systemEntityFactory, root, outputFilename, includeWeights, true, shortLabels); // includeEois
 	}

@@ -23,6 +23,7 @@ package kieker.monitoring.writer;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -39,6 +40,8 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 	private static final String PREFIX = PrintStreamWriter.class.getName() + ".";
 	private static final String STREAM = PrintStreamWriter.PREFIX + "Stream";
 
+	private static final String ENCODING = "UTF-8";
+
 	private PrintStream printStream;
 
 	public PrintStreamWriter(final Configuration configuration) {
@@ -46,14 +49,14 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 	}
 
 	@Override
-	public void init() throws FileNotFoundException {
+	public void init() throws FileNotFoundException, UnsupportedEncodingException {
 		final String printStreamName = this.configuration.getStringProperty(PrintStreamWriter.STREAM);
 		if ("STDOUT".equals(printStreamName)) {
 			this.printStream = System.out;
 		} else if ("STDERR".equals(printStreamName)) {
 			this.printStream = System.err;
 		} else {
-			this.printStream = new PrintStream(new FileOutputStream(printStreamName));
+			this.printStream = new PrintStream(new FileOutputStream(printStreamName), false, PrintStreamWriter.ENCODING);
 		}
 	}
 

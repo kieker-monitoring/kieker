@@ -33,6 +33,8 @@ import kieker.common.record.HashRecord;
  */
 public class MappingFileWriter {
 
+	private static final String ENCODING = "UTF-8";
+
 	private final File mappingFile;
 
 	public MappingFileWriter(final String path) throws IOException {
@@ -49,7 +51,7 @@ public class MappingFileWriter {
 		synchronized (this.mappingFile) {
 			PrintWriter pw = null;
 			try {
-				pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.mappingFile, true)));
+				pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.mappingFile, true), MappingFileWriter.ENCODING));
 				pw.print('$');
 				pw.print(hashRecord.getId());
 				pw.print('=');

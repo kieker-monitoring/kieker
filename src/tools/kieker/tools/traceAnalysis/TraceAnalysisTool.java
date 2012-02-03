@@ -121,6 +121,8 @@ public final class TraceAnalysisTool {
 	private static long ignoreExecutionsBeforeTimestamp = TimestampFilter.MIN_TIMESTAMP;
 	private static long ignoreExecutionsAfterTimestamp = TimestampFilter.MAX_TIMESTAMP;
 
+	private static final String ENCODING = "UTF-8";
+
 	private TraceAnalysisTool() {}
 
 	private static boolean parseArgs(final String[] args) {
@@ -700,7 +702,7 @@ public final class TraceAnalysisTool {
 		final String outputFn = new File(outputFnPrefixL).getCanonicalPath();
 		PrintStream ps = null;
 		try {
-			ps = new PrintStream(new FileOutputStream(outputFn));
+			ps = new PrintStream(new FileOutputStream(outputFn), false, TraceAnalysisTool.ENCODING);
 			int numClasses = 0;
 			final Map<ExecutionTrace, Integer> classMap = traceEquivFilter.getEquivalenceClassMap(); // NOPMD (UseConcurrentHashMap)
 			for (final Entry<ExecutionTrace, Integer> e : classMap.entrySet()) {

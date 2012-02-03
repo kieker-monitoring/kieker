@@ -23,6 +23,7 @@ package kieker.analysis.plugin;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,10 +52,13 @@ public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
 	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
 	public static final String CONFIG_STREAM = DummyRecordConsumer.class.getName() + ".Stream";
 
+	private static final String ENCODING = "UTF-8";
+
 	private final PrintStream printStream;
 	private final String printStreamName;
 
-	public DummyRecordConsumer(final Configuration configuration, final Map<String, AbstractRepository> repositories) throws FileNotFoundException {
+	public DummyRecordConsumer(final Configuration configuration, final Map<String, AbstractRepository> repositories) throws FileNotFoundException,
+			UnsupportedEncodingException {
 		super(configuration, repositories);
 
 		/* Get the name of the stream. */
@@ -68,7 +72,7 @@ public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
 			this.printStream = System.err;
 			this.printStreamName = null;
 		} else {
-			this.printStream = new PrintStream(new FileOutputStream(printStreamName));
+			this.printStream = new PrintStream(new FileOutputStream(printStreamName), false, DummyRecordConsumer.ENCODING);
 			this.printStreamName = printStreamName;
 		}
 	}

@@ -26,6 +26,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.IMonitoringRecord;
@@ -36,6 +37,8 @@ import kieker.monitoring.writer.filesystem.MappingFileWriter;
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  */
 public final class FsWriterThread extends AbstractFsWriterThread {
+
+	private static final String ENCODING = "UTF-8";
 
 	private PrintWriter pos = null;
 	private final boolean autoflush;
@@ -63,16 +66,19 @@ public final class FsWriterThread extends AbstractFsWriterThread {
 
 	/**
 	 * Prepares a new file if needed.
+	 * 
+	 * @throws FileNotFoundException
+	 * @throws UnsupportedEncodingException
 	 */
 	@Override
-	protected final void prepareFile() throws FileNotFoundException {
+	protected final void prepareFile() throws FileNotFoundException, UnsupportedEncodingException {
 		if (this.pos != null) {
 			this.pos.close();
 		}
 		if (this.autoflush) {
-			this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.getFilename())), true);
+			this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.getFilename()), FsWriterThread.ENCODING), true);
 		} else {
-			this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.getFilename()))), false);
+			this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.getFilename()), FsWriterThread.ENCODING)), false);
 		}
 		this.pos.flush();
 	}

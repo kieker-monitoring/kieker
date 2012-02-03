@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,6 +68,8 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 	private static final String SEQUENCE_PIC_PATH = "META-INF/sequence.pic";
 	private static final String SEQUENCE_PIC_CONTENT;
 
+	private static final String ENCODING = "UTF-8";
+
 	private final String outputFnBase;
 	private final boolean shortLabels;
 
@@ -83,7 +86,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 		try {
 			final InputStream is = SequenceDiagramPlugin.class.getClassLoader().getResourceAsStream(SequenceDiagramPlugin.SEQUENCE_PIC_PATH);
 			String line;
-			reader = new BufferedReader(new InputStreamReader(is));
+			reader = new BufferedReader(new InputStreamReader(is, SequenceDiagramPlugin.ENCODING));
 			while ((line = reader.readLine()) != null) { // NOPMD (assign)
 				sb.append(line).append("\n");
 			}
@@ -157,6 +160,9 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 		} catch (final FileNotFoundException ex) {
 			SequenceDiagramPlugin.this.reportError(((AbstractTrace) mt).getTraceId());
 			SequenceDiagramPlugin.LOG.error("File not found", ex);
+		} catch (final UnsupportedEncodingException ex) {
+			SequenceDiagramPlugin.this.reportError(((AbstractTrace) mt).getTraceId());
+			SequenceDiagramPlugin.LOG.error("Encoding not supported", ex);
 		}
 	}
 
@@ -314,8 +320,8 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 	}
 
 	public static void writePicForMessageTrace(final SystemModelRepository systemEntityFactory, final MessageTrace msgTrace, final SDModes sdMode,
-			final String outputFilename, final boolean shortLabels) throws FileNotFoundException {
-		final PrintStream ps = new PrintStream(new FileOutputStream(outputFilename));
+			final String outputFilename, final boolean shortLabels) throws FileNotFoundException, UnsupportedEncodingException {
+		final PrintStream ps = new PrintStream(new FileOutputStream(outputFilename), false, SequenceDiagramPlugin.ENCODING);
 		SequenceDiagramPlugin.picFromMessageTrace(systemEntityFactory, msgTrace, sdMode, ps, shortLabels);
 		ps.flush();
 		ps.close();

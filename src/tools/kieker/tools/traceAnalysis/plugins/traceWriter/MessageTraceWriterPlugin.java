@@ -21,8 +21,9 @@
 package kieker.tools.traceAnalysis.plugins.traceWriter;
 
 import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,13 +44,16 @@ public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlug
 	public static final String CONFIG_OUTPUT_FN = MessageTraceWriterPlugin.class.getName() + ".outputFn";
 	public static final String MSG_TRACES_INPUT_PORT_NAME = "msgTraceInput";
 	private static final Log LOG = LogFactory.getLog(MessageTraceWriterPlugin.class);
+
+	private static final String ENCODING = "UTF-8";
+
 	private final String outputFn;
 	private final BufferedWriter ps;
 
 	public MessageTraceWriterPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories) throws IOException {
 		super(configuration, repositories);
 		this.outputFn = this.configuration.getStringProperty(MessageTraceWriterPlugin.CONFIG_OUTPUT_FN);
-		this.ps = new BufferedWriter(new FileWriter(this.outputFn));
+		this.ps = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.outputFn), MessageTraceWriterPlugin.ENCODING));
 	}
 
 	@Override

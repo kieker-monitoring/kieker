@@ -22,8 +22,9 @@ package kieker.tools.mappingGenerator;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -41,6 +42,9 @@ import kieker.common.logging.LogFactory;
 public class NameIdMap {
 
 	private static final Log LOG = LogFactory.getLog(NameIdMap.class);
+
+	private static final String ENCODING = "UTF-8";
+
 	private final Map<String, Integer> name2IdMap = new Hashtable<String, Integer>(); // NOPMD (UseConcurrentHashMap)
 	private final Map<Integer, String> id2NameMap = new TreeMap<Integer, String>(); // NOPMD (UseConcurrentHashMap)
 	private final AtomicInteger nextId = new AtomicInteger(0);
@@ -74,7 +78,7 @@ public class NameIdMap {
 	public void writeMapToFile(final String filename) throws IOException {
 		final File f = new File(filename);
 		PrintWriter pw = null;
-		pw = new PrintWriter(f);
+		pw = new PrintWriter(f, NameIdMap.ENCODING);
 		synchronized (this.id2NameMap) {
 			final Iterator<Integer> ids = this.id2NameMap.keySet().iterator();
 			final Iterator<String> names = this.id2NameMap.values().iterator();
@@ -98,7 +102,7 @@ public class NameIdMap {
 		final File mappingFile = new File(filename);
 		BufferedReader in = null;
 		try {
-			in = new BufferedReader(new FileReader(mappingFile));
+			in = new BufferedReader(new InputStreamReader(new FileInputStream(mappingFile), NameIdMap.ENCODING));
 			String line;
 
 			while ((line = in.readLine()) != null) { // NOPMD (assign)

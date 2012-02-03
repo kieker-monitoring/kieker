@@ -21,8 +21,9 @@
 package kieker.tools.traceAnalysis.plugins.traceWriter;
 
 import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +44,9 @@ public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionT
 	public static final String CONFIG_OUTPUT_FN = InvalidExecutionTraceWriterPlugin.class.getName() + ".outputFn";
 	public static final String INVALID_EXECUTION_TRACES_INPUT_PORT_NAME = "newEvent";
 	private static final Log LOG = LogFactory.getLog(InvalidExecutionTraceWriterPlugin.class);
+
+	private static final String ENCODING = "UTF-8";
+
 	private final String outputFn;
 	private final BufferedWriter ps;
 
@@ -50,7 +54,7 @@ public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionT
 			throws IOException {
 		super(configuration, repositories);
 		this.outputFn = configuration.getStringProperty(InvalidExecutionTraceWriterPlugin.CONFIG_OUTPUT_FN);
-		this.ps = new BufferedWriter(new FileWriter(this.outputFn));
+		this.ps = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.outputFn), InvalidExecutionTraceWriterPlugin.ENCODING));
 	}
 
 	@Override

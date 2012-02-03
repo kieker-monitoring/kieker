@@ -57,6 +57,8 @@ final class FSDirectoryReader implements Runnable {
 	private static final String NORMAL_FILE_POSTFIX = ".dat";
 	private static final String BINARY_FILE_POSTFIX = ".bin";
 
+	private static final String ENCODING = "UTF-8";
+
 	private final Map<Integer, String> stringRegistry = new HashMap<Integer, String>(); // NOPMD (no synchronization needed)
 	// This set of classes is used to filter only records of a specific type. The value null means all record types are read.
 	private final Set<Class<? extends IMonitoringRecord>> recordTypeSelector;
@@ -151,7 +153,7 @@ final class FSDirectoryReader implements Runnable {
 		// found any kind of mapping file
 		BufferedReader in = null;
 		try {
-			in = new BufferedReader(new InputStreamReader(new FileInputStream(mappingFile)));
+			in = new BufferedReader(new InputStreamReader(new FileInputStream(mappingFile), FSDirectoryReader.ENCODING));
 			String line;
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
 				line = line.trim();
@@ -198,7 +200,7 @@ final class FSDirectoryReader implements Runnable {
 	private final void processNormalInputFile(final File inputFile) {
 		BufferedReader in = null;
 		try {
-			in = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
+			in = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile), FSDirectoryReader.ENCODING));
 			String line;
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
 				line = line.trim();

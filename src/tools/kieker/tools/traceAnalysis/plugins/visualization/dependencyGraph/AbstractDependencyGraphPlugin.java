@@ -23,6 +23,7 @@ package kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.Map;
 
@@ -45,6 +46,8 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 	public static final String STEREOTYPE_ALLOCATION_COMPONENT = "<<deployment component>>";
 
 	private static final String NODE_PREFIX = "depNode_";
+
+	private static final String ENCODING = "UTF-8";
 
 	protected final DependencyGraph<T> dependencyGraph;
 	private int numGraphsSaved = 0;
@@ -92,8 +95,8 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 	}
 
 	public final void saveToDotFile(final String outputFnBase, final boolean includeWeights, final boolean shortLabels, final boolean plotSelfLoops)
-			throws FileNotFoundException {
-		final PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"));
+			throws FileNotFoundException, UnsupportedEncodingException {
+		final PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"), false, AbstractDependencyGraphPlugin.ENCODING);
 		this.graphToDot(ps, includeWeights, shortLabels, plotSelfLoops);
 		ps.flush();
 		ps.close();
