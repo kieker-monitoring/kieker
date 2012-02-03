@@ -81,11 +81,6 @@
         <property name="allowLegacy" value="false"/>
     </module>
 
-    <module name="JavadocPackage">
-        <property name="severity" value="warning"/>
-        <property name="authorFormat" value="\S"/>
-    </module>
-
     <!--
      !________________________________________________________________________________________
      !
@@ -698,6 +693,11 @@
             <property name="allowMissingParamTags" value="false"/>
             <property name="allowUnknownTags"      value="false"/>
             <property name="tokens"                value="INTERFACE_DEF, CLASS_DEF"/>
+        </module>
+
+        <module name="JavadocType">
+            <property name="severity" value="warning"/>
+            <property name="authorFormat" value="\S"/>
         </module>
 
         <!-- Checks that variables have Javadoc comments. !-->
