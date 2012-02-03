@@ -13,7 +13,7 @@ import org.junit.Assert;
 
 @Plugin(
 		outputPorts = {
-			@OutputPort(name = SimpleSourcePlugin.OUTPUT_PORT_NAME, eventTypes = {})
+			@OutputPort(name = SimpleSourcePlugin.OUTPUT_PORT_NAME, eventTypes = { })
 		})
 public class SimpleSourcePlugin extends AbstractAnalysisPlugin {
 

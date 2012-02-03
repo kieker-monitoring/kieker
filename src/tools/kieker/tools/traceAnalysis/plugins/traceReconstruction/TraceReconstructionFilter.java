@@ -114,8 +114,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 		super(configuration, repositories);
 
 		/* Load the root execution from the repository if possible. */
-		if ((repositories.containsKey(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME) && (repositories
-				.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME) instanceof SystemModelRepository))) {
+		if (repositories.containsKey(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME) && (repositories
+				.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME) instanceof SystemModelRepository)) {
 			this.rootExecution = ((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getRootExecution();
 		} else {
 			this.rootExecution = null;

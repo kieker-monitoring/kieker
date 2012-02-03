@@ -43,8 +43,8 @@ public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin
 		super(configuration, repositories);
 
 		/* Use the given repository if possible. */
-		if ((repositories.containsKey(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME) && (repositories
-				.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME) instanceof SystemModelRepository))) {
+		if (repositories.containsKey(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME) && (repositories
+				.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME) instanceof SystemModelRepository)) {
 			this.systemEntityFactory = (SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME);
 		} else {
 			this.systemEntityFactory = null;

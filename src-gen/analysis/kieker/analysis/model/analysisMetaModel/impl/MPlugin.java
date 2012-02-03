@@ -13,7 +13,6 @@ import kieker.analysis.model.analysisMetaModel.MIOutputPort;
 import kieker.analysis.model.analysisMetaModel.MIPlugin;
 import kieker.analysis.model.analysisMetaModel.MIProperty;
 import kieker.analysis.model.analysisMetaModel.MIRepositoryConnector;
-import kieker.analysis.model.analysisMetaModel.MIRepository;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;

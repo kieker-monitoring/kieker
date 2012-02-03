@@ -128,9 +128,8 @@ public final class AnalysisController {
 				// TODO: perhaps it would be better, if we always return a correct AnalysisController, thus perhaps one with an empty Project.
 				throw ex;
 			}
-		} else {
-			// TODO: handle else!
 		}
+		// TODO: handle else!
 	}
 
 	public static final MIProject loadFromFile(final File file) throws Exception {
@@ -330,7 +329,12 @@ public final class AnalysisController {
 			}
 
 			for (final AbstractPlugin plugin : plugins) {
-				final MIPlugin mPlugin = (plugin instanceof AbstractReaderPlugin) ? factory.createReader() : factory.createAnalysisPlugin();
+				MIPlugin mPlugin;
+				if (plugin instanceof AbstractReaderPlugin) {
+					mPlugin = factory.createReader();
+				} else {
+					mPlugin = factory.createAnalysisPlugin();
+				}
 
 				/* Remember the mapping. */
 				pluginMap.put(plugin, mPlugin);
@@ -349,14 +353,14 @@ public final class AnalysisController {
 				}
 
 				/* Create the ports. */
-				final String outs[] = plugin.getAllOutputPortNames();
+				final String[] outs = plugin.getAllOutputPortNames();
 				for (final String out : outs) {
 					final MIOutputPort mOutputPort = factory.createOutputPort();
 					mOutputPort.setName(out);
 					mPlugin.getOutputPorts().add(mOutputPort);
 				}
 
-				final String ins[] = plugin.getAllInputPortNames();
+				final String[] ins = plugin.getAllInputPortNames();
 				for (final String in : ins) {
 					final MIInputPort mInputPort = factory.createInputPort();
 					mInputPort.setName(in);
@@ -369,7 +373,7 @@ public final class AnalysisController {
 			/* Now connect the plugins. */
 			for (final AbstractPlugin plugin : plugins) {
 				final MIPlugin mOutputPlugin = pluginMap.get(plugin);
-				final String outputPortNames[] = plugin.getAllOutputPortNames();
+				final String[] outputPortNames = plugin.getAllOutputPortNames();
 
 				/* Check all output ports of the original plugin. */
 				for (final String outputPortName : outputPortNames) {

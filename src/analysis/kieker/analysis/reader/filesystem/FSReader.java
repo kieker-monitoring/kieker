@@ -159,7 +159,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 			configuration.setProperty(FSReader.CONFIG_ONLYRECORDS, Configuration.toProperty(new String[] {}));
 		} else {
 			final int len = this.readOnlyRecordsOfType.size();
-			final String onlyRecords[] = new String[len];
+			final String[] onlyRecords = new String[len];
 			final Iterator<Class<? extends IMonitoringRecord>> iter = this.readOnlyRecordsOfType.iterator();
 			for (int i = 0; i < len; i++) {
 				onlyRecords[i] = iter.next().getName();

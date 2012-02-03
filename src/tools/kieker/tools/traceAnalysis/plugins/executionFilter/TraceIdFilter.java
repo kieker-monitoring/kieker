@@ -101,7 +101,7 @@ public class TraceIdFilter extends AbstractAnalysisPlugin {
 		final Configuration configuration = new Configuration(null);
 
 		if (this.selectedTraces != null) {
-			final String selectedTracesArr[] = new String[this.selectedTraces.size()];
+			final String[] selectedTracesArr = new String[this.selectedTraces.size()];
 			final Iterator<Long> iter = this.selectedTraces.iterator();
 			int i = 0;
 			while (iter.hasNext()) {
