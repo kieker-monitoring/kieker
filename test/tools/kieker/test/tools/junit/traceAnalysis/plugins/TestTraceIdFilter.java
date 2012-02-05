@@ -33,7 +33,6 @@ import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
 import kieker.test.tools.junit.traceAnalysis.util.SimpleSinkPlugin;
-import kieker.tools.traceAnalysis.plugins.executionFilter.TimestampFilter;
 import kieker.tools.traceAnalysis.plugins.executionFilter.TraceIdFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
@@ -52,8 +51,8 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 	private final ExecutionFactory eFactory = new ExecutionFactory(this.systemEntityFactory);
 
 	/**
-	 * Creates a {@link TimestampFilter} with the given properties
-	 * using the constructor {@link TimestampFilter#TimestampFilter(kieker.common.configuration.Configuration, java.util.Map)}
+	 * Creates a {@link TraceIdFilter} with the given properties
+	 * using the constructor {@link TraceIdFilter#TraceIdFilter(Configuration, java.util.Map)}.
 	 * 
 	 * @param ignoreExecutionsBeforeTimestamp
 	 * @param ignoreExecutionsAfterTimestamp
@@ -80,7 +79,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 	}
 
 	/**
-	 * Given a TraceIdFilter that passes traceIds included in a set <i>idsToPass</i>,
+	 * Given a {@link TraceIdFilter} that passes traceIds included in a set <i>idsToPass</i>,
 	 * assert that an Execution object <i>exec</i> with traceId not element of
 	 * <i>idsToPass</i> is not passed through the filter.
 	 */
@@ -106,7 +105,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 	}
 
 	/**
-	 * Given a TraceIdFilter that passes traceIds included in a set <i>idsToPass</i>,
+	 * Given a {@link TraceIdFilter} that passes traceIds included in a set <i>idsToPass</i>,
 	 * assert that an Execution object <i>exec</i> with traceId element of
 	 * <i>idsToPass</i> is passed through the filter.
 	 */
@@ -135,7 +134,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 	}
 
 	/**
-	 * Given a TraceIdFilter that passes all traceIds, assert that an Execution
+	 * Given a {@link TraceIdFilter} that passes all traceIds, assert that an Execution
 	 * object <i>exec</i> is passed through the filter.
 	 */
 	@Test

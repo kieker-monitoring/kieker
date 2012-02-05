@@ -59,6 +59,7 @@ public class ExecutionTrace extends AbstractTrace {
 				}
 				return 0;
 			} else {
+				// TODO: Should never happen, as #add makes sure that all trace ids equal
 				if (e1.getTin() < e2.getTin()) {
 					return -1;
 				}

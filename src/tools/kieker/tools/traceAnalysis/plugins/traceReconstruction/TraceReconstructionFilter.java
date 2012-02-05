@@ -63,6 +63,7 @@ import kieker.tools.util.LoggingTimestampConverter;
 			eventTypes = { InvalidExecutionTrace.class })
 })
 public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
+	private static final Log LOG = LogFactory.getLog(TraceReconstructionFilter.class);
 
 	public static final String EXECUTION_TRACE_INPUT_PORT_NAME = "newExecution";
 	public static final String MESSAGE_TRACE_OUTPUT_PORT_NAME = "MessageTraceOutput";
@@ -72,7 +73,6 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	public static final String CONFIG_IGNORE_INVALID_TRACES = TraceReconstructionFilter.class.getName() + ".ignoreInvalidTraces";
 
 	public static final int MAX_DURATION_MILLIS = Integer.MAX_VALUE;
-	private static final Log LOG = LogFactory.getLog(TraceReconstructionFilter.class);
 	private static final long MAX_DURATION_NANOS = Long.MAX_VALUE;
 	/** TraceId x trace */
 	private final Map<Long, ExecutionTrace> pendingTraces = new Hashtable<Long, ExecutionTrace>(); // NOPMD (UseConcurrentHashMap)

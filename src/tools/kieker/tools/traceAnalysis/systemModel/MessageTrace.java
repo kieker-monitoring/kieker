@@ -28,21 +28,21 @@ import java.util.List;
  */
 public class MessageTrace extends AbstractTrace {
 
-	private final List<AbstractMessage> set;
+	private final List<AbstractMessage> messages;
 
 	public MessageTrace(final long traceId, final List<AbstractMessage> seq) {
 		super(traceId);
-		this.set = seq;
+		this.messages = seq;
 	}
 
 	public final List<AbstractMessage> getSequenceAsVector() {
-		return this.set;
+		return this.messages;
 	}
 
 	@Override
 	public String toString() {
 		final StringBuilder strBuild = new StringBuilder("Trace " + this.getTraceId() + ":\n");
-		final Iterator<AbstractMessage> it = this.set.iterator();
+		final Iterator<AbstractMessage> it = this.messages.iterator();
 		while (it.hasNext()) {
 			final AbstractMessage m = it.next();
 			strBuild.append("<");
@@ -68,6 +68,6 @@ public class MessageTrace extends AbstractTrace {
 		}
 		final MessageTrace other = (MessageTrace) obj;
 
-		return this.set.equals(other.set);
+		return this.messages.equals(other.messages);
 	}
 }

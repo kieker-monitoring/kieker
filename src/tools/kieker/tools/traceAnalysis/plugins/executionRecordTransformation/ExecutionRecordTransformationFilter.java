@@ -43,7 +43,7 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.Signature;
 
 /**
- * Transforms KiekerExecutionRecords into Execution objects.<br>
+ * Transforms {@link OperationExecutionRecord}s into {@link Execution} objects.<br>
  * 
  * This class has exactly one input port and one output port. It receives objects inheriting from {@link OperationExecutionRecord}. The received object is
  * transformed into an instance of {@link Execution}.
