@@ -52,9 +52,8 @@
           </sourceroots>
     </iajc>
     <!-- WORKAROUND END -->
-    <copy todir="build/META-INF">
-      <fileset dir="src/META-INF"/>
-    </copy>
+    <copy tofile="build/META-INF/aop.xml" file="src/META-INF/aop.specj2010.xml"/>
+    <copy tofile="build/META-INF/kieker.monitoring.properties" file="src/META-INF/kieker.monitoring.specj2010.properties"/>
   </target>
   
   <target name="jar" depends="compile">
