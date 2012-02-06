@@ -36,7 +36,6 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.IMonitoringRecordReceiver;
 
 /**
  * Listens to a JMS queue and simply passes each record to a specified {@link IMonitoringRecordReceiver}.

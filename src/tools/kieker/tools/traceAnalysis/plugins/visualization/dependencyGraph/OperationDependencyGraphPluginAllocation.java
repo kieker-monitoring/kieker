@@ -82,7 +82,7 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 						((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getAllocationFactory()
 								.getRootAllocationComponent())));
 		this.pairFactory = new AllocationComponentOperationPairFactory(
-				((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)));
+				(SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME));
 		this.dotOutputFile = new File(this.configuration.getStringProperty(OperationDependencyGraphPluginAllocation.CONFIG_DOT_OUTPUT_FILE));
 		this.includeWeights = this.configuration.getBooleanProperty(OperationDependencyGraphPluginAllocation.CONFIG_INCLUDE_WEIGHTS);
 		this.shortLabels = this.configuration.getBooleanProperty(OperationDependencyGraphPluginAllocation.CONFIG_SHORT_LABELS);

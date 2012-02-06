@@ -37,7 +37,7 @@ import kieker.common.configuration.Configuration;
  * @author Jan Waller
  */
 @Plugin(outputPorts = {
-	@OutputPort(name = SilentCountingRecordConsumer.OUTPUT_PORT_NAME, eventTypes = {}, description = "Default output port")
+	@OutputPort(name = SilentCountingRecordConsumer.OUTPUT_PORT_NAME, eventTypes = { }, description = "Default output port")
 })
 public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
 
@@ -53,7 +53,7 @@ public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
 		super(configuration, repositories);
 	}
 
-	@InputPort(eventTypes = {}, description = "Default input port")
+	@InputPort(eventTypes = { }, description = "Default input port")
 	public final void newEvent(final Object event) {
 		SilentCountingRecordConsumer.this.counter.incrementAndGet();
 		super.deliver(SilentCountingRecordConsumer.OUTPUT_PORT_NAME, event);

@@ -44,7 +44,7 @@ import kieker.common.logging.LogFactory;
  * 
  * @author Nils Christian Ehmke
  */
-@Plugin(outputPorts = {})
+@Plugin(outputPorts = { })
 public abstract class AbstractPlugin {
 
 	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
@@ -81,7 +81,7 @@ public abstract class AbstractPlugin {
 		}
 		/* Get all input ports. */
 		this.inputPorts = new HashMap<String, InputPort>();
-		final Method allMethods[] = this.getClass().getMethods();
+		final Method[] allMethods = this.getClass().getMethods();
 		for (final Method method : allMethods) {
 			final InputPort inputPort = method.getAnnotation(InputPort.class);
 			if (inputPort != null) {
@@ -283,7 +283,7 @@ public abstract class AbstractPlugin {
 
 	public final String[] getAllInputPortNames() {
 		final List<String> inputNames = new ArrayList<String>();
-		final Method allMethods[] = this.getClass().getMethods();
+		final Method[] allMethods = this.getClass().getMethods();
 		for (final Method method : allMethods) {
 			final InputPort inputPort = method.getAnnotation(InputPort.class);
 			if (inputPort != null) {

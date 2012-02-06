@@ -49,6 +49,6 @@ public @interface InputPort {
 	 * 
 	 * @return The event types for this class.
 	 */
-	Class<?>[] eventTypes() default {};
+	Class<?>[] eventTypes() default { };
 
 }

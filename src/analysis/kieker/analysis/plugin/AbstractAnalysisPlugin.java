@@ -22,7 +22,6 @@ package kieker.analysis.plugin;
 
 import java.util.Map;
 
-import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 

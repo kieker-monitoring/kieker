@@ -23,7 +23,6 @@ package kieker.analysis;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -43,6 +42,7 @@ import kieker.analysis.model.analysisMetaModel.MIPlugin;
 import kieker.analysis.model.analysisMetaModel.MIProject;
 import kieker.analysis.model.analysisMetaModel.MIProperty;
 import kieker.analysis.model.analysisMetaModel.MIRepository;
+import kieker.analysis.model.analysisMetaModel.MIRepositoryConnector;
 import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelFactory;
 import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
@@ -75,7 +75,6 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
  * 
  * @author Andre van Hoorn, Matthias Rohr
  */
-// TODO auf neue Konstruktoren der Plugins umstellen
 public final class AnalysisController {
 	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
 
@@ -128,11 +127,19 @@ public final class AnalysisController {
 				// TODO: perhaps it would be better, if we always return a correct AnalysisController, thus perhaps one with an empty Project.
 				throw ex;
 			}
-		} else {
-			// TODO: handle else!
 		}
+		// TODO: handle else!
 	}
 
+	/**
+	 * This method can be used to load a meta model instance from a given file.
+	 * 
+	 * @param file
+	 *            The file to be loaded.
+	 * @return An instance of <code>MIProject</code> if everything went well, null otherwise.
+	 * @throws Exception
+	 *             If something went wrong.
+	 */
 	public static final MIProject loadFromFile(final File file) throws Exception {
 		final EList<EObject> content = AnalysisController.openModelFile(file);
 		if ((content != null) && !content.isEmpty()) {
@@ -142,7 +149,14 @@ public final class AnalysisController {
 		return null;
 	}
 
-	private final Configuration modelPropertiesToConfiguration(final EList<MIProperty> mProperties) {
+	/**
+	 * This method can be used to convert a given list of <code>MIProperty</code> to a configuration object.
+	 * 
+	 * @param mProperties
+	 *            The properties to be converted.
+	 * @return A filled configuration object.
+	 */
+	private static final Configuration modelPropertiesToConfiguration(final EList<MIProperty> mProperties) {
 		final Configuration configuration = new Configuration(null);
 		/* Run through the properties and convert every single of them. */
 		for (final MIProperty mProperty : mProperties) {
@@ -151,9 +165,13 @@ public final class AnalysisController {
 		return configuration;
 	}
 
-	// TODO Correct this method for the new model-structure
-	private final void loadFromModelProject(final MIProject mproject) throws InstantiationException, IllegalAccessException, IllegalArgumentException,
-			InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
+	/**
+	 * This method can be used to load the configuration from a given meta model instance.
+	 * 
+	 * @param mproject
+	 *            The instance to be used for configuration.
+	 */
+	private final void loadFromModelProject(final MIProject mproject) {
 		/* Get all repositories. */
 		final EList<MIRepository> mRepositories = mproject.getRepositories();
 		final Map<MIRepository, AbstractRepository> repositoryMap = new HashMap<MIRepository, AbstractRepository>();
@@ -161,18 +179,17 @@ public final class AnalysisController {
 		/* Create the repositories. */
 		for (final MIRepository mRepository : mRepositories) {
 			/* Extract the necessary informations to create the repository. */
-			final Configuration configuration = this.modelPropertiesToConfiguration(mRepository.getProperties());
+			final Configuration configuration = AnalysisController.modelPropertiesToConfiguration(mRepository.getProperties());
 
-			Constructor<?> repositoryConstructor;
 			try {
-				repositoryConstructor = Class.forName(mRepository.getClassname()).getConstructor(Configuration.class);
+				final Constructor<?> repositoryConstructor = Class.forName(mRepository.getClassname()).getConstructor(Configuration.class);
+				final AbstractRepository repository = (AbstractRepository) repositoryConstructor.newInstance(configuration.getPropertiesStartingWith(mRepository
+						.getClassname()));
+				repositoryMap.put(mRepository, repository);
 			} catch (final Exception ex) {
 				AnalysisController.LOG.error("Could not load repository: " + mRepository.getClassname());
 				continue;
 			}
-			final AbstractRepository repository = (AbstractRepository) repositoryConstructor.newInstance(configuration.getPropertiesStartingWith(mRepository
-					.getClassname()));
-			repositoryMap.put(mRepository, repository);
 		}
 
 		/*
@@ -185,36 +202,34 @@ public final class AnalysisController {
 		/* Now run through all plugins. */
 		for (final MIPlugin mPlugin : mPlugins) {
 			/* Extract the necessary informations to create the plugin. */
-			final Configuration configuration = this.modelPropertiesToConfiguration(mPlugin.getProperties());
+			final Configuration configuration = AnalysisController.modelPropertiesToConfiguration(mPlugin.getProperties());
 
-			// final EList<MIRepository> mPluginRepositories = null;// mPlugin.getRepositories();
-			// final int len = mPluginRepositories.size();
-			// final AbstractRepository pluginRepositories[] = new AbstractRepository[len];
-			// for (int i = 0; i < len; i++) {
-			// pluginRepositories[i] = repositoryMap.get(mPluginRepositories.get(i));
-			// }
+			final EList<MIRepositoryConnector> mPluginRepositoryConnectors = mPlugin.getRepositories();
+			final Map<String, AbstractRepository> pluginRepositories = new HashMap<String, AbstractRepository>();
+			for (final MIRepositoryConnector mPluginRepositoryConnector : mPluginRepositoryConnectors) {
+				pluginRepositories.put(mPluginRepositoryConnector.getName(), repositoryMap.get(mPluginRepositoryConnector.getRepository()));
+			}
 
 			/* Create the plugin and put it into our map. */
-			Constructor<?> pluginConstructor;
+
 			try {
-				pluginConstructor = Class.forName(mPlugin.getClassname()).getConstructor(Configuration.class, Map.class);
+				final Constructor<?> pluginConstructor = Class.forName(mPlugin.getClassname()).getConstructor(Configuration.class, Map.class);
+				final AbstractPlugin plugin = (AbstractPlugin) pluginConstructor.newInstance(configuration.getPropertiesStartingWith(mPlugin.getClassname()),
+						pluginRepositories);
+				pluginMap.put(mPlugin, plugin);
+
+				/* Set the other properties of the plugin. */
+				plugin.setName(mPlugin.getName());
+
+				/* Add the plugin to our controller instance. */
+				if (plugin instanceof AbstractReaderPlugin) {
+					this.setReader((AbstractReaderPlugin) plugin);
+				} else {
+					this.registerPlugin((AbstractAnalysisPlugin) plugin);
+				}
 			} catch (final Exception ex) {
 				AnalysisController.LOG.error("Could not load plugin: " + mPlugin.getClassname());
 				continue;
-			}
-
-			final AbstractPlugin plugin = (AbstractPlugin) pluginConstructor.newInstance(configuration.getPropertiesStartingWith(mPlugin.getClassname()),
-					new HashMap<String, AbstractRepository>());
-			pluginMap.put(mPlugin, plugin);
-
-			/* Set the other properties of the plugin. */
-			plugin.setName(mPlugin.getName());
-
-			/* Add the plugin to our controller instance. */
-			if (plugin instanceof AbstractReaderPlugin) {
-				this.setReader((AbstractReaderPlugin) plugin);
-			} else {
-				this.registerPlugin((AbstractAnalysisPlugin) plugin);
 			}
 		}
 
@@ -288,13 +303,22 @@ public final class AnalysisController {
 	 */
 	public final boolean saveToFile(final File file, final String projectName) {
 		final MIProject project = this.getCurrentConfiguration(projectName);
-		final boolean success = this.saveProject(file, project);
+		final boolean success = AnalysisController.saveProject(file, project);
 
 		return success;
 
 	}
 
-	private boolean saveProject(final File file, final MIProject project) {
+	/**
+	 * This method can be used to save the given instance of <code>MIProject</code> within a given file.
+	 * 
+	 * @param file
+	 *            The file to be used for the storage.
+	 * @param project
+	 *            The project to be stored.
+	 * @return true iff the storage was succesful.
+	 */
+	private static boolean saveProject(final File file, final MIProject project) {
 		/* Create a resource and put the given project into it. */
 		final ResourceSet resourceSet = new ResourceSetImpl();
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
@@ -312,25 +336,36 @@ public final class AnalysisController {
 		return true;
 	}
 
+	/**
+	 * This method delivers the current configuration of this instance as an instance of <code>MIProject</code>.
+	 * 
+	 * @param projectName
+	 *            The name to be used for the project.
+	 * @return A filled meta model instance if everything went well, null otherwise.
+	 */
 	public MIProject getCurrentConfiguration(final String projectName) {
-		// TODO Use the repositories here as well!
 		try {
 			/* Create a factory to create all other model instances. */
 			final MAnalysisMetaModelFactory factory = new MAnalysisMetaModelFactory();
 			final MIProject project = factory.createProject();
-
-			final Map<AbstractPlugin, MIPlugin> pluginMap = new HashMap<AbstractPlugin, MIPlugin>();
-
 			project.setName(projectName);
 
-			/* Run through all plugins and create he model-counterparts. */
+			final Map<AbstractPlugin, MIPlugin> pluginMap = new HashMap<AbstractPlugin, MIPlugin>();
+			final Map<AbstractRepository, MIRepository> repositoryMap = new HashMap<AbstractRepository, MIRepository>();
+
+			/* Run through all plugins and create the model-counterparts. */
 			final List<AbstractPlugin> plugins = new ArrayList<AbstractPlugin>(this.plugins);
 			if (this.logReader != null) {
 				plugins.add((AbstractPlugin) this.logReader);
 			}
 
 			for (final AbstractPlugin plugin : plugins) {
-				final MIPlugin mPlugin = (plugin instanceof AbstractReaderPlugin) ? factory.createReader() : factory.createAnalysisPlugin();
+				MIPlugin mPlugin;
+				if (plugin instanceof AbstractReaderPlugin) {
+					mPlugin = factory.createReader();
+				} else {
+					mPlugin = factory.createAnalysisPlugin();
+				}
 
 				/* Remember the mapping. */
 				pluginMap.put(plugin, mPlugin);
@@ -348,15 +383,36 @@ public final class AnalysisController {
 					mPlugin.getProperties().add(property);
 				}
 
+				/* Extract the repositories. */
+				final Map<String, AbstractRepository> currRepositories = plugin.getCurrentRepositories();
+				final Set<Entry<String, AbstractRepository>> repoSet = currRepositories.entrySet();
+				for (final Entry<String, AbstractRepository> repoEntry : repoSet) {
+					/* Try to find the repository within our map. */
+					MIRepository mRepository = repositoryMap.get(repoEntry.getValue());
+					/* If it doesn't exist, we have to create it first. */
+					if (mRepository == null) {
+						mRepository = factory.createRepository();
+						mRepository.setClassname(repoEntry.getValue().getClass().getName());
+						/* Remember this new repository. */
+						repositoryMap.put(repoEntry.getValue(), mRepository);
+					}
+					/* Now the connector. */
+					final MIRepositoryConnector mRepositoryConn = factory.createRepositoryConnector();
+					mRepositoryConn.setName(repoEntry.getKey());
+					mRepositoryConn.setRepository(mRepository);
+
+					mPlugin.getRepositories().add(mRepositoryConn);
+				}
+
 				/* Create the ports. */
-				final String outs[] = plugin.getAllOutputPortNames();
+				final String[] outs = plugin.getAllOutputPortNames();
 				for (final String out : outs) {
 					final MIOutputPort mOutputPort = factory.createOutputPort();
 					mOutputPort.setName(out);
 					mPlugin.getOutputPorts().add(mOutputPort);
 				}
 
-				final String ins[] = plugin.getAllInputPortNames();
+				final String[] ins = plugin.getAllInputPortNames();
 				for (final String in : ins) {
 					final MIInputPort mInputPort = factory.createInputPort();
 					mInputPort.setName(in);
@@ -369,7 +425,7 @@ public final class AnalysisController {
 			/* Now connect the plugins. */
 			for (final AbstractPlugin plugin : plugins) {
 				final MIPlugin mOutputPlugin = pluginMap.get(plugin);
-				final String outputPortNames[] = plugin.getAllOutputPortNames();
+				final String[] outputPortNames = plugin.getAllOutputPortNames();
 
 				/* Check all output ports of the original plugin. */
 				for (final String outputPortName : outputPortNames) {
@@ -401,7 +457,16 @@ public final class AnalysisController {
 
 	}
 
-	static private MIInputPort findInputPort(final MIAnalysisPlugin mPlugin, final String name) {
+	/**
+	 * Searches for an input port within the given plugin with the given name.
+	 * 
+	 * @param mPlugin
+	 *            The plugin which will be searched through.
+	 * @param name
+	 *            The name of the searched input port.
+	 * @return The searched port or null, if it is not available.
+	 */
+	private static MIInputPort findInputPort(final MIAnalysisPlugin mPlugin, final String name) {
 		final Iterator<MIInputPort> iter = mPlugin.getInputPorts().iterator();
 		while (iter.hasNext()) {
 			final MIInputPort port = iter.next();
@@ -412,7 +477,16 @@ public final class AnalysisController {
 		return null;
 	}
 
-	static private MIOutputPort findOutputPort(final MIPlugin mPlugin, final String name) {
+	/**
+	 * Searches for an output port within the given plugin with the given name.
+	 * 
+	 * @param mPlugin
+	 *            The plugin which will be searched through.
+	 * @param name
+	 *            The name of the searched output port.
+	 * @return The searched port or null, if it is not available.
+	 */
+	private static MIOutputPort findOutputPort(final MIPlugin mPlugin, final String name) {
 		final Iterator<MIOutputPort> iter = mPlugin.getOutputPorts().iterator();
 		while (iter.hasNext()) {
 			final MIOutputPort port = iter.next();

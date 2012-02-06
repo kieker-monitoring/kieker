@@ -41,6 +41,6 @@ public @interface Plugin {
 	 * 
 	 * @return The output ports of this annotation.
 	 */
-	OutputPort[] outputPorts() default {};
+	OutputPort[] outputPorts() default { };
 
 }

@@ -80,7 +80,7 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 						((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getAssemblyFactory()
 								.getRootAssemblyComponent())));
 		this.pairFactory = new AssemblyComponentOperationPairFactory(
-				((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)));
+				(SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME));
 		this.dotOutputFile = new File(this.configuration.getStringProperty(OperationDependencyGraphPluginAssembly.CONFIG_DOT_OUTPUT_FILE));
 		this.includeWeights = this.configuration.getBooleanProperty(OperationDependencyGraphPluginAssembly.CONFIG_INCLUDE_WEIGHTS);
 		this.shortLabels = this.configuration.getBooleanProperty(OperationDependencyGraphPluginAssembly.CONFIG_SHORT_LABELS);

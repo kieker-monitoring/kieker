@@ -35,7 +35,6 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.tools.util.LoggingTimestampConverter;
 
