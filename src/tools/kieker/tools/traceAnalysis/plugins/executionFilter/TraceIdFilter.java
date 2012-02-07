@@ -69,7 +69,10 @@ public class TraceIdFilter extends AbstractAnalysisPlugin {
 		this.selectedTraces = selectedTraces;
 	}
 
-	@InputPort(description = "Execution input", eventTypes = { Execution.class })
+	@InputPort(
+			name = TraceIdFilter.INPUT_PORT_NAME,
+			description = "Execution input",
+			eventTypes = { Execution.class })
 	public void newExecution(final Object data) {
 		final Execution execution = (Execution) data;
 		if ((this.selectedTraces != null) && !this.selectedTraces.contains(execution.getTraceId())) {
@@ -110,11 +113,6 @@ public class TraceIdFilter extends AbstractAnalysisPlugin {
 			configuration.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, Configuration.toProperty(selectedTracesArr));
 		}
 		return configuration;
-	}
-
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override

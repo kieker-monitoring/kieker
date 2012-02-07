@@ -87,7 +87,10 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 		this.ignoreExecutionsAfterTimestamp = ignoreExecutionsAfterTimestamp;
 	}
 
-	@InputPort(description = "Execution input", eventTypes = { Execution.class })
+	@InputPort(
+			name = TimestampFilter.INPUT_PORT_NAME,
+			description = "Execution input",
+			eventTypes = { Execution.class })
 	public void newExecution(final Object data) {
 		final Execution execution = (Execution) data;
 		if ((execution.getTin() < this.ignoreExecutionsBeforeTimestamp) || (execution.getTout() > this.ignoreExecutionsAfterTimestamp)) {
@@ -124,11 +127,6 @@ public class TimestampFilter extends AbstractAnalysisPlugin {
 		configuration.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, Long.toString(this.ignoreExecutionsBeforeTimestamp));
 
 		return configuration;
-	}
-
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override

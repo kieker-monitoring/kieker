@@ -20,7 +20,6 @@
 
 package kieker.tools.traceAnalysis.plugins.executionRecordTransformation;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -84,7 +83,10 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 		return new Signature(name, returnType, paramTypeList);
 	}
 
-	@InputPort(description = "Input", eventTypes = { IMonitoringRecord.class })
+	@InputPort(
+			name = ExecutionRecordTransformationFilter.INPUT_PORT_NAME,
+			description = "Input",
+			eventTypes = { IMonitoringRecord.class })
 	public boolean newMonitoringRecord(final Object data) {
 		final IMonitoringRecord record = (IMonitoringRecord) data;
 		if (!(record instanceof OperationExecutionRecord)) {
@@ -163,8 +165,4 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 		return configuration;
 	}
 
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
-	}
 }

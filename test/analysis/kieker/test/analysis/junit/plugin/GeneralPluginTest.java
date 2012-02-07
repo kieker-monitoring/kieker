@@ -16,6 +16,7 @@ import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.OperationExecutionRecord;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.executionFilter.TimestampFilter;
 import kieker.tools.traceAnalysis.plugins.executionFilter.TraceIdFilter;
 import kieker.tools.traceAnalysis.plugins.executionRecordTransformation.ExecutionRecordTransformationFilter;
@@ -36,7 +37,7 @@ public class GeneralPluginTest {
 	@Test
 	public void testChaining() {
 		final Map<String, AbstractRepository> repoHashMap = new HashMap<String, AbstractRepository>();
-		repoHashMap.put(ExecutionRecordTransformationFilter.SYSTEM_MODEL_REPOSITORY_NAME, new SystemModelRepository(new Configuration()));
+		repoHashMap.put(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, new SystemModelRepository(new Configuration()));
 		final ExecutionRecordTransformationFilter transformer = new ExecutionRecordTransformationFilter(new Configuration(), repoHashMap);
 		final TraceIdFilter filter1 = new TraceIdFilter(new HashSet<Long>(Arrays.asList(new Long[] { 1l })));
 		final TimestampFilter filter2 = new TimestampFilter(10, 20);
@@ -119,11 +120,6 @@ class SourceClass extends AbstractReaderPlugin {
 	}
 
 	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return null;
-	}
-
-	@Override
 	public Map<String, AbstractRepository> getCurrentRepositories() {
 		return null;
 	}
@@ -157,18 +153,15 @@ class ExecutionSinkClass extends AbstractAnalysisPlugin {
 		return null;
 	}
 
-	@InputPort(eventTypes = { Execution.class })
+	@InputPort(
+			name = ExecutionSinkClass.INPUT_PORT_NAME,
+			eventTypes = { Execution.class })
 	public void doJob(final Object data) {
 		this.lst.add((Execution) data);
 	}
 
 	public ConcurrentLinkedQueue<Execution> getList() {
 		return this.lst;
-	}
-
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return null;
 	}
 
 	@Override

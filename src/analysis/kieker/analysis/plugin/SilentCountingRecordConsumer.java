@@ -37,7 +37,7 @@ import kieker.common.configuration.Configuration;
  * @author Jan Waller
  */
 @Plugin(outputPorts = {
-	@OutputPort(name = SilentCountingRecordConsumer.OUTPUT_PORT_NAME, eventTypes = { }, description = "Default output port")
+	@OutputPort(name = SilentCountingRecordConsumer.OUTPUT_PORT_NAME, eventTypes = {}, description = "Default output port")
 })
 public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
 
@@ -53,7 +53,10 @@ public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
 		super(configuration, repositories);
 	}
 
-	@InputPort(eventTypes = { }, description = "Default input port")
+	@InputPort(
+			name = SilentCountingRecordConsumer.INPUT_PORT_NAME,
+			eventTypes = {},
+			description = "Default input port")
 	public final void newEvent(final Object event) {
 		SilentCountingRecordConsumer.this.counter.incrementAndGet();
 		super.deliver(SilentCountingRecordConsumer.OUTPUT_PORT_NAME, event);
@@ -81,11 +84,6 @@ public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
-	}
-
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override

@@ -24,7 +24,6 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.HashMap;
 import java.util.Map;
 
 import kieker.analysis.plugin.port.InputPort;
@@ -97,7 +96,10 @@ public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlug
 		return configuration;
 	}
 
-	@InputPort(description = "Message traces", eventTypes = { MessageTrace.class })
+	@InputPort(
+			name = AbstractMessageTraceProcessingPlugin.MESSAGE_TRACE_INPUT_PORT_NAME,
+			description = "Message traces",
+			eventTypes = { MessageTrace.class })
 	@Override
 	public void msgTraceInput(final Object obj) {
 		final MessageTrace mt = (MessageTrace) obj;
@@ -108,10 +110,5 @@ public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlug
 			MessageTraceWriterPlugin.LOG.error("IOException", ex);
 			MessageTraceWriterPlugin.this.reportError(mt.getTraceId());
 		}
-	}
-
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 }

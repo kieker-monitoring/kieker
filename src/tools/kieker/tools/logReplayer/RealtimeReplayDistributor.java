@@ -108,7 +108,9 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 		this.constInputPortName = constInputPortName;
 	}
 
-	@InputPort(eventTypes = { IMonitoringRecord.class })
+	@InputPort(
+			name = RealtimeReplayDistributor.INPUT_PORT_NAME,
+			eventTypes = { IMonitoringRecord.class })
 	public void newMonitoringRecord(final Object data) {
 		final IMonitoringRecord monitoringRecord = (IMonitoringRecord) data;
 		if (this.startTime == -1) { // init on first record
@@ -198,11 +200,6 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 		// TODO: Save the current configuration
 
 		return configuration;
-	}
-
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>(0);
 	}
 
 	@Override

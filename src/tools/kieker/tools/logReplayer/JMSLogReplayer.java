@@ -36,6 +36,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.IMonitoringRecordReceiver;
 
 /**
  * Listens to a JMS queue and simply passes each record to a specified {@link IMonitoringRecordReceiver}.
@@ -144,7 +145,9 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 		AbstractPlugin.connect(this, RecordDelegationPlugin2.OUTPUT_PORT_NAME, rec, inputPortName);
 	}
 
-	@InputPort(eventTypes = { IMonitoringRecord.class })
+	@InputPort(
+			name = RecordDelegationPlugin2.INPUT_PORT,
+			eventTypes = { IMonitoringRecord.class })
 	public boolean newMonitoringRecord(final Object data) {
 		return super.deliver(RecordDelegationPlugin2.OUTPUT_PORT_NAME, data);
 	}
@@ -180,11 +183,6 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
-	}
-
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override

@@ -35,6 +35,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.tools.util.LoggingTimestampConverter;
 
@@ -170,7 +171,9 @@ class RecordDelegationPlugin extends AbstractAnalysisPlugin {
 		this.ignoreRecordsAfterTimestamp = ignoreRecordsAfterTimestamp;
 	}
 
-	@InputPort(eventTypes = { IMonitoringRecord.class }, description = RecordDelegationPlugin.INPUT_PORT_NAME)
+	@InputPort(
+			name = RecordDelegationPlugin.INPUT_PORT_NAME,
+			eventTypes = { IMonitoringRecord.class }, description = RecordDelegationPlugin.INPUT_PORT_NAME)
 	public void newMonitoringRecord(final Object data) {
 		final IMonitoringRecord record = (IMonitoringRecord) data;
 		if ((record.getLoggingTimestamp() >= this.ignoreRecordsBeforeTimestamp) && (record.getLoggingTimestamp() <= this.ignoreRecordsAfterTimestamp)) {
@@ -216,11 +219,6 @@ class RecordDelegationPlugin extends AbstractAnalysisPlugin {
 	public Configuration getCurrentConfiguration() {
 		/* No configuration possible. */
 		return new Configuration(null);
-	}
-
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override

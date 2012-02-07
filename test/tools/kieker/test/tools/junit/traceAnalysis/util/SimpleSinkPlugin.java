@@ -19,7 +19,7 @@ public class SimpleSinkPlugin extends AbstractAnalysisPlugin {
 		super(new Configuration(), new HashMap<String, AbstractRepository>());
 	}
 
-	@InputPort()
+	@InputPort(name = SimpleSinkPlugin.INPUT_PORT_NAME)
 	public void input(final Object data) {
 		this.list.add(data);
 	}
@@ -49,11 +49,6 @@ public class SimpleSinkPlugin extends AbstractAnalysisPlugin {
 
 	@Override
 	public void terminate(final boolean error) {}
-
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
-	}
 
 	@Override
 	public Map<String, AbstractRepository> getCurrentRepositories() {
