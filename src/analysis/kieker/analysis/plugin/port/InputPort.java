@@ -28,7 +28,7 @@ import java.lang.annotation.Target;
 /**
  * This annotation can be used to mark methods as input ports. The corresponding methods should only get an instance of the class <code>Object</code> and nothing
  * else.<br>
- * Furthermore the port allows to specify the event types for this port, but not the name. The name is determined by the name of the target-method. There is also a
+ * Furthermore the port allows to specify the event types for this port and the name. There is also a
  * field for a human-readable description available.
  * 
  * @author Nils Christian Ehmke
@@ -45,10 +45,17 @@ public @interface InputPort {
 	String description() default "Input Port";
 
 	/**
+	 * The name which is used to identify this port. It should be unique within the class.
+	 * 
+	 * @return The name of this port.
+	 */
+	String name();
+
+	/**
 	 * The event types which are used for this port. If this is empty, everything can be received through the port.
 	 * 
 	 * @return The event types for this class.
 	 */
-	Class<?>[] eventTypes() default { };
+	Class<?>[] eventTypes() default {};
 
 }
