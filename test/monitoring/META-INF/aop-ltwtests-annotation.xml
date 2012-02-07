@@ -1,0 +1,13 @@
+<!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.aspectj.org/dtd/aspectj_1_5_0.dtd">
+
+<aspectj>
+	<weaver options=""> <!-- options="-verbose" -->
+		<!-- instrument the kieker.tests -->
+		<include within="kieker.test..*" />
+		<!--<include within="kieker.monitoring.probe.aspectJ..*"/> -->
+	</weaver>
+
+	<aspects>
+		<aspect name="kieker.monitoring.probe.aspectJ.operationExecution.OperationExecutionAspectAnnotation" />
+	</aspects>
+</aspectj>

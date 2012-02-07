@@ -33,7 +33,7 @@ interface Keys { // NOPMD NOCS
 	/** Location of the custom properties file (in classpath) */
 	public static final String CUSTOM_PROPERTIES_LOCATION_CLASSPATH = "META-INF/" + Keys.PREFIX + "properties";
 	/** Location of the default properties file (in classpath) */
-	public static final String DEFAULT_PROPERTIES_LOCATION_CLASSPATH = Keys.CUSTOM_PROPERTIES_LOCATION_CLASSPATH + ".default";
+	public static final String DEFAULT_PROPERTIES_LOCATION_CLASSPATH = "META-INF/" + Keys.PREFIX + "default.properties";
 
 	/** JVM-parameter to specify a custom properties file */
 	public static final String CUSTOM_PROPERTIES_LOCATION_JVM = Keys.PREFIX + "configuration";
