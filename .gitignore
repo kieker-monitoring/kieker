@@ -3,3 +3,6 @@
 /build/
 /dist/
 /tmp/
+META-INF/MANIFEST.MF
+plugin.properties
+plugin.xml
