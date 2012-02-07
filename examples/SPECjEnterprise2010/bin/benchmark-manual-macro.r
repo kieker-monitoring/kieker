@@ -1,5 +1,4 @@
-#DO NOT DELETE IN TRUNK
-output_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\SPECjEnterprise2010\\tmp\\results-macro.pdf"
+output_fn="results-macro.pdf"
 
 values1 <- array(dim=c(2,2,5),dimnames=list(c("nokiek","kieker"),c("mean","ci95%"),c(1:5)))
 values1["kieker",,] <- c(
