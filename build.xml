@@ -571,6 +571,7 @@
 		</path>
 
 		<java dir="." fork="true" classname="kieker.test.monitoring.manualInstrumentation.storageOnly.StorageOnly" classpathref="kieker.test-storage-run-classpath">
+			<jvmarg value="-Dkieker.monitoring.configuration=META-INF/kieker.monitoring.test.properties" />
 			<jvmarg value="-Dkieker.monitoring.writer=${tests.writer}" />
 			<jvmarg value="-D${tests.writer}.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}" />
 			<jvmarg value="-D${tests.writer}.customStoragePath=${tests.storagepath}" />
@@ -599,7 +600,7 @@
 				<include name="${dist.kieker.main.jar}" />
 			</fileset>
 		</path>
-		<copy file="${kieker.monitoring.test.properties}" tofile="${build.tests.dir}/META-INF/kieker.monitoring.properties" overwrite="true"/>
+		<copy file="${kieker.monitoring.test.properties}" tofile="${build.tests.dir}/META-INF/kieker.monitoring.test.properties" overwrite="true"/>
 		<javac source="1.6" target="1.6" destDir="${build.tests.dir}" classpathref="monitoring-test-compile-classpath" srcdir="${test.kieker.monitoring.dir}" excludes="kieker/test/monitoring/aspectJ/compileTimeWeaving/" includeAntRuntime="false">
 		</javac>
 	</target>
@@ -640,6 +641,7 @@
 
 		<copy file="${aop.xml.ltwtests.annotation}" tofile="${build.tests.dir}/META-INF/aop.xml" overwrite="true" />
 		<java dir="." fork="true" classname="kieker.test.monitoring.aspectJ.loadTimeWeaving.bookstoreDifferentRecordTypes.Bookstore" classpathref="kieker.test-loadTimeWeaving-run-classpath">
+			<jvmarg value="-Dkieker.monitoring.configuration=META-INF/kieker.monitoring.test.properties" />
 			<jvmarg value="-Dkieker.monitoring.writer=${tests.writer}" />
 			<jvmarg value="-D${tests.writer}.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}" />
 			<jvmarg value="-D${tests.writer}.customStoragePath=${tests.storagepath}" />
@@ -660,6 +662,7 @@
 
 		<copy file="${aop.xml.ltwtests.full}" tofile="${build.tests.dir}/META-INF/aop.xml" overwrite="true" />
 		<java dir="." fork="true" classname="kieker.test.monitoring.aspectJ.loadTimeWeaving.bookstoreWithoutAnnotation.BookstoreWA" classpathref="kieker.test-loadTimeWeaving-bookstoreWithoutAnnotation-run-classpath">
+			<jvmarg value="-Dkieker.monitoring.configuration=META-INF/kieker.monitoring.test.properties" />
 			<jvmarg value="-Dkieker.monitoring.writer=${tests.writer}" />
 			<jvmarg value="-D${tests.writer}.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}" />
 			<jvmarg value="-D${tests.writer}.customStoragePath=${tests.storagepath}" />
@@ -679,6 +682,7 @@
 
 		<copy file="${aop.xml.ltwtests.full}" tofile="${build.tests.dir}/META-INF/aop.xml" overwrite="true" />
 		<java dir="." fork="true" classname="kieker.test.monitoring.aspectJ.loadTimeWeaving.executionOrderTest.ExecutionOrderTest" classpathref="kieker.test-loadTimeWeaving-executionOrderTest-run-classpath">
+			<jvmarg value="-Dkieker.monitoring.configuration=META-INF/kieker.monitoring.test.properties" />
 			<jvmarg value="-Dkieker.monitoring.writer=${tests.writer}" />
 			<jvmarg value="-D${tests.writer}.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}" />
 			<jvmarg value="-D${tests.writer}.customStoragePath=${tests.storagepath}" />
@@ -705,7 +709,6 @@
 		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/operationExecution/AbstractOperationExecutionAspect.java" todir="${tmp.dir}/aspects/" />
 		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/operationExecution/AbstractOperationExecutionAspectServlet.java" todir="${tmp.dir}/aspects/" />
 		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectJ/operationExecution/${TestAspect}" todir="${tmp.dir}/aspects/" />
-		<copy file="${kieker.monitoring.test.properties}" tofile="${build.tests.dir}/META-INF/kieker.monitoring.properties" overwrite="true"/>
 		<iajc destdir="${build.tests.dir}" source="1.6" target="1.6" verbose="true" classpathref="kieker.test-compileTimeWeaving-bookstore-compile-classpath">
 			<sourceroots>
 				<pathelement location="${test.kieker.monitoring.dir}/kieker/test/monitoring/aspectJ/compileTimeWeaving/bookstore/" />
@@ -751,6 +754,7 @@
 		</path>
 
 		<java dir="." fork="true" classname="kieker.test.monitoring.aspectJ.compileTimeWeaving.bookstore.Bookstore" classpathref="kieker.test-compileTimeWeaving-bookstore-run-classpath">
+			<jvmarg value="-Dkieker.monitoring.configuration=META-INF/kieker.monitoring.test.properties" />
 			<jvmarg value="-Dkieker.monitoring.writer=${tests.writer}" />
 			<jvmarg value="-D${tests.writer}.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}" />
 			<jvmarg value="-D${tests.writer}.customStoragePath=${tests.storagepath}" />
@@ -773,6 +777,7 @@
 		<!-- delete existing DB -->
 		<java dir="." fork="true" classpathref="kieker.test-compileTimeWeaving-bookstoreDB-run-classpath" classname="kieker.test.monitoring.util.JavaDBInitializer" />
 		<java dir="." fork="true" classname="kieker.test.monitoring.aspectJ.compileTimeWeaving.bookstore.Bookstore" classpathref="kieker.test-compileTimeWeaving-bookstoreDB-run-classpath">
+			<jvmarg value="-Dkieker.monitoring.configuration=META-INF/kieker.monitoring.test.properties" />
 			<jvmarg value="-Dkieker.monitoring.writer=kieker.monitoring.writer.database.AsyncDbWriter" />
 			<jvmarg value="-Dkieker.monitoring.writer.database.AsyncDbWriter.DriverClassname=org.apache.derby.jdbc.EmbeddedDriver" />
 			<jvmarg value="-Dkieker.monitoring.writer.database.AsyncDbWriter.ConnectionString=jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS" />
@@ -794,6 +799,7 @@
 		</path>
 
 		<java dir="." fork="true" classname="kieker.test.monitoring.aspectJ.compileTimeWeaving.bookstore.synchron.Bookstore" classpathref="kieker.test-compileTimeWeaving-bookstore-synchronized-run-classpath">
+			<jvmarg value="-Dkieker.monitoring.configuration=META-INF/kieker.monitoring.test.properties" />
 			<jvmarg value="-Dkieker.monitoring.writer=${tests.writer}" />
 			<jvmarg value="-D${tests.writer}.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}" />
 			<jvmarg value="-D${tests.writer}.customStoragePath=${tests.storagepath}" />
@@ -812,6 +818,7 @@
 		</path>
 
 		<java dir="." fork="true" classname="kieker.test.monitoring.aspectJ.compileTimeWeaving.twoConcurrentMethodsExample.Starter" classpathref="kieker.test-compileTimeWeaving-twoConcurrentMethodsExample-run-classpath">
+			<jvmarg value="-Dkieker.monitoring.configuration=META-INF/kieker.monitoring.test.properties" />
 			<jvmarg value="-Dkieker.monitoring.writer=${tests.writer}" />
 			<jvmarg value="-D${tests.writer}.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}" />
 			<jvmarg value="-D${tests.writer}.customStoragePath=${tests.storagepath}" />
