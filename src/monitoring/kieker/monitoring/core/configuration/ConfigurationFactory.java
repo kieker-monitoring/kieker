@@ -114,13 +114,20 @@ public abstract class ConfigurationFactory implements Keys {
 	 */
 	private static final Configuration loadConfigurationFromFile(final String propertiesFn, final Configuration defaultValues) {
 		final Configuration properties = new Configuration(defaultValues);
-		FileInputStream is = null; // NOPMD
+		InputStream is = null; // NOPMD
 		try {
-			is = new FileInputStream(propertiesFn);
+			try {
+				is = new FileInputStream(propertiesFn);
+			} catch (final FileNotFoundException ex) {
+				// if not found as absolute path try within the classpath
+				is = MonitoringController.class.getClassLoader().getResourceAsStream(propertiesFn);
+				if (is == null) {
+					ConfigurationFactory.LOG.warn("File '" + propertiesFn + "' not found"); // NOCS (MultipleStringLiteralsCheck)
+					return new Configuration(defaultValues);
+				}
+			}
 			properties.load(is);
 			return properties;
-		} catch (final FileNotFoundException ex) {
-			ConfigurationFactory.LOG.warn("File '" + propertiesFn + "' not found"); // NOCS (MultipleStringLiteralsCheck)
 		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
 			ConfigurationFactory.LOG.error("Error reading file '" + propertiesFn + "'", ex); // NOCS (MultipleStringLiteralsCheck)
 		} finally {
