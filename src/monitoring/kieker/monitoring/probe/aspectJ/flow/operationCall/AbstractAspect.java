@@ -28,6 +28,7 @@ import kieker.monitoring.core.registry.TraceRegistry;
 import kieker.monitoring.probe.aspectJ.AbstractAspectJProbe;
 import kieker.monitoring.timer.ITimeSource;
 
+import org.aspectj.lang.JoinPoint.EnclosingStaticPart;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -46,7 +47,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	public abstract void monitoredOperation();
 
 	@Around("monitoredOperation() && notWithinKieker()")
-	public Object operation(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
+	public Object operation(final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint) throws Throwable {
 		// common fields
 		Trace trace = AbstractAspect.TRACEREGISTRY.getTrace();
 		final boolean newTrace = (trace == null);
@@ -55,10 +56,11 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			AbstractAspect.CTRLINST.newMonitoringRecord(trace);
 		}
 		final long traceId = trace.getTraceId();
-		final String signature = thisJoinPoint.getSignature().toLongString();
-		// measure before execution
-		AbstractAspect.CTRLINST.newMonitoringRecord(new CallOperationEvent(AbstractAspect.TIME.getTime(), traceId, trace.getNextOrderId(), signature, signature));
-		// execution of the called method
+		final String callee = thisJoinPoint.getSignature().toLongString();
+		final String caller = thisEnclosingJoinPoint.getSignature().toLongString();
+		// measure before call
+		AbstractAspect.CTRLINST.newMonitoringRecord(new CallOperationEvent(AbstractAspect.TIME.getTime(), traceId, trace.getNextOrderId(), caller, callee));
+		// call of the called method
 		final Object retval;
 		try {
 			retval = thisJoinPoint.proceed();
