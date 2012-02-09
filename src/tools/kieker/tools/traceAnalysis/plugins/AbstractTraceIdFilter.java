@@ -21,7 +21,6 @@
 package kieker.tools.traceAnalysis.plugins;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.NavigableSet;
 import java.util.Set;
@@ -135,13 +134,7 @@ public abstract class AbstractTraceIdFilter extends AbstractAnalysisPlugin {
 
 		if (this.selectedTraceIds != null) {
 			configuration.setProperty(this.getConfigurationPropertySelectAllTraces(), Boolean.toString(true));
-			final String selectedTracesArr[] = new String[this.selectedTraceIds.size()];
-			final Iterator<Long> iter = this.selectedTraceIds.iterator();
-			int i = 0;
-			while (iter.hasNext()) {
-				selectedTracesArr[i++] = iter.next().toString();
-			}
-			configuration.setProperty(this.getConfigurationPropertySelectedTraces(), Configuration.toProperty(selectedTracesArr));
+			configuration.setProperty(this.getConfigurationPropertySelectedTraces(), Configuration.toProperty(this.selectedTraceIds.toArray(new Long[] {})));
 		} else {
 			configuration.setProperty(this.getConfigurationPropertySelectAllTraces(), Boolean.toString(true));
 			configuration.setProperty(this.getConfigurationPropertySelectedTraces(), "");

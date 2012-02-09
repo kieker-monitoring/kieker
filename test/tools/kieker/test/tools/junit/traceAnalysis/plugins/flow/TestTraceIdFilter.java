@@ -27,6 +27,7 @@ import java.util.TreeSet;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.plugin.AbstractPlugin;
+import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.TraceEvent;
 import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
 import kieker.test.tools.junit.traceAnalysis.util.SimpleSinkPlugin;
@@ -55,7 +56,10 @@ public class TestTraceIdFilter extends TestCase {
 		idsToPass.add(1 + traceIdNotToPass); // NOCS (MagicNumberCheck)
 		idsToPass.add(2 + traceIdNotToPass); // NOCS (MagicNumberCheck)
 
-		final TraceIdFilter filter = new TraceIdFilter(idsToPass);
+		final Configuration filterConfig = new Configuration();
+		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.FALSE.toString());
+		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, Configuration.toProperty(idsToPass.toArray(new Long[] {})));
+		final TraceIdFilter filter = new TraceIdFilter(filterConfig, null);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
 
 		final List<TraceEvent> trace =
@@ -90,7 +94,10 @@ public class TestTraceIdFilter extends TestCase {
 		idsToPass.add(0 + traceIdToPass); // NOCS (MagicNumberCheck)
 		idsToPass.add(1 + traceIdToPass); // NOCS (MagicNumberCheck)
 
-		final TraceIdFilter filter = new TraceIdFilter(idsToPass);
+		final Configuration filterConfig = new Configuration();
+		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.FALSE.toString());
+		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, Configuration.toProperty(idsToPass.toArray(new Long[] {})));
+		final TraceIdFilter filter = new TraceIdFilter(filterConfig, null);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
 
 		final List<TraceEvent> trace =
@@ -116,9 +123,9 @@ public class TestTraceIdFilter extends TestCase {
 		final long firstTimestamp = 53222; // any number fits // NOCS (MagicNumberCheck)
 		final long traceIdToPass = 11l; // (must be element of idsToPass) // NOCS (MagicNumberCheck)
 
-		final NavigableSet<Long> idsToPass = null; // i.e., pass all
-
-		final TraceIdFilter filter = new TraceIdFilter(idsToPass);
+		final Configuration filterConfig = new Configuration();
+		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.TRUE.toString()); // i.e., pass all
+		final TraceIdFilter filter = new TraceIdFilter(filterConfig, null);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
 
 		final List<TraceEvent> trace =

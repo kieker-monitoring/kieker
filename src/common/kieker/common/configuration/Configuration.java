@@ -81,8 +81,7 @@ public final class Configuration extends Properties {
 		final String s = this.getStringProperty(key);
 		if (s.isEmpty()) {
 			return new String[0];
-		}
-		else {
+		} else {
 			return s.split("\\|");
 		}
 	}
@@ -94,6 +93,23 @@ public final class Configuration extends Properties {
 	 * @return
 	 */
 	public static final String toProperty(final String[] values) {
+		final StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < values.length; i++) {
+			sb.append(values[i]);
+			if (i < (values.length - 1)) {
+				sb.append('|');
+			}
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Converts the Long[] to a String split by '|'.
+	 * 
+	 * @param values
+	 * @return
+	 */
+	public static final String toProperty(final Long[] values) {
 		final StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < values.length; i++) {
 			sb.append(values[i]);

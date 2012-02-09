@@ -20,17 +20,31 @@
 
 package kieker.test.tools.junit.traceAnalysis.plugins.flow;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.record.flow.TraceEvent;
 import kieker.test.tools.junit.traceAnalysis.plugins.TestTraceReconstructionFilter;
+import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
+import kieker.test.tools.junit.traceAnalysis.util.SimpleSinkPlugin;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
+import kieker.tools.traceAnalysis.plugins.flow.EventRecordTrace;
+import kieker.tools.traceAnalysis.plugins.flow.EventTrace2ExecutionTraceFilter;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+
+import org.junit.Test;
 
 /**
  * 
@@ -99,5 +113,38 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		return executionTrace;
 	}
 
-	// TODO: implement the tests
+	@Test
+	public void testValidTraceWithBeforeAndAfterOperationEvents() throws InvalidTraceException {
+		/*
+		 * Create an EventRecordTrace, containing only Before- and AfterOperation events.
+		 */
+		final List<TraceEvent> eventList =
+				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(this.exec0_0__bookstore_searchBook.getTin(),
+						TestEventTrace2ExecutionTraceFilter.TRACE_ID);
+		final EventRecordTrace eventRecordTrace = new EventRecordTrace(TestEventTrace2ExecutionTraceFilter.TRACE_ID);
+		for (final TraceEvent ev : eventList) {
+			eventRecordTrace.add(ev);
+		}
+
+		/*
+		 * Create the transformation filter
+		 */
+		final Configuration filterConfiguration = new Configuration();
+		final Map<String, AbstractRepository> repositoryMap = new HashMap<String, AbstractRepository>();
+		repositoryMap.put(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
+		final EventTrace2ExecutionTraceFilter filter = new EventTrace2ExecutionTraceFilter(filterConfiguration, repositoryMap);
+
+		/*
+		 * Create and connect a sink plugin which collects the transformed
+		 * ExecutionTraces
+		 */
+		final SimpleSinkPlugin executionTraceSinkPlugin = new SimpleSinkPlugin();
+		AbstractPlugin.connect(filter, EventTrace2ExecutionTraceFilter.OUTPUT_EXECUTION_TRACE, executionTraceSinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+
+		filter.inputEventTrace(eventRecordTrace);
+
+		Assert.assertEquals("Unexpected number of received execution traces", 1, executionTraceSinkPlugin.getList().size());
+
+		// TODO: Check content of trace
+	}
 }

@@ -59,16 +59,15 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceAnalysisPlugin
 
 	public EventTrace2ExecutionTraceFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		super(configuration, repositories);
-		// TODO: extract repository
 	}
 
-	@InputPort(description = "Receives event record traces to be transformed", eventTypes = { TraceEvent.class })
+	@InputPort(description = "Receives event record traces to be transformed", eventTypes = { EventRecordTrace.class })
 	public void inputEventTrace(final EventRecordTrace eventTrace) {
 		final Stack<TraceEvent> eventStack = new Stack<TraceEvent>();
 
 		final ExecutionTrace execTrace = new ExecutionTrace(eventTrace.getTraceId());
 
-		final long lastOrderIndex = -1; // used to check for ascending order indices
+		long lastOrderIndex = -1; // used to check for ascending order indices
 		final Stack<Integer> eoiStack = new Stack<Integer>();
 		int nextEoi = 0;
 		int curEss = -1;
@@ -81,6 +80,8 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceAnalysisPlugin
 				EventTrace2ExecutionTraceFilter.LOG.error("Terminating processing of event record trace with ID " + eventTrace.getTraceId());
 				// TODO: output broken event record trace
 				return;
+			} else {
+				lastOrderIndex = e.getOrderIndex(); // i.e., lastOrderIndex++
 			}
 
 			if (e instanceof BeforeOperationEvent) {
@@ -162,6 +163,8 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceAnalysisPlugin
 				return;
 			}
 		}
+
+		super.deliver(EventTrace2ExecutionTraceFilter.OUTPUT_EXECUTION_TRACE, execTrace);
 	}
 
 	/**

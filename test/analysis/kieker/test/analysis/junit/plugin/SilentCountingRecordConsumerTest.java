@@ -91,9 +91,9 @@ public class SilentCountingRecordConsumerTest {
 
 		/* Now send some other data. */
 		src.deliver(Long.valueOf(10));
-		src.deliver(null);
+		src.deliver(null); // should not be delivered
 		src.deliver("");
-		Assert.assertEquals(3, consumer.getMessageCount());
+		Assert.assertEquals(2, consumer.getMessageCount());
 	}
 
 	@Plugin(
@@ -109,7 +109,11 @@ public class SilentCountingRecordConsumerTest {
 		}
 
 		public void deliver(final Object data) {
-			Assert.assertTrue(super.deliver(SourceClass.OUTPUT_PORT_NAME, data));
+			if (data != null) {
+				Assert.assertTrue(super.deliver(SourceClass.OUTPUT_PORT_NAME, data));
+			} else {
+				Assert.assertFalse(super.deliver(SourceClass.OUTPUT_PORT_NAME, data));
+			}
 		}
 
 		@Override

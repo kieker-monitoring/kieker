@@ -296,13 +296,25 @@ public final class TraceAnalysisTool {
 			/* Make sure that the execRecTransformer gets the output from the reader! */
 			AbstractPlugin.connect(reader, FSReader.OUTPUT_PORT_NAME, execRecTransformer, ExecutionRecordTransformationFilter.INPUT_PORT_NAME);
 
-			final TimestampFilter executionFilterByTimestamp = new TimestampFilter(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp,
-					TraceAnalysisTool.ignoreExecutionsAfterTimestamp);
+			final Configuration executionFilterByTimestampConfiguration = new Configuration();
+			executionFilterByTimestampConfiguration.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
+					Long.toString(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp));
+			executionFilterByTimestampConfiguration.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP,
+					Long.toString(TraceAnalysisTool.ignoreExecutionsAfterTimestamp));
+			final TimestampFilter executionFilterByTimestamp = new TimestampFilter(executionFilterByTimestampConfiguration, null);
 			AbstractPlugin.connect(execRecTransformer, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME, executionFilterByTimestamp,
 					TimestampFilter.INPUT_PORT_NAME);
 			analysisInstance.registerPlugin(executionFilterByTimestamp);
 
-			final TraceIdFilter executionFilterByTraceId = new TraceIdFilter(TraceAnalysisTool.selectedTraces);
+			final Configuration executionFilterByTraceIdConfig = new Configuration();
+			if (TraceAnalysisTool.selectedTraces == null) {
+				executionFilterByTraceIdConfig.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.TRUE.toString());
+			} else {
+				executionFilterByTraceIdConfig.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.FALSE.toString());
+				executionFilterByTraceIdConfig.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES,
+						Configuration.toProperty(TraceAnalysisTool.selectedTraces.toArray(new Long[] {})));
+			}
+			final TraceIdFilter executionFilterByTraceId = new TraceIdFilter(executionFilterByTraceIdConfig, null);
 			AbstractPlugin.connect(executionFilterByTimestamp, TimestampFilter.OUTPUT_PORT_NAME, executionFilterByTraceId, TraceIdFilter.INPUT_PORT_NAME);
 			analysisInstance.registerPlugin(executionFilterByTraceId);
 

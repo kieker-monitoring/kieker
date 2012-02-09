@@ -1,8 +1,6 @@
 package kieker.test.analysis.junit.plugin;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -16,6 +14,7 @@ import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.OperationExecutionRecord;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.executionFilter.TimestampFilter;
 import kieker.tools.traceAnalysis.plugins.executionFilter.TraceIdFilter;
 import kieker.tools.traceAnalysis.plugins.executionRecordTransformation.ExecutionRecordTransformationFilter;
@@ -36,10 +35,18 @@ public class GeneralPluginTest {
 	@Test
 	public void testChaining() {
 		final Map<String, AbstractRepository> repoHashMap = new HashMap<String, AbstractRepository>();
-		repoHashMap.put(ExecutionRecordTransformationFilter.SYSTEM_MODEL_REPOSITORY_NAME, new SystemModelRepository(new Configuration()));
+		repoHashMap.put(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, new SystemModelRepository(new Configuration()));
 		final ExecutionRecordTransformationFilter transformer = new ExecutionRecordTransformationFilter(new Configuration(), repoHashMap);
-		final TraceIdFilter filter1 = new TraceIdFilter(new HashSet<Long>(Arrays.asList(new Long[] { 1l })));
-		final TimestampFilter filter2 = new TimestampFilter(10, 20);
+
+		final Configuration filter1byTraceIDConfig = new Configuration();
+		filter1byTraceIDConfig.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.FALSE.toString());
+		filter1byTraceIDConfig.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, Configuration.toProperty(new Long[] { 1l }));
+		final TraceIdFilter filter1byTraceID = new TraceIdFilter(filter1byTraceIDConfig, null);
+
+		final Configuration filter2ByTimestampConfiguration = new Configuration();
+		filter2ByTimestampConfiguration.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, Long.toString(10l));
+		filter2ByTimestampConfiguration.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP, Long.toString(20l));
+		final TimestampFilter filter2ByTimestamp = new TimestampFilter(filter2ByTimestampConfiguration, null);
 
 		/* The records we will send. */
 		final OperationExecutionRecord opExRec1 = new OperationExecutionRecord("", "", 1, 14, 15);
@@ -55,9 +62,9 @@ public class GeneralPluginTest {
 
 		/* Connect the plugins. */
 		Assert.assertTrue(AbstractPlugin.connect(src, SourceClass.OUTPUT_PORT_NAME, transformer, ExecutionRecordTransformationFilter.INPUT_PORT_NAME));
-		Assert.assertTrue(AbstractPlugin.connect(transformer, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME, filter1, TraceIdFilter.INPUT_PORT_NAME));
-		Assert.assertTrue(AbstractPlugin.connect(filter1, TraceIdFilter.OUTPUT_PORT_NAME, filter2, TimestampFilter.INPUT_PORT_NAME));
-		Assert.assertTrue(AbstractPlugin.connect(filter2, TimestampFilter.OUTPUT_PORT_NAME, dst, ExecutionSinkClass.INPUT_PORT_NAME));
+		Assert.assertTrue(AbstractPlugin.connect(transformer, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME, filter1byTraceID, TraceIdFilter.INPUT_PORT_NAME));
+		Assert.assertTrue(AbstractPlugin.connect(filter1byTraceID, TraceIdFilter.OUTPUT_PORT_NAME, filter2ByTimestamp, TimestampFilter.INPUT_PORT_NAME));
+		Assert.assertTrue(AbstractPlugin.connect(filter2ByTimestamp, TimestampFilter.OUTPUT_PORT_NAME, dst, ExecutionSinkClass.INPUT_PORT_NAME));
 
 		src.read();
 

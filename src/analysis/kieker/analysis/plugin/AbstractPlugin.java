@@ -152,10 +152,14 @@ public abstract class AbstractPlugin {
 	 * @param outputPortName
 	 *            The output port to be used to send the given data.
 	 * @param data
-	 *            The data to be send.
-	 * @return true if and only if the given output port does exist and if the data suits the port's event types.
+	 *            The data to be send; must not be null.
+	 * @return true if and only if the given output port does exist and if the data is not null and if it suits the port's event types.
 	 */
 	protected final boolean deliver(final String outputPortName, final Object data) {
+		if (data == null) {
+			return false;
+		}
+
 		/* First step: Get the output port. */
 		final OutputPort outputPort = this.outputPorts.get(outputPortName);
 		if (outputPort == null) {
