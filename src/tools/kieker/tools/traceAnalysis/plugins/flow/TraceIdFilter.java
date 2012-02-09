@@ -20,9 +20,7 @@
 
 package kieker.tools.traceAnalysis.plugins.flow;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.plugin.port.OutputPort;
@@ -51,19 +49,7 @@ public class TraceIdFilter extends AbstractTraceIdFilter {
 	public static final String CONFIG_SELECTED_TRACES = TraceIdFilter.class.getName() + ".selectedTraces";
 
 	public TraceIdFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
-		super(configuration, repositories,
-				AbstractTraceIdFilter.extractIDsFromConfiguration(configuration, TraceIdFilter.CONFIG_SELECT_ALL_TRACES,
-						TraceIdFilter.CONFIG_SELECTED_TRACES));
-	}
-
-	/**
-	 * Creates a filter instance that only passes {@link TraceEvent} objects <i>e</i>
-	 * whose traceId (<i>e.traceId</i>) is element of the set <i>selectedTraces</i>.
-	 * 
-	 * @param selectedTraces
-	 */
-	public TraceIdFilter(final Set<Long> selectedTraces) {
-		super(new Configuration(null), new HashMap<String, AbstractRepository>(), selectedTraces);
+		super(configuration, repositories);
 	}
 
 	@InputPort(description = "Trace event input", eventTypes = { TraceEvent.class })
@@ -72,6 +58,14 @@ public class TraceIdFilter extends AbstractTraceIdFilter {
 		if (super.passId(event.getTraceId())) {
 			super.deliver(TraceIdFilter.OUTPUT_PORT_NAME, data);
 		}
+	}
+
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		final Configuration defaultConfiguration = new Configuration(super.getDefaultConfiguration());
+		defaultConfiguration.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, "false");
+		defaultConfiguration.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, "0|2");
+		return defaultConfiguration;
 	}
 
 	@Override

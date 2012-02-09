@@ -20,55 +20,33 @@
 
 package kieker.analysis.plugin;
 
+import java.lang.reflect.Method;
+
 /**
- * A helper class which can be used if for example a method should return two elements.
  * 
  * @author Nils Christian Ehmke
- * 
- * @param <T1>
- *            The type of the first element.
- * @param <T2>
- *            The type of the second element.
  */
-public class Pair<T1, T2> {
-	private T1 fst;
-	private T2 snd;
+public class PluginInputPortReference {
+	private final AbstractPlugin plugin;
+	private final Method inputPortMethod;
+	private final Class<?>[] eventTypes;
 
-	/**
-	 * Creates an instance of this class whereas both elements of this container are null.
-	 */
-	public Pair() {
-		this.fst = null;
-		this.snd = null;
+	public PluginInputPortReference(final AbstractPlugin plugin, final Method inputPortMethod, final Class<?>[] eventTypes) {
+		this.plugin = plugin;
+		this.inputPortMethod = inputPortMethod;
+		this.eventTypes = eventTypes;
 	}
 
-	/**
-	 * Creates an instance of this class using the given parameters.
-	 * 
-	 * @param fst
-	 *            The content for the first element.
-	 * @param snd
-	 *            The content for the second element.
-	 */
-	public Pair(final T1 fst, final T2 snd) {
-		this.fst = fst;
-		this.snd = snd;
+	public AbstractPlugin getPlugin() {
+		return this.plugin;
 	}
 
-	public T1 getFst() {
-		return this.fst;
+	public Method getInputPortMethod() {
+		return this.inputPortMethod;
 	}
 
-	public T2 getSnd() {
-		return this.snd;
-	}
-
-	public void setFst(final T1 fst) {
-		this.fst = fst;
-	}
-
-	public void setSnd(final T2 snd) {
-		this.snd = snd;
+	public Class<?>[] getEventTypes() {
+		return this.eventTypes;
 	}
 
 }

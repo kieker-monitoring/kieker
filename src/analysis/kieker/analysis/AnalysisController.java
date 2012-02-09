@@ -47,7 +47,7 @@ import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelFactory;
 import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.Pair;
+import kieker.analysis.plugin.PluginInputPortReference;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.reader.IMonitoringReader;
 import kieker.analysis.repository.AbstractRepository;
@@ -431,16 +431,17 @@ public final class AnalysisController {
 				for (final String outputPortName : outputPortNames) {
 					/* Get the corresponding port of the model counterpart and get also the plugins which are currently connected with the original plugin. */
 					final MIOutputPort mOutputPort = AnalysisController.findOutputPort(mOutputPlugin, outputPortName);
-					final List<Pair<AbstractPlugin, String>> subscribers = plugin.getConnectedPlugins(outputPortName);
+					final List<PluginInputPortReference> subscribers = plugin.getConnectedPlugins(outputPortName);
 
 					/* Run through all connected plugins. */
-					for (final Pair<AbstractPlugin, String> subscriber : subscribers) {
-						final AbstractPlugin subscriberPlugin = subscriber.getFst();
+					for (final PluginInputPortReference subscriber : subscribers) {
+						final AbstractPlugin subscriberPlugin = subscriber.getPlugin();
 						final MIPlugin mSubscriberPlugin = pluginMap.get(subscriberPlugin);
 						// TODO: It seems like mSubscriberPlugin can sometimes be null. Why?
 						/* Now connect them. */
 						if (mSubscriberPlugin != null) {
-							final MIInputPort mInputPort = AnalysisController.findInputPort((MIAnalysisPlugin) mSubscriberPlugin, subscriber.getSnd());
+							final MIInputPort mInputPort = AnalysisController.findInputPort((MIAnalysisPlugin) mSubscriberPlugin, subscriber.getInputPortMethod()
+									.getName());
 
 							mOutputPort.getSubscribers().add(mInputPort);
 						}

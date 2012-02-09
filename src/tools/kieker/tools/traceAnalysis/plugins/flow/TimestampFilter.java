@@ -20,7 +20,6 @@
 
 package kieker.tools.traceAnalysis.plugins.flow;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import kieker.analysis.plugin.port.InputPort;
@@ -63,22 +62,7 @@ public class TimestampFilter extends AbstractTimestampFilter {
 	 *            contain the properties for the minimum and maximum timestamp.
 	 */
 	public TimestampFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
-		super(configuration, repositories,
-				/* Load the content for the fields from the given configuration. */
-				configuration.getLongProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP),
-				configuration.getLongProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP));
-	}
-
-	/**
-	 * Creates a filter instance that only passes {@link TraceEvent} objects <i>e</i>
-	 * with the property <i>e.timestamp &gt;= ignoreExecutionsBeforeTimestamp</i> and
-	 * <i>e.timestamp &lt;= ignoreExecutionsAfterTimestamp</i>.
-	 * 
-	 * @param ignoreExecutionsBeforeTimestamp
-	 * @param ignoreExecutionsAfterTimestamp
-	 */
-	public TimestampFilter(final long ignoreExecutionsBeforeTimestamp, final long ignoreExecutionsAfterTimestamp) {
-		super(new Configuration(null), new HashMap<String, AbstractRepository>(), ignoreExecutionsBeforeTimestamp, ignoreExecutionsAfterTimestamp);
+		super(configuration, repositories);
 	}
 
 	@InputPort(description = "Trace event input", eventTypes = { TraceEvent.class })

@@ -32,6 +32,8 @@ import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 
 /**
@@ -42,37 +44,46 @@ import kieker.common.record.IMonitoringRecord;
  */
 @Plugin(outputPorts = {
 	@OutputPort(
-			name = DummyRecordConsumer.OUTPUT_PORT_NAME,
+			name = TeeFilter.OUTPUT_PORT_NAME,
 			description = "Output port",
 			eventTypes = { IMonitoringRecord.class })
 })
-public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
+public final class TeeFilter extends AbstractAnalysisPlugin {
+
+	private static final Log LOG = LogFactory.getLog(TeeFilter.class);
 
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
-	public static final String CONFIG_STREAM = DummyRecordConsumer.class.getName() + ".Stream";
+	public static final String CONFIG_STREAM = TeeFilter.class.getName() + ".Stream";
+
+	public static final String CONFIG_STREAM_STDOUT = "STDOUT";
+	public static final String CONFIG_STREAM_STDERR = "STDERR";
+	public static final String CONFIG_STREAM_STDLOG = "STDLOG";
 
 	private static final String ENCODING = "UTF-8";
 
 	private final PrintStream printStream;
 	private final String printStreamName;
 
-	public DummyRecordConsumer(final Configuration configuration, final Map<String, AbstractRepository> repositories) throws FileNotFoundException,
+	public TeeFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories) throws FileNotFoundException,
 			UnsupportedEncodingException {
 		super(configuration, repositories);
 
 		/* Get the name of the stream. */
-		final String printStreamName = this.configuration.getStringProperty(DummyRecordConsumer.CONFIG_STREAM);
+		final String printStreamName = this.configuration.getStringProperty(TeeFilter.CONFIG_STREAM);
 
 		/* Decide which stream to be used - but remember the name! */
-		if ("STDOUT".equals(printStreamName)) {
+		if (TeeFilter.CONFIG_STREAM_STDLOG.equals(printStreamName)) {
+			this.printStream = null;
+			this.printStreamName = null;
+		} else if (TeeFilter.CONFIG_STREAM_STDOUT.equals(printStreamName)) {
 			this.printStream = System.out;
 			this.printStreamName = null;
-		} else if ("STDERR".equals(printStreamName)) {
+		} else if (TeeFilter.CONFIG_STREAM_STDERR.equals(printStreamName)) {
 			this.printStream = System.err;
 			this.printStreamName = null;
 		} else {
-			this.printStream = new PrintStream(new FileOutputStream(printStreamName), false, DummyRecordConsumer.ENCODING);
+			this.printStream = new PrintStream(new FileOutputStream(printStreamName), false, TeeFilter.ENCODING);
 			this.printStreamName = printStreamName;
 		}
 	}
@@ -80,29 +91,32 @@ public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
 	@Override
 	protected final Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration(null);
-
-		defaultConfiguration.setProperty(DummyRecordConsumer.CONFIG_STREAM, "STDOUT");
-
+		defaultConfiguration.setProperty(TeeFilter.CONFIG_STREAM, "STDOUT");
 		return defaultConfiguration;
 	}
 
-	@InputPort(
-			description = "Input port",
-			eventTypes = { IMonitoringRecord.class })
+	@InputPort(description = "Input port", eventTypes = {})
 	public final void newMonitoringRecord(final Object monitoringRecord) {
-		this.printStream.println("DummyRecordConsumer consumed (" + monitoringRecord.getClass().getSimpleName() + ") " + monitoringRecord);
-		super.deliver(DummyRecordConsumer.OUTPUT_PORT_NAME, monitoringRecord);
+		final StringBuilder sb = new StringBuilder(128);
+		sb.append('(').append(monitoringRecord.getClass().getSimpleName()).append(") ").append(monitoringRecord.toString());
+		final String record = sb.toString();
+		if (this.printStream != null) {
+			this.printStream.println(record);
+		} else {
+			TeeFilter.LOG.info(record);
+		}
+		super.deliver(TeeFilter.OUTPUT_PORT_NAME, monitoringRecord);
 	}
 
 	@Override
 	public final boolean execute() {
-		this.printStream.println("DummyRecordConsumer.execute()");
+		// this.printStream.println("DummyRecordConsumer.execute()");
 		return true;
 	}
 
 	@Override
 	public final void terminate(final boolean error) {
-		if ((this.printStream != System.out) && (this.printStream != System.err)) {
+		if ((this.printStream != null) && (this.printStream != System.out) && (this.printStream != System.err)) {
 			this.printStream.close();
 		}
 	}
@@ -110,16 +124,16 @@ public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);
-
 		/* We reverse the if-decisions within the constructor. */
-		if (this.printStream == System.out) {
-			configuration.setProperty(DummyRecordConsumer.CONFIG_STREAM, "STDOUT");
+		if (this.printStream == null) {
+			configuration.setProperty(TeeFilter.CONFIG_STREAM, TeeFilter.CONFIG_STREAM_STDLOG);
+		} else if (this.printStream == System.out) {
+			configuration.setProperty(TeeFilter.CONFIG_STREAM, TeeFilter.CONFIG_STREAM_STDOUT);
 		} else if (this.printStream == System.err) {
-			configuration.setProperty(DummyRecordConsumer.CONFIG_STREAM, "STDERR");
+			configuration.setProperty(TeeFilter.CONFIG_STREAM, TeeFilter.CONFIG_STREAM_STDERR);
 		} else {
-			configuration.setProperty(DummyRecordConsumer.CONFIG_STREAM, this.printStreamName);
+			configuration.setProperty(TeeFilter.CONFIG_STREAM, this.printStreamName);
 		}
-
 		return configuration;
 	}
 

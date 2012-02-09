@@ -24,7 +24,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -44,7 +43,7 @@ import kieker.common.logging.LogFactory;
  * 
  * @author Nils Christian Ehmke
  */
-@Plugin(outputPorts = { })
+@Plugin(outputPorts = {})
 public abstract class AbstractPlugin {
 
 	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
@@ -52,7 +51,7 @@ public abstract class AbstractPlugin {
 	private String name = null;
 
 	protected final Configuration configuration;
-	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<Pair<AbstractPlugin, Method>>> registeredMethods;
+	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<PluginInputPortReference>> registeredMethods;
 	private final HashMap<String, OutputPort> outputPorts;
 	private final HashMap<String, InputPort> inputPorts;
 
@@ -90,9 +89,9 @@ public abstract class AbstractPlugin {
 		}
 
 		/* Now create a linked queue for every output port of the class, to store the registered methods. */
-		this.registeredMethods = new ConcurrentHashMap<String, ConcurrentLinkedQueue<Pair<AbstractPlugin, Method>>>();
+		this.registeredMethods = new ConcurrentHashMap<String, ConcurrentLinkedQueue<PluginInputPortReference>>();
 		for (final OutputPort outputPort : annotation.outputPorts()) {
-			this.registeredMethods.put(outputPort.name(), new ConcurrentLinkedQueue<Pair<AbstractPlugin, Method>>());
+			this.registeredMethods.put(outputPort.name(), new ConcurrentLinkedQueue<PluginInputPortReference>());
 		}
 	}
 
@@ -171,18 +170,26 @@ public abstract class AbstractPlugin {
 		}
 
 		/* Third step: Send everything to the registered ports. */
-		final ConcurrentLinkedQueue<Pair<AbstractPlugin, Method>> registeredMethods = this.registeredMethods.get(outputPortName);
+		final ConcurrentLinkedQueue<PluginInputPortReference> registeredMethods = this.registeredMethods.get(outputPortName);
 
-		final Iterator<Pair<AbstractPlugin, Method>> methodIterator = registeredMethods.iterator();
-		while (methodIterator.hasNext()) {
-			final Pair<AbstractPlugin, Method> methodPair = methodIterator.next();
-			try {
-				methodPair.getSnd().invoke(methodPair.getFst(), data);
-			} catch (final Exception e) {
-				AbstractPlugin.LOG.warn(String.format("OutputPort %s couldn't send data to InputPort %s%n", outputPort.name(), methodPair.getSnd().getName()));
+		for (final PluginInputPortReference pluginInputPortReference : registeredMethods) {
+			/* Check whether the data fits the event types. */
+			Class<?>[] eventTypes = pluginInputPortReference.getEventTypes();
+			if (eventTypes.length == 0) {
+				eventTypes = new Class<?>[] { Object.class };
+			}
+			for (final Class<?> eventType : eventTypes) {
+				if (eventType.isAssignableFrom(data.getClass())) { // data instanceof eventType
+					try {
+						pluginInputPortReference.getInputPortMethod().invoke(pluginInputPortReference.getPlugin(), data);
+					} catch (final Exception e) {
+						AbstractPlugin.LOG.warn(String.format("OutputPort %s couldn't send data to InputPort %s%n", outputPort.name(),
+								pluginInputPortReference.getInputPortMethod().getName()));
+					}
+					break; // for
+				}
 			}
 		}
-
 		return true;
 	}
 
@@ -225,7 +232,8 @@ public abstract class AbstractPlugin {
 				for (final Class<?> srcEventType : outputPort.eventTypes()) {
 					boolean compatible = false;
 					for (final Class<?> dstEventType : inputPort.eventTypes()) {
-						if (dstEventType.isAssignableFrom(srcEventType)) {
+						// FIXME: We now also accept "downcasts" as compatible. This could perhaps be colored differently in the GUI
+						if (dstEventType.isAssignableFrom(srcEventType) || srcEventType.isAssignableFrom(dstEventType)) {
 							compatible = true;
 						}
 					}
@@ -245,31 +253,34 @@ public abstract class AbstractPlugin {
 	 * 
 	 * @param src
 	 *            The source plugin.
-	 * @param output
+	 * @param outputPortName
 	 *            The output port of the source plugin.
 	 * @param dst
 	 *            The destination plugin.
-	 * @param input
+	 * @param inputPortName
 	 *            The input port of the destination port.
 	 * @return true if and only if both given plugins are valid, the output and input ports exist and if they are compatible. Furthermore the destination plugin must
 	 *         not be a reader.
 	 */
-	public static final boolean connect(final AbstractPlugin src, final String output, final AbstractPlugin dst, final String input) {
-		if (!AbstractPlugin.isConnectionAllowed(src, output, dst, input)) {
+	public static final boolean connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName) {
+		if (!AbstractPlugin.isConnectionAllowed(src, outputPortName, dst, inputPortName)) {
+			AbstractPlugin.LOG.warn("Could not connect: " + src.getClass().getSimpleName() + " to " + dst.getClass().getSimpleName());
 			return false;
 		}
 
 		/* Connect the ports. */
-		try {
-			final Method method = dst.getClass().getMethod(input, Object.class);
-			method.setAccessible(true);
-			src.registeredMethods.get(output).add(new Pair<AbstractPlugin, Method>(dst, method));
-		} catch (final Exception e) {
-			AbstractPlugin.LOG.warn(String.format("Couldn't connect OutputPort %s with InputPort %s%n", output, input));
-			return false;
+		// FIXME: add a better check for the parameter of the method (currently only if 1 parameter present)
+		for (final Method m : dst.getClass().getMethods()) {
+			final InputPort ip = m.getAnnotation(InputPort.class);
+			// FIXME: replace last part by && (ip.name = inputPortName)
+			if ((ip != null) && (m.getParameterTypes().length == 1) && m.getName().equals(inputPortName)) {
+				m.setAccessible(true);
+				src.registeredMethods.get(outputPortName).add(new PluginInputPortReference(dst, m, dst.inputPorts.get(inputPortName).eventTypes()));
+				return true;
+			}
 		}
-
-		return true;
+		AbstractPlugin.LOG.warn("Could not connect: " + src.getClass().getSimpleName() + " to " + dst.getClass().getSimpleName());
+		return false;
 	}
 
 	public final String[] getAllOutputPortNames() {
@@ -301,7 +312,7 @@ public abstract class AbstractPlugin {
 	 * @return An array of pairs, whereat the first element is the plugin and the second one the name of the input port. If the given output port is invalid, null is
 	 *         returned
 	 */
-	public final List<Pair<AbstractPlugin, String>> getConnectedPlugins(final String outputPortName) {
+	public final List<PluginInputPortReference> getConnectedPlugins(final String outputPortName) {
 		/* Make sure that the output port exists */
 		final OutputPort outputPort = this.outputPorts.get(outputPortName);
 		if (outputPort == null) {
@@ -309,12 +320,10 @@ public abstract class AbstractPlugin {
 		}
 
 		/* Now get the connections. */
-		final ConcurrentLinkedQueue<Pair<AbstractPlugin, Method>> currRegisteredMethods = this.registeredMethods.get(outputPortName);
-		final Iterator<Pair<AbstractPlugin, Method>> iterator = currRegisteredMethods.iterator();
-		final List<Pair<AbstractPlugin, String>> result = new ArrayList<Pair<AbstractPlugin, String>>();
-		while (iterator.hasNext()) {
-			final Pair<AbstractPlugin, Method> currElem = iterator.next();
-			result.add(new Pair<AbstractPlugin, String>(currElem.getFst(), currElem.getSnd().getName()));
+		final ConcurrentLinkedQueue<PluginInputPortReference> currRegisteredMethods = this.registeredMethods.get(outputPortName);
+		final List<PluginInputPortReference> result = new ArrayList<PluginInputPortReference>();
+		for (final PluginInputPortReference ref : currRegisteredMethods) {
+			result.add(ref);
 		}
 
 		return result;

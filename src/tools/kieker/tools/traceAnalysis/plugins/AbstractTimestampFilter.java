@@ -50,11 +50,11 @@ public abstract class AbstractTimestampFilter extends AbstractAnalysisPlugin {
 	 * @param ignoreExecutionsBeforeTimestamp
 	 * @param ignoreExecutionsAfterTimestamp
 	 */
-	public AbstractTimestampFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories,
-			final long ignoreExecutionsBeforeTimestamp, final long ignoreExecutionsAfterTimestamp) {
+	public AbstractTimestampFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		super(configuration, repositories);
-		this.ignoreBeforeTimestamp = ignoreExecutionsBeforeTimestamp;
-		this.ignoreAfterTimestamp = ignoreExecutionsAfterTimestamp;
+		/* Load the content for the fields from the given configuration. */
+		this.ignoreBeforeTimestamp = configuration.getLongProperty(this.getConfigurationPropertyIgnoreBeforeTimestamp());
+		this.ignoreAfterTimestamp = configuration.getLongProperty(this.getConfigurationPropertyIgnoreAfterTimestamp());
 	}
 
 	/**

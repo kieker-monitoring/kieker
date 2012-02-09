@@ -51,9 +51,10 @@ public abstract class AbstractTraceIdFilter extends AbstractAnalysisPlugin {
 	 *            ignored
 	 * @param selectedTraceIds
 	 */
-	public AbstractTraceIdFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories, final Set<Long> selectedTraceIds) {
+	public AbstractTraceIdFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		super(configuration, repositories);
-		this.selectedTraceIds = selectedTraceIds;
+		this.selectedTraceIds = AbstractTraceIdFilter.extractIDsFromConfiguration(configuration, this.getConfigurationPropertySelectAllTraces(),
+				this.getConfigurationPropertySelectedTraces());
 	}
 
 	/**
@@ -64,7 +65,7 @@ public abstract class AbstractTraceIdFilter extends AbstractAnalysisPlugin {
 	 * @param configurationPropertySelectedTraces
 	 * @return
 	 */
-	protected static Set<Long> extractIDsFromConfiguration(final Configuration configuration, final String configurationPropertySelectAllTraces,
+	private static Set<Long> extractIDsFromConfiguration(final Configuration configuration, final String configurationPropertySelectAllTraces,
 			final String configurationPropertySelectedTraces) {
 		final boolean passAll = configuration.getBooleanProperty(configurationPropertySelectAllTraces);
 		if (passAll) {
@@ -92,7 +93,7 @@ public abstract class AbstractTraceIdFilter extends AbstractAnalysisPlugin {
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
-		// TODO: Provide default properties.
+		// TODO: Provide default properties. Abstract in this class might be better?
 		return defaultConfiguration;
 	}
 
