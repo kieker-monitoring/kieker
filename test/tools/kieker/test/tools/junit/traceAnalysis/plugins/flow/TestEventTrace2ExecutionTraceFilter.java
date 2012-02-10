@@ -145,6 +145,12 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 
 		Assert.assertEquals("Unexpected number of received execution traces", 1, executionTraceSinkPlugin.getList().size());
 
-		// TODO: Check content of trace
+		final ExecutionTrace resultingExecutionTrace = (ExecutionTrace) executionTraceSinkPlugin.getList().get(0);
+		final Execution[] resultingExecutionsArr = resultingExecutionTrace.getTraceAsSortedExecutionSet().toArray(new Execution[] {});
+
+		/*
+		 * Check validity of transformed execution trace
+		 */
+
 	}
 }

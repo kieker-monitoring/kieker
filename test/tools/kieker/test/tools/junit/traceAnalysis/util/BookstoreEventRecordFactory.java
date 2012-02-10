@@ -38,9 +38,20 @@ import kieker.monitoring.core.controller.MonitoringController;
 public class BookstoreEventRecordFactory {
 	// private static final Log LOG = LogFactory.getLog(BookstoreEventRecordFactory.class);
 
-	private static final String FQ_OP_BOOKSTORE_SEARCH_BOOK = "Bookstore.searchBook";
-	private static final String FQ_OP_CATALOG_GET_BOOK = "Catalog.getBook";
-	private static final String FQ_OP_CRM_GET_ORDERS = "CRM.getOrders";
+	private static final String CLASS_BOOKSTORE = "Bookstore";
+	private static final String CLASS_CATALOG = "Catalog";
+	private static final String CLASS_CRM = "CRM";
+
+	private static final String OP_BOOKSTORE_SEARCH_BOOK = "searchBook";
+	private static final String OP_CATALOG_GET_BOOK = "getBook";
+	private static final String OP_CRM_GET_ORDERS = "getOrders";
+
+	private static final String FQ_OP_BOOKSTORE_SEARCH_BOOK =
+			BookstoreEventRecordFactory.CLASS_BOOKSTORE + "." + BookstoreEventRecordFactory.OP_BOOKSTORE_SEARCH_BOOK;
+	private static final String FQ_OP_CATALOG_GET_BOOK =
+			BookstoreEventRecordFactory.CLASS_CATALOG + "." + BookstoreEventRecordFactory.OP_CATALOG_GET_BOOK;
+	private static final String FQ_OP_CRM_GET_ORDERS =
+			BookstoreEventRecordFactory.CLASS_CRM + "." + BookstoreEventRecordFactory.OP_CRM_GET_ORDERS;
 
 	/**
 	 * Returns "well-known" Bookstore trace as a list of {@link BeforeOperationEvent} and {@link AfterOperationEvent} events, ordered by its
