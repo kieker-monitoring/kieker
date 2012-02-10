@@ -85,6 +85,8 @@ import org.apache.commons.cli.ParseException;
 
 /**
  * 
+ * TODO: Fix JavaDoc comment
+ * 
  * This is the main class to start Tpan - the model synthesis and analysis
  * server to process the monitoring data that comes from the instrumented
  * system, or from a file that contains Kieker monitoring data. Tpan can produce

@@ -80,8 +80,8 @@ public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin
 	public static String createOperationSignatureString(final String fqClassName, final Signature signature) {
 		final StringBuilder strBuilder = new StringBuilder();
 
-		if ((signature.getModifier().length == 0) && ((signature.getReturnType() == null) || signature.getReturnType().isEmpty())) {
-			throw new IllegalArgumentException("Modifier list empty and return type null/empty");
+		if ((signature.getModifier().length != 0) && ((signature.getReturnType() == null) || signature.getReturnType().isEmpty())) {
+			throw new IllegalArgumentException("Modifier not list empty but return type null/empty");
 		}
 
 		/* Append modifiers and return type */
@@ -109,16 +109,48 @@ public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin
 		return strBuilder.toString();
 	}
 
+	// TODO: Move this class to an appropriate package
+	public static class FQComponentNameSignaturePair {
+		private final String fqClassname;
+		private final Signature signature;
+
+		/**
+		 * @param fqClassname
+		 * @param signature
+		 */
+		public FQComponentNameSignaturePair(final String fqClassname, final Signature signature) {
+			this.fqClassname = fqClassname;
+			this.signature = signature;
+		}
+
+		/**
+		 * @return the fqClassname
+		 */
+		public String getFqClassname() {
+			return this.fqClassname;
+		}
+
+		/**
+		 * @return the signature
+		 */
+		public Signature getSignature() {
+			return this.signature;
+		}
+	}
+
 	/**
-	 * Creates a signature from a signature string of format <code>operatioName(Type0,..,TypeN)</code>.
-	 * The parameter type list wrapped by parentheses is optional.
+	 * Extracts an {@link FQComponentNameSignaturePair} from an an operation signature string (e.g., <code>public static Boolean a.b.c.D.op1(Integer, Long)</code>).
+	 * Modifier list, return type, and parameter list wrapped by parentheses are optional. But note that
+	 * a return type must be given if one or more modifiers are present.
 	 * 
 	 * @param operationSignatureStr
 	 * @return
 	 */
-	public static Signature createSignature(final String operationSignatureStr) {
+	public static FQComponentNameSignaturePair splitOperationSignatureStr(final String operationSignatureStr) {
+		final String fqClassname;
 		final String returnType;
 		String name;
+		String opName;
 		String[] paramTypeList;
 		String[] modifierList;
 		final int openParenIdx = operationSignatureStr.indexOf('(');
@@ -137,17 +169,26 @@ public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin
 		final int nameBeginIdx = modRetName.lastIndexOf(' ');
 		if (nameBeginIdx == -1) {
 			name = modRetName;
-			// TODO: find package and name and return both separately, also a few lines below this
-			returnType = "N/A";
+			returnType = null;
 			modifierList = new String[] {};
 		} else {
-			name = modRetName.substring(nameBeginIdx + 1);
-			final String[] modRet = name.split("\\s");
-			returnType = modRet[modRet.length - 1];
-			modifierList = new String[modRet.length - 1];
-			System.arraycopy(modRet, 0, modifierList, 0, modifierList.length);
+			// name = modRetName.substring(nameBeginIdx + 1);
+			final String[] modRetNameArr = modRetName.split("\\s");
+			name = modRetNameArr[modRetNameArr.length - 1];
+			returnType = modRetNameArr[modRetNameArr.length - 2];
+			modifierList = new String[modRetNameArr.length - 2];
+			System.arraycopy(modRetNameArr, 0, modifierList, 0, modifierList.length);
 		}
-		return new Signature(name, modifierList, returnType, paramTypeList);
+
+		final int opNameIdx = name.lastIndexOf('.');
+		if (opNameIdx != -1) {
+			fqClassname = name.substring(0, opNameIdx);
+		} else {
+			fqClassname = "";
+		}
+		opName = name.substring(opNameIdx + 1);
+
+		return new FQComponentNameSignaturePair(fqClassname, new Signature(opName, modifierList, returnType, paramTypeList));
 	}
 
 	protected final Execution createExecutionByEntityNames(final String executionContainerName, final String componentTypeName,
@@ -186,7 +227,7 @@ public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin
 
 		Operation op = this.getSystemEntityFactory().getOperationFactory().lookupOperationByNamedIdentifier(operationFactoryName);
 		if (op == null) { /* Operation doesn't exist */
-			final Signature signature = AbstractTraceAnalysisPlugin.createSignature(operationSignatureStr);
+			final Signature signature = AbstractTraceAnalysisPlugin.splitOperationSignatureStr(operationSignatureStr).getSignature();
 			op = this.getSystemEntityFactory().getOperationFactory()
 					.createAndRegisterOperation(operationFactoryName, allocInst.getAssemblyComponent().getType(), signature);
 			allocInst.getAssemblyComponent().getType().addOperation(op);

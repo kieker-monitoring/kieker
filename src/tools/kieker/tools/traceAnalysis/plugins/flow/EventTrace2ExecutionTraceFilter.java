@@ -42,7 +42,6 @@ import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceExcept
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
-import kieker.tools.traceAnalysis.systemModel.Signature;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
@@ -245,16 +244,9 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceAnalysisPlugin
 		final String hostName = "<HOST>";
 		final String sessionId = "<SESSION-ID>";
 
-		final Signature signature = super.createSignature(event.getCalleeOperationName());
-		final String name = signature.getName();
-		final int i = name.lastIndexOf('.');
-		final String fqClassname;
-		if (i != -1) {
-			fqClassname = name.substring(0, i);
-		} else {
-			fqClassname = "";
-		}
-		return super.createExecutionByEntityNames(hostName, fqClassname, signature.toString(), traceId, sessionId, eoi, ess, tin, tout);
+		final FQComponentNameSignaturePair fqComponentNameSignaturePair = super.splitOperationSignatureStr(event.getCalleeOperationName());
+		return super.createExecutionByEntityNames(hostName, fqComponentNameSignaturePair.getFqClassname(),
+				fqComponentNameSignaturePair.getSignature().toString(), traceId, sessionId, eoi, ess, tin, tout);
 	}
 
 	/**

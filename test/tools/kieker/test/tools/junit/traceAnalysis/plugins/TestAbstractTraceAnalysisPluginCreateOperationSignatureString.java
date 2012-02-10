@@ -41,40 +41,97 @@ public class TestAbstractTraceAnalysisPluginCreateOperationSignatureString exten
 		final String[] modifiers = {};
 		final String returnType = Boolean.class.getName();
 		final String[] paramTypes = { Boolean.class.getName(), Integer.class.getName() };
+		final Signature inputSignature = new Signature(opName, modifiers, returnType, paramTypes);
 
+		/*
+		 * Obtain operation signature string based on class name and signature and compare
+		 * with expected string.
+		 */
 		final String opSignatureString =
-				AbstractTraceAnalysisPlugin.createOperationSignatureString(fqClassName, new Signature(opName, modifiers, returnType, paramTypes));
-
+				AbstractTraceAnalysisPlugin.createOperationSignatureString(fqClassName, inputSignature);
 		final String expectedOpSignatureString = returnType + " " + fqClassName + "." + opName + "(" + paramTypes[0] + ", " + paramTypes[1] + ")";
 		Assert.assertEquals("Unexpected result", expectedOpSignatureString, opSignatureString);
+
+		/*
+		 * Now split expectedOpSignatureString and compare class name and signature
+		 */
+		final AbstractTraceAnalysisPlugin.FQComponentNameSignaturePair compSigPair = AbstractTraceAnalysisPlugin.splitOperationSignatureStr(expectedOpSignatureString);
+		Assert.assertEquals("FQ classnames not equal", fqClassName, compSigPair.getFqClassname());
+		// TODO: Comparing Signature.toString() results as long as no implementation of Signature.equals
+		Assert.assertEquals("Signatures not equal", inputSignature.toString(), compSigPair.getSignature().toString());
 	}
 
 	@Test
 	public void testNoPackage() {
 		final String fqClassName = "D";
 		final String opName = "op1";
-		final String[] modifiers = {};
+		final String[] modifiers = { "public", "static" };
 		final String returnType = Boolean.class.getName();
 		final String[] paramTypes = { Boolean.class.getName(), Integer.class.getName() };
+		final Signature inputSignature = new Signature(opName, modifiers, returnType, paramTypes);
 
+		/*
+		 * Obtain operation signature string based on class name and signature and compare
+		 * with expected string.
+		 */
 		final String opSignatureString =
-				AbstractTraceAnalysisPlugin.createOperationSignatureString(fqClassName, new Signature(opName, modifiers, returnType, paramTypes));
-
-		final String expectedOpSignatureString = returnType + " " + fqClassName + "." + opName + "(" + paramTypes[0] + ", " + paramTypes[1] + ")";
+				AbstractTraceAnalysisPlugin.createOperationSignatureString(fqClassName, inputSignature);
+		final String expectedOpSignatureString =
+				modifiers[0] + " " + modifiers[1] + " " + returnType + " " + fqClassName + "." + opName + "(" + paramTypes[0] + ", " + paramTypes[1] + ")";
 		Assert.assertEquals("Unexpected result", expectedOpSignatureString, opSignatureString);
+
+		/*
+		 * Now split expectedOpSignatureString and compare class name and signature
+		 */
+		final AbstractTraceAnalysisPlugin.FQComponentNameSignaturePair compSigPair = AbstractTraceAnalysisPlugin.splitOperationSignatureStr(expectedOpSignatureString);
+		Assert.assertEquals("FQ classnames not equal", fqClassName, compSigPair.getFqClassname());
+		// TODO: Comparing Signature.toString() results as long as no implementation of Signature.equals
+		Assert.assertEquals("Signatures not equal", inputSignature.toString(), compSigPair.getSignature().toString());
 	}
 
 	@Test
-	public void testNoReturnType() {
+	public void testNoModifiersNoReturnType() {
 		final String fqClassName = "a.b.c.D";
 		final String opName = "op1";
 		final String[] modifiers = {};
 		final String returnType = null;
 		final String[] paramTypes = { Boolean.class.getName(), Integer.class.getName() };
+		final Signature inputSignature = new Signature(opName, modifiers, returnType, paramTypes);
 
+		/*
+		 * Obtain operation signature string based on class name and signature and compare
+		 * with expected string.
+		 */
+		final String opSignatureString =
+				AbstractTraceAnalysisPlugin.createOperationSignatureString(fqClassName, inputSignature);
+		final String expectedOpSignatureString = fqClassName + "." + opName + "(" + paramTypes[0] + ", " + paramTypes[1] + ")";
+		Assert.assertEquals("Unexpected result", expectedOpSignatureString, opSignatureString);
+
+		/*
+		 * Now split expectedOpSignatureString and compare class name and signature
+		 */
+		final AbstractTraceAnalysisPlugin.FQComponentNameSignaturePair compSigPair = AbstractTraceAnalysisPlugin.splitOperationSignatureStr(expectedOpSignatureString);
+		Assert.assertEquals("FQ classnames not equal", fqClassName, compSigPair.getFqClassname());
+		// TODO: Comparing Signature.toString() results as long as no implementation of Signature.equals
+		Assert.assertEquals("Signatures not equal", inputSignature.toString(), compSigPair.getSignature().toString());
+	}
+
+	@Test
+	public void testModifierButNoReturnType() {
+		final String fqClassName = "a.b.c.D";
+		final String opName = "op1";
+		final String[] modifiers = { "public" };
+		final String returnType = null;
+		final String[] paramTypes = { Boolean.class.getName(), Integer.class.getName() };
+		final Signature inputSignature = new Signature(opName, modifiers, returnType, paramTypes);
+
+		/*
+		 * Obtain operation signature string based on class name and signature.
+		 * In this case, we expect an exception to be thrown
+		 */
 		try {
 			final String opSignatureString =
-					AbstractTraceAnalysisPlugin.createOperationSignatureString(fqClassName, new Signature(opName, modifiers, returnType, paramTypes));
+					AbstractTraceAnalysisPlugin.createOperationSignatureString(fqClassName, inputSignature);
 			Assert.fail("Expected IllegalArgumentException to be thrown because modifiers but no return type; result: " + opSignatureString);
 		} catch (final IllegalArgumentException ex) {
 		}
@@ -84,14 +141,28 @@ public class TestAbstractTraceAnalysisPluginCreateOperationSignatureString exten
 	public void testNoParamTypes() {
 		final String fqClassName = "a.b.c.D";
 		final String opName = "op1";
-		final String[] modifiers = {};
+		final String[] modifiers = { "public" };
 		final String returnType = Boolean.class.getName();
 		final String[] paramTypes = {};
+		final Signature inputSignature = new Signature(opName, modifiers, returnType, paramTypes);
 
+		/*
+		 * Obtain operation signature string based on class name and signature and compare
+		 * with expected string.
+		 */
 		final String opSignatureString =
-				AbstractTraceAnalysisPlugin.createOperationSignatureString(fqClassName, new Signature(opName, modifiers, returnType, paramTypes));
+				AbstractTraceAnalysisPlugin.createOperationSignatureString(fqClassName, inputSignature);
 
-		final String expectedOpSignatureString = returnType + " " + fqClassName + "." + opName + "()";
+		final String expectedOpSignatureString =
+				modifiers[0] + " " + returnType + " " + fqClassName + "." + opName + "()";
 		Assert.assertEquals("Unexpected result", expectedOpSignatureString, opSignatureString);
+
+		/*
+		 * Now split expectedOpSignatureString and compare class name and signature
+		 */
+		final AbstractTraceAnalysisPlugin.FQComponentNameSignaturePair compSigPair = AbstractTraceAnalysisPlugin.splitOperationSignatureStr(expectedOpSignatureString);
+		Assert.assertEquals("FQ classnames not equal", fqClassName, compSigPair.getFqClassname());
+		// TODO: Comparing Signature.toString() results as long as no implementation of Signature.equals
+		Assert.assertEquals("Signatures not equal", inputSignature.toString(), compSigPair.getSignature().toString());
 	}
 }
