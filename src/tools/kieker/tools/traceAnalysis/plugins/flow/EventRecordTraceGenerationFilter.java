@@ -49,17 +49,17 @@ import kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceReconstructio
  */
 @Plugin(
 		outputPorts =
-		@OutputPort(name = EventRecordTraceGenerationFilter.OUTPUT_EVENT_TRACE, description = "Outputs the generated traces", eventTypes = { EventRecordTrace.class }
+		@OutputPort(name = EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME, description = "Outputs the generated traces", eventTypes = { EventRecordTrace.class }
 		))
 public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingPlugin {
 	private static final Log LOG = LogFactory.getLog(EventRecordTraceGenerationFilter.class);
 
-	public static final String INPUT_TRACE_EVENT = "inputTraceEvent";
-	public static final String OUTPUT_EVENT_TRACE = "outputEventRecordTrace";
+	public static final String INPUT_PORT_NAME = "inputTraceEvent";
+	public static final String OUTPUT_PORT_NAME = "outputEventRecordTrace";
 
 	public static final String CONFIG_MAX_TRACE_DURATION_MILLIS = EventRecordTraceGenerationFilter.class.getName() + ".maxTraceDurationMillis";
 
-	public static final int MAX_DURATION_MILLIS = Integer.MAX_VALUE;
+	public static final long MAX_DURATION_MILLIS = Integer.MAX_VALUE;
 	private static final long MAX_DURATION_NANOS = Long.MAX_VALUE;
 
 	private final long maxTraceDurationNanos;
@@ -135,8 +135,8 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingPlu
 		EventRecordTrace eventRecordTrace = this.pendingTraces.get(traceId);
 		if (eventRecordTrace != null) { /* trace (artifacts) exists already; */
 			if (!this.timeoutMap.remove(eventRecordTrace)) { /* remove from timeoutMap. Will be re-added below */
-				EventRecordTraceGenerationFilter.LOG.error("Missing entry for trace in timeoutMap: " + eventRecordTrace);
-				EventRecordTraceGenerationFilter.LOG.error("pendingTraces and timeoutMap are now longer consistent!");
+				EventRecordTraceGenerationFilter.LOG.error("Missing entry for trace in timeoutMap: " + eventRecordTrace
+						+ ". PendingTraces and timeoutMap are now longer consistent!");
 				this.reportError(traceId);
 			}
 		} else { /* create and add new trace */
@@ -169,7 +169,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingPlu
 				final EventRecordTrace polledTrace = this.timeoutMap.pollFirst();
 				final long curTraceId = polledTrace.getTraceId();
 				this.pendingTraces.remove(curTraceId);
-				super.deliver(EventRecordTraceGenerationFilter.OUTPUT_EVENT_TRACE, polledTrace);
+				super.deliver(EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME, polledTrace);
 				this.reportSuccess(curTraceId);
 			}
 		}
@@ -221,7 +221,8 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingPlu
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.put(EventRecordTraceGenerationFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, EventRecordTraceGenerationFilter.MAX_DURATION_MILLIS);
+		configuration.setProperty(EventRecordTraceGenerationFilter.CONFIG_MAX_TRACE_DURATION_MILLIS,
+				Long.toString(EventRecordTraceGenerationFilter.MAX_DURATION_MILLIS));
 
 		return configuration;
 	}
@@ -232,16 +233,9 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingPlu
 	}
 
 	@Override
-	public Map<String, AbstractRepository> getCurrentRepositories() {
-		return new HashMap<String, AbstractRepository>();
-	}
-
-	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-
-		configuration.put(EventRecordTraceGenerationFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, this.maxTraceDurationMillis);
-
+		configuration.setProperty(EventRecordTraceGenerationFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Long.toString(this.maxTraceDurationMillis));
 		return configuration;
 	}
 

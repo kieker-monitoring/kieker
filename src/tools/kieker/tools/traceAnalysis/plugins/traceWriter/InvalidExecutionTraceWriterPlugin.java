@@ -101,7 +101,7 @@ public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionT
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.put(InvalidExecutionTraceWriterPlugin.CONFIG_OUTPUT_FN, "");
+		configuration.setProperty(InvalidExecutionTraceWriterPlugin.CONFIG_OUTPUT_FN, "");
 
 		return configuration;
 	}
@@ -110,7 +110,7 @@ public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionT
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.put(InvalidExecutionTraceWriterPlugin.CONFIG_OUTPUT_FN, this.outputFn);
+		configuration.setProperty(InvalidExecutionTraceWriterPlugin.CONFIG_OUTPUT_FN, this.outputFn);
 
 		return configuration;
 	}

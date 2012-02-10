@@ -54,8 +54,8 @@ public class TestTimestampFilter extends TestCase { // NOCS
 	 */
 	private static TimestampFilter createTimestampFilter(final long ignoreExecutionsBeforeTimestamp, final long ignoreExecutionsAfterTimestamp) {
 		final Configuration cfg = new Configuration();
-		cfg.put(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, Long.toString(ignoreExecutionsBeforeTimestamp));
-		cfg.put(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP, Long.toString(ignoreExecutionsAfterTimestamp));
+		cfg.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, Long.toString(ignoreExecutionsBeforeTimestamp));
+		cfg.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP, Long.toString(ignoreExecutionsAfterTimestamp));
 		return new TimestampFilter(cfg, new HashMap<String, AbstractRepository>());
 	}
 
@@ -97,7 +97,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 		AbstractPlugin.connect(filter, TimestampFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 		filter.inputTraceEvent(TestTimestampFilter.event);
 		Assert.assertTrue("Filter passed event " + TestTimestampFilter.event + " although timestamp before" + leftBorder
-					, sinkPlugin.getList().isEmpty());
+				, sinkPlugin.getList().isEmpty());
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 		filter.inputTraceEvent(TestTimestampFilter.event);
 
 		Assert.assertFalse("Filter ignored event " + TestTimestampFilter.event + " although timestamp on left Border" + leftBorder
-						, sinkPlugin.getList().isEmpty());
+				, sinkPlugin.getList().isEmpty());
 
 		Assert.assertTrue(sinkPlugin.getList().size() == 1);
 		Assert.assertSame(sinkPlugin.getList().get(0), TestTimestampFilter.event);
@@ -140,7 +140,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 		filter.inputTraceEvent(TestTimestampFilter.event);
 
 		Assert.assertFalse("Filter ignored event " + TestTimestampFilter.event + " although timestamp on right Border" + rightBorder
-						, sinkPlugin.getList().isEmpty());
+				, sinkPlugin.getList().isEmpty());
 
 		Assert.assertTrue(sinkPlugin.getList().size() == 1);
 		Assert.assertSame(sinkPlugin.getList().get(0), TestTimestampFilter.event);
@@ -164,7 +164,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 		filter.inputTraceEvent(TestTimestampFilter.event);
 
 		Assert.assertFalse("Filter ignored event " + TestTimestampFilter.event + " although timestamp in interval [" + leftBorder + "," + rightBorder + "]"
-					, sinkPlugin.getList().isEmpty());
+				, sinkPlugin.getList().isEmpty());
 
 		Assert.assertTrue(sinkPlugin.getList().size() == 1);
 		Assert.assertSame(sinkPlugin.getList().get(0), TestTimestampFilter.event);

@@ -152,7 +152,7 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int PLUGIN__PROPERTIES = 2;
 
 	/**
-	 * The feature id for the '<em><b>Repositories</b></em>' reference list.
+	 * The feature id for the '<em><b>Repositories</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -391,7 +391,7 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int ANALYSIS_PLUGIN__PROPERTIES = PLUGIN__PROPERTIES;
 
 	/**
-	 * The feature id for the '<em><b>Repositories</b></em>' reference list.
+	 * The feature id for the '<em><b>Repositories</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -464,7 +464,7 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int READER__PROPERTIES = PLUGIN__PROPERTIES;
 
 	/**
-	 * The feature id for the '<em><b>Repositories</b></em>' reference list.
+	 * The feature id for the '<em><b>Repositories</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -693,10 +693,10 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	EReference getPlugin_Properties();
 
 	/**
-	 * Returns the meta object for the reference list '{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getRepositories <em>Repositories</em>}'.
+	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getRepositories <em>Repositories</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Repositories</em>'.
+	 * @return the meta object for the containment reference list '<em>Repositories</em>'.
 	 * @see kieker.analysis.model.analysisMetaModel.MIPlugin#getRepositories()
 	 * @see #getPlugin()
 	 * @generated
@@ -1046,7 +1046,7 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		EReference PLUGIN__PROPERTIES = eINSTANCE.getPlugin_Properties();
 
 		/**
-		 * The meta object literal for the '<em><b>Repositories</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Repositories</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

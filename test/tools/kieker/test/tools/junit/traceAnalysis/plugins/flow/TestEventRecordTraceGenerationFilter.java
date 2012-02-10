@@ -71,7 +71,7 @@ public class TestEventRecordTraceGenerationFilter extends TestCase {
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
-		AbstractPlugin.connect(traceFilter, EventRecordTraceGenerationFilter.OUTPUT_EVENT_TRACE, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+		AbstractPlugin.connect(traceFilter, EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
 		for (final TraceEvent e : bookstoreTrace) {
 			traceFilter.inputTraceEvent(e);

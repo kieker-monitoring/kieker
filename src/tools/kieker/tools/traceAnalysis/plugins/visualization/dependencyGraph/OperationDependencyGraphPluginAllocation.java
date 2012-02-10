@@ -228,10 +228,10 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.put(OperationDependencyGraphPluginAllocation.CONFIG_DOT_OUTPUT_FILE, "");
-		configuration.put(OperationDependencyGraphPluginAllocation.CONFIG_INCLUDE_WEIGHTS, false);
-		configuration.put(OperationDependencyGraphPluginAllocation.CONFIG_INCLUDE_SELF_LOOPS, false);
-		configuration.put(OperationDependencyGraphPluginAllocation.CONFIG_SHORT_LABELS, false);
+		configuration.setProperty(OperationDependencyGraphPluginAllocation.CONFIG_DOT_OUTPUT_FILE, "./OperationDependencyGraph");
+		configuration.setProperty(OperationDependencyGraphPluginAllocation.CONFIG_INCLUDE_WEIGHTS, Boolean.TRUE.toString());
+		configuration.setProperty(OperationDependencyGraphPluginAllocation.CONFIG_INCLUDE_SELF_LOOPS, Boolean.FALSE.toString());
+		configuration.setProperty(OperationDependencyGraphPluginAllocation.CONFIG_SHORT_LABELS, Boolean.TRUE.toString());
 
 		return configuration;
 	}
@@ -240,10 +240,10 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.put(OperationDependencyGraphPluginAllocation.CONFIG_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
-		configuration.put(OperationDependencyGraphPluginAllocation.CONFIG_INCLUDE_WEIGHTS, this.includeWeights);
-		configuration.put(OperationDependencyGraphPluginAllocation.CONFIG_INCLUDE_SELF_LOOPS, this.includeSelfLoops);
-		configuration.put(OperationDependencyGraphPluginAllocation.CONFIG_SHORT_LABELS, this.shortLabels);
+		configuration.setProperty(OperationDependencyGraphPluginAllocation.CONFIG_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
+		configuration.setProperty(OperationDependencyGraphPluginAllocation.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
+		configuration.setProperty(OperationDependencyGraphPluginAllocation.CONFIG_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));
+		configuration.setProperty(OperationDependencyGraphPluginAllocation.CONFIG_SHORT_LABELS, Boolean.toString(this.shortLabels));
 
 		return configuration;
 	}

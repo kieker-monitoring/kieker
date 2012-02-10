@@ -134,10 +134,10 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.put(ComponentDependencyGraphPluginAssembly.CONFIG_DOT_OUTPUT_FILE, "");
-		configuration.put(ComponentDependencyGraphPluginAssembly.CONFIG_INCLUDE_WEIGHTS, false);
-		configuration.put(ComponentDependencyGraphPluginAssembly.CONFIG_INCLUDE_SELF_LOOPS, false);
-		configuration.put(ComponentDependencyGraphPluginAssembly.CONFIG_SHORT_LABELS, false);
+		configuration.setProperty(ComponentDependencyGraphPluginAssembly.CONFIG_DOT_OUTPUT_FILE, "");
+		configuration.setProperty(ComponentDependencyGraphPluginAssembly.CONFIG_INCLUDE_WEIGHTS, Boolean.FALSE.toString());
+		configuration.setProperty(ComponentDependencyGraphPluginAssembly.CONFIG_INCLUDE_SELF_LOOPS, Boolean.FALSE.toString());
+		configuration.setProperty(ComponentDependencyGraphPluginAssembly.CONFIG_SHORT_LABELS, Boolean.FALSE.toString());
 
 		return configuration;
 	}
@@ -146,10 +146,10 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.put(ComponentDependencyGraphPluginAssembly.CONFIG_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
-		configuration.put(ComponentDependencyGraphPluginAssembly.CONFIG_INCLUDE_WEIGHTS, this.includeWeights);
-		configuration.put(ComponentDependencyGraphPluginAssembly.CONFIG_INCLUDE_SELF_LOOPS, this.includeSelfLoops);
-		configuration.put(ComponentDependencyGraphPluginAssembly.CONFIG_SHORT_LABELS, this.shortLabels);
+		configuration.setProperty(ComponentDependencyGraphPluginAssembly.CONFIG_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
+		configuration.setProperty(ComponentDependencyGraphPluginAssembly.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
+		configuration.setProperty(ComponentDependencyGraphPluginAssembly.CONFIG_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));
+		configuration.setProperty(ComponentDependencyGraphPluginAssembly.CONFIG_SHORT_LABELS, Boolean.toString(this.shortLabels));
 
 		return configuration;
 	}

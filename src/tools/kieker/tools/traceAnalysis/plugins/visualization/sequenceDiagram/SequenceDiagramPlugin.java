@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -151,6 +152,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 	}
 
 	@Override
+	@InputPort(description = "Message traces", eventTypes = { MessageTrace.class })
 	public void msgTraceInput(final Object mt) {
 		try {
 			SequenceDiagramPlugin.writePicForMessageTrace(SequenceDiagramPlugin.this.getSystemEntityFactory(), (MessageTrace) mt,
@@ -345,4 +347,9 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 	protected Map<String, AbstractRepository> getDefaultRepositories() {
 		return new HashMap<String, AbstractRepository>();
 	}
+
+	// @Override
+	// public Map<String, AbstractRepository> getCurrentRepositories() {
+	// return new HashMap<String, AbstractRepository>();
+	// }
 }

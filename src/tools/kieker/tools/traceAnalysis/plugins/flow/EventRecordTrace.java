@@ -126,7 +126,9 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<TraceEve
 		final Iterator<TraceEvent> it = this.events.iterator();
 		while (it.hasNext()) {
 			final TraceEvent e = it.next();
-			strBuild.append("<");
+			strBuild.append('(');
+			strBuild.append(e.getClass().getSimpleName());
+			strBuild.append("):<");
 			strBuild.append(e.toString());
 			strBuild.append(">\n");
 		}

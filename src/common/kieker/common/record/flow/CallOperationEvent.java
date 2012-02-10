@@ -47,7 +47,7 @@ public final class CallOperationEvent extends OperationEvent {
 
 	@Override
 	public final Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationName(), this.getCalleeOperationName() };
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getCallerOperationName(), this.getCalleeOperationName() };
 	}
 
 	@Override
@@ -62,5 +62,4 @@ public final class CallOperationEvent extends OperationEvent {
 	public final String getCalleeOperationName() {
 		return this.calleeOperationName;
 	}
-
 }

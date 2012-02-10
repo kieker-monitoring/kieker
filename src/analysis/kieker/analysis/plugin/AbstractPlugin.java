@@ -22,7 +22,6 @@ package kieker.analysis.plugin;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -214,6 +213,7 @@ public abstract class AbstractPlugin {
 	public static final boolean isConnectionAllowed(final AbstractPlugin src, final String output, final AbstractPlugin dst, final String input) {
 		/* First step: Check whether the plugins are valid. */
 		if ((src == null) || (dst == null) || (dst instanceof IMonitoringReader)) {
+			AbstractPlugin.LOG.warn("First step: Check whether the plugins are valid.");
 			return false;
 		}
 
@@ -221,29 +221,35 @@ public abstract class AbstractPlugin {
 		final OutputPort outputPort = src.outputPorts.get(output);
 		final InputPort inputPort = dst.inputPorts.get(input);
 		if ((outputPort == null) || (inputPort == null)) {
+			AbstractPlugin.LOG.warn("Second step: Check whether the ports exist.");
 			return false;
 		}
 
 		/* Third step: Make sure the ports are compatible. */
 		if (inputPort.eventTypes().length != 0) {
+			final Class<?>[] outEventTypes;
 			if (outputPort.eventTypes().length == 0) {
-				// Output port can deliver everything
-				if (!Arrays.asList(inputPort.eventTypes()).contains(Object.class)) {
-					// But the input port cannot get everything.
-					return false;
-				}
+				outEventTypes = new Class<?>[] { Object.class };
 			} else {
-				for (final Class<?> srcEventType : outputPort.eventTypes()) {
-					boolean compatible = false;
-					for (final Class<?> dstEventType : inputPort.eventTypes()) {
-						// FIXME: We now also accept "downcasts" as compatible. This could perhaps be colored differently in the GUI
-						if (dstEventType.isAssignableFrom(srcEventType) || srcEventType.isAssignableFrom(dstEventType)) {
-							compatible = true;
-						}
+				outEventTypes = outputPort.eventTypes();
+			}
+			// // Output port can deliver everything
+			// if (!Arrays.asList(inputPort.eventTypes()).contains(Object.class)) {
+			// // But the input port cannot get everything.
+			// AbstractPlugin.LOG.warn("Third step: Make sure the ports are compatible. But the input port cannot get everything.");
+			// return false;
+			// }
+			for (final Class<?> srcEventType : outEventTypes) {
+				boolean compatible = false;
+				for (final Class<?> dstEventType : inputPort.eventTypes()) {
+					// FIXME: We now also accept "downcasts" as compatible. This could perhaps be colored differently in the GUI
+					if (dstEventType.isAssignableFrom(srcEventType) || srcEventType.isAssignableFrom(dstEventType)) {
+						compatible = true;
 					}
-					if (!compatible) {
-						return false;
-					}
+				}
+				if (!compatible) {
+					AbstractPlugin.LOG.warn("Third step: Make sure the ports are compatible. Not compatible.");
+					return false;
 				}
 			}
 		}

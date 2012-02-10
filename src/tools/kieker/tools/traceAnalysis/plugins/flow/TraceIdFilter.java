@@ -63,8 +63,8 @@ public class TraceIdFilter extends AbstractTraceIdFilter {
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration(super.getDefaultConfiguration());
-		defaultConfiguration.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, "false");
-		defaultConfiguration.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, "0|2");
+		defaultConfiguration.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, "true");
+		defaultConfiguration.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, "0|1|2|3|4");
 		return defaultConfiguration;
 	}
 

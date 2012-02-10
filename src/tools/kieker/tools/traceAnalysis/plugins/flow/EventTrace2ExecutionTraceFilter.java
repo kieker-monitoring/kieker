@@ -41,6 +41,9 @@ import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
+import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+import kieker.tools.traceAnalysis.systemModel.Signature;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * TODO: work in progress
@@ -48,17 +51,30 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
  * @author Andre van Hoorn
  * 
  */
-@Plugin(
-		outputPorts = { @OutputPort(name = EventTrace2ExecutionTraceFilter.OUTPUT_EXECUTION_TRACE, description = "Outputs transformed execution traces", eventTypes = { ExecutionTrace.class }) })
+@Plugin(outputPorts = {
+	@OutputPort(name = EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Outputs transformed execution traces", eventTypes = { ExecutionTrace.class }),
+	@OutputPort(name = EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Outputs transformed message traces", eventTypes = { MessageTrace.class })
+})
 public class EventTrace2ExecutionTraceFilter extends AbstractTraceAnalysisPlugin {
 
 	private static final Log LOG = LogFactory.getLog(EventTrace2ExecutionTraceFilter.class);
 
-	public static final String INPUT_EVENT_TRACE = "inputEventTrace";
-	public static final String OUTPUT_EXECUTION_TRACE = "outputExecutionTrace";
+	public static final String INPUT_PORT_NAME = "inputEventTrace";
+	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE = "outputExecutionTrace";
+	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE = "outputMessageTrace";
+
+	private final Execution rootExecution;
 
 	public EventTrace2ExecutionTraceFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		super(configuration, repositories);
+
+		/* Load the root execution from the repository if possible. */
+		if (repositories.containsKey(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME) && (repositories
+				.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME) instanceof SystemModelRepository)) {
+			this.rootExecution = ((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getRootExecution();
+		} else {
+			this.rootExecution = null;
+		}
 	}
 
 	@InputPort(description = "Receives event record traces to be transformed", eventTypes = { EventRecordTrace.class })
@@ -74,7 +90,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceAnalysisPlugin
 
 		for (final TraceEvent e : eventTrace) {
 			/* Make sure that order indices increment by 1 */
-			if (e.getOrderIndex() != lastOrderIndex + 1) {
+			if (e.getOrderIndex() != (lastOrderIndex + 1)) {
 				EventTrace2ExecutionTraceFilter.LOG.error("Trace events' order indices must increment by one: " +
 						" Found " + lastOrderIndex + " followed by " + e.getOrderIndex() + " event (" + e + ")");
 				EventTrace2ExecutionTraceFilter.LOG.error("Terminating processing of event record trace with ID " + eventTrace.getTraceId());
@@ -96,11 +112,29 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceAnalysisPlugin
 						final CallOperationEvent peekCallEvent = (CallOperationEvent) peekEvent;
 						// TODO: we need to consider the host name as well
 						if (peekCallEvent.getCalleeOperationName().equals(curBeforeOperationEvent.getOperationName())) {
+							// EventTrace2ExecutionTraceFilter.LOG.info("Current Event: " + curBeforeOperationEvent.toString() + ", redundant call discarded: "
+							// + peekCallEvent.toString());
 							/* Redundant call event on top of stack */
 							eventStack.pop();
 							eoiStack.pop();
 							nextEoi--;
 							curEss--;
+						}
+					}
+				}
+			} else if (e instanceof CallOperationEvent) {
+				if (!eventStack.isEmpty()) {
+					final TraceEvent peekEvent = eventStack.peek();
+					if (peekEvent instanceof CallOperationEvent) {
+						final CallOperationEvent poppedCallEvent = (CallOperationEvent) eventStack.pop();
+						final Execution execution = this.callOperationToExecution(poppedCallEvent, execTrace.getTraceId(),
+								eoiStack.pop(), curEss--, poppedCallEvent.getTimestamp(), e.getTimestamp());
+						try {
+							execTrace.add(execution);
+						} catch (final InvalidTraceException ex) {
+							EventTrace2ExecutionTraceFilter.LOG.error("Failed to add execution " + execution + " to trace" + execTrace, ex);
+							// TODO: perhaps output broken event record trace
+							return;
 						}
 					}
 				}
@@ -153,18 +187,23 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceAnalysisPlugin
 					try {
 						execTrace.add(exec);
 					} catch (final InvalidTraceException ex) {
-						EventTrace2ExecutionTraceFilter.LOG.error("Failed to add execution " + exec + " to trace" + exec);
+						EventTrace2ExecutionTraceFilter.LOG.error("Failed to add execution " + exec + " to trace" + execTrace, ex);
+						return;
 					}
 				}
 			} else {
-				EventTrace2ExecutionTraceFilter.LOG.error("Trace Events of type " + e.getClass().getName() + " not supported, yet");
-				EventTrace2ExecutionTraceFilter.LOG.error("Terminating processing of event record trace with ID " + eventTrace.getTraceId());
+				EventTrace2ExecutionTraceFilter.LOG.warn("Trace Events of type " + e.getClass().getName() + " not supported, yet");
+				// EventTrace2ExecutionTraceFilter.LOG.error("Terminating processing of event record trace with ID " + eventTrace.getTraceId());
 				// TODO: output broken event record trace
-				return;
 			}
 		}
 
-		super.deliver(EventTrace2ExecutionTraceFilter.OUTPUT_EXECUTION_TRACE, execTrace);
+		super.deliver(EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, execTrace);
+		try {
+			super.deliver(EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, execTrace.toMessageTrace(this.rootExecution));
+		} catch (final InvalidTraceException ex) {
+			// TODO send to new output port for defect traces
+		}
 	}
 
 	/**
@@ -206,11 +245,16 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceAnalysisPlugin
 		final String hostName = "<HOST>";
 		final String sessionId = "<SESSION-ID>";
 
-		final String[] fqOpSplit = this.splitFQOperationName(event.getOperationName());
-		final String fqClassName = fqOpSplit[0];
-		final String opSignature = fqOpSplit[1];
-
-		return super.createExecutionByEntityNames(hostName, fqClassName, opSignature, traceId, sessionId, eoi, ess, tin, tout);
+		final Signature signature = super.createSignature(event.getCalleeOperationName());
+		final String name = signature.getName();
+		final int i = name.lastIndexOf('.');
+		final String fqClassname;
+		if (i != -1) {
+			fqClassname = name.substring(0, i);
+		} else {
+			fqClassname = "";
+		}
+		return super.createExecutionByEntityNames(hostName, fqClassname, signature.toString(), traceId, sessionId, eoi, ess, tin, tout);
 	}
 
 	/**
@@ -264,11 +308,6 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceAnalysisPlugin
 
 	@Override
 	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
-	}
-
-	@Override
-	public Map<String, AbstractRepository> getCurrentRepositories() {
 		return new HashMap<String, AbstractRepository>();
 	}
 }

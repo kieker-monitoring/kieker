@@ -126,10 +126,10 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.put(ContainerDependencyGraphPlugin.CONFIG_DOT_OUTPUT_FILE, "");
-		configuration.put(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_WEIGHTS, false);
-		configuration.put(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_SELF_LOOPS, false);
-		configuration.put(ContainerDependencyGraphPlugin.CONFIG_SHORT_LABELS, false);
+		configuration.setProperty(ContainerDependencyGraphPlugin.CONFIG_DOT_OUTPUT_FILE, "");
+		configuration.setProperty(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_WEIGHTS, Boolean.FALSE.toString());
+		configuration.setProperty(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_SELF_LOOPS, Boolean.FALSE.toString());
+		configuration.setProperty(ContainerDependencyGraphPlugin.CONFIG_SHORT_LABELS, Boolean.FALSE.toString());
 
 		return configuration;
 	}
@@ -138,10 +138,10 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.put(ContainerDependencyGraphPlugin.CONFIG_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
-		configuration.put(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_WEIGHTS, this.includeWeights);
-		configuration.put(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_SELF_LOOPS, this.includeSelfLoops);
-		configuration.put(ContainerDependencyGraphPlugin.CONFIG_SHORT_LABELS, this.shortLabels);
+		configuration.setProperty(ContainerDependencyGraphPlugin.CONFIG_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
+		configuration.setProperty(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
+		configuration.setProperty(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));
+		configuration.setProperty(ContainerDependencyGraphPlugin.CONFIG_SHORT_LABELS, Boolean.toString(this.shortLabels));
 
 		return configuration;
 	}

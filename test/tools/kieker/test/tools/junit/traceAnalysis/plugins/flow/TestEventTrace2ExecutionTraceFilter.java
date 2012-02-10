@@ -139,7 +139,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		 * ExecutionTraces
 		 */
 		final SimpleSinkPlugin executionTraceSinkPlugin = new SimpleSinkPlugin();
-		AbstractPlugin.connect(filter, EventTrace2ExecutionTraceFilter.OUTPUT_EXECUTION_TRACE, executionTraceSinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+		AbstractPlugin.connect(filter, EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
 		filter.inputEventTrace(eventRecordTrace);
 

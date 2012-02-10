@@ -74,23 +74,37 @@ public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin
 	 * @return
 	 */
 	protected Signature createSignature(final String operationSignatureStr) {
-		final String returnType = "N/A";
+		final String returnType;
 		String name;
 		String[] paramTypeList;
+		String[] modifierList;
 		final int openParenIdx = operationSignatureStr.indexOf('(');
+		final String modRetName;
 		if (openParenIdx == -1) { // no parameter list
 			paramTypeList = new String[] {};
-			name = operationSignatureStr;
+			modRetName = operationSignatureStr;
 		} else {
-			name = operationSignatureStr.substring(0, openParenIdx);
+			modRetName = operationSignatureStr.substring(0, openParenIdx);
 			final StringTokenizer strTokenizer = new StringTokenizer(operationSignatureStr.substring(openParenIdx + 1, operationSignatureStr.length() - 1), ",");
 			paramTypeList = new String[strTokenizer.countTokens()];
 			for (int i = 0; strTokenizer.hasMoreTokens(); i++) {
 				paramTypeList[i] = strTokenizer.nextToken().trim();
 			}
 		}
-
-		return new Signature(name, returnType, paramTypeList);
+		final int nameBeginIdx = modRetName.lastIndexOf(' ');
+		if (nameBeginIdx == -1) {
+			name = modRetName;
+			// TODO: find package and name and return both separately, also a few lines below this
+			returnType = "N/A";
+			modifierList = new String[] {};
+		} else {
+			name = modRetName.substring(nameBeginIdx + 1);
+			final String[] modRet = name.split("\\s");
+			returnType = modRet[modRet.length - 1];
+			modifierList = new String[modRet.length - 1];
+			System.arraycopy(modRet, 0, modifierList, 0, modifierList.length);
+		}
+		return new Signature(name, modifierList, returnType, paramTypeList);
 	}
 
 	protected final Execution createExecutionByEntityNames(final String executionContainerName, final String componentTypeName,
@@ -155,7 +169,6 @@ public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin
 	public Map<String, AbstractRepository> getCurrentRepositories() {
 		final Map<String, AbstractRepository> map = new HashMap<String, AbstractRepository>();
 		map.put(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
-
 		return map;
 	}
 }
