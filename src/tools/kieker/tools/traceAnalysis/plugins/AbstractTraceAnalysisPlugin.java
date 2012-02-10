@@ -80,7 +80,7 @@ public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin
 	public static String createOperationSignatureString(final String fqClassName, final Signature signature) {
 		final StringBuilder strBuilder = new StringBuilder();
 
-		if ((signature.getModifier().length != 0) && ((signature.getReturnType() == null) || signature.getReturnType().isEmpty())) {
+		if ((signature.getModifier().length != 0) && (!signature.hasReturnType())) {
 			throw new IllegalArgumentException("Modifier not list empty but return type null/empty");
 		}
 
@@ -89,7 +89,9 @@ public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin
 			for (final String type : signature.getModifier()) {
 				strBuilder.append(type).append(" ");
 			}
-			strBuilder.append(signature.getReturnType()).append(" ");
+			if (signature.hasReturnType()) {
+				strBuilder.append(signature.getReturnType()).append(" ");
+			}
 		}
 
 		/* Append operation name and parameter type list */
