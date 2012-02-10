@@ -83,7 +83,7 @@ public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlug
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.put(MessageTraceWriterPlugin.CONFIG_OUTPUT_FN, "");
+		configuration.setProperty(MessageTraceWriterPlugin.CONFIG_OUTPUT_FN, "");
 
 		return configuration;
 	}
@@ -92,7 +92,7 @@ public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlug
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.put(MessageTraceWriterPlugin.CONFIG_OUTPUT_FN, this.outputFn);
+		configuration.setProperty(MessageTraceWriterPlugin.CONFIG_OUTPUT_FN, this.outputFn);
 
 		return configuration;
 	}

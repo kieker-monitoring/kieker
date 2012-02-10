@@ -33,7 +33,7 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
  */
 public abstract class AbstractMessageTraceProcessingPlugin extends AbstractTraceProcessingPlugin {
 
-	public static final String MESSAGE_TRACE_INPUT_PORT_NAME = "msgTraceInput";
+	public static final String INPUT_PORT_NAME = "msgTraceInput";
 
 	public AbstractMessageTraceProcessingPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		super(configuration, repositories);

@@ -165,4 +165,14 @@ public final class Configuration extends Properties {
 			throw new IllegalAccessException();
 		}
 	}
+
+	/**
+	 * This method should never be used directly!
+	 * Use {@link #setProperty(String, String)} instead!
+	 */
+	@Override
+	@Deprecated
+	public final synchronized Object put(final Object key, final Object value) {
+		return super.put(key, value);
+	}
 }

@@ -73,8 +73,11 @@ public class ExecutionFactory {
 		/* Register operation (if it hasn't been registered before) */
 		Operation operationAa = this.systemEntityFactory.getOperationFactory().lookupOperationByNamedIdentifier(operationName);
 		if (operationAa == null) {
-			operationAa = this.systemEntityFactory.getOperationFactory().createAndRegisterOperation(operationName, componentTypeA,
-					new Signature(operationName, ExecutionFactory.DEFAULT_STRING, new String[] { ExecutionFactory.DEFAULT_STRING }));
+			operationAa = this.systemEntityFactory.getOperationFactory().createAndRegisterOperation(
+					operationName,
+					componentTypeA,
+					new Signature(operationName, new String[] { ExecutionFactory.DEFAULT_STRING }, ExecutionFactory.DEFAULT_STRING,
+							new String[] { ExecutionFactory.DEFAULT_STRING }));
 		}
 		if (componentTypeA.getOperations().contains(operationAa)) {
 			componentTypeA.addOperation(operationAa);

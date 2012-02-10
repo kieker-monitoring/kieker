@@ -46,7 +46,7 @@ import kieker.common.record.IMonitoringRecord;
 	@OutputPort(
 			name = TeeFilter.OUTPUT_PORT_NAME,
 			description = "Output port",
-			eventTypes = { IMonitoringRecord.class })
+			eventTypes = {})
 })
 public final class TeeFilter extends AbstractAnalysisPlugin {
 

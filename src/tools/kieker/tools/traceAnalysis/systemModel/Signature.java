@@ -27,17 +27,23 @@ package kieker.tools.traceAnalysis.systemModel;
 public class Signature {
 	private final String name;
 
+	private final String[] modifierList;
 	private final String returnType;
 	private final String[] paramTypeList;
 
-	public Signature(final String name, final String returnType, final String[] paramTypeList) {
+	public Signature(final String name, final String[] modifierList, final String returnType, final String[] paramTypeList) {
 		this.name = name;
+		this.modifierList = modifierList;
 		this.returnType = returnType;
 		this.paramTypeList = paramTypeList.clone();
 	}
 
 	public final String getName() {
 		return this.name;
+	}
+
+	public String[] getModifier() {
+		return this.modifierList;
 	}
 
 	public final String[] getParamTypeList() {
@@ -51,8 +57,17 @@ public class Signature {
 	@Override
 	public String toString() {
 		final StringBuilder strBuild = new StringBuilder();
-		strBuild.append(this.name).append("(");
 		boolean first = true;
+		for (final String t : this.modifierList) {
+			if (!first) {
+				strBuild.append(" ");
+			} else {
+				first = false;
+			}
+			strBuild.append(t);
+		}
+		strBuild.append(this.name).append("(");
+		first = true;
 		for (final String t : this.paramTypeList) {
 			if (!first) {
 				strBuild.append(",");
@@ -64,4 +79,5 @@ public class Signature {
 		strBuild.append(")").append(":").append(this.returnType);
 		return strBuild.toString();
 	}
+
 }

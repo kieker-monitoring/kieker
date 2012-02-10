@@ -100,7 +100,7 @@ public interface MIPlugin extends EObject {
 	EList<MIProperty> getProperties();
 
 	/**
-	 * Returns the value of the '<em><b>Repositories</b></em>' reference list.
+	 * Returns the value of the '<em><b>Repositories</b></em>' containment reference list.
 	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.MIRepositoryConnector}.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -108,9 +108,9 @@ public interface MIPlugin extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Repositories</em>' reference list.
+	 * @return the value of the '<em>Repositories</em>' containment reference list.
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getPlugin_Repositories()
-	 * @model
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<MIRepositoryConnector> getRepositories();

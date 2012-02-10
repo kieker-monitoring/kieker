@@ -62,7 +62,7 @@ public class SystemModelRepository extends AbstractRepository {
 		final AllocationComponent rootAllocation = new AllocationComponent(AbstractSystemSubRepository.ROOT_ELEMENT_ID, rootAssemblyComponentInstance,
 				rootExecutionContainer);
 		this.allocationFactory = new AllocationRepository(this, rootAllocation);
-		final Signature rootSignature = new Signature("$", "<>", new String[] {});
+		final Signature rootSignature = new Signature("$", new String[] {}, "<>", new String[] {});
 		final Operation rootOperation = new Operation(AbstractSystemSubRepository.ROOT_ELEMENT_ID, rootComponentType, rootSignature);
 		this.operationFactory = new OperationRepository(this, rootOperation);
 		this.rootExecution = new Execution(this.operationFactory.getRootOperation(), this.allocationFactory.getRootAllocationComponent(), -1, "-1", -1, -1, -1, -1);

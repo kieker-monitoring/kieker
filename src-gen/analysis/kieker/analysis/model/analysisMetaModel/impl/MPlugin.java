@@ -99,7 +99,7 @@ public abstract class MPlugin extends EObjectImpl implements MIPlugin {
 	protected EList<MIProperty> properties;
 
 	/**
-	 * The cached value of the '{@link #getRepositories() <em>Repositories</em>}' reference list.
+	 * The cached value of the '{@link #getRepositories() <em>Repositories</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getRepositories()
@@ -198,7 +198,7 @@ public abstract class MPlugin extends EObjectImpl implements MIPlugin {
 	 */
 	public EList<MIRepositoryConnector> getRepositories() {
 		if (repositories == null) {
-			repositories = new EObjectResolvingEList<MIRepositoryConnector>(MIRepositoryConnector.class, this, MIAnalysisMetaModelPackage.PLUGIN__REPOSITORIES);
+			repositories = new EObjectContainmentEList<MIRepositoryConnector>(MIRepositoryConnector.class, this, MIAnalysisMetaModelPackage.PLUGIN__REPOSITORIES);
 		}
 		return repositories;
 	}
@@ -240,6 +240,8 @@ public abstract class MPlugin extends EObjectImpl implements MIPlugin {
 		switch (featureID) {
 			case MIAnalysisMetaModelPackage.PLUGIN__PROPERTIES:
 				return ((InternalEList<?>)getProperties()).basicRemove(otherEnd, msgs);
+			case MIAnalysisMetaModelPackage.PLUGIN__REPOSITORIES:
+				return ((InternalEList<?>)getRepositories()).basicRemove(otherEnd, msgs);
 			case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
 				return ((InternalEList<?>)getOutputPorts()).basicRemove(otherEnd, msgs);
 		}

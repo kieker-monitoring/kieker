@@ -50,25 +50,25 @@ import kieker.tools.util.LoggingTimestampConverter;
  */
 @Plugin(outputPorts = {
 	@OutputPort(
-			name = TraceReconstructionFilter.MESSAGE_TRACE_OUTPUT_PORT_NAME,
+			name = TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 			description = "Reconstructed Message Traces",
 			eventTypes = { MessageTrace.class }),
 	@OutputPort(
-			name = TraceReconstructionFilter.EXECUTION_TRACE_OUTPUT_PORT_NAME,
+			name = TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
 			description = "Reconstructed Execution Traces",
 			eventTypes = { ExecutionTrace.class }),
 	@OutputPort(
-			name = TraceReconstructionFilter.INVALID_EXECUTION_TRACE_OUTPUT_PORT_NAME,
+			name = TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE,
 			description = "Invalid Execution Traces",
 			eventTypes = { InvalidExecutionTrace.class })
 })
 public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	private static final Log LOG = LogFactory.getLog(TraceReconstructionFilter.class);
 
-	public static final String EXECUTION_TRACE_INPUT_PORT_NAME = "newExecution";
-	public static final String MESSAGE_TRACE_OUTPUT_PORT_NAME = "MessageTraceOutput";
-	public static final String EXECUTION_TRACE_OUTPUT_PORT_NAME = "ExecutionTraceOutput";
-	public static final String INVALID_EXECUTION_TRACE_OUTPUT_PORT_NAME = "InvalidExecutionTraceOutput";
+	public static final String INPUT_PORT_NAME = "newExecution";
+	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE = "MessageTraceOutput";
+	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE = "ExecutionTraceOutput";
+	public static final String OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE = "InvalidExecutionTraceOutput";
 	public static final String CONFIG_MAX_TRACE_DURATION_MILLIS = TraceReconstructionFilter.class.getName() + ".maxTraceDurationMillis";
 	public static final String CONFIG_IGNORE_INVALID_TRACES = TraceReconstructionFilter.class.getName() + ".ignoreInvalidTraces";
 
@@ -227,18 +227,18 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 			 */
 			if (!this.invalidTraces.contains(mt.getTraceId())) {
 				/* Not completing part of an invalid trace */
-				super.deliver(TraceReconstructionFilter.MESSAGE_TRACE_OUTPUT_PORT_NAME, mt);
-				super.deliver(TraceReconstructionFilter.EXECUTION_TRACE_OUTPUT_PORT_NAME, executionTrace);
+				super.deliver(TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, mt);
+				super.deliver(TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTrace);
 				this.reportSuccess(curTraceId);
 			} else {
 				/* mt is the completing part of an invalid trace */
-				super.deliver(TraceReconstructionFilter.INVALID_EXECUTION_TRACE_OUTPUT_PORT_NAME, new InvalidExecutionTrace(executionTrace));
+				super.deliver(TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, new InvalidExecutionTrace(executionTrace));
 				// the statistics have been updated on the first
 				// occurrence of artifacts of this trace
 			}
 		} catch (final InvalidTraceException ex) {
 			/* Transformation failed (i.e., trace invalid) */
-			super.deliver(TraceReconstructionFilter.INVALID_EXECUTION_TRACE_OUTPUT_PORT_NAME, new InvalidExecutionTrace(executionTrace));
+			super.deliver(TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, new InvalidExecutionTrace(executionTrace));
 			if (!this.invalidTraces.contains(curTraceId)) {
 				// only once per traceID (otherwise, we would report all
 				// trace fragments)
@@ -316,8 +316,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.put(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, TraceReconstructionFilter.MAX_DURATION_MILLIS);
-		configuration.put(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, true);
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Long.toString(TraceReconstructionFilter.MAX_DURATION_MILLIS));
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, Boolean.TRUE.toString());
 
 		return configuration;
 	}
@@ -326,8 +326,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.put(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, this.maxTraceDurationMillis);
-		configuration.put(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, this.ignoreInvalidTraces);
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Long.toString(this.maxTraceDurationMillis));
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, Boolean.toString(this.ignoreInvalidTraces));
 
 		return configuration;
 	}

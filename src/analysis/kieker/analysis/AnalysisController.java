@@ -80,6 +80,8 @@ public final class AnalysisController {
 
 	private IMonitoringReader logReader;
 	private final Collection<AbstractAnalysisPlugin> plugins = new CopyOnWriteArrayList<AbstractAnalysisPlugin>();
+	private final Collection<AbstractRepository> repos = new CopyOnWriteArrayList<AbstractRepository>();
+
 	/** Will be count down after the analysis is set-up. */
 	private final CountDownLatch initializationLatch = new CountDownLatch(1);
 
@@ -186,6 +188,7 @@ public final class AnalysisController {
 				final AbstractRepository repository = (AbstractRepository) repositoryConstructor.newInstance(configuration.getPropertiesStartingWith(mRepository
 						.getClassname()));
 				repositoryMap.put(mRepository, repository);
+				this.registerRepository(repository);
 			} catch (final Exception ex) {
 				AnalysisController.LOG.error("Could not load repository: " + mRepository.getClassname());
 				continue;
@@ -328,8 +331,8 @@ public final class AnalysisController {
 		/* Now try to save the resource. */
 		try {
 			resource.save(null);
-		} catch (final IOException e) {
-			AnalysisController.LOG.error(String.format("Unable to save configuration file '%s'.", file.getAbsolutePath()));
+		} catch (final IOException ex) {
+			AnalysisController.LOG.error("Unable to save configuration file '" + file.getAbsolutePath() + "'.", ex);
 			return false;
 		}
 
@@ -352,6 +355,15 @@ public final class AnalysisController {
 
 			final Map<AbstractPlugin, MIPlugin> pluginMap = new HashMap<AbstractPlugin, MIPlugin>();
 			final Map<AbstractRepository, MIRepository> repositoryMap = new HashMap<AbstractRepository, MIRepository>();
+
+			/* Run through all repositories and create the model-counterparts. */
+			final List<AbstractRepository> repos = new ArrayList<AbstractRepository>(this.repos);
+			for (final AbstractRepository repo : repos) {
+				final MIRepository mRepo = factory.createRepository();
+				mRepo.setClassname(repo.getClass().getName());
+				project.getRepositories().add(mRepo);
+				repositoryMap.put(repo, mRepo);
+			}
 
 			/* Run through all plugins and create the model-counterparts. */
 			final List<AbstractPlugin> plugins = new ArrayList<AbstractPlugin>(this.plugins);
@@ -388,13 +400,11 @@ public final class AnalysisController {
 				final Set<Entry<String, AbstractRepository>> repoSet = currRepositories.entrySet();
 				for (final Entry<String, AbstractRepository> repoEntry : repoSet) {
 					/* Try to find the repository within our map. */
-					MIRepository mRepository = repositoryMap.get(repoEntry.getValue());
-					/* If it doesn't exist, we have to create it first. */
+					final MIRepository mRepository = repositoryMap.get(repoEntry.getValue());
+					/* If it doesn't exist, we have a problem.. */
 					if (mRepository == null) {
-						mRepository = factory.createRepository();
-						mRepository.setClassname(repoEntry.getValue().getClass().getName());
-						/* Remember this new repository. */
-						repositoryMap.put(repoEntry.getValue(), mRepository);
+						AnalysisController.LOG.error("Repository not contained in project. Maybe the repository has not been registered.");
+						return null;
 					}
 					/* Now the connector. */
 					final MIRepositoryConnector mRepositoryConn = factory.createRepositoryConnector();
@@ -599,6 +609,16 @@ public final class AnalysisController {
 		this.plugins.add(plugin);
 		if (AnalysisController.LOG.isDebugEnabled()) {
 			AnalysisController.LOG.debug("Registered plugin " + plugin);
+		}
+	}
+
+	/**
+	 * Registers the passed repositories <i>c<i>.
+	 */
+	public void registerRepository(final AbstractRepository repo) { // TODO: is this really still needed? Should be done with Project...
+		this.repos.add(repo);
+		if (AnalysisController.LOG.isDebugEnabled()) {
+			AnalysisController.LOG.debug("Registered Repository " + repo);
 		}
 	}
 
