@@ -192,14 +192,13 @@ public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin
 	}
 
 	protected final Execution createExecutionByEntityNames(final String executionContainerName, final String componentTypeName,
-			final String operationSignature, final long traceId, final String sessionId, final int eoi, final int ess,
+			final Signature operationSignature, final long traceId, final String sessionId, final int eoi, final int ess,
 			final long tin, final long tout) {
 		// final String executionContainerName = execRec.getHostName();
 		// final String componentTypeName = execRec.getClassName();
 		final String assemblyComponentName = componentTypeName;
 		final String allocationComponentName = new StringBuilder(executionContainerName).append("::").append(assemblyComponentName).toString();
 		final String operationFactoryName = new StringBuilder(assemblyComponentName).append(".").append(operationSignature).toString();
-		final String operationSignatureStr = operationSignature;
 
 		AllocationComponent allocInst = this.getSystemEntityFactory().getAllocationFactory()
 				.lookupAllocationComponentInstanceByNamedIdentifier(allocationComponentName);
@@ -227,9 +226,8 @@ public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin
 
 		Operation op = this.getSystemEntityFactory().getOperationFactory().lookupOperationByNamedIdentifier(operationFactoryName);
 		if (op == null) { /* Operation doesn't exist */
-			final Signature signature = AbstractTraceAnalysisPlugin.splitOperationSignatureStr(operationSignatureStr).getSignature();
 			op = this.getSystemEntityFactory().getOperationFactory()
-					.createAndRegisterOperation(operationFactoryName, allocInst.getAssemblyComponent().getType(), signature);
+					.createAndRegisterOperation(operationFactoryName, allocInst.getAssemblyComponent().getType(), operationSignature);
 			allocInst.getAssemblyComponent().getType().addOperation(op);
 		}
 

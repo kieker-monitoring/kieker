@@ -221,11 +221,11 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceAnalysisPlugin
 		final String hostName = "<HOST>";
 		final String sessionId = "<SESSION-ID>";
 
-		final String[] fqOpSplit = this.splitFQOperationName(event.getOperationName());
-		final String fqClassName = fqOpSplit[0];
-		final String opSignature = fqOpSplit[1];
+		final FQComponentNameSignaturePair fqComponentNameSignaturePair = super.splitOperationSignatureStr(event.getOperationName());
 
-		return super.createExecutionByEntityNames(hostName, fqClassName, opSignature, traceId, sessionId, eoi, ess, tin, tout);
+		return super.createExecutionByEntityNames(hostName, fqComponentNameSignaturePair.getFqClassname(), fqComponentNameSignaturePair.getSignature(),
+				traceId,
+				sessionId, eoi, ess, tin, tout);
 	}
 
 	/**
@@ -246,36 +246,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceAnalysisPlugin
 
 		final FQComponentNameSignaturePair fqComponentNameSignaturePair = super.splitOperationSignatureStr(event.getCalleeOperationName());
 		return super.createExecutionByEntityNames(hostName, fqComponentNameSignaturePair.getFqClassname(),
-				fqComponentNameSignaturePair.getSignature().toString(), traceId, sessionId, eoi, ess, tin, tout);
-	}
-
-	/**
-	 * Splits a fully qualified operation of format <code>"a.b.c.D.op(args)"</code> into
-	 * an array with two elements: {"a.b.c.D", "op(args")}
-	 * 
-	 * @param fqOpname
-	 * @return
-	 */
-	protected String[] splitFQOperationName(final String fqOpname) {
-		final String fqClassName;
-		final String opSignature;
-
-		final int posParen = fqOpname.lastIndexOf('(');
-		int posDot;
-		if (posParen != -1) {
-			posDot = fqOpname.substring(0, posParen).lastIndexOf('.');
-		} else {
-			posDot = fqOpname.lastIndexOf('.');
-		}
-		if (posDot == -1) {
-			fqClassName = "";
-			opSignature = fqOpname;
-		} else {
-			fqClassName = fqOpname.substring(0, posDot);
-			opSignature = fqOpname.substring(posDot + 1);
-		}
-
-		return new String[] { fqClassName, opSignature };
+				fqComponentNameSignaturePair.getSignature(), traceId, sessionId, eoi, ess, tin, tout);
 	}
 
 	@Override

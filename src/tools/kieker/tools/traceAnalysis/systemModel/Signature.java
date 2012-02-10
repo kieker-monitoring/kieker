@@ -27,22 +27,30 @@ package kieker.tools.traceAnalysis.systemModel;
 public class Signature {
 	private final String name;
 
+	public static final String NO_RETURN_TYPE = "<NO-RETURN-TYPE>";
+
 	private final String[] modifierList;
 	private final String returnType;
 	private final String[] paramTypeList;
 
 	/**
 	 * 
+	 * Please use the constant {@link #NO_RETURN_TYPE} to indicate that the Signature contains no return type.
+	 * 
 	 * @param name
 	 * @param modifierList
 	 * @param returnType
-	 *            null if none
+	 *            if null, the return type will be set to {@link #NO_RETURN_TYPE}
 	 * @param paramTypeList
 	 */
 	public Signature(final String name, final String[] modifierList, final String returnType, final String[] paramTypeList) {
 		this.name = name;
 		this.modifierList = modifierList;
-		this.returnType = returnType;
+		if (returnType == null) {
+			this.returnType = Signature.NO_RETURN_TYPE;
+		} else {
+			this.returnType = returnType;
+		}
 		this.paramTypeList = paramTypeList.clone();
 	}
 
@@ -50,7 +58,7 @@ public class Signature {
 		return this.name;
 	}
 
-	public String[] getModifier() {
+	public final String[] getModifier() {
 		return this.modifierList;
 	}
 
@@ -60,6 +68,10 @@ public class Signature {
 
 	public final String getReturnType() {
 		return this.returnType;
+	}
+
+	public final boolean hasReturnType() {
+		return this.returnType != Signature.NO_RETURN_TYPE;
 	}
 
 	@Override
@@ -85,7 +97,7 @@ public class Signature {
 			strBuild.append(t);
 		}
 		strBuild.append(")");
-		if (this.returnType != null) {
+		if (this.hasReturnType()) {
 			strBuild.append(":").append(this.returnType);
 		}
 		return strBuild.toString();
