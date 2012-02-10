@@ -34,7 +34,6 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.systemModel.Execution;
-import kieker.tools.traceAnalysis.systemModel.Signature;
 
 /**
  * Transforms {@link OperationExecutionRecord}s into {@link Execution} objects.<br>
@@ -69,12 +68,13 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 		final OperationExecutionRecord execRec = (OperationExecutionRecord) record;
 
 		/*
-		 * FIXME: split execRec.getOperationName() of format op1(Type, Type2)
-		 * into op1 and a String array { "Type1", "Type2"}.
+		 * This would be the place to handle the operation signatures with etc. if they
+		 * are also used in OperationExecutionRecords
 		 */
-		final Signature signature = new Signature(execRec.getOperationName(), new String[] {}, Signature.NO_RETURN_TYPE, new String[] { "params" });
 
-		final Execution execution = this.createExecutionByEntityNames(execRec.getHostName(), execRec.getClassName(), signature,
+		final FQComponentNameSignaturePair fqComponentNameSignaturePair = AbstractTraceAnalysisPlugin.splitOperationSignatureStr(execRec.getOperationName());
+
+		final Execution execution = this.createExecutionByEntityNames(execRec.getHostName(), execRec.getClassName(), fqComponentNameSignaturePair.getSignature(),
 				execRec.getTraceId(), execRec.getSessionId(), execRec.getEoi(), execRec.getEss(), execRec.getTin(), execRec.getTout());
 		super.deliver(ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME, execution);
 		return true;

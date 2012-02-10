@@ -77,17 +77,12 @@ public class Signature {
 	@Override
 	public String toString() {
 		final StringBuilder strBuild = new StringBuilder();
-		boolean first = true;
 		for (final String t : this.modifierList) {
-			if (!first) {
-				strBuild.append(" ");
-			} else {
-				first = false;
-			}
 			strBuild.append(t);
+			strBuild.append(" ");
 		}
 		strBuild.append(this.name).append("(");
-		first = true;
+		boolean first = true;
 		for (final String t : this.paramTypeList) {
 			if (!first) {
 				strBuild.append(",");
