@@ -67,13 +67,56 @@ public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin
 	}
 
 	/**
+	 * Given a fully-qualified class name <i>fqClassName</i> (e.g., <code>a.b.c.D</code>) and
+	 * and a {@link Signature} (e.g., for operation <code>op1</code> with modifiers <code>public</code> and <code>static</code>, the return type <code>Boolean</code>
+	 * ,
+	 * and the parameter types <code>Integer</code> and <code>Long</code>), the method
+	 * returns an operation signature string (e.g., <code>public static Boolean a.b.c.D.op1(Integer, Long)</code>).
+	 * 
+	 * @param fqClassName
+	 * @param signature
+	 * @return
+	 */
+	public static String createOperationSignatureString(final String fqClassName, final Signature signature) {
+		final StringBuilder strBuilder = new StringBuilder();
+
+		if ((signature.getModifier().length == 0) && ((signature.getReturnType() == null) || signature.getReturnType().isEmpty())) {
+			throw new IllegalArgumentException("Modifier list empty and return type null/empty");
+		}
+
+		/* Append modifiers and return type */
+		if ((signature.getReturnType() != null) && !signature.getReturnType().isEmpty()) {
+			for (final String type : signature.getModifier()) {
+				strBuilder.append(type).append(" ");
+			}
+			strBuilder.append(signature.getReturnType()).append(" ");
+		}
+
+		/* Append operation name and parameter type list */
+		strBuilder.append(fqClassName);
+		strBuilder.append(".").append(signature.getName());
+		strBuilder.append("(");
+		boolean first = true;
+		for (final String type : signature.getParamTypeList()) {
+			if (!first) {
+				strBuilder.append(", ");
+			}
+			first = false;
+			strBuilder.append(type);
+		}
+		strBuilder.append(")");
+
+		return strBuilder.toString();
+	}
+
+	/**
 	 * Creates a signature from a signature string of format <code>operatioName(Type0,..,TypeN)</code>.
 	 * The parameter type list wrapped by parentheses is optional.
 	 * 
 	 * @param operationSignatureStr
 	 * @return
 	 */
-	protected Signature createSignature(final String operationSignatureStr) {
+	public static Signature createSignature(final String operationSignatureStr) {
 		final String returnType;
 		String name;
 		String[] paramTypeList;
@@ -143,7 +186,7 @@ public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin
 
 		Operation op = this.getSystemEntityFactory().getOperationFactory().lookupOperationByNamedIdentifier(operationFactoryName);
 		if (op == null) { /* Operation doesn't exist */
-			final Signature signature = this.createSignature(operationSignatureStr);
+			final Signature signature = AbstractTraceAnalysisPlugin.createSignature(operationSignatureStr);
 			op = this.getSystemEntityFactory().getOperationFactory()
 					.createAndRegisterOperation(operationFactoryName, allocInst.getAssemblyComponent().getType(), signature);
 			allocInst.getAssemblyComponent().getType().addOperation(op);

@@ -31,6 +31,14 @@ public class Signature {
 	private final String returnType;
 	private final String[] paramTypeList;
 
+	/**
+	 * 
+	 * @param name
+	 * @param modifierList
+	 * @param returnType
+	 *            null if none
+	 * @param paramTypeList
+	 */
 	public Signature(final String name, final String[] modifierList, final String returnType, final String[] paramTypeList) {
 		this.name = name;
 		this.modifierList = modifierList;
@@ -76,8 +84,12 @@ public class Signature {
 			}
 			strBuild.append(t);
 		}
-		strBuild.append(")").append(":").append(this.returnType);
+		strBuild.append(")");
+		if (this.returnType != null) {
+			strBuild.append(":").append(this.returnType);
+		}
 		return strBuild.toString();
 	}
 
+	// TODO: implement equals
 }
