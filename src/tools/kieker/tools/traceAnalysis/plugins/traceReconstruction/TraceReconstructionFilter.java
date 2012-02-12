@@ -72,7 +72,6 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	public static final String CONFIG_MAX_TRACE_DURATION_MILLIS = TraceReconstructionFilter.class.getName() + ".maxTraceDurationMillis";
 	public static final String CONFIG_IGNORE_INVALID_TRACES = TraceReconstructionFilter.class.getName() + ".ignoreInvalidTraces";
 
-	public static final int MAX_DURATION_MILLIS = Integer.MAX_VALUE;
 	private static final long MAX_DURATION_NANOS = Long.MAX_VALUE;
 	/** TraceId x trace */
 	private final Map<Long, ExecutionTrace> pendingTraces = new Hashtable<Long, ExecutionTrace>(); // NOPMD (UseConcurrentHashMap)
@@ -128,7 +127,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 		if (this.maxTraceDurationMillis < 0) {
 			throw new IllegalArgumentException("value maxTraceDurationMillis must not be negative (found: " + this.maxTraceDurationMillis + ")");
 		}
-		if (this.maxTraceDurationMillis == TraceReconstructionFilter.MAX_DURATION_MILLIS) {
+		if (this.maxTraceDurationMillis == AbstractTraceProcessingPlugin.MAX_DURATION_MILLIS) {
 			this.maxTraceDurationNanos = TraceReconstructionFilter.MAX_DURATION_NANOS;
 		} else {
 			this.maxTraceDurationNanos = this.maxTraceDurationMillis * (1000 * 1000); // NOCS (MagicNumberCheck)
@@ -316,7 +315,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Long.toString(TraceReconstructionFilter.MAX_DURATION_MILLIS));
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Long.toString(AbstractTraceProcessingPlugin.MAX_DURATION_MILLIS));
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, Boolean.TRUE.toString());
 
 		return configuration;

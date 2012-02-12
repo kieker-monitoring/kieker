@@ -33,6 +33,7 @@ import kieker.common.logging.LogFactory;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
 import kieker.test.tools.junit.traceAnalysis.util.SimpleSinkPlugin;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceReconstructionFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
@@ -128,7 +129,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, "TraceReconstructionFilter");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, "true");
-		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Integer.toString(TraceReconstructionFilter.MAX_DURATION_MILLIS));
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Long.toString(AbstractTraceProcessingPlugin.MAX_DURATION_MILLIS));
 		final Map<String, AbstractRepository> repositoryMap = new HashMap<String, AbstractRepository>();
 		repositoryMap.put(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
 		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, repositoryMap);
@@ -242,7 +243,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, "TraceReconstructionFilter");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, "true");
-		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Integer.toString(TraceReconstructionFilter.MAX_DURATION_MILLIS));
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Long.toString(AbstractTraceProcessingPlugin.MAX_DURATION_MILLIS));
 		final Map<String, AbstractRepository> repositoryMap = new HashMap<String, AbstractRepository>();
 		repositoryMap.put(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
 		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, repositoryMap);

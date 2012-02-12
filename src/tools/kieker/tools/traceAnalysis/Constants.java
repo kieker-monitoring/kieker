@@ -79,9 +79,11 @@ final class Constants {
 	public static final String TRACE_ASSEMBLY_EQUIV_CLASSES_FN_PREFIX = "traceAssemblyEquivClasses";
 	public static final String DATE_FORMAT_PATTERN = "yyyyMMdd'-'HHmmss";
 	public static final String EXEC_TRACE_RECONSTR_COMPONENT_NAME = "Execution record transformation";
-	public static final String TRACERECONSTR_COMPONENT_NAME = "Trace reconstruction";
+	public static final String TRACERECONSTR_COMPONENT_NAME = "Trace reconstruction (execution records -> execution traces)";
 	public static final String TRACEALLOCATIONEQUIVCLASS_COMPONENT_NAME = "Trace equivalence class filter (deployment mode)";
 	public static final String TRACEASSEMBLYEQUIVCLASS_COMPONENT_NAME = "Trace equivalence class filter (assembly mode)";
+	public static final String EVENTRECORDTRACERECONSTR_COMPONENT_NAME = "Trace reconstruction (trace event records -> event record traces)";
+	public static final String EXECTRACESFROMEVENTTRACES_COMPONENT_NAME = "Trace reconstruction (event record traces -> execution traces)";
 	public static final String PRINTMSGTRACE_COMPONENT_NAME = "Print message traces";
 	public static final String PRINTEXECTRACE_COMPONENT_NAME = "Print execution traces";
 	public static final String PRINTINVALIDEXECTRACE_COMPONENT_NAME = "Print invalid execution traces";

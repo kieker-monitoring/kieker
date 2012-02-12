@@ -274,7 +274,7 @@ public abstract class AbstractPlugin {
 	 */
 	public static final boolean connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName) {
 		if (!AbstractPlugin.isConnectionAllowed(src, outputPortName, dst, inputPortName)) {
-			AbstractPlugin.LOG.warn("Could not connect: " + src.getClass().getSimpleName() + " to " + dst.getClass().getSimpleName());
+			AbstractPlugin.LOG.warn("Could not connect: " + src.getClass().getName() + " to " + dst.getClass().getName());
 			return false;
 		}
 
@@ -289,7 +289,7 @@ public abstract class AbstractPlugin {
 				return true;
 			}
 		}
-		AbstractPlugin.LOG.warn("Could not connect: " + src.getClass().getSimpleName() + " to " + dst.getClass().getSimpleName());
+		AbstractPlugin.LOG.warn("Could not connect: " + src.getClass().getName() + " to " + dst.getClass().getName());
 		return false;
 	}
 

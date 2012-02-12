@@ -30,6 +30,8 @@ import kieker.common.configuration.Configuration;
  * @author Andre van Hoorn
  */
 public abstract class AbstractTraceProcessingPlugin extends AbstractTraceAnalysisPlugin {
+	public static final long MAX_DURATION_MILLIS = Integer.MAX_VALUE;
+
 	private int numTracesProcessed = 0;
 	private int numTracesSucceeded = 0;
 	private int numTracesFailed = 0;

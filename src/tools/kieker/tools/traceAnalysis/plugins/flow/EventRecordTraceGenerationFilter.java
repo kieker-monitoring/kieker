@@ -39,10 +39,12 @@ import kieker.tools.traceAnalysis.plugins.AbstractTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.plugins.executionRecordTransformation.ExecutionEventProcessingException;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceReconstructionFilter;
+import kieker.tools.util.LoggingTimestampConverter;
 
 /**
+ * TODO: The implementation of this plugin was based on the {@link TraceReconstructionFilter}. We should check for possible abstractions later on.
  * TODO: Note that we are currently not evaluating if traces are valid
- * TODO: The implementation of this plugin was based on the {@link TraceReconstructionFilter}. We should check for possible abstrations later on.
+ * We should import the invalid traces handling from {@link TraceReconstructionFilter}
  * 
  * @author Andre van Hoorn
  * 
@@ -59,7 +61,6 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingPlu
 
 	public static final String CONFIG_MAX_TRACE_DURATION_MILLIS = EventRecordTraceGenerationFilter.class.getName() + ".maxTraceDurationMillis";
 
-	public static final long MAX_DURATION_MILLIS = Integer.MAX_VALUE;
 	private static final long MAX_DURATION_NANOS = Long.MAX_VALUE;
 
 	private final long maxTraceDurationNanos;
@@ -113,7 +114,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingPlu
 		if (this.maxTraceDurationMillis < 0) {
 			throw new IllegalArgumentException("value maxTraceDurationMillis must not be negative (found: " + this.maxTraceDurationMillis + ")");
 		}
-		if (this.maxTraceDurationMillis == EventRecordTraceGenerationFilter.MAX_DURATION_MILLIS) {
+		if (this.maxTraceDurationMillis == AbstractTraceProcessingPlugin.MAX_DURATION_MILLIS) {
 			this.maxTraceDurationNanos = EventRecordTraceGenerationFilter.MAX_DURATION_NANOS;
 		} else {
 			this.maxTraceDurationNanos = this.maxTraceDurationMillis * (1000 * 1000); // NOCS (MagicNumberCheck)
@@ -125,7 +126,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingPlu
 		final long traceId = event.getTraceId();
 
 		/* Update minimum and maximum timestamps */
-		if (event.getTimestamp() < this.minTstamp) {
+		if ((this.minTstamp == -1) /* unset */|| (event.getTimestamp() < this.minTstamp)) {
 			this.minTstamp = event.getTimestamp();
 		}
 		if (event.getTimestamp() > this.maxTstamp) {
@@ -218,11 +219,24 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingPlu
 	}
 
 	@Override
+	public void printStatusMessage() {
+		super.printStatusMessage();
+		final String minTinStr = new StringBuilder().append(this.minTstamp).append(" (")
+				.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTstamp)).append(",")
+				.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.minTstamp)).append(")").toString();
+		final String maxToutStr = new StringBuilder().append(this.maxTstamp).append(" (")
+				.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTstamp)).append(",")
+				.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.maxTstamp)).append(")").toString();
+		System.out.println("First timestamp: " + minTinStr);
+		System.out.println("Last timestamp: " + maxToutStr);
+	}
+
+	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
 		configuration.setProperty(EventRecordTraceGenerationFilter.CONFIG_MAX_TRACE_DURATION_MILLIS,
-				Long.toString(EventRecordTraceGenerationFilter.MAX_DURATION_MILLIS));
+				Long.toString(AbstractTraceProcessingPlugin.MAX_DURATION_MILLIS));
 
 		return configuration;
 	}

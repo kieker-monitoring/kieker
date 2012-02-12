@@ -28,9 +28,6 @@ import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.systemModel.Execution;
@@ -48,25 +45,17 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
 			@OutputPort(name = ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME, description = "Execution output stream", eventTypes = { Execution.class })
 		})
 public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPlugin {
+	// private static final Log LOG = LogFactory.getLog(ExecutionRecordTransformationFilter.class);
 
 	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
-	private static final Log LOG = LogFactory.getLog(ExecutionRecordTransformationFilter.class);
 
 	public ExecutionRecordTransformationFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
 		super(configuration, repositories);
 	}
 
-	@InputPort(description = "Input", eventTypes = { IMonitoringRecord.class })
-	public boolean newMonitoringRecord(final Object data) {
-		final IMonitoringRecord record = (IMonitoringRecord) data;
-		if (!(record instanceof OperationExecutionRecord)) {
-			ExecutionRecordTransformationFilter.LOG.error("Can only process records of type" + OperationExecutionRecord.class.getName() + " but received"
-					+ record.getClass().getName());
-			return false;
-		}
-		final OperationExecutionRecord execRec = (OperationExecutionRecord) record;
-
+	@InputPort(description = "Input", eventTypes = { OperationExecutionRecord.class })
+	public boolean newMonitoringRecord(final OperationExecutionRecord execRec) {
 		/*
 		 * This would be the place to handle the operation signatures with etc. if they
 		 * are also used in OperationExecutionRecords

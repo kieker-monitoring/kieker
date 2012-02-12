@@ -38,6 +38,7 @@ import kieker.common.record.flow.BeforeOperationEvent;
 import kieker.common.record.flow.CallOperationEvent;
 import kieker.common.record.flow.TraceEvent;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
@@ -54,7 +55,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 	@OutputPort(name = EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Outputs transformed execution traces", eventTypes = { ExecutionTrace.class }),
 	@OutputPort(name = EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Outputs transformed message traces", eventTypes = { MessageTrace.class })
 })
-public class EventTrace2ExecutionTraceFilter extends AbstractTraceAnalysisPlugin {
+public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlugin {
 
 	private static final Log LOG = LogFactory.getLog(EventTrace2ExecutionTraceFilter.class);
 
@@ -200,6 +201,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceAnalysisPlugin
 		super.deliver(EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, execTrace);
 		try {
 			super.deliver(EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, execTrace.toMessageTrace(this.rootExecution));
+			super.reportSuccess(execTrace.getTraceId());
 		} catch (final InvalidTraceException ex) {
 			// TODO send to new output port for defect traces
 		}
