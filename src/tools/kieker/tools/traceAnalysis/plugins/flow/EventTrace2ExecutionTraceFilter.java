@@ -125,16 +125,22 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 			} else if (e instanceof CallOperationEvent) {
 				if (!eventStack.isEmpty()) {
 					final TraceEvent peekEvent = eventStack.peek();
+					final CallOperationEvent curCallEvent = (CallOperationEvent) e;
 					if (peekEvent instanceof CallOperationEvent) {
-						final CallOperationEvent poppedCallEvent = (CallOperationEvent) eventStack.pop();
-						final Execution execution = this.callOperationToExecution(poppedCallEvent, execTrace.getTraceId(),
-								eoiStack.pop(), curEss--, poppedCallEvent.getTimestamp(), e.getTimestamp());
-						try {
-							execTrace.add(execution);
-						} catch (final InvalidTraceException ex) {
-							EventTrace2ExecutionTraceFilter.LOG.error("Failed to add execution " + execution + " to trace" + execTrace, ex);
-							// TODO: perhaps output broken event record trace
-							return;
+						final CallOperationEvent peekCallEvent = (CallOperationEvent) eventStack.peek();
+						// TODO: Consider hostname etc.
+						if (curCallEvent.getCallerOperationName().equals(peekCallEvent.getCallerOperationName())) {
+							/* If two subsequent calls from the same caller, we assume the first call to have returned */
+							eventStack.pop();
+							final Execution execution = this.callOperationToExecution(peekCallEvent, execTrace.getTraceId(),
+									eoiStack.pop(), curEss--, peekCallEvent.getTimestamp(), e.getTimestamp());
+							try {
+								execTrace.add(execution);
+							} catch (final InvalidTraceException ex) {
+								EventTrace2ExecutionTraceFilter.LOG.error("Failed to add execution " + execution + " to trace" + execTrace, ex);
+								// TODO: perhaps output broken event record trace
+								return;
+							}
 						}
 					}
 				}

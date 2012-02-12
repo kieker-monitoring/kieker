@@ -247,7 +247,7 @@ public class BookstoreEventRecordFactory {
 
 		final List<TraceEvent> allRecords = new ArrayList<TraceEvent>();
 
-		final List<TraceEvent> validSyncTraceBeforeAfterEvents = BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(firstTimestamp, traceId++);
+		final List<TraceEvent> validSyncTraceBeforeAfterEvents = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceId++);
 		allRecords.addAll(validSyncTraceBeforeAfterEvents);
 		firstTimestamp += firstTimestampDelta;
 		final List<TraceEvent> validSyncTraceAdditionalCallEvents = BookstoreEventRecordFactory.validSyncTraceAdditionalCallEvents(firstTimestamp, traceId++);
@@ -260,6 +260,6 @@ public class BookstoreEventRecordFactory {
 			ctrl.newMonitoringRecord(r);
 		}
 
-		ctrl.terminateMonitoring();
+		// ctrl.terminateMonitoring();
 	}
 }
