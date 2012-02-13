@@ -21,11 +21,9 @@
 package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 
 import java.io.File;
-import java.util.Map;
 
 import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.plugin.port.RepositoryPort;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
@@ -44,7 +42,7 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
 public class AggregatedAllocationComponentOperationCallTreePlugin extends AggregatedCallTreePlugin<AllocationComponentOperationPair> {
 
 	// TODO Change constructor to plugin-default-constructor
-	public AggregatedAllocationComponentOperationCallTreePlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories,
+	public AggregatedAllocationComponentOperationCallTreePlugin(final Configuration configuration,
 			final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory,
 			final File dotOutputFile, final boolean includeWeights, final boolean shortLabels) {
 		// TODO Check type conversion

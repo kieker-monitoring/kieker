@@ -186,8 +186,9 @@ public abstract class AbstractPlugin {
 					try {
 						pluginInputPortReference.getInputPortMethod().invoke(pluginInputPortReference.getPlugin(), data);
 					} catch (final Exception e) {
-						AbstractPlugin.LOG.warn(String.format("OutputPort %s couldn't send data to InputPort %s%n", outputPort.name(),
-								pluginInputPortReference.getInputPortMethod().getName()));
+						AbstractPlugin.LOG.warn(String.format("%s: OutputPort %s couldn't send data to %s's InputPort %s%n", this.getClass().getName(),
+								outputPort.name(), pluginInputPortReference.getPlugin().getClass().getName(), pluginInputPortReference.getInputPortMethod()
+										.getName()));
 					}
 					break; // for
 				}
