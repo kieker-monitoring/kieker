@@ -86,7 +86,10 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 		this.equivalenceMode = traceEquivalenceCallMode;
 	}
 
-	@InputPort(description = "Execution traces", eventTypes = { ExecutionTrace.class })
+	@InputPort(
+			name = TraceEquivalenceClassFilter.EXECUTION_TRACES_INPUT_PORT_NAME,
+			description = "Execution traces",
+			eventTypes = { ExecutionTrace.class })
 	public void newExecutionTrace(final Object data) {
 		final ExecutionTrace et = (ExecutionTrace) data;
 		try {
@@ -160,8 +163,4 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 		return TraceEquivalenceClassFilter.EXECUTION_TRACES_INPUT_PORT_NAME;
 	}
 
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
-	}
 }

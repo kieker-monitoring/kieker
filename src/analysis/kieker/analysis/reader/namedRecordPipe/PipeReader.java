@@ -141,11 +141,6 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	}
 
 	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
-	}
-
-	@Override
 	public Map<String, AbstractRepository> getCurrentRepositories() {
 		return new HashMap<String, AbstractRepository>();
 	}

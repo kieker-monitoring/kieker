@@ -40,7 +40,9 @@ public class Consumer extends AbstractAnalysisPlugin {
 		this.maxResponseTime = maxResponseTime;
 	}
 
-	@InputPort(eventTypes = { IMonitoringRecord.class })
+	@InputPort(
+			name = Consumer.INPUT_PORT_NAME,
+			eventTypes = { IMonitoringRecord.class })
 	public void newEvent(final Object event) {
 		if (!(event instanceof OperationExecutionRecord)) {
 			return;
@@ -76,11 +78,6 @@ public class Consumer extends AbstractAnalysisPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
-	}
-
-	@Override
-	public Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override

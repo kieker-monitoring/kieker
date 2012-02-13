@@ -83,7 +83,9 @@ class HostNameRewriterPlugin extends AbstractAnalysisPlugin {
 		super(new Configuration(null), new HashMap<String, AbstractRepository>());
 	}
 
-	@InputPort(eventTypes = { IMonitoringRecord.class })
+	@InputPort(
+			name = HostNameRewriterPlugin.INPUT_PORT_NAME,
+			eventTypes = { IMonitoringRecord.class })
 	public void newEvent(final Object event) {
 		if (!(event instanceof OperationExecutionRecord)) {
 			return;
@@ -130,8 +132,4 @@ class HostNameRewriterPlugin extends AbstractAnalysisPlugin {
 		return new HashMap<String, AbstractRepository>(0);
 	}
 
-	@Override
-	protected HashMap<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>(0);
-	}
 }

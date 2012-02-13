@@ -44,7 +44,7 @@ import kieker.common.logging.LogFactory;
  * 
  * @author Nils Christian Ehmke
  */
-@Plugin(outputPorts = { })
+@Plugin(outputPorts = {})
 public abstract class AbstractPlugin {
 
 	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
@@ -103,14 +103,6 @@ public abstract class AbstractPlugin {
 	 * @return The default properties.
 	 */
 	protected abstract Configuration getDefaultConfiguration();
-
-	/**
-	 * This method should deliver an array of {@code AbstractRepository} containing the default repositories for this class. In other words: Every class inheriting
-	 * from {@code AbstractPlugin} should implement this method to deliver an object which can be used for the constructor of this class.
-	 * 
-	 * @return The default repositories (which can be an empty array if necessary).
-	 */
-	protected abstract Map<String, AbstractRepository> getDefaultRepositories();
 
 	/**
 	 * This method should deliver a {@code Configuration} object containing the current configuration of this instance. In other words: The constructor should be

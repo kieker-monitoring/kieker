@@ -51,7 +51,10 @@ public class MonitoringRecordTypeLogger extends AbstractAnalysisPlugin {
 
 	private static final Log LOG = LogFactory.getLog(MonitoringRecordTypeLogger.class);
 
-	@InputPort(eventTypes = { IMonitoringRecord.class }, description = "Default input port")
+	@InputPort(
+			name = MonitoringRecordTypeLogger.INPUT_PORT_NAME,
+			eventTypes = { IMonitoringRecord.class },
+			description = "Default input port")
 	public void newEvent(final Object event) {
 		final IMonitoringRecord monitoringRecord = (IMonitoringRecord) event;
 
@@ -88,11 +91,6 @@ public class MonitoringRecordTypeLogger extends AbstractAnalysisPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
-	}
-
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override

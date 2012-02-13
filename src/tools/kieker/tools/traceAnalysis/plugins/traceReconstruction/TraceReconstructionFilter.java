@@ -21,7 +21,6 @@
 package kieker.tools.traceAnalysis.plugins.traceReconstruction;
 
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.NavigableSet;
@@ -167,7 +166,10 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 		return true; // no need to do anything here
 	}
 
-	@InputPort(description = "The input port", eventTypes = { Execution.class })
+	@InputPort(
+			name = TraceReconstructionFilter.EXECUTION_TRACE_INPUT_PORT_NAME,
+			description = "The input port",
+			eventTypes = { Execution.class })
 	public void newExecution(final Object data) {
 		final Execution execution = (Execution) data;
 		final long traceId = execution.getTraceId();
@@ -330,11 +332,6 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 		configuration.put(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, this.ignoreInvalidTraces);
 
 		return configuration;
-	}
-
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 
 }

@@ -20,7 +20,6 @@
 
 package kieker.tools.traceAnalysis.plugins.messageTraceRepository;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -74,14 +73,13 @@ public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessing
 		return configuration;
 	}
 
-	@InputPort(description = "Message traces", eventTypes = { MessageTrace.class })
+	@InputPort(
+			name = MessageTraceRepositoryPlugin.MSG_TRACE_INPUT_PORT_NAME,
+			description = "Message traces",
+			eventTypes = { MessageTrace.class })
 	@Override
 	public void msgTraceInput(final Object mt) {
 		MessageTraceRepositoryPlugin.this.repo.put(((AbstractTrace) mt).getTraceId(), (MessageTrace) mt);
 	}
 
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
-	}
 }

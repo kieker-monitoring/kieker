@@ -109,11 +109,6 @@ public class RealtimeReplayWorker extends AbstractAnalysisPlugin implements Runn
 	}
 
 	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
-	}
-
-	@Override
 	public Map<String, AbstractRepository> getCurrentRepositories() {
 		return new HashMap<String, AbstractRepository>();
 	}

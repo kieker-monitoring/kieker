@@ -87,6 +87,7 @@ public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
 	}
 
 	@InputPort(
+			name = DummyRecordConsumer.INPUT_PORT_NAME,
 			description = "Input port",
 			eventTypes = { IMonitoringRecord.class })
 	public final void newMonitoringRecord(final Object monitoringRecord) {
@@ -121,11 +122,6 @@ public final class DummyRecordConsumer extends AbstractAnalysisPlugin {
 		}
 
 		return configuration;
-	}
-
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override

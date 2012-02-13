@@ -24,7 +24,6 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.HashMap;
 import java.util.Map;
 
 import kieker.analysis.plugin.port.InputPort;
@@ -85,7 +84,9 @@ public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionT
 		return InvalidExecutionTraceWriterPlugin.INVALID_EXECUTION_TRACES_INPUT_PORT_NAME;
 	}
 
-	@InputPort(description = "Invalid Execution traces", eventTypes = { InvalidExecutionTrace.class })
+	@InputPort(
+			name = InvalidExecutionTraceWriterPlugin.INVALID_EXECUTION_TRACES_INPUT_PORT_NAME,
+			description = "Invalid Execution traces", eventTypes = { InvalidExecutionTrace.class })
 	public void newEvent(final Object obj) {
 		final InvalidExecutionTrace et = (InvalidExecutionTrace) obj;
 		try {
@@ -115,8 +116,4 @@ public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionT
 		return configuration;
 	}
 
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
-	}
 }

@@ -39,7 +39,9 @@ public class MyResponseTimeConsumer extends AbstractAnalysisPlugin {
 		super(new Configuration(null), new HashMap<String, AbstractRepository>());
 	}
 
-	@InputPort(eventTypes = { MyResponseTimeRecord.class })
+	@InputPort(
+			name = MyResponseTimeConsumer.INPUT_PORT_NAME,
+			eventTypes = { MyResponseTimeRecord.class })
 	public void newEvent(final Object event) {
 		if (event instanceof MyResponseTimeRecord) {
 			/* Write the content to the standard output stream. */
@@ -66,11 +68,6 @@ public class MyResponseTimeConsumer extends AbstractAnalysisPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration(null);
-	}
-
-	@Override
-	public HashMap<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override
