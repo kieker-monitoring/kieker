@@ -1,17 +1,15 @@
 package kieker.test.analysis.junit.plugin;
 
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import junit.framework.TestCase;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.reader.AbstractReaderPlugin;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.OperationExecutionRecord;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
@@ -30,12 +28,12 @@ import org.junit.Test;
  * 
  * @author Nils Christian Ehmke
  */
-public class GeneralPluginTest {
+public class GeneralPluginTest extends TestCase {
 
 	@Test
 	public void testChaining() {
-		final Map<String, AbstractRepository> repoHashMap = new HashMap<String, AbstractRepository>();
-		repoHashMap.put(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, new SystemModelRepository(new Configuration()));
+		final SystemModelRepository systemModelRepository = new SystemModelRepository(new Configuration());
+
 		final ExecutionRecordTransformationFilter transformer = new ExecutionRecordTransformationFilter(new Configuration());
 
 		final Configuration filter1byTraceIDConfig = new Configuration();
@@ -62,6 +60,7 @@ public class GeneralPluginTest {
 
 		/* Connect the plugins. */
 		Assert.assertTrue(AbstractPlugin.connect(src, SourceClass.OUTPUT_PORT_NAME, transformer, ExecutionRecordTransformationFilter.INPUT_PORT_NAME));
+		Assert.assertTrue(transformer.connect(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, systemModelRepository));
 		Assert.assertTrue(AbstractPlugin.connect(transformer, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME, filter1byTraceID, TraceIdFilter.INPUT_PORT_NAME));
 		Assert.assertTrue(AbstractPlugin.connect(filter1byTraceID, TraceIdFilter.OUTPUT_PORT_NAME, filter2ByTimestamp, TimestampFilter.INPUT_PORT_NAME));
 		Assert.assertTrue(AbstractPlugin.connect(filter2ByTimestamp, TimestampFilter.OUTPUT_PORT_NAME, dst, ExecutionSinkClass.INPUT_PORT_NAME));

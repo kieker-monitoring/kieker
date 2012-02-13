@@ -20,14 +20,11 @@
 
 package kieker.test.tools.junit.traceAnalysis.plugins.flow;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -47,6 +44,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import org.junit.Test;
 
 /**
+ * TODO: Finalize
  * 
  * @author Andre van Hoorn
  * 
@@ -103,7 +101,6 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 
 		try {
 			/* Make sure that trace is valid: */
-			final SystemModelRepository r = this.systemEntityFactory;
 			executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 		} catch (final InvalidTraceException ex) {
 			TestEventTrace2ExecutionTraceFilter.LOG.error("", ex);
@@ -131,9 +128,8 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		 * Create the transformation filter
 		 */
 		final Configuration filterConfiguration = new Configuration();
-		final Map<String, AbstractRepository> repositoryMap = new HashMap<String, AbstractRepository>();
-		repositoryMap.put(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
 		final EventTrace2ExecutionTraceFilter filter = new EventTrace2ExecutionTraceFilter(filterConfiguration);
+		filter.connect(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
 
 		/*
 		 * Create and connect a sink plugin which collects the transformed
@@ -150,8 +146,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		final Execution[] resultingExecutionsArr = resultingExecutionTrace.getTraceAsSortedExecutionSet().toArray(new Execution[] {});
 
 		/*
-		 * Check validity of transformed execution trace
+		 * TODO: Check validity of transformed execution trace
 		 */
-
 	}
 }
