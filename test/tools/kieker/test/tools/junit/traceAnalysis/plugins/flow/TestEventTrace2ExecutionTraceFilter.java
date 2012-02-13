@@ -103,7 +103,8 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 
 		try {
 			/* Make sure that trace is valid: */
-			executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
+			final SystemModelRepository r = this.systemEntityFactory;
+			executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 		} catch (final InvalidTraceException ex) {
 			TestEventTrace2ExecutionTraceFilter.LOG.error("", ex);
 			Assert.fail("Test invalid since used trace invalid");
@@ -132,7 +133,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		final Configuration filterConfiguration = new Configuration();
 		final Map<String, AbstractRepository> repositoryMap = new HashMap<String, AbstractRepository>();
 		repositoryMap.put(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
-		final EventTrace2ExecutionTraceFilter filter = new EventTrace2ExecutionTraceFilter(filterConfiguration, repositoryMap);
+		final EventTrace2ExecutionTraceFilter filter = new EventTrace2ExecutionTraceFilter(filterConfiguration);
 
 		/*
 		 * Create and connect a sink plugin which collects the transformed

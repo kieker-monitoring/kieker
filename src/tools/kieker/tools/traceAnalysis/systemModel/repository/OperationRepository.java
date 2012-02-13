@@ -33,14 +33,15 @@ import kieker.tools.traceAnalysis.systemModel.Signature;
  * @author Andre van Hoorn
  */
 public class OperationRepository extends AbstractSystemSubRepository {
-	private final Operation rootOperation;
+	public static final Signature ROOT_SIGNATURE = new Signature("$", new String[] {}, "<>", new String[] {});
+	public static final Operation ROOT_OPERATION = new Operation(AbstractSystemSubRepository.ROOT_ELEMENT_ID, TypeRepository.ROOT_COMPONENT,
+			OperationRepository.ROOT_SIGNATURE);
 
 	private final Map<String, Operation> operationsByName = new Hashtable<String, Operation>(); // NOPMD (UseConcurrentHashMap)
 	private final Map<Integer, Operation> operationsById = new Hashtable<Integer, Operation>(); // NOPMD (UseConcurrentHashMap)
 
-	public OperationRepository(final SystemModelRepository systemFactory, final Operation rootOperation) {
+	public OperationRepository(final SystemModelRepository systemFactory) {
 		super(systemFactory);
-		this.rootOperation = rootOperation;
 	}
 
 	/**
@@ -65,9 +66,5 @@ public class OperationRepository extends AbstractSystemSubRepository {
 
 	public final Collection<Operation> getOperations() {
 		return this.operationsById.values();
-	}
-
-	public Operation getRootOperation() {
-		return this.rootOperation;
 	}
 }

@@ -24,10 +24,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collection;
-import java.util.Map;
 
 import kieker.analysis.plugin.port.InputPort;
-import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.plugin.port.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -39,6 +39,7 @@ import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
+import kieker.tools.traceAnalysis.systemModel.repository.ExecutionEnvironmentRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
@@ -49,6 +50,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugin<ExecutionContainer> {
 
 	public static final String CONFIG_DOT_OUTPUT_FILE = ContainerDependencyGraphPlugin.class.getName() + ".dotOutputFile";
@@ -62,13 +64,11 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 	private final boolean shortLabels;
 	private final boolean includeSelfLoops;
 
-	public ContainerDependencyGraphPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
+	public ContainerDependencyGraphPlugin(final Configuration configuration) {
 		// TODO Check type conversion
-		super(configuration, repositories, new DependencyGraph<ExecutionContainer>(
-				((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getExecutionEnvironmentFactory()
-						.getRootExecutionContainer().getId(),
-				((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getExecutionEnvironmentFactory()
-						.getRootExecutionContainer()));
+		super(configuration, new DependencyGraph<ExecutionContainer>(
+				ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER.getId(),
+				ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER));
 
 		this.dotOutputFile = new File(configuration.getStringProperty(ContainerDependencyGraphPlugin.CONFIG_DOT_OUTPUT_FILE));
 		this.includeWeights = configuration.getBooleanProperty(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_WEIGHTS);
@@ -79,7 +79,8 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 	@Override
 	protected void dotEdges(final Collection<DependencyGraphNode<ExecutionContainer>> nodes, final PrintStream ps, final boolean shortLabelsL) {
 
-		final ExecutionContainer rootContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().getRootExecutionContainer();
+		final ExecutionEnvironmentRepository r = this.getSystemEntityFactory().getExecutionEnvironmentFactory();
+		final ExecutionContainer rootContainer = ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER;
 		final int rootContainerId = rootContainer.getId();
 		final StringBuilder strBuild = new StringBuilder();
 		for (final DependencyGraphNode<ExecutionContainer> node : nodes) {
@@ -99,11 +100,6 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 			strBuild.append("\n");
 		}
 		ps.println(strBuild.toString());
-	}
-
-	@Override
-	public boolean execute() {
-		return true; // no need to do anything here
 	}
 
 	/**

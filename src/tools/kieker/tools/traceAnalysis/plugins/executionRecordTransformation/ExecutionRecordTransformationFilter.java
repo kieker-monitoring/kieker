@@ -20,16 +20,15 @@
 
 package kieker.tools.traceAnalysis.plugins.executionRecordTransformation;
 
-import java.util.Map;
-
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
-import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.plugin.port.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.OperationExecutionRecord;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.systemModel.Execution;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * Transforms {@link OperationExecutionRecord}s into {@link Execution} objects.<br>
@@ -40,17 +39,16 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * @author Andre van Hoorn
  */
 @Plugin(
-		outputPorts = {
-			@OutputPort(name = ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME, description = "Execution output stream", eventTypes = { Execution.class })
-		})
+		outputPorts = @OutputPort(name = ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME, description = "Execution output stream", eventTypes = { Execution.class }),
+		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPlugin {
 	// private static final Log LOG = LogFactory.getLog(ExecutionRecordTransformationFilter.class);
 
 	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 
-	public ExecutionRecordTransformationFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
-		super(configuration, repositories);
+	public ExecutionRecordTransformationFilter(final Configuration configuration) {
+		super(configuration);
 	}
 
 	@InputPort(

@@ -20,12 +20,9 @@
 
 package kieker.tools.traceAnalysis.plugins.flow;
 
-import java.util.Map;
-
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.TraceEvent;
 import kieker.tools.traceAnalysis.plugins.AbstractTimestampFilter;
@@ -61,8 +58,8 @@ public class TimestampFilter extends AbstractTimestampFilter {
 	 *            The configuration used to initialize this instance. It should
 	 *            contain the properties for the minimum and maximum timestamp.
 	 */
-	public TimestampFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
-		super(configuration, repositories);
+	public TimestampFilter(final Configuration configuration) {
+		super(configuration);
 	}
 
 	@InputPort(name = TimestampFilter.INPUT_PORT_NAME, description = "Trace event input", eventTypes = { TraceEvent.class })

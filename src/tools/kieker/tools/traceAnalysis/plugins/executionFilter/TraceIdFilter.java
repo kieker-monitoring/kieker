@@ -20,12 +20,9 @@
 
 package kieker.tools.traceAnalysis.plugins.executionFilter;
 
-import java.util.Map;
-
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceIdFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
@@ -50,8 +47,8 @@ public class TraceIdFilter extends AbstractTraceIdFilter {
 	public static final String CONFIG_SELECT_ALL_TRACES = TraceIdFilter.class.getName() + ".selectedAll";
 	public static final String CONFIG_SELECTED_TRACES = TraceIdFilter.class.getName() + ".selectedTraces";
 
-	public TraceIdFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
-		super(configuration, repositories);
+	public TraceIdFilter(final Configuration configuration) {
+		super(configuration);
 	}
 
 	@InputPort(

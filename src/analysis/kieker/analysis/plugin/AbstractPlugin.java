@@ -22,6 +22,7 @@ package kieker.analysis.plugin;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.plugin.port.RepositoryPort;
 import kieker.analysis.reader.IMonitoringReader;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
@@ -42,7 +44,7 @@ import kieker.common.logging.LogFactory;
  * 
  * @author Nils Christian Ehmke
  */
-@Plugin(outputPorts = {})
+@Plugin
 public abstract class AbstractPlugin {
 
 	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
@@ -51,13 +53,15 @@ public abstract class AbstractPlugin {
 
 	protected final Configuration configuration;
 	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<PluginInputPortReference>> registeredMethods;
+	private final ConcurrentHashMap<String, AbstractRepository> registeredRepositories;
+	private final HashMap<String, RepositoryPort> repositoryPorts;
 	private final HashMap<String, OutputPort> outputPorts;
 	private final HashMap<String, InputPort> inputPorts;
 
 	/**
 	 * Each Plugin requires a constructor with a single Configuration object and an array of repositories!
 	 */
-	public AbstractPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
+	public AbstractPlugin(final Configuration configuration) {
 		try {
 			// TODO: somewhat dirty hack...
 			final Configuration defaultConfig = this.getDefaultConfiguration(); // NOPMD
@@ -71,11 +75,19 @@ public abstract class AbstractPlugin {
 
 		/* KEEP IN MIND: Although we use "this" in the following code, it points to the actual class. Not to AbstractPlugin!! */
 
-		/* Get all output ports. */
+		/* Get all repository and output ports. */
+		this.repositoryPorts = new HashMap<String, RepositoryPort>();
 		this.outputPorts = new HashMap<String, OutputPort>();
 		final Plugin annotation = this.getClass().getAnnotation(Plugin.class);
+		for (final RepositoryPort repoPort : annotation.repositoryPorts()) {
+			if (this.repositoryPorts.put(repoPort.name(), repoPort) != null) {
+				AbstractPlugin.LOG.error("Two RepositoryPorts use the same name: " + repoPort.name());
+			}
+		}
 		for (final OutputPort outputPort : annotation.outputPorts()) {
-			this.outputPorts.put(outputPort.name(), outputPort);
+			if (this.outputPorts.put(outputPort.name(), outputPort) != null) {
+				AbstractPlugin.LOG.error("Two OutputPorts use the same name: " + outputPort.name());
+			}
 		}
 		/* Get all input ports. */
 		this.inputPorts = new HashMap<String, InputPort>();
@@ -83,9 +95,13 @@ public abstract class AbstractPlugin {
 		for (final Method method : allMethods) {
 			final InputPort inputPort = method.getAnnotation(InputPort.class);
 			if (inputPort != null) {
-				this.inputPorts.put(method.getName(), inputPort);
+				if (this.inputPorts.put(inputPort.name(), inputPort) != null) {
+					AbstractPlugin.LOG.error("Two InputPorts use the same name: " + inputPort.name());
+				}
 			}
 		}
+
+		this.registeredRepositories = new ConcurrentHashMap<String, AbstractRepository>(this.repositoryPorts.size());
 
 		/* Now create a linked queue for every output port of the class, to store the registered methods. */
 		this.registeredMethods = new ConcurrentHashMap<String, ConcurrentLinkedQueue<PluginInputPortReference>>();
@@ -109,14 +125,6 @@ public abstract class AbstractPlugin {
 	 * @return A completely filled configuration object.
 	 */
 	public abstract Configuration getCurrentConfiguration();
-
-	/**
-	 * This method should deliver an array of {@code AbstractRepository} containing the current repositories of this instance. In other words: The constructor should
-	 * be able to use the given object to initialize a new instance of this class with the same intern properties.
-	 * 
-	 * @return An (possible empty) array of repositories.
-	 */
-	public abstract Map<String, AbstractRepository> getCurrentRepositories();
 
 	/**
 	 * This method delivers the current name of this plugin. The name does not have to be unique.
@@ -248,6 +256,41 @@ public abstract class AbstractPlugin {
 
 		/* Seems like the connection is okay. */
 		return true;
+	}
+
+	public final boolean connect(final String name, final AbstractRepository repo) {
+		final RepositoryPort port = this.repositoryPorts.get(name);
+		if (port == null) {
+			AbstractPlugin.LOG.error("Unknown repository port: " + name);
+			return false;
+		}
+		final Class<? extends AbstractRepository> repositoryType = port.repositoryType();
+		if (!repositoryType.isAssignableFrom(repo.getClass())) {
+			AbstractPlugin.LOG.error("Expected RepositoryType: " + repositoryType.getName() + " Found: " + repo.getClass().getName());
+			return false;
+		}
+		synchronized (this) {
+			if (this.registeredRepositories.containsKey(name)) {
+				AbstractPlugin.LOG.error("RepositoryPort already connected: " + name);
+				return false;
+			}
+			this.registeredRepositories.put(name, repo);
+		}
+		return true;
+	}
+
+	/**
+	 * This method should deliver an array of {@code AbstractRepository} containing the current repositories of this instance. In other words: The constructor should
+	 * be able to use the given object to initialize a new instance of this class with the same intern properties.
+	 * 
+	 * @return An (possible empty) array of repositories.
+	 */
+	public final Map<String, AbstractRepository> getCurrentRepositories() {
+		return Collections.unmodifiableMap(this.registeredRepositories);
+	}
+
+	protected final AbstractRepository getRepository(final String name) {
+		return this.registeredRepositories.get(name);
 	}
 
 	/**

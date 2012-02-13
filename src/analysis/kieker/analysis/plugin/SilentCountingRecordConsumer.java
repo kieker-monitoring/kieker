@@ -20,14 +20,11 @@
 
 package kieker.analysis.plugin;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 
 /**
@@ -49,8 +46,8 @@ public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
 	/**
 	 * Constructs a {@link SilentCountingRecordConsumer}.
 	 */
-	public SilentCountingRecordConsumer(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
-		super(configuration, repositories);
+	public SilentCountingRecordConsumer(final Configuration configuration) {
+		super(configuration);
 	}
 
 	@InputPort(
@@ -67,16 +64,6 @@ public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
 	}
 
 	@Override
-	public final boolean execute() {
-		return true;
-	}
-
-	@Override
-	public final void terminate(final boolean error) {
-		// nothing to do
-	}
-
-	@Override
 	protected Configuration getDefaultConfiguration() {
 		return new Configuration();
 	}
@@ -84,10 +71,5 @@ public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
-	}
-
-	@Override
-	public Map<String, AbstractRepository> getCurrentRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 }

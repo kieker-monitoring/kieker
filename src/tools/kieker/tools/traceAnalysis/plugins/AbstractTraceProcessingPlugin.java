@@ -20,15 +20,16 @@
 
 package kieker.tools.traceAnalysis.plugins;
 
-import java.util.Map;
-
-import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.plugin.port.RepositoryPort;
 import kieker.common.configuration.Configuration;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * 
  * @author Andre van Hoorn
  */
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public abstract class AbstractTraceProcessingPlugin extends AbstractTraceAnalysisPlugin {
 	public static final long MAX_DURATION_MILLIS = Integer.MAX_VALUE;
 
@@ -39,8 +40,8 @@ public abstract class AbstractTraceProcessingPlugin extends AbstractTraceAnalysi
 	private long lastTraceIdSuccess = -1;
 	private long lastTraceIdError = -1;
 
-	public AbstractTraceProcessingPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
-		super(configuration, repositories);
+	public AbstractTraceProcessingPlugin(final Configuration configuration) {
+		super(configuration);
 	}
 
 	protected final void reportSuccess(final long traceId) {

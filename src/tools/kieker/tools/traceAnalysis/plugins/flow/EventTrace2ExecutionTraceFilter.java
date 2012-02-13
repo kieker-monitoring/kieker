@@ -22,13 +22,12 @@ package kieker.tools.traceAnalysis.plugins.flow;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Stack;
 
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
-import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.plugin.port.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -49,10 +48,12 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn
  * 
  */
-@Plugin(outputPorts = {
-	@OutputPort(name = EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Outputs transformed execution traces", eventTypes = { ExecutionTrace.class }),
-	@OutputPort(name = EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Outputs transformed message traces", eventTypes = { MessageTrace.class })
-})
+@Plugin(
+		outputPorts = {
+			@OutputPort(name = EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Outputs transformed execution traces", eventTypes = { ExecutionTrace.class }),
+			@OutputPort(name = EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Outputs transformed message traces", eventTypes = { MessageTrace.class })
+		},
+		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlugin {
 
 	private static final Log LOG = LogFactory.getLog(EventTrace2ExecutionTraceFilter.class);
@@ -61,18 +62,8 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE = "outputExecutionTrace";
 	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE = "outputMessageTrace";
 
-	private final Execution rootExecution;
-
-	public EventTrace2ExecutionTraceFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
-		super(configuration, repositories);
-
-		/* Load the root execution from the repository if possible. */
-		if (repositories.containsKey(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME) && (repositories
-				.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME) instanceof SystemModelRepository)) {
-			this.rootExecution = ((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getRootExecution();
-		} else {
-			this.rootExecution = null;
-		}
+	public EventTrace2ExecutionTraceFilter(final Configuration configuration) {
+		super(configuration);
 	}
 
 	@InputPort(name = EventTrace2ExecutionTraceFilter.INPUT_PORT_NAME, description = "Receives event record traces to be transformed", eventTypes = { EventRecordTrace.class })
@@ -204,7 +195,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 
 		super.deliver(EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, execTrace);
 		try {
-			super.deliver(EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, execTrace.toMessageTrace(this.rootExecution));
+			super.deliver(EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, execTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION));
 			super.reportSuccess(execTrace.getTraceId());
 		} catch (final InvalidTraceException ex) {
 			// TODO send to new output port for defect traces
@@ -264,15 +255,4 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 	public Configuration getCurrentConfiguration() {
 		return new Configuration(null);
 	}
-
-	@Override
-	public boolean execute() {
-		return true; // do nothing
-	}
-
-	@Override
-	public void terminate(final boolean error) {
-		// do nothing
-	}
-
 }

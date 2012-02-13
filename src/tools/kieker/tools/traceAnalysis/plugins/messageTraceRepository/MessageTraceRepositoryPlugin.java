@@ -24,17 +24,21 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import kieker.analysis.plugin.port.InputPort;
-import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.plugin.port.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.systemModel.AbstractTrace;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * This class has exactly one input port. The data which is send to this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn
  */
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessingPlugin {
 
 	public static final String MSG_TRACE_INPUT_PORT_NAME = "msgTraceInput";
@@ -45,18 +49,8 @@ public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessing
 	// TODO: handle equivalence classes
 	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/150
 
-	public MessageTraceRepositoryPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
-		super(configuration, repositories);
-	}
-
-	@Override
-	public boolean execute() {
-		return true; // no need to do anything here
-	}
-
-	@Override
-	public void terminate(final boolean error) {
-		// no need to do anything here
+	public MessageTraceRepositoryPlugin(final Configuration configuration) {
+		super(configuration);
 	}
 
 	@Override

@@ -25,9 +25,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
-
 /**
  * 
  * @author Andre van Hoorn
@@ -36,15 +33,13 @@ public abstract class AbstractCallTreeNode<T> {
 
 	private final T entity;
 	private final int id;
-	private final SystemModelRepository systemEntityFactory;
 
 	private final boolean rootNode;
 
 	private final List<WeightedDirectedCallTreeEdge<T>> childEdges = Collections.synchronizedList(new ArrayList<WeightedDirectedCallTreeEdge<T>>());
 
-	public AbstractCallTreeNode(final int id, final SystemModelRepository systemEntityFactory, final T entity, final boolean rootNode) {
+	public AbstractCallTreeNode(final int id, final T entity, final boolean rootNode) {
 		this.id = id;
-		this.systemEntityFactory = systemEntityFactory;
 		this.rootNode = rootNode;
 		this.entity = entity;
 	}
@@ -62,7 +57,8 @@ public abstract class AbstractCallTreeNode<T> {
 		this.childEdges.add(destination);
 	}
 
-	public abstract AbstractCallTreeNode<T> newCall(SynchronousCallMessage callMsg);
+	// FIXME: Object should be T
+	public abstract AbstractCallTreeNode<T> newCall(Object destination);
 
 	public final int getId() {
 		return this.id;
@@ -70,9 +66,5 @@ public abstract class AbstractCallTreeNode<T> {
 
 	public final boolean isRootNode() {
 		return this.rootNode;
-	}
-
-	protected final SystemModelRepository getSystemEntityFactory() {
-		return this.systemEntityFactory;
 	}
 }

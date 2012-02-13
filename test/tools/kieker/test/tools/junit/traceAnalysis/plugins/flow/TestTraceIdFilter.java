@@ -59,7 +59,7 @@ public class TestTraceIdFilter extends TestCase {
 		final Configuration filterConfig = new Configuration();
 		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.FALSE.toString());
 		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, Configuration.toProperty(idsToPass.toArray(new Long[] {})));
-		final TraceIdFilter filter = new TraceIdFilter(filterConfig, null);
+		final TraceIdFilter filter = new TraceIdFilter(filterConfig);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
 
 		final List<TraceEvent> trace =
@@ -97,7 +97,7 @@ public class TestTraceIdFilter extends TestCase {
 		final Configuration filterConfig = new Configuration();
 		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.FALSE.toString());
 		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, Configuration.toProperty(idsToPass.toArray(new Long[] {})));
-		final TraceIdFilter filter = new TraceIdFilter(filterConfig, null);
+		final TraceIdFilter filter = new TraceIdFilter(filterConfig);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
 
 		final List<TraceEvent> trace =
@@ -125,7 +125,7 @@ public class TestTraceIdFilter extends TestCase {
 
 		final Configuration filterConfig = new Configuration();
 		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.TRUE.toString()); // i.e., pass all
-		final TraceIdFilter filter = new TraceIdFilter(filterConfig, null);
+		final TraceIdFilter filter = new TraceIdFilter(filterConfig);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
 
 		final List<TraceEvent> trace =

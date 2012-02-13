@@ -20,9 +20,6 @@
 
 package kieker.tools.logReplayer;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
@@ -31,7 +28,6 @@ import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.reader.IMonitoringReader;
 import kieker.analysis.reader.jms.JMSReader;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -95,7 +91,7 @@ public class JMSLogReplayer {
 		configuration.setProperty("msProviderUrl", this.jmsProviderUrl);
 		configuration.setProperty("jmsDestination", this.jmsDestination);
 		configuration.setProperty("jmsFactoryLookupName", this.jmsFactoryLookupName);
-		final IMonitoringReader logReader = new JMSReader(configuration, new HashMap<String, AbstractRepository>());
+		final IMonitoringReader logReader = new JMSReader(configuration);
 		final AnalysisController tpanInstance = new AnalysisController();
 		tpanInstance.setReader(logReader);
 		final RecordDelegationPlugin2 recordReceiver = new RecordDelegationPlugin2(this.recordReceiver, this.recordReceiverInputPortName);
@@ -129,7 +125,8 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	public static final String INPUT_PORT = "newMonitoringRecord";
-	private static final Log LOG = LogFactory.getLog(RecordDelegationPlugin2.class);
+
+	// private static final Log LOG = LogFactory.getLog(RecordDelegationPlugin2.class);
 
 	/**
 	 * Must not be used for construction.
@@ -140,7 +137,7 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 	}
 
 	public RecordDelegationPlugin2(final AbstractAnalysisPlugin rec, final String inputPortName) {
-		super(new Configuration(null), new HashMap<String, AbstractRepository>());
+		super(new Configuration());
 
 		AbstractPlugin.connect(this, RecordDelegationPlugin2.OUTPUT_PORT_NAME, rec, inputPortName);
 	}
@@ -150,23 +147,6 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 			eventTypes = { IMonitoringRecord.class })
 	public boolean newMonitoringRecord(final Object data) {
 		return super.deliver(RecordDelegationPlugin2.OUTPUT_PORT_NAME, data);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean execute() {
-		RecordDelegationPlugin2.LOG.info(RecordDelegationPlugin.class.getName() + " starting ...");
-		return true;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void terminate(final boolean error) {
-		// nothing to do
 	}
 
 	/**
@@ -183,10 +163,5 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
-	}
-
-	@Override
-	public Map<String, AbstractRepository> getCurrentRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 }

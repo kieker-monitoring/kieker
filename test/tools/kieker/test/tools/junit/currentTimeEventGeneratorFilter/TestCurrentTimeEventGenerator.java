@@ -21,8 +21,6 @@
 package kieker.test.tools.junit.currentTimeEventGeneratorFilter;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import junit.framework.Assert;
@@ -30,7 +28,6 @@ import junit.framework.TestCase;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.port.InputPort;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.tools.currentTimeEventGenerator.CurrentTimeEventGenerator;
 import kieker.tools.currentTimeEventGenerator.TimestampEvent;
@@ -98,7 +95,7 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 	 * @param expectedOutputTimerEvents
 	 */
 	private void compareInputAndOutput(final long timerResolution, final long[] inputTimestamps, final long[] expectedOutputTimerEvents) {
-		final CurrentTimeEventGenerator filter = new CurrentTimeEventGenerator(timerResolution, new HashMap<String, AbstractRepository>());
+		final CurrentTimeEventGenerator filter = new CurrentTimeEventGenerator(timerResolution);
 
 		final DstClass dst = new DstClass();
 		AbstractPlugin.connect(filter, CurrentTimeEventGenerator.CURRENT_TIME_OUTPUT_PORT_NAME, dst, DstClass.INPUT_PORT_NAME);
@@ -134,16 +131,8 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 		private final ConcurrentLinkedQueue<Long> receivedTimestamps = new ConcurrentLinkedQueue<Long>();
 
 		public DstClass() {
-			super(new Configuration(null), new HashMap<String, AbstractRepository>());
+			super(new Configuration());
 		}
-
-		@Override
-		public boolean execute() {
-			return false;
-		}
-
-		@Override
-		public void terminate(final boolean error) {}
 
 		@Override
 		protected Configuration getDefaultConfiguration() {
@@ -164,11 +153,6 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 
 		public ConcurrentLinkedQueue<Long> getList() {
 			return this.receivedTimestamps;
-		}
-
-		@Override
-		public Map<String, AbstractRepository> getCurrentRepositories() {
-			return new HashMap<String, AbstractRepository>();
 		}
 	}
 }

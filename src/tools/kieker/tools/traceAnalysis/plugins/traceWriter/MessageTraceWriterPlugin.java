@@ -24,20 +24,23 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.Map;
 
 import kieker.analysis.plugin.port.InputPort;
-import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.plugin.port.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * 
  * @author Andre van Hoorn
  */
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlugin {
 
 	public static final String CONFIG_OUTPUT_FN = MessageTraceWriterPlugin.class.getName() + ".outputFn";
@@ -49,8 +52,8 @@ public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlug
 	private final String outputFn;
 	private final BufferedWriter ps;
 
-	public MessageTraceWriterPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories) throws IOException {
-		super(configuration, repositories);
+	public MessageTraceWriterPlugin(final Configuration configuration) throws IOException {
+		super(configuration);
 		this.outputFn = this.configuration.getStringProperty(MessageTraceWriterPlugin.CONFIG_OUTPUT_FN);
 		this.ps = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.outputFn), MessageTraceWriterPlugin.ENCODING));
 	}
@@ -71,11 +74,6 @@ public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlug
 				MessageTraceWriterPlugin.LOG.error("IOException", ex);
 			}
 		}
-	}
-
-	@Override
-	public boolean execute() {
-		return true; // no need to do anything here
 	}
 
 	@Override

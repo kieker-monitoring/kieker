@@ -29,11 +29,13 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Stack;
 
-import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.plugin.port.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceProcessingException;
 import kieker.tools.traceAnalysis.plugins.visualization.util.IntContainer;
 import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
@@ -55,14 +57,15 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * 
  * @author Andre van Hoorn
  */
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProcessingPlugin {
 
 	private static final Log LOG = LogFactory.getLog(AbstractCallTreePlugin.class);
 
 	private static final String ENCODING = "UTF-8";
 
-	public AbstractCallTreePlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
-		super(configuration, repositories);
+	public AbstractCallTreePlugin(final Configuration configuration) {
+		super(configuration);
 	}
 
 	private static final String assemblyComponentOperationPairNodeLabel(final AbstractCallTreeNode<AssemblyComponentOperationPair> node, final boolean shortLabels) {
@@ -185,15 +188,20 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
 		ps.println("}");
 	}
 
-	protected static void saveTreeToDotFile(final SystemModelRepository systemEntityFactory, final AbstractCallTreeNode<?> root, final String outputFnBase,
+	protected void saveTreeToDotFile(final AbstractCallTreeNode<?> root, final String outputFnBase,
 			final boolean includeWeights, final boolean includeEois, final boolean shortLabels) throws FileNotFoundException, UnsupportedEncodingException {
 		final PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"), false, AbstractCallTreePlugin.ENCODING);
-		AbstractCallTreePlugin.dotFromCallingTree(systemEntityFactory, root, ps, includeWeights, includeEois, shortLabels);
+		AbstractCallTreePlugin.dotFromCallingTree(this.getSystemEntityFactory(), root, ps, includeWeights, includeEois, shortLabels);
 		ps.flush();
 		ps.close();
 	}
 
-	protected static void addTraceToTree(final AbstractCallTreeNode<?> root, final MessageTrace t, final boolean aggregated) throws TraceProcessingException {
+	protected Object createPair(final SynchronousCallMessage callMsg) {
+		return this.getSystemEntityFactory().getAllocationPairFactory().getPairInstanceByPair(callMsg.getReceivingExecution().getAllocationComponent(), callMsg
+				.getReceivingExecution().getOperation());
+	}
+
+	protected void addTraceToTree(final AbstractCallTreeNode<?> root, final MessageTrace t, final boolean aggregated) throws TraceProcessingException {
 		final Stack<AbstractCallTreeNode<?>> curStack = new Stack<AbstractCallTreeNode<?>>();
 
 		final Collection<AbstractMessage> msgTraceVec = t.getSequenceAsVector();
@@ -203,7 +211,7 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
 			if (m instanceof SynchronousCallMessage) {
 				curNode = curStack.peek();
 				AbstractCallTreeNode<?> child;
-				child = curNode.newCall((SynchronousCallMessage) m);
+				child = curNode.newCall(this.createPair((SynchronousCallMessage) m));
 				curNode = child;
 				curStack.push(curNode);
 			} else if (m instanceof SynchronousReplyMessage) {
@@ -219,11 +227,11 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
 		}
 	}
 
-	public static void writeDotForMessageTrace(final SystemModelRepository systemEntityFactory, final AbstractCallTreeNode<?> root, final MessageTrace msgTrace,
+	public void writeDotForMessageTrace(final AbstractCallTreeNode<?> root, final MessageTrace msgTrace,
 			final String outputFilename, final boolean includeWeights, final boolean shortLabels) throws FileNotFoundException, TraceProcessingException,
 			UnsupportedEncodingException {
-		AbstractCallTreePlugin.addTraceToTree(root, msgTrace, false); // false: no aggregation
-		AbstractCallTreePlugin.saveTreeToDotFile(systemEntityFactory, root, outputFilename, includeWeights, true, shortLabels); // includeEois
+		this.addTraceToTree(root, msgTrace, false); // false: no aggregation
+		this.saveTreeToDotFile(root, outputFilename, includeWeights, true, shortLabels); // includeEois
 	}
 
 }

@@ -20,13 +20,9 @@
 
 package kieker.tools.currentTimeEventGenerator;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -85,8 +81,8 @@ public class CurrentTimeEventGenerator extends AbstractAnalysisPlugin {
 	 * 
 	 * @param timeResolution
 	 */
-	public CurrentTimeEventGenerator(final long timeResolution, final Map<String, AbstractRepository> repositories) {
-		super(new Configuration(), repositories);
+	public CurrentTimeEventGenerator(final long timeResolution) {
+		super(new Configuration());
 		this.timerResolution = timeResolution;
 	}
 
@@ -137,11 +133,6 @@ public class CurrentTimeEventGenerator extends AbstractAnalysisPlugin {
 		configuration.setProperty(CurrentTimeEventGenerator.CONFIG_TIME_RESOLUTION, Long.toString(this.timerResolution));
 
 		return configuration;
-	}
-
-	@Override
-	public Map<String, AbstractRepository> getCurrentRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override

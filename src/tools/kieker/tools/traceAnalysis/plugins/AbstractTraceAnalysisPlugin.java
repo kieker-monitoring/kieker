@@ -20,12 +20,11 @@
 
 package kieker.tools.traceAnalysis.plugins;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.StringTokenizer;
 
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.plugin.port.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
@@ -40,23 +39,16 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn
  */
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin {
 
 	public static final String CONFIG_NAME = AbstractTraceAnalysisPlugin.class.getName() + ".name";
-	public static final String SYSTEM_MODEL_REPOSITORY_NAME = AbstractTraceAnalysisPlugin.class.getName() + ".systemModelRepository";
+	public static final String SYSTEM_MODEL_REPOSITORY_NAME = "systemModelRepository";
 	private final String name;
-	private final SystemModelRepository systemEntityFactory;
+	private volatile SystemModelRepository systemEntityFactory;
 
-	public AbstractTraceAnalysisPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
-		super(configuration, repositories);
-
-		/* Use the given repository if possible. */
-		if (repositories.containsKey(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME) && (repositories
-				.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME) instanceof SystemModelRepository)) {
-			this.systemEntityFactory = (SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME);
-		} else {
-			this.systemEntityFactory = null;
-		}
+	public AbstractTraceAnalysisPlugin(final Configuration configuration) {
+		super(configuration);
 
 		/* Try to load the name from the given configuration. */
 		if (configuration.containsKey(AbstractTraceAnalysisPlugin.CONFIG_NAME)) {
@@ -246,13 +238,9 @@ public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin
 	}
 
 	protected final SystemModelRepository getSystemEntityFactory() {
+		if (this.systemEntityFactory == null) {
+			this.systemEntityFactory = (SystemModelRepository) this.getRepository(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME);
+		}
 		return this.systemEntityFactory;
-	}
-
-	@Override
-	public Map<String, AbstractRepository> getCurrentRepositories() {
-		final Map<String, AbstractRepository> map = new HashMap<String, AbstractRepository>();
-		map.put(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
-		return map;
 	}
 }

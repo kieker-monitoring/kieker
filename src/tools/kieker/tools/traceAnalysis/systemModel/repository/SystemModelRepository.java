@@ -34,7 +34,6 @@ import kieker.tools.traceAnalysis.systemModel.ComponentType;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 import kieker.tools.traceAnalysis.systemModel.Operation;
-import kieker.tools.traceAnalysis.systemModel.Signature;
 
 /**
  * 
@@ -44,32 +43,26 @@ public class SystemModelRepository extends AbstractRepository {
 
 	private static final String ENCODING = "UTF-8";
 
+	public static final Execution ROOT_EXECUTION =
+			new Execution(OperationRepository.ROOT_OPERATION, AllocationRepository.ROOT_ALLOCATION_COMPONENT, -1, "-1", -1, -1, -1, -1);
+
 	private final TypeRepository typeRepositoryFactory;
 	private final AssemblyRepository assemblyFactory;
 	private final ExecutionEnvironmentRepository executionEnvironmentFactory;
 	private final AllocationRepository allocationFactory;
 	private final OperationRepository operationFactory;
-	private final Execution rootExecution;
+	private final AllocationComponentOperationPairFactory allocationPairFactory;
+	private final AssemblyComponentOperationPairFactory assemblyPairFactory;
 
 	public SystemModelRepository(final Configuration configuration) {
 		super(configuration);
-		final ComponentType rootComponentType = new ComponentType(AbstractSystemSubRepository.ROOT_ELEMENT_ID, "$");
-		this.typeRepositoryFactory = new TypeRepository(this, rootComponentType);
-		final AssemblyComponent rootAssemblyComponentInstance = new AssemblyComponent(AbstractSystemSubRepository.ROOT_ELEMENT_ID, "$", rootComponentType);
-		this.assemblyFactory = new AssemblyRepository(this, rootAssemblyComponentInstance);
-		final ExecutionContainer rootExecutionContainer = new ExecutionContainer(AbstractSystemSubRepository.ROOT_ELEMENT_ID, null, "$");
-		this.executionEnvironmentFactory = new ExecutionEnvironmentRepository(this, rootExecutionContainer);
-		final AllocationComponent rootAllocation = new AllocationComponent(AbstractSystemSubRepository.ROOT_ELEMENT_ID, rootAssemblyComponentInstance,
-				rootExecutionContainer);
-		this.allocationFactory = new AllocationRepository(this, rootAllocation);
-		final Signature rootSignature = new Signature("$", new String[] {}, "<>", new String[] {});
-		final Operation rootOperation = new Operation(AbstractSystemSubRepository.ROOT_ELEMENT_ID, rootComponentType, rootSignature);
-		this.operationFactory = new OperationRepository(this, rootOperation);
-		this.rootExecution = new Execution(this.operationFactory.getRootOperation(), this.allocationFactory.getRootAllocationComponent(), -1, "-1", -1, -1, -1, -1);
-	}
-
-	public Execution getRootExecution() {
-		return this.rootExecution;
+		this.typeRepositoryFactory = new TypeRepository(this);
+		this.assemblyFactory = new AssemblyRepository(this);
+		this.executionEnvironmentFactory = new ExecutionEnvironmentRepository(this);
+		this.allocationFactory = new AllocationRepository(this);
+		this.operationFactory = new OperationRepository(this);
+		this.allocationPairFactory = new AllocationComponentOperationPairFactory(this);
+		this.assemblyPairFactory = new AssemblyComponentOperationPairFactory(this);
 	}
 
 	public final AllocationRepository getAllocationFactory() {
@@ -90,6 +83,14 @@ public class SystemModelRepository extends AbstractRepository {
 
 	public final TypeRepository getTypeRepositoryFactory() {
 		return this.typeRepositoryFactory;
+	}
+
+	public AllocationComponentOperationPairFactory getAllocationPairFactory() {
+		return this.allocationPairFactory;
+	}
+
+	public AssemblyComponentOperationPairFactory getAssemblyPairFactory() {
+		return this.assemblyPairFactory;
 	}
 
 	private static enum EntityType {

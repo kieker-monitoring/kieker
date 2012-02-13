@@ -22,8 +22,6 @@ package kieker.analysis.reader.jmx;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import javax.management.InstanceNotFoundException;
@@ -41,7 +39,6 @@ import javax.management.remote.JMXServiceURL;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.reader.AbstractReaderPlugin;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -75,8 +72,8 @@ public final class JMXReader extends AbstractReaderPlugin {
 	private final int port;
 	private final String server;
 
-	public JMXReader(final Configuration configuation, final Map<String, AbstractRepository> repositories) throws IllegalArgumentException {
-		super(configuation, repositories);
+	public JMXReader(final Configuration configuation) throws IllegalArgumentException {
+		super(configuation);
 		this.server = this.configuration.getStringProperty(JMXReader.CONFIG_SERVER);
 		this.port = this.configuration.getIntProperty(JMXReader.CONFIG_PORT);
 		final String tmpServiceURL;
@@ -307,10 +304,5 @@ public final class JMXReader extends AbstractReaderPlugin {
 		configuration.setProperty(JMXReader.CONFIG_SILENT, Boolean.toString(this.silentreconnect));
 
 		return configuration;
-	}
-
-	@Override
-	public Map<String, AbstractRepository> getCurrentRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 }

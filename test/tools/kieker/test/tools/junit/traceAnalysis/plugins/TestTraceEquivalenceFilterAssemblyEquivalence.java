@@ -121,7 +121,8 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase { //
 
 		try {
 			/* Make sure that trace is valid: */
-			executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
+			SystemModelRepository r = this.systemEntityFactory;
+			executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 		} catch (final InvalidTraceException ex) {
 			TestTraceEquivalenceFilterAssemblyEquivalence.LOG.error("", ex);
 			Assert.fail("Test invalid since used trace invalid");

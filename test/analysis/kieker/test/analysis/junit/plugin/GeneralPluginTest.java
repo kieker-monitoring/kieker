@@ -36,17 +36,17 @@ public class GeneralPluginTest {
 	public void testChaining() {
 		final Map<String, AbstractRepository> repoHashMap = new HashMap<String, AbstractRepository>();
 		repoHashMap.put(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, new SystemModelRepository(new Configuration()));
-		final ExecutionRecordTransformationFilter transformer = new ExecutionRecordTransformationFilter(new Configuration(), repoHashMap);
+		final ExecutionRecordTransformationFilter transformer = new ExecutionRecordTransformationFilter(new Configuration());
 
 		final Configuration filter1byTraceIDConfig = new Configuration();
 		filter1byTraceIDConfig.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.FALSE.toString());
 		filter1byTraceIDConfig.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, Configuration.toProperty(new Long[] { 1l }));
-		final TraceIdFilter filter1byTraceID = new TraceIdFilter(filter1byTraceIDConfig, null);
+		final TraceIdFilter filter1byTraceID = new TraceIdFilter(filter1byTraceIDConfig);
 
 		final Configuration filter2ByTimestampConfiguration = new Configuration();
 		filter2ByTimestampConfiguration.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, Long.toString(10l));
 		filter2ByTimestampConfiguration.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP, Long.toString(20l));
-		final TimestampFilter filter2ByTimestamp = new TimestampFilter(filter2ByTimestampConfiguration, null);
+		final TimestampFilter filter2ByTimestamp = new TimestampFilter(filter2ByTimestampConfiguration);
 
 		/* The records we will send. */
 		final OperationExecutionRecord opExRec1 = new OperationExecutionRecord("", "", 1, 14, 15);
@@ -58,7 +58,7 @@ public class GeneralPluginTest {
 		final OperationExecutionRecord opExRec7 = new OperationExecutionRecord("", "", 1, 9, 21);
 		final OperationExecutionRecord opExRec8 = new OperationExecutionRecord("", "", 1, 10, 20);
 		final SourceClass src = new SourceClass(opExRec1, opExRec2, opExRec3, opExRec4, opExRec5, opExRec6, opExRec7, opExRec8);
-		final ExecutionSinkClass dst = new ExecutionSinkClass(new Configuration(), new HashMap<String, AbstractRepository>());
+		final ExecutionSinkClass dst = new ExecutionSinkClass(new Configuration());
 
 		/* Connect the plugins. */
 		Assert.assertTrue(AbstractPlugin.connect(src, SourceClass.OUTPUT_PORT_NAME, transformer, ExecutionRecordTransformationFilter.INPUT_PORT_NAME));
@@ -100,7 +100,7 @@ class SourceClass extends AbstractReaderPlugin {
 	public static final String OUTPUT_PORT_NAME = "output";
 
 	public SourceClass(final OperationExecutionRecord... records) {
-		super(new Configuration(), new HashMap<String, AbstractRepository>());
+		super(new Configuration());
 		this.records = records;
 	}
 
@@ -117,19 +117,13 @@ class SourceClass extends AbstractReaderPlugin {
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
-		return null;
+		return new Configuration();
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		return null;
+		return new Configuration();
 	}
-
-	@Override
-	public Map<String, AbstractRepository> getCurrentRepositories() {
-		return null;
-	}
-
 }
 
 class ExecutionSinkClass extends AbstractAnalysisPlugin {
@@ -137,26 +131,18 @@ class ExecutionSinkClass extends AbstractAnalysisPlugin {
 	public static final String INPUT_PORT_NAME = "doJob";
 	private final ConcurrentLinkedQueue<Execution> lst = new ConcurrentLinkedQueue<Execution>();
 
-	public ExecutionSinkClass(final Configuration configuration, final HashMap<String, AbstractRepository> repositories) {
-		super(configuration, repositories);
+	public ExecutionSinkClass(final Configuration configuration) {
+		super(configuration);
 	}
-
-	@Override
-	public boolean execute() {
-		return false;
-	}
-
-	@Override
-	public void terminate(final boolean error) {}
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
-		return null;
+		return new Configuration();
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		return null;
+		return new Configuration();
 	}
 
 	@InputPort(
@@ -168,10 +154,5 @@ class ExecutionSinkClass extends AbstractAnalysisPlugin {
 
 	public ConcurrentLinkedQueue<Execution> getList() {
 		return this.lst;
-	}
-
-	@Override
-	public Map<String, AbstractRepository> getCurrentRepositories() {
-		return null;
 	}
 }

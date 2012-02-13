@@ -20,12 +20,9 @@
 
 package kieker.examples.userguide.appendixJMS;
 
-import java.util.HashMap;
-
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.reader.jms.JMSReader;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 
 /**
@@ -69,13 +66,13 @@ public class JMSAnalysisStarter {
 		logReaderConfiguration.setProperty(JMSReader.CONFIG_FACTORYLOOKUP, JMSAnalysisStarter.connectionFactory);
 		logReaderConfiguration.setProperty(JMSReader.CONFIG_DESTINATION, JMSAnalysisStarter.queue);
 
-		final JMSReader logReader = new JMSReader(logReaderConfiguration, new HashMap<String, AbstractRepository>());
+		final JMSReader logReader = new JMSReader(logReaderConfiguration);
 		analysisInstance.setReader(logReader);
 
 		final Configuration consumerConfiguration = new Configuration();
 		consumerConfiguration.setProperty(Consumer.CONFIG_MAX_RESPONSE_TIME, Long.toString(JMSAnalysisStarter.MAX_RT_NANOS));
 
-		final Consumer consumer = new Consumer(consumerConfiguration, new HashMap<String, AbstractRepository>());
+		final Consumer consumer = new Consumer(consumerConfiguration);
 		analysisInstance.registerPlugin(consumer);
 
 		AbstractPlugin.connect(logReader, JMSReader.OUTPUT_PORT_NAME, consumer, Consumer.INPUT_PORT_NAME);

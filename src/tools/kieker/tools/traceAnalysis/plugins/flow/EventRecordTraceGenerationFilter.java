@@ -29,15 +29,17 @@ import java.util.TreeSet;
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
-import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.plugin.port.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.flow.TraceEvent;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.plugins.executionRecordTransformation.ExecutionEventProcessingException;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceReconstructionFilter;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
@@ -49,9 +51,8 @@ import kieker.tools.util.LoggingTimestampConverter;
  * 
  */
 @Plugin(
-		outputPorts =
-		@OutputPort(name = EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME, description = "Outputs the generated traces", eventTypes = { EventRecordTrace.class }
-		))
+		outputPorts = @OutputPort(name = EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME, description = "Outputs the generated traces", eventTypes = { EventRecordTrace.class }),
+		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingPlugin {
 	private static final Log LOG = LogFactory.getLog(EventRecordTraceGenerationFilter.class);
 
@@ -104,8 +105,8 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingPlu
 	 * @param configuration
 	 * @param repositories
 	 */
-	public EventRecordTraceGenerationFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
-		super(configuration, repositories);
+	public EventRecordTraceGenerationFilter(final Configuration configuration) {
+		super(configuration);
 
 		/* Load from the configuration. */
 		this.maxTraceDurationMillis = configuration.getLongProperty(EventRecordTraceGenerationFilter.CONFIG_MAX_TRACE_DURATION_MILLIS);
@@ -191,11 +192,6 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingPlu
 	 */
 	public final long getMaxTimestamp() {
 		return this.maxTstamp;
-	}
-
-	@Override
-	public boolean execute() {
-		return true; // no need to do anything here
 	}
 
 	/**

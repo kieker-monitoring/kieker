@@ -22,9 +22,7 @@ package kieker.test.analysis.junit.reader.namedRecordPipe;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -34,7 +32,6 @@ import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.reader.namedRecordPipe.PipeReader;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
@@ -56,7 +53,7 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 		final String pipeName = NamedPipeFactory.createPipeName();
 		final Configuration configuration = new Configuration(null);
 		configuration.setProperty(PipeReader.CONFIG_PIPENAME, pipeName);
-		final PipeReader pipeReader = new PipeReader(configuration, new HashMap<String, AbstractRepository>());
+		final PipeReader pipeReader = new PipeReader(configuration);
 
 		final List<IMonitoringRecord> receivedRecords = Collections.synchronizedList(new ArrayList<IMonitoringRecord>());
 
@@ -94,26 +91,18 @@ class MonitoringSinkClass extends AbstractAnalysisPlugin {
 	private final List<IMonitoringRecord> receivedRecords;
 
 	public MonitoringSinkClass(final List<IMonitoringRecord> receivedRecords) {
-		super(new Configuration(), new HashMap<String, AbstractRepository>());
+		super(new Configuration());
 		this.receivedRecords = receivedRecords;
 	}
 
 	@Override
-	public boolean execute() {
-		return true;
-	}
-
-	@Override
-	public void terminate(final boolean error) {}
-
-	@Override
 	protected Configuration getDefaultConfiguration() {
-		return null;
+		return new Configuration();
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		return null;
+		return new Configuration();
 	}
 
 	@InputPort(
@@ -121,10 +110,5 @@ class MonitoringSinkClass extends AbstractAnalysisPlugin {
 			eventTypes = { IMonitoringRecord.class })
 	public void doJob(final Object data) {
 		this.receivedRecords.add((IMonitoringRecord) data);
-	}
-
-	@Override
-	public Map<String, AbstractRepository> getCurrentRepositories() {
-		return null;
 	}
 }

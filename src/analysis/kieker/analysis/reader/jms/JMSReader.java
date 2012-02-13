@@ -21,9 +21,7 @@
 package kieker.analysis.reader.jms;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import javax.jms.Connection;
@@ -44,7 +42,6 @@ import javax.naming.NameNotFoundException;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.reader.AbstractReaderPlugin;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -88,9 +85,9 @@ public final class JMSReader extends AbstractReaderPlugin {
 	 * @throws IllegalArgumentException
 	 *             If one of the properties is empty.
 	 */
-	public JMSReader(final Configuration configuration, final Map<String, AbstractRepository> repositories) throws IllegalArgumentException {
+	public JMSReader(final Configuration configuration) throws IllegalArgumentException {
 		/* Call the inherited constructor. */
-		super(configuration, repositories);
+		super(configuration);
 		/* Initialize the reader bases on the given configuration. */
 		this.jmsProviderUrl = configuration.getStringProperty(JMSReader.CONFIG_PROVIDERURL);
 		this.jmsDestination = configuration.getStringProperty(JMSReader.CONFIG_DESTINATION);
@@ -223,10 +220,5 @@ public final class JMSReader extends AbstractReaderPlugin {
 		configuration.setProperty(JMSReader.CONFIG_FACTORYLOOKUP, this.jmsFactoryLookupName);
 
 		return configuration;
-	}
-
-	@Override
-	public Map<String, AbstractRepository> getCurrentRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 }

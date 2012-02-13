@@ -24,10 +24,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collection;
-import java.util.Map;
 
 import kieker.analysis.plugin.port.InputPort;
-import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.plugin.port.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -38,6 +38,7 @@ import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
+import kieker.tools.traceAnalysis.systemModel.repository.AssemblyRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
@@ -48,6 +49,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGraphPlugin<AssemblyComponent> {
 
 	public static final String CONFIG_DOT_OUTPUT_FILE = ComponentDependencyGraphPluginAssembly.class.getName() + ".dotOutputFile";
@@ -61,14 +63,12 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 	private final boolean shortLabels;
 	private final boolean includeSelfLoops;
 
-	public ComponentDependencyGraphPluginAssembly(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
+	public ComponentDependencyGraphPluginAssembly(final Configuration configuration) {
 		// TODO Check type conversion
-		super(configuration, repositories,
+		super(configuration,
 				new DependencyGraph<AssemblyComponent>(
-						((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getAssemblyFactory()
-								.getRootAssemblyComponent().getId(),
-						((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getAssemblyFactory()
-								.getRootAssemblyComponent()));
+						AssemblyRepository.ROOT_ASSEMBLY_COMPONENT.getId(),
+						AssemblyRepository.ROOT_ASSEMBLY_COMPONENT));
 		this.dotOutputFile = new File(configuration.getStringProperty(ComponentDependencyGraphPluginAssembly.CONFIG_DOT_OUTPUT_FILE));
 		this.includeWeights = configuration.getBooleanProperty(ComponentDependencyGraphPluginAssembly.CONFIG_INCLUDE_WEIGHTS);
 		this.shortLabels = configuration.getBooleanProperty(ComponentDependencyGraphPluginAssembly.CONFIG_SHORT_LABELS);
@@ -87,7 +87,8 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 	@Override
 	protected void dotEdges(final Collection<DependencyGraphNode<AssemblyComponent>> nodes, final PrintStream ps, final boolean shortLabelsL) {
 
-		final AssemblyComponent rootComponent = this.getSystemEntityFactory().getAssemblyFactory().getRootAssemblyComponent();
+		final AssemblyRepository r = this.getSystemEntityFactory().getAssemblyFactory();
+		final AssemblyComponent rootComponent = AssemblyRepository.ROOT_ASSEMBLY_COMPONENT;
 		final int rootComponentId = rootComponent.getId();
 		final StringBuilder strBuild = new StringBuilder();
 		// dot code for contained components
@@ -107,11 +108,6 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 			strBuild.append("\n");
 		}
 		ps.println(strBuild.toString());
-	}
-
-	@Override
-	public boolean execute() {
-		return true; // no need to do anything here
 	}
 
 	/**

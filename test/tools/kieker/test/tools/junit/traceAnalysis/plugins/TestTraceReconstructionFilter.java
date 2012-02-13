@@ -95,7 +95,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 
 		try {
 			/* Make sure that trace is valid: */
-			executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
+			executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 		} catch (final InvalidTraceException ex) {
 			TestTraceReconstructionFilter.LOG.error("", ex);
 			Assert.fail("Test invalid since used trace invalid");
@@ -119,7 +119,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		final MessageTrace validMessageTrace;
 		try {
 			validExecutionTrace = this.genValidBookstoreTrace();
-			validMessageTrace = validExecutionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
+			validMessageTrace = validExecutionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 		} catch (final InvalidTraceException ex) {
 			TestTraceReconstructionFilter.LOG.error("InvalidTraceException", ex); // NOPMD (string literal)
 			Assert.fail("InvalidTraceException" + ex);
@@ -132,7 +132,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Long.toString(AbstractTraceProcessingPlugin.MAX_DURATION_MILLIS));
 		final Map<String, AbstractRepository> repositoryMap = new HashMap<String, AbstractRepository>();
 		repositoryMap.put(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
-		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, repositoryMap);
+		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration);
 
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout",
 				validExecutionTrace.getDurationInNanos() <= filter.getMaxTraceDurationNanos());
@@ -246,7 +246,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Long.toString(AbstractTraceProcessingPlugin.MAX_DURATION_MILLIS));
 		final Map<String, AbstractRepository> repositoryMap = new HashMap<String, AbstractRepository>();
 		repositoryMap.put(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
-		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, repositoryMap);
+		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration);
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout",
 				invalidExecutionTrace.getDurationInNanos() <= filter.getMaxTraceDurationNanos());
 
@@ -374,7 +374,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		final MessageTrace triggerMessageTrace;
 		try {
 			triggerExecutionTrace.add(exec0_0__bookstore_searchBook__trigger);
-			triggerMessageTrace = triggerExecutionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
+			triggerMessageTrace = triggerExecutionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 		} catch (final InvalidTraceException ex) {
 			TestTraceReconstructionFilter.LOG.error("InvalidTraceException", ex);
 			Assert.fail("InvalidTraceException" + ex);
@@ -391,7 +391,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 				((triggerExecutionTrace.getMaxTout() - incompleteExecutionTrace.getMinTin()) / (1000 * 1000)) - 1));
 		final Map<String, AbstractRepository> repositoryMap = new HashMap<String, AbstractRepository>();
 		repositoryMap.put(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
-		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, repositoryMap);
+		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration);
 
 		final SimpleSinkPlugin executionTraceSink = new SimpleSinkPlugin();
 		final SimpleSinkPlugin messageTraceSink = new SimpleSinkPlugin();

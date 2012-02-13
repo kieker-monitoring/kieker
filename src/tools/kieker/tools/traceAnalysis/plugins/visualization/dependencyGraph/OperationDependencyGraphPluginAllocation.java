@@ -30,7 +30,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import kieker.analysis.plugin.port.InputPort;
-import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.plugin.port.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -46,6 +47,9 @@ import kieker.tools.traceAnalysis.systemModel.Signature;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOperationPairFactory;
+import kieker.tools.traceAnalysis.systemModel.repository.AllocationRepository;
+import kieker.tools.traceAnalysis.systemModel.repository.ExecutionEnvironmentRepository;
+import kieker.tools.traceAnalysis.systemModel.repository.OperationRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationPair;
 
@@ -57,6 +61,7 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class OperationDependencyGraphPluginAllocation extends AbstractDependencyGraphPlugin<AllocationComponentOperationPair> {
 
 	public static final String CONFIG_DOT_OUTPUT_FILE = OperationDependencyGraphPluginAllocation.class.getName() + ".dotOutputFile";
@@ -67,22 +72,18 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 	private static final Log LOG = LogFactory.getLog(OperationDependencyGraphPluginAllocation.class);
 	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
 	private static final String CONTAINER_NODE_ID_PREFIX = "container_";
-	private final AllocationComponentOperationPairFactory pairFactory;
+
 	private final File dotOutputFile;
 	private final boolean includeWeights;
 	private final boolean shortLabels;
 	private final boolean includeSelfLoops;
 
-	public OperationDependencyGraphPluginAllocation(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
+	public OperationDependencyGraphPluginAllocation(final Configuration configuration) {
 		// TODO Check type conversion
-		super(configuration, repositories, new DependencyGraph<AllocationComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+		super(configuration, new DependencyGraph<AllocationComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 				new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-						((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getOperationFactory()
-								.getRootOperation(),
-						((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getAllocationFactory()
-								.getRootAllocationComponent())));
-		this.pairFactory = new AllocationComponentOperationPairFactory(
-				(SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME));
+						OperationRepository.ROOT_OPERATION,
+						AllocationRepository.ROOT_ALLOCATION_COMPONENT)));
 		this.dotOutputFile = new File(this.configuration.getStringProperty(OperationDependencyGraphPluginAllocation.CONFIG_DOT_OUTPUT_FILE));
 		this.includeWeights = this.configuration.getBooleanProperty(OperationDependencyGraphPluginAllocation.CONFIG_INCLUDE_WEIGHTS);
 		this.shortLabels = this.configuration.getBooleanProperty(OperationDependencyGraphPluginAllocation.CONFIG_SHORT_LABELS);
@@ -139,7 +140,7 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 			containedPairs.add(pairNode);
 		}
 
-		final ExecutionContainer rootContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().getRootExecutionContainer();
+		final ExecutionContainer rootContainer = ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER;
 		final int rootContainerId = rootContainer.getId();
 		final StringBuilder strBuild = new StringBuilder();
 		for (final Entry<Integer, Collection<AllocationComponent>> containerComponentEntry : containerId2componentMapping.entrySet()) {
@@ -203,11 +204,6 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 		ps.println(strBuild.toString());
 	}
 
-	@Override
-	public boolean execute() {
-		return true; // no need to do anything here
-	}
-
 	/**
 	 * Saves the dependency graph to the dot file if error is not true.
 	 * 
@@ -261,16 +257,17 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 			}
 			final AllocationComponent senderComponent = m.getSendingExecution().getAllocationComponent();
 			final AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
-			final int rootOperationId = OperationDependencyGraphPluginAllocation.this.getSystemEntityFactory().getOperationFactory().getRootOperation().getId();
+			final int rootOperationId = OperationRepository.ROOT_OPERATION.getId();
 			final Operation senderOperation = m.getSendingExecution().getOperation();
 			final Operation receiverOperation = m.getReceivingExecution().getOperation();
 			/* The following two get-calls to the factory return s.th. in either case */
+			final AllocationComponentOperationPairFactory pairFactory = this.getSystemEntityFactory().getAllocationPairFactory();
 			final AllocationComponentOperationPair senderPair = (senderOperation.getId() == rootOperationId) ? OperationDependencyGraphPluginAllocation.this.dependencyGraph // NOCS
 					.getRootNode().getEntity()
-					: OperationDependencyGraphPluginAllocation.this.pairFactory.getPairInstanceByPair(senderComponent, senderOperation);
+					: pairFactory.getPairInstanceByPair(senderComponent, senderOperation);
 			final AllocationComponentOperationPair receiverPair = (receiverOperation.getId() == rootOperationId) ? OperationDependencyGraphPluginAllocation.this.dependencyGraph // NOCS
 					.getRootNode().getEntity()
-					: OperationDependencyGraphPluginAllocation.this.pairFactory.getPairInstanceByPair(receiverComponent, receiverOperation);
+					: pairFactory.getPairInstanceByPair(receiverComponent, receiverOperation);
 
 			DependencyGraphNode<AllocationComponentOperationPair> senderNode = OperationDependencyGraphPluginAllocation.this.dependencyGraph.getNode(senderPair
 					.getId());

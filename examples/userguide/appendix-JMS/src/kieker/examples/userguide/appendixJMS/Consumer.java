@@ -20,11 +20,8 @@
 
 package kieker.examples.userguide.appendixJMS;
 
-import java.util.HashMap;
-
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.InputPort;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
@@ -35,8 +32,8 @@ public class Consumer extends AbstractAnalysisPlugin {
 	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
 	private final long maxResponseTime;
 
-	public Consumer(final Configuration configuration, final HashMap<String, AbstractRepository> repositories) {
-		super(configuration, repositories);
+	public Consumer(final Configuration configuration) {
+		super(configuration);
 
 		this.maxResponseTime = configuration.getLongProperty(Consumer.CONFIG_MAX_RESPONSE_TIME);
 		System.out.println(this.maxResponseTime);
@@ -65,14 +62,6 @@ public class Consumer extends AbstractAnalysisPlugin {
 	}
 
 	@Override
-	public boolean execute() {
-		return true;
-	}
-
-	@Override
-	public void terminate(final boolean error) {}
-
-	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
@@ -88,10 +77,5 @@ public class Consumer extends AbstractAnalysisPlugin {
 		configuration.setProperty(Consumer.CONFIG_MAX_RESPONSE_TIME, Long.toString(this.maxResponseTime));
 
 		return configuration;
-	}
-
-	@Override
-	public HashMap<String, AbstractRepository> getCurrentRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 }

@@ -32,11 +32,11 @@ public class MyResponseTimeConsumer extends AbstractAnalysisPlugin {
 	public static final String INPUT_PORT_NAME = "newEvent";
 
 	public MyResponseTimeConsumer(final Configuration configuration, final HashMap<String, AbstractRepository> repositories) {
-		super(configuration, repositories);
+		super(configuration);
 	}
 
 	public MyResponseTimeConsumer() {
-		super(new Configuration(null), new HashMap<String, AbstractRepository>());
+		super(new Configuration());
 	}
 
 	@InputPort(
@@ -53,14 +53,6 @@ public class MyResponseTimeConsumer extends AbstractAnalysisPlugin {
 	}
 
 	@Override
-	public boolean execute() {
-		return true;
-	}
-
-	@Override
-	public void terminate(final boolean error) {}
-
-	@Override
 	protected Configuration getDefaultConfiguration() {
 		return new Configuration();
 	}
@@ -68,10 +60,5 @@ public class MyResponseTimeConsumer extends AbstractAnalysisPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration(null);
-	}
-
-	@Override
-	public HashMap<String, AbstractRepository> getCurrentRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 }

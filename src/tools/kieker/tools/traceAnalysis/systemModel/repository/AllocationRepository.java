@@ -33,14 +33,15 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
  * @author Andre van Hoorn
  */
 public class AllocationRepository extends AbstractSystemSubRepository {
-	private final AllocationComponent rootAllocationComponent;
+	public static final AllocationComponent ROOT_ALLOCATION_COMPONENT =
+			new AllocationComponent(AbstractSystemSubRepository.ROOT_ELEMENT_ID, AssemblyRepository.ROOT_ASSEMBLY_COMPONENT,
+					ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER);
 
 	private final Map<String, AllocationComponent> allocationComponentInstancesByName = new Hashtable<String, AllocationComponent>(); // NOPMD (UseConcurrentHashMap)
 	private final Map<Integer, AllocationComponent> allocationComponentInstancesById = new Hashtable<Integer, AllocationComponent>(); // NOPMD (UseConcurrentHashMap)
 
-	public AllocationRepository(final SystemModelRepository systemFactory, final AllocationComponent rootAllocationComponent) {
+	public AllocationRepository(final SystemModelRepository systemFactory) {
 		super(systemFactory);
-		this.rootAllocationComponent = rootAllocationComponent;
 	}
 
 	/**
@@ -66,9 +67,5 @@ public class AllocationRepository extends AbstractSystemSubRepository {
 
 	public final Collection<AllocationComponent> getAllocationComponentInstances() {
 		return this.allocationComponentInstancesById.values();
-	}
-
-	public AllocationComponent getRootAllocationComponent() {
-		return this.rootAllocationComponent;
 	}
 }

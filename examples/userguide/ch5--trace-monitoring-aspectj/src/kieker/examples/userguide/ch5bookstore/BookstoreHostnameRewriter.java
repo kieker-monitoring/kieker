@@ -20,7 +20,6 @@
 
 package kieker.examples.userguide.ch5bookstore;
 
-import java.util.HashMap;
 import java.util.Random;
 
 import kieker.analysis.AnalysisController;
@@ -30,7 +29,6 @@ import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.reader.filesystem.FSReader;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.OperationExecutionRecord;
@@ -56,7 +54,7 @@ public class BookstoreHostnameRewriter {
 		final String inputDirs[] = { args[0] };
 		final Configuration configuration = new Configuration(null);
 		configuration.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(inputDirs));
-		final FSReader reader = new FSReader(configuration, new HashMap<String, AbstractRepository>(0));
+		final FSReader reader = new FSReader(configuration);
 		analysisInstance.setReader(reader);
 
 		/* Connect the reader with the plugin. */
@@ -80,7 +78,7 @@ class HostNameRewriterPlugin extends AbstractAnalysisPlugin {
 	private static final String CRM_HOSTNAME = "SRV0";
 
 	public HostNameRewriterPlugin() {
-		super(new Configuration(null), new HashMap<String, AbstractRepository>());
+		super(new Configuration());
 	}
 
 	@InputPort(
@@ -108,28 +106,12 @@ class HostNameRewriterPlugin extends AbstractAnalysisPlugin {
 	}
 
 	@Override
-	public boolean execute() {
-		return true; // do nothing
-	}
-
-	@Override
-	public void terminate(final boolean error) {
-		return; // do nothing
-	}
-
-	@Override
 	protected Configuration getDefaultConfiguration() {
-		return new Configuration(null);
+		return new Configuration();
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		return new Configuration(null);
+		return new Configuration();
 	}
-
-	@Override
-	public HashMap<String, AbstractRepository> getCurrentRepositories() {
-		return new HashMap<String, AbstractRepository>(0);
-	}
-
 }

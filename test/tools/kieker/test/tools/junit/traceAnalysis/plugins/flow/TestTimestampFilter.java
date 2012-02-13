@@ -20,12 +20,9 @@
 
 package kieker.test.tools.junit.traceAnalysis.plugins.flow;
 
-import java.util.HashMap;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.BeforeOperationEvent;
 import kieker.common.record.flow.TraceEvent;
@@ -56,7 +53,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 		final Configuration cfg = new Configuration();
 		cfg.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, Long.toString(ignoreExecutionsBeforeTimestamp));
 		cfg.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP, Long.toString(ignoreExecutionsAfterTimestamp));
-		return new TimestampFilter(cfg, new HashMap<String, AbstractRepository>());
+		return new TimestampFilter(cfg);
 	}
 
 	/**

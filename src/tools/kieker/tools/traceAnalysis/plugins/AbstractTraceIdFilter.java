@@ -20,14 +20,11 @@
 
 package kieker.tools.traceAnalysis.plugins;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
 
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 
 /**
@@ -50,8 +47,8 @@ public abstract class AbstractTraceIdFilter extends AbstractAnalysisPlugin {
 	 *            ignored
 	 * @param selectedTraceIds
 	 */
-	public AbstractTraceIdFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
-		super(configuration, repositories);
+	public AbstractTraceIdFilter(final Configuration configuration) {
+		super(configuration);
 		this.selectedTraceIds = AbstractTraceIdFilter.extractIDsFromConfiguration(configuration, this.getConfigurationPropertySelectAllTraces(),
 				this.getConfigurationPropertySelectedTraces());
 	}
@@ -77,16 +74,6 @@ public abstract class AbstractTraceIdFilter extends AbstractAnalysisPlugin {
 			}
 			return idsToPass;
 		}
-	}
-
-	@Override
-	public boolean execute() {
-		return true; // do nothing
-	}
-
-	@Override
-	public void terminate(final boolean error) {
-		// do nothing
 	}
 
 	@Override
@@ -140,10 +127,5 @@ public abstract class AbstractTraceIdFilter extends AbstractAnalysisPlugin {
 			configuration.setProperty(this.getConfigurationPropertySelectedTraces(), "");
 		}
 		return configuration;
-	}
-
-	@Override
-	public Map<String, AbstractRepository> getCurrentRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 }

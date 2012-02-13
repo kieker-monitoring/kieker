@@ -24,15 +24,17 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.Map;
 
 import kieker.analysis.plugin.port.InputPort;
-import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.plugin.port.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractExecutionTraceProcessingPlugin;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * This class has exactly one input port named "in". The data which is send to
@@ -40,6 +42,7 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
  * 
  * @author Andre van Hoorn
  */
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessingPlugin {
 
 	public static final String CONFIG_OUTPUT_FN = ExecutionTraceWriterPlugin.class.getName() + ".outputFn";
@@ -51,8 +54,8 @@ public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessing
 	private final String outputFn;
 	private final BufferedWriter ps;
 
-	public ExecutionTraceWriterPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories) throws IOException {
-		super(configuration, repositories);
+	public ExecutionTraceWriterPlugin(final Configuration configuration) throws IOException {
+		super(configuration);
 		this.outputFn = configuration.getStringProperty(ExecutionTraceWriterPlugin.CONFIG_OUTPUT_FN);
 		this.ps = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.outputFn), ExecutionTraceWriterPlugin.ENCODING));
 	}
@@ -73,11 +76,6 @@ public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessing
 				ExecutionTraceWriterPlugin.LOG.error("IOException", ex);
 			}
 		}
-	}
-
-	@Override
-	public boolean execute() {
-		return true; // no need to do anything here
 	}
 
 	@Override

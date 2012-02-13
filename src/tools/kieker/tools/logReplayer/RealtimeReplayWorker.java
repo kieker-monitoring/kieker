@@ -20,14 +20,10 @@
 
 package kieker.tools.logReplayer;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -60,7 +56,7 @@ public class RealtimeReplayWorker extends AbstractAnalysisPlugin implements Runn
 	 */
 	public RealtimeReplayWorker(final IMonitoringRecord monRec, final RealtimeReplayDistributor rd, final AbstractAnalysisPlugin cons,
 			final String constInputPortName) {
-		super(new Configuration(), new HashMap<String, AbstractRepository>());
+		super(new Configuration());
 		this.monRec = monRec;
 		this.rd = rd;
 
@@ -68,7 +64,7 @@ public class RealtimeReplayWorker extends AbstractAnalysisPlugin implements Runn
 	}
 
 	public RealtimeReplayWorker() {
-		super(new Configuration(), new HashMap<String, AbstractRepository>());
+		super(new Configuration());
 		this.monRec = null;
 		this.rd = null;
 	}
@@ -86,17 +82,6 @@ public class RealtimeReplayWorker extends AbstractAnalysisPlugin implements Runn
 	}
 
 	@Override
-	public boolean execute() {
-		// TODO Prepare
-		return true;
-	}
-
-	@Override
-	public void terminate(final boolean error) {
-		// TODO Terminate
-	}
-
-	@Override
 	protected Configuration getDefaultConfiguration() {
 		// TODO Default Configuration
 		return new Configuration();
@@ -106,10 +91,5 @@ public class RealtimeReplayWorker extends AbstractAnalysisPlugin implements Runn
 	public Configuration getCurrentConfiguration() {
 		// TODO Current Configuration
 		return new Configuration();
-	}
-
-	@Override
-	public Map<String, AbstractRepository> getCurrentRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 }

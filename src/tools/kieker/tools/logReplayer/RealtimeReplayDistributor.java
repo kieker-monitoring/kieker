@@ -20,8 +20,6 @@
 
 package kieker.tools.logReplayer;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -30,7 +28,6 @@ import kieker.analysis.exception.MonitoringRecordConsumerException;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.plugin.port.Plugin;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -74,8 +71,8 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 	private final int maxQueueSize;
 	private final CountDownLatch terminationLatch;
 
-	public RealtimeReplayDistributor(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
-		super(configuration, repositories);
+	public RealtimeReplayDistributor(final Configuration configuration) {
+		super(configuration);
 
 		// TODO: Load from configuration.
 		this.numWorkers = 0;
@@ -97,7 +94,7 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 	 *            will be decremented after the last record was replayed
 	 */
 	public RealtimeReplayDistributor(final int numWorkers, final AbstractAnalysisPlugin cons, final CountDownLatch terminationLatch, final String constInputPortName) {
-		super(new Configuration(null), new HashMap<String, AbstractRepository>());
+		super(new Configuration());
 		this.numWorkers = numWorkers;
 		this.cons = cons;
 		this.maxQueueSize = numWorkers * RealtimeReplayDistributor.QUEUE_SIZE_FACTOR;
@@ -142,11 +139,6 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 			this.executor.schedule(new RealtimeReplayWorker(monitoringRecord, this, this.cons, this.constInputPortName), schedTime, TimeUnit.NANOSECONDS); // *relative*
 		}
 		this.lTime = this.lTime < monitoringRecord.getLoggingTimestamp() ? monitoringRecord.getLoggingTimestamp() : this.lTime; // NOCS
-	}
-
-	@Override
-	public boolean execute() {
-		return true;
 	}
 
 	public final long getOffset() {
@@ -200,10 +192,5 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 		// TODO: Save the current configuration
 
 		return configuration;
-	}
-
-	@Override
-	public Map<String, AbstractRepository> getCurrentRepositories() {
-		return new HashMap<String, AbstractRepository>(0);
 	}
 }

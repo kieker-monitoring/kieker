@@ -30,7 +30,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import kieker.analysis.plugin.port.InputPort;
-import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.plugin.port.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -42,6 +43,8 @@ import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
+import kieker.tools.traceAnalysis.systemModel.repository.AllocationRepository;
+import kieker.tools.traceAnalysis.systemModel.repository.ExecutionEnvironmentRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
@@ -52,6 +55,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class ComponentDependencyGraphPluginAllocation extends AbstractDependencyGraphPlugin<AllocationComponent> {
 
 	private static final Log LOG = LogFactory.getLog(ComponentDependencyGraphPluginAllocation.class);
@@ -62,16 +66,12 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 	private final boolean includeSelfLoops;
 
 	// TODO Change constructor to plugin-default-constructor
-	public ComponentDependencyGraphPluginAllocation(final Configuration configuration, final Map<String, AbstractRepository> repositories, final File dotOutputFile,
+	public ComponentDependencyGraphPluginAllocation(final Configuration configuration, final File dotOutputFile,
 			final boolean includeWeights, final boolean shortLabels, final boolean includeSelfLoops) {
 		// TODO Check type conversion
-		super(configuration, repositories, new DependencyGraph<AllocationComponent>(
-				((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME))
-						.getAllocationFactory()
-						.getRootAllocationComponent()
-						.getId(),
-				((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getAllocationFactory()
-						.getRootAllocationComponent()));
+		super(configuration, new DependencyGraph<AllocationComponent>(
+				AllocationRepository.ROOT_ALLOCATION_COMPONENT.getId(),
+				AllocationRepository.ROOT_ALLOCATION_COMPONENT));
 		this.dotOutputFile = dotOutputFile;
 		this.includeWeights = includeWeights;
 		this.shortLabels = shortLabels;
@@ -80,7 +80,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 
 	private String componentNodeLabel(final DependencyGraphNode<AllocationComponent> node, final boolean shortLabelsL) {
 		final AllocationComponent component = node.getEntity();
-		if (component == super.getSystemEntityFactory().getAllocationFactory().getRootAllocationComponent()) {
+		if (component == AllocationRepository.ROOT_ALLOCATION_COMPONENT) {
 			return "$";
 		}
 
@@ -115,8 +115,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 			}
 			containedComponents.add(node);
 		}
-
-		final ExecutionContainer rootContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory().getRootExecutionContainer();
+		final ExecutionContainer rootContainer = ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER;
 		final int rootContainerId = rootContainer.getId();
 		final StringBuilder strBuild = new StringBuilder();
 		for (final Entry<Integer, Collection<DependencyGraphNode<AllocationComponent>>> entry : component2containerMapping.entrySet()) {
@@ -158,11 +157,6 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 			}
 		}
 		ps.println(strBuild.toString());
-	}
-
-	@Override
-	public boolean execute() {
-		return true; // no need to do anything here
 	}
 
 	/**

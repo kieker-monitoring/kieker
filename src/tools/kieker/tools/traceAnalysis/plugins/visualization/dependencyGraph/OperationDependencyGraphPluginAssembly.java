@@ -30,7 +30,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import kieker.analysis.plugin.port.InputPort;
-import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.plugin.port.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -45,6 +46,8 @@ import kieker.tools.traceAnalysis.systemModel.Signature;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.AssemblyComponentOperationPairFactory;
+import kieker.tools.traceAnalysis.systemModel.repository.AssemblyRepository;
+import kieker.tools.traceAnalysis.systemModel.repository.OperationRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPair;
 
@@ -56,6 +59,7 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGraphPlugin<AssemblyComponentOperationPair> {
 
 	public static final String CONFIG_DOT_OUTPUT_FILE = OperationDependencyGraphPluginAssembly.class.getName() + ".dotOutputFile";
@@ -65,22 +69,17 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 
 	private static final Log LOG = LogFactory.getLog(OperationDependencyGraphPluginAssembly.class);
 	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
-	private final AssemblyComponentOperationPairFactory pairFactory;
 	private final File dotOutputFile;
 	private final boolean includeWeights;
 	private final boolean shortLabels;
 	private final boolean includeSelfLoops;
 
-	public OperationDependencyGraphPluginAssembly(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
+	public OperationDependencyGraphPluginAssembly(final Configuration configuration) {
 		// TODO Check type conversion
-		super(configuration, repositories, new DependencyGraph<AssemblyComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+		super(configuration, new DependencyGraph<AssemblyComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 				new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-						((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getOperationFactory()
-								.getRootOperation(),
-						((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getAssemblyFactory()
-								.getRootAssemblyComponent())));
-		this.pairFactory = new AssemblyComponentOperationPairFactory(
-				(SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME));
+						OperationRepository.ROOT_OPERATION,
+						AssemblyRepository.ROOT_ASSEMBLY_COMPONENT)));
 		this.dotOutputFile = new File(this.configuration.getStringProperty(OperationDependencyGraphPluginAssembly.CONFIG_DOT_OUTPUT_FILE));
 		this.includeWeights = this.configuration.getBooleanProperty(OperationDependencyGraphPluginAssembly.CONFIG_INCLUDE_WEIGHTS);
 		this.shortLabels = this.configuration.getBooleanProperty(OperationDependencyGraphPluginAssembly.CONFIG_SHORT_LABELS);
@@ -124,7 +123,7 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 			containedPairs.add(pairNode);
 		}
 
-		final AssemblyComponent rootComponent = this.getSystemEntityFactory().getAssemblyFactory().getRootAssemblyComponent();
+		final AssemblyComponent rootComponent = AssemblyRepository.ROOT_ASSEMBLY_COMPONENT;
 		final int rootComponentId = rootComponent.getId();
 		final StringBuilder strBuild = new StringBuilder();
 		for (final Entry<Integer, Collection<DependencyGraphNode<AssemblyComponentOperationPair>>> componentOperationEntry : componentId2pairMapping.entrySet()) {
@@ -173,11 +172,6 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 		ps.println(strBuild.toString());
 	}
 
-	@Override
-	public boolean execute() {
-		return true; // no need to do anything here
-	}
-
 	/**
 	 * Saves the dependeMESSAGE_TRACE_INPUT_PORT_NAMEncy graph to the dot file if error is not true.
 	 * 
@@ -221,16 +215,17 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 			}
 			final AssemblyComponent senderComponent = m.getSendingExecution().getAllocationComponent().getAssemblyComponent();
 			final AssemblyComponent receiverComponent = m.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
-			final int rootOperationId = OperationDependencyGraphPluginAssembly.this.getSystemEntityFactory().getOperationFactory().getRootOperation().getId();
+			final int rootOperationId = OperationRepository.ROOT_OPERATION.getId();
 			final Operation senderOperation = m.getSendingExecution().getOperation();
 			final Operation receiverOperation = m.getReceivingExecution().getOperation();
 			/* The following two get-calls to the factory return s.th. in either case */
+			final AssemblyComponentOperationPairFactory pairFactory = this.getSystemEntityFactory().getAssemblyPairFactory();
 			final AssemblyComponentOperationPair senderPair = (senderOperation.getId() == rootOperationId) ? OperationDependencyGraphPluginAssembly.this.dependencyGraph // NOCS
 					.getRootNode().getEntity()
-					: OperationDependencyGraphPluginAssembly.this.pairFactory.getPairInstanceByPair(senderComponent, senderOperation);
+					: pairFactory.getPairInstanceByPair(senderComponent, senderOperation);
 			final AssemblyComponentOperationPair receiverPair = (receiverOperation.getId() == rootOperationId) ? OperationDependencyGraphPluginAssembly.this.dependencyGraph // NOCS
 					.getRootNode().getEntity()
-					: OperationDependencyGraphPluginAssembly.this.pairFactory.getPairInstanceByPair(receiverComponent, receiverOperation);
+					: pairFactory.getPairInstanceByPair(receiverComponent, receiverOperation);
 
 			DependencyGraphNode<AssemblyComponentOperationPair> senderNode = OperationDependencyGraphPluginAssembly.this.dependencyGraph.getNode(senderPair
 					.getId());

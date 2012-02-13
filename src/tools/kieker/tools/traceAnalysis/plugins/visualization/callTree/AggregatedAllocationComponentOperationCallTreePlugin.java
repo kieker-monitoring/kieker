@@ -23,6 +23,8 @@ package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 import java.io.File;
 import java.util.Map;
 
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.plugin.port.RepositoryPort;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
@@ -38,6 +40,7 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * 
  * @author Andre van Hoorn
  */
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class AggregatedAllocationComponentOperationCallTreePlugin extends AggregatedCallTreePlugin<AllocationComponentOperationPair> {
 
 	// TODO Change constructor to plugin-default-constructor
@@ -45,35 +48,43 @@ public class AggregatedAllocationComponentOperationCallTreePlugin extends Aggreg
 			final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory,
 			final File dotOutputFile, final boolean includeWeights, final boolean shortLabels) {
 		// TODO Check type conversion
-		super(configuration, repositories, new AggregatedAllocationComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-				(SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME),
-				allocationComponentOperationPairFactory, allocationComponentOperationPairFactory.getRootPair(), true), // root node
+		super(configuration, new AggregatedAllocationComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+				AllocationComponentOperationPairFactory.ROOT_PAIR, true), // root node
 				dotOutputFile, includeWeights, shortLabels);
+	}
+
+	@Override
+	public boolean execute() {
+		final boolean success = super.execute();
+		return success;
+	}
+
+	@Override
+	protected AllocationComponentOperationPair createPair(final SynchronousCallMessage callMsg) {
+		final AllocationComponent allocationComponent = callMsg.getReceivingExecution().getAllocationComponent();
+		final Operation op = callMsg.getReceivingExecution().getOperation();
+		final AllocationComponentOperationPair destination = AggregatedAllocationComponentOperationCallTreePlugin.this.getSystemEntityFactory()
+				.getAllocationPairFactory().getPairInstanceByPair(allocationComponent, op); // will never be null!
+		return destination;
 	}
 }
 
 class AggregatedAllocationComponentOperationCallTreeNode extends AbstractAggregatedCallTreeNode<AllocationComponentOperationPair> {
 
-	private final AllocationComponentOperationPairFactory pairFactory;
-
-	public AggregatedAllocationComponentOperationCallTreeNode(final int id, final SystemModelRepository systemEntityFactory,
-			final AllocationComponentOperationPairFactory pairFactory, final AllocationComponentOperationPair entity, final boolean rootNode) {
-		super(id, systemEntityFactory, entity, rootNode);
-		this.pairFactory = pairFactory;
+	public AggregatedAllocationComponentOperationCallTreeNode(final int id, final AllocationComponentOperationPair entity, final boolean rootNode) {
+		super(id, entity, rootNode);
 	}
 
 	@Override
-	public AbstractCallTreeNode<AllocationComponentOperationPair> newCall(final SynchronousCallMessage callMsg) {
-		final AllocationComponent allocationComponent = callMsg.getReceivingExecution().getAllocationComponent();
-		final Operation op = callMsg.getReceivingExecution().getOperation();
-		final AllocationComponentOperationPair destination = this.pairFactory.getPairInstanceByPair(allocationComponent, op); // will never be null!
+	public AbstractCallTreeNode<AllocationComponentOperationPair> newCall(final Object dstObj) {
+		final AllocationComponentOperationPair destination = (AllocationComponentOperationPair) dstObj;
 		WeightedDirectedCallTreeEdge<AllocationComponentOperationPair> e = this.childMap.get(destination.getId());
 		AbstractCallTreeNode<AllocationComponentOperationPair> n;
 		if (e != null) {
 			n = e.getDestination();
 		} else {
-			n = new AggregatedAllocationComponentOperationCallTreeNode(destination.getId(), this.getSystemEntityFactory(), this.pairFactory, destination, false); // !
-																																									// rootNode
+			n = new AggregatedAllocationComponentOperationCallTreeNode(destination.getId(), destination, false); // !
+			// rootNode
 			e = new WeightedDirectedCallTreeEdge<AllocationComponentOperationPair>(this, n);
 			this.childMap.put(destination.getId(), e);
 			super.appendChildEdge(e);

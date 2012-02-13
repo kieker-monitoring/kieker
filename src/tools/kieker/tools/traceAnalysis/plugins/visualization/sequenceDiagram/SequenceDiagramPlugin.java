@@ -29,16 +29,17 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
 import kieker.analysis.plugin.port.InputPort;
-import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.plugin.port.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AbstractTrace;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
@@ -47,6 +48,7 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.Signature;
 import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
+import kieker.tools.traceAnalysis.systemModel.repository.AllocationRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
@@ -57,6 +59,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn, Nils Sommer
  */
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin {
 
 	private static final Log LOG = LogFactory.getLog(SequenceDiagramPlugin.class);
@@ -118,10 +121,10 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 	private final SDModes sdmode;
 
 	// TODO Change constructor to plugin-default-constructor
-	public SequenceDiagramPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories, final SDModes sdmode,
+	public SequenceDiagramPlugin(final Configuration configuration, final SDModes sdmode,
 			final String outputFnBase,
 			final boolean shortLabels) {
-		super(configuration, repositories);
+		super(configuration);
 		this.sdmode = sdmode;
 		this.outputFnBase = outputFnBase;
 		this.shortLabels = shortLabels;
@@ -138,16 +141,6 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 		System.out.println("Example: pic2plot -T svg " + this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") // NOCS
 																																		// (AvoidInlineConditionalsCheck)
 				+ ".pic > " + this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg"); // NOCS (AvoidInlineConditionalsCheck)
-	}
-
-	@Override
-	public boolean execute() {
-		return true; // no need to do anything here
-	}
-
-	@Override
-	public void terminate(final boolean error) {
-		// no need to do anything here
 	}
 
 	@Override
@@ -223,8 +216,9 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 		ps.print("movewid = 0.5;" + "\n");
 
 		final Set<Integer> plottedComponentIds = new TreeSet<Integer>();
+		final AllocationRepository r = systemEntityFactory.getAllocationFactory();
 
-		final AllocationComponent rootAllocationComponent = systemEntityFactory.getAllocationFactory().getRootAllocationComponent();
+		final AllocationComponent rootAllocationComponent = AllocationRepository.ROOT_ALLOCATION_COMPONENT;
 		final String rootDotId = "O" + rootAllocationComponent.getId();
 		ps.print("actor(O" + rootAllocationComponent.getId() + ",\"\");" + "\n");
 		plottedComponentIds.add(rootAllocationComponent.getId());

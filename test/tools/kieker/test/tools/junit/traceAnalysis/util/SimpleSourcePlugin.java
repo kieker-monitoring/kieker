@@ -1,12 +1,8 @@
 package kieker.test.tools.junit.traceAnalysis.util;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 
 import org.junit.Assert;
@@ -20,7 +16,7 @@ public class SimpleSourcePlugin extends AbstractAnalysisPlugin {
 	public static final String OUTPUT_PORT_NAME = "output";
 
 	public SimpleSourcePlugin() {
-		super(new Configuration(), new HashMap<String, AbstractRepository>());
+		super(new Configuration());
 	}
 
 	public void deliver(final Object data) {
@@ -34,19 +30,6 @@ public class SimpleSourcePlugin extends AbstractAnalysisPlugin {
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		return null;
-	}
-
-	@Override
-	public boolean execute() {
-		return true;
-	}
-
-	@Override
-	public void terminate(final boolean error) {}
-
-	@Override
-	public Map<String, AbstractRepository> getCurrentRepositories() {
-		return new HashMap<String, AbstractRepository>();
+		return new Configuration();
 	}
 }

@@ -21,13 +21,10 @@
 package kieker.test.tools.junit.traceAnalysis.util;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.port.InputPort;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 
 /**
@@ -41,7 +38,7 @@ public class SimpleSinkPlugin extends AbstractAnalysisPlugin {
 	private final List<Object> list = new ArrayList<Object>();
 
 	public SimpleSinkPlugin() {
-		super(new Configuration(), new HashMap<String, AbstractRepository>());
+		super(new Configuration());
 	}
 
 	@InputPort(name = SimpleSinkPlugin.INPUT_PORT_NAME)
@@ -59,24 +56,11 @@ public class SimpleSinkPlugin extends AbstractAnalysisPlugin {
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
-		return null;
+		return new Configuration();
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		return null;
-	}
-
-	@Override
-	public boolean execute() {
-		return true;
-	}
-
-	@Override
-	public void terminate(final boolean error) {}
-
-	@Override
-	public Map<String, AbstractRepository> getCurrentRepositories() {
-		return new HashMap<String, AbstractRepository>();
+		return new Configuration();
 	}
 }

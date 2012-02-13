@@ -20,10 +20,7 @@
 
 package kieker.analysis.reader;
 
-import java.util.Map;
-
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 
 /**
@@ -39,7 +36,7 @@ public abstract class AbstractReaderPlugin extends AbstractPlugin implements IMo
 	 * @param configuration
 	 *            The configuration which should be used to initialize the object.
 	 */
-	public AbstractReaderPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
-		super(configuration, repositories);
+	public AbstractReaderPlugin(final Configuration configuration) {
+		super(configuration);
 	}
 }

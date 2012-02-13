@@ -21,9 +21,9 @@
 package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 
 import java.io.File;
-import java.util.Map;
 
-import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.plugin.port.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
@@ -38,42 +38,43 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * 
  * @author Andre van Hoorn
  */
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class AggregatedAssemblyComponentOperationCallTreePlugin extends AggregatedCallTreePlugin<AssemblyComponentOperationPair> {
 
 	// TODO Change constructor to plugin-default-constructor
-	public AggregatedAssemblyComponentOperationCallTreePlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories,
+	public AggregatedAssemblyComponentOperationCallTreePlugin(final Configuration configuration,
 			final AssemblyComponentOperationPairFactory assemblyComponentOperationPairFactory,
 			final File dotOutputFile, final boolean includeWeights, final boolean shortLabels) {
 		// TODO Check type conversion
-		super(configuration, repositories, new AggregatedAssemblyComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-				(SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME),
-				assemblyComponentOperationPairFactory, assemblyComponentOperationPairFactory.getRootPair(), true), // root node
+		super(configuration, new AggregatedAssemblyComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+				AssemblyComponentOperationPairFactory.ROOT_PAIR, true), // root node
 				dotOutputFile, includeWeights, shortLabels);
+	}
+
+	@Override
+	protected AssemblyComponentOperationPair createPair(final SynchronousCallMessage callMsg) {
+		final AssemblyComponent assemblyComponent = callMsg.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
+		final Operation op = callMsg.getReceivingExecution().getOperation();
+		final AssemblyComponentOperationPair destination = this.getSystemEntityFactory().getAssemblyPairFactory().getPairInstanceByPair(assemblyComponent, op);
+		return destination;
 	}
 }
 
 class AggregatedAssemblyComponentOperationCallTreeNode extends AbstractAggregatedCallTreeNode<AssemblyComponentOperationPair> {
 
-	private final AssemblyComponentOperationPairFactory pairFactory;
-
-	public AggregatedAssemblyComponentOperationCallTreeNode(final int id, final SystemModelRepository systemEntityFactory,
-			final AssemblyComponentOperationPairFactory pairFactory, final AssemblyComponentOperationPair entity, final boolean rootNode) {
-		super(id, systemEntityFactory, entity, rootNode);
-		this.pairFactory = pairFactory;
+	public AggregatedAssemblyComponentOperationCallTreeNode(final int id, final AssemblyComponentOperationPair entity, final boolean rootNode) {
+		super(id, entity, rootNode);
 	}
 
 	@Override
-	public AbstractCallTreeNode<AssemblyComponentOperationPair> newCall(final SynchronousCallMessage callMsg) {
-		final AssemblyComponent assemblyComponent = callMsg.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
-		final Operation op = callMsg.getReceivingExecution().getOperation();
-		final AssemblyComponentOperationPair destination = this.pairFactory.getPairInstanceByPair(assemblyComponent, op); // will never be null!
+	public AbstractCallTreeNode<AssemblyComponentOperationPair> newCall(final Object dstObj) {
+		final AssemblyComponentOperationPair destination = (AssemblyComponentOperationPair) dstObj;
 		WeightedDirectedCallTreeEdge<AssemblyComponentOperationPair> e = this.childMap.get(destination.getId());
 		AbstractCallTreeNode<AssemblyComponentOperationPair> n;
 		if (e != null) {
 			n = e.getDestination();
 		} else {
-			n = new AggregatedAssemblyComponentOperationCallTreeNode(destination.getId(), super.getSystemEntityFactory(), this.pairFactory, destination, false); // !
-																																									// rootNode
+			n = new AggregatedAssemblyComponentOperationCallTreeNode(destination.getId(), destination, false); // !rootNode
 			e = new WeightedDirectedCallTreeEdge<AssemblyComponentOperationPair>(this, n);
 			this.childMap.put(destination.getId(), e);
 			super.appendChildEdge(e);

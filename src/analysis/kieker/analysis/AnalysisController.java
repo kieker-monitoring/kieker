@@ -206,19 +206,10 @@ public final class AnalysisController {
 		for (final MIPlugin mPlugin : mPlugins) {
 			/* Extract the necessary informations to create the plugin. */
 			final Configuration configuration = AnalysisController.modelPropertiesToConfiguration(mPlugin.getProperties());
-
-			final EList<MIRepositoryConnector> mPluginRepositoryConnectors = mPlugin.getRepositories();
-			final Map<String, AbstractRepository> pluginRepositories = new HashMap<String, AbstractRepository>();
-			for (final MIRepositoryConnector mPluginRepositoryConnector : mPluginRepositoryConnectors) {
-				pluginRepositories.put(mPluginRepositoryConnector.getName(), repositoryMap.get(mPluginRepositoryConnector.getRepository()));
-			}
-
 			/* Create the plugin and put it into our map. */
-
 			try {
-				final Constructor<?> pluginConstructor = Class.forName(mPlugin.getClassname()).getConstructor(Configuration.class, Map.class);
-				final AbstractPlugin plugin = (AbstractPlugin) pluginConstructor.newInstance(configuration.getPropertiesStartingWith(mPlugin.getClassname()),
-						pluginRepositories);
+				final Constructor<?> pluginConstructor = Class.forName(mPlugin.getClassname()).getConstructor(Configuration.class);
+				final AbstractPlugin plugin = (AbstractPlugin) pluginConstructor.newInstance(configuration.getPropertiesStartingWith(mPlugin.getClassname()));
 				pluginMap.put(mPlugin, plugin);
 
 				/* Set the other properties of the plugin. */
@@ -238,6 +229,10 @@ public final class AnalysisController {
 
 		/* Now we have all plugins. We can start to assemble the wiring. */
 		for (final MIPlugin mPlugin : mPlugins) {
+			final EList<MIRepositoryConnector> mPluginRPorts = mPlugin.getRepositories();
+			for (final MIRepositoryConnector mPluginRPort : mPluginRPorts) {
+				pluginMap.get(mPlugin).connect(mPluginRPort.getName(), repositoryMap.get(mPluginRPort.getRepository()));
+			}
 			final EList<MIOutputPort> mPluginOPorts = mPlugin.getOutputPorts();
 			for (final MIOutputPort mPluginOPort : mPluginOPorts) {
 				final String outputPortName = mPluginOPort.getName();
@@ -386,7 +381,10 @@ public final class AnalysisController {
 				mPlugin.setName(plugin.getName());
 
 				/* Extract the configuration. */
-				final Configuration configuration = plugin.getCurrentConfiguration();
+				Configuration configuration = plugin.getCurrentConfiguration();
+				if (null == configuration) {
+					configuration = new Configuration();
+				}
 				final Set<Entry<Object, Object>> configSet = configuration.entrySet();
 				for (final Entry<Object, Object> configEntry : configSet) {
 					final MIProperty property = factory.createProperty();

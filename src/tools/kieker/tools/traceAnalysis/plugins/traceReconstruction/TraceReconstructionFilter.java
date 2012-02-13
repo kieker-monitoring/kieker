@@ -30,7 +30,7 @@ import java.util.TreeSet;
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
-import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.plugin.port.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -47,20 +47,22 @@ import kieker.tools.util.LoggingTimestampConverter;
 /**
  * @author Andre van Hoorn
  */
-@Plugin(outputPorts = {
-	@OutputPort(
-			name = TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-			description = "Reconstructed Message Traces",
-			eventTypes = { MessageTrace.class }),
-	@OutputPort(
-			name = TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
-			description = "Reconstructed Execution Traces",
-			eventTypes = { ExecutionTrace.class }),
-	@OutputPort(
-			name = TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE,
-			description = "Invalid Execution Traces",
-			eventTypes = { InvalidExecutionTrace.class })
-})
+@Plugin(
+		outputPorts = {
+			@OutputPort(
+					name = TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+					description = "Reconstructed Message Traces",
+					eventTypes = { MessageTrace.class }),
+			@OutputPort(
+					name = TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
+					description = "Reconstructed Execution Traces",
+					eventTypes = { ExecutionTrace.class }),
+			@OutputPort(
+					name = TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE,
+					description = "Invalid Execution Traces",
+					eventTypes = { InvalidExecutionTrace.class })
+		},
+		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	private static final Log LOG = LogFactory.getLog(TraceReconstructionFilter.class);
 
@@ -80,7 +82,6 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	private volatile long maxTout = -1;
 	private volatile boolean terminated = false;
 	private final boolean ignoreInvalidTraces;
-	private final Execution rootExecution;
 	private final long maxTraceDurationNanos;
 	private final long maxTraceDurationMillis;
 
@@ -108,16 +109,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 		}
 	});
 
-	public TraceReconstructionFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
-		super(configuration, repositories);
-
-		/* Load the root execution from the repository if possible. */
-		if (repositories.containsKey(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME) && (repositories
-				.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME) instanceof SystemModelRepository)) {
-			this.rootExecution = ((SystemModelRepository) repositories.get(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME)).getRootExecution();
-		} else {
-			this.rootExecution = null;
-		}
+	public TraceReconstructionFilter(final Configuration configuration) {
+		super(configuration);
 
 		/* Load from the configuration. */
 		this.maxTraceDurationMillis = configuration.getLongProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS);
@@ -218,7 +211,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 			 * If the polled trace is invalid, the following method
 			 * toMessageTrace(..) throws an exception
 			 */
-			final MessageTrace mt = executionTrace.toMessageTrace(this.rootExecution);
+			final MessageTrace mt = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 
 			/*
 			 * Transformation successful and the trace is for itself valid.

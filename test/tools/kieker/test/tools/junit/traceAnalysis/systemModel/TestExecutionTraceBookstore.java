@@ -172,7 +172,8 @@ public class TestExecutionTraceBookstore extends TestCase {
 		 */
 		MessageTrace messageTrace;
 		try {
-			messageTrace = executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
+			SystemModelRepository r = this.systemEntityFactory;
+			messageTrace = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 		} catch (final InvalidTraceException ex) {
 			TestExecutionTraceBookstore.LOG.error("InvalidTraceException", ex);
 			Assert.fail("Transformation to Message Trace failed: " + ex.getMessage());
@@ -191,9 +192,10 @@ public class TestExecutionTraceBookstore extends TestCase {
 		int curIdx = 0;
 		{ /* 1.: [0,0].Call $->bookstore.searchBook(..) */// NOCS
 			final AbstractMessage call0_0___root__bookstore_searchBook = msgArray[curIdx++]; // NOCS
-			Assert.assertTrue("Message is not a call", call0_0___root__bookstore_searchBook instanceof SynchronousCallMessage); // NOPMD (string literal)
+			Assert.assertTrue("Message is not a call", call0_0___root__bookstore_searchBook instanceof SynchronousCallMessage);
+			SystemModelRepository r = this.systemEntityFactory; // NOPMD (string literal)
 			Assert.assertEquals("Sending execution is not root execution", call0_0___root__bookstore_searchBook.getSendingExecution(),
-					this.systemEntityFactory.getRootExecution());
+					SystemModelRepository.ROOT_EXECUTION);
 			Assert.assertEquals(call0_0___root__bookstore_searchBook.getReceivingExecution(), this.exec0_0__bookstore_searchBook);
 			Assert.assertEquals("Message has wrong timestamp", call0_0___root__bookstore_searchBook.getTimestamp(), this.exec0_0__bookstore_searchBook.getTin()); // NOPMD
 		}
@@ -251,12 +253,14 @@ public class TestExecutionTraceBookstore extends TestCase {
 	public void testMessageTraceTransformationOnlyOnce() {
 		try {
 			final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
+			SystemModelRepository r = this.systemEntityFactory;
 			/*
 			 * Transform Execution Trace to Message Trace representation (twice)
 			 * and make sure, that the instances are the same.
 			 */
-			final MessageTrace messageTrace1 = executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
-			final MessageTrace messageTrace2 = executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
+			final MessageTrace messageTrace1 = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
+			SystemModelRepository r1 = this.systemEntityFactory;
+			final MessageTrace messageTrace2 = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 			Assert.assertSame(messageTrace1, messageTrace2);
 		} catch (final InvalidTraceException ex) {
 			TestExecutionTraceBookstore.LOG.error("InvalidTraceException", ex);
@@ -275,10 +279,12 @@ public class TestExecutionTraceBookstore extends TestCase {
 			final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
 
 			final Execution exec4_1__catalog_getBook = this.eFactory // NOCS
-					.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID, 9, 10, 4, 1); // NOCS (MagicNumberCheck)
-			final MessageTrace messageTrace1 = executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
+					.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID, 9, 10, 4, 1);
+			SystemModelRepository r = this.systemEntityFactory; // NOCS (MagicNumberCheck)
+			final MessageTrace messageTrace1 = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 			executionTrace.add(exec4_1__catalog_getBook);
-			final MessageTrace messageTrace2 = executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
+			SystemModelRepository r1 = this.systemEntityFactory;
+			final MessageTrace messageTrace2 = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 			Assert.assertNotSame(messageTrace1, messageTrace2);
 		} catch (final InvalidTraceException ex) {
 			TestExecutionTraceBookstore.LOG.error("InvalidTraceException", ex);
@@ -341,7 +347,8 @@ public class TestExecutionTraceBookstore extends TestCase {
 		try {
 			/* The following call must throw an Exception in this test case */
 			TestExecutionTraceBookstore.LOG.info("This test triggers a FATAL warning about an ess skip <0,3> which can simply be ignored because it is desired");
-			executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
+			SystemModelRepository r = this.systemEntityFactory;
+			executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 			Assert.fail("An invalid execution has been transformed to a message trace");
 		} catch (final InvalidTraceException ex) { // NOPMD
 			/* we wanted this exception to happen */
@@ -405,7 +412,8 @@ public class TestExecutionTraceBookstore extends TestCase {
 		 */
 		try {
 			/* The following call must throw an Exception in this test case */
-			executionTrace.toMessageTrace(this.systemEntityFactory.getRootExecution());
+			SystemModelRepository r = this.systemEntityFactory;
+			executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 			Assert.fail("An invalid execution has been transformed to a message trace");
 		} catch (final InvalidTraceException ex) { // NOPMD
 			/* we wanted this exception to happen */

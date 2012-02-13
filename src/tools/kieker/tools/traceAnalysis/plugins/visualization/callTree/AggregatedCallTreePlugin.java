@@ -22,16 +22,18 @@ package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
 import kieker.analysis.plugin.port.InputPort;
-import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.plugin.port.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceProcessingException;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * This class has exactly one input port named "in". The data which is send to
@@ -39,6 +41,7 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
  * 
  * @author Andre van Hoorn
  */
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 	private static final Log LOG = LogFactory.getLog(AggregatedCallTreePlugin.class);
 
@@ -49,10 +52,9 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 	private int numGraphsSaved = 0;
 
 	// TODO Change constructor to plugin-default-constructor
-	public AggregatedCallTreePlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories,
-			final AbstractAggregatedCallTreeNode<T> root,
+	public AggregatedCallTreePlugin(final Configuration configuration, final AbstractAggregatedCallTreeNode<T> root,
 			final File dotOutputFile, final boolean includeWeights, final boolean shortLabels) {
-		super(configuration, repositories);
+		super(configuration);
 		this.root = root;
 		this.dotOutputFile = dotOutputFile;
 		this.includeWeights = includeWeights;
@@ -61,7 +63,7 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 
 	public void saveTreeToDotFile() throws IOException {
 		final String outputFnBase = this.dotOutputFile.getCanonicalPath();
-		AbstractCallTreePlugin.saveTreeToDotFile(super.getSystemEntityFactory(), this.root, outputFnBase, this.includeWeights, false, // do not include EOIs
+		this.saveTreeToDotFile(this.root, outputFnBase, this.includeWeights, false, // do not include EOIs
 				this.shortLabels);
 		this.numGraphsSaved++;
 		this.printMessage(new String[] { "Wrote call tree to file '" + outputFnBase + ".dot" + "'", "Dot file can be converted using the dot tool",
@@ -72,11 +74,6 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 	public void printStatusMessage() {
 		super.printStatusMessage();
 		System.out.println("Saved " + this.numGraphsSaved + " call tree" + (this.numGraphsSaved > 1 ? "s" : "")); // NOCS
-	}
-
-	@Override
-	public boolean execute() {
-		return true; // no need to do anything here
 	}
 
 	/**
@@ -117,7 +114,7 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 	public void msgTraceInput(final Object obj) {
 		final MessageTrace t = (MessageTrace) obj;
 		try {
-			AbstractCallTreePlugin.addTraceToTree(AggregatedCallTreePlugin.this.root, t, true); // aggregated
+			this.addTraceToTree(AggregatedCallTreePlugin.this.root, t, true); // aggregated
 			AggregatedCallTreePlugin.this.reportSuccess(t.getTraceId());
 		} catch (final TraceProcessingException ex) {
 			AggregatedCallTreePlugin.LOG.error("TraceProcessingException", ex);

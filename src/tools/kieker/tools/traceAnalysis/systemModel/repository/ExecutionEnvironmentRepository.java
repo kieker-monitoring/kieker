@@ -31,14 +31,13 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
  * @author Andre van Hoorn
  */
 public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository {
-	private final ExecutionContainer rootExecutionContainer;
+	public static final ExecutionContainer ROOT_EXECUTION_CONTAINER = new ExecutionContainer(AbstractSystemSubRepository.ROOT_ELEMENT_ID, null, "$");;
 
 	private final Map<String, ExecutionContainer> executionContainersByName = new Hashtable<String, ExecutionContainer>(); // NOPMD (UseConcurrentHashMap)
 	private final Map<Integer, ExecutionContainer> executionContainersById = new Hashtable<Integer, ExecutionContainer>(); // NOPMD (UseConcurrentHashMap)
 
-	public ExecutionEnvironmentRepository(final SystemModelRepository systemFactory, final ExecutionContainer rootExecutionContainer) {
+	public ExecutionEnvironmentRepository(final SystemModelRepository systemFactory) {
 		super(systemFactory);
-		this.rootExecutionContainer = rootExecutionContainer;
 	}
 
 	/**
@@ -71,9 +70,5 @@ public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository 
 
 	public final Collection<ExecutionContainer> getExecutionContainers() {
 		return this.executionContainersById.values();
-	}
-
-	public ExecutionContainer getRootExecutionContainer() {
-		return this.rootExecutionContainer;
 	}
 }

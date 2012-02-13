@@ -32,14 +32,14 @@ import kieker.tools.traceAnalysis.systemModel.ComponentType;
  * @author Andre van Hoorn
  */
 public class AssemblyRepository extends AbstractSystemSubRepository {
-	private final AssemblyComponent rootAssemblyComponent;
+	public static final AssemblyComponent ROOT_ASSEMBLY_COMPONENT =
+			new AssemblyComponent(AbstractSystemSubRepository.ROOT_ELEMENT_ID, "$", TypeRepository.ROOT_COMPONENT);
 
 	private final Map<String, AssemblyComponent> assemblyComponentInstancesByName = new Hashtable<String, AssemblyComponent>(); // NOPMD (UseConcurrentHashMap)
 	private final Map<Integer, AssemblyComponent> assemblyComponentInstancesById = new Hashtable<Integer, AssemblyComponent>(); // NOPMD (UseConcurrentHashMap)
 
-	public AssemblyRepository(final SystemModelRepository systemFactory, final AssemblyComponent rootAssemblyComponent) {
+	public AssemblyRepository(final SystemModelRepository systemFactory) {
 		super(systemFactory);
-		this.rootAssemblyComponent = rootAssemblyComponent;
 	}
 
 	/**
@@ -72,9 +72,5 @@ public class AssemblyRepository extends AbstractSystemSubRepository {
 
 	public final Collection<AssemblyComponent> getAssemblyComponentInstances() {
 		return this.assemblyComponentInstancesById.values();
-	}
-
-	public AssemblyComponent getRootAssemblyComponent() {
-		return this.rootAssemblyComponent;
 	}
 }

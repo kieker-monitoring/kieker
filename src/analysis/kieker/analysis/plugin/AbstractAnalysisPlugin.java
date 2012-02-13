@@ -20,9 +20,8 @@
 
 package kieker.analysis.plugin;
 
-import java.util.Map;
-
-import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 
 /**
@@ -31,6 +30,7 @@ import kieker.common.configuration.Configuration;
  * 
  * @author Nils Christian Ehmke
  */
+@Plugin
 public abstract class AbstractAnalysisPlugin extends AbstractPlugin implements IAnalysisPlugin {
 
 	/**
@@ -39,8 +39,17 @@ public abstract class AbstractAnalysisPlugin extends AbstractPlugin implements I
 	 * @param configuration
 	 *            The configuration to use for this plugin.
 	 */
-	public AbstractAnalysisPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
-		super(configuration, repositories);
+	public AbstractAnalysisPlugin(final Configuration configuration) {
+		super(configuration);
 	}
 
+	@Override
+	public boolean execute() {
+		return true; // do nothing
+	}
+
+	@Override
+	public void terminate(final boolean error) {
+		// do nothing
+	}
 }

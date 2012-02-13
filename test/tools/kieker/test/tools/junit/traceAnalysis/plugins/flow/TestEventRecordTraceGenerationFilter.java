@@ -21,13 +21,11 @@
 package kieker.test.tools.junit.traceAnalysis.plugins.flow;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.TraceEvent;
 import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
@@ -55,7 +53,7 @@ public class TestEventRecordTraceGenerationFilter extends TestCase {
 	private static EventRecordTraceGenerationFilter createFilter(final long maxTraceDurationMillis) {
 		final Configuration cfg = new Configuration();
 		cfg.setProperty(EventRecordTraceGenerationFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Long.toString(maxTraceDurationMillis));
-		return new EventRecordTraceGenerationFilter(cfg, new HashMap<String, AbstractRepository>());
+		return new EventRecordTraceGenerationFilter(cfg);
 	}
 
 	@Test

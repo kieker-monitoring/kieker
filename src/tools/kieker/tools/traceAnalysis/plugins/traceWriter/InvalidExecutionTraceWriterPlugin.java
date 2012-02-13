@@ -24,20 +24,23 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.Map;
 
 import kieker.analysis.plugin.port.InputPort;
-import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.plugin.port.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractInvalidExecutionTraceProcessingPlugin;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * 
  * @author Andre van Hoorn
  */
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionTraceProcessingPlugin {
 
 	public static final String CONFIG_OUTPUT_FN = InvalidExecutionTraceWriterPlugin.class.getName() + ".outputFn";
@@ -49,9 +52,9 @@ public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionT
 	private final String outputFn;
 	private final BufferedWriter ps;
 
-	public InvalidExecutionTraceWriterPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories)
+	public InvalidExecutionTraceWriterPlugin(final Configuration configuration)
 			throws IOException {
-		super(configuration, repositories);
+		super(configuration);
 		this.outputFn = configuration.getStringProperty(InvalidExecutionTraceWriterPlugin.CONFIG_OUTPUT_FN);
 		this.ps = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.outputFn), InvalidExecutionTraceWriterPlugin.ENCODING));
 	}
@@ -72,11 +75,6 @@ public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionT
 				InvalidExecutionTraceWriterPlugin.LOG.error("IOException", ex);
 			}
 		}
-	}
-
-	@Override
-	public boolean execute() {
-		return true; // no need to do anything here
 	}
 
 	@Override

@@ -20,17 +20,14 @@
 
 package kieker.analysis.reader.filesystem;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
 import kieker.analysis.reader.AbstractReaderPlugin;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.logging.Log;
@@ -65,8 +62,8 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 
 	private volatile boolean running = true;
 
-	public FSReader(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
-		super(configuration, repositories);
+	public FSReader(final Configuration configuration) {
+		super(configuration);
 		this.inputDirs = this.configuration.getStringArrayProperty(FSReader.CONFIG_INPUTDIRS);
 		this.recordQueue = new PriorityQueue<IMonitoringRecord>(this.inputDirs.length);
 		final String[] onlyrecords = this.configuration.getStringArrayProperty(FSReader.CONFIG_ONLYRECORDS);
@@ -167,10 +164,5 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 			configuration.setProperty(FSReader.CONFIG_ONLYRECORDS, Configuration.toProperty(onlyRecords));
 		}
 		return configuration;
-	}
-
-	@Override
-	public Map<String, AbstractRepository> getCurrentRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 }

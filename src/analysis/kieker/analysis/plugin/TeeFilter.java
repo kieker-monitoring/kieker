@@ -24,13 +24,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
 
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.plugin.port.OutputPort;
 import kieker.analysis.plugin.port.Plugin;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -43,10 +40,10 @@ import kieker.common.record.IMonitoringRecord;
  * @author Matthias Rohr, Jan Waller
  */
 @Plugin(outputPorts = {
-		@OutputPort(
-				name = TeeFilter.OUTPUT_PORT_NAME,
-				description = "Output port",
-				eventTypes = {})
+	@OutputPort(
+			name = TeeFilter.OUTPUT_PORT_NAME,
+			description = "Output port",
+			eventTypes = {})
 })
 public final class TeeFilter extends AbstractAnalysisPlugin {
 
@@ -65,9 +62,8 @@ public final class TeeFilter extends AbstractAnalysisPlugin {
 	private final PrintStream printStream;
 	private final String printStreamName;
 
-	public TeeFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories) throws FileNotFoundException,
-			UnsupportedEncodingException {
-		super(configuration, repositories);
+	public TeeFilter(final Configuration configuration) throws FileNotFoundException, UnsupportedEncodingException {
+		super(configuration);
 
 		/* Get the name of the stream. */
 		final String printStreamName = this.configuration.getStringProperty(TeeFilter.CONFIG_STREAM);
@@ -88,13 +84,6 @@ public final class TeeFilter extends AbstractAnalysisPlugin {
 		}
 	}
 
-	@Override
-	protected final Configuration getDefaultConfiguration() {
-		final Configuration defaultConfiguration = new Configuration(null);
-		defaultConfiguration.setProperty(TeeFilter.CONFIG_STREAM, TeeFilter.CONFIG_STREAM_STDOUT);
-		return defaultConfiguration;
-	}
-
 	@InputPort(
 			name = TeeFilter.INPUT_PORT_NAME,
 			description = "Input port",
@@ -112,16 +101,17 @@ public final class TeeFilter extends AbstractAnalysisPlugin {
 	}
 
 	@Override
-	public final boolean execute() {
-		// this.printStream.println("DummyRecordConsumer.execute()");
-		return true;
-	}
-
-	@Override
 	public final void terminate(final boolean error) {
 		if ((this.printStream != null) && (this.printStream != System.out) && (this.printStream != System.err)) {
 			this.printStream.close();
 		}
+	}
+
+	@Override
+	protected final Configuration getDefaultConfiguration() {
+		final Configuration defaultConfiguration = new Configuration(null);
+		defaultConfiguration.setProperty(TeeFilter.CONFIG_STREAM, TeeFilter.CONFIG_STREAM_STDOUT);
+		return defaultConfiguration;
 	}
 
 	@Override
@@ -138,10 +128,5 @@ public final class TeeFilter extends AbstractAnalysisPlugin {
 			configuration.setProperty(TeeFilter.CONFIG_STREAM, this.printStreamName);
 		}
 		return configuration;
-	}
-
-	@Override
-	public Map<String, AbstractRepository> getCurrentRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 }

@@ -26,44 +26,39 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import kieker.analysis.repository.AbstractRepository;
+
 /**
- * This method can be used to mark plugins and to describe the corresponding output ports.
+ * This annotation can be used to describe the repository ports of a plugin. It can only be used <b>within</b> other annotations. It allows to specify the name of
+ * the
+ * repository port and the corresponding repository type. There is also a field for a human-readable description available.
  * 
  * @author Nils Christian Ehmke
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
+@Target(ElementType.ANNOTATION_TYPE)
 @Inherited
-public @interface Plugin {
-
-	public final static String NO_NAME = "";
+public @interface RepositoryPort {
 
 	/**
-	 * The human-readable description of this plugin.
+	 * The human-readable description of this port.
 	 * 
-	 * @return The description for this plugin.
+	 * @return The description for this port.
 	 */
-	String description() default "";
+	String description() default "Repository Port";
 
 	/**
-	 * The name which is used to identify this plugin.
+	 * The name which is used to identify this port. It should be unique within the class.
 	 * 
-	 * @return The name of this plugin.
+	 * @return The name of this port.
 	 */
-	String name() default Plugin.NO_NAME;
+	String name();
 
 	/**
-	 * The output ports which the current plugin has.
+	 * The event types which are used for this port. If this is empty, everything can be sent through the port.
 	 * 
-	 * @return The output ports of this annotation.
+	 * @return The event types for this class.
 	 */
-	OutputPort[] outputPorts() default {};
-
-	/**
-	 * The output ports which the current plugin has.
-	 * 
-	 * @return The output ports of this annotation.
-	 */
-	RepositoryPort[] repositoryPorts() default {};
+	Class<? extends AbstractRepository> repositoryType() default AbstractRepository.class;
 
 }

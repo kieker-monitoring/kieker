@@ -21,8 +21,6 @@
 package kieker.tools.logReplayer;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
@@ -30,7 +28,6 @@ import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.reader.filesystem.FSReader;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -112,11 +109,11 @@ public class FilesystemLogReplayer {
 			final Configuration configuration = new Configuration();
 			configuration.setProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES, Configuration.toProperty(this.inputDirs));
 			configuration.setProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS, Integer.toString(this.numRealtimeWorkerThreads));
-			fsReader = new FSReaderRealtime(configuration, new HashMap<String, AbstractRepository>());
+			fsReader = new FSReaderRealtime(configuration);
 		} else {
 			final Configuration configuration = new Configuration(null);
 			configuration.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(this.inputDirs));
-			fsReader = new FSReader(configuration, new HashMap<String, AbstractRepository>());
+			fsReader = new FSReader(configuration);
 		}
 		final AnalysisController tpanInstance = new AnalysisController();
 		tpanInstance.setReader(fsReader);
@@ -164,7 +161,7 @@ class RecordDelegationPlugin extends AbstractAnalysisPlugin {
 	 * @param ignoreRecordsAfterTimestamp
 	 */
 	public RecordDelegationPlugin(final IMonitoringController rec, final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp) {
-		super(new Configuration(null), new HashMap<String, AbstractRepository>());
+		super(new Configuration());
 
 		this.rec = rec;
 		this.ignoreRecordsBeforeTimestamp = ignoreRecordsBeforeTimestamp;
@@ -200,14 +197,6 @@ class RecordDelegationPlugin extends AbstractAnalysisPlugin {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void terminate(final boolean error) {
-		// nothing to do
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	protected Configuration getDefaultConfiguration() {
 		return new Configuration();
 	}
@@ -219,10 +208,5 @@ class RecordDelegationPlugin extends AbstractAnalysisPlugin {
 	public Configuration getCurrentConfiguration() {
 		/* No configuration possible. */
 		return new Configuration(null);
-	}
-
-	@Override
-	public Map<String, AbstractRepository> getCurrentRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 }

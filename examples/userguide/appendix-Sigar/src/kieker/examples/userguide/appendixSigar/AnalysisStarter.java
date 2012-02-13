@@ -20,15 +20,11 @@
 
 package kieker.examples.userguide.appendixSigar;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.port.InputPort;
 import kieker.analysis.reader.filesystem.FSReader;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.CPUUtilizationRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -46,14 +42,14 @@ public class AnalysisStarter {
 		/* Create Kieker.Analysis instance */
 		final AnalysisController analysisInstance = new AnalysisController();
 		/* Create a register our own consumer */
-		final StdOutDumpConsumer consumer = new StdOutDumpConsumer(new Configuration(), new HashMap<String, AbstractRepository>());
+		final StdOutDumpConsumer consumer = new StdOutDumpConsumer(new Configuration());
 		analysisInstance.registerPlugin(consumer);
 
 		/* Set filesystem monitoring log input directory for our analysis */
 		final Configuration readerConfiguration = new Configuration();
 		final String inputDirs[] = { args[0] };
 		readerConfiguration.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(inputDirs));
-		final FSReader fsReader = new FSReader(readerConfiguration, new HashMap<String, AbstractRepository>());
+		final FSReader fsReader = new FSReader(readerConfiguration);
 		analysisInstance.setReader(fsReader);
 
 		/* Connect both components. */
@@ -68,8 +64,8 @@ class StdOutDumpConsumer extends AbstractAnalysisPlugin {
 
 	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
 
-	public StdOutDumpConsumer(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
-		super(configuration, repositories);
+	public StdOutDumpConsumer(final Configuration configuration) {
+		super(configuration);
 	}
 
 	@InputPort(
@@ -112,17 +108,6 @@ class StdOutDumpConsumer extends AbstractAnalysisPlugin {
 	}
 
 	@Override
-	public boolean execute() {
-		// Nothing to do
-		return true;
-	}
-
-	@Override
-	public void terminate(final boolean error) {
-		// Nothing to do
-	}
-
-	@Override
 	public Configuration getDefaultConfiguration() {
 		return new Configuration();
 	}
@@ -131,10 +116,4 @@ class StdOutDumpConsumer extends AbstractAnalysisPlugin {
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}
-
-	@Override
-	public Map<String, AbstractRepository> getCurrentRepositories() {
-		return new HashMap<String, AbstractRepository>();
-	}
-
 }

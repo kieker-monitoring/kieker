@@ -20,11 +20,7 @@
 
 package kieker.tools.traceAnalysis.plugins;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.plugins.executionFilter.TimestampFilter;
 
@@ -50,8 +46,8 @@ public abstract class AbstractTimestampFilter extends AbstractAnalysisPlugin {
 	 * @param ignoreExecutionsBeforeTimestamp
 	 * @param ignoreExecutionsAfterTimestamp
 	 */
-	public AbstractTimestampFilter(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
-		super(configuration, repositories);
+	public AbstractTimestampFilter(final Configuration configuration) {
+		super(configuration);
 		/* Load the content for the fields from the given configuration. */
 		this.ignoreBeforeTimestamp = configuration.getLongProperty(this.getConfigurationPropertyIgnoreBeforeTimestamp());
 		this.ignoreAfterTimestamp = configuration.getLongProperty(this.getConfigurationPropertyIgnoreAfterTimestamp());
@@ -101,20 +97,5 @@ public abstract class AbstractTimestampFilter extends AbstractAnalysisPlugin {
 		configuration.setProperty(this.getConfigurationPropertyIgnoreAfterTimestamp(), Long.toString(this.ignoreAfterTimestamp));
 
 		return configuration;
-	}
-
-	@Override
-	public boolean execute() {
-		return true; // do nothing
-	}
-
-	@Override
-	public void terminate(final boolean error) {
-		// do nothing
-	}
-
-	@Override
-	public Map<String, AbstractRepository> getCurrentRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 }

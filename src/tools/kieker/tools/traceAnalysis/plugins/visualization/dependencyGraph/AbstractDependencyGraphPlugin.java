@@ -25,18 +25,21 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
-import java.util.Map;
 
-import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.plugin.port.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
+import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTraceProcessingPlugin {
 
 	// private static final Log log = LogFactory.getLog(AbstractDependencyGraphPlugin.class);
@@ -53,9 +56,8 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 	private int numGraphsSaved = 0;
 
 	// TODO Change constructor to plugin-default-constructor
-	public AbstractDependencyGraphPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories,
-			final DependencyGraph<T> dependencyGraph) {
-		super(configuration, repositories);
+	public AbstractDependencyGraphPlugin(final Configuration configuration, final DependencyGraph<T> dependencyGraph) {
+		super(configuration);
 		this.dependencyGraph = dependencyGraph;
 	}
 

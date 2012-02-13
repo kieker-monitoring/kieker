@@ -20,19 +20,20 @@
 
 package kieker.tools.traceAnalysis.plugins;
 
-import java.util.Map;
-
-import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.plugin.port.RepositoryPort;
 import kieker.common.configuration.Configuration;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * 
  * @author Andre van Hoorn
  */
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public abstract class AbstractInvalidExecutionTraceProcessingPlugin extends AbstractTraceProcessingPlugin {
 
-	public AbstractInvalidExecutionTraceProcessingPlugin(final Configuration configuration, final Map<String, AbstractRepository> repositories) {
-		super(configuration, repositories);
+	public AbstractInvalidExecutionTraceProcessingPlugin(final Configuration configuration) {
+		super(configuration);
 	}
 
 	public abstract String getInvalidExecutionTraceInputPortName();

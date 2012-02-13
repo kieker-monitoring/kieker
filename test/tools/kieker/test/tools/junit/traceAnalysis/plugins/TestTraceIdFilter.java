@@ -20,7 +20,6 @@
 
 package kieker.test.tools.junit.traceAnalysis.plugins;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.NavigableSet;
 import java.util.Set;
@@ -29,7 +28,6 @@ import java.util.TreeSet;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
 import kieker.test.tools.junit.traceAnalysis.util.SimpleSinkPlugin;
@@ -75,7 +73,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 			cfg.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, "");
 		}
 
-		return new TraceIdFilter(cfg, new HashMap<String, AbstractRepository>());
+		return new TraceIdFilter(cfg);
 	}
 
 	/**
