@@ -72,7 +72,9 @@ class StdOutDumpConsumer extends AbstractAnalysisPlugin {
 		super(configuration, repositories);
 	}
 
-	@InputPort(eventTypes = { IMonitoringRecord.class })
+	@InputPort(
+			name = StdOutDumpConsumer.INPUT_PORT_NAME,
+			eventTypes = { IMonitoringRecord.class })
 	public void newMonitoringRecord(final Object record) {
 		if (record instanceof CPUUtilizationRecord) {
 			final CPUUtilizationRecord cpuUtilizationRecord =
@@ -132,11 +134,6 @@ class StdOutDumpConsumer extends AbstractAnalysisPlugin {
 
 	@Override
 	public Map<String, AbstractRepository> getCurrentRepositories() {
-		return new HashMap<String, AbstractRepository>();
-	}
-
-	@Override
-	public Map<String, AbstractRepository> getDefaultRepositories() {
 		return new HashMap<String, AbstractRepository>();
 	}
 

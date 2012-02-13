@@ -36,11 +36,27 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface Plugin {
 
+	public final static String NO_NAME = "";
+
+	/**
+	 * The human-readable description of this plugin.
+	 * 
+	 * @return The description for this plugin.
+	 */
+	String description() default "";
+
+	/**
+	 * The name which is used to identify this plugin.
+	 * 
+	 * @return The name of this plugin.
+	 */
+	String name() default Plugin.NO_NAME;
+
 	/**
 	 * The output ports which the current plugin has.
 	 * 
 	 * @return The output ports of this annotation.
 	 */
-	OutputPort[] outputPorts() default { };
+	OutputPort[] outputPorts() default {};
 
 }

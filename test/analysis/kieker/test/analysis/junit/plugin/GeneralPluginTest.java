@@ -126,11 +126,6 @@ class SourceClass extends AbstractReaderPlugin {
 	}
 
 	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return null;
-	}
-
-	@Override
 	public Map<String, AbstractRepository> getCurrentRepositories() {
 		return null;
 	}
@@ -164,18 +159,15 @@ class ExecutionSinkClass extends AbstractAnalysisPlugin {
 		return null;
 	}
 
-	@InputPort(eventTypes = { Execution.class })
+	@InputPort(
+			name = ExecutionSinkClass.INPUT_PORT_NAME,
+			eventTypes = { Execution.class })
 	public void doJob(final Object data) {
 		this.lst.add((Execution) data);
 	}
 
 	public ConcurrentLinkedQueue<Execution> getList() {
 		return this.lst;
-	}
-
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return null;
 	}
 
 	@Override

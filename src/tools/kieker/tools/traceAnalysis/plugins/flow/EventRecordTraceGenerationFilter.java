@@ -21,7 +21,6 @@
 package kieker.tools.traceAnalysis.plugins.flow;
 
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.NavigableSet;
@@ -121,7 +120,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingPlu
 		}
 	}
 
-	@InputPort(description = "Receives new trace events", eventTypes = { TraceEvent.class })
+	@InputPort(name = EventRecordTraceGenerationFilter.INPUT_PORT_NAME, description = "Receives new trace events", eventTypes = { TraceEvent.class })
 	public void inputTraceEvent(final TraceEvent event) {
 		final long traceId = event.getTraceId();
 
@@ -239,11 +238,6 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingPlu
 				Long.toString(AbstractTraceProcessingPlugin.MAX_DURATION_MILLIS));
 
 		return configuration;
-	}
-
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override

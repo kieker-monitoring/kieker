@@ -29,7 +29,6 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -152,7 +151,10 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 	}
 
 	@Override
-	@InputPort(description = "Message traces", eventTypes = { MessageTrace.class })
+	@InputPort(
+			name = AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME,
+			description = "Message traces",
+			eventTypes = { MessageTrace.class })
 	public void msgTraceInput(final Object mt) {
 		try {
 			SequenceDiagramPlugin.writePicForMessageTrace(SequenceDiagramPlugin.this.getSystemEntityFactory(), (MessageTrace) mt,
@@ -342,14 +344,4 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 
 		return configuration;
 	}
-
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
-	}
-
-	// @Override
-	// public Map<String, AbstractRepository> getCurrentRepositories() {
-	// return new HashMap<String, AbstractRepository>();
-	// }
 }

@@ -25,7 +25,6 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Stack;
@@ -227,8 +226,4 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
 		AbstractCallTreePlugin.saveTreeToDotFile(systemEntityFactory, root, outputFilename, includeWeights, true, shortLabels); // includeEois
 	}
 
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
-	}
 }

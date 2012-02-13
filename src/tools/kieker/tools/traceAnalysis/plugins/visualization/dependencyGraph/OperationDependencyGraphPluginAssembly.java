@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -35,6 +34,7 @@ import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
@@ -179,7 +179,7 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 	}
 
 	/**
-	 * Saves the dependency graph to the dot file if error is not true.
+	 * Saves the dependeMESSAGE_TRACE_INPUT_PORT_NAMEncy graph to the dot file if error is not true.
 	 * 
 	 * @param error
 	 */
@@ -209,7 +209,10 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 	}
 
 	@Override
-	@InputPort(description = "Message traces", eventTypes = { MessageTrace.class })
+	@InputPort(
+			name = AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME,
+			description = "Message traces",
+			eventTypes = { MessageTrace.class })
 	public void msgTraceInput(final Object obj) {
 		final MessageTrace t = (MessageTrace) obj;
 		for (final AbstractMessage m : t.getSequenceAsVector()) {
@@ -247,8 +250,4 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 		OperationDependencyGraphPluginAssembly.this.reportSuccess(t.getTraceId());
 	}
 
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
-	}
 }

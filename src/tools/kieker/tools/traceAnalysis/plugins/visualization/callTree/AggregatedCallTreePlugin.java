@@ -22,7 +22,6 @@ package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 import kieker.analysis.plugin.port.InputPort;
@@ -30,6 +29,7 @@ import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceProcessingException;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 
@@ -110,7 +110,10 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 	}
 
 	@Override
-	@InputPort(description = "Message traces", eventTypes = { MessageTrace.class })
+	@InputPort(
+			name = AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME,
+			description = "Message traces",
+			eventTypes = { MessageTrace.class })
 	public void msgTraceInput(final Object obj) {
 		final MessageTrace t = (MessageTrace) obj;
 		try {
@@ -122,8 +125,4 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 		}
 	}
 
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
-	}
 }

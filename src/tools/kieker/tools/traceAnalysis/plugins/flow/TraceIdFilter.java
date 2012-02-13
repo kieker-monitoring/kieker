@@ -52,7 +52,7 @@ public class TraceIdFilter extends AbstractTraceIdFilter {
 		super(configuration, repositories);
 	}
 
-	@InputPort(description = "Trace event input", eventTypes = { TraceEvent.class })
+	@InputPort(name = TraceIdFilter.INPUT_PORT_NAME, description = "Trace event input", eventTypes = { TraceEvent.class })
 	public void inputTraceEvent(final Object data) {
 		final TraceEvent event = (TraceEvent) data;
 		if (super.passId(event.getTraceId())) {

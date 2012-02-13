@@ -43,10 +43,10 @@ import kieker.common.record.IMonitoringRecord;
  * @author Matthias Rohr, Jan Waller
  */
 @Plugin(outputPorts = {
-	@OutputPort(
-			name = TeeFilter.OUTPUT_PORT_NAME,
-			description = "Output port",
-			eventTypes = {})
+		@OutputPort(
+				name = TeeFilter.OUTPUT_PORT_NAME,
+				description = "Output port",
+				eventTypes = {})
 })
 public final class TeeFilter extends AbstractAnalysisPlugin {
 
@@ -91,11 +91,14 @@ public final class TeeFilter extends AbstractAnalysisPlugin {
 	@Override
 	protected final Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration(null);
-		defaultConfiguration.setProperty(TeeFilter.CONFIG_STREAM, "STDOUT");
+		defaultConfiguration.setProperty(TeeFilter.CONFIG_STREAM, TeeFilter.CONFIG_STREAM_STDOUT);
 		return defaultConfiguration;
 	}
 
-	@InputPort(description = "Input port", eventTypes = {})
+	@InputPort(
+			name = TeeFilter.INPUT_PORT_NAME,
+			description = "Input port",
+			eventTypes = {})
 	public final void newMonitoringRecord(final Object monitoringRecord) {
 		final StringBuilder sb = new StringBuilder(128);
 		sb.append('(').append(monitoringRecord.getClass().getSimpleName()).append(") ").append(monitoringRecord.toString());
@@ -135,11 +138,6 @@ public final class TeeFilter extends AbstractAnalysisPlugin {
 			configuration.setProperty(TeeFilter.CONFIG_STREAM, this.printStreamName);
 		}
 		return configuration;
-	}
-
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override

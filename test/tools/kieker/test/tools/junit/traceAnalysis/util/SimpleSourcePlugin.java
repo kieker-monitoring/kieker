@@ -13,7 +13,7 @@ import org.junit.Assert;
 
 @Plugin(
 		outputPorts = {
-			@OutputPort(name = SimpleSourcePlugin.OUTPUT_PORT_NAME, eventTypes = { })
+			@OutputPort(name = SimpleSourcePlugin.OUTPUT_PORT_NAME, eventTypes = {})
 		})
 public class SimpleSourcePlugin extends AbstractAnalysisPlugin {
 
@@ -44,11 +44,6 @@ public class SimpleSourcePlugin extends AbstractAnalysisPlugin {
 
 	@Override
 	public void terminate(final boolean error) {}
-
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
-	}
 
 	@Override
 	public Map<String, AbstractRepository> getCurrentRepositories() {

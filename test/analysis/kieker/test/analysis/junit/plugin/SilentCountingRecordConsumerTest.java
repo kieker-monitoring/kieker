@@ -135,11 +135,6 @@ public class SilentCountingRecordConsumerTest {
 		public void terminate(final boolean error) {}
 
 		@Override
-		protected Map<String, AbstractRepository> getDefaultRepositories() {
-			return null;
-		}
-
-		@Override
 		public Map<String, AbstractRepository> getCurrentRepositories() {
 			return null;
 		}

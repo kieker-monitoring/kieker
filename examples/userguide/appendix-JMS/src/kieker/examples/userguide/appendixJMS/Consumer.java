@@ -42,7 +42,9 @@ public class Consumer extends AbstractAnalysisPlugin {
 		System.out.println(this.maxResponseTime);
 	}
 
-	@InputPort(eventTypes = { IMonitoringRecord.class })
+	@InputPort(
+			name = Consumer.INPUT_PORT_NAME,
+			eventTypes = { IMonitoringRecord.class })
 	public boolean newMonitoringRecord(final Object record) {
 		if (!(record instanceof OperationExecutionRecord)) {
 			return true;
@@ -86,11 +88,6 @@ public class Consumer extends AbstractAnalysisPlugin {
 		configuration.setProperty(Consumer.CONFIG_MAX_RESPONSE_TIME, Long.toString(this.maxResponseTime));
 
 		return configuration;
-	}
-
-	@Override
-	public HashMap<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 
 	@Override

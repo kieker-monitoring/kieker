@@ -116,14 +116,11 @@ class MonitoringSinkClass extends AbstractAnalysisPlugin {
 		return null;
 	}
 
-	@InputPort(eventTypes = { IMonitoringRecord.class })
+	@InputPort(
+			name = MonitoringSinkClass.INPUT_PORT_NAME,
+			eventTypes = { IMonitoringRecord.class })
 	public void doJob(final Object data) {
 		this.receivedRecords.add((IMonitoringRecord) data);
-	}
-
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return null;
 	}
 
 	@Override

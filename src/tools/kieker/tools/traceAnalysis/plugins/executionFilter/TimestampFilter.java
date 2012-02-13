@@ -66,7 +66,10 @@ public class TimestampFilter extends AbstractTimestampFilter {
 		super(configuration, repositories);
 	}
 
-	@InputPort(description = "Execution input", eventTypes = { Execution.class })
+	@InputPort(
+			name = TimestampFilter.INPUT_PORT_NAME,
+			description = "Execution input",
+			eventTypes = { Execution.class })
 	public void newExecution(final Object data) {
 		final Execution execution = (Execution) data;
 		if (this.inRange(execution.getTin()) && this.inRange(execution.getTout())) {

@@ -25,7 +25,6 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Stack;
@@ -255,7 +254,10 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 	}
 
 	@Override
-	@InputPort(description = "Message traces", eventTypes = { MessageTrace.class })
+	@InputPort(
+			name = AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME,
+			description = "Message traces",
+			eventTypes = { MessageTrace.class })
 	public void msgTraceInput(final Object obj) {
 		final MessageTrace mt = (MessageTrace) obj;
 		try {
@@ -278,8 +280,4 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 		}
 	}
 
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
-	}
 }

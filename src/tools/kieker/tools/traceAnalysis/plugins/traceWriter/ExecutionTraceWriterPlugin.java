@@ -24,7 +24,6 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.HashMap;
 import java.util.Map;
 
 import kieker.analysis.plugin.port.InputPort;
@@ -86,7 +85,10 @@ public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessing
 		return ExecutionTraceWriterPlugin.EXECUTION_TRACES_INPUT_PORT_NAME;
 	}
 
-	@InputPort(description = "Execution traces", eventTypes = { ExecutionTrace.class })
+	@InputPort(
+			name = ExecutionTraceWriterPlugin.EXECUTION_TRACES_INPUT_PORT_NAME,
+			description = "Execution traces",
+			eventTypes = { ExecutionTrace.class })
 	public void newEvent(final Object obj) {
 		final ExecutionTrace et = (ExecutionTrace) obj;
 		try {
@@ -114,10 +116,5 @@ public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessing
 		configuration.setProperty(ExecutionTraceWriterPlugin.CONFIG_OUTPUT_FN, this.outputFn);
 
 		return configuration;
-	}
-
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
 	}
 }

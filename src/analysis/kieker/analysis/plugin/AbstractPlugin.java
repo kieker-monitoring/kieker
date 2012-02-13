@@ -103,14 +103,6 @@ public abstract class AbstractPlugin {
 	protected abstract Configuration getDefaultConfiguration();
 
 	/**
-	 * This method should deliver an array of {@code AbstractRepository} containing the default repositories for this class. In other words: Every class inheriting
-	 * from {@code AbstractPlugin} should implement this method to deliver an object which can be used for the constructor of this class.
-	 * 
-	 * @return The default repositories (which can be an empty array if necessary).
-	 */
-	protected abstract Map<String, AbstractRepository> getDefaultRepositories();
-
-	/**
 	 * This method should deliver a {@code Configuration} object containing the current configuration of this instance. In other words: The constructor should be
 	 * able to use the given object to initialize a new instance of this class with the same intern properties.
 	 * 

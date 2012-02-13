@@ -187,11 +187,6 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 	}
 
 	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
-	}
-
-	@Override
 	public Map<String, AbstractRepository> getCurrentRepositories() {
 		return new HashMap<String, AbstractRepository>();
 	}
@@ -221,7 +216,9 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		 * @param data
 		 */
 		@SuppressWarnings("unused")
-		@InputPort(eventTypes = { IMonitoringRecord.class })
+		@InputPort(
+				name = FSReaderRealtimeCons.INPUT_PORT,
+				eventTypes = { IMonitoringRecord.class })
 		public void newMonitoringRecord(final Object data) {
 			final IMonitoringRecord record = (IMonitoringRecord) data;
 			if (!this.master.deliver(FSReaderRealtime.OUTPUT_PORT_NAME, record)) {
@@ -248,11 +245,6 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		@Override
 		public Configuration getCurrentConfiguration() {
 			return new Configuration();
-		}
-
-		@Override
-		protected Map<String, AbstractRepository> getDefaultRepositories() {
-			return new HashMap<String, AbstractRepository>();
 		}
 
 		@Override

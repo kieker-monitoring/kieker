@@ -21,7 +21,6 @@
 package kieker.tools.traceAnalysis.plugins.flow;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -46,7 +45,6 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
- * TODO: work in progress
  * 
  * @author Andre van Hoorn
  * 
@@ -77,7 +75,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 		}
 	}
 
-	@InputPort(description = "Receives event record traces to be transformed", eventTypes = { EventRecordTrace.class })
+	@InputPort(name = EventTrace2ExecutionTraceFilter.INPUT_PORT_NAME, description = "Receives event record traces to be transformed", eventTypes = { EventRecordTrace.class })
 	public void inputEventTrace(final EventRecordTrace eventTrace) {
 		final Stack<TraceEvent> eventStack = new Stack<TraceEvent>();
 
@@ -277,8 +275,4 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 		// do nothing
 	}
 
-	@Override
-	protected Map<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
-	}
 }

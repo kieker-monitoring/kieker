@@ -65,7 +65,7 @@ public class TimestampFilter extends AbstractTimestampFilter {
 		super(configuration, repositories);
 	}
 
-	@InputPort(description = "Trace event input", eventTypes = { TraceEvent.class })
+	@InputPort(name = TimestampFilter.INPUT_PORT_NAME, description = "Trace event input", eventTypes = { TraceEvent.class })
 	public void inputTraceEvent(final Object data) {
 		final TraceEvent event = (TraceEvent) data;
 		if (this.inRange(event.getTimestamp())) {

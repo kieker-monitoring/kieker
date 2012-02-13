@@ -155,18 +155,15 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 			return null;
 		}
 
-		@InputPort(eventTypes = { TimestampEvent.class })
+		@InputPort(
+				name = DstClass.INPUT_PORT_NAME,
+				eventTypes = { TimestampEvent.class })
 		public void doJob(final Object data) {
 			this.receivedTimestamps.add(((TimestampEvent) data).getTimestamp());
 		}
 
 		public ConcurrentLinkedQueue<Long> getList() {
 			return this.receivedTimestamps;
-		}
-
-		@Override
-		protected Map<String, AbstractRepository> getDefaultRepositories() {
-			return new HashMap<String, AbstractRepository>();
 		}
 
 		@Override

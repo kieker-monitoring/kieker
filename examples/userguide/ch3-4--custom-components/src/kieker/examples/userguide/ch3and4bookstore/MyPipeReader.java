@@ -118,11 +118,6 @@ public class MyPipeReader extends AbstractReaderPlugin {
 	}
 
 	@Override
-	public HashMap<String, AbstractRepository> getDefaultRepositories() {
-		return new HashMap<String, AbstractRepository>();
-	}
-
-	@Override
 	public HashMap<String, AbstractRepository> getCurrentRepositories() {
 		return new HashMap<String, AbstractRepository>();
 	}
