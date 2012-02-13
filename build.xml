@@ -527,7 +527,7 @@
 	</target>
 
 	<target name="-build-userguide" description="Creates the Kieker user guide PDF from the LaTeX sources">
-		<exec executable="make">
+		<exec executable="make" failonerror="true">
 			<arg value="-C" />
 			<arg value="${src.userguide.dir}" />
 		</exec>
