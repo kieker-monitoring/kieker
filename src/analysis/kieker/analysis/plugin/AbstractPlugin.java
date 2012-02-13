@@ -69,7 +69,7 @@ public abstract class AbstractPlugin {
 				configuration.setDefaultConfiguration(defaultConfig);
 			}
 		} catch (final IllegalAccessException ex) {
-			AbstractPlugin.LOG.error("Unable to set plugin default properties");
+			AbstractPlugin.LOG.error("Unable to set plugin default properties", ex);
 		}
 		this.configuration = configuration;
 
@@ -188,7 +188,7 @@ public abstract class AbstractPlugin {
 					} catch (final Exception e) {
 						AbstractPlugin.LOG.warn(String.format("%s: OutputPort %s couldn't send data to %s's InputPort %s%n", this.getClass().getName(),
 								outputPort.name(), pluginInputPortReference.getPlugin().getClass().getName(), pluginInputPortReference.getInputPortMethod()
-										.getName()));
+										.getName()), e);
 					}
 					break; // for
 				}
