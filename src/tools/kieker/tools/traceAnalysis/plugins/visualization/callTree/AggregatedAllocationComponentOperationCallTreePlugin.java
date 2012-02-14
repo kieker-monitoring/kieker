@@ -58,7 +58,7 @@ public class AggregatedAllocationComponentOperationCallTreePlugin extends Aggreg
 	}
 
 	@Override
-	protected AllocationComponentOperationPair createPair(final SynchronousCallMessage callMsg) {
+	protected AllocationComponentOperationPair concreteCreatePair(final SynchronousCallMessage callMsg) {
 		final AllocationComponent allocationComponent = callMsg.getReceivingExecution().getAllocationComponent();
 		final Operation op = callMsg.getReceivingExecution().getOperation();
 		final AllocationComponentOperationPair destination = AggregatedAllocationComponentOperationCallTreePlugin.this.getSystemEntityFactory()

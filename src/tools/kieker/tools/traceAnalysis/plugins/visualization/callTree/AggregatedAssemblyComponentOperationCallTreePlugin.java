@@ -52,7 +52,7 @@ public class AggregatedAssemblyComponentOperationCallTreePlugin extends Aggregat
 	}
 
 	@Override
-	protected AssemblyComponentOperationPair createPair(final SynchronousCallMessage callMsg) {
+	protected AssemblyComponentOperationPair concreteCreatePair(final SynchronousCallMessage callMsg) {
 		final AssemblyComponent assemblyComponent = callMsg.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
 		final Operation op = callMsg.getReceivingExecution().getOperation();
 		final AssemblyComponentOperationPair destination = this.getSystemEntityFactory().getAssemblyPairFactory().getPairInstanceByPair(assemblyComponent, op);

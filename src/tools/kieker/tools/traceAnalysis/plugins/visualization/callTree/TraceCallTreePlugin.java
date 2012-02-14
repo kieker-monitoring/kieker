@@ -38,6 +38,7 @@ import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceProcessingException;
+import kieker.tools.traceAnalysis.plugins.visualization.callTree.AbstractCallTreePlugin.PairFactory;
 import kieker.tools.traceAnalysis.plugins.visualization.util.IntContainer;
 import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
@@ -52,6 +53,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOper
 import kieker.tools.traceAnalysis.systemModel.repository.AllocationRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.OperationRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationPair;
 
 /**
  * Plugin providing the creation of calling trees both for individual traces
@@ -242,9 +244,18 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 	public void msgTraceInput(final MessageTrace mt) {
 		try {
 			final TraceCallTreeNode rootNode =
-					new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, AllocationComponentOperationPairFactory.ROOT_PAIR,
-							true); // rootNode
-			AbstractCallTreePlugin.writeDotForMessageTrace(rootNode, mt, TraceCallTreePlugin.this.outputFnBase
+					new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, AllocationComponentOperationPairFactory.ROOT_PAIR, true); // rootNode
+			AbstractCallTreePlugin.writeDotForMessageTrace(rootNode, new PairFactory() {
+
+				@Override
+				public Object createPair(final SynchronousCallMessage callMsg) {
+					final AllocationComponent allocationComponent = callMsg.getReceivingExecution().getAllocationComponent();
+					final Operation op = callMsg.getReceivingExecution().getOperation();
+					final AllocationComponentOperationPair destination = TraceCallTreePlugin.this.getSystemEntityFactory()
+							.getAllocationPairFactory().getPairInstanceByPair(allocationComponent, op); // will never be null!
+					return destination;
+				}
+			}, mt, TraceCallTreePlugin.this.outputFnBase
 					+ "-" + mt.getTraceId(), false, TraceCallTreePlugin.this.shortLabels); // no weights
 			TraceCallTreePlugin.this.reportSuccess(mt.getTraceId());
 		} catch (final TraceProcessingException ex) {

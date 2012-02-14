@@ -43,7 +43,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
-public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
+public abstract class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 	private static final Log LOG = LogFactory.getLog(AggregatedCallTreePlugin.class);
 
 	private final AbstractAggregatedCallTreeNode<T> root;
@@ -114,12 +114,11 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 			eventTypes = { MessageTrace.class })
 	public void msgTraceInput(final MessageTrace t) {
 		try {
-			AbstractCallTreePlugin.addTraceToTree(AggregatedCallTreePlugin.this.root, t, new PairFactory() {
+			AbstractCallTreePlugin.addTraceToTree(this.root, t, new PairFactory() {
 
 				@Override
 				public Object createPair(final SynchronousCallMessage callMsg) {
-					// TODO Auto-generated method stub
-					return null;
+					return AggregatedCallTreePlugin.this.concreteCreatePair(callMsg);
 				}
 			}, true); // aggregated
 			AggregatedCallTreePlugin.this.reportSuccess(t.getTraceId());
@@ -128,5 +127,13 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 			AggregatedCallTreePlugin.this.reportError(t.getTraceId());
 		}
 	}
+
+	/**
+	 * HACK
+	 * 
+	 * @param callMsg
+	 * @return
+	 */
+	protected abstract Object concreteCreatePair(SynchronousCallMessage callMsg);
 
 }
