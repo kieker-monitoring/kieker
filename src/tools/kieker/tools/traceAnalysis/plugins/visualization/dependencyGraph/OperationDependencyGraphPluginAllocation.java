@@ -20,7 +20,6 @@
 
 package kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -73,7 +72,7 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
 	private static final String CONTAINER_NODE_ID_PREFIX = "container_";
 
-	private final File dotOutputFile;
+	private final String dotOutputFile;
 	private final boolean includeWeights;
 	private final boolean shortLabels;
 	private final boolean includeSelfLoops;
@@ -84,7 +83,7 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 				new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 						OperationRepository.ROOT_OPERATION,
 						AllocationRepository.ROOT_ALLOCATION_COMPONENT)));
-		this.dotOutputFile = new File(this.configuration.getStringProperty(OperationDependencyGraphPluginAllocation.CONFIG_DOT_OUTPUT_FILE));
+		this.dotOutputFile = this.configuration.getStringProperty(OperationDependencyGraphPluginAllocation.CONFIG_DOT_OUTPUT_FILE);
 		this.includeWeights = this.configuration.getBooleanProperty(OperationDependencyGraphPluginAllocation.CONFIG_INCLUDE_WEIGHTS);
 		this.shortLabels = this.configuration.getBooleanProperty(OperationDependencyGraphPluginAllocation.CONFIG_SHORT_LABELS);
 		this.includeSelfLoops = this.configuration.getBooleanProperty(OperationDependencyGraphPluginAllocation.CONFIG_INCLUDE_SELF_LOOPS);
@@ -213,7 +212,7 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 	public void terminate(final boolean error) {
 		if (!error) {
 			try {
-				this.saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
+				this.saveToDotFile(this.dotOutputFile, this.includeWeights, this.shortLabels, this.includeSelfLoops);
 			} catch (final IOException ex) {
 				OperationDependencyGraphPluginAllocation.LOG.error("IOException", ex);
 			}
@@ -235,20 +234,15 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-
-		configuration.setProperty(OperationDependencyGraphPluginAllocation.CONFIG_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
+		configuration.setProperty(OperationDependencyGraphPluginAllocation.CONFIG_DOT_OUTPUT_FILE, this.dotOutputFile);
 		configuration.setProperty(OperationDependencyGraphPluginAllocation.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
 		configuration.setProperty(OperationDependencyGraphPluginAllocation.CONFIG_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));
 		configuration.setProperty(OperationDependencyGraphPluginAllocation.CONFIG_SHORT_LABELS, Boolean.toString(this.shortLabels));
-
 		return configuration;
 	}
 
 	@Override
-	@InputPort(
-			name = AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME,
-			description = "Message traces",
-			eventTypes = { MessageTrace.class })
+	@InputPort(name = AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME, description = "Message traces", eventTypes = { MessageTrace.class })
 	public void msgTraceInput(final MessageTrace t) {
 		for (final AbstractMessage m : t.getSequenceAsVector()) {
 			if (m instanceof SynchronousReplyMessage) {

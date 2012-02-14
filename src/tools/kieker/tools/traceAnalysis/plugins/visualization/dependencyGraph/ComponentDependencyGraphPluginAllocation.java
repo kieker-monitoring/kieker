@@ -20,7 +20,6 @@
 
 package kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -53,29 +52,33 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * This class has exactly one input port named "in". The data which is send to
  * this plugin is not delegated in any way.
  * 
- * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
+ * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr, Jan Waller
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class ComponentDependencyGraphPluginAllocation extends AbstractDependencyGraphPlugin<AllocationComponent> {
-
 	private static final Log LOG = LogFactory.getLog(ComponentDependencyGraphPluginAllocation.class);
+
+	public static final String CONFIG_OUTPUT_FN_BASE = ComponentDependencyGraphPluginAllocation.class.getName() + ".filename";
+	public static final String CONFIG_INCLUDE_WEIGHTS = ComponentDependencyGraphPluginAllocation.class.getName() + ".includeWeights";
+	public static final String CONFIG_SHORTLABELS = ComponentDependencyGraphPluginAllocation.class.getName() + ".shortlabels";
+	public static final String CONFIG_SELFLOOPS = ComponentDependencyGraphPluginAllocation.class.getName() + ".selfloops";
+
+	public static final String CONFIG_OUTPUT_FN_BASE_DEFAULT = "AllocationComponentDependencyGraph";
+
 	private static final String CONTAINER_NODE_ID_PREFIX = "container";
-	private final File dotOutputFile;
+	private final String dotOutputFile;
 	private final boolean includeWeights;
 	private final boolean shortLabels;
 	private final boolean includeSelfLoops;
 
-	// TODO Change constructor to plugin-default-constructor
-	public ComponentDependencyGraphPluginAllocation(final Configuration configuration, final File dotOutputFile,
-			final boolean includeWeights, final boolean shortLabels, final boolean includeSelfLoops) {
-		// TODO Check type conversion
-		super(configuration, new DependencyGraph<AllocationComponent>(
-				AllocationRepository.ROOT_ALLOCATION_COMPONENT.getId(),
-				AllocationRepository.ROOT_ALLOCATION_COMPONENT));
-		this.dotOutputFile = dotOutputFile;
-		this.includeWeights = includeWeights;
-		this.shortLabels = shortLabels;
-		this.includeSelfLoops = includeSelfLoops;
+	public ComponentDependencyGraphPluginAllocation(final Configuration configuration) {
+		// TODO Check type conversion??
+		super(configuration,
+				new DependencyGraph<AllocationComponent>(AllocationRepository.ROOT_ALLOCATION_COMPONENT.getId(), AllocationRepository.ROOT_ALLOCATION_COMPONENT));
+		this.dotOutputFile = configuration.getStringProperty(ComponentDependencyGraphPluginAllocation.CONFIG_OUTPUT_FN_BASE);
+		this.includeWeights = configuration.getBooleanProperty(ComponentDependencyGraphPluginAllocation.CONFIG_INCLUDE_WEIGHTS);
+		this.shortLabels = configuration.getBooleanProperty(ComponentDependencyGraphPluginAllocation.CONFIG_SHORTLABELS);
+		this.includeSelfLoops = configuration.getBooleanProperty(ComponentDependencyGraphPluginAllocation.CONFIG_SELFLOOPS);
 	}
 
 	private String componentNodeLabel(final DependencyGraphNode<AllocationComponent> node, final boolean shortLabelsL) {
@@ -90,9 +93,9 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 
 		final StringBuilder strBuild = new StringBuilder(AbstractDependencyGraphPlugin.STEREOTYPE_ALLOCATION_COMPONENT);
 		strBuild.append("\\n");
-		strBuild.append(assemblyComponentName).append(":");
+		strBuild.append(assemblyComponentName).append(':');
 		if (!shortLabelsL) {
-			strBuild.append(componentTypePackagePrefx).append(".");
+			strBuild.append(componentTypePackagePrefx).append('.');
 		} else {
 			strBuild.append("..");
 		}
@@ -168,7 +171,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 	public void terminate(final boolean error) {
 		if (!error) {
 			try {
-				this.saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
+				this.saveToDotFile(this.dotOutputFile, this.includeWeights, this.shortLabels, this.includeSelfLoops);
 			} catch (final IOException ex) {
 				ComponentDependencyGraphPluginAllocation.LOG.error("IOException", ex);
 			}
@@ -176,24 +179,28 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 	}
 
 	@Override
-	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
+	protected final Configuration getDefaultConfiguration() {
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(ComponentDependencyGraphPluginAllocation.CONFIG_OUTPUT_FN_BASE,
+				ComponentDependencyGraphPluginAllocation.CONFIG_OUTPUT_FN_BASE_DEFAULT);
+		configuration.setProperty(ComponentDependencyGraphPluginAllocation.CONFIG_INCLUDE_WEIGHTS, Boolean.TRUE.toString());
+		configuration.setProperty(ComponentDependencyGraphPluginAllocation.CONFIG_SHORTLABELS, Boolean.TRUE.toString());
+		configuration.setProperty(ComponentDependencyGraphPluginAllocation.CONFIG_SELFLOOPS, Boolean.FALSE.toString());
+		return configuration;
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-
-		// TODO: Save the current configuration
-
+		configuration.setProperty(ComponentDependencyGraphPluginAllocation.CONFIG_OUTPUT_FN_BASE, this.dotOutputFile);
+		configuration.setProperty(ComponentDependencyGraphPluginAllocation.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
+		configuration.setProperty(ComponentDependencyGraphPluginAllocation.CONFIG_SHORTLABELS, Boolean.toString(this.shortLabels));
+		configuration.setProperty(ComponentDependencyGraphPluginAllocation.CONFIG_SELFLOOPS, Boolean.toString(this.includeSelfLoops));
 		return configuration;
 	}
 
 	@Override
-	@InputPort(
-			name = AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME,
-			description = "Message traces",
-			eventTypes = { MessageTrace.class })
+	@InputPort(name = AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME, description = "Message traces", eventTypes = { MessageTrace.class })
 	public void msgTraceInput(final MessageTrace t) {
 		for (final AbstractMessage m : t.getSequenceAsVector()) {
 			if (m instanceof SynchronousReplyMessage) {
@@ -217,5 +224,4 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 		}
 		ComponentDependencyGraphPluginAllocation.this.reportSuccess(t.getTraceId());
 	}
-
 }

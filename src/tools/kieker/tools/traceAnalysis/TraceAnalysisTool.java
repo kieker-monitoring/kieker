@@ -490,10 +490,11 @@ public final class TraceAnalysisTool {
 				numRequestedTasks++;
 				final Configuration componentPlotAllocationSeqDiagrConfig = new Configuration();
 				componentPlotAllocationSeqDiagrConfig.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.PLOTALLOCATIONSEQDIAGR_COMPONENT_NAME);
-				componentPlotAllocationSeqDiagr = new SequenceDiagramPlugin(componentPlotAllocationSeqDiagrConfig, SequenceDiagramPlugin.SDModes.ALLOCATION,
-						new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.ALLOCATION_SEQUENCE_DIAGRAM_FN_PREFIX)
-								.getCanonicalPath(),
-						TraceAnalysisTool.shortLabels);
+				componentPlotAllocationSeqDiagrConfig.setProperty(SequenceDiagramPlugin.CONFIG_OUTPUT_FN_BASE,
+						TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.ALLOCATION_SEQUENCE_DIAGRAM_FN_PREFIX);
+				componentPlotAllocationSeqDiagrConfig.setProperty(SequenceDiagramPlugin.CONFIG_OUTPUT_SDMODE, SequenceDiagramPlugin.SDModes.ALLOCATION.toString());
+				componentPlotAllocationSeqDiagrConfig.setProperty(SequenceDiagramPlugin.CONFIG_OUTPUT_SHORTLABES, Boolean.toString(TraceAnalysisTool.shortLabels));
+				componentPlotAllocationSeqDiagr = new SequenceDiagramPlugin(componentPlotAllocationSeqDiagrConfig);
 				AbstractPlugin.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPlotAllocationSeqDiagr, AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME);
 				AbstractPlugin.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
@@ -507,9 +508,11 @@ public final class TraceAnalysisTool {
 				numRequestedTasks++;
 				final Configuration componentPlotAssemblySeqDiagrConfig = new Configuration();
 				componentPlotAssemblySeqDiagrConfig.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.PLOTASSEMBLYSEQDIAGR_COMPONENT_NAME);
-				componentPlotAssemblySeqDiagr = new SequenceDiagramPlugin(componentPlotAssemblySeqDiagrConfig,
-						SequenceDiagramPlugin.SDModes.ASSEMBLY, new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix
-								+ Constants.ASSEMBLY_SEQUENCE_DIAGRAM_FN_PREFIX).getCanonicalPath(), TraceAnalysisTool.shortLabels);
+				componentPlotAssemblySeqDiagrConfig.setProperty(SequenceDiagramPlugin.CONFIG_OUTPUT_FN_BASE,
+						TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.ASSEMBLY_SEQUENCE_DIAGRAM_FN_PREFIX);
+				componentPlotAssemblySeqDiagrConfig.setProperty(SequenceDiagramPlugin.CONFIG_OUTPUT_SDMODE, SequenceDiagramPlugin.SDModes.ASSEMBLY.toString());
+				componentPlotAssemblySeqDiagrConfig.setProperty(SequenceDiagramPlugin.CONFIG_OUTPUT_SHORTLABES, Boolean.toString(TraceAnalysisTool.shortLabels));
+				componentPlotAssemblySeqDiagr = new SequenceDiagramPlugin(componentPlotAssemblySeqDiagrConfig);
 				AbstractPlugin.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPlotAssemblySeqDiagr, AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME);
 				AbstractPlugin.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
@@ -524,10 +527,15 @@ public final class TraceAnalysisTool {
 				final Configuration componentPlotAllocationComponentDepGraphConfig = new Configuration();
 				componentPlotAllocationComponentDepGraphConfig.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME,
 						Constants.PLOTALLOCATIONCOMPONENTDEPGRAPH_COMPONENT_NAME);
-				componentPlotAllocationComponentDepGraph = new ComponentDependencyGraphPluginAllocation(componentPlotAllocationComponentDepGraphConfig,
-						new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix
-								+ Constants.ALLOCATION_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX), true, // includeWeights,
-						TraceAnalysisTool.shortLabels, TraceAnalysisTool.includeSelfLoops);
+				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphPluginAllocation.CONFIG_OUTPUT_FN_BASE,
+						TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.ALLOCATION_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX);
+				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphPluginAllocation.CONFIG_INCLUDE_WEIGHTS, Boolean.TRUE.toString());
+				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphPluginAllocation.CONFIG_SHORTLABELS,
+						Boolean.toString(TraceAnalysisTool.shortLabels));
+				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphPluginAllocation.CONFIG_SELFLOOPS,
+						Boolean.toString(TraceAnalysisTool.includeSelfLoops));
+				componentPlotAllocationComponentDepGraph = new ComponentDependencyGraphPluginAllocation(
+						componentPlotAllocationComponentDepGraphConfig);
 				AbstractPlugin.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPlotAllocationComponentDepGraph, AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME);
 				AbstractPlugin.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,

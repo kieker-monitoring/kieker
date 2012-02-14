@@ -57,12 +57,16 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * This class has exactly one input port named "in". The data which is send to
  * this plugin is not delegated in any way.
  * 
- * @author Andre van Hoorn, Nils Sommer
+ * @author Andre van Hoorn, Nils Sommer, Jan Waller
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin {
-
 	private static final Log LOG = LogFactory.getLog(SequenceDiagramPlugin.class);
+
+	public static final String CONFIG_OUTPUT_FN_BASE = SequenceDiagramPlugin.class.getName() + ".filename";
+	public static final String CONFIG_OUTPUT_SHORTLABES = SequenceDiagramPlugin.class.getName() + ".shortlabels";
+	public static final String CONFIG_OUTPUT_SDMODE = SequenceDiagramPlugin.class.getName() + ".SDMode";
+	public static final String CONFIG_OUTPUT_FN_BASE_DEFAULT = "SequenceDiagram";
 
 	/**
 	 * Path to the sequence.pic macros used to plot UML sequence diagrams. The
@@ -70,7 +74,6 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 	 */
 	private static final String SEQUENCE_PIC_PATH = "META-INF/sequence.pic";
 	private static final String SEQUENCE_PIC_CONTENT;
-
 	private static final String ENCODING = "UTF-8";
 
 	private final String outputFnBase;
@@ -114,20 +117,16 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 	}
 
 	public static enum SDModes {
-
 		ASSEMBLY, ALLOCATION
 	}
 
 	private final SDModes sdmode;
 
-	// TODO Change constructor to plugin-default-constructor
-	public SequenceDiagramPlugin(final Configuration configuration, final SDModes sdmode,
-			final String outputFnBase,
-			final boolean shortLabels) {
+	public SequenceDiagramPlugin(final Configuration configuration) {
 		super(configuration);
-		this.sdmode = sdmode;
-		this.outputFnBase = outputFnBase;
-		this.shortLabels = shortLabels;
+		this.sdmode = SDModes.valueOf(configuration.getStringProperty(SequenceDiagramPlugin.CONFIG_OUTPUT_SDMODE));
+		this.outputFnBase = configuration.getStringProperty(SequenceDiagramPlugin.CONFIG_OUTPUT_FN_BASE);
+		this.shortLabels = configuration.getBooleanProperty(SequenceDiagramPlugin.CONFIG_OUTPUT_SHORTLABES);
 	}
 
 	@Override
@@ -144,10 +143,7 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 	}
 
 	@Override
-	@InputPort(
-			name = AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME,
-			description = "Message traces",
-			eventTypes = { MessageTrace.class })
+	@InputPort(name = AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME, description = "Message traces", eventTypes = { MessageTrace.class })
 	public void msgTraceInput(final MessageTrace mt) {
 		try {
 			SequenceDiagramPlugin.writePicForMessageTrace(SequenceDiagramPlugin.this.getSystemEntityFactory(), mt,
@@ -325,16 +321,20 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 	}
 
 	@Override
-	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
+	protected final Configuration getDefaultConfiguration() {
+		final Configuration defaultConfiguration = new Configuration();
+		defaultConfiguration.setProperty(SequenceDiagramPlugin.CONFIG_OUTPUT_FN_BASE, SequenceDiagramPlugin.CONFIG_OUTPUT_FN_BASE_DEFAULT);
+		defaultConfiguration.setProperty(SequenceDiagramPlugin.CONFIG_OUTPUT_SHORTLABES, Boolean.TRUE.toString());
+		defaultConfiguration.setProperty(SequenceDiagramPlugin.CONFIG_OUTPUT_SDMODE, SDModes.ASSEMBLY.toString());
+		return defaultConfiguration;
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-
-		// TODO: Save the current configuration
-
+		configuration.setProperty(SequenceDiagramPlugin.CONFIG_OUTPUT_FN_BASE, this.outputFnBase);
+		configuration.setProperty(SequenceDiagramPlugin.CONFIG_OUTPUT_SHORTLABES, Boolean.toString(this.shortLabels));
+		configuration.setProperty(SequenceDiagramPlugin.CONFIG_OUTPUT_SDMODE, this.sdmode.toString());
 		return configuration;
 	}
 }
