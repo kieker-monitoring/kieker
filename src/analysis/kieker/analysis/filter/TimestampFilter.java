@@ -6,8 +6,8 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.OperationExecutionRecord;
 import kieker.common.record.flow.TraceEvent;
+import kieker.common.record.legacy.OperationExecutionRecord;
 
 /**
  * Allows to filter {@link IMonitoringRecord} objects based on their given timestamps.

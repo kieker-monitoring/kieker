@@ -20,7 +20,7 @@
 
 package kieker.monitoring.probe.spring.executions;
 
-import kieker.common.record.OperationExecutionRecord;
+import kieker.common.record.legacy.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;

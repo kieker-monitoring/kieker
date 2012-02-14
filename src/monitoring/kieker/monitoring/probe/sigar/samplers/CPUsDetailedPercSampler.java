@@ -20,7 +20,7 @@
 
 package kieker.monitoring.probe.sigar.samplers;
 
-import kieker.common.record.CPUUtilizationRecord;
+import kieker.common.record.system.CPUUtilizationRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.timer.ITimeSource;
 

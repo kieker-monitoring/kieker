@@ -32,13 +32,13 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
  * Replays a filesystem monitoring log and simply passes each record to a
- * specified {@link IMonitoringRecordReceiver}. The {@link FilesystemLogReplayer} can replay monitoring logs in real-time.
+ * specified {@link kieker.common.record.IMonitoringRecordReceiver.IMonitoringRecordReceiver}. The {@link FilesystemLogReplayer} can replay monitoring logs in
+ * real-time.
  * 
  * @author Andre van Hoorn
  */
@@ -97,7 +97,7 @@ public class FilesystemLogReplayer {
 
 	/**
 	 * Replays the monitoring log terminates after the last record was passed to
-	 * the configured {@link IMonitoringRecordReceiver}.
+	 * the configured {@link kieker.common.record.IMonitoringRecordReceiver.IMonitoringRecordReceiver}.
 	 * 
 	 * @return true on success; false otherwise
 	 */
@@ -133,7 +133,7 @@ public class FilesystemLogReplayer {
 }
 
 /**
- * Kieker analysis plugin that delegates each record to the configured {@link IMonitoringRecordReceiver}.<br>
+ * Kieker analysis plugin that delegates each record to the configured {@link kieker.common.record.IMonitoringRecordReceiver.IMonitoringRecordReceiver}.<br>
  * 
  * <b>Don't</b> change the visibility modificator to public. The class does not have the necessary <i>Configuration</i>-Constructor in order to be used by the
  * analysis meta model. <br>

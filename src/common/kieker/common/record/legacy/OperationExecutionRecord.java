@@ -18,7 +18,10 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record;
+package kieker.common.record.legacy;
+
+import kieker.common.record.AbstractMonitoringRecord;
+import kieker.common.record.IMonitoringRecord;
 
 /**
  * String variables must not be null.

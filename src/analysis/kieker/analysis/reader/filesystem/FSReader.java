@@ -33,9 +33,9 @@ import kieker.common.exception.MonitoringRecordException;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IMonitoringRecordReceiver;
+import kieker.common.record.internal.DummyMonitoringRecord;
 
 /**
  * Filesystem reader which reads from multiple directories simultaneously ordered by the logging timestamp.

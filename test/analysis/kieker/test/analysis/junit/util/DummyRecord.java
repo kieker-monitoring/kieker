@@ -20,7 +20,7 @@
 
 package kieker.test.analysis.junit.util;
 
-import kieker.common.record.DummyMonitoringRecord;
+import kieker.common.record.internal.DummyMonitoringRecord;
 
 /**
  * @author Andre van Hoorn, Jan Waller

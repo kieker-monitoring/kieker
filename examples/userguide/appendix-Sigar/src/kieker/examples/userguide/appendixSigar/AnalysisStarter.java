@@ -26,9 +26,9 @@ import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
-import kieker.common.record.CPUUtilizationRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.MemSwapUsageRecord;
+import kieker.common.record.system.CPUUtilizationRecord;
+import kieker.common.record.system.MemSwapUsageRecord;
 import kieker.tools.util.LoggingTimestampConverter;
 
 public class AnalysisStarter {

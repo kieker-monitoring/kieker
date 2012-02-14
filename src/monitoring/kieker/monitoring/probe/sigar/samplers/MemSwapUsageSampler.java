@@ -20,7 +20,7 @@
 
 package kieker.monitoring.probe.sigar.samplers;
 
-import kieker.common.record.MemSwapUsageRecord;
+import kieker.common.record.system.MemSwapUsageRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 
 import org.hyperic.sigar.Mem;

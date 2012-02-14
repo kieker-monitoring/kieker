@@ -29,6 +29,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.exception.MonitoringRecordException;
+import kieker.common.record.legacy.BranchingRecord;
+import kieker.common.record.legacy.OperationExecutionRecord;
+import kieker.common.record.system.CPUUtilizationRecord;
+import kieker.common.record.system.MemSwapUsageRecord;
+import kieker.common.record.system.ResourceUtilizationRecord;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -38,6 +43,11 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> OLD_KIEKERRECORDS = new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>();
 	static {
 		AbstractMonitoringRecord.OLD_KIEKERRECORDS.put("kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord", OperationExecutionRecord.class);
+		AbstractMonitoringRecord.OLD_KIEKERRECORDS.put("kieker.common.record.CPUUtilizationRecord", CPUUtilizationRecord.class);
+		AbstractMonitoringRecord.OLD_KIEKERRECORDS.put("kieker.common.record.MemSwapUsageRecord", MemSwapUsageRecord.class);
+		AbstractMonitoringRecord.OLD_KIEKERRECORDS.put("kieker.common.record.ResourceUtilizationRecord", ResourceUtilizationRecord.class);
+		AbstractMonitoringRecord.OLD_KIEKERRECORDS.put("kieker.common.record.OperationExecutionRecord", OperationExecutionRecord.class);
+		AbstractMonitoringRecord.OLD_KIEKERRECORDS.put("kieker.common.record.BranchingRecord", BranchingRecord.class);
 	}
 
 	private volatile long loggingTimestamp = -1;

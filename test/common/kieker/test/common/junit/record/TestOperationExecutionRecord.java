@@ -22,7 +22,7 @@ package kieker.test.common.junit.record;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.common.record.OperationExecutionRecord;
+import kieker.common.record.legacy.OperationExecutionRecord;
 
 import org.junit.Test;
 

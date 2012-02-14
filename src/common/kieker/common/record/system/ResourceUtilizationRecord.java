@@ -21,7 +21,10 @@
 /**
  * 
  */
-package kieker.common.record;
+package kieker.common.record.system;
+
+import kieker.common.record.AbstractMonitoringRecord;
+import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author Andre van Hoorn

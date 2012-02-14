@@ -25,8 +25,8 @@ import java.util.concurrent.CountDownLatch;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.common.record.DummyMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.internal.DummyMonitoringRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 
 /**

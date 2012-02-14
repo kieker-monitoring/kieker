@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
-import kieker.common.record.HashRecord;
+import kieker.common.record.internal.HashRecord;
 
 /**
  * @author Andre van Hoorn, Jan Waller

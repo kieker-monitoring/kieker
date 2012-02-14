@@ -32,10 +32,9 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.IMonitoringRecordReceiver;
 
 /**
- * Listens to a JMS queue and simply passes each record to a specified {@link IMonitoringRecordReceiver}.
+ * Listens to a JMS queue and simply passes each record to a specified {@link kieker.common.record.IMonitoringRecordReceiver.IMonitoringRecordReceiver}.
  * 
  * @author Andre van Hoorn
  */
@@ -80,7 +79,7 @@ public class JMSLogReplayer {
 
 	/**
 	 * Replays the monitoring log terminates after the last record was passed to
-	 * the configured {@link IMonitoringRecordReceiver}.
+	 * the configured {@link kieker.common.record.IMonitoringRecordReceiver.IMonitoringRecordReceiver}.
 	 * 
 	 * @return true on success; false otherwise
 	 */
@@ -109,7 +108,7 @@ public class JMSLogReplayer {
 }
 
 /**
- * Kieker analysis plugin that delegates each record to the configured {@link IMonitoringRecordReceiver}.<br>
+ * Kieker analysis plugin that delegates each record to the configured {@link kieker.common.record.IMonitoringRecordReceiver.IMonitoringRecordReceiver}.<br>
  * 
  * <b>Don't</b> change the visibility modificator to public. The class does not have the necessary <i>Configuration</i>-Constructor in order to be used by the
  * analysis meta model. <br>
