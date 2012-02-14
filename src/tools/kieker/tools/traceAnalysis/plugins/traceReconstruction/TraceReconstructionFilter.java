@@ -296,14 +296,16 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	@Override
 	public void printStatusMessage() {
 		super.printStatusMessage();
-		final String minTinStr = new StringBuilder().append(this.minTin).append(" (")
-				.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTin)).append(",")
-				.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.minTin)).append(")").toString();
-		final String maxToutStr = new StringBuilder().append(this.maxTout).append(" (")
-				.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTout)).append(",")
-				.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.maxTout)).append(")").toString();
-		System.out.println("First timestamp: " + minTinStr);
-		System.out.println("Last timestamp: " + maxToutStr);
+		if ((this.getSuccessCount() > 0) || (this.getErrorCount() > 0)) {
+			final String minTinStr = new StringBuilder().append(this.minTin).append(" (")
+					.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTin)).append(",")
+					.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.minTin)).append(")").toString();
+			final String maxToutStr = new StringBuilder().append(this.maxTout).append(" (")
+					.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTout)).append(",")
+					.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.maxTout)).append(")").toString();
+			System.out.println("First timestamp: " + minTinStr);
+			System.out.println("Last timestamp: " + maxToutStr);
+		}
 	}
 
 	@Override

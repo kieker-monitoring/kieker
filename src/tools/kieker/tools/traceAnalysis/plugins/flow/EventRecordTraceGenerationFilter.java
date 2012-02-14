@@ -216,14 +216,16 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingPlu
 	@Override
 	public void printStatusMessage() {
 		super.printStatusMessage();
-		final String minTinStr = new StringBuilder().append(this.minTstamp).append(" (")
-				.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTstamp)).append(",")
-				.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.minTstamp)).append(")").toString();
-		final String maxToutStr = new StringBuilder().append(this.maxTstamp).append(" (")
-				.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTstamp)).append(",")
-				.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.maxTstamp)).append(")").toString();
-		System.out.println("First timestamp: " + minTinStr);
-		System.out.println("Last timestamp: " + maxToutStr);
+		if ((this.getSuccessCount() > 0) || (this.getErrorCount() > 0)) {
+			final String minTinStr = new StringBuilder().append(this.minTstamp).append(" (")
+					.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTstamp)).append(",")
+					.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.minTstamp)).append(")").toString();
+			final String maxToutStr = new StringBuilder().append(this.maxTstamp).append(" (")
+					.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTstamp)).append(",")
+					.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.maxTstamp)).append(")").toString();
+			System.out.println("First timestamp: " + minTinStr);
+			System.out.println("Last timestamp: " + maxToutStr);
+		}
 	}
 
 	@Override

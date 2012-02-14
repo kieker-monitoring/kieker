@@ -255,4 +255,5 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 	public Configuration getCurrentConfiguration() {
 		return new Configuration(null);
 	}
+
 }
