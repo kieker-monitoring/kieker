@@ -155,8 +155,7 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 			name = AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME,
 			description = "Message traces",
 			eventTypes = { MessageTrace.class })
-	public void msgTraceInput(final Object obj) {
-		final MessageTrace t = (MessageTrace) obj;
+	public void msgTraceInput(final MessageTrace t) {
 		for (final AbstractMessage m : t.getSequenceAsVector()) {
 			if (m instanceof SynchronousReplyMessage) {
 				continue;

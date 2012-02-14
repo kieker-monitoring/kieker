@@ -99,8 +99,7 @@ public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlug
 			description = "Message traces",
 			eventTypes = { MessageTrace.class })
 	@Override
-	public void msgTraceInput(final Object obj) {
-		final MessageTrace mt = (MessageTrace) obj;
+	public void msgTraceInput(final MessageTrace mt) {
 		try {
 			MessageTraceWriterPlugin.this.ps.append(mt.toString());
 			MessageTraceWriterPlugin.this.reportSuccess(mt.getTraceId());

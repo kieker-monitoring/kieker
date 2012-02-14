@@ -148,9 +148,9 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 			name = AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME,
 			description = "Message traces",
 			eventTypes = { MessageTrace.class })
-	public void msgTraceInput(final Object mt) {
+	public void msgTraceInput(final MessageTrace mt) {
 		try {
-			SequenceDiagramPlugin.writePicForMessageTrace(SequenceDiagramPlugin.this.getSystemEntityFactory(), (MessageTrace) mt,
+			SequenceDiagramPlugin.writePicForMessageTrace(SequenceDiagramPlugin.this.getSystemEntityFactory(), mt,
 					SequenceDiagramPlugin.this.sdmode,
 					SequenceDiagramPlugin.this.outputFnBase + "-" + ((AbstractTrace) mt).getTraceId() + ".pic", SequenceDiagramPlugin.this.shortLabels);
 			SequenceDiagramPlugin.this.reportSuccess(((AbstractTrace) mt).getTraceId());

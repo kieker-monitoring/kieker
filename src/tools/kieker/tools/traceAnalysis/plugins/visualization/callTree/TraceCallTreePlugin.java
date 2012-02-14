@@ -47,6 +47,7 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.Signature;
 import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOperationPairFactory;
 import kieker.tools.traceAnalysis.systemModel.repository.AllocationRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.OperationRepository;
@@ -54,9 +55,9 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * Plugin providing the creation of calling trees both for individual traces
- * and an aggregated form mulitple traces.<br>
+ * and an aggregated form for multiple traces.<br>
  * 
- * This class has exactly one input port named "in". The data which is send to
+ * This class has exactly one input port named "in". The data which is sent to
  * this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn
@@ -118,7 +119,7 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 	}
 
 	/** Traverse tree recursively and generate dot code for edges. */
-	private static void dotEdgesFromSubTree(final SystemModelRepository systemEntityFactory, final CallTreeNode n, final Map<CallTreeNode, Integer> nodeIds,
+	private static void dotEdgesFromSubTree(final CallTreeNode n, final Map<CallTreeNode, Integer> nodeIds,
 			final IntContainer nextNodeId, final PrintStream ps, final boolean shortLabels) {
 		final StringBuilder strBuild = new StringBuilder();
 		nodeIds.put(n, nextNodeId.getValue());
@@ -126,7 +127,7 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 				.append("\",shape=" + DotFactory.DOT_SHAPE_NONE + ",style=" + DotFactory.DOT_STYLE_FILLED + ",fillcolor=" + DotFactory.DOT_FILLCOLOR_WHITE + "];");
 		ps.println(strBuild.toString());
 		for (final CallTreeNode child : n.getChildren()) {
-			TraceCallTreePlugin.dotEdgesFromSubTree(systemEntityFactory, child, nodeIds, nextNodeId, ps, shortLabels);
+			TraceCallTreePlugin.dotEdgesFromSubTree(child, nodeIds, nextNodeId, ps, shortLabels);
 		}
 	}
 
@@ -147,7 +148,7 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 		}
 	}
 
-	private static void dotFromCallingTree(final SystemModelRepository systemEntityFactory, final CallTreeNode root, final PrintStream ps,
+	private static void dotFromCallingTree(final CallTreeNode root, final PrintStream ps,
 			final boolean includeWeights, final boolean shortLabels) {
 		// preamble:
 		ps.println("digraph G {");
@@ -155,24 +156,24 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 
 		final Map<CallTreeNode, Integer> nodeIds = new Hashtable<CallTreeNode, Integer>(); // NOPMD (UseConcurrentHashMap)
 
-		TraceCallTreePlugin.dotEdgesFromSubTree(systemEntityFactory, root, nodeIds, new IntContainer(0), ps, shortLabels);
+		TraceCallTreePlugin.dotEdgesFromSubTree(root, nodeIds, new IntContainer(0), ps, shortLabels);
 		TraceCallTreePlugin.dotVerticesFromSubTree(root, nodeIds, ps, includeWeights);
 
 		ps.println(edgestringBuilder.toString());
 		ps.println("}");
 	}
 
-	private static void saveTreeToDotFile(final SystemModelRepository systemEntityFactory, final CallTreeNode root, final String outputFnBase,
+	private static void saveTreeToDotFile(final CallTreeNode root, final String outputFnBase,
 			final boolean includeWeights, final boolean shortLabels) throws FileNotFoundException, UnsupportedEncodingException {
 		final PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"), false, TraceCallTreePlugin.ENCODING);
-		TraceCallTreePlugin.dotFromCallingTree(systemEntityFactory, root, ps, includeWeights, shortLabels);
+		TraceCallTreePlugin.dotFromCallingTree(root, ps, includeWeights, shortLabels);
 		ps.flush();
 		ps.close();
 	}
 
 	public void saveTreeToDotFile(final String outputFnBaseL, final boolean includeWeightsL, final boolean shortLabelsL) throws FileNotFoundException,
 			UnsupportedEncodingException {
-		TraceCallTreePlugin.saveTreeToDotFile(this.getSystemEntityFactory(), this.root, outputFnBaseL, includeWeightsL, shortLabelsL);
+		TraceCallTreePlugin.saveTreeToDotFile(this.root, outputFnBaseL, includeWeightsL, shortLabelsL);
 		this.printMessage(new String[] { "Wrote call tree to file '" + outputFnBaseL + ".dot" + "'", "Dot file can be converted using the dot tool",
 			"Example: dot -T svg " + outputFnBaseL + ".dot" + " > " + outputFnBaseL + ".svg", });
 	}
@@ -207,14 +208,6 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 		}
 	}
 
-	public void writeDotForMessageTrace(final MessageTrace msgTrace, final String outputFilename,
-			final boolean includeWeights, final boolean shortLabels) throws FileNotFoundException, TraceProcessingException, UnsupportedEncodingException {
-		final CallTreeNode root = new CallTreeNode(null, new CallTreeOperationHashKey(AllocationRepository.ROOT_ALLOCATION_COMPONENT,
-				OperationRepository.ROOT_OPERATION));
-		TraceCallTreePlugin.addTraceToTree(root, msgTrace, false); // false: no aggregation
-		TraceCallTreePlugin.saveTreeToDotFile(this.getSystemEntityFactory(), root, outputFilename, includeWeights, shortLabels);
-	}
-
 	@Override
 	public void printStatusMessage() {
 		super.printStatusMessage();
@@ -246,26 +239,23 @@ public class TraceCallTreePlugin extends AbstractMessageTraceProcessingPlugin {
 			name = AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME,
 			description = "Message traces",
 			eventTypes = { MessageTrace.class })
-	public void msgTraceInput(final Object obj) {
-		/*
-		 * final MessageTrace mt = (MessageTrace) obj;
-		 * try {
-		 * final TraceCallTreeNode rootNode = new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, AllocationComponentOperationPairFactory.ROOT_PAIR,
-		 * true); // rootNode
-		 * this.writeDotForMessageTrace(rootNode, mt, TraceCallTreePlugin.this.outputFnBase
-		 * + "-" + mt.getTraceId(), false, TraceCallTreePlugin.this.shortLabels); // no weights
-		 * TraceCallTreePlugin.this.reportSuccess(mt.getTraceId());
-		 * } catch (final TraceProcessingException ex) {
-		 * TraceCallTreePlugin.this.reportError(mt.getTraceId());
-		 * TraceCallTreePlugin.LOG.error("TraceProcessingException", ex);
-		 * } catch (final FileNotFoundException ex) {
-		 * TraceCallTreePlugin.this.reportError(mt.getTraceId());
-		 * TraceCallTreePlugin.LOG.error("File not found", ex);
-		 * } catch (final UnsupportedEncodingException ex) {
-		 * TraceCallTreePlugin.this.reportError(mt.getTraceId());
-		 * TraceCallTreePlugin.LOG.error("Encoding not supported", ex);
-		 * }
-		 */
-		throw new UnsupportedOperationException();
+	public void msgTraceInput(final MessageTrace mt) {
+		try {
+			final TraceCallTreeNode rootNode =
+					new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, AllocationComponentOperationPairFactory.ROOT_PAIR,
+							true); // rootNode
+			AbstractCallTreePlugin.writeDotForMessageTrace(rootNode, mt, TraceCallTreePlugin.this.outputFnBase
+					+ "-" + mt.getTraceId(), false, TraceCallTreePlugin.this.shortLabels); // no weights
+			TraceCallTreePlugin.this.reportSuccess(mt.getTraceId());
+		} catch (final TraceProcessingException ex) {
+			TraceCallTreePlugin.this.reportError(mt.getTraceId());
+			TraceCallTreePlugin.LOG.error("TraceProcessingException", ex);
+		} catch (final FileNotFoundException ex) {
+			TraceCallTreePlugin.this.reportError(mt.getTraceId());
+			TraceCallTreePlugin.LOG.error("File not found", ex);
+		} catch (final UnsupportedEncodingException ex) {
+			TraceCallTreePlugin.this.reportError(mt.getTraceId());
+			TraceCallTreePlugin.LOG.error("Encoding not supported", ex);
+		}
 	}
 }

@@ -44,6 +44,6 @@ public abstract class AbstractMessageTraceProcessingPlugin extends AbstractTrace
 			name = AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME,
 			description = "Message traces",
 			eventTypes = { MessageTrace.class })
-	public abstract void msgTraceInput(final Object obj);
+	public abstract void msgTraceInput(final MessageTrace mt);
 
 }

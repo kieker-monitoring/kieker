@@ -33,6 +33,7 @@ import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceProcessingException;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
@@ -63,7 +64,7 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 
 	public void saveTreeToDotFile() throws IOException {
 		final String outputFnBase = this.dotOutputFile.getCanonicalPath();
-		this.saveTreeToDotFile(this.root, outputFnBase, this.includeWeights, false, // do not include EOIs
+		AbstractCallTreePlugin.saveTreeToDotFile(this.root, outputFnBase, this.includeWeights, false, // do not include EOIs
 				this.shortLabels);
 		this.numGraphsSaved++;
 		this.printMessage(new String[] { "Wrote call tree to file '" + outputFnBase + ".dot" + "'", "Dot file can be converted using the dot tool",
@@ -111,10 +112,16 @@ public class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 			name = AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME,
 			description = "Message traces",
 			eventTypes = { MessageTrace.class })
-	public void msgTraceInput(final Object obj) {
-		final MessageTrace t = (MessageTrace) obj;
+	public void msgTraceInput(final MessageTrace t) {
 		try {
-			this.addTraceToTree(AggregatedCallTreePlugin.this.root, t, true); // aggregated
+			AbstractCallTreePlugin.addTraceToTree(AggregatedCallTreePlugin.this.root, t, new PairFactory() {
+
+				@Override
+				public Object createPair(final SynchronousCallMessage callMsg) {
+					// TODO Auto-generated method stub
+					return null;
+				}
+			}, true); // aggregated
 			AggregatedCallTreePlugin.this.reportSuccess(t.getTraceId());
 		} catch (final TraceProcessingException ex) {
 			AggregatedCallTreePlugin.LOG.error("TraceProcessingException", ex);

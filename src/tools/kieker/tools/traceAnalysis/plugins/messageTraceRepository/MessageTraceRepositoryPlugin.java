@@ -72,8 +72,8 @@ public class MessageTraceRepositoryPlugin extends AbstractMessageTraceProcessing
 			description = "Message traces",
 			eventTypes = { MessageTrace.class })
 	@Override
-	public void msgTraceInput(final Object mt) {
-		MessageTraceRepositoryPlugin.this.repo.put(((AbstractTrace) mt).getTraceId(), (MessageTrace) mt);
+	public void msgTraceInput(final MessageTrace mt) {
+		MessageTraceRepositoryPlugin.this.repo.put(((AbstractTrace) mt).getTraceId(), mt);
 	}
 
 }
