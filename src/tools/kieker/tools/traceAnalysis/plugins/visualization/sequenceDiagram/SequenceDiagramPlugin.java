@@ -32,9 +32,9 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
 
-import kieker.analysis.plugin.port.InputPort;
-import kieker.analysis.plugin.port.Plugin;
-import kieker.analysis.plugin.port.RepositoryPort;
+import kieker.analysis.plugin.annotation.InputPort;
+import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;

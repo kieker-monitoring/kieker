@@ -30,7 +30,7 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.reader.namedRecordPipe.PipeReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;

@@ -21,6 +21,7 @@
 package kieker.analysis.reader;
 
 import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
 
 /**
@@ -28,6 +29,7 @@ import kieker.common.configuration.Configuration;
  * 
  * @author Nils Christian Ehmke
  */
+@Plugin
 public abstract class AbstractReaderPlugin extends AbstractPlugin implements IMonitoringReader {
 
 	/**

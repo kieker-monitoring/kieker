@@ -23,7 +23,7 @@ package kieker.examples.userguide.appendixSigar;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.CPUUtilizationRecord;

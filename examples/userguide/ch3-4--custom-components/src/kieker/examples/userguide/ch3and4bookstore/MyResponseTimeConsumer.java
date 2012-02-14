@@ -23,7 +23,7 @@ package kieker.examples.userguide.ch3and4bookstore;
 import java.util.HashMap;
 
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 

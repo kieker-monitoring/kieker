@@ -25,9 +25,9 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 
-import kieker.analysis.plugin.port.InputPort;
-import kieker.analysis.plugin.port.OutputPort;
-import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.plugin.annotation.InputPort;
+import kieker.analysis.plugin.annotation.OutputPort;
+import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;

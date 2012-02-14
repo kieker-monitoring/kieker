@@ -29,10 +29,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import kieker.analysis.plugin.port.InputPort;
-import kieker.analysis.plugin.port.OutputPort;
-import kieker.analysis.plugin.port.Plugin;
-import kieker.analysis.plugin.port.RepositoryPort;
+import kieker.analysis.plugin.annotation.InputPort;
+import kieker.analysis.plugin.annotation.OutputPort;
+import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.analysis.reader.IMonitoringReader;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
@@ -186,9 +186,9 @@ public abstract class AbstractPlugin {
 					try {
 						pluginInputPortReference.getInputPortMethod().invoke(pluginInputPortReference.getPlugin(), data);
 					} catch (final Exception e) {
-						AbstractPlugin.LOG.warn(String.format("%s: OutputPort %s couldn't send data to %s's InputPort %s%n", this.getClass().getName(),
-								outputPort.name(), pluginInputPortReference.getPlugin().getClass().getName(), pluginInputPortReference.getInputPortMethod()
-										.getName()), e);
+						AbstractPlugin.LOG.warn(this.getClass().getName() + ": OutputPort " + outputPort.name() + " couldn't send data to "
+								+ pluginInputPortReference.getPlugin().getClass().getName() + "'s InputPort " +
+								pluginInputPortReference.getInputPortMethod().getName(), e);
 					}
 					break; // for
 				}

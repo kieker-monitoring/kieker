@@ -22,8 +22,8 @@ package kieker.analysis.reader.namedRecordPipe;
 
 import java.util.concurrent.CountDownLatch;
 
-import kieker.analysis.plugin.port.OutputPort;
-import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.plugin.annotation.OutputPort;
+import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -37,9 +37,7 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @author Andre van Hoorn
  */
-@Plugin(outputPorts = {
-	@OutputPort(name = PipeReader.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the PipeReader")
-})
+@Plugin(outputPorts = @OutputPort(name = PipeReader.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the PipeReader"))
 public final class PipeReader extends AbstractReaderPlugin implements IPipeReader {
 
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";

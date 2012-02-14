@@ -27,7 +27,7 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.annotation.InputPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.currentTimeEventGenerator.CurrentTimeEventGenerator;
 import kieker.tools.currentTimeEventGenerator.TimestampEvent;

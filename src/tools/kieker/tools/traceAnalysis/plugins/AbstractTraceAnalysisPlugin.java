@@ -23,8 +23,8 @@ package kieker.tools.traceAnalysis.plugins;
 import java.util.StringTokenizer;
 
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.port.Plugin;
-import kieker.analysis.plugin.port.RepositoryPort;
+import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;

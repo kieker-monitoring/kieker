@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.port.InputPort;
+import kieker.analysis.plugin.annotation.InputPort;
 import kieker.common.configuration.Configuration;
 
 /**

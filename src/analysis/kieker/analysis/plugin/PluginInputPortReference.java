@@ -48,5 +48,4 @@ public class PluginInputPortReference {
 	public Class<?>[] getEventTypes() {
 		return this.eventTypes;
 	}
-
 }

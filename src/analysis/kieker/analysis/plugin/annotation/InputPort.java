@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.plugin.port;
+package kieker.analysis.plugin.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -27,43 +27,37 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This method can be used to mark plugins and to describe the corresponding output ports.
+ * This annotation can be used to mark methods as input ports. The corresponding methods should only get an instance of the class <code>Object</code> and nothing
+ * else.<br>
+ * Furthermore the port allows to specify the event types for this port and the name. There is also a
+ * field for a human-readable description available.
  * 
  * @author Nils Christian Ehmke
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
+@Target(ElementType.METHOD)
 @Inherited
-public @interface Plugin {
-
-	public final static String NO_NAME = "";
+public @interface InputPort {
 
 	/**
-	 * The human-readable description of this plugin.
+	 * The human-readable description of this port.
 	 * 
-	 * @return The description for this plugin.
+	 * @return The description for this port.
 	 */
-	String description() default "";
+	String description() default "Input Port";
 
 	/**
-	 * The name which is used to identify this plugin.
+	 * The name which is used to identify this port. It should be unique within the class.
 	 * 
-	 * @return The name of this plugin.
+	 * @return The name of this port.
 	 */
-	String name() default Plugin.NO_NAME;
+	String name();
 
 	/**
-	 * The output ports which the current plugin has.
+	 * The event types which are used for this port. If this is empty, everything can be received through the port.
 	 * 
-	 * @return The output ports of this annotation.
+	 * @return The event types for this class.
 	 */
-	OutputPort[] outputPorts() default {};
-
-	/**
-	 * The output ports which the current plugin has.
-	 * 
-	 * @return The output ports of this annotation.
-	 */
-	RepositoryPort[] repositoryPorts() default {};
+	Class<?>[] eventTypes() default {};
 
 }

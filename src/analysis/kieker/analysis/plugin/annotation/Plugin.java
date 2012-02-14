@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.plugin.port;
+package kieker.analysis.plugin.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -27,37 +27,43 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This annotation can be used to mark methods as input ports. The corresponding methods should only get an instance of the class <code>Object</code> and nothing
- * else.<br>
- * Furthermore the port allows to specify the event types for this port and the name. There is also a
- * field for a human-readable description available.
+ * This method can be used to mark plugins and to describe the corresponding output ports.
  * 
  * @author Nils Christian Ehmke
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
+@Target(ElementType.TYPE)
 @Inherited
-public @interface InputPort {
+public @interface Plugin {
+
+	public final static String NO_NAME = "";
 
 	/**
-	 * The human-readable description of this port.
+	 * The human-readable description of this plugin.
 	 * 
-	 * @return The description for this port.
+	 * @return The description for this plugin.
 	 */
-	String description() default "Input Port";
+	String description() default "";
 
 	/**
-	 * The name which is used to identify this port. It should be unique within the class.
+	 * The name which is used to identify this plugin.
 	 * 
-	 * @return The name of this port.
+	 * @return The name of this plugin.
 	 */
-	String name();
+	String name() default Plugin.NO_NAME;
 
 	/**
-	 * The event types which are used for this port. If this is empty, everything can be received through the port.
+	 * The output ports which the current plugin has.
 	 * 
-	 * @return The event types for this class.
+	 * @return The output ports of this annotation.
 	 */
-	Class<?>[] eventTypes() default {};
+	OutputPort[] outputPorts() default {};
+
+	/**
+	 * The output ports which the current plugin has.
+	 * 
+	 * @return The output ports of this annotation.
+	 */
+	RepositoryPort[] repositoryPorts() default {};
 
 }

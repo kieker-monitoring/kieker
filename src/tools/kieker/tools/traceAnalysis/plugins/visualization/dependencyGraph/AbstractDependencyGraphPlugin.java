@@ -26,8 +26,8 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 
-import kieker.analysis.plugin.port.Plugin;
-import kieker.analysis.plugin.port.RepositoryPort;
+import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;

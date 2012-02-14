@@ -20,8 +20,8 @@
 
 package kieker.examples.userguide.ch3and4bookstore;
 
-import kieker.analysis.plugin.port.OutputPort;
-import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.plugin.annotation.OutputPort;
+import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;

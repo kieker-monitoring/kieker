@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.plugin.port;
+package kieker.analysis.plugin.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -26,26 +26,23 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import kieker.analysis.repository.AbstractRepository;
-
 /**
- * This annotation can be used to describe the repository ports of a plugin. It can only be used <b>within</b> other annotations. It allows to specify the name of
- * the
- * repository port and the corresponding repository type. There is also a field for a human-readable description available.
+ * This annotation can be used to describe the output ports of a plugin. It can only be used <b>within</b> other annotations. It allows to specify the name of the
+ * output port and the corresponding event types. There is also a field for a human-readable description available.
  * 
  * @author Nils Christian Ehmke
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.ANNOTATION_TYPE)
 @Inherited
-public @interface RepositoryPort {
+public @interface OutputPort {
 
 	/**
 	 * The human-readable description of this port.
 	 * 
 	 * @return The description for this port.
 	 */
-	String description() default "Repository Port";
+	String description() default "Output Port";
 
 	/**
 	 * The name which is used to identify this port. It should be unique within the class.
@@ -59,6 +56,6 @@ public @interface RepositoryPort {
 	 * 
 	 * @return The event types for this class.
 	 */
-	Class<? extends AbstractRepository> repositoryType() default AbstractRepository.class;
+	Class<?>[] eventTypes() default {};
 
 }

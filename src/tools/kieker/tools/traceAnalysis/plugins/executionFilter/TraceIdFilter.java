@@ -20,9 +20,9 @@
 
 package kieker.tools.traceAnalysis.plugins.executionFilter;
 
-import kieker.analysis.plugin.port.InputPort;
-import kieker.analysis.plugin.port.OutputPort;
-import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.plugin.annotation.InputPort;
+import kieker.analysis.plugin.annotation.OutputPort;
+import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceIdFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;

@@ -22,9 +22,9 @@ package kieker.analysis.plugin;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import kieker.analysis.plugin.port.InputPort;
-import kieker.analysis.plugin.port.OutputPort;
-import kieker.analysis.plugin.port.Plugin;
+import kieker.analysis.plugin.annotation.InputPort;
+import kieker.analysis.plugin.annotation.OutputPort;
+import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
 
 /**

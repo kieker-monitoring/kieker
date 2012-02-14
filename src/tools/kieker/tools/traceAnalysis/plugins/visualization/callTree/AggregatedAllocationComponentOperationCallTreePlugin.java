@@ -22,8 +22,8 @@ package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 
 import java.io.File;
 
-import kieker.analysis.plugin.port.Plugin;
-import kieker.analysis.plugin.port.RepositoryPort;
+import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
