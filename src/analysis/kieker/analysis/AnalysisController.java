@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -190,7 +189,7 @@ public final class AnalysisController {
 				repositoryMap.put(mRepository, repository);
 				this.registerRepository(repository);
 			} catch (final Exception ex) {
-				AnalysisController.LOG.error("Could not load repository: " + mRepository.getClassname());
+				AnalysisController.LOG.error("Could not load repository: " + mRepository.getClassname(), ex);
 				continue;
 			}
 		}
@@ -222,7 +221,7 @@ public final class AnalysisController {
 					this.registerPlugin((AbstractAnalysisPlugin) plugin);
 				}
 			} catch (final Exception ex) {
-				AnalysisController.LOG.error("Could not load plugin: " + mPlugin.getClassname());
+				AnalysisController.LOG.error("Could not load plugin: " + mPlugin.getClassname(), ex);
 				continue;
 			}
 		}
@@ -283,8 +282,8 @@ public final class AnalysisController {
 		try {
 			resource.load(Collections.EMPTY_MAP);
 			return resource.getContents();
-		} catch (final IOException e) {
-			AnalysisController.LOG.error("Could not open the given file.");
+		} catch (final IOException ex) {
+			AnalysisController.LOG.error("Could not open the given file.", ex);
 			return null;
 		}
 	}
@@ -382,15 +381,16 @@ public final class AnalysisController {
 
 				/* Extract the configuration. */
 				Configuration configuration = plugin.getCurrentConfiguration();
-				if (null == configuration) {
+				if (null == configuration) { // should not happen, but better safe than sorry
 					configuration = new Configuration();
 				}
+				final EList<MIProperty> properties = mPlugin.getProperties();
 				final Set<Entry<Object, Object>> configSet = configuration.entrySet();
 				for (final Entry<Object, Object> configEntry : configSet) {
 					final MIProperty property = factory.createProperty();
 					property.setName(configEntry.getKey().toString());
 					property.setValue(configEntry.getValue().toString());
-					mPlugin.getProperties().add(property);
+					properties.add(property);
 				}
 
 				/* Extract the repositories. */
@@ -433,25 +433,19 @@ public final class AnalysisController {
 			/* Now connect the plugins. */
 			for (final AbstractPlugin plugin : plugins) {
 				final MIPlugin mOutputPlugin = pluginMap.get(plugin);
-				final String[] outputPortNames = plugin.getAllOutputPortNames();
-
 				/* Check all output ports of the original plugin. */
-				for (final String outputPortName : outputPortNames) {
+				for (final String outputPortName : plugin.getAllOutputPortNames()) {
 					/* Get the corresponding port of the model counterpart and get also the plugins which are currently connected with the original plugin. */
-					final MIOutputPort mOutputPort = AnalysisController.findOutputPort(mOutputPlugin, outputPortName);
-					final List<PluginInputPortReference> subscribers = plugin.getConnectedPlugins(outputPortName);
-
+					final EList<MIInputPort> subscribers = AnalysisController.findOutputPort(mOutputPlugin, outputPortName).getSubscribers();
 					/* Run through all connected plugins. */
-					for (final PluginInputPortReference subscriber : subscribers) {
+					for (final PluginInputPortReference subscriber : plugin.getConnectedPlugins(outputPortName)) {
 						final AbstractPlugin subscriberPlugin = subscriber.getPlugin();
 						final MIPlugin mSubscriberPlugin = pluginMap.get(subscriberPlugin);
 						// TODO: It seems like mSubscriberPlugin can sometimes be null. Why?
 						/* Now connect them. */
 						if (mSubscriberPlugin != null) {
-							final MIInputPort mInputPort = AnalysisController.findInputPort((MIAnalysisPlugin) mSubscriberPlugin, subscriber.getInputPortMethod()
-									.getName());
-
-							mOutputPort.getSubscribers().add(mInputPort);
+							final MIInputPort mInputPort = AnalysisController.findInputPort((MIAnalysisPlugin) mSubscriberPlugin, subscriber.getInputPortName());
+							subscribers.add(mInputPort);
 						}
 					}
 				}
@@ -460,7 +454,7 @@ public final class AnalysisController {
 			/* We are finished. Return the finished project. */
 			return project;
 		} catch (final Exception ex) {
-			AnalysisController.LOG.error("Unable to save configuration.");
+			AnalysisController.LOG.error("Unable to save configuration.", ex);
 			return null;
 		}
 
@@ -476,9 +470,7 @@ public final class AnalysisController {
 	 * @return The searched port or null, if it is not available.
 	 */
 	private static MIInputPort findInputPort(final MIAnalysisPlugin mPlugin, final String name) {
-		final Iterator<MIInputPort> iter = mPlugin.getInputPorts().iterator();
-		while (iter.hasNext()) {
-			final MIInputPort port = iter.next();
+		for (final MIInputPort port : mPlugin.getInputPorts()) {
 			if (port.getName().equals(name)) {
 				return port;
 			}
@@ -496,9 +488,7 @@ public final class AnalysisController {
 	 * @return The searched port or null, if it is not available.
 	 */
 	private static MIOutputPort findOutputPort(final MIPlugin mPlugin, final String name) {
-		final Iterator<MIOutputPort> iter = mPlugin.getOutputPorts().iterator();
-		while (iter.hasNext()) {
-			final MIOutputPort port = iter.next();
+		for (final MIOutputPort port : mPlugin.getOutputPorts()) {
 			if (port.getName().equals(name)) {
 				return port;
 			}
@@ -545,8 +535,8 @@ public final class AnalysisController {
 					success = false;
 				}
 			}
-		} catch (final Exception exc) { // NOCS // NOPMD
-			AnalysisController.LOG.error("Error occurred: " + exc.getMessage());
+		} catch (final Exception ex) { // NOCS // NOPMD
+			AnalysisController.LOG.error("Error occurred", ex);
 			success = false;
 		} finally {
 			// to make sure that all waiting threads are released
@@ -555,8 +545,8 @@ public final class AnalysisController {
 				for (final AbstractAnalysisPlugin c : this.plugins) {
 					c.terminate(!success); // normal termination (w/o error)
 				}
-			} catch (final Exception e) { // NOCS // NOPMD
-				AnalysisController.LOG.error("Error during termination: " + e.getMessage(), e);
+			} catch (final Exception ex) { // NOCS // NOPMD
+				AnalysisController.LOG.error("Error during termination", ex);
 			}
 		}
 
@@ -630,14 +620,14 @@ public final class AnalysisController {
 			} else {
 				AnalysisController.LOG.error("Class '" + classname + "' has to implement '" + c.getSimpleName() + "'"); // NOCS (MultipleStringLiteralsCheck)
 			}
-		} catch (final ClassNotFoundException e) {
-			AnalysisController.LOG.error(c.getSimpleName() + ": Class '" + classname + "' not found", e); // NOCS (MultipleStringLiteralsCheck)
-		} catch (final NoSuchMethodException e) {
+		} catch (final ClassNotFoundException ex) {
+			AnalysisController.LOG.error(c.getSimpleName() + ": Class '" + classname + "' not found", ex); // NOCS (MultipleStringLiteralsCheck)
+		} catch (final NoSuchMethodException ex) {
 			AnalysisController.LOG.error(c.getSimpleName() + ": Class '" + classname // NOCS (MultipleStringLiteralsCheck)
-					+ "' has to implement a (public) constructor that accepts a single Configuration", e);
-		} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
+					+ "' has to implement a (public) constructor that accepts a single Configuration", ex);
+		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
 			// SecurityException, IllegalAccessException, IllegalArgumentException, InstantiationException, InvocationTargetException
-			AnalysisController.LOG.error(c.getSimpleName() + ": Failed to load class for name '" + classname + "'", e); // NOCS (MultipleStringLiteralsCheck)
+			AnalysisController.LOG.error(c.getSimpleName() + ": Failed to load class for name '" + classname + "'", ex); // NOCS (MultipleStringLiteralsCheck)
 		}
 		return createdClass;
 	}

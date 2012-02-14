@@ -26,26 +26,32 @@ import java.lang.reflect.Method;
  * 
  * @author Nils Christian Ehmke
  */
-public class PluginInputPortReference {
+public final class PluginInputPortReference {
 	private final AbstractPlugin plugin;
+	private final String inputPortName;
 	private final Method inputPortMethod;
 	private final Class<?>[] eventTypes;
 
-	public PluginInputPortReference(final AbstractPlugin plugin, final Method inputPortMethod, final Class<?>[] eventTypes) {
+	public PluginInputPortReference(final AbstractPlugin plugin, final String inputPortName, final Method inputPortMethod, final Class<?>[] eventTypes) {
 		this.plugin = plugin;
+		this.inputPortName = inputPortName;
 		this.inputPortMethod = inputPortMethod;
 		this.eventTypes = eventTypes;
 	}
 
-	public AbstractPlugin getPlugin() {
+	public final AbstractPlugin getPlugin() {
 		return this.plugin;
 	}
 
-	public Method getInputPortMethod() {
+	public final Method getInputPortMethod() {
 		return this.inputPortMethod;
 	}
 
-	public Class<?>[] getEventTypes() {
+	public final Class<?>[] getEventTypes() {
 		return this.eventTypes;
+	}
+
+	public final String getInputPortName() {
+		return this.inputPortName;
 	}
 }

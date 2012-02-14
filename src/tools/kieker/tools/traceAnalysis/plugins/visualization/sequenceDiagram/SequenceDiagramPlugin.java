@@ -216,7 +216,6 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 		ps.print("movewid = 0.5;" + "\n");
 
 		final Set<Integer> plottedComponentIds = new TreeSet<Integer>();
-		final AllocationRepository r = systemEntityFactory.getAllocationFactory();
 
 		final AllocationComponent rootAllocationComponent = AllocationRepository.ROOT_ALLOCATION_COMPONENT;
 		final String rootDotId = "O" + rootAllocationComponent.getId();

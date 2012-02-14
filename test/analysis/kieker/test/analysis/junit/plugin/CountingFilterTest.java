@@ -1,8 +1,8 @@
 package kieker.test.analysis.junit.plugin;
 
+import kieker.analysis.filter.CountingFilter;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.SilentCountingRecordConsumer;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
@@ -15,14 +15,14 @@ import org.junit.Test;
  * 
  * @author Nils Christian Ehmke
  */
-public class SilentCountingRecordConsumerTest {
+public class CountingFilterTest {
 
 	@Test
 	public void testNormal() {
 		/* Establish the connection. */
-		final SilentCountingRecordConsumer consumer = new SilentCountingRecordConsumer(new Configuration());
+		final CountingFilter consumer = new CountingFilter(new Configuration());
 		final SourceClass src = new SourceClass();
-		Assert.assertTrue(AbstractPlugin.connect(src, SourceClass.OUTPUT_PORT_NAME, consumer, SilentCountingRecordConsumer.INPUT_PORT_NAME));
+		Assert.assertTrue(AbstractPlugin.connect(src, SourceClass.OUTPUT_PORT_NAME, consumer, CountingFilter.INPUT_PORT_NAME));
 
 		Assert.assertEquals(0, consumer.getMessageCount());
 
@@ -37,9 +37,9 @@ public class SilentCountingRecordConsumerTest {
 	@Test
 	public void testConcurrently() {
 		/* Establish the connection. */
-		final SilentCountingRecordConsumer consumer = new SilentCountingRecordConsumer(new Configuration());
+		final CountingFilter consumer = new CountingFilter(new Configuration());
 		final SourceClass src = new SourceClass();
-		Assert.assertTrue(AbstractPlugin.connect(src, SourceClass.OUTPUT_PORT_NAME, consumer, SilentCountingRecordConsumer.INPUT_PORT_NAME));
+		Assert.assertTrue(AbstractPlugin.connect(src, SourceClass.OUTPUT_PORT_NAME, consumer, CountingFilter.INPUT_PORT_NAME));
 
 		Assert.assertEquals(0, consumer.getMessageCount());
 
@@ -79,9 +79,9 @@ public class SilentCountingRecordConsumerTest {
 	@Test
 	public void testDifferentClasses() {
 		/* Establish the connection. */
-		final SilentCountingRecordConsumer consumer = new SilentCountingRecordConsumer(new Configuration());
+		final CountingFilter consumer = new CountingFilter(new Configuration());
 		final SourceClass src = new SourceClass();
-		Assert.assertTrue(AbstractPlugin.connect(src, SourceClass.OUTPUT_PORT_NAME, consumer, SilentCountingRecordConsumer.INPUT_PORT_NAME));
+		Assert.assertTrue(AbstractPlugin.connect(src, SourceClass.OUTPUT_PORT_NAME, consumer, CountingFilter.INPUT_PORT_NAME));
 
 		Assert.assertEquals(0, consumer.getMessageCount());
 

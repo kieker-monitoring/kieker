@@ -79,7 +79,6 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 	@Override
 	protected void dotEdges(final Collection<DependencyGraphNode<ExecutionContainer>> nodes, final PrintStream ps, final boolean shortLabelsL) {
 
-		final ExecutionEnvironmentRepository r = this.getSystemEntityFactory().getExecutionEnvironmentFactory();
 		final ExecutionContainer rootContainer = ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER;
 		final int rootContainerId = rootContainer.getId();
 		final StringBuilder strBuild = new StringBuilder();

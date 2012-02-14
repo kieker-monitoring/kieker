@@ -3,8 +3,8 @@ package kieker.test.tools.manual;
 import java.io.File;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.filter.TeeFilter;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.TeeFilter;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;

@@ -1,7 +1,7 @@
 package kieker.test.analysis.junit;
 
 import kieker.test.analysis.junit.plugin.GeneralPluginTest;
-import kieker.test.analysis.junit.plugin.SilentCountingRecordConsumerTest;
+import kieker.test.analysis.junit.plugin.CountingFilterTest;
 import kieker.test.analysis.junit.reader.namedRecordPipe.TestPipeReader;
 
 import org.junit.runner.RunWith;
@@ -18,6 +18,6 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
 	TestPipeReader.class,
 	GeneralPluginTest.class,
-	SilentCountingRecordConsumerTest.class })
+	CountingFilterTest.class })
 public class AnalysisTest {
 }

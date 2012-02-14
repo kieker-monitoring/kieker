@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -318,10 +319,9 @@ public abstract class AbstractPlugin {
 		// FIXME: add a better check for the parameter of the method (currently only if 1 parameter present)
 		for (final Method m : dst.getClass().getMethods()) {
 			final InputPort ip = m.getAnnotation(InputPort.class);
-			// FIXME: replace last part by && (ip.name = inputPortName)
-			if ((ip != null) && (m.getParameterTypes().length == 1) && m.getName().equals(inputPortName)) {
+			if ((ip != null) && (m.getParameterTypes().length == 1) && ip.name().equals(inputPortName)) {
 				m.setAccessible(true);
-				src.registeredMethods.get(outputPortName).add(new PluginInputPortReference(dst, m, dst.inputPorts.get(inputPortName).eventTypes()));
+				src.registeredMethods.get(outputPortName).add(new PluginInputPortReference(dst, inputPortName, m, dst.inputPorts.get(inputPortName).eventTypes()));
 				return true;
 			}
 		}
@@ -330,7 +330,7 @@ public abstract class AbstractPlugin {
 	}
 
 	public final String[] getAllOutputPortNames() {
-		final List<String> outputNames = new ArrayList<String>();
+		final List<String> outputNames = new LinkedList<String>();
 		final Plugin annotation = this.getClass().getAnnotation(Plugin.class);
 		for (final OutputPort outputPort : annotation.outputPorts()) {
 			outputNames.add(outputPort.name());
@@ -339,12 +339,11 @@ public abstract class AbstractPlugin {
 	}
 
 	public final String[] getAllInputPortNames() {
-		final List<String> inputNames = new ArrayList<String>();
-		final Method[] allMethods = this.getClass().getMethods();
-		for (final Method method : allMethods) {
+		final List<String> inputNames = new LinkedList<String>();
+		for (final Method method : this.getClass().getMethods()) {
 			final InputPort inputPort = method.getAnnotation(InputPort.class);
-			if (inputPort != null) {
-				inputNames.add(method.getName());
+			if ((inputPort != null) && (method.getParameterTypes().length == 1)) {
+				inputNames.add(inputPort.name());
 			}
 		}
 		return inputNames.toArray(new String[inputNames.size()]);

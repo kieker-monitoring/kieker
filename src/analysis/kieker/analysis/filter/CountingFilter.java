@@ -18,10 +18,11 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.plugin;
+package kieker.analysis.filter;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -33,34 +34,31 @@ import kieker.common.configuration.Configuration;
  * 
  * @author Jan Waller
  */
-@Plugin(outputPorts = {
-	@OutputPort(name = SilentCountingRecordConsumer.OUTPUT_PORT_NAME, eventTypes = {}, description = "Default output port")
-})
-public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
+@Plugin(
+		outputPorts = {
+			@OutputPort(name = CountingFilter.OUTPUT_PORT_NAME, eventTypes = {}, description = "all incoming objects are forwarded"),
+			@OutputPort(name = CountingFilter.OUTPUT_PORT_NAME_COUNT, eventTypes = {}, description = "the current count of objects")
+		})
+public final class CountingFilter extends AbstractAnalysisPlugin {
 
-	public static final String OUTPUT_PORT_NAME = "defaultOutput";
-	public static final String INPUT_PORT_NAME = "newEvent";
+	public static final String OUTPUT_PORT_NAME = "output";
+	public static final String OUTPUT_PORT_NAME_COUNT = "count";
+	public static final String INPUT_PORT_NAME = "input";
 
 	private final AtomicLong counter = new AtomicLong();
 
 	/**
-	 * Constructs a {@link SilentCountingRecordConsumer}.
+	 * Constructs a {@link CountingFilter}.
 	 */
-	public SilentCountingRecordConsumer(final Configuration configuration) {
+	public CountingFilter(final Configuration configuration) {
 		super(configuration);
 	}
 
-	@InputPort(
-			name = SilentCountingRecordConsumer.INPUT_PORT_NAME,
-			eventTypes = {},
-			description = "Default input port")
+	@InputPort(name = CountingFilter.INPUT_PORT_NAME, eventTypes = {}, description = "incoming objects are counted and forwarded")
 	public final void newEvent(final Object event) {
-		SilentCountingRecordConsumer.this.counter.incrementAndGet();
-		super.deliver(SilentCountingRecordConsumer.OUTPUT_PORT_NAME, event);
-	}
-
-	public final long getMessageCount() {
-		return this.counter.get();
+		final Long count = CountingFilter.this.counter.incrementAndGet();
+		super.deliver(CountingFilter.OUTPUT_PORT_NAME, event);
+		super.deliver(CountingFilter.OUTPUT_PORT_NAME_COUNT, count);
 	}
 
 	@Override
@@ -71,5 +69,9 @@ public final class SilentCountingRecordConsumer extends AbstractAnalysisPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
+	}
+
+	public final long getMessageCount() {
+		return this.counter.get();
 	}
 }

@@ -18,55 +18,53 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.plugin;
+package kieker.analysis.filter;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 
+import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.common.record.IMonitoringRecord;
 
 /**
- * This class has exactly one input port and one output port. An instance of this class receives only objects implementing the interface {@link IMonitoringRecord},
- * prints a simple message on the output stream that it received the object and delegates the object unmodified to the output port.
+ * This filter has exactly one input port and one output port.
+ * 
+ * A simple message is printed to a configurable stream and all objects are forwarded to the output port.
  * 
  * @author Matthias Rohr, Jan Waller
  */
-@Plugin(outputPorts = {
-	@OutputPort(
-			name = TeeFilter.OUTPUT_PORT_NAME,
-			description = "Output port",
-			eventTypes = {})
-})
+@Plugin(outputPorts = @OutputPort(name = TeeFilter.OUTPUT_PORT_NAME, description = "all incoming objects are forwarded", eventTypes = {}))
 public final class TeeFilter extends AbstractAnalysisPlugin {
-
 	private static final Log LOG = LogFactory.getLog(TeeFilter.class);
 
-	public static final String OUTPUT_PORT_NAME = "defaultOutput";
-	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
+	public static final String OUTPUT_PORT_NAME = "output";
+	public static final String INPUT_PORT_NAME = "input";
 	public static final String CONFIG_STREAM = TeeFilter.class.getName() + ".Stream";
+	public static final String CONFIG_ENCODING = TeeFilter.class.getName() + ".Encoding";
 
 	public static final String CONFIG_STREAM_STDOUT = "STDOUT";
 	public static final String CONFIG_STREAM_STDERR = "STDERR";
 	public static final String CONFIG_STREAM_STDLOG = "STDLOG";
-
-	private static final String ENCODING = "UTF-8";
+	public static final String CONFIG_DEFAULT_ENCODING = "UTF-8";
 
 	private final PrintStream printStream;
 	private final String printStreamName;
+	private final String encoding;
 
 	public TeeFilter(final Configuration configuration) throws FileNotFoundException, UnsupportedEncodingException {
 		super(configuration);
 
 		/* Get the name of the stream. */
 		final String printStreamName = this.configuration.getStringProperty(TeeFilter.CONFIG_STREAM);
+		/* Get the encoding. */
+		this.encoding = this.configuration.getStringProperty(TeeFilter.CONFIG_ENCODING);
 
 		/* Decide which stream to be used - but remember the name! */
 		if (TeeFilter.CONFIG_STREAM_STDLOG.equals(printStreamName)) {
@@ -79,25 +77,22 @@ public final class TeeFilter extends AbstractAnalysisPlugin {
 			this.printStream = System.err;
 			this.printStreamName = null;
 		} else {
-			this.printStream = new PrintStream(new FileOutputStream(printStreamName), false, TeeFilter.ENCODING);
+			this.printStream = new PrintStream(new FileOutputStream(printStreamName), false, this.encoding);
 			this.printStreamName = printStreamName;
 		}
 	}
 
-	@InputPort(
-			name = TeeFilter.INPUT_PORT_NAME,
-			description = "Input port",
-			eventTypes = {})
-	public final void newMonitoringRecord(final Object monitoringRecord) {
+	@InputPort(name = TeeFilter.INPUT_PORT_NAME, description = "logs all incoming objects", eventTypes = {})
+	public final void newMonitoringRecord(final Object object) {
 		final StringBuilder sb = new StringBuilder(128);
-		sb.append('(').append(monitoringRecord.getClass().getSimpleName()).append(") ").append(monitoringRecord.toString());
+		sb.append('(').append(object.getClass().getSimpleName()).append(") ").append(object.toString());
 		final String record = sb.toString();
 		if (this.printStream != null) {
 			this.printStream.println(record);
 		} else {
 			TeeFilter.LOG.info(record);
 		}
-		super.deliver(TeeFilter.OUTPUT_PORT_NAME, monitoringRecord);
+		super.deliver(TeeFilter.OUTPUT_PORT_NAME, object);
 	}
 
 	@Override
@@ -109,14 +104,16 @@ public final class TeeFilter extends AbstractAnalysisPlugin {
 
 	@Override
 	protected final Configuration getDefaultConfiguration() {
-		final Configuration defaultConfiguration = new Configuration(null);
+		final Configuration defaultConfiguration = new Configuration();
 		defaultConfiguration.setProperty(TeeFilter.CONFIG_STREAM, TeeFilter.CONFIG_STREAM_STDOUT);
+		defaultConfiguration.setProperty(TeeFilter.CONFIG_ENCODING, TeeFilter.CONFIG_DEFAULT_ENCODING);
 		return defaultConfiguration;
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration(null);
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(TeeFilter.CONFIG_ENCODING, this.encoding);
 		/* We reverse the if-decisions within the constructor. */
 		if (this.printStream == null) {
 			configuration.setProperty(TeeFilter.CONFIG_STREAM, TeeFilter.CONFIG_STREAM_STDLOG);
