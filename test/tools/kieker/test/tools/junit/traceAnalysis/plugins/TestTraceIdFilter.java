@@ -29,8 +29,8 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.common.configuration.Configuration;
+import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
-import kieker.test.tools.junit.traceAnalysis.util.SimpleSinkPlugin;
 import kieker.tools.traceAnalysis.plugins.executionFilter.TraceIdFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
@@ -88,7 +88,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 		idsToPass.add(7l); // NOCS (MagicNumberCheck)
 
 		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(idsToPass);
-		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
+		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final Execution exec = this.eFactory.genExecution(11l, // traceId (must not be element of idsToPass) // NOCS (MagicNumberCheck)
 				5, // tin (value not important) // NOCS (MagicNumberCheck)
 				10, // tout (value not important) // NOCS (MagicNumberCheck)
@@ -114,7 +114,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 		idsToPass.add(7l); // NOCS (MagicNumberCheck)
 
 		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(idsToPass);
-		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
+		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final Execution exec = this.eFactory.genExecution(7l, // traceId (must be element of idsToPass) // NOCS (MagicNumberCheck)
 				5, // tin (value not important) // NOCS (MagicNumberCheck)
 				10, // tout (value not important) // NOCS (MagicNumberCheck)
@@ -140,7 +140,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 		final NavigableSet<Long> idsToPass = null; // i.e., pass all
 
 		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(idsToPass);
-		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
+		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final Execution exec = this.eFactory.genExecution(7l, // traceId (must be element of idsToPass) // NOCS (MagicNumberCheck)
 				5, // tin (value not important) // NOCS (MagicNumberCheck)
 				10, // tout (value not important) // NOCS (MagicNumberCheck)

@@ -24,8 +24,8 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.common.configuration.Configuration;
+import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
-import kieker.test.tools.junit.traceAnalysis.util.SimpleSinkPlugin;
 import kieker.tools.traceAnalysis.plugins.executionFilter.TimestampFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
@@ -70,7 +70,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 	public void testRecordTinBeforeToutWithinIgnored() {
 		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
-		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
+		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final Execution exec = this.eFactory.genExecution(77, // traceId (value not important)
 				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP - 1, // tin
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP - 1, // tout
@@ -93,7 +93,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 	public void testRecordTinWithinToutAfterIgnored() {
 		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
-		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
+		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final Execution exec = this.eFactory.genExecution(15, // traceId (value not important)
 				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP + 1, // tin
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP + 1, // tout
@@ -116,7 +116,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 	public void testRecordTinToutOnBordersPassed() {
 		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
-		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
+		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final Execution exec = this.eFactory.genExecution(159, // traceId (value not important)
 				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, // tin
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP, // tout
@@ -142,7 +142,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 	public void testRecordTinToutWithinRangePassed() {
 		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
-		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
+		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final Execution exec = this.eFactory.genExecution(159, // traceId (value not important)
 				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP + 1, // tin
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP - 1, // tout

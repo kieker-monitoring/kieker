@@ -104,12 +104,12 @@ public final class Configuration extends Properties {
 	}
 
 	/**
-	 * Converts the Long[] to a String split by '|'.
+	 * Converts the Object[] to a String split by '|'.
 	 * 
 	 * @param values
 	 * @return
 	 */
-	public static final String toProperty(final Long[] values) {
+	public static final String toProperty(final Object[] values) {
 		final StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < values.length; i++) {
 			sb.append(values[i]);

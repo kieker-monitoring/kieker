@@ -29,8 +29,8 @@ import junit.framework.TestCase;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.TraceEvent;
+import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
-import kieker.test.tools.junit.traceAnalysis.util.SimpleSinkPlugin;
 import kieker.tools.traceAnalysis.plugins.flow.TraceIdFilter;
 
 import org.junit.Test;
@@ -60,7 +60,7 @@ public class TestTraceIdFilter extends TestCase {
 		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.FALSE.toString());
 		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, Configuration.toProperty(idsToPass.toArray(new Long[] {})));
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig);
-		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
+		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 
 		final List<TraceEvent> trace =
 				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdNotToPass); // NOCS (MagicNumberCheck)
@@ -98,7 +98,7 @@ public class TestTraceIdFilter extends TestCase {
 		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.FALSE.toString());
 		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, Configuration.toProperty(idsToPass.toArray(new Long[] {})));
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig);
-		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
+		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 
 		final List<TraceEvent> trace =
 				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass); // NOCS (MagicNumberCheck)
@@ -126,7 +126,7 @@ public class TestTraceIdFilter extends TestCase {
 		final Configuration filterConfig = new Configuration();
 		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.TRUE.toString()); // i.e., pass all
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig);
-		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
+		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 
 		final List<TraceEvent> trace =
 				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass); // NOCS (MagicNumberCheck)

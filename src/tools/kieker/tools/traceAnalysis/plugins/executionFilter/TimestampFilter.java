@@ -44,9 +44,6 @@ public class TimestampFilter extends AbstractTimestampFilter {
 	public static final String CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP = TimestampFilter.class.getName() + ".ignoreExecutionsBeforeTimestamp";
 	public static final String CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP = TimestampFilter.class.getName() + ".ignorExecutionsAfterTimestamp";
 
-	public static final long MAX_TIMESTAMP = AbstractTimestampFilter.MAX_TIMESTAMP;
-	public static final long MIN_TIMESTAMP = AbstractTimestampFilter.MIN_TIMESTAMP;
-
 	/**
 	 * Creates a new instance of the class {@link TimestampFilter} with the given parameters.
 	 * 

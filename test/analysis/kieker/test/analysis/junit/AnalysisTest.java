@@ -1,7 +1,7 @@
 package kieker.test.analysis.junit;
 
+import kieker.test.analysis.junit.filter.CountingFilterTest;
 import kieker.test.analysis.junit.plugin.GeneralPluginTest;
-import kieker.test.analysis.junit.plugin.CountingFilterTest;
 import kieker.test.analysis.junit.reader.namedRecordPipe.TestPipeReader;
 
 import org.junit.runner.RunWith;

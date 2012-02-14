@@ -54,24 +54,24 @@ public final class CountingFilter extends AbstractAnalysisPlugin {
 		super(configuration);
 	}
 
-	@InputPort(name = CountingFilter.INPUT_PORT_NAME, eventTypes = {}, description = "incoming objects are counted and forwarded")
-	public final void newEvent(final Object event) {
-		final Long count = CountingFilter.this.counter.incrementAndGet();
-		super.deliver(CountingFilter.OUTPUT_PORT_NAME, event);
-		super.deliver(CountingFilter.OUTPUT_PORT_NAME_COUNT, count);
-	}
-
 	@Override
-	protected Configuration getDefaultConfiguration() {
+	protected final Configuration getDefaultConfiguration() {
 		return new Configuration();
 	}
 
 	@Override
-	public Configuration getCurrentConfiguration() {
+	public final Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}
 
 	public final long getMessageCount() {
 		return this.counter.get();
+	}
+
+	@InputPort(name = CountingFilter.INPUT_PORT_NAME, eventTypes = {}, description = "incoming objects are counted and forwarded")
+	public final void newEvent(final Object event) {
+		final Long count = CountingFilter.this.counter.incrementAndGet();
+		super.deliver(CountingFilter.OUTPUT_PORT_NAME, event);
+		super.deliver(CountingFilter.OUTPUT_PORT_NAME_COUNT, count);
 	}
 }

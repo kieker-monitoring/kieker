@@ -18,27 +18,27 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.traceAnalysis.util;
+package kieker.test.analysis.junit.plugin;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
+import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
 
 /**
- * 
- * @author Nils Ehmke
- * 
+ * @author Nils Ehmke, Jan Waller
  */
+@Plugin
 public class SimpleSinkPlugin extends AbstractAnalysisPlugin {
 
 	public static final String INPUT_PORT_NAME = "input";
 	private final List<Object> list = new ArrayList<Object>();
 
-	public SimpleSinkPlugin() {
-		super(new Configuration());
+	public SimpleSinkPlugin(final Configuration configuration) {
+		super(configuration);
 	}
 
 	@InputPort(name = SimpleSinkPlugin.INPUT_PORT_NAME)

@@ -318,11 +318,11 @@ public final class TraceAnalysisTool {
 			final Configuration configTimestampFilterFlow = new Configuration();
 			configTimestampFilter.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 					Long.toString(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp));
-			configTimestampFilterFlow.setProperty(kieker.tools.traceAnalysis.plugins.flow.TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
+			configTimestampFilterFlow.setProperty(kieker.analysis.filter.TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 					Long.toString(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp));
 			configTimestampFilter.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP,
 					Long.toString(TraceAnalysisTool.ignoreExecutionsAfterTimestamp));
-			configTimestampFilterFlow.setProperty(kieker.tools.traceAnalysis.plugins.flow.TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP,
+			configTimestampFilterFlow.setProperty(kieker.analysis.filter.TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP,
 					Long.toString(TraceAnalysisTool.ignoreExecutionsAfterTimestamp));
 
 			final TimestampFilter executionFilterByTimestamp = new TimestampFilter(configTimestampFilter);
@@ -330,11 +330,11 @@ public final class TraceAnalysisTool {
 					executionFilterByTimestamp, TimestampFilter.INPUT_PORT_NAME);
 			analysisInstance.registerPlugin(executionFilterByTimestamp);
 
-			final kieker.tools.traceAnalysis.plugins.flow.TimestampFilter timestampFilterFlow =
-					new kieker.tools.traceAnalysis.plugins.flow.TimestampFilter(configTimestampFilterFlow);
+			final kieker.analysis.filter.TimestampFilter timestampFilterFlow =
+					new kieker.analysis.filter.TimestampFilter(configTimestampFilterFlow);
 			analysisInstance.registerPlugin(timestampFilterFlow);
 			AbstractPlugin.connect(reader, FSReader.OUTPUT_PORT_NAME, timestampFilterFlow,
-					kieker.tools.traceAnalysis.plugins.flow.TimestampFilter.INPUT_PORT_NAME);
+					kieker.analysis.filter.TimestampFilter.INPUT_PORT_NAME);
 
 			/* Create the configuration for both trace ID filters (which will be connected differently!) */
 			final Configuration configTraceIdFilter = new Configuration();
@@ -357,7 +357,7 @@ public final class TraceAnalysisTool {
 			final kieker.tools.traceAnalysis.plugins.flow.TraceIdFilter traceIdFilterFlow =
 					new kieker.tools.traceAnalysis.plugins.flow.TraceIdFilter(configTraceIdFilterFlow);
 			analysisInstance.registerPlugin(traceIdFilterFlow);
-			AbstractPlugin.connect(timestampFilterFlow, kieker.tools.traceAnalysis.plugins.flow.TimestampFilter.OUTPUT_PORT_NAME,
+			AbstractPlugin.connect(timestampFilterFlow, kieker.analysis.filter.TimestampFilter.OUTPUT_PORT_NAME,
 					traceIdFilterFlow, kieker.tools.traceAnalysis.plugins.flow.TraceIdFilter.INPUT_PORT_NAME);
 
 			final Configuration mtReconstrFilterConfig = new Configuration();

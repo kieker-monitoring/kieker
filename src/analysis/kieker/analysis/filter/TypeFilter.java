@@ -39,7 +39,7 @@ import kieker.common.logging.LogFactory;
  * @author Jan Waller
  */
 @Plugin(outputPorts = @OutputPort(name = TypeFilter.OUTPUT_PORT_NAME, eventTypes = {}, description = "all objects with matching types are forwarded"))
-public class TypeFilter extends AbstractAnalysisPlugin {
+public final class TypeFilter extends AbstractAnalysisPlugin {
 	private static final Log LOG = LogFactory.getLog(TypeFilter.class);
 
 	public static final String OUTPUT_PORT_NAME = "output";
@@ -56,7 +56,7 @@ public class TypeFilter extends AbstractAnalysisPlugin {
 			try {
 				listOfClasses.add(Class.forName(clazz));
 			} catch (final ClassNotFoundException ex) {
-				TypeFilter.LOG.warn("Failed to add class " + clazz + " to the filter.", ex);
+				TypeFilter.LOG.warn("Failed to add class " + clazz + " to the filter.");
 			}
 		}
 		if (listOfClasses.size() > 0) {
@@ -64,6 +64,20 @@ public class TypeFilter extends AbstractAnalysisPlugin {
 		} else {
 			this.acceptedClasses = new Class<?>[] { Object.class };
 		}
+	}
+
+	@Override
+	protected final Configuration getDefaultConfiguration() {
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(TypeFilter.CONFIG_TYPES, "java.lang.Object");
+		return configuration;
+	}
+
+	@Override
+	public final Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(TypeFilter.CONFIG_TYPES, Configuration.toProperty(this.acceptedClasses));
+		return configuration;
 	}
 
 	@InputPort(name = CountingFilter.INPUT_PORT_NAME, eventTypes = {}, description = "all objects with matching types are forwarded")
@@ -74,19 +88,5 @@ public class TypeFilter extends AbstractAnalysisPlugin {
 				break; // only deliver once!
 			}
 		}
-	}
-
-	@Override
-	protected final Configuration getDefaultConfiguration() {
-		final Configuration defaultConfiguration = new Configuration();
-		defaultConfiguration.setProperty(TypeFilter.CONFIG_TYPES, "java.lang.Object");
-		return defaultConfiguration;
-	}
-
-	@Override
-	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(TypeFilter.CONFIG_TYPES, "");
-		return configuration;
 	}
 }

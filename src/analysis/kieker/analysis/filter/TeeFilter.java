@@ -82,20 +82,6 @@ public final class TeeFilter extends AbstractAnalysisPlugin {
 		}
 	}
 
-	@InputPort(name = TeeFilter.INPUT_PORT_NAME, description = "logs all incoming objects", eventTypes = {})
-	public final void newMonitoringRecord(final Object object) {
-		final StringBuilder sb = new StringBuilder(128);
-		sb.append(this.getName());
-		sb.append('(').append(object.getClass().getSimpleName()).append(") ").append(object.toString());
-		final String record = sb.toString();
-		if (this.printStream != null) {
-			this.printStream.println(record);
-		} else {
-			TeeFilter.LOG.info(record);
-		}
-		super.deliver(TeeFilter.OUTPUT_PORT_NAME, object);
-	}
-
 	@Override
 	public final void terminate(final boolean error) {
 		if ((this.printStream != null) && (this.printStream != System.out) && (this.printStream != System.err)) {
@@ -105,14 +91,14 @@ public final class TeeFilter extends AbstractAnalysisPlugin {
 
 	@Override
 	protected final Configuration getDefaultConfiguration() {
-		final Configuration defaultConfiguration = new Configuration();
-		defaultConfiguration.setProperty(TeeFilter.CONFIG_STREAM, TeeFilter.CONFIG_STREAM_STDOUT);
-		defaultConfiguration.setProperty(TeeFilter.CONFIG_ENCODING, TeeFilter.CONFIG_DEFAULT_ENCODING);
-		return defaultConfiguration;
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(TeeFilter.CONFIG_STREAM, TeeFilter.CONFIG_STREAM_STDOUT);
+		configuration.setProperty(TeeFilter.CONFIG_ENCODING, TeeFilter.CONFIG_DEFAULT_ENCODING);
+		return configuration;
 	}
 
 	@Override
-	public Configuration getCurrentConfiguration() {
+	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(TeeFilter.CONFIG_ENCODING, this.encoding);
 		/* We reverse the if-decisions within the constructor. */
@@ -126,5 +112,19 @@ public final class TeeFilter extends AbstractAnalysisPlugin {
 			configuration.setProperty(TeeFilter.CONFIG_STREAM, this.printStreamName);
 		}
 		return configuration;
+	}
+
+	@InputPort(name = TeeFilter.INPUT_PORT_NAME, description = "logs all incoming objects", eventTypes = {})
+	public final void newMonitoringRecord(final Object object) {
+		final StringBuilder sb = new StringBuilder(128);
+		sb.append(this.getName());
+		sb.append('(').append(object.getClass().getSimpleName()).append(") ").append(object.toString());
+		final String record = sb.toString();
+		if (this.printStream != null) {
+			this.printStream.println(record);
+		} else {
+			TeeFilter.LOG.info(record);
+		}
+		super.deliver(TeeFilter.OUTPUT_PORT_NAME, object);
 	}
 }

@@ -25,6 +25,8 @@ import java.io.File;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.filter.CountingFilter;
 import kieker.analysis.filter.TeeFilter;
+import kieker.analysis.filter.TimestampFilter;
+import kieker.analysis.filter.TypeFilter;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
@@ -34,7 +36,6 @@ import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.flow.EventRecordTraceGenerationFilter;
 import kieker.tools.traceAnalysis.plugins.flow.EventTrace2ExecutionTraceFilter;
-import kieker.tools.traceAnalysis.plugins.flow.TimestampFilter;
 import kieker.tools.traceAnalysis.plugins.flow.TraceIdFilter;
 import kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph.ComponentDependencyGraphPluginAllocation;
 import kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph.OperationDependencyGraphPluginAllocation;
@@ -61,6 +62,10 @@ public class TestAnalysis {
 				final Configuration confReader = new Configuration();
 				confReader.setProperty(FSReader.CONFIG_INPUTDIRS, "analysisproject/testdata-ascii/");
 				final FSReader reader = new FSReader(confReader);
+
+				/* TypeFilter */
+				final Configuration confTypeFilter = new Configuration();
+				final TypeFilter typeFilter = new TypeFilter(confTypeFilter);
 
 				/* TeeFilter */
 				final Configuration confTeeFilter1 = new Configuration();
@@ -123,8 +128,11 @@ public class TestAnalysis {
 				analysisController.registerPlugin(countingFilter1);
 				AbstractPlugin.connect(reader, FSReader.OUTPUT_PORT_NAME, countingFilter1, CountingFilter.INPUT_PORT_NAME);
 
+				analysisController.registerPlugin(typeFilter);
+				AbstractPlugin.connect(countingFilter1, CountingFilter.OUTPUT_PORT_NAME, typeFilter, TypeFilter.INPUT_PORT_NAME);
+
 				analysisController.registerPlugin(timestampFilter);
-				AbstractPlugin.connect(countingFilter1, CountingFilter.OUTPUT_PORT_NAME, timestampFilter, TimestampFilter.INPUT_PORT_NAME);
+				AbstractPlugin.connect(typeFilter, TypeFilter.OUTPUT_PORT_NAME, timestampFilter, TimestampFilter.INPUT_PORT_NAME_FLOW);
 
 				analysisController.registerPlugin(teeFilter2);
 				AbstractPlugin.connect(countingFilter1, CountingFilter.OUTPUT_PORT_NAME_COUNT, teeFilter2, TeeFilter.INPUT_PORT_NAME);

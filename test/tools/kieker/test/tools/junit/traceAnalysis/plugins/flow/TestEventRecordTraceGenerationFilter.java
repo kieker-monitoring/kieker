@@ -28,8 +28,8 @@ import junit.framework.TestCase;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.TraceEvent;
+import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
-import kieker.test.tools.junit.traceAnalysis.util.SimpleSinkPlugin;
 import kieker.tools.traceAnalysis.plugins.flow.EventRecordTrace;
 import kieker.tools.traceAnalysis.plugins.flow.EventRecordTraceGenerationFilter;
 
@@ -66,7 +66,7 @@ public class TestEventRecordTraceGenerationFilter extends TestCase {
 		final long traceDuration = bookstoreTrace.get(bookstoreTrace.size() - 1).getTimestamp() - startTime;
 
 		final EventRecordTraceGenerationFilter traceFilter = TestEventRecordTraceGenerationFilter.createFilter(traceDuration + 1);
-		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin();
+		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 		AbstractPlugin.connect(traceFilter, EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);

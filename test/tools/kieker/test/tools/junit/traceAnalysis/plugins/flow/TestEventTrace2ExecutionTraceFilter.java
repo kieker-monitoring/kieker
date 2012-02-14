@@ -29,10 +29,10 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.flow.TraceEvent;
+import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.traceAnalysis.plugins.TestTraceReconstructionFilter;
 import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
-import kieker.test.tools.junit.traceAnalysis.util.SimpleSinkPlugin;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.flow.EventRecordTrace;
 import kieker.tools.traceAnalysis.plugins.flow.EventTrace2ExecutionTraceFilter;
@@ -135,7 +135,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		 * Create and connect a sink plugin which collects the transformed
 		 * ExecutionTraces
 		 */
-		final SimpleSinkPlugin executionTraceSinkPlugin = new SimpleSinkPlugin();
+		final SimpleSinkPlugin executionTraceSinkPlugin = new SimpleSinkPlugin(new Configuration());
 		AbstractPlugin.connect(filter, EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
 		filter.inputEventTrace(eventRecordTrace);

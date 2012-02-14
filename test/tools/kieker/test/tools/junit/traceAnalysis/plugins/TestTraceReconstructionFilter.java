@@ -30,8 +30,8 @@ import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
-import kieker.test.tools.junit.traceAnalysis.util.SimpleSinkPlugin;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
@@ -137,9 +137,9 @@ public class TestTraceReconstructionFilter extends TestCase {
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout",
 				validExecutionTrace.getDurationInNanos() <= filter.getMaxTraceDurationNanos());
 
-		final SimpleSinkPlugin executionTraceSinkPlugin = new SimpleSinkPlugin();
-		final SimpleSinkPlugin messageTraceSinkPlugin = new SimpleSinkPlugin();
-		final SimpleSinkPlugin invalidExecutionTraceSinkPlugin = new SimpleSinkPlugin();
+		final SimpleSinkPlugin executionTraceSinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final SimpleSinkPlugin messageTraceSinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final SimpleSinkPlugin invalidExecutionTraceSinkPlugin = new SimpleSinkPlugin(new Configuration());
 		/*
 		 * Register a handler for reconstructed (valid) execution traces.
 		 * This handler MUST receive exactly this trace (and no other).
@@ -250,9 +250,9 @@ public class TestTraceReconstructionFilter extends TestCase {
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout",
 				invalidExecutionTrace.getDurationInNanos() <= filter.getMaxTraceDurationNanos());
 
-		final SimpleSinkPlugin executionTraceSinkPlugin = new SimpleSinkPlugin();
-		final SimpleSinkPlugin messageTraceSinkPlugin = new SimpleSinkPlugin();
-		final SimpleSinkPlugin invalidExecutionTraceSinkPlugin = new SimpleSinkPlugin();
+		final SimpleSinkPlugin executionTraceSinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final SimpleSinkPlugin messageTraceSinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final SimpleSinkPlugin invalidExecutionTraceSinkPlugin = new SimpleSinkPlugin(new Configuration());
 
 		/*
 		 * Register a handler for reconstructed (valid) execution traces.
@@ -393,9 +393,9 @@ public class TestTraceReconstructionFilter extends TestCase {
 		repositoryMap.put(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
 		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration);
 
-		final SimpleSinkPlugin executionTraceSink = new SimpleSinkPlugin();
-		final SimpleSinkPlugin messageTraceSink = new SimpleSinkPlugin();
-		final SimpleSinkPlugin invalidExecutionTraceSink = new SimpleSinkPlugin();
+		final SimpleSinkPlugin executionTraceSink = new SimpleSinkPlugin(new Configuration());
+		final SimpleSinkPlugin messageTraceSink = new SimpleSinkPlugin(new Configuration());
+		final SimpleSinkPlugin invalidExecutionTraceSink = new SimpleSinkPlugin(new Configuration());
 
 		Assert.assertTrue("Test invalid: NOT (tout of trigger trace - tin of incomplete > filter max. duration)\n" + "triggerExecutionTrace.getMaxTout()"
 				+ triggerExecutionTrace.getMaxTout() + "\n" + "incompleteExecutionTrace.getMinTin()" + incompleteExecutionTrace.getMinTin() + "\n"
