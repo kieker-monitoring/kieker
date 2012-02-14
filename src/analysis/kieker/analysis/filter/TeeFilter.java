@@ -85,6 +85,7 @@ public final class TeeFilter extends AbstractAnalysisPlugin {
 	@InputPort(name = TeeFilter.INPUT_PORT_NAME, description = "logs all incoming objects", eventTypes = {})
 	public final void newMonitoringRecord(final Object object) {
 		final StringBuilder sb = new StringBuilder(128);
+		sb.append(this.getName());
 		sb.append('(').append(object.getClass().getSimpleName()).append(") ").append(object.toString());
 		final String record = sb.toString();
 		if (this.printStream != null) {

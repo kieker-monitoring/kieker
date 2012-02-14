@@ -36,9 +36,7 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * 
  * @author Andre van Hoorn
  */
-@Plugin(
-		outputPorts = { @OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME, description = "Trace event output", eventTypes = { TraceEvent.class })
-		})
+@Plugin(outputPorts = @OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME, description = "Trace event output", eventTypes = { TraceEvent.class }))
 public class TimestampFilter extends AbstractTimestampFilter {
 
 	public static final String INPUT_PORT_NAME = "inputTraceEvent";
@@ -63,8 +61,7 @@ public class TimestampFilter extends AbstractTimestampFilter {
 	}
 
 	@InputPort(name = TimestampFilter.INPUT_PORT_NAME, description = "Trace event input", eventTypes = { TraceEvent.class })
-	public void inputTraceEvent(final Object data) {
-		final TraceEvent event = (TraceEvent) data;
+	public void inputTraceEvent(final TraceEvent event) {
 		if (this.inRange(event.getTimestamp())) {
 			super.deliver(TimestampFilter.OUTPUT_PORT_NAME, event);
 		}

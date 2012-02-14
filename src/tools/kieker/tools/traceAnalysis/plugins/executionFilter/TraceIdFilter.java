@@ -35,10 +35,7 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * 
  * @author Andre van Hoorn
  */
-@Plugin(
-		outputPorts = {
-			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME, description = "Execution output", eventTypes = { Execution.class })
-		})
+@Plugin(outputPorts = @OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME, description = "Execution output", eventTypes = { Execution.class }))
 public class TraceIdFilter extends AbstractTraceIdFilter {
 
 	public static final String INPUT_PORT_NAME = "newExecution";
@@ -51,14 +48,10 @@ public class TraceIdFilter extends AbstractTraceIdFilter {
 		super(configuration);
 	}
 
-	@InputPort(
-			name = TraceIdFilter.INPUT_PORT_NAME,
-			description = "Execution input",
-			eventTypes = { Execution.class })
-	public void newExecution(final Object data) {
-		final Execution execution = (Execution) data;
+	@InputPort(name = TraceIdFilter.INPUT_PORT_NAME, description = "Execution input", eventTypes = { Execution.class })
+	public void newExecution(final Execution execution) {
 		if (super.passId(execution.getTraceId())) {
-			super.deliver(TraceIdFilter.OUTPUT_PORT_NAME, data);
+			super.deliver(TraceIdFilter.OUTPUT_PORT_NAME, execution);
 		}
 	}
 

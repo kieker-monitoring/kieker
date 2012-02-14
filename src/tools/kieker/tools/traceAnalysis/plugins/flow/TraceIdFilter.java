@@ -35,9 +35,7 @@ import kieker.tools.traceAnalysis.plugins.AbstractTraceIdFilter;
  * 
  * @author Andre van Hoorn
  */
-@Plugin(
-		outputPorts = { @OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME, description = "Trace event output", eventTypes = { TraceEvent.class })
-		})
+@Plugin(outputPorts = @OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME, description = "Trace event output", eventTypes = { TraceEvent.class }))
 public class TraceIdFilter extends AbstractTraceIdFilter {
 	public static final String INPUT_PORT_NAME = "inputTraceEvent";
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
@@ -50,10 +48,9 @@ public class TraceIdFilter extends AbstractTraceIdFilter {
 	}
 
 	@InputPort(name = TraceIdFilter.INPUT_PORT_NAME, description = "Trace event input", eventTypes = { TraceEvent.class })
-	public void inputTraceEvent(final Object data) {
-		final TraceEvent event = (TraceEvent) data;
+	public void inputTraceEvent(final TraceEvent event) {
 		if (super.passId(event.getTraceId())) {
-			super.deliver(TraceIdFilter.OUTPUT_PORT_NAME, data);
+			super.deliver(TraceIdFilter.OUTPUT_PORT_NAME, event);
 		}
 	}
 

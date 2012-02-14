@@ -28,18 +28,14 @@ import kieker.tools.traceAnalysis.plugins.AbstractTimestampFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 
 /**
- * Allows to filter Execution objects based on their given tin and tout
- * timestamps. <br>
+ * Allows to filter Execution objects based on their given tin and tout timestamps.
  * 
  * This class has exactly one input port and one output port. It receives only objects inheriting from the class {@link Execution}. If the received object is within
  * the defined timestamps, the object is delivered unmodified to the output port.
  * 
  * @author Andre van Hoorn
  */
-@Plugin(
-		outputPorts = {
-			@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME, description = "Execution output", eventTypes = { Execution.class })
-		})
+@Plugin(outputPorts = @OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME, description = "Execution output", eventTypes = { Execution.class }))
 public class TimestampFilter extends AbstractTimestampFilter {
 
 	public static final String INPUT_PORT_NAME = "newExecution";
@@ -52,8 +48,7 @@ public class TimestampFilter extends AbstractTimestampFilter {
 	public static final long MIN_TIMESTAMP = AbstractTimestampFilter.MIN_TIMESTAMP;
 
 	/**
-	 * Creates a new instance of the class {@link TimestampFilter} with the
-	 * given parameters.
+	 * Creates a new instance of the class {@link TimestampFilter} with the given parameters.
 	 * 
 	 * @param configuration
 	 *            The configuration used to initialize this instance. It should
@@ -63,12 +58,8 @@ public class TimestampFilter extends AbstractTimestampFilter {
 		super(configuration);
 	}
 
-	@InputPort(
-			name = TimestampFilter.INPUT_PORT_NAME,
-			description = "Execution input",
-			eventTypes = { Execution.class })
-	public void newExecution(final Object data) {
-		final Execution execution = (Execution) data;
+	@InputPort(name = TimestampFilter.INPUT_PORT_NAME, description = "Execution input", eventTypes = { Execution.class })
+	public void newExecution(final Execution execution) {
 		if (this.inRange(execution.getTin()) && this.inRange(execution.getTout())) {
 			super.deliver(TimestampFilter.OUTPUT_PORT_NAME, execution);
 		}
