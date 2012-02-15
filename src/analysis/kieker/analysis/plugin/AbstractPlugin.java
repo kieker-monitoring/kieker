@@ -43,7 +43,7 @@ import kieker.common.logging.LogFactory;
 /**
  * <b>Do not</b> inherit directly from this class! Instead inherit from the class {@link AbstractAnalysisPlugin} or {@link AbstractMonitoringReader}.
  * 
- * @author Nils Christian Ehmke
+ * @author Nils Christian Ehmke, Jan Waller
  */
 @Plugin
 public abstract class AbstractPlugin {
@@ -98,10 +98,8 @@ public abstract class AbstractPlugin {
 		final Method[] allMethods = this.getClass().getMethods();
 		for (final Method method : allMethods) {
 			final InputPort inputPort = method.getAnnotation(InputPort.class);
-			if (inputPort != null) {
-				if (this.inputPorts.put(inputPort.name(), inputPort) != null) {
-					AbstractPlugin.LOG.error("Two InputPorts use the same name: " + inputPort.name());
-				}
+			if ((inputPort != null) && (this.inputPorts.put(inputPort.name(), inputPort) != null)) {
+				AbstractPlugin.LOG.error("Two InputPorts use the same name: " + inputPort.name());
 			}
 		}
 
@@ -160,10 +158,19 @@ public abstract class AbstractPlugin {
 		}
 
 		/* Second step: Check whether the data fits the event types. */
-		for (final Class<?> eventType : outputPort.eventTypes()) {
-			if (!eventType.isInstance(data)) {
-				return false;
+		Class<?>[] outTypes = outputPort.eventTypes();
+		if (outTypes.length == 0) {
+			outTypes = new Class<?>[] { Object.class };
+		}
+		boolean outTypeMatch = false;
+		for (final Class<?> eventType : outTypes) {
+			if (eventType.isInstance(data)) {
+				outTypeMatch = true;
+				break; // for
 			}
+		}
+		if (!outTypeMatch) {
+			return false;
 		}
 
 		/* Third step: Send everything to the registered ports. */
