@@ -43,7 +43,7 @@ public final class HashRecord extends AbstractMonitoringRecord implements IMonit
 	}
 
 	public HashRecord(final Object[] values) {
-		final Object[] myValues = values.clone();
+		final Object[] myValues = values.clone(); // to protect object from tampering
 		AbstractMonitoringRecord.checkArray(myValues, HashRecord.TYPES);
 		try {
 			this.id = (Integer) myValues[0];
