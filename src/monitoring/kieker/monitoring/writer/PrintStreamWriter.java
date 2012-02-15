@@ -40,6 +40,9 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 	private static final String PREFIX = PrintStreamWriter.class.getName() + ".";
 	private static final String STREAM = PrintStreamWriter.PREFIX + "Stream";
 
+	private static final String CONFIG_STREAM_STDOUT = "STDOUT";
+	private static final String CONFIG_STREAM_STDERR = "STDERR";
+
 	private static final String ENCODING = "UTF-8";
 
 	private PrintStream printStream;
@@ -51,9 +54,9 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 	@Override
 	public void init() throws FileNotFoundException, UnsupportedEncodingException {
 		final String printStreamName = this.configuration.getStringProperty(PrintStreamWriter.STREAM);
-		if ("STDOUT".equals(printStreamName)) {
+		if (PrintStreamWriter.CONFIG_STREAM_STDOUT.equals(printStreamName)) {
 			this.printStream = System.out;
-		} else if ("STDERR".equals(printStreamName)) {
+		} else if (PrintStreamWriter.CONFIG_STREAM_STDERR.equals(printStreamName)) {
 			this.printStream = System.err;
 		} else {
 			this.printStream = new PrintStream(new FileOutputStream(printStreamName), false, PrintStreamWriter.ENCODING);

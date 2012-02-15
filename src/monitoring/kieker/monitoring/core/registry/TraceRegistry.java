@@ -20,6 +20,7 @@
 
 package kieker.monitoring.core.registry;
 
+import java.security.SecureRandom;
 import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -32,8 +33,7 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 	INSTANCE;
 
 	private final AtomicInteger nextTraceId = new AtomicInteger(0);
-	// FIXME: private final long unique = ((long) new SecureRandom().nextInt()) << 32;
-	private final long unique = 0L;
+	private final long unique = ((long) new SecureRandom().nextInt()) << 32;
 
 	/** the current trace; null if new trace */
 	private final ThreadLocal<Trace> traceStorage = new ThreadLocal<Trace>();
