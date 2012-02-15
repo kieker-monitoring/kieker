@@ -69,5 +69,26 @@
   <Match>
     <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
   </Match>
+  
+  <Match>
+    <Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
+    <Bug pattern="IC_SUPERCLASS_USES_SUBCLASS_DURING_INITIALIZATION" />
+  </Match>
+  
+  <Match>
+    <Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
+    <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NULL_VALUE" />
+  </Match>
+  
+  <Match>
+    <Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
+    <Bug pattern="BC_UNCONFIRMED_CAST" />
+  </Match>
+  
+  <Match>
+    <Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
+    <Bug pattern="NP_LOAD_OF_KNOWN_NULL_VALUE" />
+  </Match>
+  
 
 </FindBugsFilter>
