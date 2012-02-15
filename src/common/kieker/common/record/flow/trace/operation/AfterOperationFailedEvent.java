@@ -18,35 +18,44 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.flow;
+package kieker.common.record.flow.trace.operation;
 
 /**
  * @author Jan Waller
  */
-public final class BeforeOperationEvent extends OperationEvent {
-	private static final long serialVersionUID = -5920247930003146071L;
+public final class AfterOperationFailedEvent extends AbstractOperationEvent {
+	private static final long serialVersionUID = 3331883608930487185L;
 	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
 		String.class, // OperationEvent.operationName
+		String.class, // Exception
 	};
 
-	public BeforeOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationName) {
+	private final String cause;
+
+	public AfterOperationFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String operationName, final String cause) {
 		super(timestamp, traceId, orderIndex, operationName);
+		this.cause = cause;
 	}
 
-	public BeforeOperationEvent(final Object[] values) {
-		super(values, BeforeOperationEvent.TYPES); // values[0..3]
+	public AfterOperationFailedEvent(final Object[] values) {
+		super(values, AfterOperationFailedEvent.TYPES); // values[0..3]
+		this.cause = (String) values[4];
 	}
 
 	@Override
 	public final Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationName(), };
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationName(), this.cause };
 	}
 
 	@Override
 	public final Class<?>[] getValueTypes() {
-		return BeforeOperationEvent.TYPES.clone();
+		return AfterOperationFailedEvent.TYPES.clone();
+	}
+
+	public final String getCause() {
+		return this.cause;
 	}
 }

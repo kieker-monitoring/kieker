@@ -25,7 +25,7 @@ import java.util.List;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.internal.NullRecord;
+import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.test.monitoring.junit.util.NamedPipeFactory;
 
@@ -59,7 +59,7 @@ public class TestPipeWriter extends TestCase { // NOCS
 		 */
 		final int numRecordsToSend = 7;
 		for (int i = 0; i < numRecordsToSend; i++) {
-			monitoringController.newMonitoringRecord(new NullRecord()); // NOPMD (new in loop)
+			monitoringController.newMonitoringRecord(new EmptyRecord()); // NOPMD (new in loop)
 		}
 
 		/*

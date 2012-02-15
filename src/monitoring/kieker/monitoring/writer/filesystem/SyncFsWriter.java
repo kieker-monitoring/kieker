@@ -37,7 +37,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.internal.HashRecord;
+import kieker.common.record.misc.HashRecord;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
 /**

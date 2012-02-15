@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.internal.NullRecord;
+import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.writer.DummyWriter;
 
 /**
@@ -48,7 +48,7 @@ public final class DummyRecordCountWriter extends DummyWriter {
 
 	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
-		if (record instanceof NullRecord) {
+		if (record instanceof EmptyRecord) {
 			this.numDummyRecords.incrementAndGet();
 		}
 		return super.newMonitoringRecord(record);

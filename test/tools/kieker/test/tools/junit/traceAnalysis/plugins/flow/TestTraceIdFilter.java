@@ -28,7 +28,7 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.record.flow.TraceEvent;
+import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
 import kieker.tools.traceAnalysis.plugins.flow.TraceIdFilter;
@@ -44,7 +44,7 @@ public class TestTraceIdFilter extends TestCase {
 
 	/**
 	 * Given a TraceIdFilter that passes traceIds included in a set <i>idsToPass</i>,
-	 * assert that a {@link TraceEvent} object <i>event</i> with traceId not element of
+	 * assert that a {@link AbstractTraceEvent} object <i>event</i> with traceId not element of
 	 * <i>idsToPass</i> is NOT passed through the filter.
 	 */
 	@Test
@@ -62,19 +62,19 @@ public class TestTraceIdFilter extends TestCase {
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 
-		final List<TraceEvent> trace =
+		final List<AbstractTraceEvent> trace =
 				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdNotToPass); // NOCS (MagicNumberCheck)
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 		AbstractPlugin.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
-		for (final TraceEvent e : trace) {
+		for (final AbstractTraceEvent e : trace) {
 			Assert.assertTrue("Testcase invalid", !idsToPass.contains(e.getTraceId()));
 			filter.inputTraceEvent(e);
 		}
 
 		if (!sinkPlugin.getList().isEmpty()) {
-			final long passedId = ((TraceEvent) sinkPlugin.getList().get(0)).getTraceId();
+			final long passedId = ((AbstractTraceEvent) sinkPlugin.getList().get(0)).getTraceId();
 			Assert.fail(
 					"Filter passed trace with ID " + passedId + " although traceId not element of " + idsToPass);
 		}
@@ -82,7 +82,7 @@ public class TestTraceIdFilter extends TestCase {
 
 	/**
 	 * Given a TraceIdFilter that passes traceIds included in a set <i>idsToPass</i>,
-	 * assert that a {@link TraceEvent} object <i>event</i> with traceId not element of
+	 * assert that a {@link AbstractTraceEvent} object <i>event</i> with traceId not element of
 	 * <i>idsToPass</i> IS passed through the filter.
 	 */
 	@Test
@@ -100,13 +100,13 @@ public class TestTraceIdFilter extends TestCase {
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 
-		final List<TraceEvent> trace =
+		final List<AbstractTraceEvent> trace =
 				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass); // NOCS (MagicNumberCheck)
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 		AbstractPlugin.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
-		for (final TraceEvent e : trace) {
+		for (final AbstractTraceEvent e : trace) {
 			Assert.assertTrue("Testcase invalid", idsToPass.contains(e.getTraceId()));
 			filter.inputTraceEvent(e);
 			Assert.assertTrue("Expected event " + e + " to pass the filter", sinkPlugin.getList().contains(e));
@@ -116,7 +116,7 @@ public class TestTraceIdFilter extends TestCase {
 	}
 
 	/**
-	 * Given a TraceIdFilter that passes all traceIds, assert that an {@link TraceEvent} object <i>exec</i> is passed through the filter.
+	 * Given a TraceIdFilter that passes all traceIds, assert that an {@link AbstractTraceEvent} object <i>exec</i> is passed through the filter.
 	 */
 	@Test
 	public void testAssertPassTraceIdWhenPassAll() {
@@ -128,13 +128,13 @@ public class TestTraceIdFilter extends TestCase {
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 
-		final List<TraceEvent> trace =
+		final List<AbstractTraceEvent> trace =
 				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass); // NOCS (MagicNumberCheck)
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 		AbstractPlugin.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
-		for (final TraceEvent e : trace) {
+		for (final AbstractTraceEvent e : trace) {
 			filter.inputTraceEvent(e);
 			Assert.assertTrue("Expected event " + e + " to pass the filter", sinkPlugin.getList().contains(e));
 		}

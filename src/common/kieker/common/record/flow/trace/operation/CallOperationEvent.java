@@ -18,44 +18,49 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.flow;
+package kieker.common.record.flow.trace.operation;
+
 
 /**
- * @author Jan Waller
+ * @author Andre van Hoorn, Holger Knoche, Jan Waller
  */
-public final class AfterOperationFailedEvent extends OperationEvent {
-	private static final long serialVersionUID = 3331883608930487185L;
+public final class CallOperationEvent extends AbstractOperationEvent {
+	private static final long serialVersionUID = -63172423466638L;
 	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
 		String.class, // OperationEvent.operationName
-		String.class, // Exception
+		String.class, // calleeOperationName
 	};
 
-	private final String cause;
+	private final String calleeOperationName;
 
-	public AfterOperationFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String operationName, final String cause) {
-		super(timestamp, traceId, orderIndex, operationName);
-		this.cause = cause;
+	public CallOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String callerOperationName, final String calleeOperationName) {
+		super(timestamp, traceId, orderIndex, callerOperationName);
+		this.calleeOperationName = calleeOperationName;
 	}
 
-	public AfterOperationFailedEvent(final Object[] values) {
-		super(values, AfterOperationFailedEvent.TYPES); // values[0..3]
-		this.cause = (String) values[4];
+	public CallOperationEvent(final Object[] values) {
+		super(values, CallOperationEvent.TYPES); // values[0..3]
+		this.calleeOperationName = (String) values[4];
 	}
 
 	@Override
 	public final Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationName(), this.cause };
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getCallerOperationName(), this.getCalleeOperationName() };
 	}
 
 	@Override
 	public final Class<?>[] getValueTypes() {
-		return AfterOperationFailedEvent.TYPES.clone();
+		return CallOperationEvent.TYPES.clone();
 	}
 
-	public final String getCause() {
-		return this.cause;
+	public final String getCallerOperationName() {
+		return this.getOperationName();
+	}
+
+	public final String getCalleeOperationName() {
+		return this.calleeOperationName;
 	}
 }

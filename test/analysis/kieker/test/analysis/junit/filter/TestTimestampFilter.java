@@ -24,7 +24,7 @@ import junit.framework.Assert;
 import kieker.analysis.filter.TimestampFilter;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.record.flow.TraceEvent;
+import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 
 import org.junit.Before;
@@ -36,7 +36,7 @@ import org.junit.Test;
  */
 public final class TestTimestampFilter {
 
-	private static final TraceEvent event = new TraceEvent(34556L, 324440L, 0) {
+	private static final AbstractTraceEvent event = new AbstractTraceEvent(34556L, 324440L, 0) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -75,8 +75,8 @@ public final class TestTimestampFilter {
 	}
 
 	/**
-	 * Given a {@link TimestampFilter} selecting {@link TraceEvent}s within an interval <i>[a,b]</i>,
-	 * assert that a {@link TraceEvent} <i>e</i> with <i>e.timestamp &lt; a</i> does not pass the filter.
+	 * Given a {@link TimestampFilter} selecting {@link AbstractTraceEvent}s within an interval <i>[a,b]</i>,
+	 * assert that a {@link AbstractTraceEvent} <i>e</i> with <i>e.timestamp &lt; a</i> does not pass the filter.
 	 */
 	@Test
 	public void testEventBeforeIgnored() {
@@ -91,8 +91,8 @@ public final class TestTimestampFilter {
 	}
 
 	/**
-	 * Given a {@link TimestampFilter} selecting {@link TraceEvent}s within an interval <i>[a,b]</i>,
-	 * assert that a {@link TraceEvent} <i>e</i> with <i>e.timestamp &gt; b </i> does not
+	 * Given a {@link TimestampFilter} selecting {@link AbstractTraceEvent}s within an interval <i>[a,b]</i>,
+	 * assert that a {@link AbstractTraceEvent} <i>e</i> with <i>e.timestamp &gt; b </i> does not
 	 * pass the filter.
 	 */
 	@Test
@@ -107,7 +107,7 @@ public final class TestTimestampFilter {
 	}
 
 	/**
-	 * Given a {@link TimestampFilter} selecting {@link TraceEvent}s within an interval <i>[a,b]</i>,
+	 * Given a {@link TimestampFilter} selecting {@link AbstractTraceEvent}s within an interval <i>[a,b]</i>,
 	 * assert that an event <i>e</i> with <i>e.timestamp == a</i> does pass the filter.
 	 */
 	@Test
@@ -125,7 +125,7 @@ public final class TestTimestampFilter {
 	}
 
 	/**
-	 * Given a {@link TimestampFilter} selecting {@link TraceEvent}s within an interval <i>[a,b]</i>,
+	 * Given a {@link TimestampFilter} selecting {@link AbstractTraceEvent}s within an interval <i>[a,b]</i>,
 	 * assert that an event <i>e</i> with <i>e.timestamp == b</i> does pass the filter.
 	 */
 	@Test
@@ -142,8 +142,8 @@ public final class TestTimestampFilter {
 	}
 
 	/**
-	 * Given a {@link TimestampFilter} selecting {@link TraceEvent}s within an interval <i>[a,b]</i>,
-	 * assert that a {@link TraceEvent} <i>e</i> with <i>e.timestamp &gt; a</i> and <i>r.timestamp
+	 * Given a {@link TimestampFilter} selecting {@link AbstractTraceEvent}s within an interval <i>[a,b]</i>,
+	 * assert that a {@link AbstractTraceEvent} <i>e</i> with <i>e.timestamp &gt; a</i> and <i>r.timestamp
 	 * &gt; a </i> does pass the filter.
 	 */
 	@Test

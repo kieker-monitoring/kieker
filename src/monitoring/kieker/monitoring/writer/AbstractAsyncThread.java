@@ -26,7 +26,7 @@ import java.util.concurrent.CountDownLatch;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.internal.NullRecord;
+import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 
 /**
@@ -34,7 +34,7 @@ import kieker.monitoring.core.controller.IMonitoringController;
  */
 public abstract class AbstractAsyncThread extends Thread {
 	private static final Log LOG = LogFactory.getLog(AbstractAsyncThread.class);
-	private static final IMonitoringRecord END_OF_MONITORING_MARKER = new NullRecord();
+	private static final IMonitoringRecord END_OF_MONITORING_MARKER = new EmptyRecord();
 
 	protected final IMonitoringController monitoringController;
 	private final BlockingQueue<IMonitoringRecord> writeQueue;

@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
-import kieker.common.record.internal.HashRecord;
+import kieker.common.record.misc.HashRecord;
 import kieker.monitoring.core.IMonitoringRecordReceiver;
 
 /**

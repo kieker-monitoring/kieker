@@ -18,26 +18,26 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.flow;
+package kieker.common.record.flow.trace;
+
+import kieker.common.record.flow.AbstractEvent;
 
 /**
  * @author Jan Waller
  */
-public abstract class TraceEvent extends Event {
+public abstract class AbstractTraceEvent extends AbstractEvent {
 	private static final long serialVersionUID = 1L;
-
-	// TODO: sessionId?
 
 	private final long traceId;
 	private final int orderIndex;
 
-	public TraceEvent(final long timestamp, final long traceId, final int orderIndex) {
+	public AbstractTraceEvent(final long timestamp, final long traceId, final int orderIndex) {
 		super(timestamp);
 		this.traceId = traceId;
 		this.orderIndex = orderIndex;
 	}
 
-	public TraceEvent(final Object[] values, final Class<?>[] valueTypes) {
+	public AbstractTraceEvent(final Object[] values, final Class<?>[] valueTypes) {
 		super(values, valueTypes); // values[0]
 		this.traceId = (Long) values[1];
 		this.orderIndex = (Integer) values[2];

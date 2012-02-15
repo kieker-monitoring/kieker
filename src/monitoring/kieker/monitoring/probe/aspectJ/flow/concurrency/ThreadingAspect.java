@@ -20,8 +20,8 @@
 
 package kieker.monitoring.probe.aspectJ.flow.concurrency;
 
-import kieker.common.record.flow.SplitEvent;
-import kieker.common.record.flow.Trace;
+import kieker.common.record.flow.trace.SplitEvent;
+import kieker.common.record.flow.trace.Trace;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.TraceRegistry;

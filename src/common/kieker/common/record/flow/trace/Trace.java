@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.flow;
+package kieker.common.record.flow.trace;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -34,6 +34,8 @@ public final class Trace extends AbstractMonitoringRecord implements IMonitoring
 		long.class, // parentTraceId
 		int.class, // parentOrderId
 	};
+
+	// TODO: sessionid, host ?
 
 	private final long traceId;
 	private final long threadId;

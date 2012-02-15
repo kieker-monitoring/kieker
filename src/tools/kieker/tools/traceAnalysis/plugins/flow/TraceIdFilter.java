@@ -24,18 +24,18 @@ import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.record.flow.TraceEvent;
+import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceIdFilter;
 
 /**
- * Allows to filter {@link TraceEvent} objects based on their {@link TraceEvent#getTraceId()}s.<br>
+ * Allows to filter {@link AbstractTraceEvent} objects based on their {@link AbstractTraceEvent#getTraceId()}s.<br>
  * 
  * This class has exactly one input port and one output port. If the received object
  * contains the defined traceID, the object is delivered unmodified to the output port.
  * 
  * @author Andre van Hoorn
  */
-@Plugin(outputPorts = @OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME, description = "Trace event output", eventTypes = { TraceEvent.class }))
+@Plugin(outputPorts = @OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME, description = "Trace event output", eventTypes = { AbstractTraceEvent.class }))
 public class TraceIdFilter extends AbstractTraceIdFilter {
 	public static final String INPUT_PORT_NAME = "inputTraceEvent";
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
@@ -47,8 +47,8 @@ public class TraceIdFilter extends AbstractTraceIdFilter {
 		super(configuration);
 	}
 
-	@InputPort(name = TraceIdFilter.INPUT_PORT_NAME, description = "Trace event input", eventTypes = { TraceEvent.class })
-	public void inputTraceEvent(final TraceEvent event) {
+	@InputPort(name = TraceIdFilter.INPUT_PORT_NAME, description = "Trace event input", eventTypes = { AbstractTraceEvent.class })
+	public void inputTraceEvent(final AbstractTraceEvent event) {
 		if (super.passId(event.getTraceId())) {
 			super.deliver(TraceIdFilter.OUTPUT_PORT_NAME, event);
 		}

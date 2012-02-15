@@ -27,7 +27,7 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.record.flow.TraceEvent;
+import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
 import kieker.tools.traceAnalysis.plugins.flow.EventRecordTrace;
@@ -61,7 +61,7 @@ public class TestEventRecordTraceGenerationFilter extends TestCase {
 		final long traceId = 978668l; // NOCS (MagicNumberCheck)
 		final long startTime = 86756587l; // NOCS (MagicNumberCheck)
 
-		final List<TraceEvent> bookstoreTrace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(startTime, traceId);
+		final List<AbstractTraceEvent> bookstoreTrace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(startTime, traceId);
 		Assert.assertEquals("Test invalid", startTime, bookstoreTrace.get(0).getTimestamp());
 		final long traceDuration = bookstoreTrace.get(bookstoreTrace.size() - 1).getTimestamp() - startTime;
 
@@ -71,7 +71,7 @@ public class TestEventRecordTraceGenerationFilter extends TestCase {
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 		AbstractPlugin.connect(traceFilter, EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
-		for (final TraceEvent e : bookstoreTrace) {
+		for (final AbstractTraceEvent e : bookstoreTrace) {
 			traceFilter.inputTraceEvent(e);
 		}
 		traceFilter.terminate(false); // terminate w/o error; otherwise end of trace not triggered
@@ -79,7 +79,7 @@ public class TestEventRecordTraceGenerationFilter extends TestCase {
 		// Make sure that 1 trace generated
 		Assert.assertEquals("No trace passed filter", sinkPlugin.getList().size(), 1); // NOCS (MagicNumberCheck)
 		final EventRecordTrace outputTrace = (EventRecordTrace) sinkPlugin.getList().get(0);
-		final List<TraceEvent> outputEvents = outputTrace.eventList();
+		final List<AbstractTraceEvent> outputEvents = outputTrace.eventList();
 
 		// Now, make sure that this trace is as expected
 		Assert.assertEquals("Unexpected length of trace", bookstoreTrace.size(), outputEvents.size());

@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import kieker.common.record.flow.TraceEvent;
+import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.systemModel.AbstractTrace;
 
@@ -36,7 +36,7 @@ import kieker.tools.traceAnalysis.systemModel.AbstractTrace;
  * @author Andre van Hoorn
  * 
  */
-public class EventRecordTrace extends AbstractTrace implements Iterable<TraceEvent> {
+public class EventRecordTrace extends AbstractTrace implements Iterable<AbstractTraceEvent> {
 
 	private int minOrderIndex = -1;
 	private int maxOrderIndex = -1;
@@ -44,12 +44,12 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<TraceEve
 	private long maxTimestamp = -1;
 
 	/**
-	 * {@link TraceEvent}s sorted/unified by {@link TraceEvent#getOrderIndex()}
+	 * {@link AbstractTraceEvent}s sorted/unified by {@link AbstractTraceEvent#getOrderIndex()}
 	 */
-	private final SortedSet<TraceEvent> events = new TreeSet<TraceEvent>(new Comparator<TraceEvent>() {
+	private final SortedSet<AbstractTraceEvent> events = new TreeSet<AbstractTraceEvent>(new Comparator<AbstractTraceEvent>() {
 
 		@Override
-		public int compare(final TraceEvent e1, final TraceEvent e2) {
+		public int compare(final AbstractTraceEvent e1, final AbstractTraceEvent e2) {
 			if ((e1 == e2) || (e1.getOrderIndex() == e2.getOrderIndex())) { // same order index
 				return 0;
 			} else if (e1.getOrderIndex() < e2.getOrderIndex()) {
@@ -71,14 +71,14 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<TraceEve
 	}
 
 	/**
-	 * Adds a {@link TraceEvent} to the trace.
-	 * The given event must have the {@link #getTraceId()} of this trace and another event with {@link TraceEvent#getOrderIndex()} must not have been added before.
+	 * Adds a {@link AbstractTraceEvent} to the trace.
+	 * The given event must have the {@link #getTraceId()} of this trace and another event with {@link AbstractTraceEvent#getOrderIndex()} must not have been added before.
 	 * 
 	 * @param execution
 	 * @throws InvalidTraceException
 	 *             if one of the constraints is violated.
 	 */
-	public void add(final TraceEvent execution) throws InvalidTraceException {
+	public void add(final AbstractTraceEvent execution) throws InvalidTraceException {
 		synchronized (this) {
 			if (this.getTraceId() != execution.getTraceId()) {
 				throw new InvalidTraceException("TraceId of new record (" + execution.getTraceId() + ") differs from Id of this trace (" + this.getTraceId() + ")");
@@ -123,9 +123,9 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<TraceEve
 	@Override
 	public String toString() {
 		final StringBuilder strBuild = new StringBuilder("Trace " + this.getTraceId() + ":\n");
-		final Iterator<TraceEvent> it = this.events.iterator();
+		final Iterator<AbstractTraceEvent> it = this.events.iterator();
 		while (it.hasNext()) {
-			final TraceEvent e = it.next();
+			final AbstractTraceEvent e = it.next();
 			strBuild.append('(');
 			strBuild.append(e.getClass().getSimpleName());
 			strBuild.append("):<");
@@ -136,10 +136,10 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<TraceEve
 	}
 
 	/**
-	 * Returns the {@link TraceEvent}s ordered by {@link TraceEvent#getOrderIndex()}
+	 * Returns the {@link AbstractTraceEvent}s ordered by {@link AbstractTraceEvent#getOrderIndex()}
 	 */
 	@Override
-	public Iterator<TraceEvent> iterator() {
+	public Iterator<AbstractTraceEvent> iterator() {
 		return this.events.iterator();
 	}
 
@@ -172,11 +172,11 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<TraceEve
 	}
 
 	/**
-	 * Returns the list of {@link TraceEvent}s, ordered by {@link TraceEvent#getOrderIndex()}.
+	 * Returns the list of {@link AbstractTraceEvent}s, ordered by {@link AbstractTraceEvent#getOrderIndex()}.
 	 * 
 	 * @return
 	 */
-	public List<TraceEvent> eventList() {
-		return new ArrayList<TraceEvent>(this.events);
+	public List<AbstractTraceEvent> eventList() {
+		return new ArrayList<AbstractTraceEvent>(this.events);
 	}
 }

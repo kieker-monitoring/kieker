@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.internal;
+package kieker.common.record.misc;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -26,16 +26,16 @@ import kieker.common.record.IMonitoringRecord;
 /**
  * @author Andre van Hoorn, Jan Waller
  */
-public final class NullRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+public final class EmptyRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 	private static final long serialVersionUID = -9106270301270791630L;
 
 	private static final Class<?>[] TYPES = {};
 
-	public NullRecord() {
+	public EmptyRecord() {
 		// nothing to do
 	}
 
-	public NullRecord(final Object[] values) { // NOPMD (UnusedFormalParameter)
+	public EmptyRecord(final Object[] values) { // NOPMD (UnusedFormalParameter)
 		// nothing to do
 	}
 
@@ -52,6 +52,6 @@ public final class NullRecord extends AbstractMonitoringRecord implements IMonit
 
 	@Override
 	public Class<?>[] getValueTypes() {
-		return NullRecord.TYPES.clone();
+		return EmptyRecord.TYPES.clone();
 	}
 }

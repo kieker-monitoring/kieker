@@ -25,7 +25,7 @@ import java.util.List;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.internal.NullRecord;
+import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.test.monitoring.junit.util.NamedPipeFactory;
 
@@ -49,7 +49,7 @@ public class TestMonitoringControllerRecordsPassedInMonitoringStates extends Tes
 		final List<IMonitoringRecord> receivedRecords = NamedPipeFactory.createAndRegisterNamedPipeRecordCollector(pipeName);
 
 		Assert.assertTrue("Failed to enable monitoring", monitoringController.enableMonitoring());
-		monitoringController.newMonitoringRecord(new NullRecord());
+		monitoringController.newMonitoringRecord(new EmptyRecord());
 		Assert.assertEquals("Unexpected number of records received", 1, receivedRecords.size());
 		monitoringController.terminateMonitoring();
 	}
@@ -67,7 +67,7 @@ public class TestMonitoringControllerRecordsPassedInMonitoringStates extends Tes
 		final List<IMonitoringRecord> receivedRecords = NamedPipeFactory.createAndRegisterNamedPipeRecordCollector(pipeName);
 
 		Assert.assertTrue("Failed to disable monitoring", monitoringController.disableMonitoring());
-		monitoringController.newMonitoringRecord(new NullRecord());
+		monitoringController.newMonitoringRecord(new EmptyRecord());
 		Assert.assertEquals("Unexpected number of records received", 0, receivedRecords.size());
 		monitoringController.terminateMonitoring();
 	}
@@ -85,7 +85,7 @@ public class TestMonitoringControllerRecordsPassedInMonitoringStates extends Tes
 		final List<IMonitoringRecord> receivedRecords = NamedPipeFactory.createAndRegisterNamedPipeRecordCollector(pipeName);
 
 		monitoringController.terminateMonitoring();
-		monitoringController.newMonitoringRecord(new NullRecord());
+		monitoringController.newMonitoringRecord(new EmptyRecord());
 		Assert.assertEquals("Unexpected number of records received", 0, receivedRecords.size());
 	}
 }

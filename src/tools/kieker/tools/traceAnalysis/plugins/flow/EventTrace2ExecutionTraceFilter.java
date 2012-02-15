@@ -31,10 +31,10 @@ import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.common.record.flow.AfterOperationEvent;
-import kieker.common.record.flow.BeforeOperationEvent;
-import kieker.common.record.flow.CallOperationEvent;
-import kieker.common.record.flow.TraceEvent;
+import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.record.flow.trace.operation.AfterOperationEvent;
+import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.common.record.flow.trace.operation.CallOperationEvent;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
@@ -68,7 +68,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 
 	@InputPort(name = EventTrace2ExecutionTraceFilter.INPUT_PORT_NAME, description = "Receives event record traces to be transformed", eventTypes = { EventRecordTrace.class })
 	public void inputEventTrace(final EventRecordTrace eventTrace) {
-		final Stack<TraceEvent> eventStack = new Stack<TraceEvent>();
+		final Stack<AbstractTraceEvent> eventStack = new Stack<AbstractTraceEvent>();
 
 		final ExecutionTrace execTrace = new ExecutionTrace(eventTrace.getTraceId());
 
@@ -77,7 +77,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 		int nextEoi = 0;
 		int curEss = -1;
 
-		for (final TraceEvent e : eventTrace) {
+		for (final AbstractTraceEvent e : eventTrace) {
 			/* Make sure that order indices increment by 1 */
 			if (e.getOrderIndex() != (lastOrderIndex + 1)) {
 				EventTrace2ExecutionTraceFilter.LOG.error("Trace events' order indices must increment by one: " +
@@ -96,7 +96,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 				 */
 				final BeforeOperationEvent curBeforeOperationEvent = (BeforeOperationEvent) e;
 				if (!eventStack.isEmpty()) {
-					final TraceEvent peekEvent = eventStack.peek();
+					final AbstractTraceEvent peekEvent = eventStack.peek();
 					if (peekEvent instanceof CallOperationEvent) {
 						final CallOperationEvent peekCallEvent = (CallOperationEvent) peekEvent;
 						// TODO: we need to consider the host name as well
@@ -113,7 +113,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 				}
 			} else if (e instanceof CallOperationEvent) {
 				if (!eventStack.isEmpty()) {
-					final TraceEvent peekEvent = eventStack.peek();
+					final AbstractTraceEvent peekEvent = eventStack.peek();
 					final CallOperationEvent curCallEvent = (CallOperationEvent) e;
 					if (peekEvent instanceof CallOperationEvent) {
 						final CallOperationEvent peekCallEvent = (CallOperationEvent) eventStack.peek();
@@ -146,7 +146,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 
 				/* 1. The peek event must be the Before event corresponding to e */
 				{
-					final TraceEvent poppedEvent = eventStack.pop();
+					final AbstractTraceEvent poppedEvent = eventStack.pop();
 					if (!(poppedEvent instanceof BeforeOperationEvent)) {
 						EventTrace2ExecutionTraceFilter.LOG.error("Didn't find corresponding BeforeOperationEvent for AfterOperationEvent " + afterOpEvent +
 								" (found: )" + poppedEvent);

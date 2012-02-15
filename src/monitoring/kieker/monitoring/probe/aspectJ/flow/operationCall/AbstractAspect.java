@@ -20,8 +20,8 @@
 
 package kieker.monitoring.probe.aspectJ.flow.operationCall;
 
-import kieker.common.record.flow.CallOperationEvent;
-import kieker.common.record.flow.Trace;
+import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.operation.CallOperationEvent;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.TraceRegistry;

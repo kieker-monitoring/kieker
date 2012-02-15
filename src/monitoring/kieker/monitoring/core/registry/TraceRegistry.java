@@ -24,7 +24,7 @@ import java.security.SecureRandom;
 import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import kieker.common.record.flow.Trace;
+import kieker.common.record.flow.trace.Trace;
 
 /**
  * @author Jan Waller

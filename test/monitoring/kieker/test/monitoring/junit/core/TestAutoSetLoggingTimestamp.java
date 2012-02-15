@@ -29,7 +29,7 @@ import java.util.Properties;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.internal.NullRecord;
+import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.test.monitoring.junit.util.NamedPipeFactory;
@@ -69,16 +69,16 @@ public class TestAutoSetLoggingTimestamp extends TestCase { // NOCS
 		 */
 		final List<IMonitoringRecord> receivedRecords = NamedPipeFactory.createAndRegisterNamedPipeRecordCollector(pipeName);
 
-		final NullRecord rSent = new NullRecord();
+		final EmptyRecord rSent = new EmptyRecord();
 		final long timestampSent = rSent.getLoggingTimestamp();
-		monitoringController.newMonitoringRecord(new NullRecord());
+		monitoringController.newMonitoringRecord(new EmptyRecord());
 
 		Assert.assertEquals("Test invalid: exactly one record should have been received", 1, receivedRecords.size());
 
 		// Note, that rSent and rReceived are actually the same, but
 		// since this is implementation knowledge, we'll fetch the
 		// logged record from the list
-		final NullRecord rReceived = (NullRecord) receivedRecords.get(0);
+		final EmptyRecord rReceived = (EmptyRecord) receivedRecords.get(0);
 		final long timestampReceived = rReceived.getLoggingTimestamp();
 
 		if (setLoggingTimestampEnabled) {

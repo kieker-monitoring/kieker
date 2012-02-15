@@ -33,7 +33,7 @@ import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.common.record.flow.TraceEvent;
+import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.plugins.executionRecordTransformation.ExecutionEventProcessingException;
@@ -72,12 +72,12 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingPlu
 	private final Map<Long, EventRecordTrace> pendingTraces = new Hashtable<Long, EventRecordTrace>(); // NOPMD (UseConcurrentHashMap)
 
 	/**
-	 * Minimum {@link TraceEvent#getTimestamp()} of the received {@link TraceEvent}s
+	 * Minimum {@link AbstractTraceEvent#getTimestamp()} of the received {@link AbstractTraceEvent}s
 	 */
 	private volatile long minTstamp = -1;
 
 	/**
-	 * Maximum {@link TraceEvent#getTimestamp()} of the received {@link TraceEvent}s
+	 * Maximum {@link AbstractTraceEvent#getTimestamp()} of the received {@link AbstractTraceEvent}s
 	 */
 	private volatile long maxTstamp = -1;
 
@@ -121,8 +121,8 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingPlu
 		}
 	}
 
-	@InputPort(name = EventRecordTraceGenerationFilter.INPUT_PORT_NAME, description = "Receives new trace events", eventTypes = { TraceEvent.class })
-	public void inputTraceEvent(final TraceEvent event) {
+	@InputPort(name = EventRecordTraceGenerationFilter.INPUT_PORT_NAME, description = "Receives new trace events", eventTypes = { AbstractTraceEvent.class })
+	public void inputTraceEvent(final AbstractTraceEvent event) {
 		final long traceId = event.getTraceId();
 
 		/* Update minimum and maximum timestamps */
@@ -177,7 +177,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingPlu
 	}
 
 	/**
-	 * Returns the minimum timestamp of the received {@link TraceEvent}s.
+	 * Returns the minimum timestamp of the received {@link AbstractTraceEvent}s.
 	 * 
 	 * @return the timestamp
 	 */
@@ -186,7 +186,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingPlu
 	}
 
 	/**
-	 * Returns the maximum timestamp of the received {@link TraceEvent}s.
+	 * Returns the maximum timestamp of the received {@link AbstractTraceEvent}s.
 	 * 
 	 * @return the timestamp
 	 */

@@ -18,48 +18,35 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.flow;
+package kieker.common.record.flow.trace.operation;
 
 /**
- * @author Andre van Hoorn, Holger Knoche, Jan Waller
+ * @author Jan Waller
  */
-public final class CallOperationEvent extends OperationEvent {
-	private static final long serialVersionUID = -63172423466638L;
+public final class AfterOperationEvent extends AbstractOperationEvent {
+	private static final long serialVersionUID = -631724968913053878L;
 	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
 		String.class, // OperationEvent.operationName
-		String.class, // calleeOperationName
 	};
 
-	private final String calleeOperationName;
-
-	public CallOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String callerOperationName, final String calleeOperationName) {
-		super(timestamp, traceId, orderIndex, callerOperationName);
-		this.calleeOperationName = calleeOperationName;
+	public AfterOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationName) {
+		super(timestamp, traceId, orderIndex, operationName);
 	}
 
-	public CallOperationEvent(final Object[] values) {
-		super(values, CallOperationEvent.TYPES); // values[0..3]
-		this.calleeOperationName = (String) values[4];
+	public AfterOperationEvent(final Object[] values) {
+		super(values, AfterOperationEvent.TYPES); // values[0..3]
 	}
 
 	@Override
 	public final Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getCallerOperationName(), this.getCalleeOperationName() };
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationName(), };
 	}
 
 	@Override
 	public final Class<?>[] getValueTypes() {
-		return CallOperationEvent.TYPES.clone();
-	}
-
-	public final String getCallerOperationName() {
-		return this.getOperationName();
-	}
-
-	public final String getCalleeOperationName() {
-		return this.calleeOperationName;
+		return AfterOperationEvent.TYPES.clone();
 	}
 }

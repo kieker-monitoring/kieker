@@ -18,35 +18,36 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.flow;
+package kieker.common.record.flow.trace;
 
-import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.flow.trace.AbstractTraceEvent;
 
 /**
  * @author Jan Waller
  */
-public abstract class Event extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	private static final long serialVersionUID = 1L;
+public final class SplitEvent extends AbstractTraceEvent {
+	private static final long serialVersionUID = -4454625562107999414L;
+	private static final Class<?>[] TYPES = {
+		long.class, // Event.timestamp
+		long.class, // TraceEvent.traceId
+		int.class, // TraceEvent.orderIndex
+	};
 
-	private final long timestamp;
-
-	public Event(final long timestamp) {
-		this.timestamp = timestamp;
+	public SplitEvent(final long timestamp, final long traceId, final int orderIndex) {
+		super(timestamp, traceId, orderIndex);
 	}
 
-	public Event(final Object[] values, final Class<?>[] valueTypes) {
-		AbstractMonitoringRecord.checkArray(values, valueTypes);
-		this.timestamp = (Long) values[0];
+	public SplitEvent(final Object[] values) {
+		super(values, SplitEvent.TYPES); // values[0..2]
 	}
 
 	@Override
-	@Deprecated
-	public final void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
+	public final Object[] toArray() {
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), };
 	}
 
-	public final long getTimestamp() {
-		return this.timestamp;
+	@Override
+	public final Class<?>[] getValueTypes() {
+		return SplitEvent.TYPES.clone();
 	}
 }

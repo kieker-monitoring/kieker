@@ -6,7 +6,7 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.flow.TraceEvent;
+import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.legacy.OperationExecutionRecord;
 
 /**
@@ -74,8 +74,8 @@ public final class TimestampFilter extends AbstractAnalysisPlugin {
 		}
 	}
 
-	@InputPort(name = TimestampFilter.INPUT_PORT_NAME_FLOW, description = "TraceEvent input", eventTypes = { TraceEvent.class })
-	public void inputTraceEvent(final TraceEvent event) {
+	@InputPort(name = TimestampFilter.INPUT_PORT_NAME_FLOW, description = "TraceEvent input", eventTypes = { AbstractTraceEvent.class })
+	public void inputTraceEvent(final AbstractTraceEvent event) {
 		if (this.inRange(event.getTimestamp())) {
 			super.deliver(TimestampFilter.OUTPUT_PORT_NAME, event);
 		}

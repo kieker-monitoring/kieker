@@ -20,10 +20,10 @@
 
 package kieker.monitoring.probe.aspectJ.flow.operationExecution;
 
-import kieker.common.record.flow.AfterOperationEvent;
-import kieker.common.record.flow.AfterOperationFailedEvent;
-import kieker.common.record.flow.BeforeOperationEvent;
-import kieker.common.record.flow.Trace;
+import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.operation.AfterOperationEvent;
+import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
+import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.TraceRegistry;

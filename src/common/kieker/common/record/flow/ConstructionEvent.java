@@ -23,7 +23,7 @@ package kieker.common.record.flow;
 /**
  * @author Jan Waller
  */
-public final class ConstructionEvent extends Event {
+public final class ConstructionEvent extends AbstractEvent {
 	private static final long serialVersionUID = 4260562921517437040L;
 	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp

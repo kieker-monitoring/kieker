@@ -28,7 +28,7 @@ import kieker.analysis.plugin.AbstractPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.common.record.flow.TraceEvent;
+import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.traceAnalysis.plugins.TestTraceReconstructionFilter;
 import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
@@ -116,11 +116,11 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		/*
 		 * Create an EventRecordTrace, containing only Before- and AfterOperation events.
 		 */
-		final List<TraceEvent> eventList =
+		final List<AbstractTraceEvent> eventList =
 				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(this.exec0_0__bookstore_searchBook.getTin(),
 						TestEventTrace2ExecutionTraceFilter.TRACE_ID);
 		final EventRecordTrace eventRecordTrace = new EventRecordTrace(TestEventTrace2ExecutionTraceFilter.TRACE_ID);
-		for (final TraceEvent ev : eventList) {
+		for (final AbstractTraceEvent ev : eventList) {
 			eventRecordTrace.add(ev);
 		}
 

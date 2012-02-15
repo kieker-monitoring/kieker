@@ -22,7 +22,7 @@ package kieker.test.common.junit.record;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.common.record.flow.CallOperationEvent;
+import kieker.common.record.flow.trace.operation.CallOperationEvent;
 
 import org.junit.Test;
 

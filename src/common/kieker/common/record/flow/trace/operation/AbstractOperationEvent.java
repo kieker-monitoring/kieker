@@ -18,22 +18,24 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.flow;
+package kieker.common.record.flow.trace.operation;
+
+import kieker.common.record.flow.trace.AbstractTraceEvent;
 
 /**
  * @author Jan Waller
  */
-public abstract class OperationEvent extends TraceEvent {
+public abstract class AbstractOperationEvent extends AbstractTraceEvent {
 	private static final long serialVersionUID = 1L;
 
 	private final String operationName;
 
-	public OperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationName) {
+	public AbstractOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationName) {
 		super(timestamp, traceId, orderIndex);
 		this.operationName = operationName;
 	}
 
-	public OperationEvent(final Object[] values, final Class<?>[] valueTypes) {
+	public AbstractOperationEvent(final Object[] values, final Class<?>[] valueTypes) {
 		super(values, valueTypes); // values[0..2]
 		this.operationName = (String) values[3];
 	}

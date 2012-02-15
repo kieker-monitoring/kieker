@@ -18,13 +18,13 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.flow;
+package kieker.common.record.flow.trace.operation;
 
 /**
  * @author Jan Waller
  */
-public final class AfterOperationEvent extends OperationEvent {
-	private static final long serialVersionUID = -631724968913053878L;
+public final class BeforeOperationEvent extends AbstractOperationEvent {
+	private static final long serialVersionUID = -5920247930003146071L;
 	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
@@ -32,12 +32,12 @@ public final class AfterOperationEvent extends OperationEvent {
 		String.class, // OperationEvent.operationName
 	};
 
-	public AfterOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationName) {
+	public BeforeOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationName) {
 		super(timestamp, traceId, orderIndex, operationName);
 	}
 
-	public AfterOperationEvent(final Object[] values) {
-		super(values, AfterOperationEvent.TYPES); // values[0..3]
+	public BeforeOperationEvent(final Object[] values) {
+		super(values, BeforeOperationEvent.TYPES); // values[0..3]
 	}
 
 	@Override
@@ -47,6 +47,6 @@ public final class AfterOperationEvent extends OperationEvent {
 
 	@Override
 	public final Class<?>[] getValueTypes() {
-		return AfterOperationEvent.TYPES.clone();
+		return BeforeOperationEvent.TYPES.clone();
 	}
 }

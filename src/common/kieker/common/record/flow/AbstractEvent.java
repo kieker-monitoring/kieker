@@ -20,32 +20,33 @@
 
 package kieker.common.record.flow;
 
+import kieker.common.record.AbstractMonitoringRecord;
+import kieker.common.record.IMonitoringRecord;
+
 /**
  * @author Jan Waller
  */
-public final class SplitEvent extends TraceEvent {
-	private static final long serialVersionUID = -4454625562107999414L;
-	private static final Class<?>[] TYPES = {
-		long.class, // Event.timestamp
-		long.class, // TraceEvent.traceId
-		int.class, // TraceEvent.orderIndex
-	};
+public abstract class AbstractEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+	private static final long serialVersionUID = 1L;
 
-	public SplitEvent(final long timestamp, final long traceId, final int orderIndex) {
-		super(timestamp, traceId, orderIndex);
+	private final long timestamp;
+
+	public AbstractEvent(final long timestamp) {
+		this.timestamp = timestamp;
 	}
 
-	public SplitEvent(final Object[] values) {
-		super(values, SplitEvent.TYPES); // values[0..2]
-	}
-
-	@Override
-	public final Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), };
+	public AbstractEvent(final Object[] values, final Class<?>[] valueTypes) {
+		AbstractMonitoringRecord.checkArray(values, valueTypes);
+		this.timestamp = (Long) values[0];
 	}
 
 	@Override
-	public final Class<?>[] getValueTypes() {
-		return SplitEvent.TYPES.clone();
+	@Deprecated
+	public final void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	public final long getTimestamp() {
+		return this.timestamp;
 	}
 }

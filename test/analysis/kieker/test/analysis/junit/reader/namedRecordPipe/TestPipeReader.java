@@ -35,7 +35,7 @@ import kieker.analysis.reader.namedRecordPipe.PipeReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.namedRecordPipe.IPipeWriter;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.internal.NullRecord;
+import kieker.common.record.misc.EmptyRecord;
 import kieker.test.analysis.junit.util.NamedPipeFactory;
 
 import org.junit.Test;
@@ -73,7 +73,7 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 		 */
 		final int numRecordsToSend = 7;
 		for (int i = 0; i < numRecordsToSend; i++) {
-			writer.newMonitoringRecord(new NullRecord()); // NOPMD (new in loop)
+			writer.newMonitoringRecord(new EmptyRecord()); // NOPMD (new in loop)
 		}
 
 		analysisThread.terminate();
