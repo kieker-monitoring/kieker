@@ -59,7 +59,7 @@ public final class FsWriterThread extends AbstractFsWriterThread {
 		sb.append(monitoringRecord.getLoggingTimestamp());
 		for (final Object recordField : recordFields) {
 			sb.append(';');
-			sb.append(recordField);
+			sb.append(String.valueOf(recordField));
 		}
 		this.pos.println(sb.toString());
 	}

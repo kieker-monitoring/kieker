@@ -18,16 +18,17 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.misc;
+package kieker.monitoring.core.registry;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 
 /**
+ * Internal record type used exclusively by the monitoring subsystem.
  * 
  * @author Jan Waller
  */
-public final class HashRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+public final class RegistryRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 	private static final long serialVersionUID = 4566332478835872121L;
 	private static final Class<?>[] TYPES = new Class<?>[] {
 		int.class, // id
@@ -37,14 +38,14 @@ public final class HashRecord extends AbstractMonitoringRecord implements IMonit
 	private final int id;
 	private final Object object;
 
-	public HashRecord(final int id, final Object object) {
+	public RegistryRecord(final int id, final Object object) {
 		this.id = id;
 		this.object = object;
 	}
 
-	public HashRecord(final Object[] values) {
+	public RegistryRecord(final Object[] values) {
 		final Object[] myValues = values.clone(); // to protect object from tampering
-		AbstractMonitoringRecord.checkArray(myValues, HashRecord.TYPES);
+		AbstractMonitoringRecord.checkArray(myValues, RegistryRecord.TYPES);
 		try {
 			this.id = (Integer) myValues[0];
 			this.object = myValues[1];
@@ -66,7 +67,7 @@ public final class HashRecord extends AbstractMonitoringRecord implements IMonit
 
 	@Override
 	public Class<?>[] getValueTypes() {
-		return HashRecord.TYPES.clone();
+		return RegistryRecord.TYPES.clone();
 	}
 
 	/**

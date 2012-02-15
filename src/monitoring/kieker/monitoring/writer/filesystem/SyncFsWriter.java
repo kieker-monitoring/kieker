@@ -37,7 +37,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.misc.HashRecord;
+import kieker.monitoring.core.registry.RegistryRecord;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
 /**
@@ -131,15 +131,14 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 
 	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		if (monitoringRecord instanceof HashRecord) {
+		if (monitoringRecord instanceof RegistryRecord) {
 			try {
-				this.mappingFileWriter.write((HashRecord) monitoringRecord);
+				this.mappingFileWriter.write((RegistryRecord) monitoringRecord);
 			} catch (final IOException ex) {
 				SyncFsWriter.LOG.error("Failed to write monitoring record", ex);
 				return false;
 			}
 		} else {
-
 			final Object[] recordFields = monitoringRecord.toArray();
 			final StringBuilder sb = new StringBuilder(256);
 			sb.append('$');
@@ -153,7 +152,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			try {
 				synchronized (this) { // we must not synch on pos, it changes within!
 					this.prepareFile(); // may throw FileNotFoundException
-					this.pos.println(sb);
+					this.pos.println(sb.toString());
 				}
 			} catch (final IOException ex) {
 				SyncFsWriter.LOG.error("Failed to write monitoring record", ex);

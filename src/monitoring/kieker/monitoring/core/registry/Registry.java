@@ -25,7 +25,6 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
-import kieker.common.record.misc.HashRecord;
 import kieker.monitoring.core.IMonitoringRecordReceiver;
 
 /**
@@ -286,7 +285,7 @@ public class Registry<E> implements IRegistry<E> {
 						tab[index] = new HashEntry<E>(value, hash, id, first);
 						this.count = c; // write-volatile
 						if (this.recordReceiver != null) { // NOCS // NOPMD (nested if)
-							this.recordReceiver.newMonitoringRecord(new HashRecord(id, value));
+							this.recordReceiver.newMonitoringRecord(new RegistryRecord(id, value));
 						}
 						return id; // return new id
 					}

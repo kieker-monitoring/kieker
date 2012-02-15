@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
-import kieker.common.record.misc.HashRecord;
+import kieker.monitoring.core.registry.RegistryRecord;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -47,7 +47,7 @@ public class MappingFileWriter {
 		}
 	}
 
-	public final void write(final HashRecord hashRecord) throws IOException {
+	public final void write(final RegistryRecord hashRecord) throws IOException {
 		synchronized (this.mappingFile) {
 			PrintWriter pw = null;
 			try {

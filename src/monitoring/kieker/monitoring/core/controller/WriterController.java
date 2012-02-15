@@ -27,6 +27,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.registry.RegistryRecord;
 import kieker.monitoring.writer.IMonitoringWriter;
 
 /**
@@ -94,14 +95,17 @@ public final class WriterController extends AbstractController implements IWrite
 	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		try {
-			final MonitoringController monitoringController = super.monitoringController;
-			if (!monitoringController.isMonitoringEnabled()) { // enabled and not terminated
-				return false;
+			// fast lane for RegistryRecords (these must always be delivered!)
+			if (!(record instanceof RegistryRecord)) {
+				final MonitoringController monitoringController = super.monitoringController;
+				if (!monitoringController.isMonitoringEnabled()) { // enabled and not terminated
+					return false;
+				}
+				if (this.autoSetLoggingTimestamp) {
+					record.setLoggingTimestamp(monitoringController.getTimeSource().getTime());
+				}
+				this.numberOfInserts.incrementAndGet();
 			}
-			if (this.autoSetLoggingTimestamp) {
-				record.setLoggingTimestamp(monitoringController.getTimeSource().getTime());
-			}
-			this.numberOfInserts.incrementAndGet();
 			if (!this.monitoringWriter.newMonitoringRecord(record)) {
 				WriterController.LOG.error("Error writing the monitoring data. Will terminate monitoring!");
 				this.terminate();

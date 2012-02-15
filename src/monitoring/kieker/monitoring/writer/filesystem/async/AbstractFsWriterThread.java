@@ -29,8 +29,8 @@ import java.util.TimeZone;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.misc.HashRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.registry.RegistryRecord;
 import kieker.monitoring.writer.AbstractAsyncThread;
 import kieker.monitoring.writer.filesystem.MappingFileWriter;
 
@@ -74,8 +74,8 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 
 	@Override
 	protected final void consume(final IMonitoringRecord monitoringRecord) throws Exception {
-		if (monitoringRecord instanceof HashRecord) {
-			this.mappingFileWriter.write((HashRecord) monitoringRecord);
+		if (monitoringRecord instanceof RegistryRecord) {
+			this.mappingFileWriter.write((RegistryRecord) monitoringRecord);
 		} else {
 			if (++this.entriesInCurrentFileCounter > this.maxEntriesInFile) {
 				this.entriesInCurrentFileCounter = 1;
