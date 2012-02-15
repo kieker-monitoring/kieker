@@ -21,7 +21,7 @@
 package kieker.monitoring.core.controller;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.IMonitoringRecordReceiver;
+import kieker.monitoring.core.IMonitoringRecordReceiver;
 
 /**
  * The methods must not throw any exceptions but indicate problems via its

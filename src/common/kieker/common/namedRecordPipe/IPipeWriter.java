@@ -18,34 +18,21 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.writer;
+package kieker.common.namedRecordPipe;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.IMonitoringRecordReceiver;
-import kieker.monitoring.core.controller.IMonitoringController;
 
 /**
- * @author Andre van Hoorn, Jan Waller, Robert von Massow
+ * @author Andre van Hoorn
  */
-public interface IMonitoringWriter extends IMonitoringRecordReceiver {
-
-	@Override
-	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
+public interface IPipeWriter {
 
 	/**
-	 * Called by the Monitoring Controller to announce a shutdown of monitoring.
-	 * Writers should return as soon as it is safe to terminate Kieker.
-	 */
-	public abstract void terminate();
-
-	/**
-	 * Set the <code>IMonitoringController</code> controlling this writer.
+	 * Called for each new record.
 	 * 
-	 * @param monitoringController
-	 * @throws Exception
+	 * @param record
+	 *            the record.
+	 * @return true on success; false in case of an error.
 	 */
-	public abstract void setController(final IMonitoringController monitoringController) throws Exception;
-
-	@Override
-	public abstract String toString();
+	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
 }

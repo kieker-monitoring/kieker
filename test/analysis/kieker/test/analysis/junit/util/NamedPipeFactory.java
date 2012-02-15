@@ -23,9 +23,9 @@ package kieker.test.analysis.junit.util;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.common.namedRecordPipe.Broker;
+import kieker.common.namedRecordPipe.IPipeWriter;
 import kieker.common.namedRecordPipe.Pipe;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.IMonitoringRecordReceiver;
 
 /**
  * 
@@ -56,9 +56,9 @@ public final class NamedPipeFactory {
 	 * @param pipeName
 	 * @return the {@link kieker.common.record.IMonitoringRecordReceiver}
 	 */
-	public static final IMonitoringRecordReceiver createAndRegisterNamedPipeRecordWriter(final String pipeName) {
+	public static final IPipeWriter createAndRegisterNamedPipeRecordWriter(final String pipeName) {
 		final Pipe namedPipe = Broker.INSTANCE.acquirePipe(pipeName);
-		final IMonitoringRecordReceiver writer = new IMonitoringRecordReceiver() {
+		final IPipeWriter writer = new IPipeWriter() {
 			@Override
 			public boolean newMonitoringRecord(final IMonitoringRecord record) {
 				return namedPipe.writeMonitoringRecord(record);

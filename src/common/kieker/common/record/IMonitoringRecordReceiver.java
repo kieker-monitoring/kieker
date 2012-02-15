@@ -21,8 +21,11 @@
 package kieker.common.record;
 
 /**
+ * Will be removed in Kieker 1.6
+ * 
  * @author Andre van Hoorn
  */
+@Deprecated
 public interface IMonitoringRecordReceiver {
 
 	/**

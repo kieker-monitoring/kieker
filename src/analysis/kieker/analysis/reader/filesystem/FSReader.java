@@ -34,7 +34,6 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.common.record.internal.DummyMonitoringRecord;
 
 /**
@@ -163,4 +162,8 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 		}
 		return configuration;
 	}
+}
+
+interface IMonitoringRecordReceiver {
+	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
 }

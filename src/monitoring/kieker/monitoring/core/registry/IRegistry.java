@@ -20,7 +20,7 @@
 
 package kieker.monitoring.core.registry;
 
-import kieker.common.record.IMonitoringRecordReceiver;
+import kieker.monitoring.core.IMonitoringRecordReceiver;
 
 /**
  * A generic interface to assign unique IDs to objects of type E.

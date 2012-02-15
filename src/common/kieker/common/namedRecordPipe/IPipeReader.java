@@ -20,15 +20,24 @@
 
 package kieker.common.namedRecordPipe;
 
-import kieker.common.record.IMonitoringRecordReceiver;
+import kieker.common.record.IMonitoringRecord;
 
 /**
  * 
  * @author Andre van Hoorn
  */
-public interface IPipeReader extends IMonitoringRecordReceiver {
+public interface IPipeReader {
 	/**
 	 * Called to notify the reader that the pipe is closed.
 	 */
 	public void notifyPipeClosed();
+
+	/**
+	 * Called for each new record.
+	 * 
+	 * @param record
+	 *            the record.
+	 * @return true on success; false in case of an error.
+	 */
+	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
 }

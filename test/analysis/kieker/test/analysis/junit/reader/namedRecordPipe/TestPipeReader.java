@@ -33,8 +33,8 @@ import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.reader.namedRecordPipe.PipeReader;
 import kieker.common.configuration.Configuration;
+import kieker.common.namedRecordPipe.IPipeWriter;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.IMonitoringRecordReceiver;
 import kieker.test.analysis.junit.util.DummyRecord;
 import kieker.test.analysis.junit.util.NamedPipeFactory;
 
@@ -57,7 +57,7 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 
 		final List<IMonitoringRecord> receivedRecords = Collections.synchronizedList(new ArrayList<IMonitoringRecord>());
 
-		final IMonitoringRecordReceiver writer = kieker.test.analysis.junit.util.NamedPipeFactory.createAndRegisterNamedPipeRecordWriter(pipeName);
+		final IPipeWriter writer = kieker.test.analysis.junit.util.NamedPipeFactory.createAndRegisterNamedPipeRecordWriter(pipeName);
 
 		final MonitoringSinkClass receiver = new MonitoringSinkClass(receivedRecords);
 
