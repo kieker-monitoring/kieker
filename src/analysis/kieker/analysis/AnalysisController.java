@@ -207,12 +207,12 @@ public final class AnalysisController {
 			final Configuration configuration = AnalysisController.modelPropertiesToConfiguration(mPlugin.getProperties());
 			/* Create the plugin and put it into our map. */
 			try {
-				final Constructor<?> pluginConstructor = Class.forName(mPlugin.getClassname()).getConstructor(Configuration.class);
-				final AbstractPlugin plugin = (AbstractPlugin) pluginConstructor.newInstance(configuration.getPropertiesStartingWith(mPlugin.getClassname()));
-				pluginMap.put(mPlugin, plugin);
-
+				final String pluginClassname = mPlugin.getClassname();
+				final Constructor<?> pluginConstructor = Class.forName(pluginClassname).getConstructor(Configuration.class);
 				/* Set the other properties of the plugin. */
-				plugin.setName(mPlugin.getName());
+				configuration.setProperty(pluginClassname + ".name", mPlugin.getName());
+				final AbstractPlugin plugin = (AbstractPlugin) pluginConstructor.newInstance(configuration.getPropertiesStartingWith(pluginClassname));
+				pluginMap.put(mPlugin, plugin);
 
 				/* Add the plugin to our controller instance. */
 				if (plugin instanceof AbstractReaderPlugin) {

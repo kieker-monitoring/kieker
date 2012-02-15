@@ -45,21 +45,12 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin {
 	private static final Log LOG = LogFactory.getLog(AbstractTraceAnalysisPlugin.class);
 
-	public static final String CONFIG_NAME = AbstractTraceAnalysisPlugin.class.getName() + ".name";
 	public static final String SYSTEM_MODEL_REPOSITORY_NAME = "systemModelRepository";
 
-	private final String name;
 	private volatile SystemModelRepository systemEntityFactory;
 
 	public AbstractTraceAnalysisPlugin(final Configuration configuration) {
 		super(configuration);
-
-		/* Try to load the name from the given configuration. */
-		if (configuration.containsKey(AbstractTraceAnalysisPlugin.CONFIG_NAME)) {
-			this.name = configuration.getStringProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME);
-		} else {
-			this.name = null;
-		}
 	}
 
 	/**
@@ -235,7 +226,7 @@ public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin
 	protected void printMessage(final String[] lines) {
 		System.out.println("");
 		System.out.println("#");
-		System.out.println("# Plugin: " + this.name);
+		System.out.println("# Plugin: " + this.getName());
 		for (final String l : lines) {
 			System.out.println(l);
 		}

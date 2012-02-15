@@ -127,7 +127,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		}
 
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, "TraceReconstructionFilter");
+		configuration.setProperty(TraceReconstructionFilter.class.getName() + ".name", "TraceReconstructionFilter");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, "true");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Long.toString(AbstractTraceProcessingPlugin.MAX_DURATION_MILLIS));
 		final Map<String, AbstractRepository> repositoryMap = new HashMap<String, AbstractRepository>();
@@ -241,7 +241,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		}
 
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, "TraceReconstructionFilter");
+		configuration.setProperty(TraceReconstructionFilter.class.getName() + ".name", "TraceReconstructionFilter");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, "true");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Long.toString(AbstractTraceProcessingPlugin.MAX_DURATION_MILLIS));
 		final Map<String, AbstractRepository> repositoryMap = new HashMap<String, AbstractRepository>();
@@ -385,7 +385,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Instantiate reconstruction filter with timeout.
 		 */
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, "TraceReconstructionFilter");
+		configuration.setProperty(TraceReconstructionFilter.class.getName() + ".name", "TraceReconstructionFilter");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, "true");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Long.toString(
 				((triggerExecutionTrace.getMaxTout() - incompleteExecutionTrace.getMinTin()) / (1000 * 1000)) - 1));

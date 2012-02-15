@@ -305,7 +305,7 @@ public final class TraceAnalysisTool {
 			analysisInstance.registerRepository(TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 
 			final Configuration execRecTransformerConfig = new Configuration();
-			execRecTransformerConfig.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.EXEC_TRACE_RECONSTR_COMPONENT_NAME);
+			execRecTransformerConfig.setProperty(ExecutionRecordTransformationFilter.class.getName() + ".name", Constants.EXEC_TRACE_RECONSTR_COMPONENT_NAME);
 			final ExecutionRecordTransformationFilter execRecTransformer =
 					new ExecutionRecordTransformationFilter(execRecTransformerConfig);
 			analysisInstance.registerPlugin(execRecTransformer);
@@ -361,7 +361,7 @@ public final class TraceAnalysisTool {
 					traceIdFilterFlow, kieker.tools.traceAnalysis.plugins.flow.TraceIdFilter.INPUT_PORT_NAME);
 
 			final Configuration mtReconstrFilterConfig = new Configuration();
-			mtReconstrFilterConfig.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.TRACERECONSTR_COMPONENT_NAME);
+			mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.class.getName() + ".name", Constants.TRACERECONSTR_COMPONENT_NAME);
 			mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS,
 					Integer.toString(TraceAnalysisTool.maxTraceDurationMillis));
 			mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, Boolean.toString(TraceAnalysisTool.ignoreInvalidTraces));
@@ -372,7 +372,8 @@ public final class TraceAnalysisTool {
 			analysisInstance.registerPlugin(mtReconstrFilter);
 
 			final Configuration configurationEventRecordTraceGenerationFilter = new Configuration();
-			configurationEventRecordTraceGenerationFilter.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.EVENTRECORDTRACERECONSTR_COMPONENT_NAME);
+			configurationEventRecordTraceGenerationFilter.setProperty(EventRecordTraceGenerationFilter.class.getName() + ".name",
+					Constants.EVENTRECORDTRACERECONSTR_COMPONENT_NAME);
 			configurationEventRecordTraceGenerationFilter.setProperty(EventRecordTraceGenerationFilter.CONFIG_MAX_TRACE_DURATION_MILLIS,
 					Integer.toString(TraceAnalysisTool.maxTraceDurationMillis));
 			eventRecordTraceGenerationFilter = new EventRecordTraceGenerationFilter(configurationEventRecordTraceGenerationFilter);
@@ -382,7 +383,8 @@ public final class TraceAnalysisTool {
 			eventRecordTraceGenerationFilter.connect(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 
 			final Configuration configurationEventTrace2ExecutionTraceFilter = new Configuration();
-			configurationEventTrace2ExecutionTraceFilter.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.EXECTRACESFROMEVENTTRACES_COMPONENT_NAME);
+			configurationEventTrace2ExecutionTraceFilter.setProperty(EventTrace2ExecutionTraceFilter.class.getName() + ".name",
+					Constants.EXECTRACESFROMEVENTTRACES_COMPONENT_NAME);
 			// EventTrace2ExecutionTraceFilter has no configuration properties
 			eventTrace2ExecutionTraceFilter = new EventTrace2ExecutionTraceFilter(configurationEventTrace2ExecutionTraceFilter);
 			analysisInstance.registerPlugin(eventTrace2ExecutionTraceFilter);
@@ -393,7 +395,8 @@ public final class TraceAnalysisTool {
 			final List<AbstractTraceProcessingPlugin> allTraceProcessingComponents = new ArrayList<AbstractTraceProcessingPlugin>();
 
 			final Configuration traceAllocationEquivClassFilterConfig = new Configuration();
-			traceAllocationEquivClassFilterConfig.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.TRACEALLOCATIONEQUIVCLASS_COMPONENT_NAME);
+			traceAllocationEquivClassFilterConfig.setProperty(TraceEquivalenceClassFilter.class.getName() + ".name",
+					Constants.TRACEALLOCATIONEQUIVCLASS_COMPONENT_NAME);
 			final TraceEquivalenceClassFilter traceAllocationEquivClassFilter = new TraceEquivalenceClassFilter(traceAllocationEquivClassFilterConfig,
 					TraceEquivalenceClassModes.ALLOCATION);
 			if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)) {
@@ -412,7 +415,7 @@ public final class TraceAnalysisTool {
 			}
 
 			final Configuration traceAssemblyEquivClassFilterConfig = new Configuration();
-			traceAssemblyEquivClassFilterConfig.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.TRACEASSEMBLYEQUIVCLASS_COMPONENT_NAME);
+			traceAssemblyEquivClassFilterConfig.setProperty(TraceEquivalenceClassFilter.class.getName() + ".name", Constants.TRACEASSEMBLYEQUIVCLASS_COMPONENT_NAME);
 			final TraceEquivalenceClassFilter traceAssemblyEquivClassFilter = new TraceEquivalenceClassFilter(traceAssemblyEquivClassFilterConfig,
 					TraceEquivalenceClassModes.ASSEMBLY);
 			if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT)) {
@@ -435,7 +438,7 @@ public final class TraceAnalysisTool {
 			if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES)) {
 				numRequestedTasks++;
 				final Configuration componentPrintMsgTraceConfig = new Configuration();
-				componentPrintMsgTraceConfig.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.PRINTMSGTRACE_COMPONENT_NAME);
+				componentPrintMsgTraceConfig.setProperty(MessageTraceWriterPlugin.class.getName() + ".name", Constants.PRINTMSGTRACE_COMPONENT_NAME);
 				componentPrintMsgTraceConfig.setProperty(MessageTraceWriterPlugin.CONFIG_OUTPUT_FN, new File(TraceAnalysisTool.outputDir + File.separator
 						+ TraceAnalysisTool.outputFnPrefix + Constants.MESSAGE_TRACES_FN_PREFIX + ".txt") // NOPMD
 						.getCanonicalPath());
@@ -452,7 +455,7 @@ public final class TraceAnalysisTool {
 			if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PRINTEXECTRACES)) {
 				numRequestedTasks++;
 				final Configuration componentPrintExecTraceConfig = new Configuration();
-				componentPrintExecTraceConfig.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.PRINTEXECTRACE_COMPONENT_NAME);
+				componentPrintExecTraceConfig.setProperty(ExecutionTraceWriterPlugin.class.getName() + ".name", Constants.PRINTEXECTRACE_COMPONENT_NAME);
 				componentPrintExecTraceConfig.setProperty(ExecutionTraceWriterPlugin.CONFIG_OUTPUT_FN, new File(TraceAnalysisTool.outputDir + File.separator
 						+ TraceAnalysisTool.outputFnPrefix + Constants.EXECUTION_TRACES_FN_PREFIX + ".txt")
 						.getCanonicalPath());
@@ -469,7 +472,8 @@ public final class TraceAnalysisTool {
 			if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES)) {
 				numRequestedTasks++;
 				final Configuration componentPrintInvalidTraceConfig = new Configuration();
-				componentPrintInvalidTraceConfig.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.PRINTINVALIDEXECTRACE_COMPONENT_NAME);
+				componentPrintInvalidTraceConfig.setProperty(InvalidExecutionTraceWriterPlugin.class.getName() + ".name",
+						Constants.PRINTINVALIDEXECTRACE_COMPONENT_NAME);
 				componentPrintInvalidTraceConfig.setProperty(InvalidExecutionTraceWriterPlugin.CONFIG_OUTPUT_FN, new File(TraceAnalysisTool.outputDir
 						+ File.separator
 						+ TraceAnalysisTool.outputFnPrefix
@@ -489,7 +493,7 @@ public final class TraceAnalysisTool {
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS)) {
 				numRequestedTasks++;
 				final Configuration componentPlotAllocationSeqDiagrConfig = new Configuration();
-				componentPlotAllocationSeqDiagrConfig.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.PLOTALLOCATIONSEQDIAGR_COMPONENT_NAME);
+				componentPlotAllocationSeqDiagrConfig.setProperty(SequenceDiagramPlugin.class.getName() + ".name", Constants.PLOTALLOCATIONSEQDIAGR_COMPONENT_NAME);
 				componentPlotAllocationSeqDiagrConfig.setProperty(SequenceDiagramPlugin.CONFIG_OUTPUT_FN_BASE,
 						TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.ALLOCATION_SEQUENCE_DIAGRAM_FN_PREFIX);
 				componentPlotAllocationSeqDiagrConfig.setProperty(SequenceDiagramPlugin.CONFIG_OUTPUT_SDMODE, SequenceDiagramPlugin.SDModes.ALLOCATION.toString());
@@ -507,7 +511,7 @@ public final class TraceAnalysisTool {
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS)) {
 				numRequestedTasks++;
 				final Configuration componentPlotAssemblySeqDiagrConfig = new Configuration();
-				componentPlotAssemblySeqDiagrConfig.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.PLOTASSEMBLYSEQDIAGR_COMPONENT_NAME);
+				componentPlotAssemblySeqDiagrConfig.setProperty(SequenceDiagramPlugin.class.getName() + ".name", Constants.PLOTASSEMBLYSEQDIAGR_COMPONENT_NAME);
 				componentPlotAssemblySeqDiagrConfig.setProperty(SequenceDiagramPlugin.CONFIG_OUTPUT_FN_BASE,
 						TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.ASSEMBLY_SEQUENCE_DIAGRAM_FN_PREFIX);
 				componentPlotAssemblySeqDiagrConfig.setProperty(SequenceDiagramPlugin.CONFIG_OUTPUT_SDMODE, SequenceDiagramPlugin.SDModes.ASSEMBLY.toString());
@@ -525,7 +529,7 @@ public final class TraceAnalysisTool {
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG)) {
 				numRequestedTasks++;
 				final Configuration componentPlotAllocationComponentDepGraphConfig = new Configuration();
-				componentPlotAllocationComponentDepGraphConfig.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME,
+				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphPluginAllocation.class.getName() + ".name",
 						Constants.PLOTALLOCATIONCOMPONENTDEPGRAPH_COMPONENT_NAME);
 				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphPluginAllocation.CONFIG_OUTPUT_FN_BASE,
 						TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.ALLOCATION_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX);
@@ -548,7 +552,7 @@ public final class TraceAnalysisTool {
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG)) {
 				numRequestedTasks++;
 				final Configuration componentPlotAssemblyComponentDepGraphConfig = new Configuration();
-				componentPlotAssemblyComponentDepGraphConfig.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME,
+				componentPlotAssemblyComponentDepGraphConfig.setProperty(ComponentDependencyGraphPluginAssembly.class.getName() + ".name",
 						Constants.PLOTASSEMBLYCOMPONENTDEPGRAPH_COMPONENT_NAME);
 				componentPlotAssemblyComponentDepGraphConfig.setProperty(ComponentDependencyGraphPluginAssembly.CONFIG_SHORT_LABELS,
 						Boolean.toString(TraceAnalysisTool.shortLabels));
@@ -572,7 +576,8 @@ public final class TraceAnalysisTool {
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG)) {
 				numRequestedTasks++;
 				final Configuration componentPlotContainerDepGraphConfig = new Configuration();
-				componentPlotContainerDepGraphConfig.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.PLOTCONTAINERDEPGRAPH_COMPONENT_NAME);
+				componentPlotContainerDepGraphConfig.setProperty(ContainerDependencyGraphPlugin.class.getName() + ".name",
+						Constants.PLOTCONTAINERDEPGRAPH_COMPONENT_NAME);
 				componentPlotContainerDepGraphConfig.setProperty(ContainerDependencyGraphPlugin.CONFIG_SHORT_LABELS,
 						Boolean.toString(TraceAnalysisTool.shortLabels));
 				componentPlotContainerDepGraphConfig.setProperty(ContainerDependencyGraphPlugin.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(true));
@@ -597,7 +602,7 @@ public final class TraceAnalysisTool {
 
 				final Configuration componentPlotAllocationOperationDepGraphConfig = new Configuration();
 				componentPlotAllocationOperationDepGraphConfig
-						.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.PLOTALLOCATIONOPERATIONDEPGRAPH_COMPONENT_NAME);
+						.setProperty(OperationDependencyGraphPluginAllocation.class.getName() + ".name", Constants.PLOTALLOCATIONOPERATIONDEPGRAPH_COMPONENT_NAME);
 				componentPlotAllocationOperationDepGraphConfig
 						.setProperty(OperationDependencyGraphPluginAllocation.CONFIG_SHORT_LABELS, Boolean.toString(TraceAnalysisTool.shortLabels));
 				componentPlotAllocationOperationDepGraphConfig.setProperty(OperationDependencyGraphPluginAllocation.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(true));
@@ -622,7 +627,7 @@ public final class TraceAnalysisTool {
 
 				final Configuration componentPlotAssemblyOperationDepGraphConfig = new Configuration();
 				componentPlotAssemblyOperationDepGraphConfig
-						.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.PLOTASSEMBLYOPERATIONDEPGRAPH_COMPONENT_NAME);
+						.setProperty(OperationDependencyGraphPluginAssembly.class.getName() + ".name", Constants.PLOTASSEMBLYOPERATIONDEPGRAPH_COMPONENT_NAME);
 				componentPlotAssemblyOperationDepGraphConfig.setProperty(ComponentDependencyGraphPluginAssembly.CONFIG_SHORT_LABELS,
 						Boolean.toString(TraceAnalysisTool.shortLabels));
 				componentPlotAssemblyOperationDepGraphConfig.setProperty(OperationDependencyGraphPluginAssembly.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(true));
@@ -646,7 +651,7 @@ public final class TraceAnalysisTool {
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES)) {
 				numRequestedTasks++;
 				final Configuration componentPlotTraceCallTreesConfig = new Configuration();
-				componentPlotTraceCallTreesConfig.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.PLOTCALLTREE_COMPONENT_NAME);
+				componentPlotTraceCallTreesConfig.setProperty(TraceCallTreePlugin.class.getName() + ".name", Constants.PLOTCALLTREE_COMPONENT_NAME);
 				componentPlotTraceCallTrees = new TraceCallTreePlugin(componentPlotTraceCallTreesConfig,
 						TraceAnalysisTool.ALLOCATION_COMPONENT_OPERATION_PAIR_FACTORY, new File(TraceAnalysisTool.outputDir
 								+ File.separator + TraceAnalysisTool.outputFnPrefix + Constants.CALL_TREE_FN_PREFIX).getCanonicalPath(),
@@ -664,7 +669,8 @@ public final class TraceAnalysisTool {
 				numRequestedTasks++;
 				final Configuration componentPlotAggregatedCallTreeConfig = new Configuration();
 				componentPlotAggregatedCallTreeConfig
-						.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.PLOTAGGREGATEDALLOCATIONCALLTREE_COMPONENT_NAME);
+						.setProperty(AggregatedAllocationComponentOperationCallTreePlugin.class.getName() + ".name",
+								Constants.PLOTAGGREGATEDALLOCATIONCALLTREE_COMPONENT_NAME);
 				componentPlotAggregatedCallTree = new AggregatedAllocationComponentOperationCallTreePlugin(componentPlotAggregatedCallTreeConfig,
 						TraceAnalysisTool.ALLOCATION_COMPONENT_OPERATION_PAIR_FACTORY,
 						new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix
@@ -681,7 +687,8 @@ public final class TraceAnalysisTool {
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE)) {
 				numRequestedTasks++;
 				final Configuration componentPlotAssemblyCallTreeConfig = new Configuration();
-				componentPlotAssemblyCallTreeConfig.setProperty(AbstractTraceAnalysisPlugin.CONFIG_NAME, Constants.PLOTAGGREGATEDASSEMBLYCALLTREE_COMPONENT_NAME);
+				componentPlotAssemblyCallTreeConfig.setProperty(AggregatedAssemblyComponentOperationCallTreePlugin.class.getName() + ".name",
+						Constants.PLOTAGGREGATEDASSEMBLYCALLTREE_COMPONENT_NAME);
 				componentPlotAssemblyCallTree = new AggregatedAssemblyComponentOperationCallTreePlugin(componentPlotAssemblyCallTreeConfig,
 						TraceAnalysisTool.ASSEMBLY_COMPONENT_OPERATION_PAIR_FACTORY, new File(TraceAnalysisTool.outputDir
 								+ File.separator + TraceAnalysisTool.outputFnPrefix + Constants.AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX), true,

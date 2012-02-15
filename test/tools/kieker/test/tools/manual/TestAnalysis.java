@@ -74,13 +74,13 @@ public class TestAnalysis {
 
 				final Configuration confTeeFilter2 = new Configuration();
 				confTeeFilter2.setProperty(TeeFilter.CONFIG_STREAM, TeeFilter.CONFIG_STREAM_STDERR);
+				confTeeFilter2.setProperty(TeeFilter.class.getName() + ".name", "CountBegin");
 				final TeeFilter teeFilter2 = new TeeFilter(confTeeFilter2);
-				teeFilter2.setName("CountBegin");
 
 				final Configuration confTeeFilter3 = new Configuration();
 				confTeeFilter3.setProperty(TeeFilter.CONFIG_STREAM, TeeFilter.CONFIG_STREAM_STDERR);
+				confTeeFilter3.setProperty(TeeFilter.class.getName() + ".name", "CountAfter");
 				final TeeFilter teeFilter3 = new TeeFilter(confTeeFilter3);
-				teeFilter3.setName("CountAfter");
 
 				/* CountingFilter */
 				final Configuration confCountingFilter1 = new Configuration();

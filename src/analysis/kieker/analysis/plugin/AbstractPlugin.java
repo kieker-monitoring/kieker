@@ -50,7 +50,7 @@ public abstract class AbstractPlugin {
 
 	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
 
-	private String name = "";
+	private final String name;
 
 	protected final Configuration configuration;
 	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<PluginInputPortReference>> registeredMethods;
@@ -73,6 +73,9 @@ public abstract class AbstractPlugin {
 			AbstractPlugin.LOG.error("Unable to set plugin default properties", ex);
 		}
 		this.configuration = configuration;
+
+		/* try to determine name */
+		this.name = configuration.getStringProperty(this.getClass().getName() + ".name");
 
 		/* KEEP IN MIND: Although we use "this" in the following code, it points to the actual class. Not to AbstractPlugin!! */
 
@@ -134,16 +137,6 @@ public abstract class AbstractPlugin {
 	 */
 	public final String getName() {
 		return this.name;
-	}
-
-	/**
-	 * This method sets the current name of this plugin. The name does not have to be unique.
-	 * 
-	 * @param name
-	 *            The new name of the plugin.
-	 */
-	public final void setName(final String name) {
-		this.name = name;
 	}
 
 	/**
