@@ -18,21 +18,40 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.analysis.junit.util;
+package kieker.common.record.internal;
 
-import kieker.common.record.internal.DummyMonitoringRecord;
+import kieker.common.record.AbstractMonitoringRecord;
+import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author Andre van Hoorn, Jan Waller
  */
-public final class DummyRecord extends DummyMonitoringRecord {
+public final class NullRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+	private static final long serialVersionUID = -9106270301270791630L;
 
-	private static final long serialVersionUID = 1L;
+	private static final Class<?>[] TYPES = {};
 
-	/**
-	 * Constructs a {@link DummyRecord}.
-	 */
-	public DummyRecord() {
+	public NullRecord() {
 		// nothing to do
+	}
+
+	public NullRecord(final Object[] values) { // NOPMD (UnusedFormalParameter)
+		// nothing to do
+	}
+
+	@Override
+	public Object[] toArray() {
+		return new Object[] {};
+	}
+
+	@Override
+	@Deprecated
+	public void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return NullRecord.TYPES.clone();
 	}
 }

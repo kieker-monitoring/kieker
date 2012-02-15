@@ -34,7 +34,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.internal.DummyMonitoringRecord;
+import kieker.common.record.internal.NullRecord;
 
 /**
  * Filesystem reader which reads from multiple directories simultaneously ordered by the logging timestamp.
@@ -49,7 +49,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	public static final String CONFIG_INPUTDIRS = FSReader.class.getName() + ".inputDirs";
 	public static final String CONFIG_ONLYRECORDS = FSReader.class.getName() + ".readOnlyRecordsOfType";
 
-	public static final IMonitoringRecord EOF = new DummyMonitoringRecord();
+	public static final IMonitoringRecord EOF = new NullRecord();
 
 	private static final Log LOG = LogFactory.getLog(FSReader.class);
 
