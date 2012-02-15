@@ -22,11 +22,12 @@ package kieker.common.record.flow.trace;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.flow.IFlowRecord;
 
 /**
  * @author Jan Waller
  */
-public final class Trace extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+public final class Trace extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IFlowRecord {
 	private static final long serialVersionUID = -4734457252539987221L;
 	private static final Class<?>[] TYPES = {
 		long.class, // traceId
