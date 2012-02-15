@@ -341,24 +341,24 @@ public final class TraceAnalysisTool {
 			final Configuration configTraceIdFilterFlow = new Configuration();
 			if (TraceAnalysisTool.selectedTraces == null) {
 				configTraceIdFilter.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.TRUE.toString());
-				configTraceIdFilterFlow.setProperty(kieker.tools.traceAnalysis.plugins.flow.TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.TRUE.toString());
+				configTraceIdFilterFlow.setProperty(kieker.analysis.filter.trace.TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.TRUE.toString());
 			} else {
 				configTraceIdFilter.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.FALSE.toString());
-				configTraceIdFilterFlow.setProperty(kieker.tools.traceAnalysis.plugins.flow.TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.FALSE.toString());
+				configTraceIdFilterFlow.setProperty(kieker.analysis.filter.trace.TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.FALSE.toString());
 				configTraceIdFilter.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES,
 						Configuration.toProperty(TraceAnalysisTool.selectedTraces.toArray(new Long[] {})));
-				configTraceIdFilterFlow.setProperty(kieker.tools.traceAnalysis.plugins.flow.TraceIdFilter.CONFIG_SELECTED_TRACES,
+				configTraceIdFilterFlow.setProperty(kieker.analysis.filter.trace.TraceIdFilter.CONFIG_SELECTED_TRACES,
 						Configuration.toProperty(TraceAnalysisTool.selectedTraces.toArray(new Long[] {})));
 			}
 			final TraceIdFilter executionFilterByTraceId = new TraceIdFilter(configTraceIdFilter);
 			AbstractPlugin.connect(executionFilterByTimestamp, TimestampFilter.OUTPUT_PORT_NAME, executionFilterByTraceId, TraceIdFilter.INPUT_PORT_NAME);
 			analysisInstance.registerPlugin(executionFilterByTraceId);
 
-			final kieker.tools.traceAnalysis.plugins.flow.TraceIdFilter traceIdFilterFlow =
-					new kieker.tools.traceAnalysis.plugins.flow.TraceIdFilter(configTraceIdFilterFlow);
+			final kieker.analysis.filter.trace.TraceIdFilter traceIdFilterFlow =
+					new kieker.analysis.filter.trace.TraceIdFilter(configTraceIdFilterFlow);
 			analysisInstance.registerPlugin(traceIdFilterFlow);
 			AbstractPlugin.connect(timestampFilterFlow, kieker.analysis.filter.TimestampFilter.OUTPUT_PORT_NAME,
-					traceIdFilterFlow, kieker.tools.traceAnalysis.plugins.flow.TraceIdFilter.INPUT_PORT_NAME);
+					traceIdFilterFlow, kieker.analysis.filter.trace.TraceIdFilter.INPUT_PORT_NAME);
 
 			final Configuration mtReconstrFilterConfig = new Configuration();
 			mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.class.getName() + ".name", Constants.TRACERECONSTR_COMPONENT_NAME);

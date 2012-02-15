@@ -18,13 +18,18 @@ import kieker.common.record.legacy.OperationExecutionRecord;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-@Plugin(outputPorts = @OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME, description = "filtered output", eventTypes = { IMonitoringRecord.class }))
+@Plugin(outputPorts = {
+	@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME, description = "records within the timeperiod", eventTypes = { IMonitoringRecord.class }),
+	@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_NOT, description = "records out of the timeperiod", eventTypes = { IMonitoringRecord.class }),
+})
 public final class TimestampFilter extends AbstractAnalysisPlugin {
 
 	public static final String INPUT_PORT_NAME = "input-records";
+	public static final String INPUT_PORT_NAME_COMBINED = "input-combined";
 	public static final String INPUT_PORT_NAME_FLOW = "input-flow-records";
 	public static final String INPUT_PORT_NAME_EXECUTION = "input-execution-records";
 	public static final String OUTPUT_PORT_NAME = "output";
+	public static final String OUTPUT_PORT_NAME_NOT = "output-not";
 
 	public static final String CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP = TimestampFilter.class.getName() + ".ignoreBeforeTimestamp";
 	public static final String CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP = TimestampFilter.class.getName() + ".ignorAfterTimestamp";
@@ -57,34 +62,45 @@ public final class TimestampFilter extends AbstractAnalysisPlugin {
 		return configuration;
 	}
 
-	/**
-	 * Returns true iff the given timestamp is within the configured time period.
-	 * 
-	 * @param timestamp
-	 * @return
-	 */
 	private final boolean inRange(final long timestamp) {
 		return (timestamp >= this.ignoreBeforeTimestamp) && (timestamp <= this.ignoreAfterTimestamp);
 	}
 
+	@InputPort(name = TimestampFilter.INPUT_PORT_NAME_COMBINED, description = "combined input", eventTypes = { IMonitoringRecord.class })
+	public void inputCombined(final IMonitoringRecord record) {
+		if (record instanceof OperationExecutionRecord) {
+			this.inputOperationExecutionRecord((OperationExecutionRecord) record);
+		} else if (record instanceof AbstractTraceEvent) {
+			this.inputTraceEvent((AbstractTraceEvent) record);
+		} else {
+			this.inputIMonitoringRecord(record);
+		}
+	}
+
 	@InputPort(name = TimestampFilter.INPUT_PORT_NAME, description = "IMonitoringRecord input", eventTypes = { IMonitoringRecord.class })
-	public void inputIMonitoringRecord(final IMonitoringRecord record) {
+	public final void inputIMonitoringRecord(final IMonitoringRecord record) {
 		if (this.inRange(record.getLoggingTimestamp())) {
 			super.deliver(TimestampFilter.OUTPUT_PORT_NAME, record);
+		} else {
+			super.deliver(TimestampFilter.OUTPUT_PORT_NAME_NOT, record);
 		}
 	}
 
 	@InputPort(name = TimestampFilter.INPUT_PORT_NAME_FLOW, description = "TraceEvent input", eventTypes = { AbstractTraceEvent.class })
-	public void inputTraceEvent(final AbstractTraceEvent event) {
+	public final void inputTraceEvent(final AbstractTraceEvent event) {
 		if (this.inRange(event.getTimestamp())) {
 			super.deliver(TimestampFilter.OUTPUT_PORT_NAME, event);
+		} else {
+			super.deliver(TimestampFilter.OUTPUT_PORT_NAME_NOT, event);
 		}
 	}
 
 	@InputPort(name = TimestampFilter.INPUT_PORT_NAME_EXECUTION, description = "Execution input", eventTypes = { OperationExecutionRecord.class })
-	public void inputOperationExecutionRecord(final OperationExecutionRecord execution) {
+	public final void inputOperationExecutionRecord(final OperationExecutionRecord execution) {
 		if (this.inRange(execution.getTin()) && this.inRange(execution.getTout())) {
 			super.deliver(TimestampFilter.OUTPUT_PORT_NAME, execution);
+		} else {
+			super.deliver(TimestampFilter.OUTPUT_PORT_NAME_NOT, execution);
 		}
 	}
 }

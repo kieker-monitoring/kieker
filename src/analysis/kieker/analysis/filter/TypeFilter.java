@@ -35,16 +35,21 @@ import kieker.common.logging.LogFactory;
  * This filter has exactly one input port and one output port.
  * 
  * Only the specified objects are forwarded to the output port.
+ * All other objects are forwarded to the output-not port.
  * 
  * @author Jan Waller
  */
-@Plugin(outputPorts = @OutputPort(name = TypeFilter.OUTPUT_PORT_NAME, eventTypes = {}, description = "all objects with matching types are forwarded"))
+@Plugin(outputPorts = {
+	@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME, eventTypes = {}, description = "all objects with matching types are forwarded"),
+	@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_NOT, eventTypes = {}, description = "all objects without matching types are forwarded"),
+})
 public final class TypeFilter extends AbstractAnalysisPlugin {
 	private static final Log LOG = LogFactory.getLog(TypeFilter.class);
 
 	public static final String OUTPUT_PORT_NAME = "output";
+	public static final String OUTPUT_PORT_NAME_NOT = "output-not";
 	public static final String INPUT_PORT_NAME = "input";
-	public static final String CONFIG_TYPES = TypeFilter.class.getName() + ".Types";
+	public static final String CONFIG_TYPES = TypeFilter.class.getName() + ".types";
 
 	private final Class<?>[] acceptedClasses;
 
@@ -59,11 +64,7 @@ public final class TypeFilter extends AbstractAnalysisPlugin {
 				TypeFilter.LOG.warn("Failed to add class " + clazz + " to the filter.");
 			}
 		}
-		if (listOfClasses.size() > 0) {
-			this.acceptedClasses = listOfClasses.toArray(new Class<?>[listOfClasses.size()]);
-		} else {
-			this.acceptedClasses = new Class<?>[] { Object.class };
-		}
+		this.acceptedClasses = listOfClasses.toArray(new Class<?>[listOfClasses.size()]);
 	}
 
 	@Override
@@ -80,13 +81,15 @@ public final class TypeFilter extends AbstractAnalysisPlugin {
 		return configuration;
 	}
 
-	@InputPort(name = CountingFilter.INPUT_PORT_NAME, eventTypes = {}, description = "all objects with matching types are forwarded")
+	@InputPort(name = TypeFilter.INPUT_PORT_NAME, eventTypes = {}, description = "all objects with matching types are forwarded")
 	public final void newEvent(final Object event) {
+		final Class<?> eventClass = event.getClass();
 		for (final Class<?> clazz : this.acceptedClasses) {
-			if (clazz.isAssignableFrom(event.getClass())) {
-				super.deliver(CountingFilter.OUTPUT_PORT_NAME, event);
+			if (clazz.isAssignableFrom(eventClass)) {
+				super.deliver(TypeFilter.OUTPUT_PORT_NAME, event);
 				break; // only deliver once!
 			}
 		}
+		super.deliver(TypeFilter.OUTPUT_PORT_NAME_NOT, event);
 	}
 }

@@ -26,12 +26,12 @@ import java.util.TreeSet;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import kieker.analysis.filter.trace.TraceIdFilter;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
-import kieker.tools.traceAnalysis.plugins.flow.TraceIdFilter;
 
 import org.junit.Test;
 
