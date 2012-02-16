@@ -20,7 +20,7 @@ import kieker.common.record.legacy.OperationExecutionRecord;
  */
 @Plugin(outputPorts = {
 	@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME, description = "records within the timeperiod", eventTypes = { IMonitoringRecord.class }),
-	@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_NOT, description = "records out of the timeperiod", eventTypes = { IMonitoringRecord.class }),
+	@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_NOT, description = "records out of the timeperiod", eventTypes = { IMonitoringRecord.class })
 })
 public final class TimestampFilter extends AbstractAnalysisPlugin {
 

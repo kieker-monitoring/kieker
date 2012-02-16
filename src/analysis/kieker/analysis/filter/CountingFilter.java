@@ -37,7 +37,7 @@ import kieker.common.configuration.Configuration;
 @Plugin(
 		outputPorts = {
 			@OutputPort(name = CountingFilter.OUTPUT_PORT_NAME, eventTypes = {}, description = "all incoming objects are forwarded"),
-			@OutputPort(name = CountingFilter.OUTPUT_PORT_NAME_COUNT, eventTypes = {}, description = "the current count of objects"),
+			@OutputPort(name = CountingFilter.OUTPUT_PORT_NAME_COUNT, eventTypes = {}, description = "the current count of objects")
 		})
 public final class CountingFilter extends AbstractAnalysisPlugin {
 

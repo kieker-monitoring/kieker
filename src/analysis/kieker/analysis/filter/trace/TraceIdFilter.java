@@ -42,7 +42,7 @@ import kieker.common.record.legacy.OperationExecutionRecord;
  */
 @Plugin(outputPorts = {
 	@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME, description = "accepted traces", eventTypes = { AbstractTraceEvent.class, OperationExecutionRecord.class }),
-	@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_NOT, description = "rejected traces", eventTypes = { AbstractTraceEvent.class, OperationExecutionRecord.class }),
+	@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_NOT, description = "rejected traces", eventTypes = { AbstractTraceEvent.class, OperationExecutionRecord.class })
 
 })
 public final class TraceIdFilter extends AbstractAnalysisPlugin {

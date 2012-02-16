@@ -41,7 +41,7 @@ import kieker.common.logging.LogFactory;
  */
 @Plugin(outputPorts = {
 	@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME, eventTypes = {}, description = "all objects with matching types are forwarded"),
-	@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_NOT, eventTypes = {}, description = "all objects without matching types are forwarded"),
+	@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_NOT, eventTypes = {}, description = "all objects without matching types are forwarded")
 })
 public final class TypeFilter extends AbstractAnalysisPlugin {
 	private static final Log LOG = LogFactory.getLog(TypeFilter.class);
