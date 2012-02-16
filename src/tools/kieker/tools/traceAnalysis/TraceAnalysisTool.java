@@ -378,7 +378,7 @@ public final class TraceAnalysisTool {
 					Integer.toString(TraceAnalysisTool.maxTraceDurationMillis));
 			eventRecordTraceGenerationFilter = new EventRecordTraceGenerationFilter(configurationEventRecordTraceGenerationFilter);
 			analysisInstance.registerPlugin(eventRecordTraceGenerationFilter);
-			AbstractPlugin.connect(traceIdFilterFlow, TraceIdFilter.OUTPUT_PORT_NAME,
+			AbstractPlugin.connect(traceIdFilterFlow, kieker.analysis.filter.trace.TraceIdFilter.OUTPUT_PORT_NAME,
 					eventRecordTraceGenerationFilter, EventRecordTraceGenerationFilter.INPUT_PORT_NAME);
 			eventRecordTraceGenerationFilter.connect(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 

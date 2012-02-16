@@ -222,8 +222,12 @@ public abstract class AbstractPlugin {
 		/* Second step: Check whether the ports exist. */
 		final OutputPort outputPort = src.outputPorts.get(output);
 		final InputPort inputPort = dst.inputPorts.get(input);
-		if ((outputPort == null) || (inputPort == null)) {
-			AbstractPlugin.LOG.warn("Second step: Check whether the ports exist.");
+		if (outputPort == null) {
+			AbstractPlugin.LOG.warn("Output port does not exist. " + "Plugin: " + src.getClass().getName() + "; output: " + output);
+			return false;
+		}
+		if (inputPort == null) {
+			AbstractPlugin.LOG.warn("Input port does not exist. " + "Plugin: " + dst.getClass().getName() + "; input: " + input);
 			return false;
 		}
 
@@ -242,17 +246,14 @@ public abstract class AbstractPlugin {
 			// return false;
 			// }
 			for (final Class<?> srcEventType : outEventTypes) {
-				boolean compatible = false;
 				for (final Class<?> dstEventType : inputPort.eventTypes()) {
 					// FIXME: We now also accept "downcasts" as compatible. This could perhaps be colored differently in the GUI
 					if (dstEventType.isAssignableFrom(srcEventType) || srcEventType.isAssignableFrom(dstEventType)) {
-						compatible = true;
+						return true;
 					}
 				}
-				if (!compatible) {
-					AbstractPlugin.LOG.warn("Third step: Make sure the ports are compatible. Not compatible.");
-					return false;
-				}
+				AbstractPlugin.LOG.warn("Third step: Make sure the ports are compatible. Not compatible.");
+				return false;
 			}
 		}
 
