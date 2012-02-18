@@ -34,6 +34,7 @@ import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
+import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.reader.IMonitoringReader;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
@@ -41,7 +42,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
 /**
- * <b>Do not</b> inherit directly from this class! Instead inherit from the class {@link AbstractAnalysisPlugin} or {@link AbstractMonitoringReader}.
+ * <b>Do not</b> inherit directly from this class! Instead inherit from the class {@link AbstractAnalysisPlugin} or {@link AbstractReaderPlugin}.
  * 
  * @author Nils Christian Ehmke, Jan Waller
  */

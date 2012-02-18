@@ -585,7 +585,9 @@ public final class AnalysisController {
 	 */
 	public void setReader(final IMonitoringReader reader) { // TODO: is this really still needed? Should be done with Project...
 		this.logReader = reader;
-		AnalysisController.LOG.debug("Registered reader " + reader);
+		if (AnalysisController.LOG.isDebugEnabled()) {
+			AnalysisController.LOG.debug("Registered reader " + reader);
+		}
 	}
 
 	/**

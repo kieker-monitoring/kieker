@@ -77,7 +77,11 @@ public final class TypeFilter extends AbstractAnalysisPlugin {
 	@Override
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(TypeFilter.CONFIG_TYPES, Configuration.toProperty(this.acceptedClasses));
+		final String[] acceptedClasses = new String[this.acceptedClasses.length];
+		for (int i = 0; i < acceptedClasses.length; i++) {
+			acceptedClasses[i] = this.acceptedClasses[i].getName();
+		}
+		configuration.setProperty(TypeFilter.CONFIG_TYPES, Configuration.toProperty(acceptedClasses));
 		return configuration;
 	}
 
