@@ -26,7 +26,7 @@ import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
-import kieker.analysis.reader.IMonitoringReader;
+import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.reader.jms.JMSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -90,12 +90,12 @@ public class JMSLogReplayer {
 		configuration.setProperty("msProviderUrl", this.jmsProviderUrl);
 		configuration.setProperty("jmsDestination", this.jmsDestination);
 		configuration.setProperty("jmsFactoryLookupName", this.jmsFactoryLookupName);
-		final IMonitoringReader logReader = new JMSReader(configuration);
+		final AbstractReaderPlugin logReader = new JMSReader(configuration);
 		final AnalysisController tpanInstance = new AnalysisController();
-		tpanInstance.setReader(logReader);
+		tpanInstance.registerReader(logReader);
 		final RecordDelegationPlugin2 recordReceiver = new RecordDelegationPlugin2(this.recordReceiver, this.recordReceiverInputPortName);
-		tpanInstance.registerPlugin(recordReceiver);
-		AbstractPlugin.connect((AbstractPlugin) logReader, JMSReader.OUTPUT_PORT_NAME, recordReceiver, RecordDelegationPlugin2.INPUT_PORT);
+		tpanInstance.registerFilter(recordReceiver);
+		AbstractPlugin.connect(logReader, JMSReader.OUTPUT_PORT_NAME, recordReceiver, RecordDelegationPlugin2.INPUT_PORT);
 		try {
 			tpanInstance.run();
 			success = true;

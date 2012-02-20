@@ -43,14 +43,14 @@ public class AnalysisStarter {
 		final AnalysisController analysisInstance = new AnalysisController();
 		/* Create a register our own consumer */
 		final StdOutDumpConsumer consumer = new StdOutDumpConsumer(new Configuration());
-		analysisInstance.registerPlugin(consumer);
+		analysisInstance.registerFilter(consumer);
 
 		/* Set filesystem monitoring log input directory for our analysis */
 		final Configuration readerConfiguration = new Configuration();
 		final String inputDirs[] = { args[0] };
 		readerConfiguration.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(inputDirs));
 		final FSReader fsReader = new FSReader(readerConfiguration);
-		analysisInstance.setReader(fsReader);
+		analysisInstance.registerReader(fsReader);
 
 		/* Connect both components. */
 		AbstractPlugin.connect(fsReader, FSReader.OUTPUT_PORT_NAME, consumer, StdOutDumpConsumer.INPUT_PORT_NAME);

@@ -56,7 +56,7 @@ public class TestAnalysis {
 			if (TestAnalysis.LOADCONFIG) {
 				analysisController = new AnalysisController(new File("analysisproject/flowproject.xml"));
 			} else {
-				analysisController = new AnalysisController();
+				analysisController = new AnalysisController("FlowProject");
 
 				/* Reader */
 				final Configuration confReader = new Configuration();
@@ -123,57 +123,57 @@ public class TestAnalysis {
 
 				analysisController.registerRepository(traceRepo);
 
-				analysisController.setReader(reader);
+				analysisController.registerReader(reader);
 
-				analysisController.registerPlugin(countingFilter1);
+				analysisController.registerFilter(countingFilter1);
 				AbstractPlugin.connect(reader, FSReader.OUTPUT_PORT_NAME, countingFilter1, CountingFilter.INPUT_PORT_NAME);
 
-				analysisController.registerPlugin(typeFilter);
+				analysisController.registerFilter(typeFilter);
 				AbstractPlugin.connect(countingFilter1, CountingFilter.OUTPUT_PORT_NAME, typeFilter, TypeFilter.INPUT_PORT_NAME);
 
-				analysisController.registerPlugin(timestampFilter);
+				analysisController.registerFilter(timestampFilter);
 				AbstractPlugin.connect(typeFilter, TypeFilter.OUTPUT_PORT_NAME, timestampFilter, TimestampFilter.INPUT_PORT_NAME_FLOW);
 
-				analysisController.registerPlugin(teeFilter2);
+				analysisController.registerFilter(teeFilter2);
 				AbstractPlugin.connect(countingFilter1, CountingFilter.OUTPUT_PORT_NAME_COUNT, teeFilter2, TeeFilter.INPUT_PORT_NAME);
 
-				analysisController.registerPlugin(traceIdFilter);
+				analysisController.registerFilter(traceIdFilter);
 				AbstractPlugin.connect(timestampFilter, TimestampFilter.OUTPUT_PORT_NAME, traceIdFilter, TraceIdFilter.INPUT_PORT_NAME);
 
-				analysisController.registerPlugin(countingFilter2);
+				analysisController.registerFilter(countingFilter2);
 				AbstractPlugin.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME, countingFilter2, CountingFilter.INPUT_PORT_NAME);
 
-				analysisController.registerPlugin(teeFilter3);
+				analysisController.registerFilter(teeFilter3);
 				AbstractPlugin.connect(countingFilter2, CountingFilter.OUTPUT_PORT_NAME_COUNT, teeFilter3, TeeFilter.INPUT_PORT_NAME);
 
-				analysisController.registerPlugin(eventRecordTraceGenerationFilter);
+				analysisController.registerFilter(eventRecordTraceGenerationFilter);
 				AbstractPlugin.connect(countingFilter2, CountingFilter.OUTPUT_PORT_NAME, eventRecordTraceGenerationFilter,
 						EventRecordTraceGenerationFilter.INPUT_PORT_NAME);
 
-				analysisController.registerPlugin(eventTrace2ExecutionTraceFilter);
+				analysisController.registerFilter(eventTrace2ExecutionTraceFilter);
 				AbstractPlugin.connect(eventRecordTraceGenerationFilter, EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME, eventTrace2ExecutionTraceFilter,
 						EventTrace2ExecutionTraceFilter.INPUT_PORT_NAME);
 				eventTrace2ExecutionTraceFilter.connect(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
 
-				analysisController.registerPlugin(teeFilter1);
+				analysisController.registerFilter(teeFilter1);
 				AbstractPlugin.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, teeFilter1,
 						TeeFilter.INPUT_PORT_NAME);
 
-				analysisController.registerPlugin(sequenceDiagramPlugin);
+				analysisController.registerFilter(sequenceDiagramPlugin);
 				AbstractPlugin.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME, sequenceDiagramPlugin, AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME);
 				sequenceDiagramPlugin.connect(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
 
-				analysisController.registerPlugin(componentDependencyGraphPluginAllocation);
+				analysisController.registerFilter(componentDependencyGraphPluginAllocation);
 				AbstractPlugin.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME, componentDependencyGraphPluginAllocation,
 						AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME);
 				componentDependencyGraphPluginAllocation.connect(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
 
-				analysisController.registerPlugin(operationDependencyGraphPluginAllocation);
+				analysisController.registerFilter(operationDependencyGraphPluginAllocation);
 				AbstractPlugin.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME, operationDependencyGraphPluginAllocation,
 						AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME);
 				operationDependencyGraphPluginAllocation.connect(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
 
-				analysisController.saveToFile(new File("analysisproject/flowproject.xml"), "FlowProject");
+				analysisController.saveToFile(new File("analysisproject/flowproject.xml"));
 			}
 			analysisController.run();
 			traceRepo.saveSystemToHTMLFile("analysisproject/out/system");

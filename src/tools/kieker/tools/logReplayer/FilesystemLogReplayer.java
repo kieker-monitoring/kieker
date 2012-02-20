@@ -116,10 +116,10 @@ public class FilesystemLogReplayer {
 			fsReader = new FSReader(configuration);
 		}
 		final AnalysisController tpanInstance = new AnalysisController();
-		tpanInstance.setReader(fsReader);
+		tpanInstance.registerReader(fsReader);
 		final RecordDelegationPlugin delegationPlugin = new RecordDelegationPlugin(this.recordReceiver, this.ignoreRecordsBeforeTimestamp,
 				this.ignoreRecordsAfterTimestamp);
-		tpanInstance.registerPlugin(delegationPlugin);
+		tpanInstance.registerFilter(delegationPlugin);
 		AbstractPlugin.connect(fsReader, FSReader.OUTPUT_PORT_NAME, delegationPlugin, RecordDelegationPlugin.INPUT_PORT_NAME);
 		try {
 			tpanInstance.run();

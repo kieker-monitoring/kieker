@@ -40,14 +40,14 @@ public class BookstoreAnalysisStarter {
 		final AnalysisController analysisInstance = new AnalysisController();
 		/* Register our own consumer; set the max. response time to 1.9 ms */
 		final Consumer consumer = new Consumer(1900000);
-		analysisInstance.registerPlugin(consumer);
+		analysisInstance.registerFilter(consumer);
 
 		/* Set filesystem monitoring log input directory for our analysis */
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(FSReader.CONFIG_INPUTDIRS, args[0]);
 
 		final FSReader reader = new FSReader(configuration);
-		analysisInstance.setReader(reader);
+		analysisInstance.registerReader(reader);
 
 		/* Connect the output of the reader with the input of the plugin. */
 		AbstractPlugin.connect(reader, FSReader.OUTPUT_PORT_NAME, consumer, Consumer.INPUT_PORT_NAME);

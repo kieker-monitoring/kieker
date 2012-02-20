@@ -22,7 +22,6 @@ package kieker.analysis;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -48,7 +47,6 @@ import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.PluginInputPortReference;
 import kieker.analysis.reader.AbstractReaderPlugin;
-import kieker.analysis.reader.IMonitoringReader;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -77,8 +75,10 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 public final class AnalysisController {
 	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
 
-	private IMonitoringReader logReader;
-	private final Collection<AbstractAnalysisPlugin> plugins = new CopyOnWriteArrayList<AbstractAnalysisPlugin>();
+	private final String projectName;
+	// private IMonitoringReader logReader;
+	private final Collection<AbstractReaderPlugin> readers = new CopyOnWriteArrayList<AbstractReaderPlugin>();
+	private final Collection<AbstractAnalysisPlugin> filters = new CopyOnWriteArrayList<AbstractAnalysisPlugin>();
 	private final Collection<AbstractRepository> repos = new CopyOnWriteArrayList<AbstractRepository>();
 
 	/** Will be count down after the analysis is set-up. */
@@ -88,8 +88,30 @@ public final class AnalysisController {
 	 * Constructs an {@link AnalysisController} instance.
 	 */
 	public AnalysisController() {
-		// do nothing
-		// TODO: is this needed? Else we could move loadFromModelProject to constructor and make logReader final
+		this.projectName = "AnalysisProject";
+	}
+
+	/**
+	 * Constructs an {@link AnalysisController} instance.
+	 */
+	public AnalysisController(final String projectName) {
+		this.projectName = projectName;
+	}
+
+	/**
+	 * This constructors loads the model from the given file as a configuration and creates an instance of this class.
+	 * The file should therefore be an instance of the analysis meta model.
+	 * 
+	 * @param file
+	 *            The configuration file for the analysis.
+	 * 
+	 * @return A completely initialized instance of {@link AnalysisController}.
+	 * 
+	 * @throws NullPointerException
+	 *             If something went wrong.
+	 */
+	public AnalysisController(final File file) throws NullPointerException {
+		this(AnalysisController.loadFromFile(file));
 	}
 
 	/**
@@ -99,37 +121,13 @@ public final class AnalysisController {
 	 *            The project instance for the analysis.
 	 * @throws Exception
 	 */
-	public AnalysisController(final MIProject project) throws Exception {
-		this.loadFromModelProject(project);
-	}
-
-	/**
-	 * This constructors loads the model from the given file as a configuration and creates an instance of this class. The file should therefore be an instance of
-	 * the analysis meta model.
-	 * 
-	 * @param file
-	 *            The configuration file for the analysis.
-	 * 
-	 * @return A completely initialized instance of {@link AnalysisController}.
-	 * 
-	 * @throws Exception
-	 *             If something went wrong.
-	 */
-	public AnalysisController(final File file) throws Exception {
-		/* Try to load everything. */
-		final MIProject project = AnalysisController.loadFromFile(file);
+	public AnalysisController(final MIProject project) throws NullPointerException {
 		if (project != null) {
-			// Use the project to configure this instance.
-			try {
-				this.loadFromModelProject(project);
-			} catch (final Exception ex) {
-				AnalysisController.LOG.error("Could not load the configuration from the given file: " + file.getName(), ex);
-				// TODO: Throw something more specific. Best would be either log or throw, thus throw a new specific exception with ex as cause instead of logging
-				// TODO: perhaps it would be better, if we always return a correct AnalysisController, thus perhaps one with an empty Project.
-				throw ex;
-			}
+			this.loadFromModelProject(project);
+			this.projectName = project.getName();
+		} else {
+			throw new NullPointerException("Failed to load project.");
 		}
-		// TODO: handle else!
 	}
 
 	/**
@@ -138,10 +136,8 @@ public final class AnalysisController {
 	 * @param file
 	 *            The file to be loaded.
 	 * @return An instance of <code>MIProject</code> if everything went well, null otherwise.
-	 * @throws Exception
-	 *             If something went wrong.
 	 */
-	public static final MIProject loadFromFile(final File file) throws Exception {
+	public static final MIProject loadFromFile(final File file) {
 		final EList<EObject> content = AnalysisController.openModelFile(file);
 		if ((content != null) && !content.isEmpty()) {
 			// The first (and only) element should be the project.
@@ -158,7 +154,7 @@ public final class AnalysisController {
 	 * @return A filled configuration object.
 	 */
 	private static final Configuration modelPropertiesToConfiguration(final EList<MIProperty> mProperties) {
-		final Configuration configuration = new Configuration(null);
+		final Configuration configuration = new Configuration();
 		/* Run through the properties and convert every single of them. */
 		for (final MIProperty mProperty : mProperties) {
 			configuration.setProperty(mProperty.getName(), mProperty.getValue());
@@ -173,19 +169,16 @@ public final class AnalysisController {
 	 *            The instance to be used for configuration.
 	 */
 	private final void loadFromModelProject(final MIProject mproject) {
-		/* Get all repositories. */
-		final EList<MIRepository> mRepositories = mproject.getRepositories();
-		final Map<MIRepository, AbstractRepository> repositoryMap = new HashMap<MIRepository, AbstractRepository>();
-
 		/* Create the repositories. */
-		for (final MIRepository mRepository : mRepositories) {
+		final Map<MIRepository, AbstractRepository> repositoryMap = new HashMap<MIRepository, AbstractRepository>();
+		for (final MIRepository mRepository : mproject.getRepositories()) {
 			/* Extract the necessary informations to create the repository. */
 			final Configuration configuration = AnalysisController.modelPropertiesToConfiguration(mRepository.getProperties());
-
 			try {
-				final Constructor<?> repositoryConstructor = Class.forName(mRepository.getClassname()).getConstructor(Configuration.class);
-				final AbstractRepository repository = (AbstractRepository) repositoryConstructor.newInstance(configuration.getPropertiesStartingWith(mRepository
-						.getClassname()));
+				final AbstractRepository repository = AnalysisController.createAndInitialize(AbstractRepository.class, mRepository.getClassname(), configuration);
+				// final Constructor<?> repositoryConstructor = Class.forName(mRepository.getClassname()).getConstructor(Configuration.class);
+				// final AbstractRepository repository = (AbstractRepository) repositoryConstructor.newInstance(configuration.getPropertiesStartingWith(mRepository
+				// .getClassname()));
 				repositoryMap.put(mRepository, repository);
 				this.registerRepository(repository);
 			} catch (final Exception ex) {
@@ -199,26 +192,24 @@ public final class AnalysisController {
 		 * between the plugins within the model and the actual objects we create.
 		 */
 		final EList<MIPlugin> mPlugins = mproject.getPlugins();
-		final Map<MIPlugin, AbstractPlugin> pluginMap = new HashMap<MIPlugin, AbstractPlugin>();
-
 		/* Now run through all plugins. */
+		final Map<MIPlugin, AbstractPlugin> pluginMap = new HashMap<MIPlugin, AbstractPlugin>();
 		for (final MIPlugin mPlugin : mPlugins) {
 			/* Extract the necessary informations to create the plugin. */
 			final Configuration configuration = AnalysisController.modelPropertiesToConfiguration(mPlugin.getProperties());
+			final String pluginClassname = mPlugin.getClassname();
+			configuration.setProperty(pluginClassname + ".name", mPlugin.getName());
 			/* Create the plugin and put it into our map. */
 			try {
-				final String pluginClassname = mPlugin.getClassname();
-				final Constructor<?> pluginConstructor = Class.forName(pluginClassname).getConstructor(Configuration.class);
-				/* Set the other properties of the plugin. */
-				configuration.setProperty(pluginClassname + ".name", mPlugin.getName());
-				final AbstractPlugin plugin = (AbstractPlugin) pluginConstructor.newInstance(configuration.getPropertiesStartingWith(pluginClassname));
+				// final Constructor<?> pluginConstructor = Class.forName(pluginClassname).getConstructor(Configuration.class);
+				// final AbstractPlugin plugin = (AbstractPlugin) pluginConstructor.newInstance(configuration.getPropertiesStartingWith(pluginClassname));
+				final AbstractPlugin plugin = AnalysisController.createAndInitialize(AbstractPlugin.class, pluginClassname, configuration);
 				pluginMap.put(mPlugin, plugin);
-
 				/* Add the plugin to our controller instance. */
 				if (plugin instanceof AbstractReaderPlugin) {
-					this.setReader((AbstractReaderPlugin) plugin);
+					this.registerReader((AbstractReaderPlugin) plugin);
 				} else {
-					this.registerPlugin((AbstractAnalysisPlugin) plugin);
+					this.registerFilter((AbstractAnalysisPlugin) plugin);
 				}
 			} catch (final Exception ex) {
 				AnalysisController.LOG.error("Could not load plugin: " + mPlugin.getClassname(), ex);
@@ -242,7 +233,6 @@ public final class AnalysisController {
 					/* Find the mapping and subscribe */
 					final String inputPortName = mSubscriber.getName();
 					final AbstractPlugin dstPlugin = pluginMap.get(mSubscriber.getParent());
-
 					AbstractPlugin.connect(srcPlugin, outputPortName, dstPlugin, inputPortName);
 				}
 			}
@@ -261,10 +251,8 @@ public final class AnalysisController {
 	private final static EList<EObject> openModelFile(final File file) {
 		/* Create a resource set to work with. */
 		final ResourceSet resourceSet = new ResourceSetImpl();
-
 		/* Initialize the package information */
 		MAnalysisMetaModelPackage.init();
-
 		/* Set OPTION_RECORD_UNKNOWN_FEATURE prior to calling getResource. */
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*",
 				new EcoreResourceFactoryImpl() {
@@ -278,7 +266,6 @@ public final class AnalysisController {
 
 		/* Try to load the ressource. */
 		final XMIResource resource = (XMIResource) resourceSet.getResource(URI.createFileURI(file.toString()), true);
-
 		try {
 			resource.load(Collections.EMPTY_MAP);
 			return resource.getContents();
@@ -294,16 +281,10 @@ public final class AnalysisController {
 	 * 
 	 * @param file
 	 *            The file in which the configuration will be stored.
-	 * @param projectName
-	 *            The name which is used for the new project.
 	 * @return true iff the configuration has been saved successfully.
 	 */
-	public final boolean saveToFile(final File file, final String projectName) {
-		final MIProject project = this.getCurrentConfiguration(projectName);
-		final boolean success = AnalysisController.saveProject(file, project);
-
-		return success;
-
+	public final boolean saveToFile(final File file) {
+		return AnalysisController.saveProject(file, this.getCurrentConfiguration());
 	}
 
 	/**
@@ -321,7 +302,6 @@ public final class AnalysisController {
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 		final Resource resource = resourceSet.createResource(URI.createFileURI(file.getAbsolutePath()));
 		resource.getContents().add(project);
-
 		/* Now try to save the resource. */
 		try {
 			resource.save(null);
@@ -329,23 +309,20 @@ public final class AnalysisController {
 			AnalysisController.LOG.error("Unable to save configuration file '" + file.getAbsolutePath() + "'.", ex);
 			return false;
 		}
-
 		return true;
 	}
 
 	/**
 	 * This method delivers the current configuration of this instance as an instance of <code>MIProject</code>.
 	 * 
-	 * @param projectName
-	 *            The name to be used for the project.
 	 * @return A filled meta model instance if everything went well, null otherwise.
 	 */
-	public MIProject getCurrentConfiguration(final String projectName) {
+	public MIProject getCurrentConfiguration() {
 		try {
 			/* Create a factory to create all other model instances. */
 			final MAnalysisMetaModelFactory factory = new MAnalysisMetaModelFactory();
 			final MIProject project = factory.createProject();
-			project.setName(projectName);
+			project.setName(this.projectName);
 
 			final Map<AbstractPlugin, MIPlugin> pluginMap = new HashMap<AbstractPlugin, MIPlugin>();
 			final Map<AbstractRepository, MIRepository> repositoryMap = new HashMap<AbstractRepository, MIRepository>();
@@ -360,11 +337,10 @@ public final class AnalysisController {
 			}
 
 			/* Run through all plugins and create the model-counterparts. */
-			final List<AbstractPlugin> plugins = new ArrayList<AbstractPlugin>(this.plugins);
-			if (this.logReader != null) {
-				plugins.add((AbstractPlugin) this.logReader);
+			final List<AbstractPlugin> plugins = new ArrayList<AbstractPlugin>(this.filters);
+			for (final AbstractReaderPlugin reader : this.readers) {
+				plugins.add(reader);
 			}
-
 			for (final AbstractPlugin plugin : plugins) {
 				MIPlugin mPlugin;
 				if (plugin instanceof AbstractReaderPlugin) {
@@ -504,35 +480,29 @@ public final class AnalysisController {
 	 */
 	public boolean run() {
 		boolean success = true;
-
 		try {
-			/**
-			 * Call execute() method of all plug-ins.
-			 */
-			for (final AbstractAnalysisPlugin c : this.plugins) {
-				if (!c.execute()) {
-					AnalysisController.LOG.error("A plug-in's execute message failed");
-					success = false;
-				}
-			}
-
-			/**
-			 * Make sure that log reader is not null
-			 */
-			if (this.logReader == null) {
+			// Make sure that a log reader exists.
+			if (this.readers.size() == 0) {
 				AnalysisController.LOG.error("No log reader registered.");
 				success = false;
 			}
-
-			/**
-			 * Start reading
-			 */
+			// Call execute() method of all plug-ins.
+			for (final AbstractAnalysisPlugin filter : this.filters) {
+				if (!filter.execute()) {
+					AnalysisController.LOG.error("A plug-in's execute message failed.");
+					success = false;
+				}
+			}
+			// Start reading
 			if (success) {
 				// notify threads waiting for the initialization to be done
 				this.initializationLatch.countDown();
-				if (!this.logReader.read()) {
-					AnalysisController.LOG.error("Calling execute() on logReader returned false");
-					success = false;
+				for (final AbstractReaderPlugin reader : this.readers) {
+					// TODO: Better would be asynchronously spawning a thread per reader.
+					if (!reader.read()) {
+						AnalysisController.LOG.error("Calling read() on Reader returned false.");
+						success = false;
+					}
 				}
 			}
 		} catch (final Exception ex) { // NOCS // NOPMD
@@ -542,14 +512,13 @@ public final class AnalysisController {
 			// to make sure that all waiting threads are released
 			this.initializationLatch.countDown();
 			try {
-				for (final AbstractAnalysisPlugin c : this.plugins) {
-					c.terminate(!success); // normal termination (w/o error)
+				for (final AbstractAnalysisPlugin filter : this.filters) {
+					filter.terminate(!success); // normal termination (w/o error)
 				}
 			} catch (final Exception ex) { // NOCS // NOPMD
 				AnalysisController.LOG.error("Error during termination", ex);
 			}
 		}
-
 		return success;
 	}
 
@@ -561,7 +530,9 @@ public final class AnalysisController {
 		 * terminate the reader. After the reader has terminated, the run method() will terminate all plugins
 		 */
 		AnalysisController.LOG.info("Explicit termination of the analysis. Terminating the reader ...");
-		this.logReader.terminate();
+		for (final AbstractReaderPlugin reader : this.readers) {
+			reader.terminate();
+		}
 	}
 
 	/**
@@ -579,37 +550,53 @@ public final class AnalysisController {
 	}
 
 	/**
-	 * Sets the log reader used as the source for monitoring records.
+	 * Registers a log reader used as the source for monitoring records.
 	 * 
 	 * @param reader
 	 */
-	public void setReader(final IMonitoringReader reader) { // TODO: is this really still needed? Should be done with Project...
-		this.logReader = reader;
+	public void registerReader(final AbstractReaderPlugin reader) {
+		this.readers.add(reader);
 		if (AnalysisController.LOG.isDebugEnabled()) {
 			AnalysisController.LOG.debug("Registered reader " + reader);
 		}
 	}
 
 	/**
-	 * Registers the passed plug-in <i>c<i>. All plugins which have been
-	 * registered before calling the <i>run</i>-method, will be started once
-	 * the analysis is started.
+	 * Registers the passed plug-in <i>filter<i>.
+	 * 
+	 * All plugins which have been registered before calling the <i>run</i>-method, will be started once the analysis is started.
 	 */
-	public void registerPlugin(final AbstractAnalysisPlugin plugin) { // TODO: is this really still needed? Should be done with Project...
-		this.plugins.add(plugin);
+	public void registerFilter(final AbstractAnalysisPlugin filter) {
+		this.filters.add(filter);
 		if (AnalysisController.LOG.isDebugEnabled()) {
-			AnalysisController.LOG.debug("Registered plugin " + plugin);
+			AnalysisController.LOG.debug("Registered plugin " + filter);
 		}
 	}
 
 	/**
-	 * Registers the passed repositories <i>c<i>.
+	 * Registers the passed repository <i>repository<i>.
 	 */
-	public void registerRepository(final AbstractRepository repo) { // TODO: is this really still needed? Should be done with Project...
-		this.repos.add(repo);
+	public void registerRepository(final AbstractRepository repository) {
+		this.repos.add(repository);
 		if (AnalysisController.LOG.isDebugEnabled()) {
-			AnalysisController.LOG.debug("Registered Repository " + repo);
+			AnalysisController.LOG.debug("Registered Repository " + repository);
 		}
+	}
+
+	public String getProjectName() {
+		return this.projectName;
+	}
+
+	public Collection<AbstractReaderPlugin> getReaders() {
+		return this.readers;
+	}
+
+	public Collection<AbstractAnalysisPlugin> getFilters() {
+		return this.filters;
+	}
+
+	public Collection<AbstractRepository> getRepos() {
+		return this.repos;
 	}
 
 	@SuppressWarnings("unchecked")

@@ -48,8 +48,8 @@ public class Starter {
 				new MyPipeReader("somePipe");
 		final MyResponseTimeConsumer consumer =
 				new MyResponseTimeConsumer();
-		analyisController.setReader(reader);
-		analyisController.registerPlugin(consumer);
+		analyisController.registerReader(reader);
+		analyisController.registerFilter(consumer);
 
 		AbstractPlugin.connect(reader, MyPipeReader.OUTPUT_PORT_NAME, consumer, MyResponseTimeConsumer.INPUT_PORT_NAME);
 

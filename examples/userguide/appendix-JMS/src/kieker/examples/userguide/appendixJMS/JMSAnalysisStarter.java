@@ -67,13 +67,13 @@ public class JMSAnalysisStarter {
 		logReaderConfiguration.setProperty(JMSReader.CONFIG_DESTINATION, JMSAnalysisStarter.queue);
 
 		final JMSReader logReader = new JMSReader(logReaderConfiguration);
-		analysisInstance.setReader(logReader);
+		analysisInstance.registerReader(logReader);
 
 		final Configuration consumerConfiguration = new Configuration();
 		consumerConfiguration.setProperty(Consumer.CONFIG_MAX_RESPONSE_TIME, Long.toString(JMSAnalysisStarter.MAX_RT_NANOS));
 
 		final Consumer consumer = new Consumer(consumerConfiguration);
-		analysisInstance.registerPlugin(consumer);
+		analysisInstance.registerFilter(consumer);
 
 		AbstractPlugin.connect(logReader, JMSReader.OUTPUT_PORT_NAME, consumer, Consumer.INPUT_PORT_NAME);
 
