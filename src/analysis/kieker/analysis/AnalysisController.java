@@ -72,13 +72,20 @@ public final class AnalysisController {
 	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
 
 	private final String projectName;
-	// private IMonitoringReader logReader;
 	private final Collection<AbstractReaderPlugin> readers = new CopyOnWriteArrayList<AbstractReaderPlugin>();
 	private final Collection<AbstractAnalysisPlugin> filters = new CopyOnWriteArrayList<AbstractAnalysisPlugin>();
 	private final Collection<AbstractRepository> repos = new CopyOnWriteArrayList<AbstractRepository>();
 
 	/** Will be count down after the analysis is set-up. */
 	private final CountDownLatch initializationLatch = new CountDownLatch(1);
+
+	private final STATE state = STATE.READY;
+
+	private static enum STATE {
+		READY,
+		RUNNING,
+		TERMINATED,
+	}
 
 	/**
 	 * Constructs an {@link AnalysisController} instance.
@@ -127,38 +134,6 @@ public final class AnalysisController {
 	}
 
 	/**
-	 * This method can be used to load a meta model instance from a given file.
-	 * 
-	 * @param file
-	 *            The file to be loaded.
-	 * @return An instance of <code>MIProject</code> if everything went well, null otherwise.
-	 */
-	public static final MIProject loadFromFile(final File file) {
-		final EList<EObject> content = AnalysisController.openModelFile(file);
-		if ((content != null) && !content.isEmpty()) {
-			// The first (and only) element should be the project.
-			return (MIProject) content.get(0);
-		}
-		return null;
-	}
-
-	/**
-	 * This method can be used to convert a given list of <code>MIProperty</code> to a configuration object.
-	 * 
-	 * @param mProperties
-	 *            The properties to be converted.
-	 * @return A filled configuration object.
-	 */
-	private static final Configuration modelPropertiesToConfiguration(final EList<MIProperty> mProperties) {
-		final Configuration configuration = new Configuration();
-		/* Run through the properties and convert every single of them. */
-		for (final MIProperty mProperty : mProperties) {
-			configuration.setProperty(mProperty.getName(), mProperty.getValue());
-		}
-		return configuration;
-	}
-
-	/**
 	 * This method can be used to load the configuration from a given meta model instance.
 	 * 
 	 * @param mproject
@@ -179,7 +154,6 @@ public final class AnalysisController {
 				continue;
 			}
 		}
-
 		/*
 		 * We run through the project and collect all plugins. As we create an actual object for every plugin within the model, we have to remember the mapping
 		 * between the plugins within the model and the actual objects we create.
@@ -207,7 +181,6 @@ public final class AnalysisController {
 				continue;
 			}
 		}
-
 		/* Now we have all plugins. We can start to assemble the wiring. */
 		for (final MIPlugin mPlugin : mPlugins) {
 			final EList<MIRepositoryConnector> mPluginRPorts = mPlugin.getRepositories();
@@ -231,42 +204,6 @@ public final class AnalysisController {
 	}
 
 	/**
-	 * Opens a given file which should contain an instance of the analysis meta
-	 * model and delivers a list with the whole content.
-	 * 
-	 * @param file
-	 *            The file to be opened.
-	 * @return A list with the content of the file or null if the loading did
-	 *         fail
-	 */
-	private final static EList<EObject> openModelFile(final File file) {
-		/* Create a resource set to work with. */
-		final ResourceSet resourceSet = new ResourceSetImpl();
-		/* Initialize the package information */
-		MAnalysisMetaModelPackage.init();
-		/* Set OPTION_RECORD_UNKNOWN_FEATURE prior to calling getResource. */
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*",
-				new EcoreResourceFactoryImpl() {
-					@Override
-					public Resource createResource(final URI uri) {
-						final XMIResourceImpl resource = (XMIResourceImpl) super.createResource(uri);
-						resource.getDefaultLoadOptions().put(XMLResource.OPTION_RECORD_UNKNOWN_FEATURE, Boolean.TRUE);
-						return resource;
-					}
-				});
-
-		/* Try to load the ressource. */
-		final XMIResource resource = (XMIResource) resourceSet.getResource(URI.createFileURI(file.toString()), true);
-		try {
-			resource.load(Collections.EMPTY_MAP);
-			return resource.getContents();
-		} catch (final IOException ex) {
-			AnalysisController.LOG.error("Could not open the given file.", ex);
-			return null;
-		}
-	}
-
-	/**
 	 * This method can be used to store the current configuration of this analysis controller in a specified file. The file can later be used to initialize the
 	 * analysis controller.
 	 * 
@@ -275,32 +212,7 @@ public final class AnalysisController {
 	 * @return true iff the configuration has been saved successfully.
 	 */
 	public final boolean saveToFile(final File file) {
-		return AnalysisController.saveProject(file, this.getCurrentConfiguration());
-	}
-
-	/**
-	 * This method can be used to save the given instance of <code>MIProject</code> within a given file.
-	 * 
-	 * @param file
-	 *            The file to be used for the storage.
-	 * @param project
-	 *            The project to be stored.
-	 * @return true iff the storage was succesful.
-	 */
-	private static boolean saveProject(final File file, final MIProject project) {
-		/* Create a resource and put the given project into it. */
-		final ResourceSet resourceSet = new ResourceSetImpl();
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
-		final Resource resource = resourceSet.createResource(URI.createFileURI(file.getAbsolutePath()));
-		resource.getContents().add(project);
-		/* Now try to save the resource. */
-		try {
-			resource.save(null);
-		} catch (final IOException ex) {
-			AnalysisController.LOG.error("Unable to save configuration file '" + file.getAbsolutePath() + "'.", ex);
-			return false;
-		}
-		return true;
+		return AnalysisController.saveToFile(file, this.getCurrentConfiguration());
 	}
 
 	/**
@@ -308,16 +220,14 @@ public final class AnalysisController {
 	 * 
 	 * @return A filled meta model instance if everything went well, null otherwise.
 	 */
-	public MIProject getCurrentConfiguration() {
+	public final MIProject getCurrentConfiguration() {
 		try {
 			/* Create a factory to create all other model instances. */
 			final MAnalysisMetaModelFactory factory = new MAnalysisMetaModelFactory();
 			final MIProject project = factory.createProject();
 			project.setName(this.projectName);
-
 			final Map<AbstractPlugin, MIPlugin> pluginMap = new HashMap<AbstractPlugin, MIPlugin>();
 			final Map<AbstractRepository, MIRepository> repositoryMap = new HashMap<AbstractRepository, MIRepository>();
-
 			/* Run through all repositories and create the model-counterparts. */
 			final List<AbstractRepository> repos = new ArrayList<AbstractRepository>(this.repos);
 			for (final AbstractRepository repo : repos) {
@@ -326,7 +236,6 @@ public final class AnalysisController {
 				project.getRepositories().add(mRepo);
 				repositoryMap.put(repo, mRepo);
 			}
-
 			/* Run through all plugins and create the model-counterparts. */
 			final List<AbstractPlugin> plugins = new ArrayList<AbstractPlugin>(this.filters);
 			for (final AbstractReaderPlugin reader : this.readers) {
@@ -339,13 +248,10 @@ public final class AnalysisController {
 				} else {
 					mPlugin = factory.createAnalysisPlugin();
 				}
-
 				/* Remember the mapping. */
 				pluginMap.put(plugin, mPlugin);
-
 				mPlugin.setClassname(plugin.getClass().getName());
 				mPlugin.setName(plugin.getName());
-
 				/* Extract the configuration. */
 				Configuration configuration = plugin.getCurrentConfiguration();
 				if (null == configuration) { // should not happen, but better safe than sorry
@@ -358,7 +264,6 @@ public final class AnalysisController {
 					property.setValue(configEntry.getValue().toString());
 					properties.add(property);
 				}
-
 				/* Extract the repositories. */
 				final Map<String, AbstractRepository> currRepositories = plugin.getCurrentRepositories();
 				final Set<Entry<String, AbstractRepository>> repoSet = currRepositories.entrySet();
@@ -377,7 +282,6 @@ public final class AnalysisController {
 
 					mPlugin.getRepositories().add(mRepositoryConn);
 				}
-
 				/* Create the ports. */
 				final String[] outs = plugin.getAllOutputPortNames();
 				for (final String out : outs) {
@@ -395,7 +299,6 @@ public final class AnalysisController {
 
 				project.getPlugins().add(mPlugin);
 			}
-
 			/* Now connect the plugins. */
 			for (final AbstractPlugin plugin : plugins) {
 				final MIPlugin mOutputPlugin = pluginMap.get(plugin);
@@ -427,48 +330,12 @@ public final class AnalysisController {
 	}
 
 	/**
-	 * Searches for an input port within the given plugin with the given name.
-	 * 
-	 * @param mPlugin
-	 *            The plugin which will be searched through.
-	 * @param name
-	 *            The name of the searched input port.
-	 * @return The searched port or null, if it is not available.
-	 */
-	private static MIInputPort findInputPort(final MIAnalysisPlugin mPlugin, final String name) {
-		for (final MIInputPort port : mPlugin.getInputPorts()) {
-			if (port.getName().equals(name)) {
-				return port;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Searches for an output port within the given plugin with the given name.
-	 * 
-	 * @param mPlugin
-	 *            The plugin which will be searched through.
-	 * @param name
-	 *            The name of the searched output port.
-	 * @return The searched port or null, if it is not available.
-	 */
-	private static MIOutputPort findOutputPort(final MIPlugin mPlugin, final String name) {
-		for (final MIOutputPort port : mPlugin.getOutputPorts()) {
-			if (port.getName().equals(name)) {
-				return port;
-			}
-		}
-		return null;
-	}
-
-	/**
 	 * Starts an {@link AnalysisController} instance and returns after the configured reader finished reading and all analysis plug-ins terminated; or immediately,
 	 * if an error occurs.
 	 * 
 	 * @return true on success; false if an error occurred
 	 */
-	public boolean run() {
+	public final boolean run() {
 		boolean success = true;
 		try {
 			// Make sure that a log reader exists.
@@ -488,11 +355,7 @@ public final class AnalysisController {
 				// notify threads waiting for the initialization to be done
 				this.initializationLatch.countDown();
 				for (final AbstractReaderPlugin reader : this.readers) {
-					// TODO: Better would be asynchronously spawning a thread per reader.
-					if (!reader.read()) {
-						AnalysisController.LOG.error("Calling read() on Reader returned false.");
-						success = false;
-					}
+					new Thread(reader).start();
 				}
 			}
 		} catch (final Exception ex) { // NOCS // NOPMD
@@ -515,7 +378,7 @@ public final class AnalysisController {
 	/**
 	 * Initiates a termination of the analysis.
 	 */
-	public void terminate() {
+	public final void terminate() {
 		/*
 		 * terminate the reader. After the reader has terminated, the run method() will terminate all plugins
 		 */
@@ -544,7 +407,7 @@ public final class AnalysisController {
 	 * 
 	 * @param reader
 	 */
-	public void registerReader(final AbstractReaderPlugin reader) {
+	public final void registerReader(final AbstractReaderPlugin reader) {
 		this.readers.add(reader);
 		if (AnalysisController.LOG.isDebugEnabled()) {
 			AnalysisController.LOG.debug("Registered reader " + reader);
@@ -556,7 +419,7 @@ public final class AnalysisController {
 	 * 
 	 * All plugins which have been registered before calling the <i>run</i>-method, will be started once the analysis is started.
 	 */
-	public void registerFilter(final AbstractAnalysisPlugin filter) {
+	public final void registerFilter(final AbstractAnalysisPlugin filter) {
 		this.filters.add(filter);
 		if (AnalysisController.LOG.isDebugEnabled()) {
 			AnalysisController.LOG.debug("Registered plugin " + filter);
@@ -566,27 +429,144 @@ public final class AnalysisController {
 	/**
 	 * Registers the passed repository <i>repository<i>.
 	 */
-	public void registerRepository(final AbstractRepository repository) {
+	public final void registerRepository(final AbstractRepository repository) {
 		this.repos.add(repository);
 		if (AnalysisController.LOG.isDebugEnabled()) {
 			AnalysisController.LOG.debug("Registered Repository " + repository);
 		}
 	}
 
-	public String getProjectName() {
+	public final String getProjectName() {
 		return this.projectName;
 	}
 
-	public Collection<AbstractReaderPlugin> getReaders() {
-		return this.readers;
+	public final Collection<AbstractReaderPlugin> getReaders() {
+		return Collections.unmodifiableCollection(this.readers);
 	}
 
-	public Collection<AbstractAnalysisPlugin> getFilters() {
-		return this.filters;
+	public final Collection<AbstractAnalysisPlugin> getFilters() {
+		return Collections.unmodifiableCollection(this.filters);
 	}
 
-	public Collection<AbstractRepository> getRepositories() {
-		return this.repos;
+	public final Collection<AbstractRepository> getRepositories() {
+		return Collections.unmodifiableCollection(this.repos);
+	}
+
+	/**
+	 * This method can be used to load a meta model instance from a given file.
+	 * 
+	 * @param file
+	 *            The file to be loaded.
+	 * @return An instance of <code>MIProject</code> if everything went well, null otherwise.
+	 */
+	public static final MIProject loadFromFile(final File file) {
+		/* Create a resource set to work with. */
+		final ResourceSet resourceSet = new ResourceSetImpl();
+		/* Initialize the package information */
+		MAnalysisMetaModelPackage.init();
+		/* Set OPTION_RECORD_UNKNOWN_FEATURE prior to calling getResource. */
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*",
+				new EcoreResourceFactoryImpl() {
+					@Override
+					public Resource createResource(final URI uri) {
+						final XMIResourceImpl resource = (XMIResourceImpl) super.createResource(uri);
+						resource.getDefaultLoadOptions().put(XMLResource.OPTION_RECORD_UNKNOWN_FEATURE, Boolean.TRUE);
+						return resource;
+					}
+				});
+		/* Try to load the ressource. */
+		final XMIResource resource = (XMIResource) resourceSet.getResource(URI.createFileURI(file.toString()), true);
+		final EList<EObject> content;
+		try {
+			resource.load(Collections.EMPTY_MAP);
+			content = resource.getContents();
+			if (!content.isEmpty()) {
+				// The first (and only) element should be the project.
+				return (MIProject) content.get(0);
+			} else {
+				return null;
+			}
+		} catch (final IOException ex) {
+			AnalysisController.LOG.error("Could not open the given file.", ex);
+			return null;
+		}
+	}
+
+	/**
+	 * This method can be used to save the given instance of <code>MIProject</code> within a given file.
+	 * 
+	 * @param file
+	 *            The file to be used for the storage.
+	 * @param project
+	 *            The project to be stored.
+	 * @return true iff the storage was succesful.
+	 */
+	public static final boolean saveToFile(final File file, final MIProject project) {
+		/* Create a resource and put the given project into it. */
+		final ResourceSet resourceSet = new ResourceSetImpl();
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+		final Resource resource = resourceSet.createResource(URI.createFileURI(file.getAbsolutePath()));
+		resource.getContents().add(project);
+		/* Now try to save the resource. */
+		try {
+			resource.save(null);
+		} catch (final IOException ex) {
+			AnalysisController.LOG.error("Unable to save configuration file '" + file.getAbsolutePath() + "'.", ex);
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * This method can be used to convert a given list of <code>MIProperty</code> to a configuration object.
+	 * 
+	 * @param mProperties
+	 *            The properties to be converted.
+	 * @return A filled configuration object.
+	 */
+	private static final Configuration modelPropertiesToConfiguration(final EList<MIProperty> mProperties) {
+		final Configuration configuration = new Configuration();
+		/* Run through the properties and convert every single of them. */
+		for (final MIProperty mProperty : mProperties) {
+			configuration.setProperty(mProperty.getName(), mProperty.getValue());
+		}
+		return configuration;
+	}
+
+	/**
+	 * Searches for an input port within the given plugin with the given name.
+	 * 
+	 * @param mPlugin
+	 *            The plugin which will be searched through.
+	 * @param name
+	 *            The name of the searched input port.
+	 * @return The searched port or null, if it is not available.
+	 */
+	private static final MIInputPort findInputPort(final MIAnalysisPlugin mPlugin, final String name) {
+		for (final MIInputPort port : mPlugin.getInputPorts()) {
+			if (port.getName().equals(name)) {
+				return port;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Searches for an output port within the given plugin with the given name.
+	 * 
+	 * @param mPlugin
+	 *            The plugin which will be searched through.
+	 * @param name
+	 *            The name of the searched output port.
+	 * @return The searched port or null, if it is not available.
+	 */
+	private static final MIOutputPort findOutputPort(final MIPlugin mPlugin, final String name) {
+		for (final MIOutputPort port : mPlugin.getOutputPorts()) {
+			if (port.getName().equals(name)) {
+				return port;
+			}
+		}
+		return null;
 	}
 
 	@SuppressWarnings("unchecked")

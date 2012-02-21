@@ -23,6 +23,8 @@ package kieker.analysis.reader;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 
 /**
  * This class should be used as a base for every reader used within <i>Kieker</i>.
@@ -30,7 +32,8 @@ import kieker.common.configuration.Configuration;
  * @author Nils Christian Ehmke
  */
 @Plugin
-public abstract class AbstractReaderPlugin extends AbstractPlugin implements IMonitoringReader {
+public abstract class AbstractReaderPlugin extends AbstractPlugin implements IMonitoringReader, Runnable {
+	private static final Log LOG = LogFactory.getLog(AbstractReaderPlugin.class);
 
 	/**
 	 * Each Plugin requires a constructor with a single Configuration object.
@@ -40,5 +43,12 @@ public abstract class AbstractReaderPlugin extends AbstractPlugin implements IMo
 	 */
 	public AbstractReaderPlugin(final Configuration configuration) {
 		super(configuration);
+	}
+
+	@Override
+	public void run() {
+		if (!this.read()) {
+			AbstractReaderPlugin.LOG.error("Calling read() on Reader returned false.");
+		}
 	}
 }
