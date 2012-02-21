@@ -76,16 +76,13 @@ public final class AnalysisController {
 	private final Collection<AbstractAnalysisPlugin> filters = new CopyOnWriteArrayList<AbstractAnalysisPlugin>();
 	private final Collection<AbstractRepository> repos = new CopyOnWriteArrayList<AbstractRepository>();
 
-	/** Will be count down after the analysis is set-up. */
-	private final CountDownLatch initializationLatch = new CountDownLatch(1);
-
-	private final STATE state = STATE.READY;
-
-	private static enum STATE {
-		READY,
-		RUNNING,
-		TERMINATED,
-	}
+	// private final STATE state = STATE.READY;
+	//
+	// private static enum STATE {
+	// READY,
+	// RUNNING,
+	// TERMINATED,
+	// }
 
 	/**
 	 * Constructs an {@link AnalysisController} instance.
@@ -336,70 +333,59 @@ public final class AnalysisController {
 	 * @return true on success; false if an error occurred
 	 */
 	public final boolean run() {
-		boolean success = true;
-		try {
-			// Make sure that a log reader exists.
-			if (this.readers.size() == 0) {
-				AnalysisController.LOG.error("No log reader registered.");
-				success = false;
-			}
-			// Call execute() method of all plug-ins.
-			for (final AbstractAnalysisPlugin filter : this.filters) {
-				if (!filter.execute()) {
-					AnalysisController.LOG.error("A plug-in's execute message failed.");
-					success = false;
-				}
-			}
-			// Start reading
-			if (success) {
-				// notify threads waiting for the initialization to be done
-				this.initializationLatch.countDown();
-				for (final AbstractReaderPlugin reader : this.readers) {
-					new Thread(reader).start();
-				}
-			}
-		} catch (final Exception ex) { // NOCS // NOPMD
-			AnalysisController.LOG.error("Error occurred", ex);
-			success = false;
-		} finally {
-			// to make sure that all waiting threads are released
-			this.initializationLatch.countDown();
-			try {
-				for (final AbstractAnalysisPlugin filter : this.filters) {
-					filter.terminate(!success); // normal termination (w/o error)
-				}
-			} catch (final Exception ex) { // NOCS // NOPMD
-				AnalysisController.LOG.error("Error during termination", ex);
+		// Make sure that a log reader exists.
+		if (this.readers.size() == 0) {
+			AnalysisController.LOG.error("No log reader registered.");
+			this.terminate(true);
+			return false;
+		}
+		// Call execute() method of all plug-ins.
+		for (final AbstractAnalysisPlugin filter : this.filters) {
+			if (!filter.init()) {
+				AnalysisController.LOG.error("A plug-in's execute message failed.");
+				this.terminate(true);
+				return false;
 			}
 		}
-		return success;
+		// Start reading
+		final CountDownLatch readerLatch = new CountDownLatch(this.readers.size());
+		for (final AbstractReaderPlugin reader : this.readers) {
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					if (!reader.read()) {
+						AnalysisController.LOG.error("Calling read() on Reader returned false.");
+						AnalysisController.this.terminate(true);
+					}
+					readerLatch.countDown();
+				}
+			}).run();
+		}
+		// wait until all threads are finished
+		try {
+			readerLatch.await();
+		} catch (final InterruptedException ex) {
+			AnalysisController.LOG.warn("Interrupted while waiting for readers to finish");
+		}
+		this.terminate(false);
+		return true;
 	}
 
 	/**
 	 * Initiates a termination of the analysis.
 	 */
-	public final void terminate() {
-		/*
-		 * terminate the reader. After the reader has terminated, the run method() will terminate all plugins
-		 */
-		AnalysisController.LOG.info("Explicit termination of the analysis. Terminating the reader ...");
+	public final void terminate(final boolean error) {
+		if (error) {
+			AnalysisController.LOG.info("Explicit termination of the analysis. Terminating ...");
+		} else {
+			AnalysisController.LOG.info("Analysis run finished successfully.");
+		}
 		for (final AbstractReaderPlugin reader : this.readers) {
-			reader.terminate();
+			reader.terminate(error);
 		}
-	}
-
-	/**
-	 * Awaits until the controller finishes its initialization.
-	 * 
-	 * @return the initializationLatch
-	 */
-	protected final boolean awaitInitialization() {
-		try {
-			this.initializationLatch.await();
-		} catch (final InterruptedException ex) {
-			AnalysisController.LOG.error("Interrupted while waiting for AnalysisController to be initialized.", ex);
+		for (final AbstractAnalysisPlugin filter : this.filters) {
+			filter.terminate(error);
 		}
-		return true;
 	}
 
 	/**

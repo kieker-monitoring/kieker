@@ -52,8 +52,8 @@ public class AggregatedAllocationComponentOperationCallTreePlugin extends Aggreg
 	}
 
 	@Override
-	public boolean execute() {
-		final boolean success = super.execute();
+	public boolean init() {
+		final boolean success = super.init();
 		return success;
 	}
 

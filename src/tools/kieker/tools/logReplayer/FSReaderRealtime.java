@@ -158,8 +158,9 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 	}
 
 	@Override
-	public void terminate() {
-		this.analysis.terminate();
+	public void terminate(final boolean error) {
+		// FIXME: this is an infinite recursion loop!?!?
+		this.analysis.terminate(error);
 	}
 
 	@Override

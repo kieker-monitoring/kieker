@@ -154,7 +154,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	}
 
 	@Override
-	public boolean execute() {
+	public boolean init() {
 		return true; // no need to do anything here
 	}
 

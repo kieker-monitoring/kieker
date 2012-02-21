@@ -112,7 +112,7 @@ class SourceClass extends AbstractReaderPlugin {
 	}
 
 	@Override
-	public void terminate() {}
+	public void terminate(final boolean error) {}
 
 	@Override
 	protected Configuration getDefaultConfiguration() {

@@ -44,7 +44,7 @@ public abstract class AbstractAnalysisPlugin extends AbstractPlugin implements I
 	}
 
 	@Override
-	public boolean execute() {
+	public boolean init() {
 		return true; // do nothing
 	}
 

@@ -110,7 +110,7 @@ public class MyPipeReader extends AbstractReaderPlugin {
 	}
 
 	@Override
-	public void terminate() {
+	public void terminate(final boolean error) {
 		// nothing to do
 	}
 }

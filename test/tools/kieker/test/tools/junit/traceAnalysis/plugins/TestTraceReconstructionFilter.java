@@ -159,7 +159,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		AbstractPlugin.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, invalidExecutionTraceSinkPlugin,
 				SimpleSinkPlugin.INPUT_PORT_NAME);
 
-		if (!filter.execute()) {
+		if (!filter.init()) {
 			Assert.fail("Execution of filter failed");
 			return;
 		}
@@ -273,7 +273,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		AbstractPlugin.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, invalidExecutionTraceSinkPlugin,
 				SimpleSinkPlugin.INPUT_PORT_NAME);
 
-		if (!filter.execute()) {
+		if (!filter.init()) {
 			Assert.fail("Execution of filter failed");
 			return;
 		}
@@ -424,7 +424,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 				SimpleSinkPlugin.INPUT_PORT_NAME);
 		Assert.assertTrue(invalidExecutionTraceSink.getList().isEmpty());
 
-		if (!filter.execute()) {
+		if (!filter.init()) {
 			Assert.fail("Execution of filter failed");
 			return;
 		}

@@ -204,7 +204,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 	}
 
 	@Override
-	public void terminate() {
+	public void terminate(final boolean error) {
 		JMSReader.LOG.info("Shutdown of JMSReader requested.");
 		this.unblock();
 	}

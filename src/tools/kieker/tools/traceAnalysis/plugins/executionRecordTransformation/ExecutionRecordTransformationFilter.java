@@ -70,16 +70,6 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 	}
 
 	@Override
-	public boolean execute() {
-		return true;
-	}
-
-	@Override
-	public void terminate(final boolean error) {
-		// nothing to do
-	}
-
-	@Override
 	protected Configuration getDefaultConfiguration() {
 		return new Configuration();
 	}

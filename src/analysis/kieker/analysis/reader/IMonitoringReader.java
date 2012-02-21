@@ -45,5 +45,5 @@ public interface IMonitoringReader {
 	 * After receiving this notification,
 	 * the reader should terminate its {@link #read()} method.
 	 */
-	public void terminate();
+	public void terminate(final boolean error);
 }

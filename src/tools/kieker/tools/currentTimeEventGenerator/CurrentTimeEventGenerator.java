@@ -134,12 +134,4 @@ public class CurrentTimeEventGenerator extends AbstractAnalysisPlugin {
 
 		return configuration;
 	}
-
-	@Override
-	public boolean execute() {
-		return false;
-	}
-
-	@Override
-	public void terminate(final boolean error) {}
 }

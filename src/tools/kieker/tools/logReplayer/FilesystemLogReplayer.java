@@ -183,7 +183,7 @@ class RecordDelegationPlugin extends AbstractAnalysisPlugin {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean execute() {
+	public boolean init() {
 		if (RecordDelegationPlugin.LOG.isDebugEnabled()) {
 			RecordDelegationPlugin.LOG.debug(RecordDelegationPlugin.class.getName() + " starting ...");
 		}

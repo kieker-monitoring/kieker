@@ -109,7 +109,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 	}
 
 	@Override
-	public void terminate() {
+	public void terminate(final boolean error) {
 		JMXReader.LOG.info("Shutdown of JMXReader requested.");
 		this.unblock();
 	}

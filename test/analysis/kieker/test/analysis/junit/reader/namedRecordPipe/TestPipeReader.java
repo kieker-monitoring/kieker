@@ -27,7 +27,6 @@ import java.util.List;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
-import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
@@ -65,9 +64,12 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 		analysis.registerReader(pipeReader);
 		AbstractPlugin.connect(pipeReader, PipeReader.OUTPUT_PORT_NAME, receiver, MonitoringSinkClass.INPUT_PORT_NAME);
 		analysis.registerFilter(receiver);
-		final AnalysisControllerThread analysisThread = new AnalysisControllerThread(analysis);
-		analysisThread.start();
-
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				analysis.run();
+			}
+		}).start();
 		/*
 		 * Send 7 dummy records
 		 */
@@ -76,7 +78,7 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 			writer.newMonitoringRecord(new EmptyRecord()); // NOPMD (new in loop)
 		}
 
-		analysisThread.terminate();
+		analysis.terminate(false);
 
 		/*
 		 * Make sure that numRecordsToSend where read.

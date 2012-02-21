@@ -88,7 +88,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	}
 
 	@Override
-	public void terminate() {
+	public void terminate(final boolean error) {
 		FSReader.LOG.info("Shutting down reader.");
 		this.running = false;
 	}

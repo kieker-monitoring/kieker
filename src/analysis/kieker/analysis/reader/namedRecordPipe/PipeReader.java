@@ -121,7 +121,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	}
 
 	@Override
-	public void terminate() {
+	public void terminate(final boolean error) {
 		// will lead to notifyPipeClosed() and the subsequent termination of read()
 		if (this.pipe != null) {
 			this.pipe.close();
