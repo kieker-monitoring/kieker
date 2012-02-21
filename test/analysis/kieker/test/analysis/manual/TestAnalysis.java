@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.manual;
+package kieker.test.analysis.manual;
 
 import java.io.File;
 

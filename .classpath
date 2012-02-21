@@ -40,5 +40,6 @@
 	<classpathentry kind="lib" path="lib/sigar-1.6.4.jar"/>
 	<classpathentry kind="lib" path="lib/springframework.context-3.0.6.jar"/>
 	<classpathentry kind="lib" path="lib/springframework.web-3.0.6.jar"/>
+	<classpathentry kind="lib" path="lib/jgraphx-1.9.1.1.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>
