@@ -54,13 +54,13 @@ public class TestAnalysis {
 			final AnalysisController analysisController;
 			final SystemModelRepository traceRepo = new SystemModelRepository(new Configuration());
 			if (TestAnalysis.LOADCONFIG) {
-				analysisController = new AnalysisController(new File("analysisproject/flowproject.xml"));
+				analysisController = new AnalysisController(new File("tmp/testproject.kax"));
 			} else {
-				analysisController = new AnalysisController("FlowProject");
+				analysisController = new AnalysisController("TestProject");
 
 				/* Reader */
 				final Configuration confReader = new Configuration();
-				confReader.setProperty(FSReader.CONFIG_INPUTDIRS, "analysisproject/testdata-ascii/");
+				confReader.setProperty(FSReader.CONFIG_INPUTDIRS, "tmp/testdata-ascii/");
 				final FSReader reader = new FSReader(confReader);
 
 				/* TypeFilter */
@@ -74,12 +74,12 @@ public class TestAnalysis {
 
 				final Configuration confTeeFilter2 = new Configuration();
 				confTeeFilter2.setProperty(TeeFilter.CONFIG_STREAM, TeeFilter.CONFIG_STREAM_STDERR);
-				confTeeFilter2.setProperty(TeeFilter.class.getName() + ".name", "CountBegin");
+				confTeeFilter2.setProperty(AbstractPlugin.CONFIG_NAME, "CountBegin");
 				final TeeFilter teeFilter2 = new TeeFilter(confTeeFilter2);
 
 				final Configuration confTeeFilter3 = new Configuration();
 				confTeeFilter3.setProperty(TeeFilter.CONFIG_STREAM, TeeFilter.CONFIG_STREAM_STDERR);
-				confTeeFilter3.setProperty(TeeFilter.class.getName() + ".name", "CountAfter");
+				confTeeFilter3.setProperty(AbstractPlugin.CONFIG_NAME, "CountAfter");
 				final TeeFilter teeFilter3 = new TeeFilter(confTeeFilter3);
 
 				/* CountingFilter */
@@ -106,18 +106,18 @@ public class TestAnalysis {
 
 				/* Visualization */
 				final Configuration confSequenceDiagramPlugin = new Configuration();
-				confSequenceDiagramPlugin.setProperty(SequenceDiagramPlugin.CONFIG_OUTPUT_FN_BASE, "analysisproject/out/SequenceAssembly");
+				confSequenceDiagramPlugin.setProperty(SequenceDiagramPlugin.CONFIG_OUTPUT_FN_BASE, "tmp/SequenceAssembly");
 				final SequenceDiagramPlugin sequenceDiagramPlugin = new SequenceDiagramPlugin(confSequenceDiagramPlugin);
 
 				final Configuration confComponentDependencyGraphPluginAllocation = new Configuration();
 				confComponentDependencyGraphPluginAllocation.setProperty(
-						ComponentDependencyGraphPluginAllocation.CONFIG_OUTPUT_FN_BASE, "analysisproject/out/dependency");
+						ComponentDependencyGraphPluginAllocation.CONFIG_OUTPUT_FN_BASE, "tmp/dependency");
 				final ComponentDependencyGraphPluginAllocation componentDependencyGraphPluginAllocation =
 						new ComponentDependencyGraphPluginAllocation(confComponentDependencyGraphPluginAllocation);
 
 				final Configuration confOperationDependencyGraphPluginAllocation = new Configuration();
 				confOperationDependencyGraphPluginAllocation.setProperty(
-						OperationDependencyGraphPluginAllocation.CONFIG_DOT_OUTPUT_FILE, "analysisproject/out/dependency-operation");
+						OperationDependencyGraphPluginAllocation.CONFIG_DOT_OUTPUT_FILE, "tmp/dependency-operation");
 				final OperationDependencyGraphPluginAllocation operationDependencyGraphPluginAllocation =
 						new OperationDependencyGraphPluginAllocation(confOperationDependencyGraphPluginAllocation);
 
@@ -173,10 +173,10 @@ public class TestAnalysis {
 						AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME);
 				operationDependencyGraphPluginAllocation.connect(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
 
-				analysisController.saveToFile(new File("analysisproject/flowproject.xml"));
+				analysisController.saveToFile(new File("tmp/testproject.kax"));
 			}
 			analysisController.run();
-			traceRepo.saveSystemToHTMLFile("analysisproject/out/system");
+			traceRepo.saveSystemToHTMLFile("tmp/system");
 		} catch (final Exception ex) {
 			TestAnalysis.LOG.error("Error initializing AnalysisController", ex);
 		}

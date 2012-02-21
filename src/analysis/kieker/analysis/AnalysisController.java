@@ -66,11 +66,7 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 
 /**
  * 
- * TODOs: - In the context of realizing a event driven architecture for the model synthesis layer, it makes sense to refactor the KiekerRecordConsumers to
- * KiekerRecordFilters. Consumers are only about how data goes in - but we also have now a concept what should happen if the data goes out: its again a publisher, to
- * which other filters or plugins can subscribe to.
- * 
- * @author Andre van Hoorn, Matthias Rohr
+ * @author Andre van Hoorn, Matthias Rohr, Jan Waller
  */
 public final class AnalysisController {
 	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
@@ -176,9 +172,6 @@ public final class AnalysisController {
 			final Configuration configuration = AnalysisController.modelPropertiesToConfiguration(mRepository.getProperties());
 			try {
 				final AbstractRepository repository = AnalysisController.createAndInitialize(AbstractRepository.class, mRepository.getClassname(), configuration);
-				// final Constructor<?> repositoryConstructor = Class.forName(mRepository.getClassname()).getConstructor(Configuration.class);
-				// final AbstractRepository repository = (AbstractRepository) repositoryConstructor.newInstance(configuration.getPropertiesStartingWith(mRepository
-				// .getClassname()));
 				repositoryMap.put(mRepository, repository);
 				this.registerRepository(repository);
 			} catch (final Exception ex) {
@@ -198,11 +191,9 @@ public final class AnalysisController {
 			/* Extract the necessary informations to create the plugin. */
 			final Configuration configuration = AnalysisController.modelPropertiesToConfiguration(mPlugin.getProperties());
 			final String pluginClassname = mPlugin.getClassname();
-			configuration.setProperty(pluginClassname + ".name", mPlugin.getName());
+			configuration.setProperty(AbstractPlugin.CONFIG_NAME, mPlugin.getName());
 			/* Create the plugin and put it into our map. */
 			try {
-				// final Constructor<?> pluginConstructor = Class.forName(pluginClassname).getConstructor(Configuration.class);
-				// final AbstractPlugin plugin = (AbstractPlugin) pluginConstructor.newInstance(configuration.getPropertiesStartingWith(pluginClassname));
 				final AbstractPlugin plugin = AnalysisController.createAndInitialize(AbstractPlugin.class, pluginClassname, configuration);
 				pluginMap.put(mPlugin, plugin);
 				/* Add the plugin to our controller instance. */
@@ -361,8 +352,7 @@ public final class AnalysisController {
 					configuration = new Configuration();
 				}
 				final EList<MIProperty> properties = mPlugin.getProperties();
-				final Set<Entry<Object, Object>> configSet = configuration.entrySet();
-				for (final Entry<Object, Object> configEntry : configSet) {
+				for (final Entry<Object, Object> configEntry : configuration.entrySet()) {
 					final MIProperty property = factory.createProperty();
 					property.setName(configEntry.getKey().toString());
 					property.setValue(configEntry.getValue().toString());
@@ -605,7 +595,7 @@ public final class AnalysisController {
 		try {
 			final Class<?> clazz = Class.forName(classname);
 			if (c.isAssignableFrom(clazz)) {
-				createdClass = (C) clazz.getConstructor(Configuration.class).newInstance(configuration.getPropertiesStartingWith(classname));
+				createdClass = (C) clazz.getConstructor(Configuration.class).newInstance(configuration.getPropertiesStartingWith(""));
 			} else {
 				AnalysisController.LOG.error("Class '" + classname + "' has to implement '" + c.getSimpleName() + "'"); // NOCS (MultipleStringLiteralsCheck)
 			}

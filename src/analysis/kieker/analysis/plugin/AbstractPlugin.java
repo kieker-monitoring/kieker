@@ -48,8 +48,9 @@ import kieker.common.logging.LogFactory;
  */
 @Plugin
 public abstract class AbstractPlugin {
-
 	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
+
+	public static final String CONFIG_NAME = "name";
 
 	private final String name;
 
@@ -76,7 +77,7 @@ public abstract class AbstractPlugin {
 		this.configuration = configuration;
 
 		/* try to determine name */
-		this.name = configuration.getStringProperty(this.getClass().getName() + ".name");
+		this.name = configuration.getStringProperty(AbstractPlugin.CONFIG_NAME);
 
 		/* KEEP IN MIND: Although we use "this" in the following code, it points to the actual class. Not to AbstractPlugin!! */
 
