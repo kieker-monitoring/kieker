@@ -284,7 +284,7 @@ public abstract class AbstractPlugin {
 	}
 
 	/**
-	 * This method should deliver an array of {@code AbstractRepository} containing the current repositories of this instance. In other words: The constructor should
+	 * This method delivers an array of {@code AbstractRepository} containing the current repositories of this instance. In other words: The constructor should
 	 * be able to use the given object to initialize a new instance of this class with the same intern properties.
 	 * 
 	 * @return An (possible empty) array of repositories.
@@ -340,6 +340,7 @@ public abstract class AbstractPlugin {
 		return outputNames.toArray(new String[outputNames.size()]);
 	}
 
+	// TODO: move to AbstractAnalysisPlugin ??
 	public final String[] getAllInputPortNames() {
 		final List<String> inputNames = new LinkedList<String>();
 		for (final Method method : this.getClass().getMethods()) {

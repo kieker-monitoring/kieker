@@ -595,7 +595,7 @@ public final class AnalysisController {
 		return this.filters;
 	}
 
-	public Collection<AbstractRepository> getRepos() {
+	public Collection<AbstractRepository> getRepositories() {
 		return this.repos;
 	}
 
