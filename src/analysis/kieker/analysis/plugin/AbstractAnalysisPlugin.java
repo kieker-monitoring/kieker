@@ -21,7 +21,6 @@
 package kieker.analysis.plugin;
 
 import kieker.analysis.plugin.annotation.Plugin;
-import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 
 /**

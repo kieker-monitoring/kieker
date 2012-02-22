@@ -18,12 +18,12 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.reader;
+package kieker.analysis.plugin;
 
 /**
  * @author Andre van Hoorn
  */
-public interface IMonitoringReader {
+public interface IReaderPlugin {
 
 	/**
 	 * Starts the reader. This method is intended to be a blocking operation,

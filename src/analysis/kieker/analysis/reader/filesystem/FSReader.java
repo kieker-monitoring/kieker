@@ -25,9 +25,9 @@ import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.Set;
 
+import kieker.analysis.plugin.AbstractReaderPlugin;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
-import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.logging.Log;

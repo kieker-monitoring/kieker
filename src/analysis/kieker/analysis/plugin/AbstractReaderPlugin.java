@@ -18,9 +18,8 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.reader;
+package kieker.analysis.plugin;
 
-import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
 
@@ -30,7 +29,7 @@ import kieker.common.configuration.Configuration;
  * @author Nils Christian Ehmke
  */
 @Plugin
-public abstract class AbstractReaderPlugin extends AbstractPlugin implements IMonitoringReader {
+public abstract class AbstractReaderPlugin extends AbstractPlugin implements IReaderPlugin {
 
 	/**
 	 * Each Plugin requires a constructor with a single Configuration object.

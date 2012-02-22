@@ -45,8 +45,9 @@ import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelFactory;
 import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.plugin.AbstractReaderPlugin;
+import kieker.analysis.plugin.IPlugin;
 import kieker.analysis.plugin.PluginInputPortReference;
-import kieker.analysis.reader.AbstractReaderPlugin;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -68,7 +69,7 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
  * 
  * @author Andre van Hoorn, Matthias Rohr, Jan Waller
  */
-public final class AnalysisController {
+public final class AnalysisController implements Runnable {
 	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
 
 	private final String projectName;
@@ -76,13 +77,16 @@ public final class AnalysisController {
 	private final Collection<AbstractAnalysisPlugin> filters = new CopyOnWriteArrayList<AbstractAnalysisPlugin>();
 	private final Collection<AbstractRepository> repos = new CopyOnWriteArrayList<AbstractRepository>();
 
-	// private final STATE state = STATE.READY;
-	//
-	// private static enum STATE {
-	// READY,
-	// RUNNING,
-	// TERMINATED,
-	// }
+	private final CountDownLatch initializationLatch = new CountDownLatch(1);
+
+	private volatile STATE state = STATE.READY;
+
+	public static enum STATE {
+		READY,
+		RUNNING,
+		TERMINATED,
+		FAILED,
+	}
 
 	/**
 	 * Constructs an {@link AnalysisController} instance.
@@ -297,7 +301,7 @@ public final class AnalysisController {
 				project.getPlugins().add(mPlugin);
 			}
 			/* Now connect the plugins. */
-			for (final AbstractPlugin plugin : plugins) {
+			for (final IPlugin plugin : plugins) {
 				final MIPlugin mOutputPlugin = pluginMap.get(plugin);
 				/* Check all output ports of the original plugin. */
 				for (final String outputPortName : plugin.getAllOutputPortNames()) {
@@ -305,7 +309,7 @@ public final class AnalysisController {
 					final EList<MIInputPort> subscribers = AnalysisController.findOutputPort(mOutputPlugin, outputPortName).getSubscribers();
 					/* Run through all connected plugins. */
 					for (final PluginInputPortReference subscriber : plugin.getConnectedPlugins(outputPortName)) {
-						final AbstractPlugin subscriberPlugin = subscriber.getPlugin();
+						final IPlugin subscriberPlugin = subscriber.getPlugin();
 						final MIPlugin mSubscriberPlugin = pluginMap.get(subscriberPlugin);
 						// TODO: It seems like mSubscriberPlugin can sometimes be null. Why?
 						/* Now connect them. */
@@ -332,19 +336,27 @@ public final class AnalysisController {
 	 * 
 	 * @return true on success; false if an error occurred
 	 */
-	public final boolean run() {
+	@Override
+	public final void run() {
+		synchronized (this) {
+			if (this.state != STATE.READY) {
+				AnalysisController.LOG.error("AnalysisController may be executed only once.");
+				return;
+			}
+			this.state = STATE.RUNNING;
+		}
 		// Make sure that a log reader exists.
 		if (this.readers.size() == 0) {
 			AnalysisController.LOG.error("No log reader registered.");
 			this.terminate(true);
-			return false;
+			return;
 		}
 		// Call execute() method of all plug-ins.
 		for (final AbstractAnalysisPlugin filter : this.filters) {
 			if (!filter.init()) {
 				AnalysisController.LOG.error("A plug-in's execute message failed.");
 				this.terminate(true);
-				return false;
+				return;
 			}
 		}
 		// Start reading
@@ -359,26 +371,46 @@ public final class AnalysisController {
 					}
 					readerLatch.countDown();
 				}
-			}).run();
+			}).start();
 		}
 		// wait until all threads are finished
 		try {
+			this.initializationLatch.countDown();
 			readerLatch.await();
 		} catch (final InterruptedException ex) {
 			AnalysisController.LOG.warn("Interrupted while waiting for readers to finish");
 		}
-		this.terminate(false);
-		return true;
+		this.terminate();
+		return;
+	}
+
+	protected final void awaitInitialization() {
+		try {
+			this.initializationLatch.await();
+		} catch (final InterruptedException ex) {
+			AnalysisController.LOG.error("Interrupted while waiting for initilaizion of analysis controller.", ex);
+		}
 	}
 
 	/**
 	 * Initiates a termination of the analysis.
 	 */
+	public final void terminate() {
+		this.terminate(false);
+	}
+
 	public final void terminate(final boolean error) {
-		if (error) {
-			AnalysisController.LOG.info("Explicit termination of the analysis. Terminating ...");
-		} else {
-			AnalysisController.LOG.info("Analysis run finished successfully.");
+		synchronized (this) {
+			if (this.state != STATE.RUNNING) {
+				return;
+			}
+			if (error) {
+				AnalysisController.LOG.info("Error during analysis. Terminating ...");
+				this.state = STATE.FAILED;
+			} else {
+				AnalysisController.LOG.info("Terminating analysis.");
+				this.state = STATE.TERMINATED;
+			}
 		}
 		for (final AbstractReaderPlugin reader : this.readers) {
 			reader.terminate(error);
@@ -394,6 +426,10 @@ public final class AnalysisController {
 	 * @param reader
 	 */
 	public final void registerReader(final AbstractReaderPlugin reader) {
+		if (this.state != STATE.READY) {
+			AnalysisController.LOG.error("Unable to reader filter after starting analysis.");
+			return;
+		}
 		this.readers.add(reader);
 		if (AnalysisController.LOG.isDebugEnabled()) {
 			AnalysisController.LOG.debug("Registered reader " + reader);
@@ -406,6 +442,10 @@ public final class AnalysisController {
 	 * All plugins which have been registered before calling the <i>run</i>-method, will be started once the analysis is started.
 	 */
 	public final void registerFilter(final AbstractAnalysisPlugin filter) {
+		if (this.state != STATE.READY) {
+			AnalysisController.LOG.error("Unable to register filter after starting analysis.");
+			return;
+		}
 		this.filters.add(filter);
 		if (AnalysisController.LOG.isDebugEnabled()) {
 			AnalysisController.LOG.debug("Registered plugin " + filter);
@@ -416,6 +456,10 @@ public final class AnalysisController {
 	 * Registers the passed repository <i>repository<i>.
 	 */
 	public final void registerRepository(final AbstractRepository repository) {
+		if (this.state != STATE.READY) {
+			AnalysisController.LOG.error("Unable to register respository after starting analysis.");
+			return;
+		}
 		this.repos.add(repository);
 		if (AnalysisController.LOG.isDebugEnabled()) {
 			AnalysisController.LOG.debug("Registered Repository " + repository);
@@ -436,6 +480,10 @@ public final class AnalysisController {
 
 	public final Collection<AbstractRepository> getRepositories() {
 		return Collections.unmodifiableCollection(this.repos);
+	}
+
+	public final STATE getState() {
+		return this.state;
 	}
 
 	/**

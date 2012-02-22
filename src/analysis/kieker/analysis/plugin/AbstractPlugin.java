@@ -34,8 +34,6 @@ import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
-import kieker.analysis.reader.AbstractReaderPlugin;
-import kieker.analysis.reader.IMonitoringReader;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -47,7 +45,7 @@ import kieker.common.logging.LogFactory;
  * @author Nils Christian Ehmke, Jan Waller
  */
 @Plugin
-public abstract class AbstractPlugin {
+public abstract class AbstractPlugin implements IPlugin {
 	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
 
 	public static final String CONFIG_NAME = "name";
@@ -122,19 +120,16 @@ public abstract class AbstractPlugin {
 	 */
 	protected abstract Configuration getDefaultConfiguration();
 
-	/**
-	 * This method should deliver a {@code Configuration} object containing the current configuration of this instance. In other words: The constructor should be
-	 * able to use the given object to initialize a new instance of this class with the same intern properties.
-	 * 
-	 * @return A completely filled configuration object.
+	/* (non-Javadoc)
+	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
 	 */
+	@Override
 	public abstract Configuration getCurrentConfiguration();
 
-	/**
-	 * This method delivers the current name of this plugin. The name does not have to be unique.
-	 * 
-	 * @return The name of the plugin.
+	/* (non-Javadoc)
+	 * @see kieker.analysis.plugin.IPlugin#getName()
 	 */
+	@Override
 	public final String getName() {
 		return this.name;
 	}
@@ -216,7 +211,7 @@ public abstract class AbstractPlugin {
 	 */
 	public static final boolean isConnectionAllowed(final AbstractPlugin src, final String output, final AbstractPlugin dst, final String input) {
 		/* First step: Check whether the plugins are valid. */
-		if ((src == null) || (dst == null) || (dst instanceof IMonitoringReader)) {
+		if ((src == null) || (dst == null) || (dst instanceof IReaderPlugin)) {
 			AbstractPlugin.LOG.warn("First step: Check whether the plugins are valid.");
 			return false;
 		}
@@ -263,6 +258,10 @@ public abstract class AbstractPlugin {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see kieker.analysis.plugin.IPlugin#connect(java.lang.String, kieker.analysis.repository.AbstractRepository)
+	 */
+	@Override
 	public final boolean connect(final String name, final AbstractRepository repo) {
 		final RepositoryPort port = this.repositoryPorts.get(name);
 		if (port == null) {
@@ -284,12 +283,10 @@ public abstract class AbstractPlugin {
 		return true;
 	}
 
-	/**
-	 * This method delivers an array of {@code AbstractRepository} containing the current repositories of this instance. In other words: The constructor should
-	 * be able to use the given object to initialize a new instance of this class with the same intern properties.
-	 * 
-	 * @return An (possible empty) array of repositories.
+	/* (non-Javadoc)
+	 * @see kieker.analysis.plugin.IPlugin#getCurrentRepositories()
 	 */
+	@Override
 	public final Map<String, AbstractRepository> getCurrentRepositories() {
 		return Collections.unmodifiableMap(this.registeredRepositories);
 	}
@@ -332,6 +329,10 @@ public abstract class AbstractPlugin {
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see kieker.analysis.plugin.IPlugin#getAllOutputPortNames()
+	 */
+	@Override
 	public final String[] getAllOutputPortNames() {
 		final List<String> outputNames = new LinkedList<String>();
 		final Plugin annotation = this.getClass().getAnnotation(Plugin.class);
@@ -341,7 +342,10 @@ public abstract class AbstractPlugin {
 		return outputNames.toArray(new String[outputNames.size()]);
 	}
 
-	// TODO: move to AbstractAnalysisPlugin ??
+	/* (non-Javadoc)
+	 * @see kieker.analysis.plugin.IPlugin#getAllInputPortNames()
+	 */
+	@Override
 	public final String[] getAllInputPortNames() {
 		final List<String> inputNames = new LinkedList<String>();
 		for (final Method method : this.getClass().getMethods()) {
@@ -353,14 +357,10 @@ public abstract class AbstractPlugin {
 		return inputNames.toArray(new String[inputNames.size()]);
 	}
 
-	/**
-	 * Delivers the plugins with their ports which are connected with the given output port.
-	 * 
-	 * @param outputPortName
-	 *            The name of the output port.
-	 * @return An array of pairs, whereat the first element is the plugin and the second one the name of the input port. If the given output port is invalid, null is
-	 *         returned
+	/* (non-Javadoc)
+	 * @see kieker.analysis.plugin.IPlugin#getConnectedPlugins(java.lang.String)
 	 */
+	@Override
 	public final List<PluginInputPortReference> getConnectedPlugins(final String outputPortName) {
 		/* Make sure that the output port exists */
 		final OutputPort outputPort = this.outputPorts.get(outputPortName);

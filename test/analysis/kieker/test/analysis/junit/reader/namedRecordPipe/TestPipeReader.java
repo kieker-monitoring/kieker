@@ -20,13 +20,13 @@
 
 package kieker.test.analysis.junit.reader.namedRecordPipe;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
+import kieker.analysis.AnalysisControllerThread;
+import kieker.analysis.filter.CountingFilter;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
@@ -49,27 +49,29 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 
 	@Test
 	public void testNamedPipeReaderReceivesFromPipe() {
+		// the pipe
 		final String pipeName = NamedPipeFactory.createPipeName();
-		final Configuration configuration = new Configuration(null);
-		configuration.setProperty(PipeReader.CONFIG_PIPENAME, pipeName);
-		final PipeReader pipeReader = new PipeReader(configuration);
 
-		final List<IMonitoringRecord> receivedRecords = Collections.synchronizedList(new ArrayList<IMonitoringRecord>());
+		// the reader
+		final Configuration readerConfiguration = new Configuration();
+		readerConfiguration.setProperty(PipeReader.CONFIG_PIPENAME, pipeName);
+		final PipeReader pipeReader = new PipeReader(readerConfiguration);
 
-		final IPipeWriter writer = kieker.test.analysis.junit.util.NamedPipeFactory.createAndRegisterNamedPipeRecordWriter(pipeName);
+		// the consumer
+		final Configuration countinConfiguration = new Configuration();
+		final CountingFilter countingFilter = new CountingFilter(countinConfiguration);
 
-		final MonitoringSinkClass receiver = new MonitoringSinkClass(receivedRecords);
+		// the writer
+		final IPipeWriter writer = NamedPipeFactory.createAndRegisterNamedPipeRecordWriter(pipeName);
 
-		final AnalysisController analysis = new AnalysisController();
+		// the analysis controller
+		final AnalysisController analysis = new AnalysisController(this.getName());
 		analysis.registerReader(pipeReader);
-		AbstractPlugin.connect(pipeReader, PipeReader.OUTPUT_PORT_NAME, receiver, MonitoringSinkClass.INPUT_PORT_NAME);
-		analysis.registerFilter(receiver);
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				analysis.run();
-			}
-		}).start();
+		analysis.registerFilter(countingFilter);
+		AbstractPlugin.connect(pipeReader, PipeReader.OUTPUT_PORT_NAME, countingFilter, CountingFilter.INPUT_PORT_NAME);
+
+		final AnalysisControllerThread analysisThread = new AnalysisControllerThread(analysis);
+		analysisThread.start(); // start asynchronously
 		/*
 		 * Send 7 dummy records
 		 */
@@ -78,12 +80,12 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 			writer.newMonitoringRecord(new EmptyRecord()); // NOPMD (new in loop)
 		}
 
-		analysis.terminate(false);
+		analysisThread.terminate();
 
 		/*
 		 * Make sure that numRecordsToSend where read.
 		 */
-		Assert.assertEquals("Unexpected number of records received", numRecordsToSend, receivedRecords.size());
+		Assert.assertEquals("Unexpected number of records received", numRecordsToSend, countingFilter.getMessageCount());
 	}
 }
 
