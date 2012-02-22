@@ -609,7 +609,7 @@ public final class AnalysisController implements Runnable {
 		try {
 			final Class<?> clazz = Class.forName(classname);
 			if (c.isAssignableFrom(clazz)) {
-				createdClass = (C) clazz.getConstructor(Configuration.class).newInstance(configuration.getPropertiesStartingWith(""));
+				createdClass = (C) clazz.getConstructor(Configuration.class).newInstance(configuration);
 			} else {
 				AnalysisController.LOG.error("Class '" + classname + "' has to implement '" + c.getSimpleName() + "'"); // NOCS (MultipleStringLiteralsCheck)
 			}

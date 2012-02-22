@@ -48,7 +48,7 @@ import kieker.common.logging.LogFactory;
 public abstract class AbstractPlugin implements IPlugin {
 	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
 
-	public static final String CONFIG_NAME = "name";
+	public static final String CONFIG_NAME = "name-hiddenAndNeverExportedProperty";
 
 	private final String name;
 
@@ -120,13 +120,17 @@ public abstract class AbstractPlugin implements IPlugin {
 	 */
 	protected abstract Configuration getDefaultConfiguration();
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
 	 */
 	@Override
 	public abstract Configuration getCurrentConfiguration();
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see kieker.analysis.plugin.IPlugin#getName()
 	 */
 	@Override
@@ -258,7 +262,9 @@ public abstract class AbstractPlugin implements IPlugin {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see kieker.analysis.plugin.IPlugin#connect(java.lang.String, kieker.analysis.repository.AbstractRepository)
 	 */
 	@Override
@@ -283,7 +289,9 @@ public abstract class AbstractPlugin implements IPlugin {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see kieker.analysis.plugin.IPlugin#getCurrentRepositories()
 	 */
 	@Override
@@ -329,7 +337,9 @@ public abstract class AbstractPlugin implements IPlugin {
 		return false;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see kieker.analysis.plugin.IPlugin#getAllOutputPortNames()
 	 */
 	@Override
@@ -342,7 +352,9 @@ public abstract class AbstractPlugin implements IPlugin {
 		return outputNames.toArray(new String[outputNames.size()]);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see kieker.analysis.plugin.IPlugin#getAllInputPortNames()
 	 */
 	@Override
@@ -357,7 +369,9 @@ public abstract class AbstractPlugin implements IPlugin {
 		return inputNames.toArray(new String[inputNames.size()]);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see kieker.analysis.plugin.IPlugin#getConnectedPlugins(java.lang.String)
 	 */
 	@Override
