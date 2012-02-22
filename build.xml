@@ -102,10 +102,12 @@
 		<path id="kieker.tools-compile-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="commons-cli-*.jar" />
+				<include name="jgraphx-*.jar" />
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
 			<pathelement location="${build.kieker.monitoring.dir}/" />
 			<pathelement location="${build.kieker.analysis.dir}/" />
+			<pathelement location="${build.kieker.analysis.model.dir}/" />
 		</path>
 
 		<path id="eclipse-external-jars">
