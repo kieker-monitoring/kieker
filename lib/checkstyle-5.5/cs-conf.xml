@@ -76,10 +76,12 @@
      !-->
     <!-- Checks that each Java package has a Javadoc file used for commenting. !-->
     <!-- See http://checkstyle.sourceforge.net/config_javadoc.html#JavadocPackage !-->
+    <!-- KIEKER: OFF
     <module name="JavadocPackage">
         <property name="severity" value="info"/>
         <property name="allowLegacy" value="false"/>
     </module>
+    !-->
 
     <!--
      !________________________________________________________________________________________
@@ -689,7 +691,7 @@
             <property name="excludeScope"          value=""/>
             !-->
             <property name="authorFormat"          value=""/>
-            <property name="versionFormat"         value=""/>
+            <!--<property name="versionFormat"         value=""/>!-->
             <property name="allowMissingParamTags" value="false"/>
             <property name="allowUnknownTags"      value="false"/>
             <property name="tokens"                value="INTERFACE_DEF, CLASS_DEF"/>
