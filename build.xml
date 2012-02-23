@@ -9,7 +9,7 @@
 		<tstamp />
 		<property name="kieker.name" value="Kieker Framework" />
 		<property name="kieker.version" value="1.5-SNAPSHOT" />
-		<property name="year" value="2011" />
+		<property name="year" value="2012" />
 		<property name="copyright" value="the Kieker Project" />
 		<property name="dist.kieker.monitoring.servlet.war" value="${kieker.monitoring.servlet.packagenamebase}-${kieker.version}.war" />
 		<property name="dist.kieker.main.jar" value="${kieker.main.packagenamebase}-${kieker.version}.jar" />
@@ -26,7 +26,7 @@
 	</target>
 
 	<target name="-update-version" unless="version.noupdate" depends="-init-version" description="Updates the version number contained in the Kieker sources">
-		<replaceregexp file="${src.kieker.common.dir}/kieker/common/util/Version.java" match="VERSION = &quot;.*?&quot;" replace="VERSION = &quot;${kieker.version}-${DSTAMP}&quot;" />
+		<replaceregexp file="${src.kieker.common.dir}/kieker/common/util/Version.java" match="VERSION = &quot;.*?&quot;" replace="VERSION = &quot;${kieker.version}&quot;" />
 	</target>
 
 	<target name="build-all" depends="clean,-init,build-kieker.main,build-kieker.main.aspectj,build-kieker.monitoring-servlet" description="Compiles and packages the Kieker Jar and War files (calls the 'build-kieker-*' targets)">
