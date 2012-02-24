@@ -34,6 +34,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.model.analysisMetaModel.MIAnalysisPlugin;
+import kieker.analysis.model.analysisMetaModel.MIDependency;
 import kieker.analysis.model.analysisMetaModel.MIInputPort;
 import kieker.analysis.model.analysisMetaModel.MIOutputPort;
 import kieker.analysis.model.analysisMetaModel.MIPlugin;
@@ -73,6 +74,10 @@ public final class AnalysisController implements Runnable {
 	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
 
 	private final String projectName;
+	/**
+	 * This list contains the dependencies of the project. Currently this field is only being used when loading an instance of the model.
+	 */
+	private final Collection<MIDependency> dependencies = new CopyOnWriteArrayList<MIDependency>();
 	private final Collection<AbstractReaderPlugin> readers = new CopyOnWriteArrayList<AbstractReaderPlugin>();
 	private final Collection<AbstractAnalysisPlugin> filters = new CopyOnWriteArrayList<AbstractAnalysisPlugin>();
 	private final Collection<AbstractRepository> repos = new CopyOnWriteArrayList<AbstractRepository>();
@@ -141,6 +146,9 @@ public final class AnalysisController implements Runnable {
 	 *            The instance to be used for configuration.
 	 */
 	private final void loadFromModelProject(final MIProject mproject) {
+		/* Remember the libraries. */
+		this.dependencies.addAll(mproject.getDependencies());
+
 		/* Create the repositories. */
 		final Map<MIRepository, AbstractRepository> repositoryMap = new HashMap<MIRepository, AbstractRepository>();
 		for (final MIRepository mRepository : mproject.getRepositories()) {
@@ -225,16 +233,20 @@ public final class AnalysisController implements Runnable {
 		try {
 			/* Create a factory to create all other model instances. */
 			final MAnalysisMetaModelFactory factory = new MAnalysisMetaModelFactory();
-			final MIProject project = factory.createProject();
-			project.setName(this.projectName);
+			final MIProject mProject = factory.createProject();
+			mProject.setName(this.projectName);
 			final Map<AbstractPlugin, MIPlugin> pluginMap = new HashMap<AbstractPlugin, MIPlugin>();
 			final Map<AbstractRepository, MIRepository> repositoryMap = new HashMap<AbstractRepository, MIRepository>();
+
+			/* Store the libraries. */
+			mProject.getDependencies().addAll(this.dependencies);
+
 			/* Run through all repositories and create the model-counterparts. */
 			final List<AbstractRepository> repos = new ArrayList<AbstractRepository>(this.repos);
 			for (final AbstractRepository repo : repos) {
 				final MIRepository mRepo = factory.createRepository();
 				mRepo.setClassname(repo.getClass().getName());
-				project.getRepositories().add(mRepo);
+				mProject.getRepositories().add(mRepo);
 				repositoryMap.put(repo, mRepo);
 			}
 			/* Run through all plugins and create the model-counterparts. */
@@ -298,7 +310,7 @@ public final class AnalysisController implements Runnable {
 					((MIAnalysisPlugin) mPlugin).getInputPorts().add(mInputPort);
 				}
 
-				project.getPlugins().add(mPlugin);
+				mProject.getPlugins().add(mPlugin);
 			}
 			/* Now connect the plugins. */
 			for (final IPlugin plugin : plugins) {
@@ -322,7 +334,7 @@ public final class AnalysisController implements Runnable {
 			}
 
 			/* We are finished. Return the finished project. */
-			return project;
+			return mProject;
 		} catch (final Exception ex) {
 			AnalysisController.LOG.error("Unable to save configuration.", ex);
 			return null;
