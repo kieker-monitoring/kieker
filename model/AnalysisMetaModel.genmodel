@@ -8,11 +8,12 @@
     interfaceNamePattern="MI{0}" classNamePattern="M{0}">
   <foreignModel>AnalysisMetaModel.ecore</foreignModel>
   <genPackages prefix="AnalysisMetaModel" basePackage="kieker.analysis.model" disposableProviderFactory="true"
-      ecorePackage="AnalysisMetaModel.ecore#/">
+      fileExtensions="kax" ecorePackage="AnalysisMetaModel.ecore#/">
     <genClasses ecoreClass="AnalysisMetaModel.ecore#//Project">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//Project/plugins"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AnalysisMetaModel.ecore#//Project/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//Project/repositories"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//Project/dependencies"/>
     </genClasses>
     <genClasses ecoreClass="AnalysisMetaModel.ecore#//Plugin">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AnalysisMetaModel.ecore#//Plugin/name"/>
@@ -43,6 +44,13 @@
     <genClasses ecoreClass="AnalysisMetaModel.ecore#//Repository">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//Repository/properties"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AnalysisMetaModel.ecore#//Repository/classname"/>
+    </genClasses>
+    <genClasses ecoreClass="AnalysisMetaModel.ecore#//Dependency">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AnalysisMetaModel.ecore#//Dependency/filePath"/>
+    </genClasses>
+    <genClasses ecoreClass="AnalysisMetaModel.ecore#//RepositoryConnector">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AnalysisMetaModel.ecore#//RepositoryConnector/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//RepositoryConnector/repository"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
