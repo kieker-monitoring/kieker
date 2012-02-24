@@ -49,6 +49,7 @@ import kieker.common.logging.LogFactory;
  * @author Andre van Hoorn
  * 
  */
+// TODO: Add input port which accepts kieker.common.record.IMonitoringRecord, extracts the loggingTimestamp and calls newTimestamp
 @Plugin(outputPorts =
 		@OutputPort(name = CurrentTimeEventGenerator.CURRENT_TIME_OUTPUT_PORT_NAME, eventTypes = { TimestampEvent.class }, description = "Provides current time events"))
 public class CurrentTimeEventGenerator extends AbstractAnalysisPlugin {
