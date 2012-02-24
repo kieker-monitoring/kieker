@@ -26,7 +26,6 @@ import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.AbstractReaderPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
@@ -134,10 +133,12 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		configuration.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(inputDirNames));
 		final AbstractReaderPlugin fsReader = new FSReader(configuration);
 		final AbstractAnalysisPlugin rtCons = new FSReaderRealtimeCons(this);
-		this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, this.terminationLatch, FSReaderRealtimeCons.INPUT_PORT);
+		this.analysis.registerFilter(rtCons);
+		this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, this.terminationLatch, FSReaderRealtimeCons.INPUT_PORT, this.analysis);
 		this.analysis.registerReader(fsReader);
-		AbstractPlugin.connect(fsReader, FSReader.OUTPUT_PORT_NAME, this.rtDistributor, RealtimeReplayDistributor.INPUT_PORT_NAME);
 		this.analysis.registerFilter(this.rtDistributor);
+
+		this.analysis.connect(fsReader, FSReader.OUTPUT_PORT_NAME, this.rtDistributor, RealtimeReplayDistributor.INPUT_PORT_NAME);
 	}
 
 	/**

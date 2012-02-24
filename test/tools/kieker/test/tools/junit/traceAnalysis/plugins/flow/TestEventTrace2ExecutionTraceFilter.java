@@ -24,7 +24,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.AnalysisController;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -136,7 +136,12 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		 * ExecutionTraces
 		 */
 		final SimpleSinkPlugin executionTraceSinkPlugin = new SimpleSinkPlugin(new Configuration());
-		AbstractPlugin.connect(filter, EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+		final AnalysisController controller = new AnalysisController();
+
+		controller.registerFilter(filter);
+		controller.registerFilter(executionTraceSinkPlugin);
+
+		controller.connect(filter, EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
 		filter.inputEventTrace(eventRecordTrace);
 

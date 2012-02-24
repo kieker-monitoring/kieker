@@ -27,7 +27,7 @@ import java.util.TreeSet;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.AnalysisController;
 import kieker.common.configuration.Configuration;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
@@ -89,6 +89,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 
 		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(idsToPass);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(11l, // traceId (must not be element of idsToPass) // NOCS (MagicNumberCheck)
 				5, // tin (value not important) // NOCS (MagicNumberCheck)
 				10, // tout (value not important) // NOCS (MagicNumberCheck)
@@ -96,7 +97,11 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 		Assert.assertTrue("Testcase invalid", !idsToPass.contains(exec.getTraceId()));
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
-		AbstractPlugin.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+
+		controller.registerFilter(filter);
+		controller.registerFilter(sinkPlugin);
+
+		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 		filter.newExecution(exec);
 		Assert.assertTrue("Filter passed execution " + exec + " although traceId not element of " + idsToPass, sinkPlugin.getList()
 				.isEmpty());
@@ -115,6 +120,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 
 		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(idsToPass);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(7l, // traceId (must be element of idsToPass) // NOCS (MagicNumberCheck)
 				5, // tin (value not important) // NOCS (MagicNumberCheck)
 				10, // tout (value not important) // NOCS (MagicNumberCheck)
@@ -122,7 +128,11 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 		Assert.assertTrue("Testcase invalid", idsToPass.contains(exec.getTraceId()));
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
-		AbstractPlugin.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+
+		controller.registerFilter(filter);
+		controller.registerFilter(sinkPlugin);
+
+		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 		filter.newExecution(exec);
 		Assert.assertFalse("Filter didn't pass execution " + exec + " although traceId element of " + idsToPass, sinkPlugin.getList()
 				.isEmpty());
@@ -141,13 +151,18 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 
 		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(idsToPass);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(7l, // traceId (must be element of idsToPass) // NOCS (MagicNumberCheck)
 				5, // tin (value not important) // NOCS (MagicNumberCheck)
 				10, // tout (value not important) // NOCS (MagicNumberCheck)
 				0, 0); // eoi, ess (values not important) // NOCS (MagicNumberCheck)
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
-		AbstractPlugin.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+
+		controller.registerFilter(filter);
+		controller.registerFilter(sinkPlugin);
+
+		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 		filter.newExecution(exec);
 		Assert.assertFalse("Filter didn't pass execution " + exec + " although traceId element of " + idsToPass, sinkPlugin.getList()
 				.isEmpty());

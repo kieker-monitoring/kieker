@@ -4,8 +4,8 @@ import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import junit.framework.TestCase;
+import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.AbstractReaderPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
@@ -58,12 +58,20 @@ public class GeneralPluginTest extends TestCase {
 		final SourceClass src = new SourceClass(opExRec1, opExRec2, opExRec3, opExRec4, opExRec5, opExRec6, opExRec7, opExRec8);
 		final ExecutionSinkClass dst = new ExecutionSinkClass(new Configuration());
 
+		final AnalysisController controller = new AnalysisController();
+		controller.registerReader(src);
+		controller.registerFilter(transformer);
+		controller.registerFilter(transformer);
+		controller.registerFilter(filter1byTraceID);
+		controller.registerFilter(filter2ByTimestamp);
+		controller.registerFilter(dst);
+
 		/* Connect the plugins. */
-		Assert.assertTrue(AbstractPlugin.connect(src, SourceClass.OUTPUT_PORT_NAME, transformer, ExecutionRecordTransformationFilter.INPUT_PORT_NAME));
+		Assert.assertTrue(controller.connect(src, SourceClass.OUTPUT_PORT_NAME, transformer, ExecutionRecordTransformationFilter.INPUT_PORT_NAME));
 		Assert.assertTrue(transformer.connect(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, systemModelRepository));
-		Assert.assertTrue(AbstractPlugin.connect(transformer, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME, filter1byTraceID, TraceIdFilter.INPUT_PORT_NAME));
-		Assert.assertTrue(AbstractPlugin.connect(filter1byTraceID, TraceIdFilter.OUTPUT_PORT_NAME, filter2ByTimestamp, TimestampFilter.INPUT_PORT_NAME));
-		Assert.assertTrue(AbstractPlugin.connect(filter2ByTimestamp, TimestampFilter.OUTPUT_PORT_NAME, dst, ExecutionSinkClass.INPUT_PORT_NAME));
+		Assert.assertTrue(controller.connect(transformer, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME, filter1byTraceID, TraceIdFilter.INPUT_PORT_NAME));
+		Assert.assertTrue(controller.connect(filter1byTraceID, TraceIdFilter.OUTPUT_PORT_NAME, filter2ByTimestamp, TimestampFilter.INPUT_PORT_NAME));
+		Assert.assertTrue(controller.connect(filter2ByTimestamp, TimestampFilter.OUTPUT_PORT_NAME, dst, ExecutionSinkClass.INPUT_PORT_NAME));
 
 		src.read();
 

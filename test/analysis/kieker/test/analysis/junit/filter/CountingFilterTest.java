@@ -20,8 +20,8 @@
 
 package kieker.test.analysis.junit.filter;
 
+import kieker.analysis.AnalysisController;
 import kieker.analysis.filter.CountingFilter;
-import kieker.analysis.plugin.AbstractPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.test.analysis.junit.plugin.SimpleSourcePlugin;
 
@@ -44,7 +44,10 @@ public class CountingFilterTest {
 		/* Establish the connection. */
 		this.consumer = new CountingFilter(new Configuration());
 		this.src = new SimpleSourcePlugin(new Configuration());
-		Assert.assertTrue(AbstractPlugin.connect(this.src, SimpleSourcePlugin.OUTPUT_PORT_NAME, this.consumer, CountingFilter.INPUT_PORT_NAME));
+		final AnalysisController controller = new AnalysisController();
+		controller.registerFilter(this.consumer);
+		controller.registerFilter(this.src);
+		Assert.assertTrue(controller.connect(this.src, SimpleSourcePlugin.OUTPUT_PORT_NAME, this.consumer, CountingFilter.INPUT_PORT_NAME));
 	}
 
 	@Test

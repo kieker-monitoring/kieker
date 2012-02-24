@@ -21,7 +21,6 @@
 package kieker.examples.userguide.ch3and4bookstore;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.plugin.AbstractPlugin;
 
 public class Starter {
 
@@ -51,7 +50,7 @@ public class Starter {
 		analyisController.registerReader(reader);
 		analyisController.registerFilter(consumer);
 
-		AbstractPlugin.connect(reader, MyPipeReader.OUTPUT_PORT_NAME, consumer, MyResponseTimeConsumer.INPUT_PORT_NAME);
+		analyisController.connect(reader, MyPipeReader.OUTPUT_PORT_NAME, consumer, MyResponseTimeConsumer.INPUT_PORT_NAME);
 
 		analyisController.run();
 	}

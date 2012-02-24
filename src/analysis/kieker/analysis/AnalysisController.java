@@ -198,7 +198,7 @@ public final class AnalysisController implements Runnable {
 					/* Find the mapping and subscribe */
 					final String inputPortName = mSubscriber.getName();
 					final AbstractPlugin dstPlugin = pluginMap.get(mSubscriber.getParent());
-					AbstractPlugin.connect(srcPlugin, outputPortName, dstPlugin, inputPortName);
+					this.connect(srcPlugin, outputPortName, dstPlugin, inputPortName);
 				}
 			}
 		}
@@ -214,6 +214,27 @@ public final class AnalysisController implements Runnable {
 	 */
 	public final boolean saveToFile(final File file) {
 		return AnalysisController.saveToFile(file, this.getCurrentConfiguration());
+	}
+
+	/**
+	 * This method should be used to connect two plugins. The plugins have to be registered withis this controller instance.
+	 * * @param src
+	 * The source plugin.
+	 * 
+	 * @param outputPortName
+	 *            The output port of the source plugin.
+	 * @param dst
+	 *            The destination plugin.
+	 * @param inputPortName
+	 *            The input port of the destination port.
+	 * @return true if and only if both given plugins are valid, registered within this controller, the output and input ports exist and if they are compatible.
+	 *         Furthermore the destination plugin must
+	 *         not be a reader.
+	 */
+	public boolean connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName) {
+		/* Make sure that the plugins are registered and use the method of AbstractPlugin (This should be the only allowed call to this method). */
+		return (this.filters.contains(src) || this.readers.contains(src)) && (this.filters.contains(dst) || this.readers.contains(dst))
+				&& AbstractPlugin.connect(src, outputPortName, dst, inputPortName);
 	}
 
 	/**

@@ -26,8 +26,8 @@ import java.util.TreeSet;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import kieker.analysis.AnalysisController;
 import kieker.analysis.filter.trace.TraceIdFilter;
-import kieker.analysis.plugin.AbstractPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
@@ -61,12 +61,17 @@ public class TestTraceIdFilter extends TestCase {
 		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, Configuration.toProperty(idsToPass.toArray(new Long[] {})));
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final AnalysisController controller = new AnalysisController();
 
 		final List<AbstractTraceEvent> trace =
 				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdNotToPass); // NOCS (MagicNumberCheck)
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
-		AbstractPlugin.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+
+		controller.registerFilter(filter);
+		controller.registerFilter(sinkPlugin);
+
+		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
 		for (final AbstractTraceEvent e : trace) {
 			Assert.assertTrue("Testcase invalid", !idsToPass.contains(e.getTraceId()));
@@ -99,12 +104,17 @@ public class TestTraceIdFilter extends TestCase {
 		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, Configuration.toProperty(idsToPass.toArray(new Long[] {})));
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final AnalysisController controller = new AnalysisController();
 
 		final List<AbstractTraceEvent> trace =
 				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass); // NOCS (MagicNumberCheck)
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
-		AbstractPlugin.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+
+		controller.registerFilter(filter);
+		controller.registerFilter(sinkPlugin);
+
+		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
 		for (final AbstractTraceEvent e : trace) {
 			Assert.assertTrue("Testcase invalid", idsToPass.contains(e.getTraceId()));
@@ -127,12 +137,17 @@ public class TestTraceIdFilter extends TestCase {
 		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.TRUE.toString()); // i.e., pass all
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final AnalysisController controller = new AnalysisController();
 
 		final List<AbstractTraceEvent> trace =
 				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass); // NOCS (MagicNumberCheck)
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
-		AbstractPlugin.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+
+		controller.registerFilter(filter);
+		controller.registerFilter(sinkPlugin);
+
+		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
 		for (final AbstractTraceEvent e : trace) {
 			filter.inputTraceEvent(e);

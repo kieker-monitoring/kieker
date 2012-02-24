@@ -304,7 +304,7 @@ public abstract class AbstractPlugin implements IPlugin {
 	}
 
 	/**
-	 * This method connects two plugins.
+	 * This method connects two plugins. <b>DO NOT USE THIS METHOD!</b> Use <code>AnalysisController.connect</code> instead!
 	 * 
 	 * @param src
 	 *            The source plugin.

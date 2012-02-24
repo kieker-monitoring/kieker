@@ -26,7 +26,6 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.MonitoringReaderException;
 import kieker.analysis.exception.MonitoringRecordConsumerException;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
@@ -58,7 +57,7 @@ public class BookstoreHostnameRewriter {
 		analysisInstance.registerReader(reader);
 
 		/* Connect the reader with the plugin. */
-		AbstractPlugin.connect(reader, FSReader.OUTPUT_PORT_NAME, plugin, HostNameRewriterPlugin.INPUT_PORT_NAME);
+		analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME, plugin, HostNameRewriterPlugin.INPUT_PORT_NAME);
 
 		/* Start the analysis */
 		analysisInstance.run();

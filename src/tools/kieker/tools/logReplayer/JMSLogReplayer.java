@@ -22,7 +22,6 @@ package kieker.tools.logReplayer;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.AbstractReaderPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
@@ -93,9 +92,9 @@ public class JMSLogReplayer {
 		final AbstractReaderPlugin logReader = new JMSReader(configuration);
 		final AnalysisController tpanInstance = new AnalysisController();
 		tpanInstance.registerReader(logReader);
-		final RecordDelegationPlugin2 recordReceiver = new RecordDelegationPlugin2(this.recordReceiver, this.recordReceiverInputPortName);
+		final RecordDelegationPlugin2 recordReceiver = new RecordDelegationPlugin2(this.recordReceiver, this.recordReceiverInputPortName, tpanInstance);
 		tpanInstance.registerFilter(recordReceiver);
-		AbstractPlugin.connect(logReader, JMSReader.OUTPUT_PORT_NAME, recordReceiver, RecordDelegationPlugin2.INPUT_PORT);
+		tpanInstance.connect(logReader, JMSReader.OUTPUT_PORT_NAME, recordReceiver, RecordDelegationPlugin2.INPUT_PORT);
 		try {
 			tpanInstance.run();
 			success = true;
@@ -132,13 +131,24 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 	 */
 	@SuppressWarnings("unused")
 	private RecordDelegationPlugin2() {
-		this((AbstractAnalysisPlugin) null, "");
+		this((AbstractAnalysisPlugin) null, "", null);
 	}
 
-	public RecordDelegationPlugin2(final AbstractAnalysisPlugin rec, final String inputPortName) {
+	/**
+	 * Creates a new instance of this class.
+	 * 
+	 * @param rec
+	 *            The target of this plugin.
+	 * @param inputPortName
+	 *            The input port of the given plugin.
+	 * @param controller
+	 *            The controller instance to be used for connecting the filters.
+	 */
+	public RecordDelegationPlugin2(final AbstractAnalysisPlugin rec, final String inputPortName, final AnalysisController controller) {
 		super(new Configuration());
 
-		AbstractPlugin.connect(this, RecordDelegationPlugin2.OUTPUT_PORT_NAME, rec, inputPortName);
+		controller.registerFilter(this);
+		controller.connect(this, RecordDelegationPlugin2.OUTPUT_PORT_NAME, rec, inputPortName);
 	}
 
 	@InputPort(

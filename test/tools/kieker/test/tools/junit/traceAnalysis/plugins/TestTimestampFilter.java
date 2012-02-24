@@ -22,7 +22,7 @@ package kieker.test.tools.junit.traceAnalysis.plugins;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.AnalysisController;
 import kieker.common.configuration.Configuration;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
@@ -70,6 +70,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 	public void testRecordTinBeforeToutWithinIgnored() {
 		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
+		final AnalysisController controller = new AnalysisController();
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final Execution exec = this.eFactory.genExecution(77, // traceId (value not important)
 				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP - 1, // tin
@@ -77,7 +78,11 @@ public class TestTimestampFilter extends TestCase { // NOCS
 				0, 0); // eoi, ess
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
-		AbstractPlugin.connect(filter, TimestampFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+
+		controller.registerFilter(filter);
+		controller.registerFilter(sinkPlugin);
+
+		controller.connect(filter, TimestampFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 		filter.newExecution(exec);
 		Assert.assertTrue("Filter passed execution " + exec + " although tin timestamp before" + TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP
 				, sinkPlugin.getList().isEmpty());
@@ -94,13 +99,18 @@ public class TestTimestampFilter extends TestCase { // NOCS
 		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(15, // traceId (value not important)
 				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP + 1, // tin
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP + 1, // tout
 				0, 0); // eoi, ess
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
-		AbstractPlugin.connect(filter, TimestampFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+
+		controller.registerFilter(filter);
+		controller.registerFilter(sinkPlugin);
+
+		controller.connect(filter, TimestampFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
 		filter.newExecution(exec);
 		Assert.assertTrue("Filter passed execution " + exec + " although tin timestamp before" + TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP
@@ -117,13 +127,18 @@ public class TestTimestampFilter extends TestCase { // NOCS
 		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(159, // traceId (value not important)
 				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, // tin
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP, // tout
 				0, 0); // eoi, ess
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
-		AbstractPlugin.connect(filter, TimestampFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+
+		controller.registerFilter(filter);
+		controller.registerFilter(sinkPlugin);
+
+		controller.connect(filter, TimestampFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 		filter.newExecution(exec);
 
 		Assert.assertFalse("Filter didn't pass execution " + exec + " although timestamps within range [" + TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP
@@ -143,13 +158,18 @@ public class TestTimestampFilter extends TestCase { // NOCS
 		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(159, // traceId (value not important)
 				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP + 1, // tin
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP - 1, // tout
 				0, 0); // eoi, ess
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
-		AbstractPlugin.connect(filter, TimestampFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+
+		controller.registerFilter(filter);
+		controller.registerFilter(sinkPlugin);
+
+		controller.connect(filter, TimestampFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 		filter.newExecution(exec);
 		Assert.assertFalse("Filter didn't pass execution " + exec + " although timestamps within range [" + TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP
 				+ "," + TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP + "]", sinkPlugin.getList().isEmpty());

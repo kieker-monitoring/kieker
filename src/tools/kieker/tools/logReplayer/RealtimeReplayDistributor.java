@@ -24,6 +24,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.MonitoringRecordConsumerException;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
@@ -70,6 +71,7 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 	private volatile int active;
 	private final int maxQueueSize;
 	private final CountDownLatch terminationLatch;
+	private AnalysisController controller;
 
 	public RealtimeReplayDistributor(final Configuration configuration) {
 		super(configuration);
@@ -92,8 +94,10 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 	 *            the consumer
 	 * @param terminationLatch
 	 *            will be decremented after the last record was replayed
+	 * @param controller
 	 */
-	public RealtimeReplayDistributor(final int numWorkers, final AbstractAnalysisPlugin cons, final CountDownLatch terminationLatch, final String constInputPortName) {
+	public RealtimeReplayDistributor(final int numWorkers, final AbstractAnalysisPlugin cons, final CountDownLatch terminationLatch,
+			final String constInputPortName, final AnalysisController controller) {
 		super(new Configuration());
 		this.numWorkers = numWorkers;
 		this.cons = cons;
@@ -103,6 +107,7 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 		this.executor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
 		this.terminationLatch = terminationLatch;
 		this.constInputPortName = constInputPortName;
+		this.controller = controller;
 	}
 
 	@InputPort(
@@ -136,7 +141,8 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 				}
 			}
 			this.active++;
-			this.executor.schedule(new RealtimeReplayWorker(monitoringRecord, this, this.cons, this.constInputPortName), schedTime, TimeUnit.NANOSECONDS); // *relative*
+			this.executor.schedule(new RealtimeReplayWorker(monitoringRecord, this, this.cons, this.constInputPortName, this.controller), schedTime,
+					TimeUnit.NANOSECONDS); // *relative*
 		}
 		this.lTime = this.lTime < monitoringRecord.getLoggingTimestamp() ? monitoringRecord.getLoggingTimestamp() : this.lTime; // NOCS
 	}
