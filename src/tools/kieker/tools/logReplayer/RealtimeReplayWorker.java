@@ -20,8 +20,8 @@
 
 package kieker.tools.logReplayer;
 
+import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
@@ -53,14 +53,16 @@ public class RealtimeReplayWorker extends AbstractAnalysisPlugin implements Runn
 	 *            The distributor.
 	 * @param cons
 	 *            The plugin which receives the record. The plugin <b>must</b> have at least one input port. The data will be send to the first input.
+	 * @param controller
+	 *            The controller instance to be used for connecting the filter.
 	 */
 	public RealtimeReplayWorker(final IMonitoringRecord monRec, final RealtimeReplayDistributor rd, final AbstractAnalysisPlugin cons,
-			final String constInputPortName) {
+			final String constInputPortName, final AnalysisController controller) {
 		super(new Configuration());
 		this.monRec = monRec;
 		this.rd = rd;
 
-		AbstractPlugin.connect(this, RealtimeReplayWorker.OUTPUT_PORT_NAME, cons, constInputPortName);
+		controller.connect(this, RealtimeReplayWorker.OUTPUT_PORT_NAME, cons, constInputPortName);
 	}
 
 	public RealtimeReplayWorker() {

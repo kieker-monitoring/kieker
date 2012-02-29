@@ -21,8 +21,8 @@
 package kieker.test.analysis.junit.filter;
 
 import junit.framework.Assert;
+import kieker.analysis.AnalysisController;
 import kieker.analysis.filter.TimestampFilter;
-import kieker.analysis.plugin.AbstractPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
@@ -51,6 +51,7 @@ public final class TestTimestampFilter {
 	};
 
 	private SimpleSinkPlugin sinkPlugin;
+	private final AnalysisController controller = new AnalysisController();
 
 	/**
 	 * Creates a {@link TimestampFilter} with the given properties
@@ -65,13 +66,15 @@ public final class TestTimestampFilter {
 		cfg.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, Long.toString(ignoreExecutionsBeforeTimestamp));
 		cfg.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP, Long.toString(ignoreExecutionsAfterTimestamp));
 		final TimestampFilter filter = new TimestampFilter(cfg);
-		AbstractPlugin.connect(filter, TimestampFilter.OUTPUT_PORT_NAME, this.sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+		this.controller.registerFilter(filter);
+		this.controller.connect(filter, TimestampFilter.OUTPUT_PORT_NAME, this.sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 		return filter;
 	}
 
 	@Before
 	public void before() {
 		this.sinkPlugin = new SimpleSinkPlugin(new Configuration());
+		this.controller.registerFilter(this.sinkPlugin);
 	}
 
 	/**

@@ -25,7 +25,7 @@ import java.util.Map;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.AnalysisController;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -117,6 +117,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 */
 		final ExecutionTrace validExecutionTrace;
 		final MessageTrace validMessageTrace;
+		final AnalysisController controller = new AnalysisController();
 		try {
 			validExecutionTrace = this.genValidBookstoreTrace();
 			validMessageTrace = validExecutionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
@@ -140,23 +141,28 @@ public class TestTraceReconstructionFilter extends TestCase {
 		final SimpleSinkPlugin executionTraceSinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final SimpleSinkPlugin messageTraceSinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final SimpleSinkPlugin invalidExecutionTraceSinkPlugin = new SimpleSinkPlugin(new Configuration());
+		controller.registerFilter(executionTraceSinkPlugin);
+		controller.registerFilter(messageTraceSinkPlugin);
+		controller.registerFilter(invalidExecutionTraceSinkPlugin);
+		controller.registerFilter(filter);
+
 		/*
 		 * Register a handler for reconstructed (valid) execution traces.
 		 * This handler MUST receive exactly this trace (and no other).
 		 */
 
-		AbstractPlugin.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 		/*
 		 * Register a handler for reconstructed (valid) message traces.
 		 * This handler MUST receive exactly this trace (and no other).
 		 */
-		AbstractPlugin.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, messageTraceSinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, messageTraceSinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
 		/*
 		 * Register a handler for invalid execution traces.
 		 * This handler MUST not be invoked.
 		 */
-		AbstractPlugin.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, invalidExecutionTraceSinkPlugin,
+		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, invalidExecutionTraceSinkPlugin,
 				SimpleSinkPlugin.INPUT_PORT_NAME);
 
 		if (!filter.init()) {
@@ -232,6 +238,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * the filter
 		 */
 		final ExecutionTrace invalidExecutionTrace;
+		final AnalysisController controller = new AnalysisController();
 		try {
 			invalidExecutionTrace = this.genBrokenBookstoreTraceEssSkip();
 		} catch (final InvalidTraceException ex) {
@@ -254,23 +261,28 @@ public class TestTraceReconstructionFilter extends TestCase {
 		final SimpleSinkPlugin messageTraceSinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final SimpleSinkPlugin invalidExecutionTraceSinkPlugin = new SimpleSinkPlugin(new Configuration());
 
+		controller.registerFilter(filter);
+		controller.registerFilter(invalidExecutionTraceSinkPlugin);
+		controller.registerFilter(messageTraceSinkPlugin);
+		controller.registerFilter(executionTraceSinkPlugin);
+
 		/*
 		 * Register a handler for reconstructed (valid) execution traces.
 		 * This handler MUST not be invoked.
 		 */
 
-		AbstractPlugin.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 		/*
 		 * Register a handler for reconstructed (valid) message traces.
 		 * This handler MUST not be invoked.
 		 */
-		AbstractPlugin.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, messageTraceSinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, messageTraceSinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
 		/*
 		 * Register a handler for invalid execution traces.
 		 * This handler MUST receive exactly this trace (and no other).
 		 */
-		AbstractPlugin.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, invalidExecutionTraceSinkPlugin,
+		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, invalidExecutionTraceSinkPlugin,
 				SimpleSinkPlugin.INPUT_PORT_NAME);
 
 		if (!filter.init()) {
@@ -385,6 +397,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Instantiate reconstruction filter with timeout.
 		 */
 		final Configuration configuration = new Configuration();
+		final AnalysisController controller = new AnalysisController();
 		configuration.setProperty(TraceReconstructionFilter.class.getName() + ".name", "TraceReconstructionFilter");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, "true");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Long.toString(
@@ -402,25 +415,30 @@ public class TestTraceReconstructionFilter extends TestCase {
 				+ "filter.getMaxTraceDurationNanos()" + filter.getMaxTraceDurationNanos(),
 				(triggerExecutionTrace.getMaxTout() - incompleteExecutionTrace.getMinTin()) > filter.getMaxTraceDurationNanos());
 
+		controller.registerFilter(filter);
+		controller.registerFilter(invalidExecutionTraceSink);
+		controller.registerFilter(messageTraceSink);
+		controller.registerFilter(executionTraceSink);
+
 		/*
 		 * Register a handler for reconstructed (valid) execution traces.
 		 * This handler MUST not be invoked.
 		 */
-		AbstractPlugin.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSink, SimpleSinkPlugin.INPUT_PORT_NAME);
+		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSink, SimpleSinkPlugin.INPUT_PORT_NAME);
 		Assert.assertTrue(executionTraceSink.getList().isEmpty());
 
 		/*
 		 * Register a handler for reconstructed (valid) message traces.
 		 * This handler MUST not be invoked.
 		 */
-		AbstractPlugin.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, messageTraceSink, SimpleSinkPlugin.INPUT_PORT_NAME);
+		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, messageTraceSink, SimpleSinkPlugin.INPUT_PORT_NAME);
 		Assert.assertTrue(messageTraceSink.getList().isEmpty());
 
 		/*
 		 * Register a handler for invalid execution traces.
 		 * This handler MUST receive exactly this trace (and no other).
 		 */
-		AbstractPlugin.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, invalidExecutionTraceSink,
+		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, invalidExecutionTraceSink,
 				SimpleSinkPlugin.INPUT_PORT_NAME);
 		Assert.assertTrue(invalidExecutionTraceSink.getList().isEmpty());
 

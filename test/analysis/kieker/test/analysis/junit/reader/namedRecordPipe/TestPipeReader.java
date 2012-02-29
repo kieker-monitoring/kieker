@@ -28,7 +28,6 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.filter.CountingFilter;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.reader.namedRecordPipe.PipeReader;
 import kieker.common.configuration.Configuration;
@@ -68,7 +67,7 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 		final AnalysisController analysis = new AnalysisController(this.getName());
 		analysis.registerReader(pipeReader);
 		analysis.registerFilter(countingFilter);
-		AbstractPlugin.connect(pipeReader, PipeReader.OUTPUT_PORT_NAME, countingFilter, CountingFilter.INPUT_PORT_NAME);
+		analysis.connect(pipeReader, PipeReader.OUTPUT_PORT_NAME, countingFilter, CountingFilter.INPUT_PORT_NAME);
 
 		final AnalysisControllerThread analysisThread = new AnalysisControllerThread(analysis);
 		analysisThread.start(); // start asynchronously

@@ -23,7 +23,6 @@ package kieker.examples.userguide.ch2bookstore.manual;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.MonitoringReaderException;
 import kieker.analysis.exception.MonitoringRecordConsumerException;
-import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 
@@ -50,7 +49,7 @@ public class BookstoreAnalysisStarter {
 		analysisInstance.registerReader(reader);
 
 		/* Connect the output of the reader with the input of the plugin. */
-		AbstractPlugin.connect(reader, FSReader.OUTPUT_PORT_NAME, consumer, Consumer.INPUT_PORT_NAME);
+		analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME, consumer, Consumer.INPUT_PORT_NAME);
 
 		/* Start the analysis */
 		analysisInstance.run();

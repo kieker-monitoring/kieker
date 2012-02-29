@@ -24,7 +24,6 @@ import java.util.Arrays;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.AbstractReaderPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.reader.filesystem.FSReader;
@@ -120,7 +119,7 @@ public class FilesystemLogReplayer {
 		final RecordDelegationPlugin delegationPlugin = new RecordDelegationPlugin(this.recordReceiver, this.ignoreRecordsBeforeTimestamp,
 				this.ignoreRecordsAfterTimestamp);
 		tpanInstance.registerFilter(delegationPlugin);
-		AbstractPlugin.connect(fsReader, FSReader.OUTPUT_PORT_NAME, delegationPlugin, RecordDelegationPlugin.INPUT_PORT_NAME);
+		tpanInstance.connect(fsReader, FSReader.OUTPUT_PORT_NAME, delegationPlugin, RecordDelegationPlugin.INPUT_PORT_NAME);
 		try {
 			tpanInstance.run();
 			success = true;

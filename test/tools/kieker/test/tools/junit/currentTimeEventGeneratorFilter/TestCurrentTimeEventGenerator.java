@@ -25,8 +25,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
-import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.currentTimeEventGenerator.CurrentTimeEventGenerator;
@@ -98,7 +98,10 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 		final CurrentTimeEventGenerator filter = new CurrentTimeEventGenerator(timerResolution);
 
 		final DstClass dst = new DstClass();
-		AbstractPlugin.connect(filter, CurrentTimeEventGenerator.CURRENT_TIME_OUTPUT_PORT_NAME, dst, DstClass.INPUT_PORT_NAME);
+		final AnalysisController controller = new AnalysisController();
+		controller.registerFilter(filter);
+		controller.registerFilter(dst);
+		controller.connect(filter, CurrentTimeEventGenerator.CURRENT_TIME_OUTPUT_PORT_NAME, dst, DstClass.INPUT_PORT_NAME);
 
 		for (final long timestamp : inputTimestamps) {
 			filter.newTimestamp(timestamp);
