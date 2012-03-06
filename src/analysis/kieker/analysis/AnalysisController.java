@@ -236,10 +236,14 @@ public final class AnalysisController implements Runnable {
 	 * @param inputPortName
 	 *            The input port of the destination port.
 	 * @return true if and only if both given plugins are valid, registered within this controller, the output and input ports exist and if they are compatible.
-	 *         Furthermore the destination plugin must
-	 *         not be a reader.
+	 *         Furthermore the destination plugin must not be a reader.
 	 */
 	public boolean connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName) {
+		if (this.state != STATE.READY) {
+			AnalysisController.LOG.error("Unable to connect readers and filters after starting analysis.");
+			return false;
+		}
+		// TODO Log different errors.
 		/* Make sure that the plugins are registered and use the method of AbstractPlugin (This should be the only allowed call to this method). */
 		return (this.filters.contains(src) || this.readers.contains(src)) && (this.filters.contains(dst) || this.readers.contains(dst))
 				&& AbstractPlugin.connect(src, outputPortName, dst, inputPortName);
@@ -463,7 +467,13 @@ public final class AnalysisController implements Runnable {
 			AnalysisController.LOG.error("Unable to reader filter after starting analysis.");
 			return;
 		}
-		this.readers.add(reader);
+		synchronized (this) {
+			if (this.readers.contains(reader)) {
+				AnalysisController.LOG.warn("Readers " + reader.getName() + " already registered.");
+				return;
+			}
+			this.readers.add(reader);
+		}
 		if (AnalysisController.LOG.isDebugEnabled()) {
 			AnalysisController.LOG.debug("Registered reader " + reader);
 		}
@@ -479,7 +489,13 @@ public final class AnalysisController implements Runnable {
 			AnalysisController.LOG.error("Unable to register filter after starting analysis.");
 			return;
 		}
-		this.filters.add(filter);
+		synchronized (this) {
+			if (this.filters.contains(filter)) {
+				AnalysisController.LOG.warn("Filter " + filter.getName() + " already registered.");
+				return;
+			}
+			this.filters.add(filter);
+		}
 		if (AnalysisController.LOG.isDebugEnabled()) {
 			AnalysisController.LOG.debug("Registered plugin " + filter);
 		}
@@ -493,7 +509,16 @@ public final class AnalysisController implements Runnable {
 			AnalysisController.LOG.error("Unable to register respository after starting analysis.");
 			return;
 		}
-		this.repos.add(repository);
+
+		synchronized (this) {
+			if (this.repos.contains(repository)) {
+				// TODO -> getName()
+				AnalysisController.LOG.warn("Repository " + repository.toString() + " already registered.");
+				return;
+			}
+			this.repos.add(repository);
+		}
+
 		if (AnalysisController.LOG.isDebugEnabled()) {
 			AnalysisController.LOG.debug("Registered Repository " + repository);
 		}
