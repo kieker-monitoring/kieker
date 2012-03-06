@@ -18,35 +18,20 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.flow.trace;
+package kieker.monitoring.probe.aspectj.flow.operationCall;
 
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 
 /**
  * @author Jan Waller
  */
-public final class SplitEvent extends AbstractTraceEvent {
-	private static final long serialVersionUID = -4454625562107999414L;
-	private static final Class<?>[] TYPES = {
-		long.class, // Event.timestamp
-		long.class, // TraceEvent.traceId
-		int.class, // TraceEvent.orderIndex
-	};
-
-	public SplitEvent(final long timestamp, final long traceId, final int orderIndex) {
-		super(timestamp, traceId, orderIndex);
-	}
-
-	public SplitEvent(final Object[] values) {
-		super(values, SplitEvent.TYPES); // values[0..2]
-	}
+@Aspect
+public final class FullInstrumentation extends AbstractAspect {
 
 	@Override
-	public final Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), };
-	}
-
-	@Override
-	public final Class<?>[] getValueTypes() {
-		return SplitEvent.TYPES.clone();
+	@Pointcut("(call(* *(..)) && noGetterAndSetter()) || call(new(..))")
+	public final void monitoredOperation() {
+		// Aspect Declaration (MUST be empty)
 	}
 }

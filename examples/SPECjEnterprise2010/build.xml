@@ -5,7 +5,7 @@
   <target name="build-all" depends="clean,init,compile,jar" />
 
   <target name="init" depends="">
-    <!-- Register special aspectJ commands in ant - allow ant to use special AspectJ commands: -->
+    <!-- Register special aspectj commands in ant - allow ant to use special AspectJ commands: -->
     <path id="aspecttools-classpath">
       <fileset dir="lib/">
         <include name="aspectjtools-*.jar"/>
@@ -29,7 +29,7 @@
            debug="true"
            classpathref="compile-classpath"
            srcdir="src"
-           excludes="kieker/monitoring/probe/aspectJ/"
+           excludes="kieker/monitoring/probe/aspectj/"
       	   includeAntRuntime="false" />
     <!-- WORKAROUND BEGIN -->
     <path id="compile-ajc-classpath">
@@ -48,7 +48,7 @@
           verbose="true"
           classpathref="compile-ajc-classpath">
           <sourceroots>
-            <pathelement location="src/kieker/monitoring/probe/aspectJ/"/>
+            <pathelement location="src/kieker/monitoring/probe/aspectj/"/>
           </sourceroots>
     </iajc>
     <!-- WORKAROUND END -->

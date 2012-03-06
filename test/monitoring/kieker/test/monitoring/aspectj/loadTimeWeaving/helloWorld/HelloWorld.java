@@ -18,35 +18,25 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.flow.trace;
-
+package kieker.test.monitoring.aspectj.loadTimeWeaving.helloWorld;
 
 /**
- * @author Jan Waller
+ * Simple example, used in the tutorial for
+ * illustration the instrumentation and monitoring
+ * capabilities of Kieker.
+ * 
+ * @author Matthias Rohr
  */
-public final class SplitEvent extends AbstractTraceEvent {
-	private static final long serialVersionUID = -4454625562107999414L;
-	private static final Class<?>[] TYPES = {
-		long.class, // Event.timestamp
-		long.class, // TraceEvent.traceId
-		int.class, // TraceEvent.orderIndex
-	};
+public final class HelloWorld {
 
-	public SplitEvent(final long timestamp, final long traceId, final int orderIndex) {
-		super(timestamp, traceId, orderIndex);
+	private HelloWorld() {}
+
+	public static void main(final String[] args) {
+		System.out.println("Hello");
+		HelloWorld.doSomething();
 	}
 
-	public SplitEvent(final Object[] values) {
-		super(values, SplitEvent.TYPES); // values[0..2]
-	}
-
-	@Override
-	public final Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), };
-	}
-
-	@Override
-	public final Class<?>[] getValueTypes() {
-		return SplitEvent.TYPES.clone();
+	public static void doSomething() {
+		System.out.println("doing something");
 	}
 }

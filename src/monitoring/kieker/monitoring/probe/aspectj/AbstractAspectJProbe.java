@@ -18,35 +18,29 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.flow.trace;
+package kieker.monitoring.probe.aspectj;
 
+import kieker.monitoring.probe.IMonitoringProbe;
+
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 
 /**
  * @author Jan Waller
  */
-public final class SplitEvent extends AbstractTraceEvent {
-	private static final long serialVersionUID = -4454625562107999414L;
-	private static final Class<?>[] TYPES = {
-		long.class, // Event.timestamp
-		long.class, // TraceEvent.traceId
-		int.class, // TraceEvent.orderIndex
-	};
+@Aspect
+public abstract class AbstractAspectJProbe implements IMonitoringProbe {
 
-	public SplitEvent(final long timestamp, final long traceId, final int orderIndex) {
-		super(timestamp, traceId, orderIndex);
-	}
+	@Pointcut("!within(kieker.common..*) && !within(kieker.monitoring..*) && !within(kieker.analysis..*) && !within(kieker.tools..*)")
+	public void notWithinKieker() {} // NOPMD
 
-	public SplitEvent(final Object[] values) {
-		super(values, SplitEvent.TYPES); // values[0..2]
-	}
+	@Pointcut("execution(void set*(..)) || call(void set*(..))")
+	public void setter() {} // NOPMD
 
-	@Override
-	public final Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), };
-	}
+	@Pointcut("execution(* get*(..)) || call(* get*(..)) || execution(boolean is*(..)) || call(boolean is*(..))")
+	public void getter() {} // NOPMD
 
-	@Override
-	public final Class<?>[] getValueTypes() {
-		return SplitEvent.TYPES.clone();
-	}
+	@Pointcut("!getter() && !setter()")
+	public void noGetterAndSetter() {} // NOPMD
+
 }

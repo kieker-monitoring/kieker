@@ -6,6 +6,6 @@
       <exclude within="org.spec.jent.ws..*"/>
     </weaver>
     <aspects>
-        <aspect name="kieker.monitoring.probe.aspectJ.operationExecution.OperationExecutionAspectSPECjEnterprise2010Servlet"/>
+        <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectSPECjEnterprise2010Servlet"/>
     </aspects>
 </aspectj>

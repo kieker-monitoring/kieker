@@ -24,36 +24,36 @@
 		<!-- Instrumentation of the dacapo eclipse benchmark -->
 		<!-- <include within="org.eclipse..*"/> -->
 
-		<!--<include within="kieker.monitoring.probe.aspectJ..*"/> -->
+		<!--<include within="kieker.monitoring.probe.aspectj..*"/> -->
 	</weaver>
 
 	<aspects>
 		<!-- Use the aspect directives to specify the aspect(s) to use (typically only one). -->
 
-		<aspect name="kieker.monitoring.probe.aspectJ.operationExecution.OperationExecutionAspectAnnotation" />
-		<!--<aspect name="kieker.monitoring.probe.aspectJ.operationExecution.OperationExecutionAspectAnnotationServlet"/> -->
-		<!--<aspect name="kieker.monitoring.probe.aspectJ.operationExecution.OperationExecutionAspectFull"/> -->
-		<!--<aspect name="kieker.monitoring.probe.aspectJ.operationExecution.OperationExecutionAspectFullServlet"/> -->
+		<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotation" />
+		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotationServlet"/> -->
+		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFull"/> -->
+		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullServlet"/> -->
 		
 		<!-- KiekerFlow Aspects-->
 		<!-- Concurrency -->
-		<!-- <aspect name="kieker.monitoring.probe.aspectJ.flow.concurrency.ThreadingAspect" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.concurrency.ThreadingAspect" /> -->
 		
 		<!-- Construction -->
-		<!-- <aspect name="kieker.monitoring.probe.aspectJ.flow.construction.FullInstrumentation" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.construction.FullInstrumentation" /> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.construction.Annotation" /> -->
 
 		<!-- OperationCall -->
-		<!-- <aspect name="kieker.monitoring.probe.aspectJ.flow.operationExecution.FullInstrumentation" /> -->
-		<!-- <aspect name="kieker.monitoring.probe.aspectJ.flow.operationExecution.Annotation" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.FullInstrumentation" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.Annotation" /> -->
 		
 		<!-- OperationExecution -->
-		<!-- <aspect name="kieker.monitoring.probe.aspectJ.flow.operationCall.FullInstrumentation" /> -->
-		<!-- <aspect name="kieker.monitoring.probe.aspectJ.flow.operationCall.Annotation" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.FullInstrumentation" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.Annotation" /> -->
 		
 		<!-- Definition of additional targeted aspects (example for a single additional getter) -->
 		<!--  
-		<concrete-aspect name="kieker.monitoring.probe.aspectJ.flow.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectJ.flow.operationExecution.AbstractAspect">
+		<concrete-aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.flow.operationExecution.AbstractAspect">
 			<pointcut name="monitoredOperation" expression="execution(int kiekerFlow.TestFlow.getA())" />
 		</concrete-aspect>
 		-->

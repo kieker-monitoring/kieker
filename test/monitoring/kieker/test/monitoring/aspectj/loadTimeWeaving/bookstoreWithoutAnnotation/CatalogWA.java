@@ -18,35 +18,27 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.flow.trace;
-
+package kieker.test.monitoring.aspectj.loadTimeWeaving.bookstoreWithoutAnnotation;
 
 /**
- * @author Jan Waller
+ * A simple test and demonstration scenario for Kieker's monitoring component.
+ * 
+ * @author Matthias Rohr History: 2008/08/30: Created based on Catalog.java
+ *         without Annotations
+ * 
  */
-public final class SplitEvent extends AbstractTraceEvent {
-	private static final long serialVersionUID = -4454625562107999414L;
-	private static final Class<?>[] TYPES = {
-		long.class, // Event.timestamp
-		long.class, // TraceEvent.traceId
-		int.class, // TraceEvent.orderIndex
-	};
 
-	public SplitEvent(final long timestamp, final long traceId, final int orderIndex) {
-		super(timestamp, traceId, orderIndex);
-	}
+public final class CatalogWA {
 
-	public SplitEvent(final Object[] values) {
-		super(values, SplitEvent.TYPES); // values[0..2]
-	}
+	private CatalogWA() {}
 
-	@Override
-	public final Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), };
-	}
-
-	@Override
-	public final Class<?>[] getValueTypes() {
-		return SplitEvent.TYPES.clone();
+	public static void getBook(final boolean complexQuery) {
+		if (complexQuery) {
+			// complex query
+			BookstoreWA.waitabit(20); // NOCS (MagicNumberCheck)
+		} else {
+			// simple query
+			BookstoreWA.waitabit(2); // NOCS (MagicNumberCheck)
+		}
 	}
 }

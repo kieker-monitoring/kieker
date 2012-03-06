@@ -4,10 +4,10 @@
 	<weaver options=""> <!-- options="-verbose" -->
 		<!-- instrument the kieker.tests -->
 		<include within="kieker.test..*" />
-		<!--<include within="kieker.monitoring.probe.aspectJ..*"/> -->
+		<!--<include within="kieker.monitoring.probe.aspectj..*"/> -->
 	</weaver>
 
 	<aspects>
-		<aspect name="kieker.monitoring.probe.aspectJ.operationExecution.OperationExecutionAspectAnnotation" />
+		<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotation" />
 	</aspects>
 </aspectj>
