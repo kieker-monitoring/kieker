@@ -599,9 +599,14 @@ public final class AnalysisController implements Runnable {
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 		final Resource resource = resourceSet.createResource(URI.createFileURI(file.getAbsolutePath()));
 		resource.getContents().add(project);
+
+		/* Make sure that the controller uses utf8 instead of ascii. */
+		final HashMap<String, String> options = new HashMap<String, String>();
+		options.put(XMLResource.OPTION_ENCODING, "UTF-8");
+
 		/* Now try to save the resource. */
 		try {
-			resource.save(null);
+			resource.save(options);
 		} catch (final IOException ex) {
 			AnalysisController.LOG.error("Unable to save configuration file '" + file.getAbsolutePath() + "'.", ex);
 			return false;
