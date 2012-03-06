@@ -26,6 +26,7 @@ import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
 import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.util.mxPoint;
 import com.mxgraph.view.mxGraph;
 
 public final class KaxViz extends JFrame {
@@ -60,6 +61,7 @@ public final class KaxViz extends JFrame {
 		graph.setGridSize(10);
 		final mxGraphComponent graphComponent = new mxGraphComponent(graph);
 		graphComponent.setConnectable(false); // Inhibit edge creation in the graph.
+		graphComponent.setGridVisible(true);
 		this.getContentPane().add(graphComponent);
 		this.graph = graph;
 		// add the actual graph
@@ -131,16 +133,26 @@ public final class KaxViz extends JFrame {
 
 	private final mxCell createReader(final AbstractReaderPlugin plugin) {
 		final String description = "<<Reader>>\n" + plugin.getName() + " : " + plugin.getClass().getSimpleName();
-		final mxGeometry geometry = new mxGeometry(0, 0, 200, 40);
+		final mxGeometry geometry = new mxGeometry(0, 0, 200, 50);
 		final mxCell vertex = new mxCell(description, geometry, null);
 		vertex.setVertex(true);
-		vertex.setConnectable(true);
+		vertex.setConnectable(false);
+		// Ports
+		final String[] portNames = plugin.getAllOutputPortNames();
+		for (int i = 0; i < portNames.length; i++) {
+			final mxGeometry portGeometry = new mxGeometry((i + 1d) / (portNames.length + 1), 1, 10, 10);
+			portGeometry.setOffset(new mxPoint(-5, -5));
+			portGeometry.setRelative(true);
+			final mxCell port = new mxCell(portNames[i], portGeometry, null);
+			port.setVertex(true);
+			this.graph.addCell(port, vertex);
+		}
 		return vertex;
 	}
 
 	private final mxCell createFilter(final AbstractAnalysisPlugin plugin) {
 		final String description = "<<Filter>>\n" + plugin.getName() + " : " + plugin.getClass().getSimpleName();
-		final mxGeometry geometry = new mxGeometry(0, 0, 200, 40);
+		final mxGeometry geometry = new mxGeometry(0, 0, 200, 50);
 		final mxCell vertex = new mxCell(description, geometry, null);
 		vertex.setVertex(true);
 		vertex.setConnectable(true);
@@ -149,7 +161,7 @@ public final class KaxViz extends JFrame {
 
 	private final mxCell createRepository(final AbstractRepository repository) {
 		final String description = "<<Repository>>\n : " + repository.getClass().getSimpleName();
-		final mxGeometry geometry = new mxGeometry(0, 0, 200, 40);
+		final mxGeometry geometry = new mxGeometry(0, 0, 200, 50);
 		final mxCell vertex = new mxCell(description, geometry, null);
 		vertex.setVertex(true);
 		vertex.setConnectable(true);
