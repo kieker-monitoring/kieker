@@ -30,7 +30,7 @@ import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.legacy.OperationExecutionRecord;
+import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 

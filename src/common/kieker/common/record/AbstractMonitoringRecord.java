@@ -29,8 +29,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.exception.MonitoringRecordException;
-import kieker.common.record.legacy.BranchingRecord;
-import kieker.common.record.legacy.OperationExecutionRecord;
+import kieker.common.record.controlflow.BranchingRecord;
+import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.system.CPUUtilizationRecord;
 import kieker.common.record.system.MemSwapUsageRecord;
 import kieker.common.record.system.ResourceUtilizationRecord;

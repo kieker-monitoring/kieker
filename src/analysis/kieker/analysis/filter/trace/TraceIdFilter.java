@@ -29,8 +29,8 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
-import kieker.common.record.legacy.OperationExecutionRecord;
 
 /**
  * Allows to filter Traces about their traceIds.

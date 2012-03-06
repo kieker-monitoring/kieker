@@ -23,7 +23,7 @@ package kieker.monitoring.probe.cxf;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import kieker.common.record.legacy.OperationExecutionRecord;
+import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;

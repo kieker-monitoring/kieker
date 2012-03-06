@@ -29,7 +29,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.legacy.OperationExecutionRecord;
+import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
 /**

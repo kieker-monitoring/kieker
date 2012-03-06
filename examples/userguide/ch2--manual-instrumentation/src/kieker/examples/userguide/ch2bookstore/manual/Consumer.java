@@ -24,7 +24,7 @@ import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.legacy.OperationExecutionRecord;
+import kieker.common.record.controlflow.OperationExecutionRecord;
 
 public class Consumer extends AbstractAnalysisPlugin {
 

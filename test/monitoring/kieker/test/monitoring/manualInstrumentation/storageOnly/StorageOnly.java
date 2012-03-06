@@ -20,7 +20,7 @@
 
 package kieker.test.monitoring.manualInstrumentation.storageOnly;
 
-import kieker.common.record.legacy.OperationExecutionRecord;
+import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 

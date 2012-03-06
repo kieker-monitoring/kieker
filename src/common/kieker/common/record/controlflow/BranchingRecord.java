@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.legacy;
+package kieker.common.record.controlflow;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;

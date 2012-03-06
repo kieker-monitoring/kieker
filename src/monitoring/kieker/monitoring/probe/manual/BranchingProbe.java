@@ -22,7 +22,7 @@ package kieker.monitoring.probe.manual;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.common.record.legacy.BranchingRecord;
+import kieker.common.record.controlflow.BranchingRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.probe.IMonitoringProbe;

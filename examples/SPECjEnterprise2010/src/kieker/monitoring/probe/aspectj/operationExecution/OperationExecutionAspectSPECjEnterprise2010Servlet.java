@@ -23,7 +23,7 @@ package kieker.monitoring.probe.aspectj.operationExecution;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kieker.common.record.legacy.OperationExecutionRecord;
+import kieker.common.record.controlflow.OperationExecutionRecord;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

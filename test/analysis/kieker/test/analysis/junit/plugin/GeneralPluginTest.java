@@ -11,7 +11,7 @@ import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.record.legacy.OperationExecutionRecord;
+import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.executionFilter.TimestampFilter;
 import kieker.tools.traceAnalysis.plugins.executionFilter.TraceIdFilter;

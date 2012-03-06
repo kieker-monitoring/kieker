@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.common.record.legacy.OperationExecutionRecord;
+import kieker.common.record.controlflow.OperationExecutionRecord;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
