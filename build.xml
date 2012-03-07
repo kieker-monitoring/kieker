@@ -93,7 +93,7 @@
 			<fileset dir="${lib.dir}">
 				<include name="rabbitmq-client.jar" />
 				<include name="javax.jms-*.jar" />
-				<include name="org.eclipse.*.jar" />
+				<include name="org.eclipse.emf.*.jar" />
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
 			<pathelement location="${build.kieker.analysis.model.dir}/" />
