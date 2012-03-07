@@ -82,7 +82,6 @@ public class OperationExecutionAspectFullServlet extends AbstractOperationExecut
 			this.proceedAndMeasure(thisJoinPoint, execData);
 			if ((eoi == -1) || (ess == -1)) {
 				OperationExecutionAspectFullServlet.LOG.error("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
-				OperationExecutionAspectFullServlet.LOG.error("Terminating!");
 				AbstractOperationExecutionAspect.CTRLINST.terminateMonitoring();
 			}
 		} catch (final Exception e) { // NOPMD // NOCS (IllegalCatchCheck)

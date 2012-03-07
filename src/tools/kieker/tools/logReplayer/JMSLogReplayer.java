@@ -99,7 +99,7 @@ public class JMSLogReplayer {
 			tpanInstance.run();
 			success = true;
 		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
-			JMSLogReplayer.LOG.error("Exception", ex);
+			JMSLogReplayer.LOG.error("Exception running analysis instance", ex);
 			success = false;
 		}
 		return success;

@@ -40,7 +40,7 @@ public abstract class AbstractRepository {
 				configuration.setDefaultConfiguration(defaultConfig);
 			}
 		} catch (final IllegalAccessException ex) {
-			AbstractRepository.LOG.error("Unable to set repository default properties");
+			AbstractRepository.LOG.error("Unable to set repository default properties"); // ok to ignore ex here
 		}
 		this.configuration = configuration;
 	}

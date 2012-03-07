@@ -102,8 +102,8 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 		try {
 			this.terminationLatch.await();
 			PipeReader.LOG.info("Pipe closed. Will terminate.");
-		} catch (final InterruptedException e) {
-			PipeReader.LOG.error("Received InterruptedException", e);
+		} catch (final InterruptedException ex) {
+			PipeReader.LOG.error("Received InterruptedException", ex);
 			return false;
 		}
 		return true;

@@ -72,7 +72,6 @@ public class OperationExecutionMethodInvocationInterceptor extends AbstractOpera
 			if ((execData.getEoi() == -1) || (execData.getEss() == -1)) {
 				OperationExecutionMethodInvocationInterceptor.LOG.error("eoi and/or ess have invalid values:" + " eoi == " + execData.getEoi()
 						+ " ess == " + execData.getEss());
-				OperationExecutionMethodInvocationInterceptor.LOG.error("Terminating Kieker.Monitoring!");
 				AbstractOperationExecutionMethodInvocationInterceptor.CONTROLLER.terminateMonitoring();
 			}
 		} catch (final Exception e) { // NOPMD // NOCS (IllegalCatchCheck)

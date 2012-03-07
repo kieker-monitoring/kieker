@@ -40,7 +40,7 @@ public abstract class AbstractTimeSource implements ITimeSource {
 				configuration.setDefaultConfiguration(defaultConfig);
 			}
 		} catch (final IllegalAccessException ex) {
-			AbstractTimeSource.LOG.error("Unable to set timer custom default properties");
+			AbstractTimeSource.LOG.error("Unable to set timer custom default properties"); // ok to ignore ex here
 		}
 		this.configuration = configuration;
 	}

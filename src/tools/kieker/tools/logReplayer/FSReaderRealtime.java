@@ -90,8 +90,8 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 			}
 			this.inputDirs = this.inputDirNameListToArray(configuration.getStringProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES));
 			this.initInstanceFromArgs(this.inputDirs, this.numWorkers);
-		} catch (final IllegalArgumentException exc) {
-			FSReaderRealtime.LOG.error("Failed to load configuration: " + exc.getMessage());
+		} catch (final IllegalArgumentException ex) {
+			FSReaderRealtime.LOG.error("Failed to load configuration", ex);
 			return false;
 		}
 		return true;
@@ -102,9 +102,8 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 
 		// parse inputDir property value
 		if ((inputDirNameList == null) || (inputDirNameList.trim().length() == 0)) { // NOPMD (inefficient empty check)
-			final String errorMsg = "Invalid argument value for inputDirNameList:" + inputDirNameList;
-			FSReaderRealtime.LOG.error(errorMsg);
-			throw new IllegalArgumentException(errorMsg);
+			// FSReaderRealtime.LOG.error(errorMsg); // no log and throw
+			throw new IllegalArgumentException("Invalid argument value for inputDirNameList:" + inputDirNameList);
 		}
 		try {
 			final StringTokenizer dirNameTokenizer = new StringTokenizer(inputDirNameList, ";");

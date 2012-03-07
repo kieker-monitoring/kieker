@@ -22,9 +22,6 @@ package kieker.common.namedRecordPipe;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
-
 /**
  * 
  * @author Andre van Hoorn, Jan Waller
@@ -32,7 +29,7 @@ import kieker.common.logging.LogFactory;
 public enum Broker { // Singleton pattern (Effective Java #3)
 	INSTANCE;
 
-	private static final Log LOG = LogFactory.getLog(Broker.class); // NOPMD (Logger on enum)
+	// private static final Log LOG = LogFactory.getLog(Broker.class); // NOPMD (Logger on enum)
 
 	/**
 	 * Access synchronized through synchronized method {@link #acquirePipe(String)} !
@@ -47,9 +44,8 @@ public enum Broker { // Singleton pattern (Effective Java #3)
 		Pipe conn;
 		synchronized (this) {
 			if ((pipeName == null) || (pipeName.isEmpty())) {
-				final String errorMsg = "pipeName must not be null or empty!  (Found: " + pipeName + ")";
-				Broker.LOG.error(errorMsg);
-				throw new IllegalArgumentException(errorMsg);
+				// Broker.LOG.error(errorMsg); no need to log if thrown
+				throw new IllegalArgumentException("pipeName must not be null or empty!  (Found: " + pipeName + ")");
 			}
 			conn = this.pipeMap.get(pipeName);
 			if (conn == null) {

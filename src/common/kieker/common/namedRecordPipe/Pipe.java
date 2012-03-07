@@ -57,13 +57,11 @@ public final class Pipe {
 	 */
 	public boolean writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		if (this.closed) {
-			final String errorMsg = "trying to write to closed pipe";
-			Pipe.LOG.error(errorMsg);
+			Pipe.LOG.error("trying to write to closed pipe");
 			return false;
 		}
 		if (this.pipeReader == null) {
-			final String errorMsg = "pipeReader is null, i.e., no pipe reader has been registered.";
-			Pipe.LOG.error(errorMsg);
+			Pipe.LOG.error("pipeReader is null, i.e., no pipe reader has been registered.");
 			return false;
 		}
 

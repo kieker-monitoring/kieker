@@ -128,9 +128,11 @@ public final class JMXReader extends AbstractReaderPlugin {
 			// Connect to the Server
 			try {
 				jmx = JMXConnectorFactory.connect(this.serviceURL);
-			} catch (final IOException e) {
-				JMXReader.LOG.error("Unable to connect to JMX Server (" + e.getMessage() + ")");
-				JMXReader.LOG.debug("Error in JMX connection!", e); // NOCS (MultipleStringLiteralsCheck)
+			} catch (final IOException ex) {
+				JMXReader.LOG.error("Unable to connect to JMX Server (" + ex.getMessage() + ")");
+				if (JMXReader.LOG.isDebugEnabled()) {
+					JMXReader.LOG.debug("Error in JMX connection!", ex); // NOCS (MultipleStringLiteralsCheck)
+				}
 				return false;
 			}
 			serverNotificationListener = new ServerNotificationListener();
@@ -145,11 +147,11 @@ public final class JMXReader extends AbstractReaderPlugin {
 
 			// Shutdown
 			JMXReader.LOG.info("Shutting down JMXReader");
-		} catch (final InstanceNotFoundException e) {
-			JMXReader.LOG.error("No monitoring log found: " + this.monitoringLog.toString());
+		} catch (final InstanceNotFoundException ex) {
+			JMXReader.LOG.error("No monitoring log found: " + this.monitoringLog.toString()); // ok to ignore ex here
 			ret = false;
-		} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
-			JMXReader.LOG.error("Error in JMX connection!", e); // NOCS (MultipleStringLiteralsCheck)
+		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
+			JMXReader.LOG.error("Error in JMX connection!", ex); // NOCS (MultipleStringLiteralsCheck)
 			ret = false;
 		} finally {
 			try {

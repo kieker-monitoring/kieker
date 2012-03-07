@@ -151,15 +151,14 @@ public final class JMSReader extends AbstractReaderPlugin {
 							final ObjectMessage om = (ObjectMessage) jmsMessage;
 							final Serializable omo = om.getObject();
 							if ((omo instanceof IMonitoringRecord) && (!JMSReader.super.deliver(JMSReader.OUTPUT_PORT_NAME, omo))) {
-								final String errorMsg = "deliverRecord returned false";
-								JMSReader.LOG.error(errorMsg);
+								JMSReader.LOG.error("deliverRecord returned false");
 							}
-						} catch (final MessageFormatException em) {
-							JMSReader.LOG.error("MessageFormatException:" + em.getMessage(), em);
+						} catch (final MessageFormatException ex) {
+							JMSReader.LOG.error("Error delivering record", ex);
 						} catch (final JMSException ex) {
-							JMSReader.LOG.error("JMSException: " + ex.getMessage(), ex);
+							JMSReader.LOG.error("Error delivering record", ex);
 						} catch (final Exception ex) { // NOCS // NOPMD
-							JMSReader.LOG.error("Exception", ex);
+							JMSReader.LOG.error("Error delivering record", ex);
 						}
 					}
 				}
@@ -172,7 +171,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 			this.block();
 			JMSReader.LOG.info("Woke up by shutdown");
 		} catch (final Exception ex) { // FindBugs complains but wontfix // NOCS (IllegalCatchCheck) // NOPMD
-			JMSReader.LOG.error(ex.getMessage(), ex);
+			JMSReader.LOG.error("Error in read()", ex);
 			retVal = false;
 		} finally {
 			try {

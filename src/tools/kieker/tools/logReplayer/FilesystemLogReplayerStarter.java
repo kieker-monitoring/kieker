@@ -138,10 +138,10 @@ public final class FilesystemLogReplayerStarter {
 				"1");
 		try {
 			FilesystemLogReplayerStarter.numRealtimeWorkerThreads = Integer.parseInt(numRealtimeWorkerThreadsStr);
-		} catch (final NumberFormatException exc) {
+		} catch (final NumberFormatException ex) {
 			System.out.println("Invalid value for option " + FilesystemLogReplayerStarter.CMD_OPT_NAME_NUM_REALTIME_WORKERS + ": '" + numRealtimeWorkerThreadsStr
 					+ "'");
-			FilesystemLogReplayerStarter.LOG.error("NumberFormatException: ", exc);
+			FilesystemLogReplayerStarter.LOG.error("NumberFormatException: ", ex);
 			retVal = false;
 		}
 		if (FilesystemLogReplayerStarter.numRealtimeWorkerThreads < 1) {
