@@ -91,7 +91,6 @@
 
 		<path id="kieker.analysis-compile-classpath">
 			<fileset dir="${lib.dir}">
-				<include name="rabbitmq-client.jar" />
 				<include name="javax.jms-*.jar" />
 				<include name="org.eclipse.emf.*.jar" />
 			</fileset>
@@ -108,15 +107,6 @@
 			<pathelement location="${build.kieker.monitoring.dir}/" />
 			<pathelement location="${build.kieker.analysis.dir}/" />
 			<pathelement location="${build.kieker.analysis.model.dir}/" />
-		</path>
-
-		<path id="eclipse-external-jars">
-			<fileset dir="${lib.dir}">
-				<include name="*.jar" />
-				<exclude name="aspectjtools-*.jar" />
-				<exclude name="aspectjweaver-*.jar" />
-				<exclude name="log4j-*.jar" />
-			</fileset>
 		</path>
 	</target>
 
