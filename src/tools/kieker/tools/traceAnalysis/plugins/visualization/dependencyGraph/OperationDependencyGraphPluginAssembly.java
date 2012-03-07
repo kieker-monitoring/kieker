@@ -62,10 +62,10 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGraphPlugin<AssemblyComponentOperationPair> {
 
-	public static final String CONFIG_DOT_OUTPUT_FILE = OperationDependencyGraphPluginAssembly.class.getName() + ".dotOutputFile";
-	public static final String CONFIG_INCLUDE_WEIGHTS = OperationDependencyGraphPluginAssembly.class.getName() + ".includeWeights";
-	public static final String CONFIG_SHORT_LABELS = OperationDependencyGraphPluginAssembly.class.getName() + ".shortLabels";
-	public static final String CONFIG_INCLUDE_SELF_LOOPS = OperationDependencyGraphPluginAssembly.class.getName() + ".includeSelfLoops";
+	public static final String CONFIG_DOT_OUTPUT_FILE = "dotOutputFile";
+	public static final String CONFIG_INCLUDE_WEIGHTS = "includeWeights";
+	public static final String CONFIG_SHORT_LABELS = "shortLabels";
+	public static final String CONFIG_INCLUDE_SELF_LOOPS = "includeSelfLoops";
 
 	private static final Log LOG = LogFactory.getLog(OperationDependencyGraphPluginAssembly.class);
 	private static final String COMPONENT_NODE_ID_PREFIX = "component_";

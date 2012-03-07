@@ -31,8 +31,8 @@ public final class TimestampFilter extends AbstractAnalysisPlugin {
 	public static final String OUTPUT_PORT_NAME = "output";
 	public static final String OUTPUT_PORT_NAME_NOT = "output-not";
 
-	public static final String CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP = TimestampFilter.class.getName() + ".ignoreBeforeTimestamp";
-	public static final String CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP = TimestampFilter.class.getName() + ".ignorAfterTimestamp";
+	public static final String CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP = "ignoreBeforeTimestamp";
+	public static final String CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP = "ignorAfterTimestamp";
 
 	public static final long MAX_TIMESTAMP = Long.MAX_VALUE;
 	public static final long MIN_TIMESTAMP = 0;

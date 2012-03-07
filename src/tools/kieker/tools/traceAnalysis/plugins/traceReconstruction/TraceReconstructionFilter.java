@@ -70,8 +70,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE = "MessageTraceOutput";
 	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE = "ExecutionTraceOutput";
 	public static final String OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE = "InvalidExecutionTraceOutput";
-	public static final String CONFIG_MAX_TRACE_DURATION_MILLIS = TraceReconstructionFilter.class.getName() + ".maxTraceDurationMillis";
-	public static final String CONFIG_IGNORE_INVALID_TRACES = TraceReconstructionFilter.class.getName() + ".ignoreInvalidTraces";
+	public static final String CONFIG_MAX_TRACE_DURATION_MILLIS = "maxTraceDurationMillis";
+	public static final String CONFIG_IGNORE_INVALID_TRACES = "ignoreInvalidTraces";
 
 	private static final long MAX_DURATION_NANOS = Long.MAX_VALUE;
 	/** TraceId x trace */

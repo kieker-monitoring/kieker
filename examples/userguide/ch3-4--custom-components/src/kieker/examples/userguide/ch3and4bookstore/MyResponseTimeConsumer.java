@@ -35,10 +35,6 @@ public class MyResponseTimeConsumer extends AbstractAnalysisPlugin {
 		super(configuration);
 	}
 
-	public MyResponseTimeConsumer() {
-		super(new Configuration());
-	}
-
 	@InputPort(
 			name = MyResponseTimeConsumer.INPUT_PORT_NAME,
 			eventTypes = { MyResponseTimeRecord.class })

@@ -47,8 +47,8 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	private static final Log LOG = LogFactory.getLog(FSReaderRealtime.class);
 
-	public static final String PROP_NAME_NUM_WORKERS = FSReaderRealtime.class + ".numWorkers";
-	public static final String PROP_NAME_INPUTDIRNAMES = FSReaderRealtime.class + ".inputDirs";
+	public static final String PROP_NAME_NUM_WORKERS = "numWorkers";
+	public static final String PROP_NAME_INPUTDIRNAMES = "inputDirs";
 
 	/* manages the life-cycle of the reader and consumers */
 	private final AnalysisController analysis = new AnalysisController();

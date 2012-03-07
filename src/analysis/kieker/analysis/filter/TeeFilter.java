@@ -46,8 +46,8 @@ public final class TeeFilter extends AbstractAnalysisPlugin {
 
 	public static final String OUTPUT_PORT_NAME = "output";
 	public static final String INPUT_PORT_NAME = "input";
-	public static final String CONFIG_STREAM = TeeFilter.class.getName() + ".stream";
-	public static final String CONFIG_ENCODING = TeeFilter.class.getName() + ".encoding";
+	public static final String CONFIG_STREAM = "stream";
+	public static final String CONFIG_ENCODING = "encoding";
 
 	public static final String CONFIG_STREAM_STDOUT = "STDOUT";
 	public static final String CONFIG_STREAM_STDERR = "STDERR";

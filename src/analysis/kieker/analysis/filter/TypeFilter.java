@@ -49,7 +49,7 @@ public final class TypeFilter extends AbstractAnalysisPlugin {
 	public static final String OUTPUT_PORT_NAME = "output";
 	public static final String OUTPUT_PORT_NAME_NOT = "output-not";
 	public static final String INPUT_PORT_NAME = "input";
-	public static final String CONFIG_TYPES = TypeFilter.class.getName() + ".types";
+	public static final String CONFIG_TYPES = "types";
 
 	private final Class<?>[] acceptedClasses;
 

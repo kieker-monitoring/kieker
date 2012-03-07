@@ -41,8 +41,8 @@ public class TimestampFilter extends AbstractTimestampFilter {
 	public static final String INPUT_PORT_NAME = "newExecution";
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 
-	public static final String CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP = TimestampFilter.class.getName() + ".ignoreExecutionsBeforeTimestamp";
-	public static final String CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP = TimestampFilter.class.getName() + ".ignorExecutionsAfterTimestamp";
+	public static final String CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP = "ignoreExecutionsBeforeTimestamp";
+	public static final String CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP = "ignoreExecutionsAfterTimestamp";
 
 	/**
 	 * Creates a new instance of the class {@link TimestampFilter} with the given parameters.

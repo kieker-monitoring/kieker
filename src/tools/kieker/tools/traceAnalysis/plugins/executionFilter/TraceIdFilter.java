@@ -41,8 +41,8 @@ public class TraceIdFilter extends AbstractTraceIdFilter {
 	public static final String INPUT_PORT_NAME = "newExecution";
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 
-	public static final String CONFIG_SELECT_ALL_TRACES = TraceIdFilter.class.getName() + ".selectedAll";
-	public static final String CONFIG_SELECTED_TRACES = TraceIdFilter.class.getName() + ".selectedTraces";
+	public static final String CONFIG_SELECT_ALL_TRACES = "selectedAll";
+	public static final String CONFIG_SELECTED_TRACES = "selectedTraces";
 
 	public TraceIdFilter(final Configuration configuration) {
 		super(configuration);

@@ -35,33 +35,19 @@ public class MyPipeReader extends AbstractReaderPlugin {
 	public static final String OUTPUT_PORT_NAME = "outputPort";
 	private static final Log log = LogFactory.getLog(MyPipeReader.class);
 
-	private static final String PROPERTY_PIPE_NAME = MyPipeReader.class + ".pipeName";
+	private static final String CONFIG_PIPE_NAME = "pipeName";
 	private final String pipeName;
 	private volatile MyPipe pipe;
-
-	public MyPipeReader() {
-		super(new Configuration());
-		this.pipeName = "kieker-pipe";
-		this.init();
-	}
 
 	public MyPipeReader(final Configuration configuration) {
 		super(configuration);
 
-		this.pipeName = configuration.getStringProperty(MyPipeReader.PROPERTY_PIPE_NAME);
+		this.pipeName = configuration.getStringProperty(MyPipeReader.CONFIG_PIPE_NAME);
 
 		this.init();
 	}
 
-	public MyPipeReader(final String pipeName) {
-		super(new Configuration());
-
-		this.pipeName = pipeName;
-
-		this.init();
-	}
-
-	public boolean init() {
+	private boolean init() {
 		try {
 			this.pipe = MyNamedPipeManager.getInstance().acquirePipe(this.pipeName);
 		} catch (final Exception ex) {
@@ -94,7 +80,7 @@ public class MyPipeReader extends AbstractReaderPlugin {
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);
 
-		configuration.setProperty(MyPipeReader.PROPERTY_PIPE_NAME, this.pipeName);
+		configuration.setProperty(MyPipeReader.CONFIG_PIPE_NAME, this.pipeName);
 
 		return configuration;
 	}
@@ -103,7 +89,7 @@ public class MyPipeReader extends AbstractReaderPlugin {
 	protected Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
 
-		defaultConfiguration.setProperty(MyPipeReader.PROPERTY_PIPE_NAME, "kieker-pipe");
+		defaultConfiguration.setProperty(MyPipeReader.CONFIG_PIPE_NAME, "kieker-pipe");
 
 		return defaultConfiguration;
 	}

@@ -43,7 +43,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class InvalidExecutionTraceWriterPlugin extends AbstractInvalidExecutionTraceProcessingPlugin {
 
-	public static final String CONFIG_OUTPUT_FN = InvalidExecutionTraceWriterPlugin.class.getName() + ".outputFn";
+	public static final String CONFIG_OUTPUT_FN = "outputFn";
 	public static final String INVALID_EXECUTION_TRACES_INPUT_PORT_NAME = "newEvent";
 	private static final Log LOG = LogFactory.getLog(InvalidExecutionTraceWriterPlugin.class);
 

@@ -63,9 +63,9 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin {
 	private static final Log LOG = LogFactory.getLog(SequenceDiagramPlugin.class);
 
-	public static final String CONFIG_OUTPUT_FN_BASE = SequenceDiagramPlugin.class.getName() + ".filename";
-	public static final String CONFIG_OUTPUT_SHORTLABES = SequenceDiagramPlugin.class.getName() + ".shortlabels";
-	public static final String CONFIG_OUTPUT_SDMODE = SequenceDiagramPlugin.class.getName() + ".SDMode";
+	public static final String CONFIG_OUTPUT_FN_BASE = "filename";
+	public static final String CONFIG_OUTPUT_SHORTLABES = "shortlabels";
+	public static final String CONFIG_OUTPUT_SDMODE = "SDMode";
 	public static final String CONFIG_OUTPUT_FN_BASE_DEFAULT = "SequenceDiagram";
 
 	/**

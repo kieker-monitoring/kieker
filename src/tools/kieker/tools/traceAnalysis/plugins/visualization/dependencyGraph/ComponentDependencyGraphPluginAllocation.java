@@ -58,10 +58,10 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 public class ComponentDependencyGraphPluginAllocation extends AbstractDependencyGraphPlugin<AllocationComponent> {
 	private static final Log LOG = LogFactory.getLog(ComponentDependencyGraphPluginAllocation.class);
 
-	public static final String CONFIG_OUTPUT_FN_BASE = ComponentDependencyGraphPluginAllocation.class.getName() + ".filename";
-	public static final String CONFIG_INCLUDE_WEIGHTS = ComponentDependencyGraphPluginAllocation.class.getName() + ".includeWeights";
-	public static final String CONFIG_SHORTLABELS = ComponentDependencyGraphPluginAllocation.class.getName() + ".shortlabels";
-	public static final String CONFIG_SELFLOOPS = ComponentDependencyGraphPluginAllocation.class.getName() + ".selfloops";
+	public static final String CONFIG_OUTPUT_FN_BASE = "filename";
+	public static final String CONFIG_INCLUDE_WEIGHTS = "includeWeights";
+	public static final String CONFIG_SHORTLABELS = "shortlabels";
+	public static final String CONFIG_SELFLOOPS = "selfloops";
 
 	public static final String CONFIG_OUTPUT_FN_BASE_DEFAULT = "AllocationComponentDependencyGraph";
 

@@ -28,7 +28,7 @@ import kieker.common.record.controlflow.OperationExecutionRecord;
 
 public class Consumer extends AbstractAnalysisPlugin {
 
-	public static final String CONFIG_MAX_RESPONSE_TIME = Consumer.class.getName() + ".maxResponseTime";
+	public static final String CONFIG_MAX_RESPONSE_TIME = "maxResponseTime";
 	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
 	private final long maxResponseTime;
 

@@ -32,6 +32,7 @@ import org.junit.Assert;
  */
 @Plugin(outputPorts = @OutputPort(name = SimpleSourcePlugin.OUTPUT_PORT_NAME))
 public class SimpleSourcePlugin extends AbstractAnalysisPlugin {
+
 	public static final String OUTPUT_PORT_NAME = "output";
 
 	public SimpleSourcePlugin(final Configuration configuration) {

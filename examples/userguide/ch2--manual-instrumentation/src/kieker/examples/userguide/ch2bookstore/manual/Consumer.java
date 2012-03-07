@@ -30,10 +30,11 @@ public class Consumer extends AbstractAnalysisPlugin {
 
 	private final long maxResponseTime;
 	public static final String INPUT_PORT_NAME = "newEvent";
+	public static final String CONFIG_MAX_RESPONSE_TIME = "maxResponseTime";
 
-	public Consumer(final long maxResponseTime) {
-		super(new Configuration());
-		this.maxResponseTime = maxResponseTime;
+	public Consumer(final Configuration configuration) {
+		super(configuration);
+		this.maxResponseTime = configuration.getLongProperty(Consumer.CONFIG_MAX_RESPONSE_TIME);
 	}
 
 	@InputPort(

@@ -57,9 +57,9 @@ import kieker.common.record.IMonitoringRecord;
 public final class JMSReader extends AbstractReaderPlugin {
 
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
-	public static final String CONFIG_PROVIDERURL = JMSReader.class.getName() + ".jmsProviderUrl";
-	public static final String CONFIG_DESTINATION = JMSReader.class.getName() + ".jmsDestination";
-	public static final String CONFIG_FACTORYLOOKUP = JMSReader.class.getName() + ".jmsFactoryLookupName";
+	public static final String CONFIG_PROVIDERURL = "jmsProviderUrl";
+	public static final String CONFIG_DESTINATION = "jmsDestination";
+	public static final String CONFIG_FACTORYLOOKUP = "jmsFactoryLookupName";
 
 	private static final Log LOG = LogFactory.getLog(JMSReader.class);
 

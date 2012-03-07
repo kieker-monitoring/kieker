@@ -43,7 +43,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlugin {
 
-	public static final String CONFIG_OUTPUT_FN = MessageTraceWriterPlugin.class.getName() + ".outputFn";
+	public static final String CONFIG_OUTPUT_FN = "outputFn";
 	public static final String MSG_TRACES_INPUT_PORT_NAME = "msgTraceInput";
 	private static final Log LOG = LogFactory.getLog(MessageTraceWriterPlugin.class);
 
