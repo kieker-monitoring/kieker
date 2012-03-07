@@ -37,9 +37,9 @@ sigar-$.jar	Hyperic SIGAR (System Information Gatherer) provides a Java API to s
 
 jgraphx-$.jar	JGraphX provides a wide ranged graph support to Swing components.
 
-org.eclipse.emf.common_$.jar	The Eclipse EMF framework.
-org.eclipse.emf.ecore_$.jar	The Eclipse EMF framework. (Ecore Components)
-org.eclipse.emf.ecore.xmi_$.jar	The Eclipse EMF framework. (XMI serialization)
+org.eclipse.emf.common-$.jar	The Eclipse EMF framework.
+org.eclipse.emf.ecore-$.jar	The Eclipse EMF framework. (Ecore Components)
+org.eclipse.emf.ecore.xmi-$.jar	The Eclipse EMF framework. (XMI serialization)
 
 // Not included are:
 // * Checkstyle
