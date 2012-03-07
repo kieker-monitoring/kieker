@@ -90,5 +90,15 @@
     <Bug pattern="NP_LOAD_OF_KNOWN_NULL_VALUE" />
   </Match>
   
+  <Match>
+    <Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
+    <Bug pattern="NM_CONFUSING" />
+  </Match>
+  
+  <Match>
+    <Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
+    <Bug pattern="MS_PKGPROTECT" />
+  </Match>
+  
 
 </FindBugsFilter>
