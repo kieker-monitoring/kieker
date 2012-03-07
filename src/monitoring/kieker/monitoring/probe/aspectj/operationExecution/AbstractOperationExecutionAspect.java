@@ -42,13 +42,9 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 	protected static final ITimeSource TIMESOURCE = AbstractOperationExecutionAspect.CTRLINST.getTimeSource();
 
 	protected OperationExecutionRecord initExecutionData(final ProceedingJoinPoint thisJoinPoint) {
-		final String methodname = thisJoinPoint.getSignature().getName();
-		String paramList = thisJoinPoint.getSignature().toLongString();
-		final int paranthIndex = paramList.lastIndexOf('(');
-		paramList = paramList.substring(paranthIndex); // paramList is now e.g., "()"
 
-		final OperationExecutionRecord execData = new OperationExecutionRecord(thisJoinPoint.getSignature().getDeclaringTypeName() /* component */, methodname
-				+ paramList /* operation */, AbstractOperationExecutionAspect.CFREGISTRY.recallThreadLocalTraceId() /* traceId, -1 if entry point */);
+		final OperationExecutionRecord execData = new OperationExecutionRecord(thisJoinPoint.getSignature().toLongString(),
+				AbstractOperationExecutionAspect.CFREGISTRY.recallThreadLocalTraceId() /* traceId, -1 if entry point */);
 
 		execData.setEntryPoint(false);
 		// execData.traceId = ctrlInst.recallThreadLocalTraceId(); // -1 if entry point

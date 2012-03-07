@@ -100,7 +100,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 					if (peekEvent instanceof CallOperationEvent) {
 						final CallOperationEvent peekCallEvent = (CallOperationEvent) peekEvent;
 						// TODO: we need to consider the host name as well
-						if (peekCallEvent.getCalleeOperationName().equals(curBeforeOperationEvent.getOperationName())) {
+						if (peekCallEvent.getCalleeOperationSiganture().equals(curBeforeOperationEvent.getOperationSignature())) {
 							// EventTrace2ExecutionTraceFilter.LOG.info("Current Event: " + curBeforeOperationEvent.toString() + ", redundant call discarded: "
 							// + peekCallEvent.toString());
 							/* Redundant call event on top of stack */
@@ -156,7 +156,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 					}
 					final BeforeOperationEvent poppedBeforeEvent = (BeforeOperationEvent) poppedEvent;
 					// TODO: we need to consider the host name as well
-					if (!afterOpEvent.getOperationName().equals(poppedBeforeEvent.getOperationName())) {
+					if (!afterOpEvent.getOperationSignature().equals(poppedBeforeEvent.getOperationSignature())) {
 						EventTrace2ExecutionTraceFilter.LOG.error("Components of before (" + poppedBeforeEvent + ") " +
 								"and after (" + afterOpEvent + ") events do not match");
 						EventTrace2ExecutionTraceFilter.LOG.error("Terminating processing of event record trace with ID " + eventTrace.getTraceId());
@@ -218,7 +218,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 		final String hostName = "<HOST>";
 		final String sessionId = "<SESSION-ID>";
 
-		final FQComponentNameSignaturePair fqComponentNameSignaturePair = super.splitOperationSignatureStr(event.getOperationName());
+		final FQComponentNameSignaturePair fqComponentNameSignaturePair = super.splitOperationSignatureStr(event.getOperationSignature());
 
 		return super.createExecutionByEntityNames(hostName, fqComponentNameSignaturePair.getFqClassname(), fqComponentNameSignaturePair.getSignature(),
 				traceId,
@@ -241,7 +241,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 		final String hostName = "<HOST>";
 		final String sessionId = "<SESSION-ID>";
 
-		final FQComponentNameSignaturePair fqComponentNameSignaturePair = super.splitOperationSignatureStr(event.getCalleeOperationName());
+		final FQComponentNameSignaturePair fqComponentNameSignaturePair = super.splitOperationSignatureStr(event.getCalleeOperationSiganture());
 		return super.createExecutionByEntityNames(hostName, fqComponentNameSignaturePair.getFqClassname(),
 				fqComponentNameSignaturePair.getSignature(), traceId, sessionId, eoi, ess, tin, tout);
 	}

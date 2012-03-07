@@ -29,11 +29,11 @@ public final class AfterOperationEvent extends AbstractOperationEvent {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
-		String.class, // OperationEvent.operationName
+		String.class, // OperationEvent.operationSiganture
 	};
 
-	public AfterOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationName) {
-		super(timestamp, traceId, orderIndex, operationName);
+	public AfterOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSiganture) {
+		super(timestamp, traceId, orderIndex, operationSiganture);
 	}
 
 	public AfterOperationEvent(final Object[] values) {
@@ -42,7 +42,7 @@ public final class AfterOperationEvent extends AbstractOperationEvent {
 
 	@Override
 	public final Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationName(), };
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), };
 	}
 
 	@Override

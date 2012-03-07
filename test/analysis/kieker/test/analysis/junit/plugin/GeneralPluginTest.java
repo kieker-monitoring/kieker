@@ -47,14 +47,14 @@ public class GeneralPluginTest extends TestCase {
 		final TimestampFilter filter2ByTimestamp = new TimestampFilter(filter2ByTimestampConfiguration);
 
 		/* The records we will send. */
-		final OperationExecutionRecord opExRec1 = new OperationExecutionRecord("", "", 1, 14, 15);
-		final OperationExecutionRecord opExRec2 = new OperationExecutionRecord("", "", 2, 14, 15);
-		final OperationExecutionRecord opExRec3 = new OperationExecutionRecord("", "", 1, 9, 15);
-		final OperationExecutionRecord opExRec4 = new OperationExecutionRecord("", "", 1, 11, 21);
-		final OperationExecutionRecord opExRec5 = new OperationExecutionRecord("", "", 2, 9, 15);
-		final OperationExecutionRecord opExRec6 = new OperationExecutionRecord("", "", 2, 14, 21);
-		final OperationExecutionRecord opExRec7 = new OperationExecutionRecord("", "", 1, 9, 21);
-		final OperationExecutionRecord opExRec8 = new OperationExecutionRecord("", "", 1, 10, 20);
+		final OperationExecutionRecord opExRec1 = new OperationExecutionRecord("", 1, 14, 15);
+		final OperationExecutionRecord opExRec2 = new OperationExecutionRecord("", 2, 14, 15);
+		final OperationExecutionRecord opExRec3 = new OperationExecutionRecord("", 1, 9, 15);
+		final OperationExecutionRecord opExRec4 = new OperationExecutionRecord("", 1, 11, 21);
+		final OperationExecutionRecord opExRec5 = new OperationExecutionRecord("", 2, 9, 15);
+		final OperationExecutionRecord opExRec6 = new OperationExecutionRecord("", 2, 14, 21);
+		final OperationExecutionRecord opExRec7 = new OperationExecutionRecord("", 1, 9, 21);
+		final OperationExecutionRecord opExRec8 = new OperationExecutionRecord("", 1, 10, 20);
 		final SourceClass src = new SourceClass(opExRec1, opExRec2, opExRec3, opExRec4, opExRec5, opExRec6, opExRec7, opExRec8);
 		final ExecutionSinkClass dst = new ExecutionSinkClass(new Configuration());
 

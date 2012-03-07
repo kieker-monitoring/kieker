@@ -124,7 +124,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 				}
 				final OperationExecutionRecord execRecord = (OperationExecutionRecord) monitoringRecord;
 				this.psInsertMonitoringData.setInt(1, execRecord.getExperimentId()); // NOCS (MagicNumberCheck)
-				this.psInsertMonitoringData.setString(2, execRecord.getClassName() + "." + execRecord.getOperationName()); // NOCS (MagicNumberCheck)
+				this.psInsertMonitoringData.setString(2, execRecord.getOperationSignature()); // NOCS (MagicNumberCheck)
 				this.psInsertMonitoringData.setString(3, execRecord.getSessionId()); // NOCS (MagicNumberCheck)
 				this.psInsertMonitoringData.setLong(4, execRecord.getTraceId()); // NOCS (MagicNumberCheck)
 				this.psInsertMonitoringData.setLong(5, execRecord.getTin()); // NOCS (MagicNumberCheck)

@@ -165,10 +165,12 @@ public class ControlServlet extends HttpServlet {
 				ControlServlet.SESSION_REGISTRY.storeThreadLocalSessionId(request.getSession(true).getId());
 				ControlServlet.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
 				for (int i = 0; i < 12; i++) { // NOCS
-					ControlServlet.CTRL_INST.newMonitoringRecord(new OperationExecutionRecord("kieker.monitoring.controlServlet.ControlServlet", // NOPMD
-							"processRequest(HttpServletRequest,HttpServletResponse)", ControlServlet.SESSION_REGISTRY.recallThreadLocalSessionId(),
-							ControlServlet.CF_REGISTRY.recallThreadLocalTraceId(), ControlServlet.TIMESOURCE.getTime(), ControlServlet.TIMESOURCE.getTime(),
-							ControlServlet.CTRL_INST.getHostName(), i, i));
+					ControlServlet.CTRL_INST
+							.newMonitoringRecord(new OperationExecutionRecord(
+									"protected void kieker.monitoring.controlServlet.ControlServlet.processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)",
+									ControlServlet.SESSION_REGISTRY.recallThreadLocalSessionId(),
+									ControlServlet.CF_REGISTRY.recallThreadLocalTraceId(), ControlServlet.TIMESOURCE.getTime(), ControlServlet.TIMESOURCE.getTime(),
+									ControlServlet.CTRL_INST.getHostName(), i, i));
 				}
 				ControlServlet.CF_REGISTRY.unsetThreadLocalTraceId();
 				ControlServlet.SESSION_REGISTRY.unsetThreadLocalSessionId();

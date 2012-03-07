@@ -60,8 +60,8 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 
 	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPResponseInInterceptor.class);
 	private static final IMonitoringController CTRL_INST = MonitoringController.getInstance();
-	private static final String COMPONENT_NAME = OperationExecutionSOAPResponseInInterceptor.class.getName();
-	private static final String OP_NAME = "handleMessage(SoapMessage msg)";
+	private static final String SIGNATURE = "public void " + OperationExecutionSOAPResponseInInterceptor.class.getName()
+			+ ".handleMessage(org.apache.cxf.message.Message)";
 
 	public OperationExecutionSOAPResponseInInterceptor() {
 		// nothing to do
@@ -142,9 +142,8 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			}
 
 			// Log this execution
-			final OperationExecutionRecord rec = new OperationExecutionRecord(OperationExecutionSOAPResponseInInterceptor.COMPONENT_NAME,
-					OperationExecutionSOAPResponseInInterceptor.OP_NAME, mySessionId, myTraceId, myTin, myTout, OperationExecutionSOAPResponseInInterceptor.VM_NAME,
-					myEoi, myEss);
+			final OperationExecutionRecord rec = new OperationExecutionRecord(OperationExecutionSOAPResponseInInterceptor.SIGNATURE, mySessionId, myTraceId, myTin,
+					myTout, OperationExecutionSOAPResponseInInterceptor.VM_NAME, myEoi, myEss);
 			rec.setExperimentId(OperationExecutionSOAPResponseInInterceptor.CTRL_INST.getExperimentId());
 			OperationExecutionSOAPResponseInInterceptor.CTRL_INST.newMonitoringRecord(rec);
 

@@ -42,7 +42,7 @@ public class Bookstore {
 		final long tout = Bookstore.MONITORING_CONTROLLER.getTimeSource().getTime();
 		final OperationExecutionRecord e =
 				new OperationExecutionRecord(
-						Catalog.class.getName(), "getBook(..)",
+						"public void kieker.examples.userguide.ch2bookstore.manual.getBook(boolean)",
 						tin, tout);
 		Bookstore.MONITORING_CONTROLLER.newMonitoringRecord(e);
 

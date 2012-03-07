@@ -61,8 +61,8 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 
 	protected static final String VM_NAME = OperationExecutionSOAPResponseOutInterceptor.CRTR_INST.getHostName();
 
-	private static final String COMPONENT_NAME = OperationExecutionSOAPResponseOutInterceptor.class.getName();
-	private static final String OP_NAME = "handleMessage(SoapMessage msg)";
+	private static final String SIGNATURE = "public void " + OperationExecutionSOAPResponseOutInterceptor.class.getName()
+			+ ".handleMessage(org.apache.cxf.binding.soap.SoapMessage)";
 
 	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPResponseOutInterceptor.class);
 
@@ -111,9 +111,8 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 		this.unsetKiekerThreadLocalData();
 
 		/* Log this execution */
-		final OperationExecutionRecord rec = new OperationExecutionRecord(OperationExecutionSOAPResponseOutInterceptor.COMPONENT_NAME,
-				OperationExecutionSOAPResponseOutInterceptor.OP_NAME, sessionID, traceId, tin, tout, OperationExecutionSOAPResponseOutInterceptor.VM_NAME, myEoi,
-				myEss);
+		final OperationExecutionRecord rec = new OperationExecutionRecord(OperationExecutionSOAPResponseOutInterceptor.SIGNATURE, sessionID, traceId, tin, tout,
+				OperationExecutionSOAPResponseOutInterceptor.VM_NAME, myEoi, myEss);
 		rec.setExperimentId(OperationExecutionSOAPResponseOutInterceptor.CRTR_INST.getExperimentId());
 		OperationExecutionSOAPResponseOutInterceptor.CRTR_INST.newMonitoringRecord(rec);
 

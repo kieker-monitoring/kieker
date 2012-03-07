@@ -57,9 +57,8 @@ import kieker.monitoring.timer.ITimeSource;
  * @author Marco Luebcke
  */
 public class OperationExecutionRegistrationAndLoggingFilter implements Filter, IMonitoringProbe {
-
-	private static final String COMPONENT_NAME = OperationExecutionRegistrationAndLoggingFilter.class.getName();
-	private static final String OP_NAME = "doFilter(ServletRequest request, ServletResponse response, FilterChain chain)";
+	private static final String SIGNATURE = "public void " + OperationExecutionRegistrationAndLoggingFilter.class.getName()
+			+ ".doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain)";
 	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	private static final IMonitoringController CTRL_INST = MonitoringController.getInstance();
@@ -99,8 +98,7 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 		final int eoi = 0; /* this is executionOrderIndex-th execution in this trace */
 		final int ess = 0; /* this is the height in the dynamic call tree of this execution */
 		if (request instanceof HttpServletRequest) {
-			execData = new OperationExecutionRecord(OperationExecutionRegistrationAndLoggingFilter.COMPONENT_NAME,
-					OperationExecutionRegistrationAndLoggingFilter.OP_NAME,
+			execData = new OperationExecutionRecord(OperationExecutionRegistrationAndLoggingFilter.SIGNATURE,
 					OperationExecutionRegistrationAndLoggingFilter.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId() /* traceId, -1 if entry point */);
 			execData.setSessionId(this.getSessionId((HttpServletRequest) request));
 			if (execData.getSessionId() == null) {

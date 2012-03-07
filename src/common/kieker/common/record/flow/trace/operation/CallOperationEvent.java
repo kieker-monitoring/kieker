@@ -20,7 +20,6 @@
 
 package kieker.common.record.flow.trace.operation;
 
-
 /**
  * @author Andre van Hoorn, Holger Knoche, Jan Waller
  */
@@ -30,25 +29,26 @@ public final class CallOperationEvent extends AbstractOperationEvent {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
-		String.class, // OperationEvent.operationName
-		String.class, // calleeOperationName
+		String.class, // OperationEvent.operationSiganture
+		String.class, // calleeOperationSiganture
 	};
 
-	private final String calleeOperationName;
+	private final String calleeOperationSiganture;
 
-	public CallOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String callerOperationName, final String calleeOperationName) {
-		super(timestamp, traceId, orderIndex, callerOperationName);
-		this.calleeOperationName = calleeOperationName;
+	public CallOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String callerOperationSiganture,
+			final String calleeOperationSiganture) {
+		super(timestamp, traceId, orderIndex, callerOperationSiganture);
+		this.calleeOperationSiganture = calleeOperationSiganture;
 	}
 
 	public CallOperationEvent(final Object[] values) {
 		super(values, CallOperationEvent.TYPES); // values[0..3]
-		this.calleeOperationName = (String) values[4];
+		this.calleeOperationSiganture = (String) values[4];
 	}
 
 	@Override
 	public final Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getCallerOperationName(), this.getCalleeOperationName() };
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getCallerOperationName(), this.getCalleeOperationSiganture() };
 	}
 
 	@Override
@@ -57,10 +57,10 @@ public final class CallOperationEvent extends AbstractOperationEvent {
 	}
 
 	public final String getCallerOperationName() {
-		return this.getOperationName();
+		return this.getOperationSignature();
 	}
 
-	public final String getCalleeOperationName() {
-		return this.calleeOperationName;
+	public final String getCalleeOperationSiganture() {
+		return this.calleeOperationSiganture;
 	}
 }

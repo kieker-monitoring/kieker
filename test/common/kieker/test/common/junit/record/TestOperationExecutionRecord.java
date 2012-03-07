@@ -40,12 +40,11 @@ public class TestOperationExecutionRecord extends TestCase { // NOCS (MissingCto
 	@Test
 	public void testSerializeDeserializeEquals() {
 		final OperationExecutionRecord r1 = new OperationExecutionRecord();
-		r1.setClassName("p1.p2.p3.componentname"); // NOPMD (string literal)
+		r1.setOperationSignature("public void p1.p2.p3.componentname.operation(boolean, int)"); // NOPMD (string literal)
 		r1.setEoi(1); // NOCS (MagicNumberCheck)
 		r1.setEss(2); // NOCS (MagicNumberCheck)
 		r1.setExperimentId(55); // NOCS (MagicNumberCheck)
 		r1.setEntryPoint(true);
-		r1.setOperationName("operation(boolean arg1, int arg2)"); // NOPMD (string literal)
 		r1.setRetVal(new Object());
 		r1.setSessionId("XXLJHDJHDHF"); // NOPMD (string literal)
 		r1.setTin(5577376); // NOCS (MagicNumberCheck)
@@ -68,12 +67,11 @@ public class TestOperationExecutionRecord extends TestCase { // NOCS (MissingCto
 	@Test
 	public void testEqualsEqualVariablesValues() {
 		final OperationExecutionRecord r1 = new OperationExecutionRecord();
-		r1.setClassName("p1.p2.p3.componentname");
+		r1.setOperationSignature("public void p1.p2.p3.componentname.operation(boolean, int)");
 		r1.setEoi(1); // NOCS (MagicNumberCheck)
 		r1.setEss(2); // NOCS (MagicNumberCheck)
 		r1.setExperimentId(55); // NOCS (MagicNumberCheck)
 		r1.setEntryPoint(true);
-		r1.setOperationName("operation(boolean arg1, int arg2)");
 		r1.setRetVal(new Object());
 		r1.setSessionId("XXLJHDJHDHF");
 		r1.setTin(5577376); // NOCS (MagicNumberCheck)
@@ -82,12 +80,11 @@ public class TestOperationExecutionRecord extends TestCase { // NOCS (MissingCto
 		r1.setHostName("myVM");
 
 		final OperationExecutionRecord r2 = new OperationExecutionRecord();
-		r2.setClassName("p1.p2.p3.componentname");
+		r2.setOperationSignature("public void p1.p2.p3.componentname.operation(boolean, int)");
 		r2.setEoi(1); // NOCS (MagicNumberCheck)
 		r2.setEss(2); // NOCS (MagicNumberCheck)
 		r2.setExperimentId(55); // NOCS (MagicNumberCheck)
 		r2.setEntryPoint(true);
-		r2.setOperationName("operation(boolean arg1, int arg2)");
 		r2.setRetVal(new Object());
 		r2.setSessionId("XXLJHDJHDHF");
 		r2.setTin(5577376); // NOCS (MagicNumberCheck)
@@ -106,12 +103,11 @@ public class TestOperationExecutionRecord extends TestCase { // NOCS (MissingCto
 	@Test
 	public void testEqualsNullVariableValues() {
 		final OperationExecutionRecord r1 = new OperationExecutionRecord();
-		r1.setClassName("p1.p2.p3.componentname");
+		r1.setOperationSignature("public void p1.p2.p3.componentname.operation(boolean, int)");
 		r1.setEoi(1); // NOCS (MagicNumberCheck)
 		r1.setEss(2); // NOCS (MagicNumberCheck)
 		r1.setExperimentId(55); // NOCS (MagicNumberCheck)
 		r1.setEntryPoint(true);
-		r1.setOperationName("operation(boolean arg1, int arg2)");
 		r1.setRetVal(new Object());
 		r1.setSessionId("XXLJHDJHDHF");
 		r1.setTin(5577376); // NOCS (MagicNumberCheck)
@@ -120,12 +116,11 @@ public class TestOperationExecutionRecord extends TestCase { // NOCS (MissingCto
 		r1.setHostName("myVM");
 
 		final OperationExecutionRecord r2 = new OperationExecutionRecord();
-		r2.setClassName("p1.p2.p3.componentname");
+		r2.setOperationSignature("public void p1.p2.p3.componentname.operation(boolean, int)");
 		r2.setEoi(1); // NOCS (MagicNumberCheck)
 		r2.setEss(2); // NOCS (MagicNumberCheck)
 		r2.setExperimentId(55); // NOCS (MagicNumberCheck)
 		r2.setEntryPoint(true);
-		r2.setOperationName("operation(boolean arg1, int arg2)");
 		r2.setRetVal(new Object());
 		r2.setSessionId("XXLJHDJHDHF");
 		r2.setTin(5577376); // NOCS (MagicNumberCheck)
@@ -136,25 +131,25 @@ public class TestOperationExecutionRecord extends TestCase { // NOCS (MissingCto
 		Assert.assertEquals(r1, r2);
 
 		/* Modification in r1 */
-		final String oldComponentName1 = r1.getClassName();
-		r1.setClassName(null);
+		final String oldOperationSignature1 = r1.getOperationSignature();
+		r1.setOperationSignature(null);
 		Assert.assertFalse(r1.equals(r2));
-		r1.setClassName(oldComponentName1);
+		r1.setOperationSignature(oldOperationSignature1);
 		Assert.assertEquals(r1, r2);
 
 		/* Modification in r2 */
-		final String oldComponentName2 = r2.getClassName();
-		r2.setClassName(null);
+		final String oldOperationSignature2 = r2.getOperationSignature();
+		r2.setOperationSignature(null);
 		Assert.assertFalse(r1.equals(r2));
-		r2.setClassName(oldComponentName2);
+		r2.setOperationSignature(oldOperationSignature2);
 		Assert.assertEquals(r1, r2);
 
 		/* Modification in both */
-		r1.setClassName(null);
-		r2.setClassName(null);
+		r1.setOperationSignature(null);
+		r2.setOperationSignature(null);
 		Assert.assertEquals(r1, r2);
-		r1.setClassName(oldComponentName1);
-		r2.setClassName(oldComponentName2);
+		r1.setOperationSignature(oldOperationSignature1);
+		r2.setOperationSignature(oldOperationSignature2);
 		Assert.assertEquals(r1, r2);
 	}
 
@@ -166,12 +161,11 @@ public class TestOperationExecutionRecord extends TestCase { // NOCS (MissingCto
 	@Test
 	public void testEqualsDifferentVariablesValues() {
 		final OperationExecutionRecord r1 = new OperationExecutionRecord();
-		r1.setClassName("p1.p2.p3.componentname");
+		r1.setOperationSignature("public void p1.p2.p3.componentname.operation(boolean, int)");
 		r1.setEoi(1); // NOCS (MagicNumberCheck)
 		r1.setEss(2); // NOCS (MagicNumberCheck)
 		r1.setExperimentId(55); // NOCS (MagicNumberCheck)
 		r1.setEntryPoint(true);
-		r1.setOperationName("operation(boolean arg1, int arg2)");
 		r1.setRetVal(new Object());
 		r1.setSessionId("XXLJHDJHDHF");
 		r1.setTin(5577376); // NOCS (MagicNumberCheck)
@@ -180,12 +174,11 @@ public class TestOperationExecutionRecord extends TestCase { // NOCS (MissingCto
 		r1.setHostName("myVM");
 
 		final OperationExecutionRecord r2 = new OperationExecutionRecord();
-		r2.setClassName("p1.p2.p3.componentname");
+		r2.setOperationSignature("public void p1.p2.p3.componentname.operation(boolean, int)");
 		r2.setEoi(1); // NOCS (MagicNumberCheck)
 		r2.setEss(2); // NOCS (MagicNumberCheck)
 		r2.setExperimentId(55); // NOCS (MagicNumberCheck)
 		r2.setEntryPoint(true);
-		r2.setOperationName("operation(boolean arg1, int arg2)");
 		r2.setRetVal(new Object());
 		r2.setSessionId("XXLJHDJHDHF");
 		r2.setTin(5577376); // NOCS (MagicNumberCheck)
@@ -195,11 +188,11 @@ public class TestOperationExecutionRecord extends TestCase { // NOCS (MissingCto
 
 		Assert.assertEquals(r1, r2);
 
-		/* Modification of className */
-		final String oldComponentName = r2.getClassName();
-		r2.setClassName(r2.getClassName() + "_");
+		/* Modification of operationSignature */
+		final String oldOperationSignature = r2.getOperationSignature();
+		r2.setOperationSignature(r2.getOperationSignature() + "_");
 		Assert.assertFalse(r1.equals(r2));
-		r2.setClassName(oldComponentName);
+		r2.setOperationSignature(oldOperationSignature);
 		Assert.assertEquals(r1, r2);
 
 		/* Modification of eoi */
@@ -214,13 +207,6 @@ public class TestOperationExecutionRecord extends TestCase { // NOCS (MissingCto
 		r2.setEss(r2.getEss() + 1);
 		Assert.assertFalse(r1.equals(r2));
 		r2.setEss(oldEss);
-		Assert.assertEquals(r1, r2);
-
-		/* Modification of operationName */
-		final String oldOpname = r2.getOperationName();
-		r2.setOperationName(r2.getOperationName() + "_");
-		Assert.assertFalse(r1.equals(r2));
-		r2.setOperationName(oldOpname);
 		Assert.assertEquals(r1, r2);
 
 		/* Modification of sessionId */

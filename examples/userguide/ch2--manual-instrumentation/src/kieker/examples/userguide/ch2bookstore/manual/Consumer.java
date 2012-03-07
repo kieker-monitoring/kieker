@@ -49,11 +49,9 @@ public class Consumer extends AbstractAnalysisPlugin {
 		/* Now compare with the response time threshold: */
 		if (responseTime > this.maxResponseTime) {
 			System.err.println("maximum response time exceeded by "
-					+ (responseTime - this.maxResponseTime) + " ns: " + rec.getClassName()
-					+ "." + rec.getOperationName());
+					+ (responseTime - this.maxResponseTime) + " ns: " + rec.getOperationSignature());
 		} else {
-			System.out.println("response time accepted: " + rec.getClassName()
-					+ "." + rec.getOperationName());
+			System.out.println("response time accepted: " + rec.getOperationSignature());
 		}
 		return;
 	}

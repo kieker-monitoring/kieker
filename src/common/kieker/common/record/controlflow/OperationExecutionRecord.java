@@ -29,10 +29,10 @@ import kieker.common.record.IMonitoringRecord;
  * @author Andre van Hoorn, Jan Waller
  */
 public final class OperationExecutionRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	private static final long serialVersionUID = -2323438859915450903L;
+	private static final long serialVersionUID = -3963151278085958619L;
 	private static final Class<?>[] TYPES = {
 		int.class, // experimentId
-		String.class, // component + op
+		String.class, // operationSignature
 		String.class, // sessionId
 		long.class, // traceId
 		long.class, // tin
@@ -45,8 +45,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 
 	private volatile int experimentId = -1;
 	private volatile String hostName = OperationExecutionRecord.DEFAULT_VALUE;
-	private volatile String className = OperationExecutionRecord.DEFAULT_VALUE;
-	private volatile String operationName = OperationExecutionRecord.DEFAULT_VALUE;
+	private volatile String operationSignature = OperationExecutionRecord.DEFAULT_VALUE;
 	private volatile String sessionId = OperationExecutionRecord.DEFAULT_VALUE;
 	private volatile long traceId = -1;
 	private volatile long tin = -1;
@@ -75,69 +74,59 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 		// nothing to do
 	}
 
-	/**
-	 * 
-	 * @param componentName
-	 * @param methodName
-	 * @param traceId
-	 */
-	public OperationExecutionRecord(final String componentName, final String methodName, final long traceId) {
-		this.className = componentName;
-		this.operationName = methodName;
+	public OperationExecutionRecord(final String operationSignature, final long traceId) {
+		this.operationSignature = operationSignature;
 		this.traceId = traceId;
 	}
 
-	/**
-	 * 
-	 * @param componentName
-	 * @param opName
-	 * @param traceId
-	 * @param tin
-	 * @param tout
-	 */
+	public OperationExecutionRecord(final String operationSignature, final long traceId, final long tin, final long tout) {
+		this(operationSignature, traceId);
+		this.tin = tin;
+		this.tout = tout;
+	}
+
+	public OperationExecutionRecord(final String operationSignature, final long tin, final long tout) {
+		this(operationSignature, -1, tin, tout);
+	}
+
+	// public OperationExecutionRecord(final String operationSignature, final String sessionId, final long traceId, final long tin, final long tout) {
+	// this(operationSignature, traceId, tin, tout);
+	// this.sessionId = sessionId;
+	// }
+
+	public OperationExecutionRecord(final String operationSignature, final String sessionId, final long traceId, final long tin, final long tout,
+			final String vnName, final int eoi, final int ess) {
+		this(operationSignature, sessionId, traceId, tin, tout);
+		this.hostName = vnName;
+		this.eoi = eoi;
+		this.ess = ess;
+	}
+
+	@Deprecated
+	public OperationExecutionRecord(final String componentName, final String methodName, final long traceId) {
+		this.operationSignature = componentName + '.' + methodName;
+		this.traceId = traceId;
+	}
+
+	@Deprecated
 	public OperationExecutionRecord(final String componentName, final String opName, final long traceId, final long tin, final long tout) {
 		this(componentName, opName, traceId);
 		this.tin = tin;
 		this.tout = tout;
 	}
 
-	/**
-	 * 
-	 * @param componentName
-	 * @param opName
-	 * @param tin
-	 * @param tout
-	 */
+	@Deprecated
 	public OperationExecutionRecord(final String componentName, final String opName, final long tin, final long tout) {
 		this(componentName, opName, -1, tin, tout);
 	}
 
-	/**
-	 * 
-	 * @param componentName
-	 * @param opName
-	 * @param sessionId
-	 * @param traceId
-	 * @param tin
-	 * @param tout
-	 */
+	@Deprecated
 	public OperationExecutionRecord(final String componentName, final String opName, final String sessionId, final long traceId, final long tin, final long tout) {
 		this(componentName, opName, traceId, tin, tout);
 		this.sessionId = sessionId;
 	}
 
-	/**
-	 * 
-	 * @param componentName
-	 * @param opName
-	 * @param sessionId
-	 * @param traceId
-	 * @param tin
-	 * @param tout
-	 * @param vnName
-	 * @param eoi
-	 * @param ess
-	 */
+	@Deprecated
 	public OperationExecutionRecord(final String componentName, final String opName, final String sessionId, final long traceId, final long tin, final long tout,
 			final String vnName, final int eoi, final int ess) {
 		this(componentName, opName, sessionId, traceId, tin, tout);
@@ -147,32 +136,17 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	}
 
 	public OperationExecutionRecord(final Object[] values) {
-		final Object[] myValues = values.clone();
-		AbstractMonitoringRecord.checkArray(myValues, OperationExecutionRecord.TYPES);
+		AbstractMonitoringRecord.checkArray(values, OperationExecutionRecord.TYPES);
 		try {
-			this.experimentId = (Integer) myValues[0];
-			final String name = (String) myValues[1];
-			final int posParen = name.lastIndexOf('(');
-			int posDot;
-			if (posParen != -1) {
-				posDot = name.substring(0, posParen).lastIndexOf('.');
-			} else {
-				posDot = name.lastIndexOf('.');
-			}
-			if (posDot == -1) {
-				this.className = "";
-				this.operationName = name;
-			} else {
-				this.className = name.substring(0, posDot);
-				this.operationName = name.substring(posDot + 1);
-			}
-			this.sessionId = (String) myValues[2]; // NOCS
-			this.traceId = (Long) myValues[3]; // NOCS
-			this.tin = (Long) myValues[4]; // NOCS
-			this.tout = (Long) myValues[5]; // NOCS
-			this.hostName = (String) myValues[6]; // NOCS
-			this.eoi = (Integer) myValues[7]; // NOCS
-			this.ess = (Integer) myValues[8]; // NOCS
+			this.experimentId = (Integer) values[0];
+			this.operationSignature = (String) values[1]; // NOCS
+			this.sessionId = (String) values[2]; // NOCS
+			this.traceId = (Long) values[3]; // NOCS
+			this.tin = (Long) values[4]; // NOCS
+			this.tout = (Long) values[5]; // NOCS
+			this.hostName = (String) values[6]; // NOCS
+			this.eoi = (Integer) values[7]; // NOCS
+			this.ess = (Integer) values[8]; // NOCS
 		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
@@ -182,7 +156,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	public final Object[] toArray() {
 		return new Object[] {
 			this.experimentId,
-			this.className + "." + this.operationName,
+			this.operationSignature,
 			(this.sessionId == null) ? "NULL" : this.sessionId, // NOCS
 			this.traceId,
 			this.tin,
@@ -233,34 +207,76 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 		this.hostName = hostName;
 	}
 
+	public String getOperationSignature() {
+		return this.operationSignature;
+	}
+
+	public void setOperationSignature(final String operationSignature) {
+		this.operationSignature = operationSignature;
+	}
+
 	/**
 	 * @return the className
 	 */
+	@Deprecated
 	public final String getClassName() {
-		return this.className;
+		final String name = this.getOperationSignature();
+		final int posParen = name.lastIndexOf('(');
+		int posDot;
+		if (posParen != -1) {
+			posDot = name.substring(0, posParen).lastIndexOf('.');
+		} else {
+			posDot = name.lastIndexOf('.');
+		}
+		if (posDot == -1) {
+			return "";
+		} else {
+			final String firstpart = name.substring(0, posDot);
+			final int posSpace = firstpart.lastIndexOf(' ');
+			if (posSpace == -1) {
+				return firstpart;
+			} else {
+				return firstpart.substring(posSpace + 1, firstpart.length());
+			}
+		}
 	}
 
 	/**
 	 * @param className
 	 *            the className to set
 	 */
+	@Deprecated
 	public final void setClassName(final String className) {
-		this.className = className;
+		throw new UnsupportedOperationException();
 	}
 
 	/**
 	 * @return the operationName
 	 */
+	@Deprecated
 	public final String getOperationName() {
-		return this.operationName;
+		final String name = this.getOperationSignature();
+		final int posParen = name.lastIndexOf('(');
+		int posDot;
+		if (posParen != -1) {
+			posDot = name.substring(0, posParen).lastIndexOf('.');
+		} else {
+			posDot = name.lastIndexOf('.');
+		}
+		if (posDot == -1) {
+			return name;
+		} else {
+			return name.substring(posDot + 1);
+		}
 	}
 
 	/**
 	 * @param operationName
 	 *            the operationName to set
 	 */
+	@Deprecated
 	public final void setOperationName(final String operationName) {
-		this.operationName = operationName;
+		throw new UnsupportedOperationException();
 	}
 
 	/**

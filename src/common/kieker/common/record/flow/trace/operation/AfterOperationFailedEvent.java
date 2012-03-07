@@ -29,14 +29,14 @@ public final class AfterOperationFailedEvent extends AbstractOperationEvent {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
-		String.class, // OperationEvent.operationName
+		String.class, // OperationEvent.operationSiganture
 		String.class, // Exception
 	};
 
 	private final String cause;
 
-	public AfterOperationFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String operationName, final String cause) {
-		super(timestamp, traceId, orderIndex, operationName);
+	public AfterOperationFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSiganture, final String cause) {
+		super(timestamp, traceId, orderIndex, operationSiganture);
 		this.cause = cause;
 	}
 
@@ -47,7 +47,7 @@ public final class AfterOperationFailedEvent extends AbstractOperationEvent {
 
 	@Override
 	public final Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationName(), this.cause };
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.cause };
 	}
 
 	@Override

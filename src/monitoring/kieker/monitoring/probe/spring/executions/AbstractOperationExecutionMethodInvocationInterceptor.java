@@ -58,37 +58,8 @@ public abstract class AbstractOperationExecutionMethodInvocationInterceptor impl
 	}
 
 	protected OperationExecutionRecord initExecutionData(final MethodInvocation invocation) {
-		final long traceId = AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.recallThreadLocalTraceId();
-
-		final StringBuilder sb = new StringBuilder().append(invocation.getMethod().getName());
-		sb.append("(");
-		boolean first = true;
-		for (final Class<?> clazz : invocation.getMethod().getParameterTypes()) {
-			if (!first) {
-				sb.append(",");
-			} else {
-				first = false;
-			}
-			sb.append(clazz.getSimpleName());
-		}
-		sb.append(")");
-		final String opname = sb.toString();
-
-		String componentName;
-		if (this.useRuntimeClassname) {
-			/* Use the name of the runtime class */
-			componentName = invocation.getThis().getClass().getName();
-		} else {
-			/* Use the name of the declaring class or the interface */
-			componentName = invocation.getMethod().getDeclaringClass().getName();
-		}
-
-		final OperationExecutionRecord execData = new OperationExecutionRecord(componentName /* component */, opname /* operation */, traceId /*
-																																			 * -1
-																																			 * if
-																																			 * entry
-																																			 * point
-																																			 */);
+		final OperationExecutionRecord execData = new OperationExecutionRecord(invocation.getMethod().toString(),
+				AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.recallThreadLocalTraceId() /* -1 if entry point */);
 		execData.setEntryPoint(false);
 		if (execData.getTraceId() == -1) { // -1 if entry points
 			execData.setTraceId(AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId());

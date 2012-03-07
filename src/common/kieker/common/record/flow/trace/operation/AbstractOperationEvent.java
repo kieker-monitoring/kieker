@@ -28,19 +28,19 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 public abstract class AbstractOperationEvent extends AbstractTraceEvent {
 	private static final long serialVersionUID = 1L;
 
-	private final String operationName;
+	private final String operationSignature;
 
 	public AbstractOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationName) {
 		super(timestamp, traceId, orderIndex);
-		this.operationName = operationName;
+		this.operationSignature = operationName;
 	}
 
 	public AbstractOperationEvent(final Object[] values, final Class<?>[] valueTypes) {
 		super(values, valueTypes); // values[0..2]
-		this.operationName = (String) values[3];
+		this.operationSignature = (String) values[3];
 	}
 
-	public final String getOperationName() {
-		return this.operationName;
+	public final String getOperationSignature() {
+		return this.operationSignature;
 	}
 }

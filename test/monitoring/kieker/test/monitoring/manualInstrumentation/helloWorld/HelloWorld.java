@@ -42,7 +42,7 @@ public final class HelloWorld {
 		final long startTime = timeSource.getTime();
 		HelloWorld.doSomething();
 		final long endTime = timeSource.getTime();
-		monitoringController.newMonitoringRecord(new OperationExecutionRecord("kieker.component", "method", 1, startTime, endTime));
+		monitoringController.newMonitoringRecord(new OperationExecutionRecord("kieker.component.method()", 1, startTime, endTime));
 	}
 
 	private static void doSomething() {
