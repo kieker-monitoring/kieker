@@ -21,7 +21,9 @@
 package kieker.tools.traceAnalysis.plugins.flow;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 import kieker.analysis.plugin.annotation.InputPort;
@@ -77,6 +79,8 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 		int nextEoi = 0;
 		int curEss = -1;
 
+		final Set<BeforeOperationEvent> assumedEvents = new HashSet<BeforeOperationEvent>();
+
 		for (final AbstractTraceEvent e : eventTrace) {
 			/* Make sure that order indices increment by 1 */
 			if (e.getOrderIndex() != (lastOrderIndex + 1)) {
@@ -109,6 +113,12 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 							nextEoi--;
 							curEss--;
 						}
+						else {
+							assumedEvents.add(curBeforeOperationEvent);
+						}
+					}
+					else {
+						assumedEvents.add(curBeforeOperationEvent);
 					}
 				}
 			} else if (e instanceof CallOperationEvent) {
@@ -122,7 +132,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 							/* If two subsequent calls from the same caller, we assume the first call to have returned */
 							eventStack.pop();
 							final Execution execution = this.callOperationToExecution(peekCallEvent, execTrace.getTraceId(),
-									eoiStack.pop(), curEss--, peekCallEvent.getTimestamp(), e.getTimestamp());
+									eoiStack.pop(), curEss--, peekCallEvent.getTimestamp(), e.getTimestamp(), true);
 							try {
 								execTrace.add(execution);
 							} catch (final InvalidTraceException ex) {
@@ -165,7 +175,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 					}
 
 					final Execution execution = this.beforeOperationToExecution(poppedBeforeEvent, execTrace.getTraceId(),
-							eoiStack.pop(), curEss--, poppedBeforeEvent.getTimestamp(), e.getTimestamp());
+							eoiStack.pop(), curEss--, poppedBeforeEvent.getTimestamp(), e.getTimestamp(), assumedEvents.contains(poppedBeforeEvent));
 					execsToAdd.add(execution);
 				}
 
@@ -173,7 +183,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 				if (!eventStack.isEmpty() && (eventStack.peek() instanceof CallOperationEvent)) {
 					final CallOperationEvent poppedCallEvent = (CallOperationEvent) eventStack.pop();
 					final Execution execution = this.callOperationToExecution(poppedCallEvent, execTrace.getTraceId(),
-							eoiStack.pop(), curEss--, poppedCallEvent.getTimestamp(), e.getTimestamp());
+							eoiStack.pop(), curEss--, poppedCallEvent.getTimestamp(), e.getTimestamp(), true);
 					execsToAdd.add(execution);
 				}
 
@@ -213,7 +223,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 	 * @return
 	 */
 	private Execution beforeOperationToExecution(final BeforeOperationEvent event, final long traceId, final int eoi, final int ess,
-			final long tin, final long tout) {
+			final long tin, final long tout, final boolean assumed) {
 		// TODO: hostname and sessionid
 		final String hostName = "<HOST>";
 		final String sessionId = "<SESSION-ID>";
@@ -221,8 +231,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 		final FQComponentNameSignaturePair fqComponentNameSignaturePair = super.splitOperationSignatureStr(event.getOperationSignature());
 
 		return super.createExecutionByEntityNames(hostName, fqComponentNameSignaturePair.getFqClassname(), fqComponentNameSignaturePair.getSignature(),
-				traceId,
-				sessionId, eoi, ess, tin, tout);
+				traceId, sessionId, eoi, ess, tin, tout, assumed);
 	}
 
 	/**
@@ -236,14 +245,14 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 	 * @return
 	 */
 	private Execution callOperationToExecution(final CallOperationEvent event, final long traceId, final int eoi, final int ess,
-			final long tin, final long tout) {
+			final long tin, final long tout, final boolean assumed) {
 		// TODO: hostname and sessionid
 		final String hostName = "<HOST>";
 		final String sessionId = "<SESSION-ID>";
 
 		final FQComponentNameSignaturePair fqComponentNameSignaturePair = super.splitOperationSignatureStr(event.getCalleeOperationSiganture());
 		return super.createExecutionByEntityNames(hostName, fqComponentNameSignaturePair.getFqClassname(),
-				fqComponentNameSignaturePair.getSignature(), traceId, sessionId, eoi, ess, tin, tout);
+				fqComponentNameSignaturePair.getSignature(), traceId, sessionId, eoi, ess, tin, tout, assumed);
 	}
 
 	@Override

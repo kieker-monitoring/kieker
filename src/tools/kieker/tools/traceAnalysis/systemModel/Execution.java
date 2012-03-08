@@ -38,6 +38,8 @@ public class Execution implements IAnalysisEvent {
 	private final long tin;
 	private final long tout;
 
+	private final boolean assumed;
+
 	/**
 	 * Creates a new Execution instance.
 	 * 
@@ -54,7 +56,7 @@ public class Execution implements IAnalysisEvent {
 	 *             iff any of the passed objects is null.
 	 */
 	public Execution(final Operation op, final AllocationComponent allocationComponent, final long traceId, final String sessionId, final int eoi, final int ess,
-			final long tin, final long tout) {
+			final long tin, final long tout, final boolean assumed) {
 		if (op == null) {
 			throw new NullPointerException("argument op must not be null");
 		}
@@ -73,6 +75,7 @@ public class Execution implements IAnalysisEvent {
 		this.ess = ess;
 		this.tin = tin;
 		this.tout = tout;
+		this.assumed = assumed;
 	}
 
 	/**
@@ -90,8 +93,8 @@ public class Execution implements IAnalysisEvent {
 	 *             iff any of the passed objects is null.
 	 */
 	public Execution(final Operation op, final AllocationComponent allocationComponent, final long traceId, final int eoi, final int ess, final long tin,
-			final long tout) {
-		this(op, allocationComponent, traceId, Execution.NO_SESSION_ID, eoi, ess, tin, tout);
+			final long tout, final boolean assumed) {
+		this(op, allocationComponent, traceId, Execution.NO_SESSION_ID, eoi, ess, tin, tout, assumed);
 	}
 
 	public final AllocationComponent getAllocationComponent() {
@@ -130,6 +133,10 @@ public class Execution implements IAnalysisEvent {
 
 	public final long getTraceId() {
 		return this.traceId;
+	}
+
+	public boolean isAssumed() {
+		return this.assumed;
 	}
 
 	@Override

@@ -182,7 +182,7 @@ public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin
 
 	protected final Execution createExecutionByEntityNames(final String executionContainerName, final String componentTypeName,
 			final Signature operationSignature, final long traceId, final String sessionId, final int eoi, final int ess,
-			final long tin, final long tout) {
+			final long tin, final long tout, final boolean assumed) {
 		// final String executionContainerName = execRec.getHostName();
 		// final String componentTypeName = execRec.getClassName();
 		final String assemblyComponentName = componentTypeName;
@@ -220,7 +220,7 @@ public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin
 			allocInst.getAssemblyComponent().getType().addOperation(op);
 		}
 
-		return new Execution(op, allocInst, traceId, sessionId, eoi, ess, tin, tout);
+		return new Execution(op, allocInst, traceId, sessionId, eoi, ess, tin, tout, assumed);
 	}
 
 	protected void printMessage(final String[] lines) {

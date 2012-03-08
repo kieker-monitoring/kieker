@@ -31,6 +31,8 @@ public class WeightedBidirectionalDependencyGraphEdge<T> {
 	private int outgoingWeight = 0;
 	private int incomingWeight = 0;
 
+	private boolean assumed = false;
+
 	public WeightedBidirectionalDependencyGraphEdge() {
 		// nothing to do
 	};
@@ -38,6 +40,14 @@ public class WeightedBidirectionalDependencyGraphEdge<T> {
 	public WeightedBidirectionalDependencyGraphEdge(final DependencyGraphNode<T> source, final DependencyGraphNode<T> destination) {
 		this.source = source;
 		this.destination = destination;
+	}
+
+	public boolean isAssumed() {
+		return this.assumed;
+	}
+
+	public void setAssumed() {
+		this.assumed = true;
 	}
 
 	public final DependencyGraphNode<T> getDestination() {

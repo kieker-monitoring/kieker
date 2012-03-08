@@ -92,13 +92,15 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 		final StringBuilder strBuild = new StringBuilder();
 		// dot code for contained components
 		for (final DependencyGraphNode<AssemblyComponent> node : nodes) {
+			final String fillColor = (node.isAssumed()) ? DotFactory.DOT_FILLCOLOR_GRAY : DotFactory.DOT_FILLCOLOR_WHITE;
+
 			final AssemblyComponent curComponent = node.getEntity();
 			final int curComponentId = node.getId();
 			strBuild.append(DotFactory.createNode("", this.getNodeId(node), (curComponentId == rootComponentId) ? "$" : this.nodeLabel(curComponent), // NOCS
 					(curComponentId == rootComponentId) ? DotFactory.DOT_SHAPE_NONE : DotFactory.DOT_SHAPE_BOX, // NOCS
 					(curComponentId == rootComponentId) ? null : DotFactory.DOT_STYLE_FILLED, // style // NOCS // NOPMD
 					null, // framecolor
-					(curComponentId == rootComponentId) ? null : DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor // NOCS //NOPMD
+					(curComponentId == rootComponentId) ? null : fillColor, // fillcolor // NOCS //NOPMD
 					null, // fontcolor
 					DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 					null, // imagefilename
@@ -165,14 +167,27 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 			DependencyGraphNode<AssemblyComponent> receiverNode = ComponentDependencyGraphPluginAssembly.this.dependencyGraph.getNode(receiverComponent.getId());
 			if (senderNode == null) {
 				senderNode = new DependencyGraphNode<AssemblyComponent>(senderComponent.getId(), senderComponent);
+
+				if (m.getSendingExecution().isAssumed()) {
+					senderNode.setAssumed();
+				}
+
 				ComponentDependencyGraphPluginAssembly.this.dependencyGraph.addNode(senderNode.getId(), senderNode);
 			}
 			if (receiverNode == null) {
 				receiverNode = new DependencyGraphNode<AssemblyComponent>(receiverComponent.getId(), receiverComponent);
+
+				if (m.getReceivingExecution().isAssumed()) {
+					receiverNode.setAssumed();
+				}
+
 				ComponentDependencyGraphPluginAssembly.this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
 			}
-			senderNode.addOutgoingDependency(receiverNode);
-			receiverNode.addIncomingDependency(senderNode);
+
+			final boolean assumed = (senderNode.isAssumed() || receiverNode.isAssumed());
+
+			senderNode.addOutgoingDependency(receiverNode, assumed);
+			receiverNode.addIncomingDependency(senderNode, assumed);
 		}
 		ComponentDependencyGraphPluginAssembly.this.reportSuccess(t.getTraceId());
 	}

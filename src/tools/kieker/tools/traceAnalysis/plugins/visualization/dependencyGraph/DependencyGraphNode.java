@@ -21,6 +21,7 @@
 package kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -34,6 +35,12 @@ public class DependencyGraphNode<T> {
 	private final int id;
 	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> incomingDependencies = new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD
 	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> outgoingDependencies = new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD
+
+	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedIncomingDependencies = new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD
+	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedOutgoingDependencies = new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD
+
+	private boolean assumed = false;
+	private final Map<String, NodeDecoration> decorations = new HashMap<String, NodeDecoration>();
 
 	public DependencyGraphNode(final int id, final T entity) {
 		this.id = id;
@@ -52,24 +59,68 @@ public class DependencyGraphNode<T> {
 		return this.outgoingDependencies.values();
 	}
 
+	public Collection<WeightedBidirectionalDependencyGraphEdge<T>> getAssumedIncomingDependencies() {
+		return this.assumedIncomingDependencies.values();
+	}
+
+	public Collection<WeightedBidirectionalDependencyGraphEdge<T>> getAssumedOutgoingDependencies() {
+		return this.assumedOutgoingDependencies.values();
+	}
+
+	public void setAssumed() {
+		this.assumed = true;
+	}
+
+	public boolean isAssumed() {
+		return this.assumed;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <NDT extends NodeDecoration> NDT getDecoration(final String name) {
+		return (NDT) this.decorations.get(name);
+	}
+
+	public void addDecoration(final String name, final NodeDecoration decoration) {
+		this.decorations.put(name, decoration);
+	}
+
 	public void addOutgoingDependency(final DependencyGraphNode<T> destination) {
-		WeightedBidirectionalDependencyGraphEdge<T> e = this.outgoingDependencies.get(destination.getId());
+		this.addOutgoingDependency(destination, false);
+	}
+
+	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final boolean assumed) {
+		final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = (assumed) ? this.assumedOutgoingDependencies
+				: this.outgoingDependencies;
+
+		WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(destination.getId());
 		if (e == null) {
 			e = new WeightedBidirectionalDependencyGraphEdge<T>();
 			e.setSource(this);
 			e.setDestination(destination);
-			this.outgoingDependencies.put(destination.getId(), e);
+
+			if (assumed) {
+				e.setAssumed();
+			}
+
+			relevantDependencies.put(destination.getId(), e);
 		}
 		e.incOutgoingWeight();
 	}
 
 	public void addIncomingDependency(final DependencyGraphNode<T> source) {
-		WeightedBidirectionalDependencyGraphEdge<T> e = this.incomingDependencies.get(source.getId());
+		this.addIncomingDependency(source, false);
+	}
+
+	public void addIncomingDependency(final DependencyGraphNode<T> source, final boolean assumed) {
+		final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = (assumed) ? this.assumedIncomingDependencies
+				: this.incomingDependencies;
+
+		WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(source.getId());
 		if (e == null) {
 			e = new WeightedBidirectionalDependencyGraphEdge<T>();
 			e.setSource(this);
 			e.setDestination(source);
-			this.incomingDependencies.put(source.getId(), e);
+			relevantDependencies.put(source.getId(), e);
 		}
 		e.incIncomingWeight();
 	}

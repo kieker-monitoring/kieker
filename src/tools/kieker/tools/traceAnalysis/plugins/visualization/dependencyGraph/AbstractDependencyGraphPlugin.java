@@ -67,23 +67,33 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 		return AbstractDependencyGraphPlugin.NODE_PREFIX + n.getId();
 	}
 
+	protected void createEdgesForNode(final DependencyGraphNode<T> node, final Collection<WeightedBidirectionalDependencyGraphEdge<T>> edges, final PrintStream ps,
+			final boolean includeWeights,
+			final boolean plotSelfLoops) {
+
+		for (final WeightedBidirectionalDependencyGraphEdge<T> currentEdge : edges) {
+			final String lineStyle = (currentEdge.isAssumed()) ? DotFactory.DOT_STYLE_DASHED : DotFactory.DOT_STYLE_SOLID;
+
+			final DependencyGraphNode<T> destNode = currentEdge.getDestination();
+			if ((node == destNode) && !plotSelfLoops) {
+				continue;
+			}
+			final StringBuilder strBuild = new StringBuilder(1024); // NOPMD (new in Loop)
+			if (includeWeights) {
+				strBuild.append(DotFactory.createConnection("", this.getNodeId(node), this.getNodeId(destNode),
+						Integer.toString(currentEdge.getOutgoingWeight()), lineStyle, DotFactory.DOT_ARROWHEAD_OPEN));
+			} else {
+				strBuild.append(DotFactory.createConnection("", this.getNodeId(node), this.getNodeId(destNode), lineStyle,
+						DotFactory.DOT_ARROWHEAD_OPEN));
+			}
+			ps.println(strBuild.toString());
+		}
+	}
+
 	protected void dotVertices(final Collection<DependencyGraphNode<T>> nodes, final PrintStream ps, final boolean includeWeights, final boolean plotSelfLoops) {
 		for (final DependencyGraphNode<T> curNode : nodes) {
-			for (final WeightedBidirectionalDependencyGraphEdge<T> outgoingDependency : curNode.getOutgoingDependencies()) {
-				final DependencyGraphNode<T> destNode = outgoingDependency.getDestination();
-				if ((curNode == destNode) && !plotSelfLoops) {
-					continue;
-				}
-				final StringBuilder strBuild = new StringBuilder(1024); // NOPMD (new in Loop)
-				if (includeWeights) {
-					strBuild.append(DotFactory.createConnection("", this.getNodeId(curNode), this.getNodeId(destNode),
-							Integer.toString(outgoingDependency.getOutgoingWeight()), DotFactory.DOT_STYLE_DASHED, DotFactory.DOT_ARROWHEAD_OPEN));
-				} else {
-					strBuild.append(DotFactory.createConnection("", this.getNodeId(curNode), this.getNodeId(destNode), DotFactory.DOT_STYLE_DASHED,
-							DotFactory.DOT_ARROWHEAD_OPEN));
-				}
-				ps.println(strBuild.toString());
-			}
+			this.createEdgesForNode(curNode, curNode.getOutgoingDependencies(), ps, includeWeights, plotSelfLoops);
+			this.createEdgesForNode(curNode, curNode.getAssumedOutgoingDependencies(), ps, includeWeights, plotSelfLoops);
 		}
 	}
 
