@@ -22,6 +22,7 @@ package kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -40,7 +41,7 @@ public class DependencyGraphNode<T> {
 	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedOutgoingDependencies = new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD
 
 	private boolean assumed = false;
-	private final Map<String, NodeDecoration> decorations = new HashMap<String, NodeDecoration>();
+	private final Map<Class<? extends NodeDecoration>, NodeDecoration> decorations = new HashMap<Class<? extends NodeDecoration>, NodeDecoration>();
 
 	public DependencyGraphNode(final int id, final T entity) {
 		this.id = id;
@@ -76,12 +77,12 @@ public class DependencyGraphNode<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <NDT extends NodeDecoration> NDT getDecoration(final String name) {
-		return (NDT) this.decorations.get(name);
+	public <NDT extends NodeDecoration> NDT getDecoration(final Class<? extends NodeDecoration> type) {
+		return (NDT) this.decorations.get(type);
 	}
 
-	public void addDecoration(final String name, final NodeDecoration decoration) {
-		this.decorations.put(name, decoration);
+	public void addDecoration(final NodeDecoration decoration) {
+		this.decorations.put(decoration.getClass(), decoration);
 	}
 
 	public void addOutgoingDependency(final DependencyGraphNode<T> destination) {
@@ -127,5 +128,26 @@ public class DependencyGraphNode<T> {
 
 	public final int getId() {
 		return this.id;
+	}
+
+	public String getFormattedDecorations() {
+		final StringBuilder builder = new StringBuilder();
+		final Iterator<NodeDecoration> decorations = this.decorations.values().iterator();
+
+		while (decorations.hasNext()) {
+			final String currentDecorationText = decorations.next().createFormattedOutput();
+
+			if ((currentDecorationText == null) || currentDecorationText.isEmpty()) {
+				continue;
+			}
+
+			builder.append(currentDecorationText);
+
+			if (decorations.hasNext()) {
+				builder.append("\\n");
+			}
+		}
+
+		return builder.toString();
 	}
 }

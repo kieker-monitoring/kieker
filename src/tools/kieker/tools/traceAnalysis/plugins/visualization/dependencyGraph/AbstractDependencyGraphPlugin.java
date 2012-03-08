@@ -24,7 +24,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
@@ -32,6 +34,7 @@ import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
+import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
@@ -54,6 +57,8 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 
 	protected final DependencyGraph<T> dependencyGraph;
 	private int numGraphsSaved = 0;
+
+	private final List<NodeDecorator> decorators = new ArrayList<NodeDecorator>();
 
 	// TODO Change constructor to plugin-default-constructor
 	public AbstractDependencyGraphPlugin(final Configuration configuration, final DependencyGraph<T> dependencyGraph) {
@@ -123,4 +128,23 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 		System.out.println("Saved " + this.numGraphsSaved + " dependency graph" + (this.numGraphsSaved > 1 ? "s" : "")); // NOCS
 	}
 
+	public void addDecorator(final NodeDecorator decorator) {
+		this.decorators.add(decorator);
+	}
+
+	protected void invokeDecorators(final AbstractMessage message, final DependencyGraphNode<?> sourceNode, final DependencyGraphNode<?> targetNode) {
+		for (final NodeDecorator currentDecorator : this.decorators) {
+			currentDecorator.processMessage(message, sourceNode, targetNode);
+		}
+	}
+
+	protected StringBuilder addDecorationText(final StringBuilder output, final DependencyGraphNode<?> node) {
+		final String decorations = node.getFormattedDecorations();
+		if ((decorations != null) && !decorations.isEmpty()) {
+			output.append("\\n");
+			output.append(decorations);
+		}
+
+		return output;
+	}
 }

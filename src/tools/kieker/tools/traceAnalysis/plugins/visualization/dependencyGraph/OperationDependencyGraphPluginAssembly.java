@@ -103,6 +103,11 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 		return strBuild.toString();
 	}
 
+	private String nodeLabel(final DependencyGraphNode<?> node, final StringBuilder labelBuilder) {
+		this.addDecorationText(labelBuilder, node);
+		return labelBuilder.toString();
+	}
+
 	@Override
 	protected void dotEdges(final Collection<DependencyGraphNode<AssemblyComponentOperationPair>> nodes, final PrintStream ps, final boolean shortLabelsUNUSED) {
 
@@ -160,7 +165,8 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 
 					final String fillStyle = (curPair.isAssumed()) ? DotFactory.DOT_FILLCOLOR_GRAY : DotFactory.DOT_FILLCOLOR_WHITE;
 
-					strBuild.append(DotFactory.createNode("", this.getNodeId(curPair), opLabel.toString(), DotFactory.DOT_SHAPE_OVAL, DotFactory.DOT_STYLE_FILLED, // style
+					strBuild.append(DotFactory.createNode("", this.getNodeId(curPair), this.nodeLabel(curPair, opLabel), DotFactory.DOT_SHAPE_OVAL,
+							DotFactory.DOT_STYLE_FILLED, // style
 							null, // framecolor
 							fillStyle, // fillcolor
 							null, // fontcolor
@@ -256,6 +262,8 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 
 			senderNode.addOutgoingDependency(receiverNode, assumed);
 			receiverNode.addIncomingDependency(senderNode, assumed);
+
+			this.invokeDecorators(m, senderNode, receiverNode);
 		}
 		OperationDependencyGraphPluginAssembly.this.reportSuccess(t.getTraceId());
 	}
