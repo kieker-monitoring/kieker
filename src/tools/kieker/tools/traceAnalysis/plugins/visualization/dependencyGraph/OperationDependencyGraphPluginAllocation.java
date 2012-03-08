@@ -214,7 +214,7 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 			try {
 				this.saveToDotFile(this.dotOutputFile, this.includeWeights, this.shortLabels, this.includeSelfLoops);
 			} catch (final IOException ex) {
-				OperationDependencyGraphPluginAllocation.LOG.error("IOException", ex);
+				OperationDependencyGraphPluginAllocation.LOG.error("IOException while saving to dot file", ex);
 			}
 		}
 	}

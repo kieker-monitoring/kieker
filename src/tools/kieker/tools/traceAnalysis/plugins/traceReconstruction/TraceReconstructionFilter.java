@@ -172,8 +172,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 		ExecutionTrace executionTrace = this.pendingTraces.get(traceId);
 		if (executionTrace != null) { /* trace (artifacts) exists already; */
 			if (!this.timeoutMap.remove(executionTrace)) { /* remove from timeoutMap. Will be re-added below */
-				TraceReconstructionFilter.LOG.error("Missing entry for trace in timeoutMap: " + executionTrace);
-				TraceReconstructionFilter.LOG.error("pendingTraces and timeoutMap are now longer consistent!");
+				TraceReconstructionFilter.LOG.error("Missing entry for trace in timeoutMap: " + executionTrace
+						+ " PendingTraces and timeoutMap are now longer consistent!");
 				this.reportError(traceId);
 			}
 		} else { /* create and add new trace */
@@ -189,7 +189,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 		} catch (final InvalidTraceException ex) { // this would be a bug!
 			TraceReconstructionFilter.LOG.error("Attempt to add record to wrong trace", ex);
 		} catch (final ExecutionEventProcessingException ex) {
-			TraceReconstructionFilter.LOG.error("ExecutionEventProcessingException occured while processing " + "the timeout queue. ", ex);
+			TraceReconstructionFilter.LOG.error("ExecutionEventProcessingException occured while processing the timeout queue.", ex);
 		}
 	}
 
@@ -239,9 +239,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 				this.reportError(curTraceId);
 				this.invalidTraces.add(curTraceId);
 				if (!this.ignoreInvalidTraces) {
-					final String errorMsg = "Failed to transform execution trace to message trace (ID:" + curTraceId + "): " + executionTrace;
-					TraceReconstructionFilter.LOG.error(errorMsg, ex);
-					throw new ExecutionEventProcessingException(errorMsg, ex);
+					throw new ExecutionEventProcessingException("Failed to transform execution trace to message trace (ID:" + curTraceId + "): " + executionTrace,
+							ex);
 				}
 			}
 		}

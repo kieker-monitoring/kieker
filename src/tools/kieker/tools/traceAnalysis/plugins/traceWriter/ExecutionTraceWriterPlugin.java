@@ -73,7 +73,7 @@ public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessing
 			try {
 				this.ps.close();
 			} catch (final IOException ex) {
-				ExecutionTraceWriterPlugin.LOG.error("IOException", ex);
+				ExecutionTraceWriterPlugin.LOG.error("IOException while terminating", ex);
 			}
 		}
 	}
@@ -94,7 +94,7 @@ public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessing
 			ExecutionTraceWriterPlugin.this.reportSuccess(et.getTraceId());
 		} catch (final IOException ex) {
 			ExecutionTraceWriterPlugin.this.reportError(et.getTraceId());
-			ExecutionTraceWriterPlugin.LOG.error("", ex);
+			ExecutionTraceWriterPlugin.LOG.error("IOException", ex);
 		}
 	}
 

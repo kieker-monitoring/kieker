@@ -23,8 +23,6 @@ package kieker.test.tools.junit.traceAnalysis.plugins;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.systemModel.Execution;
@@ -38,24 +36,16 @@ import org.junit.Test;
  * @author Andre van Hoorn
  */
 public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase { // NOCS
-	private static final Log LOG = LogFactory.getLog(TestTraceEquivalenceFilterAssemblyEquivalence.class);
-
 	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration());
 	private final ExecutionFactory executionFactory = new ExecutionFactory(this.systemEntityFactory);
 
 	@Test
-	public void testEqualTrace() {
+	public void testEqualTrace() throws InvalidTraceException {
 		final ExecutionTrace trace0;
 		final ExecutionTrace trace1;
 
-		try {
-			trace0 = this.genValidBookstoreTrace(45653l, 17); // NOCS (MagicNumberCheck)
-			trace1 = this.genValidBookstoreTrace(45653l, 17); // NOCS (MagicNumberCheck)
-		} catch (final InvalidTraceException ex) {
-			TestTraceEquivalenceFilterAssemblyEquivalence.LOG.error("InvalidTraceException", ex);
-			Assert.fail("InvalidTraceException" + ex);
-			return;
-		}
+		trace0 = this.genValidBookstoreTrace(45653l, 17); // NOCS (MagicNumberCheck)
+		trace1 = this.genValidBookstoreTrace(45653l, 17); // NOCS (MagicNumberCheck)
 		Assert.assertEquals(trace0, trace1);
 
 		/*
@@ -119,14 +109,7 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase { //
 		executionTrace.add(exec0_0__bookstore_searchBook);
 		executionTrace.add(exec1_1__catalog_getBook);
 
-		try {
-			/* Make sure that trace is valid: */
-			executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
-		} catch (final InvalidTraceException ex) {
-			TestTraceEquivalenceFilterAssemblyEquivalence.LOG.error("", ex);
-			Assert.fail("Test invalid since used trace invalid");
-			throw new InvalidTraceException("Test invalid since used trace invalid", ex);
-		}
+		executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 
 		return executionTrace;
 	}

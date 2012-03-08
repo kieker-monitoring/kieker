@@ -59,14 +59,14 @@ public final class JavaDBInitializer {
 			dbConnection = DriverManager.getConnection(JavaDBInitializer.dbConnectionAddress + ";create=true");
 			JavaDBInitializer.createTables(dbConnection);
 		} catch (final SQLException ex) {
-			JavaDBInitializer.LOG.error("", ex);
+			JavaDBInitializer.LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 			System.exit(1);
 		} finally {
 			if (dbConnection != null) {
 				try {
 					dbConnection.close();
 				} catch (final SQLException ex) {
-					JavaDBInitializer.LOG.error("", ex);
+					JavaDBInitializer.LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 					System.exit(1);
 				}
 			}

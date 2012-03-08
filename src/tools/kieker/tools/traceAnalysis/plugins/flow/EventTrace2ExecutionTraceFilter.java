@@ -81,8 +81,8 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 			/* Make sure that order indices increment by 1 */
 			if (e.getOrderIndex() != (lastOrderIndex + 1)) {
 				EventTrace2ExecutionTraceFilter.LOG.error("Trace events' order indices must increment by one: " +
-						" Found " + lastOrderIndex + " followed by " + e.getOrderIndex() + " event (" + e + ")");
-				EventTrace2ExecutionTraceFilter.LOG.error("Terminating processing of event record trace with ID " + eventTrace.getTraceId());
+						" Found " + lastOrderIndex + " followed by " + e.getOrderIndex() + " event (" + e
+						+ ").  Terminating processing of event record trace with ID " + eventTrace.getTraceId());
 				// TODO: output broken event record trace
 				return;
 			} else {
@@ -149,8 +149,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 					final AbstractTraceEvent poppedEvent = eventStack.pop();
 					if (!(poppedEvent instanceof BeforeOperationEvent)) {
 						EventTrace2ExecutionTraceFilter.LOG.error("Didn't find corresponding BeforeOperationEvent for AfterOperationEvent " + afterOpEvent +
-								" (found: )" + poppedEvent);
-						EventTrace2ExecutionTraceFilter.LOG.error("Terminating processing of event record trace with ID " + eventTrace.getTraceId());
+								" (found: )" + poppedEvent + " Terminating processing of event record trace with ID " + eventTrace.getTraceId());
 						// TODO: output broken event record trace
 						return;
 					}
@@ -158,8 +157,8 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 					// TODO: we need to consider the host name as well
 					if (!afterOpEvent.getOperationSignature().equals(poppedBeforeEvent.getOperationSignature())) {
 						EventTrace2ExecutionTraceFilter.LOG.error("Components of before (" + poppedBeforeEvent + ") " +
-								"and after (" + afterOpEvent + ") events do not match");
-						EventTrace2ExecutionTraceFilter.LOG.error("Terminating processing of event record trace with ID " + eventTrace.getTraceId());
+								"and after (" + afterOpEvent + ") events do not match.  Terminating processing of event record trace with ID "
+								+ eventTrace.getTraceId());
 						// TODO: output broken event record trace
 						return;
 					}

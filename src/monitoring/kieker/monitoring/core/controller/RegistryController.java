@@ -21,6 +21,8 @@
 package kieker.monitoring.core.controller;
 
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.registry.IRegistry;
 import kieker.monitoring.core.registry.Registry;
 
@@ -28,6 +30,7 @@ import kieker.monitoring.core.registry.Registry;
  * @author Jan Waller
  */
 public final class RegistryController extends AbstractController implements IRegistryController {
+	private static final Log LOG = LogFactory.getLog(RegistryController.class);
 
 	private final IRegistry<String> stringRegistry;
 
@@ -43,7 +46,9 @@ public final class RegistryController extends AbstractController implements IReg
 
 	@Override
 	protected final void cleanup() {
-		// RegistryController.LOG.debug("Shutting down Registry Controller");
+		if (RegistryController.LOG.isDebugEnabled()) {
+			RegistryController.LOG.debug("Shutting down Registry Controller");
+		}
 	}
 
 	@Override

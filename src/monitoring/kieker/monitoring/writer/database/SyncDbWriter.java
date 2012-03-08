@@ -80,8 +80,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 			// register correct Driver
 			Class.forName(this.configuration.getStringProperty(SyncDbWriter.CONFIG_DRIVERCLASSNAME)).newInstance();
 		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
-			SyncDbWriter.LOG.error("DB driver registration failed. Perhaps the driver jar is missing?");
-			throw ex;
+			throw new Exception("DB driver registration failed. Perhaps the driver jar is missing?", ex);
 		}
 		try {
 			this.conn = DriverManager.getConnection(this.configuration.getStringProperty(SyncDbWriter.CONFIG_CONNECTIONSTRING));
@@ -100,10 +99,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 			this.psInsertMonitoringData = this.conn.prepareStatement("INSERT INTO " + tablename
 					+ " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)" + " VALUES (?,?,?,?,?,?,?,?,?)");
 		} catch (final SQLException ex) {
-			SyncDbWriter.LOG.error("SQLException: " + ex.getMessage()); // NOCS (MultipleStringLiteralsCheck)
-			SyncDbWriter.LOG.error("SQLState: " + ex.getSQLState()); // NOCS (MultipleStringLiteralsCheck)
-			SyncDbWriter.LOG.error("VendorError: " + ex.getErrorCode()); // NOCS (MultipleStringLiteralsCheck)
-			throw ex;
+			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 		}
 	}
 
@@ -140,7 +136,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 				try {
 					this.psInsertMonitoringData.clearParameters();
 				} catch (final SQLException ex) {
-					SyncDbWriter.LOG.error("", ex);
+					SyncDbWriter.LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 					return false; // NOPMD
 				}
 			}
@@ -155,9 +151,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 				this.conn.close();
 			}
 		} catch (final SQLException ex) {
-			SyncDbWriter.LOG.error("SQLException: " + ex.getMessage()); // NOCS (MultipleStringLiteralsCheck)
-			SyncDbWriter.LOG.error("SQLState: " + ex.getSQLState()); // NOCS (MultipleStringLiteralsCheck)
-			SyncDbWriter.LOG.error("VendorError: " + ex.getErrorCode()); // NOCS (MultipleStringLiteralsCheck)
+			SyncDbWriter.LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 		}
 		SyncDbWriter.LOG.info("Writer: SyncDbWriter shutdown complete");
 	}

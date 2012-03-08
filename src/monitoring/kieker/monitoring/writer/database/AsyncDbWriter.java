@@ -67,7 +67,7 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 	public static final String CONFIG_TABLENAME = AsyncDbWriter.PREFIX + "TableName"; // NOCS (AfterPREFIX)
 	public static final String CONFIG_NRCONN = AsyncDbWriter.PREFIX + "numberOfConnections"; // NOCS (AfterPREFIX)
 
-	private static final Log LOG = LogFactory.getLog(AsyncDbWriter.class);
+	// private static final Log LOG = LogFactory.getLog(AsyncDbWriter.class);
 
 	// private static final String LOADID = PREFIX + "loadInitialExperimentId";
 	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/189
@@ -83,8 +83,7 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 			// register correct Driver
 			Class.forName(this.configuration.getStringProperty(AsyncDbWriter.CONFIG_DRIVERCLASSNAME)).newInstance();
 		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
-			AsyncDbWriter.LOG.error("DB driver registration failed. Perhaps the driver jar is missing?");
-			throw ex;
+			throw new Exception("DB driver registration failed. Perhaps the driver jar is missing?", ex);
 		}
 		final String connectionString = this.configuration.getStringProperty(AsyncDbWriter.CONFIG_CONNECTIONSTRING);
 		final String tablename = this.configuration.getStringProperty(AsyncDbWriter.CONFIG_TABLENAME);
@@ -108,10 +107,7 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 				this.addWorker(new DbWriterThread(super.monitoringController, this.blockingQueue, connectionString, preparedQuery)); // NOPMD (new in loop)
 			}
 		} catch (final SQLException ex) {
-			AsyncDbWriter.LOG.error("SQLException: " + ex.getMessage()); // NOCS (MultipleStringLiteralsCheck)
-			AsyncDbWriter.LOG.error("SQLState: " + ex.getSQLState()); // NOCS (MultipleStringLiteralsCheck)
-			AsyncDbWriter.LOG.error("VendorError: " + ex.getErrorCode()); // NOCS (MultipleStringLiteralsCheck)
-			throw ex;
+			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 		}
 	}
 }
@@ -155,9 +151,7 @@ final class DbWriterThread extends AbstractAsyncThread {
 				this.conn.close();
 			}
 		} catch (final SQLException ex) {
-			DbWriterThread.LOG.error("SQLException: " + ex.getMessage()); // NOCS (MultipleStringLiteralsCheck)
-			DbWriterThread.LOG.error("SQLState: " + ex.getSQLState()); // NOCS (MultipleStringLiteralsCheck)
-			DbWriterThread.LOG.error("VendorError: " + ex.getErrorCode()); // NOCS (MultipleStringLiteralsCheck)
+			DbWriterThread.LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 		}
 	}
 

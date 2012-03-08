@@ -21,8 +21,6 @@
 package kieker.monitoring.writer.namedRecordPipe;
 
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.namedRecordPipe.Broker;
 import kieker.common.namedRecordPipe.IPipeWriter;
 import kieker.common.namedRecordPipe.Pipe;
@@ -36,7 +34,7 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
 public final class PipeWriter extends AbstractMonitoringWriter implements IPipeWriter {
 	private static final String PREFIX = PipeWriter.class.getName() + ".";
 	public static final String CONFIG_PIPENAME = PipeWriter.PREFIX + "pipeName"; // NOCS (afterPREFIX)
-	private static final Log LOG = LogFactory.getLog(PipeWriter.class);
+	// private static final Log LOG = LogFactory.getLog(PipeWriter.class);
 
 	private final Pipe pipe;
 
@@ -44,9 +42,7 @@ public final class PipeWriter extends AbstractMonitoringWriter implements IPipeW
 		super(configuration);
 		final String pipeName = this.configuration.getStringProperty(PipeWriter.CONFIG_PIPENAME);
 		if (pipeName.isEmpty()) {
-			final String errorMsg = "Invalid or missing value for property '" + PipeWriter.CONFIG_PIPENAME + "': '" + pipeName + "'";
-			PipeWriter.LOG.error(errorMsg);
-			throw new IllegalArgumentException(errorMsg);
+			throw new IllegalArgumentException("Invalid or missing value for property '" + PipeWriter.CONFIG_PIPENAME + "': '" + pipeName + "'");
 		}
 		this.pipe = Broker.INSTANCE.acquirePipe(pipeName);
 	}

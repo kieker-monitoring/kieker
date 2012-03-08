@@ -73,7 +73,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 					final Class<? extends IMonitoringRecord> recClass = AbstractMonitoringRecord.classForName(classname);
 					this.readOnlyRecordsOfType.add(recClass);
 				} catch (final MonitoringRecordException ex) {
-					FSReader.LOG.warn(ex.getMessage(), ex.getCause());
+					FSReader.LOG.warn("Error determining record types", ex);
 				}
 			}
 		}

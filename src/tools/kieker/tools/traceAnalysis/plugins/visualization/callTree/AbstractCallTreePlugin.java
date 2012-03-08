@@ -32,8 +32,6 @@ import java.util.Stack;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.TraceProcessingException;
@@ -64,7 +62,7 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
 		public Object createPair(final SynchronousCallMessage callMsg);
 	}
 
-	private static final Log LOG = LogFactory.getLog(AbstractCallTreePlugin.class);
+	// private static final Log LOG = LogFactory.getLog(AbstractCallTreePlugin.class);
 
 	private static final String ENCODING = "UTF-8";
 
@@ -221,9 +219,7 @@ public abstract class AbstractCallTreePlugin<T> extends AbstractMessageTraceProc
 			}
 		}
 		if (curStack.pop() != root) {
-			final String errorMsg = "Stack not empty after processing trace";
-			AbstractCallTreePlugin.LOG.error(errorMsg);
-			throw new TraceProcessingException(errorMsg);
+			throw new TraceProcessingException("Stack not empty after processing trace");
 		}
 	}
 

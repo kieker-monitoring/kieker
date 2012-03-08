@@ -26,8 +26,6 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.traceAnalysis.plugins.TestTraceReconstructionFilter;
@@ -50,7 +48,6 @@ import org.junit.Test;
  * 
  */
 public class TestEventTrace2ExecutionTraceFilter extends TestCase {
-	private static final Log LOG = LogFactory.getLog(TestEventTrace2ExecutionTraceFilter.class);
 	private static final long TRACE_ID = 4563l;
 	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration());
 	private final ExecutionFactory executionFactory = new ExecutionFactory(this.systemEntityFactory);
@@ -99,14 +96,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		executionTrace.add(this.exec0_0__bookstore_searchBook);
 		executionTrace.add(this.exec1_1__catalog_getBook);
 
-		try {
-			/* Make sure that trace is valid: */
-			executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
-		} catch (final InvalidTraceException ex) {
-			TestEventTrace2ExecutionTraceFilter.LOG.error("", ex);
-			Assert.fail("Test invalid since used trace invalid");
-			throw new InvalidTraceException("Test invalid since used trace invalid", ex);
-		}
+		executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 
 		return executionTrace;
 	}

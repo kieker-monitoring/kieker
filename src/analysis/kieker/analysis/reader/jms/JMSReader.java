@@ -131,7 +131,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 				destination = (Destination) context.lookup(this.jmsDestination);
 			} catch (final NameNotFoundException exc) {
 				// JNDI lookup failed, try manual creation (this seems to fail with ActiveMQ sometimes)
-				JMSReader.LOG.warn("Failed to lookup queue '" + this.jmsDestination + "' via JNDI: " + exc.getMessage());
+				JMSReader.LOG.warn("Failed to lookup queue '" + this.jmsDestination + "' via JNDI", exc);
 				JMSReader.LOG.info("Attempting to create queue ...");
 				destination = session.createQueue(this.jmsDestination);
 			}

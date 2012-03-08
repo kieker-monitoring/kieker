@@ -61,7 +61,7 @@ public final class TypeFilter extends AbstractAnalysisPlugin {
 			try {
 				listOfClasses.add(Class.forName(clazz));
 			} catch (final ClassNotFoundException ex) {
-				TypeFilter.LOG.warn("Failed to add class " + clazz + " to the filter.");
+				TypeFilter.LOG.warn("Failed to add class " + clazz + " to the filter.", ex);
 			}
 		}
 		this.acceptedClasses = listOfClasses.toArray(new Class<?>[listOfClasses.size()]);

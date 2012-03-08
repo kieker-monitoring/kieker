@@ -88,7 +88,7 @@ public abstract class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin
 			try {
 				this.saveTreeToDotFile();
 			} catch (final IOException ex) {
-				AggregatedCallTreePlugin.LOG.error("IOException", ex);
+				AggregatedCallTreePlugin.LOG.error("IOException while saving to dot file", ex);
 			}
 		}
 	}

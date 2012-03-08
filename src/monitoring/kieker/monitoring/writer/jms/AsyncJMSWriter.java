@@ -60,7 +60,7 @@ public final class AsyncJMSWriter extends AbstractAsyncWriter {
 	}
 
 	@Override
-	protected void init() throws NamingException, JMSException {
+	protected void init() throws Exception {
 		this.addWorker(new JMSWriterThread(this.monitoringController, this.blockingQueue, this.configuration
 				.getStringProperty(AsyncJMSWriter.CONFIG_CONTEXTFACTORYTYPE), this.configuration.getStringProperty(AsyncJMSWriter.CONFIG_PROVIDERURL),
 				this.configuration.getStringProperty(AsyncJMSWriter.CONFIG_FACTORYLOOKUPNAME), this.configuration.getStringProperty(AsyncJMSWriter.CONFIG_TOPIC),
@@ -90,7 +90,7 @@ final class JMSWriterThread extends AbstractAsyncThread {
 	private MessageProducer sender;
 
 	public JMSWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue, final String contextFactoryType,
-			final String providerUrl, final String factoryLookupName, final String topic, final long messageTimeToLive) throws NamingException, JMSException {
+			final String providerUrl, final String factoryLookupName, final String topic, final long messageTimeToLive) throws Exception {
 		super(monitoringController, writeQueue);
 		try {
 			final Hashtable<String, String> properties = new Hashtable<String, String>(); // NOPMD // NOCS (IllegalTypeCheck, InitialContext requires Hashtable)
@@ -124,7 +124,7 @@ final class JMSWriterThread extends AbstractAsyncThread {
 				 * JNDI lookup failed, try manual creation (this seems to fail
 				 * with ActiveMQ sometimes)
 				 */
-				JMSWriterThread.LOG.warn("Failed to lookup queue '" + topic + "' via JNDI: " + exc.getMessage());
+				JMSWriterThread.LOG.warn("Failed to lookup queue '" + topic + "' via JNDI", exc);
 				JMSWriterThread.LOG.info("Attempting to create queue ...");
 				destination = this.session.createQueue(topic);
 				// Is the following required?
@@ -137,11 +137,9 @@ final class JMSWriterThread extends AbstractAsyncThread {
 			this.sender.setDisableMessageID(false);
 			this.sender.setTimeToLive(messageTimeToLive);
 		} catch (final NamingException ex) {
-			JMSWriterThread.LOG.error("NamingException Exception while initializing JMS Writer");
-			throw ex;
+			throw new Exception("NamingException Exception while initializing JMS Writer", ex);
 		} catch (final JMSException ex) {
-			JMSWriterThread.LOG.error("JMSException Exception while initializing JMS Writer");
-			throw ex;
+			throw new Exception("JMSException Exception while initializing JMS Writer", ex);
 		}
 	}
 
@@ -160,12 +158,11 @@ final class JMSWriterThread extends AbstractAsyncThread {
 	}
 
 	@Override
-	protected final void consume(final IMonitoringRecord monitoringRecord) throws JMSException {
+	protected final void consume(final IMonitoringRecord monitoringRecord) throws Exception {
 		try {
 			this.sender.send(this.session.createObjectMessage(monitoringRecord));
 		} catch (final JMSException ex) {
-			JMSWriterThread.LOG.error("Error sending jms message");
-			throw ex;
+			throw new Exception("Error sending jms message", ex);
 		}
 	}
 

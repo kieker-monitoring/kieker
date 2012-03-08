@@ -718,9 +718,8 @@ public final class TraceAnalysisTool {
 			int numErrorCount = 0;
 			try {
 				analysisInstance.run();
-			} catch (final Exception exc) { // NOPMD // NOCS (FindBugs reports that Exception is never thrown; but wontfix (#44)!)
-				TraceAnalysisTool.LOG.error("Error occured while running analysis", exc);
-				throw exc;
+			} catch (final Exception ex) { // NOPMD // NOCS (FindBugs reports that Exception is never thrown; but wontfix (#44)!)
+				throw new Exception("Error occured while running analysis", ex);
 			} finally {
 				for (final AbstractTraceProcessingPlugin c : allTraceProcessingComponents) {
 					numErrorCount += c.getErrorCount();
@@ -729,9 +728,7 @@ public final class TraceAnalysisTool {
 			}
 
 			if (!TraceAnalysisTool.ignoreInvalidTraces && (numErrorCount > 0)) {
-				final String errorMsg = numErrorCount + " errors occured in trace processing components";
-				TraceAnalysisTool.LOG.error(errorMsg);
-				throw new Exception(errorMsg);
+				throw new Exception(numErrorCount + " errors occured in trace processing components");
 			}
 
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)) {

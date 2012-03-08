@@ -69,7 +69,9 @@ public final class WriterController extends AbstractController implements IWrite
 
 	@Override
 	protected final void cleanup() {
-		WriterController.LOG.debug("Shutting down Writer Controller");
+		if (WriterController.LOG.isDebugEnabled()) {
+			WriterController.LOG.debug("Shutting down Writer Controller");
+		}
 		if (this.monitoringWriter != null) {
 			this.monitoringWriter.terminate();
 		}

@@ -415,7 +415,7 @@ public final class AnalysisController implements Runnable {
 			this.initializationLatch.countDown();
 			readerLatch.await();
 		} catch (final InterruptedException ex) {
-			AnalysisController.LOG.warn("Interrupted while waiting for readers to finish");
+			AnalysisController.LOG.warn("Interrupted while waiting for readers to finish", ex);
 		}
 		this.terminate();
 		return;

@@ -93,14 +93,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		executionTrace.add(this.exec0_0__bookstore_searchBook);
 		executionTrace.add(this.exec1_1__catalog_getBook);
 
-		try {
-			/* Make sure that trace is valid: */
-			executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
-		} catch (final InvalidTraceException ex) {
-			TestTraceReconstructionFilter.LOG.error("", ex);
-			Assert.fail("Test invalid since used trace invalid");
-			throw new InvalidTraceException("Test invalid since used trace invalid", ex);
-		}
+		executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 
 		return executionTrace;
 	}
@@ -108,9 +101,11 @@ public class TestTraceReconstructionFilter extends TestCase {
 	/**
 	 * Tests whether a valid trace is correctly reconstructed and passed to the
 	 * right output port.
+	 * 
+	 * @throws InvalidTraceException
 	 */
 	@Test
-	public void testValidBookstoreTracePassed() {
+	public void testValidBookstoreTracePassed() throws InvalidTraceException {
 		/*
 		 * These are the trace representations we want to be reconstructed by
 		 * the filter
@@ -118,14 +113,8 @@ public class TestTraceReconstructionFilter extends TestCase {
 		final ExecutionTrace validExecutionTrace;
 		final MessageTrace validMessageTrace;
 		final AnalysisController controller = new AnalysisController();
-		try {
-			validExecutionTrace = this.genValidBookstoreTrace();
-			validMessageTrace = validExecutionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
-		} catch (final InvalidTraceException ex) {
-			TestTraceReconstructionFilter.LOG.error("InvalidTraceException", ex); // NOPMD (string literal)
-			Assert.fail("InvalidTraceException" + ex);
-			return;
-		}
+		validExecutionTrace = this.genValidBookstoreTrace();
+		validMessageTrace = validExecutionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(TraceReconstructionFilter.class.getName() + ".name", "TraceReconstructionFilter");
@@ -230,22 +219,18 @@ public class TestTraceReconstructionFilter extends TestCase {
 	/**
 	 * Tests whether a broken trace is correctly detected and passed to the
 	 * right output port.
+	 * 
+	 * @throws InvalidTraceException
 	 */
 	@Test
-	public void testBrokenBookstoreTracePassed() {
+	public void testBrokenBookstoreTracePassed() throws InvalidTraceException {
 		/*
 		 * These are the trace representations we want to be reconstructed by
 		 * the filter
 		 */
 		final ExecutionTrace invalidExecutionTrace;
 		final AnalysisController controller = new AnalysisController();
-		try {
-			invalidExecutionTrace = this.genBrokenBookstoreTraceEssSkip();
-		} catch (final InvalidTraceException ex) {
-			TestTraceReconstructionFilter.LOG.error("InvalidTraceException", ex);
-			Assert.fail("InvalidTraceException" + ex);
-			return;
-		}
+		invalidExecutionTrace = this.genBrokenBookstoreTraceEssSkip();
 
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(TraceReconstructionFilter.class.getName() + ".name", "TraceReconstructionFilter");
@@ -343,20 +328,16 @@ public class TestTraceReconstructionFilter extends TestCase {
 	/**
 	 * Tests the timeout of pending (incomplete) traces.
 	 * A corresponding test for a valid trace is not required.
+	 * 
+	 * @throws InvalidTraceException
 	 */
 	@Test
-	public void testIncompleteTraceDueToTimeout() {
+	public void testIncompleteTraceDueToTimeout() throws InvalidTraceException {
 		/*
 		 * This trace is incomplete.
 		 */
 		final ExecutionTrace incompleteExecutionTrace;
-		try {
-			incompleteExecutionTrace = this.genBookstoreTraceWithoutEntryExecution();
-		} catch (final InvalidTraceException ex) {
-			TestTraceReconstructionFilter.LOG.error("InvalidTraceException", ex);
-			Assert.fail("InvalidTraceException" + ex);
-			return;
-		}
+		incompleteExecutionTrace = this.genBookstoreTraceWithoutEntryExecution();
 
 		/**
 		 * We will now create a trace that contains an execution which
@@ -366,13 +347,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 */
 		final ExecutionTrace completingExecutionTrace = new ExecutionTrace(incompleteExecutionTrace.getTraceId());
 		Assert.assertTrue("Test invalid (traceIds not matching)", this.exec0_0__bookstore_searchBook.getTraceId() == completingExecutionTrace.getTraceId());
-		try {
-			completingExecutionTrace.add(this.exec0_0__bookstore_searchBook);
-		} catch (final InvalidTraceException ex) {
-			TestTraceReconstructionFilter.LOG.error("InvalidTraceException", ex);
-			Assert.fail("InvalidTraceException" + ex);
-			return;
-		}
+		completingExecutionTrace.add(this.exec0_0__bookstore_searchBook);
 
 		/*
 		 * We will use this execution to trigger the timeout check for
@@ -384,14 +359,8 @@ public class TestTraceReconstructionFilter extends TestCase {
 				incompleteExecutionTrace.getMaxTout(), incompleteExecutionTrace.getMaxTout() + (triggerTraceLengthMillis * (1000 * 1000)), 0, 0); // NOCS
 		final ExecutionTrace triggerExecutionTrace = new ExecutionTrace(triggerTraceId);
 		final MessageTrace triggerMessageTrace;
-		try {
-			triggerExecutionTrace.add(exec0_0__bookstore_searchBook__trigger);
-			triggerMessageTrace = triggerExecutionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
-		} catch (final InvalidTraceException ex) {
-			TestTraceReconstructionFilter.LOG.error("InvalidTraceException", ex);
-			Assert.fail("InvalidTraceException" + ex);
-			return;
-		}
+		triggerExecutionTrace.add(exec0_0__bookstore_searchBook__trigger);
+		triggerMessageTrace = triggerExecutionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 
 		/**
 		 * Instantiate reconstruction filter with timeout.

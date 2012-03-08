@@ -71,7 +71,7 @@ public class MessageTraceWriterPlugin extends AbstractMessageTraceProcessingPlug
 			try {
 				this.ps.close();
 			} catch (final IOException ex) {
-				MessageTraceWriterPlugin.LOG.error("IOException", ex);
+				MessageTraceWriterPlugin.LOG.error("IOException while terminating", ex);
 			}
 		}
 	}

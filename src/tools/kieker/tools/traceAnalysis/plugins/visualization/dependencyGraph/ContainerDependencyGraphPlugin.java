@@ -112,7 +112,7 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 			try {
 				this.saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
 			} catch (final IOException ex) {
-				ContainerDependencyGraphPlugin.LOG.error("IOException", ex);
+				ContainerDependencyGraphPlugin.LOG.error("IOException while saving to dot file", ex);
 			}
 		}
 	}

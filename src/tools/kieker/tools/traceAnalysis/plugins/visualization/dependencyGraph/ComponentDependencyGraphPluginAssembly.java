@@ -120,7 +120,7 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 			try {
 				this.saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
 			} catch (final IOException ex) {
-				ComponentDependencyGraphPluginAssembly.LOG.error("IOException", ex);
+				ComponentDependencyGraphPluginAssembly.LOG.error("IOException while saving to dot file", ex);
 			}
 		}
 	}

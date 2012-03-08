@@ -159,21 +159,27 @@ public final class JMXReader extends AbstractReaderPlugin {
 					mbServer.removeNotificationListener(this.monitoringLog, logNotificationListener);
 				}
 			} catch (final Exception e) { // NOCS // NOPMD
-				JMXReader.LOG.debug("Failed to remove Listener!", e); // NOCS (MultipleStringLiteralsCheck)
+				if (JMXReader.LOG.isDebugEnabled()) {
+					JMXReader.LOG.debug("Failed to remove Listener!", e); // NOCS (MultipleStringLiteralsCheck)
+				}
 			}
 			try {
 				if (serverNotificationListener != null) {
 					jmx.removeConnectionNotificationListener(serverNotificationListener);
 				}
 			} catch (final ListenerNotFoundException e) {
-				JMXReader.LOG.debug("Failed to remove Listener!", e); // NOCS (MultipleStringLiteralsCheck)
+				if (JMXReader.LOG.isDebugEnabled()) {
+					JMXReader.LOG.debug("Failed to remove Listener!", e); // NOCS (MultipleStringLiteralsCheck)
+				}
 			}
 			try {
 				if (jmx != null) {
 					jmx.close();
 				}
 			} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
-				JMXReader.LOG.debug("Failed to close JMX connection!", e);
+				if (JMXReader.LOG.isDebugEnabled()) {
+					JMXReader.LOG.debug("Failed to close JMX connection!", e);
+				}
 			}
 		}
 		return ret;

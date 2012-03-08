@@ -147,8 +147,8 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 				CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS);
 		if (this.sensorIntervalSeconds == 0) {
 			CPUMemUsageServletContextListener.LOG.warn("values for the init-param '"
-					+ CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS + "' must be >0; found: " + this.sensorIntervalSeconds);
-			CPUMemUsageServletContextListener.LOG.warn("Using default value: " // NOCS (MultipleStringLiteralsCheck)
+					+ CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS + "' must be >0; found: " + this.sensorIntervalSeconds
+					+ ". Using default value: " // NOCS (MultipleStringLiteralsCheck)
 					+ CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS);
 			this.sensorIntervalSeconds = CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS;
 		}
@@ -169,8 +169,8 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 		}
 
 		if (val < 0) {
-			CPUMemUsageServletContextListener.LOG.warn("Invalid or missing value for context-param '" + paramName + "': " + valStr);
-			CPUMemUsageServletContextListener.LOG.warn("Using default value: " + defaultValue); // NOCS (MultipleStringLiteralsCheck)
+			CPUMemUsageServletContextListener.LOG.warn("Invalid or missing value for context-param '" + paramName + "': " + valStr + ". Using default value: "
+					+ defaultValue); // NOCS (MultipleStringLiteralsCheck)
 			val = defaultValue;
 		}
 

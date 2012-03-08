@@ -50,7 +50,7 @@ public final class StateController extends AbstractController implements IStateC
 			try {
 				hostnameTmp = java.net.InetAddress.getLocalHost().getHostName();
 			} catch (final UnknownHostException ex) {
-				StateController.LOG.warn("Failed to retrieve hostname");
+				StateController.LOG.warn("Failed to retrieve hostname", ex);
 			}
 		}
 		this.hostname = hostnameTmp;
@@ -63,7 +63,9 @@ public final class StateController extends AbstractController implements IStateC
 
 	@Override
 	protected final void cleanup() {
-		StateController.LOG.debug("Shutting down State Controller");
+		if (StateController.LOG.isDebugEnabled()) {
+			StateController.LOG.debug("Shutting down State Controller");
+		}
 	}
 
 	@Override

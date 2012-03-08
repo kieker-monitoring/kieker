@@ -106,7 +106,9 @@ public abstract class AbstractAsyncThread extends Thread {
 					// but normally we should be able to continue
 				}
 			}
-			AbstractAsyncThread.LOG.debug("Writer thread finished");
+			if (AbstractAsyncThread.LOG.isDebugEnabled()) {
+				AbstractAsyncThread.LOG.debug("Writer thread finished");
+			}
 		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
 			// e.g. IOException
 			AbstractAsyncThread.LOG.error("Writer thread will halt", ex);

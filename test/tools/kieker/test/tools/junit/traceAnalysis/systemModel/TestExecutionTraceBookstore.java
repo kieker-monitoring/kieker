@@ -99,85 +99,60 @@ public class TestExecutionTraceBookstore extends TestCase {
 	/**
 	 * Tests whether the "well-known" Bookstore trace gets correctly
 	 * represented as an Execution Trace.
+	 * 
+	 * @throws InvalidTraceException
 	 */
 	@Test
-	public void testValidExecutionTrace() {
-		try {
-			final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
-			/* Perform some validity checks on the execution trace object */
-			Assert.assertEquals("Invalid length of Execution Trace", executionTrace.getLength(), this.numExecutions);
-			Assert.assertEquals("Invalid maximum stack depth", executionTrace.getMaxEss(), 2);
-			Assert.assertEquals("Invalid minimum tin timestamp", executionTrace.getMinTin(), this.minTin);
-			Assert.assertEquals("Invalid maximum tout timestamp", executionTrace.getMaxTout(), this.maxTout);
-
-		} catch (final InvalidTraceException ex) {
-			TestExecutionTraceBookstore.LOG.error("InvalidTraceException", ex); // NOPMD (string literal)
-			Assert.fail(ex.getMessage());
-			return;
-		}
+	public void testValidExecutionTrace() throws InvalidTraceException {
+		final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
+		/* Perform some validity checks on the execution trace object */
+		Assert.assertEquals("Invalid length of Execution Trace", executionTrace.getLength(), this.numExecutions);
+		Assert.assertEquals("Invalid maximum stack depth", executionTrace.getMaxEss(), 2);
+		Assert.assertEquals("Invalid minimum tin timestamp", executionTrace.getMinTin(), this.minTin);
+		Assert.assertEquals("Invalid maximum tout timestamp", executionTrace.getMaxTout(), this.maxTout);
 	}
 
 	/**
 	 * Tests the equals method of the ExecutionTrace class with two equal
 	 * traces.
+	 * 
+	 * @throws InvalidTraceException
 	 */
 	@Test
-	public void testEqualMethodEqualTraces() {
-		try {
-			final ExecutionTrace execTrace1 = this.genValidBookstoreTrace();
-			final ExecutionTrace execTrace2 = this.genValidBookstoreTrace();
-			Assert.assertEquals(execTrace1, execTrace2);
-		} catch (final InvalidTraceException ex) {
-			TestExecutionTraceBookstore.LOG.error("InvalidTraceException", ex);
-			Assert.fail(ex.getMessage());
-			return;
-		}
+	public void testEqualMethodEqualTraces() throws InvalidTraceException {
+		final ExecutionTrace execTrace1 = this.genValidBookstoreTrace();
+		final ExecutionTrace execTrace2 = this.genValidBookstoreTrace();
+		Assert.assertEquals(execTrace1, execTrace2);
 	}
 
 	/**
 	 * Tests the equals method of the ExecutionTrace class with two different
 	 * traces.
+	 * 
+	 * @throws InvalidTraceException
 	 */
 	@Test
-	public void testEqualMethodDifferentTraces() {
-		try {
-			final ExecutionTrace execTrace1 = this.genValidBookstoreTrace();
-			final ExecutionTrace execTrace2 = this.genBrokenBookstoreTraceEoiSkip();
-			Assert.assertFalse(execTrace1.equals(execTrace2));
-		} catch (final InvalidTraceException ex) {
-			TestExecutionTraceBookstore.LOG.error("InvalidTraceException", ex);
-			Assert.fail(ex.getMessage());
-			return;
-		}
+	public void testEqualMethodDifferentTraces() throws InvalidTraceException {
+		final ExecutionTrace execTrace1 = this.genValidBookstoreTrace();
+		final ExecutionTrace execTrace2 = this.genBrokenBookstoreTraceEoiSkip();
+		Assert.assertFalse(execTrace1.equals(execTrace2));
 	}
 
 	/**
 	 * Tests whether the "well-known" Bookstore trace can be correctly transformed
 	 * from an Execution Trace representation into a Message Trace representation.
+	 * 
+	 * @throws InvalidTraceException
 	 */
 	@Test
-	public void testMessageTraceTransformationValidTrace() {
+	public void testMessageTraceTransformationValidTrace() throws InvalidTraceException {
 
-		ExecutionTrace executionTrace;
-		try {
-			executionTrace = this.genValidBookstoreTrace();
-		} catch (final InvalidTraceException ex) {
-			TestExecutionTraceBookstore.LOG.error("InvalidTraceException", ex);
-			Assert.fail(ex.getMessage());
-			return;
-		}
+		final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
 
 		/*
 		 * Transform Execution Trace to Message Trace representation
 		 */
-		MessageTrace messageTrace;
-		try {
-			messageTrace = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
-		} catch (final InvalidTraceException ex) {
-			TestExecutionTraceBookstore.LOG.error("InvalidTraceException", ex);
-			Assert.fail("Transformation to Message Trace failed: " + ex.getMessage());
-			return;
-		}
+		final MessageTrace messageTrace = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 
 		/*
 		 * Validate Message Trace representation.
@@ -246,45 +221,37 @@ public class TestExecutionTraceBookstore extends TestCase {
 	/**
 	 * Make sure that the transformation from an Execution Trace to a Message
 	 * Trace is performed only once.
+	 * 
+	 * @throws InvalidTraceException
 	 */
 	@Test
-	public void testMessageTraceTransformationOnlyOnce() {
-		try {
-			final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
-			/*
-			 * Transform Execution Trace to Message Trace representation (twice)
-			 * and make sure, that the instances are the same.
-			 */
-			final MessageTrace messageTrace1 = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
-			final MessageTrace messageTrace2 = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
-			Assert.assertSame(messageTrace1, messageTrace2);
-		} catch (final InvalidTraceException ex) {
-			TestExecutionTraceBookstore.LOG.error("InvalidTraceException", ex);
-			Assert.fail(ex.getMessage());
-			return;
-		}
+	public void testMessageTraceTransformationOnlyOnce() throws InvalidTraceException {
+		final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
+		/*
+		 * Transform Execution Trace to Message Trace representation (twice)
+		 * and make sure, that the instances are the same.
+		 */
+		final MessageTrace messageTrace1 = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
+		final MessageTrace messageTrace2 = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
+		Assert.assertSame(messageTrace1, messageTrace2);
 	}
 
 	/**
 	 * Make sure that the transformation from an Execution Trace to a Message
 	 * Trace is performed only once.
+	 * 
+	 * @throws InvalidTraceException
 	 */
 	@Test
-	public void testMessageTraceTransformationTwiceOnChange() {
-		try {
-			final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
+	public void testMessageTraceTransformationTwiceOnChange() throws InvalidTraceException {
+		final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
 
-			final Execution exec4_1__catalog_getBook = this.eFactory // NOCS
-					.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID, 9, 10, 4, 1);
-			final MessageTrace messageTrace1 = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
-			executionTrace.add(exec4_1__catalog_getBook);
-			final MessageTrace messageTrace2 = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
-			Assert.assertNotSame(messageTrace1, messageTrace2);
-		} catch (final InvalidTraceException ex) {
-			TestExecutionTraceBookstore.LOG.error("InvalidTraceException", ex);
-			Assert.fail(ex.getMessage());
-			return;
-		}
+		final Execution exec4_1__catalog_getBook = this.eFactory // NOCS
+				.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID, 9, 10, 4, 1);
+		final MessageTrace messageTrace1 = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
+		executionTrace.add(exec4_1__catalog_getBook);
+		final MessageTrace messageTrace2 = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
+		Assert.assertNotSame(messageTrace1, messageTrace2);
 	}
 
 	/**
@@ -323,17 +290,12 @@ public class TestExecutionTraceBookstore extends TestCase {
 	 * The trace is broken in that the eoi/ess values of an execution with eoi/ess
 	 * [1,1] are replaced by the eoi/ess values [1,3]. Since ess values must only
 	 * increment/decrement by 1, this test must lead to an exception.
+	 * 
+	 * @throws InvalidTraceException
 	 */
 	@Test
-	public void testMessageTraceTransformationBrokenTraceEssSkip() {
-		final ExecutionTrace executionTrace;
-		try {
-			executionTrace = this.genBrokenBookstoreTraceEssSkip();
-		} catch (final InvalidTraceException ex) {
-			TestExecutionTraceBookstore.LOG.error("InvalidTraceException", ex);
-			Assert.fail(ex.getMessage());
-			return;
-		}
+	public void testMessageTraceTransformationBrokenTraceEssSkip() throws InvalidTraceException {
+		final ExecutionTrace executionTrace = this.genBrokenBookstoreTraceEssSkip();
 
 		/**
 		 * Transform Execution Trace to Message Trace representation
@@ -384,21 +346,16 @@ public class TestExecutionTraceBookstore extends TestCase {
 	 * The trace is broken in that the eoi/ess values of an execution with eoi/ess
 	 * [3,2] are replaced by the eoi/ess values [4,2]. Since eoi values must only
 	 * increment by 1, this test must lead to an exception.
+	 * 
+	 * @throws InvalidTraceException
 	 */
 	@Test
-	public void testMessageTraceTransformationBrokenTraceEoiSkip() {
+	public void testMessageTraceTransformationBrokenTraceEoiSkip() throws InvalidTraceException {
 		/*
 		 * Create an Execution Trace and add Executions in
 		 * arbitrary order
 		 */
-		final ExecutionTrace executionTrace;
-		try {
-			executionTrace = this.genBrokenBookstoreTraceEoiSkip();
-		} catch (final InvalidTraceException ex) {
-			TestExecutionTraceBookstore.LOG.error("InvalidTraceException", ex);
-			Assert.fail(ex.getMessage());
-			return;
-		}
+		final ExecutionTrace executionTrace = this.genBrokenBookstoreTraceEoiSkip();
 
 		/**
 		 * Transform Execution Trace to Message Trace representation

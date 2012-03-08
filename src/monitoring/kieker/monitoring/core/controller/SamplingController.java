@@ -68,7 +68,9 @@ public final class SamplingController extends AbstractController implements ISam
 
 	@Override
 	protected final void cleanup() {
-		SamplingController.LOG.debug("Shutting down Sampling Controller");
+		if (SamplingController.LOG.isDebugEnabled()) {
+			SamplingController.LOG.debug("Shutting down Sampling Controller");
+		}
 		if (this.periodicSensorsPoolExecutor != null) {
 			this.periodicSensorsPoolExecutor.shutdown();
 		}

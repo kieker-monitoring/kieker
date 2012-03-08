@@ -173,7 +173,7 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 			try {
 				this.saveToDotFile(this.dotOutputFile, this.includeWeights, this.shortLabels, this.includeSelfLoops);
 			} catch (final IOException ex) {
-				ComponentDependencyGraphPluginAllocation.LOG.error("IOException", ex);
+				ComponentDependencyGraphPluginAllocation.LOG.error("IOException while saving to dot file", ex);
 			}
 		}
 	}

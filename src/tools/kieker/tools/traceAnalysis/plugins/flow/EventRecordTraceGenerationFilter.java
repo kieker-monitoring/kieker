@@ -154,7 +154,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingPlu
 		} catch (final InvalidTraceException ex) { // this would be a bug!
 			EventRecordTraceGenerationFilter.LOG.error("Attempt to add record to wrong trace", ex);
 		} catch (final ExecutionEventProcessingException ex) {
-			EventRecordTraceGenerationFilter.LOG.error("ExecutionEventProcessingException occured while processing " + "the timeout queue. ", ex);
+			EventRecordTraceGenerationFilter.LOG.error("ExecutionEventProcessingException occured while processing the timeout queue. ", ex);
 		}
 	}
 
