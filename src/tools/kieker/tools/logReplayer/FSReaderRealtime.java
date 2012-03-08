@@ -21,7 +21,6 @@
 package kieker.tools.logReplayer;
 
 import java.util.Arrays;
-import java.util.StringTokenizer;
 import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.AnalysisController;
@@ -73,49 +72,37 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 	 */
 	public FSReaderRealtime(final Configuration configuration) {
 		super(configuration);
-
 		this.init(configuration);
 	}
 
 	public boolean init(final Configuration configuration) {
-		try {
-			final String numWorkersString = configuration.getStringProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS);
-			this.numWorkers = -1;
-			if (numWorkersString == null) {
-				throw new IllegalArgumentException("Missing init parameter '" + FSReaderRealtime.PROP_NAME_NUM_WORKERS + "'");
-			}
-			try {
-				this.numWorkers = Integer.parseInt(numWorkersString);
-			} catch (final NumberFormatException ex) { // NOPMD (value of numWorkers remains -1)
-			}
-			this.inputDirs = this.inputDirNameListToArray(configuration.getStringProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES));
-			this.initInstanceFromArgs(this.inputDirs, this.numWorkers);
-		} catch (final IllegalArgumentException ex) {
-			FSReaderRealtime.LOG.error("Failed to load configuration", ex);
-			return false;
-		}
+		this.numWorkers = configuration.getIntProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS);
+		this.inputDirs = configuration.getStringArrayProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES, ";");
+		// this.inputDirs = this.inputDirNameListToArray(configuration.getStringProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES));
+		this.initInstanceFromArgs(this.inputDirs, this.numWorkers);
 		return true;
 	}
 
-	private String[] inputDirNameListToArray(final String inputDirNameList) throws IllegalArgumentException {
-		String[] dirNameArray;
-
-		// parse inputDir property value
-		if ((inputDirNameList == null) || (inputDirNameList.trim().length() == 0)) { // NOPMD (inefficient empty check)
-			// FSReaderRealtime.LOG.error(errorMsg); // no log and throw
-			throw new IllegalArgumentException("Invalid argument value for inputDirNameList:" + inputDirNameList);
-		}
-		try {
-			final StringTokenizer dirNameTokenizer = new StringTokenizer(inputDirNameList, ";");
-			dirNameArray = new String[dirNameTokenizer.countTokens()];
-			for (int i = 0; dirNameTokenizer.hasMoreTokens(); i++) {
-				dirNameArray[i] = dirNameTokenizer.nextToken().trim();
-			}
-		} catch (final Exception exc) { // NOCS // NOPMD
-			throw new IllegalArgumentException("Error parsing list of input directories'" + inputDirNameList + "'", exc);
-		}
-		return dirNameArray;
-	}
+	// removed and replaced by functions of configuration!
+	// private String[] inputDirNameListToArray(final String inputDirNameList) throws IllegalArgumentException {
+	// String[] dirNameArray;
+	//
+	// // parse inputDir property value
+	// if ((inputDirNameList == null) || (inputDirNameList.trim().length() == 0)) { // NOPMD (inefficient empty check)
+	// // FSReaderRealtime.LOG.error(errorMsg); // no log and throw
+	// throw new IllegalArgumentException("Invalid argument value for inputDirNameList:" + inputDirNameList);
+	// }
+	// try {
+	// final StringTokenizer dirNameTokenizer = new StringTokenizer(inputDirNameList, ";");
+	// dirNameArray = new String[dirNameTokenizer.countTokens()];
+	// for (int i = 0; dirNameTokenizer.hasMoreTokens(); i++) {
+	// dirNameArray[i] = dirNameTokenizer.nextToken().trim();
+	// }
+	// } catch (final Exception exc) { // NOCS // NOPMD
+	// throw new IllegalArgumentException("Error parsing list of input directories'" + inputDirNameList + "'", exc);
+	// }
+	// return dirNameArray;
+	// }
 
 	private void initInstanceFromArgs(final String[] inputDirNames, final int numWorkers) throws IllegalArgumentException {
 		if ((inputDirNames == null) || (inputDirNames.length <= 0)) {
@@ -128,10 +115,10 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 																																			// (MultipleStringLiteralsCheck)
 		}
 
-		final Configuration configuration = new Configuration(null);
+		final Configuration configuration = new Configuration();
 		configuration.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(inputDirNames));
 		final AbstractReaderPlugin fsReader = new FSReader(configuration);
-		final AbstractAnalysisPlugin rtCons = new FSReaderRealtimeCons(this);
+		final AbstractAnalysisPlugin rtCons = new FSReaderRealtimeCons(this); // TODO: escaping this in constructor!
 		this.analysis.registerFilter(rtCons);
 		this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, this.terminationLatch, FSReaderRealtimeCons.INPUT_PORT, this.analysis);
 		this.analysis.registerReader(fsReader);
@@ -159,38 +146,30 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 
 	@Override
 	public void terminate(final boolean error) {
-		// FIXME: this is an infinite recursion loop!?!?
-		this.analysis.terminate(error);
+		this.analysis.terminate(error); // forward to analysis controller
 	}
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
-
-		// TODO: Provide better default properties.
 		defaultConfiguration.setProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS, "1");
-		defaultConfiguration.setProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES, "");
-
+		defaultConfiguration.setProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES, "."); // the current folder as default
 		return defaultConfiguration;
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration(null);
-
+		final Configuration configuration = new Configuration();
 		configuration.setProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS, Integer.toString(this.numWorkers));
 		configuration.setProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES, Configuration.toProperty(this.inputDirs));
-
 		return configuration;
 	}
 
 	/**
-	 * Acts as a consumer to the rtDistributor and delegates incoming records to
-	 * the FSReaderRealtime instance.<br>
+	 * Acts as a consumer to the rtDistributor and delegates incoming records to the FSReaderRealtime instance.
 	 * 
-	 * Do <b>not</b> use this as an outer class. It does not have the necessary
-	 * constructors and method-implementations in order to be used as an outer
-	 * class.
+	 * Do <b>not</b> use this as an outer class. It does not have the necessary constructors and
+	 * method-implementations in order to be used as an outer class.
 	 */
 	@Plugin
 	private static class FSReaderRealtimeCons extends AbstractAnalysisPlugin {
@@ -209,9 +188,7 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		 * @param data
 		 */
 		@SuppressWarnings("unused")
-		@InputPort(
-				name = FSReaderRealtimeCons.INPUT_PORT,
-				eventTypes = { IMonitoringRecord.class })
+		@InputPort(name = FSReaderRealtimeCons.INPUT_PORT, eventTypes = { IMonitoringRecord.class })
 		public void newMonitoringRecord(final Object data) {
 			final IMonitoringRecord record = (IMonitoringRecord) data;
 			if (!this.master.deliver(FSReaderRealtime.OUTPUT_PORT_NAME, record)) {

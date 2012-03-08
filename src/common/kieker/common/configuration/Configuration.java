@@ -44,7 +44,7 @@ public final class Configuration extends Properties {
 
 	public final String getStringProperty(final String key) {
 		final String s = this.getProperty(key);
-		return (s == null) ? "" : s; // NOCS
+		return (s == null) ? "" : s.trim(); // NOCS
 	}
 
 	public final boolean getBooleanProperty(final String key) {
@@ -83,6 +83,23 @@ public final class Configuration extends Properties {
 			return new String[0];
 		} else {
 			return s.split("\\|");
+		}
+	}
+
+	/**
+	 * Property values have to be split by 'split'.
+	 * 
+	 * @param split
+	 *            a regular expression
+	 * @param key
+	 * @return
+	 */
+	public final String[] getStringArrayProperty(final String key, final String split) {
+		final String s = this.getStringProperty(key);
+		if (s.isEmpty()) {
+			return new String[0];
+		} else {
+			return s.split(split);
 		}
 	}
 
