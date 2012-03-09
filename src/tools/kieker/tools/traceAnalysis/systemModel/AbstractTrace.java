@@ -20,12 +20,10 @@
 
 package kieker.tools.traceAnalysis.systemModel;
 
-import kieker.analysis.plugin.IAnalysisEvent;
-
 /**
  * @author Andre van Hoorn
  */
-public abstract class AbstractTrace implements IAnalysisEvent {
+public abstract class AbstractTrace {
 
 	private final long traceId; // convenience field. All executions have this traceId.
 

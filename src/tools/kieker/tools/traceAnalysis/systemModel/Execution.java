@@ -20,13 +20,12 @@
 
 package kieker.tools.traceAnalysis.systemModel;
 
-import kieker.analysis.plugin.IAnalysisEvent;
 
 /**
  * 
  * @author Andre van Hoorn
  */
-public class Execution implements IAnalysisEvent {
+public class Execution {
 	public static final String NO_SESSION_ID = "<NOSESSIONID>";
 
 	private final Operation operation;

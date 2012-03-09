@@ -20,15 +20,13 @@
 
 package kieker.tools.currentTimeEventGenerator;
 
-import kieker.analysis.plugin.IAnalysisEvent;
-
 /**
  * Record type which can be used to store the current time in the field {@link #timestamp}.
  * 
  * @author Andre van Hoorn
  * 
  */
-public class TimestampEvent implements IAnalysisEvent {
+public class TimestampEvent {
 	private volatile long timestamp = -1;
 
 	/**

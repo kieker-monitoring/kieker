@@ -20,12 +20,10 @@
 
 package kieker.tools.traceAnalysis.systemModel;
 
-import kieker.analysis.plugin.IAnalysisEvent;
-
 /**
  * @author Andre van Hoorn
  */
-public class InvalidExecutionTrace implements IAnalysisEvent {
+public class InvalidExecutionTrace {
 	private final ExecutionTrace invalidExecutionTraceArtifacts;
 
 	public InvalidExecutionTrace(final ExecutionTrace invalidExecutionTrace) {
