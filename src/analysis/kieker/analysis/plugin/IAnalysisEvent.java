@@ -23,7 +23,9 @@ package kieker.analysis.plugin;
 /**
  * 
  * @author Andre van Hoorn
+ * @deprecated
  */
+@Deprecated
 public interface IAnalysisEvent {
 
 }
