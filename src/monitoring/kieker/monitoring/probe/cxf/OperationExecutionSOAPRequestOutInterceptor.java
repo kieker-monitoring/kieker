@@ -20,10 +20,11 @@
 
 package kieker.monitoring.probe.cxf;
 
+import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.IMonitoringProbe;
-import kieker.monitoring.timer.DefaultSystemTimer;
 import kieker.monitoring.timer.ITimeSource;
 
 import org.apache.cxf.binding.soap.SoapMessage;
@@ -51,7 +52,8 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
-	protected static final ITimeSource TIMESOURCE = DefaultSystemTimer.getInstance();
+	protected static final IMonitoringController ctrl = MonitoringController.getInstance();
+	protected static final ITimeSource TIMESOURCE = OperationExecutionSOAPRequestOutInterceptor.ctrl.getTimeSource();
 
 	private static final String NULL_SESSION_STR = "NULL";
 	private static final String NULL_SESSIONASYNCTRACE_STR = "NULL-ASYNCOUT";

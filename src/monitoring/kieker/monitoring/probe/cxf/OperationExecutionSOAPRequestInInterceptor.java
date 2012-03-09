@@ -23,10 +23,11 @@ package kieker.monitoring.probe.cxf;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.IMonitoringProbe;
-import kieker.monitoring.timer.DefaultSystemTimer;
 import kieker.monitoring.timer.ITimeSource;
 
 import org.apache.cxf.binding.soap.SoapMessage;
@@ -53,7 +54,8 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
-	protected static final ITimeSource TIMESOURCE = DefaultSystemTimer.getInstance();
+	protected static final IMonitoringController ctrl = MonitoringController.getInstance();
+	protected static final ITimeSource TIMESOURCE = OperationExecutionSOAPRequestInInterceptor.ctrl.getTimeSource();
 
 	// the CXF logger uses java.util.logging by default, look here how to change it to log4j: http://cwiki.apache.org/CXF20DOC/debugging.html
 	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPRequestInInterceptor.class);
