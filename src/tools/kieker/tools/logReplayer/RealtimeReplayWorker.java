@@ -25,8 +25,6 @@ import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 
 /**
@@ -40,7 +38,7 @@ import kieker.common.record.IMonitoringRecord;
 })
 public class RealtimeReplayWorker extends AbstractAnalysisPlugin implements Runnable {
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
-	private static final Log LOG = LogFactory.getLog(RealtimeReplayWorker.class);
+	// private static final Log LOG = LogFactory.getLog(RealtimeReplayWorker.class);
 	private final IMonitoringRecord monRec;
 	private final RealtimeReplayDistributor rd;
 
