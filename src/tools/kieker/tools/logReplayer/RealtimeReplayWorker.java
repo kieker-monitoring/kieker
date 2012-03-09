@@ -36,7 +36,7 @@ import kieker.common.record.IMonitoringRecord;
  * 
  */
 @Plugin(outputPorts = {
-	@OutputPort(name = RealtimeReplayWorker.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
+		@OutputPort(name = RealtimeReplayWorker.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
 })
 public class RealtimeReplayWorker extends AbstractAnalysisPlugin implements Runnable {
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
@@ -74,11 +74,7 @@ public class RealtimeReplayWorker extends AbstractAnalysisPlugin implements Runn
 	@Override
 	public void run() {
 		if (this.monRec != null) {
-			if (!super.deliver(RealtimeReplayWorker.OUTPUT_PORT_NAME, this.monRec)) {
-				// TODO: check what to do
-				// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/145
-				RealtimeReplayWorker.LOG.error("Consumer returned with error");
-			}
+			super.deliver(RealtimeReplayWorker.OUTPUT_PORT_NAME, this.monRec);
 			this.rd.decreaseActive();
 		}
 	}
