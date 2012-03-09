@@ -267,6 +267,8 @@
 		<patternset id="dist_src_files-nonbinmode">
 			<include name="bin/log4j.properties" />
 			<include name="bin/*.bat" />
+			<include name="${src.userguide.dir}/**/*" />
+			<exclude name="${src.userguide.dir}/**/*.sh" /> <!-- will be added in bin mode -->
 			<include name="META-INF/*" />
 			<!-- a file META-INF/kieker.monitoring.properties will be added during packaging -->
 			<include name="src/**/*.java" />
@@ -295,6 +297,7 @@
 		</patternset>
 		<patternset id="dist_src_files-binmode">
 			<include name="bin/*.sh" />
+			<include name="${src.userguide.dir}/**/*.sh" />
 		</patternset>
 
 		<tar destfile="${release.dir}/${dist.kieker.srcBaseName}.tar" longfile="gnu">
@@ -528,6 +531,9 @@
 	<target name="release" depends="build-all,dist-kieker-sources,dist-kieker-binaries,dist-kieker-javadoc,dist-examples,dist-kieker-userguide" description="Packages the release files (calling all dist- targets)">
 		<echo message="Sourceforge release instructions can be found at:" />
 		<echo message="https://sourceforge.net/apps/trac/sourceforge/wiki/Release files for download#Createoreditarelease" />
+		<echo message="" />
+		<echo message="Note that this target executes only on platforms having 'make' and 'sh' installed" />
+		<echo message="Also, in order to run with the source archive, you'll additionally need to extract the 'kieker-${kieker.version}_examples-JavaEEServletContainerExample'.{zip|tar.gz} archive" />
 	</target>
 
 	<target name="clean" description="Removes artifacts from previous builds">
