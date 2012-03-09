@@ -396,8 +396,8 @@ public final class TraceAnalysisTool {
 			final Configuration traceAllocationEquivClassFilterConfig = new Configuration();
 			traceAllocationEquivClassFilterConfig.setProperty(TraceEquivalenceClassFilter.class.getName() + ".name",
 					Constants.TRACEALLOCATIONEQUIVCLASS_COMPONENT_NAME);
-			final TraceEquivalenceClassFilter traceAllocationEquivClassFilter = new TraceEquivalenceClassFilter(traceAllocationEquivClassFilterConfig,
-					TraceEquivalenceClassModes.ALLOCATION);
+			final TraceEquivalenceClassFilter traceAllocationEquivClassFilter = new TraceEquivalenceClassFilter(traceAllocationEquivClassFilterConfig);
+			traceAllocationEquivClassFilter.setTraceEquivalenceCallMode(TraceEquivalenceClassModes.ALLOCATION);
 			if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)) {
 				/**
 				 * Currently, this filter is only used to print an equivalence
@@ -415,8 +415,8 @@ public final class TraceAnalysisTool {
 
 			final Configuration traceAssemblyEquivClassFilterConfig = new Configuration();
 			traceAssemblyEquivClassFilterConfig.setProperty(TraceEquivalenceClassFilter.class.getName() + ".name", Constants.TRACEASSEMBLYEQUIVCLASS_COMPONENT_NAME);
-			final TraceEquivalenceClassFilter traceAssemblyEquivClassFilter = new TraceEquivalenceClassFilter(traceAssemblyEquivClassFilterConfig,
-					TraceEquivalenceClassModes.ASSEMBLY);
+			final TraceEquivalenceClassFilter traceAssemblyEquivClassFilter = new TraceEquivalenceClassFilter(traceAssemblyEquivClassFilterConfig);
+			traceAssemblyEquivClassFilter.setTraceEquivalenceCallMode(TraceEquivalenceClassModes.ASSEMBLY);
 			if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT)) {
 				/**
 				 * Currently, this filter is only used to print an equivalence

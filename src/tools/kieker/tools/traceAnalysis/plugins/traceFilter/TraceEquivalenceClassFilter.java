@@ -67,13 +67,22 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 		DISABLED, ASSEMBLY, ALLOCATION
 	}
 
-	private final TraceEquivalenceClassModes equivalenceMode;
+	private TraceEquivalenceClassModes equivalenceMode;
 	/** Representative x # of equivalents */
 	private final Map<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap = new HashMap<AbstractExecutionTraceHashContainer, AtomicInteger>(); // NOPMD
 
-	// TODO Change constructor to plugin-default-constructor
-	public TraceEquivalenceClassFilter(final Configuration configuration, final TraceEquivalenceClassModes traceEquivalenceCallMode) {
+	/**
+	 * Creates a new instance of this class using the given configuration object. Keep in mind that the Trace-Equivalence-Class-Mode has to be set via the method
+	 * <i>setTraceEquivalenceCallMode</i> before using this component!
+	 * 
+	 * @param configuration
+	 *            The configuration object used to initialize this object.
+	 */
+	public TraceEquivalenceClassFilter(final Configuration configuration) {
 		super(configuration);
+	}
+
+	public void setTraceEquivalenceCallMode(final TraceEquivalenceClassModes traceEquivalenceCallMode) {
 		this.equivalenceMode = traceEquivalenceCallMode;
 	}
 
