@@ -46,20 +46,28 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 public abstract class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin<T> {
 	private static final Log LOG = LogFactory.getLog(AggregatedCallTreePlugin.class);
 
-	private final AbstractAggregatedCallTreeNode<T> root;
-	private final File dotOutputFile;
+	public static final String CONFIG_INCLUDE_WEIGHTS = "includeWeights";
+	public static final String CONFIG_SHORT_LABELS = "shortLabels";
+
+	private AbstractAggregatedCallTreeNode<T> root;
+	private File dotOutputFile;
 	private final boolean includeWeights;
 	private final boolean shortLabels;
 	private int numGraphsSaved = 0;
 
-	// TODO Change constructor to plugin-default-constructor
-	public AggregatedCallTreePlugin(final Configuration configuration, final AbstractAggregatedCallTreeNode<T> root,
-			final File dotOutputFile, final boolean includeWeights, final boolean shortLabels) {
+	public AggregatedCallTreePlugin(final Configuration configuration) {
 		super(configuration);
+
+		this.includeWeights = configuration.getBooleanProperty(AggregatedCallTreePlugin.CONFIG_INCLUDE_WEIGHTS);
+		this.shortLabels = configuration.getBooleanProperty(AggregatedCallTreePlugin.CONFIG_SHORT_LABELS);
+	}
+
+	public void setRoot(final AbstractAggregatedCallTreeNode<T> root) {
 		this.root = root;
+	}
+
+	public void setDotOutputFile(final File dotOutputFile) {
 		this.dotOutputFile = dotOutputFile;
-		this.includeWeights = includeWeights;
-		this.shortLabels = shortLabels;
 	}
 
 	public void saveTreeToDotFile() throws IOException {

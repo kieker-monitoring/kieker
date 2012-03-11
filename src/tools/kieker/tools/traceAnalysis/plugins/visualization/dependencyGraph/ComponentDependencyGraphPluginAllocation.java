@@ -73,8 +73,9 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 
 	public ComponentDependencyGraphPluginAllocation(final Configuration configuration) {
 		// TODO Check type conversion??
-		super(configuration,
-				new DependencyGraph<AllocationComponent>(AllocationRepository.ROOT_ALLOCATION_COMPONENT.getId(), AllocationRepository.ROOT_ALLOCATION_COMPONENT));
+		super(configuration);
+		super.setDependencyGraph(new DependencyGraph<AllocationComponent>(AllocationRepository.ROOT_ALLOCATION_COMPONENT.getId(),
+				AllocationRepository.ROOT_ALLOCATION_COMPONENT));
 		this.dotOutputFile = configuration.getStringProperty(ComponentDependencyGraphPluginAllocation.CONFIG_OUTPUT_FN_BASE);
 		this.includeWeights = configuration.getBooleanProperty(ComponentDependencyGraphPluginAllocation.CONFIG_INCLUDE_WEIGHTS);
 		this.shortLabels = configuration.getBooleanProperty(ComponentDependencyGraphPluginAllocation.CONFIG_SHORTLABELS);

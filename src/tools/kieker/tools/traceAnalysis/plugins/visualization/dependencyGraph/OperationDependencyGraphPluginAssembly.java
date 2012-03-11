@@ -76,7 +76,8 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 
 	public OperationDependencyGraphPluginAssembly(final Configuration configuration) {
 		// TODO Check type conversion
-		super(configuration, new DependencyGraph<AssemblyComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+		super(configuration);
+		super.setDependencyGraph(new DependencyGraph<AssemblyComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 				new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 						OperationRepository.ROOT_OPERATION,
 						AssemblyRepository.ROOT_ASSEMBLY_COMPONENT)));

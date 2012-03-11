@@ -79,7 +79,8 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 
 	public OperationDependencyGraphPluginAllocation(final Configuration configuration) {
 		// TODO Check type conversion
-		super(configuration, new DependencyGraph<AllocationComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+		super(configuration);
+		super.setDependencyGraph(new DependencyGraph<AllocationComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 				new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 						OperationRepository.ROOT_OPERATION,
 						AllocationRepository.ROOT_ALLOCATION_COMPONENT)));

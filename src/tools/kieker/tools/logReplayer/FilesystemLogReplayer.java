@@ -116,8 +116,13 @@ public class FilesystemLogReplayer {
 		}
 		final AnalysisController tpanInstance = new AnalysisController();
 		tpanInstance.registerReader(fsReader);
-		final RecordDelegationPlugin delegationPlugin = new RecordDelegationPlugin(this.recordReceiver, this.ignoreRecordsBeforeTimestamp,
-				this.ignoreRecordsAfterTimestamp);
+
+		final Configuration delegationConfiguration = new Configuration();
+		delegationConfiguration.setProperty(RecordDelegationPlugin.CONFIG_IGNORE_RECORDS_AFTER_TIMESTAMP, Long.toString(this.ignoreRecordsAfterTimestamp));
+		delegationConfiguration.setProperty(RecordDelegationPlugin.CONFIG_IGNORE_RECORDS_BEFORE_TIMESTAMP, Long.toString(this.ignoreRecordsBeforeTimestamp));
+		final RecordDelegationPlugin delegationPlugin = new RecordDelegationPlugin(delegationConfiguration);
+		delegationPlugin.setRec(this.recordReceiver);
+
 		tpanInstance.registerFilter(delegationPlugin);
 		tpanInstance.connect(fsReader, FSReader.OUTPUT_PORT_NAME, delegationPlugin, RecordDelegationPlugin.INPUT_PORT_NAME);
 		try {
@@ -145,26 +150,37 @@ public class FilesystemLogReplayer {
 class RecordDelegationPlugin extends AbstractAnalysisPlugin {
 
 	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
+	public static final String CONFIG_IGNORE_RECORDS_BEFORE_TIMESTAMP = "ignoreRecordsBeforeTimestamp";
+	public static final String CONFIG_IGNORE_RECORDS_AFTER_TIMESTAMP = "ignoreRecordsAfterTimestamp";
+
 	private static final Log LOG = LogFactory.getLog(RecordDelegationPlugin.class);
 
-	private final IMonitoringController rec;
+	private IMonitoringController rec;
 
 	private final long ignoreRecordsBeforeTimestamp;
 	private final long ignoreRecordsAfterTimestamp;
 
 	/**
-	 * Data is only sent via the first input port of the given plugin.
+	 * Creates a new instance of this class using the given configuration object.
+	 * 
+	 * @param configuration
+	 *            The object to configure this plugin.
+	 */
+	public RecordDelegationPlugin(final Configuration configuration) {
+		super(configuration);
+
+		this.ignoreRecordsBeforeTimestamp = configuration.getLongProperty(RecordDelegationPlugin.CONFIG_IGNORE_RECORDS_BEFORE_TIMESTAMP);
+		this.ignoreRecordsAfterTimestamp = configuration.getLongProperty(RecordDelegationPlugin.CONFIG_IGNORE_RECORDS_AFTER_TIMESTAMP);
+	}
+
+	/**
+	 * Sets the controller for this instance to a new value. Data is only sent via the first input port of the given plugin.
 	 * 
 	 * @param rec
-	 * @param ignoreRecordsBeforeTimestamp
-	 * @param ignoreRecordsAfterTimestamp
+	 *            The controller.
 	 */
-	public RecordDelegationPlugin(final IMonitoringController rec, final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp) {
-		super(new Configuration());
-
+	public void setRec(final IMonitoringController rec) {
 		this.rec = rec;
-		this.ignoreRecordsBeforeTimestamp = ignoreRecordsBeforeTimestamp;
-		this.ignoreRecordsAfterTimestamp = ignoreRecordsAfterTimestamp;
 	}
 
 	@InputPort(

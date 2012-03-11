@@ -65,10 +65,10 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 
 	public ComponentDependencyGraphPluginAssembly(final Configuration configuration) {
 		// TODO Check type conversion
-		super(configuration,
-				new DependencyGraph<AssemblyComponent>(
-						AssemblyRepository.ROOT_ASSEMBLY_COMPONENT.getId(),
-						AssemblyRepository.ROOT_ASSEMBLY_COMPONENT));
+		super(configuration);
+		super.setDependencyGraph(new DependencyGraph<AssemblyComponent>(
+				AssemblyRepository.ROOT_ASSEMBLY_COMPONENT.getId(),
+				AssemblyRepository.ROOT_ASSEMBLY_COMPONENT));
 		this.dotOutputFile = new File(configuration.getStringProperty(ComponentDependencyGraphPluginAssembly.CONFIG_DOT_OUTPUT_FILE));
 		this.includeWeights = configuration.getBooleanProperty(ComponentDependencyGraphPluginAssembly.CONFIG_INCLUDE_WEIGHTS);
 		this.shortLabels = configuration.getBooleanProperty(ComponentDependencyGraphPluginAssembly.CONFIG_SHORT_LABELS);

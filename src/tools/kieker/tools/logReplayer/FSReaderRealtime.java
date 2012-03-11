@@ -135,7 +135,14 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		/* Register this instance as the master of the created plugin. */
 		rtCons.setMaster(this);
 		this.analysis.registerFilter(rtCons);
-		this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, this.terminationLatch, FSReaderRealtimeCons.INPUT_PORT, this.analysis);
+		final Configuration rtDistributorConfiguration = new Configuration();
+		rtDistributorConfiguration.setProperty(RealtimeReplayDistributor.CONFIG_NUM_WORKERS, Integer.toString(numWorkers));
+		this.rtDistributor = new RealtimeReplayDistributor(rtDistributorConfiguration);
+		this.rtDistributor.setCons(rtCons);
+		this.rtDistributor.setConstInputPortName(FSReaderRealtimeCons.INPUT_PORT);
+		this.rtDistributor.setController(this.analysis);
+		this.rtDistributor.setTerminationLatch(this.terminationLatch);
+
 		this.analysis.registerReader(fsReader);
 		this.analysis.registerFilter(this.rtDistributor);
 

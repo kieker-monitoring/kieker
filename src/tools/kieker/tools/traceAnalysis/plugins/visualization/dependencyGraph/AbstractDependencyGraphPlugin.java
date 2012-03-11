@@ -52,12 +52,14 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 
 	private static final String ENCODING = "UTF-8";
 
-	protected final DependencyGraph<T> dependencyGraph;
+	protected DependencyGraph<T> dependencyGraph;
 	private int numGraphsSaved = 0;
 
-	// TODO Change constructor to plugin-default-constructor
-	public AbstractDependencyGraphPlugin(final Configuration configuration, final DependencyGraph<T> dependencyGraph) {
+	public AbstractDependencyGraphPlugin(final Configuration configuration) {
 		super(configuration);
+	}
+
+	public void setDependencyGraph(final DependencyGraph<T> dependencyGraph) {
 		this.dependencyGraph = dependencyGraph;
 	}
 

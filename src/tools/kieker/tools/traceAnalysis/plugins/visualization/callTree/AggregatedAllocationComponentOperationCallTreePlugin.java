@@ -20,8 +20,6 @@
 
 package kieker.tools.traceAnalysis.plugins.visualization.callTree;
 
-import java.io.File;
-
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
@@ -41,14 +39,13 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class AggregatedAllocationComponentOperationCallTreePlugin extends AggregatedCallTreePlugin<AllocationComponentOperationPair> {
 
-	// TODO Change constructor to plugin-default-constructor
-	public AggregatedAllocationComponentOperationCallTreePlugin(final Configuration configuration,
-			final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory,
-			final File dotOutputFile, final boolean includeWeights, final boolean shortLabels) {
-		// TODO Check type conversion
-		super(configuration, new AggregatedAllocationComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-				AllocationComponentOperationPairFactory.ROOT_PAIR, true), // root node
-				dotOutputFile, includeWeights, shortLabels);
+	public AggregatedAllocationComponentOperationCallTreePlugin(final Configuration configuration) {
+		super(configuration);
+	}
+
+	public void setAllocationComponentOperationPairFactory(final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory) {
+		super.setRoot(new AggregatedAllocationComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+				AllocationComponentOperationPairFactory.ROOT_PAIR, true));
 	}
 
 	@Override

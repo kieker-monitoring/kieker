@@ -66,7 +66,8 @@ public class ContainerDependencyGraphPlugin extends AbstractDependencyGraphPlugi
 
 	public ContainerDependencyGraphPlugin(final Configuration configuration) {
 		// TODO Check type conversion
-		super(configuration, new DependencyGraph<ExecutionContainer>(
+		super(configuration);
+		super.setDependencyGraph(new DependencyGraph<ExecutionContainer>(
 				ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER.getId(),
 				ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER));
 
