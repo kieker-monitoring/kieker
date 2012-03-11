@@ -46,8 +46,8 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	private static final Log LOG = LogFactory.getLog(FSReaderRealtime.class);
 
-	public static final String PROP_NAME_NUM_WORKERS = FSReaderRealtime.class + ".numWorkers";
-	public static final String PROP_NAME_INPUTDIRNAMES = FSReaderRealtime.class + ".inputDirs";
+	public static final String PROP_NAME_NUM_WORKERS = "numWorkers";
+	public static final String PROP_NAME_INPUTDIRNAMES = "inputDirs";
 
 	/* manages the life-cycle of the reader and consumers */
 	private final AnalysisController analysis = new AnalysisController();
@@ -118,9 +118,18 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(inputDirNames));
 		final AbstractReaderPlugin fsReader = new FSReader(configuration);
-		final AbstractAnalysisPlugin rtCons = new FSReaderRealtimeCons(this); // TODO: escaping this in constructor!
+		final FSReaderRealtimeCons rtCons = new FSReaderRealtimeCons(new Configuration());
+		/* Register this instance as the master of the created plugin. */
+		rtCons.setMaster(this);
 		this.analysis.registerFilter(rtCons);
-		this.rtDistributor = new RealtimeReplayDistributor(numWorkers, rtCons, this.terminationLatch, FSReaderRealtimeCons.INPUT_PORT, this.analysis);
+		final Configuration rtDistributorConfiguration = new Configuration();
+		rtDistributorConfiguration.setProperty(RealtimeReplayDistributor.CONFIG_NUM_WORKERS, Integer.toString(numWorkers));
+		this.rtDistributor = new RealtimeReplayDistributor(rtDistributorConfiguration);
+		this.rtDistributor.setCons(rtCons);
+		this.rtDistributor.setConstInputPortName(FSReaderRealtimeCons.INPUT_PORT);
+		this.rtDistributor.setController(this.analysis);
+		this.rtDistributor.setTerminationLatch(this.terminationLatch);
+
 		this.analysis.registerReader(fsReader);
 		this.analysis.registerFilter(this.rtDistributor);
 
@@ -174,16 +183,35 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 	@Plugin
 	private static class FSReaderRealtimeCons extends AbstractAnalysisPlugin {
 
+		/**
+		 * This is the name of the default input port this plugin.
+		 */
 		public static final String INPUT_PORT = "newMonitoringRecord";
-		private final FSReaderRealtime master;
+		private FSReaderRealtime master;
 
-		public FSReaderRealtimeCons(final FSReaderRealtime master) {
-			super(new Configuration());
+		/**
+		 * Creates a new instance of this class using the given configuration object.
+		 * 
+		 * @param configuration
+		 *            The configuration object. Currently no information from this object are being used.
+		 */
+		public FSReaderRealtimeCons(final Configuration configuration) {
+			super(configuration);
+		}
+
+		/**
+		 * Sets the "master" of this object to a new value. The master is the instance of <code>FSReaderRealtime</code> which will receive the data. This method
+		 * should be called directly after creation.
+		 * 
+		 * @param master
+		 *            The new master of this plugin.
+		 */
+		public void setMaster(final FSReaderRealtime master) {
 			this.master = master;
 		}
 
 		/**
-		 * The supress-warning-tag is only necessary because the method is being used via reflection...
+		 * The suppress-warning-tag is only necessary because the method is being used via reflection...
 		 * 
 		 * @param data
 		 */
@@ -191,6 +219,11 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		@InputPort(name = FSReaderRealtimeCons.INPUT_PORT, eventTypes = { IMonitoringRecord.class })
 		public void newMonitoringRecord(final Object data) {
 			final IMonitoringRecord record = (IMonitoringRecord) data;
+			/* Make sure that the master exists. This is necessary due to the changed constructor. */
+			if (this.master == null) {
+				FSReaderRealtime.LOG.warn("Plugin doesn't have a valid master-object.");
+				return;
+			}
 			if (!this.master.deliver(FSReaderRealtime.OUTPUT_PORT_NAME, record)) {
 				FSReaderRealtime.LOG.error("LogReaderExecutionException");
 			}

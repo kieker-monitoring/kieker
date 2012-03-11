@@ -52,12 +52,12 @@ import kieker.common.record.IMonitoringRecord;
 public final class JMXReader extends AbstractReaderPlugin {
 
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
-	public static final String CONFIG_SERVER = JMXReader.class.getName() + ".server";
-	public static final String CONFIG_PORT = JMXReader.class.getName() + ".port";
-	public static final String CONFIG_SERVICEURL = JMXReader.class.getName() + ".serviceURL";
-	public static final String CONFIG_DOMAIN = JMXReader.class.getName() + ".domain";
-	public static final String CONFIG_LOGNAME = JMXReader.class.getName() + ".logname";
-	public static final String CONFIG_SILENT = JMXReader.class.getName() + ".silentreconnect";
+	public static final String CONFIG_SERVER = "server";
+	public static final String CONFIG_PORT = "port";
+	public static final String CONFIG_SERVICEURL = "serviceURL";
+	public static final String CONFIG_DOMAIN = "domain";
+	public static final String CONFIG_LOGNAME = "logname";
+	public static final String CONFIG_SILENT = "silentreconnect";
 
 	private static final Log LOG = LogFactory.getLog(JMXReader.class);
 

@@ -59,7 +59,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingPlu
 	public static final String INPUT_PORT_NAME = "inputTraceEvent";
 	public static final String OUTPUT_PORT_NAME = "outputEventRecordTrace";
 
-	public static final String CONFIG_MAX_TRACE_DURATION_MILLIS = EventRecordTraceGenerationFilter.class.getName() + ".maxTraceDurationMillis";
+	public static final String CONFIG_MAX_TRACE_DURATION_MILLIS = "maxTraceDurationMillis";
 
 	private static final long MAX_DURATION_NANOS = Long.MAX_VALUE;
 

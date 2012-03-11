@@ -45,7 +45,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class ExecutionTraceWriterPlugin extends AbstractExecutionTraceProcessingPlugin {
 
-	public static final String CONFIG_OUTPUT_FN = ExecutionTraceWriterPlugin.class.getName() + ".outputFn";
+	public static final String CONFIG_OUTPUT_FN = "outputFn";
 	public static final String EXECUTION_TRACES_INPUT_PORT_NAME = "newEvent";
 	private static final Log LOG = LogFactory.getLog(ExecutionTraceWriterPlugin.class);
 

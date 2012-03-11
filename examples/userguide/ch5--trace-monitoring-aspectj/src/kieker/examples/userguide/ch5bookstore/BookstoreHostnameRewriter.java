@@ -46,7 +46,7 @@ public class BookstoreHostnameRewriter {
 		/* Create Kieker.Analysis instance */
 		final AnalysisController analysisInstance = new AnalysisController();
 
-		final HostNameRewriterPlugin plugin = new HostNameRewriterPlugin();
+		final HostNameRewriterPlugin plugin = new HostNameRewriterPlugin(new Configuration());
 		analysisInstance.registerFilter(plugin);
 
 		/* Set filesystem monitoring log input directory for our analysis */
@@ -76,8 +76,8 @@ class HostNameRewriterPlugin extends AbstractAnalysisPlugin {
 	private static final String[] CATALOG_HOSTNAMES = { "SRV0", "SRV1" };
 	private static final String CRM_HOSTNAME = "SRV0";
 
-	public HostNameRewriterPlugin() {
-		super(new Configuration());
+	public HostNameRewriterPlugin(final Configuration configuration) {
+		super(configuration);
 	}
 
 	@InputPort(

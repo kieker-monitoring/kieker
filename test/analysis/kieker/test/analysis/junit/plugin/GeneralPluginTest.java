@@ -97,15 +97,33 @@ public class GeneralPluginTest extends TestCase {
 	}
 }
 
+/**
+ * This is just a helper class used for testing the plugin structure. It should not be used outside this test class.
+ * 
+ * @author Nils Christian Ehmke
+ * @version 1.0
+ */
 @Plugin(
 		outputPorts = {
 			@OutputPort(name = SourceClass.OUTPUT_PORT_NAME, eventTypes = { OperationExecutionRecord.class })
 		})
 class SourceClass extends AbstractReaderPlugin {
 
+	/**
+	 * The array containing the records to be delivered.
+	 */
 	private final OperationExecutionRecord records[];
+	/**
+	 * The name of the default output port.
+	 */
 	public static final String OUTPUT_PORT_NAME = "output";
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param records
+	 *            The records to be delivered via the output port.
+	 */
 	public SourceClass(final OperationExecutionRecord... records) {
 		super(new Configuration());
 		this.records = records;
@@ -133,11 +151,30 @@ class SourceClass extends AbstractReaderPlugin {
 	}
 }
 
+/**
+ * This is just a simple helper class to test the plugin structure. It should not be used outside this test class.
+ * 
+ * @author Nils Christian Ehmke
+ * @version 1.0
+ */
 class ExecutionSinkClass extends AbstractAnalysisPlugin {
 
+	/**
+	 * The name of the default input port.
+	 */
 	public static final String INPUT_PORT_NAME = "doJob";
+
+	/**
+	 * This list will contain the records this plugin received.
+	 */
 	private final ConcurrentLinkedQueue<Execution> lst = new ConcurrentLinkedQueue<Execution>();
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this plugin. It will not be used.
+	 */
 	public ExecutionSinkClass(final Configuration configuration) {
 		super(configuration);
 	}
@@ -159,6 +196,11 @@ class ExecutionSinkClass extends AbstractAnalysisPlugin {
 		this.lst.add((Execution) data);
 	}
 
+	/**
+	 * Delivers the list containing the received records.
+	 * 
+	 * @return The list with the records.
+	 */
 	public ConcurrentLinkedQueue<Execution> getList() {
 		return this.lst;
 	}

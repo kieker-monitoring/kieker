@@ -52,8 +52,8 @@ public final class TraceIdFilter extends AbstractAnalysisPlugin {
 	public static final String OUTPUT_PORT_NAME = "output";
 	public static final String OUTPUT_PORT_NAME_NOT = "output-not";
 
-	public static final String CONFIG_SELECT_ALL_TRACES = TraceIdFilter.class.getName() + ".acceptAllTraces";
-	public static final String CONFIG_SELECTED_TRACES = TraceIdFilter.class.getName() + ".selectedTraceIds";
+	public static final String CONFIG_SELECT_ALL_TRACES = "acceptAllTraces";
+	public static final String CONFIG_SELECTED_TRACES = "selectedTraceIds";
 
 	private final boolean acceptAllTraces;
 	private final Set<Long> selectedTraceIds;

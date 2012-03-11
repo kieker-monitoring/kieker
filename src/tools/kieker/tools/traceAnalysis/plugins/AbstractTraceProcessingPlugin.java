@@ -31,6 +31,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public abstract class AbstractTraceProcessingPlugin extends AbstractTraceAnalysisPlugin {
+
 	public static final long MAX_DURATION_MILLIS = Integer.MAX_VALUE;
 
 	private int numTracesProcessed = 0;

@@ -69,6 +69,7 @@ import kieker.tools.traceAnalysis.plugins.traceWriter.InvalidExecutionTraceWrite
 import kieker.tools.traceAnalysis.plugins.traceWriter.MessageTraceWriterPlugin;
 import kieker.tools.traceAnalysis.plugins.visualization.callTree.AggregatedAllocationComponentOperationCallTreePlugin;
 import kieker.tools.traceAnalysis.plugins.visualization.callTree.AggregatedAssemblyComponentOperationCallTreePlugin;
+import kieker.tools.traceAnalysis.plugins.visualization.callTree.AggregatedCallTreePlugin;
 import kieker.tools.traceAnalysis.plugins.visualization.callTree.TraceCallTreePlugin;
 import kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph.ComponentDependencyGraphPluginAllocation;
 import kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph.ComponentDependencyGraphPluginAssembly;
@@ -396,8 +397,8 @@ public final class TraceAnalysisTool {
 			final Configuration traceAllocationEquivClassFilterConfig = new Configuration();
 			traceAllocationEquivClassFilterConfig.setProperty(TraceEquivalenceClassFilter.class.getName() + ".name",
 					Constants.TRACEALLOCATIONEQUIVCLASS_COMPONENT_NAME);
-			final TraceEquivalenceClassFilter traceAllocationEquivClassFilter = new TraceEquivalenceClassFilter(traceAllocationEquivClassFilterConfig,
-					TraceEquivalenceClassModes.ALLOCATION);
+			final TraceEquivalenceClassFilter traceAllocationEquivClassFilter = new TraceEquivalenceClassFilter(traceAllocationEquivClassFilterConfig);
+			traceAllocationEquivClassFilter.setTraceEquivalenceCallMode(TraceEquivalenceClassModes.ALLOCATION);
 			if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)) {
 				/**
 				 * Currently, this filter is only used to print an equivalence
@@ -415,8 +416,8 @@ public final class TraceAnalysisTool {
 
 			final Configuration traceAssemblyEquivClassFilterConfig = new Configuration();
 			traceAssemblyEquivClassFilterConfig.setProperty(TraceEquivalenceClassFilter.class.getName() + ".name", Constants.TRACEASSEMBLYEQUIVCLASS_COMPONENT_NAME);
-			final TraceEquivalenceClassFilter traceAssemblyEquivClassFilter = new TraceEquivalenceClassFilter(traceAssemblyEquivClassFilterConfig,
-					TraceEquivalenceClassModes.ASSEMBLY);
+			final TraceEquivalenceClassFilter traceAssemblyEquivClassFilter = new TraceEquivalenceClassFilter(traceAssemblyEquivClassFilterConfig);
+			traceAssemblyEquivClassFilter.setTraceEquivalenceCallMode(TraceEquivalenceClassModes.ASSEMBLY);
 			if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT)) {
 				/**
 				 * Currently, this filter is only used to print an equivalence
@@ -671,10 +672,12 @@ public final class TraceAnalysisTool {
 				componentPlotAggregatedCallTreeConfig
 						.setProperty(AggregatedAllocationComponentOperationCallTreePlugin.class.getName() + ".name",
 								Constants.PLOTAGGREGATEDALLOCATIONCALLTREE_COMPONENT_NAME);
-				componentPlotAggregatedCallTree = new AggregatedAllocationComponentOperationCallTreePlugin(componentPlotAggregatedCallTreeConfig,
-						TraceAnalysisTool.ALLOCATION_COMPONENT_OPERATION_PAIR_FACTORY,
-						new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix
-								+ Constants.AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX), true, TraceAnalysisTool.shortLabels);
+				componentPlotAggregatedCallTreeConfig.setProperty(AggregatedCallTreePlugin.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(true));
+				componentPlotAggregatedCallTreeConfig.setProperty(AggregatedCallTreePlugin.CONFIG_SHORT_LABELS, Boolean.toString(TraceAnalysisTool.shortLabels));
+				componentPlotAggregatedCallTree = new AggregatedAllocationComponentOperationCallTreePlugin(componentPlotAggregatedCallTreeConfig);
+				componentPlotAggregatedCallTree.setAllocationComponentOperationPairFactory(TraceAnalysisTool.ALLOCATION_COMPONENT_OPERATION_PAIR_FACTORY);
+				componentPlotAggregatedCallTree.setDotOutputFile(new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix
+						+ Constants.AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX));
 				analysisInstance.registerFilter(componentPlotAggregatedCallTree);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPlotAggregatedCallTree, AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME);
@@ -689,10 +692,12 @@ public final class TraceAnalysisTool {
 				final Configuration componentPlotAssemblyCallTreeConfig = new Configuration();
 				componentPlotAssemblyCallTreeConfig.setProperty(AggregatedAssemblyComponentOperationCallTreePlugin.class.getName() + ".name",
 						Constants.PLOTAGGREGATEDASSEMBLYCALLTREE_COMPONENT_NAME);
-				componentPlotAssemblyCallTree = new AggregatedAssemblyComponentOperationCallTreePlugin(componentPlotAssemblyCallTreeConfig,
-						TraceAnalysisTool.ASSEMBLY_COMPONENT_OPERATION_PAIR_FACTORY, new File(TraceAnalysisTool.outputDir
-								+ File.separator + TraceAnalysisTool.outputFnPrefix + Constants.AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX), true,
-						TraceAnalysisTool.shortLabels);
+				componentPlotAssemblyCallTreeConfig.setProperty(AggregatedCallTreePlugin.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(true));
+				componentPlotAssemblyCallTreeConfig.setProperty(AggregatedCallTreePlugin.CONFIG_SHORT_LABELS, Boolean.toString(TraceAnalysisTool.shortLabels));
+				componentPlotAssemblyCallTree = new AggregatedAssemblyComponentOperationCallTreePlugin(componentPlotAssemblyCallTreeConfig);
+				componentPlotAssemblyCallTree.setAssemblyComponentOperationPairFactory(TraceAnalysisTool.ASSEMBLY_COMPONENT_OPERATION_PAIR_FACTORY);
+				componentPlotAssemblyCallTree.setDotOutputFile(new File(TraceAnalysisTool.outputDir
+						+ File.separator + TraceAnalysisTool.outputFnPrefix + Constants.AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX));
 				analysisInstance.registerFilter(componentPlotAssemblyCallTree);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPlotAssemblyCallTree, AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME);

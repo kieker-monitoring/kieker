@@ -58,10 +58,10 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 public class ComponentDependencyGraphPluginAllocation extends AbstractDependencyGraphPlugin<AllocationComponent> {
 	private static final Log LOG = LogFactory.getLog(ComponentDependencyGraphPluginAllocation.class);
 
-	public static final String CONFIG_OUTPUT_FN_BASE = ComponentDependencyGraphPluginAllocation.class.getName() + ".filename";
-	public static final String CONFIG_INCLUDE_WEIGHTS = ComponentDependencyGraphPluginAllocation.class.getName() + ".includeWeights";
-	public static final String CONFIG_SHORTLABELS = ComponentDependencyGraphPluginAllocation.class.getName() + ".shortlabels";
-	public static final String CONFIG_SELFLOOPS = ComponentDependencyGraphPluginAllocation.class.getName() + ".selfloops";
+	public static final String CONFIG_OUTPUT_FN_BASE = "filename";
+	public static final String CONFIG_INCLUDE_WEIGHTS = "includeWeights";
+	public static final String CONFIG_SHORTLABELS = "shortlabels";
+	public static final String CONFIG_SELFLOOPS = "selfloops";
 
 	public static final String CONFIG_OUTPUT_FN_BASE_DEFAULT = "AllocationComponentDependencyGraph";
 
@@ -73,8 +73,9 @@ public class ComponentDependencyGraphPluginAllocation extends AbstractDependency
 
 	public ComponentDependencyGraphPluginAllocation(final Configuration configuration) {
 		// TODO Check type conversion??
-		super(configuration,
-				new DependencyGraph<AllocationComponent>(AllocationRepository.ROOT_ALLOCATION_COMPONENT.getId(), AllocationRepository.ROOT_ALLOCATION_COMPONENT));
+		super(configuration);
+		super.setDependencyGraph(new DependencyGraph<AllocationComponent>(AllocationRepository.ROOT_ALLOCATION_COMPONENT.getId(),
+				AllocationRepository.ROOT_ALLOCATION_COMPONENT));
 		this.dotOutputFile = configuration.getStringProperty(ComponentDependencyGraphPluginAllocation.CONFIG_OUTPUT_FN_BASE);
 		this.includeWeights = configuration.getBooleanProperty(ComponentDependencyGraphPluginAllocation.CONFIG_INCLUDE_WEIGHTS);
 		this.shortLabels = configuration.getBooleanProperty(ComponentDependencyGraphPluginAllocation.CONFIG_SHORTLABELS);

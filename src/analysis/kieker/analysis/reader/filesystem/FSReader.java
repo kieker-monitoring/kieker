@@ -46,8 +46,8 @@ import kieker.common.record.misc.EmptyRecord;
 public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
-	public static final String CONFIG_INPUTDIRS = FSReader.class.getName() + ".inputDirs";
-	public static final String CONFIG_ONLYRECORDS = FSReader.class.getName() + ".readOnlyRecordsOfType";
+	public static final String CONFIG_INPUTDIRS = "inputDirs";
+	public static final String CONFIG_ONLYRECORDS = "readOnlyRecordsOfType";
 
 	public static final IMonitoringRecord EOF = new EmptyRecord();
 

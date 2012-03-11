@@ -92,7 +92,14 @@ public class JMSLogReplayer {
 		final AbstractReaderPlugin logReader = new JMSReader(configuration);
 		final AnalysisController tpanInstance = new AnalysisController();
 		tpanInstance.registerReader(logReader);
-		final RecordDelegationPlugin2 recordReceiver = new RecordDelegationPlugin2(this.recordReceiver, this.recordReceiverInputPortName, tpanInstance);
+
+		final RecordDelegationPlugin2 recordReceiver = new RecordDelegationPlugin2(new Configuration());
+		/* configure the record receiver a little bit. */
+		recordReceiver.setController(tpanInstance);
+		recordReceiver.setInputPortName(this.recordReceiverInputPortName);
+		recordReceiver.setRec(this.recordReceiver);
+		recordReceiver.initialize();
+
 		tpanInstance.registerFilter(recordReceiver);
 		tpanInstance.connect(logReader, JMSReader.OUTPUT_PORT_NAME, recordReceiver, RecordDelegationPlugin2.INPUT_PORT);
 		try {
@@ -125,14 +132,9 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 	public static final String INPUT_PORT = "newMonitoringRecord";
 
 	// private static final Log LOG = LogFactory.getLog(RecordDelegationPlugin2.class);
-
-	/**
-	 * Must not be used for construction.
-	 */
-	@SuppressWarnings("unused")
-	private RecordDelegationPlugin2() {
-		this((AbstractAnalysisPlugin) null, "", null);
-	}
+	private AbstractAnalysisPlugin rec;
+	private String inputPortName;
+	private AnalysisController controller;
 
 	/**
 	 * Creates a new instance of this class.
@@ -144,11 +146,47 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 	 * @param controller
 	 *            The controller instance to be used for connecting the filters.
 	 */
-	public RecordDelegationPlugin2(final AbstractAnalysisPlugin rec, final String inputPortName, final AnalysisController controller) {
-		super(new Configuration());
+	public RecordDelegationPlugin2(final Configuration configuration) {
+		super(configuration);
+	}
 
-		controller.registerFilter(this);
-		controller.connect(this, RecordDelegationPlugin2.OUTPUT_PORT_NAME, rec, inputPortName);
+	/**
+	 * This method should only be called <b>after</b> <i>setRec</i>, <i>setController</i> and <i>setInputPortName</i> have been called, to register this plugin with
+	 * the given components.
+	 */
+	public void initialize() {
+		this.controller.registerFilter(this);
+		this.controller.connect(this, RecordDelegationPlugin2.OUTPUT_PORT_NAME, this.rec, this.inputPortName);
+	}
+
+	/**
+	 * This method sets the receiver of this instance.
+	 * 
+	 * @param rec
+	 *            The new receiver.
+	 */
+	public void setRec(final AbstractAnalysisPlugin rec) {
+		this.rec = rec;
+	}
+
+	/**
+	 * This method sets the input port name to be used from the receiver component.
+	 * 
+	 * @param inputPortName
+	 *            The name of the input port to be used.
+	 */
+	public void setInputPortName(final String inputPortName) {
+		this.inputPortName = inputPortName;
+	}
+
+	/**
+	 * Sets the controller to be used for registering.
+	 * 
+	 * @param controller
+	 *            The analysis controller.
+	 */
+	public void setController(final AnalysisController controller) {
+		this.controller = controller;
 	}
 
 	@InputPort(

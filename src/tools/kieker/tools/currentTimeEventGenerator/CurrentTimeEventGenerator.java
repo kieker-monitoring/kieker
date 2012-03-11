@@ -54,7 +54,7 @@ import kieker.common.logging.LogFactory;
 public class CurrentTimeEventGenerator extends AbstractAnalysisPlugin {
 
 	public static final String CURRENT_TIME_OUTPUT_PORT_NAME = "currentTimeOutputPort";
-	public static final String CONFIG_TIME_RESOLUTION = CurrentTimeEventGenerator.class.getName() + ".timeResolution";
+	public static final String CONFIG_TIME_RESOLUTION = "timeResolution";
 	private static final Log LOG = LogFactory.getLog(CurrentTimeEventGenerator.class);
 
 	/**
@@ -79,11 +79,12 @@ public class CurrentTimeEventGenerator extends AbstractAnalysisPlugin {
 	 * Creates an event generator which generates time events with the given
 	 * resolution in nanoseconds via the output port {@link #getCurrentTimeOutputPort()}.
 	 * 
-	 * @param timeResolution
+	 * @param configuration
+	 *            The configuration to be used for this plugin.
 	 */
-	public CurrentTimeEventGenerator(final long timeResolution) {
-		super(new Configuration());
-		this.timerResolution = timeResolution;
+	public CurrentTimeEventGenerator(final Configuration configuration) {
+		super(configuration);
+		this.timerResolution = configuration.getLongProperty(CurrentTimeEventGenerator.CONFIG_TIME_RESOLUTION);
 	}
 
 	/**

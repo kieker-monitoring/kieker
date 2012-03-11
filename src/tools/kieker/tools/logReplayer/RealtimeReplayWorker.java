@@ -34,39 +34,31 @@ import kieker.common.record.IMonitoringRecord;
  * 
  */
 @Plugin(outputPorts = {
-		@OutputPort(name = RealtimeReplayWorker.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
+	@OutputPort(name = RealtimeReplayWorker.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
 })
 public class RealtimeReplayWorker extends AbstractAnalysisPlugin implements Runnable {
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	// private static final Log LOG = LogFactory.getLog(RealtimeReplayWorker.class);
-	private final IMonitoringRecord monRec;
-	private final RealtimeReplayDistributor rd;
+	private IMonitoringRecord monRec;
+	private RealtimeReplayDistributor rd;
 
 	/**
-	 * Creates a new instance of this class using the given parameters.
+	 * Creates a new instance of this class using the given parameters. Further initialization should be done via the <i>initialize</i>-method.
 	 * 
-	 * @param monRec
-	 *            The record to be send to the plugin.
-	 * @param rd
-	 *            The distributor.
-	 * @param cons
-	 *            The plugin which receives the record. The plugin <b>must</b> have at least one input port. The data will be send to the first input.
-	 * @param controller
-	 *            The controller instance to be used for connecting the filter.
+	 * @param configuration
+	 *            The configuration object used to configure this instance.
 	 */
-	public RealtimeReplayWorker(final IMonitoringRecord monRec, final RealtimeReplayDistributor rd, final AbstractAnalysisPlugin cons,
+	public RealtimeReplayWorker(final Configuration configuration) {
+		super(configuration);
+	}
+
+	public void initialize(final IMonitoringRecord monRec, final RealtimeReplayDistributor rd,
+			final AbstractAnalysisPlugin cons,
 			final String constInputPortName, final AnalysisController controller) {
-		super(new Configuration());
 		this.monRec = monRec;
 		this.rd = rd;
 
 		controller.connect(this, RealtimeReplayWorker.OUTPUT_PORT_NAME, cons, constInputPortName);
-	}
-
-	public RealtimeReplayWorker() {
-		super(new Configuration());
-		this.monRec = null;
-		this.rd = null;
 	}
 
 	@Override

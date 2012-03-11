@@ -55,14 +55,15 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
 	private static final Log LOG = LogFactory.getLog(RealtimeReplayDistributor.class);
 
+	public static final String CONFIG_NUM_WORKERS = "numWorkers";
 	private static final ITimeSource TIMESOURCE = DefaultSystemTimer.getInstance();
 	private static final int QUEUE_SIZE_FACTOR = 1000;
 	private static final int MILLISECOND = 1000 * 1000;
 	private static final int REPLAY_OFFSET = 2 * 1000 * RealtimeReplayDistributor.MILLISECOND;
 
 	private final int numWorkers;
-	private final AbstractAnalysisPlugin cons;
-	private final String constInputPortName;
+	private AbstractAnalysisPlugin cons;
+	private String constInputPortName;
 	private volatile long startTime = -1;
 	private volatile long offset = -1;
 	private volatile long firstLoggingTimestamp;
@@ -70,43 +71,39 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 	private long lTime;
 	private volatile int active;
 	private final int maxQueueSize;
-	private final CountDownLatch terminationLatch;
+	private CountDownLatch terminationLatch;
 	private AnalysisController controller;
-
-	public RealtimeReplayDistributor(final Configuration configuration) {
-		super(configuration);
-
-		// TODO: Load from configuration.
-		this.numWorkers = 0;
-		this.cons = null;
-		this.maxQueueSize = 0;
-		this.executor = null;
-		this.terminationLatch = null;
-		this.constInputPortName = null;
-	}
 
 	/**
 	 * Constructs a RealtimeReplayDistributor.
 	 * 
-	 * @param numWorkers
-	 *            number of worker threads processing the internal record buffer
-	 * @param cons
-	 *            the consumer
-	 * @param terminationLatch
-	 *            will be decremented after the last record was replayed
-	 * @param controller
+	 * @param configuration
+	 *            The configuration object used to configure this instance.
 	 */
-	public RealtimeReplayDistributor(final int numWorkers, final AbstractAnalysisPlugin cons, final CountDownLatch terminationLatch,
-			final String constInputPortName, final AnalysisController controller) {
-		super(new Configuration());
-		this.numWorkers = numWorkers;
-		this.cons = cons;
-		this.maxQueueSize = numWorkers * RealtimeReplayDistributor.QUEUE_SIZE_FACTOR;
-		this.executor = new ScheduledThreadPoolExecutor(numWorkers);
+	public RealtimeReplayDistributor(final Configuration configuration) {
+		super(configuration);
+
+		this.numWorkers = configuration.getIntProperty(RealtimeReplayDistributor.CONFIG_NUM_WORKERS);
+		this.maxQueueSize = this.numWorkers * RealtimeReplayDistributor.QUEUE_SIZE_FACTOR;
+
+		this.executor = new ScheduledThreadPoolExecutor(this.numWorkers);
 		this.executor.setExecuteExistingDelayedTasksAfterShutdownPolicy(true);
 		this.executor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
-		this.terminationLatch = terminationLatch;
+	}
+
+	public void setCons(final AbstractAnalysisPlugin cons) {
+		this.cons = cons;
+	}
+
+	public void setConstInputPortName(final String constInputPortName) {
 		this.constInputPortName = constInputPortName;
+	}
+
+	public void setTerminationLatch(final CountDownLatch terminationLatch) {
+		this.terminationLatch = terminationLatch;
+	}
+
+	public void setController(final AnalysisController controller) {
 		this.controller = controller;
 	}
 
@@ -141,8 +138,9 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 				}
 			}
 			this.active++;
-			this.executor.schedule(new RealtimeReplayWorker(monitoringRecord, this, this.cons, this.constInputPortName, this.controller), schedTime,
-					TimeUnit.NANOSECONDS); // *relative*
+			final RealtimeReplayWorker worker = new RealtimeReplayWorker(new Configuration());
+			worker.initialize(monitoringRecord, this, this.cons, this.constInputPortName, this.controller);
+			this.executor.schedule(worker, schedTime, TimeUnit.NANOSECONDS); // *relative*
 		}
 		this.lTime = this.lTime < monitoringRecord.getLoggingTimestamp() ? monitoringRecord.getLoggingTimestamp() : this.lTime; // NOCS
 	}

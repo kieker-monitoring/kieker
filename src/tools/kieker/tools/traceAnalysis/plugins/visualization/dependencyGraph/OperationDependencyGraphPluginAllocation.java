@@ -63,10 +63,10 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class OperationDependencyGraphPluginAllocation extends AbstractDependencyGraphPlugin<AllocationComponentOperationPair> {
 
-	public static final String CONFIG_DOT_OUTPUT_FILE = OperationDependencyGraphPluginAllocation.class.getName() + ".dotOutputFile";
-	public static final String CONFIG_INCLUDE_WEIGHTS = OperationDependencyGraphPluginAllocation.class.getName() + ".includeWeights";
-	public static final String CONFIG_SHORT_LABELS = OperationDependencyGraphPluginAllocation.class.getName() + ".shortLabels";
-	public static final String CONFIG_INCLUDE_SELF_LOOPS = OperationDependencyGraphPluginAllocation.class.getName() + ".includeSelfLoops";
+	public static final String CONFIG_DOT_OUTPUT_FILE = "dotOutputFile";
+	public static final String CONFIG_INCLUDE_WEIGHTS = "includeWeights";
+	public static final String CONFIG_SHORT_LABELS = "shortLabels";
+	public static final String CONFIG_INCLUDE_SELF_LOOPS = "includeSelfLoops";
 
 	private static final Log LOG = LogFactory.getLog(OperationDependencyGraphPluginAllocation.class);
 	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
@@ -79,7 +79,8 @@ public class OperationDependencyGraphPluginAllocation extends AbstractDependency
 
 	public OperationDependencyGraphPluginAllocation(final Configuration configuration) {
 		// TODO Check type conversion
-		super(configuration, new DependencyGraph<AllocationComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+		super(configuration);
+		super.setDependencyGraph(new DependencyGraph<AllocationComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 				new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 						OperationRepository.ROOT_OPERATION,
 						AllocationRepository.ROOT_ALLOCATION_COMPONENT)));

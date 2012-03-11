@@ -62,10 +62,10 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGraphPlugin<AssemblyComponentOperationPair> {
 
-	public static final String CONFIG_DOT_OUTPUT_FILE = OperationDependencyGraphPluginAssembly.class.getName() + ".dotOutputFile";
-	public static final String CONFIG_INCLUDE_WEIGHTS = OperationDependencyGraphPluginAssembly.class.getName() + ".includeWeights";
-	public static final String CONFIG_SHORT_LABELS = OperationDependencyGraphPluginAssembly.class.getName() + ".shortLabels";
-	public static final String CONFIG_INCLUDE_SELF_LOOPS = OperationDependencyGraphPluginAssembly.class.getName() + ".includeSelfLoops";
+	public static final String CONFIG_DOT_OUTPUT_FILE = "dotOutputFile";
+	public static final String CONFIG_INCLUDE_WEIGHTS = "includeWeights";
+	public static final String CONFIG_SHORT_LABELS = "shortLabels";
+	public static final String CONFIG_INCLUDE_SELF_LOOPS = "includeSelfLoops";
 
 	private static final Log LOG = LogFactory.getLog(OperationDependencyGraphPluginAssembly.class);
 	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
@@ -76,7 +76,8 @@ public class OperationDependencyGraphPluginAssembly extends AbstractDependencyGr
 
 	public OperationDependencyGraphPluginAssembly(final Configuration configuration) {
 		// TODO Check type conversion
-		super(configuration, new DependencyGraph<AssemblyComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+		super(configuration);
+		super.setDependencyGraph(new DependencyGraph<AssemblyComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 				new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 						OperationRepository.ROOT_OPERATION,
 						AssemblyRepository.ROOT_ASSEMBLY_COMPONENT)));

@@ -95,7 +95,9 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 	 * @param expectedOutputTimerEvents
 	 */
 	private void compareInputAndOutput(final long timerResolution, final long[] inputTimestamps, final long[] expectedOutputTimerEvents) {
-		final CurrentTimeEventGenerator filter = new CurrentTimeEventGenerator(timerResolution);
+		final Configuration filterConfiguration = new Configuration();
+		filterConfiguration.setProperty(CurrentTimeEventGenerator.CONFIG_TIME_RESOLUTION, Long.toString(timerResolution));
+		final CurrentTimeEventGenerator filter = new CurrentTimeEventGenerator(filterConfiguration);
 
 		final DstClass dst = new DstClass();
 		final AnalysisController controller = new AnalysisController();
