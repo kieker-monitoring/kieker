@@ -21,6 +21,8 @@
 package kieker.examples.userguide.ch3and4bookstore;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.plugin.AbstractPlugin;
+import kieker.common.configuration.Configuration;
 
 public class Starter {
 
@@ -43,10 +45,12 @@ public class Starter {
 
 		/* Start an analysis of the response times */
 		final AnalysisController analyisController = new AnalysisController();
+		final Configuration readerConfiguration = new Configuration();
+		readerConfiguration.setProperty(AbstractPlugin.CONFIG_NAME, "somePipe");
 		final MyPipeReader reader =
-				new MyPipeReader("somePipe");
+				new MyPipeReader(readerConfiguration);
 		final MyResponseTimeConsumer consumer =
-				new MyResponseTimeConsumer();
+				new MyResponseTimeConsumer(new Configuration());
 		analyisController.registerReader(reader);
 		analyisController.registerFilter(consumer);
 

@@ -38,7 +38,9 @@ public class BookstoreAnalysisStarter {
 		/* Create Kieker.Analysis instance */
 		final AnalysisController analysisInstance = new AnalysisController();
 		/* Register our own consumer; set the max. response time to 1.9 ms */
-		final Consumer consumer = new Consumer(1900000);
+		final Configuration consumerConfiguration = new Configuration();
+		consumerConfiguration.setProperty(Consumer.CONFIG_MAX_RESPONSE_TIME, Long.toString(1900000));
+		final Consumer consumer = new Consumer(consumerConfiguration);
 		analysisInstance.registerFilter(consumer);
 
 		/* Set filesystem monitoring log input directory for our analysis */

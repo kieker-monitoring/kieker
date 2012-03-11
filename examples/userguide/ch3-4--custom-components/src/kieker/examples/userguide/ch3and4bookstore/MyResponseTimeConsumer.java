@@ -20,18 +20,15 @@
 
 package kieker.examples.userguide.ch3and4bookstore;
 
-import java.util.HashMap;
-
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 
 public class MyResponseTimeConsumer extends AbstractAnalysisPlugin {
 
 	public static final String INPUT_PORT_NAME = "newEvent";
 
-	public MyResponseTimeConsumer(final Configuration configuration, final HashMap<String, AbstractRepository> repositories) {
+	public MyResponseTimeConsumer(final Configuration configuration) {
 		super(configuration);
 	}
 
