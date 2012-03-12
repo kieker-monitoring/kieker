@@ -70,9 +70,14 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<Abstract
 		super(traceId);
 	}
 
+	public EventRecordTrace(final long traceId, final String sessionId) {
+		super(traceId, sessionId);
+	}
+
 	/**
 	 * Adds a {@link AbstractTraceEvent} to the trace.
-	 * The given event must have the {@link #getTraceId()} of this trace and another event with {@link AbstractTraceEvent#getOrderIndex()} must not have been added before.
+	 * The given event must have the {@link #getTraceId()} of this trace and another event with {@link AbstractTraceEvent#getOrderIndex()} must not have been added
+	 * before.
 	 * 
 	 * @param execution
 	 * @throws InvalidTraceException

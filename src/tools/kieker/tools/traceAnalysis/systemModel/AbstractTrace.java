@@ -25,18 +25,33 @@ package kieker.tools.traceAnalysis.systemModel;
  */
 public abstract class AbstractTrace {
 
+	public static final String NO_TRACE_ID = "N/A";
+
+	private final String sessionId; // convenience field. All executions have this traceId.
 	private final long traceId; // convenience field. All executions have this traceId.
 
 	protected AbstractTrace() {
-		this.traceId = -1;
+		this(-1, AbstractTrace.NO_TRACE_ID);
 	}
 
 	public AbstractTrace(final long traceId) {
+		this(traceId, AbstractTrace.NO_TRACE_ID);
+	}
+
+	public AbstractTrace(final long traceId, final String sessionId) {
 		this.traceId = traceId;
+		this.sessionId = sessionId;
 	}
 
 	public final long getTraceId() {
 		return this.traceId;
+	}
+
+	/**
+	 * @return the sessionId
+	 */
+	public final String getSessionId() {
+		return this.sessionId;
 	}
 
 	/*
@@ -46,6 +61,7 @@ public abstract class AbstractTrace {
 	 */
 	@Override
 	public int hashCode() {
+		/* On purpose, we are not considering the sessionId here */
 		return (int) (this.traceId ^ (this.traceId >>> 32)); // NOCS (MagicNumber)
 	}
 

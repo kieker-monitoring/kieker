@@ -73,6 +73,10 @@ public class ExecutionTrace extends AbstractTrace {
 		super(traceId);
 	}
 
+	public ExecutionTrace(final long traceId, final String sessionId) {
+		super(traceId, sessionId);
+	}
+
 	/**
 	 * Adds an execution to the trace.
 	 * 

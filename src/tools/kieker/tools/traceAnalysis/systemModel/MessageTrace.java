@@ -31,7 +31,11 @@ public class MessageTrace extends AbstractTrace {
 	private final List<AbstractMessage> messages;
 
 	public MessageTrace(final long traceId, final List<AbstractMessage> seq) {
-		super(traceId);
+		this(traceId, AbstractTrace.NO_TRACE_ID, seq);
+	}
+
+	public MessageTrace(final long traceId, final String sessionId, final List<AbstractMessage> seq) {
+		super(traceId, sessionId);
 		this.messages = seq;
 	}
 
