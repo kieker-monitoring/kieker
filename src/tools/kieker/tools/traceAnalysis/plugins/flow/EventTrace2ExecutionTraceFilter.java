@@ -70,7 +70,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 	public void inputEventTrace(final EventRecordTrace eventTrace) {
 		final Stack<AbstractTraceEvent> eventStack = new Stack<AbstractTraceEvent>();
 
-		final ExecutionTrace execTrace = new ExecutionTrace(eventTrace.getTraceId());
+		final ExecutionTrace execTrace = new ExecutionTrace(eventTrace.getTraceId(), eventTrace.getSessionId());
 
 		long lastOrderIndex = -1; // used to check for ascending order indices
 		final Stack<Integer> eoiStack = new Stack<Integer>();

@@ -39,13 +39,15 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase { //
 	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration());
 	private final ExecutionFactory executionFactory = new ExecutionFactory(this.systemEntityFactory);
 
+	private static final String SESSION_ID = "j8tVhvDPYL";
+
 	@Test
 	public void testEqualTrace() throws InvalidTraceException {
 		final ExecutionTrace trace0;
 		final ExecutionTrace trace1;
 
-		trace0 = this.genValidBookstoreTrace(45653l, 17); // NOCS (MagicNumberCheck)
-		trace1 = this.genValidBookstoreTrace(45653l, 17); // NOCS (MagicNumberCheck)
+		trace0 = this.genValidBookstoreTrace(45653l, TestTraceEquivalenceFilterAssemblyEquivalence.SESSION_ID, 17); // NOCS (MagicNumberCheck)
+		trace1 = this.genValidBookstoreTrace(45653l, TestTraceEquivalenceFilterAssemblyEquivalence.SESSION_ID, 17); // NOCS (MagicNumberCheck)
 		Assert.assertEquals(trace0, trace1);
 
 		/*
@@ -72,7 +74,7 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase { //
 		 */
 	}
 
-	private ExecutionTrace genValidBookstoreTrace(final long traceId, final long offset) throws InvalidTraceException {
+	private ExecutionTrace genValidBookstoreTrace(final long traceId, final String sessionId, final long offset) throws InvalidTraceException {
 		/* Executions of a valid trace */
 		final Execution exec0_0__bookstore_searchBook; // NOCS
 		final Execution exec1_1__catalog_getBook; // NOCS
@@ -81,19 +83,23 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase { //
 
 		/* Manually create Executions for a trace */
 		exec0_0__bookstore_searchBook = this.executionFactory.genExecution("Bookstore", "bookstore", "searchBook", traceId,
+				sessionId,
 				(1 * (1000 * 1000)) + offset, // tin //NOCS (MagicNumberCheck)
 				(10 * (1000 * 1000)) + offset, // tout // NOCS (MagicNumberCheck)
 				0, 0); // eoi, ess // NOCS (MagicNumberCheck)
 
 		exec1_1__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", traceId,
+				sessionId,
 				(2 * (1000 * 1000)) + offset, // NOCS (MagicNumberCheck)
 				(4 * (1000 * 1000)) + offset, // NOCS (MagicNumberCheck)
 				1, 1); // NOCS (MagicNumberCheck)
 		exec2_1__crm_getOrders = this.executionFactory.genExecution("CRM", "crm", "getOrders", traceId,
+				sessionId,
 				(5 * (1000 * 1000)) + offset, // NOCS (MagicNumberCheck)
 				(8 * (1000 * 1000)) + offset, // NOCS (MagicNumberCheck)
 				2, 1); // NOCS (MagicNumberCheck)
 		exec3_2__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", traceId,
+				sessionId,
 				(6 * (1000 * 1000)) + offset, // NOCS (MagicNumberCheck)
 				(7 * (1000 * 1000)) + offset, // NOCS (MagicNumberCheck)
 				3, 2); // NOCS (MagicNumberCheck)
@@ -102,7 +108,7 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase { //
 		 * Create an Execution Trace and add Executions in
 		 * arbitrary order
 		 */
-		final ExecutionTrace executionTrace = new ExecutionTrace(traceId);
+		final ExecutionTrace executionTrace = new ExecutionTrace(traceId, TestTraceEquivalenceFilterAssemblyEquivalence.SESSION_ID);
 
 		executionTrace.add(exec3_2__catalog_getBook);
 		executionTrace.add(exec2_1__crm_getOrders);

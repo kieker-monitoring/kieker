@@ -45,6 +45,8 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 
 	// private static final Log log = LogFactory.getLog(TestTraceIdFilter.class);
 
+	private static final String SESSION_ID = "LKHnuibfV"; // Session ID not relevant here
+
 	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration());
 	private final ExecutionFactory eFactory = new ExecutionFactory(this.systemEntityFactory);
 
@@ -91,6 +93,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(11l, // traceId (must not be element of idsToPass) // NOCS (MagicNumberCheck)
+				TestTraceIdFilter.SESSION_ID,
 				5, // tin (value not important) // NOCS (MagicNumberCheck)
 				10, // tout (value not important) // NOCS (MagicNumberCheck)
 				0, 0); // eoi, ess (values not important) // NOCS (MagicNumberCheck)
@@ -122,6 +125,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(7l, // traceId (must be element of idsToPass) // NOCS (MagicNumberCheck)
+				TestTraceIdFilter.SESSION_ID,
 				5, // tin (value not important) // NOCS (MagicNumberCheck)
 				10, // tout (value not important) // NOCS (MagicNumberCheck)
 				0, 0); // eoi, ess (values not important) // NOCS (MagicNumberCheck)
@@ -153,6 +157,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(7l, // traceId (must be element of idsToPass) // NOCS (MagicNumberCheck)
+				TestTraceIdFilter.SESSION_ID,
 				5, // tin (value not important) // NOCS (MagicNumberCheck)
 				10, // tout (value not important) // NOCS (MagicNumberCheck)
 				0, 0); // eoi, ess (values not important) // NOCS (MagicNumberCheck)

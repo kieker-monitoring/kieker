@@ -142,7 +142,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingPlu
 			}
 		} else { /* create and add new trace */
 			eventRecordTrace = new EventRecordTrace(traceId);
-			this.pendingTraces.put(traceId, eventRecordTrace);
+			this.pendingTraces.put(traceId, eventRecordTrace); // TODO: we don't have access to a session ID.
 		}
 
 		try {

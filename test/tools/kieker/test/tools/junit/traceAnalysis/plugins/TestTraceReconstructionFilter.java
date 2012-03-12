@@ -52,6 +52,8 @@ public class TestTraceReconstructionFilter extends TestCase {
 
 	private static final Log LOG = LogFactory.getLog(TestTraceReconstructionFilter.class);
 	private static final long TRACE_ID = 62298L;
+	private static final String SESSION_ID = "Y2zm6CRc";
+
 	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration());
 	private final ExecutionFactory executionFactory = new ExecutionFactory(this.systemEntityFactory);
 
@@ -64,13 +66,17 @@ public class TestTraceReconstructionFilter extends TestCase {
 	public TestTraceReconstructionFilter() {
 		/* Manually create Executions for a trace */
 		this.exec0_0__bookstore_searchBook = this.executionFactory.genExecution("Bookstore", "bookstore", "searchBook", TestTraceReconstructionFilter.TRACE_ID,
+				TestTraceReconstructionFilter.SESSION_ID,
 				1 * (1000 * 1000), 10 * (1000 * 1000), 0, 0); // NOCS (MagicNumberCheck)
 
 		this.exec1_1__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", TestTraceReconstructionFilter.TRACE_ID,
+				TestTraceReconstructionFilter.SESSION_ID,
 				2 * (1000 * 1000), 4 * (1000 * 1000), 1, 1); // NOCS (MagicNumberCheck)
 		this.exec2_1__crm_getOrders = this.executionFactory.genExecution("CRM", "crm", "getOrders", TestTraceReconstructionFilter.TRACE_ID,
+				TestTraceReconstructionFilter.SESSION_ID,
 				5 * (1000 * 1000), 8 * (1000 * 1000), 2, 1); // NOCS (MagicNumberCheck)
 		this.exec3_2__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", TestTraceReconstructionFilter.TRACE_ID,
+				TestTraceReconstructionFilter.SESSION_ID,
 				6 * (1000 * 1000), 7 * (1000 * 1000), 3, 2); // NOCS (MagicNumberCheck)
 	}
 
@@ -86,7 +92,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Create an Execution Trace and add Executions in
 		 * arbitrary order
 		 */
-		final ExecutionTrace executionTrace = new ExecutionTrace(TestTraceReconstructionFilter.TRACE_ID);
+		final ExecutionTrace executionTrace = new ExecutionTrace(TestTraceReconstructionFilter.TRACE_ID, TestTraceReconstructionFilter.SESSION_ID);
 
 		executionTrace.add(this.exec3_2__catalog_getBook);
 		executionTrace.add(this.exec2_1__crm_getOrders);
@@ -203,9 +209,10 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Create an Execution Trace and add Executions in
 		 * arbitrary order
 		 */
-		final ExecutionTrace executionTrace = new ExecutionTrace(TestTraceReconstructionFilter.TRACE_ID);
+		final ExecutionTrace executionTrace = new ExecutionTrace(TestTraceReconstructionFilter.TRACE_ID, TestTraceReconstructionFilter.SESSION_ID);
 		final Execution exec1_1__catalog_getBook__broken = this.executionFactory.genExecution("Catalog", "catalog", "getBook", // NOCS
-				TestTraceReconstructionFilter.TRACE_ID, 2 * (1000 * 1000), 4 * (1000 * 1000), 1, 3); // NOCS (MagicNumberCheck)
+				TestTraceReconstructionFilter.TRACE_ID, TestTraceReconstructionFilter.SESSION_ID, 2 * (1000 * 1000), 4 * (1000 * 1000), 1, 3); // NOCS
+																																				// (MagicNumberCheck)
 		Assert.assertFalse("Invalid test", exec1_1__catalog_getBook__broken.equals(this.exec1_1__catalog_getBook));
 
 		executionTrace.add(this.exec3_2__catalog_getBook);
@@ -316,7 +323,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Create an Execution Trace and add Executions in
 		 * arbitrary order
 		 */
-		final ExecutionTrace executionTrace = new ExecutionTrace(TestTraceReconstructionFilter.TRACE_ID);
+		final ExecutionTrace executionTrace = new ExecutionTrace(TestTraceReconstructionFilter.TRACE_ID, TestTraceReconstructionFilter.SESSION_ID);
 
 		executionTrace.add(this.exec3_2__catalog_getBook);
 		executionTrace.add(this.exec2_1__crm_getOrders);
@@ -345,7 +352,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * 
 		 * But: Then, it would exceed the maximum trace duration.
 		 */
-		final ExecutionTrace completingExecutionTrace = new ExecutionTrace(incompleteExecutionTrace.getTraceId());
+		final ExecutionTrace completingExecutionTrace = new ExecutionTrace(incompleteExecutionTrace.getTraceId(), incompleteExecutionTrace.getSessionId());
 		Assert.assertTrue("Test invalid (traceIds not matching)", this.exec0_0__bookstore_searchBook.getTraceId() == completingExecutionTrace.getTraceId());
 		completingExecutionTrace.add(this.exec0_0__bookstore_searchBook);
 
@@ -356,8 +363,9 @@ public class TestTraceReconstructionFilter extends TestCase {
 		final int triggerTraceLengthMillis = 1;
 		final long triggerTraceId = TestTraceReconstructionFilter.TRACE_ID + 1;
 		final Execution exec0_0__bookstore_searchBook__trigger = this.executionFactory.genExecution("Bookstore", "bookstore", "searchBook", triggerTraceId, // NOCS
-				incompleteExecutionTrace.getMaxTout(), incompleteExecutionTrace.getMaxTout() + (triggerTraceLengthMillis * (1000 * 1000)), 0, 0); // NOCS
-		final ExecutionTrace triggerExecutionTrace = new ExecutionTrace(triggerTraceId);
+				TestTraceReconstructionFilter.SESSION_ID, incompleteExecutionTrace.getMaxTout(), incompleteExecutionTrace.getMaxTout()
+						+ (triggerTraceLengthMillis * (1000 * 1000)), 0, 0); // NOCS
+		final ExecutionTrace triggerExecutionTrace = new ExecutionTrace(triggerTraceId, TestTraceReconstructionFilter.SESSION_ID);
 		final MessageTrace triggerMessageTrace;
 		triggerExecutionTrace.add(exec0_0__bookstore_searchBook__trigger);
 		triggerMessageTrace = triggerExecutionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);

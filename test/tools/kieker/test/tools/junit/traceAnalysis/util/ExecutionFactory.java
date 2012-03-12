@@ -60,6 +60,7 @@ public class ExecutionFactory {
 	 * @return the created Execution object
 	 */
 	public Execution genExecution(final String componentTypeName, final String componentInstanceName, final String operationName, final long traceId,
+			final String sessionId,
 			final long tin, final long tout, final int eoi, final int ess) {
 		if ((componentTypeName == null) || (componentInstanceName == null) || (operationName == null)) {
 			throw new NullPointerException("None of the String args must be null.");
@@ -105,7 +106,7 @@ public class ExecutionFactory {
 					assemblyComponentA, containerC);
 		}
 
-		return new Execution(operationAa, allocationComponentA, traceId, ExecutionFactory.DEFAULT_STRING, eoi, ess, tin, tout);
+		return new Execution(operationAa, allocationComponentA, traceId, sessionId, eoi, ess, tin, tout);
 	}
 
 	/**
@@ -120,10 +121,10 @@ public class ExecutionFactory {
 	 * @param ess
 	 * @return the created Execution object
 	 */
-	public Execution genExecution(final long traceId, final long tin, final long tout, final int eoi, final int ess) {
+	public Execution genExecution(final long traceId, final String sessionId, final long tin, final long tout, final int eoi, final int ess) {
 		return this.genExecution(ExecutionFactory.DEFAULT_STRING, // component type
 				ExecutionFactory.DEFAULT_STRING, // component instance
 				ExecutionFactory.DEFAULT_STRING, // operation name
-				traceId, tin, tout, eoi, ess);
+				traceId, sessionId, tin, tout, eoi, ess);
 	}
 }

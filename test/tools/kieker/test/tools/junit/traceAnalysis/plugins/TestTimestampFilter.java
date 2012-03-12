@@ -43,6 +43,8 @@ public class TestTimestampFilter extends TestCase { // NOCS
 	private static final long IGNORE_EXECUTIONS_BEFORE_TIMESTAMP = 50;
 	private static final long IGNORE_EXECUTIONS_AFTER_TIMESTAMP = 100;
 
+	private static final String SESSION_ID = "j8tVhvDPYL"; // Session ID not relevant here
+
 	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration());
 	private final ExecutionFactory eFactory = new ExecutionFactory(this.systemEntityFactory);
 
@@ -73,6 +75,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 		final AnalysisController controller = new AnalysisController();
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final Execution exec = this.eFactory.genExecution(77, // traceId (value not important)
+				TestTimestampFilter.SESSION_ID,
 				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP - 1, // tin
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP - 1, // tout
 				0, 0); // eoi, ess
@@ -101,6 +104,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(15, // traceId (value not important)
+				TestTimestampFilter.SESSION_ID,
 				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP + 1, // tin
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP + 1, // tout
 				0, 0); // eoi, ess
@@ -129,6 +133,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(159, // traceId (value not important)
+				TestTimestampFilter.SESSION_ID,
 				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, // tin
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP, // tout
 				0, 0); // eoi, ess
@@ -160,6 +165,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(159, // traceId (value not important)
+				TestTimestampFilter.SESSION_ID,
 				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP + 1, // tin
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP - 1, // tout
 				0, 0); // eoi, ess

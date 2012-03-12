@@ -47,6 +47,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 
 	private static final Log LOG = LogFactory.getLog(TestExecutionTraceBookstore.class);
 	private static final long TRACE_ID = 69898L;
+	private static final String SESSION_ID = "iXsnm70o4N";
 	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration());
 	private final ExecutionFactory eFactory = new ExecutionFactory(this.systemEntityFactory);
 	private final long minTin;
@@ -65,19 +66,19 @@ public class TestExecutionTraceBookstore extends TestCase {
 		/* Manually create Executions for a trace */
 		numExecutions_l++;
 		this.exec0_0__bookstore_searchBook = this.eFactory.genExecution("Bookstore", "bookstore", "searchBook", TestExecutionTraceBookstore.TRACE_ID,
-				1, 10, 0, 0); // NOCS (MagicNumberCheck)
+				TestExecutionTraceBookstore.SESSION_ID, 1, 10, 0, 0); // NOCS (MagicNumberCheck)
 		this.minTin = this.exec0_0__bookstore_searchBook.getTin();
 		this.maxTout = this.exec0_0__bookstore_searchBook.getTout();
 
 		numExecutions_l++;
 		this.exec1_1__catalog_getBook = this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID, // NOPMD
-				2, 4, 1, 1); // NOCS (MagicNumberCheck)
+				TestExecutionTraceBookstore.SESSION_ID, 2, 4, 1, 1); // NOCS (MagicNumberCheck)
 		numExecutions_l++;
 		this.exec2_1__crm_getOrders = this.eFactory.genExecution("CRM", "crm", "getOrders", TestExecutionTraceBookstore.TRACE_ID,
-				5, 8, 2, 1); // NOCS (MagicNumberCheck)
+				TestExecutionTraceBookstore.SESSION_ID, 5, 8, 2, 1); // NOCS (MagicNumberCheck)
 		numExecutions_l++;
 		this.exec3_2__catalog_getBook = this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID,
-				6, 7, 3, 2); // NOCS (MagicNumberCheck)
+				TestExecutionTraceBookstore.SESSION_ID, 6, 7, 3, 2); // NOCS (MagicNumberCheck)
 		this.numExecutions = numExecutions_l;
 	}
 
@@ -86,7 +87,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 		 * Create an Execution Trace and add Executions in
 		 * arbitrary order
 		 */
-		final ExecutionTrace executionTrace = new ExecutionTrace(TestExecutionTraceBookstore.TRACE_ID);
+		final ExecutionTrace executionTrace = new ExecutionTrace(TestExecutionTraceBookstore.TRACE_ID, TestExecutionTraceBookstore.SESSION_ID);
 
 		executionTrace.add(this.exec3_2__catalog_getBook);
 		executionTrace.add(this.exec2_1__crm_getOrders);
@@ -247,7 +248,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 		final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
 
 		final Execution exec4_1__catalog_getBook = this.eFactory // NOCS
-				.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID, 9, 10, 4, 1);
+				.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID, TestExecutionTraceBookstore.SESSION_ID, 9, 10, 4, 1);
 		final MessageTrace messageTrace1 = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 		executionTrace.add(exec4_1__catalog_getBook);
 		final MessageTrace messageTrace2 = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
@@ -270,9 +271,9 @@ public class TestExecutionTraceBookstore extends TestCase {
 		 * Create an Execution Trace and add Executions in
 		 * arbitrary order
 		 */
-		final ExecutionTrace executionTrace = new ExecutionTrace(TestExecutionTraceBookstore.TRACE_ID);
+		final ExecutionTrace executionTrace = new ExecutionTrace(TestExecutionTraceBookstore.TRACE_ID, TestExecutionTraceBookstore.SESSION_ID);
 		final Execution exec1_1__catalog_getBook__broken = this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID, // NOCS
-				2, 4, 1, 3); // NOCS
+				TestExecutionTraceBookstore.SESSION_ID, 2, 4, 1, 3); // NOCS
 		Assert.assertFalse("Invalid test", exec1_1__catalog_getBook__broken.equals(this.exec1_1__catalog_getBook));
 
 		executionTrace.add(this.exec3_2__catalog_getBook);
@@ -326,9 +327,9 @@ public class TestExecutionTraceBookstore extends TestCase {
 		 * Create an Execution Trace and add Executions in
 		 * arbitrary order
 		 */
-		final ExecutionTrace executionTrace = new ExecutionTrace(TestExecutionTraceBookstore.TRACE_ID);
+		final ExecutionTrace executionTrace = new ExecutionTrace(TestExecutionTraceBookstore.TRACE_ID, TestExecutionTraceBookstore.SESSION_ID);
 		final Execution exec3_2__catalog_getBook__broken = this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID, // NOCS
-				6, 7, 4, 2); // NOCS (MagicNumberCheck)
+				TestExecutionTraceBookstore.SESSION_ID, 6, 7, 4, 2); // NOCS (MagicNumberCheck)
 		Assert.assertFalse("Invalid test", exec3_2__catalog_getBook__broken.equals(this.exec3_2__catalog_getBook));
 
 		executionTrace.add(exec3_2__catalog_getBook__broken);

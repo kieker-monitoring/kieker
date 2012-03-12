@@ -177,7 +177,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 				this.reportError(traceId);
 			}
 		} else { /* create and add new trace */
-			executionTrace = new ExecutionTrace(traceId);
+			executionTrace = new ExecutionTrace(traceId, execution.getSessionId());
 			this.pendingTraces.put(traceId, executionTrace);
 		}
 		try {

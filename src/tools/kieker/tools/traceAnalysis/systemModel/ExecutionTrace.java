@@ -193,7 +193,7 @@ public class ExecutionTrace extends AbstractTrace {
 				}
 				prevE = curE; // prepair next loop
 			}
-			mt = new MessageTrace(this.getTraceId(), mSeq);
+			mt = new MessageTrace(this.getTraceId(), this.getSessionId(), mSeq);
 			this.messageTrace.set(mt);
 			return mt;
 		}

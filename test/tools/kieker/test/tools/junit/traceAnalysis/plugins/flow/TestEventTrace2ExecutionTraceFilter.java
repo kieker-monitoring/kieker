@@ -49,6 +49,8 @@ import org.junit.Test;
  */
 public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 	private static final long TRACE_ID = 4563l;
+	private static final String SESSION_ID = "y2zGAI0VX"; // Same Session ID for all traces
+
 	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration());
 	private final ExecutionFactory executionFactory = new ExecutionFactory(this.systemEntityFactory);
 
@@ -65,13 +67,17 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		/* Manually create Executions for a trace */
 		this.exec0_0__bookstore_searchBook = this.executionFactory.genExecution("Bookstore", "bookstore", "searchBook",
 				TestEventTrace2ExecutionTraceFilter.TRACE_ID,
+				TestEventTrace2ExecutionTraceFilter.SESSION_ID,
 				1 * (1000 * 1000), 10 * (1000 * 1000), 0, 0); // NOCS (MagicNumberCheck)
 
 		this.exec1_1__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", TestEventTrace2ExecutionTraceFilter.TRACE_ID,
+				TestEventTrace2ExecutionTraceFilter.SESSION_ID,
 				2 * (1000 * 1000), 4 * (1000 * 1000), 1, 1); // NOCS (MagicNumberCheck)
 		this.exec2_1__crm_getOrders = this.executionFactory.genExecution("CRM", "crm", "getOrders", TestEventTrace2ExecutionTraceFilter.TRACE_ID,
+				TestEventTrace2ExecutionTraceFilter.SESSION_ID,
 				5 * (1000 * 1000), 8 * (1000 * 1000), 2, 1); // NOCS (MagicNumberCheck)
 		this.exec3_2__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", TestEventTrace2ExecutionTraceFilter.TRACE_ID,
+				TestEventTrace2ExecutionTraceFilter.SESSION_ID,
 				6 * (1000 * 1000), 7 * (1000 * 1000), 3, 2); // NOCS (MagicNumberCheck)
 	}
 
@@ -89,7 +95,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		 * Create an Execution Trace and add Executions in
 		 * arbitrary order
 		 */
-		final ExecutionTrace executionTrace = new ExecutionTrace(TestEventTrace2ExecutionTraceFilter.TRACE_ID);
+		final ExecutionTrace executionTrace = new ExecutionTrace(TestEventTrace2ExecutionTraceFilter.TRACE_ID, TestEventTrace2ExecutionTraceFilter.SESSION_ID);
 
 		executionTrace.add(this.exec3_2__catalog_getBook);
 		executionTrace.add(this.exec2_1__crm_getOrders);
@@ -109,7 +115,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		final List<AbstractTraceEvent> eventList =
 				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(this.exec0_0__bookstore_searchBook.getTin(),
 						TestEventTrace2ExecutionTraceFilter.TRACE_ID);
-		final EventRecordTrace eventRecordTrace = new EventRecordTrace(TestEventTrace2ExecutionTraceFilter.TRACE_ID);
+		final EventRecordTrace eventRecordTrace = new EventRecordTrace(TestEventTrace2ExecutionTraceFilter.TRACE_ID, TestEventTrace2ExecutionTraceFilter.SESSION_ID);
 		for (final AbstractTraceEvent ev : eventList) {
 			eventRecordTrace.add(ev);
 		}
