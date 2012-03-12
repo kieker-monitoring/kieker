@@ -23,6 +23,7 @@ package kieker.monitoring.timer;
 import java.util.Date;
 
 import kieker.common.configuration.Configuration;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 
 /**
  * A timer implementation, counting in nanoseconds since a specified offset.
@@ -57,5 +58,20 @@ public final class SystemNanoTimer extends AbstractTimeSource {
 		sb.append("Time in nanoseconds since ");
 		sb.append(new Date((this.offset - this.clockdifference) / SystemNanoTimer.NANO2MILLI));
 		return sb.toString();
+	}
+
+	/**
+	 * @return a singleton instance of SystemNanoTimer
+	 */
+	public static final ITimeSource getInstance() {
+		return LazyHolder.INSTANCE;
+	}
+
+	/**
+	 * SINGLETON
+	 */
+	private static final class LazyHolder { // NOCS (MissingCtorCheck)
+		private static final ITimeSource INSTANCE = new SystemNanoTimer(ConfigurationFactory.createDefaultConfiguration().getPropertiesStartingWith(
+				SystemNanoTimer.class.getName()));
 	}
 }

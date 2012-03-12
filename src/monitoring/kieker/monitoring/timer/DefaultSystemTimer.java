@@ -29,7 +29,10 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
  * A timer implementation, counting in nanoseconds since 1970-1-1.
  * 
  * @author Jan Waller
+ * 
+ * @deprecated will be removed in Kieker 1.6
  */
+@Deprecated
 public final class DefaultSystemTimer extends AbstractTimeSource {
 	private static final Log LOG = LogFactory.getLog(DefaultSystemTimer.class);
 

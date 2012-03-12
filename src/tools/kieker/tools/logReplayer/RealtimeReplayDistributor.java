@@ -33,8 +33,8 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.timer.DefaultSystemTimer;
 import kieker.monitoring.timer.ITimeSource;
+import kieker.monitoring.timer.SystemNanoTimer;
 
 /**
  * IMonitoringRecordConsumerPlugin that distributes the log records to the worker
@@ -56,7 +56,7 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 	private static final Log LOG = LogFactory.getLog(RealtimeReplayDistributor.class);
 
 	public static final String CONFIG_NUM_WORKERS = "numWorkers";
-	private static final ITimeSource TIMESOURCE = DefaultSystemTimer.getInstance();
+	private static final ITimeSource TIMESOURCE = SystemNanoTimer.getInstance();
 	private static final int QUEUE_SIZE_FACTOR = 1000;
 	private static final int MILLISECOND = 1000 * 1000;
 	private static final int REPLAY_OFFSET = 2 * 1000 * RealtimeReplayDistributor.MILLISECOND;
