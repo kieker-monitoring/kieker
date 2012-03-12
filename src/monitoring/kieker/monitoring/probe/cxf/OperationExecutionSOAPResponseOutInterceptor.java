@@ -57,6 +57,8 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
+
+	private static final IMonitoringController CRTR_INST = MonitoringController.getInstance();
 	protected static final ITimeSource TIMESOURCE = OperationExecutionSOAPResponseOutInterceptor.CRTR_INST.getTimeSource();
 
 	protected static final String VM_NAME = OperationExecutionSOAPResponseOutInterceptor.CRTR_INST.getHostName();
@@ -65,8 +67,6 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 			+ ".handleMessage(org.apache.cxf.binding.soap.SoapMessage)";
 
 	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPResponseOutInterceptor.class);
-
-	private static final IMonitoringController CRTR_INST = MonitoringController.getInstance();
 
 	public OperationExecutionSOAPResponseOutInterceptor() {
 		// nothing to do

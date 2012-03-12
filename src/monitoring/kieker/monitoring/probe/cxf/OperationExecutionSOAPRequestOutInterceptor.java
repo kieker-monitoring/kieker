@@ -20,11 +20,12 @@
 
 package kieker.monitoring.probe.cxf;
 
+import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.IMonitoringProbe;
 import kieker.monitoring.timer.ITimeSource;
-import kieker.monitoring.timer.SystemNanoTimer;
 
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.SoapHeaderOutFilterInterceptor;
@@ -51,7 +52,15 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
-	protected static final ITimeSource TIMESOURCE = SystemNanoTimer.getInstance();
+
+	/**
+	 * Note we are using this IMonitoringController only to access ITimeSource which
+	 * is configured for the singleton instance, as this is the instance used by the
+	 * corresponding other CXF probes. Depending on the configuration, the time may
+	 * differ from Kieker's default timer (SystemNanoTimer).
+	 */
+	protected static final IMonitoringController ctrl = MonitoringController.getInstance();
+	protected static final ITimeSource TIMESOURCE = OperationExecutionSOAPRequestOutInterceptor.ctrl.getTimeSource();
 
 	private static final String NULL_SESSION_STR = "NULL";
 	private static final String NULL_SESSIONASYNCTRACE_STR = "NULL-ASYNCOUT";

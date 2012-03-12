@@ -55,11 +55,14 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
+
+	private static final IMonitoringController CTRL_INST = MonitoringController.getInstance();
 	protected static final ITimeSource TIMESOURCE = OperationExecutionSOAPResponseInInterceptor.CTRL_INST.getTimeSource();
+
 	protected static final String VM_NAME = OperationExecutionSOAPResponseInInterceptor.CTRL_INST.getHostName();
 
 	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPResponseInInterceptor.class);
-	private static final IMonitoringController CTRL_INST = MonitoringController.getInstance();
+
 	private static final String SIGNATURE = "public void " + OperationExecutionSOAPResponseInInterceptor.class.getName()
 			+ ".handleMessage(org.apache.cxf.message.Message)";
 
