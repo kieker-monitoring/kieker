@@ -66,6 +66,10 @@ public final class CallOperationEvent extends AbstractOperationEvent {
 		return this.calleeOperationSiganture;
 	}
 
+	public final boolean callsReferencedOperationOf(final AbstractOperationEvent event) {
+		return this.getCalleeOperationSiganture().equals(event.getOperationSignature());
+	}
+
 	@Override
 	public final void accept(final AbstractTraceEventVisitor visitor) {
 		visitor.handleCallOperationEvent(this);
