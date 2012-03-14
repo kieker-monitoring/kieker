@@ -20,6 +20,8 @@
 
 package kieker.common.record.flow.trace.operation;
 
+import kieker.common.record.flow.trace.AbstractTraceEventVisitor;
+
 /**
  * @author Andre van Hoorn, Holger Knoche, Jan Waller
  */
@@ -62,5 +64,10 @@ public final class CallOperationEvent extends AbstractOperationEvent {
 
 	public final String getCalleeOperationSiganture() {
 		return this.calleeOperationSiganture;
+	}
+
+	@Override
+	public final void accept(final AbstractTraceEventVisitor visitor) {
+		visitor.handleCallOperationEvent(this);
 	}
 }

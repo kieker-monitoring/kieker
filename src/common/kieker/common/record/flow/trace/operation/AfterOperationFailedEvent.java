@@ -20,6 +20,8 @@
 
 package kieker.common.record.flow.trace.operation;
 
+import kieker.common.record.flow.trace.AbstractTraceEventVisitor;
+
 /**
  * @author Jan Waller
  */
@@ -57,5 +59,10 @@ public final class AfterOperationFailedEvent extends AbstractOperationEvent {
 
 	public final String getCause() {
 		return this.cause;
+	}
+
+	@Override
+	public final void accept(final AbstractTraceEventVisitor visitor) {
+		visitor.handleAfterOperationFailedEvent(this);
 	}
 }

@@ -20,6 +20,8 @@
 
 package kieker.common.record.flow.trace.operation;
 
+import kieker.common.record.flow.trace.AbstractTraceEventVisitor;
+
 /**
  * @author Jan Waller
  */
@@ -48,5 +50,10 @@ public final class BeforeOperationEvent extends AbstractOperationEvent {
 	@Override
 	public final Class<?>[] getValueTypes() {
 		return BeforeOperationEvent.TYPES.clone();
+	}
+
+	@Override
+	public void accept(final AbstractTraceEventVisitor visitor) {
+		visitor.handleBeforeOperationEvent(this);
 	}
 }

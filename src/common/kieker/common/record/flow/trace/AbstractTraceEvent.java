@@ -50,4 +50,6 @@ public abstract class AbstractTraceEvent extends AbstractEvent {
 	public final int getOrderIndex() {
 		return this.orderIndex;
 	}
+
+	public abstract void accept(AbstractTraceEventVisitor visitor);
 }
