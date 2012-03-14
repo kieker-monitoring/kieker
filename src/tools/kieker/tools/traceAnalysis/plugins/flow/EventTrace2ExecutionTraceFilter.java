@@ -45,6 +45,7 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
+ * This filter converts an event-based trace to an execution-based trace.
  * 
  * @author Andre van Hoorn, Holger Knoche
  * 
@@ -57,6 +58,9 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlugin {
 
+	/**
+	 * This class stores information about a specific execution.
+	 */
 	private static class ExecutionInformation {
 
 		private final int executionIndex;
@@ -67,16 +71,29 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 			this.stackDepth = stackDepth;
 		}
 
+		/**
+		 * Returns the execution's execution order index.
+		 * 
+		 * @return See above
+		 */
 		public int getExecutionIndex() {
 			return this.executionIndex;
 		}
 
+		/**
+		 * Returns the stack depth at which the execution occurred.
+		 * 
+		 * @return See above
+		 */
 		public int getStackDepth() {
 			return this.stackDepth;
 		}
 
 	}
 
+	/**
+	 * This class encapsulates the filter's state, that is, the current event and execution stacks.
+	 */
 	private static class FilterState {
 
 		private final Stack<AbstractTraceEvent> eventStack = new Stack<AbstractTraceEvent>();
@@ -85,46 +102,100 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 		private int nextExecutionIndex = 0;
 		private int currentStackDepth = 0;
 
+		/**
+		 * Pushes the given event onto the event stack.
+		 * 
+		 * @param event
+		 *            The event to push
+		 */
 		public void pushEvent(final AbstractTraceEvent event) {
 			this.eventStack.push(event);
 		}
 
+		/**
+		 * Returns the event currently on top of the event stack.
+		 * 
+		 * @return See above
+		 */
 		public AbstractTraceEvent peekEvent() {
 			return this.eventStack.peek();
 		}
 
+		/**
+		 * Pops the event off the top of the stack.
+		 * 
+		 * @return The topmost event from the event stack
+		 */
 		public AbstractTraceEvent popEvent() {
 			return this.eventStack.pop();
 		}
 
+		/**
+		 * Returns whether the event stack is empty.
+		 * 
+		 * @return <code>True</code> if the stack is empty, <code>false</code> otherwise
+		 */
 		public boolean isEventStackEmpty() {
 			return this.eventStack.isEmpty();
 		}
 
+		/**
+		 * Registers an execution caused by the given event. Note that in the process, the given event
+		 * is pushed onto the event stack.
+		 * 
+		 * @param cause
+		 *            The event which caused the execution
+		 */
 		public void registerExecution(final AbstractTraceEvent cause) {
 			this.pushEvent(cause);
 			final ExecutionInformation executionInformation = new ExecutionInformation(this.nextExecutionIndex++, this.currentStackDepth++);
 			this.executionStack.push(executionInformation);
 		}
 
+		/**
+		 * Pops the execution from the top of the execution stack.
+		 * 
+		 * @return The topmost execution from the execution stack
+		 */
 		public ExecutionInformation popExecution() {
 			this.currentStackDepth--;
 			return this.executionStack.pop();
 		}
 	}
 
+	/**
+	 * This utility class provides the core event handling functionality.
+	 */
 	private class EventProcessor implements AbstractTraceEventVisitor {
 
 		private final FilterState filterState;
 		private final ExecutionTrace executionTrace;
 		private final EventRecordStream eventStream;
 
+		/**
+		 * Creates a new event processor using the given context data.
+		 * 
+		 * @param filterState
+		 *            The filter state object to work with
+		 * @param eventStream
+		 *            The event stream from which the events are taken
+		 * @param executionTrace
+		 *            The execution trace to store the generated executions in
+		 */
 		public EventProcessor(final FilterState filterState, final EventRecordStream eventStream, final ExecutionTrace executionTrace) {
 			this.filterState = filterState;
 			this.eventStream = eventStream;
 			this.executionTrace = executionTrace;
 		}
 
+		/**
+		 * Processes the given event. In the process, the filter state and the execution trace may be modified.
+		 * Note that this method requires that the {@link #eventStream} is located at the respective event, that is,
+		 * <code>event == eventStream.currentElement()</code>.
+		 * 
+		 * @param event
+		 *            The event to process
+		 */
 		public void processEvent(final AbstractTraceEvent event) {
 			event.accept(this);
 		}
@@ -133,15 +204,27 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 			EventTrace2ExecutionTraceFilter.LOG.warn("Trace Events of type " + event.getClass().getName() + " not supported yet.");
 		}
 
+		/**
+		 * Fetches the matching before-operation event for the given after-operation event from the top of the stack,
+		 * if such an event is available.
+		 * 
+		 * @param afterOperationEvent
+		 *            The after-operation event for which the match is required
+		 * @return The matching before-operation event for the given event, if available
+		 * @throws InvalidEventTraceException
+		 *             If no matching event is found at the top of the stack
+		 */
 		private BeforeOperationEvent getMatchingBeforeEventFor(final AfterOperationEvent afterOperationEvent) throws InvalidEventTraceException {
 			final AbstractTraceEvent potentialBeforeEvent = (this.filterState.isEventStackEmpty()) ? null : this.filterState.popEvent();
 
+			// The element at the top of the stack needs to be a before-operation event...
 			if ((potentialBeforeEvent == null) || !(potentialBeforeEvent instanceof BeforeOperationEvent)) {
 				final String message = "Didn't find corresponding BeforeOperationEvent for AfterOperationEvent " + afterOperationEvent + " (found: )"
 						+ potentialBeforeEvent + ".";
 				throw new InvalidEventTraceException(message);
 			}
 
+			// ... and must reference the same operation as the given after-operation event.
 			if (!afterOperationEvent.refersToSameOperationAs((BeforeOperationEvent) potentialBeforeEvent)) {
 				final String message = "Components of before (" + potentialBeforeEvent + ") " + "and after (" + afterOperationEvent + ") events do not match.";
 				throw new InvalidEventTraceException(message);
@@ -159,6 +242,13 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 			}
 		}
 
+		/**
+		 * Removes all remaining call events from the top of the event stack. For each removed call statement, an assumed
+		 * execution is generated using the timestamp of the last after-operation event.
+		 * 
+		 * @param lastEvent
+		 *            The last processed after-operation event
+		 */
 		private void closeOpenCalls(final AfterOperationEvent lastEvent) {
 			while (!this.filterState.isEventStackEmpty()) {
 				final AbstractTraceEvent nextEvent = this.filterState.peekEvent();
@@ -184,13 +274,17 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 
 		@Override
 		public void handleAfterOperationEvent(final AfterOperationEvent afterOperationEvent) {
+			// Obtain the matching before-operation event from the stack
 			final BeforeOperationEvent beforeOperationEvent = this.getMatchingBeforeEventFor(afterOperationEvent);
 
+			// Look for a call event at the top of the stack
 			final AbstractTraceEvent potentialCallEvent = (this.filterState.isEventStackEmpty()) ? null : this.filterState.peekEvent();
+			// A definite call occurs if either the stack is empty (entry into the trace) or if a matching call event is found
 			final boolean definiteCall = ((potentialCallEvent == null)
 					|| ((potentialCallEvent instanceof CallOperationEvent) && ((CallOperationEvent) potentialCallEvent)
 					.callsReferencedOperationOf(afterOperationEvent)));
 
+			// If a matching call event was found, it must be removed from the stack
 			if (definiteCall && !this.filterState.isEventStackEmpty()) {
 				this.filterState.popEvent();
 			}
@@ -207,7 +301,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 
 			this.registerExecution(execution);
 
-			// Close remaining open calls
+			// Generate assumed executions for any remaining call events on top of the stack
 			this.closeOpenCalls(afterOperationEvent);
 		}
 
@@ -225,12 +319,14 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 		public void handleCallOperationEvent(final CallOperationEvent callOperationEvent) {
 			final AbstractTraceEvent nextEvent = this.eventStream.lookahead(1);
 
+			// If the next event is NOT the entry into the called operation, register an (assumed) execution.
 			if ((nextEvent == null)
 					|| !(nextEvent instanceof BeforeOperationEvent)
 					|| !callOperationEvent.callsReferencedOperationOf((BeforeOperationEvent) nextEvent)) {
 				this.filterState.registerExecution(callOperationEvent);
 			}
 			else {
+				// Otherwise, just push the call event
 				this.filterState.pushEvent(callOperationEvent);
 			}
 		}
@@ -241,6 +337,9 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 		}
 	}
 
+	/**
+	 * Internal exception type which denotes that an invalid event trace was encountered.
+	 */
 	private static class InvalidEventTraceException extends RuntimeException {
 
 		private static final long serialVersionUID = -6187153581658321041L;
@@ -278,6 +377,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 			while (true) {
 				final AbstractTraceEvent currentEvent = eventStream.currentElement();
 
+				// Exit if the event stream has reached its end
 				if (currentEvent == null) {
 					break;
 				}
@@ -291,6 +391,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 					lastOrderIndex = currentEvent.getOrderIndex(); // i.e., lastOrderIndex++
 				}
 
+				// Process and consume the current event
 				eventProcessor.processEvent(currentEvent);
 				eventStream.consume();
 			}
