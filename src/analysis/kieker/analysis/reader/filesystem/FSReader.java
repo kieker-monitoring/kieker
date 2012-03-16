@@ -82,7 +82,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
-		defaultConfiguration.setProperty(FSReader.CONFIG_INPUTDIRS, "");
+		defaultConfiguration.setProperty(FSReader.CONFIG_INPUTDIRS, ".");
 		defaultConfiguration.setProperty(FSReader.CONFIG_ONLYRECORDS, "");
 		return defaultConfiguration;
 	}

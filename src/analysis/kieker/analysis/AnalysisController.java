@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -128,14 +129,14 @@ public final class AnalysisController implements Runnable {
 	 * 
 	 * @param project
 	 *            The project instance for the analysis.
-	 * @throws Exception
 	 */
-	public AnalysisController(final MIProject project) throws NullPointerException {
+	public AnalysisController(final MIProject project) {
 		if (project != null) {
 			this.loadFromModelProject(project);
 			this.projectName = project.getName();
 		} else {
-			throw new NullPointerException("Failed to load project.");
+			this.projectName = "";
+			AnalysisController.LOG.error("The project could not be loaded.");
 		}
 	}
 
@@ -179,6 +180,8 @@ public final class AnalysisController implements Runnable {
 			try {
 				final AbstractPlugin plugin = AnalysisController.createAndInitialize(AbstractPlugin.class, pluginClassname, configuration);
 				pluginMap.put(mPlugin, plugin);
+				/* Check the used configuration against the actual available config keys. */
+				this.checkConfiguration(plugin, configuration);
 				/* Add the plugin to our controller instance. */
 				if (plugin instanceof AbstractReaderPlugin) {
 					this.registerReader((AbstractReaderPlugin) plugin);
@@ -208,6 +211,30 @@ public final class AnalysisController implements Runnable {
 					final AbstractPlugin dstPlugin = pluginMap.get(mSubscriber.getParent());
 					this.connect(srcPlugin, outputPortName, dstPlugin, inputPortName);
 				}
+			}
+		}
+	}
+
+	/**
+	 * This method uses the given configuration object and checks the used keys against the actual existing keys within the given plugin. If there are keys in the
+	 * configuration object which are not used in the plugin, a warning is logged, but nothing happens. This method should be called during the creation of the
+	 * plugins via a given configuration file to find outdated properties.
+	 * 
+	 * @param plugin
+	 *            The plugin to be used for the check.
+	 * @param configuration
+	 *            The configuration to be checked for correctness.
+	 */
+	private void checkConfiguration(final AbstractPlugin plugin, final Configuration configuration) {
+		/* Get the actual configuration of the plugin (and therefore the real existing keys) */
+		final Configuration actualConfiguration = plugin.getCurrentConfiguration();
+		/* Run through all used keys in the given configuration. */
+		final Enumeration<Object> keyEnum = configuration.keys();
+		while (keyEnum.hasMoreElements()) {
+			final String key = (String) keyEnum.nextElement();
+			if (!actualConfiguration.containsKey(key) && !(key.equals(AbstractPlugin.CONFIG_NAME))) {
+				/* Found an invalid key. */
+				AnalysisController.LOG.warn("Invalid property found: '" + key + "'.");
 			}
 		}
 	}
@@ -567,9 +594,9 @@ public final class AnalysisController implements Runnable {
 					}
 				});
 		/* Try to load the ressource. */
-		final XMIResource resource = (XMIResource) resourceSet.getResource(URI.createFileURI(file.toString()), true);
-		final EList<EObject> content;
 		try {
+			final XMIResource resource = (XMIResource) resourceSet.getResource(URI.createFileURI(file.toString()), true);
+			final EList<EObject> content;
 			resource.load(Collections.EMPTY_MAP);
 			content = resource.getContents();
 			if (!content.isEmpty()) {
@@ -580,6 +607,10 @@ public final class AnalysisController implements Runnable {
 			}
 		} catch (final IOException ex) {
 			AnalysisController.LOG.error("Could not open the given file.", ex);
+			return null;
+		} catch (final Exception ex) {
+			/* Some exceptions like the XMIException can be thrown during loading although it cannot be seen. Catch this situation. */
+			AnalysisController.LOG.error("The given file is not a valid kax-configuration file.", ex);
 			return null;
 		}
 	}
