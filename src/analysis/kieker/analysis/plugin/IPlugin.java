@@ -39,9 +39,23 @@ public interface IPlugin {
 	public abstract Configuration getCurrentConfiguration();
 
 	/**
-	 * This method delivers the current name of this plugin. The name does not have to be unique.
+	 * This method delivers the plugin name of this plugin. The name should be unique, e.g., the classname.
 	 * 
 	 * @return The name of the plugin.
+	 */
+	public abstract String getPluginName();
+
+	/**
+	 * This method delivers the description of this plugin.
+	 * 
+	 * @return The description of the plugin.
+	 */
+	public abstract String getPluginDescription();
+
+	/**
+	 * This method delivers the current name of this plugin. The name does not have to be unique.
+	 * 
+	 * @return The current name of the plugin.
 	 */
 	public abstract String getName();
 

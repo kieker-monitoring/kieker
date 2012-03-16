@@ -138,6 +138,31 @@ public abstract class AbstractPlugin implements IPlugin {
 		return this.name;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#getPluginName()
+	 */
+	@Override
+	public final String getPluginName() {
+		final String pluginName = this.getClass().getAnnotation(Plugin.class).name();
+		if (pluginName.equals(Plugin.NO_NAME)) {
+			return this.getClass().getSimpleName();
+		} else {
+			return pluginName;
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#getPluginDescription()
+	 */
+	@Override
+	public final String getPluginDescription() {
+		return this.getClass().getAnnotation(Plugin.class).description();
+	}
+
 	/**
 	 * Delivers the given data to all registered input ports of the given output port.
 	 * 
