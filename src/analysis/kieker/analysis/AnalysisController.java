@@ -23,6 +23,7 @@ package kieker.analysis;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -55,6 +56,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
+import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -181,7 +183,7 @@ public final class AnalysisController implements Runnable {
 				final AbstractPlugin plugin = AnalysisController.createAndInitialize(AbstractPlugin.class, pluginClassname, configuration);
 				pluginMap.put(mPlugin, plugin);
 				/* Check the used configuration against the actual available config keys. */
-				this.checkConfiguration(plugin, configuration);
+				AnalysisController.checkConfiguration(plugin, configuration);
 				/* Add the plugin to our controller instance. */
 				if (plugin instanceof AbstractReaderPlugin) {
 					this.registerReader((AbstractReaderPlugin) plugin);
@@ -193,8 +195,11 @@ public final class AnalysisController implements Runnable {
 				continue;
 			}
 		}
+
 		/* Now we have all plugins. We can start to assemble the wiring. */
 		for (final MIPlugin mPlugin : mPlugins) {
+			/* Check whether the ports exist and log this if necessary. */
+			AnalysisController.checkPorts(mPlugin, pluginMap.get(mPlugin));
 			final EList<MIRepositoryConnector> mPluginRPorts = mPlugin.getRepositories();
 			for (final MIRepositoryConnector mPluginRPort : mPluginRPorts) {
 				pluginMap.get(mPlugin).connect(mPluginRPort.getName(), repositoryMap.get(mPluginRPort.getRepository()));
@@ -203,6 +208,7 @@ public final class AnalysisController implements Runnable {
 			for (final MIOutputPort mPluginOPort : mPluginOPorts) {
 				final String outputPortName = mPluginOPort.getName();
 				final AbstractPlugin srcPlugin = pluginMap.get(mPlugin);
+
 				/* Get all ports which should be subscribed to this port. */
 				final EList<MIInputPort> mSubscribers = mPluginOPort.getSubscribers();
 				for (final MIInputPort mSubscriber : mSubscribers) {
@@ -211,6 +217,40 @@ public final class AnalysisController implements Runnable {
 					final AbstractPlugin dstPlugin = pluginMap.get(mSubscriber.getParent());
 					this.connect(srcPlugin, outputPortName, dstPlugin, inputPortName);
 				}
+			}
+		}
+	}
+
+	/**
+	 * This method checks the ports of the given model plugin against the ports of the actual plugin. If there are ports which are in the model instance, but not in
+	 * the "real" plugin, a warning is logged. This method should be called during the creation of an <i>AnalysisController</i> via a configuration file to find
+	 * invalid (outdated) ports.
+	 * 
+	 * @param mPlugin
+	 *            The model instance of the plugin.
+	 * @param plugin
+	 *            The corresponding "real" plugin.
+	 */
+	private static void checkPorts(final MIPlugin mPlugin, final AbstractPlugin plugin) {
+		/* Get all ports. */
+		final EList<MIOutputPort> mOutputPorts = mPlugin.getOutputPorts();
+		final EList<MIInputPort> mInputPorts = (mPlugin instanceof MIAnalysisPlugin) ? ((MIAnalysisPlugin) mPlugin).getInputPorts() : new BasicEList<MIInputPort>();
+		final String[] outputPorts = plugin.getAllOutputPortNames();
+		final String[] inputPorts = plugin.getAllInputPortNames();
+
+		/* Sort the arrays for binary search. */
+		Arrays.sort(outputPorts);
+		Arrays.sort(inputPorts);
+
+		/* Check whether the ports of the model plugin exist. */
+		for (final MIOutputPort mOutputPort : mOutputPorts) {
+			if (Arrays.binarySearch(outputPorts, mOutputPort.getName()) < 0) {
+				AnalysisController.LOG.warn("The output port '" + mOutputPort.getName() + "' of '" + mPlugin.getName() + "' does not exist.");
+			}
+		}
+		for (final MIInputPort mInputPort : mInputPorts) {
+			if (Arrays.binarySearch(inputPorts, mInputPort.getName()) < 0) {
+				AnalysisController.LOG.warn("The input port '" + mInputPort.getName() + "' of '" + mPlugin.getName() + "' does not exist.");
 			}
 		}
 	}
@@ -225,7 +265,7 @@ public final class AnalysisController implements Runnable {
 	 * @param configuration
 	 *            The configuration to be checked for correctness.
 	 */
-	private void checkConfiguration(final AbstractPlugin plugin, final Configuration configuration) {
+	private static void checkConfiguration(final AbstractPlugin plugin, final Configuration configuration) {
 		/* Get the actual configuration of the plugin (and therefore the real existing keys) */
 		final Configuration actualConfiguration = plugin.getCurrentConfiguration();
 		/* Run through all used keys in the given configuration. */
@@ -234,7 +274,7 @@ public final class AnalysisController implements Runnable {
 			final String key = (String) keyEnum.nextElement();
 			if (!actualConfiguration.containsKey(key) && !(key.equals(AbstractPlugin.CONFIG_NAME))) {
 				/* Found an invalid key. */
-				AnalysisController.LOG.warn("Invalid property found: '" + key + "'.");
+				AnalysisController.LOG.warn("Invalid property of '" + plugin.getName() + "' found: '" + key + "'.");
 			}
 		}
 	}
