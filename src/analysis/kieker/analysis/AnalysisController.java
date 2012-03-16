@@ -360,7 +360,7 @@ public final class AnalysisController implements Runnable {
 
 			/* We are finished. Return the finished project. */
 			return mProject;
-		} catch (final Exception ex) {
+		} catch (final Exception ex) { // TODO. why the catch? Could anything be thrown?
 			AnalysisController.LOG.error("Unable to save configuration.", ex);
 			return null;
 		}
