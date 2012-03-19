@@ -82,7 +82,7 @@ public abstract class AggregatedCallTreePlugin<T> extends AbstractCallTreePlugin
 	@Override
 	public void printStatusMessage() {
 		super.printStatusMessage();
-		System.out.println("Saved " + this.numGraphsSaved + " call tree" + (this.numGraphsSaved > 1 ? "s" : "")); // NOCS
+		this.stdOutPrintln("Saved " + this.numGraphsSaved + " call tree" + (this.numGraphsSaved > 1 ? "s" : "")); // NOCS
 	}
 
 	/**

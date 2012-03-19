@@ -134,10 +134,10 @@ public class SequenceDiagramPlugin extends AbstractMessageTraceProcessingPlugin 
 		super.printStatusMessage();
 		final int numPlots = this.getSuccessCount();
 		final long lastSuccessTracesId = this.getLastTraceIdSuccess();
-		System.out.println("Wrote " + numPlots + " sequence diagram" + (numPlots > 1 ? "s" : "") // NOCS (AvoidInlineConditionalsCheck)
+		this.stdOutPrintln("Wrote " + numPlots + " sequence diagram" + (numPlots > 1 ? "s" : "") // NOCS (AvoidInlineConditionalsCheck)
 				+ " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '" + this.outputFnBase + "-<traceId>.pic'"); // NOCS (AvoidInlineConditionalsCheck)
-		System.out.println("Pic files can be converted using the pic2plot tool (package plotutils)");
-		System.out.println("Example: pic2plot -T svg " + this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") // NOCS
+		this.stdOutPrintln("Pic files can be converted using the pic2plot tool (package plotutils)");
+		this.stdOutPrintln("Example: pic2plot -T svg " + this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") // NOCS
 																																		// (AvoidInlineConditionalsCheck)
 				+ ".pic > " + this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg"); // NOCS (AvoidInlineConditionalsCheck)
 	}

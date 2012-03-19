@@ -302,8 +302,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingPlugin {
 			final String maxToutStr = new StringBuilder().append(this.maxTout).append(" (")
 					.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTout)).append(",")
 					.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.maxTout)).append(")").toString();
-			System.out.println("First timestamp: " + minTinStr);
-			System.out.println("Last timestamp: " + maxToutStr);
+			this.stdOutPrintln("First timestamp: " + minTinStr);
+			this.stdOutPrintln("Last timestamp: " + maxToutStr);
 		}
 	}
 

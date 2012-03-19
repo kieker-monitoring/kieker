@@ -121,13 +121,13 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 		ps.close();
 		this.numGraphsSaved++;
 		this.printMessage(new String[] { "Wrote dependency graph to file '" + outputFnBase + ".dot" + "'", "Dot file can be converted using the dot tool",
-			"Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg", });
+									"Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg", });
 	}
 
 	@Override
 	public void printStatusMessage() {
 		super.printStatusMessage();
-		System.out.println("Saved " + this.numGraphsSaved + " dependency graph" + (this.numGraphsSaved > 1 ? "s" : "")); // NOCS
+		this.stdOutPrintln("Saved " + this.numGraphsSaved + " dependency graph" + (this.numGraphsSaved > 1 ? "s" : "")); // NOCS
 	}
 
 	public void addDecorator(final NodeDecorator decorator) {

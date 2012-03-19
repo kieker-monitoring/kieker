@@ -223,8 +223,8 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingPlu
 			final String maxToutStr = new StringBuilder().append(this.maxTstamp).append(" (")
 					.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTstamp)).append(",")
 					.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.maxTstamp)).append(")").toString();
-			System.out.println("First timestamp: " + minTinStr);
-			System.out.println("Last timestamp: " + maxToutStr);
+			this.stdOutPrintln("First timestamp: " + minTinStr);
+			this.stdOutPrintln("Last timestamp: " + maxToutStr);
 		}
 	}
 

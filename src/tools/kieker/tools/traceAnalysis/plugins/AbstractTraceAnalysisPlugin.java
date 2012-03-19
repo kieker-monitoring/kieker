@@ -20,6 +20,8 @@
 
 package kieker.tools.traceAnalysis.plugins;
 
+import java.io.PrintStream;
+
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
@@ -42,6 +44,16 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
 public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin {
 	private static final Log LOG = LogFactory.getLog(AbstractTraceAnalysisPlugin.class);
+
+	/**
+	 * Output stream for info output addressed to users, e.g., number of traces processed, files processed etc.
+	 */
+	private volatile PrintStream outStream = System.out;
+
+	/**
+	 * Output stream for error output addressed to users, e.g., file not found.
+	 */
+	private volatile PrintStream errStream = System.err;
 
 	public static final String SYSTEM_MODEL_REPOSITORY_NAME = "systemModelRepository";
 
@@ -100,12 +112,18 @@ public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin
 				operationSignature, traceId, sessionId, eoi, ess, tin, tout, assumed);
 	}
 
+	/**
+	 * Prints a message to the configured standard output stream. The output is prepended by a
+	 * header which includes the name of this plugin instance.
+	 * 
+	 * @param lines
+	 */
 	protected void printMessage(final String[] lines) {
-		System.out.println("");
-		System.out.println("#");
-		System.out.println("# Plugin: " + this.getName());
+		this.stdOutPrintln("");
+		this.stdOutPrintln("#");
+		this.stdOutPrintln("# Plugin: " + this.getName());
 		for (final String l : lines) {
-			System.out.println(l);
+			this.stdOutPrintln(l);
 		}
 	}
 
@@ -118,5 +136,57 @@ public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin
 					+ AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME + "' (not connected?)");
 		}
 		return this.systemEntityFactory;
+	}
+
+	/**
+	 * Sets the for info output addressed to users, e.g., number of traces processed, files processed etc.
+	 * If not set explicitly, this class uses {@link System#err}.
+	 * 
+	 * @param outStream
+	 *            the outStream to set
+	 */
+	public void setOutStream(final PrintStream outStream) {
+		synchronized (this) {
+			this.outStream = outStream;
+		}
+	}
+
+	/**
+	 * Sets the for info output addressed to users, e.g., number of traces processed, files processed etc.
+	 * If not set explicitly, this class uses {@link System#err}.
+	 * 
+	 * @param errStream
+	 *            the errStream to set
+	 */
+	public void setErrStream(final PrintStream errStream) {
+		synchronized (this) {
+			this.errStream = errStream;
+		}
+	}
+
+	/**
+	 * Writes a line to the configured standard output stream for this plugin.
+	 * 
+	 * @param message
+	 */
+	protected void stdOutPrintln(final String message) {
+		synchronized (this) {
+			if (this.outStream != null) {
+				this.outStream.println(message);
+			}
+		}
+	}
+
+	/**
+	 * Writes a line to the configured error output stream for this plugin.
+	 * 
+	 * @param message
+	 */
+	protected void errOutPrintln(final String message) {
+		synchronized (this) {
+			if (this.errStream != null) {
+				this.errStream.println(message);
+			}
+		}
 	}
 }

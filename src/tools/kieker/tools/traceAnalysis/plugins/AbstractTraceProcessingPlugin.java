@@ -77,8 +77,13 @@ public abstract class AbstractTraceProcessingPlugin extends AbstractTraceAnalysi
 		return this.lastTraceIdSuccess;
 	}
 
+	/**
+	 * Returns a user-addressed status message to be logged by the calling tool.
+	 * Extending classes may override this method but should call the then-inherited method first.
+	 * 
+	 */
 	public void printStatusMessage() {
-		this.printMessage(new String[] { "Trace processing summary: " + this.numTracesProcessed + " total; " + this.numTracesSucceeded + " succeeded; "
-				+ this.numTracesFailed + " failed.", });
+		this.printMessage(new String[] { "Trace processing summary: " + this.numTracesProcessed + " total; " +
+						this.numTracesSucceeded + " succeeded; " + this.numTracesFailed + " failed.", });
 	}
 }
