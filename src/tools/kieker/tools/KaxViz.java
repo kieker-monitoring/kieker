@@ -43,6 +43,13 @@ import kieker.analysis.repository.AbstractRepository;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.w3c.dom.Document;
 
 import com.mxgraph.model.mxCell;
@@ -68,18 +75,26 @@ public final class KaxViz extends JFrame {
 	private static final int FILTER_WIDTH = 200;
 	private static final int FILTER_SPACE = 30;
 
-	private static final String USAGE =
-			"Usage: " + KaxViz.class.getName() + " analysisproject.kax [analysisproject.svg]\n" +
-					"where options include\n" +
-					"      analysisproject.kax     the analysis project file loaded and visualized\n" +
-					"      analysisproject.svg     an optional svg export of the project, saved on close";
-
 	private final AnalysisController analysisController;
 	private final mxGraph graph;
 
 	public KaxViz(final String filename, final AnalysisController analysisController, final String outFilename) {
 		super(analysisController.getProjectName() + " (" + filename + ((null != outFilename) ? " -> " + outFilename : "") + ")");
 		this.analysisController = analysisController;
+
+		// // Menu
+		// final JMenuBar menuBar = new JMenuBar();
+		// this.setJMenuBar(menuBar);
+		// final JMenu layoutMenu = new JMenu("Layout");
+		// menuBar.add(layoutMenu);
+		// final JMenuItem autoLayout = new JMenuItem("Auto Layout");
+		// autoLayout.addActionListener(new ActionListener() {
+		// @Override
+		// public final void actionPerformed(final ActionEvent arg0) {
+		// KaxViz.this.autoGraphLayout();
+		// }
+		// });
+		// layoutMenu.add(autoLayout);
 
 		if (null != outFilename) {
 			this.addWindowListener(new WindowAdapter() {
@@ -209,7 +224,7 @@ public final class KaxViz extends JFrame {
 				for (final Entry<String, AbstractRepository> repository : outputPlugin.getCurrentRepositories().entrySet()) {
 					final mxCell output = mapPlugin2Graph.get(outputPlugin);
 					final mxCell input = mapRepository2Graph.get(repository.getValue());
-					graph.insertEdge(null, null, repository.getKey(), output, input);
+					graph.insertEdge(null, null, repository.getKey(), output, input, "edgeStyle=orthogonalEdgeStyle");
 				}
 			}
 			// step 3: auto layout!
@@ -219,6 +234,11 @@ public final class KaxViz extends JFrame {
 			graph.getModel().endUpdate();
 		}
 	}
+
+	// final void autoGraphLayout() {
+	// final mxGraph graph = this.graph;
+	// new mxHierarchicalLayout(graph).execute(graph.getDefaultParent());
+	// }
 
 	private final Map<String, mxCell> createInputPorts(final AbstractPlugin plugin, final mxCell vertex) {
 		final Map<String, mxCell> port2graph = new HashMap<String, mxCell>();
@@ -284,12 +304,34 @@ public final class KaxViz extends JFrame {
 	 *            the name of the .kax file
 	 */
 	public final static void main(final String[] args) {
-		if (args.length == 0) {
-			System.err.println(KaxViz.USAGE);
-			System.exit(1);
-		}
+		// create cmdline options
+		final Options options = new Options();
+		final Option inputOption = new Option("i", "input", true, "the analysis project file (.kax) loaded");
+		inputOption.setRequired(true);
+		inputOption.setArgName("filename");
+		options.addOption(inputOption);
+		final Option outputoption = new Option("svg", true, "name of svg saved on close");
+		outputoption.setArgName("filename");
+		options.addOption(outputoption);
+
+		// parse cmdline options
+		final String kaxFilename;
+		final String svgFilename;
 		try {
-			final KaxViz frame = new KaxViz(args[0], new AnalysisController(new File(args[0])), (args.length > 1) ? args[1] : null);
+			final CommandLineParser parser = new BasicParser();
+			final CommandLine line = parser.parse(options, args);
+			kaxFilename = line.getOptionValue('i');
+			svgFilename = line.getOptionValue("svg");
+		} catch (final ParseException ex) {
+			System.out.println(ex.getMessage());
+			final HelpFormatter formatter = new HelpFormatter();
+			formatter.printHelp(KaxViz.class.getName(), options, true);
+			return;
+		}
+
+		// start tool
+		try {
+			final KaxViz frame = new KaxViz(kaxFilename, new AnalysisController(new File(kaxFilename)), svgFilename);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setExtendedState(Frame.MAXIMIZED_BOTH);
 			frame.setSize(800, 600);

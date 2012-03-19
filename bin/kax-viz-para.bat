@@ -1,5 +1,5 @@
 @echo off 
-REM This script should NOT be called directly. Use trace-analysis.bat instead.
+REM This script should NOT be called directly. Use kax-viz.bat instead.
 REM
 REM @author Nils Christian Ehmke
 
