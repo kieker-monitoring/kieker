@@ -18,9 +18,12 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.traceAnalysis.systemModel;
+package kieker.common.util;
 
 /**
+ * A signature for a software operation. Note that this is just an operation
+ * signature declaration which is not bound to an implementing class
+ * or interface.
  * 
  * @author Andre van Hoorn
  */

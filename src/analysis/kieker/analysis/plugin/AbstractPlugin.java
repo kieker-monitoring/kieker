@@ -213,7 +213,8 @@ public abstract class AbstractPlugin implements IPlugin {
 					try {
 						pluginInputPortReference.getInputPortMethod().invoke(pluginInputPortReference.getPlugin(), data);
 					} catch (final Exception e) {
-						AbstractPlugin.LOG.warn(this.getClass().getName() + ": OutputPort " + outputPort.name() + " couldn't send data to "
+						AbstractPlugin.LOG.warn("Caught exception when sending data from " + this.getClass().getName() + ": OutputPort " + outputPort.name()
+								+ " to "
 								+ pluginInputPortReference.getPlugin().getClass().getName() + "'s InputPort " +
 								pluginInputPortReference.getInputPortMethod().getName(), e);
 					}

@@ -59,6 +59,13 @@ public interface IPlugin {
 	 */
 	public abstract String getName();
 
+	/**
+	 * Connects the given repository to this plugin via the given name.
+	 * 
+	 * @param name
+	 * @param repo
+	 * @return
+	 */
 	public abstract boolean connect(final String name, final AbstractRepository repo);
 
 	/**

@@ -26,6 +26,7 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.common.util.ClassOperationSignaturePair;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
@@ -56,14 +57,10 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 			description = "Input",
 			eventTypes = { OperationExecutionRecord.class })
 	public boolean newMonitoringRecord(final OperationExecutionRecord execRec) {
-		/*
-		 * This would be the place to handle the operation signatures with etc. if they
-		 * are also used in OperationExecutionRecords
-		 */
+		final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(execRec.getOperationSignature());
 
-		final FQComponentNameSignaturePair fqComponentNameSignaturePair = AbstractTraceAnalysisPlugin.splitOperationSignatureStr(execRec.getOperationName());
-
-		final Execution execution = this.createExecutionByEntityNames(execRec.getHostName(), execRec.getClassName(), fqComponentNameSignaturePair.getSignature(),
+		final Execution execution = this.createExecutionByEntityNames(execRec.getHostName(), fqComponentNameSignaturePair.getFqClassname(),
+				fqComponentNameSignaturePair.getSignature(),
 				execRec.getTraceId(), execRec.getSessionId(), execRec.getEoi(), execRec.getEss(), execRec.getTin(), execRec.getTout());
 		super.deliver(ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME, execution);
 		return true;
@@ -77,9 +74,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisPl
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-
-		// TODO: Save the current configuration
-
+		// filter has no configuration properties
 		return configuration;
 	}
 

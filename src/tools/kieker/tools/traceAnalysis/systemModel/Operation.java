@@ -20,6 +20,7 @@
 
 package kieker.tools.traceAnalysis.systemModel;
 
+import kieker.common.util.Signature;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
 
 /**

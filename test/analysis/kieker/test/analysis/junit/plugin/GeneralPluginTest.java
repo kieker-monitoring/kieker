@@ -1,13 +1,10 @@
 package kieker.test.analysis.junit.plugin;
 
-import java.util.Iterator;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.List;
 
 import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
-import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractReaderPlugin;
-import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
@@ -75,14 +72,12 @@ public class GeneralPluginTest extends TestCase {
 
 		src.read();
 
-		final ConcurrentLinkedQueue<Execution> lst = dst.getList();
-		Assert.assertEquals(2, lst.size());
+		final List<Execution> execs = dst.getExecutions();
+		Assert.assertEquals(2, execs.size());
 
 		boolean okay1 = false, okay2 = false;
 
-		final Iterator<Execution> iter = lst.iterator();
-		for (int i = 0; i < 2; i++) {
-			final Execution ex = iter.next();
+		for (final Execution ex : execs) {
 			if ((ex.getTraceId() == 1) && (ex.getTin() == 14) && (ex.getTout() == 15)) {
 				okay1 = true;
 			} else {
@@ -148,60 +143,5 @@ class SourceClass extends AbstractReaderPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
-	}
-}
-
-/**
- * This is just a simple helper class to test the plugin structure. It should not be used outside this test class.
- * 
- * @author Nils Christian Ehmke
- * @version 1.0
- */
-class ExecutionSinkClass extends AbstractAnalysisPlugin {
-
-	/**
-	 * The name of the default input port.
-	 */
-	public static final String INPUT_PORT_NAME = "doJob";
-
-	/**
-	 * This list will contain the records this plugin received.
-	 */
-	private final ConcurrentLinkedQueue<Execution> lst = new ConcurrentLinkedQueue<Execution>();
-
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this plugin. It will not be used.
-	 */
-	public ExecutionSinkClass(final Configuration configuration) {
-		super(configuration);
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
-	}
-
-	@Override
-	public Configuration getCurrentConfiguration() {
-		return new Configuration();
-	}
-
-	@InputPort(
-			name = ExecutionSinkClass.INPUT_PORT_NAME,
-			eventTypes = { Execution.class })
-	public void doJob(final Object data) {
-		this.lst.add((Execution) data);
-	}
-
-	/**
-	 * Delivers the list containing the received records.
-	 * 
-	 * @return The list with the records.
-	 */
-	public ConcurrentLinkedQueue<Execution> getList() {
-		return this.lst;
 	}
 }

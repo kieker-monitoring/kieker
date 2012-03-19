@@ -35,6 +35,7 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.common.record.flow.trace.operation.CallOperationEvent;
+import kieker.common.util.ClassOperationSignaturePair;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
@@ -213,11 +214,11 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 	 */
 	private Execution beforeOperationToExecution(final BeforeOperationEvent event, final long traceId, final int eoi, final int ess,
 			final long tin, final long tout) {
-		// TODO: hostname and sessionid
+		// TODO: hostname and sessionid are currently not available in the event trace records
 		final String hostName = "<HOST>";
 		final String sessionId = "<SESSION-ID>";
 
-		final FQComponentNameSignaturePair fqComponentNameSignaturePair = super.splitOperationSignatureStr(event.getOperationSignature());
+		final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(event.getOperationSignature());
 
 		return super.createExecutionByEntityNames(hostName, fqComponentNameSignaturePair.getFqClassname(), fqComponentNameSignaturePair.getSignature(),
 				traceId,
@@ -236,11 +237,11 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 	 */
 	private Execution callOperationToExecution(final CallOperationEvent event, final long traceId, final int eoi, final int ess,
 			final long tin, final long tout) {
-		// TODO: hostname and sessionid
+		// TODO: hostname and sessionid are currently not available in the event trace records
 		final String hostName = "<HOST>";
 		final String sessionId = "<SESSION-ID>";
 
-		final FQComponentNameSignaturePair fqComponentNameSignaturePair = super.splitOperationSignatureStr(event.getCalleeOperationSiganture());
+		final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(event.getCalleeOperationSiganture());
 		return super.createExecutionByEntityNames(hostName, fqComponentNameSignaturePair.getFqClassname(),
 				fqComponentNameSignaturePair.getSignature(), traceId, sessionId, eoi, ess, tin, tout);
 	}

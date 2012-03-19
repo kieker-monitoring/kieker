@@ -29,7 +29,7 @@ import org.junit.Test;
 /**
  * @author Andre van Hoorn
  */
-public class TestOperationExecutionRecord extends TestCase { // NOCS (MissingCtorCheck)
+public class TestOperationExecutionRecordEquals extends TestCase { // NOCS (MissingCtorCheck)
 
 	/**
 	 * Tests the toArray(..) and initFromArray(..) methods of OperationExecutionRecord.

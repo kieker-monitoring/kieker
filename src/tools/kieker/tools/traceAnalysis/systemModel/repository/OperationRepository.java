@@ -24,9 +24,9 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
 
+import kieker.common.util.Signature;
 import kieker.tools.traceAnalysis.systemModel.ComponentType;
 import kieker.tools.traceAnalysis.systemModel.Operation;
-import kieker.tools.traceAnalysis.systemModel.Signature;
 
 /**
  * 

@@ -22,6 +22,7 @@ package kieker.common.record.controlflow;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.ClassOperationSignaturePair;
 
 /**
  * String variables must not be null.
@@ -96,18 +97,37 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 
 	public OperationExecutionRecord(final String operationSignature, final String sessionId, final long traceId, final long tin, final long tout,
 			final String vnName, final int eoi, final int ess) {
-		this(operationSignature, sessionId, traceId, tin, tout);
+		this(operationSignature, traceId, tin, tout);
+		this.sessionId = sessionId;
 		this.hostName = vnName;
 		this.eoi = eoi;
 		this.ess = ess;
 	}
 
+	/**
+	 * 
+	 * @param componentName
+	 * @param methodName
+	 * @param traceId
+	 * 
+	 * @deprecated will be removed in Kieker 1.6
+	 */
 	@Deprecated
 	public OperationExecutionRecord(final String componentName, final String methodName, final long traceId) {
 		this.operationSignature = componentName + '.' + methodName;
 		this.traceId = traceId;
 	}
 
+	/**
+	 * 
+	 * @param componentName
+	 * @param opName
+	 * @param traceId
+	 * @param tin
+	 * @param tout
+	 * 
+	 * @deprecated will be removed in Kieker 1.6
+	 */
 	@Deprecated
 	public OperationExecutionRecord(final String componentName, final String opName, final long traceId, final long tin, final long tout) {
 		this(componentName, opName, traceId);
@@ -115,17 +135,51 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 		this.tout = tout;
 	}
 
+	/**
+	 * 
+	 * @param componentName
+	 * @param opName
+	 * @param tin
+	 * @param tout
+	 * 
+	 * @deprecated will be removed in Kieker 1.6
+	 */
 	@Deprecated
 	public OperationExecutionRecord(final String componentName, final String opName, final long tin, final long tout) {
 		this(componentName, opName, -1, tin, tout);
 	}
 
+	/**
+	 * 
+	 * @param componentName
+	 * @param opName
+	 * @param sessionId
+	 * @param traceId
+	 * @param tin
+	 * @param tout
+	 * 
+	 * @deprecated will be removed in Kieker 1.6
+	 */
 	@Deprecated
 	public OperationExecutionRecord(final String componentName, final String opName, final String sessionId, final long traceId, final long tin, final long tout) {
 		this(componentName, opName, traceId, tin, tout);
 		this.sessionId = sessionId;
 	}
 
+	/**
+	 * 
+	 * @param componentName
+	 * @param opName
+	 * @param sessionId
+	 * @param traceId
+	 * @param tin
+	 * @param tout
+	 * @param vnName
+	 * @param eoi
+	 * @param ess
+	 * 
+	 * @deprecated will be removed in Kieker 1.6
+	 */
 	@Deprecated
 	public OperationExecutionRecord(final String componentName, final String opName, final String sessionId, final long traceId, final long tin, final long tout,
 			final String vnName, final int eoi, final int ess) {
@@ -211,39 +265,33 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 		return this.operationSignature;
 	}
 
+	/**
+	 * A string can, for example, be created using {@link ClassOperationSignaturePair#toOperationSignatureString()}.
+	 * 
+	 * @param operationSignature
+	 */
 	public void setOperationSignature(final String operationSignature) {
 		this.operationSignature = operationSignature;
 	}
 
 	/**
 	 * @return the className
+	 * 
+	 * @deprecated will be removed in Kieker 1.6
 	 */
 	@Deprecated
 	public final String getClassName() {
-		final String name = this.getOperationSignature();
-		final int posParen = name.lastIndexOf('(');
-		int posDot;
-		if (posParen != -1) {
-			posDot = name.substring(0, posParen).lastIndexOf('.');
-		} else {
-			posDot = name.lastIndexOf('.');
-		}
-		if (posDot == -1) {
-			return "";
-		} else {
-			final String firstpart = name.substring(0, posDot);
-			final int posSpace = firstpart.lastIndexOf(' ');
-			if (posSpace == -1) {
-				return firstpart;
-			} else {
-				return firstpart.substring(posSpace + 1, firstpart.length());
-			}
-		}
+		final ClassOperationSignaturePair classOpPair = ClassOperationSignaturePair.splitOperationSignatureStr(this.operationSignature);
+		return classOpPair.getFqClassname();
 	}
 
 	/**
+	 * Use {@link #setOperationSignature(String)} instead.
+	 * 
 	 * @param className
 	 *            the className to set
+	 * 
+	 * @deprecated will be removed in Kieker 1.6
 	 */
 	@Deprecated
 	public final void setClassName(final String className) {
@@ -252,6 +300,8 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 
 	/**
 	 * @return the operationName
+	 * 
+	 * @deprecated will be removed in Kieker 1.6
 	 */
 	@Deprecated
 	public final String getOperationName() {
@@ -271,8 +321,12 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	}
 
 	/**
+	 * Use {@link #setOperationSignature(String)} instead.
+	 * 
 	 * @param operationName
 	 *            the operationName to set
+	 * 
+	 * @deprecated will be removed in Kieker 1.6
 	 */
 	@Deprecated
 	public final void setOperationName(final String operationName) {
