@@ -69,10 +69,8 @@ public final class KaxViz extends JFrame {
 	private static final int FILTER_SPACE = 30;
 
 	private static final String USAGE =
-			"Usage: java -cp lib/jgraphx-*.jar kieker.tools.KaxViz analysisproject.kax [analysisproject.svg]\n" +
+			"Usage: " + KaxViz.class.getName() + " kieker.tools.KaxViz analysisproject.kax [analysisproject.svg]\n" +
 					"where options include\n" +
-					"      -cp lib/jgraphx-*.jar   replace 'lib/jgraphx-*.jar' with the correct\n" +
-					"                              library location, e.g., lib/jgraphx-1.9.2.0.jar\n" +
 					"      analysisproject.kax     the analysis project file loaded and visualized\n" +
 					"      analysisproject.svg     an optional svg export of the project, saved on close";
 
