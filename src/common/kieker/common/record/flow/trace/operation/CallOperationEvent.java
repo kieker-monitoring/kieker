@@ -50,7 +50,7 @@ public final class CallOperationEvent extends AbstractOperationEvent {
 
 	@Override
 	public final Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getCallerOperationName(), this.getCalleeOperationSiganture() };
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getCallerOperationName(), this.getCalleeOperationSignature() };
 	}
 
 	@Override
@@ -62,12 +62,12 @@ public final class CallOperationEvent extends AbstractOperationEvent {
 		return this.getOperationSignature();
 	}
 
-	public final String getCalleeOperationSiganture() {
+	public final String getCalleeOperationSignature() {
 		return this.calleeOperationSiganture;
 	}
 
 	public final boolean callsReferencedOperationOf(final AbstractOperationEvent event) {
-		return this.getCalleeOperationSiganture().equals(event.getOperationSignature());
+		return this.getCalleeOperationSignature().equals(event.getOperationSignature());
 	}
 
 	@Override

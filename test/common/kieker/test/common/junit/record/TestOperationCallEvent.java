@@ -59,7 +59,7 @@ public class TestOperationCallEvent extends TestCase { // NOCS (MissingCtorCheck
 		Assert.assertEquals("Unexpected trace ID", TestOperationCallEvent.TRACE_ID, call1.getTraceId());
 		Assert.assertEquals("Unexpected order index", TestOperationCallEvent.ORDER_INDEX, call1.getOrderIndex());
 		Assert.assertEquals("Unexpected caller operation name", TestOperationCallEvent.FQ_CALLER_OPERATION, call1.getCallerOperationName());
-		Assert.assertEquals("Unexpected callee operation name", TestOperationCallEvent.FQ_CALLEE_OPERATION, call1.getCalleeOperationSiganture());
+		Assert.assertEquals("Unexpected callee operation name", TestOperationCallEvent.FQ_CALLEE_OPERATION, call1.getCalleeOperationSignature());
 
 		final Object[] call1Array = call1.toArray();
 
