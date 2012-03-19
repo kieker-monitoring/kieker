@@ -453,7 +453,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 		final String hostName = "<HOST>";
 		final String sessionId = "<SESSION-ID>";
 
-		final FQComponentNameSignaturePair fqComponentNameSignaturePair = super.splitOperationSignatureStr(event.getCalleeOperationSiganture());
+		final FQComponentNameSignaturePair fqComponentNameSignaturePair = super.splitOperationSignatureStr(event.getCalleeOperationSignature());
 		return super.createExecutionByEntityNames(hostName, fqComponentNameSignaturePair.getFqClassname(),
 				fqComponentNameSignaturePair.getSignature(), traceId, sessionId, eoi, ess, tin, tout, assumed);
 	}
