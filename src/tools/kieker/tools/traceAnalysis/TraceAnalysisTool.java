@@ -841,9 +841,57 @@ public final class TraceAnalysisTool {
 		return true;
 	}
 
+	/**
+	 * Returns if the specified input directories {@link #inputDirs} exist and that
+	 * each one is a monitoring log. If this is not the case for one of the directories,
+	 * an error message is printed to stderr.
+	 * 
+	 * @return true if {@link #outputDir} is exists and is a directory; false
+	 *         otherwise
+	 */
+	private static boolean assertInputDirsExistsAndAreMonitoringLogs() {
+		for (final String inputDir : TraceAnalysisTool.inputDirs) {
+			final File inputDirFile = new File(inputDir);
+			try {
+				if (!inputDirFile.exists()) {
+					System.err.println("");
+					System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' does not exist");
+					return false;
+				}
+
+				if (!inputDirFile.isDirectory()) {
+					System.err.println("");
+					System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is not a directory");
+					return false;
+				}
+
+				/* check whether inputDirFile contains a (kieker|tpmon).map file; the latter for legacy reasons */
+				final File[] mapFiles = { new File(inputDir + "/kieker.map"), new File(inputDir + "/tpmon.map") };
+				boolean mapFileExists = false;
+				for (final File potentialMapFile : mapFiles) {
+					if (potentialMapFile.isFile()) {
+						mapFileExists = true;
+						break;
+					}
+				}
+				if (!mapFileExists) {
+					System.err.println("");
+					System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is not a kieker log directory");
+					return false;
+				}
+			} catch (final IOException e) { // thrown by File.getCanonicalPath()
+				System.err.println("");
+				System.err.println("Error resolving name of input directory: '" + inputDir + "'");
+			}
+		}
+
+		return true;
+	}
+
 	public static void main(final String[] args) {
 		try {
-			if (!TraceAnalysisTool.parseArgs(args) || !TraceAnalysisTool.initFromArgs() || !TraceAnalysisTool.assertOutputDirExists()) {
+			if (!TraceAnalysisTool.parseArgs(args) || !TraceAnalysisTool.initFromArgs()
+					|| !TraceAnalysisTool.assertOutputDirExists() || !TraceAnalysisTool.assertInputDirsExistsAndAreMonitoringLogs()) {
 				System.exit(1);
 			}
 
