@@ -19,33 +19,40 @@
  ***************************************************************************/
 package kieker.tools;
 
+import java.awt.Color;
 import java.awt.Frame;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.AbstractReaderPlugin;
+import kieker.analysis.plugin.IPlugin;
 import kieker.analysis.plugin.PluginInputPortReference;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
-import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
+import org.w3c.dom.Document;
+
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
 import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.swing.handler.mxRubberband;
+import com.mxgraph.util.mxCellRenderer;
 import com.mxgraph.util.mxPoint;
+import com.mxgraph.util.mxUtils;
+import com.mxgraph.util.mxXmlUtils;
 import com.mxgraph.view.mxGraph;
 
 /**
@@ -57,33 +64,38 @@ public final class KaxViz extends JFrame {
 	private static final long serialVersionUID = 1969467089938687452L;
 	private static final Log LOG = LogFactory.getLog(KaxViz.class);
 
+	private static final int FILTER_HEIGHT = 80;
+	private static final int FILTER_WIDTH = 200;
+	private static final int FILTER_SPACE = 30;
+
 	private static final String USAGE =
-			"Usage: java -cp lib/jgraphx-*.jar kieker.tools.KaxViz analysisproject.kax\n" +
+			"Usage: java -cp lib/jgraphx-*.jar kieker.tools.KaxViz analysisproject.kax [analysisproject.svg]\n" +
 					"where options include\n" +
 					"      -cp lib/jgraphx-*.jar   replace 'lib/jgraphx-*.jar' with the correct\n" +
 					"                              library location, e.g., lib/jgraphx-1.9.2.0.jar\n" +
-					"      analysisproject.kax     the analysis project file loaded and visualized.";
+					"      analysisproject.kax     the analysis project file loaded and visualized\n" +
+					"      analysisproject.svg     an optional svg export of the project, saved on close";
 
 	private final AnalysisController analysisController;
 	private final mxGraph graph;
 
-	public KaxViz(final String filename, final AnalysisController analysisController) {
-		super(filename + " - " + analysisController.getProjectName());
+	public KaxViz(final String filename, final AnalysisController analysisController, final String outFilename) {
+		super(analysisController.getProjectName() + " (" + filename + ((null != outFilename) ? " -> " + outFilename : "") + ")");
 		this.analysisController = analysisController;
 
-		// Menu
-		final JMenuBar menuBar = new JMenuBar();
-		this.setJMenuBar(menuBar);
-		final JMenu layoutMenu = new JMenu("Layout");
-		menuBar.add(layoutMenu);
-		final JMenuItem autoLayout = new JMenuItem("Auto Layout");
-		autoLayout.addActionListener(new ActionListener() {
-			@Override
-			public final void actionPerformed(final ActionEvent arg0) {
-				KaxViz.this.autoGraphLayout();
-			}
-		});
-		layoutMenu.add(autoLayout);
+		if (null != outFilename) {
+			this.addWindowListener(new WindowAdapter() {
+				@Override
+				public void windowClosing(final WindowEvent e) {
+					final Document doc = mxCellRenderer.createSvgDocument(KaxViz.this.graph, null, 1d, Color.WHITE, KaxViz.this.graph.getGraphBounds());
+					try {
+						mxUtils.writeFile(mxXmlUtils.getXml(doc), outFilename);
+					} catch (final IOException ex) {
+						KaxViz.LOG.error("Failed to save Visualization of kax-File.", ex);
+					}
+				}
+			});
+		}
 
 		// setup basic graph
 		final mxGraph graph = new mxGraph();
@@ -141,6 +153,7 @@ public final class KaxViz extends JFrame {
 		graphComponent.setConnectable(false); // Inhibit edge creation in the graph.
 		graphComponent.setGridVisible(true); // Show the grid
 		graphComponent.setFoldingEnabled(false); // prevent folding of vertexes
+		new mxRubberband(graphComponent); // add rubberband selection
 		this.getContentPane().add(graphComponent);
 		this.graph = graph;
 
@@ -150,73 +163,63 @@ public final class KaxViz extends JFrame {
 
 	private void displayGraph() {
 		final mxGraph graph = this.graph;
-		final Map<AbstractPlugin, mxCell> mapPlugin2Graph = new HashMap<AbstractPlugin, mxCell>();
-		final Map<AbstractPlugin, Map<String, mxCell>> mapPluginInputPorts2Graph = new HashMap<AbstractPlugin, Map<String, mxCell>>();
-		final Map<AbstractPlugin, Map<String, mxCell>> mapPluginOutputPorts2Graph = new HashMap<AbstractPlugin, Map<String, mxCell>>();
+		final Map<IPlugin, mxCell> mapPlugin2Graph = new HashMap<IPlugin, mxCell>();
+		final Map<IPlugin, Map<String, mxCell>> mapPluginInputPorts2Graph = new HashMap<IPlugin, Map<String, mxCell>>();
+		final Map<IPlugin, Map<String, mxCell>> mapPluginOutputPorts2Graph = new HashMap<IPlugin, Map<String, mxCell>>();
 		final Map<AbstractRepository, mxCell> mapRepository2Graph = new HashMap<AbstractRepository, mxCell>();
 		// draw the graph
 		graph.getModel().beginUpdate();
 		try {
+			int x = 0;
 			// step 1: add all plugins!
 			for (final AbstractReaderPlugin reader : this.analysisController.getReaders()) {
-				final mxCell vertex = this.createReader(reader);
+				final mxCell vertex = this.createReader(reader, x++);
 				mapPlugin2Graph.put(reader, vertex);
 				mapPluginOutputPorts2Graph.put(reader, this.createOutputPorts(reader, vertex));
 			}
 			for (final AbstractAnalysisPlugin filter : this.analysisController.getFilters()) {
-				final mxCell vertex = this.createFilter(filter);
+				final mxCell vertex = this.createFilter(filter, x++);
 				mapPlugin2Graph.put(filter, vertex);
 				mapPluginInputPorts2Graph.put(filter, this.createInputPorts(filter, vertex));
 				mapPluginOutputPorts2Graph.put(filter, this.createOutputPorts(filter, vertex));
 			}
 			for (final AbstractRepository repo : this.analysisController.getRepositories()) {
-				final mxCell cell = this.createRepository(repo);
+				final mxCell cell = this.createRepository(repo, x++);
 				mapRepository2Graph.put(repo, cell);
 			}
 			// step 2: connect all plugins!
-			for (final AbstractReaderPlugin reader : this.analysisController.getReaders()) {
-				final Map<String, mxCell> outputPorts = mapPluginOutputPorts2Graph.get(reader);
-				for (final String outputPort : reader.getAllOutputPortNames()) {
-					for (final PluginInputPortReference inputPortReference : reader.getConnectedPlugins(outputPort)) {
-						final mxCell output = outputPorts.get(outputPort);
-						final mxCell input = mapPluginInputPorts2Graph.get(inputPortReference.getPlugin()).get(inputPortReference.getInputPortName());
-						// final String description = "[" + outputPort + "] -> [" + inputPortReference.getInputPortName() + "]";
-						graph.insertEdge(null, null, "", output, input);
+			final Collection<IPlugin> allPlugins = new LinkedList<IPlugin>();
+			allPlugins.addAll(this.analysisController.getReaders());
+			allPlugins.addAll(this.analysisController.getFilters());
+			for (final IPlugin outputPlugin : allPlugins) {
+				final Map<String, mxCell> mapOutputPorts2Graph = mapPluginOutputPorts2Graph.get(outputPlugin);
+				for (final String outputPortName : outputPlugin.getAllOutputPortNames()) {
+					for (final PluginInputPortReference inputPortReference : outputPlugin.getConnectedPlugins(outputPortName)) {
+						final mxCell outputPluginCell = mapPlugin2Graph.get(outputPlugin);
+						final mxCell outputPortCell = mapOutputPorts2Graph.get(outputPortName);
+						final IPlugin inputPlugin = inputPortReference.getPlugin();
+						final mxCell inputPluginCell = mapPlugin2Graph.get(inputPlugin);
+						final String inputPortName = inputPortReference.getInputPortName();
+						final mxCell inputPortCell = mapPluginInputPorts2Graph.get(inputPlugin).get(inputPortName);
+						inputPortCell.setStyle("noLabel=0;spacingTop=3;verticalLabelPosition=bottom;portConstraint=north");
+						outputPortCell.setStyle("noLabel=0;verticalLabelPosition=top;portConstraint=south");
+						final mxCell edge = (mxCell) graph.insertEdge(null, null, "", outputPluginCell, inputPluginCell, "edgeStyle=orthogonalEdgeStyle");
+						edge.setSource(outputPortCell);
+						edge.setTarget(inputPortCell);
 					}
 				}
-				for (final Entry<String, AbstractRepository> repository : reader.getCurrentRepositories().entrySet()) {
-					final mxCell output = mapPlugin2Graph.get(reader);
-					final mxCell input = mapRepository2Graph.get(repository.getValue());
-					graph.insertEdge(null, null, repository.getKey(), output, input);
-				}
-			}
-			for (final AbstractAnalysisPlugin filter : this.analysisController.getFilters()) {
-				final Map<String, mxCell> outputPorts = mapPluginOutputPorts2Graph.get(filter);
-				for (final String outputPort : filter.getAllOutputPortNames()) {
-					for (final PluginInputPortReference inputPortReference : filter.getConnectedPlugins(outputPort)) {
-						final mxCell output = outputPorts.get(outputPort);
-						final mxCell input = mapPluginInputPorts2Graph.get(inputPortReference.getPlugin()).get(inputPortReference.getInputPortName());
-						// final String description = "[" + outputPort + "] -> [" + inputPortReference.getInputPortName() + "]";
-						graph.insertEdge(null, null, "", output, input);
-					}
-				}
-				for (final Entry<String, AbstractRepository> repository : filter.getCurrentRepositories().entrySet()) {
-					final mxCell output = mapPlugin2Graph.get(filter);
+				for (final Entry<String, AbstractRepository> repository : outputPlugin.getCurrentRepositories().entrySet()) {
+					final mxCell output = mapPlugin2Graph.get(outputPlugin);
 					final mxCell input = mapRepository2Graph.get(repository.getValue());
 					graph.insertEdge(null, null, repository.getKey(), output, input);
 				}
 			}
 			// step 3: auto layout!
-			this.autoGraphLayout();
+			// this.autoGraphLayout();
 		} finally {
 			// finish the drawing
 			graph.getModel().endUpdate();
 		}
-	}
-
-	final void autoGraphLayout() {
-		final mxGraph graph = this.graph;
-		new mxHierarchicalLayout(graph).execute(graph.getDefaultParent());
 	}
 
 	private final Map<String, mxCell> createInputPorts(final AbstractPlugin plugin, final mxCell vertex) {
@@ -224,9 +227,9 @@ public final class KaxViz extends JFrame {
 		final String[] portNames = plugin.getAllInputPortNames();
 		for (int i = 0; i < portNames.length; i++) {
 			final mxGeometry portGeometry = new mxGeometry((i + 1d) / (portNames.length + 1), 0, 10, 10);
-			portGeometry.setOffset(new mxPoint(-5, -5));
+			portGeometry.setOffset(new mxPoint(0, 0));
 			portGeometry.setRelative(true);
-			final mxCell port = new mxCell(portNames[i], portGeometry, null);
+			final mxCell port = new mxCell(portNames[i], portGeometry, "noLabel=1;spacingTop=3;verticalLabelPosition=bottom;portConstraint=north");
 			port.setVertex(true);
 			this.graph.addCell(port, vertex);
 			port2graph.put(portNames[i], port);
@@ -239,9 +242,9 @@ public final class KaxViz extends JFrame {
 		final String[] portNames = plugin.getAllOutputPortNames();
 		for (int i = 0; i < portNames.length; i++) {
 			final mxGeometry portGeometry = new mxGeometry((i + 1d) / (portNames.length + 1), 1, 10, 10);
-			portGeometry.setOffset(new mxPoint(-5, -5));
+			portGeometry.setOffset(new mxPoint(0, -10));
 			portGeometry.setRelative(true);
-			final mxCell port = new mxCell(portNames[i], portGeometry, null);
+			final mxCell port = new mxCell(portNames[i], portGeometry, "noLabel=1;verticalLabelPosition=top;portConstraint=south");
 			port.setVertex(true);
 			this.graph.addCell(port, vertex);
 			port2graph.put(portNames[i], port);
@@ -249,22 +252,28 @@ public final class KaxViz extends JFrame {
 		return port2graph;
 	}
 
-	private final mxCell createReader(final AbstractReaderPlugin plugin) {
-		final mxCell vertex = new mxCell("<<Reader>>\n" + plugin.getName() + " : " + plugin.getPluginName(), new mxGeometry(0, 0, 200, 50), null);
+	private final mxCell createReader(final AbstractReaderPlugin plugin, final int c) {
+		final mxCell vertex = new mxCell("<<Reader>>\n" + plugin.getName() + " : " + plugin.getPluginName(),
+				new mxGeometry(KaxViz.FILTER_SPACE, KaxViz.FILTER_SPACE + (c * (KaxViz.FILTER_HEIGHT + KaxViz.FILTER_SPACE)),
+						KaxViz.FILTER_WIDTH, KaxViz.FILTER_HEIGHT), null);
 		vertex.setVertex(true);
 		this.graph.addCell(vertex);
 		return vertex;
 	}
 
-	private final mxCell createFilter(final AbstractAnalysisPlugin plugin) {
-		final mxCell vertex = new mxCell("<<Filter>>\n" + plugin.getName() + " : " + plugin.getPluginName(), new mxGeometry(0, 0, 200, 50), null);
+	private final mxCell createFilter(final AbstractAnalysisPlugin plugin, final int c) {
+		final mxCell vertex = new mxCell("<<Filter>>\n" + plugin.getName() + " : " + plugin.getPluginName(),
+				new mxGeometry(KaxViz.FILTER_SPACE, KaxViz.FILTER_SPACE + (c * (KaxViz.FILTER_HEIGHT + KaxViz.FILTER_SPACE)),
+						KaxViz.FILTER_WIDTH, KaxViz.FILTER_HEIGHT), null);
 		vertex.setVertex(true);
 		this.graph.addCell(vertex);
 		return vertex;
 	}
 
-	private final mxCell createRepository(final AbstractRepository repository) {
-		final mxCell vertex = new mxCell("<<Repository>>\n : " + repository.getClass().getSimpleName(), new mxGeometry(0, 0, 200, 50), null);
+	private final mxCell createRepository(final AbstractRepository repository, final int c) {
+		final mxCell vertex = new mxCell("<<Repository>>\n : " + repository.getClass().getSimpleName(),
+				new mxGeometry(KaxViz.FILTER_SPACE, KaxViz.FILTER_SPACE + (c * (KaxViz.FILTER_HEIGHT + KaxViz.FILTER_SPACE)),
+						KaxViz.FILTER_WIDTH, KaxViz.FILTER_HEIGHT), "rounded=1");
 		vertex.setVertex(true);
 		this.graph.addCell(vertex);
 		return vertex;
@@ -282,7 +291,7 @@ public final class KaxViz extends JFrame {
 			System.exit(1);
 		}
 		try {
-			final KaxViz frame = new KaxViz(args[0], new AnalysisController(new File(args[0])));
+			final KaxViz frame = new KaxViz(args[0], new AnalysisController(new File(args[0])), (args.length > 1) ? args[1] : null);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setExtendedState(Frame.MAXIMIZED_BOTH);
 			frame.setSize(800, 600);
