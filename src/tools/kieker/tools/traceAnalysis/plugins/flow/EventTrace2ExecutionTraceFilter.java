@@ -30,7 +30,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
-import kieker.common.record.flow.trace.AbstractTraceEventVisitor;
+import kieker.common.record.flow.trace.IAbstractTraceEventVisitor;
 import kieker.common.record.flow.trace.SplitEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
@@ -166,7 +166,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingPlug
 	/**
 	 * This utility class provides the core event handling functionality.
 	 */
-	private class EventProcessor implements AbstractTraceEventVisitor {
+	private class EventProcessor implements IAbstractTraceEventVisitor {
 
 		private final FilterState filterState;
 		private final ExecutionTrace executionTrace;

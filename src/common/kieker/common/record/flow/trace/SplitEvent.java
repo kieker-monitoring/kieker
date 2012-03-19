@@ -50,7 +50,7 @@ public final class SplitEvent extends AbstractTraceEvent {
 	}
 
 	@Override
-	public final void accept(final AbstractTraceEventVisitor visitor) {
+	public final void accept(final IAbstractTraceEventVisitor visitor) {
 		visitor.handleSplitEvent(this);
 	}
 }

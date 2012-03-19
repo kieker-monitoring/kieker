@@ -5,7 +5,7 @@ import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.common.record.flow.trace.operation.CallOperationEvent;
 
-public interface AbstractTraceEventVisitor {
+public interface IAbstractTraceEventVisitor {
 
 	public void handleAfterOperationEvent(AfterOperationEvent afterOperationEvent);
 

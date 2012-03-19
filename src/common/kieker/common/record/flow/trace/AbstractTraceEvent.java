@@ -51,5 +51,5 @@ public abstract class AbstractTraceEvent extends AbstractEvent {
 		return this.orderIndex;
 	}
 
-	public abstract void accept(AbstractTraceEventVisitor visitor);
+	public abstract void accept(IAbstractTraceEventVisitor visitor);
 }
