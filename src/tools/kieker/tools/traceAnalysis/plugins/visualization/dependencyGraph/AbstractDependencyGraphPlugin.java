@@ -24,7 +24,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
@@ -32,6 +34,7 @@ import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
 import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
 import kieker.tools.traceAnalysis.plugins.visualization.util.dot.DotFactory;
+import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
@@ -52,8 +55,10 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 
 	private static final String ENCODING = "UTF-8";
 
-	protected DependencyGraph<T> dependencyGraph;
+	protected volatile DependencyGraph<T> dependencyGraph;
 	private int numGraphsSaved = 0;
+
+	private final List<NodeDecorator> decorators = new ArrayList<NodeDecorator>();
 
 	public AbstractDependencyGraphPlugin(final Configuration configuration) {
 		super(configuration);
@@ -69,23 +74,33 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 		return AbstractDependencyGraphPlugin.NODE_PREFIX + n.getId();
 	}
 
+	protected void createEdgesForNode(final DependencyGraphNode<T> node, final Collection<WeightedBidirectionalDependencyGraphEdge<T>> edges, final PrintStream ps,
+			final boolean includeWeights,
+			final boolean plotSelfLoops) {
+
+		for (final WeightedBidirectionalDependencyGraphEdge<T> currentEdge : edges) {
+			final String lineStyle = (currentEdge.isAssumed()) ? DotFactory.DOT_STYLE_DASHED : DotFactory.DOT_STYLE_SOLID;
+
+			final DependencyGraphNode<T> destNode = currentEdge.getDestination();
+			if ((node == destNode) && !plotSelfLoops) {
+				continue;
+			}
+			final StringBuilder strBuild = new StringBuilder(1024); // NOPMD (new in Loop)
+			if (includeWeights) {
+				strBuild.append(DotFactory.createConnection("", this.getNodeId(node), this.getNodeId(destNode),
+						Integer.toString(currentEdge.getOutgoingWeight()), lineStyle, DotFactory.DOT_ARROWHEAD_OPEN));
+			} else {
+				strBuild.append(DotFactory.createConnection("", this.getNodeId(node), this.getNodeId(destNode), lineStyle,
+						DotFactory.DOT_ARROWHEAD_OPEN));
+			}
+			ps.println(strBuild.toString());
+		}
+	}
+
 	protected void dotVertices(final Collection<DependencyGraphNode<T>> nodes, final PrintStream ps, final boolean includeWeights, final boolean plotSelfLoops) {
 		for (final DependencyGraphNode<T> curNode : nodes) {
-			for (final WeightedBidirectionalDependencyGraphEdge<T> outgoingDependency : curNode.getOutgoingDependencies()) {
-				final DependencyGraphNode<T> destNode = outgoingDependency.getDestination();
-				if ((curNode == destNode) && !plotSelfLoops) {
-					continue;
-				}
-				final StringBuilder strBuild = new StringBuilder(1024); // NOPMD (new in Loop)
-				if (includeWeights) {
-					strBuild.append(DotFactory.createConnection("", this.getNodeId(curNode), this.getNodeId(destNode),
-							Integer.toString(outgoingDependency.getOutgoingWeight()), DotFactory.DOT_STYLE_DASHED, DotFactory.DOT_ARROWHEAD_OPEN));
-				} else {
-					strBuild.append(DotFactory.createConnection("", this.getNodeId(curNode), this.getNodeId(destNode), DotFactory.DOT_STYLE_DASHED,
-							DotFactory.DOT_ARROWHEAD_OPEN));
-				}
-				ps.println(strBuild.toString());
-			}
+			this.createEdgesForNode(curNode, curNode.getOutgoingDependencies(), ps, includeWeights, plotSelfLoops);
+			this.createEdgesForNode(curNode, curNode.getAssumedOutgoingDependencies(), ps, includeWeights, plotSelfLoops);
 		}
 	}
 
@@ -115,4 +130,23 @@ public abstract class AbstractDependencyGraphPlugin<T> extends AbstractMessageTr
 		System.out.println("Saved " + this.numGraphsSaved + " dependency graph" + (this.numGraphsSaved > 1 ? "s" : "")); // NOCS
 	}
 
+	public void addDecorator(final NodeDecorator decorator) {
+		this.decorators.add(decorator);
+	}
+
+	protected void invokeDecorators(final AbstractMessage message, final DependencyGraphNode<?> sourceNode, final DependencyGraphNode<?> targetNode) {
+		for (final NodeDecorator currentDecorator : this.decorators) {
+			currentDecorator.processMessage(message, sourceNode, targetNode);
+		}
+	}
+
+	protected StringBuilder addDecorationText(final StringBuilder output, final DependencyGraphNode<?> node) {
+		final String decorations = node.getFormattedDecorations();
+		if ((decorations != null) && !decorations.isEmpty()) {
+			output.append("\\n");
+			output.append(decorations);
+		}
+
+		return output;
+	}
 }

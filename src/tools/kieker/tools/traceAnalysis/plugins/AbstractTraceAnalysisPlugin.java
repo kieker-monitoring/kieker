@@ -54,7 +54,7 @@ public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin
 	public static final Execution createExecutionByEntityNames(final SystemModelRepository systemModelRepository,
 			final String executionContainerName, final String componentTypeName,
 			final Signature operationSignature, final long traceId, final String sessionId, final int eoi, final int ess,
-			final long tin, final long tout) {
+			final long tin, final long tout, final boolean assumed) {
 		final String assemblyComponentName = componentTypeName;
 		final String allocationComponentName = new StringBuilder(executionContainerName).append("::").append(assemblyComponentName).toString();
 		final String operationFactoryName = new StringBuilder(assemblyComponentName).append(".").append(operationSignature).toString();
@@ -90,14 +90,14 @@ public abstract class AbstractTraceAnalysisPlugin extends AbstractAnalysisPlugin
 			allocInst.getAssemblyComponent().getType().addOperation(op);
 		}
 
-		return new Execution(op, allocInst, traceId, sessionId, eoi, ess, tin, tout);
+		return new Execution(op, allocInst, traceId, sessionId, eoi, ess, tin, tout, assumed);
 	}
 
 	protected final Execution createExecutionByEntityNames(final String executionContainerName, final String componentTypeName,
 			final Signature operationSignature, final long traceId, final String sessionId, final int eoi, final int ess,
-			final long tin, final long tout) {
+			final long tin, final long tout, final boolean assumed) {
 		return AbstractTraceAnalysisPlugin.createExecutionByEntityNames(this.getSystemEntityFactory(), executionContainerName, componentTypeName,
-				operationSignature, traceId, sessionId, eoi, ess, tin, tout);
+				operationSignature, traceId, sessionId, eoi, ess, tin, tout, assumed);
 	}
 
 	protected void printMessage(final String[] lines) {

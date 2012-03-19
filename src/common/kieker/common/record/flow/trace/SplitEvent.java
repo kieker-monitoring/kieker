@@ -20,7 +20,6 @@
 
 package kieker.common.record.flow.trace;
 
-
 /**
  * @author Jan Waller
  */
@@ -48,5 +47,10 @@ public final class SplitEvent extends AbstractTraceEvent {
 	@Override
 	public final Class<?>[] getValueTypes() {
 		return SplitEvent.TYPES.clone();
+	}
+
+	@Override
+	public final void accept(final IAbstractTraceEventVisitor visitor) {
+		visitor.handleSplitEvent(this);
 	}
 }

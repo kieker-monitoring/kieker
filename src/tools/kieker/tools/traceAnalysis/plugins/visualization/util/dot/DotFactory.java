@@ -36,11 +36,13 @@ public final class DotFactory {
 	public static final String DOT_SHAPE_BOX3D = "box3d";
 	public static final String DOT_SHAPE_NONE = "none";
 	public static final String DOT_SHAPE_OVAL = "oval";
+	public static final String DOT_STYLE_SOLID = "solid";
 	public static final String DOT_STYLE_DASHED = "dashed";
 	public static final String DOT_ARROWHEAD_OPEN = "open";
 	public static final double DOT_DEFAULT_FONTSIZE = 0.0;
 	public static final String DOT_DOT_RANKDIR_LR = "LR";
 	public static final String DOT_FILLCOLOR_WHITE = "white";
+	public static final String DOT_FILLCOLOR_GRAY = "gray";
 	public static final String DOT_STYLE_FILLED = "filled";
 
 	/**

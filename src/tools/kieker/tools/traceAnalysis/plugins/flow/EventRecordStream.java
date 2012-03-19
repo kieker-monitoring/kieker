@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2011 by
+ * Copyright 2012 by
  *  + Christian-Albrechts-University of Kiel
  *    + Department of Computer Science
  *      + Software Engineering Group 
@@ -18,33 +18,47 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.flow.trace.operation;
+package kieker.tools.traceAnalysis.plugins.flow;
+
+import java.util.List;
 
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 
 /**
- * @author Jan Waller
+ * 
+ * @author Holger Knoche
+ * 
  */
-public abstract class AbstractOperationEvent extends AbstractTraceEvent {
-	private static final long serialVersionUID = 1L;
+public class EventRecordStream {
 
-	private final String operationSignature;
+	private final List<AbstractTraceEvent> events;
+	private final int maxIndex;
 
-	public AbstractOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationName) {
-		super(timestamp, traceId, orderIndex);
-		this.operationSignature = operationName;
+	private int currentIndex = 0;
+
+	public EventRecordStream(final EventRecordTrace trace) {
+		this.events = trace.eventList();
+		this.maxIndex = (this.events.size() - 1);
 	}
 
-	public AbstractOperationEvent(final Object[] values, final Class<?>[] valueTypes) {
-		super(values, valueTypes); // values[0..2]
-		this.operationSignature = (String) values[3];
+	public void consume() {
+		if (this.currentIndex <= this.maxIndex) {
+			this.currentIndex++;
+		}
 	}
 
-	public final String getOperationSignature() {
-		return this.operationSignature;
+	public AbstractTraceEvent currentElement() {
+		return this.lookahead(0);
 	}
 
-	public boolean refersToSameOperationAs(final AbstractOperationEvent other) {
-		return (this.getOperationSignature().equals(other.getOperationSignature()));
+	public AbstractTraceEvent lookahead(final int amount) {
+		final int desiredIndex = (this.currentIndex + amount);
+
+		if ((desiredIndex < 0) || (desiredIndex > this.maxIndex)) {
+			return null;
+		}
+
+		return this.events.get(desiredIndex);
 	}
+
 }

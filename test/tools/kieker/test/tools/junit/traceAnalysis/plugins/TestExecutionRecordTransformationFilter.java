@@ -62,7 +62,7 @@ public class TestExecutionRecordTransformationFilter extends TestCase {
 
 			final Execution exec = AbstractTraceAnalysisPlugin.createExecutionByEntityNames(tester.getSystemModelRepository(),
 					opExec.getHostName(), fqComponentNameSignaturePair.getFqClassname(), fqComponentNameSignaturePair.getSignature(),
-					traceId, sessionId, opExec.getEoi(), opExec.getEss(), opExec.getTin(), opExec.getTout());
+					traceId, sessionId, opExec.getEoi(), opExec.getEss(), opExec.getTin(), opExec.getTout(), false);
 
 			/**
 			 * Some initial primitive checks which actually test createExecutionByEntityNames here,

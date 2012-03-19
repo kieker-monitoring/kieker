@@ -71,9 +71,11 @@ import kieker.tools.traceAnalysis.plugins.visualization.callTree.AggregatedAlloc
 import kieker.tools.traceAnalysis.plugins.visualization.callTree.AggregatedAssemblyComponentOperationCallTreePlugin;
 import kieker.tools.traceAnalysis.plugins.visualization.callTree.AggregatedCallTreePlugin;
 import kieker.tools.traceAnalysis.plugins.visualization.callTree.TraceCallTreePlugin;
+import kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph.AbstractDependencyGraphPlugin;
 import kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph.ComponentDependencyGraphPluginAllocation;
 import kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph.ComponentDependencyGraphPluginAssembly;
 import kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph.ContainerDependencyGraphPlugin;
+import kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph.NodeDecorator;
 import kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph.OperationDependencyGraphPluginAllocation;
 import kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph.OperationDependencyGraphPluginAssembly;
 import kieker.tools.traceAnalysis.plugins.visualization.sequenceDiagram.SequenceDiagramPlugin;
@@ -258,6 +260,23 @@ public final class TraceAnalysisTool {
 				TraceAnalysisTool.LOG.warn("Unformatted confguration output for option " + longOpt);
 			}
 			System.out.println("--" + longOpt + ": " + val);
+		}
+	}
+
+	private static void addDecorators(final String[] decoratorNames, final AbstractDependencyGraphPlugin<?> plugin) {
+		if (decoratorNames == null) {
+			return;
+		}
+
+		for (final String currentDecoratorName : decoratorNames) {
+			final NodeDecorator currentDecorator = NodeDecorator.createFromName(currentDecoratorName);
+
+			if (currentDecorator == null) {
+				TraceAnalysisTool.LOG.warn("Unknown decoration name '" + currentDecoratorName + "'.");
+				continue;
+			}
+
+			plugin.addDecorator(currentDecorator);
 		}
 	}
 
@@ -564,7 +583,12 @@ public final class TraceAnalysisTool {
 						TraceAnalysisTool.outputDir
 								+ File.separator + TraceAnalysisTool.outputFnPrefix
 								+ Constants.ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX).getAbsolutePath());
+
 				componentPlotAssemblyComponentDepGraph = new ComponentDependencyGraphPluginAssembly(componentPlotAssemblyComponentDepGraphConfig);
+
+				final String[] nodeDecorations = TraceAnalysisTool.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG);
+				TraceAnalysisTool.addDecorators(nodeDecorations, componentPlotAssemblyComponentDepGraph);
+
 				analysisInstance.registerFilter(componentPlotAssemblyComponentDepGraph);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPlotAssemblyComponentDepGraph, AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME);
@@ -640,6 +664,9 @@ public final class TraceAnalysisTool {
 								+ Constants.ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX).getAbsolutePath());
 
 				componentPlotAssemblyOperationDepGraph = new OperationDependencyGraphPluginAssembly(componentPlotAssemblyOperationDepGraphConfig);
+				final String[] nodeDecorations = TraceAnalysisTool.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG);
+				TraceAnalysisTool.addDecorators(nodeDecorations, componentPlotAssemblyOperationDepGraph);
+
 				analysisInstance.registerFilter(componentPlotAssemblyOperationDepGraph);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPlotAssemblyOperationDepGraph, AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME);

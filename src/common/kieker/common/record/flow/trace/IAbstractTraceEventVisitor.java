@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2011 by
+ * Copyright 2012 by
  *  + Christian-Albrechts-University of Kiel
  *    + Department of Computer Science
  *      + Software Engineering Group 
@@ -20,36 +20,26 @@
 
 package kieker.common.record.flow.trace;
 
-import kieker.common.record.flow.AbstractEvent;
+import kieker.common.record.flow.trace.operation.AfterOperationEvent;
+import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
+import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.common.record.flow.trace.operation.CallOperationEvent;
 
 /**
- * @author Jan Waller
+ * 
+ * @author Holger Knoche
+ * 
  */
-public abstract class AbstractTraceEvent extends AbstractEvent {
-	private static final long serialVersionUID = 1L;
+public interface IAbstractTraceEventVisitor {
 
-	private final long traceId;
-	private final int orderIndex;
+	public void handleAfterOperationEvent(AfterOperationEvent afterOperationEvent);
 
-	public AbstractTraceEvent(final long timestamp, final long traceId, final int orderIndex) {
-		super(timestamp);
-		this.traceId = traceId;
-		this.orderIndex = orderIndex;
-	}
+	public void handleAfterOperationFailedEvent(AfterOperationFailedEvent afterOperationFailedEvent);
 
-	public AbstractTraceEvent(final Object[] values, final Class<?>[] valueTypes) {
-		super(values, valueTypes); // values[0]
-		this.traceId = (Long) values[1];
-		this.orderIndex = (Integer) values[2];
-	}
+	public void handleBeforeOperationEvent(BeforeOperationEvent beforeOperationEvent);
 
-	public final long getTraceId() {
-		return this.traceId;
-	}
+	public void handleCallOperationEvent(CallOperationEvent callOperationEvent);
 
-	public final int getOrderIndex() {
-		return this.orderIndex;
-	}
+	public void handleSplitEvent(SplitEvent splitEvent);
 
-	public abstract void accept(IAbstractTraceEventVisitor visitor);
 }

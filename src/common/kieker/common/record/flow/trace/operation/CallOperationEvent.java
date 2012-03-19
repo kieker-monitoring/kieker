@@ -20,6 +20,8 @@
 
 package kieker.common.record.flow.trace.operation;
 
+import kieker.common.record.flow.trace.IAbstractTraceEventVisitor;
+
 /**
  * @author Andre van Hoorn, Holger Knoche, Jan Waller
  */
@@ -48,7 +50,7 @@ public final class CallOperationEvent extends AbstractOperationEvent {
 
 	@Override
 	public final Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getCallerOperationName(), this.getCalleeOperationSiganture() };
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getCallerOperationName(), this.getCalleeOperationSignature() };
 	}
 
 	@Override
@@ -60,7 +62,16 @@ public final class CallOperationEvent extends AbstractOperationEvent {
 		return this.getOperationSignature();
 	}
 
-	public final String getCalleeOperationSiganture() {
+	public final String getCalleeOperationSignature() {
 		return this.calleeOperationSiganture;
+	}
+
+	public final boolean callsReferencedOperationOf(final AbstractOperationEvent event) {
+		return this.getCalleeOperationSignature().equals(event.getOperationSignature());
+	}
+
+	@Override
+	public final void accept(final IAbstractTraceEventVisitor visitor) {
+		visitor.handleCallOperationEvent(this);
 	}
 }

@@ -75,13 +75,20 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 		this.includeSelfLoops = configuration.getBooleanProperty(ComponentDependencyGraphPluginAssembly.CONFIG_INCLUDE_SELF_LOOPS);
 	}
 
-	private String nodeLabel(final AssemblyComponent curComponent) {
+	private String nodeLabel(final DependencyGraphNode<?> node, final AssemblyComponent curComponent) {
+		final StringBuilder builder = new StringBuilder();
+
 		if (this.shortLabels) {
-			return AbstractDependencyGraphPlugin.STEREOTYPE_ASSEMBLY_COMPONENT + "\\n" + curComponent.getName() + ":.." + curComponent.getType().getTypeName();
+			builder.append(AbstractDependencyGraphPlugin.STEREOTYPE_ASSEMBLY_COMPONENT + "\\n" + curComponent.getName() + ":.."
+					+ curComponent.getType().getTypeName());
 		} else {
-			return AbstractDependencyGraphPlugin.STEREOTYPE_ASSEMBLY_COMPONENT + "\\n" + curComponent.getName() + ":"
-					+ curComponent.getType().getFullQualifiedName();
+			builder.append(AbstractDependencyGraphPlugin.STEREOTYPE_ASSEMBLY_COMPONENT + "\\n" + curComponent.getName() + ":"
+					+ curComponent.getType().getFullQualifiedName());
 		}
+
+		this.addDecorationText(builder, node);
+
+		return builder.toString();
 	}
 
 	@Override
@@ -92,13 +99,15 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 		final StringBuilder strBuild = new StringBuilder();
 		// dot code for contained components
 		for (final DependencyGraphNode<AssemblyComponent> node : nodes) {
+			final String fillColor = (node.isAssumed()) ? DotFactory.DOT_FILLCOLOR_GRAY : DotFactory.DOT_FILLCOLOR_WHITE;
+
 			final AssemblyComponent curComponent = node.getEntity();
 			final int curComponentId = node.getId();
-			strBuild.append(DotFactory.createNode("", this.getNodeId(node), (curComponentId == rootComponentId) ? "$" : this.nodeLabel(curComponent), // NOCS
+			strBuild.append(DotFactory.createNode("", this.getNodeId(node), (curComponentId == rootComponentId) ? "$" : this.nodeLabel(node, curComponent), // NOCS
 					(curComponentId == rootComponentId) ? DotFactory.DOT_SHAPE_NONE : DotFactory.DOT_SHAPE_BOX, // NOCS
 					(curComponentId == rootComponentId) ? null : DotFactory.DOT_STYLE_FILLED, // style // NOCS // NOPMD
 					null, // framecolor
-					(curComponentId == rootComponentId) ? null : DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor // NOCS //NOPMD
+					(curComponentId == rootComponentId) ? null : fillColor, // fillcolor // NOCS //NOPMD
 					null, // fontcolor
 					DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 					null, // imagefilename
@@ -165,16 +174,30 @@ public class ComponentDependencyGraphPluginAssembly extends AbstractDependencyGr
 			DependencyGraphNode<AssemblyComponent> receiverNode = ComponentDependencyGraphPluginAssembly.this.dependencyGraph.getNode(receiverComponent.getId());
 			if (senderNode == null) {
 				senderNode = new DependencyGraphNode<AssemblyComponent>(senderComponent.getId(), senderComponent);
+
+				if (m.getSendingExecution().isAssumed()) {
+					senderNode.setAssumed();
+				}
+
 				ComponentDependencyGraphPluginAssembly.this.dependencyGraph.addNode(senderNode.getId(), senderNode);
 			}
 			if (receiverNode == null) {
 				receiverNode = new DependencyGraphNode<AssemblyComponent>(receiverComponent.getId(), receiverComponent);
+
+				if (m.getReceivingExecution().isAssumed()) {
+					receiverNode.setAssumed();
+				}
+
 				ComponentDependencyGraphPluginAssembly.this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
 			}
-			senderNode.addOutgoingDependency(receiverNode);
-			receiverNode.addIncomingDependency(senderNode);
+
+			final boolean assumed = (senderNode.isAssumed() || receiverNode.isAssumed());
+
+			senderNode.addOutgoingDependency(receiverNode, assumed);
+			receiverNode.addIncomingDependency(senderNode, assumed);
+
+			this.invokeDecorators(m, senderNode, receiverNode);
 		}
 		ComponentDependencyGraphPluginAssembly.this.reportSuccess(t.getTraceId());
 	}
-
 }

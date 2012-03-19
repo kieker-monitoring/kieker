@@ -36,7 +36,7 @@ import org.apache.commons.cli.Options;
  * 
  */
 @SuppressWarnings("static-access")
-final class Constants {
+public final class Constants {
 
 	public static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";
 	public static final String CMD_OPT_NAME_OUTPUTDIR = "outputdir";
@@ -101,6 +101,8 @@ final class Constants {
 	public static final Options CMDL_OPTIONS = new Options();
 	public static final List<Option> SORTED_OPTION_LIST = new CopyOnWriteArrayList<Option>();
 
+	public static final String RESPONSE_TIME_DECORATOR_FLAG = "responseTimes";
+
 	static {
 		Constants.SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_INPUTDIRS).withArgName("dir1 ... dirN").hasArgs().isRequired(true)
 				.withDescription("Log directories to read data from").withValueSeparator('=').create("i"));
@@ -114,13 +116,15 @@ final class Constants {
 				.withDescription("Generate and store assembly-level sequence diagrams (.pic files)").create());
 		Constants.SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG).hasArg(false)
 				.withDescription("Generate and store a deployment-level component dependency graph (.dot file)").create());
-		Constants.SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG).hasArg(false)
+		Constants.SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG).withArgName("node decorations")
+				.hasArg(true).hasOptionalArg().withValueSeparator(',')
 				.withDescription("Generate and store an assembly-level component dependency graph (.dot file)").create());
 		Constants.SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG).hasArg(false)
 				.withDescription("Generate and store a container dependency graph (.dot file)").create());
 		Constants.SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG).hasArg(false)
 				.withDescription("Generate and store a deployment-level operation dependency graph (.dot file)").create());
-		Constants.SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG).hasArg(false)
+		Constants.SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG).withArgName("node decorations")
+				.hasArg(true).hasOptionalArg().withValueSeparator(',')
 				.withDescription("Generate and store an assembly-level operation dependency graph (.dot file)").create());
 		Constants.SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE).hasArg(false)
 				.withDescription("Generate and store an aggregated deployment-level call tree (.dot files)").create());

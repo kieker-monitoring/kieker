@@ -89,7 +89,7 @@ public class ExecutionFactory {
 					assemblyComponentA, containerC);
 		}
 
-		return new Execution(operationAa, allocationComponentA, traceId, sessionId, eoi, ess, tin, tout);
+		return new Execution(operationAa, allocationComponentA, traceId, sessionId, eoi, ess, tin, tout, false);
 	}
 
 	/**
