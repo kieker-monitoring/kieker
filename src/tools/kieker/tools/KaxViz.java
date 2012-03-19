@@ -69,7 +69,7 @@ public final class KaxViz extends JFrame {
 	private static final int FILTER_SPACE = 30;
 
 	private static final String USAGE =
-			"Usage: " + KaxViz.class.getName() + " kieker.tools.KaxViz analysisproject.kax [analysisproject.svg]\n" +
+			"Usage: " + KaxViz.class.getName() + " analysisproject.kax [analysisproject.svg]\n" +
 					"where options include\n" +
 					"      analysisproject.kax     the analysis project file loaded and visualized\n" +
 					"      analysisproject.svg     an optional svg export of the project, saved on close";
