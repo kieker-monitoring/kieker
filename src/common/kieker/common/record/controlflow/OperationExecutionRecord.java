@@ -239,9 +239,11 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	}
 
 	/**
+	 * @deprecated this class will become immutable in Kieker 1.6
 	 * @param experimentId
 	 *            the experimentId to set
 	 */
+	@Deprecated
 	public final void setExperimentId(final int experimentId) {
 		this.experimentId = experimentId;
 	}
@@ -254,9 +256,12 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	}
 
 	/**
+	 * @deprecated this class will become immutable in Kieker 1.6
+	 * 
 	 * @param hostName
 	 *            the hostName to set
 	 */
+	@Deprecated
 	public final void setHostName(final String hostName) {
 		this.hostName = hostName;
 	}
@@ -266,10 +271,13 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	}
 
 	/**
-	 * A string can, for example, be created using {@link ClassOperationSignaturePair#toOperationSignatureString()}.
+	 * @deprecated this class will become immutable in Kieker 1.6
+	 * 
+	 *             A string can, for example, be created using {@link ClassOperationSignaturePair#toOperationSignatureString()}.
 	 * 
 	 * @param operationSignature
 	 */
+	@Deprecated
 	public void setOperationSignature(final String operationSignature) {
 		this.operationSignature = operationSignature;
 	}
@@ -291,7 +299,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	 * @param className
 	 *            the className to set
 	 * 
-	 * @deprecated will be removed in Kieker 1.6
+	 * @deprecated will be removed in Kieker 1.6. Also, this class will become immutable in Kieker 1.6.
 	 */
 	@Deprecated
 	public final void setClassName(final String className) {
@@ -326,7 +334,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	 * @param operationName
 	 *            the operationName to set
 	 * 
-	 * @deprecated will be removed in Kieker 1.6
+	 * @deprecated will be removed in Kieker 1.6. Also, this class will become immutable in Kieker 1.6.
 	 */
 	@Deprecated
 	public final void setOperationName(final String operationName) {
@@ -341,9 +349,12 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	}
 
 	/**
+	 * @deprecated this class will become immutable in Kieker 1.6
+	 * 
 	 * @param sessionId
 	 *            the sessionId to set
 	 */
+	@Deprecated
 	public final void setSessionId(final String sessionId) {
 		this.sessionId = sessionId;
 	}
@@ -356,9 +367,12 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	}
 
 	/**
+	 * @deprecated this class will become immutable in Kieker 1.6
+	 * 
 	 * @param traceId
 	 *            the traceId to set
 	 */
+	@Deprecated
 	public final void setTraceId(final long traceId) {
 		this.traceId = traceId;
 	}
@@ -371,9 +385,12 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	}
 
 	/**
+	 * @deprecated this class will become immutable in Kieker 1.6
+	 * 
 	 * @param tin
 	 *            the tin to set
 	 */
+	@Deprecated
 	public final void setTin(final long tin) {
 		this.tin = tin;
 	}
@@ -386,9 +403,12 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	}
 
 	/**
+	 * @deprecated this class will become immutable in Kieker 1.6
+	 * 
 	 * @param tout
 	 *            the tout to set
 	 */
+	@Deprecated
 	public final void setTout(final long tout) {
 		this.tout = tout;
 	}
@@ -401,9 +421,12 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	}
 
 	/**
+	 * @deprecated this class will become immutable in Kieker 1.6
+	 * 
 	 * @param eoi
 	 *            the eoi to set
 	 */
+	@Deprecated
 	public final void setEoi(final int eoi) {
 		this.eoi = eoi;
 	}
@@ -416,9 +439,12 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	}
 
 	/**
+	 * @deprecated this class will become immutable in Kieker 1.6
+	 * 
 	 * @param ess
 	 *            the ess to set
 	 */
+	@Deprecated
 	public final void setEss(final int ess) {
 		this.ess = ess;
 	}
@@ -427,6 +453,12 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 		return this.retVal;
 	}
 
+	/**
+	 * @deprecated this class will become immutable in Kieker 1.6
+	 * 
+	 * @param retVal
+	 */
+	@Deprecated
 	public void setRetVal(final Object retVal) {
 		this.retVal = retVal;
 	}
@@ -435,6 +467,12 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 		return this.entryPoint;
 	}
 
+	/**
+	 * @deprecated this class will become immutable in Kieker 1.6
+	 * 
+	 * @param entryPoint
+	 */
+	@Deprecated
 	public void setEntryPoint(final boolean entryPoint) {
 		this.entryPoint = entryPoint;
 	}
