@@ -1,0 +1,20 @@
+<!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.aspectj.org/dtd/aspectj_1_5_0.dtd">
+
+<aspectj>
+	<weaver options=""> <!-- options="-verbose" -->
+		<!-- instrument the kieker.tests -->
+		<include within="kieker.test..*" />
+	</weaver>
+
+	<aspects>
+		<!-- Construction -->
+		<aspect name="kieker.monitoring.probe.aspectj.flow.construction.FullInstrumentation" />
+
+		<!-- OperationCall -->
+		<aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.FullInstrumentation" />
+		
+		<!-- OperationExecution -->
+		<aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.FullInstrumentation" />
+		
+	</aspects>
+</aspectj>

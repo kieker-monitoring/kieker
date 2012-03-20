@@ -690,6 +690,67 @@
 		</java>
 	</target>
 
+	<target name="run-test-loadTimeWeaving-bookstoreDifferentRecordTypes-events" depends="-compile-tests-monitoring" description="Runs a load-time weaving test with different record types">
+		<path id="kieker.test-loadTimeWeaving-run-classpath">
+			<pathelement location="${build.tests.dir}/" />
+			<fileset dir="${dist.dir}">
+				<include name="${dist.kieker.main.aspectj.jar}" />
+			</fileset>
+		</path>
+
+		<copy file="${aop.xml.ltwtests.flow.annotation}" tofile="${build.tests.dir}/META-INF/aop.xml" overwrite="true" />
+		<java dir="." fork="true" classname="kieker.test.monitoring.aspectj.loadTimeWeaving.bookstoreDifferentRecordTypes.Bookstore" classpathref="kieker.test-loadTimeWeaving-run-classpath">
+			<jvmarg value="-Dkieker.monitoring.configuration=META-INF/kieker.monitoring.test.properties" />
+			<jvmarg value="-Dkieker.monitoring.writer=${tests.writer}" />
+			<jvmarg value="-D${tests.writer}.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}" />
+			<jvmarg value="-D${tests.writer}.customStoragePath=${tests.storagepath}" />
+			<jvmarg value="-javaagent:${dist.dir}/${dist.kieker.main.aspectj.jar}" />
+			<jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true" />
+			<!--<jvmarg value="-Dorg.aspectj.weaver.loadtime.configuration=META-INF/aop.xml"/>-->
+			<jvmarg value="-Daj.weaving.verbose=true" />
+		</java>
+	</target>
+
+	<target name="run-test-loadTimeWeaving-bookstoreFullInstrumentation-events" depends="-compile-tests-monitoring" description="Runs a load-time-weaving tests with full instrumentation">
+		<path id="kieker.test-loadTimeWeaving-bookstoreWithoutAnnotation-run-classpath">
+			<pathelement location="${build.tests.dir}/" />
+			<fileset dir="${dist.dir}">
+				<include name="${dist.kieker.main.aspectj.jar}" />
+			</fileset>
+		</path>
+
+		<copy file="${aop.xml.ltwtests.flow.full}" tofile="${build.tests.dir}/META-INF/aop.xml" overwrite="true" />
+		<java dir="." fork="true" classname="kieker.test.monitoring.aspectj.loadTimeWeaving.bookstoreWithoutAnnotation.BookstoreWA" classpathref="kieker.test-loadTimeWeaving-bookstoreWithoutAnnotation-run-classpath">
+			<jvmarg value="-Dkieker.monitoring.configuration=META-INF/kieker.monitoring.test.properties" />
+			<jvmarg value="-Dkieker.monitoring.writer=${tests.writer}" />
+			<jvmarg value="-D${tests.writer}.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}" />
+			<jvmarg value="-D${tests.writer}.customStoragePath=${tests.storagepath}" />
+			<jvmarg value="-javaagent:${dist.dir}/${dist.kieker.main.aspectj.jar}" />
+			<jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true" />
+			<jvmarg value="-Daj.weaving.verbose=true" />
+		</java>
+	</target>
+
+	<target name="run-test-loadTimeWeaving-executionOrderTest-events" depends="-compile-tests-monitoring" description="Runs a load-time-weaving tests for eoi/ess information">
+		<path id="kieker.test-loadTimeWeaving-executionOrderTest-run-classpath">
+			<pathelement location="${build.tests.dir}/" />
+			<fileset dir="${dist.dir}">
+				<include name="${dist.kieker.main.aspectj.jar}" />
+			</fileset>
+		</path>
+
+		<copy file="${aop.xml.ltwtests.flow.full}" tofile="${build.tests.dir}/META-INF/aop.xml" overwrite="true" />
+		<java dir="." fork="true" classname="kieker.test.monitoring.aspectj.loadTimeWeaving.executionOrderTest.ExecutionOrderTest" classpathref="kieker.test-loadTimeWeaving-executionOrderTest-run-classpath">
+			<jvmarg value="-Dkieker.monitoring.configuration=META-INF/kieker.monitoring.test.properties" />
+			<jvmarg value="-Dkieker.monitoring.writer=${tests.writer}" />
+			<jvmarg value="-D${tests.writer}.storeInJavaIoTmpdir=${tests.storeInJavaIoTmpdir}" />
+			<jvmarg value="-D${tests.writer}.customStoragePath=${tests.storagepath}" />
+			<jvmarg value="-javaagent:${dist.dir}/${dist.kieker.main.aspectj.jar}" />
+			<jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true" />
+			<jvmarg value="-Daj.weaving.verbose=true" />
+		</java>
+	</target>
+
 	<target name="-compile-tests-compileTimeWeaving-bookstore" depends="-compile-kieker.monitoring" description="Compiles the sources of the compile-time-weaving tests">
 		<path id="kieker.test-compileTimeWeaving-bookstore-compile-classpath">
 			<fileset dir="${lib.dir}">
