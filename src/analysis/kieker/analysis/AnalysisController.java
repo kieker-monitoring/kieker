@@ -475,8 +475,14 @@ public final class AnalysisController implements Runnable {
 			this.terminate(true);
 			return;
 		}
+
 		// Call execute() method of all plug-ins.
 		for (final AbstractAnalysisPlugin filter : this.filters) {
+			/* Make also sure that all repository ports of all plugins are connected. */
+			if (!filter.areAllRepositoryPortsConnected()) {
+				AnalysisController.LOG.error("Plugin '" + filter.getName() + "' has unconnected repositories.");
+				return;
+			}
 			if (!filter.init()) {
 				AnalysisController.LOG.error("A plug-in's execute message failed.");
 				this.terminate(true);
@@ -486,6 +492,11 @@ public final class AnalysisController implements Runnable {
 		// Start reading
 		final CountDownLatch readerLatch = new CountDownLatch(this.readers.size());
 		for (final AbstractReaderPlugin reader : this.readers) {
+			/* Make also sure that all repository ports of all plugins are connected. */
+			if (!reader.areAllRepositoryPortsConnected()) {
+				AnalysisController.LOG.error("Reader '" + reader.getName() + "' has unconnected repositories.");
+				return;
+			}
 			new Thread(new Runnable() {
 				@Override
 				public void run() {

@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -285,6 +286,23 @@ public abstract class AbstractPlugin implements IPlugin {
 		}
 
 		/* Seems like the connection is okay. */
+		return true;
+	}
+
+	/**
+	 * This method checks whether all repository ports of the current plugin are connected.
+	 * 
+	 * @return true if and only if all plugin ports (defined in the annotation) are connected to a repository.
+	 */
+	public final boolean areAllRepositoryPortsConnected() {
+		/* Run through all port names and check them. */
+		final Iterator<String> repositoryNameIter = this.repositoryPorts.keySet().iterator();
+		while (repositoryNameIter.hasNext()) {
+			if (!this.registeredRepositories.containsKey(repositoryNameIter.next())) {
+				/* The current port is not connected. */
+				return false;
+			}
+		}
 		return true;
 	}
 

@@ -386,8 +386,8 @@ public final class TraceAnalysisTool {
 					Integer.toString(TraceAnalysisTool.maxTraceDurationMillis));
 			mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, Boolean.toString(TraceAnalysisTool.ignoreInvalidTraces));
 			mtReconstrFilter = new TraceReconstructionFilter(mtReconstrFilterConfig);
-			analysisInstance.connect(mtReconstrFilter, AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 			analysisInstance.registerFilter(mtReconstrFilter);
+			analysisInstance.connect(mtReconstrFilter, AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 			analysisInstance.connect(executionFilterByTraceId, TraceIdFilter.OUTPUT_PORT_NAME,
 					mtReconstrFilter, TraceReconstructionFilter.INPUT_PORT_NAME);
 
@@ -427,9 +427,9 @@ public final class TraceAnalysisTool {
 				 * report. That's why we only activate it in case this options
 				 * is requested.
 				 */
+				analysisInstance.registerFilter(traceAllocationEquivClassFilter);
 				analysisInstance.connect(traceAllocationEquivClassFilter, AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME,
 						TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
-				analysisInstance.registerFilter(traceAllocationEquivClassFilter);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
 						traceAllocationEquivClassFilter, TraceEquivalenceClassFilter.EXECUTION_TRACES_INPUT_PORT_NAME);
 				analysisInstance.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
