@@ -29,9 +29,9 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.common.configuration.Configuration;
+import kieker.common.record.misc.CurrentTimeRecord;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.tools.currentTimeEventGenerator.CurrentTimeEventGenerator;
-import kieker.tools.currentTimeEventGenerator.TimestampEvent;
 
 import org.junit.Test;
 
@@ -174,9 +174,9 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 
 		@InputPort(
 				name = DstClass.INPUT_PORT_NAME,
-				eventTypes = { TimestampEvent.class })
+				eventTypes = { CurrentTimeRecord.class })
 		public void doJob(final Object data) {
-			this.receivedTimestamps.add(((TimestampEvent) data).getTimestamp());
+			this.receivedTimestamps.add(((CurrentTimeRecord) data).getCurrentTime());
 		}
 
 		public ConcurrentLinkedQueue<Long> getList() {

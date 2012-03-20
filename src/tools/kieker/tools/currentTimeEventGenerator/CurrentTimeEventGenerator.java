@@ -28,6 +28,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.misc.CurrentTimeRecord;
 
 /**
  * Generates time events with a given resolution based on the timestamps of
@@ -37,7 +38,7 @@ import kieker.common.record.IMonitoringRecord;
  * <li>The first record received via {@link #inputTimestamp(long)} immediately leads to a new {@link TimestampEvent} with the given timestamp.</li>
  * <li>The timestamp of the first record is stored as {@link #firstTimestamp} and future events are generated at {@link #firstTimestamp} + i *
  * {@link #timerResolution}.</li>
- * <li>Future {@link kieker.common.record.IMonitoringRecord} may lead to future {@link TimestampEvent} as follows:
+ * <li>Future {@link kieker.common.record.IMonitoringRecord} may lead to future {@link CurrentTimeRecord} as follows:
  * <ol>
  * <li>A newly incoming {@link kieker.common.record.IMonitoringRecord} with logging timestamp {@literal tstamp} leads to the new timer events satisfying
  * {@link #firstTimestamp} + i * {@link #timerResolution} {@literal <} {@literal tstamp}.</li>
@@ -52,7 +53,7 @@ import kieker.common.record.IMonitoringRecord;
  * 
  */
 @Plugin(outputPorts =
-		@OutputPort(name = CurrentTimeEventGenerator.OUTPUT_PORT_NAME_CURRENT_TIME, eventTypes = { TimestampEvent.class }, description = "Provides current time events"))
+		@OutputPort(name = CurrentTimeEventGenerator.OUTPUT_PORT_NAME_CURRENT_TIME, eventTypes = { CurrentTimeRecord.class }, description = "Provides current time events"))
 public class CurrentTimeEventGenerator extends AbstractAnalysisPlugin {
 
 	public static final String INPUT_PORT_NAME_NEW_TIMESTAMP = "inputNewTimestamp";
@@ -116,7 +117,7 @@ public class CurrentTimeEventGenerator extends AbstractAnalysisPlugin {
 			 */
 			this.maxTimestamp = timestamp;
 			this.firstTimestamp = timestamp;
-			super.deliver(CurrentTimeEventGenerator.OUTPUT_PORT_NAME_CURRENT_TIME, new TimestampEvent(timestamp));
+			super.deliver(CurrentTimeEventGenerator.OUTPUT_PORT_NAME_CURRENT_TIME, new CurrentTimeRecord(timestamp));
 			this.mostRecentEventFired = timestamp;
 		} else if (timestamp > this.maxTimestamp) {
 			this.maxTimestamp = timestamp;
@@ -125,7 +126,7 @@ public class CurrentTimeEventGenerator extends AbstractAnalysisPlugin {
 			 */
 			for (long nextTimerEventAt = this.mostRecentEventFired + this.timerResolution; timestamp >= nextTimerEventAt; nextTimerEventAt = this.mostRecentEventFired
 					+ this.timerResolution) {
-				super.deliver(CurrentTimeEventGenerator.OUTPUT_PORT_NAME_CURRENT_TIME, new TimestampEvent(nextTimerEventAt)); // NOPMD (new in loop)
+				super.deliver(CurrentTimeEventGenerator.OUTPUT_PORT_NAME_CURRENT_TIME, new CurrentTimeRecord(nextTimerEventAt)); // NOPMD (new in loop)
 				this.mostRecentEventFired = nextTimerEventAt;
 			}
 		}
