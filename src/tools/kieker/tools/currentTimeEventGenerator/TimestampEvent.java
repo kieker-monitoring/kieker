@@ -20,12 +20,12 @@
 
 package kieker.tools.currentTimeEventGenerator;
 
-import kieker.common.record.misc.CurrentTimeRecord;
+import kieker.common.record.misc.TimestampRecord;
 
 /**
  * Record type which can be used to store the current time in the field {@link #timestamp}.
  * 
- * @deprecated will be removed in Kieker 1.6; use {@link CurrentTimeRecord} instead.
+ * @deprecated will be removed in Kieker 1.6; use {@link TimestampRecord} instead.
  * 
  * @author Andre van Hoorn
  * 
