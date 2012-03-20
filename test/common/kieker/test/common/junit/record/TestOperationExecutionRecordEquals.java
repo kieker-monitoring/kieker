@@ -39,18 +39,19 @@ public class TestOperationExecutionRecordEquals extends TestCase { // NOCS (Miss
 	 */
 	@Test
 	public void testSerializeDeserializeEquals() {
-		final OperationExecutionRecord r1 = new OperationExecutionRecord();
-		r1.setOperationSignature("public void p1.p2.p3.componentname.operation(boolean, int)"); // NOPMD (string literal)
-		r1.setEoi(1); // NOCS (MagicNumberCheck)
-		r1.setEss(2); // NOCS (MagicNumberCheck)
-		r1.setExperimentId(55); // NOCS (MagicNumberCheck)
-		r1.setEntryPoint(true);
-		r1.setRetVal(new Object());
-		r1.setSessionId("XXLJHDJHDHF"); // NOPMD (string literal)
-		r1.setTin(5577376); // NOCS (MagicNumberCheck)
-		r1.setTout(7544522); // NOCS (MagicNumberCheck)
-		r1.setTraceId(882287444); // NOCS (MagicNumberCheck)
-		r1.setHostName("myVM"); // NOPMD (string literal)
+		final OperationExecutionRecord r1 = new OperationExecutionRecord(
+				55, // experimentId
+				"myVM", // hostName
+				"public void p1.p2.p3.componentname.operation(boolean, int)", // operationSignature
+				"XXLJHDJHDHF", // sessionId
+				882287444, // traceId
+				5577376, // tin
+				7544522, // tout
+				1, // eoi
+				2, // ess
+				new Object(), // retVal
+				true // entryPoint
+		);
 
 		final Object[] r1Array = r1.toArray();
 
@@ -66,31 +67,33 @@ public class TestOperationExecutionRecordEquals extends TestCase { // NOCS (Miss
 	 */
 	@Test
 	public void testEqualsEqualVariablesValues() {
-		final OperationExecutionRecord r1 = new OperationExecutionRecord();
-		r1.setOperationSignature("public void p1.p2.p3.componentname.operation(boolean, int)");
-		r1.setEoi(1); // NOCS (MagicNumberCheck)
-		r1.setEss(2); // NOCS (MagicNumberCheck)
-		r1.setExperimentId(55); // NOCS (MagicNumberCheck)
-		r1.setEntryPoint(true);
-		r1.setRetVal(new Object());
-		r1.setSessionId("XXLJHDJHDHF");
-		r1.setTin(5577376); // NOCS (MagicNumberCheck)
-		r1.setTout(7544522); // NOCS (MagicNumberCheck)
-		r1.setTraceId(882287444); // NOCS (MagicNumberCheck)
-		r1.setHostName("myVM");
+		final OperationExecutionRecord r1 = new OperationExecutionRecord(
+				55, // experimentId
+				"myVM", // hostName
+				"public void p1.p2.p3.componentname.operation(boolean, int)", // operationSignature
+				"XXLJHDJHDHF", // sessionId
+				882287444, // traceId
+				5577376, // tin
+				7544522, // tout
+				1, // eoi
+				2, // ess
+				new Object(), // retVal
+				true // entryPoint
+		);
 
-		final OperationExecutionRecord r2 = new OperationExecutionRecord();
-		r2.setOperationSignature("public void p1.p2.p3.componentname.operation(boolean, int)");
-		r2.setEoi(1); // NOCS (MagicNumberCheck)
-		r2.setEss(2); // NOCS (MagicNumberCheck)
-		r2.setExperimentId(55); // NOCS (MagicNumberCheck)
-		r2.setEntryPoint(true);
-		r2.setRetVal(new Object());
-		r2.setSessionId("XXLJHDJHDHF");
-		r2.setTin(5577376); // NOCS (MagicNumberCheck)
-		r2.setTout(7544522); // NOCS (MagicNumberCheck)
-		r2.setTraceId(882287444); // NOCS (MagicNumberCheck)
-		r2.setHostName("myVM");
+		final OperationExecutionRecord r2 = new OperationExecutionRecord(
+				55, // experimentId
+				"myVM", // hostName
+				"public void p1.p2.p3.componentname.operation(boolean, int)", // operationSignature
+				"XXLJHDJHDHF", // sessionId
+				882287444, // traceId
+				5577376, // tin
+				7544522, // tout
+				1, // eoi
+				2, // ess
+				new Object(), // retVal
+				true // entryPoint
+		);
 
 		Assert.assertEquals(r1, r2);
 	}
@@ -102,31 +105,33 @@ public class TestOperationExecutionRecordEquals extends TestCase { // NOCS (Miss
 	 */
 	@Test
 	public void testEqualsNullVariableValues() {
-		final OperationExecutionRecord r1 = new OperationExecutionRecord();
-		r1.setOperationSignature("public void p1.p2.p3.componentname.operation(boolean, int)");
-		r1.setEoi(1); // NOCS (MagicNumberCheck)
-		r1.setEss(2); // NOCS (MagicNumberCheck)
-		r1.setExperimentId(55); // NOCS (MagicNumberCheck)
-		r1.setEntryPoint(true);
-		r1.setRetVal(new Object());
-		r1.setSessionId("XXLJHDJHDHF");
-		r1.setTin(5577376); // NOCS (MagicNumberCheck)
-		r1.setTout(7544522); // NOCS (MagicNumberCheck)
-		r1.setTraceId(882287444); // NOCS (MagicNumberCheck)
-		r1.setHostName("myVM");
+		final OperationExecutionRecord r1 = new OperationExecutionRecord(
+				55, // experimentId
+				"myVM", // hostName
+				"public void p1.p2.p3.componentname.operation(boolean, int)", // operationSignature
+				"XXLJHDJHDHF", // sessionId
+				882287444, // traceId
+				5577376, // tin
+				7544522, // tout
+				1, // eoi
+				2, // ess
+				new Object(), // retVal
+				true // entryPoint
+		);
 
-		final OperationExecutionRecord r2 = new OperationExecutionRecord();
-		r2.setOperationSignature("public void p1.p2.p3.componentname.operation(boolean, int)");
-		r2.setEoi(1); // NOCS (MagicNumberCheck)
-		r2.setEss(2); // NOCS (MagicNumberCheck)
-		r2.setExperimentId(55); // NOCS (MagicNumberCheck)
-		r2.setEntryPoint(true);
-		r2.setRetVal(new Object());
-		r2.setSessionId("XXLJHDJHDHF");
-		r2.setTin(5577376); // NOCS (MagicNumberCheck)
-		r2.setTout(7544522); // NOCS (MagicNumberCheck)
-		r2.setTraceId(882287444); // NOCS (MagicNumberCheck)
-		r2.setHostName("myVM");
+		final OperationExecutionRecord r2 = new OperationExecutionRecord(
+				55, // experimentId
+				"myVM", // hostName
+				"public void p1.p2.p3.componentname.operation(boolean, int)", // operationSignature
+				"XXLJHDJHDHF", // sessionId
+				882287444, // traceId
+				5577376, // tin
+				7544522, // tout
+				1, // eoi
+				2, // ess
+				new Object(), // retVal
+				true // entryPoint
+		);
 
 		Assert.assertEquals(r1, r2);
 
@@ -151,6 +156,8 @@ public class TestOperationExecutionRecordEquals extends TestCase { // NOCS (Miss
 		r1.setOperationSignature(oldOperationSignature1);
 		r2.setOperationSignature(oldOperationSignature2);
 		Assert.assertEquals(r1, r2);
+
+		// TODO: test incomplete (hostName, sessionId, retVal)
 	}
 
 	/**
@@ -160,31 +167,33 @@ public class TestOperationExecutionRecordEquals extends TestCase { // NOCS (Miss
 	 */
 	@Test
 	public void testEqualsDifferentVariablesValues() {
-		final OperationExecutionRecord r1 = new OperationExecutionRecord();
-		r1.setOperationSignature("public void p1.p2.p3.componentname.operation(boolean, int)");
-		r1.setEoi(1); // NOCS (MagicNumberCheck)
-		r1.setEss(2); // NOCS (MagicNumberCheck)
-		r1.setExperimentId(55); // NOCS (MagicNumberCheck)
-		r1.setEntryPoint(true);
-		r1.setRetVal(new Object());
-		r1.setSessionId("XXLJHDJHDHF");
-		r1.setTin(5577376); // NOCS (MagicNumberCheck)
-		r1.setTout(7544522); // NOCS (MagicNumberCheck)
-		r1.setTraceId(882287444); // NOCS (MagicNumberCheck)
-		r1.setHostName("myVM");
+		final OperationExecutionRecord r1 = new OperationExecutionRecord(
+				55, // experimentId
+				"myVM", // hostName
+				"public void p1.p2.p3.componentname.operation(boolean, int)", // operationSignature
+				"XXLJHDJHDHF", // sessionId
+				882287444, // traceId
+				5577376, // tin
+				7544522, // tout
+				1, // eoi
+				2, // ess
+				new Object(), // retVal
+				true // entryPoint
+		);
 
-		final OperationExecutionRecord r2 = new OperationExecutionRecord();
-		r2.setOperationSignature("public void p1.p2.p3.componentname.operation(boolean, int)");
-		r2.setEoi(1); // NOCS (MagicNumberCheck)
-		r2.setEss(2); // NOCS (MagicNumberCheck)
-		r2.setExperimentId(55); // NOCS (MagicNumberCheck)
-		r2.setEntryPoint(true);
-		r2.setRetVal(new Object());
-		r2.setSessionId("XXLJHDJHDHF");
-		r2.setTin(5577376); // NOCS (MagicNumberCheck)
-		r2.setTout(7544522); // NOCS (MagicNumberCheck)
-		r2.setTraceId(882287444); // NOCS (MagicNumberCheck)
-		r2.setHostName("myVM");
+		final OperationExecutionRecord r2 = new OperationExecutionRecord(
+				55, // experimentId
+				"myVM", // hostName
+				"public void p1.p2.p3.componentname.operation(boolean, int)", // operationSignature
+				"XXLJHDJHDHF", // sessionId
+				882287444, // traceId
+				5577376, // tin
+				7544522, // tout
+				1, // eoi
+				2, // ess
+				new Object(), // retVal
+				true // entryPoint
+		);
 
 		Assert.assertEquals(r1, r2);
 
@@ -243,5 +252,7 @@ public class TestOperationExecutionRecordEquals extends TestCase { // NOCS (Miss
 		Assert.assertFalse(r1.equals(r2));
 		r2.setHostName(oldVmName);
 		Assert.assertEquals(r1, r2);
+
+		// TODO: test incomplete (entryPoint, retVal)
 	}
 }

@@ -44,6 +44,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	};
 	private static final String DEFAULT_VALUE = "N/A";
 
+	// TODO: change to final in 1.6
 	private volatile int experimentId = -1;
 	private volatile String hostName = OperationExecutionRecord.DEFAULT_VALUE;
 	private volatile String operationSignature = OperationExecutionRecord.DEFAULT_VALUE;
@@ -55,12 +56,16 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	private volatile int ess = -1;
 
 	/**
+	 * TODO: change to transient final in 1.6
+	 * 
 	 * Used by probes to store the return value of executed operations.
 	 * The field is marked transient as it must not be serialized.
 	 */
 	private transient volatile Object retVal = null;
 
 	/**
+	 * TODO: change to transient final in 1.6
+	 * 
 	 * Used by probes to intermediate information.
 	 * The field is marked transient as it must not be serialized.
 	 */
@@ -70,31 +75,45 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	 * Returns an instance of OperationExecutionRecord.
 	 * The member variables are initialized that way that only actually
 	 * used variables must be updated.
+	 * 
+	 * @deprecated will be removed in Kieker 1.6
 	 */
+	@Deprecated
 	public OperationExecutionRecord() {
 		// nothing to do
 	}
 
+	/**
+	 * @deprecated will be removed in Kieker 1.6
+	 */
+	@Deprecated
 	public OperationExecutionRecord(final String operationSignature, final long traceId) {
 		this.operationSignature = operationSignature;
 		this.traceId = traceId;
 	}
 
+	/**
+	 * @deprecated will be removed in Kieker 1.6
+	 */
+	@Deprecated
 	public OperationExecutionRecord(final String operationSignature, final long traceId, final long tin, final long tout) {
 		this(operationSignature, traceId);
 		this.tin = tin;
 		this.tout = tout;
 	}
 
+	/**
+	 * @deprecated will be removed in Kieker 1.6
+	 */
+	@Deprecated
 	public OperationExecutionRecord(final String operationSignature, final long tin, final long tout) {
 		this(operationSignature, -1, tin, tout);
 	}
 
-	// public OperationExecutionRecord(final String operationSignature, final String sessionId, final long traceId, final long tin, final long tout) {
-	// this(operationSignature, traceId, tin, tout);
-	// this.sessionId = sessionId;
-	// }
-
+	/**
+	 * @deprecated will be removed in Kieker 1.6
+	 */
+	@Deprecated
 	public OperationExecutionRecord(final String operationSignature, final String sessionId, final long traceId, final long tin, final long tout,
 			final String vnName, final int eoi, final int ess) {
 		this(operationSignature, traceId, tin, tout);
@@ -189,25 +208,55 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 		this.ess = ess;
 	}
 
+	/**
+	 * TODO: maybe save some convenience constructors delegating to this one
+	 * 
+	 * @param experimentId
+	 * @param hostName
+	 * @param operationSignature
+	 * @param sessionId
+	 * @param traceId
+	 * @param tin
+	 * @param tout
+	 * @param eoi
+	 * @param ess
+	 * @param retVal
+	 * @param entryPoint
+	 */
+	public OperationExecutionRecord(final int experimentId, final String hostName, final String operationSignature, final String sessionId, final long traceId,
+			final long tin, final long tout, final int eoi, final int ess, final Object retVal, final boolean entryPoint) {
+		this.experimentId = experimentId;
+		this.hostName = hostName;
+		this.operationSignature = operationSignature;
+		this.sessionId = sessionId;
+		this.traceId = traceId;
+		this.tin = tin;
+		this.tout = tout;
+		this.eoi = eoi;
+		this.ess = ess;
+		this.retVal = retVal;
+		this.entryPoint = entryPoint;
+	}
+
 	public OperationExecutionRecord(final Object[] values) {
-		AbstractMonitoringRecord.checkArray(values, OperationExecutionRecord.TYPES);
-		try {
-			this.experimentId = (Integer) values[0];
-			this.operationSignature = (String) values[1]; // NOCS
-			this.sessionId = (String) values[2]; // NOCS
-			this.traceId = (Long) values[3]; // NOCS
-			this.tin = (Long) values[4]; // NOCS
-			this.tout = (Long) values[5]; // NOCS
-			this.hostName = (String) values[6]; // NOCS
-			this.eoi = (Integer) values[7]; // NOCS
-			this.ess = (Integer) values[8]; // NOCS
-		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
-			throw new IllegalArgumentException("Failed to init", exc);
-		}
+		AbstractMonitoringRecord.checkArray(values, OperationExecutionRecord.TYPES); // throws IllegalArgumentException
+		this.experimentId = (Integer) values[0];
+		this.operationSignature = (String) values[1]; // NOCS
+		this.sessionId = (String) values[2]; // NOCS
+		this.traceId = (Long) values[3]; // NOCS
+		this.tin = (Long) values[4]; // NOCS
+		this.tout = (Long) values[5]; // NOCS
+		this.hostName = (String) values[6]; // NOCS
+		this.eoi = (Integer) values[7]; // NOCS
+		this.ess = (Integer) values[8]; // NOCS
+		// set transient values
+		this.retVal = null;
+		this.entryPoint = false;
 	}
 
 	@Override
 	public final Object[] toArray() {
+		// TODO: NULL and NULLHOST or OperationExecutionRecord.DEFAULT_VALUE ? same check for operationSignature ?
 		return new Object[] {
 			this.experimentId,
 			this.operationSignature,
@@ -240,6 +289,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 
 	/**
 	 * @deprecated this class will become immutable in Kieker 1.6
+	 * 
 	 * @param experimentId
 	 *            the experimentId to set
 	 */
@@ -455,6 +505,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 
 	/**
 	 * @deprecated this class will become immutable in Kieker 1.6
+	 *             TODO: this value is transient, will it be immutable, too?
 	 * 
 	 * @param retVal
 	 */
@@ -469,6 +520,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 
 	/**
 	 * @deprecated this class will become immutable in Kieker 1.6
+	 *             TODO: this value is transient, will it be immutable, too?
 	 * 
 	 * @param entryPoint
 	 */
