@@ -29,16 +29,25 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.common.configuration.Configuration;
+import kieker.common.record.misc.EmptyRecord;
 import kieker.tools.currentTimeEventGenerator.CurrentTimeEventGenerator;
 import kieker.tools.currentTimeEventGenerator.TimestampEvent;
 
 import org.junit.Test;
 
+/**
+ * Each test is executed for both input ports, {@link CurrentTimeEventGenerator#inputTimestamp(Long)} and
+ * {@link CurrentTimeEventGenerator#inputRecord(kieker.common.record.IMonitoringRecord)}.
+ * 
+ * @author Andre van Hoorn
+ * 
+ */
 public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 
 	@Test
 	public void testFirstRecordGeneratesEvent() { // NOPMD (assert in method)
-		this.compareInputAndOutput(1000, new long[] { 15 }, new long[] { 15 }); // NOCS (MagicNumberCheck)
+		this.compareInputAndOutput(1000, new long[] { 15 }, new long[] { 15 }, true); // true: raw timestamp // NOCS (MagicNumberCheck)
+		this.compareInputAndOutput(1000, new long[] { 15 }, new long[] { 15 }, false); // false: wrap in record // NOCS (MagicNumberCheck)
 	}
 
 	@Test
@@ -46,7 +55,8 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 		final long resolution = 1000;
 		final long firstT = 15;
 		final long secondT = (firstT + resolution) - 1;
-		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT });
+		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT }, true);
+		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT }, false);
 	}
 
 	@Test
@@ -54,7 +64,8 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 		final long resolution = 1000;
 		final long firstT = 15;
 		final long secondT = firstT + resolution;
-		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, secondT });
+		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, secondT }, true);
+		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, secondT }, false);
 	}
 
 	@Test
@@ -62,7 +73,8 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 		final long resolution = 1000;
 		final long firstT = 15;
 		final long secondT = firstT + resolution + 1;
-		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, firstT + resolution });
+		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, firstT + resolution }, true);
+		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, firstT + resolution }, false);
 	}
 
 	@Test
@@ -72,7 +84,8 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 		final long secondT = firstT + 1;
 		final long thirdT = secondT + 4; // NOCS (MagicNumberCheck)
 		final long fourthT = firstT + resolution; // triggers next event
-		this.compareInputAndOutput(resolution, new long[] { firstT, secondT, thirdT, fourthT }, new long[] { firstT, fourthT });
+		this.compareInputAndOutput(resolution, new long[] { firstT, secondT, thirdT, fourthT }, new long[] { firstT, fourthT }, true);
+		this.compareInputAndOutput(resolution, new long[] { firstT, secondT, thirdT, fourthT }, new long[] { firstT, fourthT }, false);
 	}
 
 	@Test
@@ -81,7 +94,9 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 		final long firstT = 5;
 		final long secondT = firstT + (5 * resolution) + 1; // NOCS (MagicNumberCheck)
 		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, firstT + resolution, firstT + (2 * resolution),
-			firstT + (3 * resolution), firstT + (4 * resolution), firstT + (5 * resolution), }); // NOCS (MagicNumberCheck)
+			firstT + (3 * resolution), firstT + (4 * resolution), firstT + (5 * resolution), }, true); // NOCS (MagicNumberCheck)
+		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, firstT + resolution, firstT + (2 * resolution),
+				firstT + (3 * resolution), firstT + (4 * resolution), firstT + (5 * resolution), }, false); // NOCS (MagicNumberCheck)
 	}
 
 	/**
@@ -94,7 +109,7 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 	 * @param inputTimestamps
 	 * @param expectedOutputTimerEvents
 	 */
-	private void compareInputAndOutput(final long timerResolution, final long[] inputTimestamps, final long[] expectedOutputTimerEvents) {
+	private void compareInputAndOutput(final long timerResolution, final long[] inputTimestamps, final long[] expectedOutputTimerEvents, final boolean rawTimestamp) {
 		final Configuration filterConfiguration = new Configuration();
 		filterConfiguration.setProperty(CurrentTimeEventGenerator.CONFIG_TIME_RESOLUTION, Long.toString(timerResolution));
 		final CurrentTimeEventGenerator filter = new CurrentTimeEventGenerator(filterConfiguration);
@@ -103,10 +118,17 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 		final AnalysisController controller = new AnalysisController();
 		controller.registerFilter(filter);
 		controller.registerFilter(dst);
-		controller.connect(filter, CurrentTimeEventGenerator.CURRENT_TIME_OUTPUT_PORT_NAME, dst, DstClass.INPUT_PORT_NAME);
+		controller.connect(filter, CurrentTimeEventGenerator.OUTPUT_PORT_NAME_CURRENT_TIME, dst, DstClass.INPUT_PORT_NAME);
+		// TODO: Use list reader and actually run the controller
 
 		for (final long timestamp : inputTimestamps) {
-			filter.newTimestamp(timestamp);
+			if (rawTimestamp) { // pass raw timestamp as long
+				filter.inputTimestamp(timestamp);
+			} else { // wrap timestamp in dummy record
+				final EmptyRecord r = new EmptyRecord();
+				r.setLoggingTimestamp(timestamp);
+				filter.inputRecord(r);
+			}
 		}
 
 		final Long[] receivedTimestampsArr = dst.getList().toArray(new Long[dst.getList().size()]);
@@ -130,6 +152,7 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 		}
 	}
 
+	// TODO: Don't we have a general sink for this already?
 	static class DstClass extends AbstractAnalysisPlugin {
 
 		public static final String INPUT_PORT_NAME = "doJob";
