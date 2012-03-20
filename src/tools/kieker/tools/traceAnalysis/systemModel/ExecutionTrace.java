@@ -21,6 +21,7 @@
 package kieker.tools.traceAnalysis.systemModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -200,14 +201,13 @@ public class ExecutionTrace extends AbstractTrace {
 	}
 
 	/**
-	 * TODO: It's not a good idea to return the internal data structure.
-	 * See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/152
+	 * Returns a sorted set (unmodifiable) of {@link Execution}s in this trace.
 	 * 
 	 * @return the sorted set of {@link Execution}s in this trace
 	 */
 	public final SortedSet<Execution> getTraceAsSortedExecutionSet() {
 		synchronized (this) {
-			return this.set;
+			return Collections.unmodifiableSortedSet(this.set);
 		}
 	}
 
