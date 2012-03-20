@@ -1,0 +1,20 @@
+<!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.aspectj.org/dtd/aspectj_1_5_0.dtd">
+
+<aspectj>
+    <weaver options="">
+        <include within="bookstoreTracing..*"/>
+    </weaver>
+    
+    <aspects>
+		<!-- KiekerFlow Aspects-->
+		<!-- Construction -->
+		<aspect name="kieker.monitoring.probe.aspectj.flow.construction.Annotation" />
+
+		<!-- OperationCall -->
+		<aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.Annotation" />
+		
+		<!-- OperationExecution -->
+		<aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.Annotation" />
+		
+   </aspects>
+</aspectj>
