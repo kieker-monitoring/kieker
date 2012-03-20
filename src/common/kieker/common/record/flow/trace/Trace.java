@@ -32,21 +32,25 @@ public final class Trace extends AbstractMonitoringRecord implements IMonitoring
 	private static final Class<?>[] TYPES = {
 		long.class, // traceId
 		long.class, // threadId
+		String.class, // sessionId
+		String.class, // hostname
 		long.class, // parentTraceId
 		int.class, // parentOrderId
 	};
 
-	// TODO: sessionid, host ?
-
 	private final long traceId;
 	private final long threadId;
+	private final String sessionId;
+	private final String hostname;
 	private final long parentTraceId;
 	private final int parentOrderId;
-	private transient int nextOrderId;
+	private transient int nextOrderId; // used only thread local!
 
-	public Trace(final long traceId, final long threadId, final long parentTraceId, final int parentOrderId) {
+	public Trace(final long traceId, final long threadId, final String sessionId, final String hostname, final long parentTraceId, final int parentOrderId) {
 		this.traceId = traceId;
 		this.threadId = threadId;
+		this.sessionId = sessionId;
+		this.hostname = hostname;
 		this.parentTraceId = parentTraceId;
 		this.parentOrderId = parentOrderId;
 	}
@@ -55,13 +59,15 @@ public final class Trace extends AbstractMonitoringRecord implements IMonitoring
 		AbstractMonitoringRecord.checkArray(values, Trace.TYPES);
 		this.traceId = (Long) values[0];
 		this.threadId = (Long) values[1];
-		this.parentTraceId = (Long) values[2];
-		this.parentOrderId = (Integer) values[3];
+		this.sessionId = (String) values[2];
+		this.hostname = (String) values[3];
+		this.parentTraceId = (Long) values[4];
+		this.parentOrderId = (Integer) values[5];
 	}
 
 	@Override
 	public final Object[] toArray() {
-		return new Object[] { this.traceId, this.threadId, this.parentTraceId, this.parentOrderId, };
+		return new Object[] { this.traceId, this.threadId, this.sessionId, this.hostname, this.parentTraceId, this.parentOrderId, };
 	}
 
 	@Override
@@ -81,6 +87,14 @@ public final class Trace extends AbstractMonitoringRecord implements IMonitoring
 
 	public final long getThreadId() {
 		return this.threadId;
+	}
+
+	public String getSessionId() {
+		return this.sessionId;
+	}
+
+	public String getHostname() {
+		return this.hostname;
 	}
 
 	public long getParentTraceId() {

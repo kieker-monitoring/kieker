@@ -25,6 +25,7 @@ import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.common.record.flow.trace.Trace;
+import kieker.monitoring.core.controller.MonitoringController;
 
 /**
  * @author Jan Waller
@@ -34,6 +35,8 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 
 	private final AtomicInteger nextTraceId = new AtomicInteger(0);
 	private final long unique = ((long) new SecureRandom().nextInt()) << 32;
+	/** the hostname is final after the instantiation of the monitoring controller */
+	private final String hostname = MonitoringController.getInstance().getHostName();
 
 	/** the current trace; null if new trace */
 	private final ThreadLocal<Trace> traceStorage = new ThreadLocal<Trace>();
@@ -77,7 +80,8 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 			parentTraceId = traceId;
 			parentOrderId = -1;
 		}
-		final Trace trace = new Trace(traceId, thread.getId(), parentTraceId, parentOrderId);
+		final String sessionId = SessionRegistry.INSTANCE.recallThreadLocalSessionId();
+		final Trace trace = new Trace(traceId, thread.getId(), sessionId, this.hostname, parentTraceId, parentOrderId);
 		this.traceStorage.set(trace);
 		return trace;
 	}
