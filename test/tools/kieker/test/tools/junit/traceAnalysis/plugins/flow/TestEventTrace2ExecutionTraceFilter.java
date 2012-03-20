@@ -125,7 +125,6 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		 */
 		final Configuration filterConfiguration = new Configuration();
 		final EventTrace2ExecutionTraceFilter filter = new EventTrace2ExecutionTraceFilter(filterConfiguration);
-		filter.connect(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
 
 		/*
 		 * Create and connect a sink plugin which collects the transformed
@@ -136,7 +135,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 
 		controller.registerFilter(filter);
 		controller.registerFilter(executionTraceSinkPlugin);
-
+		controller.connect(filter, AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
 		controller.connect(filter, EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
 		filter.inputEventTrace(eventRecordTrace);

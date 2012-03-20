@@ -202,7 +202,7 @@ public final class AnalysisController implements Runnable {
 			AnalysisController.checkPorts(mPlugin, pluginMap.get(mPlugin));
 			final EList<MIRepositoryConnector> mPluginRPorts = mPlugin.getRepositories();
 			for (final MIRepositoryConnector mPluginRPort : mPluginRPorts) {
-				pluginMap.get(mPlugin).connect(mPluginRPort.getName(), repositoryMap.get(mPluginRPort.getRepository()));
+				this.connect(pluginMap.get(mPlugin), mPluginRPort.getName(), repositoryMap.get(mPluginRPort.getRepository()));
 			}
 			final EList<MIOutputPort> mPluginOPorts = mPlugin.getOutputPorts();
 			for (final MIOutputPort mPluginOPort : mPluginOPorts) {
@@ -314,6 +314,26 @@ public final class AnalysisController implements Runnable {
 		/* Make sure that the plugins are registered and use the method of AbstractPlugin (This should be the only allowed call to this method). */
 		return (this.filters.contains(src) || this.readers.contains(src)) && (this.filters.contains(dst) || this.readers.contains(dst))
 				&& AbstractPlugin.connect(src, outputPortName, dst, inputPortName);
+	}
+
+	/**
+	 * Connects the given repository to this plugin via the given name.
+	 * 
+	 * @param name
+	 *            The name of the port to connect the repository.
+	 * @param repo
+	 *            The repository which should be used.
+	 * @return true if and only if the repository-port is valid, the repository itself is compatible and the port is not used yet. Also the analysis must not run
+	 *         yet.
+	 */
+	public boolean connect(final AbstractPlugin plugin, final String name, final AbstractRepository repo) {
+		if (this.state != STATE.READY) {
+			AnalysisController.LOG.error("Unable to connect repositories after starting analysis.");
+			return false;
+		}
+		// TODO Log different errors.
+		/* Make sure that the plugins are registered and use the method of AbstractPlugin (This should be the only allowed call to this method). */
+		return (this.filters.contains(plugin) || this.readers.contains(plugin)) && plugin.connect(name, repo);
 	}
 
 	/**

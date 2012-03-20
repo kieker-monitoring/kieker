@@ -116,7 +116,7 @@ class ExecRecordTransformationFilterChecker {
 		this.analysisController.connect(this.listReader, ListReader.OUTPUT_PORT_NAME, this.execRecFilter, ExecutionRecordTransformationFilter.INPUT_PORT_NAME);
 		this.analysisController.connect(this.execRecFilter, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME,
 				this.sinkPlugin, ExecutionSinkClass.INPUT_PORT_NAME);
-		this.execRecFilter.connect(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, this.systemModelRepository);
+		this.analysisController.connect(this.execRecFilter, AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, this.systemModelRepository);
 
 	}
 

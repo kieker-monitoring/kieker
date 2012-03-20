@@ -153,7 +153,7 @@ public class TestAnalysis {
 				analysisController.registerFilter(eventTrace2ExecutionTraceFilter);
 				analysisController.connect(eventRecordTraceGenerationFilter, EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME, eventTrace2ExecutionTraceFilter,
 						EventTrace2ExecutionTraceFilter.INPUT_PORT_NAME);
-				eventTrace2ExecutionTraceFilter.connect(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
+				analysisController.connect(eventTrace2ExecutionTraceFilter, AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
 
 				analysisController.registerFilter(teeFilter1);
 				analysisController.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, teeFilter1,
@@ -161,17 +161,17 @@ public class TestAnalysis {
 
 				analysisController.registerFilter(sequenceDiagramPlugin);
 				analysisController.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME, sequenceDiagramPlugin, AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME);
-				sequenceDiagramPlugin.connect(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
+				analysisController.connect(sequenceDiagramPlugin, AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
 
 				analysisController.registerFilter(componentDependencyGraphPluginAllocation);
 				analysisController.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME, componentDependencyGraphPluginAllocation,
 						AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME);
-				componentDependencyGraphPluginAllocation.connect(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
+				analysisController.connect(componentDependencyGraphPluginAllocation, AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
 
 				analysisController.registerFilter(operationDependencyGraphPluginAllocation);
 				analysisController.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME, operationDependencyGraphPluginAllocation,
 						AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME);
-				operationDependencyGraphPluginAllocation.connect(AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
+				analysisController.connect(operationDependencyGraphPluginAllocation, AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
 
 				analysisController.saveToFile(new File("tmp/testproject.kax"));
 			}

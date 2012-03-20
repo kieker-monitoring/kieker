@@ -60,11 +60,13 @@ public interface IPlugin {
 	public abstract String getName();
 
 	/**
-	 * Connects the given repository to this plugin via the given name.
+	 * Connects the given repository to this plugin via the given name. <b>DO NOT USE THIS METHOD!</b> Use <code>AnalysisController.connect</code> instead!
 	 * 
 	 * @param name
+	 *            The name of the port to connect the repository.
 	 * @param repo
-	 * @return
+	 *            The repository which should be used.
+	 * @return true if and only if the repository-port is valid, the repository itself is compatible and the port is not used yet.
 	 */
 	public abstract boolean connect(final String name, final AbstractRepository repo);
 
