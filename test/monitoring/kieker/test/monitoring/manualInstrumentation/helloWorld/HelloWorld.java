@@ -42,11 +42,16 @@ public final class HelloWorld {
 		final long startTime = timeSource.getTime();
 		HelloWorld.doSomething();
 		final long endTime = timeSource.getTime();
-		monitoringController.newMonitoringRecord(new OperationExecutionRecord("kieker.component.method()", 1, startTime, endTime));
+		monitoringController.newMonitoringRecord(HelloWorld.createOperationExecutionRecord("kieker.component.method()", 1, startTime, endTime));
 	}
 
 	private static void doSomething() {
 		System.out.println("doing something");
 		/* .. some application logic does something meaningful .. */
+	}
+
+	private static OperationExecutionRecord createOperationExecutionRecord(final String opString, final long traceId, final long tin, final long tout) {
+		return new OperationExecutionRecord("", OperationExecutionRecord.NO_SESSION_ID, traceId, tin, tout, OperationExecutionRecord.NO_HOSTNAME,
+				OperationExecutionRecord.NO_EOI_ESS, OperationExecutionRecord.NO_EOI_ESS);
 	}
 }

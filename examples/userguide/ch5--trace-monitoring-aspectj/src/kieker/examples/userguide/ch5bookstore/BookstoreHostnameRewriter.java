@@ -31,9 +31,17 @@ import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.common.util.ClassOperationSignaturePair;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 
+/**
+ * Reads a FS monitoring log of {@link OperationExecutionRecord}s and turns the contained 
+ * traces into distributed traces by modifying the {@link OperationExecutionRecord#getHostName()}. 
+ * 
+ * @author Andre van Hoorn
+ *
+ */
 public class BookstoreHostnameRewriter {
 
 	public static void main(final String[] args)
@@ -89,19 +97,27 @@ class HostNameRewriterPlugin extends AbstractAnalysisPlugin {
 		}
 
 		final OperationExecutionRecord execution = (OperationExecutionRecord) event;
-
-		if (execution.getClassName().equals(Bookstore.class.getName())) {
-			execution.setHostName(HostNameRewriterPlugin.BOOKSTORE_HOSTNAME);
-		} else if (execution.getClassName().equals(CRM.class.getName())) {
-			execution.setHostName(HostNameRewriterPlugin.CRM_HOSTNAME);
-		} else if (execution.getClassName().equals(Catalog.class.getName())) {
+		
+		final ClassOperationSignaturePair opSigPair = ClassOperationSignaturePair.splitOperationSignatureStr(execution.getOperationSignature());
+		
+		String hostname = execution.getHostName();
+		if (opSigPair.getFqClassname().equals(Bookstore.class.getName())) {
+			hostname = HostNameRewriterPlugin.BOOKSTORE_HOSTNAME;
+		} else if (opSigPair.getFqClassname().equals(CRM.class.getName())) {
+			hostname = HostNameRewriterPlugin.CRM_HOSTNAME;
+		} else if (opSigPair.getFqClassname().equals(Catalog.class.getName())) {
 			if (HostNameRewriterPlugin.rnd.nextInt(99) < HostNameRewriterPlugin.RND_PERCENTILE_HOST_IDX_1) {
-				execution.setHostName(HostNameRewriterPlugin.CATALOG_HOSTNAMES[0]);
+				hostname = HostNameRewriterPlugin.CATALOG_HOSTNAMES[0];
 			} else {
-				execution.setHostName(HostNameRewriterPlugin.CATALOG_HOSTNAMES[1]);
+				hostname = HostNameRewriterPlugin.CATALOG_HOSTNAMES[1];
 			}
 		}
-		HostNameRewriterPlugin.MONITORING_CTRL.newMonitoringRecord(execution);
+		
+		final OperationExecutionRecord newExec = 
+			new OperationExecutionRecord(execution.getOperationSignature(), execution.getSessionId(), execution.getTraceId(), 
+					execution.getTin(), execution.getTout(), hostname, execution.getEoi(), execution.getEss());
+		
+		HostNameRewriterPlugin.MONITORING_CTRL.newMonitoringRecord(newExec);
 	}
 
 	@Override

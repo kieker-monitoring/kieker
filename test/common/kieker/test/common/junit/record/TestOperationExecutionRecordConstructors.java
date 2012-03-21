@@ -34,64 +34,6 @@ import kieker.common.record.controlflow.OperationExecutionRecord;
 public class TestOperationExecutionRecordConstructors extends TestCase {
 
 	/**
-	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, long)}
-	 */
-	public void testSignatureStringTraceID() {
-		final long traceId = 3486095; // any number will do
-		final OperationExecutionRecord opExecutionRecord =
-				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK, traceId);
-
-		this.checkClassSignatureValues(opExecutionRecord,
-				BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
-				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
-		this.checkTraceId(opExecutionRecord, traceId);
-
-		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
-				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
-	}
-
-	/**
-	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, long, long, long)}
-	 */
-	public void testSignatureStringTraceIDTinTout() {
-		final long traceId = 3486095; // any number will do
-		final long tin = 33444; // any number will do
-		final long tout = 33449; // any number will do
-		final OperationExecutionRecord opExecutionRecord =
-				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK, traceId, tin, tout);
-
-		this.checkClassSignatureValues(opExecutionRecord,
-				BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
-				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
-		this.checkTraceId(opExecutionRecord, traceId);
-		this.checkTinTout(opExecutionRecord, tin, tout);
-
-		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
-				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
-	}
-
-	/**
-	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, long, long)}
-	 */
-	public void testSignatureStringTinTout() {
-		final long tin = 33444; // any number will do
-		final long tout = 33449; // any number will do
-		final OperationExecutionRecord opExecutionRecord =
-				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK, tin, tout);
-
-		this.checkClassSignatureValues(opExecutionRecord,
-				BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
-				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
-		this.checkTinTout(opExecutionRecord, tin, tout);
-
-		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
-				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
-	}
-
-	/**
 	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long, long, long, String, int, int)}
 	 */
 	public void testSignatureStringSessionIDTraceIDTinToutEoiEss() {
@@ -115,6 +57,74 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 		this.checkEoiEss(opExecutionRecord, eoi, ess);
 		this.checkHostName(opExecutionRecord, hostName);
 		this.checkSessionId(opExecutionRecord, sessionId);
+		this.checkIsEntryPoint(opExecutionRecord, false); // default, as documented in the constructor
+		this.checkObject(opExecutionRecord, null);
+
+		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
+				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
+	}
+
+	/**
+	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long, long, long, String, int, int)}
+	 */
+	public void testSignatureStringSessionIDTraceIDTinToutEoiEssNoEntryButRetVal() {
+		final String sessionId = "IaYyf8m9B";
+		final long traceId = 3486095; // any number will do
+		final String hostName = "srv-gvNH6CgYFS";
+		final long tin = 33444; // any number will do
+		final long tout = 33449; // any number will do
+		final int eoi = BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_EOI;
+		final int ess = BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_ESS;
+		final boolean entryPoint = false;
+		final Object obj = new Object();
+		final OperationExecutionRecord opExecutionRecord =
+				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK, sessionId, traceId,
+						tin, tout, hostName, eoi, ess, entryPoint, obj);
+
+		this.checkClassSignatureValues(opExecutionRecord,
+				BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
+				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK,
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
+		this.checkTraceId(opExecutionRecord, traceId);
+		this.checkTinTout(opExecutionRecord, tin, tout);
+		this.checkEoiEss(opExecutionRecord, eoi, ess);
+		this.checkHostName(opExecutionRecord, hostName);
+		this.checkSessionId(opExecutionRecord, sessionId);
+		this.checkIsEntryPoint(opExecutionRecord, entryPoint);
+		this.checkObject(opExecutionRecord, obj);
+
+		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
+				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
+	}
+
+	/**
+	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long, long, long, String, int, int)}
+	 */
+	public void testSignatureStringSessionIDTraceIDTinToutEoiEssEntryNoRetVal() {
+		final String sessionId = "IaYyf8m9B";
+		final long traceId = 3486095; // any number will do
+		final String hostName = "srv-gvNH6CgYFS";
+		final long tin = 33444; // any number will do
+		final long tout = 33449; // any number will do
+		final int eoi = BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_EOI;
+		final int ess = BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_ESS;
+		final boolean entryPoint = true;
+		final Object obj = null;
+		final OperationExecutionRecord opExecutionRecord =
+				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK, sessionId, traceId,
+						tin, tout, hostName, eoi, ess, entryPoint, obj);
+
+		this.checkClassSignatureValues(opExecutionRecord,
+				BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
+				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK,
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
+		this.checkTraceId(opExecutionRecord, traceId);
+		this.checkTinTout(opExecutionRecord, tin, tout);
+		this.checkEoiEss(opExecutionRecord, eoi, ess);
+		this.checkHostName(opExecutionRecord, hostName);
+		this.checkSessionId(opExecutionRecord, sessionId);
+		this.checkIsEntryPoint(opExecutionRecord, entryPoint);
+		this.checkObject(opExecutionRecord, obj);
 
 		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
 				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
@@ -123,6 +133,7 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 	/**
 	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long)}
 	 */
+	// TODO: to be removed in 1.6 as the tested constructor will be removed there
 	public void testComponentOpTraceID() {
 		final long traceId = 3486095; // any number will do
 		final OperationExecutionRecord opExecutionRecord =
@@ -134,6 +145,8 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK,
 				BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE + "." + BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
 		this.checkTraceId(opExecutionRecord, traceId);
+		this.checkIsEntryPoint(opExecutionRecord, false); // default, as documented in the constructor
+		this.checkObject(opExecutionRecord, null);
 
 		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
 				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
@@ -142,6 +155,7 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 	/**
 	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long, long, long)}
 	 */
+	// TODO: to be removed in 1.6 as the tested constructor will be removed there
 	public void testComponentOpTraceIDTinTout() {
 		final long traceId = 3486095; // any number will do
 		final long tin = 33444; // any number will do
@@ -164,6 +178,7 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 	/**
 	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long, long)}
 	 */
+	// TODO: to be removed in 1.6 as the tested constructor will be removed there
 	public void testComponentTinTout() {
 		final long tin = 33444; // any number will do
 		final long tout = 33449; // any number will do
@@ -178,6 +193,9 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 
 		this.checkTinTout(opExecutionRecord, tin, tout);
 
+		this.checkIsEntryPoint(opExecutionRecord, false); // default, as documented in the constructor
+		this.checkObject(opExecutionRecord, null);
+
 		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
 				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
 	}
@@ -185,6 +203,7 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 	/**
 	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, String, long, long, long)}
 	 */
+	// TODO: to be removed in 1.6 as the tested constructor will be removed there
 	public void testComponentOpSessionTraceIDTinTout() {
 		final String sessionId = "eqJSin80n";
 		final long traceId = 3486095; // any number will do
@@ -202,6 +221,9 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 		this.checkTinTout(opExecutionRecord, tin, tout);
 		this.checkSessionId(opExecutionRecord, sessionId);
 
+		this.checkIsEntryPoint(opExecutionRecord, false); // default, as documented in the constructor
+		this.checkObject(opExecutionRecord, null);
+
 		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
 				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
 	}
@@ -209,6 +231,7 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 	/**
 	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long, long, long, String, int, int)}
 	 */
+	// TODO: to be removed in 1.6 as the tested constructor will be removed there
 	public void testComponentOpSessionIDTraceIDTinToutEoiEss() {
 		final String sessionId = "IaYyf8m9B";
 		final long traceId = 3486095; // any number will do
@@ -231,6 +254,9 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 		this.checkEoiEss(opExecutionRecord, eoi, ess);
 		this.checkHostName(opExecutionRecord, hostName);
 		this.checkSessionId(opExecutionRecord, sessionId);
+
+		this.checkIsEntryPoint(opExecutionRecord, false); // default, as documented in the constructor
+		this.checkObject(opExecutionRecord, null);
 
 		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
 				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
@@ -267,6 +293,14 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 		/* Now we'll test some (deprecated) legacy getters */
 		Assert.assertEquals("FQ classnames differ", expectedFqClassname, opExecutionRecord.getClassName());
 		Assert.assertEquals("operation names differ", expectedOpArgString, opExecutionRecord.getOperationName());
+	}
+
+	private void checkIsEntryPoint(final OperationExecutionRecord opExecutionRecord, final boolean entryPoint) {
+		Assert.assertEquals("Unexpected entry point information", entryPoint, opExecutionRecord.isEntryPoint());
+	}
+
+	private void checkObject(final OperationExecutionRecord opExecutionRecord, final Object obj) {
+		Assert.assertEquals("Unexpected object attached", obj, opExecutionRecord.getRetVal());
 	}
 
 	private void checkToFromArrayAllFields(final OperationExecutionRecord opExecutionRecord, final String expectedFqClassname, final String expectedOpArgString) {

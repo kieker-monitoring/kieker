@@ -42,13 +42,42 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 		int.class, // eoi
 		int.class, // ess
 	};
-	private static final String DEFAULT_VALUE = "N/A";
 
-	// TODO: change to final in 1.6
+	/**
+	 * This field should not be exported, because it makes little sense to have no associated operation
+	 */
+	private static final String NO_OPERATION_SIGNATURE = "noOperation";
+
+	/**
+	 * Constant to be used if no hostname required.
+	 */
+	public static final String NO_HOSTNAME = "<default-host>";
+
+	/**
+	 * Constant to be used if no session ID required.
+	 */
+	public static final String NO_SESSION_ID = "<no-session-id>";
+
+	/**
+	 * Constant to be used if no trace ID required.
+	 */
+	public static final long NO_TRACEID = -1;
+
+	/**
+	 * Constant to be used if no timestamp required.
+	 */
+	public static final long NO_TIMESTAMP = -1;
+
+	/**
+	 * Constant to be used if no eoi or ess required.
+	 */
+	public static final int NO_EOI_ESS = -1;
+
+	// TODO: change all fields to final in 1.6
 	private volatile int experimentId = -1;
-	private volatile String hostName = OperationExecutionRecord.DEFAULT_VALUE;
-	private volatile String operationSignature = OperationExecutionRecord.DEFAULT_VALUE;
-	private volatile String sessionId = OperationExecutionRecord.DEFAULT_VALUE;
+	private volatile String hostName = OperationExecutionRecord.NO_HOSTNAME;
+	private volatile String operationSignature = OperationExecutionRecord.NO_OPERATION_SIGNATURE;
+	private volatile String sessionId = OperationExecutionRecord.NO_SESSION_ID;
 	private volatile long traceId = -1;
 	private volatile long tin = -1;
 	private volatile long tout = -1;
@@ -84,43 +113,67 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	}
 
 	/**
-	 * @deprecated will be removed in Kieker 1.6
+	 * Creates a new {@link OperationExecutionRecord} with the given parameters. The fields {@link #getRetVal()} is set
+	 * to null; {@link #isEntryPoint()} is set to false.
+	 * 
+	 * @param operationSignature
+	 *            an operation string, as defined in {@link ClassOperationSignaturePair#splitOperationSignatureStr(String)}; must not be null.
+	 * @param sessionId
+	 *            the session ID; must not be null, use {@link #NO_SESSION_ID} if no session ID desired.
+	 * @param traceId
+	 *            the trace ID; use {@link #NO_TRACEID} if no trace ID desired.
+	 * @param tin
+	 *            the execution start timestamp; use {@link #NO_TIMESTAMP} if no timestamp desired.
+	 * @param tout
+	 *            the execution stop timestamp; use {@link #NO_TIMESTAMP} if no timestamp desired.
+	 * @param hostName
+	 *            the host name; must not be null, use {@link #NO_HOSTNAME} if no host name desired.
+	 * @param eoi
+	 *            the execution order index (eoi); use {@link #NO_EOI_ESS} if no eoi desired.
+	 * @param ess
+	 *            the execution order index (ess); use {@link #NO_EOI_ESS} if no ess desired.
 	 */
-	@Deprecated
-	public OperationExecutionRecord(final String operationSignature, final long traceId) {
-		this.operationSignature = operationSignature;
+	public OperationExecutionRecord(final String operationSignature, final String sessionId, final long traceId, final long tin, final long tout,
+			final String hostName, final int eoi, final int ess) {
+		this.operationSignature = (operationSignature == null) ? OperationExecutionRecord.NO_OPERATION_SIGNATURE : operationSignature; // NOCS
 		this.traceId = traceId;
-	}
-
-	/**
-	 * @deprecated will be removed in Kieker 1.6
-	 */
-	@Deprecated
-	public OperationExecutionRecord(final String operationSignature, final long traceId, final long tin, final long tout) {
-		this(operationSignature, traceId);
 		this.tin = tin;
 		this.tout = tout;
-	}
-
-	/**
-	 * @deprecated will be removed in Kieker 1.6
-	 */
-	@Deprecated
-	public OperationExecutionRecord(final String operationSignature, final long tin, final long tout) {
-		this(operationSignature, -1, tin, tout);
-	}
-
-	/**
-	 * @deprecated will be removed in Kieker 1.6
-	 */
-	@Deprecated
-	public OperationExecutionRecord(final String operationSignature, final String sessionId, final long traceId, final long tin, final long tout,
-			final String vnName, final int eoi, final int ess) {
-		this(operationSignature, traceId, tin, tout);
-		this.sessionId = sessionId;
-		this.hostName = vnName;
+		this.sessionId = (sessionId == null) ? OperationExecutionRecord.NO_SESSION_ID : sessionId; // NOCS
+		this.hostName = (hostName == null) ? OperationExecutionRecord.NO_HOSTNAME : hostName; // NOCS
 		this.eoi = eoi;
 		this.ess = ess;
+	}
+
+	/**
+	 * Creates a new {@link OperationExecutionRecord} with the given parameters.
+	 * 
+	 * @param operationSignature
+	 *            an operation string, as defined in {@link ClassOperationSignaturePair#splitOperationSignatureStr(String)}; must not be null.
+	 * @param sessionId
+	 *            the session ID; must not be null, use {@link #NO_SESSION_ID} if no session ID desired.
+	 * @param traceId
+	 *            the trace ID; use {@link #NO_TRACEID} if no trace ID desired.
+	 * @param tin
+	 *            the execution start timestamp; use {@link #NO_TIMESTAMP} if no timestamp desired.
+	 * @param tout
+	 *            the execution stop timestamp; use {@link #NO_TIMESTAMP} if no timestamp desired.
+	 * @param hostName
+	 *            the host name; must not be null, use {@link #NO_HOSTNAME} if no host name desired.
+	 * @param eoi
+	 *            the execution order index (eoi); use {@link #NO_EOI_ESS} if no eoi desired.
+	 * @param ess
+	 *            the execution order index (ess); use {@link #NO_EOI_ESS} if no ess desired.
+	 * @param entryPoint
+	 *            information whether execution is application entry point or not (transient)
+	 * @param returnValue
+	 *            object to be attached to the record (transient)
+	 */
+	public OperationExecutionRecord(final String operationSignature, final String sessionId, final long traceId, final long tin, final long tout,
+			final String hostName, final int eoi, final int ess, final boolean entryPoint, final Object returnValue) {
+		this(operationSignature, sessionId, traceId, tin, tout, hostName, eoi, ess);
+		this.entryPoint = entryPoint;
+		this.retVal = returnValue;
 	}
 
 	/**
@@ -239,6 +292,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	}
 
 	public OperationExecutionRecord(final Object[] values) {
+		// TODO: null checks?
 		AbstractMonitoringRecord.checkArray(values, OperationExecutionRecord.TYPES); // throws IllegalArgumentException
 		this.experimentId = (Integer) values[0];
 		this.operationSignature = (String) values[1]; // NOCS
@@ -256,15 +310,15 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 
 	@Override
 	public final Object[] toArray() {
-		// TODO: NULL and NULLHOST or OperationExecutionRecord.DEFAULT_VALUE ? same check for operationSignature ?
+		// TODO: remove NULL checks in Kieker 1.6, as null values not possible due to checks in the constructor
 		return new Object[] {
 			this.experimentId,
-			this.operationSignature,
-			(this.sessionId == null) ? "NULL" : this.sessionId, // NOCS
+			(this.operationSignature == null) ? OperationExecutionRecord.NO_OPERATION_SIGNATURE : this.operationSignature, // NOCS
+			(this.sessionId == null) ? OperationExecutionRecord.NO_SESSION_ID : this.sessionId, // NOCS
 			this.traceId,
 			this.tin,
 			this.tout,
-			(this.hostName == null) ? "NULLHOST" : this.hostName, // NOCS
+			(this.hostName == null) ? OperationExecutionRecord.NO_HOSTNAME : this.hostName, // NOCS
 			this.eoi,
 			this.ess, };
 	}

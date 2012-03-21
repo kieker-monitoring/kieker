@@ -43,8 +43,10 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 
 	protected OperationExecutionRecord initExecutionData(final ProceedingJoinPoint thisJoinPoint) {
 
-		final OperationExecutionRecord execData = new OperationExecutionRecord(thisJoinPoint.getSignature().toLongString(),
-				AbstractOperationExecutionAspect.CFREGISTRY.recallThreadLocalTraceId() /* traceId, -1 if entry point */);
+		final OperationExecutionRecord execData = new OperationExecutionRecord();
+
+		execData.setOperationSignature(thisJoinPoint.getSignature().toLongString());
+		execData.setTraceId(AbstractOperationExecutionAspect.CFREGISTRY.recallThreadLocalTraceId() /* traceId, -1 if entry point */);
 
 		execData.setEntryPoint(false);
 		// execData.traceId = ctrlInst.recallThreadLocalTraceId(); // -1 if entry point

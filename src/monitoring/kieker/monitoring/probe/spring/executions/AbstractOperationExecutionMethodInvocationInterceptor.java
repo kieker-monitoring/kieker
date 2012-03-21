@@ -58,8 +58,9 @@ public abstract class AbstractOperationExecutionMethodInvocationInterceptor impl
 	}
 
 	protected OperationExecutionRecord initExecutionData(final MethodInvocation invocation) {
-		final OperationExecutionRecord execData = new OperationExecutionRecord(invocation.getMethod().toString(),
-				AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.recallThreadLocalTraceId() /* -1 if entry point */);
+		final OperationExecutionRecord execData = new OperationExecutionRecord();
+		execData.setOperationSignature(invocation.getMethod().toString());
+		execData.setTraceId(AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.recallThreadLocalTraceId() /* -1 if entry point */);
 		execData.setEntryPoint(false);
 		if (execData.getTraceId() == -1) { // -1 if entry points
 			execData.setTraceId(AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId());

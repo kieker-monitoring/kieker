@@ -98,8 +98,10 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 		final int eoi = 0; /* this is executionOrderIndex-th execution in this trace */
 		final int ess = 0; /* this is the height in the dynamic call tree of this execution */
 		if (request instanceof HttpServletRequest) {
-			execData = new OperationExecutionRecord(OperationExecutionRegistrationAndLoggingFilter.SIGNATURE,
-					OperationExecutionRegistrationAndLoggingFilter.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId() /* traceId, -1 if entry point */);
+			execData = new OperationExecutionRecord();
+			execData.setOperationSignature(OperationExecutionRegistrationAndLoggingFilter.SIGNATURE);
+			execData.setTraceId(OperationExecutionRegistrationAndLoggingFilter.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId() /* traceId, -1 if entry point */);
+
 			execData.setSessionId(this.getSessionId((HttpServletRequest) request));
 			if (execData.getSessionId() == null) {
 				execData.setSessionId(OperationExecutionRegistrationAndLoggingFilter.NULL_SESSION_STR);
