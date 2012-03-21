@@ -74,6 +74,9 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 
 	@Override
 	public void handleMessage(final SoapMessage msg) throws Fault {
+		if (!OperationExecutionSOAPResponseOutInterceptor.CRTR_INST.isMonitoringEnabled()) {
+			return;
+		}
 		String sessionID;
 		final long traceId = OperationExecutionSOAPResponseOutInterceptor.CF_REGISTRY.recallThreadLocalTraceId();
 		long tin;
@@ -113,7 +116,6 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 		/* Log this execution */
 		final OperationExecutionRecord rec = new OperationExecutionRecord(OperationExecutionSOAPResponseOutInterceptor.SIGNATURE, sessionID, traceId, tin, tout,
 				OperationExecutionSOAPResponseOutInterceptor.VM_NAME, myEoi, myEss);
-		rec.setExperimentId(OperationExecutionSOAPResponseOutInterceptor.CRTR_INST.getExperimentId());
 		OperationExecutionSOAPResponseOutInterceptor.CRTR_INST.newMonitoringRecord(rec);
 
 		/*

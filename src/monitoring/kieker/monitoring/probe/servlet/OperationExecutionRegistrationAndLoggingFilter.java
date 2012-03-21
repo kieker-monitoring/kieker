@@ -54,7 +54,7 @@ import kieker.monitoring.timer.ITimeSource;
  * <url-pattern>/*</url-pattern>
  * </filter-mapping>
  * 
- * @author Marco Luebcke
+ * @author Marco Luebcke, Jan Waller
  */
 public class OperationExecutionRegistrationAndLoggingFilter implements Filter, IMonitoringProbe {
 	private static final String SIGNATURE = "public void " + OperationExecutionRegistrationAndLoggingFilter.class.getName()
@@ -64,8 +64,6 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 	private static final IMonitoringController CTRL_INST = MonitoringController.getInstance();
 	private static final ITimeSource TIMESOURCE = OperationExecutionRegistrationAndLoggingFilter.CTRL_INST.getTimeSource();
 	private static final String VM_NAME = OperationExecutionRegistrationAndLoggingFilter.CTRL_INST.getHostName();
-
-	private static final String NULL_SESSION_STR = "NULL-SERVLETFILTER";
 
 	/**
 	 * Constructs an {@link OperationExecutionRegistrationAndLoggingFilter}.
@@ -79,57 +77,41 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 		// nothing to do
 	}
 
-	/**
-	 * Returns the session ID from request @r or null if no session in @r.
-	 * 
-	 */
-	public final String getSessionId(final HttpServletRequest httpReq) {
-		final HttpSession session = httpReq.getSession(false);
-		if (session != null) {
-			return session.getId();
-		} else {
-			return null;
+	private final String getSessionId(final ServletRequest request) {
+		if (request instanceof HttpServletRequest) {
+			final HttpSession session = ((HttpServletRequest) request).getSession(false);
+			if (session != null) {
+				return session.getId();
+			}
 		}
+		return null;
 	}
 
 	@Override
 	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
-		OperationExecutionRecord execData = null;
-		final int eoi = 0; /* this is executionOrderIndex-th execution in this trace */
-		final int ess = 0; /* this is the height in the dynamic call tree of this execution */
-		if (request instanceof HttpServletRequest) {
-			execData = new OperationExecutionRecord();
-			execData.setOperationSignature(OperationExecutionRegistrationAndLoggingFilter.SIGNATURE);
-			execData.setTraceId(OperationExecutionRegistrationAndLoggingFilter.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId() /* traceId, -1 if entry point */);
-
-			execData.setSessionId(this.getSessionId((HttpServletRequest) request));
-			if (execData.getSessionId() == null) {
-				execData.setSessionId(OperationExecutionRegistrationAndLoggingFilter.NULL_SESSION_STR);
-			}
-			OperationExecutionRegistrationAndLoggingFilter.SESSION_REGISTRY.storeThreadLocalSessionId(execData.getSessionId());
-			execData.setEntryPoint(true); // of course (however, we never evaluate it here)!
-			OperationExecutionRegistrationAndLoggingFilter.CF_REGISTRY.storeThreadLocalEOI(0); // current execution's eoi is 0
-			OperationExecutionRegistrationAndLoggingFilter.CF_REGISTRY.storeThreadLocalESS(1); // *current* execution's ess is 0
-			execData.setHostName(OperationExecutionRegistrationAndLoggingFilter.VM_NAME);
-			execData.setExperimentId(OperationExecutionRegistrationAndLoggingFilter.CTRL_INST.getExperimentId());
-			execData.setTin(OperationExecutionRegistrationAndLoggingFilter.TIMESOURCE.getTime());
+		if (!OperationExecutionRegistrationAndLoggingFilter.CTRL_INST.isMonitoringEnabled()) {
+			chain.doFilter(request, response);
 		}
+		final long traceId = OperationExecutionRegistrationAndLoggingFilter.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId(); // traceId, -1 if entry point
+		String sessionId = this.getSessionId(request);
+		if (sessionId != null) {
+			OperationExecutionRegistrationAndLoggingFilter.SESSION_REGISTRY.storeThreadLocalSessionId(sessionId);
+		}
+		OperationExecutionRegistrationAndLoggingFilter.CF_REGISTRY.storeThreadLocalEOI(0); // current execution's eoi is 0
+		OperationExecutionRegistrationAndLoggingFilter.CF_REGISTRY.storeThreadLocalESS(1); // *current* execution's ess is 0
+		final String hostname = OperationExecutionRegistrationAndLoggingFilter.VM_NAME;
+		final long tin = OperationExecutionRegistrationAndLoggingFilter.TIMESOURCE.getTime();
 		try {
 			chain.doFilter(request, response);
 		} finally {
-			if (execData != null) {
-				execData.setTout(OperationExecutionRegistrationAndLoggingFilter.TIMESOURCE.getTime());
-				execData.setEoi(eoi);
-				execData.setEss(ess);
-				// if execData.sessionId == null, try again to fetch it (should exist after being within the application logic)
-				if (execData.getSessionId() == null) {
-					// log.info("TraceID" + execData.traceId + "had no sessionId so far. Now?");
-					execData.setSessionId(this.getSessionId((HttpServletRequest) request));
-					// log.info("New sessionId? " + execData.sessionId);
-				}
-				// TOOD: ?only log record if cfRegistry.recallThreadLocalEOI > 0?
-				OperationExecutionRegistrationAndLoggingFilter.CTRL_INST.newMonitoringRecord(execData);
+			final long tout = OperationExecutionRegistrationAndLoggingFilter.TIMESOURCE.getTime();
+			// if sessionId == null, try again to fetch it (should exist after being within the application logic)
+			if (sessionId == null) {
+				sessionId = this.getSessionId(request);
 			}
+			// TOOD: ?only log record if cfRegistry.recallThreadLocalEOI > 0?
+			OperationExecutionRegistrationAndLoggingFilter.CTRL_INST.newMonitoringRecord(
+					new OperationExecutionRecord(OperationExecutionRegistrationAndLoggingFilter.SIGNATURE, sessionId, traceId, tin, tout, hostname, 0, 0));
 			// since we are in an entry point:
 			OperationExecutionRegistrationAndLoggingFilter.CF_REGISTRY.unsetThreadLocalTraceId();
 			OperationExecutionRegistrationAndLoggingFilter.SESSION_REGISTRY.unsetThreadLocalSessionId();

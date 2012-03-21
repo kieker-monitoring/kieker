@@ -31,6 +31,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.IMonitoringProbe;
@@ -54,7 +56,7 @@ import kieker.monitoring.probe.IMonitoringProbe;
  * @author Marco Luebcke
  */
 public class OperationExecutionRegistrationFilter implements Filter, IMonitoringProbe {
-
+	private static final IMonitoringController CTRL_INST = MonitoringController.getInstance();
 	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 
@@ -72,6 +74,9 @@ public class OperationExecutionRegistrationFilter implements Filter, IMonitoring
 
 	@Override
 	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
+		if (!OperationExecutionRegistrationFilter.CTRL_INST.isMonitoringEnabled()) {
+			chain.doFilter(request, response);
+		}
 		if (request instanceof HttpServletRequest) {
 			final HttpSession session = ((HttpServletRequest) request).getSession(false);
 			if (session != null) {

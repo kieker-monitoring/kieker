@@ -38,7 +38,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 		long.class, // traceId
 		long.class, // tin
 		long.class, // tout
-		String.class, // hostName
+		String.class, // hostname
 		int.class, // eoi
 		int.class, // ess
 	};
@@ -80,7 +80,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	private volatile int experimentId = -1;
 
 	// TODO: change all fields to final in 1.6
-	private volatile String hostName = OperationExecutionRecord.NO_HOSTNAME;
+	private volatile String hostname = OperationExecutionRecord.NO_HOSTNAME;
 	private volatile String operationSignature = OperationExecutionRecord.NO_OPERATION_SIGNATURE;
 	private volatile String sessionId = OperationExecutionRecord.NO_SESSION_ID;
 	private volatile long traceId = OperationExecutionRecord.NO_TRACEID;
@@ -133,7 +133,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	 *            the execution start timestamp; use {@link #NO_TIMESTAMP} if no timestamp desired.
 	 * @param tout
 	 *            the execution stop timestamp; use {@link #NO_TIMESTAMP} if no timestamp desired.
-	 * @param hostName
+	 * @param hostname
 	 *            the host name; must not be null, use {@link #NO_HOSTNAME} if no host name desired.
 	 * @param eoi
 	 *            the execution order index (eoi); use {@link #NO_EOI_ESS} if no eoi desired.
@@ -141,13 +141,13 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	 *            the execution order index (ess); use {@link #NO_EOI_ESS} if no ess desired.
 	 */
 	public OperationExecutionRecord(final String operationSignature, final String sessionId, final long traceId, final long tin, final long tout,
-			final String hostName, final int eoi, final int ess) {
+			final String hostname, final int eoi, final int ess) {
 		this.operationSignature = (operationSignature == null) ? OperationExecutionRecord.NO_OPERATION_SIGNATURE : operationSignature; // NOCS
 		this.traceId = traceId;
 		this.tin = tin;
 		this.tout = tout;
 		this.sessionId = (sessionId == null) ? OperationExecutionRecord.NO_SESSION_ID : sessionId; // NOCS
-		this.hostName = (hostName == null) ? OperationExecutionRecord.NO_HOSTNAME : hostName; // NOCS
+		this.hostname = (hostname == null) ? OperationExecutionRecord.NO_HOSTNAME : hostname; // NOCS
 		this.eoi = eoi;
 		this.ess = ess;
 	}
@@ -232,7 +232,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	public OperationExecutionRecord(final String componentName, final String opName, final String sessionId, final long traceId, final long tin, final long tout,
 			final String vnName, final int eoi, final int ess) {
 		this(componentName, opName, sessionId, traceId, tin, tout);
-		this.hostName = vnName;
+		this.hostname = vnName;
 		this.eoi = eoi;
 		this.ess = ess;
 	}
@@ -246,7 +246,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 		this.traceId = (Long) values[3]; // NOCS
 		this.tin = (Long) values[4]; // NOCS
 		this.tout = (Long) values[5]; // NOCS
-		this.hostName = (String) values[6]; // NOCS
+		this.hostname = (String) values[6]; // NOCS
 		this.eoi = (Integer) values[7]; // NOCS
 		this.ess = (Integer) values[8]; // NOCS
 		// set transient values
@@ -264,7 +264,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 			this.traceId,
 			this.tin,
 			this.tout,
-			(this.hostName == null) ? OperationExecutionRecord.NO_HOSTNAME : this.hostName, // NOCS
+			(this.hostname == null) ? OperationExecutionRecord.NO_HOSTNAME : this.hostname, // NOCS
 			this.eoi,
 			this.ess, };
 	}
@@ -301,21 +301,21 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	}
 
 	/**
-	 * @return the hostName
+	 * @return the hostname
 	 */
 	public final String getHostName() {
-		return this.hostName;
+		return this.hostname;
 	}
 
 	/**
 	 * @deprecated this class will become immutable in Kieker 1.6
 	 * 
-	 * @param hostName
-	 *            the hostName to set
+	 * @param hostname
+	 *            the hostname to set
 	 */
 	@Deprecated
 	public final void setHostName(final String hostName) {
-		this.hostName = hostName;
+		this.hostname = hostName;
 	}
 
 	public String getOperationSignature() {

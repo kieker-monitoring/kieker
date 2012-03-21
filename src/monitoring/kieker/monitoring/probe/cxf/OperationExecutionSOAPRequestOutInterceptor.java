@@ -59,8 +59,8 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
 	 * corresponding other CXF probes. Depending on the configuration, the time may
 	 * differ from Kieker's default timer (SystemNanoTimer).
 	 */
-	protected static final IMonitoringController ctrl = MonitoringController.getInstance();
-	protected static final ITimeSource TIMESOURCE = OperationExecutionSOAPRequestOutInterceptor.ctrl.getTimeSource();
+	protected static final IMonitoringController CTRL = MonitoringController.getInstance();
+	protected static final ITimeSource TIMESOURCE = OperationExecutionSOAPRequestOutInterceptor.CTRL.getTimeSource();
 
 	private static final String NULL_SESSION_STR = "NULL";
 	private static final String NULL_SESSIONASYNCTRACE_STR = "NULL-ASYNCOUT";
@@ -71,6 +71,9 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
 
 	@Override
 	public void handleMessage(final SoapMessage msg) throws Fault {
+		if (!OperationExecutionSOAPRequestOutInterceptor.CTRL.isMonitoringEnabled()) {
+			return;
+		}
 		String sessionID = null;
 		long traceId = OperationExecutionSOAPRequestOutInterceptor.CF_REGISTRY.recallThreadLocalTraceId();
 		int eoi;

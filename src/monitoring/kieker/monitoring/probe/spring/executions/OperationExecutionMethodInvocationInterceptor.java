@@ -23,7 +23,14 @@ package kieker.monitoring.probe.spring.executions;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.core.registry.ControlFlowRegistry;
+import kieker.monitoring.core.registry.SessionRegistry;
+import kieker.monitoring.probe.IMonitoringProbe;
+import kieker.monitoring.timer.ITimeSource;
 
+import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
 /**
@@ -37,10 +44,33 @@ import org.aopalliance.intercept.MethodInvocation;
  */
 
 /**
- * @author Andre van Hoorn
+ * @author Marco Luebcke, Andre van Hoorn, Jan Waller
  */
-public class OperationExecutionMethodInvocationInterceptor extends AbstractOperationExecutionMethodInvocationInterceptor {
+public class OperationExecutionMethodInvocationInterceptor implements MethodInterceptor, IMonitoringProbe {
 	private static final Log LOG = LogFactory.getLog(OperationExecutionMethodInvocationInterceptor.class);
+
+	private static final IMonitoringController CONTROLLER = MonitoringController.getInstance();
+	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
+	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
+	private static final ITimeSource TIMESOURCE = OperationExecutionMethodInvocationInterceptor.CONTROLLER.getTimeSource();
+	private static final String VM_NAME = OperationExecutionMethodInvocationInterceptor.CONTROLLER.getHostName();
+
+	/**
+	 * Iff true, the name of the runtime class is used, iff false, the name of
+	 * the declaring class (interface) is used
+	 */
+	@Deprecated
+	private boolean useRuntimeClassname = true;
+
+	@Deprecated
+	public boolean isUseRuntimeClassname() {
+		return this.useRuntimeClassname;
+	}
+
+	@Deprecated
+	public void setUseRuntimeClassname(final boolean useRuntimeClassname) {
+		this.useRuntimeClassname = useRuntimeClassname;
+	}
 
 	public OperationExecutionMethodInvocationInterceptor() {
 		// nothing to do
@@ -51,39 +81,33 @@ public class OperationExecutionMethodInvocationInterceptor extends AbstractOpera
 	 */
 	@Override
 	public Object invoke(final MethodInvocation invocation) throws Throwable { // NOCS (IllegalThrowsCheck)
-		final long traceId = AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.recallThreadLocalTraceId();
+		final long traceId = OperationExecutionMethodInvocationInterceptor.CF_REGISTRY.recallThreadLocalTraceId(); // -1 if entry point
 		// Only go on if a traceId has been registered before
-		if ((traceId == -1) || !AbstractOperationExecutionMethodInvocationInterceptor.CONTROLLER.isMonitoringEnabled()) {
+		if ((traceId == -1) || !OperationExecutionMethodInvocationInterceptor.CONTROLLER.isMonitoringEnabled()) {
 			return invocation.proceed();
 		}
-
-		final OperationExecutionRecord execData = this.initExecutionData(invocation);
-		execData.setEoi(AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.incrementAndRecallThreadLocalEOI());
-		/*
-		 * this is executionOrderIndex-th execution in this trace
-		 */
-		execData.setEss(AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.recallAndIncrementThreadLocalESS());
-		/*
-		 * this is the height in the dynamic call tree of this execution
-		 */
-
-		try {
-			this.proceedAndMeasure(invocation, execData);
-			if ((execData.getEoi() == -1) || (execData.getEss() == -1)) {
-				OperationExecutionMethodInvocationInterceptor.LOG.error("eoi and/or ess have invalid values:" + " eoi == " + execData.getEoi()
-						+ " ess == " + execData.getEss());
-				AbstractOperationExecutionMethodInvocationInterceptor.CONTROLLER.terminateMonitoring();
-			}
-		} catch (final Exception e) { // NOPMD // NOCS (IllegalCatchCheck)
-			throw e; // exceptions are forwarded
-		} finally {
-			/*
-			 * note that proceedAndMeasure(...) even sets the variable name in
-			 * case the execution of the joint point resulted in an exception!
-			 */
-			AbstractOperationExecutionMethodInvocationInterceptor.CONTROLLER.newMonitoringRecord(execData);
-			AbstractOperationExecutionMethodInvocationInterceptor.CF_REGISTRY.storeThreadLocalESS(execData.getEss());
+		final String signature = invocation.getMethod().toString();
+		final String sessionId = OperationExecutionMethodInvocationInterceptor.SESSION_REGISTRY.recallThreadLocalSessionId();
+		final String hostname = OperationExecutionMethodInvocationInterceptor.VM_NAME;
+		final int eoi = OperationExecutionMethodInvocationInterceptor.CF_REGISTRY.incrementAndRecallThreadLocalEOI();
+		final int ess = OperationExecutionMethodInvocationInterceptor.CF_REGISTRY.recallAndIncrementThreadLocalESS();
+		if ((eoi == -1) || (ess == -1)) {
+			OperationExecutionMethodInvocationInterceptor.LOG.error("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
+			OperationExecutionMethodInvocationInterceptor.CONTROLLER.terminateMonitoring();
 		}
-		return execData.getRetVal();
+		final long tin = OperationExecutionMethodInvocationInterceptor.TIMESOURCE.getTime();
+		final Object retval;
+		try {
+			// executing the intercepted method call
+			retval = invocation.proceed();
+		} catch (final Throwable th) {
+			throw th;
+		} finally {
+			final long tout = OperationExecutionMethodInvocationInterceptor.TIMESOURCE.getTime();
+			OperationExecutionMethodInvocationInterceptor.CONTROLLER.newMonitoringRecord(
+					new OperationExecutionRecord(signature, sessionId, traceId, tin, tout, hostname, eoi, ess));
+			OperationExecutionMethodInvocationInterceptor.CF_REGISTRY.storeThreadLocalESS(ess);
+		}
+		return retval;
 	}
 }

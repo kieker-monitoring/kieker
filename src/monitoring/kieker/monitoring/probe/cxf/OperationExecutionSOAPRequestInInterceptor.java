@@ -61,8 +61,8 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 	 * corresponding other CXF probes. Depending on the configuration, the time may
 	 * differ from Kieker's default timer (SystemNanoTimer).
 	 */
-	protected static final IMonitoringController ctrl = MonitoringController.getInstance();
-	protected static final ITimeSource TIMESOURCE = OperationExecutionSOAPRequestInInterceptor.ctrl.getTimeSource();
+	protected static final IMonitoringController CTRL = MonitoringController.getInstance();
+	protected static final ITimeSource TIMESOURCE = OperationExecutionSOAPRequestInInterceptor.CTRL.getTimeSource();
 
 	// the CXF logger uses java.util.logging by default, look here how to change it to log4j: http://cwiki.apache.org/CXF20DOC/debugging.html
 	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPRequestInInterceptor.class);
@@ -76,6 +76,9 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 
 	@Override
 	public void handleMessage(final Message msg) throws Fault {
+		if (!OperationExecutionSOAPRequestInInterceptor.CTRL.isMonitoringEnabled()) {
+			return;
+		}
 		if (msg instanceof SoapMessage) {
 			final SoapMessage soapMsg = (SoapMessage) msg;
 

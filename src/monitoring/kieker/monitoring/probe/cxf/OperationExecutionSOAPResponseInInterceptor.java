@@ -72,6 +72,9 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 
 	@Override
 	public void handleMessage(final Message msg) throws Fault {
+		if (!OperationExecutionSOAPResponseInInterceptor.CTRL_INST.isMonitoringEnabled()) {
+			return;
+		}
 		if (msg instanceof SoapMessage) {
 			final boolean isEntryCall = OperationExecutionSOAPResponseInInterceptor.SOAP_REGISTRY.recallThreadLocalOutRequestIsEntryCall();
 			final SoapMessage soapMsg = (SoapMessage) msg;
@@ -146,7 +149,6 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			// Log this execution
 			final OperationExecutionRecord rec = new OperationExecutionRecord(OperationExecutionSOAPResponseInInterceptor.SIGNATURE, mySessionId, myTraceId, myTin,
 					myTout, OperationExecutionSOAPResponseInInterceptor.VM_NAME, myEoi, myEss);
-			rec.setExperimentId(OperationExecutionSOAPResponseInInterceptor.CTRL_INST.getExperimentId());
 			OperationExecutionSOAPResponseInInterceptor.CTRL_INST.newMonitoringRecord(rec);
 
 			/*

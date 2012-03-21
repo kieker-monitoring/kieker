@@ -23,6 +23,8 @@ package kieker.monitoring.probe.aspectj.operationExecution;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.SessionRegistry;
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -37,12 +39,16 @@ import org.aspectj.lang.annotation.Pointcut;
 public abstract class AbstractOperationExecutionAspectServlet extends AbstractOperationExecutionAspect {
 
 	private static final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
+	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 
 	@Pointcut
 	public abstract void monitoredServlet(final HttpServletRequest request, final HttpServletResponse response);
 
 	@Around("monitoredServlet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse) && notWithinKieker()")
 	public Object servlet(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
+		if (!AbstractOperationExecutionAspectServlet.CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
 		final HttpServletRequest req = (HttpServletRequest) thisJoinPoint.getArgs()[0];
 		final String sessionId = (req != null) ? req.getSession(true).getId() : null;
 		AbstractOperationExecutionAspectServlet.SESSIONREGISTRY.storeThreadLocalSessionId(sessionId);

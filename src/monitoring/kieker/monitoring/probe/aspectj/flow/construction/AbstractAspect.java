@@ -44,6 +44,9 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 
 	@AfterReturning("monitoredConstructor() && this(this_) && notWithinKieker()")
 	public void afterConstruction(final Object this_, final JoinPoint.StaticPart jp) {
+		if (!AbstractAspect.CTRLINST.isMonitoringEnabled()) {
+			return;
+		}
 		final ConstructionEvent crecord = new ConstructionEvent(AbstractAspect.TIME.getTime(), jp.getSignature().getDeclaringTypeName(), this_.toString());
 		AbstractAspect.CTRLINST.newMonitoringRecord(crecord);
 	}

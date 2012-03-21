@@ -41,6 +41,9 @@ public final class BranchingProbe implements IMonitoringProbe {
 	private BranchingProbe() {}
 
 	public static final void monitorBranch(final int branchID, final int branchingOutcome) {
+		if (!BranchingProbe.CTRLINST.isMonitoringEnabled()) {
+			return;
+		}
 		// try-catch in order to avoid that any exception is propagated to the application code.
 		try {
 			BranchingProbe.CTRLINST.newMonitoringRecord(new BranchingRecord(BranchingProbe.TIMESOURCE.getTime(), branchID, branchingOutcome));

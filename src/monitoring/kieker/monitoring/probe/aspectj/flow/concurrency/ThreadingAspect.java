@@ -44,6 +44,9 @@ public final class ThreadingAspect extends AbstractAspectJProbe {
 	// Must be @Before
 	@Before("call(void java.lang.Thread.start()) && target(thread) && notWithinKieker()")
 	public void beforeNewThread(final Thread thread) {
+		if (!ThreadingAspect.CTRLINST.isMonitoringEnabled()) {
+			return;
+		}
 		final Trace trace = ThreadingAspect.TRACEREGISTRY.getTrace();
 		if (trace != null) { // ignore split if not inside of a trace!
 			final long traceId = trace.getTraceId();
