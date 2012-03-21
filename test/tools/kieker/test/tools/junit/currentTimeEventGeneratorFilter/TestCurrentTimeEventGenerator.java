@@ -29,8 +29,8 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractAnalysisPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.common.configuration.Configuration;
-import kieker.common.record.misc.TimestampRecord;
 import kieker.common.record.misc.EmptyRecord;
+import kieker.common.record.misc.TimestampRecord;
 import kieker.tools.currentTimeEventGenerator.CurrentTimeEventGenerator;
 
 import org.junit.Test;
@@ -96,7 +96,7 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, firstT + resolution, firstT + (2 * resolution),
 			firstT + (3 * resolution), firstT + (4 * resolution), firstT + (5 * resolution), }, true); // NOCS (MagicNumberCheck)
 		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, firstT + resolution, firstT + (2 * resolution),
-				firstT + (3 * resolution), firstT + (4 * resolution), firstT + (5 * resolution), }, false); // NOCS (MagicNumberCheck)
+			firstT + (3 * resolution), firstT + (4 * resolution), firstT + (5 * resolution), }, false); // NOCS (MagicNumberCheck)
 	}
 
 	/**
@@ -176,7 +176,7 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 				name = DstClass.INPUT_PORT_NAME,
 				eventTypes = { TimestampRecord.class })
 		public void doJob(final Object data) {
-			this.receivedTimestamps.add(((TimestampRecord) data).getCurrentTime());
+			this.receivedTimestamps.add(((TimestampRecord) data).getTimestamp());
 		}
 
 		public ConcurrentLinkedQueue<Long> getList() {

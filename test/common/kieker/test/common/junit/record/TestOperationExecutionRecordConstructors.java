@@ -68,6 +68,7 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long)}
 	 */
 	// TODO: to be removed in 1.6 as the tested constructor will be removed there
+	@SuppressWarnings("deprecation")
 	public void testComponentOpTraceID() {
 		final long traceId = 3486095; // any number will do
 		final OperationExecutionRecord opExecutionRecord =
@@ -90,6 +91,7 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long, long, long)}
 	 */
 	// TODO: to be removed in 1.6 as the tested constructor will be removed there
+	@SuppressWarnings("deprecation")
 	public void testComponentOpTraceIDTinTout() {
 		final long traceId = 3486095; // any number will do
 		final long tin = 33444; // any number will do
@@ -113,6 +115,7 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long, long)}
 	 */
 	// TODO: to be removed in 1.6 as the tested constructor will be removed there
+	@SuppressWarnings("deprecation")
 	public void testComponentTinTout() {
 		final long tin = 33444; // any number will do
 		final long tout = 33449; // any number will do
@@ -138,6 +141,7 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, String, long, long, long)}
 	 */
 	// TODO: to be removed in 1.6 as the tested constructor will be removed there
+	@SuppressWarnings("deprecation")
 	public void testComponentOpSessionTraceIDTinTout() {
 		final String sessionId = "eqJSin80n";
 		final long traceId = 3486095; // any number will do
@@ -166,6 +170,7 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long, long, long, String, int, int)}
 	 */
 	// TODO: to be removed in 1.6 as the tested constructor will be removed there
+	@SuppressWarnings("deprecation")
 	public void testComponentOpSessionIDTraceIDTinToutEoiEss() {
 		final String sessionId = "IaYyf8m9B";
 		final long traceId = 3486095; // any number will do
@@ -218,6 +223,8 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 		Assert.assertEquals("ess's differ", eoi, opExecutionRecord.getEss());
 	}
 
+	// TODO: remove legacy tests in 1.6 as the tested constructor will be removed there
+	@SuppressWarnings("deprecation")
 	private void checkClassSignatureValues(final OperationExecutionRecord opExecutionRecord, final String expectedFqClassname, final String expectedOpArgString,
 			final String expectedOperationSignature) {
 		Assert.assertEquals("Signature string varies",
@@ -229,10 +236,14 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 		Assert.assertEquals("operation names differ", expectedOpArgString, opExecutionRecord.getOperationName());
 	}
 
+	// TODO: to be removed in 1.6 as the tested constructor will be removed there
+	@SuppressWarnings("deprecation")
 	private void checkIsEntryPoint(final OperationExecutionRecord opExecutionRecord, final boolean entryPoint) {
 		Assert.assertEquals("Unexpected entry point information", entryPoint, opExecutionRecord.isEntryPoint());
 	}
 
+	// TODO: to be removed in 1.6 as the tested constructor will be removed there
+	@SuppressWarnings("deprecation")
 	private void checkObject(final OperationExecutionRecord opExecutionRecord, final Object obj) {
 		Assert.assertEquals("Unexpected object attached", obj, opExecutionRecord.getRetVal());
 	}

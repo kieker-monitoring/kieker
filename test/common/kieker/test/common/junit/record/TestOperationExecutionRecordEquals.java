@@ -94,6 +94,8 @@ public class TestOperationExecutionRecordEquals extends TestCase { // NOCS (Miss
 	 * 
 	 * Assert that two record instances with null variables values are not equal.
 	 */
+	// TODO: in 1.6 check with another method!
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testEqualsNullVariableValues() {
 		final OperationExecutionRecord r1 = new OperationExecutionRecord(
@@ -150,6 +152,8 @@ public class TestOperationExecutionRecordEquals extends TestCase { // NOCS (Miss
 	 * 
 	 * Assert that two record instances with differing variables values are not equal.
 	 */
+	// TODO: in 1.6 check with another method!
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testEqualsDifferentVariablesValues() {
 		final OperationExecutionRecord r1 = new OperationExecutionRecord(
