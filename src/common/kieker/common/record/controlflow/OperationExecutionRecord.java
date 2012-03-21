@@ -73,8 +73,13 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	 */
 	public static final int NO_EOI_ESS = -1;
 
-	// TODO: change all fields to final in 1.6
+	/**
+	 * Will be removed in 1.6
+	 */
+	@Deprecated
 	private volatile int experimentId = -1;
+
+	// TODO: change all fields to final in 1.6
 	private volatile String hostName = OperationExecutionRecord.NO_HOSTNAME;
 	private volatile String operationSignature = OperationExecutionRecord.NO_OPERATION_SIGNATURE;
 	private volatile String sessionId = OperationExecutionRecord.NO_SESSION_ID;
@@ -336,7 +341,9 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 
 	/**
 	 * @return the experimentId
+	 * @deprecated Will be removed in 1.6
 	 */
+	@Deprecated
 	public final int getExperimentId() {
 		return this.experimentId;
 	}
