@@ -40,17 +40,14 @@ public class TestOperationExecutionRecordEquals extends TestCase { // NOCS (Miss
 	@Test
 	public void testSerializeDeserializeEquals() {
 		final OperationExecutionRecord r1 = new OperationExecutionRecord(
-				55, // experimentId
-				"myVM", // hostName
 				"public void p1.p2.p3.componentname.operation(boolean, int)", // operationSignature
 				"XXLJHDJHDHF", // sessionId
 				882287444, // traceId
 				5577376, // tin
 				7544522, // tout
+				"myVM", // hostName
 				1, // eoi
-				2, // ess
-				new Object(), // retVal
-				true // entryPoint
+				2 // ess
 		);
 
 		final Object[] r1Array = r1.toArray();
@@ -68,31 +65,25 @@ public class TestOperationExecutionRecordEquals extends TestCase { // NOCS (Miss
 	@Test
 	public void testEqualsEqualVariablesValues() {
 		final OperationExecutionRecord r1 = new OperationExecutionRecord(
-				55, // experimentId
-				"myVM", // hostName
 				"public void p1.p2.p3.componentname.operation(boolean, int)", // operationSignature
 				"XXLJHDJHDHF", // sessionId
 				882287444, // traceId
 				5577376, // tin
 				7544522, // tout
+				"myVM", // hostName
 				1, // eoi
-				2, // ess
-				new Object(), // retVal
-				true // entryPoint
+				2 // ess
 		);
 
 		final OperationExecutionRecord r2 = new OperationExecutionRecord(
-				55, // experimentId
-				"myVM", // hostName
 				"public void p1.p2.p3.componentname.operation(boolean, int)", // operationSignature
 				"XXLJHDJHDHF", // sessionId
 				882287444, // traceId
 				5577376, // tin
 				7544522, // tout
+				"myVM", // hostName
 				1, // eoi
-				2, // ess
-				new Object(), // retVal
-				true // entryPoint
+				2 // ess
 		);
 
 		Assert.assertEquals(r1, r2);
@@ -106,31 +97,25 @@ public class TestOperationExecutionRecordEquals extends TestCase { // NOCS (Miss
 	@Test
 	public void testEqualsNullVariableValues() {
 		final OperationExecutionRecord r1 = new OperationExecutionRecord(
-				55, // experimentId
-				"myVM", // hostName
 				"public void p1.p2.p3.componentname.operation(boolean, int)", // operationSignature
 				"XXLJHDJHDHF", // sessionId
 				882287444, // traceId
 				5577376, // tin
 				7544522, // tout
+				"myVM", // hostName
 				1, // eoi
-				2, // ess
-				new Object(), // retVal
-				true // entryPoint
+				2 // ess
 		);
 
 		final OperationExecutionRecord r2 = new OperationExecutionRecord(
-				55, // experimentId
-				"myVM", // hostName
 				"public void p1.p2.p3.componentname.operation(boolean, int)", // operationSignature
 				"XXLJHDJHDHF", // sessionId
 				882287444, // traceId
 				5577376, // tin
 				7544522, // tout
+				"myVM", // hostName
 				1, // eoi
-				2, // ess
-				new Object(), // retVal
-				true // entryPoint
+				2 // ess
 		);
 
 		Assert.assertEquals(r1, r2);
@@ -168,31 +153,25 @@ public class TestOperationExecutionRecordEquals extends TestCase { // NOCS (Miss
 	@Test
 	public void testEqualsDifferentVariablesValues() {
 		final OperationExecutionRecord r1 = new OperationExecutionRecord(
-				55, // experimentId
-				"myVM", // hostName
 				"public void p1.p2.p3.componentname.operation(boolean, int)", // operationSignature
 				"XXLJHDJHDHF", // sessionId
 				882287444, // traceId
 				5577376, // tin
 				7544522, // tout
+				"myVM", // hostName
 				1, // eoi
-				2, // ess
-				new Object(), // retVal
-				true // entryPoint
+				2 // ess
 		);
 
 		final OperationExecutionRecord r2 = new OperationExecutionRecord(
-				55, // experimentId
-				"myVM", // hostName
 				"public void p1.p2.p3.componentname.operation(boolean, int)", // operationSignature
 				"XXLJHDJHDHF", // sessionId
 				882287444, // traceId
 				5577376, // tin
 				7544522, // tout
+				"myVM", // hostName
 				1, // eoi
-				2, // ess
-				new Object(), // retVal
-				true // entryPoint
+				2 // ess
 		);
 
 		Assert.assertEquals(r1, r2);

@@ -20,58 +20,88 @@
 
 package kieker.monitoring.probe.aspectj.operationExecution;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
+import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.aspectj.AbstractAspectJProbe;
 import kieker.monitoring.timer.ITimeSource;
 
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 
 /**
- * @author Andre van Hoorn
+ * @author Andre van Hoorn, Jan Waller
  */
 @Aspect
 public abstract class AbstractOperationExecutionAspect extends AbstractAspectJProbe {
+	private static final Log LOG = LogFactory.getLog(AbstractOperationExecutionAspect.class);
 
-	protected static final IMonitoringController CTRLINST = MonitoringController.getInstance();
-	protected static final String VMNAME = AbstractOperationExecutionAspect.CTRLINST.getHostName();
-	protected static final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.INSTANCE;
-	protected static final ITimeSource TIMESOURCE = AbstractOperationExecutionAspect.CTRLINST.getTimeSource();
+	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
+	private static final ITimeSource TIME = AbstractOperationExecutionAspect.CTRLINST.getTimeSource();
+	private static final String VMNAME = AbstractOperationExecutionAspect.CTRLINST.getHostName();
+	private static final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.INSTANCE;
+	private static final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
 
-	protected OperationExecutionRecord initExecutionData(final ProceedingJoinPoint thisJoinPoint) {
+	@Pointcut
+	public abstract void monitoredOperation();
 
-		final OperationExecutionRecord execData = new OperationExecutionRecord();
-
-		execData.setOperationSignature(thisJoinPoint.getSignature().toLongString());
-		execData.setTraceId(AbstractOperationExecutionAspect.CFREGISTRY.recallThreadLocalTraceId() /* traceId, -1 if entry point */);
-
-		execData.setEntryPoint(false);
-		// execData.traceId = ctrlInst.recallThreadLocalTraceId(); // -1 if entry point
-		if (execData.getTraceId() == -1) {
-			execData.setTraceId(AbstractOperationExecutionAspect.CFREGISTRY.getAndStoreUniqueThreadLocalTraceId());
-			execData.setEntryPoint(true);
+	@Around("monitoredOperation() && notWithinKieker()")
+	public Object operation(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
+		if (!AbstractOperationExecutionAspect.CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
 		}
-		execData.setHostName(AbstractOperationExecutionAspect.VMNAME);
-		execData.setExperimentId(AbstractOperationExecutionAspect.CTRLINST.getExperimentId());
-		return execData;
-	}
-
-	public abstract Object doBasicProfiling(ProceedingJoinPoint thisJoinPoint) throws Throwable; // NOPMD // NOCS (IllegalThrowsCheck)
-
-	protected void proceedAndMeasure(final ProceedingJoinPoint thisJoinPoint, final OperationExecutionRecord execData) throws Throwable { // NOCS
-		execData.setTin(AbstractOperationExecutionAspect.TIMESOURCE.getTime()); // startint stopwatch
-		try {
-			execData.setRetVal(thisJoinPoint.proceed());
-		} catch (final Throwable e) { // NOPMD // NOCS (IllegalThrowsCheck)
-			throw e; // exceptions are forwarded
-		} finally {
-			execData.setTout(AbstractOperationExecutionAspect.TIMESOURCE.getTime());
-			if (execData.isEntryPoint()) {
-				AbstractOperationExecutionAspect.CFREGISTRY.unsetThreadLocalTraceId();
+		// collect data
+		final String signature = thisJoinPoint.getSignature().toLongString();
+		final boolean entrypoint;
+		final String hostname = AbstractOperationExecutionAspect.VMNAME;
+		final String sessionId = AbstractOperationExecutionAspect.SESSIONREGISTRY.recallThreadLocalSessionId();
+		final int eoi; // this is executionOrderIndex-th execution in this trace
+		final int ess; // this is the height in the dynamic call tree of this execution
+		long traceId = AbstractOperationExecutionAspect.CFREGISTRY.recallThreadLocalTraceId(); // traceId, -1 if entry point
+		if (traceId == -1) {
+			entrypoint = true;
+			traceId = AbstractOperationExecutionAspect.CFREGISTRY.getAndStoreUniqueThreadLocalTraceId();
+			AbstractOperationExecutionAspect.CFREGISTRY.storeThreadLocalEOI(0);
+			AbstractOperationExecutionAspect.CFREGISTRY.storeThreadLocalESS(1); // next operation is ess + 1
+			eoi = 0;
+			ess = 0;
+		} else {
+			entrypoint = false;
+			eoi = AbstractOperationExecutionAspect.CFREGISTRY.incrementAndRecallThreadLocalEOI(); // ess > 1
+			ess = AbstractOperationExecutionAspect.CFREGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0
+			if ((eoi == -1) || (ess == -1)) {
+				AbstractOperationExecutionAspect.LOG.error("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
+				AbstractOperationExecutionAspect.CTRLINST.terminateMonitoring();
 			}
 		}
+		// measure before
+		final long tin = AbstractOperationExecutionAspect.TIME.getTime();
+		// execution of the called method
+		final Object retval;
+		try {
+			retval = thisJoinPoint.proceed();
+		} catch (final Throwable th) {
+			throw th; // forward exception
+		} finally {
+			// measure after
+			final long tout = AbstractOperationExecutionAspect.TIME.getTime();
+			AbstractOperationExecutionAspect.CTRLINST.newMonitoringRecord(
+					new OperationExecutionRecord(signature, sessionId, traceId, tin, tout, hostname, eoi, ess));
+			// cleanup
+			if (entrypoint) {
+				AbstractOperationExecutionAspect.CFREGISTRY.unsetThreadLocalTraceId();
+				AbstractOperationExecutionAspect.CFREGISTRY.unsetThreadLocalEOI();
+				AbstractOperationExecutionAspect.CFREGISTRY.unsetThreadLocalESS();
+			} else {
+				AbstractOperationExecutionAspect.CFREGISTRY.storeThreadLocalESS(ess); // next operation is ess
+			}
+		}
+		return retval;
 	}
 }

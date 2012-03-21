@@ -23,81 +23,24 @@ package kieker.monitoring.probe.aspectj.operationExecution;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kieker.common.record.controlflow.OperationExecutionRecord;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
 /**
- * @author Andre van Hoorn, Jan Waller
+ * @author Jan Waller
  */
 @Aspect
 public class OperationExecutionAspectSPECjEnterprise2010Servlet extends AbstractOperationExecutionAspectServlet {
-	private static final Log LOG = LogFactory.getLog(OperationExecutionAspectSPECjEnterprise2010Servlet.class);
 
+	@Override
 	@Pointcut("execution(* org.spec.jent.servlet.SpecAppServlet.do*(..)) && args(request,response)")
-	public void monitoredServletEntry(final HttpServletRequest request, final HttpServletResponse response) {
-		// nothing here
+	public void monitoredServlet(final HttpServletRequest request, final HttpServletResponse response) {
+		// Aspect Declaration (MUST be empty)
 	}
 
 	@Override
-	@Around("monitoredServletEntry(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse) && notWithinKieker()")
-	public Object doServletEntryProfiling(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
-		return super.doServletEntryProfiling(thisJoinPoint);
-	}
-
-	@Pointcut("execution(* org.spec.jent..*(..)) && !execution(* _persistence*(..)) && noGetterAndSetter())")
-	public void monitoredMethod() {
-		// nothing here
-	}
-
-	@Override
-	@Around("monitoredMethod() && notWithinKieker()")
-	public Object doBasicProfiling(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
-		if (!AbstractOperationExecutionAspect.CTRLINST.isMonitoringEnabled()) {
-			return thisJoinPoint.proceed();
-		}
-		final OperationExecutionRecord execData = this.initExecutionData(thisJoinPoint);
-		execData.setSessionId(AbstractOperationExecutionAspectServlet.SESSIONREGISTRY.recallThreadLocalSessionId()); // may be null
-		int eoi; // this is executionOrderIndex-th execution in this trace
-		int ess; // this is the height in the dynamic call tree of this execution
-		if (execData.isEntryPoint()) {
-			AbstractOperationExecutionAspect.CFREGISTRY.storeThreadLocalEOI(0);
-			eoi = 0;
-			AbstractOperationExecutionAspect.CFREGISTRY.storeThreadLocalESS(1);
-			ess = 0;
-		} else {
-			eoi = AbstractOperationExecutionAspect.CFREGISTRY.incrementAndRecallThreadLocalEOI(); // ess > 1
-			ess = AbstractOperationExecutionAspect.CFREGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0
-		}
-		try {
-			this.proceedAndMeasure(thisJoinPoint, execData);
-			if ((eoi == -1) || (ess == -1)) {
-				OperationExecutionAspectSPECjEnterprise2010Servlet.LOG.fatal("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
-				OperationExecutionAspectSPECjEnterprise2010Servlet.LOG.fatal("Terminating!");
-				AbstractOperationExecutionAspect.CTRLINST.terminateMonitoring();
-			}
-		} catch (final Exception e) { // NOPMD
-			throw e; // exceptions are forwarded
-		} finally {
-			/*
-			 * note that proceedAndMeasure(...) even sets the variable name in
-			 * case the execution of the joint point resulted in an exception!
-			 */
-			execData.setEoi(eoi);
-			execData.setEss(ess);
-			AbstractOperationExecutionAspect.CTRLINST.newMonitoringRecord(execData);
-			if (execData.isEntryPoint()) {
-				AbstractOperationExecutionAspect.CFREGISTRY.unsetThreadLocalEOI();
-				AbstractOperationExecutionAspect.CFREGISTRY.unsetThreadLocalESS();
-			} else {
-				AbstractOperationExecutionAspect.CFREGISTRY.storeThreadLocalESS(ess);
-			}
-		}
-		return execData.getRetVal();
+	@Pointcut("(execution(* org.spec.jent..*(..)) && !execution(* _persistence*(..)) && noGetterAndSetter()) || execution(new(..))")
+	public final void monitoredOperation() {
+		// Aspect Declaration (MUST be empty)
 	}
 }

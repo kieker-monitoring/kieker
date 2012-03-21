@@ -83,26 +83,28 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	private volatile String hostName = OperationExecutionRecord.NO_HOSTNAME;
 	private volatile String operationSignature = OperationExecutionRecord.NO_OPERATION_SIGNATURE;
 	private volatile String sessionId = OperationExecutionRecord.NO_SESSION_ID;
-	private volatile long traceId = -1;
-	private volatile long tin = -1;
-	private volatile long tout = -1;
-	private volatile int eoi = -1;
-	private volatile int ess = -1;
+	private volatile long traceId = OperationExecutionRecord.NO_TRACEID;
+	private volatile long tin = OperationExecutionRecord.NO_TIMESTAMP;
+	private volatile long tout = OperationExecutionRecord.NO_TIMESTAMP;
+	private volatile int eoi = OperationExecutionRecord.NO_EOI_ESS;
+	private volatile int ess = OperationExecutionRecord.NO_EOI_ESS;
 
 	/**
-	 * TODO: change to transient final in 1.6
+	 * Will be removed in 1.6
 	 * 
 	 * Used by probes to store the return value of executed operations.
 	 * The field is marked transient as it must not be serialized.
 	 */
+	@Deprecated
 	private transient volatile Object retVal = null;
 
 	/**
-	 * TODO: change to transient final in 1.6
+	 * Will be removed in 1.6
 	 * 
 	 * Used by probes to intermediate information.
 	 * The field is marked transient as it must not be serialized.
 	 */
+	@Deprecated
 	private transient volatile boolean entryPoint = false;
 
 	/**
@@ -148,37 +150,6 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 		this.hostName = (hostName == null) ? OperationExecutionRecord.NO_HOSTNAME : hostName; // NOCS
 		this.eoi = eoi;
 		this.ess = ess;
-	}
-
-	/**
-	 * Creates a new {@link OperationExecutionRecord} with the given parameters.
-	 * 
-	 * @param operationSignature
-	 *            an operation string, as defined in {@link ClassOperationSignaturePair#splitOperationSignatureStr(String)}; must not be null.
-	 * @param sessionId
-	 *            the session ID; must not be null, use {@link #NO_SESSION_ID} if no session ID desired.
-	 * @param traceId
-	 *            the trace ID; use {@link #NO_TRACEID} if no trace ID desired.
-	 * @param tin
-	 *            the execution start timestamp; use {@link #NO_TIMESTAMP} if no timestamp desired.
-	 * @param tout
-	 *            the execution stop timestamp; use {@link #NO_TIMESTAMP} if no timestamp desired.
-	 * @param hostName
-	 *            the host name; must not be null, use {@link #NO_HOSTNAME} if no host name desired.
-	 * @param eoi
-	 *            the execution order index (eoi); use {@link #NO_EOI_ESS} if no eoi desired.
-	 * @param ess
-	 *            the execution order index (ess); use {@link #NO_EOI_ESS} if no ess desired.
-	 * @param entryPoint
-	 *            information whether execution is application entry point or not (transient)
-	 * @param returnValue
-	 *            object to be attached to the record (transient)
-	 */
-	public OperationExecutionRecord(final String operationSignature, final String sessionId, final long traceId, final long tin, final long tout,
-			final String hostName, final int eoi, final int ess, final boolean entryPoint, final Object returnValue) {
-		this(operationSignature, sessionId, traceId, tin, tout, hostName, eoi, ess);
-		this.entryPoint = entryPoint;
-		this.retVal = returnValue;
 	}
 
 	/**
@@ -264,36 +235,6 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 		this.hostName = vnName;
 		this.eoi = eoi;
 		this.ess = ess;
-	}
-
-	/**
-	 * TODO: maybe save some convenience constructors delegating to this one
-	 * 
-	 * @param experimentId
-	 * @param hostName
-	 * @param operationSignature
-	 * @param sessionId
-	 * @param traceId
-	 * @param tin
-	 * @param tout
-	 * @param eoi
-	 * @param ess
-	 * @param retVal
-	 * @param entryPoint
-	 */
-	public OperationExecutionRecord(final int experimentId, final String hostName, final String operationSignature, final String sessionId, final long traceId,
-			final long tin, final long tout, final int eoi, final int ess, final Object retVal, final boolean entryPoint) {
-		this.experimentId = experimentId;
-		this.hostName = hostName;
-		this.operationSignature = operationSignature;
-		this.sessionId = sessionId;
-		this.traceId = traceId;
-		this.tin = tin;
-		this.tout = tout;
-		this.eoi = eoi;
-		this.ess = ess;
-		this.retVal = retVal;
-		this.entryPoint = entryPoint;
 	}
 
 	public OperationExecutionRecord(final Object[] values) {
@@ -560,13 +501,16 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 		this.ess = ess;
 	}
 
+	/**
+	 * @deprecated remove in Kieker 1.6
+	 */
+	@Deprecated
 	public Object getRetVal() {
 		return this.retVal;
 	}
 
 	/**
-	 * @deprecated this class will become immutable in Kieker 1.6
-	 *             TODO: this value is transient, will it be immutable, too?
+	 * @deprecated remove in Kieker 1.6
 	 * 
 	 * @param retVal
 	 */
@@ -575,13 +519,16 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 		this.retVal = retVal;
 	}
 
+	/**
+	 * @deprecated remove in Kieker 1.6
+	 */
+	@Deprecated
 	public boolean isEntryPoint() {
 		return this.entryPoint;
 	}
 
 	/**
-	 * @deprecated this class will become immutable in Kieker 1.6
-	 *             TODO: this value is transient, will it be immutable, too?
+	 * @deprecated remove in Kieker 1.6
 	 * 
 	 * @param entryPoint
 	 */

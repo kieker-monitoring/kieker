@@ -21,30 +21,36 @@
 package kieker.monitoring.probe.aspectj.operationExecution;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import kieker.monitoring.core.registry.SessionRegistry;
 
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 
 /**
- * @author Andre van Hoorn
+ * @author Andre van Hoorn, Jan Waller
  */
 @Aspect
 public abstract class AbstractOperationExecutionAspectServlet extends AbstractOperationExecutionAspect {
 
-	protected static final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
+	private static final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
 
-	public Object doServletEntryProfiling(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOPMD // NOCS (IllegalThrowsCheck)
+	@Pointcut
+	public abstract void monitoredServlet(final HttpServletRequest request, final HttpServletResponse response);
+
+	@Around("monitoredServlet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse) && notWithinKieker()")
+	public Object servlet(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
 		final HttpServletRequest req = (HttpServletRequest) thisJoinPoint.getArgs()[0];
-		final String sessionId = (req != null) ? req.getSession(true).getId() : null; // NOPMD NOCS
-		Object retVal = null; // NOPMD
+		final String sessionId = (req != null) ? req.getSession(true).getId() : null;
 		AbstractOperationExecutionAspectServlet.SESSIONREGISTRY.storeThreadLocalSessionId(sessionId);
+		Object retVal;
 		try {
-			// does pass the args!
-			retVal = thisJoinPoint.proceed(); // NOPMD
-		} catch (final Exception exc) { // NOPMD // NOCS (IllegalCatchCheck)
-			throw exc;
+			retVal = thisJoinPoint.proceed();
+		} catch (final Throwable th) {
+			throw th;
 		} finally {
 			AbstractOperationExecutionAspectServlet.SESSIONREGISTRY.unsetThreadLocalSessionId();
 		}
