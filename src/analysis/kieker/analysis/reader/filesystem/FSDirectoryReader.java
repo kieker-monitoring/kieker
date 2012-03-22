@@ -92,10 +92,12 @@ final class FSDirectoryReader implements Runnable {
 	 * Errors must be indicated by throwing an {@link RuntimeException}.
 	 */
 
+	@Override
 	public final void run() {
 		this.readMappingFile(); // must be the first line to set filePrefix!
 		final File[] inputFiles = this.inputDir.listFiles(new FileFilter() {
 
+			@Override
 			public boolean accept(final File pathname) {
 				return pathname.isFile()
 						&& pathname.getName().startsWith(FSDirectoryReader.this.filePrefix)
@@ -110,6 +112,7 @@ final class FSDirectoryReader implements Runnable {
 		} else { // everything ok, we process the files
 			Arrays.sort(inputFiles, new Comparator<File>() {
 
+				@Override
 				public final int compare(final File f1, final File f2) {
 					return f1.compareTo(f2); // simplified (we expect no dirs!)
 				}
@@ -238,13 +241,16 @@ final class FSDirectoryReader implements Runnable {
 				} catch (final MonitoringRecordException ex) {
 					FSDirectoryReader.LOG.error("Error loading record type", ex);
 					continue; // skip this record
+				} catch (final Exception ex) {
+					FSDirectoryReader.LOG.error("Error processing line" + line);
+					continue; // skip this record
 				}
 				if (!this.recordReceiver.newMonitoringRecord(record)) {
 					this.terminated = true;
 					break; // we got the signal to stop processing
 				}
 			}
-		} catch (final IOException ex) {
+		} catch (final Exception ex) {
 			FSDirectoryReader.LOG.error("Error reading " + inputFile, ex);
 		} finally {
 			if (in != null) {
