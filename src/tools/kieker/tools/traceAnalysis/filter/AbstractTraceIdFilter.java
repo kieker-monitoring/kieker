@@ -20,7 +20,6 @@
 
 package kieker.tools.traceAnalysis.filter;
 
-import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -67,7 +66,7 @@ public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 		if (passAll) {
 			return null;
 		} else {
-			final NavigableSet<Long> idsToPass = new TreeSet<Long>();
+			final Set<Long> idsToPass = new TreeSet<Long>();
 			final String[] ids = configuration.getStringArrayProperty(configurationPropertySelectedTraces);
 			for (final String id : ids) {
 				idsToPass.add(Long.parseLong(id));

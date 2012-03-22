@@ -40,7 +40,7 @@ public final class SystemNanoTimer extends AbstractTimeSource {
 	public SystemNanoTimer(final Configuration configuration) {
 		super(configuration);
 		this.clockdifference = System.nanoTime() - (System.currentTimeMillis() * SystemNanoTimer.NANO2MILLI);
-		if (configuration.getStringProperty(SystemNanoTimer.CONFIG_OFFSET).isEmpty()) {
+		if (configuration.getStringProperty(SystemNanoTimer.CONFIG_OFFSET).length() == 0) {
 			this.offset = System.nanoTime();
 		} else {
 			this.offset = this.clockdifference + configuration.getLongProperty(SystemNanoTimer.CONFIG_OFFSET);

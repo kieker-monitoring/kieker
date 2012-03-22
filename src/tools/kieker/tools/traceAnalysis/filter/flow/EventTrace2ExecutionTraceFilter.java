@@ -273,7 +273,6 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingFilt
 			}
 		}
 
-		@Override
 		public void handleAfterOperationEvent(final AfterOperationEvent afterOperationEvent) {
 			// Obtain the matching before-operation event from the stack
 			final BeforeOperationEvent beforeOperationEvent = this.getMatchingBeforeEventFor(afterOperationEvent);
@@ -283,7 +282,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingFilt
 			// A definite call occurs if either the stack is empty (entry into the trace) or if a matching call event is found
 			final boolean definiteCall = ((potentialCallEvent == null)
 					|| ((potentialCallEvent instanceof CallOperationEvent) && ((CallOperationEvent) potentialCallEvent)
-							.callsReferencedOperationOf(afterOperationEvent)));
+					.callsReferencedOperationOf(afterOperationEvent)));
 
 			// If a matching call event was found, it must be removed from the stack
 			if (definiteCall && !this.filterState.isEventStackEmpty()) {
@@ -306,17 +305,14 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingFilt
 			this.closeOpenCalls(afterOperationEvent);
 		}
 
-		@Override
 		public void handleAfterOperationFailedEvent(final AfterOperationFailedEvent afterOperationFailedEvent) {
 			this.handleUnsupportedEvent(afterOperationFailedEvent);
 		}
 
-		@Override
 		public void handleBeforeOperationEvent(final BeforeOperationEvent beforeOperationEvent) {
 			this.filterState.registerExecution(beforeOperationEvent);
 		}
 
-		@Override
 		public void handleCallOperationEvent(final CallOperationEvent callOperationEvent) {
 			final AbstractTraceEvent nextEvent = this.eventStream.lookahead(1);
 
@@ -331,7 +327,6 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingFilt
 			}
 		}
 
-		@Override
 		public void handleSplitEvent(final SplitEvent splitEvent) {
 			this.handleUnsupportedEvent(splitEvent);
 		}

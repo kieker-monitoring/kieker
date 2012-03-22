@@ -106,14 +106,12 @@ public class CPUsCombinedServletContextListener implements ServletContextListene
 		// nothing to do
 	}
 
-	@Override
 	public void contextDestroyed(final ServletContextEvent sce) {
 		for (final ScheduledSamplerJob s : this.samplerJobs) {
 			this.samplingController.removeScheduledSampler(s);
 		}
 	}
 
-	@Override
 	public void contextInitialized(final ServletContextEvent sce) {
 		this.initParameters(sce.getServletContext());
 		this.initSensors();

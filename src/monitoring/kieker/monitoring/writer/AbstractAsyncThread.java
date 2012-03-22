@@ -128,6 +128,7 @@ public abstract class AbstractAsyncThread extends Thread {
 	 * 
 	 * @return the information string.
 	 */
+
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();

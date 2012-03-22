@@ -107,6 +107,7 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 	 * 
 	 * @param error
 	 */
+
 	@Override
 	public void terminate(final boolean error) {
 		if (!error) {

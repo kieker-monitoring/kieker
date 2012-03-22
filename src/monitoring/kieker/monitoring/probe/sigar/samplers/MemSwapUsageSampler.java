@@ -48,7 +48,6 @@ public class MemSwapUsageSampler extends AbstractSigarSampler {
 		super(sigar);
 	}
 
-	@Override
 	public void sample(final IMonitoringController monitoringController) throws SigarException {
 		final Mem mem = this.sigar.getMem();
 		final Swap swap = this.sigar.getSwap();

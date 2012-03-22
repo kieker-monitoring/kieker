@@ -72,7 +72,6 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 		// nothing to do
 	}
 
-	@Override
 	public void init(final FilterConfig config) throws ServletException {
 		// nothing to do
 	}
@@ -87,7 +86,6 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 		return null;
 	}
 
-	@Override
 	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
 		if (!OperationExecutionRegistrationAndLoggingFilter.CTRL_INST.isMonitoringEnabled()) {
 			chain.doFilter(request, response);
@@ -120,7 +118,6 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 		}
 	}
 
-	@Override
 	public void destroy() {
 		// nothing to do
 	}

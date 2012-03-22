@@ -59,6 +59,7 @@ public abstract class AbstractTrace {
 	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
+
 	@Override
 	public int hashCode() {
 		/* On purpose, we are not considering the sessionId here */

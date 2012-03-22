@@ -41,7 +41,7 @@ public final class PipeWriter extends AbstractMonitoringWriter implements IPipeW
 	public PipeWriter(final Configuration configuration) {
 		super(configuration);
 		final String pipeName = this.configuration.getStringProperty(PipeWriter.CONFIG_PIPENAME);
-		if (pipeName.isEmpty()) {
+		if (pipeName.length() == 0) {
 			throw new IllegalArgumentException("Invalid or missing value for property '" + PipeWriter.CONFIG_PIPENAME + "': '" + pipeName + "'");
 		}
 		this.pipe = Broker.INSTANCE.acquirePipe(pipeName);
@@ -72,6 +72,7 @@ public final class PipeWriter extends AbstractMonitoringWriter implements IPipeW
 	/**
 	 * Nothing to do
 	 */
+
 	@Override
 	protected void init() {
 		// nothing to do

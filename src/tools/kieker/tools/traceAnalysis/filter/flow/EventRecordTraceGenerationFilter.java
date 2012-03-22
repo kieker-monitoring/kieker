@@ -23,7 +23,7 @@ package kieker.tools.traceAnalysis.filter.flow;
 import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.NavigableSet;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import kieker.analysis.plugin.annotation.InputPort;
@@ -82,10 +82,10 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 	private volatile long maxTstamp = -1;
 
 	/** Pending traces sorted by timestamps */
-	private final NavigableSet<EventRecordTrace> timeoutMap = new TreeSet<EventRecordTrace>(new Comparator<EventRecordTrace>() {
+	private final SortedSet<EventRecordTrace> timeoutMap = new TreeSet<EventRecordTrace>(new Comparator<EventRecordTrace>() {
 
 		/** Order traces by tins */
-		@Override
+
 		public int compare(final EventRecordTrace t1, final EventRecordTrace t2) {
 			if (t1 == t2) { // NOPMD
 				return 0;
@@ -167,7 +167,10 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 	private void processTimeoutQueue() throws ExecutionEventProcessingException {
 		synchronized (this.timeoutMap) {
 			while (!this.timeoutMap.isEmpty() && (this.terminated || ((this.maxTstamp - this.timeoutMap.first().getMinTimestamp()) > this.maxTraceDurationNanos))) {
-				final EventRecordTrace polledTrace = this.timeoutMap.pollFirst();
+				// 1.5 compatibility
+				final EventRecordTrace polledTrace = this.timeoutMap.first();
+				this.timeoutMap.remove(polledTrace);
+				// Java 1.6: final EventRecordTrace polledTrace = this.timeoutMap.pollFirst();
 				final long curTraceId = polledTrace.getTraceId();
 				this.pendingTraces.remove(curTraceId);
 				super.deliver(EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME, polledTrace);
@@ -199,6 +202,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 	 * 
 	 * @param error
 	 */
+
 	@Override
 	public void terminate(final boolean error) {
 		try {

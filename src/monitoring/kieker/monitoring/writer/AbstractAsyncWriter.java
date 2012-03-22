@@ -69,6 +69,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	/**
 	 * Make sure that the three required properties always have default values!
 	 */
+
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration(super.getDefaultConfiguration());
@@ -93,6 +94,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	/**
 	 * The framework ensures, that this method is called only once!
 	 */
+
 	@Override
 	public final void terminate() {
 		final CountDownLatch cdl = new CountDownLatch(this.workers.size());

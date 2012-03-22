@@ -29,7 +29,6 @@ import kieker.monitoring.core.controller.IMonitoringController;
  */
 public interface IMonitoringWriter extends IMonitoringRecordReceiver {
 
-	@Override
 	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
 
 	/**
@@ -46,6 +45,5 @@ public interface IMonitoringWriter extends IMonitoringRecordReceiver {
 	 */
 	public abstract void setController(final IMonitoringController monitoringController) throws Exception;
 
-	@Override
 	public abstract String toString();
 }

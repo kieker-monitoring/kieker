@@ -245,7 +245,6 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 					new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, AllocationComponentOperationPairFactory.ROOT_PAIR, true); // rootNode
 			AbstractCallTreeFilter.writeDotForMessageTrace(rootNode, new PairFactory() {
 
-				@Override
 				public Object createPair(final SynchronousCallMessage callMsg) {
 					final AllocationComponent allocationComponent = callMsg.getReceivingExecution().getAllocationComponent();
 					final Operation op = callMsg.getReceivingExecution().getOperation();

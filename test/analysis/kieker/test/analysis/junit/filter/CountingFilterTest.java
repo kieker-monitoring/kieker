@@ -64,18 +64,21 @@ public class CountingFilterTest {
 		Assert.assertEquals(0, this.consumer.getMessageCount());
 		/* Now start some data concurrently. */
 		final Thread t1 = new Thread() {
+
 			@Override
 			public void run() {
 				CountingFilterTest.this.src.deliver(new Object());
 			}
 		};
 		final Thread t2 = new Thread() {
+
 			@Override
 			public void run() {
 				CountingFilterTest.this.src.deliver(new Object());
 			}
 		};
 		final Thread t3 = new Thread() {
+
 			@Override
 			public void run() {
 				CountingFilterTest.this.src.deliver(new Object());

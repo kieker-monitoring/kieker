@@ -31,8 +31,8 @@ import kieker.common.record.IMonitoringRecord;
 public final class TimestampRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 	private static final long serialVersionUID = -7166224794391621087L;
 	private static final Class<?>[] TYPES = {
-			long.class, // timestamp
-			};
+		long.class, // timestamp
+	};
 
 	private volatile long timestamp = -1;
 

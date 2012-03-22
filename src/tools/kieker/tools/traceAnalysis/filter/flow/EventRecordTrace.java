@@ -48,7 +48,6 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<Abstract
 	 */
 	private final SortedSet<AbstractTraceEvent> events = new TreeSet<AbstractTraceEvent>(new Comparator<AbstractTraceEvent>() {
 
-		@Override
 		public int compare(final AbstractTraceEvent e1, final AbstractTraceEvent e2) {
 			if ((e1 == e2) || (e1.getOrderIndex() == e2.getOrderIndex())) { // same order index
 				return 0;
@@ -107,6 +106,7 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<Abstract
 	}
 
 	// Explicit delegation to super method to make FindBugs happy
+
 	@Override
 	public int hashCode() { // NOPMD
 		return super.hashCode();
@@ -143,7 +143,7 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<Abstract
 	/**
 	 * Returns the {@link AbstractTraceEvent}s ordered by {@link AbstractTraceEvent#getOrderIndex()}
 	 */
-	@Override
+
 	public Iterator<AbstractTraceEvent> iterator() {
 		return this.events.iterator();
 	}

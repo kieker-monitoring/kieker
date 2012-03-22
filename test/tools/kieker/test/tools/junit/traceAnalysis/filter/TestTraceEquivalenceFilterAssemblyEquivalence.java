@@ -66,7 +66,7 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase { //
 		/*
 		 * filter.getExecutionTraceOutputPort().subscribe(new AbstractInputPort("Execution traces", null) {
 		 * 
-		 * @Override
+		 * 
 		 * public void newEvent(final Object event) {
 		 * throw new UnsupportedOperationException("Not supported yet.");
 		 * }

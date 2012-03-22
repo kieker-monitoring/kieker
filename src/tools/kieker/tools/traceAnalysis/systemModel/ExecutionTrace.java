@@ -47,7 +47,6 @@ public class ExecutionTrace extends AbstractTrace {
 	private int maxEss = -1;
 	private final SortedSet<Execution> set = new TreeSet<Execution>(new Comparator<Execution>() {
 
-		@Override
 		public int compare(final Execution e1, final Execution e2) {
 			if (e1.getTraceId() == e2.getTraceId()) {
 				if (e1.getEoi() < e2.getEoi()) {
@@ -318,6 +317,7 @@ public class ExecutionTrace extends AbstractTrace {
 	}
 
 	// Explicit delegation to super method to make FindBugs happy
+
 	@Override
 	public int hashCode() { // NOPMD
 		return super.hashCode();
@@ -331,6 +331,7 @@ public class ExecutionTrace extends AbstractTrace {
 	 * @param obj
 	 * @return true if the two objects are equal.
 	 */
+
 	@Override
 	public boolean equals(final Object obj) {
 		synchronized (this) {

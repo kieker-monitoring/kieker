@@ -21,7 +21,7 @@
 package kieker.test.tools.junit.traceAnalysis.filter.flow;
 
 import java.util.List;
-import java.util.NavigableSet;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import junit.framework.Assert;
@@ -52,7 +52,7 @@ public class TestTraceIdFilter extends TestCase {
 		final long firstTimestamp = 42353; // any number fits // NOCS (MagicNumberCheck)
 		final long traceIdNotToPass = 11l; // (must NOT be element of idsToPass) // NOCS (MagicNumberCheck)
 
-		final NavigableSet<Long> idsToPass = new TreeSet<Long>();
+		final SortedSet<Long> idsToPass = new TreeSet<Long>();
 		idsToPass.add(1 + traceIdNotToPass); // NOCS (MagicNumberCheck)
 		idsToPass.add(2 + traceIdNotToPass); // NOCS (MagicNumberCheck)
 
@@ -95,7 +95,7 @@ public class TestTraceIdFilter extends TestCase {
 		final long firstTimestamp = 53222; // any number fits // NOCS (MagicNumberCheck)
 		final long traceIdToPass = 11l; // (must be element of idsToPass) // NOCS (MagicNumberCheck)
 
-		final NavigableSet<Long> idsToPass = new TreeSet<Long>();
+		final SortedSet<Long> idsToPass = new TreeSet<Long>();
 		idsToPass.add(0 + traceIdToPass); // NOCS (MagicNumberCheck)
 		idsToPass.add(1 + traceIdToPass); // NOCS (MagicNumberCheck)
 

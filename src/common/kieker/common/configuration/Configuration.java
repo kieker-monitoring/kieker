@@ -79,7 +79,7 @@ public final class Configuration extends Properties {
 	 */
 	public final String[] getStringArrayProperty(final String key) {
 		final String s = this.getStringProperty(key);
-		if (s.isEmpty()) {
+		if (s.length() == 0) {
 			return new String[0];
 		} else {
 			return s.split("\\|");
@@ -96,7 +96,7 @@ public final class Configuration extends Properties {
 	 */
 	public final String[] getStringArrayProperty(final String key, final String split) {
 		final String s = this.getStringProperty(key);
-		if (s.isEmpty()) {
+		if (s.length() == 0) {
 			return new String[0];
 		} else {
 			return s.split(split);
@@ -160,9 +160,9 @@ public final class Configuration extends Properties {
 	 */
 	public final Configuration getPropertiesStartingWith(final String prefix) {
 		final Configuration configuration = new Configuration(null);
-		for (final String property : this.stringPropertyNames()) {
-			if (property.startsWith(prefix)) {
-				configuration.setProperty(property, this.getProperty(property));
+		for (final Object property : this.keySet()) {
+			if (((String) property).startsWith(prefix)) {
+				configuration.setProperty((String) property, this.getProperty((String) property));
 			}
 		}
 		return configuration;
@@ -187,6 +187,7 @@ public final class Configuration extends Properties {
 	 * This method should never be used directly!
 	 * Use {@link #setProperty(String, String)} instead!
 	 */
+
 	@Override
 	@Deprecated
 	public final synchronized Object put(final Object key, final Object value) {

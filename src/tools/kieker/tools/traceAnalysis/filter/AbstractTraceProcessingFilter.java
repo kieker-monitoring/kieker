@@ -84,6 +84,6 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 	 */
 	public void printStatusMessage() {
 		this.printMessage(new String[] { "Trace processing summary: " + this.numTracesProcessed + " total; " +
-						this.numTracesSucceeded + " succeeded; " + this.numTracesFailed + " failed.", });
+				this.numTracesSucceeded + " succeeded; " + this.numTracesFailed + " failed.", });
 	}
 }

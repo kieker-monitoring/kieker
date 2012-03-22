@@ -183,9 +183,9 @@ public abstract class ConfigurationFactory implements Keys {
 	private static final Configuration getSystemPropertiesStartingWith(final String prefix, final Configuration defaultValues) {
 		final Configuration configuration = new Configuration(defaultValues);
 		final Properties properties = System.getProperties();
-		for (final String property : properties.stringPropertyNames()) {
-			if (property.startsWith(prefix)) {
-				configuration.setProperty(property, properties.getProperty(property));
+		for (final Object property : properties.keySet()) {
+			if (((String) property).startsWith(prefix)) {
+				configuration.setProperty((String) property, properties.getProperty((String) property));
 			}
 		}
 		return configuration;

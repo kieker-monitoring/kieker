@@ -126,7 +126,7 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * 
 	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
 	 */
-	@Override
+
 	public abstract Configuration getCurrentConfiguration();
 
 	/*
@@ -134,7 +134,7 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * 
 	 * @see kieker.analysis.plugin.IPlugin#getName()
 	 */
-	@Override
+
 	public final String getName() {
 		return this.name;
 	}
@@ -144,7 +144,7 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * 
 	 * @see kieker.analysis.plugin.IPlugin#getPluginName()
 	 */
-	@Override
+
 	public final String getPluginName() {
 		final String pluginName = this.getClass().getAnnotation(Plugin.class).name();
 		if (pluginName.equals(Plugin.NO_NAME)) {
@@ -159,7 +159,7 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * 
 	 * @see kieker.analysis.plugin.IPlugin#getPluginDescription()
 	 */
-	@Override
+
 	public final String getPluginDescription() {
 		return this.getClass().getAnnotation(Plugin.class).description();
 	}
@@ -311,7 +311,7 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * 
 	 * @see kieker.analysis.plugin.IPlugin#connect(java.lang.String, kieker.analysis.repository.AbstractRepository)
 	 */
-	@Override
+
 	public final boolean connect(final String name, final AbstractRepository repo) {
 		final RepositoryPort port = this.repositoryPorts.get(name);
 		if (port == null) {
@@ -338,7 +338,7 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * 
 	 * @see kieker.analysis.plugin.IPlugin#getCurrentRepositories()
 	 */
-	@Override
+
 	public final Map<String, AbstractRepository> getCurrentRepositories() {
 		return Collections.unmodifiableMap(this.registeredRepositories);
 	}
@@ -386,7 +386,7 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * 
 	 * @see kieker.analysis.plugin.IPlugin#getAllOutputPortNames()
 	 */
-	@Override
+
 	public final String[] getAllOutputPortNames() {
 		final List<String> outputNames = new LinkedList<String>();
 		final Plugin annotation = this.getClass().getAnnotation(Plugin.class);
@@ -401,7 +401,7 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * 
 	 * @see kieker.analysis.plugin.IPlugin#getAllInputPortNames()
 	 */
-	@Override
+
 	public final String[] getAllInputPortNames() {
 		final List<String> inputNames = new LinkedList<String>();
 		for (final Method method : this.getClass().getMethods()) {
@@ -418,7 +418,7 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * 
 	 * @see kieker.analysis.plugin.IPlugin#getConnectedPlugins(java.lang.String)
 	 */
-	@Override
+
 	public final List<PluginInputPortReference> getConnectedPlugins(final String outputPortName) {
 		/* Make sure that the output port exists */
 		final OutputPort outputPort = this.outputPorts.get(outputPortName);

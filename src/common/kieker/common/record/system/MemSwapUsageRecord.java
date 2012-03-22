@@ -108,6 +108,7 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	/*
 	 * {@inheritdoc}
 	 */
+
 	@Override
 	public Object[] toArray() {
 		return new Object[] { this.timestamp, this.hostName, this.memTotal, this.memUsed, this.memFree, this.swapTotal, this.swapUsed, this.swapFree, };

@@ -67,12 +67,10 @@ public class OperationExecutionRegistrationFilter implements Filter, IMonitoring
 		// nothing to do
 	}
 
-	@Override
 	public void init(final FilterConfig config) throws ServletException {
 		// nothing to do
 	}
 
-	@Override
 	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
 		if (!OperationExecutionRegistrationFilter.CTRL_INST.isMonitoringEnabled()) {
 			chain.doFilter(request, response);
@@ -91,7 +89,6 @@ public class OperationExecutionRegistrationFilter implements Filter, IMonitoring
 		}
 	}
 
-	@Override
 	public void destroy() {
 		// nothing to do
 	}

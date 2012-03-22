@@ -95,7 +95,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	/**
 	 * Blocks until the associated pipe is being closed.
 	 */
-	@Override
+
 	public boolean read() {
 		// No need to initialize since we receive asynchronously
 		try {
@@ -108,18 +108,15 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 		return true;
 	}
 
-	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord rec) {
 		return super.deliver(PipeReader.OUTPUT_PORT_NAME, rec);
 	}
 
-	@Override
 	public void notifyPipeClosed() {
 		/* Notify main thread */
 		this.terminationLatch.countDown();
 	}
 
-	@Override
 	public void terminate(final boolean error) {
 		// will lead to notifyPipeClosed() and the subsequent termination of read()
 		if (this.pipe != null) {

@@ -91,7 +91,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 		this.jmsDestination = configuration.getStringProperty(JMSReader.CONFIG_DESTINATION);
 		this.jmsFactoryLookupName = configuration.getStringProperty(JMSReader.CONFIG_FACTORYLOOKUP);
 		// simple sanity check
-		if (this.jmsProviderUrl.isEmpty() || this.jmsDestination.isEmpty() || this.jmsFactoryLookupName.isEmpty()) {
+		if ((this.jmsProviderUrl.length() == 0) || (this.jmsDestination.length() == 0) || (this.jmsFactoryLookupName.length() == 0)) {
 			throw new IllegalArgumentException("JMSReader has not sufficient parameters. jmsProviderUrl ('" + this.jmsProviderUrl + "'), jmsDestination ('"
 					+ this.jmsDestination + "'), or factoryLookupName ('" + this.jmsFactoryLookupName + "') is null");
 		}
@@ -110,7 +110,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 	/**
 	 * A call to this method is a blocking call.
 	 */
-	@Override
+
 	public boolean read() {
 		boolean retVal = false;
 		Connection connection = null;
@@ -140,7 +140,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 			final MessageConsumer receiver = session.createConsumer(destination);
 			receiver.setMessageListener(new MessageListener() {
 				// the MessageListener will read onMessage each time a message comes in
-				@Override
+
 				public void onMessage(final Message jmsMessage) {
 					if (jmsMessage instanceof TextMessage) {
 						final TextMessage text = (TextMessage) jmsMessage;
@@ -187,6 +187,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 
 	private final void block() {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
+
 			@Override
 			public final void run() {
 				JMSReader.this.unblock();
@@ -202,7 +203,6 @@ public final class JMSReader extends AbstractReaderPlugin {
 		this.cdLatch.countDown();
 	}
 
-	@Override
 	public void terminate(final boolean error) {
 		JMSReader.LOG.info("Shutdown of JMSReader requested.");
 		this.unblock();

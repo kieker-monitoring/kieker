@@ -43,10 +43,10 @@ public class CRM {
 		this.catalog.getBook(false);
 		final long tout = CRM.MONITORING_CONTROLLER.getTimeSource().getTime();
 		final OperationExecutionRecord e =
-			new OperationExecutionRecord(
-					"public void kieker.examples.userguide.appendixJMS.getBook(boolean)",
-					OperationExecutionRecord.NO_SESSION_ID, OperationExecutionRecord.NO_TRACEID, 
-					tin, tout, OperationExecutionRecord.NO_HOSTNAME, OperationExecutionRecord.NO_EOI_ESS, OperationExecutionRecord.NO_EOI_ESS);
+				new OperationExecutionRecord(
+						"public void kieker.examples.userguide.appendixJMS.getBook(boolean)",
+						OperationExecutionRecord.NO_SESSION_ID, OperationExecutionRecord.NO_TRACEID,
+						tin, tout, OperationExecutionRecord.NO_HOSTNAME, OperationExecutionRecord.NO_EOI_ESS, OperationExecutionRecord.NO_EOI_ESS);
 		CRM.MONITORING_CONTROLLER.newMonitoringRecord(e);
 	}
 }

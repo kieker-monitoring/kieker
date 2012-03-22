@@ -74,7 +74,7 @@ final class FSDirectoryReader implements Runnable {
 	 */
 	public FSDirectoryReader(final String inputDirName, final IMonitoringRecordReceiver recordReceiver,
 			final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType) {
-		if ((inputDirName == null) || inputDirName.isEmpty()) {
+		if ((inputDirName == null) || (inputDirName.length() == 0)) {
 			throw new IllegalArgumentException("Invalid or empty inputDir: " + inputDirName);
 		}
 		this.inputDir = new File(inputDirName);
@@ -91,11 +91,11 @@ final class FSDirectoryReader implements Runnable {
 	 * 
 	 * Errors must be indicated by throwing an {@link RuntimeException}.
 	 */
-	@Override
+
 	public final void run() {
 		this.readMappingFile(); // must be the first line to set filePrefix!
 		final File[] inputFiles = this.inputDir.listFiles(new FileFilter() {
-			@Override
+
 			public boolean accept(final File pathname) {
 				return pathname.isFile()
 						&& pathname.getName().startsWith(FSDirectoryReader.this.filePrefix)
@@ -109,7 +109,7 @@ final class FSDirectoryReader implements Runnable {
 					+ FSDirectoryReader.NORMAL_FILE_POSTFIX + "' or '" + FSDirectoryReader.BINARY_FILE_POSTFIX + "'.");
 		} else { // everything ok, we process the files
 			Arrays.sort(inputFiles, new Comparator<File>() {
-				@Override
+
 				public final int compare(final File f1, final File f2) {
 					return f1.compareTo(f2); // simplified (we expect no dirs!)
 				}
@@ -225,7 +225,12 @@ final class FSDirectoryReader implements Runnable {
 							continue; // skip this ignored record
 						}
 						final long loggingTimestamp = Long.valueOf(recordFields[1]);
-						record = AbstractMonitoringRecord.createFromStringArray(clazz, Arrays.copyOfRange(recordFields, 2, recordFields.length));
+						// 1.5 compatibility
+						final String[] recordFiledsReduced = new String[recordFields.length - 1];
+						System.arraycopy(recordFields, 2, recordFiledsReduced, 1, recordFields.length - 1);
+						record = AbstractMonitoringRecord.createFromStringArray(clazz, recordFiledsReduced);
+						// in 1.6 this could be simplified to
+						// record = AbstractMonitoringRecord.createFromStringArray(clazz, Arrays.copyOfRange(recordFields, 2, recordFields.length));
 						record.setLoggingTimestamp(loggingTimestamp);
 					} else { // legacy record
 						record = AbstractMonitoringRecord.createFromStringArray(OperationExecutionRecord.class, recordFields);

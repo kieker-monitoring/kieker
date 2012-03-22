@@ -20,7 +20,6 @@
 
 package kieker.analysis;
 
-
 /**
  * Allows spawn the execution of an {@link AnalysisController} into a separate {@link Thread}. The thread with the {@link AnalysisController} instance
  * provided in the constructor {@link #AnalysisControllerThread(AnalysisController)} is started by calling

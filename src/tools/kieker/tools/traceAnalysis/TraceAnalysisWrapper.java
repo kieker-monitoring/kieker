@@ -48,7 +48,6 @@ public final class TraceAnalysisWrapper {
 		final File libDir = new File(uDir + File.separatorChar + File.separatorChar + "lib" + File.separatorChar);
 		final File[] libs = libDir.listFiles(new FilenameFilter() {
 
-			@Override
 			public boolean accept(final File dir, final String name) {
 				return name.endsWith(".jar");
 			}
@@ -57,7 +56,6 @@ public final class TraceAnalysisWrapper {
 		final File binDir = new File(uDir + File.separatorChar + File.separatorChar + "dist" + File.separatorChar);
 		final File[] bins = binDir.listFiles(new FilenameFilter() {
 
-			@Override
 			public boolean accept(final File dir, final String name) {
 				return name.endsWith(".jar");
 			}

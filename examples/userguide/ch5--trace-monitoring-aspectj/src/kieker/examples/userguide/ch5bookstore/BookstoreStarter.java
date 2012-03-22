@@ -53,7 +53,6 @@ public class BookstoreStarter {
 			final CountDownLatch latch) {
 		new Thread(new Runnable() {
 
-			@Override
 			public void run() {
 				bookstore.searchBook();
 				latch.countDown();

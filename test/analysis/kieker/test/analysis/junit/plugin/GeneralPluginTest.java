@@ -129,7 +129,6 @@ class SourceClass extends AbstractReaderPlugin {
 		this.records = records;
 	}
 
-	@Override
 	public boolean read() {
 		for (final OperationExecutionRecord record : this.records) {
 			Assert.assertTrue(super.deliver(SourceClass.OUTPUT_PORT_NAME, record));
@@ -137,7 +136,6 @@ class SourceClass extends AbstractReaderPlugin {
 		return true;
 	}
 
-	@Override
 	public void terminate(final boolean error) {}
 
 	@Override

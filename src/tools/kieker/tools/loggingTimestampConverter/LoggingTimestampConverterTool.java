@@ -68,7 +68,6 @@ public final class LoggingTimestampConverterTool {
 		}
 		LoggingTimestampConverterTool.CMD_HELP_FORMATTER.setOptionComparator(new Comparator<Object>() {
 
-			@Override
 			public int compare(final Object o1, final Object o2) {
 				if (o1 == o2) { // NOPMD
 					return 0;

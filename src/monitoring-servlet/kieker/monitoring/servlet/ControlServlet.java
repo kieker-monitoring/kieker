@@ -248,6 +248,7 @@ public class ControlServlet extends HttpServlet {
 	 * @param response
 	 *            servlet response
 	 */
+
 	@Override
 	protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 		if (!ControlServlet.initialized) {
@@ -264,6 +265,7 @@ public class ControlServlet extends HttpServlet {
 	 * @param response
 	 *            servlet response
 	 */
+
 	@Override
 	protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 		if (!ControlServlet.initialized) {
@@ -275,6 +277,7 @@ public class ControlServlet extends HttpServlet {
 	/**
 	 * Returns a short description of the servlet.
 	 */
+
 	@Override
 	public String getServletInfo() {
 		return "Kieker ControlServlet";

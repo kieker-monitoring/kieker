@@ -58,48 +58,39 @@ public final class LogImplJDK14 implements Log {
 		}
 	}
 
-	@Override
 	public boolean isDebugEnabled() {
 		return this.logger.isLoggable(Level.FINE);
 	}
 
-	@Override
 	public final void debug(final String message) {
 		this.log(Level.FINE, message, null);
 	}
 
-	@Override
 	public final void debug(final String message, final Throwable t) {
 		this.log(Level.FINE, message, t);
 	}
 
-	@Override
 	public final void info(final String message) {
 		this.log(Level.INFO, message, null);
 
 	}
 
-	@Override
 	public final void info(final String message, final Throwable t) {
 		this.log(Level.INFO, message, t);
 	}
 
-	@Override
 	public final void warn(final String message) {
 		this.log(Level.WARNING, message, null);
 	}
 
-	@Override
 	public final void warn(final String message, final Throwable t) {
 		this.log(Level.WARNING, message, t);
 	}
 
-	@Override
 	public final void error(final String message) {
 		this.log(Level.SEVERE, message, null);
 	}
 
-	@Override
 	public final void error(final String message, final Throwable t) {
 		this.log(Level.SEVERE, message, t);
 	}

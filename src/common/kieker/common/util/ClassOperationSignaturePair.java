@@ -22,7 +22,6 @@ package kieker.common.util;
 
 import java.util.StringTokenizer;
 
-
 /**
  * TODO: Add methods getPackageName and getSimpleClassname which
  * is a split of the FQ class name.
@@ -136,7 +135,7 @@ public class ClassOperationSignaturePair {
 		}
 
 		/* Append modifiers and return type */
-		if ((signature.getReturnType() != null) && !signature.getReturnType().isEmpty()) {
+		if ((signature.getReturnType() != null) && (signature.getReturnType().length() != 0)) {
 			for (final String type : signature.getModifier()) {
 				strBuilder.append(type).append(" ");
 			}

@@ -52,7 +52,7 @@ public final class SamplingController extends AbstractController implements ISam
 		this.periodicSensorsPoolExecutor = new ScheduledThreadPoolExecutor(threadPoolSize,
 				// Handler for failed sensor executions that simply logs notifications.
 				new RejectedExecutionHandler() {
-					@Override
+
 					public void rejectedExecution(final Runnable r, final ThreadPoolExecutor executor) {
 						SamplingController.LOG.error("Exception caught by RejectedExecutionHandler for Runnable " + r + " and ThreadPoolExecutor " + executor);
 					}
@@ -92,7 +92,6 @@ public final class SamplingController extends AbstractController implements ISam
 		return sb.toString();
 	}
 
-	@Override
 	public final ScheduledSamplerJob schedulePeriodicSampler(final ISampler sensor, final long initialDelay, final long period, final TimeUnit timeUnit) {
 		final ScheduledSamplerJob job;
 		synchronized (this) {
@@ -108,7 +107,6 @@ public final class SamplingController extends AbstractController implements ISam
 		return job;
 	}
 
-	@Override
 	public final boolean removeScheduledSampler(final ScheduledSamplerJob sensorJob) {
 		synchronized (this) {
 			final ScheduledFuture<?> future = sensorJob.getFuture();

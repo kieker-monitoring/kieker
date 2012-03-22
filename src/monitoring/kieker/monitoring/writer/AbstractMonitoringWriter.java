@@ -71,28 +71,28 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 		sb.append("Writer: '");
 		sb.append(this.getClass().getName());
 		sb.append("'\n\tConfiguration:");
-		final Set<String> keys = this.configuration.stringPropertyNames();
+		// 1.5 compability
+		final Set<Object> keys = this.configuration.keySet();
+		// for 1.6 simply (also change Objects to Strings
+		// final Set<String> keys = this.configuration.stringPropertyNames();
 		if (keys.isEmpty()) {
 			sb.append("\n\t\tNo Configuration");
 		} else {
-			for (final String property : keys) {
+			for (final Object property : keys) {
 				sb.append("\n\t\t");
 				sb.append(property);
 				sb.append("='");
-				sb.append(this.configuration.getProperty(property));
+				sb.append(this.configuration.getProperty((String) property));
 				sb.append("'");
 			}
 		}
 		return sb.toString();
 	}
 
-	@Override
 	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
 
-	@Override
 	public abstract void terminate();
 
-	@Override
 	public final void setController(final IMonitoringController controller) throws Exception {
 		this.monitoringController = controller;
 		this.init();

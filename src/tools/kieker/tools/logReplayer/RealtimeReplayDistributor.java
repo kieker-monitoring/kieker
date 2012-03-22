@@ -160,7 +160,6 @@ public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 		RealtimeReplayDistributor.LOG.info("Will terminate in " + terminationDelay + "nsecs from now");
 		this.executor.schedule(new Runnable() {
 
-			@Override
 			public void run() {
 				if (RealtimeReplayDistributor.this.terminationLatch != null) {
 					RealtimeReplayDistributor.this.terminationLatch.countDown(); // signal that last record has been scheduled

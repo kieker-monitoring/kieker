@@ -72,7 +72,6 @@ public final class TimeSourceController extends AbstractController implements IT
 		return sb.toString();
 	}
 
-	@Override
 	public final ITimeSource getTimeSource() {
 		return this.timeSource;
 	}

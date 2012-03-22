@@ -42,12 +42,10 @@ public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFi
 		super(configuration);
 	}
 
-	@Override
 	public boolean init() {
 		return true; // do nothing
 	}
 
-	@Override
 	public void terminate(final boolean error) {
 		// do nothing
 	}

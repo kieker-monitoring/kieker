@@ -70,6 +70,7 @@ public final class FsWriterThread extends AbstractFsWriterThread {
 	 * @throws FileNotFoundException
 	 * @throws UnsupportedEncodingException
 	 */
+
 	@Override
 	protected final void prepareFile() throws FileNotFoundException, UnsupportedEncodingException {
 		if (this.pos != null) {

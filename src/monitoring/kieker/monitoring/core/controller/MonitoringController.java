@@ -97,6 +97,7 @@ public final class MonitoringController extends AbstractController implements IM
 		 */
 		try {
 			Runtime.getRuntime().addShutdownHook(new Thread() {
+
 				@Override
 				public void run() {
 					if (!monitoringController.isMonitoringTerminated()) {
@@ -157,87 +158,70 @@ public final class MonitoringController extends AbstractController implements IM
 	// DELEGATE TO OTHER CONTROLLERS
 	// #############################
 
-	@Override
 	public final boolean terminateMonitoring() {
 		return this.stateController.terminateMonitoring();
 	}
 
-	@Override
 	public final boolean isMonitoringTerminated() {
 		return this.stateController.isMonitoringTerminated();
 	}
 
-	@Override
 	public final boolean enableMonitoring() {
 		return this.stateController.enableMonitoring();
 	}
 
-	@Override
 	public final boolean disableMonitoring() {
 		return this.stateController.disableMonitoring();
 	}
 
-	@Override
 	public final boolean isMonitoringEnabled() {
 		return this.stateController.isMonitoringEnabled();
 	}
 
-	@Override
 	public final String getName() {
 		return this.stateController.getName();
 	}
 
-	@Override
 	public final String getHostName() {
 		return this.stateController.getHostName();
 	}
 
-	@Override
 	public final int incExperimentId() {
 		return this.stateController.incExperimentId();
 	}
 
-	@Override
 	public final void setExperimentId(final int newExperimentID) {
 		this.stateController.setExperimentId(newExperimentID);
 	}
 
-	@Override
 	public final int getExperimentId() {
 		return this.stateController.getExperimentId();
 	}
 
-	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		return this.writerController.newMonitoringRecord(record);
 	}
 
-	@Override
 	public final long getNumberOfInserts() {
 		return this.writerController.getNumberOfInserts();
 	}
 
-	@Override
 	public final ScheduledSamplerJob schedulePeriodicSampler(final ISampler sampler, final long initialDelay, final long period, final TimeUnit timeUnit) {
 		return this.samplingController.schedulePeriodicSampler(sampler, initialDelay, period, timeUnit);
 	}
 
-	@Override
 	public final boolean removeScheduledSampler(final ScheduledSamplerJob sampler) {
 		return this.samplingController.removeScheduledSampler(sampler);
 	}
 
-	@Override
 	public final ITimeSource getTimeSource() {
 		return this.timeSourceController.getTimeSource();
 	}
 
-	@Override
 	public final String getJMXDomain() {
 		return this.jmxController.getJMXDomain();
 	}
 
-	@Override
 	public int getIdForString(final String string) {
 		return this.registryController.getIdForString(string);
 	}

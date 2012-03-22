@@ -123,6 +123,7 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	 * 
 	 * @param error
 	 */
+
 	@Override
 	public void terminate(final boolean error) {
 		if (!error) {

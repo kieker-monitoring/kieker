@@ -89,7 +89,7 @@ public final class KaxViz extends JFrame {
 		// menuBar.add(layoutMenu);
 		// final JMenuItem autoLayout = new JMenuItem("Auto Layout");
 		// autoLayout.addActionListener(new ActionListener() {
-		// @Override
+		//
 		// public final void actionPerformed(final ActionEvent arg0) {
 		// KaxViz.this.autoGraphLayout();
 		// }
@@ -98,6 +98,7 @@ public final class KaxViz extends JFrame {
 
 		if (null != outFilename) {
 			this.addWindowListener(new WindowAdapter() {
+
 				@Override
 				public void windowClosing(final WindowEvent e) {
 					final Document doc = mxCellRenderer.createSvgDocument(KaxViz.this.graph, null, 1d, Color.WHITE, KaxViz.this.graph.getGraphBounds());

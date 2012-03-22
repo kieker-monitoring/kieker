@@ -90,6 +90,7 @@ public abstract class AggregatedCallTreeFilter<T> extends AbstractCallTreeFilter
 	 * 
 	 * @param error
 	 */
+
 	@Override
 	public void terminate(final boolean error) {
 		if (!error) {
@@ -124,7 +125,6 @@ public abstract class AggregatedCallTreeFilter<T> extends AbstractCallTreeFilter
 		try {
 			AbstractCallTreeFilter.addTraceToTree(this.root, t, new PairFactory() {
 
-				@Override
 				public Object createPair(final SynchronousCallMessage callMsg) {
 					return AggregatedCallTreeFilter.this.concreteCreatePair(callMsg);
 				}

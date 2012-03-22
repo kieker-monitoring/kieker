@@ -102,7 +102,7 @@ public class Main {
 			/* Now get the files in the given library directory. */
 			File libs[] = libDir.listFiles(new FilenameFilter() {
 
-				@Override
+				
 				public boolean accept(File dir, String name) {
 					// * Only JAR files. */
 					return name.toUpperCase().endsWith(ALLOWED_EXT);

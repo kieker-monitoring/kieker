@@ -55,7 +55,6 @@ public abstract class AbstractTimeSource implements ITimeSource {
 		return null;
 	}
 
-	@Override
 	public abstract long getTime();
 
 	@Override

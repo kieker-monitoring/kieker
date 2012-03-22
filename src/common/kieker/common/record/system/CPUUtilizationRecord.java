@@ -158,6 +158,7 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 	/*
 	 * {@inheritdoc}
 	 */
+
 	@Override
 	public Object[] toArray() {
 		return new Object[] { this.timestamp, this.hostName, this.cpuID, this.user, this.system, this.wait, this.nice, this.irq, this.totalUtilization, this.idle };

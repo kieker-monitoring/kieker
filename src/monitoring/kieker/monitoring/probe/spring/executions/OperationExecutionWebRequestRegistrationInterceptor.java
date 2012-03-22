@@ -39,7 +39,6 @@ public class OperationExecutionWebRequestRegistrationInterceptor implements WebR
 		// nothing to do
 	}
 
-	@Override
 	public void preHandle(final WebRequest request) throws Exception {
 		OperationExecutionWebRequestRegistrationInterceptor.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
 		OperationExecutionWebRequestRegistrationInterceptor.SESSION_REGISTRY.storeThreadLocalSessionId(request.getSessionId());
@@ -47,7 +46,6 @@ public class OperationExecutionWebRequestRegistrationInterceptor implements WebR
 		OperationExecutionWebRequestRegistrationInterceptor.CF_REGISTRY.storeThreadLocalESS(1);
 	}
 
-	@Override
 	public void postHandle(final WebRequest request, final ModelMap map) throws Exception {
 		OperationExecutionWebRequestRegistrationInterceptor.CF_REGISTRY.unsetThreadLocalTraceId();
 		OperationExecutionWebRequestRegistrationInterceptor.SESSION_REGISTRY.unsetThreadLocalSessionId();
@@ -55,7 +53,6 @@ public class OperationExecutionWebRequestRegistrationInterceptor implements WebR
 		OperationExecutionWebRequestRegistrationInterceptor.CF_REGISTRY.unsetThreadLocalESS();
 	}
 
-	@Override
 	public void afterCompletion(final WebRequest request, final Exception map) throws Exception {
 		// nothing to do
 	}

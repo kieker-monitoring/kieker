@@ -121,6 +121,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 	}
 
 	// The error handling in this block is corrent, see ticket #293
+
 	@Override
 	protected final void init() {
 		synchronized (this) {
@@ -136,7 +137,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 				if (this.controllerObjectName != null) {
 					try {
 						// MXBeans is currently not possible (getClasses in IRecord)
-						final StandardMBean mbean = new StandardMBean(this.monitoringController, IMonitoringController.class, false);
+						final StandardMBean mbean = new StandardMBean(this.monitoringController, IMonitoringController.class);
 						mbs.registerMBean(mbean, this.controllerObjectName);
 					} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
 						JMXController.LOG.warn("Unable to register Monitoring Controller MBean", e);
@@ -185,7 +186,6 @@ public final class JMXController extends AbstractController implements IJMXContr
 		}
 	}
 
-	@Override
 	public final String getJMXDomain() {
 		return this.domain;
 	}
@@ -247,7 +247,6 @@ public final class JMXController extends AbstractController implements IJMXContr
 			// nothing to do
 		}
 
-		@Override
 		public final void handleNotification(final Notification notification, final Object handback) {
 			final String notificationType = notification.getType();
 			if (notificationType.equals(JMXConnectionNotification.OPENED)) {

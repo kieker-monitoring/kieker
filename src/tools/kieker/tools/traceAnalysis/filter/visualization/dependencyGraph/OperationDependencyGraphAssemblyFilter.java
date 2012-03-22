@@ -183,10 +183,11 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	}
 
 	/**
-	 * Saves the dependeMESSAGE_TRACE_INPUT_PORT_NAMEncy graph to the dot file if error is not true.
+	 * Saves the dependency graph to the dot file if error is not true.
 	 * 
 	 * @param error
 	 */
+
 	@Override
 	public void terminate(final boolean error) {
 		if (!error) {

@@ -61,7 +61,6 @@ public class RealtimeReplayWorker extends AbstractFilterPlugin implements Runnab
 		controller.connect(this, RealtimeReplayWorker.OUTPUT_PORT_NAME, cons, constInputPortName);
 	}
 
-	@Override
 	public void run() {
 		if (this.monRec != null) {
 			super.deliver(RealtimeReplayWorker.OUTPUT_PORT_NAME, this.monRec);

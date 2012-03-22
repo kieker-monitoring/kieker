@@ -43,7 +43,7 @@ public class Bookstore {
 		final OperationExecutionRecord e =
 				new OperationExecutionRecord(
 						"public void kieker.examples.userguide.appendixJMS.getBook(boolean)",
-						OperationExecutionRecord.NO_SESSION_ID, OperationExecutionRecord.NO_TRACEID, 
+						OperationExecutionRecord.NO_SESSION_ID, OperationExecutionRecord.NO_TRACEID,
 						tin, tout, OperationExecutionRecord.NO_HOSTNAME, OperationExecutionRecord.NO_EOI_ESS, OperationExecutionRecord.NO_EOI_ESS);
 		Bookstore.MONITORING_CONTROLLER.newMonitoringRecord(e);
 

@@ -45,7 +45,7 @@ public final class StateController extends AbstractController implements IStateC
 		this.experimentId.set(configuration.getIntProperty(ConfigurationFactory.EXPERIMENT_ID));
 		this.monitoringEnabled = configuration.getBooleanProperty(ConfigurationFactory.MONITORING_ENABLED);
 		String hostnameTmp = configuration.getStringProperty(ConfigurationFactory.HOST_NAME);
-		if (hostnameTmp.isEmpty()) {
+		if (hostnameTmp.length() == 0) {
 			hostnameTmp = "<UNKNOWN>";
 			try {
 				hostnameTmp = java.net.InetAddress.getLocalHost().getHostName();
@@ -90,7 +90,6 @@ public final class StateController extends AbstractController implements IStateC
 		return sb.toString();
 	}
 
-	@Override
 	public final boolean terminateMonitoring() {
 		final MonitoringController monitoringController = super.monitoringController;
 		if (monitoringController != null) {
@@ -101,12 +100,10 @@ public final class StateController extends AbstractController implements IStateC
 		}
 	}
 
-	@Override
 	public final boolean isMonitoringTerminated() {
 		return super.isTerminated();
 	}
 
-	@Override
 	public final boolean enableMonitoring() {
 		if (this.isMonitoringTerminated()) {
 			StateController.LOG.error("Refused to enable monitoring because monitoring has been permanently terminated");
@@ -117,39 +114,32 @@ public final class StateController extends AbstractController implements IStateC
 		return true;
 	}
 
-	@Override
 	public final boolean disableMonitoring() {
 		StateController.LOG.info("Disabling monitoring");
 		this.monitoringEnabled = false;
 		return true;
 	}
 
-	@Override
 	public final boolean isMonitoringEnabled() {
 		return !super.isTerminated() && this.monitoringEnabled;
 	}
 
-	@Override
 	public final String getName() {
 		return this.name;
 	}
 
-	@Override
 	public final String getHostName() {
 		return this.hostname;
 	}
 
-	@Override
 	public final int incExperimentId() {
 		return this.experimentId.incrementAndGet();
 	}
 
-	@Override
 	public final void setExperimentId(final int newExperimentID) {
 		this.experimentId.set(newExperimentID);
 	}
 
-	@Override
 	public final int getExperimentId() {
 		return this.experimentId.get();
 	}

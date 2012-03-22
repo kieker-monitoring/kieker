@@ -20,8 +20,6 @@
 
 package kieker.tools.logReplayer;
 
-import java.util.Arrays;
-
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.AbstractReaderPlugin;
@@ -87,7 +85,11 @@ public class FilesystemLogReplayer {
 	public FilesystemLogReplayer(final IMonitoringController monitoringController, final String[] inputDirs, final boolean realtimeMode,
 			final int numRealtimeWorkerThreads, final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp) {
 		this.recordReceiver = monitoringController;
-		this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
+		// 1.5 compability
+		this.inputDirs = new String[inputDirs.length];
+		System.arraycopy(inputDirs, 1, this.inputDirs, 1, inputDirs.length);
+		// for 1.6+:
+		// this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
 		this.realtimeMode = realtimeMode;
 		this.numRealtimeWorkerThreads = numRealtimeWorkerThreads;
 		this.ignoreRecordsBeforeTimestamp = ignoreRecordsBeforeTimestamp;
@@ -197,6 +199,7 @@ class RecordDelegationPlugin extends AbstractFilterPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+
 	@Override
 	public boolean init() {
 		if (RecordDelegationPlugin.LOG.isDebugEnabled()) {
@@ -211,6 +214,7 @@ class RecordDelegationPlugin extends AbstractFilterPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		return new Configuration();
@@ -219,6 +223,7 @@ class RecordDelegationPlugin extends AbstractFilterPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+
 	@Override
 	public Configuration getCurrentConfiguration() {
 		/* No configuration possible. */

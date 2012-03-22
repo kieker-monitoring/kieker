@@ -58,17 +58,14 @@ public enum SigarSamplerFactory implements ISigarSamplerFactory { // Singleton p
 		return this.sigar;
 	}
 
-	@Override
 	public CPUsCombinedPercSampler createSensorCPUsCombinedPerc() {
 		return new CPUsCombinedPercSampler(this.sigar);
 	}
 
-	@Override
 	public CPUsDetailedPercSampler createSensorCPUsDetailedPerc() {
 		return new CPUsDetailedPercSampler(this.sigar);
 	}
 
-	@Override
 	public MemSwapUsageSampler createSensorMemSwapUsage() {
 		return new MemSwapUsageSampler(this.sigar);
 	}

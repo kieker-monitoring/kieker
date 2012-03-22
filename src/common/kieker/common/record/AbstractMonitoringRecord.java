@@ -50,14 +50,18 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		AbstractMonitoringRecord.OLD_KIEKERRECORDS.put("kieker.common.record.BranchingRecord", BranchingRecord.class);
 	}
 
+	public abstract Object[] toArray();
+
+	public abstract void initFromArray(Object[] values);
+
+	public abstract Class<?>[] getValueTypes();
+
 	private volatile long loggingTimestamp = -1;
 
-	@Override
 	public final long getLoggingTimestamp() {
 		return this.loggingTimestamp;
 	}
 
-	@Override
 	public final void setLoggingTimestamp(final long timestamp) {
 		this.loggingTimestamp = timestamp;
 	}
@@ -82,7 +86,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	 * Provides an ordering of IMonitoringRecords by the loggingTimestamp.
 	 * Classes overriding the implementation should respect this ordering. (see #326)
 	 */
-	@Override
 	public int compareTo(final IMonitoringRecord otherRecord) {
 		final long timedifference = this.loggingTimestamp - otherRecord.getLoggingTimestamp();
 		if (timedifference < 0L) {
@@ -218,7 +221,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 			if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
 				final Field types = clazz.getDeclaredField("TYPES");
 				java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
-					@Override
 					public Object run() {
 						types.setAccessible(true);
 						return null;
@@ -276,7 +278,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 				final Constructor<? extends IMonitoringRecord> constructor = clazz.getConstructor(Object[].class);
 				final Field types = clazz.getDeclaredField("TYPES");
 				java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
-					@Override
 					public Object run() {
 						types.setAccessible(true);
 						return null;

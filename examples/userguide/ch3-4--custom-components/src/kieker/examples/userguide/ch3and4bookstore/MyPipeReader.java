@@ -57,7 +57,6 @@ public class MyPipeReader extends AbstractReaderPlugin {
 		return true;
 	}
 
-	@Override
 	public boolean read() {
 		try {
 			PipeData data;
@@ -94,7 +93,6 @@ public class MyPipeReader extends AbstractReaderPlugin {
 		return defaultConfiguration;
 	}
 
-	@Override
 	public void terminate(final boolean error) {
 		// nothing to do
 	}

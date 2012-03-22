@@ -121,7 +121,7 @@ public abstract class AbstractDependencyGraphFilter<T> extends AbstractMessageTr
 		ps.close();
 		this.numGraphsSaved++;
 		this.printMessage(new String[] { "Wrote dependency graph to file '" + outputFnBase + ".dot" + "'", "Dot file can be converted using the dot tool",
-									"Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg", });
+			"Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg", });
 	}
 
 	@Override
@@ -142,7 +142,7 @@ public abstract class AbstractDependencyGraphFilter<T> extends AbstractMessageTr
 
 	protected StringBuilder addDecorationText(final StringBuilder output, final DependencyGraphNode<?> node) {
 		final String decorations = node.getFormattedDecorations();
-		if ((decorations != null) && !decorations.isEmpty()) {
+		if ((decorations != null) && (decorations.length() != 0)) {
 			output.append("\\n");
 			output.append(decorations);
 		}

@@ -21,7 +21,6 @@
 package kieker.monitoring.core.registry;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -110,20 +109,17 @@ public class Registry<E> implements IRegistry<E> {
 		return h ^ (h >>> 16); // NOCS (magic number)
 	}
 
-	@Override
 	public final void setRecordReceiver(final IMonitoringRecordReceiver recordReceiver) {
 		for (final Segment<E> segment : this.segments) {
 			segment.setRecordReceiver(recordReceiver);
 		}
 	}
 
-	@Override
 	public int get(final E value) {
 		final int hash = Registry.hash(value);
 		return this.segments[(hash >>> this.segmentShift) & this.segmentMask].get(value, hash, this.nextId);
 	}
 
-	@Override
 	public E get(final int id) {
 		if (id > this.nextId.get()) {
 			return null;
@@ -131,7 +127,6 @@ public class Registry<E> implements IRegistry<E> {
 		return this.getAll()[id];
 	}
 
-	@Override
 	public E[] getAll() {
 		final int capacity = this.nextId.get();
 		if (this.eArrayCached.length != capacity) { // volatile read
@@ -142,10 +137,15 @@ public class Registry<E> implements IRegistry<E> {
 			}
 			this.eArrayCached = eArray; // volatile write
 		}
-		return Arrays.copyOf(this.eArrayCached, capacity);
+		// 1.5 compability
+		@SuppressWarnings("unchecked")
+		final E[] retArr = (E[]) new Object[capacity];
+		System.arraycopy(this.eArrayCached, 1, retArr, 1, capacity);
+		return retArr;
+		// for 1.6+:
+		// return Arrays.copyOf(this.eArrayCached, capacity);
 	}
 
-	@Override
 	public int getSize() {
 		return this.nextId.get();
 	}

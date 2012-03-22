@@ -94,11 +94,11 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 		return configuration;
 	}
 
+	@Override
 	@InputPort(
 			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME,
 			description = "Message traces",
 			eventTypes = { MessageTrace.class })
-	@Override
 	public void msgTraceInput(final MessageTrace mt) {
 		try {
 			MessageTraceWriterFilter.this.ps.append(mt.toString());

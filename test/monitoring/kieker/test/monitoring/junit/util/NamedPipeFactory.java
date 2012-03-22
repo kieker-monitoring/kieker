@@ -106,12 +106,10 @@ public final class NamedPipeFactory {
 		final Pipe namedPipe = Broker.INSTANCE.acquirePipe(pipeName);
 		namedPipe.setPipeReader(new IPipeReader() {
 
-			@Override
 			public boolean newMonitoringRecord(final IMonitoringRecord record) {
 				return receivedRecords.add(record);
 			}
 
-			@Override
 			public void notifyPipeClosed() {
 				// nothign to do
 			}

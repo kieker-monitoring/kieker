@@ -41,10 +41,10 @@ public class Bookstore {
 		this.catalog.getBook(false);
 		final long tout = Bookstore.MONITORING_CONTROLLER.getTimeSource().getTime();
 		final OperationExecutionRecord e =
-			new OperationExecutionRecord(
-					"public void kieker.examples.userguide.ch2bookstore.manual.getBook(boolean)",
-					OperationExecutionRecord.NO_SESSION_ID, OperationExecutionRecord.NO_TRACEID, 
-					tin, tout, OperationExecutionRecord.NO_HOSTNAME, OperationExecutionRecord.NO_EOI_ESS, OperationExecutionRecord.NO_EOI_ESS);
+				new OperationExecutionRecord(
+						"public void kieker.examples.userguide.ch2bookstore.manual.getBook(boolean)",
+						OperationExecutionRecord.NO_SESSION_ID, OperationExecutionRecord.NO_TRACEID,
+						tin, tout, OperationExecutionRecord.NO_HOSTNAME, OperationExecutionRecord.NO_EOI_ESS, OperationExecutionRecord.NO_EOI_ESS);
 		Bookstore.MONITORING_CONTROLLER.newMonitoringRecord(e);
 
 		/*

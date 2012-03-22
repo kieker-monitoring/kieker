@@ -140,7 +140,7 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 	 * Replays the monitoring log in real-time and returns after the complete
 	 * log was being replayed.
 	 */
-	@Override
+
 	public boolean read() {
 		final boolean success = true;
 		try {
@@ -153,7 +153,6 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		return success;
 	}
 
-	@Override
 	public void terminate(final boolean error) {
 		this.analysis.terminate(error); // forward to analysis controller
 	}

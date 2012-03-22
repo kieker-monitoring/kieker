@@ -33,7 +33,6 @@ public class Starter {
 		 */
 		new Thread(new Runnable() {
 
-			@Override
 			public void run() {
 				final Bookstore bookstore = new Bookstore();
 				for (int i = 0; i < 5; i++) {

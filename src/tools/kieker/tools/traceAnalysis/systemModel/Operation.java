@@ -57,6 +57,7 @@ public class Operation {
 	 * @param obj
 	 * @return true if the two objects are equal.
 	 */
+
 	@Override
 	public boolean equals(final Object obj) {
 		if (!(obj instanceof Operation)) {

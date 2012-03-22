@@ -20,7 +20,6 @@
 
 package kieker.tools.traceAnalysis.systemModel;
 
-
 /**
  * 
  * @author Andre van Hoorn

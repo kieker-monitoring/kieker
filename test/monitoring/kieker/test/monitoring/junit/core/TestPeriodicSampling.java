@@ -49,7 +49,6 @@ public class TestPeriodicSampling extends TestCase { // NOCS
 		final AtomicInteger numTriggers = new AtomicInteger(0);
 		final ISampler samplingCounter = new ISampler() {
 
-			@Override
 			public void sample(final IMonitoringController monitoringController) {
 				numTriggers.incrementAndGet();
 			}

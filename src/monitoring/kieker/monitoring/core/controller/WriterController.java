@@ -94,7 +94,6 @@ public final class WriterController extends AbstractController implements IWrite
 		return sb.toString();
 	}
 
-	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		try {
 			// fast lane for RegistryRecords (these must always be delivered!)
@@ -121,7 +120,6 @@ public final class WriterController extends AbstractController implements IWrite
 		}
 	}
 
-	@Override
 	public final long getNumberOfInserts() {
 		return this.numberOfInserts.longValue();
 	}

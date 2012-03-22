@@ -48,6 +48,7 @@ public abstract class AbstractAsyncFSWriter extends AbstractAsyncWriter {
 	/**
 	 * Make sure that the required properties always have default values!
 	 */
+
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration(super.getDefaultConfiguration());

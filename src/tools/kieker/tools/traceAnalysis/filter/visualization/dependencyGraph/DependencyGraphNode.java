@@ -137,7 +137,7 @@ public class DependencyGraphNode<T> {
 		while (decorations.hasNext()) {
 			final String currentDecorationText = decorations.next().createFormattedOutput();
 
-			if ((currentDecorationText == null) || currentDecorationText.isEmpty()) {
+			if ((currentDecorationText == null) || (currentDecorationText.length() == 0)) {
 				continue;
 			}
 

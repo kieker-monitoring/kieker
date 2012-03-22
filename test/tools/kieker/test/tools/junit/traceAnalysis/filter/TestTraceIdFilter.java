@@ -21,8 +21,8 @@
 package kieker.test.tools.junit.traceAnalysis.filter;
 
 import java.util.Iterator;
-import java.util.NavigableSet;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import junit.framework.Assert;
@@ -85,7 +85,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 	 */
 	@Test
 	public void testAssertIgnoreTraceId() {
-		final NavigableSet<Long> idsToPass = new TreeSet<Long>();
+		final SortedSet<Long> idsToPass = new TreeSet<Long>();
 		idsToPass.add(5l); // NOCS (MagicNumberCheck)
 		idsToPass.add(7l); // NOCS (MagicNumberCheck)
 
@@ -117,7 +117,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 	 */
 	@Test
 	public void testAssertPassTraceId() {
-		final NavigableSet<Long> idsToPass = new TreeSet<Long>();
+		final SortedSet<Long> idsToPass = new TreeSet<Long>();
 		idsToPass.add(5l); // NOCS (MagicNumberCheck)
 		idsToPass.add(7l); // NOCS (MagicNumberCheck)
 
@@ -151,7 +151,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 	 */
 	@Test
 	public void testAssertPassTraceIdWhenPassAll() {
-		final NavigableSet<Long> idsToPass = null; // i.e., pass all
+		final SortedSet<Long> idsToPass = null; // i.e., pass all
 
 		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(idsToPass);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());

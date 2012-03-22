@@ -30,61 +30,52 @@ public final class LogImplCommonsLogging implements Log {
 		this.log = org.apache.commons.logging.impl.Jdk14LoggerPatched.getLog(name);
 	}
 
-	@Override
 	public boolean isDebugEnabled() {
 		return this.log.isDebugEnabled();
 	}
 
-	@Override
 	public void debug(final String message) {
 		if (this.log.isDebugEnabled()) {
 			this.log.debug(message);
 		}
 	}
 
-	@Override
 	public void debug(final String message, final Throwable t) {
 		if (this.log.isDebugEnabled()) {
 			this.log.debug(message, t);
 		}
 	}
 
-	@Override
 	public void info(final String message) {
 		if (this.log.isInfoEnabled()) {
 			this.log.info(message);
 		}
 	}
 
-	@Override
 	public void info(final String message, final Throwable t) {
 		if (this.log.isInfoEnabled()) {
 			this.log.info(message, t);
 		}
 	}
 
-	@Override
 	public void warn(final String message) {
 		if (this.log.isWarnEnabled()) {
 			this.log.warn(message);
 		}
 	}
 
-	@Override
 	public void warn(final String message, final Throwable t) {
 		if (this.log.isWarnEnabled()) {
 			this.log.warn(message, t);
 		}
 	}
 
-	@Override
 	public void error(final String message) {
 		if (this.log.isErrorEnabled()) {
 			this.log.error(message);
 		}
 	}
 
-	@Override
 	public void error(final String message, final Throwable t) {
 		if (this.log.isErrorEnabled()) {
 			this.log.error(message, t);

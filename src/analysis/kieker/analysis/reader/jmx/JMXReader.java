@@ -108,13 +108,11 @@ public final class JMXReader extends AbstractReaderPlugin {
 		return defaultConfiguration;
 	}
 
-	@Override
 	public void terminate(final boolean error) {
 		JMXReader.LOG.info("Shutdown of JMXReader requested.");
 		this.unblock();
 	}
 
-	@Override
 	public final boolean read() {
 		if (this.silentreconnect) {
 			return this.read2();
@@ -241,6 +239,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 
 	private final void block() {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
+
 			@Override
 			public final void run() {
 				JMXReader.this.unblock();
@@ -262,7 +261,6 @@ public final class JMXReader extends AbstractReaderPlugin {
 			// nothing to do
 		}
 
-		@Override
 		public final void handleNotification(final Notification notification, final Object handback) {
 			JMXReader.super.deliver(JMXReader.OUTPUT_PORT_NAME, notification.getUserData());
 		}
@@ -277,7 +275,6 @@ public final class JMXReader extends AbstractReaderPlugin {
 			// nothing to do
 		}
 
-		@Override
 		public final void handleNotification(final Notification notification, final Object handback) {
 			final String notificationType = notification.getType();
 			if (notificationType.equals(JMXConnectionNotification.CLOSED)) {

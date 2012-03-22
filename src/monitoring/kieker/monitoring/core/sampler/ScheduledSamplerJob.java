@@ -51,7 +51,7 @@ public class ScheduledSamplerJob implements Runnable {
 	/**
 	 * Throws a {@link RuntimeException} if an error occurred.
 	 */
-	@Override
+
 	public final void run() throws RuntimeException { // NOCS (IllegalThrowsCheck)
 		try {
 			if (!this.monitoringController.isMonitoringEnabled()) {

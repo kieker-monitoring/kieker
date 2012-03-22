@@ -209,6 +209,7 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 	 * 
 	 * @param error
 	 */
+
 	@Override
 	public void terminate(final boolean error) {
 		if (!error) {

@@ -250,10 +250,12 @@ public class BookstoreEventRecordFactory {
 		final List<AbstractTraceEvent> validSyncTraceBeforeAfterEvents = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceId++);
 		allRecords.addAll(validSyncTraceBeforeAfterEvents);
 		firstTimestamp += firstTimestampDelta;
-		final List<AbstractTraceEvent> validSyncTraceAdditionalCallEvents = BookstoreEventRecordFactory.validSyncTraceAdditionalCallEvents(firstTimestamp, traceId++);
+		final List<AbstractTraceEvent> validSyncTraceAdditionalCallEvents =
+				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEvents(firstTimestamp, traceId++);
 		allRecords.addAll(validSyncTraceAdditionalCallEvents);
 		firstTimestamp += firstTimestampDelta;
-		final List<AbstractTraceEvent> validSyncTraceAdditionalCallEventsGap = BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(firstTimestamp, traceId++);
+		final List<AbstractTraceEvent> validSyncTraceAdditionalCallEventsGap =
+				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(firstTimestamp, traceId++);
 		allRecords.addAll(validSyncTraceAdditionalCallEventsGap);
 
 		for (final AbstractTraceEvent r : allRecords) {

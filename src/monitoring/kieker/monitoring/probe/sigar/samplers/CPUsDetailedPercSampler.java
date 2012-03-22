@@ -49,7 +49,6 @@ public final class CPUsDetailedPercSampler extends AbstractSigarSampler {
 		super(sigar);
 	}
 
-	@Override
 	public void sample(final IMonitoringController samplingController) throws SigarException {
 		final CpuPerc[] cpus = this.sigar.getCpuPercList();
 		final ITimeSource timesource = samplingController.getTimeSource();

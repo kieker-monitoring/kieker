@@ -22,7 +22,6 @@ package kieker.tools.traceAnalysis.filter;
 
 import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter;
 
 /**
  * 
@@ -83,8 +82,8 @@ public abstract class AbstractTimestampFilter extends AbstractFilterPlugin {
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(this.getConfigurationPropertyIgnoreBeforeTimestamp(), Long.toString(TimestampFilter.MIN_TIMESTAMP));
-		configuration.setProperty(this.getConfigurationPropertyIgnoreAfterTimestamp(), Long.toString(TimestampFilter.MAX_TIMESTAMP));
+		configuration.setProperty(this.getConfigurationPropertyIgnoreBeforeTimestamp(), Long.toString(AbstractTimestampFilter.MIN_TIMESTAMP));
+		configuration.setProperty(this.getConfigurationPropertyIgnoreAfterTimestamp(), Long.toString(AbstractTimestampFilter.MAX_TIMESTAMP));
 
 		return configuration;
 	}

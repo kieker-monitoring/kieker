@@ -79,7 +79,7 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 	/**
 	 * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
 	 */
-	@Override
+
 	public Object invoke(final MethodInvocation invocation) throws Throwable { // NOCS (IllegalThrowsCheck)
 		final long traceId = OperationExecutionMethodInvocationInterceptor.CF_REGISTRY.recallThreadLocalTraceId(); // -1 if entry point
 		// Only go on if a traceId has been registered before

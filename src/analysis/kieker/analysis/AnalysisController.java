@@ -460,7 +460,7 @@ public final class AnalysisController implements Runnable {
 	 * 
 	 * @return true on success; false if an error occurred
 	 */
-	@Override
+
 	public final void run() {
 		synchronized (this) {
 			if (this.state != STATE.READY) {
@@ -498,7 +498,7 @@ public final class AnalysisController implements Runnable {
 				return;
 			}
 			new Thread(new Runnable() {
-				@Override
+
 				public void run() {
 					if (!reader.read()) {
 						AnalysisController.LOG.error("Calling read() on Reader returned false.");
@@ -657,6 +657,7 @@ public final class AnalysisController implements Runnable {
 		/* Set OPTION_RECORD_UNKNOWN_FEATURE prior to calling getResource. */
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*",
 				new EcoreResourceFactoryImpl() {
+
 					@Override
 					public Resource createResource(final URI uri) {
 						final XMIResourceImpl resource = (XMIResourceImpl) super.createResource(uri);

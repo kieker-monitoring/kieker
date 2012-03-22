@@ -38,7 +38,7 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * 
 	 * This method should not be used for serialization purposes since this is not the purpose of Object's toString method.
 	 */
-	@Override
+
 	public String toString();
 
 	public void initFromArray(Object[] values);

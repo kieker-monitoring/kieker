@@ -59,7 +59,7 @@ public final class NamedPipeFactory {
 	public static final IPipeWriter createAndRegisterNamedPipeRecordWriter(final String pipeName) {
 		final Pipe namedPipe = Broker.INSTANCE.acquirePipe(pipeName);
 		final IPipeWriter writer = new IPipeWriter() {
-			@Override
+
 			public boolean newMonitoringRecord(final IMonitoringRecord record) {
 				return namedPipe.writeMonitoringRecord(record);
 			}

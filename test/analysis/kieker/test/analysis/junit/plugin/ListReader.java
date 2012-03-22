@@ -33,7 +33,6 @@ public class ListReader extends AbstractReaderPlugin {
 		this.objects.add(object);
 	}
 
-	@Override
 	public boolean read() {
 		for (final Object obj : this.objects) {
 			super.deliver(ListReader.OUTPUT_PORT_NAME, obj);
@@ -41,7 +40,6 @@ public class ListReader extends AbstractReaderPlugin {
 		return true;
 	}
 
-	@Override
 	public void terminate(final boolean error) {}
 
 	@Override

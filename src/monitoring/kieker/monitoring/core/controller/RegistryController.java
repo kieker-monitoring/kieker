@@ -60,7 +60,6 @@ public final class RegistryController extends AbstractController implements IReg
 		return sb.toString();
 	}
 
-	@Override
 	public final int getIdForString(final String string) {
 		return this.stringRegistry.get(string);
 	}
