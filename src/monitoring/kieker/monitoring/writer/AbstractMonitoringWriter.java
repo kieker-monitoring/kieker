@@ -20,7 +20,7 @@
 
 package kieker.monitoring.writer;
 
-import java.util.Set;
+import java.util.Enumeration;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -72,17 +72,18 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 		sb.append(this.getClass().getName());
 		sb.append("'\n\tConfiguration:");
 		// 1.5 compability
-		final Set<Object> keys = this.configuration.keySet();
-		// for 1.6 simply (also change Objects to Strings
+		final Enumeration<?> keys = this.configuration.propertyNames();
+		// for 1.6 simply (also adjust below)
 		// final Set<String> keys = this.configuration.stringPropertyNames();
-		if (keys.isEmpty()) {
+		if (!keys.hasMoreElements()) {
 			sb.append("\n\t\tNo Configuration");
 		} else {
-			for (final Object property : keys) {
+			while (keys.hasMoreElements()) {
+				final String property = (String) keys.nextElement();
 				sb.append("\n\t\t");
 				sb.append(property);
 				sb.append("='");
-				sb.append(this.configuration.getProperty((String) property));
+				sb.append(this.configuration.getProperty(property));
 				sb.append("'");
 			}
 		}

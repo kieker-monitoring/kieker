@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Enumeration;
 import java.util.Properties;
 
 import kieker.common.configuration.Configuration;
@@ -183,9 +184,11 @@ public abstract class ConfigurationFactory implements Keys {
 	private static final Configuration getSystemPropertiesStartingWith(final String prefix, final Configuration defaultValues) {
 		final Configuration configuration = new Configuration(defaultValues);
 		final Properties properties = System.getProperties();
-		for (final Object property : properties.keySet()) {
-			if (((String) property).startsWith(prefix)) {
-				configuration.setProperty((String) property, properties.getProperty((String) property));
+		final Enumeration<?> keys = properties.propertyNames();
+		while (keys.hasMoreElements()) {
+			final String property = (String) keys.nextElement();
+			if (property.startsWith(prefix)) {
+				configuration.setProperty(property, properties.getProperty(property));
 			}
 		}
 		return configuration;

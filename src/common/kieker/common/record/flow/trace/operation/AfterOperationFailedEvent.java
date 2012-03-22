@@ -35,11 +35,16 @@ public final class AfterOperationFailedEvent extends AbstractOperationEvent {
 		String.class, // Exception
 	};
 
+	/**
+	 * Constant to be used if no cause required.
+	 */
+	public static final String NO_CAUSE = "<no-cause>";
+
 	private final String cause;
 
 	public AfterOperationFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSiganture, final String cause) {
 		super(timestamp, traceId, orderIndex, operationSiganture);
-		this.cause = cause;
+		this.cause = (cause == null) ? AfterOperationFailedEvent.NO_CAUSE : cause; // NOCS
 	}
 
 	public AfterOperationFailedEvent(final Object[] values) {

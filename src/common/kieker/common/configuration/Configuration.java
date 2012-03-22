@@ -20,6 +20,7 @@
 
 package kieker.common.configuration;
 
+import java.util.Enumeration;
 import java.util.Properties;
 
 import kieker.common.logging.Log;
@@ -160,9 +161,13 @@ public final class Configuration extends Properties {
 	 */
 	public final Configuration getPropertiesStartingWith(final String prefix) {
 		final Configuration configuration = new Configuration(null);
-		for (final Object property : this.keySet()) {
-			if (((String) property).startsWith(prefix)) {
-				configuration.setProperty((String) property, this.getProperty((String) property));
+		// for 1.6 simply (also adjust below)
+		// final Set<String> keys = this.stringPropertyNames();
+		final Enumeration<?> keys = this.propertyNames();
+		while (keys.hasMoreElements()) {
+			final String property = (String) keys.nextElement();
+			if ((property).startsWith(prefix)) {
+				configuration.setProperty(property, this.getProperty(property));
 			}
 		}
 		return configuration;

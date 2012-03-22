@@ -31,13 +31,23 @@ public final class ConstructionEvent extends AbstractEvent {
 		String.class, // objectName
 	};
 
+	/**
+	 * This field should not be exported, because it makes little sense to have no associated class
+	 */
+	private static final String NO_CLASSNAME = "<no-classname>";
+
+	/**
+	 * Constant to be used if no hostname required.
+	 */
+	private static final String NO_OBJECTNAME = "<no-objectname>";
+
 	private final String className;
 	private final String objectName;
 
 	public ConstructionEvent(final long timestamp, final String className, final String objectName) {
 		super(timestamp);
-		this.className = className;
-		this.objectName = objectName;
+		this.className = (className == null) ? ConstructionEvent.NO_CLASSNAME : className; // NOCS
+		this.objectName = (objectName == null) ? ConstructionEvent.NO_OBJECTNAME : objectName; // NOCS
 	}
 
 	public ConstructionEvent(final Object[] values) {

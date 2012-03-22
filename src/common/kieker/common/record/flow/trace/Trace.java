@@ -38,6 +38,16 @@ public final class Trace extends AbstractMonitoringRecord implements IMonitoring
 		int.class, // parentOrderId
 	};
 
+	/**
+	 * Constant to be used if no sessionId required.
+	 */
+	public static final String NO_SESSION_ID = "<no-session-id>";
+
+	/**
+	 * Constant to be used if no hostname required.
+	 */
+	public static final String NO_HOSTNAME = "<default-host>";
+
 	private final long traceId;
 	private final long threadId;
 	private final String sessionId;
@@ -49,8 +59,8 @@ public final class Trace extends AbstractMonitoringRecord implements IMonitoring
 	public Trace(final long traceId, final long threadId, final String sessionId, final String hostname, final long parentTraceId, final int parentOrderId) {
 		this.traceId = traceId;
 		this.threadId = threadId;
-		this.sessionId = sessionId;
-		this.hostname = hostname;
+		this.sessionId = (sessionId == null) ? Trace.NO_SESSION_ID : sessionId; // NOCS
+		this.hostname = (hostname == null) ? Trace.NO_HOSTNAME : hostname; // NOCS
 		this.parentTraceId = parentTraceId;
 		this.parentOrderId = parentOrderId;
 	}

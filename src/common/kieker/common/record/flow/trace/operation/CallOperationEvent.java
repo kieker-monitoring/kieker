@@ -35,12 +35,17 @@ public final class CallOperationEvent extends AbstractOperationEvent {
 		String.class, // calleeOperationSiganture
 	};
 
+	/**
+	 * This field should not be exported, because it makes little sense to have no associated class
+	 */
+	private static final String NO_CALLEEOPERATIONSIGANTURE = "<no-calleeOperationSiganture>";
+
 	private final String calleeOperationSiganture;
 
 	public CallOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String callerOperationSiganture,
 			final String calleeOperationSiganture) {
 		super(timestamp, traceId, orderIndex, callerOperationSiganture);
-		this.calleeOperationSiganture = calleeOperationSiganture;
+		this.calleeOperationSiganture = (calleeOperationSiganture == null) ? CallOperationEvent.NO_CALLEEOPERATIONSIGANTURE : calleeOperationSiganture; // NOCS
 	}
 
 	public CallOperationEvent(final Object[] values) {

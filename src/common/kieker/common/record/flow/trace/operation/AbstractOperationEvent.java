@@ -28,11 +28,16 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 public abstract class AbstractOperationEvent extends AbstractTraceEvent {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * This field should not be exported, because it makes little sense to have no associated class
+	 */
+	private static final String NO_OPERATIONSIGNATURE = "<no-operationSignature>";
+
 	private final String operationSignature;
 
 	public AbstractOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationName) {
 		super(timestamp, traceId, orderIndex);
-		this.operationSignature = operationName;
+		this.operationSignature = (this.operationSignature == null) ? AbstractOperationEvent.NO_OPERATIONSIGNATURE : this.operationSignature; // NOCS
 	}
 
 	public AbstractOperationEvent(final Object[] values, final Class<?>[] valueTypes) {

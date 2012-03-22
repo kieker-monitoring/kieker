@@ -47,6 +47,27 @@ public class BinaryFsWriterThread extends AbstractFsWriterThread {
 	protected void write(final IMonitoringRecord monitoringRecord) throws IOException {
 		this.out.writeInt(this.monitoringController.getIdForString(monitoringRecord.getClass().getName()));
 		this.out.writeLong(monitoringRecord.getLoggingTimestamp());
+		// two steps
+		// first check for conformity
+		for (final Object recordField : monitoringRecord.toArray()) {
+			if ((recordField instanceof String)
+					|| (recordField instanceof Integer)
+					|| (recordField instanceof Long)
+					|| (recordField instanceof Float)
+					|| (recordField instanceof Double)
+					|| (recordField instanceof Byte)
+					|| (recordField instanceof Short)
+					|| (recordField instanceof Boolean)) {
+				continue;
+			} else if (recordField == null) {
+				BinaryFsWriterThread.LOG.warn("Unable to write record with null value: " + monitoringRecord.getClass().getSimpleName());
+				return; // skip record
+			} else {
+				BinaryFsWriterThread.LOG.warn("Unable to write record with recordField of type " + recordField.getClass());
+				return; // skip record
+			}
+		}
+		// second write it
 		for (final Object recordField : monitoringRecord.toArray()) {
 			if (recordField instanceof String) {
 				this.out.writeInt(this.monitoringController.getIdForString((String) recordField));
@@ -64,8 +85,10 @@ public class BinaryFsWriterThread extends AbstractFsWriterThread {
 				this.out.writeShort((Short) recordField);
 			} else if (recordField instanceof Boolean) {
 				this.out.writeBoolean((Boolean) recordField);
+			} else if (recordField == null) {
+				BinaryFsWriterThread.LOG.warn("Unable to write record with null value.");
 			} else {
-				BinaryFsWriterThread.LOG.warn("Failed to write recordField of type " + recordField.getClass());
+				BinaryFsWriterThread.LOG.warn("Unable to write record with recordField of type " + recordField.getClass());
 				this.out.writeByte((byte) 0);
 			}
 		}

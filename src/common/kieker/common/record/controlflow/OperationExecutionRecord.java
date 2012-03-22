@@ -238,7 +238,6 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	}
 
 	public OperationExecutionRecord(final Object[] values) {
-		// TODO: null checks?
 		AbstractMonitoringRecord.checkArray(values, OperationExecutionRecord.TYPES); // throws IllegalArgumentException
 		this.experimentId = (Integer) values[0];
 		this.operationSignature = (String) values[1]; // NOCS
