@@ -114,7 +114,7 @@
 	<target name="-compile-kieker.common" depends="-init" description="Compiles the sources commonly used by all Kieker components">
 		<delete dir="${build.kieker.common.dir}" />
 		<mkdir dir="${build.kieker.common.dir}" />
-		<javac destDir="${build.kieker.common.dir}" source="1.6" target="1.6" srcdir="${src.kieker.common.dir}" debug="true" classpathref="kieker.common-compile-classpath" includeAntRuntime="false">
+		<javac destDir="${build.kieker.common.dir}" source="1.5" target="1.5" srcdir="${src.kieker.common.dir}" debug="true" classpathref="kieker.common-compile-classpath" includeAntRuntime="false">
 			<compilerarg value="-Xlint:all" />
 		</javac>
 	</target>
@@ -123,11 +123,11 @@
 		<delete dir="${build.kieker.monitoring.dir}" />
 		<mkdir dir="${build.kieker.monitoring.dir}" />
 		<mkdir dir="${build.kieker.monitoring.dir}/META-INF" />
-		<javac destDir="${build.kieker.monitoring.dir}" source="1.6" target="1.6" srcdir="${src.kieker.monitoring.dir}" excludes="kieker/monitoring/probe/aspectj/" debug="true" classpathref="kieker.monitoring-compile-classpath" includeAntRuntime="false">
+		<javac destDir="${build.kieker.monitoring.dir}" source="1.5" target="1.5" srcdir="${src.kieker.monitoring.dir}" excludes="kieker/monitoring/probe/aspectj/" debug="true" classpathref="kieker.monitoring-compile-classpath" includeAntRuntime="false">
 			<compilerarg value="-Xlint:all" />
 		</javac>
 		<!-- WORKAROUND!!! otherwise the include statement of the aop.xml HAS TO include the apsect.class files -->
-		<iajc destdir="${build.kieker.monitoring.dir}" source="1.6" target="1.6" Xlint="ignore" debug="true" classpathref="kieker.monitoring-ajc-compile-classpath">
+		<iajc destdir="${build.kieker.monitoring.dir}" source="1.5" target="1.5" Xlint="ignore" debug="true" classpathref="kieker.monitoring-ajc-compile-classpath">
 			<sourceroots>
 				<pathelement location="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectj/" />
 			</sourceroots>
@@ -138,7 +138,7 @@
 	<target name="build-kieker.monitoring-servlet" depends="-init,-compile-kieker.common,-compile-kieker.monitoring" description="Compiles and packages the Kieker.Monitoring Control Servlet War file">
 		<delete dir="${build.kieker.monitoring.servlet.dir}" />
 		<mkdir dir="${build.kieker.monitoring.servlet.dir}" />
-		<javac source="1.6" target="1.6" destDir="${build.kieker.monitoring.servlet.dir}" classpathref="kieker.monitoring-servlet-compile-classpath" srcdir="${src.kieker.monitoring-servlet.dir}" debug="true" includeAntRuntime="false" />
+		<javac source="1.5" target="1.5" destDir="${build.kieker.monitoring.servlet.dir}" classpathref="kieker.monitoring-servlet-compile-classpath" srcdir="${src.kieker.monitoring-servlet.dir}" debug="true" includeAntRuntime="false" />
 		<war destfile="${dist.dir}/${dist.kieker.monitoring.servlet.war}" webxml="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/WEB-INF/web.xml">
 			<classes dir="${build.kieker.monitoring.servlet.dir}" />
 			<zipfileset dir="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/images" prefix="images" />
@@ -149,7 +149,7 @@
 	<target name="-compile-kieker.analysis.model" depends="-init" description="Compiles the sources of the Analysis Meta-Model">
 		<delete dir="${build.kieker.analysis.model.dir}" />
 		<mkdir dir="${build.kieker.analysis.model.dir}" />
-		<javac destDir="${build.kieker.analysis.model.dir}" source="1.6" target="1.6" srcdir="${src.gen.kieker.analysis.dir}" debug="true" classpathref="kieker.analysis-compile-classpath" includeAntRuntime="false">
+		<javac destDir="${build.kieker.analysis.model.dir}" source="1.5" target="1.5" srcdir="${src.gen.kieker.analysis.dir}" debug="true" classpathref="kieker.analysis-compile-classpath" includeAntRuntime="false">
 			<compilerarg value="-Xlint:all" />
 		</javac>
 	</target>
@@ -157,7 +157,7 @@
 	<target name="-compile-kieker.analysis" depends="-init,-compile-kieker.common,-compile-kieker.analysis.model" description="Compiles the sources of the Kieker.Analysis component">
 		<delete dir="${build.kieker.analysis.dir}" />
 		<mkdir dir="${build.kieker.analysis.dir}" />
-		<javac destDir="${build.kieker.analysis.dir}" source="1.6" target="1.6" srcdir="${src.kieker.analysis.dir}" debug="true" classpathref="kieker.analysis-compile-classpath" includeAntRuntime="false">
+		<javac destDir="${build.kieker.analysis.dir}" source="1.5" target="1.5" srcdir="${src.kieker.analysis.dir}" debug="true" classpathref="kieker.analysis-compile-classpath" includeAntRuntime="false">
 			<compilerarg value="-Xlint:all" />
 		</javac>
 	</target>
@@ -165,7 +165,7 @@
 	<target name="-compile-kieker.tools" depends="-init,-compile-kieker.common,-compile-kieker.monitoring,-compile-kieker.analysis" description="Compiles the sources of Kieker tools">
 		<delete dir="${build.kieker.tools.dir}" />
 		<mkdir dir="${build.kieker.tools.dir}" />
-		<javac destDir="${build.kieker.tools.dir}" source="1.6" target="1.6" srcdir="${src.kieker.tools.dir}" debug="true" classpathref="kieker.tools-compile-classpath" includeAntRuntime="false">
+		<javac destDir="${build.kieker.tools.dir}" source="1.5" target="1.5" srcdir="${src.kieker.tools.dir}" debug="true" classpathref="kieker.tools-compile-classpath" includeAntRuntime="false">
 			<compilerarg value="-Xlint:all" />
 		</javac>
 		<copy file="${sequence.pic}" tofile="${build.kieker.tools.dir}/META-INF/sequence.pic" />
@@ -585,7 +585,7 @@
 				<include name="${dist.kieker.main.jar}" />
 			</fileset>
 		</path>
-		<javac source="1.6" target="1.6" destDir="${build.tests.dir}" classpathref="common-test-compile-classpath" srcdir="${test.kieker.common.dir}" includeAntRuntime="false">
+		<javac source="1.5" target="1.5" destDir="${build.tests.dir}" classpathref="common-test-compile-classpath" srcdir="${test.kieker.common.dir}" includeAntRuntime="false">
 		</javac>
 	</target>
 
@@ -599,7 +599,7 @@
 			</fileset>
 		</path>
 		<copy file="${kieker.monitoring.test.properties}" tofile="${build.tests.dir}/META-INF/kieker.monitoring.test.properties" overwrite="true"/>
-		<javac source="1.6" target="1.6" destDir="${build.tests.dir}" classpathref="monitoring-test-compile-classpath" srcdir="${test.kieker.monitoring.dir}" excludes="kieker/test/monitoring/aspectj/compileTimeWeaving/" includeAntRuntime="false">
+		<javac source="1.5" target="1.5" destDir="${build.tests.dir}" classpathref="monitoring-test-compile-classpath" srcdir="${test.kieker.monitoring.dir}" excludes="kieker/test/monitoring/aspectj/compileTimeWeaving/" includeAntRuntime="false">
 		</javac>
 	</target>
 
@@ -612,7 +612,7 @@
 				<include name="${dist.kieker.main.jar}" />
 			</fileset>
 		</path>
-		<javac source="1.6" target="1.6" destDir="${build.tests.dir}" classpathref="analysis-test-compile-classpath" srcdir="${test.kieker.analysis.dir}" includeAntRuntime="false">
+		<javac source="1.5" target="1.5" destDir="${build.tests.dir}" classpathref="analysis-test-compile-classpath" srcdir="${test.kieker.analysis.dir}" includeAntRuntime="false">
 		</javac>
 	</target>
 
@@ -625,7 +625,7 @@
 				<include name="${dist.kieker.main.jar}" />
 			</fileset>
 		</path>
-		<javac source="1.6" target="1.6" destDir="${build.tests.dir}" classpathref="tools-test-compile-classpath" srcdir="${test.kieker.tools.dir}" includeAntRuntime="false">
+		<javac source="1.5" target="1.5" destDir="${build.tests.dir}" classpathref="tools-test-compile-classpath" srcdir="${test.kieker.tools.dir}" includeAntRuntime="false">
 		</javac>
 	</target>
 
@@ -768,7 +768,7 @@
 		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectj/operationExecution/AbstractOperationExecutionAspect.java" todir="${tmp.dir}/aspects/" />
 		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectj/operationExecution/AbstractOperationExecutionAspectServlet.java" todir="${tmp.dir}/aspects/" />
 		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectj/operationExecution/${TestAspect}" todir="${tmp.dir}/aspects/" />
-		<iajc destdir="${build.tests.dir}" source="1.6" target="1.6" verbose="true" classpathref="kieker.test-compileTimeWeaving-bookstore-compile-classpath">
+		<iajc destdir="${build.tests.dir}" source="1.5" target="1.5" verbose="true" classpathref="kieker.test-compileTimeWeaving-bookstore-compile-classpath">
 			<sourceroots>
 				<pathelement location="${test.kieker.monitoring.dir}/kieker/test/monitoring/aspectj/compileTimeWeaving/bookstore/" />
 				<pathelement location="${tmp.dir}/aspects/" />
@@ -793,7 +793,7 @@
 		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectj/operationExecution/AbstractOperationExecutionAspect.java" todir="${tmp.dir}/aspects/" />
 		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectj/operationExecution/AbstractOperationExecutionAspectServlet.java" todir="${tmp.dir}/aspects/" />
 		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectj/operationExecution/${TestAspect}" todir="${tmp.dir}/aspects/" />
-		<iajc destdir="${build.tests.dir}" source="1.6" target="1.6" verbose="true" classpathref="kieker.test-compileTimeWeaving-twoConcurrentMethodsExample-compile-classpath">
+		<iajc destdir="${build.tests.dir}" source="1.5" target="1.5" verbose="true" classpathref="kieker.test-compileTimeWeaving-twoConcurrentMethodsExample-compile-classpath">
 			<sourceroots>
 				<pathelement location="${test.kieker.monitoring.dir}/kieker/test/monitoring/aspectj/compileTimeWeaving/twoConcurrentMethodsExample/" />
 				<pathelement location="${tmp.dir}/aspects/" />
@@ -972,7 +972,7 @@
 			</fileset>
 		</path>
 		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.libs"/>
-		<pmd shortFilenames="true" rulesetfiles="${lib.dir}/pmd-4.3/pmdrules.xml" targetjdk="1.6" >
+		<pmd shortFilenames="true" rulesetfiles="${lib.dir}/pmd-4.3/pmdrules.xml" targetjdk="1.5" >
 			<formatter type="xml" toFile="${tmp.dir}/pmd_report.xml" />
 			<fileset dir="${src.dir}" includes="**/*.java" />
 			<fileset dir="${test.dir}" includes="**/*.java" />
