@@ -226,8 +226,8 @@ final class FSDirectoryReader implements Runnable {
 						}
 						final long loggingTimestamp = Long.valueOf(recordFields[1]);
 						// 1.5 compatibility
-						final String[] recordFiledsReduced = new String[recordFields.length - 1];
-						System.arraycopy(recordFields, 2, recordFiledsReduced, 1, recordFields.length - 1);
+						final String[] recordFiledsReduced = new String[recordFields.length - 2];
+						System.arraycopy(recordFields, 2, recordFiledsReduced, 0, recordFields.length - 2);
 						record = AbstractMonitoringRecord.createFromStringArray(clazz, recordFiledsReduced);
 						// in 1.6 this could be simplified to
 						// record = AbstractMonitoringRecord.createFromStringArray(clazz, Arrays.copyOfRange(recordFields, 2, recordFields.length));

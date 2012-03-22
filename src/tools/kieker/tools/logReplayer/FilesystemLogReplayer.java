@@ -87,7 +87,7 @@ public class FilesystemLogReplayer {
 		this.recordReceiver = monitoringController;
 		// 1.5 compability
 		this.inputDirs = new String[inputDirs.length];
-		System.arraycopy(inputDirs, 1, this.inputDirs, 1, inputDirs.length);
+		System.arraycopy(inputDirs, 0, this.inputDirs, 0, inputDirs.length);
 		// for 1.6+:
 		// this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
 		this.realtimeMode = realtimeMode;

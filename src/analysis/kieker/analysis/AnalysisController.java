@@ -480,7 +480,7 @@ public final class AnalysisController implements Runnable {
 		for (final AbstractFilterPlugin filter : this.filters) {
 			/* Make also sure that all repository ports of all plugins are connected. */
 			if (!filter.areAllRepositoryPortsConnected()) {
-				AnalysisController.LOG.error("Plugin '" + filter.getName() + "' has unconnected repositories.");
+				AnalysisController.LOG.error("Plugin '" + filter.getName() + "' (" + filter.getPluginName() + ") has unconnected repositories.");
 				return;
 			}
 			if (!filter.init()) {
@@ -494,7 +494,7 @@ public final class AnalysisController implements Runnable {
 		for (final AbstractReaderPlugin reader : this.readers) {
 			/* Make also sure that all repository ports of all plugins are connected. */
 			if (!reader.areAllRepositoryPortsConnected()) {
-				AnalysisController.LOG.error("Reader '" + reader.getName() + "' has unconnected repositories.");
+				AnalysisController.LOG.error("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") has unconnected repositories.");
 				return;
 			}
 			new Thread(new Runnable() {

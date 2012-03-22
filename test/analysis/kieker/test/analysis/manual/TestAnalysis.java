@@ -149,6 +149,7 @@ public class TestAnalysis {
 				analysisController.registerFilter(eventRecordTraceGenerationFilter);
 				analysisController.connect(countingFilter2, CountingFilter.OUTPUT_PORT_NAME, eventRecordTraceGenerationFilter,
 						EventRecordTraceGenerationFilter.INPUT_PORT_NAME);
+				analysisController.connect(eventRecordTraceGenerationFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
 
 				analysisController.registerFilter(eventTrace2ExecutionTraceFilter);
 				analysisController.connect(eventRecordTraceGenerationFilter, EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME, eventTrace2ExecutionTraceFilter,

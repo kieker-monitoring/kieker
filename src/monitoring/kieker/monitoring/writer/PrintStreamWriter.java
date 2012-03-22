@@ -71,7 +71,7 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 
 	@Override
 	public void terminate() {
-		if ((this.printStream != System.out) && (this.printStream != System.err)) {
+		if ((this.printStream != null) && (this.printStream != System.out) && (this.printStream != System.err)) {
 			this.printStream.close();
 		}
 		PrintStreamWriter.LOG.info(this.getClass().getName() + " shutting down.");
