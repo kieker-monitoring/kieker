@@ -27,7 +27,7 @@ import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.filter.CountingFilter;
-import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.reader.namedRecordPipe.PipeReader;
 import kieker.common.configuration.Configuration;
@@ -88,7 +88,7 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 	}
 }
 
-class MonitoringSinkClass extends AbstractAnalysisPlugin {
+class MonitoringSinkClass extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME = "doJob";
 	private final List<IMonitoringRecord> receivedRecords;

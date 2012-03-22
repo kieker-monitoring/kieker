@@ -34,7 +34,7 @@ import java.util.Map.Entry;
 import javax.swing.JFrame;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.AbstractReaderPlugin;
 import kieker.analysis.plugin.IPlugin;
@@ -190,7 +190,7 @@ public final class KaxViz extends JFrame {
 				mapPlugin2Graph.put(reader, vertex);
 				mapPluginOutputPorts2Graph.put(reader, this.createOutputPorts(reader, vertex));
 			}
-			for (final AbstractAnalysisPlugin filter : this.analysisController.getFilters()) {
+			for (final AbstractFilterPlugin filter : this.analysisController.getFilters()) {
 				final mxCell vertex = this.createFilter(filter, x++);
 				mapPlugin2Graph.put(filter, vertex);
 				mapPluginInputPorts2Graph.put(filter, this.createInputPorts(filter, vertex));
@@ -279,7 +279,7 @@ public final class KaxViz extends JFrame {
 		return vertex;
 	}
 
-	private final mxCell createFilter(final AbstractAnalysisPlugin plugin, final int c) {
+	private final mxCell createFilter(final AbstractFilterPlugin plugin, final int c) {
 		final mxCell vertex = new mxCell("<<Filter>>\n" + plugin.getName() + " : " + plugin.getPluginName(),
 				new mxGeometry(KaxViz.FILTER_SPACE, KaxViz.FILTER_SPACE + (c * (KaxViz.FILTER_HEIGHT + KaxViz.FILTER_SPACE)),
 						KaxViz.FILTER_WIDTH, KaxViz.FILTER_HEIGHT), null);

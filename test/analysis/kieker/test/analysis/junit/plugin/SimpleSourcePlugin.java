@@ -20,7 +20,7 @@
 
 package kieker.test.analysis.junit.plugin;
 
-import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
@@ -31,7 +31,7 @@ import org.junit.Assert;
  * @author Nils Christian Ehmke, Jan Waller
  */
 @Plugin(outputPorts = @OutputPort(name = SimpleSourcePlugin.OUTPUT_PORT_NAME))
-public class SimpleSourcePlugin extends AbstractAnalysisPlugin {
+public class SimpleSourcePlugin extends AbstractFilterPlugin {
 
 	public static final String OUTPUT_PORT_NAME = "output";
 

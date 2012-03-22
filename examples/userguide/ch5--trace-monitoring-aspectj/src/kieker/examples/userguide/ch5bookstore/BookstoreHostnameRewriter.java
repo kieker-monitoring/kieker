@@ -25,8 +25,9 @@ import java.util.Random;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.MonitoringReaderException;
 import kieker.analysis.exception.MonitoringRecordConsumerException;
-import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
+import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
@@ -36,11 +37,11 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 
 /**
- * Reads a FS monitoring log of {@link OperationExecutionRecord}s and turns the contained 
- * traces into distributed traces by modifying the {@link OperationExecutionRecord#getHostName()}. 
+ * Reads a FS monitoring log of {@link OperationExecutionRecord}s and turns the contained
+ * traces into distributed traces by modifying the {@link OperationExecutionRecord#getHostName()}.
  * 
  * @author Andre van Hoorn
- *
+ * 
  */
 public class BookstoreHostnameRewriter {
 
@@ -72,8 +73,8 @@ public class BookstoreHostnameRewriter {
 	}
 }
 
-class HostNameRewriterPlugin extends AbstractAnalysisPlugin {
-
+@Plugin
+class HostNameRewriterPlugin extends AbstractFilterPlugin {
 	public static final String INPUT_PORT_NAME = "newEvent";
 
 	private static final IMonitoringController MONITORING_CTRL =
@@ -97,9 +98,9 @@ class HostNameRewriterPlugin extends AbstractAnalysisPlugin {
 		}
 
 		final OperationExecutionRecord execution = (OperationExecutionRecord) event;
-		
+
 		final ClassOperationSignaturePair opSigPair = ClassOperationSignaturePair.splitOperationSignatureStr(execution.getOperationSignature());
-		
+
 		String hostname = execution.getHostName();
 		if (opSigPair.getFqClassname().equals(Bookstore.class.getName())) {
 			hostname = HostNameRewriterPlugin.BOOKSTORE_HOSTNAME;
@@ -112,11 +113,11 @@ class HostNameRewriterPlugin extends AbstractAnalysisPlugin {
 				hostname = HostNameRewriterPlugin.CATALOG_HOSTNAMES[1];
 			}
 		}
-		
-		final OperationExecutionRecord newExec = 
-			new OperationExecutionRecord(execution.getOperationSignature(), execution.getSessionId(), execution.getTraceId(), 
-					execution.getTin(), execution.getTout(), hostname, execution.getEoi(), execution.getEss());
-		
+
+		final OperationExecutionRecord newExec =
+				new OperationExecutionRecord(execution.getOperationSignature(), execution.getSessionId(), execution.getTraceId(),
+						execution.getTin(), execution.getTout(), hostname, execution.getEoi(), execution.getEss());
+
 		HostNameRewriterPlugin.MONITORING_CTRL.newMonitoringRecord(newExec);
 	}
 

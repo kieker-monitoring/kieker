@@ -23,7 +23,7 @@ package kieker.test.analysis.junit.plugin;
 import java.util.ArrayList;
 import java.util.List;
 
-import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
@@ -32,7 +32,7 @@ import kieker.common.configuration.Configuration;
  * @author Nils Ehmke, Jan Waller
  */
 @Plugin
-public class SimpleSinkPlugin extends AbstractAnalysisPlugin {
+public class SimpleSinkPlugin extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME = "input";
 	private final List<Object> list = new ArrayList<Object>();

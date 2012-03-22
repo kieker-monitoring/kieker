@@ -23,7 +23,7 @@ package kieker.tools.logReplayer;
 import java.util.Arrays;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.AbstractReaderPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.reader.filesystem.FSReader;
@@ -147,7 +147,7 @@ public class FilesystemLogReplayer {
  * @author Andre van Hoorn
  * 
  */
-class RecordDelegationPlugin extends AbstractAnalysisPlugin {
+class RecordDelegationPlugin extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
 	public static final String CONFIG_IGNORE_RECORDS_BEFORE_TIMESTAMP = "ignoreRecordsBeforeTimestamp";

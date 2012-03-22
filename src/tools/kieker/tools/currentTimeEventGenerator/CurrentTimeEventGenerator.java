@@ -20,7 +20,7 @@
 
 package kieker.tools.currentTimeEventGenerator;
 
-import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -54,7 +54,7 @@ import kieker.common.record.misc.TimestampRecord;
  */
 @Plugin(outputPorts =
 		@OutputPort(name = CurrentTimeEventGenerator.OUTPUT_PORT_NAME_CURRENT_TIME, eventTypes = { TimestampRecord.class }, description = "Provides current time events"))
-public class CurrentTimeEventGenerator extends AbstractAnalysisPlugin {
+public class CurrentTimeEventGenerator extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_NEW_TIMESTAMP = "inputNewTimestamp";
 	public static final String INPUT_PORT_NAME_NEW_RECORD = "inputNewRecord";

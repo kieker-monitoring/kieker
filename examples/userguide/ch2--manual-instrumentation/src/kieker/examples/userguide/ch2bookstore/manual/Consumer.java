@@ -20,14 +20,13 @@
 
 package kieker.examples.userguide.ch2bookstore.manual;
 
-import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 
-public class Consumer extends AbstractAnalysisPlugin {
-
+public class Consumer extends AbstractFilterPlugin {
 	private final long maxResponseTime;
 	public static final String INPUT_PORT_NAME = "newEvent";
 	public static final String CONFIG_MAX_RESPONSE_TIME = "maxResponseTime";

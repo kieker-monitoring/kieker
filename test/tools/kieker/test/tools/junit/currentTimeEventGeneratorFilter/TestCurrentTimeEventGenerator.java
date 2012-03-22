@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
-import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.EmptyRecord;
@@ -153,7 +153,7 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 	}
 
 	// TODO: Don't we have a general sink for this already?
-	static class DstClass extends AbstractAnalysisPlugin {
+	static class DstClass extends AbstractFilterPlugin {
 
 		public static final String INPUT_PORT_NAME = "doJob";
 		private final ConcurrentLinkedQueue<Long> receivedTimestamps = new ConcurrentLinkedQueue<Long>();

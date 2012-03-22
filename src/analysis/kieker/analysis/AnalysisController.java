@@ -46,7 +46,7 @@ import kieker.analysis.model.analysisMetaModel.MIRepository;
 import kieker.analysis.model.analysisMetaModel.MIRepositoryConnector;
 import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelFactory;
 import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage;
-import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.AbstractReaderPlugin;
 import kieker.analysis.plugin.IPlugin;
@@ -82,7 +82,7 @@ public final class AnalysisController implements Runnable {
 	 */
 	private final Collection<MIDependency> dependencies = new CopyOnWriteArrayList<MIDependency>();
 	private final Collection<AbstractReaderPlugin> readers = new CopyOnWriteArrayList<AbstractReaderPlugin>();
-	private final Collection<AbstractAnalysisPlugin> filters = new CopyOnWriteArrayList<AbstractAnalysisPlugin>();
+	private final Collection<AbstractFilterPlugin> filters = new CopyOnWriteArrayList<AbstractFilterPlugin>();
 	private final Collection<AbstractRepository> repos = new CopyOnWriteArrayList<AbstractRepository>();
 
 	private final CountDownLatch initializationLatch = new CountDownLatch(1);
@@ -188,7 +188,7 @@ public final class AnalysisController implements Runnable {
 				if (plugin instanceof AbstractReaderPlugin) {
 					this.registerReader((AbstractReaderPlugin) plugin);
 				} else {
-					this.registerFilter((AbstractAnalysisPlugin) plugin);
+					this.registerFilter((AbstractFilterPlugin) plugin);
 				}
 			} catch (final Exception ex) {
 				AnalysisController.LOG.error("Could not load plugin: " + mPlugin.getClassname(), ex);
@@ -477,7 +477,7 @@ public final class AnalysisController implements Runnable {
 		}
 
 		// Call execute() method of all plug-ins.
-		for (final AbstractAnalysisPlugin filter : this.filters) {
+		for (final AbstractFilterPlugin filter : this.filters) {
 			/* Make also sure that all repository ports of all plugins are connected. */
 			if (!filter.areAllRepositoryPortsConnected()) {
 				AnalysisController.LOG.error("Plugin '" + filter.getName() + "' has unconnected repositories.");
@@ -550,7 +550,7 @@ public final class AnalysisController implements Runnable {
 		for (final AbstractReaderPlugin reader : this.readers) {
 			reader.terminate(error);
 		}
-		for (final AbstractAnalysisPlugin filter : this.filters) {
+		for (final AbstractFilterPlugin filter : this.filters) {
 			filter.terminate(error);
 		}
 	}
@@ -582,7 +582,7 @@ public final class AnalysisController implements Runnable {
 	 * 
 	 * All plugins which have been registered before calling the <i>run</i>-method, will be started once the analysis is started.
 	 */
-	public final void registerFilter(final AbstractAnalysisPlugin filter) {
+	public final void registerFilter(final AbstractFilterPlugin filter) {
 		if (this.state != STATE.READY) {
 			AnalysisController.LOG.error("Unable to register filter after starting analysis.");
 			return;
@@ -630,7 +630,7 @@ public final class AnalysisController implements Runnable {
 		return Collections.unmodifiableCollection(this.readers);
 	}
 
-	public final Collection<AbstractAnalysisPlugin> getFilters() {
+	public final Collection<AbstractFilterPlugin> getFilters() {
 		return Collections.unmodifiableCollection(this.filters);
 	}
 

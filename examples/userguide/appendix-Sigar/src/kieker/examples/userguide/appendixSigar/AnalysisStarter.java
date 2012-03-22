@@ -21,7 +21,7 @@
 package kieker.examples.userguide.appendixSigar;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
@@ -59,8 +59,7 @@ public class AnalysisStarter {
 	}
 }
 
-class StdOutDumpConsumer extends AbstractAnalysisPlugin {
-
+class StdOutDumpConsumer extends AbstractFilterPlugin {
 	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
 
 	public StdOutDumpConsumer(final Configuration configuration) {

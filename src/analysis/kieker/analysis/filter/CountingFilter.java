@@ -22,7 +22,7 @@ package kieker.analysis.filter;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -39,7 +39,7 @@ import kieker.common.configuration.Configuration;
 			@OutputPort(name = CountingFilter.OUTPUT_PORT_NAME, eventTypes = {}, description = "all incoming objects are forwarded"),
 			@OutputPort(name = CountingFilter.OUTPUT_PORT_NAME_COUNT, eventTypes = {}, description = "the current count of objects")
 		})
-public final class CountingFilter extends AbstractAnalysisPlugin {
+public final class CountingFilter extends AbstractFilterPlugin {
 
 	public static final String OUTPUT_PORT_NAME = "output";
 	public static final String OUTPUT_PORT_NAME_COUNT = "count";

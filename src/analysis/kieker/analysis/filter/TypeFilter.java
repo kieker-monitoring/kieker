@@ -23,7 +23,7 @@ package kieker.analysis.filter;
 import java.util.LinkedList;
 import java.util.List;
 
-import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -43,7 +43,7 @@ import kieker.common.logging.LogFactory;
 	@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME, eventTypes = {}, description = "all objects with matching types are forwarded"),
 	@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_NOT, eventTypes = {}, description = "all objects without matching types are forwarded")
 })
-public final class TypeFilter extends AbstractAnalysisPlugin {
+public final class TypeFilter extends AbstractFilterPlugin {
 	private static final Log LOG = LogFactory.getLog(TypeFilter.class);
 
 	public static final String OUTPUT_PORT_NAME = "output";

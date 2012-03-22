@@ -23,7 +23,7 @@ package kieker.analysis.filter.trace;
 import java.util.Set;
 import java.util.TreeSet;
 
-import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -45,7 +45,7 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 	@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_NOT, description = "rejected traces", eventTypes = { AbstractTraceEvent.class, OperationExecutionRecord.class })
 
 })
-public final class TraceIdFilter extends AbstractAnalysisPlugin {
+public final class TraceIdFilter extends AbstractFilterPlugin {
 	public static final String INPUT_PORT_NAME = "input-combined";
 	public static final String INPUT_PORT_NAME_FLOW = "input-TraceEvent";
 	public static final String INPUT_PORT_NAME_OER = "input-OperationExecutionRecord";

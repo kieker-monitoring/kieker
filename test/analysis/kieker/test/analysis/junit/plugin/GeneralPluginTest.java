@@ -9,10 +9,10 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
-import kieker.tools.traceAnalysis.plugins.executionFilter.TimestampFilter;
-import kieker.tools.traceAnalysis.plugins.executionFilter.TraceIdFilter;
-import kieker.tools.traceAnalysis.plugins.executionRecordTransformation.ExecutionRecordTransformationFilter;
+import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
+import kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter;
+import kieker.tools.traceAnalysis.filter.executionFilter.TraceIdFilter;
+import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
@@ -70,7 +70,7 @@ public class GeneralPluginTest extends TestCase {
 
 		/* Connect the plugins. */
 		Assert.assertTrue(controller.connect(src, SourceClass.OUTPUT_PORT_NAME, transformer, ExecutionRecordTransformationFilter.INPUT_PORT_NAME));
-		Assert.assertTrue(controller.connect(transformer, AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, systemModelRepository));
+		Assert.assertTrue(controller.connect(transformer, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, systemModelRepository));
 		Assert.assertTrue(controller.connect(transformer, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME, filter1byTraceID, TraceIdFilter.INPUT_PORT_NAME));
 		Assert.assertTrue(controller.connect(filter1byTraceID, TraceIdFilter.OUTPUT_PORT_NAME, filter2ByTimestamp, TimestampFilter.INPUT_PORT_NAME));
 		Assert.assertTrue(controller.connect(filter2ByTimestamp, TimestampFilter.OUTPUT_PORT_NAME, dst, ExecutionSinkClass.INPUT_PORT_NAME));

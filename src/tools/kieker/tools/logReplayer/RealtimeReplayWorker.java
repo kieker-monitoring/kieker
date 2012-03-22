@@ -21,7 +21,7 @@
 package kieker.tools.logReplayer;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
@@ -36,7 +36,7 @@ import kieker.common.record.IMonitoringRecord;
 @Plugin(outputPorts = {
 	@OutputPort(name = RealtimeReplayWorker.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
 })
-public class RealtimeReplayWorker extends AbstractAnalysisPlugin implements Runnable {
+public class RealtimeReplayWorker extends AbstractFilterPlugin implements Runnable {
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	// private static final Log LOG = LogFactory.getLog(RealtimeReplayWorker.class);
 	private IMonitoringRecord monRec;
@@ -53,7 +53,7 @@ public class RealtimeReplayWorker extends AbstractAnalysisPlugin implements Runn
 	}
 
 	public void initialize(final IMonitoringRecord monRec, final RealtimeReplayDistributor rd,
-			final AbstractAnalysisPlugin cons,
+			final AbstractFilterPlugin cons,
 			final String constInputPortName, final AnalysisController controller) {
 		this.monRec = monRec;
 		this.rd = rd;

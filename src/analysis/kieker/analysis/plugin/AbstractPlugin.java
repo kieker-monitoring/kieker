@@ -41,7 +41,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
 /**
- * <b>Do not</b> inherit directly from this class! Instead inherit from the class {@link AbstractAnalysisPlugin} or {@link AbstractReaderPlugin}.
+ * <b>Do not</b> inherit directly from this class! Instead inherit from the class {@link AbstractFilterPlugin} or {@link AbstractReaderPlugin}.
  * 
  * @author Nils Christian Ehmke, Jan Waller
  */

@@ -25,7 +25,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 
-import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -41,7 +41,7 @@ import kieker.common.logging.LogFactory;
  * @author Matthias Rohr, Jan Waller
  */
 @Plugin(outputPorts = @OutputPort(name = TeeFilter.OUTPUT_PORT_NAME, description = "all incoming objects are forwarded", eventTypes = {}))
-public final class TeeFilter extends AbstractAnalysisPlugin {
+public final class TeeFilter extends AbstractFilterPlugin {
 	private static final Log LOG = LogFactory.getLog(TeeFilter.class);
 
 	public static final String OUTPUT_PORT_NAME = "output";

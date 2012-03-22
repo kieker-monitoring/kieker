@@ -20,12 +20,11 @@
 
 package kieker.examples.userguide.ch3and4bookstore;
 
-import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.common.configuration.Configuration;
 
-public class MyResponseTimeConsumer extends AbstractAnalysisPlugin {
-
+public class MyResponseTimeConsumer extends AbstractFilterPlugin {
 	public static final String INPUT_PORT_NAME = "newEvent";
 
 	public MyResponseTimeConsumer(final Configuration configuration) {

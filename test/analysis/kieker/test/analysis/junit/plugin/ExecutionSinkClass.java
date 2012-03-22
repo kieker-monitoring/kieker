@@ -3,7 +3,7 @@ package kieker.test.analysis.junit.plugin;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.Execution;
@@ -14,7 +14,7 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * @author Nils Christian Ehmke
  * @version 1.0
  */
-public class ExecutionSinkClass extends AbstractAnalysisPlugin {
+public class ExecutionSinkClass extends AbstractFilterPlugin {
 
 	/**
 	 * The name of the default input port.

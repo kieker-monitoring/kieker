@@ -33,13 +33,13 @@ import kieker.analysis.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.tools.traceAnalysis.plugins.AbstractMessageTraceProcessingPlugin;
-import kieker.tools.traceAnalysis.plugins.AbstractTraceAnalysisPlugin;
-import kieker.tools.traceAnalysis.plugins.flow.EventRecordTraceGenerationFilter;
-import kieker.tools.traceAnalysis.plugins.flow.EventTrace2ExecutionTraceFilter;
-import kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph.ComponentDependencyGraphPluginAllocation;
-import kieker.tools.traceAnalysis.plugins.visualization.dependencyGraph.OperationDependencyGraphPluginAllocation;
-import kieker.tools.traceAnalysis.plugins.visualization.sequenceDiagram.SequenceDiagramPlugin;
+import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
+import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
+import kieker.tools.traceAnalysis.filter.flow.EventRecordTraceGenerationFilter;
+import kieker.tools.traceAnalysis.filter.flow.EventTrace2ExecutionTraceFilter;
+import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentDependencyGraphAllocationFilter;
+import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationDependencyGraphAllocationFilter;
+import kieker.tools.traceAnalysis.filter.visualization.sequenceDiagram.SequenceDiagramFilter;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
@@ -106,20 +106,20 @@ public class TestAnalysis {
 
 				/* Visualization */
 				final Configuration confSequenceDiagramPlugin = new Configuration();
-				confSequenceDiagramPlugin.setProperty(SequenceDiagramPlugin.CONFIG_OUTPUT_FN_BASE, "tmp/SequenceAssembly");
-				final SequenceDiagramPlugin sequenceDiagramPlugin = new SequenceDiagramPlugin(confSequenceDiagramPlugin);
+				confSequenceDiagramPlugin.setProperty(SequenceDiagramFilter.CONFIG_OUTPUT_FN_BASE, "tmp/SequenceAssembly");
+				final SequenceDiagramFilter sequenceDiagramPlugin = new SequenceDiagramFilter(confSequenceDiagramPlugin);
 
 				final Configuration confComponentDependencyGraphPluginAllocation = new Configuration();
 				confComponentDependencyGraphPluginAllocation.setProperty(
-						ComponentDependencyGraphPluginAllocation.CONFIG_OUTPUT_FN_BASE, "tmp/dependency");
-				final ComponentDependencyGraphPluginAllocation componentDependencyGraphPluginAllocation =
-						new ComponentDependencyGraphPluginAllocation(confComponentDependencyGraphPluginAllocation);
+						ComponentDependencyGraphAllocationFilter.CONFIG_OUTPUT_FN_BASE, "tmp/dependency");
+				final ComponentDependencyGraphAllocationFilter componentDependencyGraphPluginAllocation =
+						new ComponentDependencyGraphAllocationFilter(confComponentDependencyGraphPluginAllocation);
 
 				final Configuration confOperationDependencyGraphPluginAllocation = new Configuration();
 				confOperationDependencyGraphPluginAllocation.setProperty(
-						OperationDependencyGraphPluginAllocation.CONFIG_DOT_OUTPUT_FILE, "tmp/dependency-operation");
-				final OperationDependencyGraphPluginAllocation operationDependencyGraphPluginAllocation =
-						new OperationDependencyGraphPluginAllocation(confOperationDependencyGraphPluginAllocation);
+						OperationDependencyGraphAllocationFilter.CONFIG_DOT_OUTPUT_FILE, "tmp/dependency-operation");
+				final OperationDependencyGraphAllocationFilter operationDependencyGraphPluginAllocation =
+						new OperationDependencyGraphAllocationFilter(confOperationDependencyGraphPluginAllocation);
 
 				analysisController.registerRepository(traceRepo);
 
@@ -153,25 +153,25 @@ public class TestAnalysis {
 				analysisController.registerFilter(eventTrace2ExecutionTraceFilter);
 				analysisController.connect(eventRecordTraceGenerationFilter, EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME, eventTrace2ExecutionTraceFilter,
 						EventTrace2ExecutionTraceFilter.INPUT_PORT_NAME);
-				analysisController.connect(eventTrace2ExecutionTraceFilter, AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
+				analysisController.connect(eventTrace2ExecutionTraceFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
 
 				analysisController.registerFilter(teeFilter1);
 				analysisController.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, teeFilter1,
 						TeeFilter.INPUT_PORT_NAME);
 
 				analysisController.registerFilter(sequenceDiagramPlugin);
-				analysisController.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME, sequenceDiagramPlugin, AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME);
-				analysisController.connect(sequenceDiagramPlugin, AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
+				analysisController.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME, sequenceDiagramPlugin, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
+				analysisController.connect(sequenceDiagramPlugin, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
 
 				analysisController.registerFilter(componentDependencyGraphPluginAllocation);
 				analysisController.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME, componentDependencyGraphPluginAllocation,
-						AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME);
-				analysisController.connect(componentDependencyGraphPluginAllocation, AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
+						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
+				analysisController.connect(componentDependencyGraphPluginAllocation, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
 
 				analysisController.registerFilter(operationDependencyGraphPluginAllocation);
 				analysisController.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME, operationDependencyGraphPluginAllocation,
-						AbstractMessageTraceProcessingPlugin.INPUT_PORT_NAME);
-				analysisController.connect(operationDependencyGraphPluginAllocation, AbstractTraceAnalysisPlugin.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
+						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
+				analysisController.connect(operationDependencyGraphPluginAllocation, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
 
 				analysisController.saveToFile(new File("tmp/testproject.kax"));
 			}

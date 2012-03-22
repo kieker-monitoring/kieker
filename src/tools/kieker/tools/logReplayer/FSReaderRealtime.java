@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.AbstractReaderPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
@@ -181,7 +181,7 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 	 * method-implementations in order to be used as an outer class.
 	 */
 	@Plugin
-	private static class FSReaderRealtimeCons extends AbstractAnalysisPlugin {
+	private static class FSReaderRealtimeCons extends AbstractFilterPlugin {
 
 		/**
 		 * This is the name of the default input port this plugin.

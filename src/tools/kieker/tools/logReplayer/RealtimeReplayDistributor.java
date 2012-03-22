@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.MonitoringRecordConsumerException;
-import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
@@ -51,7 +51,7 @@ import kieker.monitoring.timer.SystemNanoTimer;
  * 
  */
 @Plugin
-public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
+public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
 	private static final Log LOG = LogFactory.getLog(RealtimeReplayDistributor.class);
 
@@ -62,7 +62,7 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 	private static final int REPLAY_OFFSET = 2 * 1000 * RealtimeReplayDistributor.MILLISECOND;
 
 	private final int numWorkers;
-	private AbstractAnalysisPlugin cons;
+	private AbstractFilterPlugin cons;
 	private String constInputPortName;
 	private volatile long startTime = -1;
 	private volatile long offset = -1;
@@ -91,7 +91,7 @@ public class RealtimeReplayDistributor extends AbstractAnalysisPlugin {
 		this.executor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
 	}
 
-	public void setCons(final AbstractAnalysisPlugin cons) {
+	public void setCons(final AbstractFilterPlugin cons) {
 		this.cons = cons;
 	}
 

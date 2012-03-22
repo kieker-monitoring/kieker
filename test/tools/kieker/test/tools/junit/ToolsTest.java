@@ -1,9 +1,9 @@
 package kieker.test.tools.junit;
 
 import kieker.test.tools.junit.currentTimeEventGeneratorFilter.TestCurrentTimeEventGenerator;
-import kieker.test.tools.junit.traceAnalysis.plugins.TestTimestampFilter;
-import kieker.test.tools.junit.traceAnalysis.plugins.TestTraceIdFilter;
-import kieker.test.tools.junit.traceAnalysis.plugins.TestTraceReconstructionFilter;
+import kieker.test.tools.junit.traceAnalysis.filter.TestTimestampFilter;
+import kieker.test.tools.junit.traceAnalysis.filter.TestTraceIdFilter;
+import kieker.test.tools.junit.traceAnalysis.filter.TestTraceReconstructionFilter;
 import kieker.test.tools.junit.traceAnalysis.systemModel.TestExecutionTraceBookstore;
 
 import org.junit.runner.RunWith;

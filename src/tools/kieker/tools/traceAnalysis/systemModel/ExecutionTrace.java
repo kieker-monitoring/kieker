@@ -30,7 +30,7 @@ import java.util.Stack;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicReference;
 
-import kieker.tools.traceAnalysis.plugins.traceReconstruction.InvalidTraceException;
+import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**

@@ -21,7 +21,7 @@
 package kieker.tools.logReplayer;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.AbstractReaderPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
@@ -41,7 +41,7 @@ public class JMSLogReplayer {
 
 	private static final Log LOG = LogFactory.getLog(JMSLogReplayer.class);
 	/** Each record is delegated to this receiver. */
-	private final AbstractAnalysisPlugin recordReceiver;
+	private final AbstractFilterPlugin recordReceiver;
 
 	private final String jmsProviderUrl;
 	private final String jmsDestination;
@@ -67,7 +67,7 @@ public class JMSLogReplayer {
 	 * @throws IllegalArgumentException
 	 *             if passed parameters are null or empty.
 	 */
-	public JMSLogReplayer(final AbstractAnalysisPlugin recordReceiver, final String recordReceiverInputPortName, final String jmsProviderUrl,
+	public JMSLogReplayer(final AbstractFilterPlugin recordReceiver, final String recordReceiverInputPortName, final String jmsProviderUrl,
 			final String jmsDestination, final String jmsFactoryLookupName) {
 		this.recordReceiver = recordReceiver;
 		this.jmsProviderUrl = jmsProviderUrl;
@@ -126,13 +126,13 @@ public class JMSLogReplayer {
 @Plugin(
 		outputPorts = { @OutputPort(name = RecordDelegationPlugin2.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
 		})
-class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
+class RecordDelegationPlugin2 extends AbstractFilterPlugin {
 
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	public static final String INPUT_PORT = "newMonitoringRecord";
 
 	// private static final Log LOG = LogFactory.getLog(RecordDelegationPlugin2.class);
-	private AbstractAnalysisPlugin rec;
+	private AbstractFilterPlugin rec;
 	private String inputPortName;
 	private AnalysisController controller;
 
@@ -165,7 +165,7 @@ class RecordDelegationPlugin2 extends AbstractAnalysisPlugin {
 	 * @param rec
 	 *            The new receiver.
 	 */
-	public void setRec(final AbstractAnalysisPlugin rec) {
+	public void setRec(final AbstractFilterPlugin rec) {
 		this.rec = rec;
 	}
 

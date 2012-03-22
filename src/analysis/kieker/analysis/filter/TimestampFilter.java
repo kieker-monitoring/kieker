@@ -1,6 +1,6 @@
 package kieker.analysis.filter;
 
-import kieker.analysis.plugin.AbstractAnalysisPlugin;
+import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -22,7 +22,7 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 	@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME, description = "records within the timeperiod", eventTypes = { IMonitoringRecord.class }),
 	@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_NOT, description = "records out of the timeperiod", eventTypes = { IMonitoringRecord.class })
 })
-public final class TimestampFilter extends AbstractAnalysisPlugin {
+public final class TimestampFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME = "input-records";
 	public static final String INPUT_PORT_NAME_COMBINED = "input-combined";
