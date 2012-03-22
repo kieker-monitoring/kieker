@@ -14,7 +14,7 @@
   </target>
   
   <target name="-build" depends="-init">
-    <javac srcdir="${src.dir}" destdir="${build.dir}" />
+    <javac source="1.5" target="1.5" srcdir="${src.dir}" destdir="${build.dir}" />
   </target>
   
   <target name="-build-jar" depends="-build">

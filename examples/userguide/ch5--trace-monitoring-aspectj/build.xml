@@ -69,7 +69,7 @@
 	</target>
 
 	<target name="-compile" depends="-init">
-		<javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="classpath" includeAntRuntime="false" />
+		<javac source="1.5" target="1.5" srcdir="${src.dir}" destdir="${build.dir}" classpathref="classpath" includeAntRuntime="false" />
 	</target>
 
 	<target name="-init" depends="clean">

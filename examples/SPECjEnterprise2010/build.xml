@@ -24,7 +24,7 @@
       	<include name="javax.servlet-*.jar"/>
       </fileset>
     </path>
-    <javac source="1.6" target="1.6"
+    <javac source="1.5" target="1.5"
            destDir="build"
            debug="true"
            classpathref="compile-classpath"
@@ -41,7 +41,7 @@
       </fileset>
       <pathelement location="build"/>
     </path>
-    <iajc source="1.6" target="1.6"
+    <iajc source="1.5" target="1.5"
           destdir="build"
           Xlint="ignore"
           debug="true"
