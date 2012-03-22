@@ -36,7 +36,7 @@ import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.flow.EventRecordTraceGenerationFilter;
-import kieker.tools.traceAnalysis.filter.flow.EventTrace2ExecutionTraceFilter;
+import kieker.tools.traceAnalysis.filter.flow.EventTrace2ExecutionAndMessageTraceFilter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentDependencyGraphAllocationFilter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationDependencyGraphAllocationFilter;
 import kieker.tools.traceAnalysis.filter.visualization.sequenceDiagram.SequenceDiagramFilter;
@@ -101,8 +101,8 @@ public class TestAnalysis {
 						new EventRecordTraceGenerationFilter(confEventRecordTraceGenerationFilter);
 
 				final Configuration confEventTrace2ExecutionTraceFilter = new Configuration();
-				final EventTrace2ExecutionTraceFilter eventTrace2ExecutionTraceFilter =
-						new EventTrace2ExecutionTraceFilter(confEventTrace2ExecutionTraceFilter);
+				final EventTrace2ExecutionAndMessageTraceFilter eventTrace2ExecutionTraceFilter =
+						new EventTrace2ExecutionAndMessageTraceFilter(confEventTrace2ExecutionTraceFilter);
 
 				/* Visualization */
 				final Configuration confSequenceDiagramPlugin = new Configuration();
@@ -152,11 +152,11 @@ public class TestAnalysis {
 
 				analysisController.registerFilter(eventTrace2ExecutionTraceFilter);
 				analysisController.connect(eventRecordTraceGenerationFilter, EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME, eventTrace2ExecutionTraceFilter,
-						EventTrace2ExecutionTraceFilter.INPUT_PORT_NAME);
+						EventTrace2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME);
 				analysisController.connect(eventTrace2ExecutionTraceFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
 
 				analysisController.registerFilter(teeFilter1);
-				analysisController.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, teeFilter1,
+				analysisController.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, teeFilter1,
 						TeeFilter.INPUT_PORT_NAME);
 
 				analysisController.registerFilter(sequenceDiagramPlugin);

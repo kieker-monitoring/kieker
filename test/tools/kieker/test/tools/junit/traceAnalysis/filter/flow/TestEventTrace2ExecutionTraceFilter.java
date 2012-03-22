@@ -33,7 +33,7 @@ import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.flow.EventRecordTrace;
-import kieker.tools.traceAnalysis.filter.flow.EventTrace2ExecutionTraceFilter;
+import kieker.tools.traceAnalysis.filter.flow.EventTrace2ExecutionAndMessageTraceFilter;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
@@ -124,7 +124,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		 * Create the transformation filter
 		 */
 		final Configuration filterConfiguration = new Configuration();
-		final EventTrace2ExecutionTraceFilter filter = new EventTrace2ExecutionTraceFilter(filterConfiguration);
+		final EventTrace2ExecutionAndMessageTraceFilter filter = new EventTrace2ExecutionAndMessageTraceFilter(filterConfiguration);
 
 		/*
 		 * Create and connect a sink plugin which collects the transformed
@@ -136,7 +136,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		controller.registerFilter(filter);
 		controller.registerFilter(executionTraceSinkPlugin);
 		controller.connect(filter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
-		controller.connect(filter, EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+		controller.connect(filter, EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
 		filter.inputEventTrace(eventRecordTrace);
 

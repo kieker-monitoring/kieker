@@ -95,7 +95,7 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 		}
 	}
 
-	@InputPort(name = TimestampFilter.INPUT_PORT_NAME_EXECUTION, description = "Execution input", eventTypes = { OperationExecutionRecord.class })
+	@InputPort(name = TimestampFilter.INPUT_PORT_NAME_EXECUTION, description = "Execution input (incorporates the records 'tin' and 'tout' timestamps)", eventTypes = { OperationExecutionRecord.class })
 	public final void inputOperationExecutionRecord(final OperationExecutionRecord execution) {
 		if (this.inRange(execution.getTin()) && this.inRange(execution.getTout())) {
 			super.deliver(TimestampFilter.OUTPUT_PORT_NAME, execution);

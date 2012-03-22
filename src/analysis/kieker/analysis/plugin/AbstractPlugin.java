@@ -280,9 +280,9 @@ public abstract class AbstractPlugin implements IPlugin {
 						return true;
 					}
 				}
-				AbstractPlugin.LOG.warn("Third step: Make sure the ports are compatible. Not compatible.");
-				return false;
 			}
+			AbstractPlugin.LOG.warn("Third step: Make sure the ports are compatible. Not compatible.");
+			return false;
 		}
 
 		/* Seems like the connection is okay. */

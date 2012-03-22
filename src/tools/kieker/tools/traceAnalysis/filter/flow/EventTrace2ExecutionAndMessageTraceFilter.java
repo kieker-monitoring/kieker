@@ -53,11 +53,11 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  */
 @Plugin(
 		outputPorts = {
-			@OutputPort(name = EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Outputs transformed execution traces", eventTypes = { ExecutionTrace.class }),
-			@OutputPort(name = EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Outputs transformed message traces", eventTypes = { MessageTrace.class })
+			@OutputPort(name = EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Outputs transformed execution traces", eventTypes = { ExecutionTrace.class }),
+			@OutputPort(name = EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Outputs transformed message traces", eventTypes = { MessageTrace.class })
 		},
 		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
-public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingFilter {
+public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProcessingFilter {
 
 	/**
 	 * This class stores information about a specific execution.
@@ -202,7 +202,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingFilt
 		}
 
 		private void handleUnsupportedEvent(final AbstractTraceEvent event) {
-			EventTrace2ExecutionTraceFilter.LOG.warn("Trace Events of type " + event.getClass().getName() + " not supported yet.");
+			EventTrace2ExecutionAndMessageTraceFilter.LOG.warn("Trace Events of type " + event.getClass().getName() + " not supported yet.");
 		}
 
 		/**
@@ -260,7 +260,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingFilt
 
 				final CallOperationEvent currentCallEvent = (CallOperationEvent) this.filterState.popEvent();
 				final ExecutionInformation executionInformation = this.filterState.popExecution();
-				final Execution execution = EventTrace2ExecutionTraceFilter.this.callOperationToExecution(
+				final Execution execution = EventTrace2ExecutionAndMessageTraceFilter.this.callOperationToExecution(
 						currentCallEvent,
 						this.executionTrace.getTraceId(),
 						executionInformation.getExecutionIndex(),
@@ -290,7 +290,7 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingFilt
 			}
 
 			final ExecutionInformation executionInformation = this.filterState.popExecution();
-			final Execution execution = EventTrace2ExecutionTraceFilter.this.beforeOperationToExecution(
+			final Execution execution = EventTrace2ExecutionAndMessageTraceFilter.this.beforeOperationToExecution(
 					beforeOperationEvent,
 					this.executionTrace.getTraceId(),
 					executionInformation.getExecutionIndex(),
@@ -349,17 +349,17 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingFilt
 
 	}
 
-	private static final Log LOG = LogFactory.getLog(EventTrace2ExecutionTraceFilter.class);
+	private static final Log LOG = LogFactory.getLog(EventTrace2ExecutionAndMessageTraceFilter.class);
 
 	public static final String INPUT_PORT_NAME = "inputEventTrace";
 	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE = "outputExecutionTrace";
 	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE = "outputMessageTrace";
 
-	public EventTrace2ExecutionTraceFilter(final Configuration configuration) {
+	public EventTrace2ExecutionAndMessageTraceFilter(final Configuration configuration) {
 		super(configuration);
 	}
 
-	@InputPort(name = EventTrace2ExecutionTraceFilter.INPUT_PORT_NAME, description = "Receives event record traces to be transformed", eventTypes = { EventRecordTrace.class })
+	@InputPort(name = EventTrace2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME, description = "Receives event record traces to be transformed", eventTypes = { EventRecordTrace.class })
 	public void inputEventTrace(final EventRecordTrace eventTrace) {
 		final ExecutionTrace execTrace = new ExecutionTrace(eventTrace.getTraceId());
 		final EventRecordStream eventStream = new EventRecordStream(eventTrace);
@@ -391,13 +391,13 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingFilt
 				eventStream.consume();
 			}
 		} catch (final InvalidEventTraceException e) {
-			EventTrace2ExecutionTraceFilter.LOG.error(e.getMessage() + "\n"
+			EventTrace2ExecutionAndMessageTraceFilter.LOG.error(e.getMessage() + "\n"
 					+ "Terminating processing of event record trace with ID " + execTrace.getTraceId(), e);
 		}
 
-		super.deliver(EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, execTrace);
+		super.deliver(EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, execTrace);
 		try {
-			super.deliver(EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, execTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION));
+			super.deliver(EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, execTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION));
 			super.reportSuccess(execTrace.getTraceId());
 		} catch (final InvalidTraceException ex) {
 			// TODO send to new output port for defect traces
@@ -405,9 +405,9 @@ public class EventTrace2ExecutionTraceFilter extends AbstractTraceProcessingFilt
 	}
 
 	private void printInvalidIndexMessage(final AbstractTraceEvent event, final ExecutionTrace executionTrace, final long lastIndex) {
-		EventTrace2ExecutionTraceFilter.LOG.error("Trace events' order indices must increment by one: " +
+		EventTrace2ExecutionAndMessageTraceFilter.LOG.error("Trace events' order indices must increment by one: " +
 				" Found " + lastIndex + " followed by " + event.getOrderIndex() + " event (" + event + ")");
-		EventTrace2ExecutionTraceFilter.LOG.error("Terminating processing of event record trace with ID " + executionTrace.getTraceId());
+		EventTrace2ExecutionAndMessageTraceFilter.LOG.error("Terminating processing of event record trace with ID " + executionTrace.getTraceId());
 	}
 
 	/**
