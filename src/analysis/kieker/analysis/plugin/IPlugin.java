@@ -46,16 +46,16 @@ public interface IPlugin {
 	public abstract String getPluginName();
 
 	/**
-	 * This method delivers the description of this plugin.
+	 * This method delivers the description of this plugin type.
 	 * 
-	 * @return The description of the plugin.
+	 * @return The description of the plugin type.
 	 */
 	public abstract String getPluginDescription();
 
 	/**
-	 * This method delivers the current name of this plugin. The name does not have to be unique.
+	 * This method delivers the current name of this plugin instance. The name does not have to be unique.
 	 * 
-	 * @return The current name of the plugin.
+	 * @return The current name of the plugin instance.
 	 */
 	public abstract String getName();
 

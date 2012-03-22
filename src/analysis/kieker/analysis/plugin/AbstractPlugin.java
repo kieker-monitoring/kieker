@@ -126,7 +126,6 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * 
 	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
 	 */
-
 	public abstract Configuration getCurrentConfiguration();
 
 	/*

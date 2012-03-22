@@ -20,14 +20,23 @@
 
 package kieker.analysis.repository;
 
+import kieker.analysis.repository.annotation.Repository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
-public abstract class AbstractRepository {
+/**
+ * Nils Christian Ehmke?
+ */
+@Repository
+public abstract class AbstractRepository implements IRepository {
+
+	public static final String CONFIG_NAME = "name-hiddenAndNeverExportedProperty";
 
 	private static final Log LOG = LogFactory.getLog(AbstractRepository.class);
 	protected final Configuration configuration;
+
+	private final String name;
 
 	/**
 	 * Each Repository requires a constructor with a single Configuration object!
@@ -43,6 +52,9 @@ public abstract class AbstractRepository {
 			AbstractRepository.LOG.error("Unable to set repository default properties"); // ok to ignore ex here
 		}
 		this.configuration = configuration;
+
+		/* try to determine name */
+		this.name = configuration.getStringProperty(AbstractRepository.CONFIG_NAME);
 	}
 
 	/**
@@ -53,12 +65,43 @@ public abstract class AbstractRepository {
 	 */
 	protected abstract Configuration getDefaultConfiguration();
 
-	/**
-	 * This method should deliver a {@code Configuration} object containing the current configuration of this instance. In other words: The constructor should be
-	 * able to use the given object to initialize a new instance of this class with the same intern properties.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return A completely filled configuration object.
+	 * @see kieker.analysis.repository.IRepository#getCurrentConfiguration()
 	 */
 	public abstract Configuration getCurrentConfiguration();
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.repository.IRepository#getCurrentConfiguration()
+	 */
+	public final String getRepositoryName() {
+		final String repositoryName = this.getClass().getAnnotation(Repository.class).name();
+		if (repositoryName.equals(Repository.NO_NAME)) {
+			return this.getClass().getSimpleName();
+		} else {
+			return repositoryName;
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.repository.IRepository#getCurrentConfiguration()
+	 */
+	public final String getRepositoryDescription() {
+		return this.getClass().getAnnotation(Repository.class).description();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.repository.IRepository#getCurrentConfiguration()
+	 */
+	public final String getName() {
+		return this.name;
+	}
 
 }

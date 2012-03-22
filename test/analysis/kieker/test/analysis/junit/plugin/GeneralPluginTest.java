@@ -4,9 +4,12 @@ import java.util.List;
 
 import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
+import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.AbstractReaderPlugin;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.repository.annotation.Repository;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
@@ -30,6 +33,34 @@ public class GeneralPluginTest extends TestCase {
 	private OperationExecutionRecord createOperationExecutionRecord(final String opString, final long traceId, final long tin, final long tout) {
 		return new OperationExecutionRecord("", OperationExecutionRecord.NO_SESSION_ID, traceId, tin, tout, OperationExecutionRecord.NO_HOSTNAME,
 				OperationExecutionRecord.NO_EOI_ESS, OperationExecutionRecord.NO_EOI_ESS);
+	}
+
+	@Test
+	public void testPluginAttributes() {
+		final Configuration myPluginConfig = new Configuration();
+		// Set a name in order to test the getName() function below */
+		final String myPluginName = "name-ieuIyxLG";
+		myPluginConfig.setProperty(AbstractPlugin.CONFIG_NAME, myPluginName);
+		final MyPlugin sourcePlugin = new MyPlugin(myPluginConfig);
+		Assert.assertEquals("Unexpected plugin name", myPluginName, sourcePlugin.getName());
+
+		/* Test if name and description from the annotation are returned correctly */
+		Assert.assertEquals("Unexpected plugin type name", MyPlugin.PLUGIN_NAME, sourcePlugin.getPluginName());
+		Assert.assertEquals("Unexpected plugin description", MyPlugin.PLUGIN_DESCRIPTION, sourcePlugin.getPluginDescription());
+	}
+
+	@Test
+	public void testRepository() {
+		final Configuration myRepoConfig = new Configuration();
+		// Set a name in order to test the getName() function below */
+		final String myRepoName = "name-22db22rLQ";
+		myRepoConfig.setProperty(AbstractRepository.CONFIG_NAME, myRepoName);
+		final MyRepository myRepo = new MyRepository(myRepoConfig);
+		Assert.assertEquals("Unexpected repository name", myRepoName, myRepo.getName());
+
+		/* Test if name and description from the annotation are returned correctly */
+		Assert.assertEquals("Unexpected repository type name", MyRepository.REPOSITORY_NAME, myRepo.getRepositoryName());
+		Assert.assertEquals("Unexpected repository description", MyRepository.REPOSITORY_DESCRIPTION, myRepo.getRepositoryDescription());
 	}
 
 	@Test
@@ -137,6 +168,54 @@ class SourceClass extends AbstractReaderPlugin {
 	}
 
 	public void terminate(final boolean error) {}
+
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		return new Configuration();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		return new Configuration();
+	}
+}
+
+@Plugin(
+		name = MyPlugin.PLUGIN_NAME,
+		description = MyPlugin.PLUGIN_DESCRIPTION)
+class MyPlugin extends AbstractPlugin {
+	public static final String PLUGIN_NAME = "pluginName-EfpvPSE0";
+
+	public static final String PLUGIN_DESCRIPTION = "pluginDescription-TB5UV1LdSz";
+
+	public MyPlugin(final Configuration configuration) {
+		super(configuration);
+	}
+
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		return new Configuration();
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		return new Configuration();
+	}
+
+}
+
+@Repository(
+		name = MyRepository.REPOSITORY_NAME,
+		description = MyRepository.REPOSITORY_DESCRIPTION)
+class MyRepository extends AbstractRepository {
+
+	public static final String REPOSITORY_NAME = "repoName-hNcuzIKc8e";
+
+	public static final String REPOSITORY_DESCRIPTION = "repoDescription-DEYmVN6sEp";
+
+	public MyRepository(final Configuration configuration) {
+		super(configuration);
+	}
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
