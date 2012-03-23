@@ -75,8 +75,8 @@ public final class KaxViz extends JFrame {
 	private static final int FILTER_WIDTH = 200;
 	private static final int FILTER_SPACE = 30;
 
-	private final AnalysisController analysisController;
-	private final mxGraph graph;
+	private transient final AnalysisController analysisController;
+	private transient final mxGraph graph;
 
 	public KaxViz(final String filename, final AnalysisController analysisController, final String outFilename) {
 		super(analysisController.getProjectName() + " (" + filename + ((null != outFilename) ? " -> " + outFilename : "") + ")");

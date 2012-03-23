@@ -31,9 +31,6 @@ import java.util.List;
  * to demonstrate how to instrument programs for that no sources are available.
  * 
  * @author Matthias Rohr
- *         History:
- *         2008-07-31: Created this file based on Boostore.java
- * 
  */
 
 public class BookstoreWA extends Thread {

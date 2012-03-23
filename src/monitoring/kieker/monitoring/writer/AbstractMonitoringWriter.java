@@ -25,7 +25,6 @@ import java.util.Enumeration;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 
 /**
@@ -89,10 +88,6 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 		}
 		return sb.toString();
 	}
-
-	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
-
-	public abstract void terminate();
 
 	public final void setController(final IMonitoringController controller) throws Exception {
 		this.monitoringController = controller;

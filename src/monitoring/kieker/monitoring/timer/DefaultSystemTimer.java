@@ -59,7 +59,6 @@ public final class DefaultSystemTimer extends AbstractTimeSource {
 		return LazyHolder.INSTANCE;
 	}
 
-	@Override
 	public final long getTime() {
 		return this.timeSource.getTime();
 	}

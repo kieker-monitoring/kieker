@@ -91,9 +91,8 @@ public final class StateController extends AbstractController implements IStateC
 	}
 
 	public final boolean terminateMonitoring() {
-		final MonitoringController monitoringController = super.monitoringController;
-		if (monitoringController != null) {
-			return monitoringController.terminate();
+		if (super.monitoringController != null) {
+			return super.monitoringController.terminate();
 		} else {
 			StateController.LOG.warn("Shutting down Monitoring before it is correctly initialized");
 			return false;
@@ -128,7 +127,7 @@ public final class StateController extends AbstractController implements IStateC
 		return this.name;
 	}
 
-	public final String getHostName() {
+	public final String getHostname() {
 		return this.hostname;
 	}
 

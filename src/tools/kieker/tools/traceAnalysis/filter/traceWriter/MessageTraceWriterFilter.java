@@ -85,7 +85,6 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 		return configuration;
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 

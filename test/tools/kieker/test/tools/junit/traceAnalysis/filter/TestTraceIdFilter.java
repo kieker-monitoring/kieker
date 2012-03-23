@@ -151,9 +151,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 	 */
 	@Test
 	public void testAssertPassTraceIdWhenPassAll() {
-		final SortedSet<Long> idsToPass = null; // i.e., pass all
-
-		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(idsToPass);
+		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(null);// i.e., pass all
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(7l, // traceId (must be element of idsToPass) // NOCS (MagicNumberCheck)
@@ -169,8 +167,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 
 		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 		filter.newExecution(exec);
-		Assert.assertFalse("Filter didn't pass execution " + exec + " although traceId element of " + idsToPass, sinkPlugin.getList()
-				.isEmpty());
+		Assert.assertFalse("Filter didn't pass execution " + exec + " although all should pass.", sinkPlugin.getList().isEmpty());
 
 		Assert.assertTrue(sinkPlugin.getList().size() == 1);
 		Assert.assertSame(sinkPlugin.getList().get(0), exec);

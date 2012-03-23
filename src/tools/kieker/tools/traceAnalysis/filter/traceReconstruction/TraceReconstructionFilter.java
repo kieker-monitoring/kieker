@@ -321,7 +321,6 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 		return configuration;
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 

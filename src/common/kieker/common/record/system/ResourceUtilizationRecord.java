@@ -49,7 +49,7 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 	/**
 	 * Name of the host, the resource belongs to.
 	 */
-	private volatile String hostName = ResourceUtilizationRecord.DEFAULT_VALUE;
+	private volatile String hostname = ResourceUtilizationRecord.DEFAULT_VALUE;
 
 	/**
 	 * Name of the resource.
@@ -70,13 +70,13 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 
 	/**
 	 * @param timestamp
-	 * @param hostName
+	 * @param hostname
 	 * @param resourceName
 	 * @param utilization
 	 */
-	public ResourceUtilizationRecord(final long timestamp, final String hostName, final String resourceName, final double utilization) {
+	public ResourceUtilizationRecord(final long timestamp, final String hostname, final String resourceName, final double utilization) {
 		this.timestamp = timestamp;
-		this.hostName = hostName;
+		this.hostname = hostname;
 		this.resourceName = resourceName;
 		this.utilization = utilization;
 	}
@@ -86,7 +86,7 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 		AbstractMonitoringRecord.checkArray(myValues, ResourceUtilizationRecord.TYPES);
 		try {
 			this.timestamp = (Long) myValues[0]; // NOCS
-			this.hostName = (String) myValues[1]; // NOCS
+			this.hostname = (String) myValues[1]; // NOCS
 			this.resourceName = (String) myValues[2]; // NOCS
 			this.utilization = (Double) myValues[3]; // NOCS
 		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
@@ -94,18 +94,15 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 		}
 	}
 
-	@Override
 	public Object[] toArray() {
-		return new Object[] { this.timestamp, this.hostName, this.resourceName, this.utilization, };
+		return new Object[] { this.timestamp, this.hostname, this.resourceName, this.utilization, };
 	}
 
-	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
 	public Class<?>[] getValueTypes() {
 		return ResourceUtilizationRecord.TYPES.clone();
 	}
@@ -126,18 +123,18 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 	}
 
 	/**
-	 * @return the hostName
+	 * @return the hostname
 	 */
-	public final String getHostName() {
-		return this.hostName;
+	public final String getHostname() {
+		return this.hostname;
 	}
 
 	/**
-	 * @param hostName
-	 *            the hostName to set
+	 * @param hostname
+	 *            the hostname to set
 	 */
-	public final void setHostName(final String hostName) {
-		this.hostName = hostName;
+	public final void setHostname(final String hostname) {
+		this.hostname = hostname;
 	}
 
 	/**

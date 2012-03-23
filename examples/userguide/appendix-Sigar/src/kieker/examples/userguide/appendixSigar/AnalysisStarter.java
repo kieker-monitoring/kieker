@@ -74,7 +74,7 @@ class StdOutDumpConsumer extends AbstractFilterPlugin {
 			final CPUUtilizationRecord cpuUtilizationRecord =
 					(CPUUtilizationRecord) record;
 
-			final String hostName = cpuUtilizationRecord.getHostName();
+			final String hostname = cpuUtilizationRecord.getHostname();
 			final String cpuId = cpuUtilizationRecord.getCpuID();
 			final double utilizationPercent = cpuUtilizationRecord.getTotalUtilization() * 100;
 
@@ -84,14 +84,14 @@ class StdOutDumpConsumer extends AbstractFilterPlugin {
 							LoggingTimestampConverter
 									.convertLoggingTimestampToUTCString(cpuUtilizationRecord
 											.getTimestamp()),
-							hostName, cpuId, utilizationPercent));
+							hostname, cpuId, utilizationPercent));
 		} else if (record instanceof MemSwapUsageRecord) {
 			final MemSwapUsageRecord memSwapUsageRecord =
 					(MemSwapUsageRecord) record;
 
-			final String hostName = memSwapUsageRecord.getHostName();
-			final double memUsageMB = memSwapUsageRecord.getMemUsed() / (1024 * 1024);
-			final double swapUsageMB = memSwapUsageRecord.getSwapUsed() / (1024 * 1024);
+			final String hostname = memSwapUsageRecord.getHostname();
+			final double memUsageMB = memSwapUsageRecord.getMemUsed() / (1024d * 1024d);
+			final double swapUsageMB = memSwapUsageRecord.getSwapUsed() / (1024d * 1024d);
 
 			System.out
 					.println(String.format(
@@ -99,7 +99,7 @@ class StdOutDumpConsumer extends AbstractFilterPlugin {
 							LoggingTimestampConverter
 									.convertLoggingTimestampToUTCString(memSwapUsageRecord
 											.getTimestamp()),
-							hostName, memUsageMB, swapUsageMB));
+							hostname, memUsageMB, swapUsageMB));
 		} else {
 			/* Unexpected record type */
 		}
@@ -110,7 +110,6 @@ class StdOutDumpConsumer extends AbstractFilterPlugin {
 		return new Configuration();
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

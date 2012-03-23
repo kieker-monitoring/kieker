@@ -48,7 +48,7 @@ public class Signature {
 	 */
 	public Signature(final String name, final String[] modifierList, final String returnType, final String[] paramTypeList) {
 		this.name = name;
-		this.modifierList = modifierList;
+		this.modifierList = modifierList.clone();
 		if (returnType == null) {
 			this.returnType = Signature.NO_RETURN_TYPE;
 		} else {
@@ -62,7 +62,7 @@ public class Signature {
 	}
 
 	public final String[] getModifier() {
-		return this.modifierList;
+		return this.modifierList.clone();
 	}
 
 	public final String[] getParamTypeList() {

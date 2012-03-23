@@ -45,7 +45,7 @@ public class TestOperationExecutionRecordEquals extends TestCase { // NOCS (Miss
 				882287444, // traceId
 				5577376, // tin
 				7544522, // tout
-				"myVM", // hostName
+				"myVM", // hostname
 				1, // eoi
 				2 // ess
 		);
@@ -70,7 +70,7 @@ public class TestOperationExecutionRecordEquals extends TestCase { // NOCS (Miss
 				882287444, // traceId
 				5577376, // tin
 				7544522, // tout
-				"myVM", // hostName
+				"myVM", // hostname
 				1, // eoi
 				2 // ess
 		);
@@ -81,7 +81,7 @@ public class TestOperationExecutionRecordEquals extends TestCase { // NOCS (Miss
 				882287444, // traceId
 				5577376, // tin
 				7544522, // tout
-				"myVM", // hostName
+				"myVM", // hostname
 				1, // eoi
 				2 // ess
 		);
@@ -104,7 +104,7 @@ public class TestOperationExecutionRecordEquals extends TestCase { // NOCS (Miss
 				882287444, // traceId
 				5577376, // tin
 				7544522, // tout
-				"myVM", // hostName
+				"myVM", // hostname
 				1, // eoi
 				2 // ess
 		);
@@ -115,7 +115,7 @@ public class TestOperationExecutionRecordEquals extends TestCase { // NOCS (Miss
 				882287444, // traceId
 				5577376, // tin
 				7544522, // tout
-				"myVM", // hostName
+				"myVM", // hostname
 				1, // eoi
 				2 // ess
 		);
@@ -144,7 +144,7 @@ public class TestOperationExecutionRecordEquals extends TestCase { // NOCS (Miss
 		r2.setOperationSignature(oldOperationSignature2);
 		Assert.assertEquals(r1, r2);
 
-		// TODO: test incomplete (hostName, sessionId, retVal)
+		// TODO: test incomplete (hostname, sessionId, retVal)
 	}
 
 	/**
@@ -162,7 +162,7 @@ public class TestOperationExecutionRecordEquals extends TestCase { // NOCS (Miss
 				882287444, // traceId
 				5577376, // tin
 				7544522, // tout
-				"myVM", // hostName
+				"myVM", // hostname
 				1, // eoi
 				2 // ess
 		);
@@ -173,7 +173,7 @@ public class TestOperationExecutionRecordEquals extends TestCase { // NOCS (Miss
 				882287444, // traceId
 				5577376, // tin
 				7544522, // tout
-				"myVM", // hostName
+				"myVM", // hostname
 				1, // eoi
 				2 // ess
 		);
@@ -229,11 +229,11 @@ public class TestOperationExecutionRecordEquals extends TestCase { // NOCS (Miss
 		r2.setTraceId(oldTraceId);
 		Assert.assertEquals(r1, r2);
 
-		/* Modification of hostName */
-		final String oldVmName = r2.getHostName();
-		r2.setHostName(r2.getHostName() + "_");
+		/* Modification of hostname */
+		final String oldVmName = r2.getHostname();
+		r2.setHostname(r2.getHostname() + "_");
 		Assert.assertFalse(r1.equals(r2));
-		r2.setHostName(oldVmName);
+		r2.setHostname(oldVmName);
 		Assert.assertEquals(r1, r2);
 
 		// TODO: test incomplete (entryPoint, retVal)

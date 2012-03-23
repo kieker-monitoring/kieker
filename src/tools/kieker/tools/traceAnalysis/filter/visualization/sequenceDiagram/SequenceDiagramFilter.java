@@ -329,7 +329,6 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 		return defaultConfiguration;
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(SequenceDiagramFilter.CONFIG_OUTPUT_FN_BASE, this.outputFnBase);

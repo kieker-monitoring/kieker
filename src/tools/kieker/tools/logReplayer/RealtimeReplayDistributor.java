@@ -69,7 +69,7 @@ public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 	private volatile long firstLoggingTimestamp;
 	private final ScheduledThreadPoolExecutor executor;
 	private long lTime;
-	private volatile int active;
+	private int active; // no need for voaltile, always within synchronized
 	private final int maxQueueSize;
 	private CountDownLatch terminationLatch;
 	private AnalysisController controller;
@@ -188,7 +188,6 @@ public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 		return new Configuration();
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 

@@ -21,6 +21,7 @@
 package kieker.tools.traceAnalysis.filter.systemModel;
 
 import java.io.File;
+import java.io.IOException;
 
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
@@ -40,7 +41,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 @Plugin(
 		description = "Prints the contents of a connected SystemModelRepository to an HTML file",
 		repositoryPorts = {
-				@RepositoryPort(name = AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class)
+			@RepositoryPort(name = AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class)
 		})
 public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 	private static final Log LOG = LogFactory.getLog(SystemModel2FileFilter.class);
@@ -69,7 +70,6 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 		return defaultConfig;
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration currentConfiguration = new Configuration();
 		currentConfiguration.setProperty(SystemModel2FileFilter.CONFIG_HTML_OUTPUT_FN, this.outputFnHTML);
@@ -104,7 +104,7 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 				} else {
 					sysModelRepo.saveSystemToHTMLFile(outputFnHTMLCanonical);
 				}
-			} catch (final Exception e) {
+			} catch (final IOException e) {
 				final String errorMsg = "Failed to save system model to file " + outputFnHTMLCanonical;
 				SystemModel2FileFilter.LOG.error(errorMsg, e);
 				error = true;

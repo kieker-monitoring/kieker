@@ -167,7 +167,6 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 			return null;
 		}
 
-		@Override
 		public Configuration getCurrentConfiguration() {
 			return null;
 		}

@@ -39,18 +39,15 @@ public final class EmptyRecord extends AbstractMonitoringRecord implements IMoni
 		// nothing to do
 	}
 
-	@Override
 	public Object[] toArray() {
 		return new Object[] {};
 	}
 
-	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
 	public Class<?>[] getValueTypes() {
 		return EmptyRecord.TYPES.clone();
 	}

@@ -59,7 +59,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 	private static final IMonitoringController CTRL_INST = MonitoringController.getInstance();
 	protected static final ITimeSource TIMESOURCE = OperationExecutionSOAPResponseInInterceptor.CTRL_INST.getTimeSource();
 
-	protected static final String VM_NAME = OperationExecutionSOAPResponseInInterceptor.CTRL_INST.getHostName();
+	protected static final String VM_NAME = OperationExecutionSOAPResponseInInterceptor.CTRL_INST.getHostname();
 
 	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPResponseInInterceptor.class);
 

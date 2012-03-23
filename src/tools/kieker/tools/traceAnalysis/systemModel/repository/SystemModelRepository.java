@@ -234,7 +234,6 @@ public class SystemModelRepository extends AbstractRepository {
 		return new Configuration();
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

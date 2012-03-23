@@ -57,7 +57,7 @@ public class CPUsCombinedPercSampler extends AbstractSigarSampler {
 		for (int i = 0; i < cpus.length; i++) {
 			final CpuPerc curCPU = cpus[i];
 			final double combinedUtilization = curCPU.getCombined();
-			final ResourceUtilizationRecord r = new ResourceUtilizationRecord(timesource.getTime(), samplingController.getHostName(), // NOPMD
+			final ResourceUtilizationRecord r = new ResourceUtilizationRecord(timesource.getTime(), samplingController.getHostname(), // NOPMD
 					CPUsCombinedPercSampler.CPU_RESOURCE_NAME_PREFIX + i, combinedUtilization);
 			samplingController.newMonitoringRecord(r);
 			// CPUsCombinedPercSampler.log.info("Sigar utilization: " + combinedUtilization + "; " + " Record: " + r);

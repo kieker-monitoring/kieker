@@ -43,7 +43,7 @@ public class SimpleSourcePlugin extends AbstractFilterPlugin {
 		if (data != null) {
 			Assert.assertTrue(super.deliver(SimpleSourcePlugin.OUTPUT_PORT_NAME, data));
 		} else {
-			Assert.assertFalse(super.deliver(SimpleSourcePlugin.OUTPUT_PORT_NAME, data));
+			Assert.assertFalse(super.deliver(SimpleSourcePlugin.OUTPUT_PORT_NAME, null));
 		}
 	}
 
@@ -52,7 +52,6 @@ public class SimpleSourcePlugin extends AbstractFilterPlugin {
 		return new Configuration();
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

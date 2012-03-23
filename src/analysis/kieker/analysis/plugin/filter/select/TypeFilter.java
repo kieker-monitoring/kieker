@@ -74,7 +74,6 @@ public final class TypeFilter extends AbstractFilterPlugin {
 		return configuration;
 	}
 
-	@Override
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		final String[] acceptedClasses = new String[this.acceptedClasses.length];

@@ -112,7 +112,7 @@ public class ExecutionFactory {
 	public Execution genExecution(final String componentTypeName, final String componentInstanceName, final String operationName, final long traceId,
 			final String sessionId,
 			final long tin, final long tout, final int eoi, final int ess) {
-		return this.genExecution(componentTypeName, componentInstanceName, ExecutionFactory.DEFAULT_STRING, // hostName
+		return this.genExecution(componentTypeName, componentInstanceName, ExecutionFactory.DEFAULT_STRING, // hostname
 				operationName, new String[] { ExecutionFactory.DEFAULT_STRING }, ExecutionFactory.DEFAULT_STRING, new String[] { ExecutionFactory.DEFAULT_STRING },
 				traceId, sessionId, tin, tout,
 				eoi, ess);

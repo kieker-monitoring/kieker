@@ -111,7 +111,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			throw new IllegalArgumentException("'" + pathTmp + "' is not a directory.");
 		}
 		// Determine directory for files
-		final String ctrlName = super.monitoringController.getHostName() + "-" + super.monitoringController.getName();
+		final String ctrlName = super.monitoringController.getHostname() + "-" + super.monitoringController.getName();
 		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
 		date.setTimeZone(TimeZone.getTimeZone("UTC"));
 		final String dateStr = date.format(new java.util.Date()); // NOPMD (Date)
@@ -129,7 +129,6 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		}
 	}
 
-	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		if (monitoringRecord instanceof RegistryRecord) {
 			try {
@@ -190,7 +189,6 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		return sb.toString();
 	}
 
-	@Override
 	public final void terminate() {
 		synchronized (this) {
 			if (this.pos != null) {

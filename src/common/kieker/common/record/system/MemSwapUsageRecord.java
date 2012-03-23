@@ -60,7 +60,7 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	/**
 	 * Name of the host, the resource belongs to.
 	 */
-	private volatile String hostName = MemSwapUsageRecord.DEFAULT_VALUE;
+	private volatile String hostname = MemSwapUsageRecord.DEFAULT_VALUE;
 
 	private volatile long memTotal = MemSwapUsageRecord.UNDEFINED_LONG;
 
@@ -76,10 +76,10 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	 * certain values shall remain undefined, use the constants {@link #UNDEFINED_DOUBLE} and {@link #UNDEFINED_LONG}.
 	 * 
 	 */
-	public MemSwapUsageRecord(final long timestamp, final String hostName, final long memTotal, final long memUsed, final long memFree, final long swapTotal,
+	public MemSwapUsageRecord(final long timestamp, final String hostname, final long memTotal, final long memUsed, final long memFree, final long swapTotal,
 			final long swapUsed, final long swapFree) {
 		this.timestamp = timestamp;
-		this.hostName = hostName;
+		this.hostname = hostname;
 		this.memTotal = memTotal;
 		this.memUsed = memUsed;
 		this.memFree = memFree;
@@ -93,7 +93,7 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 		AbstractMonitoringRecord.checkArray(myValues, MemSwapUsageRecord.TYPES);
 		try {
 			this.timestamp = (Long) myValues[0]; // NOCS
-			this.hostName = (String) myValues[1]; // NOCS
+			this.hostname = (String) myValues[1]; // NOCS
 			this.memTotal = (Long) myValues[2]; // NOCS
 			this.memUsed = (Long) myValues[3]; // NOCS
 			this.memFree = (Long) myValues[4]; // NOCS
@@ -109,18 +109,15 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	 * {@inheritdoc}
 	 */
 
-	@Override
 	public Object[] toArray() {
-		return new Object[] { this.timestamp, this.hostName, this.memTotal, this.memUsed, this.memFree, this.swapTotal, this.swapUsed, this.swapFree, };
+		return new Object[] { this.timestamp, this.hostname, this.memTotal, this.memUsed, this.memFree, this.swapTotal, this.swapUsed, this.swapFree, };
 	}
 
-	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
 	public Class<?>[] getValueTypes() {
 		return MemSwapUsageRecord.TYPES.clone();
 	}
@@ -231,17 +228,17 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	}
 
 	/**
-	 * @return the hostName
+	 * @return the hostname
 	 */
-	public final String getHostName() {
-		return this.hostName;
+	public final String getHostname() {
+		return this.hostname;
 	}
 
 	/**
-	 * @param hostName
-	 *            the hostName to set
+	 * @param hostname
+	 *            the hostname to set
 	 */
-	public final void setHostName(final String hostName) {
-		this.hostName = hostName;
+	public final void setHostname(final String hostname) {
+		this.hostname = hostname;
 	}
 }

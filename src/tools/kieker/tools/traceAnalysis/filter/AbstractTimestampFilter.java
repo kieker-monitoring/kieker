@@ -88,7 +88,6 @@ public abstract class AbstractTimestampFilter extends AbstractFilterPlugin {
 		return configuration;
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);
 

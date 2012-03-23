@@ -90,7 +90,7 @@ public class BookstoreEventRecordFactory {
 				BookstoreEventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
 		exit2_1__crm_getOrders = new AfterOperationEvent(curTime++, traceId, curOrderIndex++,
 				BookstoreEventRecordFactory.FQ_OP_CRM_GET_ORDERS);
-		exit0_0__bookstore_searchBook = new AfterOperationEvent(curTime++, traceId, curOrderIndex++,
+		exit0_0__bookstore_searchBook = new AfterOperationEvent(curTime + 1, traceId, curOrderIndex++,
 				BookstoreEventRecordFactory.FQ_OP_BOOKSTORE_SEARCH_BOOK);
 
 		final List<AbstractTraceEvent> retList = new ArrayList<AbstractTraceEvent>();
@@ -154,7 +154,7 @@ public class BookstoreEventRecordFactory {
 				BookstoreEventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
 		exit2_1__crm_getOrders = new AfterOperationEvent(curTime++, traceId, curOrderIndex++,
 				BookstoreEventRecordFactory.FQ_OP_CRM_GET_ORDERS);
-		exit0_0__bookstore_searchBook = new AfterOperationEvent(curTime++, traceId, curOrderIndex++,
+		exit0_0__bookstore_searchBook = new AfterOperationEvent(curTime + 1, traceId, curOrderIndex++,
 				BookstoreEventRecordFactory.FQ_OP_BOOKSTORE_SEARCH_BOOK);
 
 		final List<AbstractTraceEvent> retList = new ArrayList<AbstractTraceEvent>();
@@ -221,7 +221,7 @@ public class BookstoreEventRecordFactory {
 				BookstoreEventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
 		// assumed to be uninstrumented:
 		// exit2_1__crm_getOrders = new AfterOperationEvent(curTime++, traceId, curOrderIndex++, EventRecordFactory.FQ_OP_CRM_GET_ORDERS);
-		exit0_0__bookstore_searchBook = new AfterOperationEvent(curTime++, traceId, curOrderIndex++,
+		exit0_0__bookstore_searchBook = new AfterOperationEvent(curTime + 1, traceId, curOrderIndex++,
 				BookstoreEventRecordFactory.FQ_OP_BOOKSTORE_SEARCH_BOOK);
 
 		final List<AbstractTraceEvent> retList = new ArrayList<AbstractTraceEvent>();
@@ -247,15 +247,17 @@ public class BookstoreEventRecordFactory {
 
 		final List<AbstractTraceEvent> allRecords = new ArrayList<AbstractTraceEvent>();
 
-		final List<AbstractTraceEvent> validSyncTraceBeforeAfterEvents = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceId++);
+		final List<AbstractTraceEvent> validSyncTraceBeforeAfterEvents = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceId);
 		allRecords.addAll(validSyncTraceBeforeAfterEvents);
 		firstTimestamp += firstTimestampDelta;
+		traceId++;
 		final List<AbstractTraceEvent> validSyncTraceAdditionalCallEvents =
-				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEvents(firstTimestamp, traceId++);
+				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEvents(firstTimestamp, traceId);
 		allRecords.addAll(validSyncTraceAdditionalCallEvents);
 		firstTimestamp += firstTimestampDelta;
+		traceId++;
 		final List<AbstractTraceEvent> validSyncTraceAdditionalCallEventsGap =
-				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(firstTimestamp, traceId++);
+				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(firstTimestamp, traceId);
 		allRecords.addAll(validSyncTraceAdditionalCallEventsGap);
 
 		for (final AbstractTraceEvent r : allRecords) {

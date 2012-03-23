@@ -208,7 +208,6 @@ public final class JMSReader extends AbstractReaderPlugin {
 		this.unblock();
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 

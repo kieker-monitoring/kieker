@@ -92,9 +92,8 @@ public class TestAbstractTraceAnalysisPluginCreateOperationSignatureString exten
 		final String fqClassName = "a.b.c.D";
 		final String opName = "op1";
 		final String[] modifiers = {};
-		final String returnType = null;
 		final String[] paramTypes = { Boolean.class.getName(), Integer.class.getName() };
-		final Signature inputSignature = new Signature(opName, modifiers, returnType, paramTypes);
+		final Signature inputSignature = new Signature(opName, modifiers, null, paramTypes);
 
 		/*
 		 * Obtain operation signature string based on class name and signature and compare
@@ -118,9 +117,8 @@ public class TestAbstractTraceAnalysisPluginCreateOperationSignatureString exten
 		final String fqClassName = "a.b.c.D";
 		final String opName = "op1";
 		final String[] modifiers = { "public" };
-		final String returnType = null;
 		final String[] paramTypes = { Boolean.class.getName(), Integer.class.getName() };
-		final Signature inputSignature = new Signature(opName, modifiers, returnType, paramTypes);
+		final Signature inputSignature = new Signature(opName, modifiers, null, paramTypes);
 
 		/*
 		 * Obtain operation signature string based on class name and signature.

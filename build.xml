@@ -952,7 +952,9 @@
 		<findbugs home="${lib.dir}/findbugs-2.0.0"
 				reportLevel="low"
 				effort="max"
+				maxRank="20"
 				excludeFilter="${lib.dir}/findbugs-2.0.0/fb-filter.xml"
+				pluginList = "noUpdateChecks.jar"
 				output="xml"
 				outputFile="${tmp.dir}/kieker-fb.xml" >
 			<auxClasspath>

@@ -75,7 +75,6 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 		return configuration;
 	}
 
-	@Override
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.toString(this.acceptAllTraces));
@@ -94,7 +93,7 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 	public void inputCombined(final IMonitoringRecord record) {
 		if (record instanceof OperationExecutionRecord) {
 			this.inputOperationExecutionRecord((OperationExecutionRecord) record);
-		} else { // if (record instanceof AbstractTraceEvent) { // assume it is AbstractTraceEvent
+		} else if (record instanceof AbstractTraceEvent) {
 			this.inputTraceEvent((AbstractTraceEvent) record);
 		} // else discard it, we should never have gotten it anyhow
 	}

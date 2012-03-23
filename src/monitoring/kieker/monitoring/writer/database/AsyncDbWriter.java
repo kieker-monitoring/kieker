@@ -138,7 +138,7 @@ final class DbWriterThread extends AbstractAsyncThread {
 		this.psInsertMonitoringData.setLong(4, execRecord.getTraceId()); // NOCS (MagicNumberCheck)
 		this.psInsertMonitoringData.setLong(5, execRecord.getTin()); // NOCS (MagicNumberCheck)
 		this.psInsertMonitoringData.setLong(6, execRecord.getTout()); // NOCS (MagicNumberCheck)
-		this.psInsertMonitoringData.setString(7, execRecord.getHostName()); // NOCS (MagicNumberCheck)
+		this.psInsertMonitoringData.setString(7, execRecord.getHostname()); // NOCS (MagicNumberCheck)
 		this.psInsertMonitoringData.setLong(8, execRecord.getEoi()); // NOCS (MagicNumberCheck)
 		this.psInsertMonitoringData.setLong(9, execRecord.getEss()); // NOCS (MagicNumberCheck)
 		this.psInsertMonitoringData.execute();

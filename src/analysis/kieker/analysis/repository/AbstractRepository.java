@@ -70,13 +70,6 @@ public abstract class AbstractRepository implements IRepository {
 	 * 
 	 * @see kieker.analysis.repository.IRepository#getCurrentConfiguration()
 	 */
-	public abstract Configuration getCurrentConfiguration();
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.repository.IRepository#getCurrentConfiguration()
-	 */
 	public final String getRepositoryName() {
 		final String repositoryName = this.getClass().getAnnotation(Repository.class).name();
 		if (repositoryName.equals(Repository.NO_NAME)) {
@@ -103,5 +96,4 @@ public abstract class AbstractRepository implements IRepository {
 	public final String getName() {
 		return this.name;
 	}
-
 }

@@ -107,7 +107,6 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 		return configuration;
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 

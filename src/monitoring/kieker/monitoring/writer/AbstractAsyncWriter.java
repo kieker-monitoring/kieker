@@ -95,7 +95,6 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	 * The framework ensures, that this method is called only once!
 	 */
 
-	@Override
 	public final void terminate() {
 		final CountDownLatch cdl = new CountDownLatch(this.workers.size());
 		for (final AbstractAsyncThread worker : this.workers) {
@@ -121,7 +120,6 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		}
 	}
 
-	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		try {
 			switch (this.queueFullBehavior) {

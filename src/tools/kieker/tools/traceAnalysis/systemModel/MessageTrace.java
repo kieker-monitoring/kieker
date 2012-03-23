@@ -60,6 +60,7 @@ public class MessageTrace extends AbstractTrace {
 
 	@Override
 	public int hashCode() { // NOPMD
+		// TODO either this or equals might not be correct! both should consider traceId
 		return super.hashCode();
 	}
 

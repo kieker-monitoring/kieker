@@ -1,6 +1,18 @@
 <FindBugsFilter>
 <!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
-
+  
+  <Match>
+    <Class name="kieker.evaluation.benchmark.Benchmark" />
+    <Method name="parseAndInitializeArguments" params="java.lang.String[]" returns="void" />
+    <Bug pattern="REC_CATCH_EXCEPTION" />
+  </Match>
+  
+  <Match>
+    <Class name="kieker.monitoring.timer.AbstractTimeSource" />
+    <Method name="toString" params="" returns="java.lang.String" />
+    <Bug pattern="USM_USELESS_ABSTRACT_METHOD" />
+  </Match>
+  
   <Match>
     <Class name="kieker.analysis.plugin.reader.jmx.JMXReader" />
     <Method name="read2" params="" returns="boolean" />

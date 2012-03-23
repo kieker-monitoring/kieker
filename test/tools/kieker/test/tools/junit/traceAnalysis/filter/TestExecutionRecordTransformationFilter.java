@@ -51,7 +51,7 @@ public class TestExecutionRecordTransformationFilter extends TestCase {
 	public void testAllFieldsComplete() {
 		final String sessionId = "8T6NK1Q6";
 		final long traceId = 34523; // any number will do // NOCS (MagicNumberCheck)
-		new BookstoreOperationExecutionRecordFactory();
+
 		final List<OperationExecutionRecord> opExecs = BookstoreOperationExecutionRecordFactory.genValidBookstoreTraceFullSignature(sessionId, traceId);
 
 		final ExecRecordTransformationFilterChecker tester = new ExecRecordTransformationFilterChecker(opExecs);
@@ -61,7 +61,7 @@ public class TestExecutionRecordTransformationFilter extends TestCase {
 			final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(opExec.getOperationSignature());
 
 			final Execution exec = AbstractTraceAnalysisFilter.createExecutionByEntityNames(tester.getSystemModelRepository(),
-					opExec.getHostName(), fqComponentNameSignaturePair.getFqClassname(), fqComponentNameSignaturePair.getSignature(),
+					opExec.getHostname(), fqComponentNameSignaturePair.getFqClassname(), fqComponentNameSignaturePair.getSignature(),
 					traceId, sessionId, opExec.getEoi(), opExec.getEss(), opExec.getTin(), opExec.getTout(), false);
 
 			/**
@@ -73,7 +73,7 @@ public class TestExecutionRecordTransformationFilter extends TestCase {
 				Assert.assertEquals("tout's differ", opExec.getTout(), exec.getTout());
 				Assert.assertEquals("eoi's differ", opExec.getEoi(), exec.getEoi());
 				Assert.assertEquals("ess's differ", opExec.getEss(), exec.getEss());
-				Assert.assertEquals("Hostnames differ", opExec.getHostName(), exec.getAllocationComponent().getExecutionContainer().getName());
+				Assert.assertEquals("Hostnames differ", opExec.getHostname(), exec.getAllocationComponent().getExecutionContainer().getName());
 				Assert.assertEquals("Session ID's differ", opExec.getSessionId(), exec.getSessionId());
 				Assert.assertEquals("Trace ID's differ", opExec.getTraceId(), exec.getTraceId());
 				final ClassOperationSignaturePair opExecClassOperationSignature =

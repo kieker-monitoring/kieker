@@ -58,7 +58,7 @@ public final class TeeFilter extends AbstractFilterPlugin {
 	private final String printStreamName;
 	private final String encoding;
 
-	public TeeFilter(final Configuration configuration) throws FileNotFoundException, UnsupportedEncodingException {
+	public TeeFilter(final Configuration configuration) {
 		super(configuration);
 
 		/* Get the name of the stream. */
@@ -77,7 +77,17 @@ public final class TeeFilter extends AbstractFilterPlugin {
 			this.printStream = System.err;
 			this.printStreamName = null;
 		} else {
-			this.printStream = new PrintStream(new FileOutputStream(printStreamName), false, this.encoding);
+			PrintStream printStream;
+			try {
+				printStream = new PrintStream(new FileOutputStream(printStreamName), false, this.encoding);
+			} catch (final UnsupportedEncodingException ex) {
+				TeeFilter.LOG.error("Failed to initialize " + printStreamName, ex);
+				printStream = null;
+			} catch (final FileNotFoundException ex) {
+				TeeFilter.LOG.error("Failed to initialize " + printStreamName, ex);
+				printStream = null;
+			}
+			this.printStream = printStream;
 			this.printStreamName = printStreamName;
 		}
 	}
@@ -97,7 +107,6 @@ public final class TeeFilter extends AbstractFilterPlugin {
 		return configuration;
 	}
 
-	@Override
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(TeeFilter.CONFIG_ENCODING, this.encoding);

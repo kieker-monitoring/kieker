@@ -36,7 +36,7 @@ import kieker.monitoring.core.IMonitoringRecordReceiver;
  */
 public class Registry<E> implements IRegistry<E> {
 	private static final int INITIAL_CAPACITY = 16;
-	private static final float LOAD_FACTOR = 0.75f;
+	private static final double LOAD_FACTOR = 0.75d;
 	private static final int CONCURRENCY_LEVEL = 16;
 	private static final int MAXIMUM_CAPACITY = 1 << 30; // NOCS (magic number)
 
@@ -218,7 +218,7 @@ public class Registry<E> implements IRegistry<E> {
 		private transient IMonitoringRecordReceiver recordReceiver;
 
 		@SuppressWarnings("unchecked")
-		protected Segment(final int initialCapacity, final float lf) {
+		protected Segment(final int initialCapacity, final double lf) {
 			this.table = new HashEntry[initialCapacity];
 			this.threshold = (int) (initialCapacity * lf);
 			this.count = 0;

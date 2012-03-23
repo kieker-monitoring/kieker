@@ -63,7 +63,7 @@ public class OperationExecutionRegistrationAndLoggingFilter implements Filter, I
 	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	private static final IMonitoringController CTRL_INST = MonitoringController.getInstance();
 	private static final ITimeSource TIMESOURCE = OperationExecutionRegistrationAndLoggingFilter.CTRL_INST.getTimeSource();
-	private static final String VM_NAME = OperationExecutionRegistrationAndLoggingFilter.CTRL_INST.getHostName();
+	private static final String VM_NAME = OperationExecutionRegistrationAndLoggingFilter.CTRL_INST.getHostname();
 
 	/**
 	 * Constructs an {@link OperationExecutionRegistrationAndLoggingFilter}.

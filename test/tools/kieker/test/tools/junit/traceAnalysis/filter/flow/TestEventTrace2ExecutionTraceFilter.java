@@ -136,14 +136,16 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		controller.registerFilter(filter);
 		controller.registerFilter(executionTraceSinkPlugin);
 		controller.connect(filter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
-		controller.connect(filter, EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+		controller.connect(filter, EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSinkPlugin,
+				SimpleSinkPlugin.INPUT_PORT_NAME);
 
 		filter.inputEventTrace(eventRecordTrace);
 
 		Assert.assertEquals("Unexpected number of received execution traces", 1, executionTraceSinkPlugin.getList().size());
 
-		final ExecutionTrace resultingExecutionTrace = (ExecutionTrace) executionTraceSinkPlugin.getList().get(0);
-		final Execution[] resultingExecutionsArr = resultingExecutionTrace.getTraceAsSortedExecutionSet().toArray(new Execution[] {});
+		// final ExecutionTrace resultingExecutionTrace = (ExecutionTrace) executionTraceSinkPlugin.getList().get(0);
+		// final SortedSet<Execution> traceAsSortedSet = resultingExecutionTrace.getTraceAsSortedExecutionSet();
+		// final Execution[] resultingExecutionsArr = traceAsSortedSet.toArray(new Execution[traceAsSortedSet.size()]);
 
 		/*
 		 * TODO: Check validity of transformed execution trace

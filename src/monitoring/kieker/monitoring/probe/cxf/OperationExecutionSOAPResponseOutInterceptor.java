@@ -61,7 +61,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 	private static final IMonitoringController CRTR_INST = MonitoringController.getInstance();
 	protected static final ITimeSource TIMESOURCE = OperationExecutionSOAPResponseOutInterceptor.CRTR_INST.getTimeSource();
 
-	protected static final String VM_NAME = OperationExecutionSOAPResponseOutInterceptor.CRTR_INST.getHostName();
+	protected static final String VM_NAME = OperationExecutionSOAPResponseOutInterceptor.CRTR_INST.getHostname();
 
 	private static final String SIGNATURE = "public void " + OperationExecutionSOAPResponseOutInterceptor.class.getName()
 			+ ".handleMessage(org.apache.cxf.binding.soap.SoapMessage)";

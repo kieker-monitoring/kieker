@@ -107,7 +107,7 @@ public interface IPlugin {
 			this.plugin = plugin;
 			this.inputPortName = inputPortName;
 			this.inputPortMethod = inputPortMethod;
-			this.eventTypes = eventTypes;
+			this.eventTypes = eventTypes.clone();
 		}
 
 		public final IPlugin getPlugin() {
@@ -119,7 +119,7 @@ public interface IPlugin {
 		}
 
 		public final Class<?>[] getEventTypes() {
-			return this.eventTypes;
+			return this.eventTypes.clone();
 		}
 
 		public final String getInputPortName() {

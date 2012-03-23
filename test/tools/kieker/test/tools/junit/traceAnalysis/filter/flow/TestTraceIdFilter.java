@@ -58,7 +58,7 @@ public class TestTraceIdFilter extends TestCase {
 
 		final Configuration filterConfig = new Configuration();
 		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.FALSE.toString());
-		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, Configuration.toProperty(idsToPass.toArray(new Long[] {})));
+		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, Configuration.toProperty(idsToPass.toArray(new Long[idsToPass.size()])));
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final AnalysisController controller = new AnalysisController();
@@ -101,7 +101,7 @@ public class TestTraceIdFilter extends TestCase {
 
 		final Configuration filterConfig = new Configuration();
 		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.FALSE.toString());
-		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, Configuration.toProperty(idsToPass.toArray(new Long[] {})));
+		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, Configuration.toProperty(idsToPass.toArray(new Long[idsToPass.size()])));
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final AnalysisController controller = new AnalysisController();

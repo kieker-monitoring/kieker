@@ -54,7 +54,7 @@ public final class Trace extends AbstractMonitoringRecord implements IMonitoring
 	private final String hostname;
 	private final long parentTraceId;
 	private final int parentOrderId;
-	private transient int nextOrderId; // used only thread local!
+	private transient int nextOrderId = 0; // used only thread local!
 
 	public Trace(final long traceId, final long threadId, final String sessionId, final String hostname, final long parentTraceId, final int parentOrderId) {
 		this.traceId = traceId;
@@ -75,17 +75,14 @@ public final class Trace extends AbstractMonitoringRecord implements IMonitoring
 		this.parentOrderId = (Integer) values[5];
 	}
 
-	@Override
 	public final Object[] toArray() {
 		return new Object[] { this.traceId, this.threadId, this.sessionId, this.hostname, this.parentTraceId, this.parentOrderId, };
 	}
 
-	@Override
 	public final Class<?>[] getValueTypes() {
 		return Trace.TYPES.clone();
 	}
 
-	@Override
 	@Deprecated
 	public final void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();

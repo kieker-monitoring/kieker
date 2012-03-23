@@ -34,7 +34,7 @@ public enum Broker { // Singleton pattern (Effective Java #3)
 	/**
 	 * Access synchronized through synchronized method {@link #acquirePipe(String)} !
 	 */
-	private final ConcurrentHashMap<String, Pipe> pipeMap = new ConcurrentHashMap<String, Pipe>();
+	private transient final ConcurrentHashMap<String, Pipe> pipeMap = new ConcurrentHashMap<String, Pipe>();
 
 	/**
 	 * Returns a connection with name @a pipeName. If a connection with this
@@ -47,11 +47,7 @@ public enum Broker { // Singleton pattern (Effective Java #3)
 				// Broker.LOG.error(errorMsg); no need to log if thrown
 				throw new IllegalArgumentException("pipeName must not be null or empty!  (Found: " + pipeName + ")");
 			}
-			conn = this.pipeMap.get(pipeName);
-			if (conn == null) {
-				conn = new Pipe(pipeName);
-				this.pipeMap.put(pipeName, conn);
-			}
+			conn = this.pipeMap.putIfAbsent(pipeName, new Pipe(pipeName));
 		}
 		return conn;
 	}

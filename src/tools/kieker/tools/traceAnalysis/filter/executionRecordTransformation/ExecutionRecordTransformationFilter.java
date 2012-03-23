@@ -59,7 +59,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 	public boolean newMonitoringRecord(final OperationExecutionRecord execRec) {
 		final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(execRec.getOperationSignature());
 
-		final Execution execution = this.createExecutionByEntityNames(execRec.getHostName(), fqComponentNameSignaturePair.getFqClassname(),
+		final Execution execution = this.createExecutionByEntityNames(execRec.getHostname(), fqComponentNameSignaturePair.getFqClassname(),
 				fqComponentNameSignaturePair.getSignature(),
 				execRec.getTraceId(), execRec.getSessionId(), execRec.getEoi(), execRec.getEss(), execRec.getTin(), execRec.getTout(), false);
 		super.deliver(ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME, execution);
@@ -71,7 +71,6 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 		return new Configuration();
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		// filter has no configuration properties

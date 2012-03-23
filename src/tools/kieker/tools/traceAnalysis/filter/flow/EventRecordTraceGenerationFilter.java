@@ -242,7 +242,6 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 		return configuration;
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(EventRecordTraceGenerationFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Long.toString(this.maxTraceDurationMillis));

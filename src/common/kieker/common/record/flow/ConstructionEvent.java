@@ -56,12 +56,10 @@ public final class ConstructionEvent extends AbstractEvent {
 		this.objectName = (String) values[2];
 	}
 
-	@Override
 	public final Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.className, this.objectName, };
 	}
 
-	@Override
 	public Class<?>[] getValueTypes() {
 		return ConstructionEvent.TYPES.clone();
 	}

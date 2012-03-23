@@ -39,12 +39,10 @@ public final class SplitEvent extends AbstractTraceEvent {
 		super(values, SplitEvent.TYPES); // values[0..2]
 	}
 
-	@Override
 	public final Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), };
 	}
 
-	@Override
 	public final Class<?>[] getValueTypes() {
 		return SplitEvent.TYPES.clone();
 	}

@@ -295,7 +295,6 @@ public final class JMXReader extends AbstractReaderPlugin {
 		}
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 

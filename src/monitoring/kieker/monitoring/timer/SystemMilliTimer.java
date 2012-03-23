@@ -43,7 +43,6 @@ public final class SystemMilliTimer extends AbstractTimeSource {
 		}
 	}
 
-	@Override
 	public final long getTime() {
 		return System.currentTimeMillis() - this.offset;
 	}

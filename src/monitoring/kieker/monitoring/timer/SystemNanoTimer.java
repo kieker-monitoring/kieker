@@ -47,7 +47,6 @@ public final class SystemNanoTimer extends AbstractTimeSource {
 		}
 	}
 
-	@Override
 	public final long getTime() {
 		return System.nanoTime() - this.offset;
 	}

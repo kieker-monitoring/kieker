@@ -191,7 +191,6 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 		return configuration;
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_OUTPUT_FN_BASE, this.dotOutputFile);

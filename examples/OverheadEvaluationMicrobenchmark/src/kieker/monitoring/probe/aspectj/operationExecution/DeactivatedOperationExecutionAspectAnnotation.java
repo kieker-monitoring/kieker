@@ -47,7 +47,7 @@ public class DeactivatedOperationExecutionAspectAnnotation extends AbstractOpera
 
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = DeactivatedOperationExecutionAspectAnnotation.CTRLINST.getTimeSource();
-	private static final String VMNAME = DeactivatedOperationExecutionAspectAnnotation.CTRLINST.getHostName();
+	private static final String VMNAME = DeactivatedOperationExecutionAspectAnnotation.CTRLINST.getHostname();
 	private static final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.INSTANCE;
 	private static final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
 

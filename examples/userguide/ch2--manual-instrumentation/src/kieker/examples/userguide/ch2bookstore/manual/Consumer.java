@@ -61,7 +61,6 @@ public class Consumer extends AbstractFilterPlugin {
 		return new Configuration();
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

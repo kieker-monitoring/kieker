@@ -53,7 +53,7 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	private static final ITimeSource TIMESOURCE = OperationExecutionMethodInvocationInterceptor.CONTROLLER.getTimeSource();
-	private static final String VM_NAME = OperationExecutionMethodInvocationInterceptor.CONTROLLER.getHostName();
+	private static final String VM_NAME = OperationExecutionMethodInvocationInterceptor.CONTROLLER.getHostname();
 
 	/**
 	 * Iff true, the name of the runtime class is used, iff false, the name of

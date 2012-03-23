@@ -50,12 +50,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		AbstractMonitoringRecord.OLD_KIEKERRECORDS.put("kieker.common.record.BranchingRecord", BranchingRecord.class);
 	}
 
-	public abstract Object[] toArray();
-
-	public abstract void initFromArray(Object[] values);
-
-	public abstract Class<?>[] getValueTypes();
-
 	private volatile long loggingTimestamp = -1;
 
 	public final long getLoggingTimestamp() {

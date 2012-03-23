@@ -30,11 +30,6 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  * monitoring component.
  * 
  * @author Matthias Rohr
- *         History:
- *         2008/01/09: Refactoring for the first release of
- *         Kieker and publication under an open source licence
- *         2007-04-18: Initial version
- * 
  */
 public class Bookstore extends Thread {
 	public static final List<Bookstore> BOOKSTORE_SCENARIOS = new ArrayList<Bookstore>();

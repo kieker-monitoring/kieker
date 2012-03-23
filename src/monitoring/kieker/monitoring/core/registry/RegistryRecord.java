@@ -54,18 +54,15 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 		}
 	}
 
-	@Override
 	public Object[] toArray() {
 		return new Object[] { this.id, this.object };
 	}
 
-	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
 	public Class<?>[] getValueTypes() {
 		return RegistryRecord.TYPES.clone();
 	}

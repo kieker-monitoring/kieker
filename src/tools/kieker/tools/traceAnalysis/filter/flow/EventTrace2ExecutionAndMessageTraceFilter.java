@@ -423,12 +423,12 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 	private Execution beforeOperationToExecution(final BeforeOperationEvent event, final long traceId, final int eoi, final int ess,
 			final long tin, final long tout, final boolean assumed) {
 		// TODO: hostname and sessionid are currently not available in the event trace records
-		final String hostName = "<HOST>";
+		final String hostname = "<HOST>";
 		final String sessionId = "<SESSION-ID>";
 
 		final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(event.getOperationSignature());
 
-		return super.createExecutionByEntityNames(hostName, fqComponentNameSignaturePair.getFqClassname(), fqComponentNameSignaturePair.getSignature(),
+		return super.createExecutionByEntityNames(hostname, fqComponentNameSignaturePair.getFqClassname(), fqComponentNameSignaturePair.getSignature(),
 				traceId, sessionId, eoi, ess, tin, tout, assumed);
 	}
 
@@ -445,11 +445,11 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 	private Execution callOperationToExecution(final CallOperationEvent event, final long traceId, final int eoi, final int ess,
 			final long tin, final long tout, final boolean assumed) {
 		// TODO: hostname and sessionid are currently not available in the event trace records
-		final String hostName = "<HOST>";
+		final String hostname = "<HOST>";
 		final String sessionId = "<SESSION-ID>";
 
 		final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(event.getCalleeOperationSignature());
-		return super.createExecutionByEntityNames(hostName, fqComponentNameSignaturePair.getFqClassname(),
+		return super.createExecutionByEntityNames(hostname, fqComponentNameSignaturePair.getFqClassname(),
 				fqComponentNameSignaturePair.getSignature(), traceId, sessionId, eoi, ess, tin, tout, assumed);
 	}
 
@@ -458,7 +458,6 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 		return new Configuration();
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration(null);
 	}

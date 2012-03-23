@@ -204,7 +204,6 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 		return new Configuration();
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 

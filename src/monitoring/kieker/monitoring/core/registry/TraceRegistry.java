@@ -36,7 +36,7 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 	private final AtomicInteger nextTraceId = new AtomicInteger(0);
 	private final long unique = ((long) new SecureRandom().nextInt()) << 32;
 	/** the hostname is final after the instantiation of the monitoring controller */
-	private final String hostname = MonitoringController.getInstance().getHostName();
+	private final String hostname = MonitoringController.getInstance().getHostname();
 
 	/** the current trace; null if new trace */
 	private final ThreadLocal<Trace> traceStorage = new ThreadLocal<Trace>();

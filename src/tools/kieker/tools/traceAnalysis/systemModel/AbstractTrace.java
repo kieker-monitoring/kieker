@@ -27,7 +27,7 @@ public abstract class AbstractTrace {
 
 	public static final String NO_TRACE_ID = "N/A";
 
-	private final String sessionId; // convenience field. All executions have this traceId.
+	private final String sessionId; // convenience field. All executions have this sessionId.
 	private final long traceId; // convenience field. All executions have this traceId.
 
 	protected AbstractTrace() {
@@ -59,7 +59,6 @@ public abstract class AbstractTrace {
 	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
-
 	@Override
 	public int hashCode() {
 		/* On purpose, we are not considering the sessionId here */

@@ -31,8 +31,6 @@ import kieker.analysis.plugin.filter.select.TypeFilter;
 import kieker.analysis.plugin.filter.trace.TraceIdFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.flow.EventRecordTraceGenerationFilter;
@@ -47,147 +45,142 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * @author Jan Waller
  */
 public class TestAnalysis {
-	private static final Log LOG = LogFactory.getLog(TestAnalysis.class);
 	private static final boolean LOADCONFIG = false;
 
 	public static void main(final String[] args) {
-		try {
-			final AnalysisController analysisController;
-			final SystemModelRepository traceRepo = new SystemModelRepository(new Configuration());
-			if (TestAnalysis.LOADCONFIG) {
-				analysisController = new AnalysisController(new File("tmp/testproject.kax"));
-			} else {
-				analysisController = new AnalysisController("TestProject");
+		final AnalysisController analysisController;
+		final SystemModelRepository traceRepo = new SystemModelRepository(new Configuration());
+		if (TestAnalysis.LOADCONFIG) {
+			analysisController = new AnalysisController(new File("tmp/testproject.kax"));
+		} else {
+			analysisController = new AnalysisController("TestProject");
 
-				/* Reader */
-				final Configuration confFSReader = new Configuration();
-				confFSReader.setProperty(FSReader.CONFIG_INPUTDIRS, "tmp/testdata-ascii/");
-				final FSReader reader = new FSReader(confFSReader);
+			/* Reader */
+			final Configuration confFSReader = new Configuration();
+			confFSReader.setProperty(FSReader.CONFIG_INPUTDIRS, "tmp/testdata-ascii/");
+			final FSReader reader = new FSReader(confFSReader);
 
-				/* TypeFilter */
-				final Configuration confTypeFilter = new Configuration();
-				final TypeFilter typeFilter = new TypeFilter(confTypeFilter);
+			/* TypeFilter */
+			final Configuration confTypeFilter = new Configuration();
+			final TypeFilter typeFilter = new TypeFilter(confTypeFilter);
 
-				/* TeeFilter */
-				final Configuration confTeeFilter1 = new Configuration();
-				confTeeFilter1.setProperty(TeeFilter.CONFIG_STREAM, TeeFilter.CONFIG_STREAM_STDOUT);
-				final TeeFilter teeFilter1 = new TeeFilter(confTeeFilter1);
+			/* TeeFilter */
+			final Configuration confTeeFilter1 = new Configuration();
+			confTeeFilter1.setProperty(TeeFilter.CONFIG_STREAM, TeeFilter.CONFIG_STREAM_STDOUT);
+			final TeeFilter teeFilter1 = new TeeFilter(confTeeFilter1);
 
-				final Configuration confTeeFilter2 = new Configuration();
-				confTeeFilter2.setProperty(TeeFilter.CONFIG_STREAM, TeeFilter.CONFIG_STREAM_STDERR);
-				confTeeFilter2.setProperty(AbstractPlugin.CONFIG_NAME, "CountBegin");
-				final TeeFilter teeFilter2 = new TeeFilter(confTeeFilter2);
+			final Configuration confTeeFilter2 = new Configuration();
+			confTeeFilter2.setProperty(TeeFilter.CONFIG_STREAM, TeeFilter.CONFIG_STREAM_STDERR);
+			confTeeFilter2.setProperty(AbstractPlugin.CONFIG_NAME, "CountBegin");
+			final TeeFilter teeFilter2 = new TeeFilter(confTeeFilter2);
 
-				final Configuration confTeeFilter3 = new Configuration();
-				confTeeFilter3.setProperty(TeeFilter.CONFIG_STREAM, TeeFilter.CONFIG_STREAM_STDERR);
-				confTeeFilter3.setProperty(AbstractPlugin.CONFIG_NAME, "CountAfter");
-				final TeeFilter teeFilter3 = new TeeFilter(confTeeFilter3);
+			final Configuration confTeeFilter3 = new Configuration();
+			confTeeFilter3.setProperty(TeeFilter.CONFIG_STREAM, TeeFilter.CONFIG_STREAM_STDERR);
+			confTeeFilter3.setProperty(AbstractPlugin.CONFIG_NAME, "CountAfter");
+			final TeeFilter teeFilter3 = new TeeFilter(confTeeFilter3);
 
-				/* CountingFilter */
-				final Configuration confCountingFilter1 = new Configuration();
-				final CountingFilter countingFilter1 = new CountingFilter(confCountingFilter1);
+			/* CountingFilter */
+			final Configuration confCountingFilter1 = new Configuration();
+			final CountingFilter countingFilter1 = new CountingFilter(confCountingFilter1);
 
-				final Configuration confCountingFilter2 = new Configuration();
-				final CountingFilter countingFilter2 = new CountingFilter(confCountingFilter2);
+			final Configuration confCountingFilter2 = new Configuration();
+			final CountingFilter countingFilter2 = new CountingFilter(confCountingFilter2);
 
-				final Configuration confTimestampFilter = new Configuration();
-				final TimestampFilter timestampFilter = new TimestampFilter(confTimestampFilter);
+			final Configuration confTimestampFilter = new Configuration();
+			final TimestampFilter timestampFilter = new TimestampFilter(confTimestampFilter);
 
-				/* Filter */
-				final Configuration confTraceIdFilter = new Configuration();
-				final TraceIdFilter traceIdFilter = new TraceIdFilter(confTraceIdFilter);
+			/* Filter */
+			final Configuration confTraceIdFilter = new Configuration();
+			final TraceIdFilter traceIdFilter = new TraceIdFilter(confTraceIdFilter);
 
-				final Configuration confEventRecordTraceGenerationFilter = new Configuration();
-				final EventRecordTraceGenerationFilter eventRecordTraceGenerationFilter =
-						new EventRecordTraceGenerationFilter(confEventRecordTraceGenerationFilter);
+			final Configuration confEventRecordTraceGenerationFilter = new Configuration();
+			final EventRecordTraceGenerationFilter eventRecordTraceGenerationFilter =
+					new EventRecordTraceGenerationFilter(confEventRecordTraceGenerationFilter);
 
-				final Configuration confEventTrace2ExecutionTraceFilter = new Configuration();
-				final EventTrace2ExecutionAndMessageTraceFilter eventTrace2ExecutionTraceFilter =
-						new EventTrace2ExecutionAndMessageTraceFilter(confEventTrace2ExecutionTraceFilter);
+			final Configuration confEventTrace2ExecutionTraceFilter = new Configuration();
+			final EventTrace2ExecutionAndMessageTraceFilter eventTrace2ExecutionTraceFilter =
+					new EventTrace2ExecutionAndMessageTraceFilter(confEventTrace2ExecutionTraceFilter);
 
-				/* Visualization */
-				final Configuration confSequenceDiagramFilter = new Configuration();
-				confSequenceDiagramFilter.setProperty(SequenceDiagramFilter.CONFIG_OUTPUT_FN_BASE, "tmp/SequenceAssembly");
-				final SequenceDiagramFilter sequenceDiagramFilter = new SequenceDiagramFilter(confSequenceDiagramFilter);
+			/* Visualization */
+			final Configuration confSequenceDiagramFilter = new Configuration();
+			confSequenceDiagramFilter.setProperty(SequenceDiagramFilter.CONFIG_OUTPUT_FN_BASE, "tmp/SequenceAssembly");
+			final SequenceDiagramFilter sequenceDiagramFilter = new SequenceDiagramFilter(confSequenceDiagramFilter);
 
-				final Configuration confComponentDependencyGraphAllocationFilter = new Configuration();
-				confComponentDependencyGraphAllocationFilter.setProperty(
-						ComponentDependencyGraphAllocationFilter.CONFIG_OUTPUT_FN_BASE, "tmp/dependency");
-				final ComponentDependencyGraphAllocationFilter componentDependencyGraphAllocationFilter =
-						new ComponentDependencyGraphAllocationFilter(confComponentDependencyGraphAllocationFilter);
+			final Configuration confComponentDependencyGraphAllocationFilter = new Configuration();
+			confComponentDependencyGraphAllocationFilter.setProperty(
+					ComponentDependencyGraphAllocationFilter.CONFIG_OUTPUT_FN_BASE, "tmp/dependency");
+			final ComponentDependencyGraphAllocationFilter componentDependencyGraphAllocationFilter =
+					new ComponentDependencyGraphAllocationFilter(confComponentDependencyGraphAllocationFilter);
 
-				final Configuration confOperationDependencyGraphAllocationFilter = new Configuration();
-				confOperationDependencyGraphAllocationFilter.setProperty(
-						OperationDependencyGraphAllocationFilter.CONFIG_DOT_OUTPUT_FILE, "tmp/dependency-operation");
-				final OperationDependencyGraphAllocationFilter operationDependencyGraphAllocationFilter =
-						new OperationDependencyGraphAllocationFilter(confOperationDependencyGraphAllocationFilter);
+			final Configuration confOperationDependencyGraphAllocationFilter = new Configuration();
+			confOperationDependencyGraphAllocationFilter.setProperty(
+					OperationDependencyGraphAllocationFilter.CONFIG_DOT_OUTPUT_FILE, "tmp/dependency-operation");
+			final OperationDependencyGraphAllocationFilter operationDependencyGraphAllocationFilter =
+					new OperationDependencyGraphAllocationFilter(confOperationDependencyGraphAllocationFilter);
 
-				/* Visualization */
-				final Configuration confSystemModel2FileFilter = new Configuration();
-				confSystemModel2FileFilter.setProperty(SystemModel2FileFilter.CONFIG_HTML_OUTPUT_FN, "tmp/system-model.html");
-				final SystemModel2FileFilter systemModel2FileFilter = new SystemModel2FileFilter(confSystemModel2FileFilter);
+			/* Visualization */
+			final Configuration confSystemModel2FileFilter = new Configuration();
+			confSystemModel2FileFilter.setProperty(SystemModel2FileFilter.CONFIG_HTML_OUTPUT_FN, "tmp/system-model.html");
+			final SystemModel2FileFilter systemModel2FileFilter = new SystemModel2FileFilter(confSystemModel2FileFilter);
 
-				analysisController.registerRepository(traceRepo);
+			analysisController.registerRepository(traceRepo);
 
-				analysisController.registerReader(reader);
+			analysisController.registerReader(reader);
 
-				analysisController.registerFilter(countingFilter1);
-				analysisController.connect(reader, FSReader.OUTPUT_PORT_NAME, countingFilter1, CountingFilter.INPUT_PORT_NAME);
+			analysisController.registerFilter(countingFilter1);
+			analysisController.connect(reader, FSReader.OUTPUT_PORT_NAME, countingFilter1, CountingFilter.INPUT_PORT_NAME);
 
-				analysisController.registerFilter(typeFilter);
-				analysisController.connect(countingFilter1, CountingFilter.OUTPUT_PORT_NAME, typeFilter, TypeFilter.INPUT_PORT_NAME);
+			analysisController.registerFilter(typeFilter);
+			analysisController.connect(countingFilter1, CountingFilter.OUTPUT_PORT_NAME, typeFilter, TypeFilter.INPUT_PORT_NAME);
 
-				analysisController.registerFilter(timestampFilter);
-				analysisController.connect(typeFilter, TypeFilter.OUTPUT_PORT_NAME, timestampFilter, TimestampFilter.INPUT_PORT_NAME_FLOW);
+			analysisController.registerFilter(timestampFilter);
+			analysisController.connect(typeFilter, TypeFilter.OUTPUT_PORT_NAME, timestampFilter, TimestampFilter.INPUT_PORT_NAME_FLOW);
 
-				analysisController.registerFilter(teeFilter2);
-				analysisController.connect(countingFilter1, CountingFilter.OUTPUT_PORT_NAME_COUNT, teeFilter2, TeeFilter.INPUT_PORT_NAME);
+			analysisController.registerFilter(teeFilter2);
+			analysisController.connect(countingFilter1, CountingFilter.OUTPUT_PORT_NAME_COUNT, teeFilter2, TeeFilter.INPUT_PORT_NAME);
 
-				analysisController.registerFilter(traceIdFilter);
-				analysisController.connect(timestampFilter, TimestampFilter.OUTPUT_PORT_NAME, traceIdFilter, TraceIdFilter.INPUT_PORT_NAME);
+			analysisController.registerFilter(traceIdFilter);
+			analysisController.connect(timestampFilter, TimestampFilter.OUTPUT_PORT_NAME, traceIdFilter, TraceIdFilter.INPUT_PORT_NAME);
 
-				analysisController.registerFilter(countingFilter2);
-				analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME, countingFilter2, CountingFilter.INPUT_PORT_NAME);
+			analysisController.registerFilter(countingFilter2);
+			analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME, countingFilter2, CountingFilter.INPUT_PORT_NAME);
 
-				analysisController.registerFilter(teeFilter3);
-				analysisController.connect(countingFilter2, CountingFilter.OUTPUT_PORT_NAME_COUNT, teeFilter3, TeeFilter.INPUT_PORT_NAME);
+			analysisController.registerFilter(teeFilter3);
+			analysisController.connect(countingFilter2, CountingFilter.OUTPUT_PORT_NAME_COUNT, teeFilter3, TeeFilter.INPUT_PORT_NAME);
 
-				analysisController.registerFilter(eventRecordTraceGenerationFilter);
-				analysisController.connect(countingFilter2, CountingFilter.OUTPUT_PORT_NAME, eventRecordTraceGenerationFilter,
-						EventRecordTraceGenerationFilter.INPUT_PORT_NAME);
-				analysisController.connect(eventRecordTraceGenerationFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
+			analysisController.registerFilter(eventRecordTraceGenerationFilter);
+			analysisController.connect(countingFilter2, CountingFilter.OUTPUT_PORT_NAME, eventRecordTraceGenerationFilter,
+					EventRecordTraceGenerationFilter.INPUT_PORT_NAME);
+			analysisController.connect(eventRecordTraceGenerationFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
 
-				analysisController.registerFilter(eventTrace2ExecutionTraceFilter);
-				analysisController.connect(eventRecordTraceGenerationFilter, EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME, eventTrace2ExecutionTraceFilter,
-						EventTrace2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME);
-				analysisController.connect(eventTrace2ExecutionTraceFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
+			analysisController.registerFilter(eventTrace2ExecutionTraceFilter);
+			analysisController.connect(eventRecordTraceGenerationFilter, EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME, eventTrace2ExecutionTraceFilter,
+					EventTrace2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME);
+			analysisController.connect(eventTrace2ExecutionTraceFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
 
-				analysisController.registerFilter(teeFilter1);
-				analysisController.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, teeFilter1,
-						TeeFilter.INPUT_PORT_NAME);
+			analysisController.registerFilter(teeFilter1);
+			analysisController.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, teeFilter1,
+					TeeFilter.INPUT_PORT_NAME);
 
-				analysisController.registerFilter(sequenceDiagramFilter);
-				analysisController.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME, sequenceDiagramFilter, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
-				analysisController.connect(sequenceDiagramFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
+			analysisController.registerFilter(sequenceDiagramFilter);
+			analysisController.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME, sequenceDiagramFilter, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
+			analysisController.connect(sequenceDiagramFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
 
-				analysisController.registerFilter(componentDependencyGraphAllocationFilter);
-				analysisController.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME, componentDependencyGraphAllocationFilter,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
-				analysisController.connect(componentDependencyGraphAllocationFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
+			analysisController.registerFilter(componentDependencyGraphAllocationFilter);
+			analysisController.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME, componentDependencyGraphAllocationFilter,
+					AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
+			analysisController.connect(componentDependencyGraphAllocationFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
 
-				analysisController.registerFilter(operationDependencyGraphAllocationFilter);
-				analysisController.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME, operationDependencyGraphAllocationFilter,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
-				analysisController.connect(operationDependencyGraphAllocationFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
+			analysisController.registerFilter(operationDependencyGraphAllocationFilter);
+			analysisController.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME, operationDependencyGraphAllocationFilter,
+					AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
+			analysisController.connect(operationDependencyGraphAllocationFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
 
-				analysisController.registerFilter(systemModel2FileFilter);
-				analysisController.connect(systemModel2FileFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
+			analysisController.registerFilter(systemModel2FileFilter);
+			analysisController.connect(systemModel2FileFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
 
-				analysisController.saveToFile(new File("tmp/testproject.kax"));
-			}
-			analysisController.run();
-		} catch (final Exception ex) {
-			TestAnalysis.LOG.error("Error initializing AnalysisController", ex);
+			analysisController.saveToFile(new File("tmp/testproject.kax"));
 		}
+		analysisController.run();
 	}
 }

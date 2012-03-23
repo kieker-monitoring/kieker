@@ -225,7 +225,6 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 		return new Configuration();
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 

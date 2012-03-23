@@ -105,7 +105,6 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 		return configuration;
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 

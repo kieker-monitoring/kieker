@@ -174,7 +174,6 @@ class SourceClass extends AbstractReaderPlugin {
 		return new Configuration();
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}
@@ -197,7 +196,6 @@ class MyPlugin extends AbstractPlugin {
 		return new Configuration();
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}
@@ -222,7 +220,6 @@ class MyRepository extends AbstractRepository {
 		return new Configuration();
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

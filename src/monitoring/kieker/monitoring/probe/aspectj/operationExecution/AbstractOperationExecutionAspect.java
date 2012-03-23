@@ -44,7 +44,7 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = AbstractOperationExecutionAspect.CTRLINST.getTimeSource();
-	private static final String VMNAME = AbstractOperationExecutionAspect.CTRLINST.getHostName();
+	private static final String VMNAME = AbstractOperationExecutionAspect.CTRLINST.getHostname();
 	private static final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.INSTANCE;
 	private static final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
 

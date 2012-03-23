@@ -83,7 +83,7 @@ public class Starter extends Thread {
 			a += i / 1000; // NOCS (MagicNumberCheck)
 		}
 		if ((a % 10000) == 0) { // NOCS (MagicNumberCheck)
-			Starter.boolvar ^= Starter.boolvar;
+			Starter.boolvar = !Starter.boolvar;
 		}
 	}
 }

@@ -124,7 +124,6 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 		}
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);
 

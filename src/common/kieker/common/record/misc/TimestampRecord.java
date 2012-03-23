@@ -58,18 +58,15 @@ public final class TimestampRecord extends AbstractMonitoringRecord implements I
 		}
 	}
 
-	@Override
 	public Object[] toArray() {
 		return new Object[] { this.timestamp, };
 	}
 
-	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
 	public Class<?>[] getValueTypes() {
 		return TimestampRecord.TYPES.clone();
 	}

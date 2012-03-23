@@ -39,14 +39,14 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 	public void testSignatureStringSessionIDTraceIDTinToutEoiEss() {
 		final String sessionId = "IaYyf8m9B";
 		final long traceId = 3486095; // any number will do
-		final String hostName = "srv-gvNH6CgYFS";
+		final String hostname = "srv-gvNH6CgYFS";
 		final long tin = 33444; // any number will do
 		final long tout = 33449; // any number will do
 		final int eoi = BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_EOI;
 		final int ess = BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_ESS;
 		final OperationExecutionRecord opExecutionRecord =
 				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK, sessionId, traceId,
-						tin, tout, hostName, eoi, ess);
+						tin, tout, hostname, eoi, ess);
 
 		this.checkClassSignatureValues(opExecutionRecord,
 				BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
@@ -55,7 +55,7 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 		this.checkTraceId(opExecutionRecord, traceId);
 		this.checkTinTout(opExecutionRecord, tin, tout);
 		this.checkEoiEss(opExecutionRecord, eoi, ess);
-		this.checkHostName(opExecutionRecord, hostName);
+		this.checkHostName(opExecutionRecord, hostname);
 		this.checkSessionId(opExecutionRecord, sessionId);
 		this.checkIsEntryPoint(opExecutionRecord, false); // default, as documented in the constructor
 		this.checkObject(opExecutionRecord, null);
@@ -174,7 +174,7 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 	public void testComponentOpSessionIDTraceIDTinToutEoiEss() {
 		final String sessionId = "IaYyf8m9B";
 		final long traceId = 3486095; // any number will do
-		final String hostName = "srv-gvNH6CgYFS";
+		final String hostname = "srv-gvNH6CgYFS";
 		final long tin = 33444; // any number will do
 		final long tout = 33449; // any number will do
 		final int eoi = BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_EOI;
@@ -182,7 +182,7 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 		final OperationExecutionRecord opExecutionRecord =
 				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
 						BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK, sessionId, traceId,
-						tin, tout, hostName, eoi, ess);
+						tin, tout, hostname, eoi, ess);
 
 		this.checkClassSignatureValues(opExecutionRecord,
 				BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
@@ -191,7 +191,7 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 		this.checkTraceId(opExecutionRecord, traceId);
 		this.checkTinTout(opExecutionRecord, tin, tout);
 		this.checkEoiEss(opExecutionRecord, eoi, ess);
-		this.checkHostName(opExecutionRecord, hostName);
+		this.checkHostName(opExecutionRecord, hostname);
 		this.checkSessionId(opExecutionRecord, sessionId);
 
 		this.checkIsEntryPoint(opExecutionRecord, false); // default, as documented in the constructor
@@ -206,7 +206,7 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 	}
 
 	private void checkHostName(final OperationExecutionRecord opExecutionRecord, final String expectedHostName) {
-		Assert.assertEquals("Unexpected host name", expectedHostName, opExecutionRecord.getHostName());
+		Assert.assertEquals("Unexpected host name", expectedHostName, opExecutionRecord.getHostname());
 	}
 
 	private void checkTraceId(final OperationExecutionRecord opExecutionRecord, final long expectedTraceId) {
@@ -256,7 +256,7 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 
 		this.checkClassSignatureValues(deserializedRecord, expectedFqClassname, expectedOpArgString, opExecutionRecord.getOperationSignature());
 		this.checkEoiEss(deserializedRecord, opExecutionRecord.getEoi(), opExecutionRecord.getEss());
-		this.checkHostName(deserializedRecord, opExecutionRecord.getHostName());
+		this.checkHostName(deserializedRecord, opExecutionRecord.getHostname());
 		this.checkSessionId(deserializedRecord, opExecutionRecord.getSessionId());
 		this.checkTinTout(deserializedRecord, opExecutionRecord.getTin(), opExecutionRecord.getTout());
 		this.checkTraceId(deserializedRecord, opExecutionRecord.getTraceId());

@@ -23,15 +23,9 @@ package kieker.test.monitoring.aspectj.loadTimeWeaving.bookstoreDifferentRecordT
 import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 /**
- * A simple test and demonstration scenario for Kieker's
- * monitoring component.
+ * A simple test and demonstration scenario for Kieker's monitoring component.
  * 
  * @author Matthias Rohr
- *         History:
- *         2008/01/09: Refactoring for the first release of
- *         Kieker and publication under an open source licence
- *         2007-04-18: Initial version
- * 
  */
 
 public final class CRM {

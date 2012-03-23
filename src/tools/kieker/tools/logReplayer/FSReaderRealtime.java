@@ -165,7 +165,6 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		return defaultConfiguration;
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS, Integer.toString(this.numWorkers));
@@ -233,7 +232,6 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 			return new Configuration();
 		}
 
-		@Override
 		public Configuration getCurrentConfiguration() {
 			return new Configuration();
 		}

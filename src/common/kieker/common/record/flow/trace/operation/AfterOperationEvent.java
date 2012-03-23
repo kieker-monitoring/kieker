@@ -42,12 +42,10 @@ public final class AfterOperationEvent extends AbstractOperationEvent {
 		super(values, AfterOperationEvent.TYPES); // values[0..3]
 	}
 
-	@Override
 	public final Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), };
 	}
 
-	@Override
 	public final Class<?>[] getValueTypes() {
 		return AfterOperationEvent.TYPES.clone();
 	}

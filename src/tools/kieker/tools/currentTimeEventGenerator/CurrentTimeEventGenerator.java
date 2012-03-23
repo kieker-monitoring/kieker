@@ -141,7 +141,6 @@ public class CurrentTimeEventGenerator extends AbstractFilterPlugin {
 		return configuration;
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 

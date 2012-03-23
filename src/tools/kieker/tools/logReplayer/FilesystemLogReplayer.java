@@ -224,7 +224,6 @@ class RecordDelegationPlugin extends AbstractFilterPlugin {
 	 * {@inheritDoc}
 	 */
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		/* No configuration possible. */
 		return new Configuration(null);

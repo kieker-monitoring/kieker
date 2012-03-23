@@ -141,7 +141,6 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 		return this.running;
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 

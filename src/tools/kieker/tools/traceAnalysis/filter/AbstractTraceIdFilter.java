@@ -114,13 +114,13 @@ public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 	 */
 	protected abstract String getConfigurationPropertySelectedTraces();
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);
 
 		if (this.selectedTraceIds != null) {
 			configuration.setProperty(this.getConfigurationPropertySelectAllTraces(), Boolean.toString(true));
-			configuration.setProperty(this.getConfigurationPropertySelectedTraces(), Configuration.toProperty(this.selectedTraceIds.toArray(new Long[] {})));
+			configuration.setProperty(this.getConfigurationPropertySelectedTraces(),
+					Configuration.toProperty(this.selectedTraceIds.toArray(new Long[this.selectedTraceIds.size()])));
 		} else {
 			configuration.setProperty(this.getConfigurationPropertySelectAllTraces(), Boolean.toString(true));
 			configuration.setProperty(this.getConfigurationPropertySelectedTraces(), "");

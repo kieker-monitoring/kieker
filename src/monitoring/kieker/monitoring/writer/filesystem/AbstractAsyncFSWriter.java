@@ -74,7 +74,7 @@ public abstract class AbstractAsyncFSWriter extends AbstractAsyncWriter {
 			throw new IllegalArgumentException("'" + path + "' is not a directory.");
 		}
 		// Determine directory for files
-		final String ctrlName = super.monitoringController.getHostName() + "-" + super.monitoringController.getName();
+		final String ctrlName = super.monitoringController.getHostname() + "-" + super.monitoringController.getName();
 		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
 		date.setTimeZone(TimeZone.getTimeZone("UTC"));
 		final String dateStr = date.format(new java.util.Date()); // NOPMD (Date)

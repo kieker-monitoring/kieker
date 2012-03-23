@@ -52,7 +52,7 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 	/**
 	 * Name of the host, the resource belongs to.
 	 */
-	private volatile String hostName = CPUUtilizationRecord.DEFAULT_VALUE;
+	private volatile String hostname = CPUUtilizationRecord.DEFAULT_VALUE;
 
 	/**
 	 * Identifier which is unique for a CPU on a given host.
@@ -112,7 +112,7 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 	 * certain values shall remain undefined, use the constant {@link #UNDEFINED_DOUBLE}.
 	 * 
 	 * @param timestamp
-	 * @param hostName
+	 * @param hostname
 	 * @param cpuID
 	 * @param user
 	 * @param system
@@ -122,10 +122,10 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 	 * @param totalUtilization
 	 * @param idle
 	 */
-	public CPUUtilizationRecord(final long timestamp, final String hostName, final String cpuID, final double user, final double system, final double wait,
+	public CPUUtilizationRecord(final long timestamp, final String hostname, final String cpuID, final double user, final double system, final double wait,
 			final double nice, final double irq, final double totalUtilization, final double idle) {
 		this.timestamp = timestamp;
-		this.hostName = hostName;
+		this.hostname = hostname;
 		this.cpuID = cpuID;
 		this.user = user;
 		this.system = system;
@@ -141,7 +141,7 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 		AbstractMonitoringRecord.checkArray(myValues, CPUUtilizationRecord.TYPES);
 		try {
 			this.timestamp = (Long) myValues[0]; // NOCS
-			this.hostName = (String) myValues[1]; // NOCS
+			this.hostname = (String) myValues[1]; // NOCS
 			this.cpuID = (String) myValues[2]; // NOCS
 			this.user = (Double) myValues[3]; // NOCS
 			this.system = (Double) myValues[4]; // NOCS
@@ -159,18 +159,15 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 	 * {@inheritdoc}
 	 */
 
-	@Override
 	public Object[] toArray() {
-		return new Object[] { this.timestamp, this.hostName, this.cpuID, this.user, this.system, this.wait, this.nice, this.irq, this.totalUtilization, this.idle };
+		return new Object[] { this.timestamp, this.hostname, this.cpuID, this.user, this.system, this.wait, this.nice, this.irq, this.totalUtilization, this.idle };
 	}
 
-	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
 	public Class<?>[] getValueTypes() {
 		return CPUUtilizationRecord.TYPES.clone();
 	}
@@ -191,18 +188,18 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 	}
 
 	/**
-	 * @return the hostName
+	 * @return the hostname
 	 */
-	public final String getHostName() {
-		return this.hostName;
+	public final String getHostname() {
+		return this.hostname;
 	}
 
 	/**
-	 * @param hostName
-	 *            the hostName to set
+	 * @param hostname
+	 *            the hostname to set
 	 */
-	public final void setHostName(final String hostName) {
-		this.hostName = hostName;
+	public final void setHostname(final String hostname) {
+		this.hostname = hostname;
 	}
 
 	/**

@@ -59,8 +59,8 @@ public class ResponseTimeDecoration extends NodeDecoration {
 		return this.maximalResponseTime;
 	}
 
-	public float getAverageResponseTime() {
-		return (this.executionCount == 0) ? 0 : ((float) this.responseTimeSum / (float) this.executionCount);
+	public double getAverageResponseTime() {
+		return (this.executionCount == 0) ? 0 : ((double) this.responseTimeSum / (double) this.executionCount);
 	}
 
 	@Override

@@ -47,7 +47,6 @@ public class ListReader extends AbstractReaderPlugin {
 		return new Configuration();
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

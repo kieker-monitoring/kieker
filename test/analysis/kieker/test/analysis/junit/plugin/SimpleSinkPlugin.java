@@ -59,7 +59,6 @@ public class SimpleSinkPlugin extends AbstractFilterPlugin {
 		return new Configuration();
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

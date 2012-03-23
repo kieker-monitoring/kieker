@@ -182,8 +182,8 @@ public final class MonitoringController extends AbstractController implements IM
 		return this.stateController.getName();
 	}
 
-	public final String getHostName() {
-		return this.stateController.getHostName();
+	public final String getHostname() {
+		return this.stateController.getHostname();
 	}
 
 	public final int incExperimentId() {

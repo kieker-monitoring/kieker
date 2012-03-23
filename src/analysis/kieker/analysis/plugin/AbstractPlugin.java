@@ -21,6 +21,7 @@
 package kieker.analysis.plugin;
 
 import java.lang.reflect.Method;
+import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -122,13 +123,6 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * @return The default properties.
 	 */
 	protected abstract Configuration getDefaultConfiguration();
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
-	 */
-	public abstract Configuration getCurrentConfiguration();
 
 	/*
 	 * (non-Javadoc)
@@ -368,7 +362,12 @@ public abstract class AbstractPlugin implements IPlugin {
 		for (final Method m : dst.getClass().getMethods()) {
 			final InputPort ip = m.getAnnotation(InputPort.class);
 			if ((ip != null) && (m.getParameterTypes().length == 1) && ip.name().equals(inputPortName)) {
-				m.setAccessible(true);
+				java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
+					public Object run() {
+						m.setAccessible(true);
+						return null;
+					}
+				});
 				src.registeredMethods.get(outputPortName).add(new PluginInputPortReference(dst, inputPortName, m, dst.inputPorts.get(inputPortName).eventTypes()));
 				return true;
 			}

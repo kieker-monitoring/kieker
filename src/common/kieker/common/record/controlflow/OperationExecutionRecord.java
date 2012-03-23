@@ -253,7 +253,6 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 		this.entryPoint = false;
 	}
 
-	@Override
 	public final Object[] toArray() {
 		// TODO: remove NULL checks in Kieker 1.6, as null values not possible due to checks in the constructor
 		return new Object[] {
@@ -268,13 +267,11 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 			this.ess, };
 	}
 
-	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
 	public Class<?>[] getValueTypes() {
 		return OperationExecutionRecord.TYPES.clone();
 	}
@@ -302,7 +299,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	/**
 	 * @return the hostname
 	 */
-	public final String getHostName() {
+	public final String getHostname() {
 		return this.hostname;
 	}
 
@@ -313,8 +310,8 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	 *            the hostname to set
 	 */
 	@Deprecated
-	public final void setHostName(final String hostName) {
-		this.hostname = hostName;
+	public final void setHostname(final String hostname) {
+		this.hostname = hostname;
 	}
 
 	public String getOperationSignature() {

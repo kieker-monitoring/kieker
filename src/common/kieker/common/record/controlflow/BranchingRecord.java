@@ -60,18 +60,15 @@ public final class BranchingRecord extends AbstractMonitoringRecord implements I
 		}
 	}
 
-	@Override
 	public Object[] toArray() {
 		return new Object[] { this.timestamp, this.branchID, this.branchingOutcome };
 	}
 
-	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
 	public Class<?>[] getValueTypes() {
 		return BranchingRecord.TYPES.clone();
 	}

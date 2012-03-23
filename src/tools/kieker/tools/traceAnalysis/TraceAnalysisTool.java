@@ -354,7 +354,7 @@ public final class TraceAnalysisTool {
 				} else {
 					configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.FALSE.toString());
 					configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES,
-							Configuration.toProperty(TraceAnalysisTool.selectedTraces.toArray(new Long[] {})));
+							Configuration.toProperty(TraceAnalysisTool.selectedTraces.toArray(new Long[TraceAnalysisTool.selectedTraces.size()])));
 				}
 
 				traceIdFilter =

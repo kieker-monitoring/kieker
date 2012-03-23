@@ -55,8 +55,6 @@ public abstract class AbstractTimeSource implements ITimeSource {
 		return null;
 	}
 
-	public abstract long getTime();
-
 	@Override
-	public abstract String toString();
+	public abstract String toString(); // findbugs: This has to be declared here to make this method abstract!
 }

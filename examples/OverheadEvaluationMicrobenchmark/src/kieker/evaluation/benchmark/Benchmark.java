@@ -37,6 +37,7 @@ import org.apache.commons.cli.Options;
  * @author Jan Waller
  */
 public final class Benchmark {
+	private static final String ENCODING = "UTF-8";
 
 	private static PrintStream ps = null;
 	private static String outputFn = null;
@@ -132,8 +133,8 @@ public final class Benchmark {
 			Benchmark.methodTime = Integer.parseInt(cmdl.getOptionValue("methodtime"));
 			Benchmark.totalThreads = Integer.parseInt(cmdl.getOptionValue("totalthreads"));
 			Benchmark.recursionDepth = Integer.parseInt(cmdl.getOptionValue("recursiondepth"));
-			Benchmark.ps = new PrintStream(new FileOutputStream(Benchmark.outputFn, true));
-		} catch (final Exception ex) {
+			Benchmark.ps = new PrintStream(new FileOutputStream(Benchmark.outputFn, true), false, Benchmark.ENCODING);
+		} catch (final Exception ex) { // e.g., IOException, ParseException, NumberFormatException
 			new HelpFormatter().printHelp(Benchmark.class.getName(), cmdlOpts);
 			ex.printStackTrace();
 			System.exit(-1);

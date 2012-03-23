@@ -26,7 +26,7 @@ public class PipeData {
 
 	public PipeData(final long loggingTimestamp, final Object[] recordData) {
 		this.loggingTimestamp = loggingTimestamp;
-		this.recordData = recordData;
+		this.recordData = recordData; // TODO: clone()?
 	}
 
 	public final long getLoggingTimestamp() {
@@ -34,6 +34,6 @@ public class PipeData {
 	}
 
 	public final Object[] getRecordData() {
-		return this.recordData;
+		return this.recordData; // TODO: clone()?
 	}
 }

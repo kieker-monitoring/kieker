@@ -233,7 +233,6 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 		return configuration;
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_DOT_OUTPUT_FILE, this.dotOutputFile);

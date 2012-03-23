@@ -118,7 +118,7 @@ public class ControlServlet extends HttpServlet {
 		out.println("<h2>ControlServlet</h2>");
 		out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: " + ControlServlet.TIMESOURCE.getTime() + "<br>");
 		out.println("Host:\"" + ControlServlet.hostname + "\"<br>");
-		out.println("Vmname:\"" + ControlServlet.CTRL_INST.getHostName() + "\"<br>");
+		out.println("Vmname:\"" + ControlServlet.CTRL_INST.getHostname() + "\"<br>");
 
 		String action = request.getParameter("action");
 		if (action == null) {
@@ -170,7 +170,7 @@ public class ControlServlet extends HttpServlet {
 									"protected void kieker.monitoring.controlServlet.ControlServlet.processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)",
 									ControlServlet.SESSION_REGISTRY.recallThreadLocalSessionId(),
 									ControlServlet.CF_REGISTRY.recallThreadLocalTraceId(), ControlServlet.TIMESOURCE.getTime(), ControlServlet.TIMESOURCE.getTime(),
-									ControlServlet.CTRL_INST.getHostName(), i, i));
+									ControlServlet.CTRL_INST.getHostname(), i, i));
 				}
 				ControlServlet.CF_REGISTRY.unsetThreadLocalTraceId();
 				ControlServlet.SESSION_REGISTRY.unsetThreadLocalSessionId();
@@ -216,7 +216,7 @@ public class ControlServlet extends HttpServlet {
 				+ " <FORM ACTION=\"index\" METHOD=\"GET\"> "
 				+ " <INPUT TYPE=\"HIDDEN\" NAME=\"action\" VALUE=\"setVmname\">"
 				+ " vmname (max 40 char): <INPUT TYPE=\"TEXT\" SIZE=\"40\" NAME=\"vmname\" value=\"");
-		bu.append(ControlServlet.CTRL_INST.getHostName());
+		bu.append(ControlServlet.CTRL_INST.getHostname());
 		bu.append("\"/>"
 				+ " <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> <br> <br>"
 				+ " Create 12 fake entries into the log (operation kieker.monitoring.controlServlet..): <a href=\"index?action=insertTestData\"> generate </a> <br><br>"

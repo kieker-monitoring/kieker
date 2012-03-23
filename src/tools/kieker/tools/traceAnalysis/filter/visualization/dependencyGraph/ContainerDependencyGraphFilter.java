@@ -131,7 +131,6 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 		return configuration;
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 

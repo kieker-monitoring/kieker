@@ -31,12 +31,6 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  * test the (negative) performance influence of synchronized method invocation.
  * 
  * @author Matthias Rohr
- *         History:
- *         2008/20/10: Created this variant based on kieker.tests.compileTimeWeaving.bookstore.Catalog
- *         2008/01/09: Refactoring for the first release of
- *         Kieker and publication under an open source licence
- *         2007-04-18: Initial version
- * 
  */
 
 public final class CRM {

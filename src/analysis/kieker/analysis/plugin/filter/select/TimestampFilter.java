@@ -54,7 +54,6 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 		return configuration;
 	}
 
-	@Override
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, Long.toString(this.ignoreBeforeTimestamp));

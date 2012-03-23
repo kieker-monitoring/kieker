@@ -53,12 +53,10 @@ public final class CallOperationEvent extends AbstractOperationEvent {
 		this.calleeOperationSignature = (String) values[4];
 	}
 
-	@Override
 	public final Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getCallerOperationSignature(), this.getCalleeOperationSignature() };
 	}
 
-	@Override
 	public final Class<?>[] getValueTypes() {
 		return CallOperationEvent.TYPES.clone();
 	}

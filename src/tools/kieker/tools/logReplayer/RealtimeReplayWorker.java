@@ -74,7 +74,6 @@ public class RealtimeReplayWorker extends AbstractFilterPlugin implements Runnab
 		return new Configuration();
 	}
 
-	@Override
 	public Configuration getCurrentConfiguration() {
 		// TODO Current Configuration
 		return new Configuration();

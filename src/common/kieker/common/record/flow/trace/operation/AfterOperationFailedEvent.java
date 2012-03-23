@@ -52,12 +52,10 @@ public final class AfterOperationFailedEvent extends AbstractOperationEvent {
 		this.cause = (String) values[4];
 	}
 
-	@Override
 	public final Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.cause };
 	}
 
-	@Override
 	public final Class<?>[] getValueTypes() {
 		return AfterOperationFailedEvent.TYPES.clone();
 	}
