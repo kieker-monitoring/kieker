@@ -149,4 +149,12 @@ public abstract class AbstractDependencyGraphFilter<T> extends AbstractMessageTr
 
 		return output;
 	}
+
+	protected String getNodeFillColor(final DependencyGraphNode<?> node) {
+		return (node.isAssumed()) ? DotFactory.DOT_FILLCOLOR_GRAY : DotFactory.DOT_FILLCOLOR_WHITE;
+	}
+
+	protected boolean isDependencyAssumed(final DependencyGraphNode<?> source, final DependencyGraphNode<?> target) {
+		return (source.isAssumed() || target.isAssumed());
+	}
 }

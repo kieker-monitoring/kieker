@@ -579,8 +579,13 @@ public final class TraceAnalysisTool {
 						Boolean.toString(TraceAnalysisTool.shortLabels));
 				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_SELFLOOPS,
 						Boolean.toString(TraceAnalysisTool.includeSelfLoops));
+
 				componentPlotAllocationComponentDepGraph = new ComponentDependencyGraphAllocationFilter(
 						componentPlotAllocationComponentDepGraphConfig);
+
+				final String[] nodeDecorations = TraceAnalysisTool.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG);
+				TraceAnalysisTool.addDecorators(nodeDecorations, componentPlotAllocationComponentDepGraph);
+
 				analysisInstance.registerFilter(componentPlotAllocationComponentDepGraph);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPlotAllocationComponentDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
@@ -663,6 +668,10 @@ public final class TraceAnalysisTool {
 								+ Constants.ALLOCATION_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX).getAbsolutePath());
 
 				componentPlotAllocationOperationDepGraph = new OperationDependencyGraphAllocationFilter(componentPlotAllocationOperationDepGraphConfig);
+
+				final String[] nodeDecorations = TraceAnalysisTool.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG);
+				TraceAnalysisTool.addDecorators(nodeDecorations, componentPlotAllocationOperationDepGraph);
+
 				analysisInstance.registerFilter(componentPlotAllocationOperationDepGraph);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPlotAllocationOperationDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
@@ -690,6 +699,7 @@ public final class TraceAnalysisTool {
 								+ Constants.ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX).getAbsolutePath());
 
 				componentPlotAssemblyOperationDepGraph = new OperationDependencyGraphAssemblyFilter(componentPlotAssemblyOperationDepGraphConfig);
+
 				final String[] nodeDecorations = TraceAnalysisTool.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG);
 				TraceAnalysisTool.addDecorators(nodeDecorations, componentPlotAssemblyOperationDepGraph);
 

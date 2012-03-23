@@ -164,12 +164,10 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 					}
 					opLabel.append(")");
 
-					final String fillStyle = (curPair.isAssumed()) ? DotFactory.DOT_FILLCOLOR_GRAY : DotFactory.DOT_FILLCOLOR_WHITE;
-
 					strBuild.append(DotFactory.createNode("", this.getNodeId(curPair), this.nodeLabel(curPair, opLabel), DotFactory.DOT_SHAPE_OVAL,
 							DotFactory.DOT_STYLE_FILLED, // style
 							null, // framecolor
-							fillStyle, // fillcolor
+							this.getNodeFillColor(curPair), // fillcolor
 							null, // fontcolor
 							DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 							null, // imagefilename
@@ -259,7 +257,7 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 				OperationDependencyGraphAssemblyFilter.this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
 			}
 
-			final boolean assumed = (senderNode.isAssumed() || receiverNode.isAssumed());
+			final boolean assumed = this.isDependencyAssumed(senderNode, receiverNode);
 
 			senderNode.addOutgoingDependency(receiverNode, assumed);
 			receiverNode.addIncomingDependency(senderNode, assumed);

@@ -101,6 +101,9 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 			strBuild.append("..");
 		}
 		strBuild.append(componentTypeIdentifier);
+
+		this.addDecorationText(strBuild, node);
+
 		return strBuild.toString();
 	}
 
@@ -150,7 +153,7 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 					strBuild.append(DotFactory.createNode("", this.getNodeId(node), this.componentNodeLabel(node, shortLabelsL), DotFactory.DOT_SHAPE_BOX,
 							DotFactory.DOT_STYLE_FILLED, // style
 							null, // framecolor
-							DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
+							this.getNodeFillColor(node), // fillcolor
 							null, // fontcolor
 							DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 							null, // imagefilename
@@ -214,14 +217,29 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 					.getId());
 			if (senderNode == null) {
 				senderNode = new DependencyGraphNode<AllocationComponent>(senderComponent.getId(), senderComponent);
+
+				if (m.getSendingExecution().isAssumed()) {
+					senderNode.setAssumed();
+				}
+
 				ComponentDependencyGraphAllocationFilter.this.dependencyGraph.addNode(senderNode.getId(), senderNode);
 			}
 			if (receiverNode == null) {
 				receiverNode = new DependencyGraphNode<AllocationComponent>(receiverComponent.getId(), receiverComponent);
+
+				if (m.getReceivingExecution().isAssumed()) {
+					receiverNode.setAssumed();
+				}
+
 				ComponentDependencyGraphAllocationFilter.this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
 			}
-			senderNode.addOutgoingDependency(receiverNode);
-			receiverNode.addIncomingDependency(senderNode);
+
+			final boolean assumed = this.isDependencyAssumed(senderNode, receiverNode);
+
+			senderNode.addOutgoingDependency(receiverNode, assumed);
+			receiverNode.addIncomingDependency(senderNode, assumed);
+
+			this.invokeDecorators(m, senderNode, receiverNode);
 		}
 		ComponentDependencyGraphAllocationFilter.this.reportSuccess(t.getTraceId());
 	}

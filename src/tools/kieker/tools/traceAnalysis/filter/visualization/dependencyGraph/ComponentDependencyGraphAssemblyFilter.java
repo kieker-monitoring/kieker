@@ -99,15 +99,13 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 		final StringBuilder strBuild = new StringBuilder();
 		// dot code for contained components
 		for (final DependencyGraphNode<AssemblyComponent> node : nodes) {
-			final String fillColor = (node.isAssumed()) ? DotFactory.DOT_FILLCOLOR_GRAY : DotFactory.DOT_FILLCOLOR_WHITE;
-
 			final AssemblyComponent curComponent = node.getEntity();
 			final int curComponentId = node.getId();
 			strBuild.append(DotFactory.createNode("", this.getNodeId(node), (curComponentId == rootComponentId) ? "$" : this.nodeLabel(node, curComponent), // NOCS
 					(curComponentId == rootComponentId) ? DotFactory.DOT_SHAPE_NONE : DotFactory.DOT_SHAPE_BOX, // NOCS
 					(curComponentId == rootComponentId) ? null : DotFactory.DOT_STYLE_FILLED, // style // NOCS // NOPMD
 					null, // framecolor
-					(curComponentId == rootComponentId) ? null : fillColor, // fillcolor // NOCS //NOPMD
+					(curComponentId == rootComponentId) ? null : this.getNodeFillColor(node), // fillcolor // NOCS //NOPMD
 					null, // fontcolor
 					DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 					null, // imagefilename
@@ -191,7 +189,7 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 				ComponentDependencyGraphAssemblyFilter.this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
 			}
 
-			final boolean assumed = (senderNode.isAssumed() || receiverNode.isAssumed());
+			final boolean assumed = this.isDependencyAssumed(senderNode, receiverNode);
 
 			senderNode.addOutgoingDependency(receiverNode, assumed);
 			receiverNode.addIncomingDependency(senderNode, assumed);

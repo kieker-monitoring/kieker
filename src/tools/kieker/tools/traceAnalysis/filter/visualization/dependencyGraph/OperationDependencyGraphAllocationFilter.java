@@ -186,10 +186,10 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 							opLabel.append("..");
 						}
 						opLabel.append(")");
-						strBuild.append(DotFactory.createNode("", this.getNodeId(curPair), opLabel.toString(), DotFactory.DOT_SHAPE_OVAL,
+						strBuild.append(DotFactory.createNode("", this.getNodeId(curPair), this.nodeLabel(curPair, opLabel), DotFactory.DOT_SHAPE_OVAL,
 								DotFactory.DOT_STYLE_FILLED, // style
 								null, // framecolor
-								DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
+								this.getNodeFillColor(curPair), // fillcolor
 								null, // fontcolor
 								DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 								null, // imagefilename
@@ -202,6 +202,11 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 			}
 		}
 		ps.println(strBuild.toString());
+	}
+
+	private String nodeLabel(final DependencyGraphNode<?> node, final StringBuilder labelBuilder) {
+		this.addDecorationText(labelBuilder, node);
+		return labelBuilder.toString();
 	}
 
 	/**
@@ -269,14 +274,29 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 					.getNode(receiverPair.getId());
 			if (senderNode == null) {
 				senderNode = new DependencyGraphNode<AllocationComponentOperationPair>(senderPair.getId(), senderPair);
+
+				if (m.getSendingExecution().isAssumed()) {
+					senderNode.setAssumed();
+				}
+
 				OperationDependencyGraphAllocationFilter.this.dependencyGraph.addNode(senderNode.getId(), senderNode);
 			}
 			if (receiverNode == null) {
 				receiverNode = new DependencyGraphNode<AllocationComponentOperationPair>(receiverPair.getId(), receiverPair);
+
+				if (m.getReceivingExecution().isAssumed()) {
+					receiverNode.setAssumed();
+				}
+
 				OperationDependencyGraphAllocationFilter.this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
 			}
-			senderNode.addOutgoingDependency(receiverNode);
-			receiverNode.addIncomingDependency(senderNode);
+
+			final boolean assumed = this.isDependencyAssumed(senderNode, receiverNode);
+
+			senderNode.addOutgoingDependency(receiverNode, assumed);
+			receiverNode.addIncomingDependency(senderNode, assumed);
+
+			this.invokeDecorators(m, senderNode, receiverNode);
 		}
 		OperationDependencyGraphAllocationFilter.this.reportSuccess(t.getTraceId());
 	}
