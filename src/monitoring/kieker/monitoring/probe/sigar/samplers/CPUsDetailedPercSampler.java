@@ -49,15 +49,19 @@ public final class CPUsDetailedPercSampler extends AbstractSigarSampler {
 		super(sigar);
 	}
 
-	public void sample(final IMonitoringController samplingController) throws SigarException {
+	public void sample(final IMonitoringController monitoringController) throws SigarException {
+		if (!monitoringController.isMonitoringEnabled()) {
+			return;
+		}
+
 		final CpuPerc[] cpus = this.sigar.getCpuPercList();
-		final ITimeSource timesource = samplingController.getTimeSource();
+		final ITimeSource timesource = monitoringController.getTimeSource();
 		for (int i = 0; i < cpus.length; i++) {
 			final CpuPerc curCPU = cpus[i];
 			// final double combinedUtilization = curCPU.getCombined();
-			final CPUUtilizationRecord r = new CPUUtilizationRecord(timesource.getTime(), samplingController.getHostname(), Integer.toString(i), curCPU.getUser(), // NOPMD
+			final CPUUtilizationRecord r = new CPUUtilizationRecord(timesource.getTime(), monitoringController.getHostname(), Integer.toString(i), curCPU.getUser(), // NOPMD
 					curCPU.getSys(), curCPU.getWait(), curCPU.getNice(), curCPU.getIrq(), curCPU.getCombined(), curCPU.getIdle());
-			samplingController.newMonitoringRecord(r);
+			monitoringController.newMonitoringRecord(r);
 			// CPUsDetailedPercSampler.log.info("Sigar utilization: " +
 			// combinedUtilization + "; " + " Record: " + r);
 		}
