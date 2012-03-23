@@ -36,10 +36,10 @@ public class TestOperationCallEvent extends TestCase { // NOCS (MissingCtorCheck
 	private static final int ORDER_INDEX = 234; // NOCS (MagicNumberCheck)
 
 	private static final String FQ_CALLER_CLASSNAME = "p1.p2.p3.callername";
-	private static final String FQ_CALLER_OPERATION =
+	private static final String FQ_CALLER_OPERATION_SIGNATURE =
 			TestOperationCallEvent.FQ_CALLER_CLASSNAME + ".callerOp(boolean arg1, int arg2)";
 	private static final String FQ_CALLEE_CLASSNAME = "p1.p2.p3.calleename";
-	private static final String FQ_CALLEE_OPERATION =
+	private static final String FQ_CALLEE_OPERATION_SIGNATURE =
 			TestOperationCallEvent.FQ_CALLEE_CLASSNAME + ".calleeOp(boolean arg1, int arg2)";
 
 	/**
@@ -53,13 +53,13 @@ public class TestOperationCallEvent extends TestCase { // NOCS (MissingCtorCheck
 
 		final CallOperationEvent call1 =
 				new CallOperationEvent(TestOperationCallEvent.TSTAMP, TestOperationCallEvent.TRACE_ID, TestOperationCallEvent.ORDER_INDEX,
-						TestOperationCallEvent.FQ_CALLER_OPERATION, TestOperationCallEvent.FQ_CALLEE_OPERATION);
+						TestOperationCallEvent.FQ_CALLER_OPERATION_SIGNATURE, TestOperationCallEvent.FQ_CALLEE_OPERATION_SIGNATURE);
 
 		Assert.assertEquals("Unexpected timestamp", TestOperationCallEvent.TSTAMP, call1.getTimestamp());
 		Assert.assertEquals("Unexpected trace ID", TestOperationCallEvent.TRACE_ID, call1.getTraceId());
 		Assert.assertEquals("Unexpected order index", TestOperationCallEvent.ORDER_INDEX, call1.getOrderIndex());
-		Assert.assertEquals("Unexpected caller operation name", TestOperationCallEvent.FQ_CALLER_OPERATION, call1.getCallerOperationName());
-		Assert.assertEquals("Unexpected callee operation name", TestOperationCallEvent.FQ_CALLEE_OPERATION, call1.getCalleeOperationSignature());
+		Assert.assertEquals("Unexpected caller operation name", TestOperationCallEvent.FQ_CALLER_OPERATION_SIGNATURE, call1.getCallerOperationSignature());
+		Assert.assertEquals("Unexpected callee operation name", TestOperationCallEvent.FQ_CALLEE_OPERATION_SIGNATURE, call1.getCalleeOperationSignature());
 
 		final Object[] call1Array = call1.toArray();
 

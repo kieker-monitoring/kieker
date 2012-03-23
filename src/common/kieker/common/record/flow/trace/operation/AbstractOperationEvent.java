@@ -35,9 +35,9 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent {
 
 	private final String operationSignature;
 
-	public AbstractOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationName) {
+	public AbstractOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature) {
 		super(timestamp, traceId, orderIndex);
-		this.operationSignature = (this.operationSignature == null) ? AbstractOperationEvent.NO_OPERATIONSIGNATURE : this.operationSignature; // NOCS
+		this.operationSignature = (operationSignature == null) ? AbstractOperationEvent.NO_OPERATIONSIGNATURE : operationSignature; // NOCS
 	}
 
 	public AbstractOperationEvent(final Object[] values, final Class<?>[] valueTypes) {

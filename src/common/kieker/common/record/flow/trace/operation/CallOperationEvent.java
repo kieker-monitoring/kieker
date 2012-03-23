@@ -40,22 +40,22 @@ public final class CallOperationEvent extends AbstractOperationEvent {
 	 */
 	private static final String NO_CALLEEOPERATIONSIGANTURE = "<no-calleeOperationSiganture>";
 
-	private final String calleeOperationSiganture;
+	private final String calleeOperationSignature;
 
-	public CallOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String callerOperationSiganture,
-			final String calleeOperationSiganture) {
-		super(timestamp, traceId, orderIndex, callerOperationSiganture);
-		this.calleeOperationSiganture = (calleeOperationSiganture == null) ? CallOperationEvent.NO_CALLEEOPERATIONSIGANTURE : calleeOperationSiganture; // NOCS
+	public CallOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String callerOperationSignature,
+			final String calleeOperationSignature) {
+		super(timestamp, traceId, orderIndex, callerOperationSignature);
+		this.calleeOperationSignature = (calleeOperationSignature == null) ? CallOperationEvent.NO_CALLEEOPERATIONSIGANTURE : calleeOperationSignature; // NOCS
 	}
 
 	public CallOperationEvent(final Object[] values) {
 		super(values, CallOperationEvent.TYPES); // values[0..3]
-		this.calleeOperationSiganture = (String) values[4];
+		this.calleeOperationSignature = (String) values[4];
 	}
 
 	@Override
 	public final Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getCallerOperationName(), this.getCalleeOperationSignature() };
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getCallerOperationSignature(), this.getCalleeOperationSignature() };
 	}
 
 	@Override
@@ -63,12 +63,12 @@ public final class CallOperationEvent extends AbstractOperationEvent {
 		return CallOperationEvent.TYPES.clone();
 	}
 
-	public final String getCallerOperationName() {
+	public final String getCallerOperationSignature() {
 		return this.getOperationSignature();
 	}
 
 	public final String getCalleeOperationSignature() {
-		return this.calleeOperationSiganture;
+		return this.calleeOperationSignature;
 	}
 
 	public final boolean callsReferencedOperationOf(final AbstractOperationEvent event) {
