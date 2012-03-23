@@ -35,14 +35,15 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * 
  * @author Andre van Hoorn
  */
-@Plugin(outputPorts = @OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME, description = "Execution output", eventTypes = { Execution.class }))
+@Plugin(outputPorts = @OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, description = "Fowards records within the timeperiod", eventTypes = { Execution.class }))
 public class TimestampFilter extends AbstractTimestampFilter {
 
-	public static final String INPUT_PORT_NAME = "newExecution";
-	public static final String OUTPUT_PORT_NAME = "defaultOutput";
+	public static final String INPUT_PORT_NAME_EXECUTION = "executions";
 
-	public static final String CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP = "ignoreExecutionsBeforeTimestamp";
-	public static final String CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP = "ignoreExecutionsAfterTimestamp";
+	public static final String OUTPUT_PORT_NAME_WITHIN_PERIOD = "executions-within-time-period";
+
+	public static final String CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP = "ignoreExecutionsBeforeTimestamp";
+	public static final String CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP = "ignoreExecutionsAfterTimestamp";
 
 	/**
 	 * Creates a new instance of the class {@link TimestampFilter} with the given parameters.
@@ -55,20 +56,20 @@ public class TimestampFilter extends AbstractTimestampFilter {
 		super(configuration);
 	}
 
-	@InputPort(name = TimestampFilter.INPUT_PORT_NAME, description = "Execution input", eventTypes = { Execution.class })
-	public void newExecution(final Execution execution) {
+	@InputPort(name = TimestampFilter.INPUT_PORT_NAME_EXECUTION, description = "Receives executions to be selected by their logging timestamps", eventTypes = { Execution.class })
+	public void inputExecution(final Execution execution) {
 		if (this.inRange(execution.getTin()) && this.inRange(execution.getTout())) {
-			super.deliver(TimestampFilter.OUTPUT_PORT_NAME, execution);
+			super.deliver(TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, execution);
 		}
 	}
 
 	@Override
 	protected String getConfigurationPropertyIgnoreBeforeTimestamp() {
-		return TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP;
+		return TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP;
 	}
 
 	@Override
 	protected String getConfigurationPropertyIgnoreAfterTimestamp() {
-		return TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP;
+		return TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP;
 	}
 }

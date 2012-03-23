@@ -40,19 +40,21 @@ import kieker.common.logging.LogFactory;
  * 
  * @author Matthias Rohr, Jan Waller
  */
-@Plugin(outputPorts = @OutputPort(name = TeeFilter.OUTPUT_PORT_NAME, description = "all incoming objects are forwarded", eventTypes = {}))
+@Plugin(outputPorts = @OutputPort(name = TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming object", eventTypes = { Object.class }))
 public final class TeeFilter extends AbstractFilterPlugin {
 	private static final Log LOG = LogFactory.getLog(TeeFilter.class);
 
-	public static final String OUTPUT_PORT_NAME = "output";
-	public static final String INPUT_PORT_NAME = "input";
-	public static final String CONFIG_STREAM = "stream";
-	public static final String CONFIG_ENCODING = "encoding";
+	public static final String INPUT_PORT_NAME_EVENTS = "received-events";
 
-	public static final String CONFIG_STREAM_STDOUT = "STDOUT";
-	public static final String CONFIG_STREAM_STDERR = "STDERR";
-	public static final String CONFIG_STREAM_STDLOG = "STDLOG";
-	public static final String CONFIG_DEFAULT_ENCODING = "UTF-8";
+	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayed-events";
+
+	public static final String CONFIG_PROPERTY_NAME_STREAM = "stream";
+	public static final String CONFIG_PROPERTY_NAME_ENCODING = "character-encoding";
+
+	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDOUT = "STDOUT";
+	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDERR = "STDERR";
+	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDLOG = "STDLOG";
+	public static final String CONFIG_PROPERTY_VALUE_DEFAULT_ENCODING = "UTF-8";
 
 	private final PrintStream printStream;
 	private final String printStreamName;
@@ -62,18 +64,18 @@ public final class TeeFilter extends AbstractFilterPlugin {
 		super(configuration);
 
 		/* Get the name of the stream. */
-		final String printStreamName = this.configuration.getStringProperty(TeeFilter.CONFIG_STREAM);
+		final String printStreamName = this.configuration.getStringProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM);
 		/* Get the encoding. */
-		this.encoding = this.configuration.getStringProperty(TeeFilter.CONFIG_ENCODING);
+		this.encoding = this.configuration.getStringProperty(TeeFilter.CONFIG_PROPERTY_NAME_ENCODING);
 
 		/* Decide which stream to be used - but remember the name! */
-		if (TeeFilter.CONFIG_STREAM_STDLOG.equals(printStreamName)) {
+		if (TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDLOG.equals(printStreamName)) {
 			this.printStream = null;
 			this.printStreamName = null;
-		} else if (TeeFilter.CONFIG_STREAM_STDOUT.equals(printStreamName)) {
+		} else if (TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDOUT.equals(printStreamName)) {
 			this.printStream = System.out;
 			this.printStreamName = null;
-		} else if (TeeFilter.CONFIG_STREAM_STDERR.equals(printStreamName)) {
+		} else if (TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDERR.equals(printStreamName)) {
 			this.printStream = System.err;
 			this.printStreamName = null;
 		} else {
@@ -102,29 +104,29 @@ public final class TeeFilter extends AbstractFilterPlugin {
 	@Override
 	protected final Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(TeeFilter.CONFIG_STREAM, TeeFilter.CONFIG_STREAM_STDOUT);
-		configuration.setProperty(TeeFilter.CONFIG_ENCODING, TeeFilter.CONFIG_DEFAULT_ENCODING);
+		configuration.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM, TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDOUT);
+		configuration.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_ENCODING, TeeFilter.CONFIG_PROPERTY_VALUE_DEFAULT_ENCODING);
 		return configuration;
 	}
 
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(TeeFilter.CONFIG_ENCODING, this.encoding);
+		configuration.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_ENCODING, this.encoding);
 		/* We reverse the if-decisions within the constructor. */
 		if (this.printStream == null) {
-			configuration.setProperty(TeeFilter.CONFIG_STREAM, TeeFilter.CONFIG_STREAM_STDLOG);
+			configuration.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM, TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDLOG);
 		} else if (this.printStream == System.out) {
-			configuration.setProperty(TeeFilter.CONFIG_STREAM, TeeFilter.CONFIG_STREAM_STDOUT);
+			configuration.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM, TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDOUT);
 		} else if (this.printStream == System.err) {
-			configuration.setProperty(TeeFilter.CONFIG_STREAM, TeeFilter.CONFIG_STREAM_STDERR);
+			configuration.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM, TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDERR);
 		} else {
-			configuration.setProperty(TeeFilter.CONFIG_STREAM, this.printStreamName);
+			configuration.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM, this.printStreamName);
 		}
 		return configuration;
 	}
 
-	@InputPort(name = TeeFilter.INPUT_PORT_NAME, description = "logs all incoming objects", eventTypes = {})
-	public final void newMonitoringRecord(final Object object) {
+	@InputPort(name = TeeFilter.INPUT_PORT_NAME_EVENTS, description = "Receives incoming objects to be logged and forwarded", eventTypes = { Object.class })
+	public final void inputEvent(final Object object) {
 		final StringBuilder sb = new StringBuilder(128);
 		sb.append(this.getName());
 		sb.append('(').append(object.getClass().getSimpleName()).append(") ").append(object.toString());
@@ -134,6 +136,6 @@ public final class TeeFilter extends AbstractFilterPlugin {
 		} else {
 			TeeFilter.LOG.info(record);
 		}
-		super.deliver(TeeFilter.OUTPUT_PORT_NAME, object);
+		super.deliver(TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, object);
 	}
 }

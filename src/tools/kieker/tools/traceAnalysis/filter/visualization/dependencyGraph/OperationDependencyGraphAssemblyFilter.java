@@ -59,15 +59,15 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGraphFilter<AssemblyComponentOperationPair> {
-
-	public static final String CONFIG_DOT_OUTPUT_FILE = "dotOutputFile";
-	public static final String CONFIG_INCLUDE_WEIGHTS = "includeWeights";
-	public static final String CONFIG_SHORT_LABELS = "shortLabels";
-	public static final String CONFIG_INCLUDE_SELF_LOOPS = "includeSelfLoops";
-
 	private static final Log LOG = LogFactory.getLog(OperationDependencyGraphAssemblyFilter.class);
+
+	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dotOutputFile";
+	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
+	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
+	public static final String CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS = "includeSelfLoops";
+
 	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
 	private final File dotOutputFile;
 	private final boolean includeWeights;
@@ -81,10 +81,10 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 				new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 						OperationRepository.ROOT_OPERATION,
 						AssemblyRepository.ROOT_ASSEMBLY_COMPONENT)));
-		this.dotOutputFile = new File(this.configuration.getStringProperty(OperationDependencyGraphAssemblyFilter.CONFIG_DOT_OUTPUT_FILE));
-		this.includeWeights = this.configuration.getBooleanProperty(OperationDependencyGraphAssemblyFilter.CONFIG_INCLUDE_WEIGHTS);
-		this.shortLabels = this.configuration.getBooleanProperty(OperationDependencyGraphAssemblyFilter.CONFIG_SHORT_LABELS);
-		this.includeSelfLoops = this.configuration.getBooleanProperty(OperationDependencyGraphAssemblyFilter.CONFIG_INCLUDE_SELF_LOOPS);
+		this.dotOutputFile = new File(this.configuration.getStringProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE));
+		this.includeWeights = this.configuration.getBooleanProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
+		this.shortLabels = this.configuration.getBooleanProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS);
+		this.includeSelfLoops = this.configuration.getBooleanProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS);
 	}
 
 	private String componentNodeLabel(final AssemblyComponent component) {
@@ -212,10 +212,10 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 
 	@Override
 	@InputPort(
-			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME,
-			description = "Message traces",
+			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES,
+			description = "Receives the message traces to be processed",
 			eventTypes = { MessageTrace.class })
-	public void msgTraceInput(final MessageTrace t) {
+	public void inputMessageTraces(final MessageTrace t) {
 		for (final AbstractMessage m : t.getSequenceAsVector()) {
 			if (m instanceof SynchronousReplyMessage) {
 				continue;

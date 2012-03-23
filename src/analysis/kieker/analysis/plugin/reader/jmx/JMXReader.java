@@ -48,16 +48,17 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @author Jan Waller
  */
-@Plugin(outputPorts = @OutputPort(name = JMXReader.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMXReader"))
+@Plugin(outputPorts = @OutputPort(name = JMXReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMXReader"))
 public final class JMXReader extends AbstractReaderPlugin {
 
-	public static final String OUTPUT_PORT_NAME = "defaultOutput";
-	public static final String CONFIG_SERVER = "server";
-	public static final String CONFIG_PORT = "port";
-	public static final String CONFIG_SERVICEURL = "serviceURL";
-	public static final String CONFIG_DOMAIN = "domain";
-	public static final String CONFIG_LOGNAME = "logname";
-	public static final String CONFIG_SILENT = "silentreconnect";
+	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoring-records";
+
+	public static final String CONFIG_PROPERTY_NAME_SERVER = "server";
+	public static final String CONFIG_PROPERTY_NAME_PORT = "port";
+	public static final String CONFIG_PROPERTY_NAME_SERVICEURL = "serviceURL";
+	public static final String CONFIG_PROPERTY_NAME_DOMAIN = "domain";
+	public static final String CONFIG_PROPERTY_NAME_LOGNAME = "logname";
+	public static final String CONFIG_PROPERTY_NAME_SILENT = "silentreconnect";
 
 	private static final Log LOG = LogFactory.getLog(JMXReader.class);
 
@@ -72,16 +73,16 @@ public final class JMXReader extends AbstractReaderPlugin {
 
 	public JMXReader(final Configuration configuation) throws IllegalArgumentException {
 		super(configuation);
-		this.server = this.configuration.getStringProperty(JMXReader.CONFIG_SERVER);
-		this.port = this.configuration.getIntProperty(JMXReader.CONFIG_PORT);
+		this.server = this.configuration.getStringProperty(JMXReader.CONFIG_PROPERTY_NAME_SERVER);
+		this.port = this.configuration.getIntProperty(JMXReader.CONFIG_PROPERTY_NAME_PORT);
 		final String tmpServiceURL;
 		if (this.port > 0) {
 			tmpServiceURL = "service:jmx:rmi:///jndi/rmi://" + this.server + ":" + this.port + "/jmxrmi";
 		} else {
-			tmpServiceURL = this.configuration.getStringProperty(JMXReader.CONFIG_SERVICEURL);
+			tmpServiceURL = this.configuration.getStringProperty(JMXReader.CONFIG_PROPERTY_NAME_SERVICEURL);
 		}
-		this.domain = this.configuration.getStringProperty(JMXReader.CONFIG_DOMAIN);
-		this.logname = this.configuration.getStringProperty(JMXReader.CONFIG_LOGNAME);
+		this.domain = this.configuration.getStringProperty(JMXReader.CONFIG_PROPERTY_NAME_DOMAIN);
+		this.logname = this.configuration.getStringProperty(JMXReader.CONFIG_PROPERTY_NAME_LOGNAME);
 		if (tmpServiceURL == null) {
 			throw new IllegalArgumentException("JMXReader has not sufficient parameters. serviceURL is null");
 		}
@@ -93,18 +94,18 @@ public final class JMXReader extends AbstractReaderPlugin {
 		} catch (final MalformedURLException e) {
 			throw new IllegalArgumentException("Failed to parse configuration.", e);
 		}
-		this.silentreconnect = this.configuration.getBooleanProperty(JMXReader.CONFIG_SILENT);
+		this.silentreconnect = this.configuration.getBooleanProperty(JMXReader.CONFIG_PROPERTY_NAME_SILENT);
 	}
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
-		defaultConfiguration.setProperty(JMXReader.CONFIG_SERVER, "localhost");
-		defaultConfiguration.setProperty(JMXReader.CONFIG_PORT, "0");
-		defaultConfiguration.setProperty(JMXReader.CONFIG_SERVICEURL, "");
-		defaultConfiguration.setProperty(JMXReader.CONFIG_DOMAIN, "kieker.monitoring");
-		defaultConfiguration.setProperty(JMXReader.CONFIG_LOGNAME, "MonitoringLog");
-		defaultConfiguration.setProperty(JMXReader.CONFIG_SILENT, "false");
+		defaultConfiguration.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SERVER, "localhost");
+		defaultConfiguration.setProperty(JMXReader.CONFIG_PROPERTY_NAME_PORT, "0");
+		defaultConfiguration.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SERVICEURL, "");
+		defaultConfiguration.setProperty(JMXReader.CONFIG_PROPERTY_NAME_DOMAIN, "kieker.monitoring");
+		defaultConfiguration.setProperty(JMXReader.CONFIG_PROPERTY_NAME_LOGNAME, "MonitoringLog");
+		defaultConfiguration.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SILENT, "false");
 		return defaultConfiguration;
 	}
 
@@ -262,7 +263,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 		}
 
 		public final void handleNotification(final Notification notification, final Object handback) {
-			JMXReader.super.deliver(JMXReader.OUTPUT_PORT_NAME, notification.getUserData());
+			JMXReader.super.deliver(JMXReader.OUTPUT_PORT_NAME_RECORDS, notification.getUserData());
 		}
 	}
 
@@ -298,12 +299,12 @@ public final class JMXReader extends AbstractReaderPlugin {
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(JMXReader.CONFIG_SERVER, this.server);
-		configuration.setProperty(JMXReader.CONFIG_PORT, Integer.toString(this.port));
-		configuration.setProperty(JMXReader.CONFIG_SERVICEURL, this.serviceURL.toString());
-		configuration.setProperty(JMXReader.CONFIG_DOMAIN, this.domain);
-		configuration.setProperty(JMXReader.CONFIG_LOGNAME, this.logname);
-		configuration.setProperty(JMXReader.CONFIG_SILENT, Boolean.toString(this.silentreconnect));
+		configuration.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SERVER, this.server);
+		configuration.setProperty(JMXReader.CONFIG_PROPERTY_NAME_PORT, Integer.toString(this.port));
+		configuration.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SERVICEURL, this.serviceURL.toString());
+		configuration.setProperty(JMXReader.CONFIG_PROPERTY_NAME_DOMAIN, this.domain);
+		configuration.setProperty(JMXReader.CONFIG_PROPERTY_NAME_LOGNAME, this.logname);
+		configuration.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SILENT, Boolean.toString(this.silentreconnect));
 
 		return configuration;
 	}

@@ -68,11 +68,11 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 			while (iter.hasNext()) {
 				selectedTracesArr[i++] = iter.next().toString();
 			}
-			cfg.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.toString(false));
-			cfg.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, Configuration.toProperty(selectedTracesArr));
+			cfg.setProperty(TraceIdFilter.CONFIG_PROPETY_NAME_SELECT_ALL_TRACES, Boolean.toString(false));
+			cfg.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, Configuration.toProperty(selectedTracesArr));
 		} else {
-			cfg.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.toString(true));
-			cfg.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, "");
+			cfg.setProperty(TraceIdFilter.CONFIG_PROPETY_NAME_SELECT_ALL_TRACES, Boolean.toString(true));
+			cfg.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, "");
 		}
 
 		return new TraceIdFilter(cfg);
@@ -104,8 +104,8 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 		controller.registerFilter(filter);
 		controller.registerFilter(sinkPlugin);
 
-		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
-		filter.newExecution(exec);
+		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+		filter.inputExecution(exec);
 		Assert.assertTrue("Filter passed execution " + exec + " although traceId not element of " + idsToPass, sinkPlugin.getList()
 				.isEmpty());
 	}
@@ -136,8 +136,8 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 		controller.registerFilter(filter);
 		controller.registerFilter(sinkPlugin);
 
-		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
-		filter.newExecution(exec);
+		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+		filter.inputExecution(exec);
 		Assert.assertFalse("Filter didn't pass execution " + exec + " although traceId element of " + idsToPass, sinkPlugin.getList()
 				.isEmpty());
 
@@ -165,8 +165,8 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 		controller.registerFilter(filter);
 		controller.registerFilter(sinkPlugin);
 
-		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
-		filter.newExecution(exec);
+		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+		filter.inputExecution(exec);
 		Assert.assertFalse("Filter didn't pass execution " + exec + " although all should pass.", sinkPlugin.getList().isEmpty());
 
 		Assert.assertTrue(sinkPlugin.getList().size() == 1);

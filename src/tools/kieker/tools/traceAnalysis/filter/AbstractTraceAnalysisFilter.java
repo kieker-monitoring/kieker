@@ -41,7 +41,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	private static final Log LOG = LogFactory.getLog(AbstractTraceAnalysisFilter.class);
 
@@ -55,7 +55,7 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	 */
 	private volatile PrintStream errStream = System.err;
 
-	public static final String SYSTEM_MODEL_REPOSITORY_NAME = "systemModelRepository";
+	public static final String REPOSITORY_PORT_NAME_SYSTEM_MODEL = "systemModelRepository";
 
 	private volatile SystemModelRepository systemEntityFactory;
 
@@ -129,11 +129,11 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 
 	protected final SystemModelRepository getSystemEntityFactory() {
 		if (this.systemEntityFactory == null) {
-			this.systemEntityFactory = (SystemModelRepository) this.getRepository(AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME);
+			this.systemEntityFactory = (SystemModelRepository) this.getRepository(AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL);
 		}
 		if (this.systemEntityFactory == null) {
 			AbstractTraceAnalysisFilter.LOG.error("Failed to connect to system model repository via repository port '"
-					+ AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME + "' (not connected?)");
+					+ AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL + "' (not connected?)");
 		}
 		return this.systemEntityFactory;
 	}

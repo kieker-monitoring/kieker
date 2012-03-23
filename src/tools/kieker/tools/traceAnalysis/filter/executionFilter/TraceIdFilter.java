@@ -35,33 +35,33 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * 
  * @author Andre van Hoorn
  */
-@Plugin(outputPorts = @OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME, description = "Execution output", eventTypes = { Execution.class }))
+@Plugin(outputPorts = @OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MATCH, description = "Forwards executions with matching trace IDs", eventTypes = { Execution.class }))
 public class TraceIdFilter extends AbstractTraceIdFilter {
 
-	public static final String INPUT_PORT_NAME = "newExecution";
-	public static final String OUTPUT_PORT_NAME = "defaultOutput";
+	public static final String INPUT_PORT_NAME_EXECUTION = "executions";
+	public static final String OUTPUT_PORT_NAME_MATCH = "executions-matching-id";
 
-	public static final String CONFIG_SELECT_ALL_TRACES = "selectedAll";
-	public static final String CONFIG_SELECTED_TRACES = "selectedTraces";
+	public static final String CONFIG_PROPETY_NAME_SELECT_ALL_TRACES = "selectedAll";
+	public static final String CONFIG_PROPERTY_NAME_SELECTED_TRACES = "selectedTraces";
 
 	public TraceIdFilter(final Configuration configuration) {
 		super(configuration);
 	}
 
-	@InputPort(name = TraceIdFilter.INPUT_PORT_NAME, description = "Execution input", eventTypes = { Execution.class })
-	public void newExecution(final Execution execution) {
+	@InputPort(name = TraceIdFilter.INPUT_PORT_NAME_EXECUTION, description = "Receives execution events to be selected by trace ID", eventTypes = { Execution.class })
+	public void inputExecution(final Execution execution) {
 		if (super.passId(execution.getTraceId())) {
-			super.deliver(TraceIdFilter.OUTPUT_PORT_NAME, execution);
+			super.deliver(TraceIdFilter.OUTPUT_PORT_NAME_MATCH, execution);
 		}
 	}
 
 	@Override
 	protected String getConfigurationPropertySelectAllTraces() {
-		return TraceIdFilter.CONFIG_SELECT_ALL_TRACES;
+		return TraceIdFilter.CONFIG_PROPETY_NAME_SELECT_ALL_TRACES;
 	}
 
 	@Override
 	protected String getConfigurationPropertySelectedTraces() {
-		return TraceIdFilter.CONFIG_SELECTED_TRACES;
+		return TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES;
 	}
 }

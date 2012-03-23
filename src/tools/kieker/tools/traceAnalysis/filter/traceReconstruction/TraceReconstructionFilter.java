@@ -62,18 +62,20 @@ import kieker.tools.util.LoggingTimestampConverter;
 					description = "Invalid Execution Traces",
 					eventTypes = { InvalidExecutionTrace.class })
 		},
-		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
+		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	private static final Log LOG = LogFactory.getLog(TraceReconstructionFilter.class);
 
-	public static final String INPUT_PORT_NAME = "newExecution";
-	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE = "MessageTraceOutput";
-	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE = "ExecutionTraceOutput";
-	public static final String OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE = "InvalidExecutionTraceOutput";
-	public static final String CONFIG_MAX_TRACE_DURATION_MILLIS = "maxTraceDurationMillis";
-	public static final String CONFIG_IGNORE_INVALID_TRACES = "ignoreInvalidTraces";
+	public static final String INPUT_PORT_NAME_EXECUTIONS = "executions";
 
-	private static final long MAX_DURATION_NANOS = Long.MAX_VALUE;
+	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE = "message-traces";
+	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE = "execution-traces";
+	public static final String OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE = "invalid-execution-traces";
+
+	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS = "maxTraceDurationMillis";
+	public static final String CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES = "ignoreInvalidTraces";
+
+	private static final long CONFIG_PROPERTY_VALUE_MAX_DURATION_NANOS = Long.MAX_VALUE;
 	/** TraceId x trace */
 	private final Map<Long, ExecutionTrace> pendingTraces = new Hashtable<Long, ExecutionTrace>(); // NOPMD (UseConcurrentHashMap)
 	/** We need to keep track of invalid trace's IDs */
@@ -113,14 +115,14 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 		super(configuration);
 
 		/* Load from the configuration. */
-		this.maxTraceDurationMillis = configuration.getLongProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS);
-		this.ignoreInvalidTraces = configuration.getBooleanProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES);
+		this.maxTraceDurationMillis = configuration.getLongProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS);
+		this.ignoreInvalidTraces = configuration.getBooleanProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES);
 
 		if (this.maxTraceDurationMillis < 0) {
 			throw new IllegalArgumentException("value maxTraceDurationMillis must not be negative (found: " + this.maxTraceDurationMillis + ")");
 		}
 		if (this.maxTraceDurationMillis == AbstractTraceProcessingFilter.MAX_DURATION_MILLIS) {
-			this.maxTraceDurationNanos = TraceReconstructionFilter.MAX_DURATION_NANOS;
+			this.maxTraceDurationNanos = TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_DURATION_NANOS;
 		} else {
 			this.maxTraceDurationNanos = this.maxTraceDurationMillis * (1000 * 1000); // NOCS (MagicNumberCheck)
 		}
@@ -159,11 +161,10 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	}
 
 	@InputPort(
-			name = TraceReconstructionFilter.INPUT_PORT_NAME,
-			description = "The input port",
+			name = TraceReconstructionFilter.INPUT_PORT_NAME_EXECUTIONS,
+			description = "Receives the executions to be processed",
 			eventTypes = { Execution.class })
-	public void newExecution(final Object data) {
-		final Execution execution = (Execution) data;
+	public void inputExecutions(final Execution execution) {
 		final long traceId = execution.getTraceId();
 
 		this.minTin = ((this.minTin < 0) || (execution.getTin() < this.minTin)) ? execution.getTin() : this.minTin; // NOCS
@@ -315,8 +316,9 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Long.toString(AbstractTraceProcessingFilter.MAX_DURATION_MILLIS));
-		configuration.setProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, Boolean.TRUE.toString());
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS,
+				Long.toString(AbstractTraceProcessingFilter.MAX_DURATION_MILLIS));
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, Boolean.TRUE.toString());
 
 		return configuration;
 	}
@@ -324,8 +326,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Long.toString(this.maxTraceDurationMillis));
-		configuration.setProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, Boolean.toString(this.ignoreInvalidTraces));
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long.toString(this.maxTraceDurationMillis));
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, Boolean.toString(this.ignoreInvalidTraces));
 
 		return configuration;
 	}

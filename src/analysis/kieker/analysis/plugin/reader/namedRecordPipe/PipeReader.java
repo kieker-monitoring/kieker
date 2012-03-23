@@ -37,18 +37,18 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @author Andre van Hoorn
  */
-@Plugin(outputPorts = @OutputPort(name = PipeReader.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the PipeReader"))
+@Plugin(outputPorts = @OutputPort(name = PipeReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the PipeReader"))
 public final class PipeReader extends AbstractReaderPlugin implements IPipeReader {
 
 	/**
 	 * This is the name of the default output port.
 	 */
-	public static final String OUTPUT_PORT_NAME = "defaultOutput";
+	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoring-records";
 
 	/**
 	 * This is the configuration-parameter for the name of the pipe to be used.
 	 */
-	public static final String CONFIG_PIPENAME = "pipeName";
+	public static final String CONFIG_PROPERTY_NAME_PIPENAME = "pipeName";
 
 	private static final Log LOG = LogFactory.getLog(PipeReader.class);
 
@@ -66,7 +66,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	 */
 	public PipeReader(final Configuration configuration) throws IllegalArgumentException {
 		super(configuration);
-		final String pipeName = this.configuration.getStringProperty(PipeReader.CONFIG_PIPENAME);
+		final String pipeName = this.configuration.getStringProperty(PipeReader.CONFIG_PROPERTY_NAME_PIPENAME);
 
 		this.pipeName = pipeName;
 		this.initialize(pipeName);
@@ -88,7 +88,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
-		defaultConfiguration.setProperty(PipeReader.CONFIG_PIPENAME, "kieker-pipe");
+		defaultConfiguration.setProperty(PipeReader.CONFIG_PROPERTY_NAME_PIPENAME, "kieker-pipe");
 		return defaultConfiguration;
 	}
 
@@ -109,7 +109,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	}
 
 	public boolean newMonitoringRecord(final IMonitoringRecord rec) {
-		return super.deliver(PipeReader.OUTPUT_PORT_NAME, rec);
+		return super.deliver(PipeReader.OUTPUT_PORT_NAME_RECORDS, rec);
 	}
 
 	public void notifyPipeClosed() {
@@ -127,7 +127,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);
 
-		configuration.setProperty(PipeReader.CONFIG_PIPENAME, this.pipeName);
+		configuration.setProperty(PipeReader.CONFIG_PROPERTY_NAME_PIPENAME, this.pipeName);
 
 		return configuration;
 	}

@@ -54,16 +54,16 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr, Jan Waller
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class ComponentDependencyGraphAllocationFilter extends AbstractDependencyGraphFilter<AllocationComponent> {
 	private static final Log LOG = LogFactory.getLog(ComponentDependencyGraphAllocationFilter.class);
 
-	public static final String CONFIG_OUTPUT_FN_BASE = "filename";
-	public static final String CONFIG_INCLUDE_WEIGHTS = "includeWeights";
-	public static final String CONFIG_SHORTLABELS = "shortlabels";
-	public static final String CONFIG_SELFLOOPS = "selfloops";
+	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE = "filename";
+	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "include-weights";
+	public static final String CONFIG_PROPERTY_NAME_SHORTLABELS = "short-labels";
+	public static final String CONFIG_PROPERTY_NAME_SELFLOOPS = "self-loops";
 
-	public static final String CONFIG_OUTPUT_FN_BASE_DEFAULT = "AllocationComponentDependencyGraph";
+	public static final String CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT = "AllocationComponentDependencyGraph";
 
 	private static final String CONTAINER_NODE_ID_PREFIX = "container";
 	private final String dotOutputFile;
@@ -76,10 +76,10 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 		super(configuration);
 		super.setDependencyGraph(new DependencyGraph<AllocationComponent>(AllocationRepository.ROOT_ALLOCATION_COMPONENT.getId(),
 				AllocationRepository.ROOT_ALLOCATION_COMPONENT));
-		this.dotOutputFile = configuration.getStringProperty(ComponentDependencyGraphAllocationFilter.CONFIG_OUTPUT_FN_BASE);
-		this.includeWeights = configuration.getBooleanProperty(ComponentDependencyGraphAllocationFilter.CONFIG_INCLUDE_WEIGHTS);
-		this.shortLabels = configuration.getBooleanProperty(ComponentDependencyGraphAllocationFilter.CONFIG_SHORTLABELS);
-		this.includeSelfLoops = configuration.getBooleanProperty(ComponentDependencyGraphAllocationFilter.CONFIG_SELFLOOPS);
+		this.dotOutputFile = configuration.getStringProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE);
+		this.includeWeights = configuration.getBooleanProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
+		this.shortLabels = configuration.getBooleanProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SHORTLABELS);
+		this.includeSelfLoops = configuration.getBooleanProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SELFLOOPS);
 	}
 
 	private String componentNodeLabel(final DependencyGraphNode<AllocationComponent> node, final boolean shortLabelsL) {
@@ -186,26 +186,26 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 	@Override
 	protected final Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_OUTPUT_FN_BASE,
-				ComponentDependencyGraphAllocationFilter.CONFIG_OUTPUT_FN_BASE_DEFAULT);
-		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_INCLUDE_WEIGHTS, Boolean.TRUE.toString());
-		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_SHORTLABELS, Boolean.TRUE.toString());
-		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_SELFLOOPS, Boolean.FALSE.toString());
+		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE,
+				ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT);
+		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.TRUE.toString());
+		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SHORTLABELS, Boolean.TRUE.toString());
+		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SELFLOOPS, Boolean.FALSE.toString());
 		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_OUTPUT_FN_BASE, this.dotOutputFile);
-		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
-		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_SHORTLABELS, Boolean.toString(this.shortLabels));
-		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_SELFLOOPS, Boolean.toString(this.includeSelfLoops));
+		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE, this.dotOutputFile);
+		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
+		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SHORTLABELS, Boolean.toString(this.shortLabels));
+		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SELFLOOPS, Boolean.toString(this.includeSelfLoops));
 		return configuration;
 	}
 
 	@Override
-	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME, description = "Message traces", eventTypes = { MessageTrace.class })
-	public void msgTraceInput(final MessageTrace t) {
+	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Message traces", eventTypes = { MessageTrace.class })
+	public void inputMessageTraces(final MessageTrace t) {
 		for (final AbstractMessage m : t.getSequenceAsVector()) {
 			if (m instanceof SynchronousReplyMessage) {
 				continue;

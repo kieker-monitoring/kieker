@@ -42,12 +42,13 @@ import kieker.common.record.misc.EmptyRecord;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-@Plugin(outputPorts = @OutputPort(name = FSReader.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader"))
+@Plugin(outputPorts = @OutputPort(name = FSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader"))
 public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 
-	public static final String OUTPUT_PORT_NAME = "defaultOutput";
-	public static final String CONFIG_INPUTDIRS = "inputDirs";
-	public static final String CONFIG_ONLYRECORDS = "readOnlyRecordsOfType";
+	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoring-records";
+
+	public static final String CONFIG_PROPERTY_NAME_INPUTDIRS = "inputDirs";
+	public static final String CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION = "readOnlyRecordsOfType";
 
 	public static final IMonitoringRecord EOF = new EmptyRecord();
 
@@ -61,9 +62,9 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 
 	public FSReader(final Configuration configuration) {
 		super(configuration);
-		this.inputDirs = this.configuration.getStringArrayProperty(FSReader.CONFIG_INPUTDIRS);
+		this.inputDirs = this.configuration.getStringArrayProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS);
 		this.recordQueue = new PriorityQueue<IMonitoringRecord>(this.inputDirs.length);
-		final String[] onlyrecords = this.configuration.getStringArrayProperty(FSReader.CONFIG_ONLYRECORDS);
+		final String[] onlyrecords = this.configuration.getStringArrayProperty(FSReader.CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION);
 		if (onlyrecords.length == 0) {
 			this.readOnlyRecordsOfType = null;
 		} else {
@@ -82,8 +83,8 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
-		defaultConfiguration.setProperty(FSReader.CONFIG_INPUTDIRS, ".");
-		defaultConfiguration.setProperty(FSReader.CONFIG_ONLYRECORDS, "");
+		defaultConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, ".");
+		defaultConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION, "");
 		return defaultConfiguration;
 	}
 
@@ -116,7 +117,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 			if (record == FSReader.EOF) {
 				readingReaders--;
 			} else {
-				super.deliver(FSReader.OUTPUT_PORT_NAME, record);
+				super.deliver(FSReader.OUTPUT_PORT_NAME_RECORDS, record);
 			}
 		}
 		return true;
@@ -144,10 +145,10 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(this.inputDirs));
+		configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(this.inputDirs));
 		/* Extract the names of the record-classes again. */
 		if (this.readOnlyRecordsOfType == null) {
-			configuration.setProperty(FSReader.CONFIG_ONLYRECORDS, Configuration.toProperty(new String[] {}));
+			configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION, Configuration.toProperty(new String[] {}));
 		} else {
 			final int len = this.readOnlyRecordsOfType.size();
 			final String[] onlyRecords = new String[len];
@@ -155,7 +156,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 			for (int i = 0; i < len; i++) {
 				onlyRecords[i] = iter.next().getName();
 			}
-			configuration.setProperty(FSReader.CONFIG_ONLYRECORDS, Configuration.toProperty(onlyRecords));
+			configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION, Configuration.toProperty(onlyRecords));
 		}
 		return configuration;
 	}

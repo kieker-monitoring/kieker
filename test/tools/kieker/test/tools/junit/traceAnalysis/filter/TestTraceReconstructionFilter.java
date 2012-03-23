@@ -124,10 +124,10 @@ public class TestTraceReconstructionFilter extends TestCase {
 
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(TraceReconstructionFilter.class.getName() + ".name", "TraceReconstructionFilter");
-		configuration.setProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, "true");
-		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Long.toString(AbstractTraceProcessingFilter.MAX_DURATION_MILLIS));
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, "true");
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long.toString(AbstractTraceProcessingFilter.MAX_DURATION_MILLIS));
 		final Map<String, AbstractRepository> repositoryMap = new HashMap<String, AbstractRepository>();
-		repositoryMap.put(AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
+		repositoryMap.put(AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
 		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration);
 
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout",
@@ -169,7 +169,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Pass executions of the trace to be reconstructed.
 		 */
 		for (final Execution curExec : validExecutionTrace.getTraceAsSortedExecutionSet()) {
-			filter.newExecution(curExec);
+			filter.inputExecutions(curExec);
 		}
 
 		filter.terminate(false);
@@ -241,10 +241,10 @@ public class TestTraceReconstructionFilter extends TestCase {
 
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(TraceReconstructionFilter.class.getName() + ".name", "TraceReconstructionFilter");
-		configuration.setProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, "true");
-		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Long.toString(AbstractTraceProcessingFilter.MAX_DURATION_MILLIS));
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, "true");
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long.toString(AbstractTraceProcessingFilter.MAX_DURATION_MILLIS));
 		final Map<String, AbstractRepository> repositoryMap = new HashMap<String, AbstractRepository>();
-		repositoryMap.put(AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
+		repositoryMap.put(AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
 		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration);
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout",
 				invalidExecutionTrace.getDurationInNanos() <= filter.getMaxTraceDurationNanos());
@@ -286,7 +286,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Pass executions of the trace to be reconstructed.
 		 */
 		for (final Execution curExec : invalidExecutionTrace.getTraceAsSortedExecutionSet()) {
-			filter.newExecution(curExec);
+			filter.inputExecutions(curExec);
 		}
 
 		TestTraceReconstructionFilter.LOG.info("This test triggers a FATAL warning about an ess skip <0,3> which can simply be ignored because it is desired");
@@ -376,11 +376,11 @@ public class TestTraceReconstructionFilter extends TestCase {
 		final Configuration configuration = new Configuration();
 		final AnalysisController controller = new AnalysisController();
 		configuration.setProperty(TraceReconstructionFilter.class.getName() + ".name", "TraceReconstructionFilter");
-		configuration.setProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, "true");
-		configuration.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Long.toString(
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, "true");
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long.toString(
 				((triggerExecutionTrace.getMaxTout() - incompleteExecutionTrace.getMinTin()) / (1000 * 1000)) - 1));
 		final Map<String, AbstractRepository> repositoryMap = new HashMap<String, AbstractRepository>();
-		repositoryMap.put(AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
+		repositoryMap.put(AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
 		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration);
 
 		final SimpleSinkPlugin executionTraceSink = new SimpleSinkPlugin(new Configuration());
@@ -428,13 +428,13 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * Pass the executions of the incomplete trace intended to time out
 		 */
 		for (final Execution curExec : incompleteExecutionTrace.getTraceAsSortedExecutionSet()) {
-			filter.newExecution(curExec);
+			filter.inputExecutions(curExec);
 		}
 
 		/**
 		 * Pass the timeout "trigger execution"
 		 */
-		filter.newExecution(exec0_0__bookstore_searchBook__trigger);
+		filter.inputExecutions(exec0_0__bookstore_searchBook__trigger);
 
 		/**
 		 * Now, will pass the execution that would make the incomplete trace
@@ -442,7 +442,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 		 * to be timeout already. Thus, the completing execution trace should
 		 * appear as a single incomplete execution trace.
 		 */
-		filter.newExecution(this.exec0_0__bookstore_searchBook);
+		filter.inputExecutions(this.exec0_0__bookstore_searchBook);
 
 		/**
 		 * Terminate the filter

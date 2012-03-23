@@ -47,7 +47,7 @@ public class CountingFilterTest {
 		final AnalysisController controller = new AnalysisController();
 		controller.registerFilter(this.consumer);
 		controller.registerFilter(this.src);
-		Assert.assertTrue(controller.connect(this.src, SimpleSourcePlugin.OUTPUT_PORT_NAME, this.consumer, CountingFilter.INPUT_PORT_NAME));
+		Assert.assertTrue(controller.connect(this.src, SimpleSourcePlugin.OUTPUT_PORT_NAME, this.consumer, CountingFilter.INPUT_PORT_NAME_EVENTS));
 	}
 
 	@Test

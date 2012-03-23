@@ -53,13 +53,14 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @author Andre van Hoorn, Matthias Rohr
  */
-@Plugin(outputPorts = @OutputPort(name = JMSReader.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMSReader"))
+@Plugin(outputPorts = @OutputPort(name = JMSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMSReader"))
 public final class JMSReader extends AbstractReaderPlugin {
 
-	public static final String OUTPUT_PORT_NAME = "defaultOutput";
-	public static final String CONFIG_PROVIDERURL = "jmsProviderUrl";
-	public static final String CONFIG_DESTINATION = "jmsDestination";
-	public static final String CONFIG_FACTORYLOOKUP = "jmsFactoryLookupName";
+	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoring-records";
+
+	public static final String CONFIG_PROPERTY_NAME_PROVIDERURL = "jmsProviderUrl";
+	public static final String CONFIG_PROPERTY_NAME_DESTINATION = "jmsDestination";
+	public static final String CONFIG_PROPERTY_NAME_FACTORYLOOKUP = "jmsFactoryLookupName";
 
 	private static final Log LOG = LogFactory.getLog(JMSReader.class);
 
@@ -87,9 +88,9 @@ public final class JMSReader extends AbstractReaderPlugin {
 		/* Call the inherited constructor. */
 		super(configuration);
 		/* Initialize the reader bases on the given configuration. */
-		this.jmsProviderUrl = configuration.getStringProperty(JMSReader.CONFIG_PROVIDERURL);
-		this.jmsDestination = configuration.getStringProperty(JMSReader.CONFIG_DESTINATION);
-		this.jmsFactoryLookupName = configuration.getStringProperty(JMSReader.CONFIG_FACTORYLOOKUP);
+		this.jmsProviderUrl = configuration.getStringProperty(JMSReader.CONFIG_PROPERTY_NAME_PROVIDERURL);
+		this.jmsDestination = configuration.getStringProperty(JMSReader.CONFIG_PROPERTY_NAME_DESTINATION);
+		this.jmsFactoryLookupName = configuration.getStringProperty(JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP);
 		// simple sanity check
 		if ((this.jmsProviderUrl.length() == 0) || (this.jmsDestination.length() == 0) || (this.jmsFactoryLookupName.length() == 0)) {
 			throw new IllegalArgumentException("JMSReader has not sufficient parameters. jmsProviderUrl ('" + this.jmsProviderUrl + "'), jmsDestination ('"
@@ -101,9 +102,9 @@ public final class JMSReader extends AbstractReaderPlugin {
 	protected Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
 		// TODO: provide default values!
-		defaultConfiguration.setProperty(JMSReader.CONFIG_PROVIDERURL, "");
-		defaultConfiguration.setProperty(JMSReader.CONFIG_DESTINATION, "");
-		defaultConfiguration.setProperty(JMSReader.CONFIG_FACTORYLOOKUP, "");
+		defaultConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_PROVIDERURL, "");
+		defaultConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_DESTINATION, "");
+		defaultConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, "");
 		return defaultConfiguration;
 	}
 
@@ -150,7 +151,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 						try {
 							final ObjectMessage om = (ObjectMessage) jmsMessage;
 							final Serializable omo = om.getObject();
-							if ((omo instanceof IMonitoringRecord) && (!JMSReader.super.deliver(JMSReader.OUTPUT_PORT_NAME, omo))) {
+							if ((omo instanceof IMonitoringRecord) && (!JMSReader.super.deliver(JMSReader.OUTPUT_PORT_NAME_RECORDS, omo))) {
 								JMSReader.LOG.error("deliverRecord returned false");
 							}
 						} catch (final MessageFormatException ex) {
@@ -211,9 +212,9 @@ public final class JMSReader extends AbstractReaderPlugin {
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(JMSReader.CONFIG_PROVIDERURL, this.jmsProviderUrl);
-		configuration.setProperty(JMSReader.CONFIG_DESTINATION, this.jmsDestination);
-		configuration.setProperty(JMSReader.CONFIG_FACTORYLOOKUP, this.jmsFactoryLookupName);
+		configuration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_PROVIDERURL, this.jmsProviderUrl);
+		configuration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_DESTINATION, this.jmsDestination);
+		configuration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, this.jmsFactoryLookupName);
 
 		return configuration;
 	}

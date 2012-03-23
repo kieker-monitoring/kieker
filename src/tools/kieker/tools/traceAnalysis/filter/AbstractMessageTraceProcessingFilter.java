@@ -31,15 +31,15 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public abstract class AbstractMessageTraceProcessingFilter extends AbstractTraceProcessingFilter {
 
-	public static final String INPUT_PORT_NAME = "msgTraceInput";
+	public static final String INPUT_PORT_NAME_MESSAGE_TRACES = "message-traces";
 
 	public AbstractMessageTraceProcessingFilter(final Configuration configuration) {
 		super(configuration);
 	}
 
-	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME, description = "Message traces", eventTypes = { MessageTrace.class })
-	public abstract void msgTraceInput(final MessageTrace mt);
+	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed", eventTypes = { MessageTrace.class })
+	public abstract void inputMessageTraces(final MessageTrace mt);
 }

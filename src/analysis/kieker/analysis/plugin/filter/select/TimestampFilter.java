@@ -19,45 +19,46 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
  * @author Andre van Hoorn, Jan Waller
  */
 @Plugin(outputPorts = {
-	@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME, description = "records within the timeperiod", eventTypes = { IMonitoringRecord.class }),
-	@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_NOT, description = "records out of the timeperiod", eventTypes = { IMonitoringRecord.class })
+	@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, description = "Fowards records within the timeperiod", eventTypes = { IMonitoringRecord.class }),
+	@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_OUTSIDE_PERIOD, description = "Forwards records out of the timeperiod", eventTypes = { IMonitoringRecord.class })
 })
 public final class TimestampFilter extends AbstractFilterPlugin {
 
-	public static final String INPUT_PORT_NAME = "input-records";
-	public static final String INPUT_PORT_NAME_COMBINED = "input-combined";
-	public static final String INPUT_PORT_NAME_FLOW = "input-flow-records";
-	public static final String INPUT_PORT_NAME_EXECUTION = "input-execution-records";
-	public static final String OUTPUT_PORT_NAME = "output";
-	public static final String OUTPUT_PORT_NAME_NOT = "output-not";
+	public static final String INPUT_PORT_NAME_ANY_RECORD = "monitoring-records-any";
+	public static final String INPUT_PORT_NAME_FLOW = "monitoring-records-flow";
+	public static final String INPUT_PORT_NAME_EXECUTION = "monitoring-records-execution";
+	public static final String INPUT_PORT_NAME_COMBINED = "monitoring-records-combined";
 
-	public static final String CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP = "ignoreBeforeTimestamp";
-	public static final String CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP = "ignorAfterTimestamp";
+	public static final String OUTPUT_PORT_NAME_WITHIN_PERIOD = "records-within-time-period";
+	public static final String OUTPUT_PORT_NAME_OUTSIDE_PERIOD = "records-outside-period";
 
-	public static final long MAX_TIMESTAMP = Long.MAX_VALUE;
-	public static final long MIN_TIMESTAMP = 0;
+	public static final String CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP = "ignore-before-timestamp";
+	public static final String CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP = "ignore-after-timestamp";
+
+	public static final long CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP = Long.MAX_VALUE;
+	public static final long CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP = 0;
 
 	private final long ignoreBeforeTimestamp;
 	private final long ignoreAfterTimestamp;
 
 	public TimestampFilter(final Configuration configuration) {
 		super(configuration);
-		this.ignoreBeforeTimestamp = configuration.getLongProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP);
-		this.ignoreAfterTimestamp = configuration.getLongProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
+		this.ignoreBeforeTimestamp = configuration.getLongProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP);
+		this.ignoreAfterTimestamp = configuration.getLongProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP);
 	}
 
 	@Override
 	protected final Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, Long.toString(TimestampFilter.MIN_TIMESTAMP));
-		configuration.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP, Long.toString(TimestampFilter.MAX_TIMESTAMP));
+		configuration.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, Long.toString(TimestampFilter.CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP));
+		configuration.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, Long.toString(TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP));
 		return configuration;
 	}
 
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, Long.toString(this.ignoreBeforeTimestamp));
-		configuration.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP, Long.toString(this.ignoreAfterTimestamp));
+		configuration.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, Long.toString(this.ignoreBeforeTimestamp));
+		configuration.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, Long.toString(this.ignoreAfterTimestamp));
 		return configuration;
 	}
 
@@ -65,7 +66,7 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 		return (timestamp >= this.ignoreBeforeTimestamp) && (timestamp <= this.ignoreAfterTimestamp);
 	}
 
-	@InputPort(name = TimestampFilter.INPUT_PORT_NAME_COMBINED, description = "combined input", eventTypes = { IMonitoringRecord.class })
+	@InputPort(name = TimestampFilter.INPUT_PORT_NAME_COMBINED, description = "Receives records to be selected by timestamps, based on type-specific selectors", eventTypes = { IMonitoringRecord.class })
 	public void inputCombined(final IMonitoringRecord record) {
 		if (record instanceof OperationExecutionRecord) {
 			this.inputOperationExecutionRecord((OperationExecutionRecord) record);
@@ -76,30 +77,30 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 		}
 	}
 
-	@InputPort(name = TimestampFilter.INPUT_PORT_NAME, description = "IMonitoringRecord input", eventTypes = { IMonitoringRecord.class })
+	@InputPort(name = TimestampFilter.INPUT_PORT_NAME_ANY_RECORD, description = "Receives records to be selected by their logging timestamps", eventTypes = { IMonitoringRecord.class })
 	public final void inputIMonitoringRecord(final IMonitoringRecord record) {
 		if (this.inRange(record.getLoggingTimestamp())) {
-			super.deliver(TimestampFilter.OUTPUT_PORT_NAME, record);
+			super.deliver(TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, record);
 		} else {
-			super.deliver(TimestampFilter.OUTPUT_PORT_NAME_NOT, record);
+			super.deliver(TimestampFilter.OUTPUT_PORT_NAME_OUTSIDE_PERIOD, record);
 		}
 	}
 
-	@InputPort(name = TimestampFilter.INPUT_PORT_NAME_FLOW, description = "TraceEvent input", eventTypes = { AbstractTraceEvent.class })
+	@InputPort(name = TimestampFilter.INPUT_PORT_NAME_FLOW, description = "Receives trace events to be selected by a specific timestamp selector", eventTypes = { AbstractTraceEvent.class })
 	public final void inputTraceEvent(final AbstractTraceEvent event) {
 		if (this.inRange(event.getTimestamp())) {
-			super.deliver(TimestampFilter.OUTPUT_PORT_NAME, event);
+			super.deliver(TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, event);
 		} else {
-			super.deliver(TimestampFilter.OUTPUT_PORT_NAME_NOT, event);
+			super.deliver(TimestampFilter.OUTPUT_PORT_NAME_OUTSIDE_PERIOD, event);
 		}
 	}
 
-	@InputPort(name = TimestampFilter.INPUT_PORT_NAME_EXECUTION, description = "Execution input (incorporates the records 'tin' and 'tout' timestamps)", eventTypes = { OperationExecutionRecord.class })
+	@InputPort(name = TimestampFilter.INPUT_PORT_NAME_EXECUTION, description = "Receives trace events to be selected by a specific timestamp selector (based on tin and tout)", eventTypes = { OperationExecutionRecord.class })
 	public final void inputOperationExecutionRecord(final OperationExecutionRecord execution) {
 		if (this.inRange(execution.getTin()) && this.inRange(execution.getTout())) {
-			super.deliver(TimestampFilter.OUTPUT_PORT_NAME, execution);
+			super.deliver(TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, execution);
 		} else {
-			super.deliver(TimestampFilter.OUTPUT_PORT_NAME_NOT, execution);
+			super.deliver(TimestampFilter.OUTPUT_PORT_NAME_OUTSIDE_PERIOD, execution);
 		}
 	}
 }

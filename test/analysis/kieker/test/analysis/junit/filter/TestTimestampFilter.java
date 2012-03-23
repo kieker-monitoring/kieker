@@ -67,11 +67,11 @@ public final class TestTimestampFilter {
 	 */
 	private TimestampFilter createTimestampFilter(final long ignoreExecutionsBeforeTimestamp, final long ignoreExecutionsAfterTimestamp) {
 		final Configuration cfg = new Configuration();
-		cfg.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, Long.toString(ignoreExecutionsBeforeTimestamp));
-		cfg.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP, Long.toString(ignoreExecutionsAfterTimestamp));
+		cfg.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, Long.toString(ignoreExecutionsBeforeTimestamp));
+		cfg.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, Long.toString(ignoreExecutionsAfterTimestamp));
 		final TimestampFilter filter = new TimestampFilter(cfg);
 		this.controller.registerFilter(filter);
-		this.controller.connect(filter, TimestampFilter.OUTPUT_PORT_NAME, this.sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+		this.controller.connect(filter, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, this.sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 		return filter;
 	}
 

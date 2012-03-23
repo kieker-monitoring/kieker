@@ -64,7 +64,7 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * 
  * @author Andre van Hoorn
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 
 	private static final Log LOG = LogFactory.getLog(TraceCallTreeFilter.class);
@@ -235,10 +235,10 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 
 	@Override
 	@InputPort(
-			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME,
-			description = "Message traces",
+			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES,
+			description = "Receives the message traces to be processed",
 			eventTypes = { MessageTrace.class })
-	public void msgTraceInput(final MessageTrace mt) {
+	public void inputMessageTraces(final MessageTrace mt) {
 		try {
 			final TraceCallTreeNode rootNode =
 					new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, AllocationComponentOperationPairFactory.ROOT_PAIR, true); // rootNode

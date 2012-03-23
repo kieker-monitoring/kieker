@@ -42,12 +42,12 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public abstract class AggregatedCallTreeFilter<T> extends AbstractCallTreeFilter<T> {
 	private static final Log LOG = LogFactory.getLog(AggregatedCallTreeFilter.class);
 
-	public static final String CONFIG_INCLUDE_WEIGHTS = "includeWeights";
-	public static final String CONFIG_SHORT_LABELS = "shortLabels";
+	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "include-weights";
+	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "short-labels";
 
 	private AbstractAggregatedCallTreeNode<T> root;
 	private File dotOutputFile;
@@ -58,8 +58,8 @@ public abstract class AggregatedCallTreeFilter<T> extends AbstractCallTreeFilter
 	public AggregatedCallTreeFilter(final Configuration configuration) {
 		super(configuration);
 
-		this.includeWeights = configuration.getBooleanProperty(AggregatedCallTreeFilter.CONFIG_INCLUDE_WEIGHTS);
-		this.shortLabels = configuration.getBooleanProperty(AggregatedCallTreeFilter.CONFIG_SHORT_LABELS);
+		this.includeWeights = configuration.getBooleanProperty(AggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
+		this.shortLabels = configuration.getBooleanProperty(AggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS);
 	}
 
 	public void setRoot(final AbstractAggregatedCallTreeNode<T> root) {
@@ -117,10 +117,10 @@ public abstract class AggregatedCallTreeFilter<T> extends AbstractCallTreeFilter
 
 	@Override
 	@InputPort(
-			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME,
-			description = "Message traces",
+			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES,
+			description = "Receives the message traces to be processed",
 			eventTypes = { MessageTrace.class })
-	public void msgTraceInput(final MessageTrace t) {
+	public void inputMessageTraces(final MessageTrace t) {
 		try {
 			AbstractCallTreeFilter.addTraceToTree(this.root, t, new PairFactory() {
 

@@ -36,7 +36,7 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * 
  * @author Andre van Hoorn
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class AggregatedAllocationComponentOperationCallTreeFilter extends AggregatedCallTreeFilter<AllocationComponentOperationPair> {
 
 	public AggregatedAllocationComponentOperationCallTreeFilter(final Configuration configuration) {

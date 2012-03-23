@@ -57,8 +57,8 @@ public class TestTraceIdFilter extends TestCase {
 		idsToPass.add(2 + traceIdNotToPass); // NOCS (MagicNumberCheck)
 
 		final Configuration filterConfig = new Configuration();
-		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.FALSE.toString());
-		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, Configuration.toProperty(idsToPass.toArray(new Long[idsToPass.size()])));
+		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.FALSE.toString());
+		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, Configuration.toProperty(idsToPass.toArray(new Long[idsToPass.size()])));
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final AnalysisController controller = new AnalysisController();
@@ -71,7 +71,7 @@ public class TestTraceIdFilter extends TestCase {
 		controller.registerFilter(filter);
 		controller.registerFilter(sinkPlugin);
 
-		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
 		for (final AbstractTraceEvent e : trace) {
 			Assert.assertTrue("Testcase invalid", !idsToPass.contains(e.getTraceId()));
@@ -100,8 +100,8 @@ public class TestTraceIdFilter extends TestCase {
 		idsToPass.add(1 + traceIdToPass); // NOCS (MagicNumberCheck)
 
 		final Configuration filterConfig = new Configuration();
-		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.FALSE.toString());
-		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, Configuration.toProperty(idsToPass.toArray(new Long[idsToPass.size()])));
+		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.FALSE.toString());
+		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, Configuration.toProperty(idsToPass.toArray(new Long[idsToPass.size()])));
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final AnalysisController controller = new AnalysisController();
@@ -114,7 +114,7 @@ public class TestTraceIdFilter extends TestCase {
 		controller.registerFilter(filter);
 		controller.registerFilter(sinkPlugin);
 
-		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
 		for (final AbstractTraceEvent e : trace) {
 			Assert.assertTrue("Testcase invalid", idsToPass.contains(e.getTraceId()));
@@ -134,7 +134,7 @@ public class TestTraceIdFilter extends TestCase {
 		final long traceIdToPass = 11l; // (must be element of idsToPass) // NOCS (MagicNumberCheck)
 
 		final Configuration filterConfig = new Configuration();
-		filterConfig.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.TRUE.toString()); // i.e., pass all
+		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.TRUE.toString()); // i.e., pass all
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final AnalysisController controller = new AnalysisController();
@@ -147,7 +147,7 @@ public class TestTraceIdFilter extends TestCase {
 		controller.registerFilter(filter);
 		controller.registerFilter(sinkPlugin);
 
-		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
 		for (final AbstractTraceEvent e : trace) {
 			filter.inputTraceEvent(e);

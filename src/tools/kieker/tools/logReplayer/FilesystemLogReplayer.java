@@ -113,7 +113,7 @@ public class FilesystemLogReplayer {
 			fsReader = new FSReaderRealtime(configuration);
 		} else {
 			final Configuration configuration = new Configuration(null);
-			configuration.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(this.inputDirs));
+			configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(this.inputDirs));
 			fsReader = new FSReader(configuration);
 		}
 		final AnalysisController tpanInstance = new AnalysisController();
@@ -126,7 +126,7 @@ public class FilesystemLogReplayer {
 		delegationPlugin.setRec(this.recordReceiver);
 
 		tpanInstance.registerFilter(delegationPlugin);
-		tpanInstance.connect(fsReader, FSReader.OUTPUT_PORT_NAME, delegationPlugin, RecordDelegationPlugin.INPUT_PORT_NAME);
+		tpanInstance.connect(fsReader, FSReader.OUTPUT_PORT_NAME_RECORDS, delegationPlugin, RecordDelegationPlugin.INPUT_PORT_NAME);
 		try {
 			tpanInstance.run();
 			success = true;

@@ -47,12 +47,12 @@ public class AnalysisStarter {
 		/* Set filesystem monitoring log input directory for our analysis */
 		final Configuration readerConfiguration = new Configuration();
 		final String inputDirs[] = { args[0] };
-		readerConfiguration.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(inputDirs));
+		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(inputDirs));
 		final FSReader fsReader = new FSReader(readerConfiguration);
 		analysisInstance.registerReader(fsReader);
 
 		/* Connect both components. */
-		analysisInstance.connect(fsReader, FSReader.OUTPUT_PORT_NAME, consumer, StdOutDumpConsumer.INPUT_PORT_NAME);
+		analysisInstance.connect(fsReader, FSReader.OUTPUT_PORT_NAME_RECORDS, consumer, StdOutDumpConsumer.INPUT_PORT_NAME);
 
 		/* Start the analysis */
 		analysisInstance.run();

@@ -52,7 +52,7 @@ public class TestEventRecordTraceGenerationFilter extends TestCase {
 	 */
 	private static EventRecordTraceGenerationFilter createFilter(final long maxTraceDurationMillis) {
 		final Configuration cfg = new Configuration();
-		cfg.setProperty(EventRecordTraceGenerationFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Long.toString(maxTraceDurationMillis));
+		cfg.setProperty(EventRecordTraceGenerationFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long.toString(maxTraceDurationMillis));
 		return new EventRecordTraceGenerationFilter(cfg);
 	}
 
@@ -74,7 +74,7 @@ public class TestEventRecordTraceGenerationFilter extends TestCase {
 		controller.registerFilter(traceFilter);
 		controller.registerFilter(sinkPlugin);
 
-		controller.connect(traceFilter, EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+		controller.connect(traceFilter, EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME_TRACE, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
 		for (final AbstractTraceEvent e : bookstoreTrace) {
 			traceFilter.inputTraceEvent(e);

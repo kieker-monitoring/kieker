@@ -56,7 +56,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 			@OutputPort(name = EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Outputs transformed execution traces", eventTypes = { ExecutionTrace.class }),
 			@OutputPort(name = EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Outputs transformed message traces", eventTypes = { MessageTrace.class })
 		},
-		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
+		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProcessingFilter {
 
 	/**
@@ -282,7 +282,7 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 			// A definite call occurs if either the stack is empty (entry into the trace) or if a matching call event is found
 			final boolean definiteCall = ((potentialCallEvent == null)
 					|| ((potentialCallEvent instanceof CallOperationEvent) && ((CallOperationEvent) potentialCallEvent)
-					.callsReferencedOperationOf(afterOperationEvent)));
+							.callsReferencedOperationOf(afterOperationEvent)));
 
 			// If a matching call event was found, it must be removed from the stack
 			if (definiteCall && !this.filterState.isEventStackEmpty()) {
@@ -351,15 +351,16 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 
 	private static final Log LOG = LogFactory.getLog(EventTrace2ExecutionAndMessageTraceFilter.class);
 
-	public static final String INPUT_PORT_NAME = "inputEventTrace";
-	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE = "outputExecutionTrace";
-	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE = "outputMessageTrace";
+	public static final String INPUT_PORT_NAME_EVENT_TRACE = "event-trace";
+
+	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE = "execution-trace";
+	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE = "message-trace";
 
 	public EventTrace2ExecutionAndMessageTraceFilter(final Configuration configuration) {
 		super(configuration);
 	}
 
-	@InputPort(name = EventTrace2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME, description = "Receives event record traces to be transformed", eventTypes = { EventRecordTrace.class })
+	@InputPort(name = EventTrace2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME_EVENT_TRACE, description = "Receives event record traces to be transformed", eventTypes = { EventRecordTrace.class })
 	public void inputEventTrace(final EventRecordTrace eventTrace) {
 		final ExecutionTrace execTrace = new ExecutionTrace(eventTrace.getTraceId());
 		final EventRecordStream eventStream = new EventRecordStream(eventTrace);

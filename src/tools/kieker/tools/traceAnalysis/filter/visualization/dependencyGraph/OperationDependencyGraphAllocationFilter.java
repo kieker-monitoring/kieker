@@ -60,15 +60,15 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class OperationDependencyGraphAllocationFilter extends AbstractDependencyGraphFilter<AllocationComponentOperationPair> {
-
-	public static final String CONFIG_DOT_OUTPUT_FILE = "dotOutputFile";
-	public static final String CONFIG_INCLUDE_WEIGHTS = "includeWeights";
-	public static final String CONFIG_SHORT_LABELS = "shortLabels";
-	public static final String CONFIG_INCLUDE_SELF_LOOPS = "includeSelfLoops";
-
 	private static final Log LOG = LogFactory.getLog(OperationDependencyGraphAllocationFilter.class);
+
+	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dot-output-file";
+	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "include-weights";
+	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "short-labels";
+	public static final String CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS = "include-self-loops";
+
 	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
 	private static final String CONTAINER_NODE_ID_PREFIX = "container_";
 
@@ -84,10 +84,10 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 				new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 						OperationRepository.ROOT_OPERATION,
 						AllocationRepository.ROOT_ALLOCATION_COMPONENT)));
-		this.dotOutputFile = this.configuration.getStringProperty(OperationDependencyGraphAllocationFilter.CONFIG_DOT_OUTPUT_FILE);
-		this.includeWeights = this.configuration.getBooleanProperty(OperationDependencyGraphAllocationFilter.CONFIG_INCLUDE_WEIGHTS);
-		this.shortLabels = this.configuration.getBooleanProperty(OperationDependencyGraphAllocationFilter.CONFIG_SHORT_LABELS);
-		this.includeSelfLoops = this.configuration.getBooleanProperty(OperationDependencyGraphAllocationFilter.CONFIG_INCLUDE_SELF_LOOPS);
+		this.dotOutputFile = this.configuration.getStringProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE);
+		this.includeWeights = this.configuration.getBooleanProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
+		this.shortLabels = this.configuration.getBooleanProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS);
+		this.includeSelfLoops = this.configuration.getBooleanProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS);
 	}
 
 	private String containerNodeLabel(final ExecutionContainer container) {
@@ -230,26 +230,26 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_DOT_OUTPUT_FILE, "./OperationDependencyGraph");
-		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_INCLUDE_WEIGHTS, Boolean.TRUE.toString());
-		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_INCLUDE_SELF_LOOPS, Boolean.FALSE.toString());
-		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_SHORT_LABELS, Boolean.TRUE.toString());
+		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, "./OperationDependencyGraph");
+		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.TRUE.toString());
+		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.FALSE.toString());
+		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.TRUE.toString());
 
 		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_DOT_OUTPUT_FILE, this.dotOutputFile);
-		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
-		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));
-		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_SHORT_LABELS, Boolean.toString(this.shortLabels));
+		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, this.dotOutputFile);
+		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
+		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));
+		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
 		return configuration;
 	}
 
 	@Override
-	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME, description = "Message traces", eventTypes = { MessageTrace.class })
-	public void msgTraceInput(final MessageTrace t) {
+	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed", eventTypes = { MessageTrace.class })
+	public void inputMessageTraces(final MessageTrace t) {
 		for (final AbstractMessage m : t.getSequenceAsVector()) {
 			if (m instanceof SynchronousReplyMessage) {
 				continue;

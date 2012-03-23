@@ -61,9 +61,9 @@ public class JMSAnalysisStarter {
 		final AnalysisController analysisInstance = new AnalysisController();
 
 		final Configuration logReaderConfiguration = new Configuration();
-		logReaderConfiguration.setProperty(JMSReader.CONFIG_PROVIDERURL, JMSAnalysisStarter.providerUrl);
-		logReaderConfiguration.setProperty(JMSReader.CONFIG_FACTORYLOOKUP, JMSAnalysisStarter.connectionFactory);
-		logReaderConfiguration.setProperty(JMSReader.CONFIG_DESTINATION, JMSAnalysisStarter.queue);
+		logReaderConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_PROVIDERURL, JMSAnalysisStarter.providerUrl);
+		logReaderConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, JMSAnalysisStarter.connectionFactory);
+		logReaderConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_DESTINATION, JMSAnalysisStarter.queue);
 
 		final JMSReader logReader = new JMSReader(logReaderConfiguration);
 		analysisInstance.registerReader(logReader);
@@ -74,7 +74,7 @@ public class JMSAnalysisStarter {
 		final Consumer consumer = new Consumer(consumerConfiguration);
 		analysisInstance.registerFilter(consumer);
 
-		analysisInstance.connect(logReader, JMSReader.OUTPUT_PORT_NAME, consumer, Consumer.INPUT_PORT_NAME);
+		analysisInstance.connect(logReader, JMSReader.OUTPUT_PORT_NAME_RECORDS, consumer, Consumer.INPUT_PORT_NAME);
 
 		analysisInstance.run();
 	}

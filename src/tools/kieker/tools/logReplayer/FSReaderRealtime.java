@@ -116,7 +116,7 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		}
 
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(inputDirNames));
+		configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(inputDirNames));
 		final AbstractReaderPlugin fsReader = new FSReader(configuration);
 		final FSReaderRealtimeCons rtCons = new FSReaderRealtimeCons(new Configuration());
 		/* Register this instance as the master of the created plugin. */
@@ -133,7 +133,7 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		this.analysis.registerReader(fsReader);
 		this.analysis.registerFilter(this.rtDistributor);
 
-		this.analysis.connect(fsReader, FSReader.OUTPUT_PORT_NAME, this.rtDistributor, RealtimeReplayDistributor.INPUT_PORT_NAME);
+		this.analysis.connect(fsReader, FSReader.OUTPUT_PORT_NAME_RECORDS, this.rtDistributor, RealtimeReplayDistributor.INPUT_PORT_NAME);
 	}
 
 	/**

@@ -130,8 +130,8 @@ public final class TraceAnalysisTool {
 	private static boolean includeSelfLoops = false;
 	private static boolean ignoreInvalidTraces = false;
 	private static int maxTraceDurationMillis = 10 * 60 * 1000; // 10 minutes default // NOCS (MagicNumberCheck)
-	private static long ignoreExecutionsBeforeTimestamp = TimestampFilter.MIN_TIMESTAMP;
-	private static long ignoreExecutionsAfterTimestamp = TimestampFilter.MAX_TIMESTAMP;
+	private static long ignoreExecutionsBeforeTimestamp = TimestampFilter.CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP;
+	private static long ignoreExecutionsAfterTimestamp = TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP;
 
 	private static final String ENCODING = "UTF-8";
 
@@ -307,13 +307,13 @@ public final class TraceAnalysisTool {
 				recordTypeSelectorSet.add(SplitEvent.class);
 				recordTypeSelectorSet.add(Trace.class);
 				final Configuration conf = new Configuration(null);
-				conf.setProperty(FSReader.CONFIG_INPUTDIRS, Configuration.toProperty(TraceAnalysisTool.inputDirs));
+				conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(TraceAnalysisTool.inputDirs));
 
 				final Collection<String> recordTypeSelectorNameSet = new CopyOnWriteArrayList<String>();
 				for (final Class<? extends IMonitoringRecord> c : recordTypeSelectorSet) {
 					recordTypeSelectorNameSet.add(c.getName());
 				}
-				conf.setProperty(FSReader.CONFIG_ONLYRECORDS,
+				conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION,
 						Configuration.toProperty(recordTypeSelectorNameSet.toArray(new String[recordTypeSelectorNameSet.size()])));
 				reader = new FSReader(conf);
 				analysisInstance.registerReader(reader);
@@ -331,16 +331,16 @@ public final class TraceAnalysisTool {
 				 * Create the timestamp filter and connect to the reader's output port
 				 */
 				final Configuration configTimestampFilter = new Configuration();
-				configTimestampFilter.setProperty(kieker.analysis.plugin.filter.select.TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
+				configTimestampFilter.setProperty(kieker.analysis.plugin.filter.select.TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP,
 						Long.toString(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp));
-				configTimestampFilter.setProperty(kieker.analysis.plugin.filter.select.TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP,
+				configTimestampFilter.setProperty(kieker.analysis.plugin.filter.select.TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP,
 						Long.toString(TraceAnalysisTool.ignoreExecutionsAfterTimestamp));
 
 				timestampFilter =
 						new TimestampFilter(configTimestampFilter);
 				analysisInstance.registerFilter(timestampFilter);
-				analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME, timestampFilter, TimestampFilter.INPUT_PORT_NAME_EXECUTION);
-				analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME, timestampFilter, TimestampFilter.INPUT_PORT_NAME_FLOW);
+				analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, timestampFilter, TimestampFilter.INPUT_PORT_NAME_EXECUTION);
+				analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, timestampFilter, TimestampFilter.INPUT_PORT_NAME_FLOW);
 			}
 
 			final TraceIdFilter traceIdFilter;
@@ -350,18 +350,18 @@ public final class TraceAnalysisTool {
 				 */
 				final Configuration configTraceIdFilterFlow = new Configuration();
 				if (TraceAnalysisTool.selectedTraces == null) {
-					configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.TRUE.toString());
+					configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.TRUE.toString());
 				} else {
-					configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.FALSE.toString());
-					configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES,
+					configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.FALSE.toString());
+					configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES,
 							Configuration.toProperty(TraceAnalysisTool.selectedTraces.toArray(new Long[TraceAnalysisTool.selectedTraces.size()])));
 				}
 
 				traceIdFilter =
 						new TraceIdFilter(configTraceIdFilterFlow);
 				analysisInstance.registerFilter(traceIdFilter);
-				analysisInstance.connect(timestampFilter, kieker.analysis.plugin.filter.select.TimestampFilter.OUTPUT_PORT_NAME,
-						traceIdFilter, TraceIdFilter.INPUT_PORT_NAME);
+				analysisInstance.connect(timestampFilter, kieker.analysis.plugin.filter.select.TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD,
+						traceIdFilter, TraceIdFilter.INPUT_PORT_NAME_COMBINED);
 			}
 
 			final ExecutionRecordTransformationFilter execRecTransformer;
@@ -374,8 +374,9 @@ public final class TraceAnalysisTool {
 				execRecTransformer =
 						new ExecutionRecordTransformationFilter(execRecTransformerConfig);
 				analysisInstance.registerFilter(execRecTransformer);
-				analysisInstance.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME, execRecTransformer, ExecutionRecordTransformationFilter.INPUT_PORT_NAME);
-				analysisInstance.connect(execRecTransformer, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
+				analysisInstance.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, execRecTransformer,
+						ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
+				analysisInstance.connect(execRecTransformer, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 			}
 
 			{
@@ -384,14 +385,14 @@ public final class TraceAnalysisTool {
 				 */
 				final Configuration mtReconstrFilterConfig = new Configuration();
 				mtReconstrFilterConfig.setProperty(AbstractPlugin.CONFIG_NAME, Constants.TRACERECONSTR_COMPONENT_NAME);
-				mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_MAX_TRACE_DURATION_MILLIS,
+				mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS,
 						Integer.toString(TraceAnalysisTool.maxTraceDurationMillis));
-				mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_IGNORE_INVALID_TRACES, Boolean.toString(TraceAnalysisTool.ignoreInvalidTraces));
+				mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, Boolean.toString(TraceAnalysisTool.ignoreInvalidTraces));
 				mtReconstrFilter = new TraceReconstructionFilter(mtReconstrFilterConfig);
 				analysisInstance.registerFilter(mtReconstrFilter);
-				analysisInstance.connect(mtReconstrFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
-				analysisInstance.connect(execRecTransformer, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME,
-						mtReconstrFilter, TraceReconstructionFilter.INPUT_PORT_NAME);
+				analysisInstance.connect(mtReconstrFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
+				analysisInstance.connect(execRecTransformer, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS,
+						mtReconstrFilter, TraceReconstructionFilter.INPUT_PORT_NAME_EXECUTIONS);
 			}
 
 			{
@@ -401,13 +402,13 @@ public final class TraceAnalysisTool {
 				final Configuration configurationEventRecordTraceGenerationFilter = new Configuration();
 				configurationEventRecordTraceGenerationFilter.setProperty(AbstractPlugin.CONFIG_NAME,
 						Constants.EVENTRECORDTRACERECONSTR_COMPONENT_NAME);
-				configurationEventRecordTraceGenerationFilter.setProperty(EventRecordTraceGenerationFilter.CONFIG_MAX_TRACE_DURATION_MILLIS,
+				configurationEventRecordTraceGenerationFilter.setProperty(EventRecordTraceGenerationFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS,
 						Integer.toString(TraceAnalysisTool.maxTraceDurationMillis));
 				eventRecordTraceGenerationFilter = new EventRecordTraceGenerationFilter(configurationEventRecordTraceGenerationFilter);
 				analysisInstance.registerFilter(eventRecordTraceGenerationFilter);
-				analysisInstance.connect(traceIdFilter, kieker.analysis.plugin.filter.trace.TraceIdFilter.OUTPUT_PORT_NAME,
-						eventRecordTraceGenerationFilter, EventRecordTraceGenerationFilter.INPUT_PORT_NAME);
-				analysisInstance.connect(eventRecordTraceGenerationFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME,
+				analysisInstance.connect(traceIdFilter, kieker.analysis.plugin.filter.trace.TraceIdFilter.OUTPUT_PORT_NAME_MATCH,
+						eventRecordTraceGenerationFilter, EventRecordTraceGenerationFilter.INPUT_PORT_NAME_TRACE_EVENT);
+				analysisInstance.connect(eventRecordTraceGenerationFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 			}
 
@@ -422,9 +423,9 @@ public final class TraceAnalysisTool {
 				// EventTrace2ExecutionTraceFilter has no configuration properties
 				eventTrace2ExecutionTraceFilter = new EventTrace2ExecutionAndMessageTraceFilter(configurationEventTrace2ExecutionTraceFilter);
 				analysisInstance.registerFilter(eventTrace2ExecutionTraceFilter);
-				analysisInstance.connect(eventRecordTraceGenerationFilter, EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME,
-						eventTrace2ExecutionTraceFilter, EventTrace2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME);
-				analysisInstance.connect(eventTrace2ExecutionTraceFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME,
+				analysisInstance.connect(eventRecordTraceGenerationFilter, EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME_TRACE,
+						eventTrace2ExecutionTraceFilter, EventTrace2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME_EVENT_TRACE);
+				analysisInstance.connect(eventTrace2ExecutionTraceFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 			}
 
@@ -442,12 +443,12 @@ public final class TraceAnalysisTool {
 				 * is requested.
 				 */
 				analysisInstance.registerFilter(traceAllocationEquivClassFilter);
-				analysisInstance.connect(traceAllocationEquivClassFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME,
+				analysisInstance.connect(traceAllocationEquivClassFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
-						traceAllocationEquivClassFilter, TraceEquivalenceClassFilter.EXECUTION_TRACES_INPUT_PORT_NAME);
+						traceAllocationEquivClassFilter, TraceEquivalenceClassFilter.INPUT_PORT_NAME_EXECUTION_TRACE);
 				analysisInstance.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
-						traceAllocationEquivClassFilter, TraceEquivalenceClassFilter.EXECUTION_TRACES_INPUT_PORT_NAME);
+						traceAllocationEquivClassFilter, TraceEquivalenceClassFilter.INPUT_PORT_NAME_EXECUTION_TRACE);
 				allTraceProcessingComponents.add(traceAllocationEquivClassFilter);
 			}
 
@@ -463,10 +464,10 @@ public final class TraceAnalysisTool {
 				 */
 				analysisInstance.registerFilter(traceAssemblyEquivClassFilter);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
-						traceAssemblyEquivClassFilter, TraceEquivalenceClassFilter.EXECUTION_TRACES_INPUT_PORT_NAME);
+						traceAssemblyEquivClassFilter, TraceEquivalenceClassFilter.INPUT_PORT_NAME_EXECUTION_TRACE);
 				analysisInstance.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
-						traceAssemblyEquivClassFilter, TraceEquivalenceClassFilter.EXECUTION_TRACES_INPUT_PORT_NAME);
-				analysisInstance.connect(traceAssemblyEquivClassFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME,
+						traceAssemblyEquivClassFilter, TraceEquivalenceClassFilter.INPUT_PORT_NAME_EXECUTION_TRACE);
+				analysisInstance.connect(traceAssemblyEquivClassFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(traceAssemblyEquivClassFilter);
 			}
@@ -477,16 +478,16 @@ public final class TraceAnalysisTool {
 				numRequestedTasks++;
 				final Configuration componentPrintMsgTraceConfig = new Configuration();
 				componentPrintMsgTraceConfig.setProperty(AbstractPlugin.CONFIG_NAME, Constants.PRINTMSGTRACE_COMPONENT_NAME);
-				componentPrintMsgTraceConfig.setProperty(MessageTraceWriterFilter.CONFIG_OUTPUT_FN, new File(TraceAnalysisTool.outputDir + File.separator
+				componentPrintMsgTraceConfig.setProperty(MessageTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, new File(TraceAnalysisTool.outputDir + File.separator
 						+ TraceAnalysisTool.outputFnPrefix + Constants.MESSAGE_TRACES_FN_PREFIX + ".txt") // NOPMD
 						.getCanonicalPath());
 				componentPrintMsgTrace = new MessageTraceWriterFilter(componentPrintMsgTraceConfig);
 				analysisInstance.registerFilter(componentPrintMsgTrace);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPrintMsgTrace, MessageTraceWriterFilter.MSG_TRACES_INPUT_PORT_NAME);
+						componentPrintMsgTrace, MessageTraceWriterFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				analysisInstance.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPrintMsgTrace, MessageTraceWriterFilter.MSG_TRACES_INPUT_PORT_NAME);
-				analysisInstance.connect(componentPrintMsgTrace, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
+						componentPrintMsgTrace, MessageTraceWriterFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				analysisInstance.connect(componentPrintMsgTrace, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPrintMsgTrace);
 			}
 			ExecutionTraceWriterFilter componentPrintExecTrace = null;
@@ -494,16 +495,16 @@ public final class TraceAnalysisTool {
 				numRequestedTasks++;
 				final Configuration componentPrintExecTraceConfig = new Configuration();
 				componentPrintExecTraceConfig.setProperty(AbstractPlugin.CONFIG_NAME, Constants.PRINTEXECTRACE_COMPONENT_NAME);
-				componentPrintExecTraceConfig.setProperty(ExecutionTraceWriterFilter.CONFIG_OUTPUT_FN, new File(TraceAnalysisTool.outputDir + File.separator
+				componentPrintExecTraceConfig.setProperty(ExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, new File(TraceAnalysisTool.outputDir + File.separator
 						+ TraceAnalysisTool.outputFnPrefix + Constants.EXECUTION_TRACES_FN_PREFIX + ".txt")
 						.getCanonicalPath());
 				componentPrintExecTrace = new ExecutionTraceWriterFilter(componentPrintExecTraceConfig);
 				analysisInstance.registerFilter(componentPrintExecTrace);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
-						componentPrintExecTrace, ExecutionTraceWriterFilter.EXECUTION_TRACES_INPUT_PORT_NAME);
+						componentPrintExecTrace, ExecutionTraceWriterFilter.INPUT_PORT_NAME_EXECUTION_TRACES);
 				analysisInstance.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
-						componentPrintExecTrace, ExecutionTraceWriterFilter.EXECUTION_TRACES_INPUT_PORT_NAME);
-				analysisInstance.connect(componentPrintExecTrace, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
+						componentPrintExecTrace, ExecutionTraceWriterFilter.INPUT_PORT_NAME_EXECUTION_TRACES);
+				analysisInstance.connect(componentPrintExecTrace, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPrintExecTrace);
 			}
 			InvalidExecutionTraceWriterFilter componentPrintInvalidTrace = null;
@@ -512,15 +513,15 @@ public final class TraceAnalysisTool {
 				final Configuration componentPrintInvalidTraceConfig = new Configuration();
 				componentPrintInvalidTraceConfig.setProperty(AbstractPlugin.CONFIG_NAME,
 						Constants.PRINTINVALIDEXECTRACE_COMPONENT_NAME);
-				componentPrintInvalidTraceConfig.setProperty(InvalidExecutionTraceWriterFilter.CONFIG_OUTPUT_FN, new File(TraceAnalysisTool.outputDir
+				componentPrintInvalidTraceConfig.setProperty(InvalidExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, new File(TraceAnalysisTool.outputDir
 						+ File.separator
 						+ TraceAnalysisTool.outputFnPrefix
 						+ Constants.INVALID_TRACES_FN_PREFIX + ".txt").getCanonicalPath());
 				componentPrintInvalidTrace = new InvalidExecutionTraceWriterFilter(componentPrintInvalidTraceConfig);
 				analysisInstance.registerFilter(componentPrintInvalidTrace);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE,
-						componentPrintInvalidTrace, InvalidExecutionTraceWriterFilter.INVALID_EXECUTION_TRACES_INPUT_PORT_NAME);
-				analysisInstance.connect(componentPrintInvalidTrace, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME,
+						componentPrintInvalidTrace, InvalidExecutionTraceWriterFilter.INPUT_PORT_NAME_INVALID_EXECUTION_TRACES);
+				analysisInstance.connect(componentPrintInvalidTrace, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 				// TODO: We haven't such port for the EventTrace2ExecutionTraceFilter, yet
 				TraceAnalysisTool.LOG.warn("EventTrace2ExecutionTraceFilter doesn't provide an output port for invalid execution traces, yet");
@@ -533,17 +534,17 @@ public final class TraceAnalysisTool {
 				numRequestedTasks++;
 				final Configuration componentPlotAllocationSeqDiagrConfig = new Configuration();
 				componentPlotAllocationSeqDiagrConfig.setProperty(AbstractPlugin.CONFIG_NAME, Constants.PLOTALLOCATIONSEQDIAGR_COMPONENT_NAME);
-				componentPlotAllocationSeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_OUTPUT_FN_BASE,
+				componentPlotAllocationSeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE,
 						TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.ALLOCATION_SEQUENCE_DIAGRAM_FN_PREFIX);
-				componentPlotAllocationSeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_OUTPUT_SDMODE, SequenceDiagramFilter.SDModes.ALLOCATION.toString());
-				componentPlotAllocationSeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_OUTPUT_SHORTLABES, Boolean.toString(TraceAnalysisTool.shortLabels));
+				componentPlotAllocationSeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE, SequenceDiagramFilter.SDModes.ALLOCATION.toString());
+				componentPlotAllocationSeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES, Boolean.toString(TraceAnalysisTool.shortLabels));
 				componentPlotAllocationSeqDiagr = new SequenceDiagramFilter(componentPlotAllocationSeqDiagrConfig);
 				analysisInstance.registerFilter(componentPlotAllocationSeqDiagr);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAllocationSeqDiagr, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
+						componentPlotAllocationSeqDiagr, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				analysisInstance.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAllocationSeqDiagr, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
-				analysisInstance.connect(componentPlotAllocationSeqDiagr, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME,
+						componentPlotAllocationSeqDiagr, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				analysisInstance.connect(componentPlotAllocationSeqDiagr, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPlotAllocationSeqDiagr);
 			}
@@ -552,17 +553,17 @@ public final class TraceAnalysisTool {
 				numRequestedTasks++;
 				final Configuration componentPlotAssemblySeqDiagrConfig = new Configuration();
 				componentPlotAssemblySeqDiagrConfig.setProperty(AbstractPlugin.CONFIG_NAME, Constants.PLOTASSEMBLYSEQDIAGR_COMPONENT_NAME);
-				componentPlotAssemblySeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_OUTPUT_FN_BASE,
+				componentPlotAssemblySeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE,
 						TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.ASSEMBLY_SEQUENCE_DIAGRAM_FN_PREFIX);
-				componentPlotAssemblySeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_OUTPUT_SDMODE, SequenceDiagramFilter.SDModes.ASSEMBLY.toString());
-				componentPlotAssemblySeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_OUTPUT_SHORTLABES, Boolean.toString(TraceAnalysisTool.shortLabels));
+				componentPlotAssemblySeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE, SequenceDiagramFilter.SDModes.ASSEMBLY.toString());
+				componentPlotAssemblySeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES, Boolean.toString(TraceAnalysisTool.shortLabels));
 				componentPlotAssemblySeqDiagr = new SequenceDiagramFilter(componentPlotAssemblySeqDiagrConfig);
 				analysisInstance.registerFilter(componentPlotAssemblySeqDiagr);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAssemblySeqDiagr, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
+						componentPlotAssemblySeqDiagr, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				analysisInstance.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAssemblySeqDiagr, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
-				analysisInstance.connect(componentPlotAssemblySeqDiagr, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME,
+						componentPlotAssemblySeqDiagr, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				analysisInstance.connect(componentPlotAssemblySeqDiagr, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPlotAssemblySeqDiagr);
 			}
@@ -572,12 +573,12 @@ public final class TraceAnalysisTool {
 				final Configuration componentPlotAllocationComponentDepGraphConfig = new Configuration();
 				componentPlotAllocationComponentDepGraphConfig.setProperty(AbstractPlugin.CONFIG_NAME,
 						Constants.PLOTALLOCATIONCOMPONENTDEPGRAPH_COMPONENT_NAME);
-				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_OUTPUT_FN_BASE,
+				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE,
 						TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.ALLOCATION_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX);
-				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_INCLUDE_WEIGHTS, Boolean.TRUE.toString());
-				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_SHORTLABELS,
+				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.TRUE.toString());
+				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SHORTLABELS,
 						Boolean.toString(TraceAnalysisTool.shortLabels));
-				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_SELFLOOPS,
+				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SELFLOOPS,
 						Boolean.toString(TraceAnalysisTool.includeSelfLoops));
 
 				componentPlotAllocationComponentDepGraph = new ComponentDependencyGraphAllocationFilter(
@@ -588,10 +589,10 @@ public final class TraceAnalysisTool {
 
 				analysisInstance.registerFilter(componentPlotAllocationComponentDepGraph);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAllocationComponentDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
+						componentPlotAllocationComponentDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				analysisInstance.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAllocationComponentDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
-				analysisInstance.connect(componentPlotAllocationComponentDepGraph, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME,
+						componentPlotAllocationComponentDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				analysisInstance.connect(componentPlotAllocationComponentDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 
 				allTraceProcessingComponents.add(componentPlotAllocationComponentDepGraph);
@@ -602,12 +603,12 @@ public final class TraceAnalysisTool {
 				final Configuration componentPlotAssemblyComponentDepGraphConfig = new Configuration();
 				componentPlotAssemblyComponentDepGraphConfig.setProperty(AbstractPlugin.CONFIG_NAME,
 						Constants.PLOTASSEMBLYCOMPONENTDEPGRAPH_COMPONENT_NAME);
-				componentPlotAssemblyComponentDepGraphConfig.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_SHORT_LABELS,
+				componentPlotAssemblyComponentDepGraphConfig.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
 						Boolean.toString(TraceAnalysisTool.shortLabels));
-				componentPlotAssemblyComponentDepGraphConfig.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(true));
-				componentPlotAssemblyComponentDepGraphConfig.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_INCLUDE_SELF_LOOPS,
+				componentPlotAssemblyComponentDepGraphConfig.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
+				componentPlotAssemblyComponentDepGraphConfig.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS,
 						Boolean.toString(TraceAnalysisTool.includeSelfLoops));
-				componentPlotAssemblyComponentDepGraphConfig.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_DOT_OUTPUT_FILE, new File(
+				componentPlotAssemblyComponentDepGraphConfig.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, new File(
 						TraceAnalysisTool.outputDir
 								+ File.separator + TraceAnalysisTool.outputFnPrefix
 								+ Constants.ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX).getAbsolutePath());
@@ -619,10 +620,10 @@ public final class TraceAnalysisTool {
 
 				analysisInstance.registerFilter(componentPlotAssemblyComponentDepGraph);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAssemblyComponentDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
+						componentPlotAssemblyComponentDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				analysisInstance.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAssemblyComponentDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
-				analysisInstance.connect(componentPlotAssemblyComponentDepGraph, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME,
+						componentPlotAssemblyComponentDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				analysisInstance.connect(componentPlotAssemblyComponentDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPlotAssemblyComponentDepGraph);
 			}
@@ -632,22 +633,22 @@ public final class TraceAnalysisTool {
 				final Configuration componentPlotContainerDepGraphConfig = new Configuration();
 				componentPlotContainerDepGraphConfig.setProperty(AbstractPlugin.CONFIG_NAME,
 						Constants.PLOTCONTAINERDEPGRAPH_COMPONENT_NAME);
-				componentPlotContainerDepGraphConfig.setProperty(ContainerDependencyGraphFilter.CONFIG_SHORT_LABELS,
+				componentPlotContainerDepGraphConfig.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
 						Boolean.toString(TraceAnalysisTool.shortLabels));
-				componentPlotContainerDepGraphConfig.setProperty(ContainerDependencyGraphFilter.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(true));
-				componentPlotContainerDepGraphConfig.setProperty(ContainerDependencyGraphFilter.CONFIG_INCLUDE_SELF_LOOPS,
+				componentPlotContainerDepGraphConfig.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
+				componentPlotContainerDepGraphConfig.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS,
 						Boolean.toString(TraceAnalysisTool.includeSelfLoops));
-				componentPlotContainerDepGraphConfig.setProperty(ContainerDependencyGraphFilter.CONFIG_DOT_OUTPUT_FILE, new File(TraceAnalysisTool.outputDir
+				componentPlotContainerDepGraphConfig.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, new File(TraceAnalysisTool.outputDir
 						+ File.separator + TraceAnalysisTool.outputFnPrefix
 						+ Constants.CONTAINER_DEPENDENCY_GRAPH_FN_PREFIX).getAbsolutePath());
 
 				componentPlotContainerDepGraph = new ContainerDependencyGraphFilter(componentPlotContainerDepGraphConfig);
 				analysisInstance.registerFilter(componentPlotContainerDepGraph);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotContainerDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
+						componentPlotContainerDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				analysisInstance.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotContainerDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
-				analysisInstance.connect(componentPlotContainerDepGraph, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME,
+						componentPlotContainerDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				analysisInstance.connect(componentPlotContainerDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPlotContainerDepGraph);
 			}
@@ -659,11 +660,11 @@ public final class TraceAnalysisTool {
 				componentPlotAllocationOperationDepGraphConfig
 						.setProperty(AbstractPlugin.CONFIG_NAME, Constants.PLOTALLOCATIONOPERATIONDEPGRAPH_COMPONENT_NAME);
 				componentPlotAllocationOperationDepGraphConfig
-						.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_SHORT_LABELS, Boolean.toString(TraceAnalysisTool.shortLabels));
-				componentPlotAllocationOperationDepGraphConfig.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(true));
-				componentPlotAllocationOperationDepGraphConfig.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_INCLUDE_SELF_LOOPS,
+						.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(TraceAnalysisTool.shortLabels));
+				componentPlotAllocationOperationDepGraphConfig.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
+				componentPlotAllocationOperationDepGraphConfig.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS,
 						Boolean.toString(TraceAnalysisTool.includeSelfLoops));
-				componentPlotAllocationOperationDepGraphConfig.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_DOT_OUTPUT_FILE, new File(
+				componentPlotAllocationOperationDepGraphConfig.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, new File(
 						TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix
 								+ Constants.ALLOCATION_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX).getAbsolutePath());
 
@@ -674,10 +675,10 @@ public final class TraceAnalysisTool {
 
 				analysisInstance.registerFilter(componentPlotAllocationOperationDepGraph);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAllocationOperationDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
+						componentPlotAllocationOperationDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				analysisInstance.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAllocationOperationDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
-				analysisInstance.connect(componentPlotAllocationOperationDepGraph, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME,
+						componentPlotAllocationOperationDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				analysisInstance.connect(componentPlotAllocationOperationDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPlotAllocationOperationDepGraph);
 			}
@@ -688,12 +689,12 @@ public final class TraceAnalysisTool {
 				final Configuration componentPlotAssemblyOperationDepGraphConfig = new Configuration();
 				componentPlotAssemblyOperationDepGraphConfig
 						.setProperty(AbstractPlugin.CONFIG_NAME, Constants.PLOTASSEMBLYOPERATIONDEPGRAPH_COMPONENT_NAME);
-				componentPlotAssemblyOperationDepGraphConfig.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_SHORT_LABELS,
+				componentPlotAssemblyOperationDepGraphConfig.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
 						Boolean.toString(TraceAnalysisTool.shortLabels));
-				componentPlotAssemblyOperationDepGraphConfig.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(true));
-				componentPlotAssemblyOperationDepGraphConfig.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_INCLUDE_SELF_LOOPS,
+				componentPlotAssemblyOperationDepGraphConfig.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
+				componentPlotAssemblyOperationDepGraphConfig.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS,
 						Boolean.toString(TraceAnalysisTool.includeSelfLoops));
-				componentPlotAssemblyOperationDepGraphConfig.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_DOT_OUTPUT_FILE, new File(
+				componentPlotAssemblyOperationDepGraphConfig.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, new File(
 						TraceAnalysisTool.outputDir
 								+ File.separator + TraceAnalysisTool.outputFnPrefix
 								+ Constants.ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX).getAbsolutePath());
@@ -705,10 +706,10 @@ public final class TraceAnalysisTool {
 
 				analysisInstance.registerFilter(componentPlotAssemblyOperationDepGraph);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAssemblyOperationDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
+						componentPlotAssemblyOperationDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				analysisInstance.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAssemblyOperationDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
-				analysisInstance.connect(componentPlotAssemblyOperationDepGraph, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME,
+						componentPlotAssemblyOperationDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				analysisInstance.connect(componentPlotAssemblyOperationDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPlotAssemblyOperationDepGraph);
 			}
@@ -723,10 +724,10 @@ public final class TraceAnalysisTool {
 						TraceAnalysisTool.shortLabels);
 				analysisInstance.registerFilter(componentPlotTraceCallTrees);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotTraceCallTrees, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
+						componentPlotTraceCallTrees, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				analysisInstance.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotTraceCallTrees, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
-				analysisInstance.connect(componentPlotTraceCallTrees, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME,
+						componentPlotTraceCallTrees, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				analysisInstance.connect(componentPlotTraceCallTrees, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPlotTraceCallTrees);
 			}
@@ -737,18 +738,18 @@ public final class TraceAnalysisTool {
 				componentPlotAggregatedCallTreeConfig
 						.setProperty(AbstractPlugin.CONFIG_NAME,
 								Constants.PLOTAGGREGATEDALLOCATIONCALLTREE_COMPONENT_NAME);
-				componentPlotAggregatedCallTreeConfig.setProperty(AggregatedCallTreeFilter.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(true));
-				componentPlotAggregatedCallTreeConfig.setProperty(AggregatedCallTreeFilter.CONFIG_SHORT_LABELS, Boolean.toString(TraceAnalysisTool.shortLabels));
+				componentPlotAggregatedCallTreeConfig.setProperty(AggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
+				componentPlotAggregatedCallTreeConfig.setProperty(AggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(TraceAnalysisTool.shortLabels));
 				componentPlotAggregatedCallTree = new AggregatedAllocationComponentOperationCallTreeFilter(componentPlotAggregatedCallTreeConfig);
 				componentPlotAggregatedCallTree.setAllocationComponentOperationPairFactory(TraceAnalysisTool.ALLOCATION_COMPONENT_OPERATION_PAIR_FACTORY);
 				componentPlotAggregatedCallTree.setDotOutputFile(new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix
 						+ Constants.AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX));
 				analysisInstance.registerFilter(componentPlotAggregatedCallTree);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAggregatedCallTree, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
+						componentPlotAggregatedCallTree, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				analysisInstance.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAggregatedCallTree, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
-				analysisInstance.connect(componentPlotAggregatedCallTree, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME,
+						componentPlotAggregatedCallTree, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				analysisInstance.connect(componentPlotAggregatedCallTree, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPlotAggregatedCallTree);
 			}
@@ -758,18 +759,18 @@ public final class TraceAnalysisTool {
 				final Configuration componentPlotAssemblyCallTreeConfig = new Configuration();
 				componentPlotAssemblyCallTreeConfig.setProperty(AbstractPlugin.CONFIG_NAME,
 						Constants.PLOTAGGREGATEDASSEMBLYCALLTREE_COMPONENT_NAME);
-				componentPlotAssemblyCallTreeConfig.setProperty(AggregatedCallTreeFilter.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(true));
-				componentPlotAssemblyCallTreeConfig.setProperty(AggregatedCallTreeFilter.CONFIG_SHORT_LABELS, Boolean.toString(TraceAnalysisTool.shortLabels));
+				componentPlotAssemblyCallTreeConfig.setProperty(AggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
+				componentPlotAssemblyCallTreeConfig.setProperty(AggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(TraceAnalysisTool.shortLabels));
 				componentPlotAssemblyCallTree = new AggregatedAssemblyComponentOperationCallTreeFilter(componentPlotAssemblyCallTreeConfig);
 				componentPlotAssemblyCallTree.setAssemblyComponentOperationPairFactory(TraceAnalysisTool.ASSEMBLY_COMPONENT_OPERATION_PAIR_FACTORY);
 				componentPlotAssemblyCallTree.setDotOutputFile(new File(TraceAnalysisTool.outputDir
 						+ File.separator + TraceAnalysisTool.outputFnPrefix + Constants.AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX));
 				analysisInstance.registerFilter(componentPlotAssemblyCallTree);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAssemblyCallTree, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
+						componentPlotAssemblyCallTree, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				analysisInstance.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAssemblyCallTree, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
-				analysisInstance.connect(componentPlotAssemblyCallTree, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME,
+						componentPlotAssemblyCallTree, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				analysisInstance.connect(componentPlotAssemblyCallTree, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPlotAssemblyCallTree);
 			}
@@ -791,11 +792,11 @@ public final class TraceAnalysisTool {
 				final String systemEntitiesHtmlFn =
 						TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + "system-entities.html";
 				final Configuration systemModel2FileFilterConfig = new Configuration();
-				systemModel2FileFilterConfig.setProperty(SystemModel2FileFilter.CONFIG_HTML_OUTPUT_FN, systemEntitiesHtmlFn);
+				systemModel2FileFilterConfig.setProperty(SystemModel2FileFilter.CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN, systemEntitiesHtmlFn);
 				final SystemModel2FileFilter systemModel2FileFilter = new SystemModel2FileFilter(systemModel2FileFilterConfig);
 				// note that this plugin is (currently) not connected to any other filter
 				analysisInstance.registerFilter(systemModel2FileFilter);
-				analysisInstance.connect(systemModel2FileFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
+				analysisInstance.connect(systemModel2FileFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
 			}
 
 			int numErrorCount = 0;

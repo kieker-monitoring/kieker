@@ -59,14 +59,15 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn, Nils Sommer, Jan Waller
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter {
 	private static final Log LOG = LogFactory.getLog(SequenceDiagramFilter.class);
 
-	public static final String CONFIG_OUTPUT_FN_BASE = "filename";
-	public static final String CONFIG_OUTPUT_SHORTLABES = "shortlabels";
-	public static final String CONFIG_OUTPUT_SDMODE = "SDMode";
-	public static final String CONFIG_OUTPUT_FN_BASE_DEFAULT = "SequenceDiagram";
+	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE = "filename";
+	public static final String CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES = "short-labels";
+	public static final String CONFIG_PROPERTY_NAME_OUTPUT_SDMODE = "SDMode";
+
+	public static final String CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT = "SequenceDiagram";
 
 	/**
 	 * Path to the sequence.pic macros used to plot UML sequence diagrams. The
@@ -124,9 +125,9 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 
 	public SequenceDiagramFilter(final Configuration configuration) {
 		super(configuration);
-		this.sdmode = SDModes.valueOf(configuration.getStringProperty(SequenceDiagramFilter.CONFIG_OUTPUT_SDMODE));
-		this.outputFnBase = configuration.getStringProperty(SequenceDiagramFilter.CONFIG_OUTPUT_FN_BASE);
-		this.shortLabels = configuration.getBooleanProperty(SequenceDiagramFilter.CONFIG_OUTPUT_SHORTLABES);
+		this.sdmode = SDModes.valueOf(configuration.getStringProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE));
+		this.outputFnBase = configuration.getStringProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE);
+		this.shortLabels = configuration.getBooleanProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES);
 	}
 
 	@Override
@@ -143,8 +144,8 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	}
 
 	@Override
-	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME, description = "Message traces", eventTypes = { MessageTrace.class })
-	public void msgTraceInput(final MessageTrace mt) {
+	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed", eventTypes = { MessageTrace.class })
+	public void inputMessageTraces(final MessageTrace mt) {
 		try {
 			SequenceDiagramFilter.writePicForMessageTrace(SequenceDiagramFilter.this.getSystemEntityFactory(), mt,
 					SequenceDiagramFilter.this.sdmode,
@@ -323,17 +324,18 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	@Override
 	protected final Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
-		defaultConfiguration.setProperty(SequenceDiagramFilter.CONFIG_OUTPUT_FN_BASE, SequenceDiagramFilter.CONFIG_OUTPUT_FN_BASE_DEFAULT);
-		defaultConfiguration.setProperty(SequenceDiagramFilter.CONFIG_OUTPUT_SHORTLABES, Boolean.TRUE.toString());
-		defaultConfiguration.setProperty(SequenceDiagramFilter.CONFIG_OUTPUT_SDMODE, SDModes.ASSEMBLY.toString());
+		defaultConfiguration.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE,
+				SequenceDiagramFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT);
+		defaultConfiguration.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES, Boolean.TRUE.toString());
+		defaultConfiguration.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE, SDModes.ASSEMBLY.toString());
 		return defaultConfiguration;
 	}
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(SequenceDiagramFilter.CONFIG_OUTPUT_FN_BASE, this.outputFnBase);
-		configuration.setProperty(SequenceDiagramFilter.CONFIG_OUTPUT_SHORTLABES, Boolean.toString(this.shortLabels));
-		configuration.setProperty(SequenceDiagramFilter.CONFIG_OUTPUT_SDMODE, this.sdmode.toString());
+		configuration.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE, this.outputFnBase);
+		configuration.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES, Boolean.toString(this.shortLabels));
+		configuration.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE, this.sdmode.toString());
 		return configuration;
 	}
 }

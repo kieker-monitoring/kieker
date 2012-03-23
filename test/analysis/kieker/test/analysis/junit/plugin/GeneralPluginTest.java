@@ -70,13 +70,13 @@ public class GeneralPluginTest extends TestCase {
 		final ExecutionRecordTransformationFilter transformer = new ExecutionRecordTransformationFilter(new Configuration());
 
 		final Configuration filter1byTraceIDConfig = new Configuration();
-		filter1byTraceIDConfig.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.FALSE.toString());
-		filter1byTraceIDConfig.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, Configuration.toProperty(new Long[] { 1l }));
+		filter1byTraceIDConfig.setProperty(TraceIdFilter.CONFIG_PROPETY_NAME_SELECT_ALL_TRACES, Boolean.FALSE.toString());
+		filter1byTraceIDConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, Configuration.toProperty(new Long[] { 1l }));
 		final TraceIdFilter filter1byTraceID = new TraceIdFilter(filter1byTraceIDConfig);
 
 		final Configuration filter2ByTimestampConfiguration = new Configuration();
-		filter2ByTimestampConfiguration.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, Long.toString(10l));
-		filter2ByTimestampConfiguration.setProperty(TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP, Long.toString(20l));
+		filter2ByTimestampConfiguration.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, Long.toString(10l));
+		filter2ByTimestampConfiguration.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, Long.toString(20l));
 		final TimestampFilter filter2ByTimestamp = new TimestampFilter(filter2ByTimestampConfiguration);
 
 		/* The records we will send. */
@@ -100,11 +100,11 @@ public class GeneralPluginTest extends TestCase {
 		controller.registerFilter(dst);
 
 		/* Connect the plugins. */
-		Assert.assertTrue(controller.connect(src, SourceClass.OUTPUT_PORT_NAME, transformer, ExecutionRecordTransformationFilter.INPUT_PORT_NAME));
-		Assert.assertTrue(controller.connect(transformer, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, systemModelRepository));
-		Assert.assertTrue(controller.connect(transformer, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME, filter1byTraceID, TraceIdFilter.INPUT_PORT_NAME));
-		Assert.assertTrue(controller.connect(filter1byTraceID, TraceIdFilter.OUTPUT_PORT_NAME, filter2ByTimestamp, TimestampFilter.INPUT_PORT_NAME));
-		Assert.assertTrue(controller.connect(filter2ByTimestamp, TimestampFilter.OUTPUT_PORT_NAME, dst, ExecutionSinkClass.INPUT_PORT_NAME));
+		Assert.assertTrue(controller.connect(src, SourceClass.OUTPUT_PORT_NAME, transformer, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS));
+		Assert.assertTrue(controller.connect(transformer, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemModelRepository));
+		Assert.assertTrue(controller.connect(transformer, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS, filter1byTraceID, TraceIdFilter.INPUT_PORT_NAME_EXECUTION));
+		Assert.assertTrue(controller.connect(filter1byTraceID, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, filter2ByTimestamp, TimestampFilter.INPUT_PORT_NAME_EXECUTION));
+		Assert.assertTrue(controller.connect(filter2ByTimestamp, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, dst, ExecutionSinkClass.INPUT_PORT_NAME));
 
 		src.read();
 

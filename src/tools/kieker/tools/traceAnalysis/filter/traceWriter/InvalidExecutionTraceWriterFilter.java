@@ -40,11 +40,13 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionTraceProcessingFilter {
 
-	public static final String CONFIG_OUTPUT_FN = "outputFn";
-	public static final String INVALID_EXECUTION_TRACES_INPUT_PORT_NAME = "newEvent";
+	public static final String INPUT_PORT_NAME_INVALID_EXECUTION_TRACES = "invalid-execution-traces";
+
+	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN = "outputFn";
+
 	private static final Log LOG = LogFactory.getLog(InvalidExecutionTraceWriterFilter.class);
 
 	private static final String ENCODING = "UTF-8";
@@ -55,7 +57,7 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 	public InvalidExecutionTraceWriterFilter(final Configuration configuration)
 			throws IOException {
 		super(configuration);
-		this.outputFn = configuration.getStringProperty(InvalidExecutionTraceWriterFilter.CONFIG_OUTPUT_FN);
+		this.outputFn = configuration.getStringProperty(InvalidExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN);
 		this.ps = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.outputFn), InvalidExecutionTraceWriterFilter.ENCODING));
 	}
 
@@ -79,14 +81,13 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 
 	@Override
 	public String getInvalidExecutionTraceInputPortName() {
-		return InvalidExecutionTraceWriterFilter.INVALID_EXECUTION_TRACES_INPUT_PORT_NAME;
+		return InvalidExecutionTraceWriterFilter.INPUT_PORT_NAME_INVALID_EXECUTION_TRACES;
 	}
 
 	@InputPort(
-			name = InvalidExecutionTraceWriterFilter.INVALID_EXECUTION_TRACES_INPUT_PORT_NAME,
-			description = "Invalid Execution traces", eventTypes = { InvalidExecutionTrace.class })
-	public void newEvent(final Object obj) {
-		final InvalidExecutionTrace et = (InvalidExecutionTrace) obj;
+			name = InvalidExecutionTraceWriterFilter.INPUT_PORT_NAME_INVALID_EXECUTION_TRACES,
+			description = "Receives the invalid execution traces to be written", eventTypes = { InvalidExecutionTrace.class })
+	public void newInvalidExecutionTrace(final InvalidExecutionTrace et) {
 		try {
 			InvalidExecutionTraceWriterFilter.this.ps.append(et.getInvalidExecutionTraceArtifacts().toString());
 			InvalidExecutionTraceWriterFilter.this.reportSuccess(et.getInvalidExecutionTraceArtifacts().getTraceId());
@@ -100,7 +101,7 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(InvalidExecutionTraceWriterFilter.CONFIG_OUTPUT_FN, "");
+		configuration.setProperty(InvalidExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, "");
 
 		return configuration;
 	}
@@ -108,7 +109,7 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(InvalidExecutionTraceWriterFilter.CONFIG_OUTPUT_FN, this.outputFn);
+		configuration.setProperty(InvalidExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, this.outputFn);
 
 		return configuration;
 	}

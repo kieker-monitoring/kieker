@@ -41,7 +41,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 @Plugin(
 		description = "Prints the contents of a connected SystemModelRepository to an HTML file",
 		repositoryPorts = {
-			@RepositoryPort(name = AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class)
+			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 		})
 public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 	private static final Log LOG = LogFactory.getLog(SystemModel2FileFilter.class);
@@ -49,7 +49,7 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 	/**
 	 * Name of the configuration property to pass the filename of the HTML output.
 	 */
-	public static final String CONFIG_HTML_OUTPUT_FN = "outputfn-html";
+	public static final String CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN = "outputfn-html";
 
 	/**
 	 * By default, writes HTML output file to this file in the working directory.
@@ -60,19 +60,19 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 
 	public SystemModel2FileFilter(final Configuration configuration) {
 		super(configuration);
-		this.outputFnHTML = configuration.getProperty(SystemModel2FileFilter.CONFIG_HTML_OUTPUT_FN);
+		this.outputFnHTML = configuration.getProperty(SystemModel2FileFilter.CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN);
 	}
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration defaultConfig = new Configuration();
-		defaultConfig.setProperty(SystemModel2FileFilter.CONFIG_HTML_OUTPUT_FN, SystemModel2FileFilter.DEFAULT_HTML_OUTPUT_FN);
+		defaultConfig.setProperty(SystemModel2FileFilter.CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN, SystemModel2FileFilter.DEFAULT_HTML_OUTPUT_FN);
 		return defaultConfig;
 	}
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration currentConfiguration = new Configuration();
-		currentConfiguration.setProperty(SystemModel2FileFilter.CONFIG_HTML_OUTPUT_FN, this.outputFnHTML);
+		currentConfiguration.setProperty(SystemModel2FileFilter.CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN, this.outputFnHTML);
 		return currentConfiguration;
 	}
 

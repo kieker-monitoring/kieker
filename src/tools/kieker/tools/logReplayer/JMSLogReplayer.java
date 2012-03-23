@@ -99,7 +99,7 @@ public class JMSLogReplayer {
 		tpanInstance.connect(recordReceiver, RecordDelegationPlugin2.OUTPUT_PORT_NAME, this.recordReceiver, this.recordReceiverInputPortName);
 
 		tpanInstance.registerFilter(recordReceiver);
-		tpanInstance.connect(logReader, JMSReader.OUTPUT_PORT_NAME, recordReceiver, RecordDelegationPlugin2.INPUT_PORT);
+		tpanInstance.connect(logReader, JMSReader.OUTPUT_PORT_NAME_RECORDS, recordReceiver, RecordDelegationPlugin2.INPUT_PORT);
 		try {
 			tpanInstance.run();
 			success = true;

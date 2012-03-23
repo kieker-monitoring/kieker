@@ -40,11 +40,11 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilter {
 
-	public static final String CONFIG_OUTPUT_FN = "outputFn";
-	public static final String MSG_TRACES_INPUT_PORT_NAME = "msgTraceInput";
+	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN = "outputFn";
+
 	private static final Log LOG = LogFactory.getLog(MessageTraceWriterFilter.class);
 
 	private static final String ENCODING = "UTF-8";
@@ -54,7 +54,7 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 
 	public MessageTraceWriterFilter(final Configuration configuration) throws IOException {
 		super(configuration);
-		this.outputFn = this.configuration.getStringProperty(MessageTraceWriterFilter.CONFIG_OUTPUT_FN);
+		this.outputFn = this.configuration.getStringProperty(MessageTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN);
 		this.ps = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.outputFn), MessageTraceWriterFilter.ENCODING));
 	}
 
@@ -80,7 +80,7 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(MessageTraceWriterFilter.CONFIG_OUTPUT_FN, "");
+		configuration.setProperty(MessageTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, "");
 
 		return configuration;
 	}
@@ -88,17 +88,17 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(MessageTraceWriterFilter.CONFIG_OUTPUT_FN, this.outputFn);
+		configuration.setProperty(MessageTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, this.outputFn);
 
 		return configuration;
 	}
 
 	@Override
 	@InputPort(
-			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME,
-			description = "Message traces",
+			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES,
+			description = "Receives message traces to be processed",
 			eventTypes = { MessageTrace.class })
-	public void msgTraceInput(final MessageTrace mt) {
+	public void inputMessageTraces(final MessageTrace mt) {
 		try {
 			MessageTraceWriterFilter.this.ps.append(mt.toString());
 			MessageTraceWriterFilter.this.reportSuccess(mt.getTraceId());

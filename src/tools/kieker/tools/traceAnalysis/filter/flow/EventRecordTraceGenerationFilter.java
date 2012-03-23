@@ -51,17 +51,18 @@ import kieker.tools.util.LoggingTimestampConverter;
  * 
  */
 @Plugin(
-		outputPorts = @OutputPort(name = EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME, description = "Outputs the generated traces", eventTypes = { EventRecordTrace.class }),
-		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
+		outputPorts = @OutputPort(name = EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME_TRACE, description = "Outputs the generated traces", eventTypes = { EventRecordTrace.class }),
+		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFilter {
 	private static final Log LOG = LogFactory.getLog(EventRecordTraceGenerationFilter.class);
 
-	public static final String INPUT_PORT_NAME = "inputTraceEvent";
-	public static final String OUTPUT_PORT_NAME = "outputEventRecordTrace";
+	public static final String INPUT_PORT_NAME_TRACE_EVENT = "trace-events";
 
-	public static final String CONFIG_MAX_TRACE_DURATION_MILLIS = "maxTraceDurationMillis";
+	public static final String OUTPUT_PORT_NAME_TRACE = "generated-traces";
 
-	private static final long MAX_DURATION_NANOS = Long.MAX_VALUE;
+	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS = "maxTraceDurationMillis";
+
+	private static final long CONFIG_PROPERTY_VALUE_MAX_DURATION_NANOS = Long.MAX_VALUE;
 
 	private final long maxTraceDurationNanos;
 	private final long maxTraceDurationMillis;
@@ -109,19 +110,19 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 		super(configuration);
 
 		/* Load from the configuration. */
-		this.maxTraceDurationMillis = configuration.getLongProperty(EventRecordTraceGenerationFilter.CONFIG_MAX_TRACE_DURATION_MILLIS);
+		this.maxTraceDurationMillis = configuration.getLongProperty(EventRecordTraceGenerationFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS);
 
 		if (this.maxTraceDurationMillis < 0) {
 			throw new IllegalArgumentException("value maxTraceDurationMillis must not be negative (found: " + this.maxTraceDurationMillis + ")");
 		}
 		if (this.maxTraceDurationMillis == AbstractTraceProcessingFilter.MAX_DURATION_MILLIS) {
-			this.maxTraceDurationNanos = EventRecordTraceGenerationFilter.MAX_DURATION_NANOS;
+			this.maxTraceDurationNanos = EventRecordTraceGenerationFilter.CONFIG_PROPERTY_VALUE_MAX_DURATION_NANOS;
 		} else {
 			this.maxTraceDurationNanos = this.maxTraceDurationMillis * (1000 * 1000); // NOCS (MagicNumberCheck)
 		}
 	}
 
-	@InputPort(name = EventRecordTraceGenerationFilter.INPUT_PORT_NAME, description = "Receives new trace events", eventTypes = { AbstractTraceEvent.class })
+	@InputPort(name = EventRecordTraceGenerationFilter.INPUT_PORT_NAME_TRACE_EVENT, description = "Receives the trace events to be processed", eventTypes = { AbstractTraceEvent.class })
 	public void inputTraceEvent(final AbstractTraceEvent event) {
 		final long traceId = event.getTraceId();
 
@@ -173,7 +174,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 				// Java 1.6: final EventRecordTrace polledTrace = this.timeoutMap.pollFirst();
 				final long curTraceId = polledTrace.getTraceId();
 				this.pendingTraces.remove(curTraceId);
-				super.deliver(EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME, polledTrace);
+				super.deliver(EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME_TRACE, polledTrace);
 				this.reportSuccess(curTraceId);
 			}
 		}
@@ -236,7 +237,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(EventRecordTraceGenerationFilter.CONFIG_MAX_TRACE_DURATION_MILLIS,
+		configuration.setProperty(EventRecordTraceGenerationFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS,
 				Long.toString(AbstractTraceProcessingFilter.MAX_DURATION_MILLIS));
 
 		return configuration;
@@ -244,7 +245,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(EventRecordTraceGenerationFilter.CONFIG_MAX_TRACE_DURATION_MILLIS, Long.toString(this.maxTraceDurationMillis));
+		configuration.setProperty(EventRecordTraceGenerationFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long.toString(this.maxTraceDurationMillis));
 		return configuration;
 	}
 

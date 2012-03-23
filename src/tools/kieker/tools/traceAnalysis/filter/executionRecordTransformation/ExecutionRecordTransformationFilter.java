@@ -40,29 +40,30 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn
  */
 @Plugin(
-		outputPorts = @OutputPort(name = ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME, description = "Execution output stream", eventTypes = { Execution.class }),
-		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
+		outputPorts = @OutputPort(name = ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS, description = "Provides transformed executions", eventTypes = { Execution.class }),
+		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFilter {
 	// private static final Log LOG = LogFactory.getLog(ExecutionRecordTransformationFilter.class);
 
-	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
-	public static final String OUTPUT_PORT_NAME = "defaultOutput";
+	public static final String INPUT_PORT_NAME_RECORDS = "operation-execution-records";
+
+	public static final String OUTPUT_PORT_NAME_EXECUTIONS = "transformed-executions";
 
 	public ExecutionRecordTransformationFilter(final Configuration configuration) {
 		super(configuration);
 	}
 
 	@InputPort(
-			name = ExecutionRecordTransformationFilter.INPUT_PORT_NAME,
-			description = "Input",
+			name = ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS,
+			description = "Receives operation execution records to be transformed",
 			eventTypes = { OperationExecutionRecord.class })
-	public boolean newMonitoringRecord(final OperationExecutionRecord execRec) {
+	public boolean inputOperationExecutionRecords(final OperationExecutionRecord execRec) {
 		final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(execRec.getOperationSignature());
 
 		final Execution execution = this.createExecutionByEntityNames(execRec.getHostname(), fqComponentNameSignaturePair.getFqClassname(),
 				fqComponentNameSignaturePair.getSignature(),
 				execRec.getTraceId(), execRec.getSessionId(), execRec.getEoi(), execRec.getEss(), execRec.getTin(), execRec.getTout(), false);
-		super.deliver(ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME, execution);
+		super.deliver(ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS, execution);
 		return true;
 	}
 

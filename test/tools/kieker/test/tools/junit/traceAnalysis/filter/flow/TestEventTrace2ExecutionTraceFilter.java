@@ -135,7 +135,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 
 		controller.registerFilter(filter);
 		controller.registerFilter(executionTraceSinkPlugin);
-		controller.connect(filter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, this.systemEntityFactory);
+		controller.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
 		controller.connect(filter, EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSinkPlugin,
 				SimpleSinkPlugin.INPUT_PORT_NAME);
 

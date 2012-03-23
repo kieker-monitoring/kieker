@@ -53,7 +53,7 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 
 		// the reader
 		final Configuration readerConfiguration = new Configuration();
-		readerConfiguration.setProperty(PipeReader.CONFIG_PIPENAME, pipeName);
+		readerConfiguration.setProperty(PipeReader.CONFIG_PROPERTY_NAME_PIPENAME, pipeName);
 		final PipeReader pipeReader = new PipeReader(readerConfiguration);
 
 		// the consumer
@@ -67,7 +67,7 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 		final AnalysisController analysis = new AnalysisController(this.getName());
 		analysis.registerReader(pipeReader);
 		analysis.registerFilter(countingFilter);
-		analysis.connect(pipeReader, PipeReader.OUTPUT_PORT_NAME, countingFilter, CountingFilter.INPUT_PORT_NAME);
+		analysis.connect(pipeReader, PipeReader.OUTPUT_PORT_NAME_RECORDS, countingFilter, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
 		final AnalysisControllerThread analysisThread = new AnalysisControllerThread(analysis);
 		analysisThread.start(); // start asynchronously

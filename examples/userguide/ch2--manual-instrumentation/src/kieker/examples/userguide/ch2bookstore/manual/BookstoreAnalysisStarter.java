@@ -45,13 +45,13 @@ public class BookstoreAnalysisStarter {
 
 		/* Set filesystem monitoring log input directory for our analysis */
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(FSReader.CONFIG_INPUTDIRS, args[0]);
+		configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, args[0]);
 
 		final FSReader reader = new FSReader(configuration);
 		analysisInstance.registerReader(reader);
 
 		/* Connect the output of the reader with the input of the plugin. */
-		analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME, consumer, Consumer.INPUT_PORT_NAME);
+		analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, consumer, Consumer.INPUT_PORT_NAME);
 
 		/* Start the analysis */
 		analysisInstance.run();

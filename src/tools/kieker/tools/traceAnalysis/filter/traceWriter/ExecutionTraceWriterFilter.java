@@ -42,11 +42,13 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessingFilter {
 
-	public static final String CONFIG_OUTPUT_FN = "outputFn";
-	public static final String EXECUTION_TRACES_INPUT_PORT_NAME = "newEvent";
+	public static final String INPUT_PORT_NAME_EXECUTION_TRACES = "execution-traces";
+
+	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN = "outputFn";
+
 	private static final Log LOG = LogFactory.getLog(ExecutionTraceWriterFilter.class);
 
 	private static final String ENCODING = "UTF-8";
@@ -56,7 +58,7 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 
 	public ExecutionTraceWriterFilter(final Configuration configuration) throws IOException {
 		super(configuration);
-		this.outputFn = configuration.getStringProperty(ExecutionTraceWriterFilter.CONFIG_OUTPUT_FN);
+		this.outputFn = configuration.getStringProperty(ExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN);
 		this.ps = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.outputFn), ExecutionTraceWriterFilter.ENCODING));
 	}
 
@@ -80,15 +82,14 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 
 	@Override
 	public String getExecutionTraceInputPortName() {
-		return ExecutionTraceWriterFilter.EXECUTION_TRACES_INPUT_PORT_NAME;
+		return ExecutionTraceWriterFilter.INPUT_PORT_NAME_EXECUTION_TRACES;
 	}
 
 	@InputPort(
-			name = ExecutionTraceWriterFilter.EXECUTION_TRACES_INPUT_PORT_NAME,
-			description = "Execution traces",
+			name = ExecutionTraceWriterFilter.INPUT_PORT_NAME_EXECUTION_TRACES,
+			description = "Receives the execution traces to be written",
 			eventTypes = { ExecutionTrace.class })
-	public void newEvent(final Object obj) {
-		final ExecutionTrace et = (ExecutionTrace) obj;
+	public void newExecutionTrace(final ExecutionTrace et) {
 		try {
 			ExecutionTraceWriterFilter.this.ps.append(et.toString());
 			ExecutionTraceWriterFilter.this.reportSuccess(et.getTraceId());
@@ -102,7 +103,7 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(ExecutionTraceWriterFilter.CONFIG_OUTPUT_FN, "");
+		configuration.setProperty(ExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, "");
 
 		return configuration;
 	}
@@ -110,7 +111,7 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(ExecutionTraceWriterFilter.CONFIG_OUTPUT_FN, this.outputFn);
+		configuration.setProperty(ExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, this.outputFn);
 
 		return configuration;
 	}

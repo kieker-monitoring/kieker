@@ -41,28 +41,31 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
  * @author Andre van Hoorn, Jan Waller
  */
 @Plugin(outputPorts = {
-	@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME, description = "accepted traces", eventTypes = { AbstractTraceEvent.class, OperationExecutionRecord.class }),
-	@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_NOT, description = "rejected traces", eventTypes = { AbstractTraceEvent.class, OperationExecutionRecord.class })
+	@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MATCH, description = "Forwards events with matching trace IDs",
+			eventTypes = { AbstractTraceEvent.class, OperationExecutionRecord.class }),
+	@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH, description = "Forwards events with trace IDs not matching",
+			eventTypes = { AbstractTraceEvent.class, OperationExecutionRecord.class })
 
 })
 public final class TraceIdFilter extends AbstractFilterPlugin {
-	public static final String INPUT_PORT_NAME = "input-combined";
-	public static final String INPUT_PORT_NAME_FLOW = "input-TraceEvent";
-	public static final String INPUT_PORT_NAME_OER = "input-OperationExecutionRecord";
-	public static final String OUTPUT_PORT_NAME = "output";
-	public static final String OUTPUT_PORT_NAME_NOT = "output-not";
+	public static final String INPUT_PORT_NAME_FLOW = "monitoring-records-flow";
+	public static final String INPUT_PORT_NAME_EXECUTION = "monitoring-records-execution";
+	public static final String INPUT_PORT_NAME_COMBINED = "monitoring-records-combined";
 
-	public static final String CONFIG_SELECT_ALL_TRACES = "acceptAllTraces";
-	public static final String CONFIG_SELECTED_TRACES = "selectedTraceIds";
+	public static final String OUTPUT_PORT_NAME_MATCH = "records-matching-id";
+	public static final String OUTPUT_PORT_NAME_MISMATCH = "records-not-matching-id";
+
+	public static final String CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES = "acceptAllTraces";
+	public static final String CONFIG_PROPERTY_NAME_SELECTED_TRACES = "selectedTraceIds";
 
 	private final boolean acceptAllTraces;
 	private final Set<Long> selectedTraceIds;
 
 	public TraceIdFilter(final Configuration configuration) {
 		super(configuration);
-		this.acceptAllTraces = configuration.getBooleanProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES);
+		this.acceptAllTraces = configuration.getBooleanProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES);
 		this.selectedTraceIds = new TreeSet<Long>();
-		for (final String id : configuration.getStringArrayProperty(TraceIdFilter.CONFIG_SELECTED_TRACES)) {
+		for (final String id : configuration.getStringArrayProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES)) {
 			this.selectedTraceIds.add(Long.parseLong(id));
 		}
 	}
@@ -70,15 +73,15 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 	@Override
 	protected final Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.TRUE.toString());
-		configuration.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, ""); // example might be "0|1|2|3|4"
+		configuration.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.TRUE.toString());
+		configuration.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, ""); // example might be "0|1|2|3|4"
 		return configuration;
 	}
 
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(TraceIdFilter.CONFIG_SELECT_ALL_TRACES, Boolean.toString(this.acceptAllTraces));
-		configuration.setProperty(TraceIdFilter.CONFIG_SELECTED_TRACES, Configuration.toProperty(this.selectedTraceIds.toArray()));
+		configuration.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.toString(this.acceptAllTraces));
+		configuration.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, Configuration.toProperty(this.selectedTraceIds.toArray()));
 		return configuration;
 	}
 
@@ -89,7 +92,8 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 		return false;
 	}
 
-	@InputPort(name = TraceIdFilter.INPUT_PORT_NAME, description = "combined input", eventTypes = { AbstractTraceEvent.class, OperationExecutionRecord.class })
+	@InputPort(name = TraceIdFilter.INPUT_PORT_NAME_COMBINED, description = "Receives execution and trace events to be selected by trace ID",
+			eventTypes = { AbstractTraceEvent.class, OperationExecutionRecord.class })
 	public void inputCombined(final IMonitoringRecord record) {
 		if (record instanceof OperationExecutionRecord) {
 			this.inputOperationExecutionRecord((OperationExecutionRecord) record);
@@ -98,21 +102,21 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 		} // else discard it, we should never have gotten it anyhow
 	}
 
-	@InputPort(name = TraceIdFilter.INPUT_PORT_NAME_FLOW, description = "TraceEvent input", eventTypes = { AbstractTraceEvent.class })
+	@InputPort(name = TraceIdFilter.INPUT_PORT_NAME_FLOW, description = "Receives trace events to be selected by trace ID", eventTypes = { AbstractTraceEvent.class })
 	public void inputTraceEvent(final AbstractTraceEvent event) {
 		if (this.acceptId(event.getTraceId())) {
-			super.deliver(TraceIdFilter.OUTPUT_PORT_NAME, event);
+			super.deliver(TraceIdFilter.OUTPUT_PORT_NAME_MATCH, event);
 		} else {
-			super.deliver(TraceIdFilter.OUTPUT_PORT_NAME_NOT, event);
+			super.deliver(TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH, event);
 		}
 	}
 
-	@InputPort(name = TraceIdFilter.INPUT_PORT_NAME_OER, description = "TraceEvent input", eventTypes = { OperationExecutionRecord.class })
+	@InputPort(name = TraceIdFilter.INPUT_PORT_NAME_EXECUTION, description = "Receives execution events to be selected by trace ID", eventTypes = { OperationExecutionRecord.class })
 	public void inputOperationExecutionRecord(final OperationExecutionRecord record) {
 		if (this.acceptId(record.getTraceId())) {
-			super.deliver(TraceIdFilter.OUTPUT_PORT_NAME, record);
+			super.deliver(TraceIdFilter.OUTPUT_PORT_NAME_MATCH, record);
 		} else {
-			super.deliver(TraceIdFilter.OUTPUT_PORT_NAME_NOT, record);
+			super.deliver(TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH, record);
 		}
 	}
 }

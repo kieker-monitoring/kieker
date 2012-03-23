@@ -40,22 +40,24 @@ import kieker.common.logging.LogFactory;
  * @author Jan Waller
  */
 @Plugin(outputPorts = {
-	@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME, eventTypes = {}, description = "all objects with matching types are forwarded"),
-	@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_NOT, eventTypes = {}, description = "all objects without matching types are forwarded")
+	@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH, eventTypes = { Object.class }, description = "Forwards events matching the configured types"),
+	@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_TYPE_MISMATCH, eventTypes = {}, description = "Forwards events not matching the configured types")
 })
 public final class TypeFilter extends AbstractFilterPlugin {
 	private static final Log LOG = LogFactory.getLog(TypeFilter.class);
 
-	public static final String OUTPUT_PORT_NAME = "output";
-	public static final String OUTPUT_PORT_NAME_NOT = "output-not";
-	public static final String INPUT_PORT_NAME = "input";
-	public static final String CONFIG_TYPES = "types";
+	public static final String INPUT_PORT_NAME_EVENTS = "events";
+
+	public static final String OUTPUT_PORT_NAME_TYPE_MATCH = "events-matching-type";
+	public static final String OUTPUT_PORT_NAME_TYPE_MISMATCH = "events-not-matching-type";
+
+	public static final String CONFIG_PROPERTY_NAME_TYPES = "types";
 
 	private final Class<?>[] acceptedClasses;
 
 	public TypeFilter(final Configuration configuration) {
 		super(configuration);
-		final String[] classes = configuration.getStringArrayProperty(TypeFilter.CONFIG_TYPES);
+		final String[] classes = configuration.getStringArrayProperty(TypeFilter.CONFIG_PROPERTY_NAME_TYPES);
 		final List<Class<?>> listOfClasses = new LinkedList<Class<?>>();
 		for (final String clazz : classes) {
 			try {
@@ -70,7 +72,7 @@ public final class TypeFilter extends AbstractFilterPlugin {
 	@Override
 	protected final Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(TypeFilter.CONFIG_TYPES, "java.lang.Object");
+		configuration.setProperty(TypeFilter.CONFIG_PROPERTY_NAME_TYPES, "java.lang.Object");
 		return configuration;
 	}
 
@@ -80,19 +82,19 @@ public final class TypeFilter extends AbstractFilterPlugin {
 		for (int i = 0; i < acceptedClasses.length; i++) {
 			acceptedClasses[i] = this.acceptedClasses[i].getName();
 		}
-		configuration.setProperty(TypeFilter.CONFIG_TYPES, Configuration.toProperty(acceptedClasses));
+		configuration.setProperty(TypeFilter.CONFIG_PROPERTY_NAME_TYPES, Configuration.toProperty(acceptedClasses));
 		return configuration;
 	}
 
-	@InputPort(name = TypeFilter.INPUT_PORT_NAME, eventTypes = {}, description = "all objects with matching types are forwarded")
-	public final void newEvent(final Object event) {
+	@InputPort(name = TypeFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { Object.class }, description = "all objects with matching types are forwarded")
+	public final void inputEvents(final Object event) {
 		final Class<?> eventClass = event.getClass();
 		for (final Class<?> clazz : this.acceptedClasses) {
 			if (clazz.isAssignableFrom(eventClass)) {
-				super.deliver(TypeFilter.OUTPUT_PORT_NAME, event);
+				super.deliver(TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH, event);
 				break; // only deliver once!
 			}
 		}
-		super.deliver(TypeFilter.OUTPUT_PORT_NAME_NOT, event);
+		super.deliver(TypeFilter.OUTPUT_PORT_NAME_TYPE_MISMATCH, event);
 	}
 }

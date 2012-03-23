@@ -50,14 +50,14 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilter<ExecutionContainer> {
-
-	public static final String CONFIG_DOT_OUTPUT_FILE = "dotOutputFile";
-	public static final String CONFIG_INCLUDE_WEIGHTS = "includeWeights";
-	public static final String CONFIG_SHORT_LABELS = "shortLabels";
-	public static final String CONFIG_INCLUDE_SELF_LOOPS = "includeSelfLoops";
 	private static final Log LOG = LogFactory.getLog(ContainerDependencyGraphFilter.class);
+
+	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dot-output-file";
+	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "include-weights";
+	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "short-labels";
+	public static final String CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS = "include-self-loops";
 
 	private final File dotOutputFile;
 	private final boolean includeWeights;
@@ -71,10 +71,10 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 				ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER.getId(),
 				ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER));
 
-		this.dotOutputFile = new File(configuration.getStringProperty(ContainerDependencyGraphFilter.CONFIG_DOT_OUTPUT_FILE));
-		this.includeWeights = configuration.getBooleanProperty(ContainerDependencyGraphFilter.CONFIG_INCLUDE_WEIGHTS);
-		this.shortLabels = configuration.getBooleanProperty(ContainerDependencyGraphFilter.CONFIG_SHORT_LABELS);
-		this.includeSelfLoops = configuration.getBooleanProperty(ContainerDependencyGraphFilter.CONFIG_INCLUDE_SELF_LOOPS);
+		this.dotOutputFile = new File(configuration.getStringProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE));
+		this.includeWeights = configuration.getBooleanProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
+		this.shortLabels = configuration.getBooleanProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS);
+		this.includeSelfLoops = configuration.getBooleanProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS);
 	}
 
 	@Override
@@ -123,10 +123,10 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(ContainerDependencyGraphFilter.CONFIG_DOT_OUTPUT_FILE, "");
-		configuration.setProperty(ContainerDependencyGraphFilter.CONFIG_INCLUDE_WEIGHTS, Boolean.FALSE.toString());
-		configuration.setProperty(ContainerDependencyGraphFilter.CONFIG_INCLUDE_SELF_LOOPS, Boolean.FALSE.toString());
-		configuration.setProperty(ContainerDependencyGraphFilter.CONFIG_SHORT_LABELS, Boolean.FALSE.toString());
+		configuration.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, "");
+		configuration.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.FALSE.toString());
+		configuration.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.FALSE.toString());
+		configuration.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.FALSE.toString());
 
 		return configuration;
 	}
@@ -134,20 +134,20 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(ContainerDependencyGraphFilter.CONFIG_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
-		configuration.setProperty(ContainerDependencyGraphFilter.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
-		configuration.setProperty(ContainerDependencyGraphFilter.CONFIG_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));
-		configuration.setProperty(ContainerDependencyGraphFilter.CONFIG_SHORT_LABELS, Boolean.toString(this.shortLabels));
+		configuration.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
+		configuration.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
+		configuration.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));
+		configuration.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
 
 		return configuration;
 	}
 
 	@Override
 	@InputPort(
-			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME,
-			description = "Message traces",
+			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES,
+			description = "Receives the message traces to be processed",
 			eventTypes = { MessageTrace.class })
-	public void msgTraceInput(final MessageTrace t) {
+	public void inputMessageTraces(final MessageTrace t) {
 		for (final AbstractMessage m : t.getSequenceAsVector()) {
 			if (m instanceof SynchronousReplyMessage) {
 				continue;

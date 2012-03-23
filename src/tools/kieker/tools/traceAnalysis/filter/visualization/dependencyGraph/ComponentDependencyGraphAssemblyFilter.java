@@ -49,13 +49,13 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, repositoryType = SystemModelRepository.class))
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGraphFilter<AssemblyComponent> {
 
-	public static final String CONFIG_DOT_OUTPUT_FILE = "dotOutputFile";
-	public static final String CONFIG_INCLUDE_WEIGHTS = "includeWeights";
-	public static final String CONFIG_SHORT_LABELS = "shortLabels";
-	public static final String CONFIG_INCLUDE_SELF_LOOPS = "includeSelfLoops";
+	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dot-output-file";
+	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "include-weights";
+	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "short-labels";
+	public static final String CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS = "include-self-loops";
 
 	private static final Log LOG = LogFactory.getLog(ComponentDependencyGraphAssemblyFilter.class);
 	private final File dotOutputFile;
@@ -69,10 +69,10 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 		super.setDependencyGraph(new DependencyGraph<AssemblyComponent>(
 				AssemblyRepository.ROOT_ASSEMBLY_COMPONENT.getId(),
 				AssemblyRepository.ROOT_ASSEMBLY_COMPONENT));
-		this.dotOutputFile = new File(configuration.getStringProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_DOT_OUTPUT_FILE));
-		this.includeWeights = configuration.getBooleanProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_INCLUDE_WEIGHTS);
-		this.shortLabels = configuration.getBooleanProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_SHORT_LABELS);
-		this.includeSelfLoops = configuration.getBooleanProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_INCLUDE_SELF_LOOPS);
+		this.dotOutputFile = new File(configuration.getStringProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE));
+		this.includeWeights = configuration.getBooleanProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
+		this.shortLabels = configuration.getBooleanProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS);
+		this.includeSelfLoops = configuration.getBooleanProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS);
 	}
 
 	private String nodeLabel(final DependencyGraphNode<?> node, final AssemblyComponent curComponent) {
@@ -137,10 +137,10 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_DOT_OUTPUT_FILE, "");
-		configuration.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_INCLUDE_WEIGHTS, Boolean.FALSE.toString());
-		configuration.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_INCLUDE_SELF_LOOPS, Boolean.FALSE.toString());
-		configuration.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_SHORT_LABELS, Boolean.FALSE.toString());
+		configuration.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, "");
+		configuration.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.FALSE.toString());
+		configuration.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.FALSE.toString());
+		configuration.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.FALSE.toString());
 
 		return configuration;
 	}
@@ -148,20 +148,20 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
-		configuration.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
-		configuration.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));
-		configuration.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_SHORT_LABELS, Boolean.toString(this.shortLabels));
+		configuration.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
+		configuration.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
+		configuration.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));
+		configuration.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
 
 		return configuration;
 	}
 
 	@Override
 	@InputPort(
-			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME,
-			description = "Message traces",
+			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES,
+			description = "Receives message traces to be processed",
 			eventTypes = { MessageTrace.class })
-	public void msgTraceInput(final MessageTrace t) {
+	public void inputMessageTraces(final MessageTrace t) {
 		for (final AbstractMessage m : t.getSequenceAsVector()) {
 			if (m instanceof SynchronousReplyMessage) {
 				continue;
