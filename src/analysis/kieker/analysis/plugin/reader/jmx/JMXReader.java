@@ -55,10 +55,10 @@ public final class JMXReader extends AbstractReaderPlugin {
 
 	public static final String CONFIG_PROPERTY_NAME_SERVER = "server";
 	public static final String CONFIG_PROPERTY_NAME_PORT = "port";
-	public static final String CONFIG_PROPERTY_NAME_SERVICEURL = "serviceURL";
+	public static final String CONFIG_PROPERTY_NAME_SERVICEURL = "service-url";
 	public static final String CONFIG_PROPERTY_NAME_DOMAIN = "domain";
 	public static final String CONFIG_PROPERTY_NAME_LOGNAME = "logname";
-	public static final String CONFIG_PROPERTY_NAME_SILENT = "silentreconnect";
+	public static final String CONFIG_PROPERTY_NAME_SILENT = "silent-reconnect";
 
 	private static final Log LOG = LogFactory.getLog(JMXReader.class);
 

@@ -60,7 +60,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 
 	public static final String OUTPUT_PORT_NAME_TRACE = "generated-traces";
 
-	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS = "maxTraceDurationMillis";
+	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS = "max-trace-duration-millis";
 
 	private static final long CONFIG_PROPERTY_VALUE_MAX_DURATION_NANOS = Long.MAX_VALUE;
 

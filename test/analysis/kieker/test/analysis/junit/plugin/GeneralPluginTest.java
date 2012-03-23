@@ -70,7 +70,7 @@ public class GeneralPluginTest extends TestCase {
 		final ExecutionRecordTransformationFilter transformer = new ExecutionRecordTransformationFilter(new Configuration());
 
 		final Configuration filter1byTraceIDConfig = new Configuration();
-		filter1byTraceIDConfig.setProperty(TraceIdFilter.CONFIG_PROPETY_NAME_SELECT_ALL_TRACES, Boolean.FALSE.toString());
+		filter1byTraceIDConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.FALSE.toString());
 		filter1byTraceIDConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, Configuration.toProperty(new Long[] { 1l }));
 		final TraceIdFilter filter1byTraceID = new TraceIdFilter(filter1byTraceIDConfig);
 

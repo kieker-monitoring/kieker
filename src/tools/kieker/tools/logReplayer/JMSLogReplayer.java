@@ -96,10 +96,10 @@ public class JMSLogReplayer {
 		final RecordDelegationPlugin2 recordReceiver = new RecordDelegationPlugin2(new Configuration());
 		/* configure the record receiver a little bit. */
 		tpanInstance.registerFilter(recordReceiver);
-		tpanInstance.connect(recordReceiver, RecordDelegationPlugin2.OUTPUT_PORT_NAME, this.recordReceiver, this.recordReceiverInputPortName);
+		tpanInstance.connect(recordReceiver, RecordDelegationPlugin2.OUTPUT_PORT_NAME_MONITORING_RECORDS, this.recordReceiver, this.recordReceiverInputPortName);
 
 		tpanInstance.registerFilter(recordReceiver);
-		tpanInstance.connect(logReader, JMSReader.OUTPUT_PORT_NAME_RECORDS, recordReceiver, RecordDelegationPlugin2.INPUT_PORT);
+		tpanInstance.connect(logReader, JMSReader.OUTPUT_PORT_NAME_RECORDS, recordReceiver, RecordDelegationPlugin2.INPUT_PORT_NAME_MONITORING_RECORDS);
 		try {
 			tpanInstance.run();
 			success = true;
@@ -122,12 +122,13 @@ public class JMSLogReplayer {
  * 
  */
 @Plugin(
-		outputPorts = { @OutputPort(name = RecordDelegationPlugin2.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
+		outputPorts = { @OutputPort(name = RecordDelegationPlugin2.OUTPUT_PORT_NAME_MONITORING_RECORDS, eventTypes = { IMonitoringRecord.class })
 		})
 class RecordDelegationPlugin2 extends AbstractFilterPlugin {
 
-	public static final String OUTPUT_PORT_NAME = "defaultOutput";
-	public static final String INPUT_PORT = "newMonitoringRecord";
+	public static final String INPUT_PORT_NAME_MONITORING_RECORDS = "received-records";
+
+	public static final String OUTPUT_PORT_NAME_MONITORING_RECORDS = "delegated-records";
 
 	/**
 	 * Creates a new instance of this class.
@@ -144,10 +145,10 @@ class RecordDelegationPlugin2 extends AbstractFilterPlugin {
 	}
 
 	@InputPort(
-			name = RecordDelegationPlugin2.INPUT_PORT,
+			name = RecordDelegationPlugin2.INPUT_PORT_NAME_MONITORING_RECORDS,
 			eventTypes = { IMonitoringRecord.class })
 	public boolean newMonitoringRecord(final Object data) {
-		return super.deliver(RecordDelegationPlugin2.OUTPUT_PORT_NAME, data);
+		return super.deliver(RecordDelegationPlugin2.OUTPUT_PORT_NAME_MONITORING_RECORDS, data);
 	}
 
 	/**

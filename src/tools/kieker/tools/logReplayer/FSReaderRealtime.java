@@ -39,15 +39,15 @@ import kieker.common.record.IMonitoringRecord;
  * @author Andre van Hoorn
  */
 @Plugin(outputPorts = {
-	@OutputPort(name = FSReaderRealtime.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReaderRealtime")
+		@OutputPort(name = FSReaderRealtime.OUTPUT_PORT_NAME_MONITORING_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReaderRealtime")
 })
 public class FSReaderRealtime extends AbstractReaderPlugin {
-
-	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	private static final Log LOG = LogFactory.getLog(FSReaderRealtime.class);
 
-	public static final String PROP_NAME_NUM_WORKERS = "numWorkers";
-	public static final String PROP_NAME_INPUTDIRNAMES = "inputDirs";
+	public static final String OUTPUT_PORT_NAME_MONITORING_RECORDS = "monitoring-records";
+
+	public static final String PROPERTY_NAME_NUM_WORKERS = "num-workers";
+	public static final String PROPERTY_NAME_INPUTDIRNAMES = "input-dirs";
 
 	/* manages the life-cycle of the reader and consumers */
 	private final AnalysisController analysis = new AnalysisController();
@@ -76,8 +76,8 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 	}
 
 	public boolean init(final Configuration configuration) {
-		this.numWorkers = configuration.getIntProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS);
-		this.inputDirs = configuration.getStringArrayProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES, ";");
+		this.numWorkers = configuration.getIntProperty(FSReaderRealtime.PROPERTY_NAME_NUM_WORKERS);
+		this.inputDirs = configuration.getStringArrayProperty(FSReaderRealtime.PROPERTY_NAME_INPUTDIRNAMES, ";");
 		// this.inputDirs = this.inputDirNameListToArray(configuration.getStringProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES));
 		this.initInstanceFromArgs(this.inputDirs, this.numWorkers);
 		return true;
@@ -106,13 +106,13 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 
 	private void initInstanceFromArgs(final String[] inputDirNames, final int numWorkers) throws IllegalArgumentException {
 		if ((inputDirNames == null) || (inputDirNames.length <= 0)) {
-			throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.PROP_NAME_INPUTDIRNAMES + ":" + Arrays.toString(inputDirNames)); // NOCS
-																																									// (MultipleStringLiteralsCheck)
+			throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.PROPERTY_NAME_INPUTDIRNAMES + ":" + Arrays.toString(inputDirNames)); // NOCS
+																																										// (MultipleStringLiteralsCheck)
 		}
 
 		if (numWorkers <= 0) {
-			throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.PROP_NAME_NUM_WORKERS + ": " + numWorkers); // NOCS
-																																			// (MultipleStringLiteralsCheck)
+			throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.PROPERTY_NAME_NUM_WORKERS + ": " + numWorkers); // NOCS
+			// (MultipleStringLiteralsCheck)
 		}
 
 		final Configuration configuration = new Configuration();
@@ -123,17 +123,17 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		rtCons.setMaster(this);
 		this.analysis.registerFilter(rtCons);
 		final Configuration rtDistributorConfiguration = new Configuration();
-		rtDistributorConfiguration.setProperty(RealtimeReplayDistributor.CONFIG_NUM_WORKERS, Integer.toString(numWorkers));
+		rtDistributorConfiguration.setProperty(RealtimeReplayDistributor.CONFIG_PROPERTY_NAME_NUM_WORKERS, Integer.toString(numWorkers));
 		this.rtDistributor = new RealtimeReplayDistributor(rtDistributorConfiguration);
 		this.rtDistributor.setCons(rtCons);
-		this.rtDistributor.setConstInputPortName(FSReaderRealtimeCons.INPUT_PORT);
+		this.rtDistributor.setConstInputPortName(FSReaderRealtimeCons.INPUT_PORT_MONITORING_RECORDS);
 		this.rtDistributor.setController(this.analysis);
 		this.rtDistributor.setTerminationLatch(this.terminationLatch);
 
 		this.analysis.registerReader(fsReader);
 		this.analysis.registerFilter(this.rtDistributor);
 
-		this.analysis.connect(fsReader, FSReader.OUTPUT_PORT_NAME_RECORDS, this.rtDistributor, RealtimeReplayDistributor.INPUT_PORT_NAME);
+		this.analysis.connect(fsReader, FSReader.OUTPUT_PORT_NAME_RECORDS, this.rtDistributor, RealtimeReplayDistributor.INPUT_PORT_NAME_MONITORING_RECORDS);
 	}
 
 	/**
@@ -160,15 +160,15 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
-		defaultConfiguration.setProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS, "1");
-		defaultConfiguration.setProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES, "."); // the current folder as default
+		defaultConfiguration.setProperty(FSReaderRealtime.PROPERTY_NAME_NUM_WORKERS, "1");
+		defaultConfiguration.setProperty(FSReaderRealtime.PROPERTY_NAME_INPUTDIRNAMES, "."); // the current folder as default
 		return defaultConfiguration;
 	}
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS, Integer.toString(this.numWorkers));
-		configuration.setProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES, Configuration.toProperty(this.inputDirs));
+		configuration.setProperty(FSReaderRealtime.PROPERTY_NAME_NUM_WORKERS, Integer.toString(this.numWorkers));
+		configuration.setProperty(FSReaderRealtime.PROPERTY_NAME_INPUTDIRNAMES, Configuration.toProperty(this.inputDirs));
 		return configuration;
 	}
 
@@ -184,7 +184,8 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		/**
 		 * This is the name of the default input port this plugin.
 		 */
-		public static final String INPUT_PORT = "newMonitoringRecord";
+		public static final String INPUT_PORT_MONITORING_RECORDS = "monitoring-records";
+
 		private FSReaderRealtime master;
 
 		/**
@@ -214,15 +215,14 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		 * @param data
 		 */
 		@SuppressWarnings("unused")
-		@InputPort(name = FSReaderRealtimeCons.INPUT_PORT, eventTypes = { IMonitoringRecord.class })
-		public void newMonitoringRecord(final Object data) {
-			final IMonitoringRecord record = (IMonitoringRecord) data;
+		@InputPort(name = FSReaderRealtimeCons.INPUT_PORT_MONITORING_RECORDS, eventTypes = { IMonitoringRecord.class })
+		public void inputMonitoringRecords(final IMonitoringRecord record) {
 			/* Make sure that the master exists. This is necessary due to the changed constructor. */
 			if (this.master == null) {
 				FSReaderRealtime.LOG.warn("Plugin doesn't have a valid master-object.");
 				return;
 			}
-			if (!this.master.deliver(FSReaderRealtime.OUTPUT_PORT_NAME, record)) {
+			if (!this.master.deliver(FSReaderRealtime.OUTPUT_PORT_NAME_MONITORING_RECORDS, record)) {
 				FSReaderRealtime.LOG.error("LogReaderExecutionException");
 			}
 		}

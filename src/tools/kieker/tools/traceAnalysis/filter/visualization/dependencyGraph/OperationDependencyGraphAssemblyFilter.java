@@ -63,12 +63,13 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
 public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGraphFilter<AssemblyComponentOperationPair> {
 	private static final Log LOG = LogFactory.getLog(OperationDependencyGraphAssemblyFilter.class);
 
-	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dotOutputFile";
-	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
-	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
-	public static final String CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS = "includeSelfLoops";
+	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dot-output-file";
+	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "include-weights";
+	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "short-labels";
+	public static final String CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS = "include-self-loops";
 
 	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
+
 	private final File dotOutputFile;
 	private final boolean includeWeights;
 	private final boolean shortLabels;

@@ -68,10 +68,10 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 			while (iter.hasNext()) {
 				selectedTracesArr[i++] = iter.next().toString();
 			}
-			cfg.setProperty(TraceIdFilter.CONFIG_PROPETY_NAME_SELECT_ALL_TRACES, Boolean.toString(false));
+			cfg.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.toString(false));
 			cfg.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, Configuration.toProperty(selectedTracesArr));
 		} else {
-			cfg.setProperty(TraceIdFilter.CONFIG_PROPETY_NAME_SELECT_ALL_TRACES, Boolean.toString(true));
+			cfg.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.toString(true));
 			cfg.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, "");
 		}
 

@@ -55,8 +55,8 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 	public static final String OUTPUT_PORT_NAME_MATCH = "records-matching-id";
 	public static final String OUTPUT_PORT_NAME_MISMATCH = "records-not-matching-id";
 
-	public static final String CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES = "acceptAllTraces";
-	public static final String CONFIG_PROPERTY_NAME_SELECTED_TRACES = "selectedTraceIds";
+	public static final String CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES = "accept-all-traces";
+	public static final String CONFIG_PROPERTY_NAME_SELECTED_TRACES = "selected-trace-ids";
 
 	private final boolean acceptAllTraces;
 	private final Set<Long> selectedTraceIds;

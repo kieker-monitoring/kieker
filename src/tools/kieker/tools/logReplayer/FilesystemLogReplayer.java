@@ -108,8 +108,8 @@ public class FilesystemLogReplayer {
 		AbstractReaderPlugin fsReader;
 		if (this.realtimeMode) {
 			final Configuration configuration = new Configuration();
-			configuration.setProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES, Configuration.toProperty(this.inputDirs));
-			configuration.setProperty(FSReaderRealtime.PROP_NAME_NUM_WORKERS, Integer.toString(this.numRealtimeWorkerThreads));
+			configuration.setProperty(FSReaderRealtime.PROPERTY_NAME_INPUTDIRNAMES, Configuration.toProperty(this.inputDirs));
+			configuration.setProperty(FSReaderRealtime.PROPERTY_NAME_NUM_WORKERS, Integer.toString(this.numRealtimeWorkerThreads));
 			fsReader = new FSReaderRealtime(configuration);
 		} else {
 			final Configuration configuration = new Configuration(null);
@@ -120,13 +120,15 @@ public class FilesystemLogReplayer {
 		tpanInstance.registerReader(fsReader);
 
 		final Configuration delegationConfiguration = new Configuration();
-		delegationConfiguration.setProperty(RecordDelegationPlugin.CONFIG_IGNORE_RECORDS_AFTER_TIMESTAMP, Long.toString(this.ignoreRecordsAfterTimestamp));
-		delegationConfiguration.setProperty(RecordDelegationPlugin.CONFIG_IGNORE_RECORDS_BEFORE_TIMESTAMP, Long.toString(this.ignoreRecordsBeforeTimestamp));
+		delegationConfiguration.setProperty(RecordDelegationPlugin.CONFIG_PROPERTY_NAME_IGNORE_RECORDS_AFTER_TIMESTAMP,
+				Long.toString(this.ignoreRecordsAfterTimestamp));
+		delegationConfiguration.setProperty(RecordDelegationPlugin.CONFIG_PROPERTY_NAME_IGNORE_RECORDS_BEFORE_TIMESTAMP,
+				Long.toString(this.ignoreRecordsBeforeTimestamp));
 		final RecordDelegationPlugin delegationPlugin = new RecordDelegationPlugin(delegationConfiguration);
 		delegationPlugin.setRec(this.recordReceiver);
 
 		tpanInstance.registerFilter(delegationPlugin);
-		tpanInstance.connect(fsReader, FSReader.OUTPUT_PORT_NAME_RECORDS, delegationPlugin, RecordDelegationPlugin.INPUT_PORT_NAME);
+		tpanInstance.connect(fsReader, FSReader.OUTPUT_PORT_NAME_RECORDS, delegationPlugin, RecordDelegationPlugin.INPUT_PORT_NAME_MONITORING_RECORDS);
 		try {
 			tpanInstance.run();
 			success = true;
@@ -151,9 +153,10 @@ public class FilesystemLogReplayer {
  */
 class RecordDelegationPlugin extends AbstractFilterPlugin {
 
-	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
-	public static final String CONFIG_IGNORE_RECORDS_BEFORE_TIMESTAMP = "ignoreRecordsBeforeTimestamp";
-	public static final String CONFIG_IGNORE_RECORDS_AFTER_TIMESTAMP = "ignoreRecordsAfterTimestamp";
+	public static final String INPUT_PORT_NAME_MONITORING_RECORDS = "monitoring-records";
+
+	public static final String CONFIG_PROPERTY_NAME_IGNORE_RECORDS_BEFORE_TIMESTAMP = "ignore-records-before-timestamp";
+	public static final String CONFIG_PROPERTY_NAME_IGNORE_RECORDS_AFTER_TIMESTAMP = "ignore-records-after-timestamp";
 
 	private static final Log LOG = LogFactory.getLog(RecordDelegationPlugin.class);
 
@@ -171,8 +174,8 @@ class RecordDelegationPlugin extends AbstractFilterPlugin {
 	public RecordDelegationPlugin(final Configuration configuration) {
 		super(configuration);
 
-		this.ignoreRecordsBeforeTimestamp = configuration.getLongProperty(RecordDelegationPlugin.CONFIG_IGNORE_RECORDS_BEFORE_TIMESTAMP);
-		this.ignoreRecordsAfterTimestamp = configuration.getLongProperty(RecordDelegationPlugin.CONFIG_IGNORE_RECORDS_AFTER_TIMESTAMP);
+		this.ignoreRecordsBeforeTimestamp = configuration.getLongProperty(RecordDelegationPlugin.CONFIG_PROPERTY_NAME_IGNORE_RECORDS_BEFORE_TIMESTAMP);
+		this.ignoreRecordsAfterTimestamp = configuration.getLongProperty(RecordDelegationPlugin.CONFIG_PROPERTY_NAME_IGNORE_RECORDS_AFTER_TIMESTAMP);
 	}
 
 	/**
@@ -186,10 +189,9 @@ class RecordDelegationPlugin extends AbstractFilterPlugin {
 	}
 
 	@InputPort(
-			name = RecordDelegationPlugin.INPUT_PORT_NAME,
-			eventTypes = { IMonitoringRecord.class }, description = RecordDelegationPlugin.INPUT_PORT_NAME)
-	public void newMonitoringRecord(final Object data) {
-		final IMonitoringRecord record = (IMonitoringRecord) data;
+			name = RecordDelegationPlugin.INPUT_PORT_NAME_MONITORING_RECORDS,
+			eventTypes = { IMonitoringRecord.class }, description = RecordDelegationPlugin.INPUT_PORT_NAME_MONITORING_RECORDS)
+	public void inputMonitoringRecord(final IMonitoringRecord record) {
 		if ((record.getLoggingTimestamp() >= this.ignoreRecordsBeforeTimestamp) && (record.getLoggingTimestamp() <= this.ignoreRecordsAfterTimestamp)) {
 			/* Delegate the record to the monitoring controller. */
 			this.rec.newMonitoringRecord(record);

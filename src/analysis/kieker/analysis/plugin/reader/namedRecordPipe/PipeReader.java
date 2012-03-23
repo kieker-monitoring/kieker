@@ -48,7 +48,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	/**
 	 * This is the configuration-parameter for the name of the pipe to be used.
 	 */
-	public static final String CONFIG_PROPERTY_NAME_PIPENAME = "pipeName";
+	public static final String CONFIG_PROPERTY_NAME_PIPENAME = "pipe-name";
 
 	private static final Log LOG = LogFactory.getLog(PipeReader.class);
 

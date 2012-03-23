@@ -52,10 +52,11 @@ import kieker.monitoring.timer.SystemNanoTimer;
  */
 @Plugin
 public class RealtimeReplayDistributor extends AbstractFilterPlugin {
-	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
+	public static final String INPUT_PORT_NAME_MONITORING_RECORDS = "monitoring-records";
 	private static final Log LOG = LogFactory.getLog(RealtimeReplayDistributor.class);
 
-	public static final String CONFIG_NUM_WORKERS = "numWorkers";
+	public static final String CONFIG_PROPERTY_NAME_NUM_WORKERS = "num-workers";
+
 	private static final ITimeSource TIMESOURCE = SystemNanoTimer.getInstance();
 	private static final int QUEUE_SIZE_FACTOR = 1000;
 	private static final int MILLISECOND = 1000 * 1000;
@@ -83,7 +84,7 @@ public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 	public RealtimeReplayDistributor(final Configuration configuration) {
 		super(configuration);
 
-		this.numWorkers = configuration.getIntProperty(RealtimeReplayDistributor.CONFIG_NUM_WORKERS);
+		this.numWorkers = configuration.getIntProperty(RealtimeReplayDistributor.CONFIG_PROPERTY_NAME_NUM_WORKERS);
 		this.maxQueueSize = this.numWorkers * RealtimeReplayDistributor.QUEUE_SIZE_FACTOR;
 
 		this.executor = new ScheduledThreadPoolExecutor(this.numWorkers);
@@ -108,10 +109,9 @@ public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 	}
 
 	@InputPort(
-			name = RealtimeReplayDistributor.INPUT_PORT_NAME,
+			name = RealtimeReplayDistributor.INPUT_PORT_NAME_MONITORING_RECORDS,
 			eventTypes = { IMonitoringRecord.class })
-	public void newMonitoringRecord(final Object data) {
-		final IMonitoringRecord monitoringRecord = (IMonitoringRecord) data;
+	public void inputMonitoringRecords(final IMonitoringRecord monitoringRecord) {
 		if (this.startTime == -1) { // init on first record
 			this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp() - (1 * RealtimeReplayDistributor.MILLISECOND);
 			this.offset = RealtimeReplayDistributor.REPLAY_OFFSET - this.firstLoggingTimestamp;

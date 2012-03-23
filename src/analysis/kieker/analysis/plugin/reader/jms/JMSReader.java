@@ -58,9 +58,9 @@ public final class JMSReader extends AbstractReaderPlugin {
 
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoring-records";
 
-	public static final String CONFIG_PROPERTY_NAME_PROVIDERURL = "jmsProviderUrl";
-	public static final String CONFIG_PROPERTY_NAME_DESTINATION = "jmsDestination";
-	public static final String CONFIG_PROPERTY_NAME_FACTORYLOOKUP = "jmsFactoryLookupName";
+	public static final String CONFIG_PROPERTY_NAME_PROVIDERURL = "jms-provider-url";
+	public static final String CONFIG_PROPERTY_NAME_DESTINATION = "jms-destination";
+	public static final String CONFIG_PROPERTY_NAME_FACTORYLOOKUP = "jms-factory-lookup-name";
 
 	private static final Log LOG = LogFactory.getLog(JMSReader.class);
 

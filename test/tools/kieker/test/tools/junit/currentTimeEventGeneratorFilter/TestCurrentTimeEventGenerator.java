@@ -31,13 +31,13 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.common.record.misc.TimestampRecord;
-import kieker.tools.currentTimeEventGenerator.CurrentTimeEventGenerator;
+import kieker.tools.currentTimeEventGenerator.CurrentTimeEventGenerationFilter;
 
 import org.junit.Test;
 
 /**
- * Each test is executed for both input ports, {@link CurrentTimeEventGenerator#inputTimestamp(Long)} and
- * {@link CurrentTimeEventGenerator#inputRecord(kieker.common.record.IMonitoringRecord)}.
+ * Each test is executed for both input ports, {@link CurrentTimeEventGenerationFilter#inputTimestamp(Long)} and
+ * {@link CurrentTimeEventGenerationFilter#inputRecord(kieker.common.record.IMonitoringRecord)}.
  * 
  * @author Andre van Hoorn
  * 
@@ -100,7 +100,7 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 	}
 
 	/**
-	 * Creates a {@link CurrentTimeEventGenerator} with the given time
+	 * Creates a {@link CurrentTimeEventGenerationFilter} with the given time
 	 * resolution, input the sequence of input timestamps and compares the
 	 * sequence of generated timer events with the given sequence of expected
 	 * output timer events.
@@ -111,14 +111,14 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 	 */
 	private void compareInputAndOutput(final long timerResolution, final long[] inputTimestamps, final long[] expectedOutputTimerEvents, final boolean rawTimestamp) {
 		final Configuration filterConfiguration = new Configuration();
-		filterConfiguration.setProperty(CurrentTimeEventGenerator.CONFIG_TIME_RESOLUTION, Long.toString(timerResolution));
-		final CurrentTimeEventGenerator filter = new CurrentTimeEventGenerator(filterConfiguration);
+		filterConfiguration.setProperty(CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_NAME_TIME_RESOLUTION, Long.toString(timerResolution));
+		final CurrentTimeEventGenerationFilter filter = new CurrentTimeEventGenerationFilter(filterConfiguration);
 
 		final DstClass dst = new DstClass();
 		final AnalysisController controller = new AnalysisController();
 		controller.registerFilter(filter);
 		controller.registerFilter(dst);
-		controller.connect(filter, CurrentTimeEventGenerator.OUTPUT_PORT_NAME_CURRENT_TIME, dst, DstClass.INPUT_PORT_NAME);
+		controller.connect(filter, CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME, dst, DstClass.INPUT_PORT_NAME);
 		// TODO: Use list reader and actually run the controller
 
 		for (final long timestamp : inputTimestamps) {
