@@ -62,6 +62,7 @@ import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
 import kieker.tools.traceAnalysis.filter.flow.EventRecordTraceGenerationFilter;
 import kieker.tools.traceAnalysis.filter.flow.EventTrace2ExecutionAndMessageTraceFilter;
+import kieker.tools.traceAnalysis.filter.systemModel.SystemModel2FileFilter;
 import kieker.tools.traceAnalysis.filter.traceFilter.TraceEquivalenceClassFilter;
 import kieker.tools.traceAnalysis.filter.traceFilter.TraceEquivalenceClassFilter.TraceEquivalenceClassModes;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceReconstructionFilter;
@@ -776,9 +777,19 @@ public final class TraceAnalysisTool {
 				return false;
 			}
 
+			if (retVal) {
+				final String systemEntitiesHtmlFn =
+						TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + "system-entities.html";
+				final Configuration systemModel2FileFilterConfig = new Configuration();
+				systemModel2FileFilterConfig.setProperty(SystemModel2FileFilter.CONFIG_HTML_OUTPUT_FN, systemEntitiesHtmlFn);
+				final SystemModel2FileFilter systemModel2FileFilter = new SystemModel2FileFilter(systemModel2FileFilterConfig);
+				// note that this plugin is (currently) not connected to any other filter
+				analysisInstance.registerFilter(systemModel2FileFilter);
+				analysisInstance.connect(systemModel2FileFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);
+			}
+
 			int numErrorCount = 0;
 			try {
-				analysisInstance.saveToFile(new File("traceAnalysis.kax"));
 				analysisInstance.run();
 			} catch (final Exception ex) { // NOPMD // NOCS (FindBugs reports that Exception is never thrown; but wontfix (#44)!)
 				throw new Exception("Error occured while running analysis", ex);
@@ -786,6 +797,16 @@ public final class TraceAnalysisTool {
 				for (final AbstractTraceProcessingFilter c : allTraceProcessingComponents) {
 					numErrorCount += c.getErrorCount();
 					c.printStatusMessage();
+				}
+				final String kaxOutputFn = TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + "traceAnalysis.kax";
+				final File kaxOutputFile = new File(kaxOutputFn);
+				try {
+
+					// Try to serialize analysis configuration to .kax file
+					analysisInstance.saveToFile(kaxOutputFile);
+					TraceAnalysisTool.LOG.info("Saved analysis configuration to file '" + kaxOutputFile.getCanonicalPath() + "'");
+				} catch (final Exception ex) {
+					TraceAnalysisTool.LOG.error("Failed to save analysis configuration to file '" + kaxOutputFile.getCanonicalPath() + "'");
 				}
 			}
 
@@ -803,15 +824,6 @@ public final class TraceAnalysisTool {
 						+ Constants.TRACE_ASSEMBLY_EQUIV_CLASSES_FN_PREFIX + ".txt", traceAssemblyEquivClassFilter);
 			}
 
-			// TODO: turn into plugin with output code in terminate(..) method
-			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/170
-			final String systemEntitiesHtmlFn = new File(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + "system-entities")
-					.getAbsolutePath();
-			TraceAnalysisTool.SYSTEM_ENTITY_FACTORY.saveSystemToHTMLFile(systemEntitiesHtmlFn);
-			System.out.println("");
-			System.out.println("#");
-			System.out.println("# Plugin: " + "System Entity Factory");
-			System.out.println("Wrote table of system entities to file '" + systemEntitiesHtmlFn + ".html'");
 			if (!retVal) {
 				System.err.println("A task failed");
 			}

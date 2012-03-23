@@ -27,7 +27,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This method can be used to mark plugins and to describe the corresponding output ports.
+ * This type annotation can be used to mark plugins and to describe the corresponding output ports.
  * 
  * @author Nils Christian Ehmke
  */

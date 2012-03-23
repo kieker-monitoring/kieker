@@ -20,6 +20,7 @@
 
 package kieker.tools.traceAnalysis.systemModel.repository;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -142,8 +143,16 @@ public class SystemModelRepository extends AbstractRepository {
 		ps.println(strBuild.toString());
 	}
 
-	public void saveSystemToHTMLFile(final String outputFnBase) throws FileNotFoundException, UnsupportedEncodingException {
-		final PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".html"), false, SystemModelRepository.ENCODING);
+	/**
+	 * Writes the contents of this system model to an HTML file.
+	 * 
+	 * @param outputFn
+	 *            file system location of the output file (as accepted by {@link File#File(String)}).
+	 * @throws FileNotFoundException
+	 * @throws UnsupportedEncodingException
+	 */
+	public void saveSystemToHTMLFile(final String outputFn) throws FileNotFoundException, UnsupportedEncodingException {
+		final PrintStream ps = new PrintStream(new FileOutputStream(outputFn), false, SystemModelRepository.ENCODING);
 		ps.println("<html><head><title>System Model Reconstructed by Kieker.TraceAnalysis</title>");
 		ps.println("<style type=\"text/css\">\n" + ".colTitle { font-family:sans; font-size:11px; }\n" + ".cell { font-family:monospace; font-size:10px; }\n"
 				+ "h1 { font-family:sans; font-size:14px; }\n" + "</style>");

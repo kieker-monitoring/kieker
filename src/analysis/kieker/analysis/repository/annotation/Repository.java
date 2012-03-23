@@ -27,7 +27,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This method can be used to mark repositories.
+ * This type annotation can be used to mark repositories.
  * 
  * @author Nils Christian Ehmke, Andre van Hoorn
  */
