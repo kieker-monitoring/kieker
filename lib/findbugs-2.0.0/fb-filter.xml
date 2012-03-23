@@ -2,7 +2,7 @@
 <!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
 
   <Match>
-    <Class name="kieker.analysis.reader.jmx.JMXReader" />
+    <Class name="kieker.analysis.plugin.reader.jmx.JMXReader" />
     <Method name="read2" params="" returns="boolean" />
     <Bug pattern="DE_MIGHT_IGNORE" />
   </Match>
@@ -13,19 +13,19 @@
   </Match>
 
   <Match>
-    <Class name="kieker.analysis.reader.filesystem.FSReader" />
+    <Class name="kieker.analysis.plugin.reader.filesystem.FSReader" />
     <Method name="read" params="" returns="boolean" />
     <Bug pattern="NN_NAKED_NOTIFY" />
   </Match>
   
   <Match>
-    <Class name="kieker.analysis.reader.filesystem.FSReader" />
+    <Class name="kieker.analysis.plugin.reader.filesystem.FSReader" />
     <Method name="newMonitoringRecord" params="kieker.common.record.IMonitoringRecord" returns="boolean" />
     <Bug pattern="WA_NOT_IN_LOOP" />
   </Match>
 
   <Match>
-    <Class name="kieker.analysis.reader.filesystem.FSReader" />
+    <Class name="kieker.analysis.plugin.reader.filesystem.FSReader" />
     <Method name="newMonitoringRecord" params="kieker.common.record.IMonitoringRecord" returns="boolean" />
     <Bug pattern="UW_UNCOND_WAIT" />
   </Match>
@@ -43,13 +43,13 @@
   </Match>
   
   <Match>
-    <Class name="kieker.analysis.reader.filesystem.FSDirectoryReader" />
+    <Class name="kieker.analysis.plugin.reader.filesystem.FSDirectoryReader" />
     <Method name="processNormalInputFile" params="java.io.File" returns="void" />
     <Bug pattern="REC_CATCH_EXCEPTION" />
   </Match>
   
   <Match>
-    <Class name="kieker.analysis.reader.filesystem.FSDirectoryReader" />
+    <Class name="kieker.analysis.plugin.reader.filesystem.FSDirectoryReader" />
     <Method name="processBinaryInputFile" params="java.io.File" returns="void" />
     <Bug pattern="REC_CATCH_EXCEPTION" />
   </Match>

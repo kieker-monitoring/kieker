@@ -18,12 +18,11 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.filter;
+package kieker.analysis.plugin.filter;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;

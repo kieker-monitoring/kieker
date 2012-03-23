@@ -27,7 +27,7 @@ import java.util.TreeSet;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
-import kieker.analysis.filter.trace.TraceIdFilter;
+import kieker.analysis.plugin.filter.trace.TraceIdFilter;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;

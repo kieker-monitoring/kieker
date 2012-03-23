@@ -21,10 +21,10 @@
 package kieker.tools.logReplayer;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.plugin.AbstractFilterPlugin;
-import kieker.analysis.plugin.AbstractReaderPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
-import kieker.analysis.reader.filesystem.FSReader;
+import kieker.analysis.plugin.filter.AbstractFilterPlugin;
+import kieker.analysis.plugin.reader.AbstractReaderPlugin;
+import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;

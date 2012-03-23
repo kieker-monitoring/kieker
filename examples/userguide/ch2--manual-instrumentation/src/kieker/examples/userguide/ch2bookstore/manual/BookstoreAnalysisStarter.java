@@ -23,7 +23,7 @@ package kieker.examples.userguide.ch2bookstore.manual;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.MonitoringReaderException;
 import kieker.analysis.exception.MonitoringRecordConsumerException;
-import kieker.analysis.reader.filesystem.FSReader;
+import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 
 public class BookstoreAnalysisStarter {

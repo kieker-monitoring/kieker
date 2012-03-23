@@ -3,9 +3,9 @@ package kieker.test.analysis.junit.plugin;
 import java.util.ArrayList;
 import java.util.List;
 
-import kieker.analysis.plugin.AbstractReaderPlugin;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 
 /**

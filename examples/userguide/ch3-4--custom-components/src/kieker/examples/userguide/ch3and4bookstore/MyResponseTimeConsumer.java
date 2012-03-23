@@ -20,8 +20,8 @@
 
 package kieker.examples.userguide.ch3and4bookstore;
 
-import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
+import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
 public class MyResponseTimeConsumer extends AbstractFilterPlugin {

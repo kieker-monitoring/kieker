@@ -34,11 +34,11 @@ import java.util.Map.Entry;
 import javax.swing.JFrame;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.AbstractReaderPlugin;
 import kieker.analysis.plugin.IPlugin;
-import kieker.analysis.plugin.PluginInputPortReference;
+import kieker.analysis.plugin.IPlugin.PluginInputPortReference;
+import kieker.analysis.plugin.filter.AbstractFilterPlugin;
+import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;

@@ -18,11 +18,10 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.filter;
+package kieker.analysis.plugin.filter;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;

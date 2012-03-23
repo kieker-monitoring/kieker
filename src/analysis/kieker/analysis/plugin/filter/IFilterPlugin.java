@@ -18,40 +18,30 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.plugin;
-
-import java.lang.reflect.Method;
+package kieker.analysis.plugin.filter;
 
 /**
- * 
- * @author Nils Christian Ehmke
+ * @author Andre van Hoorn
  */
-public final class PluginInputPortReference {
-	private final IPlugin plugin;
-	private final String inputPortName;
-	private final Method inputPortMethod;
-	private final Class<?>[] eventTypes;
+public interface IFilterPlugin {
 
-	public PluginInputPortReference(final IPlugin plugin, final String inputPortName, final Method inputPortMethod, final Class<?>[] eventTypes) {
-		this.plugin = plugin;
-		this.inputPortName = inputPortName;
-		this.inputPortMethod = inputPortMethod;
-		this.eventTypes = eventTypes;
-	}
+	/**
+	 * Initiates the start of a component.
+	 * This method is called once when a AnalysisController's run() method is called.
+	 * This implementation must not be blocking!
+	 * Asynchronous consumers would spawn (an) asynchronous thread(s) in this method.
+	 * 
+	 * @return true on success; false otherwise.
+	 */
+	public boolean init();
 
-	public final IPlugin getPlugin() {
-		return this.plugin;
-	}
+	/**
+	 * Initiates a termination of the component. The value of the parameter
+	 * error indicates whether an error occurred.
+	 * 
+	 * @param error
+	 *            true iff an error occurred.
+	 */
+	public void terminate(boolean error);
 
-	public final Method getInputPortMethod() {
-		return this.inputPortMethod;
-	}
-
-	public final Class<?>[] getEventTypes() {
-		return this.eventTypes;
-	}
-
-	public final String getInputPortName() {
-		return this.inputPortName;
-	}
 }

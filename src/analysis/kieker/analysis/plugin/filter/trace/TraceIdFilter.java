@@ -18,15 +18,15 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.filter.trace;
+package kieker.analysis.plugin.filter.trace;
 
 import java.util.Set;
 import java.util.TreeSet;
 
-import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;

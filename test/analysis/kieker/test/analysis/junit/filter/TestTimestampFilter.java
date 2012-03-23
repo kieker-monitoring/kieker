@@ -22,7 +22,7 @@ package kieker.test.analysis.junit.filter;
 
 import junit.framework.Assert;
 import kieker.analysis.AnalysisController;
-import kieker.analysis.filter.TimestampFilter;
+import kieker.analysis.plugin.filter.TimestampFilter;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.IAbstractTraceEventVisitor;

@@ -20,7 +20,7 @@
 
 package kieker.tools.traceAnalysis.filter;
 
-import kieker.analysis.plugin.AbstractFilterPlugin;
+import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
 /**

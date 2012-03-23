@@ -41,10 +41,10 @@ import java.util.TreeSet;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.filter.TimestampFilter;
-import kieker.analysis.filter.trace.TraceIdFilter;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.reader.filesystem.FSReader;
+import kieker.analysis.plugin.filter.TimestampFilter;
+import kieker.analysis.plugin.filter.trace.TraceIdFilter;
+import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -331,9 +331,9 @@ public final class TraceAnalysisTool {
 				 * Create the timestamp filter and connect to the reader's output port
 				 */
 				final Configuration configTimestampFilter = new Configuration();
-				configTimestampFilter.setProperty(kieker.analysis.filter.TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
+				configTimestampFilter.setProperty(kieker.analysis.plugin.filter.TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 						Long.toString(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp));
-				configTimestampFilter.setProperty(kieker.analysis.filter.TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP,
+				configTimestampFilter.setProperty(kieker.analysis.plugin.filter.TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP,
 						Long.toString(TraceAnalysisTool.ignoreExecutionsAfterTimestamp));
 
 				timestampFilter =
@@ -360,7 +360,7 @@ public final class TraceAnalysisTool {
 				traceIdFilter =
 						new TraceIdFilter(configTraceIdFilterFlow);
 				analysisInstance.registerFilter(traceIdFilter);
-				analysisInstance.connect(timestampFilter, kieker.analysis.filter.TimestampFilter.OUTPUT_PORT_NAME,
+				analysisInstance.connect(timestampFilter, kieker.analysis.plugin.filter.TimestampFilter.OUTPUT_PORT_NAME,
 						traceIdFilter, TraceIdFilter.INPUT_PORT_NAME);
 			}
 
@@ -405,7 +405,7 @@ public final class TraceAnalysisTool {
 						Integer.toString(TraceAnalysisTool.maxTraceDurationMillis));
 				eventRecordTraceGenerationFilter = new EventRecordTraceGenerationFilter(configurationEventRecordTraceGenerationFilter);
 				analysisInstance.registerFilter(eventRecordTraceGenerationFilter);
-				analysisInstance.connect(traceIdFilter, kieker.analysis.filter.trace.TraceIdFilter.OUTPUT_PORT_NAME,
+				analysisInstance.connect(traceIdFilter, kieker.analysis.plugin.filter.trace.TraceIdFilter.OUTPUT_PORT_NAME,
 						eventRecordTraceGenerationFilter, EventRecordTraceGenerationFilter.INPUT_PORT_NAME);
 				analysisInstance.connect(eventRecordTraceGenerationFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME,
 						TraceAnalysisTool.SYSTEM_ENTITY_FACTORY);

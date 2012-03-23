@@ -18,13 +18,13 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.reader.namedRecordPipe;
+package kieker.analysis.plugin.reader.namedRecordPipe;
 
 import java.util.concurrent.CountDownLatch;
 
-import kieker.analysis.plugin.AbstractReaderPlugin;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;

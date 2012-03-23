@@ -21,7 +21,7 @@
 package kieker.examples.userguide.appendixJMS;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.reader.jms.JMSReader;
+import kieker.analysis.plugin.reader.jms.JMSReader;
 import kieker.common.configuration.Configuration;
 
 /**

@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.plugin;
+package kieker.analysis.plugin.reader;
 
 /**
  * @author Andre van Hoorn

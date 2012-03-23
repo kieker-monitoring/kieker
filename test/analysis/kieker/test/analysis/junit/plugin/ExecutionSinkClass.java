@@ -3,8 +3,8 @@ package kieker.test.analysis.junit.plugin;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.analysis.plugin.AbstractFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
+import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 

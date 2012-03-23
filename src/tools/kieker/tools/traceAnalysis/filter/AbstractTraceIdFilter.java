@@ -23,7 +23,7 @@ package kieker.tools.traceAnalysis.filter;
 import java.util.Set;
 import java.util.TreeSet;
 
-import kieker.analysis.plugin.AbstractFilterPlugin;
+import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
 /**

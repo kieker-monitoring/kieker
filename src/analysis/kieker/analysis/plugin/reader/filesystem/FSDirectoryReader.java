@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.reader.filesystem;
+package kieker.analysis.plugin.reader.filesystem;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;

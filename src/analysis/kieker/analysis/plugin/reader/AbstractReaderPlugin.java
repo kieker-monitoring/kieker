@@ -18,35 +18,27 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.plugin;
+package kieker.analysis.plugin.reader;
 
+import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
 
 /**
- * This class should be used as a base for every analysis plugin used within <i>Kieker</i>. For reader plugins, the class {@link AbstractReaderPlugin} should be used
- * instead.
+ * This class should be used as a base for every reader used within <i>Kieker</i>.
  * 
  * @author Nils Christian Ehmke
  */
 @Plugin
-public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFilterPlugin {
+public abstract class AbstractReaderPlugin extends AbstractPlugin implements IReaderPlugin {
 
 	/**
-	 * The constructor for the plugin. Every plugin must have this constructor.
+	 * Each Plugin requires a constructor with a single Configuration object.
 	 * 
 	 * @param configuration
-	 *            The configuration to use for this plugin.
+	 *            The configuration which should be used to initialize the object.
 	 */
-	public AbstractFilterPlugin(final Configuration configuration) {
+	public AbstractReaderPlugin(final Configuration configuration) {
 		super(configuration);
-	}
-
-	public boolean init() {
-		return true; // do nothing
-	}
-
-	public void terminate(final boolean error) {
-		// do nothing
 	}
 }

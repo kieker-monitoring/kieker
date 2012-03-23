@@ -19,6 +19,7 @@
  ***************************************************************************/
 package kieker.analysis.plugin;
 
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
@@ -91,4 +92,38 @@ public interface IPlugin {
 	 *         returned
 	 */
 	public abstract List<PluginInputPortReference> getConnectedPlugins(final String outputPortName);
+
+	/**
+	 * 
+	 * @author Nils Christian Ehmke
+	 */
+	public static final class PluginInputPortReference {
+		private final IPlugin plugin;
+		private final String inputPortName;
+		private final Method inputPortMethod;
+		private final Class<?>[] eventTypes;
+
+		public PluginInputPortReference(final IPlugin plugin, final String inputPortName, final Method inputPortMethod, final Class<?>[] eventTypes) {
+			this.plugin = plugin;
+			this.inputPortName = inputPortName;
+			this.inputPortMethod = inputPortMethod;
+			this.eventTypes = eventTypes;
+		}
+
+		public final IPlugin getPlugin() {
+			return this.plugin;
+		}
+
+		public final Method getInputPortMethod() {
+			return this.inputPortMethod;
+		}
+
+		public final Class<?>[] getEventTypes() {
+			return this.eventTypes;
+		}
+
+		public final String getInputPortName() {
+			return this.inputPortName;
+		}
+	}
 }
