@@ -21,7 +21,7 @@
 package kieker.test.analysis.junit.filter;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.plugin.filter.CountingFilter;
+import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.common.configuration.Configuration;
 import kieker.test.analysis.junit.plugin.SimpleSourcePlugin;
 

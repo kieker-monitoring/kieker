@@ -28,7 +28,7 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
-import kieker.analysis.plugin.filter.CountingFilter;
+import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.analysis.plugin.reader.namedRecordPipe.PipeReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.namedRecordPipe.IPipeWriter;

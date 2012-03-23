@@ -42,7 +42,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.filter.TimestampFilter;
+import kieker.analysis.plugin.filter.select.TimestampFilter;
 import kieker.analysis.plugin.filter.trace.TraceIdFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
@@ -331,9 +331,9 @@ public final class TraceAnalysisTool {
 				 * Create the timestamp filter and connect to the reader's output port
 				 */
 				final Configuration configTimestampFilter = new Configuration();
-				configTimestampFilter.setProperty(kieker.analysis.plugin.filter.TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
+				configTimestampFilter.setProperty(kieker.analysis.plugin.filter.select.TimestampFilter.CONFIG_IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 						Long.toString(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp));
-				configTimestampFilter.setProperty(kieker.analysis.plugin.filter.TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP,
+				configTimestampFilter.setProperty(kieker.analysis.plugin.filter.select.TimestampFilter.CONFIG_IGNORE_EXECUTIONS_AFTER_TIMESTAMP,
 						Long.toString(TraceAnalysisTool.ignoreExecutionsAfterTimestamp));
 
 				timestampFilter =
@@ -360,7 +360,7 @@ public final class TraceAnalysisTool {
 				traceIdFilter =
 						new TraceIdFilter(configTraceIdFilterFlow);
 				analysisInstance.registerFilter(traceIdFilter);
-				analysisInstance.connect(timestampFilter, kieker.analysis.plugin.filter.TimestampFilter.OUTPUT_PORT_NAME,
+				analysisInstance.connect(timestampFilter, kieker.analysis.plugin.filter.select.TimestampFilter.OUTPUT_PORT_NAME,
 						traceIdFilter, TraceIdFilter.INPUT_PORT_NAME);
 			}
 

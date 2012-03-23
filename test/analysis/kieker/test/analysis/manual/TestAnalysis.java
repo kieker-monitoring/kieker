@@ -24,10 +24,10 @@ import java.io.File;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.filter.CountingFilter;
-import kieker.analysis.plugin.filter.TeeFilter;
-import kieker.analysis.plugin.filter.TimestampFilter;
-import kieker.analysis.plugin.filter.TypeFilter;
+import kieker.analysis.plugin.filter.forward.CountingFilter;
+import kieker.analysis.plugin.filter.forward.TeeFilter;
+import kieker.analysis.plugin.filter.select.TimestampFilter;
+import kieker.analysis.plugin.filter.select.TypeFilter;
 import kieker.analysis.plugin.filter.trace.TraceIdFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
