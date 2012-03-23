@@ -123,7 +123,25 @@ public final class AnalysisController implements Runnable {
 	 *             If something went wrong.
 	 */
 	public AnalysisController(final File file) throws NullPointerException {
-		this(AnalysisController.loadFromFile(file));
+		this(file, AnalysisController.class.getClassLoader());
+	}
+
+	/**
+	 * This constructors loads the model from the given file as a configuration and creates an instance of this class.
+	 * The file should therefore be an instance of the analysis meta model.
+	 * 
+	 * @param file
+	 *            The configuration file for the analysis.
+	 * @param classLoader
+	 *            The class loader used for the initializing.
+	 * 
+	 * @return A completely initialized instance of {@link AnalysisController}.
+	 * 
+	 * @throws NullPointerException
+	 *             If something went wrong.
+	 */
+	public AnalysisController(final File file, final ClassLoader classLoader) throws NullPointerException {
+		this(AnalysisController.loadFromFile(file), classLoader);
 	}
 
 	/**
@@ -133,8 +151,20 @@ public final class AnalysisController implements Runnable {
 	 *            The project instance for the analysis.
 	 */
 	public AnalysisController(final MIProject project) {
+		this(project, AnalysisController.class.getClassLoader());
+	}
+
+	/**
+	 * Creates a new instance of the class {@link AnalysisController} but uses the given instance of @link{Project} to construct the analysis.
+	 * 
+	 * @param project
+	 *            The project instance for the analysis.
+	 * @param classLoader
+	 *            The class loader used for the initializing.
+	 */
+	public AnalysisController(final MIProject project, final ClassLoader classLoader) {
 		if (project != null) {
-			this.loadFromModelProject(project);
+			this.loadFromModelProject(project, classLoader);
 			this.projectName = project.getName();
 		} else {
 			this.projectName = "";
@@ -148,7 +178,7 @@ public final class AnalysisController implements Runnable {
 	 * @param mproject
 	 *            The instance to be used for configuration.
 	 */
-	private final void loadFromModelProject(final MIProject mproject) {
+	private final void loadFromModelProject(final MIProject mproject, final ClassLoader classLoader) {
 		/* Remember the libraries. */
 		this.dependencies.addAll(mproject.getDependencies());
 
@@ -158,7 +188,8 @@ public final class AnalysisController implements Runnable {
 			/* Extract the necessary informations to create the repository. */
 			final Configuration configuration = AnalysisController.modelPropertiesToConfiguration(mRepository.getProperties());
 			try {
-				final AbstractRepository repository = AnalysisController.createAndInitialize(AbstractRepository.class, mRepository.getClassname(), configuration);
+				final AbstractRepository repository = AnalysisController.createAndInitialize(AbstractRepository.class, mRepository.getClassname(), configuration,
+						classLoader);
 				repositoryMap.put(mRepository, repository);
 				this.registerRepository(repository);
 			} catch (final Exception ex) {
@@ -180,7 +211,7 @@ public final class AnalysisController implements Runnable {
 			configuration.setProperty(AbstractPlugin.CONFIG_NAME, mPlugin.getName());
 			/* Create the plugin and put it into our map. */
 			try {
-				final AbstractPlugin plugin = AnalysisController.createAndInitialize(AbstractPlugin.class, pluginClassname, configuration);
+				final AbstractPlugin plugin = AnalysisController.createAndInitialize(AbstractPlugin.class, pluginClassname, configuration, classLoader);
 				pluginMap.put(mPlugin, plugin);
 				/* Check the used configuration against the actual available config keys. */
 				AnalysisController.checkConfiguration(plugin, configuration);
@@ -770,10 +801,10 @@ public final class AnalysisController implements Runnable {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected static final <C> C createAndInitialize(final Class<C> c, final String classname, final Configuration configuration) {
+	protected static final <C> C createAndInitialize(final Class<C> c, final String classname, final Configuration configuration, final ClassLoader classLoader) {
 		C createdClass = null; // NOPMD
 		try {
-			final Class<?> clazz = Class.forName(classname);
+			final Class<?> clazz = Class.forName(classname, true, classLoader);
 			if (c.isAssignableFrom(clazz)) {
 				createdClass = (C) clazz.getConstructor(Configuration.class).newInstance(configuration);
 			} else {
