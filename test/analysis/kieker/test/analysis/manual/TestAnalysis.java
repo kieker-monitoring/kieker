@@ -37,6 +37,7 @@ import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.flow.EventRecordTraceGenerationFilter;
 import kieker.tools.traceAnalysis.filter.flow.EventTrace2ExecutionAndMessageTraceFilter;
+import kieker.tools.traceAnalysis.filter.systemModel.SystemModel2FileFilter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentDependencyGraphAllocationFilter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationDependencyGraphAllocationFilter;
 import kieker.tools.traceAnalysis.filter.visualization.sequenceDiagram.SequenceDiagramFilter;
@@ -59,9 +60,9 @@ public class TestAnalysis {
 				analysisController = new AnalysisController("TestProject");
 
 				/* Reader */
-				final Configuration confReader = new Configuration();
-				confReader.setProperty(FSReader.CONFIG_INPUTDIRS, "tmp/testdata-ascii/");
-				final FSReader reader = new FSReader(confReader);
+				final Configuration confFSReader = new Configuration();
+				confFSReader.setProperty(FSReader.CONFIG_INPUTDIRS, "tmp/testdata-ascii/");
+				final FSReader reader = new FSReader(confFSReader);
 
 				/* TypeFilter */
 				final Configuration confTypeFilter = new Configuration();
@@ -105,21 +106,26 @@ public class TestAnalysis {
 						new EventTrace2ExecutionAndMessageTraceFilter(confEventTrace2ExecutionTraceFilter);
 
 				/* Visualization */
-				final Configuration confSequenceDiagramPlugin = new Configuration();
-				confSequenceDiagramPlugin.setProperty(SequenceDiagramFilter.CONFIG_OUTPUT_FN_BASE, "tmp/SequenceAssembly");
-				final SequenceDiagramFilter sequenceDiagramPlugin = new SequenceDiagramFilter(confSequenceDiagramPlugin);
+				final Configuration confSequenceDiagramFilter = new Configuration();
+				confSequenceDiagramFilter.setProperty(SequenceDiagramFilter.CONFIG_OUTPUT_FN_BASE, "tmp/SequenceAssembly");
+				final SequenceDiagramFilter sequenceDiagramFilter = new SequenceDiagramFilter(confSequenceDiagramFilter);
 
-				final Configuration confComponentDependencyGraphPluginAllocation = new Configuration();
-				confComponentDependencyGraphPluginAllocation.setProperty(
+				final Configuration confComponentDependencyGraphAllocationFilter = new Configuration();
+				confComponentDependencyGraphAllocationFilter.setProperty(
 						ComponentDependencyGraphAllocationFilter.CONFIG_OUTPUT_FN_BASE, "tmp/dependency");
-				final ComponentDependencyGraphAllocationFilter componentDependencyGraphPluginAllocation =
-						new ComponentDependencyGraphAllocationFilter(confComponentDependencyGraphPluginAllocation);
+				final ComponentDependencyGraphAllocationFilter componentDependencyGraphAllocationFilter =
+						new ComponentDependencyGraphAllocationFilter(confComponentDependencyGraphAllocationFilter);
 
-				final Configuration confOperationDependencyGraphPluginAllocation = new Configuration();
-				confOperationDependencyGraphPluginAllocation.setProperty(
+				final Configuration confOperationDependencyGraphAllocationFilter = new Configuration();
+				confOperationDependencyGraphAllocationFilter.setProperty(
 						OperationDependencyGraphAllocationFilter.CONFIG_DOT_OUTPUT_FILE, "tmp/dependency-operation");
-				final OperationDependencyGraphAllocationFilter operationDependencyGraphPluginAllocation =
-						new OperationDependencyGraphAllocationFilter(confOperationDependencyGraphPluginAllocation);
+				final OperationDependencyGraphAllocationFilter operationDependencyGraphAllocationFilter =
+						new OperationDependencyGraphAllocationFilter(confOperationDependencyGraphAllocationFilter);
+
+				/* Visualization */
+				final Configuration confSystemModel2FileFilter = new Configuration();
+				confSystemModel2FileFilter.setProperty(SystemModel2FileFilter.CONFIG_HTML_OUTPUT_FN, "tmp/system-model.html");
+				final SystemModel2FileFilter systemModel2FileFilter = new SystemModel2FileFilter(confSystemModel2FileFilter);
 
 				analysisController.registerRepository(traceRepo);
 
@@ -160,24 +166,26 @@ public class TestAnalysis {
 				analysisController.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, teeFilter1,
 						TeeFilter.INPUT_PORT_NAME);
 
-				analysisController.registerFilter(sequenceDiagramPlugin);
-				analysisController.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME, sequenceDiagramPlugin, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
-				analysisController.connect(sequenceDiagramPlugin, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
+				analysisController.registerFilter(sequenceDiagramFilter);
+				analysisController.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME, sequenceDiagramFilter, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
+				analysisController.connect(sequenceDiagramFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
 
-				analysisController.registerFilter(componentDependencyGraphPluginAllocation);
-				analysisController.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME, componentDependencyGraphPluginAllocation,
+				analysisController.registerFilter(componentDependencyGraphAllocationFilter);
+				analysisController.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME, componentDependencyGraphAllocationFilter,
 						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
-				analysisController.connect(componentDependencyGraphPluginAllocation, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
+				analysisController.connect(componentDependencyGraphAllocationFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
 
-				analysisController.registerFilter(operationDependencyGraphPluginAllocation);
-				analysisController.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME, operationDependencyGraphPluginAllocation,
+				analysisController.registerFilter(operationDependencyGraphAllocationFilter);
+				analysisController.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME, operationDependencyGraphAllocationFilter,
 						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME);
-				analysisController.connect(operationDependencyGraphPluginAllocation, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
+				analysisController.connect(operationDependencyGraphAllocationFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
+
+				analysisController.registerFilter(systemModel2FileFilter);
+				analysisController.connect(systemModel2FileFilter, AbstractTraceAnalysisFilter.SYSTEM_MODEL_REPOSITORY_NAME, traceRepo);
 
 				analysisController.saveToFile(new File("tmp/testproject.kax"));
 			}
 			analysisController.run();
-			traceRepo.saveSystemToHTMLFile("tmp/system");
 		} catch (final Exception ex) {
 			TestAnalysis.LOG.error("Error initializing AnalysisController", ex);
 		}
