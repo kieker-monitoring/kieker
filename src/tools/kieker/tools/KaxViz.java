@@ -76,7 +76,7 @@ public final class KaxViz extends JFrame {
 	private static final int FILTER_SPACE = 30;
 
 	private transient final AnalysisController analysisController;
-	private transient final mxGraph graph;
+	transient final mxGraph graph; // package visible for inner class
 
 	public KaxViz(final String filename, final AnalysisController analysisController, final String outFilename) {
 		super(analysisController.getProjectName() + " (" + filename + ((null != outFilename) ? " -> " + outFilename : "") + ")");

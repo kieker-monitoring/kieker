@@ -37,7 +37,7 @@ import org.junit.Test;
 public class CountingFilterTest {
 
 	private CountingFilter consumer;
-	private volatile SimpleSourcePlugin src;
+	volatile SimpleSourcePlugin src; // package visible for inner class
 
 	@Before
 	public void before() {

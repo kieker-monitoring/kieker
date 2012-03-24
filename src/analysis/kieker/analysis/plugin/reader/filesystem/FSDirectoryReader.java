@@ -63,7 +63,7 @@ final class FSDirectoryReader implements Runnable {
 	private final Set<Class<? extends IMonitoringRecord>> recordTypeSelector;
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final File inputDir;
-	private String filePrefix = FSDirectoryReader.NORMAL_FILE_PREFIX;
+	String filePrefix = FSDirectoryReader.NORMAL_FILE_PREFIX; // package visible for inner class
 	private boolean terminated = false;
 
 	/**

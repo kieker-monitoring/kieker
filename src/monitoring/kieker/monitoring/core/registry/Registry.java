@@ -157,10 +157,10 @@ public class Registry<E> implements IRegistry<E> {
 	 */
 	private static final class HashEntry<E> implements Serializable {
 		private static final long serialVersionUID = 1L;
-		private final E value; // NOPMD
-		private final int hash; // NOPMD
-		private final int id; // NOPMD
-		private final Registry.HashEntry<E> next; // NOPMD
+		final E value; // package visible for inner class
+		final int hash; // package visible for inner class
+		final int id; // package visible for inner class
+		final Registry.HashEntry<E> next; // package visible for inner class
 
 		protected HashEntry(final E value, final int hash, final int id, final Registry.HashEntry<E> next) {
 			this.value = value;

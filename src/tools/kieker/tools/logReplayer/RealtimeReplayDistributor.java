@@ -72,7 +72,7 @@ public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 	private long lTime;
 	private int active; // no need for voaltile, always within synchronized
 	private final int maxQueueSize;
-	private CountDownLatch terminationLatch;
+	CountDownLatch terminationLatch; // package visible for inner class
 	private AnalysisController controller;
 
 	/**
