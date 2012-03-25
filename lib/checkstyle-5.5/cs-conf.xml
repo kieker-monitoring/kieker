@@ -192,9 +192,11 @@
 
         <!-- Verifies that the java.lang.Override annotation is present when the {@inheritDoc} javadoc tag is present. !-->
         <!-- See http://checkstyle.sourceforge.net/config_annotation.html#MissingOverride !-->
+        <!-- problems with Java 1.5
         <module name="MissingOverride">
             <property name="javaFiveCompatibility" value="false"/>
         </module>
+        -->
 
         <!-- This check makes sure that all package annotations are in the package-info.java file. !-->
         <!-- See http://checkstyle.sourceforge.net/config_annotation.html#PackageAnnotation !-->
@@ -464,11 +466,13 @@
         <!-- Checks that there are no "magic numbers", where a magic number is a numeric literal !-->
         <!-- that is not defined as a constant. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
+        <!-- deactivated for Kieker
         <module name="MagicNumber">
             <property name="tokens"               value="NUM_DOUBLE, NUM_FLOAT, NUM_INT, NUM_LONG"/>
             <property name="ignoreNumbers"        value="-1, 0, 1, 2"/>
             <property name="ignoreHashCodeMethod" value="false"/>
         </module>
+        !-->
 
         <!-- Checks that classes (except abtract one) define a ctor and don't rely on the default one. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
@@ -499,13 +503,13 @@
         <!-- Restricts nested for blocks to a specified depth. !-->
         <!-- See http://checkstyle.sourceforge.net/config_coding.html#NestedForDepth !-->
         <module name="NestedForDepth">
-            <property name="max" value="1"/>
+            <property name="max" value="2"/>
         </module>
 
         <!-- Restricts nested if-else blocks to a specified depth. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
         <module name="NestedIfDepth">
-            <property name="max" value="1"/>
+            <property name="max" value="3"/>
         </module>
 
         <!-- Restricts nested try-catch blocks to a specified depth. !-->
@@ -1147,7 +1151,7 @@
         <!-- See http://checkstyle.sf.net/config_whitespace.html !-->
         <module name="OperatorWrap">
             <property name="option" value="nl"/>
-            <property name="tokens" value="ASSIGN, BAND, BOR, BSR, BXOR, COLON, DIV,
+            <property name="tokens" value="BAND, BOR, BSR, BXOR, COLON, DIV,
                                            EQUAL, GE, GT, LAND, LE, LITERAL_INSTANCEOF,
                                            LOR, LT, MINUS, MOD, NOT_EQUAL,
                                            PLUS, QUESTION, SL, SR, STAR"/>
@@ -1178,11 +1182,11 @@
         <module name="WhitespaceAround">
             <property name="tokens" value="ASSIGN, BAND, BAND_ASSIGN, BOR, BOR_ASSIGN, BSR, BSR_ASSIGN,
                                            BXOR, BXOR_ASSIGN, COLON, DIV, DIV_ASSIGN, EQUAL, GE, GT, LAND,
-                                           LCURLY, LE, LITERAL_ASSERT, LITERAL_CATCH, LITERAL_DO, LITERAL_ELSE,
+                                           LE, LITERAL_ASSERT, LITERAL_CATCH, LITERAL_DO, LITERAL_ELSE,
                                            LITERAL_FINALLY, LITERAL_FOR, LITERAL_IF, LITERAL_RETURN,
                                            LITERAL_SYNCHRONIZED, LITERAL_TRY, LITERAL_WHILE, LOR, LT,
                                            MINUS, MINUS_ASSIGN, MOD, MOD_ASSIGN, NOT_EQUAL, PLUS, PLUS_ASSIGN,
-                                           QUESTION, RCURLY, SL, SLIST, SL_ASSIGN, SR, SR_ASSIGN, STAR, STAR_ASSIGN"/>
+                                           QUESTION, SL, SLIST, SL_ASSIGN, SR, SR_ASSIGN, STAR, STAR_ASSIGN"/>
             <property name="allowEmptyConstructors" value="true"/>
             <property name="allowEmptyMethods"      value="true"/>
         </module>

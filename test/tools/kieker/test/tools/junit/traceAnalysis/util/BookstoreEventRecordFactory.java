@@ -25,7 +25,6 @@ import java.util.List;
 
 import junit.framework.Assert;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.Trace;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
@@ -60,7 +59,7 @@ public final class BookstoreEventRecordFactory {
 
 	/**
 	 * Returns "well-known" Bookstore trace as a list of {@link BeforeOperationEvent} and {@link AfterOperationEvent} events, ordered by its
-	 * {@link AbstractTraceEvent#getOrderIndex()}es.
+	 * {@link kieker.common.record.flow.trace.AbstractTraceEvent#getOrderIndex()}es.
 	 * 
 	 * @param firstTimestamp
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
@@ -125,7 +124,7 @@ public final class BookstoreEventRecordFactory {
 
 	/**
 	 * Returns "well-known" Bookstore trace as a list of {@link CallOperationEvent}, {@link BeforeOperationEvent} and {@link AfterOperationEvent} events, ordered by
-	 * its {@link AbstractTraceEvent#getOrderIndex()}es.
+	 * its {@link kieker.common.record.flow.trace.AbstractTraceEvent#getOrderIndex()}es.
 	 * 
 	 * @param firstTimestamp
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
@@ -209,7 +208,7 @@ public final class BookstoreEventRecordFactory {
 
 	/**
 	 * Returns "well-known" Bookstore trace as a list of {@link CallOperationEvent}, {@link BeforeOperationEvent} and {@link AfterOperationEvent} events, ordered by
-	 * its {@link AbstractTraceEvent#getOrderIndex()}es. In this trace, <i>CRM.getOrders</i> is assumed not to be instrumented.
+	 * its {@link kieker.common.record.flow.trace.AbstractTraceEvent#getOrderIndex()}es. In this trace, <i>CRM.getOrders</i> is assumed not to be instrumented.
 	 * 
 	 * @param firstTimestamp
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event

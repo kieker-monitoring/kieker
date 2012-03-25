@@ -20,8 +20,8 @@
 
 package kieker.test.tools.junit.traceAnalysis.systemModel;
 
-import java.util.Comparator;
 import java.util.List;
+import java.util.NavigableSet;
 import java.util.TreeSet;
 
 import junit.framework.Assert;
@@ -79,7 +79,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 		/* Manually create Executions for a trace */
 		numExecutions_l++;
 		this.exec0_0__bookstore_searchBook = this.eFactory.genExecution("Bookstore", "bookstore", "searchBook", TestExecutionTraceBookstore.TRACE_ID,
-					TestExecutionTraceBookstore.SESSION_ID, 1, 10, 0, 0); // NOCS (MagicNumberCheck)
+				TestExecutionTraceBookstore.SESSION_ID, 1, 10, 0, 0); // NOCS (MagicNumberCheck)
 		this.minTin = this.exec0_0__bookstore_searchBook.getTin();
 		this.maxTout = this.exec0_0__bookstore_searchBook.getTout();
 
@@ -88,10 +88,10 @@ public class TestExecutionTraceBookstore extends TestCase {
 				TestExecutionTraceBookstore.SESSION_ID, 2, 4, 1, 1); // NOCS (MagicNumberCheck)
 		numExecutions_l++;
 		this.exec2_1__crm_getOrders = this.eFactory.genExecution("CRM", "crm", "getOrders", TestExecutionTraceBookstore.TRACE_ID,
-					TestExecutionTraceBookstore.SESSION_ID, 5, 8, 2, 1); // NOCS (MagicNumberCheck)
+				TestExecutionTraceBookstore.SESSION_ID, 5, 8, 2, 1); // NOCS (MagicNumberCheck)
 		numExecutions_l++;
 		this.exec3_2__catalog_getBook = this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID,
-					TestExecutionTraceBookstore.SESSION_ID, 6, 7, 3, 2); // NOCS (MagicNumberCheck)
+				TestExecutionTraceBookstore.SESSION_ID, 6, 7, 3, 2); // NOCS (MagicNumberCheck)
 
 		// Just some basic checks to make sure that the trace has been set up properly (we've had some trouble here)
 		Assert.assertNotSame(this.exec3_2__catalog_getBook.getOperation(), this.exec2_1__crm_getOrders.getOperation());
@@ -261,12 +261,12 @@ public class TestExecutionTraceBookstore extends TestCase {
 	}
 
 	/**
-	 * This method can be used to debug the {@link Comparator} provided by {@link ExecutionTrace#createExecutionTraceComparator()}.
+	 * This method can be used to debug the {@link java.util.Comparator} provided by {@link ExecutionTrace#createExecutionTraceComparator()}.
 	 */
 	@Test
 	public void testTreeSet() {
-		final TreeSet<Execution> s0 = new TreeSet<Execution>(ExecutionTrace.createExecutionTraceComparator());
-		final TreeSet<Execution> s1 = new TreeSet<Execution>(ExecutionTrace.createExecutionTraceComparator());
+		final NavigableSet<Execution> s0 = new TreeSet<Execution>(ExecutionTrace.createExecutionTraceComparator());
+		final NavigableSet<Execution> s1 = new TreeSet<Execution>(ExecutionTrace.createExecutionTraceComparator());
 		final Execution execFromTrace0 = this.exec0_0__bookstore_searchBook;
 		final Execution long1 = new Execution(execFromTrace0.getOperation(), execFromTrace0.getAllocationComponent(), execFromTrace0.getTraceId(),
 				execFromTrace0.getSessionId(), execFromTrace0.getEoi(), execFromTrace0.getEss(), execFromTrace0.getTin(),

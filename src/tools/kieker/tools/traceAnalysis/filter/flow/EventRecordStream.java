@@ -38,7 +38,7 @@ public class EventRecordStream {
 
 	public EventRecordStream(final EventRecordTrace trace) {
 		this.events = trace.eventList();
-		this.maxIndex = (this.events.size() - 1);
+		this.maxIndex = this.events.size() - 1;
 	}
 
 	public void consume() {
@@ -52,7 +52,7 @@ public class EventRecordStream {
 	}
 
 	public AbstractTraceEvent lookahead(final int amount) {
-		final int desiredIndex = (this.currentIndex + amount);
+		final int desiredIndex = this.currentIndex + amount;
 
 		if ((desiredIndex < 0) || (desiredIndex > this.maxIndex)) {
 			return null;

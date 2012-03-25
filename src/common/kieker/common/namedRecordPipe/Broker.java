@@ -34,7 +34,7 @@ public enum Broker { // Singleton pattern (Effective Java #3)
 	/**
 	 * Access synchronized through synchronized method {@link #acquirePipe(String)} !
 	 */
-	private transient final ConcurrentHashMap<String, Pipe> pipeMap = new ConcurrentHashMap<String, Pipe>();
+	private final transient ConcurrentHashMap<String, Pipe> pipeMap = new ConcurrentHashMap<String, Pipe>();
 
 	/**
 	 * Returns a connection with name @a pipeName. If a connection with this

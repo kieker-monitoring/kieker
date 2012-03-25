@@ -25,9 +25,9 @@ import kieker.monitoring.core.controller.MonitoringController;
 
 public class CRM {
 
+	private static final IMonitoringController MONITORING_CONTROLLER = MonitoringController.getInstance();
+
 	private final Catalog catalog;
-	private final static IMonitoringController MONITORING_CONTROLLER =
-			MonitoringController.getInstance();
 
 	public CRM(final Catalog catalog) {
 		this.catalog = catalog;

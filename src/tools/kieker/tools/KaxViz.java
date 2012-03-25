@@ -75,8 +75,8 @@ public final class KaxViz extends JFrame {
 	private static final int FILTER_WIDTH = 200;
 	private static final int FILTER_SPACE = 30;
 
-	private transient final AnalysisController analysisController;
-	transient final mxGraph graph; // NOPMD (package visible for inner class)
+	private final transient AnalysisController analysisController;
+	final transient mxGraph graph; // NOPMD (package visible for inner class)
 
 	public KaxViz(final String filename, final AnalysisController analysisController, final String outFilename) {
 		super(analysisController.getProjectName() + " (" + filename + ((null != outFilename) ? " -> " + outFilename : "") + ")");
@@ -304,7 +304,7 @@ public final class KaxViz extends JFrame {
 	 * @param args
 	 *            the name of the .kax file
 	 */
-	public final static void main(final String[] args) {
+	public static final void main(final String[] args) {
 		// create cmdline options
 		final Options options = new Options();
 		final Option inputOption = new Option("i", "input", true, "the analysis project file (.kax) loaded");
@@ -337,7 +337,7 @@ public final class KaxViz extends JFrame {
 			frame.setExtendedState(Frame.MAXIMIZED_BOTH);
 			frame.setSize(800, 600);
 			frame.setVisible(true);
-		} catch (final Exception ex) { // NOPMD (log all errors)
+		} catch (final Exception ex) { // NOPMD NOCS (log all errors)
 			KaxViz.LOG.error("Error", ex);
 		}
 	}

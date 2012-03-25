@@ -31,7 +31,6 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.Trace;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.systemModel.AbstractTrace;
-import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 
 /**
  * 
@@ -63,7 +62,7 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<Abstract
 
 		/**
 		 * TODO: This will need to be fixed because the {@link Comparator} is also used by {@link TreeSet#equals(Object)} to compare two {@link TreeSet}s. For a
-		 * fixed {@link Comparator} see {@link ExecutionTrace#createExecutionTraceComparator()}.
+		 * fixed {@link Comparator} see {@link kieker.tools.traceAnalysis.systemModel.ExecutionTrace;#createExecutionTraceComparator()}.
 		 * 
 		 * @param e1
 		 * @param e2

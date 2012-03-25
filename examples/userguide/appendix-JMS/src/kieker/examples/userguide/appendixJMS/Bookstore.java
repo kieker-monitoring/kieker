@@ -26,11 +26,10 @@ import kieker.monitoring.core.controller.MonitoringController;
 
 public class Bookstore {
 
+	private static final IMonitoringController MONITORING_CONTROLLER = MonitoringController.getInstance();
+
 	private final Catalog catalog = new Catalog();
 	private final CRM crm = new CRM(this.catalog);
-
-	private final static IMonitoringController MONITORING_CONTROLLER =
-			MonitoringController.getInstance();
 
 	public void searchBook() {
 		/*
@@ -40,11 +39,10 @@ public class Bookstore {
 		final long tin = Bookstore.MONITORING_CONTROLLER.getTimeSource().getTime();
 		this.catalog.getBook(false);
 		final long tout = Bookstore.MONITORING_CONTROLLER.getTimeSource().getTime();
-		final OperationExecutionRecord e =
-				new OperationExecutionRecord(
-						"public void kieker.examples.userguide.appendixJMS.getBook(boolean)",
-						OperationExecutionRecord.NO_SESSION_ID, OperationExecutionRecord.NO_TRACEID,
-						tin, tout, OperationExecutionRecord.NO_HOSTNAME, OperationExecutionRecord.NO_EOI_ESS, OperationExecutionRecord.NO_EOI_ESS);
+		final OperationExecutionRecord e = new OperationExecutionRecord(
+				"public void kieker.examples.userguide.appendixJMS.getBook(boolean)",
+				OperationExecutionRecord.NO_SESSION_ID, OperationExecutionRecord.NO_TRACEID,
+				tin, tout, OperationExecutionRecord.NO_HOSTNAME, OperationExecutionRecord.NO_EOI_ESS, OperationExecutionRecord.NO_EOI_ESS);
 		Bookstore.MONITORING_CONTROLLER.newMonitoringRecord(e);
 
 		/*

@@ -30,7 +30,7 @@ import kieker.common.record.system.CPUUtilizationRecord;
 import kieker.common.record.system.MemSwapUsageRecord;
 import kieker.tools.util.LoggingTimestampConverter;
 
-public class AnalysisStarter {
+public final class AnalysisStarter {
 
 	private AnalysisStarter() {}
 
@@ -48,7 +48,7 @@ public class AnalysisStarter {
 
 		/* Set filesystem monitoring log input directory for our analysis */
 		final Configuration readerConfiguration = new Configuration();
-		final String inputDirs[] = { args[0] };
+		final String[] inputDirs = { args[0] };
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(inputDirs));
 		final FSReader fsReader = new FSReader(readerConfiguration);
 		analysisInstance.registerReader(fsReader);

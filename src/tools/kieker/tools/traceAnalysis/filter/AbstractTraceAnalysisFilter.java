@@ -45,6 +45,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	private static final Log LOG = LogFactory.getLog(AbstractTraceAnalysisFilter.class);
 
+	public static final String REPOSITORY_PORT_NAME_SYSTEM_MODEL = "systemModelRepository";
+
 	/**
 	 * Output stream for info output addressed to users, e.g., number of traces processed, files processed etc.
 	 */
@@ -54,8 +56,6 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	 * Output stream for error output addressed to users, e.g., file not found.
 	 */
 	private volatile PrintStream errStream = System.err;
-
-	public static final String REPOSITORY_PORT_NAME_SYSTEM_MODEL = "systemModelRepository";
 
 	private volatile SystemModelRepository systemEntityFactory;
 

@@ -62,7 +62,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 		final Configuration cfg = new Configuration();
 
 		if (selectedTraces != null) {
-			final String selectedTracesArr[] = new String[selectedTraces.size()];
+			final String[] selectedTracesArr = new String[selectedTraces.size()];
 			final Iterator<Long> iter = selectedTraces.iterator();
 			int i = 0;
 			while (iter.hasNext()) {
@@ -151,7 +151,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 	 */
 	@Test
 	public void testAssertPassTraceIdWhenPassAll() {
-		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(null);// i.e., pass all
+		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(null); // i.e., pass all
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(7l, // traceId (must be element of idsToPass) // NOCS (MagicNumberCheck)

@@ -154,7 +154,6 @@ class RecordDelegationPlugin2 extends AbstractFilterPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
-
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		return new Configuration();
@@ -163,7 +162,6 @@ class RecordDelegationPlugin2 extends AbstractFilterPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
-
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

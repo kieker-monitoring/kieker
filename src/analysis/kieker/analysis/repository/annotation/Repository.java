@@ -36,7 +36,7 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface Repository {
 
-	public final static String NO_NAME = "";
+	public static final String NO_NAME = "";
 
 	/**
 	 * The human-readable description of this repository type.

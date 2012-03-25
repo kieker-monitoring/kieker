@@ -1,4 +1,24 @@
-package kieker.test.analysis.junit.plugin;
+/***************************************************************************
+ * Copyright 2011 by
+ *  + Christian-Albrechts-University of Kiel
+ *    + Department of Computer Science
+ *      + Software Engineering Group 
+ *  and others.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
+package kieker.test.analysis.junit.plugin; // NOCS (outer types)
 
 import java.util.List;
 
@@ -23,8 +43,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * A simple test for the plugins in general. It tests for example if the
- * chaining of different plugins does work.
+ * A simple test for the plugins in general. It tests for example if the chaining of different plugins does work.
  * 
  * @author Nils Christian Ehmke
  */
@@ -71,12 +90,12 @@ public class GeneralPluginTest extends TestCase {
 
 		final Configuration filter1byTraceIDConfig = new Configuration();
 		filter1byTraceIDConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.FALSE.toString());
-		filter1byTraceIDConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, Configuration.toProperty(new Long[] { 1l }));
+		filter1byTraceIDConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, Configuration.toProperty(new Long[] { 1L }));
 		final TraceIdFilter filter1byTraceID = new TraceIdFilter(filter1byTraceIDConfig);
 
 		final Configuration filter2ByTimestampConfiguration = new Configuration();
-		filter2ByTimestampConfiguration.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, Long.toString(10l));
-		filter2ByTimestampConfiguration.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, Long.toString(20l));
+		filter2ByTimestampConfiguration.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, Long.toString(10L));
+		filter2ByTimestampConfiguration.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, Long.toString(20L));
 		final TimestampFilter filter2ByTimestamp = new TimestampFilter(filter2ByTimestampConfiguration);
 
 		/* The records we will send. */
@@ -112,7 +131,8 @@ public class GeneralPluginTest extends TestCase {
 		final List<Execution> execs = dst.getExecutions();
 		Assert.assertEquals(2, execs.size());
 
-		boolean okay1 = false, okay2 = false;
+		boolean okay1 = false;
+		boolean okay2 = false;
 
 		for (final Execution ex : execs) {
 			if ((ex.getTraceId() == 1) && (ex.getTin() == 14) && (ex.getTout() == 15)) {
@@ -142,13 +162,14 @@ public class GeneralPluginTest extends TestCase {
 class SourceClass extends AbstractReaderPlugin { // NOPMD (SubClassOfTest)
 
 	/**
-	 * The array containing the records to be delivered.
-	 */
-	private final OperationExecutionRecord records[];
-	/**
 	 * The name of the default output port.
 	 */
 	public static final String OUTPUT_PORT_NAME = "output";
+
+	/**
+	 * The array containing the records to be delivered.
+	 */
+	private final OperationExecutionRecord[] records;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.

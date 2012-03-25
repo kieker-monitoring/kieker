@@ -61,7 +61,7 @@ public final class BookstoreHostnameRewriter {
 		analysisInstance.registerFilter(plugin);
 
 		/* Set filesystem monitoring log input directory for our analysis */
-		final String inputDirs[] = { args[0] };
+		final String[] inputDirs = { args[0] };
 		final Configuration configuration = new Configuration(null);
 		configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(inputDirs));
 		final FSReader reader = new FSReader(configuration);

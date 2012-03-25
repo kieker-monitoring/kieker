@@ -62,6 +62,10 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 	@Deprecated
 	private boolean useRuntimeClassname = true;
 
+	public OperationExecutionMethodInvocationInterceptor() {
+		// nothing to do
+	}
+
 	@Deprecated
 	public boolean isUseRuntimeClassname() {
 		return this.useRuntimeClassname;
@@ -70,10 +74,6 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 	@Deprecated
 	public void setUseRuntimeClassname(final boolean useRuntimeClassname) {
 		this.useRuntimeClassname = useRuntimeClassname;
-	}
-
-	public OperationExecutionMethodInvocationInterceptor() {
-		// nothing to do
 	}
 
 	/**

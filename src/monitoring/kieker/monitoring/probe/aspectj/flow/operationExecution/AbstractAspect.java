@@ -48,13 +48,13 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	public abstract void monitoredOperation();
 
 	@Around("monitoredOperation() && notWithinKieker()")
-	public Object operation(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
+	public Object operation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
 		if (!AbstractAspect.CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
 		Trace trace = AbstractAspect.TRACEREGISTRY.getTrace();
-		final boolean newTrace = (trace == null);
+		final boolean newTrace = trace == null;
 		if (newTrace) {
 			trace = AbstractAspect.TRACEREGISTRY.registerTrace();
 			AbstractAspect.CTRLINST.newMonitoringRecord(trace);
@@ -67,7 +67,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final Object retval;
 		try {
 			retval = thisJoinPoint.proceed();
-		} catch (final Throwable th) { // NOPMD (catch throw might ok here)
+		} catch (final Throwable th) { // NOPMD NOCS (catch throw might ok here)
 			// measure after failed execution
 			AbstractAspect.CTRLINST.newMonitoringRecord(new AfterOperationFailedEvent(AbstractAspect.TIME.getTime(), traceId, trace.getNextOrderId(), signature,
 					th.toString()));

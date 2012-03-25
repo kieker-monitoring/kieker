@@ -73,9 +73,9 @@ public class DeactivatedOperationExecutionAspectAnnotation extends AbstractOpera
 
 	@Override
 	@Around("monitoredOperation() && notWithinKieker()")
-	public Object operation(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
-		if (!DeactivatedOperationExecutionAspectAnnotation.CTRLINST.isMonitoringEnabled() ||
-				DeactivatedOperationExecutionAspectAnnotation.DEACTIVATEDPROBES.containsKey(thisJoinPoint.getStaticPart().getSignature().toString())) {
+	public Object operation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
+		if (!DeactivatedOperationExecutionAspectAnnotation.CTRLINST.isMonitoringEnabled()
+				|| DeactivatedOperationExecutionAspectAnnotation.DEACTIVATEDPROBES.containsKey(thisJoinPoint.getStaticPart().getSignature().toString())) {
 			return thisJoinPoint.proceed();
 		}
 		// collect data

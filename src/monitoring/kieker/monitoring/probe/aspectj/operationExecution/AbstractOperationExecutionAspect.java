@@ -52,7 +52,7 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 	public abstract void monitoredOperation();
 
 	@Around("monitoredOperation() && notWithinKieker()")
-	public Object operation(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
+	public Object operation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
 		if (!AbstractOperationExecutionAspect.CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}

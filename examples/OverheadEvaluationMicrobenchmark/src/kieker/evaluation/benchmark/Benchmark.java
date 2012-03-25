@@ -67,7 +67,7 @@ public final class Benchmark {
 			threads[i] = new BenchmarkingThread(mc, Benchmark.totalCalls, Benchmark.methodTime, Benchmark.recursionDepth, doneSignal);
 		}
 		for (int l = 0; l < 4; l++) {
-			{// hopefully this works ;)
+			{ // NOCS (reserve mem only within the block)
 				final long freeMemChunks = Runtime.getRuntime().freeMemory() >> 27;
 				// System.out.println("Free-Mem: " + Runtime.getRuntime().freeMemory());
 				final int memSize = 128 * 1024 * 128; // memSize * 8 = total Bytes -> 128MB
@@ -136,7 +136,7 @@ public final class Benchmark {
 			Benchmark.totalThreads = Integer.parseInt(cmdl.getOptionValue("totalthreads"));
 			Benchmark.recursionDepth = Integer.parseInt(cmdl.getOptionValue("recursiondepth"));
 			Benchmark.ps = new PrintStream(new FileOutputStream(Benchmark.outputFn, true), false, Benchmark.ENCODING);
-		} catch (final Exception ex) { // e.g., IOException, ParseException, NumberFormatException
+		} catch (final Exception ex) { // NOCS (e.g., IOException, ParseException, NumberFormatException)
 			new HelpFormatter().printHelp(Benchmark.class.getName(), cmdlOpts);
 			ex.printStackTrace();
 			System.exit(-1);

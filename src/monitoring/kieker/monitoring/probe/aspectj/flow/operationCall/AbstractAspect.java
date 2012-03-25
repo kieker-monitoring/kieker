@@ -47,13 +47,13 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	public abstract void monitoredOperation();
 
 	@Around("monitoredOperation() && notWithinKieker()")
-	public Object operation(final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint) throws Throwable {
+	public Object operation(final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint) throws Throwable { // NOCS (Throwable)
 		if (!AbstractAspect.CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
 		Trace trace = AbstractAspect.TRACEREGISTRY.getTrace();
-		final boolean newTrace = (trace == null);
+		final boolean newTrace = trace == null;
 		if (newTrace) {
 			trace = AbstractAspect.TRACEREGISTRY.registerTrace();
 			AbstractAspect.CTRLINST.newMonitoringRecord(trace);

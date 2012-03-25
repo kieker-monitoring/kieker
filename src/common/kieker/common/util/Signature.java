@@ -28,9 +28,10 @@ package kieker.common.util;
  * @author Andre van Hoorn
  */
 public class Signature {
-	private final String name;
 
 	public static final String NO_RETURN_TYPE = "<NO-RETURN-TYPE>";
+
+	private final String name;
 
 	private final String[] modifierList;
 	private final String returnType;

@@ -463,9 +463,9 @@ public class TestTraceReconstructionFilter extends TestCase {
 		Assert.assertEquals("An incomplete or complete trace didn't pass the filter", 2, invalidExecutionTraceSink.getList().size());
 		for (int i = 0; i < 2; i++) {
 			final InvalidExecutionTrace event = (InvalidExecutionTrace) invalidExecutionTraceSink.getList().get(i);
-			if (event.getInvalidExecutionTraceArtifacts().equals(incompleteExecutionTrace)) { // NOPMD (empty if)
+			if (event.getInvalidExecutionTraceArtifacts().equals(incompleteExecutionTrace)) { // NOPMD NOCS (empty if)
 				// Nothing to do
-			} else if (event.getInvalidExecutionTraceArtifacts().equals(completingExecutionTrace)) { // NOPMD (empty if)
+			} else if (event.getInvalidExecutionTraceArtifacts().equals(completingExecutionTrace)) { // NOPMD NOCS (empty if)
 				// Nothing to do
 			} else {
 				Assert.fail("Received an unexpected invalid execution trace: " + event);

@@ -287,9 +287,9 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 			// Look for a call event at the top of the stack
 			final AbstractTraceEvent potentialCallEvent = (this.filterState.isEventStackEmpty()) ? null : this.filterState.peekEvent(); // NOPMD
 			// A definite call occurs if either the stack is empty (entry into the trace) or if a matching call event is found
-			final boolean definiteCall = ((potentialCallEvent == null)
-					|| ((potentialCallEvent instanceof CallOperationEvent) && ((CallOperationEvent) potentialCallEvent)
-					.callsReferencedOperationOf(afterOperationEvent)));
+			final boolean definiteCall = (potentialCallEvent == null)
+					|| ((potentialCallEvent instanceof CallOperationEvent)
+					&& ((CallOperationEvent) potentialCallEvent).callsReferencedOperationOf(afterOperationEvent));
 
 			// If a matching call event was found, it must be removed from the stack
 			if (definiteCall && !this.filterState.isEventStackEmpty()) {
@@ -415,8 +415,8 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 	}
 
 	private void printInvalidIndexMessage(final AbstractTraceEvent event, final ExecutionTrace executionTrace, final long lastIndex) {
-		EventTrace2ExecutionAndMessageTraceFilter.LOG.error("Trace events' order indices must increment by one: " +
-				" Found " + lastIndex + " followed by " + event.getOrderIndex() + " event (" + event + ")");
+		EventTrace2ExecutionAndMessageTraceFilter.LOG.error("Trace events' order indices must increment by one: "
+				+ " Found " + lastIndex + " followed by " + event.getOrderIndex() + " event (" + event + ")");
 		EventTrace2ExecutionAndMessageTraceFilter.LOG.error("Terminating processing of event record trace with ID " + executionTrace.getTraceId());
 	}
 

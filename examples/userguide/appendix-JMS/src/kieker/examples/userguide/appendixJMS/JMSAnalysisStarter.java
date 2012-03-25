@@ -32,20 +32,20 @@ public final class JMSAnalysisStarter {
 
 	private static final long MAX_RT_NANOS = 1700;
 
-	private final static String CONNECTION_FACTORY_TYPE__ACTIVEMQ = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
-	private final static String CONNECTION_FACTORY_TYPE__HORNETQ = "org.jnp.interfaces.NamingContextFactory";
-	private final static String CONNECTION_FACTORY_TYPE__OPENJMS = "org.exolab.jms.jndi.InitialContextFactory";
+	private static final String CONNECTION_FACTORY_TYPE__ACTIVEMQ = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
+	private static final String CONNECTION_FACTORY_TYPE__HORNETQ = "org.jnp.interfaces.NamingContextFactory";
+	private static final String CONNECTION_FACTORY_TYPE__OPENJMS = "org.exolab.jms.jndi.InitialContextFactory";
 
 	/** Default provider URL used by ActiveMQ */
-	private final static String PROVIDER_URL__ACTIVEMQ = "tcp://127.0.0.1:61616/";
+	private static final String PROVIDER_URL__ACTIVEMQ = "tcp://127.0.0.1:61616/";
 	/** Default provider URL used by HornetQ */
-	private final static String PROVIDER_URL__HORNETQ = "jnp://localhost:1099/";
+	private static final String PROVIDER_URL__HORNETQ = "jnp://localhost:1099/";
 	/** Default provider URL used by OpenJMS */
-	private final static String PROVIDER_URL__OPENJMS = "tcp://127.0.0.1:3035/";
+	private static final String PROVIDER_URL__OPENJMS = "tcp://127.0.0.1:3035/";
 
-	private final static String QUEUE_ACTIVEMQ = "queue1";
-	private final static String QUEUE_HORNETQ = "queue1";
-	private final static String QUEUE_OPENJMS = "queue1";
+	private static final String QUEUE_ACTIVEMQ = "queue1";
+	private static final String QUEUE_HORNETQ = "queue1";
+	private static final String QUEUE_OPENJMS = "queue1";
 
 	private static String connectionFactory;
 	private static String providerUrl;

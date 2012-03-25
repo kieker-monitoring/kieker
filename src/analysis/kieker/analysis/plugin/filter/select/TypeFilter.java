@@ -44,7 +44,6 @@ import kieker.common.logging.LogFactory;
 	@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_TYPE_MISMATCH, eventTypes = {}, description = "Forwards events not matching the configured types")
 })
 public final class TypeFilter extends AbstractFilterPlugin {
-	private static final Log LOG = LogFactory.getLog(TypeFilter.class);
 
 	public static final String INPUT_PORT_NAME_EVENTS = "events";
 
@@ -52,6 +51,8 @@ public final class TypeFilter extends AbstractFilterPlugin {
 	public static final String OUTPUT_PORT_NAME_TYPE_MISMATCH = "events-not-matching-type";
 
 	public static final String CONFIG_PROPERTY_NAME_TYPES = "types";
+
+	private static final Log LOG = LogFactory.getLog(TypeFilter.class);
 
 	private final Class<?>[] acceptedClasses;
 

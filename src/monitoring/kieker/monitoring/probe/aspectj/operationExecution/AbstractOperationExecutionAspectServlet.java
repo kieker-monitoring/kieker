@@ -45,7 +45,7 @@ public abstract class AbstractOperationExecutionAspectServlet extends AbstractOp
 	public abstract void monitoredServlet(final HttpServletRequest request, final HttpServletResponse response);
 
 	@Around("monitoredServlet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse) && notWithinKieker()")
-	public Object servlet(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
+	public Object servlet(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
 		if (!AbstractOperationExecutionAspectServlet.CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}

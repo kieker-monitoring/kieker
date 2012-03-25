@@ -25,10 +25,10 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 
 public class CRM {
-	private final Catalog catalog;
 
-	private final static IMonitoringController MONITORING_CONTROLLER =
-			MonitoringController.getInstance();
+	private static final IMonitoringController MONITORING_CONTROLLER = MonitoringController.getInstance();
+
+	private final Catalog catalog;
 
 	public CRM(final Catalog catalog) {
 		this.catalog = catalog;

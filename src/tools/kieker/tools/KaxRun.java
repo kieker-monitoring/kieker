@@ -49,7 +49,7 @@ public final class KaxRun {
 	 * @param args
 	 *            the name of the .kax file
 	 */
-	public final static void main(final String[] args) {
+	public static final void main(final String[] args) {
 		// create cmdline options
 		final Options options = new Options();
 		final Option inputOption = new Option("i", "input", true, "the analysis project file (.kax) loaded");
@@ -74,7 +74,7 @@ public final class KaxRun {
 		try {
 			final AnalysisController ctrl = new AnalysisController(new File(kaxFilename));
 			ctrl.run();
-		} catch (final Exception ex) { // NOPMD (log all errors)
+		} catch (final Exception ex) { // NOPMD NOCS (log all errors)
 			KaxRun.LOG.error("Error", ex);
 		}
 	}

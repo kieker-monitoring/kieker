@@ -25,10 +25,10 @@ import kieker.monitoring.core.controller.MonitoringController;
 
 public class Bookstore {
 
+	private static final IMonitoringController MONITORING_CONTROLLER = MonitoringController.getInstance();
+
 	private final Catalog catalog = new Catalog();
 	private final CRM crm = new CRM(this.catalog);
-	private final static IMonitoringController MONITORING_CONTROLLER =
-			MonitoringController.getInstance();
 
 	public void searchBook() {
 		{ /* 1. Invoke catalog.getBook() and monitor response time */

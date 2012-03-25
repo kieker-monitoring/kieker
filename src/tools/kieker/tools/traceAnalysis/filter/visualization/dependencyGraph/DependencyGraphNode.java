@@ -77,8 +77,8 @@ public class DependencyGraphNode<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <NDT extends AbstractNodeDecoration> NDT getDecoration(final Class<? extends AbstractNodeDecoration> type) {
-		return (NDT) this.decorations.get(type);
+	public <N extends AbstractNodeDecoration> N getDecoration(final Class<? extends AbstractNodeDecoration> type) {
+		return (N) this.decorations.get(type);
 	}
 
 	public void addDecoration(final AbstractNodeDecoration decoration) {
@@ -89,9 +89,8 @@ public class DependencyGraphNode<T> {
 		this.addOutgoingDependency(destination, false);
 	}
 
-	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final boolean assumed) {
-		final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = (assumed) ? this.assumedOutgoingDependencies
-				: this.outgoingDependencies;
+	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final boolean assume) {
+		final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = assume ? this.assumedOutgoingDependencies : this.outgoingDependencies;
 
 		WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(destination.getId());
 		if (e == null) {
@@ -99,7 +98,7 @@ public class DependencyGraphNode<T> {
 			e.setSource(this);
 			e.setDestination(destination);
 
-			if (assumed) {
+			if (assume) {
 				e.setAssumed();
 			}
 
@@ -112,9 +111,8 @@ public class DependencyGraphNode<T> {
 		this.addIncomingDependency(source, false);
 	}
 
-	public void addIncomingDependency(final DependencyGraphNode<T> source, final boolean assumed) {
-		final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = (assumed) ? this.assumedIncomingDependencies
-				: this.incomingDependencies;
+	public void addIncomingDependency(final DependencyGraphNode<T> source, final boolean assume) {
+		final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = assume ? this.assumedIncomingDependencies : this.incomingDependencies;
 
 		WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(source.getId());
 		if (e == null) {

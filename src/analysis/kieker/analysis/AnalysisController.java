@@ -726,7 +726,7 @@ public final class AnalysisController implements Runnable {
 		} catch (final IOException ex) {
 			AnalysisController.LOG.error("Could not open the given file.", ex);
 			return null;
-		} catch (final Exception ex) { // NOPMD
+		} catch (final Exception ex) { // NOPMD NOCS (illegal catch)
 			/* Some exceptions like the XMIException can be thrown during loading although it cannot be seen. Catch this situation. */
 			AnalysisController.LOG.error("The given file is not a valid kax-configuration file.", ex);
 			return null;
@@ -750,7 +750,7 @@ public final class AnalysisController implements Runnable {
 		resource.getContents().add(project);
 
 		/* Make sure that the controller uses utf8 instead of ascii. */
-		final HashMap<String, String> options = new HashMap<String, String>();
+		final Map<String, String> options = new HashMap<String, String>();
 		options.put(XMLResource.OPTION_ENCODING, "UTF-8");
 
 		/* Now try to save the resource. */

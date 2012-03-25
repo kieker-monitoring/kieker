@@ -45,8 +45,8 @@ public class TestEventRecordTraceGenerationFilter extends TestCase {
 
 	// TODO: Continue this test in terms of timing constellations
 
-	private final static String SESSION_ID = "8yWpCvrJ2";
-	private final static String HOSTNAME = "srv55";
+	private static final String SESSION_ID = "8yWpCvrJ2";
+	private static final String HOSTNAME = "srv55";
 
 	/**
 	 * Creates an {@link EventRecordTraceGenerationFilter} with the given parameter.

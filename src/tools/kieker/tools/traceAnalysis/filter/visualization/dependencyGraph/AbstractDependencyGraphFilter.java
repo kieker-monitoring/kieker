@@ -155,6 +155,6 @@ public abstract class AbstractDependencyGraphFilter<T> extends AbstractMessageTr
 	}
 
 	protected boolean isDependencyAssumed(final DependencyGraphNode<?> source, final DependencyGraphNode<?> target) {
-		return (source.isAssumed() || target.isAssumed());
+		return source.isAssumed() || target.isAssumed();
 	}
 }

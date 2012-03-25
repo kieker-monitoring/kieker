@@ -237,7 +237,7 @@ final class FSDirectoryReader implements Runnable {
 				} catch (final MonitoringRecordException ex) {
 					FSDirectoryReader.LOG.error("Error loading record type", ex);
 					continue; // skip this record
-				} catch (final Exception ex) { // NOPMD
+				} catch (final Exception ex) { // NOPMD NOCS (illegal catch)
 					FSDirectoryReader.LOG.error("Error processing line" + line);
 					continue; // skip this record
 				}

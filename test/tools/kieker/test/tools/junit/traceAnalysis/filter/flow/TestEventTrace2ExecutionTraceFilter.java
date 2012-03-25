@@ -25,7 +25,6 @@ import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
 import kieker.common.configuration.Configuration;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
-import kieker.test.tools.junit.traceAnalysis.filter.TestTraceReconstructionFilter;
 import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
 import kieker.test.tools.junit.traceAnalysis.util.BookstoreExecutionFactory;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
@@ -45,7 +44,7 @@ import org.junit.Test;
  * 
  */
 public class TestEventTrace2ExecutionTraceFilter extends TestCase {
-	private static final long TRACE_ID = 4563l;
+	private static final long TRACE_ID = 4563L;
 	private static final String SESSION_ID = "y2zGAI0VX"; // Same Session ID for all traces
 	private static final String HOSTNAME = "srv090";
 
@@ -59,7 +58,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 	private final Execution exec3_2__catalog_getBook; // NOCS
 
 	/**
-	 * Borrowed from {@link TestTraceReconstructionFilter}.
+	 * Borrowed from {@link kieker.test.tools.junit.traceAnalysis.filter.TestTraceReconstructionFilter}.
 	 */
 	public TestEventTrace2ExecutionTraceFilter() {
 		// Note that we are using AbstractTraceAnalysisFilter.createExecutionByEntityNames in order to get the
@@ -98,7 +97,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 	 * Generates an execution trace representation of the "well-known" bookstore
 	 * trace.
 	 * 
-	 * Borrowed from {@link TestTraceReconstructionFilter}.
+	 * Borrowed from {@link kieker.test.tools.junit.traceAnalysis.filter.TestTraceReconstructionFilter}.
 	 * 
 	 * @return
 	 * @throws InvalidTraceException

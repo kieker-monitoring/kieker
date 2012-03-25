@@ -36,10 +36,11 @@ import org.junit.Test;
  * @author Andre van Hoorn
  */
 public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase { // NOCS
-	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration());
-	private final ExecutionFactory executionFactory = new ExecutionFactory(this.systemEntityFactory);
 
 	private static final String SESSION_ID = "j8tVhvDPYL";
+
+	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration());
+	private final ExecutionFactory executionFactory = new ExecutionFactory(this.systemEntityFactory);
 
 	@Test
 	public void testEqualTrace() throws InvalidTraceException {

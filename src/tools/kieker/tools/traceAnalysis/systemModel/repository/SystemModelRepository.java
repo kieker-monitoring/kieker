@@ -20,7 +20,6 @@
 
 package kieker.tools.traceAnalysis.systemModel.repository;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -147,7 +146,7 @@ public class SystemModelRepository extends AbstractRepository {
 	 * Writes the contents of this system model to an HTML file.
 	 * 
 	 * @param outputFn
-	 *            file system location of the output file (as accepted by {@link File#File(String)}).
+	 *            file system location of the output file (as accepted by {@link java.io.File#File(String)}).
 	 * @throws FileNotFoundException
 	 * @throws UnsupportedEncodingException
 	 */

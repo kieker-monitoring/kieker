@@ -25,7 +25,7 @@ import kieker.common.record.AbstractMonitoringRecord;
 public class MyResponseTimeRecord extends AbstractMonitoringRecord {
 
 	private static final long serialVersionUID = 1775L;
-	private final static String NA_VAL = "N/A";
+	private static final String NA_VAL = "N/A";
 
 	/* Attributes storing the actual monitoring data: */
 	public volatile String className = MyResponseTimeRecord.NA_VAL;

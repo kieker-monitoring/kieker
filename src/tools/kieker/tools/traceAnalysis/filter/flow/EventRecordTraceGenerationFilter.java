@@ -40,14 +40,14 @@ import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionEventProcessingException;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
-import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceReconstructionFilter;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
- * TODO: The implementation of this plugin was based on the {@link TraceReconstructionFilter}. We should check for possible abstractions later on.
+ * TODO: The implementation of this plugin was based on the {@link kieker.tools.traceAnalysis.filter.traceReconstruction.TraceReconstructionFilter}. We should check
+ * for possible abstractions later on.
  * TODO: Note that we are currently not evaluating if traces are valid
- * We should import the invalid traces handling from {@link TraceReconstructionFilter}
+ * We should import the invalid traces handling from {@link kieker.tools.traceAnalysis.filter.traceReconstruction.TraceReconstructionFilter}
  * 
  * @author Andre van Hoorn
  * 
@@ -167,7 +167,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 				 */
 				final AbstractTraceEvent event = (AbstractTraceEvent) record;
 				/* Update minimum and maximum timestamps */
-				if ((this.minTstamp == -1) /* unset */|| (event.getTimestamp() < this.minTstamp)) {
+				if ((this.minTstamp == -1) || (event.getTimestamp() < this.minTstamp)) { // unset
 					this.minTstamp = event.getTimestamp();
 				}
 				if (event.getTimestamp() > this.maxTstamp) {

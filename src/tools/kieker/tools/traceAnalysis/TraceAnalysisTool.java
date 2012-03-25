@@ -832,16 +832,14 @@ public final class TraceAnalysisTool {
 				}
 				final String kaxOutputFn = TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + "traceAnalysis.kax";
 				final File kaxOutputFile = new File(kaxOutputFn);
-				try {
-
-					// Try to serialize analysis configuration to .kax file
+				try { // NOCS (nested try)
+						// Try to serialize analysis configuration to .kax file
 					analysisInstance.saveToFile(kaxOutputFile);
 					TraceAnalysisTool.LOG.info("Saved analysis configuration to file '" + kaxOutputFile.getCanonicalPath() + "'");
 				} catch (final IOException ex) {
 					TraceAnalysisTool.LOG.error("Failed to save analysis configuration to file '" + kaxOutputFile.getCanonicalPath() + "'");
 				}
 			}
-
 			if (!TraceAnalysisTool.ignoreInvalidTraces && (numErrorCount > 0)) {
 				throw new Exception(numErrorCount + " errors occured in trace processing components");
 			}
