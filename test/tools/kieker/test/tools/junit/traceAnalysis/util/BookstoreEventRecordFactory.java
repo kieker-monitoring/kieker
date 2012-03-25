@@ -214,7 +214,8 @@ public final class BookstoreEventRecordFactory {
 		exit1_1__catalog_getBook = new AfterOperationEvent(firstTimestamp + 3, traceId, curOrderIndex++,
 				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
 
-		call2_1__crm_getOrders = new CallOperationEvent(firstTimestamp + 4, traceId, curOrderIndex++,
+		// TODO: why is +5 correct here?
+		call2_1__crm_getOrders = new CallOperationEvent(firstTimestamp + 5, traceId, curOrderIndex++,
 				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
 				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
 		// assumed to be uninstrumented: entry2_1__crm_getOrders = new BeforeOperationEvent(curTime++, traceId, curOrderIndex++,
