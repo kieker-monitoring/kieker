@@ -25,7 +25,7 @@ package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
  * @author Holger Knoche
  * 
  */
-public abstract class NodeDecoration {
+public abstract class AbstractNodeDecoration {
 
 	public abstract String createFormattedOutput();
 

@@ -128,7 +128,7 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 			 */
 			for (long nextTimerEventAt = this.mostRecentEventFired + this.timerResolution; timestamp >= nextTimerEventAt; nextTimerEventAt = this.mostRecentEventFired
 					+ this.timerResolution) {
-				super.deliver(CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME, new TimestampRecord(nextTimerEventAt)); // NOPMD (new in loop)
+				super.deliver(CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME, new TimestampRecord(nextTimerEventAt));
 				this.mostRecentEventFired = nextTimerEventAt;
 			}
 		}

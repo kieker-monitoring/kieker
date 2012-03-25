@@ -75,7 +75,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 	private final String outputFnBase;
 	private final boolean shortLabels;
 
-	// TODO Change constructor to plugin-default-constructor
+	// FIXME Change constructor to plugin-default-constructor (allocationComponentOperationPairFactory is not used anyways)
 	public TraceCallTreeFilter(final Configuration configuration, final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory,
 			final String outputFnBase, final boolean shortLabels) {
 		super(configuration);
@@ -138,7 +138,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 			final boolean includeWeights) {
 		final int thisId = nodeIds.get(n);
 		for (final CallTreeNode child : n.getChildren()) {
-			final StringBuilder strBuild = new StringBuilder(); // NOPMD (new in loop)
+			final StringBuilder strBuild = new StringBuilder();
 			final int childId = nodeIds.get(child);
 			strBuild.append("\n").append(thisId).append("->").append(childId).append("[style=solid,arrowhead=none");
 			if (includeWeights) {

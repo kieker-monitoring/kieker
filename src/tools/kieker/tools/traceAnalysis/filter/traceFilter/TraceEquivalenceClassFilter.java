@@ -136,13 +136,11 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
-		final Configuration defaultConfiguration = new Configuration();
-		return defaultConfiguration;
+		return new Configuration();
 	}
 
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
-		return configuration;
+		return new Configuration();
 	}
 
 	@Override

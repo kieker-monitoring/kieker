@@ -28,7 +28,7 @@ import kieker.common.configuration.Configuration;
  * 
  * @author Andre van Hoorn
  */
-public class JMSAnalysisStarter {
+public final class JMSAnalysisStarter {
 
 	private static final long MAX_RT_NANOS = 1700;
 
@@ -50,6 +50,8 @@ public class JMSAnalysisStarter {
 	private static String connectionFactory;
 	private static String providerUrl;
 	private static String queue;
+
+	private JMSAnalysisStarter() {}
 
 	public static void main(final String[] args) {
 		if (!JMSAnalysisStarter.parseArguments(args)) {

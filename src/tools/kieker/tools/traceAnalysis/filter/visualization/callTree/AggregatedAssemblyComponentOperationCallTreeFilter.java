@@ -37,7 +37,7 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * @author Andre van Hoorn
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
-public class AggregatedAssemblyComponentOperationCallTreeFilter extends AggregatedCallTreeFilter<AssemblyComponentOperationPair> {
+public class AggregatedAssemblyComponentOperationCallTreeFilter extends AbstractAggregatedCallTreeFilter<AssemblyComponentOperationPair> {
 
 	public AggregatedAssemblyComponentOperationCallTreeFilter(final Configuration configuration) {
 		super(configuration);
@@ -52,8 +52,7 @@ public class AggregatedAssemblyComponentOperationCallTreeFilter extends Aggregat
 	protected AssemblyComponentOperationPair concreteCreatePair(final SynchronousCallMessage callMsg) {
 		final AssemblyComponent assemblyComponent = callMsg.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
 		final Operation op = callMsg.getReceivingExecution().getOperation();
-		final AssemblyComponentOperationPair destination = this.getSystemEntityFactory().getAssemblyPairFactory().getPairInstanceByPair(assemblyComponent, op);
-		return destination;
+		return this.getSystemEntityFactory().getAssemblyPairFactory().getPairInstanceByPair(assemblyComponent, op);
 	}
 }
 

@@ -161,7 +161,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 			final Map<AbstractCallTreeNode<?>, Integer> nodeIds, final PrintStream ps, final boolean includeWeights) {
 		final int thisId = nodeIds.get(n);
 		for (final WeightedDirectedCallTreeEdge<?> child : n.getChildEdges()) {
-			final StringBuilder strBuild = new StringBuilder(1024); // NOPMD (new in Loop)
+			final StringBuilder strBuild = new StringBuilder(1024);
 			final int childId = nodeIds.get(child.getDestination());
 			strBuild.append("\n").append(thisId).append("->").append(childId).append("[style=solid,arrowhead=none");
 			if (includeWeights) {

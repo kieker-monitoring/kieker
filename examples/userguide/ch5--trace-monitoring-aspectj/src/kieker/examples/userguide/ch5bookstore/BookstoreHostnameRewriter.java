@@ -43,7 +43,9 @@ import kieker.monitoring.core.controller.MonitoringController;
  * @author Andre van Hoorn
  * 
  */
-public class BookstoreHostnameRewriter {
+public final class BookstoreHostnameRewriter {
+
+	private BookstoreHostnameRewriter() {}
 
 	public static void main(final String[] args)
 			throws MonitoringReaderException, MonitoringRecordConsumerException {
@@ -80,7 +82,7 @@ class HostNameRewriterPlugin extends AbstractFilterPlugin {
 	private static final IMonitoringController MONITORING_CTRL =
 			MonitoringController.getInstance();
 	private static final String BOOKSTORE_HOSTNAME = "SRV0";
-	private static final Random rnd = new Random();
+	private static final Random RANDOM = new Random();
 	private static final int RND_PERCENTILE_HOST_IDX_1 = 34;
 	private static final String[] CATALOG_HOSTNAMES = { "SRV0", "SRV1" };
 	private static final String CRM_HOSTNAME = "SRV0";
@@ -107,7 +109,7 @@ class HostNameRewriterPlugin extends AbstractFilterPlugin {
 		} else if (opSigPair.getFqClassname().equals(CRM.class.getName())) {
 			hostname = HostNameRewriterPlugin.CRM_HOSTNAME;
 		} else if (opSigPair.getFqClassname().equals(Catalog.class.getName())) {
-			if (HostNameRewriterPlugin.rnd.nextInt(99) < HostNameRewriterPlugin.RND_PERCENTILE_HOST_IDX_1) {
+			if (HostNameRewriterPlugin.RANDOM.nextInt(99) < HostNameRewriterPlugin.RND_PERCENTILE_HOST_IDX_1) {
 				hostname = HostNameRewriterPlugin.CATALOG_HOSTNAMES[0];
 			} else {
 				hostname = HostNameRewriterPlugin.CATALOG_HOSTNAMES[1];

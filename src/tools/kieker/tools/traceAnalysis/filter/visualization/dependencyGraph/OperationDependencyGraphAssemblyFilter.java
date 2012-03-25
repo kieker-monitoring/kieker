@@ -124,7 +124,7 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 			Collection<DependencyGraphNode<AssemblyComponentOperationPair>> containedPairs = componentId2pairMapping.get(componentId);
 			if (containedPairs == null) {
 				// component not yet registered
-				containedPairs = new ArrayList<DependencyGraphNode<AssemblyComponentOperationPair>>(); // NOPMD (new in loop)
+				containedPairs = new ArrayList<DependencyGraphNode<AssemblyComponentOperationPair>>();
 				componentId2pairMapping.put(componentId, containedPairs);
 			}
 			containedPairs.add(pairNode);
@@ -157,7 +157,7 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 						null)); // misc
 				for (final DependencyGraphNode<AssemblyComponentOperationPair> curPair : componentOperationEntry.getValue()) {
 					final Signature sig = curPair.getEntity().getOperation().getSignature();
-					final StringBuilder opLabel = new StringBuilder(sig.getName()); // NOPMD (new in loop)
+					final StringBuilder opLabel = new StringBuilder(sig.getName());
 					opLabel.append("(");
 					final String[] paramList = sig.getParamTypeList();
 					if ((paramList != null) && (paramList.length > 0)) {

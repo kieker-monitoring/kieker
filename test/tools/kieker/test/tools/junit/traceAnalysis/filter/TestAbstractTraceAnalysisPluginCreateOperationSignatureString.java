@@ -36,8 +36,8 @@ public class TestAbstractTraceAnalysisPluginCreateOperationSignatureString exten
 
 	@Test
 	public void testNoModifiers() {
-		final String fqClassName = "a.b.c.D";
-		final String opName = "op1";
+		final String fqClassName = "a.b.c.D"; // NOPMD (String repeat)
+		final String opName = "op1"; // NOPMD (String repeat)
 		final String[] modifiers = {};
 		final String returnType = Boolean.class.getName();
 		final String[] paramTypes = { Boolean.class.getName(), Integer.class.getName() };
@@ -49,15 +49,15 @@ public class TestAbstractTraceAnalysisPluginCreateOperationSignatureString exten
 		 */
 		final String opSignatureString = ClassOperationSignaturePair.createOperationSignatureString(fqClassName, inputSignature);
 		final String expectedOpSignatureString = returnType + " " + fqClassName + "." + opName + "(" + paramTypes[0] + ", " + paramTypes[1] + ")";
-		Assert.assertEquals("Unexpected result", expectedOpSignatureString, opSignatureString);
+		Assert.assertEquals("Unexpected result", expectedOpSignatureString, opSignatureString); // NOPMD (String repeat)
 
 		/*
 		 * Now split expectedOpSignatureString and compare class name and signature
 		 */
 		final ClassOperationSignaturePair compSigPair = ClassOperationSignaturePair.splitOperationSignatureStr(expectedOpSignatureString);
-		Assert.assertEquals("FQ classnames not equal", fqClassName, compSigPair.getFqClassname());
+		Assert.assertEquals("FQ classnames not equal", fqClassName, compSigPair.getFqClassname()); // NOPMD (String repeat)
 		// TODO: Comparing Signature.toString() results as long as no implementation of Signature.equals
-		Assert.assertEquals("Signatures not equal", inputSignature.toString(), compSigPair.getSignature().toString());
+		Assert.assertEquals("Signatures not equal", inputSignature.toString(), compSigPair.getSignature().toString()); // NOPMD (String repeat)
 	}
 
 	@Test
@@ -127,7 +127,7 @@ public class TestAbstractTraceAnalysisPluginCreateOperationSignatureString exten
 		try {
 			final String opSignatureString = ClassOperationSignaturePair.createOperationSignatureString(fqClassName, inputSignature);
 			Assert.fail("Expected IllegalArgumentException to be thrown because modifiers but no return type; result: " + opSignatureString);
-		} catch (final IllegalArgumentException ex) {
+		} catch (final IllegalArgumentException ex) { // NOPMD (ignore exception)
 		}
 	}
 

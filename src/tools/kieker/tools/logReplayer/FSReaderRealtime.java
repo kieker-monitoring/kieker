@@ -39,9 +39,9 @@ import kieker.common.record.IMonitoringRecord;
  * @author Andre van Hoorn
  */
 @Plugin(outputPorts = {
-		@OutputPort(name = FSReaderRealtime.OUTPUT_PORT_NAME_MONITORING_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReaderRealtime")
+	@OutputPort(name = FSReaderRealtime.OUTPUT_PORT_NAME_MONITORING_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReaderRealtime")
 })
-public class FSReaderRealtime extends AbstractReaderPlugin {
+public final class FSReaderRealtime extends AbstractReaderPlugin {
 	private static final Log LOG = LogFactory.getLog(FSReaderRealtime.class);
 
 	public static final String OUTPUT_PORT_NAME_MONITORING_RECORDS = "monitoring-records";
@@ -51,7 +51,6 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 
 	/* manages the life-cycle of the reader and consumers */
 	private final AnalysisController analysis = new AnalysisController();
-	private RealtimeReplayDistributor rtDistributor = null;
 	/** Reader will wait for this latch before read() returns */
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
 	private int numWorkers;
@@ -75,7 +74,7 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		this.init(configuration);
 	}
 
-	public boolean init(final Configuration configuration) {
+	public final boolean init(final Configuration configuration) {
 		this.numWorkers = configuration.getIntProperty(FSReaderRealtime.PROPERTY_NAME_NUM_WORKERS);
 		this.inputDirs = configuration.getStringArrayProperty(FSReaderRealtime.PROPERTY_NAME_INPUTDIRNAMES, ";");
 		// this.inputDirs = this.inputDirNameListToArray(configuration.getStringProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES));
@@ -124,16 +123,16 @@ public class FSReaderRealtime extends AbstractReaderPlugin {
 		this.analysis.registerFilter(rtCons);
 		final Configuration rtDistributorConfiguration = new Configuration();
 		rtDistributorConfiguration.setProperty(RealtimeReplayDistributor.CONFIG_PROPERTY_NAME_NUM_WORKERS, Integer.toString(numWorkers));
-		this.rtDistributor = new RealtimeReplayDistributor(rtDistributorConfiguration);
-		this.rtDistributor.setCons(rtCons);
-		this.rtDistributor.setConstInputPortName(FSReaderRealtimeCons.INPUT_PORT_MONITORING_RECORDS);
-		this.rtDistributor.setController(this.analysis);
-		this.rtDistributor.setTerminationLatch(this.terminationLatch);
+		final RealtimeReplayDistributor rtDistributor = new RealtimeReplayDistributor(rtDistributorConfiguration);
+		rtDistributor.setCons(rtCons);
+		rtDistributor.setConstInputPortName(FSReaderRealtimeCons.INPUT_PORT_MONITORING_RECORDS);
+		rtDistributor.setController(this.analysis);
+		rtDistributor.setTerminationLatch(this.terminationLatch);
 
 		this.analysis.registerReader(fsReader);
-		this.analysis.registerFilter(this.rtDistributor);
+		this.analysis.registerFilter(rtDistributor);
 
-		this.analysis.connect(fsReader, FSReader.OUTPUT_PORT_NAME_RECORDS, this.rtDistributor, RealtimeReplayDistributor.INPUT_PORT_NAME_MONITORING_RECORDS);
+		this.analysis.connect(fsReader, FSReader.OUTPUT_PORT_NAME_RECORDS, rtDistributor, RealtimeReplayDistributor.INPUT_PORT_NAME_MONITORING_RECORDS);
 	}
 
 	/**

@@ -41,6 +41,8 @@ import org.apache.commons.cli.ParseException;
 public final class KaxRun {
 	private static final Log LOG = LogFactory.getLog(KaxRun.class);
 
+	private KaxRun() {}
+
 	/**
 	 * Starts an AnalysisController with a .kax file.
 	 * 

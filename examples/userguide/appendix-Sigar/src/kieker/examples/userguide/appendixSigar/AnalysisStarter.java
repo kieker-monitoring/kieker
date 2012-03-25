@@ -32,6 +32,8 @@ import kieker.tools.util.LoggingTimestampConverter;
 
 public class AnalysisStarter {
 
+	private AnalysisStarter() {}
+
 	public static void main(final String[] args) {
 
 		if (args.length == 0) {
@@ -100,9 +102,7 @@ class StdOutDumpConsumer extends AbstractFilterPlugin {
 									.convertLoggingTimestampToUTCString(memSwapUsageRecord
 											.getTimestamp()),
 							hostname, memUsageMB, swapUsageMB));
-		} else {
-			/* Unexpected record type */
-		}
+		} // else Unexpected record type
 	}
 
 	@Override

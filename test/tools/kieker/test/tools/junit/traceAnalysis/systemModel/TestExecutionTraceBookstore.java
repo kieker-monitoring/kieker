@@ -167,7 +167,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 		int curIdx = 0;
 		{ /* 1.: [0,0].Call $->bookstore.searchBook(..) */// NOCS
 			final AbstractMessage call0_0___root__bookstore_searchBook = msgArray[curIdx++]; // NOCS
-			Assert.assertTrue("Message is not a call", call0_0___root__bookstore_searchBook instanceof SynchronousCallMessage);
+			Assert.assertTrue("Message is not a call", call0_0___root__bookstore_searchBook instanceof SynchronousCallMessage); // NOPMD (String repeat)
 			Assert.assertEquals("Sending execution is not root execution", call0_0___root__bookstore_searchBook.getSendingExecution(),
 					SystemModelRepository.ROOT_EXECUTION);
 			Assert.assertEquals(call0_0___root__bookstore_searchBook.getReceivingExecution(), this.exec0_0__bookstore_searchBook);

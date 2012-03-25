@@ -59,7 +59,7 @@ public class BookstoreWA extends Thread {
 	public static void main(final String[] args) throws InterruptedException {
 		for (int i = 0; i < BookstoreWA.NUM_REQUESTS; i++) {
 			System.out.println("BookstoreWA.main: Starting request " + i);
-			final BookstoreWA newBookstore = new BookstoreWA(); // NOPMD (new in loop)
+			final BookstoreWA newBookstore = new BookstoreWA();
 			synchronized (BookstoreWA.BOOKSTORE_SCENARIOS) {
 				BookstoreWA.BOOKSTORE_SCENARIOS.add(newBookstore);
 			}

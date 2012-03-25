@@ -37,7 +37,7 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * @author Andre van Hoorn
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
-public class AggregatedAllocationComponentOperationCallTreeFilter extends AggregatedCallTreeFilter<AllocationComponentOperationPair> {
+public class AggregatedAllocationComponentOperationCallTreeFilter extends AbstractAggregatedCallTreeFilter<AllocationComponentOperationPair> {
 
 	public AggregatedAllocationComponentOperationCallTreeFilter(final Configuration configuration) {
 		super(configuration);
@@ -46,12 +46,6 @@ public class AggregatedAllocationComponentOperationCallTreeFilter extends Aggreg
 	public void setAllocationComponentOperationPairFactory(final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory) {
 		super.setRoot(new AggregatedAllocationComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 				AllocationComponentOperationPairFactory.ROOT_PAIR, true));
-	}
-
-	@Override
-	public boolean init() {
-		final boolean success = super.init();
-		return success;
 	}
 
 	@Override

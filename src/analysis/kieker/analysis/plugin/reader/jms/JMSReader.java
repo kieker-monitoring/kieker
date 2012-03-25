@@ -200,7 +200,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 		}
 	}
 
-	final void unblock() { // package visible for inner class
+	final void unblock() { // NOPMD (package visible for inner class)
 		this.cdLatch.countDown();
 	}
 

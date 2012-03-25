@@ -43,8 +43,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
-public abstract class AggregatedCallTreeFilter<T> extends AbstractCallTreeFilter<T> {
-	private static final Log LOG = LogFactory.getLog(AggregatedCallTreeFilter.class);
+public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTreeFilter<T> {
+	private static final Log LOG = LogFactory.getLog(AbstractAggregatedCallTreeFilter.class);
 
 	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "include-weights";
 	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "short-labels";
@@ -55,11 +55,11 @@ public abstract class AggregatedCallTreeFilter<T> extends AbstractCallTreeFilter
 	private final boolean shortLabels;
 	private int numGraphsSaved = 0;
 
-	public AggregatedCallTreeFilter(final Configuration configuration) {
+	public AbstractAggregatedCallTreeFilter(final Configuration configuration) {
 		super(configuration);
 
-		this.includeWeights = configuration.getBooleanProperty(AggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
-		this.shortLabels = configuration.getBooleanProperty(AggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS);
+		this.includeWeights = configuration.getBooleanProperty(AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
+		this.shortLabels = configuration.getBooleanProperty(AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS);
 	}
 
 	public void setRoot(final AbstractAggregatedCallTreeNode<T> root) {
@@ -97,7 +97,7 @@ public abstract class AggregatedCallTreeFilter<T> extends AbstractCallTreeFilter
 			try {
 				this.saveTreeToDotFile();
 			} catch (final IOException ex) {
-				AggregatedCallTreeFilter.LOG.error("IOException while saving to dot file", ex);
+				AbstractAggregatedCallTreeFilter.LOG.error("IOException while saving to dot file", ex);
 			}
 		}
 	}
@@ -125,13 +125,13 @@ public abstract class AggregatedCallTreeFilter<T> extends AbstractCallTreeFilter
 			AbstractCallTreeFilter.addTraceToTree(this.root, t, new PairFactory() {
 
 				public Object createPair(final SynchronousCallMessage callMsg) {
-					return AggregatedCallTreeFilter.this.concreteCreatePair(callMsg);
+					return AbstractAggregatedCallTreeFilter.this.concreteCreatePair(callMsg);
 				}
 			}, true); // aggregated
-			AggregatedCallTreeFilter.this.reportSuccess(t.getTraceId());
+			AbstractAggregatedCallTreeFilter.this.reportSuccess(t.getTraceId());
 		} catch (final TraceProcessingException ex) {
-			AggregatedCallTreeFilter.LOG.error("TraceProcessingException", ex);
-			AggregatedCallTreeFilter.this.reportError(t.getTraceId());
+			AbstractAggregatedCallTreeFilter.LOG.error("TraceProcessingException", ex);
+			AbstractAggregatedCallTreeFilter.this.reportError(t.getTraceId());
 		}
 	}
 

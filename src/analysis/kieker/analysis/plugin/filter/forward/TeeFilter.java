@@ -70,24 +70,24 @@ public final class TeeFilter extends AbstractFilterPlugin {
 
 		/* Decide which stream to be used - but remember the name! */
 		if (TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDLOG.equals(printStreamName)) {
-			this.printStream = null;
-			this.printStreamName = null;
+			this.printStream = null; // NOPMD (null)
+			this.printStreamName = null; // NOPMD (null)
 		} else if (TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDOUT.equals(printStreamName)) {
 			this.printStream = System.out;
-			this.printStreamName = null;
+			this.printStreamName = null; // NOPMD (null)
 		} else if (TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDERR.equals(printStreamName)) {
 			this.printStream = System.err;
-			this.printStreamName = null;
+			this.printStreamName = null; // NOPMD (null)
 		} else {
 			PrintStream printStream;
 			try {
 				printStream = new PrintStream(new FileOutputStream(printStreamName), false, this.encoding);
 			} catch (final UnsupportedEncodingException ex) {
 				TeeFilter.LOG.error("Failed to initialize " + printStreamName, ex);
-				printStream = null;
+				printStream = null; // NOPMD (null)
 			} catch (final FileNotFoundException ex) {
 				TeeFilter.LOG.error("Failed to initialize " + printStreamName, ex);
-				printStream = null;
+				printStream = null; // NOPMD (null)
 			}
 			this.printStream = printStream;
 			this.printStreamName = printStreamName;

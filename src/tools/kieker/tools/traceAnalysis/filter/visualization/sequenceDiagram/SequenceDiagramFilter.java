@@ -201,9 +201,9 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	 * @param ps
 	 * @param shortLabels
 	 */
+	// FIXME:systemEntityFactory not used
 	private static void picFromMessageTrace(final SystemModelRepository systemEntityFactory, final MessageTrace messageTrace, final SDModes sdMode,
 			final PrintStream ps, final boolean shortLabels) {
-		// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/208
 		// dot node ID x component instance
 		final Collection<AbstractMessage> messages = messageTrace.getSequenceAsVector();
 		// preamble:
@@ -276,7 +276,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 
 			if (me instanceof SynchronousCallMessage) {
 				final Signature sig = me.getReceivingExecution().getOperation().getSignature();
-				final StringBuilder msgLabel = new StringBuilder(sig.getName()); // NOPMD (new in loop)
+				final StringBuilder msgLabel = new StringBuilder(sig.getName());
 				msgLabel.append("(");
 				final String[] paramList = sig.getParamTypeList();
 				if ((paramList != null) && (paramList.length > 0)) {

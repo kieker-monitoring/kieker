@@ -65,7 +65,7 @@ public final class Trace extends AbstractMonitoringRecord implements IMonitoring
 		this.parentOrderId = parentOrderId;
 	}
 
-	public Trace(final Object[] values) {
+	public Trace(final Object[] values) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, Trace.TYPES);
 		this.traceId = (Long) values[0];
 		this.threadId = (Long) values[1];

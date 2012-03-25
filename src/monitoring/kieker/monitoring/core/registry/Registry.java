@@ -89,7 +89,7 @@ public class Registry<E> implements IRegistry<E> {
 			cap <<= 1;
 		}
 		for (int i = 0; i < this.segments.length; ++i) {
-			this.segments[i] = new Segment<E>(cap, Registry.LOAD_FACTOR); // NOPMD (new in loop)
+			this.segments[i] = new Segment<E>(cap, Registry.LOAD_FACTOR);
 		}
 		this.eArrayCached = (E[]) new Object[0];
 	}
@@ -157,10 +157,10 @@ public class Registry<E> implements IRegistry<E> {
 	 */
 	private static final class HashEntry<E> implements Serializable {
 		private static final long serialVersionUID = 1L;
-		final E value; // package visible for inner class
-		final int hash; // package visible for inner class
-		final int id; // package visible for inner class
-		final Registry.HashEntry<E> next; // package visible for inner class
+		final E value; // NOPMD (package visible for inner class)
+		final int hash; // NOPMD (package visible for inner class)
+		final int id; // NOPMD (package visible for inner class)
+		final Registry.HashEntry<E> next; // NOPMD (package visible for inner class)
 
 		protected HashEntry(final E value, final int hash, final int id, final Registry.HashEntry<E> next) {
 			this.value = value;
@@ -340,7 +340,7 @@ public class Registry<E> implements IRegistry<E> {
 						for (Registry.HashEntry<E> p = e; p != lastRun; p = p.next) { // NOPMD (no equals meant here)
 							final int k = p.hash & sizeMask;
 							final Registry.HashEntry<E> n = newTable[k];
-							newTable[k] = new HashEntry<E>(p.value, p.hash, p.id, n); // NOPMD (new in loop)
+							newTable[k] = new HashEntry<E>(p.value, p.hash, p.id, n);
 						}
 					}
 				}

@@ -27,7 +27,7 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * @author Holger Knoche
  * 
  */
-public class ResponseTimeDecoration extends NodeDecoration {
+public class ResponseTimeDecoration extends AbstractNodeDecoration {
 
 	private static final String OUTPUT_TEMPLATE = "min: %dms, avg: %.2fms, max: %dms";
 
@@ -40,7 +40,7 @@ public class ResponseTimeDecoration extends NodeDecoration {
 	public void registerExecution(final Execution execution) {
 		final int responseTime = (int) ((execution.getTout() / 1000000) - (execution.getTin() / 1000000));
 
-		this.responseTimeSum += responseTime;
+		this.responseTimeSum = this.responseTimeSum + responseTime;
 		this.executionCount++;
 
 		if (responseTime < this.minimalResponseTime) {

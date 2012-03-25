@@ -125,7 +125,8 @@ public class TestTraceReconstructionFilter extends TestCase {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(TraceReconstructionFilter.class.getName() + ".name", "TraceReconstructionFilter");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, "true");
-		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long.toString(AbstractTraceProcessingFilter.MAX_DURATION_MILLIS));
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS,
+				Long.toString(AbstractTraceProcessingFilter.MAX_DURATION_MILLIS));
 		final Map<String, AbstractRepository> repositoryMap = new HashMap<String, AbstractRepository>();
 		repositoryMap.put(AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
 		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration);
@@ -242,7 +243,8 @@ public class TestTraceReconstructionFilter extends TestCase {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(TraceReconstructionFilter.class.getName() + ".name", "TraceReconstructionFilter");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, "true");
-		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long.toString(AbstractTraceProcessingFilter.MAX_DURATION_MILLIS));
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS,
+				Long.toString(AbstractTraceProcessingFilter.MAX_DURATION_MILLIS));
 		final Map<String, AbstractRepository> repositoryMap = new HashMap<String, AbstractRepository>();
 		repositoryMap.put(AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
 		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration);
@@ -461,9 +463,9 @@ public class TestTraceReconstructionFilter extends TestCase {
 		Assert.assertEquals("An incomplete or complete trace didn't pass the filter", 2, invalidExecutionTraceSink.getList().size());
 		for (int i = 0; i < 2; i++) {
 			final InvalidExecutionTrace event = (InvalidExecutionTrace) invalidExecutionTraceSink.getList().get(i);
-			if (event.getInvalidExecutionTraceArtifacts().equals(incompleteExecutionTrace)) {
+			if (event.getInvalidExecutionTraceArtifacts().equals(incompleteExecutionTrace)) { // NOPMD (empty if)
 				// Nothing to do
-			} else if (event.getInvalidExecutionTraceArtifacts().equals(completingExecutionTrace)) {
+			} else if (event.getInvalidExecutionTraceArtifacts().equals(completingExecutionTrace)) { // NOPMD (empty if)
 				// Nothing to do
 			} else {
 				Assert.fail("Received an unexpected invalid execution trace: " + event);

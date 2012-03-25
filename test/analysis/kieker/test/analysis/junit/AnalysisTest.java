@@ -19,5 +19,5 @@ import org.junit.runners.Suite.SuiteClasses;
 	TestPipeReader.class,
 	GeneralPluginTest.class,
 	CountingFilterTest.class })
-public class AnalysisTest {
+public class AnalysisTest { // NOPMD (empty TestSuideClass)
 }

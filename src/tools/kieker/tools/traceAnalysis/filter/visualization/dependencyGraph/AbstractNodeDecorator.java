@@ -29,9 +29,9 @@ import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
  * 
  */
 
-public abstract class NodeDecorator {
+public abstract class AbstractNodeDecorator {
 
-	public static NodeDecorator createFromName(final String optionName) {
+	public static AbstractNodeDecorator createFromName(final String optionName) {
 		if (Constants.RESPONSE_TIME_DECORATOR_FLAG.equals(optionName)) {
 			return new ResponseTimeNodeDecorator();
 		}

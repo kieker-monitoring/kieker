@@ -50,7 +50,7 @@ public final class ConstructionEvent extends AbstractEvent {
 		this.objectName = (objectName == null) ? ConstructionEvent.NO_OBJECTNAME : objectName; // NOCS
 	}
 
-	public ConstructionEvent(final Object[] values) {
+	public ConstructionEvent(final Object[] values) { // NOPMD (values stored directly)
 		super(values, ConstructionEvent.TYPES); // values[0]
 		this.className = (String) values[1];
 		this.objectName = (String) values[2];

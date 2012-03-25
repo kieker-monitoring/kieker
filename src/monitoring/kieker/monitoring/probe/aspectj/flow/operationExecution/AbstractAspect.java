@@ -67,7 +67,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final Object retval;
 		try {
 			retval = thisJoinPoint.proceed();
-		} catch (final Throwable th) {
+		} catch (final Throwable th) { // NOPMD (catch throw might ok here)
 			// measure after failed execution
 			AbstractAspect.CTRLINST.newMonitoringRecord(new AfterOperationFailedEvent(AbstractAspect.TIME.getTime(), traceId, trace.getNextOrderId(), signature,
 					th.toString()));

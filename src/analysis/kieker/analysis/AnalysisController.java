@@ -547,7 +547,6 @@ public final class AnalysisController implements Runnable {
 			AnalysisController.LOG.warn("Interrupted while waiting for readers to finish", ex);
 		}
 		this.terminate();
-		return;
 	}
 
 	protected final void awaitInitialization() {

@@ -29,7 +29,9 @@ import kieker.monitoring.probe.sigar.SigarSamplerFactory;
 import kieker.monitoring.probe.sigar.samplers.CPUsDetailedPercSampler;
 import kieker.monitoring.probe.sigar.samplers.MemSwapUsageSampler;
 
-public class MonitoringStarter {
+public final class MonitoringStarter {
+
+	private MonitoringStarter() {}
 
 	public static void main(final String[] args) throws InterruptedException {
 		System.out.println("Monitoring CPU and Mem/Swap for 30 seconds in 5 seconds steps () with an offset of two seconds");

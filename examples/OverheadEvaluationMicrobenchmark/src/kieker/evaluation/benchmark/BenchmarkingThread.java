@@ -33,8 +33,10 @@ public final class BenchmarkingThread extends Thread {
 	private final int recursionDepth;
 	private final long[] timings;
 
-	public final synchronized long[] getTimings() {
-		return this.timings.clone();
+	public final long[] getTimings() {
+		synchronized (this) {
+			return this.timings.clone();
+		}
 	}
 
 	public BenchmarkingThread(final MonitoredClass mc, final int totalCalls, final long methodTime, final int recursionDepth, final CountDownLatch doneSignal) {

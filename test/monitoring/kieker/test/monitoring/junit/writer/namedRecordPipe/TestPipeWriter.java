@@ -59,7 +59,7 @@ public class TestPipeWriter extends TestCase { // NOCS
 		 */
 		final int numRecordsToSend = 7;
 		for (int i = 0; i < numRecordsToSend; i++) {
-			monitoringController.newMonitoringRecord(new EmptyRecord()); // NOPMD (new in loop)
+			monitoringController.newMonitoringRecord(new EmptyRecord());
 		}
 
 		/*

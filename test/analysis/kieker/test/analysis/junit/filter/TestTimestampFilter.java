@@ -37,7 +37,7 @@ import org.junit.Test;
  */
 public final class TestTimestampFilter {
 
-	private static final AbstractTraceEvent event = new AbstractTraceEvent(34556L, 324440L, 0) {
+	private static final AbstractTraceEvent EVENT = new AbstractTraceEvent(34556L, 324440L, 0) {
 		private static final long serialVersionUID = 1L;
 
 		public Object[] toArray() {
@@ -87,12 +87,12 @@ public final class TestTimestampFilter {
 	 */
 	@Test
 	public void testEventBeforeIgnored() {
-		final long leftBorder = TestTimestampFilter.event.getTimestamp() + 1;
+		final long leftBorder = TestTimestampFilter.EVENT.getTimestamp() + 1;
 		final long rightBorder = leftBorder + 1;
 		final TimestampFilter filter = this.createTimestampFilter(leftBorder, rightBorder);
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
-		filter.inputTraceEvent(TestTimestampFilter.event);
-		Assert.assertTrue("Filter passed event " + TestTimestampFilter.event + " although timestamp before" + leftBorder
+		filter.inputTraceEvent(TestTimestampFilter.EVENT);
+		Assert.assertTrue("Filter passed event " + TestTimestampFilter.EVENT + " although timestamp before" + leftBorder
 				, this.sinkPlugin.getList().isEmpty());
 
 	}
@@ -104,12 +104,12 @@ public final class TestTimestampFilter {
 	 */
 	@Test
 	public void testEventAfterIgnored() {
-		final long rightBorder = TestTimestampFilter.event.getTimestamp() - 1;
+		final long rightBorder = TestTimestampFilter.EVENT.getTimestamp() - 1;
 		final long leftBorder = rightBorder - 1;
 		final TimestampFilter filter = this.createTimestampFilter(leftBorder, rightBorder);
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
-		filter.inputTraceEvent(TestTimestampFilter.event);
-		Assert.assertTrue("Filter passed event " + TestTimestampFilter.event + " although timestamp before" + leftBorder
+		filter.inputTraceEvent(TestTimestampFilter.EVENT);
+		Assert.assertTrue("Filter passed event " + TestTimestampFilter.EVENT + " although timestamp before" + leftBorder
 				, this.sinkPlugin.getList().isEmpty());
 	}
 
@@ -119,16 +119,16 @@ public final class TestTimestampFilter {
 	 */
 	@Test
 	public void testRecordOnLeftBorderPasses() {
-		final long leftBorder = TestTimestampFilter.event.getTimestamp();
+		final long leftBorder = TestTimestampFilter.EVENT.getTimestamp();
 		final long rightBorder = leftBorder + 1;
 		final TimestampFilter filter = this.createTimestampFilter(leftBorder, rightBorder);
 
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
-		filter.inputTraceEvent(TestTimestampFilter.event);
-		Assert.assertFalse("Filter ignored event " + TestTimestampFilter.event + " although timestamp on left Border" + leftBorder
+		filter.inputTraceEvent(TestTimestampFilter.EVENT);
+		Assert.assertFalse("Filter ignored event " + TestTimestampFilter.EVENT + " although timestamp on left Border" + leftBorder
 				, this.sinkPlugin.getList().isEmpty());
 		Assert.assertTrue(this.sinkPlugin.getList().size() == 1);
-		Assert.assertSame(this.sinkPlugin.getList().get(0), TestTimestampFilter.event);
+		Assert.assertSame(this.sinkPlugin.getList().get(0), TestTimestampFilter.EVENT);
 	}
 
 	/**
@@ -137,15 +137,15 @@ public final class TestTimestampFilter {
 	 */
 	@Test
 	public void testRecordOnRightBorderPasses() {
-		final long rightBorder = TestTimestampFilter.event.getTimestamp();
+		final long rightBorder = TestTimestampFilter.EVENT.getTimestamp();
 		final long leftBorder = rightBorder - 1;
 		final TimestampFilter filter = this.createTimestampFilter(leftBorder, rightBorder);
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
-		filter.inputTraceEvent(TestTimestampFilter.event);
-		Assert.assertFalse("Filter ignored event " + TestTimestampFilter.event + " although timestamp on right Border" + rightBorder
+		filter.inputTraceEvent(TestTimestampFilter.EVENT);
+		Assert.assertFalse("Filter ignored event " + TestTimestampFilter.EVENT + " although timestamp on right Border" + rightBorder
 				, this.sinkPlugin.getList().isEmpty());
 		Assert.assertTrue(this.sinkPlugin.getList().size() == 1);
-		Assert.assertSame(this.sinkPlugin.getList().get(0), TestTimestampFilter.event);
+		Assert.assertSame(this.sinkPlugin.getList().get(0), TestTimestampFilter.EVENT);
 	}
 
 	/**
@@ -155,14 +155,14 @@ public final class TestTimestampFilter {
 	 */
 	@Test
 	public void testRecordTinToutWithinRangePassed() {
-		final long leftBorder = TestTimestampFilter.event.getTimestamp() - 1;
-		final long rightBorder = TestTimestampFilter.event.getTimestamp() + 1;
+		final long leftBorder = TestTimestampFilter.EVENT.getTimestamp() - 1;
+		final long rightBorder = TestTimestampFilter.EVENT.getTimestamp() + 1;
 		final TimestampFilter filter = this.createTimestampFilter(leftBorder, rightBorder);
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
-		filter.inputTraceEvent(TestTimestampFilter.event);
-		Assert.assertFalse("Filter ignored event " + TestTimestampFilter.event + " although timestamp in interval [" + leftBorder + "," + rightBorder + "]"
+		filter.inputTraceEvent(TestTimestampFilter.EVENT);
+		Assert.assertFalse("Filter ignored event " + TestTimestampFilter.EVENT + " although timestamp in interval [" + leftBorder + "," + rightBorder + "]"
 				, this.sinkPlugin.getList().isEmpty());
 		Assert.assertTrue(this.sinkPlugin.getList().size() == 1);
-		Assert.assertSame(this.sinkPlugin.getList().get(0), TestTimestampFilter.event);
+		Assert.assertSame(this.sinkPlugin.getList().get(0), TestTimestampFilter.EVENT);
 	}
 }

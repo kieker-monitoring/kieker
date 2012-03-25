@@ -24,6 +24,5 @@ import org.junit.runners.Suite.SuiteClasses;
 	TestTraceReconstructionFilter.class,
 	TestExecutionTraceBookstore.class
 })
-public class ToolsTest {
-
+public class ToolsTest { // NOPMD (empty TestSuite class)
 }

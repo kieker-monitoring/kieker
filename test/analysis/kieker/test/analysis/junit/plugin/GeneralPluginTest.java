@@ -31,7 +31,7 @@ import org.junit.Test;
 public class GeneralPluginTest extends TestCase {
 
 	private OperationExecutionRecord createOperationExecutionRecord(final String opString, final long traceId, final long tin, final long tout) {
-		return new OperationExecutionRecord("", OperationExecutionRecord.NO_SESSION_ID, traceId, tin, tout, OperationExecutionRecord.NO_HOSTNAME,
+		return new OperationExecutionRecord(opString, OperationExecutionRecord.NO_SESSION_ID, traceId, tin, tout, OperationExecutionRecord.NO_HOSTNAME,
 				OperationExecutionRecord.NO_EOI_ESS, OperationExecutionRecord.NO_EOI_ESS);
 	}
 
@@ -102,7 +102,8 @@ public class GeneralPluginTest extends TestCase {
 		/* Connect the plugins. */
 		Assert.assertTrue(controller.connect(src, SourceClass.OUTPUT_PORT_NAME, transformer, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS));
 		Assert.assertTrue(controller.connect(transformer, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemModelRepository));
-		Assert.assertTrue(controller.connect(transformer, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS, filter1byTraceID, TraceIdFilter.INPUT_PORT_NAME_EXECUTION));
+		Assert.assertTrue(controller.connect(transformer, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS, filter1byTraceID,
+				TraceIdFilter.INPUT_PORT_NAME_EXECUTION));
 		Assert.assertTrue(controller.connect(filter1byTraceID, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, filter2ByTimestamp, TimestampFilter.INPUT_PORT_NAME_EXECUTION));
 		Assert.assertTrue(controller.connect(filter2ByTimestamp, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, dst, ExecutionSinkClass.INPUT_PORT_NAME));
 
@@ -138,7 +139,7 @@ public class GeneralPluginTest extends TestCase {
 		outputPorts = {
 			@OutputPort(name = SourceClass.OUTPUT_PORT_NAME, eventTypes = { OperationExecutionRecord.class })
 		})
-class SourceClass extends AbstractReaderPlugin {
+class SourceClass extends AbstractReaderPlugin { // NOPMD (SubClassOfTest)
 
 	/**
 	 * The array containing the records to be delivered.
@@ -167,7 +168,9 @@ class SourceClass extends AbstractReaderPlugin {
 		return true;
 	}
 
-	public void terminate(final boolean error) {}
+	public void terminate(final boolean error) {
+		// nothing to do
+	}
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
@@ -182,7 +185,7 @@ class SourceClass extends AbstractReaderPlugin {
 @Plugin(
 		name = MyPlugin.PLUGIN_NAME,
 		description = MyPlugin.PLUGIN_DESCRIPTION)
-class MyPlugin extends AbstractPlugin {
+class MyPlugin extends AbstractPlugin { // NOPMD (SubClassOfTest)
 	public static final String PLUGIN_NAME = "pluginName-EfpvPSE0";
 
 	public static final String PLUGIN_DESCRIPTION = "pluginDescription-TB5UV1LdSz";
@@ -205,7 +208,7 @@ class MyPlugin extends AbstractPlugin {
 @Repository(
 		name = MyRepository.REPOSITORY_NAME,
 		description = MyRepository.REPOSITORY_DESCRIPTION)
-class MyRepository extends AbstractRepository {
+class MyRepository extends AbstractRepository { // NOPMD (SubClassOfTest)
 
 	public static final String REPOSITORY_NAME = "repoName-hNcuzIKc8e";
 

@@ -64,7 +64,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 
 	private final JMXServiceURL serviceURL;
 	private final ObjectName monitoringLog;
-	final boolean silentreconnect; // package visible for inner class
+	final boolean silentreconnect; // NOPMD (package visible for inner class)
 	private final CountDownLatch cdLatch = new CountDownLatch(1);
 	private final String domain;
 	private final String logname;
@@ -198,10 +198,10 @@ public final class JMXReader extends AbstractReaderPlugin {
 					Thread.sleep(10000); // NOCS
 					continue;
 				}
-				serverNotificationListener = new ServerNotificationListener(); // NOPMD
+				serverNotificationListener = new ServerNotificationListener();
 				jmx.addConnectionNotificationListener(serverNotificationListener, null, null);
 				mbServer = jmx.getMBeanServerConnection();
-				logNotificationListener = new LogNotificationListener(); // NOPMD
+				logNotificationListener = new LogNotificationListener();
 				mbServer.addNotificationListener(this.monitoringLog, logNotificationListener, null, null);
 				JMXReader.LOG.info("Connected to JMX Server, ID: " + jmx.getConnectionId());
 
@@ -252,7 +252,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 		}
 	}
 
-	final void unblock() { // package visible for inner class
+	final void unblock() { // NOPMD (package visible for inner class)
 		this.cdLatch.countDown();
 	}
 

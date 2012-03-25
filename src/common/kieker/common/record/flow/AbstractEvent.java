@@ -35,7 +35,7 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 		this.timestamp = timestamp;
 	}
 
-	public AbstractEvent(final Object[] values, final Class<?>[] valueTypes) {
+	public AbstractEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, valueTypes);
 		this.timestamp = (Long) values[0];
 	}

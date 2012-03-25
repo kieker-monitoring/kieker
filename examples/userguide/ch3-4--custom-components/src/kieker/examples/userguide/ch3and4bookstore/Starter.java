@@ -24,7 +24,9 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.common.configuration.Configuration;
 
-public class Starter {
+public final class Starter {
+
+	private Starter() {}
 
 	public static void main(final String[] args) throws Exception {
 		/*

@@ -37,8 +37,10 @@ import kieker.monitoring.core.controller.MonitoringController;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-public abstract class ConfigurationFactory implements Keys {
+public final class ConfigurationFactory implements Keys {
 	private static final Log LOG = LogFactory.getLog(ConfigurationFactory.class);
+
+	private ConfigurationFactory() {}
 
 	/*
 	 * factory methods

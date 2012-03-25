@@ -56,7 +56,7 @@ public final class StorageOnly {
 		try {
 			System.out.println("Starting test by adding " + StorageOnly.NUMBER_OF_EVENTS + " monitoring events");
 			for (int i = 0; i < StorageOnly.NUMBER_OF_EVENTS; i++) {
-				final OperationExecutionRecord record = new OperationExecutionRecord((i % 2) + "component." + // NOPMD (new in loop)
+				final OperationExecutionRecord record = new OperationExecutionRecord((i % 2) + "component." +
 						(i % 4) + "method", "sessionid", 3333, 123123L, 123124L, StorageOnly.VM_NAME, i, i); // NOCS (MagicNumberCheck)
 				StorageOnly.CTRL.newMonitoringRecord(record);
 			}
@@ -64,7 +64,7 @@ public final class StorageOnly {
 			Thread.sleep(8000); // NOCS (MagicNumberCheck)
 			System.out.println(StorageOnly.NUMBER_OF_EVENTS + " more monitoring points");
 			for (int i = 0; i < StorageOnly.NUMBER_OF_EVENTS; i++) {
-				final OperationExecutionRecord record = new OperationExecutionRecord((i % 2) + "component." + // NOPMD (new in loop)
+				final OperationExecutionRecord record = new OperationExecutionRecord((i % 2) + "component." +
 						(i % 4) + "method", "sessionid", 3333, 123123L, 123124L, StorageOnly.VM_NAME, i + 10000, i); // NOCS (MagicNumberCheck)
 				StorageOnly.CTRL.newMonitoringRecord(record);
 			}

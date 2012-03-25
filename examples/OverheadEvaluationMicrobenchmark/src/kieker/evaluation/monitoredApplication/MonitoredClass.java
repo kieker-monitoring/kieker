@@ -29,7 +29,7 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  * @author Jan Waller
  */
 public final class MonitoredClass {
-	final ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
+	private final ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
 
 	@OperationExecutionMonitoringProbe()
 	public final long monitoredMethod(final long methodTime, final int recDepth) {

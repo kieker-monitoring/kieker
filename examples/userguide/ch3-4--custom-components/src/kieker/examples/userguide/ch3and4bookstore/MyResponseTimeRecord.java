@@ -32,7 +32,7 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord {
 	public volatile String methodName = MyResponseTimeRecord.NA_VAL;
 	public volatile long responseTimeNanos = -1;
 
-	public final void initFromArray(final Object[] values) {
+	public final void initFromArray(final Object[] values) { // NOPMD (store values)
 		this.className = (String) values[0];
 		this.methodName = (String) values[1];
 		this.responseTimeNanos = (Long) values[2];

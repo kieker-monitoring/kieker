@@ -7,6 +7,9 @@
   <description>
     This ruleset is checked for Kieker automatically.
   </description>
+
+  <!-- exclude generated code -->
+  <exclude-pattern>.*/src-gen/.*</exclude-pattern>
   
   <!-- We'll use the following rulesets -->
   <rule ref="rulesets/basic.xml">
@@ -55,7 +58,9 @@
     <exclude name="ShortVariable"/>
   </rule>
 
-  <rule ref="rulesets/optimizations.xml"/>
+  <rule ref="rulesets/optimizations.xml">
+    <exclude name="AvoidInstantiatingObjectsInLoops"/>
+  </rule>
   
   <rule ref="rulesets/strictexception.xml">
     <exclude name="AvoidCatchingNPE"/>

@@ -86,8 +86,6 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 		final Object retval;
 		try {
 			retval = thisJoinPoint.proceed();
-		} catch (final Throwable th) {
-			throw th; // forward exception
 		} finally {
 			// measure after
 			final long tout = AbstractOperationExecutionAspect.TIME.getTime();

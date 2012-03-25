@@ -37,7 +37,7 @@ import org.junit.Test;
 public class CountingFilterTest {
 
 	private CountingFilter consumer;
-	volatile SimpleSourcePlugin src; // package visible for inner class
+	volatile SimpleSourcePlugin src; // NOPMD (package visible for inner class)
 
 	@Before
 	public void before() {

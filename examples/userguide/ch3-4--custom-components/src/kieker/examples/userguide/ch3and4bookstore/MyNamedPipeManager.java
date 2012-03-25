@@ -21,13 +21,14 @@
 package kieker.examples.userguide.ch3and4bookstore;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class MyNamedPipeManager {
 
 	private static final MyNamedPipeManager PIPE_MGR_INSTANCE = new MyNamedPipeManager();
 
 	/* Not synchronized! */
-	private final HashMap<String, MyPipe> pipeMap = new HashMap<String, MyPipe>();
+	private final Map<String, MyPipe> pipeMap = new HashMap<String, MyPipe>();
 
 	public static MyNamedPipeManager getInstance() {
 		return MyNamedPipeManager.PIPE_MGR_INSTANCE;
@@ -43,15 +44,17 @@ public class MyNamedPipeManager {
 	 * @throws IllegalArgumentException
 	 *             if the given name is null or has length zero.
 	 */
-	public synchronized MyPipe acquirePipe(final String pipeName)
-			throws IllegalArgumentException {
+	public MyPipe acquirePipe(final String pipeName) throws IllegalArgumentException {
 		if ((pipeName == null) || (pipeName.length() == 0)) {
 			throw new IllegalArgumentException("Invalid connection name: '" + pipeName + "'");
 		}
-		MyPipe conn = this.pipeMap.get(pipeName);
-		if (conn == null) {
-			conn = new MyPipe(pipeName);
-			this.pipeMap.put(pipeName, conn);
+		MyPipe conn;
+		synchronized (this) {
+			conn = this.pipeMap.get(pipeName);
+			if (conn == null) {
+				conn = new MyPipe(pipeName);
+				this.pipeMap.put(pipeName, conn);
+			}
 		}
 		return conn;
 	}

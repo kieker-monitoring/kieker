@@ -237,7 +237,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 		this.ess = ess;
 	}
 
-	public OperationExecutionRecord(final Object[] values) {
+	public OperationExecutionRecord(final Object[] values) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, OperationExecutionRecord.TYPES); // throws IllegalArgumentException
 		this.experimentId = (Integer) values[0];
 		this.operationSignature = (String) values[1]; // NOCS
@@ -249,7 +249,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 		this.eoi = (Integer) values[7]; // NOCS
 		this.ess = (Integer) values[8]; // NOCS
 		// set transient values
-		this.retVal = null;
+		this.retVal = null; // NOPMD
 		this.entryPoint = false;
 	}
 

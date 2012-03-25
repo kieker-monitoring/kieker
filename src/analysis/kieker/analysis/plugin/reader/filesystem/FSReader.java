@@ -66,7 +66,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 		this.recordQueue = new PriorityQueue<IMonitoringRecord>(this.inputDirs.length);
 		final String[] onlyrecords = this.configuration.getStringArrayProperty(FSReader.CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION);
 		if (onlyrecords.length == 0) {
-			this.readOnlyRecordsOfType = null;
+			this.readOnlyRecordsOfType = null; // NOPMD (null)
 		} else {
 			this.readOnlyRecordsOfType = new HashSet<Class<? extends IMonitoringRecord>>(onlyrecords.length);
 			for (final String classname : onlyrecords) {
@@ -96,7 +96,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	public boolean read() {
 		// start all reader
 		for (final String inputDir : this.inputDirs) {
-			new Thread(new FSDirectoryReader(inputDir, this, this.readOnlyRecordsOfType)).start(); // NOPMD (new in loop)
+			new Thread(new FSDirectoryReader(inputDir, this, this.readOnlyRecordsOfType)).start();
 		}
 		// consume incoming records
 		int readingReaders = this.inputDirs.length;

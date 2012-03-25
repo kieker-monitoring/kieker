@@ -128,11 +128,11 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 			Collection<DependencyGraphNode<AllocationComponentOperationPair>> containedPairs = componentId2pairMapping.get(componentId);
 			if (containedPairs == null) {
 				// component not yet registered
-				containedPairs = new ArrayList<DependencyGraphNode<AllocationComponentOperationPair>>(); // NOPMD (new in loop)
+				containedPairs = new ArrayList<DependencyGraphNode<AllocationComponentOperationPair>>();
 				componentId2pairMapping.put(componentId, containedPairs);
 				Collection<AllocationComponent> containedComponents = containerId2componentMapping.get(containerId);
 				if (containedComponents == null) {
-					containedComponents = new ArrayList<AllocationComponent>(); // NOPMD (new in loop)
+					containedComponents = new ArrayList<AllocationComponent>();
 					containerId2componentMapping.put(containerId, containedComponents);
 				}
 				containedComponents.add(curComponent);
@@ -179,7 +179,7 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 							));
 					for (final DependencyGraphNode<AllocationComponentOperationPair> curPair : componentId2pairMapping.get(curComponentId)) { // NOCS (NestedFor)
 						final Signature sig = curPair.getEntity().getOperation().getSignature();
-						final StringBuilder opLabel = new StringBuilder(sig.getName()); // NOPMD (new in loop)
+						final StringBuilder opLabel = new StringBuilder(sig.getName());
 						opLabel.append("(");
 						final String[] paramList = sig.getParamTypeList();
 						if ((paramList != null) && (paramList.length > 0)) {

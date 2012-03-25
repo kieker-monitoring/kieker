@@ -33,7 +33,7 @@ import kieker.common.logging.LogFactory;
 public class MyPipeReader extends AbstractReaderPlugin {
 
 	public static final String OUTPUT_PORT_NAME = "outputPort";
-	private static final Log log = LogFactory.getLog(MyPipeReader.class);
+	private static final Log LOG = LogFactory.getLog(MyPipeReader.class);
 
 	private static final String CONFIG_PIPE_NAME = "pipeName";
 	private final String pipeName;
@@ -51,7 +51,7 @@ public class MyPipeReader extends AbstractReaderPlugin {
 		try {
 			this.pipe = MyNamedPipeManager.getInstance().acquirePipe(this.pipeName);
 		} catch (final Exception ex) {
-			MyPipeReader.log.error("Failed to acquire pipe '" + this.pipeName + "'", ex);
+			MyPipeReader.LOG.error("Failed to acquire pipe '" + this.pipeName + "'", ex);
 			return false;
 		}
 		return true;
@@ -59,15 +59,18 @@ public class MyPipeReader extends AbstractReaderPlugin {
 
 	public boolean read() {
 		try {
-			PipeData data;
+
 			/* Wait max. 4 seconds for the next data. */
-			while ((data = this.pipe.poll(4)) != null) {
+			PipeData data = this.pipe.poll(4);
+			while (data != null) {
 				/* Create new record, init from received array ... */
 				final MyResponseTimeRecord record = new MyResponseTimeRecord();
 				record.initFromArray(data.getRecordData());
 				record.setLoggingTimestamp(data.getLoggingTimestamp());
 				/* ...and delegate the task of delivering to the super class. */
 				super.deliver(MyPipeReader.OUTPUT_PORT_NAME, record);
+				// next turn
+				data = this.pipe.poll(4);
 			}
 		} catch (final InterruptedException e) {
 			return false; // signal error

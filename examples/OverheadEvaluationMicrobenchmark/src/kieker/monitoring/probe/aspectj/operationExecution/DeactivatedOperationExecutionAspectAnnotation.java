@@ -43,7 +43,7 @@ import org.aspectj.lang.annotation.Pointcut;
  */
 @Aspect
 public class DeactivatedOperationExecutionAspectAnnotation extends AbstractOperationExecutionAspect {
-	private static final Log LOG = LogFactory.getLog(AbstractOperationExecutionAspect.class);
+	private static final Log LOG = LogFactory.getLog(DeactivatedOperationExecutionAspectAnnotation.class);
 
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = DeactivatedOperationExecutionAspectAnnotation.CTRLINST.getTimeSource();
@@ -52,7 +52,8 @@ public class DeactivatedOperationExecutionAspectAnnotation extends AbstractOpera
 	private static final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
 
 	private static final ConcurrentHashMap<String, Boolean> DEACTIVATEDPROBES = new ConcurrentHashMap<String, Boolean>();
-	{
+
+	static {
 		final int mapSize = 10000;
 		for (int i = 0; i < (mapSize / 2); i++) {
 			DeactivatedOperationExecutionAspectAnnotation.DEACTIVATEDPROBES.put(Long.toHexString(Double.doubleToLongBits(Math.random())), Boolean.TRUE);
@@ -107,8 +108,6 @@ public class DeactivatedOperationExecutionAspectAnnotation extends AbstractOpera
 		final Object retval;
 		try {
 			retval = thisJoinPoint.proceed();
-		} catch (final Throwable th) {
-			throw th; // forward exception
 		} finally {
 			// measure after
 			final long tout = DeactivatedOperationExecutionAspectAnnotation.TIME.getTime();

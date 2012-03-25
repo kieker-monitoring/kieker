@@ -59,9 +59,9 @@ public abstract class AbstractPlugin implements IPlugin {
 	protected final Configuration configuration;
 	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<PluginInputPortReference>> registeredMethods;
 	private final ConcurrentHashMap<String, AbstractRepository> registeredRepositories;
-	private final HashMap<String, RepositoryPort> repositoryPorts;
-	private final HashMap<String, OutputPort> outputPorts;
-	private final HashMap<String, InputPort> inputPorts;
+	private final Map<String, RepositoryPort> repositoryPorts;
+	private final Map<String, OutputPort> outputPorts;
+	private final Map<String, InputPort> inputPorts;
 
 	/**
 	 * Each Plugin requires a constructor with a single Configuration object and an array of repositories!

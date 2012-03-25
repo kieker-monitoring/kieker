@@ -49,7 +49,7 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<Abstract
 	private final SortedSet<AbstractTraceEvent> events = new TreeSet<AbstractTraceEvent>(new Comparator<AbstractTraceEvent>() {
 
 		public int compare(final AbstractTraceEvent e1, final AbstractTraceEvent e2) {
-			if ((e1 == e2) || (e1.getOrderIndex() == e2.getOrderIndex())) { // same order index
+			if ((e1 == e2) || (e1.getOrderIndex() == e2.getOrderIndex())) { // same order index // FIXME: use equal?
 				return 0;
 			} else if (e1.getOrderIndex() < e2.getOrderIndex()) {
 				return -1;
@@ -87,7 +87,7 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<Abstract
 			if (this.getTraceId() != execution.getTraceId()) {
 				throw new InvalidTraceException("TraceId of new record (" + execution.getTraceId() + ") differs from Id of this trace (" + this.getTraceId() + ")");
 			}
-			if (this.events.add(execution) == false) {
+			if (!this.events.add(execution)) {
 				throw new InvalidTraceException("Order index exists already" + execution.getOrderIndex());
 			}
 			if ((this.minTimestamp < 0) || (execution.getTimestamp() < this.minTimestamp)) {

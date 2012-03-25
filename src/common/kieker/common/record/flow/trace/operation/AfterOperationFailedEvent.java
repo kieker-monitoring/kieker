@@ -47,7 +47,7 @@ public final class AfterOperationFailedEvent extends AbstractOperationEvent {
 		this.cause = (cause == null) ? AfterOperationFailedEvent.NO_CAUSE : cause; // NOCS
 	}
 
-	public AfterOperationFailedEvent(final Object[] values) {
+	public AfterOperationFailedEvent(final Object[] values) { // NOPMD (values stored directly)
 		super(values, AfterOperationFailedEvent.TYPES); // values[0..3]
 		this.cause = (String) values[4];
 	}

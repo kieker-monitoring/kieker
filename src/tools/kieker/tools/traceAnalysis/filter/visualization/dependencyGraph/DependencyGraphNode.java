@@ -41,7 +41,7 @@ public class DependencyGraphNode<T> {
 	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedOutgoingDependencies = new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD
 
 	private boolean assumed = false;
-	private final Map<Class<? extends NodeDecoration>, NodeDecoration> decorations = new HashMap<Class<? extends NodeDecoration>, NodeDecoration>();
+	private final Map<Class<? extends AbstractNodeDecoration>, AbstractNodeDecoration> decorations = new HashMap<Class<? extends AbstractNodeDecoration>, AbstractNodeDecoration>();
 
 	public DependencyGraphNode(final int id, final T entity) {
 		this.id = id;
@@ -77,11 +77,11 @@ public class DependencyGraphNode<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <NDT extends NodeDecoration> NDT getDecoration(final Class<? extends NodeDecoration> type) {
+	public <NDT extends AbstractNodeDecoration> NDT getDecoration(final Class<? extends AbstractNodeDecoration> type) {
 		return (NDT) this.decorations.get(type);
 	}
 
-	public void addDecoration(final NodeDecoration decoration) {
+	public void addDecoration(final AbstractNodeDecoration decoration) {
 		this.decorations.put(decoration.getClass(), decoration);
 	}
 
@@ -132,7 +132,7 @@ public class DependencyGraphNode<T> {
 
 	public String getFormattedDecorations() {
 		final StringBuilder builder = new StringBuilder();
-		final Iterator<NodeDecoration> decorations = this.decorations.values().iterator();
+		final Iterator<AbstractNodeDecoration> decorations = this.decorations.values().iterator();
 
 		while (decorations.hasNext()) {
 			final String currentDecorationText = decorations.next().createFormattedOutput();

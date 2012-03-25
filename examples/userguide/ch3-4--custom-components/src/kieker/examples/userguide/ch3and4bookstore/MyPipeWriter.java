@@ -26,9 +26,7 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
 
 public class MyPipeWriter extends AbstractMonitoringWriter {
 	private static final String PREFIX = MyPipeWriter.class.getName() + ".";
-	private static final String PROPERTY_PIPE_NAME = MyPipeWriter.PREFIX
-			+ "pipeName";
-	private volatile String pipeName;
+	private static final String PROPERTY_PIPE_NAME = MyPipeWriter.PREFIX + "pipeName";
 	private volatile MyPipe pipe;
 
 	public MyPipeWriter(final Configuration configuration) {
@@ -54,11 +52,11 @@ public class MyPipeWriter extends AbstractMonitoringWriter {
 
 	@Override
 	protected void init() throws Exception {
-		this.pipeName =
-				this.configuration
-						.getStringProperty(MyPipeWriter.PROPERTY_PIPE_NAME);
-		this.pipe = MyNamedPipeManager.getInstance().acquirePipe(this.pipeName);
+		final String pipeName = this.configuration.getStringProperty(MyPipeWriter.PROPERTY_PIPE_NAME);
+		this.pipe = MyNamedPipeManager.getInstance().acquirePipe(pipeName);
 	}
 
-	public void terminate() {}
+	public void terminate() {
+		// nothing to do
+	}
 }

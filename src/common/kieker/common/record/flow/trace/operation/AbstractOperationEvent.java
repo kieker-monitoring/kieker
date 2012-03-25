@@ -40,7 +40,7 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent {
 		this.operationSignature = (operationSignature == null) ? AbstractOperationEvent.NO_OPERATIONSIGNATURE : operationSignature; // NOCS
 	}
 
-	public AbstractOperationEvent(final Object[] values, final Class<?>[] valueTypes) {
+	public AbstractOperationEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes); // values[0..2]
 		this.operationSignature = (String) values[3];
 	}
@@ -50,6 +50,6 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent {
 	}
 
 	public boolean refersToSameOperationAs(final AbstractOperationEvent other) {
-		return (this.getOperationSignature().equals(other.getOperationSignature()));
+		return this.getOperationSignature().equals(other.getOperationSignature());
 	}
 }

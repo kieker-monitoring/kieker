@@ -117,7 +117,7 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 			final int containerId = node.getEntity().getExecutionContainer().getId();
 			Collection<DependencyGraphNode<AllocationComponent>> containedComponents = component2containerMapping.get(containerId);
 			if (containedComponents == null) {
-				containedComponents = new ArrayList<DependencyGraphNode<AllocationComponent>>(); // NOPMD (new in loop)
+				containedComponents = new ArrayList<DependencyGraphNode<AllocationComponent>>();
 				component2containerMapping.put(containerId, containedComponents);
 			}
 			containedComponents.add(node);

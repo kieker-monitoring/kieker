@@ -44,11 +44,11 @@ public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFi
 		super(configuration);
 	}
 
-	public boolean init() {
+	public boolean init() { // NOPMD (default implementation)
 		return true; // do nothing
 	}
 
-	public void terminate(final boolean error) {
+	public void terminate(final boolean error) { // NOPMD (default implementation)
 		// do nothing
 	}
 }

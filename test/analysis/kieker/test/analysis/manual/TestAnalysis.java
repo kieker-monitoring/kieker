@@ -44,8 +44,10 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 /**
  * @author Jan Waller
  */
-public class TestAnalysis {
+public final class TestAnalysis {
 	private static final boolean LOADCONFIG = false;
+
+	private TestAnalysis() {}
 
 	public static void main(final String[] args) {
 		final AnalysisController analysisController;

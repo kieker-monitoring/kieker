@@ -37,6 +37,8 @@ import kieker.tools.traceAnalysis.filter.executionRecordTransformation.Execution
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
+import org.junit.Test;
+
 /**
  * 
  * @author Andre van Hoorn
@@ -48,6 +50,7 @@ public class TestExecutionRecordTransformationFilter extends TestCase {
 	 * Tests if each {@link OperationExecutionRecord} within a valid Bookstore trace is correctly
 	 * translated into a corresponding {@link Execution}.
 	 */
+	@Test
 	public void testAllFieldsComplete() {
 		final String sessionId = "8T6NK1Q6";
 		final long traceId = 34523; // any number will do // NOCS (MagicNumberCheck)
@@ -98,12 +101,12 @@ public class TestExecutionRecordTransformationFilter extends TestCase {
  * @author Andre van Hoorn
  * 
  */
-class ExecRecordTransformationFilterChecker {
+class ExecRecordTransformationFilterChecker { // NOPMD (subclass of TestCase)
 	private final SystemModelRepository systemModelRepository = new SystemModelRepository(new Configuration());
 	private final AnalysisController analysisController = new AnalysisController();
-	final ListReader listReader = new ListReader(new Configuration());
-	final ExecutionRecordTransformationFilter execRecFilter = new ExecutionRecordTransformationFilter(new Configuration());
-	final ExecutionSinkClass sinkPlugin = new ExecutionSinkClass(new Configuration());
+	private final ListReader listReader = new ListReader(new Configuration());
+	private final ExecutionRecordTransformationFilter execRecFilter = new ExecutionRecordTransformationFilter(new Configuration());
+	private final ExecutionSinkClass sinkPlugin = new ExecutionSinkClass(new Configuration());
 
 	public ExecRecordTransformationFilterChecker(final List<OperationExecutionRecord> records) {
 		for (final OperationExecutionRecord record : records) { // the reader will provide these records via its output port
@@ -113,7 +116,8 @@ class ExecRecordTransformationFilterChecker {
 		this.analysisController.registerFilter(this.execRecFilter);
 		this.analysisController.registerFilter(this.sinkPlugin);
 		this.analysisController.registerRepository(this.systemModelRepository);
-		this.analysisController.connect(this.listReader, ListReader.OUTPUT_PORT_NAME, this.execRecFilter, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
+		this.analysisController.connect(this.listReader, ListReader.OUTPUT_PORT_NAME, this.execRecFilter,
+				ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
 		this.analysisController.connect(this.execRecFilter, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS,
 				this.sinkPlugin, ExecutionSinkClass.INPUT_PORT_NAME);
 		this.analysisController.connect(this.execRecFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemModelRepository);

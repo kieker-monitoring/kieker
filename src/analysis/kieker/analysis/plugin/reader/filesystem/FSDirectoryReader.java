@@ -63,7 +63,7 @@ final class FSDirectoryReader implements Runnable {
 	private final Set<Class<? extends IMonitoringRecord>> recordTypeSelector;
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final File inputDir;
-	String filePrefix = FSDirectoryReader.NORMAL_FILE_PREFIX; // package visible for inner class
+	String filePrefix = FSDirectoryReader.NORMAL_FILE_PREFIX; // NOPMD (package visible for inner class)
 	private boolean terminated = false;
 
 	/**
@@ -286,7 +286,7 @@ final class FSDirectoryReader implements Runnable {
 
 				// read record
 				final long loggingTimestamp = in.readLong();
-				final Object[] objectArray = new Object[typeArray.length]; // NOPMD (new in loop)
+				final Object[] objectArray = new Object[typeArray.length];
 				int idx = -1;
 				for (final Class<?> type : typeArray) {
 					idx++;

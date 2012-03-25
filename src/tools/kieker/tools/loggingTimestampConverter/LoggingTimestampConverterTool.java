@@ -91,7 +91,7 @@ public final class LoggingTimestampConverterTool {
 		}
 
 		for (final long tstamp : LoggingTimestampConverterTool.timestampsLong) {
-			final StringBuilder strB = new StringBuilder(); // NOPMD (new in loop)
+			final StringBuilder strB = new StringBuilder();
 			strB.append(tstamp).append(": ").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(tstamp)).append(" (")
 					.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(tstamp)).append(")");
 			System.out.println(strB.toString());

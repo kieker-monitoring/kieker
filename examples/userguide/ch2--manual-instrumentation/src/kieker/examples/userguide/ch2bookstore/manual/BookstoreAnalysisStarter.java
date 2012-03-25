@@ -26,7 +26,9 @@ import kieker.analysis.exception.MonitoringRecordConsumerException;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 
-public class BookstoreAnalysisStarter {
+public final class BookstoreAnalysisStarter {
+
+	private BookstoreAnalysisStarter() {}
 
 	public static void main(final String[] args)
 			throws MonitoringReaderException, MonitoringRecordConsumerException {

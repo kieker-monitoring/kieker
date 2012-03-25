@@ -104,7 +104,7 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 			 * }
 			 */
 			for (int i = 0; i < this.configuration.getIntProperty(AsyncDbWriter.CONFIG_NRCONN); i++) {
-				this.addWorker(new DbWriterThread(super.monitoringController, this.blockingQueue, connectionString, preparedQuery)); // NOPMD (new in loop)
+				this.addWorker(new DbWriterThread(super.monitoringController, this.blockingQueue, connectionString, preparedQuery));
 			}
 		} catch (final SQLException ex) {
 			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);

@@ -135,7 +135,7 @@ public class ExecutionTrace extends AbstractTrace {
 			while (eSeqIt.hasNext()) {
 				final Execution curE = eSeqIt.next();
 				if (expectingEntryCall && (curE.getEss() != 0)) {
-					final InvalidTraceException ex = new InvalidTraceException("First execution must have ess " + "0 (found " + curE.getEss() // NOPMD (new in loop)
+					final InvalidTraceException ex = new InvalidTraceException("First execution must have ess " + "0 (found " + curE.getEss()
 							+ ")\n Causing execution: " + curE);
 					// don't log and throw
 					// ExecutionTrace.LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
@@ -143,8 +143,7 @@ public class ExecutionTrace extends AbstractTrace {
 				}
 				expectingEntryCall = false; // now we're happy
 				if (prevEoi != (curE.getEoi() - 1)) {
-					final InvalidTraceException ex = new InvalidTraceException("Eois must increment by 1 --" + "but found sequence <" + prevEoi // NOPMD (new in
-																																				// loop)
+					final InvalidTraceException ex = new InvalidTraceException("Eois must increment by 1 --" + "but found sequence <" + prevEoi
 							+ "," + curE.getEoi() + ">" + "(Execution: " + curE + ")");
 					// don't log and throw
 					// ExecutionTrace.LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
@@ -159,22 +158,22 @@ public class ExecutionTrace extends AbstractTrace {
 						final AbstractMessage poppedCall = curStack.pop();
 						prevE = poppedCall.getReceivingExecution();
 						curReturnReceiver = poppedCall.getSendingExecution();
-						final AbstractMessage m = new SynchronousReplyMessage(prevE.getTout(), prevE, curReturnReceiver); // NOPMD (new in loop)
+						final AbstractMessage m = new SynchronousReplyMessage(prevE.getTout(), prevE, curReturnReceiver);
 						mSeq.add(m);
 						prevE = curReturnReceiver;
 					}
 				}
 				// Now, we handle the current execution callMessage
 				if (prevE.equals(rootExecution)) { // initial execution callMessage
-					final AbstractMessage m = new SynchronousCallMessage(curE.getTin(), rootExecution, curE); // NOPMD (new in loop)
+					final AbstractMessage m = new SynchronousCallMessage(curE.getTin(), rootExecution, curE);
 					mSeq.add(m);
 					curStack.push(m);
 				} else if ((prevE.getEss() + 1) == curE.getEss()) { // usual callMessage with senderComponentName and receiverComponentName
-					final AbstractMessage m = new SynchronousCallMessage(curE.getTin(), prevE, curE); // NOPMD (new in loop)
+					final AbstractMessage m = new SynchronousCallMessage(curE.getTin(), prevE, curE);
 					mSeq.add(m);
 					curStack.push(m);
 				} else if (prevE.getEss() < curE.getEss()) { // detect ess incrementation by > 1
-					final InvalidTraceException ex = new InvalidTraceException("Ess are only allowed to increment by 1 --" // NOPMD (new in loop)
+					final InvalidTraceException ex = new InvalidTraceException("Ess are only allowed to increment by 1 --"
 							+ "but found sequence <" + prevE.getEss() + "," + curE.getEss() + ">" + "(Execution: " + curE + ")");
 					// don't log and throw
 					// ExecutionTrace.LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
@@ -186,7 +185,7 @@ public class ExecutionTrace extends AbstractTrace {
 						final AbstractMessage poppedCall = curStack.pop();
 						prevE = poppedCall.getReceivingExecution();
 						curReturnReceiver = poppedCall.getSendingExecution();
-						final AbstractMessage m = new SynchronousReplyMessage(prevE.getTout(), prevE, curReturnReceiver); // NOPMD (new in loop)
+						final AbstractMessage m = new SynchronousReplyMessage(prevE.getTout(), prevE, curReturnReceiver);
 						mSeq.add(m);
 						prevE = curReturnReceiver;
 					}

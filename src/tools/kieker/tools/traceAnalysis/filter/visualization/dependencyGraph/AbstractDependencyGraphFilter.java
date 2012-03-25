@@ -58,7 +58,7 @@ public abstract class AbstractDependencyGraphFilter<T> extends AbstractMessageTr
 	protected volatile DependencyGraph<T> dependencyGraph;
 	private int numGraphsSaved = 0;
 
-	private final List<NodeDecorator> decorators = new ArrayList<NodeDecorator>();
+	private final List<AbstractNodeDecorator> decorators = new ArrayList<AbstractNodeDecorator>();
 
 	public AbstractDependencyGraphFilter(final Configuration configuration) {
 		super(configuration);
@@ -82,10 +82,10 @@ public abstract class AbstractDependencyGraphFilter<T> extends AbstractMessageTr
 			final String lineStyle = (currentEdge.isAssumed()) ? DotFactory.DOT_STYLE_DASHED : DotFactory.DOT_STYLE_SOLID;
 
 			final DependencyGraphNode<T> destNode = currentEdge.getDestination();
-			if ((node == destNode) && !plotSelfLoops) {
+			if ((node == destNode) && !plotSelfLoops) { // FIXME: use equals?
 				continue;
 			}
-			final StringBuilder strBuild = new StringBuilder(1024); // NOPMD (new in Loop)
+			final StringBuilder strBuild = new StringBuilder(1024);
 			if (includeWeights) {
 				strBuild.append(DotFactory.createConnection("", this.getNodeId(node), this.getNodeId(destNode),
 						Integer.toString(currentEdge.getOutgoingWeight()), lineStyle, DotFactory.DOT_ARROWHEAD_OPEN));
@@ -130,12 +130,12 @@ public abstract class AbstractDependencyGraphFilter<T> extends AbstractMessageTr
 		this.stdOutPrintln("Saved " + this.numGraphsSaved + " dependency graph" + (this.numGraphsSaved > 1 ? "s" : "")); // NOCS
 	}
 
-	public void addDecorator(final NodeDecorator decorator) {
+	public void addDecorator(final AbstractNodeDecorator decorator) {
 		this.decorators.add(decorator);
 	}
 
 	protected void invokeDecorators(final AbstractMessage message, final DependencyGraphNode<?> sourceNode, final DependencyGraphNode<?> targetNode) {
-		for (final NodeDecorator currentDecorator : this.decorators) {
+		for (final AbstractNodeDecorator currentDecorator : this.decorators) {
 			currentDecorator.processMessage(message, sourceNode, targetNode);
 		}
 	}

@@ -98,10 +98,7 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 		final long tin = OperationExecutionMethodInvocationInterceptor.TIMESOURCE.getTime();
 		final Object retval;
 		try {
-			// executing the intercepted method call
 			retval = invocation.proceed();
-		} catch (final Throwable th) {
-			throw th;
 		} finally {
 			final long tout = OperationExecutionMethodInvocationInterceptor.TIMESOURCE.getTime();
 			OperationExecutionMethodInvocationInterceptor.CONTROLLER.newMonitoringRecord(

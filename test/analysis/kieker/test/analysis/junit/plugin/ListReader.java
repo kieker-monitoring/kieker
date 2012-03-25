@@ -40,7 +40,9 @@ public class ListReader extends AbstractReaderPlugin {
 		return true;
 	}
 
-	public void terminate(final boolean error) {}
+	public void terminate(final boolean error) {
+		// nothing to do
+	}
 
 	@Override
 	protected Configuration getDefaultConfiguration() {

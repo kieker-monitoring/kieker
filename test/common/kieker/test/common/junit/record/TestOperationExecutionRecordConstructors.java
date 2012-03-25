@@ -24,6 +24,8 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 
+import org.junit.Test;
+
 /**
  * Creates {@link OperationExecutionRecord}s via the available constructors and
  * checks the values passed values via getters.
@@ -36,7 +38,8 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 	/**
 	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long, long, long, String, int, int)}
 	 */
-	public void testSignatureStringSessionIDTraceIDTinToutEoiEss() {
+	@Test
+	public void testSignatureStringSessionIDTraceIDTinToutEoiEss() { // NOPMD (assert missing)
 		final String sessionId = "IaYyf8m9B";
 		final long traceId = 3486095; // any number will do
 		final String hostname = "srv-gvNH6CgYFS";
@@ -68,8 +71,9 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long)}
 	 */
 	// TODO: to be removed in 1.6 as the tested constructor will be removed there
+	@Test
 	@SuppressWarnings("deprecation")
-	public void testComponentOpTraceID() {
+	public void testComponentOpTraceID() { // NOPMD (assert missing)
 		final long traceId = 3486095; // any number will do
 		final OperationExecutionRecord opExecutionRecord =
 				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
@@ -91,8 +95,9 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long, long, long)}
 	 */
 	// TODO: to be removed in 1.6 as the tested constructor will be removed there
+	@Test
 	@SuppressWarnings("deprecation")
-	public void testComponentOpTraceIDTinTout() {
+	public void testComponentOpTraceIDTinTout() { // NOPMD (assert missing)
 		final long traceId = 3486095; // any number will do
 		final long tin = 33444; // any number will do
 		final long tout = 33449; // any number will do
@@ -115,8 +120,9 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long, long)}
 	 */
 	// TODO: to be removed in 1.6 as the tested constructor will be removed there
+	@Test
 	@SuppressWarnings("deprecation")
-	public void testComponentTinTout() {
+	public void testComponentTinTout() { // NOPMD (assert missing)
 		final long tin = 33444; // any number will do
 		final long tout = 33449; // any number will do
 		final OperationExecutionRecord opExecutionRecord =
@@ -141,8 +147,9 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, String, long, long, long)}
 	 */
 	// TODO: to be removed in 1.6 as the tested constructor will be removed there
+	@Test
 	@SuppressWarnings("deprecation")
-	public void testComponentOpSessionTraceIDTinTout() {
+	public void testComponentOpSessionTraceIDTinTout() { // NOPMD (assert missing)
 		final String sessionId = "eqJSin80n";
 		final long traceId = 3486095; // any number will do
 		final long tin = 33444; // any number will do
@@ -170,8 +177,9 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long, long, long, String, int, int)}
 	 */
 	// TODO: to be removed in 1.6 as the tested constructor will be removed there
+	@Test
 	@SuppressWarnings("deprecation")
-	public void testComponentOpSessionIDTraceIDTinToutEoiEss() {
+	public void testComponentOpSessionIDTraceIDTinToutEoiEss() { // NOPMD (assert missing)
 		final String sessionId = "IaYyf8m9B";
 		final long traceId = 3486095; // any number will do
 		final String hostname = "srv-gvNH6CgYFS";
@@ -220,7 +228,7 @@ public class TestOperationExecutionRecordConstructors extends TestCase {
 
 	private void checkEoiEss(final OperationExecutionRecord opExecutionRecord, final int eoi, final int ess) {
 		Assert.assertEquals("eoi's differ", eoi, opExecutionRecord.getEoi());
-		Assert.assertEquals("ess's differ", eoi, opExecutionRecord.getEss());
+		Assert.assertEquals("ess's differ", ess, opExecutionRecord.getEss());
 	}
 
 	// TODO: remove legacy tests in 1.6 as the tested constructor will be removed there

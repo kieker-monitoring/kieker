@@ -13,7 +13,7 @@ import kieker.common.record.controlflow.OperationExecutionRecord;
  * @author Andre van Hoorn
  * 
  */
-public class BookstoreOperationExecutionRecordFactory {
+public final class BookstoreOperationExecutionRecordFactory {
 	public static final String PACKAGE_BOOKSTORE_APP = "bookstore";
 
 	public static final String SIMPLE_CLASS_BOOKSTORE = "Bookstore";
@@ -84,6 +84,8 @@ public class BookstoreOperationExecutionRecordFactory {
 	public static final int EXEC2_1__CRM_GETORDERS_ESS = 1;
 	public static final int EXEC3_2__CATALOG_GETBOOK_EOI = 3;
 	public static final int EXEC3_2__CATALOG_GETBOOK_ESS = 2;
+
+	private BookstoreOperationExecutionRecordFactory() {}
 
 	/**
 	 * Returns the ordered List of {@link OperationExecutionRecord}s for the "well-known" bookstore trace with

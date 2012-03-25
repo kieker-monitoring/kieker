@@ -166,7 +166,7 @@ public final class Configuration extends Properties {
 		final Enumeration<?> keys = this.propertyNames();
 		while (keys.hasMoreElements()) {
 			final String property = (String) keys.nextElement();
-			if ((property).startsWith(prefix)) {
+			if (property.startsWith(prefix)) {
 				configuration.setProperty(property, this.getProperty(property));
 			}
 		}
@@ -192,10 +192,9 @@ public final class Configuration extends Properties {
 	 * This method should never be used directly!
 	 * Use {@link #setProperty(String, String)} instead!
 	 */
-
 	@Override
 	@Deprecated
-	public final synchronized Object put(final Object key, final Object value) {
+	public final synchronized Object put(final Object key, final Object value) { // NOPMD
 		return super.put(key, value);
 	}
 }

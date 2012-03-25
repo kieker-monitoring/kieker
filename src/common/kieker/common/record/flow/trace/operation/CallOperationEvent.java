@@ -48,7 +48,7 @@ public final class CallOperationEvent extends AbstractOperationEvent {
 		this.calleeOperationSignature = (calleeOperationSignature == null) ? CallOperationEvent.NO_CALLEEOPERATIONSIGANTURE : calleeOperationSignature; // NOCS
 	}
 
-	public CallOperationEvent(final Object[] values) {
+	public CallOperationEvent(final Object[] values) { // NOPMD (values stored directly)
 		super(values, CallOperationEvent.TYPES); // values[0..3]
 		this.calleeOperationSignature = (String) values[4];
 	}

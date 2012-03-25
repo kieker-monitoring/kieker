@@ -78,7 +78,7 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 					.lookupAssemblyComponentInstanceByNamedIdentifier(assemblyComponentName);
 			if (assemblyComponent == null) { // assembly instance doesn't exist
 				ComponentType componentType = systemModelRepository.getTypeRepositoryFactory().lookupComponentTypeByNamedIdentifier(componentTypeName);
-				if (componentType == null) { // NOCS (NestedIf)
+				if (componentType == null) { // NOPMD NOCS (NestedIf)
 					/* Component type doesn't exist */
 					componentType = systemModelRepository.getTypeRepositoryFactory().createAndRegisterComponentType(componentTypeName, componentTypeName);
 				}

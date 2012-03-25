@@ -40,12 +40,12 @@ public class TestOperationExecutionRecordEquals extends TestCase { // NOCS (Miss
 	@Test
 	public void testSerializeDeserializeEquals() {
 		final OperationExecutionRecord r1 = new OperationExecutionRecord(
-				"public void p1.p2.p3.componentname.operation(boolean, int)", // operationSignature
-				"XXLJHDJHDHF", // sessionId
+				"public void p1.p2.p3.componentname.operation(boolean, int)", // operationSignature // NOPMD (String repeat)
+				"XXLJHDJHDHF", // sessionId // NOPMD (String repeat)
 				882287444, // traceId
 				5577376, // tin
 				7544522, // tout
-				"myVM", // hostname
+				"myVM", // hostname // NOPMD (String repeat)
 				1, // eoi
 				2 // ess
 		);

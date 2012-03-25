@@ -22,9 +22,11 @@ package kieker.examples.userguide.ch5bookstore;
 
 import java.util.concurrent.CountDownLatch;
 
-public class BookstoreStarter {
+public final class BookstoreStarter {
 
 	private static final int NUM_REQUESTS_DEFAULT = 1;
+
+	private BookstoreStarter() {}
 
 	public static void main(final String[] args) throws InterruptedException {
 		final Bookstore bookstore = new Bookstore();

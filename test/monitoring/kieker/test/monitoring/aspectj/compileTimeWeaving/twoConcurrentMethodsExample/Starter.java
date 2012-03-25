@@ -45,7 +45,7 @@ public class Starter extends Thread {
 
 	public static void main(final String[] args) throws InterruptedException {
 		for (int i = 0; i < 10000; i++) { // NOCS (MagicNumberCheck)
-			new Starter().start(); // NOPMD (new in loop)
+			new Starter().start();
 			// wait between requests
 			Thread.sleep((int) (Math.max(0, (Math.random() * 115d) - (i / 142d)) + 1)); // NOCS (MagicNumberCheck)
 		}
@@ -83,7 +83,7 @@ public class Starter extends Thread {
 			a += i / 1000; // NOCS (MagicNumberCheck)
 		}
 		if ((a % 10000) == 0) { // NOCS (MagicNumberCheck)
-			Starter.boolvar = !Starter.boolvar;
+			Starter.boolvar = Starter.boolvar ^ true;
 		}
 	}
 }

@@ -53,7 +53,6 @@ public class Consumer extends AbstractFilterPlugin {
 		} else {
 			System.out.println("response time accepted: " + rec.getOperationSignature());
 		}
-		return;
 	}
 
 	@Override

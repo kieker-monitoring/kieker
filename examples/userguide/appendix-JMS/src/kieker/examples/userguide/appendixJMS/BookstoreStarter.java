@@ -20,7 +20,9 @@
 
 package kieker.examples.userguide.appendixJMS;
 
-public class BookstoreStarter {
+public final class BookstoreStarter {
+
+	private BookstoreStarter() {}
 
 	public static void main(final String[] args) {
 		final Bookstore bookstore = new Bookstore();

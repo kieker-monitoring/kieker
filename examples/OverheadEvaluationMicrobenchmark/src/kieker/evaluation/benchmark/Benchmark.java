@@ -46,6 +46,8 @@ public final class Benchmark {
 	private static long methodTime = 0;
 	private static int recursionDepth = 0;
 
+	private Benchmark() {}
+
 	public static void main(final String[] args) throws InterruptedException {
 
 		/* 1. Preparations */

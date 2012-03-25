@@ -76,7 +76,7 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 		 */
 		final int numRecordsToSend = 7;
 		for (int i = 0; i < numRecordsToSend; i++) {
-			writer.newMonitoringRecord(new EmptyRecord()); // NOPMD (new in loop)
+			writer.newMonitoringRecord(new EmptyRecord());
 		}
 
 		analysisThread.terminate();
@@ -88,7 +88,7 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 	}
 }
 
-class MonitoringSinkClass extends AbstractFilterPlugin {
+class MonitoringSinkClass extends AbstractFilterPlugin { // NOPMD (subclass of Test)
 
 	public static final String INPUT_PORT_NAME = "doJob";
 	private final List<IMonitoringRecord> receivedRecords;

@@ -67,8 +67,6 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final Object retval;
 		try {
 			retval = thisJoinPoint.proceed();
-		} catch (final Throwable th) {
-			throw th;
 		} finally {
 			if (newTrace) { // close the trace
 				AbstractAspect.TRACEREGISTRY.unregisterTrace();
