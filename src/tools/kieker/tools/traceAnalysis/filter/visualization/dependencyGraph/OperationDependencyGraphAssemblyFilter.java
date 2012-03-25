@@ -54,8 +54,7 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
 /**
  * Refactored copy from LogAnalysis-legacy tool<br>
  * 
- * This class has exactly one input port named "in". The data which is send to
- * this plugin is not delegated in any way.
+ * This class has exactly one input port named "in". The data which is send to this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
@@ -67,6 +66,8 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "include-weights";
 	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "short-labels";
 	public static final String CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS = "include-self-loops";
+
+	private static final String DEFAULT_DOT_OUTPUT_FILE = "output.dot";
 
 	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
 
@@ -200,13 +201,24 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
+		final Configuration configuration = new Configuration();
+
+		configuration.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE,
+				OperationDependencyGraphAssemblyFilter.DEFAULT_DOT_OUTPUT_FILE);
+		configuration.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
+		configuration.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(true));
+		configuration.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.toString(true));
+
+		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		// TODO: Save the current configuration
+		configuration.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
+		configuration.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
+		configuration.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
+		configuration.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));
 
 		return configuration;
 	}

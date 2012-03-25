@@ -29,6 +29,7 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * A Runnable to be scheduled via the RealtimeReplayDistributor
+ * TODO This plugin has to be rewritten in 1.6 to be initializable without further methods (initialize(...))
  * 
  * @author Robert von Massow
  * 
@@ -70,12 +71,10 @@ public class RealtimeReplayWorker extends AbstractFilterPlugin implements Runnab
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
-		// TODO Default Configuration
 		return new Configuration();
 	}
 
 	public Configuration getCurrentConfiguration() {
-		// TODO Current Configuration
 		return new Configuration();
 	}
 }

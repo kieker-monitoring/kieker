@@ -370,9 +370,13 @@ public final class AnalysisController implements Runnable {
 			AnalysisController.LOG.error("Unable to connect repositories after starting analysis.");
 			return false;
 		}
-		// TODO Log different errors.
-		/* Make sure that the plugins are registered and use the method of AbstractPlugin (This should be the only allowed call to this method). */
-		return (this.filters.contains(plugin) || this.readers.contains(plugin)) && plugin.connect(name, repo);
+		/* Make sure that the plugin is registered. */
+		if (!(this.filters.contains(plugin) || this.readers.contains(plugin))) {
+			AnalysisController.LOG.error("The plugin '" + plugin.getName() + "' is not a registered instance.");
+			return false;
+		}
+		/* Use the method of AbstractPlugin (This should be the only allowed call to this method) to check the connections. */
+		return plugin.connect(name, repo);
 	}
 
 	/**
