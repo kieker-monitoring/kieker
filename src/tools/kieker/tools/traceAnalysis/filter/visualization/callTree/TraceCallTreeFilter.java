@@ -78,11 +78,12 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 	// FIXME Change constructor to plugin-default-constructor (allocationComponentOperationPairFactory is not used anyways)
 	public TraceCallTreeFilter(final Configuration configuration, final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory,
 			final String outputFnBase, final boolean shortLabels) {
+		/* Call the inherited mandatory "default" constructor. */
 		super(configuration);
-		// TODO Check type conversion
+
+		// Initialize the fields based on the given parameters. */
 		this.root = new CallTreeNode(null, // null: root node has no parent
-				new CallTreeOperationHashKey(AllocationRepository.ROOT_ALLOCATION_COMPONENT,
-						OperationRepository.ROOT_OPERATION));
+				new CallTreeOperationHashKey(AllocationRepository.ROOT_ALLOCATION_COMPONENT, OperationRepository.ROOT_OPERATION));
 		this.outputFnBase = outputFnBase;
 		this.shortLabels = shortLabels;
 	}
@@ -180,6 +181,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 			"Example: dot -T svg " + outputFnBaseL + ".dot" + " > " + outputFnBaseL + ".svg", });
 	}
 
+	// TODO Is this method still necessary?
 	private static void addTraceToTree(final CallTreeNode root, final MessageTrace t, final boolean aggregated) throws TraceProcessingException {
 		final Stack<CallTreeNode> curStack = new Stack<CallTreeNode>();
 
@@ -226,11 +228,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 	}
 
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
-
-		// TODO: Save the current configuration
-
-		return configuration;
+		return new Configuration();
 	}
 
 	@Override

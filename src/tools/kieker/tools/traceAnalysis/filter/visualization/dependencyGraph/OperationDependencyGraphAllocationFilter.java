@@ -77,13 +77,22 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 	private final boolean shortLabels;
 	private final boolean includeSelfLoops;
 
+	/**
+	 * Creates a new instance of this class using the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration used to initialize this instance.
+	 */
 	public OperationDependencyGraphAllocationFilter(final Configuration configuration) {
-		// TODO Check type conversion
+		/* Call the mandatory "default" constructor. */
 		super(configuration);
+
+		/* Initialize the necessary fields from the inherited class. */
 		super.setDependencyGraph(new DependencyGraph<AllocationComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-				new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-						OperationRepository.ROOT_OPERATION,
+				new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID, OperationRepository.ROOT_OPERATION,
 						AllocationRepository.ROOT_ALLOCATION_COMPONENT)));
+
+		/* Initialize from the given configuration. */
 		this.dotOutputFile = this.configuration.getStringProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE);
 		this.includeWeights = this.configuration.getBooleanProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
 		this.shortLabels = this.configuration.getBooleanProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS);

@@ -67,6 +67,9 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "short-labels";
 	public static final String CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS = "include-self-loops";
 
+	/**
+	 * This is the default dot output name used for the default configuration of this instance.
+	 */
 	private static final String DEFAULT_DOT_OUTPUT_FILE = "output.dot";
 
 	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
@@ -76,13 +79,22 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	private final boolean shortLabels;
 	private final boolean includeSelfLoops;
 
+	/**
+	 * Creates a new instance of this class using the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration used to initialize this instance.
+	 */
 	public OperationDependencyGraphAssemblyFilter(final Configuration configuration) {
-		// TODO Check type conversion
+		/* Call the mandatory "default" constructor. */
 		super(configuration);
+
+		/* Initialize the necessary fields from the inherited class. */
 		super.setDependencyGraph(new DependencyGraph<AssemblyComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-				new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-						OperationRepository.ROOT_OPERATION,
+				new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID, OperationRepository.ROOT_OPERATION,
 						AssemblyRepository.ROOT_ASSEMBLY_COMPONENT)));
+
+		/* Initialize from the given configuration. */
 		this.dotOutputFile = new File(this.configuration.getStringProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE));
 		this.includeWeights = this.configuration.getBooleanProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
 		this.shortLabels = this.configuration.getBooleanProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS);
