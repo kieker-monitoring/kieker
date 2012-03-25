@@ -42,8 +42,8 @@ import org.junit.Test;
  */
 public class TestTraceIdFilter extends TestCase {
 
-	final String SESSION_ID = "sv7w1ifhK";
-	final String HOSTNAME = "srv098";
+	private static final String SESSION_ID = "sv7w1ifhK";
+	private static final String HOSTNAME = "srv098";
 
 	/**
 	 * Given a TraceIdFilter that passes traceIds included in a set <i>idsToPass</i>,
@@ -67,8 +67,8 @@ public class TestTraceIdFilter extends TestCase {
 		final AnalysisController controller = new AnalysisController();
 
 		final EventRecordTrace trace =
-				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdNotToPass, this.SESSION_ID, this.HOSTNAME); // NOCS
-																																				// (MagicNumberCheck)
+				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdNotToPass, TestTraceIdFilter.SESSION_ID,
+						TestTraceIdFilter.HOSTNAME);
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
@@ -84,8 +84,7 @@ public class TestTraceIdFilter extends TestCase {
 
 		if (!sinkPlugin.getList().isEmpty()) {
 			final long passedId = ((AbstractTraceEvent) sinkPlugin.getList().get(0)).getTraceId();
-			Assert.fail(
-					"Filter passed trace with ID " + passedId + " although traceId not element of " + idsToPass);
+			Assert.fail("Filter passed trace with ID " + passedId + " although traceId not element of " + idsToPass);
 		}
 	}
 
@@ -110,9 +109,8 @@ public class TestTraceIdFilter extends TestCase {
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 
-		final EventRecordTrace trace =
-				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, this.SESSION_ID, this.HOSTNAME); // NOCS
-																																			// (MagicNumberCheck)
+		final EventRecordTrace trace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID,
+				TestTraceIdFilter.HOSTNAME);
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
@@ -145,8 +143,7 @@ public class TestTraceIdFilter extends TestCase {
 		final AnalysisController controller = new AnalysisController();
 
 		final EventRecordTrace trace =
-				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, this.SESSION_ID, this.HOSTNAME); // NOCS
-																																			// (MagicNumberCheck)
+				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID, TestTraceIdFilter.HOSTNAME);
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 

@@ -171,7 +171,7 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 
 		private final FilterState filterState;
 		private final ExecutionTrace executionTrace;
-		final EventRecordTrace eventTrace;
+		private final EventRecordTrace eventTrace;
 		private final EventRecordStream eventStream;
 
 		/**
@@ -221,7 +221,7 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 		 *             If no matching event is found at the top of the stack
 		 */
 		private BeforeOperationEvent getMatchingBeforeEventFor(final AfterOperationEvent afterOperationEvent) throws InvalidEventTraceException {
-			final AbstractTraceEvent potentialBeforeEvent = (this.filterState.isEventStackEmpty()) ? null : this.filterState.popEvent(); // NOPMD (null)
+			final AbstractTraceEvent potentialBeforeEvent = (this.filterState.isEventStackEmpty()) ? null : this.filterState.popEvent(); // NOPMD
 
 			// The element at the top of the stack needs to be a before-operation event...
 			if ((potentialBeforeEvent == null) || !(potentialBeforeEvent instanceof BeforeOperationEvent)) {
@@ -269,7 +269,7 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 						currentCallEvent,
 						this.executionTrace.getTraceId(),
 						this.eventTrace.getSessionId(),
-						this.eventTrace.getHostName(),
+						this.eventTrace.getHostname(),
 						executionInformation.getExecutionIndex(),
 						executionInformation.getStackDepth(),
 						currentCallEvent.getTimestamp(),
@@ -285,7 +285,7 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 			final BeforeOperationEvent beforeOperationEvent = this.getMatchingBeforeEventFor(afterOperationEvent);
 
 			// Look for a call event at the top of the stack
-			final AbstractTraceEvent potentialCallEvent = (this.filterState.isEventStackEmpty()) ? null : this.filterState.peekEvent(); // NOPMD (null)
+			final AbstractTraceEvent potentialCallEvent = (this.filterState.isEventStackEmpty()) ? null : this.filterState.peekEvent(); // NOPMD
 			// A definite call occurs if either the stack is empty (entry into the trace) or if a matching call event is found
 			final boolean definiteCall = ((potentialCallEvent == null)
 					|| ((potentialCallEvent instanceof CallOperationEvent) && ((CallOperationEvent) potentialCallEvent)
@@ -301,7 +301,7 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 					beforeOperationEvent,
 					this.executionTrace.getTraceId(),
 					this.eventTrace.getSessionId(),
-					this.eventTrace.getHostName(),
+					this.eventTrace.getHostname(),
 					executionInformation.getExecutionIndex(),
 					executionInformation.getStackDepth(),
 					beforeOperationEvent.getTimestamp(),

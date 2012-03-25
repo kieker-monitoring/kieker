@@ -181,7 +181,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 				 */
 				final Trace trace = (Trace) record;
 				eventRecordTrace.setSessionId(trace.getSessionId());
-				eventRecordTrace.setHostName(trace.getHostname());
+				eventRecordTrace.setHostname(trace.getHostname());
 
 			} else {
 				return; // invalid type which should not happen due to the specified eventTypes

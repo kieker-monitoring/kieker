@@ -119,7 +119,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 	}
 
 	@Test
-	public void testValidTraceWithBeforeAndAfterOperationEvents() throws InvalidTraceException {
+	public void testValidTraceWithBeforeAndAfterOperationEvents() throws InvalidTraceException { // NOPMD (assert missing)
 		/*
 		 * Create an EventRecordTrace, containing only Before- and AfterOperation events.
 		 */
@@ -132,7 +132,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 	}
 
 	@Test
-	public void testValidTraceWithBeforeAndAfterOperationEventsAndAdditionalCallEvents() throws InvalidTraceException {
+	public void testValidTraceWithBeforeAndAfterOperationEventsAndAdditionalCallEvents() throws InvalidTraceException { // NOPMD (assert missing)
 		/*
 		 * Create an EventRecordTrace, containing only Before- and AfterOperation events.
 		 */
@@ -145,7 +145,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 	}
 
 	@Test
-	public void testValidTraceWithBeforeAndAfterOperationEventsAndAdditionalCallEventsAndGap() throws InvalidTraceException {
+	public void testValidTraceWithBeforeAndAfterOperationEventsAndAdditionalCallEventsAndGap() throws InvalidTraceException { // NOPMD (assert missing)
 		/*
 		 * Create an EventRecordTrace, containing only Before- and AfterOperation events.
 		 */

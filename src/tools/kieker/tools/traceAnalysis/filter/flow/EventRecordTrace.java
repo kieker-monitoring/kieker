@@ -45,7 +45,7 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<Abstract
 	private long minTimestamp = -1;
 	private long maxTimestamp = -1;
 
-	private volatile String hostName;
+	private volatile String hostname;
 
 	/**
 	 * This is currently used as a hack, to make the {@link #getSessionId()} mutable.
@@ -89,19 +89,19 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<Abstract
 	public EventRecordTrace(final long traceId) {
 		super(traceId);
 		this.mySessionId = super.getSessionId();
-		this.hostName = Trace.NO_HOSTNAME;
+		this.hostname = Trace.NO_HOSTNAME;
 	}
 
 	public EventRecordTrace(final long traceId, final String sessionId) {
 		super(traceId, sessionId);
 		this.mySessionId = super.getSessionId();
-		this.hostName = Trace.NO_HOSTNAME;
+		this.hostname = Trace.NO_HOSTNAME;
 	}
 
-	public EventRecordTrace(final long traceId, final String sessionId, final String hostName) {
+	public EventRecordTrace(final long traceId, final String sessionId, final String hostname) {
 		super(traceId, sessionId);
 		this.mySessionId = super.getSessionId();
-		this.hostName = hostName;
+		this.hostname = hostname;
 	}
 
 	/**
@@ -225,18 +225,18 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<Abstract
 	}
 
 	/**
-	 * @param hostName
+	 * @param hostname
 	 *            the hostName to set
 	 */
-	public void setHostName(final String hostName) {
-		this.hostName = hostName;
+	public void setHostname(final String hostname) {
+		this.hostname = hostname;
 	}
 
 	/**
 	 * @return the hostName
 	 */
-	public String getHostName() {
-		return this.hostName;
+	public String getHostname() {
+		return this.hostname;
 	}
 
 	/**

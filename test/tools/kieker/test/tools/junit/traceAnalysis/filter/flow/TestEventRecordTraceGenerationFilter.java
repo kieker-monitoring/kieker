@@ -45,8 +45,8 @@ public class TestEventRecordTraceGenerationFilter extends TestCase {
 
 	// TODO: Continue this test in terms of timing constellations
 
-	final static String SESSION_ID = "8yWpCvrJ2";
-	final static String HOSTNAME = "srv55";
+	private final static String SESSION_ID = "8yWpCvrJ2";
+	private final static String HOSTNAME = "srv55";
 
 	/**
 	 * Creates an {@link EventRecordTraceGenerationFilter} with the given parameter.
@@ -95,7 +95,7 @@ public class TestEventRecordTraceGenerationFilter extends TestCase {
 
 		Assert.assertEquals("Unexpected trace ID", traceId, outputTrace.getTraceId());
 		Assert.assertEquals("Unexpected session ID", TestEventRecordTraceGenerationFilter.SESSION_ID, outputTrace.getSessionId());
-		Assert.assertEquals("Unexpected session ID", TestEventRecordTraceGenerationFilter.HOSTNAME, outputTrace.getHostName());
+		Assert.assertEquals("Unexpected session ID", TestEventRecordTraceGenerationFilter.HOSTNAME, outputTrace.getHostname());
 
 		// Now, make sure that this trace is as expected
 		Assert.assertEquals("Unexpected length of trace", bookstoreTrace.eventList().size(), outputEvents.size());
