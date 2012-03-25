@@ -179,8 +179,13 @@ public final class AnalysisController implements Runnable {
 	 *            The instance to be used for configuration.
 	 */
 	private final void loadFromModelProject(final MIProject mproject, final ClassLoader classLoader) {
-		/* Remember the libraries. */
-		this.dependencies.addAll(mproject.getDependencies());
+		/* Remember the libraries (But create them via a factory to avoid that the dependencies are removed during the saving. */
+		final MAnalysisMetaModelFactory factory = new MAnalysisMetaModelFactory();
+		for (final MIDependency mDepdendency : mproject.getDependencies()) {
+			final MIDependency mDepdendencyCopy = factory.createDependency();
+			mDepdendencyCopy.setFilePath(mDepdendency.getFilePath());
+			this.dependencies.add(mDepdendencyCopy);
+		}
 
 		/* Create the repositories. */
 		final Map<MIRepository, AbstractRepository> repositoryMap = new HashMap<MIRepository, AbstractRepository>(); // NOPMD (no concurrent access)
@@ -752,6 +757,7 @@ public final class AnalysisController implements Runnable {
 		try {
 			resource.save(options);
 		} catch (final IOException ex) {
+			ex.printStackTrace();
 			AnalysisController.LOG.error("Unable to save configuration file '" + file.getAbsolutePath() + "'.", ex);
 			return false;
 		}
