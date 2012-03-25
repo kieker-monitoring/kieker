@@ -8,6 +8,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.record.flow.trace.Trace;
 
 /**
  * Allows to filter {@link IMonitoringRecord} objects based on their given timestamps.
@@ -71,7 +72,7 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 		if (record instanceof OperationExecutionRecord) {
 			this.inputOperationExecutionRecord((OperationExecutionRecord) record);
 		} else if (record instanceof AbstractTraceEvent) {
-			this.inputTraceEvent((AbstractTraceEvent) record);
+			this.inputTraceEvent(record);
 		} else {
 			this.inputIMonitoringRecord(record);
 		}
@@ -86,12 +87,24 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 		}
 	}
 
-	@InputPort(name = TimestampFilter.INPUT_PORT_NAME_FLOW, description = "Receives trace events to be selected by a specific timestamp selector", eventTypes = { AbstractTraceEvent.class })
-	public final void inputTraceEvent(final AbstractTraceEvent event) {
-		if (this.inRange(event.getTimestamp())) {
-			super.deliver(TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, event);
+	@InputPort(name = TimestampFilter.INPUT_PORT_NAME_FLOW, description = "Receives trace events to be selected by a specific timestamp selector",
+			eventTypes = { AbstractTraceEvent.class, Trace.class })
+	public final void inputTraceEvent(final IMonitoringRecord record) {
+		final long timestamp;
+
+		if (record instanceof Trace) {
+			timestamp = ((Trace) record).getLoggingTimestamp();
+		} else if (record instanceof AbstractTraceEvent) {
+			timestamp = ((AbstractTraceEvent) record).getTimestamp();
 		} else {
-			super.deliver(TimestampFilter.OUTPUT_PORT_NAME_OUTSIDE_PERIOD, event);
+			// should not happen given the accepted type
+			return;
+		}
+
+		if (this.inRange(timestamp)) {
+			super.deliver(TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, record);
+		} else {
+			super.deliver(TimestampFilter.OUTPUT_PORT_NAME_OUTSIDE_PERIOD, record);
 		}
 	}
 

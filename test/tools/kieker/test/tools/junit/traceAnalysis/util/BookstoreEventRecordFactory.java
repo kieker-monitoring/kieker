@@ -273,13 +273,13 @@ public final class BookstoreEventRecordFactory {
 		firstTimestamp += firstTimestampDelta;
 		traceId++;
 		final EventRecordTrace validSyncTraceAdditionalCallEvents =
-				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEvents(firstTimestamp, traceId++, sessionId, hostname);
+				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEvents(firstTimestamp, traceId, sessionId, hostname);
 		allRecords.add(new Trace(traceId, traceId, sessionId, hostname, Trace.NO_PARENT_TRACEID, Trace.NO_PARENT_ORDER_INDEX));
 		allRecords.addAll(validSyncTraceAdditionalCallEvents.eventList());
 		firstTimestamp += firstTimestampDelta;
 		traceId++;
 		final EventRecordTrace validSyncTraceAdditionalCallEventsGap =
-				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(firstTimestamp, traceId++, sessionId, hostname);
+				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(firstTimestamp, traceId, sessionId, hostname);
 		allRecords.add(new Trace(traceId, traceId, sessionId, hostname, Trace.NO_PARENT_TRACEID, Trace.NO_PARENT_ORDER_INDEX));
 		allRecords.addAll(validSyncTraceAdditionalCallEventsGap.eventList());
 
