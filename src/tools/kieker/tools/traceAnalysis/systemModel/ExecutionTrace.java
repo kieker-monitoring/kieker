@@ -45,29 +45,7 @@ public class ExecutionTrace extends AbstractTrace {
 	private long minTin = -1;
 	private long maxTout = -1;
 	private int maxEss = -1;
-	private final SortedSet<Execution> set = new TreeSet<Execution>(new Comparator<Execution>() {
-
-		public int compare(final Execution e1, final Execution e2) {
-			if (e1.getTraceId() == e2.getTraceId()) {
-				if (e1.getEoi() < e2.getEoi()) {
-					return -1;
-				}
-				if (e1.getEoi() > e2.getEoi()) {
-					return 1;
-				}
-				return 0;
-			} else {
-				// TODO: Should never happen, as #add makes sure that all trace ids equal
-				if (e1.getTin() < e2.getTin()) {
-					return -1;
-				}
-				if (e1.getTin() > e2.getTin()) {
-					return 1;
-				}
-				return 0;
-			}
-		}
-	});
+	private final SortedSet<Execution> set = new TreeSet<Execution>(ExecutionTrace.createExecutionTraceComparator());
 
 	public ExecutionTrace(final long traceId) {
 		super(traceId);
@@ -319,7 +297,6 @@ public class ExecutionTrace extends AbstractTrace {
 
 	@Override
 	public int hashCode() { // NOPMD
-		// TODO either this or equals might not be correct! both should consider traceId
 		return super.hashCode();
 	}
 
@@ -342,7 +319,97 @@ public class ExecutionTrace extends AbstractTrace {
 				return true;
 			}
 			final ExecutionTrace other = (ExecutionTrace) obj;
+			if (this.getTraceId() != other.getTraceId()) {
+				return false;
+			}
+			// Note that we are using a TreeSet which is not using the Object's equals
+			// method but the Set's Comparator, which we defined in this case.
 			return this.set.equals(other.set);
 		}
+	}
+
+	/**
+	 * Returns an instance of the {@link Comparator} used by the internal {@link TreeSet} to
+	 * compare {@link Execution}s.
+	 * 
+	 * @return
+	 */
+	public static final Comparator<Execution> createExecutionTraceComparator() {
+		return new Comparator<Execution>() {
+
+			/**
+			 * Note that this method is not only used by {@link ExecutionTrace#add(Execution)} but also by {@link TreeSet#equals(Object)} utilized in
+			 * {@link ExecutionTrace#equals(Object)}.
+			 */
+			public int compare(final Execution e1, final Execution e2) {
+				/*
+				 * If executions equal, return immediately
+				 */
+				if (e1.equals(e2)) {
+					return 0;
+				}
+
+				/*
+				 * 1. criterion: trace id
+				 */
+				if (e1.getTraceId() < e2.getTraceId()) {
+					return -1;
+				} else if (e1.getTraceId() > e2.getTraceId()) {
+					return 1;
+				}
+
+				// At this location: trace ids equal
+
+				/*
+				 * 2. criterion: eoi
+				 */
+				if (e1.getEoi() < e2.getEoi()) {
+					return -1;
+				}
+				if (e1.getEoi() > e2.getEoi()) {
+					return 1;
+				}
+
+				// At this location: trace ids, eoi equal
+
+				/*
+				 * 3. criterion: ess
+				 */
+				if (e1.getEss() < e2.getEss()) {
+					return -1;
+				}
+				if (e1.getEss() > e2.getEss()) {
+					return 1;
+				}
+
+				// At this location: trace ids, eoi, ess equal
+
+				/*
+				 * 4. criterion: tin
+				 */
+				if (e1.getTin() < e2.getTin()) {
+					return -1;
+				}
+				if (e1.getTin() > e2.getTin()) {
+					return 1;
+				}
+
+				// At this location: trace ids, eoi, ess, tin equal
+
+				/*
+				 * 5. criterion: tout
+				 */
+				if (e1.getTout() < e2.getTout()) {
+					return -1;
+				}
+				if (e1.getTout() > e2.getTout()) {
+					return 1;
+				}
+
+				// At this location: trace ids, eoi, ess, tin, tout equal
+
+				return e1.hashCode() - e2.hashCode();
+			}
+		};
 	}
 }

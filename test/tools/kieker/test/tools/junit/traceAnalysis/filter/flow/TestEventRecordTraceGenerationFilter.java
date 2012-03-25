@@ -28,6 +28,7 @@ import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.record.flow.trace.Trace;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
 import kieker.tools.traceAnalysis.filter.flow.EventRecordTrace;
@@ -42,7 +43,10 @@ import org.junit.Test;
  */
 public class TestEventRecordTraceGenerationFilter extends TestCase {
 
-	// TODO: Continue this test
+	// TODO: Continue this test in terms of timing constellations
+
+	final static String SESSION_ID = "8yWpCvrJ2";
+	final static String HOSTNAME = "srv55";
 
 	/**
 	 * Creates an {@link EventRecordTraceGenerationFilter} with the given parameter.
@@ -61,9 +65,10 @@ public class TestEventRecordTraceGenerationFilter extends TestCase {
 		final long traceId = 978668l; // NOCS (MagicNumberCheck)
 		final long startTime = 86756587l; // NOCS (MagicNumberCheck)
 
-		final List<AbstractTraceEvent> bookstoreTrace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(startTime, traceId);
-		Assert.assertEquals("Test invalid", startTime, bookstoreTrace.get(0).getTimestamp());
-		final long traceDuration = bookstoreTrace.get(bookstoreTrace.size() - 1).getTimestamp() - startTime;
+		final EventRecordTrace bookstoreTrace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(startTime, traceId,
+				TestEventRecordTraceGenerationFilter.SESSION_ID, TestEventRecordTraceGenerationFilter.HOSTNAME);
+		Assert.assertEquals("Test invalid", startTime, bookstoreTrace.eventList().get(0).getTimestamp());
+		final long traceDuration = bookstoreTrace.eventList().get(bookstoreTrace.eventList().size() - 1).getTimestamp() - startTime;
 		final AnalysisController controller = new AnalysisController();
 
 		final EventRecordTraceGenerationFilter traceFilter = TestEventRecordTraceGenerationFilter.createFilter(traceDuration + 1);
@@ -76,6 +81,8 @@ public class TestEventRecordTraceGenerationFilter extends TestCase {
 
 		controller.connect(traceFilter, EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME_TRACE, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
+		traceFilter.inputTraceEvent(new Trace(traceId, traceId, TestEventRecordTraceGenerationFilter.SESSION_ID, TestEventRecordTraceGenerationFilter.HOSTNAME,
+				Trace.NO_PARENT_TRACEID, Trace.NO_PARENT_ORDER_INDEX));
 		for (final AbstractTraceEvent e : bookstoreTrace) {
 			traceFilter.inputTraceEvent(e);
 		}
@@ -86,9 +93,13 @@ public class TestEventRecordTraceGenerationFilter extends TestCase {
 		final EventRecordTrace outputTrace = (EventRecordTrace) sinkPlugin.getList().get(0);
 		final List<AbstractTraceEvent> outputEvents = outputTrace.eventList();
 
-		// Now, make sure that this trace is as expected
-		Assert.assertEquals("Unexpected length of trace", bookstoreTrace.size(), outputEvents.size());
+		Assert.assertEquals("Unexpected trace ID", traceId, outputTrace.getTraceId());
+		Assert.assertEquals("Unexpected session ID", TestEventRecordTraceGenerationFilter.SESSION_ID, outputTrace.getSessionId());
+		Assert.assertEquals("Unexpected session ID", TestEventRecordTraceGenerationFilter.HOSTNAME, outputTrace.getHostName());
 
-		Assert.assertTrue("Expecting event lists to be equal", Arrays.equals(bookstoreTrace.toArray(), outputEvents.toArray()));
+		// Now, make sure that this trace is as expected
+		Assert.assertEquals("Unexpected length of trace", bookstoreTrace.eventList().size(), outputEvents.size());
+
+		Assert.assertTrue("Expecting event lists to be equal", Arrays.equals(bookstoreTrace.eventList().toArray(), outputEvents.toArray()));
 	}
 }

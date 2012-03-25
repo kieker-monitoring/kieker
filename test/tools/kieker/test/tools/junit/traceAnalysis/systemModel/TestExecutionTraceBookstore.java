@@ -20,7 +20,9 @@
 
 package kieker.test.tools.junit.traceAnalysis.systemModel;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.TreeSet;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -30,9 +32,11 @@ import kieker.common.logging.LogFactory;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
+import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
@@ -48,25 +52,34 @@ public class TestExecutionTraceBookstore extends TestCase {
 	private static final Log LOG = LogFactory.getLog(TestExecutionTraceBookstore.class);
 	private static final long TRACE_ID = 69898L;
 	private static final String SESSION_ID = "iXsnm70o4N";
-	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration());
-	private final ExecutionFactory eFactory = new ExecutionFactory(this.systemEntityFactory);
-	private final long minTin;
-	private final long maxTout;
-	private final int numExecutions;
+
+	private volatile SystemModelRepository systemEntityFactory;
+	private volatile ExecutionFactory eFactory;
+	private volatile long minTin;
+	private volatile long maxTout;
+	private volatile int numExecutions;
 
 	/* Executions of a valid trace */
-	private final Execution exec0_0__bookstore_searchBook; // NOCS
-	private final Execution exec1_1__catalog_getBook; // NOCS
-	private final Execution exec2_1__crm_getOrders; // NOCS
-	private final Execution exec3_2__catalog_getBook; // NOCS
+	private volatile Execution exec0_0__bookstore_searchBook; // NOCS
+	private volatile Execution exec1_1__catalog_getBook; // NOCS
+	private volatile Execution exec2_1__crm_getOrders; // NOCS
+	private volatile Execution exec3_2__catalog_getBook; // NOCS
 
-	public TestExecutionTraceBookstore() {
+	// public TestExecutionTraceBookstore() {
+	//
+	// }
+
+	@Override
+	protected void setUp() throws Exception {
+		this.systemEntityFactory = new SystemModelRepository(new Configuration());
+		this.eFactory = new ExecutionFactory(this.systemEntityFactory);
+
 		int numExecutions_l = 0;
 
 		/* Manually create Executions for a trace */
 		numExecutions_l++;
 		this.exec0_0__bookstore_searchBook = this.eFactory.genExecution("Bookstore", "bookstore", "searchBook", TestExecutionTraceBookstore.TRACE_ID,
-				TestExecutionTraceBookstore.SESSION_ID, 1, 10, 0, 0); // NOCS (MagicNumberCheck)
+					TestExecutionTraceBookstore.SESSION_ID, 1, 10, 0, 0); // NOCS (MagicNumberCheck)
 		this.minTin = this.exec0_0__bookstore_searchBook.getTin();
 		this.maxTout = this.exec0_0__bookstore_searchBook.getTout();
 
@@ -75,10 +88,15 @@ public class TestExecutionTraceBookstore extends TestCase {
 				TestExecutionTraceBookstore.SESSION_ID, 2, 4, 1, 1); // NOCS (MagicNumberCheck)
 		numExecutions_l++;
 		this.exec2_1__crm_getOrders = this.eFactory.genExecution("CRM", "crm", "getOrders", TestExecutionTraceBookstore.TRACE_ID,
-				TestExecutionTraceBookstore.SESSION_ID, 5, 8, 2, 1); // NOCS (MagicNumberCheck)
+					TestExecutionTraceBookstore.SESSION_ID, 5, 8, 2, 1); // NOCS (MagicNumberCheck)
 		numExecutions_l++;
 		this.exec3_2__catalog_getBook = this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID,
-				TestExecutionTraceBookstore.SESSION_ID, 6, 7, 3, 2); // NOCS (MagicNumberCheck)
+					TestExecutionTraceBookstore.SESSION_ID, 6, 7, 3, 2); // NOCS (MagicNumberCheck)
+
+		// Just some basic checks to make sure that the trace has been set up properly (we've had some trouble here)
+		Assert.assertNotSame(this.exec3_2__catalog_getBook.getOperation(), this.exec2_1__crm_getOrders.getOperation());
+		Assert.assertNotSame(this.exec0_0__bookstore_searchBook.getAllocationComponent(), this.exec1_1__catalog_getBook.getAllocationComponent());
+
 		this.numExecutions = numExecutions_l;
 	}
 
@@ -137,6 +155,126 @@ public class TestExecutionTraceBookstore extends TestCase {
 		final ExecutionTrace execTrace1 = this.genValidBookstoreTrace();
 		final ExecutionTrace execTrace2 = this.genBrokenBookstoreTraceEoiSkip();
 		Assert.assertFalse(execTrace1.equals(execTrace2));
+	}
+
+	private enum VariationPoint {
+		OPERATION, ALLOCATION, TRACE_ID, SESSION_ID, EOI, ESS, TIN, TOUT
+	};
+
+	/**
+	 * Returns an {@link Execution} with each field being equal to that of <i>executionTemplate</i> except for the value
+	 * of the given {@link VariationPoint} being set to the respective value of <i>variationTemplate</i>.
+	 * 
+	 * @param executionTemplate
+	 * @param vPoint
+	 * @param variationTemplate
+	 * @return
+	 */
+	private Execution cloneExecutionWithVariation(final Execution executionTemplate, final VariationPoint vPoint,
+			final Execution variationTemplate) {
+		Operation op = executionTemplate.getOperation();
+		AllocationComponent allocComp = executionTemplate.getAllocationComponent();
+		long traceId = executionTemplate.getTraceId();
+		String sessionId = executionTemplate.getSessionId();
+		int eoi = executionTemplate.getEoi();
+		int ess = executionTemplate.getEss();
+		long tin = executionTemplate.getTin();
+		long tout = executionTemplate.getTout();
+		final boolean assumed = executionTemplate.isAssumed();
+
+		/* Now perform the selected variation */
+		switch (vPoint) {
+		case ALLOCATION:
+			allocComp = variationTemplate.getAllocationComponent();
+			break;
+		case EOI:
+			eoi = variationTemplate.getEoi();
+			break;
+		case ESS:
+			ess = variationTemplate.getEss();
+			break;
+		case OPERATION:
+			op = variationTemplate.getOperation();
+			break;
+		case SESSION_ID:
+			sessionId = variationTemplate.getSessionId();
+			break;
+		case TIN:
+			tin = variationTemplate.getTin();
+			break;
+		case TOUT:
+			tout = variationTemplate.getTout();
+			break;
+		case TRACE_ID:
+			traceId = variationTemplate.getTraceId();
+			break;
+		default:
+			Assert.fail();
+
+		}
+
+		final Execution retVal = new Execution(op, allocComp, traceId, sessionId, eoi, ess, tin, tout, assumed);
+
+		Assert.assertFalse("executions must vary in " + vPoint + " but are equal: " + executionTemplate + " ; " + retVal,
+				retVal.equals(executionTemplate));
+
+		return retVal;
+	}
+
+	@Test
+	public void testExecutionTraceEqualMethod() throws InvalidTraceException {
+		final ExecutionTrace trace0 = this.genValidBookstoreTrace();
+
+		/**
+		 * Will be used to create a clone of exec0_0__bookstore_searchBook with certain variations
+		 * selected from the execution.
+		 */
+		final Execution variationTemplate =
+				new Execution(this.exec1_1__catalog_getBook.getOperation(), this.exec1_1__catalog_getBook.getAllocationComponent(),
+						this.exec1_1__catalog_getBook.getTraceId() + 100, this.exec1_1__catalog_getBook.getSessionId() + "_",
+						this.exec1_1__catalog_getBook.getEoi() + 100, this.exec1_1__catalog_getBook.getEss() + 100,
+						this.exec1_1__catalog_getBook.getTin() + 100, this.exec1_1__catalog_getBook.getTout(), !this.exec1_1__catalog_getBook.isAssumed());
+
+		vLoop: for (final VariationPoint vPoint : VariationPoint.values()) {
+			final ExecutionTrace trace1 = new ExecutionTrace(trace0.getTraceId(), trace0.getSessionId());
+			for (final Execution execFromTrace0 : trace0.getTraceAsSortedExecutionSet()) {
+				final Execution execToAddToTrace1;
+				if (execFromTrace0 == this.exec0_0__bookstore_searchBook) {
+					execToAddToTrace1 = this.cloneExecutionWithVariation(this.exec0_0__bookstore_searchBook, vPoint, variationTemplate);
+					// This tests the Execution's equals method already
+					Assert.assertFalse("Executions must not be equal (variation point: " + vPoint + " ) but they are: " + execFromTrace0 + "; " + execToAddToTrace1,
+							execFromTrace0.equals(execToAddToTrace1));
+					if (vPoint == VariationPoint.TRACE_ID) {
+						// We won't be able to continue for this variation because we cannot add an execution
+						// with a varying trace id. However, at least we've tested the Execution's equal method.
+						continue vLoop;
+					}
+				} else {
+					execToAddToTrace1 = execFromTrace0;
+				}
+				trace1.add(execToAddToTrace1);
+			}
+
+			Assert.assertFalse("Execution traces must not be equal (variation point: " + vPoint + " ) but they are: " + trace0 + "; " + trace1,
+					trace0.equals(trace1));
+		}
+	}
+
+	/**
+	 * This method can be used to debug the {@link Comparator} provided by {@link ExecutionTrace#createExecutionTraceComparator()}.
+	 */
+	@Test
+	public void testTreeSet() {
+		final TreeSet<Execution> s0 = new TreeSet<Execution>(ExecutionTrace.createExecutionTraceComparator());
+		final TreeSet<Execution> s1 = new TreeSet<Execution>(ExecutionTrace.createExecutionTraceComparator());
+		final Execution execFromTrace0 = this.exec0_0__bookstore_searchBook;
+		final Execution long1 = new Execution(execFromTrace0.getOperation(), execFromTrace0.getAllocationComponent(), execFromTrace0.getTraceId(),
+				execFromTrace0.getSessionId(), execFromTrace0.getEoi(), execFromTrace0.getEss(), execFromTrace0.getTin(),
+				execFromTrace0.getTout(),
+				execFromTrace0.isAssumed());
+		s0.add(execFromTrace0);
+		s1.add(long1);
+		Assert.assertEquals("Expected sets to be equal", s0, s1);
 	}
 
 	/**

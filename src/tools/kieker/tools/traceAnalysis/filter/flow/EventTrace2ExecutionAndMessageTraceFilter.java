@@ -171,6 +171,7 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 
 		private final FilterState filterState;
 		private final ExecutionTrace executionTrace;
+		final EventRecordTrace eventTrace;
 		private final EventRecordStream eventStream;
 
 		/**
@@ -180,12 +181,16 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 		 *            The filter state object to work with
 		 * @param eventStream
 		 *            The event stream from which the events are taken
+		 * @param eventTrace
+		 *            The event trace from which trace meta information, such as hostname, can be retrieved
 		 * @param executionTrace
 		 *            The execution trace to store the generated executions in
 		 */
-		public EventProcessor(final FilterState filterState, final EventRecordStream eventStream, final ExecutionTrace executionTrace) {
+		public EventProcessor(final FilterState filterState, final EventRecordStream eventStream, final EventRecordTrace eventTrace,
+				final ExecutionTrace executionTrace) {
 			this.filterState = filterState;
 			this.eventStream = eventStream;
+			this.eventTrace = eventTrace;
 			this.executionTrace = executionTrace;
 		}
 
@@ -263,6 +268,8 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 				final Execution execution = EventTrace2ExecutionAndMessageTraceFilter.this.callOperationToExecution(
 						currentCallEvent,
 						this.executionTrace.getTraceId(),
+						this.eventTrace.getSessionId(),
+						this.eventTrace.getHostName(),
 						executionInformation.getExecutionIndex(),
 						executionInformation.getStackDepth(),
 						currentCallEvent.getTimestamp(),
@@ -293,6 +300,8 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 			final Execution execution = EventTrace2ExecutionAndMessageTraceFilter.this.beforeOperationToExecution(
 					beforeOperationEvent,
 					this.executionTrace.getTraceId(),
+					this.eventTrace.getSessionId(),
+					this.eventTrace.getHostName(),
 					executionInformation.getExecutionIndex(),
 					executionInformation.getStackDepth(),
 					beforeOperationEvent.getTimestamp(),
@@ -362,10 +371,10 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 
 	@InputPort(name = EventTrace2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME_EVENT_TRACE, description = "Receives event record traces to be transformed", eventTypes = { EventRecordTrace.class })
 	public void inputEventTrace(final EventRecordTrace eventTrace) {
-		final ExecutionTrace execTrace = new ExecutionTrace(eventTrace.getTraceId());
+		final ExecutionTrace execTrace = new ExecutionTrace(eventTrace.getTraceId(), eventTrace.getSessionId());
 		final EventRecordStream eventStream = new EventRecordStream(eventTrace);
 		final FilterState state = new FilterState();
-		final EventProcessor eventProcessor = new EventProcessor(state, eventStream, execTrace);
+		final EventProcessor eventProcessor = new EventProcessor(state, eventStream, eventTrace, execTrace);
 
 		long lastOrderIndex = -1; // used to check for ascending order indices
 
@@ -421,11 +430,9 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 	 * @param tout
 	 * @return
 	 */
-	private Execution beforeOperationToExecution(final BeforeOperationEvent event, final long traceId, final int eoi, final int ess,
+	private Execution beforeOperationToExecution(final BeforeOperationEvent event, final long traceId, final String sessionId, final String hostname, final int eoi,
+			final int ess,
 			final long tin, final long tout, final boolean assumed) {
-		// TODO: hostname and sessionid are currently not available in the event trace records
-		final String hostname = "<HOST>";
-		final String sessionId = "<SESSION-ID>";
 
 		final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(event.getOperationSignature());
 
@@ -443,11 +450,9 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 	 * @param tout
 	 * @return
 	 */
-	private Execution callOperationToExecution(final CallOperationEvent event, final long traceId, final int eoi, final int ess,
+	private Execution callOperationToExecution(final CallOperationEvent event, final long traceId, final String sessionId, final String hostname, final int eoi,
+			final int ess,
 			final long tin, final long tout, final boolean assumed) {
-		// TODO: hostname and sessionid are currently not available in the event trace records
-		final String hostname = "<HOST>";
-		final String sessionId = "<SESSION-ID>";
 
 		final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(event.getCalleeOperationSignature());
 		return super.createExecutionByEntityNames(hostname, fqComponentNameSignaturePair.getFqClassname(),

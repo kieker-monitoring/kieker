@@ -23,12 +23,18 @@ package kieker.test.tools.junit.traceAnalysis.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import junit.framework.Assert;
+import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.record.flow.trace.Trace;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.common.record.flow.trace.operation.CallOperationEvent;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
+import kieker.test.common.junit.record.BookstoreOperationExecutionRecordFactory;
+import kieker.tools.traceAnalysis.filter.flow.EventRecordTrace;
+import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
 
 /**
  * 
@@ -37,23 +43,6 @@ import kieker.monitoring.core.controller.MonitoringController;
  */
 public final class BookstoreEventRecordFactory {
 	// private static final Log LOG = LogFactory.getLog(BookstoreEventRecordFactory.class);
-
-	private static final String CLASS_BOOKSTORE = "Bookstore";
-	private static final String CLASS_CATALOG = "Catalog";
-	private static final String CLASS_CRM = "CRM";
-
-	private static final String OP_BOOKSTORE_SEARCH_BOOK = "searchBook";
-	private static final String OP_CATALOG_GET_BOOK = "getBook";
-	private static final String OP_CRM_GET_ORDERS = "getOrders";
-
-	private static final String FQ_OP_BOOKSTORE_SEARCH_BOOK =
-			BookstoreEventRecordFactory.CLASS_BOOKSTORE + "." + BookstoreEventRecordFactory.OP_BOOKSTORE_SEARCH_BOOK;
-	private static final String FQ_OP_CATALOG_GET_BOOK =
-			BookstoreEventRecordFactory.CLASS_CATALOG + "." + BookstoreEventRecordFactory.OP_CATALOG_GET_BOOK;
-	private static final String FQ_OP_CRM_GET_ORDERS =
-			BookstoreEventRecordFactory.CLASS_CRM + "." + BookstoreEventRecordFactory.OP_CRM_GET_ORDERS;
-
-	private BookstoreEventRecordFactory() {}
 
 	/**
 	 * Returns "well-known" Bookstore trace as a list of {@link BeforeOperationEvent} and {@link AfterOperationEvent} events, ordered by its
@@ -64,7 +53,8 @@ public final class BookstoreEventRecordFactory {
 	 * @param traceId
 	 * @return
 	 */
-	public static List<AbstractTraceEvent> validSyncTraceBeforeAfterEvents(final long firstTimestamp, final long traceId) {
+	public static EventRecordTrace validSyncTraceBeforeAfterEvents(final long firstTimestamp, final long traceId, final String sessionId,
+			final String hostname) {
 		long curTime = firstTimestamp;
 
 		int curOrderIndex = 0;
@@ -78,34 +68,41 @@ public final class BookstoreEventRecordFactory {
 		final AfterOperationEvent exit2_1__crm_getOrders; // NOCS
 		final AfterOperationEvent exit0_0__bookstore_searchBook; // NOCS
 
-		entry0_0__bookstore_searchBook = new BeforeOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_BOOKSTORE_SEARCH_BOOK);
-		entry1_1__catalog_getBook = new BeforeOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
-		exit1_1__catalog_getBook = new AfterOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
-		entry2_1__crm_getOrders = new BeforeOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_CRM_GET_ORDERS);
-		entry3_2__catalog_getBook = new BeforeOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
-		exit3_2__catalog_getBook = new AfterOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
-		exit2_1__crm_getOrders = new AfterOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_CRM_GET_ORDERS);
-		exit0_0__bookstore_searchBook = new AfterOperationEvent(curTime + 1, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_BOOKSTORE_SEARCH_BOOK);
+		entry0_0__bookstore_searchBook = new BeforeOperationEvent(firstTimestamp, traceId, curOrderIndex++,
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
+		curTime++;
+		entry1_1__catalog_getBook = new BeforeOperationEvent(firstTimestamp + 2, traceId, curOrderIndex++,
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		exit1_1__catalog_getBook = new AfterOperationEvent(firstTimestamp + 3, traceId, curOrderIndex++,
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		curTime++;
+		entry2_1__crm_getOrders = new BeforeOperationEvent(firstTimestamp + 5, traceId, curOrderIndex++,
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
+		entry3_2__catalog_getBook = new BeforeOperationEvent(firstTimestamp + 7, traceId, curOrderIndex++,
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		exit3_2__catalog_getBook = new AfterOperationEvent(firstTimestamp + 8, traceId, curOrderIndex++,
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		exit2_1__crm_getOrders = new AfterOperationEvent(firstTimestamp + 8, traceId, curOrderIndex++,
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
+		exit0_0__bookstore_searchBook = new AfterOperationEvent(firstTimestamp + 11, traceId, curOrderIndex++,
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
 
-		final List<AbstractTraceEvent> retList = new ArrayList<AbstractTraceEvent>();
-		retList.add(entry0_0__bookstore_searchBook);
-		retList.add(entry1_1__catalog_getBook);
-		retList.add(exit1_1__catalog_getBook);
-		retList.add(entry2_1__crm_getOrders);
-		retList.add(entry3_2__catalog_getBook);
-		retList.add(exit3_2__catalog_getBook);
-		retList.add(exit2_1__crm_getOrders);
-		retList.add(exit0_0__bookstore_searchBook);
+		final EventRecordTrace retTrace = new EventRecordTrace(traceId, sessionId, hostname);
 
-		return retList;
+		try {
+			retTrace.add(entry0_0__bookstore_searchBook);
+			retTrace.add(entry1_1__catalog_getBook);
+			retTrace.add(exit1_1__catalog_getBook);
+			retTrace.add(entry2_1__crm_getOrders);
+			retTrace.add(entry3_2__catalog_getBook);
+			retTrace.add(exit3_2__catalog_getBook);
+			retTrace.add(exit2_1__crm_getOrders);
+			retTrace.add(exit0_0__bookstore_searchBook);
+		} catch (final InvalidTraceException e) {
+			Assert.fail("Test invalid (creating invalid trace): " + e.getMessage());
+		}
+
+		return retTrace;
 	}
 
 	/**
@@ -117,7 +114,8 @@ public final class BookstoreEventRecordFactory {
 	 * @param traceId
 	 * @return
 	 */
-	public static List<AbstractTraceEvent> validSyncTraceAdditionalCallEvents(final long firstTimestamp, final long traceId) {
+	public static EventRecordTrace validSyncTraceAdditionalCallEvents(final long firstTimestamp, final long traceId, final String sessionId,
+			final String hostname) {
 		long curTime = firstTimestamp;
 		int curOrderIndex = 0;
 
@@ -134,45 +132,51 @@ public final class BookstoreEventRecordFactory {
 		final AfterOperationEvent exit0_0__bookstore_searchBook; // NOCS
 
 		entry0_0__bookstore_searchBook = new BeforeOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_BOOKSTORE_SEARCH_BOOK);
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
 		call1_1__catalog_getBook = new CallOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_BOOKSTORE_SEARCH_BOOK,
-				BookstoreEventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
 		entry1_1__catalog_getBook = new BeforeOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
 		exit1_1__catalog_getBook = new AfterOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
 		call2_1__crm_getOrders = new CallOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_BOOKSTORE_SEARCH_BOOK,
-				BookstoreEventRecordFactory.FQ_OP_CRM_GET_ORDERS);
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
 		entry2_1__crm_getOrders = new BeforeOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_CRM_GET_ORDERS);
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
 		call3_2__catalog_getBook = new CallOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_CRM_GET_ORDERS,
-				BookstoreEventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS,
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
 		entry3_2__catalog_getBook = new BeforeOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
-		exit3_2__catalog_getBook = new AfterOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		exit3_2__catalog_getBook = new AfterOperationEvent(curTime, traceId, curOrderIndex++,
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
 		exit2_1__crm_getOrders = new AfterOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_CRM_GET_ORDERS);
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
+		curTime++;
 		exit0_0__bookstore_searchBook = new AfterOperationEvent(curTime + 1, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_BOOKSTORE_SEARCH_BOOK);
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
 
-		final List<AbstractTraceEvent> retList = new ArrayList<AbstractTraceEvent>();
-		retList.add(entry0_0__bookstore_searchBook);
-		retList.add(call1_1__catalog_getBook);
-		retList.add(entry1_1__catalog_getBook);
-		retList.add(exit1_1__catalog_getBook);
-		retList.add(call2_1__crm_getOrders);
-		retList.add(entry2_1__crm_getOrders);
-		retList.add(call3_2__catalog_getBook);
-		retList.add(entry3_2__catalog_getBook);
-		retList.add(exit3_2__catalog_getBook);
-		retList.add(exit2_1__crm_getOrders);
-		retList.add(exit0_0__bookstore_searchBook);
+		final EventRecordTrace retTrace = new EventRecordTrace(traceId, sessionId, hostname);
 
-		return retList;
+		try {
+			retTrace.add(entry0_0__bookstore_searchBook);
+			retTrace.add(call1_1__catalog_getBook);
+			retTrace.add(entry1_1__catalog_getBook);
+			retTrace.add(exit1_1__catalog_getBook);
+			retTrace.add(call2_1__crm_getOrders);
+			retTrace.add(entry2_1__crm_getOrders);
+			retTrace.add(call3_2__catalog_getBook);
+			retTrace.add(entry3_2__catalog_getBook);
+			retTrace.add(exit3_2__catalog_getBook);
+			retTrace.add(exit2_1__crm_getOrders);
+			retTrace.add(exit0_0__bookstore_searchBook);
+		} catch (final InvalidTraceException e) {
+			Assert.fail("Test invalid (creating invalid trace): " + e.getMessage());
+		}
+
+		return retTrace;
 	}
 
 	/**
@@ -184,7 +188,8 @@ public final class BookstoreEventRecordFactory {
 	 * @param traceId
 	 * @return
 	 */
-	public static List<AbstractTraceEvent> validSyncTraceAdditionalCallEventsGap(final long firstTimestamp, final long traceId) {
+	public static EventRecordTrace validSyncTraceAdditionalCallEventsGap(final long firstTimestamp, final long traceId, final String sessionId,
+			final String hostname) {
 		long curTime = firstTimestamp;
 		int curOrderIndex = 0;
 
@@ -201,43 +206,53 @@ public final class BookstoreEventRecordFactory {
 		final AfterOperationEvent exit0_0__bookstore_searchBook; // NOCS
 
 		entry0_0__bookstore_searchBook = new BeforeOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_BOOKSTORE_SEARCH_BOOK);
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
 		call1_1__catalog_getBook = new CallOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_BOOKSTORE_SEARCH_BOOK,
-				BookstoreEventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
 		entry1_1__catalog_getBook = new BeforeOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
 		exit1_1__catalog_getBook = new AfterOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		curTime++; // just to have the same timestamps as in the other traces
 		call2_1__crm_getOrders = new CallOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_BOOKSTORE_SEARCH_BOOK,
-				BookstoreEventRecordFactory.FQ_OP_CRM_GET_ORDERS);
-		// assumed to be uninstrumented:
-		// entry2_1__crm_getOrders = new BeforeOperationEvent(curTime++, traceId, curOrderIndex++, EventRecordFactory.FQ_OP_CRM_GET_ORDERS);
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
+		// assumed to be uninstrumented: entry2_1__crm_getOrders = new BeforeOperationEvent(curTime++, traceId, curOrderIndex++,
+		// BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
 		call3_2__catalog_getBook = new CallOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_CRM_GET_ORDERS,
-				BookstoreEventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS,
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
 		entry3_2__catalog_getBook = new BeforeOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
 		exit3_2__catalog_getBook = new AfterOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_CATALOG_GET_BOOK);
-		// assumed to be uninstrumented:
-		// exit2_1__crm_getOrders = new AfterOperationEvent(curTime++, traceId, curOrderIndex++, EventRecordFactory.FQ_OP_CRM_GET_ORDERS);
-		exit0_0__bookstore_searchBook = new AfterOperationEvent(curTime + 1, traceId, curOrderIndex++,
-				BookstoreEventRecordFactory.FQ_OP_BOOKSTORE_SEARCH_BOOK);
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		// assumed to be uninstrumented: exit2_1__crm_getOrders = new AfterOperationEvent(curTime++, traceId, curOrderIndex++,
+		// BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
+		curTime++;
+		curTime++; // just to have the same timestamps as in the other traces
+		exit0_0__bookstore_searchBook = new AfterOperationEvent(curTime++, traceId, curOrderIndex++,
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
 
-		final List<AbstractTraceEvent> retList = new ArrayList<AbstractTraceEvent>();
-		retList.add(entry0_0__bookstore_searchBook);
-		retList.add(call1_1__catalog_getBook);
-		retList.add(entry1_1__catalog_getBook);
-		retList.add(exit1_1__catalog_getBook);
-		retList.add(call2_1__crm_getOrders);
-		retList.add(call3_2__catalog_getBook);
-		retList.add(entry3_2__catalog_getBook);
-		retList.add(exit3_2__catalog_getBook);
-		retList.add(exit0_0__bookstore_searchBook);
+		final EventRecordTrace retTrace = new EventRecordTrace(traceId, sessionId, hostname);
 
-		return retList;
+		try {
+			retTrace.add(entry0_0__bookstore_searchBook);
+			retTrace.add(call1_1__catalog_getBook);
+			retTrace.add(entry1_1__catalog_getBook);
+			retTrace.add(exit1_1__catalog_getBook);
+			retTrace.add(call2_1__crm_getOrders);
+			// assumed to be uninstrumented: retTrace.add(entry2_1__crm_getOrders);
+			retTrace.add(call3_2__catalog_getBook);
+			retTrace.add(entry3_2__catalog_getBook);
+			retTrace.add(exit3_2__catalog_getBook);
+			// assumed to be uninstrumented: retTrace.add(exit2_1__crm_getOrders);
+			retTrace.add(exit0_0__bookstore_searchBook);
+		} catch (final InvalidTraceException e) {
+			Assert.fail("Test invalid (creating invalid trace): " + e.getMessage());
+		}
+
+		return retTrace;
 	}
 
 	public static void main(final String[] args) {
@@ -245,24 +260,30 @@ public final class BookstoreEventRecordFactory {
 
 		long firstTimestamp = 7676876; // NOCS (MagicNumberCheck)
 		final long firstTimestampDelta = 1000; // NOCS (MagicNumberCheck)
+		final String sessionId = "BwvCqdyhw2";
+		final String hostname = "srv0";
 		long traceId = 688434; // NOCS (MagicNumberCheck)
 
-		final List<AbstractTraceEvent> allRecords = new ArrayList<AbstractTraceEvent>();
+		final List<IMonitoringRecord> allRecords = new ArrayList<IMonitoringRecord>();
 
-		final List<AbstractTraceEvent> validSyncTraceBeforeAfterEvents = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceId);
-		allRecords.addAll(validSyncTraceBeforeAfterEvents);
+		final EventRecordTrace validSyncTraceBeforeAfterEvents =
+				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceId, sessionId, hostname);
+		allRecords.add(new Trace(traceId, traceId, sessionId, hostname, Trace.NO_PARENT_TRACEID, Trace.NO_PARENT_ORDER_INDEX));
+		allRecords.addAll(validSyncTraceBeforeAfterEvents.eventList());
 		firstTimestamp += firstTimestampDelta;
 		traceId++;
-		final List<AbstractTraceEvent> validSyncTraceAdditionalCallEvents =
-				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEvents(firstTimestamp, traceId);
-		allRecords.addAll(validSyncTraceAdditionalCallEvents);
+		final EventRecordTrace validSyncTraceAdditionalCallEvents =
+				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEvents(firstTimestamp, traceId++, sessionId, hostname);
+		allRecords.add(new Trace(traceId, traceId, sessionId, hostname, Trace.NO_PARENT_TRACEID, Trace.NO_PARENT_ORDER_INDEX));
+		allRecords.addAll(validSyncTraceAdditionalCallEvents.eventList());
 		firstTimestamp += firstTimestampDelta;
 		traceId++;
-		final List<AbstractTraceEvent> validSyncTraceAdditionalCallEventsGap =
-				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(firstTimestamp, traceId);
-		allRecords.addAll(validSyncTraceAdditionalCallEventsGap);
+		final EventRecordTrace validSyncTraceAdditionalCallEventsGap =
+				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(firstTimestamp, traceId++, sessionId, hostname);
+		allRecords.add(new Trace(traceId, traceId, sessionId, hostname, Trace.NO_PARENT_TRACEID, Trace.NO_PARENT_ORDER_INDEX));
+		allRecords.addAll(validSyncTraceAdditionalCallEventsGap.eventList());
 
-		for (final AbstractTraceEvent r : allRecords) {
+		for (final IMonitoringRecord r : allRecords) {
 			ctrl.newMonitoringRecord(r);
 		}
 

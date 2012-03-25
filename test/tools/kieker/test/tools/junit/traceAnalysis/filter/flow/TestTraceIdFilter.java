@@ -20,7 +20,6 @@
 
 package kieker.test.tools.junit.traceAnalysis.filter.flow;
 
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -32,6 +31,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
+import kieker.tools.traceAnalysis.filter.flow.EventRecordTrace;
 
 import org.junit.Test;
 
@@ -41,6 +41,9 @@ import org.junit.Test;
  * 
  */
 public class TestTraceIdFilter extends TestCase {
+
+	final String SESSION_ID = "sv7w1ifhK";
+	final String HOSTNAME = "srv098";
 
 	/**
 	 * Given a TraceIdFilter that passes traceIds included in a set <i>idsToPass</i>,
@@ -63,8 +66,9 @@ public class TestTraceIdFilter extends TestCase {
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 
-		final List<AbstractTraceEvent> trace =
-				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdNotToPass); // NOCS (MagicNumberCheck)
+		final EventRecordTrace trace =
+				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdNotToPass, this.SESSION_ID, this.HOSTNAME); // NOCS
+																																				// (MagicNumberCheck)
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
@@ -106,8 +110,9 @@ public class TestTraceIdFilter extends TestCase {
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 
-		final List<AbstractTraceEvent> trace =
-				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass); // NOCS (MagicNumberCheck)
+		final EventRecordTrace trace =
+				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, this.SESSION_ID, this.HOSTNAME); // NOCS
+																																			// (MagicNumberCheck)
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
@@ -122,7 +127,7 @@ public class TestTraceIdFilter extends TestCase {
 			Assert.assertTrue("Expected event " + e + " to pass the filter", sinkPlugin.getList().contains(e));
 		}
 		// Somehow redundant but records MIGHT be generated randomly ;-)
-		Assert.assertEquals("Unexpected number of output records", sinkPlugin.getList().size(), trace.size());
+		Assert.assertEquals("Unexpected number of output records", sinkPlugin.getList().size(), trace.eventList().size());
 	}
 
 	/**
@@ -139,8 +144,9 @@ public class TestTraceIdFilter extends TestCase {
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 
-		final List<AbstractTraceEvent> trace =
-				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass); // NOCS (MagicNumberCheck)
+		final EventRecordTrace trace =
+				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, this.SESSION_ID, this.HOSTNAME); // NOCS
+																																			// (MagicNumberCheck)
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
@@ -154,6 +160,6 @@ public class TestTraceIdFilter extends TestCase {
 			Assert.assertTrue("Expected event " + e + " to pass the filter", sinkPlugin.getList().contains(e));
 		}
 		// Somehow redundant but records MIGHT be generated randomly ;-)
-		Assert.assertEquals("Unexpected number of output records", sinkPlugin.getList().size(), trace.size());
+		Assert.assertEquals("Unexpected number of output records", sinkPlugin.getList().size(), trace.eventList().size());
 	}
 }

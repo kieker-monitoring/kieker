@@ -43,14 +43,14 @@ public abstract class AbstractTrace {
 		this.sessionId = sessionId;
 	}
 
-	public final long getTraceId() {
+	public long getTraceId() {
 		return this.traceId;
 	}
 
 	/**
 	 * @return the sessionId
 	 */
-	public final String getSessionId() {
+	public String getSessionId() {
 		return this.sessionId;
 	}
 

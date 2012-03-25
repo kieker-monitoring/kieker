@@ -28,8 +28,10 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.record.flow.trace.Trace;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.systemModel.AbstractTrace;
+import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 
 /**
  * 
@@ -43,11 +45,30 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<Abstract
 	private long minTimestamp = -1;
 	private long maxTimestamp = -1;
 
+	private volatile String hostName;
+
+	/**
+	 * This is currently used as a hack, to make the {@link #getSessionId()} mutable.
+	 */
+	private volatile String mySessionId;
+
+	// TODO: parent trace id?
+
+	// TODO: parent order index?
+
 	/**
 	 * {@link AbstractTraceEvent}s sorted/unified by {@link AbstractTraceEvent#getOrderIndex()}
 	 */
 	private final SortedSet<AbstractTraceEvent> events = new TreeSet<AbstractTraceEvent>(new Comparator<AbstractTraceEvent>() {
 
+		/**
+		 * TODO: This will need to be fixed because the {@link Comparator} is also used by {@link TreeSet#equals(Object)} to compare two {@link TreeSet}s. For a
+		 * fixed {@link Comparator} see {@link ExecutionTrace#createExecutionTraceComparator()}.
+		 * 
+		 * @param e1
+		 * @param e2
+		 * @return
+		 */
 		public int compare(final AbstractTraceEvent e1, final AbstractTraceEvent e2) {
 			if ((e1 == e2) || (e1.getOrderIndex() == e2.getOrderIndex())) { // same order index // FIXME: use equal?
 				return 0;
@@ -67,10 +88,20 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<Abstract
 	 */
 	public EventRecordTrace(final long traceId) {
 		super(traceId);
+		this.mySessionId = super.getSessionId();
+		this.hostName = Trace.NO_HOSTNAME;
 	}
 
 	public EventRecordTrace(final long traceId, final String sessionId) {
 		super(traceId, sessionId);
+		this.mySessionId = super.getSessionId();
+		this.hostName = Trace.NO_HOSTNAME;
+	}
+
+	public EventRecordTrace(final long traceId, final String sessionId, final String hostName) {
+		super(traceId, sessionId);
+		this.mySessionId = super.getSessionId();
+		this.hostName = hostName;
 	}
 
 	/**
@@ -142,6 +173,22 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<Abstract
 	}
 
 	/**
+	 * @return the mySessionId
+	 */
+	@Override
+	public String getSessionId() {
+		return this.mySessionId;
+	}
+
+	/**
+	 * @param mySessionId
+	 *            the mySessionId to set
+	 */
+	public void setSessionId(final String mySessionId) {
+		this.mySessionId = mySessionId;
+	}
+
+	/**
 	 * Returns the {@link AbstractTraceEvent}s ordered by {@link AbstractTraceEvent#getOrderIndex()}
 	 */
 
@@ -175,6 +222,21 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<Abstract
 	 */
 	public long getMaxTimestamp() {
 		return this.maxTimestamp;
+	}
+
+	/**
+	 * @param hostName
+	 *            the hostName to set
+	 */
+	public void setHostName(final String hostName) {
+		this.hostName = hostName;
+	}
+
+	/**
+	 * @return the hostName
+	 */
+	public String getHostName() {
+		return this.hostName;
 	}
 
 	/**

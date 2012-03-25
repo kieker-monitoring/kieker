@@ -29,6 +29,8 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
+import org.junit.Assert;
+
 /**
  * 
  * @author Andre van Hoorn
@@ -57,6 +59,8 @@ public class ExecutionFactory {
 		if (componentTypeA == null) {
 			componentTypeA = this.systemEntityFactory.getTypeRepositoryFactory().createAndRegisterComponentType(componentTypeName, componentTypeName);
 		}
+		Assert.assertEquals("Unexpected component type name", componentTypeName, componentTypeA.getTypeName());
+
 		/* Register operation (if it hasn't been registered before) */
 		Operation operationAa = this.systemEntityFactory.getOperationFactory().lookupOperationByNamedIdentifier(operationName);
 		if (operationAa == null) {
@@ -77,19 +81,22 @@ public class ExecutionFactory {
 		/* Register execution container (if it hasn't been registered before) */
 		ExecutionContainer containerC = this.systemEntityFactory.getExecutionEnvironmentFactory().lookupExecutionContainerByNamedIdentifier(executionContainerName);
 		if (containerC == null) {
-			containerC = this.systemEntityFactory.getExecutionEnvironmentFactory().createAndRegisterExecutionContainer(ExecutionFactory.DEFAULT_STRING,
-					ExecutionFactory.DEFAULT_STRING);
+			containerC = this.systemEntityFactory.getExecutionEnvironmentFactory().createAndRegisterExecutionContainer(executionContainerName,
+					executionContainerName);
 		}
 
-		/* Register allocation container (if it hasn't been registered before) */
-		AllocationComponent allocationComponentA = this.systemEntityFactory.getAllocationFactory().lookupAllocationComponentInstanceByNamedIdentifier(
-				ExecutionFactory.DEFAULT_STRING);
+		/* Register allocation component (if it hasn't been registered before) */
+		final String allocationName = componentInstanceName + "::" + executionContainerName;
+		AllocationComponent allocationComponentA =
+				this.systemEntityFactory.getAllocationFactory().lookupAllocationComponentInstanceByNamedIdentifier(allocationName);
 		if (allocationComponentA == null) {
-			allocationComponentA = this.systemEntityFactory.getAllocationFactory().createAndRegisterAllocationComponentInstance(ExecutionFactory.DEFAULT_STRING,
+			allocationComponentA = this.systemEntityFactory.getAllocationFactory().createAndRegisterAllocationComponentInstance(allocationName,
 					assemblyComponentA, containerC);
 		}
 
-		return new Execution(operationAa, allocationComponentA, traceId, sessionId, eoi, ess, tin, tout, false);
+		final Execution ret = new Execution(operationAa, allocationComponentA, traceId, sessionId, eoi, ess, tin, tout, false);
+
+		return ret;
 	}
 
 	/**
@@ -113,6 +120,16 @@ public class ExecutionFactory {
 			final String sessionId,
 			final long tin, final long tout, final int eoi, final int ess) {
 		return this.genExecution(componentTypeName, componentInstanceName, ExecutionFactory.DEFAULT_STRING, // hostname
+				operationName, new String[] { ExecutionFactory.DEFAULT_STRING }, ExecutionFactory.DEFAULT_STRING, new String[] { ExecutionFactory.DEFAULT_STRING },
+				traceId, sessionId, tin, tout,
+				eoi, ess);
+	}
+
+	public Execution genExecution(final String componentTypeName, final String componentInstanceName, final String hostName, final String operationName,
+			final long traceId,
+			final String sessionId,
+			final long tin, final long tout, final int eoi, final int ess) {
+		return this.genExecution(componentTypeName, componentInstanceName, hostName,
 				operationName, new String[] { ExecutionFactory.DEFAULT_STRING }, ExecutionFactory.DEFAULT_STRING, new String[] { ExecutionFactory.DEFAULT_STRING },
 				traceId, sessionId, tin, tout,
 				eoi, ess);

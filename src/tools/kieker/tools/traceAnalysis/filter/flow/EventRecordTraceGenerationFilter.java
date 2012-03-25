@@ -33,7 +33,9 @@ import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.record.flow.trace.Trace;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionEventProcessingException;
@@ -122,32 +124,69 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 		}
 	}
 
-	@InputPort(name = EventRecordTraceGenerationFilter.INPUT_PORT_NAME_TRACE_EVENT, description = "Receives the trace events to be processed", eventTypes = { AbstractTraceEvent.class })
-	public void inputTraceEvent(final AbstractTraceEvent event) {
-		final long traceId = event.getTraceId();
+	@InputPort(name = EventRecordTraceGenerationFilter.INPUT_PORT_NAME_TRACE_EVENT, description = "Receives the trace events to be processed",
+			eventTypes = { AbstractTraceEvent.class, Trace.class })
+	public void inputTraceEvent(final IMonitoringRecord record) {
+		final long traceId;
 
-		/* Update minimum and maximum timestamps */
-		if ((this.minTstamp == -1) /* unset */|| (event.getTimestamp() < this.minTstamp)) {
-			this.minTstamp = event.getTimestamp();
-		}
-		if (event.getTimestamp() > this.maxTstamp) {
-			this.maxTstamp = event.getTimestamp();
-		}
-
-		EventRecordTrace eventRecordTrace = this.pendingTraces.get(traceId);
-		if (eventRecordTrace != null) { /* trace (artifacts) exists already; */
-			if (!this.timeoutMap.remove(eventRecordTrace)) { /* remove from timeoutMap. Will be re-added below */
-				EventRecordTraceGenerationFilter.LOG.error("Missing entry for trace in timeoutMap: " + eventRecordTrace
-						+ ". PendingTraces and timeoutMap are now longer consistent!");
-				this.reportError(traceId);
-			}
-		} else { /* create and add new trace */
-			eventRecordTrace = new EventRecordTrace(traceId);
-			this.pendingTraces.put(traceId, eventRecordTrace); // TODO: we don't have access to a session ID.
+		/**
+		 * First, we'll fetch the trace ID (unfortunately, in a type-specific way)
+		 */
+		if (record instanceof AbstractTraceEvent) {
+			final AbstractTraceEvent event = (AbstractTraceEvent) record;
+			traceId = event.getTraceId();
+		} else if (record instanceof Trace) {
+			final Trace trace = (Trace) record;
+			traceId = trace.getTraceId();
+		} else {
+			return; // invalid type which should not happen due to the specified eventTypes
 		}
 
 		try {
-			eventRecordTrace.add(event);
+			/**
+			 * Now, we'll get or create an EventRecordTrace
+			 */
+			EventRecordTrace eventRecordTrace = this.pendingTraces.get(traceId);
+			if (eventRecordTrace != null) { /* trace (artifacts) exists already; */
+				if (!this.timeoutMap.remove(eventRecordTrace)) { /* remove from timeoutMap. Will be re-added below */
+					EventRecordTraceGenerationFilter.LOG.error("Missing entry for trace in timeoutMap: " + eventRecordTrace
+							+ ". PendingTraces and timeoutMap are now longer consistent!");
+					this.reportError(traceId);
+				}
+			} else { /* create and add new trace */
+				eventRecordTrace = new EventRecordTrace(traceId);
+				this.pendingTraces.put(traceId, eventRecordTrace); // TODO: we don't have access to a session ID.
+			}
+
+			/**
+			 * Now, we'll perform some type-specific actions
+			 */
+			if (record instanceof AbstractTraceEvent) {
+				/*
+				 * Add event to list of events for this trace
+				 */
+				final AbstractTraceEvent event = (AbstractTraceEvent) record;
+				/* Update minimum and maximum timestamps */
+				if ((this.minTstamp == -1) /* unset */|| (event.getTimestamp() < this.minTstamp)) {
+					this.minTstamp = event.getTimestamp();
+				}
+				if (event.getTimestamp() > this.maxTstamp) {
+					this.maxTstamp = event.getTimestamp();
+				}
+
+				eventRecordTrace.add(event);
+			} else if (record instanceof Trace) {
+				/*
+				 * Add session ID and hostname information to this trace
+				 */
+				final Trace trace = (Trace) record;
+				eventRecordTrace.setSessionId(trace.getSessionId());
+				eventRecordTrace.setHostName(trace.getHostname());
+
+			} else {
+				return; // invalid type which should not happen due to the specified eventTypes
+			}
+
 			if (!this.timeoutMap.add(eventRecordTrace)) { // (re-)add trace to timeoutMap
 				EventRecordTraceGenerationFilter.LOG.error("Equal entry existed in timeoutMap already:" + eventRecordTrace);
 			}

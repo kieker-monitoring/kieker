@@ -48,6 +48,16 @@ public final class Trace extends AbstractMonitoringRecord implements IMonitoring
 	 */
 	public static final String NO_HOSTNAME = "<default-host>";
 
+	/**
+	 * Constant to be used if no trace parent ID required.
+	 */
+	public static final long NO_PARENT_TRACEID = -1;
+
+	/**
+	 * Constant to be used if no trace parent order index required.
+	 */
+	public static final int NO_PARENT_ORDER_INDEX = -1;
+
 	private final long traceId;
 	private final long threadId;
 	private final String sessionId;
@@ -56,6 +66,19 @@ public final class Trace extends AbstractMonitoringRecord implements IMonitoring
 	private final int parentOrderId;
 	private transient int nextOrderId = 0; // used only thread local!
 
+	/**
+	 * 
+	 * @param traceId
+	 * @param threadId
+	 * @param sessionId
+	 *            the session ID; use {@link #NO_SESSION_ID} if no session ID desired.
+	 * @param hostname
+	 *            the host name; use {@link #NO_HOSTNAME} if no host name desired.
+	 * @param parentTraceId
+	 *            the ID of the parent trace; use {@link #NO_PARENT_TRACEID} if not desired.
+	 * @param parentOrderId
+	 *            the order index within the parent trace; use {@link #NO_PARENT_ORDER_INDEX} if not desired.
+	 */
 	public Trace(final long traceId, final long threadId, final String sessionId, final String hostname, final long parentTraceId, final int parentOrderId) {
 		this.traceId = traceId;
 		this.threadId = threadId;
