@@ -237,7 +237,7 @@ final class FSDirectoryReader implements Runnable {
 				} catch (final MonitoringRecordException ex) {
 					FSDirectoryReader.LOG.error("Error loading record type", ex);
 					continue; // skip this record
-				} catch (final Exception ex) {
+				} catch (final Exception ex) { // NOPMD
 					FSDirectoryReader.LOG.error("Error processing line" + line);
 					continue; // skip this record
 				}
@@ -246,7 +246,7 @@ final class FSDirectoryReader implements Runnable {
 					break; // we got the signal to stop processing
 				}
 			}
-		} catch (final Exception ex) {
+		} catch (final IOException ex) {
 			FSDirectoryReader.LOG.error("Error reading " + inputFile, ex);
 		} finally {
 			if (in != null) {

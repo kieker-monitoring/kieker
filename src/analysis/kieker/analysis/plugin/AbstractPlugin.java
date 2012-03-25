@@ -205,7 +205,7 @@ public abstract class AbstractPlugin implements IPlugin {
 				if (eventType.isAssignableFrom(data.getClass())) { // data instanceof eventType
 					try {
 						pluginInputPortReference.getInputPortMethod().invoke(pluginInputPortReference.getPlugin(), data);
-					} catch (final Exception e) {
+					} catch (final Exception e) { // NOPMD (catch multiple)
 						AbstractPlugin.LOG.warn("Caught exception when sending data from " + this.getClass().getName() + ": OutputPort " + outputPort.name()
 								+ " to "
 								+ pluginInputPortReference.getPlugin().getClass().getName() + "'s InputPort " +

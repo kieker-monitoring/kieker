@@ -177,10 +177,10 @@ public final class KaxViz extends JFrame {
 
 	private void displayGraph() {
 		final mxGraph graph = this.graph;
-		final Map<IPlugin, mxCell> mapPlugin2Graph = new HashMap<IPlugin, mxCell>();
-		final Map<IPlugin, Map<String, mxCell>> mapPluginInputPorts2Graph = new HashMap<IPlugin, Map<String, mxCell>>();
-		final Map<IPlugin, Map<String, mxCell>> mapPluginOutputPorts2Graph = new HashMap<IPlugin, Map<String, mxCell>>();
-		final Map<AbstractRepository, mxCell> mapRepository2Graph = new HashMap<AbstractRepository, mxCell>();
+		final Map<IPlugin, mxCell> mapPlugin2Graph = new HashMap<IPlugin, mxCell>(); // NOPMD (no concurrent access)
+		final Map<IPlugin, Map<String, mxCell>> mapPluginInputPorts2Graph = new HashMap<IPlugin, Map<String, mxCell>>(); // NOPMD (no concurrent access)
+		final Map<IPlugin, Map<String, mxCell>> mapPluginOutputPorts2Graph = new HashMap<IPlugin, Map<String, mxCell>>(); // NOPMD (no concurrent access)
+		final Map<AbstractRepository, mxCell> mapRepository2Graph = new HashMap<AbstractRepository, mxCell>(); // NOPMD (no concurrent access)
 		// draw the graph
 		graph.getModel().beginUpdate();
 		try {
@@ -206,7 +206,7 @@ public final class KaxViz extends JFrame {
 			allPlugins.addAll(this.analysisController.getReaders());
 			allPlugins.addAll(this.analysisController.getFilters());
 			for (final IPlugin outputPlugin : allPlugins) {
-				final Map<String, mxCell> mapOutputPorts2Graph = mapPluginOutputPorts2Graph.get(outputPlugin);
+				final Map<String, mxCell> mapOutputPorts2Graph = mapPluginOutputPorts2Graph.get(outputPlugin); // NOPMD (no concurrent access)
 				for (final String outputPortName : outputPlugin.getAllOutputPortNames()) {
 					for (final PluginInputPortReference inputPortReference : outputPlugin.getConnectedPlugins(outputPortName)) {
 						final mxCell outputPluginCell = mapPlugin2Graph.get(outputPlugin);
@@ -242,7 +242,7 @@ public final class KaxViz extends JFrame {
 	// }
 
 	private final Map<String, mxCell> createInputPorts(final AbstractPlugin plugin, final mxCell vertex) {
-		final Map<String, mxCell> port2graph = new HashMap<String, mxCell>();
+		final Map<String, mxCell> port2graph = new HashMap<String, mxCell>(); // NOPMD (no concurrent access)
 		final String[] portNames = plugin.getAllInputPortNames();
 		for (int i = 0; i < portNames.length; i++) {
 			final mxGeometry portGeometry = new mxGeometry((i + 1d) / (portNames.length + 1), 0, 10, 10);
@@ -257,7 +257,7 @@ public final class KaxViz extends JFrame {
 	}
 
 	private final Map<String, mxCell> createOutputPorts(final AbstractPlugin plugin, final mxCell vertex) {
-		final Map<String, mxCell> port2graph = new HashMap<String, mxCell>();
+		final Map<String, mxCell> port2graph = new HashMap<String, mxCell>(); // NOPMD (no concurrent access)
 		final String[] portNames = plugin.getAllOutputPortNames();
 		for (int i = 0; i < portNames.length; i++) {
 			final mxGeometry portGeometry = new mxGeometry((i + 1d) / (portNames.length + 1), 1, 10, 10);
@@ -337,7 +337,7 @@ public final class KaxViz extends JFrame {
 			frame.setExtendedState(Frame.MAXIMIZED_BOTH);
 			frame.setSize(800, 600);
 			frame.setVisible(true);
-		} catch (final Exception ex) {
+		} catch (final Exception ex) { // NOPMD (log all errors)
 			KaxViz.LOG.error("Error", ex);
 		}
 	}

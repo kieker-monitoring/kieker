@@ -183,7 +183,7 @@ public final class AnalysisController implements Runnable {
 		this.dependencies.addAll(mproject.getDependencies());
 
 		/* Create the repositories. */
-		final Map<MIRepository, AbstractRepository> repositoryMap = new HashMap<MIRepository, AbstractRepository>();
+		final Map<MIRepository, AbstractRepository> repositoryMap = new HashMap<MIRepository, AbstractRepository>(); // NOPMD (no concurrent access)
 		for (final MIRepository mRepository : mproject.getRepositories()) {
 			/* Extract the necessary informations to create the repository. */
 			final Configuration configuration = AnalysisController.modelPropertiesToConfiguration(mRepository.getProperties());
@@ -192,7 +192,7 @@ public final class AnalysisController implements Runnable {
 						classLoader);
 				repositoryMap.put(mRepository, repository);
 				this.registerRepository(repository);
-			} catch (final Exception ex) {
+			} catch (final Exception ex) { // FIXME: no exception gets thrown, but repository might be null !!
 				AnalysisController.LOG.error("Could not load repository: " + mRepository.getClassname(), ex);
 				continue;
 			}
@@ -203,7 +203,7 @@ public final class AnalysisController implements Runnable {
 		 */
 		final EList<MIPlugin> mPlugins = mproject.getPlugins();
 		/* Now run through all plugins. */
-		final Map<MIPlugin, AbstractPlugin> pluginMap = new HashMap<MIPlugin, AbstractPlugin>();
+		final Map<MIPlugin, AbstractPlugin> pluginMap = new HashMap<MIPlugin, AbstractPlugin>(); // NOPMD (no concurrent access)
 		for (final MIPlugin mPlugin : mPlugins) {
 			/* Extract the necessary informations to create the plugin. */
 			final Configuration configuration = AnalysisController.modelPropertiesToConfiguration(mPlugin.getProperties());
@@ -221,7 +221,7 @@ public final class AnalysisController implements Runnable {
 				} else {
 					this.registerFilter((AbstractFilterPlugin) plugin);
 				}
-			} catch (final Exception ex) {
+			} catch (final Exception ex) { // FIXME: as above !!!
 				AnalysisController.LOG.error("Could not load plugin: " + mPlugin.getClassname(), ex);
 				continue;
 			}
@@ -378,8 +378,8 @@ public final class AnalysisController implements Runnable {
 			final MAnalysisMetaModelFactory factory = new MAnalysisMetaModelFactory();
 			final MIProject mProject = factory.createProject();
 			mProject.setName(this.projectName);
-			final Map<AbstractPlugin, MIPlugin> pluginMap = new HashMap<AbstractPlugin, MIPlugin>();
-			final Map<AbstractRepository, MIRepository> repositoryMap = new HashMap<AbstractRepository, MIRepository>();
+			final Map<AbstractPlugin, MIPlugin> pluginMap = new HashMap<AbstractPlugin, MIPlugin>(); // NOPMD (no concurrent access)
+			final Map<AbstractRepository, MIRepository> repositoryMap = new HashMap<AbstractRepository, MIRepository>(); // NOPMD (no concurrent access)
 
 			/* Store the libraries. */
 			mProject.getDependencies().addAll(this.dependencies);
@@ -421,8 +421,7 @@ public final class AnalysisController implements Runnable {
 					properties.add(property);
 				}
 				/* Extract the repositories. */
-				final Map<String, AbstractRepository> currRepositories = plugin.getCurrentRepositories();
-				final Set<Entry<String, AbstractRepository>> repoSet = currRepositories.entrySet();
+				final Set<Entry<String, AbstractRepository>> repoSet = plugin.getCurrentRepositories().entrySet();
 				for (final Entry<String, AbstractRepository> repoEntry : repoSet) {
 					/* Try to find the repository within our map. */
 					final MIRepository mRepository = repositoryMap.get(repoEntry.getValue());
@@ -478,7 +477,7 @@ public final class AnalysisController implements Runnable {
 
 			/* We are finished. Return the finished project. */
 			return mProject;
-		} catch (final Exception ex) { // TODO. why the catch? Could anything be thrown?
+		} catch (final Exception ex) { // FIXME: why the catch? Could anything be thrown?
 			AnalysisController.LOG.error("Unable to save configuration.", ex);
 			return null;
 		}
@@ -710,7 +709,7 @@ public final class AnalysisController implements Runnable {
 		} catch (final IOException ex) {
 			AnalysisController.LOG.error("Could not open the given file.", ex);
 			return null;
-		} catch (final Exception ex) {
+		} catch (final Exception ex) { // NOPMD
 			/* Some exceptions like the XMIException can be thrown during loading although it cannot be seen. Catch this situation. */
 			AnalysisController.LOG.error("The given file is not a valid kax-configuration file.", ex);
 			return null;
