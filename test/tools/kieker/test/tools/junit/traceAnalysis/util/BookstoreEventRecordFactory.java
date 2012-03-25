@@ -46,6 +46,18 @@ public final class BookstoreEventRecordFactory {
 
 	private BookstoreEventRecordFactory() {}
 
+	public static final long TSTAMP_OFFSET_entry0_0__bookstore_searchBook = 0; // NOCS (MagicNumberCheck)
+	public static final long TSTAMP_OFFSET_call1_1__catalog_getBook = 1; // NOCS (MagicNumberCheck)
+	public static final long TSTAMP_OFFSET_entry1_1__catalog_getBook = 2; // NOCS (MagicNumberCheck)
+	public static final long TSTAMP_OFFSET_exit1_1__catalog_getBook = 3; // NOCS (MagicNumberCheck)
+	public static final long TSTAMP_OFFSET_call2_1__crm_getOrders = 4; // NOCS (MagicNumberCheck)
+	public static final long TSTAMP_OFFSET_entry2_1__crm_getOrders = 5; // NOCS (MagicNumberCheck)
+	public static final long TSTAMP_OFFSET_call3_2__catalog_getBook = 6; // NOCS (MagicNumberCheck)
+	public static final long TSTAMP_OFFSET_entry3_2__catalog_getBook = 7; // NOCS (MagicNumberCheck)
+	public static final long TSTAMP_OFFSET_exit3_2__catalog_getBook = 8; // NOCS (MagicNumberCheck)
+	public static final long TSTAMP_OFFSET_exit2_1__crm_getOrders = 8; // NOCS (MagicNumberCheck)
+	public static final long TSTAMP_OFFSET_exit0_0__bookstore_searchBook = 11; // NOCS (MagicNumberCheck)
+
 	/**
 	 * Returns "well-known" Bookstore trace as a list of {@link BeforeOperationEvent} and {@link AfterOperationEvent} events, ordered by its
 	 * {@link AbstractTraceEvent#getOrderIndex()}es.
@@ -68,24 +80,30 @@ public final class BookstoreEventRecordFactory {
 		final AfterOperationEvent exit2_1__crm_getOrders; // NOCS
 		final AfterOperationEvent exit0_0__bookstore_searchBook; // NOCS
 
-		entry0_0__bookstore_searchBook = new BeforeOperationEvent(firstTimestamp, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
-
-		entry1_1__catalog_getBook = new BeforeOperationEvent(firstTimestamp + 2, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
-		exit1_1__catalog_getBook = new AfterOperationEvent(firstTimestamp + 3, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
-
-		entry2_1__crm_getOrders = new BeforeOperationEvent(firstTimestamp + 5, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
-		entry3_2__catalog_getBook = new BeforeOperationEvent(firstTimestamp + 7, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
-		exit3_2__catalog_getBook = new AfterOperationEvent(firstTimestamp + 8, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
-		exit2_1__crm_getOrders = new AfterOperationEvent(firstTimestamp + 8, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
-		exit0_0__bookstore_searchBook = new AfterOperationEvent(firstTimestamp + 11, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
+		entry0_0__bookstore_searchBook =
+				new BeforeOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
+		entry1_1__catalog_getBook =
+				new BeforeOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry1_1__catalog_getBook,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		exit1_1__catalog_getBook =
+				new AfterOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit1_1__catalog_getBook,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		entry2_1__crm_getOrders =
+				new BeforeOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry2_1__crm_getOrders,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
+		entry3_2__catalog_getBook =
+				new BeforeOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry3_2__catalog_getBook,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		exit3_2__catalog_getBook =
+				new AfterOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit3_2__catalog_getBook,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		exit2_1__crm_getOrders =
+				new AfterOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit2_1__crm_getOrders,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
+		exit0_0__bookstore_searchBook =
+				new AfterOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
 
 		final EventRecordTrace retTrace = new EventRecordTrace(traceId, sessionId, hostname);
 
@@ -116,7 +134,6 @@ public final class BookstoreEventRecordFactory {
 	 */
 	public static EventRecordTrace validSyncTraceAdditionalCallEvents(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {
-		long curTime = firstTimestamp;
 		int curOrderIndex = 0;
 
 		final BeforeOperationEvent entry0_0__bookstore_searchBook; // NOCS
@@ -131,34 +148,45 @@ public final class BookstoreEventRecordFactory {
 		final AfterOperationEvent exit2_1__crm_getOrders; // NOCS
 		final AfterOperationEvent exit0_0__bookstore_searchBook; // NOCS
 
-		entry0_0__bookstore_searchBook = new BeforeOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
-		call1_1__catalog_getBook = new CallOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
-		entry1_1__catalog_getBook = new BeforeOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
-		exit1_1__catalog_getBook = new AfterOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
-		call2_1__crm_getOrders = new CallOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
-		entry2_1__crm_getOrders = new BeforeOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
-		call3_2__catalog_getBook = new CallOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
-		entry3_2__catalog_getBook = new BeforeOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
-		exit3_2__catalog_getBook = new AfterOperationEvent(curTime, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
-		exit2_1__crm_getOrders = new AfterOperationEvent(curTime++, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
-		curTime++;
-		exit0_0__bookstore_searchBook = new AfterOperationEvent(curTime + 1, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
+		entry0_0__bookstore_searchBook =
+				new BeforeOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
+		call1_1__catalog_getBook =
+				new CallOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call1_1__catalog_getBook,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
+						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		entry1_1__catalog_getBook =
+				new BeforeOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry1_1__catalog_getBook,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		exit1_1__catalog_getBook =
+				new AfterOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit1_1__catalog_getBook,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		call2_1__crm_getOrders =
+				new CallOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders,
+						traceId, curOrderIndex++,
+						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
+						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
+		entry2_1__crm_getOrders =
+				new BeforeOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry2_1__crm_getOrders,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
+		call3_2__catalog_getBook =
+				new CallOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS,
+						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		entry3_2__catalog_getBook =
+				new BeforeOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry3_2__catalog_getBook,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		exit3_2__catalog_getBook =
+				new AfterOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit3_2__catalog_getBook,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		exit2_1__crm_getOrders =
+				new AfterOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit2_1__crm_getOrders,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
+		exit0_0__bookstore_searchBook = new AfterOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
+				traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
 
-		final EventRecordTrace retTrace = new EventRecordTrace(traceId, sessionId, hostname);
+		final EventRecordTrace retTrace =
+				new EventRecordTrace(traceId, sessionId, hostname);
 
 		try {
 			retTrace.add(entry0_0__bookstore_searchBook);
@@ -204,34 +232,45 @@ public final class BookstoreEventRecordFactory {
 		// assumed to be uninstrumented: final AfterOperationEvent exit2_1__crm_getOrders; // NOCS
 		final AfterOperationEvent exit0_0__bookstore_searchBook; // NOCS
 
-		entry0_0__bookstore_searchBook = new BeforeOperationEvent(firstTimestamp, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
-		call1_1__catalog_getBook = new CallOperationEvent(firstTimestamp + 1, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
-		entry1_1__catalog_getBook = new BeforeOperationEvent(firstTimestamp + 2, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
-		exit1_1__catalog_getBook = new AfterOperationEvent(firstTimestamp + 3, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
-
-		// TODO: why is +5 correct here?
-		call2_1__crm_getOrders = new CallOperationEvent(firstTimestamp + 5, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
+		entry0_0__bookstore_searchBook =
+				new BeforeOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
+		call1_1__catalog_getBook =
+				new CallOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call1_1__catalog_getBook,
+						traceId, curOrderIndex++,
+						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
+						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		entry1_1__catalog_getBook =
+				new BeforeOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry1_1__catalog_getBook,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		exit1_1__catalog_getBook =
+				new AfterOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit1_1__catalog_getBook,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		call2_1__crm_getOrders =
+				new CallOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry2_1__crm_getOrders,
+						/* note that we are using the timestamp of the omitted event here! */
+						traceId, curOrderIndex++,
+						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
+						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
 		// assumed to be uninstrumented: entry2_1__crm_getOrders = new BeforeOperationEvent(curTime++, traceId, curOrderIndex++,
 		// BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
-		call3_2__catalog_getBook = new CallOperationEvent(firstTimestamp + 6, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
-		entry3_2__catalog_getBook = new BeforeOperationEvent(firstTimestamp + 7, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
-		exit3_2__catalog_getBook = new AfterOperationEvent(firstTimestamp + 8, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		call3_2__catalog_getBook =
+				new CallOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook,
+						traceId, curOrderIndex++,
+						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS,
+						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		entry3_2__catalog_getBook =
+				new BeforeOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry3_2__catalog_getBook,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		exit3_2__catalog_getBook =
+				new AfterOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit3_2__catalog_getBook,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
 		// assumed to be uninstrumented: exit2_1__crm_getOrders = new AfterOperationEvent(curTime++, traceId, curOrderIndex++,
 		// BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
 
-		exit0_0__bookstore_searchBook = new AfterOperationEvent(firstTimestamp + 11, traceId, curOrderIndex++,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
+		exit0_0__bookstore_searchBook =
+				new AfterOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
 
 		final EventRecordTrace retTrace = new EventRecordTrace(traceId, sessionId, hostname);
 
