@@ -341,10 +341,18 @@ public final class AnalysisController implements Runnable {
 			AnalysisController.LOG.error("Unable to connect readers and filters after starting analysis.");
 			return false;
 		}
-		// TODO Log different errors.
-		/* Make sure that the plugins are registered and use the method of AbstractPlugin (This should be the only allowed call to this method). */
-		return (this.filters.contains(src) || this.readers.contains(src)) && (this.filters.contains(dst) || this.readers.contains(dst))
-				&& AbstractPlugin.connect(src, outputPortName, dst, inputPortName);
+		/* Make sure that the plugins are registered. */
+		if (!(this.filters.contains(src) || this.readers.contains(src))) {
+			AnalysisController.LOG.error("The plugin '" + src.getName() + "' is not a registered instance.");
+			return false;
+		}
+		if (!(this.filters.contains(dst) || this.readers.contains(dst))) {
+			AnalysisController.LOG.error("The plugin '" + dst.getName() + "' is not a registered instance.");
+			return false;
+		}
+
+		/* Use the method of AbstractPlugin (This should be the only allowed call to this method) to check the connection. */
+		return AbstractPlugin.connect(src, outputPortName, dst, inputPortName);
 	}
 
 	/**
