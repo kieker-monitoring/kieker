@@ -105,7 +105,9 @@ public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 	}
 
 	public void setController(final AnalysisController controller) {
-		this.controller = controller;
+		synchronized (this) {
+			this.controller = controller;
+		}
 	}
 
 	@InputPort(

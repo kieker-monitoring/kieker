@@ -39,10 +39,10 @@ import kieker.tools.traceAnalysis.systemModel.AbstractTrace;
  */
 public class EventRecordTrace extends AbstractTrace implements Iterable<AbstractTraceEvent> {
 
-	private int minOrderIndex = -1;
-	private int maxOrderIndex = -1;
-	private long minTimestamp = -1;
-	private long maxTimestamp = -1;
+	private volatile int minOrderIndex = -1;
+	private volatile int maxOrderIndex = -1;
+	private volatile long minTimestamp = -1;
+	private volatile long maxTimestamp = -1;
 
 	private volatile String hostname;
 
