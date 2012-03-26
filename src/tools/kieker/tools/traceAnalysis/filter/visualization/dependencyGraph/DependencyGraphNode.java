@@ -21,10 +21,11 @@
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 
@@ -34,14 +35,19 @@ public class DependencyGraphNode<T> {
 
 	private final T entity;
 	private final int id;
-	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> incomingDependencies = new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD
-	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> outgoingDependencies = new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD
+	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> incomingDependencies =
+			Collections.synchronizedSortedMap(new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>());
+	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> outgoingDependencies =
+			Collections.synchronizedSortedMap(new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>());
 
-	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedIncomingDependencies = new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD
-	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedOutgoingDependencies = new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD
+	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedIncomingDependencies =
+			Collections.synchronizedSortedMap(new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>());
+	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedOutgoingDependencies =
+			Collections.synchronizedSortedMap(new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>());
 
-	private boolean assumed = false;
-	private final Map<Class<? extends AbstractNodeDecoration>, AbstractNodeDecoration> decorations = new HashMap<Class<? extends AbstractNodeDecoration>, AbstractNodeDecoration>();
+	private volatile boolean assumed = false;
+	private final Map<Class<? extends AbstractNodeDecoration>, AbstractNodeDecoration> decorations =
+			new ConcurrentHashMap<Class<? extends AbstractNodeDecoration>, AbstractNodeDecoration>();
 
 	public DependencyGraphNode(final int id, final T entity) {
 		this.id = id;
@@ -90,21 +96,24 @@ public class DependencyGraphNode<T> {
 	}
 
 	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final boolean assume) {
-		final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = assume ? this.assumedOutgoingDependencies : this.outgoingDependencies;
+		synchronized (this) {
+			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = assume ? this.assumedOutgoingDependencies
+					: this.outgoingDependencies;
 
-		WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(destination.getId());
-		if (e == null) {
-			e = new WeightedBidirectionalDependencyGraphEdge<T>();
-			e.setSource(this);
-			e.setDestination(destination);
+			WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(destination.getId());
+			if (e == null) {
+				e = new WeightedBidirectionalDependencyGraphEdge<T>();
+				e.setSource(this);
+				e.setDestination(destination);
 
-			if (assume) {
-				e.setAssumed();
+				if (assume) {
+					e.setAssumed();
+				}
+
+				relevantDependencies.put(destination.getId(), e);
 			}
-
-			relevantDependencies.put(destination.getId(), e);
+			e.incOutgoingWeight();
 		}
-		e.incOutgoingWeight();
 	}
 
 	public void addIncomingDependency(final DependencyGraphNode<T> source) {
@@ -112,16 +121,19 @@ public class DependencyGraphNode<T> {
 	}
 
 	public void addIncomingDependency(final DependencyGraphNode<T> source, final boolean assume) {
-		final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = assume ? this.assumedIncomingDependencies : this.incomingDependencies;
+		synchronized (this) {
+			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = assume ? this.assumedIncomingDependencies
+					: this.incomingDependencies;
 
-		WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(source.getId());
-		if (e == null) {
-			e = new WeightedBidirectionalDependencyGraphEdge<T>();
-			e.setSource(this);
-			e.setDestination(source);
-			relevantDependencies.put(source.getId(), e);
+			WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(source.getId());
+			if (e == null) {
+				e = new WeightedBidirectionalDependencyGraphEdge<T>();
+				e.setSource(this);
+				e.setDestination(source);
+				relevantDependencies.put(source.getId(), e);
+			}
+			e.incIncomingWeight();
 		}
-		e.incIncomingWeight();
 	}
 
 	public final int getId() {
@@ -129,23 +141,25 @@ public class DependencyGraphNode<T> {
 	}
 
 	public String getFormattedDecorations() {
-		final StringBuilder builder = new StringBuilder();
-		final Iterator<AbstractNodeDecoration> decorations = this.decorations.values().iterator();
+		synchronized (this) {
+			final StringBuilder builder = new StringBuilder();
+			final Iterator<AbstractNodeDecoration> decorations = this.decorations.values().iterator();
 
-		while (decorations.hasNext()) {
-			final String currentDecorationText = decorations.next().createFormattedOutput();
+			while (decorations.hasNext()) {
+				final String currentDecorationText = decorations.next().createFormattedOutput();
 
-			if ((currentDecorationText == null) || (currentDecorationText.length() == 0)) {
-				continue;
+				if ((currentDecorationText == null) || (currentDecorationText.length() == 0)) {
+					continue;
+				}
+
+				builder.append(currentDecorationText);
+
+				if (decorations.hasNext()) {
+					builder.append("\\n");
+				}
 			}
 
-			builder.append(currentDecorationText);
-
-			if (decorations.hasNext()) {
-				builder.append("\\n");
-			}
+			return builder.toString();
 		}
-
-		return builder.toString();
 	}
 }

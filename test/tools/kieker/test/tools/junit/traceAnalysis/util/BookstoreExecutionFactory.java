@@ -41,8 +41,8 @@ public class BookstoreExecutionFactory {
 		this.systemEntityFactory = systemEntityFactory;
 	}
 
-	public Execution createBookstoreExecution_exec0_0__bookstore_searchBook(final long traceId, final String sessionId, final String hostname, final long tin,
-			final long tout) {
+	public Execution createBookstoreExecution_exec0_0__bookstore_searchBook( // NOPMD (MethodNamingConventions)
+			final long traceId, final String sessionId, final String hostname, final long tin, final long tout) {
 		final boolean assumed = false; // currently not relevant
 
 		final ClassOperationSignaturePair classOpSignaturePair = ClassOperationSignaturePair
@@ -55,8 +55,8 @@ public class BookstoreExecutionFactory {
 				assumed);
 	}
 
-	public Execution createBookstoreExecution_exec1_1__catalog_getBook(final long traceId, final String sessionId, final String hostname, final long tin,
-			final long tout) {
+	public Execution createBookstoreExecution_exec1_1__catalog_getBook( // NOPMD (MethodNamingConventions)
+			final long traceId, final String sessionId, final String hostname, final long tin, final long tout) {
 		final boolean assumed = false; // currently not relevant
 
 		final ClassOperationSignaturePair classOpSignaturePair = ClassOperationSignaturePair
@@ -69,8 +69,8 @@ public class BookstoreExecutionFactory {
 				assumed);
 	}
 
-	public Execution createBookstoreExecution_exec2_1__crm_getOrders(final long traceId, final String sessionId, final String hostname, final long tin,
-			final long tout) {
+	public Execution createBookstoreExecution_exec2_1__crm_getOrders( // NOPMD (MethodNamingConventions)
+			final long traceId, final String sessionId, final String hostname, final long tin, final long tout) {
 		final boolean assumed = false; // currently not relevant
 
 		final ClassOperationSignaturePair classOpSignaturePair = ClassOperationSignaturePair
@@ -83,8 +83,8 @@ public class BookstoreExecutionFactory {
 				assumed);
 	}
 
-	public Execution createBookstoreExecution_exec3_2__catalog_getBook(final long traceId, final String sessionId, final String hostname, final long tin,
-			final long tout) {
+	public Execution createBookstoreExecution_exec3_2__catalog_getBook( // NOPMD (MethodNamingConventions)
+			final long traceId, final String sessionId, final String hostname, final long tin, final long tout) {
 		final boolean assumed = false; // currently not relevant
 
 		final ClassOperationSignaturePair classOpSignaturePair = ClassOperationSignaturePair

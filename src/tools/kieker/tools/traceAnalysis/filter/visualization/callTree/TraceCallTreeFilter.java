@@ -24,10 +24,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
-import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Stack;
 
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -42,12 +40,10 @@ import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceProcessingExce
 import kieker.tools.traceAnalysis.filter.visualization.callTree.AbstractCallTreeFilter.PairFactory;
 import kieker.tools.traceAnalysis.filter.visualization.util.IntContainer;
 import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
-import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
-import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOperationPairFactory;
 import kieker.tools.traceAnalysis.systemModel.repository.AllocationRepository;
@@ -76,8 +72,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 	private final boolean shortLabels;
 
 	// FIXME Change constructor to plugin-default-constructor (allocationComponentOperationPairFactory is not used anyways)
-	public TraceCallTreeFilter(final Configuration configuration, final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory,
-			final String outputFnBase, final boolean shortLabels) {
+	public TraceCallTreeFilter(final Configuration configuration, final String outputFnBase, final boolean shortLabels) {
 		/* Call the inherited mandatory "default" constructor. */
 		super(configuration);
 
@@ -179,35 +174,6 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 		TraceCallTreeFilter.saveTreeToDotFile(this.root, outputFnBaseL, includeWeightsL, shortLabelsL);
 		this.printMessage(new String[] { "Wrote call tree to file '" + outputFnBaseL + ".dot" + "'", "Dot file can be converted using the dot tool",
 			"Example: dot -T svg " + outputFnBaseL + ".dot" + " > " + outputFnBaseL + ".svg", });
-	}
-
-	// TODO Is this method still necessary?
-	private static void addTraceToTree(final CallTreeNode root, final MessageTrace t, final boolean aggregated) throws TraceProcessingException {
-		final Stack<CallTreeNode> curStack = new Stack<CallTreeNode>();
-
-		final Collection<AbstractMessage> msgTraceVec = t.getSequenceAsVector();
-		CallTreeNode curNode = root;
-		curStack.push(curNode);
-		for (final AbstractMessage m : msgTraceVec) {
-			if (m instanceof SynchronousCallMessage) {
-				curNode = curStack.peek();
-				CallTreeNode child;
-				if (aggregated) {
-					child = curNode.getChild(m.getReceivingExecution().getAllocationComponent(), m.getReceivingExecution().getOperation());
-				} else {
-					child = curNode.createNewChild(m.getReceivingExecution().getAllocationComponent(), m.getReceivingExecution().getOperation());
-				}
-				curNode = child;
-				curStack.push(curNode);
-			} else if (m instanceof SynchronousReplyMessage) {
-				curNode = curStack.pop();
-			} else {
-				throw new TraceProcessingException("Message type not supported:" + m.getClass().getName());
-			}
-		}
-		if (curStack.pop() != root) {
-			throw new TraceProcessingException("Stack not empty after processing trace");
-		}
 	}
 
 	@Override

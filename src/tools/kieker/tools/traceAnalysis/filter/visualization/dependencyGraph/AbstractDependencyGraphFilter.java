@@ -82,7 +82,7 @@ public abstract class AbstractDependencyGraphFilter<T> extends AbstractMessageTr
 			final String lineStyle = (currentEdge.isAssumed()) ? DotFactory.DOT_STYLE_DASHED : DotFactory.DOT_STYLE_SOLID;
 
 			final DependencyGraphNode<T> destNode = currentEdge.getDestination();
-			if ((node == destNode) && !plotSelfLoops) { // FIXME: use equals?
+			if ((node.equals(destNode)) && !plotSelfLoops) {
 				continue;
 			}
 			final StringBuilder strBuild = new StringBuilder(1024);

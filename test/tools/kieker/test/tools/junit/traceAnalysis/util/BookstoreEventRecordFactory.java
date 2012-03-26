@@ -45,17 +45,17 @@ public final class BookstoreEventRecordFactory {
 
 	private BookstoreEventRecordFactory() {}
 
-	public static final long TSTAMP_OFFSET_entry0_0__bookstore_searchBook = 0;
-	public static final long TSTAMP_OFFSET_call1_1__catalog_getBook = 1;
-	public static final long TSTAMP_OFFSET_entry1_1__catalog_getBook = 2;
-	public static final long TSTAMP_OFFSET_exit1_1__catalog_getBook = 3;
-	public static final long TSTAMP_OFFSET_call2_1__crm_getOrders = 4;
-	public static final long TSTAMP_OFFSET_entry2_1__crm_getOrders = 5;
-	public static final long TSTAMP_OFFSET_call3_2__catalog_getBook = 6;
-	public static final long TSTAMP_OFFSET_entry3_2__catalog_getBook = 7;
-	public static final long TSTAMP_OFFSET_exit3_2__catalog_getBook = 8;
-	public static final long TSTAMP_OFFSET_exit2_1__crm_getOrders = 8;
-	public static final long TSTAMP_OFFSET_exit0_0__bookstore_searchBook = 11;
+	public static final long TSTAMP_OFFSET_entry0_0__bookstore_searchBook = 0; // NOCS // NOPMD (VariableNamingConventions)
+	public static final long TSTAMP_OFFSET_call1_1__catalog_getBook = 1; // NOCS // NOPMD (VariableNamingConventions)
+	public static final long TSTAMP_OFFSET_entry1_1__catalog_getBook = 2; // NOCS // NOPMD (VariableNamingConventions)
+	public static final long TSTAMP_OFFSET_exit1_1__catalog_getBook = 3; // NOCS // NOPMD (VariableNamingConventions)
+	public static final long TSTAMP_OFFSET_call2_1__crm_getOrders = 4; // NOCS // NOPMD (VariableNamingConventions)
+	public static final long TSTAMP_OFFSET_entry2_1__crm_getOrders = 5; // NOCS // NOPMD (VariableNamingConventions)
+	public static final long TSTAMP_OFFSET_call3_2__catalog_getBook = 6; // NOCS // NOPMD (VariableNamingConventions)
+	public static final long TSTAMP_OFFSET_entry3_2__catalog_getBook = 7; // NOCS // NOPMD (VariableNamingConventions)
+	public static final long TSTAMP_OFFSET_exit3_2__catalog_getBook = 8; // NOCS // NOPMD (VariableNamingConventions)
+	public static final long TSTAMP_OFFSET_exit2_1__crm_getOrders = 8; // NOCS // NOPMD (VariableNamingConventions)
+	public static final long TSTAMP_OFFSET_exit0_0__bookstore_searchBook = 11; // NOCS // NOPMD (VariableNamingConventions)
 
 	/**
 	 * Returns "well-known" Bookstore trace as a list of {@link BeforeOperationEvent} and {@link AfterOperationEvent} events, ordered by its

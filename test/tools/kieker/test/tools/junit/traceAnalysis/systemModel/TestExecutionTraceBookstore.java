@@ -41,6 +41,7 @@ import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -53,26 +54,25 @@ public class TestExecutionTraceBookstore extends TestCase {
 	private static final long TRACE_ID = 69898L;
 	private static final String SESSION_ID = "iXsnm70o4N";
 
-	private volatile SystemModelRepository systemEntityFactory;
 	private volatile ExecutionFactory eFactory;
 	private volatile long minTin;
 	private volatile long maxTout;
 	private volatile int numExecutions;
 
 	/* Executions of a valid trace */
-	private volatile Execution exec0_0__bookstore_searchBook; // NOCS
-	private volatile Execution exec1_1__catalog_getBook; // NOCS
-	private volatile Execution exec2_1__crm_getOrders; // NOCS
-	private volatile Execution exec3_2__catalog_getBook; // NOCS
+	private volatile Execution exec0_0__bookstore_searchBook; // NOCS // NOMPD (VariableNamingConventions)
+	private volatile Execution exec1_1__catalog_getBook; // NOCS // NOMPD (VariableNamingConventions)
+	private volatile Execution exec2_1__crm_getOrders; // NOCS // NOMPD (VariableNamingConventions)
+	private volatile Execution exec3_2__catalog_getBook; // NOCS // NOMPD (VariableNamingConventions)
 
 	// public TestExecutionTraceBookstore() {
 	//
 	// }
-
 	@Override
+	@Before
 	protected void setUp() throws Exception {
-		this.systemEntityFactory = new SystemModelRepository(new Configuration());
-		this.eFactory = new ExecutionFactory(this.systemEntityFactory);
+		final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration());
+		this.eFactory = new ExecutionFactory(systemEntityFactory);
 
 		int numExecutions_l = 0;
 

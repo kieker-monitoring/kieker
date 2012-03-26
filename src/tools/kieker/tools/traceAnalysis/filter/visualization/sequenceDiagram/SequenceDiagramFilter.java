@@ -147,7 +147,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed", eventTypes = { MessageTrace.class })
 	public void inputMessageTraces(final MessageTrace mt) {
 		try {
-			SequenceDiagramFilter.writePicForMessageTrace(SequenceDiagramFilter.this.getSystemEntityFactory(), mt,
+			SequenceDiagramFilter.writePicForMessageTrace(mt,
 					SequenceDiagramFilter.this.sdmode,
 					SequenceDiagramFilter.this.outputFnBase + "-" + ((AbstractTrace) mt).getTraceId() + ".pic", SequenceDiagramFilter.this.shortLabels);
 			SequenceDiagramFilter.this.reportSuccess(((AbstractTrace) mt).getTraceId());
@@ -201,8 +201,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	 * @param ps
 	 * @param shortLabels
 	 */
-	// FIXME:systemEntityFactory not used
-	private static void picFromMessageTrace(final SystemModelRepository systemEntityFactory, final MessageTrace messageTrace, final SDModes sdMode,
+	private static void picFromMessageTrace(final MessageTrace messageTrace, final SDModes sdMode,
 			final PrintStream ps, final boolean shortLabels) {
 		// dot node ID x component instance
 		final Collection<AbstractMessage> messages = messageTrace.getSequenceAsVector();
@@ -313,10 +312,10 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 		ps.print(".PE" + "\n");
 	}
 
-	public static void writePicForMessageTrace(final SystemModelRepository systemEntityFactory, final MessageTrace msgTrace, final SDModes sdMode,
+	public static void writePicForMessageTrace(final MessageTrace msgTrace, final SDModes sdMode,
 			final String outputFilename, final boolean shortLabels) throws FileNotFoundException, UnsupportedEncodingException {
 		final PrintStream ps = new PrintStream(new FileOutputStream(outputFilename), false, SequenceDiagramFilter.ENCODING);
-		SequenceDiagramFilter.picFromMessageTrace(systemEntityFactory, msgTrace, sdMode, ps, shortLabels);
+		SequenceDiagramFilter.picFromMessageTrace(msgTrace, sdMode, ps, shortLabels);
 		ps.flush();
 		ps.close();
 	}

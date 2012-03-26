@@ -737,8 +737,8 @@ public final class TraceAnalysisTool {
 				final Configuration componentPlotTraceCallTreesConfig = new Configuration();
 				componentPlotTraceCallTreesConfig.setProperty(AbstractPlugin.CONFIG_NAME, Constants.PLOTCALLTREE_COMPONENT_NAME);
 				componentPlotTraceCallTrees = new TraceCallTreeFilter(componentPlotTraceCallTreesConfig,
-						TraceAnalysisTool.ALLOCATION_COMPONENT_OPERATION_PAIR_FACTORY, new File(TraceAnalysisTool.outputDir
-								+ File.separator + TraceAnalysisTool.outputFnPrefix + Constants.CALL_TREE_FN_PREFIX).getCanonicalPath(),
+							new File(TraceAnalysisTool.outputDir
+									+ File.separator + TraceAnalysisTool.outputFnPrefix + Constants.CALL_TREE_FN_PREFIX).getCanonicalPath(),
 						TraceAnalysisTool.shortLabels);
 				analysisInstance.registerFilter(componentPlotTraceCallTrees);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
