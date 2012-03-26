@@ -42,7 +42,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.filter.forward.TeeFilter;
 import kieker.analysis.plugin.filter.select.TimestampFilter;
 import kieker.analysis.plugin.filter.trace.TraceIdFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
@@ -364,9 +363,6 @@ public final class TraceAnalysisTool {
 				analysisInstance.connect(timestampFilter, kieker.analysis.plugin.filter.select.TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD,
 						traceIdFilter, TraceIdFilter.INPUT_PORT_NAME_COMBINED);
 			}
-			final TeeFilter tf = new TeeFilter(new Configuration());
-			analysisInstance.registerFilter(tf);
-			analysisInstance.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, tf, TeeFilter.INPUT_PORT_NAME_EVENTS);
 
 			final ExecutionRecordTransformationFilter execRecTransformer;
 			{
