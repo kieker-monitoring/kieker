@@ -20,6 +20,7 @@
 
 package kieker.common.record.flow.trace;
 
+import kieker.common.record.flow.trace.concurrency.SplitEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;

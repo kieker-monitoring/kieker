@@ -18,7 +18,10 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.flow.trace;
+package kieker.common.record.flow.trace.concurrency;
+
+import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.record.flow.trace.IAbstractTraceEventVisitor;
 
 /**
  * @author Jan Waller

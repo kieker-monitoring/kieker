@@ -31,7 +31,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.IAbstractTraceEventVisitor;
-import kieker.common.record.flow.trace.SplitEvent;
+import kieker.common.record.flow.trace.concurrency.SplitEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;

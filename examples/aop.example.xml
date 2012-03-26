@@ -24,6 +24,7 @@
 		<!-- Instrumentation of the dacapo eclipse benchmark -->
 		<!-- <include within="org.eclipse..*"/> -->
 
+		<!-- include this to avoid using ajc to compile the probes -->
 		<!--<include within="kieker.monitoring.probe.aspectj..*"/> -->
 	</weaver>
 
@@ -43,11 +44,11 @@
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.construction.FullInstrumentation" /> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.construction.Annotation" /> -->
 
-		<!-- OperationCall -->
+		<!-- OperationExecution -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.FullInstrumentation" /> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.Annotation" /> -->
-		
-		<!-- OperationExecution -->
+
+		<!-- OperationCall -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.FullInstrumentation" /> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.Annotation" /> -->
 		
