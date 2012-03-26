@@ -21,7 +21,7 @@
 package kieker.test.tools.junit.traceAnalysis.systemModel;
 
 import java.util.List;
-import java.util.NavigableSet;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import junit.framework.Assert;
@@ -265,8 +265,8 @@ public class TestExecutionTraceBookstore extends TestCase {
 	 */
 	@Test
 	public void testTreeSet() {
-		final NavigableSet<Execution> s0 = new TreeSet<Execution>(ExecutionTrace.createExecutionTraceComparator());
-		final NavigableSet<Execution> s1 = new TreeSet<Execution>(ExecutionTrace.createExecutionTraceComparator());
+		final SortedSet<Execution> s0 = new TreeSet<Execution>(ExecutionTrace.createExecutionTraceComparator());
+		final SortedSet<Execution> s1 = new TreeSet<Execution>(ExecutionTrace.createExecutionTraceComparator());
 		final Execution execFromTrace0 = this.exec0_0__bookstore_searchBook;
 		final Execution long1 = new Execution(execFromTrace0.getOperation(), execFromTrace0.getAllocationComponent(), execFromTrace0.getTraceId(),
 				execFromTrace0.getSessionId(), execFromTrace0.getEoi(), execFromTrace0.getEss(), execFromTrace0.getTin(),
