@@ -90,7 +90,7 @@ public class DependencyGraphNode<T> {
 
 	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final boolean assume) {
 		synchronized (this) {
-			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = // NOPMD(UseConcurrentHashMap)//NOCS
+			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = // NOPMD(UseConcurrentHashMap)
 			assume ? this.assumedOutgoingDependencies : this.outgoingDependencies;
 
 			WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(destination.getId());
@@ -115,7 +115,7 @@ public class DependencyGraphNode<T> {
 
 	public void addIncomingDependency(final DependencyGraphNode<T> source, final boolean assume) {
 		synchronized (this) {
-			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = // NOPMD(UseConcurrentHashMap)//NOCS
+			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = // NOPMD(UseConcurrentHashMap)
 			assume ? this.assumedIncomingDependencies : this.incomingDependencies;
 
 			WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(source.getId());
