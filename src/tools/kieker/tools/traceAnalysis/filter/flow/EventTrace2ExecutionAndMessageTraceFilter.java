@@ -250,37 +250,38 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 
 		/**
 		 * Removes all remaining call events from the top of the event stack. For each removed call statement, an assumed
-		 * execution is generated using the timestamp of the last after-operation event.
+		 * execution is generated using the timestamp of the last recursive operation event.
 		 * 
 		 * @param lastEvent
 		 *            The last processed after-operation event
 		 */
-		private void closeOpenCalls(final AfterOperationEvent lastEvent) {
-			while (!this.filterState.isEventStackEmpty()) {
-				final AbstractTraceEvent nextEvent = this.filterState.peekEvent();
-
-				if (!(nextEvent instanceof CallOperationEvent)) {
-					break;
-				}
-
-				final CallOperationEvent currentCallEvent = (CallOperationEvent) this.filterState.popEvent();
-				final ExecutionInformation executionInformation = this.filterState.popExecution();
-				final Execution execution = EventTrace2ExecutionAndMessageTraceFilter.this.callOperationToExecution(
-						currentCallEvent,
-						this.executionTrace.getTraceId(),
-						this.eventTrace.getSessionId(),
-						this.eventTrace.getHostname(),
-						executionInformation.getExecutionIndex(),
-						executionInformation.getStackDepth(),
-						currentCallEvent.getTimestamp(),
-						lastEvent.getTimestamp(),
-						true);
-
-				this.registerExecution(execution);
+		private void closeOpenCalls(final AbstractTraceEvent lastEvent) {
+			if (this.filterState.isEventStackEmpty()) {
+				return; // we are done
 			}
+			final AbstractTraceEvent nextEvent = this.filterState.peekEvent();
+			if (!(nextEvent instanceof CallOperationEvent)) {
+				return; // we are done
+			}
+			final CallOperationEvent currentCallEvent = (CallOperationEvent) this.filterState.popEvent();
+			final ExecutionInformation executionInformation = this.filterState.popExecution();
+			final Execution execution = EventTrace2ExecutionAndMessageTraceFilter.this.callOperationToExecution(
+					currentCallEvent,
+					this.executionTrace.getTraceId(),
+					this.eventTrace.getSessionId(),
+					this.eventTrace.getHostname(),
+					executionInformation.getExecutionIndex(),
+					executionInformation.getStackDepth(),
+					currentCallEvent.getTimestamp(),
+					lastEvent.getTimestamp(),
+					true);
+			this.registerExecution(execution);
+			this.closeOpenCalls(nextEvent);
 		}
 
 		public void handleAfterOperationEvent(final AfterOperationEvent afterOperationEvent) {
+			this.closeOpenCalls(afterOperationEvent);
+
 			// Obtain the matching before-operation event from the stack
 			final BeforeOperationEvent beforeOperationEvent = this.getMatchingBeforeEventFor(afterOperationEvent);
 
