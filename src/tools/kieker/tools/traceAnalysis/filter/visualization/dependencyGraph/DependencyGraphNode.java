@@ -21,10 +21,8 @@
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -36,14 +34,14 @@ public class DependencyGraphNode<T> {
 	private final T entity;
 	private final int id;
 	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> incomingDependencies =
-			Collections.synchronizedSortedMap(new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>());
+			new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>();
 	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> outgoingDependencies =
-			Collections.synchronizedSortedMap(new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>());
+			new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>();
 
 	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedIncomingDependencies =
-			Collections.synchronizedSortedMap(new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>());
+			new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>();
 	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedOutgoingDependencies =
-			Collections.synchronizedSortedMap(new TreeMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>());
+			new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>();
 
 	private volatile boolean assumed = false;
 	private final Map<Class<? extends AbstractNodeDecoration>, AbstractNodeDecoration> decorations =
