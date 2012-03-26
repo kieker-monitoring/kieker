@@ -119,13 +119,14 @@ public final class BookstoreOperationExecutionRecordFactory {
 	public static List<OperationExecutionRecord> genValidBookstoreTraceFullSignature(final String sessionId, final long traceId) {
 		final String hostname = "srv9786";
 
-		final List<OperationExecutionRecord> retList = new ArrayList<OperationExecutionRecord>(/* # executions: */4); // NOCS (MagicNumberCheck);
+		final List<OperationExecutionRecord> retList = new ArrayList<OperationExecutionRecord>(/* # executions: */4);
+		;
 
 		final OperationExecutionRecord exec0_0__bookstore_searchBook =
 				new OperationExecutionRecord(
 						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
 						sessionId, traceId, /* tin: */1, /* tout: */10,
-						hostname, // NOCS (MagicNumberCheck);
+						hostname,
 						BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_EOI,
 						BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_ESS);
 		retList.add(exec0_0__bookstore_searchBook);
@@ -134,7 +135,7 @@ public final class BookstoreOperationExecutionRecordFactory {
 				new OperationExecutionRecord(
 						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK,
 						sessionId, traceId, /* tin: */2, /* tout: */4,
-						hostname, // NOCS (MagicNumberCheck)
+						hostname,
 						BookstoreOperationExecutionRecordFactory.EXEC1_1__CATALOG_GETBOOK_EOI,
 						BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_ESS);
 		retList.add(exec1_1__catalog_getBook);
@@ -142,7 +143,7 @@ public final class BookstoreOperationExecutionRecordFactory {
 		final OperationExecutionRecord exec2_1__crm_getOrders =
 				new OperationExecutionRecord(
 						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS,
-						sessionId, traceId, /* tin: */5, /* tout: */8, hostname, // NOCS (MagicNumberCheck)
+						sessionId, traceId, /* tin: */5, /* tout: */8, hostname,
 						BookstoreOperationExecutionRecordFactory.EXEC2_1__CRM_GETORDERS_EOI,
 						BookstoreOperationExecutionRecordFactory.EXEC2_1__CRM_GETORDERS_ESS);
 		retList.add(exec2_1__crm_getOrders);
@@ -150,7 +151,7 @@ public final class BookstoreOperationExecutionRecordFactory {
 		final OperationExecutionRecord exec3_2__catalog_getBook =
 				new OperationExecutionRecord(
 						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK,
-						sessionId, traceId, /* tin: */6, /* tout: */7, hostname, // NOCS (MagicNumberCheck)
+						sessionId, traceId, /* tin: */6, /* tout: */7, hostname,
 						BookstoreOperationExecutionRecordFactory.EXEC3_2__CATALOG_GETBOOK_EOI,
 						BookstoreOperationExecutionRecordFactory.EXEC3_2__CATALOG_GETBOOK_ESS);
 		retList.add(exec3_2__catalog_getBook);

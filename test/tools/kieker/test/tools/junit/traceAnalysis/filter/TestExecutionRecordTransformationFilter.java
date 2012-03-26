@@ -53,7 +53,7 @@ public class TestExecutionRecordTransformationFilter extends TestCase {
 	@Test
 	public void testAllFieldsComplete() {
 		final String sessionId = "8T6NK1Q6";
-		final long traceId = 34523; // any number will do // NOCS (MagicNumberCheck)
+		final long traceId = 34523; // any number will do
 
 		final List<OperationExecutionRecord> opExecs = BookstoreOperationExecutionRecordFactory.genValidBookstoreTraceFullSignature(sessionId, traceId);
 

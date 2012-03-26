@@ -61,7 +61,7 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  * 
  */
 public final class SyncDbWriter extends AbstractMonitoringWriter {
-	private static final String PREFIX = SyncDbWriter.class.getName() + "."; // NOCS (MultipleStringLiteralsCheck)
+	private static final String PREFIX = SyncDbWriter.class.getName() + ".";
 	public static final String CONFIG_DRIVERCLASSNAME = SyncDbWriter.PREFIX + "DriverClassname"; // NOCS (AfterPREFIX)
 	public static final String CONFIG_CONNECTIONSTRING = SyncDbWriter.PREFIX + "ConnectionString"; // NOCS (AfterPREFIX)
 	public static final String CONFIG_TABLENAME = SyncDbWriter.PREFIX + "TableName"; // NOCS (AfterPREFIX)
@@ -118,15 +118,15 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 					return false;
 				}
 				final OperationExecutionRecord execRecord = (OperationExecutionRecord) monitoringRecord;
-				this.psInsertMonitoringData.setInt(1, execRecord.getExperimentId()); // NOCS (MagicNumberCheck)
-				this.psInsertMonitoringData.setString(2, execRecord.getOperationSignature()); // NOCS (MagicNumberCheck)
-				this.psInsertMonitoringData.setString(3, execRecord.getSessionId()); // NOCS (MagicNumberCheck)
-				this.psInsertMonitoringData.setLong(4, execRecord.getTraceId()); // NOCS (MagicNumberCheck)
-				this.psInsertMonitoringData.setLong(5, execRecord.getTin()); // NOCS (MagicNumberCheck)
-				this.psInsertMonitoringData.setLong(6, execRecord.getTout()); // NOCS (MagicNumberCheck)
-				this.psInsertMonitoringData.setString(7, execRecord.getHostname()); // NOCS (MagicNumberCheck)
-				this.psInsertMonitoringData.setLong(8, execRecord.getEoi()); // NOCS (MagicNumberCheck)
-				this.psInsertMonitoringData.setLong(9, execRecord.getEss()); // NOCS (MagicNumberCheck)
+				this.psInsertMonitoringData.setInt(1, execRecord.getExperimentId());
+				this.psInsertMonitoringData.setString(2, execRecord.getOperationSignature());
+				this.psInsertMonitoringData.setString(3, execRecord.getSessionId());
+				this.psInsertMonitoringData.setLong(4, execRecord.getTraceId());
+				this.psInsertMonitoringData.setLong(5, execRecord.getTin());
+				this.psInsertMonitoringData.setLong(6, execRecord.getTout());
+				this.psInsertMonitoringData.setString(7, execRecord.getHostname());
+				this.psInsertMonitoringData.setLong(8, execRecord.getEoi());
+				this.psInsertMonitoringData.setLong(9, execRecord.getEss());
 				this.psInsertMonitoringData.execute();
 			} catch (final SQLException ex) {
 				SyncDbWriter.LOG.error("Failed to write new monitoring record:", ex);

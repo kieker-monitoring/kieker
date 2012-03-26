@@ -120,7 +120,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 		if (this.maxTraceDurationMillis == AbstractTraceProcessingFilter.MAX_DURATION_MILLIS) {
 			this.maxTraceDurationNanos = EventRecordTraceGenerationFilter.CONFIG_PROPERTY_VALUE_MAX_DURATION_NANOS;
 		} else {
-			this.maxTraceDurationNanos = this.maxTraceDurationMillis * (1000 * 1000); // NOCS (MagicNumberCheck)
+			this.maxTraceDurationNanos = this.maxTraceDurationMillis * (1000 * 1000);
 		}
 	}
 

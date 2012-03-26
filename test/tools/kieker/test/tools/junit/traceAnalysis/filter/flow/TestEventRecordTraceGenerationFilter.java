@@ -62,8 +62,8 @@ public class TestEventRecordTraceGenerationFilter extends TestCase {
 
 	@Test
 	public void testTraceShorterThanMaxDurationPasses() {
-		final long traceId = 978668l; // NOCS (MagicNumberCheck)
-		final long startTime = 86756587l; // NOCS (MagicNumberCheck)
+		final long traceId = 978668l;
+		final long startTime = 86756587l;
 
 		final EventRecordTrace bookstoreTrace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(startTime, traceId,
 				TestEventRecordTraceGenerationFilter.SESSION_ID, TestEventRecordTraceGenerationFilter.HOSTNAME);
@@ -89,7 +89,7 @@ public class TestEventRecordTraceGenerationFilter extends TestCase {
 		traceFilter.terminate(false); // terminate w/o error; otherwise end of trace not triggered
 
 		// Make sure that 1 trace generated
-		Assert.assertEquals("No trace passed filter", sinkPlugin.getList().size(), 1); // NOCS (MagicNumberCheck)
+		Assert.assertEquals("No trace passed filter", sinkPlugin.getList().size(), 1);
 		final EventRecordTrace outputTrace = (EventRecordTrace) sinkPlugin.getList().get(0);
 		final List<AbstractTraceEvent> outputEvents = outputTrace.eventList();
 

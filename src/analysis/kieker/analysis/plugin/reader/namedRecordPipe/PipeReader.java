@@ -78,7 +78,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 			throw new IllegalArgumentException("Failed to get Pipe with name " + pipeName);
 		} else {
 			if (PipeReader.LOG.isDebugEnabled()) {
-				PipeReader.LOG.debug("Connected to named pipe '" + this.pipe.getName() + "'"); // NOCS (MultipleStringLiteralsCheck)
+				PipeReader.LOG.debug("Connected to named pipe '" + this.pipe.getName() + "'");
 			}
 		}
 		// TODO: escaping this in constructor! very bad practice!

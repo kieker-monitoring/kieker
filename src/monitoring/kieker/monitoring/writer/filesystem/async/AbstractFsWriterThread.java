@@ -63,7 +63,7 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 		final DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		final String threadName = this.getName();
-		final StringBuilder sb = new StringBuilder(this.filenamePrefix.length() + threadName.length() + this.fileExtension.length() + 28); // NOCS (MagicNumber)
+		final StringBuilder sb = new StringBuilder(this.filenamePrefix.length() + threadName.length() + this.fileExtension.length() + 28);
 		sb.append(this.filenamePrefix).append('-').append(dateFormat.format(new java.util.Date())).append("-UTC-").append(threadName).append(this.fileExtension); // NOPMD
 		return sb.toString();
 	}

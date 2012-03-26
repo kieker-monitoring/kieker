@@ -92,7 +92,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 				 * This may happen for responses from callees w/o Kieker instrumentation.
 				 */
 				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.FINE, "Found no Kieker eoi in response header. "
-						+ "Will unset all threadLocal variables"); // NOCS (MultipleStringLiteralsCheck)
+						+ "Will unset all threadLocal variables");
 				this.unsetKiekerThreadLocalData();
 				return;
 			}
@@ -119,7 +119,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 				 * This may happen for responses from callees w/o Kieker instrumentation.
 				 */
 				OperationExecutionSOAPResponseInInterceptor.LOG.log(Level.FINE, "Found no Kieker traceId in response header. "
-						+ "Will unset all threadLocal variables"); // NOCS (MultipleStringLiteralsCheck)
+						+ "Will unset all threadLocal variables");
 				this.unsetKiekerThreadLocalData();
 				return;
 			}

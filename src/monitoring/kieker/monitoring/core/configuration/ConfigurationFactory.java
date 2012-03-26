@@ -64,7 +64,7 @@ public final class ConfigurationFactory implements Keys {
 		String configurationFile = System.getProperty(Keys.CUSTOM_PROPERTIES_LOCATION_JVM);
 		final Configuration loadConfiguration;
 		if (configurationFile != null) {
-			ConfigurationFactory.LOG.info("Loading configuration from JVM-specified location: '" + configurationFile + "'"); // NOCS (MultipleStringLiteralsCheck)
+			ConfigurationFactory.LOG.info("Loading configuration from JVM-specified location: '" + configurationFile + "'");
 			loadConfiguration = ConfigurationFactory.loadConfigurationFromFile(configurationFile, defaultConfiguration);
 		} else {
 			// No JVM property; Trying to find configuration file in classpath
@@ -125,14 +125,14 @@ public final class ConfigurationFactory implements Keys {
 				// if not found as absolute path try within the classpath
 				is = MonitoringController.class.getClassLoader().getResourceAsStream(propertiesFn);
 				if (is == null) {
-					ConfigurationFactory.LOG.warn("File '" + propertiesFn + "' not found"); // NOCS (MultipleStringLiteralsCheck)
+					ConfigurationFactory.LOG.warn("File '" + propertiesFn + "' not found");
 					return new Configuration(defaultValues);
 				}
 			}
 			properties.load(is);
 			return properties;
 		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
-			ConfigurationFactory.LOG.error("Error reading file '" + propertiesFn + "'", ex); // NOCS (MultipleStringLiteralsCheck)
+			ConfigurationFactory.LOG.error("Error reading file '" + propertiesFn + "'", ex);
 		} finally {
 			if (is != null) {
 				try {
@@ -157,14 +157,14 @@ public final class ConfigurationFactory implements Keys {
 	private static final Configuration loadConfigurationFromResource(final String propertiesFn, final Configuration defaultValues) {
 		final InputStream is = MonitoringController.class.getClassLoader().getResourceAsStream(propertiesFn);
 		if (is == null) {
-			ConfigurationFactory.LOG.warn("File '" + propertiesFn + "' not found in classpath"); // NOCS (MultipleStringLiteralsCheck)
+			ConfigurationFactory.LOG.warn("File '" + propertiesFn + "' not found in classpath");
 		} else {
 			try {
 				final Configuration properties = new Configuration(defaultValues);
 				properties.load(is);
 				return properties;
 			} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
-				ConfigurationFactory.LOG.error("Error reading file '" + propertiesFn + "'", ex); // NOCS (MultipleStringLiteralsCheck)
+				ConfigurationFactory.LOG.error("Error reading file '" + propertiesFn + "'", ex);
 			} finally {
 				try {
 					is.close();

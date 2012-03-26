@@ -38,7 +38,7 @@ public class MappingFileWriter {
 	private final File mappingFile;
 
 	public MappingFileWriter(final String path) throws IOException {
-		final StringBuffer sbm = new StringBuffer(path.length() + 11); // NOCS (MagicNumber)
+		final StringBuffer sbm = new StringBuffer(path.length() + 11);
 		sbm.append(path).append(File.separatorChar).append("kieker.map");
 		final String mappingFileFn = sbm.toString();
 		this.mappingFile = new File(mappingFileFn);

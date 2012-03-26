@@ -67,17 +67,17 @@ public class TestTraceReconstructionFilter extends TestCase {
 		/* Manually create Executions for a trace */
 		this.exec0_0__bookstore_searchBook = this.executionFactory.genExecution("Bookstore", "bookstore", "searchBook", TestTraceReconstructionFilter.TRACE_ID,
 				TestTraceReconstructionFilter.SESSION_ID,
-				1 * (1000 * 1000), 10 * (1000 * 1000), 0, 0); // NOCS (MagicNumberCheck)
+				1 * (1000 * 1000), 10 * (1000 * 1000), 0, 0);
 
 		this.exec1_1__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", TestTraceReconstructionFilter.TRACE_ID,
 				TestTraceReconstructionFilter.SESSION_ID,
-				2 * (1000 * 1000), 4 * (1000 * 1000), 1, 1); // NOCS (MagicNumberCheck)
+				2 * (1000 * 1000), 4 * (1000 * 1000), 1, 1);
 		this.exec2_1__crm_getOrders = this.executionFactory.genExecution("CRM", "crm", "getOrders", TestTraceReconstructionFilter.TRACE_ID,
 				TestTraceReconstructionFilter.SESSION_ID,
-				5 * (1000 * 1000), 8 * (1000 * 1000), 2, 1); // NOCS (MagicNumberCheck)
+				5 * (1000 * 1000), 8 * (1000 * 1000), 2, 1);
 		this.exec3_2__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", TestTraceReconstructionFilter.TRACE_ID,
 				TestTraceReconstructionFilter.SESSION_ID,
-				6 * (1000 * 1000), 7 * (1000 * 1000), 3, 2); // NOCS (MagicNumberCheck)
+				6 * (1000 * 1000), 7 * (1000 * 1000), 3, 2);
 	}
 
 	/**

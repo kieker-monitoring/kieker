@@ -62,7 +62,7 @@ public abstract class AbstractTrace {
 	@Override
 	public int hashCode() {
 		/* On purpose, we are not considering the sessionId here */
-		return (int) (this.traceId ^ (this.traceId >>> 32)); // NOCS (MagicNumber)
+		return (int) (this.traceId ^ (this.traceId >>> 32));
 	}
 
 	@Override

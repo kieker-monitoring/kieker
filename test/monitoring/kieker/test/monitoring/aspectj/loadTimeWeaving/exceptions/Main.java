@@ -34,14 +34,14 @@ public final class Main {
 
 	public static void main(final String[] args) {
 
-		for (int i = 0; i < 10; i++) { // NOCS (MagicNumber)
+		for (int i = 0; i < 10; i++) {
 			try {
 				Main.helloKieker(true);
 			} catch (final Exception e) { // NOCS // NOPMD
 			}
 		}
 
-		for (int i = 0; i < 10; i++) { // NOCS (MagicNumber)
+		for (int i = 0; i < 10; i++) {
 			try {
 				Main.helloKieker(true);
 			} catch (final Exception e) { // NOCS // NOPMD

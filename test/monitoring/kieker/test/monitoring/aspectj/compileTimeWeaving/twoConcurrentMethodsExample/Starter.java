@@ -44,24 +44,24 @@ public class Starter extends Thread {
 	}
 
 	public static void main(final String[] args) throws InterruptedException {
-		for (int i = 0; i < 10000; i++) { // NOCS (MagicNumberCheck)
+		for (int i = 0; i < 10000; i++) {
 			new Starter().start();
 			// wait between requests
-			Thread.sleep((int) (Math.max(0, (Math.random() * 115d) - (i / 142d)) + 1)); // NOCS (MagicNumberCheck)
+			Thread.sleep((int) (Math.max(0, (Math.random() * 115d) - (i / 142d)) + 1));
 		}
 	}
 
 	@Override
 	public void run() {
 		final double ranVal = this.random.nextDouble();
-		if (ranVal < 0.5) { // NOCS (MagicNumberCheck)
-			if (ranVal >= 0.25) { // NOCS (MagicNumberCheck)
-				this.waitP(300); // NOCS (MagicNumberCheck)
+		if (ranVal < 0.5) {
+			if (ranVal >= 0.25) {
+				this.waitP(300);
 			}
 		} else {
-			if (ranVal > 0.75) { // NOCS (MagicNumberCheck)
+			if (ranVal > 0.75) {
 				this.work();
-				this.waitP(300); // NOCS (MagicNumberCheck)
+				this.waitP(300);
 			} else {
 				this.work();
 			}
@@ -78,11 +78,11 @@ public class Starter extends Thread {
 
 	@OperationExecutionMonitoringProbe
 	private void work() {
-		int a = this.random.nextInt(6); // NOCS (MagicNumberCheck)
-		for (int i = 0; i < 2000000; i++) { // NOCS (MagicNumberCheck)
-			a += i / 1000; // NOCS (MagicNumberCheck)
+		int a = this.random.nextInt(6);
+		for (int i = 0; i < 2000000; i++) {
+			a += i / 1000;
 		}
-		if ((a % 10000) == 0) { // NOCS (MagicNumberCheck)
+		if ((a % 10000) == 0) {
 			Starter.boolvar = Starter.boolvar ^ true;
 		}
 	}

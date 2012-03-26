@@ -40,7 +40,7 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 	 * a uniquely distributed offset of size 2^(64-1-16) = 2^47 = 140737488355328L in the worst case. Note that we restrict ourselves to the positive long values
 	 * so far. Of course, negative values may occur (as a result of an overflow) -- this does not hurt!
 	 */
-	private final AtomicLong lastThreadId = new AtomicLong((long) new Random().nextInt(65536) << (Long.SIZE - 16 - 1)); // NOCS (MagicNumber)
+	private final AtomicLong lastThreadId = new AtomicLong((long) new Random().nextInt(65536) << (Long.SIZE - 16 - 1));
 	private final ThreadLocal<Long> threadLocalTraceId = new ThreadLocal<Long>();
 	private final ThreadLocal<Integer> threadLocalEoi = new ThreadLocal<Integer>();
 	private final ThreadLocal<Integer> threadLocalEss = new ThreadLocal<Integer>();
@@ -125,7 +125,7 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 	public final int incrementAndRecallThreadLocalEOI() {
 		final Integer curEoi = this.threadLocalEoi.get();
 		if (curEoi == null) {
-			ControlFlowRegistry.LOG.error("eoi has not been registered before"); // NOCS (MultipleStringLiteralsCheck)
+			ControlFlowRegistry.LOG.error("eoi has not been registered before");
 			return -1;
 		}
 		final int newEoi = curEoi + 1;
@@ -141,7 +141,7 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 	public final int recallThreadLocalEOI() {
 		final Integer curEoi = this.threadLocalEoi.get();
 		if (curEoi == null) {
-			ControlFlowRegistry.LOG.error("eoi has not been registered before"); // NOCS (MultipleStringLiteralsCheck)
+			ControlFlowRegistry.LOG.error("eoi has not been registered before");
 			return -1;
 		}
 		return curEoi;
@@ -168,7 +168,7 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 	public final int recallAndIncrementThreadLocalESS() {
 		final Integer curEss = this.threadLocalEss.get();
 		if (curEss == null) {
-			ControlFlowRegistry.LOG.error("ess has not been registered before"); // NOCS (MultipleStringLiteralsCheck)
+			ControlFlowRegistry.LOG.error("ess has not been registered before");
 			return -1;
 		}
 		this.threadLocalEss.set(curEss + 1);
@@ -183,7 +183,7 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 	public final int recallThreadLocalESS() {
 		final Integer ess = this.threadLocalEss.get();
 		if (ess == null) {
-			ControlFlowRegistry.LOG.error("ess has not been registered before"); // NOCS (MultipleStringLiteralsCheck)
+			ControlFlowRegistry.LOG.error("ess has not been registered before");
 			return -1;
 		}
 		return ess;

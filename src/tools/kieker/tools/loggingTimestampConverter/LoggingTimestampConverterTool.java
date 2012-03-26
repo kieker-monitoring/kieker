@@ -110,7 +110,7 @@ public final class LoggingTimestampConverterTool {
 	}
 
 	private static void printUsage() {
-		LoggingTimestampConverterTool.CMD_HELP_FORMATTER.printHelp(80, LoggingTimestampConverterTool.class.getName(), "", // NOCS (MagicNumberCheck)
+		LoggingTimestampConverterTool.CMD_HELP_FORMATTER.printHelp(80, LoggingTimestampConverterTool.class.getName(), "",
 				LoggingTimestampConverterTool.CMDL_OPTS,
 				"", true);
 	}

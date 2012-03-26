@@ -52,7 +52,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 
 	protected AbstractAsyncWriter(final Configuration configuration) {
 		super(configuration);
-		final String prefix = this.getClass().getName() + "."; // NOCS (MultipleStringLiteralsCheck)
+		final String prefix = this.getClass().getName() + ".";
 
 		final int queueFullBehaviorTmp = this.configuration.getIntProperty(prefix + AbstractAsyncWriter.BEHAVIOR);
 		if ((queueFullBehaviorTmp < 0) || (queueFullBehaviorTmp > 2)) {

@@ -146,7 +146,7 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 		if (this.sensorIntervalSeconds == 0) {
 			CPUMemUsageServletContextListener.LOG.warn("values for the init-param '"
 					+ CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS + "' must be >0; found: " + this.sensorIntervalSeconds
-					+ ". Using default value: " // NOCS (MultipleStringLiteralsCheck)
+					+ ". Using default value: "
 					+ CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS);
 			this.sensorIntervalSeconds = CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS;
 		}
@@ -168,7 +168,7 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 
 		if (val < 0) {
 			CPUMemUsageServletContextListener.LOG.warn("Invalid or missing value for context-param '" + paramName + "': " + valStr + ". Using default value: "
-					+ defaultValue); // NOCS (MultipleStringLiteralsCheck)
+					+ defaultValue);
 			val = defaultValue;
 		}
 

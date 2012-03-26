@@ -156,7 +156,7 @@ public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 	@Override
 	public void terminate(final boolean error) {
 		final long terminationDelay = ((this.lTime + this.offset) - (RealtimeReplayDistributor.TIMESOURCE.getTime() - this.startTime))
-				+ (100 * RealtimeReplayDistributor.MILLISECOND); // NOCS (MagicNumber)
+				+ (100 * RealtimeReplayDistributor.MILLISECOND);
 		RealtimeReplayDistributor.LOG.info("Will terminate in " + terminationDelay + "nsecs from now");
 		this.executor.schedule(new Runnable() {
 

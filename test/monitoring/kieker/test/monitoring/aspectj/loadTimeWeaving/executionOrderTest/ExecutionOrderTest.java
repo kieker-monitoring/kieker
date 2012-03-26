@@ -55,9 +55,9 @@ public final class ExecutionOrderTest {
 
 	@OperationExecutionMonitoringProbe
 	private static void methodb() {
-		double d = 12 + (System.currentTimeMillis() / 1000d); // NOCS (MagicNumberCheck)
-		for (int i = 0; i < 10000; i++) { // NOCS (MagicNumberCheck)
-			d = d + 5 + i; // NOCS (MagicNumberCheck)
+		double d = 12 + (System.currentTimeMillis() / 1000d);
+		for (int i = 0; i < 10000; i++) {
+			d = d + 5 + i;
 		}
 	}
 

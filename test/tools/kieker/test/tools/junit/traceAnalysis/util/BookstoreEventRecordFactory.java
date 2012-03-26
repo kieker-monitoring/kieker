@@ -45,17 +45,17 @@ public final class BookstoreEventRecordFactory {
 
 	private BookstoreEventRecordFactory() {}
 
-	public static final long TSTAMP_OFFSET_entry0_0__bookstore_searchBook = 0; // NOCS (MagicNumberCheck)
-	public static final long TSTAMP_OFFSET_call1_1__catalog_getBook = 1; // NOCS (MagicNumberCheck)
-	public static final long TSTAMP_OFFSET_entry1_1__catalog_getBook = 2; // NOCS (MagicNumberCheck)
-	public static final long TSTAMP_OFFSET_exit1_1__catalog_getBook = 3; // NOCS (MagicNumberCheck)
-	public static final long TSTAMP_OFFSET_call2_1__crm_getOrders = 4; // NOCS (MagicNumberCheck)
-	public static final long TSTAMP_OFFSET_entry2_1__crm_getOrders = 5; // NOCS (MagicNumberCheck)
-	public static final long TSTAMP_OFFSET_call3_2__catalog_getBook = 6; // NOCS (MagicNumberCheck)
-	public static final long TSTAMP_OFFSET_entry3_2__catalog_getBook = 7; // NOCS (MagicNumberCheck)
-	public static final long TSTAMP_OFFSET_exit3_2__catalog_getBook = 8; // NOCS (MagicNumberCheck)
-	public static final long TSTAMP_OFFSET_exit2_1__crm_getOrders = 8; // NOCS (MagicNumberCheck)
-	public static final long TSTAMP_OFFSET_exit0_0__bookstore_searchBook = 11; // NOCS (MagicNumberCheck)
+	public static final long TSTAMP_OFFSET_entry0_0__bookstore_searchBook = 0;
+	public static final long TSTAMP_OFFSET_call1_1__catalog_getBook = 1;
+	public static final long TSTAMP_OFFSET_entry1_1__catalog_getBook = 2;
+	public static final long TSTAMP_OFFSET_exit1_1__catalog_getBook = 3;
+	public static final long TSTAMP_OFFSET_call2_1__crm_getOrders = 4;
+	public static final long TSTAMP_OFFSET_entry2_1__crm_getOrders = 5;
+	public static final long TSTAMP_OFFSET_call3_2__catalog_getBook = 6;
+	public static final long TSTAMP_OFFSET_entry3_2__catalog_getBook = 7;
+	public static final long TSTAMP_OFFSET_exit3_2__catalog_getBook = 8;
+	public static final long TSTAMP_OFFSET_exit2_1__crm_getOrders = 8;
+	public static final long TSTAMP_OFFSET_exit0_0__bookstore_searchBook = 11;
 
 	/**
 	 * Returns "well-known" Bookstore trace as a list of {@link BeforeOperationEvent} and {@link AfterOperationEvent} events, ordered by its
@@ -295,11 +295,11 @@ public final class BookstoreEventRecordFactory {
 	public static void main(final String[] args) {
 		final IMonitoringController ctrl = MonitoringController.getInstance();
 
-		long firstTimestamp = 7676876; // NOCS (MagicNumberCheck)
-		final long firstTimestampDelta = 1000; // NOCS (MagicNumberCheck)
+		long firstTimestamp = 7676876;
+		final long firstTimestampDelta = 1000;
 		final String sessionId = "BwvCqdyhw2";
 		final String hostname = "srv0";
-		long traceId = 688434; // NOCS (MagicNumberCheck)
+		long traceId = 688434;
 
 		final List<IMonitoringRecord> allRecords = new ArrayList<IMonitoringRecord>();
 

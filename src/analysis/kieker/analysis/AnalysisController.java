@@ -824,16 +824,16 @@ public final class AnalysisController implements Runnable {
 			if (c.isAssignableFrom(clazz)) {
 				createdClass = (C) clazz.getConstructor(Configuration.class).newInstance(configuration);
 			} else {
-				AnalysisController.LOG.error("Class '" + classname + "' has to implement '" + c.getSimpleName() + "'"); // NOCS (MultipleStringLiteralsCheck)
+				AnalysisController.LOG.error("Class '" + classname + "' has to implement '" + c.getSimpleName() + "'");
 			}
 		} catch (final ClassNotFoundException ex) {
-			AnalysisController.LOG.error(c.getSimpleName() + ": Class '" + classname + "' not found", ex); // NOCS (MultipleStringLiteralsCheck)
+			AnalysisController.LOG.error(c.getSimpleName() + ": Class '" + classname + "' not found", ex);
 		} catch (final NoSuchMethodException ex) {
-			AnalysisController.LOG.error(c.getSimpleName() + ": Class '" + classname // NOCS (MultipleStringLiteralsCheck)
+			AnalysisController.LOG.error(c.getSimpleName() + ": Class '" + classname
 					+ "' has to implement a (public) constructor that accepts a single Configuration", ex);
 		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
 			// SecurityException, IllegalAccessException, IllegalArgumentException, InstantiationException, InvocationTargetException
-			AnalysisController.LOG.error(c.getSimpleName() + ": Failed to load class for name '" + classname + "'", ex); // NOCS (MultipleStringLiteralsCheck)
+			AnalysisController.LOG.error(c.getSimpleName() + ": Failed to load class for name '" + classname + "'", ex);
 		}
 		return createdClass;
 	}

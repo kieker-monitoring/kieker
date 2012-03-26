@@ -38,7 +38,7 @@ public class Registry<E> implements IRegistry<E> {
 	private static final int INITIAL_CAPACITY = 16;
 	private static final double LOAD_FACTOR = 0.75d;
 	private static final int CONCURRENCY_LEVEL = 16;
-	private static final int MAXIMUM_CAPACITY = 1 << 30; // NOCS (magic number)
+	private static final int MAXIMUM_CAPACITY = 1 << 30;
 
 	/**
 	 * Mask value for indexing into segments. The upper bits of a key's hash code are used to choose the segment.
@@ -77,7 +77,7 @@ public class Registry<E> implements IRegistry<E> {
 			++sshift;
 			ssize <<= 1;
 		}
-		this.segmentShift = 32 - sshift; // NOCS (magic number)
+		this.segmentShift = 32 - sshift;
 		this.segmentMask = ssize - 1;
 		this.segments = new Segment[ssize];
 		int c = Registry.INITIAL_CAPACITY / ssize;
@@ -101,12 +101,12 @@ public class Registry<E> implements IRegistry<E> {
 	private static final int hash(final Object value) {
 		// Spread bits to regularize both segment and index locations, using variant of single-word Wang/Jenkins hash.
 		int h = value.hashCode();
-		h += (h << 15) ^ 0xffffcd7d; // NOCS (magic number)
-		h ^= h >>> 10; // NOCS (magic number)
-		h += h << 3; // NOCS (magic number)
-		h ^= h >>> 6; // NOCS (magic number)
-		h += (h << 2) + (h << 14); // NOCS (magic number)
-		return h ^ (h >>> 16); // NOCS (magic number)
+		h += (h << 15) ^ 0xffffcd7d;
+		h ^= h >>> 10;
+		h += h << 3;
+		h ^= h >>> 6;
+		h += (h << 2) + (h << 14);
+		return h ^ (h >>> 16);
 	}
 
 	public final void setRecordReceiver(final IMonitoringRecordReceiver recordReceiver) {

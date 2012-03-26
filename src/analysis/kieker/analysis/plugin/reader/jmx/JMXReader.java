@@ -130,7 +130,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 			} catch (final IOException ex) {
 				JMXReader.LOG.error("Unable to connect to JMX Server (" + ex.getMessage() + ")");
 				if (JMXReader.LOG.isDebugEnabled()) {
-					JMXReader.LOG.debug("Error in JMX connection!", ex); // NOCS (MultipleStringLiteralsCheck)
+					JMXReader.LOG.debug("Error in JMX connection!", ex);
 				}
 				return false;
 			}
@@ -150,7 +150,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 			JMXReader.LOG.error("No monitoring log found: " + this.monitoringLog.toString()); // ok to ignore ex here
 			ret = false;
 		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
-			JMXReader.LOG.error("Error in JMX connection!", ex); // NOCS (MultipleStringLiteralsCheck)
+			JMXReader.LOG.error("Error in JMX connection!", ex);
 			ret = false;
 		} finally {
 			try {
@@ -159,7 +159,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 				}
 			} catch (final Exception e) { // NOCS // NOPMD
 				if (JMXReader.LOG.isDebugEnabled()) {
-					JMXReader.LOG.debug("Failed to remove Listener!", e); // NOCS (MultipleStringLiteralsCheck)
+					JMXReader.LOG.debug("Failed to remove Listener!", e);
 				}
 			}
 			try {
@@ -168,7 +168,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 				}
 			} catch (final ListenerNotFoundException e) {
 				if (JMXReader.LOG.isDebugEnabled()) {
-					JMXReader.LOG.debug("Failed to remove Listener!", e); // NOCS (MultipleStringLiteralsCheck)
+					JMXReader.LOG.debug("Failed to remove Listener!", e);
 				}
 			}
 			try {
@@ -213,7 +213,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 
 			} catch (final InstanceNotFoundException e) { // ignore // NOPMD
 			} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
-				JMXReader.LOG.error("Error in JMX connection!", e); // NOCS (MultipleStringLiteralsCheck)
+				JMXReader.LOG.error("Error in JMX connection!", e);
 			} finally {
 				try {
 					if (logNotificationListener != null) {

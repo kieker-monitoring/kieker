@@ -124,7 +124,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 		if (this.maxTraceDurationMillis == AbstractTraceProcessingFilter.MAX_DURATION_MILLIS) {
 			this.maxTraceDurationNanos = TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_DURATION_NANOS;
 		} else {
-			this.maxTraceDurationNanos = this.maxTraceDurationMillis * (1000 * 1000); // NOCS (MagicNumberCheck)
+			this.maxTraceDurationNanos = this.maxTraceDurationMillis * (1000 * 1000);
 		}
 	}
 

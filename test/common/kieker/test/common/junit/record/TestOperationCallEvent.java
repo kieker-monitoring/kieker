@@ -31,9 +31,9 @@ import org.junit.Test;
  */
 public class TestOperationCallEvent extends TestCase { // NOCS (MissingCtorCheck)
 
-	private static final long TSTAMP = 987998l; // NOCS (MagicNumberCheck)
-	private static final long TRACE_ID = 23444l; // NOCS (MagicNumberCheck)
-	private static final int ORDER_INDEX = 234; // NOCS (MagicNumberCheck)
+	private static final long TSTAMP = 987998l;
+	private static final long TRACE_ID = 23444l;
+	private static final int ORDER_INDEX = 234;
 
 	private static final String FQ_CALLER_CLASSNAME = "p1.p2.p3.callername";
 	private static final String FQ_CALLER_OPERATION_SIGNATURE =

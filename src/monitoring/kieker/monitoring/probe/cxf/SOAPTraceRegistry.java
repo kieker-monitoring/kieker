@@ -71,7 +71,7 @@ public final class SOAPTraceRegistry {
 	public final long recallThreadLocalInRequestTin() {
 		final Long curTin = this.threadLocalInRequestTin.get();
 		if (curTin == null) {
-			SOAPTraceRegistry.LOG.error("tin has not been registered before"); // NOCS (MultipleStringLiteralsCheck)
+			SOAPTraceRegistry.LOG.error("tin has not been registered before");
 			return -1;
 		}
 		return curTin;
@@ -105,7 +105,7 @@ public final class SOAPTraceRegistry {
 	public final long recallThreadLocalOutRequestTin() {
 		final Long curTin = this.threadLocalOutRequestTin.get();
 		if (curTin == null) {
-			SOAPTraceRegistry.LOG.error("tin has not been registered before"); // NOCS (MultipleStringLiteralsCheck)
+			SOAPTraceRegistry.LOG.error("tin has not been registered before");
 			return -1;
 		}
 		return curTin;
@@ -136,7 +136,7 @@ public final class SOAPTraceRegistry {
 	public final boolean recallThreadLocalInRequestIsEntryCall() {
 		final Boolean curIsEntryCall = this.threadLocalInRequestIsEntryCall.get();
 		if (curIsEntryCall == null) {
-			SOAPTraceRegistry.LOG.error("isEntryCall has not been registered before"); // NOCS (MultipleStringLiteralsCheck)
+			SOAPTraceRegistry.LOG.error("isEntryCall has not been registered before");
 			return true;
 		}
 		return curIsEntryCall;
@@ -167,7 +167,7 @@ public final class SOAPTraceRegistry {
 	public final boolean recallThreadLocalOutRequestIsEntryCall() {
 		final Boolean curIsEntryCall = this.threadLocalOutRequestIsEntryCall.get();
 		if (curIsEntryCall == null) {
-			SOAPTraceRegistry.LOG.error("isEntryCall has not been registered before"); // NOCS (MultipleStringLiteralsCheck)
+			SOAPTraceRegistry.LOG.error("isEntryCall has not been registered before");
 			return true;
 		}
 		return curIsEntryCall;

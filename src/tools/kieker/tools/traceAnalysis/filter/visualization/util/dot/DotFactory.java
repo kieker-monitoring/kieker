@@ -284,7 +284,7 @@ public final class DotFactory {
 	 */
 	public static String createConnection(final String prefix, final String from, final String to, final double taillabel, final double headlabel) {
 		return String.format("%s\"%s\" -> \"%s\" [label=\" \",taillabel=\"%1.1f%%\",headlabel=\"%1.1f%%\"];%n", prefix, from, to,
-				taillabel * 100.0, headlabel * 100.0); // NOCS (MagicNumber)
+				taillabel * 100.0, headlabel * 100.0);
 	}
 
 }

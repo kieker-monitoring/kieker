@@ -62,9 +62,9 @@ public final class Jdk14LoggerPatched extends Jdk14Logger {
 			final String sourceMethod;
 			{ // NOCS detect calling class and method
 				final StackTraceElement[] stackArray = new Throwable().getStackTrace(); // NOPMD
-				if ((stackArray != null) && (stackArray.length > 3)) { // NOCS (magic number)
-					sourceClass = stackArray[3].getClassName(); // NOCS (magic number)
-					sourceMethod = stackArray[3].getMethodName(); // NOCS (magic number)
+				if ((stackArray != null) && (stackArray.length > 3)) {
+					sourceClass = stackArray[3].getClassName();
+					sourceMethod = stackArray[3].getMethodName();
 				} else {
 					sourceClass = this.name;
 					sourceMethod = "";

@@ -108,7 +108,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 
 	@Override
 	public final int hashCode() {
-		return (31 * Arrays.hashCode(this.toArray())) + (int) (this.loggingTimestamp ^ (this.loggingTimestamp >>> 32)); // NOCS (magic number)
+		return (31 * Arrays.hashCode(this.toArray())) + (int) (this.loggingTimestamp ^ (this.loggingTimestamp >>> 32));
 	}
 
 	public static final void checkArray(final Object[] values, final Class<?>[] valueTypes) {

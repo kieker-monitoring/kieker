@@ -79,19 +79,19 @@ public class TestExecutionTraceBookstore extends TestCase {
 		/* Manually create Executions for a trace */
 		numExecutions_l++;
 		this.exec0_0__bookstore_searchBook = this.eFactory.genExecution("Bookstore", "bookstore", "searchBook", TestExecutionTraceBookstore.TRACE_ID,
-				TestExecutionTraceBookstore.SESSION_ID, 1, 10, 0, 0); // NOCS (MagicNumberCheck)
+				TestExecutionTraceBookstore.SESSION_ID, 1, 10, 0, 0);
 		this.minTin = this.exec0_0__bookstore_searchBook.getTin();
 		this.maxTout = this.exec0_0__bookstore_searchBook.getTout();
 
 		numExecutions_l++;
 		this.exec1_1__catalog_getBook = this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID, // NOPMD
-				TestExecutionTraceBookstore.SESSION_ID, 2, 4, 1, 1); // NOCS (MagicNumberCheck)
+				TestExecutionTraceBookstore.SESSION_ID, 2, 4, 1, 1);
 		numExecutions_l++;
 		this.exec2_1__crm_getOrders = this.eFactory.genExecution("CRM", "crm", "getOrders", TestExecutionTraceBookstore.TRACE_ID,
-				TestExecutionTraceBookstore.SESSION_ID, 5, 8, 2, 1); // NOCS (MagicNumberCheck)
+				TestExecutionTraceBookstore.SESSION_ID, 5, 8, 2, 1);
 		numExecutions_l++;
 		this.exec3_2__catalog_getBook = this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID,
-				TestExecutionTraceBookstore.SESSION_ID, 6, 7, 3, 2); // NOCS (MagicNumberCheck)
+				TestExecutionTraceBookstore.SESSION_ID, 6, 7, 3, 2);
 
 		// Just some basic checks to make sure that the trace has been set up properly (we've had some trouble here)
 		Assert.assertNotSame(this.exec3_2__catalog_getBook.getOperation(), this.exec2_1__crm_getOrders.getOperation());
@@ -467,7 +467,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 		 */
 		final ExecutionTrace executionTrace = new ExecutionTrace(TestExecutionTraceBookstore.TRACE_ID, TestExecutionTraceBookstore.SESSION_ID);
 		final Execution exec3_2__catalog_getBook__broken = this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID, // NOCS
-				TestExecutionTraceBookstore.SESSION_ID, 6, 7, 4, 2); // NOCS (MagicNumberCheck)
+				TestExecutionTraceBookstore.SESSION_ID, 6, 7, 4, 2);
 		Assert.assertFalse("Invalid test", exec3_2__catalog_getBook__broken.equals(this.exec3_2__catalog_getBook));
 
 		executionTrace.add(exec3_2__catalog_getBook__broken);

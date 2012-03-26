@@ -61,7 +61,7 @@ import kieker.monitoring.writer.AbstractAsyncWriter;
  *         be changed during runtime 2007/07/30: Initial Prototype
  */
 public final class AsyncDbWriter extends AbstractAsyncWriter {
-	private static final String PREFIX = AsyncDbWriter.class.getName() + "."; // NOCS (MultipleStringLiteralsCheck)
+	private static final String PREFIX = AsyncDbWriter.class.getName() + ".";
 	public static final String CONFIG_DRIVERCLASSNAME = AsyncDbWriter.PREFIX + "DriverClassname"; // NOCS (AfterPREFIX)
 	public static final String CONFIG_CONNECTIONSTRING = AsyncDbWriter.PREFIX + "ConnectionString"; // NOCS (AfterPREFIX)
 	public static final String CONFIG_TABLENAME = AsyncDbWriter.PREFIX + "TableName"; // NOCS (AfterPREFIX)
@@ -132,15 +132,15 @@ final class DbWriterThread extends AbstractAsyncThread {
 	protected final void consume(final IMonitoringRecord monitoringRecord) throws Exception {
 		// connector only supports execution records so far
 		final OperationExecutionRecord execRecord = (OperationExecutionRecord) monitoringRecord;
-		this.psInsertMonitoringData.setInt(1, execRecord.getExperimentId()); // NOCS (MagicNumberCheck)
-		this.psInsertMonitoringData.setString(2, execRecord.getOperationSignature()); // NOCS (MagicNumberCheck)
-		this.psInsertMonitoringData.setString(3, execRecord.getSessionId()); // NOCS (MagicNumberCheck)
-		this.psInsertMonitoringData.setLong(4, execRecord.getTraceId()); // NOCS (MagicNumberCheck)
-		this.psInsertMonitoringData.setLong(5, execRecord.getTin()); // NOCS (MagicNumberCheck)
-		this.psInsertMonitoringData.setLong(6, execRecord.getTout()); // NOCS (MagicNumberCheck)
-		this.psInsertMonitoringData.setString(7, execRecord.getHostname()); // NOCS (MagicNumberCheck)
-		this.psInsertMonitoringData.setLong(8, execRecord.getEoi()); // NOCS (MagicNumberCheck)
-		this.psInsertMonitoringData.setLong(9, execRecord.getEss()); // NOCS (MagicNumberCheck)
+		this.psInsertMonitoringData.setInt(1, execRecord.getExperimentId());
+		this.psInsertMonitoringData.setString(2, execRecord.getOperationSignature());
+		this.psInsertMonitoringData.setString(3, execRecord.getSessionId());
+		this.psInsertMonitoringData.setLong(4, execRecord.getTraceId());
+		this.psInsertMonitoringData.setLong(5, execRecord.getTin());
+		this.psInsertMonitoringData.setLong(6, execRecord.getTout());
+		this.psInsertMonitoringData.setString(7, execRecord.getHostname());
+		this.psInsertMonitoringData.setLong(8, execRecord.getEoi());
+		this.psInsertMonitoringData.setLong(9, execRecord.getEss());
 		this.psInsertMonitoringData.execute();
 	}
 

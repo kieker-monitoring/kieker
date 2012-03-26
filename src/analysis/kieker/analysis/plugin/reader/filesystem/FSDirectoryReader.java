@@ -144,7 +144,7 @@ final class FSDirectoryReader implements Runnable {
 				this.filePrefix = FSDirectoryReader.LEGACY_FILE_PREFIX;
 			} else {
 				// no {kieker|tpmon}.map exists. This is valid for very old monitoring logs. Hence, only dump a log.warn
-				FSDirectoryReader.LOG.warn("No mapping file in directory '" + this.inputDir.getAbsolutePath() + "'"); // NOCS (MultipleStringLiteralsCheck)
+				FSDirectoryReader.LOG.warn("No mapping file in directory '" + this.inputDir.getAbsolutePath() + "'");
 				return;
 			}
 		}
@@ -209,7 +209,7 @@ final class FSDirectoryReader implements Runnable {
 				final String[] recordFields = line.split(";");
 				try {
 					if (recordFields[0].charAt(0) == '$') { // modern record
-						if (recordFields.length < 3) { // NOCS (magic number)
+						if (recordFields.length < 3) {
 							FSDirectoryReader.LOG.error("Illegal record format: " + line);
 							continue; // skip this record
 						}

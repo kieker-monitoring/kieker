@@ -78,7 +78,7 @@ public abstract class AbstractAsyncFSWriter extends AbstractAsyncWriter {
 		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
 		date.setTimeZone(TimeZone.getTimeZone("UTC"));
 		final String dateStr = date.format(new java.util.Date()); // NOPMD (Date)
-		final StringBuffer sb = new StringBuffer(path.length() + ctrlName.length() + 32); // NOCS (MagicNumber)
+		final StringBuffer sb = new StringBuffer(path.length() + ctrlName.length() + 32);
 		sb.append(path).append(File.separatorChar).append("kieker-").append(dateStr).append("-UTC-").append(ctrlName).append(File.separatorChar);
 		path = sb.toString();
 		f = new File(path);

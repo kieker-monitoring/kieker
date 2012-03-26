@@ -52,12 +52,12 @@ public class TestTraceIdFilter extends TestCase {
 	 */
 	@Test
 	public void testAssertIgnoreTraceId() {
-		final long firstTimestamp = 42353; // any number fits // NOCS (MagicNumberCheck)
-		final long traceIdNotToPass = 11l; // (must NOT be element of idsToPass) // NOCS (MagicNumberCheck)
+		final long firstTimestamp = 42353; // any number fits
+		final long traceIdNotToPass = 11l; // (must NOT be element of idsToPass)
 
 		final SortedSet<Long> idsToPass = new TreeSet<Long>();
-		idsToPass.add(1 + traceIdNotToPass); // NOCS (MagicNumberCheck)
-		idsToPass.add(2 + traceIdNotToPass); // NOCS (MagicNumberCheck)
+		idsToPass.add(1 + traceIdNotToPass);
+		idsToPass.add(2 + traceIdNotToPass);
 
 		final Configuration filterConfig = new Configuration();
 		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.FALSE.toString());
@@ -95,12 +95,12 @@ public class TestTraceIdFilter extends TestCase {
 	 */
 	@Test
 	public void testAssertPassTraceId() {
-		final long firstTimestamp = 53222; // any number fits // NOCS (MagicNumberCheck)
-		final long traceIdToPass = 11l; // (must be element of idsToPass) // NOCS (MagicNumberCheck)
+		final long firstTimestamp = 53222; // any number fits
+		final long traceIdToPass = 11l; // (must be element of idsToPass)
 
 		final SortedSet<Long> idsToPass = new TreeSet<Long>();
-		idsToPass.add(0 + traceIdToPass); // NOCS (MagicNumberCheck)
-		idsToPass.add(1 + traceIdToPass); // NOCS (MagicNumberCheck)
+		idsToPass.add(0 + traceIdToPass);
+		idsToPass.add(1 + traceIdToPass);
 
 		final Configuration filterConfig = new Configuration();
 		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.FALSE.toString());
@@ -133,8 +133,8 @@ public class TestTraceIdFilter extends TestCase {
 	 */
 	@Test
 	public void testAssertPassTraceIdWhenPassAll() {
-		final long firstTimestamp = 53222; // any number fits // NOCS (MagicNumberCheck)
-		final long traceIdToPass = 11l; // (must be element of idsToPass) // NOCS (MagicNumberCheck)
+		final long firstTimestamp = 53222; // any number fits
+		final long traceIdToPass = 11l; // (must be element of idsToPass)
 
 		final Configuration filterConfig = new Configuration();
 		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.TRUE.toString()); // i.e., pass all

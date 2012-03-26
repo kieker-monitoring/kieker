@@ -39,10 +39,10 @@ public final class Catalog {
 	public static void getBook(final boolean complexQuery) {
 		if (complexQuery) {
 			// complex query
-			Bookstore.waitabit(20); // NOCS (MagicNumberCheck)
+			Bookstore.waitabit(20);
 		} else {
 			// simple query
-			Bookstore.waitabit(2); // NOCS (MagicNumberCheck)
+			Bookstore.waitabit(2);
 		}
 	}
 }

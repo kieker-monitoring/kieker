@@ -47,8 +47,8 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase { //
 		final ExecutionTrace trace0;
 		final ExecutionTrace trace1;
 
-		trace0 = this.genValidBookstoreTrace(45653l, TestTraceEquivalenceFilterAssemblyEquivalence.SESSION_ID, 17); // NOCS (MagicNumberCheck)
-		trace1 = this.genValidBookstoreTrace(45653l, TestTraceEquivalenceFilterAssemblyEquivalence.SESSION_ID, 17); // NOCS (MagicNumberCheck)
+		trace0 = this.genValidBookstoreTrace(45653l, TestTraceEquivalenceFilterAssemblyEquivalence.SESSION_ID, 17);
+		trace1 = this.genValidBookstoreTrace(45653l, TestTraceEquivalenceFilterAssemblyEquivalence.SESSION_ID, 17);
 		Assert.assertEquals(trace0, trace1);
 
 		/*
@@ -86,24 +86,24 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase { //
 		exec0_0__bookstore_searchBook = this.executionFactory.genExecution("Bookstore", "bookstore", "searchBook", traceId,
 				sessionId,
 				(1 * (1000 * 1000)) + offset, // tin //NOCS (MagicNumberCheck)
-				(10 * (1000 * 1000)) + offset, // tout // NOCS (MagicNumberCheck)
-				0, 0); // eoi, ess // NOCS (MagicNumberCheck)
+				(10 * (1000 * 1000)) + offset, // tout
+				0, 0); // eoi, ess
 
 		exec1_1__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", traceId,
 				sessionId,
-				(2 * (1000 * 1000)) + offset, // NOCS (MagicNumberCheck)
-				(4 * (1000 * 1000)) + offset, // NOCS (MagicNumberCheck)
-				1, 1); // NOCS (MagicNumberCheck)
+				(2 * (1000 * 1000)) + offset,
+				(4 * (1000 * 1000)) + offset,
+				1, 1);
 		exec2_1__crm_getOrders = this.executionFactory.genExecution("CRM", "crm", "getOrders", traceId,
 				sessionId,
-				(5 * (1000 * 1000)) + offset, // NOCS (MagicNumberCheck)
-				(8 * (1000 * 1000)) + offset, // NOCS (MagicNumberCheck)
-				2, 1); // NOCS (MagicNumberCheck)
+				(5 * (1000 * 1000)) + offset,
+				(8 * (1000 * 1000)) + offset,
+				2, 1);
 		exec3_2__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", traceId,
 				sessionId,
-				(6 * (1000 * 1000)) + offset, // NOCS (MagicNumberCheck)
-				(7 * (1000 * 1000)) + offset, // NOCS (MagicNumberCheck)
-				3, 2); // NOCS (MagicNumberCheck)
+				(6 * (1000 * 1000)) + offset,
+				(7 * (1000 * 1000)) + offset,
+				3, 2);
 
 		/*
 		 * Create an Execution Trace and add Executions in

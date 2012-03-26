@@ -115,7 +115,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
 		date.setTimeZone(TimeZone.getTimeZone("UTC"));
 		final String dateStr = date.format(new java.util.Date()); // NOPMD (Date)
-		final StringBuffer sb = new StringBuffer(pathTmp.length() + ctrlName.length() + 32); // NOCS (MagicNumber)
+		final StringBuffer sb = new StringBuffer(pathTmp.length() + ctrlName.length() + 32);
 		sb.append(pathTmp).append(File.separatorChar).append("kieker-").append(dateStr).append("-UTC-").append(ctrlName).append(File.separatorChar);
 		pathTmp = sb.toString();
 		f = new File(pathTmp);
@@ -184,7 +184,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private final String getFilename() {
 		final DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-		final StringBuilder sb = new StringBuilder(this.filenamePrefix.length() + 27); // NOCS (MagicNumber)
+		final StringBuilder sb = new StringBuilder(this.filenamePrefix.length() + 27);
 		sb.append(this.filenamePrefix).append('-').append(dateFormat.format(new java.util.Date())).append("-UTC.dat"); // NOPMD (Date)
 		return sb.toString();
 	}

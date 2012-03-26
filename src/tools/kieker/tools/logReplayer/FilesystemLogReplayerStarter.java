@@ -163,13 +163,13 @@ public final class FilesystemLogReplayerStarter {
 					FilesystemLogReplayerStarter.CMD_OPT_NAME_IGNORERECORDSAFTERDATE, null);
 			if (ignoreRecordsBeforeTimestampString != null) {
 				final Date ignoreBeforeDate = dateFormat.parse(ignoreRecordsBeforeTimestampString);
-				FilesystemLogReplayerStarter.ignoreRecordsBeforeTimestamp = ignoreBeforeDate.getTime() * (1000 * 1000); // NOCS (MagicNumberCheck)
+				FilesystemLogReplayerStarter.ignoreRecordsBeforeTimestamp = ignoreBeforeDate.getTime() * (1000 * 1000);
 				FilesystemLogReplayerStarter.LOG.info("Ignoring records before " + dateFormat.format(ignoreBeforeDate) + " ("
 						+ FilesystemLogReplayerStarter.ignoreRecordsBeforeTimestamp + ")");
 			}
 			if (ignoreRecordsAfterTimestampString != null) {
 				final Date ignoreAfterDate = dateFormat.parse(ignoreRecordsAfterTimestampString);
-				FilesystemLogReplayerStarter.ignoreRecordsAfterTimestamp = ignoreAfterDate.getTime() * (1000 * 1000); // NOCS (MagicNumberCheck)
+				FilesystemLogReplayerStarter.ignoreRecordsAfterTimestamp = ignoreAfterDate.getTime() * (1000 * 1000);
 				FilesystemLogReplayerStarter.LOG.info("Ignoring records after " + dateFormat.format(ignoreAfterDate) + " ("
 						+ FilesystemLogReplayerStarter.ignoreRecordsAfterTimestamp + ")");
 			}

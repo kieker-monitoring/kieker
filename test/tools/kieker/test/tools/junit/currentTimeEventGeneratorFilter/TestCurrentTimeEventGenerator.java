@@ -46,8 +46,8 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 
 	@Test
 	public void testFirstRecordGeneratesEvent() { // NOPMD (assert in method)
-		this.compareInputAndOutput(1000, new long[] { 15 }, new long[] { 15 }, true); // true: raw timestamp // NOCS (MagicNumberCheck)
-		this.compareInputAndOutput(1000, new long[] { 15 }, new long[] { 15 }, false); // false: wrap in record // NOCS (MagicNumberCheck)
+		this.compareInputAndOutput(1000, new long[] { 15 }, new long[] { 15 }, true); // true: raw timestamp
+		this.compareInputAndOutput(1000, new long[] { 15 }, new long[] { 15 }, false); // false: wrap in record
 	}
 
 	@Test
@@ -82,7 +82,7 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 		final long resolution = 10;
 		final long firstT = 5;
 		final long secondT = firstT + 1;
-		final long thirdT = secondT + 4; // NOCS (MagicNumberCheck)
+		final long thirdT = secondT + 4;
 		final long fourthT = firstT + resolution; // triggers next event
 		this.compareInputAndOutput(resolution, new long[] { firstT, secondT, thirdT, fourthT }, new long[] { firstT, fourthT }, true);
 		this.compareInputAndOutput(resolution, new long[] { firstT, secondT, thirdT, fourthT }, new long[] { firstT, fourthT }, false);
@@ -92,11 +92,11 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 	public void testGapIntermediateEvents() { // NOPMD (assert in method)
 		final long resolution = 6;
 		final long firstT = 5;
-		final long secondT = firstT + (5 * resolution) + 1; // NOCS (MagicNumberCheck)
+		final long secondT = firstT + (5 * resolution) + 1;
 		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, firstT + resolution, firstT + (2 * resolution),
-			firstT + (3 * resolution), firstT + (4 * resolution), firstT + (5 * resolution), }, true); // NOCS (MagicNumberCheck)
+			firstT + (3 * resolution), firstT + (4 * resolution), firstT + (5 * resolution), }, true);
 		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, firstT + resolution, firstT + (2 * resolution),
-			firstT + (3 * resolution), firstT + (4 * resolution), firstT + (5 * resolution), }, false); // NOCS (MagicNumberCheck)
+			firstT + (3 * resolution), firstT + (4 * resolution), firstT + (5 * resolution), }, false);
 	}
 
 	/**

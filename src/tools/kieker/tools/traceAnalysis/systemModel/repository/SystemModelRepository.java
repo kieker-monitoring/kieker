@@ -156,7 +156,7 @@ public class SystemModelRepository extends AbstractRepository {
 		ps.println("<style type=\"text/css\">\n" + ".colTitle { font-family:sans; font-size:11px; }\n" + ".cell { font-family:monospace; font-size:10px; }\n"
 				+ "h1 { font-family:sans; font-size:14px; }\n" + "</style>");
 		ps.println("</head><body>");
-		this.htmlHSpace(ps, 10); // NOCS (MagicNumberCheck)
+		this.htmlHSpace(ps, 10);
 		ps.println("<h1>Component Types</h1>");
 		this.printOpenHtmlTable(ps, new String[] { "ID", "Package", "Name", "Operations" }); // NOPMD (string duplication)
 		final Collection<ComponentType> componentTypes = this.typeRepositoryFactory.getComponentTypes();
@@ -222,7 +222,7 @@ public class SystemModelRepository extends AbstractRepository {
 			this.printHtmlTableRow(ps, cells);
 		}
 		this.printCloseHtmlTable(ps);
-		this.htmlHSpace(ps, 50); // NOCS (MagicNumberCheck)
+		this.htmlHSpace(ps, 50);
 		ps.println("</body></html>");
 		ps.flush();
 		ps.close();

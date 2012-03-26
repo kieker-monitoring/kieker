@@ -61,27 +61,27 @@ public class TestPeriodicSampling extends TestCase { // NOCS
 		// final ScheduledSamplerJob samplerJob =
 		monitoringController.schedulePeriodicSampler(samplingCounter, offset, period, TimeUnit.MILLISECONDS);
 
-		Thread.sleep(3600); // sleep 3.6 seconds // NOCS (MagicNumberCheck)
+		Thread.sleep(3600); // sleep 3.6 seconds
 
 		// Expecting sampling trigger events at milliseconds 300, 1800, 3300
 		final int numEventsBeforeDisabled = numTriggers.get();
 
 		monitoringController.disableMonitoring();
 
-		Thread.sleep(2000); // sleep 2 seconds while being disabled // NOCS (MagicNumberCheck)
+		Thread.sleep(2000); // sleep 2 seconds while being disabled
 		/* There should be no new trigger events */
 		final int numEventsWhileDisabled = numTriggers.get() - numEventsBeforeDisabled;
 
 		monitoringController.enableMonitoring();
 
-		Thread.sleep(2000); // sleep 2 seconds while being re-enabled // NOCS (MagicNumberCheck)
+		Thread.sleep(2000); // sleep 2 seconds while being re-enabled
 
 		/* There should be at least one new trigger event */
 
 		final int numEventsAfterReEnabled = numTriggers.get() - numEventsBeforeDisabled - numEventsWhileDisabled;
 
-		Assert.assertEquals("Unexpected number of triggering events before disabling", 3, numEventsBeforeDisabled); // NOCS (MagicNumberCheck)
-		Assert.assertEquals("Unexpected number of triggering events while disabled", 0, numEventsWhileDisabled); // NOCS (MagicNumberCheck)
+		Assert.assertEquals("Unexpected number of triggering events before disabling", 3, numEventsBeforeDisabled);
+		Assert.assertEquals("Unexpected number of triggering events while disabled", 0, numEventsWhileDisabled);
 		Assert.assertTrue("Unexpected at least one triggering events after being re-enabled. Found " + numEventsAfterReEnabled, numEventsAfterReEnabled > 0); // NOCS
 																																								// (MagicNumberCheck)
 		monitoringController.terminateMonitoring();
@@ -105,21 +105,21 @@ public class TestPeriodicSampling extends TestCase { // NOCS
 
 		final ScheduledSamplerJob samplerJob = monitoringController.schedulePeriodicSampler(samplingCounter, offset, period, TimeUnit.MILLISECONDS);
 
-		Thread.sleep(6600); // sleep 6.6 seconds // NOCS (MagicNumberCheck)
+		Thread.sleep(6600); // sleep 6.6 seconds
 
 		// Expecting sampling trigger events at milliseconds 300, 3300, 6300
 		final int numEventsBeforeRemoval = numTriggers.get();
 
 		monitoringController.removeScheduledSampler(samplerJob);
 
-		Thread.sleep(10000); // sleep another 10 seconds // NOCS (MagicNumberCheck)
+		Thread.sleep(10000); // sleep another 10 seconds
 
 		/* There should be no new trigger events */
 
 		final int numEventsAfterRemoval = numTriggers.get();
 
-		Assert.assertEquals("Unexpected number of triggering events before removal", 3, numEventsBeforeRemoval); // NOCS (MagicNumberCheck)
-		Assert.assertEquals("Unexpected number of triggering events before removal", 3, numEventsAfterRemoval); // NOCS (MagicNumberCheck)
+		Assert.assertEquals("Unexpected number of triggering events before removal", 3, numEventsBeforeRemoval);
+		Assert.assertEquals("Unexpected number of triggering events before removal", 3, numEventsAfterRemoval);
 
 		monitoringController.terminateMonitoring();
 	}

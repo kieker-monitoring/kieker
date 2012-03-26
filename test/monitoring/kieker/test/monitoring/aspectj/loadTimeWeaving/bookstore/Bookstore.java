@@ -67,7 +67,7 @@ public class Bookstore extends Thread {
 		}
 		System.out.println("Bookstore.main: Finished with starting all requests.");
 		System.out.println("Bookstore.main: Waiting 5 secs before calling system.exit");
-		Bookstore.waitabit(5000); // NOCS (MagicNumber)
+		Bookstore.waitabit(5000);
 		System.exit(0);
 	}
 

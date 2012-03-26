@@ -130,7 +130,7 @@ public final class TraceAnalysisTool {
 	private static boolean shortLabels = true;
 	private static boolean includeSelfLoops = false;
 	private static boolean ignoreInvalidTraces = false;
-	private static int maxTraceDurationMillis = 10 * 60 * 1000; // 10 minutes default // NOCS (MagicNumberCheck)
+	private static int maxTraceDurationMillis = 10 * 60 * 1000; // 10 minutes default
 	private static long ignoreExecutionsBeforeTimestamp = TimestampFilter.CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP;
 	private static long ignoreExecutionsAfterTimestamp = TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP;
 
@@ -150,7 +150,7 @@ public final class TraceAnalysisTool {
 	}
 
 	private static void printUsage() {
-		Constants.CMD_HELP_FORMATTER.printHelp(80, TraceAnalysisTool.class.getName(), "", Constants.CMDL_OPTIONS, "", true); // NOCS (MagicNumberCheck)
+		Constants.CMD_HELP_FORMATTER.printHelp(80, TraceAnalysisTool.class.getName(), "", Constants.CMDL_OPTIONS, "", true);
 	}
 
 	private static boolean initFromArgs() {
@@ -197,13 +197,13 @@ public final class TraceAnalysisTool {
 			final String ignoreRecordsAfterTimestampString = TraceAnalysisTool.cmdl.getOptionValue(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE, null);
 			if (ignoreRecordsBeforeTimestampString != null) {
 				final Date ignoreBeforeDate = dateFormat.parse(ignoreRecordsBeforeTimestampString);
-				TraceAnalysisTool.ignoreExecutionsBeforeTimestamp = ignoreBeforeDate.getTime() * (1000 * 1000); // NOCS (MagicNumberCheck)
+				TraceAnalysisTool.ignoreExecutionsBeforeTimestamp = ignoreBeforeDate.getTime() * (1000 * 1000);
 				TraceAnalysisTool.LOG.info("Ignoring records before " + dateFormat.format(ignoreBeforeDate) + " ("
 						+ TraceAnalysisTool.ignoreExecutionsBeforeTimestamp + ")");
 			}
 			if (ignoreRecordsAfterTimestampString != null) {
 				final Date ignoreAfterDate = dateFormat.parse(ignoreRecordsAfterTimestampString);
-				TraceAnalysisTool.ignoreExecutionsAfterTimestamp = ignoreAfterDate.getTime() * (1000 * 1000); // NOCS (MagicNumberCheck)
+				TraceAnalysisTool.ignoreExecutionsAfterTimestamp = ignoreAfterDate.getTime() * (1000 * 1000);
 				TraceAnalysisTool.LOG.info("Ignoring records after " + dateFormat.format(ignoreAfterDate) + " ("
 						+ TraceAnalysisTool.ignoreExecutionsAfterTimestamp + ")");
 			}

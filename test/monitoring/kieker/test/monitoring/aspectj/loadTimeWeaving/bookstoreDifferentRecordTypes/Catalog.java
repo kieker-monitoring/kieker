@@ -43,10 +43,10 @@ public final class Catalog {
 	public static void getBook(final boolean complexQuery) {
 		if (complexQuery) {
 			BranchingProbe.monitorBranch(1, 0);
-			Bookstore.waitabit(20); // NOCS (MagicNumberCheck)
+			Bookstore.waitabit(20);
 		} else {
 			BranchingProbe.monitorBranch(1, 1);
-			Bookstore.waitabit(2000); // NOCS (MagicNumberCheck)
+			Bookstore.waitabit(2000);
 		}
 	}
 }
