@@ -33,14 +33,14 @@ public class DependencyGraphNode<T> {
 
 	private final T entity;
 	private final int id;
-	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> incomingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>();
-	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> outgoingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>();
+	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> incomingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD(UseConcurrentHashMap)//NOCS
+	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> outgoingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD(UseConcurrentHashMap)//NOCS
 
-	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedIncomingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>();
-	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedOutgoingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>();
+	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedIncomingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD(UseConcurrentHashMap)//NOCS
+	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedOutgoingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD(UseConcurrentHashMap)//NOCS
 
 	private volatile boolean assumed = false;
-	private final Map<Class<? extends AbstractNodeDecoration>, AbstractNodeDecoration> decorations = new ConcurrentHashMap<Class<? extends AbstractNodeDecoration>, AbstractNodeDecoration>();
+	private final Map<Class<? extends AbstractNodeDecoration>, AbstractNodeDecoration> decorations = new ConcurrentHashMap<Class<? extends AbstractNodeDecoration>, AbstractNodeDecoration>(); // NOPMD(UseConcurrentHashMap)//NOCS
 
 	public DependencyGraphNode(final int id, final T entity) {
 		this.id = id;
@@ -90,8 +90,8 @@ public class DependencyGraphNode<T> {
 
 	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final boolean assume) {
 		synchronized (this) {
-			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies =
-					assume ? this.assumedOutgoingDependencies : this.outgoingDependencies;
+			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = // NOPMD(UseConcurrentHashMap)//NOCS
+			assume ? this.assumedOutgoingDependencies : this.outgoingDependencies;
 
 			WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(destination.getId());
 			if (e == null) {
@@ -115,8 +115,8 @@ public class DependencyGraphNode<T> {
 
 	public void addIncomingDependency(final DependencyGraphNode<T> source, final boolean assume) {
 		synchronized (this) {
-			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies =
-					assume ? this.assumedIncomingDependencies : this.incomingDependencies;
+			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = // NOPMD(UseConcurrentHashMap)//NOCS
+			assume ? this.assumedIncomingDependencies : this.incomingDependencies;
 
 			WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(source.getId());
 			if (e == null) {
