@@ -60,10 +60,10 @@ public class TestExecutionTraceBookstore extends TestCase {
 	private volatile int numExecutions;
 
 	/* Executions of a valid trace */
-	private volatile Execution exec0_0__bookstore_searchBook; // NOCS // NOMPD (VariableNamingConventions)
-	private volatile Execution exec1_1__catalog_getBook; // NOCS // NOMPD (VariableNamingConventions)
-	private volatile Execution exec2_1__crm_getOrders; // NOCS // NOMPD (VariableNamingConventions)
-	private volatile Execution exec3_2__catalog_getBook; // NOCS // NOMPD (VariableNamingConventions)
+	private volatile Execution exec0_0__bookstore_searchBook; // NOCS // NOPMD (VariableNamingConventions)
+	private volatile Execution exec1_1__catalog_getBook; // NOCS // NOPMD (VariableNamingConventions)
+	private volatile Execution exec2_1__crm_getOrders; // NOCS // NOPMD (VariableNamingConventions)
+	private volatile Execution exec3_2__catalog_getBook; // NOCS // NOPMD (VariableNamingConventions)
 
 	// public TestExecutionTraceBookstore() {
 	//
