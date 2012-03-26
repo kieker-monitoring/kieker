@@ -120,7 +120,6 @@ public final class BookstoreOperationExecutionRecordFactory {
 		final String hostname = "srv9786";
 
 		final List<OperationExecutionRecord> retList = new ArrayList<OperationExecutionRecord>(/* # executions: */4);
-		;
 
 		final OperationExecutionRecord exec0_0__bookstore_searchBook =
 				new OperationExecutionRecord(
