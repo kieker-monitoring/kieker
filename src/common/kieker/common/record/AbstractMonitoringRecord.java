@@ -225,7 +225,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 				return clazz.newInstance().getValueTypes();
 			}
 		} catch (final SecurityException ex) {
-			throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex); // NOPMD (STring repeat)
+			throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex); // NOPMD (String repeat)
 		} catch (final NoSuchFieldException ex) {
 			throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
 		} catch (final IllegalArgumentException ex) {

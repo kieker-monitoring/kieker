@@ -32,6 +32,9 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.writer.filesystem.MappingFileWriter;
 
+/**
+ * @author Jan Waller
+ */
 public class BinaryFsWriterThread extends AbstractFsWriterThread {
 	private static final Log LOG = LogFactory.getLog(BinaryFsWriterThread.class);
 

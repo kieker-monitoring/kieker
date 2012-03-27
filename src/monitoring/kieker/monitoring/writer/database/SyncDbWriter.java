@@ -22,82 +22,53 @@ package kieker.monitoring.writer.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
 /**
  * Stores monitoring data into a database.
  * 
- * Warning! This class is an academic prototype and not intended for usage in
- * any critical system.
+ * Warning! This class is an academic prototype and not intended for usage in any critical system.
  * 
- * The insertMonitoringData methods should be thread-save (also in combination
- * with experimentId changes), so that they may be used by multiple threads at
- * the same time.
+ * The insertMonitoringData methods should be thread-save (also in combination with experimentId changes), so that they may be used by multiple threads at the same
+ * time.
  * 
- * We have tested this in various applications, in combination with the standard
- * MySQL Connector/J database driver.
+ * We have tested this in various applications, in combination with the standard MySQL Connector/J database driver.
  * 
- * We experienced that the monitoring it is not a major bottleneck if not too
- * many measurement points are used (e.g., 30/second). However, there is
- * additional performance tuning possible. For instance, by collecting multiple
- * database commands before sending it to the database, or by implementing
- * "statistical profiling", which stores only samples instead of all executions.
+ * We experienced that the monitoring it is not a major bottleneck if not too many measurement points are used (e.g., 30/second). However, there is additional
+ * performance tuning possible. For instance, by collecting multiple database commands before sending it to the database, or by implementing "statistical profiling",
+ * which stores only samples instead of all executions.
  * 
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
- * 
- *         History: 2011/03/23: Changed constructor 2008/05/29: Changed vmid to
- *         vmname (defaults to hostname), which may be changed during runtime
- *         2008/01/04: Refactoring for the first release of Kieker and
- *         publication under an open source licence 2007/03/13: Refactoring
- *         2006/12/20: Initial Prototype
- * 
  */
 public final class SyncDbWriter extends AbstractMonitoringWriter {
 	private static final String PREFIX = SyncDbWriter.class.getName() + ".";
 	public static final String CONFIG_DRIVERCLASSNAME = SyncDbWriter.PREFIX + "DriverClassname"; // NOCS (AfterPREFIX)
 	public static final String CONFIG_CONNECTIONSTRING = SyncDbWriter.PREFIX + "ConnectionString"; // NOCS (AfterPREFIX)
-	public static final String CONFIG_TABLENAME = SyncDbWriter.PREFIX + "TableName"; // NOCS (AfterPREFIX)
+	public static final String CONFIG_TABLEPREFIX = SyncDbWriter.PREFIX + "TablePrefix"; // NOCS (AfterPREFIX)
 
 	private static final Log LOG = LogFactory.getLog(SyncDbWriter.class);
 
-	// private static final String LOADID = PREFIX + "loadInitialExperimentId";
-	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/190
-
-	private final Connection conn;
-	private final PreparedStatement psInsertMonitoringData;
+	private final String tablePrefix;
+	private final Connection connection;
+	private final DBHelper helper;
 
 	public SyncDbWriter(final Configuration configuration) throws Exception {
 		super(configuration);
 		try {
-			// register correct Driver
 			Class.forName(this.configuration.getStringProperty(SyncDbWriter.CONFIG_DRIVERCLASSNAME)).newInstance();
-		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
+		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 			throw new Exception("DB driver registration failed. Perhaps the driver jar is missing?", ex);
 		}
 		try {
-			this.conn = DriverManager.getConnection(this.configuration.getStringProperty(SyncDbWriter.CONFIG_CONNECTIONSTRING));
-			final String tablename = this.configuration.getStringProperty(SyncDbWriter.CONFIG_TABLENAME);
-			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/169
-			/*
-			 * TODO: IS THIS STILL NEEDED?
-			 * if (this.configuration.getBooleanProperty(LOADID)) {
-			 * final Statement stm = this.conn.createStatement();
-			 * final ResultSet res = stm.executeQuery("SELECT max(experimentid) FROM " + tablename);
-			 * if (res.next()) { //this may not be fully constructed!!!! But it should mostly work?!?
-			 * this.ctrl.setExperimentId(res.getInt(1) + 1);
-			 * }
-			 * }
-			 */
-			this.psInsertMonitoringData = this.conn.prepareStatement("INSERT INTO " + tablename
-					+ " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)" + " VALUES (?,?,?,?,?,?,?,?,?)");
+			this.connection = DriverManager.getConnection(this.configuration.getStringProperty(SyncDbWriter.CONFIG_CONNECTIONSTRING));
+			this.tablePrefix = this.configuration.getStringProperty(SyncDbWriter.CONFIG_TABLEPREFIX);
+			this.helper = new DBHelper(this.connection, this.tablePrefix);
 		} catch (final SQLException ex) {
 			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 		}
@@ -110,43 +81,14 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		synchronized (this) {
-			try {
-				// connector only supports execution records so far
-				if (!(monitoringRecord instanceof OperationExecutionRecord)) {
-					SyncDbWriter.LOG.error("Can only process records of type" + OperationExecutionRecord.class.getName() + " but received"
-							+ monitoringRecord.getClass().getName());
-					return false;
-				}
-				final OperationExecutionRecord execRecord = (OperationExecutionRecord) monitoringRecord;
-				this.psInsertMonitoringData.setInt(1, execRecord.getExperimentId());
-				this.psInsertMonitoringData.setString(2, execRecord.getOperationSignature());
-				this.psInsertMonitoringData.setString(3, execRecord.getSessionId());
-				this.psInsertMonitoringData.setLong(4, execRecord.getTraceId());
-				this.psInsertMonitoringData.setLong(5, execRecord.getTin());
-				this.psInsertMonitoringData.setLong(6, execRecord.getTout());
-				this.psInsertMonitoringData.setString(7, execRecord.getHostname());
-				this.psInsertMonitoringData.setLong(8, execRecord.getEoi());
-				this.psInsertMonitoringData.setLong(9, execRecord.getEss());
-				this.psInsertMonitoringData.execute();
-			} catch (final SQLException ex) {
-				SyncDbWriter.LOG.error("Failed to write new monitoring record:", ex);
-				return false;
-			} finally {
-				try {
-					this.psInsertMonitoringData.clearParameters();
-				} catch (final SQLException ex) {
-					SyncDbWriter.LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
-					return false; // NOPMD
-				}
-			}
+			return this.helper.newMonitoringRecord(monitoringRecord);
 		}
-		return true;
 	}
 
 	public void terminate() {
 		try {
-			if (this.conn != null) {
-				this.conn.close();
+			if (this.connection != null) {
+				this.connection.close();
 			}
 		} catch (final SQLException ex) {
 			SyncDbWriter.LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
@@ -159,7 +101,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(super.toString());
 		sb.append("\n\tConnection: '");
-		sb.append(this.conn.toString());
+		sb.append(this.connection.toString());
 		sb.append("'");
 		return sb.toString();
 	}

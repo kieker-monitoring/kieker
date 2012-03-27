@@ -34,9 +34,9 @@ import kieker.common.logging.LogFactory;
 public final class JavaDBInitializer {
 	private static final Log LOG = LogFactory.getLog(JavaDBInitializer.class);
 
-	private static String dbDriverClassname = "org.apache.derby.jdbc.EmbeddedDriver";
-	private static String dbConnectionAddress = "jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS";
-	private static String dbTableName = "APP.kiekerdata";
+	private static final String dbDriverClassname = "org.apache.derby.jdbc.EmbeddedDriver";
+	private static final String dbConnectionAddress = "jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS";
+	private static final String dbTableName = "APP.kiekerdata";
 
 	// TODO: needs to be read from file
 	// http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/158
