@@ -69,8 +69,8 @@ public class BookstoreExecutionFactory {
 				assumed);
 	}
 
-	public Execution createBookstoreExecution_exec2_1__crm_getOrders( // NOPMD (MethodNamingConventions)
-			final long traceId, final String sessionId, final String hostname, final long tin, final long tout) {
+	public Execution createBookstoreExecution_crm_getOrders( // NOPMD (MethodNamingConventions)
+			final long traceId, final String sessionId, final String hostname, final long tin, final long tout, final int eoi, final int ess) {
 		final boolean assumed = false; // currently not relevant
 
 		final ClassOperationSignaturePair classOpSignaturePair = ClassOperationSignaturePair
@@ -78,22 +78,29 @@ public class BookstoreExecutionFactory {
 
 		return AbstractTraceAnalysisFilter.createExecutionByEntityNames(this.systemEntityFactory, hostname, classOpSignaturePair.getFqClassname(),
 				classOpSignaturePair.getSignature(),
-				traceId, sessionId, BookstoreOperationExecutionRecordFactory.EXEC2_1__CRM_GETORDERS_EOI,
-				BookstoreOperationExecutionRecordFactory.EXEC2_1__CRM_GETORDERS_ESS, tin, tout,
-				assumed);
+				traceId, sessionId, eoi, ess, tin, tout, assumed);
 	}
 
-	public Execution createBookstoreExecution_exec3_2__catalog_getBook( // NOPMD (MethodNamingConventions)
+	public Execution createBookstoreExecution_exec2_1__crm_getOrders( // NOPMD (MethodNamingConventions)
 			final long traceId, final String sessionId, final String hostname, final long tin, final long tout) {
+		return this.createBookstoreExecution_crm_getOrders(traceId, sessionId, hostname, tin, tout,
+				BookstoreOperationExecutionRecordFactory.EXEC2_1__CRM_GETORDERS_EOI, BookstoreOperationExecutionRecordFactory.EXEC2_1__CRM_GETORDERS_ESS);
+	}
+
+	public Execution createBookstoreExecution_catalog_getBook( // NOPMD (MethodNamingConventions)
+			final long traceId, final String sessionId, final String hostname, final long tin, final long tout, final int eoi, final int ess) {
 		final boolean assumed = false; // currently not relevant
 
 		final ClassOperationSignaturePair classOpSignaturePair = ClassOperationSignaturePair
 				.splitOperationSignatureStr(BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
 
 		return AbstractTraceAnalysisFilter.createExecutionByEntityNames(this.systemEntityFactory, hostname, classOpSignaturePair.getFqClassname(),
-				classOpSignaturePair.getSignature(),
-				traceId, sessionId, BookstoreOperationExecutionRecordFactory.EXEC3_2__CATALOG_GETBOOK_EOI,
-				BookstoreOperationExecutionRecordFactory.EXEC3_2__CATALOG_GETBOOK_ESS, tin, tout,
-				assumed);
+				classOpSignaturePair.getSignature(), traceId, sessionId, eoi, ess, tin, tout, assumed);
+	}
+
+	public Execution createBookstoreExecution_exec3_2__catalog_getBook( // NOPMD (MethodNamingConventions)
+			final long traceId, final String sessionId, final String hostname, final long tin, final long tout) {
+		return this.createBookstoreExecution_catalog_getBook(traceId, sessionId, hostname, tin, tout,
+				BookstoreOperationExecutionRecordFactory.EXEC3_2__CATALOG_GETBOOK_EOI, BookstoreOperationExecutionRecordFactory.EXEC3_2__CATALOG_GETBOOK_ESS);
 	}
 }

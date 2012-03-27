@@ -38,7 +38,7 @@ import org.junit.Test;
  */
 public class TestTimestampFilter extends TestCase { // NOCS
 
-	// private static final Log log = LogFactory.getLog(TestTimestampFilter.class);
+	// private static final Log LOG = LogFactory.getLog(TestTimestampFilter.class);
 
 	private static final long IGNORE_EXECUTIONS_BEFORE_TIMESTAMP = 50;
 	private static final long IGNORE_EXECUTIONS_AFTER_TIMESTAMP = 100;

@@ -32,6 +32,7 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.IAbstractTraceEventVisitor;
 import kieker.common.record.flow.trace.concurrency.SplitEvent;
+import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
@@ -153,6 +154,11 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 			this.executionStack.push(executionInformation);
 		}
 
+		public void pushExecution(final ExecutionInformation executionInformation) {
+			this.currentStackDepth++;
+			this.executionStack.push(executionInformation);
+		}
+
 		/**
 		 * Pops the execution from the top of the execution stack.
 		 * 
@@ -255,28 +261,46 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 		 * @param lastEvent
 		 *            The last processed after-operation event
 		 */
-		private void closeOpenCalls(final AbstractTraceEvent lastEvent) {
-			if (this.filterState.isEventStackEmpty()) {
-				return; // we are done
+		private void closeOpenCalls(final AbstractOperationEvent lastEvent) {
+			final FilterState tmpFilterState = new FilterState();
+
+			while (true) {
+				if (this.filterState.isEventStackEmpty()) {
+					break; // we are done
+				}
+
+				final AbstractTraceEvent prevEvent = this.filterState.peekEvent();
+				if (!(prevEvent instanceof CallOperationEvent)) {
+					break; // we are done
+				}
+
+				tmpFilterState.pushEvent(this.filterState.popEvent());
+				tmpFilterState.pushExecution(this.filterState.popExecution());
+				if (lastEvent.getOperationSignature().equals(((CallOperationEvent) prevEvent).getOperationSignature())) {
+					while (!tmpFilterState.isEventStackEmpty()) { // create executions (in reverse order)
+						final CallOperationEvent currentCallEvent = (CallOperationEvent) tmpFilterState.popEvent();
+						final ExecutionInformation executionInformation = tmpFilterState.popExecution();
+						final Execution execution = EventTrace2ExecutionAndMessageTraceFilter.this.callOperationToExecution(
+								currentCallEvent,
+								this.executionTrace.getTraceId(),
+								this.eventTrace.getSessionId(),
+								this.eventTrace.getHostname(),
+								executionInformation.getExecutionIndex(),
+								executionInformation.getStackDepth(),
+								currentCallEvent.getTimestamp(),
+								lastEvent.getTimestamp(),
+								true);
+						this.registerExecution(execution);
+					}
+					return;
+				}
 			}
-			final AbstractTraceEvent nextEvent = this.filterState.peekEvent();
-			if (!(nextEvent instanceof CallOperationEvent)) {
-				return; // we are done
+
+			while (!tmpFilterState.isEventStackEmpty()) {
+				this.filterState.pushEvent(tmpFilterState.popEvent());
+				this.filterState.pushExecution(tmpFilterState.popExecution());
 			}
-			final CallOperationEvent currentCallEvent = (CallOperationEvent) this.filterState.popEvent();
-			final ExecutionInformation executionInformation = this.filterState.popExecution();
-			final Execution execution = EventTrace2ExecutionAndMessageTraceFilter.this.callOperationToExecution(
-					currentCallEvent,
-					this.executionTrace.getTraceId(),
-					this.eventTrace.getSessionId(),
-					this.eventTrace.getHostname(),
-					executionInformation.getExecutionIndex(),
-					executionInformation.getStackDepth(),
-					currentCallEvent.getTimestamp(),
-					lastEvent.getTimestamp(),
-					true);
-			this.registerExecution(execution);
-			this.closeOpenCalls(nextEvent);
+
 		}
 
 		public void handleAfterOperationEvent(final AfterOperationEvent afterOperationEvent) {
@@ -327,13 +351,16 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 			final AbstractTraceEvent nextEvent = this.eventStream.lookahead(1);
 
 			// If the next event is NOT the entry into the called operation, register an (assumed) execution.
-			if ((nextEvent == null)
-					|| !(nextEvent instanceof BeforeOperationEvent)
-					|| !callOperationEvent.callsReferencedOperationOf((BeforeOperationEvent) nextEvent)) {
-				this.filterState.registerExecution(callOperationEvent);
-			} else {
-				// Otherwise, just push the call event
+			if ((nextEvent != null) && (nextEvent instanceof BeforeOperationEvent)
+					&& (callOperationEvent.callsReferencedOperationOf((BeforeOperationEvent) nextEvent))) {
+				// just push the call event
 				this.filterState.pushEvent(callOperationEvent);
+			} else if (nextEvent instanceof CallOperationEvent) {
+				final CallOperationEvent nextCall = (CallOperationEvent) nextEvent;
+				this.filterState.registerExecution(callOperationEvent);
+				this.closeOpenCalls(nextCall);
+			} else {
+				this.filterState.registerExecution(callOperationEvent);
 			}
 		}
 

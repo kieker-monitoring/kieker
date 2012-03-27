@@ -38,12 +38,13 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import org.junit.Test;
 
 /**
- * TODO: Finalize
  * 
  * @author Andre van Hoorn
  * 
  */
 public class TestEventTrace2ExecutionTraceFilter extends TestCase {
+	// private static final Log LOG = LogFactory.getLog(TestEventTrace2ExecutionTraceFilter.class);
+
 	private static final long TRACE_ID = 4563L;
 	private static final String SESSION_ID = "y2zGAI0VX"; // Same Session ID for all traces
 	private static final String HOSTNAME = "srv090";
@@ -147,6 +148,36 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		this.checkTrace(eventRecordTrace, expectedExecutionTrace);
 	}
 
+	/**
+	 * Borrowed from {@link kieker.test.tools.junit.traceAnalysis.filter.TestTraceReconstructionFilter}.
+	 */
+	public ExecutionTrace genValidBookstoreTraceNoExitGetOrders() throws InvalidTraceException {
+		final ExecutionTrace executionTrace =
+				new ExecutionTrace(TestEventTrace2ExecutionTraceFilter.TRACE_ID, TestEventTrace2ExecutionTraceFilter.SESSION_ID);
+
+		final long initialTimestamp = 1 * (1000 * 1000);
+
+		/* Manually create Executions for a trace */
+		executionTrace.add(this.exec0_0__bookstore_searchBook);
+		executionTrace.add(this.exec1_1__catalog_getBook);
+
+		executionTrace.add(
+				this.bookstoreExecutionFactory.createBookstoreExecution_exec2_1__crm_getOrders(
+						TestEventTrace2ExecutionTraceFilter.TRACE_ID,
+						TestEventTrace2ExecutionTraceFilter.SESSION_ID, TestEventTrace2ExecutionTraceFilter.HOSTNAME,
+						/* The assumed entry timestamp is the exit timestamp of the previous call */
+						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders,
+						/*
+						 * We will only have a (before) call to CRM.getOrder(..), hence the assumed return timestamp is
+						 * the return time of the wrapping Bookstore.searchBook(..) execution:
+						 */
+						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook));
+
+		executionTrace.add(this.exec3_2__catalog_getBook);
+
+		return executionTrace;
+	}
+
 	@Test
 	public void testValidTraceWithBeforeAndAfterOperationEventsAndAdditionalCallEventsAndGap() throws InvalidTraceException { // NOPMD (assert missing)
 		/*
@@ -155,7 +186,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		final EventRecordTrace eventRecordTrace =
 				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(this.exec0_0__bookstore_searchBook.getTin(),
 						TestEventTrace2ExecutionTraceFilter.TRACE_ID, TestEventTrace2ExecutionTraceFilter.SESSION_ID, TestEventTrace2ExecutionTraceFilter.HOSTNAME);
-		final ExecutionTrace expectedExecutionTrace = this.genValidBookstoreTrace();
+		final ExecutionTrace expectedExecutionTrace = this.genValidBookstoreTraceNoExitGetOrders();
 
 		this.checkTrace(eventRecordTrace, expectedExecutionTrace);
 	}
@@ -212,6 +243,143 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 				BookstoreEventRecordFactory.validSyncTraceSimpleEntryCallExit(this.exec0_0__bookstore_searchBook.getTin(),
 						TestEventTrace2ExecutionTraceFilter.TRACE_ID, TestEventTrace2ExecutionTraceFilter.SESSION_ID, TestEventTrace2ExecutionTraceFilter.HOSTNAME);
 		final ExecutionTrace expectedExecutionTrace = this.genValidBookstoreTraceEntryCallExit();
+
+		this.checkTrace(eventRecordTrace, expectedExecutionTrace);
+	}
+
+	/**
+	 * Generates an a modified version of the the "well-known" bookstore trace, which includes only the execution of <code>Bookstore.searchBook(..)<code> 
+	 * and the nested (i.e., called both by <code>Bookstore.searchBook(..)<code>) executions of <code>Catalog.getBook(..)</code> and <code>CRM.getOrder(..)</code>.
+	 * 
+	 * Borrowed from {@link kieker.test.tools.junit.traceAnalysis.filter.TestTraceReconstructionFilter}.
+	 * 
+	 * @return
+	 * @throws InvalidTraceException
+	 */
+	// TODO: turn private
+	public ExecutionTrace genValidBookstoreTraceSimpleEntryCallReturnCallCallExit() throws InvalidTraceException {
+		/*
+		 * Create an Execution Trace and add Executions in
+		 * arbitrary order
+		 */
+		final ExecutionTrace executionTrace =
+				new ExecutionTrace(TestEventTrace2ExecutionTraceFilter.TRACE_ID, TestEventTrace2ExecutionTraceFilter.SESSION_ID);
+
+		final long initialTimestamp = this.exec0_0__bookstore_searchBook.getTin();
+
+		/* Manually create Executions for a trace */
+		executionTrace.add(
+				this.bookstoreExecutionFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(TestEventTrace2ExecutionTraceFilter.TRACE_ID,
+						TestEventTrace2ExecutionTraceFilter.SESSION_ID, TestEventTrace2ExecutionTraceFilter.HOSTNAME,
+						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
+						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook));
+
+		executionTrace.add(
+				this.bookstoreExecutionFactory.createBookstoreExecution_exec1_1__catalog_getBook(TestEventTrace2ExecutionTraceFilter.TRACE_ID,
+						TestEventTrace2ExecutionTraceFilter.SESSION_ID, TestEventTrace2ExecutionTraceFilter.HOSTNAME,
+						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call1_1__catalog_getBook,
+						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders));
+
+		executionTrace.add(
+				this.bookstoreExecutionFactory.createBookstoreExecution_exec2_1__crm_getOrders(
+						TestEventTrace2ExecutionTraceFilter.TRACE_ID,
+						TestEventTrace2ExecutionTraceFilter.SESSION_ID, TestEventTrace2ExecutionTraceFilter.HOSTNAME,
+						/* The assumed entry timestamp is the exit timestamp of the previous call */
+						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders,
+						/*
+						 * We will only have a (before) call to CRM.getOrder(..), hence the assumed return timestamp is
+						 * the return time of the wrapping Bookstore.searchBook(..) execution:
+						 */
+						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook));
+
+		// just to make sure that this trace is valid
+		executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
+
+		return executionTrace;
+	}
+
+	// TODO: reactivate!
+	@Test
+	public void testValidSyncTraceSimpleEntryCallReturnCallCallExit() throws InvalidTraceException { // NOPMD (assert missing)
+		// TestEventTrace2ExecutionTraceFilter.LOG.error("Re-enable test: testValidSyncTraceSimpleEntryCallReturnCallCallExit");
+		// return;
+
+		/*
+		 * Create an EventRecordTrace, containing only Before- and AfterOperation events.
+		 */
+		final EventRecordTrace eventRecordTrace =
+				BookstoreEventRecordFactory.validSyncTraceSimpleEntryCallReturnCallCallExit(this.exec0_0__bookstore_searchBook.getTin(),
+						TestEventTrace2ExecutionTraceFilter.TRACE_ID, TestEventTrace2ExecutionTraceFilter.SESSION_ID, TestEventTrace2ExecutionTraceFilter.HOSTNAME);
+		final ExecutionTrace expectedExecutionTrace = this.genValidBookstoreTraceSimpleEntryCallReturnCallCallExit();
+
+		this.checkTrace(eventRecordTrace, expectedExecutionTrace);
+	}
+
+	/**
+	 * Generates an a modified version of the the "well-known" bookstore trace, which includes the execution of <code>Bookstore.searchBook(..)<code> 
+	 * with a nested execution of <code>CRM.getOrder(..)</code> which again wraps the nested execution of <code>Catalog.getBook(..)</code>.
+	 * 
+	 * Borrowed from {@link kieker.test.tools.junit.traceAnalysis.filter.TestTraceReconstructionFilter}.
+	 * 
+	 * @return
+	 * @throws InvalidTraceException
+	 */
+	// TODO: turn private
+	public ExecutionTrace genValidSyncTraceSimpleEntryCallCallExit() throws InvalidTraceException {
+		/*
+		 * Create an Execution Trace and add Executions in
+		 * arbitrary order
+		 */
+		final ExecutionTrace executionTrace =
+				new ExecutionTrace(TestEventTrace2ExecutionTraceFilter.TRACE_ID, TestEventTrace2ExecutionTraceFilter.SESSION_ID);
+
+		final long initialTimestamp = this.exec0_0__bookstore_searchBook.getTin();
+
+		/* Manually create Executions for a trace */
+		executionTrace.add(
+				this.bookstoreExecutionFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(TestEventTrace2ExecutionTraceFilter.TRACE_ID,
+						TestEventTrace2ExecutionTraceFilter.SESSION_ID, TestEventTrace2ExecutionTraceFilter.HOSTNAME,
+						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
+						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook));
+		executionTrace.add(
+				this.bookstoreExecutionFactory.createBookstoreExecution_crm_getOrders(
+						TestEventTrace2ExecutionTraceFilter.TRACE_ID,
+						TestEventTrace2ExecutionTraceFilter.SESSION_ID, TestEventTrace2ExecutionTraceFilter.HOSTNAME,
+						/* The assumed entry timestamp is the exit timestamp of the previous call */
+						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders,
+						/*
+						 * We will only have a (before) call to CRM.getOrder(..), hence the assumed return timestamp is
+						 * the return time of the wrapping Bookstore.searchBook(..) execution:
+						 */
+						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
+						/* eoi: */1, /* ess: */1));
+		executionTrace.add(
+				this.bookstoreExecutionFactory.createBookstoreExecution_catalog_getBook(
+						TestEventTrace2ExecutionTraceFilter.TRACE_ID,
+						TestEventTrace2ExecutionTraceFilter.SESSION_ID, TestEventTrace2ExecutionTraceFilter.HOSTNAME,
+						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook,
+						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
+						/* eoi: */2, /* ess: */2));
+
+		// just to make sure that this trace is valid
+		executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
+
+		return executionTrace;
+	}
+
+	// TODO: reactivate!
+	@Test
+	public void testValidSyncTraceSimpleEntryCallCallExit() throws InvalidTraceException { // NOPMD (assert missing)
+		// TestEventTrace2ExecutionTraceFilter.LOG.error("Re-enable test: testValidSyncTraceSimpleEntryCallReturnCallCallExit");
+		// return;
+
+		/*
+		 * Create an EventRecordTrace, containing only Before- and AfterOperation events.
+		 */
+		final EventRecordTrace eventRecordTrace =
+				BookstoreEventRecordFactory.validSyncTraceSimpleEntryCallCallExit(this.exec0_0__bookstore_searchBook.getTin(),
+						TestEventTrace2ExecutionTraceFilter.TRACE_ID, TestEventTrace2ExecutionTraceFilter.SESSION_ID, TestEventTrace2ExecutionTraceFilter.HOSTNAME);
+		final ExecutionTrace expectedExecutionTrace = this.genValidSyncTraceSimpleEntryCallCallExit();
 
 		this.checkTrace(eventRecordTrace, expectedExecutionTrace);
 	}
