@@ -57,6 +57,8 @@ public final class BookstoreEventRecordFactory {
 	public static final long TSTAMP_OFFSET_exit2_1__crm_getOrders = 8; // NOCS // NOPMD (VariableNamingConventions)
 	public static final long TSTAMP_OFFSET_exit0_0__bookstore_searchBook = 11; // NOCS // NOPMD (VariableNamingConventions)
 
+	private static final String MSG_INVALID_TRACE = "Test invalid (creating invalid trace): ";
+
 	/**
 	 * Returns the "well-known" Bookstore trace as a list of {@link BeforeOperationEvent} and {@link AfterOperationEvent} events, ordered by its
 	 * {@link kieker.common.record.flow.trace.AbstractTraceEvent#getOrderIndex()}es.
@@ -116,7 +118,7 @@ public final class BookstoreEventRecordFactory {
 			retTrace.add(exit2_1__crm_getOrders);
 			retTrace.add(exit0_0__bookstore_searchBook);
 		} catch (final InvalidTraceException e) {
-			Assert.fail("Test invalid (creating invalid trace): " + e.getMessage());
+			Assert.fail(BookstoreEventRecordFactory.MSG_INVALID_TRACE + e.getMessage());
 		}
 
 		return retTrace;
@@ -201,7 +203,7 @@ public final class BookstoreEventRecordFactory {
 			retTrace.add(exit2_1__crm_getOrders);
 			retTrace.add(exit0_0__bookstore_searchBook);
 		} catch (final InvalidTraceException e) {
-			Assert.fail("Test invalid (creating invalid trace): " + e.getMessage());
+			Assert.fail(BookstoreEventRecordFactory.MSG_INVALID_TRACE + e.getMessage());
 		}
 
 		return retTrace;
@@ -287,7 +289,7 @@ public final class BookstoreEventRecordFactory {
 			// assumed to be uninstrumented: retTrace.add(exit2_1__crm_getOrders);
 			retTrace.add(exit0_0__bookstore_searchBook);
 		} catch (final InvalidTraceException e) {
-			Assert.fail("Test invalid (creating invalid trace): " + e.getMessage());
+			Assert.fail(BookstoreEventRecordFactory.MSG_INVALID_TRACE + e.getMessage());
 		}
 
 		return retTrace;
@@ -338,7 +340,7 @@ public final class BookstoreEventRecordFactory {
 			retTrace.add(call1_1__catalog_getBook);
 			retTrace.add(exit0_0__bookstore_searchBook);
 		} catch (final InvalidTraceException e) {
-			Assert.fail("Test invalid (creating invalid trace): " + e.getMessage());
+			Assert.fail(BookstoreEventRecordFactory.MSG_INVALID_TRACE + e.getMessage());
 		}
 
 		return retTrace;
@@ -396,7 +398,7 @@ public final class BookstoreEventRecordFactory {
 			retTrace.add(call2_1__crm_getOrders);
 			retTrace.add(exit0_0__bookstore_searchBook);
 		} catch (final InvalidTraceException e) {
-			Assert.fail("Test invalid (creating invalid trace): " + e.getMessage());
+			Assert.fail(BookstoreEventRecordFactory.MSG_INVALID_TRACE + e.getMessage());
 		}
 
 		return retTrace;
@@ -453,7 +455,7 @@ public final class BookstoreEventRecordFactory {
 			retTrace.add(call3_2__catalog_getBook);
 			retTrace.add(exit0_0__bookstore_searchBook);
 		} catch (final InvalidTraceException e) {
-			Assert.fail("Test invalid (creating invalid trace): " + e.getMessage());
+			Assert.fail(BookstoreEventRecordFactory.MSG_INVALID_TRACE + e.getMessage());
 		}
 
 		return retTrace;

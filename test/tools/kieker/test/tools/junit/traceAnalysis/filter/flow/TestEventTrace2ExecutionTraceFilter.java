@@ -256,8 +256,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 	 * @return
 	 * @throws InvalidTraceException
 	 */
-	// TODO: turn private
-	public ExecutionTrace genValidBookstoreTraceSimpleEntryCallReturnCallCallExit() throws InvalidTraceException {
+	private ExecutionTrace genValidBookstoreTraceSimpleEntryCallReturnCallCallExit() throws InvalidTraceException {
 		/*
 		 * Create an Execution Trace and add Executions in
 		 * arbitrary order
@@ -298,12 +297,8 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		return executionTrace;
 	}
 
-	// TODO: reactivate!
 	@Test
 	public void testValidSyncTraceSimpleEntryCallReturnCallCallExit() throws InvalidTraceException { // NOPMD (assert missing)
-		// TestEventTrace2ExecutionTraceFilter.LOG.error("Re-enable test: testValidSyncTraceSimpleEntryCallReturnCallCallExit");
-		// return;
-
 		/*
 		 * Create an EventRecordTrace, containing only Before- and AfterOperation events.
 		 */
@@ -324,8 +319,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 	 * @return
 	 * @throws InvalidTraceException
 	 */
-	// TODO: turn private
-	public ExecutionTrace genValidSyncTraceSimpleEntryCallCallExit() throws InvalidTraceException {
+	private ExecutionTrace genValidSyncTraceSimpleEntryCallCallExit() throws InvalidTraceException {
 		/*
 		 * Create an Execution Trace and add Executions in
 		 * arbitrary order
@@ -367,11 +361,8 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		return executionTrace;
 	}
 
-	// TODO: reactivate!
 	@Test
 	public void testValidSyncTraceSimpleEntryCallCallExit() throws InvalidTraceException { // NOPMD (assert missing)
-		// TestEventTrace2ExecutionTraceFilter.LOG.error("Re-enable test: testValidSyncTraceSimpleEntryCallReturnCallCallExit");
-		// return;
 
 		/*
 		 * Create an EventRecordTrace, containing only Before- and AfterOperation events.

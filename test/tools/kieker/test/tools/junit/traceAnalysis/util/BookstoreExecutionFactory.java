@@ -41,7 +41,7 @@ public class BookstoreExecutionFactory {
 		this.systemEntityFactory = systemEntityFactory;
 	}
 
-	public Execution createBookstoreExecution_exec0_0__bookstore_searchBook( // NOPMD (MethodNamingConventions)
+	public Execution createBookstoreExecution_exec0_0__bookstore_searchBook(// NOPMD (MethodNamingConventions) // NOCS (MethodNameCheck)
 			final long traceId, final String sessionId, final String hostname, final long tin, final long tout) {
 		final boolean assumed = false; // currently not relevant
 
@@ -55,7 +55,7 @@ public class BookstoreExecutionFactory {
 				assumed);
 	}
 
-	public Execution createBookstoreExecution_exec1_1__catalog_getBook( // NOPMD (MethodNamingConventions)
+	public Execution createBookstoreExecution_exec1_1__catalog_getBook(// NOPMD (MethodNamingConventions) // NOCS (MethodNameCheck)
 			final long traceId, final String sessionId, final String hostname, final long tin, final long tout) {
 		final boolean assumed = false; // currently not relevant
 
@@ -69,7 +69,7 @@ public class BookstoreExecutionFactory {
 				assumed);
 	}
 
-	public Execution createBookstoreExecution_crm_getOrders( // NOPMD (MethodNamingConventions)
+	public Execution createBookstoreExecution_crm_getOrders(// NOPMD (MethodNamingConventions) // NOCS (MethodNameCheck)
 			final long traceId, final String sessionId, final String hostname, final long tin, final long tout, final int eoi, final int ess) {
 		final boolean assumed = false; // currently not relevant
 
@@ -81,13 +81,13 @@ public class BookstoreExecutionFactory {
 				traceId, sessionId, eoi, ess, tin, tout, assumed);
 	}
 
-	public Execution createBookstoreExecution_exec2_1__crm_getOrders( // NOPMD (MethodNamingConventions)
+	public Execution createBookstoreExecution_exec2_1__crm_getOrders(// NOPMD (MethodNamingConventions) // NOCS (MethodNameCheck)
 			final long traceId, final String sessionId, final String hostname, final long tin, final long tout) {
 		return this.createBookstoreExecution_crm_getOrders(traceId, sessionId, hostname, tin, tout,
 				BookstoreOperationExecutionRecordFactory.EXEC2_1__CRM_GETORDERS_EOI, BookstoreOperationExecutionRecordFactory.EXEC2_1__CRM_GETORDERS_ESS);
 	}
 
-	public Execution createBookstoreExecution_catalog_getBook( // NOPMD (MethodNamingConventions)
+	public Execution createBookstoreExecution_catalog_getBook(// NOPMD (MethodNamingConventions) // NOCS (MethodNameCheck)
 			final long traceId, final String sessionId, final String hostname, final long tin, final long tout, final int eoi, final int ess) {
 		final boolean assumed = false; // currently not relevant
 
@@ -98,7 +98,7 @@ public class BookstoreExecutionFactory {
 				classOpSignaturePair.getSignature(), traceId, sessionId, eoi, ess, tin, tout, assumed);
 	}
 
-	public Execution createBookstoreExecution_exec3_2__catalog_getBook( // NOPMD (MethodNamingConventions)
+	public Execution createBookstoreExecution_exec3_2__catalog_getBook(// NOPMD (MethodNamingConventions) // NOCS (MethodNameCheck)
 			final long traceId, final String sessionId, final String hostname, final long tin, final long tout) {
 		return this.createBookstoreExecution_catalog_getBook(traceId, sessionId, hostname, tin, tout,
 				BookstoreOperationExecutionRecordFactory.EXEC3_2__CATALOG_GETBOOK_EOI, BookstoreOperationExecutionRecordFactory.EXEC3_2__CATALOG_GETBOOK_ESS);
