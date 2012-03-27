@@ -22,9 +22,12 @@ package kieker.test.tools.junit.writeRead.filesystem;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import junit.framework.Assert;
 import kieker.common.configuration.Configuration;
+import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -63,5 +66,11 @@ public class TestFSWriterRead extends AbstractFSTest {
 		// TODO: do we have to wait for some time?
 
 		Assert.assertTrue("Expected monitoring controller to be enabled", monitoringController.isMonitoringEnabled());
+	}
+
+	@Override
+	protected void inspectRecords(final List<IMonitoringRecord> eventsPassedToController, final List<IMonitoringRecord> eventFromMonitoringLog) {
+		Arrays.equals(eventsPassedToController.toArray(), eventFromMonitoringLog.toArray());
+
 	}
 }

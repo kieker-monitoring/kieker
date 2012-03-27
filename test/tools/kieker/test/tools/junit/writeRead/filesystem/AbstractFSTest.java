@@ -81,14 +81,21 @@ public abstract class AbstractFSTest extends TestCase {
 	 */
 	protected abstract void checkControllerState(IMonitoringController monitoringController);
 
+	/**
+	 * Check if the given set of records is as expected.
+	 * 
+	 * @param monitoringRecords
+	 */
+	protected abstract void inspectRecords(List<IMonitoringRecord> eventsPassedToController, List<IMonitoringRecord> eventFromMonitoringLog);
+
 	private List<IMonitoringRecord> readLog(final String[] monitoringLogDirs) {
-		final List<IMonitoringRecord> retList;
+		final List<IMonitoringRecord> retList = new ArrayList<IMonitoringRecord>();
 
 		final AnalysisController analysisController = new AnalysisController();
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION, FSReader.CONFIG_VALUE_NAME_RECORD_TYPE_SELECTION_ANY);
-		final AbstractReaderPlugin reader = new FSReader(null);
+		final AbstractReaderPlugin reader = new FSReader(readerConfiguration);
 		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
 
 		analysisController.registerReader(reader);
@@ -97,7 +104,7 @@ public abstract class AbstractFSTest extends TestCase {
 		analysisController.run();
 
 		// return sinkPlugin.getList(); // TODO: must return List<IMonitoringRecord>; have List<Object>
-		return null;
+		return retList;
 	}
 
 	/**
@@ -112,7 +119,7 @@ public abstract class AbstractFSTest extends TestCase {
 
 		final int minNumberOfEventsToGenerate = 400;
 
-		final List<AbstractTraceEvent> someEvents = new ArrayList<AbstractTraceEvent>();
+		final List<IMonitoringRecord> someEvents = new ArrayList<IMonitoringRecord>();
 		for (int i = 0; i < minNumberOfEventsToGenerate; i = someEvents.size()) {
 			final List<AbstractTraceEvent> nextBatch =
 					BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(i, i, sessionId, hostname).eventList();
@@ -133,13 +140,14 @@ public abstract class AbstractFSTest extends TestCase {
 
 		// TODO: create more than 1 single monitoring log (or: extending classes should simply define such test)
 
-		/*
-		 * Determine directory (String[] children = dir.list(); ...)
-		 */
-		final List<String> monitoringLogs = new ArrayList<String>();
-		final String[] children = this.tmpFolder.getRoot().list(new KiekerLogDirFilter());
+		final String[] monitoringLogs = this.tmpFolder.getRoot().list(new KiekerLogDirFilter());
+		for (int i = 0; i < monitoringLogs.length; i++) { // transform relative to absolute path
+			monitoringLogs[i] = this.tmpFolder.getRoot().getAbsoluteFile() + File.separator + monitoringLogs[i];
+		}
 
-		// TODO: continue ....
+		final List<IMonitoringRecord> monitoringRecords = this.readLog(monitoringLogs);
+
+		this.inspectRecords(someEvents, monitoringRecords);
 
 		// need to terminate explicitly, because otherwise, the directory cannot be removed
 		ctrl.terminateMonitoring();
@@ -161,7 +169,7 @@ class KiekerLogDirFilter implements FilenameFilter {
 			return false;
 		}
 
-		final String potentialDirFn = dir.getName() + File.pathSeparatorChar + name;
+		final String potentialDirFn = dir.getAbsolutePath() + File.separatorChar + name;
 
 		final File potentialDir = new File(potentialDirFn);
 
