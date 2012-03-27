@@ -26,6 +26,7 @@ import java.util.List;
 import junit.framework.Assert;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.concurrency.SplitEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.common.record.flow.trace.operation.CallOperationEvent;
@@ -365,6 +366,7 @@ public final class BookstoreEventRecordFactory {
 		// assumed to be uninstrumented: final BeforeOperationEvent entry1_1__catalog_getBook; // NOCS
 		// assumed to be uninstrumented: final AfterOperationEvent exit1_1__catalog_getBook; // NOCS
 		final CallOperationEvent call2_1__crm_getOrders; // NOCS
+		final SplitEvent disturbEvent; // this caused to break the reconstruction once ...
 		// assumed to be uninstrumented: final BeforeOperationEvent entry2_1__crm_getOrders; // NOCS
 		// assumed to be uninstrumented: final CallOperationEvent call3_2__catalog_getBook; // NOCS
 		// assumed to be uninstrumented: final BeforeOperationEvent entry3_2__catalog_getBook; // NOCS
@@ -380,6 +382,7 @@ public final class BookstoreEventRecordFactory {
 						traceId, curOrderIndex++,
 						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
 						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		disturbEvent = new SplitEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook, traceId, curOrderIndex++);
 		call2_1__crm_getOrders =
 				new CallOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders,
 						/* note that we are using the timestamp of the omitted event here! */
@@ -395,6 +398,7 @@ public final class BookstoreEventRecordFactory {
 		try {
 			retTrace.add(entry0_0__bookstore_searchBook);
 			retTrace.add(call1_1__catalog_getBook);
+			retTrace.add(disturbEvent);
 			retTrace.add(call2_1__crm_getOrders);
 			retTrace.add(exit0_0__bookstore_searchBook);
 		} catch (final InvalidTraceException e) {
