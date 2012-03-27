@@ -10,7 +10,7 @@ import kieker.test.tools.junit.writeRead.filesystem.AbstractTestFSWriterReader;
  * @author André van Hoorn
  * 
  */
-public class AsyncBinaryFSWriterReaderTest extends AbstractTestFSWriterReader {
+public class AsyncBinaryFSWriterReaderTest extends AbstractTestFSWriterReader { // NOPMD (TestClassWithoutTestCases)
 
 	@Override
 	protected Class<? extends IMonitoringWriter> getTestedWriterClazz() {

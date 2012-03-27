@@ -10,9 +10,9 @@ import kieker.test.tools.junit.writeRead.filesystem.AbstractTestFSWriterReader;
  * @author André van Hoorn
  * 
  */
-public class SyncFSWriterReaderTest extends AbstractTestFSWriterReader {
+public class SyncFSWriterReaderTest extends AbstractTestFSWriterReader { // NOPMD (TestClassWithoutTestCases)
 
-	private final boolean flush = true;
+	private static final boolean FLUSH = true;
 
 	@Override
 	protected Class<? extends IMonitoringWriter> getTestedWriterClazz() {
@@ -21,12 +21,12 @@ public class SyncFSWriterReaderTest extends AbstractTestFSWriterReader {
 
 	@Override
 	protected boolean terminateBeforeLogInspection() {
-		return !this.flush;
+		return !SyncFSWriterReaderTest.FLUSH;
 	}
 
 	@Override
 	protected void refineConfiguration(final Configuration config, final int numRecordsWritten) {
-		config.setProperty(this.getClass().getName() + "." + SyncFsWriter.CONFIG_FLUSH, Boolean.toString(this.flush));
+		config.setProperty(this.getClass().getName() + "." + SyncFsWriter.CONFIG_FLUSH, Boolean.toString(SyncFSWriterReaderTest.FLUSH));
 		// TODO: additional configuration parameters
 	}
 

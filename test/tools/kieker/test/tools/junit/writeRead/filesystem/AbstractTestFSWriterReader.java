@@ -73,8 +73,7 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 		// Give extending classes the chance to refine the configuration
 		this.refineConfiguration(config, numRecordsWritten);
 
-		final IMonitoringController ctrl = MonitoringController.createInstance(config);
-		return ctrl;
+		return MonitoringController.createInstance(config);
 	}
 
 	protected abstract void refineConfiguration(Configuration config, final int numRecordsWritten);

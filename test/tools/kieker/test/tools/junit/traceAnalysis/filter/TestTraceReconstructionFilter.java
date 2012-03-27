@@ -308,7 +308,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 			Assert.fail("Invalid trace didn't pass the filter");
 		} else {
 			Assert.assertEquals("Unexpected invalid execution trace", invalidExecutionTrace,
-					(invalidExecutionTraceSinkPlugin.getList().get(0)).getInvalidExecutionTraceArtifacts());
+					invalidExecutionTraceSinkPlugin.getList().get(0).getInvalidExecutionTraceArtifacts());
 		}
 	}
 

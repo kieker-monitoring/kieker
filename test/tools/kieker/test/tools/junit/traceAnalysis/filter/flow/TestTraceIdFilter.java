@@ -83,7 +83,7 @@ public class TestTraceIdFilter extends TestCase {
 		}
 
 		if (!sinkPlugin.getList().isEmpty()) {
-			final long passedId = (sinkPlugin.getList().get(0)).getTraceId();
+			final long passedId = sinkPlugin.getList().get(0).getTraceId();
 			Assert.fail("Filter passed trace with ID " + passedId + " although traceId not element of " + idsToPass);
 		}
 	}

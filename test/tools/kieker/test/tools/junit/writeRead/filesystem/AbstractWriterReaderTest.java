@@ -116,7 +116,7 @@ public abstract class AbstractWriterReaderTest extends TestCase {
 	 * @throws InterruptedException
 	 */
 	@Test
-	public void testSimpleLog() throws IOException, InterruptedException {
+	public void testSimpleLog() throws IOException, InterruptedException { // NOPMD (JUnitTestsShouldIncludeAssert)
 		final String sessionId = "Mn51D97t0";
 		final String hostname = "srv-LURS0EMw";
 
@@ -148,7 +148,7 @@ public abstract class AbstractWriterReaderTest extends TestCase {
 
 		final String[] monitoringLogs = this.tmpFolder.getRoot().list(new KiekerLogDirFilter());
 		for (int i = 0; i < monitoringLogs.length; i++) { // transform relative to absolute path
-			monitoringLogs[i] = this.tmpFolder.getRoot().getAbsoluteFile() + File.separator + monitoringLogs[i];
+			monitoringLogs[i] = this.tmpFolder.getRoot().getAbsoluteFile() + File.separator + monitoringLogs[i]; // NOPMD (UseStringBufferForStringAppends)
 		}
 
 		final List<IMonitoringRecord> monitoringRecords = this.readLog(monitoringLogs);
@@ -168,7 +168,7 @@ public abstract class AbstractWriterReaderTest extends TestCase {
  * @author Andre van Hoorn
  * 
  */
-class KiekerLogDirFilter implements FilenameFilter {
+class KiekerLogDirFilter implements FilenameFilter { // NOPMD (TestClassWithoutTestCases)
 	public static final String LOG_DIR_PREFIX = "kieker-"; // TODO: do we have this constant in the FS Writer(s)?
 	public static final String MAP_FILENAME = "kieker.map"; // TODO: do we have this constant in the FS Writer(s)?
 
