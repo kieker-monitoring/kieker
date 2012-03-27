@@ -63,7 +63,7 @@ public class TestTraceIdFilter extends TestCase {
 		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.FALSE.toString());
 		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, Configuration.toProperty(idsToPass.toArray(new Long[idsToPass.size()])));
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig);
-		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final SimpleSinkPlugin<AbstractTraceEvent> sinkPlugin = new SimpleSinkPlugin<AbstractTraceEvent>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 
 		final EventRecordTrace trace =
@@ -83,7 +83,7 @@ public class TestTraceIdFilter extends TestCase {
 		}
 
 		if (!sinkPlugin.getList().isEmpty()) {
-			final long passedId = ((AbstractTraceEvent) sinkPlugin.getList().get(0)).getTraceId();
+			final long passedId = (sinkPlugin.getList().get(0)).getTraceId();
 			Assert.fail("Filter passed trace with ID " + passedId + " although traceId not element of " + idsToPass);
 		}
 	}
@@ -106,7 +106,7 @@ public class TestTraceIdFilter extends TestCase {
 		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.FALSE.toString());
 		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, Configuration.toProperty(idsToPass.toArray(new Long[idsToPass.size()])));
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig);
-		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final SimpleSinkPlugin<AbstractTraceEvent> sinkPlugin = new SimpleSinkPlugin<AbstractTraceEvent>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 
 		final EventRecordTrace trace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID,
@@ -139,7 +139,7 @@ public class TestTraceIdFilter extends TestCase {
 		final Configuration filterConfig = new Configuration();
 		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.TRUE.toString()); // i.e., pass all
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig);
-		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final SimpleSinkPlugin<AbstractTraceEvent> sinkPlugin = new SimpleSinkPlugin<AbstractTraceEvent>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 
 		final EventRecordTrace trace =

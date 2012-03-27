@@ -134,9 +134,9 @@ public class TestTraceReconstructionFilter extends TestCase {
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout",
 				validExecutionTrace.getDurationInNanos() <= filter.getMaxTraceDurationNanos());
 
-		final SimpleSinkPlugin executionTraceSinkPlugin = new SimpleSinkPlugin(new Configuration());
-		final SimpleSinkPlugin messageTraceSinkPlugin = new SimpleSinkPlugin(new Configuration());
-		final SimpleSinkPlugin invalidExecutionTraceSinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final SimpleSinkPlugin<ExecutionTrace> executionTraceSinkPlugin = new SimpleSinkPlugin<ExecutionTrace>(new Configuration());
+		final SimpleSinkPlugin<MessageTrace> messageTraceSinkPlugin = new SimpleSinkPlugin<MessageTrace>(new Configuration());
+		final SimpleSinkPlugin<InvalidExecutionTrace> invalidExecutionTraceSinkPlugin = new SimpleSinkPlugin<InvalidExecutionTrace>(new Configuration());
 		controller.registerFilter(executionTraceSinkPlugin);
 		controller.registerFilter(messageTraceSinkPlugin);
 		controller.registerFilter(invalidExecutionTraceSinkPlugin);
@@ -251,9 +251,9 @@ public class TestTraceReconstructionFilter extends TestCase {
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout",
 				invalidExecutionTrace.getDurationInNanos() <= filter.getMaxTraceDurationNanos());
 
-		final SimpleSinkPlugin executionTraceSinkPlugin = new SimpleSinkPlugin(new Configuration());
-		final SimpleSinkPlugin messageTraceSinkPlugin = new SimpleSinkPlugin(new Configuration());
-		final SimpleSinkPlugin invalidExecutionTraceSinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final SimpleSinkPlugin<ExecutionTrace> executionTraceSinkPlugin = new SimpleSinkPlugin<ExecutionTrace>(new Configuration());
+		final SimpleSinkPlugin<MessageTrace> messageTraceSinkPlugin = new SimpleSinkPlugin<MessageTrace>(new Configuration());
+		final SimpleSinkPlugin<InvalidExecutionTrace> invalidExecutionTraceSinkPlugin = new SimpleSinkPlugin<InvalidExecutionTrace>(new Configuration());
 
 		controller.registerFilter(filter);
 		controller.registerFilter(invalidExecutionTraceSinkPlugin);
@@ -308,7 +308,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 			Assert.fail("Invalid trace didn't pass the filter");
 		} else {
 			Assert.assertEquals("Unexpected invalid execution trace", invalidExecutionTrace,
-					((InvalidExecutionTrace) invalidExecutionTraceSinkPlugin.getList().get(0)).getInvalidExecutionTraceArtifacts());
+					(invalidExecutionTraceSinkPlugin.getList().get(0)).getInvalidExecutionTraceArtifacts());
 		}
 	}
 
@@ -385,9 +385,9 @@ public class TestTraceReconstructionFilter extends TestCase {
 		repositoryMap.put(AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
 		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration);
 
-		final SimpleSinkPlugin executionTraceSink = new SimpleSinkPlugin(new Configuration());
-		final SimpleSinkPlugin messageTraceSink = new SimpleSinkPlugin(new Configuration());
-		final SimpleSinkPlugin invalidExecutionTraceSink = new SimpleSinkPlugin(new Configuration());
+		final SimpleSinkPlugin<ExecutionTrace> executionTraceSink = new SimpleSinkPlugin<ExecutionTrace>(new Configuration());
+		final SimpleSinkPlugin<MessageTrace> messageTraceSink = new SimpleSinkPlugin<MessageTrace>(new Configuration());
+		final SimpleSinkPlugin<InvalidExecutionTrace> invalidExecutionTraceSink = new SimpleSinkPlugin<InvalidExecutionTrace>(new Configuration());
 
 		Assert.assertTrue("Test invalid: NOT (tout of trigger trace - tin of incomplete > filter max. duration)\n" + "triggerExecutionTrace.getMaxTout()"
 				+ triggerExecutionTrace.getMaxTout() + "\n" + "incompleteExecutionTrace.getMinTin()" + incompleteExecutionTrace.getMinTin() + "\n"
@@ -462,7 +462,7 @@ public class TestTraceReconstructionFilter extends TestCase {
 
 		Assert.assertEquals("An incomplete or complete trace didn't pass the filter", 2, invalidExecutionTraceSink.getList().size());
 		for (int i = 0; i < 2; i++) {
-			final InvalidExecutionTrace event = (InvalidExecutionTrace) invalidExecutionTraceSink.getList().get(i);
+			final InvalidExecutionTrace event = invalidExecutionTraceSink.getList().get(i);
 			if (event.getInvalidExecutionTraceArtifacts().equals(incompleteExecutionTrace)) { // NOPMD NOCS (empty if)
 				// Nothing to do
 			} else if (event.getInvalidExecutionTraceArtifacts().equals(completingExecutionTrace)) { // NOPMD NOCS (empty if)

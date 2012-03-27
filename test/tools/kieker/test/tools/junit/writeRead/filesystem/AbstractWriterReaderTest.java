@@ -37,17 +37,20 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 /**
+ * TODO: The idea is to make this class independent of FS, i.e., to provide a basic
+ * test for each writer/reader
  * 
  * @author Andre van Hoorn
  * 
  */
-public abstract class AbstractFSTest extends TestCase {
+public abstract class AbstractWriterReaderTest extends TestCase {
 	@Rule
 	private final TemporaryFolder tmpFolder = new TemporaryFolder();
 
@@ -58,7 +61,7 @@ public abstract class AbstractFSTest extends TestCase {
 	}
 
 	@Override
-	@org.junit.After
+	@After
 	public void tearDown() throws Exception {
 		this.tmpFolder.delete();
 	}
@@ -88,36 +91,36 @@ public abstract class AbstractFSTest extends TestCase {
 	 */
 	protected abstract void inspectRecords(List<IMonitoringRecord> eventsPassedToController, List<IMonitoringRecord> eventFromMonitoringLog);
 
-	private List<IMonitoringRecord> readLog(final String[] monitoringLogDirs) {
-		final List<IMonitoringRecord> retList = new ArrayList<IMonitoringRecord>();
+	protected abstract boolean terminateBeforeLogInspection();
 
+	private List<IMonitoringRecord> readLog(final String[] monitoringLogDirs) {
 		final AnalysisController analysisController = new AnalysisController();
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION, FSReader.CONFIG_VALUE_NAME_RECORD_TYPE_SELECTION_ANY);
 		final AbstractReaderPlugin reader = new FSReader(readerConfiguration);
-		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final SimpleSinkPlugin<IMonitoringRecord> sinkPlugin = new SimpleSinkPlugin<IMonitoringRecord>(new Configuration());
 
 		analysisController.registerReader(reader);
 		analysisController.registerFilter(sinkPlugin);
 		analysisController.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 		analysisController.run();
 
-		// return sinkPlugin.getList(); // TODO: must return List<IMonitoringRecord>; have List<Object>
-		return retList;
+		return sinkPlugin.getList();
 	}
 
 	/**
 	 * The actual Test. Note that this should be the only {@link Test} in this class.
 	 * 
 	 * @throws IOException
+	 * @throws InterruptedException
 	 */
 	@Test
-	public void testSimpleLog() throws IOException {
+	public void testSimpleLog() throws IOException, InterruptedException {
 		final String sessionId = "Mn51D97t0";
 		final String hostname = "srv-LURS0EMw";
 
-		final int minNumberOfEventsToGenerate = 400;
+		final int minNumberOfEventsToGenerate = 5; // just a basic test with (potentially) at bit more than a hand full of records
 
 		final List<IMonitoringRecord> someEvents = new ArrayList<IMonitoringRecord>();
 		for (int i = 0; i < minNumberOfEventsToGenerate; i = someEvents.size()) {
@@ -134,11 +137,14 @@ public abstract class AbstractFSTest extends TestCase {
 			ctrl.newMonitoringRecord(record);
 		}
 
-		// TODO: wait?
+		Thread.sleep(1000); // wait a second to give the FS writer the chance to write the monitoring log.
 
 		this.checkControllerState(ctrl);
 
-		// TODO: create more than 1 single monitoring log (or: extending classes should simply define such test)
+		if (this.terminateBeforeLogInspection()) {
+			// need to terminate explicitly, because otherwise, the monitoring log directory cannot be removed
+			ctrl.terminateMonitoring();
+		}
 
 		final String[] monitoringLogs = this.tmpFolder.getRoot().list(new KiekerLogDirFilter());
 		for (int i = 0; i < monitoringLogs.length; i++) { // transform relative to absolute path
@@ -149,8 +155,10 @@ public abstract class AbstractFSTest extends TestCase {
 
 		this.inspectRecords(someEvents, monitoringRecords);
 
-		// need to terminate explicitly, because otherwise, the directory cannot be removed
-		ctrl.terminateMonitoring();
+		if (!this.terminateBeforeLogInspection()) {
+			// need to terminate explicitly, because otherwise, the monitoring log directory cannot be removed
+			ctrl.terminateMonitoring();
+		}
 	}
 }
 

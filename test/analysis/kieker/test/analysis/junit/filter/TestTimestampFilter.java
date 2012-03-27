@@ -54,7 +54,7 @@ public final class TestTimestampFilter {
 		}
 	};
 
-	private SimpleSinkPlugin sinkPlugin;
+	private SimpleSinkPlugin<AbstractTraceEvent> sinkPlugin;
 	private final AnalysisController controller = new AnalysisController();
 
 	/**
@@ -77,7 +77,7 @@ public final class TestTimestampFilter {
 
 	@Before
 	public void before() {
-		this.sinkPlugin = new SimpleSinkPlugin(new Configuration());
+		this.sinkPlugin = new SimpleSinkPlugin<AbstractTraceEvent>(new Configuration());
 		this.controller.registerFilter(this.sinkPlugin);
 	}
 

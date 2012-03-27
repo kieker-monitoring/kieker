@@ -29,22 +29,22 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
 /**
- * TODO: turn into generic class?
  * 
  * @author Nils Ehmke, Jan Waller
  */
 @Plugin
-public class SimpleSinkPlugin extends AbstractFilterPlugin {
+public class SimpleSinkPlugin<T> extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME = "input";
-	private final List<Object> list = new ArrayList<Object>();
+	private final List<T> list = new ArrayList<T>();
 
 	public SimpleSinkPlugin(final Configuration configuration) {
 		super(configuration);
 	}
 
 	@InputPort(name = SimpleSinkPlugin.INPUT_PORT_NAME)
-	public void input(final Object data) {
+	// TODO: we could run into trouble here because the port accepts events of type Object
+	public void input(final T data) {
 		this.list.add(data);
 	}
 
@@ -52,7 +52,7 @@ public class SimpleSinkPlugin extends AbstractFilterPlugin {
 		this.list.clear();
 	}
 
-	public List<Object> getList() {
+	public List<T> getList() {
 		return this.list;
 	}
 

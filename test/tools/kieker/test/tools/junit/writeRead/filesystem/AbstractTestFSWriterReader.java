@@ -22,7 +22,6 @@ package kieker.test.tools.junit.writeRead.filesystem;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -35,42 +34,58 @@ import kieker.monitoring.writer.IMonitoringWriter;
 import kieker.monitoring.writer.filesystem.AbstractAsyncFSWriter;
 import kieker.monitoring.writer.filesystem.AsyncFsWriter;
 
+import org.junit.Before;
+
 /**
  * 
  * @author Andre van Hoorn
  * 
  */
-public class TestFSWriterRead extends AbstractFSTest {
-	private static final Class<? extends IMonitoringWriter> testedWriterClazz = AsyncFsWriter.class;
+public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTest {
+	private volatile Class<? extends IMonitoringWriter> testedWriterClazz = AsyncFsWriter.class;
 
-	// TODO: constant is private in AbstractAsyncWriter ... why?
-	private static final String CONFIG_ASYNC_WRITER_QUEUE_SIZE = "QueueSize";
+	// TODO: constants are private in AbstractAsyncWriter ... why?
+	private static final String CONFIG_ASYNC_WRITER_QUEUESIZE = "QueueSize";
+	private static final String CONFIG_ASYNC_WRITER_BEHAVIOR = "QueueFullBehavior";
+	private static final String CONFIG_ASYNC_WRITER_SHUTDOWNDELAY = "MaxShutdownDelay";
+
+	protected abstract Class<? extends IMonitoringWriter> getTestedWriterClazz();
+
+	@Override
+	@Before
+	public void setUp() throws IOException {
+		super.setUp();
+		this.testedWriterClazz = this.getTestedWriterClazz();
+	}
 
 	@Override
 	protected IMonitoringController createController(final int numRecordsWritten, final File monitoringLogBaseDir) throws IOException {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 
-		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, TestFSWriterRead.testedWriterClazz.getName());
-		config.setProperty(TestFSWriterRead.testedWriterClazz.getName() + "." + AbstractAsyncFSWriter.CONFIG_TEMP, Boolean.FALSE.toString());
-		config.setProperty(TestFSWriterRead.testedWriterClazz.getName() + "." + AbstractAsyncFSWriter.CONFIG_PATH, monitoringLogBaseDir.getCanonicalPath());
-		config.setProperty(TestFSWriterRead.testedWriterClazz.getName() + "." + TestFSWriterRead.CONFIG_ASYNC_WRITER_QUEUE_SIZE, Integer.toString(numRecordsWritten));
+		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, this.testedWriterClazz.getName());
+		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncFSWriter.CONFIG_TEMP, Boolean.FALSE.toString());
+		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncFSWriter.CONFIG_PATH, monitoringLogBaseDir.getCanonicalPath());
+		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractTestFSWriterReader.CONFIG_ASYNC_WRITER_QUEUESIZE,
+				Integer.toString(numRecordsWritten * 2));
+		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractTestFSWriterReader.CONFIG_ASYNC_WRITER_BEHAVIOR, "0");
+		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractTestFSWriterReader.CONFIG_ASYNC_WRITER_SHUTDOWNDELAY, "-1");
 
-		// TODO: explicitly set remaining values
+		// Give extending classes the chance to refine the configuration
+		this.refineConfiguration(config, numRecordsWritten);
 
 		final IMonitoringController ctrl = MonitoringController.createInstance(config);
 		return ctrl;
 	}
 
+	protected abstract void refineConfiguration(Configuration config, final int numRecordsWritten);
+
 	@Override
 	protected void checkControllerState(final IMonitoringController monitoringController) {
-		// TODO: do we have to wait for some time?
-
 		Assert.assertTrue("Expected monitoring controller to be enabled", monitoringController.isMonitoringEnabled());
 	}
 
 	@Override
 	protected void inspectRecords(final List<IMonitoringRecord> eventsPassedToController, final List<IMonitoringRecord> eventFromMonitoringLog) {
-		Arrays.equals(eventsPassedToController.toArray(), eventFromMonitoringLog.toArray());
-
+		Assert.assertEquals("Unexpected set of records", eventsPassedToController, eventFromMonitoringLog);
 	}
 }

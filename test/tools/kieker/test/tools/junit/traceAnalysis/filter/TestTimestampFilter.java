@@ -73,7 +73,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
 		final AnalysisController controller = new AnalysisController();
-		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final SimpleSinkPlugin<Execution> sinkPlugin = new SimpleSinkPlugin<Execution>(new Configuration());
 		final Execution exec = this.eFactory.genExecution(77, // traceId (value not important)
 				TestTimestampFilter.SESSION_ID,
 				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP - 1, // tin
@@ -101,7 +101,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 	public void testRecordTinWithinToutAfterIgnored() {
 		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
-		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final SimpleSinkPlugin<Execution> sinkPlugin = new SimpleSinkPlugin<Execution>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(15, // traceId (value not important)
 				TestTimestampFilter.SESSION_ID,
@@ -130,7 +130,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 	public void testRecordTinToutOnBordersPassed() {
 		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
-		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final SimpleSinkPlugin<Execution> sinkPlugin = new SimpleSinkPlugin<Execution>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(159, // traceId (value not important)
 				TestTimestampFilter.SESSION_ID,
@@ -162,7 +162,7 @@ public class TestTimestampFilter extends TestCase { // NOCS
 	public void testRecordTinToutWithinRangePassed() {
 		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
-		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final SimpleSinkPlugin<Execution> sinkPlugin = new SimpleSinkPlugin<Execution>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(159, // traceId (value not important)
 				TestTimestampFilter.SESSION_ID,

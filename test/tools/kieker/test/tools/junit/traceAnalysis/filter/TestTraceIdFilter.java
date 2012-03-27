@@ -90,7 +90,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 		idsToPass.add(7l);
 
 		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(idsToPass);
-		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final SimpleSinkPlugin<Execution> sinkPlugin = new SimpleSinkPlugin<Execution>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(11l, // traceId (must not be element of idsToPass)
 				TestTraceIdFilter.SESSION_ID,
@@ -122,7 +122,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 		idsToPass.add(7l);
 
 		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(idsToPass);
-		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final SimpleSinkPlugin<Execution> sinkPlugin = new SimpleSinkPlugin<Execution>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(7l, // traceId (must be element of idsToPass)
 				TestTraceIdFilter.SESSION_ID,
@@ -152,7 +152,7 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 	@Test
 	public void testAssertPassTraceIdWhenPassAll() {
 		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(null); // i.e., pass all
-		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final SimpleSinkPlugin<Execution> sinkPlugin = new SimpleSinkPlugin<Execution>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(7l, // traceId (must be element of idsToPass)
 				TestTraceIdFilter.SESSION_ID,

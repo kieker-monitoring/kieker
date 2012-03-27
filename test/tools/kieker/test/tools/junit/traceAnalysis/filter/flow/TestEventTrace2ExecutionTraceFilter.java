@@ -386,7 +386,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		 * Create and connect a sink plugin which collects the transformed
 		 * ExecutionTraces
 		 */
-		final SimpleSinkPlugin executionTraceSinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final SimpleSinkPlugin<ExecutionTrace> executionTraceSinkPlugin = new SimpleSinkPlugin<ExecutionTrace>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 
 		controller.registerFilter(filter);
@@ -400,7 +400,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 
 		Assert.assertEquals("Unexpected number of received execution traces", 1, executionTraceSinkPlugin.getList().size());
 
-		final ExecutionTrace resultingExecutionTrace = (ExecutionTrace) executionTraceSinkPlugin.getList().get(0);
+		final ExecutionTrace resultingExecutionTrace = executionTraceSinkPlugin.getList().get(0);
 
 		Assert.assertEquals("Unexpected execution trace", expectedExecutionTrace, resultingExecutionTrace);
 	}

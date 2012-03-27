@@ -72,7 +72,7 @@ public class TestEventRecordTraceGenerationFilter extends TestCase {
 		final AnalysisController controller = new AnalysisController();
 
 		final EventRecordTraceGenerationFilter traceFilter = TestEventRecordTraceGenerationFilter.createFilter(traceDuration + 1);
-		final SimpleSinkPlugin sinkPlugin = new SimpleSinkPlugin(new Configuration());
+		final SimpleSinkPlugin<EventRecordTrace> sinkPlugin = new SimpleSinkPlugin<EventRecordTrace>(new Configuration());
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
@@ -90,7 +90,7 @@ public class TestEventRecordTraceGenerationFilter extends TestCase {
 
 		// Make sure that 1 trace generated
 		Assert.assertEquals("No trace passed filter", sinkPlugin.getList().size(), 1);
-		final EventRecordTrace outputTrace = (EventRecordTrace) sinkPlugin.getList().get(0);
+		final EventRecordTrace outputTrace = sinkPlugin.getList().get(0);
 		final List<AbstractTraceEvent> outputEvents = outputTrace.eventList();
 
 		Assert.assertEquals("Unexpected trace ID", traceId, outputTrace.getTraceId());
