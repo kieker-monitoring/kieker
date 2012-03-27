@@ -160,6 +160,49 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		this.checkTrace(eventRecordTrace, expectedExecutionTrace);
 	}
 
+	/**
+	 * Generates an a modified version of the the "well-known" bookstore
+	 * trace, which included only the execution of <code>Bookstore.searchBook(..)<code> and the 
+	 * nested execution of <code>Catalog.getBook(..)</code>.
+	 * 
+	 * Borrowed from {@link kieker.test.tools.junit.traceAnalysis.filter.TestTraceReconstructionFilter}.
+	 * 
+	 * @return
+	 * @throws InvalidTraceException
+	 */
+	private ExecutionTrace genValidBookstoreTraceEntryCallExit() throws InvalidTraceException {
+		/*
+		 * Create an Execution Trace and add Executions in
+		 * arbitrary order
+		 */
+		final ExecutionTrace executionTrace =
+				new ExecutionTrace(TestEventTrace2ExecutionTraceFilter.TRACE_ID, TestEventTrace2ExecutionTraceFilter.SESSION_ID);
+
+		final long initialTimestamp = this.exec0_0__bookstore_searchBook.getTin();
+
+		/* Manually create Executions for a trace */
+		executionTrace.add(
+				this.bookstoreExecutionFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(TestEventTrace2ExecutionTraceFilter.TRACE_ID,
+						TestEventTrace2ExecutionTraceFilter.SESSION_ID, TestEventTrace2ExecutionTraceFilter.HOSTNAME,
+						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
+						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook));
+
+		executionTrace.add(
+				this.bookstoreExecutionFactory.createBookstoreExecution_exec1_1__catalog_getBook(TestEventTrace2ExecutionTraceFilter.TRACE_ID,
+						TestEventTrace2ExecutionTraceFilter.SESSION_ID, TestEventTrace2ExecutionTraceFilter.HOSTNAME,
+						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call1_1__catalog_getBook,
+						/*
+						 * We will only have a (before) call to Catalog.getBook(..), hence the assumed return timestamp is
+						 * the return time of the wrapping Bookstore.searchBook(..) execution:
+						 */
+						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook));
+
+		// just to make sure that this trace is valid
+		executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
+
+		return executionTrace;
+	}
+
 	@Test
 	public void testValidSyncTraceSimpleEntryCallExit() throws InvalidTraceException { // NOPMD (assert missing)
 		/*
@@ -168,7 +211,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		final EventRecordTrace eventRecordTrace =
 				BookstoreEventRecordFactory.validSyncTraceSimpleEntryCallExit(this.exec0_0__bookstore_searchBook.getTin(),
 						TestEventTrace2ExecutionTraceFilter.TRACE_ID, TestEventTrace2ExecutionTraceFilter.SESSION_ID, TestEventTrace2ExecutionTraceFilter.HOSTNAME);
-		final ExecutionTrace expectedExecutionTrace = this.genValidBookstoreTrace();
+		final ExecutionTrace expectedExecutionTrace = this.genValidBookstoreTraceEntryCallExit();
 
 		this.checkTrace(eventRecordTrace, expectedExecutionTrace);
 	}
