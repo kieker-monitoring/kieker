@@ -922,6 +922,7 @@
 			<batchtest fork="false" todir="${tests.junit-results.dir}">
 				<fileset dir="${build.tests.dir}/">
 					<include name="**/junit/**/*Test*.class" />
+					<exclude name="**/junit/**/Abstract*.class" />
 					<exclude name="**/*$*.class" />
 				</fileset>
 			</batchtest>

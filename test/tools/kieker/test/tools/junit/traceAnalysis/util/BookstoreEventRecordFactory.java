@@ -58,7 +58,7 @@ public final class BookstoreEventRecordFactory {
 	public static final long TSTAMP_OFFSET_exit0_0__bookstore_searchBook = 11; // NOCS // NOPMD (VariableNamingConventions)
 
 	/**
-	 * Returns "well-known" Bookstore trace as a list of {@link BeforeOperationEvent} and {@link AfterOperationEvent} events, ordered by its
+	 * Returns the "well-known" Bookstore trace as a list of {@link BeforeOperationEvent} and {@link AfterOperationEvent} events, ordered by its
 	 * {@link kieker.common.record.flow.trace.AbstractTraceEvent#getOrderIndex()}es.
 	 * 
 	 * @param firstTimestamp
@@ -123,7 +123,8 @@ public final class BookstoreEventRecordFactory {
 	}
 
 	/**
-	 * Returns "well-known" Bookstore trace as a list of {@link CallOperationEvent}, {@link BeforeOperationEvent} and {@link AfterOperationEvent} events, ordered by
+	 * Returns the "well-known" Bookstore trace as a list of {@link CallOperationEvent}, {@link BeforeOperationEvent} and {@link AfterOperationEvent} events, ordered
+	 * by
 	 * its {@link kieker.common.record.flow.trace.AbstractTraceEvent#getOrderIndex()}es.
 	 * 
 	 * @param firstTimestamp
@@ -207,7 +208,8 @@ public final class BookstoreEventRecordFactory {
 	}
 
 	/**
-	 * Returns "well-known" Bookstore trace as a list of {@link CallOperationEvent}, {@link BeforeOperationEvent} and {@link AfterOperationEvent} events, ordered by
+	 * Returns the "well-known" Bookstore trace as a list of {@link CallOperationEvent}, {@link BeforeOperationEvent} and {@link AfterOperationEvent} events, ordered
+	 * by
 	 * its {@link kieker.common.record.flow.trace.AbstractTraceEvent#getOrderIndex()}es. In this trace, <i>CRM.getOrders</i> is assumed not to be instrumented.
 	 * 
 	 * @param firstTimestamp

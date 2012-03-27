@@ -29,6 +29,8 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
 /**
+ * TODO: turn into generic class?
+ * 
  * @author Nils Ehmke, Jan Waller
  */
 @Plugin
