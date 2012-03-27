@@ -160,6 +160,19 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		this.checkTrace(eventRecordTrace, expectedExecutionTrace);
 	}
 
+	@Test
+	public void testValidSyncTraceSimpleEntryCallExit() throws InvalidTraceException { // NOPMD (assert missing)
+		/*
+		 * Create an EventRecordTrace, containing only Before- and AfterOperation events.
+		 */
+		final EventRecordTrace eventRecordTrace =
+				BookstoreEventRecordFactory.validSyncTraceSimpleEntryCallExit(this.exec0_0__bookstore_searchBook.getTin(),
+						TestEventTrace2ExecutionTraceFilter.TRACE_ID, TestEventTrace2ExecutionTraceFilter.SESSION_ID, TestEventTrace2ExecutionTraceFilter.HOSTNAME);
+		final ExecutionTrace expectedExecutionTrace = this.genValidBookstoreTrace();
+
+		this.checkTrace(eventRecordTrace, expectedExecutionTrace);
+	}
+
 	private void checkTrace(final EventRecordTrace eventRecordTrace, final ExecutionTrace expectedExecutionTrace) throws InvalidTraceException {
 
 		/*

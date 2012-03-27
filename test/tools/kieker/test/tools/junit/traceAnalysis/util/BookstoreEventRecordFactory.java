@@ -292,6 +292,56 @@ public final class BookstoreEventRecordFactory {
 		return retTrace;
 	}
 
+	/**
+	 * Returns "well-known" Bookstore trace as a list of {@link CallOperationEvent}, {@link BeforeOperationEvent} and {@link AfterOperationEvent} events, ordered by
+	 * its {@link kieker.common.record.flow.trace.AbstractTraceEvent#getOrderIndex()}es. In this trace, <i>CRM.getOrders</i> is assumed not to be instrumented.
+	 * 
+	 * @param firstTimestamp
+	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
+	 * @param traceId
+	 * @return
+	 */
+	public static EventRecordTrace validSyncTraceSimpleEntryCallExit(final long firstTimestamp, final long traceId, final String sessionId,
+			final String hostname) {
+		int curOrderIndex = 0;
+
+		final BeforeOperationEvent entry0_0__bookstore_searchBook; // NOCS
+		final CallOperationEvent call1_1__catalog_getBook; // NOCS
+		// assumed to be uninstrumented: final BeforeOperationEvent entry1_1__catalog_getBook; // NOCS
+		// assumed to be uninstrumented: final AfterOperationEvent exit1_1__catalog_getBook; // NOCS
+		// assumed to be uninstrumented: final CallOperationEvent call2_1__crm_getOrders; // NOCS
+		// assumed to be uninstrumented: final BeforeOperationEvent entry2_1__crm_getOrders; // NOCS
+		// assumed to be uninstrumented: final CallOperationEvent call3_2__catalog_getBook; // NOCS
+		// assumed to be uninstrumented: final BeforeOperationEvent entry3_2__catalog_getBook; // NOCS
+		// assumed to be uninstrumented: final AfterOperationEvent exit3_2__catalog_getBook; // NOCS
+		// assumed to be uninstrumented: final AfterOperationEvent exit2_1__crm_getOrders; // NOCS
+		final AfterOperationEvent exit0_0__bookstore_searchBook; // NOCS
+
+		entry0_0__bookstore_searchBook =
+				new BeforeOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
+		call1_1__catalog_getBook =
+				new CallOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call1_1__catalog_getBook,
+						traceId, curOrderIndex++,
+						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
+						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
+		exit0_0__bookstore_searchBook =
+				new AfterOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
+
+		final EventRecordTrace retTrace = new EventRecordTrace(traceId, sessionId, hostname);
+
+		try {
+			retTrace.add(entry0_0__bookstore_searchBook);
+			retTrace.add(call1_1__catalog_getBook);
+			retTrace.add(exit0_0__bookstore_searchBook);
+		} catch (final InvalidTraceException e) {
+			Assert.fail("Test invalid (creating invalid trace): " + e.getMessage());
+		}
+
+		return retTrace;
+	}
+
 	public static void main(final String[] args) {
 		final IMonitoringController ctrl = MonitoringController.getInstance();
 
