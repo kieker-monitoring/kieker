@@ -48,6 +48,11 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 	private final int maxEntriesInFile;
 	private int entriesInCurrentFileCounter;
 
+	private final DateFormat dateFormat;
+
+	private long previousFileDate = 0;
+	private long sameFilenameCounter = 0;
+
 	public AbstractFsWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
 			final MappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile) {
 		super(monitoringController, writeQueue);
@@ -57,14 +62,24 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 		this.maxEntriesInFile = maxEntriesInFile;
 		// Force to initialize first file!
 		this.entriesInCurrentFileCounter = maxEntriesInFile;
+		// initialize Date
+		this.dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
+		this.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 	}
 
 	protected final String getFilename() {
-		final DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
-		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		final String threadName = this.getName();
-		final StringBuilder sb = new StringBuilder(this.filenamePrefix.length() + threadName.length() + this.fileExtension.length() + 28);
-		sb.append(this.filenamePrefix).append('-').append(dateFormat.format(new java.util.Date())).append("-UTC-").append(threadName).append(this.fileExtension); // NOPMD
+		final long date = System.currentTimeMillis();
+		if (this.previousFileDate == date) {
+			this.sameFilenameCounter++;
+		} else {
+			this.sameFilenameCounter = 0;
+			this.previousFileDate = date;
+		}
+		final StringBuilder sb = new StringBuilder(this.filenamePrefix.length() + threadName.length() + this.fileExtension.length() + 33);
+		sb.append(this.filenamePrefix).append('-').append(this.dateFormat.format(new java.util.Date(date))).append("-UTC-")
+				.append('-').append(String.format("%03d", this.sameFilenameCounter)).append('-')
+				.append(threadName).append(this.fileExtension);
 		return sb.toString();
 	}
 

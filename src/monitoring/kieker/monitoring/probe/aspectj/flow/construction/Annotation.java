@@ -30,7 +30,7 @@ import org.aspectj.lang.annotation.Pointcut;
 public final class Annotation extends AbstractAspect {
 
 	@Override
-	@Pointcut("execution(@kieker.monitoring.annotation.ConstructorMonitoringProbe new(..))")
+	@Pointcut("execution(@kieker.monitoring.annotation.ConstructionMonitoringProbe new(..))")
 	public void monitoredConstructor() {
 		// Aspect Declaration (MUST be empty)
 	}

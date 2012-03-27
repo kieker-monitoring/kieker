@@ -35,6 +35,8 @@ public class MappingFileWriter {
 
 	private static final String ENCODING = "UTF-8";
 
+	// private static final Pattern pattern = Pattern.compile("[\r\n]");
+
 	private final File mappingFile;
 
 	public MappingFileWriter(final String path) throws IOException {
@@ -52,11 +54,14 @@ public class MappingFileWriter {
 			PrintWriter pw = null;
 			try {
 				pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.mappingFile, true), MappingFileWriter.ENCODING));
-				pw.print('$');
-				pw.print(hashRecord.getId());
-				pw.print('=');
-				pw.print(hashRecord.getObject());
-				pw.println();
+				pw.write('$');
+				pw.write(String.valueOf(hashRecord.getId()));
+				pw.write('=');
+				pw.write("");
+				final String value = String.valueOf(hashRecord.getObject());
+				// value = value.replace("\\", "\\\\").replace("\r", "\\r").replace("\n", "\\n");
+				pw.write(value);
+				pw.write('\n');
 				if (pw.checkError()) {
 					throw new IOException("Error writing to mappingFile " + this.mappingFile.toString());
 				}

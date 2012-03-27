@@ -154,27 +154,29 @@ final class FSDirectoryReader implements Runnable {
 			in = new BufferedReader(new InputStreamReader(new FileInputStream(mappingFile), FSDirectoryReader.ENCODING));
 			String line;
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
-				line = line.trim();
+				line = line.trim(); // TODO: do we really want a trim here?
 				if (line.length() == 0) {
 					continue; // ignore empty lines
 				}
-				final String[] assignment = line.split("=");
-				if (assignment.length != 2) {
+				final int split = line.indexOf('=');
+				if (split == -1) {
 					FSDirectoryReader.LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath()
 							+ ". Each line must contain ID=VALUE pairs.");
 					continue; // continue on errors
 				}
+				final String key = line.substring(0, split);
+				final String value = line.substring(split + 1);
 				// the leading $ is optional
 				final Integer id;
 				try {
-					id = Integer.valueOf((assignment[0].charAt(0) == '$') ? assignment[0].substring(1) : assignment[0]); // NOCS
+					id = Integer.valueOf((key.charAt(0) == '$') ? key.substring(1) : key); // NOCS
 				} catch (final NumberFormatException ex) {
 					FSDirectoryReader.LOG.error("Error reading mapping file, id must be integer", ex);
-					continue;
+					continue; // continue on errors
 				}
-				final String prevVal = this.stringRegistry.put(id, assignment[1]);
+				final String prevVal = this.stringRegistry.put(id, value);
 				if (prevVal != null) {
-					FSDirectoryReader.LOG.error("Found addional entry for id='" + id + "', old value was '" + prevVal + "' new value is '" + assignment[1] + "'");
+					FSDirectoryReader.LOG.error("Found addional entry for id='" + id + "', old value was '" + prevVal + "' new value is '" + value + "'");
 				}
 			}
 		} catch (final IOException ex) {
