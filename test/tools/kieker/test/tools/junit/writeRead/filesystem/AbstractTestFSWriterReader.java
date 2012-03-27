@@ -42,12 +42,12 @@ import org.junit.Before;
  * 
  */
 public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTest {
-	private volatile Class<? extends IMonitoringWriter> testedWriterClazz = AsyncFsWriter.class;
-
 	// TODO: constants are private in AbstractAsyncWriter ... why?
 	private static final String CONFIG_ASYNC_WRITER_QUEUESIZE = "QueueSize";
 	private static final String CONFIG_ASYNC_WRITER_BEHAVIOR = "QueueFullBehavior";
 	private static final String CONFIG_ASYNC_WRITER_SHUTDOWNDELAY = "MaxShutdownDelay";
+
+	private volatile Class<? extends IMonitoringWriter> testedWriterClazz = AsyncFsWriter.class;
 
 	protected abstract Class<? extends IMonitoringWriter> getTestedWriterClazz();
 
