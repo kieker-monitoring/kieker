@@ -310,12 +310,10 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 			final BeforeOperationEvent beforeOperationEvent = this.getMatchingBeforeEventFor(afterOperationEvent);
 
 			// Look for a call event at the top of the stack
-			final AbstractTraceEvent potentialCallEvent = (this.filterState.isEventStackEmpty()) ? null : this.filterState.peekEvent(); // NOPMD
+			final AbstractTraceEvent prevEvent = (this.filterState.isEventStackEmpty()) ? null : this.filterState.peekEvent(); // NOPMD
 			// A definite call occurs if either the stack is empty (entry into the trace) or if a matching call event is found
-			final boolean definiteCall = (potentialCallEvent == null)
-					|| ((potentialCallEvent instanceof CallOperationEvent)
-					&& ((CallOperationEvent) potentialCallEvent).callsReferencedOperationOf(afterOperationEvent));
-
+			final boolean definiteCall = (prevEvent == null)
+					|| ((prevEvent instanceof CallOperationEvent) && ((CallOperationEvent) prevEvent).callsReferencedOperationOf(afterOperationEvent));
 			// If a matching call event was found, it must be removed from the stack
 			if (definiteCall && !this.filterState.isEventStackEmpty()) {
 				this.filterState.popEvent();
@@ -332,11 +330,7 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 					beforeOperationEvent.getTimestamp(),
 					afterOperationEvent.getTimestamp(),
 					!definiteCall);
-
 			this.registerExecution(execution);
-
-			// Generate assumed executions for any remaining call events on top of the stack
-			this.closeOpenCalls(afterOperationEvent);
 		}
 
 		public void handleAfterOperationFailedEvent(final AfterOperationFailedEvent afterOperationFailedEvent) {
@@ -344,24 +338,19 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 		}
 
 		public void handleBeforeOperationEvent(final BeforeOperationEvent beforeOperationEvent) {
-			this.filterState.registerExecution(beforeOperationEvent);
+			final AbstractTraceEvent prevEvent = this.filterState.isEventStackEmpty() ? null : this.filterState.peekEvent(); // NOPMD
+			if ((prevEvent != null) && (prevEvent instanceof CallOperationEvent)
+					&& (((CallOperationEvent) prevEvent).callsReferencedOperationOf(beforeOperationEvent))) {
+				this.filterState.pushEvent(beforeOperationEvent);
+			} else {
+				this.closeOpenCalls(beforeOperationEvent);
+				this.filterState.registerExecution(beforeOperationEvent);
+			}
 		}
 
 		public void handleCallOperationEvent(final CallOperationEvent callOperationEvent) {
-			final AbstractTraceEvent nextEvent = this.eventStream.lookahead(1);
-
-			// If the next event is NOT the entry into the called operation, register an (assumed) execution.
-			if ((nextEvent != null) && (nextEvent instanceof BeforeOperationEvent)
-					&& (callOperationEvent.callsReferencedOperationOf((BeforeOperationEvent) nextEvent))) {
-				// just push the call event
-				this.filterState.pushEvent(callOperationEvent);
-			} else if (nextEvent instanceof CallOperationEvent) {
-				final CallOperationEvent nextCall = (CallOperationEvent) nextEvent;
-				this.filterState.registerExecution(callOperationEvent);
-				this.closeOpenCalls(nextCall);
-			} else {
-				this.filterState.registerExecution(callOperationEvent);
-			}
+			this.closeOpenCalls(callOperationEvent);
+			this.filterState.registerExecution(callOperationEvent);
 		}
 
 		public void handleSplitEvent(final SplitEvent splitEvent) {
