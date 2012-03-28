@@ -832,17 +832,15 @@
 			</fileset>
 		</path>
 
+		<!-- delete existing DB: -->
 		<delete dir="${tests.javadb.kiekerdb.path}" />
-		<!-- delete existing DB -->
-		<java dir="." fork="true" classpathref="kieker.test-compileTimeWeaving-bookstoreDB-run-classpath" classname="kieker.test.monitoring.util.JavaDBInitializer" />
 		<java dir="." fork="true" classname="kieker.test.monitoring.aspectj.compileTimeWeaving.bookstore.Bookstore" classpathref="kieker.test-compileTimeWeaving-bookstoreDB-run-classpath">
 			<jvmarg value="-Dkieker.monitoring.configuration=META-INF/kieker.monitoring.test.properties" />
-			<jvmarg value="-Dkieker.monitoring.writer=kieker.monitoring.writer.database.SyncDbWriter" />
-			<!--
+			<jvmarg value="-Dkieker.monitoring.writer=kieker.monitoring.writer.database.AsyncDbWriter" />
 			<jvmarg value="-Dkieker.monitoring.writer.database.AsyncDbWriter.DriverClassname=org.apache.derby.jdbc.EmbeddedDriver" />
-			<jvmarg value="-Dkieker.monitoring.writer.database.AsyncDbWriter.ConnectionString=jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS" />
-			<jvmarg value="-Dkieker.monitoring.writer.database.AsyncDbWriter.TableName=APP.kiekerdata" />
-			-->
+			<jvmarg value="-Dkieker.monitoring.writer.database.AsyncDbWriter.ConnectionString=jdbc:derby:${tests.javadb.kiekerdb.path};user=DBUSER;password=DBPASS;create=true" />
+			<jvmarg value="-Dkieker.monitoring.writer.database.AsyncDbWriter.TablePrefix=kieker" />
+			<jvmarg value="-Dkieker.monitoring.writer.database.AsyncDbWriter.numberOfConnections=1" />
 		</java>
 	</target>
 

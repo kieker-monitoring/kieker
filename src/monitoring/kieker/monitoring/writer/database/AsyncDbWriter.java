@@ -47,6 +47,8 @@ import kieker.monitoring.writer.AbstractAsyncWriter;
  * @author Jan Waller
  */
 public final class AsyncDbWriter extends AbstractAsyncWriter {
+	// private static final Log LOG = LogFactory.getLog(AsyncDbWriter.class);
+
 	private static final String PREFIX = AsyncDbWriter.class.getName() + ".";
 	public static final String CONFIG_DRIVERCLASSNAME = AsyncDbWriter.PREFIX + "DriverClassname"; // NOCS (AfterPREFIX)
 	public static final String CONFIG_CONNECTIONSTRING = AsyncDbWriter.PREFIX + "ConnectionString"; // NOCS (AfterPREFIX)
@@ -60,13 +62,12 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 	public AsyncDbWriter(final Configuration configuration) throws Exception {
 		super(configuration);
 		try {
-			Class.forName(this.configuration.getStringProperty(SyncDbWriter.CONFIG_DRIVERCLASSNAME)).newInstance();
+			Class.forName(this.configuration.getStringProperty(AsyncDbWriter.CONFIG_DRIVERCLASSNAME)).newInstance();
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 			throw new Exception("DB driver registration failed. Perhaps the driver jar is missing?", ex);
 		}
-		this.connectionString = configuration.getStringProperty(SyncDbWriter.CONFIG_CONNECTIONSTRING);
-		this.tablePrefix = configuration.getStringProperty(SyncDbWriter.CONFIG_TABLEPREFIX);
-		this.init();
+		this.connectionString = configuration.getStringProperty(AsyncDbWriter.CONFIG_CONNECTIONSTRING);
+		this.tablePrefix = configuration.getStringProperty(AsyncDbWriter.CONFIG_TABLEPREFIX);
 	}
 
 	@Override
@@ -104,7 +105,7 @@ final class DbWriterThread extends AbstractAsyncThread {
 		this.tablePrefix = tablePrefix;
 		this.helper = new DBWriterHelper(this.connection);
 		// create overview table
-		this.helper.createTable(this.tablePrefix, String.class);
+		this.helper.createTable(tablePrefix, String.class);
 		this.preparedStatementInsertOverview = this.connection.prepareStatement("INSERT INTO " + this.tablePrefix + " VALUES (?, ?)");
 	}
 
