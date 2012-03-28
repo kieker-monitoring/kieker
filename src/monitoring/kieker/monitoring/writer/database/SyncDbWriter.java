@@ -56,7 +56,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 
 	private final String tablePrefix;
 	private final Connection connection;
-	private final DBHelper helper;
+	private final DBWriterHelper helper;
 
 	public SyncDbWriter(final Configuration configuration) throws Exception {
 		super(configuration);
@@ -68,7 +68,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 		try {
 			this.connection = DriverManager.getConnection(this.configuration.getStringProperty(SyncDbWriter.CONFIG_CONNECTIONSTRING));
 			this.tablePrefix = this.configuration.getStringProperty(SyncDbWriter.CONFIG_TABLEPREFIX);
-			this.helper = new DBHelper(this.connection, this.tablePrefix);
+			this.helper = new DBWriterHelper(this.connection, this.tablePrefix);
 		} catch (final SQLException ex) {
 			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 		}
