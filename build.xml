@@ -837,10 +837,12 @@
 		<java dir="." fork="true" classpathref="kieker.test-compileTimeWeaving-bookstoreDB-run-classpath" classname="kieker.test.monitoring.util.JavaDBInitializer" />
 		<java dir="." fork="true" classname="kieker.test.monitoring.aspectj.compileTimeWeaving.bookstore.Bookstore" classpathref="kieker.test-compileTimeWeaving-bookstoreDB-run-classpath">
 			<jvmarg value="-Dkieker.monitoring.configuration=META-INF/kieker.monitoring.test.properties" />
-			<jvmarg value="-Dkieker.monitoring.writer=kieker.monitoring.writer.database.AsyncDbWriter" />
+			<jvmarg value="-Dkieker.monitoring.writer=kieker.monitoring.writer.database.SyncDbWriter" />
+			<!--
 			<jvmarg value="-Dkieker.monitoring.writer.database.AsyncDbWriter.DriverClassname=org.apache.derby.jdbc.EmbeddedDriver" />
 			<jvmarg value="-Dkieker.monitoring.writer.database.AsyncDbWriter.ConnectionString=jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS" />
 			<jvmarg value="-Dkieker.monitoring.writer.database.AsyncDbWriter.TableName=APP.kiekerdata" />
+			-->
 		</java>
 	</target>
 

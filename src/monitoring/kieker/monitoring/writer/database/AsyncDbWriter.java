@@ -24,13 +24,17 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.common.configuration.Configuration;
+import kieker.common.exception.MonitoringRecordException;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.writer.AbstractAsyncThread;
 import kieker.monitoring.writer.AbstractAsyncWriter;
@@ -38,117 +42,135 @@ import kieker.monitoring.writer.AbstractAsyncWriter;
 /**
  * Stores monitoring data into a database.
  * 
- * Warning ! This class is an academic prototype and not intended for
- * reliability or availability critical systems.
+ * Warning! This class is an academic prototype and not intended for usage in any critical system.
  * 
- * The insertMonitoringData methods are thread-save (also in combination with
- * experimentId changes), so that they may be used by multiple threads at the
- * same time. We have tested this in various applications, in combination with
- * the standard mysql-Jconnector database driver.
- * 
- * Our experience shows that it is not a major bottleneck if not too many
- * measurement points are used (e.g., 30/second). However, there are much
- * performance tuning possible in this class. For instance, performance
- * optimization should be possible by using a connection pool instead of a
- * single database connection. The current version uses prepared statements.
- * Alternatively, it could be tuned by collecting multiple database commands
- * before sending it to the database.
- * 
- * @author Matthias Rohr, Jan Waller
- * 
- *         History (Build) (change the String BUILD when this file is changed):
- *         2008/05/29: Changed vmid to vmname (defaults to hostname), which may
- *         be changed during runtime 2007/07/30: Initial Prototype
+ * @author Jan Waller
  */
 public final class AsyncDbWriter extends AbstractAsyncWriter {
 	private static final String PREFIX = AsyncDbWriter.class.getName() + ".";
 	public static final String CONFIG_DRIVERCLASSNAME = AsyncDbWriter.PREFIX + "DriverClassname"; // NOCS (AfterPREFIX)
 	public static final String CONFIG_CONNECTIONSTRING = AsyncDbWriter.PREFIX + "ConnectionString"; // NOCS (AfterPREFIX)
-	public static final String CONFIG_TABLENAME = AsyncDbWriter.PREFIX + "TableName"; // NOCS (AfterPREFIX)
+	public static final String CONFIG_TABLEPREFIX = AsyncDbWriter.PREFIX + "TablePrefix"; // NOCS (AfterPREFIX)
 	public static final String CONFIG_NRCONN = AsyncDbWriter.PREFIX + "numberOfConnections"; // NOCS (AfterPREFIX)
 
-	// private static final Log LOG = LogFactory.getLog(AsyncDbWriter.class);
-
-	// private static final String LOADID = PREFIX + "loadInitialExperimentId";
-	// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/189
+	private final String tablePrefix;
+	private final String connectionString;
+	private final AtomicLong recordId = new AtomicLong();
 
 	public AsyncDbWriter(final Configuration configuration) throws Exception {
 		super(configuration);
+		try {
+			Class.forName(this.configuration.getStringProperty(SyncDbWriter.CONFIG_DRIVERCLASSNAME)).newInstance();
+		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
+			throw new Exception("DB driver registration failed. Perhaps the driver jar is missing?", ex);
+		}
+		this.connectionString = configuration.getStringProperty(SyncDbWriter.CONFIG_CONNECTIONSTRING);
+		this.tablePrefix = configuration.getStringProperty(SyncDbWriter.CONFIG_TABLEPREFIX);
 		this.init();
 	}
 
 	@Override
 	public void init() throws Exception {
 		try {
-			// register correct Driver
-			Class.forName(this.configuration.getStringProperty(AsyncDbWriter.CONFIG_DRIVERCLASSNAME)).newInstance();
-		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
-			throw new Exception("DB driver registration failed. Perhaps the driver jar is missing?", ex);
-		}
-		final String connectionString = this.configuration.getStringProperty(AsyncDbWriter.CONFIG_CONNECTIONSTRING);
-		final String tablename = this.configuration.getStringProperty(AsyncDbWriter.CONFIG_TABLENAME);
-		final String preparedQuery = "INSERT INTO " + tablename
-				+ " (experimentid,operation,sessionid,traceid,tin,tout,vmname,executionOrderIndex,executionStackSize)" + " VALUES (?,?,?,?,?,?,?,?,?)";
-		try {
-			// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/168
-			/*
-			 * TODO: IS THIS STILL NEEDED?
-			 * if (this.configuration.getBooleanProperty(LOADID)) {
-			 * final Connection conn = DriverManager.getConnection(connectionString);
-			 * final Statement stm = conn.createStatement();
-			 * final ResultSet res = stm.executeQuery("SELECT max(experimentid) FROM " + tablename);
-			 * if (res.next()) { // this may not be fully constructed!!!! But it should mostly work?!?
-			 * this.ctrl.setExperimentId(res.getInt(1) + 1);
-			 * }
-			 * conn.close();
-			 * }
-			 */
 			for (int i = 0; i < this.configuration.getIntProperty(AsyncDbWriter.CONFIG_NRCONN); i++) {
-				this.addWorker(new DbWriterThread(super.monitoringController, this.blockingQueue, connectionString, preparedQuery));
+				this.addWorker(new DbWriterThread(super.monitoringController, this.blockingQueue, this.connectionString, this.tablePrefix + i, this.recordId));
 			}
 		} catch (final SQLException ex) {
-			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
+			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex); // NOPMD
 		}
 	}
 }
 
 /**
- * @author Matthias Rohr, Jan Waller
+ * @author Jan Waller
  */
 final class DbWriterThread extends AbstractAsyncThread {
 	private static final Log LOG = LogFactory.getLog(DbWriterThread.class);
 
-	private final Connection conn;
-	private final PreparedStatement psInsertMonitoringData;
+	private final String tablePrefix;
+	private final Connection connection;
+	private final DBWriterHelper helper;
+
+	private final Map<Class<? extends IMonitoringRecord>, PreparedStatement> recordTypeInformation = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, PreparedStatement>();
+
+	private final PreparedStatement preparedStatementInsertOverview;
+	private final AtomicLong recordId;
 
 	public DbWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> blockingQueue, final String connectionString,
-			final String preparedQuery) throws SQLException {
+			final String tablePrefix, final AtomicLong recordId) throws SQLException {
 		super(monitoringController, blockingQueue);
-		this.conn = DriverManager.getConnection(connectionString);
-		this.psInsertMonitoringData = this.conn.prepareStatement(preparedQuery);
+		this.recordId = recordId;
+		this.connection = DriverManager.getConnection(connectionString);
+		this.tablePrefix = tablePrefix;
+		this.helper = new DBWriterHelper(this.connection);
+		// create overview table
+		this.helper.createTable(this.tablePrefix, String.class);
+		this.preparedStatementInsertOverview = this.connection.prepareStatement("INSERT INTO " + this.tablePrefix + " VALUES (?, ?)");
 	}
 
 	@Override
-	protected final void consume(final IMonitoringRecord monitoringRecord) throws Exception {
-		// connector only supports execution records so far
-		final OperationExecutionRecord execRecord = (OperationExecutionRecord) monitoringRecord;
-		this.psInsertMonitoringData.setInt(1, execRecord.getExperimentId());
-		this.psInsertMonitoringData.setString(2, execRecord.getOperationSignature());
-		this.psInsertMonitoringData.setString(3, execRecord.getSessionId());
-		this.psInsertMonitoringData.setLong(4, execRecord.getTraceId());
-		this.psInsertMonitoringData.setLong(5, execRecord.getTin());
-		this.psInsertMonitoringData.setLong(6, execRecord.getTout());
-		this.psInsertMonitoringData.setString(7, execRecord.getHostname());
-		this.psInsertMonitoringData.setLong(8, execRecord.getEoi());
-		this.psInsertMonitoringData.setLong(9, execRecord.getEss());
-		this.psInsertMonitoringData.execute();
+	protected final void consume(final IMonitoringRecord record) throws Exception {
+		final Class<? extends IMonitoringRecord> recordClass = record.getClass();
+		final String recordClassName = recordClass.getSimpleName();
+		if (!this.recordTypeInformation.containsKey(recordClass)) { // not yet seen record
+			DbWriterThread.LOG.info("New record type found: " + recordClassName);
+			final String tableName = this.tablePrefix + "_" + recordClassName;
+			final Class<?>[] typeArray;
+			try {
+				typeArray = AbstractMonitoringRecord.typesForClass(recordClass);
+			} catch (final MonitoringRecordException ex) {
+				throw new Exception("Failed to get types of record", ex);
+			}
+			try {
+				this.helper.createTable(tableName, typeArray);
+				final StringBuilder sb = new StringBuilder("?");
+				for (@SuppressWarnings("unused")
+				final Class<?> element : typeArray) {
+					sb.append(",?");
+				}
+				final PreparedStatement preparedStatement = this.connection.prepareStatement("INSERT INTO " + tableName + " VALUES (" + sb.toString() + ")");
+				this.recordTypeInformation.put(recordClass, preparedStatement);
+			} catch (final SQLException ex) {
+				throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
+			}
+		}
+		try {
+			final long id = this.recordId.getAndIncrement();
+			// send to actual table
+			final PreparedStatement preparedStatement = this.recordTypeInformation.get(recordClass);
+			preparedStatement.setLong(1, id);
+			final Object[] recordFields = record.toArray();
+			for (int i = 0; i < recordFields.length; i++) {
+				if (!this.helper.set(preparedStatement, i + 2, recordFields[i])) {
+					throw new Exception("Failed to add record to database.");
+				}
+			}
+			preparedStatement.executeUpdate();
+
+			// send to overview table
+			this.preparedStatementInsertOverview.setLong(1, id);
+			this.preparedStatementInsertOverview.setString(2, recordClassName);
+			this.preparedStatementInsertOverview.executeUpdate();
+		} catch (final SQLException ex) {
+			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
+		}
 	}
 
 	@Override
 	protected void cleanup() {
 		try {
-			if (this.conn != null) {
-				this.conn.close();
+			// close all prepared statements
+			if (this.preparedStatementInsertOverview != null) {
+				this.preparedStatementInsertOverview.close();
+			}
+			for (final Class<? extends IMonitoringRecord> recordType : this.recordTypeInformation.keySet()) {
+				final PreparedStatement preparedStatement = this.recordTypeInformation.remove(recordType);
+				if (preparedStatement != null) {
+					preparedStatement.close();
+				}
+			}
+			if (this.connection != null) {
+				this.connection.close();
 			}
 		} catch (final SQLException ex) {
 			DbWriterThread.LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
@@ -160,7 +182,7 @@ final class DbWriterThread extends AbstractAsyncThread {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(super.toString());
 		sb.append("; Connection: '");
-		sb.append(this.conn.toString());
+		sb.append(this.connection.toString());
 		sb.append("'");
 		return sb.toString();
 	}

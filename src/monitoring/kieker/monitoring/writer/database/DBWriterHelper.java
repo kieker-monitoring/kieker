@@ -21,7 +21,6 @@
 package kieker.monitoring.writer.database;
 
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,50 +28,27 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 
-import kieker.common.exception.MonitoringRecordException;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.IMonitoringRecordReceiver;
 
 /**
- * This class should be instantiated and used once per {@link Connection}.
- * 
  * @author Jan Waller
  */
-public final class DBWriterHelper implements IMonitoringRecordReceiver {
+public final class DBWriterHelper {
 	private static final Log LOG = LogFactory.getLog(DBWriterHelper.class);
 
 	private final Connection connection;
-	private final String tablePrefix;
-
-	private final Map<Class<? extends IMonitoringRecord>, PreparedStatement> recordTypeInformation = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, PreparedStatement>();
-
-	private final PreparedStatement preparedStatementTotal;
-	private final AtomicLong recordId = new AtomicLong();
 
 	private final Map<Class<?>, String> createTypeMap = new ConcurrentHashMap<Class<?>, String>();
 
-	public DBWriterHelper(final Connection connection, final String tablePrefix) throws SQLException {
+	public DBWriterHelper(final Connection connection) throws SQLException {
 		this.connection = connection;
-		this.tablePrefix = tablePrefix;
-		// get initial info on the used database
-		this.initializeTypeMap();
-		// create initial table
-		this.createTable(tablePrefix, String.class);
-		this.preparedStatementTotal = connection.prepareStatement("INSERT INTO " + tablePrefix + " VALUES (?, ?)");
-	}
-
-	private final void initializeTypeMap() throws SQLException {
-		final DatabaseMetaData dbmd = this.connection.getMetaData();
-		final ResultSet rs = dbmd.getTypeInfo();
-		while (rs.next()) {
-			final int id = rs.getInt("DATA_TYPE");
-			final String typeName = rs.getString("TYPE_NAME");
-			final String typeParams = rs.getString("CREATE_PARAMS");
+		final ResultSet databaseTypeInfo = connection.getMetaData().getTypeInfo();
+		while (databaseTypeInfo.next()) {
+			final int id = databaseTypeInfo.getInt("DATA_TYPE");
+			final String typeName = databaseTypeInfo.getString("TYPE_NAME");
+			final String typeParams = databaseTypeInfo.getString("CREATE_PARAMS");
 			switch (id) {
 			case Types.VARCHAR: // String
 				if (typeParams != null) {
@@ -102,7 +78,7 @@ public final class DBWriterHelper implements IMonitoringRecordReceiver {
 				this.createTypeMap.put(Byte.class, typeName);
 				break;
 			case Types.SMALLINT: // Short
-				this.createTypeMap.put(short.class, typeName);
+				this.createTypeMap.put(short.class, typeName); // NOPMD
 				this.createTypeMap.put(Short.class, typeName);
 				break;
 			case Types.BIT: // Boolean
@@ -113,101 +89,66 @@ public final class DBWriterHelper implements IMonitoringRecordReceiver {
 				break;
 			}
 		}
-		rs.close();
+		databaseTypeInfo.close();
 	}
 
 	public void createTable(final String tableName, final Class<?>... columns) throws SQLException {
-		final StringBuilder stmt = new StringBuilder();
+		final StringBuilder statementCreateTable = new StringBuilder();
+		// FIXME: what should happen if the table already exists?
 		// stmt.append("DROP TABLE ").append(tableName).append(';');
-		stmt.append("CREATE TABLE ").append(tableName).append(" (id ");
+		statementCreateTable.append("CREATE TABLE ").append(tableName).append(" (id ");
 		final String createLong = this.createTypeMap.get(long.class);
 		if (createLong != null) {
-			stmt.append(createLong);
+			statementCreateTable.append(createLong);
 		} else {
 			throw new SQLException("Type 'long' not supported.");
 		}
 		int i = 1;
 		for (final Class<?> c : columns) {
-			stmt.append(", c").append(i++).append(' ');
+			statementCreateTable.append(", c").append(i++).append(' ');
 			final String createType = this.createTypeMap.get(c);
 			if (createType != null) {
-				stmt.append(createType);
+				statementCreateTable.append(createType);
 			} else {
 				throw new SQLException("Type '" + c.getSimpleName() + "' not supported.");
 			}
 		}
-		stmt.append(")");
-		final String s = stmt.toString();
-		final Statement statement = this.connection.createStatement();
-		DBWriterHelper.LOG.info("Creating table: " + s);
-		statement.execute(s);
-	}
-
-	public boolean newMonitoringRecord(final IMonitoringRecord record) {
-		final Class<? extends IMonitoringRecord> recordClass = record.getClass();
-		final String recordClassName = recordClass.getSimpleName();
-		if (!this.recordTypeInformation.containsKey(recordClass)) { // not yet seen record
-			DBWriterHelper.LOG.info("New record type found: " + recordClassName);
-			final String tableName = this.tablePrefix + "_" + recordClassName;
-			final Class<?>[] typeArray;
-			try {
-				typeArray = AbstractMonitoringRecord.typesForClass(recordClass);
-			} catch (final MonitoringRecordException ex) {
-				DBWriterHelper.LOG.error("Failed to get types of record", ex);
-				return false;
-			}
-			try {
-				this.createTable(tableName, typeArray);
-				final StringBuilder s = new StringBuilder("?");
-				for (@SuppressWarnings("unused")
-				final Class<?> element : typeArray) {
-					s.append(",?");
-				}
-				final PreparedStatement preparedStatement = this.connection.prepareStatement("INSERT INTO " + tableName + " VALUES (" + s.toString() + ")");
-				this.recordTypeInformation.put(recordClass, preparedStatement);
-			} catch (final SQLException ex) {
-				DBWriterHelper.LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
-				return false;
+		statementCreateTable.append(")");
+		final String statementCreateTableString = statementCreateTable.toString();
+		Statement statement = null;
+		try {
+			statement = this.connection.createStatement();
+			DBWriterHelper.LOG.info("Creating table: " + statementCreateTableString);
+			statement.execute(statementCreateTableString);
+		} finally {
+			if (statement != null) {
+				statement.close();
 			}
 		}
-		try {
-			final long recordId = this.recordId.getAndIncrement();
-			final PreparedStatement preparedStatement = this.recordTypeInformation.get(recordClass);
-			preparedStatement.setLong(1, recordId);
-			final Object[] recordFields = record.toArray();
-			for (int i = 0; i < recordFields.length; i++) {
-				if (recordFields[i] instanceof String) {
-					preparedStatement.setString(i + 2, (String) recordFields[i]);
-				} else if (recordFields[i] instanceof Integer) {
-					preparedStatement.setInt(i + 2, (Integer) recordFields[i]);
-				} else if (recordFields[i] instanceof Long) {
-					preparedStatement.setLong(i + 2, (Long) recordFields[i]);
-				} else if (recordFields[i] instanceof Float) {
-					preparedStatement.setFloat(i + 2, (Float) recordFields[i]);
-				} else if (recordFields[i] instanceof Double) {
-					preparedStatement.setDouble(i + 2, (Double) recordFields[i]);
-				} else if (recordFields[i] instanceof Byte) {
-					preparedStatement.setByte(i + 2, (Byte) recordFields[i]);
-				} else if (recordFields[i] instanceof Short) {
-					preparedStatement.setShort(i + 2, (Short) recordFields[i]);
-				} else if (recordFields[i] instanceof Boolean) {
-					preparedStatement.setBoolean(i + 2, (Boolean) recordFields[i]);
-				} else if (recordFields[i] == null) {
-					DBWriterHelper.LOG.error("Null value in record not supported!");
-					return false;
-				} else {
-					DBWriterHelper.LOG.error("Type '" + recordFields[i].getClass().getSimpleName() + "' not supported");
-					return false;
-				}
-			}
-			preparedStatement.executeUpdate();
+	}
 
-			// send to overviewtable
-			this.preparedStatementTotal.setLong(1, recordId);
-			this.preparedStatementTotal.setString(2, recordClassName);
-			this.preparedStatementTotal.executeUpdate();
-		} catch (final SQLException ex) {
-			DBWriterHelper.LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
+	public boolean set(final PreparedStatement preparedStatement, final int parameterIndex, final Object value) throws SQLException {
+		if (value instanceof String) {
+			preparedStatement.setString(parameterIndex, (String) value);
+		} else if (value instanceof Integer) {
+			preparedStatement.setInt(parameterIndex, (Integer) value);
+		} else if (value instanceof Long) {
+			preparedStatement.setLong(parameterIndex, (Long) value);
+		} else if (value instanceof Float) {
+			preparedStatement.setFloat(parameterIndex, (Float) value);
+		} else if (value instanceof Double) {
+			preparedStatement.setDouble(parameterIndex, (Double) value);
+		} else if (value instanceof Byte) {
+			preparedStatement.setByte(parameterIndex, (Byte) value);
+		} else if (value instanceof Short) {
+			preparedStatement.setShort(parameterIndex, (Short) value);
+		} else if (value instanceof Boolean) {
+			preparedStatement.setBoolean(parameterIndex, (Boolean) value);
+		} else if (value == null) {
+			DBWriterHelper.LOG.error("Null value in record not supported!");
+			return false;
+		} else {
+			DBWriterHelper.LOG.error("Type '" + value.getClass().getSimpleName() + "' not supported");
 			return false;
 		}
 		return true;
