@@ -57,7 +57,6 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 
 	private final Map<Class<? extends IMonitoringRecord>, PreparedStatement> recordTypeInformation = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, PreparedStatement>();
 
-	private final PreparedStatement preparedStatementInsertOverview;
 	private final AtomicLong recordId = new AtomicLong();
 
 	public SyncDbWriter(final Configuration configuration) throws Exception {
@@ -70,10 +69,8 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 		try {
 			this.connection = DriverManager.getConnection(configuration.getStringProperty(SyncDbWriter.CONFIG_CONNECTIONSTRING));
 			this.tablePrefix = configuration.getStringProperty(SyncDbWriter.CONFIG_TABLEPREFIX);
-			this.helper = new DBWriterHelper(this.connection);
-			// create overview table
-			this.helper.createTable(this.tablePrefix, String.class);
-			this.preparedStatementInsertOverview = this.connection.prepareStatement("INSERT INTO " + this.tablePrefix + " VALUES (?, ?)");
+			this.helper = new DBWriterHelper(this.connection, this.tablePrefix);
+			this.helper.createIndexTable();
 		} catch (final SQLException ex) {
 			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex); // NOPMD
 		}
@@ -88,7 +85,9 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 		final Class<? extends IMonitoringRecord> recordClass = record.getClass();
 		final String recordClassName = recordClass.getSimpleName();
 		if (!this.recordTypeInformation.containsKey(recordClass)) { // not yet seen record
-			SyncDbWriter.LOG.info("New record type found: " + recordClassName);
+			if (SyncDbWriter.LOG.isDebugEnabled()) {
+				SyncDbWriter.LOG.debug("New record type found: " + recordClassName);
+			}
 			final String tableName = this.tablePrefix + "_" + recordClassName;
 			final Class<?>[] typeArray;
 			try {
@@ -100,8 +99,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 			try {
 				this.helper.createTable(tableName, typeArray);
 				final StringBuilder sb = new StringBuilder("?");
-				for (@SuppressWarnings("unused")
-				final Class<?> element : typeArray) {
+				for (int count = typeArray.length; count > 0; count--) {
 					sb.append(",?");
 				}
 				final PreparedStatement preparedStatement = this.connection.prepareStatement("INSERT INTO " + tableName + " VALUES (" + sb.toString() + ")");
@@ -123,11 +121,6 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 				}
 			}
 			preparedStatement.executeUpdate();
-
-			// send to overview table
-			this.preparedStatementInsertOverview.setLong(1, id);
-			this.preparedStatementInsertOverview.setString(2, recordClassName);
-			this.preparedStatementInsertOverview.executeUpdate();
 		} catch (final SQLException ex) {
 			SyncDbWriter.LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 			return false;
@@ -138,9 +131,6 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 	public void terminate() {
 		try {
 			// close all prepared statements
-			if (this.preparedStatementInsertOverview != null) {
-				this.preparedStatementInsertOverview.close();
-			}
 			for (final Class<? extends IMonitoringRecord> recordType : this.recordTypeInformation.keySet()) {
 				final PreparedStatement preparedStatement = this.recordTypeInformation.remove(recordType);
 				if (preparedStatement != null) {

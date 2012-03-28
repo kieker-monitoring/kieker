@@ -47,8 +47,6 @@ import kieker.monitoring.writer.AbstractAsyncWriter;
  * @author Jan Waller
  */
 public final class AsyncDbWriter extends AbstractAsyncWriter {
-	// private static final Log LOG = LogFactory.getLog(AsyncDbWriter.class);
-
 	private static final String PREFIX = AsyncDbWriter.class.getName() + ".";
 	public static final String CONFIG_DRIVERCLASSNAME = AsyncDbWriter.PREFIX + "DriverClassname"; // NOCS (AfterPREFIX)
 	public static final String CONFIG_CONNECTIONSTRING = AsyncDbWriter.PREFIX + "ConnectionString"; // NOCS (AfterPREFIX)
@@ -72,9 +70,20 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 
 	@Override
 	public void init() throws Exception {
+		Connection connection = null;
+		try {
+			connection = DriverManager.getConnection(this.configuration.getStringProperty(AsyncDbWriter.CONFIG_CONNECTIONSTRING));
+			new DBWriterHelper(connection, this.tablePrefix).createIndexTable();
+		} catch (final SQLException ex) {
+			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex); // NOPMD
+		} finally {
+			if (connection != null) {
+				connection.close();
+			}
+		}
 		try {
 			for (int i = 0; i < this.configuration.getIntProperty(AsyncDbWriter.CONFIG_NRCONN); i++) {
-				this.addWorker(new DbWriterThread(super.monitoringController, this.blockingQueue, this.connectionString, this.tablePrefix + i, this.recordId));
+				this.addWorker(new DbWriterThread(super.monitoringController, this.blockingQueue, i, this.connectionString, this.tablePrefix, this.recordId));
 			}
 		} catch (final SQLException ex) {
 			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex); // NOPMD
@@ -93,20 +102,15 @@ final class DbWriterThread extends AbstractAsyncThread {
 	private final DBWriterHelper helper;
 
 	private final Map<Class<? extends IMonitoringRecord>, PreparedStatement> recordTypeInformation = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, PreparedStatement>();
-
-	private final PreparedStatement preparedStatementInsertOverview;
 	private final AtomicLong recordId;
 
-	public DbWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> blockingQueue, final String connectionString,
-			final String tablePrefix, final AtomicLong recordId) throws SQLException {
+	public DbWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> blockingQueue, final int threadId,
+			final String connectionString, final String tablePrefix, final AtomicLong recordId) throws SQLException {
 		super(monitoringController, blockingQueue);
 		this.recordId = recordId;
 		this.connection = DriverManager.getConnection(connectionString);
-		this.tablePrefix = tablePrefix;
-		this.helper = new DBWriterHelper(this.connection);
-		// create overview table
-		this.helper.createTable(tablePrefix, String.class);
-		this.preparedStatementInsertOverview = this.connection.prepareStatement("INSERT INTO " + this.tablePrefix + " VALUES (?, ?)");
+		this.tablePrefix = tablePrefix + "_" + threadId;
+		this.helper = new DBWriterHelper(this.connection, tablePrefix);
 	}
 
 	@Override
@@ -125,8 +129,7 @@ final class DbWriterThread extends AbstractAsyncThread {
 			try {
 				this.helper.createTable(tableName, typeArray);
 				final StringBuilder sb = new StringBuilder("?");
-				for (@SuppressWarnings("unused")
-				final Class<?> element : typeArray) {
+				for (int count = typeArray.length; count > 0; count--) {
 					sb.append(",?");
 				}
 				final PreparedStatement preparedStatement = this.connection.prepareStatement("INSERT INTO " + tableName + " VALUES (" + sb.toString() + ")");
@@ -147,11 +150,6 @@ final class DbWriterThread extends AbstractAsyncThread {
 				}
 			}
 			preparedStatement.executeUpdate();
-
-			// send to overview table
-			this.preparedStatementInsertOverview.setLong(1, id);
-			this.preparedStatementInsertOverview.setString(2, recordClassName);
-			this.preparedStatementInsertOverview.executeUpdate();
 		} catch (final SQLException ex) {
 			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 		}
@@ -161,9 +159,6 @@ final class DbWriterThread extends AbstractAsyncThread {
 	protected void cleanup() {
 		try {
 			// close all prepared statements
-			if (this.preparedStatementInsertOverview != null) {
-				this.preparedStatementInsertOverview.close();
-			}
 			for (final Class<? extends IMonitoringRecord> recordType : this.recordTypeInformation.keySet()) {
 				final PreparedStatement preparedStatement = this.recordTypeInformation.remove(recordType);
 				if (preparedStatement != null) {

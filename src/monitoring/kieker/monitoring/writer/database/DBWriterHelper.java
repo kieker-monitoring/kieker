@@ -39,10 +39,11 @@ public final class DBWriterHelper {
 	private static final Log LOG = LogFactory.getLog(DBWriterHelper.class);
 
 	private final Connection connection;
+	private final String indexTablename;
 
 	private final Map<Class<?>, String> createTypeMap = new ConcurrentHashMap<Class<?>, String>();
 
-	public DBWriterHelper(final Connection connection) throws SQLException {
+	public DBWriterHelper(final Connection connection, final String indexTablename) throws SQLException {
 		this.connection = connection;
 		final ResultSet databaseTypeInfo = connection.getMetaData().getTypeInfo();
 		while (databaseTypeInfo.next()) {
@@ -52,7 +53,7 @@ public final class DBWriterHelper {
 			switch (id) {
 			case Types.VARCHAR: // String
 				if (typeParams != null) {
-					this.createTypeMap.put(String.class, typeName + " (255)");
+					this.createTypeMap.put(String.class, typeName + " (1024)");
 				} else {
 					this.createTypeMap.put(String.class, typeName);
 				}
@@ -90,13 +91,14 @@ public final class DBWriterHelper {
 			}
 		}
 		databaseTypeInfo.close();
+		this.indexTablename = indexTablename;
 	}
 
-	public void createTable(final String tableName, final Class<?>... columns) throws SQLException {
+	public void createTable(final String tablename, final Class<?>... columns) throws SQLException {
 		final StringBuilder statementCreateTable = new StringBuilder();
 		// FIXME: what should happen if the table already exists?
 		// stmt.append("DROP TABLE ").append(tableName).append(';');
-		statementCreateTable.append("CREATE TABLE ").append(tableName).append(" (id ");
+		statementCreateTable.append("CREATE TABLE ").append(tablename).append(" (id ");
 		final String createLong = this.createTypeMap.get(long.class);
 		if (createLong != null) {
 			statementCreateTable.append(createLong);
@@ -118,7 +120,45 @@ public final class DBWriterHelper {
 		Statement statement = null;
 		try {
 			statement = this.connection.createStatement();
-			DBWriterHelper.LOG.info("Creating table: " + statementCreateTableString);
+			if (DBWriterHelper.LOG.isDebugEnabled()) {
+				DBWriterHelper.LOG.debug("Creating table: " + statementCreateTableString);
+			}
+			statement.execute(statementCreateTableString);
+		} finally {
+			if (statement != null) {
+				statement.close();
+			}
+		}
+		// insert this new table into the index table
+		try {
+			statement = this.connection.createStatement();
+			statement.executeUpdate("INSERT INTO " + this.indexTablename + " VALUES ('" + tablename + "')");
+		} finally {
+			if (statement != null) {
+				statement.close();
+			}
+		}
+	}
+
+	public void createIndexTable() throws SQLException {
+		final StringBuilder statementCreateTable = new StringBuilder();
+		// FIXME: what should happen if the table already exists?
+		// stmt.append("DROP TABLE ").append(tableName).append(';');
+		statementCreateTable.append("CREATE TABLE ").append(this.indexTablename).append(" (tables ");
+		final String createString = this.createTypeMap.get(String.class);
+		if (createString != null) {
+			statementCreateTable.append(createString);
+		} else {
+			throw new SQLException("Type 'String' not supported.");
+		}
+		statementCreateTable.append(")");
+		final String statementCreateTableString = statementCreateTable.toString();
+		Statement statement = null;
+		try {
+			statement = this.connection.createStatement();
+			if (DBWriterHelper.LOG.isDebugEnabled()) {
+				DBWriterHelper.LOG.debug("Creating table: " + statementCreateTableString);
+			}
 			statement.execute(statementCreateTableString);
 		} finally {
 			if (statement != null) {

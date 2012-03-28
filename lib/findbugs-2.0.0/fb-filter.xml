@@ -1,116 +1,163 @@
 <FindBugsFilter>
-<!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
-  
-  <Match>
-    <Class name="kieker.evaluation.benchmark.Benchmark" />
-    <Method name="parseAndInitializeArguments" params="java.lang.String[]" returns="void" />
-    <Bug pattern="REC_CATCH_EXCEPTION" />
-  </Match>
-  
-  <Match>
-    <Class name="kieker.monitoring.timer.AbstractTimeSource" />
-    <Method name="toString" params="" returns="java.lang.String" />
-    <Bug pattern="USM_USELESS_ABSTRACT_METHOD" />
-  </Match>
-  
-  <Match>
-    <Class name="kieker.analysis.plugin.reader.jmx.JMXReader" />
-    <Method name="read2" params="" returns="boolean" />
-    <Bug pattern="DE_MIGHT_IGNORE" />
-  </Match>
+	<!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
 
-  <Match>
-    <Class name="kieker.common.logging.LogFactory" />
-    <Bug pattern="DE_MIGHT_IGNORE" />
-  </Match>
+	<Match>
+		<Class name="kieker.monitoring.writer.database.DbWriterThread" />
+		<Method name="consume" params="kieker.common.record.IMonitoringRecord"
+			returns="void" />
+		<Bug pattern="OBL_UNSATISFIED_OBLIGATION" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.monitoring.writer.database.DbWriterThread" />
+		<Method name="consume" params="kieker.common.record.IMonitoringRecord"
+			returns="void" />
+		<Bug pattern="SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.monitoring.writer.database.SyncDbWriter" />
+		<Method name="newMonitoringRecord" params="kieker.common.record.IMonitoringRecord"
+			returns="boolean" />
+		<Bug pattern="OBL_UNSATISFIED_OBLIGATION" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.monitoring.writer.database.SyncDbWriter" />
+		<Method name="newMonitoringRecord" params="kieker.common.record.IMonitoringRecord"
+			returns="boolean" />
+		<Bug pattern="SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING" />
+	</Match>
 
-  <Match>
-    <Class name="kieker.analysis.plugin.reader.filesystem.FSReader" />
-    <Method name="read" params="" returns="boolean" />
-    <Bug pattern="NN_NAKED_NOTIFY" />
-  </Match>
-  
-  <Match>
-    <Class name="kieker.analysis.plugin.reader.filesystem.FSReader" />
-    <Method name="newMonitoringRecord" params="kieker.common.record.IMonitoringRecord" returns="boolean" />
-    <Bug pattern="WA_NOT_IN_LOOP" />
-  </Match>
+	<Match>
+		<Class name="kieker.monitoring.writer.database.DBWriterHelper" />
+		<Method name="createTable" params="java.lang.String,java.lang.Class[]"
+			returns="void" />
+		<Bug pattern="SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE" />
+	</Match>
 
-  <Match>
-    <Class name="kieker.analysis.plugin.reader.filesystem.FSReader" />
-    <Method name="newMonitoringRecord" params="kieker.common.record.IMonitoringRecord" returns="boolean" />
-    <Bug pattern="UW_UNCOND_WAIT" />
-  </Match>
+	<Match>
+		<Class name="kieker.monitoring.writer.database.DBWriterHelper" />
+		<Method name="createIndexTable" params="" returns="void" />
+		<Bug pattern="SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE" />
+	</Match>
 
-  <Match>
-    <Class name="kieker.monitoring.core.registry.Registry" />
-    <Field name="eArrayCached" />
-    <Bug pattern="VO_VOLATILE_REFERENCE_TO_ARRAY" />
-  </Match>
+	<Match>
+		<Class name="kieker.evaluation.benchmark.Benchmark" />
+		<Method name="parseAndInitializeArguments" params="java.lang.String[]"
+			returns="void" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
 
-  <Match>
-    <Class name="org.apache.commons.logging.impl.Jdk14LoggerPatched" />
-    <Method name="getLog" params="java.lang.String" returns="org.apache.commons.logging.Log" />
-    <Bug pattern="REC_CATCH_EXCEPTION" />
-  </Match>
-  
-  <Match>
-    <Class name="kieker.analysis.plugin.reader.filesystem.FSDirectoryReader" />
-    <Method name="processNormalInputFile" params="java.io.File" returns="void" />
-    <Bug pattern="REC_CATCH_EXCEPTION" />
-  </Match>
-  
-  <Match>
-    <Class name="kieker.analysis.plugin.reader.filesystem.FSDirectoryReader" />
-    <Method name="processBinaryInputFile" params="java.io.File" returns="void" />
-    <Bug pattern="REC_CATCH_EXCEPTION" />
-  </Match>
-  
-  <Match>
-    <Class name="kieker.monitoring.core.controller.JMXController" />
-    <Method name="&lt;init&gt;" params="kieker.common.configuration.Configuration" returns="void" />
-    <Bug pattern="REC_CATCH_EXCEPTION" />
-  </Match>
+	<Match>
+		<Class name="kieker.monitoring.timer.AbstractTimeSource" />
+		<Method name="toString" params="" returns="java.lang.String" />
+		<Bug pattern="USM_USELESS_ABSTRACT_METHOD" />
+	</Match>
 
-  <Match>
-    <Class name="kieker.tools.traceAnalysis.TraceAnalysisTool" />
-    <Method name="dispatchTasks" params="" returns="boolean" />
-    <Bug pattern="REC_CATCH_EXCEPTION" />
-  </Match>
+	<Match>
+		<Class name="kieker.analysis.plugin.reader.jmx.JMXReader" />
+		<Method name="read2" params="" returns="boolean" />
+		<Bug pattern="DE_MIGHT_IGNORE" />
+	</Match>
 
-  <Match>
-    <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
-  </Match>
-  
-  <Match>
-    <Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
-    <Bug pattern="IC_SUPERCLASS_USES_SUBCLASS_DURING_INITIALIZATION" />
-  </Match>
-  
-  <Match>
-    <Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
-    <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NULL_VALUE" />
-  </Match>
-  
-  <Match>
-    <Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
-    <Bug pattern="BC_UNCONFIRMED_CAST" />
-  </Match>
-  
-  <Match>
-    <Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
-    <Bug pattern="NP_LOAD_OF_KNOWN_NULL_VALUE" />
-  </Match>
-  
-  <Match>
-    <Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
-    <Bug pattern="NM_CONFUSING" />
-  </Match>
-  
-  <Match>
-    <Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
-    <Bug pattern="MS_PKGPROTECT" />
-  </Match>
-  
+	<Match>
+		<Class name="kieker.common.logging.LogFactory" />
+		<Bug pattern="DE_MIGHT_IGNORE" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.reader.filesystem.FSReader" />
+		<Method name="read" params="" returns="boolean" />
+		<Bug pattern="NN_NAKED_NOTIFY" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.reader.filesystem.FSReader" />
+		<Method name="newMonitoringRecord" params="kieker.common.record.IMonitoringRecord"
+			returns="boolean" />
+		<Bug pattern="WA_NOT_IN_LOOP" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.reader.filesystem.FSReader" />
+		<Method name="newMonitoringRecord" params="kieker.common.record.IMonitoringRecord"
+			returns="boolean" />
+		<Bug pattern="UW_UNCOND_WAIT" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.monitoring.core.registry.Registry" />
+		<Field name="eArrayCached" />
+		<Bug pattern="VO_VOLATILE_REFERENCE_TO_ARRAY" />
+	</Match>
+
+	<Match>
+		<Class name="org.apache.commons.logging.impl.Jdk14LoggerPatched" />
+		<Method name="getLog" params="java.lang.String" returns="org.apache.commons.logging.Log" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.reader.filesystem.FSDirectoryReader" />
+		<Method name="processNormalInputFile" params="java.io.File"
+			returns="void" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.reader.filesystem.FSDirectoryReader" />
+		<Method name="processBinaryInputFile" params="java.io.File"
+			returns="void" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.monitoring.core.controller.JMXController" />
+		<Method name="&lt;init&gt;" params="kieker.common.configuration.Configuration"
+			returns="void" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.tools.traceAnalysis.TraceAnalysisTool" />
+		<Method name="dispatchTasks" params="" returns="boolean" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
+
+	<Match>
+		<Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
+	</Match>
+
+	<Match>
+		<Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
+		<Bug pattern="IC_SUPERCLASS_USES_SUBCLASS_DURING_INITIALIZATION" />
+	</Match>
+
+	<Match>
+		<Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
+		<Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NULL_VALUE" />
+	</Match>
+
+	<Match>
+		<Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
+		<Bug pattern="BC_UNCONFIRMED_CAST" />
+	</Match>
+
+	<Match>
+		<Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
+		<Bug pattern="NP_LOAD_OF_KNOWN_NULL_VALUE" />
+	</Match>
+
+	<Match>
+		<Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
+		<Bug pattern="NM_CONFUSING" />
+	</Match>
+
+	<Match>
+		<Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
+		<Bug pattern="MS_PKGPROTECT" />
+	</Match>
+
 
 </FindBugsFilter>
