@@ -819,7 +819,36 @@
 			<jvmarg value="-D${tests.writer}.customStoragePath=${tests.storagepath}" />
 		</java>
 	</target>
+	
+		<target name="run-test-loadTimeWeaving-bookstoreDB" depends="-compile-tests-monitoring" description="Runs a compile-time-weaving test with an SQL database monitoring log">
+			<path id="kieker.test-loadTimeWeaving-bookstoreDB-run-classpath">
+				<pathelement location="${build.tests.dir}/" />
+				<fileset dir="${lib.dir}">
+					<include name="derby-*.jar" />
+				</fileset>
+				<fileset dir="${dist.dir}">
+					<include name="${dist.kieker.main.aspectj.jar}" />
+				</fileset>
+			</path>
 
+			<copy file="${aop.xml.ltwtests.flow.full}" tofile="${build.tests.dir}/META-INF/aop.xml" overwrite="true" />
+			
+			<!-- delete existing DB: -->
+			<delete dir="${tests.javadb.kiekerdb.path}" />
+			<java dir="." fork="true" classname="kieker.test.monitoring.aspectj.loadTimeWeaving.executionOrderTest.ExecutionOrderTest" classpathref="kieker.test-loadTimeWeaving-bookstoreDB-run-classpath">
+			<!--<java dir="." fork="true" classname="kieker.test.monitoring.aspectj.compileTimeWeaving.bookstore.Bookstore" classpathref="kieker.test-compileTimeWeaving-bookstoreDB-run-classpath">-->
+				<jvmarg value="-Dkieker.monitoring.configuration=META-INF/kieker.monitoring.test.properties" />
+				<jvmarg value="-Dkieker.monitoring.writer=kieker.monitoring.writer.database.AsyncDbWriter" />
+				<jvmarg value="-Dkieker.monitoring.writer.database.AsyncDbWriter.DriverClassname=org.apache.derby.jdbc.EmbeddedDriver" />
+				<jvmarg value="-Dkieker.monitoring.writer.database.AsyncDbWriter.ConnectionString=jdbc:derby:${tests.javadb.kiekerdb.path};user=DBUSER;password=DBPASS;create=true" />
+				<jvmarg value="-Dkieker.monitoring.writer.database.AsyncDbWriter.TablePrefix=kieker" />
+				<jvmarg value="-Dkieker.monitoring.writer.database.AsyncDbWriter.numberOfConnections=1" />
+				<jvmarg value="-javaagent:${dist.dir}/${dist.kieker.main.aspectj.jar}" />
+				<jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true" />
+				<jvmarg value="-Daj.weaving.verbose=true" />
+			</java>
+		</target>
+		
 	<target name="run-test-compileTimeWeaving-bookstoreDB" depends="-compile-tests-monitoring,-compile-tests-compileTimeWeaving-bookstore" description="Runs a compile-time-weaving test with an SQL database monitoring log">
 		<path id="kieker.test-compileTimeWeaving-bookstoreDB-run-classpath">
 			<fileset dir="${lib.dir}">
