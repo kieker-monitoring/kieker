@@ -21,6 +21,7 @@
 package kieker.test.analysis.manual;
 
 import java.io.File;
+import java.io.IOException;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractPlugin;
@@ -53,7 +54,12 @@ public final class TestAnalysis {
 		final AnalysisController analysisController;
 		final SystemModelRepository traceRepo = new SystemModelRepository(new Configuration());
 		if (TestAnalysis.LOADCONFIG) {
-			analysisController = new AnalysisController(new File("tmp/testproject.kax"));
+			try {
+				analysisController = new AnalysisController(new File("tmp/testproject.kax"));
+			} catch (final IOException e) {
+				e.printStackTrace();
+				return;
+			}
 		} else {
 			analysisController = new AnalysisController("TestProject");
 

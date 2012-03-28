@@ -111,47 +111,51 @@ public final class AnalysisController implements Runnable {
 	}
 
 	/**
-	 * This constructors loads the model from the given file as a configuration and creates an instance of this class.
-	 * The file should therefore be an instance of the analysis meta model.
+	 * This constructors creates an {@link AnalysisController} instance, using the given file to load an analysis model. The given file should therefore be an
+	 * instance of the analysis meta model.
 	 * 
 	 * @param file
 	 *            The configuration file for the analysis.
 	 * 
 	 * @return A completely initialized instance of {@link AnalysisController}.
 	 * 
-	 * @throws NullPointerException
-	 *             If something went wrong.
+	 * @throws IOException
+	 *             If the given file could not be loaded, is not a valid kax-configuration file, one or more plugins or repositories could not be created, one or
+	 *             more properties of the plugins are invalid or if a connection between two filters is not allowed. Every possible error during creation is logged.
 	 */
-	// TODO Kieker-Exception if anything goes wrong.
-	public AnalysisController(final File file) throws NullPointerException {
+	public AnalysisController(final File file) throws IOException {
 		this(file, AnalysisController.class.getClassLoader());
 	}
 
 	/**
-	 * This constructors loads the model from the given file as a configuration and creates an instance of this class.
-	 * The file should therefore be an instance of the analysis meta model.
+	 * This constructors creates an {@link AnalysisController} instance, using the given file to load an analysis model and the given classloader to initialize the
+	 * objects. The given file should therefore be an instance of the analysis meta model.
 	 * 
 	 * @param file
 	 *            The configuration file for the analysis.
 	 * @param classLoader
-	 *            The class loader used for the initializing.
+	 *            The classloader used to initialize the plugins etc.
 	 * 
 	 * @return A completely initialized instance of {@link AnalysisController}.
 	 * 
-	 * @throws NullPointerException
-	 *             If something went wrong.
+	 * @throws IOException
+	 *             If the given file could not be loaded, is not a valid kax-configuration file, one or more plugins or repositories could not be created, one or
+	 *             more properties of the plugins are invalid or if a connection between two filters is not allowed. Every possible error during creation is logged.
 	 */
-	public AnalysisController(final File file, final ClassLoader classLoader) throws NullPointerException {
+	public AnalysisController(final File file, final ClassLoader classLoader) throws IOException {
 		this(AnalysisController.loadFromFile(file), classLoader);
 	}
 
 	/**
-	 * Creates a new instance of the class {@link AnalysisController} but uses the given instance of @link{Project} to construct the analysis.
+	 * Creates a new instance of the class {@link AnalysisController} but uses the given instance of {@link MIProject} to construct the analysis.
 	 * 
 	 * @param project
 	 *            The project instance for the analysis.
+	 * @throws IOException
+	 *             If the given file could not be loaded, is not a valid kax-configuration file, one or more plugins or repositories could not be created, one or
+	 *             more properties of the plugins are invalid or if a connection between two filters is not allowed. Every possible error during creation is logged.
 	 */
-	public AnalysisController(final MIProject project) {
+	public AnalysisController(final MIProject project) throws IOException {
 		this(project, AnalysisController.class.getClassLoader());
 	}
 
@@ -162,14 +166,17 @@ public final class AnalysisController implements Runnable {
 	 *            The project instance for the analysis.
 	 * @param classLoader
 	 *            The class loader used for the initializing.
+	 * @throws IOException
+	 *             If the given file could not be loaded, is not a valid kax-configuration file, one or more plugins or repositories could not be created, one or
+	 *             more properties of the plugins are invalid or if a connection between two filters is not allowed. Every possible error during creation is logged.
 	 */
-	public AnalysisController(final MIProject project, final ClassLoader classLoader) {
-		if (project != null) {
+	public AnalysisController(final MIProject project, final ClassLoader classLoader) throws IOException {
+		if (project == null) {
+			AnalysisController.LOG.error("The project could not be loaded.");
+			throw new IOException();
+		} else {
 			this.loadFromModelProject(project, classLoader);
 			this.projectName = project.getName();
-		} else {
-			this.projectName = "";
-			AnalysisController.LOG.error("The project could not be loaded.");
 		}
 	}
 
@@ -179,7 +186,7 @@ public final class AnalysisController implements Runnable {
 	 * @param mproject
 	 *            The instance to be used for configuration.
 	 */
-	private final void loadFromModelProject(final MIProject mproject, final ClassLoader classLoader) {
+	private final void loadFromModelProject(final MIProject mproject, final ClassLoader classLoader) throws IOException {
 		/* Remember the libraries (But create them via a factory to avoid that the dependencies are removed during the saving. */
 		final MAnalysisMetaModelFactory factory = new MAnalysisMetaModelFactory();
 		for (final MIDependency mDepdendency : mproject.getDependencies()) {
@@ -193,15 +200,14 @@ public final class AnalysisController implements Runnable {
 		for (final MIRepository mRepository : mproject.getRepositories()) {
 			/* Extract the necessary informations to create the repository. */
 			final Configuration configuration = AnalysisController.modelPropertiesToConfiguration(mRepository.getProperties());
-			try {
-				final AbstractRepository repository = AnalysisController.createAndInitialize(AbstractRepository.class, mRepository.getClassname(), configuration,
-						classLoader);
-				repositoryMap.put(mRepository, repository);
-				this.registerRepository(repository);
-			} catch (final Exception ex) { // FIXME: no exception gets thrown, but repository might be null !!
-				AnalysisController.LOG.error("Could not load repository: " + mRepository.getClassname(), ex);
-				continue;
+			final AbstractRepository repository = AnalysisController.createAndInitialize(AbstractRepository.class, mRepository.getClassname(), configuration,
+					classLoader);
+			if (repository == null) {
+				AnalysisController.LOG.error("Could not load repository: " + mRepository.getClassname());
+				throw new IOException();
 			}
+			repositoryMap.put(mRepository, repository);
+			this.registerRepository(repository);
 		}
 		/*
 		 * We run through the project and collect all plugins. As we create an actual object for every plugin within the model, we have to remember the mapping
@@ -216,20 +222,19 @@ public final class AnalysisController implements Runnable {
 			final String pluginClassname = mPlugin.getClassname();
 			configuration.setProperty(AbstractPlugin.CONFIG_NAME, mPlugin.getName());
 			/* Create the plugin and put it into our map. */
-			try {
-				final AbstractPlugin plugin = AnalysisController.createAndInitialize(AbstractPlugin.class, pluginClassname, configuration, classLoader);
-				pluginMap.put(mPlugin, plugin);
-				/* Check the used configuration against the actual available config keys. */
-				AnalysisController.checkConfiguration(plugin, configuration);
-				/* Add the plugin to our controller instance. */
-				if (plugin instanceof AbstractReaderPlugin) {
-					this.registerReader((AbstractReaderPlugin) plugin);
-				} else {
-					this.registerFilter((AbstractFilterPlugin) plugin);
-				}
-			} catch (final Exception ex) { // FIXME: as above !!!
-				AnalysisController.LOG.error("Could not load plugin: " + mPlugin.getClassname(), ex);
-				continue;
+			final AbstractPlugin plugin = AnalysisController.createAndInitialize(AbstractPlugin.class, pluginClassname, configuration, classLoader);
+			if (plugin == null) {
+				AnalysisController.LOG.error("Could not load plugin: " + mPlugin.getClassname());
+				throw new IOException();
+			}
+			pluginMap.put(mPlugin, plugin);
+			/* Check the used configuration against the actual available config keys. */
+			AnalysisController.checkConfiguration(plugin, configuration);
+			/* Add the plugin to our controller instance. */
+			if (plugin instanceof AbstractReaderPlugin) {
+				this.registerReader((AbstractReaderPlugin) plugin);
+			} else {
+				this.registerFilter((AbstractFilterPlugin) plugin);
 			}
 		}
 
@@ -239,8 +244,12 @@ public final class AnalysisController implements Runnable {
 			AnalysisController.checkPorts(mPlugin, pluginMap.get(mPlugin));
 			final EList<MIRepositoryConnector> mPluginRPorts = mPlugin.getRepositories();
 			for (final MIRepositoryConnector mPluginRPort : mPluginRPorts) {
-				this.connect(pluginMap.get(mPlugin), mPluginRPort.getName(), repositoryMap.get(mPluginRPort.getRepository()));
+				final boolean result = this.connect(pluginMap.get(mPlugin), mPluginRPort.getName(), repositoryMap.get(mPluginRPort.getRepository()));
+				if (!result) {
+					throw new IOException();
+				}
 			}
+
 			final EList<MIOutputPort> mPluginOPorts = mPlugin.getOutputPorts();
 			for (final MIOutputPort mPluginOPort : mPluginOPorts) {
 				final String outputPortName = mPluginOPort.getName();
@@ -252,7 +261,10 @@ public final class AnalysisController implements Runnable {
 					/* Find the mapping and subscribe */
 					final String inputPortName = mSubscriber.getName();
 					final AbstractPlugin dstPlugin = pluginMap.get(mSubscriber.getParent());
-					this.connect(srcPlugin, outputPortName, dstPlugin, inputPortName);
+					final boolean result = this.connect(srcPlugin, outputPortName, dstPlugin, inputPortName);
+					if (!result) {
+						throw new IOException();
+					}
 				}
 			}
 		}
@@ -260,15 +272,17 @@ public final class AnalysisController implements Runnable {
 
 	/**
 	 * This method checks the ports of the given model plugin against the ports of the actual plugin. If there are ports which are in the model instance, but not in
-	 * the "real" plugin, a warning is logged. This method should be called during the creation of an <i>AnalysisController</i> via a configuration file to find
-	 * invalid (outdated) ports.
+	 * the "real" plugin, a warning is logged and an exception is thrown. This method should be called during the creation of an <i>AnalysisController</i> via a
+	 * configuration file to find invalid (outdated) ports.
 	 * 
 	 * @param mPlugin
 	 *            The model instance of the plugin.
 	 * @param plugin
 	 *            The corresponding "real" plugin.
+	 * @throws IOException
+	 *             If an invalid port has been detected.
 	 */
-	private static void checkPorts(final MIPlugin mPlugin, final AbstractPlugin plugin) {
+	private static void checkPorts(final MIPlugin mPlugin, final AbstractPlugin plugin) throws IOException {
 		/* Get all ports. */
 		final EList<MIOutputPort> mOutputPorts = mPlugin.getOutputPorts();
 		final EList<MIInputPort> mInputPorts = (mPlugin instanceof MIAnalysisPlugin) ? ((MIAnalysisPlugin) mPlugin).getInputPorts() : new BasicEList<MIInputPort>();
@@ -283,11 +297,13 @@ public final class AnalysisController implements Runnable {
 		for (final MIOutputPort mOutputPort : mOutputPorts) {
 			if (Arrays.binarySearch(outputPorts, mOutputPort.getName()) < 0) {
 				AnalysisController.LOG.warn("The output port '" + mOutputPort.getName() + "' of '" + mPlugin.getName() + "' does not exist.");
+				throw new IOException();
 			}
 		}
 		for (final MIInputPort mInputPort : mInputPorts) {
 			if (Arrays.binarySearch(inputPorts, mInputPort.getName()) < 0) {
 				AnalysisController.LOG.warn("The input port '" + mInputPort.getName() + "' of '" + mPlugin.getName() + "' does not exist.");
+				throw new IOException();
 			}
 		}
 	}
@@ -301,8 +317,10 @@ public final class AnalysisController implements Runnable {
 	 *            The plugin to be used for the check.
 	 * @param configuration
 	 *            The configuration to be checked for correctness.
+	 * @throws IOException
+	 *             If an invalid property has been detected.
 	 */
-	private static void checkConfiguration(final AbstractPlugin plugin, final Configuration configuration) {
+	private static void checkConfiguration(final AbstractPlugin plugin, final Configuration configuration) throws IOException {
 		/* Get the actual configuration of the plugin (and therefore the real existing keys) */
 		final Configuration actualConfiguration = plugin.getCurrentConfiguration();
 		/* Run through all used keys in the given configuration. */
@@ -312,6 +330,7 @@ public final class AnalysisController implements Runnable {
 			if (!actualConfiguration.containsKey(key) && !(key.equals(AbstractPlugin.CONFIG_NAME))) {
 				/* Found an invalid key. */
 				AnalysisController.LOG.warn("Invalid property of '" + plugin.getName() + "' found: '" + key + "'.");
+				throw new IOException();
 			}
 		}
 	}
@@ -693,9 +712,11 @@ public final class AnalysisController implements Runnable {
 	 * 
 	 * @param file
 	 *            The file to be loaded.
-	 * @return An instance of <code>MIProject</code> if everything went well, null otherwise.
+	 * @throws IOException
+	 *             If something during loading went wrong.
+	 * @return An instance of <code>MIProject</code> if everything went well.
 	 */
-	public static final MIProject loadFromFile(final File file) {
+	public static final MIProject loadFromFile(final File file) throws IOException {
 		/* Create a resource set to work with. */
 		final ResourceSet resourceSet = new ResourceSetImpl();
 		/* Initialize the package information */
@@ -721,15 +742,15 @@ public final class AnalysisController implements Runnable {
 				// The first (and only) element should be the project.
 				return (MIProject) content.get(0);
 			} else {
-				return null;
+				throw new IOException();
 			}
 		} catch (final IOException ex) {
 			AnalysisController.LOG.error("Could not open the given file.", ex);
-			return null;
+			throw ex;
 		} catch (final Exception ex) { // NOPMD NOCS (illegal catch)
 			/* Some exceptions like the XMIException can be thrown during loading although it cannot be seen. Catch this situation. */
 			AnalysisController.LOG.error("The given file is not a valid kax-configuration file.", ex);
-			return null;
+			throw new IOException();
 		}
 	}
 
@@ -740,7 +761,7 @@ public final class AnalysisController implements Runnable {
 	 *            The file to be used for the storage.
 	 * @param project
 	 *            The project to be stored.
-	 * @return true iff the storage was succesful.
+	 * @return true iff the storage was successful.
 	 */
 	public static final boolean saveToFile(final File file, final MIProject project) {
 		/* Create a resource and put the given project into it. */
