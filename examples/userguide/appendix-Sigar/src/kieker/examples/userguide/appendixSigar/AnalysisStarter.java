@@ -21,6 +21,7 @@
 package kieker.examples.userguide.appendixSigar;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
@@ -54,7 +55,11 @@ public final class AnalysisStarter {
 		analysisInstance.registerReader(fsReader);
 
 		/* Connect both components. */
-		analysisInstance.connect(fsReader, FSReader.OUTPUT_PORT_NAME_RECORDS, consumer, StdOutDumpConsumer.INPUT_PORT_NAME);
+		try {
+			analysisInstance.connect(fsReader, FSReader.OUTPUT_PORT_NAME_RECORDS, consumer, StdOutDumpConsumer.INPUT_PORT_NAME);
+		} catch (final AnalysisConfigurationException e) {
+			e.printStackTrace();
+		}
 
 		/* Start the analysis */
 		analysisInstance.run();

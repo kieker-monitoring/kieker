@@ -27,6 +27,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 import kieker.analysis.AnalysisController;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
@@ -105,7 +106,7 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 	}
 
 	@Override
-	protected List<IMonitoringRecord> readEvents() {
+	protected List<IMonitoringRecord> readEvents() throws AnalysisConfigurationException {
 		final String[] monitoringLogs = this.tmpFolder.getRoot().list(new KiekerLogDirFilter());
 		for (int i = 0; i < monitoringLogs.length; i++) { // transform relative to absolute path
 			monitoringLogs[i] = this.tmpFolder.getRoot().getAbsoluteFile() + File.separator + monitoringLogs[i]; // NOPMD (UseStringBufferForStringAppends)
@@ -119,7 +120,7 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 		Assert.assertEquals("Unexpected set of records", eventsPassedToController, eventFromMonitoringLog);
 	}
 
-	private List<IMonitoringRecord> readLog(final String[] monitoringLogDirs) {
+	private List<IMonitoringRecord> readLog(final String[] monitoringLogDirs) throws AnalysisConfigurationException {
 		final AnalysisController analysisController = new AnalysisController();
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));

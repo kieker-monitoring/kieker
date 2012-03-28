@@ -21,6 +21,7 @@
 package kieker.examples.userguide.appendixJMS;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.reader.jms.JMSReader;
 import kieker.common.configuration.Configuration;
 
@@ -76,7 +77,11 @@ public final class JMSAnalysisStarter {
 		final Consumer consumer = new Consumer(consumerConfiguration);
 		analysisInstance.registerFilter(consumer);
 
-		analysisInstance.connect(logReader, JMSReader.OUTPUT_PORT_NAME_RECORDS, consumer, Consumer.INPUT_PORT_NAME);
+		try {
+			analysisInstance.connect(logReader, JMSReader.OUTPUT_PORT_NAME_RECORDS, consumer, Consumer.INPUT_PORT_NAME);
+		} catch (final AnalysisConfigurationException e) {
+			e.printStackTrace();
+		}
 
 		analysisInstance.run();
 	}

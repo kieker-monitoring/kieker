@@ -21,6 +21,7 @@
 package kieker.tools.logReplayer;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -83,8 +84,6 @@ public class JMSLogReplayer {
 	 * @return true on success; false otherwise
 	 */
 	public boolean replay() {
-		boolean success = true;
-
 		final Configuration configuration = new Configuration(null);
 		configuration.setProperty("msProviderUrl", this.jmsProviderUrl);
 		configuration.setProperty("jmsDestination", this.jmsDestination);
@@ -96,18 +95,27 @@ public class JMSLogReplayer {
 		final RecordDelegationPlugin2 recordReceiver = new RecordDelegationPlugin2(new Configuration());
 		/* configure the record receiver a little bit. */
 		tpanInstance.registerFilter(recordReceiver);
-		tpanInstance.connect(recordReceiver, RecordDelegationPlugin2.OUTPUT_PORT_NAME_MONITORING_RECORDS, this.recordReceiver, this.recordReceiverInputPortName);
-
+		try {
+			tpanInstance.connect(recordReceiver, RecordDelegationPlugin2.OUTPUT_PORT_NAME_MONITORING_RECORDS, this.recordReceiver, this.recordReceiverInputPortName);
+		} catch (final AnalysisConfigurationException ex) {
+			JMSLogReplayer.LOG.error("Failed to connect recordReceiver to recordReceiver.", ex);
+			return false;
+		}
 		tpanInstance.registerFilter(recordReceiver);
-		tpanInstance.connect(logReader, JMSReader.OUTPUT_PORT_NAME_RECORDS, recordReceiver, RecordDelegationPlugin2.INPUT_PORT_NAME_MONITORING_RECORDS);
+		try {
+			tpanInstance.connect(logReader, JMSReader.OUTPUT_PORT_NAME_RECORDS, recordReceiver, RecordDelegationPlugin2.INPUT_PORT_NAME_MONITORING_RECORDS);
+		} catch (final AnalysisConfigurationException ex) {
+			JMSLogReplayer.LOG.error("Failed to connect logReader to recordReceiver", ex);
+			return false;
+		}
+
 		try {
 			tpanInstance.run();
-			success = true;
 		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
 			JMSLogReplayer.LOG.error("Exception running analysis instance", ex);
-			success = false;
+			return false;
 		}
-		return success;
+		return true;
 	}
 }
 

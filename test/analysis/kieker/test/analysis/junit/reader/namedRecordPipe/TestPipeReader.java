@@ -26,6 +26,7 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.AnalysisControllerThread;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.analysis.plugin.filter.forward.CountingFilter;
@@ -47,7 +48,7 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 	// private static final Log log = LogFactory.getLog(TestPipeReader.class);
 
 	@Test
-	public void testNamedPipeReaderReceivesFromPipe() {
+	public void testNamedPipeReaderReceivesFromPipe() throws IllegalStateException, AnalysisConfigurationException {
 		// the pipe
 		final String pipeName = NamedPipeFactory.createPipeName();
 

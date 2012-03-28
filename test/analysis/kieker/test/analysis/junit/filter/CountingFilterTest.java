@@ -21,6 +21,7 @@
 package kieker.test.analysis.junit.filter;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.common.configuration.Configuration;
 import kieker.test.analysis.junit.plugin.SimpleSourcePlugin;
@@ -40,14 +41,14 @@ public class CountingFilterTest {
 	volatile SimpleSourcePlugin src; // NOPMD (package visible for inner class)
 
 	@Before
-	public void before() {
+	public void before() throws IllegalStateException, AnalysisConfigurationException {
 		/* Establish the connection. */
 		this.consumer = new CountingFilter(new Configuration());
 		this.src = new SimpleSourcePlugin(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 		controller.registerFilter(this.consumer);
 		controller.registerFilter(this.src);
-		Assert.assertTrue(controller.connect(this.src, SimpleSourcePlugin.OUTPUT_PORT_NAME, this.consumer, CountingFilter.INPUT_PORT_NAME_EVENTS));
+		controller.connect(this.src, SimpleSourcePlugin.OUTPUT_PORT_NAME, this.consumer, CountingFilter.INPUT_PORT_NAME_EVENTS);
 	}
 
 	@Test

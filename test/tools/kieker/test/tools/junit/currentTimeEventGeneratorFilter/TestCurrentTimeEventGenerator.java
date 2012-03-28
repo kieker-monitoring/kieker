@@ -26,6 +26,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
@@ -45,13 +46,13 @@ import org.junit.Test;
 public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 
 	@Test
-	public void testFirstRecordGeneratesEvent() { // NOPMD (assert in method)
+	public void testFirstRecordGeneratesEvent() throws IllegalStateException, AnalysisConfigurationException { // NOPMD (assert in method)
 		this.compareInputAndOutput(1000, new long[] { 15 }, new long[] { 15 }, true); // true: raw timestamp
 		this.compareInputAndOutput(1000, new long[] { 15 }, new long[] { 15 }, false); // false: wrap in record
 	}
 
 	@Test
-	public void testSecondWithinBoundNoEvent() { // NOPMD (assert in method)
+	public void testSecondWithinBoundNoEvent() throws IllegalStateException, AnalysisConfigurationException { // NOPMD (assert in method)
 		final long resolution = 1000;
 		final long firstT = 15;
 		final long secondT = (firstT + resolution) - 1;
@@ -60,7 +61,7 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 	}
 
 	@Test
-	public void testSecondOnBoundEvent() { // NOPMD (assert in method)
+	public void testSecondOnBoundEvent() throws IllegalStateException, AnalysisConfigurationException { // NOPMD (assert in method)
 		final long resolution = 1000;
 		final long firstT = 15;
 		final long secondT = firstT + resolution;
@@ -69,7 +70,7 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 	}
 
 	@Test
-	public void testSecondBeyondBoundEvent() { // NOPMD (assert in method)
+	public void testSecondBeyondBoundEvent() throws IllegalStateException, AnalysisConfigurationException { // NOPMD (assert in method)
 		final long resolution = 1000;
 		final long firstT = 15;
 		final long secondT = firstT + resolution + 1;
@@ -78,7 +79,7 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 	}
 
 	@Test
-	public void testTwoWithinBoundOnlyOneEvent() { // NOPMD (assert in method)
+	public void testTwoWithinBoundOnlyOneEvent() throws IllegalStateException, AnalysisConfigurationException { // NOPMD (assert in method)
 		final long resolution = 10;
 		final long firstT = 5;
 		final long secondT = firstT + 1;
@@ -89,7 +90,7 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 	}
 
 	@Test
-	public void testGapIntermediateEvents() { // NOPMD (assert in method)
+	public void testGapIntermediateEvents() throws IllegalStateException, AnalysisConfigurationException { // NOPMD (assert in method)
 		final long resolution = 6;
 		final long firstT = 5;
 		final long secondT = firstT + (5 * resolution) + 1;
@@ -108,8 +109,11 @@ public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
 	 * @param timerResolution
 	 * @param inputTimestamps
 	 * @param expectedOutputTimerEvents
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
 	 */
-	private void compareInputAndOutput(final long timerResolution, final long[] inputTimestamps, final long[] expectedOutputTimerEvents, final boolean rawTimestamp) {
+	private void compareInputAndOutput(final long timerResolution, final long[] inputTimestamps, final long[] expectedOutputTimerEvents, final boolean rawTimestamp)
+			throws IllegalStateException, AnalysisConfigurationException {
 		final Configuration filterConfiguration = new Configuration();
 		filterConfiguration.setProperty(CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_NAME_TIME_RESOLUTION, Long.toString(timerResolution));
 		final CurrentTimeEventGenerationFilter filter = new CurrentTimeEventGenerationFilter(filterConfiguration);

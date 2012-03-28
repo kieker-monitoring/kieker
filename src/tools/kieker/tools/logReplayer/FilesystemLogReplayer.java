@@ -21,6 +21,7 @@
 package kieker.tools.logReplayer;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
@@ -128,7 +129,11 @@ public class FilesystemLogReplayer {
 		delegationPlugin.setRec(this.recordReceiver);
 
 		tpanInstance.registerFilter(delegationPlugin);
-		tpanInstance.connect(fsReader, FSReader.OUTPUT_PORT_NAME_RECORDS, delegationPlugin, RecordDelegationPlugin.INPUT_PORT_NAME_MONITORING_RECORDS);
+		try {
+			tpanInstance.connect(fsReader, FSReader.OUTPUT_PORT_NAME_RECORDS, delegationPlugin, RecordDelegationPlugin.INPUT_PORT_NAME_MONITORING_RECORDS);
+		} catch (final AnalysisConfigurationException ex) {
+			FilesystemLogReplayer.LOG.error("Failed to connect reader to delegation.", ex);
+		}
 		try {
 			tpanInstance.run();
 			success = true;

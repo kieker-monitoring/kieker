@@ -21,10 +21,13 @@
 package kieker.tools.logReplayer;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 
 /**
@@ -39,7 +42,7 @@ import kieker.common.record.IMonitoringRecord;
 })
 public class RealtimeReplayWorker extends AbstractFilterPlugin implements Runnable {
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
-	// private static final Log LOG = LogFactory.getLog(RealtimeReplayWorker.class);
+	private static final Log LOG = LogFactory.getLog(RealtimeReplayWorker.class);
 	private IMonitoringRecord monRec;
 	private RealtimeReplayDistributor rd;
 
@@ -53,13 +56,15 @@ public class RealtimeReplayWorker extends AbstractFilterPlugin implements Runnab
 		super(configuration);
 	}
 
-	public void initialize(final IMonitoringRecord monRec, final RealtimeReplayDistributor rd,
-			final AbstractFilterPlugin cons,
-			final String constInputPortName, final AnalysisController controller) {
+	public void initialize(final IMonitoringRecord monRec, final RealtimeReplayDistributor rd, final AbstractFilterPlugin cons, final String constInputPortName,
+			final AnalysisController controller) {
 		this.monRec = monRec;
 		this.rd = rd;
-
-		controller.connect(this, RealtimeReplayWorker.OUTPUT_PORT_NAME, cons, constInputPortName);
+		try {
+			controller.connect(this, RealtimeReplayWorker.OUTPUT_PORT_NAME, cons, constInputPortName);
+		} catch (final AnalysisConfigurationException ex) {
+			RealtimeReplayWorker.LOG.error("Failed to connect RealtimeReplayWorker to cons", ex);
+		}
 	}
 
 	public void run() {

@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.monitoring.core.controller.IMonitoringController;
@@ -93,17 +94,19 @@ public abstract class AbstractWriterReaderTest extends TestCase {
 	 * Returns the list of records read from the previously written monitoring log.
 	 * 
 	 * @return
+	 * @throws AnalysisConfigurationException
 	 */
-	protected abstract List<IMonitoringRecord> readEvents();
+	protected abstract List<IMonitoringRecord> readEvents() throws AnalysisConfigurationException;
 
 	/**
 	 * The actual Test. Note that this should be the only {@link Test} in this class.
 	 * 
 	 * @throws IOException
 	 * @throws InterruptedException
+	 * @throws AnalysisConfigurationException
 	 */
 	@Test
-	public void testSimpleLog() throws IOException, InterruptedException { // NOPMD (JUnitTestsShouldIncludeAssert)
+	public void testSimpleLog() throws IOException, InterruptedException, AnalysisConfigurationException { // NOPMD (JUnitTestsShouldIncludeAssert)
 		final List<IMonitoringRecord> someEvents = this.provideEvents();
 
 		/*

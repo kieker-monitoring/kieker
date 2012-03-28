@@ -23,6 +23,7 @@ package kieker.test.tools.junit.traceAnalysis.filter;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.configuration.Configuration;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
@@ -67,9 +68,12 @@ public class TestTimestampFilter extends TestCase { // NOCS
 	 * Given a TimestampFilter selecting records within an interval <i>[a,b]</i>,
 	 * assert that a record <i>r</i> with <i>r.tin &lt; a</i> and <i>r.tout
 	 * &gt; a </i>, <i>r.tout &lt; b</i> does not pass the filter.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
 	 */
 	@Test
-	public void testRecordTinBeforeToutWithinIgnored() {
+	public void testRecordTinBeforeToutWithinIgnored() throws IllegalStateException, AnalysisConfigurationException {
 		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
 		final AnalysisController controller = new AnalysisController();
@@ -96,9 +100,12 @@ public class TestTimestampFilter extends TestCase { // NOCS
 	 * Given a TimestampFilter selecting records within an interval <i>[a,b]</i>,
 	 * assert that a record <i>r</i> with <i>r.tin &gt; a</i>, <i>r.tin
 	 * &lt; b</i> and <i>r.tout &gt; b </i> does not pass the filter.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
 	 */
 	@Test
-	public void testRecordTinWithinToutAfterIgnored() {
+	public void testRecordTinWithinToutAfterIgnored() throws IllegalStateException, AnalysisConfigurationException {
 		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
 		final SimpleSinkPlugin<Execution> sinkPlugin = new SimpleSinkPlugin<Execution>(new Configuration());
@@ -125,9 +132,12 @@ public class TestTimestampFilter extends TestCase { // NOCS
 	 * Given a TimestampFilter selecting records within an interval <i>[a,b]</i>,
 	 * assert that a record <i>r</i> with <i>r.tin == a</i> and <i>r.tout == b </i>
 	 * does pass the filter.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
 	 */
 	@Test
-	public void testRecordTinToutOnBordersPassed() {
+	public void testRecordTinToutOnBordersPassed() throws IllegalStateException, AnalysisConfigurationException {
 		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
 		final SimpleSinkPlugin<Execution> sinkPlugin = new SimpleSinkPlugin<Execution>(new Configuration());
@@ -157,9 +167,12 @@ public class TestTimestampFilter extends TestCase { // NOCS
 	 * Given a TimestampFilter selecting records within an interval <i>[a,b]</i>,
 	 * assert that a record <i>r</i> with <i>r.tin &gt; a</i>, <i>r.tin &lt; b</i>
 	 * and <i>r.tout &lt; b </i>, <i>r.tout &gt; a </i> does pass the filter.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
 	 */
 	@Test
-	public void testRecordTinToutWithinRangePassed() {
+	public void testRecordTinToutWithinRangePassed() throws IllegalStateException, AnalysisConfigurationException {
 		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
 		final SimpleSinkPlugin<Execution> sinkPlugin = new SimpleSinkPlugin<Execution>(new Configuration());

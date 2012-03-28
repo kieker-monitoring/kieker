@@ -23,6 +23,7 @@ package kieker.test.tools.junit.traceAnalysis.filter.flow;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.configuration.Configuration;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
@@ -123,7 +124,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 	}
 
 	@Test
-	public void testValidTraceWithBeforeAndAfterOperationEvents() throws InvalidTraceException { // NOPMD (assert missing)
+	public void testValidTraceWithBeforeAndAfterOperationEvents() throws InvalidTraceException, IllegalStateException, AnalysisConfigurationException { // NOPMD
 		/*
 		 * Create an EventRecordTrace, containing only Before- and AfterOperation events.
 		 */
@@ -136,7 +137,8 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 	}
 
 	@Test
-	public void testValidTraceWithBeforeAndAfterOperationEventsAndAdditionalCallEvents() throws InvalidTraceException { // NOPMD (assert missing)
+	public void testValidTraceWithBeforeAndAfterOperationEventsAndAdditionalCallEvents() throws InvalidTraceException, IllegalStateException, // NOPMD
+			AnalysisConfigurationException {
 		/*
 		 * Create an EventRecordTrace, containing only Before- and AfterOperation events.
 		 */
@@ -179,7 +181,8 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 	}
 
 	@Test
-	public void testValidTraceWithBeforeAndAfterOperationEventsAndAdditionalCallEventsAndGap() throws InvalidTraceException { // NOPMD (assert missing)
+	public void testValidTraceWithBeforeAndAfterOperationEventsAndAdditionalCallEventsAndGap() throws InvalidTraceException, IllegalStateException, // NOPMD
+			AnalysisConfigurationException {
 		/*
 		 * Create an EventRecordTrace, containing only Before- and AfterOperation events.
 		 */
@@ -235,7 +238,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 	}
 
 	@Test
-	public void testValidSyncTraceSimpleEntryCallExit() throws InvalidTraceException { // NOPMD (assert missing)
+	public void testValidSyncTraceSimpleEntryCallExit() throws InvalidTraceException, IllegalStateException, AnalysisConfigurationException { // NOPMD
 		/*
 		 * Create an EventRecordTrace, containing only Before- and AfterOperation events.
 		 */
@@ -298,7 +301,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 	}
 
 	@Test
-	public void testValidSyncTraceSimpleEntryCallReturnCallCallExit() throws InvalidTraceException { // NOPMD (assert missing)
+	public void testValidSyncTraceSimpleEntryCallReturnCallCallExit() throws InvalidTraceException, IllegalStateException, AnalysisConfigurationException { // NOPMD
 		/*
 		 * Create an EventRecordTrace, containing only Before- and AfterOperation events.
 		 */
@@ -362,7 +365,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 	}
 
 	@Test
-	public void testValidSyncTraceSimpleEntryCallCallExit() throws InvalidTraceException { // NOPMD (assert missing)
+	public void testValidSyncTraceSimpleEntryCallCallExit() throws InvalidTraceException, IllegalStateException, AnalysisConfigurationException { // NOPMD
 
 		/*
 		 * Create an EventRecordTrace, containing only Before- and AfterOperation events.
@@ -375,7 +378,8 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 		this.checkTrace(eventRecordTrace, expectedExecutionTrace);
 	}
 
-	private void checkTrace(final EventRecordTrace eventRecordTrace, final ExecutionTrace expectedExecutionTrace) throws InvalidTraceException {
+	private void checkTrace(final EventRecordTrace eventRecordTrace, final ExecutionTrace expectedExecutionTrace) throws InvalidTraceException,
+			IllegalStateException, AnalysisConfigurationException {
 
 		/*
 		 * Create the transformation filter
@@ -391,6 +395,7 @@ public class TestEventTrace2ExecutionTraceFilter extends TestCase {
 
 		controller.registerFilter(filter);
 		controller.registerFilter(executionTraceSinkPlugin);
+		controller.registerRepository(this.systemEntityFactory);
 		controller.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
 		controller.connect(filter, EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSinkPlugin,
 				SimpleSinkPlugin.INPUT_PORT_NAME);

@@ -24,6 +24,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -83,7 +84,7 @@ public class GeneralPluginTest extends TestCase {
 	}
 
 	@Test
-	public void testChaining() {
+	public void testChaining() throws IllegalStateException, AnalysisConfigurationException {
 		final SystemModelRepository systemModelRepository = new SystemModelRepository(new Configuration());
 
 		final ExecutionRecordTransformationFilter transformer = new ExecutionRecordTransformationFilter(new Configuration());
@@ -117,14 +118,14 @@ public class GeneralPluginTest extends TestCase {
 		controller.registerFilter(filter1byTraceID);
 		controller.registerFilter(filter2ByTimestamp);
 		controller.registerFilter(dst);
+		controller.registerRepository(systemModelRepository);
 
 		/* Connect the plugins. */
-		Assert.assertTrue(controller.connect(src, SourceClass.OUTPUT_PORT_NAME, transformer, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS));
-		Assert.assertTrue(controller.connect(transformer, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemModelRepository));
-		Assert.assertTrue(controller.connect(transformer, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS, filter1byTraceID,
-				TraceIdFilter.INPUT_PORT_NAME_EXECUTION));
-		Assert.assertTrue(controller.connect(filter1byTraceID, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, filter2ByTimestamp, TimestampFilter.INPUT_PORT_NAME_EXECUTION));
-		Assert.assertTrue(controller.connect(filter2ByTimestamp, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, dst, ExecutionSinkClass.INPUT_PORT_NAME));
+		controller.connect(src, SourceClass.OUTPUT_PORT_NAME, transformer, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
+		controller.connect(transformer, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemModelRepository);
+		controller.connect(transformer, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS, filter1byTraceID, TraceIdFilter.INPUT_PORT_NAME_EXECUTION);
+		controller.connect(filter1byTraceID, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, filter2ByTimestamp, TimestampFilter.INPUT_PORT_NAME_EXECUTION);
+		controller.connect(filter2ByTimestamp, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, dst, ExecutionSinkClass.INPUT_PORT_NAME);
 
 		src.read();
 

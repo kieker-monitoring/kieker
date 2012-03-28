@@ -23,6 +23,7 @@ package kieker.examples.userguide.ch5bookstore;
 import java.util.Random;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.exception.MonitoringReaderException;
 import kieker.analysis.exception.MonitoringRecordConsumerException;
 import kieker.analysis.plugin.annotation.InputPort;
@@ -68,7 +69,11 @@ public final class BookstoreHostnameRewriter {
 		analysisInstance.registerReader(reader);
 
 		/* Connect the reader with the plugin. */
-		analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, plugin, HostNameRewriterPlugin.INPUT_PORT_NAME);
+		try {
+			analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, plugin, HostNameRewriterPlugin.INPUT_PORT_NAME);
+		} catch (final AnalysisConfigurationException e) {
+			e.printStackTrace();
+		}
 
 		/* Start the analysis */
 		analysisInstance.run();

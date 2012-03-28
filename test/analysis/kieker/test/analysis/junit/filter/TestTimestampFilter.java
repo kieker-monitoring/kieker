@@ -22,6 +22,7 @@ package kieker.test.analysis.junit.filter;
 
 import junit.framework.Assert;
 import kieker.analysis.AnalysisController;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.select.TimestampFilter;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
@@ -64,8 +65,11 @@ public final class TestTimestampFilter {
 	 * @param ignoreExecutionsBeforeTimestamp
 	 * @param ignoreExecutionsAfterTimestamp
 	 * @return
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
 	 */
-	private TimestampFilter createTimestampFilter(final long ignoreExecutionsBeforeTimestamp, final long ignoreExecutionsAfterTimestamp) {
+	private TimestampFilter createTimestampFilter(final long ignoreExecutionsBeforeTimestamp, final long ignoreExecutionsAfterTimestamp)
+			throws IllegalStateException, AnalysisConfigurationException {
 		final Configuration cfg = new Configuration();
 		cfg.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, Long.toString(ignoreExecutionsBeforeTimestamp));
 		cfg.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, Long.toString(ignoreExecutionsAfterTimestamp));
@@ -84,9 +88,12 @@ public final class TestTimestampFilter {
 	/**
 	 * Given a {@link TimestampFilter} selecting {@link AbstractTraceEvent}s within an interval <i>[a,b]</i>,
 	 * assert that a {@link AbstractTraceEvent} <i>e</i> with <i>e.timestamp &lt; a</i> does not pass the filter.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
 	 */
 	@Test
-	public void testEventBeforeIgnored() {
+	public void testEventBeforeIgnored() throws IllegalStateException, AnalysisConfigurationException {
 		final long leftBorder = TestTimestampFilter.EVENT.getTimestamp() + 1;
 		final long rightBorder = leftBorder + 1;
 		final TimestampFilter filter = this.createTimestampFilter(leftBorder, rightBorder);
@@ -101,9 +108,12 @@ public final class TestTimestampFilter {
 	 * Given a {@link TimestampFilter} selecting {@link AbstractTraceEvent}s within an interval <i>[a,b]</i>,
 	 * assert that a {@link AbstractTraceEvent} <i>e</i> with <i>e.timestamp &gt; b </i> does not
 	 * pass the filter.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
 	 */
 	@Test
-	public void testEventAfterIgnored() {
+	public void testEventAfterIgnored() throws IllegalStateException, AnalysisConfigurationException {
 		final long rightBorder = TestTimestampFilter.EVENT.getTimestamp() - 1;
 		final long leftBorder = rightBorder - 1;
 		final TimestampFilter filter = this.createTimestampFilter(leftBorder, rightBorder);
@@ -116,9 +126,12 @@ public final class TestTimestampFilter {
 	/**
 	 * Given a {@link TimestampFilter} selecting {@link AbstractTraceEvent}s within an interval <i>[a,b]</i>,
 	 * assert that an event <i>e</i> with <i>e.timestamp == a</i> does pass the filter.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
 	 */
 	@Test
-	public void testRecordOnLeftBorderPasses() {
+	public void testRecordOnLeftBorderPasses() throws IllegalStateException, AnalysisConfigurationException {
 		final long leftBorder = TestTimestampFilter.EVENT.getTimestamp();
 		final long rightBorder = leftBorder + 1;
 		final TimestampFilter filter = this.createTimestampFilter(leftBorder, rightBorder);
@@ -134,9 +147,12 @@ public final class TestTimestampFilter {
 	/**
 	 * Given a {@link TimestampFilter} selecting {@link AbstractTraceEvent}s within an interval <i>[a,b]</i>,
 	 * assert that an event <i>e</i> with <i>e.timestamp == b</i> does pass the filter.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
 	 */
 	@Test
-	public void testRecordOnRightBorderPasses() {
+	public void testRecordOnRightBorderPasses() throws IllegalStateException, AnalysisConfigurationException {
 		final long rightBorder = TestTimestampFilter.EVENT.getTimestamp();
 		final long leftBorder = rightBorder - 1;
 		final TimestampFilter filter = this.createTimestampFilter(leftBorder, rightBorder);
@@ -152,9 +168,12 @@ public final class TestTimestampFilter {
 	 * Given a {@link TimestampFilter} selecting {@link AbstractTraceEvent}s within an interval <i>[a,b]</i>,
 	 * assert that a {@link AbstractTraceEvent} <i>e</i> with <i>e.timestamp &gt; a</i> and <i>r.timestamp
 	 * &gt; a </i> does pass the filter.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
 	 */
 	@Test
-	public void testRecordTinToutWithinRangePassed() {
+	public void testRecordTinToutWithinRangePassed() throws IllegalStateException, AnalysisConfigurationException {
 		final long leftBorder = TestTimestampFilter.EVENT.getTimestamp() - 1;
 		final long rightBorder = TestTimestampFilter.EVENT.getTimestamp() + 1;
 		final TimestampFilter filter = this.createTimestampFilter(leftBorder, rightBorder);

@@ -26,6 +26,7 @@ import java.util.TreeSet;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.trace.TraceIdFilter;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
@@ -49,9 +50,12 @@ public class TestTraceIdFilter extends TestCase {
 	 * Given a TraceIdFilter that passes traceIds included in a set <i>idsToPass</i>,
 	 * assert that a {@link AbstractTraceEvent} object <i>event</i> with traceId not element of
 	 * <i>idsToPass</i> is NOT passed through the filter.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
 	 */
 	@Test
-	public void testAssertIgnoreTraceId() {
+	public void testAssertIgnoreTraceId() throws IllegalStateException, AnalysisConfigurationException {
 		final long firstTimestamp = 42353; // any number fits
 		final long traceIdNotToPass = 11l; // (must NOT be element of idsToPass)
 
@@ -92,9 +96,12 @@ public class TestTraceIdFilter extends TestCase {
 	 * Given a TraceIdFilter that passes traceIds included in a set <i>idsToPass</i>,
 	 * assert that a {@link AbstractTraceEvent} object <i>event</i> with traceId not element of
 	 * <i>idsToPass</i> IS passed through the filter.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
 	 */
 	@Test
-	public void testAssertPassTraceId() {
+	public void testAssertPassTraceId() throws IllegalStateException, AnalysisConfigurationException {
 		final long firstTimestamp = 53222; // any number fits
 		final long traceIdToPass = 11l; // (must be element of idsToPass)
 
@@ -130,9 +137,12 @@ public class TestTraceIdFilter extends TestCase {
 
 	/**
 	 * Given a TraceIdFilter that passes all traceIds, assert that an {@link AbstractTraceEvent} object <i>exec</i> is passed through the filter.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
 	 */
 	@Test
-	public void testAssertPassTraceIdWhenPassAll() {
+	public void testAssertPassTraceIdWhenPassAll() throws IllegalStateException, AnalysisConfigurationException {
 		final long firstTimestamp = 53222; // any number fits
 		final long traceIdToPass = 11l; // (must be element of idsToPass)
 

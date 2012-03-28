@@ -26,6 +26,7 @@ import java.util.List;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.Trace;
@@ -61,7 +62,7 @@ public class TestEventRecordTraceGenerationFilter extends TestCase {
 	}
 
 	@Test
-	public void testTraceShorterThanMaxDurationPasses() {
+	public void testTraceShorterThanMaxDurationPasses() throws IllegalStateException, AnalysisConfigurationException {
 		final long traceId = 978668l;
 		final long startTime = 86756587l;
 

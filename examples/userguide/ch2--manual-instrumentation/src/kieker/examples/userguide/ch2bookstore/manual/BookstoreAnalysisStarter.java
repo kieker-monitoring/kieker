@@ -21,6 +21,7 @@
 package kieker.examples.userguide.ch2bookstore.manual;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.exception.MonitoringReaderException;
 import kieker.analysis.exception.MonitoringRecordConsumerException;
 import kieker.analysis.plugin.filter.forward.TeeFilter;
@@ -52,7 +53,11 @@ public final class BookstoreAnalysisStarter {
 		analysisInstance.registerReader(reader);
 
 		/* Connect the output of the reader with the input of the filter. */
-		analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
+		try {
+			analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
+		} catch (final AnalysisConfigurationException e) {
+			e.printStackTrace();
+		}
 
 		/* Start the analysis */
 		analysisInstance.run();

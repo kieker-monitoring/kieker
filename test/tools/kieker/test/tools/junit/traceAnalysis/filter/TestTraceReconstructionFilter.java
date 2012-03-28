@@ -26,6 +26,7 @@ import java.util.Map;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -109,9 +110,11 @@ public class TestTraceReconstructionFilter extends TestCase {
 	 * right output port.
 	 * 
 	 * @throws InvalidTraceException
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
 	 */
 	@Test
-	public void testValidBookstoreTracePassed() throws InvalidTraceException {
+	public void testValidBookstoreTracePassed() throws InvalidTraceException, IllegalStateException, AnalysisConfigurationException {
 		/*
 		 * These are the trace representations we want to be reconstructed by
 		 * the filter
@@ -229,9 +232,11 @@ public class TestTraceReconstructionFilter extends TestCase {
 	 * right output port.
 	 * 
 	 * @throws InvalidTraceException
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
 	 */
 	@Test
-	public void testBrokenBookstoreTracePassed() throws InvalidTraceException {
+	public void testBrokenBookstoreTracePassed() throws InvalidTraceException, IllegalStateException, AnalysisConfigurationException {
 		/*
 		 * These are the trace representations we want to be reconstructed by
 		 * the filter
@@ -339,9 +344,11 @@ public class TestTraceReconstructionFilter extends TestCase {
 	 * A corresponding test for a valid trace is not required.
 	 * 
 	 * @throws InvalidTraceException
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
 	 */
 	@Test
-	public void testIncompleteTraceDueToTimeout() throws InvalidTraceException {
+	public void testIncompleteTraceDueToTimeout() throws InvalidTraceException, IllegalStateException, AnalysisConfigurationException {
 		/*
 		 * This trace is incomplete.
 		 */

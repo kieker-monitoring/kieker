@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -78,8 +79,7 @@ public final class FSReaderRealtime extends AbstractReaderPlugin {
 		this.numWorkers = configuration.getIntProperty(FSReaderRealtime.PROPERTY_NAME_NUM_WORKERS);
 		this.inputDirs = configuration.getStringArrayProperty(FSReaderRealtime.PROPERTY_NAME_INPUTDIRNAMES, ";");
 		// this.inputDirs = this.inputDirNameListToArray(configuration.getStringProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES));
-		this.initInstanceFromArgs(this.inputDirs, this.numWorkers);
-		return true;
+		return this.initInstanceFromArgs(this.inputDirs, this.numWorkers);
 	}
 
 	// removed and replaced by functions of configuration!
@@ -103,15 +103,13 @@ public final class FSReaderRealtime extends AbstractReaderPlugin {
 	// return dirNameArray;
 	// }
 
-	private void initInstanceFromArgs(final String[] inputDirNames, final int numWorkers) throws IllegalArgumentException {
+	private boolean initInstanceFromArgs(final String[] inputDirNames, final int numWorkers) throws IllegalArgumentException {
 		if ((inputDirNames == null) || (inputDirNames.length <= 0)) {
 			throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.PROPERTY_NAME_INPUTDIRNAMES + ":" + Arrays.toString(inputDirNames)); // NOCS
-																																										// (MultipleStringLiteralsCheck)
 		}
 
 		if (numWorkers <= 0) {
 			throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.PROPERTY_NAME_NUM_WORKERS + ": " + numWorkers); // NOCS
-			// (MultipleStringLiteralsCheck)
 		}
 
 		final Configuration configuration = new Configuration();
@@ -132,7 +130,13 @@ public final class FSReaderRealtime extends AbstractReaderPlugin {
 		this.analysis.registerReader(fsReader);
 		this.analysis.registerFilter(rtDistributor);
 
-		this.analysis.connect(fsReader, FSReader.OUTPUT_PORT_NAME_RECORDS, rtDistributor, RealtimeReplayDistributor.INPUT_PORT_NAME_MONITORING_RECORDS);
+		try {
+			this.analysis.connect(fsReader, FSReader.OUTPUT_PORT_NAME_RECORDS, rtDistributor, RealtimeReplayDistributor.INPUT_PORT_NAME_MONITORING_RECORDS);
+		} catch (final AnalysisConfigurationException ex) {
+			FSReaderRealtime.LOG.error("Failed to connect fsReader to rtDistributor.", ex);
+			return false;
+		}
+		return true;
 	}
 
 	/**

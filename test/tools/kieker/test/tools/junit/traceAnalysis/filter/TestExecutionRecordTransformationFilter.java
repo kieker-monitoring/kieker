@@ -26,6 +26,7 @@ import java.util.List;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.util.ClassOperationSignaturePair;
@@ -49,9 +50,12 @@ public class TestExecutionRecordTransformationFilter extends TestCase {
 	/**
 	 * Tests if each {@link OperationExecutionRecord} within a valid Bookstore trace is correctly
 	 * translated into a corresponding {@link Execution}.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
 	 */
 	@Test
-	public void testAllFieldsComplete() {
+	public void testAllFieldsComplete() throws IllegalStateException, AnalysisConfigurationException {
 		final String sessionId = "8T6NK1Q6";
 		final long traceId = 34523; // any number will do
 
@@ -108,7 +112,7 @@ class ExecRecordTransformationFilterChecker { // NOPMD (subclass of TestCase)
 	private final ExecutionRecordTransformationFilter execRecFilter = new ExecutionRecordTransformationFilter(new Configuration());
 	private final ExecutionSinkClass sinkPlugin = new ExecutionSinkClass(new Configuration());
 
-	public ExecRecordTransformationFilterChecker(final List<OperationExecutionRecord> records) {
+	public ExecRecordTransformationFilterChecker(final List<OperationExecutionRecord> records) throws IllegalStateException, AnalysisConfigurationException {
 		for (final OperationExecutionRecord record : records) { // the reader will provide these records via its output port
 			this.listReader.addObject(record);
 		}

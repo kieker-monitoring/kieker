@@ -28,6 +28,7 @@ import java.util.TreeSet;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.configuration.Configuration;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
@@ -82,9 +83,12 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 	 * Given a {@link TraceIdFilter} that passes traceIds included in a set <i>idsToPass</i>,
 	 * assert that an Execution object <i>exec</i> with traceId not element of
 	 * <i>idsToPass</i> is not passed through the filter.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
 	 */
 	@Test
-	public void testAssertIgnoreTraceId() {
+	public void testAssertIgnoreTraceId() throws IllegalStateException, AnalysisConfigurationException {
 		final SortedSet<Long> idsToPass = new TreeSet<Long>();
 		idsToPass.add(5l);
 		idsToPass.add(7l);
@@ -114,9 +118,12 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 	 * Given a {@link TraceIdFilter} that passes traceIds included in a set <i>idsToPass</i>,
 	 * assert that an Execution object <i>exec</i> with traceId element of
 	 * <i>idsToPass</i> is passed through the filter.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
 	 */
 	@Test
-	public void testAssertPassTraceId() {
+	public void testAssertPassTraceId() throws IllegalStateException, AnalysisConfigurationException {
 		final SortedSet<Long> idsToPass = new TreeSet<Long>();
 		idsToPass.add(5l);
 		idsToPass.add(7l);
@@ -148,9 +155,12 @@ public class TestTraceIdFilter extends TestCase { // NOCS
 	/**
 	 * Given a {@link TraceIdFilter} that passes all traceIds, assert that an Execution
 	 * object <i>exec</i> is passed through the filter.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
 	 */
 	@Test
-	public void testAssertPassTraceIdWhenPassAll() {
+	public void testAssertPassTraceIdWhenPassAll() throws IllegalStateException, AnalysisConfigurationException {
 		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(null); // i.e., pass all
 		final SimpleSinkPlugin<Execution> sinkPlugin = new SimpleSinkPlugin<Execution>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
