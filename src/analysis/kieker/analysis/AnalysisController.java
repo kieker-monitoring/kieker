@@ -84,6 +84,7 @@ public final class AnalysisController implements Runnable {
 	private final Collection<AbstractReaderPlugin> readers = new CopyOnWriteArrayList<AbstractReaderPlugin>();
 	private final Collection<AbstractFilterPlugin> filters = new CopyOnWriteArrayList<AbstractFilterPlugin>();
 	private final Collection<AbstractRepository> repos = new CopyOnWriteArrayList<AbstractRepository>();
+	private final Collection<IStateObserver> stateObservers = new CopyOnWriteArrayList<IStateObserver>();
 
 	private final CountDownLatch initializationLatch = new CountDownLatch(1);
 
@@ -177,6 +178,39 @@ public final class AnalysisController implements Runnable {
 		} else {
 			this.loadFromModelProject(project, classLoader);
 			this.projectName = project.getName();
+		}
+	}
+
+	/**
+	 * Registers the given instance as a new state observer. All instances are informed when the state (Running, Terminated, e.g.) changes and get the new state as
+	 * an object.
+	 * 
+	 * @param stateObserver
+	 *            The observer to be registered.
+	 */
+	public final void registerStateObserver(final IStateObserver stateObserver) {
+		this.stateObservers.add(stateObserver);
+	}
+
+	/**
+	 * Unregisters the given instance from the state observers.
+	 * 
+	 * @param stateObserver
+	 *            The observer to be unregistered.
+	 */
+	public final void unregisterStateObserver(final IStateObserver stateObserver) {
+		this.stateObservers.remove(stateObserver);
+	}
+
+	/**
+	 * This method runs through all observers and informs them about the current state.
+	 */
+	private final void notifyStateObservers() {
+		/* Get the current state to make sure that all observers get the same state. */
+		final STATE currState = this.state;
+		/* Now inform the observers. */
+		for (final IStateObserver observer : this.stateObservers) {
+			observer.update(this, currState);
 		}
 	}
 
@@ -535,6 +569,7 @@ public final class AnalysisController implements Runnable {
 				return;
 			}
 			this.state = STATE.RUNNING;
+			this.notifyStateObservers();
 		}
 		// Make sure that a log reader exists.
 		if (this.readers.size() == 0) {
@@ -608,9 +643,11 @@ public final class AnalysisController implements Runnable {
 			if (error) {
 				AnalysisController.LOG.info("Error during analysis. Terminating ...");
 				this.state = STATE.FAILED;
+				this.notifyStateObservers();
 			} else {
 				AnalysisController.LOG.info("Terminating analysis.");
 				this.state = STATE.TERMINATED;
+				this.notifyStateObservers();
 			}
 		}
 		for (final AbstractReaderPlugin reader : this.readers) {
