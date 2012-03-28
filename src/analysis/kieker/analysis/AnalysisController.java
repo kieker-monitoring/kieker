@@ -122,6 +122,7 @@ public final class AnalysisController implements Runnable {
 	 * @throws NullPointerException
 	 *             If something went wrong.
 	 */
+	// TODO Kieker-Exception if anything goes wrong.
 	public AnalysisController(final File file) throws NullPointerException {
 		this(file, AnalysisController.class.getClassLoader());
 	}
@@ -635,7 +636,7 @@ public final class AnalysisController implements Runnable {
 		}
 		synchronized (this) {
 			if (this.filters.contains(filter)) {
-				AnalysisController.LOG.warn("Filter " + filter.getName() + " already registered.");
+				AnalysisController.LOG.warn("Filter '" + filter.getName() + "' (" + filter.getPluginName() + ") already registered.");
 				return;
 			}
 			this.filters.add(filter);
@@ -656,15 +657,14 @@ public final class AnalysisController implements Runnable {
 
 		synchronized (this) {
 			if (this.repos.contains(repository)) {
-				// TODO -> getName()
-				AnalysisController.LOG.warn("Repository " + repository.toString() + " already registered.");
+				AnalysisController.LOG.warn("Repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ") already registered.");
 				return;
 			}
 			this.repos.add(repository);
 		}
 
 		if (AnalysisController.LOG.isDebugEnabled()) {
-			AnalysisController.LOG.debug("Registered Repository " + repository);
+			AnalysisController.LOG.debug("Registered Repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ")");
 		}
 	}
 

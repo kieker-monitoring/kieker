@@ -53,6 +53,7 @@ public final class BookstoreAnalysisStarter {
 		analysisInstance.registerReader(reader);
 
 		/* Connect the output of the reader with the input of the plugin. */
+		// TODO Tee-Filter
 		analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, consumer, Consumer.INPUT_PORT_NAME);
 
 		/* Start the analysis */
