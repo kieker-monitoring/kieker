@@ -23,6 +23,7 @@ package kieker.examples.userguide.ch2bookstore.manual;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.MonitoringReaderException;
 import kieker.analysis.exception.MonitoringRecordConsumerException;
+import kieker.analysis.plugin.filter.forward.TeeFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 
@@ -39,11 +40,9 @@ public final class BookstoreAnalysisStarter {
 
 		/* Create Kieker.Analysis instance */
 		final AnalysisController analysisInstance = new AnalysisController();
-		/* Register our own consumer; set the max. response time to 1.9 ms */
-		final Configuration consumerConfiguration = new Configuration();
-		consumerConfiguration.setProperty(Consumer.CONFIG_MAX_RESPONSE_TIME, Long.toString(1900000));
-		final Consumer consumer = new Consumer(consumerConfiguration);
-		analysisInstance.registerFilter(consumer);
+		/* Create and register a simple output writer. */
+		final TeeFilter teeFilter = new TeeFilter(new Configuration());
+		analysisInstance.registerFilter(teeFilter);
 
 		/* Set filesystem monitoring log input directory for our analysis */
 		final Configuration configuration = new Configuration();
@@ -52,9 +51,8 @@ public final class BookstoreAnalysisStarter {
 		final FSReader reader = new FSReader(configuration);
 		analysisInstance.registerReader(reader);
 
-		/* Connect the output of the reader with the input of the plugin. */
-		// TODO Tee-Filter
-		analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, consumer, Consumer.INPUT_PORT_NAME);
+		/* Connect the output of the reader with the input of the filter. */
+		analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
 
 		/* Start the analysis */
 		analysisInstance.run();
