@@ -7,7 +7,7 @@
 package kieker.analysis.model.analysisMetaModel.impl;
 
 import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
-import kieker.analysis.model.analysisMetaModel.MIAnalysisPlugin;
+import kieker.analysis.model.analysisMetaModel.MIFilter;
 import kieker.analysis.model.analysisMetaModel.MIInputPort;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -58,9 +58,9 @@ public class MInputPort extends MPort implements MIInputPort {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public MIAnalysisPlugin getParent() {
+	public MIFilter getParent() {
 		if (eContainerFeatureID() != MIAnalysisMetaModelPackage.INPUT_PORT__PARENT) return null;
-		return (MIAnalysisPlugin)eContainer();
+		return (MIFilter)eContainer();
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class MInputPort extends MPort implements MIInputPort {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetParent(MIAnalysisPlugin newParent, NotificationChain msgs) {
+	public NotificationChain basicSetParent(MIFilter newParent, NotificationChain msgs) {
 		msgs = eBasicSetContainer((InternalEObject)newParent, MIAnalysisMetaModelPackage.INPUT_PORT__PARENT, msgs);
 		return msgs;
 	}
@@ -78,7 +78,7 @@ public class MInputPort extends MPort implements MIInputPort {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setParent(MIAnalysisPlugin newParent) {
+	public void setParent(MIFilter newParent) {
 		if (newParent != eInternalContainer() || (eContainerFeatureID() != MIAnalysisMetaModelPackage.INPUT_PORT__PARENT && newParent != null)) {
 			if (EcoreUtil.isAncestor(this, newParent))
 				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
@@ -86,7 +86,7 @@ public class MInputPort extends MPort implements MIInputPort {
 			if (eInternalContainer() != null)
 				msgs = eBasicRemoveFromContainer(msgs);
 			if (newParent != null)
-				msgs = ((InternalEObject)newParent).eInverseAdd(this, MIAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS, MIAnalysisPlugin.class, msgs);
+				msgs = ((InternalEObject)newParent).eInverseAdd(this, MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS, MIFilter.class, msgs);
 			msgs = basicSetParent(newParent, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
@@ -105,7 +105,7 @@ public class MInputPort extends MPort implements MIInputPort {
 			case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
 				if (eInternalContainer() != null)
 					msgs = eBasicRemoveFromContainer(msgs);
-				return basicSetParent((MIAnalysisPlugin)otherEnd, msgs);
+				return basicSetParent((MIFilter)otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -133,7 +133,7 @@ public class MInputPort extends MPort implements MIInputPort {
 	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
 		switch (eContainerFeatureID()) {
 			case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
-				return eInternalContainer().eInverseRemove(this, MIAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS, MIAnalysisPlugin.class, msgs);
+				return eInternalContainer().eInverseRemove(this, MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS, MIFilter.class, msgs);
 		}
 		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
@@ -161,7 +161,7 @@ public class MInputPort extends MPort implements MIInputPort {
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
-				setParent((MIAnalysisPlugin)newValue);
+				setParent((MIFilter)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -176,7 +176,7 @@ public class MInputPort extends MPort implements MIInputPort {
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
-				setParent((MIAnalysisPlugin)null);
+				setParent((MIFilter)null);
 				return;
 		}
 		super.eUnset(featureID);

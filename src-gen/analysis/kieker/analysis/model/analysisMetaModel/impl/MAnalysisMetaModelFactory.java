@@ -64,7 +64,7 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 			case MIAnalysisMetaModelPackage.INPUT_PORT: return createInputPort();
 			case MIAnalysisMetaModelPackage.OUTPUT_PORT: return createOutputPort();
 			case MIAnalysisMetaModelPackage.PROPERTY: return createProperty();
-			case MIAnalysisMetaModelPackage.ANALYSIS_PLUGIN: return createAnalysisPlugin();
+			case MIAnalysisMetaModelPackage.FILTER: return createFilter();
 			case MIAnalysisMetaModelPackage.READER: return createReader();
 			case MIAnalysisMetaModelPackage.REPOSITORY: return createRepository();
 			case MIAnalysisMetaModelPackage.DEPENDENCY: return createDependency();
@@ -119,9 +119,9 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public MIAnalysisPlugin createAnalysisPlugin() {
-		MAnalysisPlugin analysisPlugin = new MAnalysisPlugin();
-		return analysisPlugin;
+	public MIFilter createFilter() {
+		MFilter filter = new MFilter();
+		return filter;
 	}
 
 	/**

@@ -10,21 +10,21 @@ import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Analysis Plugin</b></em>'.
+ * A representation of the model object '<em><b>Filter</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.MIAnalysisPlugin#getInputPorts <em>Input Ports</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.MIFilter#getInputPorts <em>Input Ports</em>}</li>
  * </ul>
  * </p>
  *
- * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getAnalysisPlugin()
+ * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getFilter()
  * @model
  * @generated
  */
-public interface MIAnalysisPlugin extends MIPlugin {
+public interface MIFilter extends MIPlugin {
 	/**
 	 * Returns the value of the '<em><b>Input Ports</b></em>' containment reference list.
 	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.MIInputPort}.
@@ -36,11 +36,11 @@ public interface MIAnalysisPlugin extends MIPlugin {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Input Ports</em>' containment reference list.
-	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getAnalysisPlugin_InputPorts()
+	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getFilter_InputPorts()
 	 * @see kieker.analysis.model.analysisMetaModel.MIInputPort#getParent
 	 * @model opposite="parent" containment="true"
 	 * @generated
 	 */
 	EList<MIInputPort> getInputPorts();
 
-} // MIAnalysisPlugin
+} // MIFilter

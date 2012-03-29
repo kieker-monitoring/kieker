@@ -108,10 +108,10 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case MIAnalysisMetaModelPackage.ANALYSIS_PLUGIN: {
-				MIAnalysisPlugin analysisPlugin = (MIAnalysisPlugin)theEObject;
-				T result = caseAnalysisPlugin(analysisPlugin);
-				if (result == null) result = casePlugin(analysisPlugin);
+			case MIAnalysisMetaModelPackage.FILTER: {
+				MIFilter filter = (MIFilter)theEObject;
+				T result = caseFilter(filter);
+				if (result == null) result = casePlugin(filter);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -235,17 +235,17 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Analysis Plugin</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Filter</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Analysis Plugin</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Filter</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseAnalysisPlugin(MIAnalysisPlugin object) {
+	public T caseFilter(MIFilter object) {
 		return null;
 	}
 

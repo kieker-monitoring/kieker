@@ -30,7 +30,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="InputPort" eSuperTypes="#//Port">
     <eStructuralFeatures xsi:type="ecore:EReference" name="parent" lowerBound="1"
-        eType="#//AnalysisPlugin" eOpposite="#//AnalysisPlugin/inputPorts"/>
+        eType="#//Filter" eOpposite="#//Filter/inputPorts"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OutputPort" eSuperTypes="#//Port">
     <eStructuralFeatures xsi:type="ecore:EReference" name="subscribers" upperBound="-1"
@@ -42,7 +42,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AnalysisPlugin" eSuperTypes="#//Plugin">
+  <eClassifiers xsi:type="ecore:EClass" name="Filter" eSuperTypes="#//Plugin">
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputPorts" upperBound="-1"
         eType="#//InputPort" containment="true" eOpposite="#//InputPort/parent"/>
   </eClassifiers>

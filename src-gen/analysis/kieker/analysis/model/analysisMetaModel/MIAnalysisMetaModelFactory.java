@@ -62,13 +62,13 @@ public interface MIAnalysisMetaModelFactory extends EFactory {
 	MIProperty createProperty();
 
 	/**
-	 * Returns a new object of class '<em>Analysis Plugin</em>'.
+	 * Returns a new object of class '<em>Filter</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Analysis Plugin</em>'.
+	 * @return a new object of class '<em>Filter</em>'.
 	 * @generated
 	 */
-	MIAnalysisPlugin createAnalysisPlugin();
+	MIFilter createFilter();
 
 	/**
 	 * Returns a new object of class '<em>Reader</em>'.

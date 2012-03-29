@@ -26,7 +26,7 @@ package kieker.analysis.model.analysisMetaModel;
 public interface MIInputPort extends MIPort {
 	/**
 	 * Returns the value of the '<em><b>Parent</b></em>' container reference.
-	 * It is bidirectional and its opposite is '{@link kieker.analysis.model.analysisMetaModel.MIAnalysisPlugin#getInputPorts <em>Input Ports</em>}'.
+	 * It is bidirectional and its opposite is '{@link kieker.analysis.model.analysisMetaModel.MIFilter#getInputPorts <em>Input Ports</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Parent</em>' container reference isn't clear,
@@ -34,13 +34,13 @@ public interface MIInputPort extends MIPort {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Parent</em>' container reference.
-	 * @see #setParent(MIAnalysisPlugin)
+	 * @see #setParent(MIFilter)
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getInputPort_Parent()
-	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisPlugin#getInputPorts
+	 * @see kieker.analysis.model.analysisMetaModel.MIFilter#getInputPorts
 	 * @model opposite="inputPorts" required="true" transient="false"
 	 * @generated
 	 */
-	MIAnalysisPlugin getParent();
+	MIFilter getParent();
 
 	/**
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIInputPort#getParent <em>Parent</em>}' container reference.
@@ -50,6 +50,6 @@ public interface MIInputPort extends MIPort {
 	 * @see #getParent()
 	 * @generated
 	 */
-	void setParent(MIAnalysisPlugin value);
+	void setParent(MIFilter value);
 
 } // MIInputPort

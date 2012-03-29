@@ -104,7 +104,7 @@ public interface MIPlugin extends EObject {
 	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.MIRepositoryConnector}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Repositories</em>' reference list isn't clear,
+	 * If the meaning of the '<em>Repositories</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->

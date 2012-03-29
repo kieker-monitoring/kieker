@@ -36,8 +36,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.model.analysisMetaModel.MIAnalysisPlugin;
 import kieker.analysis.model.analysisMetaModel.MIDependency;
+import kieker.analysis.model.analysisMetaModel.MIFilter;
 import kieker.analysis.model.analysisMetaModel.MIInputPort;
 import kieker.analysis.model.analysisMetaModel.MIOutputPort;
 import kieker.analysis.model.analysisMetaModel.MIPlugin;
@@ -325,7 +325,7 @@ public final class AnalysisController {
 	private static void checkPorts(final MIPlugin mPlugin, final AbstractPlugin plugin) throws AnalysisConfigurationException {
 		// Get all ports.
 		final EList<MIOutputPort> mOutputPorts = mPlugin.getOutputPorts();
-		final EList<MIInputPort> mInputPorts = (mPlugin instanceof MIAnalysisPlugin) ? ((MIAnalysisPlugin) mPlugin).getInputPorts() : new BasicEList<MIInputPort>();
+		final EList<MIInputPort> mInputPorts = (mPlugin instanceof MIFilter) ? ((MIFilter) mPlugin).getInputPorts() : new BasicEList<MIInputPort>();
 		final Set<String> outputPorts = new HashSet<String>();
 		for (final String outputPort : plugin.getAllOutputPortNames()) {
 			outputPorts.add(outputPort);
@@ -483,7 +483,7 @@ public final class AnalysisController {
 				if (plugin instanceof AbstractReaderPlugin) {
 					mPlugin = factory.createReader();
 				} else {
-					mPlugin = factory.createAnalysisPlugin();
+					mPlugin = factory.createFilter();
 				}
 				// Remember the mapping.
 				pluginMap.put(plugin, mPlugin);
@@ -529,7 +529,7 @@ public final class AnalysisController {
 				for (final String in : ins) {
 					final MIInputPort mInputPort = factory.createInputPort();
 					mInputPort.setName(in);
-					((MIAnalysisPlugin) mPlugin).getInputPorts().add(mInputPort);
+					((MIFilter) mPlugin).getInputPorts().add(mInputPort);
 				}
 				mProject.getPlugins().add(mPlugin);
 			}
@@ -549,7 +549,7 @@ public final class AnalysisController {
 							throw new AnalysisConfigurationException("Plugin '" + subscriberPlugin.getName() + "' (" + subscriberPlugin.getPluginName()
 									+ ") not contained in project. Maybe the plugin has not been registered.");
 						}
-						final MIInputPort mInputPort = AnalysisController.findInputPort((MIAnalysisPlugin) mSubscriberPlugin, subscriber.getInputPortName());
+						final MIInputPort mInputPort = AnalysisController.findInputPort((MIFilter) mSubscriberPlugin, subscriber.getInputPortName());
 						subscribers.add(mInputPort);
 					}
 				}
@@ -846,7 +846,7 @@ public final class AnalysisController {
 	 *            The name of the searched input port.
 	 * @return The searched port or null, if it is not available.
 	 */
-	private static final MIInputPort findInputPort(final MIAnalysisPlugin mPlugin, final String name) {
+	private static final MIInputPort findInputPort(final MIFilter mPlugin, final String name) {
 		for (final MIInputPort port : mPlugin.getInputPorts()) {
 			if (port.getName().equals(name)) {
 				return port;

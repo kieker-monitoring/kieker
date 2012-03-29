@@ -96,8 +96,8 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 				return createPropertyAdapter();
 			}
 			@Override
-			public Adapter caseAnalysisPlugin(MIAnalysisPlugin object) {
-				return createAnalysisPluginAdapter();
+			public Adapter caseFilter(MIFilter object) {
+				return createFilterAdapter();
 			}
 			@Override
 			public Adapter caseReader(MIReader object) {
@@ -220,16 +220,16 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link kieker.analysis.model.analysisMetaModel.MIAnalysisPlugin <em>Analysis Plugin</em>}'.
+	 * Creates a new adapter for an object of class '{@link kieker.analysis.model.analysisMetaModel.MIFilter <em>Filter</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisPlugin
+	 * @see kieker.analysis.model.analysisMetaModel.MIFilter
 	 * @generated
 	 */
-	public Adapter createAnalysisPluginAdapter() {
+	public Adapter createFilterAdapter() {
 		return null;
 	}
 

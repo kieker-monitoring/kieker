@@ -354,14 +354,14 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int PROPERTY_FEATURE_COUNT = 2;
 
 	/**
-	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MAnalysisPlugin <em>Analysis Plugin</em>}' class.
+	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MFilter <em>Filter</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisPlugin
-	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getAnalysisPlugin()
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MFilter
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getFilter()
 	 * @generated
 	 */
-	int ANALYSIS_PLUGIN = 6;
+	int FILTER = 6;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -370,7 +370,7 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ANALYSIS_PLUGIN__NAME = PLUGIN__NAME;
+	int FILTER__NAME = PLUGIN__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Classname</b></em>' attribute.
@@ -379,7 +379,7 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ANALYSIS_PLUGIN__CLASSNAME = PLUGIN__CLASSNAME;
+	int FILTER__CLASSNAME = PLUGIN__CLASSNAME;
 
 	/**
 	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
@@ -388,7 +388,7 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ANALYSIS_PLUGIN__PROPERTIES = PLUGIN__PROPERTIES;
+	int FILTER__PROPERTIES = PLUGIN__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Repositories</b></em>' containment reference list.
@@ -397,7 +397,7 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ANALYSIS_PLUGIN__REPOSITORIES = PLUGIN__REPOSITORIES;
+	int FILTER__REPOSITORIES = PLUGIN__REPOSITORIES;
 
 	/**
 	 * The feature id for the '<em><b>Output Ports</b></em>' containment reference list.
@@ -406,7 +406,7 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ANALYSIS_PLUGIN__OUTPUT_PORTS = PLUGIN__OUTPUT_PORTS;
+	int FILTER__OUTPUT_PORTS = PLUGIN__OUTPUT_PORTS;
 
 	/**
 	 * The feature id for the '<em><b>Input Ports</b></em>' containment reference list.
@@ -415,16 +415,16 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ANALYSIS_PLUGIN__INPUT_PORTS = PLUGIN_FEATURE_COUNT + 0;
+	int FILTER__INPUT_PORTS = PLUGIN_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of structural features of the '<em>Analysis Plugin</em>' class.
+	 * The number of structural features of the '<em>Filter</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANALYSIS_PLUGIN_FEATURE_COUNT = PLUGIN_FEATURE_COUNT + 1;
+	int FILTER_FEATURE_COUNT = PLUGIN_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MReader <em>Reader</em>}' class.
@@ -527,7 +527,6 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 */
 	int REPOSITORY_FEATURE_COUNT = 2;
 
-
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDependency <em>Dependency</em>}' class.
 	 * <!-- begin-user-doc -->
@@ -555,7 +554,6 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int DEPENDENCY_FEATURE_COUNT = 1;
-
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MRepositoryConnector <em>Repository Connector</em>}' class.
@@ -832,25 +830,25 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	EAttribute getProperty_Value();
 
 	/**
-	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIAnalysisPlugin <em>Analysis Plugin</em>}'.
+	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIFilter <em>Filter</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Analysis Plugin</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisPlugin
+	 * @return the meta object for class '<em>Filter</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIFilter
 	 * @generated
 	 */
-	EClass getAnalysisPlugin();
+	EClass getFilter();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIAnalysisPlugin#getInputPorts <em>Input Ports</em>}'.
+	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIFilter#getInputPorts <em>Input Ports</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Input Ports</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisPlugin#getInputPorts()
-	 * @see #getAnalysisPlugin()
+	 * @see kieker.analysis.model.analysisMetaModel.MIFilter#getInputPorts()
+	 * @see #getFilter()
 	 * @generated
 	 */
-	EReference getAnalysisPlugin_InputPorts();
+	EReference getFilter_InputPorts();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIReader <em>Reader</em>}'.
@@ -1158,14 +1156,14 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		EAttribute PROPERTY__VALUE = eINSTANCE.getProperty_Value();
 
 		/**
-		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MAnalysisPlugin <em>Analysis Plugin</em>}' class.
+		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MFilter <em>Filter</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisPlugin
-		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getAnalysisPlugin()
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MFilter
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getFilter()
 		 * @generated
 		 */
-		EClass ANALYSIS_PLUGIN = eINSTANCE.getAnalysisPlugin();
+		EClass FILTER = eINSTANCE.getFilter();
 
 		/**
 		 * The meta object literal for the '<em><b>Input Ports</b></em>' containment reference list feature.
@@ -1173,7 +1171,7 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ANALYSIS_PLUGIN__INPUT_PORTS = eINSTANCE.getAnalysisPlugin_InputPorts();
+		EReference FILTER__INPUT_PORTS = eINSTANCE.getFilter_InputPorts();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MReader <em>Reader</em>}' class.

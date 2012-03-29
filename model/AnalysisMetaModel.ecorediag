@@ -137,7 +137,7 @@
       <styles xmi:type="notation:FilteringStyle" xmi:id="_9SqbCwC7EeGS5s48xn4vTA"/>
     </children>
     <styles xmi:type="notation:ShapeStyle" xmi:id="_9SqbAQC7EeGS5s48xn4vTA" fontColor="4210752" fontName="Segoe UI" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
-    <element xmi:type="ecore:EClass" href="AnalysisMetaModel.ecore#//AnalysisPlugin"/>
+    <element xmi:type="ecore:EClass" href="AnalysisMetaModel.ecore#//Filter"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_9SqbAgC7EeGS5s48xn4vTA" x="64" y="462"/>
   </children>
   <children xmi:type="notation:Node" xmi:id="_9SqbDAC7EeGS5s48xn4vTA" type="1001">
@@ -243,7 +243,7 @@
     </children>
     <styles xmi:type="notation:ConnectorStyle" xmi:id="_9SxvyQC7EeGS5s48xn4vTA" lineColor="4210752"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_9SxvygC7EeGS5s48xn4vTA" fontColor="4210752" fontName="Segoe UI" fontHeight="10"/>
-    <element xmi:type="ecore:EReference" href="AnalysisMetaModel.ecore#//AnalysisPlugin/inputPorts"/>
+    <element xmi:type="ecore:EReference" href="AnalysisMetaModel.ecore#//Filter/inputPorts"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_9SxvywC7EeGS5s48xn4vTA" points="[6, 0, -84, 8]$[43, 0, -47, 8]$[85, 0, -5, 8]"/>
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_bcrGcCM1EeGIZLKmmZWf4g" id="(0.9534883720930233,0.5714285714285714)"/>
     <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_bcrGcSM1EeGIZLKmmZWf4g" id="(0.058823529411764705,0.3877551020408163)"/>

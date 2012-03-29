@@ -9,7 +9,7 @@ package kieker.analysis.model.analysisMetaModel.impl;
 import java.util.Collection;
 
 import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
-import kieker.analysis.model.analysisMetaModel.MIAnalysisPlugin;
+import kieker.analysis.model.analysisMetaModel.MIFilter;
 import kieker.analysis.model.analysisMetaModel.MIInputPort;
 
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -24,18 +24,18 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Analysis Plugin</b></em>'.
+ * An implementation of the model object '<em><b>Filter</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MAnalysisPlugin#getInputPorts <em>Input Ports</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MFilter#getInputPorts <em>Input Ports</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class MAnalysisPlugin extends MPlugin implements MIAnalysisPlugin {
+public class MFilter extends MPlugin implements MIFilter {
 	/**
 	 * The cached value of the '{@link #getInputPorts() <em>Input Ports</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -51,7 +51,7 @@ public class MAnalysisPlugin extends MPlugin implements MIAnalysisPlugin {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected MAnalysisPlugin() {
+	protected MFilter() {
 		super();
 	}
 
@@ -62,7 +62,7 @@ public class MAnalysisPlugin extends MPlugin implements MIAnalysisPlugin {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return MIAnalysisMetaModelPackage.Literals.ANALYSIS_PLUGIN;
+		return MIAnalysisMetaModelPackage.Literals.FILTER;
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class MAnalysisPlugin extends MPlugin implements MIAnalysisPlugin {
 	 */
 	public EList<MIInputPort> getInputPorts() {
 		if (inputPorts == null) {
-			inputPorts = new EObjectContainmentWithInverseEList<MIInputPort>(MIInputPort.class, this, MIAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS, MIAnalysisMetaModelPackage.INPUT_PORT__PARENT);
+			inputPorts = new EObjectContainmentWithInverseEList<MIInputPort>(MIInputPort.class, this, MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS, MIAnalysisMetaModelPackage.INPUT_PORT__PARENT);
 		}
 		return inputPorts;
 	}
@@ -86,7 +86,7 @@ public class MAnalysisPlugin extends MPlugin implements MIAnalysisPlugin {
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case MIAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS:
+			case MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getInputPorts()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
@@ -100,7 +100,7 @@ public class MAnalysisPlugin extends MPlugin implements MIAnalysisPlugin {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case MIAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS:
+			case MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS:
 				return ((InternalEList<?>)getInputPorts()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -114,7 +114,7 @@ public class MAnalysisPlugin extends MPlugin implements MIAnalysisPlugin {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case MIAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS:
+			case MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS:
 				return getInputPorts();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -129,7 +129,7 @@ public class MAnalysisPlugin extends MPlugin implements MIAnalysisPlugin {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case MIAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS:
+			case MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS:
 				getInputPorts().clear();
 				getInputPorts().addAll((Collection<? extends MIInputPort>)newValue);
 				return;
@@ -145,7 +145,7 @@ public class MAnalysisPlugin extends MPlugin implements MIAnalysisPlugin {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case MIAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS:
+			case MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS:
 				getInputPorts().clear();
 				return;
 		}
@@ -160,10 +160,10 @@ public class MAnalysisPlugin extends MPlugin implements MIAnalysisPlugin {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case MIAnalysisMetaModelPackage.ANALYSIS_PLUGIN__INPUT_PORTS:
+			case MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS:
 				return inputPorts != null && !inputPorts.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //MAnalysisPlugin
+} //MFilter
