@@ -21,7 +21,6 @@
 package kieker.test.common.junit.record;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 
 import org.junit.Test;
@@ -33,7 +32,7 @@ import org.junit.Test;
  * @author Andre van Hoorn
  * 
  */
-public class TestOperationExecutionRecordConstructors extends TestCase {
+public class TestOperationExecutionRecordConstructors {
 
 	/**
 	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long, long, long, String, int, int)}

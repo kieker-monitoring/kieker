@@ -24,7 +24,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -39,7 +38,7 @@ import org.junit.Test;
  * @author Andre van Hoorn
  * 
  */
-public class TestPeriodicSampling extends TestCase { // NOCS
+public class TestPeriodicSampling { // NOCS
 
 	@Test
 	public void testNoSamplingWhenMonitoringDisabled() throws InterruptedException {

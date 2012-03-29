@@ -23,7 +23,6 @@ package kieker.test.analysis.junit.reader.namedRecordPipe;
 import java.util.List;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.exception.AnalysisConfigurationException;
@@ -44,7 +43,7 @@ import org.junit.Test;
  * 
  * @author Andre van Hoorn
  */
-public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
+public class TestPipeReader { // NOCS (MissingCtorCheck)
 	// private static final Log log = LogFactory.getLog(TestPipeReader.class);
 
 	@Test
@@ -65,7 +64,7 @@ public class TestPipeReader extends TestCase { // NOCS (MissingCtorCheck)
 		final IPipeWriter writer = NamedPipeFactory.createAndRegisterNamedPipeRecordWriter(pipeName);
 
 		// the analysis controller
-		final AnalysisController analysis = new AnalysisController(this.getName());
+		final AnalysisController analysis = new AnalysisController();
 		analysis.registerReader(pipeReader);
 		analysis.registerFilter(countingFilter);
 		analysis.connect(pipeReader, PipeReader.OUTPUT_PORT_NAME_RECORDS, countingFilter, CountingFilter.INPUT_PORT_NAME_EVENTS);

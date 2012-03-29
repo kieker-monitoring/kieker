@@ -21,7 +21,6 @@
 package kieker.test.monitoring.junit.core.configuration;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -35,7 +34,7 @@ import org.junit.Test;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-public class TestConfigurationFactoryMethods extends TestCase { // NOCS
+public class TestConfigurationFactoryMethods { // NOCS
 
 	private static final String EXAMPLE_CONFIG_FILE_IN_TRUNK = "test/monitoring/META-INF/kieker.monitoring.test.properties";
 

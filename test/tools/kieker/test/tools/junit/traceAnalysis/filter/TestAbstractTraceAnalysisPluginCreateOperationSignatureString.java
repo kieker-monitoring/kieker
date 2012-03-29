@@ -21,7 +21,6 @@
 package kieker.test.tools.junit.traceAnalysis.filter;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import kieker.common.util.ClassOperationSignaturePair;
 import kieker.common.util.Signature;
 
@@ -32,7 +31,7 @@ import org.junit.Test;
  * @author Andre van Hoorn
  * 
  */
-public class TestAbstractTraceAnalysisPluginCreateOperationSignatureString extends TestCase {
+public class TestAbstractTraceAnalysisPluginCreateOperationSignatureString {
 
 	@Test
 	public void testNoModifiers() {

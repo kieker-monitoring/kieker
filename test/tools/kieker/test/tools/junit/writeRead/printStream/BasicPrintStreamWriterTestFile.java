@@ -48,22 +48,18 @@ public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTes
 	private static final String ENCODING = "UTF-8";
 
 	@Rule
-	private final TemporaryFolder tmpFolder = new TemporaryFolder();
+	public final TemporaryFolder tmpFolder = new TemporaryFolder();
 
 	private volatile File outputFile = null;
 
-	@Override
 	@Before
-	protected void setUp() throws Exception {
-		super.setUp();
+	public void setUp() throws Exception {
 		this.tmpFolder.create();
 		this.outputFile = this.tmpFolder.newFile(BasicPrintStreamWriterTestFile.OUTPUT_BASE_FN);
 	}
 
-	@Override
 	@After
-	protected void tearDown() throws Exception {
-		super.tearDown();
+	public void tearDown() throws Exception {
 		this.tmpFolder.delete();
 	}
 

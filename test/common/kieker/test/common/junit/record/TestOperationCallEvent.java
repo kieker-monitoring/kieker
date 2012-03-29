@@ -21,7 +21,6 @@
 package kieker.test.common.junit.record;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import kieker.common.record.flow.trace.operation.CallOperationEvent;
 
 import org.junit.Test;
@@ -29,7 +28,7 @@ import org.junit.Test;
 /**
  * @author Andre van Hoorn
  */
-public class TestOperationCallEvent extends TestCase { // NOCS (MissingCtorCheck)
+public class TestOperationCallEvent { // NOCS (MissingCtorCheck)
 
 	private static final long TSTAMP = 987998l;
 	private static final long TRACE_ID = 23444l;

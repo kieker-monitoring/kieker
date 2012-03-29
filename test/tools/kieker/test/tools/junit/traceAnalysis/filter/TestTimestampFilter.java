@@ -21,7 +21,6 @@
 package kieker.test.tools.junit.traceAnalysis.filter;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.configuration.Configuration;
@@ -37,7 +36,7 @@ import org.junit.Test;
  * 
  * @author Andre van Hoorn
  */
-public class TestTimestampFilter extends TestCase { // NOCS
+public class TestTimestampFilter { // NOCS
 
 	// private static final Log LOG = LogFactory.getLog(TestTimestampFilter.class);
 

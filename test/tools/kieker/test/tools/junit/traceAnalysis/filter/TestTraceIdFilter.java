@@ -26,7 +26,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.configuration.Configuration;
@@ -42,7 +41,7 @@ import org.junit.Test;
  * 
  * @author Andre van Hoorn
  */
-public class TestTraceIdFilter extends TestCase { // NOCS
+public class TestTraceIdFilter { // NOCS
 
 	// private static final Log log = LogFactory.getLog(TestTraceIdFilter.class);
 

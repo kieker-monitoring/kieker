@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.repository.AbstractRepository;
@@ -49,7 +48,7 @@ import org.junit.Test;
  * 
  * @author Andre van Hoorn
  */
-public class TestTraceReconstructionFilter extends TestCase {
+public class TestTraceReconstructionFilter {
 
 	private static final Log LOG = LogFactory.getLog(TestTraceReconstructionFilter.class);
 	private static final long TRACE_ID = 62298L;

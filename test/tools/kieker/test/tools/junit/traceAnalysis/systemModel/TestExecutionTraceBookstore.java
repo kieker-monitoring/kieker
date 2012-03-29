@@ -25,7 +25,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -48,7 +47,7 @@ import org.junit.Test;
  * 
  * @author Andre van Hoorn
  */
-public class TestExecutionTraceBookstore extends TestCase {
+public class TestExecutionTraceBookstore {
 
 	private static final Log LOG = LogFactory.getLog(TestExecutionTraceBookstore.class);
 	private static final long TRACE_ID = 69898L;
@@ -68,9 +67,9 @@ public class TestExecutionTraceBookstore extends TestCase {
 	// public TestExecutionTraceBookstore() {
 	//
 	// }
-	@Override
+
 	@Before
-	protected void setUp() throws Exception {
+	public void setUp() throws Exception {
 		final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration());
 		this.eFactory = new ExecutionFactory(systemEntityFactory);
 

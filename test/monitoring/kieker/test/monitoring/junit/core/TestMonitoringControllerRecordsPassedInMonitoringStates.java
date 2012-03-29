@@ -23,7 +23,6 @@ package kieker.test.monitoring.junit.core;
 import java.util.List;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
@@ -34,7 +33,7 @@ import org.junit.Test;
 /**
  * @author Andre van Hoorn, Jan Waller
  */
-public class TestMonitoringControllerRecordsPassedInMonitoringStates extends TestCase { // NOCS
+public class TestMonitoringControllerRecordsPassedInMonitoringStates { // NOCS
 
 	@Test
 	public void testRecordsPassedToWriterWhenEnabled() {

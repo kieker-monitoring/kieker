@@ -22,7 +22,6 @@ package kieker.test.analysis.junit.plugin; // NOCS (outer types)
 
 import java.util.List;
 
-import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.AbstractPlugin;
@@ -48,7 +47,7 @@ import org.junit.Test;
  * 
  * @author Nils Christian Ehmke
  */
-public class GeneralPluginTest extends TestCase {
+public class GeneralPluginTest {
 
 	private OperationExecutionRecord createOperationExecutionRecord(final String opString, final long traceId, final long tin, final long tout) {
 		return new OperationExecutionRecord(opString, OperationExecutionRecord.NO_SESSION_ID, traceId, tin, tout, OperationExecutionRecord.NO_HOSTNAME,
@@ -156,10 +155,7 @@ public class GeneralPluginTest extends TestCase {
  * @author Nils Christian Ehmke
  * @version 1.0
  */
-@Plugin(
-		outputPorts = {
-			@OutputPort(name = SourceClass.OUTPUT_PORT_NAME, eventTypes = { OperationExecutionRecord.class })
-		})
+@Plugin(outputPorts = { @OutputPort(name = SourceClass.OUTPUT_PORT_NAME, eventTypes = { OperationExecutionRecord.class }) })
 class SourceClass extends AbstractReaderPlugin { // NOPMD (SubClassOfTest)
 
 	/**
@@ -204,9 +200,7 @@ class SourceClass extends AbstractReaderPlugin { // NOPMD (SubClassOfTest)
 	}
 }
 
-@Plugin(
-		name = MyPlugin.PLUGIN_NAME,
-		description = MyPlugin.PLUGIN_DESCRIPTION)
+@Plugin(name = MyPlugin.PLUGIN_NAME, description = MyPlugin.PLUGIN_DESCRIPTION)
 class MyPlugin extends AbstractPlugin { // NOPMD (SubClassOfTest)
 	public static final String PLUGIN_NAME = "pluginName-EfpvPSE0";
 
@@ -227,9 +221,7 @@ class MyPlugin extends AbstractPlugin { // NOPMD (SubClassOfTest)
 
 }
 
-@Repository(
-		name = MyRepository.REPOSITORY_NAME,
-		description = MyRepository.REPOSITORY_DESCRIPTION)
+@Repository(name = MyRepository.REPOSITORY_NAME, description = MyRepository.REPOSITORY_DESCRIPTION)
 class MyRepository extends AbstractRepository { // NOPMD (SubClassOfTest)
 
 	public static final String REPOSITORY_NAME = "repoName-hNcuzIKc8e";

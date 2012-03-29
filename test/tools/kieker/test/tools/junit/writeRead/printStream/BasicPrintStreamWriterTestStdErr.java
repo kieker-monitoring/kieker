@@ -44,18 +44,15 @@ public class BasicPrintStreamWriterTestStdErr extends AbstractPrintStreamWriterT
 
 	private volatile StringTeePrintStream stringTeePrintStream = null;
 
-	@Override
 	@Before
-	protected void setUp() throws Exception {
+	public void setUp() throws Exception {
 		this.originalPrintStream = System.err;
 		this.stringTeePrintStream = new StringTeePrintStream(this.originalPrintStream);
 		System.setErr(this.stringTeePrintStream);
 	}
 
-	@Override
 	@After
-	protected void tearDown() throws Exception {
-		super.tearDown();
+	public void tearDown() throws Exception {
 		System.setErr(this.originalPrintStream);
 	}
 
@@ -85,6 +82,7 @@ public class BasicPrintStreamWriterTestStdErr extends AbstractPrintStreamWriterT
 					.append(": ")
 					.append(rec).append("\n");
 			final String curLine = inputRecordStringBuilder.toString();
+			outputString.indexOf(curLine);
 			Assert.assertTrue("Record '" + curLine + "' not found in output stream: '" + outputString + "'",
 					outputString.indexOf(curLine) != -1);
 		}

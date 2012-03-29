@@ -21,7 +21,6 @@
 package kieker.test.common.junit.record;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 
 import org.junit.Test;
@@ -29,7 +28,7 @@ import org.junit.Test;
 /**
  * @author Andre van Hoorn
  */
-public class TestOperationExecutionRecordEquals extends TestCase { // NOCS (MissingCtorCheck)
+public class TestOperationExecutionRecordEquals { // NOCS (MissingCtorCheck)
 
 	/**
 	 * Tests the toArray(..) and initFromArray(..) methods of OperationExecutionRecord.

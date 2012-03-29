@@ -21,7 +21,6 @@
 package kieker.test.tools.junit.traceAnalysis.filter.flow;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.configuration.Configuration;
@@ -43,7 +42,7 @@ import org.junit.Test;
  * @author Andre van Hoorn
  * 
  */
-public class TestEventTrace2ExecutionTraceFilter extends TestCase {
+public class TestEventTrace2ExecutionTraceFilter {
 	// private static final Log LOG = LogFactory.getLog(TestEventTrace2ExecutionTraceFilter.class);
 
 	private static final long TRACE_ID = 4563L;

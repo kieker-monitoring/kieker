@@ -44,18 +44,15 @@ public class BasicPrintStreamWriterTestStdout extends AbstractPrintStreamWriterT
 
 	private volatile StringTeePrintStream stringTeePrintStream = null;
 
-	@Override
 	@Before
-	protected void setUp() throws Exception {
+	public void setUp() throws Exception {
 		this.originalPrintStream = System.out;
 		this.stringTeePrintStream = new StringTeePrintStream(this.originalPrintStream);
 		System.setOut(this.stringTeePrintStream);
 	}
 
-	@Override
 	@After
-	protected void tearDown() throws Exception {
-		super.tearDown();
+	public void tearDown() throws Exception {
 		System.setOut(this.originalPrintStream);
 	}
 

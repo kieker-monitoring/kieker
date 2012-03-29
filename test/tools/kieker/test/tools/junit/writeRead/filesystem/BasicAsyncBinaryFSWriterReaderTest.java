@@ -25,9 +25,7 @@ import kieker.monitoring.writer.IMonitoringWriter;
 import kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter;
 
 /**
- * 
- * @author André van Hoorn
- * 
+ * @author Andre van Hoorn
  */
 public class BasicAsyncBinaryFSWriterReaderTest extends AbstractTestFSWriterReader { // NOPMD (TestClassWithoutTestCases) // NOCS (MissingCtorCheck)
 
@@ -45,5 +43,4 @@ public class BasicAsyncBinaryFSWriterReaderTest extends AbstractTestFSWriterRead
 	protected boolean terminateBeforeLogInspection() {
 		return true; // because the AsyncBinaryFsWriter doesn't flush
 	}
-
 }

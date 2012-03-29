@@ -21,7 +21,6 @@
 package kieker.test.monitoring.junit.core;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
@@ -33,7 +32,7 @@ import org.junit.Test;
 /**
  * @author Andre van Hoorn, Jan Waller
  */
-public class TestControllerConstruction extends TestCase { // NOCS
+public class TestControllerConstruction { // NOCS
 
 	@Test
 	public void testConstructionFromConfig() {

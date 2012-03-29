@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
 import kieker.common.configuration.Configuration;
 import kieker.test.analysis.junit.plugin.ListReader;
@@ -52,7 +51,7 @@ import org.junit.rules.TemporaryFolder;
  * @author Andre van Hoorn
  * 
  */
-public abstract class AbstractTraceWriterFilterTest extends TestCase {
+public abstract class AbstractTraceWriterFilterTest {
 
 	private static final String OUTPUT_BASE_FN = "NLdQ3wsS.out"; // the name doesn't matter
 	private static final String ENCODING = "UTF-8";
@@ -73,14 +72,12 @@ public abstract class AbstractTraceWriterFilterTest extends TestCase {
 	private final BookstoreExecutionFactory execFactory = new BookstoreExecutionFactory(this.modelRepo);
 
 	@Rule
-	private final TemporaryFolder tmpFolder = new TemporaryFolder();
+	public final TemporaryFolder tmpFolder = new TemporaryFolder();
 
 	private volatile File outputFile = null;
 
-	@Override
 	@Before
-	protected void setUp() throws Exception {
-		super.setUp();
+	public void setUp() throws Exception {
 		this.tmpFolder.create();
 		this.outputFile = this.tmpFolder.newFile(AbstractTraceWriterFilterTest.OUTPUT_BASE_FN);
 	}
@@ -180,10 +177,8 @@ public abstract class AbstractTraceWriterFilterTest extends TestCase {
 		return new String(buffer, AbstractTraceWriterFilterTest.ENCODING);
 	}
 
-	@Override
 	@After
-	protected void tearDown() throws Exception {
-		super.tearDown();
+	public void tearDown() throws Exception {
 		this.tmpFolder.delete();
 	}
 }

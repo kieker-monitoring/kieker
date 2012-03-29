@@ -23,7 +23,6 @@ package kieker.test.monitoring.junit.writer.namedRecordPipe;
 import java.util.List;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
@@ -35,7 +34,7 @@ import org.junit.Test;
  * @author Andre van Hoorn
  * 
  */
-public class TestPipeWriter extends TestCase { // NOCS
+public class TestPipeWriter { // NOCS
 
 	/**
 	 * Tests whether the {@link kieker.monitoring.writer.namedRecordPipe.PipeWriter} correctly passes received {@link IMonitoringRecord}s to the

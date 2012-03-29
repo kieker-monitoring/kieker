@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Properties;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
@@ -42,7 +41,7 @@ import org.junit.Test;
  * @author Andre van Hoorn
  * 
  */
-public class TestAutoSetLoggingTimestamp extends TestCase { // NOCS
+public class TestAutoSetLoggingTimestamp { // NOCS
 
 	private void executeTestSetLoggingTimestamp(final boolean setLoggingTimestampEnabled) {
 		final String pipeName = NamedPipeFactory.createPipeName();

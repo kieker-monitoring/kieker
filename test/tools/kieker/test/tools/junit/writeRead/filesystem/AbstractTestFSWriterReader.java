@@ -47,9 +47,7 @@ import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
 /**
- * 
  * @author Andre van Hoorn
- * 
  */
 public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTest {
 	// TODO: constants are private in AbstractAsyncWriter ... why?
@@ -58,20 +56,18 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 	private static final String CONFIG_ASYNC_WRITER_SHUTDOWNDELAY = "MaxShutdownDelay";
 
 	@Rule
-	private final TemporaryFolder tmpFolder = new TemporaryFolder();
+	public final TemporaryFolder tmpFolder = new TemporaryFolder();
 
 	private volatile Class<? extends IMonitoringWriter> testedWriterClazz = AsyncFsWriter.class;
 
 	protected abstract Class<? extends IMonitoringWriter> getTestedWriterClazz();
 
-	@Override
 	@Before
 	public void setUp() throws IOException {
 		this.testedWriterClazz = this.getTestedWriterClazz();
 		this.tmpFolder.create();
 	}
 
-	@Override
 	@After
 	public void tearDown() throws Exception {
 		this.tmpFolder.delete();

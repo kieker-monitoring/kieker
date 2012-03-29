@@ -21,7 +21,6 @@
 package kieker.test.tools.junit.traceAnalysis.filter;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import kieker.common.configuration.Configuration;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
@@ -35,7 +34,7 @@ import org.junit.Test;
  * 
  * @author Andre van Hoorn
  */
-public class TestTraceEquivalenceFilterAssemblyEquivalence extends TestCase { // NOCS
+public class TestTraceEquivalenceFilterAssemblyEquivalence { // NOCS
 
 	private static final String SESSION_ID = "j8tVhvDPYL";
 

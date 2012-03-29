@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.configuration.Configuration;
@@ -45,7 +44,7 @@ import org.junit.Test;
  * @author Andre van Hoorn
  * 
  */
-public class TestExecutionRecordTransformationFilter extends TestCase {
+public class TestExecutionRecordTransformationFilter {
 
 	/**
 	 * Tests if each {@link OperationExecutionRecord} within a valid Bookstore trace is correctly

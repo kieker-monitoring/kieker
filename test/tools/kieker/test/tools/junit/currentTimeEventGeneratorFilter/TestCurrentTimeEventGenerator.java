@@ -24,7 +24,6 @@ import java.util.Arrays;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
@@ -43,7 +42,7 @@ import org.junit.Test;
  * @author Andre van Hoorn
  * 
  */
-public class TestCurrentTimeEventGenerator extends TestCase { // NOCS
+public class TestCurrentTimeEventGenerator { // NOCS
 
 	@Test
 	public void testFirstRecordGeneratesEvent() throws IllegalStateException, AnalysisConfigurationException { // NOPMD (assert in method)

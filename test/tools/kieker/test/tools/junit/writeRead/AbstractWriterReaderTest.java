@@ -23,7 +23,6 @@ package kieker.test.tools.junit.writeRead;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.TestCase;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
@@ -39,7 +38,7 @@ import org.junit.Test;
  * @author Andre van Hoorn
  * 
  */
-public abstract class AbstractWriterReaderTest extends TestCase {
+public abstract class AbstractWriterReaderTest {
 
 	// parameters for the default list of events to use in the test
 	private static final String DEFAULT_EVENTS_SESSION_ID = "Mn51D97t0";

@@ -48,9 +48,8 @@ public class BasicNamedRecordPipeWriterReaderTest extends AbstractWriterReaderTe
 	private volatile SimpleSinkPlugin<IMonitoringRecord> sinkFilter = null;
 	private volatile AnalysisControllerThread analysisThread = null;
 
-	@Override
 	@Before
-	protected void setUp() throws Exception {
+	public void setUp() throws Exception {
 		final Configuration pipeReaderConfig = new Configuration();
 		pipeReaderConfig.setProperty(PipeReader.CONFIG_PROPERTY_NAME_PIPENAME, BasicNamedRecordPipeWriterReaderTest.PIPE_NAME);
 		final PipeReader pipeReader = new PipeReader(pipeReaderConfig);
