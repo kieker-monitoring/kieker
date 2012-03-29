@@ -52,7 +52,7 @@ public final class TestAnalysis {
 	private static final Log LOG = LogFactory.getLog(TestAnalysis.class);
 	private static final boolean LOADCONFIG = false;
 
-	private static final String filename = "tmp/testproject.kax";
+	private static final String FILENAME = "tmp/testproject.kax";
 
 	private TestAnalysis() {}
 
@@ -61,12 +61,12 @@ public final class TestAnalysis {
 		final SystemModelRepository traceRepo = new SystemModelRepository(new Configuration());
 		if (TestAnalysis.LOADCONFIG) {
 			try {
-				analysisController = new AnalysisController(new File(TestAnalysis.filename));
+				analysisController = new AnalysisController(new File(TestAnalysis.FILENAME));
 			} catch (final IOException ex) {
-				TestAnalysis.LOG.error("Failed to load " + TestAnalysis.filename, ex);
+				TestAnalysis.LOG.error("Failed to load " + TestAnalysis.FILENAME, ex);
 				return;
 			} catch (final AnalysisConfigurationException ex) {
-				TestAnalysis.LOG.error("Failed to load " + TestAnalysis.filename, ex);
+				TestAnalysis.LOG.error("Failed to load " + TestAnalysis.FILENAME, ex);
 				return;
 			}
 		} else {
@@ -203,11 +203,11 @@ public final class TestAnalysis {
 				TestAnalysis.LOG.error("Failed to wire the example project.", ex);
 			}
 			try {
-				analysisController.saveToFile(new File(TestAnalysis.filename));
+				analysisController.saveToFile(new File(TestAnalysis.FILENAME));
 			} catch (final IOException ex) {
-				TestAnalysis.LOG.error("Failed to save configuration to " + TestAnalysis.filename, ex);
+				TestAnalysis.LOG.error("Failed to save configuration to " + TestAnalysis.FILENAME, ex);
 			} catch (final AnalysisConfigurationException ex) {
-				TestAnalysis.LOG.error("Failed to save configuration to " + TestAnalysis.filename, ex);
+				TestAnalysis.LOG.error("Failed to save configuration to " + TestAnalysis.FILENAME, ex);
 			}
 		}
 		try {
