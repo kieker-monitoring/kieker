@@ -36,7 +36,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import kieker.common.exception.MonitoringRecordException;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
@@ -236,11 +235,8 @@ final class FSDirectoryReader implements Runnable {
 					} else { // legacy record
 						record = AbstractMonitoringRecord.createFromStringArray(OperationExecutionRecord.class, recordFields);
 					}
-				} catch (final MonitoringRecordException ex) {
-					FSDirectoryReader.LOG.error("Error loading record type", ex);
-					continue; // skip this record
 				} catch (final Exception ex) { // NOPMD NOCS (illegal catch)
-					FSDirectoryReader.LOG.error("Error processing line" + line);
+					FSDirectoryReader.LOG.error("Error processing line: " + line, ex);
 					continue; // skip this record
 				}
 				if (!this.recordReceiver.newMonitoringRecord(record)) {

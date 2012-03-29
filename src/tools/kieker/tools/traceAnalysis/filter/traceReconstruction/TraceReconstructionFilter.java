@@ -87,6 +87,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	private final long maxTraceDurationNanos;
 	private final long maxTraceDurationMillis;
 
+	private boolean traceProcessingErrorOccured = false;
+
 	/** Pending traces sorted by tin timestamps */
 	private final SortedSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() {
 
@@ -165,32 +167,38 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			description = "Receives the executions to be processed",
 			eventTypes = { Execution.class })
 	public void inputExecutions(final Execution execution) {
-		final long traceId = execution.getTraceId();
-
-		this.minTin = ((this.minTin < 0) || (execution.getTin() < this.minTin)) ? execution.getTin() : this.minTin; // NOCS
-		this.maxTout = execution.getTout() > this.maxTout ? execution.getTout() : this.maxTout; // NOCS
-
-		ExecutionTrace executionTrace = this.pendingTraces.get(traceId);
-		if (executionTrace != null) { /* trace (artifacts) exists already; */
-			if (!this.timeoutMap.remove(executionTrace)) { /* remove from timeoutMap. Will be re-added below */
-				TraceReconstructionFilter.LOG.error("Missing entry for trace in timeoutMap: " + executionTrace
-						+ " PendingTraces and timeoutMap are now longer consistent!");
-				this.reportError(traceId);
+		synchronized (this) {
+			if (this.terminated || (this.traceProcessingErrorOccured && !this.ignoreInvalidTraces)) {
+				return;
 			}
-		} else { /* create and add new trace */
-			executionTrace = new ExecutionTrace(traceId, execution.getSessionId());
-			this.pendingTraces.put(traceId, executionTrace);
-		}
-		try {
-			executionTrace.add(execution);
-			if (!this.timeoutMap.add(executionTrace)) { // (re-)add trace to timeoutMap
-				TraceReconstructionFilter.LOG.error("Equal entry existed in timeoutMap already:" + executionTrace);
+
+			final long traceId = execution.getTraceId();
+
+			this.minTin = ((this.minTin < 0) || (execution.getTin() < this.minTin)) ? execution.getTin() : this.minTin; // NOCS
+			this.maxTout = execution.getTout() > this.maxTout ? execution.getTout() : this.maxTout; // NOCS
+
+			ExecutionTrace executionTrace = this.pendingTraces.get(traceId);
+			if (executionTrace != null) { /* trace (artifacts) exists already; */
+				if (!this.timeoutMap.remove(executionTrace)) { /* remove from timeoutMap. Will be re-added below */
+					TraceReconstructionFilter.LOG.error("Missing entry for trace in timeoutMap: " + executionTrace
+							+ " PendingTraces and timeoutMap are now longer consistent!");
+					this.reportError(traceId);
+				}
+			} else { /* create and add new trace */
+				executionTrace = new ExecutionTrace(traceId, execution.getSessionId());
+				this.pendingTraces.put(traceId, executionTrace);
 			}
-			this.processTimeoutQueue();
-		} catch (final InvalidTraceException ex) { // this would be a bug!
-			TraceReconstructionFilter.LOG.error("Attempt to add record to wrong trace", ex);
-		} catch (final ExecutionEventProcessingException ex) {
-			TraceReconstructionFilter.LOG.error("ExecutionEventProcessingException occured while processing the timeout queue.", ex);
+			try {
+				executionTrace.add(execution);
+				if (!this.timeoutMap.add(executionTrace)) { // (re-)add trace to timeoutMap
+					TraceReconstructionFilter.LOG.error("Equal entry existed in timeoutMap already:" + executionTrace);
+				}
+				this.processTimeoutQueue();
+			} catch (final InvalidTraceException ex) { // this would be a bug!
+				TraceReconstructionFilter.LOG.error("Attempt to add record to wrong trace", ex);
+			} catch (final ExecutionEventProcessingException ex) {
+				TraceReconstructionFilter.LOG.error("ExecutionEventProcessingException occured while processing the timeout queue.", ex);
+			}
 		}
 	}
 
@@ -239,9 +247,14 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 				// trace fragments)
 				this.reportError(curTraceId);
 				this.invalidTraces.add(curTraceId);
+				final String transformationError = "Failed to transform execution trace to message trace (ID:" + curTraceId + "): " + executionTrace;
+				TraceReconstructionFilter.LOG.error(transformationError, ex);
 				if (!this.ignoreInvalidTraces) {
-					throw new ExecutionEventProcessingException("Failed to transform execution trace to message trace (ID:" + curTraceId + "): " + executionTrace,
-							ex);
+					this.traceProcessingErrorOccured = true;
+					TraceReconstructionFilter.LOG.warn("Note that this filter was configured to terminate at the *first* occurence of an invalid trace \n"
+							+ "If this is not the desired behavior, set the configuration property "
+							+ TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES + " to 'true'");
+					throw new ExecutionEventProcessingException(transformationError, ex);
 				}
 			}
 		}
@@ -274,7 +287,9 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	 * @return the timeout duration for a pending trace in nanoseconds
 	 */
 	public final long getMaxTraceDurationNanos() {
-		return this.maxTraceDurationNanos;
+		synchronized (this) {
+			return this.maxTraceDurationNanos;
+		}
 	}
 
 	/**
@@ -285,30 +300,36 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 
 	@Override
 	public void terminate(final boolean error) {
-		try {
-			this.terminated = true;
-			if (!error) {
-				this.processTimeoutQueue();
-			} else {
-				TraceReconstructionFilter.LOG.info("terminate called with error flag set; won't process timeoutqueue any more.");
+		synchronized (this) {
+			try {
+				this.terminated = true;
+				if (!error || (this.traceProcessingErrorOccured && !this.ignoreInvalidTraces)) {
+					this.processTimeoutQueue();
+				} else {
+					TraceReconstructionFilter.LOG
+							.info("terminate called with error an flag set or a trace processing occurred; won't process timeoutqueue any more.");
+				}
+			} catch (final ExecutionEventProcessingException ex) {
+				this.traceProcessingErrorOccured = true;
+				TraceReconstructionFilter.LOG.error("Error processing timeout queue", ex);
 			}
-		} catch (final ExecutionEventProcessingException ex) {
-			TraceReconstructionFilter.LOG.error("Error processing queue", ex);
 		}
 	}
 
 	@Override
 	public void printStatusMessage() {
-		super.printStatusMessage();
-		if ((this.getSuccessCount() > 0) || (this.getErrorCount() > 0)) {
-			final String minTinStr = new StringBuilder().append(this.minTin).append(" (")
-					.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTin)).append(",")
-					.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.minTin)).append(")").toString();
-			final String maxToutStr = new StringBuilder().append(this.maxTout).append(" (")
-					.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTout)).append(",")
-					.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.maxTout)).append(")").toString();
-			this.stdOutPrintln("First timestamp: " + minTinStr);
-			this.stdOutPrintln("Last timestamp: " + maxToutStr);
+		synchronized (this) {
+			super.printStatusMessage();
+			if ((this.getSuccessCount() > 0) || (this.getErrorCount() > 0)) {
+				final String minTinStr = new StringBuilder().append(this.minTin).append(" (")
+						.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTin)).append(",")
+						.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.minTin)).append(")").toString();
+				final String maxToutStr = new StringBuilder().append(this.maxTout).append(" (")
+						.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTout)).append(",")
+						.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.maxTout)).append(")").toString();
+				this.stdOutPrintln("First timestamp: " + minTinStr);
+				this.stdOutPrintln("Last timestamp: " + maxToutStr);
+			}
 		}
 	}
 
