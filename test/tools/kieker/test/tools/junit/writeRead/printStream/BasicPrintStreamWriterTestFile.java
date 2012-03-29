@@ -45,6 +45,8 @@ import org.junit.rules.TemporaryFolder;
 public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTest {
 	private static final String OUTPUT_BASE_FN = "S0fYvPsI.out"; // the name doesn't matter
 
+	private static final String ENCODING = "UTF-8";
+
 	@Rule
 	private final TemporaryFolder tmpFolder = new TemporaryFolder();
 
@@ -84,7 +86,9 @@ public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTes
 		BufferedInputStream f = null;
 		try {
 			f = new BufferedInputStream(new FileInputStream(this.outputFile));
-			f.read(buffer);
+			if (f.read(buffer) == -1) {
+				Assert.fail("Failed to read file into buffer: " + this.outputFile.getAbsolutePath());
+			}
 		} finally {
 			if (f != null) {
 				try {
@@ -94,7 +98,7 @@ public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTes
 				}
 			}
 		}
-		return new String(buffer);
+		return new String(buffer, BasicPrintStreamWriterTestFile.ENCODING);
 	}
 
 	@Override
