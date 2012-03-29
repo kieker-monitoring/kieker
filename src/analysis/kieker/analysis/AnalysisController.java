@@ -421,10 +421,7 @@ public final class AnalysisController {
 			throw new AnalysisConfigurationException("The plugin '" + dst.getName() + "' (" + dst.getPluginName() + ") is not registered.");
 		}
 		// Use the method of AbstractPlugin (This should be the only allowed call to this method) to check the connection.
-		if (!AbstractPlugin.connect(src, outputPortName, dst, inputPortName)) { // TODO: use exceptions on these deeper levels and change this accordingly
-			throw new AnalysisConfigurationException("Failed to connect plugin '" + src.getName() + "' (" + src.getPluginName() + ") to plugin '"
-					+ dst.getName() + "' (" + dst.getPluginName() + ").");
-		}
+		AbstractPlugin.connect(src, outputPortName, dst, inputPortName); // throws AnalysisConfigurationException
 	}
 
 	/**
@@ -449,10 +446,7 @@ public final class AnalysisController {
 			throw new AnalysisConfigurationException("The repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ") is not registered.");
 		}
 		// Use the method of AbstractPlugin (This should be the only allowed call to this method) to check the connections.
-		if (!plugin.connect(repositoryPort, repository)) { // TODO: use exceptions on these deeper levels and change this accordingly
-			throw new AnalysisConfigurationException("Failed to connect plugin '" + plugin.getName() + "' (" + plugin.getPluginName() + ") to repository '"
-					+ repository.getName() + "' (" + repository.getRepositoryName() + ").");
-		}
+		plugin.connect(repositoryPort, repository); // throws AnalysisConfigurationException
 	}
 
 	/**

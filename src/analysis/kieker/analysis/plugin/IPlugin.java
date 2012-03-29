@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 
@@ -67,9 +68,10 @@ public interface IPlugin {
 	 *            The name of the port to connect the repository.
 	 * @param repo
 	 *            The repository which should be used.
-	 * @return true if and only if the repository-port is valid, the repository itself is compatible and the port is not used yet.
+	 * @throws AnalysisConfigurationException
+	 *             if the repository-port is invalid, the repository itself is incompatible or the port is already used.
 	 */
-	public abstract boolean connect(final String name, final AbstractRepository repo);
+	public abstract void connect(final String name, final AbstractRepository repo) throws AnalysisConfigurationException;
 
 	/**
 	 * This method delivers an array of {@code AbstractRepository} containing the current repositories of this instance. In other words: The constructor should

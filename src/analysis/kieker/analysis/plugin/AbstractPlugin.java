@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -303,25 +304,25 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * 
 	 * @see kieker.analysis.plugin.IPlugin#connect(java.lang.String, kieker.analysis.repository.AbstractRepository)
 	 */
-	public final boolean connect(final String name, final AbstractRepository repo) {
+	public final void connect(final String name, final AbstractRepository repository) throws AnalysisConfigurationException {
 		final RepositoryPort port = this.repositoryPorts.get(name);
 		if (port == null) {
-			AbstractPlugin.LOG.error("Unknown repository port: " + name);
-			return false;
+			throw new AnalysisConfigurationException("Failed to connect plugin '" + this.getName() + "' (" + this.getPluginName() + ") to repository '"
+					+ repository.getName() + "' (" + repository.getRepositoryName() + "). Unknown repository port: " + name);
 		}
 		final Class<? extends AbstractRepository> repositoryType = port.repositoryType();
-		if (!repositoryType.isAssignableFrom(repo.getClass())) {
-			AbstractPlugin.LOG.error("Expected RepositoryType: " + repositoryType.getName() + " Found: " + repo.getClass().getName());
-			return false;
+		if (!repositoryType.isAssignableFrom(repository.getClass())) {
+			throw new AnalysisConfigurationException("Failed to connect plugin '" + this.getName() + "' (" + this.getPluginName() + ") to repository '"
+					+ repository.getName() + "' (" + repository.getRepositoryName() + "). Expected RepositoryType: " + repositoryType.getName() + " Found: "
+					+ repository.getClass().getName());
 		}
 		synchronized (this) {
 			if (this.registeredRepositories.containsKey(name)) {
-				AbstractPlugin.LOG.error("RepositoryPort already connected: " + name);
-				return false;
+				throw new AnalysisConfigurationException("Failed to connect plugin '" + this.getName() + "' (" + this.getPluginName() + ") to repository '"
+						+ repository.getName() + "' (" + repository.getRepositoryName() + "). RepositoryPort already connected: " + name);
 			}
-			this.registeredRepositories.put(name, repo);
+			this.registeredRepositories.put(name, repository);
 		}
-		return true;
 	}
 
 	/*
@@ -348,16 +349,17 @@ public abstract class AbstractPlugin implements IPlugin {
 	 *            The destination plugin.
 	 * @param inputPortName
 	 *            The input port of the destination port.
-	 * @return true if and only if both given plugins are valid, the output and input ports exist and if they are compatible. Furthermore the destination plugin must
-	 *         not be a reader.
+	 * @throws AnalysisConfigurationException
+	 *             if any given plugin is invalid, any output or input port doesn't exist or if they are incompatible.
+	 *             Furthermore the destination plugin must not be a reader.
 	 */
-	public static final boolean connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName) {
+	public static final void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName)
+			throws AnalysisConfigurationException {
 		if (!AbstractPlugin.isConnectionAllowed(src, outputPortName, dst, inputPortName)) {
-			AbstractPlugin.LOG.warn("Could not connect: " + src.getClass().getName() + " to " + dst.getClass().getName());
-			return false;
+			throw new AnalysisConfigurationException("Failed to connect plugin '" + src.getName() + "' (" + src.getPluginName() + ") to plugin '"
+					+ dst.getName() + "' (" + dst.getPluginName() + ").");
 		}
-
-		/* Connect the ports. */
+		// Connect the ports.
 		// FIXME: add a better check for the parameter of the method (currently only if 1 parameter present)
 		for (final Method m : dst.getClass().getMethods()) {
 			final InputPort ip = m.getAnnotation(InputPort.class);
@@ -369,11 +371,11 @@ public abstract class AbstractPlugin implements IPlugin {
 					}
 				});
 				src.registeredMethods.get(outputPortName).add(new PluginInputPortReference(dst, inputPortName, m, dst.inputPorts.get(inputPortName).eventTypes()));
-				return true;
+				return;
 			}
 		}
-		AbstractPlugin.LOG.warn("Could not connect: " + src.getClass().getName() + " to " + dst.getClass().getName());
-		return false;
+		throw new AnalysisConfigurationException("Failed to connect plugin '" + src.getName() + "' (" + src.getPluginName() + ") to plugin '"
+				+ dst.getName() + "' (" + dst.getPluginName() + ").");
 	}
 
 	/*
