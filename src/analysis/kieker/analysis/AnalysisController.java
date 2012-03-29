@@ -777,10 +777,14 @@ public final class AnalysisController implements Runnable {
 				throw new IOException("No project found in file '" + file.getAbsolutePath() + "'.");
 			}
 		} catch (final IOException ex) {
-			throw new IOException("Error loading file '" + file.getAbsolutePath() + "'.", ex);
+			final IOException newEx = new IOException("Error loading file '" + file.getAbsolutePath() + "'.");
+			newEx.initCause(ex);
+			throw newEx;
 		} catch (final Exception ex) { // NOPMD NOCS (illegal catch)
 			/* Some exceptions like the XMIException can be thrown during loading although it cannot be seen. Catch this situation. */
-			throw new IOException("The given file '" + file.getAbsolutePath() + "' is not a valid kax-configuration file.", ex);
+			final IOException newEx = new IOException("The given file '" + file.getAbsolutePath() + "' is not a valid kax-configuration file.");
+			newEx.initCause(ex);
+			throw newEx;
 		}
 	}
 
@@ -807,7 +811,9 @@ public final class AnalysisController implements Runnable {
 		try {
 			resource.save(options);
 		} catch (final IOException ex) {
-			throw new IOException("Unable to save configuration file '" + file.getAbsolutePath() + "'.", ex);
+			final IOException newEx = new IOException("Unable to save configuration file '" + file.getAbsolutePath() + "'.");
+			newEx.initCause(ex);
+			throw newEx;
 		}
 	}
 
