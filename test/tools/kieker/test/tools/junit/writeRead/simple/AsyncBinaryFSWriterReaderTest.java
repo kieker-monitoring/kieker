@@ -18,12 +18,12 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.writeRead.filesystem.simple;
+package kieker.test.tools.junit.writeRead.simple;
 
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.writer.IMonitoringWriter;
 import kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter;
-import kieker.test.tools.junit.writeRead.filesystem.AbstractTestFSWriterReader;
+import kieker.test.tools.junit.writeRead.AbstractTestFSWriterReader;
 
 /**
  * 

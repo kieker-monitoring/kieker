@@ -37,10 +37,16 @@ import kieker.common.record.IMonitoringRecord;
  */
 public class PrintStreamWriter extends AbstractMonitoringWriter {
 	private static final Log LOG = LogFactory.getLog(PrintStreamWriter.class);
+
+	// TODO: @jwa: is there a reason for providing the config parameter name "Stream" publicly?
+
 	private static final String PREFIX = PrintStreamWriter.class.getName() + ".";
 	private static final String STREAM = PrintStreamWriter.PREFIX + "Stream";
 
+	// TODO: @jwa: is there a reason for not having this constant public?
 	private static final String CONFIG_STREAM_STDOUT = "STDOUT";
+
+	// TODO: @jwa: is there a reason for not having this constant public?
 	private static final String CONFIG_STREAM_STDERR = "STDERR";
 
 	private static final String ENCODING = "UTF-8";

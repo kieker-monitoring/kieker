@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.writeRead.filesystem;
+package kieker.test.tools.junit.writeRead;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -127,6 +127,12 @@ public abstract class AbstractWriterReaderTest extends TestCase {
 		}
 
 		final List<IMonitoringRecord> monitoringRecords = this.readEvents();
+
+		/*
+		 * The following line is an easy way to test the tests (given monitoringRecords includes at least one record).
+		 * But don't forget to deactivate afterwards.
+		 */
+		// monitoringRecords.remove(monitoringRecords.size() - 1); // NOCS // NOPMD // (just in case they complain about this uncommented code)
 
 		this.inspectRecords(someEvents, monitoringRecords);
 

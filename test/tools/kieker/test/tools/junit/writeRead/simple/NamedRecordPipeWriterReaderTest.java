@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.writeRead.filesystem.simple;
+package kieker.test.tools.junit.writeRead.simple;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
-import kieker.test.tools.junit.writeRead.filesystem.AbstractWriterReaderTest;
+import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 /**
  * 
