@@ -40,15 +40,15 @@ import kieker.common.record.IMonitoringRecord;
  * @author Andre van Hoorn
  */
 @Plugin(outputPorts = {
-	@OutputPort(name = FSReaderRealtime.OUTPUT_PORT_NAME_MONITORING_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReaderRealtime")
+		@OutputPort(name = FSReaderRealtime.OUTPUT_PORT_NAME_MONITORING_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReaderRealtime")
 })
 public final class FSReaderRealtime extends AbstractReaderPlugin {
 	private static final Log LOG = LogFactory.getLog(FSReaderRealtime.class);
 
-	public static final String OUTPUT_PORT_NAME_MONITORING_RECORDS = "monitoring-records";
+	public static final String OUTPUT_PORT_NAME_MONITORING_RECORDS = "monitoringRecords";
 
-	public static final String PROPERTY_NAME_NUM_WORKERS = "num-workers";
-	public static final String PROPERTY_NAME_INPUTDIRNAMES = "input-dirs";
+	public static final String CONFIG_PROPERTY_NAME_NUM_WORKERS = "numWorkers";
+	public static final String CONFIG_PROPERTY_NAME_INPUTDIRNAMES = "inputDirs";
 
 	/* manages the life-cycle of the reader and consumers */
 	private final AnalysisController analysis = new AnalysisController();
@@ -76,8 +76,8 @@ public final class FSReaderRealtime extends AbstractReaderPlugin {
 	}
 
 	public final boolean init(final Configuration configuration) {
-		this.numWorkers = configuration.getIntProperty(FSReaderRealtime.PROPERTY_NAME_NUM_WORKERS);
-		this.inputDirs = configuration.getStringArrayProperty(FSReaderRealtime.PROPERTY_NAME_INPUTDIRNAMES, ";");
+		this.numWorkers = configuration.getIntProperty(FSReaderRealtime.CONFIG_PROPERTY_NAME_NUM_WORKERS);
+		this.inputDirs = configuration.getStringArrayProperty(FSReaderRealtime.CONFIG_PROPERTY_NAME_INPUTDIRNAMES, ";");
 		// this.inputDirs = this.inputDirNameListToArray(configuration.getStringProperty(FSReaderRealtime.PROP_NAME_INPUTDIRNAMES));
 		return this.initInstanceFromArgs(this.inputDirs, this.numWorkers);
 	}
@@ -105,11 +105,11 @@ public final class FSReaderRealtime extends AbstractReaderPlugin {
 
 	private boolean initInstanceFromArgs(final String[] inputDirNames, final int numWorkers) throws IllegalArgumentException {
 		if ((inputDirNames == null) || (inputDirNames.length <= 0)) {
-			throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.PROPERTY_NAME_INPUTDIRNAMES + ":" + Arrays.toString(inputDirNames)); // NOCS
+			throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.CONFIG_PROPERTY_NAME_INPUTDIRNAMES + ":" + Arrays.toString(inputDirNames)); // NOCS
 		}
 
 		if (numWorkers <= 0) {
-			throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.PROPERTY_NAME_NUM_WORKERS + ": " + numWorkers); // NOCS
+			throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.CONFIG_PROPERTY_NAME_NUM_WORKERS + ": " + numWorkers); // NOCS
 		}
 
 		final Configuration configuration = new Configuration();
@@ -163,15 +163,15 @@ public final class FSReaderRealtime extends AbstractReaderPlugin {
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
-		defaultConfiguration.setProperty(FSReaderRealtime.PROPERTY_NAME_NUM_WORKERS, "1");
-		defaultConfiguration.setProperty(FSReaderRealtime.PROPERTY_NAME_INPUTDIRNAMES, "."); // the current folder as default
+		defaultConfiguration.setProperty(FSReaderRealtime.CONFIG_PROPERTY_NAME_NUM_WORKERS, "1");
+		defaultConfiguration.setProperty(FSReaderRealtime.CONFIG_PROPERTY_NAME_INPUTDIRNAMES, "."); // the current folder as default
 		return defaultConfiguration;
 	}
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(FSReaderRealtime.PROPERTY_NAME_NUM_WORKERS, Integer.toString(this.numWorkers));
-		configuration.setProperty(FSReaderRealtime.PROPERTY_NAME_INPUTDIRNAMES, Configuration.toProperty(this.inputDirs));
+		configuration.setProperty(FSReaderRealtime.CONFIG_PROPERTY_NAME_NUM_WORKERS, Integer.toString(this.numWorkers));
+		configuration.setProperty(FSReaderRealtime.CONFIG_PROPERTY_NAME_INPUTDIRNAMES, Configuration.toProperty(this.inputDirs));
 		return configuration;
 	}
 

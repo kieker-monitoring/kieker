@@ -68,9 +68,9 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 
 	public static final String INPUT_PORT_NAME_EXECUTIONS = "executions";
 
-	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE = "message-traces";
-	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE = "execution-traces";
-	public static final String OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE = "invalid-execution-traces";
+	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE = "messageTraces";
+	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE = "executionTraces";
+	public static final String OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE = "invalidExecutionTraces";
 
 	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS = "maxTraceDurationMillis";
 	public static final String CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES = "ignoreInvalidTraces";

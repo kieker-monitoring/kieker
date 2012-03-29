@@ -109,8 +109,8 @@ public class FilesystemLogReplayer {
 		AbstractReaderPlugin fsReader;
 		if (this.realtimeMode) {
 			final Configuration configuration = new Configuration();
-			configuration.setProperty(FSReaderRealtime.PROPERTY_NAME_INPUTDIRNAMES, Configuration.toProperty(this.inputDirs));
-			configuration.setProperty(FSReaderRealtime.PROPERTY_NAME_NUM_WORKERS, Integer.toString(this.numRealtimeWorkerThreads));
+			configuration.setProperty(FSReaderRealtime.CONFIG_PROPERTY_NAME_INPUTDIRNAMES, Configuration.toProperty(this.inputDirs));
+			configuration.setProperty(FSReaderRealtime.CONFIG_PROPERTY_NAME_NUM_WORKERS, Integer.toString(this.numRealtimeWorkerThreads));
 			fsReader = new FSReaderRealtime(configuration);
 		} else {
 			final Configuration configuration = new Configuration(null);

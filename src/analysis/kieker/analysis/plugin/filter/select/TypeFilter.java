@@ -47,8 +47,8 @@ public final class TypeFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_EVENTS = "events";
 
-	public static final String OUTPUT_PORT_NAME_TYPE_MATCH = "events-matching-type";
-	public static final String OUTPUT_PORT_NAME_TYPE_MISMATCH = "events-not-matching-type";
+	public static final String OUTPUT_PORT_NAME_TYPE_MATCH = "eventsMatchingType";
+	public static final String OUTPUT_PORT_NAME_TYPE_MISMATCH = "eventsNotMatchingType";
 
 	public static final String CONFIG_PROPERTY_NAME_TYPES = "types";
 
