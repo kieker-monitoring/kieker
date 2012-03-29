@@ -1,9 +1,8 @@
 \begin{lstlisting}[caption=Commands to compile and run the instrumented Bookstore under Windows,label=lst:bookstoreStarterWin]
 #\lstshellprompt{}# mkdir build
-#\lstshellprompt{}# javac src\bookstoreApplication\*.java -classpath lib\#\mainJar# -d build\
+#\lstshellprompt{}# javac src\kieker\examples\userguide\ch2bookstore\manual\*.java  
+       -classpath lib\#\mainJar# -d build\
 
-#\lstshellprompt{}# java -classpath build\;
-       lib\#\mainJar#;
-       lib\#\commonsLoggingJar#
-       bookstoreApplication.BookstoreStarter 
+#\lstshellprompt{}# java -classpath build\;lib\#\mainJar#
+       kieker.examples.userguide.ch2bookstore.manual.BookstoreStarter
 \end{lstlisting}
