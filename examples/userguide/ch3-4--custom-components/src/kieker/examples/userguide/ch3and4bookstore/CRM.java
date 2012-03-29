@@ -39,10 +39,7 @@ public class CRM {
 		this.catalog.getBook(false);
 		final long tout = CRM.MONITORING_CONTROLLER.getTimeSource().getTime();
 		/* Create a new record and set values */
-		final MyResponseTimeRecord e = new MyResponseTimeRecord();
-		e.className = "mySimpleKiekerExample.bookstoreTracing.Catalog";
-		e.methodName = "getBook(..)";
-		e.responseTimeNanos = tout - tin;
+		final MyResponseTimeRecord e = new MyResponseTimeRecord(new Object[] { "mySimpleKiekerExample.bookstoreTracing.Catalog", "getBook(..)", tout - tin });
 		/* Pass the record to the monitoring controller */
 		CRM.MONITORING_CONTROLLER.newMonitoringRecord(e);
 	}

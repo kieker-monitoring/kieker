@@ -21,7 +21,6 @@
 package kieker.examples.userguide.ch3and4bookstore;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.plugin.AbstractPlugin;
 import kieker.common.configuration.Configuration;
 
 public final class Starter {
@@ -44,19 +43,40 @@ public final class Starter {
 			}
 		}).start();
 
-		/* Start an analysis of the response times */
+		/* Create a new analysis controller for our response time analysis. */
 		final AnalysisController analyisController = new AnalysisController();
+
+		/* Assemble the configurations for the filters. */
 		final Configuration readerConfiguration = new Configuration();
-		readerConfiguration.setProperty(AbstractPlugin.CONFIG_NAME, "somePipe");
-		final MyPipeReader reader =
-				new MyPipeReader(readerConfiguration);
-		final MyResponseTimeConsumer consumer =
-				new MyResponseTimeConsumer(new Configuration());
+		readerConfiguration.setProperty(MyPipeReader.CONFIG_PROPERTY_NAME_PIPE_NAME, "somePipe");
+
+		final Configuration filterConfiguration = new Configuration();
+		filterConfiguration.setProperty(MyResponseTimeFilter.CONFIG_PROPERTY_NAME_MAX_RESPONSE_TIME, Long.toString(1900000));
+
+		final Configuration validOutputConfiguration = new Configuration();
+		validOutputConfiguration.setProperty(MyResponseTimeOutputPrinter.CONFIG_PROPERTY_NAME_VALID_OUTPUT, Boolean.toString(true));
+
+		final Configuration invalidOutputConfiguration = new Configuration();
+		invalidOutputConfiguration.setProperty(MyResponseTimeOutputPrinter.CONFIG_PROPERTY_NAME_VALID_OUTPUT, Boolean.toString(false));
+
+		/* Initialize the filters. */
+		final MyPipeReader reader = new MyPipeReader(readerConfiguration);
+		final MyResponseTimeFilter filter = new MyResponseTimeFilter(filterConfiguration);
+		final MyResponseTimeOutputPrinter validPrinter = new MyResponseTimeOutputPrinter(validOutputConfiguration);
+		final MyResponseTimeOutputPrinter invalidPrinter = new MyResponseTimeOutputPrinter(invalidOutputConfiguration);
+
+		/* Register the filters. */
 		analyisController.registerReader(reader);
-		analyisController.registerFilter(consumer);
+		analyisController.registerFilter(filter);
+		analyisController.registerFilter(validPrinter);
+		analyisController.registerFilter(invalidPrinter);
 
-		analyisController.connect(reader, MyPipeReader.OUTPUT_PORT_NAME, consumer, MyResponseTimeConsumer.INPUT_PORT_NAME);
+		/* Connect the filters. */
+		analyisController.connect(reader, MyPipeReader.OUTPUT_PORT_NAME, filter, MyResponseTimeFilter.INPUT_PORT_NAME_EVENTS);
+		analyisController.connect(filter, MyResponseTimeFilter.OUTPUT_PORT_NAME_VALID_EVENTS, validPrinter, MyResponseTimeOutputPrinter.INPUT_PORT_NAME_EVENTS);
+		analyisController.connect(filter, MyResponseTimeFilter.OUTPUT_PORT_NAME_INVALID_EVENTS, invalidPrinter, MyResponseTimeOutputPrinter.INPUT_PORT_NAME_EVENTS);
 
+		/* Start the analysis. */
 		analyisController.run();
 	}
 }

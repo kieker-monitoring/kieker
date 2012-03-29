@@ -33,16 +33,17 @@ import kieker.common.logging.LogFactory;
 public class MyPipeReader extends AbstractReaderPlugin {
 
 	public static final String OUTPUT_PORT_NAME = "outputPort";
+	public static final String CONFIG_PROPERTY_NAME_PIPE_NAME = "pipeName";
+
 	private static final Log LOG = LogFactory.getLog(MyPipeReader.class);
 
-	private static final String CONFIG_PIPE_NAME = "pipeName";
 	private final String pipeName;
 	private volatile MyPipe pipe;
 
 	public MyPipeReader(final Configuration configuration) {
 		super(configuration);
 
-		this.pipeName = configuration.getStringProperty(MyPipeReader.CONFIG_PIPE_NAME);
+		this.pipeName = configuration.getStringProperty(MyPipeReader.CONFIG_PROPERTY_NAME_PIPE_NAME);
 
 		this.init();
 	}
@@ -64,8 +65,7 @@ public class MyPipeReader extends AbstractReaderPlugin {
 			PipeData data = this.pipe.poll(4);
 			while (data != null) {
 				/* Create new record, init from received array ... */
-				final MyResponseTimeRecord record = new MyResponseTimeRecord();
-				record.initFromArray(data.getRecordData());
+				final MyResponseTimeRecord record = new MyResponseTimeRecord(data.getRecordData());
 				record.setLoggingTimestamp(data.getLoggingTimestamp());
 				/* ...and delegate the task of delivering to the super class. */
 				super.deliver(MyPipeReader.OUTPUT_PORT_NAME, record);
@@ -81,7 +81,7 @@ public class MyPipeReader extends AbstractReaderPlugin {
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);
 
-		configuration.setProperty(MyPipeReader.CONFIG_PIPE_NAME, this.pipeName);
+		configuration.setProperty(MyPipeReader.CONFIG_PROPERTY_NAME_PIPE_NAME, this.pipeName);
 
 		return configuration;
 	}
@@ -90,7 +90,7 @@ public class MyPipeReader extends AbstractReaderPlugin {
 	protected Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
 
-		defaultConfiguration.setProperty(MyPipeReader.CONFIG_PIPE_NAME, "kieker-pipe");
+		defaultConfiguration.setProperty(MyPipeReader.CONFIG_PROPERTY_NAME_PIPE_NAME, "kieker-pipe");
 
 		return defaultConfiguration;
 	}

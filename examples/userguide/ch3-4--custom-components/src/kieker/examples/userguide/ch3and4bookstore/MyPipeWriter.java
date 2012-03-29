@@ -21,16 +21,24 @@
 package kieker.examples.userguide.ch3and4bookstore;
 
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
 public class MyPipeWriter extends AbstractMonitoringWriter {
-	private static final String PREFIX = MyPipeWriter.class.getName() + ".";
-	private static final String PROPERTY_PIPE_NAME = MyPipeWriter.PREFIX + "pipeName";
+
+	public static final String CONFIG_PROPERTY_NAME_PIPE_NAME = MyPipeWriter.class.getName() + ".pipeName";
+
+	private static final Log LOG = LogFactory.getLog(MyPipeWriter.class);
+
 	private volatile MyPipe pipe;
+	private final String pipeName;
 
 	public MyPipeWriter(final Configuration configuration) {
 		super(configuration);
+
+		this.pipeName = configuration.getStringProperty(MyPipeWriter.CONFIG_PROPERTY_NAME_PIPE_NAME);
 	}
 
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
@@ -46,14 +54,20 @@ public class MyPipeWriter extends AbstractMonitoringWriter {
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration(super.getDefaultConfiguration());
-		configuration.setProperty(MyPipeWriter.PROPERTY_PIPE_NAME, "myPipeName");
+
+		configuration.setProperty(MyPipeWriter.CONFIG_PROPERTY_NAME_PIPE_NAME, "kieker-pipe");
+
 		return configuration;
 	}
 
 	@Override
 	protected void init() throws Exception {
-		final String pipeName = this.configuration.getStringProperty(MyPipeWriter.PROPERTY_PIPE_NAME);
-		this.pipe = MyNamedPipeManager.getInstance().acquirePipe(pipeName);
+		try {
+			this.pipe = MyNamedPipeManager.getInstance().acquirePipe(this.pipeName);
+		} catch (final Exception ex) {
+			MyPipeWriter.LOG.error("Failed to acquire pipe '" + this.pipeName + "'", ex);
+			throw ex;
+		}
 	}
 
 	public void terminate() {
