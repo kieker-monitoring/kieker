@@ -89,7 +89,7 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 			description = "Receives the invalid execution traces to be written", eventTypes = { InvalidExecutionTrace.class })
 	public void newInvalidExecutionTrace(final InvalidExecutionTrace et) {
 		try {
-			InvalidExecutionTraceWriterFilter.this.ps.append(et.getInvalidExecutionTraceArtifacts().toString());
+			InvalidExecutionTraceWriterFilter.this.ps.append(et.getInvalidExecutionTraceArtifacts().toString()).append("\n");
 			InvalidExecutionTraceWriterFilter.this.reportSuccess(et.getInvalidExecutionTraceArtifacts().getTraceId());
 		} catch (final IOException ex) {
 			InvalidExecutionTraceWriterFilter.this.reportError(et.getInvalidExecutionTraceArtifacts().getTraceId());

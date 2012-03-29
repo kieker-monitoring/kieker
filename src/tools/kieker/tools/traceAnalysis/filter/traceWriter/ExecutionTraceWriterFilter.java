@@ -91,7 +91,7 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 			eventTypes = { ExecutionTrace.class })
 	public void newExecutionTrace(final ExecutionTrace et) {
 		try {
-			ExecutionTraceWriterFilter.this.ps.append(et.toString());
+			ExecutionTraceWriterFilter.this.ps.append(et.toString()).append("\n");
 			ExecutionTraceWriterFilter.this.reportSuccess(et.getTraceId());
 		} catch (final IOException ex) {
 			ExecutionTraceWriterFilter.this.reportError(et.getTraceId());

@@ -100,7 +100,7 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 			eventTypes = { MessageTrace.class })
 	public void inputMessageTraces(final MessageTrace mt) {
 		try {
-			MessageTraceWriterFilter.this.ps.append(mt.toString());
+			MessageTraceWriterFilter.this.ps.append(mt.toString()).append("\n");
 			MessageTraceWriterFilter.this.reportSuccess(mt.getTraceId());
 		} catch (final IOException ex) {
 			MessageTraceWriterFilter.LOG.error("IOException", ex);
