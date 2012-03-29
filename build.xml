@@ -516,6 +516,8 @@
 		<replaceregexp file="${src.userguide.example.aspectj.dir}/README.txt" match="kieker-weaver-.*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g" />
 		<replaceregexp file="${src.userguide.example.jms.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
 		<replaceregexp file="${src.userguide.example.sigar.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
+		<replaceregexp file="${example.jpetstoreservlet.dir}/Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore/bin/catalina.sh" match="kieker-weaver.*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g" />
+		<replaceregexp file="${example.jpetstoreservlet.dir}/Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore/bin/catalina.bat" match="kieker-weaver.*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g" />		
 	</target>
 
 	<target name="dist-examples" depends="-update-version.examples,dist-example-JPetStoreExample" description="Packages the example archives (.zip|.tar.gz) for a release">
