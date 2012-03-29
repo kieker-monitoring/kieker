@@ -336,13 +336,13 @@ public final class AnalysisController {
 		}
 		// Check whether the ports of the model plugin exist.
 		for (final MIOutputPort mOutputPort : mOutputPorts) {
-			if (outputPorts.contains(mOutputPort.getName())) {
+			if (!outputPorts.contains(mOutputPort.getName())) {
 				throw new AnalysisConfigurationException("The output port '" + mOutputPort.getName() + "' of '" + mPlugin.getName() + "' (" + mPlugin.getClassname()
 						+ ") does not exist.");
 			}
 		}
 		for (final MIInputPort mInputPort : mInputPorts) {
-			if (inputPorts.contains(mInputPort.getName())) {
+			if (!inputPorts.contains(mInputPort.getName())) {
 				throw new AnalysisConfigurationException("The input port '" + mInputPort.getName() + "' of '" + mPlugin.getName() + "' (" + mPlugin.getClassname()
 						+ ") does not exist.");
 			}
@@ -411,7 +411,7 @@ public final class AnalysisController {
 		}
 		// check whether dst is a reader
 		if (dst instanceof IReaderPlugin) {
-			throw new AnalysisConfigurationException("The plugin '" + dst.getName() + "' (" + dst.getPluginName() + ") is a reader and can not be conencted to.");
+			throw new AnalysisConfigurationException("The plugin '" + dst.getName() + "' (" + dst.getPluginName() + ") is a reader and can not be connected to.");
 		}
 		// Make sure that the plugins are registered. */
 		if (!(this.filters.contains(src) || this.readers.contains(src))) {
