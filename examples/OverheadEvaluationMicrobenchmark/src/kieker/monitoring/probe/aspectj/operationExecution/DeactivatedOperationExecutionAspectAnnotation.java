@@ -37,7 +37,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
 /**
- * FIXME: this is a slightly altered clone of AbstractOperationExecutionAspect. Include something similar into default implementation!
+ * TODO: this is a slightly altered clone of AbstractOperationExecutionAspect. Include something similar into default implementation!
  * 
  * @author Andre van Hoorn, Jan Waller
  */

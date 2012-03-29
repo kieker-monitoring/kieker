@@ -51,7 +51,7 @@ public class JMSLogReplayer {
 
 	/**
 	 * Must not be used for construction<br>
-	 * TODO: Do we need this?
+	 * FIXME: Do we need this?
 	 */
 	@SuppressWarnings("unused")
 	private JMSLogReplayer() {

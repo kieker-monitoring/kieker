@@ -268,7 +268,7 @@ public abstract class AbstractPlugin implements IPlugin {
 			// }
 			for (final Class<?> srcEventType : outEventTypes) {
 				for (final Class<?> dstEventType : inputPort.eventTypes()) {
-					// FIXME: We now also accept "downcasts" as compatible. This could perhaps be colored differently in the GUI
+					// TODO: We now also accept "downcasts" as compatible. This could perhaps be colored differently in the GUI
 					if (dstEventType.isAssignableFrom(srcEventType) || srcEventType.isAssignableFrom(dstEventType)) {
 						return true;
 					}
@@ -360,7 +360,7 @@ public abstract class AbstractPlugin implements IPlugin {
 					+ dst.getName() + "' (" + dst.getPluginName() + ").");
 		}
 		// Connect the ports.
-		// FIXME: add a better check for the parameter of the method (currently only if 1 parameter present)
+		// TODO: add a better check for the parameter of the method (currently only if 1 parameter present)
 		for (final Method m : dst.getClass().getMethods()) {
 			final InputPort ip = m.getAnnotation(InputPort.class);
 			if ((ip != null) && (m.getParameterTypes().length == 1) && ip.name().equals(inputPortName)) {

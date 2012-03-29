@@ -153,7 +153,7 @@ final class FSDirectoryReader implements Runnable {
 			in = new BufferedReader(new InputStreamReader(new FileInputStream(mappingFile), FSDirectoryReader.ENCODING));
 			String line;
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
-				line = line.trim(); // TODO: do we really want a trim here?
+				line = line.trim(); // FIXME: do we really want a trim here? We could use "whitespace information" saved in the record!
 				if (line.length() == 0) {
 					continue; // ignore empty lines
 				}

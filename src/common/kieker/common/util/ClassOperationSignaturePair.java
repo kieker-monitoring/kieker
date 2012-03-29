@@ -23,8 +23,7 @@ package kieker.common.util;
 import java.util.StringTokenizer;
 
 /**
- * TODO: Add methods getPackageName and getSimpleClassname which
- * is a split of the FQ class name.
+ * TODO: Add methods getPackageName and getSimpleClassname which is a split of the FQ class name.
  * 
  * @author Andre van Hoorn
  * 

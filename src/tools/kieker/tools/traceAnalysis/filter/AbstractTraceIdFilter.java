@@ -78,7 +78,7 @@ public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
-		// TODO: Provide default properties. Abstract in this class might be better?
+		// FIXME: Provide default properties. Abstract in this class might be better?
 		return defaultConfiguration;
 	}
 

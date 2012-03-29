@@ -26,8 +26,6 @@ import java.util.TreeSet;
 
 import junit.framework.Assert;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
@@ -48,8 +46,6 @@ import org.junit.Test;
  * @author Andre van Hoorn
  */
 public class TestExecutionTraceBookstore {
-
-	private static final Log LOG = LogFactory.getLog(TestExecutionTraceBookstore.class);
 	private static final long TRACE_ID = 69898L;
 	private static final String SESSION_ID = "iXsnm70o4N";
 
@@ -431,21 +427,15 @@ public class TestExecutionTraceBookstore {
 	 * 
 	 * @throws InvalidTraceException
 	 */
-	@Test
+	@Test(expected = InvalidTraceException.class)
 	public void testMessageTraceTransformationBrokenTraceEssSkip() throws InvalidTraceException {
 		final ExecutionTrace executionTrace = this.genBrokenBookstoreTraceEssSkip();
 
-		/**
+		/*
 		 * Transform Execution Trace to Message Trace representation
 		 */
-		try {
-			/* The following call must throw an Exception in this test case */
-			TestExecutionTraceBookstore.LOG.info("This test triggers a FATAL warning about an ess skip <0,3> which can simply be ignored because it is desired");
-			executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
-			Assert.fail("An invalid execution has been transformed to a message trace");
-		} catch (final InvalidTraceException ex) { // NOPMD (ignore)
-			/* we wanted this exception to happen */
-		}
+		/* The following call must throw an Exception in this test case */
+		executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 	}
 
 	/**
@@ -487,7 +477,7 @@ public class TestExecutionTraceBookstore {
 	 * 
 	 * @throws InvalidTraceException
 	 */
-	@Test
+	@Test(expected = InvalidTraceException.class)
 	public void testMessageTraceTransformationBrokenTraceEoiSkip() throws InvalidTraceException {
 		/*
 		 * Create an Execution Trace and add Executions in
@@ -495,17 +485,10 @@ public class TestExecutionTraceBookstore {
 		 */
 		final ExecutionTrace executionTrace = this.genBrokenBookstoreTraceEoiSkip();
 
-		/**
+		/*
 		 * Transform Execution Trace to Message Trace representation
 		 */
-		try {
-			/* The following call must throw an Exception in this test case */
-			executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
-			Assert.fail("An invalid execution has been transformed to a message trace");
-		} catch (final InvalidTraceException ex) { // NOPMD (ignore)
-			// FIXME Junit4 has a better way to do this!
-			/* we wanted this exception to happen */
-		}
-
+		/* The following call must throw an Exception in this test case */
+		executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 	}
 }

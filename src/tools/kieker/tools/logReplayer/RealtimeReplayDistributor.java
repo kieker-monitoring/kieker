@@ -186,14 +186,14 @@ public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
-		// TODO: Deliver default configuration
+		// FIXME: Deliver default configuration
 		return new Configuration();
 	}
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		// TODO: Save the current configuration
+		// FIXME: Save the current configuration
 
 		return configuration;
 	}

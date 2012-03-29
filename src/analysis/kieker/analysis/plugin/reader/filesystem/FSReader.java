@@ -38,7 +38,7 @@ import kieker.common.record.misc.EmptyRecord;
 
 /**
  * Filesystem reader which reads from multiple directories simultaneously ordered by the logging timestamp.
- * TODO: check correct handling of errors!
+ * FIXME: check correct handling of errors!
  * 
  * @author Andre van Hoorn, Jan Waller
  */

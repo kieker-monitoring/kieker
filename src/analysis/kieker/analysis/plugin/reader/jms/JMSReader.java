@@ -101,7 +101,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
-		// TODO: provide default values!
+		// FIXME: provide default values!
 		defaultConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_PROVIDERURL, "");
 		defaultConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_DESTINATION, "");
 		defaultConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, "");
@@ -111,7 +111,6 @@ public final class JMSReader extends AbstractReaderPlugin {
 	/**
 	 * A call to this method is a blocking call.
 	 */
-
 	public boolean read() {
 		boolean retVal = false;
 		Connection connection = null;

@@ -104,13 +104,14 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
+		// FIXME: Provide default configuration
 		return new Configuration();
 	}
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		// TODO: Save the current configuration
+		// FIXME: Save the current configuration
 
 		return configuration;
 	}
