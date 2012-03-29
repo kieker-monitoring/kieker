@@ -57,12 +57,12 @@ import kieker.common.record.misc.TimestampRecord;
 public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	private static final Log LOG = LogFactory.getLog(CurrentTimeEventGenerationFilter.class);
 
-	public static final String INPUT_PORT_NAME_NEW_TIMESTAMP = "input-new-timestamp";
-	public static final String INPUT_PORT_NAME_NEW_RECORD = "input-new-record";
+	public static final String INPUT_PORT_NAME_NEW_TIMESTAMP = "inputNewTimestamp";
+	public static final String INPUT_PORT_NAME_NEW_RECORD = "inputNewRecord";
 
-	public static final String OUTPUT_PORT_NAME_CURRENT_TIME = "current-time-output-port";
+	public static final String OUTPUT_PORT_NAME_CURRENT_TIME = "currentTimeOutputPort";
 
-	public static final String CONFIG_PROPERTY_NAME_TIME_RESOLUTION = "time-resolution";
+	public static final String CONFIG_PROPERTY_NAME_TIME_RESOLUTION = "timeResolution";
 
 	/**
 	 * Timestamp of the record that was received first. Notice, that this is not

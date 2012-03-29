@@ -49,7 +49,7 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 	/**
 	 * Name of the configuration property to pass the filename of the HTML output.
 	 */
-	public static final String CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN = "outputfn-html";
+	public static final String CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN = "outputFnHtml";
 
 	/**
 	 * By default, writes HTML output file to this file in the working directory.

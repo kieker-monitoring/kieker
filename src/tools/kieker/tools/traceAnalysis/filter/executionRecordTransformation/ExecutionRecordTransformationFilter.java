@@ -45,9 +45,9 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFilter {
 	// private static final Log LOG = LogFactory.getLog(ExecutionRecordTransformationFilter.class);
 
-	public static final String INPUT_PORT_NAME_RECORDS = "operation-execution-records";
+	public static final String INPUT_PORT_NAME_RECORDS = "operationExecutionRecords";
 
-	public static final String OUTPUT_PORT_NAME_EXECUTIONS = "transformed-executions";
+	public static final String OUTPUT_PORT_NAME_EXECUTIONS = "transformedExecutions";
 
 	public ExecutionRecordTransformationFilter(final Configuration configuration) {
 		super(configuration);

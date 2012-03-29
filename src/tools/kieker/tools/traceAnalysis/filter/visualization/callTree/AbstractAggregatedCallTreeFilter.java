@@ -46,8 +46,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTreeFilter<T> {
 	private static final Log LOG = LogFactory.getLog(AbstractAggregatedCallTreeFilter.class);
 
-	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "include-weights";
-	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "short-labels";
+	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
+	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
 
 	private AbstractAggregatedCallTreeNode<T> root;
 	private File dotOutputFile;

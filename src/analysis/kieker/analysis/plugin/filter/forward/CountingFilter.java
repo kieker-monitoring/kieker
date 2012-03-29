@@ -42,10 +42,10 @@ import kieker.common.configuration.Configuration;
 		})
 public final class CountingFilter extends AbstractFilterPlugin {
 
-	public static final String INPUT_PORT_NAME_EVENTS = "input-events";
+	public static final String INPUT_PORT_NAME_EVENTS = "inputEvents";
 
-	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayed-events";
-	public static final String OUTPUT_PORT_NAME_COUNT = "current-event-count";
+	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayedEvents";
+	public static final String OUTPUT_PORT_NAME_COUNT = "currentEventCount";
 
 	private final AtomicLong counter = new AtomicLong();
 

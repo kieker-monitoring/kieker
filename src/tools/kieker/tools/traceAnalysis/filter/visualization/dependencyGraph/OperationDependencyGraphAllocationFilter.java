@@ -64,10 +64,10 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
 public class OperationDependencyGraphAllocationFilter extends AbstractDependencyGraphFilter<AllocationComponentOperationPair> {
 	private static final Log LOG = LogFactory.getLog(OperationDependencyGraphAllocationFilter.class);
 
-	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dot-output-file";
-	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "include-weights";
-	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "short-labels";
-	public static final String CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS = "include-self-loops";
+	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dotOutputFn";
+	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
+	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
+	public static final String CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS = "includeSelfLoops";
 
 	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
 	private static final String CONTAINER_NODE_ID_PREFIX = "container_";

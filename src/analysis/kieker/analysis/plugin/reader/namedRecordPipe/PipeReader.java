@@ -40,17 +40,19 @@ import kieker.common.record.IMonitoringRecord;
 @Plugin(outputPorts = @OutputPort(name = PipeReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the PipeReader"))
 public final class PipeReader extends AbstractReaderPlugin implements IPipeReader {
 
+	private static final Log LOG = LogFactory.getLog(PipeReader.class);
+
 	/**
 	 * This is the name of the default output port.
 	 */
-	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoring-records";
+	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 
 	/**
 	 * This is the configuration-parameter for the name of the pipe to be used.
 	 */
-	public static final String CONFIG_PROPERTY_NAME_PIPENAME = "pipe-name";
+	public static final String CONFIG_PROPERTY_NAME_PIPENAME = "pipeName";
 
-	private static final Log LOG = LogFactory.getLog(PipeReader.class);
+	public static final String CONFIG_PROPERTY_VALUE_PIPENAME_DEFAULT = "kieker-pipe";
 
 	private volatile Pipe pipe;
 	private final String pipeName;
@@ -88,7 +90,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
-		defaultConfiguration.setProperty(PipeReader.CONFIG_PROPERTY_NAME_PIPENAME, "kieker-pipe");
+		defaultConfiguration.setProperty(PipeReader.CONFIG_PROPERTY_NAME_PIPENAME, PipeReader.CONFIG_PROPERTY_VALUE_PIPENAME_DEFAULT);
 		return defaultConfiguration;
 	}
 

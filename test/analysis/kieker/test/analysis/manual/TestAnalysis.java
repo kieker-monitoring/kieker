@@ -125,7 +125,7 @@ public final class TestAnalysis {
 
 			final Configuration confComponentDependencyGraphAllocationFilter = new Configuration();
 			confComponentDependencyGraphAllocationFilter.setProperty(
-					ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE, "tmp/dependency");
+					ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, "tmp/dependency");
 			final ComponentDependencyGraphAllocationFilter componentDependencyGraphAllocationFilter =
 					new ComponentDependencyGraphAllocationFilter(confComponentDependencyGraphAllocationFilter);
 

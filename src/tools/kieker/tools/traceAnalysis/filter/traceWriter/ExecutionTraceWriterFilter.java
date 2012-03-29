@@ -45,7 +45,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessingFilter {
 
-	public static final String INPUT_PORT_NAME_EXECUTION_TRACES = "execution-traces";
+	public static final String INPUT_PORT_NAME_EXECUTION_TRACES = "executionTraces";
 
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN = "outputFn";
 

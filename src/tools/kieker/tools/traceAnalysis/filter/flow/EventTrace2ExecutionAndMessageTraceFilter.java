@@ -60,6 +60,13 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProcessingFilter {
 
+	private static final Log LOG = LogFactory.getLog(EventTrace2ExecutionAndMessageTraceFilter.class);
+
+	public static final String INPUT_PORT_NAME_EVENT_TRACE = "eventTrace";
+
+	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE = "executionTrace";
+	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE = "messageTrace";
+
 	/**
 	 * This class stores information about a specific execution.
 	 */
@@ -369,13 +376,6 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 		}
 
 	}
-
-	private static final Log LOG = LogFactory.getLog(EventTrace2ExecutionAndMessageTraceFilter.class);
-
-	public static final String INPUT_PORT_NAME_EVENT_TRACE = "event-trace";
-
-	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE = "execution-trace";
-	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE = "message-trace";
 
 	public EventTrace2ExecutionAndMessageTraceFilter(final Configuration configuration) {
 		super(configuration);

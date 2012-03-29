@@ -45,16 +45,16 @@ import kieker.common.record.misc.EmptyRecord;
 @Plugin(outputPorts = @OutputPort(name = FSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader"))
 public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 
-	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoring-records";
+	private static final Log LOG = LogFactory.getLog(FSReader.class);
 
-	public static final String CONFIG_PROPERTY_NAME_INPUTDIRS = "input-dirs";
-	public static final String CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION = "read-only-records-of-type";
+	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
+
+	public static final String CONFIG_PROPERTY_NAME_INPUTDIRS = "inputDirs";
+	public static final String CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION = "readOnlyRecordsOfType";
 
 	public static final String CONFIG_VALUE_NAME_RECORD_TYPE_SELECTION_ANY = "";
 
 	public static final IMonitoringRecord EOF = new EmptyRecord();
-
-	private static final Log LOG = LogFactory.getLog(FSReader.class);
 
 	private final Set<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType;
 	private final String[] inputDirs;

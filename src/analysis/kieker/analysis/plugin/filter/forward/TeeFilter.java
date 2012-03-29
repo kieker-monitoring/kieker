@@ -44,12 +44,12 @@ import kieker.common.logging.LogFactory;
 public final class TeeFilter extends AbstractFilterPlugin {
 	private static final Log LOG = LogFactory.getLog(TeeFilter.class);
 
-	public static final String INPUT_PORT_NAME_EVENTS = "received-events";
+	public static final String INPUT_PORT_NAME_EVENTS = "receivedEvents";
 
-	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayed-events";
+	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayedEvents";
 
 	public static final String CONFIG_PROPERTY_NAME_STREAM = "stream";
-	public static final String CONFIG_PROPERTY_NAME_ENCODING = "character-encoding";
+	public static final String CONFIG_PROPERTY_NAME_ENCODING = "characterEncoding";
 
 	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDOUT = "STDOUT";
 	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDERR = "STDERR";

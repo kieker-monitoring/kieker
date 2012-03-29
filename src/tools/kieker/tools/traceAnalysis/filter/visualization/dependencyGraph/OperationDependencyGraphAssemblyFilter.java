@@ -62,10 +62,10 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
 public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGraphFilter<AssemblyComponentOperationPair> {
 	private static final Log LOG = LogFactory.getLog(OperationDependencyGraphAssemblyFilter.class);
 
-	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dot-output-file";
-	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "include-weights";
-	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "short-labels";
-	public static final String CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS = "include-self-loops";
+	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dotOutputFn";
+	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
+	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
+	public static final String CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS = "includeSelfLoops";
 
 	/**
 	 * This is the default dot output name used for the default configuration of this instance.

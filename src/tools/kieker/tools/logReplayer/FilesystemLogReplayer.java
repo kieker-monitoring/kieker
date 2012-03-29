@@ -158,10 +158,10 @@ public class FilesystemLogReplayer {
  */
 class RecordDelegationPlugin extends AbstractFilterPlugin {
 
-	public static final String INPUT_PORT_NAME_MONITORING_RECORDS = "monitoring-records";
+	public static final String INPUT_PORT_NAME_MONITORING_RECORDS = "monitoringRecords";
 
-	public static final String CONFIG_PROPERTY_NAME_IGNORE_RECORDS_BEFORE_TIMESTAMP = "ignore-records-before-timestamp";
-	public static final String CONFIG_PROPERTY_NAME_IGNORE_RECORDS_AFTER_TIMESTAMP = "ignore-records-after-timestamp";
+	public static final String CONFIG_PROPERTY_NAME_IGNORE_RECORDS_BEFORE_TIMESTAMP = "ignoreRecordsBeforeTimestamp";
+	public static final String CONFIG_PROPERTY_NAME_IGNORE_RECORDS_AFTER_TIMESTAMP = "ignoreRecordsAfterTimestamp";
 
 	private static final Log LOG = LogFactory.getLog(RecordDelegationPlugin.class);
 

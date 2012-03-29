@@ -64,7 +64,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	private static final Log LOG = LogFactory.getLog(SequenceDiagramFilter.class);
 
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE = "filename";
-	public static final String CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES = "short-labels";
+	public static final String CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES = "shortLabels";
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_SDMODE = "SDMode";
 
 	public static final String CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT = "SequenceDiagram";

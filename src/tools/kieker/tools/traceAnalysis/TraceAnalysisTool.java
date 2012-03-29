@@ -582,7 +582,7 @@ public final class TraceAnalysisTool {
 				final Configuration componentPlotAllocationComponentDepGraphConfig = new Configuration();
 				componentPlotAllocationComponentDepGraphConfig.setProperty(AbstractPlugin.CONFIG_NAME,
 						Constants.PLOTALLOCATIONCOMPONENTDEPGRAPH_COMPONENT_NAME);
-				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE,
+				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE,
 						TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.ALLOCATION_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX);
 				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS,
 						Boolean.TRUE.toString());

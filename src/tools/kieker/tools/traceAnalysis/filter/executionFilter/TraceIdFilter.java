@@ -39,10 +39,10 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
 public class TraceIdFilter extends AbstractTraceIdFilter {
 
 	public static final String INPUT_PORT_NAME_EXECUTION = "executions";
-	public static final String OUTPUT_PORT_NAME_MATCH = "executions-matching-id";
+	public static final String OUTPUT_PORT_NAME_MATCH = "executionsMatchingId";
 
-	public static final String CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES = "selected-all";
-	public static final String CONFIG_PROPERTY_NAME_SELECTED_TRACES = "selected-traces";
+	public static final String CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES = "selectedAll";
+	public static final String CONFIG_PROPERTY_NAME_SELECTED_TRACES = "selectedTraces";
 
 	public TraceIdFilter(final Configuration configuration) {
 		super(configuration);

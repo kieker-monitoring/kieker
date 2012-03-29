@@ -43,7 +43,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionTraceProcessingFilter {
 
-	public static final String INPUT_PORT_NAME_INVALID_EXECUTION_TRACES = "invalid-execution-traces";
+	public static final String INPUT_PORT_NAME_INVALID_EXECUTION_TRACES = "invalidExecutionTraces";
 
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN = "outputFn";
 

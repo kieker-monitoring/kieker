@@ -58,11 +58,11 @@ import kieker.tools.util.LoggingTimestampConverter;
 public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFilter {
 	private static final Log LOG = LogFactory.getLog(EventRecordTraceGenerationFilter.class);
 
-	public static final String INPUT_PORT_NAME_TRACE_EVENT = "trace-events";
+	public static final String INPUT_PORT_NAME_TRACE_EVENT = "traceEvents";
 
-	public static final String OUTPUT_PORT_NAME_TRACE = "generated-traces";
+	public static final String OUTPUT_PORT_NAME_TRACE = "generatedTraces";
 
-	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS = "max-trace-duration-millis";
+	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS = "maxTraceDurationMillis";
 
 	private static final long CONFIG_PROPERTY_VALUE_MAX_DURATION_NANOS = Long.MAX_VALUE;
 

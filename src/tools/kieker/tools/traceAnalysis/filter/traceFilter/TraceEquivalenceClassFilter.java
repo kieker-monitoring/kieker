@@ -59,10 +59,10 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessingFilter {
 	private static final Log LOG = LogFactory.getLog(TraceEquivalenceClassFilter.class);
 
-	public static final String INPUT_PORT_NAME_EXECUTION_TRACE = "execution-traces";
+	public static final String INPUT_PORT_NAME_EXECUTION_TRACE = "executionTraces";
 
-	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE_REPRESENTATIVES = "message-trace-representatives";
-	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE_REPRESENTATIVES = "execution-trace-representatives";
+	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE_REPRESENTATIVES = "messageTraceRepresentatives";
+	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE_REPRESENTATIVES = "executionTraceRepresentatives";
 
 	public static enum TraceEquivalenceClassModes {
 		DISABLED, ASSEMBLY, ALLOCATION

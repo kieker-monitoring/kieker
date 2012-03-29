@@ -54,10 +54,10 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilter<ExecutionContainer> {
 	private static final Log LOG = LogFactory.getLog(ContainerDependencyGraphFilter.class);
 
-	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dot-output-file";
-	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "include-weights";
-	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "short-labels";
-	public static final String CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS = "include-self-loops";
+	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dotOutputFile";
+	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
+	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
+	public static final String CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS = "includeSelfLoops";
 
 	private final File dotOutputFile;
 	private final boolean includeWeights;

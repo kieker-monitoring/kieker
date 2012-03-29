@@ -45,16 +45,16 @@ import kieker.common.record.flow.trace.Trace;
 })
 public final class TimestampFilter extends AbstractFilterPlugin {
 
-	public static final String INPUT_PORT_NAME_ANY_RECORD = "monitoring-records-any";
-	public static final String INPUT_PORT_NAME_FLOW = "monitoring-records-flow";
-	public static final String INPUT_PORT_NAME_EXECUTION = "monitoring-records-execution";
-	public static final String INPUT_PORT_NAME_COMBINED = "monitoring-records-combined";
+	public static final String INPUT_PORT_NAME_ANY_RECORD = "monitoringRecordsAny";
+	public static final String INPUT_PORT_NAME_FLOW = "monitoringRecordsFlow";
+	public static final String INPUT_PORT_NAME_EXECUTION = "monitoringRecordsExecution";
+	public static final String INPUT_PORT_NAME_COMBINED = "monitoringRecordsCombined";
 
-	public static final String OUTPUT_PORT_NAME_WITHIN_PERIOD = "records-within-time-period";
-	public static final String OUTPUT_PORT_NAME_OUTSIDE_PERIOD = "records-outside-period";
+	public static final String OUTPUT_PORT_NAME_WITHIN_PERIOD = "recordsWithinTimePeriod";
+	public static final String OUTPUT_PORT_NAME_OUTSIDE_PERIOD = "recordsOutsidePeriod";
 
-	public static final String CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP = "ignore-before-timestamp";
-	public static final String CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP = "ignore-after-timestamp";
+	public static final String CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP = "ignoreBeforeTimestamp";
+	public static final String CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP = "ignoreAfterTimestamp";
 
 	public static final long CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP = Long.MAX_VALUE;
 	public static final long CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP = 0;

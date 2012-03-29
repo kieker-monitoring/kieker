@@ -134,9 +134,9 @@ public class JMSLogReplayer {
 		})
 class RecordDelegationPlugin2 extends AbstractFilterPlugin {
 
-	public static final String INPUT_PORT_NAME_MONITORING_RECORDS = "received-records";
+	public static final String INPUT_PORT_NAME_MONITORING_RECORDS = "receivedRecords";
 
-	public static final String OUTPUT_PORT_NAME_MONITORING_RECORDS = "delegated-records";
+	public static final String OUTPUT_PORT_NAME_MONITORING_RECORDS = "delegatedRecords";
 
 	/**
 	 * Creates a new instance of this class.

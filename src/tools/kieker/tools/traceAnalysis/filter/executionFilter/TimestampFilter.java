@@ -40,10 +40,10 @@ public class TimestampFilter extends AbstractTimestampFilter {
 
 	public static final String INPUT_PORT_NAME_EXECUTION = "executions";
 
-	public static final String OUTPUT_PORT_NAME_WITHIN_PERIOD = "executions-within-time-period";
+	public static final String OUTPUT_PORT_NAME_WITHIN_PERIOD = "executionsWithinTimePeriod";
 
-	public static final String CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP = "ignore-executions-before-timestamp";
-	public static final String CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP = "ignore-executions-after-timestamp";
+	public static final String CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP = "ignoreExecutionsBeforeTimestamp";
+	public static final String CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP = "ignoreExecutionsAfterTimestamp";
 
 	/**
 	 * Creates a new instance of the class {@link TimestampFilter} with the given parameters.
