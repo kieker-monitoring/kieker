@@ -52,7 +52,7 @@ public abstract class AbstractWriterReaderTest extends TestCase {
 	 * @param numRecordsWritten
 	 * @return
 	 */
-	protected abstract IMonitoringController createController(final int numRecordsWritten);
+	protected abstract IMonitoringController createController(final int numRecordsWritten) throws Exception;
 
 	/**
 	 * Checks if the given {@link IMonitoringController} is in the expected state after having passed

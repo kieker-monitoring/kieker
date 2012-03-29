@@ -26,6 +26,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.writer.PrintStreamWriter;
 import kieker.test.tools.junit.writeRead.util.StringTeePrintStream;
 
 import org.junit.After;
@@ -60,7 +61,7 @@ public class BasicPrintStreamWriterTestStdout extends AbstractPrintStreamWriterT
 
 	@Override
 	protected String provideStreamName() {
-		return AbstractPrintStreamWriterTest.PRINT_WRITER_CONFIG_VAL_STDOUT;
+		return PrintStreamWriter.CONFIG_STREAM_STDOUT;
 	}
 
 	@Override

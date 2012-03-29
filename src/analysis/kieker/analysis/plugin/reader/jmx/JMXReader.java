@@ -83,8 +83,8 @@ public final class JMXReader extends AbstractReaderPlugin {
 		}
 		this.domain = this.configuration.getStringProperty(JMXReader.CONFIG_PROPERTY_NAME_DOMAIN);
 		this.logname = this.configuration.getStringProperty(JMXReader.CONFIG_PROPERTY_NAME_LOGNAME);
-		if (tmpServiceURL == null) {
-			throw new IllegalArgumentException("JMXReader has not sufficient parameters. serviceURL is null");
+		if (tmpServiceURL.length() == 0) {
+			throw new IllegalArgumentException("JMXReader has not sufficient parameters. Set either port or serviceURL");
 		}
 		try {
 			this.serviceURL = new JMXServiceURL(tmpServiceURL);

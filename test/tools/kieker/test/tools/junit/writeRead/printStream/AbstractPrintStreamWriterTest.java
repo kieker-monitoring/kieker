@@ -34,10 +34,6 @@ import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
  * 
  */
 public abstract class AbstractPrintStreamWriterTest extends AbstractWriterReaderTest {
-	// The class PrintStreamWriter is not providing these constants publicly ...
-	private static final String PRINT_WRITER_CONFIG_STREAM = PrintStreamWriter.class.getName() + "." + "Stream";
-	protected static final String PRINT_WRITER_CONFIG_VAL_STDOUT = "STDOUT";
-	protected static final String PRINT_WRITER_CONFIG_VAL_STDERR = "STDERR";
 
 	/**
 	 * Returns the name of the stream to write to. In addition to a file name,
@@ -51,7 +47,7 @@ public abstract class AbstractPrintStreamWriterTest extends AbstractWriterReader
 	protected IMonitoringController createController(final int numRecordsWritten) {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, PrintStreamWriter.class.getName());
-		config.setProperty(AbstractPrintStreamWriterTest.PRINT_WRITER_CONFIG_STREAM, this.provideStreamName());
+		config.setProperty(PrintStreamWriter.STREAM, this.provideStreamName());
 		return MonitoringController.createInstance(config);
 	}
 
