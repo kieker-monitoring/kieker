@@ -82,7 +82,6 @@ public class BasicPrintStreamWriterTestStdErr extends AbstractPrintStreamWriterT
 					.append(": ")
 					.append(rec).append("\n");
 			final String curLine = inputRecordStringBuilder.toString();
-			outputString.indexOf(curLine);
 			Assert.assertTrue("Record '" + curLine + "' not found in output stream: '" + outputString + "'",
 					outputString.indexOf(curLine) != -1);
 		}
