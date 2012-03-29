@@ -137,8 +137,10 @@ class ExecRecordTransformationFilterChecker { // NOPMD (subclass of TestCase)
 	 * filter.
 	 * 
 	 * @param expectedExecutions
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
 	 */
-	public void doTestFilter(final List<Execution> expectedExecutions) {
+	public void doTestFilter(final List<Execution> expectedExecutions) throws IllegalStateException, AnalysisConfigurationException {
 		this.analysisController.run();
 
 		Assert.assertEquals("Expected sink to contain 1 Execution", expectedExecutions.size(), this.sinkPlugin.getExecutions().size());

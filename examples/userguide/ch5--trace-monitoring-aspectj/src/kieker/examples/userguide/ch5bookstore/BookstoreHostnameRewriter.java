@@ -68,15 +68,14 @@ public final class BookstoreHostnameRewriter {
 		final FSReader reader = new FSReader(configuration);
 		analysisInstance.registerReader(reader);
 
-		/* Connect the reader with the plugin. */
 		try {
+			/* Connect the reader with the plugin. */
 			analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, plugin, HostNameRewriterPlugin.INPUT_PORT_NAME);
+			/* Start the analysis */
+			analysisInstance.run();
 		} catch (final AnalysisConfigurationException e) {
 			e.printStackTrace();
 		}
-
-		/* Start the analysis */
-		analysisInstance.run();
 	}
 }
 

@@ -75,7 +75,7 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
  * 
  * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke, Jan Waller
  */
-public final class AnalysisController implements Runnable {
+public final class AnalysisController {
 	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
 
 	private final String projectName;
@@ -97,6 +97,24 @@ public final class AnalysisController implements Runnable {
 		RUNNING,
 		TERMINATED,
 		FAILED,
+	}
+
+	/**
+	 * This interface can be used for observers which want to get notified about state changes of an analysis controller.
+	 * 
+	 * @author Nils Christian Ehmke
+	 */
+	public static interface IStateObserver {
+
+		/**
+		 * This method will be called for every update of the state.
+		 * 
+		 * @param controller
+		 *            The controller which updated its state.
+		 * @param state
+		 *            The new state of the given controller.
+		 */
+		public void update(final AnalysisController controller, final STATE state);
 	}
 
 	/**
@@ -367,13 +385,10 @@ public final class AnalysisController implements Runnable {
 	 * @param file
 	 *            The file in which the configuration will be stored.
 	 * @throws IOException
+	 * @throws AnalysisConfigurationException
 	 */
-	public final void saveToFile(final File file) throws IOException {
+	public final void saveToFile(final File file) throws IOException, AnalysisConfigurationException {
 		final MIProject mProject = this.getCurrentConfiguration();
-		if (mProject == null) {
-			AnalysisController.LOG.error("Failed to retrieve current configuration of AnalysisCopntroller.");
-			return;
-		}
 		AnalysisController.saveToFile(file, mProject);
 	}
 
@@ -444,9 +459,10 @@ public final class AnalysisController implements Runnable {
 	 * This method delivers the current configuration of this instance as an instance of <code>MIProject</code>.
 	 * 
 	 * @return
-	 *         A filled meta model instance if everything went well, null otherwise.
+	 *         A filled meta model instance.
+	 * @throws AnalysisConfigurationException
 	 */
-	public final MIProject getCurrentConfiguration() {
+	public final MIProject getCurrentConfiguration() throws AnalysisConfigurationException {
 		try {
 			// Create a factory to create all other model instances.
 			final MAnalysisMetaModelFactory factory = new MAnalysisMetaModelFactory();
@@ -499,9 +515,8 @@ public final class AnalysisController implements Runnable {
 					final MIRepository mRepository = repositoryMap.get(repository);
 					// If it doesn't exist, we have a problem...
 					if (mRepository == null) {
-						AnalysisController.LOG.error("Repository '" + repository.getName() + "' (" + repository.getRepositoryName()
+						throw new AnalysisConfigurationException("Repository '" + repository.getName() + "' (" + repository.getRepositoryName()
 								+ ") not contained in project. Maybe the repository has not been registered.");
-						return null;
 					}
 					// Now the connector.
 					final MIRepositoryConnector mRepositoryConn = factory.createRepositoryConnector();
@@ -537,9 +552,8 @@ public final class AnalysisController implements Runnable {
 						final MIPlugin mSubscriberPlugin = pluginMap.get(subscriberPlugin);
 						// If it doesn't exist, we have a problem...
 						if (mSubscriberPlugin == null) {
-							AnalysisController.LOG.error("Plugin '" + subscriberPlugin.getName() + "' (" + subscriberPlugin.getPluginName()
+							throw new AnalysisConfigurationException("Plugin '" + subscriberPlugin.getName() + "' (" + subscriberPlugin.getPluginName()
 									+ ") not contained in project. Maybe the plugin has not been registered.");
-							return null;
 						}
 						final MIInputPort mInputPort = AnalysisController.findInputPort((MIAnalysisPlugin) mSubscriberPlugin, subscriber.getInputPortName());
 						subscribers.add(mInputPort);
@@ -548,42 +562,40 @@ public final class AnalysisController implements Runnable {
 			}
 			// We are finished. Return the finished project.
 			return mProject;
-		} catch (final RuntimeException ex) { // TODO: Can RuntimeExcpetions happen? Should we really catch them?
-			AnalysisController.LOG.error("Unable to save configuration.", ex);
-			return null;
+		} catch (final Exception ex) {
+			throw new AnalysisConfigurationException("Failed to retrieve current configuration of AnalysisCopntroller.", ex);
 		}
 	}
 
 	/**
-	 * Starts an {@link AnalysisController} instance and returns after the configured reader finished reading and all analysis plug-ins terminated; or immediately,
-	 * if an error occurs.
+	 * Starts an {@link AnalysisController} instance.
+	 * The method returns after all configured readers finished reading and all analysis plug-ins terminated
+	 * 
+	 * On errors during the initialization, Exceptions are thrown.
 	 */
-	public final void run() {
+	public final void run() throws IllegalStateException, AnalysisConfigurationException {
 		synchronized (this) {
 			if (this.state != STATE.READY) {
-				AnalysisController.LOG.error("AnalysisController may be executed only once.");
-				return;
+				throw new IllegalStateException("AnalysisController may be executed only once.");
 			}
 			this.state = STATE.RUNNING;
 			this.notifyStateObservers();
 		}
 		// Make sure that a log reader exists.
 		if (this.readers.size() == 0) {
-			AnalysisController.LOG.error("No log reader registered.");
 			this.terminate(true);
-			return;
+			throw new AnalysisConfigurationException("No log reader registered.");
 		}
 		// Call execute() method of all plug-ins.
 		for (final AbstractFilterPlugin filter : this.filters) {
 			/* Make also sure that all repository ports of all plugins are connected. */
 			if (!filter.areAllRepositoryPortsConnected()) {
-				AnalysisController.LOG.error("Plugin '" + filter.getName() + "' (" + filter.getPluginName() + ") has unconnected repositories.");
-				return;
+				this.terminate(true);
+				throw new AnalysisConfigurationException("Plugin '" + filter.getName() + "' (" + filter.getPluginName() + ") has unconnected repositories.");
 			}
 			if (!filter.init()) {
-				AnalysisController.LOG.error("Plugin '" + filter.getName() + "' (" + filter.getPluginName() + ") failed to initialize.");
 				this.terminate(true);
-				return;
+				throw new AnalysisConfigurationException("Plugin '" + filter.getName() + "' (" + filter.getPluginName() + ") failed to initialize.");
 			}
 		}
 		// Start reading
@@ -591,12 +603,13 @@ public final class AnalysisController implements Runnable {
 		for (final AbstractReaderPlugin reader : this.readers) {
 			/* Make also sure that all repository ports of all plugins are connected. */
 			if (!reader.areAllRepositoryPortsConnected()) {
-				AnalysisController.LOG.error("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") has unconnected repositories.");
-				return;
+				this.terminate(true);
+				throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") has unconnected repositories.");
 			}
 			new Thread(new Runnable() {
 				public void run() {
 					if (!reader.read()) {
+						// here we started and won't throw any exceptions!
 						AnalysisController.LOG.error("Calling read() on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ")  returned false.");
 						AnalysisController.this.terminate(true);
 					}
@@ -618,7 +631,7 @@ public final class AnalysisController implements Runnable {
 		try {
 			this.initializationLatch.await();
 		} catch (final InterruptedException ex) {
-			AnalysisController.LOG.error("Interrupted while waiting for initilaizion of analysis controller.", ex);
+			AnalysisController.LOG.warn("Interrupted while waiting for initilaizion of analysis controller.", ex);
 		}
 	}
 
@@ -661,10 +674,9 @@ public final class AnalysisController implements Runnable {
 	 * 
 	 * @param reader
 	 */
-	public final void registerReader(final AbstractReaderPlugin reader) {
+	public final void registerReader(final AbstractReaderPlugin reader) throws IllegalStateException {
 		if (this.state != STATE.READY) {
-			AnalysisController.LOG.error("Unable to reader filter after starting analysis.");
-			return;
+			throw new IllegalStateException("Unable to reader filter after starting analysis.");
 		}
 		synchronized (this) {
 			if (this.readers.contains(reader)) {
@@ -683,10 +695,9 @@ public final class AnalysisController implements Runnable {
 	 * 
 	 * All plugins which have been registered before calling the <i>run</i>-method, will be started once the analysis is started.
 	 */
-	public final void registerFilter(final AbstractFilterPlugin filter) {
+	public final void registerFilter(final AbstractFilterPlugin filter) throws IllegalStateException {
 		if (this.state != STATE.READY) {
-			AnalysisController.LOG.error("Unable to register filter after starting analysis.");
-			return;
+			throw new IllegalStateException("Unable to register filter after starting analysis.");
 		}
 		synchronized (this) {
 			if (this.filters.contains(filter)) {
@@ -703,10 +714,9 @@ public final class AnalysisController implements Runnable {
 	/**
 	 * Registers the passed repository.
 	 */
-	public final void registerRepository(final AbstractRepository repository) {
+	public final void registerRepository(final AbstractRepository repository) throws IllegalStateException {
 		if (this.state != STATE.READY) {
-			AnalysisController.LOG.error("Unable to register respository after starting analysis.");
-			return;
+			throw new IllegalStateException("Unable to register respository after starting analysis.");
 		}
 		synchronized (this) {
 			if (this.repos.contains(repository)) {

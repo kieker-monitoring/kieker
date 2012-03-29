@@ -79,11 +79,10 @@ public final class JMSAnalysisStarter {
 
 		try {
 			analysisInstance.connect(logReader, JMSReader.OUTPUT_PORT_NAME_RECORDS, consumer, Consumer.INPUT_PORT_NAME);
+			analysisInstance.run();
 		} catch (final AnalysisConfigurationException e) {
 			e.printStackTrace();
 		}
-
-		analysisInstance.run();
 	}
 
 	/**

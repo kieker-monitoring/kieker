@@ -206,8 +206,14 @@ public final class TestAnalysis {
 				analysisController.saveToFile(new File(TestAnalysis.filename));
 			} catch (final IOException ex) {
 				TestAnalysis.LOG.error("Failed to save configuration to " + TestAnalysis.filename, ex);
+			} catch (final AnalysisConfigurationException ex) {
+				TestAnalysis.LOG.error("Failed to save configuration to " + TestAnalysis.filename, ex);
 			}
 		}
-		analysisController.run();
+		try {
+			analysisController.run();
+		} catch (final AnalysisConfigurationException ex) {
+			TestAnalysis.LOG.error("Failed to start the example project.", ex);
+		}
 	}
 }

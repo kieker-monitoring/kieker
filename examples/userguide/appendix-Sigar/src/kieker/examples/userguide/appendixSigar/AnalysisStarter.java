@@ -54,15 +54,14 @@ public final class AnalysisStarter {
 		final FSReader fsReader = new FSReader(readerConfiguration);
 		analysisInstance.registerReader(fsReader);
 
-		/* Connect both components. */
 		try {
+			/* Connect both components. */
 			analysisInstance.connect(fsReader, FSReader.OUTPUT_PORT_NAME_RECORDS, consumer, StdOutDumpConsumer.INPUT_PORT_NAME);
+			/* Start the analysis */
+			analysisInstance.run();
 		} catch (final AnalysisConfigurationException e) {
 			e.printStackTrace();
 		}
-
-		/* Start the analysis */
-		analysisInstance.run();
 	}
 }
 

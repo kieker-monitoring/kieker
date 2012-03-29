@@ -20,6 +20,9 @@
 
 package kieker.analysis;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
+
 /**
  * Allows spawn the execution of an {@link AnalysisController} into a separate {@link Thread}. The thread with the {@link AnalysisController} instance
  * provided in the constructor {@link #AnalysisControllerThread(AnalysisController)} is started by calling
@@ -29,18 +32,29 @@ package kieker.analysis;
  * @author Andre van Hoorn, Jan Waller
  */
 public final class AnalysisControllerThread extends Thread {
-	private final AnalysisController analysisInstance;
+	private static final Log LOG = LogFactory.getLog(AnalysisControllerThread.class);
+
+	private final AnalysisController analysisController;
 
 	public AnalysisControllerThread(final AnalysisController analysisController) {
-		super(analysisController);
-		this.analysisInstance = analysisController;
+		super();
+		this.analysisController = analysisController;
 	}
 
 	@Override
 	public void start() {
 		synchronized (this) {
 			super.start();
-			this.analysisInstance.awaitInitialization();
+			this.analysisController.awaitInitialization();
+		}
+	}
+
+	@Override
+	public void run() {
+		try {
+			this.analysisController.run();
+		} catch (final Exception ex) {
+			AnalysisControllerThread.LOG.error("Error running AnalysisCOntroller.", ex);
 		}
 	}
 
@@ -48,6 +62,8 @@ public final class AnalysisControllerThread extends Thread {
 	 * Initiates a termination of the executed {@link AnalysisController}.
 	 */
 	public void terminate() {
-		this.analysisInstance.terminate();
+		synchronized (this) {
+			this.analysisController.terminate();
+		}
 	}
 }

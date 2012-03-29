@@ -52,14 +52,13 @@ public final class BookstoreAnalysisStarter {
 		final FSReader reader = new FSReader(configuration);
 		analysisInstance.registerReader(reader);
 
-		/* Connect the output of the reader with the input of the filter. */
 		try {
+			/* Connect the output of the reader with the input of the filter. */
 			analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
+			/* Start the analysis */
+			analysisInstance.run();
 		} catch (final AnalysisConfigurationException e) {
 			e.printStackTrace();
 		}
-
-		/* Start the analysis */
-		analysisInstance.run();
 	}
 }

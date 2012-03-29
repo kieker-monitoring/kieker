@@ -178,24 +178,19 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 		private final FilterState filterState;
 		private final ExecutionTrace executionTrace;
 		private final EventRecordTrace eventTrace;
-		private final EventRecordStream eventStream;
 
 		/**
 		 * Creates a new event processor using the given context data.
 		 * 
 		 * @param filterState
 		 *            The filter state object to work with
-		 * @param eventStream
-		 *            The event stream from which the events are taken
 		 * @param eventTrace
 		 *            The event trace from which trace meta information, such as hostname, can be retrieved
 		 * @param executionTrace
 		 *            The execution trace to store the generated executions in
 		 */
-		public EventProcessor(final FilterState filterState, final EventRecordStream eventStream, final EventRecordTrace eventTrace,
-				final ExecutionTrace executionTrace) {
+		public EventProcessor(final FilterState filterState, final EventRecordTrace eventTrace, final ExecutionTrace executionTrace) {
 			this.filterState = filterState;
-			this.eventStream = eventStream;
 			this.eventTrace = eventTrace;
 			this.executionTrace = executionTrace;
 		}
@@ -391,7 +386,7 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 		final ExecutionTrace execTrace = new ExecutionTrace(eventTrace.getTraceId(), eventTrace.getSessionId());
 		final EventRecordStream eventStream = new EventRecordStream(eventTrace);
 		final FilterState state = new FilterState();
-		final EventProcessor eventProcessor = new EventProcessor(state, eventStream, eventTrace, execTrace);
+		final EventProcessor eventProcessor = new EventProcessor(state, eventTrace, execTrace);
 
 		long lastOrderIndex = -1; // used to check for ascending order indices
 
