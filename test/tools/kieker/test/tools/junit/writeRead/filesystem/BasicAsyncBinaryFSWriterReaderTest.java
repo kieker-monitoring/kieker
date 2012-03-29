@@ -18,36 +18,32 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.writeRead.simple;
+package kieker.test.tools.junit.writeRead.filesystem;
 
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.writer.IMonitoringWriter;
-import kieker.monitoring.writer.filesystem.SyncFsWriter;
-import kieker.test.tools.junit.writeRead.AbstractTestFSWriterReader;
+import kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter;
 
 /**
  * 
  * @author André van Hoorn
  * 
  */
-public class SyncFSWriterReaderTest extends AbstractTestFSWriterReader { // NOPMD (TestClassWithoutTestCases) // NOCS (MissingCtorCheck)
-
-	private static final boolean FLUSH = true;
+public class BasicAsyncBinaryFSWriterReaderTest extends AbstractTestFSWriterReader { // NOPMD (TestClassWithoutTestCases) // NOCS (MissingCtorCheck)
 
 	@Override
 	protected Class<? extends IMonitoringWriter> getTestedWriterClazz() {
-		return SyncFsWriter.class;
-	}
-
-	@Override
-	protected boolean terminateBeforeLogInspection() {
-		return !SyncFSWriterReaderTest.FLUSH;
+		return AsyncBinaryFsWriter.class;
 	}
 
 	@Override
 	protected void refineConfiguration(final Configuration config, final int numRecordsWritten) {
-		config.setProperty(this.getClass().getName() + "." + SyncFsWriter.CONFIG_FLUSH, Boolean.toString(SyncFSWriterReaderTest.FLUSH));
 		// TODO: additional configuration parameters
+	}
+
+	@Override
+	protected boolean terminateBeforeLogInspection() {
+		return true; // because the AsyncBinaryFsWriter doesn't flush
 	}
 
 }

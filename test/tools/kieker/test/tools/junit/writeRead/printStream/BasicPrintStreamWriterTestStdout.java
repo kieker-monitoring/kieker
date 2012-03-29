@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.writeRead.simple;
+package kieker.test.tools.junit.writeRead.printStream;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -26,19 +26,18 @@ import java.util.List;
 
 import junit.framework.Assert;
 import kieker.common.record.IMonitoringRecord;
-import kieker.test.tools.junit.writeRead.AbstractPrintStreamWriterTest;
 import kieker.test.tools.junit.writeRead.util.StringTeePrintStream;
 
 import org.junit.Before;
 
 /**
- * TODO: introduce abstract intermediate class with {@link PrintStreamWriterTestStdout},
+ * TODO: introduce abstract intermediate class with {@link BasicPrintStreamWriterTestStdout},
  * because a lot of code is shared.
  * 
  * @author Andre van Hoorn
  * 
  */
-public class PrintStreamWriterTestStdErr extends AbstractPrintStreamWriterTest {
+public class BasicPrintStreamWriterTestStdout extends AbstractPrintStreamWriterTest {
 	private volatile PrintStream originalPrintStream;
 
 	private volatile StringTeePrintStream stringTeePrintStream;
@@ -46,20 +45,20 @@ public class PrintStreamWriterTestStdErr extends AbstractPrintStreamWriterTest {
 	@Override
 	@Before
 	protected void setUp() throws Exception {
-		this.originalPrintStream = System.err;
+		this.originalPrintStream = System.out;
 		this.stringTeePrintStream = new StringTeePrintStream(this.originalPrintStream);
-		System.setErr(this.stringTeePrintStream);
+		System.setOut(this.stringTeePrintStream);
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		System.setErr(this.originalPrintStream);
+		System.setOut(this.originalPrintStream);
 	}
 
 	@Override
 	protected String provideStreamName() {
-		return AbstractPrintStreamWriterTest.PRINT_WRITER_CONFIG_VAL_STDERR;
+		return AbstractPrintStreamWriterTest.PRINT_WRITER_CONFIG_VAL_STDOUT;
 	}
 
 	@Override

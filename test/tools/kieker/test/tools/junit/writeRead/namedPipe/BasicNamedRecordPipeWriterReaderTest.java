@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.writeRead.simple;
+package kieker.test.tools.junit.writeRead.namedPipe;
 
 import java.util.List;
 
@@ -40,7 +40,7 @@ import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
  * @author Andre van Hoorn
  * 
  */
-public class NamedRecordPipeWriterReaderTest extends AbstractWriterReaderTest {
+public class BasicNamedRecordPipeWriterReaderTest extends AbstractWriterReaderTest {
 	private static final String PIPE_NAME = "pipe-IVvirGREEf";
 
 	private volatile SimpleSinkPlugin<IMonitoringRecord> sinkFilter;
@@ -49,7 +49,7 @@ public class NamedRecordPipeWriterReaderTest extends AbstractWriterReaderTest {
 	@Override
 	protected void setUp() throws Exception {
 		final Configuration pipeReaderConfig = new Configuration();
-		pipeReaderConfig.setProperty(PipeReader.CONFIG_PROPERTY_NAME_PIPENAME, NamedRecordPipeWriterReaderTest.PIPE_NAME);
+		pipeReaderConfig.setProperty(PipeReader.CONFIG_PROPERTY_NAME_PIPENAME, BasicNamedRecordPipeWriterReaderTest.PIPE_NAME);
 		final PipeReader pipeReader = new PipeReader(pipeReaderConfig);
 		this.sinkFilter = new SimpleSinkPlugin<IMonitoringRecord>(new Configuration());
 		final AnalysisController analysisController = new AnalysisController();
@@ -64,7 +64,7 @@ public class NamedRecordPipeWriterReaderTest extends AbstractWriterReaderTest {
 	protected IMonitoringController createController(final int numRecordsWritten) {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, PipeWriter.class.getName());
-		config.setProperty(PipeWriter.CONFIG_PIPENAME, NamedRecordPipeWriterReaderTest.PIPE_NAME);
+		config.setProperty(PipeWriter.CONFIG_PIPENAME, BasicNamedRecordPipeWriterReaderTest.PIPE_NAME);
 		return MonitoringController.createInstance(config);
 	}
 

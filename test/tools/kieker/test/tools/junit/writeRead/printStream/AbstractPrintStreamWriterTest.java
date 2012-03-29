@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.writeRead;
+package kieker.test.tools.junit.writeRead.printStream;
 
 import junit.framework.Assert;
 import kieker.common.configuration.Configuration;
@@ -26,6 +26,7 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.PrintStreamWriter;
+import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 /**
  * 

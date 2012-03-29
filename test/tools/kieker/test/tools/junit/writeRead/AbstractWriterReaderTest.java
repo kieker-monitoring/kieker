@@ -68,7 +68,7 @@ public abstract class AbstractWriterReaderTest extends TestCase {
 	 * 
 	 * @param monitoringRecords
 	 */
-	protected abstract void inspectRecords(List<IMonitoringRecord> eventsPassedToController, List<IMonitoringRecord> eventFromMonitoringLog);
+	protected abstract void inspectRecords(List<IMonitoringRecord> eventsPassedToController, List<IMonitoringRecord> eventFromMonitoringLog) throws Exception;
 
 	protected abstract boolean terminateBeforeLogInspection();
 
@@ -106,7 +106,7 @@ public abstract class AbstractWriterReaderTest extends TestCase {
 	 * @throws AnalysisConfigurationException
 	 */
 	@Test
-	public void testSimpleLog() throws IOException, InterruptedException, AnalysisConfigurationException { // NOPMD (JUnitTestsShouldIncludeAssert)
+	public void testSimpleLog() throws Exception { // NOPMD (JUnitTestsShouldIncludeAssert)
 		final List<IMonitoringRecord> someEvents = this.provideEvents();
 
 		/*

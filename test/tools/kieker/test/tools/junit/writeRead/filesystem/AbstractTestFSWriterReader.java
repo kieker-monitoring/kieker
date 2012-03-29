@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.writeRead;
+package kieker.test.tools.junit.writeRead.filesystem;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -39,6 +39,7 @@ import kieker.monitoring.writer.IMonitoringWriter;
 import kieker.monitoring.writer.filesystem.AbstractAsyncFSWriter;
 import kieker.monitoring.writer.filesystem.AsyncFsWriter;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
+import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 import org.junit.After;
 import org.junit.Before;

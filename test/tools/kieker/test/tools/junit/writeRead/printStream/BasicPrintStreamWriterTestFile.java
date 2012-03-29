@@ -18,48 +18,54 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.writeRead.simple;
+package kieker.test.tools.junit.writeRead.printStream;
 
-import java.io.PrintStream;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.Assert;
 import kieker.common.record.IMonitoringRecord;
-import kieker.test.tools.junit.writeRead.AbstractPrintStreamWriterTest;
-import kieker.test.tools.junit.writeRead.util.StringTeePrintStream;
 
 import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.TemporaryFolder;
 
 /**
- * TODO: introduce abstract intermediate class with {@link PrintStreamWriterTestStdout},
+ * TODO: introduce abstract intermediate class with {@link BasicPrintStreamWriterTestStdout},
  * because a lot of code is shared.
  * 
  * @author Andre van Hoorn
  * 
  */
-public class PrintStreamWriterTestStdout extends AbstractPrintStreamWriterTest {
-	private volatile PrintStream originalPrintStream;
+public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTest {
+	private final String OUTPUT_BASE_FN = "S0fYvPsI.out"; // the name doesn't matter
 
-	private volatile StringTeePrintStream stringTeePrintStream;
+	@Rule
+	private final TemporaryFolder tmpFolder = new TemporaryFolder();
+
+	private volatile File outputFile;
 
 	@Override
 	@Before
 	protected void setUp() throws Exception {
-		this.originalPrintStream = System.out;
-		this.stringTeePrintStream = new StringTeePrintStream(this.originalPrintStream);
-		System.setOut(this.stringTeePrintStream);
+		super.setUp();
+		this.tmpFolder.create();
+		this.outputFile = this.tmpFolder.newFile(this.OUTPUT_BASE_FN);
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		System.setOut(this.originalPrintStream);
+		this.tmpFolder.delete();
 	}
 
 	@Override
 	protected String provideStreamName() {
-		return AbstractPrintStreamWriterTest.PRINT_WRITER_CONFIG_VAL_STDOUT;
+		return this.outputFile.getAbsolutePath();
 	}
 
 	@Override
@@ -71,9 +77,28 @@ public class PrintStreamWriterTestStdout extends AbstractPrintStreamWriterTest {
 		return new ArrayList<IMonitoringRecord>();
 	}
 
+	private String readOutputFileAsString() throws java.io.IOException {
+		final byte[] buffer = new byte[(int) this.outputFile.length()];
+		BufferedInputStream f = null;
+		try {
+			f = new BufferedInputStream(new FileInputStream(this.outputFile));
+			f.read(buffer);
+		} finally {
+			if (f != null) {
+				try {
+					f.close();
+				} catch (final IOException ignored) {
+					Assert.fail("Failed to close stream for file " + this.outputFile.getAbsolutePath());
+				}
+			}
+		}
+		return new String(buffer);
+	}
+
 	@Override
-	protected void inspectRecords(final List<IMonitoringRecord> eventsPassedToController, final List<IMonitoringRecord> eventFromMonitoringLog) {
-		final String outputString = this.stringTeePrintStream.getString();
+	protected void inspectRecords(final List<IMonitoringRecord> eventsPassedToController, final List<IMonitoringRecord> eventFromMonitoringLog) throws Exception {
+
+		final String outputString = this.readOutputFileAsString();
 
 		for (final IMonitoringRecord rec : eventsPassedToController) {
 			final StringBuilder inputRecordStringBuilder = new StringBuilder();
