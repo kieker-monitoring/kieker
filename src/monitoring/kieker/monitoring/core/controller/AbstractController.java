@@ -35,7 +35,7 @@ public abstract class AbstractController {
 	protected volatile MonitoringController monitoringController = null;
 	private final AtomicBoolean terminated = new AtomicBoolean(false);
 
-	protected AbstractController(final Configuration configuration) { // NOPMD
+	protected AbstractController(final Configuration configuration) { // NOPMD (unused parameter)
 		// do nothing but enforce constructor
 	}
 
@@ -89,7 +89,7 @@ public abstract class AbstractController {
 
 	@SuppressWarnings("unchecked")
 	protected static final <C> C createAndInitialize(final Class<C> c, final String classname, final Configuration configuration) {
-		C createdClass = null; // NOPMD
+		C createdClass = null; // NOPMD (null)
 		try {
 			final Class<?> clazz = Class.forName(classname);
 			if (c.isAssignableFrom(clazz)) {
@@ -102,7 +102,7 @@ public abstract class AbstractController {
 		} catch (final NoSuchMethodException e) {
 			AbstractController.LOG.error(c.getSimpleName() + ": Class '" + classname
 					+ "' has to implement a (public) constructor that accepts a single Configuration", e);
-		} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
+		} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 			// SecurityException, IllegalAccessException, IllegalArgumentException, InstantiationException, InvocationTargetException
 			AbstractController.LOG.error(c.getSimpleName() + ": Failed to load class for name '" + classname + "'", e);
 		}

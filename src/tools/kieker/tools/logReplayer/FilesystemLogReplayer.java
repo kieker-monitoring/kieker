@@ -137,7 +137,7 @@ public class FilesystemLogReplayer {
 		try {
 			tpanInstance.run();
 			success = true;
-		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
+		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 			FilesystemLogReplayer.LOG.error("Exception running analysis instance", ex);
 			success = false;
 		}

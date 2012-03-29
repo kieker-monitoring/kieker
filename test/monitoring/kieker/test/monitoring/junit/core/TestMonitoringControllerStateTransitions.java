@@ -40,8 +40,8 @@ public class TestMonitoringControllerStateTransitions extends TestCase { // NOCS
 		configuration.setProperty(ConfigurationFactory.MONITORING_ENABLED, "true");
 		final IMonitoringController kieker = MonitoringController.createInstance(configuration);
 		{ /* Check values when enabled */// NOCS
-			Assert.assertEquals("Unexpected monitoringEnabled value", true, kieker.isMonitoringEnabled()); // NOPMD
-			Assert.assertEquals("Unexpected monitoringTerminated value", false, kieker.isMonitoringTerminated()); // NOPMD
+			Assert.assertEquals("Unexpected monitoringEnabled value", true, kieker.isMonitoringEnabled());
+			Assert.assertEquals("Unexpected monitoringTerminated value", false, kieker.isMonitoringTerminated());
 		}
 		{// NOCS
 			/* Change to disabled */

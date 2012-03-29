@@ -131,7 +131,7 @@ public class ControlServlet extends HttpServlet {
 				if ((expimentIdString != null) && (expimentIdString.length() != 0)) { // NOCS (NestedIf)
 					try {
 						experimentID = Integer.parseInt(expimentIdString);
-						if (experimentID >= 0) { // NOPMD // NOCS (NestedIf)
+						if (experimentID >= 0) { // NOPMD NOCS (NestedIf)
 							ControlServlet.CTRL_INST.setExperimentId(experimentID);
 						}
 					} catch (final NumberFormatException ne) {
@@ -189,7 +189,7 @@ public class ControlServlet extends HttpServlet {
 		String monitoringControllerStatus = "";
 		try {
 			monitoringControllerStatus = ControlServlet.CTRL_INST.toString();
-		} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
+		} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 			out.println(e.getMessage());
 		}
 
@@ -224,12 +224,12 @@ public class ControlServlet extends HttpServlet {
 		bu.append(ControlServlet.CTRL_INST.getNumberOfInserts());
 		bu.append(" <br> java.vm.name = ");
 		bu.append(System.getProperty("java.vm.name"));
-		bu.append(" <br>"); // NOPMD
+		bu.append(" <br>"); // NOPMD (append literal String twice)
 		try {
 			final String youngGC = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(0).getName();
 			final String tenureGC = java.lang.management.ManagementFactory.getGarbageCollectorMXBeans().get(1).getName();
 			bu.append(" Garbage collectors : " + youngGC + " , " + tenureGC + "<br>");
-		} catch (final RuntimeException e) { // ignore // NOPMD // NOCS (IllegalCatchCheck)
+		} catch (final RuntimeException e) { // ignore // NOPMD NOCS (IllegalCatchCheck)
 		}
 		out.println(bu.toString());
 		this.printFooter(out);

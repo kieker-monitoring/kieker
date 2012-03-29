@@ -111,7 +111,7 @@ public class JMSLogReplayer {
 
 		try {
 			tpanInstance.run();
-		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
+		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 			JMSLogReplayer.LOG.error("Exception running analysis instance", ex);
 			return false;
 		}

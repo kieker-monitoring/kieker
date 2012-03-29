@@ -92,15 +92,15 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 		final Object[] myValues = values.clone();
 		AbstractMonitoringRecord.checkArray(myValues, MemSwapUsageRecord.TYPES);
 		try {
-			this.timestamp = (Long) myValues[0]; // NOCS
-			this.hostname = (String) myValues[1]; // NOCS
-			this.memTotal = (Long) myValues[2]; // NOCS
-			this.memUsed = (Long) myValues[3]; // NOCS
-			this.memFree = (Long) myValues[4]; // NOCS
-			this.swapTotal = (Long) myValues[5]; // NOCS
-			this.swapUsed = (Long) myValues[6]; // NOCS
-			this.swapFree = (Long) myValues[7]; // NOCS
-		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
+			this.timestamp = (Long) myValues[0];
+			this.hostname = (String) myValues[1];
+			this.memTotal = (Long) myValues[2];
+			this.memUsed = (Long) myValues[3];
+			this.memFree = (Long) myValues[4];
+			this.swapTotal = (Long) myValues[5];
+			this.swapUsed = (Long) myValues[6];
+			this.swapFree = (Long) myValues[7];
+		} catch (final Exception exc) { // NOPMD NOCS (IllegalCatchCheck)
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
 	}

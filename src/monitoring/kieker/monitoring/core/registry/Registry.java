@@ -284,7 +284,7 @@ public class Registry<E> implements IRegistry<E> {
 						final int id = nextId.getAndIncrement();
 						tab[index] = new HashEntry<E>(value, hash, id, first);
 						this.count = c; // write-volatile
-						if (this.recordReceiver != null) { // NOCS // NOPMD (nested if)
+						if (this.recordReceiver != null) { // NOPMD NOCS (nested if)
 							this.recordReceiver.newMonitoringRecord(new RegistryRecord(id, value));
 						}
 						return id; // return new id

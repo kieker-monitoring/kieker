@@ -70,7 +70,7 @@ public abstract class AbstractPlugin implements IPlugin {
 	public AbstractPlugin(final Configuration configuration) {
 		try {
 			// TODO: somewhat dirty hack...
-			final Configuration defaultConfig = this.getDefaultConfiguration(); // NOPMD
+			final Configuration defaultConfig = this.getDefaultConfiguration();
 			if (defaultConfig != null) {
 				configuration.setDefaultConfiguration(defaultConfig);
 			}

@@ -31,7 +31,7 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
  */
 class ExecutionTraceHashContainerAssemblyEquivalence extends AbstractExecutionTraceHashContainer {
 
-	private final int hashCode; // NOPMD
+	private final int hashCodeBuffer;
 
 	public ExecutionTraceHashContainerAssemblyEquivalence(final ExecutionTrace t) {
 		super(t);
@@ -45,16 +45,16 @@ class ExecutionTraceHashContainerAssemblyEquivalence extends AbstractExecutionTr
 			h ^= r.getEss();
 		}
 		//
-		this.hashCode = h;
+		this.hashCodeBuffer = h;
 	}
 
 	@Override
 	public int hashCode() {
-		return this.hashCode;
+		return this.hashCodeBuffer;
 	}
 
 	private boolean executionsEqual(final Execution r1, final Execution r2) {
-		if (r1 == r2) { // NOPMD
+		if (r1 == r2) { // NOPMD (no equals)
 			return true;
 		}
 		if ((r1 == null) || (r2 == null)) {

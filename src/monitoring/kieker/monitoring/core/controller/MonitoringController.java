@@ -108,7 +108,7 @@ public final class MonitoringController extends AbstractController implements IM
 					}
 				}
 			});
-		} catch (final Exception e) { // NOCS // NOPMD
+		} catch (final Exception e) { // NOPMD NOCS (Exception)
 			MonitoringController.LOG.warn("Failed to add shutdownHook");
 		}
 		MonitoringController.LOG.info(monitoringController.toString());

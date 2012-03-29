@@ -117,7 +117,7 @@ public final class ConfigurationFactory implements Keys {
 	 */
 	private static final Configuration loadConfigurationFromFile(final String propertiesFn, final Configuration defaultValues) {
 		final Configuration properties = new Configuration(defaultValues);
-		InputStream is = null; // NOPMD
+		InputStream is = null; // NOPMD (null)
 		try {
 			try {
 				is = new FileInputStream(propertiesFn);
@@ -131,7 +131,7 @@ public final class ConfigurationFactory implements Keys {
 			}
 			properties.load(is);
 			return properties;
-		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
+		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 			ConfigurationFactory.LOG.error("Error reading file '" + propertiesFn + "'", ex);
 		} finally {
 			if (is != null) {
@@ -163,7 +163,7 @@ public final class ConfigurationFactory implements Keys {
 				final Configuration properties = new Configuration(defaultValues);
 				properties.load(is);
 				return properties;
-			} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
+			} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 				ConfigurationFactory.LOG.error("Error reading file '" + propertiesFn + "'", ex);
 			} finally {
 				try {

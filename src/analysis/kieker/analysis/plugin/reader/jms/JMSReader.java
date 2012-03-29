@@ -116,7 +116,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 		boolean retVal = false;
 		Connection connection = null;
 		try {
-			final Hashtable<String, String> properties = new Hashtable<String, String>(); // NOPMD // NOCS (InitialContext expects Hashtable)
+			final Hashtable<String, String> properties = new Hashtable<String, String>(); // NOPMD NOCS (InitialContext expects Hashtable)
 			properties.put(Context.INITIAL_CONTEXT_FACTORY, this.jmsFactoryLookupName);
 
 			// JMS initialization
@@ -158,7 +158,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 							JMSReader.LOG.error("Error delivering record", ex);
 						} catch (final JMSException ex) {
 							JMSReader.LOG.error("Error delivering record", ex);
-						} catch (final Exception ex) { // NOCS // NOPMD
+						} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
 							JMSReader.LOG.error("Error delivering record", ex);
 						}
 					}
@@ -171,7 +171,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 			JMSReader.LOG.info("JMSReader started and waits for incomming monitoring events!");
 			this.block();
 			JMSReader.LOG.info("Woke up by shutdown");
-		} catch (final Exception ex) { // FindBugs complains but wontfix // NOCS (IllegalCatchCheck) // NOPMD
+		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 			JMSReader.LOG.error("Error in read()", ex);
 			retVal = false;
 		} finally {

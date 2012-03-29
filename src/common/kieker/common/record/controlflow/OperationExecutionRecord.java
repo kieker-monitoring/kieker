@@ -240,16 +240,16 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	public OperationExecutionRecord(final Object[] values) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, OperationExecutionRecord.TYPES); // throws IllegalArgumentException
 		this.experimentId = (Integer) values[0];
-		this.operationSignature = (String) values[1]; // NOCS
-		this.sessionId = (String) values[2]; // NOCS
-		this.traceId = (Long) values[3]; // NOCS
-		this.tin = (Long) values[4]; // NOCS
-		this.tout = (Long) values[5]; // NOCS
-		this.hostname = (String) values[6]; // NOCS
-		this.eoi = (Integer) values[7]; // NOCS
-		this.ess = (Integer) values[8]; // NOCS
+		this.operationSignature = (String) values[1];
+		this.sessionId = (String) values[2];
+		this.traceId = (Long) values[3];
+		this.tin = (Long) values[4];
+		this.tout = (Long) values[5];
+		this.hostname = (String) values[6];
+		this.eoi = (Integer) values[7];
+		this.ess = (Integer) values[8];
 		// set transient values
-		this.retVal = null; // NOPMD
+		this.retVal = null; // NOPMD (null)
 		this.entryPoint = false;
 	}
 

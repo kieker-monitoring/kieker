@@ -51,16 +51,15 @@ public class ScheduledSamplerJob implements Runnable {
 	/**
 	 * Throws a {@link RuntimeException} if an error occurred.
 	 */
-
 	public final void run() throws RuntimeException { // NOCS (IllegalThrowsCheck)
 		try {
 			if (!this.monitoringController.isMonitoringEnabled()) {
 				return;
 			}
 			this.sampler.sample(this.monitoringController);
-		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
+		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 			/* Re-throw exception because run must throw RuntimeException */
-			throw new RuntimeException(ex.getMessage(), ex); // NOPMD
+			throw new RuntimeException(ex.getMessage(), ex); // NOPMD (RuntimeException)
 		}
 	}
 

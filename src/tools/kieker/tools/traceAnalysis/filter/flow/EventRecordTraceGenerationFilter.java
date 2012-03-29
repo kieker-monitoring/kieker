@@ -90,7 +90,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 		/** Order traces by tins */
 
 		public int compare(final EventRecordTrace t1, final EventRecordTrace t2) {
-			if (t1 == t2) { // NOPMD
+			if (t1 == t2) { // NOPMD (no equals)
 				return 0;
 			}
 			final long t1minTstamp = t1.getMinTimestamp();

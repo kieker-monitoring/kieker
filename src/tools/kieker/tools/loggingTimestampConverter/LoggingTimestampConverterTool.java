@@ -69,7 +69,7 @@ public final class LoggingTimestampConverterTool {
 		LoggingTimestampConverterTool.CMD_HELP_FORMATTER.setOptionComparator(new Comparator<Object>() {
 
 			public int compare(final Object o1, final Object o2) {
-				if (o1 == o2) { // NOPMD
+				if (o1 == o2) { // NOPMD (not equals)
 					return 0;
 				}
 				final int posO1 = LoggingTimestampConverterTool.OPTIONS.indexOf(o1);

@@ -783,12 +783,12 @@ public final class AnalysisController {
 		} catch (final IOException ex) {
 			final IOException newEx = new IOException("Error loading file '" + file.getAbsolutePath() + "'.");
 			newEx.initCause(ex);
-			throw newEx;
+			throw newEx; // NOPMD (cause is set above)
 		} catch (final Exception ex) { // NOPMD NOCS (illegal catch)
 			/* Some exceptions like the XMIException can be thrown during loading although it cannot be seen. Catch this situation. */
 			final IOException newEx = new IOException("The given file '" + file.getAbsolutePath() + "' is not a valid kax-configuration file.");
 			newEx.initCause(ex);
-			throw newEx;
+			throw newEx; // NOPMD (cause is set above)
 		}
 	}
 
@@ -817,7 +817,7 @@ public final class AnalysisController {
 		} catch (final IOException ex) {
 			final IOException newEx = new IOException("Unable to save configuration file '" + file.getAbsolutePath() + "'.");
 			newEx.initCause(ex);
-			throw newEx;
+			throw newEx; // NOPMD (cause is set above)
 		}
 	}
 
@@ -888,7 +888,7 @@ public final class AnalysisController {
 		} catch (final NoSuchMethodException ex) {
 			throw new AnalysisConfigurationException(c.getSimpleName() + ": Class '" + classname
 					+ "' has to implement a (public) constructor that accepts a single Configuration", ex);
-		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
+		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 			// SecurityException, IllegalAccessException, IllegalArgumentException, InstantiationException, InvocationTargetException
 			throw new AnalysisConfigurationException(c.getSimpleName() + ": Failed to load class for name '" + classname + "'", ex);
 		}

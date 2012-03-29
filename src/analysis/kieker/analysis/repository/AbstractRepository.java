@@ -44,7 +44,7 @@ public abstract class AbstractRepository implements IRepository {
 	public AbstractRepository(final Configuration configuration) {
 		try {
 			// TODO: somewhat dirty hack...
-			final Configuration defaultConfig = this.getDefaultConfiguration(); // NOPMD
+			final Configuration defaultConfig = this.getDefaultConfiguration();
 			if (defaultConfig != null) {
 				configuration.setDefaultConfiguration(defaultConfig);
 			}

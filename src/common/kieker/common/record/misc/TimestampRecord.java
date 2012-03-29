@@ -53,7 +53,7 @@ public final class TimestampRecord extends AbstractMonitoringRecord implements I
 		AbstractMonitoringRecord.checkArray(myValues, TimestampRecord.TYPES);
 		try {
 			this.timestamp = (Long) myValues[0];
-		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
+		} catch (final Exception exc) { // NOPMD NOCS (IllegalCatchCheck)
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
 	}

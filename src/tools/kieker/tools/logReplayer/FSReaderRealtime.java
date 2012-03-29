@@ -40,7 +40,7 @@ import kieker.common.record.IMonitoringRecord;
  * @author Andre van Hoorn
  */
 @Plugin(outputPorts = {
-		@OutputPort(name = FSReaderRealtime.OUTPUT_PORT_NAME_MONITORING_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReaderRealtime")
+	@OutputPort(name = FSReaderRealtime.OUTPUT_PORT_NAME_MONITORING_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReaderRealtime")
 })
 public final class FSReaderRealtime extends AbstractReaderPlugin {
 	private static final Log LOG = LogFactory.getLog(FSReaderRealtime.class);
@@ -97,7 +97,7 @@ public final class FSReaderRealtime extends AbstractReaderPlugin {
 	// for (int i = 0; dirNameTokenizer.hasMoreTokens(); i++) {
 	// dirNameArray[i] = dirNameTokenizer.nextToken().trim();
 	// }
-	// } catch (final Exception exc) { // NOCS // NOPMD
+	// } catch (final Exception exc) { // NOPMD NOCS
 	// throw new IllegalArgumentException("Error parsing list of input directories'" + inputDirNameList + "'", exc);
 	// }
 	// return dirNameArray;
@@ -105,7 +105,8 @@ public final class FSReaderRealtime extends AbstractReaderPlugin {
 
 	private boolean initInstanceFromArgs(final String[] inputDirNames, final int numWorkers) throws IllegalArgumentException {
 		if ((inputDirNames == null) || (inputDirNames.length <= 0)) {
-			throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.CONFIG_PROPERTY_NAME_INPUTDIRNAMES + ":" + Arrays.toString(inputDirNames)); // NOCS
+			throw new IllegalArgumentException("Invalid property value for " + FSReaderRealtime.CONFIG_PROPERTY_NAME_INPUTDIRNAMES + ":"
+					+ Arrays.toString(inputDirNames)); // NOCS
 		}
 
 		if (numWorkers <= 0) {
@@ -149,7 +150,7 @@ public final class FSReaderRealtime extends AbstractReaderPlugin {
 		try {
 			this.analysis.run();
 			this.terminationLatch.await();
-		} catch (final Exception ex) { // NOCS (catch all) // NOPMD
+		} catch (final Exception ex) { // NOPMD NOCS (catch all)
 			FSReaderRealtime.LOG.error("An error occured while reading", ex);
 			return false;
 		}

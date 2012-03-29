@@ -158,7 +158,7 @@ public class SystemModelRepository extends AbstractRepository {
 		ps.println("</head><body>");
 		this.htmlHSpace(ps, 10);
 		ps.println("<h1>Component Types</h1>");
-		this.printOpenHtmlTable(ps, new String[] { "ID", "Package", "Name", "Operations" }); // NOPMD (string duplication)
+		this.printOpenHtmlTable(ps, new String[] { "ID", "Package", "Name", "Operations" });
 		final Collection<ComponentType> componentTypes = this.typeRepositoryFactory.getComponentTypes();
 		for (final ComponentType type : componentTypes) {
 			final StringBuilder opListBuilder = new StringBuilder();

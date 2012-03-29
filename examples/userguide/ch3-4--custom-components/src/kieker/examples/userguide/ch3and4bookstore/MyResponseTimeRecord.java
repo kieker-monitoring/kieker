@@ -27,14 +27,14 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IM
 
 	private static final long serialVersionUID = 1775L;
 	private static final Class<?>[] TYPES = { String.class, String.class, long.class };
-	private static final String NA_VAL = "N/A";
+	// private static final String NA_VAL = "N/A";
 
 	/* Attributes storing the actual monitoring data: */
 	public final String className;
 	public final String methodName;
 	public final long responseTimeNanos;
 
-	public MyResponseTimeRecord(final Object[] values) {
+	public MyResponseTimeRecord(final Object[] values) { // NOPMD (store values)
 		AbstractMonitoringRecord.checkArray(values, MyResponseTimeRecord.TYPES);
 
 		this.className = (String) values[0];

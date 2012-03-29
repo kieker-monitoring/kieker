@@ -115,8 +115,8 @@ public final class FilesystemLogReplayerStarter {
 
 		/* 2.) init keepOriginalLoggingTimestamps */
 		final String keepOriginalLoggingTimestampsOptValStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(
-				FilesystemLogReplayerStarter.CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS, "true"); // NOPMD (string literals)
-		if (!("true".equals(keepOriginalLoggingTimestampsOptValStr) || "false".equals(keepOriginalLoggingTimestampsOptValStr))) { // NOPMD (string literals)
+				FilesystemLogReplayerStarter.CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS, "true");
+		if (!("true".equals(keepOriginalLoggingTimestampsOptValStr) || "false".equals(keepOriginalLoggingTimestampsOptValStr))) {
 			System.out.println("Invalid value for option " + FilesystemLogReplayerStarter.CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS + ": '"
 					+ keepOriginalLoggingTimestampsOptValStr + "'");
 			retVal = false;

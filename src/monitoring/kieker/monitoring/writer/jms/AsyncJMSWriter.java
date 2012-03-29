@@ -93,7 +93,7 @@ final class JMSWriterThread extends AbstractAsyncThread {
 			final String providerUrl, final String factoryLookupName, final String topic, final long messageTimeToLive) throws Exception {
 		super(monitoringController, writeQueue);
 		try {
-			final Hashtable<String, String> properties = new Hashtable<String, String>(); // NOPMD // NOCS (IllegalTypeCheck, InitialContext requires Hashtable)
+			final Hashtable<String, String> properties = new Hashtable<String, String>(); // NOPMD NOCS (IllegalTypeCheck, InitialContext requires Hashtable)
 			properties.put(Context.INITIAL_CONTEXT_FACTORY, contextFactoryType);
 			properties.put(Context.PROVIDER_URL, providerUrl);
 

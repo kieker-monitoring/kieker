@@ -331,7 +331,7 @@ final class FSDirectoryReader implements Runnable {
 					break; // we got the signal to stop processing
 				}
 			}
-		} catch (final Exception ex) { // NOCS // NOPMD
+		} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
 			FSDirectoryReader.LOG.error("Error reading " + inputFile, ex);
 		} finally {
 			if (in != null) {

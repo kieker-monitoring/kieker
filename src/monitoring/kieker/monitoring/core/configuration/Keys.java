@@ -26,7 +26,7 @@ package kieker.monitoring.core.configuration;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-interface Keys { // NOPMD NOCS
+interface Keys { // NOPMD NOCS (static list)
 	/** prefix used for all kieker.monitoring components */
 	public static final String PREFIX = "kieker.monitoring.";
 

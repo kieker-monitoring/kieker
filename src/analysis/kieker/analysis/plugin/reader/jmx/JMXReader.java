@@ -149,7 +149,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 		} catch (final InstanceNotFoundException ex) {
 			JMXReader.LOG.error("No monitoring log found: " + this.monitoringLog.toString()); // ok to ignore ex here
 			ret = false;
-		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
+		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 			JMXReader.LOG.error("Error in JMX connection!", ex);
 			ret = false;
 		} finally {
@@ -157,7 +157,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 				if (logNotificationListener != null) {
 					mbServer.removeNotificationListener(this.monitoringLog, logNotificationListener);
 				}
-			} catch (final Exception e) { // NOCS // NOPMD
+			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 				if (JMXReader.LOG.isDebugEnabled()) {
 					JMXReader.LOG.debug("Failed to remove Listener!", e);
 				}
@@ -211,28 +211,28 @@ public final class JMXReader extends AbstractReaderPlugin {
 				// Shutdown
 				JMXReader.LOG.info("Shutting down JMXReader");
 
-			} catch (final InstanceNotFoundException e) { // ignore // NOPMD
-			} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
+			} catch (final InstanceNotFoundException e) { // NOPMD (ignore this)
+			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 				JMXReader.LOG.error("Error in JMX connection!", e);
 			} finally {
 				try {
 					if (logNotificationListener != null) {
 						mbServer.removeNotificationListener(this.monitoringLog, logNotificationListener);
 					}
-				} catch (final Exception e) { // ignore // NOCS (IllegalCatchCheck) // NOPMD
+				} catch (final Exception e) { // ignore // NOPMD NOCS (IllegalCatchCheck)
 				}
 				try {
 					if (serverNotificationListener != null) {
 						jmx.removeConnectionNotificationListener(serverNotificationListener);
 					}
-				} catch (final ListenerNotFoundException e) { // ignore // NOPMD
+				} catch (final ListenerNotFoundException e) { // NOPMD (ignore)
 				}
 				try {
 					if (jmx != null) {
 						jmx.close();
 					}
 					Thread.sleep(10000); // NOCS
-				} catch (final Exception e) { // ignore // NOCS (IllegalCatchCheck) // NOPMD
+				} catch (final Exception e) { // ignore // NOPMD NOCS (IllegalCatchCheck)
 				}
 			}
 		}

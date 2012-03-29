@@ -41,7 +41,7 @@ public final class LogImplJDK14 implements Log {
 			final String sourceClass;
 			final String sourceMethod;
 			{ // NOCS detect calling class and method
-				final StackTraceElement[] stackArray = new Throwable().getStackTrace(); // NOPMD
+				final StackTraceElement[] stackArray = new Throwable().getStackTrace(); // NOPMD (throwable)
 				if ((stackArray != null) && (stackArray.length > 2)) { // our stackDepth
 					sourceClass = stackArray[2].getClassName();
 					sourceMethod = stackArray[2].getMethodName();

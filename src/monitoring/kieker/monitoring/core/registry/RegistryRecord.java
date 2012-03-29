@@ -49,7 +49,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 		try {
 			this.id = (Integer) myValues[0];
 			this.object = myValues[1];
-		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
+		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 			throw new IllegalArgumentException("Failed to init record from array.", ex);
 		}
 	}

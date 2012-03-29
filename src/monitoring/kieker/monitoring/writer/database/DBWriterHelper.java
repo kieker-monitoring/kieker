@@ -79,7 +79,7 @@ public final class DBWriterHelper {
 				this.createTypeMap.put(Byte.class, typeName);
 				break;
 			case Types.SMALLINT: // Short
-				this.createTypeMap.put(short.class, typeName); // NOPMD
+				this.createTypeMap.put(short.class, typeName); // NOPMD (short)
 				this.createTypeMap.put(Short.class, typeName);
 				break;
 			case Types.BIT: // Boolean

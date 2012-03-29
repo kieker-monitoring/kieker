@@ -38,7 +38,7 @@ public final class LogFactory {
 			if (Class.forName("org.apache.commons.logging.Log") != null) {
 				logselectiontemp = LogFactory.Logger.COMMONS; // use commons logging
 			}
-		} catch (final Exception ex) { // NOCS // NOPMD
+		} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
 			// failed to find Apache commons logging
 		}
 		DETECTED_LOGGER = logselectiontemp; // NOCS (missing this)

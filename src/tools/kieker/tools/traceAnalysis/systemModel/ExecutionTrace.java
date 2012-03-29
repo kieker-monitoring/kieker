@@ -296,7 +296,7 @@ public class ExecutionTrace extends AbstractTrace {
 	// Explicit delegation to super method to make FindBugs happy
 
 	@Override
-	public int hashCode() { // NOPMD
+	public int hashCode() { // NOPMD (forward hashcode)
 		return super.hashCode();
 	}
 

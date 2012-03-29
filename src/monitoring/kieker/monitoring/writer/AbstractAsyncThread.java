@@ -73,7 +73,7 @@ public abstract class AbstractAsyncThread extends Thread {
 		}
 		try {
 			// making it a local variable for faster access
-			final BlockingQueue<IMonitoringRecord> writeQueue = this.writeQueue; // NOPMD // NOCS
+			final BlockingQueue<IMonitoringRecord> writeQueue = this.writeQueue;
 			while (true) {
 				try {
 					IMonitoringRecord monitoringRecord = writeQueue.take();
@@ -109,7 +109,7 @@ public abstract class AbstractAsyncThread extends Thread {
 			if (AbstractAsyncThread.LOG.isDebugEnabled()) {
 				AbstractAsyncThread.LOG.debug("Writer thread finished");
 			}
-		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
+		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 			// e.g. IOException
 			AbstractAsyncThread.LOG.error("Writer thread will halt", ex);
 			this.cleanup();

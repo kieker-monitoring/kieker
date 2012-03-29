@@ -93,7 +93,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 		/** Order traces by tins */
 
 		public int compare(final ExecutionTrace t1, final ExecutionTrace t2) {
-			if (t1 == t2) { // NOPMD
+			if (t1 == t2) { // NOPMD (no equals)
 				return 0;
 			}
 			final long t1LowestTin = t1.getTraceAsSortedExecutionSet().first().getTin();

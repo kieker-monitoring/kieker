@@ -45,7 +45,7 @@ public class SynchronousReplyMessage extends AbstractMessage {
 	}
 
 	@Override
-	public int hashCode() { // NOPMD
+	public int hashCode() { // NOPMD (forward hashcode)
 		return super.hashCode();
 	}
 }

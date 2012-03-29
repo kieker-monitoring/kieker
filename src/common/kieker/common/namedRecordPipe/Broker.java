@@ -29,8 +29,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public enum Broker { // Singleton pattern (Effective Java #3)
 	INSTANCE;
 
-	// private static final Log LOG = LogFactory.getLog(Broker.class); // NOPMD (Logger on enum)
-
 	/**
 	 * Access synchronized through synchronized method {@link #acquirePipe(String)} !
 	 */

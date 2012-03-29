@@ -136,7 +136,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 				if (values[curIdx] instanceof Byte) {
 					continue;
 				}
-			} else if ((valueTypes[curIdx] == short.class) || (valueTypes[curIdx] == Short.class)) { // NOPMD
+			} else if ((valueTypes[curIdx] == short.class) || (valueTypes[curIdx] == Short.class)) { // NOPMD (short)
 				if (values[curIdx] instanceof Short) {
 					continue;
 				}
@@ -182,8 +182,8 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 				typedArray[curIdx] = Byte.valueOf(recordFields[curIdx]);
 				continue;
 			}
-			if ((valueTypes[curIdx] == short.class) || (valueTypes[curIdx] == Short.class)) { // NOPMD
-				typedArray[curIdx] = Short.valueOf(recordFields[curIdx]); // NOPMD
+			if ((valueTypes[curIdx] == short.class) || (valueTypes[curIdx] == Short.class)) { // NOPMD (short)
+				typedArray[curIdx] = Short.valueOf(recordFields[curIdx]); // NOPMD (short)
 				continue;
 			}
 			if ((valueTypes[curIdx] == boolean.class) || (valueTypes[curIdx] == Boolean.class)) {
@@ -225,7 +225,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 				return clazz.newInstance().getValueTypes();
 			}
 		} catch (final SecurityException ex) {
-			throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex); // NOPMD (String repeat)
+			throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
 		} catch (final NoSuchFieldException ex) {
 			throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
 		} catch (final IllegalArgumentException ex) {
@@ -250,7 +250,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 				return record;
 			}
 		} catch (final SecurityException ex) {
-			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex); // NOPMD (STring repeat)
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
 		} catch (final NoSuchMethodException ex) {
 			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
 		} catch (final IllegalArgumentException ex) {

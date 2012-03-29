@@ -89,9 +89,9 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 			strBuild.append(DotFactory.createNode("", this.getNodeId(node), (curContainerId == rootContainerId) ? "$" // NOCS (AvoidInlineConditionalsCheck)
 					: AbstractDependencyGraphFilter.STEREOTYPE_EXECUTION_CONTAINER + "\\n" + curContainer.getName(),
 					(curContainerId == rootContainerId) ? DotFactory.DOT_SHAPE_NONE : DotFactory.DOT_SHAPE_BOX3D, // NOCS (AvoidInlineConditionalsCheck)
-					(curContainerId == rootContainerId) ? null : DotFactory.DOT_STYLE_FILLED, // style // NOPMD // NOCS (AvoidInlineConditionalsCheck)
+					(curContainerId == rootContainerId) ? null : DotFactory.DOT_STYLE_FILLED, // style // NOPMD (null) // NOCS (AvoidInlineConditionalsCheck)
 					null, // framecolor
-					(curContainerId == rootContainerId) ? null : DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor // NOPMD // NOCS (AvoidInlineConditionalsCheck)
+					(curContainerId == rootContainerId) ? null : DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor // NOPMD (null) // NOCS (AvoidInlineConditionalsCheck)
 					null, // fontcolor
 					DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 					null, // imagefilename

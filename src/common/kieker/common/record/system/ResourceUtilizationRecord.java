@@ -85,11 +85,11 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 		final Object[] myValues = values.clone();
 		AbstractMonitoringRecord.checkArray(myValues, ResourceUtilizationRecord.TYPES);
 		try {
-			this.timestamp = (Long) myValues[0]; // NOCS
-			this.hostname = (String) myValues[1]; // NOCS
-			this.resourceName = (String) myValues[2]; // NOCS
-			this.utilization = (Double) myValues[3]; // NOCS
-		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
+			this.timestamp = (Long) myValues[0];
+			this.hostname = (String) myValues[1];
+			this.resourceName = (String) myValues[2];
+			this.utilization = (Double) myValues[3];
+		} catch (final Exception exc) { // NOPMD NOCS (IllegalCatchCheck)
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
 	}

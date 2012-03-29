@@ -223,8 +223,8 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				final AllocationComponent senderComponent = me.getSendingExecution().getAllocationComponent();
 				final AllocationComponent receiverComponent = me.getReceivingExecution().getAllocationComponent();
 				if (!plottedComponentIds.contains(senderComponent.getId())) {
-					ps.print("object(O" + senderComponent.getId() + ",\"" + senderComponent.getExecutionContainer().getName() + "::\",\"" // NOPMD
-							+ SequenceDiagramFilter.allocationComponentLabel(senderComponent, shortLabels) + "\");" + "\n"); // NOPMD
+					ps.print("object(O" + senderComponent.getId() + ",\"" + senderComponent.getExecutionContainer().getName() + "::\",\""
+							+ SequenceDiagramFilter.allocationComponentLabel(senderComponent, shortLabels) + "\");" + "\n");
 					plottedComponentIds.add(senderComponent.getId());
 				}
 				if (!plottedComponentIds.contains(receiverComponent.getId())) {

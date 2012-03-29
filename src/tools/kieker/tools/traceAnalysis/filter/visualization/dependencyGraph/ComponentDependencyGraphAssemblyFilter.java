@@ -103,9 +103,9 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 			final int curComponentId = node.getId();
 			strBuild.append(DotFactory.createNode("", this.getNodeId(node), (curComponentId == rootComponentId) ? "$" : this.nodeLabel(node, curComponent), // NOCS
 					(curComponentId == rootComponentId) ? DotFactory.DOT_SHAPE_NONE : DotFactory.DOT_SHAPE_BOX, // NOCS
-					(curComponentId == rootComponentId) ? null : DotFactory.DOT_STYLE_FILLED, // style // NOCS // NOPMD
+					(curComponentId == rootComponentId) ? null : DotFactory.DOT_STYLE_FILLED, // style // NOCS // NOPMD (null)
 					null, // framecolor
-					(curComponentId == rootComponentId) ? null : this.getNodeFillColor(node), // fillcolor // NOCS //NOPMD
+					(curComponentId == rootComponentId) ? null : this.getNodeFillColor(node), // fillcolor // NOCS //NOPMD (null)
 					null, // fontcolor
 					DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 					null, // imagefilename

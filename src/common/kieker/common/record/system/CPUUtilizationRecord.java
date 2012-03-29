@@ -140,17 +140,17 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 		final Object[] myValues = values.clone();
 		AbstractMonitoringRecord.checkArray(myValues, CPUUtilizationRecord.TYPES);
 		try {
-			this.timestamp = (Long) myValues[0]; // NOCS
-			this.hostname = (String) myValues[1]; // NOCS
-			this.cpuID = (String) myValues[2]; // NOCS
-			this.user = (Double) myValues[3]; // NOCS
-			this.system = (Double) myValues[4]; // NOCS
-			this.wait = (Double) myValues[5]; // NOCS
-			this.nice = (Double) myValues[6]; // NOCS
-			this.irq = (Double) myValues[7]; // NOCS
-			this.totalUtilization = (Double) myValues[8]; // NOCS
-			this.idle = (Double) myValues[9]; // NOCS
-		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
+			this.timestamp = (Long) myValues[0];
+			this.hostname = (String) myValues[1];
+			this.cpuID = (String) myValues[2];
+			this.user = (Double) myValues[3];
+			this.system = (Double) myValues[4];
+			this.wait = (Double) myValues[5];
+			this.nice = (Double) myValues[6];
+			this.irq = (Double) myValues[7];
+			this.totalUtilization = (Double) myValues[8];
+			this.idle = (Double) myValues[9];
+		} catch (final Exception exc) { // NOPMD NOCS (IllegalCatchCheck)
 			throw new IllegalArgumentException("Failed to init", exc);
 		}
 	}

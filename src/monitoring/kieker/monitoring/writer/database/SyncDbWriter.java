@@ -72,7 +72,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 			this.helper = new DBWriterHelper(this.connection, this.tablePrefix);
 			this.helper.createIndexTable();
 		} catch (final SQLException ex) {
-			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex); // NOPMD
+			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex); // NOPMD (exception)
 		}
 	}
 

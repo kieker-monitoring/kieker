@@ -37,19 +37,19 @@ public final class Main {
 		for (int i = 0; i < 10; i++) {
 			try {
 				Main.helloKieker(true);
-			} catch (final Exception e) { // NOCS // NOPMD
+			} catch (final Exception e) { // NOPMD NOCS (Exception)
 			}
 		}
 
 		for (int i = 0; i < 10; i++) {
 			try {
 				Main.helloKieker(true);
-			} catch (final Exception e) { // NOCS // NOPMD
+			} catch (final Exception e) { // NOPMD NOCS (Exception)
 			}
 
 			try {
 				Main.helloKieker(false);
-			} catch (final Exception e) { // NOCS // NOPMD
+			} catch (final Exception e) { // NOPMD NOCS (Exception)
 			}
 		}
 
@@ -60,7 +60,7 @@ public final class Main {
 		System.out.println("Hello World (look at your monitoring log ...)." + Thread.currentThread().getId() + " ");
 		if (throwException) {
 			System.out.println("For test purposes, I will throw an exception now");
-			throw new Exception("Test Exception"); // NOPMD
+			throw new Exception("Test Exception"); // NOPMD NOCS (Exception)
 		}
 	}
 }

@@ -184,7 +184,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		final Map<AbstractCallTreeNode<?>, Integer> nodeIds = new Hashtable<AbstractCallTreeNode<?>, Integer>(); // NOPMD (not synchronized)
 
 		AbstractCallTreeFilter.dotEdgesFromSubTree(root, nodeIds, new IntContainer(0), ps, shortLabels);
-		AbstractCallTreeFilter.dotVerticesFromSubTree(root, includeEois ? new IntContainer(1) : null, nodeIds, ps, includeWeights); // NOCS // NOPMD
+		AbstractCallTreeFilter.dotVerticesFromSubTree(root, includeEois ? new IntContainer(1) : null, nodeIds, ps, includeWeights); // NOPMD NOCS (null)
 
 		ps.println(edgestringBuilder.toString());
 		ps.println("}");

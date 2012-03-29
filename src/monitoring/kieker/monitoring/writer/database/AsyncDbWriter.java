@@ -75,7 +75,7 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 			connection = DriverManager.getConnection(this.configuration.getStringProperty(AsyncDbWriter.CONFIG_CONNECTIONSTRING));
 			new DBWriterHelper(connection, this.tablePrefix).createIndexTable();
 		} catch (final SQLException ex) {
-			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex); // NOPMD
+			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 		} finally {
 			if (connection != null) {
 				connection.close();
@@ -86,7 +86,7 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 				this.addWorker(new DbWriterThread(super.monitoringController, this.blockingQueue, i, this.connectionString, this.tablePrefix, this.recordId));
 			}
 		} catch (final SQLException ex) {
-			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex); // NOPMD
+			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 		}
 	}
 }

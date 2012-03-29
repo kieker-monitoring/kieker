@@ -46,17 +46,17 @@ public final class BookstoreEventRecordFactory {
 
 	private BookstoreEventRecordFactory() {}
 
-	public static final long TSTAMP_OFFSET_entry0_0__bookstore_searchBook = 0; // NOCS // NOPMD (VariableNamingConventions)
-	public static final long TSTAMP_OFFSET_call1_1__catalog_getBook = 1; // NOCS // NOPMD (VariableNamingConventions)
-	public static final long TSTAMP_OFFSET_entry1_1__catalog_getBook = 2; // NOCS // NOPMD (VariableNamingConventions)
-	public static final long TSTAMP_OFFSET_exit1_1__catalog_getBook = 3; // NOCS // NOPMD (VariableNamingConventions)
-	public static final long TSTAMP_OFFSET_call2_1__crm_getOrders = 4; // NOCS // NOPMD (VariableNamingConventions)
-	public static final long TSTAMP_OFFSET_entry2_1__crm_getOrders = 5; // NOCS // NOPMD (VariableNamingConventions)
-	public static final long TSTAMP_OFFSET_call3_2__catalog_getBook = 6; // NOCS // NOPMD (VariableNamingConventions)
-	public static final long TSTAMP_OFFSET_entry3_2__catalog_getBook = 7; // NOCS // NOPMD (VariableNamingConventions)
-	public static final long TSTAMP_OFFSET_exit3_2__catalog_getBook = 8; // NOCS // NOPMD (VariableNamingConventions)
-	public static final long TSTAMP_OFFSET_exit2_1__crm_getOrders = 8; // NOCS // NOPMD (VariableNamingConventions)
-	public static final long TSTAMP_OFFSET_exit0_0__bookstore_searchBook = 11; // NOCS // NOPMD (VariableNamingConventions)
+	public static final long TSTAMP_OFFSET_entry0_0__bookstore_searchBook = 0; // NOPMD NOCS (VariableNamingConventions)
+	public static final long TSTAMP_OFFSET_call1_1__catalog_getBook = 1; // NOPMD NOCS (VariableNamingConventions)
+	public static final long TSTAMP_OFFSET_entry1_1__catalog_getBook = 2; // NOPMD NOCS (VariableNamingConventions)
+	public static final long TSTAMP_OFFSET_exit1_1__catalog_getBook = 3; // NOPMD NOCS (VariableNamingConventions)
+	public static final long TSTAMP_OFFSET_call2_1__crm_getOrders = 4; // NOPMD NOCS (VariableNamingConventions)
+	public static final long TSTAMP_OFFSET_entry2_1__crm_getOrders = 5; // NOPMD NOCS (VariableNamingConventions)
+	public static final long TSTAMP_OFFSET_call3_2__catalog_getBook = 6; // NOPMD NOCS (VariableNamingConventions)
+	public static final long TSTAMP_OFFSET_entry3_2__catalog_getBook = 7; // NOPMD NOCS (VariableNamingConventions)
+	public static final long TSTAMP_OFFSET_exit3_2__catalog_getBook = 8; // NOPMD NOCS (VariableNamingConventions)
+	public static final long TSTAMP_OFFSET_exit2_1__crm_getOrders = 8; // NOPMD NOCS (VariableNamingConventions)
+	public static final long TSTAMP_OFFSET_exit0_0__bookstore_searchBook = 11; // NOPMD NOCS VariableNamingConventions)
 
 	private static final String MSG_INVALID_TRACE = "Test invalid (creating invalid trace): ";
 

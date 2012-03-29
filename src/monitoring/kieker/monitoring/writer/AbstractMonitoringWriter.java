@@ -44,7 +44,7 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	protected AbstractMonitoringWriter(final Configuration configuration) {
 		try {
 			// somewhat dirty hack...
-			final Configuration defaultConfiguration = this.getDefaultConfiguration(); // NOPMD
+			final Configuration defaultConfiguration = this.getDefaultConfiguration(); // NOPMD (overrideable)
 			if (defaultConfiguration != null) {
 				configuration.setDefaultConfiguration(defaultConfiguration);
 			}
@@ -60,7 +60,7 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	 * 
 	 * @return
 	 */
-	protected Configuration getDefaultConfiguration() { // NOPMD
+	protected Configuration getDefaultConfiguration() { // NOPMD (default implementation)
 		return null;
 	}
 

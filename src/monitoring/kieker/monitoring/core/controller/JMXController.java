@@ -82,7 +82,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 						serverTmp = (JMXConnectorServer) Class.forName("sun.management.jmxremote.ConnectorBootstrap")
 								.getMethod("initialize", String.class, Properties.class).invoke(null, portTmp, jmxProperties);
 						usedJMXImplementationTmp = JMXController.JMXImplementation.Sun;
-					} catch (final Exception ignoreErrors) { // NOCS (IllegalCatchCheck) // NOPMD
+					} catch (final Exception ignoreErrors) { // NOPMD NOCS (IllegalCatchCheck)
 						if (configuration.getBooleanProperty(ConfigurationFactory.ACTIVATE_JMX_REMOTE_FALLBACK)) { // NOCS (NestedIf)
 							JMXController.LOG.warn("Failed to initialize remote JMX server, falling back to default implementation");
 							// Fallback to default Implementation
@@ -99,7 +99,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 								configuration.getStringProperty(ConfigurationFactory.ACTIVATE_JMX_REMOTE_NAME));
 						serverNotificationListenerTmp = new ServerNotificationListener();
 					}
-				} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
+				} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 					JMXController.LOG.warn("Failed to initialize remote JMX server", e);
 				}
 			}
@@ -107,7 +107,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 				try {
 					controllerObjectNameTmp = new ObjectName(this.domain, "type",
 							configuration.getStringProperty(ConfigurationFactory.ACTIVATE_JMX_CONTROLLER_NAME));
-				} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
+				} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 					JMXController.LOG.warn("Failed to initialize MonitoringController MBean", e);
 				}
 			}
@@ -126,11 +126,11 @@ public final class JMXController extends AbstractController implements IJMXContr
 	protected final void init() {
 		synchronized (this) {
 			if (this.jmxEnabled && !this.isTerminated()) {
-				final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer(); // NOPMD
+				final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
 				if (this.serverObjectName != null) {
 					try {
 						mbs.registerMBean(this.server, this.serverObjectName);
-					} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
+					} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 						JMXController.LOG.warn("Unable to register JMXServer MBean", e);
 					}
 				}
@@ -139,7 +139,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 						// MXBeans is currently not possible (getClasses in IRecord)
 						final StandardMBean mbean = new StandardMBean(this.monitoringController, IMonitoringController.class);
 						mbs.registerMBean(mbean, this.controllerObjectName);
-					} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
+					} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 						JMXController.LOG.warn("Unable to register Monitoring Controller MBean", e);
 					}
 				}
@@ -155,18 +155,18 @@ public final class JMXController extends AbstractController implements IJMXContr
 	protected final void cleanup() {
 		synchronized (this) {
 			if (this.jmxEnabled) {
-				final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer(); // NOPMD
+				final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
 				if (this.controllerObjectName != null) {
 					try {
 						mbs.unregisterMBean(this.controllerObjectName);
-					} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
+					} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 						JMXController.LOG.error("Failed to terminate MBean", e);
 					}
 				}
 				if (this.serverObjectName != null) {
 					try {
 						mbs.unregisterMBean(this.serverObjectName);
-					} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
+					} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 						JMXController.LOG.error("Failed to terminate MBean", e);
 					}
 				}
@@ -178,7 +178,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 					}
 					try {
 						this.server.stop();
-					} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
+					} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 						JMXController.LOG.error("Failed to terminate JMX Server", e);
 					}
 				}

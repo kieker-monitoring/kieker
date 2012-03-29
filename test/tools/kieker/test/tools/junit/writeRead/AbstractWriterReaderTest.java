@@ -102,6 +102,7 @@ public abstract class AbstractWriterReaderTest extends TestCase {
 	 * 
 	 * @throws InterruptedException
 	 * @throws AnalysisConfigurationException
+	 * @throws Exception
 	 */
 	@Test
 	public void testSimpleLog() throws Exception { // NOPMD (JUnitTestsShouldIncludeAssert)
@@ -130,7 +131,7 @@ public abstract class AbstractWriterReaderTest extends TestCase {
 		 * The following line is an easy way to test the tests (given monitoringRecords includes at least one record).
 		 * But don't forget to deactivate afterwards.
 		 */
-		// monitoringRecords.remove(monitoringRecords.size() - 1); // NOCS // NOPMD // (just in case they complain about this uncommented code)
+		// monitoringRecords.remove(monitoringRecords.size() - 1);
 
 		this.inspectRecords(someEvents, monitoringRecords);
 

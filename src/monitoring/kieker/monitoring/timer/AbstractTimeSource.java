@@ -35,7 +35,7 @@ public abstract class AbstractTimeSource implements ITimeSource {
 	protected AbstractTimeSource(final Configuration configuration) {
 		try {
 			// somewhat dirty hack...
-			final Configuration defaultConfig = this.getDefaultConfiguration(); // NOPMD by jwa on 20.09.11 15:19
+			final Configuration defaultConfig = this.getDefaultConfiguration(); // NOPMD (overrideable)
 			if (defaultConfig != null) {
 				configuration.setDefaultConfiguration(defaultConfig);
 			}
@@ -51,7 +51,7 @@ public abstract class AbstractTimeSource implements ITimeSource {
 	 * 
 	 * @return
 	 */
-	protected Configuration getDefaultConfiguration() { // NOPMD
+	protected Configuration getDefaultConfiguration() { // NOPMD (default implementation)
 		return null;
 	}
 

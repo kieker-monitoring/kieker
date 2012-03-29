@@ -60,10 +60,10 @@ public class TestExecutionTraceBookstore extends TestCase {
 	private volatile int numExecutions;
 
 	/* Executions of a valid trace */
-	private volatile Execution exec0_0__bookstore_searchBook; // NOCS // NOPMD (VariableNamingConventions)
-	private volatile Execution exec1_1__catalog_getBook; // NOCS // NOPMD (VariableNamingConventions)
-	private volatile Execution exec2_1__crm_getOrders; // NOCS // NOPMD (VariableNamingConventions)
-	private volatile Execution exec3_2__catalog_getBook; // NOCS // NOPMD (VariableNamingConventions)
+	private volatile Execution exec0_0__bookstore_searchBook; // NOPMD NOCS (VariableNamingConventions)
+	private volatile Execution exec1_1__catalog_getBook; // NOPMD NOCS (VariableNamingConventions)
+	private volatile Execution exec2_1__crm_getOrders; // NOPMD NOCS (VariableNamingConventions)
+	private volatile Execution exec3_2__catalog_getBook; // NOPMD NOCS (VariableNamingConventions)
 
 	// public TestExecutionTraceBookstore() {
 	//
@@ -84,7 +84,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 		this.maxTout = this.exec0_0__bookstore_searchBook.getTout();
 
 		numExecutions_l++;
-		this.exec1_1__catalog_getBook = this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID, // NOPMD
+		this.exec1_1__catalog_getBook = this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID,
 				TestExecutionTraceBookstore.SESSION_ID, 2, 4, 1, 1);
 		numExecutions_l++;
 		this.exec2_1__crm_getOrders = this.eFactory.genExecution("CRM", "crm", "getOrders", TestExecutionTraceBookstore.TRACE_ID,
@@ -305,11 +305,11 @@ public class TestExecutionTraceBookstore extends TestCase {
 		int curIdx = 0;
 		{ /* 1.: [0,0].Call $->bookstore.searchBook(..) */// NOCS
 			final AbstractMessage call0_0___root__bookstore_searchBook = msgArray[curIdx++]; // NOCS
-			Assert.assertTrue("Message is not a call", call0_0___root__bookstore_searchBook instanceof SynchronousCallMessage); // NOPMD (String repeat)
+			Assert.assertTrue("Message is not a call", call0_0___root__bookstore_searchBook instanceof SynchronousCallMessage);
 			Assert.assertEquals("Sending execution is not root execution", call0_0___root__bookstore_searchBook.getSendingExecution(),
 					SystemModelRepository.ROOT_EXECUTION);
 			Assert.assertEquals(call0_0___root__bookstore_searchBook.getReceivingExecution(), this.exec0_0__bookstore_searchBook);
-			Assert.assertEquals("Message has wrong timestamp", call0_0___root__bookstore_searchBook.getTimestamp(), this.exec0_0__bookstore_searchBook.getTin()); // NOPMD
+			Assert.assertEquals("Message has wrong timestamp", call0_0___root__bookstore_searchBook.getTimestamp(), this.exec0_0__bookstore_searchBook.getTin());
 		}
 		{ /* 2.: [1,1].Call bookstore.searchBook(..)->catalog.getBook(..) */// NOCS
 			final AbstractMessage call1_1___bookstore_searchBook_catalog_getBook = msgArray[curIdx++]; // NOCS
@@ -444,7 +444,7 @@ public class TestExecutionTraceBookstore extends TestCase {
 			TestExecutionTraceBookstore.LOG.info("This test triggers a FATAL warning about an ess skip <0,3> which can simply be ignored because it is desired");
 			executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 			Assert.fail("An invalid execution has been transformed to a message trace");
-		} catch (final InvalidTraceException ex) { // NOPMD
+		} catch (final InvalidTraceException ex) { // NOPMD (ignore)
 			/* we wanted this exception to happen */
 		}
 	}
@@ -503,7 +503,8 @@ public class TestExecutionTraceBookstore extends TestCase {
 			/* The following call must throw an Exception in this test case */
 			executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 			Assert.fail("An invalid execution has been transformed to a message trace");
-		} catch (final InvalidTraceException ex) { // NOPMD
+		} catch (final InvalidTraceException ex) { // NOPMD (ignore)
+			// FIXME Junit4 has a better way to do this!
 			/* we wanted this exception to happen */
 		}
 

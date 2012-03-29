@@ -166,7 +166,7 @@ public final class TraceAnalysisTool {
 					TraceAnalysisTool.selectedTraces.add(Long.valueOf(idStr));
 				}
 				TraceAnalysisTool.LOG.info(numSelectedTraces + " trace" + (numSelectedTraces > 1 ? "s" : "") + " selected"); // NOCS
-			} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
+			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 				System.err.println("\nFailed to parse list of trace IDs: " + Arrays.toString(traceIdList) + "(" + e.getMessage() + ")");
 				TraceAnalysisTool.LOG.error("Failed to parse list of trace IDs: " + Arrays.toString(traceIdList), e);
 				return false;
@@ -481,7 +481,7 @@ public final class TraceAnalysisTool {
 				componentPrintMsgTraceConfig.setProperty(AbstractPlugin.CONFIG_NAME, Constants.PRINTMSGTRACE_COMPONENT_NAME);
 				componentPrintMsgTraceConfig.setProperty(MessageTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, new File(TraceAnalysisTool.outputDir
 						+ File.separator
-						+ TraceAnalysisTool.outputFnPrefix + Constants.MESSAGE_TRACES_FN_PREFIX + ".txt") // NOPMD
+						+ TraceAnalysisTool.outputFnPrefix + Constants.MESSAGE_TRACES_FN_PREFIX + ".txt")
 						.getCanonicalPath());
 				componentPrintMsgTrace = new MessageTraceWriterFilter(componentPrintMsgTraceConfig);
 				analysisInstance.registerFilter(componentPrintMsgTrace);
@@ -733,8 +733,8 @@ public final class TraceAnalysisTool {
 				final Configuration componentPlotTraceCallTreesConfig = new Configuration();
 				componentPlotTraceCallTreesConfig.setProperty(AbstractPlugin.CONFIG_NAME, Constants.PLOTCALLTREE_COMPONENT_NAME);
 				componentPlotTraceCallTrees = new TraceCallTreeFilter(componentPlotTraceCallTreesConfig,
-							new File(TraceAnalysisTool.outputDir
-									+ File.separator + TraceAnalysisTool.outputFnPrefix + Constants.CALL_TREE_FN_PREFIX).getCanonicalPath(),
+						new File(TraceAnalysisTool.outputDir
+								+ File.separator + TraceAnalysisTool.outputFnPrefix + Constants.CALL_TREE_FN_PREFIX).getCanonicalPath(),
 						TraceAnalysisTool.shortLabels);
 				analysisInstance.registerFilter(componentPlotTraceCallTrees);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
@@ -819,7 +819,7 @@ public final class TraceAnalysisTool {
 			int numErrorCount = 0;
 			try {
 				analysisInstance.run();
-			} catch (final Exception ex) { // NOPMD // NOCS (FindBugs reports that Exception is never thrown; but wontfix (#44)!)
+			} catch (final Exception ex) { // NOPMD NOCS (FindBugs reports that Exception is never thrown; but wontfix (#44)!)
 				throw new Exception("Error occured while running analysis", ex);
 			} finally {
 				for (final AbstractTraceProcessingFilter c : allTraceProcessingComponents) {
@@ -853,7 +853,7 @@ public final class TraceAnalysisTool {
 			if (!retVal) {
 				System.err.println("A task failed");
 			}
-		} catch (final Exception ex) { // NOCS (IllegalCatchCheck) // NOPMD
+		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 			System.err.println("An error occured: " + ex.getMessage());
 			System.err.println("");
 			TraceAnalysisTool.LOG.error("Exception", ex);
@@ -968,7 +968,7 @@ public final class TraceAnalysisTool {
 				System.exit(1);
 			}
 
-		} catch (final Exception exc) { // NOCS (IllegalCatchCheck) // NOPMD
+		} catch (final Exception exc) { // NOPMD NOCS (IllegalCatchCheck)
 			System.err.println("An error occured. See 'kieker.log' for details");
 			TraceAnalysisTool.LOG.error(Arrays.toString(args), exc);
 		}

@@ -110,7 +110,7 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 	protected List<IMonitoringRecord> readEvents() throws AnalysisConfigurationException {
 		final String[] monitoringLogs = this.tmpFolder.getRoot().list(new KiekerLogDirFilter());
 		for (int i = 0; i < monitoringLogs.length; i++) { // transform relative to absolute path
-			monitoringLogs[i] = this.tmpFolder.getRoot().getAbsoluteFile() + File.separator + monitoringLogs[i]; // NOPMD (UseStringBufferForStringAppends)
+			monitoringLogs[i] = this.tmpFolder.getRoot().getAbsoluteFile() + File.separator + monitoringLogs[i];
 		}
 
 		return this.readLog(monitoringLogs);
