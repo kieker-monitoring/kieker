@@ -2,6 +2,20 @@
 	<!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
 
 	<Match>
+		<Class name="kieker.tools.KaxViz" />
+		<Method name="main" params="java.lang.String[]"
+		  returns="void" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.analysis.AnalysisController" />
+		<Method name="getCurrentConfiguration" params=""
+			returns="kieker.analysis.model.analysisMetaModel.MIProject" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
+	
+	<Match>
 		<Class name="kieker.monitoring.writer.database.DbWriterThread" />
 		<Method name="consume" params="kieker.common.record.IMonitoringRecord"
 			returns="void" />

@@ -556,7 +556,7 @@ public final class AnalysisController {
 			}
 			// We are finished. Return the finished project.
 			return mProject;
-		} catch (final Exception ex) {
+		} catch (final Exception ex) { // NOPMD NOCS (catch any remaining problems)
 			throw new AnalysisConfigurationException("Failed to retrieve current configuration of AnalysisCopntroller.", ex);
 		}
 	}
