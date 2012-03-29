@@ -30,6 +30,7 @@ import java.util.List;
 import junit.framework.Assert;
 import kieker.common.record.IMonitoringRecord;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
@@ -42,22 +43,23 @@ import org.junit.rules.TemporaryFolder;
  * 
  */
 public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTest {
-	private final String OUTPUT_BASE_FN = "S0fYvPsI.out"; // the name doesn't matter
+	private static final String OUTPUT_BASE_FN = "S0fYvPsI.out"; // the name doesn't matter
 
 	@Rule
 	private final TemporaryFolder tmpFolder = new TemporaryFolder();
 
-	private volatile File outputFile;
+	private volatile File outputFile = null;
 
 	@Override
 	@Before
 	protected void setUp() throws Exception {
 		super.setUp();
 		this.tmpFolder.create();
-		this.outputFile = this.tmpFolder.newFile(this.OUTPUT_BASE_FN);
+		this.outputFile = this.tmpFolder.newFile(BasicPrintStreamWriterTestFile.OUTPUT_BASE_FN);
 	}
 
 	@Override
+	@After
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		this.tmpFolder.delete();
@@ -111,5 +113,10 @@ public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTes
 			Assert.assertTrue("Record '" + curLine + "' not found in output stream: '" + outputString + "'",
 					outputString.indexOf(curLine) != -1);
 		}
+	}
+
+	@Override
+	protected boolean terminateBeforeLogInspection() {
+		return false;
 	}
 }

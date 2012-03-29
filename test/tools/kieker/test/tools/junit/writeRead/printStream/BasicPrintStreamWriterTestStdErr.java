@@ -28,6 +28,7 @@ import junit.framework.Assert;
 import kieker.common.record.IMonitoringRecord;
 import kieker.test.tools.junit.writeRead.util.StringTeePrintStream;
 
+import org.junit.After;
 import org.junit.Before;
 
 /**
@@ -38,9 +39,9 @@ import org.junit.Before;
  * 
  */
 public class BasicPrintStreamWriterTestStdErr extends AbstractPrintStreamWriterTest {
-	private volatile PrintStream originalPrintStream;
+	private volatile PrintStream originalPrintStream = null;
 
-	private volatile StringTeePrintStream stringTeePrintStream;
+	private volatile StringTeePrintStream stringTeePrintStream = null;
 
 	@Override
 	@Before
@@ -51,6 +52,7 @@ public class BasicPrintStreamWriterTestStdErr extends AbstractPrintStreamWriterT
 	}
 
 	@Override
+	@After
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		System.setErr(this.originalPrintStream);
@@ -85,5 +87,10 @@ public class BasicPrintStreamWriterTestStdErr extends AbstractPrintStreamWriterT
 			Assert.assertTrue("Record '" + curLine + "' not found in output stream: '" + outputString + "'",
 					outputString.indexOf(curLine) != -1);
 		}
+	}
+
+	@Override
+	protected boolean terminateBeforeLogInspection() {
+		return false;
 	}
 }

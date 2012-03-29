@@ -59,9 +59,4 @@ public abstract class AbstractPrintStreamWriterTest extends AbstractWriterReader
 	protected void checkControllerStateAfterRecordsPassedToController(final IMonitoringController monitoringController) {
 		Assert.assertTrue(monitoringController.isMonitoringEnabled());
 	}
-
-	@Override
-	protected boolean terminateBeforeLogInspection() {
-		return false;
-	}
 }

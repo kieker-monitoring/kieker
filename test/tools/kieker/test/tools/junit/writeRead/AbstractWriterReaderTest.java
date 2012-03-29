@@ -20,7 +20,6 @@
 
 package kieker.test.tools.junit.writeRead;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,7 +100,6 @@ public abstract class AbstractWriterReaderTest extends TestCase {
 	/**
 	 * The actual Test. Note that this should be the only {@link Test} in this class.
 	 * 
-	 * @throws IOException
 	 * @throws InterruptedException
 	 * @throws AnalysisConfigurationException
 	 */

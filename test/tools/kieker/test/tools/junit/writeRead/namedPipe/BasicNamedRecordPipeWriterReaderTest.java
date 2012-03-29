@@ -35,18 +35,21 @@ import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
+import org.junit.Before;
+
 /**
  * 
  * @author Andre van Hoorn
  * 
  */
-public class BasicNamedRecordPipeWriterReaderTest extends AbstractWriterReaderTest {
+public class BasicNamedRecordPipeWriterReaderTest extends AbstractWriterReaderTest { // NOPMD (TestClassWithoutTestCases)
 	private static final String PIPE_NAME = "pipe-IVvirGREEf";
 
-	private volatile SimpleSinkPlugin<IMonitoringRecord> sinkFilter;
-	private volatile AnalysisControllerThread analysisThread;
+	private volatile SimpleSinkPlugin<IMonitoringRecord> sinkFilter = null;
+	private volatile AnalysisControllerThread analysisThread = null;
 
 	@Override
+	@Before
 	protected void setUp() throws Exception {
 		final Configuration pipeReaderConfig = new Configuration();
 		pipeReaderConfig.setProperty(PipeReader.CONFIG_PROPERTY_NAME_PIPENAME, BasicNamedRecordPipeWriterReaderTest.PIPE_NAME);

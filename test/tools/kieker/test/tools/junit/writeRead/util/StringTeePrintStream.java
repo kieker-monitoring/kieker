@@ -21,7 +21,7 @@
 package kieker.test.tools.junit.writeRead.util;
 
 import java.io.PrintStream;
-
+import java.io.UnsupportedEncodingException;
 
 /**
  * 
@@ -29,10 +29,12 @@ import java.io.PrintStream;
  * 
  */
 public class StringTeePrintStream extends PrintStream {
+	private static final String ENCODING = "UTF-8";
+
 	private final StringTeeOutputStream stringTeeOutputStream;
 
-	public StringTeePrintStream(final PrintStream originalStream) {
-		super(new StringTeeOutputStream(originalStream));
+	public StringTeePrintStream(final PrintStream originalStream) throws UnsupportedEncodingException {
+		super(new StringTeeOutputStream(originalStream), false, StringTeePrintStream.ENCODING);
 		this.stringTeeOutputStream = (StringTeeOutputStream) this.out;
 	}
 
