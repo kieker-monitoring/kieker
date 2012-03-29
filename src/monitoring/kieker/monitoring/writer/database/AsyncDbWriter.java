@@ -101,7 +101,7 @@ final class DbWriterThread extends AbstractAsyncThread {
 	private final Connection connection;
 	private final DBWriterHelper helper;
 
-	private final Map<Class<? extends IMonitoringRecord>, PreparedStatement> recordTypeInformation = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, PreparedStatement>();
+	private final Map<Class<? extends IMonitoringRecord>, PreparedStatement> recordTypeInformation = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, PreparedStatement>(); // NOPMD
 	private final AtomicLong recordId;
 
 	public DbWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> blockingQueue, final int threadId,

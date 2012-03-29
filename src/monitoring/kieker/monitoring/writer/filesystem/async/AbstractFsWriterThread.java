@@ -77,7 +77,7 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 			this.previousFileDate = date;
 		}
 		final StringBuilder sb = new StringBuilder(this.filenamePrefix.length() + threadName.length() + this.fileExtension.length() + 33);
-		sb.append(this.filenamePrefix).append('-').append(this.dateFormat.format(new java.util.Date(date))).append("-UTC-")
+		sb.append(this.filenamePrefix).append('-').append(this.dateFormat.format(new java.util.Date(date))).append("-UTC-") // NOPMD (Date)
 				.append('-').append(String.format("%03d", this.sameFilenameCounter)).append('-')
 				.append(threadName).append(this.fileExtension);
 		return sb.toString();

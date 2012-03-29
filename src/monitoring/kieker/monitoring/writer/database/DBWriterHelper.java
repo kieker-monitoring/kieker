@@ -41,7 +41,7 @@ public final class DBWriterHelper {
 	private final Connection connection;
 	private final String indexTablename;
 
-	private final Map<Class<?>, String> createTypeMap = new ConcurrentHashMap<Class<?>, String>();
+	private final Map<Class<?>, String> createTypeMap = new ConcurrentHashMap<Class<?>, String>(); // NOPMD (Map)
 
 	public DBWriterHelper(final Connection connection, final String indexTablename) throws SQLException {
 		this.connection = connection;

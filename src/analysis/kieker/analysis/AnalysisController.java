@@ -809,7 +809,7 @@ public final class AnalysisController {
 		final Resource resource = resourceSet.createResource(URI.createFileURI(file.getAbsolutePath()));
 		resource.getContents().add(project);
 		/* Make sure that the controller uses utf8 instead of ascii. */
-		final Map<String, String> options = new HashMap<String, String>();
+		final Map<String, String> options = new HashMap<String, String>(); // NOPMD (no concurrent access)
 		options.put(XMLResource.OPTION_ENCODING, "UTF-8");
 		/* Now try to save the resource. */
 		try {

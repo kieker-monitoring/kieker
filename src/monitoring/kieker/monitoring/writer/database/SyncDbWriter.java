@@ -55,7 +55,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 	private final Connection connection;
 	private final DBWriterHelper helper;
 
-	private final Map<Class<? extends IMonitoringRecord>, PreparedStatement> recordTypeInformation = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, PreparedStatement>();
+	private final Map<Class<? extends IMonitoringRecord>, PreparedStatement> recordTypeInformation = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, PreparedStatement>(); // NOPMD
 
 	private final AtomicLong recordId = new AtomicLong();
 
