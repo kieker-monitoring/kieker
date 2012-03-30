@@ -36,9 +36,9 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 
+// FIXME: check correct handling of errors by creating suitable tests in kieker.test.tools.junit.writeRead.filesystem!
 /**
  * Filesystem reader which reads from multiple directories simultaneously ordered by the logging timestamp.
- * FIXME: check correct handling of errors!
  * 
  * @author Andre van Hoorn, Jan Waller
  */

@@ -57,8 +57,8 @@ public abstract class AbstractCallTreeNode<T> {
 		this.childEdges.add(destination);
 	}
 
-	// FIXME: Object should be T
-	public abstract AbstractCallTreeNode<T> newCall(Object destination);
+	// TODO: Dirty hack, Object should be T.
+	public abstract AbstractCallTreeNode<T> newCall(T destination);
 
 	public final int getId() {
 		return this.id;

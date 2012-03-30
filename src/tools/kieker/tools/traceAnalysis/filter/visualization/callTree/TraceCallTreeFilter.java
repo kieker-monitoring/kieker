@@ -65,22 +65,27 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 
 	private static final Log LOG = LogFactory.getLog(TraceCallTreeFilter.class);
 
+	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FILENAME = "dotOutputFn";
+	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
+
+	public static final String CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT = "traceCalltree.dot";
+	public static final String CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT = Boolean.TRUE.toString();
+
 	private static final String ENCODING = "UTF-8";
 
 	private final CallTreeNode root;
-	private final String outputFnBase;
+	private final String dotOutputFn;
 	private final boolean shortLabels;
 
-	// FIXME Change constructor to plugin-default-constructor (allocationComponentOperationPairFactory is not used anyways)
-	public TraceCallTreeFilter(final Configuration configuration, final String outputFnBase, final boolean shortLabels) {
+	public TraceCallTreeFilter(final Configuration configuration) {
 		/* Call the inherited mandatory "default" constructor. */
 		super(configuration);
 
 		// Initialize the fields based on the given parameters. */
 		this.root = new CallTreeNode(null, // null: root node has no parent
 				new CallTreeOperationHashKey(AllocationRepository.ROOT_ALLOCATION_COMPONENT, OperationRepository.ROOT_OPERATION));
-		this.outputFnBase = outputFnBase;
-		this.shortLabels = shortLabels;
+		this.shortLabels = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS);
+		this.dotOutputFn = configuration.getProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILENAME);
 	}
 
 	private static final String nodeLabel(final CallTreeNode node, final boolean shortLabels) {
@@ -178,23 +183,31 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 
 	@Override
 	public void printStatusMessage() {
-		super.printStatusMessage();
-		final int numPlots = this.getSuccessCount();
-		final long lastSuccessTracesId = this.getLastTraceIdSuccess();
-		this.stdOutPrintln("Wrote " + numPlots + " call tree" + (numPlots > 1 ? "s" : "") + " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '" // NOCS
-				+ this.outputFnBase + "-<traceId>.dot'");
-		this.stdOutPrintln("Dot files can be converted using the dot tool");
-		this.stdOutPrintln("Example: dot -T svg " + this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".dot > " // NOCS
-				+ this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg"); // NOCS
+		synchronized (this) {
+			super.printStatusMessage();
+			final int numPlots = this.getSuccessCount();
+			final long lastSuccessTracesId = this.getLastTraceIdSuccess();
+			this.stdOutPrintln("Wrote " + numPlots + " call tree" + (numPlots > 1 ? "s" : "") + " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '" // NOCS
+					+ this.dotOutputFn + "-<traceId>.dot'");
+			this.stdOutPrintln("Dot files can be converted using the dot tool");
+			this.stdOutPrintln("Example: dot -T svg " + this.dotOutputFn + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".dot > " // NOCS
+					+ this.dotOutputFn + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg"); // NOCS
+		}
 	}
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT);
+		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT);
+		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {
-		return new Configuration();
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, this.dotOutputFn);
+		return configuration;
 	}
 
 	@Override
@@ -215,8 +228,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 							.getPairInstanceByPair(allocationComponent, op); // will never be null!
 					return destination;
 				}
-			}, mt, TraceCallTreeFilter.this.outputFnBase
-					+ "-" + mt.getTraceId(), false, TraceCallTreeFilter.this.shortLabels); // no weights
+			}, mt, TraceCallTreeFilter.this.dotOutputFn + "-" + mt.getTraceId() + ".dot", false, TraceCallTreeFilter.this.shortLabels); // no weights
 			TraceCallTreeFilter.this.reportSuccess(mt.getTraceId());
 		} catch (final TraceProcessingException ex) {
 			TraceCallTreeFilter.this.reportError(mt.getTraceId());

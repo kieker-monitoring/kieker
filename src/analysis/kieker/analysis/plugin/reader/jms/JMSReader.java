@@ -100,11 +100,11 @@ public final class JMSReader extends AbstractReaderPlugin {
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
+		// we return the default values for an ActiveMQ setup
 		final Configuration defaultConfiguration = new Configuration();
-		// FIXME: provide default values!
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_PROVIDERURL, "");
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_DESTINATION, "");
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_FACTORYLOOKUP, "");
+		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_PROVIDERURL, "tcp://127.0.0.1:61616/");
+		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_DESTINATION, "queue1");
+		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_FACTORYLOOKUP, "org.apache.activemq.jndi.ActiveMQInitialContextFactory");
 		return defaultConfiguration;
 	}
 

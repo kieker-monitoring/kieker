@@ -50,15 +50,6 @@ public class JMSLogReplayer {
 	private final String recordReceiverInputPortName;
 
 	/**
-	 * Must not be used for construction<br>
-	 * FIXME: Do we need this?
-	 */
-	@SuppressWarnings("unused")
-	private JMSLogReplayer() {
-		this(null, null, null, null, null);
-	}
-
-	/**
 	 * @param jmsProviderUrl
 	 *            = for instance "tcp://127.0.0.1:3035/"
 	 * @param jmsDestination
