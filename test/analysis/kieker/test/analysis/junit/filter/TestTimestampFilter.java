@@ -26,7 +26,6 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.select.TimestampFilter;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
-import kieker.common.record.flow.trace.IAbstractTraceEventVisitor;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 
 import org.junit.Before;
@@ -47,11 +46,6 @@ public final class TestTimestampFilter {
 
 		public Class<?>[] getValueTypes() {
 			return new Class<?>[] { long.class, long.class, int.class, };
-		}
-
-		@Override
-		public void accept(final IAbstractTraceEventVisitor visitor) {
-			// Do nothing
 		}
 	};
 

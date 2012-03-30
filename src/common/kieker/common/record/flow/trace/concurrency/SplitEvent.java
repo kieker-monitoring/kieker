@@ -21,7 +21,6 @@
 package kieker.common.record.flow.trace.concurrency;
 
 import kieker.common.record.flow.trace.AbstractTraceEvent;
-import kieker.common.record.flow.trace.IAbstractTraceEventVisitor;
 
 /**
  * @author Jan Waller
@@ -48,10 +47,5 @@ public final class SplitEvent extends AbstractTraceEvent {
 
 	public final Class<?>[] getValueTypes() {
 		return TYPES.clone();
-	}
-
-	@Override
-	public final void accept(final IAbstractTraceEventVisitor visitor) {
-		visitor.handleSplitEvent(this);
 	}
 }

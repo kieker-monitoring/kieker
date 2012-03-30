@@ -30,7 +30,6 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
-import kieker.common.record.flow.trace.IAbstractTraceEventVisitor;
 import kieker.common.record.flow.trace.concurrency.SplitEvent;
 import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
@@ -180,11 +179,12 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 	/**
 	 * This utility class provides the core event handling functionality.
 	 */
-	private class EventProcessor implements IAbstractTraceEventVisitor {
+	private class EventProcessor implements kieker.tools.traceAnalysis.filter.flow.TraceEventDispatcher.IAbstractTraceEventVisitor {
 
 		private final FilterState filterState;
 		private final ExecutionTrace executionTrace;
 		private final EventRecordTrace eventTrace;
+		private final TraceEventDispatcher eventDispatcher;
 
 		/**
 		 * Creates a new event processor using the given context data.
@@ -200,6 +200,7 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 			this.filterState = filterState;
 			this.eventTrace = eventTrace;
 			this.executionTrace = executionTrace;
+			this.eventDispatcher = new TraceEventDispatcher(this); // not that this is pretty dangerous!
 		}
 
 		/**
@@ -211,10 +212,14 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 		 *            The event to process
 		 */
 		public void processEvent(final AbstractTraceEvent event) {
-			event.accept(this);
+			this.eventDispatcher.dispatch(event);
 		}
 
-		private void handleUnsupportedEvent(final AbstractTraceEvent event) {
+		/**
+		 * Note that this method is called for events currently not supported by the {@link TraceEventDispatcher} but also
+		 * those not supported by this {@link EventProcessor}.
+		 */
+		public void handleUnsupportedEvent(final AbstractTraceEvent event) {
 			LOG.warn("Trace Events of type " + event.getClass().getName() + " not supported yet.");
 		}
 

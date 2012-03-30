@@ -6,3 +6,6 @@
 META-INF/MANIFEST.MF
 plugin.properties
 plugin.xml
+*~
+*.backup
+/*.log
