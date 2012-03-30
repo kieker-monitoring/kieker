@@ -308,13 +308,8 @@ public final class TraceAnalysisTool {
 				recordTypeSelectorSet.add(Trace.class);
 				final Configuration conf = new Configuration(null);
 				conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(TraceAnalysisTool.inputDirs));
-
-				final Collection<String> recordTypeSelectorNameSet = new CopyOnWriteArrayList<String>();
-				for (final Class<? extends IMonitoringRecord> c : recordTypeSelectorSet) {
-					recordTypeSelectorNameSet.add(c.getName());
-				}
-				conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION,
-						Configuration.toProperty(recordTypeSelectorNameSet.toArray(new String[recordTypeSelectorNameSet.size()])));
+				// FIXME: read as property
+				conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, FSReader.CONFIG_PROPERTY_VALUE_IGNORE_UNKNOWN_RECORD_TYPES_DEFAULT);
 				reader = new FSReader(conf);
 				analysisInstance.registerReader(reader);
 			}

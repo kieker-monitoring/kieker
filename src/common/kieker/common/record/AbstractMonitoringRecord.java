@@ -203,9 +203,9 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 			try {
 				return Class.forName(classname).asSubclass(IMonitoringRecord.class);
 			} catch (final ClassNotFoundException ex) {
-				throw new MonitoringRecordException("Failed to get record of name " + classname, ex);
+				throw new MonitoringRecordException("Failed to get record type of name " + classname, ex);
 			} catch (final ClassCastException ex) {
-				throw new MonitoringRecordException("Failed to get record of name " + classname, ex);
+				throw new MonitoringRecordException("Failed to get record type of name " + classname, ex);
 			}
 		}
 	}

@@ -77,20 +77,21 @@ public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTes
 		return new ArrayList<IMonitoringRecord>();
 	}
 
-	private String readOutputFileAsString() throws java.io.IOException {
-		final byte[] buffer = new byte[(int) this.outputFile.length()];
+	// TODO: Move this method to an IO helper class, because it is also used by other classes
+	public static String readOutputFileAsString(final File theFile) throws java.io.IOException {
+		final byte[] buffer = new byte[(int) theFile.length()];
 		BufferedInputStream f = null;
 		try {
-			f = new BufferedInputStream(new FileInputStream(this.outputFile));
+			f = new BufferedInputStream(new FileInputStream(theFile));
 			if (f.read(buffer) == -1) {
-				Assert.fail("Failed to read file into buffer: " + this.outputFile.getAbsolutePath());
+				Assert.fail("Failed to read file into buffer: " + theFile.getAbsolutePath());
 			}
 		} finally {
 			if (f != null) {
 				try {
 					f.close();
 				} catch (final IOException ignored) {
-					Assert.fail("Failed to close stream for file " + this.outputFile.getAbsolutePath());
+					Assert.fail("Failed to close stream for file " + theFile.getAbsolutePath());
 				}
 			}
 		}
@@ -100,7 +101,7 @@ public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTes
 	@Override
 	protected void inspectRecords(final List<IMonitoringRecord> eventsPassedToController, final List<IMonitoringRecord> eventFromMonitoringLog) throws Exception {
 
-		final String outputString = this.readOutputFileAsString();
+		final String outputString = BasicPrintStreamWriterTestFile.readOutputFileAsString(this.outputFile);
 
 		for (final IMonitoringRecord rec : eventsPassedToController) {
 			final StringBuilder inputRecordStringBuilder = new StringBuilder();

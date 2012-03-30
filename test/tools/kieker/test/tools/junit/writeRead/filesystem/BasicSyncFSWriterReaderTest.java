@@ -49,4 +49,8 @@ public class BasicSyncFSWriterReaderTest extends AbstractTestFSWriterReader { //
 		// TODO: additional configuration parameters
 	}
 
+	@Override
+	protected void doSomethingBeforeReading(final String[] monitoringLogs) {
+		// we'll keep the log untouched
+	}
 }

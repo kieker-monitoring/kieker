@@ -29,13 +29,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import kieker.common.exception.MonitoringRecordException;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
@@ -59,30 +59,28 @@ final class FSDirectoryReader implements Runnable {
 
 	private final Map<Integer, String> stringRegistry = new HashMap<Integer, String>(); // NOPMD (no synchronization needed)
 	// This set of classes is used to filter only records of a specific type. The value null means all record types are read.
-	private final Set<Class<? extends IMonitoringRecord>> recordTypeSelector;
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final File inputDir;
 	String filePrefix = NORMAL_FILE_PREFIX; // NOPMD (package visible for inner class)
 	private boolean terminated = false;
 
+	private final boolean ignoreUnknownRecordTypes;
+	private final Set<String> unknownTypesObserved = new HashSet<String>();
+
 	/**
 	 * 
 	 * @param inputDirName
-	 * @param readOnlyRecordsOfType
+	 * @param ignoreUnknownRecordTypes
 	 *            select only records of this type; null selects all
 	 */
 	public FSDirectoryReader(final String inputDirName, final IMonitoringRecordReceiver recordReceiver,
-			final Collection<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType) {
+			final boolean ignoreUnknownRecordTypes) {
 		if ((inputDirName == null) || (inputDirName.length() == 0)) {
 			throw new IllegalArgumentException("Invalid or empty inputDir: " + inputDirName);
 		}
 		this.inputDir = new File(inputDirName);
 		this.recordReceiver = recordReceiver;
-		if (readOnlyRecordsOfType != null) {
-			this.recordTypeSelector = new HashSet<Class<? extends IMonitoringRecord>>(readOnlyRecordsOfType);
-		} else {
-			this.recordTypeSelector = null; // NOPMD (read records of any type)
-		}
+		this.ignoreUnknownRecordTypes = ignoreUnknownRecordTypes;
 	}
 
 	/**
@@ -121,6 +119,10 @@ final class FSDirectoryReader implements Runnable {
 				if (inputFile.getName().endsWith(NORMAL_FILE_POSTFIX)) {
 					this.processNormalInputFile(inputFile);
 				} else if (inputFile.getName().endsWith(BINARY_FILE_POSTFIX)) {
+					if (this.ignoreUnknownRecordTypes) {
+						LOG.warn("The property '" + FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES
+								+ "' is not supported for binary files. But trying to read '" + inputFile + "'");
+					}
 					this.processBinaryInputFile(inputFile);
 				}
 			}
@@ -219,9 +221,20 @@ final class FSDirectoryReader implements Runnable {
 							LOG.error("Missing classname mapping for record type id " + "'" + id + "'");
 							continue; // skip this record
 						}
-						final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(classname);
-						if ((this.recordTypeSelector != null) && !this.recordTypeSelector.contains(clazz)) {
-							continue; // skip this ignored record
+						Class<? extends IMonitoringRecord> clazz = null;
+						try {
+							clazz = AbstractMonitoringRecord.classForName(classname);
+						} catch (final MonitoringRecordException ex) {
+							final String errorMsg = "Failed to load record type " + classname;
+							if (!this.unknownTypesObserved.contains(classname)) {
+								LOG.error(errorMsg, ex);
+								this.unknownTypesObserved.add(classname);
+							}
+							if (this.ignoreUnknownRecordTypes) {
+								continue; // skip this ignored record
+							} else {
+								throw ex;
+							}
 						}
 						final long loggingTimestamp = Long.valueOf(recordFields[1]);
 						// 1.5 compatibility
@@ -321,7 +334,7 @@ final class FSDirectoryReader implements Runnable {
 				}
 				final IMonitoringRecord record = AbstractMonitoringRecord.createFromArray(clazz, objectArray);
 				record.setLoggingTimestamp(loggingTimestamp);
-				if (((this.recordTypeSelector == null) || this.recordTypeSelector.contains(clazz)) && !this.recordReceiver.newMonitoringRecord(record)) {
+				if (!this.recordReceiver.newMonitoringRecord(record)) {
 					this.terminated = true;
 					break; // we got the signal to stop processing
 				}

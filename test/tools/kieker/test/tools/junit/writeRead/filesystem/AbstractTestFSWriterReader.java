@@ -21,8 +21,10 @@
 package kieker.test.tools.junit.writeRead.filesystem;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -40,6 +42,7 @@ import kieker.monitoring.writer.filesystem.AbstractAsyncFSWriter;
 import kieker.monitoring.writer.filesystem.AsyncFsWriter;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
+import kieker.test.tools.junit.writeRead.printStream.BasicPrintStreamWriterTestFile;
 
 import org.junit.After;
 import org.junit.Before;
@@ -61,6 +64,8 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 	private volatile Class<? extends IMonitoringWriter> testedWriterClazz = AsyncFsWriter.class;
 
 	protected abstract Class<? extends IMonitoringWriter> getTestedWriterClazz();
+
+	private static final String ENCODING = "UTF-8";
 
 	@Before
 	public void setUp() throws IOException {
@@ -102,6 +107,17 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 		Assert.assertTrue("Expected monitoring controller to be enabled", monitoringController.isMonitoringEnabled());
 	}
 
+	protected abstract void doSomethingBeforeReading(final String[] monitoringLogs) throws IOException;
+
+	@Override
+	protected final void doBeforeReading() throws IOException {
+		final String[] monitoringLogs = this.tmpFolder.getRoot().list(new KiekerLogDirFilter());
+		for (int i = 0; i < monitoringLogs.length; i++) { // transform relative to absolute path
+			monitoringLogs[i] = this.tmpFolder.getRoot().getAbsoluteFile() + File.separator + monitoringLogs[i]; // NOPMD (UseStringBufferForStringAppends)
+		}
+		this.doSomethingBeforeReading(monitoringLogs);
+	}
+
 	@Override
 	protected List<IMonitoringRecord> readEvents() throws AnalysisConfigurationException {
 		final String[] monitoringLogs = this.tmpFolder.getRoot().list(new KiekerLogDirFilter());
@@ -110,6 +126,40 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 		}
 
 		return this.readLog(monitoringLogs);
+	}
+
+	/**
+	 * Replaces the given search String by the given replacement String in all given files.
+	 * 
+	 * @param monitoringLogDirs
+	 * @param findString
+	 * @param replaceByString
+	 * @throws IOException
+	 */
+	protected void replaceStringInMapFiles(final String[] monitoringLogDirs, final String findString, final String replaceByString) throws IOException {
+		for (final String curLogDir : monitoringLogDirs) {
+			final String[] mapFilesInDir = new File(curLogDir).list(new KiekerMapFileFilter());
+			Assert.assertEquals("Unexpected number of map files", 1, mapFilesInDir.length);
+
+			final String curMapFile = curLogDir + File.separator + mapFilesInDir[0];
+
+			this.searchReplaceInFile(curMapFile, findString, replaceByString);
+		}
+
+	}
+
+	private void searchReplaceInFile(final String filename, final String findString, final String replaceByString) throws IOException {
+		final String mapFileContent = BasicPrintStreamWriterTestFile.readOutputFileAsString(new File(filename));
+		final String manipulatedContent = mapFileContent.replaceAll(findString, replaceByString);
+		PrintStream printStream = null;
+		try {
+			printStream = new PrintStream(new FileOutputStream(filename), false, ENCODING);
+			printStream.print(manipulatedContent);
+		} finally {
+			if (printStream != null) {
+				printStream.close();
+			}
+		}
 	}
 
 	@Override
@@ -121,7 +171,8 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 		final AnalysisController analysisController = new AnalysisController();
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));
-		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION, FSReader.CONFIG_VALUE_NAME_RECORD_TYPE_SELECTION_ANY);
+		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES,
+				FSReader.CONFIG_PROPERTY_VALUE_IGNORE_UNKNOWN_RECORD_TYPES_DEFAULT);
 		final AbstractReaderPlugin reader = new FSReader(readerConfiguration);
 		final SimpleSinkPlugin<IMonitoringRecord> sinkPlugin = new SimpleSinkPlugin<IMonitoringRecord>(new Configuration());
 
@@ -166,5 +217,23 @@ class KiekerLogDirFilter implements FilenameFilter { // NOPMD (TestClassWithoutT
 			}
 		});
 		return kiekerMapFiles.length == 1;
+	}
+}
+
+/**
+ * Accepts kieker.map files.
+ * 
+ * @author Andre van Hoorn
+ * 
+ */
+class KiekerMapFileFilter implements FilenameFilter { // NOPMD (TestClassWithoutTestCases)
+	public static final String MAP_FILENAME = "kieker.map"; // TODO: do we have this constant in the FS Writer(s)?
+
+	/**
+	 * Accepts the {@value #MAP_FILENAME} file in a monitoring log directory.
+	 */
+	public boolean accept(final File dir, final String name) {
+		final boolean match = MAP_FILENAME.equals(name);
+		return match;
 	}
 }

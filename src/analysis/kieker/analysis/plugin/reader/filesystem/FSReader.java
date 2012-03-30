@@ -20,19 +20,14 @@
 
 package kieker.analysis.plugin.reader.filesystem;
 
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.PriorityQueue;
-import java.util.Set;
 
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.exception.MonitoringRecordException;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 
@@ -50,13 +45,14 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 
 	public static final String CONFIG_PROPERTY_NAME_INPUTDIRS = "inputDirs";
-	public static final String CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION = "readOnlyRecordsOfType";
+	public static final String CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES = "ignoreUnknownRecordTypes";
 
-	public static final String CONFIG_VALUE_NAME_RECORD_TYPE_SELECTION_ANY = "";
+	public static final String CONFIG_PROPERTY_VALUE_IGNORE_UNKNOWN_RECORD_TYPES_DEFAULT = Boolean.FALSE.toString();
 
 	public static final IMonitoringRecord EOF = new EmptyRecord();
 
-	private final Set<Class<? extends IMonitoringRecord>> readOnlyRecordsOfType;
+	private final boolean ignoreUnknownRecordTypes;
+
 	private final String[] inputDirs;
 	private final PriorityQueue<IMonitoringRecord> recordQueue;
 
@@ -66,27 +62,14 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 		super(configuration);
 		this.inputDirs = this.configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_INPUTDIRS);
 		this.recordQueue = new PriorityQueue<IMonitoringRecord>(this.inputDirs.length);
-		final String[] onlyrecords = this.configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION);
-		if (onlyrecords.length == 0) {
-			this.readOnlyRecordsOfType = null; // NOPMD (null)
-		} else {
-			this.readOnlyRecordsOfType = new HashSet<Class<? extends IMonitoringRecord>>(onlyrecords.length);
-			for (final String classname : onlyrecords) {
-				try {
-					final Class<? extends IMonitoringRecord> recClass = AbstractMonitoringRecord.classForName(classname);
-					this.readOnlyRecordsOfType.add(recClass);
-				} catch (final MonitoringRecordException ex) {
-					LOG.warn("Error determining record types", ex);
-				}
-			}
-		}
+		this.ignoreUnknownRecordTypes = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES);
 	}
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
 		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_INPUTDIRS, ".");
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION, CONFIG_VALUE_NAME_RECORD_TYPE_SELECTION_ANY);
+		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, CONFIG_PROPERTY_VALUE_IGNORE_UNKNOWN_RECORD_TYPES_DEFAULT);
 		return defaultConfiguration;
 	}
 
@@ -98,7 +81,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	public boolean read() {
 		// start all reader
 		for (final String inputDir : this.inputDirs) {
-			new Thread(new FSDirectoryReader(inputDir, this, this.readOnlyRecordsOfType)).start();
+			new Thread(new FSDirectoryReader(inputDir, this, this.ignoreUnknownRecordTypes)).start();
 		}
 		// consume incoming records
 		int readingReaders = this.inputDirs.length;
@@ -146,20 +129,8 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-
 		configuration.setProperty(CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(this.inputDirs));
-		/* Extract the names of the record-classes again. */
-		if (this.readOnlyRecordsOfType == null) {
-			configuration.setProperty(CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION, Configuration.toProperty(new String[] {}));
-		} else {
-			final int len = this.readOnlyRecordsOfType.size();
-			final String[] onlyRecords = new String[len];
-			final Iterator<Class<? extends IMonitoringRecord>> iter = this.readOnlyRecordsOfType.iterator();
-			for (int i = 0; i < len; i++) {
-				onlyRecords[i] = iter.next().getName();
-			}
-			configuration.setProperty(CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION, Configuration.toProperty(onlyRecords));
-		}
+		configuration.setProperty(CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, Boolean.toString(this.ignoreUnknownRecordTypes));
 		return configuration;
 	}
 }

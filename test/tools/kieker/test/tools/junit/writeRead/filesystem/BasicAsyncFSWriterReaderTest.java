@@ -48,4 +48,9 @@ public class BasicAsyncFSWriterReaderTest extends AbstractTestFSWriterReader { /
 		config.setProperty(this.getClass().getName() + "." + SyncFsWriter.CONFIG_FLUSH, Boolean.toString(BasicAsyncFSWriterReaderTest.FLUSH));
 		// TODO: additional configuration parameters
 	}
+
+	@Override
+	protected void doSomethingBeforeReading(final String[] monitoringLogs) {
+		// we'll keep the log untouched
+	}
 }

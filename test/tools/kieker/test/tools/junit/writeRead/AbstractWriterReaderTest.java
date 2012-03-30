@@ -20,6 +20,7 @@
 
 package kieker.test.tools.junit.writeRead;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,6 +101,13 @@ public abstract class AbstractWriterReaderTest {
 	protected abstract List<IMonitoringRecord> readEvents() throws AnalysisConfigurationException;
 
 	/**
+	 * Provides implementing classes to do something before reading the log, e.g., manipulating it.
+	 * 
+	 * @throws IOException
+	 */
+	protected void doBeforeReading() throws IOException {}
+
+	/**
 	 * The actual Test. Note that this should be the only {@link Test} in this class.
 	 * 
 	 * @throws InterruptedException
@@ -126,6 +134,8 @@ public abstract class AbstractWriterReaderTest {
 			// need to terminate explicitly, because otherwise, the monitoring log directory cannot be removed
 			ctrl.terminateMonitoring();
 		}
+
+		this.doBeforeReading();
 
 		final List<IMonitoringRecord> monitoringRecords = this.readEvents();
 

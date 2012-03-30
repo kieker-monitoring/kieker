@@ -43,4 +43,9 @@ public class BasicAsyncBinaryFSWriterReaderTest extends AbstractTestFSWriterRead
 	protected boolean terminateBeforeLogInspection() {
 		return true; // because the AsyncBinaryFsWriter doesn't flush
 	}
+
+	@Override
+	protected void doSomethingBeforeReading(final String[] monitoringLogs) {
+		// we'll keep the log untouched
+	}
 }
