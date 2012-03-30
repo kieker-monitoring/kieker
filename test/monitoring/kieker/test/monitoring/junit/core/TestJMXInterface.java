@@ -20,11 +20,11 @@
 package kieker.test.monitoring.junit.core;
 
 /**
- * This test is now included in kieker.test.tools.junit.writeRead.jmx.BasicJMXWriterReaderTest
+ * This test is now included in {@link kieker.test.tools.junit.writeRead.jmx.BasicJMXWriterReaderTest}
  * 
- * Otherwise jUnut gets Problems with two open JMX servers.
+ * Otherwise jUnit gets Problems with two open JMX servers.
  * 
  * @author Jan Waller
  */
-final class TestJMXInterface { // NOPMD NOCS
+public final class TestJMXInterface { // NOPMD NOCS
 }
