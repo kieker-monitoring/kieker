@@ -22,6 +22,13 @@ package kieker.test.tools.junit.writeRead.jmx;
 
 import java.util.List;
 
+import javax.management.MBeanServerConnection;
+import javax.management.MBeanServerInvocationHandler;
+import javax.management.ObjectName;
+import javax.management.remote.JMXConnector;
+import javax.management.remote.JMXConnectorFactory;
+import javax.management.remote.JMXServiceURL;
+
 import junit.framework.Assert;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.AnalysisControllerThread;
@@ -41,6 +48,11 @@ import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
  */
 public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPMD (TestClassWithoutTestCases)
 
+	private static final String DOMAIN = "kieker.monitoring";
+	private static final String CONTROLLER = "MonitoringController";
+	private static final String PORT = "59999";
+	private static final String LOGNAME = "MonitoringLog";
+
 	private volatile SimpleSinkPlugin<IMonitoringRecord> sinkFilter = null;
 	private volatile AnalysisControllerThread analysisThread = null;
 
@@ -49,21 +61,22 @@ public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(ConfigurationFactory.ACTIVATE_JMX, "true");
 		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_CONTROLLER, "true");
-		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_DOMAIN, "kieker.monitoring");
+		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_DOMAIN, BasicJMXWriterReaderTest.DOMAIN);
+		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_CONTROLLER_NAME, BasicJMXWriterReaderTest.CONTROLLER);
 		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_REMOTE, "true");
 		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_REMOTE_FALLBACK, "false");
 		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_REMOTE_NAME, "JMXServer");
-		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_REMOTE_PORT, "59999");
+		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_REMOTE_PORT, BasicJMXWriterReaderTest.PORT);
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, JMXWriter.class.getName());
 		config.setProperty(JMXWriter.CONFIG_DOMAIN, "");
-		config.setProperty(JMXWriter.CONFIG_LOGNAME, "MonitoringLog");
+		config.setProperty(JMXWriter.CONFIG_LOGNAME, BasicJMXWriterReaderTest.LOGNAME);
 		final IMonitoringController ctrl = MonitoringController.createInstance(config);
 		Thread.sleep(1000);
 		final Configuration jmxReaderConfig = new Configuration();
-		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_DOMAIN, "kieker.monitoring");
-		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_LOGNAME, "MonitoringLog");
+		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_DOMAIN, BasicJMXWriterReaderTest.DOMAIN);
+		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_LOGNAME, BasicJMXWriterReaderTest.LOGNAME);
 		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SERVER, "localhost");
-		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_PORT, "59999");
+		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_PORT, BasicJMXWriterReaderTest.PORT);
 		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SERVICEURL, "");
 		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SILENT, "false");
 		final JMXReader jmxReader = new JMXReader(jmxReaderConfig);
@@ -79,8 +92,26 @@ public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 	}
 
 	@Override
-	protected void checkControllerStateAfterRecordsPassedToController(final IMonitoringController monitoringController) {
+	protected void checkControllerStateAfterRecordsPassedToController(final IMonitoringController monitoringController) throws Exception {
+		// Test the JMX Controller
+		final JMXServiceURL serviceURL = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://localhost:" + BasicJMXWriterReaderTest.PORT + "/jmxrmi");
+		final ObjectName controllerObjectName = new ObjectName(BasicJMXWriterReaderTest.DOMAIN, "type", BasicJMXWriterReaderTest.CONTROLLER);
+
+		final JMXConnector jmx = JMXConnectorFactory.connect(serviceURL);
+		final MBeanServerConnection mbServer = jmx.getMBeanServerConnection();
+
+		final IMonitoringController ctrlJMX = (IMonitoringController) MBeanServerInvocationHandler.newProxyInstance(
+				mbServer, controllerObjectName, IMonitoringController.class, false);
+
 		Assert.assertTrue(monitoringController.isMonitoringEnabled());
+		Assert.assertTrue(ctrlJMX.isMonitoringEnabled());
+
+		Assert.assertTrue(ctrlJMX.disableMonitoring());
+
+		Assert.assertFalse(monitoringController.isMonitoringEnabled());
+		Assert.assertFalse(ctrlJMX.isMonitoringEnabled());
+
+		jmx.close();
 	}
 
 	@Override

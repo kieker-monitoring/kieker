@@ -248,13 +248,14 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 				this.reportError(curTraceId);
 				this.invalidTraces.add(curTraceId);
 				final String transformationError = "Failed to transform execution trace to message trace (ID:" + curTraceId + "): " + executionTrace;
-				TraceReconstructionFilter.LOG.error(transformationError, ex);
 				if (!this.ignoreInvalidTraces) {
 					this.traceProcessingErrorOccured = true;
 					TraceReconstructionFilter.LOG.warn("Note that this filter was configured to terminate at the *first* occurence of an invalid trace \n"
 							+ "If this is not the desired behavior, set the configuration property "
 							+ TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES + " to 'true'");
 					throw new ExecutionEventProcessingException(transformationError, ex);
+				} else {
+					TraceReconstructionFilter.LOG.error(transformationError, ex);
 				}
 			}
 		}

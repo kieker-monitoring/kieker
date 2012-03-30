@@ -58,8 +58,9 @@ public abstract class AbstractWriterReaderTest {
 	 * the records to the controller.
 	 * 
 	 * @param monitoringController
+	 * @throws Exception
 	 */
-	protected abstract void checkControllerStateAfterRecordsPassedToController(IMonitoringController monitoringController);
+	protected abstract void checkControllerStateAfterRecordsPassedToController(IMonitoringController monitoringController) throws Exception;
 
 	/**
 	 * Check if the given set of records is as expected.
