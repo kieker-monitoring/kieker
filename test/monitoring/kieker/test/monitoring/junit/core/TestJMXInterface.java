@@ -66,7 +66,7 @@ public class TestJMXInterface {
 	public void tearDown() {
 		if (this.ctrl != null) {
 			this.ctrl.terminateMonitoring();
-			this.ctrl = null; // help the GC
+			this.ctrl = null; // NOPMD (null, help the GC)
 		}
 	}
 
