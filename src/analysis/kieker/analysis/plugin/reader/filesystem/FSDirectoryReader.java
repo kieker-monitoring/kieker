@@ -209,7 +209,7 @@ final class FSDirectoryReader implements Runnable {
 				final String[] recordFields = line.split(";");
 				try {
 					if (recordFields[0].charAt(0) == '$') { // modern record
-						if (recordFields.length < 3) {
+						if (recordFields.length < 2) {
 							LOG.error("Illegal record format: " + line);
 							continue; // skip this record
 						}

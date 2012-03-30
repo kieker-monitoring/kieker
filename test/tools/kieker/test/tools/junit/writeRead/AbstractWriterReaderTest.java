@@ -26,6 +26,7 @@ import java.util.List;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
 
@@ -86,6 +87,7 @@ public abstract class AbstractWriterReaderTest {
 							AbstractWriterReaderTest.DEFAULT_EVENTS_HOSTNAME).eventList();
 			someEvents.addAll(nextBatch);
 		}
+		someEvents.add(new EmptyRecord()); // this record used to cause problems (#475)
 		return someEvents;
 	}
 
