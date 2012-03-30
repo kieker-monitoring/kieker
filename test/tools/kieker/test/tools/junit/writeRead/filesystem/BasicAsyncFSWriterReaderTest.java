@@ -23,7 +23,6 @@ package kieker.test.tools.junit.writeRead.filesystem;
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.writer.IMonitoringWriter;
 import kieker.monitoring.writer.filesystem.AsyncFsWriter;
-import kieker.monitoring.writer.filesystem.SyncFsWriter;
 
 /**
  * 
@@ -44,13 +43,18 @@ public class BasicAsyncFSWriterReaderTest extends AbstractTestFSWriterReader { /
 	}
 
 	@Override
-	protected void refineConfiguration(final Configuration config, final int numRecordsWritten) {
-		config.setProperty(this.getClass().getName() + "." + SyncFsWriter.CONFIG_FLUSH, Boolean.toString(BasicAsyncFSWriterReaderTest.FLUSH));
+	protected void refineWriterConfiguration(final Configuration config, final int numRecordsWritten) {
+		config.setProperty(this.getClass().getName() + "." + AsyncFsWriter.CONFIG_FLUSH, Boolean.toString(BasicAsyncFSWriterReaderTest.FLUSH));
 		// TODO: additional configuration parameters
 	}
 
 	@Override
 	protected void doSomethingBeforeReading(final String[] monitoringLogs) {
 		// we'll keep the log untouched
+	}
+
+	@Override
+	protected void refineFSReaderConfiguration(final Configuration config) {
+		// no need to refine
 	}
 }

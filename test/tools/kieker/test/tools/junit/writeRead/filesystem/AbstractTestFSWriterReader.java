@@ -95,12 +95,12 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractTestFSWriterReader.CONFIG_ASYNC_WRITER_SHUTDOWNDELAY, "-1");
 
 		// Give extending classes the chance to refine the configuration
-		this.refineConfiguration(config, numRecordsWritten);
+		this.refineWriterConfiguration(config, numRecordsWritten);
 
 		return MonitoringController.createInstance(config);
 	}
 
-	protected abstract void refineConfiguration(Configuration config, final int numRecordsWritten);
+	protected abstract void refineWriterConfiguration(Configuration config, final int numRecordsWritten);
 
 	@Override
 	protected void checkControllerStateAfterRecordsPassedToController(final IMonitoringController monitoringController) {
@@ -167,12 +167,15 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 		Assert.assertEquals("Unexpected set of records", eventsPassedToController, eventFromMonitoringLog);
 	}
 
+	protected abstract void refineFSReaderConfiguration(Configuration config);
+
 	private List<IMonitoringRecord> readLog(final String[] monitoringLogDirs) throws AnalysisConfigurationException {
 		final AnalysisController analysisController = new AnalysisController();
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES,
 				FSReader.CONFIG_PROPERTY_VALUE_IGNORE_UNKNOWN_RECORD_TYPES_DEFAULT);
+		this.refineFSReaderConfiguration(readerConfiguration);
 		final AbstractReaderPlugin reader = new FSReader(readerConfiguration);
 		final SimpleSinkPlugin<IMonitoringRecord> sinkPlugin = new SimpleSinkPlugin<IMonitoringRecord>(new Configuration());
 

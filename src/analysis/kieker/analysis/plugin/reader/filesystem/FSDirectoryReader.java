@@ -198,6 +198,7 @@ final class FSDirectoryReader implements Runnable {
 	 * @param inputFile
 	 */
 	private final void processNormalInputFile(final File inputFile) {
+		boolean abortDueToUnknownRecordType = false;
 		BufferedReader in = null;
 		try {
 			in = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile), ENCODING));
@@ -226,15 +227,17 @@ final class FSDirectoryReader implements Runnable {
 							clazz = AbstractMonitoringRecord.classForName(classname);
 						} catch (final MonitoringRecordException ex) {
 							final String errorMsg = "Failed to load record type " + classname;
+							if (!this.ignoreUnknownRecordTypes) {
+								// log message will be dumped in the Exception handler below
+								abortDueToUnknownRecordType = true;
+								throw new MonitoringRecordException(errorMsg, ex);
+							}
+
 							if (!this.unknownTypesObserved.contains(classname)) {
-								LOG.error(errorMsg, ex);
+								LOG.error(errorMsg, ex); // log once for this type
 								this.unknownTypesObserved.add(classname);
 							}
-							if (this.ignoreUnknownRecordTypes) {
-								continue; // skip this ignored record
-							} else {
-								throw ex;
-							}
+							continue; // skip this ignored record
 						}
 						final long loggingTimestamp = Long.valueOf(recordFields[1]);
 						// 1.5 compatibility
@@ -248,7 +251,12 @@ final class FSDirectoryReader implements Runnable {
 						record = AbstractMonitoringRecord.createFromStringArray(OperationExecutionRecord.class, recordFields);
 					}
 				} catch (final Exception ex) { // NOPMD NOCS (illegal catch)
-					LOG.error("Error processing line: " + line, ex);
+					final String errorMsg = "Error processing line: " + line;
+					if (abortDueToUnknownRecordType) {
+						// TODO: do we need to set this.terminated = true; ?
+						throw new IOException(errorMsg + "; Aborting due to record type exception (configured not to continue in such case)", ex);
+					}
+					LOG.error(errorMsg, ex); // print only if we continue here
 					continue; // skip this record
 				}
 				if (!this.recordReceiver.newMonitoringRecord(record)) {

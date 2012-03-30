@@ -35,7 +35,7 @@ public class BasicAsyncBinaryFSWriterReaderTest extends AbstractTestFSWriterRead
 	}
 
 	@Override
-	protected void refineConfiguration(final Configuration config, final int numRecordsWritten) {
+	protected void refineWriterConfiguration(final Configuration config, final int numRecordsWritten) {
 		// TODO: additional configuration parameters
 	}
 
@@ -47,5 +47,10 @@ public class BasicAsyncBinaryFSWriterReaderTest extends AbstractTestFSWriterRead
 	@Override
 	protected void doSomethingBeforeReading(final String[] monitoringLogs) {
 		// we'll keep the log untouched
+	}
+
+	@Override
+	protected void refineFSReaderConfiguration(final Configuration config) {
+		// no need to refine
 	}
 }

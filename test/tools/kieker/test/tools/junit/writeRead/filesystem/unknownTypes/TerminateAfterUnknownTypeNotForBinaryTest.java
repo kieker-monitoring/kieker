@@ -18,44 +18,47 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.writeRead.filesystem;
+package kieker.test.tools.junit.writeRead.filesystem.unknownTypes;
 
+import java.util.List;
+
+import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
+import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writer.IMonitoringWriter;
-import kieker.monitoring.writer.filesystem.SyncFsWriter;
+import kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter;
+
+import org.junit.Assert;
 
 /**
+ * NO warning by the reader should show up that this mode is not supported for binary files.
  * 
- * @author André van Hoorn
+ * @author Andre van Hoorn
  * 
  */
-public abstract class BasicSyncFSWriterReaderTest extends AbstractTestFSWriterReader { // NOPMD (TestClassWithoutTestCases) // NOCS (MissingCtorCheck)
-
-	private static final boolean FLUSH = true;
-
+public class TerminateAfterUnknownTypeNotForBinaryTest extends AbstractUnknownTypeTest {
 	@Override
 	protected Class<? extends IMonitoringWriter> getTestedWriterClazz() {
-		return SyncFsWriter.class;
-	}
-
-	@Override
-	protected boolean terminateBeforeLogInspection() {
-		return !BasicSyncFSWriterReaderTest.FLUSH;
+		return AsyncBinaryFsWriter.class;
 	}
 
 	@Override
 	protected void refineWriterConfiguration(final Configuration config, final int numRecordsWritten) {
-		config.setProperty(this.getClass().getName() + "." + SyncFsWriter.CONFIG_FLUSH, Boolean.toString(BasicSyncFSWriterReaderTest.FLUSH));
 		// TODO: additional configuration parameters
 	}
 
 	@Override
-	protected void doSomethingBeforeReading(final String[] monitoringLogs) {
-		// we'll keep the log untouched
+	protected void inspectRecords(final List<IMonitoringRecord> eventsPassedToController, final List<IMonitoringRecord> eventFromMonitoringLog) {
+		// we expect that reading abort on the occurrence of EVENT1_UNKNOWN_TYPE, i.e., the remaining lines weren't processed
+		Assert.assertEquals("Expected one record", 1, eventFromMonitoringLog.size());
+		Assert.assertEquals("Unexpected record", EVENT0_KNOWN_TYPE, eventFromMonitoringLog.get(0));
 	}
 
+	/**
+	 * Here, we make sure that the reader aborts on the first occurrence of an unknown type.
+	 */
 	@Override
 	protected void refineFSReaderConfiguration(final Configuration config) {
-		// no need to refine
+		config.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, Boolean.FALSE.toString());
 	}
 }
