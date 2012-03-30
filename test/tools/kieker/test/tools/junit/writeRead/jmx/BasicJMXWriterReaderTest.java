@@ -39,7 +39,7 @@ import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 /**
  * @author Jan Waller
  */
-public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest {
+public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPMD (TestClassWithoutTestCases)
 
 	private volatile SimpleSinkPlugin<IMonitoringRecord> sinkFilter = null;
 	private volatile AnalysisControllerThread analysisThread = null;

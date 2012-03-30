@@ -33,7 +33,7 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
  * @author Andre van Hoorn
  * 
  */
-public class BasicExecutionTraceWriterFilterTest extends AbstractTraceWriterFilterTest {
+public class BasicExecutionTraceWriterFilterTest extends AbstractTraceWriterFilterTest { // NOPMD (TestClassWithoutTestCases)
 
 	@Override
 	protected AbstractExecutionTraceProcessingFilter provideWriterFilter(final String filename) throws IOException {

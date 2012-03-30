@@ -122,7 +122,7 @@ public abstract class AbstractTraceWriterFilterTest {
 		try {
 			execTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 			Assert.fail("Test invalid: wanted to create an *invalid* trace");
-		} catch (final InvalidTraceException e) {
+		} catch (final InvalidTraceException e) { // NOPMD (EmptyCatchBlock)
 			/* that's what we expect here */
 		}
 		return new InvalidExecutionTrace(execTrace);
