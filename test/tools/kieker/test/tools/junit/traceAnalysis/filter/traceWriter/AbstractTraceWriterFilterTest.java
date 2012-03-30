@@ -53,6 +53,8 @@ import org.junit.rules.TemporaryFolder;
  */
 public abstract class AbstractTraceWriterFilterTest {
 
+	protected static final String SYSTEM_NEWLINE_STRING = System.getProperty("line.separator");
+
 	private static final String OUTPUT_BASE_FN = "NLdQ3wsS.out"; // the name doesn't matter
 	private static final String ENCODING = "UTF-8";
 

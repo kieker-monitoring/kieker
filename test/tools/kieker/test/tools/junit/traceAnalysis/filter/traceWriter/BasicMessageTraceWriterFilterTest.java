@@ -54,7 +54,7 @@ public class BasicMessageTraceWriterFilterTest extends AbstractTraceWriterFilter
 		final StringBuilder strB = new StringBuilder();
 		for (final Object o : loggedEvents) {
 			if (o instanceof MessageTrace) {
-				strB.append(o.toString()).append("\n");
+				strB.append(o.toString()).append(AbstractTraceWriterFilterTest.SYSTEM_NEWLINE_STRING);
 			}
 		}
 		return strB.toString();

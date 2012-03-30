@@ -53,7 +53,7 @@ public class BasicExecutionTraceWriterFilterTest extends AbstractTraceWriterFilt
 		final StringBuilder strB = new StringBuilder();
 		for (final Object o : loggedEvents) {
 			if (o instanceof ExecutionTrace) {
-				strB.append(o.toString()).append("\n");
+				strB.append(o.toString()).append(AbstractTraceWriterFilterTest.SYSTEM_NEWLINE_STRING);
 			}
 		}
 		return strB.toString();

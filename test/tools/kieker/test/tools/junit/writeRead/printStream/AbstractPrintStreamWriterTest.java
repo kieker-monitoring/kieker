@@ -35,6 +35,8 @@ import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
  */
 public abstract class AbstractPrintStreamWriterTest extends AbstractWriterReaderTest {
 
+	protected static final String SYSTEM_NEWLINE_STRING = System.getProperty("line.separator");
+
 	/**
 	 * Returns the name of the stream to write to. In addition to a file name,
 	 * the constants <i>STDOUT</i> and <i>STDERR</i> can be used.

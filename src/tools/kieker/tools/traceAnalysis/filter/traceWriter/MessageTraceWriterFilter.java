@@ -28,6 +28,7 @@ import java.io.OutputStreamWriter;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
+import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -100,7 +101,7 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 			eventTypes = { MessageTrace.class })
 	public void inputMessageTraces(final MessageTrace mt) {
 		try {
-			MessageTraceWriterFilter.this.ps.append(mt.toString()).append("\n");
+			MessageTraceWriterFilter.this.ps.append(mt.toString()).append(AbstractFilterPlugin.SYSTEM_NEWLINE_STRING);
 			MessageTraceWriterFilter.this.reportSuccess(mt.getTraceId());
 		} catch (final IOException ex) {
 			MessageTraceWriterFilter.LOG.error("IOException", ex);

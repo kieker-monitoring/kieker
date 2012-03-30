@@ -54,7 +54,7 @@ public class BasicInvalidExecutionTraceWriterFilterTest extends AbstractTraceWri
 		for (final Object o : loggedEvents) {
 			if (o instanceof InvalidExecutionTrace) {
 				final InvalidExecutionTrace ivex = (InvalidExecutionTrace) o;
-				strB.append(ivex.getInvalidExecutionTraceArtifacts().toString()).append("\n");
+				strB.append(ivex.getInvalidExecutionTraceArtifacts().toString()).append(AbstractTraceWriterFilterTest.SYSTEM_NEWLINE_STRING);
 			}
 		}
 		return strB.toString();

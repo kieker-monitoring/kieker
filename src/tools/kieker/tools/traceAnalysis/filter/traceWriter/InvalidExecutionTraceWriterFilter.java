@@ -28,6 +28,7 @@ import java.io.OutputStreamWriter;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
+import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -89,7 +90,7 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 			description = "Receives the invalid execution traces to be written", eventTypes = { InvalidExecutionTrace.class })
 	public void newInvalidExecutionTrace(final InvalidExecutionTrace et) {
 		try {
-			InvalidExecutionTraceWriterFilter.this.ps.append(et.getInvalidExecutionTraceArtifacts().toString()).append("\n");
+			InvalidExecutionTraceWriterFilter.this.ps.append(et.getInvalidExecutionTraceArtifacts().toString()).append(AbstractFilterPlugin.SYSTEM_NEWLINE_STRING);
 			InvalidExecutionTraceWriterFilter.this.reportSuccess(et.getInvalidExecutionTraceArtifacts().getTraceId());
 		} catch (final IOException ex) {
 			InvalidExecutionTraceWriterFilter.this.reportError(et.getInvalidExecutionTraceArtifacts().getTraceId());
