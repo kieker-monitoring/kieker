@@ -56,7 +56,7 @@ public class MemSwapUsageSampler extends AbstractSigarSampler {
 		final Mem mem = this.sigar.getMem();
 		final Swap swap = this.sigar.getSwap();
 		final MemSwapUsageRecord r = new MemSwapUsageRecord(monitoringController.getTimeSource().getTime(), monitoringController.getHostname(), mem.getTotal(),
-				mem.getActualUsed(), mem.getActualFree(), swap.getTotal(), swap.getUsed(), swap.getTotal());
+				mem.getActualUsed(), mem.getActualFree(), swap.getTotal(), swap.getUsed(), swap.getFree());
 		monitoringController.newMonitoringRecord(r);
 	}
 }
