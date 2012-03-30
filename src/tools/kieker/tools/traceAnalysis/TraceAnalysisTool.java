@@ -29,7 +29,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -38,7 +37,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractPlugin;
@@ -48,14 +46,6 @@ import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.common.record.flow.trace.Trace;
-import kieker.common.record.flow.trace.concurrency.SplitEvent;
-import kieker.common.record.flow.trace.operation.AfterOperationEvent;
-import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
-import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
-import kieker.common.record.flow.trace.operation.CallOperationEvent;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
@@ -294,22 +284,9 @@ public final class TraceAnalysisTool {
 
 			FSReader reader;
 			{ // NOCS (NestedBlock)
-				/*
-				 * Register an FSReader which only reads records of the following types.
-				 * TODO: Currently, these need to be exactly these types and no subtype!
-				 */
-				final Collection<Class<? extends IMonitoringRecord>> recordTypeSelectorSet = new CopyOnWriteArrayList<Class<? extends IMonitoringRecord>>();
-				recordTypeSelectorSet.add(OperationExecutionRecord.class);
-				recordTypeSelectorSet.add(BeforeOperationEvent.class);
-				recordTypeSelectorSet.add(AfterOperationEvent.class);
-				recordTypeSelectorSet.add(AfterOperationFailedEvent.class);
-				recordTypeSelectorSet.add(CallOperationEvent.class);
-				recordTypeSelectorSet.add(SplitEvent.class);
-				recordTypeSelectorSet.add(Trace.class);
 				final Configuration conf = new Configuration(null);
 				conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(TraceAnalysisTool.inputDirs));
-				// FIXME: read as property
-				conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, FSReader.CONFIG_PROPERTY_VALUE_IGNORE_UNKNOWN_RECORD_TYPES_DEFAULT);
+				conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, Boolean.TRUE.toString());
 				reader = new FSReader(conf);
 				analysisInstance.registerReader(reader);
 			}
