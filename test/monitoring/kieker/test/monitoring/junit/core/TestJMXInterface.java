@@ -19,8 +19,8 @@
  ***************************************************************************/
 package kieker.test.monitoring.junit.core;
 
-import javax.management.JMX;
 import javax.management.MBeanServerConnection;
+import javax.management.MBeanServerInvocationHandler;
 import javax.management.ObjectName;
 import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
@@ -78,7 +78,8 @@ public class TestJMXInterface {
 		final JMXConnector jmx = JMXConnectorFactory.connect(serviceURL);
 		final MBeanServerConnection mbServer = jmx.getMBeanServerConnection();
 
-		final IMonitoringController ctrlJMX = JMX.newMBeanProxy(mbServer, controllerObjectName, IMonitoringController.class, true);
+		final IMonitoringController ctrlJMX = (IMonitoringController) MBeanServerInvocationHandler.newProxyInstance(
+				mbServer, controllerObjectName, IMonitoringController.class, false);
 
 		Assert.assertTrue(this.ctrl.isMonitoringEnabled());
 		Assert.assertTrue(ctrlJMX.isMonitoringEnabled());
