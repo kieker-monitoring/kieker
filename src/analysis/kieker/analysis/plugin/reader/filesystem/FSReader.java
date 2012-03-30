@@ -116,7 +116,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 			synchronized (record) { // with newMonitoringRecord()
 				record.notifyAll();
 			}
-			if (record == EOF) {
+			if (record == EOF) { // NOPMD (CompareObjectsWithEquals)
 				readingReaders--;
 			} else {
 				super.deliver(OUTPUT_PORT_NAME_RECORDS, record);

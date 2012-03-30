@@ -77,13 +77,13 @@ public abstract class AbstractAsyncThread extends Thread {
 			while (true) {
 				try {
 					IMonitoringRecord monitoringRecord = writeQueue.take();
-					if (monitoringRecord == END_OF_MONITORING_MARKER) {
+					if (monitoringRecord == END_OF_MONITORING_MARKER) { // NOPMD (CompareObjectsWithEquals
 						if (LOG.isDebugEnabled()) {
 							LOG.debug("Terminating writer thread, " + writeQueue.size() + " entries remaining");
 						}
 						monitoringRecord = writeQueue.poll();
 						while (monitoringRecord != null) {
-							if (monitoringRecord != END_OF_MONITORING_MARKER) {
+							if (monitoringRecord != END_OF_MONITORING_MARKER) {// NOPMD (CompareObjectsWithEquals
 								this.consume(monitoringRecord);
 							}
 							monitoringRecord = writeQueue.poll();
