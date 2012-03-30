@@ -81,6 +81,10 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 	public static final long DEFAULT_SENSOR_INTERVAL_SECONDS = 15;
 	public static final long DEFAULT_SENSOR_INITIAL_DELAY_SECONDS = 0;
 
+	/** Prefix for parameters used in the web.xml file */
+	// NOTE that this declaration must be BEFORE the following public constants!
+	private static final String CONTEXT_PARAM_NAME_PREFIX = CPUMemUsageServletContextListener.class.getSimpleName();
+
 	/** Parameter name for the sampling interval to be used in the web.xml file */
 	public static final String CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS = CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_PREFIX
 			+ ".samplingIntervalSeconds";
@@ -89,9 +93,6 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 			+ ".initialSamplingDelaySeconds";
 
 	private static final Log LOG = LogFactory.getLog(CPUMemUsageServletContextListener.class);
-
-	/** Prefix for parameters used in the web.xml file */
-	private static final String CONTEXT_PARAM_NAME_PREFIX = CPUMemUsageServletContextListener.class.getSimpleName();
 
 	private final IMonitoringController monitoringController = MonitoringController.getInstance();
 
