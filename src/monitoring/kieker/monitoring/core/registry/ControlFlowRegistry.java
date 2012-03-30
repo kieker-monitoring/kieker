@@ -155,8 +155,8 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 	}
 
 	/**
-	 * Used to explicitly register a sessionid that is to be collected within a servlet method (that knows the request object). The thread is responsible for
-	 * invalidating the stored curTraceId using the method unsetThreadLocalSessionId()!
+	 * Used to explicitly register a execution stack size (ess) value. The thread is responsible for invalidating the stored value
+	 * using the method {@link #unsetThreadLocalESS()}!
 	 */
 	public final void storeThreadLocalESS(final int ess) {
 		this.threadLocalEss.set(ess);

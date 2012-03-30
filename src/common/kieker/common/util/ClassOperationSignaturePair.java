@@ -159,4 +159,13 @@ public class ClassOperationSignaturePair {
 
 		return strBuilder.toString();
 	}
+
+	/**
+	 * Returns a String representation of this {@link ClassOperationSignaturePair} using the
+	 * {@link ClassOperationSignaturePair#createOperationSignatureString(String, Signature)} method.
+	 */
+	@Override
+	public String toString() {
+		return ClassOperationSignaturePair.createOperationSignatureString(this.fqClassname, this.signature);
+	}
 }

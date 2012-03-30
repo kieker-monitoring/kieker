@@ -22,26 +22,18 @@ package kieker.monitoring.probe.servlet;
 
 import java.io.IOException;
 
-import javax.servlet.Filter;
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.registry.ControlFlowRegistry;
-import kieker.monitoring.core.registry.SessionRegistry;
-import kieker.monitoring.probe.IMonitoringProbe;
 
 /**
- * Register session id (if it exists) of incoming request.
+ * Register the session id (if it exists) and trace information of incoming request into
+ * a thread-local data structure then accessible to other application-level probes.
  * The execution of the filter is not logged.
  * 
  * Servlet filter used to register session ids.
+ * 
  * It can be integrated into the web.xml as follows:
  * 
  * <filter>
@@ -53,43 +45,15 @@ import kieker.monitoring.probe.IMonitoringProbe;
  * <url-pattern>/*</url-pattern>
  * </filter-mapping>
  * 
- * @author Marco Luebcke
+ * @deprecated To be removed in Kieker 1.6. Use {@link SessionAndTraceRegistrationFilter} instead.
+ * 
+ * @author Andre van Hoorn, Marco Luebcke
  */
-public class OperationExecutionRegistrationFilter implements Filter, IMonitoringProbe {
-	private static final IMonitoringController CTRL_INST = MonitoringController.getInstance();
-	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
-	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
+@Deprecated
+public class OperationExecutionRegistrationFilter extends SessionAndTraceRegistrationFilter {
 
-	/**
-	 * Constructs an {@link OperationExecutionRegistrationFilter}.
-	 */
-	public OperationExecutionRegistrationFilter() {
-		// nothing to do
-	}
-
-	public void init(final FilterConfig config) throws ServletException {
-		// nothing to do
-	}
-
+	@Override
 	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
-		if (!OperationExecutionRegistrationFilter.CTRL_INST.isMonitoringEnabled()) {
-			chain.doFilter(request, response);
-		}
-		if (request instanceof HttpServletRequest) {
-			final HttpSession session = ((HttpServletRequest) request).getSession(false);
-			if (session != null) {
-				OperationExecutionRegistrationFilter.SESSION_REGISTRY.storeThreadLocalSessionId(session.getId());
-			}
-		}
-		try {
-			chain.doFilter(request, response);
-		} finally {
-			OperationExecutionRegistrationFilter.CF_REGISTRY.unsetThreadLocalTraceId(); // actually, this should not be necessary
-			OperationExecutionRegistrationFilter.SESSION_REGISTRY.unsetThreadLocalSessionId();
-		}
-	}
-
-	public void destroy() {
-		// nothing to do
+		this.doFilter(request, response, chain, false); // return immediately of monitoring is disabled
 	}
 }

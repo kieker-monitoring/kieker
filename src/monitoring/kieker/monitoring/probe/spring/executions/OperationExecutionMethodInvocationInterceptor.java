@@ -56,33 +56,13 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 	private static final String VM_NAME = OperationExecutionMethodInvocationInterceptor.CONTROLLER.getHostname();
 
 	/**
-	 * Iff true, the name of the runtime class is used, iff false, the name of
-	 * the declaring class (interface) is used
-	 */
-	@Deprecated
-	private boolean useRuntimeClassname = true;
-
-	public OperationExecutionMethodInvocationInterceptor() {
-		// nothing to do
-	}
-
-	@Deprecated
-	public boolean isUseRuntimeClassname() {
-		return this.useRuntimeClassname;
-	}
-
-	@Deprecated
-	public void setUseRuntimeClassname(final boolean useRuntimeClassname) {
-		this.useRuntimeClassname = useRuntimeClassname;
-	}
-
-	/**
 	 * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
 	 */
 
 	public Object invoke(final MethodInvocation invocation) throws Throwable { // NOCS (IllegalThrowsCheck)
 		final long traceId = OperationExecutionMethodInvocationInterceptor.CF_REGISTRY.recallThreadLocalTraceId(); // -1 if entry point
 		// Only go on if a traceId has been registered before
+		// TODO: this needs to be fixed!
 		if ((traceId == -1) || !OperationExecutionMethodInvocationInterceptor.CONTROLLER.isMonitoringEnabled()) {
 			return invocation.proceed();
 		}
