@@ -58,7 +58,7 @@ public abstract class AbstractCallTreeNode<T> {
 	}
 
 	// TODO: Dirty hack, Object should be T.
-	public abstract AbstractCallTreeNode<T> newCall(T destination);
+	public abstract AbstractCallTreeNode<T> newCall(Object destination);
 
 	public final int getId() {
 		return this.id;
