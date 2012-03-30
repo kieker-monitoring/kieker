@@ -137,6 +137,10 @@ public class Execution {
 		return this.assumed;
 	}
 
+	/**
+	 * Compares this {@link Execution} with the given object with respect to type and fields. All
+	 * fields but the {@link #isAssumed()} are considered for comparison.
+	 */
 	@Override
 	public boolean equals(final Object obj) {
 		if (!(obj instanceof Execution)) {
