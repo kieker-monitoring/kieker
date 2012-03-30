@@ -99,8 +99,8 @@ public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 		final JMXConnector jmx = JMXConnectorFactory.connect(serviceURL);
 		final MBeanServerConnection mbServer = jmx.getMBeanServerConnection();
 
-		final IMonitoringController ctrlJMX = MBeanServerInvocationHandler.newProxyInstance(
-				mbServer, controllerObjectName, IMonitoringController.class, false);
+		final Object tmpObj = MBeanServerInvocationHandler.newProxyInstance(mbServer, controllerObjectName, IMonitoringController.class, false);
+		final IMonitoringController ctrlJMX = (IMonitoringController) tmpObj; // NOCS // NOPMD (required for the cast not being removed by Java 1.6 editors)
 
 		Assert.assertTrue(monitoringController.isMonitoringEnabled());
 		Assert.assertTrue(ctrlJMX.isMonitoringEnabled());
