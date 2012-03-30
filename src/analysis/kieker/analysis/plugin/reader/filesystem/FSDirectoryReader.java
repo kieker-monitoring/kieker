@@ -252,11 +252,12 @@ final class FSDirectoryReader implements Runnable {
 					}
 				} catch (final Exception ex) { // NOPMD NOCS (illegal catch)
 					final String errorMsg = "Error processing line: " + line;
+					LOG.error(errorMsg, ex); // print only if we continue here
 					if (abortDueToUnknownRecordType) {
 						// TODO: do we need to set this.terminated = true; ?
-						throw new IOException(errorMsg + "; Aborting due to record type exception (configured not to continue in such case)", ex);
+						// Note: In Java 1.5 IOException has no constructor accepting a throwable
+						throw new IOException(errorMsg + "; Aborting due to record type exception (configured not to continue in such case)");
 					}
-					LOG.error(errorMsg, ex); // print only if we continue here
 					continue; // skip this record
 				}
 				if (!this.recordReceiver.newMonitoringRecord(record)) {
