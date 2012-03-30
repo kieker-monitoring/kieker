@@ -150,7 +150,7 @@ public final class DotFactory {
 		dot.append(framecolor == null ? "" : "\",color=\"" + framecolor); // NOCS
 		dot.append(fillcolor == null ? "" : "\",fillcolor=\"" + fillcolor); // NOCS
 		dot.append(fontcolor == null ? "" : "\",fontcolor=\"" + fontcolor); // NOCS
-		dot.append(fontsize == DotFactory.DOT_DEFAULT_FONTSIZE ? "" : "\",fontsize=\"" + Double.toString(fontsize)); // NOCS
+		dot.append(fontsize == DOT_DEFAULT_FONTSIZE ? "" : "\",fontsize=\"" + Double.toString(fontsize)); // NOCS
 		dot.append(imageFilename == null ? "" : "\",image=\"" + imageFilename); // NOCS
 		dot.append("\"" + (misc == null ? "" : misc) + "]\n"); // NOCS
 		return dot;
@@ -213,7 +213,7 @@ public final class DotFactory {
 			dot.append(" fontcolor = \"");
 			dot.append(fontcolor);
 		}
-		if (fontsize != DotFactory.DOT_DEFAULT_FONTSIZE) {
+		if (fontsize != DOT_DEFAULT_FONTSIZE) {
 			dot.append("\";\n");
 			dot.append(prefix);
 			dot.append(" fontsize = \"");

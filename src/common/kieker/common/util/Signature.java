@@ -51,7 +51,7 @@ public class Signature {
 		this.name = name;
 		this.modifierList = modifierList.clone();
 		if (returnType == null) {
-			this.returnType = Signature.NO_RETURN_TYPE;
+			this.returnType = NO_RETURN_TYPE;
 		} else {
 			this.returnType = returnType;
 		}
@@ -75,7 +75,7 @@ public class Signature {
 	}
 
 	public final boolean hasReturnType() {
-		return this.returnType != Signature.NO_RETURN_TYPE;
+		return this.returnType != NO_RETURN_TYPE;
 	}
 
 	@Override

@@ -41,8 +41,8 @@ public final class Pipe {
 
 	public void setPipeReader(final IPipeReader pipeReader) {
 		this.pipeReader = pipeReader;
-		if (Pipe.LOG.isDebugEnabled()) {
-			Pipe.LOG.debug("PipeReader initialized");
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("PipeReader initialized");
 		}
 	}
 
@@ -59,11 +59,11 @@ public final class Pipe {
 	 */
 	public boolean writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		if (this.closed) {
-			Pipe.LOG.error("trying to write to closed pipe");
+			LOG.error("trying to write to closed pipe");
 			return false;
 		}
 		if (this.pipeReader == null) {
-			Pipe.LOG.error("pipeReader is null, i.e., no pipe reader has been registered.");
+			LOG.error("pipeReader is null, i.e., no pipe reader has been registered.");
 			return false;
 		}
 

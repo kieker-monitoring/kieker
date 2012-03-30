@@ -54,8 +54,8 @@ public final class ConfigurationFactory implements Keys {
 	 * @return the configuration for the singleton controller
 	 */
 	public static final Configuration createSingletonConfiguration() {
-		if (ConfigurationFactory.LOG.isDebugEnabled()) {
-			ConfigurationFactory.LOG.debug("Searching for JVM argument '" + Keys.CUSTOM_PROPERTIES_LOCATION_JVM + "' ...");
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Searching for JVM argument '" + Keys.CUSTOM_PROPERTIES_LOCATION_JVM + "' ...");
 		}
 		final Configuration defaultConfiguration = ConfigurationFactory.defaultConfiguration();
 		// ignore default default-name and set to KIEKER-SINGLETON
@@ -64,12 +64,12 @@ public final class ConfigurationFactory implements Keys {
 		String configurationFile = System.getProperty(Keys.CUSTOM_PROPERTIES_LOCATION_JVM);
 		final Configuration loadConfiguration;
 		if (configurationFile != null) {
-			ConfigurationFactory.LOG.info("Loading configuration from JVM-specified location: '" + configurationFile + "'");
+			LOG.info("Loading configuration from JVM-specified location: '" + configurationFile + "'");
 			loadConfiguration = ConfigurationFactory.loadConfigurationFromFile(configurationFile, defaultConfiguration);
 		} else {
 			// No JVM property; Trying to find configuration file in classpath
 			configurationFile = Keys.CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
-			ConfigurationFactory.LOG.info("Loading properties from properties file in classpath: '" + configurationFile + "'");
+			LOG.info("Loading properties from properties file in classpath: '" + configurationFile + "'");
 			loadConfiguration = ConfigurationFactory.loadConfigurationFromResource(configurationFile, defaultConfiguration);
 		}
 		// 1.JVM-params -> 2.properties file -> 3.default properties file
@@ -125,20 +125,20 @@ public final class ConfigurationFactory implements Keys {
 				// if not found as absolute path try within the classpath
 				is = MonitoringController.class.getClassLoader().getResourceAsStream(propertiesFn);
 				if (is == null) {
-					ConfigurationFactory.LOG.warn("File '" + propertiesFn + "' not found");
+					LOG.warn("File '" + propertiesFn + "' not found");
 					return new Configuration(defaultValues);
 				}
 			}
 			properties.load(is);
 			return properties;
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
-			ConfigurationFactory.LOG.error("Error reading file '" + propertiesFn + "'", ex);
+			LOG.error("Error reading file '" + propertiesFn + "'", ex);
 		} finally {
 			if (is != null) {
 				try {
 					is.close();
 				} catch (final IOException ex) {
-					ConfigurationFactory.LOG.warn("Failed to close FileInputStream", ex);
+					LOG.warn("Failed to close FileInputStream", ex);
 				}
 			}
 		}
@@ -157,19 +157,19 @@ public final class ConfigurationFactory implements Keys {
 	private static final Configuration loadConfigurationFromResource(final String propertiesFn, final Configuration defaultValues) {
 		final InputStream is = MonitoringController.class.getClassLoader().getResourceAsStream(propertiesFn);
 		if (is == null) {
-			ConfigurationFactory.LOG.warn("File '" + propertiesFn + "' not found in classpath");
+			LOG.warn("File '" + propertiesFn + "' not found in classpath");
 		} else {
 			try {
 				final Configuration properties = new Configuration(defaultValues);
 				properties.load(is);
 				return properties;
 			} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
-				ConfigurationFactory.LOG.error("Error reading file '" + propertiesFn + "'", ex);
+				LOG.error("Error reading file '" + propertiesFn + "'", ex);
 			} finally {
 				try {
 					is.close();
 				} catch (final IOException ex) {
-					ConfigurationFactory.LOG.warn("Failed to close RessourceInputStream", ex);
+					LOG.warn("Failed to close RessourceInputStream", ex);
 				}
 			}
 		}

@@ -192,7 +192,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 
 	protected static void saveTreeToDotFile(final AbstractCallTreeNode<?> root, final String outputFnBase,
 			final boolean includeWeights, final boolean includeEois, final boolean shortLabels) throws FileNotFoundException, UnsupportedEncodingException {
-		final PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"), false, AbstractCallTreeFilter.ENCODING);
+		final PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"), false, ENCODING);
 		AbstractCallTreeFilter.dotFromCallingTree(root, ps, includeWeights, includeEois, shortLabels);
 		ps.flush();
 		ps.close();

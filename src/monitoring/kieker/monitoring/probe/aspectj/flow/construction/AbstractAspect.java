@@ -37,17 +37,17 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public abstract class AbstractAspect extends AbstractAspectJProbe {
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
-	private static final ITimeSource TIME = AbstractAspect.CTRLINST.getTimeSource();
+	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 
 	@Pointcut
 	public abstract void monitoredConstructor();
 
 	@AfterReturning("monitoredConstructor() && this(this_) && notWithinKieker()")
 	public void afterConstruction(final Object this_, final JoinPoint.StaticPart jp) {
-		if (!AbstractAspect.CTRLINST.isMonitoringEnabled()) {
+		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
-		final ConstructionEvent crecord = new ConstructionEvent(AbstractAspect.TIME.getTime(), jp.getSignature().getDeclaringTypeName(), this_.toString());
-		AbstractAspect.CTRLINST.newMonitoringRecord(crecord);
+		final ConstructionEvent crecord = new ConstructionEvent(TIME.getTime(), jp.getSignature().getDeclaringTypeName(), this_.toString());
+		CTRLINST.newMonitoringRecord(crecord);
 	}
 }

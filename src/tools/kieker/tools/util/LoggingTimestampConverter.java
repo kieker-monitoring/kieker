@@ -55,7 +55,7 @@ public final class LoggingTimestampConverter {
 	public static final String convertLoggingTimestampToUTCString(final long loggingTimestamp) {
 		final Calendar c = new GregorianCalendar();
 		c.setTimeInMillis(loggingTimestamp / ((long) 1000 * 1000));
-		final DateFormat dateFormat = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN2, Locale.US);
+		final DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_PATTERN2, Locale.US);
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		return dateFormat.format(c.getTime()) + " (UTC)";
 	}
@@ -74,7 +74,7 @@ public final class LoggingTimestampConverter {
 	public static final String convertLoggingTimestampLocalTimeZoneString(final long loggingTimestamp) {
 		final Calendar c = new GregorianCalendar();
 		c.setTimeInMillis(loggingTimestamp / ((long) 1000 * 1000));
-		final DateFormat dateFormat = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN2, Locale.US);
+		final DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_PATTERN2, Locale.US);
 		return dateFormat.format(c.getTime()) + " (local time)";
 	}
 
@@ -88,7 +88,7 @@ public final class LoggingTimestampConverter {
 	 * @throws ParseException
 	 */
 	public static final long convertDatetimeStringToUTCLoggingTimestamp(final String utcString) throws ParseException {
-		final DateFormat dateFormat = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN, Locale.US);
+		final DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_PATTERN, Locale.US);
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		return dateFormat.parse(utcString).getTime();
 	}
@@ -102,7 +102,7 @@ public final class LoggingTimestampConverter {
 	 * @throws ParseException
 	 */
 	public static final Date convertDatetimeStringToUTCDate(final String utcString) throws ParseException {
-		final DateFormat dateFormat = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN, Locale.US);
+		final DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_PATTERN, Locale.US);
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		return dateFormat.parse(utcString);
 	}

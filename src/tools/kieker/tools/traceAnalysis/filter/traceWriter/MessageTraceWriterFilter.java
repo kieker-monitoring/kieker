@@ -55,8 +55,8 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 
 	public MessageTraceWriterFilter(final Configuration configuration) throws IOException {
 		super(configuration);
-		this.outputFn = this.configuration.getStringProperty(MessageTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN);
-		this.ps = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.outputFn), MessageTraceWriterFilter.ENCODING));
+		this.outputFn = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN);
+		this.ps = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.outputFn), ENCODING));
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 			try {
 				this.ps.close();
 			} catch (final IOException ex) {
-				MessageTraceWriterFilter.LOG.error("IOException while terminating", ex);
+				LOG.error("IOException while terminating", ex);
 			}
 		}
 	}
@@ -81,7 +81,7 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(MessageTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, "");
+		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN, "");
 
 		return configuration;
 	}
@@ -89,7 +89,7 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(MessageTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, this.outputFn);
+		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN, this.outputFn);
 
 		return configuration;
 	}
@@ -104,7 +104,7 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 			MessageTraceWriterFilter.this.ps.append(mt.toString()).append(AbstractFilterPlugin.SYSTEM_NEWLINE_STRING);
 			MessageTraceWriterFilter.this.reportSuccess(mt.getTraceId());
 		} catch (final IOException ex) {
-			MessageTraceWriterFilter.LOG.error("IOException", ex);
+			LOG.error("IOException", ex);
 			MessageTraceWriterFilter.this.reportError(mt.getTraceId());
 		}
 	}

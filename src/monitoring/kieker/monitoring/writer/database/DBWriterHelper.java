@@ -120,8 +120,8 @@ public final class DBWriterHelper {
 		Statement statement = null;
 		try {
 			statement = this.connection.createStatement();
-			if (DBWriterHelper.LOG.isDebugEnabled()) {
-				DBWriterHelper.LOG.debug("Creating table: " + statementCreateTableString);
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Creating table: " + statementCreateTableString);
 			}
 			statement.execute(statementCreateTableString);
 		} finally {
@@ -156,8 +156,8 @@ public final class DBWriterHelper {
 		Statement statement = null;
 		try {
 			statement = this.connection.createStatement();
-			if (DBWriterHelper.LOG.isDebugEnabled()) {
-				DBWriterHelper.LOG.debug("Creating table: " + statementCreateTableString);
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Creating table: " + statementCreateTableString);
 			}
 			statement.execute(statementCreateTableString);
 		} finally {
@@ -185,10 +185,10 @@ public final class DBWriterHelper {
 		} else if (value instanceof Boolean) {
 			preparedStatement.setBoolean(parameterIndex, (Boolean) value);
 		} else if (value == null) {
-			DBWriterHelper.LOG.error("Null value in record not supported!");
+			LOG.error("Null value in record not supported!");
 			return false;
 		} else {
-			DBWriterHelper.LOG.error("Type '" + value.getClass().getSimpleName() + "' not supported");
+			LOG.error("Type '" + value.getClass().getSimpleName() + "' not supported");
 			return false;
 		}
 		return true;

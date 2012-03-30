@@ -46,17 +46,17 @@ public abstract class AbstractOperationExecutionAspectServlet extends AbstractOp
 
 	@Around("monitoredServlet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse) && notWithinKieker()")
 	public Object servlet(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
-		if (!AbstractOperationExecutionAspectServlet.CTRLINST.isMonitoringEnabled()) {
+		if (!CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
 		final HttpServletRequest req = (HttpServletRequest) thisJoinPoint.getArgs()[0];
 		final String sessionId = (req != null) ? req.getSession(true).getId() : null; // NOPMD (assign null)
-		AbstractOperationExecutionAspectServlet.SESSIONREGISTRY.storeThreadLocalSessionId(sessionId);
+		SESSIONREGISTRY.storeThreadLocalSessionId(sessionId);
 		Object retVal;
 		try {
 			retVal = thisJoinPoint.proceed();
 		} finally {
-			AbstractOperationExecutionAspectServlet.SESSIONREGISTRY.unsetThreadLocalSessionId();
+			SESSIONREGISTRY.unsetThreadLocalSessionId();
 		}
 		return retVal;
 	}

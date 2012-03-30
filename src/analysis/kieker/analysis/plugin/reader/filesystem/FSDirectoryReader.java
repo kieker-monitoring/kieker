@@ -62,7 +62,7 @@ final class FSDirectoryReader implements Runnable {
 	private final Set<Class<? extends IMonitoringRecord>> recordTypeSelector;
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final File inputDir;
-	String filePrefix = FSDirectoryReader.NORMAL_FILE_PREFIX; // NOPMD (package visible for inner class)
+	String filePrefix = NORMAL_FILE_PREFIX; // NOPMD (package visible for inner class)
 	private boolean terminated = false;
 
 	/**
@@ -97,14 +97,14 @@ final class FSDirectoryReader implements Runnable {
 			public boolean accept(final File pathname) {
 				return pathname.isFile()
 						&& pathname.getName().startsWith(FSDirectoryReader.this.filePrefix)
-						&& (pathname.getName().endsWith(FSDirectoryReader.NORMAL_FILE_POSTFIX) || pathname.getName().endsWith(FSDirectoryReader.BINARY_FILE_POSTFIX));
+						&& (pathname.getName().endsWith(NORMAL_FILE_POSTFIX) || pathname.getName().endsWith(BINARY_FILE_POSTFIX));
 			}
 		});
 		if (inputFiles == null) {
-			FSDirectoryReader.LOG.error("Directory '" + this.inputDir + "' does not exist or an I/O error occured.");
+			LOG.error("Directory '" + this.inputDir + "' does not exist or an I/O error occured.");
 		} else if (inputFiles.length == 0) {
-			FSDirectoryReader.LOG.error("Directory '" + this.inputDir + "' contains no files starting with '" + this.filePrefix + "' and ending with '"
-					+ FSDirectoryReader.NORMAL_FILE_POSTFIX + "' or '" + FSDirectoryReader.BINARY_FILE_POSTFIX + "'.");
+			LOG.error("Directory '" + this.inputDir + "' contains no files starting with '" + this.filePrefix + "' and ending with '"
+					+ NORMAL_FILE_POSTFIX + "' or '" + BINARY_FILE_POSTFIX + "'.");
 		} else { // everything ok, we process the files
 			Arrays.sort(inputFiles, new Comparator<File>() {
 
@@ -114,13 +114,13 @@ final class FSDirectoryReader implements Runnable {
 			});
 			for (final File inputFile : inputFiles) {
 				if (this.terminated) {
-					FSDirectoryReader.LOG.info("Shutting down DirectoryReader.");
+					LOG.info("Shutting down DirectoryReader.");
 					break;
 				}
-				FSDirectoryReader.LOG.info("< Loading " + inputFile.getAbsolutePath());
-				if (inputFile.getName().endsWith(FSDirectoryReader.NORMAL_FILE_POSTFIX)) {
+				LOG.info("< Loading " + inputFile.getAbsolutePath());
+				if (inputFile.getName().endsWith(NORMAL_FILE_POSTFIX)) {
 					this.processNormalInputFile(inputFile);
-				} else if (inputFile.getName().endsWith(FSDirectoryReader.BINARY_FILE_POSTFIX)) {
+				} else if (inputFile.getName().endsWith(BINARY_FILE_POSTFIX)) {
 					this.processBinaryInputFile(inputFile);
 				}
 			}
@@ -139,18 +139,18 @@ final class FSDirectoryReader implements Runnable {
 			// No mapping file found. Check whether we find a legacy tpmon.map file!
 			mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + "tpmon.map");
 			if (mappingFile.exists()) {
-				FSDirectoryReader.LOG.info("Directory '" + this.inputDir + "' contains no file 'kieker.map'. Found 'tpmon.map' ... switching to legacy mode");
-				this.filePrefix = FSDirectoryReader.LEGACY_FILE_PREFIX;
+				LOG.info("Directory '" + this.inputDir + "' contains no file 'kieker.map'. Found 'tpmon.map' ... switching to legacy mode");
+				this.filePrefix = LEGACY_FILE_PREFIX;
 			} else {
 				// no {kieker|tpmon}.map exists. This is valid for very old monitoring logs. Hence, only dump a log.warn
-				FSDirectoryReader.LOG.warn("No mapping file in directory '" + this.inputDir.getAbsolutePath() + "'");
+				LOG.warn("No mapping file in directory '" + this.inputDir.getAbsolutePath() + "'");
 				return;
 			}
 		}
 		// found any kind of mapping file
 		BufferedReader in = null;
 		try {
-			in = new BufferedReader(new InputStreamReader(new FileInputStream(mappingFile), FSDirectoryReader.ENCODING));
+			in = new BufferedReader(new InputStreamReader(new FileInputStream(mappingFile), ENCODING));
 			String line;
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
 				line = line.trim(); // FIXME: do we really want a trim here? We could use "whitespace information" saved in the record!
@@ -159,7 +159,7 @@ final class FSDirectoryReader implements Runnable {
 				}
 				final int split = line.indexOf('=');
 				if (split == -1) {
-					FSDirectoryReader.LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath()
+					LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath()
 							+ ". Each line must contain ID=VALUE pairs.");
 					continue; // continue on errors
 				}
@@ -170,22 +170,22 @@ final class FSDirectoryReader implements Runnable {
 				try {
 					id = Integer.valueOf((key.charAt(0) == '$') ? key.substring(1) : key); // NOCS
 				} catch (final NumberFormatException ex) {
-					FSDirectoryReader.LOG.error("Error reading mapping file, id must be integer", ex);
+					LOG.error("Error reading mapping file, id must be integer", ex);
 					continue; // continue on errors
 				}
 				final String prevVal = this.stringRegistry.put(id, value);
 				if (prevVal != null) {
-					FSDirectoryReader.LOG.error("Found addional entry for id='" + id + "', old value was '" + prevVal + "' new value is '" + value + "'");
+					LOG.error("Found addional entry for id='" + id + "', old value was '" + prevVal + "' new value is '" + value + "'");
 				}
 			}
 		} catch (final IOException ex) {
-			FSDirectoryReader.LOG.error("Error reading mapping file", ex);
+			LOG.error("Error reading mapping file", ex);
 		} finally {
 			if (in != null) {
 				try {
 					in.close();
 				} catch (final IOException ex) {
-					FSDirectoryReader.LOG.error("Exception while closing input stream for mapping file", ex);
+					LOG.error("Exception while closing input stream for mapping file", ex);
 				}
 			}
 		}
@@ -199,7 +199,7 @@ final class FSDirectoryReader implements Runnable {
 	private final void processNormalInputFile(final File inputFile) {
 		BufferedReader in = null;
 		try {
-			in = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile), FSDirectoryReader.ENCODING));
+			in = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile), ENCODING));
 			String line;
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
 				line = line.trim();
@@ -211,13 +211,13 @@ final class FSDirectoryReader implements Runnable {
 				try {
 					if (recordFields[0].charAt(0) == '$') { // modern record
 						if (recordFields.length < 3) {
-							FSDirectoryReader.LOG.error("Illegal record format: " + line);
+							LOG.error("Illegal record format: " + line);
 							continue; // skip this record
 						}
 						final Integer id = Integer.valueOf(recordFields[0].substring(1));
 						final String classname = this.stringRegistry.get(id);
 						if (classname == null) {
-							FSDirectoryReader.LOG.error("Missing classname mapping for record type id " + "'" + id + "'");
+							LOG.error("Missing classname mapping for record type id " + "'" + id + "'");
 							continue; // skip this record
 						}
 						final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(classname);
@@ -236,7 +236,7 @@ final class FSDirectoryReader implements Runnable {
 						record = AbstractMonitoringRecord.createFromStringArray(OperationExecutionRecord.class, recordFields);
 					}
 				} catch (final Exception ex) { // NOPMD NOCS (illegal catch)
-					FSDirectoryReader.LOG.error("Error processing line: " + line, ex);
+					LOG.error("Error processing line: " + line, ex);
 					continue; // skip this record
 				}
 				if (!this.recordReceiver.newMonitoringRecord(record)) {
@@ -245,13 +245,13 @@ final class FSDirectoryReader implements Runnable {
 				}
 			}
 		} catch (final IOException ex) {
-			FSDirectoryReader.LOG.error("Error reading " + inputFile, ex);
+			LOG.error("Error reading " + inputFile, ex);
 		} finally {
 			if (in != null) {
 				try {
 					in.close();
 				} catch (final IOException ex) {
-					FSDirectoryReader.LOG.error("Exception while closing input stream for processing input file", ex);
+					LOG.error("Exception while closing input stream for processing input file", ex);
 				}
 			}
 		}
@@ -275,7 +275,7 @@ final class FSDirectoryReader implements Runnable {
 				}
 				final String classname = this.stringRegistry.get(id);
 				if (classname == null) {
-					FSDirectoryReader.LOG.error("Missing classname mapping for record type id " + "'" + id + "'");
+					LOG.error("Missing classname mapping for record type id " + "'" + id + "'");
 					break; // we can't easily recover on errors
 				}
 
@@ -292,7 +292,7 @@ final class FSDirectoryReader implements Runnable {
 						final Integer strId = in.readInt();
 						final String str = this.stringRegistry.get(strId);
 						if (str == null) {
-							FSDirectoryReader.LOG.error("No String mapping found for id " + strId.toString());
+							LOG.error("No String mapping found for id " + strId.toString());
 							objectArray[idx] = "";
 						} else {
 							objectArray[idx] = str;
@@ -313,10 +313,10 @@ final class FSDirectoryReader implements Runnable {
 						objectArray[idx] = in.readBoolean();
 					} else {
 						if (in.readByte() != 0) {
-							FSDirectoryReader.LOG.error("Unexpected value for unsupported type: " + clazz.getName());
+							LOG.error("Unexpected value for unsupported type: " + clazz.getName());
 							return; // breaking error (break would not terminate the correct loop)
 						}
-						FSDirectoryReader.LOG.warn("Unsupported type: " + clazz.getName());
+						LOG.warn("Unsupported type: " + clazz.getName());
 						objectArray[idx] = null;
 					}
 				}
@@ -328,13 +328,13 @@ final class FSDirectoryReader implements Runnable {
 				}
 			}
 		} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
-			FSDirectoryReader.LOG.error("Error reading " + inputFile, ex);
+			LOG.error("Error reading " + inputFile, ex);
 		} finally {
 			if (in != null) {
 				try {
 					in.close();
 				} catch (final IOException ex) {
-					FSDirectoryReader.LOG.error("Exception while closing input stream for processing input file", ex);
+					LOG.error("Exception while closing input stream for processing input file", ex);
 				}
 			}
 		}

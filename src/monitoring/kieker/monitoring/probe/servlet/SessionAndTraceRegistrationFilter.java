@@ -56,8 +56,8 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 
-	protected static final ITimeSource TIMESOURCE = SessionAndTraceRegistrationFilter.MONITORING_CTRL.getTimeSource();
-	protected static final String VM_NAME = SessionAndTraceRegistrationFilter.MONITORING_CTRL.getHostname();
+	protected static final ITimeSource TIMESOURCE = MONITORING_CTRL.getTimeSource();
+	protected static final String VM_NAME = MONITORING_CTRL.getHostname();
 
 	/**
 	 * Signature for the {@link #doFilter(ServletRequest, ServletResponse, FilterChain)} which will be used when logging
@@ -100,12 +100,12 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 
 	public void init(final FilterConfig config) throws ServletException {
 		// by default, we do nothing here. Extending classes may override this method
-		final String valString = config.getInitParameter(SessionAndTraceRegistrationFilter.CONFIG_PROPERTY_NAME_LOG_FILTER_EXECUTION);
+		final String valString = config.getInitParameter(CONFIG_PROPERTY_NAME_LOG_FILTER_EXECUTION);
 		if (valString != null) {
 			this.logFilterExecution = Boolean.parseBoolean(valString);
 		} else {
-			SessionAndTraceRegistrationFilter.LOG.warn("Filter configuration '"
-					+ SessionAndTraceRegistrationFilter.CONFIG_PROPERTY_NAME_LOG_FILTER_EXECUTION
+			LOG.warn("Filter configuration '"
+					+ CONFIG_PROPERTY_NAME_LOG_FILTER_EXECUTION
 					+ "' not set. Using the value: " + this.logFilterExecution);
 		}
 	}
@@ -117,7 +117,7 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 	 */
 	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
 			throws IOException, ServletException {
-		if (!SessionAndTraceRegistrationFilter.MONITORING_CTRL.isMonitoringEnabled()) {
+		if (!MONITORING_CTRL.isMonitoringEnabled()) {
 			chain.doFilter(request, response);
 			return;
 		}
@@ -132,18 +132,18 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 		 * If this filter execution shall be part of the traced control flow, we need to register some control flow information.
 		 */
 		if (this.logFilterExecution) {
-			traceId = SessionAndTraceRegistrationFilter.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
-			SessionAndTraceRegistrationFilter.CF_REGISTRY.storeThreadLocalEOI(0); // current execution's eoi is 0
-			SessionAndTraceRegistrationFilter.CF_REGISTRY.storeThreadLocalESS(1); // *current* execution's ess is 0; next execution is at stack depth 1
+			traceId = CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
+			CF_REGISTRY.storeThreadLocalEOI(0); // current execution's eoi is 0
+			CF_REGISTRY.storeThreadLocalESS(1); // *current* execution's ess is 0; next execution is at stack depth 1
 		}
 
-		final long tin = SessionAndTraceRegistrationFilter.TIMESOURCE.getTime(); // the entry timestamp
+		final long tin = TIMESOURCE.getTime(); // the entry timestamp
 		try {
 			chain.doFilter(request, response);
 		} finally {
-			SessionAndTraceRegistrationFilter.SESSION_REGISTRY.unsetThreadLocalSessionId();
+			SESSION_REGISTRY.unsetThreadLocalSessionId();
 			if (this.logFilterExecution) {
-				final long tout = SessionAndTraceRegistrationFilter.TIMESOURCE.getTime();
+				final long tout = TIMESOURCE.getTime();
 				// if sessionId == null, try again to fetch it (should exist after being within the application logic)
 				if (sessionId == OperationExecutionRecord.NO_SESSION_ID) { // yes, == and not equals
 					sessionId = this.registerSessionInformation(request);
@@ -152,16 +152,16 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 				/*
 				 * Log this execution
 				 */
-				SessionAndTraceRegistrationFilter.MONITORING_CTRL.newMonitoringRecord(
+				MONITORING_CTRL.newMonitoringRecord(
 						new OperationExecutionRecord(this.getFilterOperationSignatureString(), sessionId, traceId, tin, tout,
-								SessionAndTraceRegistrationFilter.VM_NAME, 0, 0)); // 0,0 state that this method is the application entry point
+								VM_NAME, 0, 0)); // 0,0 state that this method is the application entry point
 
 				/*
 				 * Reset the thread-local trace information
 				 */
-				SessionAndTraceRegistrationFilter.CF_REGISTRY.unsetThreadLocalTraceId();
-				SessionAndTraceRegistrationFilter.CF_REGISTRY.unsetThreadLocalEOI();
-				SessionAndTraceRegistrationFilter.CF_REGISTRY.unsetThreadLocalESS();
+				CF_REGISTRY.unsetThreadLocalTraceId();
+				CF_REGISTRY.unsetThreadLocalEOI();
+				CF_REGISTRY.unsetThreadLocalESS();
 			}
 		}
 	}
@@ -190,7 +190,7 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 			final HttpSession session = ((HttpServletRequest) request).getSession(false);
 			if (session != null) {
 				sessionId = session.getId();
-				SessionAndTraceRegistrationFilter.SESSION_REGISTRY.storeThreadLocalSessionId(sessionId);
+				SESSION_REGISTRY.storeThreadLocalSessionId(sessionId);
 			}
 		}
 

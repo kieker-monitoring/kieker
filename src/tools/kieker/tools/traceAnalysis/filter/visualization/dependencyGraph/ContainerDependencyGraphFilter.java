@@ -71,10 +71,10 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 				ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER.getId(),
 				ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER));
 
-		this.dotOutputFile = new File(configuration.getStringProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE));
-		this.includeWeights = configuration.getBooleanProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
-		this.shortLabels = configuration.getBooleanProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS);
-		this.includeSelfLoops = configuration.getBooleanProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS);
+		this.dotOutputFile = new File(configuration.getStringProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE));
+		this.includeWeights = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
+		this.shortLabels = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS);
+		this.includeSelfLoops = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS);
 	}
 
 	@Override
@@ -114,7 +114,7 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 			try {
 				this.saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
 			} catch (final IOException ex) {
-				ContainerDependencyGraphFilter.LOG.error("IOException while saving to dot file", ex);
+				LOG.error("IOException while saving to dot file", ex);
 			}
 		}
 	}
@@ -123,10 +123,10 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, "");
-		configuration.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.FALSE.toString());
-		configuration.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.FALSE.toString());
-		configuration.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.FALSE.toString());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, "");
+		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.FALSE.toString());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.FALSE.toString());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.FALSE.toString());
 
 		return configuration;
 	}
@@ -134,10 +134,10 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
-		configuration.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
-		configuration.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));
-		configuration.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
 
 		return configuration;
 	}

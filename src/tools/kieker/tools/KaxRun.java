@@ -75,7 +75,7 @@ public final class KaxRun {
 			final AnalysisController ctrl = new AnalysisController(new File(kaxFilename));
 			ctrl.run();
 		} catch (final Exception ex) { // NOPMD NOCS (log all errors)
-			KaxRun.LOG.error("Error", ex);
+			LOG.error("Error", ex);
 		}
 	}
 }

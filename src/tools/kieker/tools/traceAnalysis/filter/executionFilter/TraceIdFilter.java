@@ -48,20 +48,20 @@ public class TraceIdFilter extends AbstractTraceIdFilter {
 		super(configuration);
 	}
 
-	@InputPort(name = TraceIdFilter.INPUT_PORT_NAME_EXECUTION, description = "Receives execution events to be selected by trace ID", eventTypes = { Execution.class })
+	@InputPort(name = INPUT_PORT_NAME_EXECUTION, description = "Receives execution events to be selected by trace ID", eventTypes = { Execution.class })
 	public void inputExecution(final Execution execution) {
 		if (super.passId(execution.getTraceId())) {
-			super.deliver(TraceIdFilter.OUTPUT_PORT_NAME_MATCH, execution);
+			super.deliver(OUTPUT_PORT_NAME_MATCH, execution);
 		}
 	}
 
 	@Override
 	protected String getConfigurationPropertySelectAllTraces() {
-		return TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES;
+		return CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES;
 	}
 
 	@Override
 	protected String getConfigurationPropertySelectedTraces() {
-		return TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES;
+		return CONFIG_PROPERTY_NAME_SELECTED_TRACES;
 	}
 }

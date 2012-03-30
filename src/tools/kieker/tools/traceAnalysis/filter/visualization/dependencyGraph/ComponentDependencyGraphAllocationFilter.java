@@ -76,10 +76,10 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 		super(configuration);
 		super.setDependencyGraph(new DependencyGraph<AllocationComponent>(AllocationRepository.ROOT_ALLOCATION_COMPONENT.getId(),
 				AllocationRepository.ROOT_ALLOCATION_COMPONENT));
-		this.dotOutputFile = configuration.getStringProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE);
-		this.includeWeights = configuration.getBooleanProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
-		this.shortLabels = configuration.getBooleanProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SHORTLABELS);
-		this.includeSelfLoops = configuration.getBooleanProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SELFLOOPS);
+		this.dotOutputFile = configuration.getStringProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE);
+		this.includeWeights = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
+		this.shortLabels = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORTLABELS);
+		this.includeSelfLoops = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SELFLOOPS);
 	}
 
 	private String componentNodeLabel(final DependencyGraphNode<AllocationComponent> node, final boolean shortLabelsL) {
@@ -140,7 +140,7 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 						null // misc
 						));
 			} else {
-				strBuild.append(DotFactory.createCluster("", ComponentDependencyGraphAllocationFilter.CONTAINER_NODE_ID_PREFIX + curContainer.getId(),
+				strBuild.append(DotFactory.createCluster("", CONTAINER_NODE_ID_PREFIX + curContainer.getId(),
 						AbstractDependencyGraphFilter.STEREOTYPE_EXECUTION_CONTAINER + "\\n" + curContainer.getName(), DotFactory.DOT_SHAPE_BOX, // shape
 						DotFactory.DOT_STYLE_FILLED, // style
 						null, // framecolor
@@ -178,7 +178,7 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 			try {
 				this.saveToDotFile(this.dotOutputFile, this.includeWeights, this.shortLabels, this.includeSelfLoops);
 			} catch (final IOException ex) {
-				ComponentDependencyGraphAllocationFilter.LOG.error("IOException while saving to dot file", ex);
+				LOG.error("IOException while saving to dot file", ex);
 			}
 		}
 	}
@@ -186,20 +186,20 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 	@Override
 	protected final Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE,
-				ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT);
-		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.TRUE.toString());
-		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SHORTLABELS, Boolean.TRUE.toString());
-		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SELFLOOPS, Boolean.FALSE.toString());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE,
+				CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT);
+		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.TRUE.toString());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORTLABELS, Boolean.TRUE.toString());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_SELFLOOPS, Boolean.FALSE.toString());
 		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, this.dotOutputFile);
-		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
-		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SHORTLABELS, Boolean.toString(this.shortLabels));
-		configuration.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SELFLOOPS, Boolean.toString(this.includeSelfLoops));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, this.dotOutputFile);
+		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORTLABELS, Boolean.toString(this.shortLabels));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_SELFLOOPS, Boolean.toString(this.includeSelfLoops));
 		return configuration;
 	}
 

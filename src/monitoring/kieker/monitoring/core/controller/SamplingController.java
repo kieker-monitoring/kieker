@@ -54,7 +54,7 @@ public final class SamplingController extends AbstractController implements ISam
 				new RejectedExecutionHandler() {
 
 					public void rejectedExecution(final Runnable r, final ThreadPoolExecutor executor) {
-						SamplingController.LOG.error("Exception caught by RejectedExecutionHandler for Runnable " + r + " and ThreadPoolExecutor " + executor);
+						LOG.error("Exception caught by RejectedExecutionHandler for Runnable " + r + " and ThreadPoolExecutor " + executor);
 					}
 				});
 		this.periodicSensorsPoolExecutor.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
@@ -68,8 +68,8 @@ public final class SamplingController extends AbstractController implements ISam
 
 	@Override
 	protected final void cleanup() {
-		if (SamplingController.LOG.isDebugEnabled()) {
-			SamplingController.LOG.debug("Shutting down Sampling Controller");
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Shutting down Sampling Controller");
 		}
 		if (this.periodicSensorsPoolExecutor != null) {
 			this.periodicSensorsPoolExecutor.shutdown();
@@ -96,7 +96,7 @@ public final class SamplingController extends AbstractController implements ISam
 		final ScheduledSamplerJob job;
 		synchronized (this) {
 			if (this.periodicSensorsPoolExecutor.getCorePoolSize() < 1) {
-				SamplingController.LOG.warn("Won't schedule periodic sensor since core pool size <1: " + this.periodicSensorsPoolExecutor.getCorePoolSize());
+				LOG.warn("Won't schedule periodic sensor since core pool size <1: " + this.periodicSensorsPoolExecutor.getCorePoolSize());
 				return null;
 			}
 			job = new ScheduledSamplerJob(super.monitoringController, sensor);
@@ -113,7 +113,7 @@ public final class SamplingController extends AbstractController implements ISam
 			if (future != null) {
 				future.cancel(false); // do not interrupt when running
 			} else {
-				SamplingController.LOG.warn("ScheduledFuture of ScheduledSamplerJob null: " + sensorJob);
+				LOG.warn("ScheduledFuture of ScheduledSamplerJob null: " + sensorJob);
 			}
 			final boolean success = this.periodicSensorsPoolExecutor.remove(sensorJob);
 			this.periodicSensorsPoolExecutor.purge();

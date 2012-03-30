@@ -60,7 +60,7 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
 	 * differ from Kieker's default timer (SystemNanoTimer).
 	 */
 	protected static final IMonitoringController CTRL = MonitoringController.getInstance();
-	protected static final ITimeSource TIMESOURCE = OperationExecutionSOAPRequestOutInterceptor.CTRL.getTimeSource();
+	protected static final ITimeSource TIMESOURCE = CTRL.getTimeSource();
 
 	private static final String NULL_SESSION_STR = "NULL";
 	private static final String NULL_SESSIONASYNCTRACE_STR = "NULL-ASYNCOUT";
@@ -71,11 +71,11 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
 
 	@Override
 	public void handleMessage(final SoapMessage msg) throws Fault {
-		if (!OperationExecutionSOAPRequestOutInterceptor.CTRL.isMonitoringEnabled()) {
+		if (!CTRL.isMonitoringEnabled()) {
 			return;
 		}
 		String sessionID = null;
-		long traceId = OperationExecutionSOAPRequestOutInterceptor.CF_REGISTRY.recallThreadLocalTraceId();
+		long traceId = CF_REGISTRY.recallThreadLocalTraceId();
 		int eoi;
 		int ess;
 
@@ -84,7 +84,7 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
 		 * This value will be used by the corresponding invocation of the
 		 * ResponseOutProbe.
 		 */
-		final long tin = OperationExecutionSOAPRequestOutInterceptor.TIMESOURCE.getTime();
+		final long tin = TIMESOURCE.getTime();
 		boolean isEntryCall = false; // set true below if is entry call
 
 		if (traceId == -1) {
@@ -94,26 +94,26 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
 			 * asynchronously. We will now acquire a thread id and store it
 			 * in the thread local variable.
 			 */
-			traceId = OperationExecutionSOAPRequestOutInterceptor.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
+			traceId = CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
 			eoi = 0; // eoi of this execution
-			OperationExecutionSOAPRequestOutInterceptor.CF_REGISTRY.storeThreadLocalEOI(eoi);
+			CF_REGISTRY.storeThreadLocalEOI(eoi);
 			ess = 0; // ess of this execution
-			OperationExecutionSOAPRequestOutInterceptor.CF_REGISTRY.storeThreadLocalESS(ess);
+			CF_REGISTRY.storeThreadLocalESS(ess);
 			isEntryCall = true;
-			sessionID = OperationExecutionSOAPRequestOutInterceptor.NULL_SESSIONASYNCTRACE_STR;
-			OperationExecutionSOAPRequestOutInterceptor.SESSION_REGISTRY.storeThreadLocalSessionId(sessionID);
+			sessionID = NULL_SESSIONASYNCTRACE_STR;
+			SESSION_REGISTRY.storeThreadLocalSessionId(sessionID);
 		} else {
 			/* thread-local traceId exists: eoi and ess should have been registered before */
-			eoi = OperationExecutionSOAPRequestOutInterceptor.CF_REGISTRY.incrementAndRecallThreadLocalEOI();
-			ess = OperationExecutionSOAPRequestOutInterceptor.CF_REGISTRY.recallThreadLocalESS(); // do not increment in this case!
-			sessionID = OperationExecutionSOAPRequestOutInterceptor.SESSION_REGISTRY.recallThreadLocalSessionId();
+			eoi = CF_REGISTRY.incrementAndRecallThreadLocalEOI();
+			ess = CF_REGISTRY.recallThreadLocalESS(); // do not increment in this case!
+			sessionID = SESSION_REGISTRY.recallThreadLocalSessionId();
 			if (sessionID == null) {
-				sessionID = OperationExecutionSOAPRequestOutInterceptor.NULL_SESSION_STR;
+				sessionID = NULL_SESSION_STR;
 			}
 		}
 
-		OperationExecutionSOAPRequestOutInterceptor.SOAP_REGISTRY.storeThreadLocalOutRequestIsEntryCall(isEntryCall);
-		OperationExecutionSOAPRequestOutInterceptor.SOAP_REGISTRY.storeThreadLocalOutRequestTin(tin);
+		SOAP_REGISTRY.storeThreadLocalOutRequestIsEntryCall(isEntryCall);
+		SOAP_REGISTRY.storeThreadLocalOutRequestTin(tin);
 
 		final Document d = DOMUtils.createDocument();
 		Element e;

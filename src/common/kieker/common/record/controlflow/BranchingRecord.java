@@ -50,7 +50,7 @@ public final class BranchingRecord extends AbstractMonitoringRecord implements I
 
 	public BranchingRecord(final Object[] values) {
 		final Object[] myValues = values.clone();
-		AbstractMonitoringRecord.checkArray(myValues, BranchingRecord.TYPES);
+		AbstractMonitoringRecord.checkArray(myValues, TYPES);
 		try {
 			this.timestamp = (Long) myValues[0];
 			this.branchID = (Integer) myValues[1];
@@ -70,7 +70,7 @@ public final class BranchingRecord extends AbstractMonitoringRecord implements I
 	}
 
 	public Class<?>[] getValueTypes() {
-		return BranchingRecord.TYPES.clone();
+		return TYPES.clone();
 	}
 
 	/**

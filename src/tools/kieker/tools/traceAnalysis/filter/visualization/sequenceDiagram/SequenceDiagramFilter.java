@@ -91,22 +91,22 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 		BufferedReader reader = null;
 
 		try {
-			final InputStream is = SequenceDiagramFilter.class.getClassLoader().getResourceAsStream(SequenceDiagramFilter.SEQUENCE_PIC_PATH);
+			final InputStream is = SequenceDiagramFilter.class.getClassLoader().getResourceAsStream(SEQUENCE_PIC_PATH);
 			String line;
-			reader = new BufferedReader(new InputStreamReader(is, SequenceDiagramFilter.ENCODING));
+			reader = new BufferedReader(new InputStreamReader(is, ENCODING));
 			while ((line = reader.readLine()) != null) { // NOPMD (assign)
 				sb.append(line).append("\n");
 			}
 			error = false;
 		} catch (final IOException exc) {
-			SequenceDiagramFilter.LOG.error("Error while reading " + SequenceDiagramFilter.SEQUENCE_PIC_PATH, exc);
+			LOG.error("Error while reading " + SEQUENCE_PIC_PATH, exc);
 		} finally {
 			try {
 				if (reader != null) {
 					reader.close();
 				}
 			} catch (final IOException ex) {
-				SequenceDiagramFilter.LOG.error("Failed to close input stream", ex);
+				LOG.error("Failed to close input stream", ex);
 			}
 			if (error) {
 				/* sequence.pic must be provided on execution of pic2plot */
@@ -125,9 +125,9 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 
 	public SequenceDiagramFilter(final Configuration configuration) {
 		super(configuration);
-		this.sdmode = SDModes.valueOf(configuration.getStringProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE));
-		this.outputFnBase = configuration.getStringProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE);
-		this.shortLabels = configuration.getBooleanProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES);
+		this.sdmode = SDModes.valueOf(configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_SDMODE));
+		this.outputFnBase = configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE);
+		this.shortLabels = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES);
 	}
 
 	@Override
@@ -153,10 +153,10 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 			SequenceDiagramFilter.this.reportSuccess(((AbstractTrace) mt).getTraceId());
 		} catch (final FileNotFoundException ex) {
 			SequenceDiagramFilter.this.reportError(((AbstractTrace) mt).getTraceId());
-			SequenceDiagramFilter.LOG.error("File not found", ex);
+			LOG.error("File not found", ex);
 		} catch (final UnsupportedEncodingException ex) {
 			SequenceDiagramFilter.this.reportError(((AbstractTrace) mt).getTraceId());
-			SequenceDiagramFilter.LOG.error("Encoding not supported", ex);
+			LOG.error("Encoding not supported", ex);
 		}
 	}
 
@@ -207,7 +207,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 		final Collection<AbstractMessage> messages = messageTrace.getSequenceAsVector();
 		// preamble:
 		ps.print(".PS" + "\n");
-		ps.print(SequenceDiagramFilter.SEQUENCE_PIC_CONTENT + "\n");
+		ps.print(SEQUENCE_PIC_CONTENT + "\n");
 		ps.print("boxwid = 1.1;" + "\n");
 		ps.print("movewid = 0.5;" + "\n");
 
@@ -218,7 +218,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 		ps.print("actor(O" + rootAllocationComponent.getId() + ",\"\");" + "\n");
 		plottedComponentIds.add(rootAllocationComponent.getId());
 
-		if (sdMode == SequenceDiagramFilter.SDModes.ALLOCATION) {
+		if (sdMode == SDModes.ALLOCATION) {
 			for (final AbstractMessage me : messages) {
 				final AllocationComponent senderComponent = me.getSendingExecution().getAllocationComponent();
 				final AllocationComponent receiverComponent = me.getReceivingExecution().getAllocationComponent();
@@ -233,7 +233,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 					plottedComponentIds.add(receiverComponent.getId());
 				}
 			}
-		} else if (sdMode == SequenceDiagramFilter.SDModes.ASSEMBLY) {
+		} else if (sdMode == SDModes.ASSEMBLY) {
 			for (final AbstractMessage me : messages) {
 				final AssemblyComponent senderComponent = me.getSendingExecution().getAllocationComponent().getAssemblyComponent();
 				final AssemblyComponent receiverComponent = me.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
@@ -249,7 +249,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				}
 			}
 		} else { // needs to be adjusted if a new mode is introduced
-			SequenceDiagramFilter.LOG.error("Invalid mode: " + sdMode);
+			LOG.error("Invalid mode: " + sdMode);
 		}
 
 		ps.print("step()" + "\n");
@@ -259,18 +259,18 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 			String senderDotId = "-1";
 			String receiverDotId = "-1";
 
-			if (sdMode == SequenceDiagramFilter.SDModes.ALLOCATION) {
+			if (sdMode == SDModes.ALLOCATION) {
 				final AllocationComponent senderComponent = me.getSendingExecution().getAllocationComponent();
 				final AllocationComponent receiverComponent = me.getReceivingExecution().getAllocationComponent();
 				senderDotId = "O" + senderComponent.getId();
 				receiverDotId = "O" + receiverComponent.getId();
-			} else if (sdMode == SequenceDiagramFilter.SDModes.ASSEMBLY) {
+			} else if (sdMode == SDModes.ASSEMBLY) {
 				final AssemblyComponent senderComponent = me.getSendingExecution().getAllocationComponent().getAssemblyComponent();
 				final AssemblyComponent receiverComponent = me.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
 				senderDotId = "O" + senderComponent.getId();
 				receiverDotId = "O" + receiverComponent.getId();
 			} else { // needs to be adjusted if a new mode is introduced
-				SequenceDiagramFilter.LOG.error("Invalid mode: " + sdMode);
+				LOG.error("Invalid mode: " + sdMode);
 			}
 
 			if (me instanceof SynchronousCallMessage) {
@@ -298,7 +298,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				ps.print("rmessage(" + senderDotId + "," + receiverDotId + ", \"\");" + "\n");
 				ps.print("inactive(" + senderDotId + ");" + "\n");
 			} else {
-				SequenceDiagramFilter.LOG.error("Message type not supported: " + me.getClass().getName());
+				LOG.error("Message type not supported: " + me.getClass().getName());
 			}
 		}
 		ps.print("inactive(" + rootDotId + ");" + "\n");
@@ -314,7 +314,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 
 	public static void writePicForMessageTrace(final MessageTrace msgTrace, final SDModes sdMode,
 			final String outputFilename, final boolean shortLabels) throws FileNotFoundException, UnsupportedEncodingException {
-		final PrintStream ps = new PrintStream(new FileOutputStream(outputFilename), false, SequenceDiagramFilter.ENCODING);
+		final PrintStream ps = new PrintStream(new FileOutputStream(outputFilename), false, ENCODING);
 		SequenceDiagramFilter.picFromMessageTrace(msgTrace, sdMode, ps, shortLabels);
 		ps.flush();
 		ps.close();
@@ -323,18 +323,18 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	@Override
 	protected final Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
-		defaultConfiguration.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE,
-				SequenceDiagramFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT);
-		defaultConfiguration.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES, Boolean.TRUE.toString());
-		defaultConfiguration.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE, SDModes.ASSEMBLY.toString());
+		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE,
+				CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT);
+		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES, Boolean.TRUE.toString());
+		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_SDMODE, SDModes.ASSEMBLY.toString());
 		return defaultConfiguration;
 	}
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE, this.outputFnBase);
-		configuration.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES, Boolean.toString(this.shortLabels));
-		configuration.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE, this.sdmode.toString());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE, this.outputFnBase);
+		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES, Boolean.toString(this.shortLabels));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_SDMODE, this.sdmode.toString());
 		return configuration;
 	}
 }

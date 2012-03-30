@@ -45,11 +45,11 @@ public final class CallOperationEvent extends AbstractOperationEvent {
 	public CallOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String callerOperationSignature,
 			final String calleeOperationSignature) {
 		super(timestamp, traceId, orderIndex, callerOperationSignature);
-		this.calleeOperationSignature = (calleeOperationSignature == null) ? CallOperationEvent.NO_CALLEEOPERATIONSIGANTURE : calleeOperationSignature; // NOCS
+		this.calleeOperationSignature = (calleeOperationSignature == null) ? NO_CALLEEOPERATIONSIGANTURE : calleeOperationSignature; // NOCS
 	}
 
 	public CallOperationEvent(final Object[] values) { // NOPMD (values stored directly)
-		super(values, CallOperationEvent.TYPES); // values[0..3]
+		super(values, TYPES); // values[0..3]
 		this.calleeOperationSignature = (String) values[4];
 	}
 
@@ -58,7 +58,7 @@ public final class CallOperationEvent extends AbstractOperationEvent {
 	}
 
 	public final Class<?>[] getValueTypes() {
-		return CallOperationEvent.TYPES.clone();
+		return TYPES.clone();
 	}
 
 	public final String getCallerOperationSignature() {

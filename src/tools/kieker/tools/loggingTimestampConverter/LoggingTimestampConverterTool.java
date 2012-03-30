@@ -61,19 +61,19 @@ public final class LoggingTimestampConverterTool {
 
 	@SuppressWarnings("static-access")
 	private static final void initializeOptions() {
-		LoggingTimestampConverterTool.OPTIONS.add(OptionBuilder.withLongOpt(LoggingTimestampConverterTool.CMD_OPT_NAME_TIMESTAMPS)
+		OPTIONS.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TIMESTAMPS)
 				.withArgName("timestamp1 ... timestampN").hasArgs().isRequired(true).withDescription("List of timestamps (UTC timezone) to convert").create("t"));
-		for (final Option o : LoggingTimestampConverterTool.OPTIONS) {
-			LoggingTimestampConverterTool.CMDL_OPTS.addOption(o);
+		for (final Option o : OPTIONS) {
+			CMDL_OPTS.addOption(o);
 		}
-		LoggingTimestampConverterTool.CMD_HELP_FORMATTER.setOptionComparator(new Comparator<Object>() {
+		CMD_HELP_FORMATTER.setOptionComparator(new Comparator<Object>() {
 
 			public int compare(final Object o1, final Object o2) {
 				if (o1 == o2) { // NOPMD (not equals)
 					return 0;
 				}
-				final int posO1 = LoggingTimestampConverterTool.OPTIONS.indexOf(o1);
-				final int posO2 = LoggingTimestampConverterTool.OPTIONS.indexOf(o2);
+				final int posO1 = OPTIONS.indexOf(o1);
+				final int posO2 = OPTIONS.indexOf(o2);
 				if (posO1 < posO2) {
 					return -1;
 				}
@@ -100,7 +100,7 @@ public final class LoggingTimestampConverterTool {
 
 	private static boolean parseArgs(final String[] args) {
 		try {
-			LoggingTimestampConverterTool.cmdl = LoggingTimestampConverterTool.CMDL_PARSER.parse(LoggingTimestampConverterTool.CMDL_OPTS, args);
+			LoggingTimestampConverterTool.cmdl = CMDL_PARSER.parse(CMDL_OPTS, args);
 		} catch (final ParseException e) {
 			LoggingTimestampConverterTool.printUsage();
 			System.err.println("\nError parsing arguments: " + e.getMessage());
@@ -110,15 +110,15 @@ public final class LoggingTimestampConverterTool {
 	}
 
 	private static void printUsage() {
-		LoggingTimestampConverterTool.CMD_HELP_FORMATTER.printHelp(80, LoggingTimestampConverterTool.class.getName(), "",
-				LoggingTimestampConverterTool.CMDL_OPTS,
+		CMD_HELP_FORMATTER.printHelp(80, LoggingTimestampConverterTool.class.getName(), "",
+				CMDL_OPTS,
 				"", true);
 	}
 
 	private static boolean initFromArgs() {
-		LoggingTimestampConverterTool.timestampsStr = LoggingTimestampConverterTool.cmdl.getOptionValues(LoggingTimestampConverterTool.CMD_OPT_NAME_TIMESTAMPS);
+		LoggingTimestampConverterTool.timestampsStr = LoggingTimestampConverterTool.cmdl.getOptionValues(CMD_OPT_NAME_TIMESTAMPS);
 		if (LoggingTimestampConverterTool.timestampsStr == null) { // should not happen since marked as required opt
-			LoggingTimestampConverterTool.LOG.error("Missing value for option '" + LoggingTimestampConverterTool.CMD_OPT_NAME_TIMESTAMPS + "'");
+			LOG.error("Missing value for option '" + CMD_OPT_NAME_TIMESTAMPS + "'");
 			return false;
 		}
 
@@ -127,7 +127,7 @@ public final class LoggingTimestampConverterTool {
 			try {
 				LoggingTimestampConverterTool.timestampsLong[curIdx] = Long.parseLong(LoggingTimestampConverterTool.timestampsStr[curIdx]);
 			} catch (final NumberFormatException ex) {
-				LoggingTimestampConverterTool.LOG.error("Failed to parse timestamp:" + LoggingTimestampConverterTool.timestampsStr[curIdx], ex);
+				LOG.error("Failed to parse timestamp:" + LoggingTimestampConverterTool.timestampsStr[curIdx], ex);
 				System.err.println("Failed to parse timestamp:" + LoggingTimestampConverterTool.timestampsStr[curIdx]);
 				return false;
 			}

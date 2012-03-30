@@ -35,7 +35,7 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
 public class OperationRepository extends AbstractSystemSubRepository {
 	public static final Signature ROOT_SIGNATURE = new Signature("$", new String[] {}, "<>", new String[] {});
 	public static final Operation ROOT_OPERATION = new Operation(AbstractSystemSubRepository.ROOT_ELEMENT_ID, TypeRepository.ROOT_COMPONENT,
-			OperationRepository.ROOT_SIGNATURE);
+			ROOT_SIGNATURE);
 
 	private final Map<String, Operation> operationsByName = new Hashtable<String, Operation>(); // NOPMD (UseConcurrentHashMap)
 	private final Map<Integer, Operation> operationsById = new Hashtable<Integer, Operation>(); // NOPMD (UseConcurrentHashMap)

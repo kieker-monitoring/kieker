@@ -46,7 +46,7 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 	private final ThreadLocal<Integer> threadLocalEss = new ThreadLocal<Integer>();
 
 	static {
-		ControlFlowRegistry.LOG.info("First threadId will be " + INSTANCE.lastThreadId.get());
+		LOG.info("First threadId will be " + INSTANCE.lastThreadId.get());
 	}
 
 	/**
@@ -125,7 +125,7 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 	public final int incrementAndRecallThreadLocalEOI() {
 		final Integer curEoi = this.threadLocalEoi.get();
 		if (curEoi == null) {
-			ControlFlowRegistry.LOG.error("eoi has not been registered before");
+			LOG.error("eoi has not been registered before");
 			return -1;
 		}
 		final int newEoi = curEoi + 1;
@@ -141,7 +141,7 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 	public final int recallThreadLocalEOI() {
 		final Integer curEoi = this.threadLocalEoi.get();
 		if (curEoi == null) {
-			ControlFlowRegistry.LOG.error("eoi has not been registered before");
+			LOG.error("eoi has not been registered before");
 			return -1;
 		}
 		return curEoi;
@@ -168,7 +168,7 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 	public final int recallAndIncrementThreadLocalESS() {
 		final Integer curEss = this.threadLocalEss.get();
 		if (curEss == null) {
-			ControlFlowRegistry.LOG.error("ess has not been registered before");
+			LOG.error("ess has not been registered before");
 			return -1;
 		}
 		this.threadLocalEss.set(curEss + 1);
@@ -183,7 +183,7 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 	public final int recallThreadLocalESS() {
 		final Integer ess = this.threadLocalEss.get();
 		if (ess == null) {
-			ControlFlowRegistry.LOG.error("ess has not been registered before");
+			LOG.error("ess has not been registered before");
 			return -1;
 		}
 		return ess;

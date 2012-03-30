@@ -88,9 +88,9 @@ public final class JMSReader extends AbstractReaderPlugin {
 		/* Call the inherited constructor. */
 		super(configuration);
 		/* Initialize the reader bases on the given configuration. */
-		this.jmsProviderUrl = configuration.getStringProperty(JMSReader.CONFIG_PROPERTY_NAME_PROVIDERURL);
-		this.jmsDestination = configuration.getStringProperty(JMSReader.CONFIG_PROPERTY_NAME_DESTINATION);
-		this.jmsFactoryLookupName = configuration.getStringProperty(JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP);
+		this.jmsProviderUrl = configuration.getStringProperty(CONFIG_PROPERTY_NAME_PROVIDERURL);
+		this.jmsDestination = configuration.getStringProperty(CONFIG_PROPERTY_NAME_DESTINATION);
+		this.jmsFactoryLookupName = configuration.getStringProperty(CONFIG_PROPERTY_NAME_FACTORYLOOKUP);
 		// simple sanity check
 		if ((this.jmsProviderUrl.length() == 0) || (this.jmsDestination.length() == 0) || (this.jmsFactoryLookupName.length() == 0)) {
 			throw new IllegalArgumentException("JMSReader has not sufficient parameters. jmsProviderUrl ('" + this.jmsProviderUrl + "'), jmsDestination ('"
@@ -102,9 +102,9 @@ public final class JMSReader extends AbstractReaderPlugin {
 	protected Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
 		// FIXME: provide default values!
-		defaultConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_PROVIDERURL, "");
-		defaultConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_DESTINATION, "");
-		defaultConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, "");
+		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_PROVIDERURL, "");
+		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_DESTINATION, "");
+		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_FACTORYLOOKUP, "");
 		return defaultConfiguration;
 	}
 
@@ -131,12 +131,12 @@ public final class JMSReader extends AbstractReaderPlugin {
 				destination = (Destination) context.lookup(this.jmsDestination);
 			} catch (final NameNotFoundException exc) {
 				// JNDI lookup failed, try manual creation (this seems to fail with ActiveMQ sometimes)
-				JMSReader.LOG.warn("Failed to lookup queue '" + this.jmsDestination + "' via JNDI", exc);
-				JMSReader.LOG.info("Attempting to create queue ...");
+				LOG.warn("Failed to lookup queue '" + this.jmsDestination + "' via JNDI", exc);
+				LOG.info("Attempting to create queue ...");
 				destination = session.createQueue(this.jmsDestination);
 			}
 
-			JMSReader.LOG.info("Listening to destination:" + destination + " at " + this.jmsProviderUrl + " !\n***\n\n");
+			LOG.info("Listening to destination:" + destination + " at " + this.jmsProviderUrl + " !\n***\n\n");
 			final MessageConsumer receiver = session.createConsumer(destination);
 			receiver.setMessageListener(new MessageListener() {
 				// the MessageListener will read onMessage each time a message comes in
@@ -144,21 +144,21 @@ public final class JMSReader extends AbstractReaderPlugin {
 				public void onMessage(final Message jmsMessage) {
 					if (jmsMessage instanceof TextMessage) {
 						final TextMessage text = (TextMessage) jmsMessage;
-						JMSReader.LOG.info("Received text message: " + text);
+						LOG.info("Received text message: " + text);
 
 					} else {
 						try {
 							final ObjectMessage om = (ObjectMessage) jmsMessage;
 							final Serializable omo = om.getObject();
-							if ((omo instanceof IMonitoringRecord) && (!JMSReader.super.deliver(JMSReader.OUTPUT_PORT_NAME_RECORDS, omo))) {
-								JMSReader.LOG.error("deliverRecord returned false");
+							if ((omo instanceof IMonitoringRecord) && (!JMSReader.super.deliver(OUTPUT_PORT_NAME_RECORDS, omo))) {
+								LOG.error("deliverRecord returned false");
 							}
 						} catch (final MessageFormatException ex) {
-							JMSReader.LOG.error("Error delivering record", ex);
+							LOG.error("Error delivering record", ex);
 						} catch (final JMSException ex) {
-							JMSReader.LOG.error("Error delivering record", ex);
+							LOG.error("Error delivering record", ex);
 						} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
-							JMSReader.LOG.error("Error delivering record", ex);
+							LOG.error("Error delivering record", ex);
 						}
 					}
 				}
@@ -167,11 +167,11 @@ public final class JMSReader extends AbstractReaderPlugin {
 			// start the connection to enable message delivery
 			connection.start();
 
-			JMSReader.LOG.info("JMSReader started and waits for incomming monitoring events!");
+			LOG.info("JMSReader started and waits for incomming monitoring events!");
 			this.block();
-			JMSReader.LOG.info("Woke up by shutdown");
+			LOG.info("Woke up by shutdown");
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
-			JMSReader.LOG.error("Error in read()", ex);
+			LOG.error("Error in read()", ex);
 			retVal = false;
 		} finally {
 			try {
@@ -179,7 +179,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 					connection.close();
 				}
 			} catch (final JMSException ex) {
-				JMSReader.LOG.error("Failed to close JMS", ex);
+				LOG.error("Failed to close JMS", ex);
 			}
 		}
 		return retVal;
@@ -204,16 +204,16 @@ public final class JMSReader extends AbstractReaderPlugin {
 	}
 
 	public void terminate(final boolean error) {
-		JMSReader.LOG.info("Shutdown of JMSReader requested.");
+		LOG.info("Shutdown of JMSReader requested.");
 		this.unblock();
 	}
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_PROVIDERURL, this.jmsProviderUrl);
-		configuration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_DESTINATION, this.jmsDestination);
-		configuration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, this.jmsFactoryLookupName);
+		configuration.setProperty(CONFIG_PROPERTY_NAME_PROVIDERURL, this.jmsProviderUrl);
+		configuration.setProperty(CONFIG_PROPERTY_NAME_DESTINATION, this.jmsDestination);
+		configuration.setProperty(CONFIG_PROPERTY_NAME_FACTORYLOOKUP, this.jmsFactoryLookupName);
 
 		return configuration;
 	}

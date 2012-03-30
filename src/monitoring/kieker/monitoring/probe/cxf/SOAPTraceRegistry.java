@@ -47,7 +47,7 @@ public final class SOAPTraceRegistry {
 
 	public static final SOAPTraceRegistry getInstance() {
 		synchronized (SOAPTraceRegistry.class) {
-			return SOAPTraceRegistry.INSTANCE;
+			return INSTANCE;
 		}
 	}
 
@@ -71,7 +71,7 @@ public final class SOAPTraceRegistry {
 	public final long recallThreadLocalInRequestTin() {
 		final Long curTin = this.threadLocalInRequestTin.get();
 		if (curTin == null) {
-			SOAPTraceRegistry.LOG.error("tin has not been registered before");
+			LOG.error("tin has not been registered before");
 			return -1;
 		}
 		return curTin;
@@ -105,7 +105,7 @@ public final class SOAPTraceRegistry {
 	public final long recallThreadLocalOutRequestTin() {
 		final Long curTin = this.threadLocalOutRequestTin.get();
 		if (curTin == null) {
-			SOAPTraceRegistry.LOG.error("tin has not been registered before");
+			LOG.error("tin has not been registered before");
 			return -1;
 		}
 		return curTin;
@@ -136,7 +136,7 @@ public final class SOAPTraceRegistry {
 	public final boolean recallThreadLocalInRequestIsEntryCall() {
 		final Boolean curIsEntryCall = this.threadLocalInRequestIsEntryCall.get();
 		if (curIsEntryCall == null) {
-			SOAPTraceRegistry.LOG.error("isEntryCall has not been registered before");
+			LOG.error("isEntryCall has not been registered before");
 			return true;
 		}
 		return curIsEntryCall;
@@ -167,7 +167,7 @@ public final class SOAPTraceRegistry {
 	public final boolean recallThreadLocalOutRequestIsEntryCall() {
 		final Boolean curIsEntryCall = this.threadLocalOutRequestIsEntryCall.get();
 		if (curIsEntryCall == null) {
-			SOAPTraceRegistry.LOG.error("isEntryCall has not been registered before");
+			LOG.error("isEntryCall has not been registered before");
 			return true;
 		}
 		return curIsEntryCall;
@@ -202,7 +202,7 @@ public final class SOAPTraceRegistry {
 	public final int recallThreadLocalInRequestEOI() {
 		final Integer curEoi = this.threadLocalInRequestEoi.get();
 		if (curEoi == null) {
-			SOAPTraceRegistry.LOG.error("eoi has not been registered before");
+			LOG.error("eoi has not been registered before");
 			return -1;
 		}
 		return curEoi;
@@ -237,7 +237,7 @@ public final class SOAPTraceRegistry {
 	public final int recallThreadLocalInRequestESS() {
 		final Integer curEss = this.threadLocalInRequestEss.get();
 		if (curEss == null) {
-			SOAPTraceRegistry.LOG.error("ess has not been registered before");
+			LOG.error("ess has not been registered before");
 			return -1;
 		}
 		return curEss;

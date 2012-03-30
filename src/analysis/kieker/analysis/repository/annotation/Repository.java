@@ -50,5 +50,5 @@ public @interface Repository {
 	 * 
 	 * @return The name of this repository type.
 	 */
-	String name() default Repository.NO_NAME;
+	String name() default NO_NAME;
 }

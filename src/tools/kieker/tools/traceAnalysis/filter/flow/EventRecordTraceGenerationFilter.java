@@ -112,19 +112,19 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 		super(configuration);
 
 		/* Load from the configuration. */
-		this.maxTraceDurationMillis = configuration.getLongProperty(EventRecordTraceGenerationFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS);
+		this.maxTraceDurationMillis = configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS);
 
 		if (this.maxTraceDurationMillis < 0) {
 			throw new IllegalArgumentException("value maxTraceDurationMillis must not be negative (found: " + this.maxTraceDurationMillis + ")");
 		}
 		if (this.maxTraceDurationMillis == AbstractTraceProcessingFilter.MAX_DURATION_MILLIS) {
-			this.maxTraceDurationNanos = EventRecordTraceGenerationFilter.CONFIG_PROPERTY_VALUE_MAX_DURATION_NANOS;
+			this.maxTraceDurationNanos = CONFIG_PROPERTY_VALUE_MAX_DURATION_NANOS;
 		} else {
 			this.maxTraceDurationNanos = this.maxTraceDurationMillis * (1000 * 1000);
 		}
 	}
 
-	@InputPort(name = EventRecordTraceGenerationFilter.INPUT_PORT_NAME_TRACE_EVENT, description = "Receives the trace events to be processed",
+	@InputPort(name = INPUT_PORT_NAME_TRACE_EVENT, description = "Receives the trace events to be processed",
 			eventTypes = { AbstractTraceEvent.class, Trace.class })
 	public void inputTraceEvent(final IMonitoringRecord record) {
 		final long traceId;
@@ -149,7 +149,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 			EventRecordTrace eventRecordTrace = this.pendingTraces.get(traceId);
 			if (eventRecordTrace != null) { /* trace (artifacts) exists already; */
 				if (!this.timeoutMap.remove(eventRecordTrace)) { /* remove from timeoutMap. Will be re-added below */
-					EventRecordTraceGenerationFilter.LOG.error("Missing entry for trace in timeoutMap: " + eventRecordTrace
+					LOG.error("Missing entry for trace in timeoutMap: " + eventRecordTrace
 							+ ". PendingTraces and timeoutMap are now longer consistent!");
 					this.reportError(traceId);
 				}
@@ -188,13 +188,13 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 			}
 
 			if (!this.timeoutMap.add(eventRecordTrace)) { // (re-)add trace to timeoutMap
-				EventRecordTraceGenerationFilter.LOG.error("Equal entry existed in timeoutMap already:" + eventRecordTrace);
+				LOG.error("Equal entry existed in timeoutMap already:" + eventRecordTrace);
 			}
 			this.processTimeoutQueue();
 		} catch (final InvalidTraceException ex) { // this would be a bug!
-			EventRecordTraceGenerationFilter.LOG.error("Attempt to add record to wrong trace", ex);
+			LOG.error("Attempt to add record to wrong trace", ex);
 		} catch (final ExecutionEventProcessingException ex) {
-			EventRecordTraceGenerationFilter.LOG.error("ExecutionEventProcessingException occured while processing the timeout queue. ", ex);
+			LOG.error("ExecutionEventProcessingException occured while processing the timeout queue. ", ex);
 		}
 	}
 
@@ -213,7 +213,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 				// Java 1.6: final EventRecordTrace polledTrace = this.timeoutMap.pollFirst();
 				final long curTraceId = polledTrace.getTraceId();
 				this.pendingTraces.remove(curTraceId);
-				super.deliver(EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME_TRACE, polledTrace);
+				super.deliver(OUTPUT_PORT_NAME_TRACE, polledTrace);
 				this.reportSuccess(curTraceId);
 			}
 		}
@@ -250,10 +250,10 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 			if (!error) {
 				this.processTimeoutQueue();
 			} else {
-				EventRecordTraceGenerationFilter.LOG.info("terminate called with error flag set; won't process timeoutqueue any more.");
+				LOG.info("terminate called with error flag set; won't process timeoutqueue any more.");
 			}
 		} catch (final ExecutionEventProcessingException ex) {
-			EventRecordTraceGenerationFilter.LOG.error("Error processing queue", ex);
+			LOG.error("Error processing queue", ex);
 		}
 	}
 
@@ -276,7 +276,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(EventRecordTraceGenerationFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS,
+		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS,
 				Long.toString(AbstractTraceProcessingFilter.MAX_DURATION_MILLIS));
 
 		return configuration;
@@ -284,7 +284,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(EventRecordTraceGenerationFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long.toString(this.maxTraceDurationMillis));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long.toString(this.maxTraceDurationMillis));
 		return configuration;
 	}
 

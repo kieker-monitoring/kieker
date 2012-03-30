@@ -163,7 +163,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 
 	private static void saveTreeToDotFile(final CallTreeNode root, final String outputFnBase,
 			final boolean includeWeights, final boolean shortLabels) throws FileNotFoundException, UnsupportedEncodingException {
-		final PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"), false, TraceCallTreeFilter.ENCODING);
+		final PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"), false, ENCODING);
 		TraceCallTreeFilter.dotFromCallingTree(root, ps, includeWeights, shortLabels);
 		ps.flush();
 		ps.close();
@@ -220,13 +220,13 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 			TraceCallTreeFilter.this.reportSuccess(mt.getTraceId());
 		} catch (final TraceProcessingException ex) {
 			TraceCallTreeFilter.this.reportError(mt.getTraceId());
-			TraceCallTreeFilter.LOG.error("TraceProcessingException", ex);
+			LOG.error("TraceProcessingException", ex);
 		} catch (final FileNotFoundException ex) {
 			TraceCallTreeFilter.this.reportError(mt.getTraceId());
-			TraceCallTreeFilter.LOG.error("File not found", ex);
+			LOG.error("File not found", ex);
 		} catch (final UnsupportedEncodingException ex) {
 			TraceCallTreeFilter.this.reportError(mt.getTraceId());
-			TraceCallTreeFilter.LOG.error("Encoding not supported", ex);
+			LOG.error("Encoding not supported", ex);
 		}
 	}
 }

@@ -46,12 +46,12 @@ public final class ConstructionEvent extends AbstractEvent {
 
 	public ConstructionEvent(final long timestamp, final String className, final String objectName) {
 		super(timestamp);
-		this.className = (className == null) ? ConstructionEvent.NO_CLASSNAME : className; // NOCS
-		this.objectName = (objectName == null) ? ConstructionEvent.NO_OBJECTNAME : objectName; // NOCS
+		this.className = (className == null) ? NO_CLASSNAME : className; // NOCS
+		this.objectName = (objectName == null) ? NO_OBJECTNAME : objectName; // NOCS
 	}
 
 	public ConstructionEvent(final Object[] values) { // NOPMD (values stored directly)
-		super(values, ConstructionEvent.TYPES); // values[0]
+		super(values, TYPES); // values[0]
 		this.className = (String) values[1];
 		this.objectName = (String) values[2];
 	}
@@ -61,7 +61,7 @@ public final class ConstructionEvent extends AbstractEvent {
 	}
 
 	public Class<?>[] getValueTypes() {
-		return ConstructionEvent.TYPES.clone();
+		return TYPES.clone();
 	}
 
 	public final String getClassName() {

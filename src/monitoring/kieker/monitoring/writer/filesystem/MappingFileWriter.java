@@ -53,7 +53,7 @@ public class MappingFileWriter {
 		synchronized (this.mappingFile) {
 			PrintWriter pw = null;
 			try {
-				pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.mappingFile, true), MappingFileWriter.ENCODING));
+				pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.mappingFile, true), ENCODING));
 				pw.write('$');
 				pw.write(String.valueOf(hashRecord.getId()));
 				pw.write('=');

@@ -102,16 +102,16 @@ public final class MonitoringController extends AbstractController implements IM
 				public void run() {
 					if (!monitoringController.isMonitoringTerminated()) {
 						// WONTFIX: We should not use a logger in shutdown hooks, logger may already be down! (#26)
-						MonitoringController.LOG.info("ShutdownHook notifies controller to initiate shutdown");
+						LOG.info("ShutdownHook notifies controller to initiate shutdown");
 						// System.err.println(monitoringController.toString());
 						monitoringController.terminateMonitoring();
 					}
 				}
 			});
 		} catch (final Exception e) { // NOPMD NOCS (Exception)
-			MonitoringController.LOG.warn("Failed to add shutdownHook");
+			LOG.warn("Failed to add shutdownHook");
 		}
-		MonitoringController.LOG.info(monitoringController.toString());
+		LOG.info(monitoringController.toString());
 		return monitoringController;
 	}
 
@@ -131,7 +131,7 @@ public final class MonitoringController extends AbstractController implements IM
 
 	@Override
 	protected final void cleanup() {
-		MonitoringController.LOG.info("Shutting down Monitoring Controller (" + this.getName() + ")");
+		LOG.info("Shutting down Monitoring Controller (" + this.getName() + ")");
 		this.stateController.terminate();
 		this.jmxController.terminate();
 		this.timeSourceController.terminate();

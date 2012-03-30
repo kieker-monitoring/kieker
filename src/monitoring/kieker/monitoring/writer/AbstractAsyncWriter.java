@@ -54,16 +54,16 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		super(configuration);
 		final String prefix = this.getClass().getName() + ".";
 
-		final int queueFullBehaviorTmp = this.configuration.getIntProperty(prefix + AbstractAsyncWriter.BEHAVIOR);
+		final int queueFullBehaviorTmp = this.configuration.getIntProperty(prefix + BEHAVIOR);
 		if ((queueFullBehaviorTmp < 0) || (queueFullBehaviorTmp > 2)) {
-			AbstractAsyncWriter.LOG.warn("Unknown value '" + queueFullBehaviorTmp + "' for " + prefix + AbstractAsyncWriter.BEHAVIOR + "; using default value 0");
+			LOG.warn("Unknown value '" + queueFullBehaviorTmp + "' for " + prefix + BEHAVIOR + "; using default value 0");
 			this.queueFullBehavior = 0;
 		} else {
 			this.queueFullBehavior = queueFullBehaviorTmp;
 		}
 		this.missedRecords = new AtomicInteger(0);
-		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.configuration.getIntProperty(prefix + AbstractAsyncWriter.QUEUESIZE));
-		this.maxShutdownDelay = this.configuration.getIntProperty(prefix + AbstractAsyncWriter.SHUTDOWNDELAY);
+		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.configuration.getIntProperty(prefix + QUEUESIZE));
+		this.maxShutdownDelay = this.configuration.getIntProperty(prefix + SHUTDOWNDELAY);
 	}
 
 	/**
@@ -74,9 +74,9 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration(super.getDefaultConfiguration());
 		final String prefix = this.getClass().getName() + "."; // can't use this.prefix, maybe uninitialized
-		configuration.setProperty(prefix + AbstractAsyncWriter.QUEUESIZE, "10000");
-		configuration.setProperty(prefix + AbstractAsyncWriter.BEHAVIOR, "0");
-		configuration.setProperty(prefix + AbstractAsyncWriter.SHUTDOWNDELAY, "-1");
+		configuration.setProperty(prefix + QUEUESIZE, "10000");
+		configuration.setProperty(prefix + BEHAVIOR, "0");
+		configuration.setProperty(prefix + SHUTDOWNDELAY, "-1");
 		return configuration;
 	}
 
@@ -103,10 +103,10 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		boolean finished = false;
 		try {
 			if (this.maxShutdownDelay > -1) {
-				AbstractAsyncWriter.LOG.info("Shutting down writers, waiting at most " + this.maxShutdownDelay + " milliseconds.");
+				LOG.info("Shutting down writers, waiting at most " + this.maxShutdownDelay + " milliseconds.");
 				finished = cdl.await(this.maxShutdownDelay, TimeUnit.MILLISECONDS);
 			} else {
-				AbstractAsyncWriter.LOG.info("Shutting down writers.");
+				LOG.info("Shutting down writers.");
 				cdl.await();
 				finished = true;
 			}
@@ -114,9 +114,9 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 			// we should be able to ignore an interrupted wait (finished is still false)
 		}
 		if (finished) {
-			AbstractAsyncWriter.LOG.info("Writer shutdown complete.");
+			LOG.info("Writer shutdown complete.");
 		} else {
-			AbstractAsyncWriter.LOG.info("Writer shutdown incomplete, " + cdl.getCount() + " worker(s) halted.");
+			LOG.info("Writer shutdown incomplete, " + cdl.getCount() + " worker(s) halted.");
 		}
 	}
 
@@ -128,7 +128,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 				break;
 			case 2: // does nothing if queue is full
 				if (!this.blockingQueue.offer(monitoringRecord) && ((this.missedRecords.getAndIncrement() % 1000) == 0)) { // NOCS
-					AbstractAsyncWriter.LOG.warn("Queue is full, dropping records.");
+					LOG.warn("Queue is full, dropping records.");
 				}
 				break;
 			default: // tries to add immediately (error if full)
@@ -136,7 +136,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 				break;
 			}
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
-			AbstractAsyncWriter.LOG.error("Failed to retrieve new monitoring record.", ex);
+			LOG.error("Failed to retrieve new monitoring record.", ex);
 			return false;
 		}
 		return true;

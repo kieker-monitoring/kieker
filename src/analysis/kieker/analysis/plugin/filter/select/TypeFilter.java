@@ -58,13 +58,13 @@ public final class TypeFilter extends AbstractFilterPlugin {
 
 	public TypeFilter(final Configuration configuration) {
 		super(configuration);
-		final String[] classes = configuration.getStringArrayProperty(TypeFilter.CONFIG_PROPERTY_NAME_TYPES);
+		final String[] classes = configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_TYPES);
 		final List<Class<?>> listOfClasses = new LinkedList<Class<?>>();
 		for (final String clazz : classes) {
 			try {
 				listOfClasses.add(Class.forName(clazz));
 			} catch (final ClassNotFoundException ex) {
-				TypeFilter.LOG.warn("Failed to add class " + clazz + " to the filter.", ex);
+				LOG.warn("Failed to add class " + clazz + " to the filter.", ex);
 			}
 		}
 		this.acceptedClasses = listOfClasses.toArray(new Class<?>[listOfClasses.size()]);
@@ -73,7 +73,7 @@ public final class TypeFilter extends AbstractFilterPlugin {
 	@Override
 	protected final Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(TypeFilter.CONFIG_PROPERTY_NAME_TYPES, "java.lang.Object");
+		configuration.setProperty(CONFIG_PROPERTY_NAME_TYPES, "java.lang.Object");
 		return configuration;
 	}
 
@@ -83,19 +83,19 @@ public final class TypeFilter extends AbstractFilterPlugin {
 		for (int i = 0; i < acceptedClasses.length; i++) {
 			acceptedClasses[i] = this.acceptedClasses[i].getName();
 		}
-		configuration.setProperty(TypeFilter.CONFIG_PROPERTY_NAME_TYPES, Configuration.toProperty(acceptedClasses));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_TYPES, Configuration.toProperty(acceptedClasses));
 		return configuration;
 	}
 
-	@InputPort(name = TypeFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { Object.class }, description = "all objects with matching types are forwarded")
+	@InputPort(name = INPUT_PORT_NAME_EVENTS, eventTypes = { Object.class }, description = "all objects with matching types are forwarded")
 	public final void inputEvents(final Object event) {
 		final Class<?> eventClass = event.getClass();
 		for (final Class<?> clazz : this.acceptedClasses) {
 			if (clazz.isAssignableFrom(eventClass)) {
-				super.deliver(TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH, event);
+				super.deliver(OUTPUT_PORT_NAME_TYPE_MATCH, event);
 				break; // only deliver once!
 			}
 		}
-		super.deliver(TypeFilter.OUTPUT_PORT_NAME_TYPE_MISMATCH, event);
+		super.deliver(OUTPUT_PORT_NAME_TYPE_MISMATCH, event);
 	}
 }

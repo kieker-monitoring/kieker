@@ -39,11 +39,11 @@ public final class SystemNanoTimer extends AbstractTimeSource {
 
 	public SystemNanoTimer(final Configuration configuration) {
 		super(configuration);
-		this.clockdifference = System.nanoTime() - (System.currentTimeMillis() * SystemNanoTimer.NANO2MILLI);
-		if (configuration.getStringProperty(SystemNanoTimer.CONFIG_OFFSET).length() == 0) {
+		this.clockdifference = System.nanoTime() - (System.currentTimeMillis() * NANO2MILLI);
+		if (configuration.getStringProperty(CONFIG_OFFSET).length() == 0) {
 			this.offset = System.nanoTime();
 		} else {
-			this.offset = this.clockdifference + configuration.getLongProperty(SystemNanoTimer.CONFIG_OFFSET);
+			this.offset = this.clockdifference + configuration.getLongProperty(CONFIG_OFFSET);
 		}
 	}
 
@@ -55,7 +55,7 @@ public final class SystemNanoTimer extends AbstractTimeSource {
 	public final String toString() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("Time in nanoseconds since ");
-		sb.append(new Date((this.offset - this.clockdifference) / SystemNanoTimer.NANO2MILLI));
+		sb.append(new Date((this.offset - this.clockdifference) / NANO2MILLI));
 		return sb.toString();
 	}
 

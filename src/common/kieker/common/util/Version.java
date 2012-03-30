@@ -42,7 +42,7 @@ public final class Version {
 	 * @return the version String.
 	 */
 	public static final String getVERSION() {
-		return Version.VERSION;
+		return VERSION;
 	}
 
 	/**
@@ -51,6 +51,6 @@ public final class Version {
 	 * @return the version String.
 	 */
 	public static final String getCOPYRIGHT() {
-		return Version.COPYRIGHT;
+		return COPYRIGHT;
 	}
 }

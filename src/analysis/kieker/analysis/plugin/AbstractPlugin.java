@@ -75,12 +75,12 @@ public abstract class AbstractPlugin implements IPlugin {
 				configuration.setDefaultConfiguration(defaultConfig);
 			}
 		} catch (final IllegalAccessException ex) {
-			AbstractPlugin.LOG.error("Unable to set plugin default properties", ex);
+			LOG.error("Unable to set plugin default properties", ex);
 		}
 		this.configuration = configuration;
 
 		/* try to determine name */
-		this.name = configuration.getStringProperty(AbstractPlugin.CONFIG_NAME);
+		this.name = configuration.getStringProperty(CONFIG_NAME);
 
 		/* KEEP IN MIND: Although we use "this" in the following code, it points to the actual class. Not to AbstractPlugin!! */
 
@@ -90,12 +90,12 @@ public abstract class AbstractPlugin implements IPlugin {
 		final Plugin annotation = this.getClass().getAnnotation(Plugin.class);
 		for (final RepositoryPort repoPort : annotation.repositoryPorts()) {
 			if (this.repositoryPorts.put(repoPort.name(), repoPort) != null) {
-				AbstractPlugin.LOG.error("Two RepositoryPorts use the same name: " + repoPort.name());
+				LOG.error("Two RepositoryPorts use the same name: " + repoPort.name());
 			}
 		}
 		for (final OutputPort outputPort : annotation.outputPorts()) {
 			if (this.outputPorts.put(outputPort.name(), outputPort) != null) {
-				AbstractPlugin.LOG.error("Two OutputPorts use the same name: " + outputPort.name());
+				LOG.error("Two OutputPorts use the same name: " + outputPort.name());
 			}
 		}
 		/* Get all input ports. */
@@ -104,7 +104,7 @@ public abstract class AbstractPlugin implements IPlugin {
 		for (final Method method : allMethods) {
 			final InputPort inputPort = method.getAnnotation(InputPort.class);
 			if ((inputPort != null) && (this.inputPorts.put(inputPort.name(), inputPort) != null)) {
-				AbstractPlugin.LOG.error("Two InputPorts use the same name: " + inputPort.name());
+				LOG.error("Two InputPorts use the same name: " + inputPort.name());
 			}
 		}
 
@@ -207,7 +207,7 @@ public abstract class AbstractPlugin implements IPlugin {
 					try {
 						pluginInputPortReference.getInputPortMethod().invoke(pluginInputPortReference.getPlugin(), data);
 					} catch (final Exception e) { // NOPMD NOCS (catch multiple)
-						AbstractPlugin.LOG.warn("Caught exception when sending data from " + this.getClass().getName() + ": OutputPort " + outputPort.name()
+						LOG.warn("Caught exception when sending data from " + this.getClass().getName() + ": OutputPort " + outputPort.name()
 								+ " to "
 								+ pluginInputPortReference.getPlugin().getClass().getName() + "'s InputPort "
 								+ pluginInputPortReference.getInputPortMethod().getName(), e);
@@ -236,7 +236,7 @@ public abstract class AbstractPlugin implements IPlugin {
 	public static final boolean isConnectionAllowed(final AbstractPlugin src, final String output, final AbstractPlugin dst, final String input) {
 		/* First step: Check whether the plugins are valid. */
 		if ((src == null) || (dst == null) || (dst instanceof IReaderPlugin)) {
-			AbstractPlugin.LOG.warn("First step: Check whether the plugins are valid.");
+			LOG.warn("First step: Check whether the plugins are valid.");
 			return false;
 		}
 
@@ -244,11 +244,11 @@ public abstract class AbstractPlugin implements IPlugin {
 		final OutputPort outputPort = src.outputPorts.get(output);
 		final InputPort inputPort = dst.inputPorts.get(input);
 		if (outputPort == null) {
-			AbstractPlugin.LOG.warn("Output port does not exist. " + "Plugin: " + src.getClass().getName() + "; output: " + output);
+			LOG.warn("Output port does not exist. " + "Plugin: " + src.getClass().getName() + "; output: " + output);
 			return false;
 		}
 		if (inputPort == null) {
-			AbstractPlugin.LOG.warn("Input port does not exist. " + "Plugin: " + dst.getClass().getName() + "; input: " + input);
+			LOG.warn("Input port does not exist. " + "Plugin: " + dst.getClass().getName() + "; input: " + input);
 			return false;
 		}
 
@@ -263,7 +263,7 @@ public abstract class AbstractPlugin implements IPlugin {
 			// // Output port can deliver everything
 			// if (!Arrays.asList(inputPort.eventTypes()).contains(Object.class)) {
 			// // But the input port cannot get everything.
-			// AbstractPlugin.LOG.warn("Third step: Make sure the ports are compatible. But the input port cannot get everything.");
+			// LOG.warn("Third step: Make sure the ports are compatible. But the input port cannot get everything.");
 			// return false;
 			// }
 			for (final Class<?> srcEventType : outEventTypes) {
@@ -274,7 +274,7 @@ public abstract class AbstractPlugin implements IPlugin {
 					}
 				}
 			}
-			AbstractPlugin.LOG.warn("Third step: Make sure the ports are compatible. Not compatible.");
+			LOG.warn("Third step: Make sure the ports are compatible. Not compatible.");
 			return false;
 		}
 

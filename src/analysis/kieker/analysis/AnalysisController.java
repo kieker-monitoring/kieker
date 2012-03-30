@@ -604,7 +604,7 @@ public final class AnalysisController {
 				public void run() {
 					if (!reader.read()) {
 						// here we started and won't throw any exceptions!
-						AnalysisController.LOG.error("Calling read() on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ")  returned false.");
+						LOG.error("Calling read() on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ")  returned false.");
 						AnalysisController.this.terminate(true);
 					}
 					readerLatch.countDown();
@@ -616,7 +616,7 @@ public final class AnalysisController {
 			this.initializationLatch.countDown();
 			readerLatch.await();
 		} catch (final InterruptedException ex) {
-			AnalysisController.LOG.warn("Interrupted while waiting for readers to finish", ex);
+			LOG.warn("Interrupted while waiting for readers to finish", ex);
 		}
 		this.terminate();
 	}
@@ -625,7 +625,7 @@ public final class AnalysisController {
 		try {
 			this.initializationLatch.await();
 		} catch (final InterruptedException ex) {
-			AnalysisController.LOG.warn("Interrupted while waiting for initilaizion of analysis controller.", ex);
+			LOG.warn("Interrupted while waiting for initilaizion of analysis controller.", ex);
 		}
 	}
 
@@ -645,11 +645,11 @@ public final class AnalysisController {
 				return;
 			}
 			if (error) {
-				AnalysisController.LOG.info("Error during analysis. Terminating ...");
+				LOG.info("Error during analysis. Terminating ...");
 				this.state = STATE.FAILED;
 				this.notifyStateObservers();
 			} else {
-				AnalysisController.LOG.info("Terminating analysis.");
+				LOG.info("Terminating analysis.");
 				this.state = STATE.TERMINATED;
 				this.notifyStateObservers();
 			}
@@ -674,13 +674,13 @@ public final class AnalysisController {
 		}
 		synchronized (this) {
 			if (this.readers.contains(reader)) {
-				AnalysisController.LOG.warn("Readers " + reader.getName() + " already registered.");
+				LOG.warn("Readers " + reader.getName() + " already registered.");
 				return;
 			}
 			this.readers.add(reader);
 		}
-		if (AnalysisController.LOG.isDebugEnabled()) {
-			AnalysisController.LOG.debug("Registered reader " + reader);
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Registered reader " + reader);
 		}
 	}
 
@@ -695,13 +695,13 @@ public final class AnalysisController {
 		}
 		synchronized (this) {
 			if (this.filters.contains(filter)) {
-				AnalysisController.LOG.warn("Filter '" + filter.getName() + "' (" + filter.getPluginName() + ") already registered.");
+				LOG.warn("Filter '" + filter.getName() + "' (" + filter.getPluginName() + ") already registered.");
 				return;
 			}
 			this.filters.add(filter);
 		}
-		if (AnalysisController.LOG.isDebugEnabled()) {
-			AnalysisController.LOG.debug("Registered plugin " + filter);
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Registered plugin " + filter);
 		}
 	}
 
@@ -714,13 +714,13 @@ public final class AnalysisController {
 		}
 		synchronized (this) {
 			if (this.repos.contains(repository)) {
-				AnalysisController.LOG.warn("Repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ") already registered.");
+				LOG.warn("Repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ") already registered.");
 				return;
 			}
 			this.repos.add(repository);
 		}
-		if (AnalysisController.LOG.isDebugEnabled()) {
-			AnalysisController.LOG.debug("Registered Repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ")");
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Registered Repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ")");
 		}
 	}
 

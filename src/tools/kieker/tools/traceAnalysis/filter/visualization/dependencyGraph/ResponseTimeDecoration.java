@@ -65,7 +65,7 @@ public class ResponseTimeDecoration extends AbstractNodeDecoration {
 
 	@Override
 	public String createFormattedOutput() {
-		return String.format(ResponseTimeDecoration.OUTPUT_TEMPLATE, this.getMinimalResponseTime(), this.getAverageResponseTime(), this.getMaximalResponseTime());
+		return String.format(OUTPUT_TEMPLATE, this.getMinimalResponseTime(), this.getAverageResponseTime(), this.getMaximalResponseTime());
 	}
 
 }

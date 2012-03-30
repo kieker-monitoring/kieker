@@ -42,6 +42,6 @@ public final class AsyncFsWriter extends AbstractAsyncFSWriter {
 	protected final AbstractFsWriterThread initWorker(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
 			final MappingFileWriter mappingFileWriter, final String path, final int maxEntiresInFile) {
 		return new FsWriterThread(monitoringController, writeQueue,
-				mappingFileWriter, path, maxEntiresInFile, this.configuration.getBooleanProperty(AsyncFsWriter.CONFIG_FLUSH));
+				mappingFileWriter, path, maxEntiresInFile, this.configuration.getBooleanProperty(CONFIG_FLUSH));
 	}
 }

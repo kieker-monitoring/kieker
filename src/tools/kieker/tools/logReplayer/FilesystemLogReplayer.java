@@ -70,7 +70,7 @@ public class FilesystemLogReplayer {
 	 */
 	public FilesystemLogReplayer(final IMonitoringController monitoringController, final String[] inputDirs, final boolean realtimeMode,
 			final int numRealtimeWorkerThreads) {
-		this(monitoringController, inputDirs, realtimeMode, numRealtimeWorkerThreads, FilesystemLogReplayer.MIN_TIMESTAMP, FilesystemLogReplayer.MAX_TIMESTAMP);
+		this(monitoringController, inputDirs, realtimeMode, numRealtimeWorkerThreads, MIN_TIMESTAMP, MAX_TIMESTAMP);
 	}
 
 	/**
@@ -132,13 +132,13 @@ public class FilesystemLogReplayer {
 		try {
 			tpanInstance.connect(fsReader, FSReader.OUTPUT_PORT_NAME_RECORDS, delegationPlugin, RecordDelegationPlugin.INPUT_PORT_NAME_MONITORING_RECORDS);
 		} catch (final AnalysisConfigurationException ex) {
-			FilesystemLogReplayer.LOG.error("Failed to connect reader to delegation.", ex);
+			LOG.error("Failed to connect reader to delegation.", ex);
 		}
 		try {
 			tpanInstance.run();
 			success = true;
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
-			FilesystemLogReplayer.LOG.error("Exception running analysis instance", ex);
+			LOG.error("Exception running analysis instance", ex);
 			success = false;
 		}
 		return success;

@@ -36,19 +36,19 @@ import kieker.monitoring.timer.ITimeSource;
 public final class BranchingProbe implements IMonitoringProbe {
 	private static final Log LOG = LogFactory.getLog(BranchingProbe.class);
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
-	private static final ITimeSource TIMESOURCE = BranchingProbe.CTRLINST.getTimeSource();
+	private static final ITimeSource TIMESOURCE = CTRLINST.getTimeSource();
 
 	private BranchingProbe() {}
 
 	public static final void monitorBranch(final int branchID, final int branchingOutcome) {
-		if (!BranchingProbe.CTRLINST.isMonitoringEnabled()) {
+		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
 		// try-catch in order to avoid that any exception is propagated to the application code.
 		try {
-			BranchingProbe.CTRLINST.newMonitoringRecord(new BranchingRecord(BranchingProbe.TIMESOURCE.getTime(), branchID, branchingOutcome));
+			CTRLINST.newMonitoringRecord(new BranchingRecord(TIMESOURCE.getTime(), branchID, branchingOutcome));
 		} catch (final Exception ex) { // NOPMD NOCS (Exceptions)
-			BranchingProbe.LOG.error("Error monitoring branching", ex);
+			LOG.error("Error monitoring branching", ex);
 		}
 	}
 }

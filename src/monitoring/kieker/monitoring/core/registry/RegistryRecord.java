@@ -45,7 +45,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 
 	public RegistryRecord(final Object[] values) {
 		final Object[] myValues = values.clone(); // to protect object from tampering
-		AbstractMonitoringRecord.checkArray(myValues, RegistryRecord.TYPES);
+		AbstractMonitoringRecord.checkArray(myValues, TYPES);
 		try {
 			this.id = (Integer) myValues[0];
 			this.object = myValues[1];
@@ -64,7 +64,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	}
 
 	public Class<?>[] getValueTypes() {
-		return RegistryRecord.TYPES.clone();
+		return TYPES.clone();
 	}
 
 	/**

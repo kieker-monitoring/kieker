@@ -59,9 +59,9 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
 
 	private static final IMonitoringController CRTR_INST = MonitoringController.getInstance();
-	protected static final ITimeSource TIMESOURCE = OperationExecutionSOAPResponseOutInterceptor.CRTR_INST.getTimeSource();
+	protected static final ITimeSource TIMESOURCE = CRTR_INST.getTimeSource();
 
-	protected static final String VM_NAME = OperationExecutionSOAPResponseOutInterceptor.CRTR_INST.getHostname();
+	protected static final String VM_NAME = CRTR_INST.getHostname();
 
 	private static final String SIGNATURE = "public void " + OperationExecutionSOAPResponseOutInterceptor.class.getName()
 			+ ".handleMessage(org.apache.cxf.binding.soap.SoapMessage)";
@@ -74,11 +74,11 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 
 	@Override
 	public void handleMessage(final SoapMessage msg) throws Fault {
-		if (!OperationExecutionSOAPResponseOutInterceptor.CRTR_INST.isMonitoringEnabled()) {
+		if (!CRTR_INST.isMonitoringEnabled()) {
 			return;
 		}
 		String sessionID;
-		final long traceId = OperationExecutionSOAPResponseOutInterceptor.CF_REGISTRY.recallThreadLocalTraceId();
+		final long traceId = CF_REGISTRY.recallThreadLocalTraceId();
 		long tin;
 		long tout;
 		boolean isEntryCall = true;
@@ -92,7 +92,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 			 * Kieker trace Id not registered.
 			 * Should not happen, since this is a response message!
 			 */
-			OperationExecutionSOAPResponseOutInterceptor.LOG.log(Level.WARNING, "Kieker traceId not registered. "
+			LOG.log(Level.WARNING, "Kieker traceId not registered. "
 					+ "Will unset all threadLocal variables and return.");
 			this.unsetKiekerThreadLocalData(); // unset all variables
 			return;
@@ -101,22 +101,22 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 			 * thread-local traceId exists: eoi, ess, and sessionID should have
 			 * been registered before
 			 */
-			eoi = OperationExecutionSOAPResponseOutInterceptor.CF_REGISTRY.recallThreadLocalEOI();
-			sessionID = OperationExecutionSOAPResponseOutInterceptor.SESSION_REGISTRY.recallThreadLocalSessionId();
-			myEoi = OperationExecutionSOAPResponseOutInterceptor.SOAP_REGISTRY.recallThreadLocalInRequestEOI();
-			myEss = OperationExecutionSOAPResponseOutInterceptor.SOAP_REGISTRY.recallThreadLocalInRequestESS();
-			tin = OperationExecutionSOAPResponseOutInterceptor.SOAP_REGISTRY.recallThreadLocalInRequestTin();
-			tout = OperationExecutionSOAPResponseOutInterceptor.TIMESOURCE.getTime();
-			isEntryCall = OperationExecutionSOAPResponseOutInterceptor.SOAP_REGISTRY.recallThreadLocalInRequestIsEntryCall();
+			eoi = CF_REGISTRY.recallThreadLocalEOI();
+			sessionID = SESSION_REGISTRY.recallThreadLocalSessionId();
+			myEoi = SOAP_REGISTRY.recallThreadLocalInRequestEOI();
+			myEss = SOAP_REGISTRY.recallThreadLocalInRequestESS();
+			tin = SOAP_REGISTRY.recallThreadLocalInRequestTin();
+			tout = TIMESOURCE.getTime();
+			isEntryCall = SOAP_REGISTRY.recallThreadLocalInRequestIsEntryCall();
 		}
 
 		/* The trace is leaving this node, thus we need to clean up the thread-local variables. */
 		this.unsetKiekerThreadLocalData();
 
 		/* Log this execution */
-		final OperationExecutionRecord rec = new OperationExecutionRecord(OperationExecutionSOAPResponseOutInterceptor.SIGNATURE, sessionID, traceId, tin, tout,
-				OperationExecutionSOAPResponseOutInterceptor.VM_NAME, myEoi, myEss);
-		OperationExecutionSOAPResponseOutInterceptor.CRTR_INST.newMonitoringRecord(rec);
+		final OperationExecutionRecord rec = new OperationExecutionRecord(SIGNATURE, sessionID, traceId, tin, tout,
+				VM_NAME, myEoi, myEss);
+		CRTR_INST.newMonitoringRecord(rec);
 
 		/*
 		 * We don't put Kieker data into response header if request didn't
@@ -151,13 +151,13 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 	}
 
 	private final void unsetKiekerThreadLocalData() {
-		OperationExecutionSOAPResponseOutInterceptor.CF_REGISTRY.unsetThreadLocalTraceId();
-		OperationExecutionSOAPResponseOutInterceptor.CF_REGISTRY.unsetThreadLocalEOI();
-		OperationExecutionSOAPResponseOutInterceptor.CF_REGISTRY.unsetThreadLocalESS();
-		OperationExecutionSOAPResponseOutInterceptor.SESSION_REGISTRY.unsetThreadLocalSessionId();
-		OperationExecutionSOAPResponseOutInterceptor.SOAP_REGISTRY.unsetThreadLocalInRequestIsEntryCall();
-		OperationExecutionSOAPResponseOutInterceptor.SOAP_REGISTRY.unsetThreadLocalInRequestTin();
-		OperationExecutionSOAPResponseOutInterceptor.SOAP_REGISTRY.unsetThreadLocalInRequestEOI();
-		OperationExecutionSOAPResponseOutInterceptor.SOAP_REGISTRY.unsetThreadLocalInRequestESS();
+		CF_REGISTRY.unsetThreadLocalTraceId();
+		CF_REGISTRY.unsetThreadLocalEOI();
+		CF_REGISTRY.unsetThreadLocalESS();
+		SESSION_REGISTRY.unsetThreadLocalSessionId();
+		SOAP_REGISTRY.unsetThreadLocalInRequestIsEntryCall();
+		SOAP_REGISTRY.unsetThreadLocalInRequestTin();
+		SOAP_REGISTRY.unsetThreadLocalInRequestEOI();
+		SOAP_REGISTRY.unsetThreadLocalInRequestESS();
 	}
 }

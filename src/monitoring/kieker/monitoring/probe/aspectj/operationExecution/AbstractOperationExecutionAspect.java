@@ -43,8 +43,8 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 	private static final Log LOG = LogFactory.getLog(AbstractOperationExecutionAspect.class);
 
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
-	private static final ITimeSource TIME = AbstractOperationExecutionAspect.CTRLINST.getTimeSource();
-	private static final String VMNAME = AbstractOperationExecutionAspect.CTRLINST.getHostname();
+	private static final ITimeSource TIME = CTRLINST.getTimeSource();
+	private static final String VMNAME = CTRLINST.getHostname();
 	private static final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.INSTANCE;
 	private static final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
 
@@ -53,51 +53,51 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 
 	@Around("monitoredOperation() && notWithinKieker()")
 	public Object operation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
-		if (!AbstractOperationExecutionAspect.CTRLINST.isMonitoringEnabled()) {
+		if (!CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
 		// collect data
 		final String signature = thisJoinPoint.getSignature().toLongString();
 		final boolean entrypoint;
-		final String hostname = AbstractOperationExecutionAspect.VMNAME;
-		final String sessionId = AbstractOperationExecutionAspect.SESSIONREGISTRY.recallThreadLocalSessionId();
+		final String hostname = VMNAME;
+		final String sessionId = SESSIONREGISTRY.recallThreadLocalSessionId();
 		final int eoi; // this is executionOrderIndex-th execution in this trace
 		final int ess; // this is the height in the dynamic call tree of this execution
-		long traceId = AbstractOperationExecutionAspect.CFREGISTRY.recallThreadLocalTraceId(); // traceId, -1 if entry point
+		long traceId = CFREGISTRY.recallThreadLocalTraceId(); // traceId, -1 if entry point
 		if (traceId == -1) {
 			entrypoint = true;
-			traceId = AbstractOperationExecutionAspect.CFREGISTRY.getAndStoreUniqueThreadLocalTraceId();
-			AbstractOperationExecutionAspect.CFREGISTRY.storeThreadLocalEOI(0);
-			AbstractOperationExecutionAspect.CFREGISTRY.storeThreadLocalESS(1); // next operation is ess + 1
+			traceId = CFREGISTRY.getAndStoreUniqueThreadLocalTraceId();
+			CFREGISTRY.storeThreadLocalEOI(0);
+			CFREGISTRY.storeThreadLocalESS(1); // next operation is ess + 1
 			eoi = 0;
 			ess = 0;
 		} else {
 			entrypoint = false;
-			eoi = AbstractOperationExecutionAspect.CFREGISTRY.incrementAndRecallThreadLocalEOI(); // ess > 1
-			ess = AbstractOperationExecutionAspect.CFREGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0
+			eoi = CFREGISTRY.incrementAndRecallThreadLocalEOI(); // ess > 1
+			ess = CFREGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0
 			if ((eoi == -1) || (ess == -1)) {
-				AbstractOperationExecutionAspect.LOG.error("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
-				AbstractOperationExecutionAspect.CTRLINST.terminateMonitoring();
+				LOG.error("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
+				CTRLINST.terminateMonitoring();
 			}
 		}
 		// measure before
-		final long tin = AbstractOperationExecutionAspect.TIME.getTime();
+		final long tin = TIME.getTime();
 		// execution of the called method
 		final Object retval;
 		try {
 			retval = thisJoinPoint.proceed();
 		} finally {
 			// measure after
-			final long tout = AbstractOperationExecutionAspect.TIME.getTime();
-			AbstractOperationExecutionAspect.CTRLINST.newMonitoringRecord(
+			final long tout = TIME.getTime();
+			CTRLINST.newMonitoringRecord(
 					new OperationExecutionRecord(signature, sessionId, traceId, tin, tout, hostname, eoi, ess));
 			// cleanup
 			if (entrypoint) {
-				AbstractOperationExecutionAspect.CFREGISTRY.unsetThreadLocalTraceId();
-				AbstractOperationExecutionAspect.CFREGISTRY.unsetThreadLocalEOI();
-				AbstractOperationExecutionAspect.CFREGISTRY.unsetThreadLocalESS();
+				CFREGISTRY.unsetThreadLocalTraceId();
+				CFREGISTRY.unsetThreadLocalEOI();
+				CFREGISTRY.unsetThreadLocalESS();
 			} else {
-				AbstractOperationExecutionAspect.CFREGISTRY.storeThreadLocalESS(ess); // next operation is ess
+				CFREGISTRY.storeThreadLocalESS(ess); // next operation is ess
 			}
 		}
 		return retval;

@@ -49,12 +49,12 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 	/**
 	 * Name of the host, the resource belongs to.
 	 */
-	private volatile String hostname = ResourceUtilizationRecord.DEFAULT_VALUE;
+	private volatile String hostname = DEFAULT_VALUE;
 
 	/**
 	 * Name of the resource.
 	 */
-	private volatile String resourceName = ResourceUtilizationRecord.DEFAULT_VALUE;
+	private volatile String resourceName = DEFAULT_VALUE;
 
 	/**
 	 * Value of utilization. The value should be in the range <code>[0,1]</code>
@@ -83,7 +83,7 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 
 	public ResourceUtilizationRecord(final Object[] values) {
 		final Object[] myValues = values.clone();
-		AbstractMonitoringRecord.checkArray(myValues, ResourceUtilizationRecord.TYPES);
+		AbstractMonitoringRecord.checkArray(myValues, TYPES);
 		try {
 			this.timestamp = (Long) myValues[0];
 			this.hostname = (String) myValues[1];
@@ -104,7 +104,7 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 	}
 
 	public Class<?>[] getValueTypes() {
-		return ResourceUtilizationRecord.TYPES.clone();
+		return TYPES.clone();
 	}
 
 	/**

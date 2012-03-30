@@ -88,22 +88,22 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	}
 
 	@InputPort(
-			name = TraceEquivalenceClassFilter.INPUT_PORT_NAME_EXECUTION_TRACE,
+			name = INPUT_PORT_NAME_EXECUTION_TRACE,
 			description = "Execution traces",
 			eventTypes = { ExecutionTrace.class })
 	public void newExecutionTrace(final ExecutionTrace et) {
 		try {
-			if (this.equivalenceMode == TraceEquivalenceClassFilter.TraceEquivalenceClassModes.DISABLED) {
-				super.deliver(TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_REPRESENTATIVES, et);
-				super.deliver(TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE_REPRESENTATIVES, et.toMessageTrace(SystemModelRepository.ROOT_EXECUTION));
+			if (this.equivalenceMode == TraceEquivalenceClassModes.DISABLED) {
+				super.deliver(OUTPUT_PORT_NAME_EXECUTION_TRACE_REPRESENTATIVES, et);
+				super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE_REPRESENTATIVES, et.toMessageTrace(SystemModelRepository.ROOT_EXECUTION));
 			} else { // mode is ASSEMBLY or ALLOCATION
 				final AbstractExecutionTraceHashContainer polledTraceHashContainer;
-				if (this.equivalenceMode == TraceEquivalenceClassFilter.TraceEquivalenceClassModes.ASSEMBLY) {
+				if (this.equivalenceMode == TraceEquivalenceClassModes.ASSEMBLY) {
 					polledTraceHashContainer = new ExecutionTraceHashContainerAssemblyEquivalence(et);
-				} else if (this.equivalenceMode == TraceEquivalenceClassFilter.TraceEquivalenceClassModes.ALLOCATION) {
+				} else if (this.equivalenceMode == TraceEquivalenceClassModes.ALLOCATION) {
 					polledTraceHashContainer = new ExecutionTraceHashContainerAllocationEquivalence(et);
 				} else { // just to make sure
-					TraceEquivalenceClassFilter.LOG.error("Invalid trace equivalence mode: " + this.equivalenceMode);
+					LOG.error("Invalid trace equivalence mode: " + this.equivalenceMode);
 					this.reportError(et.getTraceId());
 					return;
 				}
@@ -112,8 +112,8 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 				if (numOccurences == null) {
 					numOccurences = new AtomicInteger(1);
 					this.eTracesEquivClassesMap.put(polledTraceHashContainer, numOccurences);
-					super.deliver(TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_REPRESENTATIVES, et);
-					super.deliver(TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE_REPRESENTATIVES,
+					super.deliver(OUTPUT_PORT_NAME_EXECUTION_TRACE_REPRESENTATIVES, et);
+					super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE_REPRESENTATIVES,
 							et.toMessageTrace(SystemModelRepository.ROOT_EXECUTION));
 				} else {
 					numOccurences.incrementAndGet();
@@ -121,7 +121,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 			}
 			this.reportSuccess(et.getTraceId());
 		} catch (final InvalidTraceException ex) {
-			TraceEquivalenceClassFilter.LOG.error("InvalidTraceException", ex);
+			LOG.error("InvalidTraceException", ex);
 			this.reportError(et.getTraceId());
 		}
 	}
@@ -145,7 +145,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 
 	@Override
 	public String getExecutionTraceInputPortName() {
-		return TraceEquivalenceClassFilter.INPUT_PORT_NAME_EXECUTION_TRACE;
+		return INPUT_PORT_NAME_EXECUTION_TRACE;
 	}
 
 }

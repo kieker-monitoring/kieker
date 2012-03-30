@@ -36,10 +36,10 @@ public final class SystemMilliTimer extends AbstractTimeSource {
 
 	public SystemMilliTimer(final Configuration configuration) {
 		super(configuration);
-		if (configuration.getStringProperty(SystemMilliTimer.CONFIG_OFFSET).length() == 0) {
+		if (configuration.getStringProperty(CONFIG_OFFSET).length() == 0) {
 			this.offset = System.currentTimeMillis();
 		} else {
-			this.offset = configuration.getLongProperty(SystemMilliTimer.CONFIG_OFFSET);
+			this.offset = configuration.getLongProperty(CONFIG_OFFSET);
 		}
 	}
 

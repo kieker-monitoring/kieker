@@ -39,7 +39,7 @@ public final class BeforeOperationEvent extends AbstractOperationEvent {
 	}
 
 	public BeforeOperationEvent(final Object[] values) {
-		super(values, BeforeOperationEvent.TYPES); // values[0..3]
+		super(values, TYPES); // values[0..3]
 	}
 
 	public final Object[] toArray() {
@@ -47,7 +47,7 @@ public final class BeforeOperationEvent extends AbstractOperationEvent {
 	}
 
 	public final Class<?>[] getValueTypes() {
-		return BeforeOperationEvent.TYPES.clone();
+		return TYPES.clone();
 	}
 
 	@Override

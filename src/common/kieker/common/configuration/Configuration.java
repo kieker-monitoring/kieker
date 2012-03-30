@@ -57,7 +57,7 @@ public final class Configuration extends Properties {
 		try {
 			return Integer.parseInt(s);
 		} catch (final NumberFormatException ex) {
-			Configuration.LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0"); // ignore ex
+			LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0"); // ignore ex
 			return 0;
 		}
 	}
@@ -67,7 +67,7 @@ public final class Configuration extends Properties {
 		try {
 			return Long.parseLong(s);
 		} catch (final NumberFormatException ex) {
-			Configuration.LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0"); // ignore ex
+			LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0"); // ignore ex
 			return 0;
 		}
 	}

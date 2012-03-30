@@ -215,7 +215,7 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 		}
 
 		private void handleUnsupportedEvent(final AbstractTraceEvent event) {
-			EventTrace2ExecutionAndMessageTraceFilter.LOG.warn("Trace Events of type " + event.getClass().getName() + " not supported yet.");
+			LOG.warn("Trace Events of type " + event.getClass().getName() + " not supported yet.");
 		}
 
 		/**
@@ -381,7 +381,7 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 		super(configuration);
 	}
 
-	@InputPort(name = EventTrace2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME_EVENT_TRACE, description = "Receives event record traces to be transformed", eventTypes = { EventRecordTrace.class })
+	@InputPort(name = INPUT_PORT_NAME_EVENT_TRACE, description = "Receives event record traces to be transformed", eventTypes = { EventRecordTrace.class })
 	public void inputEventTrace(final EventRecordTrace eventTrace) {
 		final ExecutionTrace execTrace = new ExecutionTrace(eventTrace.getTraceId(), eventTrace.getSessionId());
 		final EventRecordStream eventStream = new EventRecordStream(eventTrace);
@@ -413,13 +413,13 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 				eventStream.consume();
 			}
 		} catch (final InvalidEventTraceException e) {
-			EventTrace2ExecutionAndMessageTraceFilter.LOG.error(e.getMessage() + "\n"
+			LOG.error(e.getMessage() + "\n"
 					+ "Terminating processing of event record trace with ID " + execTrace.getTraceId(), e);
 		}
 
-		super.deliver(EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, execTrace);
+		super.deliver(OUTPUT_PORT_NAME_EXECUTION_TRACE, execTrace);
 		try {
-			super.deliver(EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, execTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION));
+			super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE, execTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION));
 			super.reportSuccess(execTrace.getTraceId());
 		} catch (final InvalidTraceException ex) {
 			// FIXME: send to new output port for defect traces
@@ -427,9 +427,9 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 	}
 
 	private void printInvalidIndexMessage(final AbstractTraceEvent event, final ExecutionTrace executionTrace, final long lastIndex) {
-		EventTrace2ExecutionAndMessageTraceFilter.LOG.error("Trace events' order indices must increment by one: "
+		LOG.error("Trace events' order indices must increment by one: "
 				+ " Found " + lastIndex + " followed by " + event.getOrderIndex() + " event (" + event + ")");
-		EventTrace2ExecutionAndMessageTraceFilter.LOG.error("Terminating processing of event record trace with ID " + executionTrace.getTraceId());
+		LOG.error("Terminating processing of event record trace with ID " + executionTrace.getTraceId());
 	}
 
 	/**

@@ -51,8 +51,8 @@ public final class TimeSourceController extends AbstractController implements IT
 
 	@Override
 	protected final void cleanup() {
-		if (TimeSourceController.LOG.isDebugEnabled()) {
-			TimeSourceController.LOG.debug("Shutting down TimeSource Controller");
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Shutting down TimeSource Controller");
 		}
 	}
 

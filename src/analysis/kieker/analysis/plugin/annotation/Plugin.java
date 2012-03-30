@@ -50,7 +50,7 @@ public @interface Plugin {
 	 * 
 	 * @return The name of this plugin.
 	 */
-	String name() default Plugin.NO_NAME;
+	String name() default NO_NAME;
 
 	/**
 	 * The output ports which the current plugin has.

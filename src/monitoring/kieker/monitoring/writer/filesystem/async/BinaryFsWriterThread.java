@@ -63,10 +63,10 @@ public class BinaryFsWriterThread extends AbstractFsWriterThread {
 					|| (recordField instanceof Boolean)) {
 				continue;
 			} else if (recordField == null) {
-				BinaryFsWriterThread.LOG.warn("Unable to write record with null value: " + monitoringRecord.getClass().getSimpleName());
+				LOG.warn("Unable to write record with null value: " + monitoringRecord.getClass().getSimpleName());
 				return; // skip record
 			} else {
-				BinaryFsWriterThread.LOG.warn("Unable to write record with recordField of type " + recordField.getClass());
+				LOG.warn("Unable to write record with recordField of type " + recordField.getClass());
 				return; // skip record
 			}
 		}
@@ -89,9 +89,9 @@ public class BinaryFsWriterThread extends AbstractFsWriterThread {
 			} else if (recordField instanceof Boolean) {
 				this.out.writeBoolean((Boolean) recordField);
 			} else if (recordField == null) {
-				BinaryFsWriterThread.LOG.warn("Unable to write record with null value.");
+				LOG.warn("Unable to write record with null value.");
 			} else {
-				BinaryFsWriterThread.LOG.warn("Unable to write record with recordField of type " + recordField.getClass());
+				LOG.warn("Unable to write record with recordField of type " + recordField.getClass());
 				this.out.writeByte((byte) 0);
 			}
 		}
@@ -111,7 +111,7 @@ public class BinaryFsWriterThread extends AbstractFsWriterThread {
 			try {
 				this.out.close();
 			} catch (final IOException ex) {
-				BinaryFsWriterThread.LOG.error("Failed to close channel.", ex);
+				LOG.error("Failed to close channel.", ex);
 			}
 		}
 	}

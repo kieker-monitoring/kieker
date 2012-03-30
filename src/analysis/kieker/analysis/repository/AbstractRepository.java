@@ -49,12 +49,12 @@ public abstract class AbstractRepository implements IRepository {
 				configuration.setDefaultConfiguration(defaultConfig);
 			}
 		} catch (final IllegalAccessException ex) {
-			AbstractRepository.LOG.error("Unable to set repository default properties"); // ok to ignore ex here
+			LOG.error("Unable to set repository default properties"); // ok to ignore ex here
 		}
 		this.configuration = configuration;
 
 		/* try to determine name */
-		this.name = configuration.getStringProperty(AbstractRepository.CONFIG_NAME);
+		this.name = configuration.getStringProperty(CONFIG_NAME);
 	}
 
 	/**

@@ -33,16 +33,16 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  */
 public final class PipeWriter extends AbstractMonitoringWriter implements IPipeWriter {
 	private static final String PREFIX = PipeWriter.class.getName() + ".";
-	public static final String CONFIG_PIPENAME = PipeWriter.PREFIX + "pipeName"; // NOCS (afterPREFIX)
+	public static final String CONFIG_PIPENAME = PREFIX + "pipeName"; // NOCS (afterPREFIX)
 	// private static final Log LOG = LogFactory.getLog(PipeWriter.class);
 
 	private final Pipe pipe;
 
 	public PipeWriter(final Configuration configuration) {
 		super(configuration);
-		final String pipeName = this.configuration.getStringProperty(PipeWriter.CONFIG_PIPENAME);
+		final String pipeName = this.configuration.getStringProperty(CONFIG_PIPENAME);
 		if (pipeName.length() == 0) {
-			throw new IllegalArgumentException("Invalid or missing value for property '" + PipeWriter.CONFIG_PIPENAME + "': '" + pipeName + "'");
+			throw new IllegalArgumentException("Invalid or missing value for property '" + CONFIG_PIPENAME + "': '" + pipeName + "'");
 		}
 		this.pipe = Broker.INSTANCE.acquirePipe(pipeName);
 	}

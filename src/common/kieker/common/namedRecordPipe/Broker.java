@@ -42,7 +42,7 @@ public enum Broker { // Singleton pattern (Effective Java #3)
 		Pipe conn;
 		synchronized (this) {
 			if ((pipeName == null) || (pipeName.length() == 0)) {
-				// Broker.LOG.error(errorMsg); no need to log if thrown
+				// LOG.error(errorMsg); no need to log if thrown
 				throw new IllegalArgumentException("pipeName must not be null or empty!  (Found: " + pipeName + ")");
 			}
 			final Pipe newPipe = new Pipe(pipeName);

@@ -60,7 +60,7 @@ public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 	private static final ITimeSource TIMESOURCE = SystemNanoTimer.getInstance();
 	private static final int QUEUE_SIZE_FACTOR = 1000;
 	private static final int MILLISECOND = 1000 * 1000;
-	private static final int REPLAY_OFFSET = 2 * 1000 * RealtimeReplayDistributor.MILLISECOND;
+	private static final int REPLAY_OFFSET = 2 * 1000 * MILLISECOND;
 
 	private final int numWorkers;
 	private AbstractFilterPlugin cons;
@@ -84,8 +84,8 @@ public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 	public RealtimeReplayDistributor(final Configuration configuration) {
 		super(configuration);
 
-		this.numWorkers = configuration.getIntProperty(RealtimeReplayDistributor.CONFIG_PROPERTY_NAME_NUM_WORKERS);
-		this.maxQueueSize = this.numWorkers * RealtimeReplayDistributor.QUEUE_SIZE_FACTOR;
+		this.numWorkers = configuration.getIntProperty(CONFIG_PROPERTY_NAME_NUM_WORKERS);
+		this.maxQueueSize = this.numWorkers * QUEUE_SIZE_FACTOR;
 
 		this.executor = new ScheduledThreadPoolExecutor(this.numWorkers);
 		this.executor.setExecuteExistingDelayedTasksAfterShutdownPolicy(true);
@@ -111,25 +111,25 @@ public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 	}
 
 	@InputPort(
-			name = RealtimeReplayDistributor.INPUT_PORT_NAME_MONITORING_RECORDS,
+			name = INPUT_PORT_NAME_MONITORING_RECORDS,
 			eventTypes = { IMonitoringRecord.class })
 	public void inputMonitoringRecords(final IMonitoringRecord monitoringRecord) {
 		if (this.startTime == -1) { // init on first record
-			this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp() - (1 * RealtimeReplayDistributor.MILLISECOND);
-			this.offset = RealtimeReplayDistributor.REPLAY_OFFSET - this.firstLoggingTimestamp;
-			this.startTime = RealtimeReplayDistributor.TIMESOURCE.getTime();
+			this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp() - (1 * MILLISECOND);
+			this.offset = REPLAY_OFFSET - this.firstLoggingTimestamp;
+			this.startTime = TIMESOURCE.getTime();
 		}
 		if (monitoringRecord.getLoggingTimestamp() < this.firstLoggingTimestamp) {
 			final MonitoringRecordConsumerException e = new MonitoringRecordConsumerException("Timestamp of current record "
 					+ monitoringRecord.getLoggingTimestamp() + " < firstLoggingTimestamp " + this.firstLoggingTimestamp);
-			RealtimeReplayDistributor.LOG.error("RecordConsumerExecutionException", e);
+			LOG.error("RecordConsumerExecutionException", e);
 			return;
 		}
 		final long schedTime = (monitoringRecord.getLoggingTimestamp() + this.offset) // relative to 1st record
-				- (RealtimeReplayDistributor.TIMESOURCE.getTime() - this.startTime); // substract elapsed time
+				- (TIMESOURCE.getTime() - this.startTime); // substract elapsed time
 		if (schedTime < 0) {
 			final MonitoringRecordConsumerException e = new MonitoringRecordConsumerException("negative scheduling time: " + schedTime);
-			RealtimeReplayDistributor.LOG.error("RecordConsumerExecutionException", e);
+			LOG.error("RecordConsumerExecutionException", e);
 			return;
 		}
 		synchronized (this) {
@@ -157,16 +157,16 @@ public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 
 	@Override
 	public void terminate(final boolean error) {
-		final long terminationDelay = ((this.lTime + this.offset) - (RealtimeReplayDistributor.TIMESOURCE.getTime() - this.startTime))
-				+ (100 * RealtimeReplayDistributor.MILLISECOND);
-		RealtimeReplayDistributor.LOG.info("Will terminate in " + terminationDelay + "nsecs from now");
+		final long terminationDelay = ((this.lTime + this.offset) - (TIMESOURCE.getTime() - this.startTime))
+				+ (100 * MILLISECOND);
+		LOG.info("Will terminate in " + terminationDelay + "nsecs from now");
 		this.executor.schedule(new Runnable() {
 
 			public void run() {
 				if (RealtimeReplayDistributor.this.terminationLatch != null) {
 					RealtimeReplayDistributor.this.terminationLatch.countDown(); // signal that last record has been scheduled
 				} else {
-					RealtimeReplayDistributor.LOG.warn("terminationLatch == null");
+					LOG.warn("terminationLatch == null");
 				}
 			}
 		}, terminationDelay, TimeUnit.NANOSECONDS);

@@ -73,15 +73,15 @@ public class Registry<E> implements IRegistry<E> {
 		// Find power-of-two sizes best matching arguments
 		int sshift = 0;
 		int ssize = 1;
-		while (ssize < Registry.CONCURRENCY_LEVEL) {
+		while (ssize < CONCURRENCY_LEVEL) {
 			++sshift;
 			ssize <<= 1;
 		}
 		this.segmentShift = 32 - sshift;
 		this.segmentMask = ssize - 1;
 		this.segments = new Segment[ssize];
-		int c = Registry.INITIAL_CAPACITY / ssize;
-		if ((c * ssize) < Registry.INITIAL_CAPACITY) {
+		int c = INITIAL_CAPACITY / ssize;
+		if ((c * ssize) < INITIAL_CAPACITY) {
 			++c;
 		}
 		int cap = 1;
@@ -89,7 +89,7 @@ public class Registry<E> implements IRegistry<E> {
 			cap <<= 1;
 		}
 		for (int i = 0; i < this.segments.length; ++i) {
-			this.segments[i] = new Segment<E>(cap, Registry.LOAD_FACTOR);
+			this.segments[i] = new Segment<E>(cap, LOAD_FACTOR);
 		}
 		this.eArrayCached = (E[]) new Object[0];
 	}
@@ -160,9 +160,9 @@ public class Registry<E> implements IRegistry<E> {
 		final E value; // NOPMD (package visible for inner class)
 		final int hash; // NOPMD (package visible for inner class)
 		final int id; // NOPMD (package visible for inner class)
-		final Registry.HashEntry<E> next; // NOPMD (package visible for inner class)
+		final HashEntry<E> next; // NOPMD (package visible for inner class)
 
-		protected HashEntry(final E value, final int hash, final int id, final Registry.HashEntry<E> next) {
+		protected HashEntry(final E value, final int hash, final int id, final HashEntry<E> next) {
 			this.value = value;
 			this.hash = hash;
 			this.id = id;
@@ -205,7 +205,7 @@ public class Registry<E> implements IRegistry<E> {
 		/**
 		 * The per-segment table.
 		 */
-		private Registry.HashEntry<E>[] table;
+		private HashEntry<E>[] table;
 
 		/**
 		 * The table is rehashed when its size exceeds this threshold. (The value of this field is always <tt>(int)(capacity * loadFactor)</tt>.)
@@ -238,9 +238,9 @@ public class Registry<E> implements IRegistry<E> {
 				this.lock(); // could be smaller area! it is only important to acquire the lock, not to hold it.
 				try {
 					final int capacity = eArray.length;
-					final Registry.HashEntry<E>[] tab = this.table;
-					for (final Registry.HashEntry<E> hashEntry : tab) {
-						Registry.HashEntry<E> e = hashEntry;
+					final HashEntry<E>[] tab = this.table;
+					for (final HashEntry<E> hashEntry : tab) {
+						HashEntry<E> e = hashEntry;
 						while (e != null) {
 							if (e.id < capacity) {
 								eArray[e.id] = e.value;
@@ -255,11 +255,11 @@ public class Registry<E> implements IRegistry<E> {
 		}
 
 		protected int get(final E value, final int hash, final AtomicInteger nextId) {
-			Registry.HashEntry<E> e = null;
+			HashEntry<E> e = null;
 			if (this.count != 0) { // volatile read! search for entry without locking
-				final Registry.HashEntry<E>[] tab = this.table;
+				final HashEntry<E>[] tab = this.table;
 				final int index = hash & (tab.length - 1);
-				final Registry.HashEntry<E> first = tab[index];
+				final HashEntry<E> first = tab[index];
 				e = first;
 				while ((e != null) && ((e.hash != hash) || !value.equals(e.value))) {
 					e = e.next;
@@ -273,9 +273,9 @@ public class Registry<E> implements IRegistry<E> {
 						this.rehash();
 						this.count = c; // write volatile
 					}
-					final Registry.HashEntry<E>[] tab = this.table;
+					final HashEntry<E>[] tab = this.table;
 					final int index = hash & (tab.length - 1);
-					final Registry.HashEntry<E> first = tab[index]; // the bin the value may be inside
+					final HashEntry<E> first = tab[index]; // the bin the value may be inside
 					e = first;
 					while ((e != null) && ((e.hash != hash) || !value.equals(e.value))) {
 						e = e.next;
@@ -303,21 +303,21 @@ public class Registry<E> implements IRegistry<E> {
 		 * garbage collectable as soon as they are no longer referenced by any reader thread that may be in the midst of traversing table right now.
 		 */
 		private void rehash() {
-			final Registry.HashEntry<E>[] oldTable = this.table;
+			final HashEntry<E>[] oldTable = this.table;
 			final int oldCapacity = oldTable.length;
-			if (oldCapacity >= Registry.MAXIMUM_CAPACITY) {
+			if (oldCapacity >= MAXIMUM_CAPACITY) {
 				return;
 			}
 			@SuppressWarnings("unchecked")
-			final Registry.HashEntry<E>[] newTable = new HashEntry[oldCapacity << 1];
-			this.threshold = (int) (newTable.length * Registry.LOAD_FACTOR);
+			final HashEntry<E>[] newTable = new HashEntry[oldCapacity << 1];
+			this.threshold = (int) (newTable.length * LOAD_FACTOR);
 			final int sizeMask = newTable.length - 1;
 			for (int i = 0; i < oldCapacity; i++) {
 				// We need to guarantee that any existing reads of old Map can proceed. So we cannot yet null out each bin.
-				final Registry.HashEntry<E> e = oldTable[i];
+				final HashEntry<E> e = oldTable[i];
 
 				if (e != null) {
-					final Registry.HashEntry<E> next = e.next;
+					final HashEntry<E> next = e.next;
 					final int idx = e.hash & sizeMask;
 
 					// Single node on list
@@ -325,9 +325,9 @@ public class Registry<E> implements IRegistry<E> {
 						newTable[idx] = e;
 					} else {
 						// Reuse trailing consecutive sequence at same slot
-						Registry.HashEntry<E> lastRun = e;
+						HashEntry<E> lastRun = e;
 						int lastIdx = idx;
-						for (Registry.HashEntry<E> last = next; last != null; last = last.next) { // find end of bin
+						for (HashEntry<E> last = next; last != null; last = last.next) { // find end of bin
 							final int k = last.hash & sizeMask;
 							if (k != lastIdx) { // NOCS (nested if)
 								lastIdx = k;
@@ -337,9 +337,9 @@ public class Registry<E> implements IRegistry<E> {
 						newTable[lastIdx] = lastRun;
 
 						// Clone all remaining nodes
-						for (Registry.HashEntry<E> p = e; p != lastRun; p = p.next) { // NOPMD (no equals meant here)
+						for (HashEntry<E> p = e; p != lastRun; p = p.next) { // NOPMD (no equals meant here)
 							final int k = p.hash & sizeMask;
-							final Registry.HashEntry<E> n = newTable[k];
+							final HashEntry<E> n = newTable[k];
 							newTable[k] = new HashEntry<E>(p.value, p.hash, p.id, n);
 						}
 					}

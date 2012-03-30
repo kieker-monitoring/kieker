@@ -52,53 +52,53 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 	/**
 	 * Name of the host, the resource belongs to.
 	 */
-	private volatile String hostname = CPUUtilizationRecord.DEFAULT_VALUE;
+	private volatile String hostname = DEFAULT_VALUE;
 
 	/**
 	 * Identifier which is unique for a CPU on a given host.
 	 */
-	private volatile String cpuID = CPUUtilizationRecord.DEFAULT_VALUE;
+	private volatile String cpuID = DEFAULT_VALUE;
 
 	/**
 	 * Fraction of time during which the CPU was used for user-space processes.
 	 * The value should be in the range <code>[0,1]</code>
 	 */
-	private volatile double user = CPUUtilizationRecord.UNDEFINED_DOUBLE;
+	private volatile double user = UNDEFINED_DOUBLE;
 
 	/**
 	 * Fraction of time during which the CPU was used by the kernel. The value
 	 * should be in the range <code>[0,1]</code>
 	 */
-	private volatile double system = CPUUtilizationRecord.UNDEFINED_DOUBLE;
+	private volatile double system = UNDEFINED_DOUBLE;
 
 	/**
 	 * Fraction of CPU wait time. The value should be in the range <code>[0,1]</code>
 	 */
-	private volatile double wait = CPUUtilizationRecord.UNDEFINED_DOUBLE;
+	private volatile double wait = UNDEFINED_DOUBLE;
 
 	/**
 	 * Fraction of time during which the CPU was used by user space processes
 	 * with a high nice value. The value should be in the range <code>[0,1]</code>
 	 */
-	private volatile double nice = CPUUtilizationRecord.UNDEFINED_DOUBLE;
+	private volatile double nice = UNDEFINED_DOUBLE;
 
 	/**
 	 * Fraction of time during which the CPU was used by user space processes
 	 * with a high nice value. The value should be in the range <code>[0,1]</code>
 	 */
-	private volatile double irq = CPUUtilizationRecord.UNDEFINED_DOUBLE;
+	private volatile double irq = UNDEFINED_DOUBLE;
 
 	/**
 	 * Fraction of time during which the CPU was utilized. Typically, this is
 	 * the sum of {@link #user}, {@link #system}, {@link #wait}, and {@link #nice}. The value should be in the range <code>[0,1]</code>
 	 */
-	private volatile double totalUtilization = CPUUtilizationRecord.UNDEFINED_DOUBLE;
+	private volatile double totalUtilization = UNDEFINED_DOUBLE;
 
 	/**
 	 * Fraction of time during which the CPU was idle. The value should be in
 	 * the range <code>[0,1]</code>
 	 */
-	private volatile double idle = CPUUtilizationRecord.UNDEFINED_DOUBLE;
+	private volatile double idle = UNDEFINED_DOUBLE;
 
 	/**
 	 * 
@@ -138,7 +138,7 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 
 	public CPUUtilizationRecord(final Object[] values) {
 		final Object[] myValues = values.clone();
-		AbstractMonitoringRecord.checkArray(myValues, CPUUtilizationRecord.TYPES);
+		AbstractMonitoringRecord.checkArray(myValues, TYPES);
 		try {
 			this.timestamp = (Long) myValues[0];
 			this.hostname = (String) myValues[1];
@@ -169,7 +169,7 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 	}
 
 	public Class<?>[] getValueTypes() {
-		return CPUUtilizationRecord.TYPES.clone();
+		return TYPES.clone();
 	}
 
 	/**

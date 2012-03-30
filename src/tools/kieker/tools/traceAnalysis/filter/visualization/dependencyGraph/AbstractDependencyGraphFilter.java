@@ -71,7 +71,7 @@ public abstract class AbstractDependencyGraphFilter<T> extends AbstractMessageTr
 	protected abstract void dotEdges(Collection<DependencyGraphNode<T>> nodes, PrintStream ps, final boolean shortLabels);
 
 	protected final String getNodeId(final DependencyGraphNode<T> n) {
-		return AbstractDependencyGraphFilter.NODE_PREFIX + n.getId();
+		return NODE_PREFIX + n.getId();
 	}
 
 	protected void createEdgesForNode(final DependencyGraphNode<T> node, final Collection<WeightedBidirectionalDependencyGraphEdge<T>> edges, final PrintStream ps,
@@ -115,7 +115,7 @@ public abstract class AbstractDependencyGraphFilter<T> extends AbstractMessageTr
 
 	public final void saveToDotFile(final String outputFnBase, final boolean includeWeights, final boolean shortLabels, final boolean plotSelfLoops)
 			throws FileNotFoundException, UnsupportedEncodingException {
-		final PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"), false, AbstractDependencyGraphFilter.ENCODING);
+		final PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"), false, ENCODING);
 		this.graphToDot(ps, includeWeights, shortLabels, plotSelfLoops);
 		ps.flush();
 		ps.close();

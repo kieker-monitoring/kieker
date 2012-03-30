@@ -59,8 +59,8 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 
 	public ExecutionTraceWriterFilter(final Configuration configuration) throws IOException {
 		super(configuration);
-		this.outputFn = configuration.getStringProperty(ExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN);
-		this.ps = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.outputFn), ExecutionTraceWriterFilter.ENCODING));
+		this.outputFn = configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN);
+		this.ps = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.outputFn), ENCODING));
 	}
 
 	@Override
@@ -76,18 +76,18 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 			try {
 				this.ps.close();
 			} catch (final IOException ex) {
-				ExecutionTraceWriterFilter.LOG.error("IOException while terminating", ex);
+				LOG.error("IOException while terminating", ex);
 			}
 		}
 	}
 
 	@Override
 	public String getExecutionTraceInputPortName() {
-		return ExecutionTraceWriterFilter.INPUT_PORT_NAME_EXECUTION_TRACES;
+		return INPUT_PORT_NAME_EXECUTION_TRACES;
 	}
 
 	@InputPort(
-			name = ExecutionTraceWriterFilter.INPUT_PORT_NAME_EXECUTION_TRACES,
+			name = INPUT_PORT_NAME_EXECUTION_TRACES,
 			description = "Receives the execution traces to be written",
 			eventTypes = { ExecutionTrace.class })
 	public void newExecutionTrace(final ExecutionTrace et) {
@@ -96,7 +96,7 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 			ExecutionTraceWriterFilter.this.reportSuccess(et.getTraceId());
 		} catch (final IOException ex) {
 			ExecutionTraceWriterFilter.this.reportError(et.getTraceId());
-			ExecutionTraceWriterFilter.LOG.error("IOException", ex);
+			LOG.error("IOException", ex);
 		}
 	}
 
@@ -104,7 +104,7 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(ExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, "");
+		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN, "");
 
 		return configuration;
 	}
@@ -112,7 +112,7 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(ExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, this.outputFn);
+		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN, this.outputFn);
 
 		return configuration;
 	}

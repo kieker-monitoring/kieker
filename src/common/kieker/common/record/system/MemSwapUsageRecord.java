@@ -45,11 +45,11 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	private static final String DEFAULT_VALUE = "N/A";
 	private static final long UNDEFINED_LONG = -1;
 
-	private volatile long memUsed = MemSwapUsageRecord.UNDEFINED_LONG;
-	private volatile long memFree = MemSwapUsageRecord.UNDEFINED_LONG;
-	private volatile long swapTotal = MemSwapUsageRecord.UNDEFINED_LONG;
-	private volatile long swapUsed = MemSwapUsageRecord.UNDEFINED_LONG;
-	private volatile long swapFree = MemSwapUsageRecord.UNDEFINED_LONG;
+	private volatile long memUsed = UNDEFINED_LONG;
+	private volatile long memFree = UNDEFINED_LONG;
+	private volatile long swapTotal = UNDEFINED_LONG;
+	private volatile long swapUsed = UNDEFINED_LONG;
+	private volatile long swapFree = UNDEFINED_LONG;
 
 	/**
 	 * Date/time of measurement. The value should be interpreted as the number
@@ -60,9 +60,9 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	/**
 	 * Name of the host, the resource belongs to.
 	 */
-	private volatile String hostname = MemSwapUsageRecord.DEFAULT_VALUE;
+	private volatile String hostname = DEFAULT_VALUE;
 
-	private volatile long memTotal = MemSwapUsageRecord.UNDEFINED_LONG;
+	private volatile long memTotal = UNDEFINED_LONG;
 
 	/**
 	 * 
@@ -90,7 +90,7 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 
 	public MemSwapUsageRecord(final Object[] values) {
 		final Object[] myValues = values.clone();
-		AbstractMonitoringRecord.checkArray(myValues, MemSwapUsageRecord.TYPES);
+		AbstractMonitoringRecord.checkArray(myValues, TYPES);
 		try {
 			this.timestamp = (Long) myValues[0];
 			this.hostname = (String) myValues[1];
@@ -119,7 +119,7 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	}
 
 	public Class<?>[] getValueTypes() {
-		return MemSwapUsageRecord.TYPES.clone();
+		return TYPES.clone();
 	}
 
 	/**

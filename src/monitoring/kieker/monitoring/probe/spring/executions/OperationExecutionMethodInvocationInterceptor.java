@@ -52,38 +52,38 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 	private static final IMonitoringController CONTROLLER = MonitoringController.getInstance();
 	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
-	private static final ITimeSource TIMESOURCE = OperationExecutionMethodInvocationInterceptor.CONTROLLER.getTimeSource();
-	private static final String VM_NAME = OperationExecutionMethodInvocationInterceptor.CONTROLLER.getHostname();
+	private static final ITimeSource TIMESOURCE = CONTROLLER.getTimeSource();
+	private static final String VM_NAME = CONTROLLER.getHostname();
 
 	/**
 	 * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
 	 */
 
 	public Object invoke(final MethodInvocation invocation) throws Throwable { // NOCS (IllegalThrowsCheck)
-		final long traceId = OperationExecutionMethodInvocationInterceptor.CF_REGISTRY.recallThreadLocalTraceId(); // -1 if entry point
+		final long traceId = CF_REGISTRY.recallThreadLocalTraceId(); // -1 if entry point
 		// Only go on if a traceId has been registered before
 		// TODO: this needs to be fixed!
-		if ((traceId == -1) || !OperationExecutionMethodInvocationInterceptor.CONTROLLER.isMonitoringEnabled()) {
+		if ((traceId == -1) || !CONTROLLER.isMonitoringEnabled()) {
 			return invocation.proceed();
 		}
 		final String signature = invocation.getMethod().toString();
-		final String sessionId = OperationExecutionMethodInvocationInterceptor.SESSION_REGISTRY.recallThreadLocalSessionId();
-		final String hostname = OperationExecutionMethodInvocationInterceptor.VM_NAME;
-		final int eoi = OperationExecutionMethodInvocationInterceptor.CF_REGISTRY.incrementAndRecallThreadLocalEOI();
-		final int ess = OperationExecutionMethodInvocationInterceptor.CF_REGISTRY.recallAndIncrementThreadLocalESS();
+		final String sessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
+		final String hostname = VM_NAME;
+		final int eoi = CF_REGISTRY.incrementAndRecallThreadLocalEOI();
+		final int ess = CF_REGISTRY.recallAndIncrementThreadLocalESS();
 		if ((eoi == -1) || (ess == -1)) {
-			OperationExecutionMethodInvocationInterceptor.LOG.error("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
-			OperationExecutionMethodInvocationInterceptor.CONTROLLER.terminateMonitoring();
+			LOG.error("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
+			CONTROLLER.terminateMonitoring();
 		}
-		final long tin = OperationExecutionMethodInvocationInterceptor.TIMESOURCE.getTime();
+		final long tin = TIMESOURCE.getTime();
 		final Object retval;
 		try {
 			retval = invocation.proceed();
 		} finally {
-			final long tout = OperationExecutionMethodInvocationInterceptor.TIMESOURCE.getTime();
-			OperationExecutionMethodInvocationInterceptor.CONTROLLER.newMonitoringRecord(
+			final long tout = TIMESOURCE.getTime();
+			CONTROLLER.newMonitoringRecord(
 					new OperationExecutionRecord(signature, sessionId, traceId, tin, tout, hostname, eoi, ess));
-			OperationExecutionMethodInvocationInterceptor.CF_REGISTRY.storeThreadLocalESS(ess);
+			CF_REGISTRY.storeThreadLocalESS(ess);
 		}
 		return retval;
 	}

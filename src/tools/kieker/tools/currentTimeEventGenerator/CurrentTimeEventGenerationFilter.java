@@ -91,10 +91,10 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	 */
 	public CurrentTimeEventGenerationFilter(final Configuration configuration) {
 		super(configuration);
-		this.timerResolution = configuration.getLongProperty(CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_NAME_TIME_RESOLUTION);
+		this.timerResolution = configuration.getLongProperty(CONFIG_PROPERTY_NAME_TIME_RESOLUTION);
 	}
 
-	@InputPort(name = CurrentTimeEventGenerationFilter.INPUT_PORT_NAME_NEW_RECORD, eventTypes = { IMonitoringRecord.class },
+	@InputPort(name = INPUT_PORT_NAME_NEW_RECORD, eventTypes = { IMonitoringRecord.class },
 			description = "Receives a new timestamp and extracts the logging timestamp as a time event")
 	public void inputRecord(final IMonitoringRecord record) {
 		if (record != null) {
@@ -106,10 +106,10 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	 * Evaluates the given timestamp internal current time which may lead to
 	 * newly generated events via {@link #getCurrentTimeOutputPort()}.
 	 */
-	@InputPort(name = CurrentTimeEventGenerationFilter.INPUT_PORT_NAME_NEW_TIMESTAMP, description = "Receives a new timestamp as a time event", eventTypes = { Long.class })
+	@InputPort(name = INPUT_PORT_NAME_NEW_TIMESTAMP, description = "Receives a new timestamp as a time event", eventTypes = { Long.class })
 	public void inputTimestamp(final Long timestamp) {
 		if (timestamp < 0) {
-			CurrentTimeEventGenerationFilter.LOG.warn("Received timestamp value < 0: " + timestamp);
+			LOG.warn("Received timestamp value < 0: " + timestamp);
 			return;
 		}
 
@@ -119,7 +119,7 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 			 */
 			this.maxTimestamp = timestamp;
 			this.firstTimestamp = timestamp;
-			super.deliver(CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME, new TimestampRecord(timestamp));
+			super.deliver(OUTPUT_PORT_NAME_CURRENT_TIME, new TimestampRecord(timestamp));
 			this.mostRecentEventFired = timestamp;
 		} else if (timestamp > this.maxTimestamp) {
 			this.maxTimestamp = timestamp;
@@ -128,7 +128,7 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 			 */
 			for (long nextTimerEventAt = this.mostRecentEventFired + this.timerResolution; timestamp >= nextTimerEventAt; nextTimerEventAt = this.mostRecentEventFired
 					+ this.timerResolution) {
-				super.deliver(CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME, new TimestampRecord(nextTimerEventAt));
+				super.deliver(OUTPUT_PORT_NAME_CURRENT_TIME, new TimestampRecord(nextTimerEventAt));
 				this.mostRecentEventFired = nextTimerEventAt;
 			}
 		}
@@ -138,7 +138,7 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_NAME_TIME_RESOLUTION, Long.toString(1000L));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_TIME_RESOLUTION, Long.toString(1000L));
 
 		return configuration;
 	}
@@ -146,7 +146,7 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_NAME_TIME_RESOLUTION, Long.toString(this.timerResolution));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_TIME_RESOLUTION, Long.toString(this.timerResolution));
 
 		return configuration;
 	}

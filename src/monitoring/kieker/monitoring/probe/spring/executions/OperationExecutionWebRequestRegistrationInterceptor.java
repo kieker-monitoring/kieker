@@ -40,17 +40,17 @@ public class OperationExecutionWebRequestRegistrationInterceptor implements WebR
 	}
 
 	public void preHandle(final WebRequest request) throws Exception {
-		OperationExecutionWebRequestRegistrationInterceptor.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
-		OperationExecutionWebRequestRegistrationInterceptor.SESSION_REGISTRY.storeThreadLocalSessionId(request.getSessionId());
-		OperationExecutionWebRequestRegistrationInterceptor.CF_REGISTRY.storeThreadLocalEOI(0);
-		OperationExecutionWebRequestRegistrationInterceptor.CF_REGISTRY.storeThreadLocalESS(1);
+		CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
+		SESSION_REGISTRY.storeThreadLocalSessionId(request.getSessionId());
+		CF_REGISTRY.storeThreadLocalEOI(0);
+		CF_REGISTRY.storeThreadLocalESS(1);
 	}
 
 	public void postHandle(final WebRequest request, final ModelMap map) throws Exception {
-		OperationExecutionWebRequestRegistrationInterceptor.CF_REGISTRY.unsetThreadLocalTraceId();
-		OperationExecutionWebRequestRegistrationInterceptor.SESSION_REGISTRY.unsetThreadLocalSessionId();
-		OperationExecutionWebRequestRegistrationInterceptor.CF_REGISTRY.unsetThreadLocalEOI();
-		OperationExecutionWebRequestRegistrationInterceptor.CF_REGISTRY.unsetThreadLocalESS();
+		CF_REGISTRY.unsetThreadLocalTraceId();
+		SESSION_REGISTRY.unsetThreadLocalSessionId();
+		CF_REGISTRY.unsetThreadLocalEOI();
+		CF_REGISTRY.unsetThreadLocalESS();
 	}
 
 	public void afterCompletion(final WebRequest request, final Exception map) throws Exception {

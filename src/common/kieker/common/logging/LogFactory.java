@@ -33,10 +33,10 @@ public final class LogFactory {
 	private static final Logger DETECTED_LOGGER;
 
 	static {
-		Logger logselectiontemp = LogFactory.Logger.JDK; // default to JDK logging
+		Logger logselectiontemp = Logger.JDK; // default to JDK logging
 		try {
 			if (Class.forName("org.apache.commons.logging.Log") != null) {
-				logselectiontemp = LogFactory.Logger.COMMONS; // use commons logging
+				logselectiontemp = Logger.COMMONS; // use commons logging
 			}
 		} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
 			// failed to find Apache commons logging
@@ -53,7 +53,7 @@ public final class LogFactory {
 	}
 
 	public static final Log getLog(final String name) {
-		switch (LogFactory.DETECTED_LOGGER) { // NOPMD (no break needed)
+		switch (DETECTED_LOGGER) { // NOPMD (no break needed)
 		case COMMONS:
 			return new LogImplCommonsLogging(name);
 		case JDK:

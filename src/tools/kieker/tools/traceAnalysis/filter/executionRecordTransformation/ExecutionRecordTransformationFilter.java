@@ -54,7 +54,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 	}
 
 	@InputPort(
-			name = ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS,
+			name = INPUT_PORT_NAME_RECORDS,
 			description = "Receives operation execution records to be transformed",
 			eventTypes = { OperationExecutionRecord.class })
 	public boolean inputOperationExecutionRecords(final OperationExecutionRecord execRec) {
@@ -63,7 +63,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 		final Execution execution = this.createExecutionByEntityNames(execRec.getHostname(), fqComponentNameSignaturePair.getFqClassname(),
 				fqComponentNameSignaturePair.getSignature(),
 				execRec.getTraceId(), execRec.getSessionId(), execRec.getEoi(), execRec.getEss(), execRec.getTin(), execRec.getTout(), false);
-		super.deliver(ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS, execution);
+		super.deliver(OUTPUT_PORT_NAME_EXECUTIONS, execution);
 		return true;
 	}
 

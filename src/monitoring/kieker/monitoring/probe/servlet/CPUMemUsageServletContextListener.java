@@ -86,10 +86,10 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 	private static final String CONTEXT_PARAM_NAME_PREFIX = CPUMemUsageServletContextListener.class.getSimpleName();
 
 	/** Parameter name for the sampling interval to be used in the web.xml file */
-	public static final String CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS = CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_PREFIX
+	public static final String CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS = CONTEXT_PARAM_NAME_PREFIX
 			+ ".samplingIntervalSeconds";
 	/** Parameter name for the initial delay to be used in the web.xml file */
-	public static final String CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS = CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_PREFIX
+	public static final String CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS = CONTEXT_PARAM_NAME_PREFIX
 			+ ".initialSamplingDelaySeconds";
 
 	private static final Log LOG = LogFactory.getLog(CPUMemUsageServletContextListener.class);
@@ -102,8 +102,8 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 	 */
 	private final Collection<ScheduledSamplerJob> samplerJobs = new CopyOnWriteArrayList<ScheduledSamplerJob>();
 
-	private volatile long sensorIntervalSeconds = CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS;
-	private volatile long initialDelaySeconds = CPUMemUsageServletContextListener.DEFAULT_SENSOR_INITIAL_DELAY_SECONDS;
+	private volatile long sensorIntervalSeconds = DEFAULT_SENSOR_INTERVAL_SECONDS;
+	private volatile long initialDelaySeconds = DEFAULT_SENSOR_INITIAL_DELAY_SECONDS;
 
 	public CPUMemUsageServletContextListener() {
 		// nothing to do
@@ -131,25 +131,25 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 	 */
 	private void initParameters(final ServletContext c) {
 		if (c == null) {
-			CPUMemUsageServletContextListener.LOG.warn("ServletContext == null");
+			LOG.warn("ServletContext == null");
 			// we are using the default values assigned during variable
 			// declaration.
 			return;
 		}
 
 		// allowed values: Int>=0
-		this.initialDelaySeconds = this.readLongInitParameter(c, CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS,
-				CPUMemUsageServletContextListener.DEFAULT_SENSOR_INITIAL_DELAY_SECONDS);
+		this.initialDelaySeconds = this.readLongInitParameter(c, CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS,
+				DEFAULT_SENSOR_INITIAL_DELAY_SECONDS);
 
 		// allows values: Int>0
-		this.sensorIntervalSeconds = this.readLongInitParameter(c, CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS,
-				CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS);
+		this.sensorIntervalSeconds = this.readLongInitParameter(c, CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS,
+				DEFAULT_SENSOR_INTERVAL_SECONDS);
 		if (this.sensorIntervalSeconds == 0) {
-			CPUMemUsageServletContextListener.LOG.warn("values for the init-param '"
-					+ CPUMemUsageServletContextListener.CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS + "' must be >0; found: " + this.sensorIntervalSeconds
+			LOG.warn("values for the init-param '"
+					+ CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS + "' must be >0; found: " + this.sensorIntervalSeconds
 					+ ". Using default value: "
-					+ CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS);
-			this.sensorIntervalSeconds = CPUMemUsageServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS;
+					+ DEFAULT_SENSOR_INTERVAL_SECONDS);
+			this.sensorIntervalSeconds = DEFAULT_SENSOR_INTERVAL_SECONDS;
 		}
 
 	}
@@ -168,7 +168,7 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 		}
 
 		if (val < 0) {
-			CPUMemUsageServletContextListener.LOG.warn("Invalid or missing value for context-param '" + paramName + "': " + valStr + ". Using default value: "
+			LOG.warn("Invalid or missing value for context-param '" + paramName + "': " + valStr + ". Using default value: "
 					+ defaultValue);
 			val = defaultValue;
 		}

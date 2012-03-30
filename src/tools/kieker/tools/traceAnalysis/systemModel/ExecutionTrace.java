@@ -116,7 +116,7 @@ public class ExecutionTrace extends AbstractTrace {
 					final InvalidTraceException ex = new InvalidTraceException("First execution must have ess " + "0 (found " + curE.getEss()
 							+ ")\n Causing execution: " + curE);
 					// don't log and throw
-					// ExecutionTrace.LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
+					// LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
 					throw ex;
 				}
 				expectingEntryCall = false; // now we're happy
@@ -124,7 +124,7 @@ public class ExecutionTrace extends AbstractTrace {
 					final InvalidTraceException ex = new InvalidTraceException("Eois must increment by 1 --" + "but found sequence <" + prevEoi
 							+ "," + curE.getEoi() + ">" + "(Execution: " + curE + ")");
 					// don't log and throw
-					// ExecutionTrace.LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
+					// LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
 					throw ex;
 				}
 				prevEoi = curE.getEoi();
@@ -154,7 +154,7 @@ public class ExecutionTrace extends AbstractTrace {
 					final InvalidTraceException ex = new InvalidTraceException("Ess are only allowed to increment by 1 --"
 							+ "but found sequence <" + prevE.getEss() + "," + curE.getEss() + ">" + "(Execution: " + curE + ")");
 					// don't log and throw
-					// ExecutionTrace.LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
+					// LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
 					throw ex;
 				}
 				if (!eSeqIt.hasNext()) { // empty stack completely, since no more executions

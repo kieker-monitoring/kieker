@@ -62,7 +62,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 	 * differ from Kieker's default timer (SystemNanoTimer).
 	 */
 	protected static final IMonitoringController CTRL = MonitoringController.getInstance();
-	protected static final ITimeSource TIMESOURCE = OperationExecutionSOAPRequestInInterceptor.CTRL.getTimeSource();
+	protected static final ITimeSource TIMESOURCE = CTRL.getTimeSource();
 
 	// the CXF logger uses java.util.logging by default, look here how to change it to log4j: http://cwiki.apache.org/CXF20DOC/debugging.html
 	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPRequestInInterceptor.class);
@@ -76,7 +76,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 
 	@Override
 	public void handleMessage(final Message msg) throws Fault {
-		if (!OperationExecutionSOAPRequestInInterceptor.CTRL.isMonitoringEnabled()) {
+		if (!CTRL.isMonitoringEnabled()) {
 			return;
 		}
 		if (msg instanceof SoapMessage) {
@@ -87,7 +87,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 			 * This value will be used by the corresponding invocation of the
 			 * ResponseOutProbe.
 			 */
-			final long tin = OperationExecutionSOAPRequestInInterceptor.TIMESOURCE.getTime();
+			final long tin = TIMESOURCE.getTime();
 			boolean isEntryCall = false; // set true below if is entry call
 
 			/* 1.) Extract sessionId from SOAP header */
@@ -95,7 +95,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 			String sessionId = this.getStringContentFromHeader(hdr); // null if hdr==null
 			if (sessionId == null) {
 				/* no Kieker session id in header */
-				sessionId = OperationExecutionSOAPRequestInInterceptor.NULL_SESSION_STR;
+				sessionId = NULL_SESSION_STR;
 			}
 
 			/* 2.) Extract eoi from SOAP header */
@@ -107,7 +107,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 					eoi = 1 + Integer.parseInt(eoiStr);
 				} catch (final NumberFormatException exc) {
 					/* invalid eoi! */
-					OperationExecutionSOAPRequestInInterceptor.LOG.log(Level.WARNING, exc.getMessage(), exc);
+					LOG.log(Level.WARNING, exc.getMessage(), exc);
 				}
 			}
 
@@ -120,7 +120,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 					ess = Integer.parseInt(essStr);
 				} catch (final NumberFormatException exc) {
 					/* invalid ess! */
-					OperationExecutionSOAPRequestInInterceptor.LOG.log(Level.WARNING, exc.getMessage(), exc);
+					LOG.log(Level.WARNING, exc.getMessage(), exc);
 				}
 			}
 
@@ -133,7 +133,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 					traceId = Long.parseLong(traceIdStr);
 				} catch (final NumberFormatException exc) {
 					/* Invalid trace id! */
-					OperationExecutionSOAPRequestInInterceptor.LOG.log(Level.WARNING, exc.getMessage(), exc);
+					LOG.log(Level.WARNING, exc.getMessage(), exc);
 				}
 			} else {
 				/*
@@ -143,23 +143,23 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 				 * We will now acquire a thread id which is stored (below!!)
 				 * in the thread local variable!
 				 */
-				traceId = OperationExecutionSOAPRequestInInterceptor.CF_REGISTRY.getUniqueTraceId();
-				sessionId = OperationExecutionSOAPRequestInInterceptor.NULL_SESSIONASYNCTRACE_STR;
+				traceId = CF_REGISTRY.getUniqueTraceId();
+				sessionId = NULL_SESSIONASYNCTRACE_STR;
 				isEntryCall = true;
 				eoi = 0; // EOI of this execution
 				ess = 0; // ESS of this execution
 			}
 
 			/* Store thread-local values */
-			OperationExecutionSOAPRequestInInterceptor.CF_REGISTRY.storeThreadLocalTraceId(traceId);
-			OperationExecutionSOAPRequestInInterceptor.CF_REGISTRY.storeThreadLocalEOI(eoi); // this execution has EOI=eoi; next execution will get eoi with
+			CF_REGISTRY.storeThreadLocalTraceId(traceId);
+			CF_REGISTRY.storeThreadLocalEOI(eoi); // this execution has EOI=eoi; next execution will get eoi with
 																								// incrementAndRecall
-			OperationExecutionSOAPRequestInInterceptor.CF_REGISTRY.storeThreadLocalESS(ess + 1); // this execution has ESS=ess
-			OperationExecutionSOAPRequestInInterceptor.SESSION_REGISTRY.storeThreadLocalSessionId(sessionId);
-			OperationExecutionSOAPRequestInInterceptor.SOAP_REGISTRY.storeThreadLocalInRequestIsEntryCall(isEntryCall);
-			OperationExecutionSOAPRequestInInterceptor.SOAP_REGISTRY.storeThreadLocalInRequestTin(tin);
-			OperationExecutionSOAPRequestInInterceptor.SOAP_REGISTRY.storeThreadLocalInRequestEOI(eoi); // eoi for this execution
-			OperationExecutionSOAPRequestInInterceptor.SOAP_REGISTRY.storeThreadLocalInRequestESS(ess); // ess for this execution
+			CF_REGISTRY.storeThreadLocalESS(ess + 1); // this execution has ESS=ess
+			SESSION_REGISTRY.storeThreadLocalSessionId(sessionId);
+			SOAP_REGISTRY.storeThreadLocalInRequestIsEntryCall(isEntryCall);
+			SOAP_REGISTRY.storeThreadLocalInRequestTin(tin);
+			SOAP_REGISTRY.storeThreadLocalInRequestEOI(eoi); // eoi for this execution
+			SOAP_REGISTRY.storeThreadLocalInRequestESS(ess); // ess for this execution
 		}
 	}
 

@@ -42,12 +42,12 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	private static final long serialVersionUID = 1L;
 	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> OLD_KIEKERRECORDS = new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>();
 	static {
-		AbstractMonitoringRecord.OLD_KIEKERRECORDS.put("kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord", OperationExecutionRecord.class);
-		AbstractMonitoringRecord.OLD_KIEKERRECORDS.put("kieker.common.record.CPUUtilizationRecord", CPUUtilizationRecord.class);
-		AbstractMonitoringRecord.OLD_KIEKERRECORDS.put("kieker.common.record.MemSwapUsageRecord", MemSwapUsageRecord.class);
-		AbstractMonitoringRecord.OLD_KIEKERRECORDS.put("kieker.common.record.ResourceUtilizationRecord", ResourceUtilizationRecord.class);
-		AbstractMonitoringRecord.OLD_KIEKERRECORDS.put("kieker.common.record.OperationExecutionRecord", OperationExecutionRecord.class);
-		AbstractMonitoringRecord.OLD_KIEKERRECORDS.put("kieker.common.record.BranchingRecord", BranchingRecord.class);
+		OLD_KIEKERRECORDS.put("kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord", OperationExecutionRecord.class);
+		OLD_KIEKERRECORDS.put("kieker.common.record.CPUUtilizationRecord", CPUUtilizationRecord.class);
+		OLD_KIEKERRECORDS.put("kieker.common.record.MemSwapUsageRecord", MemSwapUsageRecord.class);
+		OLD_KIEKERRECORDS.put("kieker.common.record.ResourceUtilizationRecord", ResourceUtilizationRecord.class);
+		OLD_KIEKERRECORDS.put("kieker.common.record.OperationExecutionRecord", OperationExecutionRecord.class);
+		OLD_KIEKERRECORDS.put("kieker.common.record.BranchingRecord", BranchingRecord.class);
 	}
 
 	private volatile long loggingTimestamp = -1;
@@ -196,7 +196,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	}
 
 	public static final Class<? extends IMonitoringRecord> classForName(final String classname) throws MonitoringRecordException {
-		final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.OLD_KIEKERRECORDS.get(classname);
+		final Class<? extends IMonitoringRecord> clazz = OLD_KIEKERRECORDS.get(classname);
 		if (clazz != null) {
 			return clazz;
 		} else {

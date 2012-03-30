@@ -117,14 +117,14 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 		super(configuration);
 
 		/* Load from the configuration. */
-		this.maxTraceDurationMillis = configuration.getLongProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS);
-		this.ignoreInvalidTraces = configuration.getBooleanProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES);
+		this.maxTraceDurationMillis = configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS);
+		this.ignoreInvalidTraces = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES);
 
 		if (this.maxTraceDurationMillis < 0) {
 			throw new IllegalArgumentException("value maxTraceDurationMillis must not be negative (found: " + this.maxTraceDurationMillis + ")");
 		}
 		if (this.maxTraceDurationMillis == AbstractTraceProcessingFilter.MAX_DURATION_MILLIS) {
-			this.maxTraceDurationNanos = TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_DURATION_NANOS;
+			this.maxTraceDurationNanos = CONFIG_PROPERTY_VALUE_MAX_DURATION_NANOS;
 		} else {
 			this.maxTraceDurationNanos = this.maxTraceDurationMillis * (1000 * 1000);
 		}
@@ -163,7 +163,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	}
 
 	@InputPort(
-			name = TraceReconstructionFilter.INPUT_PORT_NAME_EXECUTIONS,
+			name = INPUT_PORT_NAME_EXECUTIONS,
 			description = "Receives the executions to be processed",
 			eventTypes = { Execution.class })
 	public void inputExecutions(final Execution execution) {
@@ -180,7 +180,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			ExecutionTrace executionTrace = this.pendingTraces.get(traceId);
 			if (executionTrace != null) { /* trace (artifacts) exists already; */
 				if (!this.timeoutMap.remove(executionTrace)) { /* remove from timeoutMap. Will be re-added below */
-					TraceReconstructionFilter.LOG.error("Missing entry for trace in timeoutMap: " + executionTrace
+					LOG.error("Missing entry for trace in timeoutMap: " + executionTrace
 							+ " PendingTraces and timeoutMap are now longer consistent!");
 					this.reportError(traceId);
 				}
@@ -191,13 +191,13 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			try {
 				executionTrace.add(execution);
 				if (!this.timeoutMap.add(executionTrace)) { // (re-)add trace to timeoutMap
-					TraceReconstructionFilter.LOG.error("Equal entry existed in timeoutMap already:" + executionTrace);
+					LOG.error("Equal entry existed in timeoutMap already:" + executionTrace);
 				}
 				this.processTimeoutQueue();
 			} catch (final InvalidTraceException ex) { // this would be a bug!
-				TraceReconstructionFilter.LOG.error("Attempt to add record to wrong trace", ex);
+				LOG.error("Attempt to add record to wrong trace", ex);
 			} catch (final ExecutionEventProcessingException ex) {
-				TraceReconstructionFilter.LOG.error("ExecutionEventProcessingException occured while processing the timeout queue.", ex);
+				LOG.error("ExecutionEventProcessingException occured while processing the timeout queue.", ex);
 			}
 		}
 	}
@@ -230,18 +230,18 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			 */
 			if (!this.invalidTraces.contains(mt.getTraceId())) {
 				/* Not completing part of an invalid trace */
-				super.deliver(TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, mt);
-				super.deliver(TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTrace);
+				super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE, mt);
+				super.deliver(OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTrace);
 				this.reportSuccess(curTraceId);
 			} else {
 				/* mt is the completing part of an invalid trace */
-				super.deliver(TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, new InvalidExecutionTrace(executionTrace));
+				super.deliver(OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, new InvalidExecutionTrace(executionTrace));
 				// the statistics have been updated on the first
 				// occurrence of artifacts of this trace
 			}
 		} catch (final InvalidTraceException ex) {
 			/* Transformation failed (i.e., trace invalid) */
-			super.deliver(TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, new InvalidExecutionTrace(executionTrace));
+			super.deliver(OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, new InvalidExecutionTrace(executionTrace));
 			if (!this.invalidTraces.contains(curTraceId)) {
 				// only once per traceID (otherwise, we would report all
 				// trace fragments)
@@ -250,12 +250,12 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 				final String transformationError = "Failed to transform execution trace to message trace (ID:" + curTraceId + "): " + executionTrace;
 				if (!this.ignoreInvalidTraces) {
 					this.traceProcessingErrorOccured = true;
-					TraceReconstructionFilter.LOG.warn("Note that this filter was configured to terminate at the *first* occurence of an invalid trace \n"
+					LOG.warn("Note that this filter was configured to terminate at the *first* occurence of an invalid trace \n"
 							+ "If this is not the desired behavior, set the configuration property "
-							+ TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES + " to 'true'");
+							+ CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES + " to 'true'");
 					throw new ExecutionEventProcessingException(transformationError, ex);
 				} else {
-					TraceReconstructionFilter.LOG.error(transformationError, ex);
+					LOG.error(transformationError, ex);
 				}
 			}
 		}
@@ -307,12 +307,12 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 				if (!error || (this.traceProcessingErrorOccured && !this.ignoreInvalidTraces)) {
 					this.processTimeoutQueue();
 				} else {
-					TraceReconstructionFilter.LOG
+					LOG
 							.info("terminate called with error an flag set or a trace processing occurred; won't process timeoutqueue any more.");
 				}
 			} catch (final ExecutionEventProcessingException ex) {
 				this.traceProcessingErrorOccured = true;
-				TraceReconstructionFilter.LOG.error("Error processing timeout queue", ex);
+				LOG.error("Error processing timeout queue", ex);
 			}
 		}
 	}
@@ -338,9 +338,9 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS,
+		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS,
 				Long.toString(AbstractTraceProcessingFilter.MAX_DURATION_MILLIS));
-		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, Boolean.TRUE.toString());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, Boolean.TRUE.toString());
 
 		return configuration;
 	}
@@ -348,8 +348,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long.toString(this.maxTraceDurationMillis));
-		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, Boolean.toString(this.ignoreInvalidTraces));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long.toString(this.maxTraceDurationMillis));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, Boolean.toString(this.ignoreInvalidTraces));
 
 		return configuration;
 	}

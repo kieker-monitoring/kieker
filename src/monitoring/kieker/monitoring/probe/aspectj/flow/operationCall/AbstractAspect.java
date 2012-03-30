@@ -40,7 +40,7 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public abstract class AbstractAspect extends AbstractAspectJProbe {
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
-	private static final ITimeSource TIME = AbstractAspect.CTRLINST.getTimeSource();
+	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 
 	@Pointcut
@@ -48,28 +48,28 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 
 	@Around("monitoredOperation() && notWithinKieker()")
 	public Object operation(final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint) throws Throwable { // NOCS (Throwable)
-		if (!AbstractAspect.CTRLINST.isMonitoringEnabled()) {
+		if (!CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
-		Trace trace = AbstractAspect.TRACEREGISTRY.getTrace();
+		Trace trace = TRACEREGISTRY.getTrace();
 		final boolean newTrace = trace == null;
 		if (newTrace) {
-			trace = AbstractAspect.TRACEREGISTRY.registerTrace();
-			AbstractAspect.CTRLINST.newMonitoringRecord(trace);
+			trace = TRACEREGISTRY.registerTrace();
+			CTRLINST.newMonitoringRecord(trace);
 		}
 		final long traceId = trace.getTraceId();
 		final String callee = thisJoinPoint.getSignature().toLongString();
 		final String caller = thisEnclosingJoinPoint.getSignature().toLongString();
 		// measure before call
-		AbstractAspect.CTRLINST.newMonitoringRecord(new CallOperationEvent(AbstractAspect.TIME.getTime(), traceId, trace.getNextOrderId(), caller, callee));
+		CTRLINST.newMonitoringRecord(new CallOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), caller, callee));
 		// call of the called method
 		final Object retval;
 		try {
 			retval = thisJoinPoint.proceed();
 		} finally {
 			if (newTrace) { // close the trace
-				AbstractAspect.TRACEREGISTRY.unregisterTrace();
+				TRACEREGISTRY.unregisterTrace();
 			}
 		}
 		return retval;

@@ -42,7 +42,7 @@ public class DummyWriter extends AbstractMonitoringWriter {
 	}
 
 	public void terminate() {
-		DummyWriter.LOG.info(this.getClass().getName() + " shutting down");
+		LOG.info(this.getClass().getName() + " shutting down");
 	}
 
 	@Override

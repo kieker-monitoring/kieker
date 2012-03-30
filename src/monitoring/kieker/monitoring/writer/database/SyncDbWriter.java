@@ -45,9 +45,9 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  */
 public final class SyncDbWriter extends AbstractMonitoringWriter {
 	private static final String PREFIX = SyncDbWriter.class.getName() + ".";
-	public static final String CONFIG_DRIVERCLASSNAME = SyncDbWriter.PREFIX + "DriverClassname"; // NOCS (AfterPREFIX)
-	public static final String CONFIG_CONNECTIONSTRING = SyncDbWriter.PREFIX + "ConnectionString"; // NOCS (AfterPREFIX)
-	public static final String CONFIG_TABLEPREFIX = SyncDbWriter.PREFIX + "TablePrefix"; // NOCS (AfterPREFIX)
+	public static final String CONFIG_DRIVERCLASSNAME = PREFIX + "DriverClassname"; // NOCS (AfterPREFIX)
+	public static final String CONFIG_CONNECTIONSTRING = PREFIX + "ConnectionString"; // NOCS (AfterPREFIX)
+	public static final String CONFIG_TABLEPREFIX = PREFIX + "TablePrefix"; // NOCS (AfterPREFIX)
 
 	private static final Log LOG = LogFactory.getLog(SyncDbWriter.class);
 
@@ -62,13 +62,13 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 	public SyncDbWriter(final Configuration configuration) throws Exception {
 		super(configuration);
 		try {
-			Class.forName(configuration.getStringProperty(SyncDbWriter.CONFIG_DRIVERCLASSNAME)).newInstance();
+			Class.forName(configuration.getStringProperty(CONFIG_DRIVERCLASSNAME)).newInstance();
 		} catch (final Throwable ex) { // NOPMD NOCS (IllegalCatchCheck)
 			throw new Exception("DB driver registration failed. Perhaps the driver jar is missing?", ex);
 		}
 		try {
-			this.connection = DriverManager.getConnection(configuration.getStringProperty(SyncDbWriter.CONFIG_CONNECTIONSTRING));
-			this.tablePrefix = configuration.getStringProperty(SyncDbWriter.CONFIG_TABLEPREFIX);
+			this.connection = DriverManager.getConnection(configuration.getStringProperty(CONFIG_CONNECTIONSTRING));
+			this.tablePrefix = configuration.getStringProperty(CONFIG_TABLEPREFIX);
 			this.helper = new DBWriterHelper(this.connection, this.tablePrefix);
 			this.helper.createIndexTable();
 		} catch (final SQLException ex) {
@@ -85,15 +85,15 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 		final Class<? extends IMonitoringRecord> recordClass = record.getClass();
 		final String recordClassName = recordClass.getSimpleName();
 		if (!this.recordTypeInformation.containsKey(recordClass)) { // not yet seen record
-			if (SyncDbWriter.LOG.isDebugEnabled()) {
-				SyncDbWriter.LOG.debug("New record type found: " + recordClassName);
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("New record type found: " + recordClassName);
 			}
 			final String tableName = this.tablePrefix + "_" + recordClassName;
 			final Class<?>[] typeArray;
 			try {
 				typeArray = AbstractMonitoringRecord.typesForClass(recordClass);
 			} catch (final MonitoringRecordException ex) {
-				SyncDbWriter.LOG.error("Failed to get types of record", ex);
+				LOG.error("Failed to get types of record", ex);
 				return false;
 			}
 			try {
@@ -105,7 +105,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 				final PreparedStatement preparedStatement = this.connection.prepareStatement("INSERT INTO " + tableName + " VALUES (" + sb.toString() + ")");
 				this.recordTypeInformation.put(recordClass, preparedStatement);
 			} catch (final SQLException ex) {
-				SyncDbWriter.LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
+				LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 				return false;
 			}
 		}
@@ -122,7 +122,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 			}
 			preparedStatement.executeUpdate();
 		} catch (final SQLException ex) {
-			SyncDbWriter.LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
+			LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 			return false;
 		}
 		return true;
@@ -141,9 +141,9 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 				this.connection.close();
 			}
 		} catch (final SQLException ex) {
-			SyncDbWriter.LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
+			LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 		}
-		SyncDbWriter.LOG.info("Writer: SyncDbWriter shutdown complete");
+		LOG.info("Writer: SyncDbWriter shutdown complete");
 	}
 
 	@Override

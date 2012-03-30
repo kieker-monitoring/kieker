@@ -46,8 +46,8 @@ public final class RegistryController extends AbstractController implements IReg
 
 	@Override
 	protected final void cleanup() {
-		if (RegistryController.LOG.isDebugEnabled()) {
-			RegistryController.LOG.debug("Shutting down Registry Controller");
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Shutting down Registry Controller");
 		}
 	}
 

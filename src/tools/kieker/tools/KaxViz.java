@@ -105,7 +105,7 @@ public final class KaxViz extends JFrame {
 					try {
 						mxUtils.writeFile(mxXmlUtils.getXml(doc), outFilename);
 					} catch (final IOException ex) {
-						KaxViz.LOG.error("Failed to save Visualization of kax-File.", ex);
+						LOG.error("Failed to save Visualization of kax-File.", ex);
 					}
 				}
 			});
@@ -273,8 +273,8 @@ public final class KaxViz extends JFrame {
 
 	private final mxCell createReader(final AbstractReaderPlugin plugin, final int c) {
 		final mxCell vertex = new mxCell("<<Reader>>\n" + plugin.getName() + " : " + plugin.getPluginName(),
-				new mxGeometry(KaxViz.FILTER_SPACE, KaxViz.FILTER_SPACE + (c * (KaxViz.FILTER_HEIGHT + KaxViz.FILTER_SPACE)),
-						KaxViz.FILTER_WIDTH, KaxViz.FILTER_HEIGHT), null);
+				new mxGeometry(FILTER_SPACE, FILTER_SPACE + (c * (FILTER_HEIGHT + FILTER_SPACE)),
+						FILTER_WIDTH, FILTER_HEIGHT), null);
 		vertex.setVertex(true);
 		this.graph.addCell(vertex);
 		return vertex;
@@ -282,8 +282,8 @@ public final class KaxViz extends JFrame {
 
 	private final mxCell createFilter(final AbstractFilterPlugin plugin, final int c) {
 		final mxCell vertex = new mxCell("<<Filter>>\n" + plugin.getName() + " : " + plugin.getPluginName(),
-				new mxGeometry(KaxViz.FILTER_SPACE, KaxViz.FILTER_SPACE + (c * (KaxViz.FILTER_HEIGHT + KaxViz.FILTER_SPACE)),
-						KaxViz.FILTER_WIDTH, KaxViz.FILTER_HEIGHT), null);
+				new mxGeometry(FILTER_SPACE, FILTER_SPACE + (c * (FILTER_HEIGHT + FILTER_SPACE)),
+						FILTER_WIDTH, FILTER_HEIGHT), null);
 		vertex.setVertex(true);
 		this.graph.addCell(vertex);
 		return vertex;
@@ -291,8 +291,8 @@ public final class KaxViz extends JFrame {
 
 	private final mxCell createRepository(final AbstractRepository repository, final int c) {
 		final mxCell vertex = new mxCell("<<Repository>>\n : " + repository.getClass().getSimpleName(),
-				new mxGeometry(KaxViz.FILTER_SPACE, KaxViz.FILTER_SPACE + (c * (KaxViz.FILTER_HEIGHT + KaxViz.FILTER_SPACE)),
-						KaxViz.FILTER_WIDTH, KaxViz.FILTER_HEIGHT), "rounded=1");
+				new mxGeometry(FILTER_SPACE, FILTER_SPACE + (c * (FILTER_HEIGHT + FILTER_SPACE)),
+						FILTER_WIDTH, FILTER_HEIGHT), "rounded=1");
 		vertex.setVertex(true);
 		this.graph.addCell(vertex);
 		return vertex;
@@ -338,7 +338,7 @@ public final class KaxViz extends JFrame {
 			frame.setSize(800, 600);
 			frame.setVisible(true);
 		} catch (final Exception ex) { // NOPMD NOCS (log all errors)
-			KaxViz.LOG.error("Error", ex);
+			LOG.error("Error", ex);
 		}
 	}
 }

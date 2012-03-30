@@ -50,7 +50,7 @@ public final class TimestampRecord extends AbstractMonitoringRecord implements I
 
 	public TimestampRecord(final Object[] values) {
 		final Object[] myValues = values.clone();
-		AbstractMonitoringRecord.checkArray(myValues, TimestampRecord.TYPES);
+		AbstractMonitoringRecord.checkArray(myValues, TYPES);
 		try {
 			this.timestamp = (Long) myValues[0];
 		} catch (final Exception exc) { // NOPMD NOCS (IllegalCatchCheck)
@@ -68,7 +68,7 @@ public final class TimestampRecord extends AbstractMonitoringRecord implements I
 	}
 
 	public Class<?>[] getValueTypes() {
-		return TimestampRecord.TYPES.clone();
+		return TYPES.clone();
 	}
 
 	/**

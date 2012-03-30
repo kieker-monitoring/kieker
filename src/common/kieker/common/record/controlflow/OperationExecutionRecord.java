@@ -80,14 +80,14 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	private volatile int experimentId = -1;
 
 	// TODO: change all fields to final in 1.6
-	private volatile String hostname = OperationExecutionRecord.NO_HOSTNAME;
-	private volatile String operationSignature = OperationExecutionRecord.NO_OPERATION_SIGNATURE;
-	private volatile String sessionId = OperationExecutionRecord.NO_SESSION_ID;
-	private volatile long traceId = OperationExecutionRecord.NO_TRACEID;
-	private volatile long tin = OperationExecutionRecord.NO_TIMESTAMP;
-	private volatile long tout = OperationExecutionRecord.NO_TIMESTAMP;
-	private volatile int eoi = OperationExecutionRecord.NO_EOI_ESS;
-	private volatile int ess = OperationExecutionRecord.NO_EOI_ESS;
+	private volatile String hostname = NO_HOSTNAME;
+	private volatile String operationSignature = NO_OPERATION_SIGNATURE;
+	private volatile String sessionId = NO_SESSION_ID;
+	private volatile long traceId = NO_TRACEID;
+	private volatile long tin = NO_TIMESTAMP;
+	private volatile long tout = NO_TIMESTAMP;
+	private volatile int eoi = NO_EOI_ESS;
+	private volatile int ess = NO_EOI_ESS;
 
 	/**
 	 * Will be removed in 1.6
@@ -142,12 +142,12 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	 */
 	public OperationExecutionRecord(final String operationSignature, final String sessionId, final long traceId, final long tin, final long tout,
 			final String hostname, final int eoi, final int ess) {
-		this.operationSignature = (operationSignature == null) ? OperationExecutionRecord.NO_OPERATION_SIGNATURE : operationSignature; // NOCS
+		this.operationSignature = (operationSignature == null) ? NO_OPERATION_SIGNATURE : operationSignature; // NOCS
 		this.traceId = traceId;
 		this.tin = tin;
 		this.tout = tout;
-		this.sessionId = (sessionId == null) ? OperationExecutionRecord.NO_SESSION_ID : sessionId; // NOCS
-		this.hostname = (hostname == null) ? OperationExecutionRecord.NO_HOSTNAME : hostname; // NOCS
+		this.sessionId = (sessionId == null) ? NO_SESSION_ID : sessionId; // NOCS
+		this.hostname = (hostname == null) ? NO_HOSTNAME : hostname; // NOCS
 		this.eoi = eoi;
 		this.ess = ess;
 	}
@@ -238,7 +238,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	}
 
 	public OperationExecutionRecord(final Object[] values) { // NOPMD (values stored directly)
-		AbstractMonitoringRecord.checkArray(values, OperationExecutionRecord.TYPES); // throws IllegalArgumentException
+		AbstractMonitoringRecord.checkArray(values, TYPES); // throws IllegalArgumentException
 		this.experimentId = (Integer) values[0];
 		this.operationSignature = (String) values[1];
 		this.sessionId = (String) values[2];
@@ -257,12 +257,12 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 		// TODO: remove NULL checks in Kieker 1.6, as null values not possible due to checks in the constructor
 		return new Object[] {
 			this.experimentId,
-			(this.operationSignature == null) ? OperationExecutionRecord.NO_OPERATION_SIGNATURE : this.operationSignature, // NOCS
-			(this.sessionId == null) ? OperationExecutionRecord.NO_SESSION_ID : this.sessionId, // NOCS
+			(this.operationSignature == null) ? NO_OPERATION_SIGNATURE : this.operationSignature, // NOCS
+			(this.sessionId == null) ? NO_SESSION_ID : this.sessionId, // NOCS
 			this.traceId,
 			this.tin,
 			this.tout,
-			(this.hostname == null) ? OperationExecutionRecord.NO_HOSTNAME : this.hostname, // NOCS
+			(this.hostname == null) ? NO_HOSTNAME : this.hostname, // NOCS
 			this.eoi,
 			this.ess, };
 	}
@@ -273,7 +273,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	}
 
 	public Class<?>[] getValueTypes() {
-		return OperationExecutionRecord.TYPES.clone();
+		return TYPES.clone();
 	}
 
 	/**

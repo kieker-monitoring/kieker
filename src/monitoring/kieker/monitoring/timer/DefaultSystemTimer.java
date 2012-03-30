@@ -45,7 +45,7 @@ public final class DefaultSystemTimer extends AbstractTimeSource {
 	@Deprecated
 	public DefaultSystemTimer(final Configuration configuration) throws IllegalAccessException { // this error should never be thrown
 		super(configuration);
-		DefaultSystemTimer.LOG.warn("This timer is deprecated, use 'kieker.monitoring.timer.SystemNanoTimer' instead.");
+		LOG.warn("This timer is deprecated, use 'kieker.monitoring.timer.SystemNanoTimer' instead.");
 		final Configuration nanoConfiguration = configuration.getPropertiesStartingWith(SystemNanoTimer.class.getName());
 		nanoConfiguration.setDefaultConfiguration(ConfigurationFactory.createDefaultConfiguration());
 		nanoConfiguration.setProperty(SystemNanoTimer.CONFIG_OFFSET, "0");

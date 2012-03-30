@@ -39,7 +39,7 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 	private static final Log LOG = LogFactory.getLog(PrintStreamWriter.class);
 
 	private static final String PREFIX = PrintStreamWriter.class.getName() + ".";
-	public static final String STREAM = PrintStreamWriter.PREFIX + "Stream";
+	public static final String STREAM = PREFIX + "Stream";
 	public static final String CONFIG_STREAM_STDOUT = "STDOUT";
 	public static final String CONFIG_STREAM_STDERR = "STDERR";
 
@@ -53,13 +53,13 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 
 	@Override
 	public void init() throws FileNotFoundException, UnsupportedEncodingException {
-		final String printStreamName = this.configuration.getStringProperty(PrintStreamWriter.STREAM);
-		if (PrintStreamWriter.CONFIG_STREAM_STDOUT.equals(printStreamName)) {
+		final String printStreamName = this.configuration.getStringProperty(STREAM);
+		if (CONFIG_STREAM_STDOUT.equals(printStreamName)) {
 			this.printStream = System.out;
-		} else if (PrintStreamWriter.CONFIG_STREAM_STDERR.equals(printStreamName)) {
+		} else if (CONFIG_STREAM_STDERR.equals(printStreamName)) {
 			this.printStream = System.err;
 		} else {
-			this.printStream = new PrintStream(new FileOutputStream(printStreamName), false, PrintStreamWriter.ENCODING);
+			this.printStream = new PrintStream(new FileOutputStream(printStreamName), false, ENCODING);
 		}
 	}
 
@@ -72,6 +72,6 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 		if ((this.printStream != null) && (this.printStream != System.out) && (this.printStream != System.err)) {
 			this.printStream.close();
 		}
-		PrintStreamWriter.LOG.info(this.getClass().getName() + " shutting down.");
+		LOG.info(this.getClass().getName() + " shutting down.");
 	}
 }

@@ -58,8 +58,8 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 	public InvalidExecutionTraceWriterFilter(final Configuration configuration)
 			throws IOException {
 		super(configuration);
-		this.outputFn = configuration.getStringProperty(InvalidExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN);
-		this.ps = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.outputFn), InvalidExecutionTraceWriterFilter.ENCODING));
+		this.outputFn = configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN);
+		this.ps = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.outputFn), ENCODING));
 	}
 
 	@Override
@@ -75,18 +75,18 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 			try {
 				this.ps.close();
 			} catch (final IOException ex) {
-				InvalidExecutionTraceWriterFilter.LOG.error("IOException while terminating", ex);
+				LOG.error("IOException while terminating", ex);
 			}
 		}
 	}
 
 	@Override
 	public String getInvalidExecutionTraceInputPortName() {
-		return InvalidExecutionTraceWriterFilter.INPUT_PORT_NAME_INVALID_EXECUTION_TRACES;
+		return INPUT_PORT_NAME_INVALID_EXECUTION_TRACES;
 	}
 
 	@InputPort(
-			name = InvalidExecutionTraceWriterFilter.INPUT_PORT_NAME_INVALID_EXECUTION_TRACES,
+			name = INPUT_PORT_NAME_INVALID_EXECUTION_TRACES,
 			description = "Receives the invalid execution traces to be written", eventTypes = { InvalidExecutionTrace.class })
 	public void newInvalidExecutionTrace(final InvalidExecutionTrace et) {
 		try {
@@ -94,7 +94,7 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 			InvalidExecutionTraceWriterFilter.this.reportSuccess(et.getInvalidExecutionTraceArtifacts().getTraceId());
 		} catch (final IOException ex) {
 			InvalidExecutionTraceWriterFilter.this.reportError(et.getInvalidExecutionTraceArtifacts().getTraceId());
-			InvalidExecutionTraceWriterFilter.LOG.error("IOException", ex);
+			LOG.error("IOException", ex);
 		}
 	}
 
@@ -102,7 +102,7 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(InvalidExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, "");
+		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN, "");
 
 		return configuration;
 	}
@@ -110,7 +110,7 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(InvalidExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, this.outputFn);
+		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN, this.outputFn);
 
 		return configuration;
 	}

@@ -84,10 +84,10 @@ public class CPUsCombinedServletContextListener implements ServletContextListene
 	private static final String CONTEXT_PARAM_NAME_PREFIX = CPUsCombinedServletContextListener.class.getSimpleName();
 
 	/** Parameter name for the sampling interval to be used in the web.xml file */
-	public static final String CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS = CPUsCombinedServletContextListener.CONTEXT_PARAM_NAME_PREFIX
+	public static final String CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS = CONTEXT_PARAM_NAME_PREFIX
 			+ ".samplingIntervalSeconds";
 	/** Parameter name for the initial delay to be used in the web.xml file */
-	public static final String CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS = CPUsCombinedServletContextListener.CONTEXT_PARAM_NAME_PREFIX
+	public static final String CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS = CONTEXT_PARAM_NAME_PREFIX
 			+ ".initialSamplingDelaySeconds";
 
 	private static final Log LOG = LogFactory.getLog(CPUsCombinedServletContextListener.class);
@@ -100,8 +100,8 @@ public class CPUsCombinedServletContextListener implements ServletContextListene
 	 */
 	private final Collection<ScheduledSamplerJob> samplerJobs = new CopyOnWriteArrayList<ScheduledSamplerJob>();
 
-	private volatile long sensorIntervalSeconds = CPUsCombinedServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS;
-	private volatile long initialDelaySeconds = CPUsCombinedServletContextListener.DEFAULT_SENSOR_INITIAL_DELAY_SECONDS;
+	private volatile long sensorIntervalSeconds = DEFAULT_SENSOR_INTERVAL_SECONDS;
+	private volatile long initialDelaySeconds = DEFAULT_SENSOR_INITIAL_DELAY_SECONDS;
 
 	public CPUsCombinedServletContextListener() {
 		// nothing to do
@@ -129,25 +129,25 @@ public class CPUsCombinedServletContextListener implements ServletContextListene
 	 */
 	private void initParameters(final ServletContext c) {
 		if (c == null) {
-			CPUsCombinedServletContextListener.LOG.warn("ServletContext == null");
+			LOG.warn("ServletContext == null");
 			// we are using the default values assigned during variable
 			// declaration.
 			return;
 		}
 
 		// allowed values: Int>=0
-		this.initialDelaySeconds = this.readLongInitParameter(c, CPUsCombinedServletContextListener.CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS,
-				CPUsCombinedServletContextListener.DEFAULT_SENSOR_INITIAL_DELAY_SECONDS);
+		this.initialDelaySeconds = this.readLongInitParameter(c, CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS,
+				DEFAULT_SENSOR_INITIAL_DELAY_SECONDS);
 
 		// allows values: Int>0
-		this.sensorIntervalSeconds = this.readLongInitParameter(c, CPUsCombinedServletContextListener.CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS,
-				CPUsCombinedServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS);
+		this.sensorIntervalSeconds = this.readLongInitParameter(c, CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS,
+				DEFAULT_SENSOR_INTERVAL_SECONDS);
 		if (this.sensorIntervalSeconds == 0) {
-			CPUsCombinedServletContextListener.LOG.warn("values for the init-param '"
-					+ CPUsCombinedServletContextListener.CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS + "' must be >0; found: " + this.sensorIntervalSeconds
+			LOG.warn("values for the init-param '"
+					+ CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS + "' must be >0; found: " + this.sensorIntervalSeconds
 					+ ". Using default value: "
-					+ CPUsCombinedServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS);
-			this.sensorIntervalSeconds = CPUsCombinedServletContextListener.DEFAULT_SENSOR_INTERVAL_SECONDS;
+					+ DEFAULT_SENSOR_INTERVAL_SECONDS);
+			this.sensorIntervalSeconds = DEFAULT_SENSOR_INTERVAL_SECONDS;
 		}
 
 	}
@@ -166,7 +166,7 @@ public class CPUsCombinedServletContextListener implements ServletContextListene
 		}
 
 		if (val < 0) {
-			CPUsCombinedServletContextListener.LOG.warn("Invalid or missing value for context-param '" + paramName + "': " + valStr + ". Using default value: "
+			LOG.warn("Invalid or missing value for context-param '" + paramName + "': " + valStr + ". Using default value: "
 					+ defaultValue);
 			val = defaultValue;
 		}

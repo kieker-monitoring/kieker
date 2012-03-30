@@ -54,7 +54,7 @@ public final class AnalysisControllerThread extends Thread {
 		try {
 			this.analysisController.run();
 		} catch (final Exception ex) { // NOPMD NOCS (Exception)
-			AnalysisControllerThread.LOG.error("Error running AnalysisCOntroller.", ex);
+			LOG.error("Error running AnalysisCOntroller.", ex);
 		}
 	}
 

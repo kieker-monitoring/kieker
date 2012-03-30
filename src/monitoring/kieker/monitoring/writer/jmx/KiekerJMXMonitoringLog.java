@@ -39,7 +39,7 @@ public final class KiekerJMXMonitoringLog extends NotificationBroadcasterSupport
 	}
 
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
-		final Notification notification = new Notification(KiekerJMXMonitoringLog.MESSAGE_TYPE, this.kiekerMonitoringLogName, 0L, 0L);
+		final Notification notification = new Notification(MESSAGE_TYPE, this.kiekerMonitoringLogName, 0L, 0L);
 		notification.setUserData(record);
 		super.sendNotification(notification);
 		return true;

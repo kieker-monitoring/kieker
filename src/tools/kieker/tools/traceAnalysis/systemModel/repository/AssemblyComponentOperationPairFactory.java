@@ -90,6 +90,6 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepo
 	}
 
 	public AssemblyComponentOperationPair getRootPair() {
-		return AssemblyComponentOperationPairFactory.ROOT_PAIR;
+		return ROOT_PAIR;
 	}
 }

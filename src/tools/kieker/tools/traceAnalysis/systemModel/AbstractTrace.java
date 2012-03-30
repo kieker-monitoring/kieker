@@ -31,11 +31,11 @@ public abstract class AbstractTrace {
 	private final long traceId; // convenience field. All executions have this traceId.
 
 	protected AbstractTrace() {
-		this(-1, AbstractTrace.NO_TRACE_ID);
+		this(-1, NO_TRACE_ID);
 	}
 
 	public AbstractTrace(final long traceId) {
-		this(traceId, AbstractTrace.NO_TRACE_ID);
+		this(traceId, NO_TRACE_ID);
 	}
 
 	public AbstractTrace(final long traceId, final String sessionId) {

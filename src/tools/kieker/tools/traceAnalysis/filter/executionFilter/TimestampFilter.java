@@ -56,20 +56,20 @@ public class TimestampFilter extends AbstractTimestampFilter {
 		super(configuration);
 	}
 
-	@InputPort(name = TimestampFilter.INPUT_PORT_NAME_EXECUTION, description = "Receives executions to be selected by their logging timestamps", eventTypes = { Execution.class })
+	@InputPort(name = INPUT_PORT_NAME_EXECUTION, description = "Receives executions to be selected by their logging timestamps", eventTypes = { Execution.class })
 	public void inputExecution(final Execution execution) {
 		if (this.inRange(execution.getTin()) && this.inRange(execution.getTout())) {
-			super.deliver(TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, execution);
+			super.deliver(OUTPUT_PORT_NAME_WITHIN_PERIOD, execution);
 		}
 	}
 
 	@Override
 	protected String getConfigurationPropertyIgnoreBeforeTimestamp() {
-		return TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP;
+		return CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP;
 	}
 
 	@Override
 	protected String getConfigurationPropertyIgnoreAfterTimestamp() {
-		return TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP;
+		return CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP;
 	}
 }

@@ -54,7 +54,7 @@ public class ControlServlet extends HttpServlet {
 	private static final long serialVersionUID = 689701318L;
 
 	private static final IMonitoringController CTRL_INST = MonitoringController.getInstance();
-	private static final ITimeSource TIMESOURCE = ControlServlet.CTRL_INST.getTimeSource();
+	private static final ITimeSource TIMESOURCE = CTRL_INST.getTimeSource();
 
 	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
@@ -116,9 +116,9 @@ public class ControlServlet extends HttpServlet {
 		out.println("<body>");
 		this.printHeader(out);
 		out.println("<h2>ControlServlet</h2>");
-		out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: " + ControlServlet.TIMESOURCE.getTime() + "<br>");
+		out.println("<br> Nanoseconds since midnight, January 1, 1970 UTC: " + TIMESOURCE.getTime() + "<br>");
 		out.println("Host:\"" + ControlServlet.hostname + "\"<br>");
-		out.println("Vmname:\"" + ControlServlet.CTRL_INST.getHostname() + "\"<br>");
+		out.println("Vmname:\"" + CTRL_INST.getHostname() + "\"<br>");
 
 		String action = request.getParameter("action");
 		if (action == null) {
@@ -132,7 +132,7 @@ public class ControlServlet extends HttpServlet {
 					try {
 						experimentID = Integer.parseInt(expimentIdString);
 						if (experimentID >= 0) { // NOPMD NOCS (NestedIf)
-							ControlServlet.CTRL_INST.setExperimentId(experimentID);
+							CTRL_INST.setExperimentId(experimentID);
 						}
 					} catch (final NumberFormatException ne) {
 						this.dumpError(out, ne.getMessage());
@@ -142,38 +142,38 @@ public class ControlServlet extends HttpServlet {
 				 * action = incExperimentId
 				 */
 			} else if ("incExperimentId".equals(action)) {
-				ControlServlet.CTRL_INST.incExperimentId();
+				CTRL_INST.incExperimentId();
 				/*
 				 * action = enable
 				 */
 			} else if ("enable".equals(action)) {
-				ControlServlet.CTRL_INST.enableMonitoring();
+				CTRL_INST.enableMonitoring();
 				/*
 				 * action = disable
 				 */
 			} else if ("disable".equals(action)) {
-				ControlServlet.CTRL_INST.disableMonitoring();
+				CTRL_INST.disableMonitoring();
 				/*
 				 * action = terminate
 				 */
 			} else if ("terminate".equals(action)) {
-				ControlServlet.CTRL_INST.terminateMonitoring();
+				CTRL_INST.terminateMonitoring();
 				/*
 				 * action = ...
 				 */
 			} else if ("insertTestData".equals(action)) {
-				ControlServlet.SESSION_REGISTRY.storeThreadLocalSessionId(request.getSession(true).getId());
-				ControlServlet.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
+				SESSION_REGISTRY.storeThreadLocalSessionId(request.getSession(true).getId());
+				CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
 				for (int i = 0; i < 12; i++) { // NOCS
-					ControlServlet.CTRL_INST
+					CTRL_INST
 							.newMonitoringRecord(new OperationExecutionRecord(
 									"protected void kieker.monitoring.controlServlet.ControlServlet.processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)",
-									ControlServlet.SESSION_REGISTRY.recallThreadLocalSessionId(),
-									ControlServlet.CF_REGISTRY.recallThreadLocalTraceId(), ControlServlet.TIMESOURCE.getTime(), ControlServlet.TIMESOURCE.getTime(),
-									ControlServlet.CTRL_INST.getHostname(), i, i));
+									SESSION_REGISTRY.recallThreadLocalSessionId(),
+									CF_REGISTRY.recallThreadLocalTraceId(), TIMESOURCE.getTime(), TIMESOURCE.getTime(),
+									CTRL_INST.getHostname(), i, i));
 				}
-				ControlServlet.CF_REGISTRY.unsetThreadLocalTraceId();
-				ControlServlet.SESSION_REGISTRY.unsetThreadLocalSessionId();
+				CF_REGISTRY.unsetThreadLocalTraceId();
+				SESSION_REGISTRY.unsetThreadLocalSessionId();
 				/*
 				 * invalid action
 				 */
@@ -188,7 +188,7 @@ public class ControlServlet extends HttpServlet {
 		out.println("<h3> Status (" + "<a href=\"index.html\"> update </a>" + ")  </h3>");
 		String monitoringControllerStatus = "";
 		try {
-			monitoringControllerStatus = ControlServlet.CTRL_INST.toString();
+			monitoringControllerStatus = CTRL_INST.toString();
 		} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 			out.println(e.getMessage());
 		}
@@ -209,19 +209,19 @@ public class ControlServlet extends HttpServlet {
 				+ " experimentID: <a href=\"index?action=incExperimentId\"> increment </a> <br>"
 				+ "<INPUT TYPE=\"HIDDEN\" NAME=\"action\" VALUE=\"setExperimentId\">"
 				+ " experimentID (int): <INPUT TYPE=\"TEXT\" SIZE=\"6\" NAME=\"experimentID\" value=\"");
-		bu.append(ControlServlet.CTRL_INST.getExperimentId());
+		bu.append(CTRL_INST.getExperimentId());
 		bu.append("\"/>"
 				+ " <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> "
 				+ "</FORM> <br><br>"
 				+ " <FORM ACTION=\"index\" METHOD=\"GET\"> "
 				+ " <INPUT TYPE=\"HIDDEN\" NAME=\"action\" VALUE=\"setVmname\">"
 				+ " vmname (max 40 char): <INPUT TYPE=\"TEXT\" SIZE=\"40\" NAME=\"vmname\" value=\"");
-		bu.append(ControlServlet.CTRL_INST.getHostname());
+		bu.append(CTRL_INST.getHostname());
 		bu.append("\"/>"
 				+ " <INPUT TYPE=\"SUBMIT\" VALUE=\"change\"> <br> <br>"
 				+ " Create 12 fake entries into the log (operation kieker.monitoring.controlServlet..): <a href=\"index?action=insertTestData\"> generate </a> <br><br>"
 				+ " Kieker monitoring events since last execution environment restart = ");
-		bu.append(ControlServlet.CTRL_INST.getNumberOfInserts());
+		bu.append(CTRL_INST.getNumberOfInserts());
 		bu.append(" <br> java.vm.name = ");
 		bu.append(System.getProperty("java.vm.name"));
 		bu.append(" <br>"); // NOPMD (append literal String twice)

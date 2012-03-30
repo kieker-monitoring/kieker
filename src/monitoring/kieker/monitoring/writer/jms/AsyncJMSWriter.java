@@ -49,11 +49,11 @@ import kieker.monitoring.writer.AbstractAsyncWriter;
  */
 public final class AsyncJMSWriter extends AbstractAsyncWriter {
 	private static final String PREFIX = AsyncJMSWriter.class.getName() + ".";
-	public static final String CONFIG_PROVIDERURL = AsyncJMSWriter.PREFIX + "ProviderUrl"; // NOCS (afterPREFIX)
-	public static final String CONFIG_TOPIC = AsyncJMSWriter.PREFIX + "Topic"; // NOCS (afterPREFIX)
-	public static final String CONFIG_CONTEXTFACTORYTYPE = AsyncJMSWriter.PREFIX + "ContextFactoryType"; // NOCS (afterPREFIX)
-	public static final String CONFIG_FACTORYLOOKUPNAME = AsyncJMSWriter.PREFIX + "FactoryLookupName"; // NOCS (afterPREFIX)
-	public static final String CONFIG_MESSAGETTL = AsyncJMSWriter.PREFIX + "MessageTimeToLive"; // NOCS (afterPREFIX)
+	public static final String CONFIG_PROVIDERURL = PREFIX + "ProviderUrl"; // NOCS (afterPREFIX)
+	public static final String CONFIG_TOPIC = PREFIX + "Topic"; // NOCS (afterPREFIX)
+	public static final String CONFIG_CONTEXTFACTORYTYPE = PREFIX + "ContextFactoryType"; // NOCS (afterPREFIX)
+	public static final String CONFIG_FACTORYLOOKUPNAME = PREFIX + "FactoryLookupName"; // NOCS (afterPREFIX)
+	public static final String CONFIG_MESSAGETTL = PREFIX + "MessageTimeToLive"; // NOCS (afterPREFIX)
 
 	public AsyncJMSWriter(final Configuration configuration) {
 		super(configuration);
@@ -62,9 +62,9 @@ public final class AsyncJMSWriter extends AbstractAsyncWriter {
 	@Override
 	protected void init() throws Exception {
 		this.addWorker(new JMSWriterThread(this.monitoringController, this.blockingQueue, this.configuration
-				.getStringProperty(AsyncJMSWriter.CONFIG_CONTEXTFACTORYTYPE), this.configuration.getStringProperty(AsyncJMSWriter.CONFIG_PROVIDERURL),
-				this.configuration.getStringProperty(AsyncJMSWriter.CONFIG_FACTORYLOOKUPNAME), this.configuration.getStringProperty(AsyncJMSWriter.CONFIG_TOPIC),
-				this.configuration.getLongProperty(AsyncJMSWriter.CONFIG_MESSAGETTL)));
+				.getStringProperty(CONFIG_CONTEXTFACTORYTYPE), this.configuration.getStringProperty(CONFIG_PROVIDERURL),
+				this.configuration.getStringProperty(CONFIG_FACTORYLOOKUPNAME), this.configuration.getStringProperty(CONFIG_TOPIC),
+				this.configuration.getLongProperty(CONFIG_MESSAGETTL)));
 	}
 }
 

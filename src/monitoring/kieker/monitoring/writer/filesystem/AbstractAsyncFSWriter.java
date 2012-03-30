@@ -53,9 +53,9 @@ public abstract class AbstractAsyncFSWriter extends AbstractAsyncWriter {
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration(super.getDefaultConfiguration());
 		final String prefix = this.getClass().getName() + "."; // can't use this.prefix, maybe uninitialized
-		configuration.setProperty(prefix + AbstractAsyncFSWriter.CONFIG_PATH, ".");
-		configuration.setProperty(prefix + AbstractAsyncFSWriter.CONFIG_TEMP, "true");
-		configuration.setProperty(prefix + AbstractAsyncFSWriter.CONFIG_MAXENTRIESINFILE, "25000");
+		configuration.setProperty(prefix + CONFIG_PATH, ".");
+		configuration.setProperty(prefix + CONFIG_TEMP, "true");
+		configuration.setProperty(prefix + CONFIG_MAXENTRIESINFILE, "25000");
 		return configuration;
 	}
 
@@ -64,10 +64,10 @@ public abstract class AbstractAsyncFSWriter extends AbstractAsyncWriter {
 		final String prefix = this.getClass().getName() + '.';
 		// Determine path
 		String path;
-		if (this.configuration.getBooleanProperty(prefix + AbstractAsyncFSWriter.CONFIG_TEMP)) {
+		if (this.configuration.getBooleanProperty(prefix + CONFIG_TEMP)) {
 			path = System.getProperty("java.io.tmpdir");
 		} else {
-			path = this.configuration.getStringProperty(prefix + AbstractAsyncFSWriter.CONFIG_PATH);
+			path = this.configuration.getStringProperty(prefix + CONFIG_PATH);
 		}
 		File f = new File(path);
 		if (!f.isDirectory()) {
@@ -86,9 +86,9 @@ public abstract class AbstractAsyncFSWriter extends AbstractAsyncWriter {
 			throw new IllegalArgumentException("Failed to create directory '" + path + "'");
 		}
 		// get number of entries per file
-		final int maxEntriesInFile = this.configuration.getIntProperty(prefix + AbstractAsyncFSWriter.CONFIG_MAXENTRIESINFILE);
+		final int maxEntriesInFile = this.configuration.getIntProperty(prefix + CONFIG_MAXENTRIESINFILE);
 		if (maxEntriesInFile < 1) {
-			throw new IllegalArgumentException(prefix + AbstractAsyncFSWriter.CONFIG_MAXENTRIESINFILE + " must be greater than 0 but is '" + maxEntriesInFile + "'");
+			throw new IllegalArgumentException(prefix + CONFIG_MAXENTRIESINFILE + " must be greater than 0 but is '" + maxEntriesInFile + "'");
 		}
 		// Mapping file
 		final MappingFileWriter mappingFileWriter = new MappingFileWriter(path);

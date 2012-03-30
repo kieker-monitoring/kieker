@@ -36,8 +36,8 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  */
 public final class JMXWriter extends AbstractMonitoringWriter {
 	private static final String PREFIX = JMXWriter.class.getName() + ".";
-	public static final String CONFIG_DOMAIN = JMXWriter.PREFIX + "domain"; // NOCS (afterPREFIX)
-	public static final String CONFIG_LOGNAME = JMXWriter.PREFIX + "logname"; // NOCS (afterPREFIX)
+	public static final String CONFIG_DOMAIN = PREFIX + "domain"; // NOCS (afterPREFIX)
+	public static final String CONFIG_LOGNAME = PREFIX + "logname"; // NOCS (afterPREFIX)
 
 	private static final Log LOG = LogFactory.getLog(JMXWriter.class);
 
@@ -51,15 +51,15 @@ public final class JMXWriter extends AbstractMonitoringWriter {
 	@Override
 	protected void init() throws Exception {
 		try {
-			String domain = this.configuration.getStringProperty(JMXWriter.CONFIG_DOMAIN);
+			String domain = this.configuration.getStringProperty(CONFIG_DOMAIN);
 			if ("".equals(domain)) {
 				domain = this.monitoringController.getJMXDomain();
 			}
-			this.monitoringLogName = new ObjectName(domain, "type", this.configuration.getStringProperty(JMXWriter.CONFIG_LOGNAME));
+			this.monitoringLogName = new ObjectName(domain, "type", this.configuration.getStringProperty(CONFIG_LOGNAME));
 		} catch (final MalformedObjectNameException ex) {
-			throw new IllegalArgumentException("The generated ObjectName is not correct! Check the following configuration values '" + JMXWriter.CONFIG_DOMAIN
-					+ "=" + this.configuration.getStringProperty(JMXWriter.CONFIG_DOMAIN) + "' and '" + JMXWriter.CONFIG_LOGNAME + "="
-					+ this.configuration.getStringProperty(JMXWriter.CONFIG_LOGNAME) + "'", ex);
+			throw new IllegalArgumentException("The generated ObjectName is not correct! Check the following configuration values '" + CONFIG_DOMAIN
+					+ "=" + this.configuration.getStringProperty(CONFIG_DOMAIN) + "' and '" + CONFIG_LOGNAME + "="
+					+ this.configuration.getStringProperty(CONFIG_LOGNAME) + "'", ex);
 		}
 		this.kiekerJMXMonitoringLog = new KiekerJMXMonitoringLog(this.monitoringLogName);
 		try {
@@ -77,7 +77,7 @@ public final class JMXWriter extends AbstractMonitoringWriter {
 		try {
 			ManagementFactory.getPlatformMBeanServer().unregisterMBean(this.monitoringLogName);
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
-			JMXWriter.LOG.error("Failed to terminate writer", ex);
+			LOG.error("Failed to terminate writer", ex);
 		}
 	}
 }

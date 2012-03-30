@@ -54,9 +54,9 @@ public abstract class AbstractAsyncThread extends Thread {
 			}
 		}
 		try {
-			this.writeQueue.put(AbstractAsyncThread.END_OF_MONITORING_MARKER);
+			this.writeQueue.put(END_OF_MONITORING_MARKER);
 		} catch (final InterruptedException ex) {
-			AbstractAsyncThread.LOG.error("Error while trying to stop writer thread", ex);
+			LOG.error("Error while trying to stop writer thread", ex);
 		}
 	}
 
@@ -68,8 +68,8 @@ public abstract class AbstractAsyncThread extends Thread {
 
 	@Override
 	public final void run() {
-		if (AbstractAsyncThread.LOG.isDebugEnabled()) {
-			AbstractAsyncThread.LOG.debug(this.getClass().getName() + " running");
+		if (LOG.isDebugEnabled()) {
+			LOG.debug(this.getClass().getName() + " running");
 		}
 		try {
 			// making it a local variable for faster access
@@ -77,18 +77,18 @@ public abstract class AbstractAsyncThread extends Thread {
 			while (true) {
 				try {
 					IMonitoringRecord monitoringRecord = writeQueue.take();
-					if (monitoringRecord == AbstractAsyncThread.END_OF_MONITORING_MARKER) {
-						if (AbstractAsyncThread.LOG.isDebugEnabled()) {
-							AbstractAsyncThread.LOG.debug("Terminating writer thread, " + writeQueue.size() + " entries remaining");
+					if (monitoringRecord == END_OF_MONITORING_MARKER) {
+						if (LOG.isDebugEnabled()) {
+							LOG.debug("Terminating writer thread, " + writeQueue.size() + " entries remaining");
 						}
 						monitoringRecord = writeQueue.poll();
 						while (monitoringRecord != null) {
-							if (monitoringRecord != AbstractAsyncThread.END_OF_MONITORING_MARKER) {
+							if (monitoringRecord != END_OF_MONITORING_MARKER) {
 								this.consume(monitoringRecord);
 							}
 							monitoringRecord = writeQueue.poll();
 						}
-						this.writeQueue.put(AbstractAsyncThread.END_OF_MONITORING_MARKER);
+						this.writeQueue.put(END_OF_MONITORING_MARKER);
 						this.cleanup();
 						synchronized (this) {
 							if (!this.finished && (this.shutdownLatch != null)) {
@@ -106,12 +106,12 @@ public abstract class AbstractAsyncThread extends Thread {
 					// but normally we should be able to continue
 				}
 			}
-			if (AbstractAsyncThread.LOG.isDebugEnabled()) {
-				AbstractAsyncThread.LOG.debug("Writer thread finished");
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Writer thread finished");
 			}
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 			// e.g. IOException
-			AbstractAsyncThread.LOG.error("Writer thread will halt", ex);
+			LOG.error("Writer thread will halt", ex);
 			this.cleanup();
 			synchronized (this) {
 				if (!this.finished && (this.shutdownLatch != null)) {

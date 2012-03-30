@@ -39,7 +39,7 @@ public final class SplitEvent extends AbstractTraceEvent {
 	}
 
 	public SplitEvent(final Object[] values) {
-		super(values, SplitEvent.TYPES); // values[0..2]
+		super(values, TYPES); // values[0..2]
 	}
 
 	public final Object[] toArray() {
@@ -47,7 +47,7 @@ public final class SplitEvent extends AbstractTraceEvent {
 	}
 
 	public final Class<?>[] getValueTypes() {
-		return SplitEvent.TYPES.clone();
+		return TYPES.clone();
 	}
 
 	@Override

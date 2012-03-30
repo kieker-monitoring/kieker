@@ -95,10 +95,10 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 						AssemblyRepository.ROOT_ASSEMBLY_COMPONENT)));
 
 		/* Initialize from the given configuration. */
-		this.dotOutputFile = new File(this.configuration.getStringProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE));
-		this.includeWeights = this.configuration.getBooleanProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
-		this.shortLabels = this.configuration.getBooleanProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS);
-		this.includeSelfLoops = this.configuration.getBooleanProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS);
+		this.dotOutputFile = new File(this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE));
+		this.includeWeights = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
+		this.shortLabels = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS);
+		this.includeSelfLoops = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS);
 	}
 
 	private String componentNodeLabel(final AssemblyComponent component) {
@@ -160,7 +160,7 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 						null // misc
 						));
 			} else {
-				strBuild.append(DotFactory.createCluster("", OperationDependencyGraphAssemblyFilter.COMPONENT_NODE_ID_PREFIX + curComponentId,
+				strBuild.append(DotFactory.createCluster("", COMPONENT_NODE_ID_PREFIX + curComponentId,
 						this.componentNodeLabel(curComponent), DotFactory.DOT_SHAPE_BOX, // shape
 						DotFactory.DOT_STYLE_FILLED, // style
 						null, // framecolor
@@ -206,7 +206,7 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 			try {
 				this.saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
 			} catch (final IOException ex) {
-				OperationDependencyGraphAssemblyFilter.LOG.error("IOException while saving to dot file", ex);
+				LOG.error("IOException while saving to dot file", ex);
 			}
 		}
 	}
@@ -215,11 +215,11 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE,
-				OperationDependencyGraphAssemblyFilter.DEFAULT_DOT_OUTPUT_FILE);
-		configuration.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
-		configuration.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(true));
-		configuration.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.toString(true));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE,
+				DEFAULT_DOT_OUTPUT_FILE);
+		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(true));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.toString(true));
 
 		return configuration;
 	}
@@ -227,10 +227,10 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
-		configuration.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
-		configuration.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
-		configuration.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));
 
 		return configuration;
 	}

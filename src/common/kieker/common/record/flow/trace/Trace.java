@@ -82,14 +82,14 @@ public final class Trace extends AbstractMonitoringRecord implements IMonitoring
 	public Trace(final long traceId, final long threadId, final String sessionId, final String hostname, final long parentTraceId, final int parentOrderId) {
 		this.traceId = traceId;
 		this.threadId = threadId;
-		this.sessionId = (sessionId == null) ? Trace.NO_SESSION_ID : sessionId; // NOCS
-		this.hostname = (hostname == null) ? Trace.NO_HOSTNAME : hostname; // NOCS
+		this.sessionId = (sessionId == null) ? NO_SESSION_ID : sessionId; // NOCS
+		this.hostname = (hostname == null) ? NO_HOSTNAME : hostname; // NOCS
 		this.parentTraceId = parentTraceId;
 		this.parentOrderId = parentOrderId;
 	}
 
 	public Trace(final Object[] values) { // NOPMD (values stored directly)
-		AbstractMonitoringRecord.checkArray(values, Trace.TYPES);
+		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.traceId = (Long) values[0];
 		this.threadId = (Long) values[1];
 		this.sessionId = (String) values[2];
@@ -103,7 +103,7 @@ public final class Trace extends AbstractMonitoringRecord implements IMonitoring
 	}
 
 	public final Class<?>[] getValueTypes() {
-		return Trace.TYPES.clone();
+		return TYPES.clone();
 	}
 
 	@Deprecated

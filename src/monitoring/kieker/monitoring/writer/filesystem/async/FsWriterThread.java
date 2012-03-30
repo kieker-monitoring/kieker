@@ -77,9 +77,9 @@ public final class FsWriterThread extends AbstractFsWriterThread {
 			this.pos.close();
 		}
 		if (this.autoflush) {
-			this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.getFilename()), FsWriterThread.ENCODING), true);
+			this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.getFilename()), ENCODING), true);
 		} else {
-			this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.getFilename()), FsWriterThread.ENCODING)), false);
+			this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.getFilename()), ENCODING)), false);
 		}
 		this.pos.flush();
 	}

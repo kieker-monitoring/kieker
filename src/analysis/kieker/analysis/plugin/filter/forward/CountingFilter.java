@@ -69,10 +69,10 @@ public final class CountingFilter extends AbstractFilterPlugin {
 		return this.counter.get();
 	}
 
-	@InputPort(name = CountingFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { Object.class }, description = "Receives incoming objects to be counted and forwarded")
+	@InputPort(name = INPUT_PORT_NAME_EVENTS, eventTypes = { Object.class }, description = "Receives incoming objects to be counted and forwarded")
 	public final void inputEvent(final Object event) {
 		final Long count = CountingFilter.this.counter.incrementAndGet();
-		super.deliver(CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, event);
-		super.deliver(CountingFilter.OUTPUT_PORT_NAME_COUNT, count);
+		super.deliver(OUTPUT_PORT_NAME_RELAYED_EVENTS, event);
+		super.deliver(OUTPUT_PORT_NAME_COUNT, count);
 	}
 }

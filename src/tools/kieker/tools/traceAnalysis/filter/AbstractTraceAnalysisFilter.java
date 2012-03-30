@@ -129,11 +129,11 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 
 	protected final SystemModelRepository getSystemEntityFactory() {
 		if (this.systemEntityFactory == null) {
-			this.systemEntityFactory = (SystemModelRepository) this.getRepository(AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL);
+			this.systemEntityFactory = (SystemModelRepository) this.getRepository(REPOSITORY_PORT_NAME_SYSTEM_MODEL);
 		}
 		if (this.systemEntityFactory == null) {
-			AbstractTraceAnalysisFilter.LOG.error("Failed to connect to system model repository via repository port '"
-					+ AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL + "' (not connected?)");
+			LOG.error("Failed to connect to system model repository via repository port '"
+					+ REPOSITORY_PORT_NAME_SYSTEM_MODEL + "' (not connected?)");
 		}
 		return this.systemEntityFactory;
 	}

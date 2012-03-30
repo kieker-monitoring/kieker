@@ -44,11 +44,11 @@ public final class AfterOperationFailedEvent extends AbstractOperationEvent {
 
 	public AfterOperationFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSiganture, final String cause) {
 		super(timestamp, traceId, orderIndex, operationSiganture);
-		this.cause = (cause == null) ? AfterOperationFailedEvent.NO_CAUSE : cause; // NOCS
+		this.cause = (cause == null) ? NO_CAUSE : cause; // NOCS
 	}
 
 	public AfterOperationFailedEvent(final Object[] values) { // NOPMD (values stored directly)
-		super(values, AfterOperationFailedEvent.TYPES); // values[0..3]
+		super(values, TYPES); // values[0..3]
 		this.cause = (String) values[4];
 	}
 
@@ -57,7 +57,7 @@ public final class AfterOperationFailedEvent extends AbstractOperationEvent {
 	}
 
 	public final Class<?>[] getValueTypes() {
-		return AfterOperationFailedEvent.TYPES.clone();
+		return TYPES.clone();
 	}
 
 	public final String getCause() {

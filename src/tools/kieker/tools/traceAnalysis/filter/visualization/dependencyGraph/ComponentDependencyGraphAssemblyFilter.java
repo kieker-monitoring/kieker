@@ -69,10 +69,10 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 		super.setDependencyGraph(new DependencyGraph<AssemblyComponent>(
 				AssemblyRepository.ROOT_ASSEMBLY_COMPONENT.getId(),
 				AssemblyRepository.ROOT_ASSEMBLY_COMPONENT));
-		this.dotOutputFile = new File(configuration.getStringProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE));
-		this.includeWeights = configuration.getBooleanProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
-		this.shortLabels = configuration.getBooleanProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS);
-		this.includeSelfLoops = configuration.getBooleanProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS);
+		this.dotOutputFile = new File(configuration.getStringProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE));
+		this.includeWeights = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
+		this.shortLabels = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS);
+		this.includeSelfLoops = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS);
 	}
 
 	private String nodeLabel(final DependencyGraphNode<?> node, final AssemblyComponent curComponent) {
@@ -128,7 +128,7 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 			try {
 				this.saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
 			} catch (final IOException ex) {
-				ComponentDependencyGraphAssemblyFilter.LOG.error("IOException while saving to dot file", ex);
+				LOG.error("IOException while saving to dot file", ex);
 			}
 		}
 	}
@@ -137,10 +137,10 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, "");
-		configuration.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.FALSE.toString());
-		configuration.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.FALSE.toString());
-		configuration.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.FALSE.toString());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, "");
+		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.FALSE.toString());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.FALSE.toString());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.FALSE.toString());
 
 		return configuration;
 	}
@@ -148,10 +148,10 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
-		configuration.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
-		configuration.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));
-		configuration.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
 
 		return configuration;
 	}

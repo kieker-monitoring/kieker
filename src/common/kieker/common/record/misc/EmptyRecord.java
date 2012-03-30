@@ -49,6 +49,6 @@ public final class EmptyRecord extends AbstractMonitoringRecord implements IMoni
 	}
 
 	public Class<?>[] getValueTypes() {
-		return EmptyRecord.TYPES.clone();
+		return TYPES.clone();
 	}
 }

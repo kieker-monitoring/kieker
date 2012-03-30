@@ -41,7 +41,7 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public abstract class AbstractAspect extends AbstractAspectJProbe {
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
-	private static final ITimeSource TIME = AbstractAspect.CTRLINST.getTimeSource();
+	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 
 	@Pointcut
@@ -49,36 +49,36 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 
 	@Around("monitoredOperation() && notWithinKieker()")
 	public Object operation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
-		if (!AbstractAspect.CTRLINST.isMonitoringEnabled()) {
+		if (!CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
-		Trace trace = AbstractAspect.TRACEREGISTRY.getTrace();
+		Trace trace = TRACEREGISTRY.getTrace();
 		final boolean newTrace = trace == null;
 		if (newTrace) {
-			trace = AbstractAspect.TRACEREGISTRY.registerTrace();
-			AbstractAspect.CTRLINST.newMonitoringRecord(trace);
+			trace = TRACEREGISTRY.registerTrace();
+			CTRLINST.newMonitoringRecord(trace);
 		}
 		final long traceId = trace.getTraceId();
 		final String signature = thisJoinPoint.getSignature().toLongString();
 		// measure before execution
-		AbstractAspect.CTRLINST.newMonitoringRecord(new BeforeOperationEvent(AbstractAspect.TIME.getTime(), traceId, trace.getNextOrderId(), signature));
+		CTRLINST.newMonitoringRecord(new BeforeOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature));
 		// execution of the called method
 		final Object retval;
 		try {
 			retval = thisJoinPoint.proceed();
 		} catch (final Throwable th) { // NOPMD NOCS (catch throw might ok here)
 			// measure after failed execution
-			AbstractAspect.CTRLINST.newMonitoringRecord(new AfterOperationFailedEvent(AbstractAspect.TIME.getTime(), traceId, trace.getNextOrderId(), signature,
+			CTRLINST.newMonitoringRecord(new AfterOperationFailedEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature,
 					th.toString()));
 			throw th;
 		} finally {
 			if (newTrace) { // close the trace
-				AbstractAspect.TRACEREGISTRY.unregisterTrace();
+				TRACEREGISTRY.unregisterTrace();
 			}
 		}
 		// measure after successful execution
-		AbstractAspect.CTRLINST.newMonitoringRecord(new AfterOperationEvent(AbstractAspect.TIME.getTime(), traceId, trace.getNextOrderId(), signature));
+		CTRLINST.newMonitoringRecord(new AfterOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature));
 		return retval;
 	}
 }

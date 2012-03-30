@@ -50,7 +50,7 @@ public final class StateController extends AbstractController implements IStateC
 			try {
 				hostnameTmp = java.net.InetAddress.getLocalHost().getHostName();
 			} catch (final UnknownHostException ex) {
-				StateController.LOG.warn("Failed to retrieve hostname", ex);
+				LOG.warn("Failed to retrieve hostname", ex);
 			}
 		}
 		this.hostname = hostnameTmp;
@@ -63,8 +63,8 @@ public final class StateController extends AbstractController implements IStateC
 
 	@Override
 	protected final void cleanup() {
-		if (StateController.LOG.isDebugEnabled()) {
-			StateController.LOG.debug("Shutting down State Controller");
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Shutting down State Controller");
 		}
 	}
 
@@ -94,7 +94,7 @@ public final class StateController extends AbstractController implements IStateC
 		if (super.monitoringController != null) {
 			return super.monitoringController.terminate();
 		} else {
-			StateController.LOG.warn("Shutting down Monitoring before it is correctly initialized");
+			LOG.warn("Shutting down Monitoring before it is correctly initialized");
 			return false;
 		}
 	}
@@ -105,16 +105,16 @@ public final class StateController extends AbstractController implements IStateC
 
 	public final boolean enableMonitoring() {
 		if (this.isMonitoringTerminated()) {
-			StateController.LOG.error("Refused to enable monitoring because monitoring has been permanently terminated");
+			LOG.error("Refused to enable monitoring because monitoring has been permanently terminated");
 			return false;
 		}
-		StateController.LOG.info("Enabling monitoring");
+		LOG.info("Enabling monitoring");
 		this.monitoringEnabled = true;
 		return true;
 	}
 
 	public final boolean disableMonitoring() {
-		StateController.LOG.info("Disabling monitoring");
+		LOG.info("Disabling monitoring");
 		this.monitoringEnabled = false;
 		return true;
 	}

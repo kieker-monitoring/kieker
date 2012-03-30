@@ -64,9 +64,9 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 
 	public FSReader(final Configuration configuration) {
 		super(configuration);
-		this.inputDirs = this.configuration.getStringArrayProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS);
+		this.inputDirs = this.configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_INPUTDIRS);
 		this.recordQueue = new PriorityQueue<IMonitoringRecord>(this.inputDirs.length);
-		final String[] onlyrecords = this.configuration.getStringArrayProperty(FSReader.CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION);
+		final String[] onlyrecords = this.configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION);
 		if (onlyrecords.length == 0) {
 			this.readOnlyRecordsOfType = null; // NOPMD (null)
 		} else {
@@ -76,7 +76,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 					final Class<? extends IMonitoringRecord> recClass = AbstractMonitoringRecord.classForName(classname);
 					this.readOnlyRecordsOfType.add(recClass);
 				} catch (final MonitoringRecordException ex) {
-					FSReader.LOG.warn("Error determining record types", ex);
+					LOG.warn("Error determining record types", ex);
 				}
 			}
 		}
@@ -85,13 +85,13 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
-		defaultConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, ".");
-		defaultConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION, FSReader.CONFIG_VALUE_NAME_RECORD_TYPE_SELECTION_ANY);
+		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_INPUTDIRS, ".");
+		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION, CONFIG_VALUE_NAME_RECORD_TYPE_SELECTION_ANY);
 		return defaultConfiguration;
 	}
 
 	public void terminate(final boolean error) {
-		FSReader.LOG.info("Shutting down reader.");
+		LOG.info("Shutting down reader.");
 		this.running = false;
 	}
 
@@ -116,10 +116,10 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 			synchronized (record) { // with newMonitoringRecord()
 				record.notifyAll();
 			}
-			if (record == FSReader.EOF) {
+			if (record == EOF) {
 				readingReaders--;
 			} else {
-				super.deliver(FSReader.OUTPUT_PORT_NAME_RECORDS, record);
+				super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
 			}
 		}
 		return true;
@@ -147,10 +147,10 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(this.inputDirs));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(this.inputDirs));
 		/* Extract the names of the record-classes again. */
 		if (this.readOnlyRecordsOfType == null) {
-			configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION, Configuration.toProperty(new String[] {}));
+			configuration.setProperty(CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION, Configuration.toProperty(new String[] {}));
 		} else {
 			final int len = this.readOnlyRecordsOfType.size();
 			final String[] onlyRecords = new String[len];
@@ -158,7 +158,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 			for (int i = 0; i < len; i++) {
 				onlyRecords[i] = iter.next().getName();
 			}
-			configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION, Configuration.toProperty(onlyRecords));
+			configuration.setProperty(CONFIG_PROPERTY_NAME_RECORD_TYPE_SELECTION, Configuration.toProperty(onlyRecords));
 		}
 		return configuration;
 	}

@@ -64,22 +64,22 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 
 	public TimestampFilter(final Configuration configuration) {
 		super(configuration);
-		this.ignoreBeforeTimestamp = configuration.getLongProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP);
-		this.ignoreAfterTimestamp = configuration.getLongProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP);
+		this.ignoreBeforeTimestamp = configuration.getLongProperty(CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP);
+		this.ignoreAfterTimestamp = configuration.getLongProperty(CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP);
 	}
 
 	@Override
 	protected final Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, Long.toString(TimestampFilter.CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP));
-		configuration.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, Long.toString(TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, Long.toString(CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, Long.toString(CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP));
 		return configuration;
 	}
 
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, Long.toString(this.ignoreBeforeTimestamp));
-		configuration.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, Long.toString(this.ignoreAfterTimestamp));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, Long.toString(this.ignoreBeforeTimestamp));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, Long.toString(this.ignoreAfterTimestamp));
 		return configuration;
 	}
 
@@ -87,7 +87,7 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 		return (timestamp >= this.ignoreBeforeTimestamp) && (timestamp <= this.ignoreAfterTimestamp);
 	}
 
-	@InputPort(name = TimestampFilter.INPUT_PORT_NAME_COMBINED, description = "Receives records to be selected by timestamps, based on type-specific selectors", eventTypes = { IMonitoringRecord.class })
+	@InputPort(name = INPUT_PORT_NAME_COMBINED, description = "Receives records to be selected by timestamps, based on type-specific selectors", eventTypes = { IMonitoringRecord.class })
 	public void inputCombined(final IMonitoringRecord record) {
 		if (record instanceof OperationExecutionRecord) {
 			this.inputOperationExecutionRecord((OperationExecutionRecord) record);
@@ -98,16 +98,16 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 		}
 	}
 
-	@InputPort(name = TimestampFilter.INPUT_PORT_NAME_ANY_RECORD, description = "Receives records to be selected by their logging timestamps", eventTypes = { IMonitoringRecord.class })
+	@InputPort(name = INPUT_PORT_NAME_ANY_RECORD, description = "Receives records to be selected by their logging timestamps", eventTypes = { IMonitoringRecord.class })
 	public final void inputIMonitoringRecord(final IMonitoringRecord record) {
 		if (this.inRange(record.getLoggingTimestamp())) {
-			super.deliver(TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, record);
+			super.deliver(OUTPUT_PORT_NAME_WITHIN_PERIOD, record);
 		} else {
-			super.deliver(TimestampFilter.OUTPUT_PORT_NAME_OUTSIDE_PERIOD, record);
+			super.deliver(OUTPUT_PORT_NAME_OUTSIDE_PERIOD, record);
 		}
 	}
 
-	@InputPort(name = TimestampFilter.INPUT_PORT_NAME_FLOW, description = "Receives trace events to be selected by a specific timestamp selector",
+	@InputPort(name = INPUT_PORT_NAME_FLOW, description = "Receives trace events to be selected by a specific timestamp selector",
 			eventTypes = { AbstractTraceEvent.class, Trace.class })
 	public final void inputTraceEvent(final IMonitoringRecord record) {
 		final long timestamp;
@@ -122,18 +122,18 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 		}
 
 		if (this.inRange(timestamp)) {
-			super.deliver(TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, record);
+			super.deliver(OUTPUT_PORT_NAME_WITHIN_PERIOD, record);
 		} else {
-			super.deliver(TimestampFilter.OUTPUT_PORT_NAME_OUTSIDE_PERIOD, record);
+			super.deliver(OUTPUT_PORT_NAME_OUTSIDE_PERIOD, record);
 		}
 	}
 
-	@InputPort(name = TimestampFilter.INPUT_PORT_NAME_EXECUTION, description = "Receives trace events to be selected by a specific timestamp selector (based on tin and tout)", eventTypes = { OperationExecutionRecord.class })
+	@InputPort(name = INPUT_PORT_NAME_EXECUTION, description = "Receives trace events to be selected by a specific timestamp selector (based on tin and tout)", eventTypes = { OperationExecutionRecord.class })
 	public final void inputOperationExecutionRecord(final OperationExecutionRecord execution) {
 		if (this.inRange(execution.getTin()) && this.inRange(execution.getTout())) {
-			super.deliver(TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, execution);
+			super.deliver(OUTPUT_PORT_NAME_WITHIN_PERIOD, execution);
 		} else {
-			super.deliver(TimestampFilter.OUTPUT_PORT_NAME_OUTSIDE_PERIOD, execution);
+			super.deliver(OUTPUT_PORT_NAME_OUTSIDE_PERIOD, execution);
 		}
 	}
 }

@@ -92,7 +92,7 @@ public class Execution {
 	 */
 	public Execution(final Operation op, final AllocationComponent allocationComponent, final long traceId, final int eoi, final int ess, final long tin,
 			final long tout, final boolean assumed) {
-		this(op, allocationComponent, traceId, Execution.NO_SESSION_ID, eoi, ess, tin, tout, assumed);
+		this(op, allocationComponent, traceId, NO_SESSION_ID, eoi, ess, tin, tout, assumed);
 	}
 
 	public final AllocationComponent getAllocationComponent() {
@@ -173,7 +173,7 @@ public class Execution {
 		strBuild.append(this.allocationComponent.toString()).append(".");
 		strBuild.append(this.operation.getSignature().getName()).append(" ");
 
-		strBuild.append((this.sessionId != null) ? this.sessionId : Execution.NO_SESSION_ID); // NOCS
+		strBuild.append((this.sessionId != null) ? this.sessionId : NO_SESSION_ID); // NOCS
 
 		return strBuild.toString();
 	}

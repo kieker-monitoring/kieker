@@ -60,26 +60,26 @@ public final class FilesystemLogReplayerStarter {
 	private static final String CMD_OPT_NAME_IGNORERECORDSBEFOREDATE = "ignore-records-before-date";
 	private static final String CMD_OPT_NAME_IGNORERECORDSAFTERDATE = "ignore-records-after-date";
 	private static final String DATE_FORMAT_PATTERN = "yyyyMMdd'-'HHmmss";
-	private static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = FilesystemLogReplayerStarter.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
+	private static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
 
 	static {
-		FilesystemLogReplayerStarter.CMDL_OPTS.addOption(OptionBuilder.withArgName("dir1 ... dirN").hasArgs()
-				.withLongOpt(FilesystemLogReplayerStarter.CMD_OPT_NAME_INPUTDIRS).isRequired(true).withDescription("Log directories to read data from")
+		CMDL_OPTS.addOption(OptionBuilder.withArgName("dir1 ... dirN").hasArgs()
+				.withLongOpt(CMD_OPT_NAME_INPUTDIRS).isRequired(true).withDescription("Log directories to read data from")
 				.withValueSeparator('=').create("i"));
-		FilesystemLogReplayerStarter.CMDL_OPTS.addOption(OptionBuilder.withArgName("true|false").hasArg()
-				.withLongOpt(FilesystemLogReplayerStarter.CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS).isRequired(false)
+		CMDL_OPTS.addOption(OptionBuilder.withArgName("true|false").hasArg()
+				.withLongOpt(CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS).isRequired(false)
 				.withDescription("Replay the original logging timestamps (defaults to true)?)").withValueSeparator('=').create("k"));
-		FilesystemLogReplayerStarter.CMDL_OPTS.addOption(OptionBuilder.withArgName("true|false").hasArg()
-				.withLongOpt(FilesystemLogReplayerStarter.CMD_OPT_NAME_REALTIME).isRequired(true).withDescription("Replay log data in realtime?")
+		CMDL_OPTS.addOption(OptionBuilder.withArgName("true|false").hasArg()
+				.withLongOpt(CMD_OPT_NAME_REALTIME).isRequired(true).withDescription("Replay log data in realtime?")
 				.withValueSeparator('=').create("r"));
-		FilesystemLogReplayerStarter.CMDL_OPTS.addOption(OptionBuilder.withArgName("num").hasArg()
-				.withLongOpt(FilesystemLogReplayerStarter.CMD_OPT_NAME_NUM_REALTIME_WORKERS).isRequired(false)
+		CMDL_OPTS.addOption(OptionBuilder.withArgName("num").hasArg()
+				.withLongOpt(CMD_OPT_NAME_NUM_REALTIME_WORKERS).isRequired(false)
 				.withDescription("Number of worker threads used in realtime mode (defaults to 1).").withValueSeparator('=').create("n"));
-		FilesystemLogReplayerStarter.CMDL_OPTS.addOption(OptionBuilder.withLongOpt(FilesystemLogReplayerStarter.CMD_OPT_NAME_IGNORERECORDSBEFOREDATE)
-				.withArgName(FilesystemLogReplayerStarter.DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false)
+		CMDL_OPTS.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNORERECORDSBEFOREDATE)
+				.withArgName(DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false)
 				.withDescription("Records logged before this date (UTC timezone) are ignored (disabled by default).").create());
-		FilesystemLogReplayerStarter.CMDL_OPTS.addOption(OptionBuilder.withLongOpt(FilesystemLogReplayerStarter.CMD_OPT_NAME_IGNORERECORDSAFTERDATE)
-				.withArgName(FilesystemLogReplayerStarter.DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false)
+		CMDL_OPTS.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNORERECORDSAFTERDATE)
+				.withArgName(DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false)
 				.withDescription("Records logged after this date (UTC timezone) are ignored (disabled by default).").create());
 	}
 	private static final Log LOG = LogFactory.getLog(FilesystemLogReplayerStarter.class);
@@ -94,7 +94,7 @@ public final class FilesystemLogReplayerStarter {
 
 	private static boolean parseArgs(final String[] args) {
 		try {
-			FilesystemLogReplayerStarter.cmdl = FilesystemLogReplayerStarter.CMDL_PARSER.parse(FilesystemLogReplayerStarter.CMDL_OPTS, args);
+			FilesystemLogReplayerStarter.cmdl = CMDL_PARSER.parse(CMDL_OPTS, args);
 		} catch (final ParseException e) {
 			System.err.println("Error parsing arguments: " + e.getMessage());
 			FilesystemLogReplayerStarter.printUsage();
@@ -104,90 +104,90 @@ public final class FilesystemLogReplayerStarter {
 	}
 
 	private static void printUsage() {
-		FilesystemLogReplayerStarter.CMD_HELP_FORMATTER.printHelp(FilesystemLogReplayerStarter.class.getName(), FilesystemLogReplayerStarter.CMDL_OPTS);
+		CMD_HELP_FORMATTER.printHelp(FilesystemLogReplayerStarter.class.getName(), CMDL_OPTS);
 	}
 
 	private static boolean initFromArgs() {
 		boolean retVal = true;
 
 		/* 1.) init inputDirs */
-		FilesystemLogReplayerStarter.inputDirs = FilesystemLogReplayerStarter.cmdl.getOptionValues(FilesystemLogReplayerStarter.CMD_OPT_NAME_INPUTDIRS);
+		FilesystemLogReplayerStarter.inputDirs = FilesystemLogReplayerStarter.cmdl.getOptionValues(CMD_OPT_NAME_INPUTDIRS);
 
 		/* 2.) init keepOriginalLoggingTimestamps */
 		final String keepOriginalLoggingTimestampsOptValStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(
-				FilesystemLogReplayerStarter.CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS, "true");
+				CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS, "true");
 		if (!("true".equals(keepOriginalLoggingTimestampsOptValStr) || "false".equals(keepOriginalLoggingTimestampsOptValStr))) {
-			System.out.println("Invalid value for option " + FilesystemLogReplayerStarter.CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS + ": '"
+			System.out.println("Invalid value for option " + CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS + ": '"
 					+ keepOriginalLoggingTimestampsOptValStr + "'");
 			retVal = false;
 		}
 		FilesystemLogReplayerStarter.keepOriginalLoggingTimestamps = "true".equals(keepOriginalLoggingTimestampsOptValStr);
-		FilesystemLogReplayerStarter.LOG.info("Keeping original logging timestamps: "
+		LOG.info("Keeping original logging timestamps: "
 				+ (FilesystemLogReplayerStarter.keepOriginalLoggingTimestamps ? "true" : "false")); // NOCS
 
 		/* 3.) init realtimeMode */
-		final String realtimeOptValStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(FilesystemLogReplayerStarter.CMD_OPT_NAME_REALTIME, "false");
+		final String realtimeOptValStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(CMD_OPT_NAME_REALTIME, "false");
 		if (!("true".equals(realtimeOptValStr) || "false".equals(realtimeOptValStr))) {
-			System.out.println("Invalid value for option " + FilesystemLogReplayerStarter.CMD_OPT_NAME_REALTIME + ": '" + realtimeOptValStr + "'");
+			System.out.println("Invalid value for option " + CMD_OPT_NAME_REALTIME + ": '" + realtimeOptValStr + "'");
 			retVal = false;
 		}
 		FilesystemLogReplayerStarter.realtimeMode = "true".equals(realtimeOptValStr);
 
 		/* 4.) init numRealtimeWorkerThreads */
-		final String numRealtimeWorkerThreadsStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(FilesystemLogReplayerStarter.CMD_OPT_NAME_NUM_REALTIME_WORKERS,
+		final String numRealtimeWorkerThreadsStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(CMD_OPT_NAME_NUM_REALTIME_WORKERS,
 				"1");
 		try {
 			FilesystemLogReplayerStarter.numRealtimeWorkerThreads = Integer.parseInt(numRealtimeWorkerThreadsStr);
 		} catch (final NumberFormatException ex) {
-			System.out.println("Invalid value for option " + FilesystemLogReplayerStarter.CMD_OPT_NAME_NUM_REALTIME_WORKERS + ": '" + numRealtimeWorkerThreadsStr
+			System.out.println("Invalid value for option " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + ": '" + numRealtimeWorkerThreadsStr
 					+ "'");
-			FilesystemLogReplayerStarter.LOG.error("NumberFormatException: ", ex);
+			LOG.error("NumberFormatException: ", ex);
 			retVal = false;
 		}
 		if (FilesystemLogReplayerStarter.numRealtimeWorkerThreads < 1) {
-			System.out.println("Option value for " + FilesystemLogReplayerStarter.CMD_OPT_NAME_NUM_REALTIME_WORKERS + " must be >= 1; found "
+			System.out.println("Option value for " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + " must be >= 1; found "
 					+ FilesystemLogReplayerStarter.numRealtimeWorkerThreads);
-			FilesystemLogReplayerStarter.LOG.error("Invalid specification of " + FilesystemLogReplayerStarter.CMD_OPT_NAME_NUM_REALTIME_WORKERS + ":"
+			LOG.error("Invalid specification of " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + ":"
 					+ FilesystemLogReplayerStarter.numRealtimeWorkerThreads);
 			retVal = false;
 		}
 
 		/* 5.) init ignoreRecordsBefore/After */
-		final DateFormat dateFormat = new SimpleDateFormat(FilesystemLogReplayerStarter.DATE_FORMAT_PATTERN, Locale.US);
+		final DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_PATTERN, Locale.US);
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
 		try {
 			final String ignoreRecordsBeforeTimestampString = FilesystemLogReplayerStarter.cmdl.getOptionValue(
-					FilesystemLogReplayerStarter.CMD_OPT_NAME_IGNORERECORDSBEFOREDATE, null);
+					CMD_OPT_NAME_IGNORERECORDSBEFOREDATE, null);
 			final String ignoreRecordsAfterTimestampString = FilesystemLogReplayerStarter.cmdl.getOptionValue(
-					FilesystemLogReplayerStarter.CMD_OPT_NAME_IGNORERECORDSAFTERDATE, null);
+					CMD_OPT_NAME_IGNORERECORDSAFTERDATE, null);
 			if (ignoreRecordsBeforeTimestampString != null) {
 				final Date ignoreBeforeDate = dateFormat.parse(ignoreRecordsBeforeTimestampString);
 				FilesystemLogReplayerStarter.ignoreRecordsBeforeTimestamp = ignoreBeforeDate.getTime() * (1000 * 1000);
-				FilesystemLogReplayerStarter.LOG.info("Ignoring records before " + dateFormat.format(ignoreBeforeDate) + " ("
+				LOG.info("Ignoring records before " + dateFormat.format(ignoreBeforeDate) + " ("
 						+ FilesystemLogReplayerStarter.ignoreRecordsBeforeTimestamp + ")");
 			}
 			if (ignoreRecordsAfterTimestampString != null) {
 				final Date ignoreAfterDate = dateFormat.parse(ignoreRecordsAfterTimestampString);
 				FilesystemLogReplayerStarter.ignoreRecordsAfterTimestamp = ignoreAfterDate.getTime() * (1000 * 1000);
-				FilesystemLogReplayerStarter.LOG.info("Ignoring records after " + dateFormat.format(ignoreAfterDate) + " ("
+				LOG.info("Ignoring records after " + dateFormat.format(ignoreAfterDate) + " ("
 						+ FilesystemLogReplayerStarter.ignoreRecordsAfterTimestamp + ")");
 			}
 		} catch (final java.text.ParseException ex) {
 			final String erorMsg = "Error parsing date/time string. Please use the following pattern: "
-					+ FilesystemLogReplayerStarter.DATE_FORMAT_PATTERN_CMD_USAGE_HELP;
+					+ DATE_FORMAT_PATTERN_CMD_USAGE_HELP;
 			System.err.println(erorMsg);
-			FilesystemLogReplayerStarter.LOG.error(erorMsg, ex);
+			LOG.error(erorMsg, ex);
 			return false;
 		}
 
 		/* log configuration */
 		if (retVal) {
-			FilesystemLogReplayerStarter.LOG.info("inputDirs: "
+			LOG.info("inputDirs: "
 					+ FilesystemLogReplayerStarter.fromStringArrayToDeliminedString(FilesystemLogReplayerStarter.inputDirs, ';'));
-			FilesystemLogReplayerStarter.LOG.info("Replaying in " + (FilesystemLogReplayerStarter.realtimeMode ? "" : "non-") + "realtime mode"); // NOCS
+			LOG.info("Replaying in " + (FilesystemLogReplayerStarter.realtimeMode ? "" : "non-") + "realtime mode"); // NOCS
 			if (FilesystemLogReplayerStarter.realtimeMode) {
-				FilesystemLogReplayerStarter.LOG.info("Using " + FilesystemLogReplayerStarter.numRealtimeWorkerThreads + " realtime worker thread"
+				LOG.info("Using " + FilesystemLogReplayerStarter.numRealtimeWorkerThreads + " realtime worker thread"
 						+ (FilesystemLogReplayerStarter.numRealtimeWorkerThreads > 1 ? "s" : "")); // NOCS
 			}
 		}
@@ -216,9 +216,9 @@ public final class FilesystemLogReplayerStarter {
 		/* Parsed args and initialized variables */
 
 		if (FilesystemLogReplayerStarter.realtimeMode) {
-			FilesystemLogReplayerStarter.LOG.info("Replaying log data in real time");
+			LOG.info("Replaying log data in real time");
 		} else {
-			FilesystemLogReplayerStarter.LOG.info("Replaying log data in non-real time");
+			LOG.info("Replaying log data in non-real time");
 		}
 
 		/**

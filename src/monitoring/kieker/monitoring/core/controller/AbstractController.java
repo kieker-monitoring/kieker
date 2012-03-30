@@ -95,16 +95,16 @@ public abstract class AbstractController {
 			if (c.isAssignableFrom(clazz)) {
 				createdClass = (C) clazz.getConstructor(Configuration.class).newInstance(configuration.getPropertiesStartingWith(classname));
 			} else {
-				AbstractController.LOG.error("Class '" + classname + "' has to implement '" + c.getSimpleName() + "'");
+				LOG.error("Class '" + classname + "' has to implement '" + c.getSimpleName() + "'");
 			}
 		} catch (final ClassNotFoundException e) {
-			AbstractController.LOG.error(c.getSimpleName() + ": Class '" + classname + "' not found", e);
+			LOG.error(c.getSimpleName() + ": Class '" + classname + "' not found", e);
 		} catch (final NoSuchMethodException e) {
-			AbstractController.LOG.error(c.getSimpleName() + ": Class '" + classname
+			LOG.error(c.getSimpleName() + ": Class '" + classname
 					+ "' has to implement a (public) constructor that accepts a single Configuration", e);
 		} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 			// SecurityException, IllegalAccessException, IllegalArgumentException, InstantiationException, InvocationTargetException
-			AbstractController.LOG.error(c.getSimpleName() + ": Failed to load class for name '" + classname + "'", e);
+			LOG.error(c.getSimpleName() + ": Failed to load class for name '" + classname + "'", e);
 		}
 		return createdClass;
 	}

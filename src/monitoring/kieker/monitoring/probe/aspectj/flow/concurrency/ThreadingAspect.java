@@ -37,22 +37,22 @@ import org.aspectj.lang.annotation.Before;
 @Aspect
 public final class ThreadingAspect extends AbstractAspectJProbe {
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
-	private static final ITimeSource TIME = ThreadingAspect.CTRLINST.getTimeSource();
+	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 
 	// TODO: what about other forms of executions? ThreadPoool, ...?
 	// Must be @Before
 	@Before("call(void java.lang.Thread.start()) && target(thread) && notWithinKieker()")
 	public void beforeNewThread(final Thread thread) {
-		if (!ThreadingAspect.CTRLINST.isMonitoringEnabled()) {
+		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
-		final Trace trace = ThreadingAspect.TRACEREGISTRY.getTrace();
+		final Trace trace = TRACEREGISTRY.getTrace();
 		if (trace != null) { // ignore split if not inside of a trace!
 			final long traceId = trace.getTraceId();
 			final int orderId = trace.getNextOrderId();
-			ThreadingAspect.TRACEREGISTRY.setParentTraceId(thread, traceId, orderId);
-			ThreadingAspect.CTRLINST.newMonitoringRecord(new SplitEvent(ThreadingAspect.TIME.getTime(), traceId, orderId));
+			TRACEREGISTRY.setParentTraceId(thread, traceId, orderId);
+			CTRLINST.newMonitoringRecord(new SplitEvent(TIME.getTime(), traceId, orderId));
 		}
 	}
 }

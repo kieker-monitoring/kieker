@@ -60,19 +60,19 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 
 	public SystemModel2FileFilter(final Configuration configuration) {
 		super(configuration);
-		this.outputFnHTML = configuration.getProperty(SystemModel2FileFilter.CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN);
+		this.outputFnHTML = configuration.getProperty(CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN);
 	}
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration defaultConfig = new Configuration();
-		defaultConfig.setProperty(SystemModel2FileFilter.CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN, SystemModel2FileFilter.DEFAULT_HTML_OUTPUT_FN);
+		defaultConfig.setProperty(CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN, DEFAULT_HTML_OUTPUT_FN);
 		return defaultConfig;
 	}
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration currentConfiguration = new Configuration();
-		currentConfiguration.setProperty(SystemModel2FileFilter.CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN, this.outputFnHTML);
+		currentConfiguration.setProperty(CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN, this.outputFnHTML);
 		return currentConfiguration;
 	}
 
@@ -99,14 +99,14 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 				final SystemModelRepository sysModelRepo = super.getSystemEntityFactory();
 				if (sysModelRepo == null) {
 					final String errorMsg = "Failed to get system model repository";
-					SystemModel2FileFilter.LOG.error(errorMsg);
+					LOG.error(errorMsg);
 					error = true;
 				} else {
 					sysModelRepo.saveSystemToHTMLFile(outputFnHTMLCanonical);
 				}
 			} catch (final IOException e) {
 				final String errorMsg = "Failed to save system model to file " + outputFnHTMLCanonical;
-				SystemModel2FileFilter.LOG.error(errorMsg, e);
+				LOG.error(errorMsg, e);
 				error = true;
 			}
 		}

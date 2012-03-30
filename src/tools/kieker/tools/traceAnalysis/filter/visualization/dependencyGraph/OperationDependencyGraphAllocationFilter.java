@@ -93,10 +93,10 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 						AllocationRepository.ROOT_ALLOCATION_COMPONENT)));
 
 		/* Initialize from the given configuration. */
-		this.dotOutputFile = this.configuration.getStringProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE);
-		this.includeWeights = this.configuration.getBooleanProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
-		this.shortLabels = this.configuration.getBooleanProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS);
-		this.includeSelfLoops = this.configuration.getBooleanProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS);
+		this.dotOutputFile = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE);
+		this.includeWeights = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
+		this.shortLabels = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS);
+		this.includeSelfLoops = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS);
 	}
 
 	private String containerNodeLabel(final ExecutionContainer container) {
@@ -167,7 +167,7 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 						null // misc
 						));
 			} else {
-				strBuild.append(DotFactory.createCluster("", OperationDependencyGraphAllocationFilter.CONTAINER_NODE_ID_PREFIX + curContainer.getId(),
+				strBuild.append(DotFactory.createCluster("", CONTAINER_NODE_ID_PREFIX + curContainer.getId(),
 						this.containerNodeLabel(curContainer), DotFactory.DOT_SHAPE_BOX, // shape
 						DotFactory.DOT_STYLE_FILLED, // style
 						null, // framecolor
@@ -178,7 +178,7 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 				// dot code for contained components
 				for (final AllocationComponent curComponent : containerComponentEntry.getValue()) {
 					final int curComponentId = curComponent.getId();
-					strBuild.append(DotFactory.createCluster("", OperationDependencyGraphAllocationFilter.COMPONENT_NODE_ID_PREFIX + curComponentId,
+					strBuild.append(DotFactory.createCluster("", COMPONENT_NODE_ID_PREFIX + curComponentId,
 							this.componentNodeLabel(curComponent, shortLabelsL), DotFactory.DOT_SHAPE_BOX, DotFactory.DOT_STYLE_FILLED, // style
 							null, // framecolor
 							DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
@@ -230,7 +230,7 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 			try {
 				this.saveToDotFile(this.dotOutputFile, this.includeWeights, this.shortLabels, this.includeSelfLoops);
 			} catch (final IOException ex) {
-				OperationDependencyGraphAllocationFilter.LOG.error("IOException while saving to dot file", ex);
+				LOG.error("IOException while saving to dot file", ex);
 			}
 		}
 	}
@@ -239,20 +239,20 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, "./OperationDependencyGraph");
-		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.TRUE.toString());
-		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.FALSE.toString());
-		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.TRUE.toString());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, "./OperationDependencyGraph");
+		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.TRUE.toString());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.FALSE.toString());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.TRUE.toString());
 
 		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, this.dotOutputFile);
-		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
-		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));
-		configuration.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, this.dotOutputFile);
+		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
 		return configuration;
 	}
 

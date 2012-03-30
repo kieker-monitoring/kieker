@@ -58,8 +58,8 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	public AbstractAggregatedCallTreeFilter(final Configuration configuration) {
 		super(configuration);
 
-		this.includeWeights = configuration.getBooleanProperty(AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
-		this.shortLabels = configuration.getBooleanProperty(AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS);
+		this.includeWeights = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
+		this.shortLabels = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS);
 	}
 
 	public void setRoot(final AbstractAggregatedCallTreeNode<T> root) {
@@ -97,7 +97,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 			try {
 				this.saveTreeToDotFile();
 			} catch (final IOException ex) {
-				AbstractAggregatedCallTreeFilter.LOG.error("IOException while saving to dot file", ex);
+				LOG.error("IOException while saving to dot file", ex);
 			}
 		}
 	}
@@ -131,7 +131,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 			}, true); // aggregated
 			AbstractAggregatedCallTreeFilter.this.reportSuccess(t.getTraceId());
 		} catch (final TraceProcessingException ex) {
-			AbstractAggregatedCallTreeFilter.LOG.error("TraceProcessingException", ex);
+			LOG.error("TraceProcessingException", ex);
 			AbstractAggregatedCallTreeFilter.this.reportError(t.getTraceId());
 		}
 	}

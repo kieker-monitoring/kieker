@@ -67,10 +67,10 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  */
 public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private static final String PREFIX = SyncFsWriter.class.getName() + ".";
-	public static final String CONFIG_PATH = SyncFsWriter.PREFIX + "customStoragePath"; // NOCS (afterPREFIX)
-	public static final String CONFIG_TEMP = SyncFsWriter.PREFIX + "storeInJavaIoTmpdir"; // NOCS (afterPREFIX)
-	public static final String CONFIG_MAXENTRIESINFILE = SyncFsWriter.PREFIX + "maxEntriesInFile"; // NOCS (afterPREFIX)
-	public static final String CONFIG_FLUSH = SyncFsWriter.PREFIX + "flush"; // NOCS (afterPREFIX)
+	public static final String CONFIG_PATH = PREFIX + "customStoragePath"; // NOCS (afterPREFIX)
+	public static final String CONFIG_TEMP = PREFIX + "storeInJavaIoTmpdir"; // NOCS (afterPREFIX)
+	public static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile"; // NOCS (afterPREFIX)
+	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
 
 	private static final Log LOG = LogFactory.getLog(SyncFsWriter.class);
 
@@ -88,11 +88,11 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 
 	public SyncFsWriter(final Configuration configuration) throws IllegalArgumentException {
 		super(configuration);
-		this.autoflush = this.configuration.getBooleanProperty(SyncFsWriter.CONFIG_FLUSH);
+		this.autoflush = this.configuration.getBooleanProperty(CONFIG_FLUSH);
 		// get number of entries per file
-		this.maxEntriesInFile = this.configuration.getIntProperty(SyncFsWriter.CONFIG_MAXENTRIESINFILE);
+		this.maxEntriesInFile = this.configuration.getIntProperty(CONFIG_MAXENTRIESINFILE);
 		if (this.maxEntriesInFile < 1) {
-			throw new IllegalArgumentException(SyncFsWriter.CONFIG_MAXENTRIESINFILE + " must be greater than 0 but is '" + this.maxEntriesInFile + "'");
+			throw new IllegalArgumentException(CONFIG_MAXENTRIESINFILE + " must be greater than 0 but is '" + this.maxEntriesInFile + "'");
 		}
 		this.entriesInCurrentFileCounter = this.maxEntriesInFile;
 	}
@@ -101,10 +101,10 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	protected void init() throws IllegalArgumentException, IOException {
 		// Determine path
 		String pathTmp;
-		if (this.configuration.getBooleanProperty(SyncFsWriter.CONFIG_TEMP)) {
+		if (this.configuration.getBooleanProperty(CONFIG_TEMP)) {
 			pathTmp = System.getProperty("java.io.tmpdir");
 		} else {
-			pathTmp = this.configuration.getStringProperty(SyncFsWriter.CONFIG_PATH);
+			pathTmp = this.configuration.getStringProperty(CONFIG_PATH);
 		}
 		File f = new File(pathTmp);
 		if (!f.isDirectory()) {
@@ -134,7 +134,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			try {
 				this.mappingFileWriter.write((RegistryRecord) monitoringRecord);
 			} catch (final IOException ex) {
-				SyncFsWriter.LOG.error("Failed to write monitoring record", ex);
+				LOG.error("Failed to write monitoring record", ex);
 				return false;
 			}
 		} else {
@@ -154,7 +154,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 					this.pos.println(sb.toString());
 				}
 			} catch (final IOException ex) {
-				SyncFsWriter.LOG.error("Failed to write monitoring record", ex);
+				LOG.error("Failed to write monitoring record", ex);
 				return false;
 			}
 		}
@@ -173,9 +173,9 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 				this.pos.close();
 			}
 			if (this.autoflush) {
-				this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.getFilename()), SyncFsWriter.ENCODING), true);
+				this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.getFilename()), ENCODING), true);
 			} else {
-				this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.getFilename()), SyncFsWriter.ENCODING)), false);
+				this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.getFilename()), ENCODING)), false);
 			}
 			this.pos.flush();
 		}
@@ -195,7 +195,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 				this.pos.close();
 			}
 		}
-		SyncFsWriter.LOG.info("Writer: SyncFsWriter shutdown complete");
+		LOG.info("Writer: SyncFsWriter shutdown complete");
 	}
 
 	@Override

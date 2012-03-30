@@ -48,10 +48,10 @@ import kieker.monitoring.writer.AbstractAsyncWriter;
  */
 public final class AsyncDbWriter extends AbstractAsyncWriter {
 	private static final String PREFIX = AsyncDbWriter.class.getName() + ".";
-	public static final String CONFIG_DRIVERCLASSNAME = AsyncDbWriter.PREFIX + "DriverClassname"; // NOCS (AfterPREFIX)
-	public static final String CONFIG_CONNECTIONSTRING = AsyncDbWriter.PREFIX + "ConnectionString"; // NOCS (AfterPREFIX)
-	public static final String CONFIG_TABLEPREFIX = AsyncDbWriter.PREFIX + "TablePrefix"; // NOCS (AfterPREFIX)
-	public static final String CONFIG_NRCONN = AsyncDbWriter.PREFIX + "numberOfConnections"; // NOCS (AfterPREFIX)
+	public static final String CONFIG_DRIVERCLASSNAME = PREFIX + "DriverClassname"; // NOCS (AfterPREFIX)
+	public static final String CONFIG_CONNECTIONSTRING = PREFIX + "ConnectionString"; // NOCS (AfterPREFIX)
+	public static final String CONFIG_TABLEPREFIX = PREFIX + "TablePrefix"; // NOCS (AfterPREFIX)
+	public static final String CONFIG_NRCONN = PREFIX + "numberOfConnections"; // NOCS (AfterPREFIX)
 
 	private final String tablePrefix;
 	private final String connectionString;
@@ -60,19 +60,19 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 	public AsyncDbWriter(final Configuration configuration) throws Exception {
 		super(configuration);
 		try {
-			Class.forName(this.configuration.getStringProperty(AsyncDbWriter.CONFIG_DRIVERCLASSNAME)).newInstance();
+			Class.forName(this.configuration.getStringProperty(CONFIG_DRIVERCLASSNAME)).newInstance();
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 			throw new Exception("DB driver registration failed. Perhaps the driver jar is missing?", ex);
 		}
-		this.connectionString = configuration.getStringProperty(AsyncDbWriter.CONFIG_CONNECTIONSTRING);
-		this.tablePrefix = configuration.getStringProperty(AsyncDbWriter.CONFIG_TABLEPREFIX);
+		this.connectionString = configuration.getStringProperty(CONFIG_CONNECTIONSTRING);
+		this.tablePrefix = configuration.getStringProperty(CONFIG_TABLEPREFIX);
 	}
 
 	@Override
 	public void init() throws Exception {
 		Connection connection = null;
 		try {
-			connection = DriverManager.getConnection(this.configuration.getStringProperty(AsyncDbWriter.CONFIG_CONNECTIONSTRING));
+			connection = DriverManager.getConnection(this.configuration.getStringProperty(CONFIG_CONNECTIONSTRING));
 			new DBWriterHelper(connection, this.tablePrefix).createIndexTable();
 		} catch (final SQLException ex) {
 			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
@@ -82,7 +82,7 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 			}
 		}
 		try {
-			for (int i = 0; i < this.configuration.getIntProperty(AsyncDbWriter.CONFIG_NRCONN); i++) {
+			for (int i = 0; i < this.configuration.getIntProperty(CONFIG_NRCONN); i++) {
 				this.addWorker(new DbWriterThread(super.monitoringController, this.blockingQueue, i, this.connectionString, this.tablePrefix, this.recordId));
 			}
 		} catch (final SQLException ex) {

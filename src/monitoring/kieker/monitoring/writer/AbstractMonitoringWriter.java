@@ -49,7 +49,7 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 				configuration.setDefaultConfiguration(defaultConfiguration);
 			}
 		} catch (final IllegalAccessException ex) {
-			AbstractMonitoringWriter.LOG.error("Unable to set writer custom default properties"); // ok to ignore ex here
+			LOG.error("Unable to set writer custom default properties"); // ok to ignore ex here
 		}
 		this.configuration = configuration;
 	}
