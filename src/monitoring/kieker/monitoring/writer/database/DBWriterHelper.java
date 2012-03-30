@@ -94,7 +94,7 @@ public final class DBWriterHelper {
 		this.indexTablename = indexTablename;
 	}
 
-	public void createTable(final String tablename, final Class<?>... columns) throws SQLException {
+	public void createTable(final String tablename, final String classname, final Class<?>... columns) throws SQLException {
 		final StringBuilder statementCreateTable = new StringBuilder();
 		// FIXME: what should happen if the table already exists?
 		// stmt.append("DROP TABLE ").append(tableName).append(';');
@@ -132,7 +132,7 @@ public final class DBWriterHelper {
 		// insert this new table into the index table
 		try {
 			statement = this.connection.createStatement();
-			statement.executeUpdate("INSERT INTO " + this.indexTablename + " VALUES ('" + tablename + "')");
+			statement.executeUpdate("INSERT INTO " + this.indexTablename + " VALUES ('" + tablename + "','" + classname + "')");
 		} finally {
 			if (statement != null) {
 				statement.close();
@@ -141,17 +141,15 @@ public final class DBWriterHelper {
 	}
 
 	public void createIndexTable() throws SQLException {
+		final String createString = this.createTypeMap.get(String.class);
+		if (createString == null) {
+			throw new SQLException("Type 'String' not supported.");
+		}
 		final StringBuilder statementCreateTable = new StringBuilder();
 		// FIXME: what should happen if the table already exists?
 		// stmt.append("DROP TABLE ").append(tableName).append(';');
-		statementCreateTable.append("CREATE TABLE ").append(this.indexTablename).append(" (tables ");
-		final String createString = this.createTypeMap.get(String.class);
-		if (createString != null) {
-			statementCreateTable.append(createString);
-		} else {
-			throw new SQLException("Type 'String' not supported.");
-		}
-		statementCreateTable.append(")");
+		statementCreateTable.append("CREATE TABLE ").append(this.indexTablename);
+		statementCreateTable.append(" (tablename ").append(createString).append(", classname ").append(createString).append(')');
 		final String statementCreateTableString = statementCreateTable.toString();
 		Statement statement = null;
 		try {

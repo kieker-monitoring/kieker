@@ -127,7 +127,7 @@ final class DbWriterThread extends AbstractAsyncThread {
 				throw new Exception("Failed to get types of record", ex);
 			}
 			try {
-				this.helper.createTable(tableName, typeArray);
+				this.helper.createTable(tableName, recordClass.getName(), typeArray);
 				final StringBuilder sb = new StringBuilder("?");
 				for (int count = typeArray.length; count > 0; count--) {
 					sb.append(",?");

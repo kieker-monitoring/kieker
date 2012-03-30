@@ -63,7 +63,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 		super(configuration);
 		try {
 			Class.forName(configuration.getStringProperty(CONFIG_DRIVERCLASSNAME)).newInstance();
-		} catch (final Throwable ex) { // NOPMD NOCS (IllegalCatchCheck)
+		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 			throw new Exception("DB driver registration failed. Perhaps the driver jar is missing?", ex);
 		}
 		try {
@@ -97,7 +97,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 				return false;
 			}
 			try {
-				this.helper.createTable(tableName, typeArray);
+				this.helper.createTable(tableName, recordClass.getName(), typeArray);
 				final StringBuilder sb = new StringBuilder("?");
 				for (int count = typeArray.length; count > 0; count--) {
 					sb.append(",?");
