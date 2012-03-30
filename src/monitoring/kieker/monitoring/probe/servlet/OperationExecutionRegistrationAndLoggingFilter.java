@@ -20,12 +20,12 @@
 
 package kieker.monitoring.probe.servlet;
 
-import java.io.IOException;
-
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+
+import kieker.common.util.ClassOperationSignaturePair;
+import kieker.common.util.Signature;
 
 /**
  * Register session and trace id for incoming requests.
@@ -44,13 +44,31 @@ import javax.servlet.ServletResponse;
  * 
  * @deprecated To be removed in Kieker 1.6. Use {@link SessionAndTraceRegistrationFilter} instead.
  * 
- * @author Andre van Hoorn
+ * @author Andre van Hoorn, Marco Luebcke, Jan Waller
  */
 @Deprecated
-public class OperationExecutionRegistrationAndLoggingFilter extends OperationExecutionRegistrationFilter {
+public class OperationExecutionRegistrationAndLoggingFilter extends SessionAndTraceRegistrationFilter {
+
+	/**
+	 * Signature for the {@link #doFilter(ServletRequest, ServletResponse, FilterChain)} which will be used when logging
+	 * executions of this method.
+	 */
+	private final String filterOperationSignatureString;
+
+	public OperationExecutionRegistrationAndLoggingFilter() {
+		super(true); // *do* log filter executions
+		final Signature methodSignature =
+				new Signature("doFilter", // operation name
+						new String[] { "public", "void" }, // modifier list
+						"void", // return type
+						new String[] { ServletRequest.class.getName(), ServletResponse.class.getName(), FilterChain.class.getName() }); // arg types
+		final ClassOperationSignaturePair filterOperationSignaturePair =
+				new ClassOperationSignaturePair(OperationExecutionRegistrationAndLoggingFilter.class.getName(), methodSignature);
+		this.filterOperationSignatureString = filterOperationSignaturePair.toString();
+	}
 
 	@Override
-	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
-		this.doFilter(request, response, chain, true); // log this execution
+	protected String getFilterOperationSignatureString() {
+		return this.filterOperationSignatureString; // provide the signature including *this* classname
 	}
 }

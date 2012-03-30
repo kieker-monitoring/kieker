@@ -20,13 +20,6 @@
 
 package kieker.monitoring.probe.servlet;
 
-import java.io.IOException;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-
 /**
  * Register the session id (if it exists) and trace information of incoming request into
  * a thread-local data structure then accessible to other application-level probes.
@@ -47,13 +40,14 @@ import javax.servlet.ServletResponse;
  * 
  * @deprecated To be removed in Kieker 1.6. Use {@link SessionAndTraceRegistrationFilter} instead.
  * 
- * @author Andre van Hoorn, Marco Luebcke
+ * @author Andre van Hoorn, Marco Luebcke, Jan Waller
  */
 @Deprecated
 public class OperationExecutionRegistrationFilter extends SessionAndTraceRegistrationFilter {
 
-	@Override
-	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
-		this.doFilter(request, response, chain, false); // return immediately of monitoring is disabled
+	public OperationExecutionRegistrationFilter() {
+		super(false); // do not log filter execution
 	}
+
+	// No need to override getFilterOperationSignatureString() because the executions are not logged.
 }
