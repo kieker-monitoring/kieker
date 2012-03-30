@@ -50,7 +50,7 @@ import kieker.monitoring.timer.ITimeSource;
 public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringProbe {
 	private static final Log LOG = LogFactory.getLog(SessionAndTraceRegistrationFilter.class);
 
-	public static String CONFIG_PROPERTY_NAME_LOG_FILTER_EXECUTION = "logFilterExecution";
+	public static final String CONFIG_PROPERTY_NAME_LOG_FILTER_EXECUTION = "logFilterExecution";
 
 	protected static final IMonitoringController MONITORING_CTRL = MonitoringController.getInstance();
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
@@ -182,7 +182,7 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 	protected String registerSessionInformation(final ServletRequest request) {
 		String sessionId = OperationExecutionRecord.NO_SESSION_ID;
 
-		if (!(request instanceof HttpServletRequest)) {
+		if ((request == null) || !(request instanceof HttpServletRequest)) {
 			return sessionId;
 		}
 
