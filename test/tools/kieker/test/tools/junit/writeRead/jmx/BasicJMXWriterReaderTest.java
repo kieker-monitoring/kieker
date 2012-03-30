@@ -54,7 +54,6 @@ public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 	private static final String LOGNAME = "MonitoringLog";
 
 	private volatile SimpleSinkPlugin<IMonitoringRecord> sinkFilter = null;
-	private volatile AnalysisControllerThread analysisThread = null;
 
 	@Override
 	protected IMonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException, InterruptedException {
@@ -85,8 +84,8 @@ public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 		analysisController.registerReader(jmxReader);
 		analysisController.registerFilter(this.sinkFilter);
 		analysisController.connect(jmxReader, JMXReader.OUTPUT_PORT_NAME_RECORDS, this.sinkFilter, SimpleSinkPlugin.INPUT_PORT_NAME);
-		this.analysisThread = new AnalysisControllerThread(analysisController);
-		this.analysisThread.start();
+		final AnalysisControllerThread analysisThread = new AnalysisControllerThread(analysisController);
+		analysisThread.start();
 		Thread.sleep(1000);
 		return ctrl;
 	}
@@ -100,7 +99,7 @@ public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 		final JMXConnector jmx = JMXConnectorFactory.connect(serviceURL);
 		final MBeanServerConnection mbServer = jmx.getMBeanServerConnection();
 
-		final IMonitoringController ctrlJMX = (IMonitoringController) MBeanServerInvocationHandler.newProxyInstance(
+		final IMonitoringController ctrlJMX = MBeanServerInvocationHandler.newProxyInstance(
 				mbServer, controllerObjectName, IMonitoringController.class, false);
 
 		Assert.assertTrue(monitoringController.isMonitoringEnabled());

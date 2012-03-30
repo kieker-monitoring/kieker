@@ -186,12 +186,10 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 			return sessionId;
 		}
 
-		if (request instanceof HttpServletRequest) {
-			final HttpSession session = ((HttpServletRequest) request).getSession(false);
-			if (session != null) {
-				sessionId = session.getId();
-				SESSION_REGISTRY.storeThreadLocalSessionId(sessionId);
-			}
+		final HttpSession session = ((HttpServletRequest) request).getSession(false);
+		if (session != null) {
+			sessionId = session.getId();
+			SESSION_REGISTRY.storeThreadLocalSessionId(sessionId);
 		}
 
 		return sessionId;

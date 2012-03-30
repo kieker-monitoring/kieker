@@ -1,7 +1,15 @@
 <FindBugsFilter>
 	<!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
 
-	<Match>
+ 	<Match>
+		<Class name="kieker.monitoring.probe.servlet.SessionAndTraceRegistrationFilter" />
+		<Method name="doFilter"
+		params="javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain"
+		  returns="void" />
+		<Bug pattern="ES_COMPARING_STRINGS_WITH_EQ" />
+	</Match>
+
+ 	<Match>
 		<Class name="kieker.tools.KaxViz" />
 		<Method name="main" params="java.lang.String[]"
 		  returns="void" />
