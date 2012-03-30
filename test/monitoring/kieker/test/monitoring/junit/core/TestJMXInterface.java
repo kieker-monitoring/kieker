@@ -20,6 +20,7 @@
 package kieker.test.monitoring.junit.core;
 
 import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * This test is now included in {@link kieker.test.tools.junit.writeRead.jmx.BasicJMXWriterReaderTest}
@@ -30,7 +31,8 @@ import org.junit.Assert;
  */
 public final class TestJMXInterface { // NOPMD NOCS
 
-	public void doTest() {
+	@Test
+	public void testIt() {
 		Assert.assertTrue(true); // NOPMD // NOCS // NOGARNIX, tested elsewhere
 	}
 }
