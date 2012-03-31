@@ -226,15 +226,12 @@ final class FSDirectoryReader implements Runnable {
 						try {
 							clazz = AbstractMonitoringRecord.classForName(classname);
 						} catch (final MonitoringRecordException ex) {
-							final String errorMsg = "Failed to load record type " + classname;
 							if (!this.ignoreUnknownRecordTypes) {
 								// log message will be dumped in the Exception handler below
 								abortDueToUnknownRecordType = true;
-								throw new MonitoringRecordException(errorMsg, ex);
-							}
-
-							if (!this.unknownTypesObserved.contains(classname)) {
-								LOG.error(errorMsg, ex); // log once for this type
+								throw new MonitoringRecordException("Failed to load record type " + classname, ex);
+							} else if (!this.unknownTypesObserved.contains(classname)) {
+								LOG.error("Failed to load record type " + classname, ex); // log once for this type
 								this.unknownTypesObserved.add(classname);
 							}
 							continue; // skip this ignored record
@@ -251,14 +248,15 @@ final class FSDirectoryReader implements Runnable {
 						record = AbstractMonitoringRecord.createFromStringArray(OperationExecutionRecord.class, recordFields);
 					}
 				} catch (final Exception ex) { // NOPMD NOCS (illegal catch)
-					final String errorMsg = "Error processing line: " + line;
-					LOG.error(errorMsg, ex); // print only if we continue here
 					if (abortDueToUnknownRecordType) {
-						// TODO: do we need to set this.terminated = true; ?
-						// Note: In Java 1.5 IOException has no constructor accepting a throwable
-						throw new IOException(errorMsg + "; Aborting due to record type exception (configured not to continue in such case)");
+						this.terminated = true; // at least it doesn't hurt to set it
+						final IOException newEx = new IOException("Error processing line: " + line);
+						newEx.initCause(ex);
+						throw newEx; // NOPMD (cause is set above)
+					} else {
+						LOG.warn("Error processing line: " + line, ex); // print only if we continue here
+						continue; // skip this record
 					}
-					continue; // skip this record
 				}
 				if (!this.recordReceiver.newMonitoringRecord(record)) {
 					this.terminated = true;

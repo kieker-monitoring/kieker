@@ -105,7 +105,7 @@ public abstract class AbstractWriterReaderTest {
 	 * 
 	 * @throws IOException
 	 */
-	protected void doBeforeReading() throws IOException {}
+	protected void doBeforeReading() throws IOException {} // NOPMD (empty default implementation)
 
 	/**
 	 * The actual Test. Note that this should be the only {@link Test} in this class.

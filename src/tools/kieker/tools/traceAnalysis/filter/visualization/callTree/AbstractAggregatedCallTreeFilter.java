@@ -58,7 +58,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	private final String dotOutputFile;
 	private final boolean includeWeights;
 	private final boolean shortLabels;
-	private volatile int numGraphsSaved = 0;
+	private int numGraphsSaved = 0; // no need for volatile, only used in synchronized blocks
 
 	public AbstractAggregatedCallTreeFilter(final Configuration configuration) {
 		super(configuration);
@@ -76,7 +76,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 
 	public void saveTreeToDotFile() throws IOException {
 		synchronized (this) {
-			final String outputFn = (new File(this.dotOutputFile)).getCanonicalPath();
+			final String outputFn = new File(this.dotOutputFile).getCanonicalPath();
 			AbstractCallTreeFilter.saveTreeToDotFile(this.root, outputFn, this.includeWeights, false, // do not include EOIs
 					this.shortLabels);
 			this.numGraphsSaved++;

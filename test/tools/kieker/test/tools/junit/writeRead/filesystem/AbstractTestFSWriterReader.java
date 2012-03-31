@@ -236,7 +236,6 @@ class KiekerMapFileFilter implements FilenameFilter { // NOPMD (TestClassWithout
 	 * Accepts the {@value #MAP_FILENAME} file in a monitoring log directory.
 	 */
 	public boolean accept(final File dir, final String name) {
-		final boolean match = MAP_FILENAME.equals(name);
-		return match;
+		return MAP_FILENAME.equals(name);
 	}
 }

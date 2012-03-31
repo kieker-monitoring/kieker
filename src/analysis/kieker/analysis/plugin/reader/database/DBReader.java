@@ -29,7 +29,6 @@ import java.sql.Statement;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
-import kieker.analysis.plugin.reader.jmx.JMXReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -47,7 +46,7 @@ public class DBReader extends AbstractReaderPlugin {
 	public static final String CONFIG_PROPERTY_NAME_CONNECTIONSTRING = "ConnectionString";
 	public static final String CONFIG_PROPERTY_NAME_TABLEPREFIX = "TablePrefix";
 
-	private static final Log LOG = LogFactory.getLog(JMXReader.class);
+	private static final Log LOG = LogFactory.getLog(DBReader.class);
 
 	private final String driverClassname;
 	private final String connectionString;
@@ -74,7 +73,8 @@ public class DBReader extends AbstractReaderPlugin {
 			while (indexTable.next()) {
 				LOG.info("TABLE: " + indexTable.getString(1) + " CLASSNAME: " + indexTable.getString(2));
 			}
-
+			indexTable.close();
+			getIndexTable.close();
 		} catch (final SQLException ex) {
 			LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 			return false;
