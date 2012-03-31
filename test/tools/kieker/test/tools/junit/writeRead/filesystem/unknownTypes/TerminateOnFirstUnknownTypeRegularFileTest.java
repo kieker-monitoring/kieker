@@ -35,7 +35,7 @@ import org.junit.Assert;
  * @author Andre van Hoorn
  * 
  */
-public class TerminateOnFirstUnknownTypeRegularFileTest extends AbstractUnknownTypeTest {
+public class TerminateOnFirstUnknownTypeRegularFileTest extends AbstractUnknownTypeTest { // NOPMD (TestClassWithoutTestCases)
 	@Override
 	protected Class<? extends IMonitoringWriter> getTestedWriterClazz() {
 		return AsyncFsWriter.class;

@@ -36,7 +36,7 @@ import org.junit.Assert;
  * @author Andre van Hoorn
  * 
  */
-public class ContinueAfterUnknownTypeNotForBinaryTest extends AbstractUnknownTypeTest {
+public class ContinueAfterUnknownTypeNotForBinaryTest extends AbstractUnknownTypeTest { // NOPMD (TestClassWithoutTestCases)
 	@Override
 	protected Class<? extends IMonitoringWriter> getTestedWriterClazz() {
 		return AsyncBinaryFsWriter.class;

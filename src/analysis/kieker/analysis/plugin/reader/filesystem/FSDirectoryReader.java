@@ -225,7 +225,8 @@ final class FSDirectoryReader implements Runnable {
 						Class<? extends IMonitoringRecord> clazz = null;
 						try {
 							clazz = AbstractMonitoringRecord.classForName(classname);
-						} catch (final MonitoringRecordException ex) {
+						} catch (final MonitoringRecordException ex) { // NOPMD (ExceptionAsFlowControl); need this to distinguish error by
+																		// abortDueToUnknownRecordType
 							if (!this.ignoreUnknownRecordTypes) {
 								// log message will be dumped in the Exception handler below
 								abortDueToUnknownRecordType = true;
