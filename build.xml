@@ -925,6 +925,7 @@
 			<fileset dir="${lib.dir}">
 				<include name="junit-*.jar" />
 				<include name="org.eclipse.emf.*.jar" />
+				<include name="derby-*.jar" />
 			</fileset>
 			<pathelement location="${build.tests.dir}/" />
 			<fileset dir="${dist.dir}">
