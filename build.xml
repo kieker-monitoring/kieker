@@ -936,7 +936,7 @@
 		<delete dir="${tests.junit-results.dir}" />
 		<mkdir dir="${tests.junit-results.dir}" />
 
-		<junit fork="false" printsummary="yes" haltonfailure="no">
+		<junit fork="false" printsummary="yes">
 			<classpath refid="kieker.test-junit-run-classpath" />
 
 			<formatter type="xml" />
@@ -962,14 +962,14 @@
 	</target>
 
 	<target name="-test.junit.report" depends="" description="Creates the report for the JUnit tests">
-		<junitreport todir="${tests.junit-results.dir}">
+		<junitreport todir="${tests.junit-results.dir}/html">
 			<fileset dir="${tests.junit-results.dir}">
 				<include name="TEST-*.xml" />
 			</fileset>
-			<report format="frames" todir="${tests.junit-results.dir}" />
+			<report format="frames" todir="${tests.junit-results.dir}/html" />
 		</junitreport>
 
-		<echo message="To see the test report, open ${tests.junit-results.dir}/index.html in your Web browser." />
+		<echo message="To see the test report, open ${tests.junit-results.dir}/html/index.html in your Web browser." />
 	</target>
 
 	<!-- http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/292: add run-tests-integration BEFORE static-analysis -->
