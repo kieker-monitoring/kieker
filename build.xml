@@ -962,14 +962,15 @@
 	</target>
 
 	<target name="-test.junit.report" depends="" description="Creates the report for the JUnit tests">
-		<junitreport todir="${tests.junit-results.dir}/html">
+		<mkdir dir="${tests.junit-results.dir}/report" />
+		<junitreport todir="${tests.junit-results.dir}/report">
 			<fileset dir="${tests.junit-results.dir}">
 				<include name="TEST-*.xml" />
 			</fileset>
-			<report format="frames" todir="${tests.junit-results.dir}/html" />
+			<report format="frames" todir="${tests.junit-results.dir}/report" />
 		</junitreport>
 
-		<echo message="To see the test report, open ${tests.junit-results.dir}/html/index.html in your Web browser." />
+		<echo message="To see the test report, open ${tests.junit-results.dir}/report/index.html in your Web browser." />
 	</target>
 
 	<!-- http://samoa.informatik.uni-kiel.de/kieker/trac/ticket/292: add run-tests-integration BEFORE static-analysis -->
