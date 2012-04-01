@@ -8,27 +8,26 @@
 
 \chapter{Introduction}\label{chap:introduction}
 
-Modern software applications are often complex and have to fulfill a large set of functional and non-functional properties. The internal behavior of such large systems cannot easily be determined on the basis of the source code. Furthermore, existing applications often lack sufficient documentation which makes it cumbersome to extend and change them for future needs. A solution to these problems can be monitoring, which allows to log the behavior of the application and to discover the application-internal control flows and response times of method executions.
+Modern software applications are often complex and have to fulfill a large set of functional and non-functional requirements. The internal behavior of such large systems cannot easily be determined on the basis of the source code. Furthermore, existing applications often lack sufficient documentation which makes it cumbersome to extend and change them for future needs. A solution to these problems can be dynamic analysis based on application-level monitoring, which allows to log the behavior of the application and to discover, for example, application-internal control flows, calling dependencies, and method response times.
 
-The monitoring of the behavior can help in detecting performance problems and faulty behavior, capacity planning, and many other areas. The \Kieker{} framework provides the necessary monitoring capabilities and comes with tools and libraries for the analysis of monitored data. \Kieker{} was designed for %
+Dynamic analysis can help in detecting performance problems and faulty behavior, capacity planning, and many other areas. The \Kieker{} framework provides the necessary monitoring capabilities and comes with tools and libraries for the analysis of monitored data. \Kieker{} has been designed for %
 continuous monitoring in production systems inducing only a very low overhead. Further information on the overhead caused by \Kieker{} is provided at \url{http://kieker-monitoring.net/overhead-evaluation/}.
 %, and offline evaluation of monitored data for a deeper inspection of the application's behavior and runtime architecture.
 
 %%
 \section{What is \Kieker?}\label{sec:kieker}
 
-\enlargethispage{0.5cm}
+\enlargethispage{1cm}
 
-The present version of \Kieker{} is a monitoring and analysis framework for %
-Java applications. %
-Support for other platforms, such as Visual Basic~6 and .NET, is currently under development.%
-\footnote{\href{http://kieker-monitoring.net/support}{Contact us} directly if you are interested in \Kieker{} support for Visual Basic~6 and .NET} %
+\Kieker{} is a Java-based application performance monitoring and dynamic software analysis framework. %
+Monitoring adapters for other platforms, such as Visual Basic~6~(VB6), .NET, and COBOL is currently under development.%
+\footnote{\href{http://kieker-monitoring.net/support}{Contact us} directly if you are interested in \Kieker{} support for other platforms} %
 Figure \ref{fig:KiekerComponentDiagram} shows the framework's composition based %
 on the two main components \KiekerMonitoringPart{} and \KiekerAnalysisPart{}. %
 
 % This is the component diagram of Kieker (the satellite).
 \begin{figure}[H]\centering
-\includegraphics[width=0.98\textwidth]{images/kiekerComponentDiagram-woCloud-bw-w-record-newNames-withTraceAnalysis-colors}
+\includegraphics[width=0.96\textwidth]{images/kiekerComponentDiagram-woCloud-bw-w-record-newNames-withTraceAnalysis-colors}
 \caption{Overview of the framework components}
 \label{fig:KiekerComponentDiagram}
 \end{figure}
@@ -37,7 +36,7 @@ on the two main components \KiekerMonitoringPart{} and \KiekerAnalysisPart{}. %
 %receives the monitoring data in so-called monitoring records from monitoring probes, and writes these %
 % receives the monitoring data and passes it to the configured monitoring log writer. %
 %
-The component \KiekerAnalysisPart{} is responsible for reading, analyzing, and visualizing the monitoring data. Its core is the \class{AnalysisController} which manages the life-cycle of the monitoring reader and all analysis plugins.
+The component \KiekerAnalysisPart{} is responsible for reading, analyzing, and visualizing the monitoring data. Its core is the \class{AnalysisController} which manages the life-cycle of the pipe-and-filter architecture of analysis plugins, including monitoring readers and  analysis filters.
 
 The monitoring and analysis parts of the \Kieker{} framework are composed of subcomponents which represent the different functionalities of the monitoring and analysis tasks. The important interaction pattern among the components is illustrated in Figure~\ref{fig:KiekerCommunicationDiagram} but will be explained furthermore throughout the course of this user guide.
 
@@ -50,7 +49,7 @@ The monitoring and analysis parts of the \Kieker{} framework are composed of sub
 \label{fig:KiekerCommunicationDiagram}
 \end{figure}
 
-\vspace{1cm}
+% \vspace{1cm}
 
 % Notify-tag because it is explained how Kieker works.
 % avh: removed
@@ -58,8 +57,9 @@ The monitoring and analysis parts of the \Kieker{} framework are composed of sub
 monitoring data and deliver them to the monitoring controller. %
 The monitoring controller employs the monitoring writers to write these %
 monitoring records to a monitoring log or stream. %
-For analyzing purposes, a monitoring reader reads the records from the monitoring log/stream. %
-These records can then be further processed by the analysis plugins.
+For analyzing purposes, a monitoring reader plugin reads the records from the %
+monitoring log/stream. These records can then be further processed by a %
+configuration of additional filter plugins, inter-connected via input and output ports. %
 
 \section{Framework Components and Extension Points}
 
@@ -85,7 +85,8 @@ Java Messaging Service~(JMS)~\cite{JMS-WebSite} technology. %
 A special reader allows to replay existing persistent %
 monitoring logs, for example to emulate incoming monitoring %
 data---also in real-time.
- \item A \textbf{time source} utilizing Java's \method{System.nanoTime()} method.
+ \item \textbf{Time sources} utilizing Java's \method{System.nanoTime()} (default) %
+or \method{System.current\-TimeMillis()} methods.
  \item \textbf{Monitoring record types} allowing to store %
 monitoring data about operation executions (including timing, control-flow, %
 and session information), CPU and resource utilization, memory/swap usage, as well as %

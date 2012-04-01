@@ -224,6 +224,70 @@
          id="path2967"
          d="m 0,-5 1183,0 0,482 L 0,477 0,-5 z" />
     </clipPath>
+    <clipPath
+       id="clipPath1-68"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         inkscape:connector-curvature="0"
+         id="path49-2"
+         d="m 0,-5 1183,0 0,482 L 0,477 0,-5 z" />
+    </clipPath>
+    <clipPath
+       id="clipPath1-1"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         inkscape:connector-curvature="0"
+         id="path49-1"
+         d="m 0,-5 1183,0 0,482 L 0,477 0,-5 z" />
+    </clipPath>
+    <clipPath
+       id="clipPath1-685"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         inkscape:connector-curvature="0"
+         id="path49-9"
+         d="m 0,-5 1183,0 0,482 L 0,477 0,-5 z" />
+    </clipPath>
+    <clipPath
+       id="clipPath1-3"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         inkscape:connector-curvature="0"
+         id="path49-18"
+         d="m 0,-5 1183,0 0,482 L 0,477 0,-5 z" />
+    </clipPath>
+    <clipPath
+       id="clipPath3216"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         inkscape:connector-curvature="0"
+         id="path3218"
+         d="m 0,-5 1183,0 0,482 L 0,477 0,-5 z" />
+    </clipPath>
+    <clipPath
+       id="clipPath1-3-3"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         inkscape:connector-curvature="0"
+         id="path49-18-7"
+         d="m 0,-5 1183,0 0,482 L 0,477 0,-5 z" />
+    </clipPath>
+    <clipPath
+       id="clipPath1-7"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         inkscape:connector-curvature="0"
+         id="path49-22"
+         d="m 0,-5 1183,0 0,482 L 0,477 0,-5 z" />
+    </clipPath>
+    <clipPath
+       id="clipPath3281"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         inkscape:connector-curvature="0"
+         id="path3283"
+         d="m 0,-5 1183,0 0,482 L 0,477 0,-5 z" />
+    </clipPath>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -236,15 +300,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="315.11413"
-     inkscape:cy="43.800813"
+     inkscape:cx="515.00166"
+     inkscape:cy="39.493906"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1280"
-     inkscape:window-height="1004"
-     inkscape:window-x="1276"
-     inkscape:window-y="-3"
+     inkscape:window-width="1366"
+     inkscape:window-height="713"
+     inkscape:window-x="-4"
+     inkscape:window-y="32"
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:window-maximized="1" />
@@ -265,6 +329,14 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(-384.82812,-122.77806)">
+    <path
+       inkscape:connector-curvature="0"
+       transform="matrix(0.9375,0,0,-0.9375,514.58095,437.86314)"
+       d="m 565.94857,289.14009 -272.94857,0 c 0,0 -6,0 -6,-6 m 0,0 0,-20.80676"
+       clip-path="url(#clipPath1-68)"
+       id="path2573-3"
+       style="font-size:11px;font-weight:bold;fill:none;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1"
+       sodipodi:nodetypes="ccccc" />
     <rect
        x="612"
        y="143"
@@ -303,15 +375,6 @@
        clip-path="url(#clipPath1)"
        id="text71"
        style="font-size:11px;stroke:none" />
-    <rect
-       x="402"
-       y="199"
-       clip-path="url(#clipPath1)"
-       width="194"
-       height="21"
-       id="rect93"
-       style="font-size:11px;font-weight:bold;fill:#b2b2b2;stroke:none"
-       transform="matrix(0.831175,0,0,0.9375,240.53304,7.104214)" />
     <path
        transform="matrix(0.9375,0,0,0.9375,177.17591,-4.3243574)"
        d="M 574,209.33333 L 574,161"
@@ -320,20 +383,33 @@
        style="font-size:11px;font-weight:bold;fill:none;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1"
        sodipodi:nodetypes="cc" />
     <g
-       transform="matrix(0.831175,0,0,0.9375,240.53304,7.104214)"
-       style="font-size:11px;font-weight:bold;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.0620364;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1"
-       id="g97"
-       font-weight="bold"
-       text-rendering="geometricPrecision"
-       font-size="11">
+       id="g3195"
+       transform="translate(40.025058,0)">
       <rect
-         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.0620364;stroke-opacity:1"
-         id="rect99"
-         clip-path="url(#clipPath1)"
-         y="196"
+         transform="matrix(0.62498969,0,0,0.9375,323.41953,7.104214)"
+         style="font-size:11px;font-weight:bold;fill:#b2b2b2;stroke:none"
+         id="rect93"
          height="21"
          width="194"
-         x="399" />
+         clip-path="url(#clipPath1)"
+         y="199"
+         x="402" />
+      <g
+         font-size="11"
+         text-rendering="geometricPrecision"
+         font-weight="bold"
+         id="g97"
+         style="font-size:11px;font-weight:bold;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.0620364;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1"
+         transform="matrix(0.62561412,0,0,0.94329236,322.49101,5.9080909)">
+        <rect
+           x="399"
+           width="194"
+           height="21"
+           y="196"
+           clip-path="url(#clipPath1)"
+           id="rect99"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.0620364;stroke-opacity:1" />
+      </g>
     </g>
     <text
        x="422.5"
@@ -342,7 +418,7 @@
        clip-path="url(#clipPath1)"
        id="text103"
        style="font-size:12.80000019px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
-       transform="matrix(0.9375,0,0,0.9375,202.64642,7.6634153)"
+       transform="matrix(0.9375,0,0,0.9375,223.50518,7.6634153)"
        sodipodi:linespacing="125%">: IMonitoringWriter</text>
     <rect
        x="612"
@@ -383,8 +459,8 @@
        clip-path="url(#clipPath1)"
        id="text115"
        style="font-size:12.80000019px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
-       transform="matrix(0.9375,0,0,0.9375,190.34864,7.6634153)"
-       sodipodi:linespacing="125%">: IMonitoringReader</text>
+       transform="matrix(0.9375,0,0,0.9375,172.31641,7.6634153)"
+       sodipodi:linespacing="125%">: IMonitoringReaderPlugin</text>
     <rect
        x="521"
        y="304"
@@ -417,7 +493,7 @@
        clip-path="url(#clipPath1)"
        id="text127"
        style="font-size:12.80000019px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
-       transform="matrix(0.9375,0,0,0.9375,183.32799,-25.166557)"
+       transform="matrix(0.9375,0,0,0.9375,185.39425,-25.166557)"
        sodipodi:linespacing="125%">: IMonitoringRecord</text>
     <g
        transform="matrix(0.82799342,0,0,0.9375,247.90602,-4.3243574)"
@@ -533,26 +609,30 @@
        id="text195"
        style="font-size:11.73333359px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
        sodipodi:linespacing="125%">1</text>
-    <text
-       x="827"
-       y="230.13789"
-       clip-path="url(#clipPath1)"
-       font-weight="normal"
-       space="preserve"
-       id="text211"
-       style="font-size:11.73333359px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-       transform="matrix(0.9375,0,0,0.9375,165.96306,-82.111541)"
-       sodipodi:linespacing="125%">newMonitoringRecord(record)</text>
-    <text
-       transform="matrix(0.9375,0,0,0.9375,159.29774,-82.111541)"
-       x="814"
-       y="230.13789"
-       clip-path="url(#clipPath1)"
-       font-weight="normal"
-       space="preserve"
-       id="text213"
-       style="font-size:11.73333359px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-       sodipodi:linespacing="125%">4.2:</text>
+    <g
+       id="g3200"
+       transform="translate(-4.5456859,-16.162441)">
+      <text
+         sodipodi:linespacing="125%"
+         transform="matrix(0.9375,0,0,0.9375,164.78065,-37.664829)"
+         style="font-size:11.73333359px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
+         id="text211"
+         space="preserve"
+         font-weight="normal"
+         clip-path="url(#clipPath1)"
+         y="230.13789"
+         x="827">inputRecord(record)</text>
+      <text
+         sodipodi:linespacing="125%"
+         style="font-size:11.73333359px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
+         id="text213"
+         space="preserve"
+         font-weight="normal"
+         clip-path="url(#clipPath1)"
+         y="230.13789"
+         x="814"
+         transform="matrix(0.9375,0,0,0.9375,158.11533,-37.664829)">4.2:</text>
+    </g>
     <g
        id="g2910"
        transform="matrix(0,-0.9375,0.9375,0,493.50902,913.47062)"
@@ -779,15 +859,15 @@
          x="371">2:</text>
     </g>
     <text
-       transform="matrix(0.9375,0,0,0.9375,160.63095,6.7470711)"
+       transform="matrix(0.9375,0,0,0.9375,148.61044,6.7470711)"
        x="644"
        y="192.13789"
        clip-path="url(#clipPath1)"
        font-weight="normal"
        space="preserve"
        id="text291"
-       style="font-size:11.73333359px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;stroke:none;stroke-linecap:butt;stroke-linejoin:round;font-family:Arial;-inkscape-font-specification:Arial"
-       sodipodi:linespacing="125%">1</text>
+       style="font-size:11.73333359px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
+       sodipodi:linespacing="125%">1..*</text>
     <text
        transform="matrix(0.9375,0,0,0.9375,160.63095,-0.3243574)"
        x="644"
@@ -877,7 +957,7 @@
          id="tspan2520">*</tspan>
     </text>
     <rect
-       transform="matrix(0.96896836,0,0,0.93685005,105.74069,-2.4575281)"
+       transform="matrix(0.38861161,0,0,0.93685005,718.55287,-2.4575281)"
        x="843"
        y="171"
        clip-path="url(#clipPath1)"
@@ -886,7 +966,7 @@
        id="rect81"
        style="font-size:11px;fill:#b2b2b2;stroke:none" />
     <g
-       transform="matrix(0.96896836,0,0,0.93685005,105.74069,-2.4575281)"
+       transform="matrix(0.39014367,0,0,0.95318129,715.35338,-5.3726554)"
        style="font-size:11px;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1"
        id="g85"
        font-size="11"
@@ -907,8 +987,8 @@
        clip-path="url(#clipPath1)"
        id="text91"
        style="font-size:12.80000019px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
-       transform="matrix(0.9375,0,0,0.9375,119.9254,-1.941914)"
-       sodipodi:linespacing="125%">: IMonitoringRecordConsumerPlugin</text>
+       transform="matrix(0.9375,0,0,0.9375,243.49683,-1.941914)"
+       sodipodi:linespacing="125%">: IFilterPlugin</text>
     <rect
        x="220"
        y="143"
@@ -973,7 +1053,7 @@
     </text>
     <g
        id="g3336-6"
-       transform="translate(322.85318,0.93291197)">
+       transform="translate(320.15554,29.217183)">
       <g
          id="g2509-3"
          transform="translate(-4,2)">
@@ -988,17 +1068,86 @@
            style="font-size:11px;font-weight:bold;fill:none;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1" />
         <polygon
            transform="matrix(0.9375,0,0,0.9375,181.21652,-4.3243574)"
-           points="433,145 433,137 433,137 440,141 "
+           points="433,137 433,137 440,141 433,145 "
            clip-path="url(#clipPath1-6)"
            id="polygon233-4"
            style="font-size:11px;font-weight:bold;fill:#424242;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1" />
         <polygon
            transform="matrix(0.9375,0,0,0.9375,181.21652,-4.3243574)"
-           points="433,145 433,137 433,137 440,141 "
+           points="433,137 433,137 440,141 433,145 "
            clip-path="url(#clipPath1-6)"
            id="polygon235-8"
            style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1" />
       </g>
     </g>
+    <text
+       transform="matrix(0.9375,0,0,0.9375,-108.01409,39.231629)"
+       x="954"
+       y="159.13789"
+       clip-path="url(#clipPath1-1)"
+       font-weight="normal"
+       space="preserve"
+       id="text197-4"
+       style="font-size:11.73333359px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
+       sodipodi:linespacing="125%">
+      <tspan
+         style="font-size:14px"
+         id="tspan2520-2">*</tspan>
+    </text>
+    <text
+       transform="matrix(0.9375,0,0,0.9375,418.74528,-1.7141519)"
+       x="644"
+       y="192.13789"
+       clip-path="url(#clipPath1-685)"
+       font-weight="normal"
+       space="preserve"
+       id="text291-7"
+       style="font-size:11.73333359px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
+       sodipodi:linespacing="125%">1..*</text>
+    <path
+       inkscape:connector-curvature="0"
+       transform="matrix(0.9375,0,0,0.9375,505.81976,-28.254142)"
+       d="m 623,217 0,49"
+       clip-path="url(#clipPath1-3)"
+       id="path257-1"
+       style="font-size:11px;font-weight:bold;fill:none;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1" />
+    <text
+       transform="matrix(0.9375,0,0,0.9375,833.16292,54.664)"
+       x="266"
+       y="177.13789"
+       clip-path="url(#clipPath1-3)"
+       font-weight="normal"
+       space="preserve"
+       id="text3276-4"
+       style="font-size:11.73333359px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
+       sodipodi:linespacing="125%">
+      <tspan
+         style="font-size:14px"
+         id="tspan2516-1">*</tspan>
+    </text>
+    <text
+       transform="matrix(0.9375,0,0,0.9375,833.16292,24.45083)"
+       x="266"
+       y="177.13789"
+       clip-path="url(#clipPath1-3-3)"
+       font-weight="normal"
+       space="preserve"
+       id="text3276-4-5"
+       style="font-size:11.73333359px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
+       sodipodi:linespacing="125%">
+      <tspan
+         style="font-size:14px"
+         id="tspan2516-1-0">*</tspan>
+    </text>
+    <text
+       x="827"
+       y="230.13789"
+       clip-path="url(#clipPath1-7)"
+       font-weight="normal"
+       space="preserve"
+       id="text211-8"
+       style="font-size:11.73333359px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
+       transform="matrix(0,-0.9375,0.9375,0,874.67852,1007.2421)"
+       sodipodi:linespacing="125%">...</text>
   </g>
 </svg>

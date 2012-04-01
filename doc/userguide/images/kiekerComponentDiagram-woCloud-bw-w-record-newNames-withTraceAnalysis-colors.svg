@@ -4181,15 +4181,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.7723245"
-     inkscape:cx="257.93641"
-     inkscape:cy="133.83938"
+     inkscape:cx="254.32322"
+     inkscape:cy="99.154963"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1280"
-     inkscape:window-height="1004"
-     inkscape:window-x="1362"
-     inkscape:window-y="-3"
+     inkscape:window-width="1366"
+     inkscape:window-height="713"
+     inkscape:window-x="-4"
+     inkscape:window-y="32"
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:window-maximized="1"
@@ -4517,7 +4517,7 @@
          x="699.81848"
          y="902.42633"
          style="font-size:8px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial Bold"
-         id="tspan4352-3-5-7">Log Reader</tspan></text>
+         id="tspan4352-3-5-7">Reader</tspan></text>
     <path
        d="m 667,362 0,12.01902"
        clip-path="url(#clipPath1-28-8-0-4)"
@@ -4854,7 +4854,7 @@
          x="446.2709"
          y="902.42633"
          style="font-size:8px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial Bold"
-         id="tspan4352-3-5">Log Writer</tspan></text>
+         id="tspan4352-3-5">Writer</tspan></text>
     <path
        d="m 667,362 0,12.01902"
        clip-path="url(#clipPath1-28-8-0)"
