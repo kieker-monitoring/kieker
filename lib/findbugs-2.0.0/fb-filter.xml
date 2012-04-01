@@ -60,7 +60,7 @@
 	<Match>
 		<Class name="kieker.monitoring.writer.database.DBWriterHelper" />
 		<Method name="createTable" params="java.lang.String,java.lang.Class[]"
-			returns="void" />
+			returns="java.lang.String" />
 		<Bug pattern="SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE" />
 	</Match>
 
