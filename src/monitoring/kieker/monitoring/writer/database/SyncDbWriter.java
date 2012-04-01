@@ -51,7 +51,6 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 
 	private static final Log LOG = LogFactory.getLog(SyncDbWriter.class);
 
-	private final String tablePrefix;
 	private final Connection connection;
 	private final DBWriterHelper helper;
 
@@ -68,8 +67,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 		}
 		try {
 			this.connection = DriverManager.getConnection(configuration.getStringProperty(CONFIG_CONNECTIONSTRING));
-			this.tablePrefix = configuration.getStringProperty(CONFIG_TABLEPREFIX);
-			this.helper = new DBWriterHelper(this.connection, this.tablePrefix);
+			this.helper = new DBWriterHelper(this.connection, configuration.getStringProperty(CONFIG_TABLEPREFIX));
 			this.helper.createIndexTable();
 		} catch (final SQLException ex) {
 			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex); // NOPMD (exception)

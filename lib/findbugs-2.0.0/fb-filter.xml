@@ -1,49 +1,55 @@
 <FindBugsFilter>
 	<!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
 
- 	<Match>
-		<Class name="kieker.monitoring.probe.servlet.SessionAndTraceRegistrationFilter" />
+	<Match>
+		<Class
+			name="kieker.monitoring.probe.servlet.SessionAndTraceRegistrationFilter" />
 		<Method name="doFilter"
-		params="javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain"
-		  returns="void" />
+			params="javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain"
+			returns="void" />
 		<Bug pattern="ES_COMPARING_STRINGS_WITH_EQ" />
 	</Match>
 
- 	<Match>
+	<Match>
 		<Class name="kieker.tools.KaxViz" />
-		<Method name="main" params="java.lang.String[]"
-		  returns="void" />
+		<Method name="main" params="java.lang.String[]" returns="void" />
 		<Bug pattern="REC_CATCH_EXCEPTION" />
 	</Match>
-	
+
 	<Match>
 		<Class name="kieker.analysis.AnalysisController" />
 		<Method name="getCurrentConfiguration" params=""
 			returns="kieker.analysis.model.analysisMetaModel.MIProject" />
 		<Bug pattern="REC_CATCH_EXCEPTION" />
 	</Match>
-	
+
+	<Match>
+		<Class name="kieker.analysis.plugin.reader.database.DBReader" />
+		<Method name="read" params="" returns="boolean" />
+		<Bug pattern="SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE" />
+	</Match>
+
 	<Match>
 		<Class name="kieker.monitoring.writer.database.DbWriterThread" />
 		<Method name="consume" params="kieker.common.record.IMonitoringRecord"
 			returns="void" />
 		<Bug pattern="OBL_UNSATISFIED_OBLIGATION" />
 	</Match>
-	
+
 	<Match>
 		<Class name="kieker.monitoring.writer.database.DbWriterThread" />
 		<Method name="consume" params="kieker.common.record.IMonitoringRecord"
 			returns="void" />
 		<Bug pattern="SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING" />
 	</Match>
-	
+
 	<Match>
 		<Class name="kieker.monitoring.writer.database.SyncDbWriter" />
 		<Method name="newMonitoringRecord" params="kieker.common.record.IMonitoringRecord"
 			returns="boolean" />
 		<Bug pattern="OBL_UNSATISFIED_OBLIGATION" />
 	</Match>
-	
+
 	<Match>
 		<Class name="kieker.monitoring.writer.database.SyncDbWriter" />
 		<Method name="newMonitoringRecord" params="kieker.common.record.IMonitoringRecord"
@@ -53,7 +59,7 @@
 
 	<Match>
 		<Class name="kieker.monitoring.writer.database.DBWriterHelper" />
-		<Method name="createTable" params="java.lang.String,java.lang.String,java.lang.Class[]"
+		<Method name="createTable" params="java.lang.String,java.lang.Class[]"
 			returns="void" />
 		<Bug pattern="SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE" />
 	</Match>
