@@ -28,6 +28,7 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -40,10 +41,15 @@ public final class DBWriterHelper {
 
 	private final Connection connection;
 	private final String indexTablename;
+	private final AtomicInteger tableCounter;
 
 	private final Map<Class<?>, String> createTypeMap = new ConcurrentHashMap<Class<?>, String>(); // NOPMD (Map)
 
 	public DBWriterHelper(final Connection connection, final String indexTablename) throws SQLException {
+		this(connection, indexTablename, new AtomicInteger());
+	}
+
+	public DBWriterHelper(final Connection connection, final String indexTablename, final AtomicInteger tableCounter) throws SQLException {
 		this.connection = connection;
 		final ResultSet databaseTypeInfo = connection.getMetaData().getTypeInfo();
 		while (databaseTypeInfo.next()) {
@@ -92,9 +98,13 @@ public final class DBWriterHelper {
 		}
 		databaseTypeInfo.close();
 		this.indexTablename = indexTablename;
+		this.tableCounter = tableCounter;
 	}
 
-	public void createTable(final String tablename, final String classname, final Class<?>... columns) throws SQLException {
+	public String createTable(final String classname, final Class<?>... columns) throws SQLException {
+		// automatically determine the tablename
+		final String tablename = this.indexTablename + "_" + this.tableCounter.getAndIncrement();
+		// create the table
 		final StringBuilder statementCreateTable = new StringBuilder();
 		// FIXME: what should happen if the table already exists?
 		// stmt.append("DROP TABLE ").append(tableName).append(';');
@@ -138,6 +148,7 @@ public final class DBWriterHelper {
 				statement.close();
 			}
 		}
+		return tablename;
 	}
 
 	public void createIndexTable() throws SQLException {

@@ -27,6 +27,7 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.common.configuration.Configuration;
@@ -55,7 +56,6 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 
 	private final String tablePrefix;
 	private final String connectionString;
-	private final AtomicLong recordId = new AtomicLong();
 
 	public AsyncDbWriter(final Configuration configuration) throws Exception {
 		super(configuration);
@@ -70,10 +70,12 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 
 	@Override
 	public void init() throws Exception {
+		final AtomicInteger tableCounter = new AtomicInteger();
+		final AtomicLong recordId = new AtomicLong();
 		Connection connection = null;
 		try {
 			connection = DriverManager.getConnection(this.configuration.getStringProperty(CONFIG_CONNECTIONSTRING));
-			new DBWriterHelper(connection, this.tablePrefix).createIndexTable();
+			new DBWriterHelper(connection, this.tablePrefix, tableCounter).createIndexTable();
 		} catch (final SQLException ex) {
 			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 		} finally {
@@ -83,7 +85,7 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 		}
 		try {
 			for (int i = 0; i < this.configuration.getIntProperty(CONFIG_NRCONN); i++) {
-				this.addWorker(new DbWriterThread(super.monitoringController, this.blockingQueue, i, this.connectionString, this.tablePrefix, this.recordId));
+				this.addWorker(new DbWriterThread(super.monitoringController, super.blockingQueue, this.connectionString, this.tablePrefix, tableCounter, recordId));
 			}
 		} catch (final SQLException ex) {
 			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
@@ -97,20 +99,18 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 final class DbWriterThread extends AbstractAsyncThread {
 	private static final Log LOG = LogFactory.getLog(DbWriterThread.class);
 
-	private final String tablePrefix;
 	private final Connection connection;
 	private final DBWriterHelper helper;
 
 	private final Map<Class<? extends IMonitoringRecord>, PreparedStatement> recordTypeInformation = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, PreparedStatement>(); // NOPMD
 	private final AtomicLong recordId;
 
-	public DbWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> blockingQueue, final int threadId,
-			final String connectionString, final String tablePrefix, final AtomicLong recordId) throws SQLException {
+	public DbWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> blockingQueue,
+			final String connectionString, final String tablePrefix, final AtomicInteger tableCounter, final AtomicLong recordId) throws SQLException {
 		super(monitoringController, blockingQueue);
 		this.recordId = recordId;
 		this.connection = DriverManager.getConnection(connectionString);
-		this.tablePrefix = tablePrefix + "_" + threadId;
-		this.helper = new DBWriterHelper(this.connection, tablePrefix);
+		this.helper = new DBWriterHelper(this.connection, tablePrefix, tableCounter);
 	}
 
 	@Override
@@ -119,7 +119,6 @@ final class DbWriterThread extends AbstractAsyncThread {
 		final String recordClassName = recordClass.getSimpleName();
 		if (!this.recordTypeInformation.containsKey(recordClass)) { // not yet seen record
 			DbWriterThread.LOG.info("New record type found: " + recordClassName);
-			final String tableName = this.tablePrefix + "_" + recordClassName;
 			final Class<?>[] typeArray;
 			try {
 				typeArray = AbstractMonitoringRecord.typesForClass(recordClass);
@@ -127,7 +126,7 @@ final class DbWriterThread extends AbstractAsyncThread {
 				throw new Exception("Failed to get types of record", ex);
 			}
 			try {
-				this.helper.createTable(tableName, recordClass.getName(), typeArray);
+				final String tableName = this.helper.createTable(recordClass.getName(), typeArray);
 				final StringBuilder sb = new StringBuilder("?");
 				for (int count = typeArray.length; count > 0; count--) {
 					sb.append(",?");

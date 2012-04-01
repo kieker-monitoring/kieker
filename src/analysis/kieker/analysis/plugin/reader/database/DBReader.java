@@ -68,13 +68,25 @@ public class DBReader extends AbstractReaderPlugin {
 		Connection connection = null;
 		try {
 			connection = DriverManager.getConnection(this.connectionString);
-			final Statement getIndexTable = connection.createStatement();
-			final ResultSet indexTable = getIndexTable.executeQuery("SELECT * from " + this.tablePrefix);
-			while (indexTable.next()) {
-				LOG.info("TABLE: " + indexTable.getString(1) + " CLASSNAME: " + indexTable.getString(2));
+			Statement getIndexTable = null;
+			try {
+				getIndexTable = connection.createStatement();
+				ResultSet indexTable = null;
+				try {
+					indexTable = getIndexTable.executeQuery("SELECT * from " + this.tablePrefix);
+					while (indexTable.next()) {
+						LOG.info("TABLE: " + indexTable.getString(1) + " CLASSNAME: " + indexTable.getString(2));
+					}
+				} finally {
+					if (indexTable != null) {
+						indexTable.close();
+					}
+				}
+			} finally {
+				if (getIndexTable != null) {
+					getIndexTable.close();
+				}
 			}
-			indexTable.close();
-			getIndexTable.close();
 		} catch (final SQLException ex) {
 			LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 			return false;

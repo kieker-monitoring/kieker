@@ -88,7 +88,6 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 			if (LOG.isDebugEnabled()) {
 				LOG.debug("New record type found: " + recordClassName);
 			}
-			final String tableName = this.tablePrefix + "_" + recordClassName;
 			final Class<?>[] typeArray;
 			try {
 				typeArray = AbstractMonitoringRecord.typesForClass(recordClass);
@@ -97,7 +96,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 				return false;
 			}
 			try {
-				this.helper.createTable(tableName, recordClass.getName(), typeArray);
+				final String tableName = this.helper.createTable(recordClass.getName(), typeArray);
 				final StringBuilder sb = new StringBuilder("?");
 				for (int count = typeArray.length; count > 0; count--) {
 					sb.append(",?");
