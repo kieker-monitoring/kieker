@@ -533,8 +533,8 @@
 		<replaceregexp file="${src.userguide.example.bookstore.dir}/README.txt" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
 		<replaceregexp file="${src.userguide.example.manual.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.emf.jar}" flags="g" />
 		<replaceregexp file="${src.userguide.example.manual.dir}/README.txt" match="kieker-.*.jar" replace="${dist.kieker.main.emf.jar}" flags="g" />
-		<replaceregexp file="${src.userguide.example.extended.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
-		<replaceregexp file="${src.userguide.example.extended.dir}/README.txt" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.extended.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.emf.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.extended.dir}/README.txt" match="kieker-.*.jar" replace="${dist.kieker.main.emf.jar}" flags="g" />
 		<replaceregexp file="${src.userguide.example.aspectj.dir}/build.properties" match="kieker-weaver-.*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g" />
 		<replaceregexp file="${src.userguide.example.aspectj.dir}/.classpath" match="kieker-weaver-.*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g" />
 		<replaceregexp file="${src.userguide.example.aspectj.dir}/README.txt" match="kieker-weaver-.*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g" />
