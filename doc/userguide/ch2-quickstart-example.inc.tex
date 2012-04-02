@@ -211,9 +211,9 @@ The record type will be detailed in Chapter~\ref{chap:aspectJ} .
 \end{centering}
 \end{figure}
 
-\noindent The attributes relevant to this part are \method{className} and \method{operationName} %
-for the class and method name, as well as \method{tin} and \method{tout} for %
-the timestamp before and after the call of the instrumented method. 
+\noindent The attributes relevant to this part are \method{operationSignature} and \method{hostname}, %
+as well as \method{tin} and \method{tout} for %
+the timestamps before and after the call of the instrumented method. 
 
 \enlargethispage{0.7cm}
 
@@ -224,10 +224,10 @@ Listing~\ref{lst:cuttingBookstore} shows the instrumentation of the \class{Books
 % It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
 
 \setJavaCodeListing
-\lstinputlisting[linerange={32-50}, firstnumber=32, caption=Instrumentation of the \method{getBook()} call in Bookstore.java, label=lst:cuttingBookstore]%
+\lstinputlisting[linerange={29-54}, firstnumber=29, caption=Instrumentation of the \method{getBook()} call in Bookstore.java, label=lst:cuttingBookstore]%
 {\manualInstrumentedBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/manual/Bookstore.java}
  
-\noindent The lines 38 and 40 are used to determine the current time in nanoseconds before and after the \method{getBook()} call. In lines 41 to 44, a monitoring record for this measurement is created and initialized with the two time values. Additionally, the record has an attribute for the involved class \verb!Catalog! and the called method \method{getBook()}. Finally the record is handed over to the monitoring controller which calls a monitoring writer to persist the record. %
+\noindent The lines 38 and 40 are used to determine the current time in nanoseconds before and after the \method{getBook()} call. In lines 41 to 44, a monitoring record for this measurement is created and initialized, including the two time values. Additionally, the record has an attribute for the involved method signature (the \verb!Catalog!'s \method{getBook()} method) and a hostname. Finally the record is handed over to the monitoring controller which calls a monitoring writer to persist the record. %
 In this example, the filesystem writer is used---\Kieker{} uses this writer by default when no other writer is specified, %
 as detailed in Section~\ref{sec:monitoring-log-writers}. %.
 
