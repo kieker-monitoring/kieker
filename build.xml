@@ -14,6 +14,7 @@
 		<property name="dist.kieker.monitoring.servlet.war" value="${kieker.monitoring.servlet.packagenamebase}-${kieker.version}.war" />
 		<property name="dist.kieker.main.jar" value="${kieker.main.packagenamebase}-${kieker.version}.jar" />
 		<property name="dist.kieker.main.aspectj.jar" value="${kieker.main.packagenamebase}-weaver-${kieker.version}.jar" />
+		<property name="dist.kieker.main.emf.jar" value="${kieker.main.packagenamebase}-analysis-${kieker.version}.jar" />
 
 		<property name="kieker.dist.name" value="${kieker.packagenamebase}-${kieker.version}" />
 		<property name="dist.kieker.srcBaseName" value="${kieker.dist.name}_${kieker-src.suffix}" />
@@ -29,7 +30,7 @@
 		<replaceregexp file="${src.kieker.common.dir}/kieker/common/util/Version.java" match="VERSION = &quot;.*?&quot;" replace="VERSION = &quot;${kieker.version}&quot;" />
 	</target>
 
-	<target name="build-all" depends="clean,-init,build-kieker.main,build-kieker.main.aspectj,build-kieker.monitoring-servlet" description="Compiles and packages the Kieker Jar and War files (calls the 'build-kieker-*' targets)">
+	<target name="build-all" depends="clean,-init,build-kieker.main,build-kieker.main.aspectj,build-kieker.main.emf,build-kieker.monitoring-servlet" description="Compiles and packages the Kieker Jar and War files (calls the 'build-kieker-*' targets)">
 	</target>
 
 	<target name="-init" depends="clean,-update-version,-init-compile-classpaths" description="Initializes variables and creates directories">
@@ -209,6 +210,29 @@
 				<attribute name="Premain-Class" value="org.aspectj.weaver.loadtime.Agent" />
 				<attribute name="Can-Redefine-Classes" value="true" />
 			</manifest>
+		</jar>
+	</target>
+
+	<target name="build-kieker.main.emf" depends="-init,build-kieker.main" description="Compiles and packages the Kieker Jar file including the EMF runtime">
+		<fileset dir="${lib.dir}" id="org.eclipse.emf.common-jar-set">
+			<include name="org.eclipse.emf.common-*.jar" />
+		</fileset>
+		<pathconvert property="org.eclipse.emf.common-jar" refid="org.eclipse.emf.common-jar-set" />
+		<fileset dir="${lib.dir}" id="org.eclipse.emf.ecore.xmi-jar-set">
+			<include name="org.eclipse.emf.ecore.xmi-*.jar" />
+		</fileset>
+		<pathconvert property="org.eclipse.emf.ecore.xmi-jar" refid="org.eclipse.emf.ecore.xmi-jar-set" />
+		<fileset dir="${lib.dir}" id="org.eclipse.emf.ecore-jar-set">
+			<include name="org.eclipse.emf.ecore-*.jar" />
+		</fileset>
+		<pathconvert property="org.eclipse.emf.ecore-jar" refid="org.eclipse.emf.ecore-jar-set" />
+		<jar destfile="${dist.dir}/${dist.kieker.main.emf.jar}" filesetmanifest="merge" index="true">
+			<!--  indexMetaInf="true" flattenAttributes="true" -->
+			<zipfileset src="${dist.dir}/${dist.kieker.main.jar}" />
+			<zipfileset src="${org.eclipse.emf.common-jar}" />
+			<zipfileset src="${org.eclipse.emf.ecore.xmi-jar}" />
+			<zipfileset src="${org.eclipse.emf.ecore-jar}" />
+			<fileset dir="${lib.dir}" includes="org.eclipse.emf.*.LICENSE" />
 		</jar>
 	</target>
 
@@ -517,7 +541,7 @@
 		<replaceregexp file="${src.userguide.example.jms.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
 		<replaceregexp file="${src.userguide.example.sigar.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
 		<replaceregexp file="${example.jpetstoreservlet.dir}/Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore/bin/catalina.sh" match="kieker-weaver.*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g" />
-		<replaceregexp file="${example.jpetstoreservlet.dir}/Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore/bin/catalina.bat" match="kieker-weaver.*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g" />		
+		<replaceregexp file="${example.jpetstoreservlet.dir}/Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore/bin/catalina.bat" match="kieker-weaver.*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g" />
 	</target>
 
 	<target name="dist-examples" depends="-update-version.examples,dist-example-JPetStoreExample" description="Packages the example archives (.zip|.tar.gz) for a release">
