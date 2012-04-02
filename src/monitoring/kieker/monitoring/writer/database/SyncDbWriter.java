@@ -95,7 +95,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 			}
 			try {
 				final String tableName = this.helper.createTable(recordClass.getName(), typeArray);
-				final StringBuilder sb = new StringBuilder("?");
+				final StringBuilder sb = new StringBuilder("?,?"); // id and loggingTimestamp
 				for (int count = typeArray.length; count > 0; count--) {
 					sb.append(",?");
 				}
@@ -111,9 +111,10 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 			// send to actual table
 			final PreparedStatement preparedStatement = this.recordTypeInformation.get(recordClass);
 			preparedStatement.setLong(1, id);
+			preparedStatement.setLong(2, record.getLoggingTimestamp());
 			final Object[] recordFields = record.toArray();
 			for (int i = 0; i < recordFields.length; i++) {
-				if (!this.helper.set(preparedStatement, i + 2, recordFields[i])) {
+				if (!this.helper.set(preparedStatement, i + 3, recordFields[i])) {
 					return false;
 				}
 			}

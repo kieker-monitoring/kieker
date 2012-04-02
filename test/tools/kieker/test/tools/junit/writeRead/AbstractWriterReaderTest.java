@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.misc.EmptyRecord;
@@ -96,9 +95,9 @@ public abstract class AbstractWriterReaderTest {
 	 * Returns the list of records read from the previously written monitoring log.
 	 * 
 	 * @return
-	 * @throws AnalysisConfigurationException
+	 * @throws Exception
 	 */
-	protected abstract List<IMonitoringRecord> readEvents() throws AnalysisConfigurationException;
+	protected abstract List<IMonitoringRecord> readEvents() throws Exception;
 
 	/**
 	 * Provides implementing classes to do something before reading the log, e.g., manipulating it.
@@ -110,8 +109,6 @@ public abstract class AbstractWriterReaderTest {
 	/**
 	 * The actual Test. Note that this should be the only {@link Test} in this class.
 	 * 
-	 * @throws InterruptedException
-	 * @throws AnalysisConfigurationException
 	 * @throws Exception
 	 */
 	@Test

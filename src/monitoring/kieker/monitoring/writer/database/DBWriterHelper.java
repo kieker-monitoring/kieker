@@ -115,6 +115,7 @@ public final class DBWriterHelper {
 		} else {
 			throw new SQLException("Type 'long' not supported.");
 		}
+		statementCreateTable.append(", timestamp ").append(createLong);
 		int i = 1;
 		for (final Class<?> c : columns) {
 			statementCreateTable.append(", c").append(i++).append(' ');

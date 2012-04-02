@@ -24,8 +24,16 @@
 	</Match>
 
 	<Match>
-		<Class name="kieker.analysis.plugin.reader.database.DBReader" />
+		<Class name="kieker.analysis.plugin.reader.database.DbReader" />
 		<Method name="read" params="" returns="boolean" />
+		<Bug pattern="SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.reader.database.DbReader" />
+		<Method name="table2record"
+			params="java.sql.Connection,java.lang.String,java.lang.Class"
+			returns="void" />
 		<Bug pattern="SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE" />
 	</Match>
 

@@ -30,15 +30,19 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
+import kieker.common.exception.MonitoringRecordException;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 
 /**
+ * A very simple database reader that probably only works for small data sets.
+ * 
  * @author Jan Waller
  */
-@Plugin(outputPorts = @OutputPort(name = DBReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the DBReader"))
-public class DBReader extends AbstractReaderPlugin {
+@Plugin(outputPorts = @OutputPort(name = DbReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the DBReader"))
+public class DbReader extends AbstractReaderPlugin {
 
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 
@@ -46,13 +50,15 @@ public class DBReader extends AbstractReaderPlugin {
 	public static final String CONFIG_PROPERTY_NAME_CONNECTIONSTRING = "ConnectionString";
 	public static final String CONFIG_PROPERTY_NAME_TABLEPREFIX = "TablePrefix";
 
-	private static final Log LOG = LogFactory.getLog(DBReader.class);
+	private static final Log LOG = LogFactory.getLog(DbReader.class);
 
 	private final String driverClassname;
 	private final String connectionString;
 	private final String tablePrefix;
 
-	public DBReader(final Configuration configuration) throws Exception {
+	private volatile boolean running = true;
+
+	public DbReader(final Configuration configuration) throws Exception {
 		super(configuration);
 		this.driverClassname = configuration.getStringProperty(CONFIG_PROPERTY_NAME_DRIVERCLASSNAME);
 		this.connectionString = configuration.getStringProperty(CONFIG_PROPERTY_NAME_CONNECTIONSTRING);
@@ -74,8 +80,16 @@ public class DBReader extends AbstractReaderPlugin {
 				ResultSet indexTable = null;
 				try {
 					indexTable = getIndexTable.executeQuery("SELECT * from " + this.tablePrefix);
-					while (indexTable.next()) {
-						LOG.info("TABLE: " + indexTable.getString(1) + " CLASSNAME: " + indexTable.getString(2));
+					while (this.running && indexTable.next()) {
+						final String tablename = indexTable.getString(1);
+						final String classname = indexTable.getString(2);
+						try {
+							this.table2record(connection, tablename, AbstractMonitoringRecord.classForName(classname));
+						} catch (final MonitoringRecordException ex) {
+							// log error but continue with next table
+							LOG.error("Failed to load records of type " + classname + " from table " + tablename, ex);
+							continue;
+						}
 					}
 				} finally {
 					if (indexTable != null) {
@@ -102,9 +116,39 @@ public class DBReader extends AbstractReaderPlugin {
 		return true;
 	}
 
+	private void table2record(final Connection connection, final String tablename, final Class<? extends IMonitoringRecord> clazz)
+			throws SQLException, MonitoringRecordException {
+		Statement selectRecord = null;
+		try {
+			selectRecord = connection.createStatement();
+			ResultSet records = null;
+			try {
+				records = selectRecord.executeQuery("SELECT * from " + tablename);
+				final int size = records.getMetaData().getColumnCount() - 2; // remove index column
+				while (this.running && records.next()) {
+					final Object[] recordValues = new Object[size];
+					for (int i = 0; i < size; i++) {
+						recordValues[i] = records.getObject(i + 3);
+					}
+					final IMonitoringRecord record = AbstractMonitoringRecord.createFromArray(clazz, recordValues);
+					record.setLoggingTimestamp(records.getLong(2));
+					super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
+				}
+			} finally {
+				if (records != null) {
+					records.close();
+				}
+			}
+		} finally {
+			if (selectRecord != null) {
+				selectRecord.close();
+			}
+		}
+	}
+
 	public void terminate(final boolean error) {
 		LOG.info("Shutdown of DBReader requested.");
-		// TODO: what to do here?
+		this.running = false;
 	}
 
 	public Configuration getCurrentConfiguration() {

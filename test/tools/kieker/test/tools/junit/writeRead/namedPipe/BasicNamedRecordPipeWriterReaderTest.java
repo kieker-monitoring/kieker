@@ -46,7 +46,6 @@ public class BasicNamedRecordPipeWriterReaderTest extends AbstractWriterReaderTe
 	private static final String PIPE_NAME = "pipe-IVvirGREEf";
 
 	private volatile SimpleSinkPlugin<IMonitoringRecord> sinkFilter = null;
-	private volatile AnalysisControllerThread analysisThread = null;
 
 	@Before
 	public void setUp() throws Exception {
@@ -58,8 +57,8 @@ public class BasicNamedRecordPipeWriterReaderTest extends AbstractWriterReaderTe
 		analysisController.registerReader(pipeReader);
 		analysisController.registerFilter(this.sinkFilter);
 		analysisController.connect(pipeReader, PipeReader.OUTPUT_PORT_NAME_RECORDS, this.sinkFilter, SimpleSinkPlugin.INPUT_PORT_NAME);
-		this.analysisThread = new AnalysisControllerThread(analysisController);
-		this.analysisThread.start();
+		final AnalysisControllerThread analysisThread = new AnalysisControllerThread(analysisController);
+		analysisThread.start();
 	}
 
 	@Override
