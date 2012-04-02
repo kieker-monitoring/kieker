@@ -3,5 +3,6 @@
 *.idx
 *.out
 *.bbl
+*.blg
 *.toc
 /*.pdf

@@ -14,7 +14,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.1 r9760"
-   sodipodi:docname="framework-figure-gray.svg">
+   sodipodi:docname="framework-figure.svg">
   <defs
      id="defs4">
     <clipPath
@@ -1103,9 +1103,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.49497475"
-     inkscape:cx="727.64944"
-     inkscape:cy="536.68932"
+     inkscape:zoom="0.35"
+     inkscape:cx="754.21161"
+     inkscape:cy="647.45184"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -1137,6 +1137,13 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(435.83964,-1878.3928)">
+    <rect
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
+       id="rect6745-7-5-3-1-6-4-4-2-1-0-74"
+       width="40"
+       height="427.50546"
+       x="456.1687"
+       y="1879.3779" />
     <rect
        style="fill:#6699cc;fill-opacity:0.8509804;fill-rule:nonzero;stroke:none"
        id="rect4850-3-80-7"
@@ -1202,14 +1209,14 @@
          x="-2189.1431"
          y="619.2052"
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
-         id="tspan4020-2-6-0-2">Memory/swap usage</tspan></text>
+         id="tspan4020-2-6-0-2">Resource utilization</tspan></text>
     <rect
        style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-2-1-0-7"
        width="40"
-       height="427.50546"
+       height="181.79118"
        x="547.38574"
-       y="1879.3779" />
+       y="2125.0923" />
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Arial;-inkscape-font-specification:Arial"
@@ -1223,13 +1230,6 @@
          y="575.97559"
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
          id="tspan4020-2-6-7-7-1">CPU utilization</tspan></text>
-    <rect
-       style="fill:#eca14f;fill-opacity:1;stroke:none"
-       id="rect6745-7-5-3-1-6-4-4-2-1"
-       width="40"
-       height="427.50546"
-       x="456.1687"
-       y="1879.3779" />
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Arial;-inkscape-font-specification:Arial"
@@ -1253,16 +1253,16 @@
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Arial;-inkscape-font-specification:Arial"
-       x="-2195.2485"
+       x="-2196.5728"
        y="530.22644"
        id="text3777-8-0-8-33-08-95-9"
        sodipodi:linespacing="100%"
        transform="matrix(0,-1,1,0,0,0)"><tspan
          sodipodi:role="line"
-         x="-2195.2485"
+         x="-2196.5728"
          y="530.22644"
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
-         id="tspan4020-2-3-5">Resource utilization</tspan></text>
+         id="tspan4020-2-3-5">Control-flow events</tspan></text>
     <rect
        style="opacity:0.39272723999999998;fill:#f2bc2e;fill-opacity:0.8509804;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-1"
@@ -4578,16 +4578,16 @@
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Arial;-inkscape-font-specification:Arial"
-       x="-2191.4531"
+       x="-2165.2734"
        y="343.99557"
        id="text3777-8-0-8-3-1-27-4"
        sodipodi:linespacing="100%"
        transform="matrix(0,-1,1,0,0,0)"><tspan
          sodipodi:role="line"
-         x="-2191.4531"
+         x="-2165.2734"
          y="343.99557"
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
-         id="tspan3781-2-6-2-2-3-5-6">File system</tspan></text>
+         id="tspan3781-2-6-2-2-3-5-6">Database (SQL)</tspan></text>
     <rect
        style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-3"
@@ -4627,22 +4627,22 @@
        style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7"
        width="40"
-       height="380.71432"
+       height="176.42712"
        x="365.4371"
-       y="1879.3777" />
+       y="2083.6648" />
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Arial;-inkscape-font-specification:Arial"
-       x="-2165.2734"
+       x="-2187.2578"
        y="391.6539"
        id="text3777-8-0-8-3-1-7-7-7-6"
        sodipodi:linespacing="100%"
        transform="matrix(0,-1,1,0,0,0)"><tspan
          sodipodi:role="line"
-         x="-2165.2734"
+         x="-2187.2578"
          y="391.6539"
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
-         id="tspan3781-2-6-2-2-3-4-8-4-0">Database (SQL)</tspan></text>
+         id="tspan3781-2-6-2-2-3-4-8-4-0">Named pipe</tspan></text>
     <rect
        style="opacity:0.39272723999999998;fill:#f2bc2e;fill-opacity:0.8509804;stroke:none"
        id="rect6745-7-5-3-1-6-4-4"
@@ -4713,16 +4713,16 @@
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Arial;-inkscape-font-specification:Arial"
-       x="-2189.1196"
+       x="-2299.229"
        y="-1.7178444"
        id="text3777-8-0-8-38-9-1"
        sodipodi:linespacing="100%"
        transform="matrix(0,-1,1,0,0,0)"><tspan
          sodipodi:role="line"
-         x="-2189.1196"
+         x="-2299.229"
          y="-1.7178444"
-         style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
-         id="tspan3781-2-6-2-5-3-3">System time (nanos)</tspan></text>
+         style="font-size:24px;text-align:start;line-height:100%;text-anchor:start"
+         id="tspan3781-2-6-2-5-3-3">System time</tspan></text>
     <rect
        style="opacity:0.39299999000000002;fill:#f2bc2e;fill-opacity:0.8509804;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-3"
@@ -5088,23 +5088,23 @@
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Arial;-inkscape-font-specification:Arial"
-       x="-2187.2578"
+       x="-2191.4531"
        y="296.48627"
        id="text3777-8-0-8-3-1-7-2-6-62"
        sodipodi:linespacing="100%"
        transform="matrix(0,-1,1,0,0,0)"><tspan
          sodipodi:role="line"
-         x="-2187.2578"
+         x="-2191.4531"
          y="296.48627"
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
-         id="tspan3781-2-6-2-2-3-4-2-0-6">Named pipe</tspan></text>
+         id="tspan3781-2-6-2-2-3-4-2-0-6">File system</tspan></text>
     <rect
        style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-2-1-0-7-6-5-0"
        width="40"
-       height="427.50546"
+       height="208.21974"
        x="912.98779"
-       y="1879.3779" />
+       y="2098.6636" />
     <rect
        style="fill:#eca14f;fill-opacity:1;stroke:none"
        id="rect6745-7-5-3-1-6-4-4-2-1-0-7-6-4"
@@ -5169,29 +5169,16 @@
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Arial;-inkscape-font-specification:Arial"
-       x="-2235.2212"
+       x="-2213.2368"
        y="893.58435"
        id="text3777-8-0-8-3-1-7-2-6-6-8"
        sodipodi:linespacing="100%"
        transform="matrix(0,-1,1,0,0,0)"><tspan
          sodipodi:role="line"
-         x="-2235.2212"
+         x="-2213.2368"
          y="893.58435"
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
-         id="tspan3781-2-6-2-2-3-4-2-0-5-6">Named pipe</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Arial;-inkscape-font-specification:Arial"
-       x="-2201.9048"
-       y="939.05219"
-       id="text3777-8-0-87-2-8-2-2"
-       sodipodi:linespacing="100%"
-       transform="matrix(0,-1,1,0,0,0)"><tspan
-         sodipodi:role="line"
-         x="-2201.9048"
-         y="939.05219"
-         style="font-size:24px;font-style:normal;text-align:center;line-height:100%;text-anchor:middle;-inkscape-font-specification:Arial"
-         id="tspan4629-7-9">Real-time replayer</tspan></text>
+         id="tspan3781-2-6-2-2-3-4-2-0-5-6">Database (SQL)</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:17.44089890000000054px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial;-inkscape-font-specification:Arial Bold"
@@ -5513,5 +5500,78 @@
          r="7.5"
          d="m 673,355.5 c 0,4.14214 -3.35786,7.5 -7.5,7.5 -4.14214,0 -7.5,-3.35786 -7.5,-7.5 0,-4.14214 3.35786,-7.5 7.5,-7.5 4.14214,0 7.5,3.35786 7.5,7.5 z" />
     </g>
+    <rect
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
+       id="rect6745-7-57"
+       width="40"
+       height="198.11311"
+       x="365.4371"
+       y="1879.3777" />
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Arial;-inkscape-font-specification:Arial"
+       x="-1993.8929"
+       y="391.6539"
+       id="text3777-8-0-8-3-1-7-7-7-6-1"
+       sodipodi:linespacing="100%"
+       transform="matrix(0,-1,1,0,0,0)"><tspan
+         sodipodi:role="line"
+         x="-1993.8929"
+         y="391.6539"
+         style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
+         id="tspan3781-2-6-2-2-3-4-8-4-0-75">Output stream</tspan></text>
+    <rect
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
+       id="rect6745-7-5-3-1-6-4-4-2-1-0-7-13"
+       width="40"
+       height="241.79118"
+       x="547.38574"
+       y="1879.3779" />
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Arial;-inkscape-font-specification:Arial"
+       x="-2115.2463"
+       y="575.97559"
+       id="text3777-8-0-8-33-08-9-7-0-8-6"
+       sodipodi:linespacing="100%"
+       transform="matrix(0,-1,1,0,0,0)"><tspan
+         sodipodi:role="line"
+         x="-2115.2463"
+         y="575.97559"
+         style="font-size:24px;text-align:start;line-height:100%;text-anchor:start"
+         id="tspan4020-2-6-7-7-1-1">Memory/swap usage</tspan></text>
+    <rect
+       style="fill:#eca14f;fill-opacity:1;stroke:none"
+       id="rect6745-7-5-3-1-6-4-4-2-1-0-7-6-5-0-7"
+       width="40"
+       height="214.64832"
+       x="912.98779"
+       y="1879.3779" />
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Arial;-inkscape-font-specification:Arial"
+       x="-1987.9048"
+       y="939.05219"
+       id="text3777-8-0-87-2-8-2-2"
+       sodipodi:linespacing="100%"
+       transform="matrix(0,-1,1,0,0,0)"><tspan
+         sodipodi:role="line"
+         x="-1987.9048"
+         y="939.05219"
+         style="font-size:24px;font-style:normal;text-align:center;line-height:100%;text-anchor:middle;-inkscape-font-specification:Arial"
+         id="tspan4629-7-9">Real-time replayer</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Arial;-inkscape-font-specification:Arial"
+       x="-2235.2212"
+       y="939.33344"
+       id="text3777-8-0-8-3-1-7-2-6-6-8-7"
+       sodipodi:linespacing="100%"
+       transform="matrix(0,-1,1,0,0,0)"><tspan
+         sodipodi:role="line"
+         x="-2235.2212"
+         y="939.33344"
+         style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
+         id="tspan3781-2-6-2-2-3-4-2-0-5-6-5">Named pipe</tspan></text>
   </g>
 </svg>

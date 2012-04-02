@@ -26,14 +26,14 @@ The \Kieker{} download site\footnote{\KiekerDownloadURL{}} provides archives of 
 			.3 \ldots. 
 		.2 \DirInDirTree{dist/}\DTcomment{The \Kieker{} framework libraries}. 
 			.3 \mainJar. 
-			.3 \servletWar. 
+			.3 \ldots. %\servletWar. 
 		.2 \DirInDirTree{doc/}\DTcomment{}. 
 			.3 kieker-\version\_userguide.pdf\DTcomment{PDF file of this document}. 
 		.2 \DirInDirTree{examples/}.
 			.3 \DirInDirTree{userguide/}\DTcomment{Source code of the examples in this document}.
                         .4 \ldots.
 		.2 \DirInDirTree{lib/}\DTcomment{Libraries required by \Kieker{}}. 
-			.3 \commonsLoggingJar.
+% 			.3 \commonsLoggingJar.
 			.3 \ldots. 
 		.2 \DirInDirTree{META-INF/}\DTcomment{Example configuration files}. 
 			.3 \kiekerMonitoringProperties{}.
@@ -44,9 +44,16 @@ The \Kieker{} download site\footnote{\KiekerDownloadURL{}} provides archives of 
 \label{fig:binary-layout}
 \end{figure}
 
+\pagebreak
+
 The Java sources presented in this user guide, as well as pre-compiled binaries, are included in the \file{\exampleDir/} directory. The file \file{\mainJar{}} contains the \KiekerMonitoringPart{} and \KiekerAnalysisPart{} components, as well as the \KiekerTraceAnalysis{} tool. A Servlet-based Web application, provided in \file{\servletWar}, can be used to control the status of \KiekerMonitoringPart{} in Java~EE environments. The sample \KiekerMonitoringPart{} 
 configuration file %
-\file{\kiekerMonitoringProperties{}} will be detailed in Chapter~\ref{chap:componentsMonitoring}. Since \Kieker{} uses the Apache Commons library~\cite{CommonsLogging-WebSite} as a logging interface, the file \file{\commonsLoggingJar} is the only dependency to a third-party library which is needed to execute \Kieker{} in any case. 
+\file{\kiekerMonitoringProperties{}} will be detailed in Chapter~\ref{chap:componentsMonitoring}. %
+In addition to the \file{\mainJar{}} file, the \file{dist/} directory includes %
+variants of this \file{.jar} files with integrated third-party libraries. Additional %
+information on these \file{.jar} files and when to use them will follow later in this document. %
+
+% Since \Kieker{} uses the Apache Commons library~\cite{CommonsLogging-WebSite} as a logging interface, the file \file{\commonsLoggingJar} is the only dependency to a third-party library which is needed to execute \Kieker{} in any case. 
 
 %%
 \section{Bookstore Example Application}\label{sec:example:bookstore}
@@ -164,7 +171,7 @@ instrumentation in detail, the quick start example uses manual instrumentation.}
 \
 
 \noindent The first step is to copy the \Kieker{} jar-file \file{\mainJar} to the \dir{lib/} directory of the example directory~(see Section~\ref{sec:example:bookstore}). The file is located in the \dir{\KiekerDir/dist/} directory of the extracted \Kieker{} archive, as described in Section~\ref{sec:example:downloadInstall}. %
-The file \file{\commonsLoggingJar} is located in the \dir{\KiekerDir/lib/} directory and has to be copied to the \dir{lib/} directory of the example application. The final layout of the example directory is illustrated in Figure~\ref{fig:KiekerBookstoreExample}.
+The final layout of the example directory is illustrated in Figure~\ref{fig:KiekerBookstoreExample}.
 
 \begin{figure}[H]
 \begin{graybox}
@@ -175,7 +182,6 @@ The file \file{\commonsLoggingJar} is located in the \dir{\KiekerDir/lib/} direc
 .4 \DirInDirTree{build/}\DTcomment{Directory for the Java class files}. 
 .4 \newFileDirInDirTree{\DirInDirTree{lib/}}\DTcomment{Directory for the required libraries}.
 .5 \newFileDirInDirTree{\mainJar}.
-.5 \newFileDirInDirTree{\commonsLoggingJar}.
 .4 \DirInDirTree{src/}\DTcomment{The directory for the source code files}.
 .5 \ldots.
 }
