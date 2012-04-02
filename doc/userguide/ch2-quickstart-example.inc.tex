@@ -264,7 +264,7 @@ Windows PowerShell.}
 
 \quad\
 
-\noindent If everything worked correctly, a new directory for the monitoring data with a name similar to \dir{kieker-20110427-142244899-UTC-Kaapstad-KIEKER-SINGLETON/} is created % in the default temporary directory
+\noindent If everything worked correctly, a new directory for the monitoring data with a name similar to \dir{kieker-20120402-163314855-UTC-myHost-KIEKER-SINGLETON/} is created % in the default temporary directory
 (see Figure~\ref{fig:logtree}). %
 % The numbers in the directory name represent the time and date of the monitoring. %Thus, they will be different numbers for every run.
 In \Kieker's default configuration, the log directory can be found in the default temporary directory: %
@@ -279,9 +279,9 @@ file named \dir{kieker.map} which contains information on the types of monitorin
 \begin{graybox}
 \dirtree{%
 .1 \DirInDirTree{/tmp/}.
-.2 \DirInDirTree{kieker-20110427-142244899-UTC-Kaapstad-KIEKER-SINGLETON/}.
+.2 \DirInDirTree{kieker-20120402-163314855-UTC-myHost-KIEKER-SINGLETON/}.
 .3 kieker.map.
-.3 kieker-20110427-142244920-UTC-Thread-1.dat.
+.3 kieker-20120402-163314882-UTC--000-Thread-1.dat.
 }
 \end{graybox}
 \caption{Directory structure after a monitoring run}
@@ -293,13 +293,13 @@ file named \dir{kieker.map} which contains information on the types of monitorin
 The Listings~\ref{lst:exampledat} and \ref{lst:examplemap} show example file contents. The \file{.dat}-file is saved in CSV format (\textbf{C}omma \textbf{S}eparated \textbf{V}alues)---in this case, the values of a monitoring record are separated by semicolons. To understand the \file{.dat}-file structure the semantics have to be explained. For this quick start example only some of the values are relevant. The first value \verb!$1! indicates the record type. The fourth value indicates the class and method which has been called. And the seventh and eighth value are the start and end time of the execution of the called method.
 
 \setBashListing
-\lstinputlisting[caption=kieker-20110427-142244920-UTC-Thread-1.dat (excerpt), firstline=1, lastline=2, label=lst:exampledat]%
-{ch2-quickstart-example/kieker-20110427-142244899-UTC-Kaapstad-KIEKER-SINGLETON/kieker-20110427-142244920-UTC-Thread-1.dat}
+\lstinputlisting[caption=kieker-20120402-163314882-UTC--000-Thread-1.dat (excerpt), firstline=1, lastline=2, label=lst:exampledat]%
+{ch2-quickstart-example/kieker-20120402-163314855-UTC-myHost-KIEKER-SINGLETON/kieker-20120402-163314882-UTC--000-Thread-1.dat}
 
 \noindent The second file is a simple mapping file referencing keys to monitoring record types. In Listing~\ref{lst:examplemap} the key \verb!$1! is mapped to the type of operation execution records which were used in the monitoring. The key value corresponds to the key values in the \file{.dat}-file.
 
 \lstinputlisting[caption=kieker.map, label=lst:examplemap]%
-{ch2-quickstart-example/kieker-20110427-142244899-UTC-Kaapstad-KIEKER-SINGLETON/kieker.map}
+{ch2-quickstart-example/kieker-20120402-163314855-UTC-myHost-KIEKER-SINGLETON/kieker.map}
 
 \noindent By the end of this section, two Java classes of the Bookstore application %
 have been manually instrumented using \KiekerMonitoringPart{} and at least one %
