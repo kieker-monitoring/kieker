@@ -229,9 +229,9 @@
 		<jar destfile="${dist.dir}/${dist.kieker.main.emf.jar}" filesetmanifest="merge" index="true">
 			<!--  indexMetaInf="true" flattenAttributes="true" -->
 			<zipfileset src="${dist.dir}/${dist.kieker.main.jar}" />
-			<zipfileset src="${org.eclipse.emf.common-jar}" />
-			<zipfileset src="${org.eclipse.emf.ecore.xmi-jar}" />
-			<zipfileset src="${org.eclipse.emf.ecore-jar}" />
+			<zipfileset excludes="META-INF/**/*" src="${org.eclipse.emf.common-jar}" />
+			<zipfileset excludes="META-INF/**/*" src="${org.eclipse.emf.ecore.xmi-jar}" />
+			<zipfileset excludes="META-INF/**/*" src="${org.eclipse.emf.ecore-jar}" />
 			<fileset dir="${lib.dir}" includes="org.eclipse.emf.*.LICENSE" />
 		</jar>
 	</target>
