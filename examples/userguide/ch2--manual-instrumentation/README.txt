@@ -4,16 +4,16 @@ the 'java' tool using the following commands:
 Monitoring:
 
 -UNIX-like systems:
- $ java -cp BookstoreMonitoring.jar:lib/commons-logging-1.1.1.jar:lib/kieker-1.5-SNAPSHOT.jar bookstoreApplication.BookstoreStarter
+ $ java -cp BookstoreMonitoring.jar:lib/kieker-analysis-1.5-SNAPSHOT.jar kieker.examples.userguide.ch2bookstore.manual.BookstoreStarter
 - Windows:
- $ java -cp BookstoreMonitoring.jar;lib\commons-logging-1.1.1.jar;lib\kieker-1.5-SNAPSHOT.jar bookstoreApplication.BookstoreStarter
+ $ java -cp BookstoreMonitoring.jar;lib\kieker-analysis-1.5-SNAPSHOT.jar kieker.examples.userguide.ch2bookstore.manual.BookstoreStarter
 
 Analysis:
 
 -UNIX-like systems:
- $ java -cp BookstoreAnalysis.jar:lib/commons-logging-1.1.1.jar:lib/kieker-1.5-SNAPSHOT.jar bookstoreApplication.BookstoreAnalysisStarter </path/to/monitoring-log/>
+ $ java -cp BookstoreAnalysis.jar:lib/kieker-analysis-1.5-SNAPSHOT.jar kieker.examples.userguide.ch2bookstore.manual.BookstoreAnalysisStarter </path/to/monitoring-log/>
 - Windows:
- $ java -cp BookstoreAnalysis.jar;lib\commons-logging-1.1.1.jar;lib\kieker-1.5-SNAPSHOT.jar bookstoreApplication.BookstoreAnalysisStarter <path\to\monitoring-log\>
+ $ java -cp BookstoreAnalysis.jar;lib\kieker-analysis-1.5-SNAPSHOT.jar kieker.examples.userguide.ch2bookstore.manual.BookstoreAnalysisStarter <path\to\monitoring-log\>
 
 Alternatively, you can compile the sources and start the application using
 'ant' with the given 'build.xml' file:

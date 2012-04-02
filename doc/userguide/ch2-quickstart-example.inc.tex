@@ -217,26 +217,26 @@ the timestamps before and after the call of the instrumented method.
 
 \enlargethispage{0.7cm}
 
-Listing~\ref{lst:cuttingBookstore} shows the instrumentation of the \class{Bookstore} class and its method \method{searchBook()}. In the lines 32 and 33, the monitoring controller is instantiated. It provides the monitoring service for the instrumentation.
+Listing~\ref{lst:cuttingBookstore} shows the instrumentation of the \class{Bookstore} class and its method \method{searchBook()}. In the lines~29 and~30, the monitoring controller is instantiated. It provides the monitoring service for the instrumentation.
 
 % \TODO{Imports?!\\ --- avh: ja, evtl. mit linerange, aber er bl\"oderweise nummeriert er so durch}
 % Make sure that this listing will be modified, once the sourcecode changes!!!
 % It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
 
 \setJavaCodeListing
-\lstinputlisting[linerange={29-54}, firstnumber=29, caption=Instrumentation of the \method{getBook()} call in Bookstore.java, label=lst:cuttingBookstore]%
+\lstinputlisting[linerange={29-53}, firstnumber=29, caption=Instrumentation of the \method{getBook()} call in Bookstore.java, label=lst:cuttingBookstore]%
 {\manualInstrumentedBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/manual/Bookstore.java}
  
-\noindent The lines 38 and 40 are used to determine the current time in nanoseconds before and after the \method{getBook()} call. In lines 41 to 44, a monitoring record for this measurement is created and initialized, including the two time values. Additionally, the record has an attribute for the involved method signature (the \verb!Catalog!'s \method{getBook()} method) and a hostname. Finally the record is handed over to the monitoring controller which calls a monitoring writer to persist the record. %
+\noindent The lines 38 and 40 are used to determine the current time in nanoseconds before and after the \method{getBook()} call. In lines 42 to 48, a monitoring record for this measurement is created and initialized, passing the method signature, the hostname, and the two time values as arguments. Finally the record is handed over to the monitoring controller (line~49) which calls a monitoring writer to persist the record. %
 In this example, the filesystem writer is used---\Kieker{} uses this writer by default when no other writer is specified, %
 as detailed in Section~\ref{sec:monitoring-log-writers}. %.
 
 In addition to the instrumentation in the \class{Bookstore} class, the \method{getOffers()} method of the \class{CRM} class is instrumented as well. Similar to Listing~\ref{lst:cuttingBookstore}, measurements are taken before and after the call of the \object{catalog}'s \method{getBook()} method, as shown in %
-lines~40 and~42 of Listing~\ref{lst:cuttingCRM}. Not shown in the listing is the instantiation of the monitoring controller. However, it is done in the same way as illustrated in Listing~\ref{lst:cuttingBookstore}. %And the complete example files can be found in the samples directory.
-Finally, a record is created (see lines 43--46) and stored by calling the monitoring controller (see line 47).
+lines~42 and~44 of Listing~\ref{lst:cuttingCRM}. Not shown in the listing is the instantiation of the monitoring controller. However, it is done in the same way as illustrated in Listing~\ref{lst:cuttingBookstore}. %And the complete example files can be found in the samples directory.
+Finally, a record is created (see lines~46--52) and stored by calling the monitoring controller (see line~53).
 
 \setJavaCodeListing
-\lstinputlisting[firstline=37, firstnumber=37, lastline=48, caption=Instrumentation of the \method{getBook()} call in CRM.java, label=lst:cuttingCRM]%
+\lstinputlisting[firstline=37, firstnumber=37, lastline=54, caption=Instrumentation of the \method{getBook()} call in CRM.java, label=lst:cuttingCRM]%
 {\manualInstrumentedBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/manual/CRM.java}
 
 % \enlargethispage{0.5cm}
@@ -258,7 +258,7 @@ a semicolon instead of a colon. Also, we recommend to use the Windows shell %
 \file{cmd.exe} for this tutorial since problems have been reported for the %
 Windows PowerShell.}
 
-\pagebreak
+% \pagebreak
 
 \input{ch2-quickstart-example_Compile_Run_Example_1.inc-win}
 

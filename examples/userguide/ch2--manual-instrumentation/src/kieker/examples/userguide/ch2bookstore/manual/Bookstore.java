@@ -26,8 +26,8 @@ import kieker.monitoring.core.controller.MonitoringController;
 
 public class Bookstore {
 
-	private static final IMonitoringController MONITORING_CONTROLLER =
-		MonitoringController.getInstance();
+	private static final 
+	IMonitoringController MONITORING_CONTROLLER = MonitoringController.getInstance();
 
 	private final Catalog catalog = new Catalog();
 	private final CRM crm = new CRM(this.catalog);
@@ -36,10 +36,9 @@ public class Bookstore {
 		/* 1.) Call Catalog.getBook() and log its entry and exit timestamps.
 		 */
 		final long tin = MONITORING_CONTROLLER.getTimeSource().getTime();
-		// the actual call:
-		this.catalog.getBook(false);
-		//
+		this.catalog.getBook(false); // <-- the monitored execution
 		final long tout = MONITORING_CONTROLLER.getTimeSource().getTime();
+		
 		final OperationExecutionRecord e = new OperationExecutionRecord(
 						"public void kieker.examples.userguide.ch2bookstore.manual.getBook(boolean)",
 						OperationExecutionRecord.NO_SESSION_ID, 

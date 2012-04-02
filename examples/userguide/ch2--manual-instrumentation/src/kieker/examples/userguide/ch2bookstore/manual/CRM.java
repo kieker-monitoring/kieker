@@ -39,14 +39,17 @@ public class CRM {
 		 * Call the Catalog component's getBook() method
 		 * and log its entry and exit timestamp using Kieker.
 		 */
-		final long tin = CRM.MONITORING_CONTROLLER.getTimeSource().getTime();
-		this.catalog.getBook(false);
-		final long tout = CRM.MONITORING_CONTROLLER.getTimeSource().getTime();
-		final OperationExecutionRecord e =
-				new OperationExecutionRecord(
+		final long tin = MONITORING_CONTROLLER.getTimeSource().getTime();
+		this.catalog.getBook(false); // <-- the monitored execution
+		final long tout = MONITORING_CONTROLLER.getTimeSource().getTime();
+		
+		final OperationExecutionRecord e = new OperationExecutionRecord(
 						"public void kieker.examples.userguide.ch2bookstore.manual.getBook(boolean)",
-						OperationExecutionRecord.NO_SESSION_ID, OperationExecutionRecord.NO_TRACEID,
-						tin, tout, OperationExecutionRecord.NO_HOSTNAME, OperationExecutionRecord.NO_EOI_ESS, OperationExecutionRecord.NO_EOI_ESS);
-		CRM.MONITORING_CONTROLLER.newMonitoringRecord(e);
+						OperationExecutionRecord.NO_SESSION_ID, 
+						OperationExecutionRecord.NO_TRACEID,
+						tin, tout, "myHost", 
+						OperationExecutionRecord.NO_EOI_ESS, 
+						OperationExecutionRecord.NO_EOI_ESS);
+		MONITORING_CONTROLLER.newMonitoringRecord(e);
 	}
 }
