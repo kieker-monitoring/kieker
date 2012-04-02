@@ -7,12 +7,9 @@
 	</path>
 
 	<condition property="not-all-files-available">
-		<resourcecount property="num.requiredLibsFound" when="ne" count="4">
+		<resourcecount property="num.requiredLibsFound" when="ne" count="1">
 			<fileset dir="${lib.dir}">
 				<include name="${jar.file.kieker}" />
-				<include name="${jar.file.common}" />
-				<include name="${jar.file.ecore}" />
-				<include name="${jar.file.ecore.xmi}" />
 			</fileset>
 		</resourcecount>
 	</condition>
