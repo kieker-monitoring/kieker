@@ -20,13 +20,16 @@
 
 package kieker.monitoring.timer;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author Jan Waller
  */
 public interface ITimeSource {
 
 	/**
-	 * Returns the timestamp for the current time.
+	 * Returns the timestamp for the current time. Usually, the timestamp is assumed to
+	 * be in {@link TimeUnit#NANOSECONDS}.
 	 */
 	public long getTime();
 

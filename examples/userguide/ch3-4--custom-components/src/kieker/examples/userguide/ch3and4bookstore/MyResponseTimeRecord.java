@@ -23,18 +23,24 @@ package kieker.examples.userguide.ch3and4bookstore;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 
-public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+public class MyResponseTimeRecord extends AbstractMonitoringRecord
+			implements IMonitoringRecord.Factory {
 
 	private static final long serialVersionUID = 1775L;
 	private static final Class<?>[] TYPES = { String.class, String.class, long.class };
-	// private static final String NA_VAL = "N/A";
 
 	/* Attributes storing the actual monitoring data: */
 	public final String className;
 	public final String methodName;
 	public final long responseTimeNanos;
 
-	public MyResponseTimeRecord(final Object[] values) { // NOPMD (store values)
+	public MyResponseTimeRecord(final String clazz, final String method, final long rtNano) {
+		this.className = clazz;
+		this.methodName = method;
+		this.responseTimeNanos = rtNano;
+	}
+
+	public MyResponseTimeRecord(final Object[] values) {
 		AbstractMonitoringRecord.checkArray(values, MyResponseTimeRecord.TYPES);
 
 		this.className = (String) values[0];
@@ -43,6 +49,7 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IM
 	}
 
 	@Deprecated
+	// Will not be used because the record implements IMonitoringRecord.Factory
 	public final void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}

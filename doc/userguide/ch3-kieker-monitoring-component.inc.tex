@@ -59,8 +59,9 @@ Note, that this is not the case if monitoring is disabled or terminated (Section
 \subsection{Retrieving the Current Time and Using Custom Time Sources}\label{sec:componentsMonitoring:monitoringController:getTime}
 
 The current time is maintained by a so-called time source. The \class{MonitoringController}'s method %
-\method{getTimeSource} returns an \class{ITimeSource} object which provides a method %
-\method{getTime}. \Kieker{}'s default time source (\class{DefaultSystemTimer}) returns the current system %
+\method{getTimeSource} returns an \class{ITimeSource} whose method %
+\method{getTime} returns a timestamp in nanoseconds. \Kieker{}'s default %
+time source, \class{SystemNanoTimer}, returns the current system %
 time as the number of nanoseconds elapsed since 1 Jan 1970 00:00~UTC. %
 The easiest way to use a custom time source is to extend the \class{AbstractTimeSource} and %
 to implement the method \method{getTime()}. Custom time sources make sense, for example, %
@@ -74,7 +75,7 @@ e.g., the utilization of system resources such as CPUs. %
 For this purpose, \Kieker{} supports special monitoring probes, called samplers. %
 Samplers must implement the interface \class{ISampler} which includes a %
 single method \method{sample(IMonitoringController monitoringController)}. %
-This method is called in peridioc time steps, %
+This method is called in periodic time steps, %
 as specified by the \class{MonitoringController}'s registration function %
 \method{schedulePeriodicSampler}. Periodic samplers can be stopped by %
 calling the \class{MonitoringController}'s method \method{removeScheduledSampler}.
@@ -93,7 +94,7 @@ data, such as CPU and memory usage, are discussed in Appendix~\ref{appendix:Siga
 \pagebreak
 
 \setJavaCodeListing
-\lstinputlisting[firstline=51, lastline=58, firstnumber=51, caption=Method \method{sample} from MemSwapUsageSampler.java, label=listing:sigarSamplerMethod]{\kiekerSrcDir/monitoring/kieker/monitoring/probe/sigar/samplers/MemSwapUsageSampler.java}
+\lstinputlisting[firstline=51, lastline=64, firstnumber=51, caption=Method \method{sample} from MemSwapUsageSampler.java, label=listing:sigarSamplerMethod]{\kiekerSrcDir/monitoring/kieker/monitoring/probe/sigar/samplers/MemSwapUsageSampler.java}
 
 \subsection{Controlling the Monitoring State}\label{sec:componentsMonitoring:monitoringController:controState}
 
@@ -132,13 +133,16 @@ is probably the easiest way to get started. Figure~\ref{fig:monitoringController
 shows two screenshots of the MBean access using \class{jconsole}.
 
 In order to enable JMX MBean access to the \class{MonitoringController}, the value of the %
-configuration property \textit{kieker.monitoring.MBean} must be set to \textit{true}:\\
+configuration property \textit{kieker.monitoring.MBean} must be set to \textit{true} (listing below). %
+The \file{\monitoringPropertiesFile} includes additional JMX-related configuration properties. \\
 
 \setPropertiesListing
 \begin{lstlisting}
  # Whether the MonitoringController will be available as an MBean.
 kieker.monitoring.MBean=true
 \end{lstlisting}
+
+
 
 \section{\KiekerMonitoringPart{} Configuration}\label{sec:monitoring:configuration}
 
@@ -200,7 +204,11 @@ monitoring record types. Corresponding classes must implement the %
 interface \class{IMonitoringRecord} shown in Figure~\ref{sec:monitoringrecord:interfacesAndImplementingClasses}. %
 The methods \method{initFromArray}, \method{toArray}, \method{getValueTypes} %
 are used for serialization and deserialization of the monitoring data contained %
-in the record. The method \method{setLoggingTimestamp} is used by the monitoring controller to %
+in the record. Alternatively---in order to support the definition of immutable record types---the %
+marker interface \class{IMonitoringRecord.Factory} needs to be implemented, requiring the %
+implementation of (i)~the \method{toArray} method (as before), (ii)~a %
+constructor accepting a values array, and (iii)~a public static \method{TYPES} %
+field. The method \method{setLoggingTimestamp} is used by the monitoring controller to %
 store the date and time when a record is received by the controller. %
 The method \method{getLoggingTimestamp} can be used during analysis to retrieve %
 this value. \KiekerMonitoringPart{} provides the abstract class %
@@ -208,31 +216,40 @@ this value. \KiekerMonitoringPart{} provides the abstract class %
 which already implements the methods to maintain the logging timestamp. 
 
 \begin{figure}[h]\centering
-\includegraphics[scale=0.7]{images/kieker_MyRTRecord-modified}
-\caption{Class diagram with the \class{IMonitoringRecord} interface, the abstract %
+\includegraphics[scale=0.75]{images/kieker_MyRTRecord-modified}
+\caption{Class diagram with the \class{IMonitoringRecord} and \class{IMonitoringRecord.Factory} interfaces, the abstract %
 class \class{AbstractMonitoringRecord}, and a custom monitoring record type %
 \class{MyResponseTimeRecord}}
 \label{sec:monitoringrecord:interfacesAndImplementingClasses}
 \end{figure}
 
-\pagebreak
+% \pagebreak
 
 \noindent In order to use the abstract class for implementing your own monitoring record type, you need to:
 
 \begin{enumerate}
 \item Create a class that extends \class{AbstractMonitoringRecord}  and
-\item Override the methods \method{initFromArray}, \method{toArray}, \method{getValueTypes}.
+\begin{enumerate}
+\item Override the methods \method{initFromArray}, \method{toArray}, \method{getValueTypes}
+\item For immutable record types: additionally implement \class{IMonitoringRecord.Fac\-tory}, a constructor %
+with a single \class{Class<?>[]} argument, and a public static \method{TYPES} field. %
+In this case, \method{initFromArray} (which is not called by the framework then) should %
+throw an \class{UnsupportedOperationException}.
+\end{enumerate}
 \end{enumerate}
 
 \noindent The class \class{MyResponseTimeRecord}, shown in the class diagram in %
 Figure~\ref{sec:monitoringrecord:interfacesAndImplementingClasses} and in %
 Listing~\ref{listing:MyRecord}, is an example of a custom monitoring record type %
-that can be used to monitor response times of method executions.
+that can be used to monitor response times of method executions. %
+Implementing \class{IMonitoringRecord.Factory}, \class{MyResponseTimeRecord} is %
+an immutable type, i.e., it includes only final fields. %
+
 
 \setJavaCodeListing
-\lstinputlisting[caption=MyResponseTimeRecord.java, label=listing:MyRecord,firstline=21,firstnumber=21]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeRecord.java}
+\lstinputlisting[caption=MyResponseTimeRecord.java, label=listing:MyRecord,firstline=26,firstnumber=26]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeRecord.java}
 
-\pagebreak
+% \pagebreak
 
 \section{Monitoring Probes}\label{sec:monitoring:probe}
 
