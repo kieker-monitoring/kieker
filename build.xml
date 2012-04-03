@@ -13,8 +13,8 @@
 		<property name="copyright" value="the Kieker Project" />
 		<property name="dist.kieker.monitoring.servlet.war" value="${kieker.monitoring.servlet.packagenamebase}-${kieker.version}.war" />
 		<property name="dist.kieker.main.jar" value="${kieker.main.packagenamebase}-${kieker.version}.jar" />
-		<property name="dist.kieker.main.aspectj.jar" value="${kieker.main.packagenamebase}-weaver-${kieker.version}.jar" />
-		<property name="dist.kieker.main.emf.jar" value="${kieker.main.packagenamebase}-analysis-${kieker.version}.jar" />
+		<property name="dist.kieker.main.aspectj.jar" value="${kieker.main.packagenamebase}-${kieker.version}_aspectj.jar" />
+		<property name="dist.kieker.main.emf.jar" value="${kieker.main.packagenamebase}-${kieker.version}_emf.jar" />
 
 		<property name="kieker.dist.name" value="${kieker.packagenamebase}-${kieker.version}" />
 		<property name="dist.kieker.srcBaseName" value="${kieker.dist.name}_${kieker-src.suffix}" />
@@ -201,7 +201,7 @@
 			<include name="aspectjweaver-*.jar" />
 		</fileset>
 		<pathconvert property="aspectjweaver-jar" refid="aspectjweaver-jar-set" />
-		<jar destfile="${dist.dir}/${dist.kieker.main.aspectj.jar}" filesetmanifest="merge" index="true">
+		<jar destfile="${dist.dir}/${dist.kieker.main.aspectj.jar}" duplicate="fail" filesetmanifest="merge" index="true">
 			<!--  indexMetaInf="true" flattenAttributes="true" -->
 			<zipfileset src="${dist.dir}/${dist.kieker.main.jar}" />
 			<zipfileset src="${aspectjweaver-jar}" />
@@ -226,12 +226,46 @@
 			<include name="org.eclipse.emf.ecore-*.jar" />
 		</fileset>
 		<pathconvert property="org.eclipse.emf.ecore-jar" refid="org.eclipse.emf.ecore-jar-set" />
-		<jar destfile="${dist.dir}/${dist.kieker.main.emf.jar}" filesetmanifest="merge" index="true">
+		<jar destfile="${dist.dir}/${dist.kieker.main.emf.jar}" duplicate="fail" filesetmanifest="skip" index="true">
 			<!--  indexMetaInf="true" flattenAttributes="true" -->
+			<manifest> <!-- would be better to take it from the jar, but somehow doesn't work -->
+				<section name="kieker">
+					<attribute name="Specification-Title" value="${kieker.name}" />
+					<attribute name="Specification-Version" value="${kieker.version}" />
+					<attribute name="Specification-Vendor" value="${copyright}" />
+					<attribute name="Implementation-Title" value="${kieker.name}" />
+					<attribute name="Implementation-Version" value="${kieker.version} (${TODAY})" />
+					<attribute name="Implementation-Vendor" value="${copyright}" />
+				</section>
+			</manifest>
 			<zipfileset src="${dist.dir}/${dist.kieker.main.jar}" />
-			<zipfileset excludes="META-INF/**/*" src="${org.eclipse.emf.common-jar}" />
-			<zipfileset excludes="META-INF/**/*" src="${org.eclipse.emf.ecore.xmi-jar}" />
-			<zipfileset excludes="META-INF/**/*" src="${org.eclipse.emf.ecore-jar}" />
+			<zipfileset src="${org.eclipse.emf.common-jar}">
+				<exclude name="META-INF/*.RSA" />
+				<exclude name="META-INF/*.SF" />
+				<exclude name="META-INF/eclipse.inf" />
+				<exclude name="plugin.*" />
+				<exclude name="about.*" />
+				<exclude name="modeling32.png" />
+			</zipfileset>
+			<zipfileset src="${org.eclipse.emf.ecore.xmi-jar}">
+				<exclude name="META-INF/*.RSA" />
+				<exclude name="META-INF/*.SF" />
+				<exclude name="META-INF/eclipse.inf" />
+				<exclude name="plugin.*" />
+				<exclude name="about.*" />
+				<exclude name="modeling32.png" />
+			</zipfileset>
+			<zipfileset src="${org.eclipse.emf.ecore-jar}">
+				<exclude name="META-INF/*.RSA" />
+				<exclude name="META-INF/*.SF" />
+				<exclude name="META-INF/eclipse.inf" />
+				<exclude name="plugin.*" />
+				<exclude name="about.*" />
+				<exclude name="modeling32.png" />
+			</zipfileset>
+			<zipfileset src="${org.eclipse.emf.common-jar}" fullpath="org.eclipse.emf.common-about.html" includes="about.html" />
+			<zipfileset src="${org.eclipse.emf.ecore.xmi-jar}" fullpath="org.eclipse.emf.ecore.xmi-about.html" includes="about.html" />
+			<zipfileset src="${org.eclipse.emf.ecore-jar}" fullpath="org.eclipse.emf.ecore-about.html" includes="about.html" />
 			<fileset dir="${lib.dir}" includes="org.eclipse.emf.*.LICENSE" />
 		</jar>
 	</target>
