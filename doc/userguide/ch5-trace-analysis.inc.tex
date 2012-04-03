@@ -77,7 +77,7 @@ annotation \class{@OperationExecutionMonitoringProbe}. %
 This section demonstrates how to use the AspectJ-based probes to monitor %
 traces based on the Bookstore application from Chapter~\ref{chap:example}. %
 
-\enlargethispage{1.5cm}
+\enlargethispage{1.0cm}
 
 \NOTIFYBOX{The Java sources of the example presented in %
 this section, as well as a pre-compiled binary, can be found in the %
@@ -113,12 +113,10 @@ binary release.}
 .4 \DirInDirTree{build/}\DTcomment{Directory for the Java class files}.
 .5 \DirInDirTree{META-INF/}.
 .4 \DirInDirTree{META-INF/} \DTcomment{Directory for the configuration files}.
-.5 \aopConfigFile.
+.5 \newFileDirInDirTree{\aopConfigFile}.
 .5 \kiekerMonitoringProperties{}. 
 .4 \DirInDirTree{lib/} \DTcomment{Directory for the needed libraries}.
-.5 \mainJar.
-.5 \commonsLoggingJar.
-.5 \aspectJWeaverJar.  
+.5 \newFileDirInDirTree{\mainJarWeaver}.
 .4 \DirInDirTree{src/}\DTcomment{Directory for the source code files}.
 .5 \DirInDirTree{bookstoreTracing/}.
 .6 Bookstore.java.
@@ -132,7 +130,14 @@ binary release.}
 \label{fig:bookstoreAOP:dirStructure}
 \end{figure}
 
-Figure~\ref{fig:bookstoreAOP:dirStructure} shows the directory used by the example of this section. The jar-file \file{aspectjweaver-1.6.11.jar} is included in the \dir{lib/} directory of the \Kieker{} binary release. Its \dir{META-INF/} directory contains an example \file{\aopConfigFile}. The library \file{aspectjweaver-1.6.11.jar} contains the \textit{AspectJ weaver} which is registered with the JVM and weaves the monitoring instrumentation into the Java classes. It will be configured based on the configuration file \file{\file{\aopConfigFile}}.
+Figure~\ref{fig:bookstoreAOP:dirStructure} shows the directory used by the example of this section. %
+The jar-file \file{\mainJarWeaver} already includes the \textit{AspectJ weaver}, %
+which is registered with the JVM and weaves the monitoring instrumentation into %
+the Java classes. It will be configured based on the configuration file %
+\file{\file{\aopConfigFile}}, for which a working sample file is provided in the %
+example's \dir{META-INF/} directory. Instead of registering the \file{\mainJarWeaver} %
+as an agent to the JVM, the \file{\aspectJWeaverJar} can be used. In this case, %
+the \file{\mainJar} needs to be added to the classpath.
 
 Once the necessary files have been copied to the example directory, the source code can be instrumented with the annotation 
 \class{OperationExecutionMonitoringProbe}. Listing~\ref{lst:BookstoreAspectJ} shows how the annotation is used.
@@ -147,10 +152,10 @@ The \file{\aopConfigFile} file has to be modified to specify the classes to be c
 \setXMLListing
 \lstinputlisting[caption=aop.xml, label=lst:aopConfigFileAnnotations]{\aspectJBookstoreApplicationDir/META-INF/aop.xml}
 
-\noindent Line~5 tells the AspectJ weaver to consider all classes inside the package %
-\class{bookstoreTracing}. AspectJ allows to use wild-cards for the definition of classes to %
+\noindent Line~5 tells the AspectJ weaver to consider all classes inside the example package. %
+AspectJ allows to use wild-cards for the definition of classes to %
 include---e.g., \lstinline$<include within="bookstoreTracing.Bookstore*"/>$ to weave all %
-classes in this package with the prefix \class{Bookstore}. 
+classes with the prefix \class{Bookstore} located in a package \class{bookstoreTracing}. 
 
 Line~9 specifies the aspect to be woven into the classes. In this case, the \Kieker{} %
 probe \class{OperationExecutionAspectAnnotation} is used. It requires that %
@@ -164,7 +169,7 @@ Bookstore application. The \file{\aopConfigFile} must be located in a %
 The AspectJ weaver has to be loaded as a so-called Java-agent. It weaves the %
 monitoring aspect into the byte code of the Bookstore application. %
 Additionally, a \file{\kiekerMonitoringProperties{}} is copied to the \dir{META-INF/} directory. %
-The configuration may be adjusted as desired (see Section~\ref{sec:monitoring:configuration}).
+This configuration file may be adjusted as desired (see Section~\ref{sec:monitoring:configuration}).
 
 \
 
@@ -178,6 +183,8 @@ the same way as mentioned in Section~\ref{sec:example:monitoring} including the 
 additional trace information. An example log of a complete run can be found in %
 Appendix~\ref{sec:appendix:exampleConsoleOutputs:aspectJExample}.
 
+\enlargethispage{0.5cm}
+
 \paragraph*{Instrumentation without annoations}%\label{sec:aspectJ:fullweaving}
 
 AspectJ-based instrumentation without using annotations is quite simple. It is %
@@ -185,7 +192,7 @@ only necessary to modify the file \file{\aopConfigFile{}}, as shown %
 in Listing~\ref{lst:aopConfigFileFull}.
 
 \setXMLListing
-\lstinputlisting[caption=aop.xml, label=lst:aopConfigFileFull]{ch5-trace-analysis_FullMonitoring-aop.xml}
+\lstinputlisting[caption=aop.xml, label=lst:aopConfigFileFull]{\aspectJBookstoreApplicationDir/META-INF/aop-full.xml}
 
 \noindent The alternative aspect \class{OperationExecutionAspectFull} is being %
 activated in line~9. As indicated by its name, this aspect makes sure that every %
@@ -210,27 +217,26 @@ classname in the \lstinline{include} directives of the \aopConfigFile{}.}
 The Java Servlet API~\cite{JavaServletTechnology-WebSite} includes the %
 \class{javax.servlet.Filter} interface. It can be used to implement %
 interceptors for incoming HTTP requests. %
-\Kieker{} includes the probes %
-\class{OperationExecutionRegistrationFilter} and %
-\class{OperationExecutionRegistrationAndLoggingFilter} which implement the %
+\Kieker{} includes the probe %
+\class{SessionAndTraceRegistrationFilter} which implements the %
 \class{javax.servlet.Filter} interface. %
-Both initialize the session and trace information for incoming requests. %
-The latter additionally creates an \class{OperationExecutionRecord} for each %
+It initializes the session and trace information for incoming requests. %
+If desired, it additionally creates an \class{OperationExecutionRecord} for each %
 invocation of the filter and passes it to the \class{MonitoringController}.
 
 % \enlargethispage{1.5cm}
 
 Listing~\ref{lst:OperationExecutionRegistrationAndLoggingFilterInWebXML} %
-demonstrates how to integrate the \class{OperationExecutionRegistrationAndLoggingFilter} %
+demonstrates how to integrate the \class{SessionAndTraceRegistrationFilter} %
 in the \file{web.xml} file of a web application. 
 
 The Java~EE Servlet container example described in Appendix~\label{appendix:JavaEEServletExample} employs the %
-\class{OperationExecutionRegistrationAndLoggingFilter}.
+\class{SessionAndTraceRegistrationFilter}.
 
 \pagebreak
 
 \setXMLListing
-\lstinputlisting[xleftmargin=0mm,firstline=31,lastline=39,numbers=none,%
+\lstinputlisting[xleftmargin=0mm,firstline=32,lastline=39,numbers=none,%
 caption=\class{OperationExecutionRegistrationAndLoggingFilter} in a \file{web.xml} file,%
 label=lst:OperationExecutionRegistrationAndLoggingFilterInWebXML]%
 {\JavaEEServletExampleDir/JPetStore-5.0-instrumented/web/WEB-INF/web.xml}
@@ -249,7 +255,8 @@ executions as well as corresponding trace and session information. %
 The \class{OperationExecutionWebRequestRegistrationInterceptor} intercepts %
 incoming Web requests and initializes the trace and session data for this %
 trace. If you are not using the \class{OperationExecutionWebRequestRegistrationInterceptor}, %
-it is important to use one of the previously described Servlet filters %
+you should use one of the previously described Servlet filters to register %
+session information for incoming requests %
 (Section~\ref{sec:traceAnalysis:instr:servlet}).
 
 See the Spring documentation for instructions how to add the interceptors %
