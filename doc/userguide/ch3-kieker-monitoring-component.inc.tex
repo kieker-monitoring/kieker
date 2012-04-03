@@ -304,7 +304,11 @@ threads that decouple the I/O operations from the control flow of the %
 instrumented application. % 
 The \class{AsyncFsWriter} is the default writer which has already been used in %
 Section~\ref{sec:example:monitoring}. %
-Currently, the database writer only supports the record type \class{OperationExecutionRecord}. %
+Please note that the database writers are currently in a prototype stage and 
+that they should not be used in production environments. %
+The \class{StreamWriter} simply sends the String representation of incoming %
+records to the standard output or standard error streams, which can be helpful %
+for debugging purposes. 
 
 The \class{AsyncJMSWriter} and \class{JMXWriter} write records to a JMS %
 (Java Messaging Service~\cite{JMS-WebSite}) queue and JMX (Java Management %
@@ -330,20 +334,19 @@ write the given records into a buffer located in the memory. The source code of 
 the class \class{MyPipe} is listed in Appendix~\ref{appendix:pipeListings}. %
 
 \setJavaCodeListing
-\lstinputlisting[caption=MyPipeWriter.java, label=listing:MyWriter,float,firstline=21,firstnumber=21]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeWriter.java}
+\lstinputlisting[caption=MyPipeWriter.java, label=listing:MyWriter,float,firstline=27,firstnumber=27]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeWriter.java}
 
-\noindent The monitoring writer to be used is selected and configured by the \KiekerMonitoringPart{} %
-configuration properties (Section~\ref{chap:componentsMonitoring}) %
-\textit{monitoringDataWriter} and \textit{monitoringDataWriterInitString}. %
+\noindent The monitoring writer to be used is selected by the %
+\KiekerMonitoringPart{} configuration property (Section~\ref{chap:componentsMonitoring}) %
+\textit{kieker.monitoring.writer}. Writer-specific configuration properties %
+can be provided by properties prefixed by the fully-qualified writer classname.  %
 Listing~\ref{lst:monitoringwriter:MyWriter} demonstrates how to use the custom %
 writer \class{MyPipeWriter} defined above. In this example, the pipe name is %
-passed as the property value \textit{monitoringDataWriterInitString}.
+passed as the property value \textit{pipeName}.
 
-\setBashListing       
-\begin{lstlisting}[label=lst:monitoringwriter:MyWriter]
-monitoringDataWriter=bookstoreApplication.MyPipeWriter
-monitoringDataWriterInitString=pipeName=somePipe
-\end{lstlisting}
+\setPropertiesListing  
+\lstinputlisting[caption={Configuration of the custom writer \class{MyPipeWriter}},label=lst:monitoringwriter:MyWriter,firstline=70,firstnumber=70,lastline=75]%
+{\customComponentsBookstoreApplicationDir/META-INF/kieker.monitoring.properties}
 
 \enlargethispage{1cm}
 
