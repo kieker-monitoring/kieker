@@ -12,10 +12,12 @@
 		<property name="year" value="2012" />
 		<property name="copyright" value="the Kieker Project" />
 		<property name="dist.kieker.monitoring.servlet.war" value="${kieker.monitoring.servlet.packagenamebase}-${kieker.version}.war" />
+		
 		<property name="dist.kieker.main.jar" value="${kieker.main.packagenamebase}-${kieker.version}.jar" />
 		<property name="dist.kieker.main.aspectj.jar" value="${kieker.main.packagenamebase}-${kieker.version}_aspectj.jar" />
+		<property name="dist.kieker.main.aspectj.jar.latex" value="${kieker.main.packagenamebase}-${kieker.version}\\\\\\_aspectj.jar" />
 		<property name="dist.kieker.main.emf.jar" value="${kieker.main.packagenamebase}-${kieker.version}_emf.jar" />
-
+		<property name="dist.kieker.main.emf.jar.latex" value="${kieker.main.packagenamebase}-${kieker.version}\\\\\\_emf.jar" />
 		<property name="kieker.dist.name" value="${kieker.packagenamebase}-${kieker.version}" />
 		<property name="dist.kieker.srcBaseName" value="${kieker.dist.name}_${kieker-src.suffix}" />
 		<property name="dist.kieker.binBaseName" value="${kieker.dist.name}_${kieker-bin.suffix}" />
@@ -562,6 +564,13 @@
 		</ant>
 	</target>
 
+	<target name="update-version-ug" depends="-init-version" description="Updates the Kieker version in the examples (e.g., in the .classpath files)">
+		<replaceregexp file="${src.userguide.dir}/Macros.tex" match="newcommand\{\\version\}\{.*\}" replace="newcommand\{\\\\\\version\}\{${kieker.version}\}" flags="g" />
+		<replaceregexp file="${src.userguide.dir}/Macros.tex" match="newcommand\{\\mainJar\}\{.*\}" replace="newcommand\{\\\\\\mainJar\}\{${dist.kieker.main.jar}\}" flags="g" />
+		<replaceregexp file="${src.userguide.dir}/Macros.tex" match="newcommand\{\\mainJarEMF\}\{.*\}" replace="newcommand\{\\\\\\mainJarEMF\}\{${dist.kieker.main.emf.jar.latex}\}" flags="g" />
+		<replaceregexp file="${src.userguide.dir}/Macros.tex" match="newcommand\{\\mainJarWeaver\}\{.*\}" replace="newcommand\{\\\\\\mainJarWeaver\}\{${dist.kieker.main.aspectj.jar.latex}\}" flags="g" />
+	</target>
+	
 	<target name="-update-version.examples" depends="-init-version" description="Updates the Kieker version in the examples (e.g., in the .classpath files)">
 		<replaceregexp file="${src.userguide.example.bookstore.dir}/.classpath" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />
 		<replaceregexp file="${src.userguide.example.bookstore.dir}/README.txt" match="kieker-.*.jar" replace="${dist.kieker.main.jar}" flags="g" />

@@ -2,24 +2,26 @@
 \newcommand{\Kieker}{\textsf{Kieker}}
 
 % The current version-string.
-\newcommand{\version}{1.5-SNAPSHOT} % 
+\newcommand{\version}{1.5-SNAPSHOT} % will be set automatically by ant 'release' target 
 
 % The single parts of Kieker and some files.
 \newcommand{\KiekerMonitoringPart}{\textsf{Kieker.\-Monitoring}}
 \newcommand{\KiekerAnalysisPart}{\textsf{Kieker.\-Analysis}}
 \newcommand{\KiekerTraceAnalysis}{\textsf{Kieker.Trace\-Analysis}}
 % \newcommand{\analysisJar}{kieker-analysis-\version.jar}
-\newcommand{\mainJar}{kieker-\version.jar}
+\newcommand{\mainJar}{kieker-1.5-SNAPSHOT.jar} % will be set automatically by ant 'release' target
+\newcommand{\mainJarEMF}{kieker-1.5-SNAPSHOT\_emf.jar} % will be set automatically by ant 'release' target
+\newcommand{\mainJarWeaver}{kieker-1.5-SNAPSHOT\_weaver.jar} % will be set automatically by ant 'release' target
 \newcommand{\servletWar}{kieker-monitoring-servlet-\version.war}
 % \newcommand{\monitoringJar}{kieker-monitoring-\version.jar}
 % \newcommand{\commonJar}{kieker-common-\version.jar}
 % \newcommand{\toolsJar}{kieker-tools-\version.jar}
 \newcommand{\commonsLoggingJar}{commons-logging-1.1.1.jar}
-\newcommand{\aspectJWeaverJar}{aspectjweaver-1.6.11.jar}
+\newcommand{\aspectJWeaverJar}{aspectjweaver-1.6.12.jar}
 \newcommand{\monitoringPropertiesFile}{kieker.\-monitoring.\-pro\-per\-ties}
 \newcommand{\analysisPropertiesFile}{kieker.analysis.properties}
 \newcommand{\logFourJPropertiesFile}{log4j.properties}
-\newcommand{\sigarJar}{sigar-1.6.3.jar}
+\newcommand{\sigarJar}{sigar-1.6.4.jar}
 
 \newcommand{\aopConfigFile}{aop.xml}
 \newcommand{\binaryFileForDownload}{kieker-\version{}\_bina\-ries.zip}

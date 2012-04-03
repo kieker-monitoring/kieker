@@ -319,7 +319,13 @@ analyzed with \KiekerAnalysisPart{}. %
 % The second step is to write a suitable analyzer. And finally the analyzer is used to aggregate the information in a sensible way.
 For this quick example guide, the analysis tool is very simple and does not show %
 the full potential of \Kieker{}. For more detail read Chapter~\ref{chap:aspectJ} %
-which uses \KiekerTraceAnalysis{}.
+which uses \KiekerTraceAnalysis{}. %
+\KiekerAnalysisPart{} has a dependency to the Eclipse Modeling Framework~(EMF).%
+\footnote{\url{http://www.eclipse.org/modeling/emf/}} %
+For this reason, we are using the \file{\mainJarEMF{}} that is a variant of %
+the \file{\mainJar{}}, additionally including the required EMF dependencies. % 
+When using the \file{\mainJar{}}, the \file{org.eclipse.emf.\-*.jar} files (to %
+be found in \Kieker's \file{lib/} directory) need to be added to the classpath. %
 
 \begin{figure}[H]
 \begin{graybox}
@@ -328,9 +334,8 @@ which uses \KiekerTraceAnalysis{}.
 .2 \DirInDirTree{userguide/}.
 .3 \DirInDirTree{ch2--manual-instrumentation/}.
 .4 \DirInDirTree{build/}\DTcomment{Directory for the Java class files}. 
-.4 \DirInDirTree{lib/}\DTcomment{Directory for the required libraries}.
-.5 \ldots. 
-.5 \mainJar.
+.4 \newFileDirInDirTree{\DirInDirTree{lib/}}\DTcomment{Directory for the required libraries}.
+.5 \newFileDirInDirTree{\mainJarEMF}.
 .4 \DirInDirTree{src/}\DTcomment{The directory for the source code files}.
 .5 \DirInDirTree{bookstoreApplication/}.
 .6 \ldots. 

@@ -23,7 +23,7 @@ Writer: 'kieker.monitoring.writer.filesystem.AsyncFsWriter'
                 kieker.monitoring.writer.filesystem.AsyncFsWriter.maxEntriesInFile='25000'
         Records lost: 0
         Writer Threads (1): 
-                Finished: 'false'; Writing to Directory: '/tmp/kieker-20120402-163314855-UTC-myHost0-KIEKER-SINGLETON'
+                Finished: 'false'; Writing to Directory: '/tmp/kieker-20120402-163314855-UTC-myHost-KIEKER-SINGLETON'
 Sampling Controller: Periodic Sensor available: Current Poolsize: '0'; Scheduled Tasks: '0'
 
 Bookstore.main: Starting request 0
