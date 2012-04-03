@@ -25,22 +25,22 @@ import kieker.monitoring.core.controller.MonitoringController;
 
 public class Bookstore {
 
-	private static final IMonitoringController MONITORING_CONTROLLER = MonitoringController.getInstance();
+	private static final IMonitoringController MONITORING_CONTROLLER =
+			MonitoringController.getInstance();
 
 	private final Catalog catalog = new Catalog();
 	private final CRM crm = new CRM(this.catalog);
 
 	public void searchBook() {
 		{ /* 1. Invoke catalog.getBook() and monitor response time */
-			final long tin =
-					Bookstore.MONITORING_CONTROLLER.getTimeSource().getTime();
+			final long tin = MONITORING_CONTROLLER.getTimeSource().getTime();
 			this.catalog.getBook(false);
-			final long tout =
-					Bookstore.MONITORING_CONTROLLER.getTimeSource().getTime();
+			final long tout = MONITORING_CONTROLLER.getTimeSource().getTime();
 			/* Create a new record and set values */
-			final MyResponseTimeRecord e = new MyResponseTimeRecord(new Object[] { "mySimpleKiekerExample.bookstoreTracing.Catalog", "getBook(..)", tout - tin });
+			final MyResponseTimeRecord e = new MyResponseTimeRecord(
+					"mySimpleKiekerExample.bookstoreTracing.Catalog", "getBook(..)", tout - tin);
 			/* Pass the record to the monitoring controller */
-			Bookstore.MONITORING_CONTROLLER.newMonitoringRecord(e);
+			MONITORING_CONTROLLER.newMonitoringRecord(e);
 		}
 
 		{ /* 2. Invoke crm.getOffers() (without monitoring) */
