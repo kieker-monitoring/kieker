@@ -55,10 +55,13 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 	private static final ITimeSource TIMESOURCE = CONTROLLER.getTimeSource();
 	private static final String VM_NAME = CONTROLLER.getHostname();
 
+	public OperationExecutionMethodInvocationInterceptor() {
+		// empty default constructor
+	}
+
 	/**
 	 * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
 	 */
-
 	public Object invoke(final MethodInvocation invocation) throws Throwable { // NOCS (IllegalThrowsCheck)
 		final long traceId = CF_REGISTRY.recallThreadLocalTraceId(); // -1 if entry point
 		// Only go on if a traceId has been registered before

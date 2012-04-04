@@ -40,8 +40,6 @@ import kieker.common.record.misc.EmptyRecord;
 @Plugin(outputPorts = @OutputPort(name = FSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader"))
 public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 
-	private static final Log LOG = LogFactory.getLog(FSReader.class);
-
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 
 	public static final String CONFIG_PROPERTY_NAME_INPUTDIRS = "inputDirs";
@@ -50,6 +48,8 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	public static final String CONFIG_PROPERTY_VALUE_IGNORE_UNKNOWN_RECORD_TYPES_DEFAULT = Boolean.FALSE.toString();
 
 	public static final IMonitoringRecord EOF = new EmptyRecord();
+
+	private static final Log LOG = LogFactory.getLog(FSReader.class);
 
 	private final boolean ignoreUnknownRecordTypes;
 
@@ -135,6 +135,9 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	}
 }
 
+/**
+ * @author Andre van Hoorn, Jan Waller
+ */
 interface IMonitoringRecordReceiver {
 	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
 }

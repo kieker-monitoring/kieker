@@ -78,12 +78,12 @@ public class DbReader extends AbstractReaderPlugin {
 			try {
 				getIndexTable = connection.createStatement();
 				ResultSet indexTable = null;
-				try {
+				try { // NOCS (nested try)
 					indexTable = getIndexTable.executeQuery("SELECT * from " + this.tablePrefix);
 					while (this.running && indexTable.next()) {
 						final String tablename = indexTable.getString(1);
 						final String classname = indexTable.getString(2);
-						try {
+						try { // NOCS (nested try)
 							this.table2record(connection, tablename, AbstractMonitoringRecord.classForName(classname));
 						} catch (final MonitoringRecordException ex) {
 							// log error but continue with next table

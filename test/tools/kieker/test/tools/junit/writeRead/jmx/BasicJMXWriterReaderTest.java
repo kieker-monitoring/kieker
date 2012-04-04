@@ -46,7 +46,7 @@ import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 /**
  * @author Jan Waller
  */
-public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPMD (TestClassWithoutTestCases)
+public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPMD NOCS (TestClassWithoutTestCases)
 
 	private static final String DOMAIN = "kieker.monitoring";
 	private static final String CONTROLLER = "MonitoringController";

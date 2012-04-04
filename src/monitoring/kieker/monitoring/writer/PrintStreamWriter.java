@@ -39,9 +39,9 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 	private static final Log LOG = LogFactory.getLog(PrintStreamWriter.class);
 
 	private static final String PREFIX = PrintStreamWriter.class.getName() + ".";
-	public static final String STREAM = PREFIX + "Stream";
-	public static final String CONFIG_STREAM_STDOUT = "STDOUT";
-	public static final String CONFIG_STREAM_STDERR = "STDERR";
+	public static final String STREAM = PREFIX + "Stream"; // NOCS (decl. order)
+	public static final String CONFIG_STREAM_STDOUT = "STDOUT"; // NOCS (decl. order)
+	public static final String CONFIG_STREAM_STDERR = "STDERR"; // NOCS (decl. order)
 
 	private static final String ENCODING = "UTF-8";
 

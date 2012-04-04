@@ -37,11 +37,9 @@ import kieker.tools.traceAnalysis.filter.flow.EventRecordTraceGenerationFilter;
 import org.junit.Test;
 
 /**
- * 
  * @author Andre van Hoorn
- * 
  */
-public class TestEventRecordTraceGenerationFilter {
+public class TestEventRecordTraceGenerationFilter { // NOCS (test class without constructor)
 
 	// TODO: Continue this test in terms of timing constellations
 
@@ -62,8 +60,8 @@ public class TestEventRecordTraceGenerationFilter {
 
 	@Test
 	public void testTraceShorterThanMaxDurationPasses() throws IllegalStateException, AnalysisConfigurationException {
-		final long traceId = 978668l;
-		final long startTime = 86756587l;
+		final long traceId = 978668L;
+		final long startTime = 86756587L;
 
 		final EventRecordTrace bookstoreTrace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(startTime, traceId,
 				TestEventRecordTraceGenerationFilter.SESSION_ID, TestEventRecordTraceGenerationFilter.HOSTNAME);

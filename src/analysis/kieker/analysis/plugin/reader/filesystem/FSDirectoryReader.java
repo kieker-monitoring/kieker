@@ -57,11 +57,12 @@ final class FSDirectoryReader implements Runnable {
 
 	private static final String ENCODING = "UTF-8";
 
+	String filePrefix = NORMAL_FILE_PREFIX; // NOPMD NOCS (package visible for inner class)
+
 	private final Map<Integer, String> stringRegistry = new HashMap<Integer, String>(); // NOPMD (no synchronization needed)
 	// This set of classes is used to filter only records of a specific type. The value null means all record types are read.
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final File inputDir;
-	String filePrefix = NORMAL_FILE_PREFIX; // NOPMD (package visible for inner class)
 	private boolean terminated = false;
 
 	private final boolean ignoreUnknownRecordTypes;
@@ -223,7 +224,7 @@ final class FSDirectoryReader implements Runnable {
 							continue; // skip this record
 						}
 						Class<? extends IMonitoringRecord> clazz = null;
-						try {
+						try { // NOCS (nested try)
 							clazz = AbstractMonitoringRecord.classForName(classname);
 						} catch (final MonitoringRecordException ex) { // NOPMD (ExceptionAsFlowControl); need this to distinguish error by
 																		// abortDueToUnknownRecordType

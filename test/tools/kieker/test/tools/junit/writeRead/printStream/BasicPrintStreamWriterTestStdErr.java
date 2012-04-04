@@ -39,7 +39,7 @@ import org.junit.Before;
  * @author Andre van Hoorn
  * 
  */
-public class BasicPrintStreamWriterTestStdErr extends AbstractPrintStreamWriterTest {
+public class BasicPrintStreamWriterTestStdErr extends AbstractPrintStreamWriterTest { // NOCS (test class without constructor)
 	private volatile PrintStream originalPrintStream = null;
 
 	private volatile StringTeePrintStream stringTeePrintStream = null;

@@ -24,6 +24,9 @@ import java.util.concurrent.CountDownLatch;
 
 import kieker.evaluation.monitoredApplication.MonitoredClass;
 
+/**
+ * @author Jan Waller
+ */
 public final class BenchmarkingThread extends Thread {
 
 	private final MonitoredClass mc;

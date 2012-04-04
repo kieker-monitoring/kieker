@@ -53,15 +53,17 @@ import kieker.monitoring.timer.SystemNanoTimer;
 @Plugin
 public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 	public static final String INPUT_PORT_NAME_MONITORING_RECORDS = "monitoringRecords";
-	private static final Log LOG = LogFactory.getLog(RealtimeReplayDistributor.class);
 
 	public static final String CONFIG_PROPERTY_NAME_NUM_WORKERS = "numWorkers";
+
+	private static final Log LOG = LogFactory.getLog(RealtimeReplayDistributor.class);
 
 	private static final ITimeSource TIMESOURCE = SystemNanoTimer.getInstance();
 	private static final int QUEUE_SIZE_FACTOR = 1000;
 	private static final int MILLISECOND = 1000 * 1000;
 	private static final int REPLAY_OFFSET = 2 * 1000 * MILLISECOND;
 
+	CountDownLatch terminationLatch; // NOPMD NOCS (package visible for inner class)
 	private final int numWorkers;
 	private AbstractFilterPlugin cons;
 	private String constInputPortName;
@@ -72,7 +74,6 @@ public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 	private long lTime;
 	private int active; // no need for voaltile, always within synchronized
 	private final int maxQueueSize;
-	CountDownLatch terminationLatch; // NOPMD (package visible for inner class)
 	private AnalysisController controller;
 
 	/**

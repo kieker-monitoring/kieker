@@ -75,11 +75,12 @@ public final class KaxViz extends JFrame {
 	private static final int FILTER_WIDTH = 200;
 	private static final int FILTER_SPACE = 30;
 
+	final transient mxGraph graph; // NOPMD NOCS (package visible for inner class)
+
 	private final transient AnalysisController analysisController;
-	final transient mxGraph graph; // NOPMD (package visible for inner class)
 
 	public KaxViz(final String filename, final AnalysisController analysisController, final String outFilename) {
-		super(analysisController.getProjectName() + " (" + filename + ((null != outFilename) ? " -> " + outFilename : "") + ")");
+		super(analysisController.getProjectName() + " (" + filename + ((null != outFilename) ? " -> " + outFilename : "") + ")"); // NOCS
 		this.analysisController = analysisController;
 
 		// // Menu
@@ -112,41 +113,41 @@ public final class KaxViz extends JFrame {
 		}
 
 		// setup basic graph
-		final mxGraph graph = new mxGraph();
+		this.graph = new mxGraph();
 		// graph.setGridEnabled(true); // true
 		// graph.setGridSize(10); // 10
 		// graph.setDefaultOverlap(0.5); // 0.5
 		// graph.setDefaultParent(null); // null
 		// graph.setAlternateEdgeStyle(null); // null
 		// graph.setEnabled(true); // true
-		graph.setCellsLocked(false); // true
-		graph.setCellsEditable(false); // true
-		graph.setCellsResizable(false); // true
+		this.graph.setCellsLocked(false); // true
+		this.graph.setCellsEditable(false); // true
+		this.graph.setCellsResizable(false); // true
 		// graph.setCellsMovable(true); // true
 		// graph.setCellsBendable(true); // true
 		// graph.setCellsSelectable(true); // true
-		graph.setCellsDeletable(false); // true
-		graph.setCellsCloneable(false); // true
-		graph.setCellsDisconnectable(false); // true
+		this.graph.setCellsDeletable(false); // true
+		this.graph.setCellsCloneable(false); // true
+		this.graph.setCellsDisconnectable(false); // true
 		// graph.setLabelsClipped(false); // false
 		// graph.setEdgeLabelsMovable(true); // true
 		// graph.setVertexLabelsMovable(false); // false
-		graph.setDropEnabled(false); // true
-		graph.setSplitEnabled(false); // true
+		this.graph.setDropEnabled(false); // true
+		this.graph.setSplitEnabled(false); // true
 		// graph.setAutoSizeCells(false); // false
 		// graph.setMaximumGraphBounds(null); // null
 		// graph.setMinimumGraphSize(null); // null
 		// graph.setBorder(0); // 0
-		graph.setKeepEdgesInForeground(true); // false
-		graph.setCollapseToPreferredSize(false); // true
-		graph.setAllowNegativeCoordinates(false); // true
+		this.graph.setKeepEdgesInForeground(true); // false
+		this.graph.setCollapseToPreferredSize(false); // true
+		this.graph.setAllowNegativeCoordinates(false); // true
 		// graph.setConstrainChildren(true); // true
-		graph.setExtendParents(false); // true
-		graph.setExtendParentsOnAdd(false); // true
+		this.graph.setExtendParents(false); // true
+		this.graph.setExtendParentsOnAdd(false); // true
 		// graph.setResetViewOnRootChange(true); // true
 		// graph.setResetEdgesOnResize(false); // false
 		// graph.setResetEdgesOnMove(false); // false
-		graph.setResetEdgesOnConnect(false); // true
+		this.graph.setResetEdgesOnConnect(false); // true
 		// graph.setAllowLoops(false); // false
 		// graph.setMultiplicities(null); // null
 		// graph.setDefaultLoopStyle(mxEdgeStyle.Loop); // mxEdgeStyle.Loop
@@ -154,7 +155,7 @@ public final class KaxViz extends JFrame {
 		// graph.setConnectableEdges(false); // false
 		// graph.setAllowDanglingEdges(false); // false
 		// graph.setCloneInvalidEdges(false); // false
-		graph.setDisconnectOnMove(false); // true
+		this.graph.setDisconnectOnMove(false); // true
 		// graph.setLabelsVisible(true); // true
 		// graph.setHtmlLabels(false); // false
 		// graph.setSwimlaneNesting(true); // true
@@ -163,26 +164,24 @@ public final class KaxViz extends JFrame {
 		// graph.setEventsEnabled(true); // true
 
 		// setup the graphComponent
-		final mxGraphComponent graphComponent = new mxGraphComponent(graph);
+		final mxGraphComponent graphComponent = new mxGraphComponent(this.graph);
 		graphComponent.setConnectable(false); // Inhibit edge creation in the graph.
 		graphComponent.setGridVisible(true); // Show the grid
 		graphComponent.setFoldingEnabled(false); // prevent folding of vertexes
 		new mxRubberband(graphComponent); // add rubberband selection
 		this.getContentPane().add(graphComponent);
-		this.graph = graph;
 
 		// add the actual graph
 		this.displayGraph();
 	}
 
 	private void displayGraph() {
-		final mxGraph graph = this.graph;
 		final Map<IPlugin, mxCell> mapPlugin2Graph = new HashMap<IPlugin, mxCell>(); // NOPMD (no concurrent access)
 		final Map<IPlugin, Map<String, mxCell>> mapPluginInputPorts2Graph = new HashMap<IPlugin, Map<String, mxCell>>(); // NOPMD (no concurrent access)
 		final Map<IPlugin, Map<String, mxCell>> mapPluginOutputPorts2Graph = new HashMap<IPlugin, Map<String, mxCell>>(); // NOPMD (no concurrent access)
 		final Map<AbstractRepository, mxCell> mapRepository2Graph = new HashMap<AbstractRepository, mxCell>(); // NOPMD (no concurrent access)
 		// draw the graph
-		graph.getModel().beginUpdate();
+		this.graph.getModel().beginUpdate();
 		try {
 			int x = 0;
 			// step 1: add all plugins!
@@ -217,7 +216,7 @@ public final class KaxViz extends JFrame {
 						final mxCell inputPortCell = mapPluginInputPorts2Graph.get(inputPlugin).get(inputPortName);
 						inputPortCell.setStyle("noLabel=0;spacingTop=3;verticalLabelPosition=bottom;portConstraint=north");
 						outputPortCell.setStyle("noLabel=0;verticalLabelPosition=top;portConstraint=south");
-						final mxCell edge = (mxCell) graph.insertEdge(null, null, "", outputPluginCell, inputPluginCell, "edgeStyle=orthogonalEdgeStyle");
+						final mxCell edge = (mxCell) this.graph.insertEdge(null, null, "", outputPluginCell, inputPluginCell, "edgeStyle=orthogonalEdgeStyle");
 						edge.setSource(outputPortCell);
 						edge.setTarget(inputPortCell);
 					}
@@ -225,14 +224,14 @@ public final class KaxViz extends JFrame {
 				for (final Entry<String, AbstractRepository> repository : outputPlugin.getCurrentRepositories().entrySet()) {
 					final mxCell output = mapPlugin2Graph.get(outputPlugin);
 					final mxCell input = mapRepository2Graph.get(repository.getValue());
-					graph.insertEdge(null, null, repository.getKey(), output, input, "edgeStyle=orthogonalEdgeStyle");
+					this.graph.insertEdge(null, null, repository.getKey(), output, input, "edgeStyle=orthogonalEdgeStyle");
 				}
 			}
 			// step 3: auto layout!
 			// this.autoGraphLayout();
 		} finally {
 			// finish the drawing
-			graph.getModel().endUpdate();
+			this.graph.getModel().endUpdate();
 		}
 	}
 

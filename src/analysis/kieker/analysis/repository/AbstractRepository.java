@@ -26,7 +26,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
 /**
- * Nils Christian Ehmke?
+ * @author Nils Christian Ehmke?
  */
 @Repository
 public abstract class AbstractRepository implements IRepository {

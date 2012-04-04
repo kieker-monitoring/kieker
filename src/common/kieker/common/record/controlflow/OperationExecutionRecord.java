@@ -30,23 +30,6 @@ import kieker.common.util.ClassOperationSignaturePair;
  * @author Andre van Hoorn, Jan Waller
  */
 public final class OperationExecutionRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	private static final long serialVersionUID = -3963151278085958619L;
-	private static final Class<?>[] TYPES = {
-		int.class, // experimentId
-		String.class, // operationSignature
-		String.class, // sessionId
-		long.class, // traceId
-		long.class, // tin
-		long.class, // tout
-		String.class, // hostname
-		int.class, // eoi
-		int.class, // ess
-	};
-
-	/**
-	 * This field should not be exported, because it makes little sense to have no associated operation
-	 */
-	private static final String NO_OPERATION_SIGNATURE = "noOperation";
 
 	/**
 	 * Constant to be used if no hostname required.
@@ -72,6 +55,24 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	 * Constant to be used if no eoi or ess required.
 	 */
 	public static final int NO_EOI_ESS = -1;
+
+	/**
+	 * This field should not be exported, because it makes little sense to have no associated operation
+	 */
+	private static final String NO_OPERATION_SIGNATURE = "noOperation";
+
+	private static final long serialVersionUID = -3963151278085958619L;
+	private static final Class<?>[] TYPES = {
+		int.class, // experimentId
+		String.class, // operationSignature
+		String.class, // sessionId
+		long.class, // traceId
+		long.class, // tin
+		long.class, // tout
+		String.class, // hostname
+		int.class, // eoi
+		int.class, // ess
+	};
 
 	/**
 	 * Will be removed in 1.6

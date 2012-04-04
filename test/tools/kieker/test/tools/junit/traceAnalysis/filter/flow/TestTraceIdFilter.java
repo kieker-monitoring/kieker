@@ -56,7 +56,7 @@ public class TestTraceIdFilter {
 	@Test
 	public void testAssertIgnoreTraceId() throws IllegalStateException, AnalysisConfigurationException {
 		final long firstTimestamp = 42353; // any number fits
-		final long traceIdNotToPass = 11l; // (must NOT be element of idsToPass)
+		final long traceIdNotToPass = 11L; // (must NOT be element of idsToPass)
 
 		final SortedSet<Long> idsToPass = new TreeSet<Long>();
 		idsToPass.add(1 + traceIdNotToPass);
@@ -102,7 +102,7 @@ public class TestTraceIdFilter {
 	@Test
 	public void testAssertPassTraceId() throws IllegalStateException, AnalysisConfigurationException {
 		final long firstTimestamp = 53222; // any number fits
-		final long traceIdToPass = 11l; // (must be element of idsToPass)
+		final long traceIdToPass = 11L; // (must be element of idsToPass)
 
 		final SortedSet<Long> idsToPass = new TreeSet<Long>();
 		idsToPass.add(0 + traceIdToPass);
@@ -143,7 +143,7 @@ public class TestTraceIdFilter {
 	@Test
 	public void testAssertPassTraceIdWhenPassAll() throws IllegalStateException, AnalysisConfigurationException {
 		final long firstTimestamp = 53222; // any number fits
-		final long traceIdToPass = 11l; // (must be element of idsToPass)
+		final long traceIdToPass = 11L; // (must be element of idsToPass)
 
 		final Configuration filterConfig = new Configuration();
 		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.TRUE.toString()); // i.e., pass all

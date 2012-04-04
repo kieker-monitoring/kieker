@@ -92,31 +92,6 @@ public final class AnalysisController {
 
 	private volatile STATE state = STATE.READY;
 
-	public static enum STATE {
-		READY,
-		RUNNING,
-		TERMINATED,
-		FAILED,
-	}
-
-	/**
-	 * This interface can be used for observers which want to get notified about state changes of an analysis controller.
-	 * 
-	 * @author Nils Christian Ehmke
-	 */
-	public static interface IStateObserver {
-
-		/**
-		 * This method will be called for every update of the state.
-		 * 
-		 * @param controller
-		 *            The controller which updated its state.
-		 * @param state
-		 *            The new state of the given controller.
-		 */
-		public void update(final AnalysisController controller, final STATE state);
-	}
-
 	/**
 	 * Constructs an {@link AnalysisController} instance.
 	 */
@@ -325,7 +300,7 @@ public final class AnalysisController {
 	private static void checkPorts(final MIPlugin mPlugin, final AbstractPlugin plugin) throws AnalysisConfigurationException {
 		// Get all ports.
 		final EList<MIOutputPort> mOutputPorts = mPlugin.getOutputPorts();
-		final EList<MIInputPort> mInputPorts = (mPlugin instanceof MIFilter) ? ((MIFilter) mPlugin).getInputPorts() : new BasicEList<MIInputPort>();
+		final EList<MIInputPort> mInputPorts = (mPlugin instanceof MIFilter) ? ((MIFilter) mPlugin).getInputPorts() : new BasicEList<MIInputPort>(); // NOCS
 		final Set<String> outputPorts = new HashSet<String>();
 		for (final String outputPort : plugin.getAllOutputPortNames()) {
 			outputPorts.add(outputPort);
@@ -892,5 +867,33 @@ public final class AnalysisController {
 			// SecurityException, IllegalAccessException, IllegalArgumentException, InstantiationException, InvocationTargetException
 			throw new AnalysisConfigurationException(c.getSimpleName() + ": Failed to load class for name '" + classname + "'", ex);
 		}
+	}
+
+	/**
+	 * @author Jan Waller
+	 */
+	public static enum STATE {
+		READY,
+		RUNNING,
+		TERMINATED,
+		FAILED,
+	}
+
+	/**
+	 * This interface can be used for observers which want to get notified about state changes of an analysis controller.
+	 * 
+	 * @author Nils Christian Ehmke
+	 */
+	public static interface IStateObserver {
+
+		/**
+		 * This method will be called for every update of the state.
+		 * 
+		 * @param controller
+		 *            The controller which updated its state.
+		 * @param state
+		 *            The new state of the given controller.
+		 */
+		public void update(final AnalysisController controller, final STATE state);
 	}
 }

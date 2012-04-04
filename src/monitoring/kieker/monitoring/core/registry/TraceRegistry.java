@@ -94,8 +94,8 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 	}
 
 	private static final class TracePoint {
-		public final long traceId;
-		public final int orderId;
+		public final long traceId; // NOCS (public no setters or getters)
+		public final int orderId; // NOCS (public no setters or getters)
 
 		public TracePoint(final long traceId, final int orderId) {
 			this.traceId = traceId;

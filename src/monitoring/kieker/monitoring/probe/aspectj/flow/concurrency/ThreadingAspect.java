@@ -40,7 +40,11 @@ public final class ThreadingAspect extends AbstractAspectJProbe {
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 
-	// TODO: what about other forms of executions? ThreadPoool, ...?
+	public ThreadingAspect() {
+		// empty default constructor
+	}
+
+	// TODO: what about other forms of executions? ThreadPool, ...?
 	// Must be @Before
 	@Before("call(void java.lang.Thread.start()) && target(thread) && notWithinKieker()")
 	public void beforeNewThread(final Thread thread) {

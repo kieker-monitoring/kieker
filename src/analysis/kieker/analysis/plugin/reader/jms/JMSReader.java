@@ -56,13 +56,13 @@ import kieker.common.record.IMonitoringRecord;
 @Plugin(outputPorts = @OutputPort(name = JMSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMSReader"))
 public final class JMSReader extends AbstractReaderPlugin {
 
-	private static final Log LOG = LogFactory.getLog(JMSReader.class);
-
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 
 	public static final String CONFIG_PROPERTY_NAME_PROVIDERURL = "jmsProviderUrl";
 	public static final String CONFIG_PROPERTY_NAME_DESTINATION = "jmsDestination";
 	public static final String CONFIG_PROPERTY_NAME_FACTORYLOOKUP = "jmsFactoryLookupName";
+
+	private static final Log LOG = LogFactory.getLog(JMSReader.class);
 
 	private final String jmsProviderUrl;
 	private final String jmsDestination;

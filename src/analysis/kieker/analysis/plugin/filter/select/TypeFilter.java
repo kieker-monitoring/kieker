@@ -79,11 +79,11 @@ public final class TypeFilter extends AbstractFilterPlugin {
 
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		final String[] acceptedClasses = new String[this.acceptedClasses.length];
-		for (int i = 0; i < acceptedClasses.length; i++) {
-			acceptedClasses[i] = this.acceptedClasses[i].getName();
+		final String[] acceptedClassesConfig = new String[this.acceptedClasses.length];
+		for (int i = 0; i < acceptedClassesConfig.length; i++) {
+			acceptedClassesConfig[i] = this.acceptedClasses[i].getName();
 		}
-		configuration.setProperty(CONFIG_PROPERTY_NAME_TYPES, Configuration.toProperty(acceptedClasses));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_TYPES, Configuration.toProperty(acceptedClassesConfig));
 		return configuration;
 	}
 

@@ -36,7 +36,7 @@ import kieker.test.tools.junit.writeRead.filesystem.unknownTypes.ContinueAfterUn
  * @author Andre van Hoorn
  * 
  */
-public class SkipBrokenRecordsRegularFileTest extends ContinueAfterUnknownTypeRegularFileTest { // NOPMD (TestClassWithoutTestCases)
+public class SkipBrokenRecordsRegularFileTest extends ContinueAfterUnknownTypeRegularFileTest { // NOPMD NOCS (TestClassWithoutTestCases)
 
 	/**
 	 * Here, we make sure that the reader aborts on the first occurrence of an unknown type

@@ -28,15 +28,6 @@ import kieker.common.record.flow.IFlowRecord;
  * @author Jan Waller
  */
 public final class Trace extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IFlowRecord {
-	private static final long serialVersionUID = -4734457252539987221L;
-	private static final Class<?>[] TYPES = {
-		long.class, // traceId
-		long.class, // threadId
-		String.class, // sessionId
-		String.class, // hostname
-		long.class, // parentTraceId
-		int.class, // parentOrderId
-	};
 
 	/**
 	 * Constant to be used if no sessionId required.
@@ -57,6 +48,16 @@ public final class Trace extends AbstractMonitoringRecord implements IMonitoring
 	 * Constant to be used if no trace parent order index required.
 	 */
 	public static final int NO_PARENT_ORDER_INDEX = -1;
+
+	private static final long serialVersionUID = -4734457252539987221L;
+	private static final Class<?>[] TYPES = {
+		long.class, // traceId
+		long.class, // threadId
+		String.class, // sessionId
+		String.class, // hostname
+		long.class, // parentTraceId
+		int.class, // parentOrderId
+	};
 
 	private final long traceId;
 	private final long threadId;

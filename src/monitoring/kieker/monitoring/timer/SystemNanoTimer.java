@@ -21,6 +21,7 @@
 package kieker.monitoring.timer;
 
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import kieker.common.configuration.Configuration;
@@ -79,7 +80,7 @@ public final class SystemNanoTimer extends AbstractTimeSource {
 	@Override
 	public final String toString() {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("Time in " + this.timeunit.toString().toLowerCase() + " (with nanoseconds precision) since ");
+		sb.append("Time in " + this.timeunit.toString().toLowerCase(Locale.ENGLISH) + " (with nanoseconds precision) since ");
 		sb.append(new Date(TimeUnit.NANOSECONDS.toMicros(this.offset - this.clockdifference)));
 		return sb.toString();
 	}

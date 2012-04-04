@@ -42,12 +42,12 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Pointcut
 	public abstract void monitoredConstructor();
 
-	@AfterReturning("monitoredConstructor() && this(this_) && notWithinKieker()")
-	public void afterConstruction(final Object this_, final JoinPoint.StaticPart jp) {
+	@AfterReturning("monitoredConstructor() && this(thisObject) && notWithinKieker()")
+	public void afterConstruction(final Object thisObject, final JoinPoint.StaticPart jp) {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
-		final ConstructionEvent crecord = new ConstructionEvent(TIME.getTime(), jp.getSignature().getDeclaringTypeName(), this_.toString());
+		final ConstructionEvent crecord = new ConstructionEvent(TIME.getTime(), jp.getSignature().getDeclaringTypeName(), thisObject.toString());
 		CTRLINST.newMonitoringRecord(crecord);
 	}
 }

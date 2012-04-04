@@ -21,6 +21,7 @@
 package kieker.monitoring.timer;
 
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import kieker.common.configuration.Configuration;
@@ -76,7 +77,7 @@ public final class SystemMilliTimer extends AbstractTimeSource {
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("Time in " + this.timeunit.toString().toLowerCase() + " (with milliseconds precision) since ");
+		sb.append("Time in " + this.timeunit.toString().toLowerCase(Locale.ENGLISH) + " (with milliseconds precision) since ");
 		sb.append(new Date(this.offset));
 		return sb.toString();
 	}

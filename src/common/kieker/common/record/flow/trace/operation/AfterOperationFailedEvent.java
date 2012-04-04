@@ -20,11 +20,16 @@
 
 package kieker.common.record.flow.trace.operation;
 
-
 /**
  * @author Jan Waller
  */
 public final class AfterOperationFailedEvent extends AbstractOperationEvent {
+
+	/**
+	 * Constant to be used if no cause required.
+	 */
+	public static final String NO_CAUSE = "<no-cause>";
+
 	private static final long serialVersionUID = 3331883608930487185L;
 	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
@@ -33,11 +38,6 @@ public final class AfterOperationFailedEvent extends AbstractOperationEvent {
 		String.class, // OperationEvent.operationSiganture
 		String.class, // Exception
 	};
-
-	/**
-	 * Constant to be used if no cause required.
-	 */
-	public static final String NO_CAUSE = "<no-cause>";
 
 	private final String cause;
 

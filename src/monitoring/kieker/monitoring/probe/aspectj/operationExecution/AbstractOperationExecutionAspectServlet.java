@@ -50,7 +50,7 @@ public abstract class AbstractOperationExecutionAspectServlet extends AbstractOp
 			return thisJoinPoint.proceed();
 		}
 		final HttpServletRequest req = (HttpServletRequest) thisJoinPoint.getArgs()[0];
-		final String sessionId = (req != null) ? req.getSession(true).getId() : null; // NOPMD (assign null)
+		final String sessionId = (req != null) ? req.getSession(true).getId() : null; // NOPMD (assign null) // NOCS (inline cond)
 		SESSIONREGISTRY.storeThreadLocalSessionId(sessionId);
 		Object retVal;
 		try {

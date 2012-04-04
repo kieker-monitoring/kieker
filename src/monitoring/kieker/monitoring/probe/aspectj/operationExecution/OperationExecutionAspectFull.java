@@ -29,6 +29,10 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public class OperationExecutionAspectFull extends AbstractOperationExecutionAspect {
 
+	public OperationExecutionAspectFull() {
+		// empty default constructor
+	}
+
 	@Override
 	@Pointcut("(execution(* *(..)) && noGetterAndSetter()) || execution(new(..))")
 	public final void monitoredOperation() {

@@ -40,15 +40,15 @@ import kieker.common.record.IMonitoringRecord;
  * @author Andre van Hoorn
  */
 @Plugin(outputPorts = {
-		@OutputPort(name = FSReaderRealtime.OUTPUT_PORT_NAME_MONITORING_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReaderRealtime")
+	@OutputPort(name = FSReaderRealtime.OUTPUT_PORT_NAME_MONITORING_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReaderRealtime")
 })
 public final class FSReaderRealtime extends AbstractReaderPlugin {
-	private static final Log LOG = LogFactory.getLog(FSReaderRealtime.class);
-
 	public static final String OUTPUT_PORT_NAME_MONITORING_RECORDS = "monitoringRecords";
 
 	public static final String CONFIG_PROPERTY_NAME_NUM_WORKERS = "numWorkers";
 	public static final String CONFIG_PROPERTY_NAME_INPUTDIRNAMES = "inputDirs";
+
+	private static final Log LOG = LogFactory.getLog(FSReaderRealtime.class);
 
 	/* manages the life-cycle of the reader and consumers */
 	private final AnalysisController analysis = new AnalysisController();

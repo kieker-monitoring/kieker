@@ -42,13 +42,13 @@ import org.junit.rules.TemporaryFolder;
  * @author Andre van Hoorn
  * 
  */
-public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTest {
+public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTest { // NOCS (testClass without constructor)
 	private static final String OUTPUT_BASE_FN = "S0fYvPsI.out"; // the name doesn't matter
 
 	private static final String ENCODING = "UTF-8";
 
 	@Rule
-	public final TemporaryFolder tmpFolder = new TemporaryFolder();
+	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (must be public)
 
 	private volatile File outputFile = null;
 

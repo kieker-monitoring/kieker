@@ -51,11 +51,10 @@ import kieker.common.logging.LogFactory;
  */
 @Plugin
 public abstract class AbstractPlugin implements IPlugin {
-	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
 
 	public static final String CONFIG_NAME = "name-hiddenAndNeverExportedProperty";
 
-	private final String name;
+	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
 
 	protected final Configuration configuration;
 	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<PluginInputPortReference>> registeredMethods;
@@ -63,6 +62,7 @@ public abstract class AbstractPlugin implements IPlugin {
 	private final Map<String, RepositoryPort> repositoryPorts;
 	private final Map<String, OutputPort> outputPorts;
 	private final Map<String, InputPort> inputPorts;
+	private final String name;
 
 	/**
 	 * Each Plugin requires a constructor with a single Configuration object and an array of repositories!
@@ -194,9 +194,9 @@ public abstract class AbstractPlugin implements IPlugin {
 		}
 
 		/* Third step: Send everything to the registered ports. */
-		final ConcurrentLinkedQueue<PluginInputPortReference> registeredMethods = this.registeredMethods.get(outputPortName);
+		final ConcurrentLinkedQueue<PluginInputPortReference> registeredMethodsOfPort = this.registeredMethods.get(outputPortName);
 
-		for (final PluginInputPortReference pluginInputPortReference : registeredMethods) {
+		for (final PluginInputPortReference pluginInputPortReference : registeredMethodsOfPort) {
 			/* Check whether the data fits the event types. */
 			Class<?>[] eventTypes = pluginInputPortReference.getEventTypes();
 			if (eventTypes.length == 0) {
@@ -304,11 +304,11 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * 
 	 * @see kieker.analysis.plugin.IPlugin#connect(java.lang.String, kieker.analysis.repository.AbstractRepository)
 	 */
-	public final void connect(final String name, final AbstractRepository repository) throws AnalysisConfigurationException {
-		final RepositoryPort port = this.repositoryPorts.get(name);
+	public final void connect(final String reponame, final AbstractRepository repository) throws AnalysisConfigurationException {
+		final RepositoryPort port = this.repositoryPorts.get(reponame);
 		if (port == null) {
 			throw new AnalysisConfigurationException("Failed to connect plugin '" + this.getName() + "' (" + this.getPluginName() + ") to repository '"
-					+ repository.getName() + "' (" + repository.getRepositoryName() + "). Unknown repository port: " + name);
+					+ repository.getName() + "' (" + repository.getRepositoryName() + "). Unknown repository port: " + reponame);
 		}
 		final Class<? extends AbstractRepository> repositoryType = port.repositoryType();
 		if (!repositoryType.isAssignableFrom(repository.getClass())) {
@@ -317,11 +317,11 @@ public abstract class AbstractPlugin implements IPlugin {
 					+ repository.getClass().getName());
 		}
 		synchronized (this) {
-			if (this.registeredRepositories.containsKey(name)) {
+			if (this.registeredRepositories.containsKey(reponame)) {
 				throw new AnalysisConfigurationException("Failed to connect plugin '" + this.getName() + "' (" + this.getPluginName() + ") to repository '"
-						+ repository.getName() + "' (" + repository.getRepositoryName() + "). RepositoryPort already connected: " + name);
+						+ repository.getName() + "' (" + repository.getRepositoryName() + "). RepositoryPort already connected: " + reponame);
 			}
-			this.registeredRepositories.put(name, repository);
+			this.registeredRepositories.put(reponame, repository);
 		}
 	}
 
@@ -334,8 +334,8 @@ public abstract class AbstractPlugin implements IPlugin {
 		return Collections.unmodifiableMap(this.registeredRepositories);
 	}
 
-	protected final AbstractRepository getRepository(final String name) {
-		return this.registeredRepositories.get(name);
+	protected final AbstractRepository getRepository(final String reponame) {
+		return this.registeredRepositories.get(reponame);
 	}
 
 	/**

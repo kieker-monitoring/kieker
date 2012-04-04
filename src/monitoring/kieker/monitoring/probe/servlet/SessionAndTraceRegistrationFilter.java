@@ -1,3 +1,23 @@
+/***************************************************************************
+ * Copyright 2011 by
+ *  + Christian-Albrechts-University of Kiel
+ *    + Department of Computer Science
+ *      + Software Engineering Group 
+ *  and others.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.monitoring.probe.servlet;
 
 import java.io.IOException;
@@ -20,13 +40,13 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
-import kieker.monitoring.core.registry.TraceRegistry;
 import kieker.monitoring.probe.IMonitoringProbe;
 import kieker.monitoring.timer.ITimeSource;
 
 /**
  * For each incoming request via {@link #doFilter(ServletRequest, ServletResponse, FilterChain)}, this class
- * (i) registers session and trace information into the thread-local data structures {@link SessionRegistry} and {@link TraceRegistry} accessible to other probes in
+ * (i) registers session and trace information into the thread-local data structures {@link SessionRegistry} and
+ * {@link kieker.monitoring.core.registry.TraceRegistry} accessible to other probes in
  * the control-flow of this request, (ii) executes the given {@link FilterChain} and subsequently (iii) unregisters the thread-local
  * data. If configured in the {@link FilterConfig} (see below), the execution of the {@link #doFilter(ServletRequest, ServletResponse, FilterChain)} method
  * is also part of the trace and logged to the {@link IMonitoringController} (note that this is the default behavior when no property is found).
@@ -48,8 +68,6 @@ import kieker.monitoring.timer.ITimeSource;
  * 
  */
 public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringProbe {
-	private static final Log LOG = LogFactory.getLog(SessionAndTraceRegistrationFilter.class);
-
 	public static final String CONFIG_PROPERTY_NAME_LOG_FILTER_EXECUTION = "logFilterExecution";
 
 	protected static final IMonitoringController MONITORING_CTRL = MonitoringController.getInstance();
@@ -58,6 +76,8 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 
 	protected static final ITimeSource TIMESOURCE = MONITORING_CTRL.getTimeSource();
 	protected static final String VM_NAME = MONITORING_CTRL.getHostname();
+
+	private static final Log LOG = LogFactory.getLog(SessionAndTraceRegistrationFilter.class);
 
 	/**
 	 * Signature for the {@link #doFilter(ServletRequest, ServletResponse, FilterChain)} which will be used when logging

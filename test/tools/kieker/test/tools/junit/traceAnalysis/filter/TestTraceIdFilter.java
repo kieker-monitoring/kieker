@@ -89,13 +89,13 @@ public class TestTraceIdFilter { // NOCS
 	@Test
 	public void testAssertIgnoreTraceId() throws IllegalStateException, AnalysisConfigurationException {
 		final SortedSet<Long> idsToPass = new TreeSet<Long>();
-		idsToPass.add(5l);
-		idsToPass.add(7l);
+		idsToPass.add(5L);
+		idsToPass.add(7L);
 
 		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(idsToPass);
 		final SimpleSinkPlugin<Execution> sinkPlugin = new SimpleSinkPlugin<Execution>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
-		final Execution exec = this.eFactory.genExecution(11l, // traceId (must not be element of idsToPass)
+		final Execution exec = this.eFactory.genExecution(11L, // traceId (must not be element of idsToPass)
 				TestTraceIdFilter.SESSION_ID,
 				5, // tin (value not important)
 				10, // tout (value not important)
@@ -124,13 +124,13 @@ public class TestTraceIdFilter { // NOCS
 	@Test
 	public void testAssertPassTraceId() throws IllegalStateException, AnalysisConfigurationException {
 		final SortedSet<Long> idsToPass = new TreeSet<Long>();
-		idsToPass.add(5l);
-		idsToPass.add(7l);
+		idsToPass.add(5L);
+		idsToPass.add(7L);
 
 		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(idsToPass);
 		final SimpleSinkPlugin<Execution> sinkPlugin = new SimpleSinkPlugin<Execution>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
-		final Execution exec = this.eFactory.genExecution(7l, // traceId (must be element of idsToPass)
+		final Execution exec = this.eFactory.genExecution(7L, // traceId (must be element of idsToPass)
 				TestTraceIdFilter.SESSION_ID,
 				5, // tin (value not important)
 				10, // tout (value not important)
@@ -163,7 +163,7 @@ public class TestTraceIdFilter { // NOCS
 		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(null); // i.e., pass all
 		final SimpleSinkPlugin<Execution> sinkPlugin = new SimpleSinkPlugin<Execution>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
-		final Execution exec = this.eFactory.genExecution(7l, // traceId (must be element of idsToPass)
+		final Execution exec = this.eFactory.genExecution(7L, // traceId (must be element of idsToPass)
 				TestTraceIdFilter.SESSION_ID,
 				5, // tin (value not important)
 				10, // tout (value not important)

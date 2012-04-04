@@ -62,9 +62,9 @@ public final class JMXReader extends AbstractReaderPlugin {
 
 	private static final Log LOG = LogFactory.getLog(JMXReader.class);
 
+	final boolean silentreconnect; // NOPMD NOCS (package visible for inner class)
 	private final JMXServiceURL serviceURL;
 	private final ObjectName monitoringLog;
-	final boolean silentreconnect; // NOPMD (package visible for inner class)
 	private final CountDownLatch cdLatch = new CountDownLatch(1);
 	private final String domain;
 	private final String logname;
@@ -256,6 +256,19 @@ public final class JMXReader extends AbstractReaderPlugin {
 		this.cdLatch.countDown();
 	}
 
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration();
+
+		configuration.setProperty(CONFIG_PROPERTY_NAME_SERVER, this.server);
+		configuration.setProperty(CONFIG_PROPERTY_NAME_PORT, Integer.toString(this.port));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_SERVICEURL, this.serviceURL.toString());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_DOMAIN, this.domain);
+		configuration.setProperty(CONFIG_PROPERTY_NAME_LOGNAME, this.logname);
+		configuration.setProperty(CONFIG_PROPERTY_NAME_SILENT, Boolean.toString(this.silentreconnect));
+
+		return configuration;
+	}
+
 	private final class LogNotificationListener implements NotificationListener {
 
 		public LogNotificationListener() {
@@ -294,18 +307,5 @@ public final class JMXReader extends AbstractReaderPlugin {
 				LOG.info(notificationType + ": " + notification.getMessage());
 			}
 		}
-	}
-
-	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
-
-		configuration.setProperty(CONFIG_PROPERTY_NAME_SERVER, this.server);
-		configuration.setProperty(CONFIG_PROPERTY_NAME_PORT, Integer.toString(this.port));
-		configuration.setProperty(CONFIG_PROPERTY_NAME_SERVICEURL, this.serviceURL.toString());
-		configuration.setProperty(CONFIG_PROPERTY_NAME_DOMAIN, this.domain);
-		configuration.setProperty(CONFIG_PROPERTY_NAME_LOGNAME, this.logname);
-		configuration.setProperty(CONFIG_PROPERTY_NAME_SILENT, Boolean.toString(this.silentreconnect));
-
-		return configuration;
 	}
 }

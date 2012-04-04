@@ -59,9 +59,9 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
 
 	private static final IMonitoringController CRTR_INST = MonitoringController.getInstance();
-	protected static final ITimeSource TIMESOURCE = CRTR_INST.getTimeSource();
+	protected static final ITimeSource TIMESOURCE = CRTR_INST.getTimeSource(); // NOCS (decl. order)
 
-	protected static final String VM_NAME = CRTR_INST.getHostname();
+	protected static final String VM_NAME = CRTR_INST.getHostname(); // NOCS (decl. order)
 
 	private static final String SIGNATURE = "public void " + OperationExecutionSOAPResponseOutInterceptor.class.getName()
 			+ ".handleMessage(org.apache.cxf.binding.soap.SoapMessage)";

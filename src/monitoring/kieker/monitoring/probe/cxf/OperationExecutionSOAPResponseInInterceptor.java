@@ -57,9 +57,9 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
 
 	private static final IMonitoringController CTRL_INST = MonitoringController.getInstance();
-	protected static final ITimeSource TIMESOURCE = CTRL_INST.getTimeSource();
+	protected static final ITimeSource TIMESOURCE = CTRL_INST.getTimeSource(); // NOCS (decl. order)
 
-	protected static final String VM_NAME = CTRL_INST.getHostname();
+	protected static final String VM_NAME = CTRL_INST.getHostname(); // NOCS (decl. order)
 
 	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPResponseInInterceptor.class);
 

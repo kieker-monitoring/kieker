@@ -40,8 +40,6 @@ import kieker.common.record.IMonitoringRecord;
 @Plugin(outputPorts = @OutputPort(name = PipeReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the PipeReader"))
 public final class PipeReader extends AbstractReaderPlugin implements IPipeReader {
 
-	private static final Log LOG = LogFactory.getLog(PipeReader.class);
-
 	/**
 	 * This is the name of the default output port.
 	 */
@@ -53,6 +51,8 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	public static final String CONFIG_PROPERTY_NAME_PIPENAME = "pipeName";
 
 	public static final String CONFIG_PROPERTY_VALUE_PIPENAME_DEFAULT = "kieker-pipe";
+
+	private static final Log LOG = LogFactory.getLog(PipeReader.class);
 
 	private volatile Pipe pipe;
 	private final String pipeName;
@@ -68,16 +68,12 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	 */
 	public PipeReader(final Configuration configuration) throws IllegalArgumentException {
 		super(configuration);
-		final String pipeName = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_PIPENAME);
+		final String pipeNameConfig = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_PIPENAME);
 
-		this.pipeName = pipeName;
-		this.initialize(pipeName);
-	}
-
-	private void initialize(final String pipeName) throws IllegalArgumentException {
-		this.pipe = Broker.INSTANCE.acquirePipe(pipeName);
+		this.pipeName = pipeNameConfig;
+		this.pipe = Broker.INSTANCE.acquirePipe(pipeNameConfig);
 		if (this.pipe == null) {
-			throw new IllegalArgumentException("Failed to get Pipe with name " + pipeName);
+			throw new IllegalArgumentException("Failed to get Pipe with name " + pipeNameConfig);
 		} else {
 			if (LOG.isDebugEnabled()) {
 				LOG.debug("Connected to named pipe '" + this.pipe.getName() + "'");

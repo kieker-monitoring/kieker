@@ -46,8 +46,8 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence { // NOCS
 		final ExecutionTrace trace0;
 		final ExecutionTrace trace1;
 
-		trace0 = this.genValidBookstoreTrace(45653l, TestTraceEquivalenceFilterAssemblyEquivalence.SESSION_ID, 17);
-		trace1 = this.genValidBookstoreTrace(45653l, TestTraceEquivalenceFilterAssemblyEquivalence.SESSION_ID, 17);
+		trace0 = this.genValidBookstoreTrace(45653L, TestTraceEquivalenceFilterAssemblyEquivalence.SESSION_ID, 17);
+		trace1 = this.genValidBookstoreTrace(45653L, TestTraceEquivalenceFilterAssemblyEquivalence.SESSION_ID, 17);
 		Assert.assertEquals(trace0, trace1);
 
 		/*

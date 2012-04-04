@@ -86,10 +86,10 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 	private static final String CONTEXT_PARAM_NAME_PREFIX = CPUMemUsageServletContextListener.class.getSimpleName();
 
 	/** Parameter name for the sampling interval to be used in the web.xml file */
-	public static final String CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS = CONTEXT_PARAM_NAME_PREFIX
+	public static final String CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS = CONTEXT_PARAM_NAME_PREFIX // NOCS (decl. order)
 			+ ".samplingIntervalSeconds";
 	/** Parameter name for the initial delay to be used in the web.xml file */
-	public static final String CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS = CONTEXT_PARAM_NAME_PREFIX
+	public static final String CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS = CONTEXT_PARAM_NAME_PREFIX // NOCS (decl. order)
 			+ ".initialSamplingDelaySeconds";
 
 	private static final Log LOG = LogFactory.getLog(CPUMemUsageServletContextListener.class);

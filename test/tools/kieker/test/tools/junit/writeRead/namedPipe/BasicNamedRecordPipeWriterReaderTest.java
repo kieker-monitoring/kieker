@@ -42,7 +42,7 @@ import org.junit.Before;
  * @author Andre van Hoorn
  * 
  */
-public class BasicNamedRecordPipeWriterReaderTest extends AbstractWriterReaderTest { // NOPMD (TestClassWithoutTestCases)
+public class BasicNamedRecordPipeWriterReaderTest extends AbstractWriterReaderTest { // NOPMD NOCS (TestClassWithoutTestCases)
 	private static final String PIPE_NAME = "pipe-IVvirGREEf";
 
 	private volatile SimpleSinkPlugin<IMonitoringRecord> sinkFilter = null;

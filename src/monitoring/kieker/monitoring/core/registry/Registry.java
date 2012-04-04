@@ -26,11 +26,13 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import kieker.monitoring.core.IMonitoringRecordReceiver;
 
+// FIXME: check License
 /**
  * Based upon ConcurrentHashMap.
  * The basic strategy is to subdivide the table among Segments, each of which itself is a concurrently readable hash table.
  * 
- * TODO: check License
+ * @param <E>
+ *            the type of registered objects
  * 
  * @author Jan Waller
  */
@@ -157,10 +159,10 @@ public class Registry<E> implements IRegistry<E> {
 	 */
 	private static final class HashEntry<E> implements Serializable {
 		private static final long serialVersionUID = 1L;
-		final E value; // NOPMD (package visible for inner class)
-		final int hash; // NOPMD (package visible for inner class)
-		final int id; // NOPMD (package visible for inner class)
-		final HashEntry<E> next; // NOPMD (package visible for inner class)
+		final E value; // NOPMD NOCS (package visible for inner class)
+		final int hash; // NOPMD NOCS (package visible for inner class)
+		final int id; // NOPMD NOCS (package visible for inner class)
+		final HashEntry<E> next; // NOPMD NOCS (package visible for inner class)
 
 		protected HashEntry(final E value, final int hash, final int id, final HashEntry<E> next) {
 			this.value = value;

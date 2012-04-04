@@ -30,8 +30,8 @@ import org.junit.Test;
  */
 public class TestOperationCallEvent { // NOCS (MissingCtorCheck)
 
-	private static final long TSTAMP = 987998l;
-	private static final long TRACE_ID = 23444l;
+	private static final long TSTAMP = 987998L;
+	private static final long TRACE_ID = 23444L;
 	private static final int ORDER_INDEX = 234;
 
 	private static final String FQ_CALLER_CLASSNAME = "p1.p2.p3.callername";

@@ -42,7 +42,6 @@ import kieker.common.logging.LogFactory;
  */
 @Plugin(outputPorts = @OutputPort(name = TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming object", eventTypes = { Object.class }))
 public final class TeeFilter extends AbstractFilterPlugin {
-	private static final Log LOG = LogFactory.getLog(TeeFilter.class);
 
 	public static final String INPUT_PORT_NAME_EVENTS = "receivedEvents";
 
@@ -56,6 +55,8 @@ public final class TeeFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDLOG = "STDLOG";
 	public static final String CONFIG_PROPERTY_VALUE_DEFAULT_ENCODING = "UTF-8";
 
+	private static final Log LOG = LogFactory.getLog(TeeFilter.class);
+
 	private final PrintStream printStream;
 	private final String printStreamName;
 	private final String encoding;
@@ -64,33 +65,33 @@ public final class TeeFilter extends AbstractFilterPlugin {
 		super(configuration);
 
 		/* Get the name of the stream. */
-		final String printStreamName = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_STREAM);
+		final String printStreamNameConfig = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_STREAM);
 		/* Get the encoding. */
 		this.encoding = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_ENCODING);
 
 		/* Decide which stream to be used - but remember the name! */
-		if (CONFIG_PROPERTY_VALUE_STREAM_STDLOG.equals(printStreamName)) {
+		if (CONFIG_PROPERTY_VALUE_STREAM_STDLOG.equals(printStreamNameConfig)) {
 			this.printStream = null; // NOPMD (null)
 			this.printStreamName = null; // NOPMD (null)
-		} else if (CONFIG_PROPERTY_VALUE_STREAM_STDOUT.equals(printStreamName)) {
+		} else if (CONFIG_PROPERTY_VALUE_STREAM_STDOUT.equals(printStreamNameConfig)) {
 			this.printStream = System.out;
 			this.printStreamName = null; // NOPMD (null)
-		} else if (CONFIG_PROPERTY_VALUE_STREAM_STDERR.equals(printStreamName)) {
+		} else if (CONFIG_PROPERTY_VALUE_STREAM_STDERR.equals(printStreamNameConfig)) {
 			this.printStream = System.err;
 			this.printStreamName = null; // NOPMD (null)
 		} else {
-			PrintStream printStream;
+			PrintStream tmpPrintStream;
 			try {
-				printStream = new PrintStream(new FileOutputStream(printStreamName), false, this.encoding);
+				tmpPrintStream = new PrintStream(new FileOutputStream(printStreamNameConfig), false, this.encoding);
 			} catch (final UnsupportedEncodingException ex) {
-				LOG.error("Failed to initialize " + printStreamName, ex);
-				printStream = null; // NOPMD (null)
+				LOG.error("Failed to initialize " + printStreamNameConfig, ex);
+				tmpPrintStream = null; // NOPMD (null)
 			} catch (final FileNotFoundException ex) {
-				LOG.error("Failed to initialize " + printStreamName, ex);
-				printStream = null; // NOPMD (null)
+				LOG.error("Failed to initialize " + printStreamNameConfig, ex);
+				tmpPrintStream = null; // NOPMD (null)
 			}
-			this.printStream = printStream;
-			this.printStreamName = printStreamName;
+			this.printStream = tmpPrintStream;
+			this.printStreamName = printStreamNameConfig;
 		}
 	}
 

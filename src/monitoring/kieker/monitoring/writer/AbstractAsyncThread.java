@@ -73,20 +73,20 @@ public abstract class AbstractAsyncThread extends Thread {
 		}
 		try {
 			// making it a local variable for faster access
-			final BlockingQueue<IMonitoringRecord> writeQueue = this.writeQueue;
+			final BlockingQueue<IMonitoringRecord> writeQueueLocal = this.writeQueue;
 			while (true) {
 				try {
-					IMonitoringRecord monitoringRecord = writeQueue.take();
+					IMonitoringRecord monitoringRecord = writeQueueLocal.take();
 					if (monitoringRecord == END_OF_MONITORING_MARKER) { // NOPMD (CompareObjectsWithEquals
 						if (LOG.isDebugEnabled()) {
-							LOG.debug("Terminating writer thread, " + writeQueue.size() + " entries remaining");
+							LOG.debug("Terminating writer thread, " + writeQueueLocal.size() + " entries remaining");
 						}
-						monitoringRecord = writeQueue.poll();
+						monitoringRecord = writeQueueLocal.poll();
 						while (monitoringRecord != null) {
-							if (monitoringRecord != END_OF_MONITORING_MARKER) {// NOPMD (CompareObjectsWithEquals
+							if (monitoringRecord != END_OF_MONITORING_MARKER) { // NOPMD (CompareObjectsWithEquals
 								this.consume(monitoringRecord);
 							}
-							monitoringRecord = writeQueue.poll();
+							monitoringRecord = writeQueueLocal.poll();
 						}
 						this.writeQueue.put(END_OF_MONITORING_MARKER);
 						this.cleanup();

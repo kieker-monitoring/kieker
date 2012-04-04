@@ -29,6 +29,10 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public final class FullInstrumentation extends AbstractAspect {
 
+	public FullInstrumentation() {
+		// empty default constructor
+	}
+
 	@Override
 	@Pointcut("execution(new(..))")
 	public final void monitoredConstructor() {
