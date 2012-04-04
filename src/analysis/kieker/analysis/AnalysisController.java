@@ -670,7 +670,7 @@ public final class AnalysisController {
 	 */
 	public final void registerReader(final AbstractReaderPlugin reader) throws IllegalStateException {
 		if (this.state != STATE.READY) {
-			throw new IllegalStateException("Unable to reader filter after starting analysis.");
+			throw new IllegalStateException("Unable to register filter after starting analysis.");
 		}
 		synchronized (this) {
 			if (this.readers.contains(reader)) {

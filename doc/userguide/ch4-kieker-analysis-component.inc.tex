@@ -9,7 +9,7 @@
 \chapter{\KiekerAnalysisPart{} Component}\label{chap:componentsAnalysis}
 
 \NOTIFYBOX{The Java sources of this chapter, as well as a pre-compiled binary, %
-can also be found in the %
+can be found in the %
 \file{\customComponentsBookstoreApplicationDirDistro{}/} directory of the %
 binary release.}
 
@@ -17,11 +17,13 @@ binary release.}
 
 An analysis with \KiekerAnalysisPart{} is set up and executed employing %
 the class \class{AnalysisController}. %
-\KiekerAnalysisPart{} requires a monitoring reader %
-(Section~\ref{sec:analysis:reader}) and at least %
-one monitoring record consumer plugin (Section~\ref{sec:analysis:consumer}). %
-In addition to the monitoring record consumer plugin, %
-other analysis plugins can be registered. %
+\KiekerAnalysisPart{} provides a framework to define and execute pipe-and-filter %
+architectures of analysis plugins, i.e., monitoring readers and analysis filters. %
+%  requires a monitoring reader %
+% (Section~\ref{sec:analysis:reader}) and at least %
+% one monitoring record consumer plugin (Section~\ref{sec:analysis:consumer}). %
+% In addition to the monitoring record consumer plugin, %
+% other analysis plugins can be registered. %
 Figure~\ref{fig:analysisController:classdiagram} shows the class diagram %
 with the important \KiekerAnalysisPart{} classes and their relationship. %
 

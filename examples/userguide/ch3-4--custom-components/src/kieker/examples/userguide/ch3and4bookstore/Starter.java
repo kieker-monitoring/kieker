@@ -57,22 +57,21 @@ public final class Starter {
 		/* Configure, register, and connect the response time filter */
 		final Configuration filterConfiguration = new Configuration();
 		final long rtThresholdNanos = TimeUnit.NANOSECONDS.convert(1900, TimeUnit.MICROSECONDS);
-		filterConfiguration.setProperty(
-				MyResponseTimeFilter.CONFIG_PROPERTY_NAME_RT_TS_NANOS,
-				Long.toString(rtThresholdNanos)); // 1.9 millis
+		filterConfiguration.setProperty( // configure threshold of 1.9 milliseconds:
+				MyResponseTimeFilter.CONFIG_PROPERTY_NAME_RT_TS_NANOS, Long.toString(rtThresholdNanos));
 		final MyResponseTimeFilter filter = new MyResponseTimeFilter(filterConfiguration);
 		analysisController.registerFilter(filter);
 		analysisController.connect(reader, MyPipeReader.OUTPUT_PORT_NAME,
 				filter, MyResponseTimeFilter.INPUT_PORT_NAME_RESPONSE_TIMES);
 
-		/* Configure, register, and connect the filter printing valid response times */
+		/* Configure, register, and connect the filter printing *valid* response times */
 		final Configuration validOutputConfiguration = new Configuration();
 		validOutputConfiguration.setProperty(MyResponseTimeOutputPrinter.CONFIG_PROPERTY_NAME_VALID_OUTPUT, Boolean.toString(true));
 		final MyResponseTimeOutputPrinter validPrinter = new MyResponseTimeOutputPrinter(validOutputConfiguration);
 		analysisController.registerFilter(validPrinter);
 		analysisController.connect(filter, MyResponseTimeFilter.OUTPUT_PORT_NAME_RT_VALID, validPrinter, MyResponseTimeOutputPrinter.INPUT_PORT_NAME_EVENTS);
 
-		/* Configure, register, and connect the filter printing invalid response times */
+		/* Configure, register, and connect the filter printing *invalid* response times */
 		final Configuration invalidOutputConfiguration = new Configuration();
 		invalidOutputConfiguration.setProperty(MyResponseTimeOutputPrinter.CONFIG_PROPERTY_NAME_VALID_OUTPUT, Boolean.toString(false));
 		final MyResponseTimeOutputPrinter invalidPrinter = new MyResponseTimeOutputPrinter(invalidOutputConfiguration);
