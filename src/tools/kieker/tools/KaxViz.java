@@ -290,7 +290,7 @@ public final class KaxViz extends JFrame {
 	}
 
 	private final mxCell createRepository(final AbstractRepository repository, final int c) {
-		final mxCell vertex = new mxCell("<<Repository>>\n : " + repository.getClass().getSimpleName(),
+		final mxCell vertex = new mxCell("<<Repository>>\n : " + repository.getName() + " : " + repository.getRepositoryName(),
 				new mxGeometry(FILTER_SPACE, FILTER_SPACE + (c * (FILTER_HEIGHT + FILTER_SPACE)),
 						FILTER_WIDTH, FILTER_HEIGHT), "rounded=1");
 		vertex.setVertex(true);

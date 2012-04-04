@@ -29,7 +29,7 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
 @Plugin(
-		name = "Response Time filter",
+		name = "Response time filter",
 		description = "Filters incoming response times based on a threshold",
 		outputPorts = {
 			@OutputPort(name = MyResponseTimeFilter.OUTPUT_PORT_NAME_RT_VALID,

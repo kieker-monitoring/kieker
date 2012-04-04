@@ -8,17 +8,13 @@
 
 \chapter{\KiekerAnalysisPart{} Component}\label{chap:componentsAnalysis}
 
-\NOTIFYBOX{The Java sources of this chapter, as well as a pre-compiled binary, %
-can be found in the %
-\file{\customComponentsBookstoreApplicationDirDistro{}/} directory of the %
-binary release.}
-
-\section{Analysis Controller}\label{sec:analysis:controller}
+\section{Analysis Controller and Pipe-And-Filter Framework}\label{sec:analysis:controller}
 
 An analysis with \KiekerAnalysisPart{} is set up and executed employing %
 the class \class{AnalysisController}. %
 \KiekerAnalysisPart{} provides a framework to define and execute pipe-and-filter %
-architectures of analysis plugins, i.e., monitoring readers and analysis filters. %
+architectures of analysis plugins, i.e., monitoring readers and analysis filters, %
+as well as repositories. %
 %  requires a monitoring reader %
 % (Section~\ref{sec:analysis:reader}) and at least %
 % one monitoring record consumer plugin (Section~\ref{sec:analysis:consumer}). %
@@ -36,38 +32,63 @@ with the important \KiekerAnalysisPart{} classes and their relationship. %
 \noindent Setting up and running an analysis with \KiekerAnalysisPart{} requires the %
 following steps to be performed, as described in Section~\ref{sec:example:analysis} already:\\
 
-\enlargethispage{1cm}
+\enlargethispage{0.6cm}
 
 \begin{compactenum}
 \item Creating an instance of the \class{AnalysisController} class
-\item Creating and registering the monitoring reader (\method{setReader}) as %
-well as the monitoring record consumers and other analysis plugins (\method{registerPlugin}).
+\item Creating and registering monitoring readers (\method{registerReader}), 
+filters (\method{registerFilter}), and repositories (\method{registerRepository}).
+\item Connecting plugins and repositories (\method{registerRepository})
 \item Starting the analysis instance (\method{run}).
 \end{compactenum}
 
-\
 
-\noindent In the following Sections~\ref{sec:analysis:reader} and~\ref{sec:analysis:consumer}, %
-we will create a custom monitoring reader \class{MyPipeReader} and a %
-monitoring record consumer plugin \class{MyResponseTimeConsumer}. %
-\noindent The following Listing~\ref{listing:AnalysisController} shows how to create and run an analysis %
-with these custom components:
-
-\setJavaCodeListing
-\lstinputlisting[caption=Code snippet setting up and running a \KiekerAnalysisPart{} instance (Starter.java),label=listing:AnalysisController,firstline=46, lastline=53, firstnumber=46]%
-{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/Starter.java}
-
-\enlargethispage{1.2cm}
 
 \noindent On invocation of the \method{run} method, the \class{Analysis Controller} %
-calls the \method{execute} method of all analysis plugins allowing them to initialize. %
-Then, it starts the configured monitoring reader by calling its \method{read} %
-method. Monitoring record consumers receive the monitoring records provided by %
-the reader. As soon as the reader returns from the execution of its \method{read} 
+calls the \method{init} method of all filter plugins allowing them to initialize. %
+Then, it starts the configured monitoring readers by calling its \method{read} %
+method. Plugins send data via their output ports to connected input ports of other 
+plugins. As soon as the reader returns from the execution of its \method{read} 
 method, the method \method{terminate} of each registered plugin is called by the %
 \class{Analysis Controller}. %
 In order to support the asynchronous execution of the \class{AnalysisController} instance, %
 we provide the \class{AnalysisControllerThread} class.
+
+\begin{figure}
+\includegraphics[width=\textwidth]{images/example-pipe-and-filter}
+\caption{Example pipe-and-filter configuration}
+\label{fig:example:pipe-and-filter}
+\end{figure}
+
+
+The remainder of this chapter describes how to develop custom reader and filter 
+plugins, as well as repositories. The description is based on the example %
+pipe-and-filter architecture shown in Figure~\ref{fig:example:pipe-and-filter}. The custom monitoring reader %
+\class{MyPipeReader}, which corresponds to the writer developed in Section~\ref{sec:monitoring-log-writers}, %
+sends records to the connected custom filter \class{MyResponseTimeFilter}. %
+This filter accepts only events of the record type \class{MyResponseTimeRecord}, 
+developed in Section~\ref{sec:componentsMonitoring:monitoringRecords}. %
+The \class{MyResponseTimeFilter} classifies incoming \class{MyResponseTimeRecord}s %
+based on whether they satisfy or exceed a configured threshold and pass them %
+to the respective output ports, \method{validResponseTimes} or \method{invalidResponseTimes}. %
+Two instances of a second custom filter, \class{MyResponseTimeOutputPrinter}, %
+print the received records to the standard output stream.
+
+\
+
+\NOTIFYBOX{The Java sources of this chapter, as well as a pre-compiled binary, %
+can be found in the %
+\file{\customComponentsBookstoreApplicationDirDistro{}/} directory of the %
+binary release.}
+
+% The following Listing~\ref{listing:AnalysisController} shows how to create and run an analysis %
+% with these custom components:
+% 
+% \setJavaCodeListing
+% \lstinputlisting[caption=Code snippet setting up and running a \KiekerAnalysisPart{} instance (Starter.java),label=listing:AnalysisController,firstline=48, lastline=82, firstnumber=48]%
+% {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/Starter.java}
+
+% \enlargethispage{1.2cm}
 
 \section{Analysis Plugins}\label{sec:analysis:plugins}
 

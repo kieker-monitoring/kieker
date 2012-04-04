@@ -20,9 +20,11 @@
 
 package kieker.examples.userguide.ch3and4bookstore;
 
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.plugin.AbstractPlugin;
 import kieker.common.configuration.Configuration;
 
 public final class Starter {
@@ -67,6 +69,7 @@ public final class Starter {
 		/* Configure, register, and connect the filter printing *valid* response times */
 		final Configuration validOutputConfiguration = new Configuration();
 		validOutputConfiguration.setProperty(MyResponseTimeOutputPrinter.CONFIG_PROPERTY_NAME_VALID_OUTPUT, Boolean.toString(true));
+		validOutputConfiguration.setProperty(AbstractPlugin.CONFIG_NAME, "Print valid");
 		final MyResponseTimeOutputPrinter validPrinter = new MyResponseTimeOutputPrinter(validOutputConfiguration);
 		analysisController.registerFilter(validPrinter);
 		analysisController.connect(filter, MyResponseTimeFilter.OUTPUT_PORT_NAME_RT_VALID, validPrinter, MyResponseTimeOutputPrinter.INPUT_PORT_NAME_EVENTS);
@@ -74,9 +77,12 @@ public final class Starter {
 		/* Configure, register, and connect the filter printing *invalid* response times */
 		final Configuration invalidOutputConfiguration = new Configuration();
 		invalidOutputConfiguration.setProperty(MyResponseTimeOutputPrinter.CONFIG_PROPERTY_NAME_VALID_OUTPUT, Boolean.toString(false));
+		invalidOutputConfiguration.setProperty(AbstractPlugin.CONFIG_NAME, "Print invalid");
 		final MyResponseTimeOutputPrinter invalidPrinter = new MyResponseTimeOutputPrinter(invalidOutputConfiguration);
 		analysisController.registerFilter(invalidPrinter);
 		analysisController.connect(filter, MyResponseTimeFilter.OUTPUT_PORT_NAME_RT_EXCEED, invalidPrinter, MyResponseTimeOutputPrinter.INPUT_PORT_NAME_EVENTS);
+
+		analysisController.saveToFile(new File("out.kax"));
 
 		/* Start the analysis. */
 		analysisController.run();

@@ -1,9 +1,11 @@
 package kieker.examples.userguide.ch3and4bookstore;
 
 import kieker.analysis.plugin.annotation.InputPort;
+import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
+@Plugin(name = "Reponse time printer")
 public class MyResponseTimeOutputPrinter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_EVENTS = "newEvent";
