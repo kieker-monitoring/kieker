@@ -20,57 +20,66 @@
 
 package kieker.examples.userguide.ch3and4bookstore;
 
+import java.util.concurrent.TimeUnit;
+
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
-@Plugin(outputPorts = {
-	@OutputPort(name = MyResponseTimeFilter.OUTPUT_PORT_NAME_VALID_EVENTS, eventTypes = { MyResponseTimeRecord.class }),
-	@OutputPort(name = MyResponseTimeFilter.OUTPUT_PORT_NAME_INVALID_EVENTS, eventTypes = { MyResponseTimeRecord.class }) })
+@Plugin(
+		name = "Response Time filter",
+		description = "Filters incoming response times based on a threshold",
+		outputPorts = {
+			@OutputPort(name = MyResponseTimeFilter.OUTPUT_PORT_NAME_RT_VALID,
+					description = "Outputs response times satisfying the threshold",
+					eventTypes = { MyResponseTimeRecord.class }),
+			@OutputPort(name = MyResponseTimeFilter.OUTPUT_PORT_NAME_RT_EXCEED,
+					description = "Outputs response times exceeding the threshold",
+					eventTypes = { MyResponseTimeRecord.class }) })
 public class MyResponseTimeFilter extends AbstractFilterPlugin {
+	public static final String OUTPUT_PORT_NAME_RT_VALID = "validResponseTimes";
+	public static final String OUTPUT_PORT_NAME_RT_EXCEED = "invalidResponseTimes";
 
-	public static final String INPUT_PORT_NAME_EVENTS = "newEvent";
-	public static final String OUTPUT_PORT_NAME_VALID_EVENTS = "validEvent";
-	public static final String OUTPUT_PORT_NAME_INVALID_EVENTS = "invalidEvent";
-	public static final String CONFIG_PROPERTY_NAME_MAX_RESPONSE_TIME = "maxResponseTime";
+	public static final String CONFIG_PROPERTY_NAME_RT_TS_NANOS = "rtThresholdNanos";
 
-	private final long maxResponseTime;
+	private final long rtThresholdNanos; // the configure threshold for this filter instance
 
 	public MyResponseTimeFilter(final Configuration configuration) {
 		super(configuration);
-		this.maxResponseTime = configuration.getLongProperty(MyResponseTimeFilter.CONFIG_PROPERTY_NAME_MAX_RESPONSE_TIME);
+		this.rtThresholdNanos =
+				configuration.getLongProperty(CONFIG_PROPERTY_NAME_RT_TS_NANOS);
 	}
 
-	@InputPort(name = MyResponseTimeFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { MyResponseTimeRecord.class })
-	public void newEvent(final Object event) {
-		if (event instanceof MyResponseTimeRecord) {
-			/* Filter the given record depending on the actual response time. */
-			final MyResponseTimeRecord myRecord = (MyResponseTimeRecord) event;
+	public static final String INPUT_PORT_NAME_RESPONSE_TIMES = "newResponseTime";
 
-			if (myRecord.responseTimeNanos > this.maxResponseTime) {
-				super.deliver(MyResponseTimeFilter.OUTPUT_PORT_NAME_INVALID_EVENTS, event);
-			} else {
-				super.deliver(MyResponseTimeFilter.OUTPUT_PORT_NAME_VALID_EVENTS, event);
-			}
+	@InputPort(
+			name = MyResponseTimeFilter.INPUT_PORT_NAME_RESPONSE_TIMES,
+			description = "Filter the given record depending on the response time",
+			eventTypes = { MyResponseTimeRecord.class })
+	public void newResponseTime(final MyResponseTimeRecord rtRecord) {
+		if (rtRecord.responseTimeNanos > this.rtThresholdNanos) {
+			super.deliver(OUTPUT_PORT_NAME_RT_EXCEED, rtRecord);
+		} else {
+			super.deliver(OUTPUT_PORT_NAME_RT_VALID, rtRecord);
 		}
 	}
+
+	public static final long CONFIG_PROPERTY_VALUE_RT_TS_NANOS_DEFAULT =
+			TimeUnit.NANOSECONDS.convert(1l, TimeUnit.MILLISECONDS);
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
-
-		configuration.setProperty(MyResponseTimeFilter.CONFIG_PROPERTY_NAME_MAX_RESPONSE_TIME, Long.toString(1000000));
-
+		configuration.setProperty(CONFIG_PROPERTY_NAME_RT_TS_NANOS,
+				Long.toString(CONFIG_PROPERTY_VALUE_RT_TS_NANOS_DEFAULT));
 		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-
-		configuration.setProperty(MyResponseTimeFilter.CONFIG_PROPERTY_NAME_MAX_RESPONSE_TIME, Long.toString(this.maxResponseTime));
-
+		configuration.setProperty(CONFIG_PROPERTY_NAME_RT_TS_NANOS, Long.toString(this.rtThresholdNanos));
 		return configuration;
 	}
 }

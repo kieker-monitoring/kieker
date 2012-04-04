@@ -67,7 +67,46 @@ method, the method \method{terminate} of each registered plugin is called by the
 In order to support the asynchronous execution of the \class{AnalysisController} instance, %
 we provide the \class{AnalysisControllerThread} class.
 
-\section{Monitoring Readers}\label{sec:analysis:reader}
+\section{Analysis Plugins}\label{sec:analysis:plugins}
+
+Any analysis or visualization component used with \KiekerAnalysisPart{} must %
+implement the interface \class{IAnalysisPlugin} (Figure~\ref{fig:analysisController:classdiagram}). %
+As described in Section~\ref{sec:analysis:controller}, the life-cycle of each %
+registered plugin is controlled by the \class{Analysis Controller} instance %
+employing the methods \method{execute} and \method{terminate}. Analysis plugins %
+must implement these methods for initialization and termination.
+
+The monitoring record consumer plugins described in the following %
+Section~\ref{sec:analysis:consumer}, are special analysis plugins that receive %
+the monitoring records provided by the monitoring reader. %
+Starting with these monitoring record plugins, analysis plugins can be connected %
+in a pipe-and-filter style to implement more complex analyses. %
+\Kieker{} provides input and output port interfaces and implementing classes %
+to implement such analyses. See the documentation of the classes \class{AbstractInputPort} %
+and \class{OutputPort} for details. \KiekerTraceAnalysis{} is implemented %
+based on this pattern. 
+
+\subsection{@Plugin Annotation and Output Ports}
+
+\setJavaCodeListing
+\lstinputlisting[firstline=31, firstnumber=31, lastline=44, caption={@Plugin annotation and output port names for example plugin}, label=listing:MyResponseTimeFilterPluginAnnotationOutputs]%
+{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
+
+\setJavaCodeListing
+\lstinputlisting[firstline=61, firstnumber=61, lastline=67, caption={Plugin sending events to output ports}, label=listing:MyResponseTimeFilterPluginAnnotationOutputs]%
+{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
+
+\subsection{Configuration}
+
+\setJavaCodeListing
+\lstinputlisting[firstline=45, firstnumber=45, lastline=53, caption={Plugin constructor with Configuration}, label=listing:MyResponseTimeFilterConstructor]%
+{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
+
+\setJavaCodeListing
+\lstinputlisting[firstline=72, firstnumber=72, lastline=84, caption={Plugin returning its default and current configuration}, label=listing:MyResponseTimeFilterEventsToOutput]%
+{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
+
+\subsection{Monitoring Reader Plugins}\label{sec:analysis:reader}
 
 % Warning-tag for the reader-writer-thing
 The monitoring readers are the direct counterpart to the monitoring %
@@ -81,7 +120,7 @@ of monitoring logs/streams, readers deserialize monitoring data and provide it a
 \label{Figure:ReaderHierarchy}
 \end{figure}
 
-\pagebreak
+% \pagebreak
 
 % \
 % 
@@ -110,28 +149,43 @@ Listing~\ref{listing:MyReader} on page~\pageref{listing:MyReader} shows a simple
 the named pipe introduced in the previous Chapter~\ref{chap:componentsMonitoring}. %
 
 % If there is nothing on the pipe to be read, the reader waits 4 seconds at maximum before it terminates.
+% \setJavaCodeListing
+% \lstinputlisting[firstline=29, firstnumber=29, caption=MyPipeReader.java (excerpt), label=listing:MyReader,float]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
+
 
 \setJavaCodeListing
-\lstinputlisting[firstline=29, firstnumber=29, caption=MyPipeReader.java (excerpt), label=listing:MyReader,float]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
+\lstinputlisting[firstline=30, firstnumber=30, lastline=38, caption={@Plugin annotation for the example reader}, label=listing:MyPipeReaderPluginAnnotation]%
+{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
 
-\section{Analysis Plugins}\label{sec:analysis:plugins}
+\setJavaCodeListing
+\lstinputlisting[firstline=30, firstnumber=30, lastline=38, caption={Example reader's initialization method}, label=listing:MyPipeReaderInit]%
+{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
 
-Any analysis or visualization component used with \KiekerAnalysisPart{} must %
-implement the interface \class{IAnalysisPlugin} (Figure~\ref{fig:analysisController:classdiagram}). %
-As described in Section~\ref{sec:analysis:controller}, the life-cycle of each %
-registered plugin is controlled by the \class{Analysis Controller} instance %
-employing the methods \method{execute} and \method{terminate}. Analysis plugins %
-must implement these methods for initialization and termination.
+\setJavaCodeListing
+\lstinputlisting[firstline=66, firstnumber=66, lastline=84, caption={Example reader's \method{read} method}, label=listing:MyPipeReaderInit]%
+{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
 
-The monitoring record consumer plugins described in the following %
-Section~\ref{sec:analysis:consumer}, are special analysis plugins that receive %
-the monitoring records provided by the monitoring reader. %
-Starting with these monitoring record plugins, analysis plugins can be connected %
-in a pipe-and-filter style to implement more complex analyses. %
-\Kieker{} provides input and output port interfaces and implementing classes %
-to implement such analyses. See the documentation of the classes \class{AbstractInputPort} %
-and \class{OutputPort} for details. \KiekerTraceAnalysis{} is implemented %
-based on this pattern. 
+\TODO{\method{terminate}}
+
+\subsection{Filter Plugins}\label{sec:analysis:filters}
+
+\setJavaCodeListing
+\lstinputlisting[firstline=57, firstnumber=57, lastline=61, caption={@InputPort annotation for the example plugin's input method}, label=listing:MyResponseTimeFilterEventsToOutput]%
+{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
+
+\subsection{Repositories}
+
+\setJavaCodeListing
+\lstinputlisting[firstline=57, firstnumber=57, lastline=61, caption={@Respository annotation for Kieker's system model repository}, label=listing:RepositoryAnnotation]%
+{../../src/tools/kieker/tools/traceAnalysis/systemModel/repository/SystemModelRepository.java}
+
+\setJavaCodeListing
+\lstinputlisting[firstline=44, firstnumber=44, lastline=48, caption={Declaration of required repositories in the @Respository annotation}, label=listing:RepositoryRequirementDeclaration]%
+{../../src/tools/kieker/tools/traceAnalysis/filter/AbstractTraceAnalysisFilter.java}
+
+\setJavaCodeListing
+\lstinputlisting[firstline=135, firstnumber=135, lastline=135, caption={Accessing a repository within in a plugin}, label=listing:RepositoryAccess]%
+{../../src/tools/kieker/tools/traceAnalysis/filter/AbstractTraceAnalysisFilter.java}
 
 \section{Monitoring Record Consumer Plugins}\label{sec:analysis:consumer}
 
@@ -148,7 +202,6 @@ The custom consumer in Listing~\ref{lst:MyReponseTimeConsumer} on %
 page~\pageref{lst:MyReponseTimeConsumer} simply writes %
 the content of the received response time records to the standard output stream.
 
-\pagebreak
-
-\setJavaCodeListing
+% \pagebreak
+% \setJavaCodeListing
 %\lstinputlisting[caption=MyReponseTimeConsumer.java,label=lst:MyReponseTimeConsumer,firstline=21,firstnumber=21]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeConsumer.java}

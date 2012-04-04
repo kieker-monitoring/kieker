@@ -27,6 +27,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 
 import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.repository.annotation.Repository;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
@@ -39,6 +40,9 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
  * 
  * @author Andre van Hoorn
  */
+@Repository(
+		name = "System model repository",
+		description = "Model manager for Kieker's component model ")
 public class SystemModelRepository extends AbstractRepository {
 
 	private static final String ENCODING = "UTF-8";

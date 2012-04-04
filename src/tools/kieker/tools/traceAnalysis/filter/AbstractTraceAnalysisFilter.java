@@ -41,11 +41,14 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
+@Plugin(repositoryPorts =
+			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
+					repositoryType = SystemModelRepository.class))
 public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
-	private static final Log LOG = LogFactory.getLog(AbstractTraceAnalysisFilter.class);
-
 	public static final String REPOSITORY_PORT_NAME_SYSTEM_MODEL = "systemModelRepository";
+
+	// Please leave the logger here, because the "composition" above is used in the user guide
+	private static final Log LOG = LogFactory.getLog(AbstractTraceAnalysisFilter.class);
 
 	/**
 	 * Output stream for info output addressed to users, e.g., number of traces processed, files processed etc.

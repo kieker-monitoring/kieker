@@ -27,8 +27,13 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
-@Plugin(outputPorts = {
-	@OutputPort(eventTypes = { MyResponseTimeRecord.class }, name = MyPipeReader.OUTPUT_PORT_NAME)
+@Plugin(
+		name = "Pipe reader",
+		description = "Reads records from a configured pipe",
+		outputPorts = { @OutputPort(
+				name = MyPipeReader.OUTPUT_PORT_NAME,
+				description = "Outputs any received record",
+				eventTypes = { Object.class })
 })
 public class MyPipeReader extends AbstractReaderPlugin {
 
