@@ -92,24 +92,25 @@ binary release.}
 
 \section{Analysis Plugins}\label{sec:analysis:plugins}
 
-Any analysis or visualization component used with \KiekerAnalysisPart{} must %
-implement the interface \class{IAnalysisPlugin} (Figure~\ref{fig:analysisController:classdiagram}). %
-As described in Section~\ref{sec:analysis:controller}, the life-cycle of each %
-registered plugin is controlled by the \class{Analysis Controller} instance %
-employing the methods \method{execute} and \method{terminate}. Analysis plugins %
-must implement these methods for initialization and termination.
+Kieker analyis plugins are either monitoring readers, as detailed in Section~\ref{sec:analysis:reader}, %
+or filters, as detailed in Section~\ref{sec:analysis:filters}. When implementing %
+any of these two plugin types, the classes \class{AbstractReaderPlugin} or, %
+respectively, \class{AbstractFilterPlugin} need to be extended (Figure~\ref{fig:analysisController:classdiagram}). %
 
-The monitoring record consumer plugins described in the following %
-Section~\ref{sec:analysis:consumer}, are special analysis plugins that receive %
-the monitoring records provided by the monitoring reader. %
-Starting with these monitoring record plugins, analysis plugins can be connected %
-in a pipe-and-filter style to implement more complex analyses. %
-\Kieker{} provides input and output port interfaces and implementing classes %
-to implement such analyses. See the documentation of the classes \class{AbstractInputPort} %
-and \class{OutputPort} for details. \KiekerTraceAnalysis{} is implemented %
-based on this pattern. 
+% The monitoring record consumer plugins described in the following %
+% Section~\ref{sec:analysis:consumer}, are special analysis plugins that receive %
+% the monitoring records provided by the monitoring reader. %
+% Starting with these monitoring record plugins, analysis plugins can be connected %
+% in a pipe-and-filter style to implement more complex analyses. %
+% \Kieker{} provides input and output port interfaces and implementing classes %
+% to implement such analyses. See the documentation of the classes \class{AbstractInputPort} %
+% and \class{OutputPort} for details. \KiekerTraceAnalysis{} is implemented %
+% based on this pattern. 
 
 \subsection{@Plugin Annotation and Output Ports}
+
+\noindent The \class{@Plugin} class annotation is used to define a %
+plugin name, a description, and the list of output ports.
 
 \setJavaCodeListing
 \lstinputlisting[firstline=31, firstnumber=31, lastline=44, caption={@Plugin annotation and output port names for example plugin}, label=listing:MyResponseTimeFilterPluginAnnotationOutputs]%
@@ -120,6 +121,10 @@ based on this pattern.
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
 
 \subsection{Configuration}
+
+\noindent According to the %
+configuration of the \KiekerMonitoringPart{} components (see Section~\ref{sec:monitoring:configuration}), 
+filters are configured via \class{Configuration} objects. 
 
 \setJavaCodeListing
 \lstinputlisting[firstline=45, firstnumber=45, lastline=53, caption={Plugin constructor with Configuration}, label=listing:MyResponseTimeFilterConstructor]%
