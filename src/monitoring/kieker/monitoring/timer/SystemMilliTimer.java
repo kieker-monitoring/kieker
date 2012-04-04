@@ -21,8 +21,11 @@
 package kieker.monitoring.timer;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 
 /**
  * A timer implementation, counting in milliseconds since a specified offset.
@@ -31,8 +34,12 @@ import kieker.common.configuration.Configuration;
  */
 public final class SystemMilliTimer extends AbstractTimeSource {
 	public static final String CONFIG_OFFSET = SystemMilliTimer.class.getName() + ".offset";
+	public static final String CONFIG_UNIT = SystemMilliTimer.class.getName() + ".unit";
+
+	private static final Log LOG = LogFactory.getLog(SystemMilliTimer.class);
 
 	private final long offset;
+	private final TimeUnit timeunit;
 
 	public SystemMilliTimer(final Configuration configuration) {
 		super(configuration);
@@ -41,16 +48,35 @@ public final class SystemMilliTimer extends AbstractTimeSource {
 		} else {
 			this.offset = configuration.getLongProperty(CONFIG_OFFSET);
 		}
+		final int timeunitval = configuration.getIntProperty(CONFIG_UNIT);
+		switch (timeunitval) {
+		case 0:
+			this.timeunit = TimeUnit.NANOSECONDS;
+			break;
+		case 1:
+			this.timeunit = TimeUnit.MICROSECONDS;
+			break;
+		case 2:
+			this.timeunit = TimeUnit.MILLISECONDS;
+			break;
+		case 3:
+			this.timeunit = TimeUnit.SECONDS;
+			break;
+		default:
+			LOG.warn("Failed to determine value of " + CONFIG_UNIT + " (0, 1, 2, or 3 expected). Setting to 0=nanoseconds");
+			this.timeunit = TimeUnit.NANOSECONDS;
+			break;
+		}
 	}
 
 	public final long getTime() {
-		return System.currentTimeMillis() - this.offset;
+		return TimeUnit.MILLISECONDS.convert(System.currentTimeMillis() - this.offset, this.timeunit);
 	}
 
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("Time in milliseconds since ");
+		sb.append("Time in " + this.timeunit.toString().toLowerCase() + " (with milliseconds precision) since ");
 		sb.append(new Date(this.offset));
 		return sb.toString();
 	}
