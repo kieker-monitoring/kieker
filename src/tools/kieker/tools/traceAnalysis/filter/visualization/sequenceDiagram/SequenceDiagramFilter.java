@@ -61,8 +61,6 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter {
-	private static final Log LOG = LogFactory.getLog(SequenceDiagramFilter.class);
-
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE = "filename";
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES = "shortLabels";
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_SDMODE = "SDMode";
@@ -76,6 +74,8 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	private static final String SEQUENCE_PIC_PATH = "META-INF/sequence.pic";
 	private static final String SEQUENCE_PIC_CONTENT;
 	private static final String ENCODING = "UTF-8";
+
+	private static final Log LOG = LogFactory.getLog(SequenceDiagramFilter.class);
 
 	private final String outputFnBase;
 	private final boolean shortLabels;
@@ -117,6 +117,9 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 		}
 	}
 
+	/**
+	 * @author Andre van Hoorn
+	 */
 	public static enum SDModes {
 		ASSEMBLY, ALLOCATION
 	}

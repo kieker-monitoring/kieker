@@ -22,6 +22,8 @@ package kieker.tools.traceAnalysis.filter.visualization.callTree;
 
 /**
  * 
+ * @param <T>
+ * 
  * @author Andre van Hoorn
  */
 public class WeightedDirectedCallTreeEdge<T> {

@@ -24,13 +24,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Test;
+
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
-
-import org.junit.Test;
 
 /**
  * TODO: The idea is to make this class independent of FS, i.e., to provide a basic

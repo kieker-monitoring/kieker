@@ -21,10 +21,11 @@
 package kieker.test.tools.junit.traceAnalysis.filter;
 
 import junit.framework.Assert;
-import kieker.common.util.ClassOperationSignaturePair;
-import kieker.common.util.Signature;
 
 import org.junit.Test;
+
+import kieker.common.util.ClassOperationSignaturePair;
+import kieker.common.util.Signature;
 
 /**
  * 
@@ -32,6 +33,10 @@ import org.junit.Test;
  * 
  */
 public class TestAbstractTraceAnalysisPluginCreateOperationSignatureString {
+
+	public TestAbstractTraceAnalysisPluginCreateOperationSignatureString() {
+		// empty default constructor
+	}
 
 	@Test
 	public void testNoModifiers() {

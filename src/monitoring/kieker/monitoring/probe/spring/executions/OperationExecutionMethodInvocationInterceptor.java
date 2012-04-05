@@ -20,6 +20,9 @@
 
 package kieker.monitoring.probe.spring.executions;
 
+import org.aopalliance.intercept.MethodInterceptor;
+import org.aopalliance.intercept.MethodInvocation;
+
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
@@ -29,9 +32,6 @@ import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.IMonitoringProbe;
 import kieker.monitoring.timer.ITimeSource;
-
-import org.aopalliance.intercept.MethodInterceptor;
-import org.aopalliance.intercept.MethodInvocation;
 
 /**
  * This annotation marks methods that are exit points for remote calls

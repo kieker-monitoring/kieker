@@ -60,8 +60,6 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGraphFilter<AssemblyComponentOperationPair> {
-	private static final Log LOG = LogFactory.getLog(OperationDependencyGraphAssemblyFilter.class);
-
 	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dotOutputFn";
 	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
 	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
@@ -73,6 +71,8 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	private static final String DEFAULT_DOT_OUTPUT_FILE = "output.dot";
 
 	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
+
+	private static final Log LOG = LogFactory.getLog(OperationDependencyGraphAssemblyFilter.class);
 
 	private final File dotOutputFile;
 	private final boolean includeWeights;

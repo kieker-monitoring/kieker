@@ -25,6 +25,12 @@ import java.util.Collections;
 import java.util.List;
 
 import junit.framework.Assert;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.TemporaryFolder;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.reader.database.DbReader;
 import kieker.common.configuration.Configuration;
@@ -32,11 +38,6 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.TemporaryFolder;
 
 /**
  * @author Jan Waller
@@ -47,7 +48,7 @@ public abstract class AbstractDbWriterReaderTest extends AbstractWriterReaderTes
 	public static final String TABLEPREFIX = "kieker";
 
 	@Rule
-	public final TemporaryFolder tmpFolder = new TemporaryFolder();
+	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
 	public String getConnectionString() throws IOException {
 		return "jdbc:derby:" + this.tmpFolder.getRoot().getCanonicalPath() + "/KIEKER;user=DBUSER;password=DBPASS";

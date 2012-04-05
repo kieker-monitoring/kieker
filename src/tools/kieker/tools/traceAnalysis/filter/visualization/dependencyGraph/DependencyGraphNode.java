@@ -27,6 +27,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 
+ * @param <T>
+ * 
  * @author Andre van Hoorn
  */
 public class DependencyGraphNode<T> {
@@ -91,7 +93,7 @@ public class DependencyGraphNode<T> {
 	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final boolean assume) {
 		synchronized (this) {
 			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = // NOPMD(UseConcurrentHashMap)
-			assume ? this.assumedOutgoingDependencies : this.outgoingDependencies;
+			assume ? this.assumedOutgoingDependencies : this.outgoingDependencies; // NOCS (inline ?)
 
 			WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(destination.getId());
 			if (e == null) {
@@ -116,7 +118,7 @@ public class DependencyGraphNode<T> {
 	public void addIncomingDependency(final DependencyGraphNode<T> source, final boolean assume) {
 		synchronized (this) {
 			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = // NOPMD(UseConcurrentHashMap)
-			assume ? this.assumedIncomingDependencies : this.incomingDependencies;
+			assume ? this.assumedIncomingDependencies : this.incomingDependencies; // NOCS (inline ?)
 
 			WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(source.getId());
 			if (e == null) {
@@ -136,10 +138,10 @@ public class DependencyGraphNode<T> {
 	public String getFormattedDecorations() {
 		synchronized (this) {
 			final StringBuilder builder = new StringBuilder();
-			final Iterator<AbstractNodeDecoration> decorations = this.decorations.values().iterator();
+			final Iterator<AbstractNodeDecoration> decorationsIter = this.decorations.values().iterator();
 
-			while (decorations.hasNext()) {
-				final String currentDecorationText = decorations.next().createFormattedOutput();
+			while (decorationsIter.hasNext()) {
+				final String currentDecorationText = decorationsIter.next().createFormattedOutput();
 
 				if ((currentDecorationText == null) || (currentDecorationText.length() == 0)) {
 					continue;
@@ -147,7 +149,7 @@ public class DependencyGraphNode<T> {
 
 				builder.append(currentDecorationText);
 
-				if (decorations.hasNext()) {
+				if (decorationsIter.hasNext()) {
 					builder.append("\\n");
 				}
 			}

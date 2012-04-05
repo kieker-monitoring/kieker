@@ -24,6 +24,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import junit.framework.Assert;
+
+import org.junit.Test;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.trace.TraceIdFilter;
@@ -32,8 +35,6 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
 import kieker.tools.traceAnalysis.filter.flow.EventRecordTrace;
-
-import org.junit.Test;
 
 /**
  * 
@@ -44,6 +45,10 @@ public class TestTraceIdFilter {
 
 	private static final String SESSION_ID = "sv7w1ifhK";
 	private static final String HOSTNAME = "srv098";
+
+	public TestTraceIdFilter() {
+		// empty default constructor
+	}
 
 	/**
 	 * Given a TraceIdFilter that passes traceIds included in a set <i>idsToPass</i>,

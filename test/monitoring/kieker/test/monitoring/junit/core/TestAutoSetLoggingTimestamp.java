@@ -24,13 +24,14 @@ import java.util.List;
 import java.util.Properties;
 
 import junit.framework.Assert;
+
+import org.junit.Test;
+
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.test.monitoring.junit.util.NamedPipeFactory;
-
-import org.junit.Test;
 
 /**
  * Tests, whether the property <i>setLoggingTimestamp</i> works properly.

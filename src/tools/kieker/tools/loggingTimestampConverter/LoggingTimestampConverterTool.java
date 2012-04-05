@@ -24,10 +24,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
-import kieker.tools.util.LoggingTimestampConverter;
-
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -36,6 +32,10 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
+import kieker.tools.util.LoggingTimestampConverter;
 
 /**
  * 

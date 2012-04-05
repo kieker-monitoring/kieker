@@ -21,10 +21,6 @@ package kieker.tools;
 
 import java.io.File;
 
-import kieker.analysis.AnalysisController;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
-
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -32,6 +28,10 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+
+import kieker.analysis.AnalysisController;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 
 /**
  * A simple execution of Analysis Configurations.

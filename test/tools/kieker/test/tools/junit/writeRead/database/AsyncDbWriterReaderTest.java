@@ -30,6 +30,11 @@ import kieker.monitoring.writer.database.AsyncDbWriter;
  * @author Jan Waller
  */
 public final class AsyncDbWriterReaderTest extends AbstractDbWriterReaderTest { // NOPMD (TestClassWithoutTestCases)
+
+	public AsyncDbWriterReaderTest() {
+		// empty default constructor
+	}
+
 	@Override
 	protected IMonitoringController createController(final int numRecordsWritten) throws Exception {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();

@@ -25,6 +25,10 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import junit.framework.Assert;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import kieker.common.configuration.Configuration;
 import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
@@ -37,9 +41,6 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
-
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * 
@@ -60,9 +61,9 @@ public class TestExecutionTraceBookstore {
 	private volatile Execution exec2_1__crm_getOrders; // NOPMD NOCS (VariableNamingConventions)
 	private volatile Execution exec3_2__catalog_getBook; // NOPMD NOCS (VariableNamingConventions)
 
-	// public TestExecutionTraceBookstore() {
-	//
-	// }
+	public TestExecutionTraceBookstore() {
+		// empty default constructor
+	}
 
 	@Before
 	public void setUp() throws Exception {

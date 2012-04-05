@@ -57,13 +57,16 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 					eventTypes = { ExecutionTrace.class }) },
 		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessingFilter {
-	private static final Log LOG = LogFactory.getLog(TraceEquivalenceClassFilter.class);
-
 	public static final String INPUT_PORT_NAME_EXECUTION_TRACE = "executionTraces";
 
 	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE_REPRESENTATIVES = "messageTraceRepresentatives";
 	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE_REPRESENTATIVES = "executionTraceRepresentatives";
 
+	private static final Log LOG = LogFactory.getLog(TraceEquivalenceClassFilter.class);
+
+	/**
+	 * @author Andre van Hoorn
+	 */
 	public static enum TraceEquivalenceClassModes {
 		DISABLED, ASSEMBLY, ALLOCATION
 	}

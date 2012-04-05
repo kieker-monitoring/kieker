@@ -30,6 +30,8 @@ import kieker.common.configuration.Configuration;
 
 /**
  * 
+ * @param <T>
+ * 
  * @author Nils Ehmke, Jan Waller
  */
 @Plugin

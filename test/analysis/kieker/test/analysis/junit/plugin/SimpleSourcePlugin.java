@@ -20,12 +20,12 @@
 
 package kieker.test.analysis.junit.plugin;
 
+import org.junit.Assert;
+
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-
-import org.junit.Assert;
 
 /**
  * @author Nils Christian Ehmke, Jan Waller

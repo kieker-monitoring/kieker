@@ -8,6 +8,12 @@
     <file-match-pattern match-pattern="." include-pattern="true"/>
   </fileset>
   <filter name="FilesFromPackage" enabled="true">
+    <filter-data value="examples/userguide/ch2--bookstore-application/src"/>
+    <filter-data value="examples/userguide/ch2--manual-instrumentation/src"/>
+    <filter-data value="examples/userguide/ch3-4--custom-components/src"/>
+    <filter-data value="examples/userguide/ch5--trace-monitoring-aspectj/src"/>
+    <filter-data value="examples/userguide/appendix-JMS/src"/>
+    <filter-data value="examples/userguide/appendix-Sigar/src"/>
     <filter-data value="src-gen/analysis"/>
   </filter>
   <filter name="NonSrcDirs" enabled="true"/>

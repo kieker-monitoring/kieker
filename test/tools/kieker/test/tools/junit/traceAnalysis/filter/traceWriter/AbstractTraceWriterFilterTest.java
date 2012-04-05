@@ -28,6 +28,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.Assert;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+
 import kieker.analysis.AnalysisController;
 import kieker.common.configuration.Configuration;
 import kieker.test.analysis.junit.plugin.ListReader;
@@ -39,12 +46,6 @@ import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceExcepti
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
 /**
  * 
@@ -69,12 +70,12 @@ public abstract class AbstractTraceWriterFilterTest {
 	private static final int INITIAL_TIMESTAMP_INVALID_EXEC_TRACE = AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_VALID_EXEC_TRACE + 300;
 	private static final int INITIAL_TIMESTAMP_VALID_MESSAGE_TRACE = AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_INVALID_EXEC_TRACE + 300;
 
+	@Rule
+	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
+
 	private final SystemModelRepository modelRepo = new SystemModelRepository(new Configuration());
 
 	private final BookstoreExecutionFactory execFactory = new BookstoreExecutionFactory(this.modelRepo);
-
-	@Rule
-	public final TemporaryFolder tmpFolder = new TemporaryFolder();
 
 	private volatile File outputFile = null;
 

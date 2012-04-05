@@ -56,6 +56,9 @@ public class AggregatedAssemblyComponentOperationCallTreeFilter extends Abstract
 	}
 }
 
+/**
+ * @author Andre van Hoorn
+ */
 class AggregatedAssemblyComponentOperationCallTreeNode extends AbstractAggregatedCallTreeNode<AssemblyComponentOperationPair> {
 
 	public AggregatedAssemblyComponentOperationCallTreeNode(final int id, final AssemblyComponentOperationPair entity, final boolean rootNode) {

@@ -20,7 +20,6 @@
 
 package kieker.common.record.flow.trace.operation;
 
-
 /**
  * @author Andre van Hoorn, Holger Knoche, Jan Waller
  */

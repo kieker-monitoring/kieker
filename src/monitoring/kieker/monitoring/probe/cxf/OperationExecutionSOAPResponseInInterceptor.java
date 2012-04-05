@@ -23,14 +23,6 @@ package kieker.monitoring.probe.cxf;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.registry.ControlFlowRegistry;
-import kieker.monitoring.core.registry.SessionRegistry;
-import kieker.monitoring.probe.IMonitoringProbe;
-import kieker.monitoring.timer.ITimeSource;
-
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.SoapHeaderInterceptor;
 import org.apache.cxf.common.logging.LogUtils;
@@ -39,6 +31,14 @@ import org.apache.cxf.helpers.DOMUtils;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.message.Message;
 import org.w3c.dom.Element;
+
+import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.core.registry.ControlFlowRegistry;
+import kieker.monitoring.core.registry.SessionRegistry;
+import kieker.monitoring.probe.IMonitoringProbe;
+import kieker.monitoring.timer.ITimeSource;
 
 /**
  * CXF InInterceptor to get the sessionIdentifier header from an incoming soap message

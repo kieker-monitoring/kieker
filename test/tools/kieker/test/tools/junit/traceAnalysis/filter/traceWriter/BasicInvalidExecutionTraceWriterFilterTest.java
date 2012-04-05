@@ -35,6 +35,10 @@ import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
  */
 public class BasicInvalidExecutionTraceWriterFilterTest extends AbstractTraceWriterFilterTest { // NOPMD (TestClassWithoutTestCases)
 
+	public BasicInvalidExecutionTraceWriterFilterTest() {
+		// empty default constructor
+	}
+
 	@Override
 	protected AbstractTraceProcessingFilter provideWriterFilter(final String filename) throws IOException {
 		final Configuration filterConfiguration = new Configuration();

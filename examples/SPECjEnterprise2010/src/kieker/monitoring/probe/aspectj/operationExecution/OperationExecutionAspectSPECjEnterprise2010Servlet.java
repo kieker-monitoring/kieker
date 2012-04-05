@@ -32,6 +32,10 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public class OperationExecutionAspectSPECjEnterprise2010Servlet extends AbstractOperationExecutionAspectServlet {
 
+	public OperationExecutionAspectSPECjEnterprise2010Servlet() {
+		// empty default constructor
+	}
+
 	@Override
 	@Pointcut("execution(* org.spec.jent.servlet.SpecAppServlet.do*(..)) && args(request,response)")
 	public void monitoredServlet(final HttpServletRequest request, final HttpServletResponse response) {

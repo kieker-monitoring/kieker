@@ -10,6 +10,8 @@
 
   <!-- exclude generated code -->
   <exclude-pattern>.*/src-gen/.*</exclude-pattern>
+  <!-- exclude userguide examples -->
+  <exclude-pattern>.*/examples/userguide/.*</exclude-pattern>
   
   <!-- We'll use the following rulesets -->
   <rule ref="rulesets/basic.xml">

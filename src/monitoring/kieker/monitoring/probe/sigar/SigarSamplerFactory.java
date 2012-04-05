@@ -20,13 +20,13 @@
 
 package kieker.monitoring.probe.sigar;
 
-import kieker.monitoring.probe.sigar.samplers.CPUsCombinedPercSampler;
-import kieker.monitoring.probe.sigar.samplers.CPUsDetailedPercSampler;
-import kieker.monitoring.probe.sigar.samplers.MemSwapUsageSampler;
-
 import org.hyperic.sigar.Humidor;
 import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarProxy;
+
+import kieker.monitoring.probe.sigar.samplers.CPUsCombinedPercSampler;
+import kieker.monitoring.probe.sigar.samplers.CPUsDetailedPercSampler;
+import kieker.monitoring.probe.sigar.samplers.MemSwapUsageSampler;
 
 /**
  * Provides factory methods for {@link kieker.monitoring.probe.sigar.samplers.AbstractSigarSampler}s.

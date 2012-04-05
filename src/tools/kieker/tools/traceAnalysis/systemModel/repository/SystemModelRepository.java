@@ -45,10 +45,10 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
 		description = "Model manager for Kieker's component model ")
 public class SystemModelRepository extends AbstractRepository {
 
-	private static final String ENCODING = "UTF-8";
-
 	public static final Execution ROOT_EXECUTION =
 			new Execution(OperationRepository.ROOT_OPERATION, AllocationRepository.ROOT_ALLOCATION_COMPONENT, -1, "-1", -1, -1, -1, -1, false);
+
+	private static final String ENCODING = "UTF-8";
 
 	private final TypeRepository typeRepositoryFactory;
 	private final AssemblyRepository assemblyFactory;

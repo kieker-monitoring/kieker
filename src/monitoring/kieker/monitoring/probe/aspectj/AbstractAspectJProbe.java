@@ -20,10 +20,10 @@
 
 package kieker.monitoring.probe.aspectj;
 
-import kieker.monitoring.probe.IMonitoringProbe;
-
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+
+import kieker.monitoring.probe.IMonitoringProbe;
 
 /**
  * @author Jan Waller

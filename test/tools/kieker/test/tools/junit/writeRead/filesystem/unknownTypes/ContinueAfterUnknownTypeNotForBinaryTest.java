@@ -22,13 +22,13 @@ package kieker.test.tools.junit.writeRead.filesystem.unknownTypes;
 
 import java.util.List;
 
+import org.junit.Assert;
+
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writer.IMonitoringWriter;
 import kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter;
-
-import org.junit.Assert;
 
 /**
  * A warning by the reader should show up that this mode is not supported for binary files.
@@ -37,6 +37,11 @@ import org.junit.Assert;
  * 
  */
 public class ContinueAfterUnknownTypeNotForBinaryTest extends AbstractUnknownTypeTest { // NOPMD (TestClassWithoutTestCases)
+
+	public ContinueAfterUnknownTypeNotForBinaryTest() {
+		// empty default constructor
+	}
+
 	@Override
 	protected Class<? extends IMonitoringWriter> getTestedWriterClazz() {
 		return AsyncBinaryFsWriter.class;

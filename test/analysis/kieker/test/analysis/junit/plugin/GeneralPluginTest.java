@@ -22,6 +22,9 @@ package kieker.test.analysis.junit.plugin; // NOCS (outer types)
 
 import java.util.List;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.AbstractPlugin;
@@ -39,15 +42,16 @@ import kieker.tools.traceAnalysis.filter.executionRecordTransformation.Execution
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 /**
  * A simple test for the plugins in general. It tests for example if the chaining of different plugins does work.
  * 
  * @author Nils Christian Ehmke
  */
 public class GeneralPluginTest {
+
+	public GeneralPluginTest() {
+		// empty default constructor
+	}
 
 	private OperationExecutionRecord createOperationExecutionRecord(final String opString, final long traceId, final long tin, final long tout) {
 		return new OperationExecutionRecord(opString, OperationExecutionRecord.NO_SESSION_ID, traceId, tin, tout, OperationExecutionRecord.NO_HOSTNAME,
@@ -153,7 +157,6 @@ public class GeneralPluginTest {
  * This is just a helper class used for testing the plugin structure. It should not be used outside this test class.
  * 
  * @author Nils Christian Ehmke
- * @version 1.0
  */
 @Plugin(outputPorts = { @OutputPort(name = SourceClass.OUTPUT_PORT_NAME, eventTypes = { OperationExecutionRecord.class }) })
 class SourceClass extends AbstractReaderPlugin { // NOPMD (SubClassOfTest)
@@ -200,6 +203,9 @@ class SourceClass extends AbstractReaderPlugin { // NOPMD (SubClassOfTest)
 	}
 }
 
+/**
+ * @author Nils Christian Ehmke
+ */
 @Plugin(name = MyPlugin.PLUGIN_NAME, description = MyPlugin.PLUGIN_DESCRIPTION)
 class MyPlugin extends AbstractPlugin { // NOPMD (SubClassOfTest)
 	public static final String PLUGIN_NAME = "pluginName-EfpvPSE0";
@@ -221,6 +227,9 @@ class MyPlugin extends AbstractPlugin { // NOPMD (SubClassOfTest)
 
 }
 
+/**
+ * @author Nils Christian Ehmke
+ */
 @Repository(name = MyRepository.REPOSITORY_NAME, description = MyRepository.REPOSITORY_DESCRIPTION)
 class MyRepository extends AbstractRepository { // NOPMD (SubClassOfTest)
 

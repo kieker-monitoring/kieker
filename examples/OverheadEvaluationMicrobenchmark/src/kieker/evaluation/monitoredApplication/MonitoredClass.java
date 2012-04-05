@@ -31,6 +31,10 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 public final class MonitoredClass {
 	private final ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
 
+	public MonitoredClass() {
+		// empty default constructor
+	}
+
 	@OperationExecutionMonitoringProbe
 	public final long monitoredMethod(final long methodTime, final int recDepth) {
 		if (recDepth > 1) {

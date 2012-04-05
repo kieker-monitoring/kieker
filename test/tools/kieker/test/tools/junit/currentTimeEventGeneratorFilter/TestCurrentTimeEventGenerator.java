@@ -24,6 +24,9 @@ import java.util.Arrays;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import junit.framework.Assert;
+
+import org.junit.Test;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
@@ -33,14 +36,11 @@ import kieker.common.record.misc.EmptyRecord;
 import kieker.common.record.misc.TimestampRecord;
 import kieker.tools.currentTimeEventGenerator.CurrentTimeEventGenerationFilter;
 
-import org.junit.Test;
-
 /**
  * Each test is executed for both input ports, {@link CurrentTimeEventGenerationFilter#inputTimestamp(Long)} and
  * {@link CurrentTimeEventGenerationFilter#inputRecord(kieker.common.record.IMonitoringRecord)}.
  * 
  * @author Andre van Hoorn
- * 
  */
 public class TestCurrentTimeEventGenerator { // NOCS
 
@@ -156,6 +156,9 @@ public class TestCurrentTimeEventGenerator { // NOCS
 	}
 
 	// TODO: Don't we have a general sink for this already?
+	/**
+	 * @author Andre van Hoorn
+	 */
 	static class DstClass extends AbstractFilterPlugin {
 
 		public static final String INPUT_PORT_NAME = "doJob";

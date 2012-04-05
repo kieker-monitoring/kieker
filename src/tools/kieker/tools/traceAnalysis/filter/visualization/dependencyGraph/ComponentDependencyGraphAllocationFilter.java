@@ -56,8 +56,6 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class ComponentDependencyGraphAllocationFilter extends AbstractDependencyGraphFilter<AllocationComponent> {
-	private static final Log LOG = LogFactory.getLog(ComponentDependencyGraphAllocationFilter.class);
-
 	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dotOutputFn";
 	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
 	public static final String CONFIG_PROPERTY_NAME_SHORTLABELS = "shortLabels";
@@ -66,6 +64,9 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 	public static final String CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT = "AllocationComponentDependencyGraph";
 
 	private static final String CONTAINER_NODE_ID_PREFIX = "container";
+
+	private static final Log LOG = LogFactory.getLog(ComponentDependencyGraphAllocationFilter.class);
+
 	private final String dotOutputFile;
 	private final boolean includeWeights;
 	private final boolean shortLabels;

@@ -33,26 +33,6 @@ import kieker.common.record.flow.trace.operation.CallOperationEvent;
  * 
  */
 public class TraceEventDispatcher {
-	/**
-	 * 
-	 * @author Holger Knoche
-	 * 
-	 */
-	public static interface IAbstractTraceEventVisitor {
-
-		public void handleAfterOperationEvent(AfterOperationEvent afterOperationEvent);
-
-		public void handleAfterOperationFailedEvent(AfterOperationFailedEvent afterOperationFailedEvent);
-
-		public void handleBeforeOperationEvent(BeforeOperationEvent beforeOperationEvent);
-
-		public void handleCallOperationEvent(CallOperationEvent callOperationEvent);
-
-		public void handleSplitEvent(SplitEvent splitEvent);
-
-		public void handleUnsupportedEvent(AbstractTraceEvent unsupportedEvent);
-
-	}
 
 	private final IAbstractTraceEventVisitor visitor;
 
@@ -74,5 +54,24 @@ public class TraceEventDispatcher {
 		} else {
 			this.visitor.handleUnsupportedEvent(event);
 		}
+	}
+
+	/**
+	 * @author Holger Knoche
+	 */
+	public static interface IAbstractTraceEventVisitor {
+
+		public void handleAfterOperationEvent(AfterOperationEvent afterOperationEvent);
+
+		public void handleAfterOperationFailedEvent(AfterOperationFailedEvent afterOperationFailedEvent);
+
+		public void handleBeforeOperationEvent(BeforeOperationEvent beforeOperationEvent);
+
+		public void handleCallOperationEvent(CallOperationEvent callOperationEvent);
+
+		public void handleSplitEvent(SplitEvent splitEvent);
+
+		public void handleUnsupportedEvent(AbstractTraceEvent unsupportedEvent);
+
 	}
 }

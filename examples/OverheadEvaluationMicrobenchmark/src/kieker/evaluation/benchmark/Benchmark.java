@@ -24,14 +24,14 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.concurrent.CountDownLatch;
 
-import kieker.evaluation.monitoredApplication.MonitoredClass;
-
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
+
+import kieker.evaluation.monitoredApplication.MonitoredClass;
 
 /**
  * @author Jan Waller

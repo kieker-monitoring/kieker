@@ -38,6 +38,12 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
 
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.ParseException;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.filter.select.TimestampFilter;
@@ -76,12 +82,6 @@ import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOper
 import kieker.tools.traceAnalysis.systemModel.repository.AssemblyComponentOperationPairFactory;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.util.LoggingTimestampConverter;
-
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.ParseException;
 
 /**
  * 
@@ -298,7 +298,7 @@ public final class TraceAnalysisTool {
 			analysisInstance.registerRepository(SYSTEM_ENTITY_FACTORY);
 
 			final TimestampFilter timestampFilter;
-			{
+			{ // NOCS (nested block)
 				/*
 				 * Create the timestamp filter and connect to the reader's output port
 				 */
@@ -316,7 +316,7 @@ public final class TraceAnalysisTool {
 			}
 
 			final TraceIdFilter traceIdFilter;
-			{
+			{ // NOCS (nested block)
 				/*
 				 * Create the trace ID filter and connect to the timestamp filter's output port
 				 */
@@ -337,7 +337,7 @@ public final class TraceAnalysisTool {
 			}
 
 			final ExecutionRecordTransformationFilter execRecTransformer;
-			{
+			{ // NOCS (nested block)
 				/*
 				 * Create the execution record transformation filter and connect to the trace ID filter's output port
 				 */
@@ -351,7 +351,7 @@ public final class TraceAnalysisTool {
 				analysisInstance.connect(execRecTransformer, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, SYSTEM_ENTITY_FACTORY);
 			}
 
-			{
+			{ // NOCS (nested block)
 				/*
 				 * Create the trace reconstruction filter and connect to the record transformation filter's output port
 				 */
@@ -368,7 +368,7 @@ public final class TraceAnalysisTool {
 						mtReconstrFilter, TraceReconstructionFilter.INPUT_PORT_NAME_EXECUTIONS);
 			}
 
-			{
+			{ // NOCS (nested block)
 				/*
 				 * Create the event record trace generation filter and connect to the trace ID filter's output port
 				 */
@@ -385,7 +385,7 @@ public final class TraceAnalysisTool {
 						SYSTEM_ENTITY_FACTORY);
 			}
 
-			{
+			{ // NOCS (nested block)
 				/*
 				 * Create the event trace to execution/message trace transformation filter and connect its input to the
 				 * event record trace generation filter's output port

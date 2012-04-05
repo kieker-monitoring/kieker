@@ -24,6 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.Assert;
+
+import org.junit.Test;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.configuration.Configuration;
@@ -37,14 +40,16 @@ import kieker.tools.traceAnalysis.filter.executionRecordTransformation.Execution
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
-import org.junit.Test;
-
 /**
  * 
  * @author Andre van Hoorn
  * 
  */
 public class TestExecutionRecordTransformationFilter {
+
+	public TestExecutionRecordTransformationFilter() {
+		// empty default constructor
+	}
 
 	/**
 	 * Tests if each {@link OperationExecutionRecord} within a valid Bookstore trace is correctly
@@ -70,28 +75,21 @@ public class TestExecutionRecordTransformationFilter {
 					opExec.getHostname(), fqComponentNameSignaturePair.getFqClassname(), fqComponentNameSignaturePair.getSignature(),
 					traceId, sessionId, opExec.getEoi(), opExec.getEss(), opExec.getTin(), opExec.getTout(), false);
 
-			/**
-			 * Some initial primitive checks which actually test createExecutionByEntityNames here,
-			 * but errors here would make the test invalid
-			 */
-			{
-				Assert.assertEquals("tin's differ", opExec.getTin(), exec.getTin());
-				Assert.assertEquals("tout's differ", opExec.getTout(), exec.getTout());
-				Assert.assertEquals("eoi's differ", opExec.getEoi(), exec.getEoi());
-				Assert.assertEquals("ess's differ", opExec.getEss(), exec.getEss());
-				Assert.assertEquals("Hostnames differ", opExec.getHostname(), exec.getAllocationComponent().getExecutionContainer().getName());
-				Assert.assertEquals("Session ID's differ", opExec.getSessionId(), exec.getSessionId());
-				Assert.assertEquals("Trace ID's differ", opExec.getTraceId(), exec.getTraceId());
-				final ClassOperationSignaturePair opExecClassOperationSignature =
-						ClassOperationSignaturePair.splitOperationSignatureStr(opExec.getOperationSignature());
-				Assert.assertEquals("Class/Component type names differ", opExecClassOperationSignature.getFqClassname(),
-						exec.getAllocationComponent().getAssemblyComponent().getType().getFullQualifiedName());
-				// TODO: as long as Signature's equal not implemented, compare the strings
-				Assert.assertEquals("Signatures differ", opExecClassOperationSignature.getSignature().toString(),
-						exec.getOperation().getSignature().toString());
-				// we're not testing the assembly name here, because therefore, we had to transform the class name
-			}
-
+			Assert.assertEquals("tin's differ", opExec.getTin(), exec.getTin());
+			Assert.assertEquals("tout's differ", opExec.getTout(), exec.getTout());
+			Assert.assertEquals("eoi's differ", opExec.getEoi(), exec.getEoi());
+			Assert.assertEquals("ess's differ", opExec.getEss(), exec.getEss());
+			Assert.assertEquals("Hostnames differ", opExec.getHostname(), exec.getAllocationComponent().getExecutionContainer().getName());
+			Assert.assertEquals("Session ID's differ", opExec.getSessionId(), exec.getSessionId());
+			Assert.assertEquals("Trace ID's differ", opExec.getTraceId(), exec.getTraceId());
+			final ClassOperationSignaturePair opExecClassOperationSignature =
+					ClassOperationSignaturePair.splitOperationSignatureStr(opExec.getOperationSignature());
+			Assert.assertEquals("Class/Component type names differ", opExecClassOperationSignature.getFqClassname(),
+					exec.getAllocationComponent().getAssemblyComponent().getType().getFullQualifiedName());
+			// TODO: as long as Signature's equal not implemented, compare the strings
+			Assert.assertEquals("Signatures differ", opExecClassOperationSignature.getSignature().toString(),
+					exec.getOperation().getSignature().toString());
+			// we're not testing the assembly name here, because therefore, we had to transform the class name
 			expectedExecs.add(exec);
 		}
 

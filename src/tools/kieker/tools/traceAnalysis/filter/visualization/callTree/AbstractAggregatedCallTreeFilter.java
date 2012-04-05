@@ -40,12 +40,12 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * This class has exactly one input port named "in". The data which is send to
  * this plugin is not delegated in any way.
  * 
+ * @param <T>
+ * 
  * @author Andre van Hoorn
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTreeFilter<T> {
-	private static final Log LOG = LogFactory.getLog(AbstractAggregatedCallTreeFilter.class);
-
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FILENAME = "dotOutputFn";
 	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
 	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
@@ -53,6 +53,8 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	public static final String CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT = "calltree.dot";
 	public static final String CONFIG_PROPERTY_VALUE_INCLUDE_WEIGHTS_DEFAULT = Boolean.TRUE.toString();
 	public static final String CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT = Boolean.TRUE.toString();
+
+	private static final Log LOG = LogFactory.getLog(AbstractAggregatedCallTreeFilter.class);
 
 	private volatile AbstractAggregatedCallTreeNode<T> root;
 	private final String dotOutputFile;
@@ -137,7 +139,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	public void inputMessageTraces(final MessageTrace t) {
 		synchronized (this) {
 			try {
-				AbstractCallTreeFilter.addTraceToTree(this.root, t, new PairFactory() {
+				AbstractCallTreeFilter.addTraceToTree(this.root, t, new IPairFactory() {
 
 					public Object createPair(final SynchronousCallMessage callMsg) {
 						return AbstractAggregatedCallTreeFilter.this.concreteCreatePair(callMsg);

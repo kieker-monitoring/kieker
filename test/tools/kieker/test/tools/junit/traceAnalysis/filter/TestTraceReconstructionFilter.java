@@ -24,6 +24,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import junit.framework.Assert;
+
+import org.junit.Test;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.repository.AbstractRepository;
@@ -41,8 +44,6 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
-
-import org.junit.Test;
 
 /**
  * 

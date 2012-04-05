@@ -42,8 +42,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn
  */
 @Plugin(repositoryPorts =
-			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-					repositoryType = SystemModelRepository.class))
+		@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
+				repositoryType = SystemModelRepository.class))
 public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	public static final String REPOSITORY_PORT_NAME_SYSTEM_MODEL = "systemModelRepository";
 

@@ -27,6 +27,8 @@ import java.util.List;
 
 /**
  * 
+ * @param <T>
+ * 
  * @author Andre van Hoorn
  */
 public abstract class AbstractCallTreeNode<T> {

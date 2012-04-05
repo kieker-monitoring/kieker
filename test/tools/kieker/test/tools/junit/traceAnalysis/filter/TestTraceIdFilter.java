@@ -26,6 +26,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import junit.framework.Assert;
+
+import org.junit.Test;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.configuration.Configuration;
@@ -34,8 +37,6 @@ import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
 import kieker.tools.traceAnalysis.filter.executionFilter.TraceIdFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
-
-import org.junit.Test;
 
 /**
  * 

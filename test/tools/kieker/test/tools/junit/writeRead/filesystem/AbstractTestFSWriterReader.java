@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.writeRead.filesystem;
+package kieker.test.tools.junit.writeRead.filesystem; // NOCS (number outer types)
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,6 +28,12 @@ import java.io.PrintStream;
 import java.util.List;
 
 import junit.framework.Assert;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.TemporaryFolder;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
@@ -44,11 +50,6 @@ import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 import kieker.test.tools.junit.writeRead.printStream.BasicPrintStreamWriterTestFile;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.TemporaryFolder;
-
 /**
  * @author Andre van Hoorn
  */
@@ -58,14 +59,14 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 	private static final String CONFIG_ASYNC_WRITER_BEHAVIOR = "QueueFullBehavior";
 	private static final String CONFIG_ASYNC_WRITER_SHUTDOWNDELAY = "MaxShutdownDelay";
 
+	private static final String ENCODING = "UTF-8";
+
 	@Rule
-	public final TemporaryFolder tmpFolder = new TemporaryFolder();
+	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
 	private volatile Class<? extends IMonitoringWriter> testedWriterClazz = AsyncFsWriter.class;
 
 	protected abstract Class<? extends IMonitoringWriter> getTestedWriterClazz();
-
-	private static final String ENCODING = "UTF-8";
 
 	@Before
 	public void setUp() throws IOException {
@@ -198,6 +199,10 @@ class KiekerLogDirFilter implements FilenameFilter { // NOPMD (TestClassWithoutT
 	public static final String LOG_DIR_PREFIX = "kieker-"; // TODO: do we have this constant in the FS Writer(s)?
 	public static final String MAP_FILENAME = "kieker.map"; // TODO: do we have this constant in the FS Writer(s)?
 
+	public KiekerLogDirFilter() {
+		// empty default constructor
+	}
+
 	public boolean accept(final File dir, final String name) {
 		if (!name.startsWith(KiekerLogDirFilter.LOG_DIR_PREFIX)) {
 			return false;
@@ -231,6 +236,10 @@ class KiekerLogDirFilter implements FilenameFilter { // NOPMD (TestClassWithoutT
  */
 class KiekerMapFileFilter implements FilenameFilter { // NOPMD (TestClassWithoutTestCases)
 	public static final String MAP_FILENAME = "kieker.map"; // TODO: do we have this constant in the FS Writer(s)?
+
+	public KiekerMapFileFilter() {
+		// empty default constructor
+	}
 
 	/**
 	 * Accepts the {@value #MAP_FILENAME} file in a monitoring log directory.

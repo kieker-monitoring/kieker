@@ -44,8 +44,6 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 		})
 public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
-	private static final Log LOG = LogFactory.getLog(SystemModel2FileFilter.class);
-
 	/**
 	 * Name of the configuration property to pass the filename of the HTML output.
 	 */
@@ -55,6 +53,8 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 	 * By default, writes HTML output file to this file in the working directory.
 	 */
 	private static final String DEFAULT_HTML_OUTPUT_FN = "system-model.html";
+
+	private static final Log LOG = LogFactory.getLog(SystemModel2FileFilter.class);
 
 	private final String outputFnHTML;
 
@@ -87,14 +87,12 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 		boolean error = errorBeforeTermination;
 		if (!error) {
 			try {
-				{
-					/*
-					 * Trying to create the canonical file path here.
-					 * Using a code block to hide the File.
-					 */
-					final File outputFileHTML = new File(this.outputFnHTML);
-					outputFnHTMLCanonical = outputFileHTML.getCanonicalPath(); // may throw IOExecption
-				}
+				/*
+				 * Trying to create the canonical file path here.
+				 * Using a code block to hide the File.
+				 */
+				final File outputFileHTML = new File(this.outputFnHTML);
+				outputFnHTMLCanonical = outputFileHTML.getCanonicalPath(); // may throw IOExecption
 
 				final SystemModelRepository sysModelRepo = super.getSystemEntityFactory();
 				if (sysModelRepo == null) {

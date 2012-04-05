@@ -64,8 +64,6 @@ import kieker.tools.util.LoggingTimestampConverter;
 		},
 		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
-	private static final Log LOG = LogFactory.getLog(TraceReconstructionFilter.class);
-
 	public static final String INPUT_PORT_NAME_EXECUTIONS = "executions";
 
 	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE = "messageTraces";
@@ -76,6 +74,9 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	public static final String CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES = "ignoreInvalidTraces";
 
 	private static final long CONFIG_PROPERTY_VALUE_MAX_DURATION_NANOS = Long.MAX_VALUE;
+
+	private static final Log LOG = LogFactory.getLog(TraceReconstructionFilter.class);
+
 	/** TraceId x trace */
 	private final Map<Long, ExecutionTrace> pendingTraces = new Hashtable<Long, ExecutionTrace>(); // NOPMD (UseConcurrentHashMap)
 	/** We need to keep track of invalid trace's IDs */

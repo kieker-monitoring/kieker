@@ -22,13 +22,13 @@ package kieker.test.tools.junit.writeRead.filesystem.unknownTypes;
 
 import java.util.List;
 
+import org.junit.Assert;
+
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writer.IMonitoringWriter;
 import kieker.monitoring.writer.filesystem.AsyncFsWriter;
-
-import org.junit.Assert;
 
 /**
  * 
@@ -36,6 +36,11 @@ import org.junit.Assert;
  * 
  */
 public class TerminateOnFirstUnknownTypeRegularFileTest extends AbstractUnknownTypeTest { // NOPMD NOCS (TestClassWithoutTestCases)
+
+	public TerminateOnFirstUnknownTypeRegularFileTest() {
+		// empty default constructor
+	}
+
 	@Override
 	protected Class<? extends IMonitoringWriter> getTestedWriterClazz() {
 		return AsyncFsWriter.class;

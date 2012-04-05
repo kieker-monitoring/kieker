@@ -20,6 +20,11 @@
 
 package kieker.monitoring.probe.aspectj.operationExecution;
 
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
@@ -29,11 +34,6 @@ import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.aspectj.AbstractAspectJProbe;
 import kieker.monitoring.timer.ITimeSource;
-
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 
 /**
  * @author Andre van Hoorn, Jan Waller

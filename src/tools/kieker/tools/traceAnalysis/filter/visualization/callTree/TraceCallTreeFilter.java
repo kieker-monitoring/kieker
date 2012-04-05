@@ -37,7 +37,7 @@ import kieker.common.util.Signature;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceProcessingException;
-import kieker.tools.traceAnalysis.filter.visualization.callTree.AbstractCallTreeFilter.PairFactory;
+import kieker.tools.traceAnalysis.filter.visualization.callTree.AbstractCallTreeFilter.IPairFactory;
 import kieker.tools.traceAnalysis.filter.visualization.util.IntContainer;
 import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
@@ -63,8 +63,6 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 
-	private static final Log LOG = LogFactory.getLog(TraceCallTreeFilter.class);
-
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FILENAME = "dotOutputFn";
 	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
 
@@ -72,6 +70,8 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 	public static final String CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT = Boolean.TRUE.toString();
 
 	private static final String ENCODING = "UTF-8";
+
+	private static final Log LOG = LogFactory.getLog(TraceCallTreeFilter.class);
 
 	private final CallTreeNode root;
 	private final String dotOutputFn;
@@ -219,7 +219,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 		try {
 			final TraceCallTreeNode rootNode =
 					new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, AllocationComponentOperationPairFactory.ROOT_PAIR, true); // rootNode
-			AbstractCallTreeFilter.writeDotForMessageTrace(rootNode, new PairFactory() {
+			AbstractCallTreeFilter.writeDotForMessageTrace(rootNode, new IPairFactory() {
 
 				public Object createPair(final SynchronousCallMessage callMsg) {
 					final AllocationComponent allocationComponent = callMsg.getReceivingExecution().getAllocationComponent();

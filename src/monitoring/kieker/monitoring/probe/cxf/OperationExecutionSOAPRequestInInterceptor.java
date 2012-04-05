@@ -23,13 +23,6 @@ package kieker.monitoring.probe.cxf;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.registry.ControlFlowRegistry;
-import kieker.monitoring.core.registry.SessionRegistry;
-import kieker.monitoring.probe.IMonitoringProbe;
-import kieker.monitoring.timer.ITimeSource;
-
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.SoapHeaderInterceptor;
 import org.apache.cxf.common.logging.LogUtils;
@@ -38,6 +31,13 @@ import org.apache.cxf.helpers.DOMUtils;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.message.Message;
 import org.w3c.dom.Element;
+
+import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.core.registry.ControlFlowRegistry;
+import kieker.monitoring.core.registry.SessionRegistry;
+import kieker.monitoring.probe.IMonitoringProbe;
+import kieker.monitoring.timer.ITimeSource;
 
 /**
  * CXF InInterceptor to get the sessionIdentifier header from an incoming soap message
@@ -153,7 +153,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 			/* Store thread-local values */
 			CF_REGISTRY.storeThreadLocalTraceId(traceId);
 			CF_REGISTRY.storeThreadLocalEOI(eoi); // this execution has EOI=eoi; next execution will get eoi with
-																								// incrementAndRecall
+													// incrementAndRecall
 			CF_REGISTRY.storeThreadLocalESS(ess + 1); // this execution has ESS=ess
 			SESSION_REGISTRY.storeThreadLocalSessionId(sessionId);
 			SOAP_REGISTRY.storeThreadLocalInRequestIsEntryCall(isEntryCall);

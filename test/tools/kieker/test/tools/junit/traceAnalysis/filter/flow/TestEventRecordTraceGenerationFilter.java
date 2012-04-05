@@ -24,6 +24,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.Assert;
+
+import org.junit.Test;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.configuration.Configuration;
@@ -33,8 +36,6 @@ import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
 import kieker.tools.traceAnalysis.filter.flow.EventRecordTrace;
 import kieker.tools.traceAnalysis.filter.flow.EventRecordTraceGenerationFilter;
-
-import org.junit.Test;
 
 /**
  * @author Andre van Hoorn

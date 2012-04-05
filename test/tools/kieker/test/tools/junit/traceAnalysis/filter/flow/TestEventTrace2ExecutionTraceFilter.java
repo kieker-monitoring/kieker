@@ -21,6 +21,9 @@
 package kieker.test.tools.junit.traceAnalysis.filter.flow;
 
 import junit.framework.Assert;
+
+import org.junit.Test;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.configuration.Configuration;
@@ -34,8 +37,6 @@ import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceExcepti
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
-
-import org.junit.Test;
 
 /**
  * 

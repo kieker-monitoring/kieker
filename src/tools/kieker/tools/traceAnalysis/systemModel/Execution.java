@@ -157,10 +157,10 @@ public class Execution {
 	@Override
 	public int hashCode() {
 		int hash = 3;
-		hash = (43 * hash) + (this.operation != null ? this.operation.hashCode() : 0);
-		hash = (43 * hash) + (this.allocationComponent != null ? this.allocationComponent.hashCode() : 0);
+		hash = (43 * hash) + (this.operation != null ? this.operation.hashCode() : 0); // NOCS (inline ?)
+		hash = (43 * hash) + (this.allocationComponent != null ? this.allocationComponent.hashCode() : 0); // NOCS (inline ?)
 		hash = (43 * hash) + (int) (this.traceId ^ (this.traceId >>> 32));
-		hash = (43 * hash) + (this.sessionId != null ? this.sessionId.hashCode() : 0);
+		hash = (43 * hash) + (this.sessionId != null ? this.sessionId.hashCode() : 0); // NOCS (inline ?)
 		hash = (43 * hash) + this.eoi;
 		hash = (43 * hash) + this.ess;
 		hash = (43 * hash) + (int) (this.tin ^ (this.tin >>> 32));

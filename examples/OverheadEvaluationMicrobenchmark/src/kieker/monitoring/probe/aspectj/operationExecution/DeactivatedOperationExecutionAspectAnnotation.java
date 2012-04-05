@@ -22,6 +22,11 @@ package kieker.monitoring.probe.aspectj.operationExecution;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
@@ -30,11 +35,6 @@ import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.timer.ITimeSource;
-
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 
 /**
  * TODO: this is a slightly altered clone of AbstractOperationExecutionAspect. Include something similar into default implementation!
@@ -63,6 +63,10 @@ public class DeactivatedOperationExecutionAspectAnnotation extends AbstractOpera
 		for (int i = 0; i < (mapSize / 2); i++) {
 			DeactivatedOperationExecutionAspectAnnotation.DEACTIVATEDPROBES.put(Long.toHexString(Double.doubleToLongBits(Math.random())), Boolean.TRUE);
 		}
+	}
+
+	public DeactivatedOperationExecutionAspectAnnotation() {
+		// empty default constructor
 	}
 
 	@Override

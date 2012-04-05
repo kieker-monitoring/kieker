@@ -22,12 +22,12 @@ package kieker.test.monitoring.junit.timer;
 
 import java.util.concurrent.TimeUnit;
 
+import org.junit.Test;
+
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.timer.ITimeSource;
 import kieker.monitoring.timer.SystemMilliTimer;
-
-import org.junit.Test;
 
 /**
  * @author Jan Waller

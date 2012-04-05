@@ -52,12 +52,12 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilter<ExecutionContainer> {
-	private static final Log LOG = LogFactory.getLog(ContainerDependencyGraphFilter.class);
-
 	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dotOutputFile";
 	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
 	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
 	public static final String CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS = "includeSelfLoops";
+
+	private static final Log LOG = LogFactory.getLog(ContainerDependencyGraphFilter.class);
 
 	private final File dotOutputFile;
 	private final boolean includeWeights;

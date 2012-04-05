@@ -28,12 +28,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.Assert;
-import kieker.common.record.IMonitoringRecord;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
+
+import kieker.common.record.IMonitoringRecord;
 
 /**
  * TODO: introduce abstract intermediate class with {@link BasicPrintStreamWriterTestStdout},

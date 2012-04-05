@@ -23,9 +23,7 @@ package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 
 /**
- * 
  * @author Holger Knoche
- * 
  */
 public class ResponseTimeDecoration extends AbstractNodeDecoration {
 
@@ -36,6 +34,10 @@ public class ResponseTimeDecoration extends AbstractNodeDecoration {
 	private int executionCount = 0;
 	private int minimalResponseTime = Integer.MAX_VALUE;
 	private int maximalResponseTime = 0;
+
+	public ResponseTimeDecoration() {
+		// empty default constructor
+	}
 
 	public void registerExecution(final Execution execution) {
 		final int responseTime = (int) ((execution.getTout() / 1000000) - (execution.getTin() / 1000000));
@@ -60,7 +62,7 @@ public class ResponseTimeDecoration extends AbstractNodeDecoration {
 	}
 
 	public double getAverageResponseTime() {
-		return (this.executionCount == 0) ? 0 : ((double) this.responseTimeSum / (double) this.executionCount);
+		return (this.executionCount == 0) ? 0 : ((double) this.responseTimeSum / (double) this.executionCount); // NOCS (inline ?)
 	}
 
 	@Override

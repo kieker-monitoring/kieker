@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.Assert;
+
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.Trace;
 import kieker.common.record.flow.trace.concurrency.SplitEvent;
@@ -44,8 +45,6 @@ import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceExcepti
 public final class BookstoreEventRecordFactory {
 	// private static final Log LOG = LogFactory.getLog(BookstoreEventRecordFactory.class);
 
-	private BookstoreEventRecordFactory() {}
-
 	public static final long TSTAMP_OFFSET_entry0_0__bookstore_searchBook = 0; // NOPMD NOCS (VariableNamingConventions)
 	public static final long TSTAMP_OFFSET_call1_1__catalog_getBook = 1; // NOPMD NOCS (VariableNamingConventions)
 	public static final long TSTAMP_OFFSET_entry1_1__catalog_getBook = 2; // NOPMD NOCS (VariableNamingConventions)
@@ -59,6 +58,8 @@ public final class BookstoreEventRecordFactory {
 	public static final long TSTAMP_OFFSET_exit0_0__bookstore_searchBook = 11; // NOPMD NOCS VariableNamingConventions)
 
 	private static final String MSG_INVALID_TRACE = "Test invalid (creating invalid trace): ";
+
+	private BookstoreEventRecordFactory() {}
 
 	/**
 	 * Returns the "well-known" Bookstore trace as a list of {@link BeforeOperationEvent} and {@link AfterOperationEvent} events, ordered by its

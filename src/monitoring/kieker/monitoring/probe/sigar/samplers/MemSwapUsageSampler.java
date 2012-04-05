@@ -20,13 +20,13 @@
 
 package kieker.monitoring.probe.sigar.samplers;
 
-import kieker.common.record.system.MemSwapUsageRecord;
-import kieker.monitoring.core.controller.IMonitoringController;
-
 import org.hyperic.sigar.Mem;
 import org.hyperic.sigar.SigarException;
 import org.hyperic.sigar.SigarProxy;
 import org.hyperic.sigar.Swap;
+
+import kieker.common.record.system.MemSwapUsageRecord;
+import kieker.monitoring.core.controller.IMonitoringController;
 
 /**
  * Logs memory and swap statistics retrieved from {@link Mem} and {@link Swap},
@@ -49,7 +49,7 @@ public class MemSwapUsageSampler extends AbstractSigarSampler {
 	}
 
 	public void sample(final IMonitoringController monitoringCtrl)
-				throws SigarException {
+			throws SigarException {
 		if (!monitoringCtrl.isMonitoringEnabled()) {
 			return;
 		}
@@ -57,9 +57,9 @@ public class MemSwapUsageSampler extends AbstractSigarSampler {
 		final Mem mem = this.sigar.getMem();
 		final Swap swap = this.sigar.getSwap();
 		final MemSwapUsageRecord r = new MemSwapUsageRecord(
-						monitoringCtrl.getTimeSource().getTime(), monitoringCtrl.getHostname(),
-						mem.getTotal(), mem.getActualUsed(), mem.getActualFree(),
-						swap.getTotal(), swap.getUsed(), swap.getFree());
+				monitoringCtrl.getTimeSource().getTime(), monitoringCtrl.getHostname(),
+				mem.getTotal(), mem.getActualUsed(), mem.getActualFree(),
+				swap.getTotal(), swap.getUsed(), swap.getFree());
 		monitoringCtrl.newMonitoringRecord(r);
 	}
 }

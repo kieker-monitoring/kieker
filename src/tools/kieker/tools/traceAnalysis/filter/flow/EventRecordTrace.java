@@ -180,11 +180,11 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<Abstract
 	}
 
 	/**
-	 * @param mySessionId
+	 * @param sessionId
 	 *            the mySessionId to set
 	 */
-	public void setSessionId(final String mySessionId) {
-		this.mySessionId = mySessionId;
+	public void setSessionId(final String sessionId) {
+		this.mySessionId = sessionId;
 	}
 
 	/**

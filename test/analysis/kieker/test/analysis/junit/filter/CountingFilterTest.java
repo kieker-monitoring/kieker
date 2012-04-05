@@ -20,15 +20,15 @@
 
 package kieker.test.analysis.junit.filter;
 
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.common.configuration.Configuration;
 import kieker.test.analysis.junit.plugin.SimpleSourcePlugin;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * This test is for the class {@link CountingFilter}.
@@ -37,8 +37,12 @@ import org.junit.Test;
  */
 public class CountingFilterTest {
 
+	volatile SimpleSourcePlugin src; // NOPMD NOCS (package visible for inner class)
 	private CountingFilter consumer;
-	volatile SimpleSourcePlugin src; // NOPMD (package visible for inner class)
+
+	public CountingFilterTest() {
+		// empty default constructor
+	}
 
 	@Before
 	public void before() throws IllegalStateException, AnalysisConfigurationException {

@@ -58,6 +58,9 @@ public class AggregatedAllocationComponentOperationCallTreeFilter extends Abstra
 	}
 }
 
+/**
+ * @author Andre van Hoorn
+ */
 class AggregatedAllocationComponentOperationCallTreeNode extends AbstractAggregatedCallTreeNode<AllocationComponentOperationPair> {
 
 	public AggregatedAllocationComponentOperationCallTreeNode(final int id, final AllocationComponentOperationPair entity, final boolean rootNode) {

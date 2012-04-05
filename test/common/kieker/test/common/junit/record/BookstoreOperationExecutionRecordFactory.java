@@ -96,14 +96,14 @@ public final class BookstoreOperationExecutionRecordFactory {
 					+ BookstoreOperationExecutionRecordFactory.OP_FQNAME_CRM_GET_ORDERS + "("
 					+ BookstoreOperationExecutionRecordFactory.OP_ARGTYPE_CRM_GET_ORDERS + ")";
 
-	public static final int EXEC0_0__BOOKSTORE_SEARCHBOOK_EOI = 0;
-	public static final int EXEC0_0__BOOKSTORE_SEARCHBOOK_ESS = 0;
-	public static final int EXEC1_1__CATALOG_GETBOOK_EOI = 1;
-	public static final int EXEC1_1__CATALOG_GETBOOK_ESS = 1;
-	public static final int EXEC2_1__CRM_GETORDERS_EOI = 2;
-	public static final int EXEC2_1__CRM_GETORDERS_ESS = 1;
-	public static final int EXEC3_2__CATALOG_GETBOOK_EOI = 3;
-	public static final int EXEC3_2__CATALOG_GETBOOK_ESS = 2;
+	public static final int EXEC0_0__BOOKSTORE_SEARCHBOOK_EOI = 0; // NOCS (constant name)
+	public static final int EXEC0_0__BOOKSTORE_SEARCHBOOK_ESS = 0; // NOCS (constant name)
+	public static final int EXEC1_1__CATALOG_GETBOOK_EOI = 1; // NOCS (constant name)
+	public static final int EXEC1_1__CATALOG_GETBOOK_ESS = 1; // NOCS (constant name)
+	public static final int EXEC2_1__CRM_GETORDERS_EOI = 2; // NOCS (constant name)
+	public static final int EXEC2_1__CRM_GETORDERS_ESS = 1; // NOCS (constant name)
+	public static final int EXEC3_2__CATALOG_GETBOOK_EOI = 3; // NOCS (constant name)
+	public static final int EXEC3_2__CATALOG_GETBOOK_ESS = 2; // NOCS (constant name)
 
 	private BookstoreOperationExecutionRecordFactory() {}
 
@@ -123,36 +123,36 @@ public final class BookstoreOperationExecutionRecordFactory {
 
 		final OperationExecutionRecord exec0_0__bookstore_searchBook = // NOCS (LocalFinalVariableNameCheck)
 		new OperationExecutionRecord(
-						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
-						sessionId, traceId, /* tin: */1, /* tout: */10,
-						hostname,
-						BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_EOI,
-						BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_ESS);
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
+				sessionId, traceId, /* tin: */1, /* tout: */10,
+				hostname,
+				BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_EOI,
+				BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_ESS);
 		retList.add(exec0_0__bookstore_searchBook);
 
 		final OperationExecutionRecord exec1_1__catalog_getBook = // NOCS (LocalFinalVariableNameCheck)
 		new OperationExecutionRecord(
-						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK,
-						sessionId, traceId, /* tin: */2, /* tout: */4,
-						hostname,
-						BookstoreOperationExecutionRecordFactory.EXEC1_1__CATALOG_GETBOOK_EOI,
-						BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_ESS);
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK,
+				sessionId, traceId, /* tin: */2, /* tout: */4,
+				hostname,
+				BookstoreOperationExecutionRecordFactory.EXEC1_1__CATALOG_GETBOOK_EOI,
+				BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_ESS);
 		retList.add(exec1_1__catalog_getBook);
 
 		final OperationExecutionRecord exec2_1__crm_getOrders = // NOCS (LocalFinalVariableNameCheck)
 		new OperationExecutionRecord(
-						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS,
-						sessionId, traceId, /* tin: */5, /* tout: */8, hostname,
-						BookstoreOperationExecutionRecordFactory.EXEC2_1__CRM_GETORDERS_EOI,
-						BookstoreOperationExecutionRecordFactory.EXEC2_1__CRM_GETORDERS_ESS);
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS,
+				sessionId, traceId, /* tin: */5, /* tout: */8, hostname,
+				BookstoreOperationExecutionRecordFactory.EXEC2_1__CRM_GETORDERS_EOI,
+				BookstoreOperationExecutionRecordFactory.EXEC2_1__CRM_GETORDERS_ESS);
 		retList.add(exec2_1__crm_getOrders);
 
 		final OperationExecutionRecord exec3_2__catalog_getBook = // NOCS (LocalFinalVariableNameCheck)
 		new OperationExecutionRecord(
-						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK,
-						sessionId, traceId, /* tin: */6, /* tout: */7, hostname,
-						BookstoreOperationExecutionRecordFactory.EXEC3_2__CATALOG_GETBOOK_EOI,
-						BookstoreOperationExecutionRecordFactory.EXEC3_2__CATALOG_GETBOOK_ESS);
+				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK,
+				sessionId, traceId, /* tin: */6, /* tout: */7, hostname,
+				BookstoreOperationExecutionRecordFactory.EXEC3_2__CATALOG_GETBOOK_EOI,
+				BookstoreOperationExecutionRecordFactory.EXEC3_2__CATALOG_GETBOOK_ESS);
 		retList.add(exec3_2__catalog_getBook);
 		return retList;
 	}

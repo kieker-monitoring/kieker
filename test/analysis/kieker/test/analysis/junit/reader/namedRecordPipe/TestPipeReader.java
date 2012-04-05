@@ -23,6 +23,9 @@ package kieker.test.analysis.junit.reader.namedRecordPipe;
 import java.util.List;
 
 import junit.framework.Assert;
+
+import org.junit.Test;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.exception.AnalysisConfigurationException;
@@ -35,8 +38,6 @@ import kieker.common.namedRecordPipe.IPipeWriter;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.test.analysis.junit.util.NamedPipeFactory;
-
-import org.junit.Test;
 
 /**
  * A simple test for the class <code>PipeReader</code>.
@@ -88,6 +89,9 @@ public class TestPipeReader { // NOCS (MissingCtorCheck)
 	}
 }
 
+/**
+ * @author Andre van Hoorn
+ */
 class MonitoringSinkClass extends AbstractFilterPlugin { // NOPMD (subclass of Test)
 
 	public static final String INPUT_PORT_NAME = "doJob";

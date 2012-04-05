@@ -23,6 +23,7 @@ package kieker.test.monitoring.junit.timer;
 import java.util.concurrent.TimeUnit;
 
 import junit.framework.Assert;
+
 import kieker.monitoring.timer.ITimeSource;
 
 /**

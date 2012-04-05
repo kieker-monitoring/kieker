@@ -23,12 +23,13 @@ package kieker.test.monitoring.junit.core;
 import java.util.List;
 
 import junit.framework.Assert;
+
+import org.junit.Test;
+
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.test.monitoring.junit.util.NamedPipeFactory;
-
-import org.junit.Test;
 
 /**
  * @author Andre van Hoorn, Jan Waller

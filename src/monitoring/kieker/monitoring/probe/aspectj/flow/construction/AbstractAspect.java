@@ -20,16 +20,16 @@
 
 package kieker.monitoring.probe.aspectj.flow.construction;
 
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+
 import kieker.common.record.flow.ConstructionEvent;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.probe.aspectj.AbstractAspectJProbe;
 import kieker.monitoring.timer.ITimeSource;
-
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 
 /**
  * @author Jan Waller

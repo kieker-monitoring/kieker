@@ -36,6 +36,10 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
  */
 public class BasicMessageTraceWriterFilterTest extends AbstractTraceWriterFilterTest { // NOPMD (TestClassWithoutTestCases)
 
+	public BasicMessageTraceWriterFilterTest() {
+		// empty default constructor
+	}
+
 	@Override
 	protected AbstractTraceProcessingFilter provideWriterFilter(final String filename) throws IOException {
 		final Configuration filterConfiguration = new Configuration();

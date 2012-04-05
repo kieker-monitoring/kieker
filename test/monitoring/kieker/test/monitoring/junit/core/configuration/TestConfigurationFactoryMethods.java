@@ -21,12 +21,13 @@
 package kieker.test.monitoring.junit.core.configuration;
 
 import junit.framework.Assert;
+
+import org.junit.Test;
+
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.test.monitoring.junit.util.DefaultConfigurationFactory;
-
-import org.junit.Test;
 
 /**
  * Tests whether the factory methods of {@link Configuration} return

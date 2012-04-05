@@ -83,18 +83,19 @@ public class JMSLogReplayer {
 		final AnalysisController tpanInstance = new AnalysisController();
 		tpanInstance.registerReader(logReader);
 
-		final RecordDelegationPlugin2 recordReceiver = new RecordDelegationPlugin2(new Configuration());
+		final RecordDelegationPlugin2 tmpRecordReceiver = new RecordDelegationPlugin2(new Configuration());
 		/* configure the record receiver a little bit. */
-		tpanInstance.registerFilter(recordReceiver);
+		tpanInstance.registerFilter(tmpRecordReceiver);
 		try {
-			tpanInstance.connect(recordReceiver, RecordDelegationPlugin2.OUTPUT_PORT_NAME_MONITORING_RECORDS, this.recordReceiver, this.recordReceiverInputPortName);
+			tpanInstance.connect(tmpRecordReceiver, RecordDelegationPlugin2.OUTPUT_PORT_NAME_MONITORING_RECORDS, this.recordReceiver,
+					this.recordReceiverInputPortName);
 		} catch (final AnalysisConfigurationException ex) {
 			LOG.error("Failed to connect recordReceiver to recordReceiver.", ex);
 			return false;
 		}
-		tpanInstance.registerFilter(recordReceiver);
+		tpanInstance.registerFilter(tmpRecordReceiver);
 		try {
-			tpanInstance.connect(logReader, JMSReader.OUTPUT_PORT_NAME_RECORDS, recordReceiver, RecordDelegationPlugin2.INPUT_PORT_NAME_MONITORING_RECORDS);
+			tpanInstance.connect(logReader, JMSReader.OUTPUT_PORT_NAME_RECORDS, tmpRecordReceiver, RecordDelegationPlugin2.INPUT_PORT_NAME_MONITORING_RECORDS);
 		} catch (final AnalysisConfigurationException ex) {
 			LOG.error("Failed to connect logReader to recordReceiver", ex);
 			return false;

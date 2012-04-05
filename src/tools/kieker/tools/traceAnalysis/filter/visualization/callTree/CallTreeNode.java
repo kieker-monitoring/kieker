@@ -28,6 +28,9 @@ import java.util.List;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 
+/**
+ * @author Andre van Hoorn
+ */
 public class CallTreeNode {
 
 	private final CallTreeNode parent;

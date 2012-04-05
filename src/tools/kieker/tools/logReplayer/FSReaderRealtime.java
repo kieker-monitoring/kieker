@@ -103,14 +103,14 @@ public final class FSReaderRealtime extends AbstractReaderPlugin {
 	// return dirNameArray;
 	// }
 
-	private boolean initInstanceFromArgs(final String[] inputDirNames, final int numWorkers) throws IllegalArgumentException {
+	private boolean initInstanceFromArgs(final String[] inputDirNames, final int nWorkers) throws IllegalArgumentException {
 		if ((inputDirNames == null) || (inputDirNames.length <= 0)) {
 			throw new IllegalArgumentException("Invalid property value for " + CONFIG_PROPERTY_NAME_INPUTDIRNAMES + ":"
 					+ Arrays.toString(inputDirNames)); // NOCS
 		}
 
-		if (numWorkers <= 0) {
-			throw new IllegalArgumentException("Invalid property value for " + CONFIG_PROPERTY_NAME_NUM_WORKERS + ": " + numWorkers); // NOCS
+		if (nWorkers <= 0) {
+			throw new IllegalArgumentException("Invalid property value for " + CONFIG_PROPERTY_NAME_NUM_WORKERS + ": " + nWorkers); // NOCS
 		}
 
 		final Configuration configuration = new Configuration();
@@ -121,7 +121,7 @@ public final class FSReaderRealtime extends AbstractReaderPlugin {
 		rtCons.setMaster(this);
 		this.analysis.registerFilter(rtCons);
 		final Configuration rtDistributorConfiguration = new Configuration();
-		rtDistributorConfiguration.setProperty(RealtimeReplayDistributor.CONFIG_PROPERTY_NAME_NUM_WORKERS, Integer.toString(numWorkers));
+		rtDistributorConfiguration.setProperty(RealtimeReplayDistributor.CONFIG_PROPERTY_NAME_NUM_WORKERS, Integer.toString(nWorkers));
 		final RealtimeReplayDistributor rtDistributor = new RealtimeReplayDistributor(rtDistributorConfiguration);
 		rtDistributor.setCons(rtCons);
 		rtDistributor.setConstInputPortName(FSReaderRealtimeCons.INPUT_PORT_MONITORING_RECORDS);

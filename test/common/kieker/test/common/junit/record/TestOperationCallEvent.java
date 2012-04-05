@@ -21,9 +21,10 @@
 package kieker.test.common.junit.record;
 
 import junit.framework.Assert;
-import kieker.common.record.flow.trace.operation.CallOperationEvent;
 
 import org.junit.Test;
+
+import kieker.common.record.flow.trace.operation.CallOperationEvent;
 
 /**
  * @author Andre van Hoorn

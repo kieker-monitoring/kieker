@@ -53,16 +53,12 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * Plugin providing the creation of calling trees both for individual traces
  * and an aggregated form mulitple traces.
  * 
+ * @param <T>
+ * 
  * @author Andre van Hoorn
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProcessingFilter {
-
-	public interface PairFactory {
-		public Object createPair(final SynchronousCallMessage callMsg);
-	}
-
-	// private static final Log LOG = LogFactory.getLog(AbstractCallTreePlugin.class);
 
 	private static final String ENCODING = "UTF-8";
 
@@ -198,7 +194,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		ps.close();
 	}
 
-	protected static void addTraceToTree(final AbstractCallTreeNode<?> root, final MessageTrace t, final PairFactory pairFactory, final boolean aggregated)
+	protected static void addTraceToTree(final AbstractCallTreeNode<?> root, final MessageTrace t, final IPairFactory pairFactory, final boolean aggregated)
 			throws TraceProcessingException {
 		final Stack<AbstractCallTreeNode<?>> curStack = new Stack<AbstractCallTreeNode<?>>();
 
@@ -223,7 +219,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		}
 	}
 
-	public static void writeDotForMessageTrace(final AbstractCallTreeNode<?> root, final PairFactory pairFactory, final MessageTrace msgTrace,
+	public static void writeDotForMessageTrace(final AbstractCallTreeNode<?> root, final IPairFactory pairFactory, final MessageTrace msgTrace,
 			final String outputFilename, final boolean includeWeights, final boolean shortLabels) throws FileNotFoundException, TraceProcessingException,
 			UnsupportedEncodingException {
 
@@ -231,4 +227,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		AbstractCallTreeFilter.saveTreeToDotFile(root, outputFilename, includeWeights, true, shortLabels); // includeEois
 	}
 
+	public interface IPairFactory {
+		public Object createPair(final SynchronousCallMessage callMsg);
+	}
 }

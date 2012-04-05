@@ -20,6 +20,8 @@
 
 package kieker.test.tools.junit.traceAnalysis.util;
 
+import org.junit.Assert;
+
 import kieker.common.util.Signature;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
@@ -28,8 +30,6 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
-
-import org.junit.Assert;
 
 /**
  * 

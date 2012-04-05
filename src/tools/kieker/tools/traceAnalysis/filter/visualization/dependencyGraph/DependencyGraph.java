@@ -26,6 +26,8 @@ import java.util.TreeMap;
 
 /**
  * 
+ * @param <T>
+ * 
  * @author Andre van Hoorn, Lena St&ouml;ver
  */
 public class DependencyGraph<T> {

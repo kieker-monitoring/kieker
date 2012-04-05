@@ -21,9 +21,10 @@
 package kieker.test.common.junit.record;
 
 import junit.framework.Assert;
-import kieker.common.record.controlflow.OperationExecutionRecord;
 
 import org.junit.Test;
+
+import kieker.common.record.controlflow.OperationExecutionRecord;
 
 /**
  * Creates {@link OperationExecutionRecord}s via the available constructors and
@@ -33,6 +34,10 @@ import org.junit.Test;
  * 
  */
 public class TestOperationExecutionRecordConstructors {
+
+	public TestOperationExecutionRecordConstructors() {
+		// empty default constructor
+	}
 
 	/**
 	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long, long, long, String, int, int)}

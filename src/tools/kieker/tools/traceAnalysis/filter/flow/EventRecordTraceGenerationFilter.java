@@ -56,13 +56,13 @@ import kieker.tools.util.LoggingTimestampConverter;
 		outputPorts = @OutputPort(name = EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME_TRACE, description = "Outputs the generated traces", eventTypes = { EventRecordTrace.class }),
 		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFilter {
-	private static final Log LOG = LogFactory.getLog(EventRecordTraceGenerationFilter.class);
-
 	public static final String INPUT_PORT_NAME_TRACE_EVENT = "traceEvents";
 
 	public static final String OUTPUT_PORT_NAME_TRACE = "generatedTraces";
 
 	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS = "maxTraceDurationMillis";
+
+	private static final Log LOG = LogFactory.getLog(EventRecordTraceGenerationFilter.class);
 
 	private static final long CONFIG_PROPERTY_VALUE_MAX_DURATION_NANOS = Long.MAX_VALUE;
 

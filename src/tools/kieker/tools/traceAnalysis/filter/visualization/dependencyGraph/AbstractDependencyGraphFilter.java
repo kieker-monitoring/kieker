@@ -40,6 +40,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 /**
  * Refactored copy from LogAnalysis-legacy tool
  * 
+ * @param <T>
+ * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
@@ -79,7 +81,7 @@ public abstract class AbstractDependencyGraphFilter<T> extends AbstractMessageTr
 			final boolean plotSelfLoops) {
 
 		for (final WeightedBidirectionalDependencyGraphEdge<T> currentEdge : edges) {
-			final String lineStyle = (currentEdge.isAssumed()) ? DotFactory.DOT_STYLE_DASHED : DotFactory.DOT_STYLE_SOLID;
+			final String lineStyle = (currentEdge.isAssumed()) ? DotFactory.DOT_STYLE_DASHED : DotFactory.DOT_STYLE_SOLID; // NOCS (inline ?)
 
 			final DependencyGraphNode<T> destNode = currentEdge.getDestination();
 			if ((node.equals(destNode)) && !plotSelfLoops) {
@@ -151,7 +153,7 @@ public abstract class AbstractDependencyGraphFilter<T> extends AbstractMessageTr
 	}
 
 	protected String getNodeFillColor(final DependencyGraphNode<?> node) {
-		return (node.isAssumed()) ? DotFactory.DOT_FILLCOLOR_GRAY : DotFactory.DOT_FILLCOLOR_WHITE;
+		return (node.isAssumed()) ? DotFactory.DOT_FILLCOLOR_GRAY : DotFactory.DOT_FILLCOLOR_WHITE; // NOCS (inline ?)
 	}
 
 	protected boolean isDependencyAssumed(final DependencyGraphNode<?> source, final DependencyGraphNode<?> target) {

@@ -59,12 +59,115 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProcessingFilter {
 
-	private static final Log LOG = LogFactory.getLog(EventTrace2ExecutionAndMessageTraceFilter.class);
-
 	public static final String INPUT_PORT_NAME_EVENT_TRACE = "eventTrace";
 
 	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE = "executionTrace";
 	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE = "messageTrace";
+
+	private static final Log LOG = LogFactory.getLog(EventTrace2ExecutionAndMessageTraceFilter.class);
+
+	public EventTrace2ExecutionAndMessageTraceFilter(final Configuration configuration) {
+		super(configuration);
+	}
+
+	@InputPort(name = INPUT_PORT_NAME_EVENT_TRACE, description = "Receives event record traces to be transformed", eventTypes = { EventRecordTrace.class })
+	public void inputEventTrace(final EventRecordTrace eventTrace) {
+		final ExecutionTrace execTrace = new ExecutionTrace(eventTrace.getTraceId(), eventTrace.getSessionId());
+		final EventRecordStream eventStream = new EventRecordStream(eventTrace);
+		final FilterState state = new FilterState();
+		final EventProcessor eventProcessor = new EventProcessor(state, eventTrace, execTrace);
+
+		long lastOrderIndex = -1; // used to check for ascending order indices
+
+		try {
+			while (true) {
+				final AbstractTraceEvent currentEvent = eventStream.currentElement();
+
+				// Exit if the event stream has reached its end
+				if (currentEvent == null) {
+					break;
+				}
+
+				/* Make sure that order indices increment by 1 */
+				if (currentEvent.getOrderIndex() != (lastOrderIndex + 1)) {
+					this.printInvalidIndexMessage(currentEvent, execTrace, lastOrderIndex);
+					// TODO: output broken event record trace
+					return;
+				} else {
+					lastOrderIndex = currentEvent.getOrderIndex(); // i.e., lastOrderIndex++
+				}
+
+				// Process and consume the current event
+				eventProcessor.processEvent(currentEvent);
+				eventStream.consume();
+			}
+		} catch (final InvalidEventTraceException e) {
+			LOG.error(e.getMessage() + "\n"
+					+ "Terminating processing of event record trace with ID " + execTrace.getTraceId(), e);
+		}
+
+		super.deliver(OUTPUT_PORT_NAME_EXECUTION_TRACE, execTrace);
+		try {
+			super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE, execTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION));
+			super.reportSuccess(execTrace.getTraceId());
+		} catch (final InvalidTraceException ex) {
+			// FIXME: send to new output port for defect traces
+		}
+	}
+
+	private void printInvalidIndexMessage(final AbstractTraceEvent event, final ExecutionTrace executionTrace, final long lastIndex) {
+		LOG.error("Trace events' order indices must increment by one: "
+				+ " Found " + lastIndex + " followed by " + event.getOrderIndex() + " event (" + event + ")");
+		LOG.error("Terminating processing of event record trace with ID " + executionTrace.getTraceId());
+	}
+
+	/**
+	 * 
+	 * @param event
+	 * @param traceId
+	 * @param eoi
+	 * @param ess
+	 * @param tin
+	 * @param tout
+	 * @return
+	 */
+	private Execution beforeOperationToExecution(final BeforeOperationEvent event, final long traceId, final String sessionId, final String hostname, final int eoi,
+			final int ess,
+			final long tin, final long tout, final boolean assumed) {
+
+		final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(event.getOperationSignature());
+
+		return super.createExecutionByEntityNames(hostname, fqComponentNameSignaturePair.getFqClassname(), fqComponentNameSignaturePair.getSignature(),
+				traceId, sessionId, eoi, ess, tin, tout, assumed);
+	}
+
+	/**
+	 * 
+	 * @param event
+	 * @param traceId
+	 * @param eoi
+	 * @param ess
+	 * @param tin
+	 * @param tout
+	 * @return
+	 */
+	private Execution callOperationToExecution(final CallOperationEvent event, final long traceId, final String sessionId, final String hostname, final int eoi,
+			final int ess,
+			final long tin, final long tout, final boolean assumed) {
+
+		final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(event.getCalleeOperationSignature());
+		return super.createExecutionByEntityNames(hostname, fqComponentNameSignaturePair.getFqClassname(),
+				fqComponentNameSignaturePair.getSignature(), traceId, sessionId, eoi, ess, tin, tout, assumed);
+	}
+
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		return new Configuration();
+	}
+
+	public Configuration getCurrentConfiguration() {
+		return new Configuration(null);
+	}
 
 	/**
 	 * This class stores information about a specific execution.
@@ -109,6 +212,10 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 
 		private int nextExecutionIndex = 0;
 		private int currentStackDepth = 0;
+
+		public FilterState() {
+			// empty default constructor
+		}
 
 		/**
 		 * Pushes the given event onto the event stack.
@@ -234,7 +341,7 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 		 *             If no matching event is found at the top of the stack
 		 */
 		private BeforeOperationEvent getMatchingBeforeEventFor(final AfterOperationEvent afterOperationEvent) throws InvalidEventTraceException {
-			final AbstractTraceEvent potentialBeforeEvent = (this.filterState.isEventStackEmpty()) ? null : this.filterState.popEvent(); // NOPMD (null)
+			final AbstractTraceEvent potentialBeforeEvent = (this.filterState.isEventStackEmpty()) ? null : this.filterState.popEvent(); // NOPMD (null) // NOCS
 
 			// The element at the top of the stack needs to be a before-operation event...
 			if ((potentialBeforeEvent == null) || !(potentialBeforeEvent instanceof BeforeOperationEvent)) {
@@ -317,7 +424,7 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 			final BeforeOperationEvent beforeOperationEvent = this.getMatchingBeforeEventFor(afterOperationEvent);
 
 			// Look for a call event at the top of the stack
-			final AbstractTraceEvent prevEvent = (this.filterState.isEventStackEmpty()) ? null : this.filterState.peekEvent(); // NOPMD (null)
+			final AbstractTraceEvent prevEvent = (this.filterState.isEventStackEmpty()) ? null : this.filterState.peekEvent(); // NOPMD (null) // NOCS
 			// A definite call occurs if either the stack is empty (entry into the trace) or if a matching call event is found
 			final boolean definiteCall = (prevEvent == null)
 					|| ((prevEvent instanceof CallOperationEvent) && ((CallOperationEvent) prevEvent).callsReferencedOperationOf(afterOperationEvent));
@@ -345,7 +452,7 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 		}
 
 		public void handleBeforeOperationEvent(final BeforeOperationEvent beforeOperationEvent) {
-			final AbstractTraceEvent prevEvent = this.filterState.isEventStackEmpty() ? null : this.filterState.peekEvent(); // NOPMD (null)
+			final AbstractTraceEvent prevEvent = this.filterState.isEventStackEmpty() ? null : this.filterState.peekEvent(); // NOPMD (null) // NOCS
 			if ((prevEvent != null) && (prevEvent instanceof CallOperationEvent)
 					&& (((CallOperationEvent) prevEvent).callsReferencedOperationOf(beforeOperationEvent))) {
 				this.filterState.pushEvent(beforeOperationEvent);
@@ -381,108 +488,4 @@ public class EventTrace2ExecutionAndMessageTraceFilter extends AbstractTraceProc
 		}
 
 	}
-
-	public EventTrace2ExecutionAndMessageTraceFilter(final Configuration configuration) {
-		super(configuration);
-	}
-
-	@InputPort(name = INPUT_PORT_NAME_EVENT_TRACE, description = "Receives event record traces to be transformed", eventTypes = { EventRecordTrace.class })
-	public void inputEventTrace(final EventRecordTrace eventTrace) {
-		final ExecutionTrace execTrace = new ExecutionTrace(eventTrace.getTraceId(), eventTrace.getSessionId());
-		final EventRecordStream eventStream = new EventRecordStream(eventTrace);
-		final FilterState state = new FilterState();
-		final EventProcessor eventProcessor = new EventProcessor(state, eventTrace, execTrace);
-
-		long lastOrderIndex = -1; // used to check for ascending order indices
-
-		try {
-			while (true) {
-				final AbstractTraceEvent currentEvent = eventStream.currentElement();
-
-				// Exit if the event stream has reached its end
-				if (currentEvent == null) {
-					break;
-				}
-
-				/* Make sure that order indices increment by 1 */
-				if (currentEvent.getOrderIndex() != (lastOrderIndex + 1)) {
-					this.printInvalidIndexMessage(currentEvent, execTrace, lastOrderIndex);
-					// TODO: output broken event record trace
-					return;
-				} else {
-					lastOrderIndex = currentEvent.getOrderIndex(); // i.e., lastOrderIndex++
-				}
-
-				// Process and consume the current event
-				eventProcessor.processEvent(currentEvent);
-				eventStream.consume();
-			}
-		} catch (final InvalidEventTraceException e) {
-			LOG.error(e.getMessage() + "\n"
-					+ "Terminating processing of event record trace with ID " + execTrace.getTraceId(), e);
-		}
-
-		super.deliver(OUTPUT_PORT_NAME_EXECUTION_TRACE, execTrace);
-		try {
-			super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE, execTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION));
-			super.reportSuccess(execTrace.getTraceId());
-		} catch (final InvalidTraceException ex) {
-			// FIXME: send to new output port for defect traces
-		}
-	}
-
-	private void printInvalidIndexMessage(final AbstractTraceEvent event, final ExecutionTrace executionTrace, final long lastIndex) {
-		LOG.error("Trace events' order indices must increment by one: "
-				+ " Found " + lastIndex + " followed by " + event.getOrderIndex() + " event (" + event + ")");
-		LOG.error("Terminating processing of event record trace with ID " + executionTrace.getTraceId());
-	}
-
-	/**
-	 * 
-	 * @param event
-	 * @param traceId
-	 * @param eoi
-	 * @param ess
-	 * @param tin
-	 * @param tout
-	 * @return
-	 */
-	private Execution beforeOperationToExecution(final BeforeOperationEvent event, final long traceId, final String sessionId, final String hostname, final int eoi,
-			final int ess,
-			final long tin, final long tout, final boolean assumed) {
-
-		final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(event.getOperationSignature());
-
-		return super.createExecutionByEntityNames(hostname, fqComponentNameSignaturePair.getFqClassname(), fqComponentNameSignaturePair.getSignature(),
-				traceId, sessionId, eoi, ess, tin, tout, assumed);
-	}
-
-	/**
-	 * 
-	 * @param event
-	 * @param traceId
-	 * @param eoi
-	 * @param ess
-	 * @param tin
-	 * @param tout
-	 * @return
-	 */
-	private Execution callOperationToExecution(final CallOperationEvent event, final long traceId, final String sessionId, final String hostname, final int eoi,
-			final int ess,
-			final long tin, final long tout, final boolean assumed) {
-
-		final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(event.getCalleeOperationSignature());
-		return super.createExecutionByEntityNames(hostname, fqComponentNameSignaturePair.getFqClassname(),
-				fqComponentNameSignaturePair.getSignature(), traceId, sessionId, eoi, ess, tin, tout, assumed);
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
-	}
-
-	public Configuration getCurrentConfiguration() {
-		return new Configuration(null);
-	}
-
 }

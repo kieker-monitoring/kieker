@@ -22,6 +22,8 @@ package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
 /**
  * 
+ * @param <T>
+ * 
  * @author Andre van Hoorn
  */
 public class WeightedBidirectionalDependencyGraphEdge<T> {

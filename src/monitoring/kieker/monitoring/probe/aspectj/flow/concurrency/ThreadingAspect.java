@@ -20,6 +20,9 @@
 
 package kieker.monitoring.probe.aspectj.flow.concurrency;
 
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+
 import kieker.common.record.flow.trace.Trace;
 import kieker.common.record.flow.trace.concurrency.SplitEvent;
 import kieker.monitoring.core.controller.IMonitoringController;
@@ -27,9 +30,6 @@ import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.TraceRegistry;
 import kieker.monitoring.probe.aspectj.AbstractAspectJProbe;
 import kieker.monitoring.timer.ITimeSource;
-
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 
 /**
  * @author Jan Waller

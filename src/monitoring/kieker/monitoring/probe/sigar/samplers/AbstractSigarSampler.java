@@ -20,9 +20,9 @@
 
 package kieker.monitoring.probe.sigar.samplers;
 
-import kieker.monitoring.core.sampler.ISampler;
-
 import org.hyperic.sigar.SigarProxy;
+
+import kieker.monitoring.core.sampler.ISampler;
 
 /**
  * Eases the implementation of {@link ISampler}s which collect

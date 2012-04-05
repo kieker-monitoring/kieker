@@ -29,6 +29,10 @@ import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
  */
 public class ResponseTimeNodeDecorator extends AbstractNodeDecorator {
 
+	public ResponseTimeNodeDecorator() {
+		// empty default constructor
+	}
+
 	@Override
 	public void processMessage(final AbstractMessage message, final DependencyGraphNode<?> sourceNode, final DependencyGraphNode<?> targetNode) {
 		// Ignore internal executions

@@ -24,14 +24,15 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import junit.framework.Assert;
+
+import org.junit.Test;
+
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 import kieker.test.monitoring.junit.util.DefaultConfigurationFactory;
-
-import org.junit.Test;
 
 /**
  * 

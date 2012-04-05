@@ -25,6 +25,8 @@ import java.util.TreeMap;
 
 /**
  * 
+ * @param <T>
+ * 
  * @author Andre van Hoorn
  */
 public abstract class AbstractAggregatedCallTreeNode<T> extends AbstractCallTreeNode<T> {

@@ -30,6 +30,11 @@ import kieker.monitoring.writer.database.SyncDbWriter;
  * @author Jan Waller
  */
 public final class SyncDbWriterReaderTest extends AbstractDbWriterReaderTest { // NOPMD (TestClassWithoutTestCases)
+
+	public SyncDbWriterReaderTest() {
+		// empty default constructor
+	}
+
 	@Override
 	protected IMonitoringController createController(final int numRecordsWritten) throws Exception {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();

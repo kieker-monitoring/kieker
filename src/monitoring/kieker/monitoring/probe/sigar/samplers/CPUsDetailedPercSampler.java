@@ -20,13 +20,13 @@
 
 package kieker.monitoring.probe.sigar.samplers;
 
-import kieker.common.record.system.CPUUtilizationRecord;
-import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.timer.ITimeSource;
-
 import org.hyperic.sigar.CpuPerc;
 import org.hyperic.sigar.SigarException;
 import org.hyperic.sigar.SigarProxy;
+
+import kieker.common.record.system.CPUUtilizationRecord;
+import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.timer.ITimeSource;
 
 /**
  * Logs detailed utilization statistics for each CPU in the system, retrieved

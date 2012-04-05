@@ -21,15 +21,16 @@
 package kieker.test.analysis.junit.filter;
 
 import junit.framework.Assert;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.select.TimestampFilter;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
-
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * 
@@ -51,6 +52,10 @@ public final class TestTimestampFilter {
 
 	private SimpleSinkPlugin<AbstractTraceEvent> sinkPlugin;
 	private final AnalysisController controller = new AnalysisController();
+
+	public TestTimestampFilter() {
+		// empty default constructor
+	}
 
 	/**
 	 * Creates a {@link TimestampFilter} with the given properties

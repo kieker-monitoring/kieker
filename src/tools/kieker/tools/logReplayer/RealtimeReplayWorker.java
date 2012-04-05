@@ -38,7 +38,7 @@ import kieker.common.record.IMonitoringRecord;
  * 
  */
 @Plugin(outputPorts = {
-		@OutputPort(name = RealtimeReplayWorker.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
+	@OutputPort(name = RealtimeReplayWorker.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
 })
 public class RealtimeReplayWorker extends AbstractFilterPlugin implements Runnable {
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
@@ -56,10 +56,10 @@ public class RealtimeReplayWorker extends AbstractFilterPlugin implements Runnab
 		super(configuration);
 	}
 
-	public void initialize(final IMonitoringRecord monRec, final RealtimeReplayDistributor rd, final AbstractFilterPlugin cons, final String constInputPortName,
-			final AnalysisController controller) {
-		this.monRec = monRec;
-		this.rd = rd;
+	public void initialize(final IMonitoringRecord record, final RealtimeReplayDistributor replayDistributor, final AbstractFilterPlugin cons,
+			final String constInputPortName, final AnalysisController controller) {
+		this.monRec = record;
+		this.rd = replayDistributor;
 		try {
 			controller.connect(this, OUTPUT_PORT_NAME, cons, constInputPortName);
 		} catch (final AnalysisConfigurationException ex) {
