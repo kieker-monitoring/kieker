@@ -23,7 +23,7 @@
 	<classpathentry kind="lib" path="lib/aopalliance-alpha1.jar"/>
 	<classpathentry kind="lib" path="lib/aspectjrt-1.6.12.jar"/>
 	<classpathentry kind="lib" path="lib/commons-cli-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar" sourcepath="C:/Temp/commons-logging-1.1.1-src.zip"/>
 	<classpathentry kind="lib" path="lib/cxf-api-2.5.2.jar"/>
 	<classpathentry kind="lib" path="lib/cxf-common-utilities-2.5.2.jar"/>
 	<classpathentry kind="lib" path="lib/cxf-rt-bindings-soap-2.5.2.jar"/>

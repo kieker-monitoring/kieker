@@ -42,14 +42,15 @@ public final class DBWriterHelper {
 	private final Connection connection;
 	private final String indexTablename;
 	private final AtomicInteger tableCounter;
+	private final boolean overwrite;
 
 	private final Map<Class<?>, String> createTypeMap = new ConcurrentHashMap<Class<?>, String>(); // NOPMD (Map)
 
-	public DBWriterHelper(final Connection connection, final String indexTablename) throws SQLException {
-		this(connection, indexTablename, new AtomicInteger());
+	public DBWriterHelper(final Connection connection, final String indexTablename, final boolean overwrite) throws SQLException {
+		this(connection, indexTablename, new AtomicInteger(), overwrite);
 	}
 
-	public DBWriterHelper(final Connection connection, final String indexTablename, final AtomicInteger tableCounter) throws SQLException {
+	public DBWriterHelper(final Connection connection, final String indexTablename, final AtomicInteger tableCounter, final boolean overwrite) throws SQLException {
 		this.connection = connection;
 		final ResultSet databaseTypeInfo = connection.getMetaData().getTypeInfo();
 		while (databaseTypeInfo.next()) {
@@ -99,15 +100,31 @@ public final class DBWriterHelper {
 		databaseTypeInfo.close();
 		this.indexTablename = indexTablename;
 		this.tableCounter = tableCounter;
+		this.overwrite = overwrite;
 	}
 
 	public String createTable(final String classname, final Class<?>... columns) throws SQLException {
 		// automatically determine the tablename
 		final String tablename = this.indexTablename + "_" + this.tableCounter.getAndIncrement();
+		// check whether table exists
+		if (this.overwrite) {
+			final String statementDropTableString = "DROP TABLE " + tablename;
+			Statement statementDropTable = null;
+			try {
+				statementDropTable = this.connection.createStatement();
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Dropping table: " + statementDropTableString);
+				}
+				statementDropTable.execute(statementDropTableString);
+			} catch (final SQLException ignore) {
+			} finally {
+				if (statementDropTable != null) {
+					statementDropTable.close();
+				}
+			}
+		}
 		// create the table
 		final StringBuilder statementCreateTable = new StringBuilder();
-		// FIXME: what should happen if the table already exists?
-		// stmt.append("DROP TABLE ").append(tableName).append(';');
 		statementCreateTable.append("CREATE TABLE ").append(tablename).append(" (id ");
 		final String createLong = this.createTypeMap.get(long.class);
 		if (createLong != null) {
@@ -157,9 +174,24 @@ public final class DBWriterHelper {
 		if (createString == null) {
 			throw new SQLException("Type 'String' not supported.");
 		}
+		// check whether table exists
+		if (this.overwrite) {
+			final String statementDropTableString = "DROP TABLE " + this.indexTablename;
+			Statement statementDropTable = null;
+			try {
+				statementDropTable = this.connection.createStatement();
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Dropping table: " + statementDropTableString);
+				}
+				statementDropTable.execute(statementDropTableString);
+			} catch (final SQLException ignore) {
+			} finally {
+				if (statementDropTable != null) {
+					statementDropTable.close();
+				}
+			}
+		}
 		final StringBuilder statementCreateTable = new StringBuilder();
-		// FIXME: what should happen if the table already exists?
-		// stmt.append("DROP TABLE ").append(tableName).append(';');
 		statementCreateTable.append("CREATE TABLE ").append(this.indexTablename);
 		statementCreateTable.append(" (tablename ").append(createString).append(", classname ").append(createString).append(')');
 		final String statementCreateTableString = statementCreateTable.toString();
@@ -202,5 +234,18 @@ public final class DBWriterHelper {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("Prefix: '");
+		sb.append(this.indexTablename);
+		sb.append("'; Drop Tables: '");
+		sb.append(this.overwrite);
+		sb.append("'; Created Tables: '");
+		sb.append(this.tableCounter.get());
+		sb.append('\'');
+		return sb.toString();
 	}
 }

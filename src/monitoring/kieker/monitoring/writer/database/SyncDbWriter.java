@@ -48,6 +48,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 	public static final String CONFIG_DRIVERCLASSNAME = PREFIX + "DriverClassname"; // NOCS (AfterPREFIX)
 	public static final String CONFIG_CONNECTIONSTRING = PREFIX + "ConnectionString"; // NOCS (AfterPREFIX)
 	public static final String CONFIG_TABLEPREFIX = PREFIX + "TablePrefix"; // NOCS (AfterPREFIX)
+	public static final String CONFIG_OVERWRITE = PREFIX + "DropTables"; // NOCS (AfterPREFIX)
 
 	private static final Log LOG = LogFactory.getLog(SyncDbWriter.class);
 
@@ -67,7 +68,9 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 		}
 		try {
 			this.connection = DriverManager.getConnection(configuration.getStringProperty(CONFIG_CONNECTIONSTRING));
-			this.helper = new DBWriterHelper(this.connection, configuration.getStringProperty(CONFIG_TABLEPREFIX));
+			this.helper = new DBWriterHelper(this.connection,
+					configuration.getStringProperty(CONFIG_TABLEPREFIX),
+					configuration.getBooleanProperty(CONFIG_OVERWRITE));
 			this.helper.createIndexTable();
 		} catch (final SQLException ex) {
 			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex); // NOPMD (exception)
@@ -151,6 +154,8 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 		sb.append("\n\tConnection: '");
 		sb.append(this.connection.toString());
 		sb.append("'");
+		sb.append("\n\t");
+		sb.append(this.helper.toString());
 		return sb.toString();
 	}
 }
