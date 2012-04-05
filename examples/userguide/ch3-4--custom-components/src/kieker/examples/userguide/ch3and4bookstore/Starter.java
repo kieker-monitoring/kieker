@@ -60,7 +60,8 @@ public final class Starter {
 		final Configuration filterConfiguration = new Configuration();
 		final long rtThresholdNanos = TimeUnit.NANOSECONDS.convert(1900, TimeUnit.MICROSECONDS);
 		filterConfiguration.setProperty( // configure threshold of 1.9 milliseconds:
-				MyResponseTimeFilter.CONFIG_PROPERTY_NAME_RT_TS_NANOS, Long.toString(rtThresholdNanos));
+				MyResponseTimeFilter.CONFIG_PROPERTY_NAME_RT_TS_NANOS,
+				Long.toString(rtThresholdNanos));
 		final MyResponseTimeFilter filter = new MyResponseTimeFilter(filterConfiguration);
 		analysisController.registerFilter(filter);
 		analysisController.connect(reader, MyPipeReader.OUTPUT_PORT_NAME,
