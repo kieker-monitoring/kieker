@@ -76,7 +76,7 @@ Figure~\ref{fig:bookstore:classAndSequenceDiagrams} shows a class diagram descri
 
 The bookstore contains a catalog for books and a customer relationship management system~(CRM) for the book sellers. To provide this service, the different classes provide operations to initialize the application, search for books, and get offers or searched books. In this example, the methods implementing these operations are merely stubs. However, for the illustration of \Kieker{} they are sufficient and the inclined reader may extend the application into a real bookstore. 
 
-The directory structure of the Bookstore example is shown in Figure~\ref{fig:PlainBookstoreExample} and comprises four Java classes in its source directory \dir{src/bookstoreApplication/} which are explained in detail below.
+The directory structure of the Bookstore example is shown in Figure~\ref{fig:PlainBookstoreExample} and comprises four Java classes in its source directory \dir{src/.../ch2bookstore/} which are explained in detail below.
 
 \begin{figure}[H]
 \begin{graybox}
@@ -85,7 +85,7 @@ The directory structure of the Bookstore example is shown in Figure~\ref{fig:Pla
 .2 \DirInDirTree{userguide/}.
 .3 \DirInDirTree{ch2--bookstore-application/}.
 .4 \DirInDirTree{src/}\DTcomment{The directory for the source code files}.
-.5 \DirInDirTree{bookstoreApplication/}.
+.5 \DirInDirTree{../ch2bookstore/}.
 .6 Bookstore.java.
 .6 BookstoreStarter.java.
 .6 Catalog.java.
@@ -138,9 +138,9 @@ In a real application these methods would pass objects to ensure the results of 
 %}
 \begin{lstlisting}[label=lst:bookstoreStarterNoInstr, caption=Commands to compile and run the Bookstore application]
 > mkdir build
-> javac src/bookstoreApplication/*.java -d build
+> javac src/kieker/examples/userguide/ch2bookstore/*.java -d build
 
-> java -classpath build bookstoreApplication.BookstoreStarter 
+> java -classpath build kieker.examples.userguide.ch2bookstore.BookstoreStarter 
 \end{lstlisting}
 
 \noindent The first command compiles the application and places the resulting four class files in the \dir{build/} directory. To verify the build process, the \dir{build/} directory can be inspected. The second command loads the bookstore application and produces the output shown in Listing~\ref{lst:result-noinstr}.
