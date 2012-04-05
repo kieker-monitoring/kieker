@@ -71,7 +71,7 @@ public final class SystemMilliTimer extends AbstractTimeSource {
 	}
 
 	public final long getTime() {
-		return TimeUnit.MILLISECONDS.convert(System.currentTimeMillis() - this.offset, this.timeunit);
+		return this.timeunit.convert(System.currentTimeMillis() - this.offset, TimeUnit.MILLISECONDS);
 	}
 
 	@Override

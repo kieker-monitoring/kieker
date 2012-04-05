@@ -74,14 +74,14 @@ public final class SystemNanoTimer extends AbstractTimeSource {
 	}
 
 	public final long getTime() {
-		return TimeUnit.NANOSECONDS.convert(System.nanoTime() - this.offset, this.timeunit);
+		return this.timeunit.convert(System.nanoTime() - this.offset, TimeUnit.NANOSECONDS);
 	}
 
 	@Override
 	public final String toString() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("Time in " + this.timeunit.toString().toLowerCase(Locale.ENGLISH) + " (with nanoseconds precision) since ");
-		sb.append(new Date(TimeUnit.NANOSECONDS.toMicros(this.offset - this.clockdifference)));
+		sb.append(new Date(TimeUnit.NANOSECONDS.toMillis(this.offset - this.clockdifference)));
 		return sb.toString();
 	}
 

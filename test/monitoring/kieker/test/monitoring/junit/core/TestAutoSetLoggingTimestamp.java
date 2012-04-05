@@ -18,9 +18,6 @@
  * limitations under the License.
  ***************************************************************************/
 
-/**
- * 
- */
 package kieker.test.monitoring.junit.core;
 
 import java.util.List;
