@@ -31,7 +31,7 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 
-// FIXME: check correct handling of errors by creating suitable tests in kieker.test.tools.junit.writeRead.filesystem!
+// TODO: check correct handling of errors by creating suitable tests in kieker.test.tools.junit.writeRead.filesystem!
 /**
  * Filesystem reader which reads from multiple directories simultaneously ordered by the logging timestamp.
  * 

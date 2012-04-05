@@ -116,7 +116,7 @@ public final class DBWriterHelper {
 					LOG.debug("Dropping table: " + statementDropTableString);
 				}
 				statementDropTable.execute(statementDropTableString);
-			} catch (final SQLException ignore) {
+			} catch (final SQLException ignore) { // NOPMD (empty catch block)
 			} finally {
 				if (statementDropTable != null) {
 					statementDropTable.close();
@@ -184,7 +184,7 @@ public final class DBWriterHelper {
 					LOG.debug("Dropping table: " + statementDropTableString);
 				}
 				statementDropTable.execute(statementDropTableString);
-			} catch (final SQLException ignore) {
+			} catch (final SQLException ignore) { // NOPMD (empty catch block)
 			} finally {
 				if (statementDropTable != null) {
 					statementDropTable.close();

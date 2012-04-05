@@ -26,10 +26,13 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import kieker.monitoring.core.IMonitoringRecordReceiver;
 
-// FIXME: check License
 /**
- * Based upon ConcurrentHashMap.
+ * A simple registry to assign unique ids to objects.
  * The basic strategy is to subdivide the table among Segments, each of which itself is a concurrently readable hash table.
+ * 
+ * Based upon ConcurrentHashMap.
+ * Written by Doug Lea with assistance from members of JCP JSR-166 Expert Group and released to the public domain, as explained at
+ * http://creativecommons.org/publicdomain/zero/1.0/
  * 
  * @param <E>
  *            the type of registered objects
