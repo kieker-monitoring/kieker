@@ -101,7 +101,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 	protected Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
 		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_SERVER, "localhost");
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_PORT, "0");
+		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_PORT, "59999");
 		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_SERVICEURL, "");
 		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_DOMAIN, "kieker.monitoring");
 		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_LOGNAME, "MonitoringLog");
