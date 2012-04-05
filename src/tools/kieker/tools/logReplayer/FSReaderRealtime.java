@@ -75,7 +75,7 @@ public final class FSReaderRealtime extends AbstractReaderPlugin {
 		this.init(configuration);
 	}
 
-	public final boolean init(final Configuration configuration) {
+	private final boolean init(final Configuration configuration) {
 		this.numWorkers = configuration.getIntProperty(CONFIG_PROPERTY_NAME_NUM_WORKERS);
 		this.inputDirs = configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_INPUTDIRNAMES, ";");
 		// this.inputDirs = this.inputDirNameListToArray(configuration.getStringProperty(PROP_NAME_INPUTDIRNAMES));
