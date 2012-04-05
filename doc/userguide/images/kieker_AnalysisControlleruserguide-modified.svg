@@ -171,7 +171,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -188,9 +188,9 @@
      inkscape:window-height="928"
      id="namedview509"
      showgrid="false"
-     inkscape:zoom="3.1389111"
-     inkscape:cx="484.42918"
-     inkscape:cy="200.26612"
+     inkscape:zoom="1.5694556"
+     inkscape:cx="666.0556"
+     inkscape:cy="284.293"
      inkscape:window-x="-4"
      inkscape:window-y="35"
      inkscape:window-maximized="1"
@@ -1858,12 +1858,12 @@
   </g>
   <text
      font-size="12"
-     x="685.33319"
+     x="669.33319"
      y="125.43673"
      clip-path="none"
      xml:space="preserve"
      id="text443-5"
-     style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">- readers</text>
+     style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">- repositories</text>
   <text
      font-size="12"
      x="457"
