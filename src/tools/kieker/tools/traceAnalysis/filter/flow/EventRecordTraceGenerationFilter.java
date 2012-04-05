@@ -106,7 +106,6 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 	/**
 	 * 
 	 * @param configuration
-	 * @param repositories
 	 */
 	public EventRecordTraceGenerationFilter(final Configuration configuration) {
 		super(configuration);

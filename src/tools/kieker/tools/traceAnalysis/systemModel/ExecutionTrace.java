@@ -331,8 +331,6 @@ public class ExecutionTrace extends AbstractTrace {
 	/**
 	 * Returns an instance of the {@link Comparator} used by the internal {@link TreeSet} to
 	 * compare {@link Execution}s.
-	 * 
-	 * @return
 	 */
 	public static final Comparator<Execution> createExecutionTraceComparator() {
 		return new Comparator<Execution>() {

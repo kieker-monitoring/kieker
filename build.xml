@@ -307,6 +307,7 @@
 			<dirset dir=".">
 				<include name="${src.kieker.common.dir}" />
 				<include name="${src.kieker.analysis.dir}" />
+				<include name="${src.gen.kieker.analysis.dir}" />
 				<include name="${src.kieker.monitoring.dir}" />
 				<include name="${src.kieker.monitoring-servlet.dir}" />
 				<include name="${src.kieker.tools.dir}" />
@@ -319,7 +320,10 @@
 			<classpath refid="kieker.monitoring-ajc-compile-classpath" />
 			<classpath refid="kieker.monitoring-servlet-compile-classpath" />
 			<classpath refid="kieker.tools-compile-classpath" />
-			<link href="http://download.oracle.com/javase/6/docs/api/" />
+			<link href="http://docs.oracle.com/javase/1.5.0/docs/api/" />
+			<tag name="generated" /> 
+			<tag name="ordered" />
+			<tag name="model" />
 		</javadoc>
 	</target>
 

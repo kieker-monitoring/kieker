@@ -66,7 +66,6 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<Abstract
 		 * 
 		 * @param e1
 		 * @param e2
-		 * @return
 		 */
 		public int compare(final AbstractTraceEvent e1, final AbstractTraceEvent e2) {
 			if ((e1.equals(e2)) || (e1.getOrderIndex() == e2.getOrderIndex())) { // same order index

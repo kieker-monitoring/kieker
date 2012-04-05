@@ -132,13 +132,6 @@ class RecordDelegationPlugin2 extends AbstractFilterPlugin {
 
 	/**
 	 * Creates a new instance of this class.
-	 * 
-	 * @param rec
-	 *            The target of this plugin.
-	 * @param inputPortName
-	 *            The input port of the given plugin.
-	 * @param controller
-	 *            The controller instance to be used for connecting the filters.
 	 */
 	public RecordDelegationPlugin2(final Configuration configuration) {
 		super(configuration);

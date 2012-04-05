@@ -68,7 +68,6 @@ public class ClassOperationSignaturePair {
 	 * TODO: Move this method to the then-extracted class FQComponentNameSignaturePair
 	 * 
 	 * @param operationSignatureStr
-	 * @return
 	 */
 	public static ClassOperationSignaturePair splitOperationSignatureStr(final String operationSignatureStr) {
 		final String fqClassname;
@@ -124,7 +123,6 @@ public class ClassOperationSignaturePair {
 	 * 
 	 * @param fqClassName
 	 * @param signature
-	 * @return
 	 */
 	public static String createOperationSignatureString(final String fqClassName, final Signature signature) {
 		final StringBuilder strBuilder = new StringBuilder();

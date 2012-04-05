@@ -76,7 +76,6 @@ public final class Configuration extends Properties {
 	 * Property values have to be split by '|'.
 	 * 
 	 * @param key
-	 * @return
 	 */
 	public final String[] getStringArrayProperty(final String key) {
 		final String s = this.getStringProperty(key);
@@ -93,7 +92,6 @@ public final class Configuration extends Properties {
 	 * @param split
 	 *            a regular expression
 	 * @param key
-	 * @return
 	 */
 	public final String[] getStringArrayProperty(final String key, final String split) {
 		final String s = this.getStringProperty(key);
@@ -108,7 +106,6 @@ public final class Configuration extends Properties {
 	 * Converts the String[] to a String split by '|'.
 	 * 
 	 * @param values
-	 * @return
 	 */
 	public static final String toProperty(final String[] values) {
 		final StringBuilder sb = new StringBuilder();
@@ -125,7 +122,6 @@ public final class Configuration extends Properties {
 	 * Converts the Object[] to a String split by '|'.
 	 * 
 	 * @param values
-	 * @return
 	 */
 	public static final String toProperty(final Object[] values) {
 		final StringBuilder sb = new StringBuilder();
@@ -153,11 +149,8 @@ public final class Configuration extends Properties {
 	 * </pre>
 	 * 
 	 * </blockquote>
-	 * <p>
-	 * </p>
 	 * 
 	 * @param prefix
-	 * @return
 	 */
 	public final Configuration getPropertiesStartingWith(final String prefix) {
 		final Configuration configuration = new Configuration(null);

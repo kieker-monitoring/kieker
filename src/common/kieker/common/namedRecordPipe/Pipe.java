@@ -54,8 +54,6 @@ public final class Pipe {
 	 * Passe the monitoring record to the registered pipe reader.
 	 * 
 	 * @param monitoringRecord
-	 * @throws PipeException
-	 *             if the pipe is closed or no pipe reader is registered
 	 */
 	public boolean writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		if (this.closed) {

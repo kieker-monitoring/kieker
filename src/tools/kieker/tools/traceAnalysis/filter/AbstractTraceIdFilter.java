@@ -41,9 +41,6 @@ public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 	/**
 	 * 
 	 * @param configuration
-	 *            ignored
-	 * @param repositories
-	 *            ignored
 	 * @param selectedTraceIds
 	 */
 	public AbstractTraceIdFilter(final Configuration configuration) {

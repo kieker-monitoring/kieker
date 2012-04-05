@@ -113,8 +113,6 @@ public final class AnalysisController {
 	 * @param file
 	 *            The configuration file for the analysis.
 	 * 
-	 * @return A completely initialized instance of {@link AnalysisController}.
-	 * 
 	 * @throws IOException
 	 *             If the given file could not be loaded or is not a valid kax-configuration file.
 	 * @throws AnalysisConfigurationException
@@ -133,8 +131,6 @@ public final class AnalysisController {
 	 *            The configuration file for the analysis.
 	 * @param classLoader
 	 *            The classloader used to initialize the plugins etc.
-	 * 
-	 * @return A completely initialized instance of {@link AnalysisController}.
 	 * 
 	 * @throws IOException
 	 *             If the given file could not be loaded or is not a valid kax-configuration file.

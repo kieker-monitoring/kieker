@@ -39,11 +39,6 @@ public abstract class AbstractTimestampFilter extends AbstractFilterPlugin {
 	/**
 	 * 
 	 * @param configuration
-	 *            ignored
-	 * @param repositories
-	 *            ignored
-	 * @param ignoreExecutionsBeforeTimestamp
-	 * @param ignoreExecutionsAfterTimestamp
 	 */
 	public AbstractTimestampFilter(final Configuration configuration) {
 		super(configuration);
