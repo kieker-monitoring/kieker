@@ -630,9 +630,9 @@
         <!-- See http://checkstyle.sf.net/config_import.html !-->
         <module name="ImportOrder">
             <property name="option"        value="under"/>
-            <property name="groups"        value=""/>
+            <property name="groups"        value="java,javax,junit,org,com,kieker"/>
             <property name="ordered"       value="true"/>
-            <property name="separated"     value="false"/>
+            <property name="separated"     value="true"/>
             <property name="caseSensitive" value="true"/>
         </module>
 

@@ -227,6 +227,9 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		AbstractCallTreeFilter.saveTreeToDotFile(root, outputFilename, includeWeights, true, shortLabels); // includeEois
 	}
 
+	/**
+	 * @author Andre van Hoorn
+	 */
 	public interface IPairFactory {
 		public Object createPair(final SynchronousCallMessage callMsg);
 	}
