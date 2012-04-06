@@ -313,7 +313,7 @@
 				<include name="${src.kieker.tools.dir}" />
 			</dirset>
 		</path>
-		<javadoc sourcepathref="javadoc-sourcepath" destdir="${build.api.dir}" packagenames="kieker.*" access="public" author="true" version="false" use="true" doctitle="Kieker Monitoring and Analysis Framework, Vers. ${kieker.version}&lt;br/&gt;API Documentation" header="Kieker ${kieker.version}" footer="Kieker ${kieker.version}" bottom="Copyright ${year} ${copyright}, &lt;a href=&quot;http://kieker.sourceforge.net&quot;&gt;http://kieker.sourceforge.net&lt;/&gt;">
+		<javadoc sourcepathref="javadoc-sourcepath" destdir="${build.api.dir}" packagenames="kieker.*" access="public" author="true" version="false" use="true" doctitle="Kieker Monitoring and Analysis Framework, Vers. ${kieker.version}&lt;br/&gt;API Documentation" header="Kieker ${kieker.version}" footer="Kieker ${kieker.version}" bottom="Copyright ${year} ${copyright}, &lt;a href=&quot;http://kieker-monitoring.net&quot;&gt;http://kieker-monitoring.net&lt;/&gt;">
 			<classpath refid="kieker.common-compile-classpath" />
 			<classpath refid="kieker.analysis-compile-classpath" />
 			<classpath refid="kieker.monitoring-compile-classpath" />
