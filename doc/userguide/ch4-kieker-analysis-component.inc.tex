@@ -5,7 +5,6 @@
 % $Rev$:
 % $Author$
 
-
 \chapter{\KiekerAnalysisPart{} Component}\label{chap:componentsAnalysis}
 
 \NOTIFYBOX{The Java sources of this chapter, as well as a pre-compiled binary, %
@@ -13,32 +12,31 @@ can be found in the %
 \file{\customComponentsBookstoreApplicationDirDistro{}/} directory of the %
 binary release.}
 
-\section{Pipe-And-Filter Framework and Included Plugins}\label{sec:analysis:controller}
+\section{Pipe-and-Filter Framework and Included Plugins}\label{sec:analysis:controller}
 
 An analysis with \KiekerAnalysisPart{} is set up and executed employing %
 the class \class{AnalysisController}. %
 \KiekerAnalysisPart{} provides a framework to define and execute pipe-and-filter %
 architectures of analysis plugins, i.e., monitoring readers and analysis filters, %
 as well as repositories. %
-
-\begin{figure}
-\includegraphics[width=\textwidth]{images/example-pipe-and-filter}
-\caption{Example pipe-and-filter configuration}
-\label{fig:example:pipe-and-filter}
-\end{figure}
-
-This section describes how to develop custom reader and filter 
-plugins, as well as repositories. The description is based on the example %
+This section describes how to use and develop readers, filters, and % 
+repositories. The description is based on the example %
 pipe-and-filter architecture shown in Figure~\ref{fig:example:pipe-and-filter}. The custom monitoring reader %
 \class{MyPipeReader}, which corresponds to the writer developed in Section~\ref{sec:monitoring-log-writers}, %
 sends records to the connected custom filter \class{MyResponseTimeFilter}. %
 This filter accepts only events of the record type \class{MyResponseTimeRecord}, 
 developed in Section~\ref{sec:componentsMonitoring:monitoringRecords}. %
 The \class{MyResponseTimeFilter} classifies incoming \class{MyResponseTimeRecord}s %
-based on whether they satisfy or exceed a configured threshold and pass them %
+based on whether they satisfy or exceed a configured threshold and passes them %
 to the respective output ports, \method{validResponseTimes} or \method{invalidResponseTimes}. %
 Two instances of a second custom filter, \class{MyResponseTimeOutputPrinter}, %
 print the received records to the standard output stream.
+
+\begin{figure}
+\includegraphics[width=\textwidth]{images/example-pipe-and-filter}
+\caption{Example pipe-and-filter configuration}
+\label{fig:example:pipe-and-filter}
+\end{figure}
 
 %  requires a monitoring reader %
 % (Section~\ref{sec:analysis:reader}) and at least %
@@ -52,27 +50,31 @@ print the received records to the standard output stream.
 \label{fig:analysisController:classdiagram}
 \end{figure}
 
-Figure~\ref{fig:analysisController:classdiagram} shows the class diagram %
-with the important \KiekerAnalysisPart{} classes and their relationship. %
+\pagebreak
 
-\noindent Setting up and running an analysis with \KiekerAnalysisPart{} requires the %
-following steps to be performed, as described in Section~\ref{sec:example:analysis} already:\\
+\noindent Figure~\ref{fig:analysisController:classdiagram} shows the class diagram %
+with the important \KiekerAnalysisPart{} classes and their relationships. %
+Setting up and running an analysis with \KiekerAnalysisPart{} requires the %
+following steps to be performed, as sketched in Section~\ref{sec:example:analysis} already:
+
+\medskip
 
 \begin{compactenum}
 \item Creating an instance of the \class{AnalysisController} class
 \item Creating and registering monitoring readers (\method{registerReader}), 
 filters (\method{registerFilter}), and repositories (\method{registerRepository}).
-\item Connecting plugins and repositories (\method{registerRepository})
+\item Connecting plugins to other plugins and to repositories (\method{connect})
 \item Starting the analysis instance (\method{run}).
 \end{compactenum}
 
-
+\medskip
 
 \noindent On invocation of the \method{run} method, the \class{Analysis Controller} %
 calls the \method{init} method of all filter plugins allowing them to initialize. %
 Then, it starts the configured monitoring readers by calling its \method{read} %
 method. Plugins send data via their output ports to connected input ports of other 
-plugins. As soon as the reader returns from the execution of its \method{read} 
+plugins. Being the sink of a pipe-and-filter architecture, readers don't have %
+input ports. As soon as the reader returns from the execution of its \method{read} 
 method, the method \method{terminate} of each registered plugin is called by the %
 \class{Analysis Controller}. \KiekerAnalysisPart{} configurations can be saved %
 to a \class{.kax} file by calling the \class{Analysis Controller}'s \method{saveToFile} method. %
@@ -81,6 +83,29 @@ file system location of a \class{.kax} file to load the configuration from. %
  %
 In order to support the asynchronous execution of the \class{AnalysisController} instance, %
 we provide the \class{AnalysisControllerThread} class.
+
+\subsection{Programmatic Creation of Pipe-and-Filter Architectures}\label{sec:analysis:programmaticCreation}
+
+To give a first impression of the programmatic %
+instantiation, configuration, and connection of plugins, Listing~\ref{listing:StarterInitConnect} %
+demonstrates this procedure for the example, using \class{MyPipeReader} and %
+\class{MyResponseTimeFilter}, according to Figure~\ref{fig:example:pipe-and-filter}.
+
+The configuration for the \class{MyPipeReader} is created in lines~54 and~55. %
+Using this configuration, the reader is created in line~56, and registered to %
+the \class{AnalysisController} in line~57. Similarly, lines~60--66 initialize %
+and register the \class{MyResponseTimeFilter}. The reader's output is connected %
+to the filter's input in line~67. % 
+The entire programmatic creation of the pipe-and-filter architecture shown %
+in Figure~\ref{fig:example:pipe-and-filter}, can be found in the example  %
+file \file{Starter.java}.
+
+\medskip
+
+\setJavaCodeListing
+\lstinputlisting[caption=Initializing and connecting the example reader and filter (Starter.java),label=listing:StarterInitConnect,firstline=53, lastline=68, firstnumber=53]%
+{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/Starter.java}
+
 
 \subsection{Monitoring Reader Plugins}
 
@@ -113,24 +138,33 @@ The \class{FSReaderRealtime} can be used to simulate continuous monitoring of a 
 production system. It adds delays between the delivery of the monitoring records %
 to its consumers according to the original delays reconstructed from the logging %
 timestamps (Section~\ref{sec:componentsMonitoring:monitoringRecords}).
-A brief description of how to use the \class{JMSReader} can be found in Appendix~\ref{appendix:usingJMS}. %
+A brief description of how to use the \class{JMSReader} can be found in Appendix~%
+\ref{appendix:usingJMS}. Please note that the database reader (\class{JMSReader}) %
+is currently in a prototype stage and that they should be used with care. %
+Like each plugin, readers are configured via properties, as used in Section~%
+\ref{sec:analysis:programmaticCreation} and detailed in Section~%
+\ref{sec:analysis:configuration}. 
 
 \subsection{Filter Plugins}
 
-\ldots OLD: \ldots
-
-As just mentioned, consumer plugins are special analysis plugins which receive %
-the records provided by the monitoring reader and implement analyses or %
-visualizations based on these records. %
-Consumer plugins must implement the interface \class{IMonitoringRecordConsumerPlugin} %
+Filter plugins receive events (Java objects) via input ports from other %
+plugins and implement analyses or visualizations based on these events. %
+Consumer plugins must extend the class \class{AbstractFilterPlugin} %
 (see Figure~\ref{fig:analysisController:classdiagram}). %
-By implementing the \method{getRecordTypeSubscriptionList} method, a consumer plugin %
-can specify the desired types of monitoring records to be received via the %
-method \method{newMonitoringRecord}.
 
-The custom consumer in Listing~\ref{lst:MyReponseTimeConsumer} on %
-page~\pageref{lst:MyReponseTimeConsumer} simply writes %
-the content of the received response time records to the standard output stream.
+\Kieker{} already includes some basic filter plugins. For example, the %
+\class{CountingFilter} and  \class{TeeFilter} forward incoming events %
+to their output ports. The \class{CountingFilter} additionally provides the %
+current number of received records via a second output port. The \class{TeeFilter} %
+prints additionally prints incoming events to an output stream, which may be %
+the standard output, standard error, a logger, or a file. %
+A \class{TimestampFilter} and a \class{TypeFilter} filters incoming records by %
+timestamp and by type, respectively. A \class{TraceIdFilter} filters incoming %
+trace events (e.g., \class{OperationExecutionRecord}s, see Section~%
+\ref{chap:example}) by trace id. Like each plugin, readers filters configured %
+via properties, as used in Section~\ref{sec:analysis:programmaticCreation} and %
+detailed in Section~%
+\ref{sec:analysis:configuration}. %
 
 % \pagebreak
 % \setJavaCodeListing
@@ -144,17 +178,6 @@ the content of the received response time records to the standard output stream.
 % {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/Starter.java}
 
 % \enlargethispage{1.2cm}
-
-\subsection{Programmatic Creation of Pipe-and-Filter Architectures}
-
-To give a first impression of the programmatic %
-instantiation, configuration, and connection of plugins, Listing~\ref{listing:StarterInitConnect} %
-demonstrates this procedure for the example, using \class{MyPipeReader} and %
-\class{MyResponseTimeFilter}, according to Figure~\ref{fig:example:pipe-and-filter}.
-
-\setJavaCodeListing
-\lstinputlisting[caption=Initializing and connecting the example reader and filter (Starter.java),label=listing:StarterInitConnect,firstline=53, lastline=68, firstnumber=53]%
-{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/Starter.java}
 
 \section{Developing Analysis Plugins}\label{sec:analysis:plugins}
 
@@ -250,24 +273,36 @@ which already provides an implementation of the observer pattern. %
 By invoking the method \method{deliverRecord},  the delivery of records is then %
 delegated to the super class.
 
-Listing~\ref{listing:MyReader} on page~\pageref{listing:MyReader} shows a simple reader which polls records from %
-the named pipe introduced in the previous Chapter~\ref{chap:componentsMonitoring}. %
+Listing~\ref{listing:MyPipeReaderPluginAnnotation} shows the \class{@Plugin} annotation %
+(Section~\ref{sec:analysis:pluginAnnotation}) of the example reader %
+\class{MyPipeReader}. Reading monitoring records from the monitoring % 
+pipe introduced in the previous Chapter~\ref{sec:monitoring-log-writers}, %
+the reader provides received monitoring records via its output port.
 
 % If there is nothing on the pipe to be read, the reader waits 4 seconds at maximum before it terminates.
 % \setJavaCodeListing
 % \lstinputlisting[firstline=29, firstnumber=29, caption=MyPipeReader.java (excerpt), label=listing:MyReader,float]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
 
+\TODO{Change output event type to \class{IMonitoringRecord}}.
 
 \setJavaCodeListing
 \lstinputlisting[firstline=30, firstnumber=30, lastline=38, caption={@Plugin annotation for the example reader}, label=listing:MyPipeReaderPluginAnnotation]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
 
-\setJavaCodeListing
-\lstinputlisting[firstline=30, firstnumber=30, lastline=38, caption={Example reader's initialization method}, label=listing:MyPipeReaderInit]%
-{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
+\noindent Listing~\ref{listing:MyPipeReaderInit} shows the \class{MyPipeReader}'s %
+\method{init} method. In this case, the reader reads the pipe name from the %
+configuration and connects to the named pipe. 
 
 \setJavaCodeListing
-\lstinputlisting[firstline=66, firstnumber=66, lastline=84, caption={Example reader's \method{read} method}, label=listing:MyPipeReaderInit]%
+\lstinputlisting[firstline=56, firstnumber=56, lastline=64, caption={Example reader's initialization method}, label=listing:MyPipeReaderInit]%
+{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
+
+\noindent Listing~\ref{listing:MyPipeReaderRead} shows the \class{MyPipeReader}'s %
+\method{read} method. In this case, the reader polls the pipe for new records %
+and forwards these to its output port. 
+
+\setJavaCodeListing
+\lstinputlisting[firstline=66, firstnumber=66, lastline=84, caption={Example reader's \method{read} method}, label=listing:MyPipeReaderRead]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
 
 \TODO{\method{terminate}}
