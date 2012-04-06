@@ -83,13 +83,28 @@ public final class AnalysisController {
 	 * This list contains the dependencies of the project. Currently this field is only being used when loading an instance of the model.
 	 */
 	private final Collection<MIDependency> dependencies = new CopyOnWriteArrayList<MIDependency>();
+	/**
+	 * This list contains all registered readers within this controller.
+	 */
 	private final Collection<AbstractReaderPlugin> readers = new CopyOnWriteArrayList<AbstractReaderPlugin>();
+	/**
+	 * This list contains all registered filters within this controller.
+	 */
 	private final Collection<AbstractFilterPlugin> filters = new CopyOnWriteArrayList<AbstractFilterPlugin>();
+	/**
+	 * This list contains all registered repositories within this controller.
+	 */
 	private final Collection<AbstractRepository> repos = new CopyOnWriteArrayList<AbstractRepository>();
+	/**
+	 * This list contains all registered state observers within this controller.
+	 */
 	private final Collection<IStateObserver> stateObservers = new CopyOnWriteArrayList<IStateObserver>();
 
 	private final CountDownLatch initializationLatch = new CountDownLatch(1);
 
+	/**
+	 * This field contains the current state of the controller.
+	 */
 	private volatile STATE state = STATE.READY;
 
 	/**
@@ -100,7 +115,10 @@ public final class AnalysisController {
 	}
 
 	/**
-	 * Constructs an {@link AnalysisController} instance.
+	 * Constructs an {@link AnalysisController} instance using the given parameter.
+	 * 
+	 * @param projectName
+	 *            The name of the project.
 	 */
 	public AnalysisController(final String projectName) {
 		this.projectName = projectName;
@@ -638,6 +656,9 @@ public final class AnalysisController {
 	 * Registers a log reader used as a source for monitoring records.
 	 * 
 	 * @param reader
+	 *            The reader to be registered.
+	 * @throws IllegalStateException
+	 *             If the controller is already running or has already been terminated.
 	 */
 	public final void registerReader(final AbstractReaderPlugin reader) throws IllegalStateException {
 		if (this.state != STATE.READY) {
@@ -659,6 +680,11 @@ public final class AnalysisController {
 	 * Registers the passed plugin.
 	 * 
 	 * All plugins which have been registered before calling the <i>run</i>-method, will be started once the analysis is started.
+	 * 
+	 * @param filter
+	 *            The filter to be registered.
+	 * @throws IllegalStateException
+	 *             If the controller is already running or has already been terminated.
 	 */
 	public final void registerFilter(final AbstractFilterPlugin filter) throws IllegalStateException {
 		if (this.state != STATE.READY) {
@@ -678,6 +704,11 @@ public final class AnalysisController {
 
 	/**
 	 * Registers the passed repository.
+	 * 
+	 * @param repository
+	 *            The repository to be registered.
+	 * @throws IllegalStateException
+	 *             If the controller is already running or has already been terminated.
 	 */
 	public final void registerRepository(final AbstractRepository repository) throws IllegalStateException {
 		if (this.state != STATE.READY) {
@@ -695,22 +726,47 @@ public final class AnalysisController {
 		}
 	}
 
+	/**
+	 * Delivers the current name of the project.
+	 * 
+	 * @return The current project name.
+	 */
 	public final String getProjectName() {
 		return this.projectName;
 	}
 
+	/**
+	 * Delivers and unmodifiable collection of all readers.
+	 * 
+	 * @return All registered readers.
+	 */
 	public final Collection<AbstractReaderPlugin> getReaders() {
 		return Collections.unmodifiableCollection(this.readers);
 	}
 
+	/**
+	 * Delivers and unmodifiable collection of all filters.
+	 * 
+	 * @return All registered filters.
+	 */
 	public final Collection<AbstractFilterPlugin> getFilters() {
 		return Collections.unmodifiableCollection(this.filters);
 	}
 
+	/**
+	 * Delivers and unmodifiable collection of all repositories.
+	 * 
+	 * @return All registered repositories.
+	 */
 	public final Collection<AbstractRepository> getRepositories() {
 		return Collections.unmodifiableCollection(this.repos);
 	}
 
+	/**
+	 * Delivers the current state of the analysis controller.
+	 * 
+	 * @return The current state.
+	 */
 	public final STATE getState() {
 		return this.state;
 	}
