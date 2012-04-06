@@ -159,8 +159,7 @@ public class ClassOperationSignaturePair {
 	}
 
 	/**
-	 * Returns a String representation of this {@link ClassOperationSignaturePair} using the
-	 * {@link ClassOperationSignaturePair#createOperationSignatureString(String, Signature)} method.
+	 * Returns a String representation of this {@link ClassOperationSignaturePair} using the {@link #createOperationSignatureString(String, Signature)} method.
 	 */
 	@Override
 	public String toString() {

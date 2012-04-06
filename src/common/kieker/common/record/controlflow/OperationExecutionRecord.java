@@ -125,7 +125,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	 * to null; {@link #isEntryPoint()} is set to false.
 	 * 
 	 * @param operationSignature
-	 *            an operation string, as defined in {@link ClassOperationSignaturePair#splitOperationSignatureStr(String)}; must not be null.
+	 *            an operation string, as defined in {@link kieker.common.util.ClassOperationSignaturePair#splitOperationSignatureStr(String)}; must not be null.
 	 * @param sessionId
 	 *            the session ID; must not be null, use {@link #NO_SESSION_ID} if no session ID desired.
 	 * @param traceId

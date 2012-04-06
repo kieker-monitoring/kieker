@@ -56,7 +56,7 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<Abstract
 	// TODO: parent order index?
 
 	/**
-	 * {@link AbstractTraceEvent}s sorted/unified by {@link AbstractTraceEvent#getOrderIndex()}
+	 * {@link AbstractTraceEvent}s sorted/unified by {@link kieker.common.record.flow.trace.AbstractTraceEvent#getOrderIndex()}
 	 */
 	private final SortedSet<AbstractTraceEvent> events = new TreeSet<AbstractTraceEvent>(new Comparator<AbstractTraceEvent>() {
 
@@ -103,8 +103,9 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<Abstract
 	}
 
 	/**
-	 * Adds a {@link AbstractTraceEvent} to the trace.
-	 * The given event must have the {@link #getTraceId()} of this trace and another event with {@link AbstractTraceEvent#getOrderIndex()} must not have been added
+	 * Adds a {@link kieker.common.record.flow.trace.AbstractTraceEvent} to the trace.
+	 * The given event must have the {@link #getTraceId()} of this trace and another event with
+	 * {@link kieker.common.record.flow.trace.AbstractTraceEvent#getOrderIndex()} must not have been added
 	 * before.
 	 * 
 	 * @param execution
@@ -187,7 +188,7 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<Abstract
 	}
 
 	/**
-	 * Returns the {@link AbstractTraceEvent}s ordered by {@link AbstractTraceEvent#getOrderIndex()}
+	 * Returns the {@link kieker.common.record.flow.trace.AbstractTraceEvent}s ordered by {@link kieker.common.record.flow.trace.AbstractTraceEvent#getOrderIndex()}
 	 */
 
 	public Iterator<AbstractTraceEvent> iterator() {
@@ -238,9 +239,10 @@ public class EventRecordTrace extends AbstractTrace implements Iterable<Abstract
 	}
 
 	/**
-	 * Returns the list of {@link AbstractTraceEvent}s, ordered by {@link AbstractTraceEvent#getOrderIndex()}.
+	 * Returns the list of {@link kieker.common.record.flow.trace.AbstractTraceEvent}s, ordered by
+	 * {@link kieker.common.record.flow.trace.AbstractTraceEvent#getOrderIndex()}.
 	 * 
-	 * @return
+	 * @return The event list.
 	 */
 	public List<AbstractTraceEvent> eventList() {
 		return new ArrayList<AbstractTraceEvent>(this.events);

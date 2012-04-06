@@ -35,7 +35,7 @@ import kieker.common.record.misc.TimestampRecord;
  * incoming {@link kieker.common.record.IMonitoringRecord}s.
  * 
  * <ol>
- * <li>The first record received via {@link #inputTimestamp(long)} immediately leads to a new {@link TimestampEvent} with the given timestamp.</li>
+ * <li>The first record received via {@link #inputTimestamp(Long)} immediately leads to a new {@link TimestampEvent} with the given timestamp.</li>
  * <li>The timestamp of the first record is stored as {@link #firstTimestamp} and future events are generated at {@link #firstTimestamp} + i *
  * {@link #timerResolution}.</li>
  * <li>Future {@link kieker.common.record.IMonitoringRecord} may lead to future {@link TimestampRecord} as follows:
@@ -84,7 +84,7 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Creates an event generator which generates time events with the given
-	 * resolution in nanoseconds via the output port {@link #getCurrentTimeOutputPort()}.
+	 * resolution in nanoseconds via the output port {@link #OUTPUT_PORT_NAME_CURRENT_TIME}.
 	 * 
 	 * @param configuration
 	 *            The configuration to be used for this plugin.
@@ -104,7 +104,7 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Evaluates the given timestamp internal current time which may lead to
-	 * newly generated events via {@link #getCurrentTimeOutputPort()}.
+	 * newly generated events via {@link #OUTPUT_PORT_NAME_CURRENT_TIME}.
 	 */
 	@InputPort(name = INPUT_PORT_NAME_NEW_TIMESTAMP, description = "Receives a new timestamp as a time event", eventTypes = { Long.class })
 	public void inputTimestamp(final Long timestamp) {
