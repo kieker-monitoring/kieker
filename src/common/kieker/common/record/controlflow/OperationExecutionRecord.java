@@ -322,7 +322,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	/**
 	 * @deprecated this class will become immutable in Kieker 1.6
 	 * 
-	 *             A string can, for example, be created using {@link ClassOperationSignaturePair#toOperationSignatureString()}.
+	 *             A string can, for example, be created using {@link kieker.common.util.ClassOperationSignaturePair#toOperationSignatureString()}.
 	 * 
 	 * @param operationSignature
 	 */

@@ -62,7 +62,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	 * Creates a new instance of this class using the given parameter.
 	 * 
 	 * @param configuration
-	 *            The configuration used to load the pipe name. It <b>must</b> contain the property {@link CONFIG_PIPENAME}.
+	 *            The configuration used to load the pipe name. It <b>must</b> contain the property {@link #CONFIG_PROPERTY_NAME_PIPENAME}.
 	 * @throws IllegalArgumentException
 	 *             If the pipe name was invalid.
 	 */

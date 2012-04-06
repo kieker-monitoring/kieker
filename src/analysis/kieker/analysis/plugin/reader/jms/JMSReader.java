@@ -76,9 +76,9 @@ public final class JMSReader extends AbstractReaderPlugin {
 	 * @param configuration
 	 *            The configuration used to initialize the whole reader. Keep in mind that the configuration should contain the following properties:
 	 *            <ul>
-	 *            <li>The property {@link CONFIG_PROVIDERURL}, e.g. {@code tcp://localhost:3035/}
-	 *            <li>The property {@link CONFIG_DESTINATION}, e.g. {@code queue1}
-	 *            <li>The property {@link CONFIG_FACTORYLOOKUP}, e.g. {@code org.exolab.jms.jndi.InitialContextFactory}
+	 *            <li>The property {@link #CONFIG_PROPERTY_NAME_PROVIDERURL}, e.g. {@code tcp://localhost:3035/}
+	 *            <li>The property {@link #CONFIG_PROPERTY_NAME_DESTINATION}, e.g. {@code queue1}
+	 *            <li>The property {@link #CONFIG_PROPERTY_NAME_FACTORYLOOKUP}, e.g. {@code org.exolab.jms.jndi.InitialContextFactory}
 	 *            </ul>
 	 * 
 	 * @throws IllegalArgumentException
