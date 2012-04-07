@@ -72,6 +72,8 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
 /**
+ * The <code>AnalysisController</code> can be used to configure and control an analysis instance. It is responsible for the life cycle of the readers, filters and
+ * repositories.
  * 
  * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke, Jan Waller
  */
@@ -167,6 +169,8 @@ public final class AnalysisController {
 	 *            The project instance for the analysis.
 	 * @throws AnalysisConfigurationException
 	 *             If the given project could not be loaded.
+	 * @throws NullPointerException
+	 *             If the project is null.
 	 */
 	public AnalysisController(final MIProject project) throws NullPointerException, AnalysisConfigurationException {
 		this(project, AnalysisController.class.getClassLoader());
@@ -194,7 +198,7 @@ public final class AnalysisController {
 	}
 
 	/**
-	 * Registers the given instance as a new state observer. All instances are informed when the state (Running, Terminated, e.g.) changes and get the new state as
+	 * Registers the given instance as a new state observer. All instances are informed when the state (Running, Terminated etc) changes and get the new state as
 	 * an object.
 	 * 
 	 * @param stateObserver
@@ -231,6 +235,10 @@ public final class AnalysisController {
 	 * 
 	 * @param mProject
 	 *            The instance to be used for configuration.
+	 * @param classLoader
+	 *            The instance of {@link java.lang.ClassLoader} used for creating the necessary components.
+	 * @throws AnalysisConfigurationException
+	 *             If the given project represents somehow an invalid configuration.
 	 */
 	private final void loadFromModelProject(final MIProject mProject, final ClassLoader classLoader) throws AnalysisConfigurationException {
 		// Remember the libraries (But create them via a factory to avoid that the dependencies are removed during the saving.
@@ -374,7 +382,9 @@ public final class AnalysisController {
 	 * @param file
 	 *            The file in which the configuration will be stored.
 	 * @throws IOException
+	 *             If an exception during the storage occurred.
 	 * @throws AnalysisConfigurationException
+	 *             If the current configuration is somehow invalid.
 	 */
 	public final void saveToFile(final File file) throws IOException, AnalysisConfigurationException {
 		final MIProject mProject = this.getCurrentConfiguration();
@@ -382,7 +392,7 @@ public final class AnalysisController {
 	}
 
 	/**
-	 * This method should be used to connect two plugins. The plugins have to be registered withis this controller instance.
+	 * This method should be used to connect two plugins. The plugins have to be registered within this controller instance.
 	 * 
 	 * @param src
 	 *            The source plugin.
@@ -392,9 +402,13 @@ public final class AnalysisController {
 	 *            The destination plugin.
 	 * @param inputPortName
 	 *            The input port of the destination port.
+	 * @throws IllegalStateException
+	 *             If this instance has already been started or has already been terminated.
+	 * @throws AnalysisConfigurationException
+	 *             If the port names or the given plugins are invalid or not compatible.
 	 */
-	public void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName)
-			throws IllegalStateException, AnalysisConfigurationException {
+	public void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName) throws IllegalStateException,
+			AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect readers and filters after starting analysis.");
 		}
@@ -416,13 +430,19 @@ public final class AnalysisController {
 	/**
 	 * Connects the given repository to this plugin via the given name.
 	 * 
+	 * @param plugin
+	 *            The plugin to be connected.
 	 * @param repositoryPort
 	 *            The name of the port to connect the repository.
 	 * @param repository
 	 *            The repository which should be used.
+	 * @throws IllegalStateException
+	 *             If this instance has already been started or has already been terminated.
+	 * @throws AnalysisConfigurationException
+	 *             If the port names or the given objects are invalid or not compatible.
 	 */
-	public void connect(final AbstractPlugin plugin, final String repositoryPort, final AbstractRepository repository)
-			throws IllegalStateException, AnalysisConfigurationException {
+	public void connect(final AbstractPlugin plugin, final String repositoryPort, final AbstractRepository repository) throws IllegalStateException,
+			AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect repositories after starting analysis.");
 		}
@@ -441,9 +461,9 @@ public final class AnalysisController {
 	/**
 	 * This method delivers the current configuration of this instance as an instance of <code>MIProject</code>.
 	 * 
-	 * @return
-	 *         A filled meta model instance.
+	 * @return A filled meta model instance.
 	 * @throws AnalysisConfigurationException
+	 *             If the current configuration is somehow invalid.
 	 */
 	public final MIProject getCurrentConfiguration() throws AnalysisConfigurationException {
 		try {
@@ -555,6 +575,11 @@ public final class AnalysisController {
 	 * The method returns after all configured readers finished reading and all analysis plug-ins terminated
 	 * 
 	 * On errors during the initialization, Exceptions are thrown.
+	 * 
+	 * @throws IllegalStateException
+	 *             If the current instance has already been started or already been terminated.
+	 * @throws AnalysisConfigurationException
+	 *             If plugins with mandatory repositories have not been connected properly or couldn't be initialized.
 	 */
 	public final void run() throws IllegalStateException, AnalysisConfigurationException {
 		synchronized (this) {
@@ -614,7 +639,7 @@ public final class AnalysisController {
 		try {
 			this.initializationLatch.await();
 		} catch (final InterruptedException ex) {
-			LOG.warn("Interrupted while waiting for initilaizion of analysis controller.", ex);
+			LOG.warn("Interrupted while waiting for initialization of analysis controller.", ex);
 		}
 	}
 
@@ -627,6 +652,9 @@ public final class AnalysisController {
 
 	/**
 	 * Initiates a termination of the analysis.
+	 * 
+	 * @param error
+	 *            Determines whether this is a normal termination or an termination due to an error during the analysis.
 	 */
 	public final void terminate(final boolean error) {
 		synchronized (this) {
@@ -736,7 +764,7 @@ public final class AnalysisController {
 	}
 
 	/**
-	 * Delivers and unmodifiable collection of all readers.
+	 * Delivers an unmodifiable collection of all readers.
 	 * 
 	 * @return All registered readers.
 	 */
@@ -745,7 +773,7 @@ public final class AnalysisController {
 	}
 
 	/**
-	 * Delivers and unmodifiable collection of all filters.
+	 * Delivers an unmodifiable collection of all filters.
 	 * 
 	 * @return All registered filters.
 	 */
@@ -754,7 +782,7 @@ public final class AnalysisController {
 	}
 
 	/**
-	 * Delivers and unmodifiable collection of all repositories.
+	 * Delivers an unmodifiable collection of all repositories.
 	 * 
 	 * @return All registered repositories.
 	 */
@@ -922,12 +950,26 @@ public final class AnalysisController {
 	}
 
 	/**
+	 * An enumeration used to describe the state of an {@link AnalysisController}.
+	 * 
 	 * @author Jan Waller
 	 */
 	public static enum STATE {
+		/**
+		 * The controller has been initialized and is ready to be configured.
+		 */
 		READY,
+		/**
+		 * The analysis is currently running.
+		 */
 		RUNNING,
+		/**
+		 * The controller has been terminated without errors.
+		 */
 		TERMINATED,
+		/**
+		 * The analysis failed.
+		 */
 		FAILED,
 	}
 
