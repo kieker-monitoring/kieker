@@ -22,6 +22,7 @@ package kieker.examples.userguide.appendixJMS;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
+import kieker.analysis.plugin.filter.forward.TeeFilter;
 import kieker.analysis.plugin.reader.jms.JMSReader;
 import kieker.common.configuration.Configuration;
 
@@ -71,14 +72,12 @@ public final class JMSAnalysisStarter {
 		final JMSReader logReader = new JMSReader(logReaderConfiguration);
 		analysisInstance.registerReader(logReader);
 
-		final Configuration consumerConfiguration = new Configuration();
-		consumerConfiguration.setProperty(Consumer.CONFIG_MAX_RESPONSE_TIME, Long.toString(JMSAnalysisStarter.MAX_RT_NANOS));
-
-		final Consumer consumer = new Consumer(consumerConfiguration);
-		analysisInstance.registerFilter(consumer);
+		/* Create and register a simple output writer. */
+		final TeeFilter teeFilter = new TeeFilter(new Configuration());
+		analysisInstance.registerFilter(teeFilter);
 
 		try {
-			analysisInstance.connect(logReader, JMSReader.OUTPUT_PORT_NAME_RECORDS, consumer, Consumer.INPUT_PORT_NAME);
+			analysisInstance.connect(logReader, JMSReader.OUTPUT_PORT_NAME_RECORDS, teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
 			analysisInstance.run();
 		} catch (final AnalysisConfigurationException e) {
 			e.printStackTrace();
