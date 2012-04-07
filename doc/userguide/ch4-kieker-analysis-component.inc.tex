@@ -161,7 +161,7 @@ the standard output, standard error, a logger, or a file. %
 A \class{TimestampFilter} and a \class{TypeFilter} filters incoming records by %
 timestamp and by type, respectively. A \class{TraceIdFilter} filters incoming %
 trace events (e.g., \class{OperationExecutionRecord}s, see Section~%
-\ref{chap:example}) by trace id. Like each plugin, readers filters configured %
+\ref{chap:example}) by trace id. Like each plugin, filters are configured %
 via properties, as used in Section~\ref{sec:analysis:programmaticCreation} and %
 detailed in Section~%
 \ref{sec:analysis:configuration}. %
@@ -179,15 +179,19 @@ detailed in Section~%
 
 % \enlargethispage{1.2cm}
 
-\section{Developing Analysis Plugins}\label{sec:analysis:plugins}
+\section{Developing Analysis Plugins and Repositories}\label{sec:analysis:plugins}
 
-Kieker analyis plugins are either monitoring readers, as detailed in Section~\ref{sec:analysis:reader}, %
-or filters, as detailed in Section~\ref{sec:analysis:filters}. When implementing %
-any of these two plugin types, the classes \class{AbstractReaderPlugin} or, %
-respectively, \class{AbstractFilterPlugin} need to be extended (Figure~\ref{fig:analysisController:classdiagram}). %
-Sections~\ref{sec:analysis:pluginAnnotation} and~\ref{sec:analysis:configuration} %
-describe how to declare meta-information for plugins and the way to use %
-configuration properties. 
+When implementing analysis plugins (i.e., readers or filters) and repositories, %
+the classes \class{AbstractReaderPlugin}, \class{AbstractFilterPlugin}, or, %
+respectively, \class{AbstractRepository} need to be extended %
+(Figure~\ref{fig:analysisController:classdiagram}). %
+Section~\ref{sec:analysis:configuration} describes how plugins and repositories %
+can be configured via properties. %
+Section~\ref{sec:analysis:pluginAnnotation} %
+describes how to declare meta-information for plugins using %
+dedicated class and method annotations. %
+Specific information on the development of custom filters, readers, and repositories %
+are given in Sections~\ref{sec:analysis:filters}--\ref{sec:analysis:repositories}. %
 
 % The monitoring record consumer plugins described in the following %
 % Section~\ref{sec:analysis:consumer}, are special analysis plugins that receive %
@@ -198,43 +202,6 @@ configuration properties.
 % to implement such analyses. See the documentation of the classes \class{AbstractInputPort} %
 % and \class{OutputPort} for details. \KiekerTraceAnalysis{} is implemented %
 % based on this pattern. 
-
-\subsection{@Plugin Annotation and Output Ports}\label{sec:analysis:pluginAnnotation}
-
-\noindent The \class{@Plugin} class annotation is used to define a %
-plugin name, a description, and the list of output ports. %
-Listing~\ref{listing:MyResponseTimeFilterPluginAnnotationOutputs} shows the %
-\class{@Plugin} annotation for the example filter.
-
-If the \class{@Plugin} annotation is not present for a plugin, the \method{name} %
-defaults to the plugin's (simple) classname, the \method{description} defaults %
-to the empty string, and the list of output ports is empty. These default values %
-are also used in case a respective attribute is omitted. %
-Note that the name is not required to be a unique name for filters; it is simply %
-used for descriptive purposes, such as in Figure~\ref{fig:example:pipe-and-filter}. %
-
-Output ports are specified using the nested \class{@OutputPort} annotation. %
-In addition to a name and a description for the output port, a list of event %
-types can be specified. Note that in this case, the name is mandatory and must %
-be unique for a plugin, as it is used for connecting input and output ports. %
-The list of event types defaults to a list including only \class{Object.class}. %
-The output port names should be provided as a \class{public static} constant %
-with prefix \method{OUTPUT\_PORT\_NAME\_}, in order to ease the programmatic connection of %
-pipe-and-filter, as previously shown in Listing~\ref{lst:BookstoreAnalysisStarter}.
-
-\setJavaCodeListing
-\lstinputlisting[firstline=31, firstnumber=31, lastline=44, caption={@Plugin annotation for the example plugin \class{MyResponseTimeFilter}}, label=listing:MyResponseTimeFilterPluginAnnotationOutputs]%
-{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
-
-\noindent Plugins can send events to their output ports by the \method{deliver} method %
-provided by the super class. The method expects the output port name and %
-the event to be sent as arguments. Listing~\ref{listing:MyResponseTimeFilterPluginAnnotationOutputs} %
-shows how the example filter plugin \class{MyResponseTimeFilter} delivers records %
-to its two output ports declared in the \class{@Plugin} annotation.
-
-\setJavaCodeListing
-\lstinputlisting[firstline=61, firstnumber=61, lastline=67, caption={Plugin sending events to output ports}, label=listing:MyResponseTimeFilterPluginAnnotationOutputs]%
-{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
 
 \subsection{Configuration}\label{sec:analysis:configuration}
 
@@ -264,6 +231,45 @@ shows how the methods are implemented for the example filter \class{MyResponseTi
 \setJavaCodeListing
 \lstinputlisting[firstline=72, firstnumber=72, lastline=84, caption={Plugin returning its default and current configuration}, label=listing:MyResponseTimeFilterEventsToOutput]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
+
+
+\subsection{@Plugin Annotation and Output Ports}\label{sec:analysis:pluginAnnotation}
+
+\noindent The \class{@Plugin} class annotation is used to define a %
+plugin name, a description, and the list of output ports. %
+Listing~\ref{listing:MyResponseTimeFilterPluginAnnotationOutputs} shows the %
+\class{@Plugin} annotation for the example filter.
+
+If the \class{@Plugin} annotation is not present for a plugin, the \method{name} %
+defaults to the plugin's (simple) classname, the \method{description} defaults %
+to the empty string, and the list of output ports is empty. These default values %
+are also used in case a respective attribute is omitted. %
+Note that the name is not required to be a unique among filters; it is simply %
+used for descriptive purposes, such as in Figure~\ref{fig:example:pipe-and-filter}. %
+
+Output ports are specified using the nested \class{@OutputPort} annotation. %
+In addition to a name and a description for the output port, a list of event %
+types can be specified. Note that in this case, the name is mandatory and must %
+be unique for a plugin, as it is used for connecting input and output ports. %
+The list of event types defaults to a list including only \class{Object.class}. %
+The output port names should be provided as a \class{public static} constant %
+with prefix \method{OUTPUT\_PORT\_NAME\_}, in order to ease the programmatic connection of %
+pipe-and-filter, as previously shown in Listing~\ref{lst:BookstoreAnalysisStarter}.
+
+\setJavaCodeListing
+\lstinputlisting[firstline=31, firstnumber=31, lastline=44, caption={@Plugin annotation for the example plugin \class{MyResponseTimeFilter}}, label=listing:MyResponseTimeFilterPluginAnnotationOutputs]%
+{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
+
+\noindent Plugins can send events to their output ports by the \method{deliver} method %
+provided by the super class. The method expects the output port name and %
+the event to be sent as arguments. Listing~\ref{listing:MyResponseTimeFilterPluginAnnotationOutputs} %
+shows how the example filter plugin \class{MyResponseTimeFilter} delivers records %
+to its two output ports declared in the \class{@Plugin} annotation.
+
+\setJavaCodeListing
+\lstinputlisting[firstline=61, firstnumber=61, lastline=67, caption={Plugin sending events to output ports}, label=listing:MyResponseTimeFilterPluginAnnotationOutputs]%
+{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
+
 
 \subsection{Developing Monitoring Reader Plugins}\label{sec:analysis:reader}
 
@@ -313,7 +319,7 @@ and forwards these to its output port.
 \lstinputlisting[firstline=57, firstnumber=57, lastline=61, caption={@InputPort annotation for the example plugin's input method}, label=listing:MyResponseTimeFilterEventsToOutput]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
 
-\subsection{Developing Repositories}
+\subsection{Developing Repositories}\label{sec:analysis:repositories}
 
 \setJavaCodeListing
 \lstinputlisting[firstline=57, firstnumber=57, lastline=61, caption={@Respository annotation for Kieker's system model repository}, label=listing:RepositoryAnnotation]%
