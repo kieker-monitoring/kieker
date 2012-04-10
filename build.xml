@@ -415,16 +415,6 @@
 		<tar destfile="${release.dir}/${dist.kieker.binBaseName}.tar" longfile="gnu">
 			<tarfileset file="${kieker.monitoring.default.properties}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.properties" />
 			<tarfileset file="${src.userguide.pdf}" fullpath="${kieker.dist.name}/doc/${dist.kieker.userguide.pdf}" />
-			<!-- Include pre-compiled binaries for the examples -->
-			<tarfileset file="${src.userguide.example.extended.dir}/BookstoreApplication.jar" fullpath="${kieker.dist.name}/${src.userguide.example.extended.dir}/BookstoreApplication.jar" />
-			<tarfileset file="${src.userguide.example.jms.dir}/BookstoreMonitoring.jar" fullpath="${kieker.dist.name}/${src.userguide.example.jms.dir}/BookstoreMonitoring.jar" />
-			<tarfileset file="${src.userguide.example.jms.dir}/BookstoreAnalysis.jar" fullpath="${kieker.dist.name}/${src.userguide.example.jms.dir}/BookstoreAnalysis.jar" />
-			<tarfileset file="${src.userguide.example.bookstore.dir}/BookstoreApplication.jar" fullpath="${kieker.dist.name}/${src.userguide.example.bookstore.dir}/BookstoreApplication.jar" />
-			<tarfileset file="${src.userguide.example.manual.dir}/BookstoreMonitoring.jar" fullpath="${kieker.dist.name}/${src.userguide.example.manual.dir}/BookstoreMonitoring.jar" />
-			<tarfileset file="${src.userguide.example.manual.dir}/BookstoreAnalysis.jar" fullpath="${kieker.dist.name}/${src.userguide.example.manual.dir}/BookstoreAnalysis.jar" />
-			<tarfileset file="${src.userguide.example.sigar.dir}/SigarMonitoring.jar" fullpath="${kieker.dist.name}/${src.userguide.example.sigar.dir}/SigarMonitoring.jar" />
-			<tarfileset file="${src.userguide.example.sigar.dir}/SigarAnalysis.jar" fullpath="${kieker.dist.name}/${src.userguide.example.sigar.dir}/SigarAnalysis.jar" />
-			<tarfileset file="${src.userguide.example.aspectj.dir}/BookstoreApplication.jar" fullpath="${kieker.dist.name}/${src.userguide.example.aspectj.dir}/BookstoreApplication.jar" />
 			<tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
 				<patternset refid="dist_bin_files-nonbinmode" />
 			</tarfileset>
@@ -442,16 +432,6 @@
 			<zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
 				<patternset refid="dist_bin_files-nonbinmode" />
 			</zipfileset>
-			<!-- Include pre-compiled binaries for the examples -->
-			<zipfileset file="${src.userguide.example.extended.dir}/BookstoreApplication.jar" fullpath="${kieker.dist.name}/${src.userguide.example.extended.dir}/BookstoreApplication.jar" />
-			<zipfileset file="${src.userguide.example.jms.dir}/BookstoreMonitoring.jar" fullpath="${kieker.dist.name}/${src.userguide.example.jms.dir}/BookstoreMonitoring.jar" />
-			<zipfileset file="${src.userguide.example.jms.dir}/BookstoreAnalysis.jar" fullpath="${kieker.dist.name}/${src.userguide.example.jms.dir}/BookstoreAnalysis.jar" />
-			<zipfileset file="${src.userguide.example.bookstore.dir}/BookstoreApplication.jar" fullpath="${kieker.dist.name}/${src.userguide.example.bookstore.dir}/BookstoreApplication.jar" />
-			<zipfileset file="${src.userguide.example.manual.dir}/BookstoreMonitoring.jar" fullpath="${kieker.dist.name}/${src.userguide.example.manual.dir}/BookstoreMonitoring.jar" />
-			<zipfileset file="${src.userguide.example.manual.dir}/BookstoreAnalysis.jar" fullpath="${kieker.dist.name}/${src.userguide.example.manual.dir}/BookstoreAnalysis.jar" />
-			<zipfileset file="${src.userguide.example.sigar.dir}/SigarMonitoring.jar" fullpath="${kieker.dist.name}/${src.userguide.example.sigar.dir}/SigarMonitoring.jar" />
-			<zipfileset file="${src.userguide.example.sigar.dir}/SigarAnalysis.jar" fullpath="${kieker.dist.name}/${src.userguide.example.sigar.dir}/SigarAnalysis.jar" />
-			<zipfileset file="${src.userguide.example.aspectj.dir}/BookstoreApplication.jar" fullpath="${kieker.dist.name}/${src.userguide.example.aspectj.dir}/BookstoreApplication.jar" />
 			<zipfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
 				<patternset refid="dist_bin_files-binmode" />
 			</zipfileset>
