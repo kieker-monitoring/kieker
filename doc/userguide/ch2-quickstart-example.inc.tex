@@ -85,7 +85,7 @@ The directory structure of the Bookstore example is shown in Figure~\ref{fig:Pla
 .2 \DirInDirTree{userguide/}.
 .3 \DirInDirTree{ch2--bookstore-application/}.
 .4 \DirInDirTree{src/}\DTcomment{The directory for the source code files}.
-.5 \DirInDirTree{../ch2bookstore/}.
+.5 \DirInDirTree{.../ch2bookstore/}.
 .6 Bookstore.java.
 .6 BookstoreStarter.java.
 .6 Catalog.java.
@@ -105,27 +105,29 @@ The directory structure of the Bookstore example is shown in Figure~\ref{fig:Pla
 
 \enlargethispage{1cm}
 
-\noindent The class \class{BookstoreStarter}, shown in Listing~\ref{lst:class:BookstoreStarter}, contains the application's \method{main} method, i.e., the program start routine. It initializes the \class{Bookstore} and issues five search requests by calling the \method{searchBook} method of the \object{bookstore} object.
+\noindent The class \class{BookstoreStarter}, contains the application's \method{main} method (shown in Listing~\ref{lst:class:BookstoreStarter}), i.e., the program start routine. It initializes the \class{Bookstore} and issues five search requests by calling the \method{searchBook} method of the \object{bookstore} object.
 
 \setJavaCodeListing
 
-\lstinputlisting[caption=BookstoreStarter.java,label=lst:class:BookstoreStarter,firstline=21,firstnumber=21]{\plainBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/BookstoreStarter.java}
+\lstinputlisting[caption=\method{main} method from BookstoreStarter.java,firstline=27,firstnumber=27,lastline=33,label=lst:class:BookstoreStarter]{\plainBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/BookstoreStarter.java}
 
 \noindent The \class{Bookstore}, shown in Listing~\ref{lst:class:Bookstore}, contains a catalog and a CRM object, representing the catalog of the bookstore and a customer relationship management system which can provide offers for books out of the catalog. The business method of the bookstore is \method{searchBook()} which will first check the catalog for books and then check for offers.
 
 In a real application these methods would pass objects to ensure the results of the catalog search will be available to the offer collecting method. However, for our example we omitted such code. 
 
-\lstinputlisting[caption=Bookstore.java,label=lst:class:Bookstore,firstline=21,firstnumber=21]{\plainBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/Bookstore.java}
+\lstinputlisting[caption=Bookstore.java,label=lst:class:Bookstore,firstline=23,firstnumber=23]{\plainBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/Bookstore.java}
 
 \noindent The customer relationship management for this application is modeled in the \class{CRM} class shown in Listing~\ref{lst:class:CRM}. It only provides a business method to collect offers which uses the catalog for some lookup. The additional catalog lookup is later used to illustrate different traces in the application.
 
-\lstinputlisting[caption=CRM.java,label=lst:class:CRM,firstline=21,firstnumber=21]{\plainBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/CRM.java}
+\lstinputlisting[caption=CRM.java,label=lst:class:CRM,firstline=23,firstnumber=23]{\plainBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/CRM.java}
 
-\pagebreak
+% \pagebreak
 
-\noindent The final class is \class{Catalog} shown in Listing~\ref{lst:class:Catalog}. It resembles the catalog component in the application.
+\enlargethispage{0.8cm}
 
-\lstinputlisting[caption=Catalog.java,label=lst:class:Catalog,firstline=21,firstnumber=21]{\plainBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/Catalog.java}
+\noindent Finally, the class \class{Catalog} is shown in Listing~\ref{lst:class:Catalog}. It resembles the catalog component in the application.
+
+\lstinputlisting[caption=Catalog.java,label=lst:class:Catalog,firstline=23,firstnumber=23]{\plainBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/Catalog.java}
 
 \noindent After this brief introduction of the application and its implementation, the next step is to see the example running. To compile and run the example, the commands in Listing~\ref{lst:bookstoreStarterNoInstr} can be executed. This document assumes that the reader enters the commands in the example directory. For this first example this is \dir{examples/userquide/ch2--bookstore-application/}.
 \\
@@ -151,7 +153,7 @@ In a real application these methods would pass objects to ensure the results of 
 The next Section~\ref{sec:example:monitoring} will demonstrate how %
 to monitor this example application employing \KiekerMonitoringPart{} using manual instrumentation.
 
-\pagebreak
+% \pagebreak
 
 %%
 \section{Monitoring with \KiekerMonitoringPart{}}\label{sec:example:monitoring}
@@ -234,6 +236,8 @@ as detailed in Section~\ref{sec:monitoring-log-writers}. %.
 In addition to the instrumentation in the \class{Bookstore} class, the \method{getOffers()} method of the \class{CRM} class is instrumented as well. Similar to Listing~\ref{lst:cuttingBookstore}, measurements are taken before and after the call of the \object{catalog}'s \method{getBook()} method, as shown in %
 lines~42 and~44 of Listing~\ref{lst:cuttingCRM}. Not shown in the listing is the instantiation of the monitoring controller. However, it is done in the same way as illustrated in Listing~\ref{lst:cuttingBookstore}. %And the complete example files can be found in the samples directory.
 Finally, a record is created (see lines~46--52) and stored by calling the monitoring controller (see line~53).
+
+\pagebreak
 
 \setJavaCodeListing
 \lstinputlisting[firstline=37, firstnumber=37, lastline=54, caption=Instrumentation of the \method{getBook()} call in CRM.java, label=lst:cuttingCRM]%
@@ -318,8 +322,12 @@ In this section, the monitoring data recorded in the previous section is %
 analyzed with \KiekerAnalysisPart{}. %
 % The second step is to write a suitable analyzer. And finally the analyzer is used to aggregate the information in a sensible way.
 For this quick example guide, the analysis tool is very simple and does not show %
-the full potential of \Kieker{}. For more detail read Chapter~\ref{chap:aspectJ} %
-which uses \KiekerTraceAnalysis{}. %
+the full potential of \Kieker{}. For more detail, read %
+Chapter~\ref{chap:componentsAnalysis} to learn which plugins, i.e., readers %
+and filters, are included in \Kieker{}, how to use them, and how to develop %
+custom plugins. %
+Chapter~\ref{chap:aspectJ} presents the \KiekerTraceAnalysis{} tool, which %
+is also based on \KiekerAnalysisPart{}.
 \KiekerAnalysisPart{} has a dependency to the Eclipse Modeling Framework~(EMF).%
 \footnote{\url{http://www.eclipse.org/modeling/emf/}} %
 For this reason, we are using the \file{\mainJarEMF{}} that is a variant of %
@@ -337,7 +345,7 @@ be found in \Kieker's \file{lib/} directory) need to be added to the classpath. 
 .4 \newFileDirInDirTree{\DirInDirTree{lib/}}\DTcomment{Directory for the required libraries}.
 .5 \newFileDirInDirTree{\mainJarEMF}.
 .4 \DirInDirTree{src/}\DTcomment{The directory for the source code files}.
-.5 \DirInDirTree{../manual/}.
+.5 \DirInDirTree{.../manual/}.
 .6 \ldots. 
 .6 \newFileDirInDirTree{BookstoreAnalysisStarter.java}.
 }
@@ -346,56 +354,53 @@ be found in \Kieker's \file{lib/} directory) need to be added to the classpath. 
 \label{lst:analysisExampleLayout}
 \end{figure}
 
-\pagebreak
+\begin{figure}[b]
+\includegraphics[width=\textwidth]{images/ch2-example-pnp}
+\caption{Example pipe-and-filter configuration}
+\label{fig:example:ch2:pipe-and-filter}
+\end{figure}
 
-\noindent The analysis application developed in this section comprises the files %
-\file{Consumer.java} and \file{BookstoreAnalysisStarter.java}, as shown in Figure~\ref{lst:analysisExampleLayout}. %
-These files can also be found in the directory \dir{\manualInstrumentedBookstoreApplicationDirDistro{}/}. 
+\noindent The analysis application developed in this section comprises the file %
+\file{BookstoreAnalysisStarter.java}, as shown in Figure~\ref{lst:analysisExampleLayout}. %
+This file can also be found in the directory \dir{\manualInstrumentedBookstoreApplicationDirDistro{}/}. 
+The file sets up the basic pipe-and-filter configuration depicted in Figure~\ref{fig:example:ch2:pipe-and-filter}: %
+\Kieker{}'s file system reader (\class{FSReader}) reads monitoring records %
+from a file system monitoring log (as produced in the previous Section~\ref{sec:example:monitoring}) %
+and passes these to the \class{TeeFilter} plugin; the \class{TeeFilter} plugin %
+reads events of arbitrary type (i.e., Java \class{Object}), prints them to a %
+configured output stream, and also relays them to filters connected to the %
+filter's output port \method{relayedEvents}. %
+Currently, \KiekerAnalysisPart{} pipe-and-filter configurations can only %
+be created programmatically, i.e., by configuring, instantiating, registering, and %
+connecting the plugins in a Java program. %
+For the example, this is demonstrated in Listing~\ref{lst:BookstoreAnalysisStarter}, %
+which shows an excerpt from the \class{BookstoreAnalysisStarter}'s \method{main} %
+method. %
 
-Listing \ref{lst:Consumer} on page~\pageref{lst:Consumer} shows the content of the \file{Consumer.java} file which implements the \class{IMonitoringRecordConsumerPlugin} interface. This is the standard interface for the consumer of \Kieker{} monitoring records. The consumer is part of the \KiekerAnalysisPart{} component. It processes records provided by the monitoring readers (see Chapter~\ref{chap:introduction}). %For details on the composition of the \Kieker{} framework).
-
-\setJavaCodeListing       
-
-%\lstinputlisting[float,caption=Consumer.java, label=lst:Consumer,firstline=21,firstnumber=21]{\manualInstrumentedBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/manual/Consumer.java}
-
-\noindent The consumer checks if the response time of each method call, in this case \method{getBook()}, is below %
-a specified threshold value. %Meaning the maximal response time has not been exceeded. 
-This threshold is set during construction of the \class{Consumer} class (see lines 33--35). 
-
-%\pagebreak
-
-For the data analysis, the method \method{newMonitoringRecord()} (see lines 43--60) is used. %
-This method is called for every monitoring record. At first, the method tests if %
-the monitoring record is an \class{OperationExecutionRecord}, as %
-this is the only record type it can process. Then the method calculates the %
-response time of one recorded \method{getBook()} call. If the method call takes %
-longer than specified, a message is written directly to the error stream.
-
-The framework methods \method{terminate} and \method{execute} don't do anything %
-in this example, due to the fact that this consumer does not need any initialization. %
-If the consumer would, for example, use threads then these methods would be the %
-correct location to start and stop them.
-
-After implementing a consumer, the application's main class has to be created. %
-In this case the main program is located in the \file{BookstoreAnalysisStarter.java} %
-file shown in Listing~\ref{lst:BookstoreAnalysisStarter}.
+\
 
 \setJavaCodeListing       
-\lstinputlisting[caption=BookstoreAnalysisStarter.java,label=lst:BookstoreAnalysisStarter,firstline=21,firstnumber=21]%
+\lstinputlisting[caption=BookstoreAnalysisStarter.java (excerpt from \method{main} method),label=lst:BookstoreAnalysisStarter,firstline=40,firstnumber=40,lastline=60]%
 {\manualInstrumentedBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/manual/BookstoreAnalysisStarter.java}
+
+\
 
 \noindent The \class{BookstoreAnalysisStarter} follows a simple scheme. Each %
 analysis tool has to create at least one \class{AnalysisController} which can be %
-seen in Listing~\ref{lst:BookstoreAnalysisStarter} in line~38. Then the consumers %
-are registered with the analysis instance. In this case, the previously described %
-\class{Consumer} is instantiated and the maximum response time is set to 1.9 milliseconds. %3 nanoseconds. %
-Line~44 sets the file system monitoring log reader which is initialized with the first %
-command-line argument value as the input directory. The application expects the %
+seen in Listing~\ref{lst:BookstoreAnalysisStarter} in line~41. Then, the plugins, %
+which may be readers or filters, are configured, instantiated, and registered %
+with the analysis instance. %
+Lines~44--47 configure, instantiate, and register the file system monitoring %
+log reader, which uses the command-line argument value as the input directory. %
+The application expects the %
 output directory from the earlier monitoring run (see Section~\ref{sec:example:monitoring}) %
 as the only argument value, which must be passed manually. %
-The analysis is started by calling its \method{run} method (line~47). %
+Lines~50--54 configure, instantiate, and register the \class{TeeFilter}, %
+which outputs received events to the standard output. Lines~57 and~58 connect %
+the \class{TeeFilter}'s input port to the filesystem reader's output port. %
+The analysis is started by calling its \method{run} method (line~60). %
 
-% \pagebreak
+\pagebreak
 
 The Listings~\ref{lst:bookstoreAnalysisStarterLinux} and \ref{lst:bookstoreAnalysisStarterWin} %
 describe how the analysis application can be compiled and executed under \UnixLikeSystems{} and Windows.
@@ -406,6 +411,6 @@ describe how the analysis application can be compiled and executed under \UnixLi
 \input{ch2-quickstart-example_Compile_Run_Example_2.inc-win.tex}	
 
 \noindent You need to make sure that the application gets the correct path from the monitoring run. 
-The consumer prints an output message for each record received. %
+The \class{TeeFilter} prints an output message for each record received. %
 An example output can be found in Appendix~\ref{sec:appendix:manualInstrumentation:output}.
 % A possible display of the run can be found in the appendix of this tutorial. 
