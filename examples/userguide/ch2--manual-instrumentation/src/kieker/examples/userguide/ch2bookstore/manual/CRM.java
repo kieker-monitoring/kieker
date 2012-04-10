@@ -26,7 +26,8 @@ import kieker.monitoring.core.controller.MonitoringController;
 
 public class CRM {
 
-	private static final IMonitoringController MONITORING_CONTROLLER = MonitoringController.getInstance();
+	private static final IMonitoringController MONITORING_CONTROLLER =
+			MonitoringController.getInstance();
 
 	private final Catalog catalog;
 
@@ -42,14 +43,14 @@ public class CRM {
 		final long tin = MONITORING_CONTROLLER.getTimeSource().getTime();
 		this.catalog.getBook(false); // <-- the monitored execution
 		final long tout = MONITORING_CONTROLLER.getTimeSource().getTime();
-		
+
 		final OperationExecutionRecord e = new OperationExecutionRecord(
-						"public void kieker.examples.userguide.ch2bookstore.manual.getBook(boolean)",
-						OperationExecutionRecord.NO_SESSION_ID, 
-						OperationExecutionRecord.NO_TRACEID,
-						tin, tout, "myHost", 
-						OperationExecutionRecord.NO_EOI_ESS, 
-						OperationExecutionRecord.NO_EOI_ESS);
+				"public void kieker.examples.userguide.ch2bookstore.manual.getBook(boolean)",
+				OperationExecutionRecord.NO_SESSION_ID,
+				OperationExecutionRecord.NO_TRACEID,
+				tin, tout, "myHost",
+				OperationExecutionRecord.NO_EOI_ESS,
+				OperationExecutionRecord.NO_EOI_ESS);
 		MONITORING_CONTROLLER.newMonitoringRecord(e);
 	}
 }

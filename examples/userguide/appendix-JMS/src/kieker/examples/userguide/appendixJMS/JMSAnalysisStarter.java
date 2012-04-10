@@ -32,8 +32,6 @@ import kieker.common.configuration.Configuration;
  */
 public final class JMSAnalysisStarter {
 
-	private static final long MAX_RT_NANOS = 1700;
-
 	private static final String CONNECTION_FACTORY_TYPE__ACTIVEMQ = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
 	private static final String CONNECTION_FACTORY_TYPE__HORNETQ = "org.jnp.interfaces.NamingContextFactory";
 	private static final String CONNECTION_FACTORY_TYPE__OPENJMS = "org.exolab.jms.jndi.InitialContextFactory";
@@ -65,9 +63,9 @@ public final class JMSAnalysisStarter {
 		final AnalysisController analysisInstance = new AnalysisController();
 
 		final Configuration logReaderConfiguration = new Configuration();
-		logReaderConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_PROVIDERURL, JMSAnalysisStarter.providerUrl);
-		logReaderConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, JMSAnalysisStarter.connectionFactory);
-		logReaderConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_DESTINATION, JMSAnalysisStarter.queue);
+		logReaderConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_PROVIDERURL, providerUrl);
+		logReaderConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, connectionFactory);
+		logReaderConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_DESTINATION, queue);
 
 		final JMSReader logReader = new JMSReader(logReaderConfiguration);
 		analysisInstance.registerReader(logReader);
@@ -95,12 +93,12 @@ public final class JMSAnalysisStarter {
 			return false;
 		}
 
-		JMSAnalysisStarter.connectionFactory = args[0];
-		System.out.println("jms-connection-factory:" + JMSAnalysisStarter.connectionFactory);
-		JMSAnalysisStarter.providerUrl = args[1];
-		System.out.println("jms-provider-url:      " + JMSAnalysisStarter.providerUrl);
-		JMSAnalysisStarter.queue = args[2];
-		System.out.println("jms-queue:             " + JMSAnalysisStarter.queue);
+		connectionFactory = args[0];
+		System.out.println("jms-connection-factory:" + connectionFactory);
+		providerUrl = args[1];
+		System.out.println("jms-provider-url:      " + providerUrl);
+		queue = args[2];
+		System.out.println("jms-queue:             " + queue);
 		System.out.println();
 		return true;
 	}
@@ -109,11 +107,11 @@ public final class JMSAnalysisStarter {
 		System.out.println("Usage: " + JMSAnalysisStarter.class.getName() + " <jms-connection-factory> <jms-provider-url> <jms-queue>");
 		System.out.println();
 		System.out.println("Examples:");
-		System.out.println(" - ActiveMQ: " + JMSAnalysisStarter.CONNECTION_FACTORY_TYPE__ACTIVEMQ + " " + JMSAnalysisStarter.PROVIDER_URL__ACTIVEMQ + " "
-				+ JMSAnalysisStarter.QUEUE_ACTIVEMQ);
-		System.out.println(" - HornetQ:  " + JMSAnalysisStarter.CONNECTION_FACTORY_TYPE__HORNETQ + " " + JMSAnalysisStarter.PROVIDER_URL__HORNETQ + " "
-				+ JMSAnalysisStarter.QUEUE_HORNETQ);
-		System.out.println(" - OpenJMS:  " + JMSAnalysisStarter.CONNECTION_FACTORY_TYPE__OPENJMS + " " + JMSAnalysisStarter.PROVIDER_URL__OPENJMS + " "
-				+ JMSAnalysisStarter.QUEUE_OPENJMS);
+		System.out.println(" - ActiveMQ: " + CONNECTION_FACTORY_TYPE__ACTIVEMQ + " " + PROVIDER_URL__ACTIVEMQ + " "
+				+ QUEUE_ACTIVEMQ);
+		System.out.println(" - HornetQ:  " + CONNECTION_FACTORY_TYPE__HORNETQ + " " + PROVIDER_URL__HORNETQ + " "
+				+ QUEUE_HORNETQ);
+		System.out.println(" - OpenJMS:  " + CONNECTION_FACTORY_TYPE__OPENJMS + " " + PROVIDER_URL__OPENJMS + " "
+				+ QUEUE_OPENJMS);
 	}
 }

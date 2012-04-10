@@ -121,6 +121,7 @@
 \lstset{    
 numbers=#2,
 basicstyle=#3,       	% the size of the fonts that are used for the code
+keywordstyle=\bfseries,%
 commentstyle={\textrmit},
 showspaces=false,               % show spaces adding particular underscores
 showstringspaces=false,         % underline spaces within strings
@@ -128,9 +129,9 @@ showtabs=false,                 % show tabs within strings adding particular und
 %frame=shadowbox,	                % adds a frame around the code
 % frame=lrtb,
 rulesepcolor=\color{black},
-linewidth=0.98\columnwidth,
+linewidth=1\columnwidth,
 columns=[c]flexible, % default is [c]fixed
-xleftmargin=1cm,
+% xleftmargin=1cm,
 tabsize=2,	                % sets default tabsize to 2 spaces
 captionpos=b,                   % sets the caption-position to bottom
 breaklines=true,                % sets automatic line breaking
@@ -173,7 +174,7 @@ xleftmargin=3mm
 \newcommand{\UnixLikeSystems}{UNIX-like systems}
 \newcommand{\lstshellprompt}{$\triangleright$}
 \newcommand{\lstHighlight}{\bfseries}
-\newcommand{\setJavaCodeListing}{\setListing{javaStyle}{left}{\sffamily\footnotesize}{\#}}
+\newcommand{\setJavaCodeListing}{\setListing{eclipse-java}{left}{\sffamily\scriptsize}{\#}}
 \newcommand{\setBashListing}{\setListing{bashStyle}{none}{\sffamily\footnotesize}{\#}}
 \newcommand{\setPropertiesListing}{\setListing{PropertiesStyle}{none}{\sffamily\footnotesize}{}}
 \newcommand{\setAntListing}{\setListing{AntStyle}{none}{\sffamily\footnotesize}{}}

@@ -26,26 +26,27 @@ import kieker.monitoring.core.controller.MonitoringController;
 
 public class Bookstore {
 
-	private static final 
-	IMonitoringController MONITORING_CONTROLLER = MonitoringController.getInstance();
+	private static final IMonitoringController MONITORING_CONTROLLER =
+			MonitoringController.getInstance();
 
 	private final Catalog catalog = new Catalog();
 	private final CRM crm = new CRM(this.catalog);
 
 	public void searchBook() {
-		/* 1.) Call Catalog.getBook() and log its entry and exit timestamps.
+		/*
+		 * 1.) Call Catalog.getBook() and log its entry and exit timestamps.
 		 */
 		final long tin = MONITORING_CONTROLLER.getTimeSource().getTime();
 		this.catalog.getBook(false); // <-- the monitored execution
 		final long tout = MONITORING_CONTROLLER.getTimeSource().getTime();
-		
+
 		final OperationExecutionRecord e = new OperationExecutionRecord(
-						"public void kieker.examples.userguide.ch2bookstore.manual.getBook(boolean)",
-						OperationExecutionRecord.NO_SESSION_ID, 
-						OperationExecutionRecord.NO_TRACEID,
-						tin, tout, "myHost", 
-						OperationExecutionRecord.NO_EOI_ESS, 
-						OperationExecutionRecord.NO_EOI_ESS);
+				"public void kieker.examples.userguide.ch2bookstore.manual.getBook(boolean)",
+				OperationExecutionRecord.NO_SESSION_ID,
+				OperationExecutionRecord.NO_TRACEID,
+				tin, tout, "myHost",
+				OperationExecutionRecord.NO_EOI_ESS,
+				OperationExecutionRecord.NO_EOI_ESS);
 		MONITORING_CONTROLLER.newMonitoringRecord(e);
 
 		/* 2.) Call the CRM catalog's getOffers() method (without monitoring). */

@@ -107,9 +107,12 @@ The directory structure of the Bookstore example is shown in Figure~\ref{fig:Pla
 
 \noindent The class \class{BookstoreStarter}, contains the application's \method{main} method (shown in Listing~\ref{lst:class:BookstoreStarter}), i.e., the program start routine. It initializes the \class{Bookstore} and issues five search requests by calling the \method{searchBook} method of the \object{bookstore} object.
 
-\setJavaCodeListing
+\medskip
 
+\setJavaCodeListing
 \lstinputlisting[caption=\method{main} method from BookstoreStarter.java,firstline=27,firstnumber=27,lastline=33,label=lst:class:BookstoreStarter]{\plainBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/BookstoreStarter.java}
+
+\pagebreak
 
 \noindent The \class{Bookstore}, shown in Listing~\ref{lst:class:Bookstore}, contains a catalog and a CRM object, representing the catalog of the bookstore and a customer relationship management system which can provide offers for books out of the catalog. The business method of the bookstore is \method{searchBook()} which will first check the catalog for books and then check for offers.
 
@@ -153,7 +156,7 @@ In a real application these methods would pass objects to ensure the results of 
 The next Section~\ref{sec:example:monitoring} will demonstrate how %
 to monitor this example application employing \KiekerMonitoringPart{} using manual instrumentation.
 
-% \pagebreak
+\pagebreak
 
 %%
 \section{Monitoring with \KiekerMonitoringPart{}}\label{sec:example:monitoring}
@@ -226,7 +229,7 @@ Listing~\ref{lst:cuttingBookstore} shows the instrumentation of the \class{Books
 % It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
 
 \setJavaCodeListing
-\lstinputlisting[linerange={29-53}, firstnumber=29, caption=Instrumentation of the \method{getBook()} call in Bookstore.java, label=lst:cuttingBookstore]%
+\lstinputlisting[linerange={29-54}, firstnumber=29, caption=Instrumentation of the \method{getBook()} call in Bookstore.java, label=lst:cuttingBookstore]%
 {\manualInstrumentedBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/manual/Bookstore.java}
  
 \noindent The lines 38 and 40 are used to determine the current time in nanoseconds before and after the \method{getBook()} call. In lines 42 to 48, a monitoring record for this measurement is created and initialized, passing the method signature, the hostname, and the two time values as arguments. Finally the record is handed over to the monitoring controller (line~49) which calls a monitoring writer to persist the record. %
@@ -240,7 +243,7 @@ Finally, a record is created (see lines~46--52) and stored by calling the monito
 \pagebreak
 
 \setJavaCodeListing
-\lstinputlisting[firstline=37, firstnumber=37, lastline=54, caption=Instrumentation of the \method{getBook()} call in CRM.java, label=lst:cuttingCRM]%
+\lstinputlisting[firstline=37, firstnumber=37, lastline=55, caption=Instrumentation of the \method{getBook()} call in CRM.java, label=lst:cuttingCRM]%
 {\manualInstrumentedBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/manual/CRM.java}
 
 % \enlargethispage{0.5cm}
@@ -380,11 +383,11 @@ method. %
 \
 
 \setJavaCodeListing       
-\lstinputlisting[caption=BookstoreAnalysisStarter.java (excerpt from \method{main} method),label=lst:BookstoreAnalysisStarter,firstline=40,firstnumber=40,lastline=60]%
+\lstinputlisting[gobble=6,caption=BookstoreAnalysisStarter.java (excerpt from \method{main} method),label=lst:BookstoreAnalysisStarter,firstline=40,firstnumber=40,lastline=60]%
 {\manualInstrumentedBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/manual/BookstoreAnalysisStarter.java}
 
 \
-
+ 
 \noindent The \class{BookstoreAnalysisStarter} follows a simple scheme. Each %
 analysis tool has to create at least one \class{AnalysisController} which can be %
 seen in Listing~\ref{lst:BookstoreAnalysisStarter} in line~41. Then, the plugins, %
