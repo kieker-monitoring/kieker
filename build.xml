@@ -644,6 +644,7 @@
 		<path id="monitoring-test-compile-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="junit-*.jar" />
+				<include name="aopalliance-*.jar" />
 			</fileset>
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />
@@ -971,6 +972,7 @@
 	<target name="run-tests-junit" depends="compile-tests,kieker-src-jar" description="Runs the JUnit tests">
 		<path id="kieker.test-junit-run-classpath">
 			<fileset dir="${lib.dir}">
+				<include name="aopalliance-*.jar" />
 				<include name="junit-*.jar" />
 				<include name="org.eclipse.emf.*.jar" />
 				<include name="derby-*.jar" />

@@ -55,8 +55,14 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 	private static final ITimeSource TIMESOURCE = CONTROLLER.getTimeSource();
 	private static final String VM_NAME = CONTROLLER.getHostname();
 
+	private final boolean logExecutions;
+
 	public OperationExecutionMethodInvocationInterceptor() {
-		// empty default constructor
+		this.logExecutions = true; // might be configurable via method interceptor properties?
+	}
+
+	public OperationExecutionMethodInvocationInterceptor(final boolean logExecutions) {
+		this.logExecutions = logExecutions;
 	}
 
 	/**
@@ -84,8 +90,10 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 			retval = invocation.proceed();
 		} finally {
 			final long tout = TIMESOURCE.getTime();
-			CONTROLLER.newMonitoringRecord(
-					new OperationExecutionRecord(signature, sessionId, traceId, tin, tout, hostname, eoi, ess));
+			if (this.logExecutions) {
+				CONTROLLER.newMonitoringRecord(
+						new OperationExecutionRecord(signature, sessionId, traceId, tin, tout, hostname, eoi, ess));
+			}
 			CF_REGISTRY.storeThreadLocalESS(ess);
 		}
 		return retval;
