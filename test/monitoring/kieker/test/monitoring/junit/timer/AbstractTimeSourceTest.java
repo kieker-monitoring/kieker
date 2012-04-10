@@ -36,7 +36,7 @@ public abstract class AbstractTimeSourceTest { // NOPMD (no abstract methods)
 		final long measured = timesource.getTime();
 		final long after = System.currentTimeMillis();
 
-		final long beforeTU = timeunit.convert(before, TimeUnit.MILLISECONDS);
+		final long beforeTU = timeunit.convert(before - 1, TimeUnit.MILLISECONDS);
 		final long afterTU = timeunit.convert(after + 1, TimeUnit.MILLISECONDS);
 
 		Assert.assertTrue("Measured time (" + measured + ") has to be >= " + beforeTU, beforeTU <= measured);
