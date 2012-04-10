@@ -3,7 +3,7 @@ INFO: Loading properties from properties file in classpath: 'META-INF/kieker.mon
 Apr 2, 2012 6:33:14 PM kieker.monitoring.core.configuration.ConfigurationFactory loadConfigurationFromResource
 WARNING: File 'META-INF/kieker.monitoring.properties' not found in classpath
 Apr 2, 2012 6:33:14 PM kieker.monitoring.core.controller.MonitoringController createInstance
-INFO: Current State of kieker.monitoring (1.5-SNAPSHOT) Status: 'enabled'
+INFO: Current State of kieker.monitoring (1.5) Status: 'enabled'
         Name: 'KIEKER-SINGLETON'; Hostname: 'myHost'; experimentID: '1'
 JMXController: JMX disabled
 RegistryController: 0 strings registered.
