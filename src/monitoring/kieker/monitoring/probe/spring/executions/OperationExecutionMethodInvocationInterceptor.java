@@ -82,7 +82,6 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 
 		final String signature = invocation.getMethod().toString();
 		final String sessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
-		final String hostname = this.hostname;
 		final int eoi; // this is executionOrderIndex-th execution in this trace
 		final int ess; // this is the height in the dynamic call tree of this execution
 		final boolean entrypoint;
@@ -110,7 +109,7 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 		} finally {
 			final long tout = this.timeSource.getTime();
 			this.monitoringCtrl.newMonitoringRecord(
-						new OperationExecutionRecord(signature, sessionId, traceId, tin, tout, hostname, eoi, ess));
+						new OperationExecutionRecord(signature, sessionId, traceId, tin, tout, this.hostname, eoi, ess));
 			// cleanup
 			if (entrypoint) {
 				CF_REGISTRY.unsetThreadLocalTraceId();

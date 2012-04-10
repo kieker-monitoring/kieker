@@ -55,7 +55,7 @@ import kieker.monitoring.writer.filesystem.AsyncFsWriter;
  * @author Andre van Hoorn
  * 
  */
-public abstract class AbstractTestSpringMethodInterceptor {
+public abstract class AbstractTestSpringMethodInterceptor { // NOPMD (AbstractClassWithoutAbstractMethod)
 	protected final ControlFlowRegistry controlFlowRegistry = ControlFlowRegistry.INSTANCE;
 	protected final SessionRegistry sessionRegistry = SessionRegistry.INSTANCE;
 
@@ -97,7 +97,7 @@ public abstract class AbstractTestSpringMethodInterceptor {
 	}
 
 	@Test
-	public void testIt() throws Throwable {
+	public void testIt() throws Throwable { // NOPMD (JUnitTestsShouldIncludeAssert), assertions in inv.checkEoiEss();
 		final OperationExecutionMethodInvocationInterceptor methodInterceptor =
 				new OperationExecutionMethodInvocationInterceptor(this.monitoringCtrl); // do not log executions
 
@@ -110,8 +110,15 @@ public abstract class AbstractTestSpringMethodInterceptor {
 		final CRM crmObject = new CRM();
 		final Method crmMethod = crmObject.lookupPseudoMethod();
 
-		final int eoiExpectedForOuterInterceptor = this.interceptorIsEntryPoint ? 0 : 1;
-		final int essExpectedForOuterInterceptor = this.interceptorIsEntryPoint ? 0 : 1;
+		final int eoiExpectedForOuterInterceptor;
+		final int essExpectedForOuterInterceptor;
+		if (this.interceptorIsEntryPoint) {
+			eoiExpectedForOuterInterceptor = 0;
+			essExpectedForOuterInterceptor = 0;
+		} else {
+			eoiExpectedForOuterInterceptor = 1;
+			essExpectedForOuterInterceptor = 1;
+		}
 
 		if (!this.interceptorIsEntryPoint) {
 			this.registerSessionInfo();
@@ -122,25 +129,25 @@ public abstract class AbstractTestSpringMethodInterceptor {
 
 		// Note that right before the proceed we expect the ess to be proceeding execution's ess +1!
 		final BasicMethodInvocation invocation11Catalog =
-				new BasicMethodInvocation( // eoi should not increase because no sub call
+				new BasicMethodInvocation(// eoi should not increase because no sub call
 						eoiExpectedForOuterInterceptor + 1, eoiExpectedForOuterInterceptor + 2, // eoi/ess before sub calls (right before proceed)
 						eoiExpectedForOuterInterceptor + 1, eoiExpectedForOuterInterceptor + 2, // eoi/ess after sub calls (right after proceed)
 						catalogMethod, methodInterceptor, new MethodInvocation[0]);
 		invocations.add(invocation11Catalog);
 		final BasicMethodInvocation invocation32Catalog =
-				new BasicMethodInvocation( // eoi should not increase because no sub call
+				new BasicMethodInvocation(// eoi should not increase because no sub call
 						eoiExpectedForOuterInterceptor + 3, eoiExpectedForOuterInterceptor + 3, // eoi/ess before sub calls (right before proceed)
 						eoiExpectedForOuterInterceptor + 3, eoiExpectedForOuterInterceptor + 3, // eoi/ess after sub calls (right after proceed)
 						catalogMethod, methodInterceptor, new MethodInvocation[0]);
 		invocations.add(invocation32Catalog);
 		final BasicMethodInvocation invocation21CRM =
-				new BasicMethodInvocation( // eoi increases due to sub call
+				new BasicMethodInvocation(// eoi increases due to sub call
 						eoiExpectedForOuterInterceptor + 2, eoiExpectedForOuterInterceptor + 2, // eoi/ess before sub calls (right before proceed)
 						eoiExpectedForOuterInterceptor + 3, eoiExpectedForOuterInterceptor + 2, // eoi/ess after sub calls (right after proceed)
 						crmMethod, methodInterceptor, new MethodInvocation[] { invocation32Catalog });
 		invocations.add(invocation21CRM);
 		final BasicMethodInvocation invocation00Bookstore =
-				new BasicMethodInvocation( // eoi increases due to sub calls(right after proceed)
+				new BasicMethodInvocation(// eoi increases due to sub calls(right after proceed)
 						eoiExpectedForOuterInterceptor + 0, essExpectedForOuterInterceptor + 1, // eoi/ess before sub calls (right before proceed)
 						eoiExpectedForOuterInterceptor + 3, essExpectedForOuterInterceptor + 1, // eoi/ess after sub calls (right after proceed)
 						bookstoreMethod, methodInterceptor, new MethodInvocation[] { invocation11Catalog, invocation21CRM });
@@ -204,7 +211,8 @@ public abstract class AbstractTestSpringMethodInterceptor {
 		public BasicMethodInvocation(
 				final int expectedEoiBeforeInvokes, final int expectedEssBeforeInvokes,
 				final int expectedEoiAfterInvokes, final int expectedEssAfterInvokes,
-				final Method myMethod, final MethodInterceptor methodInterceptor, final MethodInvocation[] subInvocations) {
+				final Method myMethod, final MethodInterceptor methodInterceptor,
+				final MethodInvocation[] subInvocations) { // NOPMD (ArrayIsStoredDirectly); is a test, we don't care here
 			this.expectedEoiBeforeInvokes = expectedEoiBeforeInvokes;
 			this.expectedEssBeforeInvokes = expectedEssBeforeInvokes;
 			this.expectedEoiAfterInvokes = expectedEoiAfterInvokes;
@@ -285,38 +293,38 @@ public abstract class AbstractTestSpringMethodInterceptor {
 	}
 }
 
-abstract class AbstractPseudoComponent {
+abstract class AbstractPseudoComponent { // NOPMD (AbstractClassWithoutAbstractMethod)
 	private final String pseudoMethodName;
 
 	AbstractPseudoComponent(final String pseudoMethodName) {
 		this.pseudoMethodName = pseudoMethodName;
 	}
 
-	Method lookupPseudoMethod() throws SecurityException, NoSuchMethodException {
+	public Method lookupPseudoMethod() throws SecurityException, NoSuchMethodException {
 		return this.getClass().getMethod(this.pseudoMethodName, new Class<?>[0]);
 	}
 }
 
-class Bookstore extends AbstractPseudoComponent {
+class Bookstore extends AbstractPseudoComponent { // NOPMD (TestClassWithoutTestCases, reported because classname ends with "Test")
 	Bookstore() {
 		super("searchBook");
 	}
 
-	public void searchBook() {}
+	public void searchBook() {} // NOPMD (UncommentedEmptyMethod)
 }
 
-class CRM extends AbstractPseudoComponent {
+class CRM extends AbstractPseudoComponent { // NOPMD (TestClassWithoutTestCases, reported because classname ends with "Test")
 	CRM() {
 		super("getOffers");
 	}
 
-	public void getOffers() {}
+	public void getOffers() {} // NOPMD (UncommentedEmptyMethod)
 }
 
-class Catalog extends AbstractPseudoComponent {
+class Catalog extends AbstractPseudoComponent { // NOPMD (TestClassWithoutTestCases, reported because classname ends with "Test")
 	Catalog() {
 		super("getBook");
 	}
 
-	public void getBook() {}
+	public void getBook() {} // NOPMD (UncommentedEmptyMethod)
 }
