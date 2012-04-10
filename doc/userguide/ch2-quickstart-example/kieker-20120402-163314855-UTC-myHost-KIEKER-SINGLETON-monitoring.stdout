@@ -8,7 +8,7 @@ INFO: Current State of kieker.monitoring (1.5-SNAPSHOT) Status: 'enabled'
 JMXController: JMX disabled
 RegistryController: 0 strings registered.
 TimeSource: 'kieker.monitoring.timer.SystemNanoTimer'
-        Time in nanoseconds since Thu Jan 01 01:00:00 CET 1970'
+        Time in nanoseconds (with nanoseconds precision) since Thu Jan 01 01:00:00 CET 1970'
 WriterController:
         Number of Inserts: '0'
         Automatic assignment of logging timestamps: 'true'
