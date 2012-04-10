@@ -51,35 +51,37 @@ public final class Starter {
 		final AnalysisController analysisController = new AnalysisController();
 
 		/* Configure and register the reader */
-		final Configuration readerConfiguration = new Configuration();
-		readerConfiguration.setProperty(MyPipeReader.CONFIG_PROPERTY_NAME_PIPE_NAME, "somePipe");
-		final MyPipeReader reader = new MyPipeReader(readerConfiguration);
+		final Configuration readerConfig = new Configuration();
+		readerConfig.setProperty(
+				MyPipeReader.CONFIG_PROPERTY_NAME_PIPE_NAME, "somePipe");
+		final MyPipeReader reader = new MyPipeReader(readerConfig);
 		analysisController.registerReader(reader);
 
 		/* Configure, register, and connect the response time filter */
-		final Configuration filterConfiguration = new Configuration();
-		final long rtThresholdNanos = TimeUnit.NANOSECONDS.convert(1900, TimeUnit.MICROSECONDS);
-		filterConfiguration.setProperty( // configure threshold of 1.9 milliseconds:
+		final Configuration filterConfig = new Configuration();
+		final long rtThresholdNanos =
+				TimeUnit.NANOSECONDS.convert(1900, TimeUnit.MICROSECONDS);
+		filterConfig.setProperty( // configure threshold of 1.9 milliseconds:
 				MyResponseTimeFilter.CONFIG_PROPERTY_NAME_TS_NANOS,
 				Long.toString(rtThresholdNanos));
-		final MyResponseTimeFilter filter = new MyResponseTimeFilter(filterConfiguration);
+		final MyResponseTimeFilter filter = new MyResponseTimeFilter(filterConfig);
 		analysisController.registerFilter(filter);
 		analysisController.connect(reader, MyPipeReader.OUTPUT_PORT_NAME,
 				filter, MyResponseTimeFilter.INPUT_PORT_NAME_RESPONSE_TIMES);
 
 		/* Configure, register, and connect the filter printing *valid* response times */
-		final Configuration validOutputConfiguration = new Configuration();
-		validOutputConfiguration.setProperty(MyResponseTimeOutputPrinter.CONFIG_PROPERTY_NAME_VALID_OUTPUT, Boolean.toString(true));
-		validOutputConfiguration.setProperty(AbstractPlugin.CONFIG_NAME, "Print valid");
-		final MyResponseTimeOutputPrinter validPrinter = new MyResponseTimeOutputPrinter(validOutputConfiguration);
+		final Configuration validOutputConfig = new Configuration();
+		validOutputConfig.setProperty(MyResponseTimeOutputPrinter.CONFIG_PROPERTY_NAME_VALID_OUTPUT, Boolean.toString(true));
+		validOutputConfig.setProperty(AbstractPlugin.CONFIG_NAME, "Print valid");
+		final MyResponseTimeOutputPrinter validPrinter = new MyResponseTimeOutputPrinter(validOutputConfig);
 		analysisController.registerFilter(validPrinter);
 		analysisController.connect(filter, MyResponseTimeFilter.OUTPUT_PORT_NAME_RT_VALID, validPrinter, MyResponseTimeOutputPrinter.INPUT_PORT_NAME_EVENTS);
 
 		/* Configure, register, and connect the filter printing *invalid* response times */
-		final Configuration invalidOutputConfiguration = new Configuration();
-		invalidOutputConfiguration.setProperty(MyResponseTimeOutputPrinter.CONFIG_PROPERTY_NAME_VALID_OUTPUT, Boolean.toString(false));
-		invalidOutputConfiguration.setProperty(AbstractPlugin.CONFIG_NAME, "Print invalid");
-		final MyResponseTimeOutputPrinter invalidPrinter = new MyResponseTimeOutputPrinter(invalidOutputConfiguration);
+		final Configuration invalidOutputConfig = new Configuration();
+		invalidOutputConfig.setProperty(MyResponseTimeOutputPrinter.CONFIG_PROPERTY_NAME_VALID_OUTPUT, Boolean.toString(false));
+		invalidOutputConfig.setProperty(AbstractPlugin.CONFIG_NAME, "Print invalid");
+		final MyResponseTimeOutputPrinter invalidPrinter = new MyResponseTimeOutputPrinter(invalidOutputConfig);
 		analysisController.registerFilter(invalidPrinter);
 		analysisController.connect(filter, MyResponseTimeFilter.OUTPUT_PORT_NAME_RT_EXCEED, invalidPrinter, MyResponseTimeOutputPrinter.INPUT_PORT_NAME_EVENTS);
 

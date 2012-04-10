@@ -14,8 +14,6 @@ binary release.}
 
 \section{Pipe-and-Filter Framework and Included Plugins}\label{sec:analysis:controller}
 
-An analysis with \KiekerAnalysisPart{} is set up and executed employing %
-the class \class{AnalysisController}. %
 \KiekerAnalysisPart{} provides a framework to define and execute pipe-and-filter %
 architectures of analysis plugins, i.e., monitoring readers and analysis filters, %
 as well as repositories. %
@@ -54,6 +52,8 @@ print the received records to the standard output stream.
 
 \noindent Figure~\ref{fig:analysisController:classdiagram} shows the class diagram %
 with the important \KiekerAnalysisPart{} classes and their relationships. %
+An analysis with \KiekerAnalysisPart{} is set up and executed employing %
+the class \class{AnalysisController}. %
 Setting up and running an analysis with \KiekerAnalysisPart{} requires the %
 following steps to be performed, as sketched in Section~\ref{sec:example:analysis} already:
 
@@ -69,18 +69,18 @@ filters (\method{registerFilter}), and repositories (\method{registerRepository}
 
 \medskip
 
-\noindent On invocation of the \method{run} method, the \class{Analysis Controller} %
+\noindent On invocation of the \method{run} method, the \class{AnalysisController} %
 calls the \method{init} method of all filter plugins allowing them to initialize. %
 Then, it starts the configured monitoring readers by calling its \method{read} %
 method. Plugins send data via their output ports to connected input ports of other 
 plugins. Being the sink of a pipe-and-filter architecture, readers don't have %
 input ports. Plugins can be connected to repositories, which may provide %
 shared services, such as managed access to a common architectural model %
-for the analyzed system. As soon as the reader returns from the execution of its \method{read} 
+of the analyzed system. As soon as the reader returns from the execution of its \method{read} 
 method, the method \method{terminate} of each registered plugin is called by the %
-\class{Analysis Controller}. \KiekerAnalysisPart{} configurations can be saved %
-to a \class{.kax} file by calling the \class{Analysis Controller}'s \method{saveToFile} method. %
-The \class{Analysis Controller} provides a constructor which accepts the %
+\class{AnalysisController}. \KiekerAnalysisPart{} configurations can be saved %
+to a \class{.kax} file by calling the \class{AnalysisController}'s \method{saveToFile} method. %
+The \class{AnalysisController} provides a constructor which accepts the %
 file system location of a \class{.kax} file to load the configuration from. %
  %
 In order to support the asynchronous execution of the \class{AnalysisController} instance, %
@@ -93,11 +93,11 @@ instantiation, configuration, and connection of plugins, Listing~\ref{listing:St
 demonstrates this procedure for the example, using \class{MyPipeReader} and %
 \class{MyResponseTimeFilter}, according to Figure~\ref{fig:example:pipe-and-filter}.
 
-The configuration for the \class{MyPipeReader} is created in lines~54 and~55. %
-Using this configuration, the reader is created in line~56, and registered to %
-the \class{AnalysisController} in line~57. Similarly, lines~60--66 initialize %
+The configuration for the \class{MyPipeReader} is created in lines~54--56. %
+Using this configuration, the reader is created in line~57, and registered to %
+the \class{AnalysisController} in line~58. Similarly, lines~61--68 initialize %
 and register the \class{MyResponseTimeFilter}. The reader's output is connected %
-to the filter's input in line~67. % 
+to the filter's input in line~69. % 
 The entire programmatic creation of the pipe-and-filter architecture shown %
 in Figure~\ref{fig:example:pipe-and-filter}, can be found in the example  %
 file \file{Starter.java}.
@@ -105,9 +105,10 @@ file \file{Starter.java}.
 \medskip
 
 \setJavaCodeListing
-\lstinputlisting[caption=Initializing and connecting the example reader and filter (Starter.java),label=listing:StarterInitConnect,firstline=53, lastline=68, firstnumber=53]%
+\lstinputlisting[caption=Initializing and connecting the example reader and filter (Starter.java),label=listing:StarterInitConnect,firstline=53, lastline=70, firstnumber=53]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/Starter.java}
 
+\enlargethispage{0.5cm}
 
 \subsection{Monitoring Reader Plugins}
 
@@ -117,7 +118,7 @@ writers. While writers receive records and write them into files or other kinds 
 of monitoring logs/streams, readers deserialize monitoring data and provide it as %
 \class{IMonitoringRecord} instances. 
 
-\begin{figure}[h]\centering
+\begin{figure}\centering
 \includegraphics[scale=0.7]{images/kieker_readerimplsuserguide-modified}
 \caption{Interface \class{IMonitoringReader} and implementing classes}
 \label{Figure:ReaderHierarchy}
@@ -142,7 +143,7 @@ to its consumers according to the original delays reconstructed from the logging
 timestamps (Section~\ref{sec:componentsMonitoring:monitoringRecords}).
 A brief description of how to use the \class{JMSReader} can be found in Appendix~%
 \ref{appendix:usingJMS}. Please note that the database reader (\class{JMSReader}) %
-is currently in a prototype stage and that they should be used with care. %
+is currently in a prototype stage and that it should be used with care. %
 Like each plugin, readers are configured via properties, as used in Section~%
 \ref{sec:analysis:programmaticCreation} and detailed in Section~%
 \ref{sec:analysis:configuration}. 
@@ -155,12 +156,12 @@ plugins and implement analyses or visualizations based on these events. %
 \class{CountingFilter} and  \class{TeeFilter} forward incoming events %
 to their output ports. The \class{CountingFilter} additionally provides the %
 current number of received records via a second output port. The \class{TeeFilter} %
-prints additionally prints incoming events to an output stream, which may be %
+additionally prints incoming events to an output stream, which may be %
 the standard output, standard error, a logger, or a file. %
-A \class{TimestampFilter} and a \class{TypeFilter} filters incoming records by %
+A \class{TimestampFilter} and a \class{TypeFilter} filter incoming records by %
 timestamp and by type, respectively. A \class{TraceIdFilter} filters incoming %
 trace events (e.g., \class{OperationExecutionRecord}s, see Section~%
-\ref{chap:example}) by trace id. Additional filters for trace analysis, %
+\ref{chap:example}) by trace ID. Additional filters for trace analysis, %
 architecture reconstruction and visualization are included as part of %
 the \KiekerTraceAnalysis{} tool, presented in Chapter~\ref{chap:aspectJ}. %
 Like each plugin, filters are configured %
@@ -200,7 +201,7 @@ Section~\ref{sec:analysis:configuration} describes how plugins and repositories 
 can be configured via properties. %
 Section~\ref{sec:analysis:pluginAnnotation} %
 describes how to declare meta-information for plugins using %
-dedicated class and method annotations. %
+dedicated annotations. %
 Specific information on the development of custom filters, readers, and repositories %
 are given in Sections~\ref{sec:analysis:filters}--\ref{sec:analysis:repositories}. %
 
@@ -218,10 +219,10 @@ are given in Sections~\ref{sec:analysis:filters}--\ref{sec:analysis:repositories
 
 \noindent According to the %
 configuration of the \KiekerMonitoringPart{} components (see Section~\ref{sec:monitoring:configuration}), 
-filters are configured via \class{Configuration} objects. Filters must %
+plugins and repositories are configured via \class{Configuration} objects. Classes must %
 provide a public constructor, accepting a \class{Configuration} object as %
 its only argument. It is important to invoke the constructor of the super class. %
-The configuration properties accepted by a plugin should be provided via \class{public static} %
+The configuration properties accepted by a plugin or repository should be provided via \class{public static} %
 constants with prefix \method{CONFIG\_PROPERTY\_NAME\_} in order to ease the %
 programmatic initialization of plugins (Section~\ref{sec:analysis:programmaticCreation}). %
 For the example filter \class{MyResponseTimeFilter},
@@ -233,10 +234,10 @@ configuration.
 \lstinputlisting[firstline=45, firstnumber=45, lastline=53, caption={Plugin constructor accepting a \class{Configuration} object}, label=listing:MyResponseTimeFilterConstructor]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
 
-\noindent Additionally, filters must provide a default configuration and the %
-current configuration via the methods \method{getDefaultConfiguration} and %
+\noindent Additionally, a default configuration and the %
+current configuration must be provided via the methods \method{getDefaultConfiguration} and %
 \method{getCurrentConfiguration}. Please note that the returned configuration %
-must be sufficient to initialize the filter via the mentioned constructor. %
+must be sufficient to initialize the plugin or repository via the mentioned constructor. %
 The \class{AnalysisController} uses the \method{getCurrentConfiguration} to %
 save the pipe-and-filter configuration. Listing~\ref{listing:MyResponseTimeFilterEventsToOutput} %
 shows how the methods are implemented for the example filter \class{MyResponseTimeFilter}. %
@@ -291,14 +292,14 @@ to its two output ports declared in the \class{@Plugin} annotation.
 \subsection{Developing Monitoring Reader Plugins}\label{sec:analysis:reader}
 
 \noindent Custom readers must extend the class %
-\class{AbstractMonitoringReaderPlugin} (see Figure~\ref{fig:analysisController:classdiagram}), %
+\class{AbstractReaderPlugin} (see Figure~\ref{fig:analysisController:classdiagram}), %
 and implement the methods \method{init}, \method{read}, and \method{terminate}, %
-which are called by \class{AnalysisController} to trigger the reader's initialization, %
+which are called by the \class{AnalysisController} to trigger the reader's initialization, %
 reading, and termination. Like each plugin (Section~\ref{sec:analysis:configuration}), %
 readers are configured via a constructor accepting a \class{Configuration} object %
 as its only argument; they must provide the default and current configurations %
 via the implemented \method{getDefaultConfiguration} and \method{getCurrentConfiguration} %
-methods. Reader start reading on invocation of the \method{read} method, %
+methods. Readers start reading on invocation of the \method{read} method, %
 providing the obtained records to connected filters via the output port(s) %
 declared in the \class{@Plugin} annotation (Section~\ref{sec:analysis:pluginAnnotation}). %
 The \method{read} method should be implemented synchronously, i.e., it should %
@@ -327,6 +328,8 @@ configuration and connects to the named pipe.
 \lstinputlisting[firstline=58, firstnumber=58, lastline=66, caption={Example reader's initialization method}, label=listing:MyPipeReaderInit]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
 
+\pagebreak
+
 \noindent Listing~\ref{listing:MyPipeReaderRead} shows the \class{MyPipeReader}'s %
 \method{read} method. In this case, the reader polls the pipe for new records %
 and forwards these to its output port. 
@@ -349,10 +352,10 @@ was shown in Listing~\ref{listing:MyResponseTimeFilterPluginAnnotationOutputs} a
 
 Filters receive events via methods marked with the \class{@InputPort} %
 annotation. These methods must accept a single argument, which has to be %
-a super type of the set of accepted event types declared in respective %
+a super type of the set of accepted event types declared in the respective %
 \class{@InputPort} annotation's \method{eventTypes}. %
 In addition to an optional \method{description}, each \class{@InputPort} %
-must have a \method{name} which is unique for this filter. The input port names %
+must have a \method{name}, which is unique for this filter. The input port names %
 should be provided as a \class{public static} constant %
 with prefix \method{INPUT\_PORT\_NAME\_}, in order to ease the programmatic %
 connection of readers and filters, as described in %
@@ -361,6 +364,8 @@ Listing~\ref{listing:MyResponseTimeFilterEventsToOutput} shows the declaration %
 of the input port provided by the example plugin \class{MyResponseTimeFilter}. %
 The body of this method was shown in Listing~%
 \ref{listing:MyResponseTimeFilterPluginAnnotationOutputs} already.
+
+\pagebreak
 
 \setJavaCodeListing
 \lstinputlisting[firstline=55, firstnumber=55, lastline=61, caption={@InputPort annotation for the example plugin's input method}, label=listing:MyResponseTimeFilterEventsToOutput]%
