@@ -35,6 +35,8 @@ human-readable textual representation in the UTC and local timezones. %
 The following listing shows the command to convert two logging timestamps as %
 well as the resulting output.
 
+\enlargethispage{0.7cm}
+
 \setTextListing
 \begin{lstlisting}[caption=Execution under UNIX-like systems]
 $\lstshellprompt{}$ $\textbf{bin/convertLoggingTimestamp.sh}$ $\textbf{-\,-timestamps}$ 1283156545581511026 1283156546127117246 
@@ -78,7 +80,7 @@ incoming monitoring data from a running system, e.g., via JMS~(see also Appendix
 \noindent The following command replays the monitoring testdata included in %
 the binary release to another directory:
 
-\pagebreak
+% \pagebreak
 
 \setTextListing
 \begin{lstlisting}[caption=Execution under UNIX-like systems]
@@ -128,11 +130,11 @@ as described in Chapter~\ref{chap:aspectJ}.
 
 \noindent Main-class: {\small \class{kieker.tools.traceAnalysis.TraceAnalysisTool}}
 
-\pagebreak
+% \pagebreak
 
 \paragraph*{Usage}\
 
-\enlargethispage{0.6cm}
+\enlargethispage{1cm}
 
 \setTextListing
 \lstinputlisting[caption=]{Appendix-usage-trace-analysis.sh.inc}
@@ -152,7 +154,7 @@ $\lstshellprompt{}$ $\textbf{bin/trace-analysis.sh}$
   $\textbf{-\,-plot-Deployment-Operation-Dependency-Graph}$
 $\lstshellprompt{}$ $\textbf{dot}$ $\textbf{-T}$ pdf  deploymentOperationDependencyGraph.dot > deploymentOperationDependencyGraph.pdf
 \end{lstlisting}
-\pagebreak
+
 \begin{lstlisting}[caption=Execution under Windows]
 $\lstshellprompt{}$ $\textbf{trace-analysis.bat}$
   $\textbf{-\,-inputdirs}$ $\distributedTestdataDirDistroWin$ 

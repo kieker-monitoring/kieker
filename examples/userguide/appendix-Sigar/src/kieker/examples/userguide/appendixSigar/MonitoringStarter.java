@@ -41,14 +41,18 @@ public final class MonitoringStarter {
 
 		final ISigarSamplerFactory sigarFactory = SigarSamplerFactory.INSTANCE;
 
-		final CPUsDetailedPercSampler cpuSampler = sigarFactory.createSensorCPUsDetailedPerc();
-		final MemSwapUsageSampler memSwapSampler = sigarFactory.createSensorMemSwapUsage();
+		final CPUsDetailedPercSampler cpuSampler =
+				sigarFactory.createSensorCPUsDetailedPerc();
+		final MemSwapUsageSampler memSwapSampler =
+				sigarFactory.createSensorMemSwapUsage();
 
 		final long offset = 2; // start after 2 seconds
 		final long period = 5; // monitor every 5 seconds
 
-		monitoringController.schedulePeriodicSampler(cpuSampler, offset, period, TimeUnit.SECONDS);
-		monitoringController.schedulePeriodicSampler(memSwapSampler, offset, period, TimeUnit.SECONDS);
+		monitoringController.schedulePeriodicSampler(
+				cpuSampler, offset, period, TimeUnit.SECONDS);
+		monitoringController.schedulePeriodicSampler(
+				memSwapSampler, offset, period, TimeUnit.SECONDS);
 
 		Thread.sleep(30000);
 
