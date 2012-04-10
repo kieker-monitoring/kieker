@@ -20,8 +20,9 @@
 
 package kieker.examples.userguide.ch2bookstore.manual;
 
+import java.io.File;
+
 import kieker.analysis.AnalysisController;
-import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.exception.MonitoringReaderException;
 import kieker.analysis.exception.MonitoringRecordConsumerException;
 import kieker.analysis.plugin.filter.forward.TeeFilter;
@@ -36,29 +37,33 @@ public final class BookstoreAnalysisStarter {
 			throws MonitoringReaderException, MonitoringRecordConsumerException {
 
 		if (args.length == 0) {
-			return;
+			System.err.println("Please provide a monitoring log directory as argument");
+			System.exit(1);
 		}
 
-		/* Create Kieker.Analysis instance */
-		final AnalysisController analysisInstance = new AnalysisController();
-		/* Create and register a simple output writer. */
-		final TeeFilter teeFilter = new TeeFilter(new Configuration());
-		analysisInstance.registerFilter(teeFilter);
-
-		/* Set filesystem monitoring log input directory for our analysis */
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, args[0]);
-
-		final FSReader reader = new FSReader(configuration);
-		analysisInstance.registerReader(reader);
-
 		try {
+			/* Create Kieker.Analysis instance */
+			final AnalysisController analysisInstance = new AnalysisController();
+			/* Create and register a simple output writer. */
+			final TeeFilter teeFilter = new TeeFilter(new Configuration());
+			analysisInstance.registerFilter(teeFilter);
+
+			/* Set filesystem monitoring log input directory for our analysis */
+			final Configuration configuration = new Configuration();
+			configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, args[0]);
+
+			final FSReader reader = new FSReader(configuration);
+			analysisInstance.registerReader(reader);
+
 			/* Connect the output of the reader with the input of the filter. */
 			analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
 			/* Start the analysis */
 			analysisInstance.run();
-		} catch (final AnalysisConfigurationException e) {
-			e.printStackTrace();
+
+			analysisInstance.saveToFile(new File("out-ch2.kax"));
+		} catch (final Exception e) {
+			System.out.println("An error occurred: " + e.getMessage());
+			System.exit(1);
 		}
 	}
 }

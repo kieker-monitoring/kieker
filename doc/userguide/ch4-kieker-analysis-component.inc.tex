@@ -73,7 +73,7 @@ filters (\method{registerFilter}), and repositories (\method{registerRepository}
 calls the \method{init} method of all filter plugins allowing them to initialize. %
 Then, it starts the configured monitoring readers by calling its \method{read} %
 method. Plugins send data via their output ports to connected input ports of other 
-plugins. Being the sink of a pipe-and-filter architecture, readers don't have %
+plugins. Being the source in a pipe-and-filter architecture, readers don't have %
 input ports. Plugins can be connected to repositories, which may provide %
 shared services, such as managed access to a common architectural model %
 of the analyzed system. As soon as the reader returns from the execution of its \method{read} 
@@ -120,7 +120,7 @@ of monitoring logs/streams, readers deserialize monitoring data and provide it a
 
 \begin{figure}\centering
 \includegraphics[scale=0.7]{images/kieker_readerimplsuserguide-modified}
-\caption{Interface \class{IMonitoringReader} and implementing classes}
+\caption{Monitoring reader plugins included with \Kieker{}}
 \label{Figure:ReaderHierarchy}
 \end{figure}
 
@@ -142,7 +142,7 @@ production system. It adds delays between the delivery of the monitoring records
 to its consumers according to the original delays reconstructed from the logging %
 timestamps (Section~\ref{sec:componentsMonitoring:monitoringRecords}).
 A brief description of how to use the \class{JMSReader} can be found in Appendix~%
-\ref{appendix:usingJMS}. Please note that the database reader (\class{JMSReader}) %
+\ref{appendix:usingJMS}. Please note that the database reader (\class{DBReader}) %
 is currently in a prototype stage and that it should be used with care. %
 Like each plugin, readers are configured via properties, as used in Section~%
 \ref{sec:analysis:programmaticCreation} and detailed in Section~%
