@@ -42,14 +42,14 @@ public class MyResponseTimeFilter extends AbstractFilterPlugin {
 	public static final String OUTPUT_PORT_NAME_RT_VALID = "validResponseTimes";
 	public static final String OUTPUT_PORT_NAME_RT_EXCEED = "invalidResponseTimes";
 
-	public static final String CONFIG_PROPERTY_NAME_RT_TS_NANOS = "rtThresholdNanos";
+	public static final String CONFIG_PROPERTY_NAME_TS_NANOS = "thresholdNanos";
 
-	private final long rtThresholdNanos; // the configure threshold for this filter instance
+	private final long rtThresholdNanos; // the configured threshold for this filter instance
 
 	public MyResponseTimeFilter(final Configuration configuration) {
 		super(configuration);
 		this.rtThresholdNanos =
-				configuration.getLongProperty(CONFIG_PROPERTY_NAME_RT_TS_NANOS);
+				configuration.getLongProperty(CONFIG_PROPERTY_NAME_TS_NANOS);
 	}
 
 	public static final String INPUT_PORT_NAME_RESPONSE_TIMES = "newResponseTime";
@@ -72,14 +72,15 @@ public class MyResponseTimeFilter extends AbstractFilterPlugin {
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_RT_TS_NANOS,
+		configuration.setProperty(CONFIG_PROPERTY_NAME_TS_NANOS,
 				Long.toString(CONFIG_PROPERTY_VALUE_RT_TS_NANOS_DEFAULT));
 		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_RT_TS_NANOS, Long.toString(this.rtThresholdNanos));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_TS_NANOS,
+				Long.toString(this.rtThresholdNanos));
 		return configuration;
 	}
 }

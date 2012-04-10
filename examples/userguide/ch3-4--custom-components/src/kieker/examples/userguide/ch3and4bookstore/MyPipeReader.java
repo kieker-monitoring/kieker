@@ -26,6 +26,8 @@ import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.record.AbstractMonitoringRecord;
+import kieker.common.record.IMonitoringRecord;
 
 @Plugin(
 		name = "Pipe reader",
@@ -33,7 +35,7 @@ import kieker.common.logging.LogFactory;
 		outputPorts = { @OutputPort(
 				name = MyPipeReader.OUTPUT_PORT_NAME,
 				description = "Outputs any received record",
-				eventTypes = { Object.class })
+				eventTypes = { IMonitoringRecord.class })
 })
 public class MyPipeReader extends AbstractReaderPlugin {
 
@@ -65,19 +67,20 @@ public class MyPipeReader extends AbstractReaderPlugin {
 
 	public boolean read() {
 		try {
-
 			/* Wait max. 4 seconds for the next data. */
 			PipeData data = this.pipe.poll(4);
 			while (data != null) {
 				/* Create new record, init from received array ... */
-				final MyResponseTimeRecord record = new MyResponseTimeRecord(data.getRecordData());
+				final IMonitoringRecord record = // throws MonitoringRecordException:
+				AbstractMonitoringRecord.createFromArray(data.getRecordType(),
+						data.getRecordData());
 				record.setLoggingTimestamp(data.getLoggingTimestamp());
 				/* ...and delegate the task of delivering to the super class. */
 				super.deliver(MyPipeReader.OUTPUT_PORT_NAME, record);
 				// next turn
 				data = this.pipe.poll(4);
 			}
-		} catch (final InterruptedException e) {
+		} catch (final Exception e) {
 			return false; // signal error
 		}
 		return true;

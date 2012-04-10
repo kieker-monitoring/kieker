@@ -42,10 +42,12 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn
  */
 @Plugin(repositoryPorts =
-		@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
+		@RepositoryPort(
+				name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 				repositoryType = SystemModelRepository.class))
 public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
-	public static final String REPOSITORY_PORT_NAME_SYSTEM_MODEL = "systemModelRepository";
+	public static final String REPOSITORY_PORT_NAME_SYSTEM_MODEL =
+			"systemModelRepository";
 
 	// Please leave the logger here, because the "composition" above is used in the user guide
 	private static final Log LOG = LogFactory.getLog(AbstractTraceAnalysisFilter.class);
@@ -132,7 +134,8 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 
 	protected final SystemModelRepository getSystemEntityFactory() {
 		if (this.systemEntityFactory == null) {
-			this.systemEntityFactory = (SystemModelRepository) this.getRepository(REPOSITORY_PORT_NAME_SYSTEM_MODEL);
+			this.systemEntityFactory = (SystemModelRepository)
+					this.getRepository(REPOSITORY_PORT_NAME_SYSTEM_MODEL);
 		}
 		if (this.systemEntityFactory == null) {
 			LOG.error("Failed to connect to system model repository via repository port '"

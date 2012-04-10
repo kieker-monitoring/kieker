@@ -34,13 +34,15 @@ public class MyPipeWriter extends AbstractMonitoringWriter {
 
 	public MyPipeWriter(final Configuration configuration) {
 		super(configuration);
-		this.pipeName = configuration.getStringProperty(CONFIG_PROPERTY_NAME_PIPE_NAME);
+		this.pipeName =
+				configuration.getStringProperty(CONFIG_PROPERTY_NAME_PIPE_NAME);
 	}
 
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		try {
 			/* Just write the content of the record into the pipe. */
-			this.pipe.put(new PipeData(record.getLoggingTimestamp(), record.toArray()));
+			this.pipe.put(new PipeData(record.getLoggingTimestamp(),
+					record.toArray(), record.getClass()));
 		} catch (final InterruptedException e) {
 			return false; // signal error
 		}
