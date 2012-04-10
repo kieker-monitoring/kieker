@@ -49,52 +49,76 @@ import kieker.monitoring.timer.ITimeSource;
 public class OperationExecutionMethodInvocationInterceptor implements MethodInterceptor, IMonitoringProbe {
 	private static final Log LOG = LogFactory.getLog(OperationExecutionMethodInvocationInterceptor.class);
 
-	private static final IMonitoringController CONTROLLER = MonitoringController.getInstance();
 	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
-	private static final ITimeSource TIMESOURCE = CONTROLLER.getTimeSource();
-	private static final String VM_NAME = CONTROLLER.getHostname();
 
-	private final boolean logExecutions;
+	private final IMonitoringController monitoringCtrl;
+	private final ITimeSource timeSource;
+	private final String hostname;
 
 	public OperationExecutionMethodInvocationInterceptor() {
-		this.logExecutions = true; // might be configurable via method interceptor properties?
+		this(MonitoringController.getInstance());
 	}
 
-	public OperationExecutionMethodInvocationInterceptor(final boolean logExecutions) {
-		this.logExecutions = logExecutions;
+	/**
+	 * This constructor is mainly used for testing, providing a custom {@link IMonitoringController} instead of using the singleton instance.
+	 * 
+	 * @param monitoringController
+	 *            must not be null
+	 */
+	public OperationExecutionMethodInvocationInterceptor(final IMonitoringController monitoringController) {
+		this.monitoringCtrl = monitoringController;
+		this.timeSource = this.monitoringCtrl.getTimeSource();
+		this.hostname = this.monitoringCtrl.getHostname();
 	}
 
 	/**
 	 * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
 	 */
 	public Object invoke(final MethodInvocation invocation) throws Throwable { // NOCS (IllegalThrowsCheck)
-		final long traceId = CF_REGISTRY.recallThreadLocalTraceId(); // -1 if entry point
-		// Only go on if a traceId has been registered before
-		// TODO: this needs to be fixed!
-		if ((traceId == -1) || !CONTROLLER.isMonitoringEnabled()) {
+		if (!this.monitoringCtrl.isMonitoringEnabled()) {
 			return invocation.proceed();
 		}
+
 		final String signature = invocation.getMethod().toString();
 		final String sessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
-		final String hostname = VM_NAME;
-		final int eoi = CF_REGISTRY.incrementAndRecallThreadLocalEOI();
-		final int ess = CF_REGISTRY.recallAndIncrementThreadLocalESS();
-		if ((eoi == -1) || (ess == -1)) {
-			LOG.error("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
-			CONTROLLER.terminateMonitoring();
+		final String hostname = this.hostname;
+		final int eoi; // this is executionOrderIndex-th execution in this trace
+		final int ess; // this is the height in the dynamic call tree of this execution
+		final boolean entrypoint;
+		long traceId = CF_REGISTRY.recallThreadLocalTraceId(); // traceId, -1 if entry point
+		if (traceId == -1) {
+			entrypoint = true;
+			traceId = CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
+			CF_REGISTRY.storeThreadLocalEOI(0);
+			CF_REGISTRY.storeThreadLocalESS(1); // next operation is ess + 1
+			eoi = 0;
+			ess = 0;
+		} else {
+			entrypoint = false;
+			eoi = CF_REGISTRY.incrementAndRecallThreadLocalEOI(); // ess > 1
+			ess = CF_REGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0
+			if ((eoi == -1) || (ess == -1)) {
+				LOG.error("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
+				this.monitoringCtrl.terminateMonitoring();
+			}
 		}
-		final long tin = TIMESOURCE.getTime();
+		final long tin = this.timeSource.getTime();
 		final Object retval;
 		try {
 			retval = invocation.proceed();
 		} finally {
-			final long tout = TIMESOURCE.getTime();
-			if (this.logExecutions) {
-				CONTROLLER.newMonitoringRecord(
+			final long tout = this.timeSource.getTime();
+			this.monitoringCtrl.newMonitoringRecord(
 						new OperationExecutionRecord(signature, sessionId, traceId, tin, tout, hostname, eoi, ess));
+			// cleanup
+			if (entrypoint) {
+				CF_REGISTRY.unsetThreadLocalTraceId();
+				CF_REGISTRY.unsetThreadLocalEOI();
+				CF_REGISTRY.unsetThreadLocalESS();
+			} else {
+				CF_REGISTRY.storeThreadLocalESS(ess); // next operation is ess
 			}
-			CF_REGISTRY.storeThreadLocalESS(ess);
 		}
 		return retval;
 	}
