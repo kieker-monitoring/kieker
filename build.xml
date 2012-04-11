@@ -402,11 +402,13 @@
 			<include name="LICENSE" />
 			<include name="${src.userguide.dist.pdf}" />
 			<include name="${examples.dir}/**/*" />
+			<exclude name="${examples.dir}/**/*.sh" /> <!-- added in bin mode below -->
 			<exclude name="${examples.dir}/**/lib/*" />
 			<exclude name="${example.jpetstoreservlet.dir}/" />
 		</patternset>
 		<patternset id="dist_bin_files-binmode">
 			<include name="bin/*.sh" /> <!-- excluding subdirs (e.g., bin/dev/) here -->
+			<include name="${examples.dir}/**/*.sh" />
 		</patternset>
 
 		<tar destfile="${release.dir}/${dist.kieker.binBaseName}.tar" longfile="gnu">

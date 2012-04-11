@@ -1,0 +1,4 @@
+Class 0 ; cardinality: 386; # executions: 4; representative: 6488138950668976130; max. stack depth: 2
+Class 1 ; cardinality: 356; # executions: 4; representative: 6488138950668976131; max. stack depth: 2
+Class 2 ; cardinality: 706; # executions: 4; representative: 6488138950668976129; max. stack depth: 2
+Class 3 ; cardinality: 187; # executions: 4; representative: 6488138950668976141; max. stack depth: 2

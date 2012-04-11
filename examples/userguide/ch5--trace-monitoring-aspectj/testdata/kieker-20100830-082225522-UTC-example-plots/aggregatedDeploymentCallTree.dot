@@ -1,0 +1,22 @@
+digraph G {
+0[label ="$",shape=none];
+1[label ="SRV0::\n@3:..Bookstore\n.searchBook()",shape=none];
+2[label ="SRV1::\n@1:..Catalog\n.getBook(..)",shape=none];
+3[label ="SRV0::\n@2:..CRM\n.getOffers()",shape=none];
+4[label ="SRV1::\n@1:..Catalog\n.getBook(..)",shape=none];
+5[label ="SRV0::\n@1:..Catalog\n.getBook(..)",shape=none];
+6[label ="SRV0::\n@1:..Catalog\n.getBook(..)",shape=none];
+
+0->1[style=solid,arrowhead=none,label="1635" ]
+
+1->2[style=solid,arrowhead=none,label="1092" ]
+
+1->3[style=solid,arrowhead=none,label="1635" ]
+
+3->4[style=solid,arrowhead=none,label="1062" ]
+
+3->5[style=solid,arrowhead=none,label="573" ]
+
+1->6[style=solid,arrowhead=none,label="543" ]
+
+}

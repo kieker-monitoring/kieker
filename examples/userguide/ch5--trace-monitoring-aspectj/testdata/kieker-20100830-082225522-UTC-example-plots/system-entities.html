@@ -1,0 +1,191 @@
+<html><head><title>System Model Reconstructed by Kieker.TraceAnalysis</title>
+<style type="text/css">
+.colTitle { font-family:sans; font-size:11px; }
+.cell { font-family:monospace; font-size:10px; }
+h1 { font-family:sans; font-size:14px; }
+</style>
+</head><body>
+<pre>
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+</pre>
+<h1>Component Types</h1>
+<table border="1"><tr>
+<th class="colTitle">ID</th>
+<th class="colTitle">Package</th>
+<th class="colTitle">Name</th>
+<th class="colTitle">Operations</th>
+</tr>
+<tr class="cell">
+<td><a name="COMPONENT_TYPE-3">3</a></td>
+<td>bookstoreTracing</td>
+<td>Bookstore</td>
+<td><li><a href="#OPERATION-3">searchBook()</a></li></td>
+</tr>
+<tr class="cell">
+<td><a name="COMPONENT_TYPE-2">2</a></td>
+<td>bookstoreTracing</td>
+<td>CRM</td>
+<td><li><a href="#OPERATION-2">getOffers()</a></li></td>
+</tr>
+<tr class="cell">
+<td><a name="COMPONENT_TYPE-1">1</a></td>
+<td>bookstoreTracing</td>
+<td>Catalog</td>
+<td><li><a href="#OPERATION-1">getBook(boolean)</a></li></td>
+</tr>
+</table>
+<h1>Operations</h1>
+<table border="1"><tr>
+<th class="colTitle">ID</th>
+<th class="colTitle">Component type</th>
+<th class="colTitle">Name</th>
+<th class="colTitle">Parameter types</th>
+<th class="colTitle">Return type</th>
+</tr>
+<tr class="cell">
+<td><a name="OPERATION-3">3</a></td>
+<td><a href="#COMPONENT_TYPE-3">bookstoreTracing.Bookstore</a></td>
+<td>searchBook</td>
+<td>&nbsp;</td>
+<td><NO-RETURN-TYPE></td>
+</tr>
+<tr class="cell">
+<td><a name="OPERATION-2">2</a></td>
+<td><a href="#COMPONENT_TYPE-2">bookstoreTracing.CRM</a></td>
+<td>getOffers</td>
+<td>&nbsp;</td>
+<td><NO-RETURN-TYPE></td>
+</tr>
+<tr class="cell">
+<td><a name="OPERATION-1">1</a></td>
+<td><a href="#COMPONENT_TYPE-1">bookstoreTracing.Catalog</a></td>
+<td>getBook</td>
+<td><li>boolean</li></td>
+<td><NO-RETURN-TYPE></td>
+</tr>
+</table>
+<h1>Assembly Components</h1>
+<table border="1"><tr>
+<th class="colTitle">ID</th>
+<th class="colTitle">Name</th>
+<th class="colTitle">Component type</th>
+</tr>
+<tr class="cell">
+<td><a name="ASSEMBLY_COMPONENT-3">3</a></td>
+<td>@3</td>
+<td><a href="#COMPONENT_TYPE-3">bookstoreTracing.Bookstore</a></td>
+</tr>
+<tr class="cell">
+<td><a name="ASSEMBLY_COMPONENT-2">2</a></td>
+<td>@2</td>
+<td><a href="#COMPONENT_TYPE-2">bookstoreTracing.CRM</a></td>
+</tr>
+<tr class="cell">
+<td><a name="ASSEMBLY_COMPONENT-1">1</a></td>
+<td>@1</td>
+<td><a href="#COMPONENT_TYPE-1">bookstoreTracing.Catalog</a></td>
+</tr>
+</table>
+<h1>Execution Containers</h1>
+<table border="1"><tr>
+<th class="colTitle">ID</th>
+<th class="colTitle">Name</th>
+</tr>
+<tr class="cell">
+<td><a name="EXECUTION_CONTAINER-2">2</a></td>
+<td>SRV0</td>
+</tr>
+<tr class="cell">
+<td><a name="EXECUTION_CONTAINER-1">1</a></td>
+<td>SRV1</td>
+</tr>
+</table>
+<h1>Deployment Components</h1>
+<table border="1"><tr>
+<th class="colTitle">ID</th>
+<th class="colTitle">Assembly component</th>
+<th class="colTitle">Execution container</th>
+</tr>
+<tr class="cell">
+<td><a name="ALLOCATION_COMPONENT-4">4</a></td>
+<td><a href="#ALLOCATION_COMPONENT-3">@3:bookstoreTracing.Bookstore</a></td>
+<td><a href="#EXECUTION_CONTAINER-2">SRV0</a></td>
+</tr>
+<tr class="cell">
+<td><a name="ALLOCATION_COMPONENT-3">3</a></td>
+<td><a href="#ALLOCATION_COMPONENT-2">@2:bookstoreTracing.CRM</a></td>
+<td><a href="#EXECUTION_CONTAINER-2">SRV0</a></td>
+</tr>
+<tr class="cell">
+<td><a name="ALLOCATION_COMPONENT-2">2</a></td>
+<td><a href="#ALLOCATION_COMPONENT-1">@1:bookstoreTracing.Catalog</a></td>
+<td><a href="#EXECUTION_CONTAINER-2">SRV0</a></td>
+</tr>
+<tr class="cell">
+<td><a name="ALLOCATION_COMPONENT-1">1</a></td>
+<td><a href="#ALLOCATION_COMPONENT-1">@1:bookstoreTracing.Catalog</a></td>
+<td><a href="#EXECUTION_CONTAINER-1">SRV1</a></td>
+</tr>
+</table>
+<pre>
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+</pre>
+</body></html>

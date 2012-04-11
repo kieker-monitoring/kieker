@@ -198,6 +198,9 @@ function check_src_archive {
 
     # now execute junt tests (which compiles the sources again ...)
     run_ant run-tests-junit
+
+    # now execute junt tests (which compiles the sources again ...)
+    run_ant static-analysis
 }
 
 function check_bin_archive {
@@ -230,6 +233,41 @@ function check_bin_archive {
 	exit 1
     fi
     echo "OK"
+
+    # some basic tests with the tools
+    if ! (bin/convertLoggingTimestamp.sh --timestamps 1283156545581511026 1283156546127117246 | grep "Mon, 30 Aug 2010 08:22:25 +0000 (UTC)"); then
+	echo "Unexpected result executinǵ bin/convertLoggingTimestamp.sh"
+	exit 1
+    fi
+    
+
+    # now perform some trace analysis tests and compare results with reference data
+    ARCHDIR=$(pwd)
+    create_subdir_n_cd
+    REFERENCE_OUTPUT_DIR="${ARCHDIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC-example-plots"
+    PLOT_SCRIPT="${ARCHDIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC-example-plots.sh"
+    if ! test -x ${PLOT_SCRIPT}; then
+	echo "${PLOT_SCRIPT} does not exist or is not executable"
+	exit 1
+    fi
+    if ! ${PLOT_SCRIPT} "${ARCHDIR}" "."; then # passing kieker dir and output dir
+	echo "${PLOT_SCRIPT} returned with error"
+	exit 1
+    fi
+    for f in $(ls "${REFERENCE_OUTPUT_DIR}" | egrep "(dot$|pic$|html$|txt$)"); do 
+	echo -n "Comparing to reference file $f ... "
+	if ! diff "$f"  "${REFERENCE_OUTPUT_DIR}/$f"; then
+	    echo "Detected deviation to reference file"
+	    exit 1
+	else 
+	    echo "OK"
+	fi
+    done
+
+    # Return to archive base dir
+    cd ${ARCHDIR}
+
+    # TODO: test examples ...
 }
 
 ##
@@ -242,7 +280,6 @@ BASE_TMP_DIR_ABS=$(pwd)
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
-assert_dir_exists ${DIR}
 SRCZIP=$(ls ../../dist/release/*_sources.zip)
 assert_file_exists_regular ${SRCZIP}
 check_src_archive "${SRCZIP}"
@@ -251,7 +288,6 @@ rm -rf ${DIR}
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
-assert_dir_exists ${DIR}
 SRCTGZ=$(ls ../../dist/release/*_sources.tar.gz)
 assert_file_exists_regular ${SRCTGZ}
 check_src_archive "${SRCTGZ}"
@@ -260,7 +296,6 @@ rm -rf ${DIR}
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
-assert_dir_exists ${DIR}
 BINZIP=$(ls ../../dist/release/*_binaries.zip)
 assert_file_exists_regular ${BINZIP}
 check_bin_archive "${BINZIP}"
@@ -269,7 +304,6 @@ rm -rf ${DIR}
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
-assert_dir_exists ${DIR}
 BINTGZ=$(ls ../../dist/release/*_binaries.tar.gz)
 assert_file_exists_regular ${BINTGZ}
 check_bin_archive "${BINTGZ}"
