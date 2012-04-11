@@ -18,9 +18,9 @@ function create_subdir_n_cd {
     change_dir "${TMPDIR}"
 }
 
-# build with ant
+# build with ant (target may be passed as $1)
 function run_ant {
-    if ! ant; then
+    if ! ant $1; then
 	echo "Build failed"
 	exit 1
     fi
@@ -178,6 +178,9 @@ function check_src_archive {
     touch $(basename "$1") # just to mark where this dir comes from
 
     assert_files_exist_src
+
+    # now compile sources
+    run_ant run-tests-junit
 }
 
 function check_bin_archive {
