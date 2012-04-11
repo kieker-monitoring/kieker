@@ -109,7 +109,7 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 		} finally {
 			final long tout = this.timeSource.getTime();
 			this.monitoringCtrl.newMonitoringRecord(
-						new OperationExecutionRecord(signature, sessionId, traceId, tin, tout, this.hostname, eoi, ess));
+					new OperationExecutionRecord(signature, sessionId, traceId, tin, tout, this.hostname, eoi, ess));
 			// cleanup
 			if (entrypoint) {
 				CF_REGISTRY.unsetThreadLocalTraceId();

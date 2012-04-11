@@ -27,7 +27,7 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
 public class MyPipeWriter extends AbstractMonitoringWriter {
 
 	public static final String CONFIG_PROPERTY_NAME_PIPE_NAME =
-					MyPipeWriter.class.getName() + ".pipeName";
+			MyPipeWriter.class.getName() + ".pipeName";
 
 	private volatile MyPipe pipe;
 	private final String pipeName;
