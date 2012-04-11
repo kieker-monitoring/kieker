@@ -111,16 +111,14 @@ final class JMSWriterThread extends AbstractAsyncThread {
 			Destination destination;
 			try {
 				/*
-				 * As a first step, try a JNDI lookup (this seems to fail with ActiveMQ sometimes)
+				 * As a first step, try a JNDI lookup (this seems to fail with ActiveMQ /HornetQ sometimes)
 				 */
 				destination = (Destination) context.lookup(topic);
 			} catch (final NameNotFoundException exc) {
-				// JNDI lookup failed, try manual creation (this seems to fail with ActiveMQ sometimes)
-				LOG.warn("Failed to lookup queue '" + topic + "' via JNDI: " + exc.getMessage()); // do not append exc to log!
-				LOG.info("Attempting to create queue ...");
+				// JNDI lookup failed, try manual creation (this seems to fail with ActiveMQ/HornetQ sometimes)
 				destination = this.session.createQueue(topic);
-				if (destination == null) { // 
-					LOG.error("Attempt to create queue failed");
+				if (destination == null) { //
+					LOG.error("Failed to lookup queue '" + topic + "' via JNDI: " + exc.getMessage() + " AND failed to create queue");
 					throw exc; // will be catched below to abort the read method
 				}
 			}

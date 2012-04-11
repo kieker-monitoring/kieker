@@ -129,12 +129,10 @@ public final class JMSReader extends AbstractReaderPlugin {
 				// As a first step, try a JNDI lookup (this seems to fail with ActiveMQ sometimes)
 				destination = (Destination) context.lookup(this.jmsDestination);
 			} catch (final NameNotFoundException exc) {
-				// JNDI lookup failed, try manual creation (this seems to fail with ActiveMQ sometimes)
-				LOG.warn("Failed to lookup queue '" + this.jmsDestination + "' via JNDI: " + exc.getMessage()); // do not append exc to log!
-				LOG.info("Attempting to create queue ...");
+				// JNDI lookup failed, try manual creation (this seems to fail with ActiveMQ/HornetQ sometimes)
 				destination = session.createQueue(this.jmsDestination);
-				if (destination == null) { // 
-					LOG.error("Attempt to create queue failed");
+				if (destination == null) { //
+					LOG.error("Failed to lookup queue '" + this.jmsDestination + "' via JNDI: " + exc.getMessage() + " AND failed to create queue");
 					throw exc; // will be catched below to abort the read method
 				}
 			}
@@ -170,7 +168,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 			// start the connection to enable message delivery
 			connection.start();
 
-			LOG.info("JMSReader started and waits for incomming monitoring events!");
+			LOG.info("JMSReader started and waits for incoming monitoring events!");
 			this.block();
 			LOG.info("Woke up by shutdown");
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
