@@ -332,10 +332,8 @@
 			<include name="bin/log4j.properties" />
 			<include name="bin/*.bat" />
 			<include name="${src.userguide.dir}/**/*" />
-			<exclude name="${src.userguide.dir}/**/*.sh" />
-			<!-- will be added in bin mode -->
-			<include name="META-INF/*" />
-			<!-- a file META-INF/kieker.monitoring.properties will be added during packaging -->
+			<exclude name="${src.userguide.dir}/**/*.sh" /> <!-- will be added in bin mode -->
+			<exclude name="META-INF/" /><!-- not required in source release release -->
 			<include name="src/**/*.java" />
 			<include name="src/**/META-INF/*" />
 			<include name="${src.gen}/**/*.java" />
@@ -366,7 +364,7 @@
 		</patternset>
 
 		<tar destfile="${release.dir}/${dist.kieker.srcBaseName}.tar" longfile="gnu">
-			<tarfileset file="${kieker.monitoring.default.properties}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.properties" />
+			<!-- ${kieker.dist.name}/META-INF/kieker.monitoring.properties not required in source release release! -->
 			<tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
 				<patternset refid="dist_src_files-nonbinmode" />
 			</tarfileset>
@@ -379,7 +377,7 @@
 		<delete file="${release.dir}/${dist.kieker.srcBaseName}.tar" />
 
 		<zip zipfile="${release.dir}/${dist.kieker.srcBaseName}.zip">
-			<zipfileset file="${kieker.monitoring.default.properties}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.properties" />
+			<!-- ${kieker.dist.name}/META-INF/kieker.monitoring.properties not required in source release release! -->
 			<zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
 				<patternset refid="dist_src_files-nonbinmode" />
 			</zipfileset>
@@ -397,8 +395,7 @@
 			<include name="bin/*.bat" />
 			<include name="dist/*.jar" />
 			<include name="dist/*.war" />
-			<include name="META-INF/*" />
-			<!-- a file META-INF/kieker.monitoring.properties will added be during packaging the tar.gz|.zip archives below -->
+
 			<include name="lib/*" />
 			<include name="lib/sigar-native-libs/*" />
 			<include name="HISTORY" />
