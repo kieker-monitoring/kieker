@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2011 by
+ * Copyright 2012 by
  *  + Christian-Albrechts-University of Kiel
  *    + Department of Computer Science
  *      + Software Engineering Group 
