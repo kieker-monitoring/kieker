@@ -588,6 +588,11 @@
 		<echo message="" />
 		<echo message="Note that this target executes only on platforms having 'make' and 'sh' installed" />
 		<echo message="Also, in order to run with the source archive, you'll additionally need to extract the 'kieker-${kieker.version}_examples-JavaEEServletContainerExample'.{zip|tar.gz} archive" />
+
+		<exec executable="bin/dev/check-release-archives.sh" failonerror="true">
+			<arg value="-C" />
+			<arg value="." />
+		</exec>
 	</target>
 
 	<target name="clean" description="Removes artifacts from previous builds">
