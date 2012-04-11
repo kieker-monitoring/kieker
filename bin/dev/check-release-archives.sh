@@ -32,24 +32,6 @@ function run_ant {
     echo "Execution of ant failed"
 }
 
-# make sure that license for each jar included
-
-# check byte-code version of jars
-
-# make sure important files included
-
-# assert expected number of files in dist/release
-
-# assert expected number of jars in dist/
-
-# assert that given string $1 contains expression $2 (regexp allowed)
-function assert_string_contains {
-    if ! (echo -n "$1" | grep -q "$2"); then
-	echo "Expression '$2' not found in string"
-	exit 1
-    fi
-}
-
 # provide content list of archive
 function print_archive_contents {
     if [ -z "$1" ]; then
@@ -185,8 +167,7 @@ function check_src_archive {
 
     echo "Checking archive contents of '$1' ..."
     ARCHIVE_CONTENT=$(print_archive_contents "$1")
-    # TODO: do some more with the ${ARCHIVE_CONTENT} than:
-    assert_string_contains "${ARCHIVE_CONTENT}" "HISTORY"
+    # TODO: do s.th. with the ${ARCHIVE_CONTENT}
 
     echo "Decompressing archive '$1' ..."
     extract_archive_n_cd "$1"
@@ -229,8 +210,7 @@ function check_bin_archive {
 
     echo "Checking archive contents of '$1' ..."
     ARCHIVE_CONTENT=$(print_archive_contents "$1")
-    # TODO: do some more with the ${ARCHIVE_CONTENT} than:
-    assert_string_contains "${ARCHIVE_CONTENT}" "HISTORY"
+    # TODO: do s.th. with the ${ARCHIVE_CONTENT}
 
     echo "Decompressing archive '$1' ..."
     extract_archive_n_cd "$1"
@@ -255,28 +235,45 @@ function check_bin_archive {
 ##
 ## "main" 
 ##
+assert_dir_exists ${BASE_TMP_DIR}
 change_dir "${BASE_TMP_DIR}"
 BASE_TMP_DIR_ABS=$(pwd)
 
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
+DIR=$(pwd)
+assert_dir_exists ${DIR}
 SRCZIP=$(ls ../../dist/release/*_sources.zip)
+assert_file_exists_regular ${SRCZIP}
 check_src_archive "${SRCZIP}"
+rm -rf ${DIR}
 
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
+DIR=$(pwd)
+assert_dir_exists ${DIR}
 SRCTGZ=$(ls ../../dist/release/*_sources.tar.gz)
+assert_file_exists_regular ${SRCTGZ}
 check_src_archive "${SRCTGZ}"
+rm -rf ${DIR}
 
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
+DIR=$(pwd)
+assert_dir_exists ${DIR}
 BINZIP=$(ls ../../dist/release/*_binaries.zip)
+assert_file_exists_regular ${BINZIP}
 check_bin_archive "${BINZIP}"
+rm -rf ${DIR}
 
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
+DIR=$(pwd)
+assert_dir_exists ${DIR}
 BINTGZ=$(ls ../../dist/release/*_binaries.tar.gz)
+assert_file_exists_regular ${BINTGZ}
 check_bin_archive "${BINTGZ}"
+rm -rf ${DIR}
 
 # TOOD: check contents of remaining archives
 
