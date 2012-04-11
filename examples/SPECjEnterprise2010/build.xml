@@ -5,57 +5,15 @@
   <target name="build-all" depends="clean,init,compile,jar" />
 
   <target name="init" depends="">
-    <!-- Register special aspectj commands in ant - allow ant to use special AspectJ commands: -->
-    <path id="aspecttools-classpath">
-      <fileset dir="lib/">
-        <include name="aspectjtools-*.jar"/>
-      </fileset>
-    </path>
-    <taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" classpathref="aspecttools-classpath"/>
     <mkdir dir="build"/>
     <mkdir dir="dist"/>
   </target>
 
   <target name="compile" depends="init">
-    <path id="compile-classpath">
-      <fileset dir="lib/">
-        <include name="commons-logging-*.jar"/>
-        <include name="kieker-*.jar"/>
-      	<include name="javax.servlet-*.jar"/>
-      </fileset>
-    </path>
-    <javac source="1.5" target="1.5"
-           destDir="build"
-           debug="true"
-           classpathref="compile-classpath"
-           srcdir="src"
-           excludes="kieker/monitoring/probe/aspectj/"
-      	   includeAntRuntime="false" />
-    <!-- WORKAROUND BEGIN -->
-    <path id="compile-ajc-classpath">
-      <fileset dir="lib/">
-        <include name="aspectjrt-*.jar"/>
-        <include name="commons-logging-*.jar"/>
-        <include name="kieker-*.jar"/>
-      	<include name="javax.servlet-*.jar"/>
-      </fileset>
-      <pathelement location="build"/>
-    </path>
-    <iajc source="1.5" target="1.5"
-          destdir="build"
-          Xlint="ignore"
-          debug="true"
-          verbose="true"
-          classpathref="compile-ajc-classpath">
-          <sourceroots>
-            <pathelement location="src/kieker/monitoring/probe/aspectj/"/>
-          </sourceroots>
-    </iajc>
-    <!-- WORKAROUND END -->
     <copy tofile="build/META-INF/aop.xml" file="src/META-INF/aop.specj2010.xml"/>
     <copy tofile="build/META-INF/kieker.monitoring.properties" file="src/META-INF/kieker.monitoring.specj2010.properties"/>
   </target>
-  
+
   <target name="jar" depends="compile">
     <jar destfile="dist/KiekerInstr.jar">
       <fileset dir="build"/>

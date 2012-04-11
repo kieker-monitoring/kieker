@@ -1,11 +1,7 @@
-Files required in /lib:
-  kieker-weaver-*.jar  (a current build of Kieker)
-  aspectjrt-*.jar
-  aspectjtools-*.jar
-  javax.servlet-*.jar
-
 Build with a call of ant.
 
 Files to copy in the server lib directory:
-  KiekerInstr.jar      (the build of this example)
-  kieker-weaver-*.jar  (a current build of Kieker)
+  KiekerInstr.jar       (the build of this example)
+  kieker-*_aspectj.jar  (a current build of Kieker)
+
+Add kieker-*_aspectj.jar as a javaagent.
