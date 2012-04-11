@@ -272,7 +272,7 @@
 		</jar>
 	</target>
 
-	<target name="kieker-src-jar" description="Creates a Jar which contains the KIEKER source code">
+	<target name="kieker-src-jar" description="Creates a Jar which contains the Kieker source code"> <!-- used by serenity --> 
 		<jar destfile="${tmp.dir}/${src.jar}">
 			<fileset dir="${src.kieker.common.dir}" />
 			<fileset dir="${src.kieker.analysis.dir}" />
@@ -663,7 +663,7 @@
 		</javac>
 	</target>
 
-	<target name="-compile-tests-analysis" depends="build-kieker.main" description="Compiles the tests for the Kieker.Analysis component">
+	<target name="-compile-tests-analysis" depends="build-kieker.main,build-kieker.main.emf" description="Compiles the tests for the Kieker.Analysis component">
 		<path id="analysis-test-compile-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="junit-*.jar" />

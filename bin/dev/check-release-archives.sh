@@ -157,13 +157,22 @@ function assert_files_exist_bin {
     assert_files_exist_common
     assert_file_exists_regular "doc/kieker-"*"_userguide.pdf"
     assert_dir_exists "dist/"
-    assert_file_exists_regular $(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj ) # the core jar
+    MAIN_JAR=$(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj )
+    assert_file_exists_regular ${MAIN_JAR}
     assert_file_exists_regular "dist/kieker-"*"_aspectj.jar"
     assert_file_exists_regular "dist/kieker-"*"_emf.jar"
+    assert_file_exists_regular "dist/kieker-monitoring-servlet-"*".war"
     assert_file_NOT_exists "dist/release/"
     assert_file_NOT_exists "bin/dev/"
     assert_file_NOT_exists "doc/userguide/"
     assert_file_NOT_exists "model/"
+    assert_file_NOT_exists "src/"
+    assert_file_NOT_exists "src-gen/"
+    assert_file_NOT_exists "test/"
+    assert_file_NOT_exists "kieker-eclipse-cleanup.xml"
+    assert_file_NOT_exists "kieker-eclipse-formatter.xml"
+    assert_file_NOT_exists ".project"
+    assert_file_NOT_exists ".classpath"
 }
 
 function check_src_archive {
@@ -176,7 +185,7 @@ function check_src_archive {
 
     echo "Checking archive contents of '$1' ..."
     ARCHIVE_CONTENT=$(print_archive_contents "$1")
-    # TODO: do so more with the ${ARCHIVE_CONTENT} than:
+    # TODO: do some more with the ${ARCHIVE_CONTENT} than:
     assert_string_contains "${ARCHIVE_CONTENT}" "HISTORY"
 
     echo "Decompressing archive '$1' ..."
@@ -186,6 +195,27 @@ function check_src_archive {
     assert_files_exist_src
 
     # now compile sources
+    run_ant
+    # make sure that the expected files are present
+    assert_dir_exists "dist/"
+    assert_file_exists_regular $(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj ) # the core jar
+    assert_file_exists_regular "dist/kieker-"*"_aspectj.jar"
+    assert_file_exists_regular "dist/kieker-"*"_emf.jar"
+    assert_file_exists_regular "dist/kieker-monitoring-servlet-"*".war"
+
+    # check bytecode version of classes contained in jar
+    echo -n "Making sure that bytecode version of class in jar is 49.0 (Java 1.5)"
+    MAIN_JAR=$(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj)
+    assert_file_exists_regular ${MAIN_JAR}
+    VERSION_CLASS=$(find build -name "Version.class")
+    assert_file_exists_regular "${VERSION_CLASS}"
+    if ! file ${VERSION_CLASS} | grep "version 49.0 (Java 1.5)"; then
+	echo "Unexpected bytecode version"
+	exit 1
+    fi
+    echo "OK"
+
+    # now execute junt tests (which compiles the sources again ...)
     run_ant run-tests-junit
 }
 
@@ -199,7 +229,7 @@ function check_bin_archive {
 
     echo "Checking archive contents of '$1' ..."
     ARCHIVE_CONTENT=$(print_archive_contents "$1")
-    # TODO: do so more with the ${ARCHIVE_CONTENT} than:
+    # TODO: do some more with the ${ARCHIVE_CONTENT} than:
     assert_string_contains "${ARCHIVE_CONTENT}" "HISTORY"
 
     echo "Decompressing archive '$1' ..."
@@ -207,6 +237,19 @@ function check_bin_archive {
     touch $(basename "$1") # just to mark where this dir comes from
 
     assert_files_exist_bin
+
+    # check bytecode version of classes contained in jar
+    echo -n "Making sure that bytecode version of class in jar is 49.0 (Java 1.5)"
+    MAIN_JAR=$(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj)
+    assert_file_exists_regular ${MAIN_JAR}
+    VERSION_CLASS_IN_JAR=$(unzip -l  ${MAIN_JAR} | grep Version.class | awk '{ print $4 }')
+    unzip "${MAIN_JAR}" "${VERSION_CLASS_IN_JAR}"
+    assert_file_exists_regular "${VERSION_CLASS_IN_JAR}"
+    if ! file ${VERSION_CLASS_IN_JAR} | grep "version 49.0 (Java 1.5)"; then
+	echo "Unexpected bytecode version"
+	exit 1
+    fi
+    echo "OK"
 }
 
 ##
