@@ -21,6 +21,10 @@ function create_subdir_n_cd {
 # build with ant (target may be passed as $1)
 function run_ant {
     echo "Trying to invoke ant with target '$1' ..."
+    if ! which ant; then
+	echo "Ant not found in path"
+	exit 1
+    fi
     if ! ant $1; then
 	echo "Build failed"
 	exit 1
