@@ -1,82 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="KiekerOverheadEvaluation" default="build-all" basedir=".">
-  <property file="build.properties"/>
+	<property file="build.properties" />
 
-  <target name="build-all" depends="clean,init,compile,jar" />
+	<target name="build-all" depends="clean,init,compile,jar" />
 
-  <target name="init" depends="">
-    <!-- Register special aspectj commands in ant - allow ant to use special AspectJ commands: -->
-    <path id="aspecttools-classpath">
-      <fileset dir="lib/">
-        <include name="aspectjtools-*.jar"/>
-      </fileset>
-    </path>
-    <taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" classpathref="aspecttools-classpath"/>
-    <mkdir dir="build"/>
-    <mkdir dir="dist"/>
-    <mkdir dir="tmp"/>
-  </target>
+	<target name="init" depends="">
+		<!-- Register special aspectj commands in ant - allow ant to use special AspectJ commands: -->
+		<path id="aspecttools-classpath">
+			<fileset dir="lib/">
+				<include name="aspectjtools-*.jar" />
+			</fileset>
+		</path>
+		<taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" classpathref="aspecttools-classpath" />
+		<mkdir dir="build" />
+		<mkdir dir="dist" />
+		<mkdir dir="tmp" />
+	</target>
 
-  <target name="compile" depends="init">
-    <path id="compile-classpath">
-      <fileset dir="lib/">
-        <include name="commons-cli-*.jar"/>
-        <include name="kieker-*.jar"/>
-      </fileset>
-    </path>
-    <javac source="1.5" target="1.5"
-           destDir="build"
-           debug="true"
-           classpathref="compile-classpath"
-           srcdir="src"
-           excludes="kieker/monitoring/probe/aspectj/"
-    	   includeAntRuntime="false" />
-    <!-- WORKAROUND BEGIN -->
-    <path id="compile-ajc-classpath">
-      <fileset dir="lib/">
-        <include name="aspectjrt-*.jar"/>
-        <include name="kieker-*.jar"/>
-      </fileset>
-      <pathelement location="build"/>
-    </path>
-    <iajc source="1.5" target="1.5"
-          destdir="build"
-          Xlint="ignore"
-          debug="true"
-          verbose="true"
-          classpathref="compile-ajc-classpath">
-          <sourceroots>
-            <pathelement location="src/kieker/monitoring/probe/aspectj/"/>
-          </sourceroots>
-    </iajc>
-    <!-- WORKAROUND END -->
-    <copy todir="build/META-INF">
-      <fileset dir="src/META-INF"/>
-    </copy>
-  </target>
-  
-  <target name="jar" depends="compile">
-    <manifestclasspath property="jar.classpath" jarfile="dist/OverheadEvaluationMicrobenchmark.jar">
-      <classpath>
-        <fileset dir="lib/">
-          <include name="**/*.jar"/>
-        </fileset>
-      </classpath>
-    </manifestclasspath>
-    <jar destfile="dist/OverheadEvaluationMicrobenchmark.jar">
-      <fileset dir="build"/>
-      <fileset dir="." includes="LICENSE README" />
-      <manifest>
-        <attribute name="Main-Class" value="kieker.evaluation.benchmark.Benchmark"/>
-        <attribute name="Class-Path" value="${jar.classpath}"/>
-      </manifest>
-    </jar>
-  </target>
+	<target name="compile" depends="init">
+		<path id="compile-classpath">
+			<fileset dir="lib/">
+				<include name="commons-cli-*.jar" />
+				<include name="kieker-*.jar" />
+			</fileset>
+		</path>
+		<javac source="1.5" target="1.5" destDir="build" debug="true" classpathref="compile-classpath" srcdir="src" excludes="kieker/monitoring/probe/aspectj/" includeAntRuntime="false" />
+		<!-- WORKAROUND BEGIN -->
+		<path id="compile-ajc-classpath">
+			<fileset dir="lib/">
+				<include name="aspectjrt-*.jar" />
+				<include name="kieker-*.jar" />
+			</fileset>
+		</path>
+		<iajc destdir="build/" source="1.5" target="1.5" Xlint="ignore" debug="true" classpathref="compile-ajc-classpath">
+			<sourceroots>
+				<pathelement location="src/kieker/monitoring/probe/aspectj/" />
+			</sourceroots>
+		</iajc>
+		<!-- WORKAROUND END -->
+		<copy todir="build/META-INF">
+			<fileset dir="src/META-INF" />
+		</copy>
+	</target>
 
-  <target name="clean">
-    <!--<delete dir="tmp"/>-->
-    <delete dir="build"/>
-    <delete dir="dist"/>
-  </target>
+	<target name="jar" depends="compile">
+		<manifestclasspath property="jar.classpath" jarfile="dist/OverheadEvaluationMicrobenchmark.jar">
+			<classpath>
+				<fileset dir="lib/">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</manifestclasspath>
+		<jar destfile="dist/OverheadEvaluationMicrobenchmark.jar">
+			<fileset dir="build" />
+			<fileset dir="." includes="LICENSE README" />
+			<manifest>
+				<attribute name="Main-Class" value="kieker.evaluation.benchmark.Benchmark" />
+				<attribute name="Class-Path" value="${jar.classpath}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="clean">
+		<!--<delete dir="tmp"/>-->
+		<delete dir="build" />
+		<delete dir="dist" />
+	</target>
 
 </project>

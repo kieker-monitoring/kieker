@@ -30,7 +30,7 @@ import org.aspectj.lang.annotation.Pointcut;
  * @author Jan Waller
  */
 @Aspect
-public class OperationExecutionAspectAnnotationServlet extends AbstractOperationExecutionAspectServlet {
+public final class OperationExecutionAspectAnnotationServlet extends AbstractOperationExecutionAspectServlet {
 
 	public OperationExecutionAspectAnnotationServlet() {
 		// empty default constructor
@@ -38,13 +38,13 @@ public class OperationExecutionAspectAnnotationServlet extends AbstractOperation
 
 	@Override
 	@Pointcut("execution(* *.do*(..)) && args(request,response)")
-	public void monitoredServlet(final HttpServletRequest request, final HttpServletResponse response) {
+	public final void monitoredServlet(final HttpServletRequest request, final HttpServletResponse response) {
 		// Aspect Declaration (MUST be empty)
 	}
 
 	@Override
 	@Pointcut("execution(@kieker.monitoring.annotation.OperationExecutionMonitoringProbe * *(..)) || execution(@kieker.monitoring.annotation.OperationExecutionMonitoringProbe new(..))")
-	public void monitoredOperation() {
+	public final void monitoredOperation() {
 		// Aspect Declaration (MUST be empty)
 	}
 }

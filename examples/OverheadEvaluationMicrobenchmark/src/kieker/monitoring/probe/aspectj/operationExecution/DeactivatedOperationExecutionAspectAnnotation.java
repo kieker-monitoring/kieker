@@ -22,11 +22,6 @@ package kieker.monitoring.probe.aspectj.operationExecution;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
-
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
@@ -36,13 +31,18 @@ import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.timer.ITimeSource;
 
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+
 /**
  * TODO: this is a slightly altered clone of AbstractOperationExecutionAspect. Include something similar into default implementation!
  * 
  * @author Andre van Hoorn, Jan Waller
  */
 @Aspect
-public class DeactivatedOperationExecutionAspectAnnotation extends AbstractOperationExecutionAspect {
+public final class DeactivatedOperationExecutionAspectAnnotation extends AbstractOperationExecutionAspect {
 	private static final Log LOG = LogFactory.getLog(DeactivatedOperationExecutionAspectAnnotation.class);
 
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
@@ -69,15 +69,14 @@ public class DeactivatedOperationExecutionAspectAnnotation extends AbstractOpera
 		// empty default constructor
 	}
 
-	@Override
 	@Pointcut("execution(@kieker.monitoring.annotation.OperationExecutionMonitoringProbe * *(..)) || execution(@kieker.monitoring.annotation.OperationExecutionMonitoringProbe new(..))")
-	public void monitoredOperation() {
+	public final void monitoredOperation() {
 		// Aspect Declaration (MUST be empty)
 	}
 
 	@Override
 	@Around("monitoredOperation() && notWithinKieker()")
-	public Object operation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
+	public final Object operation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
 		if (!DeactivatedOperationExecutionAspectAnnotation.CTRLINST.isMonitoringEnabled()
 				|| DeactivatedOperationExecutionAspectAnnotation.DEACTIVATEDPROBES.containsKey(thisJoinPoint.getStaticPart().getSignature().toString())) {
 			return thisJoinPoint.proceed();

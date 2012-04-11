@@ -35,7 +35,7 @@ public final class OperationExecutionAspectAnnotation extends AbstractOperationE
 
 	@Override
 	@Pointcut("execution(@kieker.monitoring.annotation.OperationExecutionMonitoringProbe * *(..)) || execution(@kieker.monitoring.annotation.OperationExecutionMonitoringProbe new(..))")
-	public void monitoredOperation() {
+	public final void monitoredOperation() {
 		// Aspect Declaration (MUST be empty)
 	}
 }

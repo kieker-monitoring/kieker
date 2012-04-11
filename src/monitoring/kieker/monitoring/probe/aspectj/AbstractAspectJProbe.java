@@ -31,6 +31,8 @@ import kieker.monitoring.probe.IMonitoringProbe;
 @Aspect
 public abstract class AbstractAspectJProbe implements IMonitoringProbe {
 
+	// Pointcuts should not be final!
+
 	@Pointcut("!within(kieker.common..*) && !within(kieker.monitoring..*) && !within(kieker.analysis..*) && !within(kieker.tools..*)")
 	public void notWithinKieker() {} // NOPMD (Aspect)
 
@@ -42,5 +44,4 @@ public abstract class AbstractAspectJProbe implements IMonitoringProbe {
 
 	@Pointcut("!getter() && !setter()")
 	public void noGetterAndSetter() {} // NOPMD (Aspect)
-
 }
