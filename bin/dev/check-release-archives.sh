@@ -260,7 +260,7 @@ function check_bin_archive {
 	(cat "$f" | sort) > left.tmp
 	(cat "${REFERENCE_OUTPUT_DIR}/$f" | sort) > right.tmp
 	if ! diff "$f" "${REFERENCE_OUTPUT_DIR}/$f"; then
-	    echo "Detected deviation between files: '$f', '${${REFERENCE_OUTPUT_DIR}/$f}'"
+	    echo "Detected deviation between files: '$f', '${REFERENCE_OUTPUT_DIR}/${f}'"
 	    exit 1
 	else 
 	    echo "OK"
