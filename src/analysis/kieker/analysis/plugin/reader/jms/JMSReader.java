@@ -70,8 +70,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 	private final CountDownLatch cdLatch = new CountDownLatch(1);
 
 	/**
-	 * Creates a new instance of this class using the given parameters to
-	 * configure the reader.
+	 * Creates a new instance of this class using the given parameters to configure the reader.
 	 * 
 	 * @param configuration
 	 *            The configuration used to initialize the whole reader. Keep in mind that the configuration should contain the following properties:
@@ -131,9 +130,13 @@ public final class JMSReader extends AbstractReaderPlugin {
 				destination = (Destination) context.lookup(this.jmsDestination);
 			} catch (final NameNotFoundException exc) {
 				// JNDI lookup failed, try manual creation (this seems to fail with ActiveMQ sometimes)
-				LOG.warn("Failed to lookup queue '" + this.jmsDestination + "' via JNDI", exc);
+				LOG.warn("Failed to lookup queue '" + this.jmsDestination + "' via JNDI: " + exc.getMessage()); // do not append exc to log!
 				LOG.info("Attempting to create queue ...");
 				destination = session.createQueue(this.jmsDestination);
+				if (destination == null) { // 
+					LOG.error("Attempt to create queue failed");
+					throw exc; // will be catched below to abort the read method
+				}
 			}
 
 			LOG.info("Listening to destination:" + destination + " at " + this.jmsProviderUrl + " !\n***\n\n");

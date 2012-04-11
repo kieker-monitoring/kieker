@@ -61,21 +61,17 @@ public final class AsyncJMSWriter extends AbstractAsyncWriter {
 
 	@Override
 	protected void init() throws Exception {
-		this.addWorker(new JMSWriterThread(this.monitoringController, this.blockingQueue, this.configuration
-				.getStringProperty(CONFIG_CONTEXTFACTORYTYPE), this.configuration.getStringProperty(CONFIG_PROVIDERURL),
-				this.configuration.getStringProperty(CONFIG_FACTORYLOOKUPNAME), this.configuration.getStringProperty(CONFIG_TOPIC),
-				this.configuration.getLongProperty(CONFIG_MESSAGETTL)));
+		this.addWorker(new JMSWriterThread(this.monitoringController, this.blockingQueue, this.configuration.getStringProperty(CONFIG_CONTEXTFACTORYTYPE),
+				this.configuration.getStringProperty(CONFIG_PROVIDERURL), this.configuration.getStringProperty(CONFIG_FACTORYLOOKUPNAME), this.configuration
+						.getStringProperty(CONFIG_TOPIC), this.configuration.getLongProperty(CONFIG_MESSAGETTL)));
 	}
 }
 
 /**
- * The writer moves monitoring data via messaging to a JMS server. This uses the
- * publishRecord/subscribe pattern. The JMS server will only keep each
- * monitoring event for messageTimeToLive milliseconds presents before it is
- * deleted.
+ * The writer moves monitoring data via messaging to a JMS server. This uses the publishRecord/subscribe pattern. The JMS server will only keep each monitoring event
+ * for messageTimeToLive milliseconds presents before it is deleted.
  * 
- * At the moment, JmsWorkers do not share any connections, sessions or other
- * objects.
+ * At the moment, JmsWorkers do not share any connections, sessions or other objects.
  * 
  * History: 2008-09-13: Initial prototype
  * 
@@ -115,21 +111,18 @@ final class JMSWriterThread extends AbstractAsyncThread {
 			Destination destination;
 			try {
 				/*
-				 * As a first step, try a JNDI lookup (this seems to fail with
-				 * ActiveMQ sometimes)
+				 * As a first step, try a JNDI lookup (this seems to fail with ActiveMQ sometimes)
 				 */
 				destination = (Destination) context.lookup(topic);
 			} catch (final NameNotFoundException exc) {
-				/*
-				 * JNDI lookup failed, try manual creation (this seems to fail
-				 * with ActiveMQ sometimes)
-				 */
-				JMSWriterThread.LOG.warn("Failed to lookup queue '" + topic + "' via JNDI", exc);
-				JMSWriterThread.LOG.info("Attempting to create queue ...");
+				// JNDI lookup failed, try manual creation (this seems to fail with ActiveMQ sometimes)
+				LOG.warn("Failed to lookup queue '" + topic + "' via JNDI: " + exc.getMessage()); // do not append exc to log!
+				LOG.info("Attempting to create queue ...");
 				destination = this.session.createQueue(topic);
-				// Is the following required?
-				// context.bind(topic, destination);
-				// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/192
+				if (destination == null) { // 
+					LOG.error("Attempt to create queue failed");
+					throw exc; // will be catched below to abort the read method
+				}
 			}
 
 			this.sender = this.session.createProducer(destination);
