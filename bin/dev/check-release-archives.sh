@@ -256,8 +256,11 @@ function check_bin_archive {
     fi
     for f in $(ls "${REFERENCE_OUTPUT_DIR}" | egrep "(dot$|pic$|html$|txt$)"); do 
 	echo -n "Comparing to reference file $f ... "
-	if ! diff "$f"  "${REFERENCE_OUTPUT_DIR}/$f"; then
-	    echo "Detected deviation to reference file"
+	# Note that this is a hack because sometimes the line order differs
+	(cat "$f" | sort) > left.tmp
+	(cat "${REFERENCE_OUTPUT_DIR}/$f" | sort) > right.tmp
+	if ! diff "$f" "${REFERENCE_OUTPUT_DIR}/$f"; then
+	    echo "Detected deviation between files: '$f', '${${REFERENCE_OUTPUT_DIR}/$f}'"
 	    exit 1
 	else 
 	    echo "OK"
@@ -277,29 +280,29 @@ assert_dir_exists ${BASE_TMP_DIR}
 change_dir "${BASE_TMP_DIR}"
 BASE_TMP_DIR_ABS=$(pwd)
 
-change_dir "${BASE_TMP_DIR_ABS}"
-create_subdir_n_cd
-DIR=$(pwd)
-SRCZIP=$(ls ../../dist/release/*_sources.zip)
-assert_file_exists_regular ${SRCZIP}
-check_src_archive "${SRCZIP}"
-rm -rf ${DIR}
+#change_dir "${BASE_TMP_DIR_ABS}"
+#create_subdir_n_cd
+#DIR=$(pwd)
+#SRCZIP=$(ls ../../dist/release/*_sources.zip)
+#assert_file_exists_regular ${SRCZIP}
+#check_src_archive "${SRCZIP}"
+#rm -rf ${DIR}
 
-change_dir "${BASE_TMP_DIR_ABS}"
-create_subdir_n_cd
-DIR=$(pwd)
-SRCTGZ=$(ls ../../dist/release/*_sources.tar.gz)
-assert_file_exists_regular ${SRCTGZ}
-check_src_archive "${SRCTGZ}"
-rm -rf ${DIR}
+#change_dir "${BASE_TMP_DIR_ABS}"
+#create_subdir_n_cd
+#DIR=$(pwd)
+#SRCTGZ=$(ls ../../dist/release/*_sources.tar.gz)
+#assert_file_exists_regular ${SRCTGZ}
+#check_src_archive "${SRCTGZ}"
+#rm -rf ${DIR}
 
-change_dir "${BASE_TMP_DIR_ABS}"
-create_subdir_n_cd
-DIR=$(pwd)
-BINZIP=$(ls ../../dist/release/*_binaries.zip)
-assert_file_exists_regular ${BINZIP}
-check_bin_archive "${BINZIP}"
-rm -rf ${DIR}
+#change_dir "${BASE_TMP_DIR_ABS}"
+#create_subdir_n_cd
+#DIR=$(pwd)
+#BINZIP=$(ls ../../dist/release/*_binaries.zip)
+#assert_file_exists_regular ${BINZIP}
+#check_bin_archive "${BINZIP}"
+#rm -rf ${DIR}
 
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
