@@ -20,10 +20,12 @@ function create_subdir_n_cd {
 
 # build with ant (target may be passed as $1)
 function run_ant {
+    echo "Trying to invoke ant with target '$1' ..."
     if ! ant $1; then
 	echo "Build failed"
 	exit 1
     fi
+    echo "Execution of ant failed"
 }
 
 # make sure that license for each jar included
