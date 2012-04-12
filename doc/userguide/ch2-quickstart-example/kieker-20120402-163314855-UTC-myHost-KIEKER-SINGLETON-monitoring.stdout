@@ -31,5 +31,5 @@ Bookstore.main: Starting request 1
 Bookstore.main: Starting request 2
 Bookstore.main: Starting request 3
 Bookstore.main: Starting request 4
-Apr 2, 2012 6:33:14 PM kieker.monitoring.core.controller.MonitoringController$1 run
+Apr 2, 2012 6:33:14 PM kieker.monitoring.core.controller.MonitoringController$\$$1 run
 INFO: ShutdownHook notifies controller to initiate shutdown
