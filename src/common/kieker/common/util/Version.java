@@ -31,7 +31,7 @@ public final class Version {
 	 * The VERSION string is updated by the Ant build file, which looks for the
 	 * pattern: VERSION = <quote>.*<quote>
 	 */
-	private static final String VERSION = "1.5-SNAPSHOT"; // NOPMD (FieldName)
+	private static final String VERSION = "1.5"; // NOPMD (FieldName)
 	private static final String COPYRIGHT = "Copyright (c) 2006-2012 Kieker Project";
 
 	private Version() {}
