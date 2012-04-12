@@ -21,6 +21,7 @@
 package kieker.monitoring.probe.aspectj.flow.operationExecution;
 
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -47,8 +48,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Pointcut
 	public abstract void monitoredOperation();
 
-	@Around("monitoredOperation() && notWithinKieker()")
-	public Object operation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
+	@Around("monitoredOperation() && this(thisObject) && notWithinKieker()")
+	public Object operation(final Object thisObject, final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
@@ -61,15 +62,16 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		}
 		final long traceId = trace.getTraceId();
 		final String signature = thisJoinPoint.getSignature().toLongString();
+		final String clazz = thisObject.getClass().getName();
 		// measure before execution
-		CTRLINST.newMonitoringRecord(new BeforeOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature));
+		CTRLINST.newMonitoringRecord(new BeforeOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz));
 		// execution of the called method
 		final Object retval;
 		try {
 			retval = thisJoinPoint.proceed();
 		} catch (final Throwable th) { // NOPMD NOCS (catch throw might ok here)
 			// measure after failed execution
-			CTRLINST.newMonitoringRecord(new AfterOperationFailedEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature,
+			CTRLINST.newMonitoringRecord(new AfterOperationFailedEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz,
 					th.toString()));
 			throw th;
 		} finally {
@@ -78,7 +80,44 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			}
 		}
 		// measure after successful execution
-		CTRLINST.newMonitoringRecord(new AfterOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature));
+		CTRLINST.newMonitoringRecord(new AfterOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz));
+		return retval;
+	}
+
+	@Around("monitoredOperation() && !this(java.lang.Object) && notWithinKieker()")
+	public Object staticOperation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
+		// common fields
+		Trace trace = TRACEREGISTRY.getTrace();
+		final boolean newTrace = trace == null;
+		if (newTrace) {
+			trace = TRACEREGISTRY.registerTrace();
+			CTRLINST.newMonitoringRecord(trace);
+		}
+		final long traceId = trace.getTraceId();
+		final Signature sig = thisJoinPoint.getSignature();
+		final String signature = sig.toLongString();
+		final String clazz = sig.getDeclaringTypeName();
+		// measure before execution
+		CTRLINST.newMonitoringRecord(new BeforeOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz));
+		// execution of the called method
+		final Object retval;
+		try {
+			retval = thisJoinPoint.proceed();
+		} catch (final Throwable th) { // NOPMD NOCS (catch throw might ok here)
+			// measure after failed execution
+			CTRLINST.newMonitoringRecord(new AfterOperationFailedEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz,
+					th.toString()));
+			throw th;
+		} finally {
+			if (newTrace) { // close the trace
+				TRACEREGISTRY.unregisterTrace();
+			}
+		}
+		// measure after successful execution
+		CTRLINST.newMonitoringRecord(new AfterOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz));
 		return retval;
 	}
 }

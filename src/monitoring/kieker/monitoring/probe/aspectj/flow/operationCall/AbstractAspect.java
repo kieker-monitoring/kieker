@@ -22,6 +22,7 @@ package kieker.monitoring.probe.aspectj.flow.operationCall;
 
 import org.aspectj.lang.JoinPoint.EnclosingStaticPart;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -46,8 +47,11 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Pointcut
 	public abstract void monitoredOperation();
 
-	@Around("monitoredOperation() && notWithinKieker()")
-	public Object operation(final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint) throws Throwable { // NOCS (Throwable)
+	// TODO: the detection of the caller with EnclosingStaticPart might be wrong!
+
+	@Around("monitoredOperation() && this(thisObject) && target(targetObject) && notWithinKieker()")
+	public Object member2memberOperation(final Object thisObject, final Object targetObject, final ProceedingJoinPoint thisJoinPoint,
+			final EnclosingStaticPart thisEnclosingJoinPoint) throws Throwable { // NOCS
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
@@ -59,10 +63,124 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			CTRLINST.newMonitoringRecord(trace);
 		}
 		final long traceId = trace.getTraceId();
-		final String callee = thisJoinPoint.getSignature().toLongString();
+		// caller
 		final String caller = thisEnclosingJoinPoint.getSignature().toLongString();
+		final String callerClazz = thisObject.getClass().getName();
+		// callee
+		final String callee = thisJoinPoint.getSignature().toLongString();
+		final String calleeClazz = targetObject.getClass().getName();
 		// measure before call
-		CTRLINST.newMonitoringRecord(new CallOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), caller, callee));
+		CTRLINST.newMonitoringRecord(new CallOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
+				caller, callerClazz, callee, calleeClazz));
+		// call of the called method
+		final Object retval;
+		try {
+			retval = thisJoinPoint.proceed();
+		} finally {
+			if (newTrace) { // close the trace
+				TRACEREGISTRY.unregisterTrace();
+			}
+		}
+		return retval;
+	}
+
+	@Around("monitoredOperation() && !this(java.lang.Object) && target(targetObject) && notWithinKieker()")
+	public Object static2memberOperation(final Object targetObject, final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint)
+			throws Throwable { // NOCS
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
+		// common fields
+		Trace trace = TRACEREGISTRY.getTrace();
+		final boolean newTrace = trace == null;
+		if (newTrace) {
+			trace = TRACEREGISTRY.registerTrace();
+			CTRLINST.newMonitoringRecord(trace);
+		}
+		final long traceId = trace.getTraceId();
+		// caller
+		final Signature callerSig = thisEnclosingJoinPoint.getSignature();
+		final String caller = callerSig.toLongString();
+		final String callerClazz = callerSig.getDeclaringTypeName();
+		// callee
+		final String callee = thisJoinPoint.getSignature().toLongString();
+		final String calleeClazz = targetObject.getClass().getName();
+		// measure before call
+		CTRLINST.newMonitoringRecord(new CallOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
+				caller, callerClazz, callee, calleeClazz));
+		// call of the called method
+		final Object retval;
+		try {
+			retval = thisJoinPoint.proceed();
+		} finally {
+			if (newTrace) { // close the trace
+				TRACEREGISTRY.unregisterTrace();
+			}
+		}
+		return retval;
+	}
+
+	@Around("monitoredOperation() && this(thisObject) && !target(java.lang.Object) && notWithinKieker()")
+	public Object member2staticOperation(final Object thisObject, final ProceedingJoinPoint thisJoinPoint,
+			final EnclosingStaticPart thisEnclosingJoinPoint) throws Throwable { // NOCS
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
+		// common fields
+		Trace trace = TRACEREGISTRY.getTrace();
+		final boolean newTrace = trace == null;
+		if (newTrace) {
+			trace = TRACEREGISTRY.registerTrace();
+			CTRLINST.newMonitoringRecord(trace);
+		}
+		final long traceId = trace.getTraceId();
+		// caller
+		final String caller = thisEnclosingJoinPoint.getSignature().toLongString();
+		final String callerClazz = thisObject.getClass().getName();
+		// callee
+		final Signature calleeSig = thisJoinPoint.getSignature();
+		final String callee = calleeSig.toLongString();
+		final String calleeClazz = calleeSig.getDeclaringTypeName();
+		// measure before call
+		CTRLINST.newMonitoringRecord(new CallOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
+				caller, callerClazz, callee, calleeClazz));
+		// call of the called method
+		final Object retval;
+		try {
+			retval = thisJoinPoint.proceed();
+		} finally {
+			if (newTrace) { // close the trace
+				TRACEREGISTRY.unregisterTrace();
+			}
+		}
+		return retval;
+	}
+
+	@Around("monitoredOperation() && !this(java.lang.Object) && !target(java.lang.Object) && notWithinKieker()")
+	public Object static2staticOperation(final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint)
+			throws Throwable { // NOCS
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
+		// common fields
+		Trace trace = TRACEREGISTRY.getTrace();
+		final boolean newTrace = trace == null;
+		if (newTrace) {
+			trace = TRACEREGISTRY.registerTrace();
+			CTRLINST.newMonitoringRecord(trace);
+		}
+		final long traceId = trace.getTraceId();
+		// caller
+		final Signature callerSig = thisEnclosingJoinPoint.getSignature();
+		final String caller = callerSig.toLongString();
+		final String callerClazz = callerSig.getDeclaringTypeName();
+		// callee
+		final Signature calleeSig = thisJoinPoint.getSignature();
+		final String callee = calleeSig.toLongString();
+		final String calleeClazz = calleeSig.getDeclaringTypeName();
+		// measure before call
+		CTRLINST.newMonitoringRecord(new CallOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
+				caller, callerClazz, callee, calleeClazz));
 		// call of the called method
 		final Object retval;
 		try {

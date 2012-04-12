@@ -47,7 +47,7 @@ public final class ThreadingAspect extends AbstractAspectJProbe {
 	// TODO: what about other forms of executions? ThreadPool, ...?
 	// Must be @Before
 	@Before("call(void java.lang.Thread.start()) && target(thread) && notWithinKieker()")
-	public void beforeNewThread(final Thread thread) {
+	public final void beforeNewThread(final Thread thread) {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}

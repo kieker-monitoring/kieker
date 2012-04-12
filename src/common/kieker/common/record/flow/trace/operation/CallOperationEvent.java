@@ -30,29 +30,38 @@ public final class CallOperationEvent extends AbstractOperationEvent {
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
 		String.class, // OperationEvent.operationSiganture
-		String.class, // calleeOperationSiganture
+		String.class, // OperationEvent.classSignature
+		String.class, // calleeOperationSignature
+		String.class, // calleeClassSiganture
 	};
 
 	/**
 	 * This field should not be exported, because it makes little sense to have no associated class
 	 */
 	private static final String NO_CALLEEOPERATIONSIGANTURE = "<no-calleeOperationSiganture>";
+	private static final String NO_CALLEECLASSSIGANTURE = ""; // default is empty
 
 	private final String calleeOperationSignature;
+	private final String calleeClassSignature;
 
-	public CallOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String callerOperationSignature,
-			final String calleeOperationSignature) {
-		super(timestamp, traceId, orderIndex, callerOperationSignature);
+	public CallOperationEvent(final long timestamp, final long traceId, final int orderIndex,
+			final String callerOperationSignature, final String callerClassSignature,
+			final String calleeOperationSignature, final String calleeClassSignature) {
+		super(timestamp, traceId, orderIndex, callerOperationSignature, callerClassSignature);
 		this.calleeOperationSignature = (calleeOperationSignature == null) ? NO_CALLEEOPERATIONSIGANTURE : calleeOperationSignature; // NOCS
+		this.calleeClassSignature = (calleeClassSignature == null) ? NO_CALLEECLASSSIGANTURE : calleeClassSignature; // NOCS
 	}
 
 	public CallOperationEvent(final Object[] values) { // NOPMD (values stored directly)
-		super(values, TYPES); // values[0..3]
-		this.calleeOperationSignature = (String) values[4];
+		super(values, TYPES); // values[0..4]
+		this.calleeOperationSignature = (String) values[5];
+		this.calleeClassSignature = (String) values[6];
 	}
 
 	public final Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getCallerOperationSignature(), this.getCalleeOperationSignature() };
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(),
+			this.getCallerOperationSignature(), this.getCallerClassSignature(),
+			this.getCalleeOperationSignature(), this.getCalleeClassSignature(), };
 	}
 
 	public final Class<?>[] getValueTypes() {
@@ -63,11 +72,20 @@ public final class CallOperationEvent extends AbstractOperationEvent {
 		return this.getOperationSignature();
 	}
 
+	public final String getCallerClassSignature() {
+		return this.getClassSignature();
+	}
+
 	public final String getCalleeOperationSignature() {
 		return this.calleeOperationSignature;
 	}
 
+	public String getCalleeClassSignature() {
+		return this.calleeClassSignature;
+	}
+
 	public final boolean callsReferencedOperationOf(final AbstractOperationEvent event) {
+		// FIXME: check also classSignature
 		return this.getCalleeOperationSignature().equals(event.getOperationSignature());
 	}
 }

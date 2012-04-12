@@ -29,19 +29,20 @@ public final class AfterOperationEvent extends AbstractOperationEvent {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
-		String.class, // OperationEvent.operationSiganture
+		String.class, // OperationEvent.operationSignature
+		String.class, // OperationEvent.classSignature
 	};
 
-	public AfterOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSiganture) {
-		super(timestamp, traceId, orderIndex, operationSiganture);
+	public AfterOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSiganture, final String classSignature) {
+		super(timestamp, traceId, orderIndex, operationSiganture, classSignature);
 	}
 
 	public AfterOperationEvent(final Object[] values) {
-		super(values, TYPES); // values[0..3]
+		super(values, TYPES); // values[0..4]
 	}
 
 	public final Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), };
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.getClassSignature(), };
 	}
 
 	public final Class<?>[] getValueTypes() {

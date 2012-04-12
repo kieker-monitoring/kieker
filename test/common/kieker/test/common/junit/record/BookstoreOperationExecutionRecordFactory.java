@@ -40,12 +40,12 @@ public final class BookstoreOperationExecutionRecordFactory {
 	public static final String SIMPLE_CLASS_CATALOG = "Catalog";
 	public static final String SIMPLE_CLASS_CRM = "CRM";
 
-	public static final String FQCLASS_BOOKSTORE =
+	public static final String FQ_CLASS_BOOKSTORE =
 			BookstoreOperationExecutionRecordFactory.PACKAGE_BOOKSTORE_APP
 					+ "." + BookstoreOperationExecutionRecordFactory.SIMPLE_CLASS_BOOKSTORE;
-	public static final String FQCLASS_CATALOG = BookstoreOperationExecutionRecordFactory.PACKAGE_BOOKSTORE_APP
+	public static final String FQ_CLASS_CATALOG = BookstoreOperationExecutionRecordFactory.PACKAGE_BOOKSTORE_APP
 			+ "." + BookstoreOperationExecutionRecordFactory.SIMPLE_CLASS_CATALOG;
-	public static final String FQCLASS_CRM = BookstoreOperationExecutionRecordFactory.PACKAGE_BOOKSTORE_APP
+	public static final String FQ_CLASS_CRM = BookstoreOperationExecutionRecordFactory.PACKAGE_BOOKSTORE_APP
 			+ "." + BookstoreOperationExecutionRecordFactory.SIMPLE_CLASS_CRM;
 
 	public static final String OP_MODIFIER_BOOKSTORE_SEARCH_BOOK = "public";
@@ -53,7 +53,7 @@ public final class BookstoreOperationExecutionRecordFactory {
 	public static final String OP_NAME_BOOKSTORE_SEARCH_BOOK = "searchBook";
 	public static final String OP_ARGTYPE_BOOKSTORE_SEARCH_BOOK = "long";
 	public static final String OP_FQNAME_BOOKSTORE_SEARCH_BOOK =
-			BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE + "." + BookstoreOperationExecutionRecordFactory.OP_NAME_BOOKSTORE_SEARCH_BOOK;
+			BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE + "." + BookstoreOperationExecutionRecordFactory.OP_NAME_BOOKSTORE_SEARCH_BOOK;
 	public static final String OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK =
 			BookstoreOperationExecutionRecordFactory.OP_NAME_BOOKSTORE_SEARCH_BOOK + "("
 					+ BookstoreOperationExecutionRecordFactory.OP_ARGTYPE_BOOKSTORE_SEARCH_BOOK + ")";
@@ -63,7 +63,7 @@ public final class BookstoreOperationExecutionRecordFactory {
 	public static final String OP_NAME_CATALOG_GET_BOOK = "getBook";
 	public static final String OP_ARGTYPE_CATALOG_GET_BOOK = "long";
 	public static final String OP_FQNAME_CATALOG_GET_BOOK =
-			BookstoreOperationExecutionRecordFactory.FQCLASS_CATALOG + "." + BookstoreOperationExecutionRecordFactory.OP_NAME_CATALOG_GET_BOOK;
+			BookstoreOperationExecutionRecordFactory.FQ_CLASS_CATALOG + "." + BookstoreOperationExecutionRecordFactory.OP_NAME_CATALOG_GET_BOOK;
 	public static final String OP_NAMEWITHARG_CATALOG_GET_BOOK =
 			BookstoreOperationExecutionRecordFactory.OP_NAME_CATALOG_GET_BOOK + "("
 					+ BookstoreOperationExecutionRecordFactory.OP_ARGTYPE_CATALOG_GET_BOOK + ")";
@@ -73,7 +73,7 @@ public final class BookstoreOperationExecutionRecordFactory {
 	public static final String OP_NAME_CRM_GET_ORDERS = "getOrders";
 	public static final String OP_ARGTYPE_CRM_GET_ORDERS = "long";
 	public static final String OP_FQNAME_CRM_GET_ORDERS =
-			BookstoreOperationExecutionRecordFactory.FQCLASS_CRM + "." + BookstoreOperationExecutionRecordFactory.OP_NAME_CRM_GET_ORDERS;
+			BookstoreOperationExecutionRecordFactory.FQ_CLASS_CRM + "." + BookstoreOperationExecutionRecordFactory.OP_NAME_CRM_GET_ORDERS;
 	public static final String OP_NAMEWITHARG_CRM_GET_ORDERS =
 			BookstoreOperationExecutionRecordFactory.OP_NAME_CRM_GET_ORDERS + "("
 					+ BookstoreOperationExecutionRecordFactory.OP_ARGTYPE_CRM_GET_ORDERS + ")";
