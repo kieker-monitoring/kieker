@@ -232,15 +232,13 @@ Listing~\ref{lst:cuttingBookstore} shows the instrumentation of the \class{Books
 \lstinputlisting[linerange={29-54}, firstnumber=29, caption=Instrumentation of the \method{getBook()} call in Bookstore.java, label=lst:cuttingBookstore]%
 {\manualInstrumentedBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/manual/Bookstore.java}
  
-\noindent The lines 38 and 40 are used to determine the current time in nanoseconds before and after the \method{getBook()} call. In lines 42 to 48, a monitoring record for this measurement is created and initialized, passing the method signature, the hostname, and the two time values as arguments. Finally the record is handed over to the monitoring controller (line~49) which calls a monitoring writer to persist the record. %
+\noindent The lines 39 and 41 are used to determine the current time in nanoseconds before and after the \method{getBook()} call. In lines 43 to 49, a monitoring record for this measurement is created and initialized, passing the method signature, the hostname, and the two time values as arguments. Finally the record is handed over to the monitoring controller (line~50) which calls a monitoring writer to persist the record. %
 In this example, the filesystem writer is used---\Kieker{} uses this writer by default when no other writer is specified, %
 as detailed in Section~\ref{sec:monitoring-log-writers}. %.
 
 In addition to the instrumentation in the \class{Bookstore} class, the \method{getOffers()} method of the \class{CRM} class is instrumented as well. Similar to Listing~\ref{lst:cuttingBookstore}, measurements are taken before and after the call of the \object{catalog}'s \method{getBook()} method, as shown in %
-lines~42 and~44 of Listing~\ref{lst:cuttingCRM}. Not shown in the listing is the instantiation of the monitoring controller. However, it is done in the same way as illustrated in Listing~\ref{lst:cuttingBookstore}. %And the complete example files can be found in the samples directory.
-Finally, a record is created (see lines~46--52) and stored by calling the monitoring controller (see line~53).
-
-\pagebreak
+lines~43 and~45 of Listing~\ref{lst:cuttingCRM}. Not shown in the listing is the instantiation of the monitoring controller. However, it is done in the same way as illustrated in Listing~\ref{lst:cuttingBookstore}. %And the complete example files can be found in the samples directory.
+Finally, a record is created (see lines~47--53) and stored by calling the monitoring controller (see line~54).
 
 \setJavaCodeListing
 \lstinputlisting[firstline=37, firstnumber=37, lastline=55, caption=Instrumentation of the \method{getBook()} call in CRM.java, label=lst:cuttingCRM]%
@@ -357,7 +355,7 @@ be found in \Kieker's \file{lib/} directory) need to be added to the classpath. 
 \label{lst:analysisExampleLayout}
 \end{figure}
 
-\begin{figure}[b]
+\begin{figure}[t]
 \includegraphics[width=\textwidth]{images/ch2-example-pnp}
 \caption{Example pipe-and-filter configuration}
 \label{fig:example:ch2:pipe-and-filter}
@@ -386,7 +384,7 @@ method. %
 \lstinputlisting[gobble=6,caption=BookstoreAnalysisStarter.java (excerpt from \method{main} method),label=lst:BookstoreAnalysisStarter,firstline=40,firstnumber=40,lastline=60]%
 {\manualInstrumentedBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/manual/BookstoreAnalysisStarter.java}
 
-\
+\pagebreak
  
 \noindent The \class{BookstoreAnalysisStarter} follows a simple scheme. Each %
 analysis tool has to create at least one \class{AnalysisController} which can be %
@@ -403,7 +401,6 @@ which outputs received events to the standard output. Lines~57 and~58 connect %
 the \class{TeeFilter}'s input port to the filesystem reader's output port. %
 The analysis is started by calling its \method{run} method (line~60). %
 
-\pagebreak
 
 The Listings~\ref{lst:bookstoreAnalysisStarterLinux} and \ref{lst:bookstoreAnalysisStarterWin} %
 describe how the analysis application can be compiled and executed under \UnixLikeSystems{} and Windows.
