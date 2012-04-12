@@ -7,12 +7,12 @@ Please refer to the Kieker User Guide for details on using Kieker.
 
 * 1.5 (April 13, 2012)
 - Major new features
-  - Completely reworked pipe-and-filter framework
+  - Completely reworked pipe-and-filter framework in Kieker.Analysis
    - Use of Java annotations to specify plugins, repositories, 
      input/output ports etc.
-   - (De)serializable configurations (from/to .kax files) based on 
-     meta-model specified using Ecore
    - Support for multiple readers
+   - Load and save configurations from/to .kax files 
+     (based on a new meta-model specified using Ecore)
    - Basic tools to execute/visualize .kax files
   - New database writer/reader supporting arbitrary record types
   - Support for immutable record types
@@ -20,13 +20,14 @@ Please refer to the Kieker User Guide for details on using Kieker.
   - New print stream writer
   - New re-usable filters (tee, counting, timestamp etc.)
   - Complete method signatures used in probes/records for control-flow tracing
-  - New record types/probes for event-based tracing (method call, entry, exit etc.)
+  - New record types/probes for event-based tracing 
+    (method call, entry, exit etc.)
   - Re-enabled Java 5 support
   - Removed dependency to commons.logging
-  - Additional Kieker jar to be used as javaagent for AspectJ-based instrumentation
+  - Additional Kieker Jar usable as javaagent for AspectJ-based instrumentation
 - Quality
   - Bug fixes
-  - Added a number of JUnit tests
+  - Added a number of (JUnit) tests
 
 * 1.4 (October 14, 2011)
 - Features:
