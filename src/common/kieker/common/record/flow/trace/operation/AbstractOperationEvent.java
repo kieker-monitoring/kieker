@@ -32,24 +32,33 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent {
 	 * This field should not be exported, because it makes little sense to have no associated class
 	 */
 	private static final String NO_OPERATIONSIGNATURE = "<no-operationSignature>";
+	private static final String NO_CLASSSIGNATURE = ""; // default is empty
 
 	private final String operationSignature;
+	private final String classSignature;
 
-	public AbstractOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature) {
+	public AbstractOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature) {
 		super(timestamp, traceId, orderIndex);
 		this.operationSignature = (operationSignature == null) ? NO_OPERATIONSIGNATURE : operationSignature; // NOCS
+		this.classSignature = (classSignature == null) ? NO_CLASSSIGNATURE : classSignature; // NOCS
 	}
 
 	public AbstractOperationEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes); // values[0..2]
 		this.operationSignature = (String) values[3];
+		this.classSignature = (String) values[4];
 	}
 
 	public final String getOperationSignature() {
 		return this.operationSignature;
 	}
 
+	public String getClassSignature() {
+		return this.classSignature;
+	}
+
 	public boolean refersToSameOperationAs(final AbstractOperationEvent other) {
+		// FIXME: check also classSignature
 		return this.getOperationSignature().equals(other.getOperationSignature());
 	}
 }

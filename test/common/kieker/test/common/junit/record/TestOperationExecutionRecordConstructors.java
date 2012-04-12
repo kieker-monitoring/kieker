@@ -56,7 +56,7 @@ public class TestOperationExecutionRecordConstructors {
 						tin, tout, hostname, eoi, ess);
 
 		this.checkClassSignatureValues(opExecutionRecord,
-				BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
+				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
 				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK,
 				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
 		this.checkTraceId(opExecutionRecord, traceId);
@@ -67,7 +67,7 @@ public class TestOperationExecutionRecordConstructors {
 		this.checkIsEntryPoint(opExecutionRecord, false); // default, as documented in the constructor
 		this.checkObject(opExecutionRecord, null);
 
-		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
+		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
 				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
 	}
 
@@ -80,18 +80,18 @@ public class TestOperationExecutionRecordConstructors {
 	public void testComponentOpTraceID() { // NOPMD (assert missing)
 		final long traceId = 3486095; // any number will do
 		final OperationExecutionRecord opExecutionRecord =
-				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
+				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
 						BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK, traceId);
 
 		this.checkClassSignatureValues(opExecutionRecord,
-				BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
+				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
 				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK,
-				BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE + "." + BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
+				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE + "." + BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
 		this.checkTraceId(opExecutionRecord, traceId);
 		this.checkIsEntryPoint(opExecutionRecord, false); // default, as documented in the constructor
 		this.checkObject(opExecutionRecord, null);
 
-		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
+		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
 				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
 	}
 
@@ -106,17 +106,17 @@ public class TestOperationExecutionRecordConstructors {
 		final long tin = 33444; // any number will do
 		final long tout = 33449; // any number will do
 		final OperationExecutionRecord opExecutionRecord =
-				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
+				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
 						BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK, traceId, tin, tout);
 
 		this.checkClassSignatureValues(opExecutionRecord,
-				BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
+				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
 				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK,
-				BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE + "." + BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
+				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE + "." + BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
 		this.checkTraceId(opExecutionRecord, traceId);
 		this.checkTinTout(opExecutionRecord, tin, tout);
 
-		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
+		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
 				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
 	}
 
@@ -130,20 +130,20 @@ public class TestOperationExecutionRecordConstructors {
 		final long tin = 33444; // any number will do
 		final long tout = 33449; // any number will do
 		final OperationExecutionRecord opExecutionRecord =
-				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
+				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
 						BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK, tin, tout);
 
 		this.checkClassSignatureValues(opExecutionRecord,
-				BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
+				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
 				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK,
-				BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE + "." + BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
+				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE + "." + BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
 
 		this.checkTinTout(opExecutionRecord, tin, tout);
 
 		this.checkIsEntryPoint(opExecutionRecord, false); // default, as documented in the constructor
 		this.checkObject(opExecutionRecord, null);
 
-		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
+		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
 				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
 	}
 
@@ -159,13 +159,13 @@ public class TestOperationExecutionRecordConstructors {
 		final long tin = 33444; // any number will do
 		final long tout = 33449; // any number will do
 		final OperationExecutionRecord opExecutionRecord =
-				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
+				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
 						BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK, sessionId, traceId, tin, tout);
 
 		this.checkClassSignatureValues(opExecutionRecord,
-				BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
+				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
 				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK,
-				BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE + "." + BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
+				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE + "." + BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
 		this.checkTraceId(opExecutionRecord, traceId);
 		this.checkTinTout(opExecutionRecord, tin, tout);
 		this.checkSessionId(opExecutionRecord, sessionId);
@@ -173,7 +173,7 @@ public class TestOperationExecutionRecordConstructors {
 		this.checkIsEntryPoint(opExecutionRecord, false); // default, as documented in the constructor
 		this.checkObject(opExecutionRecord, null);
 
-		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
+		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
 				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
 	}
 
@@ -192,14 +192,14 @@ public class TestOperationExecutionRecordConstructors {
 		final int eoi = BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_EOI;
 		final int ess = BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_ESS;
 		final OperationExecutionRecord opExecutionRecord =
-				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
+				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
 						BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK, sessionId, traceId,
 						tin, tout, hostname, eoi, ess);
 
 		this.checkClassSignatureValues(opExecutionRecord,
-				BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
+				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
 				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK,
-				BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE + "." + BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
+				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE + "." + BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
 		this.checkTraceId(opExecutionRecord, traceId);
 		this.checkTinTout(opExecutionRecord, tin, tout);
 		this.checkEoiEss(opExecutionRecord, eoi, ess);
@@ -209,7 +209,7 @@ public class TestOperationExecutionRecordConstructors {
 		this.checkIsEntryPoint(opExecutionRecord, false); // default, as documented in the constructor
 		this.checkObject(opExecutionRecord, null);
 
-		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQCLASS_BOOKSTORE,
+		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
 				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
 	}
 

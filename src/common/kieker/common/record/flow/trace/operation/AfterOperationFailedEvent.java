@@ -35,24 +35,26 @@ public final class AfterOperationFailedEvent extends AbstractOperationEvent {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
-		String.class, // OperationEvent.operationSiganture
+		String.class, // OperationEvent.operationSignature
+		String.class, // OperationEvent.classSignature
 		String.class, // Exception
 	};
 
 	private final String cause;
 
-	public AfterOperationFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSiganture, final String cause) {
-		super(timestamp, traceId, orderIndex, operationSiganture);
+	public AfterOperationFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSiganture, final String classSignature,
+			final String cause) {
+		super(timestamp, traceId, orderIndex, operationSiganture, classSignature);
 		this.cause = (cause == null) ? NO_CAUSE : cause; // NOCS
 	}
 
 	public AfterOperationFailedEvent(final Object[] values) { // NOPMD (values stored directly)
-		super(values, TYPES); // values[0..3]
-		this.cause = (String) values[4];
+		super(values, TYPES); // values[0..4]
+		this.cause = (String) values[5];
 	}
 
 	public final Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.cause };
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.getClassSignature(), this.cause, };
 	}
 
 	public final Class<?>[] getValueTypes() {

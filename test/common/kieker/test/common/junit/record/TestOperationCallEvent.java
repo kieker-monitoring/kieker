@@ -37,10 +37,10 @@ public class TestOperationCallEvent { // NOCS (MissingCtorCheck)
 
 	private static final String FQ_CALLER_CLASSNAME = "p1.p2.p3.callername";
 	private static final String FQ_CALLER_OPERATION_SIGNATURE =
-			TestOperationCallEvent.FQ_CALLER_CLASSNAME + ".callerOp(boolean arg1, int arg2)";
+			FQ_CALLER_CLASSNAME + ".callerOp(boolean arg1, int arg2)";
 	private static final String FQ_CALLEE_CLASSNAME = "p1.p2.p3.calleename";
 	private static final String FQ_CALLEE_OPERATION_SIGNATURE =
-			TestOperationCallEvent.FQ_CALLEE_CLASSNAME + ".calleeOp(boolean arg1, int arg2)";
+			FQ_CALLEE_CLASSNAME + ".calleeOp(boolean arg1, int arg2)";
 
 	/**
 	 * Tests the constructor and toArray(..) methods of {@link OperationCallEvent}.
@@ -52,14 +52,16 @@ public class TestOperationCallEvent { // NOCS (MissingCtorCheck)
 	public void testSerializeDeserializeEquals() {
 
 		final CallOperationEvent call1 =
-				new CallOperationEvent(TestOperationCallEvent.TSTAMP, TestOperationCallEvent.TRACE_ID, TestOperationCallEvent.ORDER_INDEX,
-						TestOperationCallEvent.FQ_CALLER_OPERATION_SIGNATURE, TestOperationCallEvent.FQ_CALLEE_OPERATION_SIGNATURE);
+				new CallOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_OPERATION_SIGNATURE, FQ_CALLER_CLASSNAME,
+						FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME);
 
-		Assert.assertEquals("Unexpected timestamp", TestOperationCallEvent.TSTAMP, call1.getTimestamp());
-		Assert.assertEquals("Unexpected trace ID", TestOperationCallEvent.TRACE_ID, call1.getTraceId());
-		Assert.assertEquals("Unexpected order index", TestOperationCallEvent.ORDER_INDEX, call1.getOrderIndex());
-		Assert.assertEquals("Unexpected caller operation name", TestOperationCallEvent.FQ_CALLER_OPERATION_SIGNATURE, call1.getCallerOperationSignature());
-		Assert.assertEquals("Unexpected callee operation name", TestOperationCallEvent.FQ_CALLEE_OPERATION_SIGNATURE, call1.getCalleeOperationSignature());
+		Assert.assertEquals("Unexpected timestamp", TSTAMP, call1.getTimestamp());
+		Assert.assertEquals("Unexpected trace ID", TRACE_ID, call1.getTraceId());
+		Assert.assertEquals("Unexpected order index", ORDER_INDEX, call1.getOrderIndex());
+		Assert.assertEquals("Unexpected caller operation name", FQ_CALLER_OPERATION_SIGNATURE, call1.getCallerOperationSignature());
+		Assert.assertEquals("Unexpected caller class name", FQ_CALLER_CLASSNAME, call1.getCallerClassSignature());
+		Assert.assertEquals("Unexpected callee operation name", FQ_CALLEE_OPERATION_SIGNATURE, call1.getCalleeOperationSignature());
+		Assert.assertEquals("Unexpected callee class name", FQ_CALLEE_CLASSNAME, call1.getCalleeClassSignature());
 
 		final Object[] call1Array = call1.toArray();
 
