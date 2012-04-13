@@ -34,9 +34,8 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
- * Replays a filesystem monitoring log and simply passes each record to a
- * specified {@link kieker.common.record.IMonitoringRecordReceiver}. The {@link FilesystemLogReplayer} can replay monitoring logs in
- * real-time.
+ * Replays a filesystem monitoring log and simply passes each record to a specified {@link kieker.common.record.IMonitoringRecordReceiver}. The
+ * {@link FilesystemLogReplayer} can replay monitoring logs in real-time.
  * 
  * @author Andre van Hoorn
  */
@@ -98,8 +97,7 @@ public class FilesystemLogReplayer {
 	}
 
 	/**
-	 * Replays the monitoring log terminates after the last record was passed to
-	 * the configured {@link kieker.common.record.IMonitoringRecordReceiver}.
+	 * Replays the monitoring log terminates after the last record was passed to the configured {@link kieker.common.record.IMonitoringRecordReceiver}.
 	 * 
 	 * @return true on success; false otherwise
 	 */
@@ -121,10 +119,10 @@ public class FilesystemLogReplayer {
 		tpanInstance.registerReader(fsReader);
 
 		final Configuration delegationConfiguration = new Configuration();
-		delegationConfiguration.setProperty(RecordDelegationPlugin.CONFIG_PROPERTY_NAME_IGNORE_RECORDS_AFTER_TIMESTAMP,
-				Long.toString(this.ignoreRecordsAfterTimestamp));
-		delegationConfiguration.setProperty(RecordDelegationPlugin.CONFIG_PROPERTY_NAME_IGNORE_RECORDS_BEFORE_TIMESTAMP,
-				Long.toString(this.ignoreRecordsBeforeTimestamp));
+		delegationConfiguration.setProperty(RecordDelegationPlugin.CONFIG_PROPERTY_NAME_IGNORE_RECORDS_AFTER_TIMESTAMP, Long
+				.toString(this.ignoreRecordsAfterTimestamp));
+		delegationConfiguration.setProperty(RecordDelegationPlugin.CONFIG_PROPERTY_NAME_IGNORE_RECORDS_BEFORE_TIMESTAMP, Long
+				.toString(this.ignoreRecordsBeforeTimestamp));
 		final RecordDelegationPlugin delegationPlugin = new RecordDelegationPlugin(delegationConfiguration);
 		delegationPlugin.setRec(this.recordReceiver);
 
@@ -141,6 +139,7 @@ public class FilesystemLogReplayer {
 			LOG.error("Exception running analysis instance", ex);
 			success = false;
 		}
+		LOG.info(FilesystemLogReplayer.class.getName() + " terminates ...");
 		return success;
 	}
 }
@@ -193,9 +192,7 @@ class RecordDelegationPlugin extends AbstractFilterPlugin {
 		this.rec = rec;
 	}
 
-	@InputPort(
-			name = RecordDelegationPlugin.INPUT_PORT_NAME_MONITORING_RECORDS,
-			eventTypes = { IMonitoringRecord.class }, description = RecordDelegationPlugin.INPUT_PORT_NAME_MONITORING_RECORDS)
+	@InputPort(name = RecordDelegationPlugin.INPUT_PORT_NAME_MONITORING_RECORDS, eventTypes = { IMonitoringRecord.class }, description = RecordDelegationPlugin.INPUT_PORT_NAME_MONITORING_RECORDS)
 	public void inputMonitoringRecord(final IMonitoringRecord record) {
 		if ((record.getLoggingTimestamp() >= this.ignoreRecordsBeforeTimestamp) && (record.getLoggingTimestamp() <= this.ignoreRecordsAfterTimestamp)) {
 			/* Delegate the record to the monitoring controller. */

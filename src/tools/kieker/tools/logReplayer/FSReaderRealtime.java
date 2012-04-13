@@ -39,9 +39,7 @@ import kieker.common.record.IMonitoringRecord;
 /**
  * @author Andre van Hoorn
  */
-@Plugin(outputPorts = {
-		@OutputPort(name = FSReaderRealtime.OUTPUT_PORT_NAME_MONITORING_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReaderRealtime")
-})
+@Plugin(outputPorts = { @OutputPort(name = FSReaderRealtime.OUTPUT_PORT_NAME_MONITORING_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReaderRealtime") })
 public final class FSReaderRealtime extends AbstractReaderPlugin {
 	public static final String OUTPUT_PORT_NAME_MONITORING_RECORDS = "monitoringRecords";
 
@@ -58,13 +56,10 @@ public final class FSReaderRealtime extends AbstractReaderPlugin {
 	private String[] inputDirs;
 
 	/**
-	 * Creates a new instance of this class using the given parameters to
-	 * configure the reader.
+	 * Creates a new instance of this class using the given parameters to configure the reader.
 	 * 
 	 * @param configuration
-	 *            The configuration used to initialize the whole reader. Keep in
-	 *            mind that the configuration should contain the following
-	 *            properties:
+	 *            The configuration used to initialize the whole reader. Keep in mind that the configuration should contain the following properties:
 	 *            <ul>
 	 *            <li>The property {@code inputDirNames}, e.g. {@code INPUTDIRECTORY1;...;INPUTDIRECTORYN }
 	 *            <li>The property {@code numWorkers}
@@ -105,8 +100,7 @@ public final class FSReaderRealtime extends AbstractReaderPlugin {
 
 	private boolean initInstanceFromArgs(final String[] inputDirNames, final int nWorkers) throws IllegalArgumentException {
 		if ((inputDirNames == null) || (inputDirNames.length <= 0)) {
-			throw new IllegalArgumentException("Invalid property value for " + CONFIG_PROPERTY_NAME_INPUTDIRNAMES + ":"
-					+ Arrays.toString(inputDirNames)); // NOCS
+			throw new IllegalArgumentException("Invalid property value for " + CONFIG_PROPERTY_NAME_INPUTDIRNAMES + ":" + Arrays.toString(inputDirNames)); // NOCS
 		}
 
 		if (nWorkers <= 0) {
@@ -141,8 +135,7 @@ public final class FSReaderRealtime extends AbstractReaderPlugin {
 	}
 
 	/**
-	 * Replays the monitoring log in real-time and returns after the complete
-	 * log was being replayed.
+	 * Replays the monitoring log in real-time and returns after the complete log was being replayed.
 	 */
 
 	public boolean read() {
@@ -179,8 +172,7 @@ public final class FSReaderRealtime extends AbstractReaderPlugin {
 	/**
 	 * Acts as a consumer to the rtDistributor and delegates incoming records to the FSReaderRealtime instance.
 	 * 
-	 * Do <b>not</b> use this as an outer class. It does not have the necessary constructors and
-	 * method-implementations in order to be used as an outer class.
+	 * Do <b>not</b> use this as an outer class. It does not have the necessary constructors and method-implementations in order to be used as an outer class.
 	 */
 	@Plugin
 	protected static class FSReaderRealtimeCons extends AbstractFilterPlugin {

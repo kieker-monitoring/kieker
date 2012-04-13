@@ -124,12 +124,11 @@ public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 			LOG.error("RecordConsumerExecutionException", e);
 			return;
 		}
-		final long schedTime = (monitoringRecord.getLoggingTimestamp() + this.offset) // relative to 1st record
+		long schedTime = (monitoringRecord.getLoggingTimestamp() + this.offset) // relative to 1st record
 				- (TIMESOURCE.getTime() - this.startTime); // substract elapsed time
 		if (schedTime < 0) {
-			final MonitoringRecordConsumerException e = new MonitoringRecordConsumerException("negative scheduling time: " + schedTime);
-			LOG.error("RecordConsumerExecutionException", e);
-			return;
+			LOG.warn("negative scheduling time: " + schedTime + "-> scheduling with a delay of 0"); // do not append e
+			schedTime = 0;
 		}
 		synchronized (this) {
 			while (this.active > this.maxQueueSize) {
@@ -154,10 +153,12 @@ public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 		return this.startTime;
 	}
 
+	private static final long TERMINATION_DELAY_NANOS = TimeUnit.NANOSECONDS.convert(5, TimeUnit.SECONDS);
+
 	@Override
 	public void terminate(final boolean error) {
-		final long terminationDelay = ((this.lTime + this.offset) - (TIMESOURCE.getTime() - this.startTime)) + (100 * MILLISECOND);
-		LOG.info("Will terminate in " + terminationDelay + "nsecs from now");
+		final long terminationDelay = TERMINATION_DELAY_NANOS + ((this.lTime + this.offset) - (TIMESOURCE.getTime() - this.startTime)) + (100 * MILLISECOND);
+		LOG.info("Will terminate in " + TimeUnit.SECONDS.convert(terminationDelay, TimeUnit.NANOSECONDS) + " secs from now");
 		this.executor.schedule(new Runnable() {
 
 			public void run() {
