@@ -40,7 +40,7 @@ import kieker.common.record.IMonitoringRecord;
  * @author Andre van Hoorn
  */
 @Plugin(outputPorts = {
-	@OutputPort(name = FSReaderRealtime.OUTPUT_PORT_NAME_MONITORING_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReaderRealtime")
+		@OutputPort(name = FSReaderRealtime.OUTPUT_PORT_NAME_MONITORING_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReaderRealtime")
 })
 public final class FSReaderRealtime extends AbstractReaderPlugin {
 	public static final String OUTPUT_PORT_NAME_MONITORING_RECORDS = "monitoringRecords";
@@ -183,7 +183,7 @@ public final class FSReaderRealtime extends AbstractReaderPlugin {
 	 * method-implementations in order to be used as an outer class.
 	 */
 	@Plugin
-	private static class FSReaderRealtimeCons extends AbstractFilterPlugin {
+	protected static class FSReaderRealtimeCons extends AbstractFilterPlugin {
 
 		/**
 		 * This is the name of the default input port this plugin.
@@ -218,7 +218,6 @@ public final class FSReaderRealtime extends AbstractReaderPlugin {
 		 * 
 		 * @param data
 		 */
-		@SuppressWarnings("unused")
 		@InputPort(name = FSReaderRealtimeCons.INPUT_PORT_MONITORING_RECORDS, eventTypes = { IMonitoringRecord.class })
 		public void inputMonitoringRecords(final IMonitoringRecord record) {
 			/* Make sure that the master exists. This is necessary due to the changed constructor. */
