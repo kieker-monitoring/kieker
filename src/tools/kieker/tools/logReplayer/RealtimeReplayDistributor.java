@@ -38,15 +38,12 @@ import kieker.monitoring.timer.SystemNanoTimer;
 import kieker.tools.logReplayer.FSReaderRealtime.FSReaderRealtimeCons;
 
 /**
- * IMonitoringRecordConsumerPlugin that distributes the log records to the worker
- * thread for "real time" replays.<br>
+ * IMonitoringRecordConsumerPlugin that distributes the log records to the worker thread for "real time" replays.<br>
  * 
- * This class has exactly one input port named "in" and one output ports named
- * "out".<br>
+ * This class has exactly one input port named "in" and one output ports named "out".<br>
  * 
- * TODO: Currently this class <b>can not</b> be used for the later analysis
- * tool, as the objects for the constructor cannot be configured with a
- * configuration object.
+ * TODO: Currently this class <b>can not</b> be used for the later analysis tool, as the objects for the constructor cannot be configured with a configuration
+ * object.
  * 
  * @author Robert von Massow
  * 
@@ -95,7 +92,9 @@ public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 	}
 
 	public void setCons(final FSReaderRealtimeCons cons) {
-		this.cons = cons;
+		synchronized (this) { // to make FindBugs happy
+			this.cons = cons;
+		}
 	}
 
 	public void setConstInputPortName(final String constInputPortName) {
@@ -112,9 +111,7 @@ public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 		}
 	}
 
-	@InputPort(
-			name = INPUT_PORT_NAME_MONITORING_RECORDS,
-			eventTypes = { IMonitoringRecord.class })
+	@InputPort(name = INPUT_PORT_NAME_MONITORING_RECORDS, eventTypes = { IMonitoringRecord.class })
 	public void inputMonitoringRecords(final IMonitoringRecord monitoringRecord) {
 		if (this.startTime == -1) { // init on first record
 			this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp() - (1 * MILLISECOND);
@@ -159,8 +156,7 @@ public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 
 	@Override
 	public void terminate(final boolean error) {
-		final long terminationDelay = ((this.lTime + this.offset) - (TIMESOURCE.getTime() - this.startTime))
-				+ (100 * MILLISECOND);
+		final long terminationDelay = ((this.lTime + this.offset) - (TIMESOURCE.getTime() - this.startTime)) + (100 * MILLISECOND);
 		LOG.info("Will terminate in " + terminationDelay + "nsecs from now");
 		this.executor.schedule(new Runnable() {
 
