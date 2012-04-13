@@ -21,14 +21,12 @@
 package kieker.tools.logReplayer;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.tools.logReplayer.FSReaderRealtime.FSReaderRealtimeCons;
 
 /**
  * A Runnable to be scheduled via the RealtimeReplayDistributor
@@ -38,11 +36,11 @@ import kieker.common.record.IMonitoringRecord;
  * 
  */
 @Plugin(outputPorts = {
-	@OutputPort(name = RealtimeReplayWorker.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
+		@OutputPort(name = RealtimeReplayWorker.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
 })
 public class RealtimeReplayWorker extends AbstractFilterPlugin implements Runnable {
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
-	private static final Log LOG = LogFactory.getLog(RealtimeReplayWorker.class);
+	// private static final Log LOG = LogFactory.getLog(RealtimeReplayWorker.class);
 	private IMonitoringRecord monRec;
 	private RealtimeReplayDistributor rd;
 
@@ -56,20 +54,24 @@ public class RealtimeReplayWorker extends AbstractFilterPlugin implements Runnab
 		super(configuration);
 	}
 
-	public void initialize(final IMonitoringRecord record, final RealtimeReplayDistributor replayDistributor, final AbstractFilterPlugin cons,
+	private volatile FSReaderRealtimeCons cons;
+
+	public void initialize(final IMonitoringRecord record, final RealtimeReplayDistributor replayDistributor, final FSReaderRealtimeCons cons,
 			final String constInputPortName, final AnalysisController controller) {
 		this.monRec = record;
 		this.rd = replayDistributor;
-		try {
-			controller.connect(this, OUTPUT_PORT_NAME, cons, constInputPortName);
-		} catch (final AnalysisConfigurationException ex) {
-			LOG.error("Failed to connect RealtimeReplayWorker to cons", ex);
-		}
+		this.cons = cons;
+		// try {
+		// controller.connect(this, OUTPUT_PORT_NAME, cons, constInputPortName);
+		// } catch (final AnalysisConfigurationException ex) {
+		// LOG.error("Failed to connect RealtimeReplayWorker to cons", ex);
+		// }
 	}
 
 	public void run() {
 		if (this.monRec != null) {
-			super.deliver(OUTPUT_PORT_NAME, this.monRec);
+			// super.deliver(OUTPUT_PORT_NAME, this.monRec);
+			this.cons.inputMonitoringRecords(this.monRec);
 			this.rd.decreaseActive();
 		}
 	}

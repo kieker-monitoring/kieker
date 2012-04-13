@@ -35,6 +35,7 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.timer.ITimeSource;
 import kieker.monitoring.timer.SystemNanoTimer;
+import kieker.tools.logReplayer.FSReaderRealtime.FSReaderRealtimeCons;
 
 /**
  * IMonitoringRecordConsumerPlugin that distributes the log records to the worker
@@ -65,7 +66,7 @@ public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 
 	CountDownLatch terminationLatch; // NOPMD NOCS (package visible for inner class)
 	private final int numWorkers;
-	private AbstractFilterPlugin cons;
+	private FSReaderRealtimeCons cons;
 	private String constInputPortName;
 	private volatile long startTime = -1;
 	private volatile long offset = -1;
@@ -93,7 +94,7 @@ public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 		this.executor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
 	}
 
-	public void setCons(final AbstractFilterPlugin cons) {
+	public void setCons(final FSReaderRealtimeCons cons) {
 		this.cons = cons;
 	}
 
