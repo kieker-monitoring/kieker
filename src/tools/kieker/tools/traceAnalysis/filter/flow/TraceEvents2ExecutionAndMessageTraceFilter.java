@@ -161,28 +161,23 @@ public class TraceEvents2ExecutionAndMessageTraceFilter extends AbstractTracePro
 			this.executionStack.push(executionInformation);
 		}
 
-		private void finishExecution(final Execution execution) throws InvalidTraceException {
+		private void finishExecution(final String operationSignature, final String classSignature, final long traceId, final String sessionId,
+				final String hostname, final int eoi, final int ess, final long tin, final long tout, final boolean assumed) throws InvalidTraceException {
+			final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(operationSignature);
+			final String classname;
+			// FIXME: just another set of default cases! super calls aren't detected now!
+			if (classSignature.length() == 0) {
+				classname = fqComponentNameSignaturePair.getFqClassname();
+			} else {
+				classname = classSignature;
+			}
+			final Execution execution = AbstractTraceAnalysisFilter.createExecutionByEntityNames(this.systemModelRepository,
+					hostname, classname, fqComponentNameSignaturePair.getSignature(), traceId, sessionId, eoi, ess, tin, tout, assumed);
 			try {
 				this.executionTrace.add(execution);
 			} catch (final InvalidTraceException ex) {
 				throw new InvalidTraceException("Failed to add execution " + execution + " to trace " + this.executionTrace + ".", ex);
 			}
-		}
-
-		private final Execution beforeOperationToExecution(final BeforeOperationEvent event, final long traceId, final String sessionId, final String hostname,
-				final int eoi, final int ess, final long tin, final long tout, final boolean assumed) {
-			final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(event.getOperationSignature());
-			return AbstractTraceAnalysisFilter.createExecutionByEntityNames(this.systemModelRepository, hostname, fqComponentNameSignaturePair.getFqClassname(),
-					fqComponentNameSignaturePair.getSignature(), traceId, sessionId, eoi, ess, tin, tout, assumed);
-
-		}
-
-		private final Execution callOperationToExecution(final CallOperationEvent event, final long traceId, final String sessionId, final String hostname,
-				final int eoi, final int ess, final long tin, final long tout, final boolean assumed) {
-			final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(
-					event.getCalleeOperationSignature());
-			return AbstractTraceAnalysisFilter.createExecutionByEntityNames(this.systemModelRepository, hostname, fqComponentNameSignaturePair.getFqClassname(),
-					fqComponentNameSignaturePair.getSignature(), traceId, sessionId, eoi, ess, tin, tout, assumed);
 		}
 
 		/**
@@ -235,8 +230,9 @@ public class TraceEvents2ExecutionAndMessageTraceFilter extends AbstractTracePro
 					while (!tmpEventStack.isEmpty()) { // create executions (in reverse order)
 						final CallOperationEvent currentCallEvent = tmpEventStack.pop();
 						final ExecutionInformation executionInformation = tmpExecutionStack.pop();
-						final Execution execution = this.callOperationToExecution(
-								currentCallEvent,
+						this.finishExecution(
+								currentCallEvent.getCalleeOperationSignature(),
+								currentCallEvent.getCalleeClassSignature(),
 								this.trace.getTraceId(),
 								this.trace.getSessionId(),
 								this.trace.getHostname(),
@@ -245,7 +241,6 @@ public class TraceEvents2ExecutionAndMessageTraceFilter extends AbstractTracePro
 								currentCallEvent.getTimestamp(),
 								lastEvent.getTimestamp(),
 								true);
-						this.finishExecution(execution);
 					}
 					return;
 				}
@@ -282,8 +277,9 @@ public class TraceEvents2ExecutionAndMessageTraceFilter extends AbstractTracePro
 				this.eventStack.pop();
 			}
 			final ExecutionInformation executionInformation = this.executionStack.pop();
-			final Execution execution = this.beforeOperationToExecution(
-					beforeOperationEvent,
+			this.finishExecution(
+					beforeOperationEvent.getOperationSignature(),
+					beforeOperationEvent.getClassSignature(),
 					this.trace.getTraceId(),
 					this.trace.getSessionId(),
 					this.trace.getHostname(),
@@ -292,7 +288,6 @@ public class TraceEvents2ExecutionAndMessageTraceFilter extends AbstractTracePro
 					beforeOperationEvent.getTimestamp(),
 					afterOperationEvent.getTimestamp(),
 					!definiteCall);
-			this.finishExecution(execution);
 		}
 
 		public void handleCallOperationEvent(final CallOperationEvent callOperationEvent) throws InvalidTraceException {

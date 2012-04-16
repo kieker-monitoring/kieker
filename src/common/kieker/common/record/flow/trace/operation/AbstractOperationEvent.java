@@ -49,16 +49,25 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent {
 		this.classSignature = (String) values[4];
 	}
 
+	/**
+	 * Get the actual OperationSignature
+	 * 
+	 * @return
+	 */
 	public final String getOperationSignature() {
 		return this.operationSignature;
 	}
 
+	/**
+	 * Get the actually executing class
+	 * 
+	 * @return
+	 */
 	public String getClassSignature() {
 		return this.classSignature;
 	}
 
 	public boolean refersToSameOperationAs(final AbstractOperationEvent other) {
-		// FIXME: check also classSignature
-		return this.getOperationSignature().equals(other.getOperationSignature());
+		return (this.getOperationSignature().equals(other.getOperationSignature()) && this.getClassSignature().equals(other.getClassSignature()));
 	}
 }
