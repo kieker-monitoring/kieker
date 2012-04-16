@@ -37,8 +37,8 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
-import kieker.tools.traceAnalysis.filter.flow.EventRecordTraceGenerationFilter;
-import kieker.tools.traceAnalysis.filter.flow.EventTrace2ExecutionAndMessageTraceFilter;
+import kieker.tools.traceAnalysis.filter.flow.EventTraceReconstructionFilter;
+import kieker.tools.traceAnalysis.filter.flow.TraceEvents2ExecutionAndMessageTraceFilter;
 import kieker.tools.traceAnalysis.filter.systemModel.SystemModel2FileFilter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentDependencyGraphAllocationFilter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationDependencyGraphAllocationFilter;
@@ -110,13 +110,13 @@ public final class TestAnalysis {
 			final Configuration confTraceIdFilter = new Configuration();
 			final TraceIdFilter traceIdFilter = new TraceIdFilter(confTraceIdFilter);
 
-			final Configuration confEventRecordTraceGenerationFilter = new Configuration();
-			final EventRecordTraceGenerationFilter eventRecordTraceGenerationFilter =
-					new EventRecordTraceGenerationFilter(confEventRecordTraceGenerationFilter);
+			final Configuration confEventTraceReconstructionFilter = new Configuration();
+			final EventTraceReconstructionFilter eventTraceReconstructionFilter =
+					new EventTraceReconstructionFilter(confEventTraceReconstructionFilter);
 
-			final Configuration confEventTrace2ExecutionTraceFilter = new Configuration();
-			final EventTrace2ExecutionAndMessageTraceFilter eventTrace2ExecutionTraceFilter =
-					new EventTrace2ExecutionAndMessageTraceFilter(confEventTrace2ExecutionTraceFilter);
+			final Configuration confTraceEvents2ExecutionAndMessageTraceFilter = new Configuration();
+			final TraceEvents2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter =
+					new TraceEvents2ExecutionAndMessageTraceFilter(confTraceEvents2ExecutionAndMessageTraceFilter);
 
 			/* Visualization */
 			final Configuration confSequenceDiagramFilter = new Configuration();
@@ -167,19 +167,19 @@ public final class TestAnalysis {
 				analysisController.registerFilter(teeFilter3);
 				analysisController.connect(countingFilter2, CountingFilter.OUTPUT_PORT_NAME_COUNT, teeFilter3, TeeFilter.INPUT_PORT_NAME_EVENTS);
 
-				analysisController.registerFilter(eventRecordTraceGenerationFilter);
-				analysisController.connect(countingFilter2, CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, eventRecordTraceGenerationFilter,
-						EventRecordTraceGenerationFilter.INPUT_PORT_NAME_TRACE_EVENT);
-				analysisController.connect(eventRecordTraceGenerationFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, traceRepo);
+				analysisController.registerFilter(eventTraceReconstructionFilter);
+				analysisController.connect(countingFilter2, CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, eventTraceReconstructionFilter,
+						EventTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
+				// analysisController.connect(eventTraceReconstructionFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, traceRepo);
 
-				analysisController.registerFilter(eventTrace2ExecutionTraceFilter);
-				analysisController.connect(eventRecordTraceGenerationFilter, EventRecordTraceGenerationFilter.OUTPUT_PORT_NAME_TRACE,
-						eventTrace2ExecutionTraceFilter,
-						EventTrace2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME_EVENT_TRACE);
-				analysisController.connect(eventTrace2ExecutionTraceFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, traceRepo);
+				analysisController.registerFilter(traceEvents2ExecutionAndMessageTraceFilter);
+				analysisController.connect(eventTraceReconstructionFilter, EventTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID,
+						traceEvents2ExecutionAndMessageTraceFilter, TraceEvents2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME_EVENT_TRACE);
+				analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, traceRepo);
 
 				analysisController.registerFilter(teeFilter1);
-				analysisController.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, teeFilter1,
+				analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter, TraceEvents2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+						teeFilter1,
 						TeeFilter.INPUT_PORT_NAME_EVENTS);
 
 				analysisController.registerFilter(sequenceDiagramFilter);

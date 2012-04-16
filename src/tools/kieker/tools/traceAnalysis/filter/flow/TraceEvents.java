@@ -20,45 +20,40 @@
 
 package kieker.tools.traceAnalysis.filter.flow;
 
-import java.util.List;
-
 import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.record.flow.trace.Trace;
 
 /**
- * 
- * @author Holger Knoche
- * 
+ * @author Jan Waller
  */
-public class EventRecordStream {
+public final class TraceEvents {
+	private final Trace trace;
+	private final AbstractTraceEvent[] traceEvents;
 
-	private final List<AbstractTraceEvent> events;
-	private final int maxIndex;
-
-	private int currentIndex = 0;
-
-	public EventRecordStream(final EventRecordTrace trace) {
-		this.events = trace.eventList();
-		this.maxIndex = this.events.size() - 1;
+	public TraceEvents(final Trace trace, final AbstractTraceEvent[] traceEvents) {
+		this.trace = trace;
+		this.traceEvents = traceEvents;
 	}
 
-	public void consume() {
-		if (this.currentIndex <= this.maxIndex) {
-			this.currentIndex++;
+	public Trace getTrace() {
+		return this.trace;
+	}
+
+	public AbstractTraceEvent[] getTraceEvents() {
+		return this.traceEvents;
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder(super.toString());
+		sb.append("\n\tTrace: ");
+		sb.append(this.trace);
+		for (final AbstractTraceEvent traceEvent : this.traceEvents) {
+			sb.append("\n\t");
+			sb.append(traceEvent.getClass().getSimpleName());
+			sb.append(": ");
+			sb.append(traceEvent);
 		}
+		return sb.toString();
 	}
-
-	public AbstractTraceEvent currentElement() {
-		return this.lookahead(0);
-	}
-
-	public AbstractTraceEvent lookahead(final int amount) {
-		final int desiredIndex = this.currentIndex + amount;
-
-		if ((desiredIndex < 0) || (desiredIndex > this.maxIndex)) {
-			return null;
-		}
-
-		return this.events.get(desiredIndex);
-	}
-
 }

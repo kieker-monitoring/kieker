@@ -34,7 +34,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
-import kieker.tools.traceAnalysis.filter.flow.EventRecordTrace;
+import kieker.tools.traceAnalysis.filter.flow.TraceEvents;
 
 /**
  * 
@@ -74,7 +74,7 @@ public class TestTraceIdFilter {
 		final SimpleSinkPlugin<AbstractTraceEvent> sinkPlugin = new SimpleSinkPlugin<AbstractTraceEvent>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 
-		final EventRecordTrace trace =
+		final TraceEvents traceEvents =
 				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdNotToPass, TestTraceIdFilter.SESSION_ID,
 						TestTraceIdFilter.HOSTNAME);
 
@@ -85,7 +85,7 @@ public class TestTraceIdFilter {
 
 		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
-		for (final AbstractTraceEvent e : trace) {
+		for (final AbstractTraceEvent e : traceEvents.getTraceEvents()) {
 			Assert.assertTrue("Testcase invalid", !idsToPass.contains(e.getTraceId()));
 			filter.inputTraceEvent(e);
 		}
@@ -120,7 +120,7 @@ public class TestTraceIdFilter {
 		final SimpleSinkPlugin<AbstractTraceEvent> sinkPlugin = new SimpleSinkPlugin<AbstractTraceEvent>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 
-		final EventRecordTrace trace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID,
+		final TraceEvents trace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID,
 				TestTraceIdFilter.HOSTNAME);
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
@@ -130,13 +130,13 @@ public class TestTraceIdFilter {
 
 		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
-		for (final AbstractTraceEvent e : trace) {
+		for (final AbstractTraceEvent e : trace.getTraceEvents()) {
 			Assert.assertTrue("Testcase invalid", idsToPass.contains(e.getTraceId()));
 			filter.inputTraceEvent(e);
 			Assert.assertTrue("Expected event " + e + " to pass the filter", sinkPlugin.getList().contains(e));
 		}
 		// Somehow redundant but records MIGHT be generated randomly ;-)
-		Assert.assertEquals("Unexpected number of output records", sinkPlugin.getList().size(), trace.eventList().size());
+		Assert.assertEquals("Unexpected number of output records", sinkPlugin.getList().size(), trace.getTraceEvents().length);
 	}
 
 	/**
@@ -156,7 +156,7 @@ public class TestTraceIdFilter {
 		final SimpleSinkPlugin<AbstractTraceEvent> sinkPlugin = new SimpleSinkPlugin<AbstractTraceEvent>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 
-		final EventRecordTrace trace =
+		final TraceEvents trace =
 				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID, TestTraceIdFilter.HOSTNAME);
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
@@ -166,11 +166,11 @@ public class TestTraceIdFilter {
 
 		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
 
-		for (final AbstractTraceEvent e : trace) {
+		for (final AbstractTraceEvent e : trace.getTraceEvents()) {
 			filter.inputTraceEvent(e);
 			Assert.assertTrue("Expected event " + e + " to pass the filter", sinkPlugin.getList().contains(e));
 		}
 		// Somehow redundant but records MIGHT be generated randomly ;-)
-		Assert.assertEquals("Unexpected number of output records", sinkPlugin.getList().size(), trace.eventList().size());
+		Assert.assertEquals("Unexpected number of output records", sinkPlugin.getList().size(), trace.getTraceEvents().length);
 	}
 }

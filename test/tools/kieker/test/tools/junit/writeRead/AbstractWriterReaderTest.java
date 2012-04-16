@@ -22,6 +22,7 @@ package kieker.test.tools.junit.writeRead;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
@@ -82,9 +83,9 @@ public abstract class AbstractWriterReaderTest {
 	protected List<IMonitoringRecord> provideEvents() {
 		final List<IMonitoringRecord> someEvents = new ArrayList<IMonitoringRecord>();
 		for (int i = 0; i < AbstractWriterReaderTest.DEFAULT_EVENTS_NUMBER; i = someEvents.size()) {
-			final List<AbstractTraceEvent> nextBatch =
+			final List<AbstractTraceEvent> nextBatch = Arrays.asList(
 					BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(i, i, AbstractWriterReaderTest.DEFAULT_EVENTS_SESSION_ID,
-							AbstractWriterReaderTest.DEFAULT_EVENTS_HOSTNAME).eventList();
+							AbstractWriterReaderTest.DEFAULT_EVENTS_HOSTNAME).getTraceEvents());
 			someEvents.addAll(nextBatch);
 		}
 		someEvents.add(new EmptyRecord()); // this record used to cause problems (#475)

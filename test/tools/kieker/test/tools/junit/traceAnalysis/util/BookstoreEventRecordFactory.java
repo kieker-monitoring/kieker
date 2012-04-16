@@ -21,11 +21,11 @@
 package kieker.test.tools.junit.traceAnalysis.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import junit.framework.Assert;
-
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.Trace;
 import kieker.common.record.flow.trace.concurrency.SplitEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
@@ -34,12 +34,11 @@ import kieker.common.record.flow.trace.operation.CallOperationEvent;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.test.common.junit.record.BookstoreOperationExecutionRecordFactory;
-import kieker.tools.traceAnalysis.filter.flow.EventRecordTrace;
-import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
+import kieker.tools.traceAnalysis.filter.flow.TraceEvents;
 
 /**
  * 
- * @author Andre van Hoorn, Holger Knoche
+ * @author Andre van Hoorn, Holger Knoche, Jan Waller
  * 
  */
 public final class BookstoreEventRecordFactory {
@@ -57,8 +56,6 @@ public final class BookstoreEventRecordFactory {
 	public static final long TSTAMP_OFFSET_exit2_1__crm_getOrders = 8; // NOPMD NOCS (VariableNamingConventions)
 	public static final long TSTAMP_OFFSET_exit0_0__bookstore_searchBook = 11; // NOPMD NOCS VariableNamingConventions)
 
-	private static final String MSG_INVALID_TRACE = "Test invalid (creating invalid trace): ";
-
 	private BookstoreEventRecordFactory() {}
 
 	/**
@@ -70,7 +67,7 @@ public final class BookstoreEventRecordFactory {
 	 * @param traceId
 	 * @return
 	 */
-	public static EventRecordTrace validSyncTraceBeforeAfterEvents(final long firstTimestamp, final long traceId, final String sessionId,
+	public static TraceEvents validSyncTraceBeforeAfterEvents(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {
 		int curOrderIndex = 0;
 
@@ -116,22 +113,18 @@ public final class BookstoreEventRecordFactory {
 						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
 						BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE);
 
-		final EventRecordTrace retTrace = new EventRecordTrace(traceId, sessionId, hostname);
-
-		try {
-			retTrace.add(entry0_0__bookstore_searchBook);
-			retTrace.add(entry1_1__catalog_getBook);
-			retTrace.add(exit1_1__catalog_getBook);
-			retTrace.add(entry2_1__crm_getOrders);
-			retTrace.add(entry3_2__catalog_getBook);
-			retTrace.add(exit3_2__catalog_getBook);
-			retTrace.add(exit2_1__crm_getOrders);
-			retTrace.add(exit0_0__bookstore_searchBook);
-		} catch (final InvalidTraceException e) {
-			Assert.fail(BookstoreEventRecordFactory.MSG_INVALID_TRACE + e.getMessage());
-		}
-
-		return retTrace;
+		final Trace trace = new Trace(traceId, -1, sessionId, hostname, -1, -1);
+		final AbstractTraceEvent[] events = new AbstractTraceEvent[] {
+			entry0_0__bookstore_searchBook,
+			entry1_1__catalog_getBook,
+			exit1_1__catalog_getBook,
+			entry2_1__crm_getOrders,
+			entry3_2__catalog_getBook,
+			exit3_2__catalog_getBook,
+			exit2_1__crm_getOrders,
+			exit0_0__bookstore_searchBook,
+		};
+		return new TraceEvents(trace, events);
 	}
 
 	/**
@@ -144,7 +137,7 @@ public final class BookstoreEventRecordFactory {
 	 * @param traceId
 	 * @return
 	 */
-	public static EventRecordTrace validSyncTraceAdditionalCallEvents(final long firstTimestamp, final long traceId, final String sessionId,
+	public static TraceEvents validSyncTraceAdditionalCallEvents(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {
 		int curOrderIndex = 0;
 
@@ -211,26 +204,21 @@ public final class BookstoreEventRecordFactory {
 				traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
 				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE);
 
-		final EventRecordTrace retTrace =
-				new EventRecordTrace(traceId, sessionId, hostname);
-
-		try {
-			retTrace.add(entry0_0__bookstore_searchBook);
-			retTrace.add(call1_1__catalog_getBook);
-			retTrace.add(entry1_1__catalog_getBook);
-			retTrace.add(exit1_1__catalog_getBook);
-			retTrace.add(call2_1__crm_getOrders);
-			retTrace.add(entry2_1__crm_getOrders);
-			retTrace.add(call3_2__catalog_getBook);
-			retTrace.add(entry3_2__catalog_getBook);
-			retTrace.add(exit3_2__catalog_getBook);
-			retTrace.add(exit2_1__crm_getOrders);
-			retTrace.add(exit0_0__bookstore_searchBook);
-		} catch (final InvalidTraceException e) {
-			Assert.fail(BookstoreEventRecordFactory.MSG_INVALID_TRACE + e.getMessage());
-		}
-
-		return retTrace;
+		final Trace trace = new Trace(traceId, -1, sessionId, hostname, -1, -1);
+		final AbstractTraceEvent[] events = new AbstractTraceEvent[] {
+			entry0_0__bookstore_searchBook,
+			call1_1__catalog_getBook,
+			entry1_1__catalog_getBook,
+			exit1_1__catalog_getBook,
+			call2_1__crm_getOrders,
+			entry2_1__crm_getOrders,
+			call3_2__catalog_getBook,
+			entry3_2__catalog_getBook,
+			exit3_2__catalog_getBook,
+			exit2_1__crm_getOrders,
+			exit0_0__bookstore_searchBook,
+		};
+		return new TraceEvents(trace, events);
 	}
 
 	/**
@@ -243,7 +231,7 @@ public final class BookstoreEventRecordFactory {
 	 * @param traceId
 	 * @return
 	 */
-	public static EventRecordTrace validSyncTraceAdditionalCallEventsGap(final long firstTimestamp, final long traceId, final String sessionId,
+	public static TraceEvents validSyncTraceAdditionalCallEventsGap(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {
 		int curOrderIndex = 0;
 
@@ -312,25 +300,21 @@ public final class BookstoreEventRecordFactory {
 						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
 						BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE);
 
-		final EventRecordTrace retTrace = new EventRecordTrace(traceId, sessionId, hostname);
-
-		try {
-			retTrace.add(entry0_0__bookstore_searchBook);
-			retTrace.add(call1_1__catalog_getBook);
-			retTrace.add(entry1_1__catalog_getBook);
-			retTrace.add(exit1_1__catalog_getBook);
-			retTrace.add(call2_1__crm_getOrders);
-			// assumed to be uninstrumented: retTrace.add(entry2_1__crm_getOrders);
-			retTrace.add(call3_2__catalog_getBook);
-			retTrace.add(entry3_2__catalog_getBook);
-			retTrace.add(exit3_2__catalog_getBook);
-			// assumed to be uninstrumented: retTrace.add(exit2_1__crm_getOrders);
-			retTrace.add(exit0_0__bookstore_searchBook);
-		} catch (final InvalidTraceException e) {
-			Assert.fail(BookstoreEventRecordFactory.MSG_INVALID_TRACE + e.getMessage());
-		}
-
-		return retTrace;
+		final Trace trace = new Trace(traceId, -1, sessionId, hostname, -1, -1);
+		final AbstractTraceEvent[] events = new AbstractTraceEvent[] {
+			entry0_0__bookstore_searchBook,
+			call1_1__catalog_getBook,
+			entry1_1__catalog_getBook,
+			exit1_1__catalog_getBook,
+			call2_1__crm_getOrders,
+			// entry2_1__crm_getOrders,
+			call3_2__catalog_getBook,
+			entry3_2__catalog_getBook,
+			exit3_2__catalog_getBook,
+			// exit2_1__crm_getOrders,
+			exit0_0__bookstore_searchBook,
+		};
+		return new TraceEvents(trace, events);
 	}
 
 	/**
@@ -343,7 +327,7 @@ public final class BookstoreEventRecordFactory {
 	 * @param traceId
 	 * @return
 	 */
-	public static EventRecordTrace validSyncTraceSimpleEntryCallExit(final long firstTimestamp, final long traceId, final String sessionId,
+	public static TraceEvents validSyncTraceSimpleEntryCallExit(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {
 		int curOrderIndex = 0;
 
@@ -375,17 +359,13 @@ public final class BookstoreEventRecordFactory {
 						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
 						BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE);
 
-		final EventRecordTrace retTrace = new EventRecordTrace(traceId, sessionId, hostname);
-
-		try {
-			retTrace.add(entry0_0__bookstore_searchBook);
-			retTrace.add(call1_1__catalog_getBook);
-			retTrace.add(exit0_0__bookstore_searchBook);
-		} catch (final InvalidTraceException e) {
-			Assert.fail(BookstoreEventRecordFactory.MSG_INVALID_TRACE + e.getMessage());
-		}
-
-		return retTrace;
+		final Trace trace = new Trace(traceId, -1, sessionId, hostname, -1, -1);
+		final AbstractTraceEvent[] events = new AbstractTraceEvent[] {
+			entry0_0__bookstore_searchBook,
+			call1_1__catalog_getBook,
+			exit0_0__bookstore_searchBook,
+		};
+		return new TraceEvents(trace, events);
 	}
 
 	/**
@@ -398,7 +378,7 @@ public final class BookstoreEventRecordFactory {
 	 * @param traceId
 	 * @return
 	 */
-	public static EventRecordTrace validSyncTraceSimpleEntryCallReturnCallCallExit(final long firstTimestamp, final long traceId, final String sessionId,
+	public static TraceEvents validSyncTraceSimpleEntryCallReturnCallCallExit(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {
 		int curOrderIndex = 0;
 
@@ -440,19 +420,15 @@ public final class BookstoreEventRecordFactory {
 						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
 						BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE);
 
-		final EventRecordTrace retTrace = new EventRecordTrace(traceId, sessionId, hostname);
-
-		try {
-			retTrace.add(entry0_0__bookstore_searchBook);
-			retTrace.add(call1_1__catalog_getBook);
-			retTrace.add(disturbEvent);
-			retTrace.add(call2_1__crm_getOrders);
-			retTrace.add(exit0_0__bookstore_searchBook);
-		} catch (final InvalidTraceException e) {
-			Assert.fail(BookstoreEventRecordFactory.MSG_INVALID_TRACE + e.getMessage());
-		}
-
-		return retTrace;
+		final Trace trace = new Trace(traceId, -1, sessionId, hostname, -1, -1);
+		final AbstractTraceEvent[] events = new AbstractTraceEvent[] {
+			entry0_0__bookstore_searchBook,
+			call1_1__catalog_getBook,
+			disturbEvent,
+			call2_1__crm_getOrders,
+			exit0_0__bookstore_searchBook,
+		};
+		return new TraceEvents(trace, events);
 	}
 
 	/**
@@ -465,7 +441,7 @@ public final class BookstoreEventRecordFactory {
 	 * @param traceId
 	 * @return
 	 */
-	public static EventRecordTrace validSyncTraceSimpleEntryCallCallExit(final long firstTimestamp, final long traceId, final String sessionId,
+	public static TraceEvents validSyncTraceSimpleEntryCallCallExit(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {
 		int curOrderIndex = 0;
 
@@ -504,18 +480,14 @@ public final class BookstoreEventRecordFactory {
 						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
 						BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE);
 
-		final EventRecordTrace retTrace = new EventRecordTrace(traceId, sessionId, hostname);
-
-		try {
-			retTrace.add(entry0_0__bookstore_searchBook);
-			retTrace.add(call2_1__crm_getOrders);
-			retTrace.add(call3_2__catalog_getBook);
-			retTrace.add(exit0_0__bookstore_searchBook);
-		} catch (final InvalidTraceException e) {
-			Assert.fail(BookstoreEventRecordFactory.MSG_INVALID_TRACE + e.getMessage());
-		}
-
-		return retTrace;
+		final Trace trace = new Trace(traceId, -1, sessionId, hostname, -1, -1);
+		final AbstractTraceEvent[] events = new AbstractTraceEvent[] {
+			entry0_0__bookstore_searchBook,
+			call2_1__crm_getOrders,
+			call3_2__catalog_getBook,
+			exit0_0__bookstore_searchBook,
+		};
+		return new TraceEvents(trace, events);
 	}
 
 	public static void main(final String[] args) {
@@ -529,22 +501,22 @@ public final class BookstoreEventRecordFactory {
 
 		final List<IMonitoringRecord> allRecords = new ArrayList<IMonitoringRecord>();
 
-		final EventRecordTrace validSyncTraceBeforeAfterEvents =
+		final TraceEvents validSyncTraceBeforeAfterEvents =
 				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceId, sessionId, hostname);
 		allRecords.add(new Trace(traceId, traceId, sessionId, hostname, Trace.NO_PARENT_TRACEID, Trace.NO_PARENT_ORDER_INDEX));
-		allRecords.addAll(validSyncTraceBeforeAfterEvents.eventList());
+		allRecords.addAll(Arrays.asList(validSyncTraceBeforeAfterEvents.getTraceEvents()));
 		firstTimestamp += firstTimestampDelta;
 		traceId++;
-		final EventRecordTrace validSyncTraceAdditionalCallEvents =
+		final TraceEvents validSyncTraceAdditionalCallEvents =
 				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEvents(firstTimestamp, traceId, sessionId, hostname);
 		allRecords.add(new Trace(traceId, traceId, sessionId, hostname, Trace.NO_PARENT_TRACEID, Trace.NO_PARENT_ORDER_INDEX));
-		allRecords.addAll(validSyncTraceAdditionalCallEvents.eventList());
+		allRecords.addAll(Arrays.asList(validSyncTraceAdditionalCallEvents.getTraceEvents()));
 		firstTimestamp += firstTimestampDelta;
 		traceId++;
-		final EventRecordTrace validSyncTraceAdditionalCallEventsGap =
+		final TraceEvents validSyncTraceAdditionalCallEventsGap =
 				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(firstTimestamp, traceId, sessionId, hostname);
 		allRecords.add(new Trace(traceId, traceId, sessionId, hostname, Trace.NO_PARENT_TRACEID, Trace.NO_PARENT_ORDER_INDEX));
-		allRecords.addAll(validSyncTraceAdditionalCallEventsGap.eventList());
+		allRecords.addAll(Arrays.asList(validSyncTraceAdditionalCallEventsGap.getTraceEvents()));
 
 		// TODO: currently not all of the trace generation methods in this class are used
 
