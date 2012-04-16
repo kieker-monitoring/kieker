@@ -86,9 +86,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 
 	/** Pending traces sorted by timestamps */
 	private final SortedSet<EventRecordTrace> timeoutMap = new TreeSet<EventRecordTrace>(new Comparator<EventRecordTrace>() {
-
 		/** Order traces by tins */
-
 		public int compare(final EventRecordTrace t1, final EventRecordTrace t2) {
 			if (t1 == t2) { // NOPMD (no equals)
 				return 0;
@@ -154,7 +152,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 				}
 			} else { /* create and add new trace */
 				eventRecordTrace = new EventRecordTrace(traceId);
-				this.pendingTraces.put(traceId, eventRecordTrace); // TODO: we don't have access to a session ID.
+				this.pendingTraces.put(traceId, eventRecordTrace); // TODO: we don't have access to a session ID. (if it is a Trace Record, we might!)
 			}
 
 			/**
@@ -199,7 +197,7 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 
 	/**
 	 * Processes the pending traces in the timeout queue: Either those,
-	 * that timed out are all, if the filter was requested to terminate.
+	 * that timed out or all, if the filter was requested to terminate.
 	 * 
 	 * @throws ExecutionEventProcessingException
 	 */
@@ -241,7 +239,6 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 	 * 
 	 * @param error
 	 */
-
 	@Override
 	public void terminate(final boolean error) {
 		try {
@@ -274,10 +271,8 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
-
 		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS,
 				Long.toString(AbstractTraceProcessingFilter.MAX_DURATION_MILLIS));
-
 		return configuration;
 	}
 
@@ -286,5 +281,4 @@ public class EventRecordTraceGenerationFilter extends AbstractTraceProcessingFil
 		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long.toString(this.maxTraceDurationMillis));
 		return configuration;
 	}
-
 }

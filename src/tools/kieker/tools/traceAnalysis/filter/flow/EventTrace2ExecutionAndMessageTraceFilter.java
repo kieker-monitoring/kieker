@@ -48,7 +48,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 /**
  * This filter converts an event-based trace to an execution-based trace.
  * 
- * @author Andre van Hoorn, Holger Knoche
+ * @author Andre van Hoorn, Holger Knoche, Jan Waller
  * 
  */
 @Plugin(

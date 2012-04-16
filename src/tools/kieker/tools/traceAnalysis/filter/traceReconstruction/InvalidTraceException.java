@@ -21,8 +21,7 @@
 package kieker.tools.traceAnalysis.filter.traceReconstruction;
 
 /**
- * 
- * @author avanhoorn
+ * @author Andre van Hoorn
  */
 public class InvalidTraceException extends Exception {
 
