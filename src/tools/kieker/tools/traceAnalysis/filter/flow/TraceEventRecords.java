@@ -26,11 +26,11 @@ import kieker.common.record.flow.trace.Trace;
 /**
  * @author Jan Waller
  */
-public final class TraceEvents {
+public final class TraceEventRecords {
 	private final Trace trace;
 	private final AbstractTraceEvent[] traceEvents;
 
-	public TraceEvents(final Trace trace, final AbstractTraceEvent[] traceEvents) {
+	public TraceEventRecords(final Trace trace, final AbstractTraceEvent[] traceEvents) {
 		this.trace = trace;
 		this.traceEvents = traceEvents;
 	}

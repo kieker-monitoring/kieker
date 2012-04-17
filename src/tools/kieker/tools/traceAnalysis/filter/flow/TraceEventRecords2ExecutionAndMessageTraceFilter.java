@@ -55,25 +55,25 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  */
 @Plugin(
 		outputPorts = {
-			@OutputPort(name = TraceEvents2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
+			@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
 					description = "Outputs transformed execution traces",
 					eventTypes = { ExecutionTrace.class }),
-			@OutputPort(name = TraceEvents2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+			@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 					description = "Outputs transformed message traces",
 					eventTypes = { MessageTrace.class }) },
 		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
-public class TraceEvents2ExecutionAndMessageTraceFilter extends AbstractTraceProcessingFilter {
+public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTraceProcessingFilter {
 	public static final String INPUT_PORT_NAME_EVENT_TRACE = "traceEvents";
 	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE = "executionTrace";
 	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE = "messageTrace";
 
 	public static final String CONFIG_ENHANCE_JAVA_CONSTRUCTORS = "enhanceJavaConstructors";
 
-	private static final Log LOG = LogFactory.getLog(TraceEvents2ExecutionAndMessageTraceFilter.class);
+	private static final Log LOG = LogFactory.getLog(TraceEventRecords2ExecutionAndMessageTraceFilter.class);
 
 	private final boolean enhanceJavaConstructors;
 
-	public TraceEvents2ExecutionAndMessageTraceFilter(final Configuration configuration) {
+	public TraceEventRecords2ExecutionAndMessageTraceFilter(final Configuration configuration) {
 		super(configuration);
 		this.enhanceJavaConstructors = configuration.getBooleanProperty(CONFIG_ENHANCE_JAVA_CONSTRUCTORS);
 	}
@@ -91,8 +91,8 @@ public class TraceEvents2ExecutionAndMessageTraceFilter extends AbstractTracePro
 		return configuration;
 	}
 
-	@InputPort(name = INPUT_PORT_NAME_EVENT_TRACE, description = "Receives TraceEvents to be transformed", eventTypes = { TraceEvents.class })
-	public void inputTraceEvents(final TraceEvents traceEvents) {
+	@InputPort(name = INPUT_PORT_NAME_EVENT_TRACE, description = "Receives TraceEvents to be transformed", eventTypes = { TraceEventRecords.class })
+	public void inputTraceEvents(final TraceEventRecords traceEvents) {
 		final Trace trace = traceEvents.getTrace();
 		if (trace == null) {
 			LOG.error("Trace is missing from TraceEvents");
@@ -100,7 +100,7 @@ public class TraceEvents2ExecutionAndMessageTraceFilter extends AbstractTracePro
 		}
 		final long traceId = trace.getTraceId();
 		final ExecutionTrace executionTrace = new ExecutionTrace(traceId, trace.getSessionId());
-		final TraceEventHandler traceEventHandler = new TraceEventHandler(trace, executionTrace, this.getSystemEntityFactory(), this.enhanceJavaConstructors);
+		final TraceEventRecordHandler traceEventRecordHandler = new TraceEventRecordHandler(trace, executionTrace, this.getSystemEntityFactory(), this.enhanceJavaConstructors);
 		int expectedOrderIndex = 0;
 		for (final AbstractTraceEvent event : traceEvents.getTraceEvents()) {
 			if (event.getOrderIndex() != expectedOrderIndex++) {
@@ -114,21 +114,21 @@ public class TraceEvents2ExecutionAndMessageTraceFilter extends AbstractTracePro
 			try { // handle all cases (in order of inheritance!!!)
 				if (event instanceof BeforeConstructorEvent) {
 					// TODO: use an own handler?
-					traceEventHandler.handleBeforeOperationEvent((BeforeConstructorEvent) event);
+					traceEventRecordHandler.handleBeforeOperationEvent((BeforeConstructorEvent) event);
 				} else if (event instanceof AfterConstructorFailedEvent) {
 					// TODO: use an own handler?
-					traceEventHandler.handleAfterConstructorEvent((AfterConstructorEvent) event);
+					traceEventRecordHandler.handleAfterConstructorEvent((AfterConstructorEvent) event);
 				} else if (event instanceof AfterConstructorEvent) {
-					traceEventHandler.handleAfterConstructorEvent((AfterConstructorEvent) event);
+					traceEventRecordHandler.handleAfterConstructorEvent((AfterConstructorEvent) event);
 				} else if (event instanceof BeforeOperationEvent) {
-					traceEventHandler.handleBeforeOperationEvent((BeforeOperationEvent) event);
+					traceEventRecordHandler.handleBeforeOperationEvent((BeforeOperationEvent) event);
 				} else if (event instanceof AfterOperationFailedEvent) {
 					// TODO: use an own handler?
-					traceEventHandler.handleAfterOperationEvent((AfterOperationEvent) event);
+					traceEventRecordHandler.handleAfterOperationEvent((AfterOperationEvent) event);
 				} else if (event instanceof AfterOperationEvent) {
-					traceEventHandler.handleAfterOperationEvent((AfterOperationEvent) event);
+					traceEventRecordHandler.handleAfterOperationEvent((AfterOperationEvent) event);
 				} else if (event instanceof CallOperationEvent) {
-					traceEventHandler.handleCallOperationEvent((CallOperationEvent) event);
+					traceEventRecordHandler.handleCallOperationEvent((CallOperationEvent) event);
 				} else if (event instanceof SplitEvent) {
 					LOG.warn("Events of type 'SplitEvent' are currently not handled and ignored.");
 				} else {
@@ -152,7 +152,7 @@ public class TraceEvents2ExecutionAndMessageTraceFilter extends AbstractTracePro
 	/**
 	 * This class encapsulates the trace's state, that is, the current event and execution stacks.
 	 */
-	private static class TraceEventHandler {
+	private static class TraceEventRecordHandler {
 		private final SystemModelRepository systemModelRepository;
 		private final Trace trace;
 		private final ExecutionTrace executionTrace;
@@ -163,7 +163,7 @@ public class TraceEvents2ExecutionAndMessageTraceFilter extends AbstractTracePro
 
 		private int eoi = 0;
 
-		public TraceEventHandler(final Trace trace, final ExecutionTrace executionTrace, final SystemModelRepository systemModelRepository,
+		public TraceEventRecordHandler(final Trace trace, final ExecutionTrace executionTrace, final SystemModelRepository systemModelRepository,
 				final boolean enhanceJavaConstructors) {
 			this.trace = trace;
 			this.executionTrace = executionTrace;

@@ -34,7 +34,7 @@ import kieker.common.record.flow.trace.operation.CallOperationEvent;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.test.common.junit.record.BookstoreOperationExecutionRecordFactory;
-import kieker.tools.traceAnalysis.filter.flow.TraceEvents;
+import kieker.tools.traceAnalysis.filter.flow.TraceEventRecords;
 
 /**
  * 
@@ -67,7 +67,7 @@ public final class BookstoreEventRecordFactory {
 	 * @param traceId
 	 * @return
 	 */
-	public static TraceEvents validSyncTraceBeforeAfterEvents(final long firstTimestamp, final long traceId, final String sessionId,
+	public static TraceEventRecords validSyncTraceBeforeAfterEvents(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {
 		int curOrderIndex = 0;
 
@@ -124,7 +124,7 @@ public final class BookstoreEventRecordFactory {
 			exit2_1__crm_getOrders,
 			exit0_0__bookstore_searchBook,
 		};
-		return new TraceEvents(trace, events);
+		return new TraceEventRecords(trace, events);
 	}
 
 	/**
@@ -137,7 +137,7 @@ public final class BookstoreEventRecordFactory {
 	 * @param traceId
 	 * @return
 	 */
-	public static TraceEvents validSyncTraceAdditionalCallEvents(final long firstTimestamp, final long traceId, final String sessionId,
+	public static TraceEventRecords validSyncTraceAdditionalCallEvents(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {
 		int curOrderIndex = 0;
 
@@ -218,7 +218,7 @@ public final class BookstoreEventRecordFactory {
 			exit2_1__crm_getOrders,
 			exit0_0__bookstore_searchBook,
 		};
-		return new TraceEvents(trace, events);
+		return new TraceEventRecords(trace, events);
 	}
 
 	/**
@@ -231,7 +231,7 @@ public final class BookstoreEventRecordFactory {
 	 * @param traceId
 	 * @return
 	 */
-	public static TraceEvents validSyncTraceAdditionalCallEventsGap(final long firstTimestamp, final long traceId, final String sessionId,
+	public static TraceEventRecords validSyncTraceAdditionalCallEventsGap(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {
 		int curOrderIndex = 0;
 
@@ -314,7 +314,7 @@ public final class BookstoreEventRecordFactory {
 			// exit2_1__crm_getOrders,
 			exit0_0__bookstore_searchBook,
 		};
-		return new TraceEvents(trace, events);
+		return new TraceEventRecords(trace, events);
 	}
 
 	/**
@@ -327,7 +327,7 @@ public final class BookstoreEventRecordFactory {
 	 * @param traceId
 	 * @return
 	 */
-	public static TraceEvents validSyncTraceSimpleEntryCallExit(final long firstTimestamp, final long traceId, final String sessionId,
+	public static TraceEventRecords validSyncTraceSimpleEntryCallExit(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {
 		int curOrderIndex = 0;
 
@@ -365,7 +365,7 @@ public final class BookstoreEventRecordFactory {
 			call1_1__catalog_getBook,
 			exit0_0__bookstore_searchBook,
 		};
-		return new TraceEvents(trace, events);
+		return new TraceEventRecords(trace, events);
 	}
 
 	/**
@@ -378,7 +378,7 @@ public final class BookstoreEventRecordFactory {
 	 * @param traceId
 	 * @return
 	 */
-	public static TraceEvents validSyncTraceSimpleEntryCallReturnCallCallExit(final long firstTimestamp, final long traceId, final String sessionId,
+	public static TraceEventRecords validSyncTraceSimpleEntryCallReturnCallCallExit(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {
 		int curOrderIndex = 0;
 
@@ -428,7 +428,7 @@ public final class BookstoreEventRecordFactory {
 			call2_1__crm_getOrders,
 			exit0_0__bookstore_searchBook,
 		};
-		return new TraceEvents(trace, events);
+		return new TraceEventRecords(trace, events);
 	}
 
 	/**
@@ -441,7 +441,7 @@ public final class BookstoreEventRecordFactory {
 	 * @param traceId
 	 * @return
 	 */
-	public static TraceEvents validSyncTraceSimpleEntryCallCallExit(final long firstTimestamp, final long traceId, final String sessionId,
+	public static TraceEventRecords validSyncTraceSimpleEntryCallCallExit(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {
 		int curOrderIndex = 0;
 
@@ -487,7 +487,7 @@ public final class BookstoreEventRecordFactory {
 			call3_2__catalog_getBook,
 			exit0_0__bookstore_searchBook,
 		};
-		return new TraceEvents(trace, events);
+		return new TraceEventRecords(trace, events);
 	}
 
 	public static void main(final String[] args) {
@@ -501,19 +501,19 @@ public final class BookstoreEventRecordFactory {
 
 		final List<IMonitoringRecord> allRecords = new ArrayList<IMonitoringRecord>();
 
-		final TraceEvents validSyncTraceBeforeAfterEvents =
+		final TraceEventRecords validSyncTraceBeforeAfterEvents =
 				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceId, sessionId, hostname);
 		allRecords.add(new Trace(traceId, traceId, sessionId, hostname, Trace.NO_PARENT_TRACEID, Trace.NO_PARENT_ORDER_INDEX));
 		allRecords.addAll(Arrays.asList(validSyncTraceBeforeAfterEvents.getTraceEvents()));
 		firstTimestamp += firstTimestampDelta;
 		traceId++;
-		final TraceEvents validSyncTraceAdditionalCallEvents =
+		final TraceEventRecords validSyncTraceAdditionalCallEvents =
 				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEvents(firstTimestamp, traceId, sessionId, hostname);
 		allRecords.add(new Trace(traceId, traceId, sessionId, hostname, Trace.NO_PARENT_TRACEID, Trace.NO_PARENT_ORDER_INDEX));
 		allRecords.addAll(Arrays.asList(validSyncTraceAdditionalCallEvents.getTraceEvents()));
 		firstTimestamp += firstTimestampDelta;
 		traceId++;
-		final TraceEvents validSyncTraceAdditionalCallEventsGap =
+		final TraceEventRecords validSyncTraceAdditionalCallEventsGap =
 				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(firstTimestamp, traceId, sessionId, hostname);
 		allRecords.add(new Trace(traceId, traceId, sessionId, hostname, Trace.NO_PARENT_TRACEID, Trace.NO_PARENT_ORDER_INDEX));
 		allRecords.addAll(Arrays.asList(validSyncTraceAdditionalCallEventsGap.getTraceEvents()));

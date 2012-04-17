@@ -21,12 +21,12 @@
 package kieker.test.tools.junit.traceAnalysis.filter.flow;
 
 import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.filter.flow.EventTraceReconstructionFilter;
+import kieker.tools.traceAnalysis.filter.flow.EventRecordTraceReconstructionFilter;
 
 /**
  * @author Andre van Hoorn
  */
-public class TestEventTraceReconstructionFilter { // NOCS (test class without constructor)
+public class TestEventRecordTraceReconstructionFilter { // NOCS (test class without constructor)
 
 	// TODO: Continue this test in terms of timing constellations
 
@@ -39,10 +39,10 @@ public class TestEventTraceReconstructionFilter { // NOCS (test class without co
 	 * @param maxTraceDurationMillis
 	 * @return
 	 */
-	private static EventTraceReconstructionFilter createFilter(final long maxTraceDurationMillis) {
+	private static EventRecordTraceReconstructionFilter createFilter(final long maxTraceDurationMillis) {
 		final Configuration cfg = new Configuration();
 		// cfg.setProperty(EventRecordTraceGenerationFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long.toString(maxTraceDurationMillis));
-		return new EventTraceReconstructionFilter(cfg);
+		return new EventRecordTraceReconstructionFilter(cfg);
 	}
 
 	// TODO currently not implemented!

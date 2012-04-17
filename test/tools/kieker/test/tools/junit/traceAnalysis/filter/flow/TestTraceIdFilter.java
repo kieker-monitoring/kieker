@@ -34,7 +34,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
 import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
-import kieker.tools.traceAnalysis.filter.flow.TraceEvents;
+import kieker.tools.traceAnalysis.filter.flow.TraceEventRecords;
 
 /**
  * 
@@ -74,7 +74,7 @@ public class TestTraceIdFilter {
 		final SimpleSinkPlugin<AbstractTraceEvent> sinkPlugin = new SimpleSinkPlugin<AbstractTraceEvent>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 
-		final TraceEvents traceEvents =
+		final TraceEventRecords traceEvents =
 				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdNotToPass, TestTraceIdFilter.SESSION_ID,
 						TestTraceIdFilter.HOSTNAME);
 
@@ -120,7 +120,7 @@ public class TestTraceIdFilter {
 		final SimpleSinkPlugin<AbstractTraceEvent> sinkPlugin = new SimpleSinkPlugin<AbstractTraceEvent>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 
-		final TraceEvents trace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID,
+		final TraceEventRecords trace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID,
 				TestTraceIdFilter.HOSTNAME);
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
@@ -156,7 +156,7 @@ public class TestTraceIdFilter {
 		final SimpleSinkPlugin<AbstractTraceEvent> sinkPlugin = new SimpleSinkPlugin<AbstractTraceEvent>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 
-		final TraceEvents trace =
+		final TraceEventRecords trace =
 				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID, TestTraceIdFilter.HOSTNAME);
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());

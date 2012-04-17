@@ -48,20 +48,20 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 		name = "Trace Reconstruction Filter",
 		description = "Filter to reconstruct event based (flow) traces",
 		outputPorts = {
-			@OutputPort(name = EventTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID,
+			@OutputPort(name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID,
 					description = "Outputs valid traces",
-					eventTypes = { TraceEvents.class }),
-			@OutputPort(name = EventTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID,
+					eventTypes = { TraceEventRecords.class }),
+			@OutputPort(name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID,
 					description = "Outputs traces missing crucial records",
-					eventTypes = { TraceEvents.class }) })
-public final class EventTraceReconstructionFilter extends AbstractFilterPlugin {
+					eventTypes = { TraceEventRecords.class }) })
+public final class EventRecordTraceReconstructionFilter extends AbstractFilterPlugin {
 	public static final String OUTPUT_PORT_NAME_TRACE_VALID = "validTraces";
 	public static final String OUTPUT_PORT_NAME_TRACE_INVALID = "invalidTraces";
 	public static final String INPUT_PORT_NAME_TRACE_RECORDS = "traceRecords";
 
 	private final Map<Long, TraceBuffer> traceId2trace;
 
-	public EventTraceReconstructionFilter(final Configuration configuration) {
+	public EventRecordTraceReconstructionFilter(final Configuration configuration) {
 		super(configuration);
 		this.traceId2trace = new ConcurrentHashMap<Long, TraceBuffer>();
 	}
@@ -192,8 +192,8 @@ public final class EventTraceReconstructionFilter extends AbstractFilterPlugin {
 			return ((this.trace == null) || this.damaged || (this.openEvents != 0) || ((this.maxOrderIndex + 1) != this.events.size()));
 		}
 
-		public TraceEvents toTraceEvents() {
-			return new TraceEvents(this.trace, this.events.toArray(new AbstractTraceEvent[this.events.size()]));
+		public TraceEventRecords toTraceEvents() {
+			return new TraceEventRecords(this.trace, this.events.toArray(new AbstractTraceEvent[this.events.size()]));
 		}
 
 		private static final class TraceEventComperator implements Comparator<AbstractTraceEvent> {
