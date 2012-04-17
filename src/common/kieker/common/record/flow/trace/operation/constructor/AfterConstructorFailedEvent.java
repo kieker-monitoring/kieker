@@ -18,19 +18,18 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.flow.trace.operation;
+package kieker.common.record.flow.trace.operation.constructor;
 
 /**
  * @author Jan Waller
  */
-public class AfterOperationFailedEvent extends AfterOperationEvent {
-
+public class AfterConstructorFailedEvent extends AfterConstructorEvent {
 	/**
 	 * Constant to be used if no cause required.
 	 */
 	public static final String NO_CAUSE = "<no-cause>";
 
-	private static final long serialVersionUID = 3331883608930487185L;
+	private static final long serialVersionUID = 7799237551807650179L;
 	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
@@ -42,18 +41,18 @@ public class AfterOperationFailedEvent extends AfterOperationEvent {
 
 	private final String cause;
 
-	public AfterOperationFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSiganture, final String classSignature,
+	public AfterConstructorFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSiganture, final String classSignature,
 			final String cause) {
 		super(timestamp, traceId, orderIndex, operationSiganture, classSignature);
 		this.cause = (cause == null) ? NO_CAUSE : cause; // NOCS
 	}
 
-	public AfterOperationFailedEvent(final Object[] values) { // NOPMD (values stored directly)
+	public AfterConstructorFailedEvent(final Object[] values) { // NOPMD (values stored directly)
 		super(values, TYPES); // values[0..4]
 		this.cause = (String) values[5];
 	}
 
-	protected AfterOperationFailedEvent(final Object[] values, final Class<?>[] types) {
+	protected AfterConstructorFailedEvent(final Object[] values, final Class<?>[] types) {
 		super(values, types); // values[0..4]
 		this.cause = (String) values[5];
 	}

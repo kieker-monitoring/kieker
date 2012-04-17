@@ -24,7 +24,7 @@ package kieker.common.record.flow.trace.operation;
  * @author Andre van Hoorn, Holger Knoche, Jan Waller
  */
 public final class CallOperationEvent extends AbstractOperationEvent {
-	private static final long serialVersionUID = -63172423466638L;
+	private static final long serialVersionUID = -3767410839664324783L;
 	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
@@ -58,13 +58,19 @@ public final class CallOperationEvent extends AbstractOperationEvent {
 		this.calleeClassSignature = (String) values[6];
 	}
 
-	public final Object[] toArray() {
+	protected CallOperationEvent(final Object[] values, final Class<?>[] types) { // NOPMD (values stored directly)
+		super(values, types); // values[0..4]
+		this.calleeOperationSignature = (String) values[5];
+		this.calleeClassSignature = (String) values[6];
+	}
+
+	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(),
 			this.getCallerOperationSignature(), this.getCallerClassSignature(),
 			this.getCalleeOperationSignature(), this.getCalleeClassSignature(), };
 	}
 
-	public final Class<?>[] getValueTypes() {
+	public Class<?>[] getValueTypes() {
 		return TYPES.clone();
 	}
 

@@ -23,7 +23,7 @@ package kieker.common.record.flow;
 /**
  * @author Jan Waller
  */
-public final class ConstructionEvent extends AbstractEvent {
+public class ConstructionEvent extends AbstractEvent {
 	private static final long serialVersionUID = 4260562921517437040L;
 	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
@@ -56,7 +56,13 @@ public final class ConstructionEvent extends AbstractEvent {
 		this.objectName = (String) values[2];
 	}
 
-	public final Object[] toArray() {
+	protected ConstructionEvent(final Object[] values, final Class<?>[] types) { // NOPMD (values stored directly)
+		super(values, types); // values[0]
+		this.className = (String) values[1];
+		this.objectName = (String) values[2];
+	}
+
+	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.className, this.objectName, };
 	}
 

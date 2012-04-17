@@ -37,7 +37,7 @@ public abstract class AbstractTraceEvent extends AbstractEvent {
 		this.orderIndex = orderIndex;
 	}
 
-	public AbstractTraceEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
+	protected AbstractTraceEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes); // values[0]
 		this.traceId = (Long) values[1];
 		this.orderIndex = (Integer) values[2];

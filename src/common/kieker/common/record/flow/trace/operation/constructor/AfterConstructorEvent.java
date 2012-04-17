@@ -18,57 +18,42 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.flow.trace.operation;
+package kieker.common.record.flow.trace.operation.constructor;
+
+import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 
 /**
  * @author Jan Waller
  */
-public class AfterOperationFailedEvent extends AfterOperationEvent {
-
-	/**
-	 * Constant to be used if no cause required.
-	 */
-	public static final String NO_CAUSE = "<no-cause>";
-
-	private static final long serialVersionUID = 3331883608930487185L;
+public class AfterConstructorEvent extends AfterOperationEvent {
+	private static final long serialVersionUID = 5346337856547267118L;
 	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
 		String.class, // OperationEvent.operationSignature
 		String.class, // OperationEvent.classSignature
-		String.class, // Exception
 	};
 
-	private final String cause;
-
-	public AfterOperationFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSiganture, final String classSignature,
-			final String cause) {
+	public AfterConstructorEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSiganture, final String classSignature) {
 		super(timestamp, traceId, orderIndex, operationSiganture, classSignature);
-		this.cause = (cause == null) ? NO_CAUSE : cause; // NOCS
 	}
 
-	public AfterOperationFailedEvent(final Object[] values) { // NOPMD (values stored directly)
+	public AfterConstructorEvent(final Object[] values) {
 		super(values, TYPES); // values[0..4]
-		this.cause = (String) values[5];
 	}
 
-	protected AfterOperationFailedEvent(final Object[] values, final Class<?>[] types) {
+	protected AfterConstructorEvent(final Object[] values, final Class<?>[] types) {
 		super(values, types); // values[0..4]
-		this.cause = (String) values[5];
 	}
 
 	@Override
 	public Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.getClassSignature(), this.cause, };
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.getClassSignature(), };
 	}
 
 	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES.clone();
-	}
-
-	public final String getCause() {
-		return this.cause;
 	}
 }

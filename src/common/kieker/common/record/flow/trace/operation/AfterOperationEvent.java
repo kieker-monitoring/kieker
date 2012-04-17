@@ -23,8 +23,8 @@ package kieker.common.record.flow.trace.operation;
 /**
  * @author Jan Waller
  */
-public final class AfterOperationEvent extends AbstractOperationEvent {
-	private static final long serialVersionUID = -631724968913053878L;
+public class AfterOperationEvent extends AbstractOperationEvent {
+	private static final long serialVersionUID = -1072024765497556058L;
 	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
@@ -41,11 +41,15 @@ public final class AfterOperationEvent extends AbstractOperationEvent {
 		super(values, TYPES); // values[0..4]
 	}
 
-	public final Object[] toArray() {
+	protected AfterOperationEvent(final Object[] values, final Class<?>[] types) {
+		super(values, types); // values[0..4]
+	}
+
+	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.getClassSignature(), };
 	}
 
-	public final Class<?>[] getValueTypes() {
+	public Class<?>[] getValueTypes() {
 		return TYPES.clone();
 	}
 }

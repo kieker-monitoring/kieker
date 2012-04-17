@@ -44,6 +44,10 @@
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.construction.FullInstrumentation" /> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.construction.Annotation" /> -->
 
+		<!-- ConstructorExecution -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.constructorExecution.FullInstrumentation" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.constructorExecution.Annotation" /> -->
+
 		<!-- OperationExecution -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.FullInstrumentation" /> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.Annotation" /> -->

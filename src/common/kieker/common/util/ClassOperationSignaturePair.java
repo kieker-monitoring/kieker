@@ -23,12 +23,10 @@ package kieker.common.util;
 import java.util.StringTokenizer;
 
 /**
- * TODO: Add methods getPackageName and getSimpleClassname which is a split of the FQ class name.
- * 
- * @author Andre van Hoorn
- * 
+ * @author Andre van Hoorn, Jan Waller
  */
 public class ClassOperationSignaturePair {
+	private final int lastDot;
 	private final String fqClassname;
 	private final Signature signature;
 
@@ -40,6 +38,8 @@ public class ClassOperationSignaturePair {
 	public ClassOperationSignaturePair(final String fqClassname, final Signature signature) {
 		this.fqClassname = fqClassname;
 		this.signature = signature;
+		final int tmpLastDot = fqClassname.lastIndexOf('.');
+		this.lastDot = (tmpLastDot + 1) > fqClassname.length() ? -1 : tmpLastDot;
 	}
 
 	/**
@@ -54,6 +54,22 @@ public class ClassOperationSignaturePair {
 	 */
 	public Signature getSignature() {
 		return this.signature;
+	}
+
+	public String getSimpleClassname() {
+		if (this.lastDot == -1) {
+			return this.fqClassname;
+		} else {
+			return this.fqClassname.substring(this.lastDot + 1);
+		}
+	}
+
+	public String getPackageName() {
+		if (this.lastDot == -1) {
+			return "";
+		} else {
+			return this.fqClassname.substring(0, this.lastDot);
+		}
 	}
 
 	public String toOperationSignatureString() {

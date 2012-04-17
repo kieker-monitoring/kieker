@@ -120,23 +120,23 @@ public final class Trace extends AbstractMonitoringRecord implements IMonitoring
 		return this.threadId;
 	}
 
-	public String getSessionId() {
+	public final String getSessionId() {
 		return this.sessionId;
 	}
 
-	public String getHostname() {
+	public final String getHostname() {
 		return this.hostname;
 	}
 
-	public long getParentTraceId() {
+	public final long getParentTraceId() {
 		return this.parentTraceId;
 	}
 
-	public int getParentOrderId() {
+	public final int getParentOrderId() {
 		return this.parentOrderId;
 	}
 
-	public int getNextOrderId() {
+	public final int getNextOrderId() {
 		return this.nextOrderId++;
 	}
 }
