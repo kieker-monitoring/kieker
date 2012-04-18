@@ -2,12 +2,28 @@
 	<!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
 
 	<Match>
+		<Class name="kieker.tools.traceAnalysis.filter.flow.TraceEventRecords" />
+		<Bug pattern="EI_EXPOSE_REP2" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.tools.traceAnalysis.filter.flow.TraceEventRecords" />
+		<Bug pattern="EI_EXPOSE_REP" />
+	</Match>
+
+	<Match>
 		<Class
 			name="kieker.monitoring.probe.servlet.SessionAndTraceRegistrationFilter" />
 		<Method name="doFilter"
 			params="javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain"
 			returns="void" />
 		<Bug pattern="ES_COMPARING_STRINGS_WITH_EQ" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.reader.jms.JMSReader" />
+		<Method name="read" params="" returns="boolean" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
 	</Match>
 
 	<Match>

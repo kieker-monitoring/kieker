@@ -30,7 +30,7 @@ public final class TraceEventRecords {
 	private final Trace trace;
 	private final AbstractTraceEvent[] traceEvents;
 
-	public TraceEventRecords(final Trace trace, final AbstractTraceEvent[] traceEvents) {
+	public TraceEventRecords(final Trace trace, final AbstractTraceEvent[] traceEvents) { // NOPMD (stored directly)
 		this.trace = trace;
 		this.traceEvents = traceEvents;
 	}
@@ -40,7 +40,7 @@ public final class TraceEventRecords {
 	}
 
 	public AbstractTraceEvent[] getTraceEvents() {
-		return this.traceEvents;
+		return this.traceEvents; // NOPMD (internal array exposed)
 	}
 
 	@Override

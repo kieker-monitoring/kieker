@@ -20,6 +20,7 @@
 
 package kieker.tools.traceAnalysis.filter.flow;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -116,14 +117,12 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	}
 
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
-		return configuration;
+		return new Configuration();
 	}
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-		return configuration;
+		return new Configuration();
 	}
 
 	private static final class TraceBuffer {
@@ -196,7 +195,9 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 			return new TraceEventRecords(this.trace, this.events.toArray(new AbstractTraceEvent[this.events.size()]));
 		}
 
-		private static final class TraceEventComperator implements Comparator<AbstractTraceEvent> {
+		private static final class TraceEventComperator implements Comparator<AbstractTraceEvent>, Serializable {
+			private static final long serialVersionUID = 8920737343446332517L;
+
 			public int compare(final AbstractTraceEvent o1, final AbstractTraceEvent o2) {
 				return o1.getOrderIndex() - o2.getOrderIndex();
 			}

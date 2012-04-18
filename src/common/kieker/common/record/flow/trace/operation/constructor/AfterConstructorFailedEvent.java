@@ -52,7 +52,7 @@ public class AfterConstructorFailedEvent extends AfterConstructorEvent {
 		this.cause = (String) values[5];
 	}
 
-	protected AfterConstructorFailedEvent(final Object[] values, final Class<?>[] types) {
+	protected AfterConstructorFailedEvent(final Object[] values, final Class<?>[] types) { // NOPMD (values stored directly)
 		super(values, types); // values[0..4]
 		this.cause = (String) values[5];
 	}

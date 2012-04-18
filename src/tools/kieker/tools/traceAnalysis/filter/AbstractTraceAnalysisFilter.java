@@ -147,7 +147,7 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 		}
 	}
 
-	protected final SystemModelRepository getSystemEntityFactory() {
+	public final SystemModelRepository getSystemEntityFactory() {
 		if (this.systemEntityFactory == null) {
 			this.systemEntityFactory = (SystemModelRepository)
 					this.getRepository(REPOSITORY_PORT_NAME_SYSTEM_MODEL);

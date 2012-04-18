@@ -105,11 +105,22 @@ public class Signature {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = (prime * result) + Arrays.hashCode(this.modifierList);
+		result = (prime * result) + ((this.name == null) ? 0 : this.name.hashCode());
+		result = (prime * result) + Arrays.hashCode(this.paramTypeList);
+		result = (prime * result) + ((this.returnType == null) ? 0 : this.returnType.hashCode());
+		return result;
+	}
+
+	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}
-		if ((obj == null) || (Signature.class != obj.getClass())) {
+		if ((obj == null) || (this.getClass() != obj.getClass())) {
 			return false;
 		}
 		final Signature other = (Signature) obj;

@@ -854,10 +854,10 @@ public final class TraceAnalysisTool {
 				if (mtReconstrFilter != null) {
 					mtReconstrFilter.printStatusMessage();
 				}
-				if (eventTraceReconstructionFilter != null) {
-					// TODO add status message
-					// eventTraceReconstructionFilter.printStatusMessage();
-				}
+				// if (eventTraceReconstructionFilter != null) {
+				// TODO add status message
+				// eventTraceReconstructionFilter.printStatusMessage();
+				// }
 				if (traceEvents2ExecutionAndMessageTraceFilter != null) {
 					traceEvents2ExecutionAndMessageTraceFilter.printStatusMessage();
 				}

@@ -20,30 +20,35 @@
 
 package kieker.test.tools.junit.traceAnalysis.filter.flow;
 
-import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.filter.flow.EventRecordTraceReconstructionFilter;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Andre van Hoorn
  */
 public class TestEventRecordTraceReconstructionFilter { // NOCS (test class without constructor)
 
+	@Test
+	public void testTrue() {
+		Assert.assertTrue(true);
+	}
+
 	// TODO: Continue this test in terms of timing constellations
 
-	private static final String SESSION_ID = "8yWpCvrJ2";
-	private static final String HOSTNAME = "srv55";
+	// private static final String SESSION_ID = "8yWpCvrJ2";
+	// private static final String HOSTNAME = "srv55";
 
-	/**
-	 * Creates an {@link EventRecordTraceGenerationFilter} with the given parameter.
-	 * 
-	 * @param maxTraceDurationMillis
-	 * @return
-	 */
-	private static EventRecordTraceReconstructionFilter createFilter(final long maxTraceDurationMillis) {
-		final Configuration cfg = new Configuration();
-		// cfg.setProperty(EventRecordTraceGenerationFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long.toString(maxTraceDurationMillis));
-		return new EventRecordTraceReconstructionFilter(cfg);
-	}
+	// /**
+	// * Creates an {@link EventRecordTraceGenerationFilter} with the given parameter.
+	// *
+	// * @param maxTraceDurationMillis
+	// * @return
+	// */
+	// private static EventRecordTraceReconstructionFilter createFilter(final long maxTraceDurationMillis) {
+	// final Configuration cfg = new Configuration();
+	// // cfg.setProperty(EventRecordTraceGenerationFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long.toString(maxTraceDurationMillis));
+	// return new EventRecordTraceReconstructionFilter(cfg);
+	// }
 
 	// TODO currently not implemented!
 	// @Test

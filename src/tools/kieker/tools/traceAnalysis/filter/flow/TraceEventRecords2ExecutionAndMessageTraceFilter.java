@@ -252,8 +252,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 								this.trace.getTraceId(),
 								this.trace.getSessionId(),
 								this.trace.getHostname(),
-								executionInformation.getEOI(),
-								executionInformation.getESS(),
+								executionInformation.getEoi(),
+								executionInformation.getEss(),
 								currentCallEvent.getTimestamp(),
 								lastEvent.getTimestamp(),
 								true, (currentCallEvent instanceof CallConstructorEvent));
@@ -343,8 +343,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 					this.trace.getTraceId(),
 					this.trace.getSessionId(),
 					this.trace.getHostname(),
-					executionInformation.getEOI(),
-					executionInformation.getESS(),
+					executionInformation.getEoi(),
+					executionInformation.getEss(),
 					beforeOperationEvent.getTimestamp(),
 					afterOperationEvent.getTimestamp(),
 					!definiteCall, (beforeOperationEvent instanceof BeforeConstructorEvent));
@@ -380,7 +380,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 			 * 
 			 * @return See above
 			 */
-			public int getEOI() {
+			public int getEoi() {
 				return this.eoi;
 			}
 
@@ -389,7 +389,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 			 * 
 			 * @return See above
 			 */
-			public int getESS() {
+			public int getEss() {
 				return this.ess;
 			}
 		}
