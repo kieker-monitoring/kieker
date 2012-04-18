@@ -41,9 +41,9 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 	 * so far. Of course, negative values may occur (as a result of an overflow) -- this does not hurt!
 	 */
 	private final AtomicLong lastThreadId = new AtomicLong((long) new Random().nextInt(65536) << (Long.SIZE - 16 - 1));
-	private final ThreadLocal<Long> threadLocalTraceId = new ThreadLocal<Long>();
-	private final ThreadLocal<Integer> threadLocalEoi = new ThreadLocal<Integer>();
-	private final ThreadLocal<Integer> threadLocalEss = new ThreadLocal<Integer>();
+	private transient final ThreadLocal<Long> threadLocalTraceId = new ThreadLocal<Long>();
+	private transient final ThreadLocal<Integer> threadLocalEoi = new ThreadLocal<Integer>();
+	private transient final ThreadLocal<Integer> threadLocalEss = new ThreadLocal<Integer>();
 
 	static {
 		LOG.info("First threadId will be " + INSTANCE.lastThreadId.get());
