@@ -43,6 +43,7 @@ public final class Constants {
 	public static final String CMD_OPT_NAME_OUTPUTFNPREFIX = "output-filename-prefix";
 	public static final String CMD_OPT_NAME_SELECTTRACES = "select-traces";
 	public static final String CMD_OPT_NAME_SHORTLABELS = "short-labels";
+	public static final String CMD_OPT_NAME_INCLUDESELFLOOPS = "include-self-loops";
 	public static final String CMD_OPT_NAME_IGNOREINVALIDTRACES = "ignore-invalid-traces";
 	public static final String CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS = "plot-Deployment-Sequence-Diagrams";
 	public static final String CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS = "plot-Assembly-Sequence-Diagrams";
@@ -164,6 +165,8 @@ public final class Constants {
 				.withDescription("Executions ending after this date (UTC timezone) are ignored.").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_SHORTLABELS).hasArg(false).isRequired(false)
 				.withDescription("If selected, abbreviated labels (e.g., package names) are used in the visualizations.").create());
+		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_INCLUDESELFLOOPS).hasArg(false).isRequired(false)
+				.withDescription("If selected, self-loops are included in the visualizations.").create());
 
 		for (final Option o : SORTED_OPTION_LIST) {
 			CMDL_OPTIONS.addOption(o);

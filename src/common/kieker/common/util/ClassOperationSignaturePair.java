@@ -86,6 +86,10 @@ public class ClassOperationSignaturePair {
 	 * @param operationSignatureStr
 	 */
 	public static ClassOperationSignaturePair splitOperationSignatureStr(final String operationSignatureStr) {
+		return ClassOperationSignaturePair.splitOperationSignatureStr(operationSignatureStr, false);
+	}
+
+	public static ClassOperationSignaturePair splitOperationSignatureStr(final String operationSignatureStr, final boolean javaConstructor) {
 		final String fqClassname;
 		final String returnType;
 		String name;
@@ -111,22 +115,28 @@ public class ClassOperationSignaturePair {
 			returnType = null;
 			modifierList = new String[] {};
 		} else {
-			// name = modRetName.substring(nameBeginIdx + 1);
 			final String[] modRetNameArr = modRetName.split("\\s");
 			name = modRetNameArr[modRetNameArr.length - 1];
-			returnType = modRetNameArr[modRetNameArr.length - 2];
-			modifierList = new String[modRetNameArr.length - 2];
+			if (javaConstructor) {
+				returnType = null;
+				modifierList = new String[modRetNameArr.length - 1];
+			} else {
+				returnType = modRetNameArr[modRetNameArr.length - 2];
+				modifierList = new String[modRetNameArr.length - 2];
+			}
 			System.arraycopy(modRetNameArr, 0, modifierList, 0, modifierList.length);
 		}
-
 		final int opNameIdx = name.lastIndexOf('.');
-		if (opNameIdx != -1) {
-			fqClassname = name.substring(0, opNameIdx);
+		if (javaConstructor) {
+			fqClassname = name;
 		} else {
-			fqClassname = "";
+			if (opNameIdx != -1) {
+				fqClassname = name.substring(0, opNameIdx);
+			} else {
+				fqClassname = "";
+			}
 		}
 		opName = name.substring(opNameIdx + 1);
-
 		return new ClassOperationSignaturePair(fqClassname, new Signature(opName, modifierList, returnType, paramTypeList));
 	}
 

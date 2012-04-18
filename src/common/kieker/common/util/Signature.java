@@ -20,6 +20,8 @@
 
 package kieker.common.util;
 
+import java.util.Arrays;
+
 /**
  * A signature for a software operation. Note that this is just an operation
  * signature declaration which is not bound to an implementing class
@@ -102,5 +104,35 @@ public class Signature {
 		return strBuild.toString();
 	}
 
-	// TODO: implement equals
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if ((obj == null) || (Signature.class != obj.getClass())) {
+			return false;
+		}
+		final Signature other = (Signature) obj;
+		if (!Arrays.equals(this.modifierList, other.modifierList)) {
+			return false;
+		}
+		if (this.name == null) {
+			if (other.name != null) {
+				return false;
+			}
+		} else if (!this.name.equals(other.name)) {
+			return false;
+		}
+		if (!Arrays.equals(this.paramTypeList, other.paramTypeList)) {
+			return false;
+		}
+		if (this.returnType == null) {
+			if (other.returnType != null) {
+				return false;
+			}
+		} else if (!this.returnType.equals(other.returnType)) {
+			return false;
+		}
+		return true;
+	}
 }

@@ -23,7 +23,7 @@ package kieker.common.record.flow.trace.operation;
 /**
  * @author Andre van Hoorn, Holger Knoche, Jan Waller
  */
-public final class CallOperationEvent extends AbstractOperationEvent {
+public class CallOperationEvent extends AbstractOperationEvent {
 	private static final long serialVersionUID = -3767410839664324783L;
 	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
@@ -86,12 +86,11 @@ public final class CallOperationEvent extends AbstractOperationEvent {
 		return this.calleeOperationSignature;
 	}
 
-	public String getCalleeClassSignature() {
+	public final String getCalleeClassSignature() {
 		return this.calleeClassSignature;
 	}
 
 	public final boolean callsReferencedOperationOf(final AbstractOperationEvent event) {
-		// FIXME: check also classSignature
-		return this.getCalleeOperationSignature().equals(event.getOperationSignature());
+		return (this.getCalleeOperationSignature().equals(event.getOperationSignature()) && this.getCalleeClassSignature().equals(event.getClassSignature()));
 	}
 }
