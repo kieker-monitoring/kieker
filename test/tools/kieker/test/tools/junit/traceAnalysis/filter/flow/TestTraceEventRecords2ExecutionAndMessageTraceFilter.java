@@ -26,17 +26,18 @@ import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
+import kieker.analysis.plugin.filter.flow.TraceEventRecords;
 import kieker.common.configuration.Configuration;
-import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
-import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
-import kieker.test.tools.junit.traceAnalysis.util.BookstoreExecutionFactory;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
-import kieker.tools.traceAnalysis.filter.flow.TraceEventRecords;
 import kieker.tools.traceAnalysis.filter.flow.TraceEventRecords2ExecutionAndMessageTraceFilter;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+
+import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
+import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
+import kieker.test.tools.junit.traceAnalysis.util.BookstoreExecutionFactory;
 
 /**
  * 
@@ -396,7 +397,7 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter {
 		 * Create and connect a sink plugin which collects the transformed
 		 * ExecutionTraces
 		 */
-		final SimpleSinkPlugin<ExecutionTrace> executionTraceSinkPlugin = new SimpleSinkPlugin<ExecutionTrace>(new Configuration());
+		final SimpleSinkFilter<ExecutionTrace> executionTraceSinkPlugin = new SimpleSinkFilter<ExecutionTrace>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 
 		controller.registerFilter(filter);
@@ -404,7 +405,7 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter {
 		controller.registerRepository(this.systemEntityFactory);
 		controller.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
 		controller.connect(filter, TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSinkPlugin,
-				SimpleSinkPlugin.INPUT_PORT_NAME);
+				SimpleSinkFilter.INPUT_PORT_NAME);
 
 		// TODO: dirty. Use reader + controller.run()
 		filter.inputTraceEvents(traceEvents);

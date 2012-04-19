@@ -35,7 +35,8 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
-import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
+
+import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 /**
@@ -46,18 +47,18 @@ import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 public class BasicNamedRecordPipeWriterReaderTest extends AbstractWriterReaderTest { // NOPMD NOCS (TestClassWithoutTestCases)
 	private static final String PIPE_NAME = "pipe-IVvirGREEf";
 
-	private volatile SimpleSinkPlugin<IMonitoringRecord> sinkFilter = null;
+	private volatile SimpleSinkFilter<IMonitoringRecord> sinkFilter = null;
 
 	@Before
 	public void setUp() throws Exception {
 		final Configuration pipeReaderConfig = new Configuration();
 		pipeReaderConfig.setProperty(PipeReader.CONFIG_PROPERTY_NAME_PIPENAME, BasicNamedRecordPipeWriterReaderTest.PIPE_NAME);
 		final PipeReader pipeReader = new PipeReader(pipeReaderConfig);
-		this.sinkFilter = new SimpleSinkPlugin<IMonitoringRecord>(new Configuration());
+		this.sinkFilter = new SimpleSinkFilter<IMonitoringRecord>(new Configuration());
 		final AnalysisController analysisController = new AnalysisController();
 		analysisController.registerReader(pipeReader);
 		analysisController.registerFilter(this.sinkFilter);
-		analysisController.connect(pipeReader, PipeReader.OUTPUT_PORT_NAME_RECORDS, this.sinkFilter, SimpleSinkPlugin.INPUT_PORT_NAME);
+		analysisController.connect(pipeReader, PipeReader.OUTPUT_PORT_NAME_RECORDS, this.sinkFilter, SimpleSinkFilter.INPUT_PORT_NAME);
 		final AnalysisControllerThread analysisThread = new AnalysisControllerThread(analysisController);
 		analysisThread.start();
 	}

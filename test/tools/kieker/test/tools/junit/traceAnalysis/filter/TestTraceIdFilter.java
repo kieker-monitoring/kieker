@@ -32,11 +32,12 @@ import org.junit.Test;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.configuration.Configuration;
-import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
-import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
 import kieker.tools.traceAnalysis.filter.executionFilter.TraceIdFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+
+import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
+import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
 
 /**
  * 
@@ -94,7 +95,7 @@ public class TestTraceIdFilter { // NOCS
 		idsToPass.add(7L);
 
 		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(idsToPass);
-		final SimpleSinkPlugin<Execution> sinkPlugin = new SimpleSinkPlugin<Execution>(new Configuration());
+		final SimpleSinkFilter<Execution> sinkPlugin = new SimpleSinkFilter<Execution>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(11L, // traceId (must not be element of idsToPass)
 				TestTraceIdFilter.SESSION_ID,
@@ -108,7 +109,7 @@ public class TestTraceIdFilter { // NOCS
 		controller.registerFilter(filter);
 		controller.registerFilter(sinkPlugin);
 
-		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
 		filter.inputExecution(exec);
 		Assert.assertTrue("Filter passed execution " + exec + " although traceId not element of " + idsToPass, sinkPlugin.getList()
 				.isEmpty());
@@ -129,7 +130,7 @@ public class TestTraceIdFilter { // NOCS
 		idsToPass.add(7L);
 
 		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(idsToPass);
-		final SimpleSinkPlugin<Execution> sinkPlugin = new SimpleSinkPlugin<Execution>(new Configuration());
+		final SimpleSinkFilter<Execution> sinkPlugin = new SimpleSinkFilter<Execution>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(7L, // traceId (must be element of idsToPass)
 				TestTraceIdFilter.SESSION_ID,
@@ -143,7 +144,7 @@ public class TestTraceIdFilter { // NOCS
 		controller.registerFilter(filter);
 		controller.registerFilter(sinkPlugin);
 
-		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
 		filter.inputExecution(exec);
 		Assert.assertFalse("Filter didn't pass execution " + exec + " although traceId element of " + idsToPass, sinkPlugin.getList()
 				.isEmpty());
@@ -162,7 +163,7 @@ public class TestTraceIdFilter { // NOCS
 	@Test
 	public void testAssertPassTraceIdWhenPassAll() throws IllegalStateException, AnalysisConfigurationException {
 		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(null); // i.e., pass all
-		final SimpleSinkPlugin<Execution> sinkPlugin = new SimpleSinkPlugin<Execution>(new Configuration());
+		final SimpleSinkFilter<Execution> sinkPlugin = new SimpleSinkFilter<Execution>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(7L, // traceId (must be element of idsToPass)
 				TestTraceIdFilter.SESSION_ID,
@@ -175,7 +176,7 @@ public class TestTraceIdFilter { // NOCS
 		controller.registerFilter(filter);
 		controller.registerFilter(sinkPlugin);
 
-		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, SimpleSinkPlugin.INPUT_PORT_NAME);
+		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
 		filter.inputExecution(exec);
 		Assert.assertFalse("Filter didn't pass execution " + exec + " although all should pass.", sinkPlugin.getList().isEmpty());
 

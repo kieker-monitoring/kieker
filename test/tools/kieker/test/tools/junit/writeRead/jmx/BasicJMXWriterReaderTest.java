@@ -41,7 +41,8 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.jmx.JMXWriter;
-import kieker.test.analysis.junit.plugin.SimpleSinkPlugin;
+
+import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 /**
@@ -54,7 +55,7 @@ public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 	private static final String PORT = "59999";
 	private static final String LOGNAME = "MonitoringLog";
 
-	private volatile SimpleSinkPlugin<IMonitoringRecord> sinkFilter = null;
+	private volatile SimpleSinkFilter<IMonitoringRecord> sinkFilter = null;
 
 	@Override
 	protected IMonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException, InterruptedException {
@@ -80,11 +81,11 @@ public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SERVICEURL, "");
 		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SILENT, "false");
 		final JMXReader jmxReader = new JMXReader(jmxReaderConfig);
-		this.sinkFilter = new SimpleSinkPlugin<IMonitoringRecord>(new Configuration());
+		this.sinkFilter = new SimpleSinkFilter<IMonitoringRecord>(new Configuration());
 		final AnalysisController analysisController = new AnalysisController();
 		analysisController.registerReader(jmxReader);
 		analysisController.registerFilter(this.sinkFilter);
-		analysisController.connect(jmxReader, JMXReader.OUTPUT_PORT_NAME_RECORDS, this.sinkFilter, SimpleSinkPlugin.INPUT_PORT_NAME);
+		analysisController.connect(jmxReader, JMXReader.OUTPUT_PORT_NAME_RECORDS, this.sinkFilter, SimpleSinkFilter.INPUT_PORT_NAME);
 		final AnalysisControllerThread analysisThread = new AnalysisControllerThread(analysisController);
 		analysisThread.start();
 		Thread.sleep(1000);

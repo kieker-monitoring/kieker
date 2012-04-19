@@ -31,7 +31,8 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
+
+import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 
 /**
  * TODO: The idea is to make this class independent of FS, i.e., to provide a basic

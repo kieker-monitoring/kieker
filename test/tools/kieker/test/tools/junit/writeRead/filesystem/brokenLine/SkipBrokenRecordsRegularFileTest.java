@@ -25,6 +25,7 @@ import java.io.IOException;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
+
 import kieker.test.tools.junit.writeRead.filesystem.unknownTypes.ContinueAfterUnknownTypeRegularFileTest;
 
 /**

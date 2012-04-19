@@ -27,6 +27,7 @@ import java.util.List;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.BranchingRecord;
 import kieker.common.record.misc.EmptyRecord;
+
 import kieker.test.tools.junit.writeRead.filesystem.AbstractTestFSWriterReader;
 
 /**

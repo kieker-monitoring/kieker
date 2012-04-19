@@ -21,15 +21,14 @@
 package kieker.test.tools.junit.traceAnalysis.util;
 
 import kieker.common.util.ClassOperationSignaturePair;
-import kieker.test.common.junit.record.BookstoreOperationExecutionRecordFactory;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
+import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
+
 /**
- * 
  * @author Andre van Hoorn
- * 
  */
 public class BookstoreExecutionFactory {
 	private final SystemModelRepository systemEntityFactory;

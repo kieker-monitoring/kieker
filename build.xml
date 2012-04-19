@@ -1002,12 +1002,15 @@
 			<formatter type="xml" />
 
 			<!-- Serenity system properties. -->
+			<!-- Serenity deactivated
 			<sysproperty key="included.packages" value="kieker" />
 			<sysproperty key="included.adapters" value="coverage,complexity,dependency" />
 			<sysproperty key="included.jars" value="${tmp.dir}/${src.jar}" />
-
+			-->
 			<!-- Serenity JVM command line. -->
+			<!-- Serenity deactivated
 			<jvmarg line="-javaagent:${lib.dir}/serenity-0.4/serenity.jar" />
+			-->
 
 			<batchtest fork="false" todir="${tests.junit-results.dir}">
 				<fileset dir="${build.tests.dir}/">

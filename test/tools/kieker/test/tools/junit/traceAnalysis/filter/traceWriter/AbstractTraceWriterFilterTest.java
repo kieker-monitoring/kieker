@@ -37,15 +37,16 @@ import org.junit.rules.TemporaryFolder;
 
 import kieker.analysis.AnalysisController;
 import kieker.common.configuration.Configuration;
-import kieker.test.analysis.junit.plugin.ListReader;
-import kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactory;
-import kieker.test.tools.junit.traceAnalysis.util.BookstoreExecutionFactory;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+
+import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
+import kieker.test.analysis.util.plugin.reader.SimpleListReader;
+import kieker.test.tools.junit.traceAnalysis.util.BookstoreExecutionFactory;
 
 /**
  * 
@@ -143,7 +144,7 @@ public abstract class AbstractTraceWriterFilterTest {
 	public void testIt() throws Exception {
 		final AbstractTraceProcessingFilter filter = this.provideWriterFilter(this.outputFile.getAbsolutePath());
 
-		final ListReader reader = new ListReader(new Configuration());
+		final SimpleListReader<Object> reader = new SimpleListReader<Object>(new Configuration());
 		final List<Object> eventList = this.createTraces();
 		reader.addAllObjects(eventList);
 
@@ -151,7 +152,7 @@ public abstract class AbstractTraceWriterFilterTest {
 		analysisController.registerFilter(filter);
 		analysisController.registerReader(reader);
 		analysisController.registerRepository(this.modelRepo);
-		analysisController.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, this.provideFilterInputName());
+		analysisController.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, filter, this.provideFilterInputName());
 		analysisController.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.modelRepo);
 		analysisController.run();
 

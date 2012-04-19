@@ -32,13 +32,13 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.util.ClassOperationSignaturePair;
-import kieker.test.analysis.junit.plugin.ExecutionSinkClass;
-import kieker.test.analysis.junit.plugin.ListReader;
-import kieker.test.common.junit.record.BookstoreOperationExecutionRecordFactory;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+
+import kieker.test.analysis.util.plugin.reader.SimpleListReader;
+import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
 
 /**
  * 
@@ -105,7 +105,7 @@ public class TestExecutionRecordTransformationFilter {
 class ExecRecordTransformationFilterChecker { // NOPMD (subclass of TestCase)
 	private final SystemModelRepository systemModelRepository = new SystemModelRepository(new Configuration());
 	private final AnalysisController analysisController = new AnalysisController();
-	private final ListReader listReader = new ListReader(new Configuration());
+	private final SimpleListReader<Object> listReader = new SimpleListReader<Object>(new Configuration());
 	private final ExecutionRecordTransformationFilter execRecFilter = new ExecutionRecordTransformationFilter(new Configuration());
 	private final ExecutionSinkClass sinkPlugin = new ExecutionSinkClass(new Configuration());
 
@@ -117,7 +117,7 @@ class ExecRecordTransformationFilterChecker { // NOPMD (subclass of TestCase)
 		this.analysisController.registerFilter(this.execRecFilter);
 		this.analysisController.registerFilter(this.sinkPlugin);
 		this.analysisController.registerRepository(this.systemModelRepository);
-		this.analysisController.connect(this.listReader, ListReader.OUTPUT_PORT_NAME, this.execRecFilter,
+		this.analysisController.connect(this.listReader, SimpleListReader.OUTPUT_PORT_NAME, this.execRecFilter,
 				ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
 		this.analysisController.connect(this.execRecFilter, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS,
 				this.sinkPlugin, ExecutionSinkClass.INPUT_PORT_NAME);
