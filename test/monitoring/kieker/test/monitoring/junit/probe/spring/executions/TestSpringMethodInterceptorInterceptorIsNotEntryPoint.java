@@ -20,8 +20,6 @@
 
 package kieker.test.monitoring.junit.probe.spring.executions;
 
-import kieker.test.monitoring.junit.probe.spring.executions.AbstractTestSpringMethodInterceptor;
-
 /**
  * 
  * @author Andre van Hoorn

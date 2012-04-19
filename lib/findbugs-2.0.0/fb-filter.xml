@@ -2,12 +2,17 @@
 	<!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
 
 	<Match>
-		<Class name="kieker.tools.traceAnalysis.filter.flow.TraceEventRecords" />
+		<Class name="kieker.test.analysis.junit.plugin.filter.select.TestTimestampFilter" />
+		<Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.filter.flow.TraceEventRecords" />
 		<Bug pattern="EI_EXPOSE_REP2" />
 	</Match>
 
 	<Match>
-		<Class name="kieker.tools.traceAnalysis.filter.flow.TraceEventRecords" />
+		<Class name="kieker.analysis.plugin.filter.flow.TraceEventRecords" />
 		<Bug pattern="EI_EXPOSE_REP" />
 	</Match>
 
