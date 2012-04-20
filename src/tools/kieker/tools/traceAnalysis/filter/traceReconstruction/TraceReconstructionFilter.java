@@ -271,7 +271,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	private void processTimeoutQueue() throws ExecutionEventProcessingException {
 		synchronized (this.timeoutMap) {
 			while (!this.timeoutMap.isEmpty() && (this.terminated || ((this.maxTout - this.timeoutMap.first().getMinTin()) > this.maxTraceDurationNanos))) {
-				// 1.5 compatibility
+				// Java 1.5 compatibility
 				final ExecutionTrace polledTrace = this.timeoutMap.first();
 				this.timeoutMap.remove(polledTrace);
 				// Java 1.6: final ExecutionTrace polledTrace = this.timeoutMap.pollFirst();

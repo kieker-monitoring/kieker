@@ -142,12 +142,12 @@ public class Registry<E> implements IRegistry<E> {
 			}
 			this.eArrayCached = eArray; // volatile write
 		}
-		// 1.5 compability
+		// Java 1.5 compability
 		@SuppressWarnings("unchecked")
 		final E[] retArr = (E[]) new Object[capacity];
 		System.arraycopy(this.eArrayCached, 0, retArr, 0, capacity);
 		return retArr;
-		// for 1.6+:
+		// for Java 1.6+:
 		// return Arrays.copyOf(this.eArrayCached, capacity);
 	}
 

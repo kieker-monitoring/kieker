@@ -26,36 +26,23 @@ import kieker.common.record.IMonitoringRecord;
 /**
  * Record type which can be used to store a timestamp.
  * 
- * @author Andre van Hoorn
+ * @author Andre van Hoorn, Jan Waller
  */
 public final class TimestampRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	private static final long serialVersionUID = -7166224794391621087L;
+	private static final long serialVersionUID = 4673929935358689920L;
 	private static final Class<?>[] TYPES = {
 		long.class, // timestamp
 	};
 
-	private volatile long timestamp = -1;
-
-	/**
-	 * Constructs a new {@link TimestampRecord} with the
-	 * without setting the current time value.
-	 */
-	public TimestampRecord() {
-		// nothing to do
-	};
+	private final long timestamp;
 
 	public TimestampRecord(final long timestamp) {
 		this.timestamp = timestamp;
 	}
 
-	public TimestampRecord(final Object[] values) {
-		final Object[] myValues = values.clone();
-		AbstractMonitoringRecord.checkArray(myValues, TYPES);
-		try {
-			this.timestamp = (Long) myValues[0];
-		} catch (final Exception exc) { // NOPMD NOCS (IllegalCatchCheck)
-			throw new IllegalArgumentException("Failed to init", exc);
-		}
+	public TimestampRecord(final Object[] values) { // NOPMD (direct store of long)
+		AbstractMonitoringRecord.checkArray(values, TYPES);
+		this.timestamp = (Long) values[0];
 	}
 
 	public Object[] toArray() {
@@ -72,31 +59,9 @@ public final class TimestampRecord extends AbstractMonitoringRecord implements I
 	}
 
 	/**
-	 * Returns the current time.
-	 * 
-	 * @return the current time.
-	 * @deprecated will be removed in Kieker 1.6; use {@link #getTimestamp()}
-	 */
-	@Deprecated
-	public long getCurrentTime() {
-		return this.timestamp;
-	}
-
-	/**
 	 * @return the timestamp
 	 */
 	public final long getTimestamp() {
 		return this.timestamp;
-	}
-
-	/**
-	 * Sets the current time to the given value.
-	 * 
-	 * @param currentTime
-	 * @deprecated will be removed in Kieker 1.6; record will become immutable
-	 */
-	@Deprecated
-	public void setCurrentTime(final long currentTime) {
-		this.timestamp = currentTime;
 	}
 }

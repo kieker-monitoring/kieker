@@ -85,10 +85,10 @@ public class FilesystemLogReplayer {
 	public FilesystemLogReplayer(final IMonitoringController monitoringController, final String[] inputDirs, final boolean realtimeMode,
 			final int numRealtimeWorkerThreads, final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp) {
 		this.recordReceiver = monitoringController;
-		// 1.5 compability
+		// Java 1.5 compability
 		this.inputDirs = new String[inputDirs.length];
 		System.arraycopy(inputDirs, 0, this.inputDirs, 0, inputDirs.length);
-		// for 1.6+:
+		// for Java 1.6+:
 		// this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
 		this.realtimeMode = realtimeMode;
 		this.numRealtimeWorkerThreads = numRealtimeWorkerThreads;

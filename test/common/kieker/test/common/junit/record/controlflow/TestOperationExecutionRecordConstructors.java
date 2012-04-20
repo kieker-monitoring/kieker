@@ -57,159 +57,11 @@ public class TestOperationExecutionRecordConstructors {
 				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK, sessionId, traceId,
 						tin, tout, hostname, eoi, ess);
 
-		this.checkClassSignatureValues(opExecutionRecord,
-				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
-				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK,
-				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
 		this.checkTraceId(opExecutionRecord, traceId);
 		this.checkTinTout(opExecutionRecord, tin, tout);
 		this.checkEoiEss(opExecutionRecord, eoi, ess);
 		this.checkHostName(opExecutionRecord, hostname);
 		this.checkSessionId(opExecutionRecord, sessionId);
-		this.checkIsEntryPoint(opExecutionRecord, false); // default, as documented in the constructor
-		this.checkObject(opExecutionRecord, null);
-
-		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
-				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
-	}
-
-	/**
-	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long)}
-	 */
-	// TODO: to be removed in 1.6 as the tested constructor will be removed there
-	@Test
-	@SuppressWarnings("deprecation")
-	public void testComponentOpTraceID() { // NOPMD (assert missing)
-		final long traceId = 3486095; // any number will do
-		final OperationExecutionRecord opExecutionRecord =
-				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
-						BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK, traceId);
-
-		this.checkClassSignatureValues(opExecutionRecord,
-				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
-				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK,
-				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE + "." + BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
-		this.checkTraceId(opExecutionRecord, traceId);
-		this.checkIsEntryPoint(opExecutionRecord, false); // default, as documented in the constructor
-		this.checkObject(opExecutionRecord, null);
-
-		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
-				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
-	}
-
-	/**
-	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long, long, long)}
-	 */
-	// TODO: to be removed in 1.6 as the tested constructor will be removed there
-	@Test
-	@SuppressWarnings("deprecation")
-	public void testComponentOpTraceIDTinTout() { // NOPMD (assert missing)
-		final long traceId = 3486095; // any number will do
-		final long tin = 33444; // any number will do
-		final long tout = 33449; // any number will do
-		final OperationExecutionRecord opExecutionRecord =
-				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
-						BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK, traceId, tin, tout);
-
-		this.checkClassSignatureValues(opExecutionRecord,
-				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
-				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK,
-				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE + "." + BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
-		this.checkTraceId(opExecutionRecord, traceId);
-		this.checkTinTout(opExecutionRecord, tin, tout);
-
-		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
-				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
-	}
-
-	/**
-	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long, long)}
-	 */
-	// TODO: to be removed in 1.6 as the tested constructor will be removed there
-	@Test
-	@SuppressWarnings("deprecation")
-	public void testComponentTinTout() { // NOPMD (assert missing)
-		final long tin = 33444; // any number will do
-		final long tout = 33449; // any number will do
-		final OperationExecutionRecord opExecutionRecord =
-				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
-						BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK, tin, tout);
-
-		this.checkClassSignatureValues(opExecutionRecord,
-				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
-				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK,
-				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE + "." + BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
-
-		this.checkTinTout(opExecutionRecord, tin, tout);
-
-		this.checkIsEntryPoint(opExecutionRecord, false); // default, as documented in the constructor
-		this.checkObject(opExecutionRecord, null);
-
-		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
-				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
-	}
-
-	/**
-	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, String, long, long, long)}
-	 */
-	// TODO: to be removed in 1.6 as the tested constructor will be removed there
-	@Test
-	@SuppressWarnings("deprecation")
-	public void testComponentOpSessionTraceIDTinTout() { // NOPMD (assert missing)
-		final String sessionId = "eqJSin80n";
-		final long traceId = 3486095; // any number will do
-		final long tin = 33444; // any number will do
-		final long tout = 33449; // any number will do
-		final OperationExecutionRecord opExecutionRecord =
-				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
-						BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK, sessionId, traceId, tin, tout);
-
-		this.checkClassSignatureValues(opExecutionRecord,
-				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
-				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK,
-				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE + "." + BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
-		this.checkTraceId(opExecutionRecord, traceId);
-		this.checkTinTout(opExecutionRecord, tin, tout);
-		this.checkSessionId(opExecutionRecord, sessionId);
-
-		this.checkIsEntryPoint(opExecutionRecord, false); // default, as documented in the constructor
-		this.checkObject(opExecutionRecord, null);
-
-		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
-				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
-	}
-
-	/**
-	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long, long, long, String, int, int)}
-	 */
-	// TODO: to be removed in 1.6 as the tested constructor will be removed there
-	@Test
-	@SuppressWarnings("deprecation")
-	public void testComponentOpSessionIDTraceIDTinToutEoiEss() { // NOPMD (assert missing)
-		final String sessionId = "IaYyf8m9B";
-		final long traceId = 3486095; // any number will do
-		final String hostname = "srv-gvNH6CgYFS";
-		final long tin = 33444; // any number will do
-		final long tout = 33449; // any number will do
-		final int eoi = BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_EOI;
-		final int ess = BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_ESS;
-		final OperationExecutionRecord opExecutionRecord =
-				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
-						BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK, sessionId, traceId,
-						tin, tout, hostname, eoi, ess);
-
-		this.checkClassSignatureValues(opExecutionRecord,
-				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
-				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK,
-				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE + "." + BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
-		this.checkTraceId(opExecutionRecord, traceId);
-		this.checkTinTout(opExecutionRecord, tin, tout);
-		this.checkEoiEss(opExecutionRecord, eoi, ess);
-		this.checkHostName(opExecutionRecord, hostname);
-		this.checkSessionId(opExecutionRecord, sessionId);
-
-		this.checkIsEntryPoint(opExecutionRecord, false); // default, as documented in the constructor
-		this.checkObject(opExecutionRecord, null);
 
 		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
 				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
@@ -237,38 +89,12 @@ public class TestOperationExecutionRecordConstructors {
 		Assert.assertEquals("ess's differ", ess, opExecutionRecord.getEss());
 	}
 
-	// TODO: remove legacy tests in 1.6 as the tested constructor will be removed there
-	@SuppressWarnings("deprecation")
-	private void checkClassSignatureValues(final OperationExecutionRecord opExecutionRecord, final String expectedFqClassname, final String expectedOpArgString,
-			final String expectedOperationSignature) {
-		Assert.assertEquals("Signature string varies",
-				expectedOperationSignature,
-				opExecutionRecord.getOperationSignature());
-
-		/* Now we'll test some (deprecated) legacy getters */
-		Assert.assertEquals("FQ classnames differ", expectedFqClassname, opExecutionRecord.getClassName());
-		Assert.assertEquals("operation names differ", expectedOpArgString, opExecutionRecord.getOperationName());
-	}
-
-	// TODO: to be removed in 1.6 as the tested constructor will be removed there
-	@SuppressWarnings("deprecation")
-	private void checkIsEntryPoint(final OperationExecutionRecord opExecutionRecord, final boolean entryPoint) {
-		Assert.assertEquals("Unexpected entry point information", entryPoint, opExecutionRecord.isEntryPoint());
-	}
-
-	// TODO: to be removed in 1.6 as the tested constructor will be removed there
-	@SuppressWarnings("deprecation")
-	private void checkObject(final OperationExecutionRecord opExecutionRecord, final Object obj) {
-		Assert.assertEquals("Unexpected object attached", obj, opExecutionRecord.getRetVal());
-	}
-
 	private void checkToFromArrayAllFields(final OperationExecutionRecord opExecutionRecord, final String expectedFqClassname, final String expectedOpArgString) {
 		final Object[] serializedRecord = opExecutionRecord.toArray();
 		final OperationExecutionRecord deserializedRecord = new OperationExecutionRecord(serializedRecord);
 
 		Assert.assertEquals("Records not equal", opExecutionRecord, deserializedRecord);
 
-		this.checkClassSignatureValues(deserializedRecord, expectedFqClassname, expectedOpArgString, opExecutionRecord.getOperationSignature());
 		this.checkEoiEss(deserializedRecord, opExecutionRecord.getEoi(), opExecutionRecord.getEss());
 		this.checkHostName(deserializedRecord, opExecutionRecord.getHostname());
 		this.checkSessionId(deserializedRecord, opExecutionRecord.getSessionId());

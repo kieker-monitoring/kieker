@@ -24,11 +24,10 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 
 /**
- * @author Andre van Hoorn
- * 
+ * @author Andre van Hoorn, Jan Waller
  */
 public final class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	private static final long serialVersionUID = -8267026568234433190L;
+	private static final long serialVersionUID = 229860008090066333L;
 	private static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
@@ -42,70 +41,62 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 		double.class,
 	};
 	private static final String DEFAULT_VALUE = "N/A";
-	private static final double UNDEFINED_DOUBLE = -1;
 
 	/**
 	 * Date/time of measurement. The value should be interpreted as the number of nano-seconds elapsed since Jan 1st, 1970 UTC.
 	 */
-	private volatile long timestamp = -1;
+	private final long timestamp;
 
 	/**
 	 * Name of the host, the resource belongs to.
 	 */
-	private volatile String hostname = DEFAULT_VALUE;
+	private final String hostname;
 
 	/**
 	 * Identifier which is unique for a CPU on a given host.
 	 */
-	private volatile String cpuID = DEFAULT_VALUE;
+	private final String cpuID;
 
 	/**
 	 * Fraction of time during which the CPU was used for user-space processes.
 	 * The value should be in the range <code>[0,1]</code>
 	 */
-	private volatile double user = UNDEFINED_DOUBLE;
+	private final double user;
 
 	/**
 	 * Fraction of time during which the CPU was used by the kernel. The value
 	 * should be in the range <code>[0,1]</code>
 	 */
-	private volatile double system = UNDEFINED_DOUBLE;
+	private final double system;
 
 	/**
 	 * Fraction of CPU wait time. The value should be in the range <code>[0,1]</code>
 	 */
-	private volatile double wait = UNDEFINED_DOUBLE;
+	private final double wait;
 
 	/**
 	 * Fraction of time during which the CPU was used by user space processes
 	 * with a high nice value. The value should be in the range <code>[0,1]</code>
 	 */
-	private volatile double nice = UNDEFINED_DOUBLE;
+	private final double nice;
 
 	/**
 	 * Fraction of time during which the CPU was used by user space processes
 	 * with a high nice value. The value should be in the range <code>[0,1]</code>
 	 */
-	private volatile double irq = UNDEFINED_DOUBLE;
+	private final double irq;
 
 	/**
 	 * Fraction of time during which the CPU was utilized. Typically, this is
 	 * the sum of {@link #user}, {@link #system}, {@link #wait}, and {@link #nice}. The value should be in the range <code>[0,1]</code>
 	 */
-	private volatile double totalUtilization = UNDEFINED_DOUBLE;
+	private final double totalUtilization;
 
 	/**
 	 * Fraction of time during which the CPU was idle. The value should be in
 	 * the range <code>[0,1]</code>
 	 */
-	private volatile double idle = UNDEFINED_DOUBLE;
-
-	/**
-	 * 
-	 */
-	public CPUUtilizationRecord() {
-		// nothing to do
-	}
+	private final double idle;
 
 	/**
 	 * Constructs a new {@link CPUUtilizationRecord} with the given values. If
@@ -125,8 +116,8 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 	public CPUUtilizationRecord(final long timestamp, final String hostname, final String cpuID, final double user, final double system, final double wait,
 			final double nice, final double irq, final double totalUtilization, final double idle) {
 		this.timestamp = timestamp;
-		this.hostname = hostname;
-		this.cpuID = cpuID;
+		this.hostname = (hostname == null) ? DEFAULT_VALUE : hostname; // NOCS
+		this.cpuID = (cpuID == null) ? DEFAULT_VALUE : cpuID; // NOCS
 		this.user = user;
 		this.system = system;
 		this.wait = wait;
@@ -136,31 +127,25 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 		this.idle = idle;
 	}
 
-	public CPUUtilizationRecord(final Object[] values) {
-		final Object[] myValues = values.clone();
-		AbstractMonitoringRecord.checkArray(myValues, TYPES);
-		try {
-			this.timestamp = (Long) myValues[0];
-			this.hostname = (String) myValues[1];
-			this.cpuID = (String) myValues[2];
-			this.user = (Double) myValues[3];
-			this.system = (Double) myValues[4];
-			this.wait = (Double) myValues[5];
-			this.nice = (Double) myValues[6];
-			this.irq = (Double) myValues[7];
-			this.totalUtilization = (Double) myValues[8];
-			this.idle = (Double) myValues[9];
-		} catch (final Exception exc) { // NOPMD NOCS (IllegalCatchCheck)
-			throw new IllegalArgumentException("Failed to init", exc);
-		}
+	public CPUUtilizationRecord(final Object[] values) { // NOPMD (direct store of values)
+		AbstractMonitoringRecord.checkArray(values, TYPES);
+		this.timestamp = (Long) values[0];
+		this.hostname = (String) values[1];
+		this.cpuID = (String) values[2];
+		this.user = (Double) values[3];
+		this.system = (Double) values[4];
+		this.wait = (Double) values[5];
+		this.nice = (Double) values[6];
+		this.irq = (Double) values[7];
+		this.totalUtilization = (Double) values[8];
+		this.idle = (Double) values[9];
 	}
 
 	/*
 	 * {@inheritdoc}
 	 */
-
 	public Object[] toArray() {
-		return new Object[] { this.timestamp, this.hostname, this.cpuID, this.user, this.system, this.wait, this.nice, this.irq, this.totalUtilization, this.idle };
+		return new Object[] { this.timestamp, this.hostname, this.cpuID, this.user, this.system, this.wait, this.nice, this.irq, this.totalUtilization, this.idle, };
 	}
 
 	@Deprecated
@@ -180,26 +165,10 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 	}
 
 	/**
-	 * @param timestamp
-	 *            the timestamp to set
-	 */
-	public final void setTimestamp(final long timestamp) {
-		this.timestamp = timestamp;
-	}
-
-	/**
 	 * @return the hostname
 	 */
 	public final String getHostname() {
 		return this.hostname;
-	}
-
-	/**
-	 * @param hostname
-	 *            the hostname to set
-	 */
-	public final void setHostname(final String hostname) {
-		this.hostname = hostname;
 	}
 
 	/**
@@ -210,26 +179,10 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 	}
 
 	/**
-	 * @param cpuID
-	 *            the cpuID to set
-	 */
-	public final void setCpuID(final String cpuID) {
-		this.cpuID = cpuID;
-	}
-
-	/**
 	 * @return the user
 	 */
 	public final double getUser() {
 		return this.user;
-	}
-
-	/**
-	 * @param user
-	 *            the user to set
-	 */
-	public final void setUser(final double user) {
-		this.user = user;
 	}
 
 	/**
@@ -240,26 +193,10 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 	}
 
 	/**
-	 * @param system
-	 *            the system to set
-	 */
-	public final void setSystem(final double system) {
-		this.system = system;
-	}
-
-	/**
 	 * @return the wait
 	 */
 	public final double getWait() {
 		return this.wait;
-	}
-
-	/**
-	 * @param wait
-	 *            the wait to set
-	 */
-	public final void setWait(final double wait) {
-		this.wait = wait;
 	}
 
 	/**
@@ -270,26 +207,10 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 	}
 
 	/**
-	 * @param nice
-	 *            the nice to set
-	 */
-	public final void setNice(final double nice) {
-		this.nice = nice;
-	}
-
-	/**
 	 * @return the irq
 	 */
 	public final double getIrq() {
 		return this.irq;
-	}
-
-	/**
-	 * @param irq
-	 *            the irq to set
-	 */
-	public final void setIrq(final double irq) {
-		this.irq = irq;
 	}
 
 	/**
@@ -300,25 +221,9 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 	}
 
 	/**
-	 * @param totalUtilization
-	 *            the totalUtilization to set
-	 */
-	public final void setTotalUtilization(final double totalUtilization) {
-		this.totalUtilization = totalUtilization;
-	}
-
-	/**
 	 * @return the idle
 	 */
 	public final double getIdle() {
 		return this.idle;
-	}
-
-	/**
-	 * @param idle
-	 *            the idle to set
-	 */
-	public final void setIdle(final double idle) {
-		this.idle = idle;
 	}
 }

@@ -31,15 +31,13 @@ import kieker.common.record.misc.EmptyRecord;
 import kieker.test.tools.junit.writeRead.filesystem.AbstractTestFSWriterReader;
 
 /**
- * 
- * @author André van Hoorn
- * 
+ * @author André van Hoorn, Jan Waller
  */
 public abstract class AbstractUnknownTypeTest extends AbstractTestFSWriterReader { // NOPMD (TestClassWithoutTestCases) // NOCS (MissingCtorCheck)
 	protected static final EmptyRecord EVENT0_KNOWN_TYPE = new EmptyRecord();
-	protected static final BranchingRecord EVENT1_UNKNOWN_TYPE = new BranchingRecord();
+	protected static final BranchingRecord EVENT1_UNKNOWN_TYPE = new BranchingRecord(-1, -1, -1);
 	protected static final EmptyRecord EVENT2_KNOWN_TYPE = new EmptyRecord();
-	protected static final BranchingRecord EVENT3_UNKNOWN_TYPE = new BranchingRecord();
+	protected static final BranchingRecord EVENT3_UNKNOWN_TYPE = new BranchingRecord(-1, -1, -1);
 
 	private static final Class<? extends IMonitoringRecord> EVENT_CLASS_TO_MANIPULATE = EVENT1_UNKNOWN_TYPE.getClass();
 

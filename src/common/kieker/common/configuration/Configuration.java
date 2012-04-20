@@ -154,7 +154,7 @@ public final class Configuration extends Properties {
 	 */
 	public final Configuration getPropertiesStartingWith(final String prefix) {
 		final Configuration configuration = new Configuration(null);
-		// for 1.6 simply (also adjust below)
+		// for Java 1.6 simply (also adjust below)
 		// final Set<String> keys = this.stringPropertyNames();
 		final Enumeration<?> keys = this.propertyNames();
 		while (keys.hasMoreElements()) {

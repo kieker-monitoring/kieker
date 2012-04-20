@@ -27,11 +27,10 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 
 /**
- * @author Andre van Hoorn
- * 
+ * @author Andre van Hoorn, Jan Waller
  */
 public final class ResourceUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	private static final long serialVersionUID = -7386791367687652550L;
+	private static final long serialVersionUID = 8412442607068036054L;
 	private static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
@@ -41,32 +40,24 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 	private static final String DEFAULT_VALUE = "N/A";
 
 	/**
-	 * Date/time of measurement. The value should be interpreted as the number
-	 * of nano-seconds elapsed since Jan 1st, 1970 UTC.
+	 * Date/time of measurement.
 	 */
-	private volatile long timestamp = -1;
+	private final long timestamp;
 
 	/**
 	 * Name of the host, the resource belongs to.
 	 */
-	private volatile String hostname = DEFAULT_VALUE;
+	private final String hostname;
 
 	/**
 	 * Name of the resource.
 	 */
-	private volatile String resourceName = DEFAULT_VALUE;
+	private final String resourceName;
 
 	/**
 	 * Value of utilization. The value should be in the range <code>[0,1]</code>
 	 */
-	private volatile double utilization = -1;
-
-	/**
-	 * 
-	 */
-	public ResourceUtilizationRecord() {
-		// nothing to do
-	}
+	private final double utilization;
 
 	/**
 	 * @param timestamp
@@ -76,22 +67,17 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 	 */
 	public ResourceUtilizationRecord(final long timestamp, final String hostname, final String resourceName, final double utilization) {
 		this.timestamp = timestamp;
-		this.hostname = hostname;
-		this.resourceName = resourceName;
+		this.hostname = (hostname == null) ? DEFAULT_VALUE : hostname; // NOCS
+		this.resourceName = (resourceName == null) ? DEFAULT_VALUE : resourceName; // NOCS
 		this.utilization = utilization;
 	}
 
-	public ResourceUtilizationRecord(final Object[] values) {
-		final Object[] myValues = values.clone();
-		AbstractMonitoringRecord.checkArray(myValues, TYPES);
-		try {
-			this.timestamp = (Long) myValues[0];
-			this.hostname = (String) myValues[1];
-			this.resourceName = (String) myValues[2];
-			this.utilization = (Double) myValues[3];
-		} catch (final Exception exc) { // NOPMD NOCS (IllegalCatchCheck)
-			throw new IllegalArgumentException("Failed to init", exc);
-		}
+	public ResourceUtilizationRecord(final Object[] values) { // NOPMD (values stored directly)
+		AbstractMonitoringRecord.checkArray(values, TYPES);
+		this.timestamp = (Long) values[0];
+		this.hostname = (String) values[1];
+		this.resourceName = (String) values[2];
+		this.utilization = (Double) values[3];
 	}
 
 	public Object[] toArray() {
@@ -115,26 +101,10 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 	}
 
 	/**
-	 * @param timestamp
-	 *            the timestamp to set
-	 */
-	public final void setTimestamp(final long timestamp) {
-		this.timestamp = timestamp;
-	}
-
-	/**
 	 * @return the hostname
 	 */
 	public final String getHostname() {
 		return this.hostname;
-	}
-
-	/**
-	 * @param hostname
-	 *            the hostname to set
-	 */
-	public final void setHostname(final String hostname) {
-		this.hostname = hostname;
 	}
 
 	/**
@@ -145,25 +115,9 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 	}
 
 	/**
-	 * @param resourceName
-	 *            the resourceName to set
-	 */
-	public final void setResourceName(final String resourceName) {
-		this.resourceName = resourceName;
-	}
-
-	/**
 	 * @return the utilization
 	 */
 	public final double getUtilization() {
 		return this.utilization;
-	}
-
-	/**
-	 * @param utilization
-	 *            the utilization to set
-	 */
-	public final void setUtilization(final double utilization) {
-		this.utilization = utilization;
 	}
 }

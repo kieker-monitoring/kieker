@@ -70,9 +70,9 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 		sb.append("Writer: '");
 		sb.append(this.getClass().getName());
 		sb.append("'\n\tConfiguration:");
-		// 1.5 compability
+		// Java 1.5 compability
 		final Enumeration<?> keys = this.configuration.propertyNames();
-		// for 1.6 simply (also adjust below)
+		// for Java 1.6 simply (also adjust below)
 		// final Set<String> keys = this.configuration.stringPropertyNames();
 		if (!keys.hasMoreElements()) {
 			sb.append("\n\t\tNo Configuration");

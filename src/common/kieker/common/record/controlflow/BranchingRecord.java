@@ -24,23 +24,19 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 
 /**
- * @author Andre van Hoorn
+ * @author Andre van Hoorn, Jan Waller
  */
 public final class BranchingRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	private static final long serialVersionUID = -4569387448110349137L;
+	private static final long serialVersionUID = 1949567386494340839L;
 	private static final Class<?>[] TYPES = {
 		long.class, // timestamp
 		int.class, // branchId
 		int.class, // branchingOutcome
 	};
 
-	private volatile long timestamp = -1;
-	private volatile int branchID = -1;
-	private volatile int branchingOutcome = -1;
-
-	public BranchingRecord() {
-		// nothing to do
-	};
+	private final long timestamp;
+	private final int branchID;
+	private final int branchingOutcome;
 
 	public BranchingRecord(final long timestamp, final int branchID, final int branchingOutcome) {
 		this.timestamp = timestamp;
@@ -48,20 +44,15 @@ public final class BranchingRecord extends AbstractMonitoringRecord implements I
 		this.branchingOutcome = branchingOutcome;
 	}
 
-	public BranchingRecord(final Object[] values) {
-		final Object[] myValues = values.clone();
-		AbstractMonitoringRecord.checkArray(myValues, TYPES);
-		try {
-			this.timestamp = (Long) myValues[0];
-			this.branchID = (Integer) myValues[1];
-			this.branchingOutcome = (Integer) myValues[2];
-		} catch (final Exception exc) { // NOPMD NOCS (IllegalCatchCheck)
-			throw new IllegalArgumentException("Failed to init", exc);
-		}
+	public BranchingRecord(final Object[] values) { // NOPMD (direct store of values)
+		AbstractMonitoringRecord.checkArray(values, TYPES);
+		this.timestamp = (Long) values[0];
+		this.branchID = (Integer) values[1];
+		this.branchingOutcome = (Integer) values[2];
 	}
 
 	public Object[] toArray() {
-		return new Object[] { this.timestamp, this.branchID, this.branchingOutcome };
+		return new Object[] { this.timestamp, this.branchID, this.branchingOutcome, };
 	}
 
 	@Deprecated
@@ -81,14 +72,6 @@ public final class BranchingRecord extends AbstractMonitoringRecord implements I
 	}
 
 	/**
-	 * @param timestamp
-	 *            the timestamp to set
-	 */
-	public final void setTimestamp(final long timestamp) {
-		this.timestamp = timestamp;
-	}
-
-	/**
 	 * @return the branchID
 	 */
 	public final int getBranchID() {
@@ -96,25 +79,9 @@ public final class BranchingRecord extends AbstractMonitoringRecord implements I
 	}
 
 	/**
-	 * @param branchID
-	 *            the branchID to set
-	 */
-	public final void setBranchID(final int branchID) {
-		this.branchID = branchID;
-	}
-
-	/**
 	 * @return the branchingOutcome
 	 */
 	public final int getBranchingOutcome() {
 		return this.branchingOutcome;
-	}
-
-	/**
-	 * @param branchingOutcome
-	 *            the branchingOutcome to set
-	 */
-	public final void setBranchingOutcome(final int branchingOutcome) {
-		this.branchingOutcome = branchingOutcome;
 	}
 }

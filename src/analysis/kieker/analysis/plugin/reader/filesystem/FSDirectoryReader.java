@@ -239,11 +239,11 @@ final class FSDirectoryReader implements Runnable {
 							continue; // skip this ignored record
 						}
 						final long loggingTimestamp = Long.valueOf(recordFields[1]);
-						// 1.5 compatibility
+						// Java 1.5 compatibility
 						final String[] recordFiledsReduced = new String[recordFields.length - 2];
 						System.arraycopy(recordFields, 2, recordFiledsReduced, 0, recordFields.length - 2);
 						record = AbstractMonitoringRecord.createFromStringArray(clazz, recordFiledsReduced);
-						// in 1.6 this could be simplified to
+						// in Java 1.6 this could be simplified to
 						// record = AbstractMonitoringRecord.createFromStringArray(clazz, Arrays.copyOfRange(recordFields, 2, recordFields.length));
 						record.setLoggingTimestamp(loggingTimestamp);
 					} else { // legacy record

@@ -27,11 +27,10 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 
 /**
- * @author Andre van Hoorn
- * 
+ * @author Andre van Hoorn, Jan Waller
  */
 public final class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	private static final long serialVersionUID = 320361406631781156L;
+	private static final long serialVersionUID = 8072422694598002383L;
 	private static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
@@ -43,33 +42,24 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 		long.class,
 	};
 	private static final String DEFAULT_VALUE = "N/A";
-	private static final long UNDEFINED_LONG = -1;
 
-	private volatile long memUsed = UNDEFINED_LONG;
-	private volatile long memFree = UNDEFINED_LONG;
-	private volatile long swapTotal = UNDEFINED_LONG;
-	private volatile long swapUsed = UNDEFINED_LONG;
-	private volatile long swapFree = UNDEFINED_LONG;
+	private final long memUsed;
+	private final long memFree;
+	private final long swapTotal;
+	private final long swapUsed;
+	private final long swapFree;
 
 	/**
-	 * Date/time of measurement. The value should be interpreted as the number
-	 * of nano-seconds elapsed since Jan 1st, 1970 UTC.
+	 * Date/time of measurement.
 	 */
-	private volatile long timestamp = -1;
+	private final long timestamp;
 
 	/**
 	 * Name of the host, the resource belongs to.
 	 */
-	private volatile String hostname = DEFAULT_VALUE;
+	private final String hostname;
 
-	private volatile long memTotal = UNDEFINED_LONG;
-
-	/**
-	 * 
-	 */
-	public MemSwapUsageRecord() {
-		// nothing to do
-	}
+	private final long memTotal;
 
 	/**
 	 * Constructs a new {@link MemSwapUsageRecord} with the given values. If
@@ -79,7 +69,7 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	public MemSwapUsageRecord(final long timestamp, final String hostname, final long memTotal, final long memUsed, final long memFree, final long swapTotal,
 			final long swapUsed, final long swapFree) {
 		this.timestamp = timestamp;
-		this.hostname = hostname;
+		this.hostname = (hostname == null) ? DEFAULT_VALUE : hostname; // NOCS
 		this.memTotal = memTotal;
 		this.memUsed = memUsed;
 		this.memFree = memFree;
@@ -88,27 +78,21 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 		this.swapFree = swapFree;
 	}
 
-	public MemSwapUsageRecord(final Object[] values) {
-		final Object[] myValues = values.clone();
-		AbstractMonitoringRecord.checkArray(myValues, TYPES);
-		try {
-			this.timestamp = (Long) myValues[0];
-			this.hostname = (String) myValues[1];
-			this.memTotal = (Long) myValues[2];
-			this.memUsed = (Long) myValues[3];
-			this.memFree = (Long) myValues[4];
-			this.swapTotal = (Long) myValues[5];
-			this.swapUsed = (Long) myValues[6];
-			this.swapFree = (Long) myValues[7];
-		} catch (final Exception exc) { // NOPMD NOCS (IllegalCatchCheck)
-			throw new IllegalArgumentException("Failed to init", exc);
-		}
+	public MemSwapUsageRecord(final Object[] values) { // NOPMD (values stored directly)
+		AbstractMonitoringRecord.checkArray(values, TYPES);
+		this.timestamp = (Long) values[0];
+		this.hostname = (String) values[1];
+		this.memTotal = (Long) values[2];
+		this.memUsed = (Long) values[3];
+		this.memFree = (Long) values[4];
+		this.swapTotal = (Long) values[5];
+		this.swapUsed = (Long) values[6];
+		this.swapFree = (Long) values[7];
 	}
 
 	/*
 	 * {@inheritdoc}
 	 */
-
 	public Object[] toArray() {
 		return new Object[] { this.timestamp, this.hostname, this.memTotal, this.memUsed, this.memFree, this.swapTotal, this.swapUsed, this.swapFree, };
 	}
@@ -130,26 +114,10 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	}
 
 	/**
-	 * @param memTotal
-	 *            the memTotal to set
-	 */
-	public final void setMemTotal(final long memTotal) {
-		this.memTotal = memTotal;
-	}
-
-	/**
 	 * @return the memUsed
 	 */
 	public final long getMemUsed() {
 		return this.memUsed;
-	}
-
-	/**
-	 * @param memUsed
-	 *            the memUsed to set
-	 */
-	public final void setMemUsed(final long memUsed) {
-		this.memUsed = memUsed;
 	}
 
 	/**
@@ -160,26 +128,10 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	}
 
 	/**
-	 * @param memFree
-	 *            the memFree to set
-	 */
-	public final void setMemFree(final long memFree) {
-		this.memFree = memFree;
-	}
-
-	/**
 	 * @return the swapTotal
 	 */
 	public final long getSwapTotal() {
 		return this.swapTotal;
-	}
-
-	/**
-	 * @param swapTotal
-	 *            the swapTotal to set
-	 */
-	public final void setSwapTotal(final long swapTotal) {
-		this.swapTotal = swapTotal;
 	}
 
 	/**
@@ -190,26 +142,10 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	}
 
 	/**
-	 * @param swapUsed
-	 *            the swapUsed to set
-	 */
-	public final void setSwapUsed(final long swapUsed) {
-		this.swapUsed = swapUsed;
-	}
-
-	/**
 	 * @return the swapFree
 	 */
 	public final long getSwapFree() {
 		return this.swapFree;
-	}
-
-	/**
-	 * @param swapFree
-	 *            the swapFree to set
-	 */
-	public final void setSwapFree(final long swapFree) {
-		this.swapFree = swapFree;
 	}
 
 	/**
@@ -220,25 +156,9 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	}
 
 	/**
-	 * @param timestamp
-	 *            the timestamp to set
-	 */
-	public final void setTimestamp(final long timestamp) {
-		this.timestamp = timestamp;
-	}
-
-	/**
 	 * @return the hostname
 	 */
 	public final String getHostname() {
 		return this.hostname;
-	}
-
-	/**
-	 * @param hostname
-	 *            the hostname to set
-	 */
-	public final void setHostname(final String hostname) {
-		this.hostname = hostname;
 	}
 }
