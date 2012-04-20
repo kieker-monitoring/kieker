@@ -23,15 +23,25 @@ package kieker.monitoring.core.controller;
 /**
  * @author Jan Waller
  */
-public interface IRegistryController {
+public interface IProbeController {
 
 	/**
-	 * Gets a unique id for a string.
+	 * Activates a probe.
 	 * 
 	 * @param string
-	 *            the string
+	 *            signature of the probe
 	 * @return
-	 *         the unique id
+	 *         true on success
 	 */
-	public int getIdForString(final String string);
+	public boolean activateProbe(final String signature);
+
+	/**
+	 * Deactivates a probe.
+	 * 
+	 * @param string
+	 *            signature of the probe
+	 * @return
+	 *         true on success
+	 */
+	public boolean deactivateProbe(final String signature);
 }

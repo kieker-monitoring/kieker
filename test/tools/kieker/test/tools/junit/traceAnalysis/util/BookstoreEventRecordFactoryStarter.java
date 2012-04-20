@@ -14,6 +14,10 @@ import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 
 public class BookstoreEventRecordFactoryStarter {
 
+	private BookstoreEventRecordFactoryStarter() {
+		// nothing to see here ...
+	}
+
 	public static void main(final String[] args) {
 		final IMonitoringController ctrl = MonitoringController.getInstance();
 

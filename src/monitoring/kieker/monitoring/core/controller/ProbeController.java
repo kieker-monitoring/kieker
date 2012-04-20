@@ -20,18 +20,45 @@
 
 package kieker.monitoring.core.controller;
 
+import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
+
 /**
  * @author Jan Waller
  */
-public interface IRegistryController {
+public class ProbeController extends AbstractController implements IProbeController {
+	private static final Log LOG = LogFactory.getLog(ProbeController.class);
 
-	/**
-	 * Gets a unique id for a string.
-	 * 
-	 * @param string
-	 *            the string
-	 * @return
-	 *         the unique id
-	 */
-	public int getIdForString(final String string);
+	protected ProbeController(final Configuration configuration) {
+		super(configuration);
+	}
+
+	@Override
+	protected void init() {
+		// nothing to do
+	}
+
+	@Override
+	protected void cleanup() {
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Shutting down Probe Controller");
+		}
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("ProbeController: ");
+		sb.append(" not yet implemented.\n");
+		return sb.toString();
+	}
+
+	public boolean activateProbe(final String signature) {
+		return false;
+	}
+
+	public boolean deactivateProbe(final String signature) {
+		return false;
+	}
 }

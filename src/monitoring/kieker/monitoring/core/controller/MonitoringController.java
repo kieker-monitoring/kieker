@@ -44,6 +44,7 @@ public final class MonitoringController extends AbstractController implements IM
 	private final SamplingController samplingController;
 	private final TimeSourceController timeSourceController;
 	private final RegistryController registryController;
+	private final ProbeController probeController;
 
 	// private Constructor
 	private MonitoringController(final Configuration configuration) {
@@ -54,6 +55,7 @@ public final class MonitoringController extends AbstractController implements IM
 		this.samplingController = new SamplingController(configuration);
 		this.timeSourceController = new TimeSourceController(configuration);
 		this.registryController = new RegistryController(configuration);
+		this.probeController = new ProbeController(configuration);
 	}
 
 	// FACTORY
@@ -87,6 +89,11 @@ public final class MonitoringController extends AbstractController implements IM
 		}
 		monitoringController.registryController.setMonitoringController(monitoringController);
 		if (monitoringController.registryController.isTerminated()) {
+			monitoringController.terminate();
+			return monitoringController;
+		}
+		monitoringController.probeController.setMonitoringController(monitoringController);
+		if (monitoringController.probeController.isTerminated()) {
 			monitoringController.terminate();
 			return monitoringController;
 		}
@@ -138,6 +145,7 @@ public final class MonitoringController extends AbstractController implements IM
 		this.samplingController.terminate();
 		this.writerController.terminate();
 		this.registryController.terminate();
+		this.probeController.terminate();
 	}
 
 	@Override
@@ -150,6 +158,7 @@ public final class MonitoringController extends AbstractController implements IM
 		sb.append(this.jmxController.toString());
 		sb.append(this.registryController.toString());
 		sb.append(this.timeSourceController.toString());
+		sb.append(this.probeController.toString());
 		sb.append(this.writerController.toString());
 		sb.append(this.samplingController.toString());
 		return sb.toString();
@@ -224,6 +233,14 @@ public final class MonitoringController extends AbstractController implements IM
 
 	public int getIdForString(final String string) {
 		return this.registryController.getIdForString(string);
+	}
+
+	public boolean activateProbe(final String signature) {
+		return this.probeController.activateProbe(signature);
+	}
+
+	public boolean deactivateProbe(final String signature) {
+		return this.probeController.deactivateProbe(signature);
 	}
 
 	// GET SINGLETON INSTANCE
