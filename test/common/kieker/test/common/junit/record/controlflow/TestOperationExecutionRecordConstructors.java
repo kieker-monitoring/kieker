@@ -63,8 +63,7 @@ public class TestOperationExecutionRecordConstructors {
 		this.checkHostName(opExecutionRecord, hostname);
 		this.checkSessionId(opExecutionRecord, sessionId);
 
-		this.checkToFromArrayAllFields(opExecutionRecord, BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
-				BookstoreOperationExecutionRecordFactory.OP_NAMEWITHARG_BOOKSTORE_SEARCH_BOOK);
+		this.checkToFromArrayAllFields(opExecutionRecord);
 	}
 
 	private void checkSessionId(final OperationExecutionRecord opExecutionRecord, final String expectedSessionId) {
@@ -89,7 +88,7 @@ public class TestOperationExecutionRecordConstructors {
 		Assert.assertEquals("ess's differ", ess, opExecutionRecord.getEss());
 	}
 
-	private void checkToFromArrayAllFields(final OperationExecutionRecord opExecutionRecord, final String expectedFqClassname, final String expectedOpArgString) {
+	private void checkToFromArrayAllFields(final OperationExecutionRecord opExecutionRecord) {
 		final Object[] serializedRecord = opExecutionRecord.toArray();
 		final OperationExecutionRecord deserializedRecord = new OperationExecutionRecord(serializedRecord);
 

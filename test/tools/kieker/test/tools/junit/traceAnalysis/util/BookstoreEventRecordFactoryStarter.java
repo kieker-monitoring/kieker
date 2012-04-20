@@ -12,7 +12,7 @@ import kieker.monitoring.core.controller.MonitoringController;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 
-public class BookstoreEventRecordFactoryStarter {
+public final class BookstoreEventRecordFactoryStarter {
 
 	private BookstoreEventRecordFactoryStarter() {
 		// nothing to see here ...
