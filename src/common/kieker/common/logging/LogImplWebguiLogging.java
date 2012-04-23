@@ -35,8 +35,14 @@ public final class LogImplWebguiLogging implements Log {
 
 	private final String name;
 	private static final int MAX_ENTRIES = 100;
-	private static final HashMap<String, Queue<String>> queues = new HashMap<String, Queue<String>>();
+	private static final HashMap<String, Queue<String>> QUEUES = new HashMap<String, Queue<String>>();
 
+	/**
+	 * Creates a new instance of this class.
+	 * 
+	 * @param name
+	 *            The name of the logger.
+	 */
 	protected LogImplWebguiLogging(final String name) {
 		this.name = name;
 	}
@@ -80,12 +86,12 @@ public final class LogImplWebguiLogging implements Log {
 	private void addMessage(final String message) {
 		Queue<String> queue;
 
-		synchronized (LogImplWebguiLogging.queues) {
+		synchronized (LogImplWebguiLogging.QUEUES) {
 			// Get the right queue and create it if necessary.
-			queue = LogImplWebguiLogging.queues.get(this.name);
+			queue = LogImplWebguiLogging.QUEUES.get(this.name);
 			if (queue == null) {
 				queue = new ArrayBlockingQueue<String>(MAX_ENTRIES);
-				LogImplWebguiLogging.queues.put(this.name, queue);
+				LogImplWebguiLogging.QUEUES.put(this.name, queue);
 			}
 		}
 
@@ -100,18 +106,28 @@ public final class LogImplWebguiLogging implements Log {
 		}
 	}
 
+	/**
+	 * Clears the saved entries within this logger.
+	 */
 	public void clear() {
-		synchronized (LogImplWebguiLogging.queues) {
-			LogImplWebguiLogging.queues.clear();
+		synchronized (LogImplWebguiLogging.QUEUES) {
+			LogImplWebguiLogging.QUEUES.clear();
 		}
 	}
 
+	/**
+	 * Delivers an array with all entries of the logger with the given name.
+	 * 
+	 * @param name
+	 *            The name of the logger.
+	 * @return The stored entries of the logger. If a logger with the given name doesn't exist, an empty array will be returned.
+	 */
 	public static String[] getEntries(final String name) {
 		Queue<String> queue;
 
-		synchronized (LogImplWebguiLogging.queues) {
+		synchronized (LogImplWebguiLogging.QUEUES) {
 			// Get the right queue
-			queue = LogImplWebguiLogging.queues.get(name);
+			queue = LogImplWebguiLogging.QUEUES.get(name);
 			if (queue == null) {
 				return new String[0];
 			}
