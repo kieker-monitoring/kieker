@@ -27,7 +27,7 @@ package kieker.common.logging;
 public final class LogFactory {
 
 	private static enum Logger {
-		JDK, COMMONS,
+		JDK, COMMONS, WEBGUI,
 	}
 
 	private static final Logger DETECTED_LOGGER;
@@ -35,11 +35,17 @@ public final class LogFactory {
 	static {
 		Logger logselectiontemp = Logger.JDK; // default to JDK logging
 		try {
-			if (Class.forName("org.apache.commons.logging.Log") != null) {
-				logselectiontemp = Logger.COMMONS; // use commons logging
+			if (Class.forName("kieker.webgui.beans.application.ProjectsBean") != null) {
+				logselectiontemp = Logger.WEBGUI; // use webgui logging
 			}
-		} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
-			// failed to find Apache commons logging
+		} catch (final Exception ex1) { // NOPMD NOCS (catch Exception)
+			try {
+				if (Class.forName("org.apache.commons.logging.Log") != null) {
+					logselectiontemp = Logger.COMMONS; // use commons logging
+				}
+			} catch (final Exception ex2) { // NOPMD NOCS (catch Exception)
+				// use default ...
+			}
 		}
 		DETECTED_LOGGER = logselectiontemp; // NOCS (missing this)
 	}
@@ -54,6 +60,8 @@ public final class LogFactory {
 
 	public static final Log getLog(final String name) {
 		switch (DETECTED_LOGGER) { // NOPMD (no break needed)
+		case WEBGUI:
+			return new LogImplWebguiLogging(name);
 		case COMMONS:
 			return new LogImplCommonsLogging(name);
 		case JDK:
