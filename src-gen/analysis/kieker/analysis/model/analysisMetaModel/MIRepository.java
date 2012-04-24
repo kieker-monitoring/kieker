@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.MIRepository#getProperties <em>Properties</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.MIRepository#getClassname <em>Classname</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.MIRepository#getName <em>Name</em>}</li>
  * </ul>
  * </p>
  *
@@ -69,5 +70,31 @@ public interface MIRepository extends EObject {
 	 * @generated
 	 */
 	void setClassname(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Name</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Name</em>' attribute.
+	 * @see #setName(String)
+	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getRepository_Name()
+	 * @model required="true"
+	 * @generated
+	 */
+	String getName();
+
+	/**
+	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIRepository#getName <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Name</em>' attribute.
+	 * @see #getName()
+	 * @generated
+	 */
+	void setName(String value);
 
 } // MIRepository

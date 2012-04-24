@@ -519,13 +519,22 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int REPOSITORY__CLASSNAME = 1;
 
 	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REPOSITORY__NAME = 2;
+
+	/**
 	 * The number of structural features of the '<em>Repository</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int REPOSITORY_FEATURE_COUNT = 2;
+	int REPOSITORY_FEATURE_COUNT = 3;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDependency <em>Dependency</em>}' class.
@@ -893,6 +902,17 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	EAttribute getRepository_Classname();
 
 	/**
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIRepository#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIRepository#getName()
+	 * @see #getRepository()
+	 * @generated
+	 */
+	EAttribute getRepository_Name();
+
+	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIDependency <em>Dependency</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1208,6 +1228,14 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute REPOSITORY__CLASSNAME = eINSTANCE.getRepository_Classname();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REPOSITORY__NAME = eINSTANCE.getRepository_Name();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDependency <em>Dependency</em>}' class.

@@ -35,6 +35,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MRepository#getProperties <em>Properties</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MRepository#getClassname <em>Classname</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MRepository#getName <em>Name</em>}</li>
  * </ul>
  * </p>
  *
@@ -70,6 +71,26 @@ public class MRepository extends EObjectImpl implements MIRepository {
 	 * @ordered
 	 */
 	protected String classname = CLASSNAME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String name = NAME_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -128,6 +149,27 @@ public class MRepository extends EObjectImpl implements MIRepository {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setName(String newName) {
+		String oldName = name;
+		name = newName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.REPOSITORY__NAME, oldName, name));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -149,6 +191,8 @@ public class MRepository extends EObjectImpl implements MIRepository {
 				return getProperties();
 			case MIAnalysisMetaModelPackage.REPOSITORY__CLASSNAME:
 				return getClassname();
+			case MIAnalysisMetaModelPackage.REPOSITORY__NAME:
+				return getName();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -169,6 +213,9 @@ public class MRepository extends EObjectImpl implements MIRepository {
 			case MIAnalysisMetaModelPackage.REPOSITORY__CLASSNAME:
 				setClassname((String)newValue);
 				return;
+			case MIAnalysisMetaModelPackage.REPOSITORY__NAME:
+				setName((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -187,6 +234,9 @@ public class MRepository extends EObjectImpl implements MIRepository {
 			case MIAnalysisMetaModelPackage.REPOSITORY__CLASSNAME:
 				setClassname(CLASSNAME_EDEFAULT);
 				return;
+			case MIAnalysisMetaModelPackage.REPOSITORY__NAME:
+				setName(NAME_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -203,6 +253,8 @@ public class MRepository extends EObjectImpl implements MIRepository {
 				return properties != null && !properties.isEmpty();
 			case MIAnalysisMetaModelPackage.REPOSITORY__CLASSNAME:
 				return CLASSNAME_EDEFAULT == null ? classname != null : !CLASSNAME_EDEFAULT.equals(classname);
+			case MIAnalysisMetaModelPackage.REPOSITORY__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -219,6 +271,8 @@ public class MRepository extends EObjectImpl implements MIRepository {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (classname: ");
 		result.append(classname);
+		result.append(", name: ");
+		result.append(name);
 		result.append(')');
 		return result.toString();
 	}

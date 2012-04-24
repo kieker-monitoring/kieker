@@ -429,6 +429,15 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getRepository_Name() {
+		return (EAttribute)repositoryEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getDependency() {
 		return dependencyEClass;
 	}
@@ -533,6 +542,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 		repositoryEClass = createEClass(REPOSITORY);
 		createEReference(repositoryEClass, REPOSITORY__PROPERTIES);
 		createEAttribute(repositoryEClass, REPOSITORY__CLASSNAME);
+		createEAttribute(repositoryEClass, REPOSITORY__NAME);
 
 		dependencyEClass = createEClass(DEPENDENCY);
 		createEAttribute(dependencyEClass, DEPENDENCY__FILE_PATH);
@@ -612,6 +622,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 		initEClass(repositoryEClass, MIRepository.class, "Repository", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRepository_Properties(), this.getProperty(), null, "properties", null, 0, -1, MIRepository.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRepository_Classname(), ecorePackage.getEString(), "classname", null, 1, 1, MIRepository.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRepository_Name(), ecorePackage.getEString(), "name", null, 1, 1, MIRepository.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(dependencyEClass, MIDependency.class, "Dependency", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDependency_FilePath(), ecorePackage.getEString(), "filePath", null, 1, 1, MIDependency.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
