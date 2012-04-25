@@ -47,6 +47,7 @@ import com.mxgraph.model.mxGeometry;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.handler.mxRubberband;
 import com.mxgraph.util.mxCellRenderer;
+import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxPoint;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.util.mxXmlUtils;
@@ -74,6 +75,38 @@ public final class KaxViz extends JFrame {
 	private static final int FILTER_HEIGHT = 80;
 	private static final int FILTER_WIDTH = 200;
 	private static final int FILTER_SPACE = 30;
+
+	private static final String STYLE_READER_COLOR = mxConstants.STYLE_FILLCOLOR + "=#A3C592;";
+	private static final String STYLE_FILTER_COLOR = mxConstants.STYLE_FILLCOLOR + "=#C3D9FF;";
+	private static final String STYLE_REPOSITORY_COLOR = mxConstants.STYLE_FILLCOLOR + "=#EAE385;";
+
+	private static final String STYLE_READER = STYLE_READER_COLOR +
+			mxConstants.STYLE_STROKECOLOR + "=#000000;" +
+			mxConstants.STYLE_FONTCOLOR + "=#000000;";
+
+	private static final String STYLE_FILTER = STYLE_FILTER_COLOR +
+			mxConstants.STYLE_STROKECOLOR + "=#000000;" +
+			mxConstants.STYLE_FONTCOLOR + "=#000000;";
+
+	private static final String STYLE_REPOSITORY = STYLE_REPOSITORY_COLOR +
+			mxConstants.STYLE_ROUNDED + "=1;" +
+			mxConstants.STYLE_STROKECOLOR + "=#000000;" +
+			mxConstants.STYLE_FONTCOLOR + "=#000000;";
+
+	private static final String STYLE_PORT = "" +
+			mxConstants.STYLE_NOLABEL + "=1;" +
+			mxConstants.STYLE_STROKECOLOR + "=#000000;" +
+			mxConstants.STYLE_FONTCOLOR + "=#000000;" +
+			mxConstants.STYLE_FONTSTYLE + "=" + mxConstants.FONT_ITALIC + ";";
+
+	private static final String STYLE_CONNECTION = "" +
+			mxConstants.STYLE_EDGE + "=orthogonalEdgeStyle;";
+
+	private static final String STYLE_CONNECTION_REPOSITORY = "" +
+			mxConstants.STYLE_EDGE + "=orthogonalEdgeStyle;" +
+			mxConstants.STYLE_DASHED + "=1;" +
+			mxConstants.STYLE_FONTCOLOR + "=#000000;" +
+			mxConstants.STYLE_FONTSTYLE + "=" + mxConstants.FONT_ITALIC + ";";
 
 	final transient mxGraph graph; // NOPMD NOCS (package visible for inner class)
 
@@ -188,13 +221,13 @@ public final class KaxViz extends JFrame {
 			for (final AbstractReaderPlugin reader : this.analysisController.getReaders()) {
 				final mxCell vertex = this.createReader(reader, x++);
 				mapPlugin2Graph.put(reader, vertex);
-				mapPluginOutputPorts2Graph.put(reader, this.createOutputPorts(reader, vertex));
+				mapPluginOutputPorts2Graph.put(reader, this.createOutputPorts(reader, vertex, true));
 			}
 			for (final AbstractFilterPlugin filter : this.analysisController.getFilters()) {
 				final mxCell vertex = this.createFilter(filter, x++);
 				mapPlugin2Graph.put(filter, vertex);
 				mapPluginInputPorts2Graph.put(filter, this.createInputPorts(filter, vertex));
-				mapPluginOutputPorts2Graph.put(filter, this.createOutputPorts(filter, vertex));
+				mapPluginOutputPorts2Graph.put(filter, this.createOutputPorts(filter, vertex, false));
 			}
 			for (final AbstractRepository repo : this.analysisController.getRepositories()) {
 				final mxCell cell = this.createRepository(repo, x++);
@@ -214,9 +247,9 @@ public final class KaxViz extends JFrame {
 						final mxCell inputPluginCell = mapPlugin2Graph.get(inputPlugin);
 						final String inputPortName = inputPortReference.getInputPortName();
 						final mxCell inputPortCell = mapPluginInputPorts2Graph.get(inputPlugin).get(inputPortName);
-						inputPortCell.setStyle("noLabel=0;spacingTop=3;verticalLabelPosition=bottom;portConstraint=north");
-						outputPortCell.setStyle("noLabel=0;verticalLabelPosition=top;portConstraint=south");
-						final mxCell edge = (mxCell) this.graph.insertEdge(null, null, "", outputPluginCell, inputPluginCell, "edgeStyle=orthogonalEdgeStyle");
+						this.graph.setCellStyles(mxConstants.STYLE_NOLABEL, "0", new Object[] { inputPortCell, outputPortCell });
+
+						final mxCell edge = (mxCell) this.graph.insertEdge(null, null, "", outputPluginCell, inputPluginCell, STYLE_CONNECTION);
 						edge.setSource(outputPortCell);
 						edge.setTarget(inputPortCell);
 					}
@@ -224,7 +257,7 @@ public final class KaxViz extends JFrame {
 				for (final Entry<String, AbstractRepository> repository : outputPlugin.getCurrentRepositories().entrySet()) {
 					final mxCell output = mapPlugin2Graph.get(outputPlugin);
 					final mxCell input = mapRepository2Graph.get(repository.getValue());
-					this.graph.insertEdge(null, null, repository.getKey(), output, input, "edgeStyle=orthogonalEdgeStyle");
+					this.graph.insertEdge(null, null, repository.getKey(), output, input, STYLE_CONNECTION_REPOSITORY);
 				}
 			}
 			// step 3: auto layout!
@@ -244,10 +277,13 @@ public final class KaxViz extends JFrame {
 		final Map<String, mxCell> port2graph = new HashMap<String, mxCell>(); // NOPMD (no concurrent access)
 		final String[] portNames = plugin.getAllInputPortNames();
 		for (int i = 0; i < portNames.length; i++) {
-			final mxGeometry portGeometry = new mxGeometry((i + 1d) / (portNames.length + 1), 0, 10, 10);
+			final mxGeometry portGeometry = new mxGeometry((i + 1d) / (portNames.length + 1), -0.06, 10, 10);
 			portGeometry.setOffset(new mxPoint(0, 0));
 			portGeometry.setRelative(true);
-			final mxCell port = new mxCell(portNames[i], portGeometry, "noLabel=1;spacingTop=3;verticalLabelPosition=bottom;portConstraint=north");
+			final mxCell port = new mxCell(
+					portNames[i],
+					portGeometry,
+					STYLE_PORT + "spacingTop=3;verticalLabelPosition=bottom;portConstraint=north;" + STYLE_FILTER_COLOR);
 			port.setVertex(true);
 			this.graph.addCell(port, vertex);
 			port2graph.put(portNames[i], port);
@@ -255,14 +291,16 @@ public final class KaxViz extends JFrame {
 		return port2graph;
 	}
 
-	private final Map<String, mxCell> createOutputPorts(final AbstractPlugin plugin, final mxCell vertex) {
+	private final Map<String, mxCell> createOutputPorts(final AbstractPlugin plugin, final mxCell vertex, final boolean reader) {
 		final Map<String, mxCell> port2graph = new HashMap<String, mxCell>(); // NOPMD (no concurrent access)
 		final String[] portNames = plugin.getAllOutputPortNames();
 		for (int i = 0; i < portNames.length; i++) {
-			final mxGeometry portGeometry = new mxGeometry((i + 1d) / (portNames.length + 1), 1, 10, 10);
+			final mxGeometry portGeometry = new mxGeometry((i + 1d) / (portNames.length + 1), 1.06, 10, 10);
 			portGeometry.setOffset(new mxPoint(0, -10));
 			portGeometry.setRelative(true);
-			final mxCell port = new mxCell(portNames[i], portGeometry, "noLabel=1;verticalLabelPosition=top;portConstraint=south");
+			final String fillcolor = reader ? STYLE_READER_COLOR : STYLE_FILTER_COLOR; // NOPMD
+			final mxCell port = new mxCell(portNames[i], portGeometry,
+					STYLE_PORT + "verticalLabelPosition=top;portConstraint=south;" + fillcolor);
 			port.setVertex(true);
 			this.graph.addCell(port, vertex);
 			port2graph.put(portNames[i], port);
@@ -273,7 +311,7 @@ public final class KaxViz extends JFrame {
 	private final mxCell createReader(final AbstractReaderPlugin plugin, final int c) {
 		final mxCell vertex = new mxCell("<<Reader>>\n" + plugin.getName() + " : " + plugin.getPluginName(),
 				new mxGeometry(FILTER_SPACE, FILTER_SPACE + (c * (FILTER_HEIGHT + FILTER_SPACE)),
-						FILTER_WIDTH, FILTER_HEIGHT), null);
+						FILTER_WIDTH, FILTER_HEIGHT), STYLE_READER);
 		vertex.setVertex(true);
 		this.graph.addCell(vertex);
 		return vertex;
@@ -282,16 +320,16 @@ public final class KaxViz extends JFrame {
 	private final mxCell createFilter(final AbstractFilterPlugin plugin, final int c) {
 		final mxCell vertex = new mxCell("<<Filter>>\n" + plugin.getName() + " : " + plugin.getPluginName(),
 				new mxGeometry(FILTER_SPACE, FILTER_SPACE + (c * (FILTER_HEIGHT + FILTER_SPACE)),
-						FILTER_WIDTH, FILTER_HEIGHT), null);
+						FILTER_WIDTH, FILTER_HEIGHT), STYLE_FILTER);
 		vertex.setVertex(true);
 		this.graph.addCell(vertex);
 		return vertex;
 	}
 
 	private final mxCell createRepository(final AbstractRepository repository, final int c) {
-		final mxCell vertex = new mxCell("<<Repository>>\n : " + repository.getName() + " : " + repository.getRepositoryName(),
+		final mxCell vertex = new mxCell("<<Repository>>\n" + repository.getName() + " : " + repository.getRepositoryName(),
 				new mxGeometry(FILTER_SPACE, FILTER_SPACE + (c * (FILTER_HEIGHT + FILTER_SPACE)),
-						FILTER_WIDTH, FILTER_HEIGHT), "rounded=1");
+						FILTER_WIDTH, FILTER_HEIGHT), STYLE_REPOSITORY);
 		vertex.setVertex(true);
 		this.graph.addCell(vertex);
 		return vertex;
