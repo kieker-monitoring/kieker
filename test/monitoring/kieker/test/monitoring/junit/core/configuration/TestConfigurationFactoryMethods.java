@@ -45,6 +45,7 @@ public class TestConfigurationFactoryMethods { // NOCS
 		// Monitoring controller
 		Assert.assertNotNull(ConfigurationFactory.MONITORING_ENABLED + " must not be empty", configuration.getProperty(ConfigurationFactory.MONITORING_ENABLED));
 		Assert.assertNotNull(ConfigurationFactory.CONTROLLER_NAME + " must not be empty", configuration.getProperty(ConfigurationFactory.CONTROLLER_NAME));
+		Assert.assertTrue(ConfigurationFactory.USE_SHUTDOWN_HOOK + " must be true", configuration.getBooleanProperty(ConfigurationFactory.USE_SHUTDOWN_HOOK));
 		// HostName may be empty!
 		Assert.assertNotNull(ConfigurationFactory.EXPERIMENT_ID + " must not be empty", configuration.getProperty(ConfigurationFactory.EXPERIMENT_ID));
 		// JMX controller

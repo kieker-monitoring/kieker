@@ -97,26 +97,30 @@ public final class MonitoringController extends AbstractController implements IM
 			monitoringController.terminate();
 			return monitoringController;
 		}
-		/*
-		 * This ensures that the terminateMonitoring() method is always called
-		 * before shutting down the JVM. This method ensures that necessary cleanup
-		 * steps are finished and no information is lost due to asynchronous writers.
-		 */
-		try {
-			Runtime.getRuntime().addShutdownHook(new Thread() {
+		if (configuration.getBooleanProperty(ConfigurationFactory.USE_SHUTDOWN_HOOK)) {
+			/*
+			 * This ensures that the terminateMonitoring() method is always called
+			 * before shutting down the JVM. This method ensures that necessary cleanup
+			 * steps are finished and no information is lost due to asynchronous writers.
+			 */
+			try {
+				Runtime.getRuntime().addShutdownHook(new Thread() {
 
-				@Override
-				public void run() {
-					if (!monitoringController.isMonitoringTerminated()) {
-						// WONTFIX: We should not use a logger in shutdown hooks, logger may already be down! (#26)
-						LOG.info("ShutdownHook notifies controller to initiate shutdown");
-						// System.err.println(monitoringController.toString());
-						monitoringController.terminateMonitoring();
+					@Override
+					public void run() {
+						if (!monitoringController.isMonitoringTerminated()) {
+							// WONTFIX: We should not use a logger in shutdown hooks, logger may already be down! (#26)
+							LOG.info("ShutdownHook notifies controller to initiate shutdown");
+							// System.err.println(monitoringController.toString());
+							monitoringController.terminateMonitoring();
+						}
 					}
-				}
-			});
-		} catch (final Exception e) { // NOPMD NOCS (Exception)
-			LOG.warn("Failed to add shutdownHook");
+				});
+			} catch (final Exception e) { // NOPMD NOCS (Exception)
+				LOG.warn("Failed to add shutdownHook");
+			}
+		} else {
+			LOG.warn("Shutdown Hook is disabled, loss of monitoring data might occur.");
 		}
 		LOG.info(monitoringController.toString());
 		return monitoringController;
