@@ -36,7 +36,7 @@ public final class LogImplWebguiLogging implements Log {
 
 	private final String name;
 	private static final int MAX_ENTRIES = 100;
-	private static final Map<String, Queue<String>> QUEUES = new HashMap<String, Queue<String>>();
+	private static final Map<String, Queue<String>> QUEUES = new HashMap<String, Queue<String>>(); // NOPMD (sync needed)
 
 	/**
 	 * Creates a new instance of this class.

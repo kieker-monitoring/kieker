@@ -105,6 +105,11 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 	protected abstract void refineWriterConfiguration(Configuration config, final int numRecordsWritten);
 
 	@Override
+	protected void checkControllerStateBeforeRecordsPassedToController(final IMonitoringController monitoringController) throws Exception {
+		Assert.assertTrue(monitoringController.isMonitoringEnabled());
+	}
+
+	@Override
 	protected void checkControllerStateAfterRecordsPassedToController(final IMonitoringController monitoringController) {
 		Assert.assertTrue("Expected monitoring controller to be enabled", monitoringController.isMonitoringEnabled());
 	}

@@ -66,6 +66,15 @@ public abstract class AbstractWriterReaderTest {
 	protected abstract void checkControllerStateAfterRecordsPassedToController(IMonitoringController monitoringController) throws Exception;
 
 	/**
+	 * Checks if the given {@link IMonitoringController} is in the expected state before having passed
+	 * the records to the controller.
+	 * 
+	 * @param monitoringController
+	 * @throws Exception
+	 */
+	protected abstract void checkControllerStateBeforeRecordsPassedToController(IMonitoringController monitoringController) throws Exception;
+
+	/**
 	 * Check if the given set of records is as expected.
 	 * 
 	 * @param monitoringRecords
@@ -121,6 +130,9 @@ public abstract class AbstractWriterReaderTest {
 		 * Write batch of records:
 		 */
 		final IMonitoringController ctrl = this.createController(someEvents.size());
+
+		this.checkControllerStateBeforeRecordsPassedToController(ctrl);
+
 		for (final IMonitoringRecord record : someEvents) {
 			ctrl.newMonitoringRecord(record);
 		}

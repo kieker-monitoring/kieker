@@ -93,6 +93,24 @@ public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 	}
 
 	@Override
+	protected void checkControllerStateBeforeRecordsPassedToController(final IMonitoringController monitoringController) throws Exception {
+		// Test the JMX Controller
+		final JMXServiceURL serviceURL = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://localhost:" + BasicJMXWriterReaderTest.PORT + "/jmxrmi");
+		final ObjectName controllerObjectName = new ObjectName(BasicJMXWriterReaderTest.DOMAIN, "type", BasicJMXWriterReaderTest.CONTROLLER);
+
+		final JMXConnector jmx = JMXConnectorFactory.connect(serviceURL);
+		final MBeanServerConnection mbServer = jmx.getMBeanServerConnection();
+
+		final Object tmpObj = MBeanServerInvocationHandler.newProxyInstance(mbServer, controllerObjectName, IMonitoringController.class, false);
+		final IMonitoringController ctrlJMX = (IMonitoringController) tmpObj; // NOCS // NOPMD (required for the cast not being removed by Java 1.6 editors)
+
+		Assert.assertTrue(monitoringController.isMonitoringEnabled());
+		Assert.assertTrue(ctrlJMX.isMonitoringEnabled());
+
+		jmx.close();
+	}
+
+	@Override
 	protected void checkControllerStateAfterRecordsPassedToController(final IMonitoringController monitoringController) throws Exception {
 		// Test the JMX Controller
 		final JMXServiceURL serviceURL = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://localhost:" + BasicJMXWriterReaderTest.PORT + "/jmxrmi");

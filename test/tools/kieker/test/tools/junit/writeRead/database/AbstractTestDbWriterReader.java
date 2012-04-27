@@ -95,6 +95,11 @@ public abstract class AbstractTestDbWriterReader extends AbstractWriterReaderTes
 	}
 
 	@Override
+	protected void checkControllerStateBeforeRecordsPassedToController(final IMonitoringController monitoringController) throws Exception {
+		Assert.assertTrue(monitoringController.isMonitoringEnabled());
+	}
+
+	@Override
 	protected boolean terminateBeforeLogInspection() { // NOPMD (empty method)
 		return false;
 	}
