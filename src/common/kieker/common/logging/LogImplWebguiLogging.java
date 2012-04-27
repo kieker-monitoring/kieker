@@ -22,6 +22,7 @@ package kieker.common.logging;
 
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -35,7 +36,7 @@ public final class LogImplWebguiLogging implements Log {
 
 	private final String name;
 	private static final int MAX_ENTRIES = 100;
-	private static final HashMap<String, Queue<String>> QUEUES = new HashMap<String, Queue<String>>();
+	private static final Map<String, Queue<String>> QUEUES = new HashMap<String, Queue<String>>();
 
 	/**
 	 * Creates a new instance of this class.
@@ -76,11 +77,11 @@ public final class LogImplWebguiLogging implements Log {
 	}
 
 	public void error(final String message) {
-		this.addMessage("[Error] " + message);
+		this.addMessage("[Crit] " + message);
 	}
 
 	public void error(final String message, final Throwable t) {
-		this.addMessage("[Error] " + message);
+		this.addMessage("[Crit] " + message);
 	}
 
 	private void addMessage(final String message) {
@@ -99,7 +100,7 @@ public final class LogImplWebguiLogging implements Log {
 			// Is the queue full?
 			if (queue.size() >= MAX_ENTRIES) {
 				// Yes, remove the oldest entry.
-				queue.poll();
+				queue.poll(); // ignore the return value
 			}
 			final String timestamp = new GregorianCalendar().getTime().toString();
 			queue.add(timestamp + ": " + message);
@@ -123,7 +124,7 @@ public final class LogImplWebguiLogging implements Log {
 	 * @return The stored entries of the logger. If a logger with the given name doesn't exist, an empty array will be returned.
 	 */
 	public static String[] getEntries(final String name) {
-		Queue<String> queue;
+		final Queue<String> queue;
 
 		synchronized (LogImplWebguiLogging.QUEUES) {
 			// Get the right queue

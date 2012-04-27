@@ -93,17 +93,14 @@ public final class KaxViz extends JFrame {
 			mxConstants.STYLE_STROKECOLOR + "=#000000;" +
 			mxConstants.STYLE_FONTCOLOR + "=#000000;";
 
-	private static final String STYLE_PORT = "" +
-			mxConstants.STYLE_NOLABEL + "=1;" +
+	private static final String STYLE_PORT = mxConstants.STYLE_NOLABEL + "=1;" +
 			mxConstants.STYLE_STROKECOLOR + "=#000000;" +
 			mxConstants.STYLE_FONTCOLOR + "=#000000;" +
 			mxConstants.STYLE_FONTSTYLE + "=" + mxConstants.FONT_ITALIC + ";";
 
-	private static final String STYLE_CONNECTION = "" +
-			mxConstants.STYLE_EDGE + "=orthogonalEdgeStyle;";
+	private static final String STYLE_CONNECTION = mxConstants.STYLE_EDGE + "=orthogonalEdgeStyle;";
 
-	private static final String STYLE_CONNECTION_REPOSITORY = "" +
-			mxConstants.STYLE_EDGE + "=orthogonalEdgeStyle;" +
+	private static final String STYLE_CONNECTION_REPOSITORY = mxConstants.STYLE_EDGE + "=orthogonalEdgeStyle;" +
 			mxConstants.STYLE_DASHED + "=1;" +
 			mxConstants.STYLE_FONTCOLOR + "=#000000;" +
 			mxConstants.STYLE_FONTSTYLE + "=" + mxConstants.FONT_ITALIC + ";";

@@ -2,7 +2,14 @@
 	<!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
 
 	<Match>
-		<Class name="kieker.test.analysis.junit.plugin.filter.select.TestTimestampFilter" />
+		<Class name="kieker.common.logging.LogImplWebguiLogging" />
+		<Method name="addMessage" params="java.lang.String" returns="void" />
+		<Bug pattern="RV_RETURN_VALUE_IGNORED" />
+	</Match>
+
+	<Match>
+		<Class
+			name="kieker.test.analysis.junit.plugin.filter.select.TestTimestampFilter" />
 		<Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
 	</Match>
 
