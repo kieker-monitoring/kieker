@@ -20,10 +20,12 @@
 
 package kieker.common.record.flow;
 
+import kieker.common.record.IMonitoringRecord;
+
 /**
  * Marker interface to collect all kieker.common.record.flow..* records.
  * 
  * @author Jan Waller
  */
-public interface IFlowRecord {
+public interface IFlowRecord extends IMonitoringRecord {
 }

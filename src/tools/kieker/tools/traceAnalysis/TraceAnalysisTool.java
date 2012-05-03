@@ -378,14 +378,12 @@ public final class TraceAnalysisTool {
 				final Configuration configurationEventRecordTraceGenerationFilter = new Configuration();
 				configurationEventRecordTraceGenerationFilter.setProperty(AbstractPlugin.CONFIG_NAME,
 						Constants.EVENTRECORDTRACERECONSTR_COMPONENT_NAME);
-				// configurationEventRecordTraceGenerationFilter.setProperty(EventRecordTraceGenerationFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS,
-				// Integer.toString(TraceAnalysisTool.maxTraceDurationMillis));
+				configurationEventRecordTraceGenerationFilter.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
+						Integer.toString(TraceAnalysisTool.maxTraceDurationMillis));
 				eventTraceReconstructionFilter = new EventRecordTraceReconstructionFilter(configurationEventRecordTraceGenerationFilter);
 				analysisInstance.registerFilter(eventTraceReconstructionFilter);
 				analysisInstance.connect(traceIdFilter, kieker.analysis.plugin.filter.trace.TraceIdFilter.OUTPUT_PORT_NAME_MATCH,
 						eventTraceReconstructionFilter, EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
-				// analysisInstance.connect(eventTraceReconstructionFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-				// SYSTEM_ENTITY_FACTORY);
 			}
 
 			{ // NOCS (nested block)

@@ -60,10 +60,16 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	public static final String OUTPUT_PORT_NAME_TRACE_INVALID = "invalidTraces";
 	public static final String INPUT_PORT_NAME_TRACE_RECORDS = "traceRecords";
 
+	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION = "maxTraceDuration";
+
+	private final long maxTraceDuration;
+	private long maxLoggingTimestamp = -1; // concurrency might be problematic !
+
 	private final Map<Long, TraceBuffer> traceId2trace;
 
 	public EventRecordTraceReconstructionFilter(final Configuration configuration) {
 		super(configuration);
+		this.maxTraceDuration = configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION);
 		this.traceId2trace = new ConcurrentHashMap<Long, TraceBuffer>();
 	}
 
@@ -74,6 +80,10 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	public void newEvent(final IFlowRecord record) {
 		final Long traceId;
 		TraceBuffer traceBuffer;
+		final long maxLoggingTimestamp = record.getLoggingTimestamp();
+		if (maxLoggingTimestamp > this.maxLoggingTimestamp) {
+			this.maxLoggingTimestamp = maxLoggingTimestamp;
+		}
 		if (record instanceof Trace) {
 			final Trace trace = (Trace) record;
 			traceId = trace.getTraceId();
@@ -99,6 +109,21 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 			this.traceId2trace.remove(traceId);
 			super.deliver(OUTPUT_PORT_NAME_TRACE_VALID, traceBuffer.toTraceEvents());
 		}
+		// check for timeout of traces
+		final long timeout = maxLoggingTimestamp - this.maxTraceDuration;
+		// foreach possible tracebuffer
+		for (final Entry<Long, TraceBuffer> entry : this.traceId2trace.entrySet()) {
+			final TraceBuffer tb = entry.getValue();
+			if (tb.getMaxLoggingTimestamp() < timeout) {
+				if (tb.isInvalid()) {
+					super.deliver(OUTPUT_PORT_NAME_TRACE_INVALID, tb.toTraceEvents());
+				} else {
+					super.deliver(OUTPUT_PORT_NAME_TRACE_VALID, tb.toTraceEvents());
+				}
+				this.traceId2trace.remove(entry.getKey());
+			}
+		}
+
 	}
 
 	@Override
@@ -117,12 +142,16 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	}
 
 	public Configuration getCurrentConfiguration() {
-		return new Configuration();
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, String.valueOf(this.maxTraceDuration));
+		return configuration;
 	}
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, String.valueOf(Long.MAX_VALUE));
+		return configuration;
 	}
 
 	private static final class TraceBuffer {
@@ -136,6 +165,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		private boolean damaged = false;
 		private int openEvents = 0;
 		private int maxOrderIndex = -1;
+		private long maxLoggingTimestamp = -1;
 
 		private long traceId = -1;
 
@@ -146,6 +176,10 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 			} else if (this.traceId != myTraceId) {
 				LOG.error("Invalid traceId! Expected: " + this.traceId + " but found: " + myTraceId + " in event " + event.toString());
 				this.damaged = true;
+			}
+			final long maxLoggingTimestamp = event.getLoggingTimestamp();
+			if (maxLoggingTimestamp > this.maxLoggingTimestamp) {
+				this.maxLoggingTimestamp = maxLoggingTimestamp;
 			}
 			final int orderIndex = event.getOrderIndex();
 			if (orderIndex > this.maxOrderIndex) {
@@ -193,6 +227,10 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 		public TraceEventRecords toTraceEvents() {
 			return new TraceEventRecords(this.trace, this.events.toArray(new AbstractTraceEvent[this.events.size()]));
+		}
+
+		public long getMaxLoggingTimestamp() {
+			return this.maxLoggingTimestamp;
 		}
 
 		private static final class TraceEventComperator implements Comparator<AbstractTraceEvent>, Serializable {
