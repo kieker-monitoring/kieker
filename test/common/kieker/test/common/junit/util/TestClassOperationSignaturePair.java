@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.traceAnalysis.filter;
+package kieker.test.common.junit.util;
 
 import junit.framework.Assert;
 
@@ -32,9 +32,9 @@ import kieker.common.util.Signature;
  * @author Andre van Hoorn
  * 
  */
-public class TestAbstractTraceAnalysisPluginCreateOperationSignatureString {
+public class TestClassOperationSignaturePair {
 
-	public TestAbstractTraceAnalysisPluginCreateOperationSignatureString() {
+	public TestClassOperationSignaturePair() {
 		// empty default constructor
 	}
 

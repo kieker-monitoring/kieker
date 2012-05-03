@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.currentTimeEventGeneratorFilter;
+package kieker.test.tools.junit.currentTimeEventGenerator;
 
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -42,7 +42,7 @@ import kieker.tools.currentTimeEventGenerator.CurrentTimeEventGenerationFilter;
  * 
  * @author Andre van Hoorn
  */
-public class TestCurrentTimeEventGenerator { // NOCS
+public class TestCurrentTimeEventGeneratorFilter { // NOCS
 
 	@Test
 	public void testFirstRecordGeneratesEvent() throws IllegalStateException, AnalysisConfigurationException { // NOPMD (assert in method)
@@ -155,7 +155,7 @@ public class TestCurrentTimeEventGenerator { // NOCS
 		}
 	}
 
-	// TODO: Don't we have a general sink for this already?
+	// TODO: Don't we have a general sink for this already? (see kieker.test.analysis.util.plugin..)
 	/**
 	 * @author Andre van Hoorn
 	 */

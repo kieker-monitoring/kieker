@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.traceAnalysis.filter;
+package kieker.test.tools.junit.traceAnalysis.filter.traceReconstruction;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +44,7 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
-import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
+import kieker.test.tools.util.ExecutionFactory;
 
 /**
  * 

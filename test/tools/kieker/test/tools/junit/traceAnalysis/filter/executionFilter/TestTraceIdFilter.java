@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.traceAnalysis.filter;
+package kieker.test.tools.junit.traceAnalysis.filter.executionFilter;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -37,7 +37,7 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
-import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
+import kieker.test.tools.util.ExecutionFactory;
 
 /**
  * 

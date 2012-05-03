@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.traceAnalysis.filter;
+package kieker.test.tools.junit.traceAnalysis.filter.traceFilter;
 
 import junit.framework.Assert;
 
@@ -30,10 +30,9 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
-import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
+import kieker.test.tools.util.ExecutionFactory;
 
 /**
- * 
  * @author Andre van Hoorn
  */
 public class TestTraceEquivalenceFilterAssemblyEquivalence { // NOCS

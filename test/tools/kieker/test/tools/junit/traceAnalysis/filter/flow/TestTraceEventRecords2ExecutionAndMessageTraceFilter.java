@@ -37,7 +37,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
-import kieker.test.tools.junit.traceAnalysis.util.BookstoreExecutionFactory;
+import kieker.test.tools.util.BookstoreExecutionFactory;
 
 /**
  * 

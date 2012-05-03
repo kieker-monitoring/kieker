@@ -18,28 +18,39 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.monitoring.junit.util;
+package kieker.test.monitoring.util;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.common.configuration.Configuration;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.writer.DummyWriter;
 
 /**
- * @author Andre van Hoorn, Jan Waller
+ * A writer that simply counts the number of records of type DummyRecord received.
  * 
+ * @author Andre van Hoorn, Jan Waller
  */
-public final class DefaultConfigurationFactory {
+public final class DummyRecordCountWriter extends DummyWriter {
+	private final AtomicInteger numDummyRecords = new AtomicInteger(0);
 
-	public static final String WRITER_NAME = DummyWriter.class.getName();
+	public DummyRecordCountWriter(final Configuration configuration) {
+		super(configuration);
+	}
 
-	private DefaultConfigurationFactory() {}
+	/**
+	 * @return the number of records
+	 */
+	public final int getNumDummyRecords() {
+		return this.numDummyRecords.get();
+	}
 
-	public static Configuration createDefaultConfigurationWithDummyWriter() {
-		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
-		configuration.setProperty(ConfigurationFactory.CONTROLLER_NAME, "jUnit");
-		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, DefaultConfigurationFactory.WRITER_NAME);
-		configuration.setProperty(ConfigurationFactory.PREFIX + "jUnit", "true");
-		configuration.setProperty(DefaultConfigurationFactory.WRITER_NAME + ".jUnit", "true");
-		return configuration;
+	@Override
+	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
+		if (record instanceof EmptyRecord) {
+			this.numDummyRecords.incrementAndGet();
+		}
+		return super.newMonitoringRecord(record);
 	}
 }

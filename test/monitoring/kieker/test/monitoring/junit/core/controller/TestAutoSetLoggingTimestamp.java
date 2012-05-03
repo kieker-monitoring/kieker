@@ -32,7 +32,7 @@ import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 
-import kieker.test.monitoring.junit.util.NamedPipeFactory;
+import kieker.test.monitoring.util.NamedPipeFactory;
 
 /**
  * Tests, whether the property <i>setLoggingTimestamp</i> works properly.

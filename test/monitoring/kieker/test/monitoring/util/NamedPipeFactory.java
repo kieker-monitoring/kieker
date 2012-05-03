@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.monitoring.junit.util;
+package kieker.test.monitoring.util;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -46,7 +46,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.analysis.util.plugin.reader.SimpleListReader;
-import kieker.test.tools.junit.traceAnalysis.util.BookstoreExecutionFactory;
+import kieker.test.tools.util.BookstoreExecutionFactory;
 
 /**
  * 

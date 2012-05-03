@@ -41,7 +41,7 @@ import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
-import kieker.test.tools.junit.traceAnalysis.util.ExecutionFactory;
+import kieker.test.tools.util.ExecutionFactory;
 
 /**
  * 

@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.traceAnalysis.util;
+package kieker.test.tools.util;
 
 import org.junit.Assert;
 

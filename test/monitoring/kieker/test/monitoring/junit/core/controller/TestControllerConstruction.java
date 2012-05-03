@@ -29,7 +29,7 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 
-import kieker.test.monitoring.junit.util.DefaultConfigurationFactory;
+import kieker.test.monitoring.util.DefaultConfigurationFactory;
 
 /**
  * @author Andre van Hoorn, Jan Waller

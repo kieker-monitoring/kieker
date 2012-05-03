@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.traceAnalysis.filter;
+package kieker.test.tools.util.filter;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -29,7 +29,6 @@ import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 
 /**
- * FIXME: move to test.tools (use of Execution)
  * This is just a simple helper class which collects {@link Execution}s.
  * 
  * @author Nils Christian Ehmke

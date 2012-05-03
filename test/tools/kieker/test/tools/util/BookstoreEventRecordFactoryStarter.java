@@ -1,4 +1,4 @@
-package kieker.test.tools.junit.traceAnalysis.util;
+package kieker.test.tools.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;

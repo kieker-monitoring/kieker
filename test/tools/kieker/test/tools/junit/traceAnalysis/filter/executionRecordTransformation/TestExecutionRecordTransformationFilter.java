@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.traceAnalysis.filter;
+package kieker.test.tools.junit.traceAnalysis.filter.executionRecordTransformation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +39,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 import kieker.test.analysis.util.plugin.reader.SimpleListReader;
 import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
+import kieker.test.tools.util.filter.ExecutionSinkClass;
 
 /**
  * 
