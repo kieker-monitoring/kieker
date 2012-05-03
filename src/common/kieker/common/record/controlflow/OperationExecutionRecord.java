@@ -58,14 +58,8 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	 */
 	private static final String NO_OPERATION_SIGNATURE = "noOperation";
 
-	/**
-	 * This field should be removed in Kieker 1.6!
-	 */
-	private static final int EXPERIMENT_ID = 0;
-
 	private static final long serialVersionUID = 8028082734210614968L;
 	private static final Class<?>[] TYPES = {
-		int.class, // experimentId
 		String.class, // operationSignature
 		String.class, // sessionId
 		long.class, // traceId
@@ -120,19 +114,18 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 
 	public OperationExecutionRecord(final Object[] values) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, TYPES); // throws IllegalArgumentException
-		this.operationSignature = (String) values[1];
-		this.sessionId = (String) values[2];
-		this.traceId = (Long) values[3];
-		this.tin = (Long) values[4];
-		this.tout = (Long) values[5];
-		this.hostname = (String) values[6];
-		this.eoi = (Integer) values[7];
-		this.ess = (Integer) values[8];
+		this.operationSignature = (String) values[0];
+		this.sessionId = (String) values[1];
+		this.traceId = (Long) values[2];
+		this.tin = (Long) values[3];
+		this.tout = (Long) values[4];
+		this.hostname = (String) values[5];
+		this.eoi = (Integer) values[6];
+		this.ess = (Integer) values[7];
 	}
 
 	public final Object[] toArray() {
 		return new Object[] {
-			EXPERIMENT_ID,
 			this.operationSignature,
 			this.sessionId,
 			this.traceId,

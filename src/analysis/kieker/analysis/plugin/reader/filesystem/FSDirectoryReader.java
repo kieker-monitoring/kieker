@@ -239,15 +239,24 @@ final class FSDirectoryReader implements Runnable {
 							continue; // skip this ignored record
 						}
 						final long loggingTimestamp = Long.valueOf(recordFields[1]);
+						final int skipValues;
+						// check for Kieker < 1.6 OperationExecutionRecords
+						if ((recordFields.length == 11) && clazz.equals(OperationExecutionRecord.class)) {
+							skipValues = 3;
+						} else {
+							skipValues = 2;
+						}
 						// Java 1.5 compatibility
-						final String[] recordFiledsReduced = new String[recordFields.length - 2];
-						System.arraycopy(recordFields, 2, recordFiledsReduced, 0, recordFields.length - 2);
-						record = AbstractMonitoringRecord.createFromStringArray(clazz, recordFiledsReduced);
+						final String[] recordFieldsReduced = new String[recordFields.length - skipValues];
+						System.arraycopy(recordFields, skipValues, recordFieldsReduced, 0, recordFields.length - skipValues);
+						record = AbstractMonitoringRecord.createFromStringArray(clazz, recordFieldsReduced);
 						// in Java 1.6 this could be simplified to
-						// record = AbstractMonitoringRecord.createFromStringArray(clazz, Arrays.copyOfRange(recordFields, 2, recordFields.length));
+						// record = AbstractMonitoringRecord.createFromStringArray(clazz, Arrays.copyOfRange(recordFields, skipValues, recordFields.length));
 						record.setLoggingTimestamp(loggingTimestamp);
 					} else { // legacy record
-						record = AbstractMonitoringRecord.createFromStringArray(OperationExecutionRecord.class, recordFields);
+						final String[] recordFieldsReduced = new String[recordFields.length - 1];
+						System.arraycopy(recordFields, 1, recordFieldsReduced, 0, recordFields.length - 1);
+						record = AbstractMonitoringRecord.createFromStringArray(OperationExecutionRecord.class, recordFieldsReduced);
 					}
 				} catch (final Exception ex) { // NOPMD NOCS (illegal catch)
 					if (abortDueToUnknownRecordType) {
