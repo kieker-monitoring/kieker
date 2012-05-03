@@ -26,8 +26,6 @@ import java.util.List;
 
 import junit.framework.Assert;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
@@ -53,16 +51,6 @@ public abstract class AbstractTestDbWriterReader extends AbstractWriterReaderTes
 
 	public String getConnectionString() throws IOException {
 		return "jdbc:derby:" + this.tmpFolder.getRoot().getCanonicalPath() + "/KIEKER;user=DBUSER;password=DBPASS";
-	}
-
-	@Before
-	public void setUp() throws IOException {
-		this.tmpFolder.create();
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		this.tmpFolder.delete();
 	}
 
 	@Override

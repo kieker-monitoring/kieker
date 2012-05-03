@@ -18,7 +18,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.traceAnalysis.filter.flow;
+package kieker.test.analysis.junit.plugin.filter.flow;
 
 import org.junit.Assert;
 import org.junit.Test;

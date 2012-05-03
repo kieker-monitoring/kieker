@@ -29,7 +29,6 @@ import java.util.List;
 
 import junit.framework.Assert;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
@@ -72,12 +71,6 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 	@Before
 	public void setUp() throws IOException {
 		this.testedWriterClazz = this.getTestedWriterClazz();
-		this.tmpFolder.create();
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		this.tmpFolder.delete();
 	}
 
 	@Override
