@@ -22,6 +22,7 @@ package kieker.analysis.plugin.filter.flow;
 
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedSet;
@@ -61,15 +62,18 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	public static final String INPUT_PORT_NAME_TRACE_RECORDS = "traceRecords";
 
 	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION = "maxTraceDuration";
+	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT = "maxTraceTimeout";
 
 	private final long maxTraceDuration;
-	private long maxLoggingTimestamp = -1; // concurrency might be problematic !
+	private final long maxTraceTimeout;
+	private long maxEncounteredLoggingTimestamp = -1;
 
 	private final Map<Long, TraceBuffer> traceId2trace;
 
 	public EventRecordTraceReconstructionFilter(final Configuration configuration) {
 		super(configuration);
 		this.maxTraceDuration = configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION);
+		this.maxTraceTimeout = configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT);
 		this.traceId2trace = new ConcurrentHashMap<Long, TraceBuffer>();
 	}
 
@@ -80,70 +84,89 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	public void newEvent(final IFlowRecord record) {
 		final Long traceId;
 		TraceBuffer traceBuffer;
-		final long maxLoggingTimestamp = record.getLoggingTimestamp();
-		if (maxLoggingTimestamp > this.maxLoggingTimestamp) {
-			this.maxLoggingTimestamp = maxLoggingTimestamp;
-		}
 		if (record instanceof Trace) {
-			final Trace trace = (Trace) record;
-			traceId = trace.getTraceId();
+			traceId = ((Trace) record).getTraceId();
 			traceBuffer = this.traceId2trace.get(traceId);
 			if (traceBuffer == null) { // first record for this id!
-				traceBuffer = new TraceBuffer();
-				this.traceId2trace.put(traceId, traceBuffer);
+				synchronized (this.traceId2trace) {
+					traceBuffer = this.traceId2trace.get(traceId);
+					if (traceBuffer == null) {
+						traceBuffer = new TraceBuffer();
+						this.traceId2trace.put(traceId, traceBuffer);
+					}
+				}
 			}
-			traceBuffer.setTrace(trace);
+			traceBuffer.setTrace((Trace) record);
 		} else if (record instanceof AbstractTraceEvent) {
-			final AbstractTraceEvent traceEvent = (AbstractTraceEvent) record;
-			traceId = traceEvent.getTraceId();
+			traceId = ((AbstractTraceEvent) record).getTraceId();
 			traceBuffer = this.traceId2trace.get(traceId);
 			if (traceBuffer == null) { // first record for this id!
-				traceBuffer = new TraceBuffer();
-				this.traceId2trace.put(traceId, traceBuffer);
+				synchronized (this.traceId2trace) {
+					traceBuffer = this.traceId2trace.get(traceId);
+					if (traceBuffer == null) {
+						traceBuffer = new TraceBuffer();
+						this.traceId2trace.put(traceId, traceBuffer);
+					}
+				}
 			}
-			traceBuffer.insertEvent(traceEvent);
+			traceBuffer.insertEvent((AbstractTraceEvent) record);
 		} else {
 			return; // invalid type which should not happen due to the specified eventTypes
 		}
+
 		if (traceBuffer.isFinished()) {
-			this.traceId2trace.remove(traceId);
+			synchronized (this.traceId2trace) { // has to be synchronized because of timeout cleanup
+				this.traceId2trace.remove(traceId);
+			}
 			super.deliver(OUTPUT_PORT_NAME_TRACE_VALID, traceBuffer.toTraceEvents());
 		}
-		// check for timeout of traces
-		final long timeout = maxLoggingTimestamp - this.maxTraceDuration;
-		// foreach possible tracebuffer
-		for (final Entry<Long, TraceBuffer> entry : this.traceId2trace.entrySet()) {
-			final TraceBuffer tb = entry.getValue();
-			if (tb.getMaxLoggingTimestamp() < timeout) {
-				if (tb.isInvalid()) {
-					super.deliver(OUTPUT_PORT_NAME_TRACE_INVALID, tb.toTraceEvents());
-				} else {
-					super.deliver(OUTPUT_PORT_NAME_TRACE_VALID, tb.toTraceEvents());
-				}
-				this.traceId2trace.remove(entry.getKey());
+		final long loggingTimestamp = record.getLoggingTimestamp();
+		synchronized (this.traceId2trace) {
+			if (loggingTimestamp > this.maxEncounteredLoggingTimestamp) { // can we assume a rough order of logging timestamps?
+				this.maxEncounteredLoggingTimestamp = loggingTimestamp;
 			}
+			// every time or only if the max encountered ts changes?
+			this.processTimeoutQueue(this.maxEncounteredLoggingTimestamp);
 		}
-
 	}
 
 	@Override
 	public void terminate(final boolean error) {
 		super.terminate(error);
-		// when we arrive here, all records should be processed or damaged
-		for (final Entry<Long, TraceBuffer> entry : this.traceId2trace.entrySet()) {
-			final TraceBuffer traceBuffer = entry.getValue();
-			if (traceBuffer.isInvalid()) {
-				super.deliver(OUTPUT_PORT_NAME_TRACE_INVALID, traceBuffer.toTraceEvents());
-			} else {
-				super.deliver(OUTPUT_PORT_NAME_TRACE_VALID, traceBuffer.toTraceEvents());
+		synchronized (this.traceId2trace) {
+			for (final Entry<Long, TraceBuffer> entry : this.traceId2trace.entrySet()) {
+				final TraceBuffer traceBuffer = entry.getValue();
+				if (traceBuffer.isInvalid()) {
+					super.deliver(OUTPUT_PORT_NAME_TRACE_INVALID, traceBuffer.toTraceEvents());
+				} else {
+					super.deliver(OUTPUT_PORT_NAME_TRACE_VALID, traceBuffer.toTraceEvents());
+				}
+			}
+			this.traceId2trace.clear();
+		}
+	}
+
+	private void processTimeoutQueue(final long timestamp) {
+		final long timeout = timestamp - this.maxTraceTimeout;
+		final long duration = timestamp - this.maxTraceDuration;
+		for (final Iterator<Entry<Long, TraceBuffer>> iterator = this.traceId2trace.entrySet().iterator(); iterator.hasNext();) {
+			final TraceBuffer traceBuffer = iterator.next().getValue();
+			if ((traceBuffer.getMaxLoggingTimestamp() > timeout) // long time no see
+					|| (traceBuffer.getMinLoggingTimestamp() > duration)) { // max duration is gone
+				if (traceBuffer.isInvalid()) {
+					super.deliver(OUTPUT_PORT_NAME_TRACE_INVALID, traceBuffer.toTraceEvents());
+				} else {
+					super.deliver(OUTPUT_PORT_NAME_TRACE_VALID, traceBuffer.toTraceEvents());
+				}
+				iterator.remove();
 			}
 		}
-		this.traceId2trace.clear();
 	}
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, String.valueOf(this.maxTraceDuration));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, String.valueOf(this.maxTraceTimeout));
 		return configuration;
 	}
 
@@ -151,9 +174,15 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, String.valueOf(Long.MAX_VALUE));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, String.valueOf(Long.MAX_VALUE));
 		return configuration;
 	}
 
+	/**
+	 * The TraceBuffer is synchronized to prevent problems with concurrent access.
+	 * 
+	 * @author Jan Waller
+	 */
 	private static final class TraceBuffer {
 		private static final Log LOG = LogFactory.getLog(TraceBuffer.class);
 		private static final Comparator<AbstractTraceEvent> COMPARATOR = new TraceEventComperator();
@@ -165,72 +194,95 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		private boolean damaged = false;
 		private int openEvents = 0;
 		private int maxOrderIndex = -1;
+
+		private long minLoggingTimestamp = Long.MAX_VALUE;
 		private long maxLoggingTimestamp = -1;
 
 		private long traceId = -1;
 
 		public void insertEvent(final AbstractTraceEvent event) {
 			final long myTraceId = event.getTraceId();
-			if (this.traceId == -1) {
-				this.traceId = myTraceId;
-			} else if (this.traceId != myTraceId) {
-				LOG.error("Invalid traceId! Expected: " + this.traceId + " but found: " + myTraceId + " in event " + event.toString());
-				this.damaged = true;
-			}
-			final long maxLoggingTimestamp = event.getLoggingTimestamp();
-			if (maxLoggingTimestamp > this.maxLoggingTimestamp) {
-				this.maxLoggingTimestamp = maxLoggingTimestamp;
-			}
-			final int orderIndex = event.getOrderIndex();
-			if (orderIndex > this.maxOrderIndex) {
-				this.maxOrderIndex = orderIndex;
-			}
-			if (event instanceof BeforeOperationEvent) {
-				if (orderIndex == 0) {
-					this.closeable = true;
+			synchronized (this) {
+				if (this.traceId == -1) {
+					this.traceId = myTraceId;
+				} else if (this.traceId != myTraceId) {
+					LOG.error("Invalid traceId! Expected: " + this.traceId + " but found: " + myTraceId + " in event " + event.toString());
+					this.damaged = true;
 				}
-				this.openEvents++;
-			} else if (event instanceof AfterOperationEvent) {
-				this.openEvents--;
-			} else if (event instanceof AfterOperationFailedEvent) {
-				this.openEvents--;
-			}
-			if (!this.events.add(event)) {
-				LOG.error("Duplicate entry for orderIndex " + orderIndex + " with tarceId " + myTraceId);
-				this.damaged = true;
+				final long loggingTimestamp = event.getLoggingTimestamp();
+				if (loggingTimestamp > this.maxLoggingTimestamp) {
+					this.maxLoggingTimestamp = loggingTimestamp;
+				}
+				if (loggingTimestamp < this.minLoggingTimestamp) {
+					this.minLoggingTimestamp = loggingTimestamp;
+				}
+				final int orderIndex = event.getOrderIndex();
+				if (orderIndex > this.maxOrderIndex) {
+					this.maxOrderIndex = orderIndex;
+				}
+				if (event instanceof BeforeOperationEvent) {
+					if (orderIndex == 0) {
+						this.closeable = true;
+					}
+					this.openEvents++;
+				} else if (event instanceof AfterOperationEvent) {
+					this.openEvents--;
+				} else if (event instanceof AfterOperationFailedEvent) {
+					this.openEvents--;
+				}
+				if (!this.events.add(event)) {
+					LOG.error("Duplicate entry for orderIndex " + orderIndex + " with tarceId " + myTraceId);
+					this.damaged = true;
+				}
 			}
 		}
 
 		public void setTrace(final Trace trace) {
 			final long myTraceId = trace.getTraceId();
-			if (this.traceId == -1) {
-				this.traceId = myTraceId;
-			} else if (this.traceId != myTraceId) {
-				LOG.error("Invalid traceId! Expected: " + this.traceId + " but found: " + myTraceId + " in trace " + trace.toString());
-				this.damaged = true;
-			}
-			if (this.trace == null) {
-				this.trace = trace;
-			} else {
-				LOG.error("Duplicate Trace entry for traceId " + myTraceId);
-				this.damaged = true;
+			synchronized (this) {
+				if (this.traceId == -1) {
+					this.traceId = myTraceId;
+				} else if (this.traceId != myTraceId) {
+					LOG.error("Invalid traceId! Expected: " + this.traceId + " but found: " + myTraceId + " in trace " + trace.toString());
+					this.damaged = true;
+				}
+				if (this.trace == null) {
+					this.trace = trace;
+				} else {
+					LOG.error("Duplicate Trace entry for traceId " + myTraceId);
+					this.damaged = true;
+				}
 			}
 		}
 
 		public boolean isFinished() {
-			return (this.closeable && !this.isInvalid());
+			synchronized (this) {
+				return (this.closeable && !this.isInvalid());
+			}
 		}
 
 		public boolean isInvalid() {
-			return ((this.trace == null) || this.damaged || (this.openEvents != 0) || ((this.maxOrderIndex + 1) != this.events.size()));
+			synchronized (this) {
+				return ((this.trace == null) || this.damaged || (this.openEvents != 0) || ((this.maxOrderIndex + 1) != this.events.size()));
+			}
 		}
 
 		public TraceEventRecords toTraceEvents() {
-			return new TraceEventRecords(this.trace, this.events.toArray(new AbstractTraceEvent[this.events.size()]));
+			synchronized (this) {
+				return new TraceEventRecords(this.trace, this.events.toArray(new AbstractTraceEvent[this.events.size()]));
+			}
 		}
 
 		public long getMaxLoggingTimestamp() {
-			return this.maxLoggingTimestamp;
+			synchronized (this) {
+				return this.maxLoggingTimestamp;
+			}
+		}
+
+		public long getMinLoggingTimestamp() {
+			synchronized (this) {
+				return this.minLoggingTimestamp;
+			}
 		}
 
 		private static final class TraceEventComperator implements Comparator<AbstractTraceEvent>, Serializable {
