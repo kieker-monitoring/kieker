@@ -49,12 +49,12 @@ public class TestEventRecordTraceReconstructionFilter { // NOCS (test class with
 	/**
 	 * Creates an {@link EventRecordTraceGenerationFilter} with the given parameter.
 	 * 
-	 * @param maxTraceDurationMillis
+	 * @param maxTraceDuration
 	 * @return
 	 */
-	private static EventRecordTraceReconstructionFilter createFilter(final long maxTraceDurationMillis) {
+	private static EventRecordTraceReconstructionFilter createFilter(final long maxTraceDuration) {
 		final Configuration cfg = new Configuration();
-		cfg.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, Long.toString(maxTraceDurationMillis));
+		cfg.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, Long.toString(maxTraceDuration));
 		return new EventRecordTraceReconstructionFilter(cfg);
 	}
 

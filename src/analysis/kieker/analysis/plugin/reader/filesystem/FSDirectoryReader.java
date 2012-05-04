@@ -20,6 +20,7 @@
 
 package kieker.analysis.plugin.reader.filesystem;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.EOFException;
@@ -295,7 +296,7 @@ final class FSDirectoryReader implements Runnable {
 	private final void processBinaryInputFile(final File inputFile) {
 		DataInputStream in = null;
 		try {
-			in = new DataInputStream(new FileInputStream(inputFile));
+			in = new DataInputStream(new BufferedInputStream(new FileInputStream(inputFile), 1048576)); // 1 MB buffer
 			while (true) {
 				final Integer id;
 				try {
