@@ -20,8 +20,6 @@
 
 package kieker.test.analysis.junit.plugin.filter.flow;
 
-import java.util.Arrays;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -31,7 +29,6 @@ import kieker.analysis.plugin.filter.flow.EventRecordTraceReconstructionFilter;
 import kieker.analysis.plugin.filter.flow.TraceEventRecords;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
-import kieker.common.record.flow.trace.Trace;
 
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
@@ -43,59 +40,106 @@ public class TestEventRecordTraceReconstructionFilter { // NOCS (test class with
 
 	private static final String SESSION_ID = "8yWpCvrJ2";
 	private static final String HOSTNAME = "srv55";
-
-	// TODO add tests with other trace durations ...
+	private static final long TRACE_ID = 978668L;
+	private static final long START_TIME = 86756587L;
 
 	/**
 	 * Creates an {@link EventRecordTraceGenerationFilter} with the given parameter.
 	 * 
 	 * @param maxTraceDuration
+	 * @param maxTraceTimeout
 	 * @return
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
 	 */
-	private static EventRecordTraceReconstructionFilter createFilter(final long maxTraceDuration) {
-		final Configuration cfg = new Configuration();
-		cfg.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, Long.toString(maxTraceDuration));
-		return new EventRecordTraceReconstructionFilter(cfg);
-	}
-
-	@Test
-	public void testTraceShorterThanMaxDurationPasses() throws IllegalStateException, AnalysisConfigurationException {
-		final long traceId = 978668L;
-		final long startTime = 86756587L;
-
-		final TraceEventRecords bookstoreTrace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(startTime, traceId, SESSION_ID, HOSTNAME);
-		Assert.assertEquals("Test invalid", startTime, bookstoreTrace.getTraceEvents()[0].getTimestamp());
-		final long traceDuration = bookstoreTrace.getTraceEvents()[bookstoreTrace.getTraceEvents().length - 1].getTimestamp() - startTime;
+	private void runTest(final TraceEventRecords records, final long maxTraceDuration, final long maxTraceTimeout)
+			throws IllegalStateException, AnalysisConfigurationException {
 		final AnalysisController controller = new AnalysisController();
 
-		final EventRecordTraceReconstructionFilter traceFilter = TestEventRecordTraceReconstructionFilter.createFilter(traceDuration + 1);
-		final SimpleSinkFilter<TraceEventRecords> sinkPlugin = new SimpleSinkFilter<TraceEventRecords>(new Configuration());
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, Long.toString(maxTraceDuration));
+		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, Long.toString(maxTraceTimeout));
+		final EventRecordTraceReconstructionFilter traceFilter = new EventRecordTraceReconstructionFilter(configuration);
 
+		final SimpleSinkFilter<TraceEventRecords> sinkPlugin = new SimpleSinkFilter<TraceEventRecords>(new Configuration());
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
 		controller.registerFilter(traceFilter);
 		controller.registerFilter(sinkPlugin);
-
 		controller.connect(traceFilter, EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID, sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
 
-		traceFilter.newEvent(new Trace(traceId, traceId, SESSION_ID, HOSTNAME, Trace.NO_PARENT_TRACEID, Trace.NO_PARENT_ORDER_INDEX));
-		for (final AbstractTraceEvent e : bookstoreTrace.getTraceEvents()) {
+		traceFilter.newEvent(records.getTrace());
+		for (final AbstractTraceEvent e : records.getTraceEvents()) {
 			traceFilter.newEvent(e);
 		}
-		traceFilter.terminate(false); // terminate w/o error; otherwise end of trace not triggered
+		traceFilter.terminate(false); // terminate w/o error; otherwise end of trace might not be triggered
 
 		// Make sure that 1 trace generated
-		Assert.assertEquals("No trace passed filter", sinkPlugin.getList().size(), 1);
-		final TraceEventRecords outputTrace = sinkPlugin.getList().get(0);
-		final AbstractTraceEvent[] outputEvents = outputTrace.getTraceEvents();
-
-		Assert.assertEquals("Unexpected trace ID", traceId, outputTrace.getTrace().getTraceId());
-		Assert.assertEquals("Unexpected session ID", SESSION_ID, outputTrace.getTrace().getSessionId());
-		Assert.assertEquals("Unexpected session ID", HOSTNAME, outputTrace.getTrace().getHostname());
-
-		// Now, make sure that this trace is as expected
-		Assert.assertEquals("Unexpected length of trace", bookstoreTrace.getTraceEvents().length, outputEvents.length);
-
-		Assert.assertTrue("Expecting event lists to be equal", Arrays.equals(bookstoreTrace.getTraceEvents(), outputEvents));
+		Assert.assertEquals("No trace passed filter", 1, sinkPlugin.getList().size());
+		Assert.assertEquals(records, sinkPlugin.getList().get(0));
 	}
+
+	private void runTestFailed(final TraceEventRecords records, final long maxTraceDuration, final long maxTraceTimeout)
+			throws IllegalStateException, AnalysisConfigurationException {
+		final AnalysisController controller = new AnalysisController();
+
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, Long.toString(maxTraceDuration));
+		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, Long.toString(maxTraceTimeout));
+		final EventRecordTraceReconstructionFilter traceFilter = new EventRecordTraceReconstructionFilter(configuration);
+
+		final SimpleSinkFilter<TraceEventRecords> sinkPlugin = new SimpleSinkFilter<TraceEventRecords>(new Configuration());
+		Assert.assertTrue(sinkPlugin.getList().isEmpty());
+
+		controller.registerFilter(traceFilter);
+		controller.registerFilter(sinkPlugin);
+		controller.connect(traceFilter, EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID, sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
+
+		traceFilter.newEvent(records.getTrace());
+		for (final AbstractTraceEvent e : records.getTraceEvents()) {
+			traceFilter.newEvent(e);
+		}
+		traceFilter.terminate(false); // terminate w/o error; otherwise end of trace might not be triggered
+
+		// Make sure that 1 trace generated
+		Assert.assertEquals("There should be no trace", 0, sinkPlugin.getList().size());
+	}
+
+	@Test
+	public void testTraceMaxLong() throws IllegalStateException, AnalysisConfigurationException {
+		final TraceEventRecords bookstoreTrace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(START_TIME, TRACE_ID, SESSION_ID, HOSTNAME);
+		Assert.assertEquals("Test invalid", START_TIME, bookstoreTrace.getTraceEvents()[0].getTimestamp());
+		this.runTest(bookstoreTrace, Long.MAX_VALUE, Long.MAX_VALUE);
+	}
+
+	@Test
+	public void testTraceShorterThanMaxDurationPasses() throws IllegalStateException, AnalysisConfigurationException {
+		final TraceEventRecords bookstoreTrace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(START_TIME, TRACE_ID, SESSION_ID, HOSTNAME);
+		Assert.assertEquals("Test invalid", START_TIME, bookstoreTrace.getTraceEvents()[0].getTimestamp());
+		final long traceDuration = bookstoreTrace.getTraceEvents()[bookstoreTrace.getTraceEvents().length - 1].getTimestamp() - START_TIME;
+		this.runTest(bookstoreTrace, traceDuration + 1, Long.MAX_VALUE);
+	}
+
+	@Test
+	public void testTraceShorterThanMaxTimeoutPasses() throws IllegalStateException, AnalysisConfigurationException {
+		final TraceEventRecords bookstoreTrace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(START_TIME, TRACE_ID, SESSION_ID, HOSTNAME);
+		Assert.assertEquals("Test invalid", START_TIME, bookstoreTrace.getTraceEvents()[0].getTimestamp());
+		this.runTest(bookstoreTrace, Long.MAX_VALUE, 100);
+	}
+
+	@Test
+	public void testTraceLongerThanMaxDurationPasses() throws IllegalStateException, AnalysisConfigurationException {
+		final TraceEventRecords bookstoreTrace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(START_TIME, TRACE_ID, SESSION_ID, HOSTNAME);
+		Assert.assertEquals("Test invalid", START_TIME, bookstoreTrace.getTraceEvents()[0].getTimestamp());
+		final long traceDuration = bookstoreTrace.getTraceEvents()[bookstoreTrace.getTraceEvents().length - 1].getTimestamp() - START_TIME;
+		this.runTestFailed(bookstoreTrace, traceDuration - 5, Long.MAX_VALUE);
+	}
+
+	// TODO: Timeout can only happen if more than one trace is sent simultaneously
+	// @Test
+	// public void testTraceLongerThanMaxTimeoutPasses() throws IllegalStateException, AnalysisConfigurationException {
+	// final TraceEventRecords bookstoreTrace = BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(START_TIME, TRACE_ID, SESSION_ID, HOSTNAME);
+	// Assert.assertEquals("Test invalid", START_TIME, bookstoreTrace.getTraceEvents()[0].getTimestamp());
+	// this.runTestFailed(bookstoreTrace, Long.MAX_VALUE, 1);
+	// }
 }

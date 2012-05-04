@@ -36,6 +36,7 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.record.flow.AbstractEvent;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.Trace;
@@ -84,6 +85,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	public void newEvent(final IFlowRecord record) {
 		final Long traceId;
 		TraceBuffer traceBuffer;
+		final long loggingTimestamp;
 		if (record instanceof Trace) {
 			traceId = ((Trace) record).getTraceId();
 			traceBuffer = this.traceId2trace.get(traceId);
@@ -97,6 +99,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 				}
 			}
 			traceBuffer.setTrace((Trace) record);
+			loggingTimestamp = -1;
 		} else if (record instanceof AbstractTraceEvent) {
 			traceId = ((AbstractTraceEvent) record).getTraceId();
 			traceBuffer = this.traceId2trace.get(traceId);
@@ -110,17 +113,16 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 				}
 			}
 			traceBuffer.insertEvent((AbstractTraceEvent) record);
+			loggingTimestamp = ((AbstractEvent) record).getTimestamp();
 		} else {
 			return; // invalid type which should not happen due to the specified eventTypes
 		}
-
 		if (traceBuffer.isFinished()) {
 			synchronized (this) { // has to be synchronized because of timeout cleanup
 				this.traceId2trace.remove(traceId);
 			}
 			super.deliver(OUTPUT_PORT_NAME_TRACE_VALID, traceBuffer.toTraceEvents());
 		}
-		final long loggingTimestamp = record.getLoggingTimestamp();
 		synchronized (this) {
 			if (loggingTimestamp > this.maxEncounteredLoggingTimestamp) { // can we assume a rough order of logging timestamps?
 				this.maxEncounteredLoggingTimestamp = loggingTimestamp;
@@ -147,12 +149,12 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	}
 
 	private void processTimeoutQueue(final long timestamp) {
-		final long timeout = timestamp - this.maxTraceTimeout;
 		final long duration = timestamp - this.maxTraceDuration;
+		final long timeout = timestamp - this.maxTraceTimeout;
 		for (final Iterator<Entry<Long, TraceBuffer>> iterator = this.traceId2trace.entrySet().iterator(); iterator.hasNext();) {
 			final TraceBuffer traceBuffer = iterator.next().getValue();
-			if ((traceBuffer.getMaxLoggingTimestamp() < timeout) // long time no see
-					|| (traceBuffer.getMinLoggingTimestamp() < duration)) { // max duration is gone
+			if ((traceBuffer.getMaxLoggingTimestamp() <= timeout) // long time no see
+					|| (traceBuffer.getMinLoggingTimestamp() <= duration)) { // max duration is gone
 				if (traceBuffer.isInvalid()) {
 					super.deliver(OUTPUT_PORT_NAME_TRACE_INVALID, traceBuffer.toTraceEvents());
 				} else {
@@ -209,7 +211,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 					LOG.error("Invalid traceId! Expected: " + this.traceId + " but found: " + myTraceId + " in event " + event.toString());
 					this.damaged = true;
 				}
-				final long loggingTimestamp = event.getLoggingTimestamp();
+				final long loggingTimestamp = event.getTimestamp();
 				if (loggingTimestamp > this.maxLoggingTimestamp) {
 					this.maxLoggingTimestamp = loggingTimestamp;
 				}

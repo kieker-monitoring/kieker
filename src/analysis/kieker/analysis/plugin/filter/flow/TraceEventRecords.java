@@ -20,6 +20,8 @@
 
 package kieker.analysis.plugin.filter.flow;
 
+import java.util.Arrays;
+
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.Trace;
 
@@ -55,5 +57,39 @@ public final class TraceEventRecords {
 			sb.append(traceEvent);
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = (prime * result) + ((this.trace == null) ? 0 : this.trace.hashCode());
+		result = (prime * result) + Arrays.hashCode(this.traceEvents);
+		return result;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (this.getClass() != obj.getClass()) {
+			return false;
+		}
+		final TraceEventRecords other = (TraceEventRecords) obj;
+		if (this.trace == null) {
+			if (other.trace != null) {
+				return false;
+			}
+		} else if (!this.trace.equals(other.trace)) {
+			return false;
+		}
+		if (!Arrays.equals(this.traceEvents, other.traceEvents)) {
+			return false;
+		}
+		return true;
 	}
 }
