@@ -21,11 +21,23 @@
 package kieker.analysis.display.annotation;
 
 /**
+ * This annotation can be used for methods which are able to deliver display objects. Plugins with such methods can display their content.
  * 
  * @author Nils Christian Ehmke
- * 
  */
 public @interface Display {
 
+	/**
+	 * The human-readable description of this display.
+	 * 
+	 * @return The description for this display.
+	 */
+	String description() default "N/A";
+
+	/**
+	 * The name which is used to name this display.
+	 * 
+	 * @return The name of this display.
+	 */
 	String name();
 }

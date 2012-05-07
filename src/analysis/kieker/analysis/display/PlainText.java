@@ -20,18 +20,40 @@
 
 package kieker.analysis.display;
 
+/**
+ * This is a display type used for plain text. It provides methods to modify and read the contained plain text and is thread safe.
+ * 
+ * @author Nils Christian Ehmke
+ */
 public class PlainText extends AbstractDisplay {
 
+	/**
+	 * The text stored within this object.
+	 */
 	private volatile String currText;
 
+	/**
+	 * Creates a new instance of this class with empty content.
+	 */
 	public PlainText() {
 		this.currText = "";
 	}
 
+	/**
+	 * This method sets the text of the object to a new value.
+	 * 
+	 * @param string
+	 *            The new content of this object.
+	 */
 	public void setText(final String string) {
 		this.currText = string;
 	}
 
+	/**
+	 * Delivers the current text stored within this object.
+	 * 
+	 * @return The current value within this object.
+	 */
 	public String getText() {
 		return this.currText;
 	}

@@ -105,6 +105,17 @@ public final class AnalysisController {
 	private final CountDownLatch initializationLatch = new CountDownLatch(1);
 
 	/**
+	 * This map is used to store the mapping between a given instance of {@link MIProject} and an actual instantiation of an analysis. It is not modified after
+	 * creation and should only be used by the factory method.
+	 */
+	private HashMap<MIPlugin, AbstractPlugin> pluginModelMap;
+	/**
+	 * This map is used to store the mapping between a given instance of {@link MIProject} and an actual instantiation of an analysis. It is not modified after
+	 * creation and should only be used by the factory method.
+	 */
+	private HashMap<MIRepository, AbstractRepository> repositoryModelMap;
+
+	/**
 	 * This field contains the current state of the controller.
 	 */
 	private volatile STATE state = STATE.READY;
@@ -249,7 +260,7 @@ public final class AnalysisController {
 			this.dependencies.add(mDepdendencyCopy);
 		}
 		// Create the repositories.
-		final Map<MIRepository, AbstractRepository> repositoryMap = new HashMap<MIRepository, AbstractRepository>(); // NOPMD (no concurrent access)
+		final HashMap<MIRepository, AbstractRepository> repositoryMap = new HashMap<MIRepository, AbstractRepository>(); // NOPMD (no concurrent access)
 		for (final MIRepository mRepository : mProject.getRepositories()) {
 			// Extract the necessary informations to create the repository.
 			final Configuration configuration = AnalysisController.modelPropertiesToConfiguration(mRepository.getProperties());
@@ -264,7 +275,7 @@ public final class AnalysisController {
 		 */
 		final EList<MIPlugin> mPlugins = mProject.getPlugins();
 		// Now run through all plugins.
-		final Map<MIPlugin, AbstractPlugin> pluginMap = new HashMap<MIPlugin, AbstractPlugin>(); // NOPMD (no concurrent access)
+		final HashMap<MIPlugin, AbstractPlugin> pluginMap = new HashMap<MIPlugin, AbstractPlugin>(); // NOPMD (no concurrent access)
 		for (final MIPlugin mPlugin : mPlugins) {
 			// Extract the necessary informations to create the plugin.
 			final Configuration configuration = AnalysisController.modelPropertiesToConfiguration(mPlugin.getProperties());
@@ -304,6 +315,10 @@ public final class AnalysisController {
 				}
 			}
 		}
+
+		// Remember the mapping!
+		this.pluginModelMap = pluginMap;
+		this.repositoryModelMap = repositoryMap;
 	}
 
 	/**
@@ -949,15 +964,51 @@ public final class AnalysisController {
 		}
 	}
 
-	private HashMap<MIPlugin, AbstractPlugin> getMapping() {
-		return null;
-	}
+	/**
+	 * This is a factory method which can be used to create a new instance of {@link AnalysisController}, but delivers the mapping between the {@link MIProject} and
+	 * the actual analysis. It calls the constructor {@code AnalysisController(MIProject, ClassLoader)}.
+	 * 
+	 * @param project
+	 *            The project to be loaded.
+	 * @param classLoader
+	 *            The class loader used to load the instances.
+	 * @return The newly created controller and the mapping.
+	 * @throws NullPointerException
+	 *             If the project is null.
+	 * @throws AnalysisConfigurationException
+	 *             If the given project could not be loaded.
+	 */
+	public static final AnalysisControllerWithMapping createAnalysisController(final MIProject project, final ClassLoader classLoader) throws NullPointerException,
+			AnalysisConfigurationException {
+		final AnalysisController controller = new AnalysisController(project, classLoader);
 
-	public static final AnalysisControllerWithMapping createAnalysisController(final MIProject project) {
-		return null;
+		return new AnalysisControllerWithMapping(controller, controller.pluginModelMap, controller.repositoryModelMap);
 	}
 
 	public static final class AnalysisControllerWithMapping {
+
+		private final HashMap<MIPlugin, AbstractPlugin> pluginMap;
+		private final HashMap<MIRepository, AbstractRepository> repositoryMap;
+		private final AnalysisController controller;
+
+		public AnalysisControllerWithMapping(final AnalysisController controller, final HashMap<MIPlugin, AbstractPlugin> pluginMap,
+				final HashMap<MIRepository, AbstractRepository> repositoryMap) {
+			this.controller = controller;
+			this.pluginMap = pluginMap;
+			this.repositoryMap = repositoryMap;
+		}
+
+		public HashMap<MIPlugin, AbstractPlugin> getPluginMap() {
+			return this.pluginMap;
+		}
+
+		public HashMap<MIRepository, AbstractRepository> getRepositoryMap() {
+			return this.repositoryMap;
+		}
+
+		public AnalysisController getController() {
+			return this.controller;
+		}
 
 	}
 

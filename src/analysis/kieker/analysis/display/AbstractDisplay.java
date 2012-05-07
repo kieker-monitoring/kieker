@@ -20,6 +20,11 @@
 
 package kieker.analysis.display;
 
+/**
+ * This is the abstract class which should be the base class for all other display types.
+ * 
+ * @author Nils Christian Ehmke
+ */
 public abstract class AbstractDisplay {
 
 }

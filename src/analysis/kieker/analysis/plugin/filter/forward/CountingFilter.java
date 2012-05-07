@@ -50,6 +50,9 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	public static final String OUTPUT_PORT_NAME_COUNT = "currentEventCount";
 
 	private final AtomicLong counter = new AtomicLong();
+	/**
+	 * This is the container for the display method.
+	 */
 	private final PlainText plainText = new PlainText();
 
 	/**
@@ -79,6 +82,11 @@ public final class CountingFilter extends AbstractFilterPlugin {
 		super.deliver(OUTPUT_PORT_NAME_COUNT, count);
 	}
 
+	/**
+	 * This method is being used to display the currently stored value within this counter.
+	 * 
+	 * @return The current text within an instance of {@link PlainText}.
+	 */
 	@Display(name = "Counter Display")
 	public final PlainText countDisplay() {
 		this.plainText.setText(Long.toString(this.counter.get()));
