@@ -22,6 +22,8 @@ package kieker.analysis.plugin.filter.forward;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import kieker.analysis.display.PlainText;
+import kieker.analysis.display.annotation.Display;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -48,6 +50,7 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	public static final String OUTPUT_PORT_NAME_COUNT = "currentEventCount";
 
 	private final AtomicLong counter = new AtomicLong();
+	private final PlainText plainText = new PlainText();
 
 	/**
 	 * Constructs a {@link CountingFilter}.
@@ -74,5 +77,12 @@ public final class CountingFilter extends AbstractFilterPlugin {
 		final Long count = CountingFilter.this.counter.incrementAndGet();
 		super.deliver(OUTPUT_PORT_NAME_RELAYED_EVENTS, event);
 		super.deliver(OUTPUT_PORT_NAME_COUNT, count);
+	}
+
+	@Display(name = "Counter Display")
+	public final PlainText countDisplay() {
+		this.plainText.setText(Long.toString(this.counter.get()));
+
+		return this.plainText;
 	}
 }

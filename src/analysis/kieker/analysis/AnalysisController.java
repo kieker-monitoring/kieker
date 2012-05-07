@@ -949,6 +949,18 @@ public final class AnalysisController {
 		}
 	}
 
+	private HashMap<MIPlugin, AbstractPlugin> getMapping() {
+		return null;
+	}
+
+	public static final AnalysisControllerWithMapping createAnalysisController(final MIProject project) {
+		return null;
+	}
+
+	public static final class AnalysisControllerWithMapping {
+
+	}
+
 	/**
 	 * An enumeration used to describe the state of an {@link AnalysisController}.
 	 * 
