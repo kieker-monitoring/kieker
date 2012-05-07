@@ -108,12 +108,12 @@ public final class AnalysisController {
 	 * This map is used to store the mapping between a given instance of {@link MIProject} and an actual instantiation of an analysis. It is not modified after
 	 * creation and should only be used by the factory method.
 	 */
-	private HashMap<MIPlugin, AbstractPlugin> pluginModelMap;
+	private Map<MIPlugin, AbstractPlugin> pluginModelMap;
 	/**
 	 * This map is used to store the mapping between a given instance of {@link MIProject} and an actual instantiation of an analysis. It is not modified after
 	 * creation and should only be used by the factory method.
 	 */
-	private HashMap<MIRepository, AbstractRepository> repositoryModelMap;
+	private Map<MIRepository, AbstractRepository> repositoryModelMap;
 
 	/**
 	 * This field contains the current state of the controller.
@@ -260,7 +260,7 @@ public final class AnalysisController {
 			this.dependencies.add(mDepdendencyCopy);
 		}
 		// Create the repositories.
-		final HashMap<MIRepository, AbstractRepository> repositoryMap = new HashMap<MIRepository, AbstractRepository>(); // NOPMD (no concurrent access)
+		final Map<MIRepository, AbstractRepository> repositoryMap = new HashMap<MIRepository, AbstractRepository>(); // NOPMD (no concurrent access)
 		for (final MIRepository mRepository : mProject.getRepositories()) {
 			// Extract the necessary informations to create the repository.
 			final Configuration configuration = AnalysisController.modelPropertiesToConfiguration(mRepository.getProperties());
@@ -275,7 +275,7 @@ public final class AnalysisController {
 		 */
 		final EList<MIPlugin> mPlugins = mProject.getPlugins();
 		// Now run through all plugins.
-		final HashMap<MIPlugin, AbstractPlugin> pluginMap = new HashMap<MIPlugin, AbstractPlugin>(); // NOPMD (no concurrent access)
+		final Map<MIPlugin, AbstractPlugin> pluginMap = new HashMap<MIPlugin, AbstractPlugin>(); // NOPMD (no concurrent access)
 		for (final MIPlugin mPlugin : mPlugins) {
 			// Extract the necessary informations to create the plugin.
 			final Configuration configuration = AnalysisController.modelPropertiesToConfiguration(mPlugin.getProperties());
@@ -987,22 +987,22 @@ public final class AnalysisController {
 
 	public static final class AnalysisControllerWithMapping {
 
-		private final HashMap<MIPlugin, AbstractPlugin> pluginMap;
-		private final HashMap<MIRepository, AbstractRepository> repositoryMap;
+		private final Map<MIPlugin, AbstractPlugin> pluginMap;
+		private final Map<MIRepository, AbstractRepository> repositoryMap;
 		private final AnalysisController controller;
 
-		public AnalysisControllerWithMapping(final AnalysisController controller, final HashMap<MIPlugin, AbstractPlugin> pluginMap,
-				final HashMap<MIRepository, AbstractRepository> repositoryMap) {
+		public AnalysisControllerWithMapping(final AnalysisController controller, final Map<MIPlugin, AbstractPlugin> pluginMap,
+				final Map<MIRepository, AbstractRepository> repositoryMap) {
 			this.controller = controller;
 			this.pluginMap = pluginMap;
 			this.repositoryMap = repositoryMap;
 		}
 
-		public HashMap<MIPlugin, AbstractPlugin> getPluginMap() {
+		public Map<MIPlugin, AbstractPlugin> getPluginMap() {
 			return this.pluginMap;
 		}
 
-		public HashMap<MIRepository, AbstractRepository> getRepositoryMap() {
+		public Map<MIRepository, AbstractRepository> getRepositoryMap() {
 			return this.repositoryMap;
 		}
 
