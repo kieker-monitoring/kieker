@@ -59,6 +59,10 @@ public class TestLegacyExecutionRecordReader {
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
+	public TestLegacyExecutionRecordReader() {
+		// default constructor
+	}
+
 	@Before
 	public void setUp() throws IOException {
 		final File mapFile = this.tmpFolder.newFile("kieker.map");

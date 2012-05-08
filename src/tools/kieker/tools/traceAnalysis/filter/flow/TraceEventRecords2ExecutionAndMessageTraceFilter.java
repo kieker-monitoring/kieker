@@ -174,7 +174,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		private final boolean enhanceJavaConstructors;
 		private final boolean enhanceCallDetection;
 
-		private int eoi = 0;
+		private int orderindex = 0;
 
 		public TraceEventRecordHandler(final Trace trace, final ExecutionTrace executionTrace, final SystemModelRepository systemModelRepository,
 				final boolean enhanceJavaConstructors, final boolean enhanceCallDetection) {
@@ -194,7 +194,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 
 		private void registerExecution(final AbstractTraceEvent cause) {
 			this.eventStack.push(cause);
-			final ExecutionInformation executionInformation = new ExecutionInformation(this.eoi++, this.executionStack.size());
+			final ExecutionInformation executionInformation = new ExecutionInformation(this.orderindex++, this.executionStack.size());
 			this.executionStack.push(executionInformation);
 		}
 
@@ -257,7 +257,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 								executionInformation.getEss(),
 								currentCallEvent.getTimestamp(),
 								lastEvent.getTimestamp(),
-								true, (currentCallEvent instanceof CallConstructorEvent));
+								true, currentCallEvent instanceof CallConstructorEvent);
 					}
 					return;
 				}
@@ -319,8 +319,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 			final AbstractTraceEvent potentialBeforeEvent = this.peekEvent();
 			// The element at the top of the stack needs to be a before-operation event...
 			if ((potentialBeforeEvent == null) || !potentialBeforeEvent.getClass().equals(beforeClass)) {
-				throw new InvalidTraceException("Didn't find corresponding " +
-						beforeClass.getName() + " for " + afterOperationEvent.getClass().getName() + " "
+				throw new InvalidTraceException("Didn't find corresponding "
+						+ beforeClass.getName() + " for " + afterOperationEvent.getClass().getName() + " "
 						+ afterOperationEvent.toString() + " (found: " + potentialBeforeEvent + ").");
 			}
 			// ... and must reference the same operation as the given after-operation event.
@@ -348,7 +348,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 					executionInformation.getEss(),
 					beforeOperationEvent.getTimestamp(),
 					afterOperationEvent.getTimestamp(),
-					!definiteCall, (beforeOperationEvent instanceof BeforeConstructorEvent));
+					!definiteCall, beforeOperationEvent instanceof BeforeConstructorEvent);
 		}
 
 		public void handleAfterOperationEvent(final AfterOperationEvent afterOperationEvent) throws InvalidTraceException {

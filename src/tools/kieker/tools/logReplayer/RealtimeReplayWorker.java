@@ -36,13 +36,15 @@ import kieker.tools.logReplayer.FSReaderRealtime.FSReaderRealtimeCons;
  * 
  */
 @Plugin(outputPorts = {
-		@OutputPort(name = RealtimeReplayWorker.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
+	@OutputPort(name = RealtimeReplayWorker.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
 })
 public class RealtimeReplayWorker extends AbstractFilterPlugin implements Runnable {
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	// private static final Log LOG = LogFactory.getLog(RealtimeReplayWorker.class);
 	private IMonitoringRecord monRec;
 	private RealtimeReplayDistributor rd;
+
+	private volatile FSReaderRealtimeCons cons;
 
 	/**
 	 * Creates a new instance of this class using the given parameters. Further initialization should be done via the <i>initialize</i>-method.
@@ -54,13 +56,11 @@ public class RealtimeReplayWorker extends AbstractFilterPlugin implements Runnab
 		super(configuration);
 	}
 
-	private volatile FSReaderRealtimeCons cons;
-
-	public void initialize(final IMonitoringRecord record, final RealtimeReplayDistributor replayDistributor, final FSReaderRealtimeCons cons,
+	public void initialize(final IMonitoringRecord record, final RealtimeReplayDistributor replayDistributor, final FSReaderRealtimeCons consumer,
 			final String constInputPortName, final AnalysisController controller) {
 		this.monRec = record;
 		this.rd = replayDistributor;
-		this.cons = cons;
+		this.cons = consumer;
 		// try {
 		// controller.connect(this, OUTPUT_PORT_NAME, cons, constInputPortName);
 		// } catch (final AnalysisConfigurationException ex) {

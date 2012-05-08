@@ -109,9 +109,9 @@ public class Signature {
 		final int prime = 31;
 		int result = 1;
 		result = (prime * result) + Arrays.hashCode(this.modifierList);
-		result = (prime * result) + ((this.name == null) ? 0 : this.name.hashCode());
+		result = (prime * result) + ((this.name == null) ? 0 : this.name.hashCode()); // NOCS (?:)
 		result = (prime * result) + Arrays.hashCode(this.paramTypeList);
-		result = (prime * result) + ((this.returnType == null) ? 0 : this.returnType.hashCode());
+		result = (prime * result) + ((this.returnType == null) ? 0 : this.returnType.hashCode()); // NOCS (?:)
 		return result;
 	}
 

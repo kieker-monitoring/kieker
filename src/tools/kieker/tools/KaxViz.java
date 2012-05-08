@@ -44,8 +44,8 @@ import org.w3c.dom.Document;
 
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
-import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.handler.mxRubberband;
+import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxCellRenderer;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxPoint;
@@ -80,30 +80,30 @@ public final class KaxViz extends JFrame {
 	private static final String STYLE_FILTER_COLOR = mxConstants.STYLE_FILLCOLOR + "=#C3D9FF;";
 	private static final String STYLE_REPOSITORY_COLOR = mxConstants.STYLE_FILLCOLOR + "=#EAE385;";
 
-	private static final String STYLE_READER = STYLE_READER_COLOR +
-			mxConstants.STYLE_STROKECOLOR + "=#000000;" +
-			mxConstants.STYLE_FONTCOLOR + "=#000000;";
+	private static final String STYLE_READER = STYLE_READER_COLOR
+			+ mxConstants.STYLE_STROKECOLOR + "=#000000;"
+			+ mxConstants.STYLE_FONTCOLOR + "=#000000;";
 
-	private static final String STYLE_FILTER = STYLE_FILTER_COLOR +
-			mxConstants.STYLE_STROKECOLOR + "=#000000;" +
-			mxConstants.STYLE_FONTCOLOR + "=#000000;";
+	private static final String STYLE_FILTER = STYLE_FILTER_COLOR
+			+ mxConstants.STYLE_STROKECOLOR + "=#000000;"
+			+ mxConstants.STYLE_FONTCOLOR + "=#000000;";
 
-	private static final String STYLE_REPOSITORY = STYLE_REPOSITORY_COLOR +
-			mxConstants.STYLE_ROUNDED + "=1;" +
-			mxConstants.STYLE_STROKECOLOR + "=#000000;" +
-			mxConstants.STYLE_FONTCOLOR + "=#000000;";
+	private static final String STYLE_REPOSITORY = STYLE_REPOSITORY_COLOR
+			+ mxConstants.STYLE_ROUNDED + "=1;"
+			+ mxConstants.STYLE_STROKECOLOR + "=#000000;"
+			+ mxConstants.STYLE_FONTCOLOR + "=#000000;";
 
-	private static final String STYLE_PORT = mxConstants.STYLE_NOLABEL + "=1;" +
-			mxConstants.STYLE_STROKECOLOR + "=#000000;" +
-			mxConstants.STYLE_FONTCOLOR + "=#000000;" +
-			mxConstants.STYLE_FONTSTYLE + "=" + mxConstants.FONT_ITALIC + ";";
+	private static final String STYLE_PORT = mxConstants.STYLE_NOLABEL + "=1;"
+			+ mxConstants.STYLE_STROKECOLOR + "=#000000;"
+			+ mxConstants.STYLE_FONTCOLOR + "=#000000;"
+			+ mxConstants.STYLE_FONTSTYLE + "=" + mxConstants.FONT_ITALIC + ";";
 
 	private static final String STYLE_CONNECTION = mxConstants.STYLE_EDGE + "=orthogonalEdgeStyle;";
 
-	private static final String STYLE_CONNECTION_REPOSITORY = mxConstants.STYLE_EDGE + "=orthogonalEdgeStyle;" +
-			mxConstants.STYLE_DASHED + "=1;" +
-			mxConstants.STYLE_FONTCOLOR + "=#000000;" +
-			mxConstants.STYLE_FONTSTYLE + "=" + mxConstants.FONT_ITALIC + ";";
+	private static final String STYLE_CONNECTION_REPOSITORY = mxConstants.STYLE_EDGE + "=orthogonalEdgeStyle;"
+			+ mxConstants.STYLE_DASHED + "=1;"
+			+ mxConstants.STYLE_FONTCOLOR + "=#000000;"
+			+ mxConstants.STYLE_FONTSTYLE + "=" + mxConstants.FONT_ITALIC + ";";
 
 	final transient mxGraph graph; // NOPMD NOCS (package visible for inner class)
 
@@ -295,7 +295,7 @@ public final class KaxViz extends JFrame {
 			final mxGeometry portGeometry = new mxGeometry((i + 1d) / (portNames.length + 1), 1.06, 10, 10);
 			portGeometry.setOffset(new mxPoint(0, -10));
 			portGeometry.setRelative(true);
-			final String fillcolor = reader ? STYLE_READER_COLOR : STYLE_FILTER_COLOR; // NOPMD
+			final String fillcolor = reader ? STYLE_READER_COLOR : STYLE_FILTER_COLOR; // NOPMD NOCS (?:)
 			final mxCell port = new mxCell(portNames[i], portGeometry,
 					STYLE_PORT + "verticalLabelPosition=top;portConstraint=south;" + fillcolor);
 			port.setVertex(true);

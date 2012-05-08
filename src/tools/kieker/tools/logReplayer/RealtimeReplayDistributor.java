@@ -61,6 +61,8 @@ public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 	private static final int MILLISECOND = 1000 * 1000;
 	private static final int REPLAY_OFFSET = 2 * 1000 * MILLISECOND;
 
+	private static final long TERMINATION_DELAY_NANOS = TimeUnit.NANOSECONDS.convert(5, TimeUnit.SECONDS);
+
 	CountDownLatch terminationLatch; // NOPMD NOCS (package visible for inner class)
 	private final int numWorkers;
 	private FSReaderRealtimeCons cons;
@@ -152,8 +154,6 @@ public class RealtimeReplayDistributor extends AbstractFilterPlugin {
 	public final long getStartTime() {
 		return this.startTime;
 	}
-
-	private static final long TERMINATION_DELAY_NANOS = TimeUnit.NANOSECONDS.convert(5, TimeUnit.SECONDS);
 
 	@Override
 	public void terminate(final boolean error) {

@@ -4,7 +4,7 @@
 <module name="Checker">
 
     <!-- KIEKER default is warning instead of error -->
-    <property name="severity" value="warning"/>
+    <property name="severity" value="error"/>
     
     <!-- KIEKER Filter -->
     <module name="SuppressWithNearbyCommentFilter">
@@ -630,7 +630,7 @@
         <!-- See http://checkstyle.sf.net/config_import.html !-->
         <module name="ImportOrder">
             <property name="option"        value="under"/>
-            <property name="groups"        value="java,javax,junit,org,com,kieker"/>
+            <property name="groups"        value="java,javax,junit,org,com,kieker,kieker.test"/>
             <property name="ordered"       value="true"/>
             <property name="separated"     value="true"/>
             <property name="caseSensitive" value="true"/>
@@ -702,7 +702,7 @@
         </module>
 
         <module name="JavadocType">
-            <property name="severity" value="warning"/>
+            <property name="severity" value="error"/>
             <property name="scope" value="package"/>
             <property name="authorFormat" value="\S"/>
         </module>
@@ -845,6 +845,11 @@
         <!-- Kieker !-->
         <module name="TodoComment">
             <property name="format" value="TODO"/>
+            <property name="severity" value="warning"/>
+        </module>
+        <module name="TodoComment">
+            <property name="format" value="FIXME"/>
+            <property name="severity" value="warning"/>
         </module>
 
         <!-- The check to ensure that requires that comments be the only thing on a line. !-->

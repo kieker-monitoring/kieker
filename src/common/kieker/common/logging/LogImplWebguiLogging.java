@@ -34,9 +34,10 @@ import java.util.concurrent.ArrayBlockingQueue;
  */
 public final class LogImplWebguiLogging implements Log {
 
-	private final String name;
 	private static final int MAX_ENTRIES = 100;
 	private static final Map<String, Queue<String>> QUEUES = new HashMap<String, Queue<String>>(); // NOPMD (sync needed)
+
+	private final String name;
 
 	/**
 	 * Creates a new instance of this class.

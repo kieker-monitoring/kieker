@@ -63,7 +63,7 @@ public final class TraceEventRecords {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = (prime * result) + ((this.trace == null) ? 0 : this.trace.hashCode());
+		result = (prime * result) + ((this.trace == null) ? 0 : this.trace.hashCode()); // NOCS (?:)
 		result = (prime * result) + Arrays.hashCode(this.traceEvents);
 		return result;
 	}

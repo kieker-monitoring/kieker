@@ -202,6 +202,10 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 		private long traceId = -1;
 
+		public TraceBuffer() {
+			// default empty constructor
+		}
+
 		public void insertEvent(final AbstractTraceEvent event) {
 			final long myTraceId = event.getTraceId();
 			synchronized (this) {
@@ -259,13 +263,13 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 		public boolean isFinished() {
 			synchronized (this) {
-				return (this.closeable && !this.isInvalid());
+				return this.closeable && !this.isInvalid();
 			}
 		}
 
 		public boolean isInvalid() {
 			synchronized (this) {
-				return ((this.trace == null) || this.damaged || (this.openEvents != 0) || ((this.maxOrderIndex + 1) != this.events.size()));
+				return (this.trace == null) || this.damaged || (this.openEvents != 0) || ((this.maxOrderIndex + 1) != this.events.size());
 			}
 		}
 
@@ -287,8 +291,15 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 			}
 		}
 
+		/**
+		 * @author Jan Waller
+		 */
 		private static final class TraceEventComperator implements Comparator<AbstractTraceEvent>, Serializable {
 			private static final long serialVersionUID = 8920737343446332517L;
+
+			public TraceEventComperator() {
+				// default empty constructor
+			}
 
 			public int compare(final AbstractTraceEvent o1, final AbstractTraceEvent o2) {
 				return o1.getOrderIndex() - o2.getOrderIndex();

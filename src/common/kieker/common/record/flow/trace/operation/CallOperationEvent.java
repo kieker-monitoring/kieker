@@ -91,6 +91,6 @@ public class CallOperationEvent extends AbstractOperationEvent {
 	}
 
 	public final boolean callsReferencedOperationOf(final AbstractOperationEvent event) {
-		return (this.getCalleeOperationSignature().equals(event.getOperationSignature()) && this.getCalleeClassSignature().equals(event.getClassSignature()));
+		return this.getCalleeOperationSignature().equals(event.getOperationSignature()) && this.getCalleeClassSignature().equals(event.getClassSignature());
 	}
 }

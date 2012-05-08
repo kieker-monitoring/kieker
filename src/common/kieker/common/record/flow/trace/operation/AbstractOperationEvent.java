@@ -68,6 +68,6 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent {
 	}
 
 	public final boolean refersToSameOperationAs(final AbstractOperationEvent other) {
-		return (this.getOperationSignature().equals(other.getOperationSignature()) && this.getClassSignature().equals(other.getClassSignature()));
+		return this.getOperationSignature().equals(other.getOperationSignature()) && this.getClassSignature().equals(other.getClassSignature());
 	}
 }

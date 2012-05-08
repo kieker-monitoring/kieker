@@ -31,6 +31,8 @@ import kieker.common.configuration.Configuration;
 /**
  * Helper class that reads records added using the method {@link #addAllRecords(List)}.
  * 
+ * @param <T>
+ * 
  * @author Andre van Hoorn, Jan Waller
  */
 @Plugin(outputPorts = { @OutputPort(name = SimpleListReader.OUTPUT_PORT_NAME, eventTypes = { Object.class }) })

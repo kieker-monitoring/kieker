@@ -56,11 +56,14 @@ import kieker.monitoring.writer.filesystem.AsyncFsWriter;
  * 
  */
 public abstract class AbstractTestSpringMethodInterceptor { // NOPMD (AbstractClassWithoutAbstractMethod)
-	protected final ControlFlowRegistry controlFlowRegistry = ControlFlowRegistry.INSTANCE;
-	protected final SessionRegistry sessionRegistry = SessionRegistry.INSTANCE;
 
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
+
+	protected final ControlFlowRegistry controlFlowRegistry = ControlFlowRegistry.INSTANCE;
+	protected final SessionRegistry sessionRegistry = SessionRegistry.INSTANCE;
+
+	private final String sessionId = UUID.randomUUID().toString();
 
 	private final boolean interceptorIsEntryPoint; // if true, we'll emulate a wrapping execution, which may e.g. be a servlet filter
 
@@ -97,7 +100,7 @@ public abstract class AbstractTestSpringMethodInterceptor { // NOPMD (AbstractCl
 	}
 
 	@Test
-	public void testIt() throws Throwable { // NOPMD (JUnitTestsShouldIncludeAssert), assertions in inv.checkEoiEss();
+	public void testIt() throws Throwable { // NOPMD (JUnitTestsShouldIncludeAssert), assertions in inv.checkEoiEss(); // NOCS
 		final OperationExecutionMethodInvocationInterceptor methodInterceptor =
 				new OperationExecutionMethodInvocationInterceptor(this.monitoringCtrl); // do not log executions
 
@@ -165,8 +168,6 @@ public abstract class AbstractTestSpringMethodInterceptor { // NOPMD (AbstractCl
 		}
 	}
 
-	private final String sessionId = UUID.randomUUID().toString();
-
 	private void registerSessionInfo() {
 		this.sessionRegistry.storeThreadLocalSessionId(this.sessionId);
 	}
@@ -222,7 +223,7 @@ public abstract class AbstractTestSpringMethodInterceptor { // NOPMD (AbstractCl
 			this.methodsToInvoke = subInvocations;
 		}
 
-		public Object proceed() throws Throwable {
+		public Object proceed() throws Throwable { // NOCS (Throwable)
 			this.actualEoiBeforeInvokes = AbstractTestSpringMethodInterceptor.this.controlFlowRegistry.recallThreadLocalEOI();
 			this.actualEssBeforeInvokes = AbstractTestSpringMethodInterceptor.this.controlFlowRegistry.recallThreadLocalESS();
 			for (final MethodInvocation miv : this.methodsToInvoke) {
@@ -291,40 +292,53 @@ public abstract class AbstractTestSpringMethodInterceptor { // NOPMD (AbstractCl
 			return this.myMethod;
 		}
 	}
-}
 
-abstract class AbstractPseudoComponent { // NOPMD (AbstractClassWithoutAbstractMethod)
-	private final String pseudoMethodName;
+	/**
+	 * @author Andre van Hoorn
+	 */
+	public abstract static class AbstractPseudoComponent { // NOPMD (AbstractClassWithoutAbstractMethod)
+		private final String pseudoMethodName;
 
-	AbstractPseudoComponent(final String pseudoMethodName) {
-		this.pseudoMethodName = pseudoMethodName;
+		AbstractPseudoComponent(final String pseudoMethodName) {
+			this.pseudoMethodName = pseudoMethodName;
+		}
+
+		public Method lookupPseudoMethod() throws SecurityException, NoSuchMethodException {
+			return this.getClass().getMethod(this.pseudoMethodName, new Class<?>[0]);
+		}
 	}
 
-	public Method lookupPseudoMethod() throws SecurityException, NoSuchMethodException {
-		return this.getClass().getMethod(this.pseudoMethodName, new Class<?>[0]);
-	}
-}
+	/**
+	 * @author Andre van Hoorn
+	 */
+	public static final class Bookstore extends AbstractPseudoComponent { // NOPMD (TestClassWithoutTestCases, reported because classname ends with "Test")
+		Bookstore() {
+			super("searchBook");
+		}
 
-class Bookstore extends AbstractPseudoComponent { // NOPMD (TestClassWithoutTestCases, reported because classname ends with "Test")
-	Bookstore() {
-		super("searchBook");
-	}
-
-	public void searchBook() {} // NOPMD (UncommentedEmptyMethod)
-}
-
-class CRM extends AbstractPseudoComponent { // NOPMD (TestClassWithoutTestCases, reported because classname ends with "Test")
-	CRM() {
-		super("getOffers");
+		public void searchBook() {} // NOPMD (UncommentedEmptyMethod)
 	}
 
-	public void getOffers() {} // NOPMD (UncommentedEmptyMethod)
-}
+	/**
+	 * @author Andre van Hoorn
+	 */
+	public static final class CRM extends AbstractPseudoComponent { // NOPMD (TestClassWithoutTestCases, reported because classname ends with "Test")
+		CRM() {
+			super("getOffers");
+		}
 
-class Catalog extends AbstractPseudoComponent { // NOPMD (TestClassWithoutTestCases, reported because classname ends with "Test")
-	Catalog() {
-		super("getBook");
+		public void getOffers() {} // NOPMD (UncommentedEmptyMethod)
 	}
 
-	public void getBook() {} // NOPMD (UncommentedEmptyMethod)
+	/**
+	 * @author Andre van Hoorn
+	 */
+	public static final class Catalog extends AbstractPseudoComponent { // NOPMD (TestClassWithoutTestCases, reported because classname ends with "Test")
+		Catalog() {
+			super("getBook");
+		}
+
+		public void getBook() {} // NOPMD (UncommentedEmptyMethod)
+	}
+
 }

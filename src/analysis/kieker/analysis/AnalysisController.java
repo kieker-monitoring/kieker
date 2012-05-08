@@ -985,6 +985,9 @@ public final class AnalysisController {
 		return new AnalysisControllerWithMapping(controller, controller.pluginModelMap, controller.repositoryModelMap);
 	}
 
+	/**
+	 * @author Andre van Hoorn, Nils Christian Ehmke, Jan Waller
+	 */
 	public static final class AnalysisControllerWithMapping {
 
 		private final Map<MIPlugin, AbstractPlugin> pluginMap;

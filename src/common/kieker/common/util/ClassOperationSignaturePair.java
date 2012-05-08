@@ -39,7 +39,7 @@ public class ClassOperationSignaturePair {
 		this.fqClassname = fqClassname;
 		this.signature = signature;
 		final int tmpLastDot = fqClassname.lastIndexOf('.');
-		this.lastDot = (tmpLastDot + 1) > fqClassname.length() ? -1 : tmpLastDot;
+		this.lastDot = (tmpLastDot + 1) > fqClassname.length() ? -1 : tmpLastDot; // NOCS (?:)
 	}
 
 	/**
