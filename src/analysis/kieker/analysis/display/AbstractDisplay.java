@@ -27,4 +27,15 @@ package kieker.analysis.display;
  */
 public abstract class AbstractDisplay {
 
+	public AbstractDisplay() {
+		// No code necessary
+	}
+
+	/**
+	 * Remove this method once other methods have been implemented in this class. It is just a place holder to avoid a high prioritized warning of pmd.
+	 */
+	@Override
+	public String toString() {
+		return super.toString();
+	}
 }

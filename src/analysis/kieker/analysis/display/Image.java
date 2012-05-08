@@ -27,4 +27,8 @@ package kieker.analysis.display;
  */
 public class Image extends AbstractDisplay {
 
+	public Image() {
+		// No code necessary
+	}
+
 }

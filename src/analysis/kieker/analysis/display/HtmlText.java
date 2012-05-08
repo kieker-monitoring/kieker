@@ -27,4 +27,8 @@ package kieker.analysis.display;
  */
 public class HtmlText extends AbstractDisplay {
 
+	public HtmlText() {
+		// No code necessary
+	}
+
 }
