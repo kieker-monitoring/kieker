@@ -92,7 +92,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 			if (traceBuffer == null) { // first record for this id!
 				synchronized (this) {
 					traceBuffer = this.traceId2trace.get(traceId);
-					if (traceBuffer == null) {
+					if (traceBuffer == null) { // NOCS (DCL)
 						traceBuffer = new TraceBuffer();
 						this.traceId2trace.put(traceId, traceBuffer);
 					}
@@ -106,7 +106,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 			if (traceBuffer == null) { // first record for this id!
 				synchronized (this) {
 					traceBuffer = this.traceId2trace.get(traceId);
-					if (traceBuffer == null) {
+					if (traceBuffer == null) { // NOCS (DCL)
 						traceBuffer = new TraceBuffer();
 						this.traceId2trace.put(traceId, traceBuffer);
 					}
