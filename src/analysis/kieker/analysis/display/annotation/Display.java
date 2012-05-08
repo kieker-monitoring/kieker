@@ -20,11 +20,20 @@
 
 package kieker.analysis.display.annotation;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
  * This annotation can be used for methods which are able to deliver display objects. Plugins with such methods can display their content.
  * 
  * @author Nils Christian Ehmke
  */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+@Inherited
 public @interface Display {
 
 	/**
