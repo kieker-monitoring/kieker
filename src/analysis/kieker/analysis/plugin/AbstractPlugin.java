@@ -411,6 +411,20 @@ public abstract class AbstractPlugin implements IPlugin {
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see kieker.analysis.plugin.IPlugin#getAllOutputPortNames()
+	 */
+	public final String[] getAllRepositoryPortNames() {
+		final List<String> repositoryNames = new LinkedList<String>();
+		final Plugin annotation = this.getClass().getAnnotation(Plugin.class);
+		for (final RepositoryPort repositoryPort : annotation.repositoryPorts()) {
+			repositoryNames.add(repositoryPort.name());
+		}
+		return repositoryNames.toArray(new String[repositoryNames.size()]);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see kieker.analysis.plugin.IPlugin#getConnectedPlugins(java.lang.String)
 	 */
 	public final List<PluginInputPortReference> getConnectedPlugins(final String outputPortName) {
