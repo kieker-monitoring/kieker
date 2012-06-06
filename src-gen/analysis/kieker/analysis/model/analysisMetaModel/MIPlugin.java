@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getProperties <em>Properties</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getRepositories <em>Repositories</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getOutputPorts <em>Output Ports</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getDisplays <em>Displays</em>}</li>
  * </ul>
  * </p>
  *
@@ -132,5 +133,21 @@ public interface MIPlugin extends EObject {
 	 * @generated
 	 */
 	EList<MIOutputPort> getOutputPorts();
+
+	/**
+	 * Returns the value of the '<em><b>Displays</b></em>' containment reference list.
+	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.MIDisplay}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Displays</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Displays</em>' containment reference list.
+	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getPlugin_Displays()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<MIDisplay> getDisplays();
 
 } // MIPlugin

@@ -14,6 +14,7 @@ import kieker.analysis.model.analysisMetaModel.MIPlugin;
 import kieker.analysis.model.analysisMetaModel.MIProject;
 import kieker.analysis.model.analysisMetaModel.MIRepository;
 
+import kieker.analysis.model.analysisMetaModel.MIView;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -39,6 +40,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MProject#getName <em>Name</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MProject#getRepositories <em>Repositories</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MProject#getDependencies <em>Dependencies</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MProject#getViews <em>Views</em>}</li>
  * </ul>
  * </p>
  *
@@ -94,6 +96,16 @@ public class MProject extends EObjectImpl implements MIProject {
 	 * @ordered
 	 */
 	protected EList<MIDependency> dependencies;
+
+	/**
+	 * The cached value of the '{@link #getViews() <em>Views</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getViews()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<MIView> views;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -176,6 +188,18 @@ public class MProject extends EObjectImpl implements MIProject {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<MIView> getViews() {
+		if (views == null) {
+			views = new EObjectContainmentEList<MIView>(MIView.class, this, MIAnalysisMetaModelPackage.PROJECT__VIEWS);
+		}
+		return views;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -185,6 +209,8 @@ public class MProject extends EObjectImpl implements MIProject {
 				return ((InternalEList<?>)getRepositories()).basicRemove(otherEnd, msgs);
 			case MIAnalysisMetaModelPackage.PROJECT__DEPENDENCIES:
 				return ((InternalEList<?>)getDependencies()).basicRemove(otherEnd, msgs);
+			case MIAnalysisMetaModelPackage.PROJECT__VIEWS:
+				return ((InternalEList<?>)getViews()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -205,6 +231,8 @@ public class MProject extends EObjectImpl implements MIProject {
 				return getRepositories();
 			case MIAnalysisMetaModelPackage.PROJECT__DEPENDENCIES:
 				return getDependencies();
+			case MIAnalysisMetaModelPackage.PROJECT__VIEWS:
+				return getViews();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -233,6 +261,10 @@ public class MProject extends EObjectImpl implements MIProject {
 				getDependencies().clear();
 				getDependencies().addAll((Collection<? extends MIDependency>)newValue);
 				return;
+			case MIAnalysisMetaModelPackage.PROJECT__VIEWS:
+				getViews().clear();
+				getViews().addAll((Collection<? extends MIView>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -257,6 +289,9 @@ public class MProject extends EObjectImpl implements MIProject {
 			case MIAnalysisMetaModelPackage.PROJECT__DEPENDENCIES:
 				getDependencies().clear();
 				return;
+			case MIAnalysisMetaModelPackage.PROJECT__VIEWS:
+				getViews().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -277,6 +312,8 @@ public class MProject extends EObjectImpl implements MIProject {
 				return repositories != null && !repositories.isEmpty();
 			case MIAnalysisMetaModelPackage.PROJECT__DEPENDENCIES:
 				return dependencies != null && !dependencies.isEmpty();
+			case MIAnalysisMetaModelPackage.PROJECT__VIEWS:
+				return views != null && !views.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

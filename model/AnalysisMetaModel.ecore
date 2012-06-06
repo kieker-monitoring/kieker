@@ -11,6 +11,8 @@
         eType="#//Repository" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="dependencies" upperBound="-1"
         eType="#//Dependency" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="views" upperBound="-1"
+        eType="#//View" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Plugin" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -22,6 +24,8 @@
         eType="#//RepositoryConnector" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="outputPorts" upperBound="-1"
         eType="#//OutputPort" containment="true" eOpposite="#//OutputPort/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="displays" upperBound="-1"
+        eType="#//Display" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Port" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -62,5 +66,14 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="repository" lowerBound="1"
         eType="#//Repository"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Display">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="View">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="displays" upperBound="-1"
+        eType="#//Display"/>
   </eClassifiers>
 </ecore:EPackage>

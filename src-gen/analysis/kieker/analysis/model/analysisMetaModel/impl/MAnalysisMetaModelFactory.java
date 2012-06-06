@@ -69,6 +69,8 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 			case MIAnalysisMetaModelPackage.REPOSITORY: return createRepository();
 			case MIAnalysisMetaModelPackage.DEPENDENCY: return createDependency();
 			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR: return createRepositoryConnector();
+			case MIAnalysisMetaModelPackage.DISPLAY: return createDisplay();
+			case MIAnalysisMetaModelPackage.VIEW: return createView();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -162,6 +164,26 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 	public MIRepositoryConnector createRepositoryConnector() {
 		MRepositoryConnector repositoryConnector = new MRepositoryConnector();
 		return repositoryConnector;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MIDisplay createDisplay() {
+		MDisplay display = new MDisplay();
+		return display;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MIView createView() {
+		MView view = new MView();
+		return view;
 	}
 
 	/**
