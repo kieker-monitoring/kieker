@@ -48,7 +48,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
-		final ConstructionEvent crecord = new ConstructionEvent(TIME.getTime(), jp.getSignature().getDeclaringTypeName(), thisObject.toString());
+		final ConstructionEvent crecord = new ConstructionEvent(TIME.getTime(), jp.getSignature().getDeclaringTypeName(), System.identityHashCode(thisObject));
 		CTRLINST.newMonitoringRecord(crecord);
 	}
 }

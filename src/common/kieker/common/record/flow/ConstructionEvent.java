@@ -28,7 +28,7 @@ public class ConstructionEvent extends AbstractEvent {
 	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		String.class, // className
-		String.class, // objectName
+		int.class, // objectId
 	};
 
 	/**
@@ -36,34 +36,29 @@ public class ConstructionEvent extends AbstractEvent {
 	 */
 	private static final String NO_CLASSNAME = "<no-classname>";
 
-	/**
-	 * Constant to be used if no hostname required.
-	 */
-	private static final String NO_OBJECTNAME = "<no-objectname>";
-
 	private final String className;
-	private final String objectName;
+	private final int objectId;
 
-	public ConstructionEvent(final long timestamp, final String className, final String objectName) {
+	public ConstructionEvent(final long timestamp, final String className, final int objectId) {
 		super(timestamp);
 		this.className = (className == null) ? NO_CLASSNAME : className; // NOCS
-		this.objectName = (objectName == null) ? NO_OBJECTNAME : objectName; // NOCS
+		this.objectId = objectId;
 	}
 
 	public ConstructionEvent(final Object[] values) { // NOPMD (values stored directly)
 		super(values, TYPES); // values[0]
 		this.className = (String) values[1];
-		this.objectName = (String) values[2];
+		this.objectId = (Integer) values[2];
 	}
 
 	protected ConstructionEvent(final Object[] values, final Class<?>[] types) { // NOPMD (values stored directly)
 		super(values, types); // values[0]
 		this.className = (String) values[1];
-		this.objectName = (String) values[2];
+		this.objectId = (Integer) values[2];
 	}
 
 	public Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.className, this.objectName, };
+		return new Object[] { this.getTimestamp(), this.className, this.objectId, };
 	}
 
 	public Class<?>[] getValueTypes() {
@@ -74,7 +69,7 @@ public class ConstructionEvent extends AbstractEvent {
 		return this.className;
 	}
 
-	public final String getObjectName() {
-		return this.objectName;
+	public final int getObjectId() {
+		return this.objectId;
 	}
 }
