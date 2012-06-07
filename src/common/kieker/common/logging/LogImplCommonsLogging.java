@@ -26,8 +26,23 @@ package kieker.common.logging;
 public final class LogImplCommonsLogging implements Log {
 	private final org.apache.commons.logging.Log log;
 
+	private static final boolean JDK14PATCH;
+
+	static {
+		final org.apache.commons.logging.Log log = org.apache.commons.logging.LogFactory.getLog("KiekerTest");
+		if ("org.apache.commons.logging.impl.Jdk14Logger".equals(log.getClass().getName())) {
+			JDK14PATCH = true;
+		} else {
+			JDK14PATCH = false;
+		}
+	}
+
 	protected LogImplCommonsLogging(final String name) {
-		this.log = org.apache.commons.logging.impl.Jdk14LoggerPatched.getLog(name);
+		if (JDK14PATCH) {
+			this.log = org.apache.commons.logging.impl.Jdk14LoggerPatched.getLog(name);
+		} else {
+			this.log = org.apache.commons.logging.LogFactory.getLog(name);
+		}
 	}
 
 	public boolean isDebugEnabled() {
