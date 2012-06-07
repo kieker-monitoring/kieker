@@ -25,6 +25,8 @@ import java.util.Stack;
 import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.flow.trace.Trace;
 import kieker.monitoring.core.controller.MonitoringController;
 
@@ -34,8 +36,10 @@ import kieker.monitoring.core.controller.MonitoringController;
 public enum TraceRegistry { // Singleton (Effective Java #3)
 	INSTANCE;
 
+	private static final Log LOG = LogFactory.getLog(TraceRegistry.class); // NOPMD (enum logger)
+
 	private final AtomicInteger nextTraceId = new AtomicInteger(0);
-	private final long unique = ((long) new SecureRandom().nextInt()) << 32;
+	private final long unique = MonitoringController.getInstance().isDebug() ? 0 : ((long) new SecureRandom().nextInt()) << 32;
 	/** the hostname is final after the instantiation of the monitoring controller */
 	private final String hostname = MonitoringController.getInstance().getHostname();
 
@@ -85,7 +89,7 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 		final int parentOrderId;
 		if (tp != null) { // we have a known split point
 			if ((enclosingTrace != null) && (enclosingTrace.getTraceId() != tp.traceId)) {
-				throw new IllegalStateException("Enclosing trace does not match split point.");
+				LOG.error("Enclosing trace does not match split point. Found: " + enclosingTrace.getTraceId() + " expected: " + tp.traceId);
 			}
 			parentTraceId = tp.traceId;
 			parentOrderId = tp.orderId;

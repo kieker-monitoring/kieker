@@ -38,12 +38,14 @@ public final class StateController extends AbstractController implements IStateC
 	private final String name;
 	private final String hostname;
 	private final AtomicInteger experimentId = new AtomicInteger(0);
+	private final boolean debug;
 
 	protected StateController(final Configuration configuration) {
 		super(configuration);
 		this.name = configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME);
 		this.experimentId.set(configuration.getIntProperty(ConfigurationFactory.EXPERIMENT_ID));
 		this.monitoringEnabled = configuration.getBooleanProperty(ConfigurationFactory.MONITORING_ENABLED);
+		this.debug = configuration.getBooleanProperty(ConfigurationFactory.DEBUG);
 		String hostnameTmp = configuration.getStringProperty(ConfigurationFactory.HOST_NAME);
 		if (hostnameTmp.length() == 0) {
 			hostnameTmp = "<UNKNOWN>";
@@ -141,5 +143,9 @@ public final class StateController extends AbstractController implements IStateC
 
 	public final int getExperimentId() {
 		return this.experimentId.get();
+	}
+
+	public final boolean isDebug() {
+		return this.debug;
 	}
 }
