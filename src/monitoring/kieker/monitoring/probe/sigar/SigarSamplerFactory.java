@@ -50,16 +50,12 @@ public enum SigarSamplerFactory implements ISigarSamplerFactory { // Singleton p
 	private SigarSamplerFactory() {
 		final Log LOG = LogFactory.getLog(SigarSamplerFactory.class); // access to static logger not possible in constructor
 
-		SigarProxy mySigarProxy = null;
 		final Sigar mySigar = new Sigar();
 		if (mySigar.getNativeLibrary() == null) {
 			LOG.error("No Sigar native lib in java.library.path. See Sigar log for details (maybe only visible on Debug log-level).");
-		} else {
-			final Humidor humidor = new Humidor(mySigar);
-			mySigarProxy = humidor.getSigar();
 		}
-
-		this.sigar = mySigarProxy;
+		final Humidor humidor = new Humidor(mySigar);
+		this.sigar = humidor.getSigar();
 	}
 
 	/**
