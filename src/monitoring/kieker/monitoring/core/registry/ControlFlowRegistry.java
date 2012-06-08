@@ -41,7 +41,7 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 	 * a uniquely distributed offset of size 2^(64-1-16) = 2^47 = 140737488355328L in the worst case. Note that we restrict ourselves to the positive long values
 	 * so far. Of course, negative values may occur (as a result of an overflow) -- this does not hurt!
 	 */
-	private final AtomicLong lastThreadId = new AtomicLong(MonitoringController.getInstance().isDebug() ? 0
+	private final AtomicLong lastThreadId = new AtomicLong(MonitoringController.getInstance().isDebug() ? 0 // NOCS
 			: (long) new Random().nextInt(65536) << (Long.SIZE - 16 - 1));
 	private final transient ThreadLocal<Long> threadLocalTraceId = new ThreadLocal<Long>();
 	private final transient ThreadLocal<Integer> threadLocalEoi = new ThreadLocal<Integer>();

@@ -39,7 +39,7 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 	private static final Log LOG = LogFactory.getLog(TraceRegistry.class); // NOPMD (enum logger)
 
 	private final AtomicInteger nextTraceId = new AtomicInteger(0);
-	private final long unique = MonitoringController.getInstance().isDebug() ? 0 : ((long) new SecureRandom().nextInt()) << 32;
+	private final long unique = MonitoringController.getInstance().isDebug() ? 0 : ((long) new SecureRandom().nextInt()) << 32; // NOCS
 	/** the hostname is final after the instantiation of the monitoring controller */
 	private final String hostname = MonitoringController.getInstance().getHostname();
 

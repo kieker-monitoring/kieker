@@ -24,9 +24,9 @@ package kieker.common.logging;
  * @author Jan Waller
  */
 public final class LogImplCommonsLogging implements Log {
-	private final org.apache.commons.logging.Log log;
-
 	private static final boolean JDK14PATCH;
+
+	private final org.apache.commons.logging.Log log;
 
 	static {
 		final org.apache.commons.logging.Log log = org.apache.commons.logging.LogFactory.getLog("KiekerTest");
