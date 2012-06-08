@@ -24,6 +24,8 @@ import org.hyperic.sigar.Humidor;
 import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarProxy;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.monitoring.probe.sigar.samplers.CPUsCombinedPercSampler;
 import kieker.monitoring.probe.sigar.samplers.CPUsDetailedPercSampler;
 import kieker.monitoring.probe.sigar.samplers.MemSwapUsageSampler;
@@ -34,6 +36,7 @@ import kieker.monitoring.probe.sigar.samplers.MemSwapUsageSampler;
  * @author Andre van Hoorn, Jan Waller
  */
 public enum SigarSamplerFactory implements ISigarSamplerFactory { // Singleton pattern (Effective Java #3)
+
 	INSTANCE;
 
 	/**
@@ -45,8 +48,18 @@ public enum SigarSamplerFactory implements ISigarSamplerFactory { // Singleton p
 	 * Used by {@link #getInstance()} to construct the singleton instance.
 	 */
 	private SigarSamplerFactory() {
-		final Humidor humidor = new Humidor(new Sigar());
-		this.sigar = humidor.getSigar();
+		final Log LOG = LogFactory.getLog(SigarSamplerFactory.class); // access to static logger not possible in constructor
+
+		SigarProxy mySigarProxy = null;
+		final Sigar mySigar = new Sigar();
+		if (mySigar.getNativeLibrary() == null) {
+			LOG.error("No Sigar native lib in java.library.path. See Sigar log for details (maybe only visible on Debug log-level).");
+		} else {
+			final Humidor humidor = new Humidor(mySigar);
+			mySigarProxy = humidor.getSigar();
+		}
+
+		this.sigar = mySigarProxy;
 	}
 
 	/**
