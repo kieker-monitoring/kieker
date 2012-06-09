@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import kieker.analysis.display.annotation.Display;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
@@ -406,6 +407,22 @@ public abstract class AbstractPlugin implements IPlugin {
 			}
 		}
 		return inputNames.toArray(new String[inputNames.size()]);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#getAllDisplayNames()
+	 */
+	public final String[] getAllDisplayNames() {
+		final List<String> displayNames = new LinkedList<String>();
+		for (final Method method : this.getClass().getMethods()) {
+			final Display display = method.getAnnotation(Display.class);
+			if (display != null) {
+				displayNames.add(display.name());
+			}
+		}
+		return displayNames.toArray(new String[displayNames.size()]);
 	}
 
 	/*
