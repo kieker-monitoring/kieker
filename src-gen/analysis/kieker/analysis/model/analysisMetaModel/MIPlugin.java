@@ -137,6 +137,7 @@ public interface MIPlugin extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Displays</b></em>' containment reference list.
 	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.MIDisplay}.
+	 * It is bidirectional and its opposite is '{@link kieker.analysis.model.analysisMetaModel.MIDisplay#getParent <em>Parent</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Displays</em>' containment reference list isn't clear,
@@ -145,7 +146,8 @@ public interface MIPlugin extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Displays</em>' containment reference list.
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getPlugin_Displays()
-	 * @model containment="true"
+	 * @see kieker.analysis.model.analysisMetaModel.MIDisplay#getParent
+	 * @model opposite="parent" containment="true"
 	 * @generated
 	 */
 	EList<MIDisplay> getDisplays();

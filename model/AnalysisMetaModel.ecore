@@ -25,7 +25,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="outputPorts" upperBound="-1"
         eType="#//OutputPort" containment="true" eOpposite="#//OutputPort/parent"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="displays" upperBound="-1"
-        eType="#//Display" containment="true"/>
+        eType="#//Display" containment="true" eOpposite="#//Display/parent"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Port" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -69,11 +69,13 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Display">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" lowerBound="1"
+        eType="#//Plugin" eOpposite="#//Plugin/displays"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="View">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="displays" upperBound="-1"
-        eType="#//Display"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="displays" unique="false"
+        upperBound="-1" eType="#//Display"/>
   </eClassifiers>
 </ecore:EPackage>

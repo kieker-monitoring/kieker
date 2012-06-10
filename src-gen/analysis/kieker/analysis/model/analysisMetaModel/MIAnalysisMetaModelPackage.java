@@ -658,13 +658,22 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int DISPLAY__NAME = 0;
 
 	/**
+	 * The feature id for the '<em><b>Parent</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISPLAY__PARENT = 1;
+
+	/**
 	 * The number of structural features of the '<em>Display</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISPLAY_FEATURE_COUNT = 1;
+	int DISPLAY_FEATURE_COUNT = 2;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MView <em>View</em>}' class.
@@ -1120,6 +1129,17 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	EAttribute getDisplay_Name();
 
 	/**
+	 * Returns the meta object for the container reference '{@link kieker.analysis.model.analysisMetaModel.MIDisplay#getParent <em>Parent</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>Parent</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIDisplay#getParent()
+	 * @see #getDisplay()
+	 * @generated
+	 */
+	EReference getDisplay_Parent();
+
+	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIView <em>View</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1511,6 +1531,14 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DISPLAY__NAME = eINSTANCE.getDisplay_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Parent</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DISPLAY__PARENT = eINSTANCE.getDisplay_Parent();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MView <em>View</em>}' class.

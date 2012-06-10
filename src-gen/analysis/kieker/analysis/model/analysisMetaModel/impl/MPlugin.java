@@ -233,7 +233,7 @@ public abstract class MPlugin extends EObjectImpl implements MIPlugin {
 	 */
 	public EList<MIDisplay> getDisplays() {
 		if (displays == null) {
-			displays = new EObjectContainmentEList<MIDisplay>(MIDisplay.class, this, MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS);
+			displays = new EObjectContainmentWithInverseEList<MIDisplay>(MIDisplay.class, this, MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS, MIAnalysisMetaModelPackage.DISPLAY__PARENT);
 		}
 		return displays;
 	}
@@ -249,6 +249,8 @@ public abstract class MPlugin extends EObjectImpl implements MIPlugin {
 		switch (featureID) {
 			case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getOutputPorts()).basicAdd(otherEnd, msgs);
+			case MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getDisplays()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}

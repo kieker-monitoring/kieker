@@ -57,4 +57,9 @@ public class PlainText extends AbstractDisplay {
 	public String getText() {
 		return this.currText;
 	}
+
+	@Override
+	public String toString() {
+		return this.getText();
+	}
 }

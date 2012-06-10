@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.MIDisplay#getName <em>Name</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.MIDisplay#getParent <em>Parent</em>}</li>
  * </ul>
  * </p>
  *
@@ -50,5 +51,33 @@ public interface MIDisplay extends EObject {
 	 * @generated
 	 */
 	void setName(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Parent</b></em>' container reference.
+	 * It is bidirectional and its opposite is '{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getDisplays <em>Displays</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Parent</em>' container reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Parent</em>' container reference.
+	 * @see #setParent(MIPlugin)
+	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getDisplay_Parent()
+	 * @see kieker.analysis.model.analysisMetaModel.MIPlugin#getDisplays
+	 * @model opposite="displays" required="true" transient="false"
+	 * @generated
+	 */
+	MIPlugin getParent();
+
+	/**
+	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIDisplay#getParent <em>Parent</em>}' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Parent</em>' container reference.
+	 * @see #getParent()
+	 * @generated
+	 */
+	void setParent(MIPlugin value);
 
 } // MIDisplay
