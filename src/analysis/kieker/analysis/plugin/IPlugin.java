@@ -85,6 +85,8 @@ public interface IPlugin {
 
 	public abstract String[] getAllInputPortNames();
 
+	public abstract String[] getAllDisplayNames();
+
 	/**
 	 * Delivers the plugins with their ports which are connected with the given output port.
 	 * 

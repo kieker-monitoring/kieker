@@ -106,4 +106,11 @@ public interface IStateController {
 	 * @return experimentID
 	 */
 	public abstract int getExperimentId();
+
+	/**
+	 * Is the debug mode enabled?
+	 * 
+	 * @return debug mode
+	 */
+	public abstract boolean isDebug();
 }

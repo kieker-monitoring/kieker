@@ -191,6 +191,10 @@ public final class MonitoringController extends AbstractController implements IM
 		return this.stateController.isMonitoringEnabled();
 	}
 
+	public final boolean isDebug() {
+		return this.stateController.isDebug();
+	}
+
 	public final String getName() {
 		return this.stateController.getName();
 	}
@@ -235,15 +239,15 @@ public final class MonitoringController extends AbstractController implements IM
 		return this.jmxController.getJMXDomain();
 	}
 
-	public int getIdForString(final String string) {
+	public final int getIdForString(final String string) {
 		return this.registryController.getIdForString(string);
 	}
 
-	public boolean activateProbe(final String signature) {
+	public final boolean activateProbe(final String signature) {
 		return this.probeController.activateProbe(signature);
 	}
 
-	public boolean deactivateProbe(final String signature) {
+	public final boolean deactivateProbe(final String signature) {
 		return this.probeController.deactivateProbe(signature);
 	}
 

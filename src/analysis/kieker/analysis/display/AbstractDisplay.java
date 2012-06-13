@@ -25,7 +25,7 @@ package kieker.analysis.display;
  * 
  * @author Nils Christian Ehmke
  */
-public abstract class AbstractDisplay {
+public abstract class AbstractDisplay { // NOPMD (remove when abstract methods are added)
 
 	public AbstractDisplay() {
 		// No code necessary

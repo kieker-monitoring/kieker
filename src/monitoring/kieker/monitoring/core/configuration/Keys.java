@@ -46,6 +46,7 @@ interface Keys { // NOPMD NOCS (static list)
 	public static final String HOST_NAME = PREFIX + "hostname";
 	public static final String EXPERIMENT_ID = PREFIX + "initialExperimentId";
 	public static final String USE_SHUTDOWN_HOOK = PREFIX + "useShutdownHook";
+	public static final String DEBUG = PREFIX + "debug";
 
 	// JMX Controller
 	public static final String ACTIVATE_JMX = PREFIX + "jmx";

@@ -106,13 +106,22 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int PROJECT__DEPENDENCIES = 3;
 
 	/**
+	 * The feature id for the '<em><b>Views</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROJECT__VIEWS = 4;
+
+	/**
 	 * The number of structural features of the '<em>Project</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROJECT_FEATURE_COUNT = 4;
+	int PROJECT_FEATURE_COUNT = 5;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MPlugin <em>Plugin</em>}' class.
@@ -170,13 +179,22 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int PLUGIN__OUTPUT_PORTS = 4;
 
 	/**
+	 * The feature id for the '<em><b>Displays</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PLUGIN__DISPLAYS = 5;
+
+	/**
 	 * The number of structural features of the '<em>Plugin</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PLUGIN_FEATURE_COUNT = 5;
+	int PLUGIN_FEATURE_COUNT = 6;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MPort <em>Port</em>}' class.
@@ -409,6 +427,15 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int FILTER__OUTPUT_PORTS = PLUGIN__OUTPUT_PORTS;
 
 	/**
+	 * The feature id for the '<em><b>Displays</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILTER__DISPLAYS = PLUGIN__DISPLAYS;
+
+	/**
 	 * The feature id for the '<em><b>Input Ports</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -480,6 +507,15 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int READER__OUTPUT_PORTS = PLUGIN__OUTPUT_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Displays</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int READER__DISPLAYS = PLUGIN__DISPLAYS;
 
 	/**
 	 * The number of structural features of the '<em>Reader</em>' class.
@@ -603,6 +639,90 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDisplay <em>Display</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MDisplay
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getDisplay()
+	 * @generated
+	 */
+	int DISPLAY = 11;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISPLAY__NAME = 0;
+
+	/**
+	 * The feature id for the '<em><b>Parent</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISPLAY__PARENT = 1;
+
+	/**
+	 * The number of structural features of the '<em>Display</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISPLAY_FEATURE_COUNT = 2;
+
+	/**
+	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MView <em>View</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MView
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getView()
+	 * @generated
+	 */
+	int VIEW = 12;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIEW__NAME = 0;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIEW__DESCRIPTION = 1;
+
+	/**
+	 * The feature id for the '<em><b>Displays</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIEW__DISPLAYS = 2;
+
+	/**
+	 * The number of structural features of the '<em>View</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIEW_FEATURE_COUNT = 3;
+
+
+	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIProject <em>Project</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -655,6 +775,17 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getProject_Dependencies();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIProject#getViews <em>Views</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Views</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIProject#getViews()
+	 * @see #getProject()
+	 * @generated
+	 */
+	EReference getProject_Views();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIPlugin <em>Plugin</em>}'.
@@ -720,6 +851,17 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getPlugin_OutputPorts();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getDisplays <em>Displays</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Displays</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIPlugin#getDisplays()
+	 * @see #getPlugin()
+	 * @generated
+	 */
+	EReference getPlugin_Displays();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIPort <em>Port</em>}'.
@@ -966,6 +1108,81 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	EReference getRepositoryConnector_Repository();
 
 	/**
+	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIDisplay <em>Display</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Display</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIDisplay
+	 * @generated
+	 */
+	EClass getDisplay();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIDisplay#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIDisplay#getName()
+	 * @see #getDisplay()
+	 * @generated
+	 */
+	EAttribute getDisplay_Name();
+
+	/**
+	 * Returns the meta object for the container reference '{@link kieker.analysis.model.analysisMetaModel.MIDisplay#getParent <em>Parent</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>Parent</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIDisplay#getParent()
+	 * @see #getDisplay()
+	 * @generated
+	 */
+	EReference getDisplay_Parent();
+
+	/**
+	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIView <em>View</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>View</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIView
+	 * @generated
+	 */
+	EClass getView();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIView#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIView#getName()
+	 * @see #getView()
+	 * @generated
+	 */
+	EAttribute getView_Name();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIView#getDescription <em>Description</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Description</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIView#getDescription()
+	 * @see #getView()
+	 * @generated
+	 */
+	EAttribute getView_Description();
+
+	/**
+	 * Returns the meta object for the reference list '{@link kieker.analysis.model.analysisMetaModel.MIView#getDisplays <em>Displays</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Displays</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIView#getDisplays()
+	 * @see #getView()
+	 * @generated
+	 */
+	EReference getView_Displays();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1030,6 +1247,14 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		EReference PROJECT__DEPENDENCIES = eINSTANCE.getProject_Dependencies();
 
 		/**
+		 * The meta object literal for the '<em><b>Views</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PROJECT__VIEWS = eINSTANCE.getProject_Views();
+
+		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MPlugin <em>Plugin</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1078,6 +1303,14 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PLUGIN__OUTPUT_PORTS = eINSTANCE.getPlugin_OutputPorts();
+
+		/**
+		 * The meta object literal for the '<em><b>Displays</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PLUGIN__DISPLAYS = eINSTANCE.getPlugin_Displays();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MPort <em>Port</em>}' class.
@@ -1280,6 +1513,66 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference REPOSITORY_CONNECTOR__REPOSITORY = eINSTANCE.getRepositoryConnector_Repository();
+
+		/**
+		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDisplay <em>Display</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MDisplay
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getDisplay()
+		 * @generated
+		 */
+		EClass DISPLAY = eINSTANCE.getDisplay();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DISPLAY__NAME = eINSTANCE.getDisplay_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Parent</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DISPLAY__PARENT = eINSTANCE.getDisplay_Parent();
+
+		/**
+		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MView <em>View</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MView
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getView()
+		 * @generated
+		 */
+		EClass VIEW = eINSTANCE.getView();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VIEW__NAME = eINSTANCE.getView_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Description</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VIEW__DESCRIPTION = eINSTANCE.getView_Description();
+
+		/**
+		 * The meta object literal for the '<em><b>Displays</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VIEW__DISPLAYS = eINSTANCE.getView_Displays();
 
 	}
 

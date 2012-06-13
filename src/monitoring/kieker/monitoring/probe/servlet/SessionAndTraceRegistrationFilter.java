@@ -91,7 +91,7 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 		super();
 		final Signature methodSignature =
 				new Signature("doFilter", // operation name
-						new String[] { "public", "void" }, // modifier list
+						new String[] { "public" }, // modifier list
 						"void", // return type
 						new String[] { ServletRequest.class.getName(), ServletResponse.class.getName(), FilterChain.class.getName() }); // arg types
 		final ClassOperationSignaturePair filterOperationSignaturePair =

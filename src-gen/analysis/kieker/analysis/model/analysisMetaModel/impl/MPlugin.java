@@ -9,6 +9,7 @@ package kieker.analysis.model.analysisMetaModel.impl;
 import java.util.Collection;
 
 import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
+import kieker.analysis.model.analysisMetaModel.MIDisplay;
 import kieker.analysis.model.analysisMetaModel.MIOutputPort;
 import kieker.analysis.model.analysisMetaModel.MIPlugin;
 import kieker.analysis.model.analysisMetaModel.MIProperty;
@@ -41,6 +42,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MPlugin#getProperties <em>Properties</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MPlugin#getRepositories <em>Repositories</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MPlugin#getOutputPorts <em>Output Ports</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MPlugin#getDisplays <em>Displays</em>}</li>
  * </ul>
  * </p>
  *
@@ -116,6 +118,16 @@ public abstract class MPlugin extends EObjectImpl implements MIPlugin {
 	 * @ordered
 	 */
 	protected EList<MIOutputPort> outputPorts;
+
+	/**
+	 * The cached value of the '{@link #getDisplays() <em>Displays</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDisplays()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<MIDisplay> displays;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -219,12 +231,26 @@ public abstract class MPlugin extends EObjectImpl implements MIPlugin {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<MIDisplay> getDisplays() {
+		if (displays == null) {
+			displays = new EObjectContainmentWithInverseEList<MIDisplay>(MIDisplay.class, this, MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS, MIAnalysisMetaModelPackage.DISPLAY__PARENT);
+		}
+		return displays;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getOutputPorts()).basicAdd(otherEnd, msgs);
+			case MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getDisplays()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -243,6 +269,8 @@ public abstract class MPlugin extends EObjectImpl implements MIPlugin {
 				return ((InternalEList<?>)getRepositories()).basicRemove(otherEnd, msgs);
 			case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
 				return ((InternalEList<?>)getOutputPorts()).basicRemove(otherEnd, msgs);
+			case MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS:
+				return ((InternalEList<?>)getDisplays()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -265,6 +293,8 @@ public abstract class MPlugin extends EObjectImpl implements MIPlugin {
 				return getRepositories();
 			case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
 				return getOutputPorts();
+			case MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS:
+				return getDisplays();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -296,6 +326,10 @@ public abstract class MPlugin extends EObjectImpl implements MIPlugin {
 				getOutputPorts().clear();
 				getOutputPorts().addAll((Collection<? extends MIOutputPort>)newValue);
 				return;
+			case MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS:
+				getDisplays().clear();
+				getDisplays().addAll((Collection<? extends MIDisplay>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -323,6 +357,9 @@ public abstract class MPlugin extends EObjectImpl implements MIPlugin {
 			case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
 				getOutputPorts().clear();
 				return;
+			case MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS:
+				getDisplays().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -345,6 +382,8 @@ public abstract class MPlugin extends EObjectImpl implements MIPlugin {
 				return repositories != null && !repositories.isEmpty();
 			case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
 				return outputPorts != null && !outputPorts.isEmpty();
+			case MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS:
+				return displays != null && !displays.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
