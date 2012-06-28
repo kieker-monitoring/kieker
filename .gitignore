@@ -10,6 +10,3 @@ plugin.xml
 *.backup
 /*.log
 .DS_Store
-
-
-
