@@ -1,7 +1,7 @@
 <!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.aspectj.org/dtd/aspectj_1_5_0.dtd">
 
 <aspectj>
-	<weaver options=""> <!-- options="-verbose" -->
+	<weaver options=""> <!-- options="-verbose -showWeaveInfo" -->
 
 		<!-- Use the exclude/include directives to specify which classes are (not) to be considered for weaving.
 		     Some examples are given below. -->
@@ -11,6 +11,8 @@
 
 		<!-- Use * to consider all classes. In this case, you typically need some additional excludes. -->
 		<!-- <include within="*"/> -->
+		<!-- This would cause problems with * ?!? -->
+		<!-- <exclude within="org.apache.commons.logging..*" />  -->
 
 		<!-- Example instrumentation for the iBATIS JPetStore -->
 		<!--<include within="com.ibatis.jpetstore..*"/> -->
@@ -36,9 +38,12 @@
 		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFull"/> -->
 		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullServlet"/> -->
 		
-		<!-- KiekerFlow Aspects-->
+		<!-- KiekerFlow Aspects -->
+		<!-- ################## -->
+		
 		<!-- Concurrency -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.concurrency.ThreadingAspect" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.concurrency.SynchronizedAspect" /> -->
 		
 		<!-- Construction -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.construction.FullInstrumentation" /> -->
@@ -59,6 +64,10 @@
 		<!-- OperationCall -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.FullInstrumentation" /> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.Annotation" /> -->
+		
+		<!-- ObjectOperationCall -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.objectCall.FullInstrumentation" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.objectCall.Annotation" /> -->
 		
 		<!-- Definition of additional targeted aspects (example for a single additional getter) -->
 		<!--  
