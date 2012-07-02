@@ -25,13 +25,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import kieker.tools.traceAnalysis.filter.visualization.graph.Vertex;
+
 /**
  * 
  * @param <T>
  * 
  * @author Andre van Hoorn
  */
-public abstract class AbstractCallTreeNode<T> {
+public abstract class AbstractCallTreeNode<T> extends Vertex<AbstractCallTreeNode<T>, WeightedDirectedCallTreeEdge<T>> {
 
 	private final T entity;
 	private final int id;
@@ -68,5 +70,10 @@ public abstract class AbstractCallTreeNode<T> {
 
 	public final boolean isRootNode() {
 		return this.rootNode;
+	}
+
+	@Override
+	public Collection<WeightedDirectedCallTreeEdge<T>> getOutgoingEdges() {
+		return this.getChildEdges();
 	}
 }

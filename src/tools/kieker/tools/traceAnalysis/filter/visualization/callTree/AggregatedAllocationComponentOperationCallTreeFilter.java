@@ -73,7 +73,7 @@ class AggregatedAllocationComponentOperationCallTreeNode extends AbstractAggrega
 		WeightedDirectedCallTreeEdge<AllocationComponentOperationPair> e = this.childMap.get(destination.getId());
 		AbstractCallTreeNode<AllocationComponentOperationPair> n;
 		if (e != null) {
-			n = e.getDestination();
+			n = e.getTarget();
 		} else {
 			n = new AggregatedAllocationComponentOperationCallTreeNode(destination.getId(), destination, false); // !
 			// rootNode
@@ -81,7 +81,7 @@ class AggregatedAllocationComponentOperationCallTreeNode extends AbstractAggrega
 			this.childMap.put(destination.getId(), e);
 			super.appendChildEdge(e);
 		}
-		e.incOutgoingWeight();
+		e.getTargetWeight().increase();
 		return n;
 	}
 }

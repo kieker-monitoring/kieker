@@ -18,30 +18,15 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
-
-import kieker.tools.traceAnalysis.filter.visualization.graph.WeightedEdge;
+package kieker.tools.traceAnalysis.filter.visualization.graph;
 
 /**
+ * Abstract superclass for graph elements, i.e. edges and vertices, in the visualization package.
  * 
- * @param <T>
+ * @author Holger Knoche
  * 
- * @author Andre van Hoorn
  */
-public class WeightedBidirectionalDependencyGraphEdge<T> extends WeightedEdge<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>> {
 
-	private boolean assumed = false;
-
-	public WeightedBidirectionalDependencyGraphEdge(final DependencyGraphNode<T> source, final DependencyGraphNode<T> target) {
-		super(source, target);
-	}
-
-	public boolean isAssumed() {
-		return this.assumed;
-	}
-
-	public void setAssumed() {
-		this.assumed = true;
-	}
+public abstract class GraphElement {
 
 }

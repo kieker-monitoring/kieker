@@ -20,10 +20,13 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import kieker.tools.traceAnalysis.filter.visualization.graph.Vertex;
 
 /**
  * 
@@ -31,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 
  * @author Andre van Hoorn
  */
-public class DependencyGraphNode<T> {
+public class DependencyGraphNode<T> extends Vertex<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>> {
 
 	private final T entity;
 	private final int id;
@@ -97,9 +100,7 @@ public class DependencyGraphNode<T> {
 
 			WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(destination.getId());
 			if (e == null) {
-				e = new WeightedBidirectionalDependencyGraphEdge<T>();
-				e.setSource(this);
-				e.setDestination(destination);
+				e = new WeightedBidirectionalDependencyGraphEdge<T>(this, destination);
 
 				if (assume) {
 					e.setAssumed();
@@ -107,7 +108,7 @@ public class DependencyGraphNode<T> {
 
 				relevantDependencies.put(destination.getId(), e);
 			}
-			e.incOutgoingWeight();
+			e.getTargetWeight().increase();
 		}
 	}
 
@@ -122,12 +123,10 @@ public class DependencyGraphNode<T> {
 
 			WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(source.getId());
 			if (e == null) {
-				e = new WeightedBidirectionalDependencyGraphEdge<T>();
-				e.setSource(this);
-				e.setDestination(source);
+				e = new WeightedBidirectionalDependencyGraphEdge<T>(this, source);
 				relevantDependencies.put(source.getId(), e);
 			}
-			e.incIncomingWeight();
+			e.getSourceWeight().increase();
 		}
 	}
 
@@ -156,5 +155,15 @@ public class DependencyGraphNode<T> {
 
 			return builder.toString();
 		}
+	}
+
+	@Override
+	public Collection<WeightedBidirectionalDependencyGraphEdge<T>> getOutgoingEdges() {
+		final Collection<WeightedBidirectionalDependencyGraphEdge<T>> edges = new ArrayList<WeightedBidirectionalDependencyGraphEdge<T>>();
+
+		edges.addAll(this.getOutgoingDependencies());
+		edges.addAll(this.getAssumedOutgoingDependencies());
+
+		return edges;
 	}
 }

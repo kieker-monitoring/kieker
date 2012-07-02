@@ -71,14 +71,14 @@ class AggregatedAssemblyComponentOperationCallTreeNode extends AbstractAggregate
 		WeightedDirectedCallTreeEdge<AssemblyComponentOperationPair> e = this.childMap.get(destination.getId());
 		AbstractCallTreeNode<AssemblyComponentOperationPair> n;
 		if (e != null) {
-			n = e.getDestination();
+			n = e.getTarget();
 		} else {
 			n = new AggregatedAssemblyComponentOperationCallTreeNode(destination.getId(), destination, false); // !rootNode
 			e = new WeightedDirectedCallTreeEdge<AssemblyComponentOperationPair>(this, n);
 			this.childMap.put(destination.getId(), e);
 			super.appendChildEdge(e);
 		}
-		e.incOutgoingWeight();
+		e.getTargetWeight().increase();
 		return n;
 	}
 }

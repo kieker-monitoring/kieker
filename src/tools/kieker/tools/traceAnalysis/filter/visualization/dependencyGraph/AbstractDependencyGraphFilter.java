@@ -83,14 +83,14 @@ public abstract class AbstractDependencyGraphFilter<T> extends AbstractMessageTr
 		for (final WeightedBidirectionalDependencyGraphEdge<T> currentEdge : edges) {
 			final String lineStyle = (currentEdge.isAssumed()) ? DotFactory.DOT_STYLE_DASHED : DotFactory.DOT_STYLE_SOLID; // NOCS (inline ?)
 
-			final DependencyGraphNode<T> destNode = currentEdge.getDestination();
+			final DependencyGraphNode<T> destNode = currentEdge.getTarget();
 			if ((node.equals(destNode)) && !plotSelfLoops) {
 				continue;
 			}
 			final StringBuilder strBuild = new StringBuilder(1024);
 			if (includeWeights) {
 				strBuild.append(DotFactory.createConnection("", this.getNodeId(node), this.getNodeId(destNode),
-						Integer.toString(currentEdge.getOutgoingWeight()), lineStyle, DotFactory.DOT_ARROWHEAD_OPEN));
+						Integer.toString(currentEdge.getTargetWeight().getValue()), lineStyle, DotFactory.DOT_ARROWHEAD_OPEN));
 			} else {
 				strBuild.append(DotFactory.createConnection("", this.getNodeId(node), this.getNodeId(destNode), lineStyle,
 						DotFactory.DOT_ARROWHEAD_OPEN));
