@@ -21,6 +21,9 @@
 package kieker.tools.traceAnalysis.filter.visualization.graph;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Generic superclass for all vertices in the visualization package.
@@ -35,6 +38,8 @@ import java.util.Collection;
 
 public abstract class Vertex<VertexT extends Vertex<VertexT, EdgeT>, EdgeT extends Edge<VertexT, EdgeT>> extends GraphElement {
 
+	private final Map<Class<? extends AbstractVertexDecoration>, AbstractVertexDecoration> decorations = new ConcurrentHashMap<Class<? extends AbstractVertexDecoration>, AbstractVertexDecoration>(); // NOPMD(UseConcurrentHashMap)//NOCS
+
 	/**
 	 * Returns the outgoing edges of this vertex.
 	 * 
@@ -42,4 +47,35 @@ public abstract class Vertex<VertexT extends Vertex<VertexT, EdgeT>, EdgeT exten
 	 */
 	public abstract Collection<EdgeT> getOutgoingEdges();
 
+	/**
+	 * Returns the decoration of this vertex of the given type.
+	 * 
+	 * @param type
+	 *            The type of the desired decoration
+	 * @return The given decoration or {@code null} if no such type exists
+	 */
+	@SuppressWarnings("unchecked")
+	public <DecorationT extends AbstractVertexDecoration> DecorationT getDecoration(final Class<DecorationT> type) {
+		return (DecorationT) this.decorations.get(type);
+	}
+
+	/**
+	 * Adds a decoration to this vertex. Note that the given decoration may replace an existing
+	 * decoration of the same type.
+	 * 
+	 * @param decoration
+	 *            The decoration to add
+	 */
+	public void addDecoration(final AbstractVertexDecoration decoration) {
+		this.decorations.put(decoration.getClass(), decoration);
+	}
+
+	/**
+	 * Returns all decorations of this vertex.
+	 * 
+	 * @return See above
+	 */
+	public Collection<AbstractVertexDecoration> getDecorations() {
+		return Collections.unmodifiableCollection(this.decorations.values());
+	}
 }

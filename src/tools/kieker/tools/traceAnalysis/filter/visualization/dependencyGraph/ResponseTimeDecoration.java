@@ -20,12 +20,13 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
+import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertexDecoration;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 
 /**
  * @author Holger Knoche
  */
-public class ResponseTimeDecoration extends AbstractNodeDecoration {
+public class ResponseTimeDecoration extends AbstractVertexDecoration {
 
 	private static final String OUTPUT_TEMPLATE = "min: %dms, avg: %.2fms, max: %dms";
 

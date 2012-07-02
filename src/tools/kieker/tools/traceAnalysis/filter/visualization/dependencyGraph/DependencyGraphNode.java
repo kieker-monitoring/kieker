@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertexDecoration;
 import kieker.tools.traceAnalysis.filter.visualization.graph.Vertex;
 
 /**
@@ -45,7 +46,6 @@ public class DependencyGraphNode<T> extends Vertex<DependencyGraphNode<T>, Weigh
 	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedOutgoingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD(UseConcurrentHashMap)//NOCS
 
 	private volatile boolean assumed = false;
-	private final Map<Class<? extends AbstractNodeDecoration>, AbstractNodeDecoration> decorations = new ConcurrentHashMap<Class<? extends AbstractNodeDecoration>, AbstractNodeDecoration>(); // NOPMD(UseConcurrentHashMap)//NOCS
 
 	public DependencyGraphNode(final int id, final T entity) {
 		this.id = id;
@@ -78,15 +78,6 @@ public class DependencyGraphNode<T> extends Vertex<DependencyGraphNode<T>, Weigh
 
 	public boolean isAssumed() {
 		return this.assumed;
-	}
-
-	@SuppressWarnings("unchecked")
-	public <N extends AbstractNodeDecoration> N getDecoration(final Class<? extends AbstractNodeDecoration> type) {
-		return (N) this.decorations.get(type);
-	}
-
-	public void addDecoration(final AbstractNodeDecoration decoration) {
-		this.decorations.put(decoration.getClass(), decoration);
 	}
 
 	public void addOutgoingDependency(final DependencyGraphNode<T> destination) {
@@ -137,7 +128,7 @@ public class DependencyGraphNode<T> extends Vertex<DependencyGraphNode<T>, Weigh
 	public String getFormattedDecorations() {
 		synchronized (this) {
 			final StringBuilder builder = new StringBuilder();
-			final Iterator<AbstractNodeDecoration> decorationsIter = this.decorations.values().iterator();
+			final Iterator<AbstractVertexDecoration> decorationsIter = this.getDecorations().iterator();
 
 			while (decorationsIter.hasNext()) {
 				final String currentDecorationText = decorationsIter.next().createFormattedOutput();

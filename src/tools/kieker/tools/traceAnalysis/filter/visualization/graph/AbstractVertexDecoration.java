@@ -18,14 +18,14 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
+package kieker.tools.traceAnalysis.filter.visualization.graph;
 
 /**
  * 
  * @author Holger Knoche
  * 
  */
-public abstract class AbstractNodeDecoration {
+public abstract class AbstractVertexDecoration {
 
 	public abstract String createFormattedOutput();
 
