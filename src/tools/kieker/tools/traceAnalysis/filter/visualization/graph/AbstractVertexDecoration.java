@@ -27,6 +27,11 @@ package kieker.tools.traceAnalysis.filter.visualization.graph;
  */
 public abstract class AbstractVertexDecoration {
 
+	/**
+	 * Creates formatted output for this decoration.
+	 * 
+	 * @return See above
+	 */
 	public abstract String createFormattedOutput();
 
 }

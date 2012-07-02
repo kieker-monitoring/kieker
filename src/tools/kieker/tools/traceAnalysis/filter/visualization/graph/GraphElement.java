@@ -20,13 +20,66 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.graph;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
- * Abstract superclass for graph elements, i.e. edges and vertices, in the visualization package.
+ * Superclass for graph elements, i.e. edges and vertices, in the visualization package.
  * 
  * @author Holger Knoche
  * 
+ * @param <O>
+ *            The type of the objects which caused the creation of this graph element
+ * 
  */
 
-public abstract class GraphElement {
+public class GraphElement<O> {
+
+	private Color color;
+
+	private final Set<O> origins = new HashSet<O>();
+
+	protected GraphElement(final O origin) {
+		// Prevent external instantiation
+	}
+
+	/**
+	 * Returns this graph element's color.
+	 * 
+	 * @return See above
+	 */
+	public Color getColor() {
+		return this.color;
+	}
+
+	/**
+	 * Sets this graph element's color.
+	 * 
+	 * @param color
+	 *            The color to set
+	 */
+	public void setColor(final Color color) {
+		this.color = color;
+	}
+
+	/**
+	 * Returns the objects which caused the creation of this element.
+	 * 
+	 * @return See above
+	 */
+	public Set<O> getOrigins() {
+		return Collections.unmodifiableSet(this.origins);
+	}
+
+	/**
+	 * Adds a new origin object to this element.
+	 * 
+	 * @param origin
+	 *            The origin object
+	 */
+	public void addOrigin(final O origin) {
+		this.origins.add(origin);
+	}
 
 }

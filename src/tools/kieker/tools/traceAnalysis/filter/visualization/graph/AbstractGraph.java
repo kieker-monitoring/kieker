@@ -20,51 +20,28 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.graph;
 
+import java.util.Collection;
+
 /**
- * Generic superclass for all graph edges in the visualization package.
+ * Generic superclass for all graphs in the visualization package.
  * 
  * @author Holger Knoche
  * 
- * @param <VertexT>
+ * @param <V>
  *            The type of the graph's vertices
- * @param <EdgeT>
+ * @param <E>
  *            The type of the graph's edges
+ * @param <O>
+ *            The type of object from which the graph's elements originate
  */
 
-public abstract class Edge<VertexT extends Vertex<VertexT, EdgeT>, EdgeT extends Edge<VertexT, EdgeT>> extends GraphElement {
-
-	private final VertexT source;
-	private final VertexT target;
+public abstract class AbstractGraph<V extends AbstractVertex<V, E, O>, E extends AbstractEdge<V, E, O>, O> {
 
 	/**
-	 * Creates a new edge between the given vertices.
-	 * 
-	 * @param source
-	 *            The source vertex of the edge
-	 * @param target
-	 *            The target vertex of the edge
-	 */
-	public Edge(final VertexT source, final VertexT target) {
-		this.source = source;
-		this.target = target;
-	}
-
-	/**
-	 * Returns the source of this edge.
+	 * Returns the vertices contained in this graph.
 	 * 
 	 * @return See above
 	 */
-	public VertexT getSource() {
-		return this.source;
-	}
-
-	/**
-	 * Returns the target of this edge.
-	 * 
-	 * @return See above
-	 */
-	public VertexT getTarget() {
-		return this.target;
-	}
+	public abstract Collection<V> getVertices();
 
 }

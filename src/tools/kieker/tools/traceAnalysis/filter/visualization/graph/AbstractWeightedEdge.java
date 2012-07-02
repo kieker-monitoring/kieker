@@ -28,12 +28,12 @@ import kieker.common.util.MutableInteger;
  * 
  * @author Holger Knoche
  * 
- * @param <VertexT>
+ * @param <V>
  *            The type of the graph's vertices
- * @param <EdgeT>
+ * @param <E>
  *            The type of the graph's edges
  */
-public abstract class WeightedEdge<VertexT extends Vertex<VertexT, EdgeT>, EdgeT extends Edge<VertexT, EdgeT>> extends Edge<VertexT, EdgeT> {
+public abstract class AbstractWeightedEdge<V extends AbstractVertex<V, E, O>, E extends AbstractEdge<V, E, O>, O> extends AbstractEdge<V, E, O> {
 
 	private final MutableInteger sourceWeight = new MutableInteger();
 	private final MutableInteger targetWeight = new MutableInteger();
@@ -47,8 +47,8 @@ public abstract class WeightedEdge<VertexT extends Vertex<VertexT, EdgeT>, EdgeT
 	 * @param target
 	 *            The target vertex of the edge
 	 */
-	public WeightedEdge(final VertexT source, final VertexT target) {
-		super(source, target);
+	public AbstractWeightedEdge(final V source, final V target, final O origin) {
+		super(source, target, origin);
 	}
 
 	/**

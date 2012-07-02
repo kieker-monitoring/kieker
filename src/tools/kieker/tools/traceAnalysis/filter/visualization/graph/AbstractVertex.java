@@ -30,22 +30,28 @@ import java.util.concurrent.ConcurrentHashMap;
  * 
  * @author Holger Knoche
  * 
- * @param <VertexT>
+ * @param <V>
  *            The type of the graph's vertices
- * @param <EdgeT>
+ * @param <E>
  *            The type of the graph's edges
+ * @param <O>
+ *            The type of object from which the graph's elements originate
  */
 
-public abstract class Vertex<VertexT extends Vertex<VertexT, EdgeT>, EdgeT extends Edge<VertexT, EdgeT>> extends GraphElement {
+public abstract class AbstractVertex<V extends AbstractVertex<V, E, O>, E extends AbstractEdge<V, E, O>, O> extends GraphElement<O> {
 
 	private final Map<Class<? extends AbstractVertexDecoration>, AbstractVertexDecoration> decorations = new ConcurrentHashMap<Class<? extends AbstractVertexDecoration>, AbstractVertexDecoration>(); // NOPMD(UseConcurrentHashMap)//NOCS
+
+	protected AbstractVertex(final O origin) {
+		super(origin);
+	}
 
 	/**
 	 * Returns the outgoing edges of this vertex.
 	 * 
 	 * @return See above
 	 */
-	public abstract Collection<EdgeT> getOutgoingEdges();
+	public abstract Collection<E> getOutgoingEdges();
 
 	/**
 	 * Returns the decoration of this vertex of the given type.
