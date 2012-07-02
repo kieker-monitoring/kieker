@@ -35,9 +35,9 @@ import kieker.common.util.MutableInteger;
  */
 public abstract class WeightedEdge<VertexT extends Vertex<VertexT, EdgeT>, EdgeT extends Edge<VertexT, EdgeT>> extends Edge<VertexT, EdgeT> {
 
-	private MutableInteger sourceWeight;
-	private MutableInteger targetWeight;
-	private MutableInteger weight;
+	private final MutableInteger sourceWeight = new MutableInteger();
+	private final MutableInteger targetWeight = new MutableInteger();
+	private final MutableInteger weight = new MutableInteger();
 
 	/**
 	 * Creates a new weighted edge between the given vertices.
