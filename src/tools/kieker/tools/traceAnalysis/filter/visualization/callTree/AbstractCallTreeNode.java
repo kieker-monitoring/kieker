@@ -25,7 +25,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import kieker.tools.traceAnalysis.filter.visualization.graph.Vertex;
+import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertex;
+import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 
 /**
  * 
@@ -33,7 +34,7 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.Vertex;
  * 
  * @author Andre van Hoorn
  */
-public abstract class AbstractCallTreeNode<T> extends Vertex<AbstractCallTreeNode<T>, WeightedDirectedCallTreeEdge<T>> {
+public abstract class AbstractCallTreeNode<T> extends AbstractVertex<AbstractCallTreeNode<T>, WeightedDirectedCallTreeEdge<T>, MessageTrace> {
 
 	private final T entity;
 	private final int id;
@@ -42,7 +43,8 @@ public abstract class AbstractCallTreeNode<T> extends Vertex<AbstractCallTreeNod
 
 	private final List<WeightedDirectedCallTreeEdge<T>> childEdges = Collections.synchronizedList(new ArrayList<WeightedDirectedCallTreeEdge<T>>());
 
-	public AbstractCallTreeNode(final int id, final T entity, final boolean rootNode) {
+	public AbstractCallTreeNode(final int id, final T entity, final boolean rootNode, final MessageTrace origin) {
+		super(origin);
 		this.id = id;
 		this.rootNode = rootNode;
 		this.entity = entity;
@@ -62,7 +64,7 @@ public abstract class AbstractCallTreeNode<T> extends Vertex<AbstractCallTreeNod
 	}
 
 	// TODO: Dirty hack, Object should be T.
-	public abstract AbstractCallTreeNode<T> newCall(Object destination);
+	public abstract AbstractCallTreeNode<T> newCall(Object destination, MessageTrace origin);
 
 	public final int getId() {
 		return this.id;

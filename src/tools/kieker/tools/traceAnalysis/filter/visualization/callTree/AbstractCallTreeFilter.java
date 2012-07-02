@@ -205,7 +205,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 			if (m instanceof SynchronousCallMessage) {
 				curNode = curStack.peek();
 				AbstractCallTreeNode<?> child;
-				child = curNode.newCall(pairFactory.createPair((SynchronousCallMessage) m));
+				child = curNode.newCall(pairFactory.createPair((SynchronousCallMessage) m), t);
 				curNode = child;
 				curStack.push(curNode);
 			} else if (m instanceof SynchronousReplyMessage) {
