@@ -20,6 +20,9 @@
 
 package kieker.analysis;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
@@ -35,6 +38,7 @@ public final class AnalysisControllerThread extends Thread {
 	private static final Log LOG = LogFactory.getLog(AnalysisControllerThread.class);
 
 	private final AnalysisController analysisController;
+	private final CountDownLatch terminationLatch = new CountDownLatch(1);
 
 	public AnalysisControllerThread(final AnalysisController analysisController) {
 		super();
@@ -53,9 +57,30 @@ public final class AnalysisControllerThread extends Thread {
 	public void run() {
 		try {
 			this.analysisController.run();
+			this.terminationLatch.countDown();
 		} catch (final Exception ex) { // NOPMD NOCS (Exception)
 			LOG.error("Error running AnalysisCOntroller.", ex);
 		}
+	}
+
+	/**
+	 * Awaits (with timeout) the termination of the contained {@link AnalysisController}.
+	 * 
+	 * @param timeout
+	 * @param unit
+	 * @throws InterruptedException
+	 */
+	public void awaitTermination(final long timeout, final TimeUnit unit) throws InterruptedException {
+		this.terminationLatch.await(timeout, unit);
+	}
+
+	/**
+	 * Awaits the termination of the contained {@link AnalysisController}.
+	 * 
+	 * @throws InterruptedException
+	 */
+	public void awaitTermination() throws InterruptedException {
+		this.terminationLatch.await();
 	}
 
 	/**

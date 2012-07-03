@@ -29,6 +29,9 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
 /**
+ * TODO: This filter should be improved/fixed with respect to thread safety
+ * TOOD: This filter could be made available in the core distro (not only in the tests package)
+ * TODO: Could additionally be a relay/forward filter, i.e., forward incoming events to an output port
  * 
  * @param <T>
  * 
@@ -37,7 +40,9 @@ import kieker.common.configuration.Configuration;
 @Plugin
 public class SimpleSinkFilter<T> extends AbstractFilterPlugin {
 
-	public static final String INPUT_PORT_NAME = "input";
+	public static final String INPUT_PORT_NAME = "inputObject";
+
+	// TODO: Use a concurrent data structure instead
 	private final List<T> list = new ArrayList<T>();
 
 	public SimpleSinkFilter(final Configuration configuration) {
@@ -46,16 +51,26 @@ public class SimpleSinkFilter<T> extends AbstractFilterPlugin {
 
 	@InputPort(name = SimpleSinkFilter.INPUT_PORT_NAME)
 	// TODO: we could run into trouble here because the port accepts events of type Object
-	public void input(final T data) {
+	public synchronized void input(final T data) {
 		this.list.add(data);
 	}
 
-	public void clear() {
+	public synchronized void clear() {
 		this.list.clear();
 	}
 
+	// TODO: this is pretty dangerous (return a read-only copy or alike?)
 	public List<T> getList() {
 		return this.list;
+	}
+
+	/**
+	 * Returns the current number of collected objects.
+	 * 
+	 * @return
+	 */
+	public synchronized int size() {
+		return this.list.size();
 	}
 
 	@Override
