@@ -67,7 +67,7 @@ public class TestRealtimeRecordDelayFilter {
 	private SimpleListReader<IMonitoringRecord> simpleListReader;
 
 	/** The filter actually tested: */
-	private RealtimeRecordDelayFilter delayFilter;
+	private RealtimeRecordDelayFilter delayFilter; // NOPMD (SingularField) // We want to have all filters declared here
 
 	/** Provides the (current) number of {@link IMonitoringRecord}s provided by the {@link #simpleListReader} */
 	private CountingFilter countingFilterReader;

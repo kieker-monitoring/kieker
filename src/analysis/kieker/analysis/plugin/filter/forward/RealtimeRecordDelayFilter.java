@@ -79,42 +79,43 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	}
 
 	@InputPort(name = INPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Receives the records to be delayed")
-	public synchronized final void inputRecord(final IMonitoringRecord monitoringRecord) {
-		if (this.startTime == -1) { // init on first record
-			this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp();
-			this.startTime = this.currentTimeNanos();
-		}
-
+	public final void inputRecord(final IMonitoringRecord monitoringRecord) {
 		final long currentTimeNanos = this.currentTimeNanos();
 
-		/*
-		 * Compute scheduling time
-		 */
-		long schedTimeNanosFromNow = (monitoringRecord.getLoggingTimestamp() - this.firstLoggingTimestamp) // relative to 1st record
-				- (currentTimeNanos - this.startTime); // substract elapsed time
-		if (schedTimeNanosFromNow < -WARN_ON_NEGATIVE_SCHED_TIME_NANOS) {
-			final long schedTimeSeconds = TimeUnit.SECONDS.convert(schedTimeNanosFromNow, TimeUnit.NANOSECONDS);
-			LOG.warn("negative scheduling time: " + schedTimeNanosFromNow + " (nanos) / " + schedTimeSeconds + " (seconds)-> scheduling with a delay of 0");
-		}
-		if (schedTimeNanosFromNow < 0) {
-			schedTimeNanosFromNow = 0; // i.e., schedule immediately
-		}
-
-		final long absSchedTime = currentTimeNanos + schedTimeNanosFromNow;
-		if (absSchedTime > this.latestSchedulingTimeNanos) {
-			this.latestSchedulingTimeNanos = absSchedTime;
-		}
-
-		/*
-		 * Schedule
-		 */
-		this.executor.schedule(new Runnable() {
-
-			public void run() {
-				RealtimeRecordDelayFilter.this.deliver(OUTPUT_PORT_NAME_RECORDS, monitoringRecord);
+		synchronized (this) {
+			if (this.startTime == -1) { // init on first record
+				this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp();
+				this.startTime = currentTimeNanos;
 			}
-		}, schedTimeNanosFromNow, TimeUnit.NANOSECONDS);
 
+			/*
+			 * Compute scheduling time
+			 */
+			long schedTimeNanosFromNow = (monitoringRecord.getLoggingTimestamp() - this.firstLoggingTimestamp) // relative to 1st record
+					- (currentTimeNanos - this.startTime); // substract elapsed time
+			if (schedTimeNanosFromNow < -WARN_ON_NEGATIVE_SCHED_TIME_NANOS) {
+				final long schedTimeSeconds = TimeUnit.SECONDS.convert(schedTimeNanosFromNow, TimeUnit.NANOSECONDS);
+				LOG.warn("negative scheduling time: " + schedTimeNanosFromNow + " (nanos) / " + schedTimeSeconds + " (seconds)-> scheduling with a delay of 0");
+			}
+			if (schedTimeNanosFromNow < 0) {
+				schedTimeNanosFromNow = 0; // i.e., schedule immediately
+			}
+
+			final long absSchedTime = currentTimeNanos + schedTimeNanosFromNow;
+			if (absSchedTime > this.latestSchedulingTimeNanos) {
+				this.latestSchedulingTimeNanos = absSchedTime;
+			}
+
+			/*
+			 * Schedule
+			 */
+			this.executor.schedule(new Runnable() {
+
+				public void run() {
+					RealtimeRecordDelayFilter.this.deliver(OUTPUT_PORT_NAME_RECORDS, monitoringRecord);
+				}
+			}, schedTimeNanosFromNow, TimeUnit.NANOSECONDS);
+		}
 	}
 
 	/**

@@ -134,7 +134,7 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 				this.currentCountForCurrentInterval = 0;
 			}
 
-			this.currentCountForCurrentInterval++;
+			this.currentCountForCurrentInterval++; // only incremented in synchronized blocks
 		}
 		super.deliver(OUTPUT_PORT_NAME_RELAYED_OBJECTS, event);
 	}

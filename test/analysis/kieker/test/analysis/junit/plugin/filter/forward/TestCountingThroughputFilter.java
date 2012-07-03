@@ -72,7 +72,7 @@ public class TestCountingThroughputFilter {
 	/**
 	 * Will be filled by {@link #createInputEvents(SimpleListReader)}
 	 */
-	final List<Entry<Long, Long>> expectedThroughputValues = new ArrayList<Entry<Long, Long>>();
+	private final List<Entry<Long, Long>> expectedThroughputValues = new ArrayList<Entry<Long, Long>>();
 
 	// Note that @Before is not working because the configuration depends on which @Test is executed
 	public void prepareConfiguration() throws IllegalStateException, AnalysisConfigurationException {
@@ -184,20 +184,22 @@ public class TestCountingThroughputFilter {
 	}
 
 	@Test
-	public void testIntervalsBasedOn1stTstamp() throws IllegalStateException, AnalysisConfigurationException, InterruptedException {
+	public void testIntervalsBasedOn1stTstamp() throws IllegalStateException, AnalysisConfigurationException, InterruptedException { // NOPMD
+																																		// (JUnitTestsShouldIncludeAssert)
 		this.intervalsBasedOn1stTstamp = true;
 		this.prepareConfiguration();
 		this.doTheTest();
 	}
 
 	@Test
-	public void testIntervalsBasedOn1970() throws IllegalStateException, AnalysisConfigurationException, InterruptedException {
+	public void testIntervalsBasedOn1970() throws IllegalStateException, AnalysisConfigurationException, InterruptedException { // NOPMD
+																																// (JUnitTestsShouldIncludeAssert)
 		this.intervalsBasedOn1stTstamp = false;
 		this.prepareConfiguration();
 		this.doTheTest();
 	}
 
-	public void doTheTest() throws IllegalStateException, AnalysisConfigurationException, InterruptedException {
+	private void doTheTest() throws IllegalStateException, AnalysisConfigurationException, InterruptedException {
 		this.createInputEvents(this.simpleListReader);
 		Assert.assertEquals(0, this.sinkPlugin.size());
 

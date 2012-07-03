@@ -68,10 +68,11 @@ public final class AnalysisControllerThread extends Thread {
 	 * 
 	 * @param timeout
 	 * @param unit
+	 * @return see {@link CountDownLatch#await(long, TimeUnit)}
 	 * @throws InterruptedException
 	 */
-	public void awaitTermination(final long timeout, final TimeUnit unit) throws InterruptedException {
-		this.terminationLatch.await(timeout, unit);
+	public boolean awaitTermination(final long timeout, final TimeUnit unit) throws InterruptedException {
+		return this.terminationLatch.await(timeout, unit);
 	}
 
 	/**

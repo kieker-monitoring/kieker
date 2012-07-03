@@ -51,12 +51,16 @@ public class SimpleSinkFilter<T> extends AbstractFilterPlugin {
 
 	@InputPort(name = SimpleSinkFilter.INPUT_PORT_NAME)
 	// TODO: we could run into trouble here because the port accepts events of type Object
-	public synchronized void input(final T data) {
-		this.list.add(data);
+	public void input(final T data) {
+		synchronized (this) {
+			this.list.add(data);
+		}
 	}
 
-	public synchronized void clear() {
-		this.list.clear();
+	public void clear() {
+		synchronized (this) {
+			this.list.clear();
+		}
 	}
 
 	// TODO: this is pretty dangerous (return a read-only copy or alike?)
@@ -69,8 +73,10 @@ public class SimpleSinkFilter<T> extends AbstractFilterPlugin {
 	 * 
 	 * @return
 	 */
-	public synchronized int size() {
-		return this.list.size();
+	public int size() {
+		synchronized (this) {
+			return this.list.size();
+		}
 	}
 
 	@Override
