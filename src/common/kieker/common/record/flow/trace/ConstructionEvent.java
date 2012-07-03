@@ -18,15 +18,17 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.flow;
+package kieker.common.record.flow.trace;
 
 /**
  * @author Jan Waller
  */
-public class ConstructionEvent extends AbstractEvent {
+public class ConstructionEvent extends AbstractTraceEvent {
 	private static final long serialVersionUID = 4260562921517437040L;
 	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
+		long.class, // TraceEvent.traceId
+		int.class, // TraceEvent.orderIndex
 		String.class, // className
 		int.class, // objectId
 	};
@@ -39,26 +41,26 @@ public class ConstructionEvent extends AbstractEvent {
 	private final String className;
 	private final int objectId;
 
-	public ConstructionEvent(final long timestamp, final String className, final int objectId) {
-		super(timestamp);
+	public ConstructionEvent(final long timestamp, final long traceId, final int orderIndex, final String className, final int objectId) {
+		super(timestamp, traceId, orderIndex);
 		this.className = (className == null) ? NO_CLASSNAME : className; // NOCS
 		this.objectId = objectId;
 	}
 
 	public ConstructionEvent(final Object[] values) { // NOPMD (values stored directly)
-		super(values, TYPES); // values[0]
-		this.className = (String) values[1];
-		this.objectId = (Integer) values[2];
+		super(values, TYPES); // values[0..2]
+		this.className = (String) values[3];
+		this.objectId = (Integer) values[4];
 	}
 
 	protected ConstructionEvent(final Object[] values, final Class<?>[] types) { // NOPMD (values stored directly)
-		super(values, types); // values[0]
-		this.className = (String) values[1];
-		this.objectId = (Integer) values[2];
+		super(values, types); // values[0..2]
+		this.className = (String) values[3];
+		this.objectId = (Integer) values[4];
 	}
 
 	public Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.className, this.objectId, };
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.className, this.objectId, };
 	}
 
 	public Class<?>[] getValueTypes() {
