@@ -42,7 +42,7 @@ public class JoinEvent extends AbstractTraceEvent {
 	}
 
 	public JoinEvent(final Object[] values, final Class<?>[] valueTypes) {
-		super(values, TYPES); // values[0..2]
+		super(values, valueTypes); // values[0..2]
 	}
 
 	public Object[] toArray() {
