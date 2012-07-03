@@ -53,16 +53,16 @@ public class TestCountingThroughputFilter {
 	private AnalysisController analysisController;
 
 	/** Provides the list of {@link IMonitoringRecord}s to be processed */
-	private SimpleListReader<IMonitoringRecord> simpleListReader;
+	private SimpleListReader<IMonitoringRecord> simpleListReader = null; // initialized in #prepareConfiguration()
 
 	/** Provides the (current) number of {@link IMonitoringRecord}s provided by the {@link #simpleListReader} */
-	private CountingFilter countingFilterReader;
+	private CountingFilter countingFilterReader = null; // initialized in #prepareConfiguration()
 
 	/** The filter to be tested */
-	private CountingThroughputFilter throughputFilter;
+	private CountingThroughputFilter throughputFilter = null; // initialized in #prepareConfiguration()
 
 	/** Simply collects all {@link IMonitoringRecord}s processed by the tested filter */
-	private SimpleSinkFilter<EmptyRecord> sinkPlugin;
+	private SimpleSinkFilter<EmptyRecord> sinkPlugin = null; // initialized in #prepareConfiguration()
 
 	private static final long START_TIME_NANOS = 246561l; // just a non-trivial number
 	private static final long INTERVAL_SIZE_NANOS = 100; // just a non-trivial number

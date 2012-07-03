@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
@@ -85,7 +86,7 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 
 	private final long intervalSizeNanos;
 
-	private volatile long currentCountForCurrentInterval = 0;
+	private final AtomicLong currentCountForCurrentInterval = new AtomicLong(0);
 
 	private volatile long firstTimestampInCurrentInterval = -1; // initialized with the first incoming event
 	private volatile long lastTimestampInCurrentInterval = -1; // initialized with the first incoming event
@@ -125,16 +126,16 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 			if (endOfTimestampsInterval > this.lastTimestampInCurrentInterval) {
 				if (this.firstTimestampInCurrentInterval >= 0) { // don't do this for the first record
 					this.eventCountsPerInterval.add(
-							new SimpleImmutableEntry<Long, Long>(this.lastTimestampInCurrentInterval + 1, this.currentCountForCurrentInterval)
+							new SimpleImmutableEntry<Long, Long>(this.lastTimestampInCurrentInterval + 1, this.currentCountForCurrentInterval.get())
 							);
 				}
 
 				this.firstTimestampInCurrentInterval = startOfTimestampsInterval;
 				this.lastTimestampInCurrentInterval = endOfTimestampsInterval;
-				this.currentCountForCurrentInterval = 0;
+				this.currentCountForCurrentInterval.set(0);
 			}
 
-			this.currentCountForCurrentInterval++; // only incremented in synchronized blocks
+			this.currentCountForCurrentInterval.incrementAndGet(); // only incremented in synchronized blocks
 		}
 		super.deliver(OUTPUT_PORT_NAME_RELAYED_OBJECTS, event);
 	}
@@ -235,7 +236,7 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	 * @return the currentCountForCurrentInterval
 	 */
 	public long getCurrentCountForCurrentInterval() {
-		return this.currentCountForCurrentInterval;
+		return this.currentCountForCurrentInterval.get();
 	}
 
 }
