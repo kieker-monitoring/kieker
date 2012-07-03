@@ -68,7 +68,7 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	/**
 	 * The configuration property value for {@link #CONFIG_PROPERTY_NAME_INTERVAL_SIZE_NANOS}, leading to a bin size of 1 minute
 	 */
-	public static final String CONFIG_PROPERTY_VALUE_INTERVAL_SIZE_ONE_MINUTE = Long.toString(TimeUnit.NANOSECONDS.convert(1, TimeUnit.MINUTES));
+	public static final String CONFIG_PROPERTY_VALUE_INTERVAL_SIZE_ONE_MINUTE = Long.toString(TimeUnit.NANOSECONDS.convert(60, TimeUnit.SECONDS));
 
 	private volatile long firstIntervalStart = -1;
 	private final boolean intervalsBasedOn1stTstamp;
