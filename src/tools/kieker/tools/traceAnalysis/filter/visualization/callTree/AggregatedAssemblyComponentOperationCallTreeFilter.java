@@ -25,6 +25,7 @@ import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
+import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
@@ -45,7 +46,7 @@ public class AggregatedAssemblyComponentOperationCallTreeFilter extends Abstract
 
 	public void setAssemblyComponentOperationPairFactory(final AssemblyComponentOperationPairFactory assemblyComponentOperationPairFactory) {
 		super.setRoot(new AggregatedAssemblyComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-				AssemblyComponentOperationPairFactory.ROOT_PAIR, true));
+				AssemblyComponentOperationPairFactory.ROOT_PAIR, true, null));
 	}
 
 	@Override
@@ -61,24 +62,27 @@ public class AggregatedAssemblyComponentOperationCallTreeFilter extends Abstract
  */
 class AggregatedAssemblyComponentOperationCallTreeNode extends AbstractAggregatedCallTreeNode<AssemblyComponentOperationPair> {
 
-	public AggregatedAssemblyComponentOperationCallTreeNode(final int id, final AssemblyComponentOperationPair entity, final boolean rootNode) {
-		super(id, entity, rootNode);
+	public AggregatedAssemblyComponentOperationCallTreeNode(final int id, final AssemblyComponentOperationPair entity, final boolean rootNode,
+			final MessageTrace origin) {
+		super(id, entity, rootNode, origin);
 	}
 
 	@Override
-	public AbstractCallTreeNode<AssemblyComponentOperationPair> newCall(final Object dstObj) {
+	public AbstractCallTreeNode<AssemblyComponentOperationPair> newCall(final Object dstObj, final MessageTrace origin) {
 		final AssemblyComponentOperationPair destination = (AssemblyComponentOperationPair) dstObj;
 		WeightedDirectedCallTreeEdge<AssemblyComponentOperationPair> e = this.childMap.get(destination.getId());
 		AbstractCallTreeNode<AssemblyComponentOperationPair> n;
 		if (e != null) {
-			n = e.getDestination();
+			n = e.getTarget();
+			e.addOrigin(origin);
+			n.addOrigin(origin);
 		} else {
-			n = new AggregatedAssemblyComponentOperationCallTreeNode(destination.getId(), destination, false); // !rootNode
-			e = new WeightedDirectedCallTreeEdge<AssemblyComponentOperationPair>(this, n);
+			n = new AggregatedAssemblyComponentOperationCallTreeNode(destination.getId(), destination, false, origin); // !rootNode
+			e = new WeightedDirectedCallTreeEdge<AssemblyComponentOperationPair>(this, n, origin);
 			this.childMap.put(destination.getId(), e);
 			super.appendChildEdge(e);
 		}
-		e.incOutgoingWeight();
+		e.getTargetWeight().increase();
 		return n;
 	}
 }

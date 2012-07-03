@@ -218,7 +218,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 	public void inputMessageTraces(final MessageTrace mt) {
 		try {
 			final TraceCallTreeNode rootNode =
-					new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, AllocationComponentOperationPairFactory.ROOT_PAIR, true); // rootNode
+					new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, AllocationComponentOperationPairFactory.ROOT_PAIR, true, mt); // rootNode
 			AbstractCallTreeFilter.writeDotForMessageTrace(rootNode, new IPairFactory() {
 
 				public Object createPair(final SynchronousCallMessage callMsg) {

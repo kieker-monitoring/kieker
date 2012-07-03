@@ -18,32 +18,20 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
-
-import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractWeightedEdge;
-import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+package kieker.tools.traceAnalysis.filter.visualization.graph;
 
 /**
  * 
- * @param <T>
+ * @author Holger Knoche
  * 
- * @author Andre van Hoorn
  */
-public class WeightedBidirectionalDependencyGraphEdge<T> extends
-		AbstractWeightedEdge<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, MessageTrace> {
+public abstract class AbstractVertexDecoration {
 
-	private boolean assumed = false;
-
-	public WeightedBidirectionalDependencyGraphEdge(final DependencyGraphNode<T> source, final DependencyGraphNode<T> target, final MessageTrace origin) {
-		super(source, target, origin);
-	}
-
-	public boolean isAssumed() {
-		return this.assumed;
-	}
-
-	public void setAssumed() {
-		this.assumed = true;
-	}
+	/**
+	 * Creates formatted output for this decoration.
+	 * 
+	 * @return See above
+	 */
+	public abstract String createFormattedOutput();
 
 }

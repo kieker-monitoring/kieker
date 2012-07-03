@@ -22,14 +22,20 @@ package kieker.test.analysis.util.plugin.reader;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
+import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 
 /**
  * Helper class that reads records added using the method {@link #addAllRecords(List)}.
+ * Depending on the value of the {@link Configuration} variable {@value #CONFIG_PROPERTY_NAME_AWAIT_TERMINATION},
+ * either the {@link #read()} method returns immediately, or awaits a termination via {@link AnalysisController#terminate()}.
  * 
  * @param <T>
  * 
@@ -37,13 +43,23 @@ import kieker.common.configuration.Configuration;
  */
 @Plugin(outputPorts = { @OutputPort(name = SimpleListReader.OUTPUT_PORT_NAME, eventTypes = { Object.class }) })
 public class SimpleListReader<T> extends AbstractReaderPlugin {
+	private static final Log LOG = LogFactory.getLog(SimpleListReader.class);
 
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
+
+	public static final String CONFIG_PROPERTY_NAME_AWAIT_TERMINATION = "awaitTermination";
+
+	private final boolean awaitTermination;
+	private final CountDownLatch terminationLatch = new CountDownLatch(1);
 
 	private final List<T> objects = new ArrayList<T>();
 
 	public SimpleListReader(final Configuration configuration) {
 		super(configuration);
+		this.awaitTermination = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_AWAIT_TERMINATION);
+		if (!this.awaitTermination) {
+			this.terminationLatch.countDown(); // just to be sure that a call to await() would return immediately
+		}
 	}
 
 	public void addAllObjects(final List<T> records) {
@@ -58,19 +74,33 @@ public class SimpleListReader<T> extends AbstractReaderPlugin {
 		for (final T obj : this.objects) {
 			super.deliver(SimpleListReader.OUTPUT_PORT_NAME, obj);
 		}
+		try {
+			if (this.awaitTermination) {
+				LOG.info("Awaiting termination latch to count down ...");
+				this.terminationLatch.await();
+				LOG.info("Passed termination latch");
+			}
+		} catch (final InterruptedException e) {
+			LOG.error("Reader interrupted while awaiting termination", e);
+			return false;
+		}
 		return true;
 	}
 
 	public void terminate(final boolean error) {
-		// nothing to do
+		this.terminationLatch.countDown();
 	}
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.FALSE.toString());
+		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {
-		return new Configuration();
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.toString(this.awaitTermination));
+		return configuration;
 	}
 }

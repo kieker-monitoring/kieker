@@ -20,10 +20,15 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertex;
+import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertexDecoration;
+import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 
 /**
  * 
@@ -31,7 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 
  * @author Andre van Hoorn
  */
-public class DependencyGraphNode<T> {
+public class DependencyGraphNode<T> extends AbstractVertex<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, MessageTrace> {
 
 	private final T entity;
 	private final int id;
@@ -42,9 +47,9 @@ public class DependencyGraphNode<T> {
 	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedOutgoingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD(UseConcurrentHashMap)//NOCS
 
 	private volatile boolean assumed = false;
-	private final Map<Class<? extends AbstractNodeDecoration>, AbstractNodeDecoration> decorations = new ConcurrentHashMap<Class<? extends AbstractNodeDecoration>, AbstractNodeDecoration>(); // NOPMD(UseConcurrentHashMap)//NOCS
 
-	public DependencyGraphNode(final int id, final T entity) {
+	public DependencyGraphNode(final int id, final T entity, final MessageTrace origin) {
+		super(origin);
 		this.id = id;
 		this.entity = entity;
 	}
@@ -77,57 +82,44 @@ public class DependencyGraphNode<T> {
 		return this.assumed;
 	}
 
-	@SuppressWarnings("unchecked")
-	public <N extends AbstractNodeDecoration> N getDecoration(final Class<? extends AbstractNodeDecoration> type) {
-		return (N) this.decorations.get(type);
+	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final MessageTrace origin) {
+		this.addOutgoingDependency(destination, false, origin);
 	}
 
-	public void addDecoration(final AbstractNodeDecoration decoration) {
-		this.decorations.put(decoration.getClass(), decoration);
-	}
-
-	public void addOutgoingDependency(final DependencyGraphNode<T> destination) {
-		this.addOutgoingDependency(destination, false);
-	}
-
-	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final boolean assume) {
+	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final boolean assumed, final MessageTrace origin) {
 		synchronized (this) {
 			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = // NOPMD(UseConcurrentHashMap)
-			assume ? this.assumedOutgoingDependencies : this.outgoingDependencies; // NOCS (inline ?)
+			assumed ? this.assumedOutgoingDependencies : this.outgoingDependencies; // NOCS (inline ?)
 
 			WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(destination.getId());
 			if (e == null) {
-				e = new WeightedBidirectionalDependencyGraphEdge<T>();
-				e.setSource(this);
-				e.setDestination(destination);
+				e = new WeightedBidirectionalDependencyGraphEdge<T>(this, destination, origin);
 
-				if (assume) {
+				if (assumed) {
 					e.setAssumed();
 				}
 
 				relevantDependencies.put(destination.getId(), e);
 			}
-			e.incOutgoingWeight();
+			e.getTargetWeight().increase();
 		}
 	}
 
-	public void addIncomingDependency(final DependencyGraphNode<T> source) {
-		this.addIncomingDependency(source, false);
+	public void addIncomingDependency(final DependencyGraphNode<T> source, final MessageTrace origin) {
+		this.addIncomingDependency(source, false, origin);
 	}
 
-	public void addIncomingDependency(final DependencyGraphNode<T> source, final boolean assume) {
+	public void addIncomingDependency(final DependencyGraphNode<T> source, final boolean assumed, final MessageTrace origin) {
 		synchronized (this) {
 			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = // NOPMD(UseConcurrentHashMap)
-			assume ? this.assumedIncomingDependencies : this.incomingDependencies; // NOCS (inline ?)
+			assumed ? this.assumedIncomingDependencies : this.incomingDependencies; // NOCS (inline ?)
 
 			WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(source.getId());
 			if (e == null) {
-				e = new WeightedBidirectionalDependencyGraphEdge<T>();
-				e.setSource(this);
-				e.setDestination(source);
+				e = new WeightedBidirectionalDependencyGraphEdge<T>(this, source, origin);
 				relevantDependencies.put(source.getId(), e);
 			}
-			e.incIncomingWeight();
+			e.getSourceWeight().increase();
 		}
 	}
 
@@ -138,7 +130,7 @@ public class DependencyGraphNode<T> {
 	public String getFormattedDecorations() {
 		synchronized (this) {
 			final StringBuilder builder = new StringBuilder();
-			final Iterator<AbstractNodeDecoration> decorationsIter = this.decorations.values().iterator();
+			final Iterator<AbstractVertexDecoration> decorationsIter = this.getDecorations().iterator();
 
 			while (decorationsIter.hasNext()) {
 				final String currentDecorationText = decorationsIter.next().createFormattedOutput();
@@ -156,5 +148,15 @@ public class DependencyGraphNode<T> {
 
 			return builder.toString();
 		}
+	}
+
+	@Override
+	public Collection<WeightedBidirectionalDependencyGraphEdge<T>> getOutgoingEdges() {
+		final Collection<WeightedBidirectionalDependencyGraphEdge<T>> edges = new ArrayList<WeightedBidirectionalDependencyGraphEdge<T>>();
+
+		edges.addAll(this.getOutgoingDependencies());
+		edges.addAll(this.getAssumedOutgoingDependencies());
+
+		return edges;
 	}
 }

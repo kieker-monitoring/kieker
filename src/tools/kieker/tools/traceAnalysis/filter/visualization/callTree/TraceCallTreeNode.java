@@ -20,6 +20,7 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.callTree;
 
+import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationPair;
 
 /**
@@ -28,15 +29,16 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  */
 public class TraceCallTreeNode extends AbstractCallTreeNode<AllocationComponentOperationPair> {
 
-	public TraceCallTreeNode(final int id, final AllocationComponentOperationPair entity, final boolean rootNode) {
-		super(id, entity, rootNode);
+	public TraceCallTreeNode(final int id, final AllocationComponentOperationPair entity, final boolean rootNode, final MessageTrace origin) {
+		super(id, entity, rootNode, origin);
 	}
 
 	@Override
-	public AbstractCallTreeNode<AllocationComponentOperationPair> newCall(final Object destination) {
+	public AbstractCallTreeNode<AllocationComponentOperationPair> newCall(final Object destination, final MessageTrace origin) {
 		final AllocationComponentOperationPair destPair = (AllocationComponentOperationPair) destination;
-		final TraceCallTreeNode destNode = new TraceCallTreeNode(destPair.getId(), destPair, false);
-		final WeightedDirectedCallTreeEdge<AllocationComponentOperationPair> e = new WeightedDirectedCallTreeEdge<AllocationComponentOperationPair>(this, destNode);
+		final TraceCallTreeNode destNode = new TraceCallTreeNode(destPair.getId(), destPair, false, origin);
+		final WeightedDirectedCallTreeEdge<AllocationComponentOperationPair> e = new WeightedDirectedCallTreeEdge<AllocationComponentOperationPair>(this, destNode,
+				origin);
 		super.appendChildEdge(e);
 		return destNode;
 	}

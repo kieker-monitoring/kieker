@@ -148,7 +148,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 				.append("\",shape=" + DotFactory.DOT_SHAPE_NONE + "];");
 		ps.println(strBuild.toString());
 		for (final WeightedDirectedCallTreeEdge<?> child : n.getChildEdges()) {
-			AbstractCallTreeFilter.dotEdgesFromSubTree(child.getDestination(), nodeIds, nextNodeId, ps, shortLabels);
+			AbstractCallTreeFilter.dotEdgesFromSubTree(child.getTarget(), nodeIds, nextNodeId, ps, shortLabels);
 		}
 	}
 
@@ -158,16 +158,16 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		final int thisId = nodeIds.get(n);
 		for (final WeightedDirectedCallTreeEdge<?> child : n.getChildEdges()) {
 			final StringBuilder strBuild = new StringBuilder(1024);
-			final int childId = nodeIds.get(child.getDestination());
+			final int childId = nodeIds.get(child.getTarget());
 			strBuild.append("\n").append(thisId).append("->").append(childId).append("[style=solid,arrowhead=none");
 			if (includeWeights) {
-				strBuild.append(",label=\"").append(child.getOutgoingWeight()).append("\"");
+				strBuild.append(",label=\"").append(child.getTargetWeight().getValue()).append("\"");
 			} else if (eoiCounter != null) {
 				strBuild.append(",label=\"").append(eoiCounter.getAndIncValue()).append(".\"");
 			}
 			strBuild.append(" ]");
 			ps.println(strBuild.toString());
-			AbstractCallTreeFilter.dotVerticesFromSubTree(child.getDestination(), eoiCounter, nodeIds, ps, includeWeights);
+			AbstractCallTreeFilter.dotVerticesFromSubTree(child.getTarget(), eoiCounter, nodeIds, ps, includeWeights);
 		}
 	}
 
@@ -205,7 +205,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 			if (m instanceof SynchronousCallMessage) {
 				curNode = curStack.peek();
 				AbstractCallTreeNode<?> child;
-				child = curNode.newCall(pairFactory.createPair((SynchronousCallMessage) m));
+				child = curNode.newCall(pairFactory.createPair((SynchronousCallMessage) m), t);
 				curNode = child;
 				curStack.push(curNode);
 			} else if (m instanceof SynchronousReplyMessage) {

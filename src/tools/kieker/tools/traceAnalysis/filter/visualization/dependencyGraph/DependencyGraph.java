@@ -24,13 +24,16 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
 
+import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
+import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+
 /**
  * 
  * @param <T>
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver
  */
-public class DependencyGraph<T> {
+public class DependencyGraph<T> extends AbstractGraph<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, MessageTrace> {
 
 	// private static final Log LOG = LogFactory.getLog(DependencyGraph.class);
 
@@ -38,7 +41,7 @@ public class DependencyGraph<T> {
 	private final DependencyGraphNode<T> rootNode;
 
 	public DependencyGraph(final int rootNodeId, final T rootEntity) {
-		this.rootNode = new DependencyGraphNode<T>(rootNodeId, rootEntity);
+		this.rootNode = new DependencyGraphNode<T>(rootNodeId, rootEntity, null);
 		this.nodes.put(rootNodeId, this.rootNode);
 	}
 
@@ -61,5 +64,10 @@ public class DependencyGraph<T> {
 	/** Return number of nodes */
 	public int size() {
 		return this.nodes.size();
+	}
+
+	@Override
+	public Collection<DependencyGraphNode<T>> getVertices() {
+		return this.nodes.values();
 	}
 }

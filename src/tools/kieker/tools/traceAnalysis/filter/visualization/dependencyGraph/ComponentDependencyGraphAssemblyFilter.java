@@ -171,7 +171,7 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 			DependencyGraphNode<AssemblyComponent> senderNode = ComponentDependencyGraphAssemblyFilter.this.dependencyGraph.getNode(senderComponent.getId());
 			DependencyGraphNode<AssemblyComponent> receiverNode = ComponentDependencyGraphAssemblyFilter.this.dependencyGraph.getNode(receiverComponent.getId());
 			if (senderNode == null) {
-				senderNode = new DependencyGraphNode<AssemblyComponent>(senderComponent.getId(), senderComponent);
+				senderNode = new DependencyGraphNode<AssemblyComponent>(senderComponent.getId(), senderComponent, t);
 
 				if (m.getSendingExecution().isAssumed()) {
 					senderNode.setAssumed();
@@ -179,8 +179,12 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 
 				ComponentDependencyGraphAssemblyFilter.this.dependencyGraph.addNode(senderNode.getId(), senderNode);
 			}
+			else {
+				senderNode.addOrigin(t);
+			}
+
 			if (receiverNode == null) {
-				receiverNode = new DependencyGraphNode<AssemblyComponent>(receiverComponent.getId(), receiverComponent);
+				receiverNode = new DependencyGraphNode<AssemblyComponent>(receiverComponent.getId(), receiverComponent, t);
 
 				if (m.getReceivingExecution().isAssumed()) {
 					receiverNode.setAssumed();
@@ -188,11 +192,14 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 
 				ComponentDependencyGraphAssemblyFilter.this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
 			}
+			else {
+				receiverNode.addOrigin(t);
+			}
 
 			final boolean assumed = this.isDependencyAssumed(senderNode, receiverNode);
 
-			senderNode.addOutgoingDependency(receiverNode, assumed);
-			receiverNode.addIncomingDependency(senderNode, assumed);
+			senderNode.addOutgoingDependency(receiverNode, assumed, t);
+			receiverNode.addIncomingDependency(senderNode, assumed, t);
 
 			this.invokeDecorators(m, senderNode, receiverNode);
 		}

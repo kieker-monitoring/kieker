@@ -18,15 +18,30 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
+package kieker.tools.traceAnalysis.filter.visualization.graph;
+
+import java.util.Collection;
 
 /**
+ * Generic superclass for all graphs in the visualization package.
  * 
  * @author Holger Knoche
  * 
+ * @param <V>
+ *            The type of the graph's vertices
+ * @param <E>
+ *            The type of the graph's edges
+ * @param <O>
+ *            The type of object from which the graph's elements originate
  */
-public abstract class AbstractNodeDecoration {
 
-	public abstract String createFormattedOutput();
+public abstract class AbstractGraph<V extends AbstractVertex<V, E, O>, E extends AbstractEdge<V, E, O>, O> {
+
+	/**
+	 * Returns the vertices contained in this graph.
+	 * 
+	 * @return See above
+	 */
+	public abstract Collection<V> getVertices();
 
 }

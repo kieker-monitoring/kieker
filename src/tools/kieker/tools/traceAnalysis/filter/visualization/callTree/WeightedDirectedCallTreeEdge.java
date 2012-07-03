@@ -20,46 +20,18 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.callTree;
 
+import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractWeightedEdge;
+import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+
 /**
  * 
  * @param <T>
  * 
  * @author Andre van Hoorn
  */
-public class WeightedDirectedCallTreeEdge<T> {
+public class WeightedDirectedCallTreeEdge<T> extends AbstractWeightedEdge<AbstractCallTreeNode<T>, WeightedDirectedCallTreeEdge<T>, MessageTrace> {
 
-	private final AbstractCallTreeNode<T> source;
-	private final AbstractCallTreeNode<T> destination;
-
-	private int outgoingWeight = 0;
-	private int incomingWeight = 0;
-
-	public WeightedDirectedCallTreeEdge(final AbstractCallTreeNode<T> source, final AbstractCallTreeNode<T> destination) {
-		this.source = source;
-		this.destination = destination;
-	}
-
-	public final AbstractCallTreeNode<T> getDestination() {
-		return this.destination;
-	}
-
-	public final AbstractCallTreeNode<T> getSource() {
-		return this.source;
-	}
-
-	public final int getIncomingWeight() {
-		return this.incomingWeight;
-	}
-
-	public final int getOutgoingWeight() {
-		return this.outgoingWeight;
-	}
-
-	public final void incOutgoingWeight() {
-		this.outgoingWeight++;
-	}
-
-	public final void incIncomingWeight() {
-		this.incomingWeight++;
+	public WeightedDirectedCallTreeEdge(final AbstractCallTreeNode<T> source, final AbstractCallTreeNode<T> target, final MessageTrace origin) {
+		super(source, target, origin);
 	}
 }
