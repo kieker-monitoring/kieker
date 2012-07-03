@@ -67,6 +67,11 @@ public final class CountingFilter extends AbstractFilterPlugin {
 		return new Configuration();
 	}
 
+	/**
+	 * Returns the number of objects received until now.
+	 * 
+	 * @return
+	 */
 	public final long getMessageCount() {
 		return this.counter.get();
 	}
