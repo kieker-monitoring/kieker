@@ -24,16 +24,7 @@ import org.apache.cxf.interceptor.LoggingInInterceptor;
 import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
 import org.apache.cxf.jaxrs.lifecycle.SingletonResourceProvider;
 
-public final class BookstoreServer {
-	
-	/*public static void main(final String[] args) {
-		final Bookstore bookstore = new Bookstore();
-		for (int i = 0; i < 5; i++) {
-			System.out.println("Bookstore.main: Starting request " + i);
-			bookstore.searchBook("");
-		}
-	}*/
-	
+public final class BookstoreServer {	
 
     protected BookstoreServer() throws Exception {
         JAXRSServerFactoryBean sf = new JAXRSServerFactoryBean();
