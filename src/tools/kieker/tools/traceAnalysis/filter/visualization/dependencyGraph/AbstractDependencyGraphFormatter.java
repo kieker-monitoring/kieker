@@ -23,7 +23,9 @@ package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFormatter;
 import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
+import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
+import kieker.tools.traceAnalysis.systemModel.Operation;
 
 /**
  * Abstract superclass for all dependency-graph formatters.
@@ -54,6 +56,7 @@ public abstract class AbstractDependencyGraphFormatter<G extends DependencyGraph
 
 	private static final String NODE_ID_PREFIX = "depNode_";
 	private static final String CONTAINER_NODE_ID_PREFIX = "container";
+	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
 
 	@Override
 	protected String formatGraph(final G graph, final Configuration configuration) {
@@ -93,6 +96,28 @@ public abstract class AbstractDependencyGraphFormatter<G extends DependencyGraph
 	 */
 	protected static String createContainerId(final ExecutionContainer container) {
 		return CONTAINER_NODE_ID_PREFIX + container.getId();
+	}
+
+	/**
+	 * Utility function to create a textual container ID for an allocation component.
+	 * 
+	 * @param component
+	 *            The allocation component to create the ID for
+	 * @return The created ID
+	 */
+	protected static String createAllocationComponentId(final AllocationComponent component) {
+		return COMPONENT_NODE_ID_PREFIX + component.getId();
+	}
+
+	/**
+	 * Utility function to create a textual node ID for an operation.
+	 * 
+	 * @param operation
+	 *            The operation to create the ID for
+	 * @return The created ID
+	 */
+	protected static String createOperationNodeId(final Operation operation) {
+		return AbstractDependencyGraphFormatter.createNodeId(operation.getId());
 	}
 
 	/**

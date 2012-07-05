@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import kieker.analysis.plugin.annotation.InputPort;
+import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
@@ -37,6 +38,7 @@ import kieker.common.logging.LogFactory;
 import kieker.common.util.Signature;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
+import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
 import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
@@ -60,12 +62,15 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
+		outputPorts = @OutputPort(name = OperationDependencyGraphAllocationFilter.OUTPUT_PORT_NAME, eventTypes = { AbstractGraph.class }))
 public class OperationDependencyGraphAllocationFilter extends AbstractDependencyGraphFilter<AllocationComponentOperationPair> {
 	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dotOutputFn";
 	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
 	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
 	public static final String CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS = "includeSelfLoops";
+
+	public static final String OUTPUT_PORT_NAME = "graphOutput";
 
 	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
 	private static final String CONTAINER_NODE_ID_PREFIX = "container_";
@@ -229,6 +234,7 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 		if (!error) {
 			try {
 				this.saveToDotFile(this.dotOutputFile, this.includeWeights, this.shortLabels, this.includeSelfLoops);
+				super.deliver(OUTPUT_PORT_NAME, this.dependencyGraph);
 			} catch (final IOException ex) {
 				LOG.error("IOException while saving to dot file", ex);
 			}
