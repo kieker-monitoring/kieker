@@ -24,6 +24,7 @@ import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFormatter;
 import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
+import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 
@@ -106,6 +107,17 @@ public abstract class AbstractDependencyGraphFormatter<G extends DependencyGraph
 	 * @return The created ID
 	 */
 	protected static String createAllocationComponentId(final AllocationComponent component) {
+		return COMPONENT_NODE_ID_PREFIX + component.getId();
+	}
+
+	/**
+	 * Utility function to create a textual container ID for an assembly component.
+	 * 
+	 * @param component
+	 *            The assembly component to create the ID for
+	 * @return The created ID
+	 */
+	protected static String createAssemblyComponentId(final AssemblyComponent component) {
 		return COMPONENT_NODE_ID_PREFIX + component.getId();
 	}
 

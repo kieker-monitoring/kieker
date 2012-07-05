@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import kieker.analysis.plugin.annotation.InputPort;
+import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
@@ -38,6 +39,7 @@ import kieker.common.logging.LogFactory;
 import kieker.common.util.Signature;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
+import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
 import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
@@ -58,12 +60,15 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
+		outputPorts = @OutputPort(name = OperationDependencyGraphAssemblyFilter.OUTPUT_PORT_NAME, eventTypes = { AbstractGraph.class }))
 public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGraphFilter<AssemblyComponentOperationPair> {
 	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dotOutputFn";
 	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
 	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
 	public static final String CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS = "includeSelfLoops";
+
+	public static final String OUTPUT_PORT_NAME = "graphOutput";
 
 	/**
 	 * This is the default dot output name used for the default configuration of this instance.
@@ -205,6 +210,7 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 		if (!error) {
 			try {
 				this.saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
+				super.deliver(OUTPUT_PORT_NAME, this.dependencyGraph);
 			} catch (final IOException ex) {
 				LOG.error("IOException while saving to dot file", ex);
 			}
