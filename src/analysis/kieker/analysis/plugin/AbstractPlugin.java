@@ -237,7 +237,7 @@ public abstract class AbstractPlugin implements IPlugin {
 	public static final boolean isConnectionAllowed(final AbstractPlugin src, final String output, final AbstractPlugin dst, final String input) {
 		/* First step: Check whether the plugins are valid. */
 		if ((src == null) || (dst == null) || (dst instanceof IReaderPlugin)) {
-			LOG.warn("First step: Check whether the plugins are valid.");
+			LOG.warn("Plugins are invalid or null.");
 			return false;
 		}
 
@@ -269,13 +269,13 @@ public abstract class AbstractPlugin implements IPlugin {
 			// }
 			for (final Class<?> srcEventType : outEventTypes) {
 				for (final Class<?> dstEventType : inputPort.eventTypes()) {
-					// TODO: We now also accept "downcasts" as compatible. This could perhaps be colored differently in the GUI
-					if (dstEventType.isAssignableFrom(srcEventType) || srcEventType.isAssignableFrom(dstEventType)) {
+					if (dstEventType.isInterface() || srcEventType.isInterface()
+							|| dstEventType.isAssignableFrom(srcEventType) || srcEventType.isAssignableFrom(dstEventType)) {
 						return true;
 					}
 				}
 			}
-			LOG.warn("Third step: Make sure the ports are compatible. Not compatible.");
+			LOG.warn("Ports are not comaptible with eachother.");
 			return false;
 		}
 
