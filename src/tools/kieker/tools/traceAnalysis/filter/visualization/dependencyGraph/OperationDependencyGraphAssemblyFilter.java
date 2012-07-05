@@ -90,9 +90,9 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 		super(configuration);
 
 		/* Initialize the necessary fields from the inherited class. */
-		super.setDependencyGraph(new DependencyGraph<AssemblyComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-				new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID, OperationRepository.ROOT_OPERATION,
-						AssemblyRepository.ROOT_ASSEMBLY_COMPONENT)));
+		super.setDependencyGraph(new OperationAssemblyDependencyGraph(new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+				OperationRepository.ROOT_OPERATION,
+				AssemblyRepository.ROOT_ASSEMBLY_COMPONENT)));
 
 		/* Initialize from the given configuration. */
 		this.dotOutputFile = new File(this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE));

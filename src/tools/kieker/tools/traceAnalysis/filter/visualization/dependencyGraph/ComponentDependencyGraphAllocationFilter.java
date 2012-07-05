@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import kieker.analysis.plugin.annotation.InputPort;
+import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
@@ -54,12 +55,15 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr, Jan Waller
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
+		outputPorts = @OutputPort(name = ComponentDependencyGraphAllocationFilter.OUTPUT_PORT_NAME, eventTypes = { ComponentAllocationDependencyGraph.class }))
 public class ComponentDependencyGraphAllocationFilter extends AbstractDependencyGraphFilter<AllocationComponent> {
 	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dotOutputFn";
 	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
 	public static final String CONFIG_PROPERTY_NAME_SHORTLABELS = "shortLabels";
 	public static final String CONFIG_PROPERTY_NAME_SELFLOOPS = "selfLoops";
+
+	public static final String OUTPUT_PORT_NAME = "graphOutput";
 
 	public static final String CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT = "AllocationComponentDependencyGraph";
 
@@ -75,8 +79,7 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 	public ComponentDependencyGraphAllocationFilter(final Configuration configuration) {
 		// TODO Check type conversion??
 		super(configuration);
-		super.setDependencyGraph(new DependencyGraph<AllocationComponent>(AllocationRepository.ROOT_ALLOCATION_COMPONENT.getId(),
-				AllocationRepository.ROOT_ALLOCATION_COMPONENT));
+		super.setDependencyGraph(new ComponentAllocationDependencyGraph(AllocationRepository.ROOT_ALLOCATION_COMPONENT));
 		this.dotOutputFile = configuration.getStringProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE);
 		this.includeWeights = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
 		this.shortLabels = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORTLABELS);
@@ -112,7 +115,8 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 	protected void dotEdges(final Collection<DependencyGraphNode<AllocationComponent>> nodes, final PrintStream ps, final boolean shortLabelsL) {
 
 		/* Execution container ID x DependencyGraphNode */
-		final Map<Integer, Collection<DependencyGraphNode<AllocationComponent>>> component2containerMapping = new Hashtable<Integer, Collection<DependencyGraphNode<AllocationComponent>>>(); // NOPMD
+		final Map<Integer, Collection<DependencyGraphNode<AllocationComponent>>> component2containerMapping = new Hashtable<Integer,
+				Collection<DependencyGraphNode<AllocationComponent>>>(); // NOPMD
 
 		for (final DependencyGraphNode<AllocationComponent> node : nodes) {
 			final int containerId = node.getEntity().getExecutionContainer().getId();
@@ -123,6 +127,7 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 			}
 			containedComponents.add(node);
 		}
+
 		final ExecutionContainer rootContainer = ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER;
 		final int rootContainerId = rootContainer.getId();
 		final StringBuilder strBuild = new StringBuilder();
@@ -178,6 +183,7 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 		if (!error) {
 			try {
 				this.saveToDotFile(this.dotOutputFile, this.includeWeights, this.shortLabels, this.includeSelfLoops);
+				super.deliver(OUTPUT_PORT_NAME, this.dependencyGraph);
 			} catch (final IOException ex) {
 				LOG.error("IOException while saving to dot file", ex);
 			}

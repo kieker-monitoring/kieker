@@ -1,0 +1,103 @@
+/***************************************************************************
+ * Copyright 2012 by
+ *  + Christian-Albrechts-University of Kiel
+ *    + Department of Computer Science
+ *      + Software Engineering Group 
+ *  and others.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
+package kieker.tools.traceAnalysis.filter.visualization;
+
+import java.util.Iterator;
+
+import kieker.common.configuration.Configuration;
+import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
+import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertex;
+import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertexDecoration;
+
+/**
+ * Abstract superclass for all graph formatters.
+ * 
+ * @author Holger Knoche
+ * 
+ * @param <G>
+ *            The graph type this formatter is for
+ */
+public abstract class AbstractGraphFormatter<G extends AbstractGraph<?, ?, ?>> {
+
+	/**
+	 * Creates a formatted representation of the given graph.
+	 * 
+	 * @param graph
+	 *            The graph to format
+	 * @param configuration
+	 *            The configuration to use for formatting
+	 * @return A formatted representation of the graph
+	 */
+	@SuppressWarnings("unchecked")
+	public String createFormattedRepresentation(final AbstractGraph<?, ?, ?> graph, final Configuration configuration) {
+		return this.formatGraph((G) graph, configuration);
+	}
+
+	/**
+	 * This method encapsulates the concrete graph formatting.
+	 * 
+	 * @param graph
+	 *            The input graph to format
+	 * @param configuration
+	 *            The configuration to use for formatting
+	 * @return A textual specification of the input graph
+	 */
+	protected abstract String formatGraph(G graph, Configuration configuration);
+
+	private static String getFormattedDecorations(final AbstractVertex<?, ?, ?> vertex) {
+		synchronized (vertex) {
+			final StringBuilder builder = new StringBuilder();
+			final Iterator<AbstractVertexDecoration> decorationsIter = vertex.getDecorations().iterator();
+
+			while (decorationsIter.hasNext()) {
+				final String currentDecorationText = decorationsIter.next().createFormattedOutput();
+
+				if ((currentDecorationText == null) || (currentDecorationText.length() == 0)) {
+					continue;
+				}
+
+				builder.append(currentDecorationText);
+
+				if (decorationsIter.hasNext()) {
+					builder.append("\\n");
+				}
+			}
+
+			return builder.toString();
+		}
+	}
+
+	/**
+	 * Utility function to format the decorations attached to a vertex.
+	 * 
+	 * @param builder
+	 *            The builder to send the output to
+	 * @param vertex
+	 *            The vertex to work with
+	 */
+	protected static void formatDecorations(final StringBuilder builder, final AbstractVertex<?, ?, ?> vertex) {
+		final String decorations = AbstractGraphFormatter.getFormattedDecorations(vertex);
+		if ((decorations != null) && (decorations.length() != 0)) {
+			builder.append("\\n");
+			builder.append(decorations);
+		}
+	}
+}

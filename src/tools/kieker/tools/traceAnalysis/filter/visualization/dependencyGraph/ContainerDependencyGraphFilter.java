@@ -67,9 +67,7 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 	public ContainerDependencyGraphFilter(final Configuration configuration) {
 		// TODO Check type conversion
 		super(configuration);
-		super.setDependencyGraph(new DependencyGraph<ExecutionContainer>(
-				ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER.getId(),
-				ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER));
+		super.setDependencyGraph(new ContainerDependencyGraph(ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER));
 
 		this.dotOutputFile = new File(configuration.getStringProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE));
 		this.includeWeights = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);

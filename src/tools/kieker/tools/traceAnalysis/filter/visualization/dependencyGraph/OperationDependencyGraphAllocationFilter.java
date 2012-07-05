@@ -88,9 +88,9 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 		super(configuration);
 
 		/* Initialize the necessary fields from the inherited class. */
-		super.setDependencyGraph(new DependencyGraph<AllocationComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-				new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID, OperationRepository.ROOT_OPERATION,
-						AllocationRepository.ROOT_ALLOCATION_COMPONENT)));
+		super.setDependencyGraph(new OperationAllocationDependencyGraph(new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+				OperationRepository.ROOT_OPERATION,
+				AllocationRepository.ROOT_ALLOCATION_COMPONENT)));
 
 		/* Initialize from the given configuration. */
 		this.dotOutputFile = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE);

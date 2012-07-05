@@ -73,4 +73,13 @@ public class ExecutionContainer {
 		final ExecutionContainer other = (ExecutionContainer) obj;
 		return other.id == this.id;
 	}
+
+	/**
+	 * Returns whether this container is a root container.
+	 * 
+	 * @return See above
+	 */
+	public boolean isRootContainer() {
+		return false;
+	}
 }

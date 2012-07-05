@@ -84,4 +84,5 @@ public abstract class AbstractVertex<V extends AbstractVertex<V, E, O>, E extend
 	public Collection<AbstractVertexDecoration> getDecorations() {
 		return Collections.unmodifiableCollection(this.decorations.values());
 	}
+
 }
