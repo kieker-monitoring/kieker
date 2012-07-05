@@ -65,6 +65,7 @@ import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceReconstruction
 import kieker.tools.traceAnalysis.filter.traceWriter.ExecutionTraceWriterFilter;
 import kieker.tools.traceAnalysis.filter.traceWriter.InvalidExecutionTraceWriterFilter;
 import kieker.tools.traceAnalysis.filter.traceWriter.MessageTraceWriterFilter;
+import kieker.tools.traceAnalysis.filter.visualization.GraphWriterPlugin;
 import kieker.tools.traceAnalysis.filter.visualization.callTree.AbstractAggregatedCallTreeFilter;
 import kieker.tools.traceAnalysis.filter.visualization.callTree.AggregatedAllocationComponentOperationCallTreeFilter;
 import kieker.tools.traceAnalysis.filter.visualization.callTree.AggregatedAssemblyComponentOperationCallTreeFilter;
@@ -585,6 +586,11 @@ public final class TraceAnalysisTool {
 				analysisInstance.connect(componentPlotAllocationComponentDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						SYSTEM_ENTITY_FACTORY);
 
+				final GraphWriterPlugin graphWriter = new GraphWriterPlugin(componentPlotAllocationComponentDepGraphConfig);
+				analysisInstance.registerFilter(graphWriter);
+				analysisInstance.connect(componentPlotAllocationComponentDepGraph, ComponentDependencyGraphAllocationFilter.OUTPUT_PORT_NAME,
+						graphWriter, GraphWriterPlugin.INPUT_PORT_NAME);
+
 				allTraceProcessingComponents.add(componentPlotAllocationComponentDepGraph);
 			}
 			ComponentDependencyGraphAssemblyFilter componentPlotAssemblyComponentDepGraph = null;
@@ -618,6 +624,11 @@ public final class TraceAnalysisTool {
 				analysisInstance.connect(componentPlotAssemblyComponentDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPlotAssemblyComponentDepGraph);
+
+				final GraphWriterPlugin graphWriter = new GraphWriterPlugin(componentPlotAssemblyComponentDepGraphConfig);
+				analysisInstance.registerFilter(graphWriter);
+				analysisInstance.connect(componentPlotAssemblyComponentDepGraph, ComponentDependencyGraphAssemblyFilter.OUTPUT_PORT_NAME,
+						graphWriter, GraphWriterPlugin.INPUT_PORT_NAME);
 			}
 			ContainerDependencyGraphFilter componentPlotContainerDepGraph = null;
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG)) {
@@ -645,6 +656,11 @@ public final class TraceAnalysisTool {
 				analysisInstance.connect(componentPlotContainerDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPlotContainerDepGraph);
+
+				final GraphWriterPlugin graphWriter = new GraphWriterPlugin(componentPlotContainerDepGraphConfig);
+				analysisInstance.registerFilter(graphWriter);
+				analysisInstance.connect(componentPlotContainerDepGraph, ContainerDependencyGraphFilter.OUTPUT_PORT_NAME,
+						graphWriter, GraphWriterPlugin.INPUT_PORT_NAME);
 			}
 			OperationDependencyGraphAllocationFilter componentPlotAllocationOperationDepGraph = null;
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG)) {
@@ -677,6 +693,11 @@ public final class TraceAnalysisTool {
 				analysisInstance.connect(componentPlotAllocationOperationDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPlotAllocationOperationDepGraph);
+
+				final GraphWriterPlugin graphWriter = new GraphWriterPlugin(componentPlotAllocationOperationDepGraphConfig);
+				analysisInstance.registerFilter(graphWriter);
+				analysisInstance.connect(componentPlotAllocationOperationDepGraph, OperationDependencyGraphAllocationFilter.OUTPUT_PORT_NAME,
+						graphWriter, GraphWriterPlugin.INPUT_PORT_NAME);
 			}
 			OperationDependencyGraphAssemblyFilter componentPlotAssemblyOperationDepGraph = null;
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG)) {
@@ -710,6 +731,11 @@ public final class TraceAnalysisTool {
 				analysisInstance.connect(componentPlotAssemblyOperationDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPlotAssemblyOperationDepGraph);
+
+				final GraphWriterPlugin graphWriter = new GraphWriterPlugin(componentPlotAssemblyOperationDepGraphConfig);
+				analysisInstance.registerFilter(graphWriter);
+				analysisInstance.connect(componentPlotAssemblyOperationDepGraph, OperationDependencyGraphAssemblyFilter.OUTPUT_PORT_NAME,
+						graphWriter, GraphWriterPlugin.INPUT_PORT_NAME);
 			}
 			TraceCallTreeFilter componentPlotTraceCallTrees = null;
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES)) {
