@@ -21,20 +21,14 @@
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.Collection;
 
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
-import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
@@ -61,7 +55,6 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 
 	public static final String OUTPUT_PORT_NAME = "graphOutput";
 
-	private static final Log LOG = LogFactory.getLog(ComponentDependencyGraphAssemblyFilter.class);
 	private final File dotOutputFile;
 	private final boolean includeWeights;
 	private final boolean shortLabels;
@@ -77,62 +70,10 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 		this.includeSelfLoops = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS);
 	}
 
-	private String nodeLabel(final DependencyGraphNode<?> node, final AssemblyComponent curComponent) {
-		final StringBuilder builder = new StringBuilder();
-
-		if (this.shortLabels) {
-			builder.append(AbstractDependencyGraphFilter.STEREOTYPE_ASSEMBLY_COMPONENT + "\\n" + curComponent.getName() + ":.."
-					+ curComponent.getType().getTypeName());
-		} else {
-			builder.append(AbstractDependencyGraphFilter.STEREOTYPE_ASSEMBLY_COMPONENT + "\\n" + curComponent.getName() + ":"
-					+ curComponent.getType().getFullQualifiedName());
-		}
-
-		this.addDecorationText(builder, node);
-
-		return builder.toString();
-	}
-
-	@Override
-	protected void dotEdges(final Collection<DependencyGraphNode<AssemblyComponent>> nodes, final PrintStream ps, final boolean shortLabelsL) {
-
-		final AssemblyComponent rootComponent = AssemblyRepository.ROOT_ASSEMBLY_COMPONENT;
-		final int rootComponentId = rootComponent.getId();
-		final StringBuilder strBuild = new StringBuilder();
-		// dot code for contained components
-		for (final DependencyGraphNode<AssemblyComponent> node : nodes) {
-			final AssemblyComponent curComponent = node.getEntity();
-			final int curComponentId = node.getId();
-			strBuild.append(DotFactory.createNode("", this.getNodeId(node), (curComponentId == rootComponentId) ? "$" : this.nodeLabel(node, curComponent), // NOCS
-					(curComponentId == rootComponentId) ? DotFactory.DOT_SHAPE_NONE : DotFactory.DOT_SHAPE_BOX, // NOCS
-					(curComponentId == rootComponentId) ? null : DotFactory.DOT_STYLE_FILLED, // style // NOCS // NOPMD (null)
-					null, // framecolor
-					(curComponentId == rootComponentId) ? null : this.getNodeFillColor(node), // fillcolor // NOCS //NOPMD (null)
-					null, // fontcolor
-					DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
-					null, // imagefilename
-					null // misc
-					));
-			strBuild.append("\n");
-		}
-		ps.println(strBuild.toString());
-	}
-
-	/**
-	 * Saves the dependency graph to the dot file if error is not true.
-	 * 
-	 * @param error
-	 */
-
 	@Override
 	public void terminate(final boolean error) {
 		if (!error) {
-			try {
-				this.saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
-				super.deliver(OUTPUT_PORT_NAME, this.dependencyGraph);
-			} catch (final IOException ex) {
-				LOG.error("IOException while saving to dot file", ex);
-			}
+			this.deliver(OUTPUT_PORT_NAME, this.dependencyGraph);
 		}
 	}
 

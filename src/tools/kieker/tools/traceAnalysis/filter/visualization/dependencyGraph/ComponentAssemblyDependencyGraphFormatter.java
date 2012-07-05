@@ -41,7 +41,7 @@ public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponent
 		private String createNodeLabel(final DependencyGraphNode<AssemblyComponent> vertex, final AssemblyComponent component) {
 			final StringBuilder builder = new StringBuilder();
 
-			builder.append(AbstractDependencyGraphFilter.STEREOTYPE_ASSEMBLY_COMPONENT).append("\\n");
+			builder.append(AbstractDependencyGraphFormatter.STEREOTYPE_ASSEMBLY_COMPONENT).append("\\n");
 			builder.append(component.getName()).append(":");
 
 			if (this.useShortLabels) {

@@ -73,7 +73,7 @@ public class OperationAssemblyDependencyGraphFormatter extends AbstractOperation
 	private static String createComponentNodeLabel(final AssemblyComponent component, final boolean useShortLabels) {
 		final StringBuilder builder = new StringBuilder();
 
-		builder.append(AbstractDependencyGraphFilter.STEREOTYPE_ASSEMBLY_COMPONENT).append("\\n");
+		builder.append(AbstractDependencyGraphFormatter.STEREOTYPE_ASSEMBLY_COMPONENT).append("\\n");
 		builder.append(component.getName()).append(":");
 
 		if (useShortLabels) {

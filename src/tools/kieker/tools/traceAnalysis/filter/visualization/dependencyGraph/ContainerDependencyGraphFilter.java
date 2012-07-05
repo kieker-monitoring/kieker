@@ -21,21 +21,15 @@
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.Collection;
 
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
-import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
@@ -62,8 +56,6 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 
 	public static final String OUTPUT_PORT_NAME = "graphOutput";
 
-	private static final Log LOG = LogFactory.getLog(ContainerDependencyGraphFilter.class);
-
 	private final File dotOutputFile;
 	private final boolean includeWeights;
 	private final boolean shortLabels;
@@ -81,45 +73,9 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 	}
 
 	@Override
-	protected void dotEdges(final Collection<DependencyGraphNode<ExecutionContainer>> nodes, final PrintStream ps, final boolean shortLabelsL) {
-
-		final ExecutionContainer rootContainer = ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER;
-		final int rootContainerId = rootContainer.getId();
-		final StringBuilder strBuild = new StringBuilder();
-		for (final DependencyGraphNode<ExecutionContainer> node : nodes) {
-			final ExecutionContainer curContainer = node.getEntity();
-			final int curContainerId = node.getId();
-			strBuild.append(DotFactory.createNode("", this.getNodeId(node), (curContainerId == rootContainerId) ? "$" // NOCS (AvoidInlineConditionalsCheck)
-					: AbstractDependencyGraphFilter.STEREOTYPE_EXECUTION_CONTAINER + "\\n" + curContainer.getName(),
-					(curContainerId == rootContainerId) ? DotFactory.DOT_SHAPE_NONE : DotFactory.DOT_SHAPE_BOX3D, // NOCS (AvoidInlineConditionalsCheck)
-					(curContainerId == rootContainerId) ? null : DotFactory.DOT_STYLE_FILLED, // style // NOPMD (null) // NOCS (AvoidInlineConditionalsCheck)
-					null, // framecolor
-					(curContainerId == rootContainerId) ? null : DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor // NOPMD (null) // NOCS (AvoidInlineConditionalsCheck)
-					null, // fontcolor
-					DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
-					null, // imagefilename
-					null // misc
-					));
-			strBuild.append("\n");
-		}
-		ps.println(strBuild.toString());
-	}
-
-	/**
-	 * Saves the dependency graph to the dot file if error is not true.
-	 * 
-	 * @param error
-	 */
-
-	@Override
 	public void terminate(final boolean error) {
 		if (!error) {
-			try {
-				this.saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
-				super.deliver(OUTPUT_PORT_NAME, this.dependencyGraph);
-			} catch (final IOException ex) {
-				LOG.error("IOException while saving to dot file", ex);
-			}
+			this.deliver(OUTPUT_PORT_NAME, this.dependencyGraph);
 		}
 	}
 

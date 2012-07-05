@@ -86,7 +86,7 @@ public class ComponentAllocationDependencyGraphFormatter extends AbstractCompone
 		}
 		else {
 			builder.append(DotFactory.createCluster("", AbstractDependencyGraphFormatter.createContainerId(container),
-					AbstractDependencyGraphFilter.STEREOTYPE_EXECUTION_CONTAINER + "\\n" + container.getName(), DotFactory.DOT_SHAPE_BOX, // shape
+					AbstractDependencyGraphFormatter.STEREOTYPE_EXECUTION_CONTAINER + "\\n" + container.getName(), DotFactory.DOT_SHAPE_BOX, // shape
 					DotFactory.DOT_STYLE_FILLED, // style
 					null, // framecolor
 					DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor

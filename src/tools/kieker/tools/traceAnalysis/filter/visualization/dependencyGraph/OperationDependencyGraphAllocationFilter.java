@@ -20,36 +20,22 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
-import kieker.common.util.Signature;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
-import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
-import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOperationPairFactory;
 import kieker.tools.traceAnalysis.systemModel.repository.AllocationRepository;
-import kieker.tools.traceAnalysis.systemModel.repository.ExecutionEnvironmentRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.OperationRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationPair;
@@ -71,11 +57,6 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 	public static final String CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS = "includeSelfLoops";
 
 	public static final String OUTPUT_PORT_NAME = "graphOutput";
-
-	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
-	private static final String CONTAINER_NODE_ID_PREFIX = "container_";
-
-	private static final Log LOG = LogFactory.getLog(OperationDependencyGraphAllocationFilter.class);
 
 	private final String dotOutputFile;
 	private final boolean includeWeights;
@@ -104,140 +85,10 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 		this.includeSelfLoops = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS);
 	}
 
-	private String containerNodeLabel(final ExecutionContainer container) {
-		return String.format("%s\\n%s", AbstractDependencyGraphFilter.STEREOTYPE_EXECUTION_CONTAINER, container.getName());
-	}
-
-	private String componentNodeLabel(final AllocationComponent component, final boolean shortLabelsL) {
-		final String assemblyComponentName = component.getAssemblyComponent().getName();
-		final String componentTypePackagePrefx = component.getAssemblyComponent().getType().getPackageName();
-		final String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
-
-		final StringBuilder strBuild = new StringBuilder(AbstractDependencyGraphFilter.STEREOTYPE_ALLOCATION_COMPONENT);
-		strBuild.append("\\n");
-		strBuild.append(assemblyComponentName).append(":");
-		if (!shortLabelsL) {
-			strBuild.append(componentTypePackagePrefx).append(".");
-		} else {
-			strBuild.append("..");
-		}
-		strBuild.append(componentTypeIdentifier);
-		return strBuild.toString();
-	}
-
-	@Override
-	protected void dotEdges(final Collection<DependencyGraphNode<AllocationComponentOperationPair>> nodes, final PrintStream ps, final boolean shortLabelsL) {
-
-		/* Execution container ID x contained components */
-		final Map<Integer, Collection<AllocationComponent>> containerId2componentMapping = new Hashtable<Integer, Collection<AllocationComponent>>(); // NOPMD
-		final Map<Integer, Collection<DependencyGraphNode<AllocationComponentOperationPair>>> componentId2pairMapping = new Hashtable<Integer, Collection<DependencyGraphNode<AllocationComponentOperationPair>>>(); // NOPMD
-
-		// Derive container / component / operation hieraŕchy
-		for (final DependencyGraphNode<AllocationComponentOperationPair> pairNode : nodes) {
-			final AllocationComponent curComponent = pairNode.getEntity().getAllocationComponent();
-			final ExecutionContainer curContainer = curComponent.getExecutionContainer();
-			final int componentId = curComponent.getId();
-			final int containerId = curContainer.getId();
-
-			Collection<DependencyGraphNode<AllocationComponentOperationPair>> containedPairs = componentId2pairMapping.get(componentId);
-			if (containedPairs == null) {
-				// component not yet registered
-				containedPairs = new ArrayList<DependencyGraphNode<AllocationComponentOperationPair>>();
-				componentId2pairMapping.put(componentId, containedPairs);
-				Collection<AllocationComponent> containedComponents = containerId2componentMapping.get(containerId);
-				if (containedComponents == null) {
-					containedComponents = new ArrayList<AllocationComponent>();
-					containerId2componentMapping.put(containerId, containedComponents);
-				}
-				containedComponents.add(curComponent);
-			}
-			containedPairs.add(pairNode);
-		}
-
-		final ExecutionContainer rootContainer = ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER;
-		final int rootContainerId = rootContainer.getId();
-		final StringBuilder strBuild = new StringBuilder();
-		for (final Entry<Integer, Collection<AllocationComponent>> containerComponentEntry : containerId2componentMapping.entrySet()) {
-			final int curContainerId = containerComponentEntry.getKey();
-			final ExecutionContainer curContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory()
-					.lookupExecutionContainerByContainerId(curContainerId);
-
-			if (curContainerId == rootContainerId) {
-				strBuild.append(DotFactory.createNode("", this.getNodeId(this.dependencyGraph.getRootNode()), "$", DotFactory.DOT_SHAPE_NONE, null, // style
-						null, // framecolor
-						null, // fillcolor
-						null, // fontcolor
-						DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
-						null, // imagefilename
-						null // misc
-						));
-			} else {
-				strBuild.append(DotFactory.createCluster("", CONTAINER_NODE_ID_PREFIX + curContainer.getId(),
-						this.containerNodeLabel(curContainer), DotFactory.DOT_SHAPE_BOX, // shape
-						DotFactory.DOT_STYLE_FILLED, // style
-						null, // framecolor
-						DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
-						null, // fontcolor
-						DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
-						null)); // misc
-				// dot code for contained components
-				for (final AllocationComponent curComponent : containerComponentEntry.getValue()) {
-					final int curComponentId = curComponent.getId();
-					strBuild.append(DotFactory.createCluster("", COMPONENT_NODE_ID_PREFIX + curComponentId,
-							this.componentNodeLabel(curComponent, shortLabelsL), DotFactory.DOT_SHAPE_BOX, DotFactory.DOT_STYLE_FILLED, // style
-							null, // framecolor
-							DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
-							null, // fontcolor
-							DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
-							null // misc
-							));
-					for (final DependencyGraphNode<AllocationComponentOperationPair> curPair : componentId2pairMapping.get(curComponentId)) { // NOCS (NestedFor)
-						final Signature sig = curPair.getEntity().getOperation().getSignature();
-						final StringBuilder opLabel = new StringBuilder(sig.getName());
-						opLabel.append("(");
-						final String[] paramList = sig.getParamTypeList();
-						if ((paramList != null) && (paramList.length > 0)) {
-							opLabel.append("..");
-						}
-						opLabel.append(")");
-						strBuild.append(DotFactory.createNode("", this.getNodeId(curPair), this.nodeLabel(curPair, opLabel), DotFactory.DOT_SHAPE_OVAL,
-								DotFactory.DOT_STYLE_FILLED, // style
-								null, // framecolor
-								this.getNodeFillColor(curPair), // fillcolor
-								null, // fontcolor
-								DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
-								null, // imagefilename
-								null // misc
-								));
-					}
-					strBuild.append("}\n");
-				}
-				strBuild.append("}\n");
-			}
-		}
-		ps.println(strBuild.toString());
-	}
-
-	private String nodeLabel(final DependencyGraphNode<?> node, final StringBuilder labelBuilder) {
-		this.addDecorationText(labelBuilder, node);
-		return labelBuilder.toString();
-	}
-
-	/**
-	 * Saves the dependency graph to the dot file if error is not true.
-	 * 
-	 * @param error
-	 */
-
 	@Override
 	public void terminate(final boolean error) {
 		if (!error) {
-			try {
-				this.saveToDotFile(this.dotOutputFile, this.includeWeights, this.shortLabels, this.includeSelfLoops);
-				super.deliver(OUTPUT_PORT_NAME, this.dependencyGraph);
-			} catch (final IOException ex) {
-				LOG.error("IOException while saving to dot file", ex);
-			}
+			this.deliver(OUTPUT_PORT_NAME, this.dependencyGraph);
 		}
 	}
 

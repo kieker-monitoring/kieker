@@ -20,13 +20,6 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -34,14 +27,11 @@ import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
-import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
-import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.AllocationRepository;
-import kieker.tools.traceAnalysis.systemModel.repository.ExecutionEnvironmentRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
@@ -64,8 +54,6 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 
 	public static final String CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT = "AllocationComponentDependencyGraph";
 
-	private static final String CONTAINER_NODE_ID_PREFIX = "container";
-
 	private final String dotOutputFile;
 	private final boolean includeWeights;
 	private final boolean shortLabels;
@@ -81,101 +69,9 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 		this.includeSelfLoops = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SELFLOOPS);
 	}
 
-	private String componentNodeLabel(final DependencyGraphNode<AllocationComponent> node, final boolean shortLabelsL) {
-		final AllocationComponent component = node.getEntity();
-		if (component == AllocationRepository.ROOT_ALLOCATION_COMPONENT) {
-			return "$";
-		}
-
-		final String assemblyComponentName = component.getAssemblyComponent().getName();
-		final String componentTypePackagePrefx = component.getAssemblyComponent().getType().getPackageName();
-		final String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
-
-		final StringBuilder strBuild = new StringBuilder(AbstractDependencyGraphFilter.STEREOTYPE_ALLOCATION_COMPONENT);
-		strBuild.append("\\n");
-		strBuild.append(assemblyComponentName).append(':');
-		if (!shortLabelsL) {
-			strBuild.append(componentTypePackagePrefx).append('.');
-		} else {
-			strBuild.append("..");
-		}
-		strBuild.append(componentTypeIdentifier);
-
-		this.addDecorationText(strBuild, node);
-
-		return strBuild.toString();
-	}
-
-	@Override
-	protected void dotEdges(final Collection<DependencyGraphNode<AllocationComponent>> nodes, final PrintStream ps, final boolean shortLabelsL) {
-
-		/* Execution container ID x DependencyGraphNode */
-		final Map<Integer, Collection<DependencyGraphNode<AllocationComponent>>> component2containerMapping = new Hashtable<Integer,
-				Collection<DependencyGraphNode<AllocationComponent>>>(); // NOPMD
-
-		for (final DependencyGraphNode<AllocationComponent> node : nodes) {
-			final int containerId = node.getEntity().getExecutionContainer().getId();
-			Collection<DependencyGraphNode<AllocationComponent>> containedComponents = component2containerMapping.get(containerId);
-			if (containedComponents == null) {
-				containedComponents = new ArrayList<DependencyGraphNode<AllocationComponent>>();
-				component2containerMapping.put(containerId, containedComponents);
-			}
-			containedComponents.add(node);
-		}
-
-		final ExecutionContainer rootContainer = ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER;
-		final int rootContainerId = rootContainer.getId();
-		final StringBuilder strBuild = new StringBuilder();
-		for (final Entry<Integer, Collection<DependencyGraphNode<AllocationComponent>>> entry : component2containerMapping.entrySet()) {
-			final int curContainerId = entry.getKey();
-			final ExecutionContainer curContainer = this.getSystemEntityFactory().getExecutionEnvironmentFactory()
-					.lookupExecutionContainerByContainerId(curContainerId);
-			if (curContainerId == rootContainerId) {
-				strBuild.append(DotFactory.createNode("", this.getNodeId(this.dependencyGraph.getRootNode()),
-						this.componentNodeLabel(this.dependencyGraph.getRootNode(), shortLabelsL), DotFactory.DOT_SHAPE_NONE, null, // style
-						null, // framecolor
-						null, // fillcolor
-						null, // fontcolor
-						DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
-						null, // imagefilename
-						null // misc
-						));
-			} else {
-				strBuild.append(DotFactory.createCluster("", CONTAINER_NODE_ID_PREFIX + curContainer.getId(),
-						AbstractDependencyGraphFilter.STEREOTYPE_EXECUTION_CONTAINER + "\\n" + curContainer.getName(), DotFactory.DOT_SHAPE_BOX, // shape
-						DotFactory.DOT_STYLE_FILLED, // style
-						null, // framecolor
-						DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
-						null, // fontcolor
-						DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
-						null)); // misc
-				// dot code for contained components
-				for (final DependencyGraphNode<AllocationComponent> node : entry.getValue()) {
-					strBuild.append(DotFactory.createNode("", this.getNodeId(node), this.componentNodeLabel(node, shortLabelsL), DotFactory.DOT_SHAPE_BOX,
-							DotFactory.DOT_STYLE_FILLED, // style
-							null, // framecolor
-							this.getNodeFillColor(node), // fillcolor
-							null, // fontcolor
-							DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
-							null, // imagefilename
-							null // misc
-							));
-				}
-				strBuild.append("}\n");
-			}
-		}
-		ps.println(strBuild.toString());
-	}
-
-	/**
-	 * Saves the dependency graph to the dot file if error is not true.
-	 * 
-	 * @param error
-	 */
-
 	@Override
 	public void terminate(final boolean error) {
-		super.deliver(OUTPUT_PORT_NAME, this.dependencyGraph);
+		this.deliver(OUTPUT_PORT_NAME, this.dependencyGraph);
 	}
 
 	@Override
