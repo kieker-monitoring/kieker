@@ -34,13 +34,14 @@ import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
  * @param <E>
  *            The type of the graph's edges
  */
-public abstract class AbstractDependencyGraphFormatterVisitor<V extends DependencyGraphNode<?>, E extends WeightedBidirectionalDependencyGraphEdge<?>> implements
-		Visitor<V, E> {
+public abstract class AbstractDependencyGraphFormatterVisitor<T> implements
+		Visitor<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>> {
 
-	private final StringBuilder builder;
+	protected final StringBuilder builder;
 
-	private final boolean includeWeights;
-	private final boolean plotLoops;
+	protected final boolean includeWeights;
+	protected final boolean plotLoops;
+	protected final boolean useShortLabels;
 
 	/**
 	 * Creates a new formatter visitor using the given arguments.
@@ -51,16 +52,19 @@ public abstract class AbstractDependencyGraphFormatterVisitor<V extends Dependen
 	 *            Indicates whether weights should be printed at the edges
 	 * @param plotLoops
 	 *            Indicates whether self-loops should be displayed
+	 * @param useShortLabels
+	 *            Indicates whether short labels should be used
 	 */
-	public AbstractDependencyGraphFormatterVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops) {
+	public AbstractDependencyGraphFormatterVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops, final boolean useShortLabels) {
 		this.builder = builder;
 		this.includeWeights = includeWeights;
 		this.plotLoops = plotLoops;
+		this.useShortLabels = useShortLabels;
 	}
 
-	public void visitEdge(final E edge) {
-		final DependencyGraphNode<?> sourceNode = edge.getSource();
-		final DependencyGraphNode<?> destinationNode = edge.getTarget();
+	public void visitEdge(final WeightedBidirectionalDependencyGraphEdge<T> edge) {
+		final DependencyGraphNode<T> sourceNode = edge.getSource();
+		final DependencyGraphNode<T> destinationNode = edge.getTarget();
 
 		if ((sourceNode.equals(destinationNode)) && !this.plotLoops) {
 			return;

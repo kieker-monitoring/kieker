@@ -20,7 +20,6 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
-import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,8 +32,6 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
@@ -68,8 +65,6 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 	public static final String CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT = "AllocationComponentDependencyGraph";
 
 	private static final String CONTAINER_NODE_ID_PREFIX = "container";
-
-	private static final Log LOG = LogFactory.getLog(ComponentDependencyGraphAllocationFilter.class);
 
 	private final String dotOutputFile;
 	private final boolean includeWeights;
@@ -180,14 +175,7 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 
 	@Override
 	public void terminate(final boolean error) {
-		if (!error) {
-			try {
-				this.saveToDotFile(this.dotOutputFile, this.includeWeights, this.shortLabels, this.includeSelfLoops);
-				super.deliver(OUTPUT_PORT_NAME, this.dependencyGraph);
-			} catch (final IOException ex) {
-				LOG.error("IOException while saving to dot file", ex);
-			}
-		}
+		super.deliver(OUTPUT_PORT_NAME, this.dependencyGraph);
 	}
 
 	@Override

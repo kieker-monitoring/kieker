@@ -81,7 +81,7 @@ public abstract class AbstractDependencyGraphFormatter<G extends DependencyGraph
 	 *            The builder to use
 	 */
 	protected void appendGraphFooter(final StringBuilder builder) {
-		builder.append("}");
+		builder.append("}\n");
 	}
 
 	/**

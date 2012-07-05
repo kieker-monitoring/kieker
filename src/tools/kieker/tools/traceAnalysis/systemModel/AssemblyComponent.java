@@ -67,4 +67,13 @@ public class AssemblyComponent {
 		final AssemblyComponent other = (AssemblyComponent) obj;
 		return other.id == this.id;
 	}
+
+	/**
+	 * Denotes whether this assembly component is a root component.
+	 * 
+	 * @return See above
+	 */
+	public boolean isRootComponent() {
+		return false;
+	}
 }

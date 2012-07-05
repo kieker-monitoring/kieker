@@ -39,10 +39,10 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 public class ComponentAllocationDependencyGraphFormatter extends AbstractComponentDependencyGraphFormatter<ComponentAllocationDependencyGraph> {
 
 	private class EdgeFormattingVisitor extends
-			AbstractDependencyGraphFormatterVisitor<DependencyGraphNode<AllocationComponent>, WeightedBidirectionalDependencyGraphEdge<AllocationComponent>> {
+			AbstractDependencyGraphFormatterVisitor<AllocationComponent> {
 
-		public EdgeFormattingVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops) {
-			super(builder, includeWeights, plotLoops);
+		public EdgeFormattingVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops, final boolean useShortLabels) {
+			super(builder, includeWeights, plotLoops, useShortLabels);
 		}
 
 		public void visitVertex(final DependencyGraphNode<AllocationComponent> vertex) {
@@ -127,7 +127,7 @@ public class ComponentAllocationDependencyGraphFormatter extends AbstractCompone
 			this.handleContainerEntry(entry, builder, useShortLabels);
 		}
 		// Format the graph's edges
-		graph.traverseWithVerticesFirst(new EdgeFormattingVisitor(builder, includeWeights, plotLoops));
+		graph.traverseWithVerticesFirst(new EdgeFormattingVisitor(builder, includeWeights, plotLoops, useShortLabels));
 
 		this.appendGraphFooter(builder);
 

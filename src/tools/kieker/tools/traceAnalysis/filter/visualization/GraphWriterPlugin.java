@@ -35,6 +35,8 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentAllocationDependencyGraph;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentAllocationDependencyGraphFormatter;
+import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentAssemblyDependencyGraph;
+import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentAssemblyDependencyGraphFormatter;
 import kieker.tools.traceAnalysis.filter.visualization.exception.GraphFormattingException;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
 
@@ -54,6 +56,8 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 
 	public static final String FILE_NAME_CONFIG_KEY = "dotOutputFn";
 
+	private static final String DOT_FILE_EXTENSION = ".dot";
+
 	private static final String NO_SUITABLE_FORMATTER_MESSAGE_TEMPLATE = "No formatter type defined for graph type %s.";
 	private static final String INSTANTIATION_ERROR_MESSAGE_TEMPLATE = "Could not instantiate formatter type %s for graph type %s.";
 	private static final String NO_FILE_NAME_SPECIFIED_MESSAGE_TEMPLATE = "No output file name specified in configuration key %s.";
@@ -63,6 +67,7 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 
 	static {
 		FORMATTER_REGISTRY.put(ComponentAllocationDependencyGraph.class, ComponentAllocationDependencyGraphFormatter.class);
+		FORMATTER_REGISTRY.put(ComponentAssemblyDependencyGraph.class, ComponentAssemblyDependencyGraphFormatter.class);
 	}
 
 	/**
@@ -138,7 +143,7 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 		final AbstractGraphFormatter<?> graphFormatter = GraphWriterPlugin.createFormatter(graph);
 
 		final String specification = graphFormatter.createFormattedRepresentation(graph, this.configuration);
-		final String outputFileName = this.getOutputFileName();
+		final String outputFileName = (this.getOutputFileName() + DOT_FILE_EXTENSION);
 
 		try {
 			final BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outputFileName)));
