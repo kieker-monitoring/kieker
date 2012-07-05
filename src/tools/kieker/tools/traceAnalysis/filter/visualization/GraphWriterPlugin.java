@@ -37,6 +37,8 @@ import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.Component
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentAllocationDependencyGraphFormatter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentAssemblyDependencyGraph;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentAssemblyDependencyGraphFormatter;
+import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ContainerDependencyGraph;
+import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ContainerDependencyGraphFormatter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationAllocationDependencyGraph;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationAllocationDependencyGraphFormatter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationAssemblyDependencyGraph;
@@ -74,6 +76,7 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 		FORMATTER_REGISTRY.put(ComponentAssemblyDependencyGraph.class, ComponentAssemblyDependencyGraphFormatter.class);
 		FORMATTER_REGISTRY.put(OperationAllocationDependencyGraph.class, OperationAllocationDependencyGraphFormatter.class);
 		FORMATTER_REGISTRY.put(OperationAssemblyDependencyGraph.class, OperationAssemblyDependencyGraphFormatter.class);
+		FORMATTER_REGISTRY.put(ContainerDependencyGraph.class, ContainerDependencyGraphFormatter.class);
 	}
 
 	/**
