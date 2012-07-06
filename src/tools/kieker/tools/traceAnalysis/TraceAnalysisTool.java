@@ -58,6 +58,7 @@ import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
+import kieker.tools.traceAnalysis.filter.IGraphOutputtingFilter;
 import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
 import kieker.tools.traceAnalysis.filter.flow.TraceEventRecords2ExecutionAndMessageTraceFilter;
 import kieker.tools.traceAnalysis.filter.systemModel.SystemModel2FileFilter;
@@ -290,17 +291,49 @@ public final class TraceAnalysisTool {
 		return configuration;
 	}
 
+	/**
+	 * Attaches a graph writer plugin to the given plugin.
+	 * 
+	 * @param plugin
+	 *            The plugin which delivers the graph to write
+	 * @param producer
+	 *            The producer which originally produced the graph
+	 * @param controller
+	 *            The analysis controller to use for the connection of the plugins
+	 * @throws IllegalStateException
+	 *             If the connection of the plugins is not possible at the moment
+	 * @throws AnalysisConfigurationException
+	 *             If the plugins cannot be connected
+	 */
+	private static <P extends AbstractPlugin<?> & IGraphOutputtingFilter<?>> void attachGraphWriter(final P plugin,
+			final AbstractGraphProducingFilter<?> producer, final AnalysisController controller) throws IllegalStateException, AnalysisConfigurationException {
+
+		final GraphWriterConfiguration configuration = TraceAnalysisTool.createGraphWriterConfiguration();
+		configuration.setConfigurationName(producer.getConfigurationName());
+		final GraphWriterPlugin graphWriter = new GraphWriterPlugin(configuration);
+		controller.registerFilter(graphWriter);
+		controller.connect(plugin, ((IGraphOutputtingFilter<?>) plugin).getGraphOutputPortName(),
+				graphWriter, GraphWriterPlugin.INPUT_PORT_NAME);
+	}
+
+	/**
+	 * Attaches graph processors and a writer to the given graph producers.
+	 * 
+	 * @param graphProducers
+	 *            The graph producers to connect processors to
+	 * @param controller
+	 *            The analysis controller to use for the connection of the plugins
+	 * @throws IllegalStateException
+	 *             If the connection of plugins is not possible at the moment
+	 * @throws AnalysisConfigurationException
+	 *             If some plugins cannot be connected
+	 */
 	private static void attachGraphProcessors(final List<AbstractGraphProducingFilter<?>> graphProducers, final AnalysisController controller)
 			throws IllegalStateException, AnalysisConfigurationException {
+
 		for (final AbstractGraphProducingFilter<?> producer : graphProducers) {
 
-			final AbstractGraphProducingFilter<?> lastGraphProcessor = producer;
-			final GraphWriterConfiguration configuration = TraceAnalysisTool.createGraphWriterConfiguration();
-			configuration.setConfigurationName(producer.getConfigurationName());
-			final GraphWriterPlugin graphWriter = new GraphWriterPlugin(configuration);
-			controller.registerFilter(graphWriter);
-			controller.connect(lastGraphProcessor, AbstractGraphProducingFilter.GRAPH_OUTPUT_PORT_NAME,
-					graphWriter, GraphWriterPlugin.INPUT_PORT_NAME);
+			TraceAnalysisTool.attachGraphWriter(producer, producer, controller);
 		}
 	}
 

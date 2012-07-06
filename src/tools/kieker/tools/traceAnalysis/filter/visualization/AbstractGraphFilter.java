@@ -24,6 +24,7 @@ import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
+import kieker.tools.traceAnalysis.filter.IGraphOutputtingFilter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractEdge;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertex;
@@ -37,16 +38,12 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertex;
 
 @Plugin
 public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V extends AbstractVertex<V, E, O>, E extends AbstractEdge<V, E, O>, O> extends
-		AbstractFilterPlugin<Configuration> {
+		AbstractFilterPlugin<Configuration> implements IGraphOutputtingFilter<G> {
 
 	/**
 	 * The name of the filter's graph input port.
 	 */
 	public static final String INPUT_PORT_NAME = "graphInput";
-	/**
-	 * The name of the filter's graph output port.
-	 */
-	public static final String OUTPUT_PORT_NAME = "graphOutput";
 
 	private final Configuration configuration;
 
@@ -71,7 +68,11 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 			eventTypes = { AbstractGraph.class })
 	public void processGraph(final G graph) {
 		final G processedGraph = this.performConcreteGraphProcessing(graph);
-		super.deliver(OUTPUT_PORT_NAME, processedGraph);
+		this.deliver(this.getGraphOutputPortName(), processedGraph);
+	}
+
+	public String getGraphOutputPortName() {
+		return GRAPH_OUTPUT_PORT_NAME;
 	}
 
 	/**

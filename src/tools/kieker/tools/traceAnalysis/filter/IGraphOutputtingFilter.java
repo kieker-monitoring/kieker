@@ -20,54 +20,25 @@
 
 package kieker.tools.traceAnalysis.filter;
 
-import kieker.analysis.plugin.annotation.Plugin;
-import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
 
 /**
- * Abstract superclass for graph-producing filters.
+ * Interface for graph-producing filters.
  * 
  * @author Holger Knoche
  * 
  * @param <G>
- *            The graph type created by this filter
+ *            The type of the produced graph
  */
-@Plugin
-public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?, ?>> extends AbstractMessageTraceProcessingFilter implements
-		IGraphOutputtingFilter<G> {
+public interface IGraphOutputtingFilter<G extends AbstractGraph<?, ?, ?>> {
 
-	private final G graph;
+	public static final String GRAPH_OUTPUT_PORT_NAME = "graphOutput";
 
-	public AbstractGraphProducingFilter(final Configuration configuration, final G graph) {
-		super(configuration);
-
-		this.graph = graph;
-	}
-
-	public Configuration getCurrentConfiguration() {
-		return this.configuration;
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		return null;
-	}
-
-	public abstract String getConfigurationName();
-
-	@Override
-	public void terminate(final boolean error) {
-		if (!error) {
-			this.deliver(this.getGraphOutputPortName(), this.getGraph());
-		}
-	}
-
-	public String getGraphOutputPortName() {
-		return GRAPH_OUTPUT_PORT_NAME;
-	}
-
-	protected G getGraph() {
-		return this.graph;
-	}
+	/**
+	 * Returns the name of the port this filter uses to emit the graph.
+	 * 
+	 * @return See above
+	 */
+	public String getGraphOutputPortName();
 
 }
