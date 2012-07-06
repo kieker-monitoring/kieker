@@ -176,7 +176,7 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES,
 				FSReader.CONFIG_PROPERTY_VALUE_IGNORE_UNKNOWN_RECORD_TYPES_DEFAULT);
 		this.refineFSReaderConfiguration(readerConfiguration);
-		final AbstractReaderPlugin reader = new FSReader(readerConfiguration);
+		final AbstractReaderPlugin<Configuration> reader = new FSReader(readerConfiguration);
 		final SimpleSinkFilter<IMonitoringRecord> sinkPlugin = new SimpleSinkFilter<IMonitoringRecord>(new Configuration());
 
 		analysisController.registerReader(reader);

@@ -42,7 +42,7 @@ public class JMSLogReplayer {
 
 	private static final Log LOG = LogFactory.getLog(JMSLogReplayer.class);
 	/** Each record is delegated to this receiver. */
-	private final AbstractFilterPlugin recordReceiver;
+	private final AbstractFilterPlugin<?> recordReceiver;
 
 	private final String jmsProviderUrl;
 	private final String jmsDestination;
@@ -59,7 +59,7 @@ public class JMSLogReplayer {
 	 * @throws IllegalArgumentException
 	 *             if passed parameters are null or empty.
 	 */
-	public JMSLogReplayer(final AbstractFilterPlugin recordReceiver, final String recordReceiverInputPortName, final String jmsProviderUrl,
+	public JMSLogReplayer(final AbstractFilterPlugin<?> recordReceiver, final String recordReceiverInputPortName, final String jmsProviderUrl,
 			final String jmsDestination, final String jmsFactoryLookupName) {
 		this.recordReceiver = recordReceiver;
 		this.jmsProviderUrl = jmsProviderUrl;
@@ -79,7 +79,7 @@ public class JMSLogReplayer {
 		configuration.setProperty("msProviderUrl", this.jmsProviderUrl);
 		configuration.setProperty("jmsDestination", this.jmsDestination);
 		configuration.setProperty("jmsFactoryLookupName", this.jmsFactoryLookupName);
-		final AbstractReaderPlugin logReader = new JMSReader(configuration);
+		final AbstractReaderPlugin<Configuration> logReader = new JMSReader(configuration);
 		final AnalysisController tpanInstance = new AnalysisController();
 		tpanInstance.registerReader(logReader);
 
@@ -124,7 +124,7 @@ public class JMSLogReplayer {
 @Plugin(
 		outputPorts = { @OutputPort(name = RecordDelegationPlugin2.OUTPUT_PORT_NAME_MONITORING_RECORDS, eventTypes = { IMonitoringRecord.class })
 		})
-class RecordDelegationPlugin2 extends AbstractFilterPlugin {
+class RecordDelegationPlugin2 extends AbstractFilterPlugin<Configuration> {
 
 	public static final String INPUT_PORT_NAME_MONITORING_RECORDS = "receivedRecords";
 

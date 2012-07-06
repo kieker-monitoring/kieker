@@ -36,7 +36,7 @@ import kieker.common.configuration.Configuration;
  * @author Andre van Hoorn, Jan Waller
  */
 @Plugin(outputPorts = { @OutputPort(name = SimpleListReader.OUTPUT_PORT_NAME, eventTypes = { Object.class }) })
-public class SimpleListReader<T> extends AbstractReaderPlugin {
+public class SimpleListReader<T> extends AbstractReaderPlugin<Configuration> {
 
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 

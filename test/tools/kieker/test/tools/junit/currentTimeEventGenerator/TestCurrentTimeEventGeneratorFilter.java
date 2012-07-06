@@ -159,7 +159,7 @@ public class TestCurrentTimeEventGeneratorFilter { // NOCS
 	/**
 	 * @author Andre van Hoorn
 	 */
-	static class DstClass extends AbstractFilterPlugin {
+	static class DstClass extends AbstractFilterPlugin<Configuration> {
 
 		public static final String INPUT_PORT_NAME = "doJob";
 		private final ConcurrentLinkedQueue<Long> receivedTimestamps = new ConcurrentLinkedQueue<Long>();

@@ -32,7 +32,7 @@ import kieker.common.configuration.Configuration;
  * @author Andre van Hoorn
  * 
  */
-public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
+public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin<Configuration> {
 	/**
 	 * List of trace IDs to accept. Set null to accept any ID.
 	 */

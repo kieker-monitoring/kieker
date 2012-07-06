@@ -38,7 +38,7 @@ import kieker.tools.logReplayer.FSReaderRealtime.FSReaderRealtimeCons;
 @Plugin(outputPorts = {
 	@OutputPort(name = RealtimeReplayWorker.OUTPUT_PORT_NAME, eventTypes = { IMonitoringRecord.class })
 })
-public class RealtimeReplayWorker extends AbstractFilterPlugin implements Runnable {
+public class RealtimeReplayWorker extends AbstractFilterPlugin<Configuration> implements Runnable {
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 	// private static final Log LOG = LogFactory.getLog(RealtimeReplayWorker.class);
 	private IMonitoringRecord monRec;

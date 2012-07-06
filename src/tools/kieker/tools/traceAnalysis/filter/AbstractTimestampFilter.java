@@ -28,7 +28,7 @@ import kieker.common.configuration.Configuration;
  * @author Andre van Hoorn
  * 
  */
-public abstract class AbstractTimestampFilter extends AbstractFilterPlugin {
+public abstract class AbstractTimestampFilter extends AbstractFilterPlugin<Configuration> {
 
 	public static final long MAX_TIMESTAMP = Long.MAX_VALUE;
 	public static final long MIN_TIMESTAMP = 0;

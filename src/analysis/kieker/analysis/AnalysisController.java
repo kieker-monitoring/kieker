@@ -88,15 +88,15 @@ public final class AnalysisController {
 	/**
 	 * This list contains all registered readers within this controller.
 	 */
-	private final Collection<AbstractReaderPlugin> readers = new CopyOnWriteArrayList<AbstractReaderPlugin>();
+	private final Collection<AbstractReaderPlugin<?>> readers = new CopyOnWriteArrayList<AbstractReaderPlugin<?>>();
 	/**
 	 * This list contains all registered filters within this controller.
 	 */
-	private final Collection<AbstractFilterPlugin> filters = new CopyOnWriteArrayList<AbstractFilterPlugin>();
+	private final Collection<AbstractFilterPlugin<?>> filters = new CopyOnWriteArrayList<AbstractFilterPlugin<?>>();
 	/**
 	 * This list contains all registered repositories within this controller.
 	 */
-	private final Collection<AbstractRepository> repos = new CopyOnWriteArrayList<AbstractRepository>();
+	private final Collection<AbstractRepository<?>> repos = new CopyOnWriteArrayList<AbstractRepository<?>>();
 	/**
 	 * This list contains all registered state observers within this controller.
 	 */
@@ -108,12 +108,12 @@ public final class AnalysisController {
 	 * This map is used to store the mapping between a given instance of {@link MIProject} and an actual instantiation of an analysis. It is not modified after
 	 * creation and should only be used by the factory method.
 	 */
-	private Map<MIPlugin, AbstractPlugin> pluginModelMap;
+	private Map<MIPlugin, AbstractPlugin<?>> pluginModelMap;
 	/**
 	 * This map is used to store the mapping between a given instance of {@link MIProject} and an actual instantiation of an analysis. It is not modified after
 	 * creation and should only be used by the factory method.
 	 */
-	private Map<MIRepository, AbstractRepository> repositoryModelMap;
+	private Map<MIRepository, AbstractRepository<?>> repositoryModelMap;
 
 	/**
 	 * This field contains the current state of the controller.
@@ -260,11 +260,11 @@ public final class AnalysisController {
 			this.dependencies.add(mDepdendencyCopy);
 		}
 		// Create the repositories.
-		final Map<MIRepository, AbstractRepository> repositoryMap = new HashMap<MIRepository, AbstractRepository>(); // NOPMD (no concurrent access)
+		final Map<MIRepository, AbstractRepository<?>> repositoryMap = new HashMap<MIRepository, AbstractRepository<?>>(); // NOPMD (no concurrent access)
 		for (final MIRepository mRepository : mProject.getRepositories()) {
 			// Extract the necessary informations to create the repository.
 			final Configuration configuration = AnalysisController.modelPropertiesToConfiguration(mRepository.getProperties());
-			final AbstractRepository repository = AnalysisController.createAndInitialize(AbstractRepository.class, mRepository.getClassname(), configuration,
+			final AbstractRepository<?> repository = AnalysisController.createAndInitialize(AbstractRepository.class, mRepository.getClassname(), configuration,
 					classLoader); // throws AnalysisConfigurationException on errors
 			repositoryMap.put(mRepository, repository);
 			this.registerRepository(repository);
@@ -275,22 +275,22 @@ public final class AnalysisController {
 		 */
 		final EList<MIPlugin> mPlugins = mProject.getPlugins();
 		// Now run through all plugins.
-		final Map<MIPlugin, AbstractPlugin> pluginMap = new HashMap<MIPlugin, AbstractPlugin>(); // NOPMD (no concurrent access)
+		final Map<MIPlugin, AbstractPlugin<?>> pluginMap = new HashMap<MIPlugin, AbstractPlugin<?>>(); // NOPMD (no concurrent access)
 		for (final MIPlugin mPlugin : mPlugins) {
 			// Extract the necessary informations to create the plugin.
 			final Configuration configuration = AnalysisController.modelPropertiesToConfiguration(mPlugin.getProperties());
 			final String pluginClassname = mPlugin.getClassname();
 			configuration.setProperty(AbstractPlugin.CONFIG_NAME, mPlugin.getName());
 			// Create the plugin and put it into our map. */
-			final AbstractPlugin plugin = AnalysisController.createAndInitialize(AbstractPlugin.class, pluginClassname, configuration, classLoader);
+			final AbstractPlugin<?> plugin = AnalysisController.createAndInitialize(AbstractPlugin.class, pluginClassname, configuration, classLoader);
 			pluginMap.put(mPlugin, plugin);
 			// Check the used configuration against the actual available configuration keys.
 			AnalysisController.checkConfiguration(plugin, configuration);
 			// Add the plugin to our controller instance.
 			if (plugin instanceof AbstractReaderPlugin) {
-				this.registerReader((AbstractReaderPlugin) plugin);
+				this.registerReader((AbstractReaderPlugin<?>) plugin);
 			} else {
-				this.registerFilter((AbstractFilterPlugin) plugin);
+				this.registerFilter((AbstractFilterPlugin<?>) plugin);
 			}
 		}
 		// Now we have all plugins. We can start to assemble the wiring.
@@ -304,13 +304,13 @@ public final class AnalysisController {
 			final EList<MIOutputPort> mPluginOPorts = mPlugin.getOutputPorts();
 			for (final MIOutputPort mPluginOPort : mPluginOPorts) {
 				final String outputPortName = mPluginOPort.getName();
-				final AbstractPlugin srcPlugin = pluginMap.get(mPlugin);
+				final AbstractPlugin<?> srcPlugin = pluginMap.get(mPlugin);
 				// Get all ports which should be subscribed to this port.
 				final EList<MIInputPort> mSubscribers = mPluginOPort.getSubscribers();
 				for (final MIInputPort mSubscriber : mSubscribers) {
 					// Find the mapping and subscribe
 					final String inputPortName = mSubscriber.getName();
-					final AbstractPlugin dstPlugin = pluginMap.get(mSubscriber.getParent());
+					final AbstractPlugin<?> dstPlugin = pluginMap.get(mSubscriber.getParent());
 					this.connect(srcPlugin, outputPortName, dstPlugin, inputPortName);
 				}
 			}
@@ -334,7 +334,7 @@ public final class AnalysisController {
 	 * @throws AnalysisConfigurationException
 	 *             If an invalid port has been detected.
 	 */
-	private static void checkPorts(final MIPlugin mPlugin, final AbstractPlugin plugin) throws AnalysisConfigurationException {
+	private static void checkPorts(final MIPlugin mPlugin, final AbstractPlugin<?> plugin) throws AnalysisConfigurationException {
 		// Get all ports.
 		final EList<MIOutputPort> mOutputPorts = mPlugin.getOutputPorts();
 		final EList<MIInputPort> mInputPorts = (mPlugin instanceof MIFilter) ? ((MIFilter) mPlugin).getInputPorts() : new BasicEList<MIInputPort>(); // NOCS
@@ -374,7 +374,7 @@ public final class AnalysisController {
 	 * @throws AnalysisConfigurationException
 	 *             If an invalid property has been detected.
 	 */
-	private static void checkConfiguration(final AbstractPlugin plugin, final Configuration configuration) throws AnalysisConfigurationException {
+	private static void checkConfiguration(final AbstractPlugin<?> plugin, final Configuration configuration) throws AnalysisConfigurationException {
 		final Set<String> possibleKeys = new HashSet<String>();
 		// Run through all used keys in the actual configuration. (all possible keys)
 		for (final Enumeration<?> e = plugin.getCurrentConfiguration().propertyNames(); e.hasMoreElements();) {
@@ -422,7 +422,8 @@ public final class AnalysisController {
 	 * @throws AnalysisConfigurationException
 	 *             If the port names or the given plugins are invalid or not compatible.
 	 */
-	public void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName) throws IllegalStateException,
+	public void connect(final AbstractPlugin<?> src, final String outputPortName, final AbstractPlugin<?> dst, final String inputPortName)
+			throws IllegalStateException,
 			AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect readers and filters after starting analysis.");
@@ -456,7 +457,7 @@ public final class AnalysisController {
 	 * @throws AnalysisConfigurationException
 	 *             If the port names or the given objects are invalid or not compatible.
 	 */
-	public void connect(final AbstractPlugin plugin, final String repositoryPort, final AbstractRepository repository) throws IllegalStateException,
+	public void connect(final AbstractPlugin<?> plugin, final String repositoryPort, final AbstractRepository<?> repository) throws IllegalStateException,
 			AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect repositories after starting analysis.");
@@ -486,23 +487,23 @@ public final class AnalysisController {
 			final MAnalysisMetaModelFactory factory = new MAnalysisMetaModelFactory();
 			final MIProject mProject = factory.createProject();
 			mProject.setName(this.projectName);
-			final Map<AbstractPlugin, MIPlugin> pluginMap = new HashMap<AbstractPlugin, MIPlugin>(); // NOPMD (no concurrent access)
-			final Map<AbstractRepository, MIRepository> repositoryMap = new HashMap<AbstractRepository, MIRepository>(); // NOPMD (no concurrent access)
+			final Map<AbstractPlugin<?>, MIPlugin> pluginMap = new HashMap<AbstractPlugin<?>, MIPlugin>(); // NOPMD (no concurrent access)
+			final Map<AbstractRepository<?>, MIRepository> repositoryMap = new HashMap<AbstractRepository<?>, MIRepository>(); // NOPMD (no concurrent access)
 			// Store the libraries.
 			mProject.getDependencies().addAll(this.dependencies);
 			// Run through all repositories and create the model-counterparts.
-			for (final AbstractRepository repo : this.repos) {
+			for (final AbstractRepository<?> repo : this.repos) {
 				final MIRepository mRepo = factory.createRepository();
 				mRepo.setClassname(repo.getClass().getName());
 				mProject.getRepositories().add(mRepo);
 				repositoryMap.put(repo, mRepo);
 			}
 			// Run through all plugins and create the model-counterparts.
-			final List<AbstractPlugin> plugins = new ArrayList<AbstractPlugin>(this.readers);
-			for (final AbstractFilterPlugin filter : this.filters) {
+			final List<AbstractPlugin<?>> plugins = new ArrayList<AbstractPlugin<?>>(this.readers);
+			for (final AbstractFilterPlugin<?> filter : this.filters) {
 				plugins.add(filter);
 			}
-			for (final AbstractPlugin plugin : plugins) {
+			for (final AbstractPlugin<?> plugin : plugins) {
 				MIPlugin mPlugin;
 				if (plugin instanceof AbstractReaderPlugin) {
 					mPlugin = factory.createReader();
@@ -527,9 +528,9 @@ public final class AnalysisController {
 					properties.add(property);
 				}
 				// Extract the repositories.
-				for (final Entry<String, AbstractRepository> repoEntry : plugin.getCurrentRepositories().entrySet()) {
+				for (final Entry<String, AbstractRepository<?>> repoEntry : plugin.getCurrentRepositories().entrySet()) {
 					// Try to find the repository within our map.
-					final AbstractRepository repository = repoEntry.getValue();
+					final AbstractRepository<?> repository = repoEntry.getValue();
 					final MIRepository mRepository = repositoryMap.get(repository);
 					// If it doesn't exist, we have a problem...
 					if (mRepository == null) {
@@ -558,7 +559,7 @@ public final class AnalysisController {
 				mProject.getPlugins().add(mPlugin);
 			}
 			// Now connect the plugins.
-			for (final IPlugin plugin : plugins) {
+			for (final IPlugin<?> plugin : plugins) {
 				final MIPlugin mOutputPlugin = pluginMap.get(plugin);
 				// Check all output ports of the original plugin.
 				for (final String outputPortName : plugin.getAllOutputPortNames()) {
@@ -566,7 +567,7 @@ public final class AnalysisController {
 					final EList<MIInputPort> subscribers = AnalysisController.findOutputPort(mOutputPlugin, outputPortName).getSubscribers();
 					// Run through all connected plugins.
 					for (final PluginInputPortReference subscriber : plugin.getConnectedPlugins(outputPortName)) {
-						final IPlugin subscriberPlugin = subscriber.getPlugin();
+						final IPlugin<?> subscriberPlugin = subscriber.getPlugin();
 						final MIPlugin mSubscriberPlugin = pluginMap.get(subscriberPlugin);
 						// If it doesn't exist, we have a problem...
 						if (mSubscriberPlugin == null) {
@@ -610,7 +611,7 @@ public final class AnalysisController {
 			throw new AnalysisConfigurationException("No log reader registered.");
 		}
 		// Call execute() method of all plug-ins.
-		for (final AbstractFilterPlugin filter : this.filters) {
+		for (final AbstractFilterPlugin<?> filter : this.filters) {
 			/* Make also sure that all repository ports of all plugins are connected. */
 			if (!filter.areAllRepositoryPortsConnected()) {
 				this.terminate(true);
@@ -623,7 +624,7 @@ public final class AnalysisController {
 		}
 		// Start reading
 		final CountDownLatch readerLatch = new CountDownLatch(this.readers.size());
-		for (final AbstractReaderPlugin reader : this.readers) {
+		for (final AbstractReaderPlugin<?> reader : this.readers) {
 			/* Make also sure that all repository ports of all plugins are connected. */
 			if (!reader.areAllRepositoryPortsConnected()) {
 				this.terminate(true);
@@ -687,10 +688,10 @@ public final class AnalysisController {
 			}
 		}
 		// TODO: Later we will want to introduce a topological order to terminate connected plugins.
-		for (final AbstractReaderPlugin reader : this.readers) {
+		for (final AbstractReaderPlugin<?> reader : this.readers) {
 			reader.terminate(error);
 		}
-		for (final AbstractFilterPlugin filter : this.filters) {
+		for (final AbstractFilterPlugin<?> filter : this.filters) {
 			filter.terminate(error);
 		}
 	}
@@ -703,7 +704,7 @@ public final class AnalysisController {
 	 * @throws IllegalStateException
 	 *             If the controller is already running or has already been terminated.
 	 */
-	public final void registerReader(final AbstractReaderPlugin reader) throws IllegalStateException {
+	public final void registerReader(final AbstractReaderPlugin<?> reader) throws IllegalStateException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register filter after starting analysis.");
 		}
@@ -729,7 +730,7 @@ public final class AnalysisController {
 	 * @throws IllegalStateException
 	 *             If the controller is already running or has already been terminated.
 	 */
-	public final void registerFilter(final AbstractFilterPlugin filter) throws IllegalStateException {
+	public final void registerFilter(final AbstractFilterPlugin<?> filter) throws IllegalStateException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register filter after starting analysis.");
 		}
@@ -753,7 +754,7 @@ public final class AnalysisController {
 	 * @throws IllegalStateException
 	 *             If the controller is already running or has already been terminated.
 	 */
-	public final void registerRepository(final AbstractRepository repository) throws IllegalStateException {
+	public final void registerRepository(final AbstractRepository<?> repository) throws IllegalStateException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register respository after starting analysis.");
 		}
@@ -783,7 +784,7 @@ public final class AnalysisController {
 	 * 
 	 * @return All registered readers.
 	 */
-	public final Collection<AbstractReaderPlugin> getReaders() {
+	public final Collection<AbstractReaderPlugin<?>> getReaders() {
 		return Collections.unmodifiableCollection(this.readers);
 	}
 
@@ -792,7 +793,7 @@ public final class AnalysisController {
 	 * 
 	 * @return All registered filters.
 	 */
-	public final Collection<AbstractFilterPlugin> getFilters() {
+	public final Collection<AbstractFilterPlugin<?>> getFilters() {
 		return Collections.unmodifiableCollection(this.filters);
 	}
 
@@ -801,7 +802,7 @@ public final class AnalysisController {
 	 * 
 	 * @return All registered repositories.
 	 */
-	public final Collection<AbstractRepository> getRepositories() {
+	public final Collection<AbstractRepository<?>> getRepositories() {
 		return Collections.unmodifiableCollection(this.repos);
 	}
 
@@ -990,22 +991,22 @@ public final class AnalysisController {
 	 */
 	public static final class AnalysisControllerWithMapping {
 
-		private final Map<MIPlugin, AbstractPlugin> pluginMap;
-		private final Map<MIRepository, AbstractRepository> repositoryMap;
+		private final Map<MIPlugin, AbstractPlugin<?>> pluginMap;
+		private final Map<MIRepository, AbstractRepository<?>> repositoryMap;
 		private final AnalysisController controller;
 
-		public AnalysisControllerWithMapping(final AnalysisController controller, final Map<MIPlugin, AbstractPlugin> pluginMap,
-				final Map<MIRepository, AbstractRepository> repositoryMap) {
+		public AnalysisControllerWithMapping(final AnalysisController controller, final Map<MIPlugin, AbstractPlugin<?>> pluginMap,
+				final Map<MIRepository, AbstractRepository<?>> repositoryMap) {
 			this.controller = controller;
 			this.pluginMap = pluginMap;
 			this.repositoryMap = repositoryMap;
 		}
 
-		public Map<MIPlugin, AbstractPlugin> getPluginMap() {
+		public Map<MIPlugin, AbstractPlugin<?>> getPluginMap() {
 			return this.pluginMap;
 		}
 
-		public Map<MIRepository, AbstractRepository> getRepositoryMap() {
+		public Map<MIRepository, AbstractRepository<?>> getRepositoryMap() {
 			return this.repositoryMap;
 		}
 

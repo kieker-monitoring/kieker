@@ -35,7 +35,7 @@ import kieker.test.analysis.util.repository.SimpleRepository;
 @Plugin(name = SimpleForwardFilterWithRepository.FILTER_NAME, description = SimpleForwardFilterWithRepository.FILTER_DESCRIPTION,
 		outputPorts = { @OutputPort(name = SimpleForwardFilterWithRepository.OUTPUT_PORT_NAME, eventTypes = { Object.class }) },
 		repositoryPorts = @RepositoryPort(name = SimpleForwardFilterWithRepository.REPOSITORY_PORT_NAME, repositoryType = SimpleRepository.class))
-public class SimpleForwardFilterWithRepository extends AbstractFilterPlugin {
+public class SimpleForwardFilterWithRepository extends AbstractFilterPlugin<Configuration> {
 	public static final String FILTER_NAME = "pluginName-EfpvPSE0";
 	public static final String FILTER_DESCRIPTION = "pluginDescription-TB5UV1LdSz";
 

@@ -32,7 +32,7 @@ import kieker.common.configuration.Configuration;
  * @author Nils Christian Ehmke
  */
 @Plugin
-public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFilterPlugin {
+public abstract class AbstractFilterPlugin<C extends Configuration> extends AbstractPlugin<C> implements IFilterPlugin {
 
 	protected static final String SYSTEM_NEWLINE_STRING = System.getProperty("line.separator");
 
@@ -42,7 +42,7 @@ public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFi
 	 * @param configuration
 	 *            The configuration to use for this plugin.
 	 */
-	public AbstractFilterPlugin(final Configuration configuration) {
+	public AbstractFilterPlugin(final C configuration) {
 		super(configuration);
 	}
 

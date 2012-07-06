@@ -33,7 +33,7 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * 
  * @author Nils Christian Ehmke
  */
-public class ExecutionSinkClass extends AbstractFilterPlugin {
+public class ExecutionSinkClass extends AbstractFilterPlugin<Configuration> {
 
 	/**
 	 * The name of the default input port.

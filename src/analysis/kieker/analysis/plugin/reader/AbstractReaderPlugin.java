@@ -30,7 +30,7 @@ import kieker.common.configuration.Configuration;
  * @author Nils Christian Ehmke
  */
 @Plugin
-public abstract class AbstractReaderPlugin extends AbstractPlugin implements IReaderPlugin {
+public abstract class AbstractReaderPlugin<C extends Configuration> extends AbstractPlugin<C> implements IReaderPlugin {
 
 	/**
 	 * Each Plugin requires a constructor with a single Configuration object.
@@ -38,7 +38,7 @@ public abstract class AbstractReaderPlugin extends AbstractPlugin implements IRe
 	 * @param configuration
 	 *            The configuration which should be used to initialize the object.
 	 */
-	public AbstractReaderPlugin(final Configuration configuration) {
+	public AbstractReaderPlugin(final C configuration) {
 		super(configuration);
 	}
 }

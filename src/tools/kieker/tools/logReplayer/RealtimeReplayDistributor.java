@@ -49,7 +49,7 @@ import kieker.tools.logReplayer.FSReaderRealtime.FSReaderRealtimeCons;
  * 
  */
 @Plugin
-public class RealtimeReplayDistributor extends AbstractFilterPlugin {
+public class RealtimeReplayDistributor extends AbstractFilterPlugin<Configuration> {
 	public static final String INPUT_PORT_NAME_MONITORING_RECORDS = "monitoringRecords";
 
 	public static final String CONFIG_PROPERTY_NAME_NUM_WORKERS = "numWorkers";

@@ -48,7 +48,7 @@ import kieker.common.record.flow.trace.Trace;
 			eventTypes = { AbstractTraceEvent.class, Trace.class, OperationExecutionRecord.class })
 
 })
-public final class TraceIdFilter extends AbstractFilterPlugin {
+public final class TraceIdFilter extends AbstractFilterPlugin<Configuration> {
 	public static final String INPUT_PORT_NAME_FLOW = "monitoringRecordsFlow";
 	public static final String INPUT_PORT_NAME_EXECUTION = "monitoringRecordsExecution";
 	public static final String INPUT_PORT_NAME_COMBINED = "monitoringRecordsCombined";

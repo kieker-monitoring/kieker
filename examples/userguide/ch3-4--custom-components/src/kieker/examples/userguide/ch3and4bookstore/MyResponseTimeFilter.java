@@ -38,7 +38,7 @@ import kieker.common.configuration.Configuration;
 			@OutputPort(name = MyResponseTimeFilter.OUTPUT_PORT_NAME_RT_EXCEED,
 					description = "Outputs response times exceeding the threshold",
 					eventTypes = { MyResponseTimeRecord.class }) })
-public class MyResponseTimeFilter extends AbstractFilterPlugin {
+public class MyResponseTimeFilter extends AbstractFilterPlugin<Configuration> {
 	public static final String OUTPUT_PORT_NAME_RT_VALID = "validResponseTimes";
 	public static final String OUTPUT_PORT_NAME_RT_EXCEED = "invalidResponseTimes";
 

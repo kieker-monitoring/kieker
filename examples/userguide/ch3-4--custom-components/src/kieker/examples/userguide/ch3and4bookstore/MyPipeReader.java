@@ -37,7 +37,7 @@ import kieker.common.record.IMonitoringRecord;
 				description = "Outputs any received record",
 				eventTypes = { IMonitoringRecord.class })
 		})
-public class MyPipeReader extends AbstractReaderPlugin {
+public class MyPipeReader extends AbstractReaderPlugin<Configuration> {
 
 	public static final String OUTPUT_PORT_NAME = "outputPort";
 	public static final String CONFIG_PROPERTY_NAME_PIPE_NAME = "pipeName";

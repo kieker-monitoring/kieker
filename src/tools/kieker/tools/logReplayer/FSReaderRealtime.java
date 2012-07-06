@@ -40,7 +40,7 @@ import kieker.common.record.IMonitoringRecord;
  * @author Andre van Hoorn
  */
 @Plugin(outputPorts = { @OutputPort(name = FSReaderRealtime.OUTPUT_PORT_NAME_MONITORING_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReaderRealtime") })
-public final class FSReaderRealtime extends AbstractReaderPlugin {
+public final class FSReaderRealtime extends AbstractReaderPlugin<Configuration> {
 	public static final String OUTPUT_PORT_NAME_MONITORING_RECORDS = "monitoringRecords";
 
 	public static final String CONFIG_PROPERTY_NAME_NUM_WORKERS = "numWorkers";
@@ -109,7 +109,7 @@ public final class FSReaderRealtime extends AbstractReaderPlugin {
 
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(inputDirNames));
-		final AbstractReaderPlugin fsReader = new FSReader(configuration);
+		final AbstractReaderPlugin<Configuration> fsReader = new FSReader(configuration);
 		final FSReaderRealtimeCons rtCons = new FSReaderRealtimeCons(new Configuration());
 		/* Register this instance as the master of the created plugin. */
 		rtCons.setMaster(this);
@@ -175,7 +175,7 @@ public final class FSReaderRealtime extends AbstractReaderPlugin {
 	 * Do <b>not</b> use this as an outer class. It does not have the necessary constructors and method-implementations in order to be used as an outer class.
 	 */
 	@Plugin
-	protected static class FSReaderRealtimeCons extends AbstractFilterPlugin {
+	protected static class FSReaderRealtimeCons extends AbstractFilterPlugin<Configuration> {
 
 		/**
 		 * This is the name of the default input port this plugin.

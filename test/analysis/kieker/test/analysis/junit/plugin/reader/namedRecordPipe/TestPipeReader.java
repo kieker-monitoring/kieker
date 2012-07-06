@@ -93,7 +93,7 @@ public class TestPipeReader { // NOCS (MissingCtorCheck)
 /**
  * @author Andre van Hoorn
  */
-class MonitoringSinkClass extends AbstractFilterPlugin { // NOPMD (subclass of Test)
+class MonitoringSinkClass extends AbstractFilterPlugin<Configuration> { // NOPMD (subclass of Test)
 
 	public static final String INPUT_PORT_NAME = "doJob";
 	private final List<IMonitoringRecord> receivedRecords;

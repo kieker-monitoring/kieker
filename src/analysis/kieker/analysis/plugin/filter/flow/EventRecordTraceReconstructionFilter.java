@@ -57,7 +57,7 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 			@OutputPort(name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID,
 					description = "Outputs traces missing crucial records",
 					eventTypes = { TraceEventRecords.class }) })
-public final class EventRecordTraceReconstructionFilter extends AbstractFilterPlugin {
+public final class EventRecordTraceReconstructionFilter extends AbstractFilterPlugin<Configuration> {
 	public static final String OUTPUT_PORT_NAME_TRACE_VALID = "validTraces";
 	public static final String OUTPUT_PORT_NAME_TRACE_INVALID = "invalidTraces";
 	public static final String INPUT_PORT_NAME_TRACE_RECORDS = "traceRecords";

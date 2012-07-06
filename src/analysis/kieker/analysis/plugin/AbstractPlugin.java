@@ -51,15 +51,15 @@ import kieker.common.logging.LogFactory;
  * @author Nils Christian Ehmke, Jan Waller
  */
 @Plugin
-public abstract class AbstractPlugin implements IPlugin {
+public abstract class AbstractPlugin<C extends Configuration> implements IPlugin<C> {
 
 	public static final String CONFIG_NAME = "name-hiddenAndNeverExportedProperty";
 
 	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
 
-	protected final Configuration configuration;
+	protected final C configuration;
 	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<PluginInputPortReference>> registeredMethods;
-	private final ConcurrentHashMap<String, AbstractRepository> registeredRepositories;
+	private final ConcurrentHashMap<String, AbstractRepository<?>> registeredRepositories;
 	private final Map<String, RepositoryPort> repositoryPorts;
 	private final Map<String, OutputPort> outputPorts;
 	private final Map<String, InputPort> inputPorts;
@@ -68,10 +68,10 @@ public abstract class AbstractPlugin implements IPlugin {
 	/**
 	 * Each Plugin requires a constructor with a single Configuration object and an array of repositories!
 	 */
-	public AbstractPlugin(final Configuration configuration) {
+	public AbstractPlugin(final C configuration) {
 		try {
 			// TODO: somewhat dirty hack...
-			final Configuration defaultConfig = this.getDefaultConfiguration();
+			final C defaultConfig = this.getDefaultConfiguration();
 			if (defaultConfig != null) {
 				configuration.setDefaultConfiguration(defaultConfig);
 			}
@@ -109,7 +109,7 @@ public abstract class AbstractPlugin implements IPlugin {
 			}
 		}
 
-		this.registeredRepositories = new ConcurrentHashMap<String, AbstractRepository>(this.repositoryPorts.size());
+		this.registeredRepositories = new ConcurrentHashMap<String, AbstractRepository<?>>(this.repositoryPorts.size());
 
 		/* Now create a linked queue for every output port of the class, to store the registered methods. */
 		this.registeredMethods = new ConcurrentHashMap<String, ConcurrentLinkedQueue<PluginInputPortReference>>();
@@ -124,7 +124,7 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * 
 	 * @return The default properties.
 	 */
-	protected abstract Configuration getDefaultConfiguration();
+	protected abstract C getDefaultConfiguration();
 
 	/*
 	 * (non-Javadoc)
@@ -234,7 +234,7 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * @return true if and only if both given plugins are valid, the output and input ports exist and if they are compatible. Furthermore the destination plugin must
 	 *         not be a reader.
 	 */
-	public static final boolean isConnectionAllowed(final AbstractPlugin src, final String output, final AbstractPlugin dst, final String input) {
+	public static final boolean isConnectionAllowed(final AbstractPlugin<?> src, final String output, final AbstractPlugin<?> dst, final String input) {
 		/* First step: Check whether the plugins are valid. */
 		if ((src == null) || (dst == null) || (dst instanceof IReaderPlugin)) {
 			LOG.warn("First step: Check whether the plugins are valid.");
@@ -305,7 +305,7 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * 
 	 * @see kieker.analysis.plugin.IPlugin#connect(java.lang.String, kieker.analysis.repository.AbstractRepository)
 	 */
-	public final void connect(final String reponame, final AbstractRepository repository) throws AnalysisConfigurationException {
+	public final void connect(final String reponame, final AbstractRepository<?> repository) throws AnalysisConfigurationException {
 		final RepositoryPort port = this.repositoryPorts.get(reponame);
 		if (port == null) {
 			throw new AnalysisConfigurationException("Failed to connect plugin '" + this.getName() + "' (" + this.getPluginName() + ") to repository '"
@@ -331,11 +331,11 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * 
 	 * @see kieker.analysis.plugin.IPlugin#getCurrentRepositories()
 	 */
-	public final Map<String, AbstractRepository> getCurrentRepositories() {
+	public final Map<String, AbstractRepository<?>> getCurrentRepositories() {
 		return Collections.unmodifiableMap(this.registeredRepositories);
 	}
 
-	protected final AbstractRepository getRepository(final String reponame) {
+	protected final AbstractRepository<?> getRepository(final String reponame) {
 		return this.registeredRepositories.get(reponame);
 	}
 
@@ -354,7 +354,7 @@ public abstract class AbstractPlugin implements IPlugin {
 	 *             if any given plugin is invalid, any output or input port doesn't exist or if they are incompatible.
 	 *             Furthermore the destination plugin must not be a reader.
 	 */
-	public static final void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName)
+	public static final void connect(final AbstractPlugin<?> src, final String outputPortName, final AbstractPlugin<?> dst, final String inputPortName)
 			throws AnalysisConfigurationException {
 		if (!AbstractPlugin.isConnectionAllowed(src, outputPortName, dst, inputPortName)) {
 			throw new AnalysisConfigurationException("Failed to connect plugin '" + src.getName() + "' (" + src.getPluginName() + ") to plugin '"
@@ -371,7 +371,8 @@ public abstract class AbstractPlugin implements IPlugin {
 						return null;
 					}
 				});
-				src.registeredMethods.get(outputPortName).add(new PluginInputPortReference(dst, inputPortName, m, dst.inputPorts.get(inputPortName).eventTypes()));
+				src.registeredMethods.get(outputPortName)
+						.add(new PluginInputPortReference(dst, inputPortName, m, dst.inputPorts.get(inputPortName).eventTypes()));
 				return;
 			}
 		}

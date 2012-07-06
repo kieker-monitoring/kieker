@@ -123,7 +123,7 @@ public class TestTraceReconstructionFilter {
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, "true");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long
 				.toString(AbstractTraceProcessingFilter.MAX_DURATION_MILLIS));
-		final Map<String, AbstractRepository> repositoryMap = new HashMap<String, AbstractRepository>(); // NOPMD (no concurrent access)
+		final Map<String, AbstractRepository<?>> repositoryMap = new HashMap<String, AbstractRepository<?>>(); // NOPMD (no concurrent access)
 		repositoryMap.put(AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
 		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration);
 
@@ -235,7 +235,7 @@ public class TestTraceReconstructionFilter {
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, "true");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long
 				.toString(AbstractTraceProcessingFilter.MAX_DURATION_MILLIS));
-		final Map<String, AbstractRepository> repositoryMap = new HashMap<String, AbstractRepository>(); // NOPMD (no concurrent access)
+		final Map<String, AbstractRepository<?>> repositoryMap = new HashMap<String, AbstractRepository<?>>(); // NOPMD (no concurrent access)
 		repositoryMap.put(AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
 		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration);
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout", invalidExecutionTrace.getDurationInNanos() <= filter
@@ -365,7 +365,7 @@ public class TestTraceReconstructionFilter {
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, "true");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long
 				.toString(((triggerExecutionTrace.getMaxTout() - incompleteExecutionTrace.getMinTin()) / (1000 * 1000)) - 1));
-		final Map<String, AbstractRepository> repositoryMap = new HashMap<String, AbstractRepository>(); // NOPMD (no concurrent access)
+		final Map<String, AbstractRepository<?>> repositoryMap = new HashMap<String, AbstractRepository<?>>(); // NOPMD (no concurrent access)
 		repositoryMap.put(AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
 		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration);
 

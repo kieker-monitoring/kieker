@@ -43,7 +43,7 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
 @Repository(
 		name = "System model repository",
 		description = "Model manager for Kieker's component model ")
-public class SystemModelRepository extends AbstractRepository {
+public class SystemModelRepository extends AbstractRepository<Configuration> {
 
 	public static final Execution ROOT_EXECUTION =
 			new Execution(OperationRepository.ROOT_OPERATION, AllocationRepository.ROOT_ALLOCATION_COMPONENT, -1, "-1", -1, -1, -1, -1, false);

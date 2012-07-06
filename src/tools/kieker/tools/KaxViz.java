@@ -44,8 +44,8 @@ import org.w3c.dom.Document;
 
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
-import com.mxgraph.swing.handler.mxRubberband;
 import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.swing.handler.mxRubberband;
 import com.mxgraph.util.mxCellRenderer;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxPoint;
@@ -206,41 +206,41 @@ public final class KaxViz extends JFrame {
 	}
 
 	private void displayGraph() {
-		final Map<IPlugin, mxCell> mapPlugin2Graph = new HashMap<IPlugin, mxCell>(); // NOPMD (no concurrent access)
-		final Map<IPlugin, Map<String, mxCell>> mapPluginInputPorts2Graph = new HashMap<IPlugin, Map<String, mxCell>>(); // NOPMD (no concurrent access)
-		final Map<IPlugin, Map<String, mxCell>> mapPluginOutputPorts2Graph = new HashMap<IPlugin, Map<String, mxCell>>(); // NOPMD (no concurrent access)
-		final Map<AbstractRepository, mxCell> mapRepository2Graph = new HashMap<AbstractRepository, mxCell>(); // NOPMD (no concurrent access)
+		final Map<IPlugin<?>, mxCell> mapPlugin2Graph = new HashMap<IPlugin<?>, mxCell>(); // NOPMD (no concurrent access)
+		final Map<IPlugin<?>, Map<String, mxCell>> mapPluginInputPorts2Graph = new HashMap<IPlugin<?>, Map<String, mxCell>>(); // NOPMD (no concurrent access)
+		final Map<IPlugin<?>, Map<String, mxCell>> mapPluginOutputPorts2Graph = new HashMap<IPlugin<?>, Map<String, mxCell>>(); // NOPMD (no concurrent access)
+		final Map<AbstractRepository<?>, mxCell> mapRepository2Graph = new HashMap<AbstractRepository<?>, mxCell>(); // NOPMD (no concurrent access)
 		// draw the graph
 		this.graph.getModel().beginUpdate();
 		try {
 			int x = 0;
 			// step 1: add all plugins!
-			for (final AbstractReaderPlugin reader : this.analysisController.getReaders()) {
+			for (final AbstractReaderPlugin<?> reader : this.analysisController.getReaders()) {
 				final mxCell vertex = this.createReader(reader, x++);
 				mapPlugin2Graph.put(reader, vertex);
 				mapPluginOutputPorts2Graph.put(reader, this.createOutputPorts(reader, vertex, true));
 			}
-			for (final AbstractFilterPlugin filter : this.analysisController.getFilters()) {
+			for (final AbstractFilterPlugin<?> filter : this.analysisController.getFilters()) {
 				final mxCell vertex = this.createFilter(filter, x++);
 				mapPlugin2Graph.put(filter, vertex);
 				mapPluginInputPorts2Graph.put(filter, this.createInputPorts(filter, vertex));
 				mapPluginOutputPorts2Graph.put(filter, this.createOutputPorts(filter, vertex, false));
 			}
-			for (final AbstractRepository repo : this.analysisController.getRepositories()) {
+			for (final AbstractRepository<?> repo : this.analysisController.getRepositories()) {
 				final mxCell cell = this.createRepository(repo, x++);
 				mapRepository2Graph.put(repo, cell);
 			}
 			// step 2: connect all plugins!
-			final Collection<IPlugin> allPlugins = new LinkedList<IPlugin>();
+			final Collection<IPlugin<?>> allPlugins = new LinkedList<IPlugin<?>>();
 			allPlugins.addAll(this.analysisController.getReaders());
 			allPlugins.addAll(this.analysisController.getFilters());
-			for (final IPlugin outputPlugin : allPlugins) {
+			for (final IPlugin<?> outputPlugin : allPlugins) {
 				final Map<String, mxCell> mapOutputPorts2Graph = mapPluginOutputPorts2Graph.get(outputPlugin); // NOPMD (no concurrent access)
 				for (final String outputPortName : outputPlugin.getAllOutputPortNames()) {
 					for (final PluginInputPortReference inputPortReference : outputPlugin.getConnectedPlugins(outputPortName)) {
 						final mxCell outputPluginCell = mapPlugin2Graph.get(outputPlugin);
 						final mxCell outputPortCell = mapOutputPorts2Graph.get(outputPortName);
-						final IPlugin inputPlugin = inputPortReference.getPlugin();
+						final IPlugin<?> inputPlugin = inputPortReference.getPlugin();
 						final mxCell inputPluginCell = mapPlugin2Graph.get(inputPlugin);
 						final String inputPortName = inputPortReference.getInputPortName();
 						final mxCell inputPortCell = mapPluginInputPorts2Graph.get(inputPlugin).get(inputPortName);
@@ -251,7 +251,7 @@ public final class KaxViz extends JFrame {
 						edge.setTarget(inputPortCell);
 					}
 				}
-				for (final Entry<String, AbstractRepository> repository : outputPlugin.getCurrentRepositories().entrySet()) {
+				for (final Entry<String, AbstractRepository<?>> repository : outputPlugin.getCurrentRepositories().entrySet()) {
 					final mxCell output = mapPlugin2Graph.get(outputPlugin);
 					final mxCell input = mapRepository2Graph.get(repository.getValue());
 					this.graph.insertEdge(null, null, repository.getKey(), output, input, STYLE_CONNECTION_REPOSITORY);
@@ -270,7 +270,7 @@ public final class KaxViz extends JFrame {
 	// new mxHierarchicalLayout(graph).execute(graph.getDefaultParent());
 	// }
 
-	private final Map<String, mxCell> createInputPorts(final AbstractPlugin plugin, final mxCell vertex) {
+	private final Map<String, mxCell> createInputPorts(final AbstractPlugin<?> plugin, final mxCell vertex) {
 		final Map<String, mxCell> port2graph = new HashMap<String, mxCell>(); // NOPMD (no concurrent access)
 		final String[] portNames = plugin.getAllInputPortNames();
 		for (int i = 0; i < portNames.length; i++) {
@@ -288,7 +288,7 @@ public final class KaxViz extends JFrame {
 		return port2graph;
 	}
 
-	private final Map<String, mxCell> createOutputPorts(final AbstractPlugin plugin, final mxCell vertex, final boolean reader) {
+	private final Map<String, mxCell> createOutputPorts(final AbstractPlugin<?> plugin, final mxCell vertex, final boolean reader) {
 		final Map<String, mxCell> port2graph = new HashMap<String, mxCell>(); // NOPMD (no concurrent access)
 		final String[] portNames = plugin.getAllOutputPortNames();
 		for (int i = 0; i < portNames.length; i++) {
@@ -305,7 +305,7 @@ public final class KaxViz extends JFrame {
 		return port2graph;
 	}
 
-	private final mxCell createReader(final AbstractReaderPlugin plugin, final int c) {
+	private final mxCell createReader(final AbstractReaderPlugin<?> plugin, final int c) {
 		final mxCell vertex = new mxCell("<<Reader>>\n" + plugin.getName() + " : " + plugin.getPluginName(),
 				new mxGeometry(FILTER_SPACE, FILTER_SPACE + (c * (FILTER_HEIGHT + FILTER_SPACE)),
 						FILTER_WIDTH, FILTER_HEIGHT), STYLE_READER);
@@ -314,7 +314,7 @@ public final class KaxViz extends JFrame {
 		return vertex;
 	}
 
-	private final mxCell createFilter(final AbstractFilterPlugin plugin, final int c) {
+	private final mxCell createFilter(final AbstractFilterPlugin<?> plugin, final int c) {
 		final mxCell vertex = new mxCell("<<Filter>>\n" + plugin.getName() + " : " + plugin.getPluginName(),
 				new mxGeometry(FILTER_SPACE, FILTER_SPACE + (c * (FILTER_HEIGHT + FILTER_SPACE)),
 						FILTER_WIDTH, FILTER_HEIGHT), STYLE_FILTER);
@@ -323,7 +323,7 @@ public final class KaxViz extends JFrame {
 		return vertex;
 	}
 
-	private final mxCell createRepository(final AbstractRepository repository, final int c) {
+	private final mxCell createRepository(final AbstractRepository<?> repository, final int c) {
 		final mxCell vertex = new mxCell("<<Repository>>\n" + repository.getName() + " : " + repository.getRepositoryName(),
 				new mxGeometry(FILTER_SPACE, FILTER_SPACE + (c * (FILTER_HEIGHT + FILTER_SPACE)),
 						FILTER_WIDTH, FILTER_HEIGHT), STYLE_REPOSITORY);

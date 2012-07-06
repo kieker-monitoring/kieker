@@ -29,22 +29,22 @@ import kieker.common.logging.LogFactory;
  * @author Nils Christian Ehmke?
  */
 @Repository
-public abstract class AbstractRepository implements IRepository {
+public abstract class AbstractRepository<C extends Configuration> implements IRepository<C> {
 
 	public static final String CONFIG_NAME = "name-hiddenAndNeverExportedProperty";
 
 	private static final Log LOG = LogFactory.getLog(AbstractRepository.class);
-	protected final Configuration configuration;
+	protected final C configuration;
 
 	private final String name;
 
 	/**
 	 * Each Repository requires a constructor with a single Configuration object!
 	 */
-	public AbstractRepository(final Configuration configuration) {
+	public AbstractRepository(final C configuration) {
 		try {
 			// TODO: somewhat dirty hack...
-			final Configuration defaultConfig = this.getDefaultConfiguration();
+			final C defaultConfig = this.getDefaultConfiguration();
 			if (defaultConfig != null) {
 				configuration.setDefaultConfiguration(defaultConfig);
 			}
@@ -63,7 +63,7 @@ public abstract class AbstractRepository implements IRepository {
 	 * 
 	 * @return The default properties.
 	 */
-	protected abstract Configuration getDefaultConfiguration();
+	protected abstract C getDefaultConfiguration();
 
 	/*
 	 * (non-Javadoc)

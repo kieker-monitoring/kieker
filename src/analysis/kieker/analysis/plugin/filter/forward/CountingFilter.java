@@ -42,7 +42,7 @@ import kieker.common.configuration.Configuration;
 			@OutputPort(name = CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, eventTypes = { Object.class }, description = "Provides each incoming object"),
 			@OutputPort(name = CountingFilter.OUTPUT_PORT_NAME_COUNT, eventTypes = { Long.class }, description = "Provides the current object count")
 		})
-public final class CountingFilter extends AbstractFilterPlugin {
+public final class CountingFilter extends AbstractFilterPlugin<Configuration> {
 
 	public static final String INPUT_PORT_NAME_EVENTS = "inputEvents";
 

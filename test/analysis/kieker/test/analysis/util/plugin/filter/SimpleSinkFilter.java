@@ -35,7 +35,7 @@ import kieker.common.configuration.Configuration;
  * @author Nils Ehmke, Jan Waller
  */
 @Plugin
-public class SimpleSinkFilter<T> extends AbstractFilterPlugin {
+public class SimpleSinkFilter<T> extends AbstractFilterPlugin<Configuration> {
 
 	public static final String INPUT_PORT_NAME = "input";
 	private final List<T> list = new ArrayList<T>();

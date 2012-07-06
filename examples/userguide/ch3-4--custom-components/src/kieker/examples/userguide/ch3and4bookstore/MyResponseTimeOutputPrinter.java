@@ -6,7 +6,7 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
 @Plugin(name = "Reponse time printer")
-public class MyResponseTimeOutputPrinter extends AbstractFilterPlugin {
+public class MyResponseTimeOutputPrinter extends AbstractFilterPlugin<Configuration> {
 
 	public static final String INPUT_PORT_NAME_EVENTS = "newEvent";
 	public static final String CONFIG_PROPERTY_NAME_VALID_OUTPUT = "validOutput";

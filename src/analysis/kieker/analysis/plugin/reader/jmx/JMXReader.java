@@ -49,7 +49,7 @@ import kieker.common.record.IMonitoringRecord;
  * @author Jan Waller
  */
 @Plugin(outputPorts = @OutputPort(name = JMXReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMXReader"))
-public final class JMXReader extends AbstractReaderPlugin {
+public final class JMXReader extends AbstractReaderPlugin<Configuration> {
 
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 

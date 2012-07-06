@@ -54,7 +54,7 @@ import kieker.common.record.misc.TimestampRecord;
  */
 @Plugin(outputPorts =
 		@OutputPort(name = CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME, eventTypes = { TimestampRecord.class }, description = "Provides current time events"))
-public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
+public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin<Configuration> {
 	public static final String INPUT_PORT_NAME_NEW_TIMESTAMP = "inputNewTimestamp";
 	public static final String INPUT_PORT_NAME_NEW_RECORD = "inputNewRecord";
 

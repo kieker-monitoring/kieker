@@ -27,7 +27,7 @@ import kieker.common.configuration.Configuration;
  * @author Andre van Hoorn, Nils Christian Ehmke, Jan Waller
  * 
  */
-public interface IRepository {
+public interface IRepository<C extends Configuration> {
 
 	/**
 	 * This method should deliver a {@code Configuration} object containing the current configuration of this instance. In other words: The constructor should be
@@ -35,7 +35,7 @@ public interface IRepository {
 	 * 
 	 * @return A completely filled configuration object.
 	 */
-	public abstract Configuration getCurrentConfiguration();
+	public abstract C getCurrentConfiguration();
 
 	/**
 	 * This method delivers the repository name of this repository type. The name should be unique, e.g., the classname.

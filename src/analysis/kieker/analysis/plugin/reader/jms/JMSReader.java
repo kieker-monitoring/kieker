@@ -54,7 +54,7 @@ import kieker.common.record.IMonitoringRecord;
  * @author Andre van Hoorn, Matthias Rohr
  */
 @Plugin(outputPorts = @OutputPort(name = JMSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMSReader"))
-public final class JMSReader extends AbstractReaderPlugin {
+public final class JMSReader extends AbstractReaderPlugin<Configuration> {
 
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 

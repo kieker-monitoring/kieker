@@ -65,7 +65,7 @@ public final class AnalysisStarter {
 	}
 }
 
-class StdOutDumpConsumer extends AbstractFilterPlugin {
+class StdOutDumpConsumer extends AbstractFilterPlugin<Configuration> {
 	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
 
 	public StdOutDumpConsumer(final Configuration configuration) {

@@ -104,7 +104,7 @@ public class FilesystemLogReplayer {
 	public boolean replay() {
 		boolean success = true;
 
-		AbstractReaderPlugin fsReader;
+		AbstractReaderPlugin<Configuration> fsReader;
 		if (this.realtimeMode) {
 			final Configuration configuration = new Configuration();
 			configuration.setProperty(FSReaderRealtime.CONFIG_PROPERTY_NAME_INPUTDIRNAMES, Configuration.toProperty(this.inputDirs));
@@ -155,7 +155,7 @@ public class FilesystemLogReplayer {
  * @author Andre van Hoorn
  * 
  */
-class RecordDelegationPlugin extends AbstractFilterPlugin {
+class RecordDelegationPlugin extends AbstractFilterPlugin<Configuration> {
 
 	public static final String INPUT_PORT_NAME_MONITORING_RECORDS = "monitoringRecords";
 

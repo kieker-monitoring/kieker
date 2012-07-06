@@ -80,7 +80,7 @@ public final class BookstoreHostnameRewriter {
 }
 
 @Plugin
-class HostNameRewriterPlugin extends AbstractFilterPlugin {
+class HostNameRewriterPlugin extends AbstractFilterPlugin<Configuration> {
 	public static final String INPUT_PORT_NAME = "newEvent";
 
 	private static final IMonitoringController MONITORING_CTRL =
