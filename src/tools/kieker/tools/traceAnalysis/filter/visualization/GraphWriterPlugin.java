@@ -32,7 +32,6 @@ import java.util.Map;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
-import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentAllocationDependencyGraph;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentAllocationDependencyGraphFormatter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentAssemblyDependencyGraph;
@@ -56,17 +55,15 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
  */
 @Plugin(name = "Graph writer plugin",
 		description = "Generic plugin for writing graphs to files")
-public class GraphWriterPlugin extends AbstractFilterPlugin {
+public class GraphWriterPlugin extends AbstractFilterPlugin<GraphWriterConfiguration> {
 
+	/**
+	 * Name of the plugin's graph input port.
+	 */
 	public static final String INPUT_PORT_NAME = "inputGraph";
-
-	public static final String FILE_NAME_CONFIG_KEY = "dotOutputFn";
-
-	private static final String DOT_FILE_EXTENSION = ".dot";
 
 	private static final String NO_SUITABLE_FORMATTER_MESSAGE_TEMPLATE = "No formatter type defined for graph type %s.";
 	private static final String INSTANTIATION_ERROR_MESSAGE_TEMPLATE = "Could not instantiate formatter type %s for graph type %s.";
-	private static final String NO_FILE_NAME_SPECIFIED_MESSAGE_TEMPLATE = "No output file name specified in configuration key %s.";
 	private static final String WRITE_ERROR_MESSAGE_TEMPLATE = "Graph could not be written to file %s.";
 
 	private static final Map<Class<? extends AbstractGraph<?, ?, ?>>, Class<? extends AbstractGraphFormatter<?>>> FORMATTER_REGISTRY = new HashMap<Class<? extends AbstractGraph<?, ?, ?>>, Class<? extends AbstractGraphFormatter<?>>>();
@@ -85,17 +82,23 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 	 * @param configuration
 	 *            The configuration to use
 	 */
-	public GraphWriterPlugin(final Configuration configuration) {
+	public GraphWriterPlugin(final GraphWriterConfiguration configuration) {
 		super(configuration);
 	}
 
-	public Configuration getCurrentConfiguration() {
+	public GraphWriterConfiguration getCurrentConfiguration() {
 		return this.configuration;
 	}
 
 	@Override
-	protected Configuration getDefaultConfiguration() {
-		return null;
+	protected GraphWriterConfiguration getDefaultConfiguration() {
+		final GraphWriterConfiguration configuration = new GraphWriterConfiguration();
+
+		configuration.setIncludeWeights(true);
+		configuration.setUseShortLabels(true);
+		configuration.setPlotLoops(false);
+
+		return configuration;
 	}
 
 	private static void handleInstantiationException(final Class<?> graphClass, final Class<?> formatterClass, final Exception exception) {
@@ -130,11 +133,11 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 		return null;
 	}
 
-	private String getOutputFileName() {
-		final String outputFileName = this.configuration.getStringProperty(FILE_NAME_CONFIG_KEY);
+	private String getOutputFileName(final AbstractGraphFormatter<?> formatter) {
+		String outputFileName = this.configuration.getOutputFileName();
 
-		if (outputFileName == null) {
-			throw new GraphFormattingException(String.format(NO_FILE_NAME_SPECIFIED_MESSAGE_TEMPLATE, FILE_NAME_CONFIG_KEY));
+		if ((outputFileName == null) || outputFileName.isEmpty()) {
+			outputFileName = formatter.getDefaultFileName();
 		}
 
 		return outputFileName;
@@ -142,7 +145,7 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 
 	/**
 	 * Formats a given graph and saves the generated specification to disk. The file name to save the
-	 * output to is specified by the configuration option {@link #FILE_NAME_CONFIG_KEY}.
+	 * output to is specified by the configuration option {@link #CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME}.
 	 * 
 	 * @param graph
 	 *            The graph to save
@@ -152,7 +155,7 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 		final AbstractGraphFormatter<?> graphFormatter = GraphWriterPlugin.createFormatter(graph);
 
 		final String specification = graphFormatter.createFormattedRepresentation(graph, this.configuration);
-		final String outputFileName = (this.getOutputFileName() + DOT_FILE_EXTENSION);
+		final String outputFileName = this.configuration.getOutputPath() + this.getOutputFileName(graphFormatter);
 
 		try {
 			final BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outputFileName)));

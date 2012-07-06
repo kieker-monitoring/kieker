@@ -22,7 +22,6 @@ package kieker.tools.traceAnalysis.filter.visualization;
 
 import java.util.Iterator;
 
-import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertex;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertexDecoration;
@@ -47,7 +46,7 @@ public abstract class AbstractGraphFormatter<G extends AbstractGraph<?, ?, ?>> {
 	 * @return A formatted representation of the graph
 	 */
 	@SuppressWarnings("unchecked")
-	public String createFormattedRepresentation(final AbstractGraph<?, ?, ?> graph, final Configuration configuration) {
+	public String createFormattedRepresentation(final AbstractGraph<?, ?, ?> graph, final GraphWriterConfiguration configuration) {
 		return this.formatGraph((G) graph, configuration);
 	}
 
@@ -60,7 +59,7 @@ public abstract class AbstractGraphFormatter<G extends AbstractGraph<?, ?, ?>> {
 	 *            The configuration to use for formatting
 	 * @return A textual specification of the input graph
 	 */
-	protected abstract String formatGraph(G graph, Configuration configuration);
+	protected abstract String formatGraph(G graph, GraphWriterConfiguration configuration);
 
 	private static String getFormattedDecorations(final AbstractVertex<?, ?, ?> vertex) {
 		synchronized (vertex) {
@@ -100,4 +99,11 @@ public abstract class AbstractGraphFormatter<G extends AbstractGraph<?, ?, ?>> {
 			builder.append(decorations);
 		}
 	}
+
+	/**
+	 * Returns the default file name suggested by this formatter.
+	 * 
+	 * @return See above
+	 */
+	public abstract String getDefaultFileName();
 }
