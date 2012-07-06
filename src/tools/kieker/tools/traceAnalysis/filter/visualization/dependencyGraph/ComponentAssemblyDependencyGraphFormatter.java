@@ -79,7 +79,7 @@ public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponent
 						this.createNodeLabel(vertex, component), // NOCS
 						DotFactory.DOT_SHAPE_BOX, // NOCS
 						DotFactory.DOT_STYLE_FILLED, // style // NOCS // NOPMD (null)
-						null, // framecolor
+						AbstractGraphFormatter.getDotRepresentation(vertex.getColor()), // framecolor
 						AbstractDependencyGraphFormatter.getNodeFillColor(vertex), // fillcolor // NOCS //NOPMD (null)
 						null, // fontcolor
 						DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize

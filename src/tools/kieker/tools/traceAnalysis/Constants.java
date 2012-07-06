@@ -107,6 +107,9 @@ public final class Constants {
 	public static final char DECORATOR_SEPARATOR = ',';
 	public static final String RESPONSE_TIME_DECORATOR_FLAG = "responseTimes";
 
+	public static final String CMD_OPT_NAME_TRACE_COLORING = "traceColoring";
+	public static final String COLORING_FILE_OPTION_NAME = "Color Map File";
+
 	static {
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_INPUTDIRS).withArgName("dir1 ... dirN").hasArgs().isRequired(true)
 				.withDescription("Log directories to read data from").withValueSeparator('=').create("i"));
@@ -168,6 +171,8 @@ public final class Constants {
 				.withDescription("If selected, abbreviated labels (e.g., package names) are used in the visualizations.").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_INCLUDESELFLOOPS).hasArg(false).isRequired(false)
 				.withDescription("If selected, self-loops are included in the visualizations.").create());
+		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TRACE_COLORING).hasArg().isRequired(false)
+				.withDescription("Color traces according to the given color map.").withArgName(COLORING_FILE_OPTION_NAME).create());
 
 		for (final Option o : SORTED_OPTION_LIST) {
 			CMDL_OPTIONS.addOption(o);

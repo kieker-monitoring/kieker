@@ -41,7 +41,7 @@ public class GraphElement<O> {
 	private final Set<O> origins = new HashSet<O>();
 
 	protected GraphElement(final O origin) {
-		// Prevent external instantiation
+		this.addOrigin(origin);
 	}
 
 	/**

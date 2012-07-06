@@ -21,6 +21,7 @@
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
 import kieker.tools.traceAnalysis.Constants;
+import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFormatter;
 import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 
@@ -63,7 +64,7 @@ public class ContainerDependencyGraphFormatter extends AbstractDependencyGraphFo
 						ContainerDependencyGraphFormatter.createExecutionContainerNodeLabel(container),
 						DotFactory.DOT_SHAPE_BOX3D, // NOCS (AvoidInlineConditionalsCheck)
 						DotFactory.DOT_STYLE_FILLED, // style // NOPMD (null) // NOCS (AvoidInlineConditionalsCheck)
-						null, // framecolor
+						AbstractGraphFormatter.getDotRepresentation(vertex.getColor()), // framecolor
 						DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor // NOPMD (null) // NOCS
 						null, // fontcolor
 						DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize

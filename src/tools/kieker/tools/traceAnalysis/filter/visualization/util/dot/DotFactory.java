@@ -237,8 +237,11 @@ public final class DotFactory {
 	 * @param to
 	 * @return graph connection as dot code
 	 */
-	public static String createConnection(final String prefix, final String from, final String to, final String style, final String arrowhead) {
+	public static String createConnection(final String prefix, final String from, final String to, final String style, final String arrowhead, final String color) {
 		final StringBuilder dot = new StringBuilder(prefix).append(String.format("%s->%s[", from, to));
+		if (color != null) {
+			dot.append(String.format(", color=\"%s\"", color));
+		}
 		if (style != null) {
 			dot.append(String.format("style=\"%s\"", style));
 		}
@@ -259,8 +262,12 @@ public final class DotFactory {
 	 * @param label
 	 * @return graph connection as dot code
 	 */
-	public static String createConnection(final String prefix, final String from, final String to, final String label, final String style, final String arrowhead) {
+	public static String createConnection(final String prefix, final String from, final String to, final String label, final String style, final String arrowhead,
+			final String color) {
 		final StringBuilder dot = new StringBuilder(prefix).append(String.format("%s->%s", from, to)).append(String.format("[label=%s", label));
+		if (color != null) {
+			dot.append(String.format(", color=\"%s\"", color));
+		}
 		if (style != null) {
 			dot.append(String.format(", style=\"%s\"", style));
 		}

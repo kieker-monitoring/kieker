@@ -68,6 +68,7 @@ import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceReconstruction
 import kieker.tools.traceAnalysis.filter.traceWriter.ExecutionTraceWriterFilter;
 import kieker.tools.traceAnalysis.filter.traceWriter.InvalidExecutionTraceWriterFilter;
 import kieker.tools.traceAnalysis.filter.traceWriter.MessageTraceWriterFilter;
+import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFilter;
 import kieker.tools.traceAnalysis.filter.visualization.GraphWriterConfiguration;
 import kieker.tools.traceAnalysis.filter.visualization.GraphWriterPlugin;
 import kieker.tools.traceAnalysis.filter.visualization.callTree.AbstractAggregatedCallTreeFilter;
@@ -82,6 +83,8 @@ import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.Container
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationDependencyGraphAllocationFilter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationDependencyGraphAssemblyFilter;
 import kieker.tools.traceAnalysis.filter.visualization.sequenceDiagram.SequenceDiagramFilter;
+import kieker.tools.traceAnalysis.filter.visualization.traceColoring.TraceColoringFilter;
+import kieker.tools.traceAnalysis.repository.TraceColorRepository;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOperationPairFactory;
 import kieker.tools.traceAnalysis.systemModel.repository.AssemblyComponentOperationPairFactory;
@@ -312,28 +315,61 @@ public final class TraceAnalysisTool {
 		configuration.setConfigurationName(producer.getConfigurationName());
 		final GraphWriterPlugin graphWriter = new GraphWriterPlugin(configuration);
 		controller.registerFilter(graphWriter);
-		controller.connect(plugin, ((IGraphOutputtingFilter<?>) plugin).getGraphOutputPortName(),
+		controller.connect(plugin, plugin.getGraphOutputPortName(),
 				graphWriter, GraphWriterPlugin.INPUT_PORT_NAME);
 	}
 
+	private static <P extends AbstractPlugin<?> & IGraphOutputtingFilter<?>> void connectGraphFilters(final P predecessor,
+			final AbstractGraphFilter<?, ?, ?, ?> filter, final AnalysisController controller) throws IllegalStateException, AnalysisConfigurationException {
+		controller.registerFilter(filter);
+		controller.connect(predecessor, predecessor.getGraphOutputPortName(),
+				filter, filter.getGraphInputPortName());
+	}
+
+	private static <P extends AbstractPlugin<?> & IGraphOutputtingFilter<?>> TraceColoringFilter<?, ?> createTraceColoringFilter(final P predecessor,
+			final String coloringFileName, final AnalysisController controller) throws IOException, IllegalStateException, AnalysisConfigurationException {
+		final TraceColorRepository colorRepository = TraceColorRepository.createFromFile(coloringFileName);
+		controller.registerRepository(colorRepository);
+
+		@SuppressWarnings("rawtypes")
+		final TraceColoringFilter<?, ?> coloringFilter = new TraceColoringFilter(new Configuration());
+		TraceAnalysisTool.connectGraphFilters(predecessor, coloringFilter, controller);
+		controller.connect(coloringFilter, TraceColoringFilter.COLOR_REPOSITORY_NAME, colorRepository);
+
+		return coloringFilter;
+	}
+
 	/**
-	 * Attaches graph processors and a writer to the given graph producers.
+	 * Attaches graph processors and a writer to the given graph producers depending on the given
+	 * command line.
 	 * 
 	 * @param graphProducers
 	 *            The graph producers to connect processors to
 	 * @param controller
 	 *            The analysis controller to use for the connection of the plugins
+	 * @param commandLine
+	 *            The command line to determine the desired processors
 	 * @throws IllegalStateException
 	 *             If the connection of plugins is not possible at the moment
 	 * @throws AnalysisConfigurationException
 	 *             If some plugins cannot be connected
 	 */
-	private static void attachGraphProcessors(final List<AbstractGraphProducingFilter<?>> graphProducers, final AnalysisController controller)
-			throws IllegalStateException, AnalysisConfigurationException {
+	private static void attachGraphProcessors(final List<AbstractGraphProducingFilter<?>> graphProducers, final AnalysisController controller,
+			final CommandLine commandLine)
+			throws IllegalStateException, AnalysisConfigurationException, IOException {
 
 		for (final AbstractGraphProducingFilter<?> producer : graphProducers) {
+			boolean filtersExist = false;
+			AbstractGraphFilter<?, ?, ?, ?> lastFilter = null;
 
-			TraceAnalysisTool.attachGraphWriter(producer, producer, controller);
+			// Add a trace coloring filter, if necessary
+			if (commandLine.hasOption(Constants.CMD_OPT_NAME_TRACE_COLORING)) {
+				final String coloringFileName = commandLine.getOptionValue(Constants.CMD_OPT_NAME_TRACE_COLORING);
+				lastFilter = TraceAnalysisTool.createTraceColoringFilter(((filtersExist) ? lastFilter : producer), coloringFileName, controller);
+				filtersExist = true;
+			}
+
+			TraceAnalysisTool.attachGraphWriter(((filtersExist) ? lastFilter : producer), producer, controller);
 		}
 	}
 
@@ -790,7 +826,7 @@ public final class TraceAnalysisTool {
 			}
 
 			// Attach graph processors to the graph producers
-			TraceAnalysisTool.attachGraphProcessors(allGraphProducers, analysisInstance);
+			TraceAnalysisTool.attachGraphProcessors(allGraphProducers, analysisInstance, cmdl);
 
 			if (numRequestedTasks == 0) {
 				LOG.warn("No task requested");

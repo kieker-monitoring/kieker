@@ -27,6 +27,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import kieker.tools.traceAnalysis.Constants;
+import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFormatter;
 import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
@@ -185,7 +186,7 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 							this.createOperationNodeLabel(operation, node),
 							DotFactory.DOT_SHAPE_OVAL,
 							DotFactory.DOT_STYLE_FILLED, // style
-							null, // framecolor
+							AbstractGraphFormatter.getDotRepresentation(node.getColor()), // framecolor
 							AbstractDependencyGraphFormatter.getNodeFillColor(node), // fillcolor
 							null, // fontcolor
 							DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize

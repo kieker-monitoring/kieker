@@ -105,6 +105,9 @@ public class DependencyGraphNode<T> extends AbstractVertex<DependencyGraphNode<T
 
 				relevantDependencies.put(destination.getId(), e);
 			}
+			else {
+				e.addOrigin(origin);
+			}
 			e.getTargetWeight().increase();
 		}
 	}
@@ -122,6 +125,9 @@ public class DependencyGraphNode<T> extends AbstractVertex<DependencyGraphNode<T
 			if (e == null) {
 				e = new WeightedBidirectionalDependencyGraphEdge<T>(this, source, origin);
 				relevantDependencies.put(source.getId(), e);
+			}
+			else {
+				e.addOrigin(origin);
 			}
 			e.getSourceWeight().increase();
 		}

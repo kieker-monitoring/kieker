@@ -20,6 +20,7 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
+import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFormatter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph.Visitor;
 import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
 
@@ -71,15 +72,16 @@ public abstract class AbstractDependencyGraphFormatterVisitor<T> implements
 		}
 
 		final String lineStyle = (edge.isAssumed()) ? DotFactory.DOT_STYLE_DASHED : DotFactory.DOT_STYLE_SOLID; // NOCS (inline ?)
+		final String color = AbstractGraphFormatter.getDotRepresentation(edge.getColor());
 
 		if (this.includeWeights) {
 			this.builder.append(DotFactory.createConnection("", AbstractDependencyGraphFormatter.createNodeId(sourceNode),
 					AbstractDependencyGraphFormatter.createNodeId(destinationNode),
-					Integer.toString(edge.getTargetWeight().getValue()), lineStyle, DotFactory.DOT_ARROWHEAD_OPEN));
+					Integer.toString(edge.getTargetWeight().getValue()), lineStyle, DotFactory.DOT_ARROWHEAD_OPEN, color));
 		} else {
 			this.builder.append(DotFactory.createConnection("", AbstractDependencyGraphFormatter.createNodeId(sourceNode),
 					AbstractDependencyGraphFormatter.createNodeId(destinationNode), lineStyle,
-					DotFactory.DOT_ARROWHEAD_OPEN));
+					DotFactory.DOT_ARROWHEAD_OPEN, color));
 		}
 
 		this.builder.append("\n");

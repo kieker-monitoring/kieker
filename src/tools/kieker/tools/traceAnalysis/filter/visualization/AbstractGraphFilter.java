@@ -75,6 +75,10 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 		return GRAPH_OUTPUT_PORT_NAME;
 	}
 
+	public String getGraphInputPortName() {
+		return INPUT_PORT_NAME;
+	}
+
 	/**
 	 * This method encapsulates the concrete graph processing performed by the concrete filters.
 	 * 

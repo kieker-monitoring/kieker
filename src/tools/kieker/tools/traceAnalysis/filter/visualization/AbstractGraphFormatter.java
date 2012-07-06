@@ -25,6 +25,7 @@ import java.util.Iterator;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertex;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertexDecoration;
+import kieker.tools.traceAnalysis.filter.visualization.graph.Color;
 
 /**
  * Abstract superclass for all graph formatters.
@@ -106,4 +107,15 @@ public abstract class AbstractGraphFormatter<G extends AbstractGraph<?, ?, ?>> {
 	 * @return See above
 	 */
 	public abstract String getDefaultFileName();
+
+	/**
+	 * Returns the dot (graphviz) representation of the given color.
+	 * 
+	 * @param color
+	 *            The color to convert
+	 * @return The dot representation of the given color
+	 */
+	public static String getDotRepresentation(final Color color) {
+		return String.format("#%06x", color.getRGB());
+	}
 }
