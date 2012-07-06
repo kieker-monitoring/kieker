@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertex;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertexDecoration;
+import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
 
@@ -37,7 +38,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubReposi
  * 
  * @author Andre van Hoorn
  */
-public class DependencyGraphNode<T> extends AbstractVertex<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, MessageTrace> {
+public class DependencyGraphNode<T extends ISystemModelElement> extends
+		AbstractVertex<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, MessageTrace> {
 
 	public static final int ROOT_NODE_ID = AbstractSystemSubRepository.ROOT_ELEMENT_ID;
 	public static final String ROOT_NODE_NAME = "$";
@@ -60,6 +62,11 @@ public class DependencyGraphNode<T> extends AbstractVertex<DependencyGraphNode<T
 
 	public final T getEntity() {
 		return this.entity;
+	}
+
+	@Override
+	public String getIdentifier() {
+		return this.getEntity().getIdentifier();
 	}
 
 	public final Collection<WeightedBidirectionalDependencyGraphEdge<T>> getIncomingDependencies() {

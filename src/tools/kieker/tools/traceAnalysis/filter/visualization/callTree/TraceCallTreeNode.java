@@ -42,4 +42,9 @@ public class TraceCallTreeNode extends AbstractCallTreeNode<AllocationComponentO
 		super.appendChildEdge(e);
 		return destNode;
 	}
+
+	@Override
+	public String getIdentifier() {
+		return null;
+	}
 }

@@ -34,13 +34,14 @@ import java.util.Set;
  * 
  */
 
-public class GraphElement<O> {
+public abstract class AbstractGraphElement<O> {
 
 	private Color color;
+	private String description;
 
 	private final Set<O> origins = new HashSet<O>();
 
-	protected GraphElement(final O origin) {
+	protected AbstractGraphElement(final O origin) {
 		this.addOrigin(origin);
 	}
 
@@ -64,6 +65,25 @@ public class GraphElement<O> {
 	}
 
 	/**
+	 * Returns this graph element's description.
+	 * 
+	 * @return See above
+	 */
+	public String getDescription() {
+		return this.description;
+	}
+
+	/**
+	 * Sets this graph element's description.
+	 * 
+	 * @param description
+	 *            The description to set
+	 */
+	public void setDescription(final String description) {
+		this.description = description;
+	}
+
+	/**
 	 * Returns the objects which caused the creation of this element.
 	 * 
 	 * @return See above
@@ -81,5 +101,12 @@ public class GraphElement<O> {
 	public void addOrigin(final O origin) {
 		this.origins.add(origin);
 	}
+
+	/**
+	 * Returns an identifier for this graph element (e.g., a label).
+	 * 
+	 * @return An identifier or {@code null} if no identifier can be determined
+	 */
+	public abstract String getIdentifier();
 
 }

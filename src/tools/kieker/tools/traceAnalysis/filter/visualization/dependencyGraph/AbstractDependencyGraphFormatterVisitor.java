@@ -23,6 +23,7 @@ package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFormatter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph.Visitor;
 import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
+import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
 
 /**
  * Abstract base class for dependency-graph-formatting visitors. This base class already provides the common
@@ -35,7 +36,7 @@ import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
  * @param <E>
  *            The type of the graph's edges
  */
-public abstract class AbstractDependencyGraphFormatterVisitor<T> implements
+public abstract class AbstractDependencyGraphFormatterVisitor<T extends ISystemModelElement> implements
 		Visitor<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>> {
 
 	protected final StringBuilder builder;

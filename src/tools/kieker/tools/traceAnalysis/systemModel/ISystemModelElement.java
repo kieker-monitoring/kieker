@@ -18,33 +18,21 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
-
-import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractWeightedEdge;
-import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
-import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+package kieker.tools.traceAnalysis.systemModel;
 
 /**
+ * Abstract supertype for all entities in the system model.
  * 
- * @param <T>
+ * @author Holger Knoche
  * 
- * @author Andre van Hoorn
  */
-public class WeightedBidirectionalDependencyGraphEdge<T extends ISystemModelElement> extends
-		AbstractWeightedEdge<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, MessageTrace> {
+public interface ISystemModelElement {
 
-	private boolean assumed = false;
-
-	public WeightedBidirectionalDependencyGraphEdge(final DependencyGraphNode<T> source, final DependencyGraphNode<T> target, final MessageTrace origin) {
-		super(source, target, origin);
-	}
-
-	public boolean isAssumed() {
-		return this.assumed;
-	}
-
-	public void setAssumed() {
-		this.assumed = true;
-	}
+	/**
+	 * Returns a textual identifier for this object (e.g., its name).
+	 * 
+	 * @return See above
+	 */
+	public String getIdentifier();
 
 }

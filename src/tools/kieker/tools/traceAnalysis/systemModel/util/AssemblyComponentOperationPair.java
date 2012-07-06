@@ -21,13 +21,14 @@
 package kieker.tools.traceAnalysis.systemModel.util;
 
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
+import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 
 /**
  * 
  * @author Andre van Hoorn
  */
-public class AssemblyComponentOperationPair {
+public class AssemblyComponentOperationPair implements ISystemModelElement {
 	private final int id;
 	private final Operation operation;
 
@@ -54,5 +55,9 @@ public class AssemblyComponentOperationPair {
 	@Override
 	public String toString() {
 		return +this.assemblyComponent.getId() + ":" + this.operation.getId() + "@" + this.id;
+	}
+
+	public String getIdentifier() {
+		return this.getAssemblyComponent().getIdentifier();
 	}
 }

@@ -88,4 +88,9 @@ class AggregatedAllocationComponentOperationCallTreeNode extends AbstractAggrega
 		e.getTargetWeight().increase();
 		return n;
 	}
+
+	@Override
+	public String getIdentifier() {
+		return null;
+	}
 }

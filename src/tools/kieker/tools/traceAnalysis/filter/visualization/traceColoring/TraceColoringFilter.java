@@ -33,7 +33,7 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph.Visitor;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertex;
 import kieker.tools.traceAnalysis.filter.visualization.graph.Color;
-import kieker.tools.traceAnalysis.filter.visualization.graph.GraphElement;
+import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraphElement;
 import kieker.tools.traceAnalysis.repository.TraceColorRepository;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 
@@ -79,7 +79,7 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, MessageTrace>, E
 		this.collisionColor = colorRepository.getCollisionColor();
 	}
 
-	private void handleGraphElement(final GraphElement<MessageTrace> element) {
+	private void handleGraphElement(final AbstractGraphElement<MessageTrace> element) {
 		if (element.getOrigins().size() != 1) {
 			element.setColor(this.collisionColor);
 		}

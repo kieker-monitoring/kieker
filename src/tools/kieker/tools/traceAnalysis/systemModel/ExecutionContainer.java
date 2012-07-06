@@ -28,7 +28,7 @@ import java.util.Collections;
  * 
  * @author Andre van Hoorn
  */
-public class ExecutionContainer {
+public class ExecutionContainer implements ISystemModelElement {
 	private final int id;
 	private final String name;
 	private final ExecutionContainer parent;
@@ -81,5 +81,9 @@ public class ExecutionContainer {
 	 */
 	public boolean isRootContainer() {
 		return false;
+	}
+
+	public String getIdentifier() {
+		return this.getName();
 	}
 }
