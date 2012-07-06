@@ -23,7 +23,6 @@ package kieker.common.configuration;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import kieker.analysis.plugin.AbstractPlugin;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
@@ -36,7 +35,7 @@ public class Configuration extends Properties {
 	private static final long serialVersionUID = 3364877592243422259L;
 	private static final Log LOG = LogFactory.getLog(Configuration.class);
 
-	private static final String CONFIGURATION_NAME_KEY = AbstractPlugin.CONFIG_NAME;
+	public static final String CONFIGURATION_NAME_KEY = "name-hiddenAndNeverExportedProperty";
 
 	public Configuration() {
 		this(null);

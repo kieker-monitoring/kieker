@@ -53,7 +53,7 @@ import kieker.common.logging.LogFactory;
 @Plugin
 public abstract class AbstractPlugin<C extends Configuration> implements IPlugin<C> {
 
-	public static final String CONFIG_NAME = "name-hiddenAndNeverExportedProperty";
+	public static final String CONFIG_NAME = Configuration.CONFIGURATION_NAME_KEY;
 
 	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
 
