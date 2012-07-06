@@ -72,6 +72,7 @@ public final class Constants {
 	public static final String ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX = "assemblyOperationDependencyGraph";
 	public static final String AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX = "aggregatedDeploymentCallTree";
 	public static final String AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX = "aggregatedAssemblyCallTree";
+	public static final String DOT_FILE_SUFFIX = ".dot";
 	public static final String CALL_TREE_FN_PREFIX = "callTree";
 	public static final String MESSAGE_TRACES_FN_PREFIX = "messageTraces";
 	public static final String EXECUTION_TRACES_FN_PREFIX = "executionTraces";
