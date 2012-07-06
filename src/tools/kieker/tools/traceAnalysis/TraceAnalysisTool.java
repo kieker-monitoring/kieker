@@ -82,8 +82,10 @@ import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.Component
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ContainerDependencyGraphFilter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationDependencyGraphAllocationFilter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationDependencyGraphAssemblyFilter;
+import kieker.tools.traceAnalysis.filter.visualization.descriptions.DescriptionDecoratorFilter;
 import kieker.tools.traceAnalysis.filter.visualization.sequenceDiagram.SequenceDiagramFilter;
 import kieker.tools.traceAnalysis.filter.visualization.traceColoring.TraceColoringFilter;
+import kieker.tools.traceAnalysis.repository.DescriptionRepository;
 import kieker.tools.traceAnalysis.repository.TraceColorRepository;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOperationPairFactory;
@@ -339,6 +341,20 @@ public final class TraceAnalysisTool {
 		return coloringFilter;
 	}
 
+	private static <P extends AbstractPlugin<?> & IGraphOutputtingFilter<?>> DescriptionDecoratorFilter<?, ?, ?> createDescriptionDecoratorFilter(
+			final P predecessor,
+			final String descriptionsFileName, final AnalysisController controller) throws IOException, IllegalStateException, AnalysisConfigurationException {
+		final DescriptionRepository descriptionRepository = DescriptionRepository.createFromFile(descriptionsFileName);
+		controller.registerRepository(descriptionRepository);
+
+		@SuppressWarnings("rawtypes")
+		final DescriptionDecoratorFilter<?, ?, ?> descriptionFilter = new DescriptionDecoratorFilter(new Configuration());
+		TraceAnalysisTool.connectGraphFilters(predecessor, descriptionFilter, controller);
+		controller.connect(descriptionFilter, DescriptionDecoratorFilter.DESCRIPTION_REPOSITORY_NAME, descriptionRepository);
+
+		return descriptionFilter;
+	}
+
 	/**
 	 * Attaches graph processors and a writer to the given graph producers depending on the given
 	 * command line.
@@ -366,6 +382,13 @@ public final class TraceAnalysisTool {
 			if (commandLine.hasOption(Constants.CMD_OPT_NAME_TRACE_COLORING)) {
 				final String coloringFileName = commandLine.getOptionValue(Constants.CMD_OPT_NAME_TRACE_COLORING);
 				lastFilter = TraceAnalysisTool.createTraceColoringFilter(((filtersExist) ? lastFilter : producer), coloringFileName, controller);
+				filtersExist = true;
+			}
+
+			// Add a description filter, if necessary
+			if (commandLine.hasOption(Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS)) {
+				final String descriptionsFileName = commandLine.getOptionValue(Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS);
+				lastFilter = TraceAnalysisTool.createDescriptionDecoratorFilter(((filtersExist) ? lastFilter : producer), descriptionsFileName, controller);
 				filtersExist = true;
 			}
 

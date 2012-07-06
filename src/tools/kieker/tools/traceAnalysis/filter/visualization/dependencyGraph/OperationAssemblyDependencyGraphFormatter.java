@@ -107,7 +107,8 @@ public class OperationAssemblyDependencyGraphFormatter extends AbstractOperation
 						null, // fontcolor
 						DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 						null, // imagefilename
-						null // misc
+						null, // misc
+						null
 						));
 				continue;
 			}
@@ -136,7 +137,8 @@ public class OperationAssemblyDependencyGraphFormatter extends AbstractOperation
 						null, // fontcolor
 						DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 						null, // imagefilename
-						null // misc
+						null, // misc
+						node.getDescription() // tooltip
 						));
 			}
 			builder.append("}\n");

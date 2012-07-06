@@ -146,7 +146,8 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 						null, // fontcolor
 						DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 						null, // imagefilename
-						null // misc
+						null, // misc
+						null // tooltip
 						));
 				continue;
 			}
@@ -161,7 +162,8 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 					DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
 					null, // fontcolor
 					DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
-					null)); // misc
+					null // misc
+					));
 
 			// ...then, create clusters for the contained allocation components.
 			for (final AllocationComponent allocationComponent : containerComponentEntry.getValue()) {
@@ -191,7 +193,8 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 							null, // fontcolor
 							DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 							null, // imagefilename
-							null // misc
+							null, // misc
+							node.getDescription() // tooltip
 							));
 				}
 

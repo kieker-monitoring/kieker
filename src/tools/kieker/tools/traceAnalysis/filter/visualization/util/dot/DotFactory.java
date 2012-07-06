@@ -141,7 +141,8 @@ public final class DotFactory {
 	 * @return graph node as dot code
 	 */
 	public static StringBuilder createNode(final String prefix, final String nodeId, final String label, final String shape, final String style,
-			final String framecolor, final String fillcolor, final String fontcolor, final double fontsize, final String imageFilename, final String misc) {
+			final String framecolor, final String fillcolor, final String fontcolor, final double fontsize, final String imageFilename, final String misc,
+			final String tooltip) {
 		final StringBuilder dot = new StringBuilder(prefix == null ? "" : prefix); // NOCS
 		dot.append("\"" + nodeId + "\" [");
 		dot.append(label == null ? "" : "label=\"" + label); // NOCS
@@ -152,6 +153,7 @@ public final class DotFactory {
 		dot.append(fontcolor == null ? "" : "\",fontcolor=\"" + fontcolor); // NOCS
 		dot.append(fontsize == DOT_DEFAULT_FONTSIZE ? "" : "\",fontsize=\"" + Double.toString(fontsize)); // NOCS
 		dot.append(imageFilename == null ? "" : "\",image=\"" + imageFilename); // NOCS
+		dot.append(tooltip == null ? "" : "\", tooltip=\"" + tooltip);
 		dot.append("\"" + (misc == null ? "" : misc) + "]\n"); // NOCS
 		return dot;
 	}

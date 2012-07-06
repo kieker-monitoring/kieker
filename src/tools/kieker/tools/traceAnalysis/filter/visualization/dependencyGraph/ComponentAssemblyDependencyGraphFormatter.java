@@ -71,7 +71,8 @@ public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponent
 						null, // fontcolor
 						DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 						null, // imagefilename
-						null // misc
+						null, // misc
+						null // tooltip
 						));
 			}
 			else {
@@ -84,7 +85,8 @@ public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponent
 						null, // fontcolor
 						DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 						null, // imagefilename
-						null // misc
+						null, // misc
+						vertex.getDescription() // tooltip
 						));
 			}
 

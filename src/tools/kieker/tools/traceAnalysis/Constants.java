@@ -108,7 +108,10 @@ public final class Constants {
 	public static final String RESPONSE_TIME_DECORATOR_FLAG = "responseTimes";
 
 	public static final String CMD_OPT_NAME_TRACE_COLORING = "traceColoring";
-	public static final String COLORING_FILE_OPTION_NAME = "Color Map File";
+	public static final String COLORING_FILE_OPTION_NAME = "color map file";
+
+	public static final String CMD_OPT_NAME_ADD_DESCRIPTIONS = "addDescriptions";
+	public static final String DESCRIPTIONS_FILE_OPTION_NAME = "descriptions file";
 
 	static {
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_INPUTDIRS).withArgName("dir1 ... dirN").hasArgs().isRequired(true)
@@ -173,6 +176,8 @@ public final class Constants {
 				.withDescription("If selected, self-loops are included in the visualizations.").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TRACE_COLORING).hasArg().isRequired(false)
 				.withDescription("Color traces according to the given color map.").withArgName(COLORING_FILE_OPTION_NAME).create());
+		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_ADD_DESCRIPTIONS).hasArg().isRequired(false)
+				.withDescription("Adds descriptions to elements according to the given file.").withArgName(DESCRIPTIONS_FILE_OPTION_NAME).create());
 
 		for (final Option o : SORTED_OPTION_LIST) {
 			CMDL_OPTIONS.addOption(o);
