@@ -78,7 +78,7 @@ public class SimpleImmutableEntry<K, V> implements Map.Entry<K, V>,
 	 * 
 	 * @see java.util.Map.Entry#setValue(java.lang.Object)
 	 */
-	public V setValue(@SuppressWarnings("unused") final V object) {
+	public V setValue(final V object) {
 		throw new UnsupportedOperationException();
 	}
 
