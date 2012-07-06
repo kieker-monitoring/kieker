@@ -20,13 +20,13 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
-import java.io.File;
-
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
+import kieker.tools.traceAnalysis.Constants;
+import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
@@ -47,59 +47,13 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
-		outputPorts = @OutputPort(name = ContainerDependencyGraphFilter.OUTPUT_PORT_NAME, eventTypes = { AbstractGraph.class }))
+		outputPorts = @OutputPort(name = AbstractGraphProducingFilter.GRAPH_OUTPUT_PORT_NAME, eventTypes = { AbstractGraph.class }))
 public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilter<ExecutionContainer> {
-	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dotOutputFn";
-	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
-	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
-	public static final String CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS = "includeSelfLoops";
 
-	public static final String OUTPUT_PORT_NAME = "graphOutput";
-
-	private final File dotOutputFile;
-	private final boolean includeWeights;
-	private final boolean shortLabels;
-	private final boolean includeSelfLoops;
+	private static final String CONFIGURATION_NAME = Constants.PLOTCONTAINERDEPGRAPH_COMPONENT_NAME;
 
 	public ContainerDependencyGraphFilter(final Configuration configuration) {
-		// TODO Check type conversion
-		super(configuration);
-		super.setDependencyGraph(new ContainerDependencyGraph(ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER));
-
-		this.dotOutputFile = new File(configuration.getStringProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE));
-		this.includeWeights = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
-		this.shortLabels = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS);
-		this.includeSelfLoops = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS);
-	}
-
-	@Override
-	public void terminate(final boolean error) {
-		if (!error) {
-			this.deliver(OUTPUT_PORT_NAME, this.dependencyGraph);
-		}
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-
-		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, "");
-		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.FALSE.toString());
-		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.FALSE.toString());
-		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.FALSE.toString());
-
-		return configuration;
-	}
-
-	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
-
-		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
-		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
-		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));
-		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
-
-		return configuration;
+		super(configuration, new ContainerDependencyGraph(ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER));
 	}
 
 	@Override
@@ -116,12 +70,12 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 			final AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
 			final ExecutionContainer senderContainer = senderComponent.getExecutionContainer();
 			final ExecutionContainer receiverContainer = receiverComponent.getExecutionContainer();
-			DependencyGraphNode<ExecutionContainer> senderNode = ContainerDependencyGraphFilter.this.dependencyGraph.getNode(senderContainer.getId());
-			DependencyGraphNode<ExecutionContainer> receiverNode = ContainerDependencyGraphFilter.this.dependencyGraph.getNode(receiverContainer.getId());
+			DependencyGraphNode<ExecutionContainer> senderNode = this.getGraph().getNode(senderContainer.getId());
+			DependencyGraphNode<ExecutionContainer> receiverNode = this.getGraph().getNode(receiverContainer.getId());
 
 			if (senderNode == null) {
 				senderNode = new DependencyGraphNode<ExecutionContainer>(senderContainer.getId(), senderContainer, t);
-				ContainerDependencyGraphFilter.this.dependencyGraph.addNode(senderContainer.getId(), senderNode);
+				this.getGraph().addNode(senderContainer.getId(), senderNode);
 			}
 			else {
 				senderNode.addOrigin(t);
@@ -129,7 +83,7 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 
 			if (receiverNode == null) {
 				receiverNode = new DependencyGraphNode<ExecutionContainer>(receiverContainer.getId(), receiverContainer, t);
-				ContainerDependencyGraphFilter.this.dependencyGraph.addNode(receiverContainer.getId(), receiverNode);
+				this.getGraph().addNode(receiverContainer.getId(), receiverNode);
 			}
 			else {
 				receiverNode.addOrigin(t);
@@ -138,7 +92,12 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 			senderNode.addOutgoingDependency(receiverNode, t);
 			receiverNode.addIncomingDependency(senderNode, t);
 		}
-		ContainerDependencyGraphFilter.this.reportSuccess(t.getTraceId());
+		this.reportSuccess(t.getTraceId());
+	}
+
+	@Override
+	public String getConfigurationName() {
+		return CONFIGURATION_NAME;
 	}
 
 }

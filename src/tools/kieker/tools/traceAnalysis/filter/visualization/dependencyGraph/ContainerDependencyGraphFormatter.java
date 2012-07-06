@@ -20,6 +20,7 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
+import kieker.tools.traceAnalysis.Constants;
 import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 
@@ -30,6 +31,8 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
  * 
  */
 public class ContainerDependencyGraphFormatter extends AbstractDependencyGraphFormatter<ContainerDependencyGraph> {
+
+	private static final String DEFAULT_FILE_NAME = Constants.CONTAINER_DEPENDENCY_GRAPH_FN_PREFIX + Constants.DOT_FILE_SUFFIX;
 
 	private static class FormatterVisitor extends AbstractDependencyGraphFormatterVisitor<ExecutionContainer> {
 
@@ -86,6 +89,11 @@ public class ContainerDependencyGraphFormatter extends AbstractDependencyGraphFo
 		this.appendGraphFooter(builder);
 
 		return builder.toString();
+	}
+
+	@Override
+	public String getDefaultFileName() {
+		return DEFAULT_FILE_NAME;
 	}
 
 }

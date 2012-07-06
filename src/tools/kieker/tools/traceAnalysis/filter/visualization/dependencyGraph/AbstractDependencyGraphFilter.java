@@ -26,7 +26,7 @@ import java.util.List;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
+import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
@@ -39,20 +39,12 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
-public abstract class AbstractDependencyGraphFilter<T> extends AbstractMessageTraceProcessingFilter {
-
-	// private static final Log log = LogFactory.getLog(AbstractDependencyGraphPlugin.class);
-
-	protected volatile DependencyGraph<T> dependencyGraph;
+public abstract class AbstractDependencyGraphFilter<T> extends AbstractGraphProducingFilter<DependencyGraph<T>> {
 
 	private final List<AbstractNodeDecorator> decorators = new ArrayList<AbstractNodeDecorator>();
 
-	public AbstractDependencyGraphFilter(final Configuration configuration) {
-		super(configuration);
-	}
-
-	public void setDependencyGraph(final DependencyGraph<T> dependencyGraph) {
-		this.dependencyGraph = dependencyGraph;
+	public AbstractDependencyGraphFilter(final Configuration configuration, final DependencyGraph<T> graph) {
+		super(configuration, graph);
 	}
 
 	public void addDecorator(final AbstractNodeDecorator decorator) {

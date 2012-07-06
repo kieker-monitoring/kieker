@@ -25,6 +25,8 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
+import kieker.tools.traceAnalysis.Constants;
+import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
@@ -49,19 +51,10 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
-		outputPorts = @OutputPort(name = OperationDependencyGraphAllocationFilter.OUTPUT_PORT_NAME, eventTypes = { AbstractGraph.class }))
+		outputPorts = @OutputPort(name = AbstractGraphProducingFilter.GRAPH_OUTPUT_PORT_NAME, eventTypes = { AbstractGraph.class }))
 public class OperationDependencyGraphAllocationFilter extends AbstractDependencyGraphFilter<AllocationComponentOperationPair> {
-	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dotOutputFn";
-	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
-	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
-	public static final String CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS = "includeSelfLoops";
 
-	public static final String OUTPUT_PORT_NAME = "graphOutput";
-
-	private final String dotOutputFile;
-	private final boolean includeWeights;
-	private final boolean shortLabels;
-	private final boolean includeSelfLoops;
+	private static final String CONFIGURATION_NAME = Constants.PLOTALLOCATIONOPERATIONDEPGRAPH_COMPONENT_NAME;
 
 	/**
 	 * Creates a new instance of this class using the given configuration.
@@ -71,46 +64,9 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 	 */
 	public OperationDependencyGraphAllocationFilter(final Configuration configuration) {
 		/* Call the mandatory "default" constructor. */
-		super(configuration);
-
-		/* Initialize the necessary fields from the inherited class. */
-		super.setDependencyGraph(new OperationAllocationDependencyGraph(new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+		super(configuration, new OperationAllocationDependencyGraph(new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 				OperationRepository.ROOT_OPERATION,
 				AllocationRepository.ROOT_ALLOCATION_COMPONENT)));
-
-		/* Initialize from the given configuration. */
-		this.dotOutputFile = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE);
-		this.includeWeights = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
-		this.shortLabels = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS);
-		this.includeSelfLoops = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS);
-	}
-
-	@Override
-	public void terminate(final boolean error) {
-		if (!error) {
-			this.deliver(OUTPUT_PORT_NAME, this.dependencyGraph);
-		}
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-
-		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, "./OperationDependencyGraph");
-		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.TRUE.toString());
-		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.FALSE.toString());
-		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.TRUE.toString());
-
-		return configuration;
-	}
-
-	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, this.dotOutputFile);
-		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
-		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));
-		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
-		return configuration;
 	}
 
 	@Override
@@ -127,17 +83,14 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 			final Operation receiverOperation = m.getReceivingExecution().getOperation();
 			/* The following two get-calls to the factory return s.th. in either case */
 			final AllocationComponentOperationPairFactory pairFactory = this.getSystemEntityFactory().getAllocationPairFactory();
-			final AllocationComponentOperationPair senderPair = (senderOperation.getId() == rootOperationId) ? OperationDependencyGraphAllocationFilter.this.dependencyGraph // NOCS
-					.getRootNode().getEntity()
+			final AllocationComponentOperationPair senderPair = (senderOperation.getId() == rootOperationId) ? this.getGraph().getRootNode().getEntity()
 					: pairFactory.getPairInstanceByPair(senderComponent, senderOperation);
-			final AllocationComponentOperationPair receiverPair = (receiverOperation.getId() == rootOperationId) ? OperationDependencyGraphAllocationFilter.this.dependencyGraph // NOCS
-					.getRootNode().getEntity()
+			final AllocationComponentOperationPair receiverPair = (receiverOperation.getId() == rootOperationId) ? this.getGraph().getRootNode().getEntity()
 					: pairFactory.getPairInstanceByPair(receiverComponent, receiverOperation);
 
-			DependencyGraphNode<AllocationComponentOperationPair> senderNode = OperationDependencyGraphAllocationFilter.this.dependencyGraph.getNode(senderPair
+			DependencyGraphNode<AllocationComponentOperationPair> senderNode = this.getGraph().getNode(senderPair
 					.getId());
-			DependencyGraphNode<AllocationComponentOperationPair> receiverNode = OperationDependencyGraphAllocationFilter.this.dependencyGraph
-					.getNode(receiverPair.getId());
+			DependencyGraphNode<AllocationComponentOperationPair> receiverNode = this.getGraph().getNode(receiverPair.getId());
 			if (senderNode == null) {
 				senderNode = new DependencyGraphNode<AllocationComponentOperationPair>(senderPair.getId(), senderPair, t);
 
@@ -145,7 +98,7 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 					senderNode.setAssumed();
 				}
 
-				OperationDependencyGraphAllocationFilter.this.dependencyGraph.addNode(senderNode.getId(), senderNode);
+				this.getGraph().addNode(senderNode.getId(), senderNode);
 			}
 			else {
 				senderNode.addOrigin(t);
@@ -158,7 +111,7 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 					receiverNode.setAssumed();
 				}
 
-				OperationDependencyGraphAllocationFilter.this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
+				this.getGraph().addNode(receiverNode.getId(), receiverNode);
 			}
 			else {
 				receiverNode.addOrigin(t);
@@ -171,7 +124,12 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 
 			this.invokeDecorators(m, senderNode, receiverNode);
 		}
-		OperationDependencyGraphAllocationFilter.this.reportSuccess(t.getTraceId());
+		this.reportSuccess(t.getTraceId());
+	}
+
+	@Override
+	public String getConfigurationName() {
+		return CONFIGURATION_NAME;
 	}
 
 }

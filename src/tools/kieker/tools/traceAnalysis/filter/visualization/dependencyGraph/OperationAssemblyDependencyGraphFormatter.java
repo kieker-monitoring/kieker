@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import kieker.tools.traceAnalysis.Constants;
 import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.Operation;
@@ -38,6 +39,8 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * 
  */
 public class OperationAssemblyDependencyGraphFormatter extends AbstractOperationDependencyGraphFormatter<OperationAssemblyDependencyGraph> {
+
+	private static final String DEFAULT_FILE_NAME = Constants.ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX + Constants.DOT_FILE_SUFFIX;
 
 	private static class EdgeVisitor extends AbstractDependencyGraphFormatterVisitor<AssemblyComponentOperationPair> {
 
@@ -151,6 +154,11 @@ public class OperationAssemblyDependencyGraphFormatter extends AbstractOperation
 		this.appendGraphFooter(builder);
 
 		return builder.toString();
+	}
+
+	@Override
+	public String getDefaultFileName() {
+		return DEFAULT_FILE_NAME;
 	}
 
 }

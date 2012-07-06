@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import kieker.tools.traceAnalysis.Constants;
 import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
@@ -39,6 +40,8 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * 
  */
 public class OperationAllocationDependencyGraphFormatter extends AbstractOperationDependencyGraphFormatter<OperationAllocationDependencyGraph> {
+
+	private static final String DEFAULT_FILE_NAME = Constants.ALLOCATION_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX + Constants.DOT_FILE_SUFFIX;
 
 	private static class ElementGrouping {
 
@@ -209,5 +212,10 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 		this.appendGraphFooter(builder);
 
 		return builder.toString();
+	}
+
+	@Override
+	public String getDefaultFileName() {
+		return DEFAULT_FILE_NAME;
 	}
 }

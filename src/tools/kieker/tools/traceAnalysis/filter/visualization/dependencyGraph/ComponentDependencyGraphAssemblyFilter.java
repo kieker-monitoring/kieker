@@ -20,13 +20,13 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
-import java.io.File;
-
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
+import kieker.tools.traceAnalysis.Constants;
+import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
@@ -39,65 +39,19 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 /**
  * Refactored copy from LogAnalysis-legacy tool<br>
  * 
- * This class has exactly one input port named "in". The data which is send to
- * this plugin is not delegated in any way.
+ * This class has exactly one input port named "in". The created graph is emitted through
+ * the output port.
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
-		outputPorts = @OutputPort(name = ComponentDependencyGraphAssemblyFilter.OUTPUT_PORT_NAME))
+		outputPorts = @OutputPort(name = AbstractGraphProducingFilter.GRAPH_OUTPUT_PORT_NAME))
 public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGraphFilter<AssemblyComponent> {
 
-	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dotOutputFn";
-	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
-	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
-	public static final String CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS = "includeSelfLoops";
-
-	public static final String OUTPUT_PORT_NAME = "graphOutput";
-
-	private final File dotOutputFile;
-	private final boolean includeWeights;
-	private final boolean shortLabels;
-	private final boolean includeSelfLoops;
+	private static final String CONFIGURATION_NAME = Constants.PLOTASSEMBLYCOMPONENTDEPGRAPH_COMPONENT_NAME;
 
 	public ComponentDependencyGraphAssemblyFilter(final Configuration configuration) {
-		// TODO Check type conversion
-		super(configuration);
-		super.setDependencyGraph(new ComponentAssemblyDependencyGraph(AssemblyRepository.ROOT_ASSEMBLY_COMPONENT));
-		this.dotOutputFile = new File(configuration.getStringProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE));
-		this.includeWeights = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
-		this.shortLabels = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS);
-		this.includeSelfLoops = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS);
-	}
-
-	@Override
-	public void terminate(final boolean error) {
-		if (!error) {
-			this.deliver(OUTPUT_PORT_NAME, this.dependencyGraph);
-		}
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-
-		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, "");
-		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.FALSE.toString());
-		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.FALSE.toString());
-		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.FALSE.toString());
-
-		return configuration;
-	}
-
-	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
-
-		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
-		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
-		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));
-		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
-
-		return configuration;
+		super(configuration, new ComponentAssemblyDependencyGraph(AssemblyRepository.ROOT_ASSEMBLY_COMPONENT));
 	}
 
 	@Override
@@ -112,8 +66,8 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 			}
 			final AssemblyComponent senderComponent = m.getSendingExecution().getAllocationComponent().getAssemblyComponent();
 			final AssemblyComponent receiverComponent = m.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
-			DependencyGraphNode<AssemblyComponent> senderNode = ComponentDependencyGraphAssemblyFilter.this.dependencyGraph.getNode(senderComponent.getId());
-			DependencyGraphNode<AssemblyComponent> receiverNode = ComponentDependencyGraphAssemblyFilter.this.dependencyGraph.getNode(receiverComponent.getId());
+			DependencyGraphNode<AssemblyComponent> senderNode = this.getGraph().getNode(senderComponent.getId());
+			DependencyGraphNode<AssemblyComponent> receiverNode = this.getGraph().getNode(receiverComponent.getId());
 			if (senderNode == null) {
 				senderNode = new DependencyGraphNode<AssemblyComponent>(senderComponent.getId(), senderComponent, t);
 
@@ -121,7 +75,7 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 					senderNode.setAssumed();
 				}
 
-				ComponentDependencyGraphAssemblyFilter.this.dependencyGraph.addNode(senderNode.getId(), senderNode);
+				this.getGraph().addNode(senderNode.getId(), senderNode);
 			}
 			else {
 				senderNode.addOrigin(t);
@@ -134,7 +88,7 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 					receiverNode.setAssumed();
 				}
 
-				ComponentDependencyGraphAssemblyFilter.this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
+				this.getGraph().addNode(receiverNode.getId(), receiverNode);
 			}
 			else {
 				receiverNode.addOrigin(t);
@@ -147,6 +101,12 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 
 			this.invokeDecorators(m, senderNode, receiverNode);
 		}
-		ComponentDependencyGraphAssemblyFilter.this.reportSuccess(t.getTraceId());
+
+		this.reportSuccess(t.getTraceId());
+	}
+
+	@Override
+	public String getConfigurationName() {
+		return CONFIGURATION_NAME;
 	}
 }

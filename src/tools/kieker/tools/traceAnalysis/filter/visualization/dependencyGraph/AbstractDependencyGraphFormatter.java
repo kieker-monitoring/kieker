@@ -20,8 +20,8 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
-import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFormatter;
+import kieker.tools.traceAnalysis.filter.visualization.GraphWriterConfiguration;
 import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
@@ -38,19 +38,6 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
  */
 public abstract class AbstractDependencyGraphFormatter<G extends DependencyGraph<?>> extends AbstractGraphFormatter<G> {
 
-	/**
-	 * Name of the configuration property indicating that weights should be included.
-	 */
-	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
-	/**
-	 * Name of the configuration property indicating that short labels should be used.
-	 */
-	public static final String CONFIG_PROPERTY_NAME_SHORTLABELS = "shortLabels";
-	/**
-	 * Name of the configuration property indicating that self-loops should be displayed.
-	 */
-	public static final String CONFIG_PROPERTY_NAME_SELFLOOPS = "selfLoops";
-
 	protected static final String STEREOTYPE_EXECUTION_CONTAINER = "<<execution container>>";
 	protected static final String STEREOTYPE_ASSEMBLY_COMPONENT = "<<assembly component>>";
 	protected static final String STEREOTYPE_ALLOCATION_COMPONENT = "<<deployment component>>";
@@ -60,10 +47,10 @@ public abstract class AbstractDependencyGraphFormatter<G extends DependencyGraph
 	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
 
 	@Override
-	protected String formatGraph(final G graph, final Configuration configuration) {
-		final boolean includeWeights = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
-		final boolean useShortLabels = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORTLABELS);
-		final boolean plotLoops = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SELFLOOPS);
+	protected String formatGraph(final G graph, final GraphWriterConfiguration configuration) {
+		final boolean includeWeights = configuration.doIncludeWeights();
+		final boolean useShortLabels = configuration.doUseShortLabels();
+		final boolean plotLoops = configuration.doPlotLoops();
 
 		return this.formatDependencyGraph(graph, includeWeights, useShortLabels, plotLoops);
 	}
