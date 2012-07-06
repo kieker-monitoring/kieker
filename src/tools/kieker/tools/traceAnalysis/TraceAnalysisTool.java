@@ -45,6 +45,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.ParseException;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.filter.flow.EventRecordTraceReconstructionFilter;
 import kieker.analysis.plugin.filter.select.TimestampFilter;
@@ -53,6 +54,7 @@ import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
@@ -65,6 +67,7 @@ import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceReconstruction
 import kieker.tools.traceAnalysis.filter.traceWriter.ExecutionTraceWriterFilter;
 import kieker.tools.traceAnalysis.filter.traceWriter.InvalidExecutionTraceWriterFilter;
 import kieker.tools.traceAnalysis.filter.traceWriter.MessageTraceWriterFilter;
+import kieker.tools.traceAnalysis.filter.visualization.GraphWriterConfiguration;
 import kieker.tools.traceAnalysis.filter.visualization.GraphWriterPlugin;
 import kieker.tools.traceAnalysis.filter.visualization.callTree.AbstractAggregatedCallTreeFilter;
 import kieker.tools.traceAnalysis.filter.visualization.callTree.AggregatedAllocationComponentOperationCallTreeFilter;
@@ -276,6 +279,31 @@ public final class TraceAnalysisTool {
 		}
 	}
 
+	private static GraphWriterConfiguration createGraphWriterConfiguration() {
+		final GraphWriterConfiguration configuration = new GraphWriterConfiguration();
+
+		configuration.setOutputPath(outputDir + File.separator + outputFnPrefix);
+		configuration.setIncludeWeights(true);
+		configuration.setUseShortLabels(shortLabels);
+		configuration.setPlotLoops(includeSelfLoops);
+
+		return configuration;
+	}
+
+	private static void attachGraphProcessors(final List<AbstractGraphProducingFilter<?>> graphProducers, final AnalysisController controller)
+			throws IllegalStateException, AnalysisConfigurationException {
+		for (final AbstractGraphProducingFilter<?> producer : graphProducers) {
+
+			final AbstractGraphProducingFilter<?> lastGraphProcessor = producer;
+			final GraphWriterConfiguration configuration = TraceAnalysisTool.createGraphWriterConfiguration();
+			configuration.setConfigurationName(producer.getConfigurationName());
+			final GraphWriterPlugin graphWriter = new GraphWriterPlugin(configuration);
+			controller.registerFilter(graphWriter);
+			controller.connect(lastGraphProcessor, AbstractGraphProducingFilter.GRAPH_OUTPUT_PORT_NAME,
+					graphWriter, GraphWriterPlugin.INPUT_PORT_NAME);
+		}
+	}
+
 	private static boolean dispatchTasks() {
 		boolean retVal = true;
 		int numRequestedTasks = 0;
@@ -405,6 +433,7 @@ public final class TraceAnalysisTool {
 			}
 
 			final List<AbstractTraceProcessingFilter> allTraceProcessingComponents = new ArrayList<AbstractTraceProcessingFilter>();
+			final List<AbstractGraphProducingFilter<?>> allGraphProducers = new ArrayList<AbstractGraphProducingFilter<?>>();
 
 			final Configuration traceAllocationEquivClassFilterConfig = new Configuration();
 			traceAllocationEquivClassFilterConfig.setProperty(AbstractPlugin.CONFIG_NAME,
@@ -556,23 +585,11 @@ public final class TraceAnalysisTool {
 						SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPlotAssemblySeqDiagr);
 			}
+
 			ComponentDependencyGraphAllocationFilter componentPlotAllocationComponentDepGraph = null;
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG)) {
 				numRequestedTasks++;
-				final Configuration componentPlotAllocationComponentDepGraphConfig = new Configuration();
-				componentPlotAllocationComponentDepGraphConfig.setProperty(AbstractPlugin.CONFIG_NAME,
-						Constants.PLOTALLOCATIONCOMPONENTDEPGRAPH_COMPONENT_NAME);
-				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE,
-						TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.ALLOCATION_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX);
-				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS,
-						Boolean.TRUE.toString());
-				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SHORTLABELS,
-						Boolean.toString(TraceAnalysisTool.shortLabels));
-				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SELFLOOPS,
-						Boolean.toString(TraceAnalysisTool.includeSelfLoops));
-
-				componentPlotAllocationComponentDepGraph = new ComponentDependencyGraphAllocationFilter(
-						componentPlotAllocationComponentDepGraphConfig);
+				componentPlotAllocationComponentDepGraph = new ComponentDependencyGraphAllocationFilter(new Configuration());
 
 				final String[] nodeDecorations = TraceAnalysisTool.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG);
 				TraceAnalysisTool.addDecorators(nodeDecorations, componentPlotAllocationComponentDepGraph);
@@ -586,31 +603,14 @@ public final class TraceAnalysisTool {
 				analysisInstance.connect(componentPlotAllocationComponentDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						SYSTEM_ENTITY_FACTORY);
 
-				final GraphWriterPlugin graphWriter = new GraphWriterPlugin(componentPlotAllocationComponentDepGraphConfig);
-				analysisInstance.registerFilter(graphWriter);
-				analysisInstance.connect(componentPlotAllocationComponentDepGraph, ComponentDependencyGraphAllocationFilter.OUTPUT_PORT_NAME,
-						graphWriter, GraphWriterPlugin.INPUT_PORT_NAME);
-
 				allTraceProcessingComponents.add(componentPlotAllocationComponentDepGraph);
+				allGraphProducers.add(componentPlotAllocationComponentDepGraph);
 			}
+
 			ComponentDependencyGraphAssemblyFilter componentPlotAssemblyComponentDepGraph = null;
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG)) {
 				numRequestedTasks++;
-				final Configuration componentPlotAssemblyComponentDepGraphConfig = new Configuration();
-				componentPlotAssemblyComponentDepGraphConfig.setProperty(AbstractPlugin.CONFIG_NAME,
-						Constants.PLOTASSEMBLYCOMPONENTDEPGRAPH_COMPONENT_NAME);
-				componentPlotAssemblyComponentDepGraphConfig.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
-						Boolean.toString(TraceAnalysisTool.shortLabels));
-				componentPlotAssemblyComponentDepGraphConfig.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS,
-						Boolean.toString(true));
-				componentPlotAssemblyComponentDepGraphConfig.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS,
-						Boolean.toString(TraceAnalysisTool.includeSelfLoops));
-				componentPlotAssemblyComponentDepGraphConfig.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, new File(
-						TraceAnalysisTool.outputDir
-								+ File.separator + TraceAnalysisTool.outputFnPrefix
-								+ Constants.ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX).getAbsolutePath());
-
-				componentPlotAssemblyComponentDepGraph = new ComponentDependencyGraphAssemblyFilter(componentPlotAssemblyComponentDepGraphConfig);
+				componentPlotAssemblyComponentDepGraph = new ComponentDependencyGraphAssemblyFilter(new Configuration());
 
 				final String[] nodeDecorations = TraceAnalysisTool.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG);
 				TraceAnalysisTool.addDecorators(nodeDecorations, componentPlotAssemblyComponentDepGraph);
@@ -624,29 +624,13 @@ public final class TraceAnalysisTool {
 				analysisInstance.connect(componentPlotAssemblyComponentDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPlotAssemblyComponentDepGraph);
-
-				final GraphWriterPlugin graphWriter = new GraphWriterPlugin(componentPlotAssemblyComponentDepGraphConfig);
-				analysisInstance.registerFilter(graphWriter);
-				analysisInstance.connect(componentPlotAssemblyComponentDepGraph, ComponentDependencyGraphAssemblyFilter.OUTPUT_PORT_NAME,
-						graphWriter, GraphWriterPlugin.INPUT_PORT_NAME);
+				allGraphProducers.add(componentPlotAssemblyComponentDepGraph);
 			}
+
 			ContainerDependencyGraphFilter componentPlotContainerDepGraph = null;
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG)) {
 				numRequestedTasks++;
-				final Configuration componentPlotContainerDepGraphConfig = new Configuration();
-				componentPlotContainerDepGraphConfig.setProperty(AbstractPlugin.CONFIG_NAME,
-						Constants.PLOTCONTAINERDEPGRAPH_COMPONENT_NAME);
-				componentPlotContainerDepGraphConfig.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
-						Boolean.toString(TraceAnalysisTool.shortLabels));
-				componentPlotContainerDepGraphConfig.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
-				componentPlotContainerDepGraphConfig.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS,
-						Boolean.toString(TraceAnalysisTool.includeSelfLoops));
-				componentPlotContainerDepGraphConfig.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, new File(
-						TraceAnalysisTool.outputDir
-								+ File.separator + TraceAnalysisTool.outputFnPrefix
-								+ Constants.CONTAINER_DEPENDENCY_GRAPH_FN_PREFIX).getAbsolutePath());
-
-				componentPlotContainerDepGraph = new ContainerDependencyGraphFilter(componentPlotContainerDepGraphConfig);
+				componentPlotContainerDepGraph = new ContainerDependencyGraphFilter(new Configuration());
 				analysisInstance.registerFilter(componentPlotContainerDepGraph);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPlotContainerDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
@@ -656,30 +640,13 @@ public final class TraceAnalysisTool {
 				analysisInstance.connect(componentPlotContainerDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPlotContainerDepGraph);
-
-				final GraphWriterPlugin graphWriter = new GraphWriterPlugin(componentPlotContainerDepGraphConfig);
-				analysisInstance.registerFilter(graphWriter);
-				analysisInstance.connect(componentPlotContainerDepGraph, ContainerDependencyGraphFilter.OUTPUT_PORT_NAME,
-						graphWriter, GraphWriterPlugin.INPUT_PORT_NAME);
+				allGraphProducers.add(componentPlotContainerDepGraph);
 			}
+
 			OperationDependencyGraphAllocationFilter componentPlotAllocationOperationDepGraph = null;
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG)) {
 				numRequestedTasks++;
-
-				final Configuration componentPlotAllocationOperationDepGraphConfig = new Configuration();
-				componentPlotAllocationOperationDepGraphConfig
-						.setProperty(AbstractPlugin.CONFIG_NAME, Constants.PLOTALLOCATIONOPERATIONDEPGRAPH_COMPONENT_NAME);
-				componentPlotAllocationOperationDepGraphConfig
-						.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(TraceAnalysisTool.shortLabels));
-				componentPlotAllocationOperationDepGraphConfig.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS,
-						Boolean.toString(true));
-				componentPlotAllocationOperationDepGraphConfig.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS,
-						Boolean.toString(TraceAnalysisTool.includeSelfLoops));
-				componentPlotAllocationOperationDepGraphConfig.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, new File(
-						TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix
-								+ Constants.ALLOCATION_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX).getAbsolutePath());
-
-				componentPlotAllocationOperationDepGraph = new OperationDependencyGraphAllocationFilter(componentPlotAllocationOperationDepGraphConfig);
+				componentPlotAllocationOperationDepGraph = new OperationDependencyGraphAllocationFilter(new Configuration());
 
 				final String[] nodeDecorations = TraceAnalysisTool.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG);
 				TraceAnalysisTool.addDecorators(nodeDecorations, componentPlotAllocationOperationDepGraph);
@@ -693,31 +660,13 @@ public final class TraceAnalysisTool {
 				analysisInstance.connect(componentPlotAllocationOperationDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPlotAllocationOperationDepGraph);
-
-				final GraphWriterPlugin graphWriter = new GraphWriterPlugin(componentPlotAllocationOperationDepGraphConfig);
-				analysisInstance.registerFilter(graphWriter);
-				analysisInstance.connect(componentPlotAllocationOperationDepGraph, OperationDependencyGraphAllocationFilter.OUTPUT_PORT_NAME,
-						graphWriter, GraphWriterPlugin.INPUT_PORT_NAME);
+				allGraphProducers.add(componentPlotAllocationOperationDepGraph);
 			}
+
 			OperationDependencyGraphAssemblyFilter componentPlotAssemblyOperationDepGraph = null;
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG)) {
 				numRequestedTasks++;
-
-				final Configuration componentPlotAssemblyOperationDepGraphConfig = new Configuration();
-				componentPlotAssemblyOperationDepGraphConfig
-						.setProperty(AbstractPlugin.CONFIG_NAME, Constants.PLOTASSEMBLYOPERATIONDEPGRAPH_COMPONENT_NAME);
-				componentPlotAssemblyOperationDepGraphConfig.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
-						Boolean.toString(TraceAnalysisTool.shortLabels));
-				componentPlotAssemblyOperationDepGraphConfig.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS,
-						Boolean.toString(true));
-				componentPlotAssemblyOperationDepGraphConfig.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS,
-						Boolean.toString(TraceAnalysisTool.includeSelfLoops));
-				componentPlotAssemblyOperationDepGraphConfig.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, new File(
-						TraceAnalysisTool.outputDir
-								+ File.separator + TraceAnalysisTool.outputFnPrefix
-								+ Constants.ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX).getAbsolutePath());
-
-				componentPlotAssemblyOperationDepGraph = new OperationDependencyGraphAssemblyFilter(componentPlotAssemblyOperationDepGraphConfig);
+				componentPlotAssemblyOperationDepGraph = new OperationDependencyGraphAssemblyFilter(new Configuration());
 
 				final String[] nodeDecorations = TraceAnalysisTool.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG);
 				TraceAnalysisTool.addDecorators(nodeDecorations, componentPlotAssemblyOperationDepGraph);
@@ -731,12 +680,9 @@ public final class TraceAnalysisTool {
 				analysisInstance.connect(componentPlotAssemblyOperationDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPlotAssemblyOperationDepGraph);
-
-				final GraphWriterPlugin graphWriter = new GraphWriterPlugin(componentPlotAssemblyOperationDepGraphConfig);
-				analysisInstance.registerFilter(graphWriter);
-				analysisInstance.connect(componentPlotAssemblyOperationDepGraph, OperationDependencyGraphAssemblyFilter.OUTPUT_PORT_NAME,
-						graphWriter, GraphWriterPlugin.INPUT_PORT_NAME);
+				allGraphProducers.add(componentPlotAssemblyOperationDepGraph);
 			}
+
 			TraceCallTreeFilter componentPlotTraceCallTrees = null;
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES)) {
 				numRequestedTasks++;
@@ -809,6 +755,9 @@ public final class TraceAnalysisTool {
 				numRequestedTasks++;
 				// the actual execution of the task is performed below
 			}
+
+			// Attach graph processors to the graph producers
+			TraceAnalysisTool.attachGraphProcessors(allGraphProducers, analysisInstance);
 
 			if (numRequestedTasks == 0) {
 				LOG.warn("No task requested");
