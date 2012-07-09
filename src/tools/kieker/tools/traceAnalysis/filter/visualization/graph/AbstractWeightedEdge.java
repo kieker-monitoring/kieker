@@ -32,6 +32,8 @@ import kieker.common.util.MutableInteger;
  *            The type of the graph's vertices
  * @param <E>
  *            The type of the graph's edges
+ * @param <O>
+ *            The type of object from which the graph's elements originate
  */
 public abstract class AbstractWeightedEdge<V extends AbstractVertex<V, E, O>, E extends AbstractEdge<V, E, O>, O> extends AbstractEdge<V, E, O> {
 

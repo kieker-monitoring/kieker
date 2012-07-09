@@ -86,16 +86,16 @@ public class DependencyGraphNode<T> extends AbstractVertex<DependencyGraphNode<T
 		this.addOutgoingDependency(destination, false, origin);
 	}
 
-	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final boolean assumed, final MessageTrace origin) {
+	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final boolean isAssumed, final MessageTrace origin) {
 		synchronized (this) {
 			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = // NOPMD(UseConcurrentHashMap)
-			assumed ? this.assumedOutgoingDependencies : this.outgoingDependencies; // NOCS (inline ?)
+			isAssumed ? this.assumedOutgoingDependencies : this.outgoingDependencies; // NOCS (inline ?)
 
 			WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(destination.getId());
 			if (e == null) {
 				e = new WeightedBidirectionalDependencyGraphEdge<T>(this, destination, origin);
 
-				if (assumed) {
+				if (isAssumed) {
 					e.setAssumed();
 				}
 
@@ -109,10 +109,10 @@ public class DependencyGraphNode<T> extends AbstractVertex<DependencyGraphNode<T
 		this.addIncomingDependency(source, false, origin);
 	}
 
-	public void addIncomingDependency(final DependencyGraphNode<T> source, final boolean assumed, final MessageTrace origin) {
+	public void addIncomingDependency(final DependencyGraphNode<T> source, final boolean isAssumed, final MessageTrace origin) {
 		synchronized (this) {
 			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = // NOPMD(UseConcurrentHashMap)
-			assumed ? this.assumedIncomingDependencies : this.incomingDependencies; // NOCS (inline ?)
+			isAssumed ? this.assumedIncomingDependencies : this.incomingDependencies; // NOCS (inline ?)
 
 			WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(source.getId());
 			if (e == null) {

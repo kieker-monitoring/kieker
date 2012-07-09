@@ -48,7 +48,6 @@ import kieker.common.record.IMonitoringRecord;
 			@OutputPort(name = RealtimeRecordDelayFilter.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Outputs the delayed records")
 		})
 public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
-	private static final Log LOG = LogFactory.getLog(RealtimeRecordDelayFilter.class);
 
 	public static final String INPUT_PORT_NAME_RECORDS = "inputRecords";
 	public static final String OUTPUT_PORT_NAME_RECORDS = "outputRecords";
@@ -57,6 +56,8 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	 * The number of additional seconds to wait before execute the termination (after all records have been forwarded)
 	 */
 	public static final String CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS = "additionalShutdownDelaySeconds";
+
+	private static final Log LOG = LogFactory.getLog(RealtimeRecordDelayFilter.class);
 
 	private static final long WARN_ON_NEGATIVE_SCHED_TIME_NANOS = TimeUnit.NANOSECONDS.convert(2, TimeUnit.SECONDS);
 

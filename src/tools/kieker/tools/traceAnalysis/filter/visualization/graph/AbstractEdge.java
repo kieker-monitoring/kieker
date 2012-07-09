@@ -33,7 +33,7 @@ package kieker.tools.traceAnalysis.filter.visualization.graph;
  *            The type of object from which the graph's elements originate
  */
 
-public class AbstractEdge<V extends AbstractVertex<V, E, O>, E extends AbstractEdge<V, E, O>, O> extends GraphElement<O> {
+public abstract class AbstractEdge<V extends AbstractVertex<V, E, O>, E extends AbstractEdge<V, E, O>, O> extends GraphElement<O> {
 
 	private final V source;
 	private final V target;

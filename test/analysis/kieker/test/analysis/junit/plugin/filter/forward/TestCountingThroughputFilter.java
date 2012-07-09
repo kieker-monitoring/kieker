@@ -50,6 +50,10 @@ import kieker.test.analysis.util.plugin.reader.SimpleListReader;
  * 
  */
 public class TestCountingThroughputFilter {
+
+	private static final long START_TIME_NANOS = 246561L; // just a non-trivial number
+	private static final long INTERVAL_SIZE_NANOS = 100; // just a non-trivial number
+
 	private AnalysisController analysisController;
 
 	/** Provides the list of {@link IMonitoringRecord}s to be processed */
@@ -64,15 +68,16 @@ public class TestCountingThroughputFilter {
 	/** Simply collects all {@link IMonitoringRecord}s processed by the tested filter */
 	private SimpleSinkFilter<EmptyRecord> sinkPlugin = null; // initialized in #prepareConfiguration()
 
-	private static final long START_TIME_NANOS = 246561l; // just a non-trivial number
-	private static final long INTERVAL_SIZE_NANOS = 100; // just a non-trivial number
-
 	private volatile boolean intervalsBasedOn1stTstamp; // will be set by the @Test's
 
 	/**
 	 * Will be filled by {@link #createInputEvents(SimpleListReader)}
 	 */
 	private final List<Entry<Long, Long>> expectedThroughputValues = new ArrayList<Entry<Long, Long>>();
+
+	public TestCountingThroughputFilter() {
+		// empty default constructor
+	}
 
 	// Note that @Before is not working because the configuration depends on which @Test is executed
 	public void prepareConfiguration() throws IllegalStateException, AnalysisConfigurationException {
@@ -207,7 +212,7 @@ public class TestCountingThroughputFilter {
 
 		final Collection<Entry<Long, Long>> throughputListFromFilter = this.throughputFilter.getCountsPerInterval();
 		final List<Entry<Long, Long>> throughputListFromFilterAndCurrentInterval = new ArrayList<Map.Entry<Long, Long>>();
-		{ // We'll need to append the value for the current (pending) interval
+		{ // We'll need to append the value for the current (pending) interval // NOCS (nested block)
 			throughputListFromFilterAndCurrentInterval.addAll(throughputListFromFilter);
 			throughputListFromFilterAndCurrentInterval.add(new SimpleImmutableEntry<Long, Long>(
 					this.throughputFilter.getLastTimestampInCurrentInterval() + 1, this.throughputFilter.getCurrentCountForCurrentInterval()));
