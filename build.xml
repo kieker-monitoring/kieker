@@ -105,6 +105,8 @@
 			<fileset dir="${lib.dir}">
 				<include name="commons-cli-*.jar" />
 				<include name="jgraphx-*.jar" />
+				<include name="MoDisco-KDM-implementation*.jar" />
+				<include name="org.eclipse.emf.*.jar" />
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
 			<pathelement location="${build.kieker.monitoring.dir}/" />
