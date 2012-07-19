@@ -60,7 +60,7 @@ public class MethodCallIterator extends AbstractKDMIterator<String> {
 	 * @return
 	 *         True if the iterator has more elements.
 	 */
-	@Override
+	// @Override
 	public boolean hasNext() {
 		// If a current element exist there is one
 		if (this.currentElement != null) {
@@ -108,7 +108,7 @@ public class MethodCallIterator extends AbstractKDMIterator<String> {
 	 *             If no other element exists.
 	 * @see #hasNext()
 	 */
-	@Override
+	// @Override
 	public String next() throws NoSuchElementException {
 		if (this.currentElement == null) {
 			throw new NoSuchElementException("No more elements");

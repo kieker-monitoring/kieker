@@ -115,7 +115,7 @@ public abstract class AbstractKDMIterator<T> implements Iterator<T> {
 	/**
 	 * Not implemented.
 	 */
-	@Override
+	// @Override
 	public void remove() { // NOPMD (Not necessary)
 		// Not necessary
 	}

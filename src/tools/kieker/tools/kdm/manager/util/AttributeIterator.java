@@ -61,7 +61,7 @@ public class AttributeIterator extends AbstractKDMIterator<AttributeDescription>
 	 * @return
 	 *         True if the iterator has more elements.
 	 */
-	@Override
+	// @Override
 	public boolean hasNext() {
 		// If a current element exist there is one
 		if (this.currentElement != null) {
@@ -103,7 +103,7 @@ public class AttributeIterator extends AbstractKDMIterator<AttributeDescription>
 	 *             If no other element exists.
 	 * @see #hasNext()
 	 */
-	@Override
+	// @Override
 	public AttributeDescription next() throws NoSuchElementException {
 		if (this.currentElement == null) {
 			throw new NoSuchElementException("No more elements.");

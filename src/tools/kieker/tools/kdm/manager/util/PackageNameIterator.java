@@ -84,7 +84,7 @@ public final class PackageNameIterator extends AbstractKDMIterator<String> {
 		this.nameStak.push(fullPackageName);
 	}
 
-	@Override
+	// @Override
 	/**
 	 * Returns true if the iterator has more elements, otherwise false.
 	 */
@@ -119,12 +119,12 @@ public final class PackageNameIterator extends AbstractKDMIterator<String> {
 		return this.currentIterator.hasNext();
 	}
 
-	@Override
+	// @Override
 	/**
 	 * Returns the next package name. Call next() <b>only</b> after a previous call of {@link #hasNext()}!
 	 * 
 	 * @throws NoSuchElemetException
-	 * 			if no other element exists.
+	 *             if no other element exists.
 	 * @see #hasNext()
 	 */
 	public String next() throws NoSuchElementException {

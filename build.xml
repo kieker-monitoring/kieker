@@ -684,6 +684,9 @@
 		<path id="tools-test-compile-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="junit-*.jar" />
+				<!-- This is necessary for the KDM part -->
+				<include name="MoDisco-KDM-implementation*.jar" />
+				<include name="org.eclipse.emf.*.jar" />
 			</fileset>
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />
@@ -988,6 +991,8 @@
 				<include name="junit-*.jar" />
 				<include name="org.eclipse.emf.*.jar" />
 				<include name="derby-*.jar" />
+				<!-- This is necessary for the KDM part -->
+				<include name="MoDisco-KDM-implementation*.jar" />
 			</fileset>
 			<pathelement location="${build.tests.dir}/" />
 			<fileset dir="${dist.dir}">

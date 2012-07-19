@@ -93,7 +93,7 @@ public final class ClassNameIterator extends AbstractKDMIterator<String> {
 	 * @return
 	 *         Returns true if the iterator has more elements, otherwise false.
 	 */
-	@Override
+	// @Override
 	public boolean hasNext() { // NOCS (JavaNCSSCheck, CyclomaticComplexityCheck)
 		// If a current element exist there is one
 		if (this.currentElement != null) {
@@ -154,7 +154,7 @@ public final class ClassNameIterator extends AbstractKDMIterator<String> {
 		return this.currentIterator.hasNext();
 	}
 
-	@Override
+	// @Override
 	/**
 	 * Returns the next class name. Call next() <b>only</b> after a previous call of {@link #hasNext()}!
 	 * 

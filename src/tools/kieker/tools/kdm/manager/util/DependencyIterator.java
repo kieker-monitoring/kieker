@@ -101,7 +101,7 @@ public class DependencyIterator extends AbstractKDMIterator<DependencyDescriptio
 	 * @return
 	 *         Returns true if the iterator has more elements, otherwise false. You have to call it, otherwise next() will fail!
 	 */
-	@Override
+	// @Override
 	public boolean hasNext() { // NOCS (JavaNCSSCheck, CyclomaticComplexityCheck)
 		// If a current element exist there is one
 		if (this.currentElement != null) {
@@ -174,7 +174,7 @@ public class DependencyIterator extends AbstractKDMIterator<DependencyDescriptio
 		return this.currentIterator.hasNext();
 	}
 
-	@Override
+	// @Override
 	/**
 	 * Returns the next dependency. Call next() <b>only</b> after a previous call of {@link #hasNext()}!
 	 * 

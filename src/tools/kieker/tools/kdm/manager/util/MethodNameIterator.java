@@ -84,7 +84,7 @@ public final class MethodNameIterator extends AbstractKDMIterator<MethodDescript
 		this.nameStak.push(fullInterfaceName);
 	}
 
-	@Override
+	// @Override
 	/**
 	 * Returns true if the iterator has more elements, otherwise false.
 	 */
@@ -118,14 +118,14 @@ public final class MethodNameIterator extends AbstractKDMIterator<MethodDescript
 		return this.currentIterator.hasNext();
 	}
 
-	@Override
+	// @Override
 	/**
 	 * Returns the next method description. Call next() <b>only</b> after a previous call of {@link #hasNext()}!
 	 * 
 	 * @returns
-	 * 			The next method description.
+	 *          The next method description.
 	 * @throws NoSuchElemetException
-	 * 			if no other element exists.
+	 *             if no other element exists.
 	 * @see #hasNaxt()
 	 */
 	public MethodDescription next() throws NoSuchElementException {
