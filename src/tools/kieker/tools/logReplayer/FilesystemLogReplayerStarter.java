@@ -48,6 +48,7 @@ import kieker.monitoring.core.controller.MonitoringController;
  */
 @SuppressWarnings("static-access")
 public final class FilesystemLogReplayerStarter {
+	private static final Log LOG = LogFactory.getLog(FilesystemLogReplayerStarter.class);
 
 	private static CommandLine cmdl = null;
 	private static final CommandLineParser CMDL_PARSER = new BasicParser();
@@ -82,7 +83,7 @@ public final class FilesystemLogReplayerStarter {
 				.withArgName(DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false)
 				.withDescription("Records logged after this date (UTC timezone) are ignored (disabled by default).").create());
 	}
-	private static final Log LOG = LogFactory.getLog(FilesystemLogReplayerStarter.class);
+
 	private static String[] inputDirs = null;
 	private static boolean keepOriginalLoggingTimestamps;
 	private static boolean realtimeMode = false;
@@ -90,6 +91,7 @@ public final class FilesystemLogReplayerStarter {
 	private static long ignoreRecordsBeforeTimestamp = FilesystemLogReplayer.MIN_TIMESTAMP;
 	private static long ignoreRecordsAfterTimestamp = FilesystemLogReplayer.MAX_TIMESTAMP;
 
+	// Avoid instantiation by setting the constructor's visibility to private
 	private FilesystemLogReplayerStarter() {}
 
 	private static boolean parseArgs(final String[] args) {
@@ -195,6 +197,7 @@ public final class FilesystemLogReplayerStarter {
 		return retVal;
 	}
 
+	// TODO: difference to Arrays.toString(..array.)?
 	private static String fromStringArrayToDeliminedString(final String[] array, final char delimiter) {
 		final StringBuilder arTostr = new StringBuilder();
 		if (array.length > 0) {

@@ -150,7 +150,7 @@ public class FilesystemLogReplayer {
  * <b>Don't</b> change the visibility modificator to public. The class does not have the necessary <i>Configuration</i>-Constructor in order to be used by the
  * analysis meta model. <br>
  * 
- * TODO: We need to extract this class and merge it with that of {@link JMSLogReplayer} See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/172
+ * TODO: We need to extract this class and merge it with that of {@link JMSLogReplayer} See ticket http://kieker.uni-kiel.de/trac/ticket/172
  * 
  * @author Andre van Hoorn
  * 

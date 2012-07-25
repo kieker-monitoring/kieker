@@ -36,6 +36,9 @@ import kieker.common.record.IMonitoringRecord;
 /**
  * Listens to a JMS queue and simply passes each record to a specified {@link kieker.common.record.IMonitoringRecordReceiver}.
  * 
+ * @TODO: This class is not used within Kieker; also, it can't work properly, as the recordReceiver is not registered
+ *        to the {@link AnalysisController} instance.
+ * 
  * @author Andre van Hoorn
  */
 public class JMSLogReplayer {
@@ -116,7 +119,7 @@ public class JMSLogReplayer {
  * 
  * <b>Don't</b> change the visibility modificator to public. The class does not have the necessary <i>Configuration</i>-Constructor in order to be used by the
  * analysis meta model. <br>
- * TODO: We need to extract this class and merge it with that of {@link FilesystemLogReplayer} See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/173
+ * TODO: We need to extract this class and merge it with that of {@link FilesystemLogReplayer} See ticket http://kieker.uni-kiel.de/trac/ticket/173
  * 
  * @author Andre van Hoorn
  * 
