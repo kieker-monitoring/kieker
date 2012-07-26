@@ -161,7 +161,7 @@ public class DependencyDescription {
 	public String getFullName() {
 		final StringBuilder fullName = new StringBuilder();
 		// Assemble full name
-		if (!this.fullParentName.isEmpty()) {
+		if (this.fullParentName.length() > 0) {
 			fullName.append(this.fullParentName);
 			if (!this.fullParentName.endsWith(".")) {
 				fullName.append('.');

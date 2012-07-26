@@ -22,7 +22,6 @@ package kieker.tools.kdm;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
@@ -149,7 +148,7 @@ public final class KDMExtractorFilter extends AbstractFilterPlugin {
 	@Override
 	public void terminate(final boolean error) {
 		try {
-			if (!this.outputFileName.isEmpty()) {
+			if (this.outputFileName.length() > 0) {
 				this.repository.saveToFile(this.outputFileName);
 			}
 		} catch (final IOException ex) {
@@ -287,9 +286,9 @@ public final class KDMExtractorFilter extends AbstractFilterPlugin {
 		 */
 		public MethodInformation(final String[] packageNames, final String[] classNames, final String[] parameters, final String methodName,
 				final String returnType, final boolean isStatic, final boolean isConstructor, final String visibilityModifier) {
-			this.packageNames = Arrays.copyOf(packageNames, packageNames.length);
-			this.classNames = Arrays.copyOf(classNames, classNames.length);
-			this.parameters = Arrays.copyOf(parameters, parameters.length);
+			this.packageNames = packageNames.clone();
+			this.classNames = classNames.clone();
+			this.parameters = parameters.clone();
 			this.methodName = methodName;
 			this.returnType = returnType;
 			this.staticFlag = isStatic;
@@ -336,7 +335,7 @@ public final class KDMExtractorFilter extends AbstractFilterPlugin {
 		 * @return The package names.
 		 */
 		public String[] getPackageNames() {
-			return Arrays.copyOf(this.packageNames, this.packageNames.length);
+			return this.packageNames.clone();
 		}
 
 		/**
@@ -345,7 +344,7 @@ public final class KDMExtractorFilter extends AbstractFilterPlugin {
 		 * @return The class names.
 		 */
 		public String[] getClassNames() {
-			return Arrays.copyOf(this.classNames, this.classNames.length);
+			return this.classNames.clone();
 		}
 
 		/**
@@ -354,7 +353,7 @@ public final class KDMExtractorFilter extends AbstractFilterPlugin {
 		 * @return The parameters of the method.
 		 */
 		public String[] getParameters() {
-			return Arrays.copyOf(this.parameters, this.parameters.length);
+			return this.parameters.clone();
 		}
 
 		/**

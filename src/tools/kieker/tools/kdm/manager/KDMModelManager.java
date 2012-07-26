@@ -805,7 +805,7 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 			signature.setName(methodName);
 
 			// Add the return type if necessary
-			if (!returnType.isEmpty()) {
+			if (returnType.length() > 0) {
 				final ParameterUnit parameterUnit = this.codeFactory.createParameterUnit();
 				parameterUnit.setType(this.translateType(returnType));
 				parameterUnit.setKind(ParameterKind.RETURN);
@@ -816,7 +816,7 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 			// Add the parameters
 			int pos = 0;
 			for (final String parameter : parameters) {
-				if (parameter.isEmpty()) {
+				if (parameter.length() == 0) {
 					continue;
 				}
 
@@ -1234,7 +1234,7 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 	 */
 	public String getProjectLanguage() {
 		// If the language is determined just return it
-		if ((this.languageName != null) && !this.languageName.isEmpty()) {
+		if ((this.languageName != null) && (this.languageName.length() > 0)) {
 			return this.languageName;
 		} else { // Try to find out from the InventoryModel
 			try {
@@ -1250,7 +1250,7 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 					} else if (element instanceof SourceFile) {
 						final SourceFile sourceFile = (SourceFile) element;
 						final String language = sourceFile.getLanguage();
-						if (!language.isEmpty()) {
+						if (language.length() > 0) {
 							// Set up the language and break
 							this.languageName = language;
 							break;
