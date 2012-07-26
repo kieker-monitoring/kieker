@@ -224,8 +224,7 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 				}
 
 				ComponentDependencyGraphAllocationFilter.this.dependencyGraph.addNode(senderNode.getId(), senderNode);
-			}
-			else {
+			} else {
 				senderNode.addOrigin(t);
 			}
 
@@ -237,8 +236,7 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 				}
 
 				ComponentDependencyGraphAllocationFilter.this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
-			}
-			else {
+			} else {
 				receiverNode.addOrigin(t);
 			}
 

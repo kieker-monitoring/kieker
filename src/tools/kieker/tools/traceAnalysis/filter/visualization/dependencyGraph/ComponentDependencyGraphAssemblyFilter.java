@@ -178,8 +178,7 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 				}
 
 				ComponentDependencyGraphAssemblyFilter.this.dependencyGraph.addNode(senderNode.getId(), senderNode);
-			}
-			else {
+			} else {
 				senderNode.addOrigin(t);
 			}
 
@@ -191,8 +190,7 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 				}
 
 				ComponentDependencyGraphAssemblyFilter.this.dependencyGraph.addNode(receiverNode.getId(), receiverNode);
-			}
-			else {
+			} else {
 				receiverNode.addOrigin(t);
 			}
 
