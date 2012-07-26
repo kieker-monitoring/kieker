@@ -29,7 +29,7 @@ public class ConstructionEvent extends AbstractTraceEvent {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
-		String.class, // className
+		String.class, // classSignature
 		int.class, // objectId
 	};
 
@@ -38,37 +38,37 @@ public class ConstructionEvent extends AbstractTraceEvent {
 	 */
 	private static final String NO_CLASSNAME = "<no-classname>";
 
-	private final String className;
+	private final String classSignature;
 	private final int objectId;
 
 	public ConstructionEvent(final long timestamp, final long traceId, final int orderIndex, final String className, final int objectId) {
 		super(timestamp, traceId, orderIndex);
-		this.className = (className == null) ? NO_CLASSNAME : className; // NOCS
+		this.classSignature = (className == null) ? NO_CLASSNAME : className; // NOCS
 		this.objectId = objectId;
 	}
 
 	public ConstructionEvent(final Object[] values) { // NOPMD (values stored directly)
 		super(values, TYPES); // values[0..2]
-		this.className = (String) values[3];
+		this.classSignature = (String) values[3];
 		this.objectId = (Integer) values[4];
 	}
 
 	protected ConstructionEvent(final Object[] values, final Class<?>[] types) { // NOPMD (values stored directly)
 		super(values, types); // values[0..2]
-		this.className = (String) values[3];
+		this.classSignature = (String) values[3];
 		this.objectId = (Integer) values[4];
 	}
 
 	public Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.className, this.objectId, };
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.classSignature, this.objectId, };
 	}
 
 	public Class<?>[] getValueTypes() {
 		return TYPES.clone();
 	}
 
-	public final String getClassName() {
-		return this.className;
+	public final String getClassSignature() {
+		return this.classSignature;
 	}
 
 	public final int getObjectId() {
