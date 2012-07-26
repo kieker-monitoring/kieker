@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
@@ -35,7 +34,7 @@ import kieker.common.logging.LogFactory;
 /**
  * Helper class that reads records added using the method {@link #addAllRecords(List)}.
  * Depending on the value of the {@link Configuration} variable {@value #CONFIG_PROPERTY_NAME_AWAIT_TERMINATION},
- * either the {@link #read()} method returns immediately, or awaits a termination via {@link AnalysisController#terminate()}.
+ * either the {@link #read()} method returns immediately, or awaits a termination via {@link kieker.analysis.AnalysisController#terminate()}.
  * 
  * @param <T>
  * 
@@ -43,11 +42,12 @@ import kieker.common.logging.LogFactory;
  */
 @Plugin(outputPorts = { @OutputPort(name = SimpleListReader.OUTPUT_PORT_NAME, eventTypes = { Object.class }) })
 public class SimpleListReader<T> extends AbstractReaderPlugin {
-	private static final Log LOG = LogFactory.getLog(SimpleListReader.class);
 
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 
 	public static final String CONFIG_PROPERTY_NAME_AWAIT_TERMINATION = "awaitTermination";
+
+	private static final Log LOG = LogFactory.getLog(SimpleListReader.class);
 
 	private final boolean awaitTermination;
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);

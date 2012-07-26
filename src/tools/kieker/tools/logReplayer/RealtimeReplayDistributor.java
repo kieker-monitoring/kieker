@@ -50,11 +50,11 @@ import kieker.tools.logReplayer.FSReaderRealtime.FSReaderRealtimeCons;
  */
 @Plugin
 public class RealtimeReplayDistributor extends AbstractFilterPlugin {
-	private static final Log LOG = LogFactory.getLog(RealtimeReplayDistributor.class);
-
 	public static final String INPUT_PORT_NAME_MONITORING_RECORDS = "monitoringRecords";
 
 	public static final String CONFIG_PROPERTY_NAME_NUM_WORKERS = "numWorkers";
+
+	private static final Log LOG = LogFactory.getLog(RealtimeReplayDistributor.class);
 
 	private static final ITimeSource TIMESOURCE = SystemNanoTimer.getInstance();
 	private static final int QUEUE_SIZE_FACTOR = 1000;
