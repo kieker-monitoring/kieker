@@ -86,7 +86,10 @@ public final class PackageNameIterator extends AbstractKDMIterator<String> {
 
 	// @Override
 	/**
-	 * Returns true if the iterator has more elements, otherwise false.
+	 * This method tries to find another element.
+	 * 
+	 * @return
+	 *         Returns true if the iterator has more elements, otherwise false.
 	 */
 	public boolean hasNext() {
 		// If a current element exist there is one

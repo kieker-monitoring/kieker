@@ -28,6 +28,7 @@ import org.eclipse.gmt.modisco.omg.kdm.code.AbstractCodeElement;
 import org.eclipse.gmt.modisco.omg.kdm.code.ClassUnit;
 import org.eclipse.gmt.modisco.omg.kdm.code.CodeItem;
 import org.eclipse.gmt.modisco.omg.kdm.code.InterfaceUnit;
+import org.eclipse.gmt.modisco.omg.kdm.code.Namespace;
 import org.eclipse.gmt.modisco.omg.kdm.code.Package;
 
 /**
@@ -82,6 +83,40 @@ public final class InterfaceNameIterator extends AbstractKDMIterator<String> {
 	 */
 	public InterfaceNameIterator(final Package pack, final String fullPackageName, final boolean depthFirstSearch) throws NullPointerException {
 		this(pack, fullPackageName);
+
+		this.performDepthFirstSearch = depthFirstSearch;
+	}
+
+	/**
+	 * Creates a new instance of this class from the given {@link Namespace} and the full name of the namespace. Depth-first search is disabled.
+	 * 
+	 * @param namespaze
+	 *            The {@link Namespace} to iterate on.
+	 * @param fullNamespaceName
+	 *            The full name of the namespace.
+	 * @throws NullPointerException
+	 *             If the namespace is null.
+	 */
+	public InterfaceNameIterator(final Namespace namespaze, final String fullNamespaceName) throws NullPointerException {
+		super(namespaze.getGroupedCode());
+
+		this.nameStak.push(fullNamespaceName);
+	}
+
+	/**
+	 * Creates a new instance of this class from the {@link Namespace} and the full name of the namespace.
+	 * 
+	 * @param namespaze
+	 *            The {@link Namespace} to iterate on.
+	 * @param fullNamespaceName
+	 *            The full name of the namespace.
+	 * @param depthFirstSearch
+	 *            If true the iterator tries to get more element from nested elements.
+	 * @throws NullPointerException
+	 *             If the namespace is null.
+	 */
+	public InterfaceNameIterator(final Namespace namespaze, final String fullNamespaceName, final boolean depthFirstSearch) throws NullPointerException {
+		this(namespaze, fullNamespaceName);
 
 		this.performDepthFirstSearch = depthFirstSearch;
 	}

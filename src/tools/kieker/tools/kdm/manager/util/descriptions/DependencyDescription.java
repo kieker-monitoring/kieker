@@ -184,6 +184,19 @@ public class DependencyDescription {
 	}
 
 	/**
+	 * This method returns the full name of the parent element.
+	 * 
+	 * @return
+	 *         The full name of the parent element.
+	 * @deprecated
+	 *             Use {@link #getParentName()} instead.
+	 */
+	@Deprecated
+	public String getFullParentName() {
+		return this.fullParentName;
+	}
+
+	/**
 	 * This method returns the full name of the parent package. It may be different from the the parent name.
 	 * 
 	 * @return

@@ -28,6 +28,7 @@ import org.eclipse.gmt.modisco.omg.kdm.code.AbstractCodeElement;
 import org.eclipse.gmt.modisco.omg.kdm.code.ClassUnit;
 import org.eclipse.gmt.modisco.omg.kdm.code.CodeItem;
 import org.eclipse.gmt.modisco.omg.kdm.code.InterfaceUnit;
+import org.eclipse.gmt.modisco.omg.kdm.code.Namespace;
 import org.eclipse.gmt.modisco.omg.kdm.code.Package;
 
 /**
@@ -88,12 +89,46 @@ public final class ClassNameIterator extends AbstractKDMIterator<String> {
 	}
 
 	/**
+	 * Creates a new instance of this class from the given {@link Namespace} and the full namespace name.
+	 * 
+	 * @param namespaze
+	 *            The {@link Namespace} to iterate on.
+	 * @param fullNamespaceName
+	 *            The full name of the namespace.
+	 * @throws NullPointerException
+	 *             If the namespace is null.
+	 */
+	public ClassNameIterator(final Namespace namespaze, final String fullNamespaceName) throws NullPointerException {
+		super(namespaze.getGroupedCode());
+
+		this.nameStak.push(fullNamespaceName);
+	}
+
+	/**
+	 * Creates a new instance of this class from the given {@link Namespace} and the full namespace name.
+	 * 
+	 * @param namespaze
+	 *            The {@link Namespace} to iterate on.
+	 * @param fullNamespaceName
+	 *            The full name of the namespace.
+	 * @param depthFirstSearch
+	 *            If true the iterator tries to find nested classes too.
+	 * @throws NullPointerException
+	 *             If the namespace is null.
+	 */
+	public ClassNameIterator(final Namespace namespaze, final String fullNamespaceName, final boolean depthFirstSearch) throws NullPointerException {
+		this(namespaze, fullNamespaceName);
+
+		this.performDepthFirstSearch = depthFirstSearch;
+	}
+
+	// @Override
+	/**
 	 * This method checks whether there is another element or not.
 	 * 
 	 * @return
 	 *         Returns true if the iterator has more elements, otherwise false.
 	 */
-	// @Override
 	public boolean hasNext() { // NOCS (JavaNCSSCheck, CyclomaticComplexityCheck)
 		// If a current element exist there is one
 		if (this.currentElement != null) {

@@ -10,6 +10,8 @@ import org.eclipse.gmt.modisco.omg.kdm.code.Package;
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.tools.kdm.manager.KDMModelManager;
+import kieker.tools.kdm.manager.exception.InvalidNamespaceException;
 import kieker.tools.kdm.manager.util.InterfaceNameIterator;
 
 /**
@@ -20,6 +22,7 @@ import kieker.tools.kdm.manager.util.InterfaceNameIterator;
 public class InterfaceNameIteratorTest {
 	private final CodeModel codeModel = TestPackageStructure.getCodeModel();
 	private final Map<String, Package> packages = TestPackageStructure.getPackages();
+	private final KDMModelManager modelManager = new KDMModelManager("..\\testdata\\NAnt-p1.xmi");
 
 	/**
 	 * Default constructor.
@@ -134,5 +137,41 @@ public class InterfaceNameIteratorTest {
 		}
 
 		Assert.assertArrayEquals(new Object[] { "test.zwei.acht.IPrintable", "test.zwei.acht.IPrintable.IWritable" }, l.toArray());
+	}
+
+	@Test
+	public void testSimpleInterfaceFromNamespace() {
+		try {
+			final String key = "NAnt.NUnit1.Types";
+			final Iterator<String> it = this.modelManager.iterateInterfacesFromNamespace(key);
+			final List<String> l = new LinkedList<String>();
+			while (it.hasNext()) {
+				final String name = it.next();
+				l.add(name);
+			}
+			final String[] values = new String[] { "NAnt.NUnit1.Types.IResultFormatter" };
+
+			Assert.assertArrayEquals(values, l.toArray());
+		} catch (final InvalidNamespaceException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testMultipleInterfacesFromNamespace() {
+		try {
+			final String key = "NAnt.Core";
+			final Iterator<String> it = this.modelManager.iterateInterfacesFromNamespace(key);
+			final List<String> l = new LinkedList<String>();
+			while (it.hasNext()) {
+				final String name = it.next();
+				l.add(name);
+			}
+			final String[] values = new String[] { "NAnt.Core.IAttributeSetter", "NAnt.Core.IBuildListener", "NAnt.Core.IBuildLogger" };
+
+			Assert.assertArrayEquals(values, l.toArray());
+		} catch (final InvalidNamespaceException e) {
+			e.printStackTrace();
+		}
 	}
 }

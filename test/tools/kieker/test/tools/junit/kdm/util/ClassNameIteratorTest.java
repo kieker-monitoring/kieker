@@ -10,6 +10,8 @@ import org.eclipse.gmt.modisco.omg.kdm.code.Package;
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.tools.kdm.manager.KDMModelManager;
+import kieker.tools.kdm.manager.exception.InvalidNamespaceException;
 import kieker.tools.kdm.manager.util.ClassNameIterator;
 
 /**
@@ -21,6 +23,7 @@ import kieker.tools.kdm.manager.util.ClassNameIterator;
 public class ClassNameIteratorTest {
 	private final CodeModel codeModel = TestPackageStructure.getCodeModel();
 	private final Map<String, Package> packages = TestPackageStructure.getPackages();
+	private final KDMModelManager modelManager = new KDMModelManager("..\\testdata\\NAnt-p1.xmi");
 
 	/**
 	 * Default constructor.
@@ -137,5 +140,44 @@ public class ClassNameIteratorTest {
 		}
 
 		Assert.assertArrayEquals(new Object[] { "test.zwei.sieben.Foo", "test.zwei.sieben.Foo.Bar" }, l.toArray());
+	}
+
+	@Test
+	public void testSimpleClassFromNamespace() {
+		try {
+			final String key = "NAnt.Win32.Functions";
+			final Iterator<String> it = this.modelManager.iterateClassesFromNamespace(key);
+			final List<String> l = new LinkedList<String>();
+			while (it.hasNext()) {
+				final String name = it.next();
+				l.add(name);
+			}
+			final String[] values = new String[] { "NAnt.Win32.Functions.CygpathFunctions" };
+
+			Assert.assertArrayEquals(values, l.toArray());
+		} catch (final InvalidNamespaceException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testMultipleClassesFromNamespace() {
+		try {
+			final String key = "NAnt.SourceControl.Tasks";
+			final Iterator<String> it = this.modelManager.iterateClassesFromNamespace(key);
+			final List<String> l = new LinkedList<String>();
+			while (it.hasNext()) {
+				final String name = it.next();
+				l.add(name);
+			}
+			final String[] values = new String[] { "NAnt.SourceControl.Tasks.AbstractCvsTask", "NAnt.SourceControl.Tasks.AbstractSourceControlTask",
+				"NAnt.SourceControl.Tasks.ChangeLogTask", "NAnt.SourceControl.Tasks.CheckoutTask", "NAnt.SourceControl.Tasks.CvsPass",
+				"NAnt.SourceControl.Tasks.CvsTask", "NAnt.SourceControl.Tasks.ExportTask", "NAnt.SourceControl.Tasks.RTagTask", "NAnt.SourceControl.Tasks.TagTask",
+				"NAnt.SourceControl.Tasks.UpdateTask" };
+
+			Assert.assertArrayEquals(values, l.toArray());
+		} catch (final InvalidNamespaceException e) {
+			e.printStackTrace();
+		}
 	}
 }

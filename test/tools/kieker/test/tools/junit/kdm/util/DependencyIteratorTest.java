@@ -79,14 +79,15 @@ public class DependencyIteratorTest {
 	@Test
 	public void testSimpleExtends2() {
 		final KDMModelManager modelManager = new KDMModelManager("..\\testdata\\InterfaceExtends.xml");
+
 		try {
-			final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromInterface("Iterable");
+			final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromInterface("test.Iterator");
 			final List<String> l = new LinkedList<String>();
 			while (it.hasNext()) {
 				l.add(this.print(it.next()));
 			}
 
-			Assert.assertArrayEquals(new String[] { "EXTENDS INTERFACE Iterator" }, l.toArray());
+			Assert.assertArrayEquals(new String[] { "EXTENDS INTERFACE test.Iterable" }, l.toArray());
 		} catch (final Exception ex) {
 			ex.printStackTrace();
 		}

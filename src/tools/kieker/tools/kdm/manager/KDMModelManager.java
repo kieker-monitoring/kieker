@@ -56,6 +56,7 @@ import org.eclipse.gmt.modisco.omg.kdm.code.CodeFactory;
 import org.eclipse.gmt.modisco.omg.kdm.code.CodeItem;
 import org.eclipse.gmt.modisco.omg.kdm.code.CodeModel;
 import org.eclipse.gmt.modisco.omg.kdm.code.CodeRelationship;
+import org.eclipse.gmt.modisco.omg.kdm.code.CompilationUnit;
 import org.eclipse.gmt.modisco.omg.kdm.code.Datatype;
 import org.eclipse.gmt.modisco.omg.kdm.code.ExportKind;
 import org.eclipse.gmt.modisco.omg.kdm.code.IndexUnit;
@@ -63,6 +64,8 @@ import org.eclipse.gmt.modisco.omg.kdm.code.InterfaceUnit;
 import org.eclipse.gmt.modisco.omg.kdm.code.ItemUnit;
 import org.eclipse.gmt.modisco.omg.kdm.code.MethodKind;
 import org.eclipse.gmt.modisco.omg.kdm.code.MethodUnit;
+import org.eclipse.gmt.modisco.omg.kdm.code.Module;
+import org.eclipse.gmt.modisco.omg.kdm.code.Namespace;
 import org.eclipse.gmt.modisco.omg.kdm.code.Package;
 import org.eclipse.gmt.modisco.omg.kdm.code.ParameterKind;
 import org.eclipse.gmt.modisco.omg.kdm.code.ParameterUnit;
@@ -70,6 +73,7 @@ import org.eclipse.gmt.modisco.omg.kdm.code.Signature;
 import org.eclipse.gmt.modisco.omg.kdm.code.impl.CodeFactoryImpl;
 import org.eclipse.gmt.modisco.omg.kdm.core.KDMEntity;
 import org.eclipse.gmt.modisco.omg.kdm.core.ModelElement;
+import org.eclipse.gmt.modisco.omg.kdm.kdm.Attribute;
 import org.eclipse.gmt.modisco.omg.kdm.kdm.KDMModel;
 import org.eclipse.gmt.modisco.omg.kdm.kdm.KdmFactory;
 import org.eclipse.gmt.modisco.omg.kdm.kdm.Segment;
@@ -82,6 +86,7 @@ import org.eclipse.gmt.modisco.omg.kdm.source.SourceFile;
 
 import kieker.tools.kdm.manager.exception.InvalidInterfaceException;
 import kieker.tools.kdm.manager.exception.InvalidMethodException;
+import kieker.tools.kdm.manager.exception.InvalidNamespaceException;
 import kieker.tools.kdm.manager.exception.InvalidPackageException;
 import kieker.tools.kdm.manager.util.AttributeIterator;
 import kieker.tools.kdm.manager.util.ClassNameIterator;
@@ -89,6 +94,7 @@ import kieker.tools.kdm.manager.util.DependencyIterator;
 import kieker.tools.kdm.manager.util.InterfaceNameIterator;
 import kieker.tools.kdm.manager.util.MethodCallIterator;
 import kieker.tools.kdm.manager.util.MethodNameIterator;
+import kieker.tools.kdm.manager.util.NamespaceNameIterator;
 import kieker.tools.kdm.manager.util.PackageNameIterator;
 import kieker.tools.kdm.manager.util.ParameterIterator;
 import kieker.tools.kdm.manager.util.descriptions.AttributeDescription;
@@ -165,6 +171,10 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 	 * This hash map contains all call relationships between methods, making sure that we can check very fast whether a relationship exists already.
 	 */
 	private final ConcurrentHashMap<String, CodeRelationship> methodCalls = new ConcurrentHashMap<String, CodeRelationship>();
+	/**
+	 * This hash map contains all namespaces used in C#-models, making shure that we can check very fast whether a namespace exists already.
+	 */
+	private final ConcurrentHashMap<String, Namespace> namespaces = new ConcurrentHashMap<String, Namespace>();
 
 	/***************************************************************************************************************************************************************
 	 * The following part should only contain the static constructor
@@ -1175,6 +1185,21 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 	}
 
 	/**
+	 * This method returns an iterator for all dependencies of the given namespace.
+	 * 
+	 * @param fullNamespaceName
+	 *            The full name of the namespace.
+	 * @return
+	 *         An iterator for all dependencies of the given namespace.
+	 * @throws InvalidNamespaceException
+	 *             If the namespace does not exist.
+	 */
+	public Iterator<DependencyDescription> iterateDependenciesFromNamespace(final String fullNamespaceName) throws InvalidNamespaceException {
+		// TODO: implement
+		return null;
+	}
+
+	/**
 	 * This method returns an iterator for all attributes of the given class.
 	 * 
 	 * @param fullClassName
@@ -1204,6 +1229,83 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 		final InterfaceUnit interfaze = this.getInterfaceUnit(fullInterfaceName);
 
 		return new AttributeIterator(interfaze);
+	}
+
+	/**
+	 * This method return an iterator for all {@link Namespace} directly within the code model.
+	 * 
+	 * @return
+	 *         An iterator for all {@link Namespace} directly within the code model.
+	 * @throws InvalidNamespaceException
+	 *             If the namespace does not exist.
+	 */
+	public Iterator<String> iterateNamespaces() throws InvalidNamespaceException {
+		// Namespaces directly within the model
+		return new NamespaceNameIterator(this.codeModel.getCodeElement());
+	}
+
+	/**
+	 * This method return an iterator for all {@link Namespace} within the given namespace.
+	 * 
+	 * @param fullNamespaceName
+	 *            The full name of the namespace.
+	 * @return
+	 *         An iterator for all {@link Namespace} within the given namespace.
+	 * @throws InvalidNamespaceException
+	 *             If the namespace does not exist.
+	 */
+	public Iterator<String> iterateNamespaces(final String fullNamespaceName) throws InvalidNamespaceException {
+		final Namespace namespaze = this.getNamespace(fullNamespaceName);
+
+		return new NamespaceNameIterator(namespaze, fullNamespaceName, false);
+	}
+
+	/**
+	 * This method return an iterator for all {@link Namespace} within the given namespace.
+	 * 
+	 * @param fullNamespaceName
+	 *            The full name of the namespace.
+	 * @param depthFirstSearch
+	 *            If true the iterator performs a depth-first search and tries to get more information by iterating nested namespaces.
+	 * @return
+	 *         An iterator for all {@link Namespace} within the given namespace.
+	 * @throws InvalidNamespaceException
+	 *             If the namespace does not exist.
+	 */
+	public Iterator<String> iterateNamespaces(final String fullNamespaceName, final boolean depthFirstSearch) throws InvalidNamespaceException {
+		final Namespace namespaze = this.getNamespace(fullNamespaceName);
+
+		return new NamespaceNameIterator(namespaze, fullNamespaceName, depthFirstSearch);
+	}
+
+	/**
+	 * This method returns an iterator for all classes within the given {@link Namespace}.
+	 * 
+	 * @param fullNamespaceName
+	 *            The full name of the {@link Namespace}.
+	 * @return
+	 *         An iterator for all classes within the given {@link Namespace}.
+	 * @throws InvalidNamespaceException
+	 *             If the namespace does not exist.
+	 */
+	public Iterator<String> iterateClassesFromNamespace(final String fullNamespaceName) throws InvalidNamespaceException {
+		final Namespace namepsaze = this.getNamespace(fullNamespaceName);
+		return new ClassNameIterator(namepsaze, fullNamespaceName);
+	}
+
+	/**
+	 * This method returns an iterator for all interfaces within the given {@link Namespace}.
+	 * 
+	 * @param fullNamespaceName
+	 *            The full name of the {@link Namespace}.
+	 * @return
+	 *         An iterator for all interfaces within the given {@link Namespace}.
+	 * @throws InvalidNamespaceException
+	 *             If the namespace does not exist.
+	 */
+	public Iterator<String> iterateInterfacesFromNamespace(final String fullNamespaceName) throws InvalidNamespaceException {
+		final Namespace namespaze = this.getNamespace(fullNamespaceName);
+		return new InterfaceNameIterator(namespaze, fullNamespaceName);
 	}
 
 	/***************************************************************************************************************************************************************
@@ -1355,6 +1457,24 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 	 */
 	public MethodUnit getMethodUnit(final MethodDescription description) throws InvalidMethodException {
 		return this.getMethodUnit(description.getMethodQualifier());
+	}
+
+	/**
+	 * This method returns the kdm {@link Namespace} element for the namespace matching the given name. <b>Attention! Use at your own risk! Use it read only!</b>
+	 * 
+	 * @param fullNamespaceName
+	 *            The full name of the namespace.
+	 * @return
+	 *         The kdm {@link Namespace} element.
+	 * @throws InvalidNamespaceException
+	 *             If the namespace does not exist.
+	 */
+	public Namespace getNamespace(final String fullNamespaceName) throws InvalidNamespaceException {
+		final Namespace namespaze = this.namespaces.get(fullNamespaceName);
+		if (namespaze == null) {
+			throw new InvalidNamespaceException("A namespace with the name '" + fullNamespaceName + "' does not exist.");
+		}
+		return namespaze;
 	}
 
 	/***************************************************************************************************************************************************************
@@ -1580,6 +1700,55 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 		return null;
 	}
 
+	/**
+	 * This method tries to get an {@link Attribute} with the given tag and returns the value.
+	 * 
+	 * @param item
+	 *            The {@link CodeItem} to get the attribute from.
+	 * @param tag
+	 *            The value for the tag-attribute of the {@link Attribute}.
+	 * @return
+	 *         The {@link Attribute} with the tag value 'FullyQualifiedName'.
+	 * @throws NoSuchElementException
+	 *             If no such attribute exist.
+	 */
+	private static String getValueFromAttribute(final CodeItem item, final String tag) throws NoSuchElementException {
+		if ((tag != null) && !tag.isEmpty()) {
+			for (final Attribute attribute : item.getAttribute()) {
+				if (attribute.getTag().equals(tag)) {
+					return attribute.getValue();
+				}
+			}
+		}
+		throw new NoSuchElementException();
+	}
+
+	/**
+	 * This method removes the prefix 'global' used in the C#-models.
+	 * 
+	 * @param value
+	 *            The value to remove the prefix.
+	 * @return
+	 *         The String without the prefix or an empty string if value is null.
+	 */
+	private static String removeGlobalCSharpePrefix(final String value) {
+		final String prefix = "global.";
+		String result = "";
+
+		// Avoid NullPointerException
+		if (value == null) {
+			return result;
+		}
+		// Remove the prefix if it exist
+		if (value.startsWith(prefix)) {
+			result = value.substring(prefix.length());
+		} else {
+			result = value;
+		}
+
+		return result;
+	}
+
 	/***************************************************************************************************************************************************************
 	 * The following part should only contain private and non-static methods for subtasks
 	 **************************************************************************************************************************************************************/
@@ -1743,7 +1912,7 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 	 * This method clears all concurrent hash maps, but javaDatatypes.
 	 */
 	private void clearHashMaps() {
-		// Clear all the hash maps
+		// Clear the hash maps
 		this.packages.clear();
 		this.classes.clear();
 		this.interfaces.clear();
@@ -1761,114 +1930,193 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 	 *            Elements from this {@link CodeModel} will be added to the hash maps.
 	 */
 	private void initializeHashMaps(final CodeModel cModel) { // NOCS (JavaNCSSCheck, CyclomaticComplexityCheck)
-
-		// Fill them again
-		if ((cModel != null) && (cModel.getCodeElement() != null)) {
-			final Stack<Iterator<? extends ModelElement>> iteratorStack = new Stack<Iterator<? extends ModelElement>>();
-			final Stack<String> nameStack = new Stack<String>();
-			Iterator<? extends ModelElement> currentIterator = cModel.getCodeElement().iterator();
-			ModelElement currentElement;
-			boolean condition = currentIterator.hasNext();
-
-			while (condition) {
-				// Next element
-				currentElement = currentIterator.next();
-				final StringBuilder name = new StringBuilder();
-				// Assemble full name
-				if (!nameStack.isEmpty()) {
-					name.append(nameStack.peek());
-					if (!name.toString().endsWith(".")) {
-						name.append('.');
-					}
-				}
-
-				// What is the current element?
-				if (currentElement instanceof Package) {
-					final Package pack = (Package) currentElement;
-					// Assemble name
-					name.append(pack.getName());
-					// Put the package into the hash map
-					this.packages.put(name.toString(), pack);
-					// Keep child elements in mind
-					iteratorStack.push(currentIterator);
-					currentIterator = pack.getCodeElement().iterator();
-					// Save current name
-					nameStack.push(name.toString());
-				} else if (currentElement instanceof ClassUnit) {
-					final ClassUnit clazz = (ClassUnit) currentElement;
-					// Assemble name
-					name.append(clazz.getName());
-					// Put the class into the hash map
-					this.classes.put(name.toString(), clazz);
-					// Keep child elements in mind
-					iteratorStack.push(currentIterator);
-					currentIterator = clazz.getCodeElement().iterator();
-					// Save current name
-					nameStack.push(name.toString());
-				} else if (currentElement instanceof InterfaceUnit) {
-					final InterfaceUnit interfaze = (InterfaceUnit) currentElement;
-					// Assemble name
-					name.append(interfaze.getName());
-					// Put the interface into the hash map
-					this.interfaces.put(name.toString(), interfaze);
-					// Keep child elements in mind
-					iteratorStack.push(currentIterator);
-					currentIterator = interfaze.getCodeElement().iterator();
-					// Save current name
-					nameStack.push(name.toString());
-				} else if (currentElement instanceof MethodUnit) {
-					final MethodUnit method = (MethodUnit) currentElement;
-					// Assemble name
-					final String qualifier = KDMModelManager.reassembleMethodQualifierFromModel(method, name.toString());
-					// Put the method into the hash map
-					this.methods.put(qualifier, method);
-					// Keep child elements in mind, necessary to get all code relations (method calls)
-					iteratorStack.push(currentIterator);
-					currentIterator = method.getCodeRelation().iterator();
-					// don't forget the name stack!
-					nameStack.push(name.toString());
-				} else if (currentElement instanceof ArrayType) {
-					final ArrayType arrayType = (ArrayType) currentElement;
-					final StringBuilder arrayTypeName = new StringBuilder();
-					final ItemUnit itemUnit = arrayType.getItemUnit();
-					// Assemble array type name
-					arrayTypeName.append(itemUnit.getType().getName());
-					arrayTypeName.append("[]");
-					this.arrays.put(arrayTypeName.toString(), arrayType);
-				} else if (currentElement instanceof CodeRelationship) {
-					final CodeRelationship codeRelationship = (CodeRelationship) currentElement;
-					// Get the relationship elements
-					final CodeItem fromObject = codeRelationship.getFrom();
-					final KDMEntity toObject = codeRelationship.getTo();
-					// Ensure the elements are methods
-					if ((fromObject instanceof MethodUnit) && (toObject instanceof MethodUnit)) {
-						final MethodUnit srcMethodUnit = (MethodUnit) fromObject;
-						final MethodUnit dstMethodUnit = (MethodUnit) toObject;
-						// Assemble method qualifier
-						final String srcQualifier = KDMModelManager.reassembleMethodQualifierFromModel(srcMethodUnit, name.toString());
-						final String dstParentName = KDMModelManager.reassembleFullParentName(dstMethodUnit);
-						final String dstQualifier = KDMModelManager.reassembleMethodQualifierFromModel(dstMethodUnit, dstParentName);
-						final StringBuilder relName = new StringBuilder();
-						relName.append(srcQualifier).append(' ');
-						relName.append(dstQualifier);
-						// Put the relation ship into the hash map
-						this.methodCalls.put(relName.toString(), codeRelationship);
-					}
-				}
-
-				// Are there more elements?
-				while (!currentIterator.hasNext() && !iteratorStack.isEmpty()) {
-					currentIterator = iteratorStack.pop();
-
-					if (!nameStack.isEmpty()) {
-						nameStack.pop();
-					}
-				}
-
-				condition = currentIterator.hasNext();
-			}
-		} else {
+		// Check the model first
+		if ((cModel == null) || (cModel.getCodeElement() == null)) {
 			KDMModelManager.LOG.severe("Hash map initialization faild because the code model is null.");
+			return;
+		}
+		// Fill them again
+		final Stack<Iterator<? extends ModelElement>> iteratorStack = new Stack<Iterator<? extends ModelElement>>();
+		final Stack<String> nameStack = new Stack<String>();
+		Iterator<? extends ModelElement> currentIterator = cModel.getCodeElement().iterator();
+		ModelElement currentElement;
+		boolean condition = currentIterator.hasNext();
+		// Constant name used on the top level
+		final String globalConstant = "global";
+		final String nameAttributeKey = "FullyQualifiedName";
+
+		while (condition) {
+			// Next element
+			currentElement = currentIterator.next();
+			final StringBuilder name = new StringBuilder();
+			// Assemble full name
+			if (!nameStack.isEmpty()) {
+				name.append(nameStack.peek());
+				if (!name.toString().endsWith(".")) {
+					name.append('.');
+				}
+			}
+
+			// What is the current element?
+			if (currentElement instanceof Package) {
+				final Package pack = (Package) currentElement;
+				// Assemble name
+				name.append(pack.getName());
+				// Put the package into the hash map
+				this.packages.put(name.toString(), pack);
+				// Keep child elements in mind
+				iteratorStack.push(currentIterator);
+				currentIterator = pack.getCodeElement().iterator();
+				// Save current name
+				nameStack.push(name.toString());
+			} else if (currentElement instanceof ClassUnit) {
+				final ClassUnit clazz = (ClassUnit) currentElement;
+				// Assemble name, used for Java
+				name.append(clazz.getName());
+				String key;
+				// In C#-models we must use the name from the attribute, so try to find it
+				try {
+					final String value = KDMModelManager.getValueFromAttribute(clazz, nameAttributeKey);
+					// If it exist keep the 'global'-prefix in mind
+					// if (value.startsWith(globalConstant)) {
+					// final StringBuilder tValue = new StringBuilder(value);
+					// tValue.delete(0, globalConstant.length() + 1);
+					// value = tValue.toString();
+					// }
+					key = KDMModelManager.removeGlobalCSharpePrefix(value);
+				} catch (final NoSuchElementException ex) {
+					// Else use the name
+					key = name.toString();
+				}
+				// Put the class into the hash map
+				this.classes.put(key, clazz);
+				// Keep child elements in mind
+				iteratorStack.push(currentIterator);
+				currentIterator = clazz.getCodeElement().iterator();
+				// Save current name
+				nameStack.push(name.toString());
+			} else if (currentElement instanceof InterfaceUnit) {
+				final InterfaceUnit interfaze = (InterfaceUnit) currentElement;
+				// Assemble name
+				name.append(interfaze.getName());
+				String key;
+				// In C#-models we must use the name from the attribute, so try to find it
+				try {
+					final String value = KDMModelManager.getValueFromAttribute(interfaze, nameAttributeKey);
+					// If it exist keep the 'global'-prefix in mind
+					// if (value.startsWith(globalConstant)) {
+					// final StringBuilder tValue = new StringBuilder(value);
+					// tValue.delete(0, globalConstant.length() + 1);
+					// value = tValue.toString();
+					// }
+					key = KDMModelManager.removeGlobalCSharpePrefix(value);
+				} catch (final NoSuchElementException ex) {
+					// Else use the name
+					key = name.toString();
+				}
+				// Put the interface into the hash map
+				this.interfaces.put(key, interfaze);
+				// Keep child elements in mind
+				iteratorStack.push(currentIterator);
+				currentIterator = interfaze.getCodeElement().iterator();
+				// Save current name
+				nameStack.push(name.toString());
+			} else if (currentElement instanceof MethodUnit) {
+				final MethodUnit method = (MethodUnit) currentElement;
+				// Assemble name
+				String qualifier;
+				// If we are in a C#-model we must use the value from the 'FullyQualifiedName'-attribute.
+				try {
+					// Get the parent
+					final EObject parentObject = method.eContainer();
+					String pName;
+					if (parentObject instanceof ClassUnit) {
+						final ClassUnit classUnit = (ClassUnit) parentObject;
+						pName = KDMModelManager.getValueFromAttribute(classUnit, nameAttributeKey);
+					} else if (parentObject instanceof InterfaceUnit) {
+						final InterfaceUnit interfaceUnit = (InterfaceUnit) parentObject;
+						pName = KDMModelManager.getValueFromAttribute(interfaceUnit, nameAttributeKey);
+					} else {
+						// Use the normal way
+						pName = name.toString();
+					}
+					// Keep the 'global' prefix in mind which is used in C#-models
+					pName = KDMModelManager.removeGlobalCSharpePrefix(pName);
+					qualifier = KDMModelManager.reassembleMethodQualifierFromModel(method, pName);
+				} catch (final NoSuchElementException ex) {
+					qualifier = KDMModelManager.reassembleMethodQualifierFromModel(method, name.toString());
+				}
+				// Put the method into the hash map
+				this.methods.put(qualifier, method);
+				// Keep child elements in mind, necessary to get all code relations (method calls)
+				iteratorStack.push(currentIterator);
+				currentIterator = method.getCodeRelation().iterator();
+				// don't forget the name stack!
+				nameStack.push(name.toString());
+			} else if (currentElement instanceof ArrayType) {
+				final ArrayType arrayType = (ArrayType) currentElement;
+				final StringBuilder arrayTypeName = new StringBuilder();
+				final ItemUnit itemUnit = arrayType.getItemUnit();
+				// Assemble array type name
+				arrayTypeName.append(itemUnit.getType().getName());
+				arrayTypeName.append("[]");
+				this.arrays.put(arrayTypeName.toString(), arrayType);
+			} else if (currentElement instanceof CodeRelationship) {
+				final CodeRelationship codeRelationship = (CodeRelationship) currentElement;
+				// Get the relationship elements
+				final CodeItem fromObject = codeRelationship.getFrom();
+				final KDMEntity toObject = codeRelationship.getTo();
+				// Ensure the elements are methods
+				if ((fromObject instanceof MethodUnit) && (toObject instanceof MethodUnit)) {
+					final MethodUnit srcMethodUnit = (MethodUnit) fromObject;
+					final MethodUnit dstMethodUnit = (MethodUnit) toObject;
+					// Assemble method qualifier
+					final String srcQualifier = KDMModelManager.reassembleMethodQualifierFromModel(srcMethodUnit, name.toString());
+					final String dstParentName = KDMModelManager.reassembleFullParentName(dstMethodUnit);
+					final String dstQualifier = KDMModelManager.reassembleMethodQualifierFromModel(dstMethodUnit, dstParentName);
+					final StringBuilder relName = new StringBuilder();
+					relName.append(srcQualifier).append(' ');
+					relName.append(dstQualifier);
+					// Put the relation ship into the hash map
+					this.methodCalls.put(relName.toString(), codeRelationship);
+				}
+			} else if (currentElement instanceof Module) { // used in C#-models
+				final Module module = (Module) currentElement;
+				// Keep child elements in mind
+				iteratorStack.push(currentIterator);
+				currentIterator = module.getCodeElement().iterator();
+			} else if (currentElement instanceof Namespace) { // Used in C#-models
+				final Namespace namespace = (Namespace) currentElement;
+				final String namespaceName = namespace.getName();
+				// Keep the constant name 'global' in mind, don't use it!
+				if (!globalConstant.equals(namespaceName) || !nameStack.isEmpty()) {
+					try {
+						// Use the full qualified name within the attribute
+						final String nameAttrValue = KDMModelManager.getValueFromAttribute(namespace, nameAttributeKey);
+						this.namespaces.put(nameAttrValue, namespace);
+					} catch (final NoSuchElementException ex) {
+						KDMModelManager.LOG
+								.severe("The attribute '" + nameAttributeKey + "' of the namespace with the name '" + namespaceName + "' does not exist.");
+					}
+				}
+				// Keep the flat order in mind and don't look for child elements
+			} else if (currentElement instanceof CompilationUnit) {
+				final CompilationUnit compilationUnit = (CompilationUnit) currentElement;
+				// Keep child elements in mind
+				iteratorStack.push(currentIterator);
+				currentIterator = compilationUnit.getCodeElement().iterator();
+			}
+
+			// Are there more elements?
+			while (!currentIterator.hasNext() && !iteratorStack.isEmpty()) {
+				currentIterator = iteratorStack.pop();
+
+				if (!nameStack.isEmpty()) {
+					nameStack.pop();
+				}
+			}
+
+			condition = currentIterator.hasNext();
 		}
 	}
 
@@ -2069,30 +2317,32 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 	 */
 	public List<String> logHashMapKeys() {
 		final List<String> keys = new LinkedList<String>();
-		keys.add("packages");
-		for (final String p : this.packages.keySet()) {
-			keys.add(p);
-		}
-		keys.add("classes");
-		for (final String c : this.classes.keySet()) {
-			keys.add(c);
-		}
-		keys.add("interfaces");
-		for (final String i : this.interfaces.keySet()) {
-			keys.add(i);
-		}
-		keys.add("methods");
-		for (final String m : this.methods.keySet()) {
-			keys.add(m);
-		}
-		keys.add("arrays");
-		for (final String a : this.arrays.keySet()) {
-			keys.add(a);
-		}
-		keys.add("methodCalls");
-		for (final String mc : this.methodCalls.keySet()) {
-			keys.add(mc);
-		}
+		// keys.add("packages");
+		// keys.addAll(this.packages.keySet());
+		//
+		// keys.add("");
+		// keys.add("classes");
+		// keys.addAll(this.classes.keySet());
+		//
+		// keys.add("");
+		// keys.add("interfaces");
+		// keys.addAll(this.interfaces.keySet());
+		//
+		// keys.add("");
+		// keys.add("methods");
+		keys.addAll(this.methods.keySet());
+
+		// keys.add("");
+		// keys.add("arrays");
+		// keys.addAll(this.arrays.keySet());
+		//
+		// keys.add("");
+		// keys.add("methodCalls");
+		// keys.addAll(this.methodCalls.keySet());
+		//
+		// keys.add("");
+		// keys.add("namespaces");
+		// keys.addAll(this.namespaces.keySet());
 
 		return keys;
 	}
