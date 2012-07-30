@@ -162,6 +162,7 @@ public final class Registry<E> implements IRegistry<E> {
 		this.eArrayCached = (E[]) new Object[0]; // invalidate cache
 	}
 
+	@SuppressWarnings("unchecked")
 	public final void clear() {
 		for (final Segment<E> segment : this.segments) {
 			segment.clear();
