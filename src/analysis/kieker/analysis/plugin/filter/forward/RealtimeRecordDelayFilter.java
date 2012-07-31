@@ -21,6 +21,7 @@
 package kieker.analysis.plugin.filter.forward;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.plugin.annotation.InputPort;
@@ -37,10 +38,9 @@ import kieker.common.record.IMonitoringRecord;
  * resolution). For example, after initialization, if records with logging timestamps 3000 and 4500 nanos are received, the first record is forwarded immediately;
  * the second will be forwarded 1500 nanos later.
  * 
- * TODO: Configurable number of worker threads?
  * TODO: Timer with higher precision (Currently milliseconds)?
  * 
- * @author Andre van Hoorn
+ * @author Andre van Hoorn, Robert von Massow
  * 
  */
 @Plugin(
@@ -48,18 +48,25 @@ import kieker.common.record.IMonitoringRecord;
 			@OutputPort(name = RealtimeRecordDelayFilter.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Outputs the delayed records")
 		})
 public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
+	private static final Log LOG = LogFactory.getLog(RealtimeRecordDelayFilter.class);
 
 	public static final String INPUT_PORT_NAME_RECORDS = "inputRecords";
 	public static final String OUTPUT_PORT_NAME_RECORDS = "outputRecords";
+
+	// TODO: Way might want to provide this property as a configuration property
+	private static final long WARN_ON_NEGATIVE_SCHED_TIME_NANOS = TimeUnit.NANOSECONDS.convert(2, TimeUnit.SECONDS);
+
+	/**
+	 * The number of threads to be used for the internal {@link ThreadPoolExecutor}, processing the scheduled {@link IMonitoringRecord}s.
+	 */
+	public static final String CONFIG_PROPERTY_NAME_NUM_WORKERS = "numWorkers";
 
 	/**
 	 * The number of additional seconds to wait before execute the termination (after all records have been forwarded)
 	 */
 	public static final String CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS = "additionalShutdownDelaySeconds";
 
-	private static final Log LOG = LogFactory.getLog(RealtimeRecordDelayFilter.class);
-
-	private static final long WARN_ON_NEGATIVE_SCHED_TIME_NANOS = TimeUnit.NANOSECONDS.convert(2, TimeUnit.SECONDS);
+	private final int numWorkers;
 
 	private final ScheduledThreadPoolExecutor executor;
 	private final long shutdownDelayNanos;
@@ -71,10 +78,11 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 
 	public RealtimeRecordDelayFilter(final Configuration configuration) {
 		super(configuration);
+		this.numWorkers = configuration.getIntProperty(CONFIG_PROPERTY_NAME_NUM_WORKERS);
 		this.shutdownDelayNanos =
 				TimeUnit.NANOSECONDS.convert(this.configuration.getLongProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS), TimeUnit.SECONDS);
 
-		this.executor = new ScheduledThreadPoolExecutor(1); // one worker
+		this.executor = new ScheduledThreadPoolExecutor(this.numWorkers);
 		this.executor.setExecuteExistingDelayedTasksAfterShutdownPolicy(true);
 		this.executor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
 	}
@@ -137,8 +145,11 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 		this.executor.shutdown();
 
 		if (!error) {
-			final long shutdownDelaySecondsFromNow =
+			long shutdownDelaySecondsFromNow =
 					TimeUnit.SECONDS.convert((this.latestSchedulingTimeNanos - this.currentTimeNanos()) + this.shutdownDelayNanos, TimeUnit.NANOSECONDS);
+			if (shutdownDelaySecondsFromNow < 0) {
+				shutdownDelaySecondsFromNow = 0;
+			}
 			try {
 				LOG.info("Awaiting termination delay of " + shutdownDelaySecondsFromNow + " seconds ...");
 				if (!this.executor.awaitTermination(shutdownDelaySecondsFromNow, TimeUnit.SECONDS)) {
@@ -152,6 +163,7 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
+		configuration.setProperty(CONFIG_PROPERTY_NAME_NUM_WORKERS, Integer.toString(this.numWorkers));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS, Long.toString(this.shutdownDelayNanos));
 		return configuration;
 	}
@@ -159,6 +171,7 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
+		configuration.setProperty(CONFIG_PROPERTY_NAME_NUM_WORKERS, "1");
 		configuration.setProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS, Long.toString(5)); // 5 seconds default
 		return configuration;
 	}

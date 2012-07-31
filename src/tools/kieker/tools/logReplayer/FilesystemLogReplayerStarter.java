@@ -20,6 +20,7 @@
 
 package kieker.tools.logReplayer;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,12 +35,8 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.core.controller.MonitoringController;
 
 /**
  * Command-line tool for replaying a filesystem monitoring log using the {@link FilesystemLogReplayer}.
@@ -54,6 +51,7 @@ public final class FilesystemLogReplayerStarter {
 	private static final CommandLineParser CMDL_PARSER = new BasicParser();
 	private static final HelpFormatter CMD_HELP_FORMATTER = new HelpFormatter();
 	private static final Options CMDL_OPTS = new Options();
+	private static final String CMD_OPT_NAME_MONITORING_CONFIGURATION = "monitoring.configuration";
 	private static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";
 	private static final String CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS = "keep-logging-timestamps";
 	private static final String CMD_OPT_NAME_REALTIME = "realtime";
@@ -63,7 +61,13 @@ public final class FilesystemLogReplayerStarter {
 	private static final String DATE_FORMAT_PATTERN = "yyyyMMdd'-'HHmmss";
 	private static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
 
+	private static final String OPTION_EXAMPLE_FILE_MONITORING_PROPERTIES =
+			File.separator + "path" + File.separator + "to" + File.separator + "monitoring.properties";
+
 	static {
+		CMDL_OPTS.addOption(OptionBuilder.withArgName(OPTION_EXAMPLE_FILE_MONITORING_PROPERTIES).hasArg()
+				.withLongOpt(CMD_OPT_NAME_MONITORING_CONFIGURATION).isRequired(false)
+				.withDescription("Configuration to use for the Kieker monitoring instance").withValueSeparator('=').create("c"));
 		CMDL_OPTS.addOption(OptionBuilder.withArgName("dir1 ... dirN").hasArgs()
 				.withLongOpt(CMD_OPT_NAME_INPUTDIRS).isRequired(true).withDescription("Log directories to read data from")
 				.withValueSeparator('=').create("i"));
@@ -84,6 +88,7 @@ public final class FilesystemLogReplayerStarter {
 				.withDescription("Records logged after this date (UTC timezone) are ignored (disabled by default).").create());
 	}
 
+	private static String monitoringConfigurationFile = null;
 	private static String[] inputDirs = null;
 	private static boolean keepOriginalLoggingTimestamps;
 	private static boolean realtimeMode = false;
@@ -111,6 +116,9 @@ public final class FilesystemLogReplayerStarter {
 
 	private static boolean initFromArgs() {
 		boolean retVal = true;
+
+		/* 0.) monitoring properties */
+		monitoringConfigurationFile = cmdl.getOptionValue(CMD_OPT_NAME_MONITORING_CONFIGURATION);
 
 		/* 1.) init inputDirs */
 		FilesystemLogReplayerStarter.inputDirs = FilesystemLogReplayerStarter.cmdl.getOptionValues(CMD_OPT_NAME_INPUTDIRS);
@@ -224,23 +232,8 @@ public final class FilesystemLogReplayerStarter {
 			LOG.info("Replaying log data in non-real time");
 		}
 
-		/**
-		 * Force the controller to keep the original logging timestamps of the
-		 * monitoring records.
-		 */
-		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
-
-		if (FilesystemLogReplayerStarter.keepOriginalLoggingTimestamps) {
-			configuration.setProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(false));
-		} else {
-			configuration.setProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(true));
-		}
-
-		final IMonitoringController monitoringController = MonitoringController.createInstance(configuration);
-
-		final FilesystemLogReplayer player = new FilesystemLogReplayer(monitoringController, FilesystemLogReplayerStarter.inputDirs,
-				FilesystemLogReplayerStarter.realtimeMode, FilesystemLogReplayerStarter.numRealtimeWorkerThreads,
-				FilesystemLogReplayerStarter.ignoreRecordsBeforeTimestamp, FilesystemLogReplayerStarter.ignoreRecordsAfterTimestamp);
+		final FilesystemLogReplayer player = new FilesystemLogReplayer(monitoringConfigurationFile, inputDirs, realtimeMode, keepOriginalLoggingTimestamps,
+				numRealtimeWorkerThreads, ignoreRecordsBeforeTimestamp, ignoreRecordsAfterTimestamp);
 
 		if (!player.replay()) {
 			System.err.println("An error occured");

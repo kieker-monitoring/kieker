@@ -52,6 +52,14 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN = "monitoringPropertiesFilename";
 
 	/**
+	 * Specifies whether the included {@link IMonitoringController} should set the {@link IMonitoringRecord#getLoggingTimestamp()} or keep it untouched.
+	 * Values of this property may be (i) <code>"true"</code>, (ii) <code>"false"</code>, or (iii) <code>null</code>/<code>""</code>.
+	 * Cases (i) and (ii) override the respective value also included in the {@link IMonitoringController}'s properties file passed
+	 * via the configuration property {@link #CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN}; case (iii) keeps this property untouched.
+	 */
+	public static final String CONFIG_PROPERTY_NAME_KEEP_LOGGING_TIMESTAMP = "keepLoggingTimestamp";
+
+	/**
 	 * The {@link IMonitoringController} the records received via {@link #inputIMonitoringRecord(IMonitoringRecord)} are passed to.
 	 */
 	private final IMonitoringController monitoringController;
@@ -62,9 +70,15 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 	 */
 	private final String monitoringPropertiesFn;
 
+	/**
+	 * @see #CONFIG_PROPERTY_NAME_KEEP_LOGGING_TIMESTAMP
+	 */
+	private final String keepLoggingTimestamp;
+
 	public MonitoringRecordLoggerFilter(final Configuration configuration) {
 		super(configuration);
 		this.monitoringPropertiesFn = configuration.getProperty(CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN);
+		this.keepLoggingTimestamp = configuration.getProperty(CONFIG_PROPERTY_NAME_KEEP_LOGGING_TIMESTAMP); // may be null or empty
 
 		final Configuration controllerConfiguration;
 
@@ -74,17 +88,30 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 			LOG.info("No path to a 'monitoring.properties' file passed; using default configuration");
 			controllerConfiguration = ConfigurationFactory.createDefaultConfiguration();
 		}
+		if ((this.keepLoggingTimestamp != null) && !this.keepLoggingTimestamp.isEmpty()) {
+			controllerConfiguration.setProperty(
+					ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP,
+					Boolean.toString(!configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_KEEP_LOGGING_TIMESTAMP)));
+		}
 		this.monitoringController = MonitoringController.createInstance(controllerConfiguration);
 	}
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
+		if (this.monitoringPropertiesFn != null) {
+			configuration.setProperty(CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, this.monitoringPropertiesFn);
+		}
+		if ((this.keepLoggingTimestamp != null) && !this.keepLoggingTimestamp.isEmpty()) {
+			configuration.setProperty(CONFIG_PROPERTY_NAME_KEEP_LOGGING_TIMESTAMP, this.keepLoggingTimestamp);
+		}
 		return configuration;
 	}
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration();
+		// Do not set property CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN!
+		// Do not set property CONFIG_PROPERTY_NAME_KEEP_LOGGING_TIMESTAMP!
 		return configuration;
 	}
 

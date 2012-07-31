@@ -53,7 +53,12 @@ import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.analysis.util.plugin.reader.SimpleListReader;
 import kieker.test.tools.junit.writeRead.filesystem.KiekerLogDirFilter;
 
-// TODO: Finalize this test!
+/**
+ * Tests the {@link MonitoringRecordLoggerFilter}.
+ * 
+ * @author Andre van Hoorn
+ * 
+ */
 public class TestMonitoringRecordLoggerFilter {
 	private static final Log LOG = LogFactory.getLog(TestMonitoringRecordLoggerFilter.class);
 
@@ -97,6 +102,7 @@ public class TestMonitoringRecordLoggerFilter {
 			final List<AbstractTraceEvent> nextBatch = Arrays.asList(
 					BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(i, i, DEFAULT_EVENTS_SESSION_ID,
 							DEFAULT_EVENTS_HOSTNAME).getTraceEvents());
+			// note that the loggingTimestamp is not set (i.e., it is -1)
 			someEvents.addAll(nextBatch);
 		}
 		someEvents.add(new EmptyRecord()); // this record used to cause problems (#475)
@@ -129,14 +135,24 @@ public class TestMonitoringRecordLoggerFilter {
 		return sinkPlugin.getList();
 	}
 
+	@Test
+	public void testControllerKeepsLoggingTimestamp() throws Exception {
+		this.testIt(true); //
+	}
+
+	@Test
+	public void testControllerSetsLoggingTimestamp() throws Exception {
+		this.testIt(false); //
+	}
+
 	/**
-	 * The actual Test. Note that this should be the only {@link Test} in this class.
+	 * The actual (parameterized) Test.
 	 * 
 	 * @throws Exception
 	 */
-	@Test
-	public void testSimpleLog() throws Exception { // NOPMD (JUnitTestsShouldIncludeAssert)
+	private void testIt(final boolean keepLoggingTimestamps) throws Exception { // NOPMD (JUnitTestsShouldIncludeAssert)
 		final List<IMonitoringRecord> eventsToWrite = this.provideEvents();
+		final long firstLoggingTimestamp = eventsToWrite.get(0).getLoggingTimestamp();
 
 		final AnalysisController analysisController = new AnalysisController();
 
@@ -149,6 +165,9 @@ public class TestMonitoringRecordLoggerFilter {
 
 		final Configuration recordLoggingFilterConfiguration = new Configuration();
 		recordLoggingFilterConfiguration.setProperty(MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, monitoringProperties.getPath());
+		recordLoggingFilterConfiguration.setProperty(
+				MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_KEEP_LOGGING_TIMESTAMP,
+				Boolean.toString(keepLoggingTimestamps));
 		final MonitoringRecordLoggerFilter loggerFilter = new MonitoringRecordLoggerFilter(recordLoggingFilterConfiguration);
 		analysisController.registerFilter(loggerFilter);
 		analysisController.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, loggerFilter, MonitoringRecordLoggerFilter.INPUT_PORT_NAME_RECORD);
@@ -170,5 +189,12 @@ public class TestMonitoringRecordLoggerFilter {
 		Assert.assertEquals("Unexpected set of records in monitoring log", eventsToWrite, eventsFromLog);
 
 		Assert.assertEquals("Unexpected set of records relayed by filter", eventsToWrite, simpleSinkFilter.getList());
+
+		if (keepLoggingTimestamps) {
+			Assert.assertEquals("Expected logging timestamps to be untouched by the controller", firstLoggingTimestamp, eventsFromLog.get(0).getLoggingTimestamp());
+		} else {
+			// note that firstLoggingTimestamp is actually -1 for each record in this test
+			Assert.assertTrue("Expected logging timestamps to be untouched by the controller", firstLoggingTimestamp != eventsFromLog.get(0).getLoggingTimestamp());
+		}
 	}
 }
