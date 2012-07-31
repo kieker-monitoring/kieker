@@ -27,8 +27,8 @@ public class MyResponseTimeOutputPrinter extends AbstractFilterPlugin {
 
 			String msg = this.validOutput ? "[Valid] " : "[Invalid] ";
 			msg += myRecord.getLoggingTimestamp()
-					+ ": " + myRecord.className + ", " + myRecord.methodName
-					+ ", " + myRecord.responseTimeNanos;
+					+ ": " + myRecord.getClassName() + ", " + myRecord.getMethodName()
+					+ ", " + myRecord.getResponseTimeNanos();
 
 			System.out.println(msg);
 		}
