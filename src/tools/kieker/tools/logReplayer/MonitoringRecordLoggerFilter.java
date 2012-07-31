@@ -88,7 +88,7 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 			LOG.info("No path to a 'monitoring.properties' file passed; using default configuration");
 			controllerConfiguration = ConfigurationFactory.createDefaultConfiguration();
 		}
-		if ((this.keepLoggingTimestamp != null) && !this.keepLoggingTimestamp.isEmpty()) {
+		if ((this.keepLoggingTimestamp != null) && (this.keepLoggingTimestamp.length() > 0)) {
 			controllerConfiguration.setProperty(
 					ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP,
 					Boolean.toString(!configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_KEEP_LOGGING_TIMESTAMP)));
@@ -101,7 +101,7 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 		if (this.monitoringPropertiesFn != null) {
 			configuration.setProperty(CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, this.monitoringPropertiesFn);
 		}
-		if ((this.keepLoggingTimestamp != null) && !this.keepLoggingTimestamp.isEmpty()) {
+		if ((this.keepLoggingTimestamp != null) && (this.keepLoggingTimestamp.length() > 0)) {
 			configuration.setProperty(CONFIG_PROPERTY_NAME_KEEP_LOGGING_TIMESTAMP, this.keepLoggingTimestamp);
 		}
 		return configuration;
