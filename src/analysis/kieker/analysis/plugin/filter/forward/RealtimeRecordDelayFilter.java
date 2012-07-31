@@ -44,6 +44,7 @@ import kieker.common.record.IMonitoringRecord;
  * 
  */
 @Plugin(
+		description = "Forwards incoming records with delays computed from the timestamp values",
 		outputPorts = {
 			@OutputPort(name = RealtimeRecordDelayFilter.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Outputs the delayed records")
 		})

@@ -39,10 +39,11 @@ import kieker.common.logging.LogFactory;
  * 
  * @author Jan Waller
  */
-@Plugin(outputPorts = {
-	@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH, eventTypes = { Object.class }, description = "Forwards events matching the configured types"),
-	@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_TYPE_MISMATCH, eventTypes = {}, description = "Forwards events not matching the configured types")
-})
+@Plugin(description = "Filters incoming objects based on their type",
+		outputPorts = {
+			@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH, eventTypes = { Object.class }, description = "Forwards events matching the configured types"),
+			@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_TYPE_MISMATCH, eventTypes = {}, description = "Forwards events not matching the configured types")
+		})
 public final class TypeFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_EVENTS = "events";

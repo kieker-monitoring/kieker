@@ -49,6 +49,7 @@ import kieker.common.util.SimpleImmutableEntry;
  * @author Andre van Hoorn
  */
 @Plugin(
+		description = "A filter computing the throughput in terms of the number of events received per time unit",
 		outputPorts = {
 			@OutputPort(name = CountingThroughputFilter.OUTPUT_PORT_NAME_RELAYED_OBJECTS, eventTypes = { Object.class }, description = "Provides each incoming object")
 		})

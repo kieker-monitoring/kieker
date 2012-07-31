@@ -39,10 +39,11 @@ import kieker.common.record.flow.trace.Trace;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-@Plugin(outputPorts = {
-	@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, description = "Fowards records within the timeperiod", eventTypes = { IMonitoringRecord.class }),
-	@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_OUTSIDE_PERIOD, description = "Forwards records out of the timeperiod", eventTypes = { IMonitoringRecord.class })
-})
+@Plugin(description = "A filter which filters incoming records based on their timestamps",
+		outputPorts = {
+			@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, description = "Fowards records within the timeperiod", eventTypes = { IMonitoringRecord.class }),
+			@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_OUTSIDE_PERIOD, description = "Forwards records out of the timeperiod", eventTypes = { IMonitoringRecord.class })
+		})
 public final class TimestampFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_ANY_RECORD = "monitoringRecordsAny";
