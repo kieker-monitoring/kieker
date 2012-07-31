@@ -21,7 +21,7 @@
 package kieker.test.tools.junit.logReplayer;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -86,7 +86,7 @@ public class TestMonitoringRecordLoggerFilter {
 
 		// Write configuration to tmp file
 		LOG.info("Writing monitoring.properties to file '" + monitoringPropertiesFn + "'");
-		config.store(new FileWriter(monitoringPropertiesFn, /* !append */false), "Created by " + TestMonitoringRecordLoggerFilter.class.getName());
+		config.store(new FileOutputStream(monitoringPropertiesFn, /* !append */false), "Created by " + TestMonitoringRecordLoggerFilter.class.getName());
 	}
 
 	/**
