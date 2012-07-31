@@ -44,6 +44,7 @@ public class AggregatedAllocationComponentOperationCallTreeFilter extends Abstra
 		super(configuration);
 	}
 
+	// TODO: resolve (http://kieker.uni-kiel.de/trac/ticket/411)
 	public void setAllocationComponentOperationPairFactory(final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory) {
 		super.setRoot(new AggregatedAllocationComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 				AllocationComponentOperationPairFactory.ROOT_PAIR, true, null));

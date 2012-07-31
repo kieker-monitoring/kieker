@@ -44,6 +44,7 @@ public class AggregatedAssemblyComponentOperationCallTreeFilter extends Abstract
 		super(configuration);
 	}
 
+	// TODO: resolve (http://kieker.uni-kiel.de/trac/ticket/411)
 	public void setAssemblyComponentOperationPairFactory(final AssemblyComponentOperationPairFactory assemblyComponentOperationPairFactory) {
 		super.setRoot(new AggregatedAssemblyComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 				AssemblyComponentOperationPairFactory.ROOT_PAIR, true, null));

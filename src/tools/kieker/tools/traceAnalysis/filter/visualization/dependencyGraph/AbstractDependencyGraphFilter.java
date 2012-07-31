@@ -66,7 +66,7 @@ public abstract class AbstractDependencyGraphFilter<T> extends AbstractMessageTr
 		super(configuration);
 	}
 
-	public void setDependencyGraph(final DependencyGraph<T> dependencyGraph) {
+	protected void setDependencyGraph(final DependencyGraph<T> dependencyGraph) {
 		this.dependencyGraph = dependencyGraph;
 	}
 

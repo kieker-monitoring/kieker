@@ -70,7 +70,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 		this.dotOutputFile = configuration.getProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILENAME);
 	}
 
-	public void setRoot(final AbstractAggregatedCallTreeNode<T> root) {
+	protected void setRoot(final AbstractAggregatedCallTreeNode<T> root) {
 		synchronized (this) {
 			this.root = root;
 		}

@@ -139,10 +139,12 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
+		// TODO: equivalenceMode
 		return new Configuration();
 	}
 
 	public Configuration getCurrentConfiguration() {
+		// TODO: equivalenceMode
 		return new Configuration();
 	}
 
