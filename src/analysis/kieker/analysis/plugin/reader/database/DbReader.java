@@ -41,7 +41,8 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @author Jan Waller
  */
-@Plugin(outputPorts = @OutputPort(name = DbReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the DBReader"))
+@Plugin(description = "A reader which reads records from a database",
+		outputPorts = @OutputPort(name = DbReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the DBReader"))
 public class DbReader extends AbstractReaderPlugin {
 
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";

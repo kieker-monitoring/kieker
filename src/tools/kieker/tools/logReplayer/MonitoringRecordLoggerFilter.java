@@ -41,7 +41,8 @@ import kieker.monitoring.core.controller.MonitoringController;
  * 
  */
 // TODO: We should move this class to another package
-@Plugin(outputPorts = @OutputPort(name = MonitoringRecordLoggerFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming monitoring record", eventTypes = { IMonitoringRecord.class }))
+@Plugin(description = "A filter which passes received records to the configured monitoring controller",
+		outputPorts = @OutputPort(name = MonitoringRecordLoggerFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming monitoring record", eventTypes = { IMonitoringRecord.class }))
 public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 	private static final Log LOG = LogFactory.getLog(MonitoringRecordLoggerFilter.class);
 

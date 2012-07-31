@@ -37,7 +37,8 @@ import kieker.common.record.misc.EmptyRecord;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-@Plugin(outputPorts = @OutputPort(name = FSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader"))
+@Plugin(description = "A file system reader which reads records from multiple directories",
+		outputPorts = @OutputPort(name = FSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader"))
 public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
