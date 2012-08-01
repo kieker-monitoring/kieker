@@ -23,6 +23,7 @@ package kieker.test.tools.junit.logReplayer;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -86,7 +87,9 @@ public class TestMonitoringRecordLoggerFilter {
 
 		// Write configuration to tmp file
 		LOG.info("Writing monitoring.properties to file '" + monitoringPropertiesFn + "'");
-		config.store(new FileOutputStream(monitoringPropertiesFn, /* !append */false), "Created by " + TestMonitoringRecordLoggerFilter.class.getName());
+		final OutputStream os = new FileOutputStream(monitoringPropertiesFn, /* !append */false);
+		config.store(os, "Created by " + TestMonitoringRecordLoggerFilter.class.getName());
+		os.close();
 	}
 
 	/**
@@ -136,13 +139,13 @@ public class TestMonitoringRecordLoggerFilter {
 	}
 
 	@Test
-	public void testControllerKeepsLoggingTimestamp() throws Exception {
-		this.testIt(true); //
+	public void testControllerKeepsLoggingTimestamp() throws Exception { // NOMPD (JUnitTestsShouldIncludeAssert)
+		this.testIt(true); // includes Assert(s)
 	}
 
 	@Test
-	public void testControllerSetsLoggingTimestamp() throws Exception {
-		this.testIt(false); //
+	public void testControllerSetsLoggingTimestamp() throws Exception { // NOMPD (JUnitTestsShouldIncludeAssert)
+		this.testIt(false); // includes Assert(s)
 	}
 
 	/**

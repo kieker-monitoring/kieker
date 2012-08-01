@@ -129,7 +129,7 @@ public class FilesystemLogReplayer {
 					analysisInstance.connect(lastFilter, lastOutputPortName, timestampFilter, TimestampFilter.INPUT_PORT_NAME_ANY_RECORD);
 					lastFilter = timestampFilter;
 					lastOutputPortName = TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD;
-				} else {
+				} else { // NOPMD (EmptyIfStmt)
 					// nothing to do; lastFilter and lastOutputPortName keep their values
 				}
 			}
