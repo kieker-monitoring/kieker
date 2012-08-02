@@ -41,13 +41,14 @@ import kieker.common.record.flow.trace.Trace;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-@Plugin(outputPorts = {
-	@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MATCH, description = "Forwards events with matching trace IDs",
-			eventTypes = { AbstractTraceEvent.class, Trace.class, OperationExecutionRecord.class }),
-	@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH, description = "Forwards events with trace IDs not matching",
-			eventTypes = { AbstractTraceEvent.class, Trace.class, OperationExecutionRecord.class })
+@Plugin(description = "A filter allowing to filter incoming objects based on their trace ID",
+		outputPorts = {
+			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MATCH, description = "Forwards events with matching trace IDs",
+					eventTypes = { AbstractTraceEvent.class, Trace.class, OperationExecutionRecord.class }),
+			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH, description = "Forwards events with trace IDs not matching",
+					eventTypes = { AbstractTraceEvent.class, Trace.class, OperationExecutionRecord.class })
 
-})
+		})
 public final class TraceIdFilter extends AbstractFilterPlugin {
 	public static final String INPUT_PORT_NAME_FLOW = "monitoringRecordsFlow";
 	public static final String INPUT_PORT_NAME_EXECUTION = "monitoringRecordsExecution";
