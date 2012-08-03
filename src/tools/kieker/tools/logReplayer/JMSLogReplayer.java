@@ -21,46 +21,44 @@
 package kieker.tools.logReplayer;
 
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
-import kieker.analysis.plugin.reader.filesystem.FSReader;
+import kieker.analysis.plugin.reader.jms.JMSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 
 /**
- * An implementation of the {@link AbstractLogReplayer}, using the {@link FSReader} to replay {@link IMonitoringRecord}s from a list of file system monitoring logs.
+ * An implementation of the {@link AbstractLogReplayer}, using the {@link JMSReader} to replay {@link IMonitoringRecord}s from a JMS queue.
  * 
  * @author Andre van Hoorn
+ * 
  */
-public class FilesystemLogReplayer extends AbstractLogReplayer {
-	// private static final Log LOG = LogFactory.getLog(FilesystemLogReplayer.class);
+public class JMSLogReplayer extends AbstractLogReplayer {
 
-	private final String[] inputDirs;
+	private final String jmsProviderUrl;
+	private final String jmsDestination;
+	private final String jmsFactoryLookupName;
 
-	public FilesystemLogReplayer(final String monitoringConfigurationFile, final boolean realtimeMode, final boolean keepOriginalLoggingTimestamps,
+	public JMSLogReplayer(final String monitoringConfigurationFile, final boolean realtimeMode, final boolean keepOriginalLoggingTimestamps,
 			final int numRealtimeWorkerThreads, final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp,
-			final String[] inputDirs) {
+			final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
 		super(monitoringConfigurationFile, realtimeMode, keepOriginalLoggingTimestamps, numRealtimeWorkerThreads, ignoreRecordsBeforeTimestamp,
 				ignoreRecordsAfterTimestamp);
-		// Java 1.5 compatibility
-		this.inputDirs = new String[inputDirs.length];
-		System.arraycopy(inputDirs, 0, this.inputDirs, 0, inputDirs.length);
-		// for Java 1.6+:
-		// this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
-
+		this.jmsProviderUrl = jmsProviderUrl;
+		this.jmsDestination = jmsDestination;
+		this.jmsFactoryLookupName = jmsFactoryLookupName;
 	}
 
 	@Override
 	protected AbstractReaderPlugin createReader() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(this.inputDirs));
-		// TODO: we might want to pull this out as a property
-		configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, Boolean.toString(true));
-		final FSReader fsReader = new FSReader(configuration);
-		return fsReader;
+		configuration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_PROVIDERURL, this.jmsProviderUrl);
+		configuration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_DESTINATION, this.jmsDestination);
+		configuration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, this.jmsFactoryLookupName);
+		final JMSReader jmsReader = new JMSReader(configuration);
+		return jmsReader;
 	}
 
 	@Override
 	protected String readerOutputPortName() {
-		return FSReader.OUTPUT_PORT_NAME_RECORDS;
+		return JMSReader.OUTPUT_PORT_NAME_RECORDS;
 	}
-
 }

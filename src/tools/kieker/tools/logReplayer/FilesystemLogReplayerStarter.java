@@ -232,8 +232,8 @@ public final class FilesystemLogReplayerStarter {
 			LOG.info("Replaying log data in non-real time");
 		}
 
-		final FilesystemLogReplayer player = new FilesystemLogReplayer(monitoringConfigurationFile, inputDirs, realtimeMode, keepOriginalLoggingTimestamps,
-				numRealtimeWorkerThreads, ignoreRecordsBeforeTimestamp, ignoreRecordsAfterTimestamp);
+		final FilesystemLogReplayer player = new FilesystemLogReplayer(monitoringConfigurationFile, realtimeMode, keepOriginalLoggingTimestamps, numRealtimeWorkerThreads,
+				ignoreRecordsBeforeTimestamp, ignoreRecordsAfterTimestamp, inputDirs);
 
 		if (!player.replay()) {
 			System.err.println("An error occured");
