@@ -37,11 +37,19 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 	private final String jmsDestination;
 	private final String jmsFactoryLookupName;
 
-	public JMSLogReplayer(final String monitoringConfigurationFile, final boolean realtimeMode, final boolean keepOriginalLoggingTimestamps,
-			final int numRealtimeWorkerThreads, final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp,
-			final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
-		super(monitoringConfigurationFile, realtimeMode, keepOriginalLoggingTimestamps, numRealtimeWorkerThreads, ignoreRecordsBeforeTimestamp,
-				ignoreRecordsAfterTimestamp);
+	/**
+	 * @param jmsProviderUrl
+	 *            = for instance "tcp://127.0.0.1:3035/"
+	 * @param jmsDestination
+	 *            = for instance "queue1"
+	 * @param jmsFactoryLookupName
+	 *            = for instance "org.exolab.jms.jndi.InitialContextFactory" (OpenJMS)
+	 * @throws IllegalArgumentException
+	 *             if passed parameters are null or empty.
+	 */
+	public JMSLogReplayer(final String monitoringConfigurationFile, final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
+		super(monitoringConfigurationFile, /* realtimeMode */false, /* keepOriginalLoggingTimestamps */false,
+				/* numRealtimeWorkerThreads: any value will do because realtimeMode = false */1, Long.MIN_VALUE, Long.MAX_VALUE);
 		this.jmsProviderUrl = jmsProviderUrl;
 		this.jmsDestination = jmsDestination;
 		this.jmsFactoryLookupName = jmsFactoryLookupName;
