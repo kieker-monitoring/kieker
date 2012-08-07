@@ -318,7 +318,7 @@ public final class TraceAnalysisTool {
 		final GraphWriterPlugin graphWriter = new GraphWriterPlugin(configuration);
 		controller.registerFilter(graphWriter);
 		controller.connect(plugin, plugin.getGraphOutputPortName(),
-				graphWriter, GraphWriterPlugin.INPUT_PORT_NAME);
+				graphWriter, GraphWriterPlugin.INPUT_PORT_NAME_GRAPHS);
 	}
 
 	private static <P extends AbstractPlugin<?> & IGraphOutputtingFilter<?>> void connectGraphFilters(final P predecessor,

@@ -60,7 +60,7 @@ public class GraphWriterPlugin extends AbstractFilterPlugin<GraphWriterConfigura
 	/**
 	 * Name of the plugin's graph input port.
 	 */
-	public static final String INPUT_PORT_NAME = "inputGraph";
+	public static final String INPUT_PORT_NAME_GRAPHS = "inputGraph";
 
 	private static final String NO_SUITABLE_FORMATTER_MESSAGE_TEMPLATE = "No formatter type defined for graph type %s.";
 	private static final String INSTANTIATION_ERROR_MESSAGE_TEMPLATE = "Could not instantiate formatter type %s for graph type %s.";
@@ -150,7 +150,7 @@ public class GraphWriterPlugin extends AbstractFilterPlugin<GraphWriterConfigura
 	 * @param graph
 	 *            The graph to save
 	 */
-	@InputPort(name = INPUT_PORT_NAME, eventTypes = { AbstractGraph.class })
+	@InputPort(name = INPUT_PORT_NAME_GRAPHS, eventTypes = { AbstractGraph.class })
 	public void writeGraph(final AbstractGraph<?, ?, ?> graph) {
 		final AbstractGraphFormatter<?> graphFormatter = GraphWriterPlugin.createFormatter(graph);
 

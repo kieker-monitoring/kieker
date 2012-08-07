@@ -204,12 +204,12 @@ public final class TestAnalysis {
 				analysisController.connect(operationDependencyGraphAllocationFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, traceRepo);
 
 				analysisController.registerFilter(componentAllocationGraphWriter);
-				analysisController.connect(componentDependencyGraphAllocationFilter, AbstractGraphProducingFilter.GRAPH_OUTPUT_PORT_NAME,
-						componentAllocationGraphWriter, GraphWriterPlugin.INPUT_PORT_NAME);
+				analysisController.connect(componentDependencyGraphAllocationFilter, AbstractGraphProducingFilter.OUTPUT_PORT_NAME_GRAPH,
+						componentAllocationGraphWriter, GraphWriterPlugin.INPUT_PORT_NAME_GRAPHS);
 
 				analysisController.registerFilter(operationAllocationGraphWriter);
-				analysisController.connect(operationDependencyGraphAllocationFilter, AbstractGraphProducingFilter.GRAPH_OUTPUT_PORT_NAME,
-						operationAllocationGraphWriter, GraphWriterPlugin.INPUT_PORT_NAME);
+				analysisController.connect(operationDependencyGraphAllocationFilter, AbstractGraphProducingFilter.OUTPUT_PORT_NAME_GRAPH,
+						operationAllocationGraphWriter, GraphWriterPlugin.INPUT_PORT_NAME_GRAPHS);
 
 				analysisController.registerFilter(systemModel2FileFilter);
 				analysisController.connect(systemModel2FileFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, traceRepo);

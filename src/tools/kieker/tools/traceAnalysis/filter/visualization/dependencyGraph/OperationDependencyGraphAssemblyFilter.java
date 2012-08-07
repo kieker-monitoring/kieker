@@ -50,7 +50,7 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
-		outputPorts = @OutputPort(name = AbstractGraphProducingFilter.GRAPH_OUTPUT_PORT_NAME, eventTypes = { AbstractGraph.class }))
+		outputPorts = @OutputPort(name = AbstractGraphProducingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
 public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGraphFilter<AssemblyComponentOperationPair> {
 
 	private static final String CONFIGURATION_NAME = Constants.PLOTASSEMBLYOPERATIONDEPGRAPH_COMPONENT_NAME;

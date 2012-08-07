@@ -43,7 +43,7 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 	/**
 	 * The name of the filter's graph input port.
 	 */
-	public static final String INPUT_PORT_NAME = "graphInput";
+	public static final String INPUT_PORT_NAME_GRAPH = "graphs";
 
 	private final Configuration configuration;
 
@@ -63,7 +63,7 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 		return this.configuration;
 	}
 
-	@InputPort(name = INPUT_PORT_NAME,
+	@InputPort(name = INPUT_PORT_NAME_GRAPH,
 			description = "Graphs to process",
 			eventTypes = { AbstractGraph.class })
 	public void processGraph(final G graph) {
@@ -72,11 +72,11 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 	}
 
 	public String getGraphOutputPortName() {
-		return GRAPH_OUTPUT_PORT_NAME;
+		return OUTPUT_PORT_NAME_GRAPH;
 	}
 
 	public String getGraphInputPortName() {
-		return INPUT_PORT_NAME;
+		return INPUT_PORT_NAME_GRAPH;
 	}
 
 	/**

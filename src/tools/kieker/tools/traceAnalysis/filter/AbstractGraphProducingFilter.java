@@ -63,7 +63,7 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 	}
 
 	public String getGraphOutputPortName() {
-		return GRAPH_OUTPUT_PORT_NAME;
+		return OUTPUT_PORT_NAME_GRAPH;
 	}
 
 	protected G getGraph() {

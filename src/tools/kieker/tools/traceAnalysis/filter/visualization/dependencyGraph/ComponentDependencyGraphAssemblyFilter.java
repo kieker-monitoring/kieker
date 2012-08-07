@@ -45,7 +45,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
-		outputPorts = @OutputPort(name = AbstractGraphProducingFilter.GRAPH_OUTPUT_PORT_NAME))
+		outputPorts = @OutputPort(name = AbstractGraphProducingFilter.OUTPUT_PORT_NAME_GRAPH))
 public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGraphFilter<AssemblyComponent> {
 
 	private static final String CONFIGURATION_NAME = Constants.PLOTASSEMBLYCOMPONENTDEPGRAPH_COMPONENT_NAME;

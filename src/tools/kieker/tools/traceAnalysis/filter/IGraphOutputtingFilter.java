@@ -32,7 +32,7 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
  */
 public interface IGraphOutputtingFilter<G extends AbstractGraph<?, ?, ?>> {
 
-	public static final String GRAPH_OUTPUT_PORT_NAME = "graphOutput";
+	public static final String OUTPUT_PORT_NAME_GRAPH = "graphs";
 
 	/**
 	 * Returns the name of the port this filter uses to emit the graph.

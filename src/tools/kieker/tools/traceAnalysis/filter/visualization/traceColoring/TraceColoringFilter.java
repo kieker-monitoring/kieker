@@ -52,7 +52,7 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 @Plugin(name = "Trace coloring filter",
 		description = "Colors graph elements that can uniquely associated to a trace according to the color repository",
 		repositoryPorts = @RepositoryPort(name = TraceColoringFilter.COLOR_REPOSITORY_NAME, repositoryType = TraceColorRepository.class),
-		outputPorts = @OutputPort(name = IGraphOutputtingFilter.GRAPH_OUTPUT_PORT_NAME, eventTypes = { AbstractGraph.class }))
+		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
 public class TraceColoringFilter<V extends AbstractVertex<V, E, MessageTrace>, E extends AbstractEdge<V, E, MessageTrace>> extends
 		AbstractGraphFilter<AbstractGraph<V, E, MessageTrace>, V, E, MessageTrace> implements Visitor<V, E> {
 
