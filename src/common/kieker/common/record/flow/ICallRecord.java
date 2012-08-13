@@ -18,37 +18,22 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.flow.trace;
-
-import kieker.common.record.flow.AbstractEvent;
-import kieker.common.record.flow.ITraceRecord;
+package kieker.common.record.flow;
 
 /**
+ * Interface for all flow records that describe operation calls.
+ * 
  * @author Jan Waller
  */
-public abstract class AbstractTraceEvent extends AbstractEvent implements ITraceRecord {
-	private static final long serialVersionUID = 1L;
+public interface ICallRecord extends IOperationRecord {
 
-	private final long traceId;
-	private final int orderIndex;
+	public abstract String getCallerOperationSignature();
 
-	public AbstractTraceEvent(final long timestamp, final long traceId, final int orderIndex) {
-		super(timestamp);
-		this.traceId = traceId;
-		this.orderIndex = orderIndex;
-	}
+	public abstract String getCallerClassSignature();
 
-	protected AbstractTraceEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		super(values, valueTypes); // values[0]
-		this.traceId = (Long) values[1];
-		this.orderIndex = (Integer) values[2];
-	}
+	public abstract String getCalleeOperationSignature();
 
-	public final long getTraceId() {
-		return this.traceId;
-	}
+	public abstract String getCalleeClassSignature();
 
-	public final int getOrderIndex() {
-		return this.orderIndex;
-	}
+	public abstract boolean callsReferencedOperationOf(final IOperationRecord record);
 }

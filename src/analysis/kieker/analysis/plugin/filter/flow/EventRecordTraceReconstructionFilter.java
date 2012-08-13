@@ -36,7 +36,6 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.common.record.flow.AbstractEvent;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.Trace;
@@ -113,7 +112,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 				}
 			}
 			traceBuffer.insertEvent((AbstractTraceEvent) record);
-			loggingTimestamp = ((AbstractEvent) record).getTimestamp();
+			loggingTimestamp = ((AbstractTraceEvent) record).getTimestamp();
 		} else {
 			return; // invalid type which should not happen due to the specified eventTypes
 		}

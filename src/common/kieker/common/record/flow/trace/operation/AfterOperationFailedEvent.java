@@ -20,17 +20,19 @@
 
 package kieker.common.record.flow.trace.operation;
 
+import kieker.common.record.flow.IExceptionRecord;
+
 /**
  * @author Jan Waller
  */
-public class AfterOperationFailedEvent extends AfterOperationEvent {
+public class AfterOperationFailedEvent extends AfterOperationEvent implements IExceptionRecord {
 
 	/**
 	 * Constant to be used if no cause required.
 	 */
 	public static final String NO_CAUSE = "<no-cause>";
 
-	private static final long serialVersionUID = 3331883608930487185L;
+	private static final long serialVersionUID = 6968286882927488605L;
 	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
