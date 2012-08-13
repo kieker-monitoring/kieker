@@ -23,6 +23,8 @@ package kieker.common.record.flow.trace.operation.object;
 import kieker.common.record.flow.trace.operation.CallOperationEvent;
 
 /**
+ * TODO: IObjectRecord ?
+ * 
  * @author Jan Waller
  */
 public final class CallObjectOperationEvent extends CallOperationEvent {
