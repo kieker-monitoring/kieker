@@ -37,7 +37,8 @@ import kieker.common.record.misc.EmptyRecord;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-@Plugin(outputPorts = @OutputPort(name = FSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader"))
+@Plugin(description = "A file system reader which reads records from multiple directories",
+		outputPorts = @OutputPort(name = FSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader"))
 public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
@@ -61,6 +62,9 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	public FSReader(final Configuration configuration) {
 		super(configuration);
 		this.inputDirs = this.configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_INPUTDIRS);
+		if (this.inputDirs.length == 0) {
+			LOG.warn("The list of input dirs passed to the " + FSReader.class.getSimpleName() + " is empty");
+		}
 		this.recordQueue = new PriorityQueue<IMonitoringRecord>(this.inputDirs.length);
 		this.ignoreUnknownRecordTypes = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES);
 	}

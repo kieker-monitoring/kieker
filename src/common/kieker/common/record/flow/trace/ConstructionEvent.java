@@ -20,11 +20,13 @@
 
 package kieker.common.record.flow.trace;
 
+import kieker.common.record.flow.IObjectRecord;
+
 /**
  * @author Jan Waller
  */
-public class ConstructionEvent extends AbstractTraceEvent {
-	private static final long serialVersionUID = 4260562921517437040L;
+public class ConstructionEvent extends AbstractTraceEvent implements IObjectRecord {
+	private static final long serialVersionUID = -7484030624827825815L;
 	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId

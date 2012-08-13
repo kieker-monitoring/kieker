@@ -20,8 +20,6 @@
 
 package kieker.test.analysis.junit.plugin.reader.namedRecordPipe;
 
-import java.util.List;
-
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -29,13 +27,10 @@ import org.junit.Test;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.plugin.annotation.InputPort;
-import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.analysis.plugin.reader.namedRecordPipe.PipeReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.namedRecordPipe.IPipeWriter;
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 
 import kieker.test.common.util.namedRecordPipe.NamedPipeFactory;
@@ -87,35 +82,5 @@ public class TestPipeReader { // NOCS (MissingCtorCheck)
 		 * Make sure that numRecordsToSend where read.
 		 */
 		Assert.assertEquals("Unexpected number of records received", numRecordsToSend, countingFilter.getMessageCount());
-	}
-}
-
-/**
- * @author Andre van Hoorn
- */
-class MonitoringSinkClass extends AbstractFilterPlugin { // NOPMD (subclass of Test)
-
-	public static final String INPUT_PORT_NAME = "doJob";
-	private final List<IMonitoringRecord> receivedRecords;
-
-	public MonitoringSinkClass(final List<IMonitoringRecord> receivedRecords) {
-		super(new Configuration());
-		this.receivedRecords = receivedRecords;
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
-	}
-
-	public Configuration getCurrentConfiguration() {
-		return new Configuration();
-	}
-
-	@InputPort(
-			name = MonitoringSinkClass.INPUT_PORT_NAME,
-			eventTypes = { IMonitoringRecord.class })
-	public void doJob(final Object data) {
-		this.receivedRecords.add((IMonitoringRecord) data);
 	}
 }

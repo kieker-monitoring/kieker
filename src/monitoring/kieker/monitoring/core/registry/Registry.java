@@ -155,15 +155,19 @@ public final class Registry<E> implements IRegistry<E> {
 		return this.nextId.get();
 	}
 
+	@SuppressWarnings("unchecked")
 	public final void remove(final E value) {
 		final int hash = Registry.hash(value);
 		this.segments[(hash >>> this.segmentShift) & this.segmentMask].remove(value, hash);
+		this.eArrayCached = (E[]) new Object[0]; // invalidate cache
 	}
 
+	@SuppressWarnings("unchecked")
 	public final void clear() {
 		for (final Segment<E> segment : this.segments) {
 			segment.clear();
 		}
+		this.eArrayCached = (E[]) new Object[0]; // invalidate cache
 	}
 
 	/* ---------------- Inner Classes -------------- */

@@ -59,7 +59,7 @@ public class MyResponseTimeFilter extends AbstractFilterPlugin {
 			description = "Filter the given record depending on the response time",
 			eventTypes = { MyResponseTimeRecord.class })
 	public void newResponseTime(final MyResponseTimeRecord rtRecord) {
-		if (rtRecord.responseTimeNanos > this.rtThresholdNanos) {
+		if (rtRecord.getResponseTimeNanos() > this.rtThresholdNanos) {
 			super.deliver(OUTPUT_PORT_NAME_RT_EXCEED, rtRecord);
 		} else {
 			super.deliver(OUTPUT_PORT_NAME_RT_VALID, rtRecord);

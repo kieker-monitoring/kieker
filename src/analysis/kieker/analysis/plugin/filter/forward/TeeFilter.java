@@ -40,7 +40,8 @@ import kieker.common.logging.LogFactory;
  * 
  * @author Matthias Rohr, Jan Waller
  */
-@Plugin(outputPorts = @OutputPort(name = TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming object", eventTypes = { Object.class }))
+@Plugin(description = "A filter to print the object to a configured stream",
+		outputPorts = @OutputPort(name = TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming object", eventTypes = { Object.class }))
 public final class TeeFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_EVENTS = "receivedEvents";

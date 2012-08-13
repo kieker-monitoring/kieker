@@ -18,30 +18,28 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.traceAnalysis.filter;
+package kieker.test.tools.junit.writeRead.filesystem;
 
-import kieker.analysis.plugin.annotation.Plugin;
-import kieker.analysis.plugin.annotation.RepositoryPort;
-import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+import java.io.File;
+import java.io.FilenameFilter;
 
 /**
+ * Accepts kieker.map files.
  * 
  * @author Andre van Hoorn
+ * 
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
-public abstract class AbstractExecutionTraceProcessingFilter extends AbstractTraceProcessingFilter {
+class KiekerMapFileFilter implements FilenameFilter { // NOPMD (TestClassWithoutTestCases)
+	public static final String MAP_FILENAME = "kieker.map"; // TODO: do we have this constant in the FS Writer(s)?
 
-	public AbstractExecutionTraceProcessingFilter(final Configuration configuration) {
-		super(configuration);
+	public KiekerMapFileFilter() {
+		// empty default constructor
 	}
 
-	@Deprecated
 	/**
-	 * To be removed in Kieker 1.7
-	 * 
-	 * @return
+	 * Accepts the {@value #MAP_FILENAME} file in a monitoring log directory.
 	 */
-	public abstract String getExecutionTraceInputPortName();
-
+	public boolean accept(final File dir, final String name) {
+		return MAP_FILENAME.equals(name);
+	}
 }

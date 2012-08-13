@@ -35,7 +35,8 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * 
  * @author Andre van Hoorn
  */
-@Plugin(outputPorts = @OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, description = "Fowards records within the timeperiod", eventTypes = { Execution.class }))
+@Plugin(description = "A filter allowing to filter incoming execution objects based on their timestamps",
+		outputPorts = @OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, description = "Fowards records within the timeperiod", eventTypes = { Execution.class }))
 public class TimestampFilter extends AbstractTimestampFilter {
 
 	public static final String INPUT_PORT_NAME_EXECUTION = "executions";

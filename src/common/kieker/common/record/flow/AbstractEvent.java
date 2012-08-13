@@ -26,7 +26,7 @@ import kieker.common.record.IMonitoringRecord;
 /**
  * @author Jan Waller
  */
-public abstract class AbstractEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IFlowRecord {
+public abstract class AbstractEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IFlowRecord, IEventRecord {
 	private static final long serialVersionUID = 1L;
 
 	private final long timestamp;

@@ -52,7 +52,8 @@ import kieker.common.record.misc.TimestampRecord;
  * @author Andre van Hoorn
  * 
  */
-@Plugin(outputPorts =
+@Plugin(description = "A filter generating time events with a given resolution based on the incoming timestamps",
+		outputPorts =
 		@OutputPort(name = CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME, eventTypes = { TimestampRecord.class }, description = "Provides current time events"))
 public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	public static final String INPUT_PORT_NAME_NEW_TIMESTAMP = "inputNewTimestamp";

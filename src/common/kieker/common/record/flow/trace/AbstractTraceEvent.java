@@ -21,11 +21,12 @@
 package kieker.common.record.flow.trace;
 
 import kieker.common.record.flow.AbstractEvent;
+import kieker.common.record.flow.ITraceRecord;
 
 /**
  * @author Jan Waller
  */
-public abstract class AbstractTraceEvent extends AbstractEvent {
+public abstract class AbstractTraceEvent extends AbstractEvent implements ITraceRecord {
 	private static final long serialVersionUID = 1L;
 
 	private final long traceId;

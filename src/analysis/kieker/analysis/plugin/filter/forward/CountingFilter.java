@@ -38,6 +38,7 @@ import kieker.common.configuration.Configuration;
  * @author Jan Waller
  */
 @Plugin(
+		description = "A filter counting the elements flowing through this filter",
 		outputPorts = {
 			@OutputPort(name = CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, eventTypes = { Object.class }, description = "Provides each incoming object"),
 			@OutputPort(name = CountingFilter.OUTPUT_PORT_NAME_COUNT, eventTypes = { Long.class }, description = "Provides the current object count")

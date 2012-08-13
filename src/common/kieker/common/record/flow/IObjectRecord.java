@@ -18,30 +18,16 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.traceAnalysis.filter;
-
-import kieker.analysis.plugin.annotation.Plugin;
-import kieker.analysis.plugin.annotation.RepositoryPort;
-import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+package kieker.common.record.flow;
 
 /**
+ * Interface for all flow records that describe objects.
  * 
- * @author Andre van Hoorn
+ * @author Jan Waller
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
-public abstract class AbstractExecutionTraceProcessingFilter extends AbstractTraceProcessingFilter {
+public interface IObjectRecord {
 
-	public AbstractExecutionTraceProcessingFilter(final Configuration configuration) {
-		super(configuration);
-	}
+	public abstract String getClassSignature();
 
-	@Deprecated
-	/**
-	 * To be removed in Kieker 1.7
-	 * 
-	 * @return
-	 */
-	public abstract String getExecutionTraceInputPortName();
-
+	public abstract int getObjectId();
 }

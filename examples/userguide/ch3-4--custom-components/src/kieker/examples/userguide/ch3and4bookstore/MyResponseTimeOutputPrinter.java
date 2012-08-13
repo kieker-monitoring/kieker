@@ -5,7 +5,7 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
-@Plugin(name = "Reponse time printer")
+@Plugin(name = "Reponse time printer", description = "Prints the response time on the standard output")
 public class MyResponseTimeOutputPrinter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_EVENTS = "newEvent";
@@ -27,8 +27,8 @@ public class MyResponseTimeOutputPrinter extends AbstractFilterPlugin {
 
 			String msg = this.validOutput ? "[Valid] " : "[Invalid] ";
 			msg += myRecord.getLoggingTimestamp()
-					+ ": " + myRecord.className + ", " + myRecord.methodName
-					+ ", " + myRecord.responseTimeNanos;
+					+ ": " + myRecord.getClassName() + ", " + myRecord.getMethodName()
+					+ ", " + myRecord.getResponseTimeNanos();
 
 			System.out.println(msg);
 		}

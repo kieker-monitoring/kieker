@@ -20,11 +20,14 @@
 
 package kieker.common.record.flow.trace.operation;
 
+import kieker.common.record.flow.ICallRecord;
+import kieker.common.record.flow.IOperationRecord;
+
 /**
  * @author Andre van Hoorn, Holger Knoche, Jan Waller
  */
-public class CallOperationEvent extends AbstractOperationEvent {
-	private static final long serialVersionUID = -3767410839664324783L;
+public class CallOperationEvent extends AbstractOperationEvent implements ICallRecord {
+	private static final long serialVersionUID = 1193776099551467929L;
 	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
@@ -90,7 +93,7 @@ public class CallOperationEvent extends AbstractOperationEvent {
 		return this.calleeClassSignature;
 	}
 
-	public final boolean callsReferencedOperationOf(final AbstractOperationEvent event) {
-		return this.getCalleeOperationSignature().equals(event.getOperationSignature()) && this.getCalleeClassSignature().equals(event.getClassSignature());
+	public final boolean callsReferencedOperationOf(final IOperationRecord record) {
+		return this.getCalleeOperationSignature().equals(record.getOperationSignature()) && this.getCalleeClassSignature().equals(record.getClassSignature());
 	}
 }

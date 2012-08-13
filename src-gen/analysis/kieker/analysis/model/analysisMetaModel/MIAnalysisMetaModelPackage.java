@@ -704,13 +704,13 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int VIEW__DESCRIPTION = 1;
 
 	/**
-	 * The feature id for the '<em><b>Displays</b></em>' reference list.
+	 * The feature id for the '<em><b>Display Connectors</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VIEW__DISPLAYS = 2;
+	int VIEW__DISPLAY_CONNECTORS = 2;
 
 	/**
 	 * The number of structural features of the '<em>View</em>' class.
@@ -720,6 +720,44 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int VIEW_FEATURE_COUNT = 3;
+
+
+	/**
+	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDisplayConnector <em>Display Connector</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MDisplayConnector
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getDisplayConnector()
+	 * @generated
+	 */
+	int DISPLAY_CONNECTOR = 13;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISPLAY_CONNECTOR__NAME = 0;
+
+	/**
+	 * The feature id for the '<em><b>Display</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISPLAY_CONNECTOR__DISPLAY = 1;
+
+	/**
+	 * The number of structural features of the '<em>Display Connector</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISPLAY_CONNECTOR_FEATURE_COUNT = 2;
 
 
 	/**
@@ -1172,15 +1210,47 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	EAttribute getView_Description();
 
 	/**
-	 * Returns the meta object for the reference list '{@link kieker.analysis.model.analysisMetaModel.MIView#getDisplays <em>Displays</em>}'.
+	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIView#getDisplayConnectors <em>Display Connectors</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Displays</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.MIView#getDisplays()
+	 * @return the meta object for the containment reference list '<em>Display Connectors</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIView#getDisplayConnectors()
 	 * @see #getView()
 	 * @generated
 	 */
-	EReference getView_Displays();
+	EReference getView_DisplayConnectors();
+
+	/**
+	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIDisplayConnector <em>Display Connector</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Display Connector</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIDisplayConnector
+	 * @generated
+	 */
+	EClass getDisplayConnector();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIDisplayConnector#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIDisplayConnector#getName()
+	 * @see #getDisplayConnector()
+	 * @generated
+	 */
+	EAttribute getDisplayConnector_Name();
+
+	/**
+	 * Returns the meta object for the reference '{@link kieker.analysis.model.analysisMetaModel.MIDisplayConnector#getDisplay <em>Display</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Display</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIDisplayConnector#getDisplay()
+	 * @see #getDisplayConnector()
+	 * @generated
+	 */
+	EReference getDisplayConnector_Display();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -1567,12 +1637,38 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		EAttribute VIEW__DESCRIPTION = eINSTANCE.getView_Description();
 
 		/**
-		 * The meta object literal for the '<em><b>Displays</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Display Connectors</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference VIEW__DISPLAYS = eINSTANCE.getView_Displays();
+		EReference VIEW__DISPLAY_CONNECTORS = eINSTANCE.getView_DisplayConnectors();
+
+		/**
+		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDisplayConnector <em>Display Connector</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MDisplayConnector
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getDisplayConnector()
+		 * @generated
+		 */
+		EClass DISPLAY_CONNECTOR = eINSTANCE.getDisplayConnector();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DISPLAY_CONNECTOR__NAME = eINSTANCE.getDisplayConnector_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Display</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DISPLAY_CONNECTOR__DISPLAY = eINSTANCE.getDisplayConnector_Display();
 
 	}
 

@@ -18,30 +18,22 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.traceAnalysis.filter;
-
-import kieker.analysis.plugin.annotation.Plugin;
-import kieker.analysis.plugin.annotation.RepositoryPort;
-import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+package kieker.common.record.flow;
 
 /**
+ * Interface for all flow records that describe operation calls.
  * 
- * @author Andre van Hoorn
+ * @author Jan Waller
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
-public abstract class AbstractExecutionTraceProcessingFilter extends AbstractTraceProcessingFilter {
+public interface ICallRecord extends IOperationRecord {
 
-	public AbstractExecutionTraceProcessingFilter(final Configuration configuration) {
-		super(configuration);
-	}
+	public abstract String getCallerOperationSignature();
 
-	@Deprecated
-	/**
-	 * To be removed in Kieker 1.7
-	 * 
-	 * @return
-	 */
-	public abstract String getExecutionTraceInputPortName();
+	public abstract String getCallerClassSignature();
 
+	public abstract String getCalleeOperationSignature();
+
+	public abstract String getCalleeClassSignature();
+
+	public abstract boolean callsReferencedOperationOf(final IOperationRecord record);
 }
