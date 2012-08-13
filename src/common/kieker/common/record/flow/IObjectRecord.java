@@ -27,7 +27,7 @@ package kieker.common.record.flow;
  */
 public interface IObjectRecord {
 
-	public abstract String getClassName();
+	public abstract String getClassSignature();
 
 	public abstract int getObjectId();
 }
