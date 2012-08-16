@@ -11,7 +11,7 @@ public class BookstoreClient {
 	public static void main(String[] args) throws IOException {
 		for (int i = 0; i < 5; i++) {
 			System.out.println("BookstoreClient: Starting HTTP GET request: " + i);
-	        URL url = new URL("http://localhost:9090/bookstore/search/any/");
+	        URL url = new URL("http://localhost:9292/bookstore/search/any/");
 	        BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 	        System.out.println(in.readLine());
 	        in.close();
