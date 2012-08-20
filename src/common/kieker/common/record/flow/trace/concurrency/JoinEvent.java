@@ -31,25 +31,35 @@ public class JoinEvent extends AbstractTraceEvent {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
+		long.class, // joined traceId
 	};
 
-	public JoinEvent(final long timestamp, final long traceId, final int orderIndex) {
+	private final long joinedTraceId;
+
+	public JoinEvent(final long timestamp, final long traceId, final int orderIndex, final long joinedTraceId) {
 		super(timestamp, traceId, orderIndex);
+		this.joinedTraceId = joinedTraceId;
 	}
 
 	public JoinEvent(final Object[] values) {
 		super(values, TYPES); // values[0..2]
+		this.joinedTraceId = (Long) values[3];
 	}
 
 	public JoinEvent(final Object[] values, final Class<?>[] valueTypes) {
 		super(values, valueTypes); // values[0..2]
+		this.joinedTraceId = (Long) values[3];
 	}
 
 	public Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), };
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this, this.getJoinedTraceId(), };
 	}
 
 	public Class<?>[] getValueTypes() {
 		return TYPES.clone();
+	}
+
+	public long getJoinedTraceId() {
+		return this.joinedTraceId;
 	}
 }

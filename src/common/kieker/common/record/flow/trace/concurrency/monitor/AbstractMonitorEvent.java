@@ -20,12 +20,12 @@
 
 package kieker.common.record.flow.trace.concurrency.monitor;
 
-import kieker.common.record.flow.trace.concurrency.JoinEvent;
+import kieker.common.record.flow.trace.AbstractTraceEvent;
 
 /**
  * @author Jan Waller
  */
-public abstract class AbstractMonitorEvent extends JoinEvent {
+public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 	private static final long serialVersionUID = -1L;
 	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
