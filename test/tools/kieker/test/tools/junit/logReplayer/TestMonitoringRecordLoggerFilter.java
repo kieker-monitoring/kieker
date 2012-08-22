@@ -71,6 +71,10 @@ public class TestMonitoringRecordLoggerFilter {
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
+	public TestMonitoringRecordLoggerFilter() {
+		// empty default constructor
+	}
+
 	private void createControllerConfiguration(final String monitoringPropertiesFn) throws IOException {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 
@@ -87,9 +91,17 @@ public class TestMonitoringRecordLoggerFilter {
 
 		// Write configuration to tmp file
 		LOG.info("Writing monitoring.properties to file '" + monitoringPropertiesFn + "'");
-		final OutputStream os = new FileOutputStream(monitoringPropertiesFn, /* !append */false);
-		config.store(os, "Created by " + TestMonitoringRecordLoggerFilter.class.getName());
-		os.close();
+
+		OutputStream os = null;
+		try {
+			os = new FileOutputStream(monitoringPropertiesFn, /* !append */false);
+			config.store(os, "Created by " + TestMonitoringRecordLoggerFilter.class.getName());
+		} finally {
+			if (os != null) {
+				os.close();
+			}
+		}
+
 	}
 
 	/**

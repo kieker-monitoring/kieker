@@ -40,7 +40,7 @@ public class GraphElement<O> {
 
 	private final Set<O> origins = new HashSet<O>();
 
-	protected GraphElement(final O origin) {
+	protected GraphElement(final O origin) { // NOPMD (unsued paramter)
 		// Prevent external instantiation
 	}
 

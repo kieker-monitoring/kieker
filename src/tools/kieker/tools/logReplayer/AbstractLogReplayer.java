@@ -29,21 +29,20 @@ import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.controller.IMonitoringController;
 
 /**
- * Replays a monitoring log to a {@link IMonitoringController} with a given {@link Configuration}.
+ * Replays a monitoring log to a {@link kieker.monitoring.core.controller.IMonitoringController} with a given {@link Configuration}.
  * The {@link AbstractLogReplayer} can filter by timestamp and replay in real-time.
  * 
  * @author Andre van Hoorn
  * 
  */
 public abstract class AbstractLogReplayer {
-	private static final Log LOG = LogFactory.getLog(AbstractLogReplayer.class);
 
 	public static final long MAX_TIMESTAMP = Long.MAX_VALUE;
 	public static final long MIN_TIMESTAMP = 0;
+
+	private static final Log LOG = LogFactory.getLog(AbstractLogReplayer.class);
 
 	private final long ignoreRecordsBeforeTimestamp;
 	private final long ignoreRecordsAfterTimestamp;
@@ -96,7 +95,7 @@ public abstract class AbstractLogReplayer {
 			/*
 			 * (Potentially) initializing the timestamp filter
 			 */
-			{
+			{ // NOCS (nested Block)
 				final Configuration timestampFilterConfiguration = new Configuration();
 
 				boolean atLeastOneTimestampGiven = false;
@@ -118,7 +117,7 @@ public abstract class AbstractLogReplayer {
 					analysisInstance.connect(lastFilter, lastOutputPortName, timestampFilter, TimestampFilter.INPUT_PORT_NAME_ANY_RECORD);
 					lastFilter = timestampFilter;
 					lastOutputPortName = TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD;
-				} else { // NOPMD (EmptyIfStmt)
+				} else { // NOCS NOPMD (EmptyIfStmt)
 					// nothing to do; lastFilter and lastOutputPortName keep their values
 				}
 			}
@@ -162,7 +161,7 @@ public abstract class AbstractLogReplayer {
 	}
 
 	/**
-	 * Implementing classes returns the name of the reader's output port which provides the {@link IMonitoringRecord}s from the monitoring log.
+	 * Implementing classes returns the name of the reader's output port which provides the {@link kieker.common.record.IMonitoringRecord}s from the monitoring log.
 	 * 
 	 * @return
 	 */

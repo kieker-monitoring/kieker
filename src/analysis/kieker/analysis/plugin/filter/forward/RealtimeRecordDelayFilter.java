@@ -21,7 +21,6 @@
 package kieker.analysis.plugin.filter.forward;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.plugin.annotation.InputPort;
@@ -49,16 +48,11 @@ import kieker.common.record.IMonitoringRecord;
 			@OutputPort(name = RealtimeRecordDelayFilter.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Outputs the delayed records")
 		})
 public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
-	private static final Log LOG = LogFactory.getLog(RealtimeRecordDelayFilter.class);
-
 	public static final String INPUT_PORT_NAME_RECORDS = "inputRecords";
 	public static final String OUTPUT_PORT_NAME_RECORDS = "outputRecords";
 
-	// TODO: Way might want to provide this property as a configuration property
-	private static final long WARN_ON_NEGATIVE_SCHED_TIME_NANOS = TimeUnit.NANOSECONDS.convert(2, TimeUnit.SECONDS);
-
 	/**
-	 * The number of threads to be used for the internal {@link ThreadPoolExecutor}, processing the scheduled {@link IMonitoringRecord}s.
+	 * The number of threads to be used for the internal {@link java.util.concurrent.ThreadPoolExecutor}, processing the scheduled {@link IMonitoringRecord}s.
 	 */
 	public static final String CONFIG_PROPERTY_NAME_NUM_WORKERS = "numWorkers";
 
@@ -66,6 +60,10 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	 * The number of additional seconds to wait before execute the termination (after all records have been forwarded)
 	 */
 	public static final String CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS = "additionalShutdownDelaySeconds";
+
+	private static final Log LOG = LogFactory.getLog(RealtimeRecordDelayFilter.class);
+	// TODO: Way might want to provide this property as a configuration property
+	private static final long WARN_ON_NEGATIVE_SCHED_TIME_NANOS = TimeUnit.NANOSECONDS.convert(2, TimeUnit.SECONDS);
 
 	private final int numWorkers;
 

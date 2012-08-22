@@ -23,10 +23,9 @@ package kieker.tools.logReplayer;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.jms.JMSReader;
 import kieker.common.configuration.Configuration;
-import kieker.common.record.IMonitoringRecord;
 
 /**
- * An implementation of the {@link AbstractLogReplayer}, using the {@link JMSReader} to replay {@link IMonitoringRecord}s from a JMS queue.
+ * An implementation of the {@link AbstractLogReplayer}, using the {@link JMSReader} to replay {@link kieker.common.record.IMonitoringRecord}s from a JMS queue.
  * 
  * @author Andre van Hoorn
  * 
@@ -61,8 +60,7 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 		configuration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_PROVIDERURL, this.jmsProviderUrl);
 		configuration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_DESTINATION, this.jmsDestination);
 		configuration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, this.jmsFactoryLookupName);
-		final JMSReader jmsReader = new JMSReader(configuration);
-		return jmsReader;
+		return new JMSReader(configuration);
 	}
 
 	@Override

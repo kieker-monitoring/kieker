@@ -44,8 +44,6 @@ import kieker.monitoring.core.controller.MonitoringController;
 @Plugin(description = "A filter which passes received records to the configured monitoring controller",
 		outputPorts = @OutputPort(name = MonitoringRecordLoggerFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming monitoring record", eventTypes = { IMonitoringRecord.class }))
 public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
-	private static final Log LOG = LogFactory.getLog(MonitoringRecordLoggerFilter.class);
-
 	public static final String INPUT_PORT_NAME_RECORD = "monitoringRecords";
 
 	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayedEvents";
@@ -59,6 +57,8 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 	 * via the configuration property {@link #CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN}; case (iii) keeps this property untouched.
 	 */
 	public static final String CONFIG_PROPERTY_NAME_KEEP_LOGGING_TIMESTAMP = "keepLoggingTimestamp";
+
+	private static final Log LOG = LogFactory.getLog(MonitoringRecordLoggerFilter.class);
 
 	/**
 	 * The {@link IMonitoringController} the records received via {@link #inputIMonitoringRecord(IMonitoringRecord)} are passed to.

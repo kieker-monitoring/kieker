@@ -23,10 +23,10 @@ package kieker.tools.logReplayer;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
-import kieker.common.record.IMonitoringRecord;
 
 /**
- * An implementation of the {@link AbstractLogReplayer}, using the {@link FSReader} to replay {@link IMonitoringRecord}s from a list of file system monitoring logs.
+ * An implementation of the {@link AbstractLogReplayer}, using the {@link FSReader} to replay {@link kieker.common.record.IMonitoringRecord}s from a list of file
+ * system monitoring logs.
  * 
  * @author Andre van Hoorn
  */
@@ -54,8 +54,7 @@ public class FilesystemLogReplayer extends AbstractLogReplayer {
 		configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(this.inputDirs));
 		// TODO: we might want to pull this out as a property
 		configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, Boolean.toString(true));
-		final FSReader fsReader = new FSReader(configuration);
-		return fsReader;
+		return new FSReader(configuration);
 	}
 
 	@Override

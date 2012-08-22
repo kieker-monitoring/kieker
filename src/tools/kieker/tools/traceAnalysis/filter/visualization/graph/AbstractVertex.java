@@ -61,7 +61,7 @@ public abstract class AbstractVertex<V extends AbstractVertex<V, E, O>, E extend
 	 * @return The given decoration or {@code null} if no such type exists
 	 */
 	@SuppressWarnings("unchecked")
-	public <DecorationT extends AbstractVertexDecoration> DecorationT getDecoration(final Class<DecorationT> type) {
+	public <DecorationT extends AbstractVertexDecoration> DecorationT getDecoration(final Class<DecorationT> type) { // NOCS (DecorationT istaed of T)
 		return (DecorationT) this.decorations.get(type);
 	}
 
