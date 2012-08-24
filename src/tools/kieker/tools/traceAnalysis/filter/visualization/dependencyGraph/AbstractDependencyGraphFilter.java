@@ -57,16 +57,13 @@ public abstract class AbstractDependencyGraphFilter<T> extends AbstractMessageTr
 
 	private static final String ENCODING = "UTF-8";
 
-	protected volatile DependencyGraph<T> dependencyGraph;
+	protected final DependencyGraph<T> dependencyGraph;
 	private int numGraphsSaved = 0;
 
 	private final List<AbstractNodeDecorator> decorators = new ArrayList<AbstractNodeDecorator>();
 
-	public AbstractDependencyGraphFilter(final Configuration configuration) {
+	public AbstractDependencyGraphFilter(final Configuration configuration, final DependencyGraph<T> dependencyGraph) {
 		super(configuration);
-	}
-
-	protected void setDependencyGraph(final DependencyGraph<T> dependencyGraph) {
 		this.dependencyGraph = dependencyGraph;
 	}
 
@@ -144,7 +141,7 @@ public abstract class AbstractDependencyGraphFilter<T> extends AbstractMessageTr
 
 	protected StringBuilder addDecorationText(final StringBuilder output, final DependencyGraphNode<?> node) {
 		final String decorations = node.getFormattedDecorations();
-		if ((decorations != null) && (decorations.length() != 0)) {
+		if (decorations.length() != 0) {
 			output.append("\\n");
 			output.append(decorations);
 		}

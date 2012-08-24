@@ -88,10 +88,7 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	 */
 	public OperationDependencyGraphAssemblyFilter(final Configuration configuration) {
 		/* Call the mandatory "default" constructor. */
-		super(configuration);
-
-		/* Initialize the necessary fields from the inherited class. */
-		super.setDependencyGraph(new DependencyGraph<AssemblyComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+		super(configuration, new DependencyGraph<AssemblyComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 				new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID, OperationRepository.ROOT_OPERATION,
 						AssemblyRepository.ROOT_ASSEMBLY_COMPONENT)));
 
@@ -174,7 +171,7 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 					final StringBuilder opLabel = new StringBuilder(sig.getName());
 					opLabel.append("(");
 					final String[] paramList = sig.getParamTypeList();
-					if ((paramList != null) && (paramList.length > 0)) {
+					if (paramList.length > 0) {
 						opLabel.append("..");
 					}
 					opLabel.append(")");

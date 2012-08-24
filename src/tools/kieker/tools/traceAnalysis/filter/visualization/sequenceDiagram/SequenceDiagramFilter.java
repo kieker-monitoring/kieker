@@ -282,7 +282,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				final StringBuilder msgLabel = new StringBuilder(sig.getName());
 				msgLabel.append("(");
 				final String[] paramList = sig.getParamTypeList();
-				if ((paramList != null) && (paramList.length > 0)) {
+				if (paramList.length > 0) {
 					msgLabel.append("..");
 				}
 				msgLabel.append(")");

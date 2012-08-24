@@ -75,8 +75,7 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 
 	public ComponentDependencyGraphAllocationFilter(final Configuration configuration) {
 		// TODO Check type conversion??
-		super(configuration);
-		super.setDependencyGraph(new DependencyGraph<AllocationComponent>(AllocationRepository.ROOT_ALLOCATION_COMPONENT.getId(),
+		super(configuration, new DependencyGraph<AllocationComponent>(AllocationRepository.ROOT_ALLOCATION_COMPONENT.getId(),
 				AllocationRepository.ROOT_ALLOCATION_COMPONENT));
 		this.dotOutputFile = configuration.getStringProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE);
 		this.includeWeights = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);

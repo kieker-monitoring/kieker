@@ -86,7 +86,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		final StringBuilder opLabel = new StringBuilder(sig.getName());
 		opLabel.append("(");
 		final String[] paramList = sig.getParamTypeList();
-		if ((paramList != null) && (paramList.length > 0)) {
+		if (paramList.length > 0) {
 			opLabel.append("..");
 		}
 		opLabel.append(")");
@@ -117,7 +117,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		final StringBuilder opLabel = new StringBuilder(sig.getName());
 		opLabel.append("(");
 		final String[] paramList = sig.getParamTypeList();
-		if ((paramList != null) && (paramList.length > 0)) {
+		if (paramList.length > 0) {
 			opLabel.append("..");
 		}
 		opLabel.append(")");

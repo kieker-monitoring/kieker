@@ -158,7 +158,7 @@ public class TestRealtimeRecordDelayFilter {
 	}
 
 	private List<Entry<Long, Integer>> passEventListToReader(final SimpleListReader<IMonitoringRecord> reader) {
-		long currentTimeSeconds = START_TIME_SECONDS;
+		long currentTimeSeconds;
 		int curNumRecords = 0;
 
 		final List<Entry<Long, Integer>> eventList = new ArrayList<Entry<Long, Integer>>(TestRealtimeRecordDelayFilter.EVENT_TIME_OFFSETS_SECONDS.length);

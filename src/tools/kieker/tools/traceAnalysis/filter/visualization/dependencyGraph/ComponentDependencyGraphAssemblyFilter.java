@@ -66,8 +66,7 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 
 	public ComponentDependencyGraphAssemblyFilter(final Configuration configuration) {
 		// TODO Check type conversion
-		super(configuration);
-		super.setDependencyGraph(new DependencyGraph<AssemblyComponent>(
+		super(configuration, new DependencyGraph<AssemblyComponent>(
 				AssemblyRepository.ROOT_ASSEMBLY_COMPONENT.getId(),
 				AssemblyRepository.ROOT_ASSEMBLY_COMPONENT));
 		this.dotOutputFile = new File(configuration.getStringProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE));
