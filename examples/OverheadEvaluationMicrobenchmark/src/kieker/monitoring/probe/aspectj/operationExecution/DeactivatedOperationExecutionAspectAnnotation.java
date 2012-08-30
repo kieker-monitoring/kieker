@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2011 by
+ * Copyright 2012 by
  *  + Christian-Albrechts-University of Kiel
  *    + Department of Computer Science
  *      + Software Engineering Group 
@@ -69,6 +69,7 @@ public final class DeactivatedOperationExecutionAspectAnnotation extends Abstrac
 		// empty default constructor
 	}
 
+	@Override
 	@Pointcut("execution(@kieker.monitoring.annotation.OperationExecutionMonitoringProbe * *(..)) || execution(@kieker.monitoring.annotation.OperationExecutionMonitoringProbe new(..))")
 	public final void monitoredOperation() {
 		// Aspect Declaration (MUST be empty)
