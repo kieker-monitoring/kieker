@@ -99,7 +99,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 
 		final StringBuilder strBuild = new StringBuilder(resourceContainerName).append("::\\n").append(assemblyComponentName).append(":");
 		if (!shortLabels) {
-			strBuild.append(componentTypePackagePrefx);
+			strBuild.append(componentTypePackagePrefx).append(".");
 		} else {
 			strBuild.append("..");
 		}
