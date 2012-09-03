@@ -82,7 +82,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 		this.root = new CallTreeNode(null, // null: root node has no parent
 				new CallTreeOperationHashKey(AllocationRepository.ROOT_ALLOCATION_COMPONENT, OperationRepository.ROOT_OPERATION));
 		this.shortLabels = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS);
-		this.dotOutputFn = configuration.getProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILENAME);
+		this.dotOutputFn = configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILENAME);
 	}
 
 	private static final String nodeLabel(final CallTreeNode node, final boolean shortLabels) {

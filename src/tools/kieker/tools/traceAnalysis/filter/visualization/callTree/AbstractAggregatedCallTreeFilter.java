@@ -63,7 +63,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 
 		this.includeWeights = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
 		this.shortLabels = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS);
-		this.dotOutputFile = configuration.getProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILENAME);
+		this.dotOutputFile = configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILENAME);
 	}
 
 	protected void setRoot(final AbstractAggregatedCallTreeNode<T> root) {

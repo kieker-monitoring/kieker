@@ -25,6 +25,7 @@ import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 
 /**
  * Replays a monitoring log to a {@link kieker.monitoring.core.controller.IMonitoringController} with a given {@link Configuration}.
@@ -139,8 +140,8 @@ public abstract class AbstractLogReplayer {
 				recordLoggerConfig.setProperty(MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, this.monitoringConfigurationFile);
 			}
 			recordLoggerConfig.setProperty(
-					MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_KEEP_LOGGING_TIMESTAMP,
-					Boolean.toString(this.keepOriginalLoggingTimestamps));
+					ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP,
+					Boolean.toString(!this.keepOriginalLoggingTimestamps));
 			final MonitoringRecordLoggerFilter recordLogger = new MonitoringRecordLoggerFilter(recordLoggerConfig);
 			analysisInstance.registerFilter(recordLogger);
 			analysisInstance.connect(lastFilter, lastOutputPortName, recordLogger, MonitoringRecordLoggerFilter.INPUT_PORT_NAME_RECORD);

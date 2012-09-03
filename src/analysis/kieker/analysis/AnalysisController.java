@@ -519,7 +519,7 @@ public final class AnalysisController {
 					final String key = (String) e.nextElement();
 					final MIProperty property = factory.createProperty();
 					property.setName(key);
-					property.setValue(configuration.getProperty(key));
+					property.setValue(configuration.getStringProperty(key));
 					properties.add(property);
 				}
 				// Extract the repositories.

@@ -56,7 +56,7 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 
 	public SystemModel2FileFilter(final Configuration configuration) {
 		super(configuration);
-		this.outputFnHTML = configuration.getProperty(CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN);
+		this.outputFnHTML = configuration.getStringProperty(CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN);
 	}
 
 	@Override

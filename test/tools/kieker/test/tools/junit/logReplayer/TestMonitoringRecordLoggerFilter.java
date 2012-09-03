@@ -177,8 +177,8 @@ public class TestMonitoringRecordLoggerFilter {
 		final Configuration recordLoggingFilterConfiguration = new Configuration();
 		recordLoggingFilterConfiguration.setProperty(MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, monitoringProperties.getPath());
 		recordLoggingFilterConfiguration.setProperty(
-				MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_KEEP_LOGGING_TIMESTAMP,
-				Boolean.toString(keepLoggingTimestamps));
+				ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP,
+				Boolean.toString(!keepLoggingTimestamps));
 		final MonitoringRecordLoggerFilter loggerFilter = new MonitoringRecordLoggerFilter(recordLoggingFilterConfiguration);
 		analysisController.registerFilter(loggerFilter);
 		analysisController.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, loggerFilter, MonitoringRecordLoggerFilter.INPUT_PORT_NAME_RECORD);

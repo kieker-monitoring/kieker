@@ -186,4 +186,33 @@ public final class Configuration extends Properties {
 	public final synchronized Object put(final Object key, final Object value) { // NOPMD
 		return super.put(key, value);
 	}
+
+	/**
+	 * This method should never be used directly!
+	 * Use {@link #getStringProperty(String)} instead!
+	 */
+	@Override
+	@Deprecated
+	public final synchronized Object get(final Object key) {
+		return super.get(key);
+	}
+
+	/**
+	 * This method should never be used directly!
+	 * Use {@link #getStringProperty(String)} instead!
+	 */
+	@Override
+	@Deprecated
+	public final String getProperty(final String key) {
+		return super.getProperty(key);
+	}
+
+	/**
+	 * This method should never be used directly!
+	 */
+	@Override
+	@Deprecated
+	public final String getProperty(final String key, final String defaultValue) {
+		return super.getProperty(key);
+	}
 }
