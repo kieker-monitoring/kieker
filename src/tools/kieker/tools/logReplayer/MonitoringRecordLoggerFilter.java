@@ -79,7 +79,7 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 
 		final Configuration controllerConfiguration;
 
-		if (this.monitoringPropertiesFn != null) {
+		if (this.monitoringPropertiesFn != null) { // TODO: isEmpty
 			controllerConfiguration = ConfigurationFactory.createConfigurationFromFile(this.monitoringPropertiesFn);
 		} else {
 			LOG.info("No path to a 'monitoring.properties' file passed; using default configuration");

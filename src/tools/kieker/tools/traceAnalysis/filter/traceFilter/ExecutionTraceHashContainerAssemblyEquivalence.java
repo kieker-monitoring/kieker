@@ -31,22 +31,16 @@ class ExecutionTraceHashContainerAssemblyEquivalence extends AbstractExecutionTr
 
 	public ExecutionTraceHashContainerAssemblyEquivalence(final ExecutionTrace t) {
 		super(t);
-		int h = 0;
-		// TODO: need a better hash function considering the order (e.g., MD5)
-		// See ticket http://samoa.informatik.uni-kiel.de:8000/kieker/ticket/157
+		final int prime = 31;
+		int result = 1;
 		for (final Execution r : t.getTraceAsSortedExecutionSet()) {
-			h ^= r.getOperation().getId();
-			h ^= r.getAllocationComponent().getAssemblyComponent().getId();
-			h ^= r.getEoi();
-			h ^= r.getEss();
+			result = (prime * result) + r.getOperation().getId();
+			result = (prime * result) + r.getAllocationComponent().getAssemblyComponent().getId();
+			result = (prime * result) + r.getEoi();
+			result = (prime * result) + r.getEss();
 		}
 		//
-		this.hashCodeBuffer = h;
-	}
-
-	@Override
-	public int hashCode() {
-		return this.hashCodeBuffer;
+		this.hashCodeBuffer = result;
 	}
 
 	private boolean executionsEqual(final Execution r1, final Execution r2) {
@@ -58,6 +52,11 @@ class ExecutionTraceHashContainerAssemblyEquivalence extends AbstractExecutionTr
 		}
 		return (r1.getAllocationComponent().getAssemblyComponent().getId() == r2.getAllocationComponent().getAssemblyComponent().getId())
 				&& (r1.getOperation().getId() == r2.getOperation().getId()) && (r1.getEoi() == r2.getEoi()) && (r1.getEss() == r2.getEss());
+	}
+
+	@Override
+	public int hashCode() {
+		return this.hashCodeBuffer;
 	}
 
 	@Override
