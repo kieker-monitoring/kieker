@@ -135,8 +135,6 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 
 	@Override
 	public void terminate(final boolean error) {
-		// TODO: Termination delay? Wait for pending jobs to be processed?
-
 		this.executor.shutdown();
 
 		if (!error) {
