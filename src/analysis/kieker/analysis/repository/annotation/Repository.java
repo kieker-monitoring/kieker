@@ -37,6 +37,12 @@ public @interface Repository {
 	public static final String NO_NAME = "";
 
 	/**
+	 * This flag determines whether the annotated repository should only be used for programmatic purposes or not. This can for example be used by tools to ignore
+	 * specific repositories.
+	 */
+	boolean programmaticOnly() default false;
+
+	/**
 	 * The human-readable description of this repository type.
 	 * 
 	 * @return The description for this repository type.

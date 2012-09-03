@@ -63,11 +63,6 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 		return true;
 	}
 
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
-	}
-
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		// filter has no configuration properties

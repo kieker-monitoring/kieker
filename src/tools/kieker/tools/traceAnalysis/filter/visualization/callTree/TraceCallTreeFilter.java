@@ -25,6 +25,7 @@ import java.util.Map;
 
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -57,14 +58,18 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * @author Andre van Hoorn
  */
 @Plugin(description = "A filter allowing to write the incoming data into a calling tree",
-		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
+		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
+		configuration = {
+			@Property(name = TraceCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, defaultValue = TraceCallTreeFilter.CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT),
+			@Property(name = TraceCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, defaultValue = TraceCallTreeFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT)
+		})
 public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FILENAME = "dotOutputFn";
 	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
 
 	public static final String CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT = "traceCalltree.dot";
-	public static final String CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT = Boolean.TRUE.toString();
+	public static final String CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT = "true";
 
 	private static final String ENCODING = "UTF-8";
 
@@ -190,14 +195,6 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 			this.stdOutPrintln("Example: dot -T svg " + this.dotOutputFn + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".dot > " // NOCS
 					+ this.dotOutputFn + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg"); // NOCS
 		}
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT);
-		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT);
-		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {
