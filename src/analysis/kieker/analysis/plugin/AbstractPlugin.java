@@ -33,6 +33,7 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.analysis.plugin.reader.IReaderPlugin;
 import kieker.analysis.repository.AbstractRepository;
@@ -115,12 +116,24 @@ public abstract class AbstractPlugin implements IPlugin {
 	}
 
 	/**
-	 * This method should deliver an instance of {@code Properties} containing the default properties for this class. In other words: Every class inheriting from
-	 * {@code AbstractPlugin} should implement this method to deliver an object which can be used for the constructor of this class.
+	 * This method delivers an instance of {@code Configuration} containing the default properties for this class.
 	 * 
 	 * @return The default properties.
 	 */
-	protected abstract Configuration getDefaultConfiguration();
+	protected final Configuration getDefaultConfiguration() {
+		final Configuration configuration = new Configuration();
+
+		// Get the annotation from the class
+		final Plugin pluginAnnotation = this.getClass().getAnnotation(Plugin.class);
+		final Property[] propertyAnnotations = pluginAnnotation.configuration();
+
+		// Run through all properties within the annotation and add them to the configuration object
+		for (final Property property : propertyAnnotations) {
+			configuration.setProperty(property.name(), property.defaultValue());
+		}
+
+		return configuration;
+	}
 
 	/*
 	 * (non-Javadoc)

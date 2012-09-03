@@ -62,4 +62,10 @@ public @interface Plugin {
 	 */
 	RepositoryPort[] repositoryPorts() default {};
 
+	/**
+	 * The list of possible properties for this plugin.
+	 * 
+	 * @return A list of properties.
+	 */
+	Property[] configuration() default {};
 }

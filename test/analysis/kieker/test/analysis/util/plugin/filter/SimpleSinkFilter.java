@@ -75,11 +75,6 @@ public class SimpleSinkFilter<T> extends AbstractFilterPlugin {
 		}
 	}
 
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
-	}
-
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

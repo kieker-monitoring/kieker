@@ -22,6 +22,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import kieker.analysis.plugin.annotation.Property;
+
 /**
  * This type annotation can be used to mark repositories.
  * 
@@ -47,4 +49,11 @@ public @interface Repository {
 	 * @return The name of this repository type.
 	 */
 	String name() default NO_NAME;
+
+	/**
+	 * The list of possible properties for this repository.
+	 * 
+	 * @return A list of properties.
+	 */
+	Property[] configuration() default {};
 }
