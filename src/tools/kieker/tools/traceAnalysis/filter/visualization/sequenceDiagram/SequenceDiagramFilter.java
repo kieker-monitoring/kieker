@@ -30,6 +30,7 @@ import java.util.TreeSet;
 
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -37,6 +38,7 @@ import kieker.common.logging.LogFactory;
 import kieker.common.util.Signature;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
+import kieker.tools.traceAnalysis.filter.visualization.sequenceDiagram.SequenceDiagramFilter.SDModes;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AbstractTrace;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
@@ -56,8 +58,14 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn, Nils Sommer, Jan Waller
  */
 @Plugin(description = "A filter allowing to write the incoming data into a sequence diagram",
-		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
+		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
+		configuration = {
+			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE, defaultValue = SequenceDiagramFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT),
+			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES, defaultValue = "true"),
+			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE, defaultValue = SDModes.ASSEMBLY.toString())
+		})
 public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter {
+
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE = "filename";
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES = "shortLabels";
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_SDMODE = "SDMode";
@@ -318,16 +326,6 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 		SequenceDiagramFilter.picFromMessageTrace(msgTrace, sdMode, ps, shortLabels);
 		ps.flush();
 		ps.close();
-	}
-
-	@Override
-	protected final Configuration getDefaultConfiguration() {
-		final Configuration defaultConfiguration = new Configuration();
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE,
-				CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT);
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES, Boolean.TRUE.toString());
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_SDMODE, SDModes.ASSEMBLY.toString());
-		return defaultConfiguration;
 	}
 
 	public Configuration getCurrentConfiguration() {

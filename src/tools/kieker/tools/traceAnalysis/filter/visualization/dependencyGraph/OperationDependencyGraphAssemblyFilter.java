@@ -27,6 +27,7 @@ import java.util.Map.Entry;
 
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -55,8 +56,15 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
 @Plugin(description = "Uses the incoming data to enrich the connected repository with data for the operation assembly dependency graph",
-		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
+		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
+		configuration = {
+			@Property(name = OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, defaultValue = OperationDependencyGraphAssemblyFilter.DEFAULT_DOT_OUTPUT_FILE),
+			@Property(name = OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, defaultValue = "true"),
+			@Property(name = OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, defaultValue = "true"),
+			@Property(name = OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, defaultValue = "true")
+		})
 public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGraphFilter<AssemblyComponentOperationPair> {
+
 	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dotOutputFn";
 	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
 	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
@@ -65,7 +73,7 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	/**
 	 * This is the default dot output name used for the default configuration of this instance.
 	 */
-	private static final String DEFAULT_DOT_OUTPUT_FILE = "output.dot";
+	protected static final String DEFAULT_DOT_OUTPUT_FILE = "output.dot";
 
 	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
 
@@ -203,19 +211,6 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 				LOG.error("IOException while saving to dot file", ex);
 			}
 		}
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-
-		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE,
-				DEFAULT_DOT_OUTPUT_FILE);
-		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
-		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(true));
-		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.toString(true));
-
-		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {

@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -51,8 +52,15 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr, Jan Waller
  */
 @Plugin(description = "Uses the incoming data to enrich the connected repository with data for the component allocation dependency graph",
-		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
+		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
+		configuration = {
+			@Property(name = ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, defaultValue = ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT),
+			@Property(name = ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, defaultValue = "true"),
+			@Property(name = ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SHORTLABELS, defaultValue = "true"),
+			@Property(name = ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SELFLOOPS, defaultValue = "false")
+		})
 public class ComponentDependencyGraphAllocationFilter extends AbstractDependencyGraphFilter<AllocationComponent> {
+
 	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dotOutputFn";
 	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
 	public static final String CONFIG_PROPERTY_NAME_SHORTLABELS = "shortLabels";
@@ -178,17 +186,6 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 				LOG.error("IOException while saving to dot file", ex);
 			}
 		}
-	}
-
-	@Override
-	protected final Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE,
-				CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT);
-		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.TRUE.toString());
-		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORTLABELS, Boolean.TRUE.toString());
-		configuration.setProperty(CONFIG_PROPERTY_NAME_SELFLOOPS, Boolean.FALSE.toString());
-		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {

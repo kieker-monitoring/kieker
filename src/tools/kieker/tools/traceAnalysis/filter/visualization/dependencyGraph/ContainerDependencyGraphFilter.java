@@ -23,6 +23,7 @@ import java.util.Collection;
 
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -47,8 +48,15 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
 @Plugin(description = "Uses the incoming data to enrich the connected repository with data for the container dependency graph",
-		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
+		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
+		configuration = {
+			@Property(name = ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, defaultValue = ""),
+			@Property(name = ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, defaultValue = "false"),
+			@Property(name = ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, defaultValue = "false"),
+			@Property(name = ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, defaultValue = "false")
+		})
 public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilter<ExecutionContainer> {
+
 	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dotOutputFile";
 	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
 	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
@@ -113,18 +121,6 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 				LOG.error("IOException while saving to dot file", ex);
 			}
 		}
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-
-		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, "");
-		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.FALSE.toString());
-		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.FALSE.toString());
-		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.FALSE.toString());
-
-		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {

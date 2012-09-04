@@ -22,6 +22,7 @@ import java.util.TreeSet;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
@@ -44,6 +45,10 @@ import kieker.common.record.flow.trace.Trace;
 			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH, description = "Forwards events with trace IDs not matching",
 					eventTypes = { AbstractTraceEvent.class, Trace.class, OperationExecutionRecord.class })
 
+		},
+		configuration = {
+			@Property(name = TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, defaultValue = "true"),
+			@Property(name = TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, defaultValue = "")
 		})
 public final class TraceIdFilter extends AbstractFilterPlugin {
 	public static final String INPUT_PORT_NAME_FLOW = "monitoringRecordsFlow";
@@ -66,14 +71,6 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 		for (final String id : configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_SELECTED_TRACES)) {
 			this.selectedTraceIds.add(Long.parseLong(id));
 		}
-	}
-
-	@Override
-	protected final Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.TRUE.toString());
-		configuration.setProperty(CONFIG_PROPERTY_NAME_SELECTED_TRACES, ""); // example might be "0|1|2|3|4"
-		return configuration;
 	}
 
 	public final Configuration getCurrentConfiguration() {

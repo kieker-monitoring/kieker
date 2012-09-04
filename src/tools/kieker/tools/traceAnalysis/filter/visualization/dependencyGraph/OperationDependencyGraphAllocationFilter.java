@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -57,8 +58,15 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
 @Plugin(description = "Uses the incoming data to enrich the connected repository with data for the operation allocation dependency graph",
-		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
+		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
+		configuration = {
+			@Property(name = OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, defaultValue = "./OperationDependencyGraph"),
+			@Property(name = OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, defaultValue = "true"),
+			@Property(name = OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, defaultValue = "false"),
+			@Property(name = OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, defaultValue = "true")
+		})
 public class OperationDependencyGraphAllocationFilter extends AbstractDependencyGraphFilter<AllocationComponentOperationPair> {
+
 	public static final String CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE = "dotOutputFn";
 	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
 	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
@@ -227,18 +235,6 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 				LOG.error("IOException while saving to dot file", ex);
 			}
 		}
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-
-		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, "./OperationDependencyGraph");
-		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.TRUE.toString());
-		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.FALSE.toString());
-		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.TRUE.toString());
-
-		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {

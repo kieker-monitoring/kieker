@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -42,8 +43,13 @@ import kieker.common.record.IMonitoringRecord;
 		description = "Forwards incoming records with delays computed from the timestamp values",
 		outputPorts = {
 			@OutputPort(name = RealtimeRecordDelayFilter.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Outputs the delayed records")
+		},
+		configuration = {
+			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_NUM_WORKERS, defaultValue = "1"),
+			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS, defaultValue = "5")
 		})
 public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
+
 	public static final String INPUT_PORT_NAME_RECORDS = "inputRecords";
 	public static final String OUTPUT_PORT_NAME_RECORDS = "outputRecords";
 
@@ -163,11 +169,4 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 		return configuration;
 	}
 
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_NUM_WORKERS, "1");
-		configuration.setProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS, Long.toString(5)); // 5 seconds default
-		return configuration;
-	}
 }

@@ -19,6 +19,7 @@ package kieker.tools.logReplayer;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -38,8 +39,13 @@ import kieker.monitoring.core.controller.MonitoringController;
  */
 // TODO: We should move this class to another package
 @Plugin(description = "A filter which passes received records to the configured monitoring controller",
-		outputPorts = @OutputPort(name = MonitoringRecordLoggerFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming monitoring record", eventTypes = { IMonitoringRecord.class }))
+		outputPorts = @OutputPort(name = MonitoringRecordLoggerFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming monitoring record", eventTypes = { IMonitoringRecord.class }),
+		configuration = {
+			@Property(name = MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, defaultValue = ""),
+			@Property(name = MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_KEEP_LOGGING_TIMESTAMP, defaultValue = "")
+		})
 public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
+
 	public static final String INPUT_PORT_NAME_RECORD = "monitoringRecords";
 
 	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayedEvents";
@@ -101,14 +107,6 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 		if ((this.keepLoggingTimestamp != null) && (this.keepLoggingTimestamp.length() > 0)) {
 			configuration.setProperty(CONFIG_PROPERTY_NAME_KEEP_LOGGING_TIMESTAMP, this.keepLoggingTimestamp);
 		}
-		return configuration;
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-		// Do not set property CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN!
-		// Do not set property CONFIG_PROPERTY_NAME_KEEP_LOGGING_TIMESTAMP!
 		return configuration;
 	}
 
