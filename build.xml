@@ -1056,8 +1056,7 @@
 		</findbugs>
 	</target>
 
-  <!--depends="build-all,compile-tests"-->
-	<target name="pmd" description="Performs a source code analysis employing PMD">
+	<target name="pmd" depends="build-all,compile-tests" description="Performs a source code analysis employing PMD">
 		<path id="pmd.libs">
 			<fileset dir="${lib.dir}/pmd-5.0.0/lib">
 				<include name="*.jar" />

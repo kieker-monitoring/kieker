@@ -14,10 +14,8 @@
   <exclude-pattern>.*/examples/userguide/.*</exclude-pattern>
   
   <!-- We'll use the following rulesets -->
-  <!-- 
   <rule ref="rulesets/internal/all-java.xml">
   
   </rule>
-  -->
   
 </ruleset>
