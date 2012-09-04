@@ -101,10 +101,19 @@
 			<pathelement location="${build.kieker.analysis.model.dir}/" />
 		</path>
 
+		<echo message="TODO: #571 - minimize dependencies in kieker.tools-compile-classpath!" />
+		
 		<path id="kieker.tools-compile-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="commons-cli-*.jar" />
 				<include name="jgraphx-*.jar" />
+				<!-- The following include were added for OPAD/TSLib; the number of dependencies needs to be minimized -->
+				<include name="commons-collections-*.jar" />
+				<include name="commons-lang-*.jar" />
+				<include name="commons-math-*.jar" />
+				<include name="Rsession.jar" />
+				<include name="REngine.jar" />
+				<!--<include name="*.jar" />-->
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
 			<pathelement location="${build.kieker.monitoring.dir}/" />

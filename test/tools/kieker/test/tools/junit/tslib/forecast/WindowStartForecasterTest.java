@@ -22,9 +22,8 @@ import java.util.concurrent.TimeUnit;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.tools.tslib.ITimeSeries;
 import kieker.tools.tslib.TimeSeries;
 import kieker.tools.tslib.forecast.IForecastResult;

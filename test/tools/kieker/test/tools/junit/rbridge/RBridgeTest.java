@@ -18,12 +18,12 @@ package kieker.test.tools.junit.rbridge;
 
 import java.io.File;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.tools.util.RBridgeControl;
 
 /**
@@ -49,7 +49,7 @@ public class RBridgeTest {
 		final Object result = r
 				.e("plotAnomaly(combined, '/Users/till/Documents/repositories/uni/thesis-repos/Opad4lsssExperiments/opad4lsss_r/plots/junit_testplot.pdf', 1323437034798, 2000)");
 
-		LOG.info(result);
+		LOG.info(result.toString());
 
 		Assert.assertTrue(result != null);
 		Assert.assertTrue(result instanceof org.rosuda.REngine.REXPInteger);

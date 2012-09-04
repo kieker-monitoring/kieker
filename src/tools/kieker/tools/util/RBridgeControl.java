@@ -23,13 +23,14 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.math.R.Rsession;
 import org.rosuda.REngine.REXPDouble;
 import org.rosuda.REngine.REXPLogical;
 import org.rosuda.REngine.REXPString;
 import org.rosuda.REngine.REXPVector;
+
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 
 /**
  * 
