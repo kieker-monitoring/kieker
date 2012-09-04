@@ -35,10 +35,8 @@ import kieker.common.record.misc.EmptyRecord;
  * @author Andre van Hoorn, Jan Waller
  */
 @Plugin(description = "A file system reader which reads records from multiple directories",
-		outputPorts = @OutputPort(
-				name = FSReader.OUTPUT_PORT_NAME_RECORDS,
-				eventTypes = { IMonitoringRecord.class },
-				description = "Output Port of the FSReader"),
+		outputPorts = {
+			@OutputPort(name = FSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader") },
 		configuration = {
 			@Property(name = FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = "."),
 			@Property(name = FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, defaultValue = FSReader.CONFIG_PROPERTY_VALUE_IGNORE_UNKNOWN_RECORD_TYPES_DEFAULT)

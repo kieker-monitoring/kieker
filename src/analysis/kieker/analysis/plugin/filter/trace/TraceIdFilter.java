@@ -40,11 +40,10 @@ import kieker.common.record.flow.trace.Trace;
  */
 @Plugin(description = "A filter allowing to filter incoming objects based on their trace ID",
 		outputPorts = {
-			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MATCH, description = "Forwards events with matching trace IDs",
-					eventTypes = { AbstractTraceEvent.class, Trace.class, OperationExecutionRecord.class }),
-			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH, description = "Forwards events with trace IDs not matching",
-					eventTypes = { AbstractTraceEvent.class, Trace.class, OperationExecutionRecord.class })
-
+			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MATCH, description = "Forwards events with matching trace IDs", eventTypes = {
+				AbstractTraceEvent.class, Trace.class, OperationExecutionRecord.class }),
+			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH, description = "Forwards events with trace IDs not matching", eventTypes = {
+				AbstractTraceEvent.class, Trace.class, OperationExecutionRecord.class })
 		},
 		configuration = {
 			@Property(name = TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, defaultValue = "true"),

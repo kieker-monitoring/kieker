@@ -43,7 +43,9 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn
  */
 @Plugin(description = "A filter allowing to write the incoming MessageTraces into a configured file",
-		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
+		repositoryPorts = {
+			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+		})
 public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilter {
 
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN = "outputFn";

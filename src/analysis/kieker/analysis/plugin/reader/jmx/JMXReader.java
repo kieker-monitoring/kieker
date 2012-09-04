@@ -46,7 +46,9 @@ import kieker.common.record.IMonitoringRecord;
  * @author Jan Waller
  */
 @Plugin(description = "A reader which reads records from a JMX queue",
-		outputPorts = @OutputPort(name = JMXReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMXReader"),
+		outputPorts = {
+			@OutputPort(name = JMXReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMXReader")
+		},
 		configuration = {
 			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_SERVER, defaultValue = "localhost"),
 			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_PORT, defaultValue = "59999"),

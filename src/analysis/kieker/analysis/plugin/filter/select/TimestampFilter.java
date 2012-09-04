@@ -58,8 +58,8 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP = "ignoreBeforeTimestamp";
 	public static final String CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP = "ignoreAfterTimestamp";
 
-	public static final String CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP_S = "9223372036854775807";
-	public static final String CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP_S = "0";
+	public static final String CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP_S = "9223372036854775807"; // Long.toString(Long.MAX_VALUE)
+	public static final String CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP_S = "0"; // Long.toString(0)
 
 	public static final long CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP = Long.parseLong(CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP_S);
 	public static final long CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP = Long.parseLong(CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP_S);

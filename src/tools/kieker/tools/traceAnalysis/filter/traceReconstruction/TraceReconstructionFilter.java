@@ -45,20 +45,13 @@ import kieker.tools.util.LoggingTimestampConverter;
  */
 @Plugin(description = "Uses the incoming data to enrich the connected repository with the reconstructed traces",
 		outputPorts = {
-			@OutputPort(
-					name = TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-					description = "Reconstructed Message Traces",
-					eventTypes = { MessageTrace.class }),
-			@OutputPort(
-					name = TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
-					description = "Reconstructed Execution Traces",
-					eventTypes = { ExecutionTrace.class }),
-			@OutputPort(
-					name = TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE,
-					description = "Invalid Execution Traces",
-					eventTypes = { InvalidExecutionTrace.class })
+			@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Reconstructed Message Traces", eventTypes = { MessageTrace.class }),
+			@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Reconstructed Execution Traces", eventTypes = { ExecutionTrace.class }),
+			@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, description = "Invalid Execution Traces", eventTypes = { InvalidExecutionTrace.class })
 		},
-		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
+		repositoryPorts = {
+			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+		})
 public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	public static final String INPUT_PORT_NAME_EXECUTIONS = "executions";
 
