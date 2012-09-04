@@ -23,9 +23,6 @@ springframework.web-$.jar	This library contains the web application context, mul
 
 javax.servlet-$.jar	This package contains different classes for the work with servlets.
 
-jndi-$.jar	The Java Naming and Directory Interface is an API which provides methods for multiple naming and directory services. It can be used for example to register disposed files in a network and to allow other part of a Java program to use them for RMI calls.
-spice-jndikit-$.jar	The JNDI Kit is a toolkit for the easy use of the so called Java Naming and Directory Interface.
-
 javax.jms-$.jar	Java Message Service is an API to send and receive messages within a client and to control so called Message Oriented Middleware (MOM).
 
 cxf-api-$.jar	Apache CXF is an open source services framework. 
@@ -41,9 +38,10 @@ org.eclipse.emf.common-$.jar	The Eclipse EMF framework.
 org.eclipse.emf.ecore-$.jar	The Eclipse EMF framework. (Ecore Components)
 org.eclipse.emf.ecore.xmi-$.jar	The Eclipse EMF framework. (XMI serialization)
 
+derby-$.jar	??? (TODO: Please provide description)
+
 // Not included are:
 // * Checkstyle
 // * Findbugs
 // * PMD
-// * Serenity
 // and their sub-libraries.
