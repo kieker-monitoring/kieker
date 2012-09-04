@@ -12,10 +12,27 @@
   <exclude-pattern>.*/src-gen/.*</exclude-pattern>
   <!-- exclude userguide examples -->
   <exclude-pattern>.*/examples/userguide/.*</exclude-pattern>
-  
+
   <!-- We'll use the following rulesets -->
   <rule ref="rulesets/internal/all-java.xml">
-  
+    <exclude name="AvoidCatchingNPE"/>
+    <exclude name="AvoidDuplicateLiterals"/>
+    <exclude name="AvoidFinalLocalVariable"/>
+    <exclude name="AvoidInstantiatingObjectsInLoops"/>
+    <exclude name="AvoidLiteralsInIfCondition"/>
+    <exclude name="AvoidThrowingNullPointerException"/>
+    <exclude name="AvoidUsingVolatile"/>
+    <exclude name="CallSuperInConstructor"/>
+    <exclude name="ConfusingTernary"/>
+    <exclude name="DataflowAnomalyAnalysis"/>
+    <exclude name="LongVariable"/>
+    <exclude name="OnlyOneReturn"/>
+    <exclude name="PackageCase"/>
+    <exclude name="ShortVariable"/>
+    <exclude name="SignatureDeclareThrowsException"/>
+    <exclude name="UnnecessaryConstructor"/>
+    <exclude name="UnnecessaryFinalModifier"/>
+    <exclude name="UnusedModifier"/>
   </rule>
-  
+
 </ruleset>
