@@ -39,5 +39,12 @@
 	<classpathentry kind="lib" path="lib/springframework.context-3.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/springframework.web-3.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/jgraphx-1.9.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar"/>
+	<classpathentry kind="lib" path="lib/commons-math-2.2.jar"/>
+	<classpathentry kind="lib" path="lib/JRI.jar"/>
+	<classpathentry kind="lib" path="lib/JRIEngine.jar"/>
+	<classpathentry kind="lib" path="lib/REngine.jar"/>
+	<classpathentry kind="lib" path="lib/Rsession.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>
