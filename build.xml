@@ -77,8 +77,8 @@
 				<include name="javax.jms-*.jar" />
 				<include name="javax.servlet-*.jar" />
 				<include name="sigar-*.jar" />
-				<include name="springframework.context-*.jar" />
-				<include name="springframework.web-*.jar" />
+				<include name="org.springframework.context-*.jar" />
+				<include name="org.springframework.web-*.jar" />
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
 		</path>
@@ -1056,14 +1056,16 @@
 		</findbugs>
 	</target>
 
-	<target name="pmd" depends="build-all,compile-tests" description="Performs a source code analysis employing PMD">
+  <!--depends="build-all,compile-tests"-->
+	<target name="pmd" description="Performs a source code analysis employing PMD">
 		<path id="pmd.libs">
-			<fileset dir="${lib.dir}/pmd-4.3/lib">
+			<fileset dir="${lib.dir}/pmd-5.0.0/lib">
 				<include name="*.jar" />
 			</fileset>
 		</path>
 		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.libs" />
-		<pmd shortFilenames="true" rulesetfiles="${lib.dir}/pmd-4.3/pmdrules.xml" targetjdk="1.5">
+		<pmd shortFilenames="true" rulesetfiles="${lib.dir}/pmd-5.0.0/pmdrules.xml">
+		  <version>java 1.5</version>
 			<formatter type="xml" toFile="${tmp.dir}/pmd_report.xml" />
 			<fileset dir="${src.dir}" includes="**/*.java" />
 			<fileset dir="${test.dir}" includes="**/*.java" />
