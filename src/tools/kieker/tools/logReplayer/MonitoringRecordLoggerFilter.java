@@ -54,22 +54,16 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 	private final IMonitoringController monitoringController;
 
 	/**
-	 * Path to the {@link Configuration} to be used to create {@link #monitoringController}.
-	 * If <code>null</code>, the {@link ConfigurationFactory#createDefaultConfiguration()} is used.
-	 */
-	private final String monitoringPropertiesFn;
-
-	/**
 	 * Used to cache the configuration.
 	 */
-	final Configuration configuration;
+	private final Configuration configuration;
 
 	public MonitoringRecordLoggerFilter(final Configuration configuration) {
 		super(configuration);
 		final Configuration controllerConfiguration;
-		this.monitoringPropertiesFn = configuration.getStringProperty(CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN);
-		if (this.monitoringPropertiesFn.length() > 0) {
-			controllerConfiguration = ConfigurationFactory.createConfigurationFromFile(this.monitoringPropertiesFn);
+		final String monitoringPropertiesFn = configuration.getPathProperty(CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN);
+		if (monitoringPropertiesFn.length() > 0) {
+			controllerConfiguration = ConfigurationFactory.createConfigurationFromFile(monitoringPropertiesFn);
 		} else {
 			LOG.info("No path to a 'monitoring.properties' file passed; using default configuration");
 			controllerConfiguration = ConfigurationFactory.createDefaultConfiguration();
@@ -81,7 +75,7 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 		try {
 			flatConfiguration.setDefaultConfiguration(controllerConfiguration);
 		} catch (final IllegalAccessException ex) {
-			throw new RuntimeException(ex); // cannot happen (due to flatten)!
+			throw new RuntimeException(ex); // NOPMD(cannot happen (due to flatten)!)
 		}
 		this.monitoringController = MonitoringController.createInstance(flatConfiguration);
 	}
@@ -93,9 +87,9 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, "");
-		return configuration;
+		final Configuration defaultconfiguration = new Configuration();
+		defaultconfiguration.setProperty(CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, "");
+		return defaultconfiguration;
 	}
 
 	@InputPort(name = INPUT_PORT_NAME_RECORD, description = "Receives records to be passed to the controller", eventTypes = { IMonitoringRecord.class })

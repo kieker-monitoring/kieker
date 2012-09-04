@@ -194,7 +194,7 @@ public final class Configuration extends Properties {
 	 */
 	@Override
 	@Deprecated
-	public final synchronized Object get(final Object key) {
+	public final synchronized Object get(final Object key) { // NOPMD
 		return super.get(key);
 	}
 
