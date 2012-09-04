@@ -87,7 +87,7 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 						AllocationRepository.ROOT_ALLOCATION_COMPONENT)));
 
 		/* Initialize from the given configuration. */
-		this.dotOutputFile = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE);
+		this.dotOutputFile = this.configuration.getPathProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE);
 		this.includeWeights = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
 		this.shortLabels = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS);
 		this.includeSelfLoops = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS);

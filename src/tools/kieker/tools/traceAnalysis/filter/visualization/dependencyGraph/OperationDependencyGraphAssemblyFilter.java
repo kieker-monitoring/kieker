@@ -71,7 +71,7 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 
 	private static final Log LOG = LogFactory.getLog(OperationDependencyGraphAssemblyFilter.class);
 
-	private final File dotOutputFile;
+	private final String dotOutputFile;
 	private final boolean includeWeights;
 	private final boolean shortLabels;
 	private final boolean includeSelfLoops;
@@ -89,7 +89,7 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 						AssemblyRepository.ROOT_ASSEMBLY_COMPONENT)));
 
 		/* Initialize from the given configuration. */
-		this.dotOutputFile = new File(this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE));
+		this.dotOutputFile = this.configuration.getPathProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE);
 		this.includeWeights = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
 		this.shortLabels = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS);
 		this.includeSelfLoops = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS);
@@ -198,7 +198,7 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	public void terminate(final boolean error) {
 		if (!error) {
 			try {
-				this.saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
+				this.saveToDotFile(new File(this.dotOutputFile).getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
 			} catch (final IOException ex) {
 				LOG.error("IOException while saving to dot file", ex);
 			}
@@ -221,7 +221,7 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, this.dotOutputFile);
 		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));

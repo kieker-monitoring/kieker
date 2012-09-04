@@ -58,6 +58,9 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	public FSReader(final Configuration configuration) {
 		super(configuration);
 		this.inputDirs = this.configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_INPUTDIRS);
+		for (int i = 0; i < this.inputDirs.length; i++) {
+			this.inputDirs[i] = Configuration.convertToPath(this.inputDirs[i]);
+		}
 		if (this.inputDirs.length == 0) {
 			LOG.warn("The list of input dirs passed to the " + FSReader.class.getSimpleName() + " is empty");
 		}

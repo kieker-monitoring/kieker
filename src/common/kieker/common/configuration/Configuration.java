@@ -16,6 +16,8 @@
 
 package kieker.common.configuration;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -68,18 +70,17 @@ public final class Configuration extends Properties {
 		}
 	}
 
+	public final String getPathProperty(final String key) {
+		return Configuration.convertToPath(this.getStringProperty(key));
+	}
+
 	/**
 	 * Property values have to be split by '|'.
 	 * 
 	 * @param key
 	 */
 	public final String[] getStringArrayProperty(final String key) {
-		final String s = this.getStringProperty(key);
-		if (s.length() == 0) {
-			return new String[0];
-		} else {
-			return s.split("\\|");
-		}
+		return this.getStringArrayProperty(key, "\\|");
 	}
 
 	/**
@@ -99,22 +100,6 @@ public final class Configuration extends Properties {
 	}
 
 	/**
-	 * Converts the String[] to a String split by '|'.
-	 * 
-	 * @param values
-	 */
-	public static final String toProperty(final String[] values) {
-		final StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < values.length; i++) {
-			sb.append(values[i]);
-			if (i < (values.length - 1)) {
-				sb.append('|');
-			}
-		}
-		return sb.toString();
-	}
-
-	/**
 	 * Converts the Object[] to a String split by '|'.
 	 * 
 	 * @param values
@@ -131,6 +116,22 @@ public final class Configuration extends Properties {
 	}
 
 	/**
+	 * Tries to simplify a given filesystem path.
+	 * E.g., test/../x/y/./z/a/../x -> x/y/z/x
+	 * 
+	 * @param path
+	 * @return a simplified path
+	 */
+	public static final String convertToPath(final String path) {
+		try {
+			return new URI(null, null, null, -1, path.replace('\\', '/'), null, null).normalize().toASCIIString();
+		} catch (final URISyntaxException ex) {
+			LOG.warn("Failed to parse path: " + path, ex);
+			return path;
+		}
+	}
+
+	/**
 	 * Flattens the Properties hierarchies and returns an Configuration object containing only keys starting with the prefix.
 	 * 
 	 * <p>
@@ -140,7 +141,7 @@ public final class Configuration extends Properties {
 	 * 
 	 * <pre>
 	 * public final Configuration getPropertiesStartingWith(final String prefix) {
-	 * 	return (Configuration) getPropertiesStartingWith(new Configuration(null), prefix);
+	 * 	return (Configuration) getPropertiesStartingWith(new Configuration(), prefix);
 	 * }
 	 * </pre>
 	 * 

@@ -73,7 +73,7 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 		// TODO Check type conversion??
 		super(configuration, new DependencyGraph<AllocationComponent>(AllocationRepository.ROOT_ALLOCATION_COMPONENT.getId(),
 				AllocationRepository.ROOT_ALLOCATION_COMPONENT));
-		this.dotOutputFile = configuration.getStringProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE);
+		this.dotOutputFile = configuration.getPathProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE);
 		this.includeWeights = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
 		this.shortLabels = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORTLABELS);
 		this.includeSelfLoops = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SELFLOOPS);
@@ -168,7 +168,6 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 	 * 
 	 * @param error
 	 */
-
 	@Override
 	public void terminate(final boolean error) {
 		if (!error) {
