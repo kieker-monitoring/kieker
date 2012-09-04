@@ -43,7 +43,7 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 	 *             if passed parameters are null or empty.
 	 */
 	public JMSLogReplayer(final String monitoringConfigurationFile, final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
-		super(monitoringConfigurationFile, /* realtimeMode */false, /* keepOriginalLoggingTimestamps */false,
+		super(monitoringConfigurationFile, /* realtimeMode */false, /* keepOriginalLoggingTimestamps */true,
 				/* numRealtimeWorkerThreads: any value will do because realtimeMode = false */1, Long.MIN_VALUE, Long.MAX_VALUE);
 		this.jmsProviderUrl = jmsProviderUrl;
 		this.jmsDestination = jmsDestination;
