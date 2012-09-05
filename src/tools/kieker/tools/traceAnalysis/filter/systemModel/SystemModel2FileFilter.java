@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -38,6 +39,9 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 		description = "Prints the contents of a connected SystemModelRepository to an HTML file",
 		repositoryPorts = {
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+		},
+		configuration = {
+			@Property(name = SystemModel2FileFilter.CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN, defaultValue = SystemModel2FileFilter.DEFAULT_HTML_OUTPUT_FN)
 		})
 public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 	/**
@@ -48,7 +52,7 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 	/**
 	 * By default, writes HTML output file to this file in the working directory.
 	 */
-	private static final String DEFAULT_HTML_OUTPUT_FN = "system-model.html";
+	protected static final String DEFAULT_HTML_OUTPUT_FN = "system-model.html";
 
 	private static final Log LOG = LogFactory.getLog(SystemModel2FileFilter.class);
 
@@ -57,13 +61,6 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 	public SystemModel2FileFilter(final Configuration configuration) {
 		super(configuration);
 		this.outputFnHTML = configuration.getPathProperty(CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN);
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration defaultConfig = new Configuration();
-		defaultConfig.setProperty(CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN, DEFAULT_HTML_OUTPUT_FN);
-		return defaultConfig;
 	}
 
 	public Configuration getCurrentConfiguration() {

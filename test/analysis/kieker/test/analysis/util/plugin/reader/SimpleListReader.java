@@ -22,6 +22,7 @@ import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -36,7 +37,10 @@ import kieker.common.logging.LogFactory;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-@Plugin(outputPorts = { @OutputPort(name = SimpleListReader.OUTPUT_PORT_NAME, eventTypes = { Object.class }) })
+@Plugin(programmaticOnly = true, outputPorts = { @OutputPort(name = SimpleListReader.OUTPUT_PORT_NAME, eventTypes = { Object.class }) },
+		configuration = {
+			@Property(name = SimpleListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, defaultValue = "false")
+		})
 public class SimpleListReader<T> extends AbstractReaderPlugin {
 
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
@@ -85,13 +89,6 @@ public class SimpleListReader<T> extends AbstractReaderPlugin {
 
 	public void terminate(final boolean error) {
 		this.terminationLatch.countDown();
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.FALSE.toString());
-		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {

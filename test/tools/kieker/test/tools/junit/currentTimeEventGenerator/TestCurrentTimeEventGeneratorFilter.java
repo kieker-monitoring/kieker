@@ -165,11 +165,6 @@ public class TestCurrentTimeEventGeneratorFilter { // NOCS
 			super(new Configuration());
 		}
 
-		@Override
-		protected Configuration getDefaultConfiguration() {
-			return null;
-		}
-
 		public Configuration getCurrentConfiguration() {
 			return null;
 		}

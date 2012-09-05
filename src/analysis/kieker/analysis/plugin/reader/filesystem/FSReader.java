@@ -20,6 +20,7 @@ import java.util.PriorityQueue;
 
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -34,7 +35,12 @@ import kieker.common.record.misc.EmptyRecord;
  * @author Andre van Hoorn, Jan Waller
  */
 @Plugin(description = "A file system reader which reads records from multiple directories",
-		outputPorts = @OutputPort(name = FSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader"))
+		outputPorts = {
+			@OutputPort(name = FSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader") },
+		configuration = {
+			@Property(name = FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = "."),
+			@Property(name = FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, defaultValue = FSReader.CONFIG_PROPERTY_VALUE_IGNORE_UNKNOWN_RECORD_TYPES_DEFAULT)
+		})
 public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
@@ -42,7 +48,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	public static final String CONFIG_PROPERTY_NAME_INPUTDIRS = "inputDirs";
 	public static final String CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES = "ignoreUnknownRecordTypes";
 
-	public static final String CONFIG_PROPERTY_VALUE_IGNORE_UNKNOWN_RECORD_TYPES_DEFAULT = Boolean.FALSE.toString();
+	public static final String CONFIG_PROPERTY_VALUE_IGNORE_UNKNOWN_RECORD_TYPES_DEFAULT = "false";
 
 	public static final IMonitoringRecord EOF = new EmptyRecord();
 
@@ -66,14 +72,6 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 		}
 		this.recordQueue = new PriorityQueue<IMonitoringRecord>(this.inputDirs.length);
 		this.ignoreUnknownRecordTypes = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES);
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration defaultConfiguration = new Configuration();
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_INPUTDIRS, ".");
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, CONFIG_PROPERTY_VALUE_IGNORE_UNKNOWN_RECORD_TYPES_DEFAULT);
-		return defaultConfiguration;
 	}
 
 	public void terminate(final boolean error) {

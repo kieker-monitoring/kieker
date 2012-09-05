@@ -19,6 +19,7 @@ package kieker.tools.logReplayer;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -38,8 +39,14 @@ import kieker.monitoring.core.controller.MonitoringController;
  */
 // TODO: We should move this class to another package
 @Plugin(description = "A filter which passes received records to the configured monitoring controller",
-		outputPorts = @OutputPort(name = MonitoringRecordLoggerFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming monitoring record", eventTypes = { IMonitoringRecord.class }))
+		outputPorts = {
+			@OutputPort(name = MonitoringRecordLoggerFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming monitoring record", eventTypes = { IMonitoringRecord.class })
+		},
+		configuration = {
+			@Property(name = MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, defaultValue = "")
+		})
 public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
+
 	public static final String INPUT_PORT_NAME_RECORD = "monitoringRecords";
 
 	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayedEvents";
@@ -83,13 +90,6 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 	public Configuration getCurrentConfiguration() {
 		// clone again, so no one can change anything
 		return (Configuration) this.configuration.clone();
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration defaultconfiguration = new Configuration();
-		defaultconfiguration.setProperty(CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, "");
-		return defaultconfiguration;
 	}
 
 	@InputPort(name = INPUT_PORT_NAME_RECORD, description = "Receives records to be passed to the controller", eventTypes = { IMonitoringRecord.class })

@@ -51,11 +51,6 @@ public class ExecutionSinkClass extends AbstractFilterPlugin {
 		super(configuration);
 	}
 
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
-	}
-
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

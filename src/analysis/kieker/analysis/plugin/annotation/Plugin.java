@@ -35,6 +35,12 @@ public @interface Plugin {
 	public static final String NO_NAME = "";
 
 	/**
+	 * This flag determines whether the annotated plugin should only be used for programmatic purposes or not. This can for example be used by tools to ignore
+	 * specific plugins.
+	 */
+	boolean programmaticOnly() default false;
+
+	/**
 	 * The human-readable description of this plugin.
 	 * 
 	 * @return The description for this plugin.
@@ -62,4 +68,10 @@ public @interface Plugin {
 	 */
 	RepositoryPort[] repositoryPorts() default {};
 
+	/**
+	 * The list of possible properties for this plugin.
+	 * 
+	 * @return A list of properties.
+	 */
+	Property[] configuration() default {};
 }

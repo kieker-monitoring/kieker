@@ -53,7 +53,9 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * 
  * @author Andre van Hoorn
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
+@Plugin(repositoryPorts = {
+	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+})
 public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProcessingFilter {
 
 	private static final String ENCODING = "UTF-8";

@@ -34,6 +34,7 @@ import javax.management.remote.JMXServiceURL;
 
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -45,7 +46,17 @@ import kieker.common.record.IMonitoringRecord;
  * @author Jan Waller
  */
 @Plugin(description = "A reader which reads records from a JMX queue",
-		outputPorts = @OutputPort(name = JMXReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMXReader"))
+		outputPorts = {
+			@OutputPort(name = JMXReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMXReader")
+		},
+		configuration = {
+			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_SERVER, defaultValue = "localhost"),
+			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_PORT, defaultValue = "59999"),
+			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_SERVICEURL, defaultValue = ""),
+			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_DOMAIN, defaultValue = "kieker.monitoring"),
+			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_LOGNAME, defaultValue = "MonitoringLog"),
+			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_SILENT, defaultValue = "false")
+		})
 public final class JMXReader extends AbstractReaderPlugin {
 
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
@@ -92,18 +103,6 @@ public final class JMXReader extends AbstractReaderPlugin {
 			throw new IllegalArgumentException("Failed to parse configuration.", e);
 		}
 		this.silentreconnect = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SILENT);
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration defaultConfiguration = new Configuration();
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_SERVER, "localhost");
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_PORT, "59999");
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_SERVICEURL, "");
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_DOMAIN, "kieker.monitoring");
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_LOGNAME, "MonitoringLog");
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_SILENT, "false");
-		return defaultConfiguration;
 	}
 
 	public void terminate(final boolean error) {

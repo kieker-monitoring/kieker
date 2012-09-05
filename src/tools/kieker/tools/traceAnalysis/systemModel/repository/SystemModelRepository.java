@@ -228,11 +228,6 @@ public class SystemModelRepository extends AbstractRepository {
 		ps.close();
 	}
 
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
-	}
-
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}
