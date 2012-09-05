@@ -69,16 +69,6 @@ public abstract class AbstractTimestampFilter extends AbstractFilterPlugin {
 	 */
 	protected abstract String getConfigurationPropertyIgnoreAfterTimestamp();
 
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-
-		configuration.setProperty(this.getConfigurationPropertyIgnoreBeforeTimestamp(), Long.toString(MIN_TIMESTAMP));
-		configuration.setProperty(this.getConfigurationPropertyIgnoreAfterTimestamp(), Long.toString(MAX_TIMESTAMP));
-
-		return configuration;
-	}
-
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);
 

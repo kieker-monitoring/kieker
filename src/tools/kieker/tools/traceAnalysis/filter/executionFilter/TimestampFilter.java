@@ -19,6 +19,7 @@ package kieker.tools.traceAnalysis.filter.executionFilter;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.AbstractTimestampFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
@@ -34,6 +35,10 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
 @Plugin(description = "A filter allowing to filter incoming execution objects based on their timestamps",
 		outputPorts = {
 			@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, description = "Fowards records within the timeperiod", eventTypes = { Execution.class })
+		},
+		configuration = {
+			@Property(name = TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, defaultValue = "0"),
+			@Property(name = TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, defaultValue = "9223372036854775807") // Long.toString(Long.MAX_VALUE)
 		})
 public class TimestampFilter extends AbstractTimestampFilter {
 

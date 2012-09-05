@@ -26,6 +26,7 @@ import java.util.TreeSet;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -51,8 +52,13 @@ import kieker.tools.util.LoggingTimestampConverter;
 		},
 		repositoryPorts = {
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+		},
+		configuration = {
+			@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, defaultValue = "2147483647"), // Integer.toString(Integer.MAX_VALUE)
+			@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, defaultValue = "true")
 		})
 public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
+
 	public static final String INPUT_PORT_NAME_EXECUTIONS = "executions";
 
 	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE = "messageTraces";
@@ -322,17 +328,6 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 				this.stdOutPrintln("Last timestamp: " + maxToutStr);
 			}
 		}
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-
-		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS,
-				Long.toString(AbstractTraceProcessingFilter.MAX_DURATION_MILLIS));
-		configuration.setProperty(CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, Boolean.TRUE.toString());
-
-		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {

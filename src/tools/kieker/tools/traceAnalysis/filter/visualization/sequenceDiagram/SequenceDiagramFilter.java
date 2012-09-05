@@ -38,7 +38,6 @@ import kieker.common.logging.LogFactory;
 import kieker.common.util.Signature;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
-import kieker.tools.traceAnalysis.filter.visualization.sequenceDiagram.SequenceDiagramFilter.SDModes;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AbstractTrace;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
@@ -64,7 +63,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 		configuration = {
 			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE, defaultValue = SequenceDiagramFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT),
 			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES, defaultValue = "true"),
-			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE, defaultValue = SDModes.ASSEMBLY.toString())
+			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE, defaultValue = "ASSEMBLY") // SDModes.ASSEMBLY.toString())
 		})
 public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter {
 

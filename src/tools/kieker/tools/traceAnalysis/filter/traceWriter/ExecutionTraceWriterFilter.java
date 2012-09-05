@@ -20,19 +20,15 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.tools.traceAnalysis.Constants;
 import kieker.tools.traceAnalysis.filter.AbstractExecutionTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
@@ -47,6 +43,9 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 @Plugin(description = "A filter allowing to write the incoming ExecutionTraces into a configured file",
 		repositoryPorts = {
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+		},
+		configuration = {
+			@Property(name = ExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, defaultValue = "invalidTraceArtifacts-yyyyMMdd-HHmmssSSS.txt")
 		})
 public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessingFilter {
 
@@ -102,18 +101,6 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 			ExecutionTraceWriterFilter.this.reportError(et.getTraceId());
 			LOG.error("IOException", ex);
 		}
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
-		date.setTimeZone(TimeZone.getTimeZone("UTC"));
-		final String dateStr = date.format(new java.util.Date()); // NOPMD (Date)
-		final String defaultFn = Constants.EXECUTION_TRACES_FN_PREFIX + "-" + dateStr + ".txt";
-
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN, defaultFn);
-		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {
