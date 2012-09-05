@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +19,9 @@ package kieker.tools.logReplayer;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.jms.JMSReader;
 import kieker.common.configuration.Configuration;
-import kieker.common.record.IMonitoringRecord;
 
 /**
- * An implementation of the {@link AbstractLogReplayer}, using the {@link JMSReader} to replay {@link IMonitoringRecord}s from a JMS queue.
+ * An implementation of the {@link AbstractLogReplayer}, using the {@link JMSReader} to replay {@link kieker.common.record.IMonitoringRecord}s from a JMS queue.
  * 
  * @author Andre van Hoorn
  * 
@@ -48,7 +43,7 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 	 *             if passed parameters are null or empty.
 	 */
 	public JMSLogReplayer(final String monitoringConfigurationFile, final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
-		super(monitoringConfigurationFile, /* realtimeMode */false, /* keepOriginalLoggingTimestamps */false,
+		super(monitoringConfigurationFile, /* realtimeMode */false, /* keepOriginalLoggingTimestamps */true,
 				/* numRealtimeWorkerThreads: any value will do because realtimeMode = false */1, Long.MIN_VALUE, Long.MAX_VALUE);
 		this.jmsProviderUrl = jmsProviderUrl;
 		this.jmsDestination = jmsDestination;
@@ -61,8 +56,7 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 		configuration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_PROVIDERURL, this.jmsProviderUrl);
 		configuration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_DESTINATION, this.jmsDestination);
 		configuration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, this.jmsFactoryLookupName);
-		final JMSReader jmsReader = new JMSReader(configuration);
-		return jmsReader;
+		return new JMSReader(configuration);
 	}
 
 	@Override

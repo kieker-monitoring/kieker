@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,6 +67,10 @@ public class TestMonitoringRecordLoggerFilter {
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
+	public TestMonitoringRecordLoggerFilter() {
+		// empty default constructor
+	}
+
 	private void createControllerConfiguration(final String monitoringPropertiesFn) throws IOException {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 
@@ -87,9 +87,17 @@ public class TestMonitoringRecordLoggerFilter {
 
 		// Write configuration to tmp file
 		LOG.info("Writing monitoring.properties to file '" + monitoringPropertiesFn + "'");
-		final OutputStream os = new FileOutputStream(monitoringPropertiesFn, /* !append */false);
-		config.store(os, "Created by " + TestMonitoringRecordLoggerFilter.class.getName());
-		os.close();
+
+		OutputStream os = null;
+		try {
+			os = new FileOutputStream(monitoringPropertiesFn, /* !append */false);
+			config.store(os, "Created by " + TestMonitoringRecordLoggerFilter.class.getName());
+		} finally {
+			if (os != null) {
+				os.close();
+			}
+		}
+
 	}
 
 	/**
@@ -169,8 +177,8 @@ public class TestMonitoringRecordLoggerFilter {
 		final Configuration recordLoggingFilterConfiguration = new Configuration();
 		recordLoggingFilterConfiguration.setProperty(MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, monitoringProperties.getPath());
 		recordLoggingFilterConfiguration.setProperty(
-				MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_KEEP_LOGGING_TIMESTAMP,
-				Boolean.toString(keepLoggingTimestamps));
+				ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP,
+				Boolean.toString(!keepLoggingTimestamps));
 		final MonitoringRecordLoggerFilter loggerFilter = new MonitoringRecordLoggerFilter(recordLoggingFilterConfiguration);
 		analysisController.registerFilter(loggerFilter);
 		analysisController.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, loggerFilter, MonitoringRecordLoggerFilter.INPUT_PORT_NAME_RECORD);

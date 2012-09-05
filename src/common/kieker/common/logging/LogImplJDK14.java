@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +38,7 @@ public final class LogImplJDK14 implements Log {
 			final String sourceMethod;
 			{ // NOCS detect calling class and method
 				final StackTraceElement[] stackArray = new Throwable().getStackTrace(); // NOPMD (throwable)
-				if ((stackArray != null) && (stackArray.length > 2)) { // our stackDepth
+				if (stackArray.length > 2) { // our stackDepth
 					sourceClass = stackArray[2].getClassName();
 					sourceMethod = stackArray[2].getMethodName();
 				} else {

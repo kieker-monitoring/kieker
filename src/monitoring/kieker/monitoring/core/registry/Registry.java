@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -330,7 +326,7 @@ public final class Registry<E> implements IRegistry<E> {
 				if (e != null) {
 					// All entries following removed node can stay in list, but all preceding ones need to be cloned.
 					HashEntry<E> newFirst = e.next;
-					for (HashEntry<E> p = first; p != e; p = p.next) {
+					for (HashEntry<E> p = first; p != e; p = p.next) { // NOPMD (=== istead of equals)
 						newFirst = new HashEntry<E>(p.value, p.hash, p.id, newFirst);
 					}
 					tab[index] = newFirst;

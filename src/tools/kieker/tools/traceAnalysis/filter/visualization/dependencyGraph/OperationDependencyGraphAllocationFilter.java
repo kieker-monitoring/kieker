@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,15 +82,12 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 	 */
 	public OperationDependencyGraphAllocationFilter(final Configuration configuration) {
 		/* Call the mandatory "default" constructor. */
-		super(configuration);
-
-		/* Initialize the necessary fields from the inherited class. */
-		super.setDependencyGraph(new DependencyGraph<AllocationComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+		super(configuration, new DependencyGraph<AllocationComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 				new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID, OperationRepository.ROOT_OPERATION,
 						AllocationRepository.ROOT_ALLOCATION_COMPONENT)));
 
 		/* Initialize from the given configuration. */
-		this.dotOutputFile = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE);
+		this.dotOutputFile = this.configuration.getPathProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE);
 		this.includeWeights = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
 		this.shortLabels = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS);
 		this.includeSelfLoops = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS);
@@ -192,7 +185,7 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 						final StringBuilder opLabel = new StringBuilder(sig.getName());
 						opLabel.append("(");
 						final String[] paramList = sig.getParamTypeList();
-						if ((paramList != null) && (paramList.length > 0)) {
+						if (paramList.length > 0) {
 							opLabel.append("..");
 						}
 						opLabel.append(")");

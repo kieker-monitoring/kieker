@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +17,7 @@
 package kieker.test.tools.junit.currentTimeEventGenerator;
 
 import java.util.Arrays;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import junit.framework.Assert;
 
@@ -28,12 +25,12 @@ import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
+import kieker.analysis.plugin.annotation.InputPort;
+import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.common.record.misc.TimestampRecord;
 import kieker.tools.currentTimeEventGenerator.CurrentTimeEventGenerationFilter;
-
-import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 
 /**
  * Each test is executed for both input ports, {@link CurrentTimeEventGenerationFilter#inputTimestamp(Long)} and
@@ -41,6 +38,7 @@ import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
  * 
  * @author Andre van Hoorn
  */
+// TODO: Test filter output port OUTPUT_PORT_NAME_CURRENT_TIME_VALUE
 public class TestCurrentTimeEventGeneratorFilter { // NOCS
 
 	@Test
@@ -116,11 +114,11 @@ public class TestCurrentTimeEventGeneratorFilter { // NOCS
 		filterConfiguration.setProperty(CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_NAME_TIME_RESOLUTION, Long.toString(timerResolution));
 		final CurrentTimeEventGenerationFilter filter = new CurrentTimeEventGenerationFilter(filterConfiguration);
 
-		final SimpleSinkFilter<TimestampRecord> dst = new SimpleSinkFilter<TimestampRecord>(new Configuration());
+		final DstClass dst = new DstClass();
 		final AnalysisController controller = new AnalysisController();
 		controller.registerFilter(filter);
 		controller.registerFilter(dst);
-		controller.connect(filter, CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME, dst, SimpleSinkFilter.INPUT_PORT_NAME);
+		controller.connect(filter, CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_RECORD, dst, DstClass.INPUT_PORT_NAME);
 		// TODO: Use list reader and actually run the controller
 
 		for (final long timestamp : inputTimestamps) {
@@ -133,14 +131,10 @@ public class TestCurrentTimeEventGeneratorFilter { // NOCS
 			}
 		}
 
-		final int numTimestamps = dst.getList().size();
-		final Long[] receivedTimestampsArr = new Long[numTimestamps];
-		for (int i = 0; i < numTimestamps; i++) {
-			receivedTimestampsArr[i] = dst.getList().get(i).getTimestamp(); // crazy list ops in a loop, but ...
-		}
+		final Long[] receivedTimestampsArr = dst.getList().toArray(new Long[dst.getList().size()]);
 
 		if (expectedOutputTimerEvents.length != dst.getList().size()) {
-			Assert.fail("Mismatch in sequence length while comparing timer event sequences" + "Expected: " + Arrays.toString(expectedOutputTimerEvents)
+			Assert.fail("Mismatach in sequence length while comparing timer event sequences" + "Expected: " + Arrays.toString(expectedOutputTimerEvents)
 					+ " Found: " + Arrays.toString(receivedTimestampsArr));
 		}
 
@@ -155,6 +149,40 @@ public class TestCurrentTimeEventGeneratorFilter { // NOCS
 		if (firstMismatchIdx >= 0) {
 			Assert.fail("Mismatch at index " + firstMismatchIdx + " while comparing timer event sequences" + "Expected: "
 					+ Arrays.toString(expectedOutputTimerEvents) + " Found: " + Arrays.toString(receivedTimestampsArr));
+		}
+	}
+
+	// TODO: Don't we have a general sink for this already? (see kieker.test.analysis.util.plugin..)
+	/**
+	 * @author Andre van Hoorn
+	 */
+	static class DstClass extends AbstractFilterPlugin {
+
+		public static final String INPUT_PORT_NAME = "doJob";
+		private final ConcurrentLinkedQueue<Long> receivedTimestamps = new ConcurrentLinkedQueue<Long>();
+
+		public DstClass() {
+			super(new Configuration());
+		}
+
+		@Override
+		protected Configuration getDefaultConfiguration() {
+			return null;
+		}
+
+		public Configuration getCurrentConfiguration() {
+			return null;
+		}
+
+		@InputPort(
+				name = DstClass.INPUT_PORT_NAME,
+				eventTypes = { TimestampRecord.class })
+		public void doJob(final Object data) {
+			this.receivedTimestamps.add(((TimestampRecord) data).getTimestamp());
+		}
+
+		public ConcurrentLinkedQueue<Long> getList() {
+			return this.receivedTimestamps;
 		}
 	}
 }

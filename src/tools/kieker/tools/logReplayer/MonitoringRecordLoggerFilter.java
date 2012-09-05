@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,21 +40,13 @@ import kieker.monitoring.core.controller.MonitoringController;
 @Plugin(description = "A filter which passes received records to the configured monitoring controller",
 		outputPorts = @OutputPort(name = MonitoringRecordLoggerFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming monitoring record", eventTypes = { IMonitoringRecord.class }))
 public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
-	private static final Log LOG = LogFactory.getLog(MonitoringRecordLoggerFilter.class);
-
 	public static final String INPUT_PORT_NAME_RECORD = "monitoringRecords";
 
 	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayedEvents";
 
 	public static final String CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN = "monitoringPropertiesFilename";
 
-	/**
-	 * Specifies whether the included {@link IMonitoringController} should set the {@link IMonitoringRecord#getLoggingTimestamp()} or keep it untouched.
-	 * Values of this property may be (i) <code>"true"</code>, (ii) <code>"false"</code>, or (iii) <code>null</code>/<code>""</code>.
-	 * Cases (i) and (ii) override the respective value also included in the {@link IMonitoringController}'s properties file passed
-	 * via the configuration property {@link #CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN}; case (iii) keeps this property untouched.
-	 */
-	public static final String CONFIG_PROPERTY_NAME_KEEP_LOGGING_TIMESTAMP = "keepLoggingTimestamp";
+	private static final Log LOG = LogFactory.getLog(MonitoringRecordLoggerFilter.class);
 
 	/**
 	 * The {@link IMonitoringController} the records received via {@link #inputIMonitoringRecord(IMonitoringRecord)} are passed to.
@@ -66,54 +54,42 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 	private final IMonitoringController monitoringController;
 
 	/**
-	 * Path to the {@link Configuration} to be used to create {@link #monitoringController}.
-	 * If <code>null</code>, the {@link ConfigurationFactory#createDefaultConfiguration()} is used.
+	 * Used to cache the configuration.
 	 */
-	private final String monitoringPropertiesFn;
-
-	/**
-	 * @see #CONFIG_PROPERTY_NAME_KEEP_LOGGING_TIMESTAMP
-	 */
-	private final String keepLoggingTimestamp;
+	private final Configuration configuration;
 
 	public MonitoringRecordLoggerFilter(final Configuration configuration) {
 		super(configuration);
-		this.monitoringPropertiesFn = configuration.getProperty(CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN);
-		this.keepLoggingTimestamp = configuration.getProperty(CONFIG_PROPERTY_NAME_KEEP_LOGGING_TIMESTAMP); // may be null or empty
-
 		final Configuration controllerConfiguration;
-
-		if (this.monitoringPropertiesFn != null) {
-			controllerConfiguration = ConfigurationFactory.createConfigurationFromFile(this.monitoringPropertiesFn);
+		final String monitoringPropertiesFn = configuration.getPathProperty(CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN);
+		if (monitoringPropertiesFn.length() > 0) {
+			controllerConfiguration = ConfigurationFactory.createConfigurationFromFile(monitoringPropertiesFn);
 		} else {
 			LOG.info("No path to a 'monitoring.properties' file passed; using default configuration");
 			controllerConfiguration = ConfigurationFactory.createDefaultConfiguration();
 		}
-		if ((this.keepLoggingTimestamp != null) && (this.keepLoggingTimestamp.length() > 0)) {
-			controllerConfiguration.setProperty(
-					ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP,
-					Boolean.toString(!configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_KEEP_LOGGING_TIMESTAMP)));
+		// flatten submitted properties
+		final Configuration flatConfiguration = configuration.getPropertiesStartingWith("");
+		// save before adding the defaults
+		this.configuration = (Configuration) flatConfiguration.clone();
+		try {
+			flatConfiguration.setDefaultConfiguration(controllerConfiguration);
+		} catch (final IllegalAccessException ex) {
+			throw new RuntimeException(ex); // NOPMD(cannot happen (due to flatten)!)
 		}
-		this.monitoringController = MonitoringController.createInstance(controllerConfiguration);
+		this.monitoringController = MonitoringController.createInstance(flatConfiguration);
 	}
 
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
-		if (this.monitoringPropertiesFn != null) {
-			configuration.setProperty(CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, this.monitoringPropertiesFn);
-		}
-		if ((this.keepLoggingTimestamp != null) && (this.keepLoggingTimestamp.length() > 0)) {
-			configuration.setProperty(CONFIG_PROPERTY_NAME_KEEP_LOGGING_TIMESTAMP, this.keepLoggingTimestamp);
-		}
-		return configuration;
+		// clone again, so no one can change anything
+		return (Configuration) this.configuration.clone();
 	}
 
 	@Override
 	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-		// Do not set property CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN!
-		// Do not set property CONFIG_PROPERTY_NAME_KEEP_LOGGING_TIMESTAMP!
-		return configuration;
+		final Configuration defaultconfiguration = new Configuration();
+		defaultconfiguration.setProperty(CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, "");
+		return defaultconfiguration;
 	}
 
 	@InputPort(name = INPUT_PORT_NAME_RECORD, description = "Receives records to be passed to the controller", eventTypes = { IMonitoringRecord.class })

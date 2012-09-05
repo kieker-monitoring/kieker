@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,7 +71,7 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 
 	private static final Log LOG = LogFactory.getLog(OperationDependencyGraphAssemblyFilter.class);
 
-	private final File dotOutputFile;
+	private final String dotOutputFile;
 	private final boolean includeWeights;
 	private final boolean shortLabels;
 	private final boolean includeSelfLoops;
@@ -88,15 +84,12 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	 */
 	public OperationDependencyGraphAssemblyFilter(final Configuration configuration) {
 		/* Call the mandatory "default" constructor. */
-		super(configuration);
-
-		/* Initialize the necessary fields from the inherited class. */
-		super.setDependencyGraph(new DependencyGraph<AssemblyComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+		super(configuration, new DependencyGraph<AssemblyComponentOperationPair>(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 				new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID, OperationRepository.ROOT_OPERATION,
 						AssemblyRepository.ROOT_ASSEMBLY_COMPONENT)));
 
 		/* Initialize from the given configuration. */
-		this.dotOutputFile = new File(this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE));
+		this.dotOutputFile = this.configuration.getPathProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE);
 		this.includeWeights = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
 		this.shortLabels = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS);
 		this.includeSelfLoops = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS);
@@ -174,7 +167,7 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 					final StringBuilder opLabel = new StringBuilder(sig.getName());
 					opLabel.append("(");
 					final String[] paramList = sig.getParamTypeList();
-					if ((paramList != null) && (paramList.length > 0)) {
+					if (paramList.length > 0) {
 						opLabel.append("..");
 					}
 					opLabel.append(")");
@@ -205,7 +198,7 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	public void terminate(final boolean error) {
 		if (!error) {
 			try {
-				this.saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
+				this.saveToDotFile(new File(this.dotOutputFile).getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
 			} catch (final IOException ex) {
 				LOG.error("IOException while saving to dot file", ex);
 			}
@@ -228,7 +221,7 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, this.dotOutputFile);
 		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));

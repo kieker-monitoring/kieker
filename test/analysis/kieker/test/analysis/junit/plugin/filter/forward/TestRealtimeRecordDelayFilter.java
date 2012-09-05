@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -158,7 +154,7 @@ public class TestRealtimeRecordDelayFilter {
 	}
 
 	private List<Entry<Long, Integer>> passEventListToReader(final SimpleListReader<IMonitoringRecord> reader) {
-		long currentTimeSeconds = START_TIME_SECONDS;
+		long currentTimeSeconds;
 		int curNumRecords = 0;
 
 		final List<Entry<Long, Integer>> eventList = new ArrayList<Entry<Long, Integer>>(TestRealtimeRecordDelayFilter.EVENT_TIME_OFFSETS_SECONDS.length);

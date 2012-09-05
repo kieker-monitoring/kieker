@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,6 +58,9 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	public FSReader(final Configuration configuration) {
 		super(configuration);
 		this.inputDirs = this.configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_INPUTDIRS);
+		for (int i = 0; i < this.inputDirs.length; i++) {
+			this.inputDirs[i] = Configuration.convertToPath(this.inputDirs[i]);
+		}
 		if (this.inputDirs.length == 0) {
 			LOG.warn("The list of input dirs passed to the " + FSReader.class.getSimpleName() + " is empty");
 		}

@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -523,7 +519,7 @@ public final class AnalysisController {
 					final String key = (String) e.nextElement();
 					final MIProperty property = factory.createProperty();
 					property.setName(key);
-					property.setValue(configuration.getProperty(key));
+					property.setValue(configuration.getStringProperty(key));
 					properties.add(property);
 				}
 				// Extract the repositories.

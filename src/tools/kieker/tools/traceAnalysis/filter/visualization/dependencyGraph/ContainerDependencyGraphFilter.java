@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,19 +56,18 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 
 	private static final Log LOG = LogFactory.getLog(ContainerDependencyGraphFilter.class);
 
-	private final File dotOutputFile;
+	private final String dotOutputFile;
 	private final boolean includeWeights;
 	private final boolean shortLabels;
 	private final boolean includeSelfLoops;
 
 	public ContainerDependencyGraphFilter(final Configuration configuration) {
 		// TODO Check type conversion
-		super(configuration);
-		super.setDependencyGraph(new DependencyGraph<ExecutionContainer>(
+		super(configuration, new DependencyGraph<ExecutionContainer>(
 				ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER.getId(),
 				ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER));
 
-		this.dotOutputFile = new File(configuration.getStringProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE));
+		this.dotOutputFile = configuration.getPathProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE);
 		this.includeWeights = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
 		this.shortLabels = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS);
 		this.includeSelfLoops = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS);
@@ -113,7 +108,7 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 	public void terminate(final boolean error) {
 		if (!error) {
 			try {
-				this.saveToDotFile(this.dotOutputFile.getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
+				this.saveToDotFile(new File(this.dotOutputFile).getCanonicalPath(), this.includeWeights, this.shortLabels, this.includeSelfLoops);
 			} catch (final IOException ex) {
 				LOG.error("IOException while saving to dot file", ex);
 			}
@@ -135,7 +130,7 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, this.dotOutputFile.getAbsolutePath());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, this.dotOutputFile);
 		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));

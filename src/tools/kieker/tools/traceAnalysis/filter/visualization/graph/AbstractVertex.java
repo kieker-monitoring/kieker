@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,7 +57,7 @@ public abstract class AbstractVertex<V extends AbstractVertex<V, E, O>, E extend
 	 * @return The given decoration or {@code null} if no such type exists
 	 */
 	@SuppressWarnings("unchecked")
-	public <DecorationT extends AbstractVertexDecoration> DecorationT getDecoration(final Class<DecorationT> type) {
+	public <DecorationT extends AbstractVertexDecoration> DecorationT getDecoration(final Class<DecorationT> type) { // NOCS (DecorationT istaed of T)
 		return (DecorationT) this.decorations.get(type);
 	}
 

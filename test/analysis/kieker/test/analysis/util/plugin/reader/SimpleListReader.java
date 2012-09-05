@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,11 +38,12 @@ import kieker.common.logging.LogFactory;
  */
 @Plugin(outputPorts = { @OutputPort(name = SimpleListReader.OUTPUT_PORT_NAME, eventTypes = { Object.class }) })
 public class SimpleListReader<T> extends AbstractReaderPlugin {
-	private static final Log LOG = LogFactory.getLog(SimpleListReader.class);
 
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 
 	public static final String CONFIG_PROPERTY_NAME_AWAIT_TERMINATION = "awaitTermination";
+
+	private static final Log LOG = LogFactory.getLog(SimpleListReader.class);
 
 	private final boolean awaitTermination;
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);

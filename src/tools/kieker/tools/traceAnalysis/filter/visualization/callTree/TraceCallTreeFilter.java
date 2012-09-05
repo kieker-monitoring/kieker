@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,7 +82,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 		this.root = new CallTreeNode(null, // null: root node has no parent
 				new CallTreeOperationHashKey(AllocationRepository.ROOT_ALLOCATION_COMPONENT, OperationRepository.ROOT_OPERATION));
 		this.shortLabels = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS);
-		this.dotOutputFn = configuration.getProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILENAME);
+		this.dotOutputFn = configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILENAME);
 	}
 
 	private static final String nodeLabel(final CallTreeNode node, final boolean shortLabels) {
@@ -103,7 +99,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 
 		final StringBuilder strBuild = new StringBuilder(resourceContainerName).append("::\\n").append(assemblyComponentName).append(":");
 		if (!shortLabels) {
-			strBuild.append(componentTypePackagePrefx);
+			strBuild.append(componentTypePackagePrefx).append(".");
 		} else {
 			strBuild.append("..");
 		}
@@ -113,7 +109,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 		final StringBuilder opLabel = new StringBuilder(sig.getName());
 		opLabel.append("(");
 		final String[] paramList = sig.getParamTypeList();
-		if ((paramList != null) && (paramList.length > 0)) {
+		if (paramList.length > 0) {
 			opLabel.append("..");
 		}
 		opLabel.append(")");
