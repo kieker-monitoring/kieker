@@ -310,7 +310,7 @@ final class FSDirectoryReader implements Runnable {
 				final Class<?>[] typeArray = AbstractMonitoringRecord.typesForClass(clazz);
 
 				// read record
-				final long loggingTimestamp = in.readLong();
+				final long loggingTimestamp = in.readLong(); // NOPMD (must be read here!)
 				final Object[] objectArray = new Object[typeArray.length];
 				int idx = -1;
 				for (final Class<?> type : typeArray) {

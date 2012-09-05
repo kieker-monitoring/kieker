@@ -164,7 +164,7 @@ public class ControlServlet extends HttpServlet {
 				/*
 				 * invalid action
 				 */
-			} else if (!(action.length() == 0)) {
+			} else if (action.length() > 0) {
 				this.dumpError(out, "Invalid action: '" + action + "'");
 			}
 		}

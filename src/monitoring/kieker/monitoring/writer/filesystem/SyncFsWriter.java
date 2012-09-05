@@ -163,7 +163,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	 * @throws UnsupportedEncodingException
 	 */
 	private final void prepareFile() throws FileNotFoundException, UnsupportedEncodingException {
-		if (++this.entriesInCurrentFileCounter > this.maxEntriesInFile) {
+		if (++this.entriesInCurrentFileCounter > this.maxEntriesInFile) { // NOPMD
 			this.entriesInCurrentFileCounter = 1;
 			if (this.pos != null) {
 				this.pos.close();

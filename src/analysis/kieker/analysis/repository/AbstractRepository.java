@@ -41,10 +41,7 @@ public abstract class AbstractRepository implements IRepository {
 	public AbstractRepository(final Configuration configuration) {
 		try {
 			// TODO: somewhat dirty hack...
-			final Configuration defaultConfig = this.getDefaultConfiguration();
-			if (defaultConfig != null) {
-				configuration.setDefaultConfiguration(defaultConfig);
-			}
+			configuration.setDefaultConfiguration(this.getDefaultConfiguration());
 		} catch (final IllegalAccessException ex) {
 			LOG.error("Unable to set repository default properties"); // ok to ignore ex here
 		}
@@ -60,18 +57,15 @@ public abstract class AbstractRepository implements IRepository {
 	 * @return The default properties.
 	 */
 	protected final Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-
+		final Configuration defaultConfiguration = new Configuration();
 		// Get the annotation from the class
 		final Repository repoAnnotation = this.getClass().getAnnotation(Repository.class);
 		final Property[] propertyAnnotations = repoAnnotation.configuration();
-
 		// Run through all properties within the annotation and add them to the configuration object
 		for (final Property property : propertyAnnotations) {
-			configuration.setProperty(property.name(), property.defaultValue());
+			defaultConfiguration.setProperty(property.name(), property.defaultValue());
 		}
-
-		return configuration;
+		return defaultConfiguration;
 	}
 
 	/*

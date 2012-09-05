@@ -284,8 +284,8 @@ public final class Registry<E> implements IRegistry<E> {
 			if (e == null) { // not yet present, but have to repeat search
 				this.lock();
 				try {
-					int c = this.count;
-					if (c++ > this.threshold) {
+					final int c = this.count + 1;
+					if (c >= this.threshold) {
 						this.rehash();
 						this.count = c; // write volatile
 					}

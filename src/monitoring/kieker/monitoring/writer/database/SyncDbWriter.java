@@ -149,8 +149,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 		sb.append(super.toString());
 		sb.append("\n\tConnection: '");
 		sb.append(this.connection.toString());
-		sb.append("'");
-		sb.append("\n\t");
+		sb.append("'\n\t");
 		sb.append(this.helper.toString());
 		return sb.toString();
 	}

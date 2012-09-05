@@ -68,10 +68,7 @@ public abstract class AbstractPlugin implements IPlugin {
 	public AbstractPlugin(final Configuration configuration) {
 		try {
 			// TODO: somewhat dirty hack...
-			final Configuration defaultConfig = this.getDefaultConfiguration();
-			if (defaultConfig != null) {
-				configuration.setDefaultConfiguration(defaultConfig);
-			}
+			configuration.setDefaultConfiguration(this.getDefaultConfiguration());
 		} catch (final IllegalAccessException ex) {
 			LOG.error("Unable to set plugin default properties", ex);
 		}
@@ -121,18 +118,15 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * @return The default properties.
 	 */
 	protected final Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-
+		final Configuration defaultConfiguration = new Configuration();
 		// Get the annotation from the class
 		final Plugin pluginAnnotation = this.getClass().getAnnotation(Plugin.class);
 		final Property[] propertyAnnotations = pluginAnnotation.configuration();
-
 		// Run through all properties within the annotation and add them to the configuration object
 		for (final Property property : propertyAnnotations) {
-			configuration.setProperty(property.name(), property.defaultValue());
+			defaultConfiguration.setProperty(property.name(), property.defaultValue());
 		}
-
-		return configuration;
+		return defaultConfiguration;
 	}
 
 	/*
@@ -252,11 +246,11 @@ public abstract class AbstractPlugin implements IPlugin {
 
 		/* Second step: Check whether the ports exist. */
 		final OutputPort outputPort = src.outputPorts.get(output);
-		final InputPort inputPort = dst.inputPorts.get(input);
 		if (outputPort == null) {
 			LOG.warn("Output port does not exist. " + "Plugin: " + src.getClass().getName() + "; output: " + output);
 			return false;
 		}
+		final InputPort inputPort = dst.inputPorts.get(input);
 		if (inputPort == null) {
 			LOG.warn("Input port does not exist. " + "Plugin: " + dst.getClass().getName() + "; input: " + input);
 			return false;

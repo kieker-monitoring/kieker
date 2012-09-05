@@ -88,7 +88,7 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 		if (monitoringRecord instanceof RegistryRecord) {
 			this.mappingFileWriter.write((RegistryRecord) monitoringRecord);
 		} else {
-			if (++this.entriesInCurrentFileCounter > this.maxEntriesInFile) {
+			if (++this.entriesInCurrentFileCounter > this.maxEntriesInFile) { // NOPMD
 				this.entriesInCurrentFileCounter = 1;
 				this.prepareFile();
 			}

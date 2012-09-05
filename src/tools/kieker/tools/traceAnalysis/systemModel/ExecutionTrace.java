@@ -202,10 +202,10 @@ public class ExecutionTrace extends AbstractTrace {
 		synchronized (this) {
 			strBuild.append("TraceId ").append(this.getTraceId());
 			strBuild.append(" (minTin=").append(this.minTin);
-			strBuild.append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTin)).append(")");
-			strBuild.append("; maxTout=").append(this.maxTout);
-			strBuild.append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTout)).append(")");
-			strBuild.append("; maxEss=").append(this.maxEss).append("):\n");
+			strBuild.append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTin));
+			strBuild.append("); maxTout=").append(this.maxTout);
+			strBuild.append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTout));
+			strBuild.append("); maxEss=").append(this.maxEss).append("):\n");
 			for (final Execution e : this.set) {
 				strBuild.append("<");
 				strBuild.append(e.toString()).append(">\n");

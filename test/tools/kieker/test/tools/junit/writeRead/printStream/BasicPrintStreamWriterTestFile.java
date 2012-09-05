@@ -75,7 +75,7 @@ public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTes
 	}
 
 	// TODO: Move this method to an IO helper class, because it is also used by other classes
-	public static String readOutputFileAsString(final File theFile) throws java.io.IOException {
+	public static String readOutputFileAsString(final File theFile) throws IOException {
 		final byte[] buffer = new byte[(int) theFile.length()];
 		BufferedInputStream f = null;
 		try {

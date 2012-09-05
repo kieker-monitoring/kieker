@@ -55,12 +55,11 @@ public class AssemblyRepository extends AbstractSystemSubRepository {
 	}
 
 	public final AssemblyComponent createAndRegisterAssemblyComponentInstance(final String namedIdentifier, final ComponentType componentType) {
-		AssemblyComponent newInst;
 		if (this.assemblyComponentInstancesByName.containsKey(namedIdentifier)) {
 			throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
 		}
 		final int id = this.getAndIncrementNextId();
-		newInst = new AssemblyComponent(id, "@" + id, componentType);
+		final AssemblyComponent newInst = new AssemblyComponent(id, "@" + id, componentType);
 		this.assemblyComponentInstancesById.put(id, newInst);
 		this.assemblyComponentInstancesByName.put(namedIdentifier, newInst);
 		return newInst;

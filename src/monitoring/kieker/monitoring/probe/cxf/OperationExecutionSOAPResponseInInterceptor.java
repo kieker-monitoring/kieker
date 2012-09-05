@@ -72,7 +72,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			return;
 		}
 		if (msg instanceof SoapMessage) {
-			final boolean isEntryCall = SOAP_REGISTRY.recallThreadLocalOutRequestIsEntryCall();
+			final boolean isEntryCall = SOAP_REGISTRY.recallThreadLocalOutRequestIsEntryCall(); // NOPMD (must be requerst here!)
 			final SoapMessage soapMsg = (SoapMessage) msg;
 
 			/* 1.) Extract sessionId from SOAP header */

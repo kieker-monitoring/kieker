@@ -49,9 +49,9 @@ public abstract class AbstractMessage {
 		final StringBuilder strBuild = new StringBuilder();
 
 		if (this instanceof SynchronousCallMessage) {
-			strBuild.append("SYNC-CALL").append(" ");
+			strBuild.append("SYNC-CALL ");
 		} else {
-			strBuild.append("SYNC-RPLY").append(" ");
+			strBuild.append("SYNC-RPLY ");
 		}
 
 		strBuild.append(this.timestamp);

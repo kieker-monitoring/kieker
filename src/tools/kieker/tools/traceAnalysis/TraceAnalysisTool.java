@@ -302,9 +302,9 @@ public final class TraceAnalysisTool {
 				 * Create the timestamp filter and connect to the reader's output port
 				 */
 				final Configuration configTimestampFilter = new Configuration();
-				configTimestampFilter.setProperty(kieker.analysis.plugin.filter.select.TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP,
+				configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP,
 						Long.toString(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp));
-				configTimestampFilter.setProperty(kieker.analysis.plugin.filter.select.TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP,
+				configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP,
 						Long.toString(TraceAnalysisTool.ignoreExecutionsAfterTimestamp));
 
 				timestampFilter =
@@ -331,7 +331,7 @@ public final class TraceAnalysisTool {
 				traceIdFilter =
 						new TraceIdFilter(configTraceIdFilterFlow);
 				analysisInstance.registerFilter(traceIdFilter);
-				analysisInstance.connect(timestampFilter, kieker.analysis.plugin.filter.select.TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD,
+				analysisInstance.connect(timestampFilter, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD,
 						traceIdFilter, TraceIdFilter.INPUT_PORT_NAME_COMBINED);
 			}
 
@@ -378,7 +378,7 @@ public final class TraceAnalysisTool {
 						Integer.toString(TraceAnalysisTool.maxTraceDurationMillis));
 				eventTraceReconstructionFilter = new EventRecordTraceReconstructionFilter(configurationEventRecordTraceGenerationFilter);
 				analysisInstance.registerFilter(eventTraceReconstructionFilter);
-				analysisInstance.connect(traceIdFilter, kieker.analysis.plugin.filter.trace.TraceIdFilter.OUTPUT_PORT_NAME_MATCH,
+				analysisInstance.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH,
 						eventTraceReconstructionFilter, EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
 			}
 

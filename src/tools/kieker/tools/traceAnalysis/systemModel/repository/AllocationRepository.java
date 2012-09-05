@@ -50,12 +50,11 @@ public class AllocationRepository extends AbstractSystemSubRepository {
 
 	public final AllocationComponent createAndRegisterAllocationComponentInstance(final String namedIdentifier, final AssemblyComponent assemblyComponentInstance,
 			final ExecutionContainer executionContainer) {
-		AllocationComponent newInst;
 		if (this.allocationComponentInstancesByName.containsKey(namedIdentifier)) {
 			throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
 		}
 		final int id = this.getAndIncrementNextId();
-		newInst = new AllocationComponent(id, assemblyComponentInstance, executionContainer);
+		final AllocationComponent newInst = new AllocationComponent(id, assemblyComponentInstance, executionContainer);
 		this.allocationComponentInstancesById.put(id, newInst);
 		this.allocationComponentInstancesByName.put(namedIdentifier, newInst);
 		return newInst;

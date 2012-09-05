@@ -147,12 +147,11 @@ public class ClassOperationSignaturePair {
 	 * @param signature
 	 */
 	public static String createOperationSignatureString(final String fqClassName, final Signature signature) {
-		final StringBuilder strBuilder = new StringBuilder();
-
 		if ((signature.getModifier().length != 0) && (!signature.hasReturnType())) {
 			throw new IllegalArgumentException("Modifier not list empty but return type null/empty");
 		}
 
+		final StringBuilder strBuilder = new StringBuilder();
 		/* Append modifiers and return type */
 		if ((signature.getReturnType() != null) && (signature.getReturnType().length() != 0)) {
 			for (final String type : signature.getModifier()) {

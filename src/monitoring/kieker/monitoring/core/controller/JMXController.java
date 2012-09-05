@@ -203,8 +203,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 			sb.append("'\n");
 		}
 		if ((this.server != null) && this.server.isActive()) {
-			sb.append("\tJMX remote access available:\n");
-			sb.append("\t\tService URL: '");
+			sb.append("\tJMX remote access available:\n\t\tService URL: '");
 			final JMXServiceURL url = this.server.getAddress();
 			switch (this.usedJMXImplementation) { // NOPMD (extend in the future)
 			case Sun:
