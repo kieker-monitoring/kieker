@@ -100,13 +100,13 @@ public class SystemModelRepository extends AbstractRepository {
 
 	private String htmlEntityLabel(final int id, final String caption, final EntityType entityType) {
 		final StringBuilder strBuild = new StringBuilder();
-		strBuild.append("<a name=\"").append(entityType).append("-").append(id).append("\">").append(caption).append("</a>");
+		strBuild.append("<a name=\"").append(entityType).append('-').append(id).append("\">").append(caption).append("</a>");
 		return strBuild.toString();
 	}
 
 	private String htmlEntityRef(final int id, final String caption, final EntityType entityType) {
 		final StringBuilder strBuild = new StringBuilder();
-		strBuild.append("<a href=\"#").append(entityType).append("-").append(id).append("\">").append(caption).append("</a>");
+		strBuild.append("<a href=\"#").append(entityType).append('-').append(id).append("\">").append(caption).append("</a>");
 		return strBuild.toString();
 	}
 

@@ -167,7 +167,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		private final boolean enhanceJavaConstructors;
 		private final boolean enhanceCallDetection;
 
-		private int orderindex = 0;
+		private int orderindex;
 
 		public TraceEventRecordHandler(final Trace trace, final ExecutionTrace executionTrace, final SystemModelRepository systemModelRepository,
 				final boolean enhanceJavaConstructors, final boolean enhanceCallDetection) {

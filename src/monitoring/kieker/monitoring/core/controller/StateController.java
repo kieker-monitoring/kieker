@@ -30,7 +30,7 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 public final class StateController extends AbstractController implements IStateController {
 	private static final Log LOG = LogFactory.getLog(StateController.class);
 
-	private volatile boolean monitoringEnabled = false;
+	private volatile boolean monitoringEnabled;
 	private final String name;
 	private final String hostname;
 	private final AtomicInteger experimentId = new AtomicInteger(0);

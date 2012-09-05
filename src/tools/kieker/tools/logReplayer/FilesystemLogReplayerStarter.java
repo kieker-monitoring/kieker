@@ -43,7 +43,7 @@ import kieker.common.logging.LogFactory;
 public final class FilesystemLogReplayerStarter {
 	private static final Log LOG = LogFactory.getLog(FilesystemLogReplayerStarter.class);
 
-	private static CommandLine cmdl = null;
+	private static CommandLine cmdl;
 	private static final CommandLineParser CMDL_PARSER = new BasicParser();
 	private static final HelpFormatter CMD_HELP_FORMATTER = new HelpFormatter();
 	private static final Options CMDL_OPTS = new Options();
@@ -59,6 +59,17 @@ public final class FilesystemLogReplayerStarter {
 
 	private static final String OPTION_EXAMPLE_FILE_MONITORING_PROPERTIES =
 			File.separator + "path" + File.separator + "to" + File.separator + "monitoring.properties";
+
+	private static String monitoringConfigurationFile;
+	private static String[] inputDirs;
+	private static boolean keepOriginalLoggingTimestamps;
+	private static boolean realtimeMode;
+	private static int numRealtimeWorkerThreads = -1;
+	private static long ignoreRecordsBeforeTimestamp = FilesystemLogReplayer.MIN_TIMESTAMP;
+	private static long ignoreRecordsAfterTimestamp = FilesystemLogReplayer.MAX_TIMESTAMP;
+
+	// Avoid instantiation by setting the constructor's visibility to private
+	private FilesystemLogReplayerStarter() {}
 
 	static {
 		CMDL_OPTS.addOption(OptionBuilder.withArgName(OPTION_EXAMPLE_FILE_MONITORING_PROPERTIES).hasArg()
@@ -83,17 +94,6 @@ public final class FilesystemLogReplayerStarter {
 				.withArgName(DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false)
 				.withDescription("Records logged after this date (UTC timezone) are ignored (disabled by default).").create());
 	}
-
-	private static String monitoringConfigurationFile = null;
-	private static String[] inputDirs = null;
-	private static boolean keepOriginalLoggingTimestamps;
-	private static boolean realtimeMode = false;
-	private static int numRealtimeWorkerThreads = -1;
-	private static long ignoreRecordsBeforeTimestamp = FilesystemLogReplayer.MIN_TIMESTAMP;
-	private static long ignoreRecordsAfterTimestamp = FilesystemLogReplayer.MAX_TIMESTAMP;
-
-	// Avoid instantiation by setting the constructor's visibility to private
-	private FilesystemLogReplayerStarter() {}
 
 	private static boolean parseArgs(final String[] args) {
 		try {

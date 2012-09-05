@@ -57,7 +57,7 @@ public final class TimeSourceController extends AbstractController implements IT
 		final StringBuilder sb = new StringBuilder();
 		sb.append("TimeSource: ");
 		if (this.timeSource != null) {
-			sb.append("'");
+			sb.append('\'');
 			sb.append(this.getTimeSource().getClass().getName());
 			sb.append("'\n\t");
 			sb.append(this.getTimeSource().toString());

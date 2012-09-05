@@ -177,12 +177,12 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		private static final Log LOG = LogFactory.getLog(TraceBuffer.class);
 		private static final Comparator<AbstractTraceEvent> COMPARATOR = new TraceEventComperator();
 
-		private Trace trace = null;
+		private Trace trace;
 		private final SortedSet<AbstractTraceEvent> events = new TreeSet<AbstractTraceEvent>(COMPARATOR);
 
-		private boolean closeable = false;
-		private boolean damaged = false;
-		private int openEvents = 0;
+		private boolean closeable;
+		private boolean damaged;
+		private int openEvents;
 		private int maxOrderIndex = -1;
 
 		private long minLoggingTimestamp = Long.MAX_VALUE;

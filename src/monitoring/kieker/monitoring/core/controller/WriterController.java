@@ -86,7 +86,7 @@ public final class WriterController extends AbstractController implements IWrite
 		} else {
 			sb.append("\tNo Monitoring Writer available");
 		}
-		sb.append("\n");
+		sb.append('\n');
 		return sb.toString();
 	}
 

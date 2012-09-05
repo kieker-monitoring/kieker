@@ -80,7 +80,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private MappingFileWriter mappingFileWriter;
 	private String filenamePrefix;
 	private String path;
-	private PrintWriter pos = null;
+	private PrintWriter pos;
 
 	public SyncFsWriter(final Configuration configuration) throws IllegalArgumentException {
 		super(configuration);

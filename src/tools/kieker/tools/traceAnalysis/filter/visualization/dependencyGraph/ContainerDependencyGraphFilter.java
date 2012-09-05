@@ -103,7 +103,7 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 					null, // imagefilename
 					null // misc
 					));
-			strBuild.append("\n");
+			strBuild.append('\n');
 		}
 		ps.println(strBuild.toString());
 	}

@@ -139,7 +139,7 @@ public final class DBWriterHelper {
 				throw new SQLException("Type '" + c.getSimpleName() + "' not supported.");
 			}
 		}
-		statementCreateTable.append(")");
+		statementCreateTable.append(')');
 		final String statementCreateTableString = statementCreateTable.toString();
 		Statement statement = null;
 		try {

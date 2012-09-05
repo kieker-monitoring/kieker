@@ -207,7 +207,7 @@ public class ExecutionTrace extends AbstractTrace {
 			strBuild.append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTout));
 			strBuild.append("); maxEss=").append(this.maxEss).append("):\n");
 			for (final Execution e : this.set) {
-				strBuild.append("<");
+				strBuild.append('<');
 				strBuild.append(e.toString()).append(">\n");
 			}
 		}

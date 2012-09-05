@@ -140,7 +140,7 @@ final class JMSWriterThread extends AbstractAsyncThread {
 		sb.append(this.connection.toString());
 		sb.append("'; MessageProducer: '");
 		sb.append(this.sender.toString());
-		sb.append("'");
+		sb.append('\'');
 		return sb.toString();
 	}
 

@@ -74,7 +74,7 @@ public abstract class AbstractTraceWriterFilterTest {
 
 	private final BookstoreExecutionFactory execFactory = new BookstoreExecutionFactory(this.modelRepo);
 
-	private volatile File outputFile = null;
+	private volatile File outputFile;
 
 	@Before
 	public void setUp() throws Exception {

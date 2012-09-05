@@ -112,9 +112,9 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 
 		final StringBuilder strBuild = new StringBuilder(AbstractDependencyGraphFilter.STEREOTYPE_ASSEMBLY_COMPONENT);
 		strBuild.append("\\n");
-		strBuild.append(assemblyComponentName).append(":");
+		strBuild.append(assemblyComponentName).append(':');
 		if (!this.shortLabels) {
-			strBuild.append(componentTypePackagePrefx).append(".");
+			strBuild.append(componentTypePackagePrefx).append('.');
 		} else {
 			strBuild.append("..");
 		}
@@ -175,12 +175,12 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 				for (final DependencyGraphNode<AssemblyComponentOperationPair> curPair : componentOperationEntry.getValue()) {
 					final Signature sig = curPair.getEntity().getOperation().getSignature();
 					final StringBuilder opLabel = new StringBuilder(sig.getName());
-					opLabel.append("(");
+					opLabel.append('(');
 					final String[] paramList = sig.getParamTypeList();
 					if (paramList.length > 0) {
 						opLabel.append("..");
 					}
-					opLabel.append(")");
+					opLabel.append(')');
 
 					strBuild.append(DotFactory.createNode("", this.getNodeId(curPair), this.nodeLabel(curPair, opLabel), DotFactory.DOT_SHAPE_OVAL,
 							DotFactory.DOT_STYLE_FILLED, // style

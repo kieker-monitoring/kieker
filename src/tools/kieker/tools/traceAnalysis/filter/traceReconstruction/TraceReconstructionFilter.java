@@ -78,12 +78,12 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	private final Set<Long> invalidTraces = new TreeSet<Long>();
 	private volatile long minTin = -1;
 	private volatile long maxTout = -1;
-	private volatile boolean terminated = false;
-	private final boolean ignoreInvalidTraces;
+	private volatile boolean terminated;
+	private final boolean ignoreInvalidTraces; // false
 	private final long maxTraceDurationNanos;
 	private final long maxTraceDurationMillis;
 
-	private boolean traceProcessingErrorOccured = false;
+	private boolean traceProcessingErrorOccured; // false
 
 	/** Pending traces sorted by tin timestamps */
 	private final SortedSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() {

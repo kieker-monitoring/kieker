@@ -46,7 +46,7 @@ public class AssemblyComponent {
 	@Override
 	public final String toString() {
 		final StringBuilder strBuild = new StringBuilder();
-		strBuild.append(this.name).append(":").append(this.type.getFullQualifiedName());
+		strBuild.append(this.name).append(':').append(this.type.getFullQualifiedName());
 		return strBuild.toString();
 	}
 

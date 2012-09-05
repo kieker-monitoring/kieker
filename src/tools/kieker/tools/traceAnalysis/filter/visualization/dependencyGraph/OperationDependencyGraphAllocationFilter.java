@@ -114,9 +114,9 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 
 		final StringBuilder strBuild = new StringBuilder(AbstractDependencyGraphFilter.STEREOTYPE_ALLOCATION_COMPONENT);
 		strBuild.append("\\n");
-		strBuild.append(assemblyComponentName).append(":");
+		strBuild.append(assemblyComponentName).append(':');
 		if (!shortLabelsL) {
-			strBuild.append(componentTypePackagePrefx).append(".");
+			strBuild.append(componentTypePackagePrefx).append('.');
 		} else {
 			strBuild.append("..");
 		}
@@ -193,12 +193,12 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 					for (final DependencyGraphNode<AllocationComponentOperationPair> curPair : componentId2pairMapping.get(curComponentId)) { // NOCS (NestedFor)
 						final Signature sig = curPair.getEntity().getOperation().getSignature();
 						final StringBuilder opLabel = new StringBuilder(sig.getName());
-						opLabel.append("(");
+						opLabel.append('(');
 						final String[] paramList = sig.getParamTypeList();
 						if (paramList.length > 0) {
 							opLabel.append("..");
 						}
-						opLabel.append(")");
+						opLabel.append(')');
 						strBuild.append(DotFactory.createNode("", this.getNodeId(curPair), this.nodeLabel(curPair, opLabel), DotFactory.DOT_SHAPE_OVAL,
 								DotFactory.DOT_STYLE_FILLED, // style
 								null, // framecolor

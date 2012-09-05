@@ -46,8 +46,8 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 
 	private final DateFormat dateFormat;
 
-	private long previousFileDate = 0;
-	private long sameFilenameCounter = 0;
+	private long previousFileDate;
+	private long sameFilenameCounter;
 
 	public AbstractFsWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
 			final MappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile) {

@@ -46,7 +46,7 @@ public class ControlServlet extends HttpServlet {
 	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 
-	private static boolean initialized = false;
+	private static boolean initialized;
 
 	/**
 	 * Constructs a {@link ControlServlet}.

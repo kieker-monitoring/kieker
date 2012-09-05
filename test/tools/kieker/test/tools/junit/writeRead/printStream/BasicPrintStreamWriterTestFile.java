@@ -47,7 +47,7 @@ public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTes
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (must be public)
 
-	private volatile File outputFile = null;
+	private volatile File outputFile;
 
 	@Before
 	public void setUp() throws Exception {

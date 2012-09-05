@@ -85,6 +85,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 
 	private final String outputFnBase;
 	private final boolean shortLabels;
+	private final SDModes sdmode;
 
 	/*
 	 * Read Spinellis' UML macros from file META-INF/sequence.pic to the String
@@ -101,7 +102,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 			String line;
 			reader = new BufferedReader(new InputStreamReader(is, ENCODING));
 			while ((line = reader.readLine()) != null) { // NOPMD (assign)
-				sb.append(line).append("\n");
+				sb.append(line).append('\n');
 			}
 			error = false;
 		} catch (final IOException exc) {
@@ -129,8 +130,6 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	public static enum SDModes {
 		ASSEMBLY, ALLOCATION
 	}
-
-	private final SDModes sdmode;
 
 	public SequenceDiagramFilter(final Configuration configuration) {
 		super(configuration);
@@ -174,9 +173,9 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 		final String componentTypePackagePrefx = component.getType().getPackageName();
 		final String componentTypeIdentifier = component.getType().getTypeName();
 
-		final StringBuilder strBuild = new StringBuilder(assemblyComponentName).append(":");
+		final StringBuilder strBuild = new StringBuilder(assemblyComponentName).append(':');
 		if (!shortLabels) {
-			strBuild.append(componentTypePackagePrefx).append(".");
+			strBuild.append(componentTypePackagePrefx).append('.');
 		} else {
 			strBuild.append("..");
 		}
@@ -189,9 +188,9 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 		final String componentTypePackagePrefx = component.getAssemblyComponent().getType().getPackageName();
 		final String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
 
-		final StringBuilder strBuild = new StringBuilder(assemblyComponentName).append(":");
+		final StringBuilder strBuild = new StringBuilder(assemblyComponentName).append(':');
 		if (!shortLabels) {
-			strBuild.append(componentTypePackagePrefx).append(".");
+			strBuild.append(componentTypePackagePrefx).append('.');
 		} else {
 			strBuild.append("..");
 		}
@@ -285,40 +284,40 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 			if (me instanceof SynchronousCallMessage) {
 				final Signature sig = me.getReceivingExecution().getOperation().getSignature();
 				final StringBuilder msgLabel = new StringBuilder(sig.getName());
-				msgLabel.append("(");
+				msgLabel.append('(');
 				final String[] paramList = sig.getParamTypeList();
 				if (paramList.length > 0) {
 					msgLabel.append("..");
 				}
-				msgLabel.append(")");
+				msgLabel.append(')');
 
 				if (first) {
-					ps.print("async();" + "\n");
+					ps.print("async();\n");
 					first = false;
 				} else {
-					ps.print("sync();" + "\n");
+					ps.print("sync();\n");
 				}
-				ps.print("message(" + senderDotId + "," + receiverDotId + ", \"" + msgLabel.toString() + "\");" + "\n");
-				ps.print("active(" + receiverDotId + ");" + "\n");
-				ps.print("step();" + "\n");
+				ps.print("message(" + senderDotId + "," + receiverDotId + ", \"" + msgLabel.toString() + "\");\n");
+				ps.print("active(" + receiverDotId + ");\n");
+				ps.print("step();\n");
 			} else if (me instanceof SynchronousReplyMessage) {
 				ps.print("step();" + "\n");
 				ps.print("async();" + "\n");
-				ps.print("rmessage(" + senderDotId + "," + receiverDotId + ", \"\");" + "\n");
-				ps.print("inactive(" + senderDotId + ");" + "\n");
+				ps.print("rmessage(" + senderDotId + "," + receiverDotId + ", \"\");\n");
+				ps.print("inactive(" + senderDotId + ");\n");
 			} else {
 				LOG.error("Message type not supported: " + me.getClass().getName());
 			}
 		}
-		ps.print("inactive(" + rootDotId + ");" + "\n");
-		ps.print("step();" + "\n");
+		ps.print("inactive(" + rootDotId + ");\n");
+		ps.print("step();\n");
 
 		for (final int i : plottedComponentIds) {
-			ps.print("complete(O" + i + ");" + "\n");
+			ps.print("complete(O" + i + ");\n");
 		}
-		ps.print("complete(" + rootDotId + ");" + "\n");
+		ps.print("complete(" + rootDotId + ");\n");
 
-		ps.print(".PE" + "\n");
+		ps.print(".PE\n");
 	}
 
 	public static void writePicForMessageTrace(final MessageTrace msgTrace, final SDModes sdMode,

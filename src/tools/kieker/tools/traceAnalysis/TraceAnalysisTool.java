@@ -107,14 +107,14 @@ public final class TraceAnalysisTool {
 	private static final AssemblyComponentOperationPairFactory ASSEMBLY_COMPONENT_OPERATION_PAIR_FACTORY = new AssemblyComponentOperationPairFactory(
 			SYSTEM_ENTITY_FACTORY);
 	private static final CommandLineParser CMDL_PARSER = new BasicParser();
-	private static CommandLine cmdl = null;
-	private static String[] inputDirs = null;
-	private static String outputDir = null;
-	private static String outputFnPrefix = null;
-	private static Set<Long> selectedTraces = null; // null means select all
+	private static CommandLine cmdl;
+	private static String[] inputDirs;
+	private static String outputDir;
+	private static String outputFnPrefix;
+	private static Set<Long> selectedTraces; // null means select all
 	private static boolean shortLabels = true;
-	private static boolean includeSelfLoops = false;
-	private static boolean ignoreInvalidTraces = false;
+	private static boolean includeSelfLoops; // false
+	private static boolean ignoreInvalidTraces; // false
 	private static int maxTraceDurationMillis = 10 * 60 * 1000; // 10 minutes default
 	private static long ignoreExecutionsBeforeTimestamp = TimestampFilter.CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP;
 	private static long ignoreExecutionsAfterTimestamp = TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP;

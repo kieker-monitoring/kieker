@@ -28,7 +28,7 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 public class WeightedBidirectionalDependencyGraphEdge<T> extends
 		AbstractWeightedEdge<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, MessageTrace> {
 
-	private boolean assumed = false;
+	private boolean assumed; // false
 
 	public WeightedBidirectionalDependencyGraphEdge(final DependencyGraphNode<T> source, final DependencyGraphNode<T> target, final MessageTrace origin) {
 		super(source, target, origin);

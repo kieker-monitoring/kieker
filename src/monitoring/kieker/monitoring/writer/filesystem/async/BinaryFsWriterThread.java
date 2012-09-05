@@ -34,7 +34,7 @@ import kieker.monitoring.writer.filesystem.MappingFileWriter;
 public class BinaryFsWriterThread extends AbstractFsWriterThread {
 	private static final Log LOG = LogFactory.getLog(BinaryFsWriterThread.class);
 
-	private DataOutputStream out = null;
+	private DataOutputStream out;
 
 	public BinaryFsWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
 			final MappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile) {

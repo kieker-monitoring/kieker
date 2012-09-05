@@ -79,7 +79,7 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 				sb.append(property);
 				sb.append("='");
 				sb.append(this.configuration.getStringProperty(property));
-				sb.append("'");
+				sb.append('\'');
 			}
 		}
 		return sb.toString();

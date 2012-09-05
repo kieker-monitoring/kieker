@@ -155,17 +155,17 @@ public class ClassOperationSignaturePair {
 		/* Append modifiers and return type */
 		if ((signature.getReturnType() != null) && (signature.getReturnType().length() != 0)) {
 			for (final String type : signature.getModifier()) {
-				strBuilder.append(type).append(" ");
+				strBuilder.append(type).append(' ');
 			}
 			if (signature.hasReturnType()) {
-				strBuilder.append(signature.getReturnType()).append(" ");
+				strBuilder.append(signature.getReturnType()).append(' ');
 			}
 		}
 
 		/* Append operation name and parameter type list */
 		strBuilder.append(fqClassName);
-		strBuilder.append(".").append(signature.getName());
-		strBuilder.append("(");
+		strBuilder.append('.').append(signature.getName());
+		strBuilder.append('(');
 		boolean first = true;
 		for (final String type : signature.getParamTypeList()) {
 			if (!first) {
@@ -174,7 +174,7 @@ public class ClassOperationSignaturePair {
 			first = false;
 			strBuilder.append(type);
 		}
-		strBuilder.append(")");
+		strBuilder.append(')');
 
 		return strBuilder.toString();
 	}

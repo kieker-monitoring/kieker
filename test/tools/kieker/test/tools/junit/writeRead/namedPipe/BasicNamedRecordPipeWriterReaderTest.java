@@ -43,7 +43,7 @@ import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 public class BasicNamedRecordPipeWriterReaderTest extends AbstractWriterReaderTest { // NOPMD NOCS (TestClassWithoutTestCases)
 	private static final String PIPE_NAME = "pipe-IVvirGREEf";
 
-	private volatile SimpleSinkFilter<IMonitoringRecord> sinkFilter = null;
+	private volatile SimpleSinkFilter<IMonitoringRecord> sinkFilter;
 
 	@Before
 	public void setUp() throws Exception {

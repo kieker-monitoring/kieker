@@ -56,7 +56,7 @@ public abstract class AbstractDependencyGraphFilter<T> extends AbstractMessageTr
 	private static final String ENCODING = "UTF-8";
 
 	protected final DependencyGraph<T> dependencyGraph;
-	private int numGraphsSaved = 0;
+	private int numGraphsSaved;
 
 	private final List<AbstractNodeDecorator> decorators = new ArrayList<AbstractNodeDecorator>();
 

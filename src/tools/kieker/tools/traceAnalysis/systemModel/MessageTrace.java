@@ -45,7 +45,7 @@ public class MessageTrace extends AbstractTrace {
 		final Iterator<AbstractMessage> it = this.messages.iterator();
 		while (it.hasNext()) {
 			final AbstractMessage m = it.next();
-			strBuild.append("<");
+			strBuild.append('<');
 			strBuild.append(m.toString());
 			strBuild.append(">\n");
 		}

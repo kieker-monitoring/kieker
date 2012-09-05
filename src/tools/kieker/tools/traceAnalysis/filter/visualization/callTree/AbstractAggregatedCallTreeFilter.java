@@ -66,7 +66,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	private final String dotOutputFile;
 	private final boolean includeWeights;
 	private final boolean shortLabels;
-	private int numGraphsSaved = 0; // no need for volatile, only used in synchronized blocks
+	private int numGraphsSaved; // no need for volatile, only used in synchronized blocks
 
 	public AbstractAggregatedCallTreeFilter(final Configuration configuration) {
 		super(configuration);

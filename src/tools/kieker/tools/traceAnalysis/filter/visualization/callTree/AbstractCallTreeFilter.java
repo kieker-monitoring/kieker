@@ -74,7 +74,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 
 		final StringBuilder strBuild = new StringBuilder(assemblyComponentName).append(":");
 		if (!shortLabels) {
-			strBuild.append(componentTypePackagePrefx).append(".");
+			strBuild.append(componentTypePackagePrefx).append('.');
 		} else {
 			strBuild.append("..");
 		}
@@ -82,12 +82,12 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 
 		final Signature sig = operation.getSignature();
 		final StringBuilder opLabel = new StringBuilder(sig.getName());
-		opLabel.append("(");
+		opLabel.append('(');
 		final String[] paramList = sig.getParamTypeList();
 		if (paramList.length > 0) {
 			opLabel.append("..");
 		}
-		opLabel.append(")");
+		opLabel.append(')');
 
 		strBuild.append(opLabel.toString());
 		return strBuild.toString();
@@ -105,7 +105,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 
 		final StringBuilder strBuild = new StringBuilder(resourceContainerName).append("::\\n").append(assemblyComponentName).append(":");
 		if (!shortLabels) {
-			strBuild.append(componentTypePackagePrefx).append(".");
+			strBuild.append(componentTypePackagePrefx).append('.');
 		} else {
 			strBuild.append("..");
 		}
@@ -113,12 +113,12 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 
 		final Signature sig = operation.getSignature();
 		final StringBuilder opLabel = new StringBuilder(sig.getName());
-		opLabel.append("(");
+		opLabel.append('(');
 		final String[] paramList = sig.getParamTypeList();
 		if (paramList.length > 0) {
 			opLabel.append("..");
 		}
-		opLabel.append(")");
+		opLabel.append(')');
 
 		strBuild.append(opLabel.toString());
 
@@ -157,9 +157,9 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		for (final WeightedDirectedCallTreeEdge<?> child : n.getChildEdges()) {
 			final StringBuilder strBuild = new StringBuilder(1024);
 			final int childId = nodeIds.get(child.getTarget());
-			strBuild.append("\n").append(thisId).append("->").append(childId).append("[style=solid,arrowhead=none");
+			strBuild.append('\n').append(thisId).append("->").append(childId).append("[style=solid,arrowhead=none");
 			if (includeWeights) {
-				strBuild.append(",label=\"").append(child.getTargetWeight().getValue()).append("\"");
+				strBuild.append(",label=\"").append(child.getTargetWeight().getValue()).append('"');
 			} else if (eoiCounter != null) {
 				strBuild.append(",label=\"").append(eoiCounter.getAndIncValue()).append(".\"");
 			}

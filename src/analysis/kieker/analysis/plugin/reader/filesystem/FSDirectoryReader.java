@@ -60,7 +60,7 @@ final class FSDirectoryReader implements Runnable {
 	// This set of classes is used to filter only records of a specific type. The value null means all record types are read.
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final File inputDir;
-	private boolean terminated = false;
+	private boolean terminated;
 
 	private final boolean ignoreUnknownRecordTypes;
 	private final Set<String> unknownTypesObserved = new HashSet<String>();

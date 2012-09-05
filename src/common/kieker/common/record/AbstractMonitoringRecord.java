@@ -37,6 +37,9 @@ import kieker.common.record.system.ResourceUtilizationRecord;
 public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	private static final long serialVersionUID = 1L;
 	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> OLD_KIEKERRECORDS = new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>();
+
+	private volatile long loggingTimestamp = -1;
+
 	static {
 		OLD_KIEKERRECORDS.put("kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord", OperationExecutionRecord.class);
 		OLD_KIEKERRECORDS.put("kieker.common.record.CPUUtilizationRecord", CPUUtilizationRecord.class);
@@ -45,8 +48,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		OLD_KIEKERRECORDS.put("kieker.common.record.OperationExecutionRecord", OperationExecutionRecord.class);
 		OLD_KIEKERRECORDS.put("kieker.common.record.BranchingRecord", BranchingRecord.class);
 	}
-
-	private volatile long loggingTimestamp = -1;
 
 	public final long getLoggingTimestamp() {
 		return this.loggingTimestamp;
@@ -62,7 +63,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(this.loggingTimestamp);
 		for (final Object curStr : recordVector) {
-			sb.append(";");
+			sb.append(';');
 			if (curStr != null) {
 				sb.append(curStr.toString());
 			} else {

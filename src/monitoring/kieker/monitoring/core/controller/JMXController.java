@@ -50,11 +50,11 @@ public final class JMXController extends AbstractController implements IJMXContr
 	private final ServerNotificationListener serverNotificationListener;
 	private final String port;
 
+	private final JMXImplementation usedJMXImplementation;
+
 	private static enum JMXImplementation {
 		Fallback, Sun
 	}
-
-	private final JMXImplementation usedJMXImplementation;
 
 	// The error handling in this block is corrent, see ticket #293
 	protected JMXController(final Configuration configuration) {

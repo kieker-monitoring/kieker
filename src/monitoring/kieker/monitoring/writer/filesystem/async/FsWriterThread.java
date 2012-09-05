@@ -36,7 +36,7 @@ public final class FsWriterThread extends AbstractFsWriterThread {
 
 	private static final String ENCODING = "UTF-8";
 
-	private PrintWriter pos = null;
+	private PrintWriter pos;
 	private final boolean autoflush;
 
 	public FsWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,

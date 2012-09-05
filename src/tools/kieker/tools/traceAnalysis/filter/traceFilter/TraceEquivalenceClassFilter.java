@@ -57,16 +57,17 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 
 	private static final Log LOG = LogFactory.getLog(TraceEquivalenceClassFilter.class);
 
+	private TraceEquivalenceClassModes equivalenceMode;
+
+	/** Representative x # of equivalents */
+	private final Map<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap = new HashMap<AbstractExecutionTraceHashContainer, AtomicInteger>(); // NOPMD
+
 	/**
 	 * @author Andre van Hoorn
 	 */
 	public static enum TraceEquivalenceClassModes {
 		DISABLED, ASSEMBLY, ALLOCATION
 	}
-
-	private TraceEquivalenceClassModes equivalenceMode;
-	/** Representative x # of equivalents */
-	private final Map<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap = new HashMap<AbstractExecutionTraceHashContainer, AtomicInteger>(); // NOPMD
 
 	/**
 	 * Creates a new instance of this class using the given configuration object. Keep in mind that the Trace-Equivalence-Class-Mode has to be set via the method

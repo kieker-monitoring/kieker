@@ -45,7 +45,7 @@ public final class LoggingTimestampConverterTool {
 	private static final Options CMDL_OPTS = new Options();
 	private static final List<Option> OPTIONS = new CopyOnWriteArrayList<Option>();
 	private static final String CMD_OPT_NAME_TIMESTAMPS = "timestamps";
-	private static CommandLine cmdl = null;
+	private static CommandLine cmdl;
 	private static String[] timestampsStr;
 	private static long[] timestampsLong;
 
@@ -89,7 +89,7 @@ public final class LoggingTimestampConverterTool {
 		for (final long tstamp : LoggingTimestampConverterTool.timestampsLong) {
 			final StringBuilder strB = new StringBuilder();
 			strB.append(tstamp).append(": ").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(tstamp)).append(" (")
-					.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(tstamp)).append(")");
+					.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(tstamp)).append(')');
 			System.out.println(strB.toString()); // NOPMD (System.out)
 		}
 	}

@@ -59,7 +59,7 @@ public final class PipeWriter extends AbstractMonitoringWriter implements IPipeW
 		sb.append(super.toString());
 		sb.append("\n\tConnected to pipe: '");
 		sb.append(this.pipe.getName());
-		sb.append("'");
+		sb.append('\'');
 		return sb.toString();
 	}
 

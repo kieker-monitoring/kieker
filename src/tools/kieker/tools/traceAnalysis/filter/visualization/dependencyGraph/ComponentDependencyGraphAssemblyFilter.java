@@ -114,7 +114,7 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 					null, // imagefilename
 					null // misc
 					));
-			strBuild.append("\n");
+			strBuild.append('\n');
 		}
 		ps.println(strBuild.toString());
 	}
