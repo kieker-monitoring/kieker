@@ -173,6 +173,50 @@ public class MethodNameIteratorTest {
 				l.toArray());
 	}
 
+	@Test
+	public void testMethodsFromCSharpClass() {
+		final KDMModelManager modelManager = new KDMModelManager("..\\testdata\\SharpDevelop.xmi");
+		try {
+			// Get some methods
+			final String key = "ICSharpCode.FormsDesigner.Services.ImageResourceEditor";
+			final Iterator<MethodDescription> it = modelManager.iterateMethodsFromClass(key);
+			final List<String> l = new LinkedList<String>();
+			while (it.hasNext()) {
+				final String p = this.print(it.next());
+				l.add(p);
+			}
+
+			final String[] values = new String[] { "public System.Drawing.Desig.UITypeEditorEditStyle GetEditStyle", "public object EditValue",
+				"public bool GetPaintValueSupported", "public void PaintValue" };
+			Assert.assertArrayEquals(values, l.toArray());
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testMethodsFromCSharpInterface() {
+		// More then one million lines of code and no InterfaceUnit containing some attributes or methods...so test another class...
+		final KDMModelManager modelManager = new KDMModelManager("..\\testdata\\SharpDevelop.xmi");
+		try {
+			final String key = "ICSharpCode.XamlBinding.PowerToys.Dialogs.DragDropMarkerAdorner";
+			// Get some methods
+			final Iterator<MethodDescription> it = modelManager.iterateMethodsFromClass(key);
+			final List<String> l = new LinkedList<String>();
+			while (it.hasNext()) {
+				final String p = this.print(it.next());
+				l.add(p);
+			}
+
+			final String[] values = new String[] { "protected void OnRender", "protected System.Window.Size MeasureOverride",
+				"protected System.Window.Size ArrangeOverride", "public ICSharpCode.XamlBinding.PowerToys.Dialog.DragDropMarkerAdorner CreateAdornerContentMove",
+				"public ICSharpCode.XamlBinding.PowerToys.Dialog.DragDropMarkerAdorner CreateAdornerCellMove" };
+			Assert.assertArrayEquals(values, l.toArray());
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	private String print(final MethodDescription description) {
 		final StringBuilder line = new StringBuilder();
 		line.append(description.getVisibilityModifier()).append(' ');

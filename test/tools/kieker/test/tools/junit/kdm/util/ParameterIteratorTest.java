@@ -201,6 +201,29 @@ public class ParameterIteratorTest {
 		Assert.assertArrayEquals(new Object[] { "char[] name", "int count" }, l.toArray());
 	}
 
+	@Test
+	public void testParameterFromCSharpMethod() {
+		final KDMModelManager modelManager = new KDMModelManager("..\\testdata\\SharpDevelop.xmi");
+		try {
+			// Get some methods
+			final String key = "ICSharpCode.SharpDevelop.ProjectActiveConditionEvaluator";
+			final Iterator<MethodDescription> it = modelManager.iterateMethodsFromClass(key);
+			it.hasNext();
+			final String methodKey = it.next().getMethodQualifier();
+			final Iterator<ParameterDescription> parameterIterator = modelManager.iterateParameter(methodKey);
+			final List<String> l = new LinkedList<String>();
+			while (parameterIterator.hasNext()) {
+				final String p = this.print(parameterIterator.next());
+				l.add(p);
+			}
+
+			final String[] values = new String[] { "object caller", "ICSharpCode.Cor.Condition condition" };
+			Assert.assertArrayEquals(values, l.toArray());
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	private String print(final ParameterDescription parameterDescription) {
 		final StringBuilder description = new StringBuilder();
 		description.append(parameterDescription.getTypeName());

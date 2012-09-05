@@ -25,13 +25,18 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmt.modisco.omg.kdm.code.AbstractCodeRelationship;
 import org.eclipse.gmt.modisco.omg.kdm.code.ClassUnit;
 import org.eclipse.gmt.modisco.omg.kdm.code.CodeItem;
+import org.eclipse.gmt.modisco.omg.kdm.code.CodeModel;
+import org.eclipse.gmt.modisco.omg.kdm.code.CompilationUnit;
+import org.eclipse.gmt.modisco.omg.kdm.code.Datatype;
 import org.eclipse.gmt.modisco.omg.kdm.code.Extends;
 import org.eclipse.gmt.modisco.omg.kdm.code.Implements;
 import org.eclipse.gmt.modisco.omg.kdm.code.Imports;
 import org.eclipse.gmt.modisco.omg.kdm.code.InterfaceUnit;
+import org.eclipse.gmt.modisco.omg.kdm.code.Namespace;
 import org.eclipse.gmt.modisco.omg.kdm.code.Package;
 
 import kieker.tools.kdm.manager.util.descriptions.DependencyDescription;
@@ -47,7 +52,7 @@ public class DependencyIterator extends AbstractKDMIterator<DependencyDescriptio
 	/**
 	 * Contains the information whether the instance was created with a given package, or not. This is necessary to get only interesting dependencies.
 	 */
-	private final boolean isPackage;
+	private final boolean isPackageOrNamespace;
 	/**
 	 * If this instance was created from a {@link Package} the set is used to avoid duplicate dependencies.
 	 */
@@ -64,7 +69,7 @@ public class DependencyIterator extends AbstractKDMIterator<DependencyDescriptio
 	public DependencyIterator(final Package pack) throws NullPointerException {
 		super(pack.getCodeElement());
 
-		this.isPackage = true;
+		this.isPackageOrNamespace = true;
 	}
 
 	/**
@@ -77,8 +82,9 @@ public class DependencyIterator extends AbstractKDMIterator<DependencyDescriptio
 	 */
 	public DependencyIterator(final ClassUnit classUnit) throws NullPointerException {
 		super(classUnit.getCodeRelation());
-
-		this.isPackage = false;
+		// Keep C#-specials in mind
+		this.tryGetParentCompilationUnit(classUnit);
+		this.isPackageOrNamespace = false;
 	}
 
 	/**
@@ -91,8 +97,23 @@ public class DependencyIterator extends AbstractKDMIterator<DependencyDescriptio
 	 */
 	public DependencyIterator(final InterfaceUnit interfaceUnit) throws NullPointerException {
 		super(interfaceUnit.getCodeRelation());
+		// Keep C#-specials in mind
+		this.tryGetParentCompilationUnit(interfaceUnit);
+		this.isPackageOrNamespace = false;
+	}
 
-		this.isPackage = false;
+	/**
+	 * Creates a new instance of this class from the given {@link Namespace}.
+	 * 
+	 * @param namespaze
+	 *            The {@link Namespace} to get the dependencies from.
+	 * @throws NullPointerException
+	 *             If the grouped code list of the {@link Namespace} is null.
+	 */
+	public DependencyIterator(final Namespace namespaze) throws NullPointerException {
+		super(namespaze.getGroupedCode());
+
+		this.isPackageOrNamespace = true;
 	}
 
 	/**
@@ -126,6 +147,8 @@ public class DependencyIterator extends AbstractKDMIterator<DependencyDescriptio
 					final Iterator<CodeItem> childIterator = classUnit.getCodeElement().iterator();
 					this.iteratorStack.push(childIterator);
 					this.currentIterator = childIterator;
+					// If we are in a C#-model, we must keep the CompilationUnit in mind
+					this.tryGetParentCompilationUnit(classUnit);
 					// Check the new iterator
 					this.stepBack();
 					cond = true;
@@ -138,29 +161,45 @@ public class DependencyIterator extends AbstractKDMIterator<DependencyDescriptio
 					final Iterator<CodeItem> childIterator = interfaceUnit.getCodeElement().iterator();
 					this.iteratorStack.push(childIterator);
 					this.currentIterator = childIterator;
+					// If we are in a C#-model, we must keep the CompilationUnit in mind
+					this.tryGetParentCompilationUnit(interfaceUnit);
 					// Check the new iterator
 					this.stepBack();
 					cond = true;
-				} else if ((this.currentElement instanceof Imports) && this.isPackage) {
-					final Imports imports = (Imports) this.currentElement;
-					final DependencyDescription description = new DependencyDescription(imports);
-					final CodeItem destination = imports.getTo();
-					String identifier;
-					// If the target is a package we must user the full name
-					if (destination instanceof Package) {
-						identifier = description.getFullName();
-					} else { // Else we must use the name of the parent package
-						identifier = description.getParentPackageName();
-					}
-					// Check whether the destination is already known
-					if (this.descriptionSet.add(identifier)) {
+				} else if ((this.currentElement instanceof Imports) || (this.currentElement instanceof Implements) || (this.currentElement instanceof Extends)) {
+					// If it not a package or namespace just return true
+					if (!this.isPackageOrNamespace) {
 						return true;
-					} else {
-						cond = true;
+					} else { // If it is a package or namespace we must use every target only once.
+						final DependencyDescription description;
+						final CodeItem destination;
+						if (this.currentElement instanceof Imports) {
+							final Imports imports = (Imports) this.currentElement;
+							description = new DependencyDescription(imports);
+							destination = imports.getTo();
+						} else if (this.currentElement instanceof Implements) {
+							final Implements implement = (Implements) this.currentElement;
+							description = new DependencyDescription(implement);
+							destination = implement.getTo();
+						} else {
+							final Extends extend = (Extends) this.currentElement;
+							description = new DependencyDescription(extend);
+							destination = extend.getTo();
+						}
+						String identifier;
+						// If the target is a package we must user the full name
+						if ((destination instanceof Package) || (destination instanceof Namespace)) {
+							identifier = description.getFullName();
+						} else { // Else we must use the name of the parent package
+							identifier = description.getParentPackageName();
+						}
+						// Check whether the destination is already known
+						if (this.descriptionSet.add(identifier)) {
+							return true;
+						} else {
+							cond = true;
+						}
 					}
-				} else if (((this.currentElement instanceof Imports) || (this.currentElement instanceof Implements) || (this.currentElement instanceof Extends))
-						&& !this.isPackage) {
-					return true;
 				} else {
 					// Else try again
 					cond = true;
@@ -172,6 +211,32 @@ public class DependencyIterator extends AbstractKDMIterator<DependencyDescriptio
 		}
 
 		return this.currentIterator.hasNext();
+	}
+
+	/**
+	 * This method tries to find a parent element of type {@link CompilationUnit}. In C# all the {@link Imports}-dependencies are stored in it.
+	 * 
+	 * @param type
+	 *            The element to check the ancestors.
+	 */
+	private void tryGetParentCompilationUnit(final Datatype type) {
+		EObject parent = type.eContainer();
+		while (parent != null) {
+			// Stop at the CodeModel
+			if (parent instanceof CodeModel) {
+				parent = null; // NOPMD (Stop at the code model)
+			} else if (parent instanceof CompilationUnit) { // We have found the target
+				final CompilationUnit cUnit = (CompilationUnit) parent;
+				final Iterator<AbstractCodeRelationship> relationIterator = cUnit.getCodeRelation().iterator();
+				this.iteratorStack.push(relationIterator);
+				this.currentIterator = relationIterator;
+				break;
+			} else if (parent instanceof Package) { // We can stop here, because we are in a Java model
+				parent = null; // NOPMD (Avoid infinite loop)
+			} else { // Use the next parent
+				parent = parent.eContainer();
+			}
+		}
 	}
 
 	// @Override

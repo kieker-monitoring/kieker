@@ -84,6 +84,7 @@ public final class KDMRepository extends AbstractRepository {
 	 * 
 	 * @return A configuration object with the current configuration.
 	 */
+	// @Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 

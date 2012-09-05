@@ -2,7 +2,6 @@ package kieker.test.tools.junit.kdm;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InvalidClassException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -13,6 +12,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.tools.kdm.manager.KDMModelManager;
+import kieker.tools.kdm.manager.exception.InvalidClassException;
 import kieker.tools.kdm.manager.exception.InvalidPackageException;
 import kieker.tools.kdm.manager.util.descriptions.MethodDescription;
 
@@ -83,25 +83,31 @@ public class KDMModelManagerTest {
 		final KDMModelManager manager = new KDMModelManager();
 		manager.addMethod(false, false, "", "", new String[0], "myMethod", new String[] { "class1", "class2" }, new String[] { "pack1", "pack2", "pack3" });
 
-		final Iterator<String> packIter = manager.iteratePackages("pack1", true);
-		final Iterator<String> classIter = manager.iterateClasses("pack1.pack2.pack3", true);
-		final Iterator<MethodDescription> methodIter = manager.iterateMethodsFromClass("pack1.pack2.pack3.class1.class2");
+		try {
+			final Iterator<String> packIter = manager.iteratePackages("pack1", true);
+			final Iterator<String> classIter = manager.iterateClasses("pack1.pack2.pack3", true);
+			final Iterator<MethodDescription> methodIter = manager.iterateMethodsFromClass("pack1.pack2.pack3.class1.class2");
 
-		Assert.assertTrue(packIter.hasNext());
-		Assert.assertEquals("pack1.pack2", packIter.next());
-		Assert.assertTrue(packIter.hasNext());
-		Assert.assertEquals("pack1.pack2.pack3", packIter.next());
-		Assert.assertFalse(packIter.hasNext());
+			Assert.assertTrue(packIter.hasNext());
+			Assert.assertEquals("pack1.pack2", packIter.next());
+			Assert.assertTrue(packIter.hasNext());
+			Assert.assertEquals("pack1.pack2.pack3", packIter.next());
+			Assert.assertFalse(packIter.hasNext());
 
-		Assert.assertTrue(classIter.hasNext());
-		Assert.assertEquals("pack1.pack2.pack3.class1", classIter.next());
-		Assert.assertTrue(classIter.hasNext());
-		Assert.assertEquals("pack1.pack2.pack3.class1.class2", classIter.next());
-		Assert.assertFalse(classIter.hasNext());
+			Assert.assertTrue(classIter.hasNext());
+			Assert.assertEquals("pack1.pack2.pack3.class1", classIter.next());
+			Assert.assertTrue(classIter.hasNext());
+			Assert.assertEquals("pack1.pack2.pack3.class1.class2", classIter.next());
+			Assert.assertFalse(classIter.hasNext());
 
-		Assert.assertTrue(methodIter.hasNext());
-		Assert.assertEquals("myMethod", methodIter.next().getName());
-		Assert.assertFalse(methodIter.hasNext());
+			Assert.assertTrue(methodIter.hasNext());
+			Assert.assertEquals("myMethod", methodIter.next().getName());
+			Assert.assertFalse(methodIter.hasNext());
+		} catch (final InvalidPackageException e) {
+			e.printStackTrace();
+		} catch (final InvalidClassException ex) {
+
+		}
 	}
 
 	@Test

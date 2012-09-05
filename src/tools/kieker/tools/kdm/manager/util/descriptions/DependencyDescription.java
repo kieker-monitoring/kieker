@@ -20,13 +20,21 @@
 
 package kieker.tools.kdm.manager.util.descriptions;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmt.modisco.omg.kdm.code.ClassUnit;
 import org.eclipse.gmt.modisco.omg.kdm.code.CodeItem;
 import org.eclipse.gmt.modisco.omg.kdm.code.Extends;
 import org.eclipse.gmt.modisco.omg.kdm.code.Implements;
 import org.eclipse.gmt.modisco.omg.kdm.code.Imports;
 import org.eclipse.gmt.modisco.omg.kdm.code.InterfaceUnit;
+import org.eclipse.gmt.modisco.omg.kdm.code.Namespace;
 import org.eclipse.gmt.modisco.omg.kdm.code.Package;
+import org.eclipse.gmt.modisco.omg.kdm.kdm.Attribute;
 
 import kieker.tools.kdm.manager.KDMModelManager;
 import kieker.tools.kdm.manager.util.DependencyType;
@@ -72,16 +80,34 @@ public class DependencyDescription {
 		// Set the name
 		this.name = item.getName();
 		// Assemble the full parent name
-		final String pName = KDMModelManager.reassembleFullParentName(item);
+		String pName;
+		try {
+			pName = this.getValueFromAttribute(item, "FullyQualifiedName");
+			if (pName.endsWith(this.name)) {
+				final int index = pName.length() - this.name.length();
+				pName = pName.substring(0, index);
+			}
+		} catch (final NoSuchElementException ex) {
+			pName = KDMModelManager.reassembleFullParentName(item);
+		}
 		final StringBuilder parentName = new StringBuilder();
 		parentName.append(pName);
 		// Ensure it doesn't end with a dot
 		if (parentName.toString().endsWith(".")) {
 			parentName.deleteCharAt(parentName.length() - 1);
 		}
-		this.fullParentName = parentName.toString();
-		// Set the name of the parent package
-		this.parentPackageName = KDMModelManager.reassembleParentPackageName(item);
+		this.fullParentName = this.removeGlobalPrefix(parentName.toString());
+		// Set the name of the parent package or namespace
+		if (item instanceof Namespace) {
+			this.parentPackageName = this.fullParentName;
+		} else {
+			String ppName = KDMModelManager.reassembleParentPackageName(item);
+			if ("".equals(ppName) && !"".equals(this.fullParentName)) {
+				ppName = this.tryAssembleParentNamespace(item);
+				ppName = this.removeGlobalPrefix(ppName);
+			}
+			this.parentPackageName = ppName;
+		}
 	}
 
 	/**
@@ -124,6 +150,108 @@ public class DependencyDescription {
 	}
 
 	/**
+	 * This method tries to remove the 'global.'-prefix from the given value which used in C#-models.
+	 * 
+	 * @param value
+	 *            The value to remove the prefix.
+	 * @return
+	 *         The value without the prefix or just the value.
+	 */
+	private String removeGlobalPrefix(final String value) {
+		String result = "";
+		final String prefix = "global.";
+		if (!"".equals(value)) {
+			if (value.startsWith(prefix)) {
+				result = value.substring(prefix.length());
+			} else {
+				result = value;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * This method tries to reassemble the name of the parent {@link Namespace} of the given item.
+	 * 
+	 * @param item
+	 *            The {@link CodeItem} to reassemble the parent namespace.
+	 * @return
+	 *         The parent {@link Namespace} name of the given {@link CodeItem}.
+	 */
+	private String tryAssembleParentNamespace(final CodeItem item) {
+		final StringBuilder nonNamespacePart = new StringBuilder();
+		final List<String> parts = new LinkedList<String>();
+		parts.add(item.getName());
+		// Get first container
+		EObject parentElement = item.eContainer();
+		String fullyQualifiedName;
+
+		// Try to get the full name from the attribute
+		try {
+			fullyQualifiedName = this.getValueFromAttribute(item, "FullyQualifiedName");
+		} catch (final NoSuchElementException e) {
+			// Without the fully qualified name we cannot assemble the parent namespace name.
+			return "";
+		}
+
+		// As long as there is an other package, class or interface container we must go on
+		while (parentElement != null) {
+			if (parentElement instanceof ClassUnit) {
+				final ClassUnit classUnit = (ClassUnit) parentElement;
+				parts.add(classUnit.getName());
+				parentElement = parentElement.eContainer();
+			} else if (parentElement instanceof InterfaceUnit) {
+				final InterfaceUnit interfaceUnit = (InterfaceUnit) parentElement;
+				parts.add(interfaceUnit.getName());
+				parentElement = parentElement.eContainer();
+			} else {
+				parentElement = null; // NOPMD (avoid infinite loop)
+			}
+		}
+
+		// Keep the wrong order in mind
+		Collections.reverse(parts);
+		// Assemble name
+		for (final String part : parts) {
+			nonNamespacePart.append(part).append('.');
+		}
+		// Remove the last dot
+		nonNamespacePart.deleteCharAt(nonNamespacePart.length() - 1);
+
+		final int nnPartLength = nonNamespacePart.length();
+		String namespaceName;
+		if (fullyQualifiedName.length() > nnPartLength) {
+			namespaceName = fullyQualifiedName.substring(0, fullyQualifiedName.length() - nnPartLength - 1);
+		} else {
+			namespaceName = "";
+		}
+
+		return namespaceName;
+	}
+
+	/**
+	 * This method searches for an attribute where the tag equals the 'tag'-parameter and return the value.
+	 * 
+	 * @param item
+	 *            The item which should contains the attribute.
+	 * @param tag
+	 *            The tag of the attribute.
+	 * @return
+	 *         The value of the attribute.
+	 * @throws NoSuchElementException
+	 *             If the attribute does not exist.
+	 */
+	private String getValueFromAttribute(final CodeItem item, final String tag) throws NoSuchElementException {
+		for (final Attribute attribute : item.getAttribute()) {
+			if (tag.equals(attribute.getTag())) {
+				return attribute.getValue();
+			}
+		}
+
+		throw new NoSuchElementException();
+	}
+
+	/**
 	 * This method tries to determine the type of the {@link CodeItem}.
 	 * 
 	 * @param item
@@ -137,6 +265,8 @@ public class DependencyDescription {
 			this.elementType = ElementType.CLASS;
 		} else if (item instanceof InterfaceUnit) {
 			this.elementType = ElementType.INTERFACE;
+		} else if (item instanceof Namespace) {
+			this.elementType = ElementType.NAMESPACE;
 		} else {
 			this.elementType = ElementType.UNKNOWN;
 		}
@@ -161,7 +291,7 @@ public class DependencyDescription {
 	public String getFullName() {
 		final StringBuilder fullName = new StringBuilder();
 		// Assemble full name
-		if (this.fullParentName.length() > 0) {
+		if (!this.fullParentName.isEmpty()) {
 			fullName.append(this.fullParentName);
 			if (!this.fullParentName.endsWith(".")) {
 				fullName.append('.');

@@ -20,12 +20,16 @@
 
 package kieker.tools.kdm.manager.util.descriptions;
 
+import java.util.NoSuchElementException;
+
 import org.eclipse.gmt.modisco.omg.kdm.code.ArrayType;
 import org.eclipse.gmt.modisco.omg.kdm.code.ClassUnit;
+import org.eclipse.gmt.modisco.omg.kdm.code.CodeItem;
 import org.eclipse.gmt.modisco.omg.kdm.code.Datatype;
 import org.eclipse.gmt.modisco.omg.kdm.code.InterfaceUnit;
 import org.eclipse.gmt.modisco.omg.kdm.code.ParameterUnit;
 import org.eclipse.gmt.modisco.omg.kdm.code.PrimitiveType;
+import org.eclipse.gmt.modisco.omg.kdm.kdm.Attribute;
 
 import kieker.tools.kdm.manager.KDMModelManager;
 import kieker.tools.kdm.manager.util.ElementType;
@@ -94,8 +98,10 @@ public class ParameterDescription {
 				this.elementType = ElementType.UNKNOWN;
 			} else {
 				this.primitiveType = false;
-				// Let the model manager reassemble the name
-				tempFullTypeName.append(KDMModelManager.reassembleFullParentName(itemType));
+				// reassemble the name
+				final String parentName = this.reassembleParentName(itemType);
+				tempFullTypeName.append(parentName);
+				// tempFullTypeName.append(KDMModelManager.reassembleFullParentName(itemType));
 				// Set the element type
 				this.setElementType(itemType);
 			}
@@ -104,8 +110,10 @@ public class ParameterDescription {
 			this.primitiveType = false;
 			// Set the element type
 			this.setElementType(datatype);
-			// Let the model manager reassemble the name
-			tempFullTypeName.append(KDMModelManager.reassembleFullParentName(datatype));
+			// reassemble the name
+			final String parentName = this.reassembleParentName(datatype);
+			tempFullTypeName.append(parentName);
+			// tempFullTypeName.append(KDMModelManager.reassembleFullParentName(datatype));
 		}
 		// Assemble full type name
 		if ((tempFullTypeName.length() > 0) && !tempFullTypeName.toString().endsWith(".")) {
@@ -129,6 +137,66 @@ public class ParameterDescription {
 		} else {
 			this.elementType = ElementType.UNKNOWN;
 		}
+	}
+
+	/**
+	 * This method searches for the attribute with the tag-value given in the parameter 'tag' and returs the value.
+	 * 
+	 * @param item
+	 *            The {@link CodeItem} to get the attribute from.
+	 * @param tag
+	 *            The tag to identify the attribute.
+	 * @return
+	 *         Returns the value of the attribute specified by the 'tag'-value.
+	 * @throws NoSuchElementException
+	 *             If the attribute does not exist.
+	 */
+	private String getValueFromAttribute(final CodeItem item, final String tag) throws NoSuchElementException {
+		for (final Attribute attribute : item.getAttribute()) {
+			if (tag.equals(attribute.getTag())) {
+				return attribute.getValue();
+			}
+		}
+
+		throw new NoSuchElementException();
+	}
+
+	/**
+	 * Reassembles the parent name from the given {@link Datatype} in a C# or Java model.
+	 * 
+	 * @param type
+	 *            The {@link Datatype} to reassemble the parent name from.
+	 * @return
+	 *         The parent name if it could be reassembled or an empty string.
+	 */
+	private String reassembleParentName(final Datatype type) {
+		String result = "";
+		final String prefix = "global.";
+
+		if (type != null) {
+			// Try to get the full name from the attribute used in C#-models
+			try {
+				final String name = type.getName();
+				String value = this.getValueFromAttribute(type, "FullyQualifiedName");
+				// Keep the global-prefix in mind
+				if (value.startsWith(prefix)) {
+					value = value.substring(prefix.length());
+				}
+				// Remove the name of the type if necessary
+				if (value.endsWith(name)) {
+					final int index = value.length() - name.length() - 2;
+					if (index >= 0) {
+						value = value.substring(0, index);
+					}
+				}
+				result = value;
+			} catch (final NoSuchElementException e) {
+				// Reassemble the name if the attribute does not exist.
+				result = KDMModelManager.reassembleFullParentName(type);
+			}
+		}
+
+		return result;
 	}
 
 	/**

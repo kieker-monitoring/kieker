@@ -22,7 +22,6 @@ package kieker.tools.kdm.manager;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InvalidClassException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -84,6 +83,7 @@ import org.eclipse.gmt.modisco.omg.kdm.source.Directory;
 import org.eclipse.gmt.modisco.omg.kdm.source.InventoryModel;
 import org.eclipse.gmt.modisco.omg.kdm.source.SourceFile;
 
+import kieker.tools.kdm.manager.exception.InvalidClassException;
 import kieker.tools.kdm.manager.exception.InvalidInterfaceException;
 import kieker.tools.kdm.manager.exception.InvalidMethodException;
 import kieker.tools.kdm.manager.exception.InvalidNamespaceException;
@@ -875,8 +875,13 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 	 *         An iterator for the packages directly within the kdm instance.
 	 */
 	public Iterator<String> iteratePackages() {
-		// Return new Iterator. Use the complete codeModel-content.
-		return new PackageNameIterator(this.codeModel.getCodeElement());
+		// Use all elements from all code models
+		final List<List<AbstractCodeElement>> elememtList = new ArrayList<List<AbstractCodeElement>>();
+		for (final CodeModel modelElement : KDMModelManager.getAllCodeModels(this.segment)) {
+			elememtList.add(modelElement.getCodeElement());
+		}
+
+		return new PackageNameIterator(elememtList);
 	}
 
 	/**
@@ -1195,8 +1200,9 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 	 *             If the namespace does not exist.
 	 */
 	public Iterator<DependencyDescription> iterateDependenciesFromNamespace(final String fullNamespaceName) throws InvalidNamespaceException {
-		// TODO: implement
-		return null;
+		final Namespace namespaze = this.getNamespace(fullNamespaceName);
+
+		return new DependencyIterator(namespaze);
 	}
 
 	/**
@@ -1236,12 +1242,13 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 	 * 
 	 * @return
 	 *         An iterator for all {@link Namespace} directly within the code model.
-	 * @throws InvalidNamespaceException
-	 *             If the namespace does not exist.
+	 * @throws NoSuchElementException
+	 *             If no namespaces exist.
 	 */
-	public Iterator<String> iterateNamespaces() throws InvalidNamespaceException {
+	public Iterator<String> iterateNamespaces() throws NoSuchElementException {
 		// Namespaces directly within the model
-		return new NamespaceNameIterator(this.codeModel.getCodeElement());
+		final Module module = this.getNamespaceModule();
+		return new NamespaceNameIterator(module.getCodeElement());
 	}
 
 	/**
@@ -1731,7 +1738,7 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 	 * @return
 	 *         The String without the prefix or an empty string if value is null.
 	 */
-	private static String removeGlobalCSharpePrefix(final String value) {
+	private static String removeGlobalCSharpPrefix(final String value) {
 		final String prefix = "global.";
 		String result = "";
 
@@ -1977,13 +1984,7 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 				// In C#-models we must use the name from the attribute, so try to find it
 				try {
 					final String value = KDMModelManager.getValueFromAttribute(clazz, nameAttributeKey);
-					// If it exist keep the 'global'-prefix in mind
-					// if (value.startsWith(globalConstant)) {
-					// final StringBuilder tValue = new StringBuilder(value);
-					// tValue.delete(0, globalConstant.length() + 1);
-					// value = tValue.toString();
-					// }
-					key = KDMModelManager.removeGlobalCSharpePrefix(value);
+					key = KDMModelManager.removeGlobalCSharpPrefix(value);
 				} catch (final NoSuchElementException ex) {
 					// Else use the name
 					key = name.toString();
@@ -2003,13 +2004,7 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 				// In C#-models we must use the name from the attribute, so try to find it
 				try {
 					final String value = KDMModelManager.getValueFromAttribute(interfaze, nameAttributeKey);
-					// If it exist keep the 'global'-prefix in mind
-					// if (value.startsWith(globalConstant)) {
-					// final StringBuilder tValue = new StringBuilder(value);
-					// tValue.delete(0, globalConstant.length() + 1);
-					// value = tValue.toString();
-					// }
-					key = KDMModelManager.removeGlobalCSharpePrefix(value);
+					key = KDMModelManager.removeGlobalCSharpPrefix(value);
 				} catch (final NoSuchElementException ex) {
 					// Else use the name
 					key = name.toString();
@@ -2041,7 +2036,7 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 						pName = name.toString();
 					}
 					// Keep the 'global' prefix in mind which is used in C#-models
-					pName = KDMModelManager.removeGlobalCSharpePrefix(pName);
+					pName = KDMModelManager.removeGlobalCSharpPrefix(pName);
 					qualifier = KDMModelManager.reassembleMethodQualifierFromModel(method, pName);
 				} catch (final NoSuchElementException ex) {
 					qualifier = KDMModelManager.reassembleMethodQualifierFromModel(method, name.toString());
@@ -2138,6 +2133,24 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 		result.append(dstQualifier);
 
 		return result.toString();
+	}
+
+	/**
+	 * This method tries to get a {@link Module} out of the list of Abstract code elements from the code model.
+	 * 
+	 * @return
+	 *         The Module if one exist.
+	 * @throws NoSuchElementException
+	 *             If no Module exist.
+	 */
+	private Module getNamespaceModule() throws NoSuchElementException {
+		for (final AbstractCodeElement element : this.codeModel.getCodeElement()) {
+			if (element instanceof Module) {
+				return (Module) element;
+			}
+		}
+
+		throw new NoSuchElementException();
 	}
 
 	/**
@@ -2299,7 +2312,20 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 	 *         The unique qualifier used within the {@link KDMModelManager}.
 	 */
 	public static String reassembleMethodQualifier(final MethodUnit methodUnit) {
-		final String parentName = KDMModelManager.reassembleFullParentName(methodUnit);
+		String parentName;
+		try {
+			final EObject parentObject = methodUnit.eContainer();
+			if ((parentObject instanceof ClassUnit) || (parentObject instanceof InterfaceUnit)) {
+				final CodeItem parent = (CodeItem) parentObject;
+				final String value = KDMModelManager.getValueFromAttribute(parent, "FullyQualifiedName");
+				parentName = KDMModelManager.removeGlobalCSharpPrefix(value);
+			} else {
+				parentName = KDMModelManager.reassembleFullParentName(methodUnit);
+			}
+		} catch (final NoSuchElementException ex) {
+			parentName = KDMModelManager.reassembleFullParentName(methodUnit);
+		}
+
 		final String qualifier = KDMModelManager.reassembleMethodQualifierFromModel(methodUnit, parentName);
 
 		return qualifier;

@@ -104,6 +104,7 @@ public final class KDMExtractorFilter extends AbstractFilterPlugin {
 	 * 
 	 * @return A configuration object with the current configuration.
 	 */
+	// @Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 

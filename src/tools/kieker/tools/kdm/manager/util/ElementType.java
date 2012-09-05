@@ -40,6 +40,10 @@ public enum ElementType {
 	 */
 	INTERFACE,
 	/**
+	 * Indicates, that the type of the element is a namespace.
+	 */
+	NAMESPACE,
+	/**
 	 * Indicates, that the type of the element is unknown.
 	 */
 	UNKNOWN

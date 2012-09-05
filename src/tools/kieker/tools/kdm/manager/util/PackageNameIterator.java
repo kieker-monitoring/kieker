@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.eclipse.gmt.modisco.omg.kdm.code.AbstractCodeElement;
+import org.eclipse.gmt.modisco.omg.kdm.code.CodeModel;
 import org.eclipse.gmt.modisco.omg.kdm.code.Package;
 
 /**
@@ -39,13 +40,33 @@ public final class PackageNameIterator extends AbstractKDMIterator<String> {
 	/**
 	 * Creates a new instance of this class from a List of AbstractCodeElement.
 	 * 
-	 * @param elementList
-	 *            The list to iterate on.
+	 * @param codeModel
+	 *            The code model to iterate on.
 	 * @throws NullPointerException
 	 *             If the list is null.
 	 */
-	public PackageNameIterator(final List<AbstractCodeElement> elementList) throws NullPointerException {
-		super(elementList);
+	public PackageNameIterator(final CodeModel codeModel) throws NullPointerException {
+		super(codeModel.getCodeElement());
+
+		this.performDepthFirstSearch = false;
+	}
+
+	/**
+	 * Creates a new instance of this class from a list of {@link AbstractCodeElement} and a list of that lists.
+	 * 
+	 * @param elementList
+	 *            The list of lists to iterate on.
+	 * @throws NullPointerException
+	 *             If the list is null.
+	 */
+	public PackageNameIterator(final List<List<AbstractCodeElement>> elementList) throws NullPointerException {
+		super(elementList.get(0));
+
+		for (int i = 1; i < elementList.size(); i++) {
+			final Iterator<AbstractCodeElement> iterator = elementList.get(i).iterator();
+			this.iteratorStack.push(iterator);
+			this.currentIterator = iterator;
+		}
 
 		this.performDepthFirstSearch = false;
 	}

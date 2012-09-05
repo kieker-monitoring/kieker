@@ -49,6 +49,17 @@ public class PackageNameIteratorTest {
 	}
 
 	@Test
+	public void testBasePackages() {
+		final Iterator<String> it = new PackageNameIterator(this.codeModel);
+		final List<String> l = new LinkedList<String>();
+		while (it.hasNext()) {
+			l.add(it.next());
+		}
+
+		Assert.assertArrayEquals(new String[] { "test", "org" }, l.toArray());
+	}
+
+	@Test
 	public void testNormalPackage() {
 		final String key = "test.zwei.drei";
 		final Package pack = this.packages.get(key);
@@ -64,7 +75,7 @@ public class PackageNameIteratorTest {
 	@Test
 	public void testFullStructure() {
 		// Normal
-		final Iterator<String> it = new PackageNameIterator(this.codeModel.getCodeElement());
+		final Iterator<String> it = new PackageNameIterator(this.codeModel);
 		final List<String> l = new LinkedList<String>();
 		while (it.hasNext()) {
 			l.add(it.next());
@@ -96,7 +107,7 @@ public class PackageNameIteratorTest {
 
 	@Test
 	public void testWithPetStore() {
-		final KDMModelManager modelManager = new KDMModelManager("./test/testdata/outJPetStore.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("..\\testdata\\outJPetStore.xmi");
 		try {
 			// First level
 			final Iterator<String> itOrg = modelManager.iteratePackages();
@@ -126,6 +137,19 @@ public class PackageNameIteratorTest {
 		} catch (final InvalidPackageException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Test
+	public void testBasePackagesWithPetStore() {
+		final KDMModelManager modelManager = new KDMModelManager("..\\testdata\\outJPetStore.xmi");
+		final Iterator<String> it = modelManager.iteratePackages();
+		final List<String> l = new LinkedList<String>();
+		while (it.hasNext()) {
+			final String p = it.next();
+			l.add(p);
+		}
+
+		Assert.assertArrayEquals(new String[] { "java", "net", "javax", "org" }, l.toArray());
 	}
 
 	@Test

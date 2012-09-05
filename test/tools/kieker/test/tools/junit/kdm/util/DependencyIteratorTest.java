@@ -11,6 +11,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.tools.kdm.manager.KDMModelManager;
+import kieker.tools.kdm.manager.exception.InvalidClassException;
+import kieker.tools.kdm.manager.exception.InvalidInterfaceException;
+import kieker.tools.kdm.manager.exception.InvalidNamespaceException;
 import kieker.tools.kdm.manager.exception.InvalidPackageException;
 import kieker.tools.kdm.manager.util.DependencyIterator;
 import kieker.tools.kdm.manager.util.descriptions.DependencyDescription;
@@ -204,6 +207,91 @@ public class DependencyIteratorTest {
 
 			Assert.assertArrayEquals(values, l.toArray());
 		} catch (final InvalidPackageException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testDependeciesFromCSharpClassImplements() {
+		final KDMModelManager modelManager = new KDMModelManager("..\\testdata\\SharpDevelop.xmi");
+		final String key = "ICSharpCode.CodeQualityAnalysis.Controls.DependencyIconVertexConverter";
+		try {
+			final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromClass(key);
+			final List<String> l = new LinkedList<String>();
+			while (it.hasNext()) {
+				final String d = this.print(it.next());
+				l.add(d);
+			}
+			final String[] values = new String[] { "IMPORTS NAMESPACE System", "IMPORTS NAMESPACE System.Windows.Data", "IMPORTS NAMESPACE System.Globalization",
+				"IMPORTS NAMESPACE System.Windows.Media.Imaging", "IMPLEMENTS INTERFACE System.Windows.Data.IValueConverter" };
+
+			Assert.assertArrayEquals(values, l.toArray());
+		} catch (final InvalidClassException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testDependeciesFromCSharpClassExtends() {
+		final KDMModelManager modelManager = new KDMModelManager("..\\testdata\\SharpDevelop.xmi");
+		final String key = "XmlEditor.Tests.Schema.AbstractElementTestFixture";
+		try {
+			final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromClass(key);
+			final List<String> l = new LinkedList<String>();
+			while (it.hasNext()) {
+				final String d = this.print(it.next());
+				l.add(d);
+			}
+			final String[] values = new String[] { "IMPORTS NAMESPACE System", "IMPORTS NAMESPACE ICSharpCode.SharpDevelop.Editor.CodeCompletion",
+				"IMPORTS NAMESPACE ICSharpCode.XmlEditor", "IMPORTS NAMESPACE NUnit.Framework", "EXTENDS CLASS XmlEditor.Tests.Schema.SchemaTestFixtureBase" };
+
+			Assert.assertArrayEquals(values, l.toArray());
+		} catch (final InvalidClassException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testDependeciesFromCSharpInterfaceExtends() {
+		final KDMModelManager modelManager = new KDMModelManager("..\\testdata\\SharpDevelop.xmi");
+		final String key = "ICSharpCode.SharpDevelop.Editor.CodeCompletion.IFancyCompletionItem";
+		try {
+			final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromInterface(key);
+			final List<String> l = new LinkedList<String>();
+			while (it.hasNext()) {
+				final String d = this.print(it.next());
+				l.add(d);
+			}
+			final String[] values = new String[] { "IMPORTS NAMESPACE System", "EXTENDS INTERFACE ICSharpCode.SharpDevelop.Editor.CodeCompletion.ICompletionItem" };
+
+			Assert.assertArrayEquals(values, l.toArray());
+		} catch (final InvalidInterfaceException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testDependeciesFromCSharpNamespace() {
+		final KDMModelManager modelManager = new KDMModelManager("..\\testdata\\SharpDevelop.xmi");
+		final String key = "ICSharpCode.AvalonEdit";
+		try {
+			final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromNamespace(key);
+			final List<String> l = new LinkedList<String>();
+			while (it.hasNext()) {
+				final String d = this.print(it.next());
+				l.add(d);
+			}
+			final String[] values = new String[] { "IMPORTS NAMESPACE System", "IMPORTS NAMESPACE System.Windows.Input", "IMPORTS NAMESPACE System.ComponentModel",
+				"IMPORTS NAMESPACE System.IO", "IMPORTS NAMESPACE System.Linq", "IMPORTS NAMESPACE System.Text", "IMPORTS NAMESPACE System.Windows",
+				"IMPORTS NAMESPACE System.Windows.Controls", "IMPORTS NAMESPACE System.Windows.Controls.Primitives", "IMPORTS NAMESPACE System.Windows.Data",
+				"IMPORTS NAMESPACE System.Windows.Markup", "IMPORTS NAMESPACE System.Windows.Media", "IMPORTS NAMESPACE System.Windows.Shapes",
+				"IMPORTS NAMESPACE System.Windows.Threading", "IMPORTS NAMESPACE ICSharpCode.AvalonEdit.Document",
+				"IMPORTS NAMESPACE ICSharpCode.AvalonEdit.Editing", "IMPORTS NAMESPACE ICSharpCode.AvalonEdit.Highlighting",
+				"IMPORTS NAMESPACE ICSharpCode.AvalonEdit.Rendering", "IMPORTS NAMESPACE ICSharpCode.AvalonEdit.Utils",
+				"IMPLEMENTS INTERFACE ICSharpCode.AvalonEdit.ITextEditorComponent" };
+
+			Assert.assertArrayEquals(values, l.toArray());
+		} catch (final InvalidNamespaceException e) {
 			e.printStackTrace();
 		}
 	}

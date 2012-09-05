@@ -24,6 +24,7 @@ import java.util.NoSuchElementException;
 
 import org.eclipse.gmt.modisco.omg.kdm.code.ClassUnit;
 import org.eclipse.gmt.modisco.omg.kdm.code.InterfaceUnit;
+import org.eclipse.gmt.modisco.omg.kdm.code.MemberUnit;
 import org.eclipse.gmt.modisco.omg.kdm.code.StorableUnit;
 
 import kieker.tools.kdm.manager.util.descriptions.AttributeDescription;
@@ -80,6 +81,8 @@ public class AttributeIterator extends AbstractKDMIterator<AttributeDescription>
 				if (this.currentElement instanceof StorableUnit) {
 					// Found another element
 					return true;
+				} else if (this.currentElement instanceof MemberUnit) { // In C#-models MemberUnits are used too.
+					return true;
 				} else {
 					// Else try again
 					cond = true;
@@ -109,10 +112,20 @@ public class AttributeIterator extends AbstractKDMIterator<AttributeDescription>
 			throw new NoSuchElementException("No more elements.");
 		}
 
-		final StorableUnit attribute = (StorableUnit) this.currentElement;
+		AttributeDescription description;
+		if (this.currentElement instanceof StorableUnit) {
+			final StorableUnit storableUnit = (StorableUnit) this.currentElement;
+			description = new AttributeDescription(storableUnit);
+		} else if (this.currentElement instanceof MemberUnit) {
+			final MemberUnit memberUnit = (MemberUnit) this.currentElement;
+			description = new AttributeDescription(memberUnit);
+		} else {
+			// Should not happen
+			throw new NoSuchElementException("Wrong type of current element.");
+		}
 
 		this.currentElement = null; // NOPMD (ensure this element is not used again)
 
-		return new AttributeDescription(attribute);
+		return description;
 	}
 }

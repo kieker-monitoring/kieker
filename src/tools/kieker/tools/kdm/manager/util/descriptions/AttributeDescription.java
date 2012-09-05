@@ -28,10 +28,13 @@ import org.eclipse.gmt.modisco.omg.kdm.code.AbstractCodeElement;
 import org.eclipse.gmt.modisco.omg.kdm.code.AbstractCodeRelationship;
 import org.eclipse.gmt.modisco.omg.kdm.code.ArrayType;
 import org.eclipse.gmt.modisco.omg.kdm.code.ClassUnit;
+import org.eclipse.gmt.modisco.omg.kdm.code.CodeItem;
+import org.eclipse.gmt.modisco.omg.kdm.code.DataElement;
 import org.eclipse.gmt.modisco.omg.kdm.code.Datatype;
 import org.eclipse.gmt.modisco.omg.kdm.code.ExportKind;
 import org.eclipse.gmt.modisco.omg.kdm.code.HasValue;
 import org.eclipse.gmt.modisco.omg.kdm.code.InterfaceUnit;
+import org.eclipse.gmt.modisco.omg.kdm.code.MemberUnit;
 import org.eclipse.gmt.modisco.omg.kdm.code.PrimitiveType;
 import org.eclipse.gmt.modisco.omg.kdm.code.StorableKind;
 import org.eclipse.gmt.modisco.omg.kdm.code.StorableUnit;
@@ -49,9 +52,9 @@ import kieker.tools.kdm.manager.util.ElementType;
  */
 public class AttributeDescription {
 	/**
-	 * The storable unit describing the attribute.
+	 * The name of the attribute.
 	 */
-	private final StorableUnit storableUnit;
+	private String attributeName;
 	/**
 	 * The full name of the type of the attribute.
 	 */
@@ -73,6 +76,10 @@ public class AttributeDescription {
 	 */
 	private boolean isArray;
 	/**
+	 * If true, the attribute is declared as static.
+	 */
+	private boolean isAStatic;
+	/**
 	 * Describes the type of the attribute, if it is not a primitive type.
 	 */
 	private ElementType elementType;
@@ -88,96 +95,157 @@ public class AttributeDescription {
 	 *            The {@code StorableUnit} to describe.
 	 */
 	public AttributeDescription(final StorableUnit attribute) {
-		this.storableUnit = attribute;
 		// Initialize
-		this.initTypeDescription();
-		this.initVisibilityModifier();
+		this.initAttributeDescription(attribute);
+	}
+
+	/**
+	 * Creates a new instance of this class from the given {@link MemberUnit}.
+	 * 
+	 * @param attribute
+	 *            The {@link MemberUnit} to describe.
+	 */
+	public AttributeDescription(final MemberUnit attribute) {
+		// Initialize
+		this.initAttributeDescription(attribute);
+	}
+
+	/**
+	 * This method initializes this instance from the given {@link DataElement}.
+	 * 
+	 * @param element
+	 *            The {@link DataElement} to get all information.
+	 */
+	private void initAttributeDescription(final DataElement element) {
+		// Initialize
+		this.attributeName = element.getName();
+		this.initTypeDescription(element);
+		this.initVisibilityModifier(element);
 		// Initialize default values only for primitive types. Only call it after initTypeDescription to ensure that isPrimitive has the right value.
 		if (this.isPrimitive) {
-			this.initDefaultValue();
+			this.initDefaultValue(element);
+		}
+		// Static: Only StorableUnits can be static
+		if (element instanceof StorableUnit) {
+			final StorableUnit storableUnit = (StorableUnit) element;
+			this.isAStatic = StorableKind.STATIC.equals(storableUnit.getKind());
+		} else {
+			this.isAStatic = false;
 		}
 	}
 
 	/**
 	 * This method initializes the type description. It checks whether it is a primitive type or an array and sets up the type name.
+	 * 
+	 * @param element
+	 *            The {@link DataElement} to get the type information.
 	 */
-	private void initTypeDescription() {
-		// Get information about the type
-		final Datatype datatype = this.storableUnit.getType();
-		String tName = datatype.getName();
-		final StringBuilder fullTName = new StringBuilder();
-		// First test primitive type
-		if (datatype instanceof PrimitiveType) {
-			this.isArray = false;
-			this.isPrimitive = true;
-			this.elementType = ElementType.UNKNOWN;
-		} else if (datatype instanceof ArrayType) { // Test array type
-			this.isArray = true;
-			final ArrayType arrayType = (ArrayType) datatype;
-			// Check the type of the array elements
-			final Datatype itemType = arrayType.getItemUnit().getType();
-			tName = itemType.getName();
-			if (itemType instanceof PrimitiveType) {
+	private void initTypeDescription(final DataElement element) {
+		try {
+			// Get information about the type
+			final Datatype datatype = element.getType();
+			String tName = datatype.getName();
+			final StringBuilder fullTName = new StringBuilder();
+			// First test primitive type
+			if (datatype instanceof PrimitiveType) {
+				this.isArray = false;
 				this.isPrimitive = true;
 				this.elementType = ElementType.UNKNOWN;
-			} else {
+			} else if (datatype instanceof ArrayType) { // Test array type
+				this.isArray = true;
+				final ArrayType arrayType = (ArrayType) datatype;
+				// Check the type of the array elements
+				final Datatype itemType = arrayType.getItemUnit().getType();
+				tName = itemType.getName();
+				if (itemType instanceof PrimitiveType) {
+					this.isPrimitive = true;
+					this.elementType = ElementType.UNKNOWN;
+				} else {
+					this.isPrimitive = false;
+					// Let the model manager reassemble the name
+					fullTName.append(KDMModelManager.reassembleFullParentName(itemType));
+					// Set the element type
+					this.setElementType(itemType);
+				}
+			} else { // Anything else like ClassUnit etc
+				this.isArray = false;
 				this.isPrimitive = false;
-				// Let the model manager reassemble the name
-				fullTName.append(KDMModelManager.reassembleFullParentName(itemType));
 				// Set the element type
-				this.setElementType(itemType);
+				this.setElementType(datatype);
+				// If it is a C#-model we must use the 'fullyQuallifiedName'-attribute to get the full name
+				try {
+					final Attribute fullyQualifiedName = this.getAttribute(datatype, "FullyQualifiedName");
+					String value = fullyQualifiedName.getValue();
+					// Keep 'global'-prefix in mind
+					final String globalPrefix = "global.";
+					if (value.startsWith(globalPrefix)) {
+						value = value.substring(globalPrefix.length());
+					}
+					fullTName.append(value);
+				} catch (final NoSuchElementException e) {
+					// Let the model manager reassemble the name
+					fullTName.append(KDMModelManager.reassembleFullParentName(datatype));
+				}
 			}
-		} else { // Anything else like ClassUnit etc
-			this.isArray = false;
-			this.isPrimitive = false;
-			// Set the element type
-			this.setElementType(datatype);
-			// Let the model manager reassemble the name
-			fullTName.append(KDMModelManager.reassembleFullParentName(datatype));
+			// In C#-models the 'fullyQualifiedName' contains the name
+			if (!fullTName.toString().endsWith(tName)) {
+				if ((fullTName.length() > 0) && !fullTName.toString().endsWith(".")) {
+					fullTName.append('.');
+				}
+				fullTName.append(tName);
+			}
+			this.fullTypeName = fullTName.toString();
+		} catch (final NullPointerException e) { // Some MemberUnits in Java-Models does not have a type...
+			this.fullTypeName = "";
 		}
-		// Assemble full type name
-		if ((fullTName.length() > 0) && !fullTName.toString().endsWith(".")) {
-			fullTName.append('.');
-		}
-		fullTName.append(tName);
-		this.fullTypeName = fullTName.toString();
 	}
 
 	/**
 	 * This method tries to get information about the visibility modifier from the export attribute used by MoDisco.
+	 * 
+	 * @param element
+	 *            The {@link DataElement} to get the visibility modifier.
 	 */
-	private void initVisibilityModifier() {
-		try {
-			// Try to get the export attribute
-			final Attribute attribute = this.getExportAttribute();
-			final String value = attribute.getValue();
-			// Split the defaultValue
-			final String[] tokens = value.split("\\s");
+	private void initVisibilityModifier(final DataElement element) {
+		if (element instanceof MemberUnit) {
+			final MemberUnit memberUnit = (MemberUnit) element;
+			this.visibilityModifier = memberUnit.getExport();
+		} else {
+			try {
+				// Try to get the export attribute
+				final Attribute attribute = this.getAttribute(element, "export");
+				final String value = attribute.getValue();
+				// Split the defaultValue
+				final String[] tokens = value.split("\\s");
 
-			this.visibilityModifier = ExportKind.UNKNOWN;
-			// Try to find the visibility modifier
-			for (final String token : tokens) {
-				if ("public".equals(token)) {
-					this.visibilityModifier = ExportKind.PUBLIC;
-				} else if ("private".equals(token)) {
-					this.visibilityModifier = ExportKind.PRIVATE;
-				} else if ("protected".equals(token)) {
-					this.visibilityModifier = ExportKind.PROTECTED;
+				this.visibilityModifier = ExportKind.UNKNOWN;
+				// Try to find the visibility modifier
+				for (final String token : tokens) {
+					if ("public".equals(token)) {
+						this.visibilityModifier = ExportKind.PUBLIC;
+					} else if ("private".equals(token)) {
+						this.visibilityModifier = ExportKind.PRIVATE;
+					} else if ("protected".equals(token)) {
+						this.visibilityModifier = ExportKind.PROTECTED;
+					}
 				}
+			} catch (final NoSuchElementException ex) {
+				// Set the visibility modifier to 'UNKNOWN' if the attribute does not exist.
+				this.visibilityModifier = ExportKind.UNKNOWN;
 			}
-		} catch (final NoSuchElementException ex) {
-			// Set the visibility modifier to 'UNKNOWN' if the attribute does not exist.
-			this.visibilityModifier = ExportKind.UNKNOWN;
 		}
 	}
 
 	/**
 	 * This method tries to get information about the default value.
+	 * 
+	 * @param element
+	 *            The {@link DataElement} to get the default value from.
 	 */
-	private void initDefaultValue() {
+	private void initDefaultValue(final DataElement element) {
 		this.defaultValue = "";
 		try {
-			final HasValue hasValueelement = this.getHasValueRelation(this.storableUnit.getCodeRelation());
+			final HasValue hasValueelement = this.getHasValueRelation(element.getCodeRelation());
 			final AbstractCodeElement target = hasValueelement.getTo();
 
 			if (target instanceof Value) {
@@ -239,16 +307,20 @@ public class AttributeDescription {
 	}
 
 	/**
-	 * This method tries to get the attribute with the name 'export' from the {@code StorableUnit} set by the constructor.
+	 * This method tries to get the attribute with the tag 'tag' from the given {@code CodeItem}.
 	 * 
+	 * @param element
+	 *            The {@link CodeItem} to get the 'export' attribute.
+	 * @param tag
+	 *            The value of the tag.
 	 * @return
 	 *         The attribute with the name 'export'.
 	 * @throws NoSuchElementException
 	 *             If an attribute with the name 'export' does not exist.
 	 */
-	private Attribute getExportAttribute() throws NoSuchElementException {
-		for (final Attribute attribute : this.storableUnit.getAttribute()) {
-			if ("export".equals(attribute.getTag())) {
+	private Attribute getAttribute(final CodeItem element, final String tag) throws NoSuchElementException {
+		for (final Attribute attribute : element.getAttribute()) {
+			if (tag.equals(attribute.getTag())) {
 				return attribute;
 			}
 		}
@@ -279,7 +351,7 @@ public class AttributeDescription {
 	 *         The anem of the parameter.
 	 */
 	public String getName() {
-		return this.storableUnit.getName();
+		return this.attributeName;
 	}
 
 	/**
@@ -321,7 +393,7 @@ public class AttributeDescription {
 	 *         True is the attribute is static, otherwise false.
 	 */
 	public boolean isStatic() {
-		return StorableKind.STATIC.equals(this.storableUnit.getKind());
+		return this.isAStatic;
 	}
 
 	/**
