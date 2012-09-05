@@ -43,7 +43,8 @@ public final class TraceEventRecords {
 
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder(super.toString());
+		final StringBuilder sb = new StringBuilder(64);
+		sb.append(super.toString());
 		sb.append("\n\tTrace: ");
 		sb.append(this.trace);
 		for (final AbstractTraceEvent traceEvent : this.traceEvents) {

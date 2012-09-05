@@ -120,7 +120,7 @@ public final class DBWriterHelper {
 			}
 		}
 		// create the table
-		final StringBuilder statementCreateTable = new StringBuilder();
+		final StringBuilder statementCreateTable = new StringBuilder(128);
 		statementCreateTable.append("CREATE TABLE ").append(tablename).append(" (id ");
 		final String createLong = this.createTypeMap.get(long.class);
 		if (createLong != null) {
@@ -187,7 +187,7 @@ public final class DBWriterHelper {
 				}
 			}
 		}
-		final StringBuilder statementCreateTable = new StringBuilder();
+		final StringBuilder statementCreateTable = new StringBuilder(128);
 		statementCreateTable.append("CREATE TABLE ").append(this.indexTablename);
 		statementCreateTable.append(" (tablename ").append(createString).append(", classname ").append(createString).append(')');
 		final String statementCreateTableString = statementCreateTable.toString();
@@ -234,7 +234,7 @@ public final class DBWriterHelper {
 
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(128);
 		sb.append("Prefix: '");
 		sb.append(this.indexTablename);
 		sb.append("'; Drop Tables: '");

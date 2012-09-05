@@ -54,7 +54,7 @@ public final class TimeSourceController extends AbstractController implements IT
 
 	@Override
 	public final String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(128);
 		sb.append("TimeSource: ");
 		if (this.timeSource != null) {
 			sb.append('\'');

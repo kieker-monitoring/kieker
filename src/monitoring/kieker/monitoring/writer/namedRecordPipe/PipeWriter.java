@@ -55,7 +55,7 @@ public final class PipeWriter extends AbstractMonitoringWriter implements IPipeW
 
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(64);
 		sb.append(super.toString());
 		sb.append("\n\tConnected to pipe: '");
 		sb.append(this.pipe.getName());

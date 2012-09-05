@@ -140,7 +140,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(64);
 		sb.append(super.toString());
 		sb.append("\n\tRecords lost: ");
 		sb.append(this.missedRecords.intValue());

@@ -68,7 +68,7 @@ public final class StateController extends AbstractController implements IStateC
 
 	@Override
 	public final String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(128);
 		sb.append("Status: '");
 		if (this.isMonitoringTerminated()) {
 			sb.append("terminated");

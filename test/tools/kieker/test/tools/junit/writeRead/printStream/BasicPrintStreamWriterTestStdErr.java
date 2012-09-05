@@ -40,7 +40,7 @@ public class BasicPrintStreamWriterTestStdErr extends AbstractPrintStreamWriterT
 
 	private volatile PrintStream originalPrintStream;
 
-	private volatile StringTeePrintStream stringTeePrintStream;
+	private volatile StringTeePrintStream stringTeePrintStream = null; // NOPMD (init for findbugs)
 
 	@Before
 	public void setUp() throws Exception {

@@ -44,7 +44,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(40);
 		sb.append("ProbeController: not yet implemented.\n");
 		return sb.toString();
 	}

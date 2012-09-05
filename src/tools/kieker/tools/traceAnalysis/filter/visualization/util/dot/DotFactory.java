@@ -59,7 +59,8 @@ public final class DotFactory {
 	 * @return digraph header as dot code
 	 */
 	public static StringBuilder createHeader(final String name, final String label, final String fontcolor, final String fontname, final double fontsize) {
-		final StringBuilder dot = new StringBuilder("digraph ");
+		final StringBuilder dot = new StringBuilder(256);
+		dot.append("digraph ");
 		dot.append(name);
 		dot.append(" {\n label=<");
 		dot.append(label);
@@ -87,7 +88,8 @@ public final class DotFactory {
 	 */
 	public static StringBuilder createNodeDefaults(final String style, final String shape, final String framecolor, final String fontcolor, final String fontname,
 			final double fontsize, final String imagescale) {
-		final StringBuilder dot = new StringBuilder(" node [style=\"");
+		final StringBuilder dot = new StringBuilder(256);
+		dot.append(" node [style=\"");
 		dot.append(style);
 		dot.append("\",shape=\"");
 		dot.append(shape);
@@ -116,7 +118,8 @@ public final class DotFactory {
 	 * @return graph edge defaults as dot code
 	 */
 	public static StringBuilder createEdgeDefaults(final String style, final String arrowhead, final String labelfontname) {
-		final StringBuilder dot = new StringBuilder(" edge [style=\"");
+		final StringBuilder dot = new StringBuilder(128);
+		dot.append(" edge [style=\"");
 		dot.append(style);
 		dot.append("\",arrowhead=\"");
 		dot.append(arrowhead);
@@ -146,7 +149,7 @@ public final class DotFactory {
 	 */
 	public static StringBuilder createNode(final String prefix, final String nodeId, final String label, final String shape, final String style,
 			final String framecolor, final String fillcolor, final String fontcolor, final double fontsize, final String imageFilename, final String misc) {
-		final StringBuilder dot = new StringBuilder();
+		final StringBuilder dot = new StringBuilder(128);
 		if (prefix != null) {
 			dot.append(prefix);
 		}
@@ -220,7 +223,8 @@ public final class DotFactory {
 	 */
 	public static StringBuilder createCluster(final String prefix, final String name, final String label, final String shape, final String style,
 			final String framecolor, final String fillcolor, final String fontcolor, final double fontsize, final String misc) {
-		final StringBuilder dot = new StringBuilder(prefix);
+		final StringBuilder dot = new StringBuilder(256);
+		dot.append(prefix);
 		dot.append("subgraph \"cluster_");
 		dot.append(name);
 		dot.append("\" {\n");
@@ -267,7 +271,7 @@ public final class DotFactory {
 		if (misc != null) {
 			dot.append(misc);
 		}
-		dot.append("\n");
+		dot.append('\n');
 		// closing bracket "}" has to be added by calling method !
 		return dot;
 	}
@@ -282,7 +286,8 @@ public final class DotFactory {
 	 * @return graph connection as dot code
 	 */
 	public static String createConnection(final String prefix, final String from, final String to, final String style, final String arrowhead) {
-		final StringBuilder dot = new StringBuilder(prefix);
+		final StringBuilder dot = new StringBuilder(128);
+		dot.append(prefix);
 		dot.append(from);
 		dot.append("->");
 		dot.append(to);
@@ -299,7 +304,7 @@ public final class DotFactory {
 			dot.append(arrowhead);
 			dot.append('"');
 		}
-		dot.append("]");
+		dot.append(']');
 		return dot.toString();
 	}
 
@@ -314,7 +319,8 @@ public final class DotFactory {
 	 * @return graph connection as dot code
 	 */
 	public static String createConnection(final String prefix, final String from, final String to, final String label, final String style, final String arrowhead) {
-		final StringBuilder dot = new StringBuilder(prefix);
+		final StringBuilder dot = new StringBuilder(128);
+		dot.append(prefix);
 		dot.append(from);
 		dot.append("->");
 		dot.append(to);
@@ -333,7 +339,7 @@ public final class DotFactory {
 			dot.append(arrowhead);
 			dot.append('"');
 		}
-		dot.append("]");
+		dot.append(']');
 		return dot.toString();
 	}
 
@@ -349,7 +355,8 @@ public final class DotFactory {
 	 * @return graph connection as dot code
 	 */
 	public static String createConnection(final String prefix, final String from, final String to, final double taillabel, final double headlabel) {
-		final StringBuilder dot = new StringBuilder(prefix);
+		final StringBuilder dot = new StringBuilder(128);
+		dot.append(prefix);
 		dot.append('"');
 		dot.append(from);
 		dot.append("\" -> \"");

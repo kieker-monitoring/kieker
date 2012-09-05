@@ -171,7 +171,7 @@ final class DbWriterThread extends AbstractAsyncThread {
 
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(64);
 		sb.append(super.toString());
 		sb.append("; Connection: '");
 		sb.append(this.connection.toString());

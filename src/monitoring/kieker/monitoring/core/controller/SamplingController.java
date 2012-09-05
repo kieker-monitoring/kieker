@@ -74,7 +74,7 @@ public final class SamplingController extends AbstractController implements ISam
 
 	@Override
 	public final String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(128);
 		sb.append("Sampling Controller: ");
 		if (this.periodicSensorsPoolExecutor != null) {
 			sb.append("Periodic Sensor available: Current Poolsize: '");

@@ -188,7 +188,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 
 	@Override
 	public final String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(255);
 		sb.append("JMXController: ");
 		if (this.jmxEnabled) {
 			sb.append("JMX enabled (Domain: '");

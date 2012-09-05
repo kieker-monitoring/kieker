@@ -51,7 +51,7 @@ public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 	private static final String PORT = "59999";
 	private static final String LOGNAME = "MonitoringLog";
 
-	private volatile SimpleSinkFilter<IMonitoringRecord> sinkFilter;
+	private volatile SimpleSinkFilter<IMonitoringRecord> sinkFilter = null; // NOPMD (init for findbugs)
 
 	@Override
 	protected IMonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException, InterruptedException {

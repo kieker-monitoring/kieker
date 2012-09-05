@@ -140,7 +140,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 	/** Traverse tree recursively and generate dot code for edges. */
 	private static void dotEdgesFromSubTree(final AbstractCallTreeNode<?> n,
 			final Map<AbstractCallTreeNode<?>, Integer> nodeIds, final IntContainer nextNodeId, final PrintStream ps, final boolean shortLabels) {
-		final StringBuilder strBuild = new StringBuilder();
+		final StringBuilder strBuild = new StringBuilder(64);
 		nodeIds.put(n, nextNodeId.getValue());
 		strBuild.append(nextNodeId.getAndIncValue()).append("[label =\"").append(n.isRootNode() ? "$" : AbstractCallTreeFilter.nodeLabel(n, shortLabels)) // NOCS
 				.append("\",shape=" + DotFactory.DOT_SHAPE_NONE + "];");

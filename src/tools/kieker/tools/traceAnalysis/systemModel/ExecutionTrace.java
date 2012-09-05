@@ -198,7 +198,7 @@ public class ExecutionTrace extends AbstractTrace {
 
 	@Override
 	public String toString() {
-		final StringBuilder strBuild = new StringBuilder();
+		final StringBuilder strBuild = new StringBuilder(512);
 		synchronized (this) {
 			strBuild.append("TraceId ").append(this.getTraceId());
 			strBuild.append(" (minTin=").append(this.minTin);

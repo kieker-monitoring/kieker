@@ -196,7 +196,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 
 	@Override
 	public final String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(128);
 		sb.append(super.toString());
 		sb.append("\n\tWriting to Directory: '");
 		sb.append(this.path);

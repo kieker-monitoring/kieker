@@ -37,7 +37,6 @@ import kieker.common.record.IMonitoringRecord;
  * because a lot of code is shared.
  * 
  * @author Andre van Hoorn
- * 
  */
 public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTest { // NOCS (testClass without constructor)
 	private static final String OUTPUT_BASE_FN = "S0fYvPsI.out"; // the name doesn't matter
@@ -47,7 +46,7 @@ public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTes
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (must be public)
 
-	private volatile File outputFile;
+	private volatile File outputFile = null; // NOPMD (init for findbugs)
 
 	@Before
 	public void setUp() throws Exception {

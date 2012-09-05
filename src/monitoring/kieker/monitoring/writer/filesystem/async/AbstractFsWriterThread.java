@@ -98,7 +98,7 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 
 	@Override
 	public final String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(128);
 		sb.append(super.toString());
 		sb.append("; Writing to Directory: '");
 		sb.append(this.path);

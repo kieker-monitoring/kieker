@@ -145,7 +145,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(128);
 		sb.append(super.toString());
 		sb.append("\n\tConnection: '");
 		sb.append(this.connection.toString());
