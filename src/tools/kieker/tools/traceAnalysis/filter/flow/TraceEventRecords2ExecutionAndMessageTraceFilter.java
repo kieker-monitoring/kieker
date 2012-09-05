@@ -101,9 +101,10 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		final ExecutionTrace executionTrace = new ExecutionTrace(traceId, trace.getSessionId());
 		final TraceEventRecordHandler traceEventRecordHandler = new TraceEventRecordHandler(trace, executionTrace, this.getSystemEntityFactory(),
 				this.enhanceJavaConstructors, this.enhanceCallDetection);
-		int expectedOrderIndex = 0;
+		int expectedOrderIndex = -1;
 		for (final AbstractTraceEvent event : traceEventRecords.getTraceEvents()) {
-			if (event.getOrderIndex() != expectedOrderIndex++) {
+			expectedOrderIndex += 1; // increment in each iteration -> 0 is the first real value
+			if (event.getOrderIndex() != expectedOrderIndex) {
 				LOG.error("Found event with wrong orderIndex. Found: " + event.getOrderIndex() + " expected: " + (expectedOrderIndex - 1));
 				continue; // simply ignore wrong event
 			}
