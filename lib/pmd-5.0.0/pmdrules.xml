@@ -20,19 +20,39 @@
     <exclude name="AvoidFinalLocalVariable"/>
     <exclude name="AvoidInstantiatingObjectsInLoops"/>
     <exclude name="AvoidLiteralsInIfCondition"/>
+    <exclude name="AvoidPrefixingMethodParameters"/>
     <exclude name="AvoidThrowingNullPointerException"/>
     <exclude name="AvoidUsingVolatile"/>
+    <exclude name="BeanMembersShouldSerialize"/>
     <exclude name="CallSuperInConstructor"/>
+    <exclude name="CommentSize"/>
     <exclude name="ConfusingTernary"/>
+    <exclude name="CyclomaticComplexity"/>
     <exclude name="DataflowAnomalyAnalysis"/>
+    <exclude name="DoNotCallSystemExit"/>
+    <exclude name="DoNotUseThreads"/>
+    <exclude name="ExcessiveImports"/>
+    <exclude name="ExcessiveMethodLength"/>
+    <exclude name="ExcessiveParameterList"/>
+    <exclude name="GodClass"/>
+    <exclude name="LawOfDemeter"/>
     <exclude name="LongVariable"/>
+    <exclude name="LoosePackageCoupling"/>
+    <exclude name="NcssMethodCount"/>
+    <exclude name="NPathComplexity"/>
     <exclude name="OnlyOneReturn"/>
     <exclude name="PackageCase"/>
+    <exclude name="ShortClassName"/>
     <exclude name="ShortVariable"/>
     <exclude name="SignatureDeclareThrowsException"/>
+    <exclude name="TooManyMethods"/>
     <exclude name="UnnecessaryConstructor"/>
     <exclude name="UnnecessaryFinalModifier"/>
     <exclude name="UnusedModifier"/>
+    <exclude name="UseObjectForClearerAPI"/>
+    <exclude name="UseProperClassLoader"/>
+    <exclude name="UselessParentheses"/>
+    <exclude name="UseVarargs"/>
   </rule>
 
 </ruleset>
