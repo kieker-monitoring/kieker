@@ -38,7 +38,7 @@ import kieker.common.record.misc.EmptyRecord;
 		outputPorts = {
 			@OutputPort(name = FSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader") },
 		configuration = {
-			@Property(name = FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = "."),
+			@Property(name = FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".", description = "The name of the input dirs used to read data."),
 			@Property(name = FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, defaultValue = FSReader.CONFIG_PROPERTY_VALUE_IGNORE_UNKNOWN_RECORD_TYPES_DEFAULT)
 		})
 public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {

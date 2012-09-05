@@ -39,7 +39,7 @@ import kieker.common.logging.LogFactory;
  */
 @Plugin(programmaticOnly = true, outputPorts = { @OutputPort(name = SimpleListReader.OUTPUT_PORT_NAME, eventTypes = { Object.class }) },
 		configuration = {
-			@Property(name = SimpleListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, defaultValue = "false")
+			@Property(name = SimpleListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, defaultValue = "false", description = "Determines whether the read()-method returns immediately or whether it awaits the termination via AnalysisController.terminate()")
 		})
 public class SimpleListReader<T> extends AbstractReaderPlugin {
 

@@ -37,4 +37,10 @@ public @interface Property {
 	 */
 	String defaultValue();
 
+	/**
+	 * This field can be used for a (short) description of the property's purpose.
+	 * 
+	 * @return The description of this property.
+	 */
+	String description() default "";
 }
