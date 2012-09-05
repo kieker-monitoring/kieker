@@ -99,7 +99,7 @@ public final class FilesystemLogReplayerStarter {
 		try {
 			FilesystemLogReplayerStarter.cmdl = CMDL_PARSER.parse(CMDL_OPTS, args);
 		} catch (final ParseException e) {
-			System.err.println("Error parsing arguments: " + e.getMessage());
+			System.err.println("Error parsing arguments: " + e.getMessage()); // NOPMD (System.out)
 			FilesystemLogReplayerStarter.printUsage();
 			return false;
 		}
@@ -123,7 +123,7 @@ public final class FilesystemLogReplayerStarter {
 		final String keepOriginalLoggingTimestampsOptValStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(
 				CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS, "true");
 		if (!("true".equals(keepOriginalLoggingTimestampsOptValStr) || "false".equals(keepOriginalLoggingTimestampsOptValStr))) {
-			System.out.println("Invalid value for option " + CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS + ": '"
+			System.out.println("Invalid value for option " + CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS + ": '" // NOPMD (System.out)
 					+ keepOriginalLoggingTimestampsOptValStr + "'");
 			retVal = false;
 		}
@@ -134,7 +134,7 @@ public final class FilesystemLogReplayerStarter {
 		/* 3.) init realtimeMode */
 		final String realtimeOptValStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(CMD_OPT_NAME_REALTIME, "false");
 		if (!("true".equals(realtimeOptValStr) || "false".equals(realtimeOptValStr))) {
-			System.out.println("Invalid value for option " + CMD_OPT_NAME_REALTIME + ": '" + realtimeOptValStr + "'");
+			System.out.println("Invalid value for option " + CMD_OPT_NAME_REALTIME + ": '" + realtimeOptValStr + "'"); // NOPMD (System.out)
 			retVal = false;
 		}
 		FilesystemLogReplayerStarter.realtimeMode = "true".equals(realtimeOptValStr);
@@ -145,13 +145,13 @@ public final class FilesystemLogReplayerStarter {
 		try {
 			FilesystemLogReplayerStarter.numRealtimeWorkerThreads = Integer.parseInt(numRealtimeWorkerThreadsStr);
 		} catch (final NumberFormatException ex) {
-			System.out.println("Invalid value for option " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + ": '" + numRealtimeWorkerThreadsStr
+			System.out.println("Invalid value for option " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + ": '" + numRealtimeWorkerThreadsStr // NOPMD (System.out)
 					+ "'");
 			LOG.error("NumberFormatException: ", ex);
 			retVal = false;
 		}
 		if (FilesystemLogReplayerStarter.numRealtimeWorkerThreads < 1) {
-			System.out.println("Option value for " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + " must be >= 1; found "
+			System.out.println("Option value for " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + " must be >= 1; found " // NOPMD (System.out)
 					+ FilesystemLogReplayerStarter.numRealtimeWorkerThreads);
 			LOG.error("Invalid specification of " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + ":"
 					+ FilesystemLogReplayerStarter.numRealtimeWorkerThreads);
@@ -182,7 +182,7 @@ public final class FilesystemLogReplayerStarter {
 		} catch (final java.text.ParseException ex) {
 			final String erorMsg = "Error parsing date/time string. Please use the following pattern: "
 					+ DATE_FORMAT_PATTERN_CMD_USAGE_HELP;
-			System.err.println(erorMsg);
+			System.err.println(erorMsg); // NOPMD (System.out)
 			LOG.error(erorMsg, ex);
 			return false;
 		}
@@ -228,13 +228,14 @@ public final class FilesystemLogReplayerStarter {
 			LOG.info("Replaying log data in non-real time");
 		}
 
-		final FilesystemLogReplayer player = new FilesystemLogReplayer(monitoringConfigurationFile, realtimeMode, keepOriginalLoggingTimestamps, numRealtimeWorkerThreads,
+		final FilesystemLogReplayer player = new FilesystemLogReplayer(monitoringConfigurationFile, realtimeMode, keepOriginalLoggingTimestamps,
+				numRealtimeWorkerThreads,
 				ignoreRecordsBeforeTimestamp, ignoreRecordsAfterTimestamp, inputDirs);
 
 		if (!player.replay()) {
-			System.err.println("An error occured");
-			System.err.println("");
-			System.err.println("See 'kieker.log' for details");
+			System.err.println("An error occured"); // NOPMD (System.out)
+			System.err.println(""); // NOPMD (System.out)
+			System.err.println("See 'kieker.log' for details"); // NOPMD (System.out)
 			System.exit(1);
 		}
 

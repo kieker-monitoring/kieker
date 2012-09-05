@@ -29,7 +29,6 @@ import java.net.URLClassLoader;
  * Build classpath and run trace analysis tool. Simple convenience class.
  * 
  * @author Robert von Massow
- * 
  */
 public final class TraceAnalysisWrapper {
 

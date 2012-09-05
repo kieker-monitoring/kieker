@@ -58,7 +58,7 @@ public final class BenchmarkingThread extends Thread {
 			stop_ns = System.nanoTime();
 			this.timings[i] = stop_ns - start_ns;
 			if ((i % 100000) == 0) {
-				System.out.println(i);
+				System.out.println(i); // NOPMD (System.out)
 			}
 		}
 		this.doneSignal.countDown();

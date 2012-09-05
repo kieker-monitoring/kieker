@@ -59,7 +59,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION = "maxTraceDuration";
 	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT = "maxTraceTimeout";
-	protected static final String CONFIG_PROPERTY_VALUE_MAX_TIME = "9223372036854775807"; // String.valueOf(Long.MAX_VALUE)
+	protected static final String CONFIG_PROPERTY_VALUE_MAX_TIME = "9223372036854775807"; // String.valueOf(Long.MAX_VALUE) // NOPMD (has to be protected)
 
 	private final long maxTraceDuration;
 	private final long maxTraceTimeout;

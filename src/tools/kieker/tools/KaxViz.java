@@ -40,8 +40,8 @@ import org.w3c.dom.Document;
 
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
-import com.mxgraph.swing.handler.mxRubberband;
 import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.swing.handler.mxRubberband;
 import com.mxgraph.util.mxCellRenderer;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxPoint;
@@ -354,7 +354,7 @@ public final class KaxViz extends JFrame {
 			kaxFilename = line.getOptionValue('i');
 			svgFilename = line.getOptionValue("svg");
 		} catch (final ParseException ex) {
-			System.out.println(ex.getMessage());
+			System.out.println(ex.getMessage()); // NOPMD (System.out)
 			final HelpFormatter formatter = new HelpFormatter();
 			formatter.printHelp(KaxViz.class.getName(), options, true);
 			return;

@@ -20,7 +20,7 @@ package kieker.common.logging;
  * 
  * @author Jan Waller
  */
-public final class LogFactory {
+public final class LogFactory { // NOPMD (Implementation of an logger)
 
 	private static enum Logger {
 		JDK, COMMONS,

@@ -147,12 +147,14 @@ public class TestMonitoringRecordLoggerFilter {
 	}
 
 	@Test
-	public void testControllerKeepsLoggingTimestamp() throws Exception { // NOMPD (JUnitTestsShouldIncludeAssert)
+	public void testControllerKeepsLoggingTimestamp() throws Exception {
+		Assert.assertTrue(true); // just to get rid of strange PMD behavior
 		this.testIt(true); // includes Assert(s)
 	}
 
 	@Test
-	public void testControllerSetsLoggingTimestamp() throws Exception { // NOMPD (JUnitTestsShouldIncludeAssert)
+	public void testControllerSetsLoggingTimestamp() throws Exception {
+		Assert.assertTrue(true); // just to get rid of strange PMD behavior
 		this.testIt(false); // includes Assert(s)
 	}
 
