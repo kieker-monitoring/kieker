@@ -26,6 +26,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.LinkedList;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -54,11 +55,6 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  * The AsyncFsWriter should usually be used instead of this class to avoid the
  * outliers described above.
  * 
- * The asyncFsWriter is not(!) faster (but also it shouldn't be much slower)
- * because only one thread is used for writing into a single file. To tune it,
- * it might be an option to write to multiple files, while writing with more
- * than one thread into a single file is not considered a save option.
- * 
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  */
 public final class SyncFsWriter extends AbstractMonitoringWriter {
@@ -66,6 +62,8 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	public static final String CONFIG_PATH = PREFIX + "customStoragePath"; // NOCS (afterPREFIX)
 	public static final String CONFIG_TEMP = PREFIX + "storeInJavaIoTmpdir"; // NOCS (afterPREFIX)
 	public static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile"; // NOCS (afterPREFIX)
+	public static final String CONFIG_MAXLOGSIZE = "maxLogSize"; // NOCS (afterPREFIX)
+	public static final String CONFIG_MAXLOGFILES = "maxLogFiles"; // NOCS (afterPREFIX)
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
 
 	private static final Log LOG = LogFactory.getLog(SyncFsWriter.class);
@@ -75,8 +73,15 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	// internal variables
 	private final boolean autoflush;
 	private final int maxEntriesInFile;
+	private final long maxLogSize;
+	private final int maxLogFiles;
+
 	// only access within synchronized
 	private int entriesInCurrentFileCounter;
+
+	private final LinkedList<FileNameSize> listOfLogFiles; // NOCS NOPMD (we explicitly need LinekdList here)
+	private long totalLogSize;
+
 	private MappingFileWriter mappingFileWriter;
 	private String filenamePrefix;
 	private String path;
@@ -89,6 +94,17 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		this.maxEntriesInFile = this.configuration.getIntProperty(CONFIG_MAXENTRIESINFILE);
 		if (this.maxEntriesInFile < 1) {
 			throw new IllegalArgumentException(CONFIG_MAXENTRIESINFILE + " must be greater than 0 but is '" + this.maxEntriesInFile + "'");
+		}
+		final int configMaxLogSize = configuration.getIntProperty(CONFIG_MAXLOGSIZE);
+		final int configMaxLogFiles = configuration.getIntProperty(CONFIG_MAXLOGFILES);
+		if ((configMaxLogSize > 0) || (configMaxLogFiles > 0)) {
+			this.maxLogSize = configMaxLogSize * 1024L * 1024L; // convert from MiBytes to Bytes
+			this.maxLogFiles = configMaxLogFiles;
+			this.listOfLogFiles = new LinkedList<FileNameSize>();
+		} else {
+			this.maxLogSize = -1;
+			this.maxLogFiles = -1;
+			this.listOfLogFiles = null; // NOPMD (set explicitly to null)
 		}
 		this.entriesInCurrentFileCounter = this.maxEntriesInFile;
 	}
@@ -146,7 +162,31 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			}
 			try {
 				synchronized (this) { // we must not synch on pos, it changes within!
-					this.prepareFile(); // may throw FileNotFoundException
+					if (++this.entriesInCurrentFileCounter > this.maxEntriesInFile) { // NOPMD
+						final String filename = this.getFilename();
+						this.prepareFile(filename); // may throw FileNotFoundException
+						if (this.listOfLogFiles != null) {
+							final FileNameSize fns = this.listOfLogFiles.getLast();
+							final long filesize = new File(fns.name).length();
+							fns.size = filesize;
+							this.totalLogSize += filesize;
+							this.listOfLogFiles.add(new FileNameSize(filename));
+							if (this.listOfLogFiles.size() > this.maxLogFiles) { // too many files (at most one!)
+								final FileNameSize removeFile = this.listOfLogFiles.removeFirst();
+								if (!new File(removeFile.name).delete()) { // NOCS (nested if)
+									throw new IOException("Failed to delete file " + removeFile.name);
+								}
+								this.totalLogSize -= removeFile.size;
+							}
+							while ((this.listOfLogFiles.size() > 1) && (this.totalLogSize > this.maxLogSize)) {
+								final FileNameSize removeFile = this.listOfLogFiles.removeFirst();
+								if (!new File(removeFile.name).delete()) {
+									throw new IOException("Failed to delete file " + removeFile.name);
+								}
+								this.totalLogSize -= removeFile.size;
+							}
+						}
+					}
 					this.pos.println(sb.toString());
 				}
 			} catch (final IOException ex) {
@@ -162,19 +202,17 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	 * 
 	 * @throws UnsupportedEncodingException
 	 */
-	private final void prepareFile() throws FileNotFoundException, UnsupportedEncodingException {
-		if (++this.entriesInCurrentFileCounter > this.maxEntriesInFile) { // NOPMD
-			this.entriesInCurrentFileCounter = 1;
-			if (this.pos != null) {
-				this.pos.close();
-			}
-			if (this.autoflush) {
-				this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.getFilename()), ENCODING), true);
-			} else {
-				this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.getFilename()), ENCODING)), false);
-			}
-			this.pos.flush();
+	private final void prepareFile(final String filename) throws FileNotFoundException, UnsupportedEncodingException {
+		this.entriesInCurrentFileCounter = 1;
+		if (this.pos != null) {
+			this.pos.close();
 		}
+		if (this.autoflush) {
+			this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename), ENCODING), true);
+		} else {
+			this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), ENCODING)), false);
+		}
+		this.pos.flush();
 	}
 
 	private final String getFilename() {
@@ -202,5 +240,14 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		sb.append(this.path);
 		sb.append('\'');
 		return sb.toString();
+	}
+
+	private static final class FileNameSize {
+		public final String name; // NOCS
+		public long size; // NOCS
+
+		public FileNameSize(final String name) {
+			this.name = name;
+		}
 	}
 }

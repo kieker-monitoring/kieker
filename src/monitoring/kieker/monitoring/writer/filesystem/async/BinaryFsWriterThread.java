@@ -37,8 +37,8 @@ public class BinaryFsWriterThread extends AbstractFsWriterThread {
 	private DataOutputStream out;
 
 	public BinaryFsWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
-			final MappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile) {
-		super(monitoringController, writeQueue, mappingFileWriter, path, maxEntriesInFile);
+			final MappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile, final int maxLogSize, final int maxLogFiles) {
+		super(monitoringController, writeQueue, mappingFileWriter, path, maxEntriesInFile, maxLogSize, maxLogFiles);
 		this.fileExtension = ".bin";
 	}
 
@@ -94,11 +94,11 @@ public class BinaryFsWriterThread extends AbstractFsWriterThread {
 	}
 
 	@Override
-	protected void prepareFile() throws IOException {
+	protected void prepareFile(final String filename) throws IOException {
 		if (this.out != null) {
 			this.out.close();
 		}
-		this.out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(this.getFilename())));
+		this.out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(filename)));
 	}
 
 	@Override

@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.LinkedList;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.BlockingQueue;
@@ -35,14 +36,21 @@ import kieker.monitoring.writer.filesystem.MappingFileWriter;
  */
 public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 
+	private static final String FILE_PREFIX = "kieker-";
+
 	protected String fileExtension = ".dat";
 
-	// internal variables
 	private final MappingFileWriter mappingFileWriter;
 	private final String filenamePrefix;
 	private final String path;
 	private final int maxEntriesInFile;
+	private final long maxLogSize;
+	private final int maxLogFiles;
+
 	private int entriesInCurrentFileCounter;
+
+	private final LinkedList<FileNameSize> listOfLogFiles; // NOCS NOPMD (we explicitly need LinekdList here)
+	private long totalLogSize;
 
 	private final DateFormat dateFormat;
 
@@ -50,12 +58,21 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 	private long sameFilenameCounter;
 
 	public AbstractFsWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
-			final MappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile) {
+			final MappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile, final int maxLogSize, final int maxLogFiles) {
 		super(monitoringController, writeQueue);
 		this.mappingFileWriter = mappingFileWriter;
 		this.path = new File(path).getAbsolutePath();
-		this.filenamePrefix = path + File.separatorChar + "kieker";
+		this.filenamePrefix = path + File.separatorChar + FILE_PREFIX;
 		this.maxEntriesInFile = maxEntriesInFile;
+		if ((maxLogSize > 0) || (maxLogFiles > 0)) {
+			this.maxLogSize = maxLogSize * 1024L * 1024L; // convert from MiBytes to Bytes
+			this.maxLogFiles = maxLogFiles;
+			this.listOfLogFiles = new LinkedList<FileNameSize>();
+		} else {
+			this.maxLogSize = -1;
+			this.maxLogFiles = -1;
+			this.listOfLogFiles = null; // NOPMD (set explicitly to null)
+		}
 		// Force to initialize first file!
 		this.entriesInCurrentFileCounter = maxEntriesInFile;
 		// initialize Date
@@ -73,15 +90,11 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 			this.previousFileDate = date;
 		}
 		final StringBuilder sb = new StringBuilder(this.filenamePrefix.length() + threadName.length() + this.fileExtension.length() + 33);
-		sb.append(this.filenamePrefix).append('-').append(this.dateFormat.format(new java.util.Date(date))).append("-UTC-") // NOPMD (Date)
+		sb.append(this.filenamePrefix).append(this.dateFormat.format(new java.util.Date(date))).append("-UTC-") // NOPMD (Date)
 				.append('-').append(String.format("%03d", this.sameFilenameCounter)).append('-')
 				.append(threadName).append(this.fileExtension);
 		return sb.toString();
 	}
-
-	protected abstract void write(IMonitoringRecord monitoringRecord) throws IOException;
-
-	protected abstract void prepareFile() throws IOException;
 
 	@Override
 	protected final void consume(final IMonitoringRecord monitoringRecord) throws Exception {
@@ -90,11 +103,37 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 		} else {
 			if (++this.entriesInCurrentFileCounter > this.maxEntriesInFile) { // NOPMD
 				this.entriesInCurrentFileCounter = 1;
-				this.prepareFile();
+				final String filename = this.getFilename();
+				this.prepareFile(filename);
+				if (this.listOfLogFiles != null) {
+					final FileNameSize fns = this.listOfLogFiles.getLast();
+					final long filesize = new File(fns.name).length();
+					fns.size = filesize;
+					this.totalLogSize += filesize;
+					this.listOfLogFiles.add(new FileNameSize(filename));
+					if (this.listOfLogFiles.size() > this.maxLogFiles) { // too many files (at most one!)
+						final FileNameSize removeFile = this.listOfLogFiles.removeFirst();
+						if (!new File(removeFile.name).delete()) { // NOCS (nested if)
+							throw new IOException("Failed to delete file " + removeFile.name);
+						}
+						this.totalLogSize -= removeFile.size;
+					}
+					while ((this.listOfLogFiles.size() > 1) && (this.totalLogSize > this.maxLogSize)) {
+						final FileNameSize removeFile = this.listOfLogFiles.removeFirst();
+						if (!new File(removeFile.name).delete()) {
+							throw new IOException("Failed to delete file " + removeFile.name);
+						}
+						this.totalLogSize -= removeFile.size;
+					}
+				}
 			}
 			this.write(monitoringRecord);
 		}
 	}
+
+	protected abstract void write(IMonitoringRecord monitoringRecord) throws IOException;
+
+	protected abstract void prepareFile(final String filename) throws IOException;
 
 	@Override
 	public final String toString() {
@@ -104,5 +143,14 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 		sb.append(this.path);
 		sb.append('\'');
 		return sb.toString();
+	}
+
+	private static final class FileNameSize {
+		public final String name; // NOCS
+		public long size; // NOCS
+
+		public FileNameSize(final String name) {
+			this.name = name;
+		}
 	}
 }
