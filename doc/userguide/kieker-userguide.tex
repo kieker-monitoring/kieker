@@ -1,4 +1,4 @@
-\documentclass[a4paper, oneside, 11pt, pointlessnumbers, headsepline, bibtotoc]{scrbook}
+\documentclass[paper=a4,twoside=false,fontsize=11pt,numbers=noenddot,version=first,bibliography=totoc,headsepline]{scrbook}
 
 % Get the necessary packages for the document.
 \input{Packages}
@@ -9,14 +9,14 @@
 \clearscrheadfoot
 
 \ifoot[\hrule\sffamily Kieker \version{} User Guide]{\hrule\sffamily Kieker \version{} User Guide}
-\ofoot[\hrule\sffamily\pagemark]{\hrule\sffamily\pagemark} 
+\ofoot[\hrule\sffamily\pagemark]{\hrule\sffamily\pagemark}
 
 % Set the title and everything.
 \titlehead{
-	\begin{center}
-		\includegraphics[height=25mm]{./images/kieker-logo}\\
+  \begin{center}
+    \includegraphics[height=25mm]{./images/kieker-logo}\\
 \href{http://kieker-monitoring.net}{\sffamily\Large http://kieker-monitoring.net}
-	\end{center}
+  \end{center}
 }
 
 \title{%
@@ -55,7 +55,7 @@ pdfauthor = {Nils Ehmke, Andr\'e van Hoorn, and Reiner Jung}
   \input{ch3-kieker-monitoring-component.inc.tex}
   \input{ch4-kieker-analysis-component.inc.tex}
   \input{ch5-trace-analysis.inc.tex}
-  
+
   \input{Appendix}
   % suppress appendix chapters in toc:
   \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
@@ -63,4 +63,4 @@ pdfauthor = {Nils Ehmke, Andr\'e van Hoorn, and Reiner Jung}
 \bibliographystyle{abbrvnatAvanhoorn} % alpha
 \bibliography{bibliography}
 \end{document}
- 
+
