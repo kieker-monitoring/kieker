@@ -65,5 +65,7 @@
 	<classpathentry kind="lib" path="lib/jetty-webapp-7.6.5.v20120716.jar"/>
 	<classpathentry kind="lib" path="lib/jetty-websocket-7.6.5.v20120716.jar"/>
 	<classpathentry kind="lib" path="lib/jetty-xml-7.6.5.v20120716.jar"/>
+	<classpathentry kind="lib" path="lib/aopalliance.jar"/>
+	<classpathentry kind="lib" path="lib/cglib-2.2.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
