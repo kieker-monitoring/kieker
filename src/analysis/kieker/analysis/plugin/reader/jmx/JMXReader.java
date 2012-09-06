@@ -50,12 +50,18 @@ import kieker.common.record.IMonitoringRecord;
 			@OutputPort(name = JMXReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMXReader")
 		},
 		configuration = {
-			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_SERVER, defaultValue = "localhost", description = "The server used for the JMX connection."),
-			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_PORT, defaultValue = "59999", description = "The port used for the JMX connection."),
-			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_SERVICEURL, defaultValue = ""),
-			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_DOMAIN, defaultValue = "kieker.monitoring"),
-			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_LOGNAME, defaultValue = "MonitoringLog"),
-			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_SILENT, defaultValue = "false")
+			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_SERVER, defaultValue = "localhost",
+					description = "The address of the server used for the JMX connection."),
+			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_PORT, defaultValue = "59999",
+					description = "The port of the server used for the JMX connection."),
+			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_SERVICEURL, defaultValue = "",
+					description = "As an alternative to specifiying server and port, a service URL can be given. This value is ignored if port > 0."),
+			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_DOMAIN, defaultValue = "kieker.monitoring",
+					description = "The JMX domain used by the JMXWriter."),
+			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_LOGNAME, defaultValue = "MonitoringLog",
+					description = "The logname used by the JMXWriter."),
+			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_SILENT, defaultValue = "false",
+					description = "Whether the JMXReader should silently reconnect on any errors. This prevents termination of the reader!")
 		})
 public final class JMXReader extends AbstractReaderPlugin {
 

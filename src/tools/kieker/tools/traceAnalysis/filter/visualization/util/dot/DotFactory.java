@@ -150,6 +150,7 @@ public final class DotFactory {
 	public static StringBuilder createNode(final String prefix, final String nodeId, final String label, final String shape, final String style,
 			final String framecolor, final String fillcolor, final String fontcolor, final double fontsize, final String imageFilename, final String misc) {
 		final StringBuilder dot = new StringBuilder(128);
+		boolean addComma = false;
 		if (prefix != null) {
 			dot.append(prefix);
 		}
@@ -159,44 +160,68 @@ public final class DotFactory {
 		if (label != null) {
 			dot.append("label=\"");
 			dot.append(label);
-			dot.append("\",");
+			addComma = true;
 		}
 		if (shape != null) {
+			if (addComma) {
+				dot.append("\",");
+			}
 			dot.append("shape=\"");
 			dot.append(shape);
-			dot.append("\",");
+			addComma = true;
 		}
 		if (style != null) {
+			if (addComma) {
+				dot.append("\",");
+			}
 			dot.append("style=\"");
 			dot.append(style);
-			dot.append("\",");
+			addComma = true;
 		}
 		if (framecolor != null) {
+			if (addComma) {
+				dot.append("\",");
+			}
 			dot.append("color=\"");
 			dot.append(framecolor);
-			dot.append("\",");
+			addComma = true;
 		}
 		if (fillcolor != null) {
+			if (addComma) {
+				dot.append("\",");
+			}
 			dot.append("fillcolor=\"");
 			dot.append(fillcolor);
-			dot.append("\",");
+			addComma = true;
 		}
 		if (fontcolor != null) {
+			if (addComma) {
+				dot.append("\",");
+			}
 			dot.append("fontcolor=\"");
 			dot.append(fontcolor);
-			dot.append("\",");
+			addComma = true;
 		}
 		if (fontsize != DOT_DEFAULT_FONTSIZE) {
+			if (addComma) {
+				dot.append("\",");
+			}
 			dot.append("fontsize=\"");
 			dot.append(fontsize);
-			dot.append("\",");
+			addComma = true;
 		}
 		if (imageFilename != null) {
+			if (addComma) {
+				dot.append("\",");
+			}
 			dot.append("image=\"");
 			dot.append(imageFilename);
-			dot.append('"');
+			addComma = true;
 		}
 		if (misc != null) {
+			if (addComma) {
+				dot.append("\",");
+			}
 			dot.append(misc);
 		}
 		dot.append("]\n");

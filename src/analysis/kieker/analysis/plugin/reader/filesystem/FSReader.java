@@ -38,8 +38,10 @@ import kieker.common.record.misc.EmptyRecord;
 		outputPorts = {
 			@OutputPort(name = FSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader") },
 		configuration = {
-			@Property(name = FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".", description = "The name of the input dirs used to read data."),
-			@Property(name = FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, defaultValue = FSReader.CONFIG_PROPERTY_VALUE_IGNORE_UNKNOWN_RECORD_TYPES_DEFAULT)
+			@Property(name = FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".",
+					description = "The name of the input dirs used to read data (multiple dirs are separated by |)."),
+			@Property(name = FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, defaultValue = "false",
+					description = "Ignore unknown records? Aborts if encountered and value is false.")
 		})
 public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 
@@ -47,8 +49,6 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 
 	public static final String CONFIG_PROPERTY_NAME_INPUTDIRS = "inputDirs";
 	public static final String CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES = "ignoreUnknownRecordTypes";
-
-	public static final String CONFIG_PROPERTY_VALUE_IGNORE_UNKNOWN_RECORD_TYPES_DEFAULT = "false";
 
 	public static final IMonitoringRecord EOF = new EmptyRecord();
 
