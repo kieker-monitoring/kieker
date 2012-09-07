@@ -33,102 +33,102 @@ import kieker.monitoring.core.controller.IMonitoringController;
  */
 public abstract class AbstractTestLogRotationMaxLogFiles {
 
-	private final static int MAXENTRIESINFILE = 2;
+	private static final int MAXENTRIESINFILE = 2;
 
 	@Rule
-	public final TemporaryFolder tmpFolder = new TemporaryFolder();
+	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (Rule has to be public)
 
 	public AbstractTestLogRotationMaxLogFiles() {
 		super();
 	}
 
 	@Test
-	public final void testMaxLogFilesUnlimited0() throws IOException {
+	public final void testMaxLogFilesUnlimited0() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(-1, 0);
 	}
 
 	@Test
-	public final void testMaxLogFilesUnlimited1() throws IOException {
+	public final void testMaxLogFilesUnlimited1() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(-1, 1);
 	}
 
 	@Test
-	public final void testMaxLogFilesUnlimited10() throws IOException {
+	public final void testMaxLogFilesUnlimited10() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(-1, 10);
 	}
 
 	@Test
-	public final void testMaxLogFilesUnlimitedZero0() throws IOException {
+	public final void testMaxLogFilesUnlimitedZero0() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(0, 0);
 	}
 
 	@Test
-	public final void testMaxLogFilesUnlimitedZero1() throws IOException {
+	public final void testMaxLogFilesUnlimitedZero1() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(0, 1);
 	}
 
 	@Test
-	public final void testMaxLogFilesUnlimitedZero10() throws IOException {
+	public final void testMaxLogFilesUnlimitedZero10() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(0, 10);
 	}
 
 	@Test
-	public final void testMaxLogFilesLimitedOne0() throws IOException {
+	public final void testMaxLogFilesLimitedOne0() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(1, 0);
 	}
 
 	@Test
-	public final void testMaxLogFilesLimitedOne1() throws IOException {
+	public final void testMaxLogFilesLimitedOne1() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(1, 1);
 	}
 
 	@Test
-	public final void testMaxLogFilesLimitedOne10() throws IOException {
+	public final void testMaxLogFilesLimitedOne10() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(1, 10);
 	}
 
 	@Test
-	public final void testMaxLogFilesLimitedTwo0() throws IOException {
+	public final void testMaxLogFilesLimitedTwo0() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(2, 0);
 	}
 
 	@Test
-	public final void testMaxLogFilesLimitedTwo1() throws IOException {
+	public final void testMaxLogFilesLimitedTwo1() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(2, 1);
 	}
 
 	@Test
-	public final void testMaxLogFilesLimitedTwo2() throws IOException {
+	public final void testMaxLogFilesLimitedTwo2() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(2, 2);
 	}
 
 	@Test
-	public final void testMaxLogFilesLimitedTwo3() throws IOException {
+	public final void testMaxLogFilesLimitedTwo3() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(2, 3);
 	}
 
 	@Test
-	public final void testMaxLogFilesLimitedTwo10() throws IOException {
+	public final void testMaxLogFilesLimitedTwo10() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(2, 10);
 	}
 
 	@Test
-	public final void testMaxLogFilesLimitedTen0() throws IOException {
+	public final void testMaxLogFilesLimitedTen0() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(10, 0);
 	}
 
 	@Test
-	public final void testMaxLogFilesLimitedTen2() throws IOException {
+	public final void testMaxLogFilesLimitedTen2() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(10, 2);
 	}
 
 	@Test
-	public final void testMaxLogFilesLimitedTen10() throws IOException {
+	public final void testMaxLogFilesLimitedTen10() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(10, 10);
 	}
 
 	@Test
-	public final void testMaxLogFilesLimitedTen11() throws IOException {
+	public final void testMaxLogFilesLimitedTen11() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(10, 11);
 	}
 

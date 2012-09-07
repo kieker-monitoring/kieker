@@ -190,7 +190,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 							if (this.maxLogSize > 0) {
 								while ((this.listOfLogFiles.size() > 1) && (this.totalLogSize > this.maxLogSize)) {
 									final FileNameSize removeFile = this.listOfLogFiles.removeFirst();
-									if (!new File(removeFile.name).delete()) {
+									if (!new File(removeFile.name).delete()) { // NOCS (nested if)
 										throw new IOException("Failed to delete file " + removeFile.name);
 									}
 									this.totalLogSize -= removeFile.size;

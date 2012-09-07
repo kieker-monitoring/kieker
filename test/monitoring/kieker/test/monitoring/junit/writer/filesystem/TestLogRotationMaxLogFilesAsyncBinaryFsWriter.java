@@ -28,6 +28,10 @@ import kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter;
  */
 public class TestLogRotationMaxLogFilesAsyncBinaryFsWriter extends AbstractTestLogRotationMaxLogFiles {
 
+	public TestLogRotationMaxLogFilesAsyncBinaryFsWriter() {
+		// empty default constructor
+	}
+
 	@Override
 	protected IMonitoringController createController(final String path, final int maxEntriesInFile, final int maxLogFiles) {
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
