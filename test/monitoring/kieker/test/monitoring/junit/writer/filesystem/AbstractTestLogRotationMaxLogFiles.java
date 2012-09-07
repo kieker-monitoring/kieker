@@ -39,7 +39,7 @@ public abstract class AbstractTestLogRotationMaxLogFiles {
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (Rule has to be public)
 
 	public AbstractTestLogRotationMaxLogFiles() {
-		super();
+		// empty default constructor
 	}
 
 	@Test
