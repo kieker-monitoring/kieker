@@ -30,7 +30,6 @@ import kieker.test.monitoring.util.NamedPipeFactory;
 
 /**
  * @author Andre van Hoorn
- * 
  */
 public class TestPipeWriter { // NOCS
 
