@@ -232,15 +232,15 @@
 
 	<target name="build-kieker.main.emf" depends="-init,build-kieker.main" description="Compiles and packages the Kieker Jar file including the EMF runtime">
 		<fileset dir="${lib.dir}" id="org.eclipse.emf.common-jar-set">
-			<include name="org.eclipse.emf.common-*.jar" />
+			<include name="org.eclipse.emf.common_*.jar" />
 		</fileset>
 		<pathconvert property="org.eclipse.emf.common-jar" refid="org.eclipse.emf.common-jar-set" />
 		<fileset dir="${lib.dir}" id="org.eclipse.emf.ecore.xmi-jar-set">
-			<include name="org.eclipse.emf.ecore.xmi-*.jar" />
+			<include name="org.eclipse.emf.ecore.xmi_*.jar" />
 		</fileset>
 		<pathconvert property="org.eclipse.emf.ecore.xmi-jar" refid="org.eclipse.emf.ecore.xmi-jar-set" />
 		<fileset dir="${lib.dir}" id="org.eclipse.emf.ecore-jar-set">
-			<include name="org.eclipse.emf.ecore-*.jar" />
+			<include name="org.eclipse.emf.ecore_*.jar" />
 		</fileset>
 		<pathconvert property="org.eclipse.emf.ecore-jar" refid="org.eclipse.emf.ecore-jar-set" />
 		<jar destfile="${dist.dir}/${dist.kieker.main.emf.jar}" duplicate="fail" filesetmanifest="skip">
