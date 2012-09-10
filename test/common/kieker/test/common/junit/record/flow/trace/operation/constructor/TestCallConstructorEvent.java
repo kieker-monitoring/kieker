@@ -14,18 +14,18 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.common.junit.record.flow.trace.operation;
+package kieker.test.common.junit.record.flow.trace.operation.constructor;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
 
-import kieker.common.record.flow.trace.operation.CallOperationEvent;
+import kieker.common.record.flow.trace.operation.constructor.CallConstructorEvent;
 
 /**
- * @author Andre van Hoorn, Jan Waller
+ * @author Jan Waller
  */
-public class TestOperationCallEvent {
+public class TestCallConstructorEvent {
 
 	private static final long TSTAMP = 987998L;
 	private static final long TRACE_ID = 23444L;
@@ -35,12 +35,12 @@ public class TestOperationCallEvent {
 	private static final String FQ_CALLEE_CLASSNAME = "p1.p2.p3.calleename";
 	private static final String FQ_CALLEE_OPERATION_SIGNATURE = FQ_CALLEE_CLASSNAME + ".calleeOp(boolean arg1, int arg2)";
 
-	public TestOperationCallEvent() {
+	public TestCallConstructorEvent() {
 		// empty default constructor
 	}
 
 	/**
-	 * Tests the constructor and toArray(..) methods of {@link OperationCallEvent}.
+	 * Tests the constructor and toArray(..) methods of {@link CallConstructorEvent}.
 	 * 
 	 * Assert that a record instance event1 equals an instance event2 created by serializing event1 to an array event1Array
 	 * and using event1Array to construct event2. This ignores a set loggingTimestamp!
@@ -48,8 +48,8 @@ public class TestOperationCallEvent {
 	@Test
 	public void testSerializeDeserializeEquals() {
 
-		final CallOperationEvent event1 =
-				new CallOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_OPERATION_SIGNATURE, FQ_CALLER_CLASSNAME,
+		final CallConstructorEvent event1 =
+				new CallConstructorEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_OPERATION_SIGNATURE, FQ_CALLER_CLASSNAME,
 						FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
@@ -62,7 +62,7 @@ public class TestOperationCallEvent {
 
 		final Object[] event1Array = event1.toArray();
 
-		final CallOperationEvent event2 = new CallOperationEvent(event1Array);
+		final CallConstructorEvent event2 = new CallConstructorEvent(event1Array);
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));
@@ -72,11 +72,11 @@ public class TestOperationCallEvent {
 
 	@Test
 	public void testCallsReferencedOperationOf() {
-		final CallOperationEvent event1 =
-				new CallOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_OPERATION_SIGNATURE, FQ_CALLER_CLASSNAME,
+		final CallConstructorEvent event1 =
+				new CallConstructorEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_OPERATION_SIGNATURE, FQ_CALLER_CLASSNAME,
 						FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME);
-		final CallOperationEvent event2 =
-				new CallOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME,
+		final CallConstructorEvent event2 =
+				new CallConstructorEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME,
 						FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME);
 
 		Assert.assertTrue(event1.callsReferencedOperationOf(event2));
