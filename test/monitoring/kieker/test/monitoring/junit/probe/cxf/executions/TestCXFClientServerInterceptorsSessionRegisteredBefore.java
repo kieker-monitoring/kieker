@@ -68,4 +68,9 @@ public class TestCXFClientServerInterceptorsSessionRegisteredBefore extends Abst
 		}
 	}
 
+	@Override
+	protected int getPortDigit() {
+		return 0;
+	}
+
 }

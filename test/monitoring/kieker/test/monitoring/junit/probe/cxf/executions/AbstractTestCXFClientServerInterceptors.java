@@ -17,7 +17,6 @@
 package kieker.test.monitoring.junit.probe.cxf.executions;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
@@ -26,6 +25,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
@@ -48,7 +49,7 @@ import kieker.test.monitoring.util.NamedListWriter;
  * 
  */
 public abstract class AbstractTestCXFClientServerInterceptors {
-	private static final AtomicInteger NEXT_IDX = new AtomicInteger(0);
+	private static final Log LOG = LogFactory.getLog(AbstractTestCXFClientServerInterceptors.class);
 
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
@@ -59,15 +60,13 @@ public abstract class AbstractTestCXFClientServerInterceptors {
 
 	private static final String SERVICE_ADDRESS_TEMPLATE = "http://localhost:909X/bookstore";
 
-	private final int curIdx = NEXT_IDX.getAndIncrement();
-
 	/**
 	 * Each instance of this class increments the port number by 1
 	 */
-	private final String serviceAddress = SERVICE_ADDRESS_TEMPLATE.replace("X", Integer.toString(this.curIdx));
+	private volatile String serviceAddress;
 
-	private final String LIST_NAME = AbstractTestCXFClientServerInterceptors.class.getName() + "-" + this.curIdx;
-	private final List<IMonitoringRecord> recordListFilledByListWriter = NamedListWriter.createNamedList(this.LIST_NAME);
+	private volatile String LIST_NAME;
+	private volatile List<IMonitoringRecord> recordListFilledByListWriter;
 
 	private final JaxWsServerFactoryBean srvFactory = new JaxWsServerFactoryBean();
 
@@ -78,12 +77,25 @@ public abstract class AbstractTestCXFClientServerInterceptors {
 
 	@Before
 	public void setup() throws Exception {
+		final int curIdx = this.getPortDigit();
+		this.serviceAddress = SERVICE_ADDRESS_TEMPLATE.replace("X", Integer.toString(curIdx));
+		this.LIST_NAME = AbstractTestCXFClientServerInterceptors.class.getName() + "-" + curIdx;
+		this.recordListFilledByListWriter = NamedListWriter.createNamedList(this.LIST_NAME);
+
 		this.unsetKiekerThreadLocalData();
 		this.clientMonitoringController = this.createMonitoringController(CLIENT_HOSTNAME);
 		this.serverMonitoringController = this.createMonitoringController(SERVER_HOSTNAME);
 		this.startServer();
 		this.createClient();
 	}
+
+	/**
+	 * Workaround to have unique port numbers among the CXF tests. A mechanism having a static
+	 * integer increment by each instance did work under Eclipse, but not when executed by ant.
+	 * 
+	 * @return
+	 */
+	protected abstract int getPortDigit();
 
 	private IMonitoringController createMonitoringController(final String hostname) {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
@@ -94,6 +106,8 @@ public abstract class AbstractTestCXFClientServerInterceptors {
 	}
 
 	private void startServer() {
+		LOG.info("XX: " + this.serviceAddress);
+
 		final BookstoreImpl implementor = new BookstoreImpl();
 		this.srvFactory.setServiceClass(IBookstore.class);
 		this.srvFactory.setAddress(this.serviceAddress);
