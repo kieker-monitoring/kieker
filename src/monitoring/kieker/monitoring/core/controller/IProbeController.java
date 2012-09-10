@@ -40,4 +40,12 @@ public interface IProbeController {
 	 *         true on success
 	 */
 	public boolean deactivateProbe(final String signature);
+
+	/**
+	 * @param string
+	 *            signature of the probe
+	 * @return
+	 *         true if the probe with this signature is active
+	 */
+	public boolean isActive(final String signature);
 }

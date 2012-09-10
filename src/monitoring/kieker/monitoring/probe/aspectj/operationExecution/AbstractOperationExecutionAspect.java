@@ -49,11 +49,11 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 
 	@Around("monitoredOperation() && notWithinKieker()")
 	public Object operation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
-		if (!CTRLINST.isMonitoringEnabled()) {
+		final String signature = thisJoinPoint.getSignature().toLongString();
+		if (!CTRLINST.isActive(signature)) {
 			return thisJoinPoint.proceed();
 		}
 		// collect data
-		final String signature = thisJoinPoint.getSignature().toLongString();
 		final boolean entrypoint;
 		final String hostname = VMNAME;
 		final String sessionId = SESSIONREGISTRY.recallThreadLocalSessionId();

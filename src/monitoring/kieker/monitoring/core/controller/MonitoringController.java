@@ -247,6 +247,10 @@ public final class MonitoringController extends AbstractController implements IM
 		return this.probeController.deactivateProbe(signature);
 	}
 
+	public boolean isActive(final String signature) {
+		return this.probeController.isActive(signature);
+	}
+
 	// GET SINGLETON INSTANCE
 	// #############################
 	public static final IMonitoringController getInstance() {
@@ -259,4 +263,5 @@ public final class MonitoringController extends AbstractController implements IM
 	private static final class LazyHolder { // NOCS
 		private static final IMonitoringController INSTANCE = MonitoringController.createInstance(ConfigurationFactory.createSingletonConfiguration());
 	}
+
 }
