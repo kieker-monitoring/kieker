@@ -16,6 +16,7 @@
 
 package kieker.analysis.plugin;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
@@ -210,9 +211,21 @@ public abstract class AbstractPlugin implements IPlugin {
 				if (eventType.isAssignableFrom(data.getClass())) { // data instanceof eventType
 					try {
 						pluginInputPortReference.getInputPortMethod().invoke(pluginInputPortReference.getPlugin(), data);
+					} catch (final InvocationTargetException e) {
+						// This is an exception wrapped by invoke
+						final Throwable cause = e.getCause();
+						if (cause instanceof Error) {
+							// This is a severe case and there is little chance to terminate appropriately
+							throw (Error) cause;
+						} else {
+							LOG.warn("Caught exception when sending data from " + this.getClass().getName() + ": OutputPort " + outputPort.name()
+									+ " to "
+									+ pluginInputPortReference.getPlugin().getClass().getName() + "'s InputPort "
+									+ pluginInputPortReference.getInputPortMethod().getName(), cause);
+						}
 					} catch (final Exception e) { // NOPMD NOCS (catch multiple)
-						LOG.warn("Caught exception when sending data from " + this.getClass().getName() + ": OutputPort " + outputPort.name()
-								+ " to "
+						// This is an exception wrapped by invoke
+						LOG.error("Caught exception when invoking "
 								+ pluginInputPortReference.getPlugin().getClass().getName() + "'s InputPort "
 								+ pluginInputPortReference.getInputPortMethod().getName(), e);
 					}

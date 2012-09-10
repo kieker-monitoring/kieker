@@ -627,12 +627,15 @@ public final class AnalysisController {
 			}
 			new Thread(new Runnable() {
 				public void run() {
-					if (!reader.read()) {
-						// here we started and won't throw any exceptions!
-						LOG.error("Calling read() on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ")  returned false.");
-						AnalysisController.this.terminate(true);
+					try {
+						if (!reader.read()) {
+							// here we started and won't throw any exceptions!
+							LOG.error("Calling read() on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ")  returned false.");
+							AnalysisController.this.terminate(true);
+						}
+					} finally {
+						readerLatch.countDown();
 					}
-					readerLatch.countDown();
 				}
 			}).start();
 		}
