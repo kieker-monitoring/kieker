@@ -43,6 +43,7 @@ import org.apache.commons.cli.ParseException;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.filter.flow.EventRecordTraceReconstructionFilter;
+import kieker.analysis.plugin.filter.forward.StringBufferFilter;
 import kieker.analysis.plugin.filter.select.TimestampFilter;
 import kieker.analysis.plugin.filter.trace.TraceIdFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
@@ -291,6 +292,13 @@ public final class TraceAnalysisTool {
 			}
 
 			/*
+			 * Unify Strings
+			 */
+			final StringBufferFilter stringBufferFilter = new StringBufferFilter(new Configuration());
+			analysisInstance.registerFilter(stringBufferFilter);
+			analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, stringBufferFilter, StringBufferFilter.INPUT_PORT_NAME_EVENTS);
+
+			/*
 			 * This map can be used within the constructor for all following plugins which use the repository with the name defined in the
 			 * AbstractTraceAnalysisPlugin.
 			 */
@@ -310,8 +318,10 @@ public final class TraceAnalysisTool {
 				timestampFilter =
 						new TimestampFilter(configTimestampFilter);
 				analysisInstance.registerFilter(timestampFilter);
-				analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, timestampFilter, TimestampFilter.INPUT_PORT_NAME_EXECUTION);
-				analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, timestampFilter, TimestampFilter.INPUT_PORT_NAME_FLOW);
+				analysisInstance.connect(stringBufferFilter, StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
+						timestampFilter, TimestampFilter.INPUT_PORT_NAME_EXECUTION);
+				analysisInstance.connect(stringBufferFilter, StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
+						timestampFilter, TimestampFilter.INPUT_PORT_NAME_FLOW);
 			}
 
 			final TraceIdFilter traceIdFilter;
