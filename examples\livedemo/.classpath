@@ -65,5 +65,6 @@
 	<classpathentry kind="lib" path="lib/cglib-2.2.3.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Kieker"/>
 	<classpathentry kind="lib" path="lib/junit-4.10.jar"/>
+	<classpathentry kind="lib" path="lib/aspectjweaver-1.7.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

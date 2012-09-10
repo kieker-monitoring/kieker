@@ -29,6 +29,7 @@
  
     <aop:config>
         <aop:advisor advice-ref="opEMII" pointcut="execution(public * kieker.examples.userguide.spring.Bookstore.searchBook(..))"/>
+        <aop:advisor advice-ref="opEMII" pointcut="execution(public * kieker.examples.userguide.spring.Catalog.getBook(..))"/>
     </aop:config>
   
     <!-- Resolve logical view names to .jsp resources in the /WEB-INF/views directory -->
