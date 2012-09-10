@@ -74,7 +74,7 @@ public abstract class AbstractTraceWriterFilterTest {
 
 	private final BookstoreExecutionFactory execFactory = new BookstoreExecutionFactory(this.modelRepo);
 
-	private volatile File outputFile = null;
+	private volatile File outputFile;
 
 	@Before
 	public void setUp() throws Exception {
@@ -157,7 +157,7 @@ public abstract class AbstractTraceWriterFilterTest {
 		Assert.assertEquals("Unexpected file content", expectedFileContent, actualFileContent);
 	}
 
-	private String readOutputFileAsString() throws java.io.IOException {
+	private String readOutputFileAsString() throws IOException {
 		final byte[] buffer = new byte[(int) this.outputFile.length()];
 		BufferedInputStream f = null;
 		try {

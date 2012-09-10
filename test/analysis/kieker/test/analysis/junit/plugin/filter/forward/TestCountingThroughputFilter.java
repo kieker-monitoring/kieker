@@ -53,16 +53,16 @@ public class TestCountingThroughputFilter {
 	private AnalysisController analysisController;
 
 	/** Provides the list of {@link IMonitoringRecord}s to be processed */
-	private SimpleListReader<IMonitoringRecord> simpleListReader = null; // initialized in #prepareConfiguration()
+	private SimpleListReader<IMonitoringRecord> simpleListReader; // initialized in #prepareConfiguration()
 
 	/** Provides the (current) number of {@link IMonitoringRecord}s provided by the {@link #simpleListReader} */
-	private CountingFilter countingFilterReader = null; // initialized in #prepareConfiguration()
+	private CountingFilter countingFilterReader; // initialized in #prepareConfiguration()
 
 	/** The filter to be tested */
-	private CountingThroughputFilter throughputFilter = null; // initialized in #prepareConfiguration()
+	private CountingThroughputFilter throughputFilter; // initialized in #prepareConfiguration()
 
 	/** Simply collects all {@link IMonitoringRecord}s processed by the tested filter */
-	private SimpleSinkFilter<EmptyRecord> sinkPlugin = null; // initialized in #prepareConfiguration()
+	private SimpleSinkFilter<EmptyRecord> sinkPlugin; // initialized in #prepareConfiguration()
 
 	private volatile boolean intervalsBasedOn1stTstamp; // will be set by the @Test's
 

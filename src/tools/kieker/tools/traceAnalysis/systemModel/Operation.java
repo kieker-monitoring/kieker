@@ -73,7 +73,7 @@ public class Operation {
 	@Override
 	public String toString() {
 		final StringBuilder strBuild = new StringBuilder();
-		strBuild.append(this.componentType.getFullQualifiedName()).append(".").append(this.signature.toString());
+		strBuild.append(this.componentType.getFullQualifiedName()).append('.').append(this.signature.toString());
 		return strBuild.toString();
 	}
 }

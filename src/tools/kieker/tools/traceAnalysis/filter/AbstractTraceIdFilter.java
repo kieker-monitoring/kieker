@@ -28,6 +28,7 @@ import kieker.common.configuration.Configuration;
  * @author Andre van Hoorn
  * 
  */
+// FIXME: Provide default properties. Abstract in this class might be better?
 public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 	/**
 	 * List of trace IDs to accept. Set null to accept any ID.
@@ -65,13 +66,6 @@ public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 			}
 			return idsToPass;
 		}
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration defaultConfiguration = new Configuration();
-		// FIXME: Provide default properties. Abstract in this class might be better?
-		return defaultConfiguration;
 	}
 
 	/**

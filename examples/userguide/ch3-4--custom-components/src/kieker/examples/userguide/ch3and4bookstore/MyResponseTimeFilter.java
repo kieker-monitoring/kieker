@@ -16,11 +16,10 @@
 
 package kieker.examples.userguide.ch3and4bookstore;
 
-import java.util.concurrent.TimeUnit;
-
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
@@ -33,8 +32,12 @@ import kieker.common.configuration.Configuration;
 					eventTypes = { MyResponseTimeRecord.class }),
 			@OutputPort(name = MyResponseTimeFilter.OUTPUT_PORT_NAME_RT_EXCEED,
 					description = "Outputs response times exceeding the threshold",
-					eventTypes = { MyResponseTimeRecord.class }) })
+					eventTypes = { MyResponseTimeRecord.class }) },
+		configuration = {
+			@Property(name = MyResponseTimeFilter.CONFIG_PROPERTY_NAME_TS_NANOS, defaultValue = "1000000")
+		})
 public class MyResponseTimeFilter extends AbstractFilterPlugin {
+
 	public static final String OUTPUT_PORT_NAME_RT_VALID = "validResponseTimes";
 	public static final String OUTPUT_PORT_NAME_RT_EXCEED = "invalidResponseTimes";
 
@@ -60,17 +63,6 @@ public class MyResponseTimeFilter extends AbstractFilterPlugin {
 		} else {
 			super.deliver(OUTPUT_PORT_NAME_RT_VALID, rtRecord);
 		}
-	}
-
-	public static final long CONFIG_PROPERTY_VALUE_RT_TS_NANOS_DEFAULT =
-			TimeUnit.NANOSECONDS.convert(1l, TimeUnit.MILLISECONDS);
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_TS_NANOS,
-				Long.toString(CONFIG_PROPERTY_VALUE_RT_TS_NANOS_DEFAULT));
-		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {

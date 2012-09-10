@@ -58,7 +58,7 @@ public class Bookstore extends Thread {
 	public static void main(final String[] args) throws InterruptedException {
 
 		for (int i = 0; i < Bookstore.NUM_REQUESTS; i++) {
-			System.out.println("Bookstore.main: Starting request " + i);
+			System.out.println("Bookstore.main: Starting request " + i); // NOPMD (System.out)
 			final Bookstore newBookstore = new Bookstore();
 			synchronized (Bookstore.BOOKSTORE_SCENARIOS) {
 				Bookstore.BOOKSTORE_SCENARIOS.add(newBookstore);
@@ -66,8 +66,8 @@ public class Bookstore extends Thread {
 			newBookstore.start();
 			Bookstore.waitabit(Bookstore.INTER_REQUEST_TIME);
 		}
-		System.out.println("Bookstore.main: Finished with starting all requests.");
-		System.out.println("Bookstore.main: Waiting for threads to terminate");
+		System.out.println("Bookstore.main: Finished with starting all requests."); // NOPMD (System.out)
+		System.out.println("Bookstore.main: Waiting for threads to terminate"); // NOPMD (System.out)
 		synchronized (Bookstore.BOOKSTORE_SCENARIOS) {
 			while (!Bookstore.BOOKSTORE_SCENARIOS.isEmpty()) {
 				Bookstore.BOOKSTORE_SCENARIOS.wait();

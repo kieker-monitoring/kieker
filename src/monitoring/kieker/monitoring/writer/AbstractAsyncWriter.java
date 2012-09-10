@@ -33,11 +33,12 @@ import kieker.common.record.IMonitoringRecord;
  * @author Jan Waller
  */
 public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
-	private static final Log LOG = LogFactory.getLog(AbstractAsyncWriter.class);
 
-	private static final String QUEUESIZE = "QueueSize";
-	private static final String BEHAVIOR = "QueueFullBehavior";
-	private static final String SHUTDOWNDELAY = "MaxShutdownDelay";
+	public static final String CONFIG_QUEUESIZE = "QueueSize";
+	public static final String CONFIG_BEHAVIOR = "QueueFullBehavior";
+	public static final String CONFIG_SHUTDOWNDELAY = "MaxShutdownDelay";
+
+	private static final Log LOG = LogFactory.getLog(AbstractAsyncWriter.class);
 
 	// internal variables
 	protected final BlockingQueue<IMonitoringRecord> blockingQueue;
@@ -50,16 +51,16 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		super(configuration);
 		final String prefix = this.getClass().getName() + ".";
 
-		final int queueFullBehaviorTmp = this.configuration.getIntProperty(prefix + BEHAVIOR);
+		final int queueFullBehaviorTmp = this.configuration.getIntProperty(prefix + CONFIG_BEHAVIOR);
 		if ((queueFullBehaviorTmp < 0) || (queueFullBehaviorTmp > 2)) {
-			LOG.warn("Unknown value '" + queueFullBehaviorTmp + "' for " + prefix + BEHAVIOR + "; using default value 0");
+			LOG.warn("Unknown value '" + queueFullBehaviorTmp + "' for " + prefix + CONFIG_BEHAVIOR + "; using default value 0");
 			this.queueFullBehavior = 0;
 		} else {
 			this.queueFullBehavior = queueFullBehaviorTmp;
 		}
 		this.missedRecords = new AtomicInteger(0);
-		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.configuration.getIntProperty(prefix + QUEUESIZE));
-		this.maxShutdownDelay = this.configuration.getIntProperty(prefix + SHUTDOWNDELAY);
+		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.configuration.getIntProperty(prefix + CONFIG_QUEUESIZE));
+		this.maxShutdownDelay = this.configuration.getIntProperty(prefix + CONFIG_SHUTDOWNDELAY);
 	}
 
 	/**
@@ -70,9 +71,9 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration(super.getDefaultConfiguration());
 		final String prefix = this.getClass().getName() + "."; // can't use this.prefix, maybe uninitialized
-		configuration.setProperty(prefix + QUEUESIZE, "10000");
-		configuration.setProperty(prefix + BEHAVIOR, "0");
-		configuration.setProperty(prefix + SHUTDOWNDELAY, "-1");
+		configuration.setProperty(prefix + CONFIG_QUEUESIZE, "10000");
+		configuration.setProperty(prefix + CONFIG_BEHAVIOR, "0");
+		configuration.setProperty(prefix + CONFIG_SHUTDOWNDELAY, "-1");
 		return configuration;
 	}
 
@@ -140,7 +141,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(64);
 		sb.append(super.toString());
 		sb.append("\n\tRecords lost: ");
 		sb.append(this.missedRecords.intValue());

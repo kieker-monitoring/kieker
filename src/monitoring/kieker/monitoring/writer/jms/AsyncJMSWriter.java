@@ -132,7 +132,7 @@ final class JMSWriterThread extends AbstractAsyncThread {
 
 	@Override
 	public final String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(128);
 		sb.append(super.toString());
 		sb.append("; Session: '");
 		sb.append(this.session.toString());
@@ -140,7 +140,7 @@ final class JMSWriterThread extends AbstractAsyncThread {
 		sb.append(this.connection.toString());
 		sb.append("'; MessageProducer: '");
 		sb.append(this.sender.toString());
-		sb.append("'");
+		sb.append('\'');
 		return sb.toString();
 	}
 

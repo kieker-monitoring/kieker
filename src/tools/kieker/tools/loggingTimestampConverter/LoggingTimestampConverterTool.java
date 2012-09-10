@@ -45,7 +45,7 @@ public final class LoggingTimestampConverterTool {
 	private static final Options CMDL_OPTS = new Options();
 	private static final List<Option> OPTIONS = new CopyOnWriteArrayList<Option>();
 	private static final String CMD_OPT_NAME_TIMESTAMPS = "timestamps";
-	private static CommandLine cmdl = null;
+	private static CommandLine cmdl;
 	private static String[] timestampsStr;
 	private static long[] timestampsLong;
 
@@ -89,8 +89,8 @@ public final class LoggingTimestampConverterTool {
 		for (final long tstamp : LoggingTimestampConverterTool.timestampsLong) {
 			final StringBuilder strB = new StringBuilder();
 			strB.append(tstamp).append(": ").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(tstamp)).append(" (")
-					.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(tstamp)).append(")");
-			System.out.println(strB.toString());
+					.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(tstamp)).append(')');
+			System.out.println(strB.toString()); // NOPMD (System.out)
 		}
 	}
 
@@ -99,7 +99,7 @@ public final class LoggingTimestampConverterTool {
 			LoggingTimestampConverterTool.cmdl = CMDL_PARSER.parse(CMDL_OPTS, args);
 		} catch (final ParseException e) {
 			LoggingTimestampConverterTool.printUsage();
-			System.err.println("\nError parsing arguments: " + e.getMessage());
+			System.err.println("\nError parsing arguments: " + e.getMessage()); // NOPMD (System.out)
 			return false;
 		}
 		return true;
@@ -124,7 +124,7 @@ public final class LoggingTimestampConverterTool {
 				LoggingTimestampConverterTool.timestampsLong[curIdx] = Long.parseLong(LoggingTimestampConverterTool.timestampsStr[curIdx]);
 			} catch (final NumberFormatException ex) {
 				LOG.error("Failed to parse timestamp:" + LoggingTimestampConverterTool.timestampsStr[curIdx], ex);
-				System.err.println("Failed to parse timestamp:" + LoggingTimestampConverterTool.timestampsStr[curIdx]);
+				System.err.println("Failed to parse timestamp:" + LoggingTimestampConverterTool.timestampsStr[curIdx]); // NOPMD (System.out)
 				return false;
 			}
 		}

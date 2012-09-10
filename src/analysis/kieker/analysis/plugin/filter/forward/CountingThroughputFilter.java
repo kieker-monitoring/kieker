@@ -27,6 +27,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
@@ -48,6 +49,10 @@ import kieker.common.util.SimpleImmutableEntry;
 		description = "A filter computing the throughput in terms of the number of events received per time unit",
 		outputPorts = {
 			@OutputPort(name = CountingThroughputFilter.OUTPUT_PORT_NAME_RELAYED_OBJECTS, eventTypes = { Object.class }, description = "Provides each incoming object")
+		},
+		configuration = {
+			@Property(name = CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE_NANOS, defaultValue = CountingThroughputFilter.CONFIG_PROPERTY_VALUE_INTERVAL_SIZE_ONE_MINUTE),
+			@Property(name = CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVALS_BASED_ON_1ST_TSTAMP, defaultValue = "true")
 		})
 public final class CountingThroughputFilter extends AbstractFilterPlugin {
 
@@ -66,7 +71,7 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	/**
 	 * The configuration property value for {@link #CONFIG_PROPERTY_NAME_INTERVAL_SIZE_NANOS}, leading to a bin size of 1 minute
 	 */
-	public static final String CONFIG_PROPERTY_VALUE_INTERVAL_SIZE_ONE_MINUTE = Long.toString(TimeUnit.NANOSECONDS.convert(60, TimeUnit.SECONDS));
+	public static final String CONFIG_PROPERTY_VALUE_INTERVAL_SIZE_ONE_MINUTE = "60000000000";
 
 	private volatile long firstIntervalStart = -1;
 	private final boolean intervalsBasedOn1stTstamp;
@@ -95,14 +100,6 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 		super(configuration);
 		this.intervalSizeNanos = configuration.getLongProperty(CONFIG_PROPERTY_NAME_INTERVAL_SIZE_NANOS);
 		this.intervalsBasedOn1stTstamp = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INTERVALS_BASED_ON_1ST_TSTAMP);
-	}
-
-	@Override
-	protected final Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_INTERVAL_SIZE_NANOS, CONFIG_PROPERTY_VALUE_INTERVAL_SIZE_ONE_MINUTE);
-		configuration.setProperty(CONFIG_PROPERTY_NAME_INTERVALS_BASED_ON_1ST_TSTAMP, Boolean.TRUE.toString());
-		return configuration;
 	}
 
 	public final Configuration getCurrentConfiguration() {

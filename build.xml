@@ -197,14 +197,29 @@
 			</manifest>
 		</jar>
 	</target>
+	
+	<!--
+	<target name="rebuild-aspectj" description="Corrects the manifest.mf file of the aspectweaver-*.jar">
+		<fileset dir="${lib.dir}" id="aspectjweaver-jar-set">
+			<include name="aspectjweaver-*.jar" />
+		</fileset>
+		<pathconvert property="aspectjweaver-jar" refid="aspectjweaver-jar-set" />
+		<jar destfile="${dist.dir}/aspectjweaver.jar" duplicate="fail" filesetmanifest="merge">
+			<zipfileset src="${aspectjweaver-jar}" />
+			<manifest>
+				<attribute name="Premain-Class" value="org.aspectj.weaver.loadtime.Agent" />
+				<attribute name="Can-Redefine-Classes" value="true" />
+			</manifest>
+		</jar>
+	</target>
+	-->
 
 	<target name="build-kieker.main.aspectj" depends="-init,build-kieker.main" description="Compiles and packages the Kieker Jar file including the aspectweaver">
 		<fileset dir="${lib.dir}" id="aspectjweaver-jar-set">
 			<include name="aspectjweaver-*.jar" />
 		</fileset>
 		<pathconvert property="aspectjweaver-jar" refid="aspectjweaver-jar-set" />
-		<jar destfile="${dist.dir}/${dist.kieker.main.aspectj.jar}" duplicate="fail" filesetmanifest="merge" index="true">
-			<!--  indexMetaInf="true" flattenAttributes="true" -->
+		<jar destfile="${dist.dir}/${dist.kieker.main.aspectj.jar}" duplicate="fail" filesetmanifest="merge">
 			<zipfileset src="${dist.dir}/${dist.kieker.main.jar}" />
 			<zipfileset src="${aspectjweaver-jar}" />
 			<fileset dir="${lib.dir}" includes="aspectjweaver-*.LICENSE" />
@@ -217,19 +232,18 @@
 
 	<target name="build-kieker.main.emf" depends="-init,build-kieker.main" description="Compiles and packages the Kieker Jar file including the EMF runtime">
 		<fileset dir="${lib.dir}" id="org.eclipse.emf.common-jar-set">
-			<include name="org.eclipse.emf.common-*.jar" />
+			<include name="org.eclipse.emf.common_*.jar" />
 		</fileset>
 		<pathconvert property="org.eclipse.emf.common-jar" refid="org.eclipse.emf.common-jar-set" />
 		<fileset dir="${lib.dir}" id="org.eclipse.emf.ecore.xmi-jar-set">
-			<include name="org.eclipse.emf.ecore.xmi-*.jar" />
+			<include name="org.eclipse.emf.ecore.xmi_*.jar" />
 		</fileset>
 		<pathconvert property="org.eclipse.emf.ecore.xmi-jar" refid="org.eclipse.emf.ecore.xmi-jar-set" />
 		<fileset dir="${lib.dir}" id="org.eclipse.emf.ecore-jar-set">
-			<include name="org.eclipse.emf.ecore-*.jar" />
+			<include name="org.eclipse.emf.ecore_*.jar" />
 		</fileset>
 		<pathconvert property="org.eclipse.emf.ecore-jar" refid="org.eclipse.emf.ecore-jar-set" />
-		<jar destfile="${dist.dir}/${dist.kieker.main.emf.jar}" duplicate="fail" filesetmanifest="skip" index="true">
-			<!--  indexMetaInf="true" flattenAttributes="true" -->
+		<jar destfile="${dist.dir}/${dist.kieker.main.emf.jar}" duplicate="fail" filesetmanifest="skip">
 			<manifest> <!-- would be better to take it from the jar, but somehow doesn't work -->
 				<section name="kieker">
 					<attribute name="Specification-Title" value="${kieker.name}" />

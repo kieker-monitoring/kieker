@@ -48,11 +48,6 @@ public class SimpleForwardFilterWithRepository extends AbstractFilterPlugin {
 		super.deliver(OUTPUT_PORT_NAME, event);
 	}
 
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
-	}
-
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

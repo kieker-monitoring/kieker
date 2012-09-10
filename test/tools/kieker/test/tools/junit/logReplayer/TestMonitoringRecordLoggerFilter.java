@@ -133,8 +133,7 @@ public class TestMonitoringRecordLoggerFilter {
 		final AnalysisController analysisController = new AnalysisController();
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));
-		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES,
-				FSReader.CONFIG_PROPERTY_VALUE_IGNORE_UNKNOWN_RECORD_TYPES_DEFAULT);
+		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, " false");
 		final AbstractReaderPlugin reader = new FSReader(readerConfiguration);
 		final SimpleSinkFilter<IMonitoringRecord> sinkPlugin = new SimpleSinkFilter<IMonitoringRecord>(new Configuration());
 
@@ -147,12 +146,14 @@ public class TestMonitoringRecordLoggerFilter {
 	}
 
 	@Test
-	public void testControllerKeepsLoggingTimestamp() throws Exception { // NOMPD (JUnitTestsShouldIncludeAssert)
+	public void testControllerKeepsLoggingTimestamp() throws Exception {
+		Assert.assertTrue(true); // just to get rid of strange PMD behavior
 		this.testIt(true); // includes Assert(s)
 	}
 
 	@Test
-	public void testControllerSetsLoggingTimestamp() throws Exception { // NOMPD (JUnitTestsShouldIncludeAssert)
+	public void testControllerSetsLoggingTimestamp() throws Exception {
+		Assert.assertTrue(true); // just to get rid of strange PMD behavior
 		this.testIt(false); // includes Assert(s)
 	}
 

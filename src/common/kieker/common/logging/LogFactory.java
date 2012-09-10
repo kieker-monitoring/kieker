@@ -20,13 +20,13 @@ package kieker.common.logging;
  * 
  * @author Jan Waller
  */
-public final class LogFactory {
+public final class LogFactory { // NOPMD (Implementation of an logger)
+
+	private static final Logger DETECTED_LOGGER;
 
 	private static enum Logger {
 		JDK, COMMONS,
 	}
-
-	private static final Logger DETECTED_LOGGER;
 
 	static {
 		Logger logselectiontemp = Logger.JDK; // default to JDK logging

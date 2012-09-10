@@ -22,7 +22,7 @@ package kieker.tools.traceAnalysis.filter.visualization.util;
  */
 public class IntContainer {
 
-	private int value = 0;
+	private int value;
 
 	public IntContainer(final int initVal) {
 		this.value = initVal;

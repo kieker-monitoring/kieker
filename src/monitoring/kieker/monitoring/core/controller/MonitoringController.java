@@ -150,7 +150,7 @@ public final class MonitoringController extends AbstractController implements IM
 
 	@Override
 	public final String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(2048);
 		sb.append("Current State of kieker.monitoring (");
 		sb.append(MonitoringController.getVersion());
 		sb.append(") ");

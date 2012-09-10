@@ -168,10 +168,10 @@ public class Execution {
 	public String toString() {
 		final StringBuilder strBuild = new StringBuilder();
 		strBuild.append(this.traceId);
-		strBuild.append("[").append(this.eoi).append(",").append(this.ess).append("]").append(" ");
-		strBuild.append(this.tin).append("-").append(this.tout).append(" ");
-		strBuild.append(this.allocationComponent.toString()).append(".");
-		strBuild.append(this.operation.getSignature().getName()).append(" ");
+		strBuild.append('[').append(this.eoi).append(',').append(this.ess).append("] ");
+		strBuild.append(this.tin).append('-').append(this.tout).append(' ');
+		strBuild.append(this.allocationComponent.toString()).append('.');
+		strBuild.append(this.operation.getSignature().getName()).append(' ');
 
 		strBuild.append((this.sessionId != null) ? this.sessionId : NO_SESSION_ID); // NOCS
 

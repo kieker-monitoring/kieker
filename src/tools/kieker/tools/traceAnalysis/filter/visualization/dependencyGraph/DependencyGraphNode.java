@@ -42,7 +42,7 @@ public class DependencyGraphNode<T> extends AbstractVertex<DependencyGraphNode<T
 	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedIncomingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD(UseConcurrentHashMap)//NOCS
 	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedOutgoingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD(UseConcurrentHashMap)//NOCS
 
-	private volatile boolean assumed = false;
+	private volatile boolean assumed; // false
 
 	public DependencyGraphNode(final int id, final T entity, final MessageTrace origin) {
 		super(origin);

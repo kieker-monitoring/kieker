@@ -26,10 +26,9 @@ function run_ant {
 	exit 1
     fi
     if ! ant $1; then
-	echo "Build failed"
+	echo "Ant build failed"
 	exit 1
     fi
-    echo "Execution of ant failed"
 }
 
 # provide content list of archive

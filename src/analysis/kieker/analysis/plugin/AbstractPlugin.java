@@ -33,6 +33,7 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.analysis.plugin.reader.IReaderPlugin;
 import kieker.analysis.repository.AbstractRepository;
@@ -67,10 +68,7 @@ public abstract class AbstractPlugin implements IPlugin {
 	public AbstractPlugin(final Configuration configuration) {
 		try {
 			// TODO: somewhat dirty hack...
-			final Configuration defaultConfig = this.getDefaultConfiguration();
-			if (defaultConfig != null) {
-				configuration.setDefaultConfiguration(defaultConfig);
-			}
+			configuration.setDefaultConfiguration(this.getDefaultConfiguration());
 		} catch (final IllegalAccessException ex) {
 			LOG.error("Unable to set plugin default properties", ex);
 		}
@@ -115,12 +113,21 @@ public abstract class AbstractPlugin implements IPlugin {
 	}
 
 	/**
-	 * This method should deliver an instance of {@code Properties} containing the default properties for this class. In other words: Every class inheriting from
-	 * {@code AbstractPlugin} should implement this method to deliver an object which can be used for the constructor of this class.
+	 * This method delivers an instance of {@code Configuration} containing the default properties for this class.
 	 * 
 	 * @return The default properties.
 	 */
-	protected abstract Configuration getDefaultConfiguration();
+	protected final Configuration getDefaultConfiguration() {
+		final Configuration defaultConfiguration = new Configuration();
+		// Get the annotation from the class
+		final Plugin pluginAnnotation = this.getClass().getAnnotation(Plugin.class);
+		final Property[] propertyAnnotations = pluginAnnotation.configuration();
+		// Run through all properties within the annotation and add them to the configuration object
+		for (final Property property : propertyAnnotations) {
+			defaultConfiguration.setProperty(property.name(), property.defaultValue());
+		}
+		return defaultConfiguration;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -239,11 +246,11 @@ public abstract class AbstractPlugin implements IPlugin {
 
 		/* Second step: Check whether the ports exist. */
 		final OutputPort outputPort = src.outputPorts.get(output);
-		final InputPort inputPort = dst.inputPorts.get(input);
 		if (outputPort == null) {
 			LOG.warn("Output port does not exist. " + "Plugin: " + src.getClass().getName() + "; output: " + output);
 			return false;
 		}
+		final InputPort inputPort = dst.inputPorts.get(input);
 		if (inputPort == null) {
 			LOG.warn("Input port does not exist. " + "Plugin: " + dst.getClass().getName() + "; input: " + input);
 			return false;

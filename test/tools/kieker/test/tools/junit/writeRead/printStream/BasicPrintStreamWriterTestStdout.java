@@ -35,12 +35,12 @@ import kieker.test.tools.junit.writeRead.util.StringTeePrintStream;
  * because a lot of code is shared.
  * 
  * @author Andre van Hoorn
- * 
  */
 public class BasicPrintStreamWriterTestStdout extends AbstractPrintStreamWriterTest { // NOCS (test class without a constructor)
-	private volatile PrintStream originalPrintStream = null;
 
-	private volatile StringTeePrintStream stringTeePrintStream = null;
+	private volatile PrintStream originalPrintStream;
+
+	private volatile StringTeePrintStream stringTeePrintStream = null; // NOPMD (init for findbugs)
 
 	@Before
 	public void setUp() throws Exception {

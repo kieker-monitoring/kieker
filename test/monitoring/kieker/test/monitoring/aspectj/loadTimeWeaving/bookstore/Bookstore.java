@@ -56,13 +56,13 @@ public class Bookstore extends Thread {
 	@OperationExecutionMonitoringProbe
 	public static void main(final String[] args) {
 		for (int i = 0; i < Bookstore.NUM_REQUESTS; i++) {
-			System.out.println("Bookstore.main: Starting request " + i);
+			System.out.println("Bookstore.main: Starting request " + i); // NOPMD (System.out)
 			final Bookstore newBookstore = new Bookstore();
 			newBookstore.start();
 			Bookstore.waitabit(Bookstore.INTER_REQUEST_TIME);
 		}
-		System.out.println("Bookstore.main: Finished with starting all requests.");
-		System.out.println("Bookstore.main: Waiting 5 secs before calling system.exit");
+		System.out.println("Bookstore.main: Finished with starting all requests."); // NOPMD (System.out)
+		System.out.println("Bookstore.main: Waiting 5 secs before calling system.exit"); // NOPMD (System.out)
 		Bookstore.waitabit(5000);
 		System.exit(0);
 	}

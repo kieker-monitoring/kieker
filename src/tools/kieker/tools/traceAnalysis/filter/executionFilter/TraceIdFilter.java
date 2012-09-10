@@ -32,7 +32,9 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * @author Andre van Hoorn
  */
 @Plugin(description = "A filter allowing to filter incoming execution objects based on their trace ID",
-		outputPorts = @OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MATCH, description = "Forwards executions with matching trace IDs", eventTypes = { Execution.class }))
+		outputPorts = {
+			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MATCH, description = "Forwards executions with matching trace IDs", eventTypes = { Execution.class })
+		})
 public class TraceIdFilter extends AbstractTraceIdFilter {
 
 	public static final String INPUT_PORT_NAME_EXECUTION = "executions";

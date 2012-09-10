@@ -27,10 +27,10 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 	private static final String OUTPUT_TEMPLATE = "min: %dms, avg: %.2fms, max: %dms";
 
 	// TODO Use TimeUnit instead (currently, we use milliseconds)
-	private long responseTimeSum = 0;
-	private int executionCount = 0;
+	private long responseTimeSum;
+	private int executionCount;
 	private int minimalResponseTime = Integer.MAX_VALUE;
-	private int maximalResponseTime = 0;
+	private int maximalResponseTime;
 
 	public ResponseTimeDecoration() {
 		// empty default constructor

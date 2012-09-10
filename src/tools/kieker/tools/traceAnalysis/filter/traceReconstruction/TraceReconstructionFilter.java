@@ -26,6 +26,7 @@ import java.util.TreeSet;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -45,21 +46,19 @@ import kieker.tools.util.LoggingTimestampConverter;
  */
 @Plugin(description = "Uses the incoming data to enrich the connected repository with the reconstructed traces",
 		outputPorts = {
-			@OutputPort(
-					name = TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-					description = "Reconstructed Message Traces",
-					eventTypes = { MessageTrace.class }),
-			@OutputPort(
-					name = TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
-					description = "Reconstructed Execution Traces",
-					eventTypes = { ExecutionTrace.class }),
-			@OutputPort(
-					name = TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE,
-					description = "Invalid Execution Traces",
-					eventTypes = { InvalidExecutionTrace.class })
+			@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Reconstructed Message Traces", eventTypes = { MessageTrace.class }),
+			@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Reconstructed Execution Traces", eventTypes = { ExecutionTrace.class }),
+			@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, description = "Invalid Execution Traces", eventTypes = { InvalidExecutionTrace.class })
 		},
-		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
+		repositoryPorts = {
+			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+		},
+		configuration = {
+			@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, defaultValue = "2147483647"), // Integer.toString(Integer.MAX_VALUE)
+			@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, defaultValue = "true")
+		})
 public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
+
 	public static final String INPUT_PORT_NAME_EXECUTIONS = "executions";
 
 	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE = "messageTraces";
@@ -79,12 +78,12 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	private final Set<Long> invalidTraces = new TreeSet<Long>();
 	private volatile long minTin = -1;
 	private volatile long maxTout = -1;
-	private volatile boolean terminated = false;
-	private final boolean ignoreInvalidTraces;
+	private volatile boolean terminated;
+	private final boolean ignoreInvalidTraces; // false
 	private final long maxTraceDurationNanos;
 	private final long maxTraceDurationMillis;
 
-	private boolean traceProcessingErrorOccured = false;
+	private boolean traceProcessingErrorOccured; // false
 
 	/** Pending traces sorted by tin timestamps */
 	private final SortedSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() {
@@ -329,17 +328,6 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 				this.stdOutPrintln("Last timestamp: " + maxToutStr);
 			}
 		}
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-
-		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS,
-				Long.toString(AbstractTraceProcessingFilter.MAX_DURATION_MILLIS));
-		configuration.setProperty(CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, Boolean.TRUE.toString());
-
-		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {

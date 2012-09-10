@@ -60,7 +60,7 @@ final class FSDirectoryReader implements Runnable {
 	// This set of classes is used to filter only records of a specific type. The value null means all record types are read.
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final File inputDir;
-	private boolean terminated = false;
+	private boolean terminated;
 
 	private final boolean ignoreUnknownRecordTypes;
 	private final Set<String> unknownTypesObserved = new HashSet<String>();
@@ -310,7 +310,7 @@ final class FSDirectoryReader implements Runnable {
 				final Class<?>[] typeArray = AbstractMonitoringRecord.typesForClass(clazz);
 
 				// read record
-				final long loggingTimestamp = in.readLong();
+				final long loggingTimestamp = in.readLong(); // NOPMD (must be read here!)
 				final Object[] objectArray = new Object[typeArray.length];
 				int idx = -1;
 				for (final Class<?> type : typeArray) {

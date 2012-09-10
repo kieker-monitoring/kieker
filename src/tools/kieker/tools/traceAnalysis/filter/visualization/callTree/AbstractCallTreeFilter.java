@@ -53,7 +53,9 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * 
  * @author Andre van Hoorn
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
+@Plugin(repositoryPorts = {
+	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+})
 public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProcessingFilter {
 
 	private static final String ENCODING = "UTF-8";
@@ -72,7 +74,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 
 		final StringBuilder strBuild = new StringBuilder(assemblyComponentName).append(":");
 		if (!shortLabels) {
-			strBuild.append(componentTypePackagePrefx).append(".");
+			strBuild.append(componentTypePackagePrefx).append('.');
 		} else {
 			strBuild.append("..");
 		}
@@ -80,12 +82,12 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 
 		final Signature sig = operation.getSignature();
 		final StringBuilder opLabel = new StringBuilder(sig.getName());
-		opLabel.append("(");
+		opLabel.append('(');
 		final String[] paramList = sig.getParamTypeList();
 		if (paramList.length > 0) {
 			opLabel.append("..");
 		}
-		opLabel.append(")");
+		opLabel.append(')');
 
 		strBuild.append(opLabel.toString());
 		return strBuild.toString();
@@ -103,7 +105,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 
 		final StringBuilder strBuild = new StringBuilder(resourceContainerName).append("::\\n").append(assemblyComponentName).append(":");
 		if (!shortLabels) {
-			strBuild.append(componentTypePackagePrefx).append(".");
+			strBuild.append(componentTypePackagePrefx).append('.');
 		} else {
 			strBuild.append("..");
 		}
@@ -111,12 +113,12 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 
 		final Signature sig = operation.getSignature();
 		final StringBuilder opLabel = new StringBuilder(sig.getName());
-		opLabel.append("(");
+		opLabel.append('(');
 		final String[] paramList = sig.getParamTypeList();
 		if (paramList.length > 0) {
 			opLabel.append("..");
 		}
-		opLabel.append(")");
+		opLabel.append(')');
 
 		strBuild.append(opLabel.toString());
 
@@ -138,7 +140,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 	/** Traverse tree recursively and generate dot code for edges. */
 	private static void dotEdgesFromSubTree(final AbstractCallTreeNode<?> n,
 			final Map<AbstractCallTreeNode<?>, Integer> nodeIds, final IntContainer nextNodeId, final PrintStream ps, final boolean shortLabels) {
-		final StringBuilder strBuild = new StringBuilder();
+		final StringBuilder strBuild = new StringBuilder(64);
 		nodeIds.put(n, nextNodeId.getValue());
 		strBuild.append(nextNodeId.getAndIncValue()).append("[label =\"").append(n.isRootNode() ? "$" : AbstractCallTreeFilter.nodeLabel(n, shortLabels)) // NOCS
 				.append("\",shape=" + DotFactory.DOT_SHAPE_NONE + "];");
@@ -155,9 +157,9 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		for (final WeightedDirectedCallTreeEdge<?> child : n.getChildEdges()) {
 			final StringBuilder strBuild = new StringBuilder(1024);
 			final int childId = nodeIds.get(child.getTarget());
-			strBuild.append("\n").append(thisId).append("->").append(childId).append("[style=solid,arrowhead=none");
+			strBuild.append('\n').append(thisId).append("->").append(childId).append("[style=solid,arrowhead=none");
 			if (includeWeights) {
-				strBuild.append(",label=\"").append(child.getTargetWeight().getValue()).append("\"");
+				strBuild.append(",label=\"").append(child.getTargetWeight().getValue()).append('"');
 			} else if (eoiCounter != null) {
 				strBuild.append(",label=\"").append(eoiCounter.getAndIncValue()).append(".\"");
 			}

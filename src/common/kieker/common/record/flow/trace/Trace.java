@@ -61,7 +61,7 @@ public final class Trace extends AbstractMonitoringRecord implements IMonitoring
 	private final String hostname;
 	private final long parentTraceId;
 	private final int parentOrderId;
-	private transient int nextOrderId = 0; // used only thread local!
+	private transient int nextOrderId = 0; // used only thread local! // NOPMD (transient init)
 
 	/**
 	 * 

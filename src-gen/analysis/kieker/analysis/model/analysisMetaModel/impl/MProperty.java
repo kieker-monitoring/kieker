@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <ul>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MProperty#getName <em>Name</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MProperty#getValue <em>Value</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MProperty#getDescription <em>Description</em>}</li>
  * </ul>
  * </p>
  *
@@ -70,6 +71,26 @@ public class MProperty extends EObjectImpl implements MIProperty {
 	 * @ordered
 	 */
 	protected String value = VALUE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDescription()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String DESCRIPTION_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDescription()
+	 * @generated
+	 * @ordered
+	 */
+	protected String description = DESCRIPTION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -137,6 +158,27 @@ public class MProperty extends EObjectImpl implements MIProperty {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDescription(String newDescription) {
+		String oldDescription = description;
+		description = newDescription;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.PROPERTY__DESCRIPTION, oldDescription, description));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -144,6 +186,8 @@ public class MProperty extends EObjectImpl implements MIProperty {
 				return getName();
 			case MIAnalysisMetaModelPackage.PROPERTY__VALUE:
 				return getValue();
+			case MIAnalysisMetaModelPackage.PROPERTY__DESCRIPTION:
+				return getDescription();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -161,6 +205,9 @@ public class MProperty extends EObjectImpl implements MIProperty {
 				return;
 			case MIAnalysisMetaModelPackage.PROPERTY__VALUE:
 				setValue((String)newValue);
+				return;
+			case MIAnalysisMetaModelPackage.PROPERTY__DESCRIPTION:
+				setDescription((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -180,6 +227,9 @@ public class MProperty extends EObjectImpl implements MIProperty {
 			case MIAnalysisMetaModelPackage.PROPERTY__VALUE:
 				setValue(VALUE_EDEFAULT);
 				return;
+			case MIAnalysisMetaModelPackage.PROPERTY__DESCRIPTION:
+				setDescription(DESCRIPTION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -196,6 +246,8 @@ public class MProperty extends EObjectImpl implements MIProperty {
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case MIAnalysisMetaModelPackage.PROPERTY__VALUE:
 				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
+			case MIAnalysisMetaModelPackage.PROPERTY__DESCRIPTION:
+				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -214,6 +266,8 @@ public class MProperty extends EObjectImpl implements MIProperty {
 		result.append(name);
 		result.append(", value: ");
 		result.append(value);
+		result.append(", description: ");
+		result.append(description);
 		result.append(')');
 		return result.toString();
 	}

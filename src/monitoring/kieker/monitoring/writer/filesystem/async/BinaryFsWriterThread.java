@@ -34,11 +34,11 @@ import kieker.monitoring.writer.filesystem.MappingFileWriter;
 public class BinaryFsWriterThread extends AbstractFsWriterThread {
 	private static final Log LOG = LogFactory.getLog(BinaryFsWriterThread.class);
 
-	private DataOutputStream out = null;
+	private DataOutputStream out;
 
 	public BinaryFsWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
-			final MappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile) {
-		super(monitoringController, writeQueue, mappingFileWriter, path, maxEntriesInFile);
+			final MappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile, final int maxLogSize, final int maxLogFiles) {
+		super(monitoringController, writeQueue, mappingFileWriter, path, maxEntriesInFile, maxLogSize, maxLogFiles);
 		this.fileExtension = ".bin";
 	}
 
@@ -46,59 +46,59 @@ public class BinaryFsWriterThread extends AbstractFsWriterThread {
 	protected void write(final IMonitoringRecord monitoringRecord) throws IOException {
 		this.out.writeInt(this.monitoringController.getIdForString(monitoringRecord.getClass().getName()));
 		this.out.writeLong(monitoringRecord.getLoggingTimestamp());
-		// two steps
-		// first check for conformity
-		for (final Object recordField : monitoringRecord.toArray()) {
-			if ((recordField instanceof String)
-					|| (recordField instanceof Integer)
-					|| (recordField instanceof Long)
-					|| (recordField instanceof Float)
-					|| (recordField instanceof Double)
-					|| (recordField instanceof Byte)
-					|| (recordField instanceof Short)
-					|| (recordField instanceof Boolean)) {
-				continue;
-			} else if (recordField == null) {
-				LOG.warn("Unable to write record with null value: " + monitoringRecord.getClass().getSimpleName());
-				return; // skip record
+		final Object[] recordFields = monitoringRecord.toArray();
+		for (int i = 0; i < recordFields.length; i++) {
+			if (recordFields[i] == null) {
+				final Class<?>[] recordTypes = monitoringRecord.getValueTypes();
+				if (recordTypes[i] == String.class) {
+					this.out.writeInt(this.monitoringController.getIdForString(""));
+				} else if (recordTypes[i] == Integer.class) {
+					this.out.writeInt(0);
+				} else if (recordTypes[i] == Long.class) {
+					this.out.writeLong(0L);
+				} else if (recordTypes[i] == Float.class) {
+					this.out.writeFloat(0);
+				} else if (recordTypes[i] == Double.class) {
+					this.out.writeDouble(0);
+				} else if (recordTypes[i] == Byte.class) {
+					this.out.writeByte(0);
+				} else if (recordTypes[i] == Short.class) {
+					this.out.writeShort(0);
+				} else if (recordTypes[i] == Boolean.class) {
+					this.out.writeBoolean(false);
+				} else {
+					LOG.warn("Record with unsupported recordField of type " + recordFields[i].getClass());
+					this.out.writeByte((byte) 0);
+				}
+			} else if (recordFields[i] instanceof String) {
+				this.out.writeInt(this.monitoringController.getIdForString((String) recordFields[i]));
+			} else if (recordFields[i] instanceof Integer) {
+				this.out.writeInt((Integer) recordFields[i]);
+			} else if (recordFields[i] instanceof Long) {
+				this.out.writeLong((Long) recordFields[i]);
+			} else if (recordFields[i] instanceof Float) {
+				this.out.writeFloat((Float) recordFields[i]);
+			} else if (recordFields[i] instanceof Double) {
+				this.out.writeDouble((Double) recordFields[i]);
+			} else if (recordFields[i] instanceof Byte) {
+				this.out.writeByte((Byte) recordFields[i]);
+			} else if (recordFields[i] instanceof Short) {
+				this.out.writeShort((Short) recordFields[i]);
+			} else if (recordFields[i] instanceof Boolean) {
+				this.out.writeBoolean((Boolean) recordFields[i]);
 			} else {
-				LOG.warn("Unable to write record with recordField of type " + recordField.getClass());
-				return; // skip record
-			}
-		}
-		// second write it
-		for (final Object recordField : monitoringRecord.toArray()) {
-			if (recordField instanceof String) {
-				this.out.writeInt(this.monitoringController.getIdForString((String) recordField));
-			} else if (recordField instanceof Integer) {
-				this.out.writeInt((Integer) recordField);
-			} else if (recordField instanceof Long) {
-				this.out.writeLong((Long) recordField);
-			} else if (recordField instanceof Float) {
-				this.out.writeFloat((Float) recordField);
-			} else if (recordField instanceof Double) {
-				this.out.writeDouble((Double) recordField);
-			} else if (recordField instanceof Byte) {
-				this.out.writeByte((Byte) recordField);
-			} else if (recordField instanceof Short) {
-				this.out.writeShort((Short) recordField);
-			} else if (recordField instanceof Boolean) {
-				this.out.writeBoolean((Boolean) recordField);
-			} else if (recordField == null) {
-				LOG.warn("Unable to write record with null value.");
-			} else {
-				LOG.warn("Unable to write record with recordField of type " + recordField.getClass());
+				LOG.warn("Record with unsupported recordField of type " + recordFields[i].getClass());
 				this.out.writeByte((byte) 0);
 			}
 		}
 	}
 
 	@Override
-	protected void prepareFile() throws IOException {
+	protected void prepareFile(final String filename) throws IOException {
 		if (this.out != null) {
 			this.out.close();
 		}
-		this.out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(this.getFilename())));
+		this.out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(filename)));
 	}
 
 	@Override

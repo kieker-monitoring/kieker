@@ -49,11 +49,11 @@ public final class Benchmark {
 		/* 1. Preparations */
 		Benchmark.parseAndInitializeArguments(args);
 
-		System.out.println(" # Experiment run configuration:");
-		System.out.println(" # 1. Output filename " + Benchmark.outputFn);
-		System.out.println(" # 2. Recursion Depth " + Benchmark.recursionDepth);
-		System.out.println(" # 3. Threads " + Benchmark.totalThreads);
-		System.out.println(" # 4. Total-Calls " + Benchmark.totalCalls);
+		System.out.println(" # Experiment run configuration:"); // NOPMD (System.out)
+		System.out.println(" # 1. Output filename " + Benchmark.outputFn); // NOPMD (System.out)
+		System.out.println(" # 2. Recursion Depth " + Benchmark.recursionDepth); // NOPMD (System.out)
+		System.out.println(" # 3. Threads " + Benchmark.totalThreads); // NOPMD (System.out)
+		System.out.println(" # 4. Total-Calls " + Benchmark.totalCalls); // NOPMD (System.out)
 
 		/* 2. Initialize Threads and Classes */
 		final CountDownLatch doneSignal = new CountDownLatch(Benchmark.totalThreads);
@@ -87,12 +87,12 @@ public final class Benchmark {
 		try {
 			doneSignal.await();
 		} catch (final InterruptedException e) {
-			e.printStackTrace();
+			e.printStackTrace(); // NOPMD (Stacktrace)
 			System.exit(-1);
 		}
 
 		/* 5. Print experiment statistics */
-		System.out.print(" # 5. Writing results ... ");
+		System.out.print(" # 5. Writing results ... "); // NOPMD (System.out)
 		// CSV Format: configuration;order_index;Thread-ID;duration_nsec
 		long[] timings;
 		for (int h = 0; h < Benchmark.totalThreads; h++) {
@@ -103,8 +103,8 @@ public final class Benchmark {
 		}
 		Benchmark.ps.close();
 
-		System.out.println("done");
-		System.out.println(" # ");
+		System.out.println("done"); // NOPMD (System.out)
+		System.out.println(" # "); // NOPMD (System.out)
 
 		System.exit(0);
 	}
@@ -134,7 +134,7 @@ public final class Benchmark {
 			Benchmark.ps = new PrintStream(new FileOutputStream(Benchmark.outputFn, true), false, Benchmark.ENCODING);
 		} catch (final Exception ex) { // NOCS (e.g., IOException, ParseException, NumberFormatException)
 			new HelpFormatter().printHelp(Benchmark.class.getName(), cmdlOpts);
-			ex.printStackTrace();
+			ex.printStackTrace(); // NOPMD (Stacktrace)
 			System.exit(-1);
 		}
 	}

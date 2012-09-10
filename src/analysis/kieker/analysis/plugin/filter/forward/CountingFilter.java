@@ -55,11 +55,6 @@ public final class CountingFilter extends AbstractFilterPlugin {
 		super(configuration);
 	}
 
-	@Override
-	protected final Configuration getDefaultConfiguration() {
-		return new Configuration();
-	}
-
 	public final Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

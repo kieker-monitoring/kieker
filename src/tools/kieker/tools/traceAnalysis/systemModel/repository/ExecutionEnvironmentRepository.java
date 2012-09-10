@@ -53,12 +53,11 @@ public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository 
 	}
 
 	public final ExecutionContainer createAndRegisterExecutionContainer(final String namedIdentifier, final String name) {
-		ExecutionContainer newInst;
 		if (this.executionContainersByName.containsKey(namedIdentifier)) {
 			throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
 		}
 		final int id = this.getAndIncrementNextId();
-		newInst = new ExecutionContainer(id, null, name);
+		final ExecutionContainer newInst = new ExecutionContainer(id, null, name);
 		this.executionContainersById.put(id, newInst);
 		this.executionContainersByName.put(namedIdentifier, newInst);
 		return newInst;

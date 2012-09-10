@@ -49,12 +49,11 @@ public class OperationRepository extends AbstractSystemSubRepository {
 	}
 
 	public final Operation createAndRegisterOperation(final String namedIdentifier, final ComponentType componentType, final Signature signature) {
-		Operation newInst;
 		if (this.operationsByName.containsKey(namedIdentifier)) {
 			throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
 		}
 		final int id = this.getAndIncrementNextId();
-		newInst = new Operation(id, componentType, signature);
+		final Operation newInst = new Operation(id, componentType, signature);
 		this.operationsById.put(id, newInst);
 		this.operationsByName.put(namedIdentifier, newInst);
 		return newInst;

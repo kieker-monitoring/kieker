@@ -36,14 +36,12 @@ import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 /**
- * 
  * @author Andre van Hoorn
- * 
  */
 public class BasicNamedRecordPipeWriterReaderTest extends AbstractWriterReaderTest { // NOPMD NOCS (TestClassWithoutTestCases)
 	private static final String PIPE_NAME = "pipe-IVvirGREEf";
 
-	private volatile SimpleSinkFilter<IMonitoringRecord> sinkFilter = null;
+	private volatile SimpleSinkFilter<IMonitoringRecord> sinkFilter = null; // NOPMD (init for findbugs)
 
 	@Before
 	public void setUp() throws Exception {

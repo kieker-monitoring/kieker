@@ -75,7 +75,7 @@ public final class ExecutionOrderTest {
 
 	@OperationExecutionMonitoringProbe
 	public static void methodd3() {
-		System.out.println("d3()");
+		System.out.println("d3()"); // NOPMD (System.out)
 	}
 
 }

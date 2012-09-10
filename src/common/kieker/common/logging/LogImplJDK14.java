@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  * @author Jan Waller
  */
 public final class LogImplJDK14 implements Log {
-	private final Logger logger;
+	private final Logger logger; // NOPMD (Implementation of an logger)
 	private final String name;
 
 	protected LogImplJDK14(final String name) {

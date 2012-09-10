@@ -22,6 +22,7 @@ import java.util.List;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -39,6 +40,9 @@ import kieker.common.logging.LogFactory;
 		outputPorts = {
 			@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH, eventTypes = { Object.class }, description = "Forwards events matching the configured types"),
 			@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_TYPE_MISMATCH, eventTypes = {}, description = "Forwards events not matching the configured types")
+		},
+		configuration = {
+			@Property(name = TypeFilter.CONFIG_PROPERTY_NAME_TYPES, defaultValue = "java.lang.Object")
 		})
 public final class TypeFilter extends AbstractFilterPlugin {
 
@@ -65,13 +69,6 @@ public final class TypeFilter extends AbstractFilterPlugin {
 			}
 		}
 		this.acceptedClasses = listOfClasses.toArray(new Class<?>[listOfClasses.size()]);
-	}
-
-	@Override
-	protected final Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_TYPES, "java.lang.Object");
-		return configuration;
 	}
 
 	public final Configuration getCurrentConfiguration() {
