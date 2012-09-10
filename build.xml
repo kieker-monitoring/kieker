@@ -671,6 +671,7 @@
 			<fileset dir="${lib.dir}">
 				<include name="junit-*.jar" />
 				<include name="aopalliance-*.jar" />
+				<include name="cxf-*.jar" />
 			</fileset>
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />
@@ -1002,6 +1003,16 @@
 				<include name="junit-*.jar" />
 				<include name="org.eclipse.emf.*.jar" />
 				<include name="derby-*.jar" />
+				<include name="javax.servlet-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="cxf-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="xmlschema-core-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="neethi-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="wsdl4j-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="jetty-util-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="jetty-http-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="jetty-server-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="jetty-io-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="jetty-continuation-*.jar" /> <!-- needed for the cxf tests -->
 			</fileset>
 			<pathelement location="${build.tests.dir}/" />
 			<fileset dir="${dist.dir}">

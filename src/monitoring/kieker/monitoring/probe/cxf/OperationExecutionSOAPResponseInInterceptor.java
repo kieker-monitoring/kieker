@@ -52,23 +52,28 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
 
-	private static final IMonitoringController CTRL_INST = MonitoringController.getInstance();
-	protected static final ITimeSource TIMESOURCE = CTRL_INST.getTimeSource(); // NOCS (decl. order)
-
-	protected static final String VM_NAME = CTRL_INST.getHostname(); // NOCS (decl. order)
+	protected final IMonitoringController monitoringController;
+	protected final ITimeSource timeSource;
+	protected final String vmName;
 
 	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPResponseInInterceptor.class);
 
-	private static final String SIGNATURE = "public void " + OperationExecutionSOAPResponseInInterceptor.class.getName()
+	public static final String SIGNATURE = "public void " + OperationExecutionSOAPResponseInInterceptor.class.getName()
 			+ ".handleMessage(org.apache.cxf.message.Message)";
 
 	public OperationExecutionSOAPResponseInInterceptor() {
-		// nothing to do
+		this(MonitoringController.getInstance());
+	}
+
+	public OperationExecutionSOAPResponseInInterceptor(final IMonitoringController monitoringCtrl) {
+		this.monitoringController = monitoringCtrl;
+		this.timeSource = this.monitoringController.getTimeSource();
+		this.vmName = this.monitoringController.getHostname();
 	}
 
 	@Override
 	public void handleMessage(final Message msg) throws Fault {
-		if (!CTRL_INST.isMonitoringEnabled()) {
+		if (!this.monitoringController.isMonitoringEnabled()) {
 			return;
 		}
 		if (msg instanceof SoapMessage) {
@@ -135,7 +140,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			final int myEoi = CF_REGISTRY.recallThreadLocalEOI();
 			final int myEss = CF_REGISTRY.recallThreadLocalESS();
 			final long myTin = SOAP_REGISTRY.recallThreadLocalOutRequestTin();
-			final long myTout = TIMESOURCE.getTime();
+			final long myTout = this.timeSource.getTime();
 
 			if (myTraceId != traceId) {
 				LOG.log(Level.WARNING, "Inconsistency between traceId before and after SOAP request:\n" + myTraceId
@@ -144,8 +149,8 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 
 			// Log this execution
 			final OperationExecutionRecord rec = new OperationExecutionRecord(SIGNATURE, mySessionId, myTraceId, myTin,
-					myTout, VM_NAME, myEoi, myEss);
-			CTRL_INST.newMonitoringRecord(rec);
+					myTout, this.vmName, myEoi, myEss);
+			this.monitoringController.newMonitoringRecord(rec);
 
 			/*
 			 * Store received Kieker EOI

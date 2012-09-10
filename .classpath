@@ -37,5 +37,14 @@
 	<classpathentry kind="lib" path="lib/org.springframework.context-3.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/org.springframework.web-3.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/sigar-1.6.4.jar"/>
+	<classpathentry kind="lib" path="lib/cxf-2.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-http-7.6.5.v20120716.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-io-7.6.5.v20120716.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-server-7.6.5.v20120716.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-util-7.6.5.v20120716.jar"/>
+	<classpathentry kind="lib" path="lib/neethi-3.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/wsdl4j-1.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/xmlschema-core-2.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-continuation-7.6.5.v20120716.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>

@@ -54,23 +54,28 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
 
-	private static final IMonitoringController CRTR_INST = MonitoringController.getInstance();
-	protected static final ITimeSource TIMESOURCE = CRTR_INST.getTimeSource(); // NOCS (decl. order)
+	protected final IMonitoringController monitoringController;
+	protected final ITimeSource timeSource;
+	protected final String vmName;
 
-	protected static final String VM_NAME = CRTR_INST.getHostname(); // NOCS (decl. order)
-
-	private static final String SIGNATURE = "public void " + OperationExecutionSOAPResponseOutInterceptor.class.getName()
+	public static final String SIGNATURE = "public void " + OperationExecutionSOAPResponseOutInterceptor.class.getName()
 			+ ".handleMessage(org.apache.cxf.binding.soap.SoapMessage)";
 
 	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPResponseOutInterceptor.class);
 
 	public OperationExecutionSOAPResponseOutInterceptor() {
-		// nothing to do
+		this(MonitoringController.getInstance());
+	}
+
+	public OperationExecutionSOAPResponseOutInterceptor(final IMonitoringController monitoringCtrl) {
+		this.monitoringController = monitoringCtrl;
+		this.timeSource = this.monitoringController.getTimeSource();
+		this.vmName = this.monitoringController.getHostname();
 	}
 
 	@Override
 	public void handleMessage(final SoapMessage msg) throws Fault {
-		if (!CRTR_INST.isMonitoringEnabled()) {
+		if (!this.monitoringController.isMonitoringEnabled()) {
 			return;
 		}
 		String sessionID;
@@ -102,7 +107,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 			myEoi = SOAP_REGISTRY.recallThreadLocalInRequestEOI();
 			myEss = SOAP_REGISTRY.recallThreadLocalInRequestESS();
 			tin = SOAP_REGISTRY.recallThreadLocalInRequestTin();
-			tout = TIMESOURCE.getTime();
+			tout = this.timeSource.getTime();
 			isEntryCall = SOAP_REGISTRY.recallThreadLocalInRequestIsEntryCall();
 		}
 
@@ -110,9 +115,8 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 		this.unsetKiekerThreadLocalData();
 
 		/* Log this execution */
-		final OperationExecutionRecord rec = new OperationExecutionRecord(SIGNATURE, sessionID, traceId, tin, tout,
-				VM_NAME, myEoi, myEss);
-		CRTR_INST.newMonitoringRecord(rec);
+		final OperationExecutionRecord rec = new OperationExecutionRecord(SIGNATURE, sessionID, traceId, tin, tout, this.vmName, myEoi, myEss);
+		this.monitoringController.newMonitoringRecord(rec);
 
 		/*
 		 * We don't put Kieker data into response header if request didn't
