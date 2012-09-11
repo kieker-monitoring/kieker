@@ -16,7 +16,6 @@
 
 package kieker.analysis.plugin.filter.forward;
 
-import java.io.Serializable;
 import java.lang.ref.SoftReference;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -154,8 +153,7 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 	/**
 	 * StringBuffer entry.
 	 */
-	private static final class HashEntry extends SoftReference<String> implements Serializable {
-		private static final long serialVersionUID = 1L;
+	private static final class HashEntry extends SoftReference<String> {
 		final int hash; // NOPMD NOCS (package visible for inner class)
 		final HashEntry next; // NOPMD NOCS (package visible for inner class)
 
@@ -216,7 +214,7 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 
 		protected final String get(final String value, final int hash) {
 			HashEntry e = null;
-			String cachedString = null;
+			String cachedString;
 			if (this.count != 0) { // volatile read! search for entry without locking
 				final HashEntry[] tab = this.table;
 				final int index = hash & (tab.length - 1);
@@ -227,8 +225,6 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 						cachedString = e.get();
 						if (value.equals(cachedString)) {
 							return cachedString;
-						} else {
-							cachedString = null;
 						}
 					}
 					e = e.next;
