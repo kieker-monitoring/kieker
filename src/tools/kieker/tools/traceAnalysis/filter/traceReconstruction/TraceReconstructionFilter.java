@@ -238,12 +238,13 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 		} catch (final InvalidTraceException ex) {
 			/* Transformation failed (i.e., trace invalid) */
 			super.deliver(OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, new InvalidExecutionTrace(executionTrace));
+			final String transformationError = "Failed to transform execution trace to message trace (ID:" + curTraceId + "). \n"
+					+ "Reason:" + ex.getMessage() + "\n Trace: " + executionTrace;
 			if (!this.invalidTraces.contains(curTraceId)) {
 				// only once per traceID (otherwise, we would report all
 				// trace fragments)
 				this.reportError(curTraceId);
 				this.invalidTraces.add(curTraceId);
-				final String transformationError = "Failed to transform execution trace to message trace (ID:" + curTraceId + "): " + executionTrace;
 				if (!this.ignoreInvalidTraces) {
 					this.traceProcessingErrorOccured = true;
 					LOG.warn("Note that this filter was configured to terminate at the *first* occurence of an invalid trace \n"
@@ -251,8 +252,10 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 							+ CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES + " to 'true'");
 					throw new ExecutionEventProcessingException(transformationError, ex);
 				} else {
-					LOG.error(transformationError, ex);
+					LOG.error(transformationError); // do not pass 'ex' to LOG.error because this makes the output verbose (#584)
 				}
+			} else {
+				LOG.warn("Found additional fragment for trace already marked invalid: " + transformationError);
 			}
 		}
 	}

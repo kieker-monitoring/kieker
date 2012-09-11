@@ -118,7 +118,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 			}
 			this.reportSuccess(et.getTraceId());
 		} catch (final InvalidTraceException ex) {
-			LOG.error("InvalidTraceException", ex);
+			LOG.error("InvalidTraceException: " + ex.getMessage()); // do not pass 'ex' to LOG.error because this makes the output verbose (#584)
 			this.reportError(et.getTraceId());
 		}
 	}

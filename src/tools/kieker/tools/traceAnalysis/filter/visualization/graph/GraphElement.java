@@ -75,7 +75,7 @@ public class GraphElement<O> {
 	 *            The origin object
 	 */
 	public void addOrigin(final O origin) {
-		// Deactivated due to memory issues: http://kieker.uni-kiel.de/trac/ticket/583
+		// TODO: Deactivated due to memory issues: http://kieker.uni-kiel.de/trac/ticket/583
 		// this.origins.add(origin);
 	}
 
