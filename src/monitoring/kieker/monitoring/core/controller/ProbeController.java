@@ -21,23 +21,18 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.ListIterator;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.aspectj.util.LangUtil;
-import org.aspectj.weaver.tools.PointcutExpression;
-import org.aspectj.weaver.tools.PointcutParser;
-import org.aspectj.weaver.tools.ShadowMatch;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.helper.FileWatcher;
+import kieker.monitoring.core.helper.NamePattern;
 
 /**
  * @author Jan Waller, Björn Weißenfels
@@ -45,7 +40,7 @@ import kieker.monitoring.core.helper.FileWatcher;
 public class ProbeController extends AbstractController implements IProbeController {
 	private static final Log LOG = LogFactory.getLog(ProbeController.class);
 
-	private static final ConcurrentHashMap<String, Boolean> PATTERNS = new ConcurrentHashMap<String, Boolean>();
+	private static final CopyOnWriteArrayList<NamePattern> PATTERNS = new CopyOnWriteArrayList<NamePattern>();
 	private static final ConcurrentHashMap<String, Boolean> SIGNATURE_CACHE = new ConcurrentHashMap<String, Boolean>();
 
 	private boolean updateConfigFile;
@@ -110,20 +105,24 @@ public class ProbeController extends AbstractController implements IProbeControl
 			ProbeController.SIGNATURE_CACHE.put(pattern, true);
 		}
 
-		boolean activate = true;
-		if (ProbeController.PATTERNS.containsKey(pattern)) {
-			activate = !ProbeController.PATTERNS.get(pattern);
-		}
-		if (activate) {
-			ProbeController.PATTERNS.put(pattern, true);
+		final NamePattern namePattern = new NamePattern(pattern, true);
+		if (ProbeController.PATTERNS.contains(namePattern)) {
+			final int index = ProbeController.PATTERNS.indexOf(namePattern);
+			final NamePattern existingPattern = ProbeController.PATTERNS.get(index);
+			final boolean result = !existingPattern.isInclude();
+			if (result) {
+				existingPattern.setInclude(true);
+				if (this.updateConfigFile) {
+					this.updatePatternFile();
+				}
+			}
+			return result;
+		} else {
+			ProbeController.PATTERNS.add(namePattern);
 			if (this.updateConfigFile) {
 				this.updatePatternFile();
 			}
-			LOG.info("The pattern " + pattern + " is activated.");
 			return true;
-		} else {
-			LOG.info(pattern + " was already active.");
-			return false;
 		}
 	}
 
@@ -135,20 +134,24 @@ public class ProbeController extends AbstractController implements IProbeControl
 			ProbeController.SIGNATURE_CACHE.put(pattern, false);
 		}
 
-		boolean deactivate = true;
-		if (ProbeController.PATTERNS.containsKey(pattern)) {
-			deactivate = ProbeController.PATTERNS.get(pattern);
-		}
-		if (deactivate) {
-			ProbeController.PATTERNS.put(pattern, false);
+		final NamePattern namePattern = new NamePattern(pattern, false);
+		if (ProbeController.PATTERNS.contains(namePattern)) {
+			final int index = ProbeController.PATTERNS.indexOf(namePattern);
+			final NamePattern existingPattern = ProbeController.PATTERNS.get(index);
+			final boolean result = existingPattern.isInclude();
+			if (result) {
+				existingPattern.setInclude(false);
+				if (this.updateConfigFile) {
+					this.updatePatternFile();
+				}
+			}
+			return result;
+		} else {
+			ProbeController.PATTERNS.add(namePattern);
 			if (this.updateConfigFile) {
 				this.updatePatternFile();
 			}
-			LOG.info("The pattern " + pattern + " is deactivated.");
 			return true;
-		} else {
-			LOG.info(pattern + " was already deactivated.");
-			return false;
 		}
 	}
 
@@ -171,31 +174,14 @@ public class ProbeController extends AbstractController implements IProbeControl
 	 * will be replaced
 	 */
 	private boolean matchesIncludePattern(final String signature) {
-		Method m;
-		try {
-			m = this.signatureToMethod(signature);
-		} catch (final NoSuchMethodException e) {
-			e.printStackTrace();
-			return false;
-		} catch (final SecurityException e) {
-			e.printStackTrace();
-			return false;
-		} catch (final ClassNotFoundException e) {
-			e.printStackTrace();
-			return false;
-		}
 
-		final PointcutParser pp = PointcutParser.getPointcutParserSupportingAllPrimitivesAndUsingContextClassloaderForResolution();
-
-		final Enumeration<String> keys = ProbeController.PATTERNS.keys();
-		String pattern;
-		while (keys.hasMoreElements()) {
-			pattern = keys.nextElement();
-			final String execPattern = "execution(" + pattern + ")";
-			final PointcutExpression pe = pp.parsePointcutExpression(execPattern);
-			final ShadowMatch sm = pe.matchesMethodExecution(m);
-			if (sm.alwaysMatches()) {
-				final boolean value = ProbeController.PATTERNS.get(pattern);
+		// TODO: liste rückwärts durchlaufen
+		final ListIterator<NamePattern> namePatterns = ProbeController.PATTERNS.listIterator();
+		NamePattern pattern;
+		while (namePatterns.hasNext()) {
+			pattern = namePatterns.next();
+			if (pattern.matches(signature)) {
+				final boolean value = pattern.isInclude();
 				ProbeController.SIGNATURE_CACHE.put(signature, value);
 				return value;
 			}
@@ -203,87 +189,19 @@ public class ProbeController extends AbstractController implements IProbeControl
 		return false;
 	}
 
-	private Method signatureToMethod(final String signature) throws NoSuchMethodException, SecurityException, ClassNotFoundException {
-		final List<String> sigAsList = LangUtil.anySplit(signature, "(");
-		final String prefix = sigAsList.get(0);
-		final String suffix = sigAsList.get(1);
-
-		final List<String> suffixList = LangUtil.anySplit(suffix, ")");
-		Class<?>[] paramClasses = null;
-		if (!suffixList.isEmpty()) {
-			final String params = suffixList.get(0);
-			final List<String> paramList = LangUtil.anySplit(params, ",");
-			final int numberOfParams = paramList.size();
-			paramClasses = new Class<?>[numberOfParams];
-			for (int i = 0; i < numberOfParams; i++) {
-				Class<?> c = this.getPrimitiveType(paramList.get(i));
-				if (c == null) {
-					c = Class.forName(paramList.get(i));
-				}
-				paramClasses[i] = c;
-			}
-		}
-
-		final List<String> prefixList = LangUtil.anySplit(prefix, " ");
-		final String name = prefixList.get(prefixList.size() - 1);
-		final int index = name.lastIndexOf(".");
-		final String methodName = name.substring(index + 1);
-		final String className = name.substring(0, index);
-		Method result;
-		if (paramClasses != null) {
-			result = Class.forName(className).getMethod(methodName, paramClasses);
-		} else {
-			result = Class.forName(className).getMethod(methodName);
-		}
-		return result;
-	}
-
-	private Class<?> getPrimitiveType(final String name)
-	{
-		if (name.equals("byte")) {
-			return byte.class;
-		}
-		if (name.equals("short")) {
-			return short.class;
-		}
-		if (name.equals("int")) {
-			return int.class;
-		}
-		if (name.equals("long")) {
-			return long.class;
-		}
-		if (name.equals("char")) {
-			return char.class;
-		}
-		if (name.equals("float")) {
-			return float.class;
-		}
-		if (name.equals("double")) {
-			return double.class;
-		}
-		if (name.equals("boolean")) {
-			return boolean.class;
-		}
-		if (name.equals("void")) {
-			return void.class;
-		}
-
-		return null;
-	}
-
 	private void updatePatternFile() {
 		try {
 			final FileWriter fw = new FileWriter(this.pathname);
 			final BufferedWriter bw = new BufferedWriter(fw);
-			final Enumeration<String> keys = ProbeController.PATTERNS.keys();
+			final ListIterator<NamePattern> patternList = ProbeController.PATTERNS.listIterator();
 			String prefix;
-			while (keys.hasMoreElements()) {
+			while (patternList.hasNext()) {
 				prefix = "+ ";
-				final String key = keys.nextElement();
-				if (!ProbeController.PATTERNS.get(key)) {
+				final NamePattern namePattern = patternList.next();
+				if (!namePattern.isInclude()) {
 					prefix = "- ";
 				}
-				bw.write(prefix + key);
+				bw.write(prefix + namePattern);
 				bw.newLine();
 			}
 			bw.close();

@@ -20,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -42,7 +43,7 @@ public class FileWatcher extends Thread {
 	 * The delay between every check.
 	 */
 	protected long delay;
-	private final ConcurrentHashMap<String, Boolean> patterns;
+	private final CopyOnWriteArrayList<NamePattern> patterns;
 	private final ConcurrentHashMap<String, Boolean> signatureCache;
 
 	File file;
@@ -50,16 +51,16 @@ public class FileWatcher extends Thread {
 	boolean warnedAlready = false;
 	boolean interrupted = false;
 
-	public FileWatcher(final File file, final long delay, final ConcurrentHashMap<String, Boolean> patterns,
+	public FileWatcher(final File file, final long delay, final CopyOnWriteArrayList<NamePattern> patterns,
 			final ConcurrentHashMap<String, Boolean> signatureCache) {
 		this.file = file;
-		this.pathname = file.getPath();
+		this.pathname = this.file.getPath();
 		this.patterns = patterns;
 		this.signatureCache = signatureCache;
 
 		this.setDaemon(true);
 		this.checkAndConfigure();
-		this.setDelay(delay);
+		this.setDelay(this.delay);
 	}
 
 	/**
@@ -93,12 +94,15 @@ public class FileWatcher extends Thread {
 		while (br.ready()) {
 			currentLine = br.readLine();
 			System.out.println(currentLine);
+			NamePattern namePattern;
 			if (currentLine.startsWith("+")) {
 				currentLine = currentLine.replaceFirst("\\+", "").trim();
-				this.patterns.put(currentLine, true);
+				namePattern = new NamePattern(currentLine, true);
+				this.patterns.add(namePattern);
 			} else if (currentLine.startsWith("-")) {
 				currentLine = currentLine.replaceFirst("\\-", "").trim();
-				this.patterns.put(currentLine, false);
+				namePattern = new NamePattern(currentLine, false);
+				this.patterns.add(namePattern);
 			}
 		}
 		br.close();
