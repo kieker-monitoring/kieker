@@ -639,6 +639,9 @@ public final class AnalysisController {
 							LOG.error("Calling read() on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ")  returned false.");
 							AnalysisController.this.terminate(true);
 						}
+					} catch (final Throwable t) { // NOPMD NOCS (we also want errors)
+						LOG.error("Exception while reading on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ").", t);
+						AnalysisController.this.terminate(true);
 					} finally {
 						readerLatch.countDown();
 					}
@@ -691,7 +694,6 @@ public final class AnalysisController {
 				this.notifyStateObservers();
 			}
 		}
-		// TODO: Later we will want to introduce a topological order to terminate connected plugins.
 		for (final AbstractReaderPlugin reader : this.readers) {
 			reader.shutdown(error);
 		}
