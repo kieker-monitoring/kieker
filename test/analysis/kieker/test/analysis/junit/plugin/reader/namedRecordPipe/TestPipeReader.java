@@ -73,6 +73,7 @@ public class TestPipeReader { // NOCS (MissingCtorCheck)
 		}
 
 		analysisThread.terminate();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, analysis.getState());
 
 		/*
 		 * Make sure that numRecordsToSend where read.

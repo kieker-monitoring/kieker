@@ -86,6 +86,7 @@ public class TestLegacyExecutionRecordReader {
 		analysisController.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, sink, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
 		analysisController.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, analysisController.getState());
 		Assert.assertEquals(5L, sink.getMessageCount()); // 5 records are expected
 	}
 }

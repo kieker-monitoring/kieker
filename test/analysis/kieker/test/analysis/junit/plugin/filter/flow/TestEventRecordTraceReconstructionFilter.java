@@ -74,6 +74,7 @@ public class TestEventRecordTraceReconstructionFilter { // NOCS (test class with
 			reader.addObject(e);
 		}
 		controller.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, controller.getState());
 
 		// Make sure that 1 trace generated
 		Assert.assertEquals("No trace passed filter", 1, sinkPlugin.getList().size());
@@ -105,6 +106,7 @@ public class TestEventRecordTraceReconstructionFilter { // NOCS (test class with
 			reader.addObject(e);
 		}
 		controller.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, controller.getState());
 
 		// Make sure that no trace is generated
 		Assert.assertEquals("There should be no trace", 0, sinkPlugin.getList().size());

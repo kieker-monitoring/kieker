@@ -101,6 +101,7 @@ public final class TestTimestampFilter {
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
 		this.reader.addObject(TestTimestampFilter.EVENT);
 		this.controller.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.controller.getState());
 		Assert.assertTrue("Filter passed event " + TestTimestampFilter.EVENT + " although timestamp before " + leftBorder
 				, this.sinkPlugin.getList().isEmpty());
 
@@ -122,6 +123,7 @@ public final class TestTimestampFilter {
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
 		this.reader.addObject(TestTimestampFilter.EVENT);
 		this.controller.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.controller.getState());
 		Assert.assertTrue("Filter passed event " + TestTimestampFilter.EVENT + " although timestamp before " + leftBorder
 				, this.sinkPlugin.getList().isEmpty());
 	}
@@ -141,6 +143,7 @@ public final class TestTimestampFilter {
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
 		this.reader.addObject(TestTimestampFilter.EVENT);
 		this.controller.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.controller.getState());
 		Assert.assertFalse("Filter ignored event " + TestTimestampFilter.EVENT + " although timestamp on left Border " + leftBorder
 				, this.sinkPlugin.getList().isEmpty());
 		Assert.assertTrue(this.sinkPlugin.getList().size() == 1);
@@ -162,6 +165,7 @@ public final class TestTimestampFilter {
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
 		this.reader.addObject(TestTimestampFilter.EVENT);
 		this.controller.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.controller.getState());
 		Assert.assertFalse("Filter ignored event " + TestTimestampFilter.EVENT + " although timestamp on right Border " + rightBorder
 				, this.sinkPlugin.getList().isEmpty());
 		Assert.assertTrue(this.sinkPlugin.getList().size() == 1);
@@ -184,6 +188,7 @@ public final class TestTimestampFilter {
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
 		this.reader.addObject(TestTimestampFilter.EVENT);
 		this.controller.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.controller.getState());
 		Assert.assertFalse("Filter ignored event " + TestTimestampFilter.EVENT + " although timestamp in interval [" + leftBorder + "," + rightBorder + "]"
 				, this.sinkPlugin.getList().isEmpty());
 		Assert.assertTrue(this.sinkPlugin.getList().size() == 1);

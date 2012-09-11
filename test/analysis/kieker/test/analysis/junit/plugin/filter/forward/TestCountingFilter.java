@@ -59,6 +59,7 @@ public class TestCountingFilter {
 		this.simpleListReader.addObject(new Object());
 		Assert.assertEquals(0, this.countingFilter.getMessageCount());
 		this.analysisController.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.analysisController.getState());
 		Assert.assertEquals(3, this.countingFilter.getMessageCount());
 	}
 
@@ -76,6 +77,7 @@ public class TestCountingFilter {
 		reader3.addObject(new Object());
 		Assert.assertEquals(0, this.countingFilter.getMessageCount());
 		this.analysisController.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.analysisController.getState());
 		Assert.assertEquals(3, this.countingFilter.getMessageCount());
 	}
 
@@ -86,6 +88,7 @@ public class TestCountingFilter {
 		this.simpleListReader.addObject("");
 		Assert.assertEquals(0, this.countingFilter.getMessageCount());
 		this.analysisController.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.analysisController.getState());
 		Assert.assertEquals(2, this.countingFilter.getMessageCount());
 	}
 }

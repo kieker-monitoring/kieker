@@ -90,6 +90,7 @@ public class TestTraceIdFilter {
 		}
 
 		controller.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, controller.getState());
 
 		if (!sinkPlugin.getList().isEmpty()) {
 			final long passedId = sinkPlugin.getList().get(0).getTraceId();
@@ -139,6 +140,7 @@ public class TestTraceIdFilter {
 			reader.addObject(e);
 		}
 		controller.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, controller.getState());
 		for (final AbstractTraceEvent e : trace.getTraceEvents()) {
 			Assert.assertTrue("Expected event " + e + " to pass the filter", sinkPlugin.getList().contains(e));
 		}
@@ -180,6 +182,7 @@ public class TestTraceIdFilter {
 			reader.addObject(e);
 		}
 		controller.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, controller.getState());
 		for (final AbstractTraceEvent e : trace.getTraceEvents()) {
 			Assert.assertTrue("Expected event " + e + " to pass the filter", sinkPlugin.getList().contains(e));
 		}

@@ -98,6 +98,7 @@ public class TestPlugin {
 		analysisController.connect(simpleFilter, SimpleForwardFilterWithRepository.REPOSITORY_PORT_NAME, simpleRepository);
 
 		analysisController.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, analysisController.getState());
 
 		final List<Object> list = simpleSinkPlugin.getList();
 		Assert.assertEquals(2, list.size());

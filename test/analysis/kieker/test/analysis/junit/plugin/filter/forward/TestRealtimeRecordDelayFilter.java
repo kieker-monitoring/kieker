@@ -209,6 +209,7 @@ public class TestRealtimeRecordDelayFilter {
 		Assert.assertEquals(0, this.sinkPlugin.size());
 
 		this.analysisController.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.analysisController.getState());
 
 		/*
 		 * Make sure that all events have been provided to the delay filter (otherwise the test make no sense)
