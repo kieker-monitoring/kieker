@@ -29,6 +29,26 @@ import kieker.common.configuration.Configuration;
 public interface IPlugin {
 
 	/**
+	 * Initiates the start of a component.
+	 * This method is called once when a AnalysisController's run() method is called.
+	 * This implementation must not be blocking!
+	 * Asynchronous consumers would spawn (an) asynchronous thread(s) in this method.
+	 * 
+	 * @return true on success; false otherwise.
+	 */
+	public boolean init();
+
+	/**
+	 * Initiates a termination of the plugin. This method is only used by the
+	 * framework and should not be called manually.
+	 * Use the method {@link kieker.analysis.AnalysisController#terminate(boolean)} instead.
+	 * 
+	 * After receiving this notification, the plugin should terminate any running
+	 * methods, e.g., read for readers.
+	 */
+	public void terminate(final boolean error);
+
+	/**
 	 * This method should deliver a {@code Configuration} object containing the current configuration of this instance. In other words: The constructor should be
 	 * able to use the given object to initialize a new instance of this class with the same intern properties.
 	 * 

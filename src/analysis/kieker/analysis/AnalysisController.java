@@ -605,14 +605,25 @@ public final class AnalysisController {
 			this.terminate(true);
 			throw new AnalysisConfigurationException("No log reader registered.");
 		}
-		// Call execute() method of all plug-ins.
+		// Call init() method of all plug-ins.
+		for (final AbstractReaderPlugin reader : this.readers) {
+			/* Make also sure that all repository ports of all plugins are connected. */
+			if (!reader.areAllRepositoryPortsConnected()) {
+				this.terminate(true);
+				throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") has unconnected repositories.");
+			}
+			if (!reader.start()) {
+				this.terminate(true);
+				throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") failed to initialize.");
+			}
+		}
 		for (final AbstractFilterPlugin filter : this.filters) {
 			/* Make also sure that all repository ports of all plugins are connected. */
 			if (!filter.areAllRepositoryPortsConnected()) {
 				this.terminate(true);
 				throw new AnalysisConfigurationException("Plugin '" + filter.getName() + "' (" + filter.getPluginName() + ") has unconnected repositories.");
 			}
-			if (!filter.init()) {
+			if (!filter.start()) {
 				this.terminate(true);
 				throw new AnalysisConfigurationException("Plugin '" + filter.getName() + "' (" + filter.getPluginName() + ") failed to initialize.");
 			}
@@ -620,11 +631,6 @@ public final class AnalysisController {
 		// Start reading
 		final CountDownLatch readerLatch = new CountDownLatch(this.readers.size());
 		for (final AbstractReaderPlugin reader : this.readers) {
-			/* Make also sure that all repository ports of all plugins are connected. */
-			if (!reader.areAllRepositoryPortsConnected()) {
-				this.terminate(true);
-				throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") has unconnected repositories.");
-			}
 			new Thread(new Runnable() {
 				public void run() {
 					try {
@@ -687,10 +693,10 @@ public final class AnalysisController {
 		}
 		// TODO: Later we will want to introduce a topological order to terminate connected plugins.
 		for (final AbstractReaderPlugin reader : this.readers) {
-			reader.terminate(error);
+			reader.shutdown(error);
 		}
 		for (final AbstractFilterPlugin filter : this.filters) {
-			filter.terminate(error);
+			filter.shutdown(error);
 		}
 	}
 

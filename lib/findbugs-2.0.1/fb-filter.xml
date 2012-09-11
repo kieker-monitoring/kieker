@@ -2,6 +2,11 @@
 	<!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
 
 	<Match>
+		<Class name="kieker.analysis.plugin.filter.forward.StringBufferFilter$Segment" />
+		<Bug pattern="SE_BAD_FIELD" />
+	</Match>
+
+	<Match>
 		<Class name="kieker.analysis.AnalysisController" />
 		<Method name="getCurrentConfiguration" params="" returns="kieker.analysis.model.analysisMetaModel.MIProject" />
 		<Bug pattern="REC_CATCH_EXCEPTION" />
