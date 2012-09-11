@@ -18,19 +18,14 @@ aspectjrt-$.jar	This jar-file contains the runtime library for AspectJ programs.
 aspectjtools-$.jar	This package contains the tools (the AspectJ Compiler and Browser) for AspectJ.
 
 aopalliance-$.jar	Providedes a common API for aspect-oriented programming (AOP)
-springframework.context-$.jar	The spring framework delivers different methods and classes to make the handling with Java/Java EE easier.
-springframework.web-$.jar	This library contains the web application context, multipart resolver, Struts support, JSF support and web utilities for the spring framework.
+org.springframework.context-$.jar	The spring framework delivers different methods and classes to make the handling with Java/Java EE easier.
+org.springframework.web-$.jar	This library contains the web application context, multipart resolver, Struts support, JSF support and web utilities for the spring framework.
 
 javax.servlet-$.jar	This package contains different classes for the work with servlets.
-
-jndi-$.jar	The Java Naming and Directory Interface is an API which provides methods for multiple naming and directory services. It can be used for example to register disposed files in a network and to allow other part of a Java program to use them for RMI calls.
-spice-jndikit-$.jar	The JNDI Kit is a toolkit for the easy use of the so called Java Naming and Directory Interface.
 
 javax.jms-$.jar	Java Message Service is an API to send and receive messages within a client and to control so called Message Oriented Middleware (MOM).
 
 cxf-api-$.jar	Apache CXF is an open source services framework. 
-cxf-rt-core-$.jar	This library contains the Apache CXF Runtime Core. 
-cxf-common-utilities-$.jar	This package contains different classes for Apache CXF.
 cxf-rt-bindings-soap-$.jar	This package contains necessary files to use Apache CXF as well with the Simple Object Access Protocol (SOAP).
 
 sigar-$.jar	Hyperic SIGAR (System Information Gatherer) provides a Java API to system inventory and monitoring data (Memory, CPU etc.). In addition to the Jar file, it is required to add corresponding platform-specific native libraries to the classpath, which can be downloaded from~\cite{HypericSigarWebsite}. Kieker's \dir{lib/sigar-native-libs/} folder already includes the right libraries for 32 and 64~bit Linux/Windows platforms.
@@ -41,9 +36,10 @@ org.eclipse.emf.common-$.jar	The Eclipse EMF framework.
 org.eclipse.emf.ecore-$.jar	The Eclipse EMF framework. (Ecore Components)
 org.eclipse.emf.ecore.xmi-$.jar	The Eclipse EMF framework. (XMI serialization)
 
+derby-$.jar	??? (TODO: Please provide description)
+
 // Not included are:
 // * Checkstyle
 // * Findbugs
 // * PMD
-// * Serenity
 // and their sub-libraries.

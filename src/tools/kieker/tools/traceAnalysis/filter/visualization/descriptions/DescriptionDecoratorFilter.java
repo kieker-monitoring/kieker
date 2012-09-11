@@ -62,11 +62,6 @@ public class DescriptionDecoratorFilter<V extends AbstractPayloadedVertex<V, E, 
 		super(configuration);
 	}
 
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		return null;
-	}
-
 	public void visitVertex(final V vertex) {
 		final ISystemModelElement element = vertex.getPayload();
 		if (element == null) {

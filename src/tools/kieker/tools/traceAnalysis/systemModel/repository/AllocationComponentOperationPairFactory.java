@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,12 +71,11 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubRe
 
 	private final AllocationComponentOperationPair createAndRegisterPair(final String namedIdentifier, final Operation operation,
 			final AllocationComponent allocationComponent) {
-		AllocationComponentOperationPair newInst;
 		if (this.pairsByName.containsKey(namedIdentifier)) {
 			throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
 		}
 		final int id = this.getAndIncrementNextId();
-		newInst = new AllocationComponentOperationPair(id, operation, allocationComponent);
+		final AllocationComponentOperationPair newInst = new AllocationComponentOperationPair(id, operation, allocationComponent);
 		this.pairsById.put(id, newInst);
 		this.pairsByName.put(namedIdentifier, newInst);
 		return newInst;

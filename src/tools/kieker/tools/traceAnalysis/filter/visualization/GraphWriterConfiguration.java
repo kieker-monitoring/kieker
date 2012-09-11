@@ -28,68 +28,80 @@ import kieker.common.configuration.Configuration;
  * @author Holger Knoche
  * 
  */
-public class GraphWriterConfiguration extends Configuration {
-
-	private static final long serialVersionUID = 7069737251772871133L;
-
+public class GraphWriterConfiguration {
 	/**
 	 * Name of the configuration property containing the output file name.
 	 */
-	private static final String CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME = "dotOutputFn";
+	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME = "dotOutputFn";
 	/**
 	 * Name of the configuration property containing the output path name.
 	 */
-	private static final String CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME = "outputPath";
+	public static final String CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME = "outputPath";
 	/**
 	 * Name of the configuration property indicating that weights should be included.
 	 */
-	private static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
+	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
 	/**
 	 * Name of the configuration property indicating that short labels should be used.
 	 */
-	private static final String CONFIG_PROPERTY_NAME_SHORTLABELS = "shortLabels";
+	public static final String CONFIG_PROPERTY_NAME_SHORTLABELS = "shortLabels";
 	/**
 	 * Name of the configuration property indicating that self-loops should be displayed.
 	 */
-	private static final String CONFIG_PROPERTY_NAME_SELFLOOPS = "selfLoops";
+	public static final String CONFIG_PROPERTY_NAME_SELFLOOPS = "selfLoops";
+
+	private final Configuration configuration;
+
+	public GraphWriterConfiguration() {
+		this.configuration = new Configuration();
+	}
+
+	public GraphWriterConfiguration(final Configuration configuration) {
+		this.configuration = configuration;
+	}
+
+	public Configuration getConfiguration() {
+		return this.configuration;
+	}
 
 	public String getOutputFileName() {
-		return this.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME);
+		return this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME);
 	}
 
 	public void setOutputFileName(final String outputFileName) {
-		this.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME, outputFileName);
+		this.configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME, outputFileName);
 	}
 
 	public String getOutputPath() {
-		return this.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME);
+		return this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME);
 	}
 
 	public void setOutputPath(final String outputPath) {
-		this.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME, outputPath);
+		this.configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME, outputPath);
 	}
 
 	public boolean doIncludeWeights() {
-		return this.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
+		return this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
 	}
 
 	public void setIncludeWeights(final boolean value) {
-		this.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, String.valueOf(value));
+		this.configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, String.valueOf(value));
 	}
 
 	public boolean doUseShortLabels() {
-		return this.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORTLABELS);
+		return this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORTLABELS);
 	}
 
 	public void setUseShortLabels(final boolean value) {
-		this.setProperty(CONFIG_PROPERTY_NAME_SHORTLABELS, String.valueOf(value));
+		this.configuration.setProperty(CONFIG_PROPERTY_NAME_SHORTLABELS, String.valueOf(value));
 	}
 
 	public boolean doPlotLoops() {
-		return this.getBooleanProperty(CONFIG_PROPERTY_NAME_SELFLOOPS);
+		return this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SELFLOOPS);
 	}
 
 	public void setPlotLoops(final boolean value) {
-		this.setProperty(CONFIG_PROPERTY_NAME_SELFLOOPS, String.valueOf(value));
+		this.configuration.setProperty(CONFIG_PROPERTY_NAME_SELFLOOPS, String.valueOf(value));
 	}
+
 }

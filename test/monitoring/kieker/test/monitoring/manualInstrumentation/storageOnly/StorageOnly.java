@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,9 +37,6 @@ import kieker.monitoring.core.controller.MonitoringController;
  * the folder specified in kieker.monitoring.properties (default: /tmp).
  * 
  * @author Matthias Rohr
- * 
- *         History: 2008-05-05 small refactoring for first release
- *         2008-03-30 initial version
  */
 public final class StorageOnly {
 	private static final int NUMBER_OF_EVENTS = 1000;
@@ -54,26 +47,26 @@ public final class StorageOnly {
 
 	public static void main(final String[] args) {
 		try {
-			System.out.println("Starting test by adding " + StorageOnly.NUMBER_OF_EVENTS + " monitoring events");
+			System.out.println("Starting test by adding " + StorageOnly.NUMBER_OF_EVENTS + " monitoring events"); // NOPMD (System.out)
 			for (int i = 0; i < StorageOnly.NUMBER_OF_EVENTS; i++) {
 				final OperationExecutionRecord record = new OperationExecutionRecord((i % 2) + "component."
 						+ (i % 4) + "method", "sessionid", 3333, 123123L, 123124L, StorageOnly.VM_NAME, i, i);
 				StorageOnly.CTRL.newMonitoringRecord(record);
 			}
-			System.out.println("Sleeping for 8 seconds");
+			System.out.println("Sleeping for 8 seconds"); // NOPMD (System.out)
 			Thread.sleep(8000);
-			System.out.println(StorageOnly.NUMBER_OF_EVENTS + " more monitoring points");
+			System.out.println(StorageOnly.NUMBER_OF_EVENTS + " more monitoring points"); // NOPMD (System.out)
 			for (int i = 0; i < StorageOnly.NUMBER_OF_EVENTS; i++) {
 				final OperationExecutionRecord record = new OperationExecutionRecord((i % 2) + "component."
 						+ (i % 4) + "method", "sessionid", 3333, 123123L, 123124L, StorageOnly.VM_NAME, i + 10000, i);
 				StorageOnly.CTRL.newMonitoringRecord(record);
 			}
-			System.out.println("Sleeping for 60 seconds");
+			System.out.println("Sleeping for 60 seconds"); // NOPMD (System.out)
 			Thread.sleep(10000);
 			StorageOnly.CTRL.terminateMonitoring();
 		} catch (final InterruptedException ex) {
-			System.out.println("Exception:" + ex);
-			ex.printStackTrace();
+			System.out.println("Exception:" + ex); // NOPMD (System.out)
+			ex.printStackTrace(); // NOPMD (Stacktrace)
 		}
 	}
 }

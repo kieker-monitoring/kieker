@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +47,7 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedIncomingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD(UseConcurrentHashMap)//NOCS
 	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedOutgoingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD(UseConcurrentHashMap)//NOCS
 
-	private volatile boolean assumed = false;
+	private volatile boolean assumed; // false
 
 	public DependencyGraphNode(final int id, final T entity, final MessageTrace origin) {
 		super(origin, entity);
@@ -95,16 +91,16 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 		this.addOutgoingDependency(destination, false, origin);
 	}
 
-	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final boolean assumed, final MessageTrace origin) {
+	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final boolean isAssumed, final MessageTrace origin) {
 		synchronized (this) {
 			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = // NOPMD(UseConcurrentHashMap)
-			assumed ? this.assumedOutgoingDependencies : this.outgoingDependencies; // NOCS (inline ?)
+			isAssumed ? this.assumedOutgoingDependencies : this.outgoingDependencies; // NOCS (inline ?)
 
 			WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(destination.getId());
 			if (e == null) {
 				e = new WeightedBidirectionalDependencyGraphEdge<T>(this, destination, origin);
 
-				if (assumed) {
+				if (isAssumed) {
 					e.setAssumed();
 				}
 
@@ -121,10 +117,10 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 		this.addIncomingDependency(source, false, origin);
 	}
 
-	public void addIncomingDependency(final DependencyGraphNode<T> source, final boolean assumed, final MessageTrace origin) {
+	public void addIncomingDependency(final DependencyGraphNode<T> source, final boolean isAssumed, final MessageTrace origin) {
 		synchronized (this) {
 			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = // NOPMD(UseConcurrentHashMap)
-			assumed ? this.assumedIncomingDependencies : this.incomingDependencies; // NOCS (inline ?)
+			isAssumed ? this.assumedIncomingDependencies : this.incomingDependencies; // NOCS (inline ?)
 
 			WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(source.getId());
 			if (e == null) {

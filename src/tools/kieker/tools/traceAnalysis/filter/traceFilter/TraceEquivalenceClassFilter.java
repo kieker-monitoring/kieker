@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,17 +41,14 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn
  */
-@Plugin(
+@Plugin(description = "Puts the incoming traces into equivalence classes",
 		outputPorts = {
-			@OutputPort(
-					name = TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE_REPRESENTATIVES,
-					description = "Message Traces",
-					eventTypes = { MessageTrace.class }),
-			@OutputPort(
-					name = TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_REPRESENTATIVES,
-					description = "Execution Traces",
-					eventTypes = { ExecutionTrace.class }) },
-		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
+			@OutputPort(name = TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE_REPRESENTATIVES, description = "Message Traces", eventTypes = { MessageTrace.class }),
+			@OutputPort(name = TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_REPRESENTATIVES, description = "Execution Traces", eventTypes = { ExecutionTrace.class })
+		},
+		repositoryPorts = {
+			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+		})
 public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessingFilter {
 	public static final String INPUT_PORT_NAME_EXECUTION_TRACE = "executionTraces";
 
@@ -64,16 +57,17 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 
 	private static final Log LOG = LogFactory.getLog(TraceEquivalenceClassFilter.class);
 
+	private TraceEquivalenceClassModes equivalenceMode;
+
+	/** Representative x # of equivalents */
+	private final Map<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap = new HashMap<AbstractExecutionTraceHashContainer, AtomicInteger>(); // NOPMD
+
 	/**
 	 * @author Andre van Hoorn
 	 */
 	public static enum TraceEquivalenceClassModes {
 		DISABLED, ASSEMBLY, ALLOCATION
 	}
-
-	private TraceEquivalenceClassModes equivalenceMode;
-	/** Representative x # of equivalents */
-	private final Map<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap = new HashMap<AbstractExecutionTraceHashContainer, AtomicInteger>(); // NOPMD
 
 	/**
 	 * Creates a new instance of this class using the given configuration object. Keep in mind that the Trace-Equivalence-Class-Mode has to be set via the method
@@ -124,7 +118,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 			}
 			this.reportSuccess(et.getTraceId());
 		} catch (final InvalidTraceException ex) {
-			LOG.error("InvalidTraceException", ex);
+			LOG.error("InvalidTraceException: " + ex.getMessage()); // do not pass 'ex' to LOG.error because this makes the output verbose (#584)
 			this.reportError(et.getTraceId());
 		}
 	}
@@ -137,12 +131,8 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 		return map;
 	}
 
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
-	}
-
 	public Configuration getCurrentConfiguration() {
+		// TODO: equivalenceMode
 		return new Configuration();
 	}
 

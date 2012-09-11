@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +35,7 @@ public final class AsyncBinaryFsWriter extends AbstractAsyncFSWriter {
 
 	@Override
 	protected final AbstractFsWriterThread initWorker(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
-			final MappingFileWriter mappingFileWriter, final String path, final int maxEntiresInFile) {
-		return new BinaryFsWriterThread(monitoringController, writeQueue, mappingFileWriter, path, maxEntiresInFile);
+			final MappingFileWriter mappingFileWriter, final String path, final int maxEntiresInFile, final int maxlogSize, final int maxLogFiles) {
+		return new BinaryFsWriterThread(monitoringController, writeQueue, mappingFileWriter, path, maxEntiresInFile, maxlogSize, maxLogFiles);
 	}
 }

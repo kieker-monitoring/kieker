@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,12 +35,12 @@ import kieker.test.tools.junit.writeRead.util.StringTeePrintStream;
  * because a lot of code is shared.
  * 
  * @author Andre van Hoorn
- * 
  */
 public class BasicPrintStreamWriterTestStdout extends AbstractPrintStreamWriterTest { // NOCS (test class without a constructor)
-	private volatile PrintStream originalPrintStream = null;
 
-	private volatile StringTeePrintStream stringTeePrintStream = null;
+	private volatile PrintStream originalPrintStream;
+
+	private volatile StringTeePrintStream stringTeePrintStream = null; // NOPMD (init for findbugs)
 
 	@Before
 	public void setUp() throws Exception {

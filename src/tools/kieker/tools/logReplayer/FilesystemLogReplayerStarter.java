@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +16,7 @@
 
 package kieker.tools.logReplayer;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,12 +31,8 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.core.controller.MonitoringController;
 
 /**
  * Command-line tool for replaying a filesystem monitoring log using the {@link FilesystemLogReplayer}.
@@ -48,11 +41,13 @@ import kieker.monitoring.core.controller.MonitoringController;
  */
 @SuppressWarnings("static-access")
 public final class FilesystemLogReplayerStarter {
+	private static final Log LOG = LogFactory.getLog(FilesystemLogReplayerStarter.class);
 
-	private static CommandLine cmdl = null;
+	private static CommandLine cmdl;
 	private static final CommandLineParser CMDL_PARSER = new BasicParser();
 	private static final HelpFormatter CMD_HELP_FORMATTER = new HelpFormatter();
 	private static final Options CMDL_OPTS = new Options();
+	private static final String CMD_OPT_NAME_MONITORING_CONFIGURATION = "monitoring.configuration";
 	private static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";
 	private static final String CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS = "keep-logging-timestamps";
 	private static final String CMD_OPT_NAME_REALTIME = "realtime";
@@ -62,7 +57,24 @@ public final class FilesystemLogReplayerStarter {
 	private static final String DATE_FORMAT_PATTERN = "yyyyMMdd'-'HHmmss";
 	private static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
 
+	private static final String OPTION_EXAMPLE_FILE_MONITORING_PROPERTIES =
+			File.separator + "path" + File.separator + "to" + File.separator + "monitoring.properties";
+
+	private static String monitoringConfigurationFile;
+	private static String[] inputDirs;
+	private static boolean keepOriginalLoggingTimestamps;
+	private static boolean realtimeMode;
+	private static int numRealtimeWorkerThreads = -1;
+	private static long ignoreRecordsBeforeTimestamp = FilesystemLogReplayer.MIN_TIMESTAMP;
+	private static long ignoreRecordsAfterTimestamp = FilesystemLogReplayer.MAX_TIMESTAMP;
+
+	// Avoid instantiation by setting the constructor's visibility to private
+	private FilesystemLogReplayerStarter() {}
+
 	static {
+		CMDL_OPTS.addOption(OptionBuilder.withArgName(OPTION_EXAMPLE_FILE_MONITORING_PROPERTIES).hasArg()
+				.withLongOpt(CMD_OPT_NAME_MONITORING_CONFIGURATION).isRequired(false)
+				.withDescription("Configuration to use for the Kieker monitoring instance").withValueSeparator('=').create("c"));
 		CMDL_OPTS.addOption(OptionBuilder.withArgName("dir1 ... dirN").hasArgs()
 				.withLongOpt(CMD_OPT_NAME_INPUTDIRS).isRequired(true).withDescription("Log directories to read data from")
 				.withValueSeparator('=').create("i"));
@@ -82,21 +94,12 @@ public final class FilesystemLogReplayerStarter {
 				.withArgName(DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false)
 				.withDescription("Records logged after this date (UTC timezone) are ignored (disabled by default).").create());
 	}
-	private static final Log LOG = LogFactory.getLog(FilesystemLogReplayerStarter.class);
-	private static String[] inputDirs = null;
-	private static boolean keepOriginalLoggingTimestamps;
-	private static boolean realtimeMode = false;
-	private static int numRealtimeWorkerThreads = -1;
-	private static long ignoreRecordsBeforeTimestamp = FilesystemLogReplayer.MIN_TIMESTAMP;
-	private static long ignoreRecordsAfterTimestamp = FilesystemLogReplayer.MAX_TIMESTAMP;
-
-	private FilesystemLogReplayerStarter() {}
 
 	private static boolean parseArgs(final String[] args) {
 		try {
 			FilesystemLogReplayerStarter.cmdl = CMDL_PARSER.parse(CMDL_OPTS, args);
 		} catch (final ParseException e) {
-			System.err.println("Error parsing arguments: " + e.getMessage());
+			System.err.println("Error parsing arguments: " + e.getMessage()); // NOPMD (System.out)
 			FilesystemLogReplayerStarter.printUsage();
 			return false;
 		}
@@ -110,6 +113,9 @@ public final class FilesystemLogReplayerStarter {
 	private static boolean initFromArgs() {
 		boolean retVal = true;
 
+		/* 0.) monitoring properties */
+		monitoringConfigurationFile = cmdl.getOptionValue(CMD_OPT_NAME_MONITORING_CONFIGURATION);
+
 		/* 1.) init inputDirs */
 		FilesystemLogReplayerStarter.inputDirs = FilesystemLogReplayerStarter.cmdl.getOptionValues(CMD_OPT_NAME_INPUTDIRS);
 
@@ -117,7 +123,7 @@ public final class FilesystemLogReplayerStarter {
 		final String keepOriginalLoggingTimestampsOptValStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(
 				CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS, "true");
 		if (!("true".equals(keepOriginalLoggingTimestampsOptValStr) || "false".equals(keepOriginalLoggingTimestampsOptValStr))) {
-			System.out.println("Invalid value for option " + CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS + ": '"
+			System.out.println("Invalid value for option " + CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS + ": '" // NOPMD (System.out)
 					+ keepOriginalLoggingTimestampsOptValStr + "'");
 			retVal = false;
 		}
@@ -128,7 +134,7 @@ public final class FilesystemLogReplayerStarter {
 		/* 3.) init realtimeMode */
 		final String realtimeOptValStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(CMD_OPT_NAME_REALTIME, "false");
 		if (!("true".equals(realtimeOptValStr) || "false".equals(realtimeOptValStr))) {
-			System.out.println("Invalid value for option " + CMD_OPT_NAME_REALTIME + ": '" + realtimeOptValStr + "'");
+			System.out.println("Invalid value for option " + CMD_OPT_NAME_REALTIME + ": '" + realtimeOptValStr + "'"); // NOPMD (System.out)
 			retVal = false;
 		}
 		FilesystemLogReplayerStarter.realtimeMode = "true".equals(realtimeOptValStr);
@@ -139,13 +145,13 @@ public final class FilesystemLogReplayerStarter {
 		try {
 			FilesystemLogReplayerStarter.numRealtimeWorkerThreads = Integer.parseInt(numRealtimeWorkerThreadsStr);
 		} catch (final NumberFormatException ex) {
-			System.out.println("Invalid value for option " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + ": '" + numRealtimeWorkerThreadsStr
+			System.out.println("Invalid value for option " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + ": '" + numRealtimeWorkerThreadsStr // NOPMD (System.out)
 					+ "'");
 			LOG.error("NumberFormatException: ", ex);
 			retVal = false;
 		}
 		if (FilesystemLogReplayerStarter.numRealtimeWorkerThreads < 1) {
-			System.out.println("Option value for " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + " must be >= 1; found "
+			System.out.println("Option value for " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + " must be >= 1; found " // NOPMD (System.out)
 					+ FilesystemLogReplayerStarter.numRealtimeWorkerThreads);
 			LOG.error("Invalid specification of " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + ":"
 					+ FilesystemLogReplayerStarter.numRealtimeWorkerThreads);
@@ -176,7 +182,7 @@ public final class FilesystemLogReplayerStarter {
 		} catch (final java.text.ParseException ex) {
 			final String erorMsg = "Error parsing date/time string. Please use the following pattern: "
 					+ DATE_FORMAT_PATTERN_CMD_USAGE_HELP;
-			System.err.println(erorMsg);
+			System.err.println(erorMsg); // NOPMD (System.out)
 			LOG.error(erorMsg, ex);
 			return false;
 		}
@@ -195,6 +201,7 @@ public final class FilesystemLogReplayerStarter {
 		return retVal;
 	}
 
+	// TODO: difference to Arrays.toString(..array.)?
 	private static String fromStringArrayToDeliminedString(final String[] array, final char delimiter) {
 		final StringBuilder arTostr = new StringBuilder();
 		if (array.length > 0) {
@@ -221,28 +228,14 @@ public final class FilesystemLogReplayerStarter {
 			LOG.info("Replaying log data in non-real time");
 		}
 
-		/**
-		 * Force the controller to keep the original logging timestamps of the
-		 * monitoring records.
-		 */
-		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
-
-		if (FilesystemLogReplayerStarter.keepOriginalLoggingTimestamps) {
-			configuration.setProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(false));
-		} else {
-			configuration.setProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(true));
-		}
-
-		final IMonitoringController monitoringController = MonitoringController.createInstance(configuration);
-
-		final FilesystemLogReplayer player = new FilesystemLogReplayer(monitoringController, FilesystemLogReplayerStarter.inputDirs,
-				FilesystemLogReplayerStarter.realtimeMode, FilesystemLogReplayerStarter.numRealtimeWorkerThreads,
-				FilesystemLogReplayerStarter.ignoreRecordsBeforeTimestamp, FilesystemLogReplayerStarter.ignoreRecordsAfterTimestamp);
+		final FilesystemLogReplayer player = new FilesystemLogReplayer(monitoringConfigurationFile, realtimeMode, keepOriginalLoggingTimestamps,
+				numRealtimeWorkerThreads,
+				ignoreRecordsBeforeTimestamp, ignoreRecordsAfterTimestamp, inputDirs);
 
 		if (!player.replay()) {
-			System.err.println("An error occured");
-			System.err.println("");
-			System.err.println("See 'kieker.log' for details");
+			System.err.println("An error occured"); // NOPMD (System.out)
+			System.err.println(""); // NOPMD (System.out)
+			System.err.println("See 'kieker.log' for details"); // NOPMD (System.out)
 			System.exit(1);
 		}
 

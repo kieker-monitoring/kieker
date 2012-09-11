@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +28,8 @@ import kieker.common.util.MutableInteger;
  *            The type of the graph's vertices
  * @param <E>
  *            The type of the graph's edges
+ * @param <O>
+ *            The type of object from which the graph's elements originate
  */
 public abstract class AbstractWeightedEdge<V extends AbstractVertex<V, E, O>, E extends AbstractEdge<V, E, O>, O> extends AbstractEdge<V, E, O> {
 

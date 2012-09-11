@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +18,6 @@ package kieker.test.tools.junit.writeRead.filesystem; // NOCS (number outer type
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
@@ -173,10 +168,9 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 		final AnalysisController analysisController = new AnalysisController();
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));
-		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES,
-				FSReader.CONFIG_PROPERTY_VALUE_IGNORE_UNKNOWN_RECORD_TYPES_DEFAULT);
+		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, "false");
 		this.refineFSReaderConfiguration(readerConfiguration);
-		final AbstractReaderPlugin<Configuration> reader = new FSReader(readerConfiguration);
+		final AbstractReaderPlugin reader = new FSReader(readerConfiguration);
 		final SimpleSinkFilter<IMonitoringRecord> sinkPlugin = new SimpleSinkFilter<IMonitoringRecord>(new Configuration());
 
 		analysisController.registerReader(reader);
@@ -185,65 +179,5 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 		analysisController.run();
 
 		return sinkPlugin.getList();
-	}
-}
-
-/**
- * Accepts Kieker file system monitoring logs.
- * 
- * @author Andre van Hoorn
- * 
- */
-class KiekerLogDirFilter implements FilenameFilter { // NOPMD (TestClassWithoutTestCases)
-	public static final String LOG_DIR_PREFIX = "kieker-"; // TODO: do we have this constant in the FS Writer(s)?
-	public static final String MAP_FILENAME = "kieker.map"; // TODO: do we have this constant in the FS Writer(s)?
-
-	public KiekerLogDirFilter() {
-		// empty default constructor
-	}
-
-	public boolean accept(final File dir, final String name) {
-		if (!name.startsWith(KiekerLogDirFilter.LOG_DIR_PREFIX)) {
-			return false;
-		}
-
-		final String potentialDirFn = dir.getAbsolutePath() + File.separatorChar + name;
-
-		final File potentialDir = new File(potentialDirFn);
-
-		if (!potentialDir.isDirectory()) {
-			return false;
-		}
-
-		final String[] kiekerMapFiles = potentialDir.list(new FilenameFilter() {
-			/**
-			 * Accepts directories containing a `kieker.map` file.
-			 */
-			public boolean accept(final File dir, final String name) {
-				return name.equals(KiekerLogDirFilter.MAP_FILENAME);
-			}
-		});
-		return kiekerMapFiles.length == 1;
-	}
-}
-
-/**
- * Accepts kieker.map files.
- * 
- * @author Andre van Hoorn
- * 
- */
-class KiekerMapFileFilter implements FilenameFilter { // NOPMD (TestClassWithoutTestCases)
-	public static final String MAP_FILENAME = "kieker.map"; // TODO: do we have this constant in the FS Writer(s)?
-
-	public KiekerMapFileFilter() {
-		// empty default constructor
-	}
-
-	/**
-	 * Accepts the {@value #MAP_FILENAME} file in a monitoring log directory.
-	 */
-	public boolean accept(final File dir, final String name) {
-		return MAP_FILENAME.equals(name);
 	}
 }

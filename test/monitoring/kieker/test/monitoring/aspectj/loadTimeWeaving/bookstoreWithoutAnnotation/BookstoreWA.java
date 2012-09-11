@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,7 +54,7 @@ public class BookstoreWA extends Thread {
 	 */
 	public static void main(final String[] args) throws InterruptedException {
 		for (int i = 0; i < BookstoreWA.NUM_REQUESTS; i++) {
-			System.out.println("BookstoreWA.main: Starting request " + i);
+			System.out.println("BookstoreWA.main: Starting request " + i); // NOPMD (System.out)
 			final BookstoreWA newBookstore = new BookstoreWA();
 			synchronized (BookstoreWA.BOOKSTORE_SCENARIOS) {
 				BookstoreWA.BOOKSTORE_SCENARIOS.add(newBookstore);
@@ -66,8 +62,8 @@ public class BookstoreWA extends Thread {
 			newBookstore.start();
 			BookstoreWA.waitabit(BookstoreWA.INTER_REQUEST_TIME);
 		}
-		System.out.println("Bookstore.main: Finished with starting all requests.");
-		System.out.println("Bookstore.main: Waiting for threads to terminate");
+		System.out.println("Bookstore.main: Finished with starting all requests."); // NOPMD (System.out)
+		System.out.println("Bookstore.main: Waiting for threads to terminate"); // NOPMD (System.out)
 		synchronized (BookstoreWA.BOOKSTORE_SCENARIOS) {
 			while (!BookstoreWA.BOOKSTORE_SCENARIOS.isEmpty()) {
 				BookstoreWA.BOOKSTORE_SCENARIOS.wait();

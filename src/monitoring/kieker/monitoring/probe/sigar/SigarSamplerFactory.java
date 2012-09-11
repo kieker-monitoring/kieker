@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +32,6 @@ import kieker.monitoring.probe.sigar.samplers.MemSwapUsageSampler;
  * @author Andre van Hoorn, Jan Waller
  */
 public enum SigarSamplerFactory implements ISigarSamplerFactory { // Singleton pattern (Effective Java #3)
-
 	INSTANCE;
 
 	/**
@@ -48,11 +43,11 @@ public enum SigarSamplerFactory implements ISigarSamplerFactory { // Singleton p
 	 * Used by {@link #getInstance()} to construct the singleton instance.
 	 */
 	private SigarSamplerFactory() {
-		final Log LOG = LogFactory.getLog(SigarSamplerFactory.class); // access to static logger not possible in constructor
+		final Log log = LogFactory.getLog(SigarSamplerFactory.class); // access to static logger not possible in constructor
 
 		final Sigar mySigar = new Sigar();
 		if (mySigar.getNativeLibrary() == null) {
-			LOG.error("No Sigar native lib in java.library.path. See Sigar log for details (maybe only visible on Debug log-level).");
+			log.error("No Sigar native lib in java.library.path. See Sigar log for details (maybe only visible on Debug log-level).");
 		}
 		final Humidor humidor = new Humidor(mySigar);
 		this.sigar = humidor.getSigar();

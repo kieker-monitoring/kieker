@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,11 +28,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.common.record.flow.AbstractEvent;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.Trace;
@@ -51,19 +47,19 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 		name = "Trace Reconstruction Filter",
 		description = "Filter to reconstruct event based (flow) traces",
 		outputPorts = {
-			@OutputPort(name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID,
-					description = "Outputs valid traces",
-					eventTypes = { TraceEventRecords.class }),
-			@OutputPort(name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID,
-					description = "Outputs traces missing crucial records",
-					eventTypes = { TraceEventRecords.class }) })
-public final class EventRecordTraceReconstructionFilter extends AbstractFilterPlugin<Configuration> {
+			@OutputPort(name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID, description = "Outputs valid traces", eventTypes = { TraceEventRecords.class }),
+			@OutputPort(name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID, description = "Outputs traces missing crucial records", eventTypes = { TraceEventRecords.class }) },
+		configuration = {
+			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME),
+			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME) })
+public final class EventRecordTraceReconstructionFilter extends AbstractFilterPlugin {
 	public static final String OUTPUT_PORT_NAME_TRACE_VALID = "validTraces";
 	public static final String OUTPUT_PORT_NAME_TRACE_INVALID = "invalidTraces";
 	public static final String INPUT_PORT_NAME_TRACE_RECORDS = "traceRecords";
 
 	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION = "maxTraceDuration";
 	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT = "maxTraceTimeout";
+	public static final String CONFIG_PROPERTY_VALUE_MAX_TIME = "9223372036854775807"; // String.valueOf(Long.MAX_VALUE)
 
 	private final long maxTraceDuration;
 	private final long maxTraceTimeout;
@@ -113,7 +109,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 				}
 			}
 			traceBuffer.insertEvent((AbstractTraceEvent) record);
-			loggingTimestamp = ((AbstractEvent) record).getTimestamp();
+			loggingTimestamp = ((AbstractTraceEvent) record).getTimestamp();
 		} else {
 			return; // invalid type which should not happen due to the specified eventTypes
 		}
@@ -172,14 +168,6 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		return configuration;
 	}
 
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, String.valueOf(Long.MAX_VALUE));
-		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, String.valueOf(Long.MAX_VALUE));
-		return configuration;
-	}
-
 	/**
 	 * The TraceBuffer is synchronized to prevent problems with concurrent access.
 	 * 
@@ -189,12 +177,12 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		private static final Log LOG = LogFactory.getLog(TraceBuffer.class);
 		private static final Comparator<AbstractTraceEvent> COMPARATOR = new TraceEventComperator();
 
-		private Trace trace = null;
+		private Trace trace;
 		private final SortedSet<AbstractTraceEvent> events = new TreeSet<AbstractTraceEvent>(COMPARATOR);
 
-		private boolean closeable = false;
-		private boolean damaged = false;
-		private int openEvents = 0;
+		private boolean closeable;
+		private boolean damaged;
+		private int openEvents;
 		private int maxOrderIndex = -1;
 
 		private long minLoggingTimestamp = Long.MAX_VALUE;

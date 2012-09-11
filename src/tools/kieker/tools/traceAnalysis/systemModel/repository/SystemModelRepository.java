@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +39,7 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
 @Repository(
 		name = "System model repository",
 		description = "Model manager for Kieker's component model ")
-public class SystemModelRepository extends AbstractRepository<Configuration> {
+public class SystemModelRepository extends AbstractRepository {
 
 	public static final Execution ROOT_EXECUTION =
 			new Execution(OperationRepository.ROOT_OPERATION, AllocationRepository.ROOT_ALLOCATION_COMPONENT, -1, "-1", -1, -1, -1, -1, false);
@@ -103,14 +99,14 @@ public class SystemModelRepository extends AbstractRepository<Configuration> {
 	};
 
 	private String htmlEntityLabel(final int id, final String caption, final EntityType entityType) {
-		final StringBuilder strBuild = new StringBuilder();
-		strBuild.append("<a name=\"").append(entityType).append("-").append(id).append("\">").append(caption).append("</a>");
+		final StringBuilder strBuild = new StringBuilder(64);
+		strBuild.append("<a name=\"").append(entityType).append('-').append(id).append("\">").append(caption).append("</a>");
 		return strBuild.toString();
 	}
 
 	private String htmlEntityRef(final int id, final String caption, final EntityType entityType) {
-		final StringBuilder strBuild = new StringBuilder();
-		strBuild.append("<a href=\"#").append(entityType).append("-").append(id).append("\">").append(caption).append("</a>");
+		final StringBuilder strBuild = new StringBuilder(64);
+		strBuild.append("<a href=\"#").append(entityType).append('-').append(id).append("\">").append(caption).append("</a>");
 		return strBuild.toString();
 	}
 
@@ -230,11 +226,6 @@ public class SystemModelRepository extends AbstractRepository<Configuration> {
 		ps.println("</body></html>");
 		ps.flush();
 		ps.close();
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
 	}
 
 	public Configuration getCurrentConfiguration() {

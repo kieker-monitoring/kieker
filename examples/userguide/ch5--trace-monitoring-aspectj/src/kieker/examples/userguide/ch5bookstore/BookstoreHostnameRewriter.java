@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,7 +76,7 @@ public final class BookstoreHostnameRewriter {
 }
 
 @Plugin
-class HostNameRewriterPlugin extends AbstractFilterPlugin<Configuration> {
+class HostNameRewriterPlugin extends AbstractFilterPlugin {
 	public static final String INPUT_PORT_NAME = "newEvent";
 
 	private static final IMonitoringController MONITORING_CTRL =
@@ -125,11 +121,6 @@ class HostNameRewriterPlugin extends AbstractFilterPlugin<Configuration> {
 						execution.getTin(), execution.getTout(), hostname, execution.getEoi(), execution.getEss());
 
 		HostNameRewriterPlugin.MONITORING_CTRL.newMonitoringRecord(newExec);
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
 	}
 
 	public Configuration getCurrentConfiguration() {

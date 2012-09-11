@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,28 +18,52 @@ package kieker.test.analysis.util.plugin.reader;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 
 /**
  * Helper class that reads records added using the method {@link #addAllRecords(List)}.
+ * Depending on the value of the {@link Configuration} variable {@value #CONFIG_PROPERTY_NAME_AWAIT_TERMINATION},
+ * either the {@link #read()} method returns immediately, or awaits a termination via {@link kieker.analysis.AnalysisController#terminate()}.
  * 
  * @param <T>
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-@Plugin(outputPorts = { @OutputPort(name = SimpleListReader.OUTPUT_PORT_NAME, eventTypes = { Object.class }) })
-public class SimpleListReader<T> extends AbstractReaderPlugin<Configuration> {
+@Plugin(programmaticOnly = true,
+		outputPorts = {
+			@OutputPort(name = SimpleListReader.OUTPUT_PORT_NAME, eventTypes = { Object.class })
+		},
+		configuration = {
+			@Property(name = SimpleListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, defaultValue = "false",
+					description = "Determines whether the read()-method returns immediately or whether it awaits the termination via AnalysisController.terminate()")
+		})
+public class SimpleListReader<T> extends AbstractReaderPlugin {
 
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
+
+	public static final String CONFIG_PROPERTY_NAME_AWAIT_TERMINATION = "awaitTermination";
+
+	private static final Log LOG = LogFactory.getLog(SimpleListReader.class);
+
+	private final boolean awaitTermination;
+	private final CountDownLatch terminationLatch = new CountDownLatch(1);
 
 	private final List<T> objects = new ArrayList<T>();
 
 	public SimpleListReader(final Configuration configuration) {
 		super(configuration);
+		this.awaitTermination = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_AWAIT_TERMINATION);
+		if (!this.awaitTermination) {
+			this.terminationLatch.countDown(); // just to be sure that a call to await() would return immediately
+		}
 	}
 
 	public void addAllObjects(final List<T> records) {
@@ -58,19 +78,26 @@ public class SimpleListReader<T> extends AbstractReaderPlugin<Configuration> {
 		for (final T obj : this.objects) {
 			super.deliver(SimpleListReader.OUTPUT_PORT_NAME, obj);
 		}
+		try {
+			if (this.awaitTermination) {
+				LOG.info("Awaiting termination latch to count down ...");
+				this.terminationLatch.await();
+				LOG.info("Passed termination latch");
+			}
+		} catch (final InterruptedException e) {
+			LOG.error("Reader interrupted while awaiting termination", e);
+			return false;
+		}
 		return true;
 	}
 
 	public void terminate(final boolean error) {
-		// nothing to do
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
+		this.terminationLatch.countDown();
 	}
 
 	public Configuration getCurrentConfiguration() {
-		return new Configuration();
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.toString(this.awaitTermination));
+		return configuration;
 	}
 }

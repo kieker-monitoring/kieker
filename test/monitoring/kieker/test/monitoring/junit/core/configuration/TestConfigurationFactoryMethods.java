@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +36,7 @@ public class TestConfigurationFactoryMethods { // NOCS
 
 	private static final String EXAMPLE_CONFIG_FILE_IN_TRUNK = "test/monitoring/META-INF/kieker.monitoring.test.properties";
 
+	@SuppressWarnings("deprecation")
 	private void executeTestValues(final Configuration configuration) {
 		Assert.assertNotNull("Configuration is null", configuration);
 		// Monitoring controller
@@ -156,6 +153,6 @@ public class TestConfigurationFactoryMethods { // NOCS
 	public void testCreationfromFile() {
 		final Configuration configuration = ConfigurationFactory.createConfigurationFromFile(TestConfigurationFactoryMethods.EXAMPLE_CONFIG_FILE_IN_TRUNK);
 		this.executeTestValues(configuration);
-		Assert.assertEquals("KIEKER-TEST", configuration.getProperty(ConfigurationFactory.CONTROLLER_NAME));
+		Assert.assertEquals("KIEKER-TEST", configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME));
 	}
 }

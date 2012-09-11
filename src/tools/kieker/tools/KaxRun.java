@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,7 +60,7 @@ public final class KaxRun {
 			final CommandLine line = parser.parse(options, args);
 			kaxFilename = line.getOptionValue('i');
 		} catch (final ParseException ex) {
-			System.out.println(ex.getMessage());
+			System.out.println(ex.getMessage()); // NOPMD (System.out)
 			final HelpFormatter formatter = new HelpFormatter();
 			formatter.printHelp(KaxRun.class.getName(), options, true);
 			return;

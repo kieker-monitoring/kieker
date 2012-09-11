@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +24,7 @@ import java.sql.Statement;
 
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.MonitoringRecordException;
@@ -41,8 +38,19 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @author Jan Waller
  */
-@Plugin(outputPorts = @OutputPort(name = DbReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the DBReader"))
-public class DbReader extends AbstractReaderPlugin<Configuration> {
+@Plugin(description = "A reader which reads records from a database",
+		outputPorts = {
+			@OutputPort(name = DbReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the DBReader")
+		},
+		configuration = {
+			@Property(name = DbReader.CONFIG_PROPERTY_NAME_DRIVERCLASSNAME, defaultValue = "org.apache.derby.jdbc.EmbeddedDriver",
+					description = "The classname of the driver used for the connection."),
+			@Property(name = DbReader.CONFIG_PROPERTY_NAME_CONNECTIONSTRING, defaultValue = "jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS",
+					description = "The connection string used to establish the connection."),
+			@Property(name = DbReader.CONFIG_PROPERTY_NAME_TABLEPREFIX, defaultValue = "kieker",
+					description = "The prefix of the used table within the database.")
+		})
+public class DbReader extends AbstractReaderPlugin {
 
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 
@@ -159,12 +167,4 @@ public class DbReader extends AbstractReaderPlugin<Configuration> {
 		return configuration;
 	}
 
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_DRIVERCLASSNAME, "org.apache.derby.jdbc.EmbeddedDriver");
-		configuration.setProperty(CONFIG_PROPERTY_NAME_CONNECTIONSTRING, "jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS");
-		configuration.setProperty(CONFIG_PROPERTY_NAME_TABLEPREFIX, "kieker");
-		return configuration;
-	}
 }

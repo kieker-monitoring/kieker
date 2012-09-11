@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,7 +63,6 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 	@Override
 	public void init() throws Exception {
 		final AtomicInteger tableCounter = new AtomicInteger();
-		final AtomicLong recordId = new AtomicLong();
 		final String connectionString = this.configuration.getStringProperty(CONFIG_CONNECTIONSTRING);
 		final String tablePrefix = this.configuration.getStringProperty(CONFIG_TABLEPREFIX);
 		final boolean overwrite = this.configuration.getBooleanProperty(CONFIG_OVERWRITE);
@@ -82,6 +77,7 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 				connection.close();
 			}
 		}
+		final AtomicLong recordId = new AtomicLong();
 		try {
 			for (int i = 0; i < this.configuration.getIntProperty(CONFIG_NRCONN); i++) {
 				this.addWorker(new DbWriterThread(super.monitoringController, super.blockingQueue, connectionString, tablePrefix, tableCounter, recordId, overwrite));
@@ -175,7 +171,7 @@ final class DbWriterThread extends AbstractAsyncThread {
 
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(64);
 		sb.append(super.toString());
 		sb.append("; Connection: '");
 		sb.append(this.connection.toString());

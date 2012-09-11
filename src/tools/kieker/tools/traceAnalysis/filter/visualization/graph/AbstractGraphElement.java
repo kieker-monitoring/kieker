@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +32,8 @@ import java.util.Set;
 
 public abstract class AbstractGraphElement<O> {
 
-	private Color color;
-	private String description;
+	private volatile Color color = Color.BLACK;
+	private volatile String description;
 
 	private final Set<O> origins = new HashSet<O>();
 
@@ -99,7 +95,8 @@ public abstract class AbstractGraphElement<O> {
 	 *            The origin object
 	 */
 	public void addOrigin(final O origin) {
-		this.origins.add(origin);
+		// TODO: Deactivated due to memory issues: http://kieker.uni-kiel.de/trac/ticket/583
+		// this.origins.add(origin);
 	}
 
 	/**

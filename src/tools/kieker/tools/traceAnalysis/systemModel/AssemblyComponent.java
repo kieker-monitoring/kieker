@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +46,7 @@ public class AssemblyComponent implements ISystemModelElement {
 	@Override
 	public final String toString() {
 		final StringBuilder strBuild = new StringBuilder();
-		strBuild.append(this.name).append(":").append(this.type.getFullQualifiedName());
+		strBuild.append(this.name).append(':').append(this.type.getFullQualifiedName());
 		return strBuild.toString();
 	}
 

@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +19,7 @@ package kieker.analysis.plugin.filter.select;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
@@ -39,11 +36,16 @@ import kieker.common.record.flow.trace.Trace;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-@Plugin(outputPorts = {
-	@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, description = "Fowards records within the timeperiod", eventTypes = { IMonitoringRecord.class }),
-	@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_OUTSIDE_PERIOD, description = "Forwards records out of the timeperiod", eventTypes = { IMonitoringRecord.class })
-})
-public final class TimestampFilter extends AbstractFilterPlugin<Configuration> {
+@Plugin(description = "A filter which filters incoming records based on their timestamps",
+		outputPorts = {
+			@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, description = "Fowards records within the timeperiod", eventTypes = { IMonitoringRecord.class }),
+			@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_OUTSIDE_PERIOD, description = "Forwards records out of the timeperiod", eventTypes = { IMonitoringRecord.class })
+		},
+		configuration = {
+			@Property(name = TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, defaultValue = TimestampFilter.CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP_S),
+			@Property(name = TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, defaultValue = TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP_S)
+		})
+public final class TimestampFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_ANY_RECORD = "monitoringRecordsAny";
 	public static final String INPUT_PORT_NAME_FLOW = "monitoringRecordsFlow";
@@ -56,8 +58,11 @@ public final class TimestampFilter extends AbstractFilterPlugin<Configuration> {
 	public static final String CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP = "ignoreBeforeTimestamp";
 	public static final String CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP = "ignoreAfterTimestamp";
 
-	public static final long CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP = Long.MAX_VALUE;
-	public static final long CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP = 0;
+	public static final String CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP_S = "9223372036854775807"; // Long.toString(Long.MAX_VALUE)
+	public static final String CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP_S = "0"; // Long.toString(0)
+
+	public static final long CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP = Long.parseLong(CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP_S);
+	public static final long CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP = Long.parseLong(CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP_S);
 
 	private final long ignoreBeforeTimestamp;
 	private final long ignoreAfterTimestamp;
@@ -66,14 +71,6 @@ public final class TimestampFilter extends AbstractFilterPlugin<Configuration> {
 		super(configuration);
 		this.ignoreBeforeTimestamp = configuration.getLongProperty(CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP);
 		this.ignoreAfterTimestamp = configuration.getLongProperty(CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP);
-	}
-
-	@Override
-	protected final Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, Long.toString(CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP));
-		configuration.setProperty(CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, Long.toString(CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP));
-		return configuration;
 	}
 
 	public final Configuration getCurrentConfiguration() {

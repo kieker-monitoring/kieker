@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,10 +88,10 @@ public abstract class AbstractWriterReaderTest {
 	 */
 	protected List<IMonitoringRecord> provideEvents() {
 		final List<IMonitoringRecord> someEvents = new ArrayList<IMonitoringRecord>();
-		for (int i = 0; i < AbstractWriterReaderTest.DEFAULT_EVENTS_NUMBER; i = someEvents.size()) {
+		for (int i = 0; i < DEFAULT_EVENTS_NUMBER; i = someEvents.size()) {
 			final List<AbstractTraceEvent> nextBatch = Arrays.asList(
-					BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(i, i, AbstractWriterReaderTest.DEFAULT_EVENTS_SESSION_ID,
-							AbstractWriterReaderTest.DEFAULT_EVENTS_HOSTNAME).getTraceEvents());
+					BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(i, i, DEFAULT_EVENTS_SESSION_ID,
+							DEFAULT_EVENTS_HOSTNAME).getTraceEvents());
 			someEvents.addAll(nextBatch);
 		}
 		someEvents.add(new EmptyRecord()); // this record used to cause problems (#475)

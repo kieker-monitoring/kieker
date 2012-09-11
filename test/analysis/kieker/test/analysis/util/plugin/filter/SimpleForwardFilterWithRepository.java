@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +31,7 @@ import kieker.test.analysis.util.repository.SimpleRepository;
 @Plugin(name = SimpleForwardFilterWithRepository.FILTER_NAME, description = SimpleForwardFilterWithRepository.FILTER_DESCRIPTION,
 		outputPorts = { @OutputPort(name = SimpleForwardFilterWithRepository.OUTPUT_PORT_NAME, eventTypes = { Object.class }) },
 		repositoryPorts = @RepositoryPort(name = SimpleForwardFilterWithRepository.REPOSITORY_PORT_NAME, repositoryType = SimpleRepository.class))
-public class SimpleForwardFilterWithRepository extends AbstractFilterPlugin<Configuration> {
+public class SimpleForwardFilterWithRepository extends AbstractFilterPlugin {
 	public static final String FILTER_NAME = "pluginName-EfpvPSE0";
 	public static final String FILTER_DESCRIPTION = "pluginDescription-TB5UV1LdSz";
 
@@ -50,11 +46,6 @@ public class SimpleForwardFilterWithRepository extends AbstractFilterPlugin<Conf
 	@InputPort(name = INPUT_PORT_NAME, eventTypes = { Object.class })
 	public final void inputEvent(final Object event) {
 		super.deliver(OUTPUT_PORT_NAME, event);
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
 	}
 
 	public Configuration getCurrentConfiguration() {

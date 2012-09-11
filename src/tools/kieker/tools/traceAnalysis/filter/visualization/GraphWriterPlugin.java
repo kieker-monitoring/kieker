@@ -31,7 +31,9 @@ import java.util.Map;
 
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
+import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentAllocationDependencyGraph;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentAllocationDependencyGraphFormatter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentAssemblyDependencyGraph;
@@ -54,8 +56,15 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
  * 
  */
 @Plugin(name = "Graph writer plugin",
-		description = "Generic plugin for writing graphs to files")
-public class GraphWriterPlugin extends AbstractFilterPlugin<GraphWriterConfiguration> {
+		description = "Generic plugin for writing graphs to files",
+		configuration = {
+			@Property(name = GraphWriterConfiguration.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, defaultValue = "true"),
+			@Property(name = GraphWriterConfiguration.CONFIG_PROPERTY_NAME_SHORTLABELS, defaultValue = "true"),
+			@Property(name = GraphWriterConfiguration.CONFIG_PROPERTY_NAME_SELFLOOPS, defaultValue = "false")
+		})
+public class GraphWriterPlugin extends AbstractFilterPlugin {
+
+	private final GraphWriterConfiguration gConfiguration;
 
 	/**
 	 * Name of the plugin's graph input port.
@@ -82,23 +91,13 @@ public class GraphWriterPlugin extends AbstractFilterPlugin<GraphWriterConfigura
 	 * @param configuration
 	 *            The configuration to use
 	 */
-	public GraphWriterPlugin(final GraphWriterConfiguration configuration) {
+	public GraphWriterPlugin(final Configuration configuration) {
 		super(configuration);
+		this.gConfiguration = new GraphWriterConfiguration(configuration);
 	}
 
-	public GraphWriterConfiguration getCurrentConfiguration() {
-		return this.configuration;
-	}
-
-	@Override
-	protected GraphWriterConfiguration getDefaultConfiguration() {
-		final GraphWriterConfiguration configuration = new GraphWriterConfiguration();
-
-		configuration.setIncludeWeights(true);
-		configuration.setUseShortLabels(true);
-		configuration.setPlotLoops(false);
-
-		return configuration;
+	public Configuration getCurrentConfiguration() {
+		return this.gConfiguration.getConfiguration();
 	}
 
 	private static void handleInstantiationException(final Class<?> graphClass, final Class<?> formatterClass, final Exception exception) {
@@ -134,7 +133,7 @@ public class GraphWriterPlugin extends AbstractFilterPlugin<GraphWriterConfigura
 	}
 
 	private String getOutputFileName(final AbstractGraphFormatter<?> formatter) {
-		String outputFileName = this.configuration.getOutputFileName();
+		String outputFileName = this.gConfiguration.getOutputFileName();
 
 		if ((outputFileName == null) || outputFileName.isEmpty()) {
 			outputFileName = formatter.getDefaultFileName();
@@ -154,8 +153,8 @@ public class GraphWriterPlugin extends AbstractFilterPlugin<GraphWriterConfigura
 	public void writeGraph(final AbstractGraph<?, ?, ?> graph) {
 		final AbstractGraphFormatter<?> graphFormatter = GraphWriterPlugin.createFormatter(graph);
 
-		final String specification = graphFormatter.createFormattedRepresentation(graph, this.configuration);
-		final String outputFileName = this.configuration.getOutputPath() + this.getOutputFileName(graphFormatter);
+		final String specification = graphFormatter.createFormattedRepresentation(graph, this.gConfiguration);
+		final String outputFileName = this.gConfiguration.getOutputPath() + this.getOutputFileName(graphFormatter);
 
 		try {
 			final BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outputFileName)));

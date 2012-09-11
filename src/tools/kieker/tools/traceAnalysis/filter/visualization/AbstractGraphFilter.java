@@ -38,7 +38,7 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertex;
 
 @Plugin
 public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V extends AbstractVertex<V, E, O>, E extends AbstractEdge<V, E, O>, O> extends
-		AbstractFilterPlugin<Configuration> implements IGraphOutputtingFilter<G> {
+		AbstractFilterPlugin implements IGraphOutputtingFilter<G> {
 
 	/**
 	 * The name of the filter's graph input port.

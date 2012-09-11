@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +24,7 @@ import java.io.UnsupportedEncodingException;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -40,8 +37,17 @@ import kieker.common.logging.LogFactory;
  * 
  * @author Matthias Rohr, Jan Waller
  */
-@Plugin(outputPorts = @OutputPort(name = TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming object", eventTypes = { Object.class }))
-public final class TeeFilter extends AbstractFilterPlugin<Configuration> {
+@Plugin(description = "A filter to print the object to a configured stream",
+		outputPorts = {
+			@OutputPort(name = TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming object", eventTypes = { Object.class })
+		},
+		configuration = {
+			@Property(name = TeeFilter.CONFIG_PROPERTY_NAME_STREAM, defaultValue = TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDOUT,
+					description = "The name of the stream used to print the incoming data (valid values are STDOUT, STDERR, and STDLOG)."),
+			@Property(name = TeeFilter.CONFIG_PROPERTY_NAME_ENCODING, defaultValue = TeeFilter.CONFIG_PROPERTY_VALUE_DEFAULT_ENCODING,
+					description = "The used encoding for the selected stream.")
+		})
+public final class TeeFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_EVENTS = "receivedEvents";
 
@@ -100,14 +106,6 @@ public final class TeeFilter extends AbstractFilterPlugin<Configuration> {
 		if ((this.printStream != null) && (this.printStream != System.out) && (this.printStream != System.err)) {
 			this.printStream.close();
 		}
-	}
-
-	@Override
-	protected final Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_STREAM, CONFIG_PROPERTY_VALUE_STREAM_STDOUT);
-		configuration.setProperty(CONFIG_PROPERTY_NAME_ENCODING, CONFIG_PROPERTY_VALUE_DEFAULT_ENCODING);
-		return configuration;
 	}
 
 	public final Configuration getCurrentConfiguration() {

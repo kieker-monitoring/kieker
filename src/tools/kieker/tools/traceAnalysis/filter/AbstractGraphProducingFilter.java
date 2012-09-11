@@ -48,11 +48,6 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 		return this.configuration;
 	}
 
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		return null;
-	}
-
 	public abstract String getConfigurationName();
 
 	@Override

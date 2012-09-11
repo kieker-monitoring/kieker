@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,7 +58,7 @@ public final class Jdk14LoggerPatched extends Jdk14Logger {
 			final String sourceMethod;
 			{ // NOCS detect calling class and method
 				final StackTraceElement[] stackArray = new Throwable().getStackTrace(); // NOPMD (throwable)
-				if ((stackArray != null) && (stackArray.length > 3)) {
+				if (stackArray.length > 3) {
 					sourceClass = stackArray[3].getClassName();
 					sourceMethod = stackArray[3].getMethodName();
 				} else {

@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +26,7 @@ import kieker.common.configuration.Configuration;
 /**
  * @author Nils Christian Ehmke, Jan Waller
  */
-public interface IPlugin<C extends Configuration> {
+public interface IPlugin {
 
 	/**
 	 * This method should deliver a {@code Configuration} object containing the current configuration of this instance. In other words: The constructor should be
@@ -38,7 +34,7 @@ public interface IPlugin<C extends Configuration> {
 	 * 
 	 * @return A completely filled configuration object.
 	 */
-	public abstract C getCurrentConfiguration();
+	public abstract Configuration getCurrentConfiguration();
 
 	/**
 	 * This method delivers the plugin name of this plugin. The name should be unique, e.g., the classname.
@@ -71,7 +67,7 @@ public interface IPlugin<C extends Configuration> {
 	 * @throws AnalysisConfigurationException
 	 *             if the repository-port is invalid, the repository itself is incompatible or the port is already used.
 	 */
-	public abstract void connect(final String name, final AbstractRepository<?> repo) throws AnalysisConfigurationException;
+	public abstract void connect(final String name, final AbstractRepository repo) throws AnalysisConfigurationException;
 
 	/**
 	 * This method delivers an array of {@code AbstractRepository} containing the current repositories of this instance. In other words: The constructor should
@@ -79,7 +75,7 @@ public interface IPlugin<C extends Configuration> {
 	 * 
 	 * @return An (possible empty) array of repositories.
 	 */
-	public abstract Map<String, AbstractRepository<?>> getCurrentRepositories();
+	public abstract Map<String, AbstractRepository> getCurrentRepositories();
 
 	public abstract String[] getAllOutputPortNames();
 
@@ -102,19 +98,19 @@ public interface IPlugin<C extends Configuration> {
 	 * @author Nils Christian Ehmke
 	 */
 	public static final class PluginInputPortReference {
-		private final IPlugin<?> plugin;
+		private final IPlugin plugin;
 		private final String inputPortName;
 		private final Method inputPortMethod;
 		private final Class<?>[] eventTypes;
 
-		public PluginInputPortReference(final IPlugin<?> plugin, final String inputPortName, final Method inputPortMethod, final Class<?>[] eventTypes) {
+		public PluginInputPortReference(final IPlugin plugin, final String inputPortName, final Method inputPortMethod, final Class<?>[] eventTypes) {
 			this.plugin = plugin;
 			this.inputPortName = inputPortName;
 			this.inputPortMethod = inputPortMethod;
 			this.eventTypes = eventTypes.clone();
 		}
 
-		public final IPlugin<?> getPlugin() {
+		public final IPlugin getPlugin() {
 			return this.plugin;
 		}
 

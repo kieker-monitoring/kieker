@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +19,7 @@ package kieker.tools.currentTimeEventGenerator;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -52,13 +49,20 @@ import kieker.common.record.misc.TimestampRecord;
  * @author Andre van Hoorn
  * 
  */
-@Plugin(outputPorts =
-		@OutputPort(name = CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME, eventTypes = { TimestampRecord.class }, description = "Provides current time events"))
-public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin<Configuration> {
+@Plugin(description = "Generates time events with a given resolution based on the timestamps of incoming IMonitoringRecords",
+		outputPorts = {
+			@OutputPort(name = CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_RECORD, eventTypes = { TimestampRecord.class }, description = "Provides current time events"),
+			@OutputPort(name = CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_VALUE, eventTypes = { Long.class }, description = "Provides current time values")
+		},
+		configuration = {
+			@Property(name = CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_NAME_TIME_RESOLUTION, defaultValue = "1000")
+		})
+public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	public static final String INPUT_PORT_NAME_NEW_TIMESTAMP = "inputNewTimestamp";
 	public static final String INPUT_PORT_NAME_NEW_RECORD = "inputNewRecord";
 
-	public static final String OUTPUT_PORT_NAME_CURRENT_TIME = "currentTimeOutputPort";
+	public static final String OUTPUT_PORT_NAME_CURRENT_TIME_RECORD = "currentTimeRecord";
+	public static final String OUTPUT_PORT_NAME_CURRENT_TIME_VALUE = "currentTimeValue";
 
 	public static final String CONFIG_PROPERTY_NAME_TIME_RESOLUTION = "timeResolution";
 
@@ -84,7 +88,7 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin<Confi
 
 	/**
 	 * Creates an event generator which generates time events with the given
-	 * resolution in nanoseconds via the output port {@link #OUTPUT_PORT_NAME_CURRENT_TIME}.
+	 * resolution in nanoseconds via the output port {@link #OUTPUT_PORT_NAME_CURRENT_TIME_RECORD}.
 	 * 
 	 * @param configuration
 	 *            The configuration to be used for this plugin.
@@ -104,7 +108,7 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin<Confi
 
 	/**
 	 * Evaluates the given timestamp internal current time which may lead to
-	 * newly generated events via {@link #OUTPUT_PORT_NAME_CURRENT_TIME}.
+	 * newly generated events via {@link #OUTPUT_PORT_NAME_CURRENT_TIME_RECORD}.
 	 */
 	@InputPort(name = INPUT_PORT_NAME_NEW_TIMESTAMP, description = "Receives a new timestamp as a time event", eventTypes = { Long.class })
 	public void inputTimestamp(final Long timestamp) {
@@ -119,7 +123,8 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin<Confi
 			 */
 			this.maxTimestamp = timestamp;
 			this.firstTimestamp = timestamp;
-			super.deliver(OUTPUT_PORT_NAME_CURRENT_TIME, new TimestampRecord(timestamp));
+			super.deliver(OUTPUT_PORT_NAME_CURRENT_TIME_RECORD, new TimestampRecord(timestamp));
+			super.deliver(OUTPUT_PORT_NAME_CURRENT_TIME_VALUE, timestamp);
 			this.mostRecentEventFired = timestamp;
 		} else if (timestamp > this.maxTimestamp) {
 			this.maxTimestamp = timestamp;
@@ -128,19 +133,11 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin<Confi
 			 */
 			for (long nextTimerEventAt = this.mostRecentEventFired + this.timerResolution; timestamp >= nextTimerEventAt; nextTimerEventAt = this.mostRecentEventFired
 					+ this.timerResolution) {
-				super.deliver(OUTPUT_PORT_NAME_CURRENT_TIME, new TimestampRecord(nextTimerEventAt));
+				super.deliver(OUTPUT_PORT_NAME_CURRENT_TIME_RECORD, new TimestampRecord(nextTimerEventAt));
+				super.deliver(OUTPUT_PORT_NAME_CURRENT_TIME_VALUE, nextTimerEventAt);
 				this.mostRecentEventFired = nextTimerEventAt;
 			}
 		}
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-
-		configuration.setProperty(CONFIG_PROPERTY_NAME_TIME_RESOLUTION, Long.toString(1000L));
-
-		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {

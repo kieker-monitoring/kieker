@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +37,6 @@ import kieker.common.record.IMonitoringRecord;
  * because a lot of code is shared.
  * 
  * @author Andre van Hoorn
- * 
  */
 public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTest { // NOCS (testClass without constructor)
 	private static final String OUTPUT_BASE_FN = "S0fYvPsI.out"; // the name doesn't matter
@@ -51,7 +46,7 @@ public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTes
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (must be public)
 
-	private volatile File outputFile = null;
+	private volatile File outputFile = null; // NOPMD (init for findbugs)
 
 	@Before
 	public void setUp() throws Exception {
@@ -79,7 +74,7 @@ public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTes
 	}
 
 	// TODO: Move this method to an IO helper class, because it is also used by other classes
-	public static String readOutputFileAsString(final File theFile) throws java.io.IOException {
+	public static String readOutputFileAsString(final File theFile) throws IOException {
 		final byte[] buffer = new byte[(int) theFile.length()];
 		BufferedInputStream f = null;
 		try {

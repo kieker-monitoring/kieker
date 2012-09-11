@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,9 +32,9 @@ import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
+import kieker.tools.traceAnalysis.filter.IGraphOutputtingFilter;
 import kieker.tools.traceAnalysis.filter.flow.TraceEventRecords2ExecutionAndMessageTraceFilter;
 import kieker.tools.traceAnalysis.filter.systemModel.SystemModel2FileFilter;
 import kieker.tools.traceAnalysis.filter.visualization.GraphWriterConfiguration;
@@ -131,14 +127,14 @@ public final class TestAnalysis {
 			final GraphWriterConfiguration componentAllocationWriterConfiguration = new GraphWriterConfiguration();
 			componentAllocationWriterConfiguration.setOutputPath("tmp/");
 			componentAllocationWriterConfiguration.setOutputFileName("dependency.dot");
-			final GraphWriterPlugin componentAllocationGraphWriter = new GraphWriterPlugin(componentAllocationWriterConfiguration);
+			final GraphWriterPlugin componentAllocationGraphWriter = new GraphWriterPlugin(componentAllocationWriterConfiguration.getConfiguration());
 
 			final OperationDependencyGraphAllocationFilter operationDependencyGraphAllocationFilter =
 					new OperationDependencyGraphAllocationFilter(new Configuration());
 			final GraphWriterConfiguration operationAllocationWriterConfiguration = new GraphWriterConfiguration();
 			operationAllocationWriterConfiguration.setOutputPath("tmp/");
 			operationAllocationWriterConfiguration.setOutputFileName("dependency-operation.dot");
-			final GraphWriterPlugin operationAllocationGraphWriter = new GraphWriterPlugin(operationAllocationWriterConfiguration);
+			final GraphWriterPlugin operationAllocationGraphWriter = new GraphWriterPlugin(operationAllocationWriterConfiguration.getConfiguration());
 
 			/* Visualization */
 			final Configuration confSystemModel2FileFilter = new Configuration();
@@ -204,11 +200,11 @@ public final class TestAnalysis {
 				analysisController.connect(operationDependencyGraphAllocationFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, traceRepo);
 
 				analysisController.registerFilter(componentAllocationGraphWriter);
-				analysisController.connect(componentDependencyGraphAllocationFilter, AbstractGraphProducingFilter.OUTPUT_PORT_NAME_GRAPH,
+				analysisController.connect(componentDependencyGraphAllocationFilter, IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH,
 						componentAllocationGraphWriter, GraphWriterPlugin.INPUT_PORT_NAME_GRAPHS);
 
 				analysisController.registerFilter(operationAllocationGraphWriter);
-				analysisController.connect(operationDependencyGraphAllocationFilter, AbstractGraphProducingFilter.OUTPUT_PORT_NAME_GRAPH,
+				analysisController.connect(operationDependencyGraphAllocationFilter, IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH,
 						operationAllocationGraphWriter, GraphWriterPlugin.INPUT_PORT_NAME_GRAPHS);
 
 				analysisController.registerFilter(systemModel2FileFilter);

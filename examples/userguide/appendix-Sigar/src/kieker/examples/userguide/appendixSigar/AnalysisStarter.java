@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,7 +61,7 @@ public final class AnalysisStarter {
 	}
 }
 
-class StdOutDumpConsumer extends AbstractFilterPlugin<Configuration> {
+class StdOutDumpConsumer extends AbstractFilterPlugin {
 	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
 
 	public StdOutDumpConsumer(final Configuration configuration) {
@@ -107,11 +103,6 @@ class StdOutDumpConsumer extends AbstractFilterPlugin<Configuration> {
 											.getTimestamp()),
 							hostname, memUsageMB, swapUsageMB));
 		} // else Unexpected record type
-	}
-
-	@Override
-	public Configuration getDefaultConfiguration() {
-		return new Configuration();
 	}
 
 	public Configuration getCurrentConfiguration() {

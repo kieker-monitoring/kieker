@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,13 +20,13 @@ package kieker.common.logging;
  * 
  * @author Jan Waller
  */
-public final class LogFactory {
+public final class LogFactory { // NOPMD (Implementation of an logger)
+
+	private static final Logger DETECTED_LOGGER;
 
 	private static enum Logger {
 		JDK, COMMONS,
 	}
-
-	private static final Logger DETECTED_LOGGER;
 
 	static {
 		Logger logselectiontemp = Logger.JDK; // default to JDK logging

@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -149,12 +145,11 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(128);
 		sb.append(super.toString());
 		sb.append("\n\tConnection: '");
 		sb.append(this.connection.toString());
-		sb.append("'");
-		sb.append("\n\t");
+		sb.append("'\n\t");
 		sb.append(this.helper.toString());
 		return sb.toString();
 	}

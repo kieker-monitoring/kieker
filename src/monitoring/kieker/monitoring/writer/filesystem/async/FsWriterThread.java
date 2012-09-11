@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,12 +36,13 @@ public final class FsWriterThread extends AbstractFsWriterThread {
 
 	private static final String ENCODING = "UTF-8";
 
-	private PrintWriter pos = null;
+	private PrintWriter pos = null; // NOPMD (init for findbugs)
 	private final boolean autoflush;
 
 	public FsWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
-			final MappingFileWriter mappingFileWriter, final String path, final int maxEntiresInFile, final boolean autoflush) {
-		super(monitoringController, writeQueue, mappingFileWriter, path, maxEntiresInFile);
+			final MappingFileWriter mappingFileWriter, final String path, final int maxEntiresInFile, final int maxLogSize, final int maxLogFiles,
+			final boolean autoflush) {
+		super(monitoringController, writeQueue, mappingFileWriter, path, maxEntiresInFile, maxLogSize, maxLogFiles);
 		this.autoflush = autoflush;
 	}
 
@@ -70,16 +67,15 @@ public final class FsWriterThread extends AbstractFsWriterThread {
 	 * @throws FileNotFoundException
 	 * @throws UnsupportedEncodingException
 	 */
-
 	@Override
-	protected final void prepareFile() throws FileNotFoundException, UnsupportedEncodingException {
+	protected final void prepareFile(final String filename) throws FileNotFoundException, UnsupportedEncodingException {
 		if (this.pos != null) {
 			this.pos.close();
 		}
 		if (this.autoflush) {
-			this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.getFilename()), ENCODING), true);
+			this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename), ENCODING), true);
 		} else {
-			this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.getFilename()), ENCODING)), false);
+			this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), ENCODING)), false);
 		}
 		this.pos.flush();
 	}

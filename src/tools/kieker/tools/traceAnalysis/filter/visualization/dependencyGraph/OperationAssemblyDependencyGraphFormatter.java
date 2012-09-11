@@ -98,7 +98,7 @@ public class OperationAssemblyDependencyGraphFormatter extends AbstractOperation
 
 			if (assemblyComponent.isRootComponent()) {
 				builder.append(DotFactory.createNode("",
-						AbstractDependencyGraphFormatter.createAssemblyComponentId(assemblyComponent),
+						AbstractDependencyGraphFormatter.createNodeId(assemblyComponent.getId()),
 						assemblyComponent.getName(),
 						DotFactory.DOT_SHAPE_NONE,
 						null, // style

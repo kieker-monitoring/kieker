@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -124,7 +120,7 @@ public final class DBWriterHelper {
 			}
 		}
 		// create the table
-		final StringBuilder statementCreateTable = new StringBuilder();
+		final StringBuilder statementCreateTable = new StringBuilder(128);
 		statementCreateTable.append("CREATE TABLE ").append(tablename).append(" (id ");
 		final String createLong = this.createTypeMap.get(long.class);
 		if (createLong != null) {
@@ -143,7 +139,7 @@ public final class DBWriterHelper {
 				throw new SQLException("Type '" + c.getSimpleName() + "' not supported.");
 			}
 		}
-		statementCreateTable.append(")");
+		statementCreateTable.append(')');
 		final String statementCreateTableString = statementCreateTable.toString();
 		Statement statement = null;
 		try {
@@ -191,7 +187,7 @@ public final class DBWriterHelper {
 				}
 			}
 		}
-		final StringBuilder statementCreateTable = new StringBuilder();
+		final StringBuilder statementCreateTable = new StringBuilder(128);
 		statementCreateTable.append("CREATE TABLE ").append(this.indexTablename);
 		statementCreateTable.append(" (tablename ").append(createString).append(", classname ").append(createString).append(')');
 		final String statementCreateTableString = statementCreateTable.toString();
@@ -238,7 +234,7 @@ public final class DBWriterHelper {
 
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(128);
 		sb.append("Prefix: '");
 		sb.append(this.indexTablename);
 		sb.append("'; Drop Tables: '");

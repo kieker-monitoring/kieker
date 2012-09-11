@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,9 +21,11 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
-import kieker.common.record.flow.ConstructionEvent;
+import kieker.common.record.flow.trace.ConstructionEvent;
+import kieker.common.record.flow.trace.Trace;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.core.registry.TraceRegistry;
 import kieker.monitoring.probe.aspectj.AbstractAspectJProbe;
 import kieker.monitoring.timer.ITimeSource;
 
@@ -38,6 +36,7 @@ import kieker.monitoring.timer.ITimeSource;
 public abstract class AbstractAspect extends AbstractAspectJProbe {
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
+	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 
 	@Pointcut
 	public abstract void monitoredConstructor();
@@ -48,7 +47,15 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
-		final ConstructionEvent crecord = new ConstructionEvent(TIME.getTime(), jp.getSignature().getDeclaringTypeName(), System.identityHashCode(thisObject));
+		// common fields
+		Trace trace = TRACEREGISTRY.getTrace();
+		final boolean newTrace = trace == null;
+		if (newTrace) {
+			trace = TRACEREGISTRY.registerTrace();
+			CTRLINST.newMonitoringRecord(trace);
+		}
+		final ConstructionEvent crecord = new ConstructionEvent(TIME.getTime(), trace.getTraceId(), trace.getNextOrderId(),
+				jp.getSignature().getDeclaringTypeName(), System.identityHashCode(thisObject));
 		CTRLINST.newMonitoringRecord(crecord);
 	}
 }

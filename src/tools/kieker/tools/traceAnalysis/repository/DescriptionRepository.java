@@ -40,7 +40,7 @@ import kieker.common.configuration.Configuration;
  */
 @Repository(name = "Description repository",
 		description = "Stores descriptions for names")
-public class DescriptionRepository extends AbstractRepository<Configuration> {
+public class DescriptionRepository extends AbstractRepository {
 
 	private static final char DELIMITER = '=';
 
@@ -92,11 +92,6 @@ public class DescriptionRepository extends AbstractRepository<Configuration> {
 
 	public Configuration getCurrentConfiguration() {
 		return this.configuration;
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		return null;
 	}
 
 	public Map<String, String> getDescriptionMap() {

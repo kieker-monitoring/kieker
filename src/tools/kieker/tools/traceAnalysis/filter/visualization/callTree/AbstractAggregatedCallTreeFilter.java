@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +21,7 @@ import java.io.IOException;
 
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -44,15 +41,24 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
+@Plugin(description = "An abstract filter for aggregated call trees",
+		repositoryPorts = {
+			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+		},
+		configuration = {
+			@Property(name = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, defaultValue = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_VALUE_INCLUDE_WEIGHTS_DEFAULT),
+			@Property(name = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, defaultValue = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT),
+			@Property(name = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, defaultValue = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT)
+		})
 public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTreeFilter<T> {
+
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FILENAME = "dotOutputFn";
 	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
 	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
 
 	public static final String CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT = "calltree.dot";
-	public static final String CONFIG_PROPERTY_VALUE_INCLUDE_WEIGHTS_DEFAULT = Boolean.TRUE.toString();
-	public static final String CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT = Boolean.TRUE.toString();
+	public static final String CONFIG_PROPERTY_VALUE_INCLUDE_WEIGHTS_DEFAULT = "true";
+	public static final String CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT = "true";
 
 	private static final Log LOG = LogFactory.getLog(AbstractAggregatedCallTreeFilter.class);
 
@@ -60,17 +66,17 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	private final String dotOutputFile;
 	private final boolean includeWeights;
 	private final boolean shortLabels;
-	private int numGraphsSaved = 0; // no need for volatile, only used in synchronized blocks
+	private int numGraphsSaved; // no need for volatile, only used in synchronized blocks
 
 	public AbstractAggregatedCallTreeFilter(final Configuration configuration) {
 		super(configuration);
 
 		this.includeWeights = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
 		this.shortLabels = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS);
-		this.dotOutputFile = configuration.getProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILENAME);
+		this.dotOutputFile = configuration.getPathProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILENAME);
 	}
 
-	public void setRoot(final AbstractAggregatedCallTreeNode<T> root) {
+	protected void setRoot(final AbstractAggregatedCallTreeNode<T> root) {
 		synchronized (this) {
 			this.root = root;
 		}
@@ -112,15 +118,6 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 				}
 			}
 		}
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, CONFIG_PROPERTY_VALUE_INCLUDE_WEIGHTS_DEFAULT);
-		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT);
-		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT);
-		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {

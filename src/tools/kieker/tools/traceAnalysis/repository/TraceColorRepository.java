@@ -44,7 +44,7 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.Color;
  */
 @Repository(name = "Trace color repository",
 		description = "Provides color information for trace coloring")
-public class TraceColorRepository extends AbstractRepository<Configuration> {
+public class TraceColorRepository extends AbstractRepository {
 
 	private static final String DEFAULT_KEYWORD = "default";
 	private static final String COLLISION_KEYWORD = "collision";
@@ -143,11 +143,6 @@ public class TraceColorRepository extends AbstractRepository<Configuration> {
 
 	public Configuration getCurrentConfiguration() {
 		return this.configuration;
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		return null;
 	}
 
 	/**

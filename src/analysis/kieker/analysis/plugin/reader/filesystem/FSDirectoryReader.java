@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,7 +60,7 @@ final class FSDirectoryReader implements Runnable {
 	// This set of classes is used to filter only records of a specific type. The value null means all record types are read.
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final File inputDir;
-	private boolean terminated = false;
+	private boolean terminated;
 
 	private final boolean ignoreUnknownRecordTypes;
 	private final Set<String> unknownTypesObserved = new HashSet<String>();
@@ -314,7 +310,7 @@ final class FSDirectoryReader implements Runnable {
 				final Class<?>[] typeArray = AbstractMonitoringRecord.typesForClass(clazz);
 
 				// read record
-				final long loggingTimestamp = in.readLong();
+				final long loggingTimestamp = in.readLong(); // NOPMD (must be read here!)
 				final Object[] objectArray = new Object[typeArray.length];
 				int idx = -1;
 				for (final Class<?> type : typeArray) {

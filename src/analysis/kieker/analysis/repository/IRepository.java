@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +23,7 @@ import kieker.common.configuration.Configuration;
  * @author Andre van Hoorn, Nils Christian Ehmke, Jan Waller
  * 
  */
-public interface IRepository<C extends Configuration> {
+public interface IRepository {
 
 	/**
 	 * This method should deliver a {@code Configuration} object containing the current configuration of this instance. In other words: The constructor should be
@@ -35,7 +31,7 @@ public interface IRepository<C extends Configuration> {
 	 * 
 	 * @return A completely filled configuration object.
 	 */
-	public abstract C getCurrentConfiguration();
+	public abstract Configuration getCurrentConfiguration();
 
 	/**
 	 * This method delivers the repository name of this repository type. The name should be unique, e.g., the classname.

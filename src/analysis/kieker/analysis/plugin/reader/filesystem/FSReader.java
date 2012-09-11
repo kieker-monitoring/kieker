@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +20,7 @@ import java.util.PriorityQueue;
 
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -37,15 +34,21 @@ import kieker.common.record.misc.EmptyRecord;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-@Plugin(outputPorts = @OutputPort(name = FSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader"))
-public class FSReader extends AbstractReaderPlugin<Configuration> implements IMonitoringRecordReceiver {
+@Plugin(description = "A file system reader which reads records from multiple directories",
+		outputPorts = {
+			@OutputPort(name = FSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader") },
+		configuration = {
+			@Property(name = FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".",
+					description = "The name of the input dirs used to read data (multiple dirs are separated by |)."),
+			@Property(name = FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, defaultValue = "false",
+					description = "Ignore unknown records? Aborts if encountered and value is false.")
+		})
+public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 
 	public static final String CONFIG_PROPERTY_NAME_INPUTDIRS = "inputDirs";
 	public static final String CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES = "ignoreUnknownRecordTypes";
-
-	public static final String CONFIG_PROPERTY_VALUE_IGNORE_UNKNOWN_RECORD_TYPES_DEFAULT = Boolean.FALSE.toString();
 
 	public static final IMonitoringRecord EOF = new EmptyRecord();
 
@@ -61,16 +64,14 @@ public class FSReader extends AbstractReaderPlugin<Configuration> implements IMo
 	public FSReader(final Configuration configuration) {
 		super(configuration);
 		this.inputDirs = this.configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_INPUTDIRS);
+		for (int i = 0; i < this.inputDirs.length; i++) {
+			this.inputDirs[i] = Configuration.convertToPath(this.inputDirs[i]);
+		}
+		if (this.inputDirs.length == 0) {
+			LOG.warn("The list of input dirs passed to the " + FSReader.class.getSimpleName() + " is empty");
+		}
 		this.recordQueue = new PriorityQueue<IMonitoringRecord>(this.inputDirs.length);
 		this.ignoreUnknownRecordTypes = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES);
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration defaultConfiguration = new Configuration();
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_INPUTDIRS, ".");
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, CONFIG_PROPERTY_VALUE_IGNORE_UNKNOWN_RECORD_TYPES_DEFAULT);
-		return defaultConfiguration;
 	}
 
 	public void terminate(final boolean error) {
@@ -81,7 +82,9 @@ public class FSReader extends AbstractReaderPlugin<Configuration> implements IMo
 	public boolean read() {
 		// start all reader
 		for (final String inputDir : this.inputDirs) {
-			new Thread(new FSDirectoryReader(inputDir, this, this.ignoreUnknownRecordTypes)).start();
+			final Thread readerThread = new Thread(new FSDirectoryReader(inputDir, this, this.ignoreUnknownRecordTypes));
+			readerThread.setDaemon(true);
+			readerThread.start();
 		}
 		// consume incoming records
 		int readingReaders = this.inputDirs.length;

@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +23,7 @@ import java.io.OutputStreamWriter;
 
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
@@ -43,7 +40,13 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
+@Plugin(description = "A filter allowing to write the incoming ExecutionTraces into a configured file",
+		repositoryPorts = {
+			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+		},
+		configuration = {
+			@Property(name = ExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, defaultValue = "invalidTraceArtifacts-yyyyMMdd-HHmmssSSS.txt")
+		})
 public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessingFilter {
 
 	public static final String INPUT_PORT_NAME_EXECUTION_TRACES = "executionTraces";
@@ -98,15 +101,6 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 			ExecutionTraceWriterFilter.this.reportError(et.getTraceId());
 			LOG.error("IOException", ex);
 		}
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-
-		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN, "");
-
-		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {

@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,12 +54,11 @@ public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository 
 	}
 
 	public final ExecutionContainer createAndRegisterExecutionContainer(final String namedIdentifier, final String name) {
-		ExecutionContainer newInst;
 		if (this.executionContainersByName.containsKey(namedIdentifier)) {
 			throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
 		}
 		final int id = this.getAndIncrementNextId();
-		newInst = new ExecutionContainer(id, null, name);
+		final ExecutionContainer newInst = new ExecutionContainer(id, null, name);
 		this.executionContainersById.put(id, newInst);
 		this.executionContainersByName.put(namedIdentifier, newInst);
 		return newInst;

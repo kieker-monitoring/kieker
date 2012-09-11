@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +16,7 @@
 
 package kieker.analysis.repository;
 
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.repository.annotation.Repository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -29,25 +26,22 @@ import kieker.common.logging.LogFactory;
  * @author Nils Christian Ehmke?
  */
 @Repository
-public abstract class AbstractRepository<C extends Configuration> implements IRepository<C> {
+public abstract class AbstractRepository implements IRepository {
 
 	public static final String CONFIG_NAME = "name-hiddenAndNeverExportedProperty";
 
 	private static final Log LOG = LogFactory.getLog(AbstractRepository.class);
-	protected final C configuration;
+	protected final Configuration configuration;
 
 	private final String name;
 
 	/**
 	 * Each Repository requires a constructor with a single Configuration object!
 	 */
-	public AbstractRepository(final C configuration) {
+	public AbstractRepository(final Configuration configuration) {
 		try {
 			// TODO: somewhat dirty hack...
-			final C defaultConfig = this.getDefaultConfiguration();
-			if (defaultConfig != null) {
-				configuration.setDefaultConfiguration(defaultConfig);
-			}
+			configuration.setDefaultConfiguration(this.getDefaultConfiguration());
 		} catch (final IllegalAccessException ex) {
 			LOG.error("Unable to set repository default properties"); // ok to ignore ex here
 		}
@@ -58,12 +52,21 @@ public abstract class AbstractRepository<C extends Configuration> implements IRe
 	}
 
 	/**
-	 * This method should deliver an instance of {@code Configuration} containing the default properties for this class. In other words: Every class inheriting from
-	 * {@code AbstractRepository} should implement this method to deliver an object which can be used for the constructor of this class.
+	 * This method delivers an instance of {@code Configuration} containing the default properties for this class.
 	 * 
 	 * @return The default properties.
 	 */
-	protected abstract C getDefaultConfiguration();
+	protected final Configuration getDefaultConfiguration() {
+		final Configuration defaultConfiguration = new Configuration();
+		// Get the annotation from the class
+		final Repository repoAnnotation = this.getClass().getAnnotation(Repository.class);
+		final Property[] propertyAnnotations = repoAnnotation.configuration();
+		// Run through all properties within the annotation and add them to the configuration object
+		for (final Property property : propertyAnnotations) {
+			defaultConfiguration.setProperty(property.name(), property.defaultValue());
+		}
+		return defaultConfiguration;
+	}
 
 	/*
 	 * (non-Javadoc)

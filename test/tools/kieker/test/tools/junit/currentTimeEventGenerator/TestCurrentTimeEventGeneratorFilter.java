@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +38,7 @@ import kieker.tools.currentTimeEventGenerator.CurrentTimeEventGenerationFilter;
  * 
  * @author Andre van Hoorn
  */
+// TODO: Test filter output port OUTPUT_PORT_NAME_CURRENT_TIME_VALUE
 public class TestCurrentTimeEventGeneratorFilter { // NOCS
 
 	@Test
@@ -121,7 +118,7 @@ public class TestCurrentTimeEventGeneratorFilter { // NOCS
 		final AnalysisController controller = new AnalysisController();
 		controller.registerFilter(filter);
 		controller.registerFilter(dst);
-		controller.connect(filter, CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME, dst, DstClass.INPUT_PORT_NAME);
+		controller.connect(filter, CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_RECORD, dst, DstClass.INPUT_PORT_NAME);
 		// TODO: Use list reader and actually run the controller
 
 		for (final long timestamp : inputTimestamps) {
@@ -159,18 +156,13 @@ public class TestCurrentTimeEventGeneratorFilter { // NOCS
 	/**
 	 * @author Andre van Hoorn
 	 */
-	static class DstClass extends AbstractFilterPlugin<Configuration> {
+	static class DstClass extends AbstractFilterPlugin {
 
 		public static final String INPUT_PORT_NAME = "doJob";
 		private final ConcurrentLinkedQueue<Long> receivedTimestamps = new ConcurrentLinkedQueue<Long>();
 
 		public DstClass() {
 			super(new Configuration());
-		}
-
-		@Override
-		protected Configuration getDefaultConfiguration() {
-			return null;
 		}
 
 		public Configuration getCurrentConfiguration() {

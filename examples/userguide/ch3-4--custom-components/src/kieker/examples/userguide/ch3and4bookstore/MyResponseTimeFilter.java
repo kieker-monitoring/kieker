@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +16,10 @@
 
 package kieker.examples.userguide.ch3and4bookstore;
 
-import java.util.concurrent.TimeUnit;
-
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
@@ -37,8 +32,11 @@ import kieker.common.configuration.Configuration;
 					eventTypes = { MyResponseTimeRecord.class }),
 			@OutputPort(name = MyResponseTimeFilter.OUTPUT_PORT_NAME_RT_EXCEED,
 					description = "Outputs response times exceeding the threshold",
-					eventTypes = { MyResponseTimeRecord.class }) })
-public class MyResponseTimeFilter extends AbstractFilterPlugin<Configuration> {
+					eventTypes = { MyResponseTimeRecord.class }) },
+		configuration = {
+			@Property(name = MyResponseTimeFilter.CONFIG_PROPERTY_NAME_TS_NANOS, defaultValue = "1000000")
+		})
+public class MyResponseTimeFilter extends AbstractFilterPlugin {
 	public static final String OUTPUT_PORT_NAME_RT_VALID = "validResponseTimes";
 	public static final String OUTPUT_PORT_NAME_RT_EXCEED = "invalidResponseTimes";
 
@@ -59,22 +57,11 @@ public class MyResponseTimeFilter extends AbstractFilterPlugin<Configuration> {
 			description = "Filter the given record depending on the response time",
 			eventTypes = { MyResponseTimeRecord.class })
 	public void newResponseTime(final MyResponseTimeRecord rtRecord) {
-		if (rtRecord.responseTimeNanos > this.rtThresholdNanos) {
+		if (rtRecord.getResponseTimeNanos() > this.rtThresholdNanos) {
 			super.deliver(OUTPUT_PORT_NAME_RT_EXCEED, rtRecord);
 		} else {
 			super.deliver(OUTPUT_PORT_NAME_RT_VALID, rtRecord);
 		}
-	}
-
-	public static final long CONFIG_PROPERTY_VALUE_RT_TS_NANOS_DEFAULT =
-			TimeUnit.NANOSECONDS.convert(1l, TimeUnit.MILLISECONDS);
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_TS_NANOS,
-				Long.toString(CONFIG_PROPERTY_VALUE_RT_TS_NANOS_DEFAULT));
-		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {

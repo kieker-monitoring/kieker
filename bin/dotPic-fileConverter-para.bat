@@ -40,6 +40,10 @@ REM @author Nils Christian Ehmke
 	for /F "delims=" %%i in ('dir /B /S "%DIRNAME%\*.pic"') do (
 		for %%j in (%EXTS%) do (
 			pic2plot -T %%j "%%i" > "%%i.%%j"
+		  if "%%j" == "pdf" (
+        pic2plot -T ps "%%i" > "%%i.ps"
+        ps2pdf "%%i.ps"
+      )
 		)
 		SET /a PIC_COUNTER=%PIC_COUNTER% + 1
 	)

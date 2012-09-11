@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +18,7 @@ package kieker.examples.userguide.ch3and4bookstore;
 
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -36,8 +33,12 @@ import kieker.common.record.IMonitoringRecord;
 				name = MyPipeReader.OUTPUT_PORT_NAME,
 				description = "Outputs any received record",
 				eventTypes = { IMonitoringRecord.class })
+		},
+		configuration = { @Property(
+				name = MyPipeReader.CONFIG_PROPERTY_NAME_PIPE_NAME,
+				defaultValue = "kieker-pipe")
 		})
-public class MyPipeReader extends AbstractReaderPlugin<Configuration> {
+public class MyPipeReader extends AbstractReaderPlugin {
 
 	public static final String OUTPUT_PORT_NAME = "outputPort";
 	public static final String CONFIG_PROPERTY_NAME_PIPE_NAME = "pipeName";
@@ -92,15 +93,6 @@ public class MyPipeReader extends AbstractReaderPlugin<Configuration> {
 		configuration.setProperty(MyPipeReader.CONFIG_PROPERTY_NAME_PIPE_NAME, this.pipeName);
 
 		return configuration;
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration defaultConfiguration = new Configuration();
-
-		defaultConfiguration.setProperty(MyPipeReader.CONFIG_PROPERTY_NAME_PIPE_NAME, "kieker-pipe");
-
-		return defaultConfiguration;
 	}
 
 	public void terminate(final boolean error) {

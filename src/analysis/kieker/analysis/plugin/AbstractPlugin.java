@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +16,7 @@
 
 package kieker.analysis.plugin;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
@@ -37,6 +34,7 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.analysis.plugin.reader.IReaderPlugin;
 import kieker.analysis.repository.AbstractRepository;
@@ -51,15 +49,15 @@ import kieker.common.logging.LogFactory;
  * @author Nils Christian Ehmke, Jan Waller
  */
 @Plugin
-public abstract class AbstractPlugin<C extends Configuration> implements IPlugin<C> {
+public abstract class AbstractPlugin implements IPlugin {
 
 	public static final String CONFIG_NAME = Configuration.CONFIGURATION_NAME_KEY;
 
 	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
 
-	protected final C configuration;
+	protected final Configuration configuration;
 	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<PluginInputPortReference>> registeredMethods;
-	private final ConcurrentHashMap<String, AbstractRepository<?>> registeredRepositories;
+	private final ConcurrentHashMap<String, AbstractRepository> registeredRepositories;
 	private final Map<String, RepositoryPort> repositoryPorts;
 	private final Map<String, OutputPort> outputPorts;
 	private final Map<String, InputPort> inputPorts;
@@ -68,13 +66,11 @@ public abstract class AbstractPlugin<C extends Configuration> implements IPlugin
 	/**
 	 * Each Plugin requires a constructor with a single Configuration object and an array of repositories!
 	 */
-	public AbstractPlugin(final C configuration) {
+	public AbstractPlugin(final Configuration configuration) {
 		try {
 			// TODO: somewhat dirty hack...
-			final C defaultConfig = this.getDefaultConfiguration();
-			if (defaultConfig != null) {
-				configuration.setDefaultConfiguration(defaultConfig);
-			}
+			configuration.setDefaultConfiguration(this.getDefaultConfiguration());
+
 		} catch (final IllegalAccessException ex) {
 			LOG.error("Unable to set plugin default properties", ex);
 		}
@@ -109,7 +105,7 @@ public abstract class AbstractPlugin<C extends Configuration> implements IPlugin
 			}
 		}
 
-		this.registeredRepositories = new ConcurrentHashMap<String, AbstractRepository<?>>(this.repositoryPorts.size());
+		this.registeredRepositories = new ConcurrentHashMap<String, AbstractRepository>(this.repositoryPorts.size());
 
 		/* Now create a linked queue for every output port of the class, to store the registered methods. */
 		this.registeredMethods = new ConcurrentHashMap<String, ConcurrentLinkedQueue<PluginInputPortReference>>();
@@ -119,12 +115,21 @@ public abstract class AbstractPlugin<C extends Configuration> implements IPlugin
 	}
 
 	/**
-	 * This method should deliver an instance of {@code Properties} containing the default properties for this class. In other words: Every class inheriting from
-	 * {@code AbstractPlugin} should implement this method to deliver an object which can be used for the constructor of this class.
+	 * This method delivers an instance of {@code Configuration} containing the default properties for this class.
 	 * 
 	 * @return The default properties.
 	 */
-	protected abstract C getDefaultConfiguration();
+	protected final Configuration getDefaultConfiguration() {
+		final Configuration defaultConfiguration = new Configuration();
+		// Get the annotation from the class
+		final Plugin pluginAnnotation = this.getClass().getAnnotation(Plugin.class);
+		final Property[] propertyAnnotations = pluginAnnotation.configuration();
+		// Run through all properties within the annotation and add them to the configuration object
+		for (final Property property : propertyAnnotations) {
+			defaultConfiguration.setProperty(property.name(), property.defaultValue());
+		}
+		return defaultConfiguration;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -207,9 +212,21 @@ public abstract class AbstractPlugin<C extends Configuration> implements IPlugin
 				if (eventType.isAssignableFrom(data.getClass())) { // data instanceof eventType
 					try {
 						pluginInputPortReference.getInputPortMethod().invoke(pluginInputPortReference.getPlugin(), data);
+					} catch (final InvocationTargetException e) {
+						// This is an exception wrapped by invoke
+						final Throwable cause = e.getCause();
+						if (cause instanceof Error) {
+							// This is a severe case and there is little chance to terminate appropriately
+							throw (Error) cause;
+						} else {
+							LOG.warn("Caught exception when sending data from " + this.getClass().getName() + ": OutputPort " + outputPort.name()
+									+ " to "
+									+ pluginInputPortReference.getPlugin().getClass().getName() + "'s InputPort "
+									+ pluginInputPortReference.getInputPortMethod().getName(), cause);
+						}
 					} catch (final Exception e) { // NOPMD NOCS (catch multiple)
-						LOG.warn("Caught exception when sending data from " + this.getClass().getName() + ": OutputPort " + outputPort.name()
-								+ " to "
+						// This is an exception wrapped by invoke
+						LOG.error("Caught exception when invoking "
 								+ pluginInputPortReference.getPlugin().getClass().getName() + "'s InputPort "
 								+ pluginInputPortReference.getInputPortMethod().getName(), e);
 					}
@@ -234,20 +251,20 @@ public abstract class AbstractPlugin<C extends Configuration> implements IPlugin
 	 * @return true if and only if both given plugins are valid, the output and input ports exist and if they are compatible. Furthermore the destination plugin must
 	 *         not be a reader.
 	 */
-	public static final boolean isConnectionAllowed(final AbstractPlugin<?> src, final String output, final AbstractPlugin<?> dst, final String input) {
+	public static final boolean isConnectionAllowed(final AbstractPlugin src, final String output, final AbstractPlugin dst, final String input) {
 		/* First step: Check whether the plugins are valid. */
 		if ((src == null) || (dst == null) || (dst instanceof IReaderPlugin)) {
-			LOG.warn("First step: Check whether the plugins are valid.");
+			LOG.warn("Plugins are invalid or null.");
 			return false;
 		}
 
 		/* Second step: Check whether the ports exist. */
 		final OutputPort outputPort = src.outputPorts.get(output);
-		final InputPort inputPort = dst.inputPorts.get(input);
 		if (outputPort == null) {
 			LOG.warn("Output port does not exist. " + "Plugin: " + src.getClass().getName() + "; output: " + output);
 			return false;
 		}
+		final InputPort inputPort = dst.inputPorts.get(input);
 		if (inputPort == null) {
 			LOG.warn("Input port does not exist. " + "Plugin: " + dst.getClass().getName() + "; input: " + input);
 			return false;
@@ -269,13 +286,13 @@ public abstract class AbstractPlugin<C extends Configuration> implements IPlugin
 			// }
 			for (final Class<?> srcEventType : outEventTypes) {
 				for (final Class<?> dstEventType : inputPort.eventTypes()) {
-					// TODO: We now also accept "downcasts" as compatible. This could perhaps be colored differently in the GUI
-					if (dstEventType.isAssignableFrom(srcEventType) || srcEventType.isAssignableFrom(dstEventType)) {
+					if (dstEventType.isInterface() || srcEventType.isInterface()
+							|| dstEventType.isAssignableFrom(srcEventType) || srcEventType.isAssignableFrom(dstEventType)) {
 						return true;
 					}
 				}
 			}
-			LOG.warn("Third step: Make sure the ports are compatible. Not compatible.");
+			LOG.warn("Ports are not comaptible with eachother.");
 			return false;
 		}
 
@@ -305,7 +322,7 @@ public abstract class AbstractPlugin<C extends Configuration> implements IPlugin
 	 * 
 	 * @see kieker.analysis.plugin.IPlugin#connect(java.lang.String, kieker.analysis.repository.AbstractRepository)
 	 */
-	public final void connect(final String reponame, final AbstractRepository<?> repository) throws AnalysisConfigurationException {
+	public final void connect(final String reponame, final AbstractRepository repository) throws AnalysisConfigurationException {
 		final RepositoryPort port = this.repositoryPorts.get(reponame);
 		if (port == null) {
 			throw new AnalysisConfigurationException("Failed to connect plugin '" + this.getName() + "' (" + this.getPluginName() + ") to repository '"
@@ -331,11 +348,11 @@ public abstract class AbstractPlugin<C extends Configuration> implements IPlugin
 	 * 
 	 * @see kieker.analysis.plugin.IPlugin#getCurrentRepositories()
 	 */
-	public final Map<String, AbstractRepository<?>> getCurrentRepositories() {
+	public final Map<String, AbstractRepository> getCurrentRepositories() {
 		return Collections.unmodifiableMap(this.registeredRepositories);
 	}
 
-	protected final AbstractRepository<?> getRepository(final String reponame) {
+	protected final AbstractRepository getRepository(final String reponame) {
 		return this.registeredRepositories.get(reponame);
 	}
 
@@ -354,7 +371,7 @@ public abstract class AbstractPlugin<C extends Configuration> implements IPlugin
 	 *             if any given plugin is invalid, any output or input port doesn't exist or if they are incompatible.
 	 *             Furthermore the destination plugin must not be a reader.
 	 */
-	public static final void connect(final AbstractPlugin<?> src, final String outputPortName, final AbstractPlugin<?> dst, final String inputPortName)
+	public static final void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName)
 			throws AnalysisConfigurationException {
 		if (!AbstractPlugin.isConnectionAllowed(src, outputPortName, dst, inputPortName)) {
 			throw new AnalysisConfigurationException("Failed to connect plugin '" + src.getName() + "' (" + src.getPluginName() + ") to plugin '"

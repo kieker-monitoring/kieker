@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +29,7 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * 
  * @author Nils Christian Ehmke
  */
-public class ExecutionSinkClass extends AbstractFilterPlugin<Configuration> {
+public class ExecutionSinkClass extends AbstractFilterPlugin {
 
 	/**
 	 * The name of the default input port.
@@ -53,11 +49,6 @@ public class ExecutionSinkClass extends AbstractFilterPlugin<Configuration> {
 	 */
 	public ExecutionSinkClass(final Configuration configuration) {
 		super(configuration);
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
 	}
 
 	public Configuration getCurrentConfiguration() {

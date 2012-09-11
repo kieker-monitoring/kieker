@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +35,7 @@ import kieker.monitoring.core.IMonitoringRecordReceiver;
  * 
  * @author Jan Waller
  */
-public class Registry<E> implements IRegistry<E> {
+public final class Registry<E> implements IRegistry<E> {
 	private static final int INITIAL_CAPACITY = 16;
 	private static final double LOAD_FACTOR = 0.75d;
 	private static final int CONCURRENCY_LEVEL = 16;
@@ -120,19 +116,19 @@ public class Registry<E> implements IRegistry<E> {
 		}
 	}
 
-	public int get(final E value) {
+	public final int get(final E value) {
 		final int hash = Registry.hash(value);
 		return this.segments[(hash >>> this.segmentShift) & this.segmentMask].get(value, hash, this.nextId);
 	}
 
-	public E get(final int id) {
+	public final E get(final int id) {
 		if (id > this.nextId.get()) {
 			return null;
 		}
 		return this.getAll()[id];
 	}
 
-	public E[] getAll() {
+	public final E[] getAll() {
 		final int capacity = this.nextId.get();
 		if (this.eArrayCached.length != capacity) { // volatile read
 			@SuppressWarnings("unchecked")
@@ -151,8 +147,23 @@ public class Registry<E> implements IRegistry<E> {
 		// return Arrays.copyOf(this.eArrayCached, capacity);
 	}
 
-	public int getSize() {
+	public final int getSize() {
 		return this.nextId.get();
+	}
+
+	@SuppressWarnings("unchecked")
+	public final void remove(final E value) {
+		final int hash = Registry.hash(value);
+		this.segments[(hash >>> this.segmentShift) & this.segmentMask].remove(value, hash);
+		this.eArrayCached = (E[]) new Object[0]; // invalidate cache
+	}
+
+	@SuppressWarnings("unchecked")
+	public final void clear() {
+		for (final Segment<E> segment : this.segments) {
+			segment.clear();
+		}
+		this.eArrayCached = (E[]) new Object[0]; // invalidate cache
 	}
 
 	/* ---------------- Inner Classes -------------- */
@@ -229,7 +240,7 @@ public class Registry<E> implements IRegistry<E> {
 			this.count = 0;
 		}
 
-		protected void setRecordReceiver(final IMonitoringRecordReceiver recordReceiver) {
+		protected final void setRecordReceiver(final IMonitoringRecordReceiver recordReceiver) {
 			this.lock();
 			try {
 				this.recordReceiver = recordReceiver;
@@ -238,7 +249,7 @@ public class Registry<E> implements IRegistry<E> {
 			}
 		}
 
-		protected void insertIntoArray(final E[] eArray) {
+		protected final void insertIntoArray(final E[] eArray) {
 			if (this.count != 0) { // volatile read!
 				this.lock(); // could be smaller area! it is only important to acquire the lock, not to hold it.
 				try {
@@ -259,7 +270,7 @@ public class Registry<E> implements IRegistry<E> {
 			}
 		}
 
-		protected int get(final E value, final int hash, final AtomicInteger nextId) {
+		protected final int get(final E value, final int hash, final AtomicInteger nextId) {
 			HashEntry<E> e = null;
 			if (this.count != 0) { // volatile read! search for entry without locking
 				final HashEntry<E>[] tab = this.table;
@@ -273,8 +284,8 @@ public class Registry<E> implements IRegistry<E> {
 			if (e == null) { // not yet present, but have to repeat search
 				this.lock();
 				try {
-					int c = this.count;
-					if (c++ > this.threshold) {
+					final int c = this.count + 1;
+					if (c >= this.threshold) {
 						this.rehash();
 						this.count = c; // write volatile
 					}
@@ -301,13 +312,53 @@ public class Registry<E> implements IRegistry<E> {
 			return e.id; // return id if found
 		}
 
+		protected final void remove(final E value, final int hash) {
+			this.lock();
+			try {
+				final int c = this.count - 1;
+				final HashEntry<E>[] tab = this.table;
+				final int index = hash & (tab.length - 1);
+				final HashEntry<E> first = tab[index];
+				HashEntry<E> e = first;
+				while ((e != null) && ((e.hash != hash) || !value.equals(e.value))) {
+					e = e.next;
+				}
+				if (e != null) {
+					// All entries following removed node can stay in list, but all preceding ones need to be cloned.
+					HashEntry<E> newFirst = e.next;
+					for (HashEntry<E> p = first; p != e; p = p.next) { // NOPMD (=== instead of equals)
+						newFirst = new HashEntry<E>(p.value, p.hash, p.id, newFirst);
+					}
+					tab[index] = newFirst;
+					this.count = c; // write-volatile
+				}
+			} finally {
+				this.unlock();
+			}
+		}
+
+		protected final void clear() {
+			if (this.count != 0) {
+				this.lock();
+				try {
+					final HashEntry<E>[] tab = this.table;
+					for (int i = 0; i < tab.length; i++) {
+						tab[i] = null;
+					}
+					this.count = 0; // write-volatile
+				} finally {
+					this.unlock();
+				}
+			}
+		}
+
 		/**
 		 * Reclassify nodes in each list to new Map. Because we are using power-of-two expansion, the elements from each bin must either stay at same index, or
 		 * move with a power of two offset. We eliminate unnecessary node creation by catching cases where old nodes can be reused because their next fields
 		 * won't change. Statistically, at the default threshold, only about one-sixth of them need cloning when a table doubles. The nodes they replace will be
 		 * garbage collectable as soon as they are no longer referenced by any reader thread that may be in the midst of traversing table right now.
 		 */
-		private void rehash() {
+		private final void rehash() {
 			final HashEntry<E>[] oldTable = this.table;
 			final int oldCapacity = oldTable.length;
 			if (oldCapacity >= MAXIMUM_CAPACITY) {

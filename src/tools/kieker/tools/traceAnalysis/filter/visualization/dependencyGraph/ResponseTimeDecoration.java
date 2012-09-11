@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,10 +27,10 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 	private static final String OUTPUT_TEMPLATE = "min: %dms, avg: %.2fms, max: %dms";
 
 	// TODO Use TimeUnit instead (currently, we use milliseconds)
-	private long responseTimeSum = 0;
-	private int executionCount = 0;
+	private long responseTimeSum;
+	private int executionCount;
 	private int minimalResponseTime = Integer.MAX_VALUE;
-	private int maximalResponseTime = 0;
+	private int maximalResponseTime;
 
 	public ResponseTimeDecoration() {
 		// empty default constructor

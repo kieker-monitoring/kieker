@@ -7,11 +7,11 @@ TRACE_ANALYSIS_SH=${KIEKER_DIR}/bin/trace-analysis.sh
 FILE_CONVERTER_SH=${KIEKER_DIR}/bin/dotPic-fileConverter.sh
 
 # Should be enabled only if the reference pdfs shall be created:
-#KIEKER_DIR=${HOME}/git_work/kieker/
-#EXAMPLE_LOG=${KIEKER_DIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC
-#TRACE_ANALYSIS_SH=${KIEKER_DIR}/bin/trace-analysis.sh
-#FILE_CONVERTER_SH=${KIEKER_DIR}/bin/dotPic-fileConverter.sh
-#OUTDIR=$(basename "${EXAMPLE_LOG}")"-example-plots77"
+KIEKER_DIR=${HOME}/git_work/kieker/
+EXAMPLE_LOG=${KIEKER_DIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC
+TRACE_ANALYSIS_SH=${KIEKER_DIR}/bin/trace-analysis.sh
+FILE_CONVERTER_SH=${KIEKER_DIR}/bin/dotPic-fileConverter.sh
+OUTDIR=$(basename "${EXAMPLE_LOG}")"-example-plots77"
 
 if ! test -x "${TRACE_ANALYSIS_SH}"; then
     echo "${TRACE_ANALYSIS_SH} does not exist or is not executable"
@@ -29,11 +29,11 @@ if ! test -s "${EXAMPLE_LOG}/kieker.map"; then
 fi
 
 
-#if test -e "${OUTDIR}"; then
-#    echo "${OUTDIR} exists; remove it"
-#    exit 1
-#fi
-#mkdir "${OUTDIR}"
+if test -e "${OUTDIR}"; then
+    echo "${OUTDIR} exists; remove it"
+    exit 1
+fi
+mkdir "${OUTDIR}"
 
 # Dependency graphs, equivalence classes
 ${TRACE_ANALYSIS_SH} \
@@ -66,7 +66,7 @@ ${TRACE_ANALYSIS_SH} \
 
 
 # Should be enabled only if the reference pdfs shall be created:
-#${FILE_CONVERTER_SH} "./${OUTDIR}" pdf
-#for f in "./${OUTDIR}"/*.pdf; do
-#    pdfcrop "$f"
-#done
+${FILE_CONVERTER_SH} "./${OUTDIR}" pdf
+for f in "./${OUTDIR}"/*.pdf; do
+    pdfcrop "$f"
+done

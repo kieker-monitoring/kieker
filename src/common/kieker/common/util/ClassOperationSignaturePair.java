@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -151,26 +147,25 @@ public class ClassOperationSignaturePair {
 	 * @param signature
 	 */
 	public static String createOperationSignatureString(final String fqClassName, final Signature signature) {
-		final StringBuilder strBuilder = new StringBuilder();
-
 		if ((signature.getModifier().length != 0) && (!signature.hasReturnType())) {
 			throw new IllegalArgumentException("Modifier not list empty but return type null/empty");
 		}
 
+		final StringBuilder strBuilder = new StringBuilder();
 		/* Append modifiers and return type */
 		if ((signature.getReturnType() != null) && (signature.getReturnType().length() != 0)) {
 			for (final String type : signature.getModifier()) {
-				strBuilder.append(type).append(" ");
+				strBuilder.append(type).append(' ');
 			}
 			if (signature.hasReturnType()) {
-				strBuilder.append(signature.getReturnType()).append(" ");
+				strBuilder.append(signature.getReturnType()).append(' ');
 			}
 		}
 
 		/* Append operation name and parameter type list */
 		strBuilder.append(fqClassName);
-		strBuilder.append(".").append(signature.getName());
-		strBuilder.append("(");
+		strBuilder.append('.').append(signature.getName());
+		strBuilder.append('(');
 		boolean first = true;
 		for (final String type : signature.getParamTypeList()) {
 			if (!first) {
@@ -179,7 +174,7 @@ public class ClassOperationSignaturePair {
 			first = false;
 			strBuilder.append(type);
 		}
-		strBuilder.append(")");
+		strBuilder.append(')');
 
 		return strBuilder.toString();
 	}

@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,6 +44,7 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.filter.flow.EventRecordTraceReconstructionFilter;
+import kieker.analysis.plugin.filter.forward.StringBufferFilter;
 import kieker.analysis.plugin.filter.select.TimestampFilter;
 import kieker.analysis.plugin.filter.trace.TraceIdFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
@@ -121,14 +118,14 @@ public final class TraceAnalysisTool {
 	private static final AssemblyComponentOperationPairFactory ASSEMBLY_COMPONENT_OPERATION_PAIR_FACTORY = new AssemblyComponentOperationPairFactory(
 			SYSTEM_ENTITY_FACTORY);
 	private static final CommandLineParser CMDL_PARSER = new BasicParser();
-	private static CommandLine cmdl = null;
-	private static String[] inputDirs = null;
-	private static String outputDir = null;
-	private static String outputFnPrefix = null;
-	private static Set<Long> selectedTraces = null; // null means select all
+	private static CommandLine cmdl;
+	private static String[] inputDirs;
+	private static String outputDir;
+	private static String outputFnPrefix;
+	private static Set<Long> selectedTraces; // null means select all
 	private static boolean shortLabels = true;
-	private static boolean includeSelfLoops = false;
-	private static boolean ignoreInvalidTraces = false;
+	private static boolean includeSelfLoops; // false
+	private static boolean ignoreInvalidTraces; // false
 	private static int maxTraceDurationMillis = 10 * 60 * 1000; // 10 minutes default
 	private static long ignoreExecutionsBeforeTimestamp = TimestampFilter.CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP;
 	private static long ignoreExecutionsAfterTimestamp = TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP;
@@ -142,7 +139,7 @@ public final class TraceAnalysisTool {
 			TraceAnalysisTool.cmdl = CMDL_PARSER.parse(Constants.CMDL_OPTIONS, args);
 		} catch (final ParseException e) {
 			TraceAnalysisTool.printUsage();
-			System.err.println("\nError parsing arguments: " + e.getMessage());
+			System.err.println("\nError parsing arguments: " + e.getMessage()); // NOPMD (System.out)
 			return false;
 		}
 		return true;
@@ -167,7 +164,7 @@ public final class TraceAnalysisTool {
 				}
 				LOG.info(numSelectedTraces + " trace" + (numSelectedTraces > 1 ? "s" : "") + " selected"); // NOCS
 			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
-				System.err.println("\nFailed to parse list of trace IDs: " + Arrays.toString(traceIdList) + "(" + e.getMessage() + ")");
+				System.err.println("\nFailed to parse list of trace IDs: " + Arrays.toString(traceIdList) + "(" + e.getMessage() + ")"); // NOPMD (System.out)
 				LOG.error("Failed to parse list of trace IDs: " + Arrays.toString(traceIdList), e);
 				return false;
 			}
@@ -182,7 +179,7 @@ public final class TraceAnalysisTool {
 		try {
 			TraceAnalysisTool.maxTraceDurationMillis = Integer.parseInt(maxTraceDurationStr);
 		} catch (final NumberFormatException exc) {
-			System.err.println("\nFailed to parse int value of property " + Constants.CMD_OPT_NAME_MAXTRACEDURATION + " (must be an integer): "
+			System.err.println("\nFailed to parse int value of property " + Constants.CMD_OPT_NAME_MAXTRACEDURATION + " (must be an integer): " // NOPMD (System.out)
 					+ maxTraceDurationStr);
 			LOG.error("Failed to parse int value of property " + Constants.CMD_OPT_NAME_MAXTRACEDURATION + " (must be an integer):"
 					+ maxTraceDurationStr, exc);
@@ -209,7 +206,7 @@ public final class TraceAnalysisTool {
 			}
 		} catch (final java.text.ParseException ex) {
 			final String errorMsg = "Error parsing date/time string. Please use the following pattern: " + DATE_FORMAT_PATTERN_CMD_USAGE_HELP;
-			System.err.println(errorMsg);
+			System.err.println(errorMsg); // NOPMD (System.out)
 			LOG.error(errorMsg, ex);
 			return false;
 		}
@@ -217,8 +214,8 @@ public final class TraceAnalysisTool {
 	}
 
 	private static void dumpConfiguration() {
-		System.out.println("#");
-		System.out.println("# Configuration");
+		System.out.println("#"); // NOPMD (System.out)
+		System.out.println("# Configuration"); // NOPMD (System.out)
 		for (final Option o : Constants.SORTED_OPTION_LIST) {
 			final String longOpt = o.getLongOpt();
 			String val = "<null>";
@@ -260,11 +257,21 @@ public final class TraceAnalysisTool {
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE)) {
 				val = LoggingTimestampConverter.convertLoggingTimestampToUTCString(TraceAnalysisTool.ignoreExecutionsAfterTimestamp) + " ("
 						+ LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(TraceAnalysisTool.ignoreExecutionsAfterTimestamp) + ")";
+			} else if (Constants.CMD_OPT_NAME_TRACE_COLORING.equals(longOpt)) {
+				val = cmdl.getOptionValue(Constants.CMD_OPT_NAME_TRACE_COLORING);
+				if (val == null) {
+					val = "";
+				}
+			} else if (Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS.equals(longOpt)) {
+				val = cmdl.getOptionValue(Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS);
+				if (val == null) {
+					val = "";
+				}
 			} else {
 				val = Arrays.toString(TraceAnalysisTool.cmdl.getOptionValues(longOpt));
-				LOG.warn("Unformatted confguration output for option " + longOpt);
+				LOG.warn("Unformatted configuration output for option " + longOpt);
 			}
-			System.out.println("--" + longOpt + ": " + val);
+			System.out.println("--" + longOpt + ": " + val); // NOPMD (System.out)
 		}
 	}
 
@@ -310,10 +317,11 @@ public final class TraceAnalysisTool {
 	 * @throws AnalysisConfigurationException
 	 *             If the plugins cannot be connected
 	 */
-	private static <P extends AbstractPlugin<?> & IGraphOutputtingFilter<?>> void attachGraphWriter(final P plugin,
+	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> void attachGraphWriter(final P plugin,
 			final AbstractGraphProducingFilter<?> producer, final AnalysisController controller) throws IllegalStateException, AnalysisConfigurationException {
 
-		final GraphWriterConfiguration configuration = TraceAnalysisTool.createGraphWriterConfiguration();
+		final GraphWriterConfiguration gConfiguration = TraceAnalysisTool.createGraphWriterConfiguration();
+		final Configuration configuration = gConfiguration.getConfiguration();
 		configuration.setConfigurationName(producer.getConfigurationName());
 		final GraphWriterPlugin graphWriter = new GraphWriterPlugin(configuration);
 		controller.registerFilter(graphWriter);
@@ -321,14 +329,14 @@ public final class TraceAnalysisTool {
 				graphWriter, GraphWriterPlugin.INPUT_PORT_NAME_GRAPHS);
 	}
 
-	private static <P extends AbstractPlugin<?> & IGraphOutputtingFilter<?>> void connectGraphFilters(final P predecessor,
+	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> void connectGraphFilters(final P predecessor,
 			final AbstractGraphFilter<?, ?, ?, ?> filter, final AnalysisController controller) throws IllegalStateException, AnalysisConfigurationException {
 		controller.registerFilter(filter);
 		controller.connect(predecessor, predecessor.getGraphOutputPortName(),
 				filter, filter.getGraphInputPortName());
 	}
 
-	private static <P extends AbstractPlugin<?> & IGraphOutputtingFilter<?>> TraceColoringFilter<?, ?> createTraceColoringFilter(final P predecessor,
+	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> TraceColoringFilter<?, ?> createTraceColoringFilter(final P predecessor,
 			final String coloringFileName, final AnalysisController controller) throws IOException, IllegalStateException, AnalysisConfigurationException {
 		final TraceColorRepository colorRepository = TraceColorRepository.createFromFile(coloringFileName);
 		controller.registerRepository(colorRepository);
@@ -341,7 +349,7 @@ public final class TraceAnalysisTool {
 		return coloringFilter;
 	}
 
-	private static <P extends AbstractPlugin<?> & IGraphOutputtingFilter<?>> DescriptionDecoratorFilter<?, ?, ?> createDescriptionDecoratorFilter(
+	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> DescriptionDecoratorFilter<?, ?, ?> createDescriptionDecoratorFilter(
 			final P predecessor,
 			final String descriptionsFileName, final AnalysisController controller) throws IOException, IllegalStateException, AnalysisConfigurationException {
 		final DescriptionRepository descriptionRepository = DescriptionRepository.createFromFile(descriptionsFileName);
@@ -416,6 +424,13 @@ public final class TraceAnalysisTool {
 			}
 
 			/*
+			 * Unify Strings
+			 */
+			final StringBufferFilter stringBufferFilter = new StringBufferFilter(new Configuration());
+			analysisInstance.registerFilter(stringBufferFilter);
+			analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, stringBufferFilter, StringBufferFilter.INPUT_PORT_NAME_EVENTS);
+
+			/*
 			 * This map can be used within the constructor for all following plugins which use the repository with the name defined in the
 			 * AbstractTraceAnalysisPlugin.
 			 */
@@ -427,16 +442,18 @@ public final class TraceAnalysisTool {
 				 * Create the timestamp filter and connect to the reader's output port
 				 */
 				final Configuration configTimestampFilter = new Configuration();
-				configTimestampFilter.setProperty(kieker.analysis.plugin.filter.select.TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP,
+				configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP,
 						Long.toString(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp));
-				configTimestampFilter.setProperty(kieker.analysis.plugin.filter.select.TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP,
+				configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP,
 						Long.toString(TraceAnalysisTool.ignoreExecutionsAfterTimestamp));
 
 				timestampFilter =
 						new TimestampFilter(configTimestampFilter);
 				analysisInstance.registerFilter(timestampFilter);
-				analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, timestampFilter, TimestampFilter.INPUT_PORT_NAME_EXECUTION);
-				analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, timestampFilter, TimestampFilter.INPUT_PORT_NAME_FLOW);
+				analysisInstance.connect(stringBufferFilter, StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
+						timestampFilter, TimestampFilter.INPUT_PORT_NAME_EXECUTION);
+				analysisInstance.connect(stringBufferFilter, StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
+						timestampFilter, TimestampFilter.INPUT_PORT_NAME_FLOW);
 			}
 
 			final TraceIdFilter traceIdFilter;
@@ -456,7 +473,7 @@ public final class TraceAnalysisTool {
 				traceIdFilter =
 						new TraceIdFilter(configTraceIdFilterFlow);
 				analysisInstance.registerFilter(traceIdFilter);
-				analysisInstance.connect(timestampFilter, kieker.analysis.plugin.filter.select.TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD,
+				analysisInstance.connect(timestampFilter, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD,
 						traceIdFilter, TraceIdFilter.INPUT_PORT_NAME_COMBINED);
 			}
 
@@ -503,7 +520,7 @@ public final class TraceAnalysisTool {
 						Integer.toString(TraceAnalysisTool.maxTraceDurationMillis));
 				eventTraceReconstructionFilter = new EventRecordTraceReconstructionFilter(configurationEventRecordTraceGenerationFilter);
 				analysisInstance.registerFilter(eventTraceReconstructionFilter);
-				analysisInstance.connect(traceIdFilter, kieker.analysis.plugin.filter.trace.TraceIdFilter.OUTPUT_PORT_NAME_MATCH,
+				analysisInstance.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH,
 						eventTraceReconstructionFilter, EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
 			}
 
@@ -854,9 +871,9 @@ public final class TraceAnalysisTool {
 			if (numRequestedTasks == 0) {
 				LOG.warn("No task requested");
 				TraceAnalysisTool.printUsage();
-				System.err.println("");
-				System.err.println("No task requested");
-				System.err.println("");
+				System.err.println(""); // NOPMD (System.out)
+				System.err.println("No task requested"); // NOPMD (System.out)
+				System.err.println(""); // NOPMD (System.out)
 				return false;
 			}
 
@@ -907,11 +924,11 @@ public final class TraceAnalysisTool {
 			}
 
 			if (!retVal) {
-				System.err.println("A task failed");
+				System.err.println("A task failed"); // NOPMD (System.out)
 			}
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
-			System.err.println("An error occured: " + ex.getMessage());
-			System.err.println("");
+			System.err.println("An error occured: " + ex.getMessage()); // NOPMD (System.out)
+			System.err.println(""); // NOPMD (System.out)
 			LOG.error("Exception", ex);
 			retVal = false;
 		} finally {
@@ -928,8 +945,8 @@ public final class TraceAnalysisTool {
 				}
 			}
 
-			System.out.println("");
-			System.out.println("See 'kieker.log' for details");
+			System.out.println(""); // NOPMD (System.out)
+			System.out.println("See 'kieker.log' for details"); // NOPMD (System.out)
 		}
 
 		return retVal;
@@ -946,20 +963,20 @@ public final class TraceAnalysisTool {
 		final File outputDirFile = new File(TraceAnalysisTool.outputDir);
 		try {
 			if (!outputDirFile.exists()) {
-				System.err.println("");
-				System.err.println("The specified output directory '" + outputDirFile.getCanonicalPath() + "' does not exist");
+				System.err.println(""); // NOPMD (System.out)
+				System.err.println("The specified output directory '" + outputDirFile.getCanonicalPath() + "' does not exist"); // NOPMD (System.out)
 				return false;
 			}
 
 			if (!outputDirFile.isDirectory()) {
-				System.err.println("");
-				System.err.println("The specified output directory '" + outputDirFile.getCanonicalPath() + "' is not a directory");
+				System.err.println(""); // NOPMD (System.out)
+				System.err.println("The specified output directory '" + outputDirFile.getCanonicalPath() + "' is not a directory"); // NOPMD (System.out)
 				return false;
 			}
 
 		} catch (final IOException e) { // thrown by File.getCanonicalPath()
-			System.err.println("");
-			System.err.println("Error resolving name of output directory: '" + TraceAnalysisTool.outputDir + "'");
+			System.err.println(""); // NOPMD (System.out)
+			System.err.println("Error resolving name of output directory: '" + TraceAnalysisTool.outputDir + "'"); // NOPMD (System.out)
 		}
 
 		return true;
@@ -978,14 +995,14 @@ public final class TraceAnalysisTool {
 			final File inputDirFile = new File(inputDir);
 			try {
 				if (!inputDirFile.exists()) {
-					System.err.println("");
-					System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' does not exist");
+					System.err.println(""); // NOPMD (System.out)
+					System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' does not exist"); // NOPMD (System.out)
 					return false;
 				}
 
 				if (!inputDirFile.isDirectory()) {
-					System.err.println("");
-					System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is not a directory");
+					System.err.println(""); // NOPMD (System.out)
+					System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is not a directory"); // NOPMD (System.out)
 					return false;
 				}
 
@@ -999,13 +1016,14 @@ public final class TraceAnalysisTool {
 					}
 				}
 				if (!mapFileExists) {
-					System.err.println("");
-					System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is not a kieker log directory");
+					System.err.println(""); // NOPMD (System.out)
+					System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is not a kieker log directory"); // NOPMD
+																																					// (System.out)
 					return false;
 				}
 			} catch (final IOException e) { // thrown by File.getCanonicalPath()
-				System.err.println("");
-				System.err.println("Error resolving name of input directory: '" + inputDir + "'");
+				System.err.println(""); // NOPMD (System.out)
+				System.err.println("Error resolving name of input directory: '" + inputDir + "'"); // NOPMD (System.out)
 			}
 		}
 
@@ -1026,7 +1044,7 @@ public final class TraceAnalysisTool {
 			}
 
 		} catch (final Exception exc) { // NOPMD NOCS (IllegalCatchCheck)
-			System.err.println("An error occured. See 'kieker.log' for details");
+			System.err.println("An error occured. See 'kieker.log' for details"); // NOPMD (System.out)
 			LOG.error(Arrays.toString(args), exc);
 		}
 	}
@@ -1044,10 +1062,10 @@ public final class TraceAnalysisTool {
 				ps.println("Class " + numClasses++ + " ; cardinality: " + e.getValue() + "; # executions: " + t.getLength() + "; representative: " + t.getTraceId()
 						+ "; max. stack depth: " + t.getMaxEss());
 			}
-			System.out.println("");
-			System.out.println("#");
-			System.out.println("# Plugin: " + "Trace equivalence report");
-			System.out.println("Wrote " + numClasses + " equivalence class" + (numClasses > 1 ? "es" : "") + " to file '" + outputFn + "'"); // NOCS
+			System.out.println(""); // NOPMD (System.out)
+			System.out.println("#"); // NOPMD (System.out)
+			System.out.println("# Plugin: " + "Trace equivalence report"); // NOPMD (System.out)
+			System.out.println("Wrote " + numClasses + " equivalence class" + (numClasses > 1 ? "es" : "") + " to file '" + outputFn + "'"); // NOCS // NOPMD
 		} catch (final FileNotFoundException e) {
 			LOG.error("File not found", e);
 			retVal = false;

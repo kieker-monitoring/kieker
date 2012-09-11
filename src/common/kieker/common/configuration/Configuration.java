@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +16,8 @@
 
 package kieker.common.configuration;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -82,18 +80,17 @@ public class Configuration extends Properties {
 		}
 	}
 
+	public final String getPathProperty(final String key) {
+		return Configuration.convertToPath(this.getStringProperty(key));
+	}
+
 	/**
 	 * Property values have to be split by '|'.
 	 * 
 	 * @param key
 	 */
 	public final String[] getStringArrayProperty(final String key) {
-		final String s = this.getStringProperty(key);
-		if (s.length() == 0) {
-			return new String[0];
-		} else {
-			return s.split("\\|");
-		}
+		return this.getStringArrayProperty(key, "\\|");
 	}
 
 	/**
@@ -113,22 +110,6 @@ public class Configuration extends Properties {
 	}
 
 	/**
-	 * Converts the String[] to a String split by '|'.
-	 * 
-	 * @param values
-	 */
-	public static final String toProperty(final String[] values) {
-		final StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < values.length; i++) {
-			sb.append(values[i]);
-			if (i < (values.length - 1)) {
-				sb.append('|');
-			}
-		}
-		return sb.toString();
-	}
-
-	/**
 	 * Converts the Object[] to a String split by '|'.
 	 * 
 	 * @param values
@@ -145,6 +126,22 @@ public class Configuration extends Properties {
 	}
 
 	/**
+	 * Tries to simplify a given filesystem path.
+	 * E.g., test/../x/y/./z/a/../x -> x/y/z/x
+	 * 
+	 * @param path
+	 * @return a simplified path
+	 */
+	public static final String convertToPath(final String path) {
+		try {
+			return new URI(null, null, null, -1, path.replace('\\', '/'), null, null).normalize().toASCIIString();
+		} catch (final URISyntaxException ex) {
+			LOG.warn("Failed to parse path: " + path, ex);
+			return path;
+		}
+	}
+
+	/**
 	 * Flattens the Properties hierarchies and returns an Configuration object containing only keys starting with the prefix.
 	 * 
 	 * <p>
@@ -154,7 +151,7 @@ public class Configuration extends Properties {
 	 * 
 	 * <pre>
 	 * public final Configuration getPropertiesStartingWith(final String prefix) {
-	 * 	return (Configuration) getPropertiesStartingWith(new Configuration(null), prefix);
+	 * 	return (Configuration) getPropertiesStartingWith(new Configuration(), prefix);
 	 * }
 	 * </pre>
 	 * 
@@ -199,5 +196,34 @@ public class Configuration extends Properties {
 	@Deprecated
 	public final synchronized Object put(final Object key, final Object value) { // NOPMD
 		return super.put(key, value);
+	}
+
+	/**
+	 * This method should never be used directly!
+	 * Use {@link #getStringProperty(String)} instead!
+	 */
+	@Override
+	@Deprecated
+	public final synchronized Object get(final Object key) { // NOPMD
+		return super.get(key);
+	}
+
+	/**
+	 * This method should never be used directly!
+	 * Use {@link #getStringProperty(String)} instead!
+	 */
+	@Override
+	@Deprecated
+	public final String getProperty(final String key) {
+		return super.getProperty(key);
+	}
+
+	/**
+	 * This method should never be used directly!
+	 */
+	@Override
+	@Deprecated
+	public final String getProperty(final String key, final String defaultValue) {
+		return super.getProperty(key);
 	}
 }
