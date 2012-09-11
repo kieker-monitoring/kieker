@@ -34,10 +34,74 @@ import java.util.Collection;
 public abstract class AbstractGraph<V extends AbstractVertex<V, E, O>, E extends AbstractEdge<V, E, O>, O> {
 
 	/**
+	 * Interface for abstract-graph visitors. These visitors can be used in conjunction with the
+	 * graph's traversal methods.
+	 * 
+	 * @author Holger Knoche
+	 * 
+	 * @param <V>
+	 *            The type of the graph's vertices
+	 * @param <E>
+	 *            The type of the graph's edges
+	 */
+	public interface Visitor<V, E> {
+
+		/**
+		 * Call-back operation that is invoked when a vertex is encountered during graph traversal.
+		 * 
+		 * @param vertex
+		 *            The encountered vertex
+		 */
+		public void visitVertex(V vertex);
+
+		/**
+		 * Call-back operation that is invoked when an edge is encountered during graph traversal.
+		 * 
+		 * @param edge
+		 *            The encountered edge
+		 */
+		public void visitEdge(E edge);
+
+	}
+
+	/**
 	 * Returns the vertices contained in this graph.
 	 * 
 	 * @return See above
 	 */
 	public abstract Collection<V> getVertices();
 
+	/**
+	 * Traverses this graph using the given visitor. Outgoing edges are traversed immediately after their owning node.
+	 * 
+	 * @param visitor
+	 *            The visitor to call during traversal
+	 */
+	public void traverse(final Visitor<V, E> visitor) {
+		for (final V vertex : this.getVertices()) {
+			visitor.visitVertex(vertex);
+
+			for (final E edge : vertex.getOutgoingEdges()) {
+				visitor.visitEdge(edge);
+			}
+		}
+	}
+
+	/**
+	 * Traverses this graph using the given visitor. All vertices are visited before the first edge.
+	 * 
+	 * @param visitor
+	 *            The visitor to call during traversal
+	 */
+	public void traverseWithVerticesFirst(final Visitor<V, E> visitor) {
+		for (final V vertex : this.getVertices()) {
+			visitor.visitVertex(vertex);
+		}
+
+		for (final V vertex : this.getVertices()) {
+			for (final E edge : vertex.getOutgoingEdges()) {
+				visitor.visitEdge(edge);
+			}
+		}
+	}
 }

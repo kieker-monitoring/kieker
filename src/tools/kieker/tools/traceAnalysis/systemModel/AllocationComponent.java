@@ -20,7 +20,7 @@ package kieker.tools.traceAnalysis.systemModel;
  * 
  * @author Andre van Hoorn
  */
-public class AllocationComponent {
+public class AllocationComponent implements ISystemModelElement {
 
 	private final int id;
 	private final AssemblyComponent assemblyComponent;
@@ -63,5 +63,9 @@ public class AllocationComponent {
 		}
 		final AllocationComponent other = (AllocationComponent) obj;
 		return other.id == this.id;
+	}
+
+	public String getIdentifier() {
+		return this.getAssemblyComponent().getName();
 	}
 }

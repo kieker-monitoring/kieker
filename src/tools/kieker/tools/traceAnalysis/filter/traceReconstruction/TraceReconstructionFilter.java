@@ -238,8 +238,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 		} catch (final InvalidTraceException ex) {
 			/* Transformation failed (i.e., trace invalid) */
 			super.deliver(OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, new InvalidExecutionTrace(executionTrace));
-			final String transformationError = "Failed to transform execution trace to message trace (ID:" + curTraceId + "). \n"
-					+ "Reason:" + ex.getMessage() + "\n Trace: " + executionTrace;
+			final String transformationError = "Failed to transform execution trace to message trace (ID: " + curTraceId + "). \n"
+					+ "Reason: " + ex.getMessage() + "\n Trace: " + executionTrace;
 			if (!this.invalidTraces.contains(curTraceId)) {
 				// only once per traceID (otherwise, we would report all
 				// trace fragments)

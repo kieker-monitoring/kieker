@@ -41,6 +41,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.ParseException;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.filter.flow.EventRecordTraceReconstructionFilter;
 import kieker.analysis.plugin.filter.forward.StringBufferFilter;
@@ -50,9 +51,11 @@ import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
+import kieker.tools.traceAnalysis.filter.IGraphOutputtingFilter;
 import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
 import kieker.tools.traceAnalysis.filter.flow.TraceEventRecords2ExecutionAndMessageTraceFilter;
 import kieker.tools.traceAnalysis.filter.systemModel.SystemModel2FileFilter;
@@ -62,6 +65,9 @@ import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceReconstruction
 import kieker.tools.traceAnalysis.filter.traceWriter.ExecutionTraceWriterFilter;
 import kieker.tools.traceAnalysis.filter.traceWriter.InvalidExecutionTraceWriterFilter;
 import kieker.tools.traceAnalysis.filter.traceWriter.MessageTraceWriterFilter;
+import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFilter;
+import kieker.tools.traceAnalysis.filter.visualization.GraphWriterConfiguration;
+import kieker.tools.traceAnalysis.filter.visualization.GraphWriterPlugin;
 import kieker.tools.traceAnalysis.filter.visualization.callTree.AbstractAggregatedCallTreeFilter;
 import kieker.tools.traceAnalysis.filter.visualization.callTree.AggregatedAllocationComponentOperationCallTreeFilter;
 import kieker.tools.traceAnalysis.filter.visualization.callTree.AggregatedAssemblyComponentOperationCallTreeFilter;
@@ -73,7 +79,11 @@ import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.Component
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ContainerDependencyGraphFilter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationDependencyGraphAllocationFilter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationDependencyGraphAssemblyFilter;
+import kieker.tools.traceAnalysis.filter.visualization.descriptions.DescriptionDecoratorFilter;
 import kieker.tools.traceAnalysis.filter.visualization.sequenceDiagram.SequenceDiagramFilter;
+import kieker.tools.traceAnalysis.filter.visualization.traceColoring.TraceColoringFilter;
+import kieker.tools.traceAnalysis.repository.DescriptionRepository;
+import kieker.tools.traceAnalysis.repository.TraceColorRepository;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOperationPairFactory;
 import kieker.tools.traceAnalysis.systemModel.repository.AssemblyComponentOperationPairFactory;
@@ -247,9 +257,19 @@ public final class TraceAnalysisTool {
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE)) {
 				val = LoggingTimestampConverter.convertLoggingTimestampToUTCString(TraceAnalysisTool.ignoreExecutionsAfterTimestamp) + " ("
 						+ LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(TraceAnalysisTool.ignoreExecutionsAfterTimestamp) + ")";
+			} else if (Constants.CMD_OPT_NAME_TRACE_COLORING.equals(longOpt)) {
+				val = cmdl.getOptionValue(Constants.CMD_OPT_NAME_TRACE_COLORING);
+				if (val == null) {
+					val = "";
+				}
+			} else if (Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS.equals(longOpt)) {
+				val = cmdl.getOptionValue(Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS);
+				if (val == null) {
+					val = "";
+				}
 			} else {
 				val = Arrays.toString(TraceAnalysisTool.cmdl.getOptionValues(longOpt));
-				LOG.warn("Unformatted confguration output for option " + longOpt);
+				LOG.warn("Unformatted configuration output for option " + longOpt);
 			}
 			System.out.println("--" + longOpt + ": " + val); // NOPMD (System.out)
 		}
@@ -269,6 +289,118 @@ public final class TraceAnalysisTool {
 			}
 
 			plugin.addDecorator(currentDecorator);
+		}
+	}
+
+	private static GraphWriterConfiguration createGraphWriterConfiguration() {
+		final GraphWriterConfiguration configuration = new GraphWriterConfiguration();
+
+		configuration.setOutputPath(outputDir + File.separator + outputFnPrefix);
+		configuration.setIncludeWeights(true);
+		configuration.setUseShortLabels(shortLabels);
+		configuration.setPlotLoops(includeSelfLoops);
+
+		return configuration;
+	}
+
+	/**
+	 * Attaches a graph writer plugin to the given plugin.
+	 * 
+	 * @param plugin
+	 *            The plugin which delivers the graph to write
+	 * @param producer
+	 *            The producer which originally produced the graph
+	 * @param controller
+	 *            The analysis controller to use for the connection of the plugins
+	 * @throws IllegalStateException
+	 *             If the connection of the plugins is not possible at the moment
+	 * @throws AnalysisConfigurationException
+	 *             If the plugins cannot be connected
+	 */
+	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> void attachGraphWriter(final P plugin,
+			final AbstractGraphProducingFilter<?> producer, final AnalysisController controller) throws IllegalStateException, AnalysisConfigurationException {
+
+		final GraphWriterConfiguration gConfiguration = TraceAnalysisTool.createGraphWriterConfiguration();
+		final Configuration configuration = gConfiguration.getConfiguration();
+		configuration.setConfigurationName(producer.getConfigurationName());
+		final GraphWriterPlugin graphWriter = new GraphWriterPlugin(configuration);
+		controller.registerFilter(graphWriter);
+		controller.connect(plugin, plugin.getGraphOutputPortName(),
+				graphWriter, GraphWriterPlugin.INPUT_PORT_NAME_GRAPHS);
+	}
+
+	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> void connectGraphFilters(final P predecessor,
+			final AbstractGraphFilter<?, ?, ?, ?> filter, final AnalysisController controller) throws IllegalStateException, AnalysisConfigurationException {
+		controller.registerFilter(filter);
+		controller.connect(predecessor, predecessor.getGraphOutputPortName(),
+				filter, filter.getGraphInputPortName());
+	}
+
+	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> TraceColoringFilter<?, ?> createTraceColoringFilter(final P predecessor,
+			final String coloringFileName, final AnalysisController controller) throws IOException, IllegalStateException, AnalysisConfigurationException {
+		final TraceColorRepository colorRepository = TraceColorRepository.createFromFile(coloringFileName);
+		controller.registerRepository(colorRepository);
+
+		@SuppressWarnings("rawtypes")
+		final TraceColoringFilter<?, ?> coloringFilter = new TraceColoringFilter(new Configuration());
+		TraceAnalysisTool.connectGraphFilters(predecessor, coloringFilter, controller);
+		controller.connect(coloringFilter, TraceColoringFilter.COLOR_REPOSITORY_NAME, colorRepository);
+
+		return coloringFilter;
+	}
+
+	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> DescriptionDecoratorFilter<?, ?, ?> createDescriptionDecoratorFilter(
+			final P predecessor,
+			final String descriptionsFileName, final AnalysisController controller) throws IOException, IllegalStateException, AnalysisConfigurationException {
+		final DescriptionRepository descriptionRepository = DescriptionRepository.createFromFile(descriptionsFileName);
+		controller.registerRepository(descriptionRepository);
+
+		@SuppressWarnings("rawtypes")
+		final DescriptionDecoratorFilter<?, ?, ?> descriptionFilter = new DescriptionDecoratorFilter(new Configuration());
+		TraceAnalysisTool.connectGraphFilters(predecessor, descriptionFilter, controller);
+		controller.connect(descriptionFilter, DescriptionDecoratorFilter.DESCRIPTION_REPOSITORY_NAME, descriptionRepository);
+
+		return descriptionFilter;
+	}
+
+	/**
+	 * Attaches graph processors and a writer to the given graph producers depending on the given
+	 * command line.
+	 * 
+	 * @param graphProducers
+	 *            The graph producers to connect processors to
+	 * @param controller
+	 *            The analysis controller to use for the connection of the plugins
+	 * @param commandLine
+	 *            The command line to determine the desired processors
+	 * @throws IllegalStateException
+	 *             If the connection of plugins is not possible at the moment
+	 * @throws AnalysisConfigurationException
+	 *             If some plugins cannot be connected
+	 */
+	private static void attachGraphProcessors(final List<AbstractGraphProducingFilter<?>> graphProducers, final AnalysisController controller,
+			final CommandLine commandLine)
+			throws IllegalStateException, AnalysisConfigurationException, IOException {
+
+		for (final AbstractGraphProducingFilter<?> producer : graphProducers) {
+			boolean filtersExist = false;
+			AbstractGraphFilter<?, ?, ?, ?> lastFilter = null;
+
+			// Add a trace coloring filter, if necessary
+			if (commandLine.hasOption(Constants.CMD_OPT_NAME_TRACE_COLORING)) {
+				final String coloringFileName = commandLine.getOptionValue(Constants.CMD_OPT_NAME_TRACE_COLORING);
+				lastFilter = TraceAnalysisTool.createTraceColoringFilter(((filtersExist) ? lastFilter : producer), coloringFileName, controller);
+				filtersExist = true;
+			}
+
+			// Add a description filter, if necessary
+			if (commandLine.hasOption(Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS)) {
+				final String descriptionsFileName = commandLine.getOptionValue(Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS);
+				lastFilter = TraceAnalysisTool.createDescriptionDecoratorFilter(((filtersExist) ? lastFilter : producer), descriptionsFileName, controller);
+				filtersExist = true;
+			}
+
+			TraceAnalysisTool.attachGraphWriter(((filtersExist) ? lastFilter : producer), producer, controller);
 		}
 	}
 
@@ -410,6 +542,7 @@ public final class TraceAnalysisTool {
 			}
 
 			final List<AbstractTraceProcessingFilter> allTraceProcessingComponents = new ArrayList<AbstractTraceProcessingFilter>();
+			final List<AbstractGraphProducingFilter<?>> allGraphProducers = new ArrayList<AbstractGraphProducingFilter<?>>();
 
 			final Configuration traceAllocationEquivClassFilterConfig = new Configuration();
 			traceAllocationEquivClassFilterConfig.setProperty(AbstractPlugin.CONFIG_NAME,
@@ -561,23 +694,11 @@ public final class TraceAnalysisTool {
 						SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPlotAssemblySeqDiagr);
 			}
+
 			ComponentDependencyGraphAllocationFilter componentPlotAllocationComponentDepGraph = null;
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG)) {
 				numRequestedTasks++;
-				final Configuration componentPlotAllocationComponentDepGraphConfig = new Configuration();
-				componentPlotAllocationComponentDepGraphConfig.setProperty(AbstractPlugin.CONFIG_NAME,
-						Constants.PLOTALLOCATIONCOMPONENTDEPGRAPH_COMPONENT_NAME);
-				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE,
-						TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.ALLOCATION_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX);
-				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS,
-						Boolean.TRUE.toString());
-				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SHORTLABELS,
-						Boolean.toString(TraceAnalysisTool.shortLabels));
-				componentPlotAllocationComponentDepGraphConfig.setProperty(ComponentDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SELFLOOPS,
-						Boolean.toString(TraceAnalysisTool.includeSelfLoops));
-
-				componentPlotAllocationComponentDepGraph = new ComponentDependencyGraphAllocationFilter(
-						componentPlotAllocationComponentDepGraphConfig);
+				componentPlotAllocationComponentDepGraph = new ComponentDependencyGraphAllocationFilter(new Configuration());
 
 				final String[] nodeDecorations = TraceAnalysisTool.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG);
 				TraceAnalysisTool.addDecorators(nodeDecorations, componentPlotAllocationComponentDepGraph);
@@ -592,25 +713,13 @@ public final class TraceAnalysisTool {
 						SYSTEM_ENTITY_FACTORY);
 
 				allTraceProcessingComponents.add(componentPlotAllocationComponentDepGraph);
+				allGraphProducers.add(componentPlotAllocationComponentDepGraph);
 			}
+
 			ComponentDependencyGraphAssemblyFilter componentPlotAssemblyComponentDepGraph = null;
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG)) {
 				numRequestedTasks++;
-				final Configuration componentPlotAssemblyComponentDepGraphConfig = new Configuration();
-				componentPlotAssemblyComponentDepGraphConfig.setProperty(AbstractPlugin.CONFIG_NAME,
-						Constants.PLOTASSEMBLYCOMPONENTDEPGRAPH_COMPONENT_NAME);
-				componentPlotAssemblyComponentDepGraphConfig.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
-						Boolean.toString(TraceAnalysisTool.shortLabels));
-				componentPlotAssemblyComponentDepGraphConfig.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS,
-						Boolean.toString(true));
-				componentPlotAssemblyComponentDepGraphConfig.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS,
-						Boolean.toString(TraceAnalysisTool.includeSelfLoops));
-				componentPlotAssemblyComponentDepGraphConfig.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, new File(
-						TraceAnalysisTool.outputDir
-								+ File.separator + TraceAnalysisTool.outputFnPrefix
-								+ Constants.ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX).getAbsolutePath());
-
-				componentPlotAssemblyComponentDepGraph = new ComponentDependencyGraphAssemblyFilter(componentPlotAssemblyComponentDepGraphConfig);
+				componentPlotAssemblyComponentDepGraph = new ComponentDependencyGraphAssemblyFilter(new Configuration());
 
 				final String[] nodeDecorations = TraceAnalysisTool.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG);
 				TraceAnalysisTool.addDecorators(nodeDecorations, componentPlotAssemblyComponentDepGraph);
@@ -624,24 +733,13 @@ public final class TraceAnalysisTool {
 				analysisInstance.connect(componentPlotAssemblyComponentDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPlotAssemblyComponentDepGraph);
+				allGraphProducers.add(componentPlotAssemblyComponentDepGraph);
 			}
+
 			ContainerDependencyGraphFilter componentPlotContainerDepGraph = null;
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG)) {
 				numRequestedTasks++;
-				final Configuration componentPlotContainerDepGraphConfig = new Configuration();
-				componentPlotContainerDepGraphConfig.setProperty(AbstractPlugin.CONFIG_NAME,
-						Constants.PLOTCONTAINERDEPGRAPH_COMPONENT_NAME);
-				componentPlotContainerDepGraphConfig.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
-						Boolean.toString(TraceAnalysisTool.shortLabels));
-				componentPlotContainerDepGraphConfig.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
-				componentPlotContainerDepGraphConfig.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS,
-						Boolean.toString(TraceAnalysisTool.includeSelfLoops));
-				componentPlotContainerDepGraphConfig.setProperty(ContainerDependencyGraphFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, new File(
-						TraceAnalysisTool.outputDir
-								+ File.separator + TraceAnalysisTool.outputFnPrefix
-								+ Constants.CONTAINER_DEPENDENCY_GRAPH_FN_PREFIX).getAbsolutePath());
-
-				componentPlotContainerDepGraph = new ContainerDependencyGraphFilter(componentPlotContainerDepGraphConfig);
+				componentPlotContainerDepGraph = new ContainerDependencyGraphFilter(new Configuration());
 				analysisInstance.registerFilter(componentPlotContainerDepGraph);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPlotContainerDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
@@ -651,25 +749,13 @@ public final class TraceAnalysisTool {
 				analysisInstance.connect(componentPlotContainerDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPlotContainerDepGraph);
+				allGraphProducers.add(componentPlotContainerDepGraph);
 			}
+
 			OperationDependencyGraphAllocationFilter componentPlotAllocationOperationDepGraph = null;
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG)) {
 				numRequestedTasks++;
-
-				final Configuration componentPlotAllocationOperationDepGraphConfig = new Configuration();
-				componentPlotAllocationOperationDepGraphConfig
-						.setProperty(AbstractPlugin.CONFIG_NAME, Constants.PLOTALLOCATIONOPERATIONDEPGRAPH_COMPONENT_NAME);
-				componentPlotAllocationOperationDepGraphConfig
-						.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(TraceAnalysisTool.shortLabels));
-				componentPlotAllocationOperationDepGraphConfig.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS,
-						Boolean.toString(true));
-				componentPlotAllocationOperationDepGraphConfig.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS,
-						Boolean.toString(TraceAnalysisTool.includeSelfLoops));
-				componentPlotAllocationOperationDepGraphConfig.setProperty(OperationDependencyGraphAllocationFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, new File(
-						TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix
-								+ Constants.ALLOCATION_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX).getAbsolutePath());
-
-				componentPlotAllocationOperationDepGraph = new OperationDependencyGraphAllocationFilter(componentPlotAllocationOperationDepGraphConfig);
+				componentPlotAllocationOperationDepGraph = new OperationDependencyGraphAllocationFilter(new Configuration());
 
 				final String[] nodeDecorations = TraceAnalysisTool.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG);
 				TraceAnalysisTool.addDecorators(nodeDecorations, componentPlotAllocationOperationDepGraph);
@@ -683,26 +769,13 @@ public final class TraceAnalysisTool {
 				analysisInstance.connect(componentPlotAllocationOperationDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPlotAllocationOperationDepGraph);
+				allGraphProducers.add(componentPlotAllocationOperationDepGraph);
 			}
+
 			OperationDependencyGraphAssemblyFilter componentPlotAssemblyOperationDepGraph = null;
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG)) {
 				numRequestedTasks++;
-
-				final Configuration componentPlotAssemblyOperationDepGraphConfig = new Configuration();
-				componentPlotAssemblyOperationDepGraphConfig
-						.setProperty(AbstractPlugin.CONFIG_NAME, Constants.PLOTASSEMBLYOPERATIONDEPGRAPH_COMPONENT_NAME);
-				componentPlotAssemblyOperationDepGraphConfig.setProperty(ComponentDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
-						Boolean.toString(TraceAnalysisTool.shortLabels));
-				componentPlotAssemblyOperationDepGraphConfig.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS,
-						Boolean.toString(true));
-				componentPlotAssemblyOperationDepGraphConfig.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_INCLUDE_SELF_LOOPS,
-						Boolean.toString(TraceAnalysisTool.includeSelfLoops));
-				componentPlotAssemblyOperationDepGraphConfig.setProperty(OperationDependencyGraphAssemblyFilter.CONFIG_PROPERTY_NAME_DOT_OUTPUT_FILE, new File(
-						TraceAnalysisTool.outputDir
-								+ File.separator + TraceAnalysisTool.outputFnPrefix
-								+ Constants.ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX).getAbsolutePath());
-
-				componentPlotAssemblyOperationDepGraph = new OperationDependencyGraphAssemblyFilter(componentPlotAssemblyOperationDepGraphConfig);
+				componentPlotAssemblyOperationDepGraph = new OperationDependencyGraphAssemblyFilter(new Configuration());
 
 				final String[] nodeDecorations = TraceAnalysisTool.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG);
 				TraceAnalysisTool.addDecorators(nodeDecorations, componentPlotAssemblyOperationDepGraph);
@@ -716,7 +789,9 @@ public final class TraceAnalysisTool {
 				analysisInstance.connect(componentPlotAssemblyOperationDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						SYSTEM_ENTITY_FACTORY);
 				allTraceProcessingComponents.add(componentPlotAssemblyOperationDepGraph);
+				allGraphProducers.add(componentPlotAssemblyOperationDepGraph);
 			}
+
 			TraceCallTreeFilter componentPlotTraceCallTrees = null;
 			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES)) {
 				numRequestedTasks++;
@@ -789,6 +864,9 @@ public final class TraceAnalysisTool {
 				numRequestedTasks++;
 				// the actual execution of the task is performed below
 			}
+
+			// Attach graph processors to the graph producers
+			TraceAnalysisTool.attachGraphProcessors(allGraphProducers, analysisInstance, cmdl);
 
 			if (numRequestedTasks == 0) {
 				LOG.warn("No task requested");

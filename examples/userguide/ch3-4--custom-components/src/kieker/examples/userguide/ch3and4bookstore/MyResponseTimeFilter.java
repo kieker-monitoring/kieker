@@ -37,7 +37,6 @@ import kieker.common.configuration.Configuration;
 			@Property(name = MyResponseTimeFilter.CONFIG_PROPERTY_NAME_TS_NANOS, defaultValue = "1000000")
 		})
 public class MyResponseTimeFilter extends AbstractFilterPlugin {
-
 	public static final String OUTPUT_PORT_NAME_RT_VALID = "validResponseTimes";
 	public static final String OUTPUT_PORT_NAME_RT_EXCEED = "invalidResponseTimes";
 

@@ -29,9 +29,11 @@ import kieker.common.logging.LogFactory;
  * 
  * @author Jan Waller
  */
-public final class Configuration extends Properties {
+public class Configuration extends Properties {
 	private static final long serialVersionUID = 3364877592243422259L;
 	private static final Log LOG = LogFactory.getLog(Configuration.class);
+
+	public static final String CONFIGURATION_NAME_KEY = "name-hiddenAndNeverExportedProperty";
 
 	public Configuration() {
 		this(null);
@@ -39,6 +41,14 @@ public final class Configuration extends Properties {
 
 	public Configuration(final Properties defaults) {
 		super(defaults);
+	}
+
+	public String getConfigurationName() {
+		return this.getStringProperty(CONFIGURATION_NAME_KEY);
+	}
+
+	public void setConfigurationName(final String name) {
+		this.setProperty(CONFIGURATION_NAME_KEY, name);
 	}
 
 	public final String getStringProperty(final String key) {

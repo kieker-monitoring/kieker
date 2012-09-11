@@ -51,7 +51,7 @@ import kieker.common.logging.LogFactory;
 @Plugin
 public abstract class AbstractPlugin implements IPlugin {
 
-	public static final String CONFIG_NAME = "name-hiddenAndNeverExportedProperty";
+	public static final String CONFIG_NAME = Configuration.CONFIGURATION_NAME_KEY;
 
 	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
 
@@ -75,6 +75,7 @@ public abstract class AbstractPlugin implements IPlugin {
 		try {
 			// TODO: somewhat dirty hack...
 			configuration.setDefaultConfiguration(this.getDefaultConfiguration());
+
 		} catch (final IllegalAccessException ex) {
 			LOG.error("Unable to set plugin default properties", ex);
 		}

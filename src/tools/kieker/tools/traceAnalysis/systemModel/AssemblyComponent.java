@@ -20,7 +20,7 @@ package kieker.tools.traceAnalysis.systemModel;
  * 
  * @author Andre van Hoorn
  */
-public class AssemblyComponent {
+public class AssemblyComponent implements ISystemModelElement {
 	private final int id;
 	private final String name;
 	private final ComponentType type;
@@ -62,5 +62,18 @@ public class AssemblyComponent {
 		}
 		final AssemblyComponent other = (AssemblyComponent) obj;
 		return other.id == this.id;
+	}
+
+	/**
+	 * Denotes whether this assembly component is a root component.
+	 * 
+	 * @return See above
+	 */
+	public boolean isRootComponent() {
+		return false;
+	}
+
+	public String getIdentifier() {
+		return (this.getType() == null) ? this.getName() : this.getType().getFullQualifiedName();
 	}
 }

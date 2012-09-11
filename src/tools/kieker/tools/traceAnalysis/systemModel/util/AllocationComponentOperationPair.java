@@ -17,13 +17,14 @@
 package kieker.tools.traceAnalysis.systemModel.util;
 
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
+import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 
 /**
  * 
  * @author Andre van Hoorn
  */
-public class AllocationComponentOperationPair {
+public class AllocationComponentOperationPair implements ISystemModelElement {
 	private final int id;
 	private final Operation operation;
 
@@ -50,5 +51,9 @@ public class AllocationComponentOperationPair {
 	@Override
 	public String toString() {
 		return +this.allocationComponent.getId() + ":" + this.operation.getId() + "@" + this.id;
+	}
+
+	public String getIdentifier() {
+		return this.getAllocationComponent().getIdentifier();
 	}
 }

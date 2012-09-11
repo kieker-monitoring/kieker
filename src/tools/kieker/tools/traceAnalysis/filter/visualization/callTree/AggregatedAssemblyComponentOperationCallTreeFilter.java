@@ -85,4 +85,9 @@ class AggregatedAssemblyComponentOperationCallTreeNode extends AbstractAggregate
 		e.getTargetWeight().increase();
 		return n;
 	}
+
+	@Override
+	public String getIdentifier() {
+		return null;
+	}
 }

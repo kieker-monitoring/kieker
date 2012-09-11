@@ -41,7 +41,6 @@ public class FilesystemLogReplayer extends AbstractLogReplayer {
 		System.arraycopy(inputDirs, 0, this.inputDirs, 0, inputDirs.length);
 		// for Java 1.6+:
 		// this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
-
 	}
 
 	@Override
