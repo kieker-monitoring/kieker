@@ -111,10 +111,6 @@
         <element xmi:type="ecore:EAttribute" href="AnalysisMetaModel.ecore#//Property/value"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_7wEf8-qkEeGghJo8FZ_45A"/>
       </children>
-      <children xmi:type="notation:Node" xmi:id="_aCD-cPphEeG78Z0ODO6VVA" type="2001">
-        <element xmi:type="ecore:EAttribute" href="AnalysisMetaModel.ecore#//Property/description"/>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_aCD-cfphEeG78Z0ODO6VVA"/>
-      </children>
       <styles xmi:type="notation:DrawerStyle" xmi:id="_7wD44uqkEeGghJo8FZ_45A"/>
       <styles xmi:type="notation:SortingStyle" xmi:id="_7wD44-qkEeGghJo8FZ_45A"/>
       <styles xmi:type="notation:FilteringStyle" xmi:id="_7wD45OqkEeGghJo8FZ_45A"/>
