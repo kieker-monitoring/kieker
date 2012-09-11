@@ -132,7 +132,7 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * @return true if and only if the given output port does exist and if the data is not null and if it suits the port's event types.
 	 */
 	protected final boolean deliver(final String outputPortName, final Object data) {
-		if ((this.state != STATE.RUNNING) || (data == null)) {
+		if (((this.state != STATE.RUNNING) && (this.state != STATE.TERMINATING)) || (data == null)) {
 			return false;
 		}
 
@@ -503,15 +503,16 @@ public abstract class AbstractPlugin implements IPlugin {
 	}
 
 	public final void shutdown(final boolean error) {
-		if (this.state == STATE.TERMINATED) { // we terminate only once
+		if ((this.state == STATE.TERMINATED) || (this.state == STATE.TERMINATING)) { // we terminate only once
 			return;
 		}
-		this.state = STATE.TERMINATED;
+		this.state = STATE.TERMINATING;
 		for (final AbstractPlugin plugin : this.incomingPlugins) {
 			plugin.shutdown(error);
 		}
 		// when we arrive here, all incoming plugins are terminated!
 		this.terminate(error);
+		this.state = STATE.TERMINATED;
 		for (final AbstractPlugin plugin : this.outgoingPlugins) {
 			plugin.shutdown(error);
 		}
@@ -531,6 +532,10 @@ public abstract class AbstractPlugin implements IPlugin {
 		 * The plugin is currently running.
 		 */
 		RUNNING,
+		/**
+		 * The plugin has been notified to terminate.
+		 */
+		TERMINATING,
 		/**
 		 * The plugin has been terminated.
 		 */

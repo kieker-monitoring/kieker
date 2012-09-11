@@ -28,6 +28,7 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
+import kieker.test.analysis.util.plugin.reader.SimpleListReader;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -52,6 +53,8 @@ public class TestEventRecordTraceReconstructionFilter { // NOCS (test class with
 			throws IllegalStateException, AnalysisConfigurationException {
 		final AnalysisController controller = new AnalysisController();
 
+		final SimpleListReader<Object> reader = new SimpleListReader<Object>(new Configuration());
+
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, Long.toString(maxTraceDuration));
 		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, Long.toString(maxTraceTimeout));
@@ -60,15 +63,17 @@ public class TestEventRecordTraceReconstructionFilter { // NOCS (test class with
 		final SimpleSinkFilter<TraceEventRecords> sinkPlugin = new SimpleSinkFilter<TraceEventRecords>(new Configuration());
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
+		controller.registerReader(reader);
 		controller.registerFilter(traceFilter);
 		controller.registerFilter(sinkPlugin);
+		controller.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, traceFilter, EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
 		controller.connect(traceFilter, EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID, sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
 
-		traceFilter.newEvent(records.getTrace());
+		reader.addObject(records.getTrace());
 		for (final AbstractTraceEvent e : records.getTraceEvents()) {
-			traceFilter.newEvent(e);
+			reader.addObject(e);
 		}
-		traceFilter.terminate(false); // terminate w/o error; otherwise end of trace might not be triggered
+		controller.run();
 
 		// Make sure that 1 trace generated
 		Assert.assertEquals("No trace passed filter", 1, sinkPlugin.getList().size());
@@ -79,6 +84,8 @@ public class TestEventRecordTraceReconstructionFilter { // NOCS (test class with
 			throws IllegalStateException, AnalysisConfigurationException {
 		final AnalysisController controller = new AnalysisController();
 
+		final SimpleListReader<Object> reader = new SimpleListReader<Object>(new Configuration());
+
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, Long.toString(maxTraceDuration));
 		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, Long.toString(maxTraceTimeout));
@@ -87,17 +94,19 @@ public class TestEventRecordTraceReconstructionFilter { // NOCS (test class with
 		final SimpleSinkFilter<TraceEventRecords> sinkPlugin = new SimpleSinkFilter<TraceEventRecords>(new Configuration());
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
+		controller.registerReader(reader);
 		controller.registerFilter(traceFilter);
 		controller.registerFilter(sinkPlugin);
+		controller.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, traceFilter, EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
 		controller.connect(traceFilter, EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID, sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
 
-		traceFilter.newEvent(records.getTrace());
+		reader.addObject(records.getTrace());
 		for (final AbstractTraceEvent e : records.getTraceEvents()) {
-			traceFilter.newEvent(e);
+			reader.addObject(e);
 		}
-		traceFilter.terminate(false); // terminate w/o error; otherwise end of trace might not be triggered
+		controller.run();
 
-		// Make sure that 1 trace generated
+		// Make sure that no trace is generated
 		Assert.assertEquals("There should be no trace", 0, sinkPlugin.getList().size());
 	}
 
