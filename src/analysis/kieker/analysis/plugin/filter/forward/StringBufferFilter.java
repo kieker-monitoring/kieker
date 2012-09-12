@@ -118,7 +118,7 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 					super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
 							AbstractMonitoringRecord.createFromArray((Class<? extends IMonitoringRecord>) object.getClass(), objects));
 				} catch (final MonitoringRecordException ex) {
-					LOG.warn("Failed to recreated buffered monitoring record!", ex);
+					LOG.warn("Failed to recreate buffered monitoring record: " + object.toString(), ex);
 				}
 			} else {
 				super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, object);

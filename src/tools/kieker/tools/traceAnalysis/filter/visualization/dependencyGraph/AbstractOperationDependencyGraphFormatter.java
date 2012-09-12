@@ -42,7 +42,7 @@ public abstract class AbstractOperationDependencyGraphFormatter<T extends Depend
 		builder.append('(');
 
 		final String[] parameterTypes = signature.getParamTypeList();
-		if ((parameterTypes != null) && (parameterTypes.length > 0)) {
+		if (parameterTypes.length > 0) { // // parameterTypes cannot be null (getParamTypeList never returns null)
 			builder.append("..");
 		}
 		builder.append(')');

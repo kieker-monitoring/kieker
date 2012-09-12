@@ -141,7 +141,7 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 	private String getOutputFileName(final AbstractGraphFormatter<?> formatter) {
 		String outputFileName = this.gConfiguration.getOutputFileName();
 
-		if ((outputFileName == null) || (outputFileName.trim().length() == 0)) { // NOPMD(InefficientEmptyStringCheck) // does the job
+		if (outputFileName.length() == 0) { // outputFileName cannot be null (getOutputFileName never returns null)
 			outputFileName = formatter.getDefaultFileName();
 		}
 

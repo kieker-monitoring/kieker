@@ -65,7 +65,7 @@ public class GraphWriterConfiguration {
 	}
 
 	public String getOutputFileName() {
-		return this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME);
+		return this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME); // never null
 	}
 
 	public void setOutputFileName(final String outputFileName) {
