@@ -16,8 +16,7 @@
 
 package kieker.test.tools.junit.traceAnalysis.filter.flow;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;

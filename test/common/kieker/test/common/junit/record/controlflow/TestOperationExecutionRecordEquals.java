@@ -16,8 +16,7 @@
 
 package kieker.test.common.junit.record.controlflow;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.controlflow.OperationExecutionRecord;

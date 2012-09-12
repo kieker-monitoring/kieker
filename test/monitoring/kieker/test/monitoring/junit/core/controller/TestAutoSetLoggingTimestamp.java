@@ -19,8 +19,7 @@ package kieker.test.monitoring.junit.core.controller;
 import java.util.List;
 import java.util.Properties;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.IMonitoringRecord;

@@ -16,8 +16,7 @@
 
 package kieker.test.common.junit.record.flow.trace.concurrency;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.concurrency.SplitEvent;

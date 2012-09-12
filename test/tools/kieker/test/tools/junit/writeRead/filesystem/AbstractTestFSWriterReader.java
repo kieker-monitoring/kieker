@@ -22,8 +22,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;

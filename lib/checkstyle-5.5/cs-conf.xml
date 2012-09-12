@@ -612,6 +612,7 @@
         <!-- Checks for imports from a set of illegal packages. !-->
         <!-- See http://checkstyle.sf.net/config_import.html !-->
         <module name="IllegalImport">
+            <property name="illegalPkgs" value="junit.framework"/>
             <property name="illegalPkgs" value="sun"/>
             <property name="illegalPkgs" value="org.apache.commons.logging"/>
         </module>

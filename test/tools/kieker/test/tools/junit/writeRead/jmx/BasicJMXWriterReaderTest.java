@@ -25,7 +25,7 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.AnalysisControllerThread;

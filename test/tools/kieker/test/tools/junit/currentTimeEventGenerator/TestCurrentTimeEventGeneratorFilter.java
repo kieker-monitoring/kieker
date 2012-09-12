@@ -19,8 +19,7 @@ package kieker.test.tools.junit.currentTimeEventGenerator;
 import java.util.Arrays;
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;

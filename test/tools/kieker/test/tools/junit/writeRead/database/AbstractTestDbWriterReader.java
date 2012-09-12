@@ -20,8 +20,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
@@ -68,14 +67,11 @@ public abstract class AbstractTestDbWriterReader extends AbstractWriterReaderTes
 	@Override
 	protected void inspectRecords(final List<IMonitoringRecord> eventsPassedToController, final List<IMonitoringRecord> eventsFromMonitoringLog) throws Exception {
 		// TODO currently the reader screws the order completely
-		// Collections.sort(eventsPassedToController);
 		final IMonitoringRecord[] eventsPassed = eventsPassedToController.toArray(new IMonitoringRecord[eventsPassedToController.size()]);
 		Arrays.sort(eventsPassed);
-		// Collections.sort(eventsFromMonitoringLog);
 		final IMonitoringRecord[] eventsFrom = eventsFromMonitoringLog.toArray(new IMonitoringRecord[eventsFromMonitoringLog.size()]);
 		Arrays.sort(eventsFrom);
-		// Assert.assertEquals("Unexpected set of records", eventsPassedToController, eventsFromMonitoringLog);
-		Assert.assertTrue("Unexpected set of records", Arrays.equals(eventsPassed, eventsFrom));
+		Assert.assertArrayEquals("Unexpected set of records", eventsPassed, eventsFrom);
 	}
 
 	@Override
