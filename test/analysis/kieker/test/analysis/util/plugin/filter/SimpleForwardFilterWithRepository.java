@@ -28,7 +28,8 @@ import kieker.test.analysis.util.repository.SimpleRepository;
 /**
  * @author Nils Christian Ehmke, Jan Waller
  */
-@Plugin(name = SimpleForwardFilterWithRepository.FILTER_NAME, description = SimpleForwardFilterWithRepository.FILTER_DESCRIPTION,
+@Plugin(programmaticOnly = true,
+		name = SimpleForwardFilterWithRepository.FILTER_NAME, description = SimpleForwardFilterWithRepository.FILTER_DESCRIPTION,
 		outputPorts = { @OutputPort(name = SimpleForwardFilterWithRepository.OUTPUT_PORT_NAME, eventTypes = { Object.class }) },
 		repositoryPorts = @RepositoryPort(name = SimpleForwardFilterWithRepository.REPOSITORY_PORT_NAME, repositoryType = SimpleRepository.class))
 public class SimpleForwardFilterWithRepository extends AbstractFilterPlugin {

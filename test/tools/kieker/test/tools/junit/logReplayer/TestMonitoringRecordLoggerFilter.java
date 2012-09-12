@@ -116,7 +116,7 @@ public class TestMonitoringRecordLoggerFilter {
 			// note that the loggingTimestamp is not set (i.e., it is -1)
 			someEvents.addAll(nextBatch);
 		}
-		someEvents.add(new EmptyRecord()); // this record used to cause problems (#475)
+		someEvents.add(new EmptyRecord());
 		return someEvents;
 	}
 
@@ -133,7 +133,7 @@ public class TestMonitoringRecordLoggerFilter {
 		final AnalysisController analysisController = new AnalysisController();
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));
-		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, " false");
+		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, "false");
 		final AbstractReaderPlugin reader = new FSReader(readerConfiguration);
 		final SimpleSinkFilter<IMonitoringRecord> sinkPlugin = new SimpleSinkFilter<IMonitoringRecord>(new Configuration());
 
@@ -141,6 +141,7 @@ public class TestMonitoringRecordLoggerFilter {
 		analysisController.registerFilter(sinkPlugin);
 		analysisController.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
 		analysisController.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, analysisController.getState());
 
 		return sinkPlugin.getList();
 	}
@@ -189,6 +190,7 @@ public class TestMonitoringRecordLoggerFilter {
 		analysisController.connect(loggerFilter, MonitoringRecordLoggerFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, simpleSinkFilter, SimpleSinkFilter.INPUT_PORT_NAME);
 
 		analysisController.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, analysisController.getState());
 
 		final List<IMonitoringRecord> eventsFromLog = this.readEvents();
 

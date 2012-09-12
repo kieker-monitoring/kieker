@@ -115,6 +115,12 @@ public interface IPlugin {
 
 	/**
 	 * 
+	 * @return the current state of the plugin
+	 */
+	public abstract STATE getState();
+
+	/**
+	 * 
 	 * @author Nils Christian Ehmke
 	 */
 	public static final class PluginInputPortReference {
@@ -146,4 +152,37 @@ public interface IPlugin {
 			return this.inputPortName;
 		}
 	}
+
+	/**
+	 * An enumeration used to describe the state of an {@link AbstractPlugin}.
+	 * 
+	 * @author Jan Waller
+	 */
+	public static enum STATE {
+		/**
+		 * The plugin has been initialized and is ready to be configured.
+		 */
+		READY,
+		/**
+		 * The plugin is currently running.
+		 */
+		RUNNING,
+		/**
+		 * The plugin has been notified to terminate.
+		 */
+		TERMINATING,
+		/**
+		 * The plugin has been terminated.
+		 */
+		TERMINATED,
+		/**
+		 * The plugin has been notified to terminate with error.
+		 */
+		FAILING,
+		/**
+		 * The plugin has been terminated with error.
+		 */
+		FAILED,
+	}
+
 }

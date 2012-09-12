@@ -497,48 +497,39 @@ public abstract class AbstractPlugin implements IPlugin {
 		return result;
 	}
 
+	public final STATE getState() {
+		return this.state;
+	}
+
 	public final boolean start() {
+		if (this.state != STATE.READY) {
+			return false;
+		}
 		this.state = STATE.RUNNING;
 		return this.init();
 	}
 
 	public final void shutdown(final boolean error) {
-		if ((this.state == STATE.TERMINATED) || (this.state == STATE.TERMINATING)) { // we terminate only once
+		if ((this.state != STATE.READY) && (this.state != STATE.RUNNING)) { // we terminate only once
 			return;
 		}
-		this.state = STATE.TERMINATING;
+		if (error) {
+			this.state = STATE.FAILING;
+		} else {
+			this.state = STATE.TERMINATING;
+		}
 		for (final AbstractPlugin plugin : this.incomingPlugins) {
 			plugin.shutdown(error);
 		}
 		// when we arrive here, all incoming plugins are terminated!
 		this.terminate(error);
-		this.state = STATE.TERMINATED;
+		if (error) {
+			this.state = STATE.FAILED;
+		} else {
+			this.state = STATE.TERMINATED;
+		}
 		for (final AbstractPlugin plugin : this.outgoingPlugins) {
 			plugin.shutdown(error);
 		}
-	}
-
-	/**
-	 * An enumeration used to describe the state of an {@link AbstractPlugin}.
-	 * 
-	 * @author Jan Waller
-	 */
-	public static enum STATE {
-		/**
-		 * The plugin has been initialized and is ready to be configured.
-		 */
-		READY,
-		/**
-		 * The plugin is currently running.
-		 */
-		RUNNING,
-		/**
-		 * The plugin has been notified to terminate.
-		 */
-		TERMINATING,
-		/**
-		 * The plugin has been terminated.
-		 */
-		TERMINATED,
 	}
 }
