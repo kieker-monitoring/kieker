@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,37 +40,8 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 
 	private static final String DEFAULT_FILE_NAME = Constants.ALLOCATION_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX + Constants.DOT_FILE_SUFFIX;
 
-	private static class ElementGrouping {
-
-		private final ConcurrentMap<ExecutionContainer, Set<AllocationComponent>> allocationComponentGrouping;
-		private final ConcurrentMap<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>> operationGrouping;
-
-		public ElementGrouping(final ConcurrentMap<ExecutionContainer, Set<AllocationComponent>> allocationComponentGrouping,
-				final ConcurrentMap<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>> operationGrouping) {
-			this.allocationComponentGrouping = allocationComponentGrouping;
-			this.operationGrouping = operationGrouping;
-		}
-
-		public ConcurrentMap<ExecutionContainer, Set<AllocationComponent>> getAllocationComponentGrouping() {
-			return this.allocationComponentGrouping;
-		}
-
-		public ConcurrentMap<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>> getOperationGrouping() {
-			return this.operationGrouping;
-		}
-
-	}
-
-	private static class EdgeVisitor extends AbstractDependencyGraphFormatterVisitor<AllocationComponentOperationPair> {
-
-		public EdgeVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops, final boolean useShortLabels) {
-			super(builder, includeWeights, plotLoops, useShortLabels);
-		}
-
-		public void visitVertex(final DependencyGraphNode<AllocationComponentOperationPair> vertex) {
-			// Do nothing
-		}
-
+	public OperationAllocationDependencyGraphFormatter() {
+		// empty default constructor
 	}
 
 	private ElementGrouping groupElements(final OperationAllocationDependencyGraph graph) {
@@ -108,7 +75,7 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 	}
 
 	private static String createContainerNodeLabel(final ExecutionContainer container) {
-		return (STEREOTYPE_EXECUTION_CONTAINER + "\\n" + container.getName());
+		return STEREOTYPE_EXECUTION_CONTAINER + "\\n" + container.getName();
 	}
 
 	private static String createAllocationComponentNodeLabel(final AllocationComponent component, final boolean useShortLabels) {
@@ -223,5 +190,38 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 	@Override
 	public String getDefaultFileName() {
 		return DEFAULT_FILE_NAME;
+	}
+
+	private static class ElementGrouping {
+
+		private final ConcurrentMap<ExecutionContainer, Set<AllocationComponent>> allocationComponentGrouping;
+		private final ConcurrentMap<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>> operationGrouping;
+
+		public ElementGrouping(final ConcurrentMap<ExecutionContainer, Set<AllocationComponent>> allocationComponentGrouping,
+				final ConcurrentMap<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>> operationGrouping) {
+			this.allocationComponentGrouping = allocationComponentGrouping;
+			this.operationGrouping = operationGrouping;
+		}
+
+		public ConcurrentMap<ExecutionContainer, Set<AllocationComponent>> getAllocationComponentGrouping() {
+			return this.allocationComponentGrouping;
+		}
+
+		public ConcurrentMap<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>> getOperationGrouping() {
+			return this.operationGrouping;
+		}
+
+	}
+
+	private static class EdgeVisitor extends AbstractDependencyGraphFormatterVisitor<AllocationComponentOperationPair> {
+
+		public EdgeVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops, final boolean useShortLabels) {
+			super(builder, includeWeights, plotLoops, useShortLabels);
+		}
+
+		public void visitVertex(final DependencyGraphNode<AllocationComponentOperationPair> vertex) {
+			// Do nothing
+		}
+
 	}
 }

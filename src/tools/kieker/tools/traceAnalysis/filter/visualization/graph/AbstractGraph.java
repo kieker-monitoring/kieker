@@ -34,37 +34,6 @@ import java.util.Collection;
 public abstract class AbstractGraph<V extends AbstractVertex<V, E, O>, E extends AbstractEdge<V, E, O>, O> {
 
 	/**
-	 * Interface for abstract-graph visitors. These visitors can be used in conjunction with the
-	 * graph's traversal methods.
-	 * 
-	 * @author Holger Knoche
-	 * 
-	 * @param <V>
-	 *            The type of the graph's vertices
-	 * @param <E>
-	 *            The type of the graph's edges
-	 */
-	public interface Visitor<V, E> {
-
-		/**
-		 * Call-back operation that is invoked when a vertex is encountered during graph traversal.
-		 * 
-		 * @param vertex
-		 *            The encountered vertex
-		 */
-		public void visitVertex(V vertex);
-
-		/**
-		 * Call-back operation that is invoked when an edge is encountered during graph traversal.
-		 * 
-		 * @param edge
-		 *            The encountered edge
-		 */
-		public void visitEdge(E edge);
-
-	}
-
-	/**
 	 * Returns the vertices contained in this graph.
 	 * 
 	 * @return See above
@@ -103,5 +72,36 @@ public abstract class AbstractGraph<V extends AbstractVertex<V, E, O>, E extends
 				visitor.visitEdge(edge);
 			}
 		}
+	}
+
+	/**
+	 * Interface for abstract-graph visitors. These visitors can be used in conjunction with the
+	 * graph's traversal methods.
+	 * 
+	 * @author Holger Knoche
+	 * 
+	 * @param <V>
+	 *            The type of the graph's vertices
+	 * @param <E>
+	 *            The type of the graph's edges
+	 */
+	public interface Visitor<V, E> {
+
+		/**
+		 * Call-back operation that is invoked when a vertex is encountered during graph traversal.
+		 * 
+		 * @param vertex
+		 *            The encountered vertex
+		 */
+		public void visitVertex(V vertex);
+
+		/**
+		 * Call-back operation that is invoked when an edge is encountered during graph traversal.
+		 * 
+		 * @param edge
+		 *            The encountered edge
+		 */
+		public void visitEdge(E edge);
+
 	}
 }

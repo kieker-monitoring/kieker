@@ -105,8 +105,7 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 				}
 
 				relevantDependencies.put(destination.getId(), e);
-			}
-			else {
+			} else {
 				e.addOrigin(origin);
 			}
 			e.getTargetWeight().increase();
@@ -126,8 +125,7 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 			if (e == null) {
 				e = new WeightedBidirectionalDependencyGraphEdge<T>(this, source, origin);
 				relevantDependencies.put(source.getId(), e);
-			}
-			else {
+			} else {
 				e.addOrigin(origin);
 			}
 			e.getSourceWeight().increase();

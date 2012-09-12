@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +30,27 @@ import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponentDependencyGraphFormatter<ComponentAssemblyDependencyGraph> {
 
 	private static final String DEFAULT_FILE_NAME = Constants.ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX + Constants.DOT_FILE_SUFFIX;
+
+	public ComponentAssemblyDependencyGraphFormatter() {
+		// empty default constructor
+	}
+
+	@Override
+	protected String formatDependencyGraph(final ComponentAssemblyDependencyGraph graph, final boolean includeWeights, final boolean useShortLabels,
+			final boolean plotLoops) {
+		final StringBuilder builder = new StringBuilder();
+
+		this.appendGraphHeader(builder);
+		graph.traverseWithVerticesFirst(new FormatterVisitor(builder, includeWeights, plotLoops, useShortLabels));
+		this.appendGraphFooter(builder);
+
+		return builder.toString();
+	}
+
+	@Override
+	public String getDefaultFileName() {
+		return DEFAULT_FILE_NAME;
+	}
 
 	private static class FormatterVisitor extends AbstractDependencyGraphFormatterVisitor<AssemblyComponent> {
 
@@ -74,8 +91,7 @@ public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponent
 						null, // misc
 						null // tooltip
 						));
-			}
-			else {
+			} else {
 				this.builder.append(DotFactory.createNode("", AbstractDependencyGraphFormatter.createNodeId(vertex),
 						this.createNodeLabel(vertex, component), // NOCS
 						DotFactory.DOT_SHAPE_BOX, // NOCS
@@ -93,22 +109,4 @@ public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponent
 			this.builder.append("\n");
 		}
 	}
-
-	@Override
-	protected String formatDependencyGraph(final ComponentAssemblyDependencyGraph graph, final boolean includeWeights, final boolean useShortLabels,
-			final boolean plotLoops) {
-		final StringBuilder builder = new StringBuilder();
-
-		this.appendGraphHeader(builder);
-		graph.traverseWithVerticesFirst(new FormatterVisitor(builder, includeWeights, plotLoops, useShortLabels));
-		this.appendGraphFooter(builder);
-
-		return builder.toString();
-	}
-
-	@Override
-	public String getDefaultFileName() {
-		return DEFAULT_FILE_NAME;
-	}
-
 }

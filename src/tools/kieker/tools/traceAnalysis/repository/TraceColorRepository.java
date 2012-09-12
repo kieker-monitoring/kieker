@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,75 +56,6 @@ public class TraceColorRepository extends AbstractRepository {
 	private final Color defaultColor;
 	private final Color collisionColor;
 
-	private static Long parseTraceId(final String input) {
-		try {
-			return Long.parseLong(input);
-		} catch (final NumberFormatException e) {
-			return null;
-		}
-	}
-
-	private static Color parseColor(final String input) {
-		final Matcher matcher = COLOR_PATTERN.matcher(input);
-		if (!matcher.matches()) {
-			return null;
-		}
-
-		final int rgbValue = Integer.parseInt(matcher.group(1), 16);
-		return new Color(rgbValue);
-	}
-
-	public static TraceColorRepository createFromFile(final String fileName) throws IOException {
-		BufferedReader reader = null;
-		try {
-			reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), ENCODING));
-			final Map<Long, Color> colorMap = new HashMap<Long, Color>(); // NOPMD ( UseConcurrentHashMap), returned as Collections.unmodifiableMap
-			Color defaultColor = Color.BLACK;
-			Color collisionColor = Color.GRAY;
-
-			while (true) {
-				final String currentLine = reader.readLine();
-				if (currentLine == null) {
-					break;
-				}
-
-				final String[] parts = currentLine.split(DELIMITER_REGEX);
-				if (parts.length != 2) {
-					continue;
-				}
-
-				final String traceName = parts[0];
-				final String colorSpecification = parts[1];
-
-				final Color traceColor = TraceColorRepository.parseColor(colorSpecification);
-
-				if (DEFAULT_KEYWORD.equals(traceName)) {
-					if (traceColor != null) {
-						defaultColor = traceColor;
-					}
-				}
-				else if (COLLISION_KEYWORD.equals(traceName)) {
-					if (traceColor != null) {
-						collisionColor = traceColor;
-					}
-				}
-				else {
-					final Long traceId = TraceColorRepository.parseTraceId(traceName);
-
-					if ((traceId != null) && (traceColor != null)) {
-						colorMap.put(traceId, traceColor);
-					}
-				}
-			}
-
-			return new TraceColorRepository(new Configuration(), colorMap, defaultColor, collisionColor);
-		} finally {
-			if (reader != null) {
-				reader.close();
-			}
-		}
-	}
-
 	/**
 	 * Creates a new color repository with the given data.
 	 * 
@@ -179,4 +106,70 @@ public class TraceColorRepository extends AbstractRepository {
 		return this.collisionColor;
 	}
 
+	private static Long parseTraceId(final String input) {
+		try {
+			return Long.parseLong(input);
+		} catch (final NumberFormatException e) {
+			return null;
+		}
+	}
+
+	private static Color parseColor(final String input) {
+		final Matcher matcher = COLOR_PATTERN.matcher(input);
+		if (!matcher.matches()) {
+			return null;
+		}
+
+		final int rgbValue = Integer.parseInt(matcher.group(1), 16);
+		return new Color(rgbValue);
+	}
+
+	public static TraceColorRepository createFromFile(final String fileName) throws IOException {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), ENCODING));
+			final Map<Long, Color> colorMap = new HashMap<Long, Color>(); // NOPMD ( UseConcurrentHashMap), returned as Collections.unmodifiableMap
+			Color defaultColor = Color.BLACK;
+			Color collisionColor = Color.GRAY;
+
+			while (true) {
+				final String currentLine = reader.readLine();
+				if (currentLine == null) {
+					break;
+				}
+
+				final String[] parts = currentLine.split(DELIMITER_REGEX);
+				if (parts.length != 2) {
+					continue;
+				}
+
+				final String traceName = parts[0];
+				final String colorSpecification = parts[1];
+
+				final Color traceColor = TraceColorRepository.parseColor(colorSpecification);
+
+				if (DEFAULT_KEYWORD.equals(traceName)) {
+					if (traceColor != null) {
+						defaultColor = traceColor;
+					}
+				} else if (COLLISION_KEYWORD.equals(traceName)) {
+					if (traceColor != null) {
+						collisionColor = traceColor;
+					}
+				} else {
+					final Long traceId = TraceColorRepository.parseTraceId(traceName);
+
+					if ((traceId != null) && (traceColor != null)) {
+						colorMap.put(traceId, traceColor);
+					}
+				}
+			}
+
+			return new TraceColorRepository(new Configuration(), colorMap, defaultColor, collisionColor);
+		} finally {
+			if (reader != null) {
+				reader.close();
+			}
+		}
+	}
 }

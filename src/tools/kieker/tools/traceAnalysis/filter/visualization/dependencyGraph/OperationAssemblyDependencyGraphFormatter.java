@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,16 +40,8 @@ public class OperationAssemblyDependencyGraphFormatter extends AbstractOperation
 
 	private static final String DEFAULT_FILE_NAME = Constants.ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX + Constants.DOT_FILE_SUFFIX;
 
-	private static class EdgeVisitor extends AbstractDependencyGraphFormatterVisitor<AssemblyComponentOperationPair> {
-
-		public EdgeVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops, final boolean useShortLabels) {
-			super(builder, includeWeights, plotLoops, useShortLabels);
-		}
-
-		public void visitVertex(final DependencyGraphNode<AssemblyComponentOperationPair> vertex) {
-			// Do nothing
-		}
-
+	public OperationAssemblyDependencyGraphFormatter() {
+		// default empty constructor
 	}
 
 	private ConcurrentMap<AssemblyComponent, List<DependencyGraphNode<AssemblyComponentOperationPair>>> groupNodesByComponent(
@@ -166,4 +154,13 @@ public class OperationAssemblyDependencyGraphFormatter extends AbstractOperation
 		return DEFAULT_FILE_NAME;
 	}
 
+	private static class EdgeVisitor extends AbstractDependencyGraphFormatterVisitor<AssemblyComponentOperationPair> {
+		public EdgeVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops, final boolean useShortLabels) {
+			super(builder, includeWeights, plotLoops, useShortLabels);
+		}
+
+		public void visitVertex(final DependencyGraphNode<AssemblyComponentOperationPair> vertex) {
+			// Do nothing
+		}
+	}
 }

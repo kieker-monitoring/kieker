@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,17 +38,8 @@ public class ComponentAllocationDependencyGraphFormatter extends AbstractCompone
 
 	private static final String DEFAULT_FILE_NAME = Constants.ALLOCATION_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX + Constants.DOT_FILE_SUFFIX;
 
-	private static class EdgeFormattingVisitor extends
-			AbstractDependencyGraphFormatterVisitor<AllocationComponent> {
-
-		public EdgeFormattingVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops, final boolean useShortLabels) {
-			super(builder, includeWeights, plotLoops, useShortLabels);
-		}
-
-		public void visitVertex(final DependencyGraphNode<AllocationComponent> vertex) {
-			// Do nothing
-		}
-
+	public ComponentAllocationDependencyGraphFormatter() {
+		// empty default Constructor
 	}
 
 	private static ConcurrentMap<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>> groupNodesByComponent(
@@ -90,8 +77,7 @@ public class ComponentAllocationDependencyGraphFormatter extends AbstractCompone
 					null, // misc
 					null // tooltip
 					));
-		}
-		else {
+		} else {
 			builder.append(DotFactory.createCluster("", AbstractDependencyGraphFormatter.createContainerId(container),
 					AbstractDependencyGraphFormatter.STEREOTYPE_EXECUTION_CONTAINER + "\\n" + container.getName(), DotFactory.DOT_SHAPE_BOX, // shape
 					DotFactory.DOT_STYLE_FILLED, // style
@@ -146,5 +132,18 @@ public class ComponentAllocationDependencyGraphFormatter extends AbstractCompone
 	@Override
 	public String getDefaultFileName() {
 		return DEFAULT_FILE_NAME;
+	}
+
+	private static class EdgeFormattingVisitor extends
+			AbstractDependencyGraphFormatterVisitor<AllocationComponent> {
+
+		public EdgeFormattingVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops, final boolean useShortLabels) {
+			super(builder, includeWeights, plotLoops, useShortLabels);
+		}
+
+		public void visitVertex(final DependencyGraphNode<AllocationComponent> vertex) {
+			// Do nothing
+		}
+
 	}
 }

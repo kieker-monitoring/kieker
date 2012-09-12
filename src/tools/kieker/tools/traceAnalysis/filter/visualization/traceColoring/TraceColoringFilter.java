@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,8 +78,7 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, MessageTrace>, E
 	private void handleGraphElement(final AbstractGraphElement<MessageTrace> element) {
 		if (element.getOrigins().size() != 1) {
 			element.setColor(this.collisionColor);
-		}
-		else {
+		} else {
 			final MessageTrace trace = element.getOrigins().iterator().next();
 			final long traceId = trace.getTraceId();
 			final Color color = (this.colorMap.containsKey(traceId)) ? this.colorMap.get(traceId) : this.defaultColor;

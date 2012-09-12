@@ -322,7 +322,7 @@ public final class TraceAnalysisTool {
 
 		final GraphWriterConfiguration gConfiguration = TraceAnalysisTool.createGraphWriterConfiguration();
 		final Configuration configuration = gConfiguration.getConfiguration();
-		configuration.setConfigurationName(producer.getConfigurationName());
+		configuration.setProperty(AbstractPlugin.CONFIG_NAME, producer.getConfigurationName());
 		final GraphWriterPlugin graphWriter = new GraphWriterPlugin(configuration);
 		controller.registerFilter(graphWriter);
 		controller.connect(plugin, plugin.getGraphOutputPortName(),

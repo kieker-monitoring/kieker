@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,16 +61,14 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
 			@Property(name = GraphWriterConfiguration.CONFIG_PROPERTY_NAME_SELFLOOPS, defaultValue = "false")
 		})
 public class GraphWriterPlugin extends AbstractFilterPlugin {
-	private static final Log LOG = LogFactory.getLog(GraphWriterPlugin.class);
-
-	private final GraphWriterConfiguration gConfiguration;
-
-	private static final String ENCODING = "UTF-8";
-
 	/**
 	 * Name of the plugin's graph input port.
 	 */
 	public static final String INPUT_PORT_NAME_GRAPHS = "inputGraph";
+
+	private static final Log LOG = LogFactory.getLog(GraphWriterPlugin.class);
+
+	private static final String ENCODING = "UTF-8";
 
 	private static final String NO_SUITABLE_FORMATTER_MESSAGE_TEMPLATE = "No formatter type defined for graph type %s.";
 	private static final String INSTANTIATION_ERROR_MESSAGE_TEMPLATE = "Could not instantiate formatter type %s for graph type %s.";
@@ -82,6 +76,8 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 
 	private static final ConcurrentMap<Class<? extends AbstractGraph<?, ?, ?>>, Class<? extends AbstractGraphFormatter<?>>> FORMATTER_REGISTRY =
 			new ConcurrentHashMap<Class<? extends AbstractGraph<?, ?, ?>>, Class<? extends AbstractGraphFormatter<?>>>();
+
+	private final GraphWriterConfiguration gConfiguration;
 
 	static {
 		FORMATTER_REGISTRY.put(ComponentAllocationDependencyGraph.class, ComponentAllocationDependencyGraphFormatter.class);

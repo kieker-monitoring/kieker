@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +45,20 @@ public class DescriptionRepository extends AbstractRepository {
 
 	private final ConcurrentMap<String, String> descriptionMap;
 
+	public DescriptionRepository(final Configuration configuration, final ConcurrentMap<String, String> descriptionMap) {
+		super(configuration);
+
+		this.descriptionMap = descriptionMap;
+	}
+
+	public Configuration getCurrentConfiguration() {
+		return this.configuration;
+	}
+
+	public Map<String, String> getDescriptionMap() {
+		return Collections.unmodifiableMap(this.descriptionMap);
+	}
+
 	private static String[] splitLine(final String inputLine) {
 		final int delimiterIndex = inputLine.indexOf(DELIMITER);
 		if (delimiterIndex < 0) {
@@ -90,19 +100,4 @@ public class DescriptionRepository extends AbstractRepository {
 			}
 		}
 	}
-
-	public DescriptionRepository(final Configuration configuration, final ConcurrentMap<String, String> descriptionMap) {
-		super(configuration);
-
-		this.descriptionMap = descriptionMap;
-	}
-
-	public Configuration getCurrentConfiguration() {
-		return this.configuration;
-	}
-
-	public Map<String, String> getDescriptionMap() {
-		return Collections.unmodifiableMap(this.descriptionMap);
-	}
-
 }

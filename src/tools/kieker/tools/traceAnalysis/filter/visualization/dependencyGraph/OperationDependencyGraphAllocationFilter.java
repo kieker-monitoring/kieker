@@ -95,8 +95,7 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 				}
 
 				this.getGraph().addNode(senderNode.getId(), senderNode);
-			}
-			else {
+			} else {
 				senderNode.addOrigin(t);
 			}
 
@@ -108,8 +107,7 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 				}
 
 				this.getGraph().addNode(receiverNode.getId(), receiverNode);
-			}
-			else {
+			} else {
 				receiverNode.addOrigin(t);
 			}
 

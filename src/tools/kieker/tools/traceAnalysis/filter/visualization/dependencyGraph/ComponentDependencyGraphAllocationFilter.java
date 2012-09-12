@@ -71,8 +71,7 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 				}
 
 				this.getGraph().addNode(senderNode.getId(), senderNode);
-			}
-			else {
+			} else {
 				senderNode.addOrigin(t);
 			}
 
@@ -84,8 +83,7 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 				}
 
 				this.getGraph().addNode(receiverNode.getId(), receiverNode);
-			}
-			else {
+			} else {
 				receiverNode.addOrigin(t);
 			}
 

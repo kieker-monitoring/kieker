@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +31,30 @@ public class ContainerDependencyGraphFormatter extends AbstractDependencyGraphFo
 
 	private static final String DEFAULT_FILE_NAME = Constants.CONTAINER_DEPENDENCY_GRAPH_FN_PREFIX + Constants.DOT_FILE_SUFFIX;
 
+	public ContainerDependencyGraphFormatter() {
+		// empty default constructor
+	}
+
+	private static String createExecutionContainerNodeLabel(final ExecutionContainer container) {
+		return AbstractDependencyGraphFormatter.STEREOTYPE_EXECUTION_CONTAINER + "\\n" + container.getName();
+	}
+
+	@Override
+	protected String formatDependencyGraph(final ContainerDependencyGraph graph, final boolean includeWeights, final boolean useShortLabels, final boolean plotLoops) {
+		final StringBuilder builder = new StringBuilder();
+
+		this.appendGraphHeader(builder);
+		graph.traverseWithVerticesFirst(new FormatterVisitor(builder, includeWeights, plotLoops, useShortLabels));
+		this.appendGraphFooter(builder);
+
+		return builder.toString();
+	}
+
+	@Override
+	public String getDefaultFileName() {
+		return DEFAULT_FILE_NAME;
+	}
+
 	private static class FormatterVisitor extends AbstractDependencyGraphFormatterVisitor<ExecutionContainer> {
 
 		public FormatterVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops, final boolean useShortLabels) {
@@ -58,8 +78,7 @@ public class ContainerDependencyGraphFormatter extends AbstractDependencyGraphFo
 						null, // misc
 						null // tooltip
 						));
-			}
-			else {
+			} else {
 				this.builder.append(DotFactory.createNode("",
 						AbstractDependencyGraphFormatter.createNodeId(vertex),
 						ContainerDependencyGraphFormatter.createExecutionContainerNodeLabel(container),
@@ -78,25 +97,4 @@ public class ContainerDependencyGraphFormatter extends AbstractDependencyGraphFo
 			this.builder.append("\n");
 		}
 	}
-
-	private static String createExecutionContainerNodeLabel(final ExecutionContainer container) {
-		return AbstractDependencyGraphFormatter.STEREOTYPE_EXECUTION_CONTAINER + "\\n" + container.getName();
-	}
-
-	@Override
-	protected String formatDependencyGraph(final ContainerDependencyGraph graph, final boolean includeWeights, final boolean useShortLabels, final boolean plotLoops) {
-		final StringBuilder builder = new StringBuilder();
-
-		this.appendGraphHeader(builder);
-		graph.traverseWithVerticesFirst(new FormatterVisitor(builder, includeWeights, plotLoops, useShortLabels));
-		this.appendGraphFooter(builder);
-
-		return builder.toString();
-	}
-
-	@Override
-	public String getDefaultFileName() {
-		return DEFAULT_FILE_NAME;
-	}
-
 }

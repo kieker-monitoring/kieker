@@ -419,8 +419,7 @@ public final class AnalysisController {
 	 *             If the port names or the given plugins are invalid or not compatible.
 	 */
 	public void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName)
-			throws IllegalStateException,
-			AnalysisConfigurationException {
+			throws IllegalStateException, AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect readers and filters after starting analysis.");
 		}

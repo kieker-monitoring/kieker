@@ -72,16 +72,14 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 			if (senderNode == null) {
 				senderNode = new DependencyGraphNode<ExecutionContainer>(senderContainer.getId(), senderContainer, t);
 				this.getGraph().addNode(senderContainer.getId(), senderNode);
-			}
-			else {
+			} else {
 				senderNode.addOrigin(t);
 			}
 
 			if (receiverNode == null) {
 				receiverNode = new DependencyGraphNode<ExecutionContainer>(receiverContainer.getId(), receiverContainer, t);
 				this.getGraph().addNode(receiverContainer.getId(), receiverNode);
-			}
-			else {
+			} else {
 				receiverNode.addOrigin(t);
 			}
 
