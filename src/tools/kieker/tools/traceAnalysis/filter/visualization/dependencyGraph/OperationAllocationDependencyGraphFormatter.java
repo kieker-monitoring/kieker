@@ -20,11 +20,12 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import kieker.tools.traceAnalysis.Constants;
 import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFormatter;
@@ -46,20 +47,20 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 
 	private static class ElementGrouping {
 
-		private final Map<ExecutionContainer, Set<AllocationComponent>> allocationComponentGrouping;
-		private final Map<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>> operationGrouping;
+		private final ConcurrentMap<ExecutionContainer, Set<AllocationComponent>> allocationComponentGrouping;
+		private final ConcurrentMap<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>> operationGrouping;
 
-		public ElementGrouping(final Map<ExecutionContainer, Set<AllocationComponent>> allocationComponentGrouping,
-				final Map<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>> operationGrouping) {
+		public ElementGrouping(final ConcurrentMap<ExecutionContainer, Set<AllocationComponent>> allocationComponentGrouping,
+				final ConcurrentMap<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>> operationGrouping) {
 			this.allocationComponentGrouping = allocationComponentGrouping;
 			this.operationGrouping = operationGrouping;
 		}
 
-		public Map<ExecutionContainer, Set<AllocationComponent>> getAllocationComponentGrouping() {
+		public ConcurrentMap<ExecutionContainer, Set<AllocationComponent>> getAllocationComponentGrouping() {
 			return this.allocationComponentGrouping;
 		}
 
-		public Map<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>> getOperationGrouping() {
+		public ConcurrentMap<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>> getOperationGrouping() {
 			return this.operationGrouping;
 		}
 
@@ -78,9 +79,10 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 	}
 
 	private ElementGrouping groupElements(final OperationAllocationDependencyGraph graph) {
-		final Map<ExecutionContainer, Set<AllocationComponent>> allocationComponentGrouping = new HashMap<ExecutionContainer, Set<AllocationComponent>>();
-		final Map<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>> operationGrouping =
-				new HashMap<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>>(); // NOPMD ( UseConcurrentHashMap)
+		final ConcurrentMap<ExecutionContainer, Set<AllocationComponent>> allocationComponentGrouping =
+				new ConcurrentHashMap<ExecutionContainer, Set<AllocationComponent>>();
+		final ConcurrentMap<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>> operationGrouping =
+				new ConcurrentHashMap<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>>();
 
 		for (final DependencyGraphNode<AllocationComponentOperationPair> vertex : graph.getVertices()) {
 			final AllocationComponent allocationComponent = vertex.getEntity().getAllocationComponent();

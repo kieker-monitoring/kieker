@@ -21,10 +21,10 @@
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import kieker.tools.traceAnalysis.Constants;
 import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFormatter;
@@ -55,9 +55,10 @@ public class ComponentAllocationDependencyGraphFormatter extends AbstractCompone
 
 	}
 
-	private static Map<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>> groupNodesByComponent(final ComponentAllocationDependencyGraph graph) {
-		final Map<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>> nodeMap =
-				new HashMap<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>>(); // NOPMD ( UseConcurrentHashMap)
+	private static ConcurrentMap<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>> groupNodesByComponent(
+			final ComponentAllocationDependencyGraph graph) {
+		final ConcurrentMap<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>> nodeMap =
+				new ConcurrentHashMap<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>>();
 
 		for (final DependencyGraphNode<AllocationComponent> node : graph.getNodes()) {
 			final ExecutionContainer container = node.getEntity().getExecutionContainer();
@@ -129,7 +130,7 @@ public class ComponentAllocationDependencyGraphFormatter extends AbstractCompone
 		this.appendGraphHeader(builder);
 
 		// Group nodes by execution containers
-		final Map<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>> nodeMap =
+		final ConcurrentMap<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>> nodeMap =
 				ComponentAllocationDependencyGraphFormatter.groupNodesByComponent(graph);
 		for (final Entry<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>> entry : nodeMap.entrySet()) {
 			this.handleContainerEntry(entry, builder, useShortLabels);

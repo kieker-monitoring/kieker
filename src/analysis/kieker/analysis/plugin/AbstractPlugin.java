@@ -21,7 +21,6 @@ import java.lang.reflect.Method;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -87,8 +86,8 @@ public abstract class AbstractPlugin implements IPlugin {
 		/* KEEP IN MIND: Although we use "this" in the following code, it points to the actual class. Not to AbstractPlugin!! */
 
 		/* Get all repository and output ports. */
-		this.repositoryPorts = new HashMap<String, RepositoryPort>();
-		this.outputPorts = new HashMap<String, OutputPort>();
+		this.repositoryPorts = new ConcurrentHashMap<String, RepositoryPort>();
+		this.outputPorts = new ConcurrentHashMap<String, OutputPort>();
 		final Plugin annotation = this.getClass().getAnnotation(Plugin.class);
 		for (final RepositoryPort repoPort : annotation.repositoryPorts()) {
 			if (this.repositoryPorts.put(repoPort.name(), repoPort) != null) {
@@ -101,7 +100,7 @@ public abstract class AbstractPlugin implements IPlugin {
 			}
 		}
 		/* Get all input ports. */
-		this.inputPorts = new HashMap<String, InputPort>();
+		this.inputPorts = new ConcurrentHashMap<String, InputPort>();
 		// ignore possible inputPorts for IReaderPlugins
 		if (!(this instanceof IReaderPlugin)) {
 			for (final Method method : this.getClass().getMethods()) {

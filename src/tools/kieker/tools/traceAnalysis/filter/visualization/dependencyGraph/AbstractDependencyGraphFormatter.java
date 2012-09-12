@@ -36,7 +36,7 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
  * @param <G>
  *            The graph type this formatter is for
  */
-public abstract class AbstractDependencyGraphFormatter<G extends DependencyGraph<?>> extends AbstractGraphFormatter<G> {
+public abstract class AbstractDependencyGraphFormatter<G extends AbstractDependencyGraph<?>> extends AbstractGraphFormatter<G> {
 
 	protected static final String STEREOTYPE_EXECUTION_CONTAINER = "<<execution container>>";
 	protected static final String STEREOTYPE_ASSEMBLY_COMPONENT = "<<assembly component>>";

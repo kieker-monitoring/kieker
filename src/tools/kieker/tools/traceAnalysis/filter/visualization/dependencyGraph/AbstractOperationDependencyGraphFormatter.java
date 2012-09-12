@@ -32,7 +32,7 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
  * @param <T>
  *            The type of graph this formatter is for
  */
-public abstract class AbstractOperationDependencyGraphFormatter<T extends DependencyGraph<?>> extends AbstractDependencyGraphFormatter<T> {
+public abstract class AbstractOperationDependencyGraphFormatter<T extends AbstractDependencyGraph<?>> extends AbstractDependencyGraphFormatter<T> {
 
 	private String createOperationSignature(final Operation operation) {
 		final StringBuilder builder = new StringBuilder();

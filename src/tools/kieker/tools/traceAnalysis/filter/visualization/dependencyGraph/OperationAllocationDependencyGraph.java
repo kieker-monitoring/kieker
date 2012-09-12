@@ -28,7 +28,7 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * @author Holger Knoche
  * 
  */
-public class OperationAllocationDependencyGraph extends DependencyGraph<AllocationComponentOperationPair> {
+public class OperationAllocationDependencyGraph extends AbstractDependencyGraph<AllocationComponentOperationPair> {
 
 	/**
 	 * Creates a new graph with the given root entity.

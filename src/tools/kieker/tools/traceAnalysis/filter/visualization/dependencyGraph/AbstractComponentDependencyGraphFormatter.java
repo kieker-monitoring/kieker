@@ -31,7 +31,7 @@ import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
  * @param <G>
  *            The graph type this formatter is for
  */
-public abstract class AbstractComponentDependencyGraphFormatter<G extends DependencyGraph<?>> extends AbstractDependencyGraphFormatter<G> {
+public abstract class AbstractComponentDependencyGraphFormatter<G extends AbstractDependencyGraph<?>> extends AbstractDependencyGraphFormatter<G> {
 
 	/**
 	 * Utility function to create a label for component nodes.

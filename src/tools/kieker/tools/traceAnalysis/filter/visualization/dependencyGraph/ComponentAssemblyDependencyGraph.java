@@ -28,7 +28,7 @@ import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
  * @author Holger Knoche
  * 
  */
-public class ComponentAssemblyDependencyGraph extends DependencyGraph<AssemblyComponent> {
+public class ComponentAssemblyDependencyGraph extends AbstractDependencyGraph<AssemblyComponent> {
 
 	/**
 	 * Creates a new graph with the given root entity.

@@ -25,8 +25,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import kieker.analysis.repository.AbstractRepository;
 import kieker.analysis.repository.annotation.Repository;
@@ -46,7 +47,7 @@ public class DescriptionRepository extends AbstractRepository {
 
 	private static final String ENCODING = "UTF-8";
 
-	private final Map<String, String> descriptionMap;
+	private final ConcurrentMap<String, String> descriptionMap;
 
 	private static String[] splitLine(final String inputLine) {
 		final int delimiterIndex = inputLine.indexOf(DELIMITER);
@@ -65,7 +66,7 @@ public class DescriptionRepository extends AbstractRepository {
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), ENCODING));
-			final Map<String, String> descriptionMap = new HashMap<String, String>(); // NOPMD ( UseConcurrentHashMap), returned as Collections.unmodifiableMap
+			final ConcurrentMap<String, String> descriptionMap = new ConcurrentHashMap<String, String>();
 
 			while (true) {
 				final String currentLine = reader.readLine();
@@ -90,7 +91,7 @@ public class DescriptionRepository extends AbstractRepository {
 		}
 	}
 
-	public DescriptionRepository(final Configuration configuration, final Map<String, String> descriptionMap) {
+	public DescriptionRepository(final Configuration configuration, final ConcurrentMap<String, String> descriptionMap) {
 		super(configuration);
 
 		this.descriptionMap = descriptionMap;

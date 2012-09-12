@@ -39,7 +39,7 @@ import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
 public abstract class AbstractDependencyGraphFormatterVisitor<T extends ISystemModelElement> implements
 		Visitor<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>> {
 
-	protected final StringBuilder builder;
+	protected final StringBuilder builder; // NOPMD (AvoidStringBufferField)
 
 	protected final boolean includeWeights;
 	protected final boolean plotLoops;

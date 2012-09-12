@@ -21,10 +21,11 @@
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import kieker.tools.traceAnalysis.Constants;
 import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFormatter;
@@ -55,9 +56,10 @@ public class OperationAssemblyDependencyGraphFormatter extends AbstractOperation
 
 	}
 
-	private Map<AssemblyComponent, List<DependencyGraphNode<AssemblyComponentOperationPair>>> groupNodesByComponent(
+	private ConcurrentMap<AssemblyComponent, List<DependencyGraphNode<AssemblyComponentOperationPair>>> groupNodesByComponent(
 			final OperationAssemblyDependencyGraph graph) {
-		final Map<AssemblyComponent, List<DependencyGraphNode<AssemblyComponentOperationPair>>> grouping = new HashMap<AssemblyComponent, List<DependencyGraphNode<AssemblyComponentOperationPair>>>();
+		final ConcurrentMap<AssemblyComponent, List<DependencyGraphNode<AssemblyComponentOperationPair>>> grouping =
+				new ConcurrentHashMap<AssemblyComponent, List<DependencyGraphNode<AssemblyComponentOperationPair>>>();
 
 		for (final DependencyGraphNode<AssemblyComponentOperationPair> vertex : graph.getVertices()) {
 			final AssemblyComponentOperationPair pair = vertex.getEntity();
@@ -151,7 +153,7 @@ public class OperationAssemblyDependencyGraphFormatter extends AbstractOperation
 		final StringBuilder builder = new StringBuilder();
 
 		this.appendGraphHeader(builder);
-		final Map<AssemblyComponent, List<DependencyGraphNode<AssemblyComponentOperationPair>>> grouping = this.groupNodesByComponent(graph);
+		final ConcurrentMap<AssemblyComponent, List<DependencyGraphNode<AssemblyComponentOperationPair>>> grouping = this.groupNodesByComponent(graph);
 		this.createGraph(builder, grouping, useShortLabels);
 		graph.traverseWithVerticesFirst(new EdgeVisitor(builder, includeWeights, plotLoops, useShortLabels));
 		this.appendGraphFooter(builder);

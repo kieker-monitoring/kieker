@@ -28,7 +28,7 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
  * @author Holger Knoche
  * 
  */
-public class ContainerDependencyGraph extends DependencyGraph<ExecutionContainer> {
+public class ContainerDependencyGraph extends AbstractDependencyGraph<ExecutionContainer> {
 
 	/**
 	 * Creates a new graph with the given root entity.

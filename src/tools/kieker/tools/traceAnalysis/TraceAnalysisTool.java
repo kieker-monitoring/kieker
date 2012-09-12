@@ -383,21 +383,22 @@ public final class TraceAnalysisTool {
 			throws IllegalStateException, AnalysisConfigurationException, IOException {
 
 		for (final AbstractGraphProducingFilter<?> producer : graphProducers) {
-			boolean filtersExist = false;
 			AbstractGraphFilter<?, ?, ?, ?> lastFilter = null;
 
 			// Add a trace coloring filter, if necessary
 			if (commandLine.hasOption(Constants.CMD_OPT_NAME_TRACE_COLORING)) {
 				final String coloringFileName = commandLine.getOptionValue(Constants.CMD_OPT_NAME_TRACE_COLORING);
-				lastFilter = TraceAnalysisTool.createTraceColoringFilter(((filtersExist) ? lastFilter : producer), coloringFileName, controller);
-				filtersExist = true;
+				lastFilter = TraceAnalysisTool.createTraceColoringFilter(producer, coloringFileName, controller);
 			}
 
 			// Add a description filter, if necessary
 			if (commandLine.hasOption(Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS)) {
 				final String descriptionsFileName = commandLine.getOptionValue(Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS);
-				lastFilter = TraceAnalysisTool.createDescriptionDecoratorFilter(((filtersExist) ? lastFilter : producer), descriptionsFileName, controller);
-				filtersExist = true;
+				if (lastFilter != null) {
+					lastFilter = TraceAnalysisTool.createDescriptionDecoratorFilter(lastFilter, descriptionsFileName, controller);
+				} else {
+					lastFilter = TraceAnalysisTool.createDescriptionDecoratorFilter(producer, descriptionsFileName, controller);
+				}
 			}
 
 			if (lastFilter != null) {

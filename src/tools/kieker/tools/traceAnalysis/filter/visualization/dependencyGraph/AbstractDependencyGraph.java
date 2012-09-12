@@ -18,7 +18,7 @@ package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
 import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
@@ -30,15 +30,15 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver
  */
-public abstract class DependencyGraph<T extends ISystemModelElement> extends
+public abstract class AbstractDependencyGraph<T extends ISystemModelElement> extends
 		AbstractGraph<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, MessageTrace> {
 
 	// private static final Log LOG = LogFactory.getLog(DependencyGraph.class);
 
-	private final Map<Integer, DependencyGraphNode<T>> nodes = new TreeMap<Integer, DependencyGraphNode<T>>(); // NOPMD (UseConcurrentHashMap)
+	private final Map<Integer, DependencyGraphNode<T>> nodes = new ConcurrentHashMap<Integer, DependencyGraphNode<T>>(); // NOPMD (UseConcurrentHashMap)
 	private final DependencyGraphNode<T> rootNode;
 
-	public DependencyGraph(final T rootEntity) {
+	public AbstractDependencyGraph(final T rootEntity) {
 		this.rootNode = new DependencyGraphNode<T>(DependencyGraphNode.ROOT_NODE_ID, rootEntity, null);
 		this.nodes.put(DependencyGraphNode.ROOT_NODE_ID, this.rootNode);
 	}

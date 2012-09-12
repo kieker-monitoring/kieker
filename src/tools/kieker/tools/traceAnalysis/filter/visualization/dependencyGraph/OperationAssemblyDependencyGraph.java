@@ -28,7 +28,7 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * @author Holger Knoche
  * 
  */
-public class OperationAssemblyDependencyGraph extends DependencyGraph<AssemblyComponentOperationPair> {
+public class OperationAssemblyDependencyGraph extends AbstractDependencyGraph<AssemblyComponentOperationPair> {
 
 	/**
 	 * Creates a new graph with the given root entity.

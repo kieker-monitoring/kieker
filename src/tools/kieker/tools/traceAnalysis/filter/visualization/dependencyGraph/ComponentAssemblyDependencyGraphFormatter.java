@@ -35,7 +35,7 @@ public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponent
 
 	private static final String DEFAULT_FILE_NAME = Constants.ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX + Constants.DOT_FILE_SUFFIX;
 
-	private class FormatterVisitor extends AbstractDependencyGraphFormatterVisitor<AssemblyComponent> {
+	private static class FormatterVisitor extends AbstractDependencyGraphFormatterVisitor<AssemblyComponent> {
 
 		public FormatterVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops, final boolean useShortLabels) {
 			super(builder, includeWeights, plotLoops, useShortLabels);
@@ -45,7 +45,7 @@ public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponent
 			final StringBuilder builder = new StringBuilder();
 
 			builder.append(AbstractDependencyGraphFormatter.STEREOTYPE_ASSEMBLY_COMPONENT).append("\\n");
-			builder.append(component.getName()).append(":");
+			builder.append(component.getName()).append(':');
 
 			if (this.useShortLabels) {
 				builder.append("..").append(component.getType().getTypeName());
