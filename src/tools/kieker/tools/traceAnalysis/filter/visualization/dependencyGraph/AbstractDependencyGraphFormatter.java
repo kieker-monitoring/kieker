@@ -145,7 +145,11 @@ public abstract class AbstractDependencyGraphFormatter<G extends AbstractDepende
 	 * @return The color name to use for the given node
 	 */
 	protected static String getNodeFillColor(final DependencyGraphNode<?> node) {
-		return (node.isAssumed()) ? DotFactory.DOT_FILLCOLOR_GRAY : DotFactory.DOT_FILLCOLOR_WHITE;
+		if (node.isAssumed()) {
+			return DotFactory.DOT_FILLCOLOR_GRAY;
+		} else {
+			return DotFactory.DOT_FILLCOLOR_WHITE;
+		}
 	}
 
 	protected abstract String formatDependencyGraph(G graph, boolean includeWeights, boolean useShortLabels, boolean plotLoops);
