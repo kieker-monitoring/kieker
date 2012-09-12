@@ -85,8 +85,6 @@ import kieker.tools.traceAnalysis.filter.visualization.traceColoring.TraceColori
 import kieker.tools.traceAnalysis.repository.DescriptionRepository;
 import kieker.tools.traceAnalysis.repository.TraceColorRepository;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
-import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOperationPairFactory;
-import kieker.tools.traceAnalysis.systemModel.repository.AssemblyComponentOperationPairFactory;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.util.LoggingTimestampConverter;
 
@@ -113,10 +111,6 @@ public final class TraceAnalysisTool {
 	public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
 	private static final Log LOG = LogFactory.getLog(TraceAnalysisTool.class);
 	private static final SystemModelRepository SYSTEM_ENTITY_FACTORY = new SystemModelRepository(new Configuration());
-	private static final AllocationComponentOperationPairFactory ALLOCATION_COMPONENT_OPERATION_PAIR_FACTORY = new AllocationComponentOperationPairFactory(
-			SYSTEM_ENTITY_FACTORY);
-	private static final AssemblyComponentOperationPairFactory ASSEMBLY_COMPONENT_OPERATION_PAIR_FACTORY = new AssemblyComponentOperationPairFactory(
-			SYSTEM_ENTITY_FACTORY);
 	private static final CommandLineParser CMDL_PARSER = new BasicParser();
 	private static CommandLine cmdl;
 	private static String[] inputDirs;
@@ -831,7 +825,6 @@ public final class TraceAnalysisTool {
 						+ File.separator + TraceAnalysisTool.outputFnPrefix
 						+ Constants.AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX + ".dot");
 				componentPlotAggregatedCallTree = new AggregatedAllocationComponentOperationCallTreeFilter(componentPlotAggregatedCallTreeConfig);
-				componentPlotAggregatedCallTree.setAllocationComponentOperationPairFactory(ALLOCATION_COMPONENT_OPERATION_PAIR_FACTORY);
 				analysisInstance.registerFilter(componentPlotAggregatedCallTree);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPlotAggregatedCallTree, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
@@ -854,7 +847,6 @@ public final class TraceAnalysisTool {
 				componentPlotAssemblyCallTreeConfig.setProperty(AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, TraceAnalysisTool.outputDir
 						+ File.separator + TraceAnalysisTool.outputFnPrefix + Constants.AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX + ".dot");
 				componentPlotAssemblyCallTree = new AggregatedAssemblyComponentOperationCallTreeFilter(componentPlotAssemblyCallTreeConfig);
-				componentPlotAssemblyCallTree.setAssemblyComponentOperationPairFactory(ASSEMBLY_COMPONENT_OPERATION_PAIR_FACTORY);
 				analysisInstance.registerFilter(componentPlotAssemblyCallTree);
 				analysisInstance.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPlotAssemblyCallTree, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);

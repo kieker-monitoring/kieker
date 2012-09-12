@@ -37,16 +37,21 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
 		repositoryPorts = {
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 		})
+// TODO: don't we have to redefine the configuration properties from the super class here?
 public class AggregatedAssemblyComponentOperationCallTreeFilter extends AbstractAggregatedCallTreeFilter<AssemblyComponentOperationPair> {
 
 	public AggregatedAssemblyComponentOperationCallTreeFilter(final Configuration configuration) {
 		super(configuration);
 	}
 
-	// TODO: resolve (http://kieker.uni-kiel.de/trac/ticket/411)
-	public void setAssemblyComponentOperationPairFactory(final AssemblyComponentOperationPairFactory assemblyComponentOperationPairFactory) {
-		super.setRoot(new AggregatedAssemblyComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-				AssemblyComponentOperationPairFactory.ROOT_PAIR, true, null));
+	@Override
+	public boolean init() {
+		final boolean success = super.init();
+		if (success) {
+			super.setRoot(new AggregatedAssemblyComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+					AssemblyComponentOperationPairFactory.ROOT_PAIR, true, null));
+		}
+		return success;
 	}
 
 	@Override
