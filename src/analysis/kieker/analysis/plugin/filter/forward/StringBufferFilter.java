@@ -248,8 +248,6 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 					if (e.hash == hash) {
 						cachedString = e.get();
 						if (value.equals(cachedString)) {
-							break;
-						} else {
 							return cachedString;
 						}
 					}
