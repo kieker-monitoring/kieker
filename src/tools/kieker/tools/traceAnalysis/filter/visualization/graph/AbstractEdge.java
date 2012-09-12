@@ -67,7 +67,7 @@ public abstract class AbstractEdge<V extends AbstractVertex<V, E, O>, E extends 
 	}
 
 	@Override
-	public String getIdentifier() {
+	public String getIdentifier() { // NOPMD ( EmptyMethodInAbstractClassShouldBeAbstract)
 		return null;
 	}
 }

@@ -400,7 +400,11 @@ public final class TraceAnalysisTool {
 				filtersExist = true;
 			}
 
-			TraceAnalysisTool.attachGraphWriter(((filtersExist) ? lastFilter : producer), producer, controller);
+			if (lastFilter != null) {
+				TraceAnalysisTool.attachGraphWriter(lastFilter, producer, controller);
+			} else {
+				TraceAnalysisTool.attachGraphWriter(producer, producer, controller);
+			}
 		}
 	}
 

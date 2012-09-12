@@ -49,13 +49,13 @@ public abstract class AbstractComponentDependencyGraphFormatter<G extends Depend
 		final AllocationComponent component = node.getEntity();
 
 		builder.append(stereotype).append("\\n");
-		builder.append(component.getAssemblyComponent().getName()).append(":");
+		builder.append(component.getAssemblyComponent().getName()).append(':');
 
 		if (useShortLabels) {
 			builder.append("..");
 		}
 		else {
-			builder.append(component.getAssemblyComponent().getType().getPackageName()).append(".");
+			builder.append(component.getAssemblyComponent().getType().getPackageName()).append('.');
 		}
 
 		builder.append(component.getAssemblyComponent().getType().getTypeName());

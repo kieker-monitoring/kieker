@@ -346,7 +346,7 @@ public final class DotFactory {
 		}
 		if (arrowhead != null) {
 			if (!firstFlag) {
-				dot.append(",");
+				dot.append(',');
 			}
 
 			dot.append(" arrowhead=\"");
@@ -356,7 +356,7 @@ public final class DotFactory {
 		}
 		if (color != null) {
 			if (!firstFlag) {
-				dot.append(",");
+				dot.append(',');
 			}
 
 			dot.append(" color=\"");

@@ -21,9 +21,9 @@
 package kieker.tools.traceAnalysis.repository;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,6 +44,8 @@ public class DescriptionRepository extends AbstractRepository {
 
 	private static final char DELIMITER = '=';
 
+	private static final String ENCODING = "UTF-8";
+
 	private final Map<String, String> descriptionMap;
 
 	private static String[] splitLine(final String inputLine) {
@@ -60,28 +62,32 @@ public class DescriptionRepository extends AbstractRepository {
 	}
 
 	public static DescriptionRepository createFromFile(final String fileName) throws IOException {
-		final BufferedReader reader = new BufferedReader(new FileReader(new File(fileName)));
-		final Map<String, String> descriptionMap = new HashMap<String, String>();
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), ENCODING));
+			final Map<String, String> descriptionMap = new HashMap<String, String>(); // NOPMD ( UseConcurrentHashMap), returned as Collections.unmodifiableMap
 
-		while (true) {
-			final String currentLine = reader.readLine();
-			if (currentLine == null) {
-				break;
+			while (true) {
+				final String currentLine = reader.readLine();
+				if (currentLine == null) {
+					break;
+				}
+
+				final String[] parts = DescriptionRepository.splitLine(currentLine);
+				if (parts == null) {
+					continue;
+				}
+
+				final String key = parts[0];
+				final String description = parts[1];
+				descriptionMap.put(key, description);
 			}
-
-			final String[] parts = DescriptionRepository.splitLine(currentLine);
-			if (parts == null) {
-				continue;
+			return new DescriptionRepository(new Configuration(), descriptionMap);
+		} finally {
+			if (reader != null) {
+				reader.close();
 			}
-
-			final String key = parts[0];
-			final String description = parts[1];
-			descriptionMap.put(key, description);
 		}
-
-		reader.close();
-
-		return new DescriptionRepository(new Configuration(), descriptionMap);
 	}
 
 	public DescriptionRepository(final Configuration configuration, final Map<String, String> descriptionMap) {

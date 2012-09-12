@@ -21,9 +21,9 @@
 package kieker.tools.traceAnalysis.repository;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +54,8 @@ public class TraceColorRepository extends AbstractRepository {
 
 	private static final String DELIMITER_REGEX = "=";
 
+	private static final String ENCODING = "UTF-8";
+
 	private final Map<Long, Color> colorMap;
 	private final Color defaultColor;
 	private final Color collisionColor;
@@ -77,49 +79,54 @@ public class TraceColorRepository extends AbstractRepository {
 	}
 
 	public static TraceColorRepository createFromFile(final String fileName) throws IOException {
-		final BufferedReader reader = new BufferedReader(new FileReader(new File(fileName)));
-		final Map<Long, Color> colorMap = new HashMap<Long, Color>();
-		Color defaultColor = Color.BLACK;
-		Color collisionColor = Color.GRAY;
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), ENCODING));
+			final Map<Long, Color> colorMap = new HashMap<Long, Color>(); // NOPMD ( UseConcurrentHashMap), returned as Collections.unmodifiableMap
+			Color defaultColor = Color.BLACK;
+			Color collisionColor = Color.GRAY;
 
-		while (true) {
-			final String currentLine = reader.readLine();
-			if (currentLine == null) {
-				break;
-			}
+			while (true) {
+				final String currentLine = reader.readLine();
+				if (currentLine == null) {
+					break;
+				}
 
-			final String[] parts = currentLine.split(DELIMITER_REGEX);
-			if (parts.length != 2) {
-				continue;
-			}
+				final String[] parts = currentLine.split(DELIMITER_REGEX);
+				if (parts.length != 2) {
+					continue;
+				}
 
-			final String traceName = parts[0];
-			final String colorSpecification = parts[1];
+				final String traceName = parts[0];
+				final String colorSpecification = parts[1];
 
-			final Color traceColor = TraceColorRepository.parseColor(colorSpecification);
+				final Color traceColor = TraceColorRepository.parseColor(colorSpecification);
 
-			if (DEFAULT_KEYWORD.equals(traceName)) {
-				if (traceColor != null) {
-					defaultColor = traceColor;
+				if (DEFAULT_KEYWORD.equals(traceName)) {
+					if (traceColor != null) {
+						defaultColor = traceColor;
+					}
+				}
+				else if (COLLISION_KEYWORD.equals(traceName)) {
+					if (traceColor != null) {
+						collisionColor = traceColor;
+					}
+				}
+				else {
+					final Long traceId = TraceColorRepository.parseTraceId(traceName);
+
+					if ((traceId != null) && (traceColor != null)) {
+						colorMap.put(traceId, traceColor);
+					}
 				}
 			}
-			else if (COLLISION_KEYWORD.equals(traceName)) {
-				if (traceColor != null) {
-					collisionColor = traceColor;
-				}
-			}
-			else {
-				final Long traceId = TraceColorRepository.parseTraceId(traceName);
 
-				if ((traceId != null) && (traceColor != null)) {
-					colorMap.put(traceId, traceColor);
-				}
+			return new TraceColorRepository(new Configuration(), colorMap, defaultColor, collisionColor);
+		} finally {
+			if (reader != null) {
+				reader.close();
 			}
 		}
-
-		reader.close();
-
-		return new TraceColorRepository(new Configuration(), colorMap, defaultColor, collisionColor);
 	}
 
 	/**

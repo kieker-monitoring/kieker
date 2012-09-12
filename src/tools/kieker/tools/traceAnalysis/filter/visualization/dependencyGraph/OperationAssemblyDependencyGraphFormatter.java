@@ -78,12 +78,12 @@ public class OperationAssemblyDependencyGraphFormatter extends AbstractOperation
 		final StringBuilder builder = new StringBuilder();
 
 		builder.append(AbstractDependencyGraphFormatter.STEREOTYPE_ASSEMBLY_COMPONENT).append("\\n");
-		builder.append(component.getName()).append(":");
+		builder.append(component.getName()).append(':');
 
 		if (useShortLabels) {
 			builder.append("..");
 		} else {
-			builder.append(component.getType().getPackageName()).append(".");
+			builder.append(component.getType().getPackageName()).append('.');
 		}
 
 		builder.append(component.getType().getTypeName());

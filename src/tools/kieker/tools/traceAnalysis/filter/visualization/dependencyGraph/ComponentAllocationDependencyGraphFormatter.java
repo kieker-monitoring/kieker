@@ -42,7 +42,7 @@ public class ComponentAllocationDependencyGraphFormatter extends AbstractCompone
 
 	private static final String DEFAULT_FILE_NAME = Constants.ALLOCATION_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX + Constants.DOT_FILE_SUFFIX;
 
-	private class EdgeFormattingVisitor extends
+	private static class EdgeFormattingVisitor extends
 			AbstractDependencyGraphFormatterVisitor<AllocationComponent> {
 
 		public EdgeFormattingVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops, final boolean useShortLabels) {
@@ -56,7 +56,8 @@ public class ComponentAllocationDependencyGraphFormatter extends AbstractCompone
 	}
 
 	private static Map<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>> groupNodesByComponent(final ComponentAllocationDependencyGraph graph) {
-		final Map<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>> nodeMap = new HashMap<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>>();
+		final Map<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>> nodeMap =
+				new HashMap<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>>(); // NOPMD ( UseConcurrentHashMap)
 
 		for (final DependencyGraphNode<AllocationComponent> node : graph.getNodes()) {
 			final ExecutionContainer container = node.getEntity().getExecutionContainer();
@@ -128,8 +129,8 @@ public class ComponentAllocationDependencyGraphFormatter extends AbstractCompone
 		this.appendGraphHeader(builder);
 
 		// Group nodes by execution containers
-		final Map<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>> nodeMap = ComponentAllocationDependencyGraphFormatter
-				.groupNodesByComponent(graph);
+		final Map<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>> nodeMap =
+				ComponentAllocationDependencyGraphFormatter.groupNodesByComponent(graph);
 		for (final Entry<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>> entry : nodeMap.entrySet()) {
 			this.handleContainerEntry(entry, builder, useShortLabels);
 		}

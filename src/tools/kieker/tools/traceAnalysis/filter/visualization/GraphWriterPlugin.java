@@ -21,9 +21,9 @@
 package kieker.tools.traceAnalysis.filter.visualization;
 
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -34,6 +34,8 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentAllocationDependencyGraph;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentAllocationDependencyGraphFormatter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentAssemblyDependencyGraph;
@@ -63,8 +65,11 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
 			@Property(name = GraphWriterConfiguration.CONFIG_PROPERTY_NAME_SELFLOOPS, defaultValue = "false")
 		})
 public class GraphWriterPlugin extends AbstractFilterPlugin {
+	private static final Log LOG = LogFactory.getLog(GraphWriterPlugin.class);
 
 	private final GraphWriterConfiguration gConfiguration;
+
+	private static final String ENCODING = "UTF-8";
 
 	/**
 	 * Name of the plugin's graph input port.
@@ -75,7 +80,8 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 	private static final String INSTANTIATION_ERROR_MESSAGE_TEMPLATE = "Could not instantiate formatter type %s for graph type %s.";
 	private static final String WRITE_ERROR_MESSAGE_TEMPLATE = "Graph could not be written to file %s.";
 
-	private static final Map<Class<? extends AbstractGraph<?, ?, ?>>, Class<? extends AbstractGraphFormatter<?>>> FORMATTER_REGISTRY = new HashMap<Class<? extends AbstractGraph<?, ?, ?>>, Class<? extends AbstractGraphFormatter<?>>>();
+	private static final Map<Class<? extends AbstractGraph<?, ?, ?>>, Class<? extends AbstractGraphFormatter<?>>> FORMATTER_REGISTRY =
+			new HashMap<Class<? extends AbstractGraph<?, ?, ?>>, Class<? extends AbstractGraphFormatter<?>>>(); // NOPMD (UseConcurrentHashMap)
 
 	static {
 		FORMATTER_REGISTRY.put(ComponentAllocationDependencyGraph.class, ComponentAllocationDependencyGraphFormatter.class);
@@ -135,7 +141,7 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 	private String getOutputFileName(final AbstractGraphFormatter<?> formatter) {
 		String outputFileName = this.gConfiguration.getOutputFileName();
 
-		if ((outputFileName == null) || (outputFileName.trim().length() == 0)) {
+		if ((outputFileName == null) || (outputFileName.trim().length() == 0)) { // NOPMD(InefficientEmptyStringCheck) // does the job
 			outputFileName = formatter.getDefaultFileName();
 		}
 
@@ -156,13 +162,21 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 		final String specification = graphFormatter.createFormattedRepresentation(graph, this.gConfiguration);
 		final String outputFileName = this.gConfiguration.getOutputPath() + this.getOutputFileName(graphFormatter);
 
+		BufferedWriter writer = null;
 		try {
-			final BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outputFileName)));
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFileName), ENCODING));
 			writer.write(specification);
 			writer.flush();
-			writer.close();
 		} catch (final IOException e) {
 			throw new GraphFormattingException(String.format(WRITE_ERROR_MESSAGE_TEMPLATE, outputFileName), e);
+		} finally {
+			if (writer != null) {
+				try {
+					writer.close();
+				} catch (final IOException e) {
+					LOG.error(String.format(WRITE_ERROR_MESSAGE_TEMPLATE, outputFileName), e);
+				}
+			}
 		}
 	}
 

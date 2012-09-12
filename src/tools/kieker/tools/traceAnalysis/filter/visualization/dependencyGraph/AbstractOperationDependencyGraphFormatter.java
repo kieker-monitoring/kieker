@@ -39,13 +39,13 @@ public abstract class AbstractOperationDependencyGraphFormatter<T extends Depend
 		final Signature signature = operation.getSignature();
 
 		builder.append(signature.getName());
-		builder.append("(");
+		builder.append('(');
 
 		final String[] parameterTypes = signature.getParamTypeList();
 		if ((parameterTypes != null) && (parameterTypes.length > 0)) {
 			builder.append("..");
 		}
-		builder.append(")");
+		builder.append(')');
 
 		return builder.toString();
 	}

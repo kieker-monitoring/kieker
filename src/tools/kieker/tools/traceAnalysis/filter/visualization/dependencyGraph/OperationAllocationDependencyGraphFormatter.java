@@ -79,7 +79,8 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 
 	private ElementGrouping groupElements(final OperationAllocationDependencyGraph graph) {
 		final Map<ExecutionContainer, Set<AllocationComponent>> allocationComponentGrouping = new HashMap<ExecutionContainer, Set<AllocationComponent>>();
-		final Map<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>> operationGrouping = new HashMap<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>>();
+		final Map<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>> operationGrouping =
+				new HashMap<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>>(); // NOPMD ( UseConcurrentHashMap)
 
 		for (final DependencyGraphNode<AllocationComponentOperationPair> vertex : graph.getVertices()) {
 			final AllocationComponent allocationComponent = vertex.getEntity().getAllocationComponent();
@@ -113,12 +114,12 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 		final StringBuilder builder = new StringBuilder();
 
 		builder.append(AbstractDependencyGraphFormatter.STEREOTYPE_ALLOCATION_COMPONENT).append("\\n");
-		builder.append(component.getAssemblyComponent().getName()).append(":");
+		builder.append(component.getAssemblyComponent().getName()).append(':');
 
 		if (useShortLabels) {
 			builder.append("..");
 		} else {
-			builder.append(component.getAssemblyComponent().getType().getPackageName()).append(".");
+			builder.append(component.getAssemblyComponent().getType().getPackageName()).append('.');
 		}
 
 		builder.append(component.getAssemblyComponent().getType().getTypeName());
