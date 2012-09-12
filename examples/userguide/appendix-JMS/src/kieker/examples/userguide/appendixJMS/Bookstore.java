@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +36,7 @@ public class Bookstore {
 		this.catalog.getBook(false);
 		final long tout = MONITORING_CONTROLLER.getTimeSource().getTime();
 		final OperationExecutionRecord e = new OperationExecutionRecord(
-				"public void kieker.examples.userguide.appendixJMS.getBook(boolean)",
+				"public void kieker.examples.userguide.appendixJMS.Catalog.getBook(boolean)",
 				OperationExecutionRecord.NO_SESSION_ID, OperationExecutionRecord.NO_TRACEID,
 				tin, tout, OperationExecutionRecord.NO_HOSTNAME, OperationExecutionRecord.NO_EOI_ESS, OperationExecutionRecord.NO_EOI_ESS);
 		MONITORING_CONTROLLER.newMonitoringRecord(e);

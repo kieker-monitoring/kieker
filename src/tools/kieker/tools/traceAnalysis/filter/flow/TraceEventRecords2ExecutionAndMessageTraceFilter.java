@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +21,7 @@ import java.util.Stack;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.analysis.plugin.filter.flow.TraceEventRecords;
 import kieker.common.configuration.Configuration;
@@ -55,16 +52,19 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 /**
  * @author Andre van Hoorn, Holger Knoche, Jan Waller
  */
-@Plugin(
+@Plugin(description = "Transforms incoming TraceEventRecords into execution and message traces",
 		outputPorts = {
-			@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
-					description = "Outputs transformed execution traces",
-					eventTypes = { ExecutionTrace.class }),
-			@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-					description = "Outputs transformed message traces",
-					eventTypes = { MessageTrace.class }) },
-		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
+			@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Outputs transformed execution traces", eventTypes = { ExecutionTrace.class }),
+			@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Outputs transformed message traces", eventTypes = { MessageTrace.class }) },
+		repositoryPorts = {
+			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+		},
+		configuration = {
+			@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_ENHANCE_JAVA_CONSTRUCTORS, defaultValue = "true"),
+			@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_ENHANCE_CALL_DETECTION, defaultValue = "true")
+		})
 public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTraceProcessingFilter {
+
 	public static final String INPUT_PORT_NAME_EVENT_TRACE = "traceEvents";
 	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE = "executionTrace";
 	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE = "messageTrace";
@@ -90,14 +90,6 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		return configuration;
 	}
 
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_ENHANCE_JAVA_CONSTRUCTORS, String.valueOf(true));
-		configuration.setProperty(CONFIG_ENHANCE_CALL_DETECTION, String.valueOf(true));
-		return configuration;
-	}
-
 	@InputPort(name = INPUT_PORT_NAME_EVENT_TRACE, description = "Receives TraceEvents to be transformed", eventTypes = { TraceEventRecords.class })
 	public void inputTraceEvents(final TraceEventRecords traceEventRecords) {
 		final Trace trace = traceEventRecords.getTrace();
@@ -109,9 +101,10 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		final ExecutionTrace executionTrace = new ExecutionTrace(traceId, trace.getSessionId());
 		final TraceEventRecordHandler traceEventRecordHandler = new TraceEventRecordHandler(trace, executionTrace, this.getSystemEntityFactory(),
 				this.enhanceJavaConstructors, this.enhanceCallDetection);
-		int expectedOrderIndex = 0;
+		int expectedOrderIndex = -1;
 		for (final AbstractTraceEvent event : traceEventRecords.getTraceEvents()) {
-			if (event.getOrderIndex() != expectedOrderIndex++) {
+			expectedOrderIndex += 1; // increment in each iteration -> 0 is the first real value
+			if (event.getOrderIndex() != expectedOrderIndex) {
 				LOG.error("Found event with wrong orderIndex. Found: " + event.getOrderIndex() + " expected: " + (expectedOrderIndex - 1));
 				continue; // simply ignore wrong event
 			}
@@ -154,7 +147,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 			super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE, executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION));
 			super.reportSuccess(executionTrace.getTraceId());
 		} catch (final InvalidTraceException ex) {
-			LOG.warn("Failed to convert to message trace.", ex);
+			LOG.warn("Failed to convert to message trace: " + ex.getMessage()); // do not pass 'ex' to LOG.warn because this makes the output verbose (#584)
 			// TODO: send to new output port for defect traces
 		}
 	}
@@ -174,7 +167,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		private final boolean enhanceJavaConstructors;
 		private final boolean enhanceCallDetection;
 
-		private int orderindex = 0;
+		private int orderindex;
 
 		public TraceEventRecordHandler(final Trace trace, final ExecutionTrace executionTrace, final SystemModelRepository systemModelRepository,
 				final boolean enhanceJavaConstructors, final boolean enhanceCallDetection) {

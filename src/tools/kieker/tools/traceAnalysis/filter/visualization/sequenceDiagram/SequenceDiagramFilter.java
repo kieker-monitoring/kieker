@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +30,7 @@ import java.util.TreeSet;
 
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -59,8 +56,17 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn, Nils Sommer, Jan Waller
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
+@Plugin(description = "A filter allowing to write the incoming data into a sequence diagram",
+		repositoryPorts = {
+			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+		},
+		configuration = {
+			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE, defaultValue = SequenceDiagramFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT),
+			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES, defaultValue = "true"),
+			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE, defaultValue = "ASSEMBLY") // SDModes.ASSEMBLY.toString())
+		})
 public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter {
+
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE = "filename";
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES = "shortLabels";
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_SDMODE = "SDMode";
@@ -79,6 +85,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 
 	private final String outputFnBase;
 	private final boolean shortLabels;
+	private final SDModes sdmode;
 
 	/*
 	 * Read Spinellis' UML macros from file META-INF/sequence.pic to the String
@@ -95,7 +102,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 			String line;
 			reader = new BufferedReader(new InputStreamReader(is, ENCODING));
 			while ((line = reader.readLine()) != null) { // NOPMD (assign)
-				sb.append(line).append("\n");
+				sb.append(line).append('\n');
 			}
 			error = false;
 		} catch (final IOException exc) {
@@ -123,8 +130,6 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	public static enum SDModes {
 		ASSEMBLY, ALLOCATION
 	}
-
-	private final SDModes sdmode;
 
 	public SequenceDiagramFilter(final Configuration configuration) {
 		super(configuration);
@@ -168,9 +173,9 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 		final String componentTypePackagePrefx = component.getType().getPackageName();
 		final String componentTypeIdentifier = component.getType().getTypeName();
 
-		final StringBuilder strBuild = new StringBuilder(assemblyComponentName).append(":");
+		final StringBuilder strBuild = new StringBuilder(assemblyComponentName).append(':');
 		if (!shortLabels) {
-			strBuild.append(componentTypePackagePrefx).append(".");
+			strBuild.append(componentTypePackagePrefx).append('.');
 		} else {
 			strBuild.append("..");
 		}
@@ -183,9 +188,9 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 		final String componentTypePackagePrefx = component.getAssemblyComponent().getType().getPackageName();
 		final String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
 
-		final StringBuilder strBuild = new StringBuilder(assemblyComponentName).append(":");
+		final StringBuilder strBuild = new StringBuilder(assemblyComponentName).append(':');
 		if (!shortLabels) {
-			strBuild.append(componentTypePackagePrefx).append(".");
+			strBuild.append(componentTypePackagePrefx).append('.');
 		} else {
 			strBuild.append("..");
 		}
@@ -279,40 +284,40 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 			if (me instanceof SynchronousCallMessage) {
 				final Signature sig = me.getReceivingExecution().getOperation().getSignature();
 				final StringBuilder msgLabel = new StringBuilder(sig.getName());
-				msgLabel.append("(");
+				msgLabel.append('(');
 				final String[] paramList = sig.getParamTypeList();
-				if ((paramList != null) && (paramList.length > 0)) {
+				if (paramList.length > 0) {
 					msgLabel.append("..");
 				}
-				msgLabel.append(")");
+				msgLabel.append(')');
 
 				if (first) {
-					ps.print("async();" + "\n");
+					ps.print("async();\n");
 					first = false;
 				} else {
-					ps.print("sync();" + "\n");
+					ps.print("sync();\n");
 				}
-				ps.print("message(" + senderDotId + "," + receiverDotId + ", \"" + msgLabel.toString() + "\");" + "\n");
-				ps.print("active(" + receiverDotId + ");" + "\n");
-				ps.print("step();" + "\n");
+				ps.print("message(" + senderDotId + "," + receiverDotId + ", \"" + msgLabel.toString() + "\");\n");
+				ps.print("active(" + receiverDotId + ");\n");
+				ps.print("step();\n");
 			} else if (me instanceof SynchronousReplyMessage) {
 				ps.print("step();" + "\n");
 				ps.print("async();" + "\n");
-				ps.print("rmessage(" + senderDotId + "," + receiverDotId + ", \"\");" + "\n");
-				ps.print("inactive(" + senderDotId + ");" + "\n");
+				ps.print("rmessage(" + senderDotId + "," + receiverDotId + ", \"\");\n");
+				ps.print("inactive(" + senderDotId + ");\n");
 			} else {
 				LOG.error("Message type not supported: " + me.getClass().getName());
 			}
 		}
-		ps.print("inactive(" + rootDotId + ");" + "\n");
-		ps.print("step();" + "\n");
+		ps.print("inactive(" + rootDotId + ");\n");
+		ps.print("step();\n");
 
 		for (final int i : plottedComponentIds) {
-			ps.print("complete(O" + i + ");" + "\n");
+			ps.print("complete(O" + i + ");\n");
 		}
-		ps.print("complete(" + rootDotId + ");" + "\n");
+		ps.print("complete(" + rootDotId + ");\n");
 
-		ps.print(".PE" + "\n");
+		ps.print(".PE\n");
 	}
 
 	public static void writePicForMessageTrace(final MessageTrace msgTrace, final SDModes sdMode,
@@ -321,16 +326,6 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 		SequenceDiagramFilter.picFromMessageTrace(msgTrace, sdMode, ps, shortLabels);
 		ps.flush();
 		ps.close();
-	}
-
-	@Override
-	protected final Configuration getDefaultConfiguration() {
-		final Configuration defaultConfiguration = new Configuration();
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE,
-				CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT);
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES, Boolean.TRUE.toString());
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_SDMODE, SDModes.ASSEMBLY.toString());
-		return defaultConfiguration;
 	}
 
 	public Configuration getCurrentConfiguration() {

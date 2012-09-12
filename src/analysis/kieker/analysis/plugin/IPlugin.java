@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +27,26 @@ import kieker.common.configuration.Configuration;
  * @author Nils Christian Ehmke, Jan Waller
  */
 public interface IPlugin {
+
+	/**
+	 * Initiates the start of a component.
+	 * This method is called once when a AnalysisController's run() method is called.
+	 * This implementation must not be blocking!
+	 * Asynchronous consumers would spawn (an) asynchronous thread(s) in this method.
+	 * 
+	 * @return true on success; false otherwise.
+	 */
+	public boolean init();
+
+	/**
+	 * Initiates a termination of the plugin. This method is only used by the
+	 * framework and should not be called manually.
+	 * Use the method {@link kieker.analysis.AnalysisController#terminate(boolean)} instead.
+	 * 
+	 * After receiving this notification, the plugin should terminate any running
+	 * methods, e.g., read for readers.
+	 */
+	public void terminate(final boolean error);
 
 	/**
 	 * This method should deliver a {@code Configuration} object containing the current configuration of this instance. In other words: The constructor should be
@@ -99,6 +115,12 @@ public interface IPlugin {
 
 	/**
 	 * 
+	 * @return the current state of the plugin
+	 */
+	public abstract STATE getState();
+
+	/**
+	 * 
 	 * @author Nils Christian Ehmke
 	 */
 	public static final class PluginInputPortReference {
@@ -130,4 +152,37 @@ public interface IPlugin {
 			return this.inputPortName;
 		}
 	}
+
+	/**
+	 * An enumeration used to describe the state of an {@link AbstractPlugin}.
+	 * 
+	 * @author Jan Waller
+	 */
+	public static enum STATE {
+		/**
+		 * The plugin has been initialized and is ready to be configured.
+		 */
+		READY,
+		/**
+		 * The plugin is currently running.
+		 */
+		RUNNING,
+		/**
+		 * The plugin has been notified to terminate.
+		 */
+		TERMINATING,
+		/**
+		 * The plugin has been terminated.
+		 */
+		TERMINATED,
+		/**
+		 * The plugin has been notified to terminate with error.
+		 */
+		FAILING,
+		/**
+		 * The plugin has been terminated with error.
+		 */
+		FAILED,
+	}
+
 }

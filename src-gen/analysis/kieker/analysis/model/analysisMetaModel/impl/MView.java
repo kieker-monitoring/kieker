@@ -1,27 +1,26 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package kieker.analysis.model.analysisMetaModel.impl;
 
 import java.util.Collection;
 
 import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
-import kieker.analysis.model.analysisMetaModel.MIDisplay;
+import kieker.analysis.model.analysisMetaModel.MIDisplayConnector;
 import kieker.analysis.model.analysisMetaModel.MIView;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -32,7 +31,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * <ul>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MView#getName <em>Name</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MView#getDescription <em>Description</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MView#getDisplays <em>Displays</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MView#getDisplayConnectors <em>Display Connectors</em>}</li>
  * </ul>
  * </p>
  *
@@ -80,14 +79,14 @@ public class MView extends EObjectImpl implements MIView {
 	protected String description = DESCRIPTION_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getDisplays() <em>Displays</em>}' reference list.
+	 * The cached value of the '{@link #getDisplayConnectors() <em>Display Connectors</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDisplays()
+	 * @see #getDisplayConnectors()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<MIDisplay> displays;
+	protected EList<MIDisplayConnector> displayConnectors;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -155,11 +154,25 @@ public class MView extends EObjectImpl implements MIView {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<MIDisplay> getDisplays() {
-		if (displays == null) {
-			displays = new EObjectResolvingEList<MIDisplay>(MIDisplay.class, this, MIAnalysisMetaModelPackage.VIEW__DISPLAYS);
+	public EList<MIDisplayConnector> getDisplayConnectors() {
+		if (displayConnectors == null) {
+			displayConnectors = new EObjectContainmentEList<MIDisplayConnector>(MIDisplayConnector.class, this, MIAnalysisMetaModelPackage.VIEW__DISPLAY_CONNECTORS);
 		}
-		return displays;
+		return displayConnectors;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case MIAnalysisMetaModelPackage.VIEW__DISPLAY_CONNECTORS:
+				return ((InternalEList<?>)getDisplayConnectors()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -174,8 +187,8 @@ public class MView extends EObjectImpl implements MIView {
 				return getName();
 			case MIAnalysisMetaModelPackage.VIEW__DESCRIPTION:
 				return getDescription();
-			case MIAnalysisMetaModelPackage.VIEW__DISPLAYS:
-				return getDisplays();
+			case MIAnalysisMetaModelPackage.VIEW__DISPLAY_CONNECTORS:
+				return getDisplayConnectors();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -195,9 +208,9 @@ public class MView extends EObjectImpl implements MIView {
 			case MIAnalysisMetaModelPackage.VIEW__DESCRIPTION:
 				setDescription((String)newValue);
 				return;
-			case MIAnalysisMetaModelPackage.VIEW__DISPLAYS:
-				getDisplays().clear();
-				getDisplays().addAll((Collection<? extends MIDisplay>)newValue);
+			case MIAnalysisMetaModelPackage.VIEW__DISPLAY_CONNECTORS:
+				getDisplayConnectors().clear();
+				getDisplayConnectors().addAll((Collection<? extends MIDisplayConnector>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -217,8 +230,8 @@ public class MView extends EObjectImpl implements MIView {
 			case MIAnalysisMetaModelPackage.VIEW__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
-			case MIAnalysisMetaModelPackage.VIEW__DISPLAYS:
-				getDisplays().clear();
+			case MIAnalysisMetaModelPackage.VIEW__DISPLAY_CONNECTORS:
+				getDisplayConnectors().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -236,8 +249,8 @@ public class MView extends EObjectImpl implements MIView {
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case MIAnalysisMetaModelPackage.VIEW__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
-			case MIAnalysisMetaModelPackage.VIEW__DISPLAYS:
-				return displays != null && !displays.isEmpty();
+			case MIAnalysisMetaModelPackage.VIEW__DISPLAY_CONNECTORS:
+				return displayConnectors != null && !displayConnectors.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

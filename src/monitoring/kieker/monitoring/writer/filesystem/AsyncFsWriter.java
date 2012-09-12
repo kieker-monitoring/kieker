@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +25,7 @@ import kieker.monitoring.writer.filesystem.async.AbstractFsWriterThread;
 import kieker.monitoring.writer.filesystem.async.FsWriterThread;
 
 /**
- * @author Matthias Rohr, Andre van Hoorn, Jan Waller, Robert von Massow
+ * @author Matthias Rohr, Robert von Massow, Andre van Hoorn, Jan Waller
  */
 public final class AsyncFsWriter extends AbstractAsyncFSWriter {
 	public static final String CONFIG_FLUSH = AsyncFsWriter.class.getName() + ".flush";
@@ -40,8 +36,8 @@ public final class AsyncFsWriter extends AbstractAsyncFSWriter {
 
 	@Override
 	protected final AbstractFsWriterThread initWorker(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
-			final MappingFileWriter mappingFileWriter, final String path, final int maxEntiresInFile) {
-		return new FsWriterThread(monitoringController, writeQueue,
-				mappingFileWriter, path, maxEntiresInFile, this.configuration.getBooleanProperty(CONFIG_FLUSH));
+			final MappingFileWriter mappingFileWriter, final String path, final int maxEntiresInFile, final int maxlogSize, final int maxLogFiles) {
+		return new FsWriterThread(monitoringController, writeQueue, mappingFileWriter, path, maxEntiresInFile, maxlogSize, maxLogFiles,
+				this.configuration.getBooleanProperty(CONFIG_FLUSH));
 	}
 }

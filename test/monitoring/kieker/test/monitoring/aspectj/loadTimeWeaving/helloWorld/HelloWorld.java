@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,11 +28,11 @@ public final class HelloWorld {
 	private HelloWorld() {}
 
 	public static void main(final String[] args) {
-		System.out.println("Hello");
+		System.out.println("Hello"); // NOPMD (System.out)
 		HelloWorld.doSomething();
 	}
 
 	public static void doSomething() {
-		System.out.println("doing something");
+		System.out.println("doing something"); // NOPMD (System.out)
 	}
 }

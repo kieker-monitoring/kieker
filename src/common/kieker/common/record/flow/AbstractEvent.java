@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +22,7 @@ import kieker.common.record.IMonitoringRecord;
 /**
  * @author Jan Waller
  */
-public abstract class AbstractEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IFlowRecord {
+public abstract class AbstractEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IFlowRecord, IEventRecord {
 	private static final long serialVersionUID = 1L;
 
 	private final long timestamp;

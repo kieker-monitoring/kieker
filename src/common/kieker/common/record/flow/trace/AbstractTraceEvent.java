@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +17,12 @@
 package kieker.common.record.flow.trace;
 
 import kieker.common.record.flow.AbstractEvent;
+import kieker.common.record.flow.ITraceRecord;
 
 /**
  * @author Jan Waller
  */
-public abstract class AbstractTraceEvent extends AbstractEvent {
+public abstract class AbstractTraceEvent extends AbstractEvent implements ITraceRecord {
 	private static final long serialVersionUID = 1L;
 
 	private final long traceId;

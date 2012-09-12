@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -155,15 +151,19 @@ public final class Registry<E> implements IRegistry<E> {
 		return this.nextId.get();
 	}
 
+	@SuppressWarnings("unchecked")
 	public final void remove(final E value) {
 		final int hash = Registry.hash(value);
 		this.segments[(hash >>> this.segmentShift) & this.segmentMask].remove(value, hash);
+		this.eArrayCached = (E[]) new Object[0]; // invalidate cache
 	}
 
+	@SuppressWarnings("unchecked")
 	public final void clear() {
 		for (final Segment<E> segment : this.segments) {
 			segment.clear();
 		}
+		this.eArrayCached = (E[]) new Object[0]; // invalidate cache
 	}
 
 	/* ---------------- Inner Classes -------------- */
@@ -284,8 +284,8 @@ public final class Registry<E> implements IRegistry<E> {
 			if (e == null) { // not yet present, but have to repeat search
 				this.lock();
 				try {
-					int c = this.count;
-					if (c++ > this.threshold) {
+					final int c = this.count + 1;
+					if (c >= this.threshold) {
 						this.rehash();
 						this.count = c; // write volatile
 					}
@@ -326,7 +326,7 @@ public final class Registry<E> implements IRegistry<E> {
 				if (e != null) {
 					// All entries following removed node can stay in list, but all preceding ones need to be cloned.
 					HashEntry<E> newFirst = e.next;
-					for (HashEntry<E> p = first; p != e; p = p.next) {
+					for (HashEntry<E> p = first; p != e; p = p.next) { // NOPMD (=== instead of equals)
 						newFirst = new HashEntry<E>(p.value, p.hash, p.id, newFirst);
 					}
 					tab[index] = newFirst;

@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,6 +68,7 @@ public final class Constants {
 	public static final String ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX = "assemblyOperationDependencyGraph";
 	public static final String AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX = "aggregatedDeploymentCallTree";
 	public static final String AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX = "aggregatedAssemblyCallTree";
+	public static final String DOT_FILE_SUFFIX = ".dot";
 	public static final String CALL_TREE_FN_PREFIX = "callTree";
 	public static final String MESSAGE_TRACES_FN_PREFIX = "messageTraces";
 	public static final String EXECUTION_TRACES_FN_PREFIX = "executionTraces";
@@ -105,6 +102,12 @@ public final class Constants {
 	public static final String DECORATORS_OPTION_NAME = "node decorations";
 	public static final char DECORATOR_SEPARATOR = ',';
 	public static final String RESPONSE_TIME_DECORATOR_FLAG = "responseTimes";
+
+	public static final String CMD_OPT_NAME_TRACE_COLORING = "traceColoring";
+	public static final String COLORING_FILE_OPTION_NAME = "color map file";
+
+	public static final String CMD_OPT_NAME_ADD_DESCRIPTIONS = "addDescriptions";
+	public static final String DESCRIPTIONS_FILE_OPTION_NAME = "descriptions file";
 
 	static {
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_INPUTDIRS).withArgName("dir1 ... dirN").hasArgs().isRequired(true)
@@ -167,6 +170,10 @@ public final class Constants {
 				.withDescription("If selected, abbreviated labels (e.g., package names) are used in the visualizations.").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_INCLUDESELFLOOPS).hasArg(false).isRequired(false)
 				.withDescription("If selected, self-loops are included in the visualizations.").create());
+		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TRACE_COLORING).hasArg().isRequired(false)
+				.withDescription("Color traces according to the given color map.").withArgName(COLORING_FILE_OPTION_NAME).create());
+		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_ADD_DESCRIPTIONS).hasArg().isRequired(false)
+				.withDescription("Adds descriptions to elements according to the given file.").withArgName(DESCRIPTIONS_FILE_OPTION_NAME).create());
 
 		for (final Option o : SORTED_OPTION_LIST) {
 			CMDL_OPTIONS.addOption(o);

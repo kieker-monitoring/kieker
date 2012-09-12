@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +33,7 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
+import kieker.test.analysis.util.plugin.reader.SimpleListReader;
 import kieker.test.tools.util.ExecutionFactory;
 
 /**
@@ -94,9 +91,10 @@ public class TestTraceIdFilter { // NOCS
 		idsToPass.add(5L);
 		idsToPass.add(7L);
 
+		final AnalysisController controller = new AnalysisController();
+		final SimpleListReader<Execution> reader = new SimpleListReader<Execution>(new Configuration());
 		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(idsToPass);
 		final SimpleSinkFilter<Execution> sinkPlugin = new SimpleSinkFilter<Execution>(new Configuration());
-		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(11L, // traceId (must not be element of idsToPass)
 				TestTraceIdFilter.SESSION_ID,
 				5, // tin (value not important)
@@ -106,11 +104,16 @@ public class TestTraceIdFilter { // NOCS
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
+		controller.registerReader(reader);
 		controller.registerFilter(filter);
 		controller.registerFilter(sinkPlugin);
 
+		controller.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, filter, TraceIdFilter.INPUT_PORT_NAME_EXECUTION);
 		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
-		filter.inputExecution(exec);
+		reader.addObject(exec);
+
+		controller.run();
+
 		Assert.assertTrue("Filter passed execution " + exec + " although traceId not element of " + idsToPass, sinkPlugin.getList()
 				.isEmpty());
 	}
@@ -128,10 +131,10 @@ public class TestTraceIdFilter { // NOCS
 		final SortedSet<Long> idsToPass = new TreeSet<Long>();
 		idsToPass.add(5L);
 		idsToPass.add(7L);
-
+		final AnalysisController controller = new AnalysisController();
+		final SimpleListReader<Execution> reader = new SimpleListReader<Execution>(new Configuration());
 		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(idsToPass);
 		final SimpleSinkFilter<Execution> sinkPlugin = new SimpleSinkFilter<Execution>(new Configuration());
-		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(7L, // traceId (must be element of idsToPass)
 				TestTraceIdFilter.SESSION_ID,
 				5, // tin (value not important)
@@ -141,11 +144,16 @@ public class TestTraceIdFilter { // NOCS
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
+		controller.registerReader(reader);
 		controller.registerFilter(filter);
 		controller.registerFilter(sinkPlugin);
 
+		controller.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, filter, TraceIdFilter.INPUT_PORT_NAME_EXECUTION);
 		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
-		filter.inputExecution(exec);
+		reader.addObject(exec);
+
+		controller.run();
+
 		Assert.assertFalse("Filter didn't pass execution " + exec + " although traceId element of " + idsToPass, sinkPlugin.getList()
 				.isEmpty());
 
@@ -162,9 +170,10 @@ public class TestTraceIdFilter { // NOCS
 	 */
 	@Test
 	public void testAssertPassTraceIdWhenPassAll() throws IllegalStateException, AnalysisConfigurationException {
+		final AnalysisController controller = new AnalysisController();
+		final SimpleListReader<Execution> reader = new SimpleListReader<Execution>(new Configuration());
 		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(null); // i.e., pass all
 		final SimpleSinkFilter<Execution> sinkPlugin = new SimpleSinkFilter<Execution>(new Configuration());
-		final AnalysisController controller = new AnalysisController();
 		final Execution exec = this.eFactory.genExecution(7L, // traceId (must be element of idsToPass)
 				TestTraceIdFilter.SESSION_ID,
 				5, // tin (value not important)
@@ -173,11 +182,15 @@ public class TestTraceIdFilter { // NOCS
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
+		controller.registerReader(reader);
 		controller.registerFilter(filter);
 		controller.registerFilter(sinkPlugin);
 
+		controller.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, filter, TraceIdFilter.INPUT_PORT_NAME_EXECUTION);
 		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
-		filter.inputExecution(exec);
+		reader.addObject(exec);
+
+		controller.run();
 		Assert.assertFalse("Filter didn't pass execution " + exec + " although all should pass.", sinkPlugin.getList().isEmpty());
 
 		Assert.assertTrue(sinkPlugin.getList().size() == 1);

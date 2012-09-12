@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,13 +57,6 @@ public class TestRealtimeRecordDelayFilter {
 	private static final long START_TIME_SECONDS = 246561L;
 	private static final long[] EVENT_TIME_OFFSETS_SECONDS = { 0, 1, 2, 7, 17, 19 }; // relative to the start time
 	private static final List<Entry<Long, Long>> EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS = new ArrayList<Entry<Long, Long>>(); // intervals relative to start time
-	static {
-		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new SimpleImmutableEntry<Long, Long>((long) 5, (long) 3)); // i.e., in interval (0,5(
-		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new SimpleImmutableEntry<Long, Long>((long) 10, (long) 1)); // i.e., in interval (5,10(
-		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new SimpleImmutableEntry<Long, Long>((long) 15, (long) 0)); // i.e., in interval (10,15(
-		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new SimpleImmutableEntry<Long, Long>((long) 20, (long) 2)); // i.e., in interval (15,20(
-	}
-
 	private AnalysisController analysisController;
 
 	/**
@@ -92,6 +81,13 @@ public class TestRealtimeRecordDelayFilter {
 
 	/** Simply collects all delayed {@link IMonitoringRecord}s */
 	private SimpleSinkFilter<EmptyRecord> sinkPlugin;
+
+	static {
+		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new SimpleImmutableEntry<Long, Long>((long) 5, (long) 3)); // i.e., in interval (0,5(
+		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new SimpleImmutableEntry<Long, Long>((long) 10, (long) 1)); // i.e., in interval (5,10(
+		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new SimpleImmutableEntry<Long, Long>((long) 15, (long) 0)); // i.e., in interval (10,15(
+		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new SimpleImmutableEntry<Long, Long>((long) 20, (long) 2)); // i.e., in interval (15,20(
+	}
 
 	public TestRealtimeRecordDelayFilter() {
 		// empty default constructor
@@ -158,7 +154,7 @@ public class TestRealtimeRecordDelayFilter {
 	}
 
 	private List<Entry<Long, Integer>> passEventListToReader(final SimpleListReader<IMonitoringRecord> reader) {
-		long currentTimeSeconds = START_TIME_SECONDS;
+		long currentTimeSeconds;
 		int curNumRecords = 0;
 
 		final List<Entry<Long, Integer>> eventList = new ArrayList<Entry<Long, Integer>>(TestRealtimeRecordDelayFilter.EVENT_TIME_OFFSETS_SECONDS.length);
@@ -213,6 +209,7 @@ public class TestRealtimeRecordDelayFilter {
 		Assert.assertEquals(0, this.sinkPlugin.size());
 
 		this.analysisController.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.analysisController.getState());
 
 		/*
 		 * Make sure that all events have been provided to the delay filter (otherwise the test make no sense)

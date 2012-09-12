@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -136,7 +132,7 @@ final class JMSWriterThread extends AbstractAsyncThread {
 
 	@Override
 	public final String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(128);
 		sb.append(super.toString());
 		sb.append("; Session: '");
 		sb.append(this.session.toString());
@@ -144,7 +140,7 @@ final class JMSWriterThread extends AbstractAsyncThread {
 		sb.append(this.connection.toString());
 		sb.append("'; MessageProducer: '");
 		sb.append(this.sender.toString());
-		sb.append("'");
+		sb.append('\'');
 		return sb.toString();
 	}
 

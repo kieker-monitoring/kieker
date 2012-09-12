@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -103,14 +99,14 @@ public class SystemModelRepository extends AbstractRepository {
 	};
 
 	private String htmlEntityLabel(final int id, final String caption, final EntityType entityType) {
-		final StringBuilder strBuild = new StringBuilder();
-		strBuild.append("<a name=\"").append(entityType).append("-").append(id).append("\">").append(caption).append("</a>");
+		final StringBuilder strBuild = new StringBuilder(64);
+		strBuild.append("<a name=\"").append(entityType).append('-').append(id).append("\">").append(caption).append("</a>");
 		return strBuild.toString();
 	}
 
 	private String htmlEntityRef(final int id, final String caption, final EntityType entityType) {
-		final StringBuilder strBuild = new StringBuilder();
-		strBuild.append("<a href=\"#").append(entityType).append("-").append(id).append("\">").append(caption).append("</a>");
+		final StringBuilder strBuild = new StringBuilder(64);
+		strBuild.append("<a href=\"#").append(entityType).append('-').append(id).append("\">").append(caption).append("</a>");
 		return strBuild.toString();
 	}
 
@@ -230,11 +226,6 @@ public class SystemModelRepository extends AbstractRepository {
 		ps.println("</body></html>");
 		ps.flush();
 		ps.close();
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
 	}
 
 	public Configuration getCurrentConfiguration() {

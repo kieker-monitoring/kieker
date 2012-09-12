@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,21 +81,21 @@ public class Signature {
 		final StringBuilder strBuild = new StringBuilder();
 		for (final String t : this.modifierList) {
 			strBuild.append(t);
-			strBuild.append(" ");
+			strBuild.append(' ');
 		}
-		strBuild.append(this.name).append("(");
+		strBuild.append(this.name).append('(');
 		boolean first = true;
 		for (final String t : this.paramTypeList) {
 			if (!first) {
-				strBuild.append(",");
+				strBuild.append(',');
 			} else {
 				first = false;
 			}
 			strBuild.append(t);
 		}
-		strBuild.append(")");
+		strBuild.append(')');
 		if (this.hasReturnType()) {
-			strBuild.append(":").append(this.returnType);
+			strBuild.append(':').append(this.returnType);
 		}
 		return strBuild.toString();
 	}

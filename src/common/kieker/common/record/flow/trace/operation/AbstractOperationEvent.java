@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +16,13 @@
 
 package kieker.common.record.flow.trace.operation;
 
+import kieker.common.record.flow.IOperationRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 
 /**
  * @author Jan Waller
  */
-public abstract class AbstractOperationEvent extends AbstractTraceEvent {
+public abstract class AbstractOperationEvent extends AbstractTraceEvent implements IOperationRecord {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -49,25 +46,15 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent {
 		this.classSignature = (String) values[4];
 	}
 
-	/**
-	 * Get the actual OperationSignature
-	 * 
-	 * @return
-	 */
 	public final String getOperationSignature() {
 		return this.operationSignature;
 	}
 
-	/**
-	 * Get the actually executing class
-	 * 
-	 * @return
-	 */
 	public final String getClassSignature() {
 		return this.classSignature;
 	}
 
-	public final boolean refersToSameOperationAs(final AbstractOperationEvent other) {
-		return this.getOperationSignature().equals(other.getOperationSignature()) && this.getClassSignature().equals(other.getClassSignature());
+	public final boolean refersToSameOperationAs(final IOperationRecord record) {
+		return this.getOperationSignature().equals(record.getOperationSignature()) && this.getClassSignature().equals(record.getClassSignature());
 	}
 }

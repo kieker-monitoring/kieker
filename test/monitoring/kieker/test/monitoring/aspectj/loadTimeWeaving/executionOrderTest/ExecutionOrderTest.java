@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,7 +75,7 @@ public final class ExecutionOrderTest {
 
 	@OperationExecutionMonitoringProbe
 	public static void methodd3() {
-		System.out.println("d3()");
+		System.out.println("d3()"); // NOPMD (System.out)
 	}
 
 }

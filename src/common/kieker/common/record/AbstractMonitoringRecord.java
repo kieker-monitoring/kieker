@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +37,9 @@ import kieker.common.record.system.ResourceUtilizationRecord;
 public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	private static final long serialVersionUID = 1L;
 	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> OLD_KIEKERRECORDS = new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>();
+
+	private volatile long loggingTimestamp = -1;
+
 	static {
 		OLD_KIEKERRECORDS.put("kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord", OperationExecutionRecord.class);
 		OLD_KIEKERRECORDS.put("kieker.common.record.CPUUtilizationRecord", CPUUtilizationRecord.class);
@@ -49,8 +48,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		OLD_KIEKERRECORDS.put("kieker.common.record.OperationExecutionRecord", OperationExecutionRecord.class);
 		OLD_KIEKERRECORDS.put("kieker.common.record.BranchingRecord", BranchingRecord.class);
 	}
-
-	private volatile long loggingTimestamp = -1;
 
 	public final long getLoggingTimestamp() {
 		return this.loggingTimestamp;
@@ -66,7 +63,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(this.loggingTimestamp);
 		for (final Object curStr : recordVector) {
-			sb.append(";");
+			sb.append(';');
 			if (curStr != null) {
 				sb.append(curStr.toString());
 			} else {
@@ -116,7 +113,9 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 			throw new IllegalArgumentException("Expecting array with " + valueTypes.length + " elements but found " + values.length + " elements.");
 		}
 		for (int curIdx = 0; curIdx < valueTypes.length; curIdx++) {
-			if ((valueTypes[curIdx] == int.class) || (valueTypes[curIdx] == Integer.class)) {
+			if (values[curIdx] == null) {
+				throw new IllegalArgumentException("Expecting " + valueTypes[curIdx].getName() + " but found null at position " + curIdx + " of the array.");
+			} else if ((valueTypes[curIdx] == int.class) || (valueTypes[curIdx] == Integer.class)) {
 				if (values[curIdx] instanceof Integer) {
 					continue;
 				}

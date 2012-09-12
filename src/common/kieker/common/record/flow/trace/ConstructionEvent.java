@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +16,13 @@
 
 package kieker.common.record.flow.trace;
 
+import kieker.common.record.flow.IObjectRecord;
+
 /**
  * @author Jan Waller
  */
-public class ConstructionEvent extends AbstractTraceEvent {
-	private static final long serialVersionUID = 4260562921517437040L;
+public class ConstructionEvent extends AbstractTraceEvent implements IObjectRecord {
+	private static final long serialVersionUID = -7484030624827825815L;
 	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
@@ -38,37 +36,37 @@ public class ConstructionEvent extends AbstractTraceEvent {
 	 */
 	private static final String NO_CLASSNAME = "<no-classname>";
 
-	private final String className;
+	private final String classSignature;
 	private final int objectId;
 
 	public ConstructionEvent(final long timestamp, final long traceId, final int orderIndex, final String className, final int objectId) {
 		super(timestamp, traceId, orderIndex);
-		this.className = (className == null) ? NO_CLASSNAME : className; // NOCS
+		this.classSignature = (className == null) ? NO_CLASSNAME : className; // NOCS
 		this.objectId = objectId;
 	}
 
 	public ConstructionEvent(final Object[] values) { // NOPMD (values stored directly)
 		super(values, TYPES); // values[0..2]
-		this.className = (String) values[3];
+		this.classSignature = (String) values[3];
 		this.objectId = (Integer) values[4];
 	}
 
 	protected ConstructionEvent(final Object[] values, final Class<?>[] types) { // NOPMD (values stored directly)
 		super(values, types); // values[0..2]
-		this.className = (String) values[3];
+		this.classSignature = (String) values[3];
 		this.objectId = (Integer) values[4];
 	}
 
 	public Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.className, this.objectId, };
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.classSignature, this.objectId, };
 	}
 
 	public Class<?>[] getValueTypes() {
 		return TYPES.clone();
 	}
 
-	public final String getClassName() {
-		return this.className;
+	public final String getClassSignature() {
+		return this.classSignature;
 	}
 
 	public final int getObjectId() {

@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,14 +36,12 @@ import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 /**
- * 
  * @author Andre van Hoorn
- * 
  */
 public class BasicNamedRecordPipeWriterReaderTest extends AbstractWriterReaderTest { // NOPMD NOCS (TestClassWithoutTestCases)
 	private static final String PIPE_NAME = "pipe-IVvirGREEf";
 
-	private volatile SimpleSinkFilter<IMonitoringRecord> sinkFilter = null;
+	private volatile SimpleSinkFilter<IMonitoringRecord> sinkFilter = null; // NOPMD (init for findbugs)
 
 	@Before
 	public void setUp() throws Exception {

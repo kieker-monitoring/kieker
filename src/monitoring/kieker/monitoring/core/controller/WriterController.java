@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,7 +75,7 @@ public final class WriterController extends AbstractController implements IWrite
 
 	@Override
 	public final String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(256);
 		sb.append("WriterController:\n\tNumber of Inserts: '");
 		sb.append(this.getNumberOfInserts());
 		sb.append("'\n\tAutomatic assignment of logging timestamps: '");
@@ -90,7 +86,7 @@ public final class WriterController extends AbstractController implements IWrite
 		} else {
 			sb.append("\tNo Monitoring Writer available");
 		}
-		sb.append("\n");
+		sb.append('\n');
 		return sb.toString();
 	}
 

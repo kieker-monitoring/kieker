@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +34,7 @@ import kieker.common.configuration.Configuration;
  * @author Jan Waller
  */
 @Plugin(
+		description = "A filter counting the elements flowing through this filter",
 		outputPorts = {
 			@OutputPort(name = CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, eventTypes = { Object.class }, description = "Provides each incoming object"),
 			@OutputPort(name = CountingFilter.OUTPUT_PORT_NAME_COUNT, eventTypes = { Long.class }, description = "Provides the current object count")
@@ -56,11 +53,6 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	 */
 	public CountingFilter(final Configuration configuration) {
 		super(configuration);
-	}
-
-	@Override
-	protected final Configuration getDefaultConfiguration() {
-		return new Configuration();
 	}
 
 	public final Configuration getCurrentConfiguration() {

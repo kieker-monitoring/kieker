@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +28,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
+import kieker.test.analysis.util.plugin.reader.SimpleListReader;
 
 /**
  * 
@@ -51,6 +48,7 @@ public final class TestTimestampFilter {
 		}
 	};
 
+	private SimpleListReader<AbstractTraceEvent> reader;
 	private SimpleSinkFilter<AbstractTraceEvent> sinkPlugin;
 	private AnalysisController controller;
 
@@ -68,21 +66,23 @@ public final class TestTimestampFilter {
 	 * @throws AnalysisConfigurationException
 	 * @throws IllegalStateException
 	 */
-	private TimestampFilter createTimestampFilter(final long ignoreExecutionsBeforeTimestamp, final long ignoreExecutionsAfterTimestamp)
+	private void createTimestampFilter(final long ignoreExecutionsBeforeTimestamp, final long ignoreExecutionsAfterTimestamp)
 			throws IllegalStateException, AnalysisConfigurationException {
 		final Configuration cfg = new Configuration();
 		cfg.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, Long.toString(ignoreExecutionsBeforeTimestamp));
 		cfg.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, Long.toString(ignoreExecutionsAfterTimestamp));
 		final TimestampFilter filter = new TimestampFilter(cfg);
 		this.controller.registerFilter(filter);
+		this.controller.connect(this.reader, SimpleListReader.OUTPUT_PORT_NAME, filter, TimestampFilter.INPUT_PORT_NAME_FLOW);
 		this.controller.connect(filter, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, this.sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
-		return filter;
 	}
 
 	@Before
 	public void before() {
 		this.controller = new AnalysisController();
+		this.reader = new SimpleListReader<AbstractTraceEvent>(new Configuration());
 		this.sinkPlugin = new SimpleSinkFilter<AbstractTraceEvent>(new Configuration());
+		this.controller.registerReader(this.reader);
 		this.controller.registerFilter(this.sinkPlugin);
 	}
 
@@ -97,10 +97,12 @@ public final class TestTimestampFilter {
 	public void testEventBeforeIgnored() throws IllegalStateException, AnalysisConfigurationException {
 		final long leftBorder = TestTimestampFilter.EVENT.getTimestamp() + 1;
 		final long rightBorder = leftBorder + 1;
-		final TimestampFilter filter = this.createTimestampFilter(leftBorder, rightBorder);
+		this.createTimestampFilter(leftBorder, rightBorder);
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
-		filter.inputTraceEvent(TestTimestampFilter.EVENT);
-		Assert.assertTrue("Filter passed event " + TestTimestampFilter.EVENT + " although timestamp before" + leftBorder
+		this.reader.addObject(TestTimestampFilter.EVENT);
+		this.controller.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.controller.getState());
+		Assert.assertTrue("Filter passed event " + TestTimestampFilter.EVENT + " although timestamp before " + leftBorder
 				, this.sinkPlugin.getList().isEmpty());
 
 	}
@@ -117,10 +119,12 @@ public final class TestTimestampFilter {
 	public void testEventAfterIgnored() throws IllegalStateException, AnalysisConfigurationException {
 		final long rightBorder = TestTimestampFilter.EVENT.getTimestamp() - 1;
 		final long leftBorder = rightBorder - 1;
-		final TimestampFilter filter = this.createTimestampFilter(leftBorder, rightBorder);
+		this.createTimestampFilter(leftBorder, rightBorder);
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
-		filter.inputTraceEvent(TestTimestampFilter.EVENT);
-		Assert.assertTrue("Filter passed event " + TestTimestampFilter.EVENT + " although timestamp before" + leftBorder
+		this.reader.addObject(TestTimestampFilter.EVENT);
+		this.controller.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.controller.getState());
+		Assert.assertTrue("Filter passed event " + TestTimestampFilter.EVENT + " although timestamp before " + leftBorder
 				, this.sinkPlugin.getList().isEmpty());
 	}
 
@@ -135,11 +139,12 @@ public final class TestTimestampFilter {
 	public void testRecordOnLeftBorderPasses() throws IllegalStateException, AnalysisConfigurationException {
 		final long leftBorder = TestTimestampFilter.EVENT.getTimestamp();
 		final long rightBorder = leftBorder + 1;
-		final TimestampFilter filter = this.createTimestampFilter(leftBorder, rightBorder);
-
+		this.createTimestampFilter(leftBorder, rightBorder);
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
-		filter.inputTraceEvent(TestTimestampFilter.EVENT);
-		Assert.assertFalse("Filter ignored event " + TestTimestampFilter.EVENT + " although timestamp on left Border" + leftBorder
+		this.reader.addObject(TestTimestampFilter.EVENT);
+		this.controller.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.controller.getState());
+		Assert.assertFalse("Filter ignored event " + TestTimestampFilter.EVENT + " although timestamp on left Border " + leftBorder
 				, this.sinkPlugin.getList().isEmpty());
 		Assert.assertTrue(this.sinkPlugin.getList().size() == 1);
 		Assert.assertSame(this.sinkPlugin.getList().get(0), TestTimestampFilter.EVENT);
@@ -156,10 +161,12 @@ public final class TestTimestampFilter {
 	public void testRecordOnRightBorderPasses() throws IllegalStateException, AnalysisConfigurationException {
 		final long rightBorder = TestTimestampFilter.EVENT.getTimestamp();
 		final long leftBorder = rightBorder - 1;
-		final TimestampFilter filter = this.createTimestampFilter(leftBorder, rightBorder);
+		this.createTimestampFilter(leftBorder, rightBorder);
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
-		filter.inputTraceEvent(TestTimestampFilter.EVENT);
-		Assert.assertFalse("Filter ignored event " + TestTimestampFilter.EVENT + " although timestamp on right Border" + rightBorder
+		this.reader.addObject(TestTimestampFilter.EVENT);
+		this.controller.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.controller.getState());
+		Assert.assertFalse("Filter ignored event " + TestTimestampFilter.EVENT + " although timestamp on right Border " + rightBorder
 				, this.sinkPlugin.getList().isEmpty());
 		Assert.assertTrue(this.sinkPlugin.getList().size() == 1);
 		Assert.assertSame(this.sinkPlugin.getList().get(0), TestTimestampFilter.EVENT);
@@ -177,9 +184,11 @@ public final class TestTimestampFilter {
 	public void testRecordTinToutWithinRangePassed() throws IllegalStateException, AnalysisConfigurationException {
 		final long leftBorder = TestTimestampFilter.EVENT.getTimestamp() - 1;
 		final long rightBorder = TestTimestampFilter.EVENT.getTimestamp() + 1;
-		final TimestampFilter filter = this.createTimestampFilter(leftBorder, rightBorder);
+		this.createTimestampFilter(leftBorder, rightBorder);
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
-		filter.inputTraceEvent(TestTimestampFilter.EVENT);
+		this.reader.addObject(TestTimestampFilter.EVENT);
+		this.controller.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.controller.getState());
 		Assert.assertFalse("Filter ignored event " + TestTimestampFilter.EVENT + " although timestamp in interval [" + leftBorder + "," + rightBorder + "]"
 				, this.sinkPlugin.getList().isEmpty());
 		Assert.assertTrue(this.sinkPlugin.getList().size() == 1);

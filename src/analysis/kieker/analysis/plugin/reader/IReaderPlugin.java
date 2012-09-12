@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,14 +32,4 @@ public interface IReaderPlugin {
 	 * @return true if reading was successful; false if an error occurred
 	 */
 	public boolean read();
-
-	/**
-	 * Initiates a termination of the reader. This method is only used by the
-	 * framework and should not be called manually to register a receiver. Use
-	 * the method {@link kieker.analysis.AnalysisController#terminate(boolean)} instead.
-	 * 
-	 * After receiving this notification,
-	 * the reader should terminate its {@link #read()} method.
-	 */
-	public void terminate(final boolean error);
 }

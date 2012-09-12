@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,16 +53,16 @@ public class TestCountingThroughputFilter {
 	private AnalysisController analysisController;
 
 	/** Provides the list of {@link IMonitoringRecord}s to be processed */
-	private SimpleListReader<IMonitoringRecord> simpleListReader = null; // initialized in #prepareConfiguration()
+	private SimpleListReader<IMonitoringRecord> simpleListReader; // initialized in #prepareConfiguration()
 
 	/** Provides the (current) number of {@link IMonitoringRecord}s provided by the {@link #simpleListReader} */
-	private CountingFilter countingFilterReader = null; // initialized in #prepareConfiguration()
+	private CountingFilter countingFilterReader; // initialized in #prepareConfiguration()
 
 	/** The filter to be tested */
-	private CountingThroughputFilter throughputFilter = null; // initialized in #prepareConfiguration()
+	private CountingThroughputFilter throughputFilter; // initialized in #prepareConfiguration()
 
 	/** Simply collects all {@link IMonitoringRecord}s processed by the tested filter */
-	private SimpleSinkFilter<EmptyRecord> sinkPlugin = null; // initialized in #prepareConfiguration()
+	private SimpleSinkFilter<EmptyRecord> sinkPlugin; // initialized in #prepareConfiguration()
 
 	private volatile boolean intervalsBasedOn1stTstamp; // will be set by the @Test's
 
@@ -209,6 +205,7 @@ public class TestCountingThroughputFilter {
 		Assert.assertEquals(0, this.sinkPlugin.size());
 
 		this.analysisController.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.analysisController.getState());
 
 		final Collection<Entry<Long, Long>> throughputListFromFilter = this.throughputFilter.getCountsPerInterval();
 		final List<Entry<Long, Long>> throughputListFromFilterAndCurrentInterval = new ArrayList<Map.Entry<Long, Long>>();

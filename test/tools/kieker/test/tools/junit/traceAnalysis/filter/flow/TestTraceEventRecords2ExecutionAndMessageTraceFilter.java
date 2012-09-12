@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,12 +33,11 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
+import kieker.test.analysis.util.plugin.reader.SimpleListReader;
 import kieker.test.tools.util.BookstoreExecutionFactory;
 
 /**
- * 
  * @author Andre van Hoorn
- * 
  */
 public class TestTraceEventRecords2ExecutionAndMessageTraceFilter {
 	// private static final Log LOG = LogFactory.getLog(TestEventTrace2ExecutionTraceFilter.class);
@@ -389,6 +384,13 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter {
 			IllegalStateException, AnalysisConfigurationException {
 
 		/*
+		 * Create the SimpleListReader
+		 */
+		final Configuration readerConfiguration = new Configuration();
+		final SimpleListReader<TraceEventRecords> reader = new SimpleListReader<TraceEventRecords>(readerConfiguration);
+		reader.addObject(traceEvents);
+
+		/*
 		 * Create the transformation filter
 		 */
 		final Configuration filterConfiguration = new Configuration();
@@ -400,15 +402,15 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter {
 		final SimpleSinkFilter<ExecutionTrace> executionTraceSinkPlugin = new SimpleSinkFilter<ExecutionTrace>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 
+		controller.registerReader(reader);
 		controller.registerFilter(filter);
 		controller.registerFilter(executionTraceSinkPlugin);
 		controller.registerRepository(this.systemEntityFactory);
+		controller.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, filter, TraceEventRecords2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME_EVENT_TRACE);
 		controller.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
 		controller.connect(filter, TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSinkPlugin,
 				SimpleSinkFilter.INPUT_PORT_NAME);
-
-		// TODO: dirty. Use reader + controller.run()
-		filter.inputTraceEvents(traceEvents);
+		controller.run();
 
 		Assert.assertEquals("Unexpected number of received execution traces", 1, executionTraceSinkPlugin.getList().size());
 

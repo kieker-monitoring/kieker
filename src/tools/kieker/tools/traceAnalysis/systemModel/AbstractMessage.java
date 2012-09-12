@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,21 +49,21 @@ public abstract class AbstractMessage {
 		final StringBuilder strBuild = new StringBuilder();
 
 		if (this instanceof SynchronousCallMessage) {
-			strBuild.append("SYNC-CALL").append(" ");
+			strBuild.append("SYNC-CALL ");
 		} else {
-			strBuild.append("SYNC-RPLY").append(" ");
+			strBuild.append("SYNC-RPLY ");
 		}
 
 		strBuild.append(this.timestamp);
-		strBuild.append(" ");
+		strBuild.append(' ');
 		if (this.getSendingExecution().getOperation().getId() == Operation.ROOT_OPERATION_ID) {
-			strBuild.append("$");
+			strBuild.append('$');
 		} else {
 			strBuild.append(this.getSendingExecution());
 		}
 		strBuild.append(" --> ");
 		if (this.getReceivingExecution().getOperation().getId() == Operation.ROOT_OPERATION_ID) {
-			strBuild.append("$");
+			strBuild.append('$');
 		} else {
 			strBuild.append(this.getReceivingExecution());
 		}

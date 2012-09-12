@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,9 +30,9 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 
 	public static final long MAX_DURATION_MILLIS = Integer.MAX_VALUE;
 
-	private int numTracesProcessed = 0;
-	private int numTracesSucceeded = 0;
-	private int numTracesFailed = 0;
+	private int numTracesProcessed;
+	private int numTracesSucceeded;
+	private int numTracesFailed;
 
 	private long lastTraceIdSuccess = -1;
 	private long lastTraceIdError = -1;

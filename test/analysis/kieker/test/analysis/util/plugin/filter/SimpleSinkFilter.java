@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +16,8 @@
 
 package kieker.test.analysis.util.plugin.filter;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -29,43 +25,36 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
 /**
- * TODO: This filter should be improved/fixed with respect to thread safety
- * TOOD: This filter could be made available in the core distro (not only in the tests package)
  * TODO: Could additionally be a relay/forward filter, i.e., forward incoming events to an output port
  * 
  * @param <T>
  * 
  * @author Nils Ehmke, Jan Waller
  */
-@Plugin
+@Plugin(programmaticOnly = true)
 public class SimpleSinkFilter<T> extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME = "inputObject";
 
-	// TODO: Use a concurrent data structure instead
-	private final List<T> list = new ArrayList<T>();
+	private final List<T> list = new CopyOnWriteArrayList<T>();
 
 	public SimpleSinkFilter(final Configuration configuration) {
 		super(configuration);
 	}
 
 	@InputPort(name = SimpleSinkFilter.INPUT_PORT_NAME)
-	// TODO: we could run into trouble here because the port accepts events of type Object
-	public void input(final T data) {
-		synchronized (this) {
-			this.list.add(data);
-		}
+	@SuppressWarnings("unchecked")
+	public void input(final Object data) {
+		this.list.add((T) data);
 	}
 
 	public void clear() {
-		synchronized (this) {
-			this.list.clear();
-		}
+		this.list.clear();
 	}
 
-	// TODO: this is pretty dangerous (return a read-only copy or alike?)
+	@SuppressWarnings("unchecked")
 	public List<T> getList() {
-		return this.list;
+		return new CopyOnWriteArrayList<T>((T[]) this.list.toArray());
 	}
 
 	/**
@@ -74,14 +63,7 @@ public class SimpleSinkFilter<T> extends AbstractFilterPlugin {
 	 * @return
 	 */
 	public int size() {
-		synchronized (this) {
-			return this.list.size();
-		}
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
+		return this.list.size();
 	}
 
 	public Configuration getCurrentConfiguration() {

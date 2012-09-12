@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +32,7 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
+import kieker.test.analysis.util.plugin.reader.SimpleListReader;
 
 /**
  * @author Andre van Hoorn
@@ -66,6 +63,7 @@ public class TestTraceIdFilter {
 		idsToPass.add(1 + traceIdNotToPass);
 		idsToPass.add(2 + traceIdNotToPass);
 
+		final SimpleListReader<AbstractTraceEvent> reader = new SimpleListReader<AbstractTraceEvent>(new Configuration());
 		final Configuration filterConfig = new Configuration();
 		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.FALSE.toString());
 		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, Configuration.toProperty(idsToPass.toArray(new Long[idsToPass.size()])));
@@ -79,15 +77,20 @@ public class TestTraceIdFilter {
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
+		controller.registerReader(reader);
 		controller.registerFilter(filter);
 		controller.registerFilter(sinkPlugin);
 
+		controller.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, filter, TraceIdFilter.INPUT_PORT_NAME_FLOW);
 		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
 
 		for (final AbstractTraceEvent e : traceEvents.getTraceEvents()) {
 			Assert.assertTrue("Testcase invalid", !idsToPass.contains(e.getTraceId()));
-			filter.inputTraceEvent(e);
+			reader.addObject(e);
 		}
+
+		controller.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, controller.getState());
 
 		if (!sinkPlugin.getList().isEmpty()) {
 			final long passedId = sinkPlugin.getList().get(0).getTraceId();
@@ -112,6 +115,7 @@ public class TestTraceIdFilter {
 		idsToPass.add(0 + traceIdToPass);
 		idsToPass.add(1 + traceIdToPass);
 
+		final SimpleListReader<AbstractTraceEvent> reader = new SimpleListReader<AbstractTraceEvent>(new Configuration());
 		final Configuration filterConfig = new Configuration();
 		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.FALSE.toString());
 		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, Configuration.toProperty(idsToPass.toArray(new Long[idsToPass.size()])));
@@ -124,14 +128,20 @@ public class TestTraceIdFilter {
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
+		controller.registerReader(reader);
 		controller.registerFilter(filter);
 		controller.registerFilter(sinkPlugin);
 
+		controller.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, filter, TraceIdFilter.INPUT_PORT_NAME_FLOW);
 		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
 
 		for (final AbstractTraceEvent e : trace.getTraceEvents()) {
 			Assert.assertTrue("Testcase invalid", idsToPass.contains(e.getTraceId()));
-			filter.inputTraceEvent(e);
+			reader.addObject(e);
+		}
+		controller.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, controller.getState());
+		for (final AbstractTraceEvent e : trace.getTraceEvents()) {
 			Assert.assertTrue("Expected event " + e + " to pass the filter", sinkPlugin.getList().contains(e));
 		}
 		// Somehow redundant but records MIGHT be generated randomly ;-)
@@ -149,6 +159,7 @@ public class TestTraceIdFilter {
 		final long firstTimestamp = 53222; // any number fits
 		final long traceIdToPass = 11L; // (must be element of idsToPass)
 
+		final SimpleListReader<AbstractTraceEvent> reader = new SimpleListReader<AbstractTraceEvent>(new Configuration());
 		final Configuration filterConfig = new Configuration();
 		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.TRUE.toString()); // i.e., pass all
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig);
@@ -160,13 +171,19 @@ public class TestTraceIdFilter {
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
+		controller.registerReader(reader);
 		controller.registerFilter(filter);
 		controller.registerFilter(sinkPlugin);
 
+		controller.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, filter, TraceIdFilter.INPUT_PORT_NAME_FLOW);
 		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
 
 		for (final AbstractTraceEvent e : trace.getTraceEvents()) {
-			filter.inputTraceEvent(e);
+			reader.addObject(e);
+		}
+		controller.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, controller.getState());
+		for (final AbstractTraceEvent e : trace.getTraceEvents()) {
 			Assert.assertTrue("Expected event " + e + " to pass the filter", sinkPlugin.getList().contains(e));
 		}
 		// Somehow redundant but records MIGHT be generated randomly ;-)

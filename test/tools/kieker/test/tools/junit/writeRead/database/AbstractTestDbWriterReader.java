@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +17,7 @@
 package kieker.test.tools.junit.writeRead.database;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -70,11 +66,16 @@ public abstract class AbstractTestDbWriterReader extends AbstractWriterReaderTes
 	}
 
 	@Override
-	protected void inspectRecords(final List<IMonitoringRecord> eventsPassedToController, final List<IMonitoringRecord> eventFromMonitoringLog) throws Exception {
+	protected void inspectRecords(final List<IMonitoringRecord> eventsPassedToController, final List<IMonitoringRecord> eventsFromMonitoringLog) throws Exception {
 		// TODO currently the reader screws the order completely
-		Collections.sort(eventsPassedToController);
-		Collections.sort(eventFromMonitoringLog);
-		Assert.assertEquals("Unexpected set of records", eventsPassedToController, eventFromMonitoringLog);
+		// Collections.sort(eventsPassedToController);
+		final IMonitoringRecord[] eventsPassed = eventsPassedToController.toArray(new IMonitoringRecord[eventsPassedToController.size()]);
+		Arrays.sort(eventsPassed);
+		// Collections.sort(eventsFromMonitoringLog);
+		final IMonitoringRecord[] eventsFrom = eventsFromMonitoringLog.toArray(new IMonitoringRecord[eventsFromMonitoringLog.size()]);
+		Arrays.sort(eventsFrom);
+		// Assert.assertEquals("Unexpected set of records", eventsPassedToController, eventsFromMonitoringLog);
+		Assert.assertTrue("Unexpected set of records", Arrays.equals(eventsPassed, eventsFrom));
 	}
 
 	@Override

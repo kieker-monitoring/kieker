@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -90,6 +86,7 @@ public class TestLegacyExecutionRecordReader {
 		analysisController.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, sink, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
 		analysisController.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, analysisController.getState());
 		Assert.assertEquals(5L, sink.getMessageCount()); // 5 records are expected
 	}
 }

@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package kieker.analysis.model.analysisMetaModel.util;
 
@@ -149,6 +145,12 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 			case MIAnalysisMetaModelPackage.VIEW: {
 				MIView view = (MIView)theEObject;
 				T result = caseView(view);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case MIAnalysisMetaModelPackage.DISPLAY_CONNECTOR: {
+				MIDisplayConnector displayConnector = (MIDisplayConnector)theEObject;
+				T result = caseDisplayConnector(displayConnector);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -348,6 +350,21 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseView(MIView object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Display Connector</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Display Connector</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDisplayConnector(MIDisplayConnector object) {
 		return null;
 	}
 

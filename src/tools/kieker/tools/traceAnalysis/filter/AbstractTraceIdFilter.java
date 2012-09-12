@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +28,7 @@ import kieker.common.configuration.Configuration;
  * @author Andre van Hoorn
  * 
  */
+// FIXME: Provide default properties. Abstract in this class might be better?
 public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 	/**
 	 * List of trace IDs to accept. Set null to accept any ID.
@@ -69,13 +66,6 @@ public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 			}
 			return idsToPass;
 		}
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration defaultConfiguration = new Configuration();
-		// FIXME: Provide default properties. Abstract in this class might be better?
-		return defaultConfiguration;
 	}
 
 	/**

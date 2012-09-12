@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,8 +34,8 @@ public abstract class AbstractAsyncThread extends Thread {
 
 	protected final IMonitoringController monitoringController;
 	private final BlockingQueue<IMonitoringRecord> writeQueue;
-	private boolean finished = false; // only accessed in synchronized blocks
-	private CountDownLatch shutdownLatch = null; // only accessed in synchronized blocks
+	private boolean finished; // only accessed in synchronized blocks
+	private CountDownLatch shutdownLatch; // only accessed in synchronized blocks
 
 	public AbstractAsyncThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue) {
 		this.writeQueue = writeQueue;
@@ -134,7 +130,7 @@ public abstract class AbstractAsyncThread extends Thread {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("Finished: '");
 		sb.append(this.isFinished());
-		sb.append("'");
+		sb.append('\'');
 		return sb.toString();
 	}
 

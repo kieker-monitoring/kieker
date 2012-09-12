@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +35,12 @@ public @interface Plugin {
 	public static final String NO_NAME = "";
 
 	/**
+	 * This flag determines whether the annotated plugin should only be used for programmatic purposes or not. This can for example be used by tools to ignore
+	 * specific plugins.
+	 */
+	boolean programmaticOnly() default false;
+
+	/**
 	 * The human-readable description of this plugin.
 	 * 
 	 * @return The description for this plugin.
@@ -66,4 +68,10 @@ public @interface Plugin {
 	 */
 	RepositoryPort[] repositoryPorts() default {};
 
+	/**
+	 * The list of possible properties for this plugin.
+	 * 
+	 * @return A list of properties.
+	 */
+	Property[] configuration() default {};
 }

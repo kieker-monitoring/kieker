@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +28,7 @@ public class ScheduledSamplerJob implements Runnable {
 
 	private final IMonitoringController monitoringController;
 	private final ISampler sampler;
-	private volatile ScheduledFuture<?> future = null;
+	private volatile ScheduledFuture<?> future;
 
 	/**
 	 * Constructs a new {@link ScheduledSamplerJob} with the given parameters.

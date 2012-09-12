@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +16,13 @@
 
 package kieker.test.analysis.util.plugin.reader;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -40,7 +37,14 @@ import kieker.common.logging.LogFactory;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-@Plugin(outputPorts = { @OutputPort(name = SimpleListReader.OUTPUT_PORT_NAME, eventTypes = { Object.class }) })
+@Plugin(programmaticOnly = true,
+		outputPorts = {
+			@OutputPort(name = SimpleListReader.OUTPUT_PORT_NAME, eventTypes = { Object.class })
+		},
+		configuration = {
+			@Property(name = SimpleListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, defaultValue = "false",
+					description = "Determines whether the read()-method returns immediately or whether it awaits the termination via AnalysisController.terminate()")
+		})
 public class SimpleListReader<T> extends AbstractReaderPlugin {
 
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
@@ -52,7 +56,7 @@ public class SimpleListReader<T> extends AbstractReaderPlugin {
 	private final boolean awaitTermination;
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
 
-	private final List<T> objects = new ArrayList<T>();
+	private final List<T> objects = new CopyOnWriteArrayList<T>();
 
 	public SimpleListReader(final Configuration configuration) {
 		super(configuration);
@@ -89,13 +93,6 @@ public class SimpleListReader<T> extends AbstractReaderPlugin {
 
 	public void terminate(final boolean error) {
 		this.terminationLatch.countDown();
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.FALSE.toString());
-		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {

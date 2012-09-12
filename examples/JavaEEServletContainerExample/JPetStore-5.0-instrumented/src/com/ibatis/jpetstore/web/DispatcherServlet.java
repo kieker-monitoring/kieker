@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2011 by
+ * Copyright 2012 by
  *  + Christian-Albrechts-University of Kiel
  *    + Department of Computer Science
  *      + Software Engineering Group 
@@ -18,10 +18,6 @@
  * limitations under the License.
  ***************************************************************************/
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ibatis.jpetstore.web;
 
 import java.io.IOException;

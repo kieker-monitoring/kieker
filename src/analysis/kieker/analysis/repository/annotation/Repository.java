@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +22,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import kieker.analysis.plugin.annotation.Property;
+
 /**
  * This type annotation can be used to mark repositories.
  * 
@@ -37,6 +35,12 @@ import java.lang.annotation.Target;
 public @interface Repository {
 
 	public static final String NO_NAME = "";
+
+	/**
+	 * This flag determines whether the annotated repository should only be used for programmatic purposes or not. This can for example be used by tools to ignore
+	 * specific repositories.
+	 */
+	boolean programmaticOnly() default false;
 
 	/**
 	 * The human-readable description of this repository type.
@@ -51,4 +55,11 @@ public @interface Repository {
 	 * @return The name of this repository type.
 	 */
 	String name() default NO_NAME;
+
+	/**
+	 * The list of possible properties for this repository.
+	 * 
+	 * @return A list of properties.
+	 */
+	Property[] configuration() default {};
 }

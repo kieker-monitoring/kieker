@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +24,7 @@ import java.util.Collections;
  * 
  * @author Andre van Hoorn
  */
-public class ExecutionContainer {
+public class ExecutionContainer implements ISystemModelElement {
 	private final int id;
 	private final String name;
 	private final ExecutionContainer parent;
@@ -72,5 +68,18 @@ public class ExecutionContainer {
 		}
 		final ExecutionContainer other = (ExecutionContainer) obj;
 		return other.id == this.id;
+	}
+
+	/**
+	 * Returns whether this container is a root container.
+	 * 
+	 * @return See above
+	 */
+	public boolean isRootContainer() {
+		return false;
+	}
+
+	public String getIdentifier() {
+		return this.getName();
 	}
 }

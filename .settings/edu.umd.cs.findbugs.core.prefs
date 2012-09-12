@@ -1,5 +1,5 @@
 #FindBugs User Preferences
-#Sat Mar 24 22:27:10 CET 2012
+#Fri Aug 24 11:13:25 CEST 2012
 cloud_id=edu.umd.cs.findbugs.cloud.doNothingCloud
 detectorAppendingToAnObjectOutputStream=AppendingToAnObjectOutputStream|true
 detectorAtomicityProblem=AtomicityProblem|true
@@ -81,6 +81,7 @@ detectorInfiniteLoop=InfiniteLoop|true
 detectorInfiniteRecursiveLoop=InfiniteRecursiveLoop|true
 detectorInheritanceUnsafeGetResource=InheritanceUnsafeGetResource|true
 detectorInitializationChain=InitializationChain|true
+detectorInitializeNonnullFieldsInConstructor=InitializeNonnullFieldsInConstructor|true
 detectorInstantiateStaticClass=InstantiateStaticClass|true
 detectorIntCast2LongAsInstant=IntCast2LongAsInstant|true
 detectorInvalidJUnitTest=InvalidJUnitTest|true
@@ -126,7 +127,7 @@ detectorWrongMapIterator=WrongMapIterator|true
 detectorXMLFactoryBypass=XMLFactoryBypass|true
 detector_threshold=3
 effort=max
-excludefilter0=lib/findbugs-2.0.0/fb-filter.xml|true
+excludefilter0=lib/findbugs-2.0.1/fb-filter.xml|true
 filter_settings=Low|BAD_PRACTICE,CORRECTNESS,EXPERIMENTAL,I18N,MALICIOUS_CODE,MT_CORRECTNESS,PERFORMANCE,SECURITY,STYLE|false|20
 filter_settings_neg=NOISE|
 run_at_full_build=false

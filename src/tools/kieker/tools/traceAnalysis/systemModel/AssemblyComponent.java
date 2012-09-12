@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +20,7 @@ package kieker.tools.traceAnalysis.systemModel;
  * 
  * @author Andre van Hoorn
  */
-public class AssemblyComponent {
+public class AssemblyComponent implements ISystemModelElement {
 	private final int id;
 	private final String name;
 	private final ComponentType type;
@@ -50,7 +46,7 @@ public class AssemblyComponent {
 	@Override
 	public final String toString() {
 		final StringBuilder strBuild = new StringBuilder();
-		strBuild.append(this.name).append(":").append(this.type.getFullQualifiedName());
+		strBuild.append(this.name).append(':').append(this.type.getFullQualifiedName());
 		return strBuild.toString();
 	}
 
@@ -66,5 +62,18 @@ public class AssemblyComponent {
 		}
 		final AssemblyComponent other = (AssemblyComponent) obj;
 		return other.id == this.id;
+	}
+
+	/**
+	 * Denotes whether this assembly component is a root component.
+	 * 
+	 * @return See above
+	 */
+	public boolean isRootComponent() {
+		return false;
+	}
+
+	public String getIdentifier() {
+		return (this.getType() == null) ? this.getName() : this.getType().getFullQualifiedName();
 	}
 }

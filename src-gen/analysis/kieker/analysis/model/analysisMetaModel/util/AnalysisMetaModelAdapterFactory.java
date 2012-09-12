@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package kieker.analysis.model.analysisMetaModel.util;
 
@@ -122,6 +118,10 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseView(MIView object) {
 				return createViewAdapter();
+			}
+			@Override
+			public Adapter caseDisplayConnector(MIDisplayConnector object) {
+				return createDisplayConnectorAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -322,6 +322,20 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createViewAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link kieker.analysis.model.analysisMetaModel.MIDisplayConnector <em>Display Connector</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see kieker.analysis.model.analysisMetaModel.MIDisplayConnector
+	 * @generated
+	 */
+	public Adapter createDisplayConnectorAdapter() {
 		return null;
 	}
 

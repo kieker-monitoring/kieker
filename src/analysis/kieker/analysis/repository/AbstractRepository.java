@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +16,7 @@
 
 package kieker.analysis.repository;
 
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.repository.annotation.Repository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -44,10 +41,7 @@ public abstract class AbstractRepository implements IRepository {
 	public AbstractRepository(final Configuration configuration) {
 		try {
 			// TODO: somewhat dirty hack...
-			final Configuration defaultConfig = this.getDefaultConfiguration();
-			if (defaultConfig != null) {
-				configuration.setDefaultConfiguration(defaultConfig);
-			}
+			configuration.setDefaultConfiguration(this.getDefaultConfiguration());
 		} catch (final IllegalAccessException ex) {
 			LOG.error("Unable to set repository default properties"); // ok to ignore ex here
 		}
@@ -58,12 +52,21 @@ public abstract class AbstractRepository implements IRepository {
 	}
 
 	/**
-	 * This method should deliver an instance of {@code Configuration} containing the default properties for this class. In other words: Every class inheriting from
-	 * {@code AbstractRepository} should implement this method to deliver an object which can be used for the constructor of this class.
+	 * This method delivers an instance of {@code Configuration} containing the default properties for this class.
 	 * 
 	 * @return The default properties.
 	 */
-	protected abstract Configuration getDefaultConfiguration();
+	protected final Configuration getDefaultConfiguration() {
+		final Configuration defaultConfiguration = new Configuration();
+		// Get the annotation from the class
+		final Repository repoAnnotation = this.getClass().getAnnotation(Repository.class);
+		final Property[] propertyAnnotations = repoAnnotation.configuration();
+		// Run through all properties within the annotation and add them to the configuration object
+		for (final Property property : propertyAnnotations) {
+			defaultConfiguration.setProperty(property.name(), property.defaultValue());
+		}
+		return defaultConfiguration;
+	}
 
 	/*
 	 * (non-Javadoc)

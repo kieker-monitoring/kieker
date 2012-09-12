@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +17,7 @@
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractWeightedEdge;
+import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 
 /**
@@ -29,10 +26,10 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
  * 
  * @author Andre van Hoorn
  */
-public class WeightedBidirectionalDependencyGraphEdge<T> extends
+public class WeightedBidirectionalDependencyGraphEdge<T extends ISystemModelElement> extends
 		AbstractWeightedEdge<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, MessageTrace> {
 
-	private boolean assumed = false;
+	private boolean assumed; // false
 
 	public WeightedBidirectionalDependencyGraphEdge(final DependencyGraphNode<T> source, final DependencyGraphNode<T> target, final MessageTrace origin) {
 		super(source, target, origin);

@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,9 +26,9 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord
 	private static final Class<?>[] TYPES = { String.class, String.class, long.class };
 
 	/* Attributes storing the actual monitoring data: */
-	public final String className;
-	public final String methodName;
-	public final long responseTimeNanos;
+	private final String className;
+	private final String methodName;
+	private final long responseTimeNanos;
 
 	public MyResponseTimeRecord(final String clazz, final String method, final long rtNano) {
 		this.className = clazz;
@@ -61,4 +57,17 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord
 	public Class<?>[] getValueTypes() {
 		return MyResponseTimeRecord.TYPES.clone();
 	}
+
+	public String getClassName() {
+		return this.className;
+	}
+
+	public String getMethodName() {
+		return this.methodName;
+	}
+
+	public long getResponseTimeNanos() {
+		return this.responseTimeNanos;
+	}
+
 }

@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +17,14 @@
 package kieker.tools.traceAnalysis.systemModel.util;
 
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
+import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 
 /**
  * 
  * @author Andre van Hoorn
  */
-public class AssemblyComponentOperationPair {
+public class AssemblyComponentOperationPair implements ISystemModelElement {
 	private final int id;
 	private final Operation operation;
 
@@ -54,5 +51,9 @@ public class AssemblyComponentOperationPair {
 	@Override
 	public String toString() {
 		return +this.assemblyComponent.getId() + ":" + this.operation.getId() + "@" + this.id;
+	}
+
+	public String getIdentifier() {
+		return this.getAssemblyComponent().getIdentifier();
 	}
 }

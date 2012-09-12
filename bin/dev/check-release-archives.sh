@@ -26,10 +26,9 @@ function run_ant {
 	exit 1
     fi
     if ! ant $1; then
-	echo "Build failed"
+	echo "Ant build failed"
 	exit 1
     fi
-    echo "Execution of ant failed"
 }
 
 # provide content list of archive
@@ -67,6 +66,23 @@ function extract_archive_n_cd {
     fi 
 
     change_dir kieker-*
+}
+
+# lists the files included in an archive without extracting it
+function cat_archive_content {
+    if [ -z "$1" ]; then
+	echo "No archive provided"
+	exit 1
+    fi
+
+    if echo "$1" | grep "zip"; then
+	unzip -l "$1" | awk '{ print $4 }' |grep -v "^$"
+    elif echo "$1" | grep "tar.gz"; then
+	tar -tzf "$1" |grep -v "^$"
+    else
+	echo "Archive '$1' is neither zip nor .tar.gz"
+	exit 1
+    fi 
 }
 
 function assert_file_NOT_exists {
@@ -281,9 +297,42 @@ function check_bin_archive {
     # TODO: test examples ...
 }
 
+function assert_no_common_files_in_archives {
+   echo "Making sure that archives have no common files: '$1', '$2' ..."
+
+    if [ -z "$2" ]; then
+	echo "No source archive provided"
+	exit 1
+    fi
+
+
+
+    CONTENT1_FN="$(basename $1).txt"
+    CONTENT2_FN="$(basename $2).txt"
+
+    # excluding directories ("/$") and the zip output header ("Name\n---")
+    cat_archive_content $1 | grep -v "/$" | grep -v "^Name" | grep -v "^----" | sort > ${CONTENT1_FN} 
+    cat_archive_content $2 | grep -v "/$" | grep -v "^Name" | grep -v "^----" | sort > ${CONTENT2_FN}
+
+    COMMON_CONTENT_FN="common.txt"
+    comm -1 -2 ${CONTENT1_FN=} ${CONTENT2_FN} > ${COMMON_CONTENT_FN}
+    
+    if ! test -f ${COMMON_CONTENT_FN}; then
+	echo "File ${COMMON_CONTENT_FN} does not exist"
+	exit 1
+    fi
+
+    if test -s ${COMMON_CONTENT_FN}; then
+	echo "The archives have common files:"
+	cat ${COMMON_CONTENT_FN}
+	exit 1
+    fi
+}
+
 ##
 ## "main" 
 ##
+
 assert_dir_exists ${BASE_TMP_DIR}
 change_dir "${BASE_TMP_DIR}"
 BASE_TMP_DIR_ABS=$(pwd)
@@ -318,6 +367,17 @@ DIR=$(pwd)
 BINTGZ=$(ls ../../dist/release/*_binaries.tar.gz)
 assert_file_exists_regular ${BINTGZ}
 check_bin_archive "${BINTGZ}"
+rm -rf ${DIR}
+
+change_dir "${BASE_TMP_DIR_ABS}"
+create_subdir_n_cd
+DIR=$(pwd)
+JEEEXAMPLETGZ=$(ls ../../dist/release/*_examples-JavaEEServletContainerExample.tar.gz)
+JEEEXAMPLEZIP=$(ls ../../dist/release/*_examples-JavaEEServletContainerExample.zip)
+BINTGZ=$(ls ../../dist/release/*_binaries.tar.gz)
+BINZIP=$(ls ../../dist/release/*_binaries.zip)
+assert_no_common_files_in_archives ${BINTGZ} ${JEEEXAMPLETGZ}
+assert_no_common_files_in_archives ${BINZIP} ${JEEEXAMPLEZIP}
 rm -rf ${DIR}
 
 # TOOD: check contents of remaining archives

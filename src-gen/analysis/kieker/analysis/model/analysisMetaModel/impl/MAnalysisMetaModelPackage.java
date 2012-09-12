@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package kieker.analysis.model.analysisMetaModel.impl;
 
@@ -10,6 +6,7 @@ import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelFactory;
 import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
 import kieker.analysis.model.analysisMetaModel.MIDependency;
 import kieker.analysis.model.analysisMetaModel.MIDisplay;
+import kieker.analysis.model.analysisMetaModel.MIDisplayConnector;
 import kieker.analysis.model.analysisMetaModel.MIFilter;
 import kieker.analysis.model.analysisMetaModel.MIInputPort;
 import kieker.analysis.model.analysisMetaModel.MIOutputPort;
@@ -20,8 +17,8 @@ import kieker.analysis.model.analysisMetaModel.MIProperty;
 import kieker.analysis.model.analysisMetaModel.MIReader;
 import kieker.analysis.model.analysisMetaModel.MIRepository;
 import kieker.analysis.model.analysisMetaModel.MIRepositoryConnector;
-
 import kieker.analysis.model.analysisMetaModel.MIView;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
@@ -126,6 +123,13 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	 * @generated
 	 */
 	private EClass viewEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass displayConnectorEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -571,8 +575,35 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getView_Displays() {
+	public EReference getView_DisplayConnectors() {
 		return (EReference)viewEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getDisplayConnector() {
+		return displayConnectorEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getDisplayConnector_Name() {
+		return (EAttribute)displayConnectorEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getDisplayConnector_Display() {
+		return (EReference)displayConnectorEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -657,7 +688,11 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 		viewEClass = createEClass(VIEW);
 		createEAttribute(viewEClass, VIEW__NAME);
 		createEAttribute(viewEClass, VIEW__DESCRIPTION);
-		createEReference(viewEClass, VIEW__DISPLAYS);
+		createEReference(viewEClass, VIEW__DISPLAY_CONNECTORS);
+
+		displayConnectorEClass = createEClass(DISPLAY_CONNECTOR);
+		createEAttribute(displayConnectorEClass, DISPLAY_CONNECTOR__NAME);
+		createEReference(displayConnectorEClass, DISPLAY_CONNECTOR__DISPLAY);
 	}
 
 	/**
@@ -748,7 +783,11 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 		initEClass(viewEClass, MIView.class, "View", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getView_Name(), ecorePackage.getEString(), "name", null, 1, 1, MIView.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getView_Description(), ecorePackage.getEString(), "description", null, 0, 1, MIView.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getView_Displays(), this.getDisplay(), null, "displays", null, 0, -1, MIView.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getView_DisplayConnectors(), this.getDisplayConnector(), null, "displayConnectors", null, 0, -1, MIView.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(displayConnectorEClass, MIDisplayConnector.class, "DisplayConnector", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getDisplayConnector_Name(), ecorePackage.getEString(), "name", null, 1, 1, MIDisplayConnector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDisplayConnector_Display(), this.getDisplay(), null, "display", null, 1, 1, MIDisplayConnector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

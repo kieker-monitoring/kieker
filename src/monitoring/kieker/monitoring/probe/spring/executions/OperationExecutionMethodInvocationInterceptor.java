@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,16 +28,6 @@ import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.IMonitoringProbe;
 import kieker.monitoring.timer.ITimeSource;
-
-/**
- * This annotation marks methods that are exit points for remote calls
- * that go to an other virtual machine. The annotation tries to ensure
- * that the trace id is propagated to another Kieker.Monitoring instance 
- * in the other virtual machine.
- *
- * It provides the boolean property useRuntimeClassname to select whether
- * to use the declaring or the runtime classname of the instrumented methods.
- */
 
 /**
  * @author Marco Luebcke, Andre van Hoorn, Jan Waller

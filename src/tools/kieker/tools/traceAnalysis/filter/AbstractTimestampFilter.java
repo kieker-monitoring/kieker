@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,16 +68,6 @@ public abstract class AbstractTimestampFilter extends AbstractFilterPlugin {
 	 * @return
 	 */
 	protected abstract String getConfigurationPropertyIgnoreAfterTimestamp();
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-
-		configuration.setProperty(this.getConfigurationPropertyIgnoreBeforeTimestamp(), Long.toString(MIN_TIMESTAMP));
-		configuration.setProperty(this.getConfigurationPropertyIgnoreAfterTimestamp(), Long.toString(MAX_TIMESTAMP));
-
-		return configuration;
-	}
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);

@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,28 +16,11 @@
 
 package kieker.analysis.plugin.filter;
 
+import kieker.analysis.plugin.IPlugin;
+
 /**
- * @author Andre van Hoorn
+ * @author Andre van Hoorn, Jan Waller
  */
-public interface IFilterPlugin {
-
-	/**
-	 * Initiates the start of a component.
-	 * This method is called once when a AnalysisController's run() method is called.
-	 * This implementation must not be blocking!
-	 * Asynchronous consumers would spawn (an) asynchronous thread(s) in this method.
-	 * 
-	 * @return true on success; false otherwise.
-	 */
-	public boolean init();
-
-	/**
-	 * Initiates a termination of the component. The value of the parameter
-	 * error indicates whether an error occurred.
-	 * 
-	 * @param error
-	 *            true iff an error occurred.
-	 */
-	public void terminate(boolean error);
+public interface IFilterPlugin extends IPlugin {
 
 }

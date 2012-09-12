@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package kieker.analysis.model.analysisMetaModel;
 
@@ -20,7 +16,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.MIView#getName <em>Name</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.MIView#getDescription <em>Description</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.MIView#getDisplays <em>Displays</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.MIView#getDisplayConnectors <em>Display Connectors</em>}</li>
  * </ul>
  * </p>
  *
@@ -82,19 +78,19 @@ public interface MIView extends EObject {
 	void setDescription(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Displays</b></em>' reference list.
-	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.MIDisplay}.
+	 * Returns the value of the '<em><b>Display Connectors</b></em>' containment reference list.
+	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.MIDisplayConnector}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Displays</em>' reference list isn't clear,
+	 * If the meaning of the '<em>Display Connectors</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Displays</em>' reference list.
-	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getView_Displays()
-	 * @model
+	 * @return the value of the '<em>Display Connectors</em>' containment reference list.
+	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getView_DisplayConnectors()
+	 * @model containment="true"
 	 * @generated
 	 */
-	EList<MIDisplay> getDisplays();
+	EList<MIDisplayConnector> getDisplayConnectors();
 
 } // MIView

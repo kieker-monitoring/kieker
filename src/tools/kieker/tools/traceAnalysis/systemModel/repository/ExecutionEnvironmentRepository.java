@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,13 +21,14 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
+import kieker.tools.traceAnalysis.systemModel.RootExecutionContainer;
 
 /**
  * 
  * @author Andre van Hoorn
  */
 public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository {
-	public static final ExecutionContainer ROOT_EXECUTION_CONTAINER = new ExecutionContainer(AbstractSystemSubRepository.ROOT_ELEMENT_ID, null, "$");;
+	public static final ExecutionContainer ROOT_EXECUTION_CONTAINER = new RootExecutionContainer();
 
 	private final Map<String, ExecutionContainer> executionContainersByName = new Hashtable<String, ExecutionContainer>(); // NOPMD (UseConcurrentHashMap)
 	private final Map<Integer, ExecutionContainer> executionContainersById = new Hashtable<Integer, ExecutionContainer>(); // NOPMD (UseConcurrentHashMap)
@@ -57,12 +54,11 @@ public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository 
 	}
 
 	public final ExecutionContainer createAndRegisterExecutionContainer(final String namedIdentifier, final String name) {
-		ExecutionContainer newInst;
 		if (this.executionContainersByName.containsKey(namedIdentifier)) {
 			throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
 		}
 		final int id = this.getAndIncrementNextId();
-		newInst = new ExecutionContainer(id, null, name);
+		final ExecutionContainer newInst = new ExecutionContainer(id, null, name);
 		this.executionContainersById.put(id, newInst);
 		this.executionContainersByName.put(namedIdentifier, newInst);
 		return newInst;

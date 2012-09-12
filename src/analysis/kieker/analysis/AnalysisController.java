@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -337,7 +333,6 @@ public final class AnalysisController {
 	private static void checkPorts(final MIPlugin mPlugin, final AbstractPlugin plugin) throws AnalysisConfigurationException {
 		// Get all ports.
 		final EList<MIOutputPort> mOutputPorts = mPlugin.getOutputPorts();
-		final EList<MIInputPort> mInputPorts = (mPlugin instanceof MIFilter) ? ((MIFilter) mPlugin).getInputPorts() : new BasicEList<MIInputPort>(); // NOCS
 		final Set<String> outputPorts = new HashSet<String>();
 		for (final String outputPort : plugin.getAllOutputPortNames()) {
 			outputPorts.add(outputPort);
@@ -353,6 +348,7 @@ public final class AnalysisController {
 						+ ") does not exist.");
 			}
 		}
+		final EList<MIInputPort> mInputPorts = (mPlugin instanceof MIFilter) ? ((MIFilter) mPlugin).getInputPorts() : new BasicEList<MIInputPort>(); // NOCS
 		for (final MIInputPort mInputPort : mInputPorts) {
 			if (!inputPorts.contains(mInputPort.getName())) {
 				throw new AnalysisConfigurationException("The input port '" + mInputPort.getName() + "' of '" + mPlugin.getName() + "' (" + mPlugin.getClassname()
@@ -422,8 +418,8 @@ public final class AnalysisController {
 	 * @throws AnalysisConfigurationException
 	 *             If the port names or the given plugins are invalid or not compatible.
 	 */
-	public void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName) throws IllegalStateException,
-			AnalysisConfigurationException {
+	public void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName)
+			throws IllegalStateException, AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect readers and filters after starting analysis.");
 		}
@@ -523,7 +519,7 @@ public final class AnalysisController {
 					final String key = (String) e.nextElement();
 					final MIProperty property = factory.createProperty();
 					property.setName(key);
-					property.setValue(configuration.getProperty(key));
+					property.setValue(configuration.getStringProperty(key));
 					properties.add(property);
 				}
 				// Extract the repositories.
@@ -609,14 +605,25 @@ public final class AnalysisController {
 			this.terminate(true);
 			throw new AnalysisConfigurationException("No log reader registered.");
 		}
-		// Call execute() method of all plug-ins.
+		// Call init() method of all plug-ins.
+		for (final AbstractReaderPlugin reader : this.readers) {
+			/* Make also sure that all repository ports of all plugins are connected. */
+			if (!reader.areAllRepositoryPortsConnected()) {
+				this.terminate(true);
+				throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") has unconnected repositories.");
+			}
+			if (!reader.start()) {
+				this.terminate(true);
+				throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") failed to initialize.");
+			}
+		}
 		for (final AbstractFilterPlugin filter : this.filters) {
 			/* Make also sure that all repository ports of all plugins are connected. */
 			if (!filter.areAllRepositoryPortsConnected()) {
 				this.terminate(true);
 				throw new AnalysisConfigurationException("Plugin '" + filter.getName() + "' (" + filter.getPluginName() + ") has unconnected repositories.");
 			}
-			if (!filter.init()) {
+			if (!filter.start()) {
 				this.terminate(true);
 				throw new AnalysisConfigurationException("Plugin '" + filter.getName() + "' (" + filter.getPluginName() + ") failed to initialize.");
 			}
@@ -624,19 +631,20 @@ public final class AnalysisController {
 		// Start reading
 		final CountDownLatch readerLatch = new CountDownLatch(this.readers.size());
 		for (final AbstractReaderPlugin reader : this.readers) {
-			/* Make also sure that all repository ports of all plugins are connected. */
-			if (!reader.areAllRepositoryPortsConnected()) {
-				this.terminate(true);
-				throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") has unconnected repositories.");
-			}
 			new Thread(new Runnable() {
 				public void run() {
-					if (!reader.read()) {
-						// here we started and won't throw any exceptions!
-						LOG.error("Calling read() on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ")  returned false.");
+					try {
+						if (!reader.read()) {
+							// here we started and won't throw any exceptions!
+							LOG.error("Calling read() on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ")  returned false.");
+							AnalysisController.this.terminate(true);
+						}
+					} catch (final Throwable t) { // NOPMD NOCS (we also want errors)
+						LOG.error("Exception while reading on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ").", t);
 						AnalysisController.this.terminate(true);
+					} finally {
+						readerLatch.countDown();
 					}
-					readerLatch.countDown();
 				}
 			}).start();
 		}
@@ -686,12 +694,11 @@ public final class AnalysisController {
 				this.notifyStateObservers();
 			}
 		}
-		// TODO: Later we will want to introduce a topological order to terminate connected plugins.
 		for (final AbstractReaderPlugin reader : this.readers) {
-			reader.terminate(error);
+			reader.shutdown(error);
 		}
 		for (final AbstractFilterPlugin filter : this.filters) {
-			filter.terminate(error);
+			filter.shutdown(error);
 		}
 	}
 
