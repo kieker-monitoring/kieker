@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kdm:Segment xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:code="http://www.eclipse.org/MoDisco/kdm/code" xmlns:kdm="http://www.eclipse.org/MoDisco/kdm/kdm">
+  <model xsi:type="code:CodeModel">
+    <codeElement xsi:type="code:VoidType" name="void"/>
+    <codeElement xsi:type="code:IntegerType" name="long"/>
+    <codeElement xsi:type="code:BooleanType" name="boolean"/>
+    <codeElement xsi:type="code:IntegerType" name="int"/>
+    <codeElement xsi:type="code:FloatType" name="float"/>
+    <codeElement xsi:type="code:CharType" name="char"/>
+    <codeElement xsi:type="code:FloatType" name="double"/>
+    <codeElement xsi:type="code:IntegerType" name="byte"/>
+    <codeElement xsi:type="code:IntegerType" name="short"/>
+    <codeElement xsi:type="code:Package" name="kieker">
+      <codeElement xsi:type="code:Package" name="monitoring">
+        <codeElement xsi:type="code:Package" name="probe">
+          <codeElement xsi:type="code:Package" name="servlet">
+            <codeElement xsi:type="code:ClassUnit" name="SessionAndTraceRegistrationFilter">
+              <codeElement xsi:type="code:MethodUnit" name="doFilter" type="//@model.0/@codeElement.9/@codeElement.0/@codeElement.0/@codeElement.0/@codeElement.0/@codeElement.0/@codeElement.0">
+                <codeElement xsi:type="code:Signature">
+                  <parameterUnit type="//@model.0/@codeElement.0" kind="return"/>
+                  <parameterUnit type="//@model.0/@codeElement.10/@codeElement.0/@codeElement.0" kind="byReference" pos="0"/>
+                  <parameterUnit type="//@model.0/@codeElement.11/@codeElement.0/@codeElement.0" kind="byReference" pos="1"/>
+                  <parameterUnit type="//@model.0/@codeElement.11/@codeElement.0/@codeElement.1" kind="byReference" pos="2"/>
+                </codeElement>
+              </codeElement>
+            </codeElement>
+          </codeElement>
+        </codeElement>
+      </codeElement>
+    </codeElement>
+    <codeElement xsi:type="code:Package" name="javax">
+      <codeElement xsi:type="code:Package" name="servlet">
+        <codeElement xsi:type="code:ClassUnit" name="ServletRequest"/>
+        <codeElement xsi:type="code:Package" name="http">
+          <codeElement xsi:type="code:ClassUnit" name="HttpServletRequest"/>
+        </codeElement>
+      </codeElement>
+    </codeElement>
+    <codeElement xsi:type="code:Package" name=" javax">
+      <codeElement xsi:type="code:Package" name="servlet">
+        <codeElement xsi:type="code:ClassUnit" name="ServletResponse"/>
+        <codeElement xsi:type="code:ClassUnit" name="FilterChain"/>
+        <codeElement xsi:type="code:Package" name="http">
+          <codeElement xsi:type="code:ClassUnit" name="HttpServletResponse"/>
+        </codeElement>
+      </codeElement>
+    </codeElement>
+    <codeElement xsi:type="code:Package" name="com">
+      <codeElement xsi:type="code:Package" name="ibatis">
+        <codeElement xsi:type="code:Package" name="jpetstore">
+          <codeElement xsi:type="code:Package" name="web">
+            <codeElement xsi:type="code:ClassUnit" name="DispatcherServlet">
+              <codeElement xsi:type="code:MethodUnit" name="process" type="//@model.0/@codeElement.12/@codeElement.0/@codeElement.0/@codeElement.0/@codeElement.0/@codeElement.0/@codeElement.0" export="protected">
+                <codeElement xsi:type="code:Signature">
+                  <parameterUnit type="//@model.0/@codeElement.0" kind="return"/>
+                  <parameterUnit type="//@model.0/@codeElement.10/@codeElement.0/@codeElement.1/@codeElement.0" kind="byReference" pos="0"/>
+                  <parameterUnit type="//@model.0/@codeElement.11/@codeElement.0/@codeElement.2/@codeElement.0" kind="byReference" pos="1"/>
+                </codeElement>
+              </codeElement>
+              <codeElement xsi:type="code:MethodUnit" name="doGet" type="//@model.0/@codeElement.12/@codeElement.0/@codeElement.0/@codeElement.0/@codeElement.0/@codeElement.1/@codeElement.0">
+                <codeElement xsi:type="code:Signature">
+                  <parameterUnit type="//@model.0/@codeElement.0" kind="return"/>
+                  <parameterUnit type="//@model.0/@codeElement.10/@codeElement.0/@codeElement.1/@codeElement.0" kind="byReference" pos="0"/>
+                  <parameterUnit type="//@model.0/@codeElement.11/@codeElement.0/@codeElement.2/@codeElement.0" kind="byReference" pos="1"/>
+                </codeElement>
+              </codeElement>
+              <codeElement xsi:type="code:MethodUnit" name="doPost" type="//@model.0/@codeElement.12/@codeElement.0/@codeElement.0/@codeElement.0/@codeElement.0/@codeElement.2/@codeElement.0">
+                <codeElement xsi:type="code:Signature">
+                  <parameterUnit type="//@model.0/@codeElement.0" kind="return"/>
+                  <parameterUnit type="//@model.0/@codeElement.10/@codeElement.0/@codeElement.1/@codeElement.0" kind="byReference" pos="0"/>
+                  <parameterUnit type="//@model.0/@codeElement.11/@codeElement.0/@codeElement.2/@codeElement.0" kind="byReference" pos="1"/>
+                </codeElement>
+              </codeElement>
+            </codeElement>
+          </codeElement>
+          <codeElement xsi:type="code:Package" name="service">
+            <codeElement xsi:type="code:ClassUnit" name="CatalogService">
+              <codeElement xsi:type="code:MethodUnit" name="getProductListByCategory" type="//@model.0/@codeElement.12/@codeElement.0/@codeElement.0/@codeElement.1/@codeElement.0/@codeElement.0/@codeElement.0">
+                <codeElement xsi:type="code:Signature">
+                  <parameterUnit type="//@model.0/@codeElement.12/@codeElement.0/@codeElement.1/@codeElement.0/@codeElement.0" kind="return"/>
+                  <parameterUnit type="//@model.0/@codeElement.13/@codeElement.0/@codeElement.0" kind="byReference" pos="0"/>
+                </codeElement>
+              </codeElement>
+              <codeElement xsi:type="code:MethodUnit" name="getCategory" type="//@model.0/@codeElement.12/@codeElement.0/@codeElement.0/@codeElement.1/@codeElement.0/@codeElement.1/@codeElement.0">
+                <codeElement xsi:type="code:Signature">
+                  <parameterUnit type="//@model.0/@codeElement.12/@codeElement.0/@codeElement.0/@codeElement.2/@codeElement.0" kind="return"/>
+                  <parameterUnit type="//@model.0/@codeElement.13/@codeElement.0/@codeElement.0" kind="byReference" pos="0"/>
+                </codeElement>
+              </codeElement>
+              <codeElement xsi:type="code:MethodUnit" name="getItemListByProduct" type="//@model.0/@codeElement.12/@codeElement.0/@codeElement.0/@codeElement.1/@codeElement.0/@codeElement.2/@codeElement.0">
+                <codeElement xsi:type="code:Signature">
+                  <parameterUnit type="//@model.0/@codeElement.12/@codeElement.0/@codeElement.1/@codeElement.0/@codeElement.0" kind="return"/>
+                  <parameterUnit type="//@model.0/@codeElement.13/@codeElement.0/@codeElement.0" kind="byReference" pos="0"/>
+                </codeElement>
+              </codeElement>
+              <codeElement xsi:type="code:MethodUnit" name="getProduct" type="//@model.0/@codeElement.12/@codeElement.0/@codeElement.0/@codeElement.1/@codeElement.0/@codeElement.3/@codeElement.0">
+                <codeElement xsi:type="code:Signature">
+                  <parameterUnit type="//@model.0/@codeElement.12/@codeElement.0/@codeElement.0/@codeElement.2/@codeElement.1" kind="return"/>
+                  <parameterUnit type="//@model.0/@codeElement.13/@codeElement.0/@codeElement.0" kind="byReference" pos="0"/>
+                </codeElement>
+              </codeElement>
+              <codeElement xsi:type="code:MethodUnit" name="searchProductList" type="//@model.0/@codeElement.12/@codeElement.0/@codeElement.0/@codeElement.1/@codeElement.0/@codeElement.4/@codeElement.0">
+                <codeElement xsi:type="code:Signature">
+                  <parameterUnit type="//@model.0/@codeElement.12/@codeElement.0/@codeElement.1/@codeElement.0/@codeElement.0" kind="return"/>
+                  <parameterUnit type="//@model.0/@codeElement.13/@codeElement.0/@codeElement.0" kind="byReference" pos="0"/>
+                </codeElement>
+              </codeElement>
+            </codeElement>
+          </codeElement>
+          <codeElement xsi:type="code:Package" name="domain">
+            <codeElement xsi:type="code:ClassUnit" name="Category"/>
+            <codeElement xsi:type="code:ClassUnit" name="Product"/>
+          </codeElement>
+          <codeElement xsi:type="code:Package" name="presentation">
+            <codeElement xsi:type="code:ClassUnit" name="CatalogBean">
+              <codeElement xsi:type="code:MethodUnit" name="viewCategory" type="//@model.0/@codeElement.12/@codeElement.0/@codeElement.0/@codeElement.3/@codeElement.0/@codeElement.0/@codeElement.0">
+                <codeElement xsi:type="code:Signature">
+                  <parameterUnit type="//@model.0/@codeElement.13/@codeElement.0/@codeElement.0" kind="return"/>
+                </codeElement>
+              </codeElement>
+              <codeElement xsi:type="code:MethodUnit" name="viewProduct" type="//@model.0/@codeElement.12/@codeElement.0/@codeElement.0/@codeElement.3/@codeElement.0/@codeElement.1/@codeElement.0">
+                <codeElement xsi:type="code:Signature">
+                  <parameterUnit type="//@model.0/@codeElement.13/@codeElement.0/@codeElement.0" kind="return"/>
+                </codeElement>
+              </codeElement>
+              <codeElement xsi:type="code:MethodUnit" name="searchProducts" type="//@model.0/@codeElement.12/@codeElement.0/@codeElement.0/@codeElement.3/@codeElement.0/@codeElement.2/@codeElement.0">
+                <codeElement xsi:type="code:Signature">
+                  <parameterUnit type="//@model.0/@codeElement.13/@codeElement.0/@codeElement.0" kind="return"/>
+                </codeElement>
+              </codeElement>
+            </codeElement>
+            <codeElement xsi:type="code:ClassUnit" name="CartBean">
+              <codeElement xsi:type="code:MethodUnit" name="viewCart" type="//@model.0/@codeElement.12/@codeElement.0/@codeElement.0/@codeElement.3/@codeElement.1/@codeElement.0/@codeElement.0">
+                <codeElement xsi:type="code:Signature">
+                  <parameterUnit type="//@model.0/@codeElement.13/@codeElement.0/@codeElement.0" kind="return"/>
+                </codeElement>
+              </codeElement>
+              <codeElement xsi:type="code:MethodUnit" name="updateCartQuantities" type="//@model.0/@codeElement.12/@codeElement.0/@codeElement.0/@codeElement.3/@codeElement.1/@codeElement.1/@codeElement.0">
+                <codeElement xsi:type="code:Signature">
+                  <parameterUnit type="//@model.0/@codeElement.13/@codeElement.0/@codeElement.0" kind="return"/>
+                </codeElement>
+              </codeElement>
+            </codeElement>
+          </codeElement>
+        </codeElement>
+        <codeElement xsi:type="code:Package" name="common">
+          <codeElement xsi:type="code:Package" name="util">
+            <codeElement xsi:type="code:ClassUnit" name="PaginatedList"/>
+          </codeElement>
+        </codeElement>
+      </codeElement>
+    </codeElement>
+    <codeElement xsi:type="code:Package" name="java">
+      <codeElement xsi:type="code:Package" name="lang">
+        <codeElement xsi:type="code:ClassUnit" name="String"/>
+      </codeElement>
+    </codeElement>
+  </model>
+</kdm:Segment>

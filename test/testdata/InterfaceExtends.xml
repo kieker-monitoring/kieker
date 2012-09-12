@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kdm:Segment xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:code="http://www.eclipse.org/MoDisco/kdm/code" xmlns:kdm="http://www.eclipse.org/MoDisco/kdm/kdm">
+  <model xsi:type="code:CodeModel">
+    <codeElement xsi:type="code:VoidType" name="void"/>
+    <codeElement xsi:type="code:IntegerType" name="long"/>
+    <codeElement xsi:type="code:BooleanType" name="boolean"/>
+    <codeElement xsi:type="code:IntegerType" name="int"/>
+    <codeElement xsi:type="code:FloatType" name="float"/>
+    <codeElement xsi:type="code:CharType" name="char"/>
+    <codeElement xsi:type="code:FloatType" name="double"/>
+    <codeElement xsi:type="code:IntegerType" name="byte"/>
+    <codeElement xsi:type="code:IntegerType" name="short"/>
+    <codeElement xsi:type="code:Package" name="test">
+      <codeElement xsi:type="code:InterfaceUnit" name="Iterable"/>
+      <codeElement xsi:type="code:InterfaceUnit" name="Iterator">
+        <codeRelation xsi:type="code:Extends" to="//@model.0/@codeElement.9/@codeElement.1" from="//@model.0/@codeElement.9/@codeElement.0"/>
+      </codeElement>
+    </codeElement>
+  </model>
+</kdm:Segment>

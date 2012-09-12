@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kdm:Segment xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:code="http://www.eclipse.org/MoDisco/kdm/code" xmlns:kdm="http://www.eclipse.org/MoDisco/kdm/kdm">
+  <model xsi:type="code:CodeModel">
+    <codeElement xsi:type="code:VoidType" name="void"/>
+    <codeElement xsi:type="code:IntegerType" name="long"/>
+    <codeElement xsi:type="code:BooleanType" name="boolean"/>
+    <codeElement xsi:type="code:IntegerType" name="int"/>
+    <codeElement xsi:type="code:FloatType" name="float"/>
+    <codeElement xsi:type="code:CharType" name="char"/>
+    <codeElement xsi:type="code:FloatType" name="double"/>
+    <codeElement xsi:type="code:IntegerType" name="byte"/>
+    <codeElement xsi:type="code:IntegerType" name="short"/>
+    <codeElement xsi:type="code:Package" name="test">
+      <codeElement xsi:type="code:Package" name="eins"/>
+      <codeElement xsi:type="code:Package" name="zwei">
+        <codeElement xsi:type="code:Package" name="drei">
+          <codeElement xsi:type="code:Package" name="vier"/>
+        </codeElement>
+        <codeElement xsi:type="code:Package" name="fuenf">
+          <codeElement xsi:type="code:ClassUnit" name="Main"/>
+        </codeElement>
+        <codeElement xsi:type="code:Package" name="sechs">
+          <codeElement xsi:type="code:InterfaceUnit" name="IIterator"/>
+        </codeElement>
+        <codeElement xsi:type="code:Package" name="sieben">
+          <codeElement xsi:type="code:ClassUnit" name="Foo">
+            <codeElement xsi:type="code:ClassUnit" name="Bar"/>
+          </codeElement>
+        </codeElement>
+        <codeElement xsi:type="code:Package" name="acht">
+          <codeElement xsi:type="code:InterfaceUnit" name="IPrintable">
+            <codeElement xsi:type="code:InterfaceUnit" name="IWritable"/>
+          </codeElement>
+        </codeElement>
+        <codeElement xsi:type="code:Package" name="neun">
+          <codeElement xsi:type="code:ClassUnit" name="InterfaceClass"/>
+        </codeElement>
+        <codeElement xsi:type="code:Package" name="zehn">
+          <codeElement xsi:type="code:InterfaceUnit" name="ISetable"/>
+        </codeElement>
+      </codeElement>
+    </codeElement>
+    <codeElement xsi:type="code:Package" name="org">
+      <codeElement xsi:type="code:Package" name="emf">
+        <codeElement xsi:type="code:Package" name="kdm">
+          <codeElement xsi:type="code:ClassUnit" name="Demo"/>
+        </codeElement>
+        <codeElement xsi:type="code:Package" name="abc">
+          <codeElement xsi:type="code:ClassUnit" name="Input">
+            <codeElement xsi:type="code:ClassUnit" name="Stream"/>
+          </codeElement>
+        </codeElement>
+      </codeElement>
+    </codeElement>
+  </model>
+</kdm:Segment>
