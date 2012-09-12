@@ -21,7 +21,6 @@
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -130,8 +129,8 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 	}
 
 	private void createGraph(final ElementGrouping grouping, final StringBuilder builder, final boolean useShortLabels) {
-		final Map<ExecutionContainer, Set<AllocationComponent>> allocationComponentGrouping = grouping.getAllocationComponentGrouping();
-		final Map<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>> operationGrouping = grouping.getOperationGrouping();
+		final ConcurrentMap<ExecutionContainer, Set<AllocationComponent>> allocationComponentGrouping = grouping.getAllocationComponentGrouping();
+		final ConcurrentMap<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>> operationGrouping = grouping.getOperationGrouping();
 
 		for (final Entry<ExecutionContainer, Set<AllocationComponent>> containerComponentEntry : allocationComponentGrouping.entrySet()) {
 			final ExecutionContainer executionContainer = containerComponentEntry.getKey();

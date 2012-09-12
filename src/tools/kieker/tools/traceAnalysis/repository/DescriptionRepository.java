@@ -52,7 +52,7 @@ public class DescriptionRepository extends AbstractRepository {
 	private static String[] splitLine(final String inputLine) {
 		final int delimiterIndex = inputLine.indexOf(DELIMITER);
 		if (delimiterIndex < 0) {
-			return null;
+			return null; // FindBugs doesn't like it (PZLA_PREFER_ZERO_LENGTH_ARRAYS)
 		}
 
 		final String[] returnValue = new String[2];
