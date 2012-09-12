@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,7 +58,6 @@ public class AttributeIterator extends AbstractKDMIterator<AttributeDescription>
 	 * @return
 	 *         True if the iterator has more elements.
 	 */
-	// @Override
 	public boolean hasNext() {
 		// If a current element exist there is one
 		if (this.currentElement != null) {
@@ -87,7 +82,7 @@ public class AttributeIterator extends AbstractKDMIterator<AttributeDescription>
 					// Else try again
 					cond = true;
 					// Reset current element!!
-					this.currentElement = null; // NOPMD (ensure this element is not used again)
+					this.currentElement = null;
 					this.stepBack();
 				}
 			} while (cond && this.currentIterator.hasNext() && !this.iteratorStack.isEmpty());
@@ -106,7 +101,6 @@ public class AttributeIterator extends AbstractKDMIterator<AttributeDescription>
 	 *             If no other element exists.
 	 * @see #hasNext()
 	 */
-	// @Override
 	public AttributeDescription next() throws NoSuchElementException {
 		if (this.currentElement == null) {
 			throw new NoSuchElementException("No more elements.");
@@ -124,7 +118,7 @@ public class AttributeIterator extends AbstractKDMIterator<AttributeDescription>
 			throw new NoSuchElementException("Wrong type of current element.");
 		}
 
-		this.currentElement = null; // NOPMD (ensure this element is not used again)
+		this.currentElement = null;
 
 		return description;
 	}

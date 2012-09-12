@@ -105,8 +105,8 @@
 			<fileset dir="${lib.dir}">
 				<include name="commons-cli-*.jar" />
 				<include name="jgraphx-*.jar" />
-				<include name="org.eclipse.gmt.modisco.omg.kdm*.jar" />
 				<include name="org.eclipse.emf.*.jar" />
+				<include name="org.eclipse.gmt.modisco.omg.kdm*.jar" />
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
 			<pathelement location="${build.kieker.monitoring.dir}/" />
@@ -245,6 +245,10 @@
 			<include name="org.eclipse.emf.ecore_*.jar" />
 		</fileset>
 		<pathconvert property="org.eclipse.emf.ecore-jar" refid="org.eclipse.emf.ecore-jar-set" />
+    <fileset dir="${lib.dir}" id="org.eclipse.gmt.modisco.omg.kdm-jar-set">
+			<include name="org.eclipse.gmt.modisco.omg.kdm_*.jar" />
+		</fileset>
+		<pathconvert property="org.eclipse.gmt.modisco.omg.kdm-jar" refid="org.eclipse.gmt.modisco.omg.kdm-jar-set" />
 		<jar destfile="${dist.dir}/${dist.kieker.main.emf.jar}" duplicate="fail" filesetmanifest="skip">
 			<manifest> <!-- would be better to take it from the jar, but somehow doesn't work -->
 				<section name="kieker">
@@ -281,10 +285,20 @@
 				<exclude name="about.*" />
 				<exclude name="modeling32.png" />
 			</zipfileset>
+      <zipfileset src="${org.eclipse.gmt.modisco.omg.kdm-jar}">
+				<exclude name="META-INF/*.RSA" />
+				<exclude name="META-INF/*.SF" />
+				<exclude name="META-INF/eclipse.inf" />
+				<exclude name="plugin.*" />
+				<exclude name="about.*" />
+				<exclude name="modeling32.png" />
+			</zipfileset>
 			<zipfileset src="${org.eclipse.emf.common-jar}" fullpath="org.eclipse.emf.common-about.html" includes="about.html" />
 			<zipfileset src="${org.eclipse.emf.ecore.xmi-jar}" fullpath="org.eclipse.emf.ecore.xmi-about.html" includes="about.html" />
 			<zipfileset src="${org.eclipse.emf.ecore-jar}" fullpath="org.eclipse.emf.ecore-about.html" includes="about.html" />
+			<zipfileset src="${org.eclipse.gmt.modisco.omg.kdm-jar}" fullpath="org.eclipse.gmt.modisco.omg.kdm-about.html" includes="about.html" />
 			<fileset dir="${lib.dir}" includes="org.eclipse.emf.*.LICENSE" />
+			<fileset dir="${lib.dir}" includes="org.eclipse.gmt.modisco.omg.kdm*.LICENSE" />
 		</jar>
 	</target>
 
@@ -700,9 +714,8 @@
 		<path id="tools-test-compile-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="junit-*.jar" />
-				<!-- This is necessary for the KDM part -->
-				<include name="org.eclipse.gmt.modisco.omg.kdm*.jar" />
 				<include name="org.eclipse.emf.*.jar" />
+				<include name="org.eclipse.gmt.modisco.omg.kdm*.jar" />
 			</fileset>
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />
@@ -1005,10 +1018,9 @@
 			<fileset dir="${lib.dir}">
 				<include name="aopalliance-*.jar" />
 				<include name="junit-*.jar" />
+				<include name="org.eclipse.gmt.modisco.omg.kdm*.jar" />
 				<include name="org.eclipse.emf.*.jar" />
 				<include name="derby-*.jar" />
-				<!-- This is necessary for the KDM part -->
-				<include name="org.eclipse.gmt.modisco.omg.kdm*.jar" />
 			</fileset>
 			<pathelement location="${build.tests.dir}/" />
 			<fileset dir="${dist.dir}">

@@ -1,9 +1,24 @@
+/***************************************************************************
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.test.tools.junit.kdm.util;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.gmt.modisco.omg.kdm.code.InterfaceUnit;
 import org.junit.Assert;
@@ -14,22 +29,18 @@ import kieker.tools.kdm.manager.exception.InvalidClassException;
 import kieker.tools.kdm.manager.util.AttributeIterator;
 import kieker.tools.kdm.manager.util.descriptions.AttributeDescription;
 
+/**
+ * @author Nils Christian Ehmke, Benjamin Harms
+ */
 public class AttributeIteratorTest {
-	private final Map<String, InterfaceUnit> interfaces = TestPackageStructure.getInterfaces();
-	// Initialize the model manager once
-	private final String path = "..\\testdata\\SharpDevelop.xmi";
-	private final KDMModelManager modelManager = new KDMModelManager(this.path);
 
 	public AttributeIteratorTest() {
 		// Not necessary
 	}
 
 	@Test
-	public void testLoad() {}
-
-	@Test
 	public void testAttributesFromClass() {
-		final String path = "..\\testdata\\outJPetStore.xmi";
+		final String path = "../examples/JavaEEServletContainerExample/JPetStore-KDM.xmi";
 		final KDMModelManager modelManager = new KDMModelManager(path);
 
 		try {
@@ -41,7 +52,7 @@ public class AttributeIteratorTest {
 				l.add(desc);
 			}
 
-			final String[] values = new String[] { "private static long serialVersionUID = 5054687760345121163L", "CLASS private java.lang.String username" };
+			final String[] values = new String[] { "private static long serialVersionUID = 5054687760345121163L", "CLASS private java.lang.String username", };
 
 			Assert.assertArrayEquals(values, l.toArray());
 		} catch (final InvalidClassException e) {
@@ -52,7 +63,7 @@ public class AttributeIteratorTest {
 	@Test
 	public void testAttributesFromInterface() {
 		final String key = "test.zwei.zehn.ISetable";
-		final InterfaceUnit interfaze = this.interfaces.get(key);
+		final InterfaceUnit interfaze = TestPackageStructure.getInterfaces().get(key);
 		final Iterator<AttributeDescription> it = new AttributeIterator(interfaze);
 		final List<String> l = new LinkedList<String>();
 		while (it.hasNext()) {
@@ -60,16 +71,18 @@ public class AttributeIteratorTest {
 			l.add(desc);
 		}
 
-		final String[] values = new String[] { "private int length", "protected char[] letter", "CLASS public static test.zwei.sieben.Foo dings" };
+		final String[] values = new String[] { "private int length", "protected char[] letter", "CLASS public static test.zwei.sieben.Foo dings", };
 
 		Assert.assertArrayEquals(values, l.toArray());
 	}
 
 	@Test
 	public void testAttributeFromCSharpClassOnlyStorableUnits() {
+		final String path = "tmp/SharpDevelop.xmi"; // FIXME: correct file?
+		final KDMModelManager modelManager = new KDMModelManager(path);
 		final String key = "ICSharpCode.CodeAnalysis.SuppressMessageCommand";
 		try {
-			final Iterator<AttributeDescription> it = this.modelManager.iterateAttributesFromClass(key);
+			final Iterator<AttributeDescription> it = modelManager.iterateAttributesFromClass(key);
 			final List<String> l = new LinkedList<String>();
 
 			while (it.hasNext()) {
@@ -77,7 +90,7 @@ public class AttributeIteratorTest {
 				l.add(p);
 			}
 
-			final String[] values = new String[] { "unknown string NamespaceName", "unknown string AttributeName" };
+			final String[] values = new String[] { "unknown string NamespaceName", "unknown string AttributeName", };
 
 			Assert.assertArrayEquals(values, l.toArray());
 		} catch (final InvalidClassException e) {
@@ -87,9 +100,11 @@ public class AttributeIteratorTest {
 
 	@Test
 	public void testAttributeFromCSharpClassOnlyMemberUnits() {
+		final String path = "tmp/SharpDevelop.xmi"; // FIXME: correct file?
+		final KDMModelManager modelManager = new KDMModelManager(path);
 		final String key = "Mono.Cecil.EventReference";
 		try {
-			final Iterator<AttributeDescription> it = this.modelManager.iterateAttributesFromClass(key);
+			final Iterator<AttributeDescription> it = modelManager.iterateAttributesFromClass(key);
 			final List<String> l = new LinkedList<String>();
 
 			while (it.hasNext()) {
@@ -97,8 +112,11 @@ public class AttributeIteratorTest {
 				l.add(p);
 			}
 
-			final String[] values = new String[] { "CLASS public Mono.Cecil.TypeReference event_type", "CLASS public Mono.Cecil.TypeReference EventType",
-				"public string FullName" };
+			final String[] values = new String[] {
+				"CLASS public Mono.Cecil.TypeReference event_type",
+				"CLASS public Mono.Cecil.TypeReference EventType",
+				"public string FullName",
+			};
 
 			Assert.assertArrayEquals(values, l.toArray());
 		} catch (final InvalidClassException e) {

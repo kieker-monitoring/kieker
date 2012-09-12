@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -122,8 +118,7 @@ public class DependencyIterator extends AbstractKDMIterator<DependencyDescriptio
 	 * @return
 	 *         Returns true if the iterator has more elements, otherwise false. You have to call it, otherwise next() will fail!
 	 */
-	// @Override
-	public boolean hasNext() { // NOCS (JavaNCSSCheck, CyclomaticComplexityCheck)
+	public boolean hasNext() {
 		// If a current element exist there is one
 		if (this.currentElement != null) {
 			return true;
@@ -204,7 +199,7 @@ public class DependencyIterator extends AbstractKDMIterator<DependencyDescriptio
 					// Else try again
 					cond = true;
 					// Reset current element!!
-					this.currentElement = null; // NOPMD (ensure this element is not used again)
+					this.currentElement = null;
 					this.stepBack();
 				}
 			} while (cond && this.currentIterator.hasNext() && !this.iteratorStack.isEmpty());
@@ -224,7 +219,7 @@ public class DependencyIterator extends AbstractKDMIterator<DependencyDescriptio
 		while (parent != null) {
 			// Stop at the CodeModel
 			if (parent instanceof CodeModel) {
-				parent = null; // NOPMD (Stop at the code model)
+				parent = null;
 			} else if (parent instanceof CompilationUnit) { // We have found the target
 				final CompilationUnit cUnit = (CompilationUnit) parent;
 				final Iterator<AbstractCodeRelationship> relationIterator = cUnit.getCodeRelation().iterator();
@@ -232,14 +227,13 @@ public class DependencyIterator extends AbstractKDMIterator<DependencyDescriptio
 				this.currentIterator = relationIterator;
 				break;
 			} else if (parent instanceof Package) { // We can stop here, because we are in a Java model
-				parent = null; // NOPMD (Avoid infinite loop)
+				parent = null;
 			} else { // Use the next parent
 				parent = parent.eContainer();
 			}
 		}
 	}
 
-	// @Override
 	/**
 	 * Returns the next dependency. Call next() <b>only</b> after a previous call of {@link #hasNext()}!
 	 * 
@@ -268,7 +262,7 @@ public class DependencyIterator extends AbstractKDMIterator<DependencyDescriptio
 			description = new DependencyDescription(ext);
 		}
 		// Reset current element!!
-		this.currentElement = null; // NOPMD (ensure this element is not used again)
+		this.currentElement = null;
 
 		return description;
 	}

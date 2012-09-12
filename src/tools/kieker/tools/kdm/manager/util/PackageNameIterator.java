@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,8 +28,6 @@ import org.eclipse.gmt.modisco.omg.kdm.code.Package;
  * This class provides an iterator for package names within the given {@link Package} or list of {@link AbstractCodeElement}.
  * 
  * @author Benjamin Harms
- * 
- * @version 1.0
  */
 public final class PackageNameIterator extends AbstractKDMIterator<String> {
 
@@ -105,7 +99,6 @@ public final class PackageNameIterator extends AbstractKDMIterator<String> {
 		this.nameStak.push(fullPackageName);
 	}
 
-	// @Override
 	/**
 	 * This method tries to find another element.
 	 * 
@@ -134,7 +127,7 @@ public final class PackageNameIterator extends AbstractKDMIterator<String> {
 					// Else try again
 					cond = true;
 					// Reset current element!!
-					this.currentElement = null; // NOPMD (ensure this element is not used again)
+					this.currentElement = null;
 					this.stepBack();
 				}
 			} while (cond && this.currentIterator.hasNext() && !this.iteratorStack.isEmpty());
@@ -143,7 +136,6 @@ public final class PackageNameIterator extends AbstractKDMIterator<String> {
 		return this.currentIterator.hasNext();
 	}
 
-	// @Override
 	/**
 	 * Returns the next package name. Call next() <b>only</b> after a previous call of {@link #hasNext()}!
 	 * 
@@ -171,7 +163,7 @@ public final class PackageNameIterator extends AbstractKDMIterator<String> {
 			this.currentIterator = iterator;
 		}
 		// Reset current element!!
-		this.currentElement = null; // NOPMD (ensure this element is not used again)
+		this.currentElement = null;
 
 		return parentName.toString();
 	}

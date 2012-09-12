@@ -1,3 +1,19 @@
+/***************************************************************************
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.test.tools.junit.kdm;
 
 import java.io.File;
@@ -199,37 +215,38 @@ public class KDMModelManagerTest {
 		final KDMModelManager managerBefore = new KDMModelManager();
 
 		// Put in some structure
-		managerBefore.addPackage(new String[] { "test", "eins" });
-		managerBefore.addPackage(new String[] { "test", "zwei", "drei", "vier" });
-		managerBefore.addClass(new String[] { "Main" }, new String[] { "test", "zwei", "fuenf" });
-		managerBefore.addClass(new String[] { "Foo", "Bar" }, new String[] { "test", "zwei", "sieben" });
-		managerBefore.addClass(new String[] { "InterfaceClass" }, new String[] { "test", "zwei", "neun" });
-		managerBefore.addClass(new String[] { "Demo" }, new String[] { "org", "emf", "kdm" });
-		managerBefore.addClass(new String[] { "Input", "Stream" }, new String[] { "org", "emf", "abc" });
-		managerBefore.addClass(new String[] { "GlobalClass" }, new String[] { "" });
+		managerBefore.addPackage(new String[] { "test", "eins", });
+		managerBefore.addPackage(new String[] { "test", "zwei", "drei", "vier", });
+		managerBefore.addClass(new String[] { "Main", }, new String[] { "test", "zwei", "fuenf", });
+		managerBefore.addClass(new String[] { "Foo", "Bar", }, new String[] { "test", "zwei", "sieben", });
+		managerBefore.addClass(new String[] { "InterfaceClass", }, new String[] { "test", "zwei", "neun", });
+		managerBefore.addClass(new String[] { "Demo", }, new String[] { "org", "emf", "kdm", });
+		managerBefore.addClass(new String[] { "Input", "Stream", }, new String[] { "org", "emf", "abc", });
+		managerBefore.addClass(new String[] { "GlobalClass", }, new String[] { "", });
 
-		managerBefore.addInterface(new String[] { "IITerator" }, new String[] { "test", "zwei", "sechs" });
-		managerBefore.addInterface(new String[] { "IPrintable", "IWritable" }, new String[] { "test", "zwei", "acht" });
-		managerBefore.addInterface(new String[] { "ISetable" }, new String[] { "test", "zwei", "zehn" });
-		managerBefore.addInterface(new String[] { "IGlobalInterface" }, new String[] { "" });
+		managerBefore.addInterface(new String[] { "IITerator", }, new String[] { "test", "zwei", "sechs", });
+		managerBefore.addInterface(new String[] { "IPrintable", "IWritable", }, new String[] { "test", "zwei", "acht", });
+		managerBefore.addInterface(new String[] { "ISetable", }, new String[] { "test", "zwei", "zehn", });
+		managerBefore.addInterface(new String[] { "IGlobalInterface", }, new String[] { "", });
 
-		managerBefore.addMethod(true, false, "void", "public", new String[] { "char[] args" }, "main", new String[] { "Main" }, new String[] { "test", "zwei",
-			"fuenf" });
-		managerBefore
-				.addMethod(false, false, "void", "public", new String[] { "int count" }, "showA", new String[] { "Demo" }, new String[] { "org", "emf", "kdm" });
-		managerBefore.addMethod(false, false, "void", "public", new String[] { "char letter", "int count" }, "showB", new String[] { "Demo" }, new String[] {
-			"org", "emf", "kdm" });
-		managerBefore.addMethod(false, false, "int", "protected", new String[0], "showC", new String[] { "Demo" }, new String[] { "org", "emf", "kdm" });
+		managerBefore.addMethod(true, false, "void", "public", new String[] { "char[] args", }, "main", new String[] { "Main", }, new String[] { "test", "zwei",
+			"fuenf", });
+		managerBefore.addMethod(false, false, "void", "public", new String[] { "int count", }, "showA", new String[] { "Demo", },
+				new String[] { "org", "emf", "kdm" });
+		managerBefore.addMethod(false, false, "void", "public", new String[] { "char letter", "int count", }, "showB", new String[] { "Demo", }, new String[] {
+			"org", "emf", "kdm", });
+		managerBefore.addMethod(false, false, "int", "protected", new String[0], "showC", new String[] { "Demo", }, new String[] { "org", "emf", "kdm", });
 		// Constructor
-		managerBefore.addMethod(false, true, "", "public", new String[0], "Demo", new String[] { "Demo" }, new String[] { "org", "emf", "kdm" });
-		managerBefore.addMethod(false, false, "int", "public", new String[] { "char[] name", "int count" }, "open", new String[] { "Input", "Stream" },
-				new String[] { "org", "emf", "abc" });
-		managerBefore.addMethod(false, false, "void", "public", new String[] { "Item item" }, "set", new String[] { "Demo" }, new String[] { "org", "emf", "kdm" });
+		managerBefore.addMethod(false, true, "", "public", new String[0], "Demo", new String[] { "Demo", }, new String[] { "org", "emf", "kdm", });
+		managerBefore.addMethod(false, false, "int", "public", new String[] { "char[] name", "int count", }, "open", new String[] { "Input", "Stream", },
+				new String[] { "org", "emf", "abc", });
+		managerBefore.addMethod(false, false, "void", "public", new String[] { "Item item", }, "set", new String[] { "Demo", },
+				new String[] { "org", "emf", "kdm", });
 		managerBefore.addMethod(false, false, "void", "private", new String[0], "globalMethod", new String[] { "" }, new String[0]);
 		// Method call
-		managerBefore.addMethodCall(false, false, "void", "public", new String[] { "char[] args" }, "main", new String[] { "Main" }, new String[] { "test", "zwei",
-			"fuenf" }, false, false, "void", "public", new String[] { "char letter", "int count" }, "showB", new String[] { "Demo" }, new String[] { "org", "emf",
-			"kdm" });
+		managerBefore.addMethodCall(false, false, "void", "public", new String[] { "char[] args", }, "main", new String[] { "Main", }, new String[] { "test",
+			"zwei", "fuenf", }, false, false, "void", "public", new String[] { "char letter", "int count", }, "showB", new String[] { "Demo", }, new String[] {
+			"org", "emf", "kdm", });
 
 		// Get all keys
 		final List<String> insertedKeys = managerBefore.logHashMapKeys();

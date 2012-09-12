@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,9 +32,6 @@ import org.eclipse.gmt.modisco.omg.kdm.code.Package;
  * thread safe, so while iterating changes of the model can lead to unexpected behavior.
  * 
  * @author Benjamin Harms
- * 
- * @version 1.0
- * 
  */
 public final class ClassNameIterator extends AbstractKDMIterator<String> {
 	/**
@@ -122,14 +115,13 @@ public final class ClassNameIterator extends AbstractKDMIterator<String> {
 		this.performDepthFirstSearch = depthFirstSearch;
 	}
 
-	// @Override
 	/**
 	 * This method checks whether there is another element or not.
 	 * 
 	 * @return
 	 *         Returns true if the iterator has more elements, otherwise false.
 	 */
-	public boolean hasNext() { // NOCS (JavaNCSSCheck, CyclomaticComplexityCheck)
+	public boolean hasNext() {
 		// If a current element exist there is one
 		if (this.currentElement != null) {
 			return true;
@@ -180,7 +172,7 @@ public final class ClassNameIterator extends AbstractKDMIterator<String> {
 					// Else try again
 					cond = true;
 					// Reset current element!!
-					this.currentElement = null; // NOPMD (ensure this element is not used again)
+					this.currentElement = null;
 					this.stepBack();
 				}
 			} while (cond && this.currentIterator.hasNext() && !this.iteratorStack.isEmpty());
@@ -189,7 +181,6 @@ public final class ClassNameIterator extends AbstractKDMIterator<String> {
 		return this.currentIterator.hasNext();
 	}
 
-	// @Override
 	/**
 	 * Returns the next class name. Call next() <b>only</b> after a previous call of {@link #hasNext()}!
 	 * 
@@ -219,7 +210,7 @@ public final class ClassNameIterator extends AbstractKDMIterator<String> {
 			this.currentIterator = iterator;
 		}
 		// Reset current element!!
-		this.currentElement = null; // NOPMD (ensure this element is not used again)
+		this.currentElement = null;
 
 		return parentName.toString();
 	}

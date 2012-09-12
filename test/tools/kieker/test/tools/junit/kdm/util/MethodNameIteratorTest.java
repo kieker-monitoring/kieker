@@ -1,3 +1,19 @@
+/***************************************************************************
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.test.tools.junit.kdm.util;
 
 import java.util.Iterator;
@@ -129,7 +145,7 @@ public class MethodNameIteratorTest {
 
 	@Test
 	public void testWithJPetStore() {
-		final KDMModelManager modelManager = new KDMModelManager("..\\testdata\\outJPetStore.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("../examples/JavaEEServletContainerExample/JPetStore-KDM.xmi");
 		try {
 			// Get some methods
 			Iterator<MethodDescription> methodIterator = modelManager.iterateMethodsFromInterface("org.mybatis.jpetstore.persistence.AccountMapper");
@@ -175,7 +191,7 @@ public class MethodNameIteratorTest {
 
 	@Test
 	public void testMethodsFromCSharpClass() {
-		final KDMModelManager modelManager = new KDMModelManager("..\\testdata\\SharpDevelop.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("tmp/SharpDevelop.xmi");
 		try {
 			// Get some methods
 			final String key = "ICSharpCode.FormsDesigner.Services.ImageResourceEditor";
@@ -186,8 +202,12 @@ public class MethodNameIteratorTest {
 				l.add(p);
 			}
 
-			final String[] values = new String[] { "public System.Drawing.Desig.UITypeEditorEditStyle GetEditStyle", "public object EditValue",
-				"public bool GetPaintValueSupported", "public void PaintValue" };
+			final String[] values = new String[] {
+				"public System.Drawing.Desig.UITypeEditorEditStyle GetEditStyle",
+				"public object EditValue",
+				"public bool GetPaintValueSupported",
+				"public void PaintValue",
+			};
 			Assert.assertArrayEquals(values, l.toArray());
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -197,7 +217,7 @@ public class MethodNameIteratorTest {
 	@Test
 	public void testMethodsFromCSharpInterface() {
 		// More then one million lines of code and no InterfaceUnit containing some attributes or methods...so test another class...
-		final KDMModelManager modelManager = new KDMModelManager("..\\testdata\\SharpDevelop.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("tmp/SharpDevelop.xmi");
 		try {
 			final String key = "ICSharpCode.XamlBinding.PowerToys.Dialogs.DragDropMarkerAdorner";
 			// Get some methods
@@ -208,9 +228,13 @@ public class MethodNameIteratorTest {
 				l.add(p);
 			}
 
-			final String[] values = new String[] { "protected void OnRender", "protected System.Window.Size MeasureOverride",
-				"protected System.Window.Size ArrangeOverride", "public ICSharpCode.XamlBinding.PowerToys.Dialog.DragDropMarkerAdorner CreateAdornerContentMove",
-				"public ICSharpCode.XamlBinding.PowerToys.Dialog.DragDropMarkerAdorner CreateAdornerCellMove" };
+			final String[] values = new String[] {
+				"protected void OnRender",
+				"protected System.Window.Size MeasureOverride",
+				"protected System.Window.Size ArrangeOverride",
+				"public ICSharpCode.XamlBinding.PowerToys.Dialog.DragDropMarkerAdorner CreateAdornerContentMove",
+				"public ICSharpCode.XamlBinding.PowerToys.Dialog.DragDropMarkerAdorner CreateAdornerCellMove",
+			};
 			Assert.assertArrayEquals(values, l.toArray());
 		} catch (final Exception e) {
 			e.printStackTrace();

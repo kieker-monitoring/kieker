@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,9 +31,6 @@ import kieker.tools.kdm.manager.util.descriptions.MethodDescription;
  * This class provides an iterator for all methods within the given {@link ClassUnit}, {@link InterfaceUnit} or list of {@link AbstractCodeElement}.
  * 
  * @author Benjamin Harms
- * 
- * @version 1.0
- * 
  */
 public final class MethodNameIterator extends AbstractKDMIterator<MethodDescription> {
 	/**
@@ -84,7 +77,6 @@ public final class MethodNameIterator extends AbstractKDMIterator<MethodDescript
 		this.nameStak.push(fullInterfaceName);
 	}
 
-	// @Override
 	/**
 	 * Returns true if the iterator has more elements, otherwise false.
 	 */
@@ -109,7 +101,7 @@ public final class MethodNameIterator extends AbstractKDMIterator<MethodDescript
 					// Else try again
 					cond = true;
 					// Reset current element!!
-					this.currentElement = null; // NOPMD (ensure this element is not used again)
+					this.currentElement = null;
 					this.stepBack();
 				}
 			} while (cond && this.currentIterator.hasNext() && !this.iteratorStack.isEmpty());
@@ -118,7 +110,6 @@ public final class MethodNameIterator extends AbstractKDMIterator<MethodDescript
 		return this.currentIterator.hasNext();
 	}
 
-	// @Override
 	/**
 	 * Returns the next method description. Call next() <b>only</b> after a previous call of {@link #hasNext()}!
 	 * 
@@ -139,7 +130,7 @@ public final class MethodNameIterator extends AbstractKDMIterator<MethodDescript
 		final MethodDescription description = new MethodDescription(methodUnit, qualifier);
 
 		// Reset current element!!
-		this.currentElement = null; // NOPMD (ensure this element is not used again)
+		this.currentElement = null;
 
 		return description;
 	}

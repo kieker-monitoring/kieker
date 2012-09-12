@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -97,7 +93,6 @@ public class NamespaceNameIterator extends AbstractKDMIterator<String> {
 		this.nameStak.push(fullNamespaceName);
 	}
 
-	// @Override
 	/**
 	 * This method tries to find another element.
 	 * 
@@ -157,7 +152,7 @@ public class NamespaceNameIterator extends AbstractKDMIterator<String> {
 					// Else try again
 					cond = true;
 					// Reset current element!!
-					this.currentElement = null; // NOPMD (ensure this element is not used again)
+					this.currentElement = null;
 					this.stepBack();
 				}
 			} while (cond && this.currentIterator.hasNext() && !this.iteratorStack.isEmpty());
@@ -166,7 +161,6 @@ public class NamespaceNameIterator extends AbstractKDMIterator<String> {
 		return this.currentIterator.hasNext();
 	}
 
-	// @Override
 	/**
 	 * Returns the next namespace name. Call next() <b>only</b> after a previous call of {@link #hasNext()}!
 	 * 
@@ -198,7 +192,7 @@ public class NamespaceNameIterator extends AbstractKDMIterator<String> {
 			this.currentIterator = iterator;
 		}
 		// Reset current element!!
-		this.currentElement = null; // NOPMD (ensure this element is not used again)
+		this.currentElement = null;
 
 		return name;
 	}
@@ -216,7 +210,7 @@ public class NamespaceNameIterator extends AbstractKDMIterator<String> {
 	 *             If no such attribute exist.
 	 */
 	private static String getValueFromAttribute(final CodeItem item, final String tag) throws NoSuchElementException {
-		if ((tag != null) && !tag.isEmpty()) {
+		if ((tag != null) && (tag.length() > 0)) {
 			for (final Attribute attribute : item.getAttribute()) {
 				if (attribute.getTag().equals(tag)) {
 					return attribute.getValue();

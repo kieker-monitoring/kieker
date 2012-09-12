@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,8 +30,6 @@ import kieker.tools.kdm.manager.util.descriptions.ParameterDescription;
  * This class provides an iterator for all parameter of the given {@link MethodUnit} or {@link Signature}.
  * 
  * @author Benjamin Harms
- * @version 1.0
- * 
  */
 public class ParameterIterator extends AbstractKDMIterator<ParameterDescription> {
 	/**
@@ -68,7 +62,6 @@ public class ParameterIterator extends AbstractKDMIterator<ParameterDescription>
 	 * @return
 	 *         True if the iterator has more elements.
 	 */
-	// @Override
 	public boolean hasNext() {
 		// If a current element exist there is one
 		if (this.currentElement != null) {
@@ -108,7 +101,7 @@ public class ParameterIterator extends AbstractKDMIterator<ParameterDescription>
 					// Else try again
 					cond = true;
 					// Reset current element!!
-					this.currentElement = null; // NOPMD (ensure this element is not used again)
+					this.currentElement = null;
 				}
 			} while (cond && this.currentIterator.hasNext());
 		}
@@ -125,7 +118,6 @@ public class ParameterIterator extends AbstractKDMIterator<ParameterDescription>
 	 *             If no other element exists.
 	 * @see #hasNext()
 	 */
-	// @Override
 	public ParameterDescription next() throws NoSuchElementException {
 		if (this.currentElement == null) {
 			throw new NoSuchElementException("No more elements");
@@ -135,7 +127,7 @@ public class ParameterIterator extends AbstractKDMIterator<ParameterDescription>
 		final ParameterDescription description = new ParameterDescription(parameterUnit);
 
 		// Reset current element!!
-		this.currentElement = null; // NOPMD (ensure this element is not used again)
+		this.currentElement = null;
 
 		return description;
 	}

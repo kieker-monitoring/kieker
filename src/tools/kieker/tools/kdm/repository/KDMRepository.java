@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +19,7 @@ package kieker.tools.kdm.repository;
 import java.io.File;
 import java.io.IOException;
 
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.analysis.repository.annotation.Repository;
 import kieker.common.configuration.Configuration;
@@ -33,19 +30,21 @@ import kieker.tools.kdm.manager.KDMModelManager;
  * used by filters to enrich the KDM instance. Internally it uses an instance of {@link KDMModelManager}.
  * 
  * @author Benjamin Harms, Nils Christian Ehmke
- * @version 1.0
  */
-@Repository(name = "KDM Repository", description = "A repository containing and managing an instance of the KDM")
+@Repository(
+		name = "KDM Repository",
+		description = "A repository containing and managing an instance of the KDM",
+		configuration = @Property(
+				name = KDMRepository.CONFIG_PROPERTY_NAME_INPUT_FILE,
+				defaultValue = "", // no default initial input file
+				description = "This is the name of the initial input file, which will be used to load the initial KDM instance."
+		))
 public final class KDMRepository extends AbstractRepository {
 
 	/**
 	 * This is the name of the configuration used to determine the initial input file, which will be used to load the initial KDM instance.
 	 */
 	public static final String CONFIG_PROPERTY_NAME_INPUT_FILE = "inputFile";
-	/**
-	 * This is the default value for the input file property.
-	 */
-	private static final String DEFAULT_PROPERTY_FILE_NAME = "";
 	/**
 	 * This field contains the KDMModelManager which is responsible for managing the KDM instance.
 	 */
@@ -84,26 +83,9 @@ public final class KDMRepository extends AbstractRepository {
 	 * 
 	 * @return A configuration object with the current configuration.
 	 */
-	// @Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-
 		configuration.setProperty(KDMRepository.CONFIG_PROPERTY_NAME_INPUT_FILE, this.inputFileName);
-
-		return configuration;
-	}
-
-	/**
-	 * Delivers the default configuration of this class.
-	 * 
-	 * @return A configuration object with the default configuration.
-	 */
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-
-		configuration.setProperty(KDMRepository.CONFIG_PROPERTY_NAME_INPUT_FILE, KDMRepository.DEFAULT_PROPERTY_FILE_NAME);
-
 		return configuration;
 	}
 

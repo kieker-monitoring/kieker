@@ -1,3 +1,19 @@
+/***************************************************************************
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.test.tools.junit.kdm.util;
 
 import java.util.HashMap;
@@ -94,37 +110,36 @@ public final class TestPackageStructure {
 	static {
 		// Generate packages
 		TestPackageStructure.segment.getModel().add(TestPackageStructure.codeModel);
-		final Package pEins, pZwei, pDrei, pVier, pFuenf, pSechs, pSieben, pAcht, pNeun, pZehn, pTest, pKdm, pOrg, pEmf, pAbc;
 
-		pEins = TestPackageStructure.codeFactory.createPackage();
+		final Package pEins = TestPackageStructure.codeFactory.createPackage();
 		pEins.setName("eins");
-		pZwei = TestPackageStructure.codeFactory.createPackage();
+		final Package pZwei = TestPackageStructure.codeFactory.createPackage();
 		pZwei.setName("zwei");
-		pDrei = TestPackageStructure.codeFactory.createPackage();
+		final Package pDrei = TestPackageStructure.codeFactory.createPackage();
 		pDrei.setName("drei");
-		pVier = TestPackageStructure.codeFactory.createPackage();
+		final Package pVier = TestPackageStructure.codeFactory.createPackage();
 		pVier.setName("vier");
-		pFuenf = TestPackageStructure.codeFactory.createPackage();
+		final Package pFuenf = TestPackageStructure.codeFactory.createPackage();
 		pFuenf.setName("fuenf");
-		pSechs = TestPackageStructure.codeFactory.createPackage();
+		final Package pSechs = TestPackageStructure.codeFactory.createPackage();
 		pSechs.setName("sechs");
-		pSieben = TestPackageStructure.codeFactory.createPackage();
+		final Package pSieben = TestPackageStructure.codeFactory.createPackage();
 		pSieben.setName("sieben");
-		pAcht = TestPackageStructure.codeFactory.createPackage();
+		final Package pAcht = TestPackageStructure.codeFactory.createPackage();
 		pAcht.setName("acht");
-		pNeun = TestPackageStructure.codeFactory.createPackage();
+		final Package pNeun = TestPackageStructure.codeFactory.createPackage();
 		pNeun.setName("neun");
-		pZehn = TestPackageStructure.codeFactory.createPackage();
+		final Package pZehn = TestPackageStructure.codeFactory.createPackage();
 		pZehn.setName("zehn");
-		pTest = TestPackageStructure.codeFactory.createPackage();
+		final Package pTest = TestPackageStructure.codeFactory.createPackage();
 		pTest.setName("test");
-		pKdm = TestPackageStructure.codeFactory.createPackage();
+		final Package pKdm = TestPackageStructure.codeFactory.createPackage();
 		pKdm.setName("kdm");
-		pOrg = TestPackageStructure.codeFactory.createPackage();
+		final Package pOrg = TestPackageStructure.codeFactory.createPackage();
 		pOrg.setName("org");
-		pEmf = TestPackageStructure.codeFactory.createPackage();
+		final Package pEmf = TestPackageStructure.codeFactory.createPackage();
 		pEmf.setName("emf");
-		pAbc = TestPackageStructure.codeFactory.createPackage();
+		final Package pAbc = TestPackageStructure.codeFactory.createPackage();
 		pAbc.setName("abc");
 
 		// Setup package map
@@ -145,26 +160,25 @@ public final class TestPackageStructure {
 		TestPackageStructure.packages.put("org.emf.abc", pAbc);
 
 		// Generate classes
-		ClassUnit cMain, cFoo, cBar, cInterfaceClass, cClassInterface, cDemo, cManager, cInput, cStream, cGlobalClass;
-		cMain = TestPackageStructure.codeFactory.createClassUnit();
+		final ClassUnit cMain = TestPackageStructure.codeFactory.createClassUnit();
 		cMain.setName("Main");
-		cFoo = TestPackageStructure.codeFactory.createClassUnit();
+		final ClassUnit cFoo = TestPackageStructure.codeFactory.createClassUnit();
 		cFoo.setName("Foo");
-		cBar = TestPackageStructure.codeFactory.createClassUnit();
+		final ClassUnit cBar = TestPackageStructure.codeFactory.createClassUnit();
 		cBar.setName("Bar");
-		cInterfaceClass = TestPackageStructure.codeFactory.createClassUnit();
+		final ClassUnit cInterfaceClass = TestPackageStructure.codeFactory.createClassUnit();
 		cInterfaceClass.setName("InterfaceClass");
-		cClassInterface = TestPackageStructure.codeFactory.createClassUnit();
+		final ClassUnit cClassInterface = TestPackageStructure.codeFactory.createClassUnit();
 		cClassInterface.setName("ClassInterface");
-		cDemo = TestPackageStructure.codeFactory.createClassUnit();
+		final ClassUnit cDemo = TestPackageStructure.codeFactory.createClassUnit();
 		cDemo.setName("Demo");
-		cManager = TestPackageStructure.codeFactory.createClassUnit();
+		final ClassUnit cManager = TestPackageStructure.codeFactory.createClassUnit();
 		cManager.setName("Manager");
-		cInput = TestPackageStructure.codeFactory.createClassUnit();
+		final ClassUnit cInput = TestPackageStructure.codeFactory.createClassUnit();
 		cInput.setName("Input");
-		cStream = TestPackageStructure.codeFactory.createClassUnit();
+		final ClassUnit cStream = TestPackageStructure.codeFactory.createClassUnit();
 		cStream.setName("Stream");
-		cGlobalClass = TestPackageStructure.codeFactory.createClassUnit();
+		final ClassUnit cGlobalClass = TestPackageStructure.codeFactory.createClassUnit();
 		cGlobalClass.setName("GlobalClass");
 
 		// Setup class map
@@ -180,18 +194,17 @@ public final class TestPackageStructure {
 		TestPackageStructure.classes.put("GlobalClass", cGlobalClass);
 
 		// Generate Interfaces
-		InterfaceUnit iIterator, iPrintable, iWritable, iGetable, iSetable, iGloablInterface;
-		iIterator = TestPackageStructure.codeFactory.createInterfaceUnit();
+		final InterfaceUnit iIterator = TestPackageStructure.codeFactory.createInterfaceUnit();
 		iIterator.setName("IIterator");
-		iPrintable = TestPackageStructure.codeFactory.createInterfaceUnit();
+		final InterfaceUnit iPrintable = TestPackageStructure.codeFactory.createInterfaceUnit();
 		iPrintable.setName("IPrintable");
-		iWritable = TestPackageStructure.codeFactory.createInterfaceUnit();
+		final InterfaceUnit iWritable = TestPackageStructure.codeFactory.createInterfaceUnit();
 		iWritable.setName("IWritable");
-		iGetable = TestPackageStructure.codeFactory.createInterfaceUnit();
+		final InterfaceUnit iGetable = TestPackageStructure.codeFactory.createInterfaceUnit();
 		iGetable.setName("IGetable");
-		iSetable = TestPackageStructure.codeFactory.createInterfaceUnit();
+		final InterfaceUnit iSetable = TestPackageStructure.codeFactory.createInterfaceUnit();
 		iSetable.setName("ISetable");
-		iGloablInterface = TestPackageStructure.codeFactory.createInterfaceUnit();
+		final InterfaceUnit iGloablInterface = TestPackageStructure.codeFactory.createInterfaceUnit();
 		iGloablInterface.setName("IGlobalInterface");
 
 		// Setup interface map
@@ -203,58 +216,54 @@ public final class TestPackageStructure {
 		TestPackageStructure.interfaces.put("IGlobalInterface", iGloablInterface);
 
 		// Generate dependencies
-		Imports importManager, importsMain;
-		Implements implementsManager;
-		Extends extendsIWritable, extendsManager, extendsGlobalClass;
-		importManager = TestPackageStructure.codeFactory.createImports();
+		final Imports importManager = TestPackageStructure.codeFactory.createImports();
 		importManager.setFrom(cManager);
 		importManager.setTo(cStream);
-		importsMain = TestPackageStructure.codeFactory.createImports();
+		final Imports importsMain = TestPackageStructure.codeFactory.createImports();
 		importsMain.setFrom(cMain);
 		importsMain.setTo(iPrintable);
-		extendsIWritable = TestPackageStructure.codeFactory.createExtends();
+		final Extends extendsIWritable = TestPackageStructure.codeFactory.createExtends();
 		extendsIWritable.setFrom(iWritable);
 		extendsIWritable.setTo(iIterator);
-		implementsManager = TestPackageStructure.codeFactory.createImplements();
+		final Implements implementsManager = TestPackageStructure.codeFactory.createImplements();
 		implementsManager.setFrom(cManager);
 		implementsManager.setTo(iSetable);
-		extendsManager = TestPackageStructure.codeFactory.createExtends();
+		final Extends extendsManager = TestPackageStructure.codeFactory.createExtends();
 		extendsManager.setFrom(cManager);
 		extendsManager.setTo(cInterfaceClass);
-		extendsGlobalClass = TestPackageStructure.codeFactory.createExtends();
+		final Extends extendsGlobalClass = TestPackageStructure.codeFactory.createExtends();
 		extendsGlobalClass.setFrom(cGlobalClass);
 		extendsGlobalClass.setTo(cFoo);
 
 		// Generate methods
-		MethodUnit mMain, mIterate, mShowA, mShowB, mShowC, mManager, mSet, mOpen, mGlobalMethod, mGlobalMaethodNext;
-		mMain = TestPackageStructure.codeFactory.createMethodUnit();
+		final MethodUnit mMain = TestPackageStructure.codeFactory.createMethodUnit();
 		mMain.setName("main()");
 		mMain.setKind(MethodKind.METHOD);
-		mIterate = TestPackageStructure.codeFactory.createMethodUnit();
+		final MethodUnit mIterate = TestPackageStructure.codeFactory.createMethodUnit();
 		mIterate.setName("iterate()");
 		mIterate.setKind(MethodKind.METHOD);
-		mShowA = TestPackageStructure.codeFactory.createMethodUnit();
+		final MethodUnit mShowA = TestPackageStructure.codeFactory.createMethodUnit();
 		mShowA.setName("showA()");
 		mShowA.setKind(MethodKind.METHOD);
-		mShowB = TestPackageStructure.codeFactory.createMethodUnit();
+		final MethodUnit mShowB = TestPackageStructure.codeFactory.createMethodUnit();
 		mShowB.setName("showB()");
 		mShowB.setKind(MethodKind.METHOD);
-		mShowC = TestPackageStructure.codeFactory.createMethodUnit();
+		final MethodUnit mShowC = TestPackageStructure.codeFactory.createMethodUnit();
 		mShowC.setName("showC()");
 		mShowC.setKind(MethodKind.METHOD);
-		mManager = TestPackageStructure.codeFactory.createMethodUnit();
+		final MethodUnit mManager = TestPackageStructure.codeFactory.createMethodUnit();
 		mManager.setName("Manager()");
 		mManager.setKind(MethodKind.CONSTRUCTOR);
-		mSet = TestPackageStructure.codeFactory.createMethodUnit();
+		final MethodUnit mSet = TestPackageStructure.codeFactory.createMethodUnit();
 		mSet.setName("set()");
 		mSet.setKind(MethodKind.METHOD);
-		mOpen = TestPackageStructure.codeFactory.createMethodUnit();
+		final MethodUnit mOpen = TestPackageStructure.codeFactory.createMethodUnit();
 		mOpen.setName("open()");
 		mOpen.setKind(MethodKind.METHOD);
-		mGlobalMethod = TestPackageStructure.codeFactory.createMethodUnit();
+		final MethodUnit mGlobalMethod = TestPackageStructure.codeFactory.createMethodUnit();
 		mGlobalMethod.setName("globalMethod()");
 		mGlobalMethod.setKind(MethodKind.METHOD);
-		mGlobalMaethodNext = TestPackageStructure.codeFactory.createMethodUnit();
+		final MethodUnit mGlobalMaethodNext = TestPackageStructure.codeFactory.createMethodUnit();
 		mGlobalMaethodNext.setName("globalMethodNext()");
 		mGlobalMaethodNext.setExport(ExportKind.PROTECTED);
 
@@ -271,56 +280,49 @@ public final class TestPackageStructure {
 		TestPackageStructure.methods.put("globalMethodNext()", mGlobalMaethodNext);
 
 		// Method calls
-		CodeRelationship crMain1, crMain2, crMain3, crShowB;
-		crMain1 = TestPackageStructure.codeFactory.createCodeRelationship();
+		final CodeRelationship crMain1 = TestPackageStructure.codeFactory.createCodeRelationship();
 		crMain1.setFrom(mMain);
 		crMain1.setTo(mShowA);
 		mMain.getCodeRelation().add(crMain1);
-		crMain2 = TestPackageStructure.codeFactory.createCodeRelationship();
+		final CodeRelationship crMain2 = TestPackageStructure.codeFactory.createCodeRelationship();
 		crMain2.setFrom(mMain);
 		crMain2.setTo(mOpen);
 		mMain.getCodeRelation().add(crMain2);
-		crMain3 = TestPackageStructure.codeFactory.createCodeRelationship();
+		final CodeRelationship crMain3 = TestPackageStructure.codeFactory.createCodeRelationship();
 		crMain3.setFrom(mMain);
 		crMain3.setTo(mGlobalMethod);
 		mMain.getCodeRelation().add(crMain3);
-		crShowB = TestPackageStructure.codeFactory.createCodeRelationship();
+		final CodeRelationship crShowB = TestPackageStructure.codeFactory.createCodeRelationship();
 		crShowB.setFrom(mShowB);
 		crShowB.setTo(mOpen);
 		mShowB.getCodeRelation().add(crShowB);
 
 		// Setup signatures
-		Signature sMain, sIterate, sShowA, sShowB, sShowC, sManager, sSet, sOpen, sGlobalMethod, sGlobalMethodNext;
-		sMain = TestPackageStructure.codeFactory.createSignature();
-		sIterate = TestPackageStructure.codeFactory.createSignature();
-		sShowA = TestPackageStructure.codeFactory.createSignature();
-		sShowB = TestPackageStructure.codeFactory.createSignature();
-		sShowC = TestPackageStructure.codeFactory.createSignature();
-		sManager = TestPackageStructure.codeFactory.createSignature();
-		sSet = TestPackageStructure.codeFactory.createSignature();
-		sOpen = TestPackageStructure.codeFactory.createSignature();
-		sGlobalMethod = TestPackageStructure.codeFactory.createSignature();
-		sGlobalMethodNext = TestPackageStructure.codeFactory.createSignature();
+		final Signature sMain = TestPackageStructure.codeFactory.createSignature();
+		final Signature sIterate = TestPackageStructure.codeFactory.createSignature();
+		final Signature sShowA = TestPackageStructure.codeFactory.createSignature();
+		final Signature sShowB = TestPackageStructure.codeFactory.createSignature();
+		final Signature sShowC = TestPackageStructure.codeFactory.createSignature();
+		final Signature sManager = TestPackageStructure.codeFactory.createSignature();
+		final Signature sSet = TestPackageStructure.codeFactory.createSignature();
+		final Signature sOpen = TestPackageStructure.codeFactory.createSignature();
+		final Signature sGlobalMethod = TestPackageStructure.codeFactory.createSignature();
+		final Signature sGlobalMethodNext = TestPackageStructure.codeFactory.createSignature();
 
 		// Types
-		VoidType tVoidType;
-		tVoidType = TestPackageStructure.codeFactory.createVoidType();
+		final VoidType tVoidType = TestPackageStructure.codeFactory.createVoidType();
 		tVoidType.setName("void");
 
-		IntegerType tIntegerType;
-		tIntegerType = TestPackageStructure.codeFactory.createIntegerType();
+		final IntegerType tIntegerType = TestPackageStructure.codeFactory.createIntegerType();
 		tIntegerType.setName("int");
 
-		CharType tCharType;
-		tCharType = TestPackageStructure.codeFactory.createCharType();
+		final CharType tCharType = TestPackageStructure.codeFactory.createCharType();
 		tCharType.setName("char");
 
-		ClassUnit tItemType;
-		tItemType = TestPackageStructure.codeFactory.createClassUnit();
+		final ClassUnit tItemType = TestPackageStructure.codeFactory.createClassUnit();
 		tItemType.setName("Item");
 
-		ArrayType tCharArrayType;
-		tCharArrayType = TestPackageStructure.codeFactory.createArrayType();
+		final ArrayType tCharArrayType = TestPackageStructure.codeFactory.createArrayType();
 		tCharArrayType.setName("char[]");
 		final IndexUnit indexUnit = TestPackageStructure.codeFactory.createIndexUnit();
 		final ItemUnit itemUnit = TestPackageStructure.codeFactory.createItemUnit();
@@ -330,87 +332,83 @@ public final class TestPackageStructure {
 		tCharArrayType.setItemUnit(itemUnit);
 
 		// Parameter units
-		ParameterUnit puReturnMain, puReturnIterate, puReturnShowA, puReturnShowB, puReturnShowC, puReturnSet, puReturnGlobalMethod, puReturnOpen, puReturnGlobalMethodNext;
-		ParameterUnit puMain, puShowA, puShowB1, puShowB2, puSet, puOpen1, puOpen2, puGlobalMethodNext;
-		puReturnMain = TestPackageStructure.codeFactory.createParameterUnit();
+		final ParameterUnit puReturnMain = TestPackageStructure.codeFactory.createParameterUnit();
 		puReturnMain.setKind(ParameterKind.RETURN);
 		puReturnMain.setType(tVoidType);
-		puReturnIterate = TestPackageStructure.codeFactory.createParameterUnit();
+		final ParameterUnit puReturnIterate = TestPackageStructure.codeFactory.createParameterUnit();
 		puReturnIterate.setKind(ParameterKind.RETURN);
 		puReturnIterate.setType(tIntegerType);
-		puReturnShowA = TestPackageStructure.codeFactory.createParameterUnit();
+		final ParameterUnit puReturnShowA = TestPackageStructure.codeFactory.createParameterUnit();
 		puReturnShowA.setKind(ParameterKind.RETURN);
 		puReturnShowA.setType(tVoidType);
-		puReturnShowB = TestPackageStructure.codeFactory.createParameterUnit();
+		final ParameterUnit puReturnShowB = TestPackageStructure.codeFactory.createParameterUnit();
 		puReturnShowB.setKind(ParameterKind.RETURN);
 		puReturnShowB.setType(tVoidType);
-		puReturnShowC = TestPackageStructure.codeFactory.createParameterUnit();
+		final ParameterUnit puReturnShowC = TestPackageStructure.codeFactory.createParameterUnit();
 		puReturnShowC.setKind(ParameterKind.RETURN);
 		puReturnShowC.setType(tIntegerType);
-		puReturnSet = TestPackageStructure.codeFactory.createParameterUnit();
+		final ParameterUnit puReturnSet = TestPackageStructure.codeFactory.createParameterUnit();
 		puReturnSet.setKind(ParameterKind.RETURN);
 		puReturnSet.setType(tVoidType);
-		puReturnGlobalMethod = TestPackageStructure.codeFactory.createParameterUnit();
+		final ParameterUnit puReturnGlobalMethod = TestPackageStructure.codeFactory.createParameterUnit();
 		puReturnGlobalMethod.setKind(ParameterKind.RETURN);
 		puReturnGlobalMethod.setType(tVoidType);
-		puReturnOpen = TestPackageStructure.codeFactory.createParameterUnit();
+		final ParameterUnit puReturnOpen = TestPackageStructure.codeFactory.createParameterUnit();
 		puReturnOpen.setKind(ParameterKind.RETURN);
 		puReturnOpen.setType(tIntegerType);
-		puReturnGlobalMethodNext = TestPackageStructure.codeFactory.createParameterUnit();
+		final ParameterUnit puReturnGlobalMethodNext = TestPackageStructure.codeFactory.createParameterUnit();
 		puReturnGlobalMethodNext.setKind(ParameterKind.RETURN);
 		puReturnGlobalMethodNext.setType(tVoidType);
 
-		puMain = TestPackageStructure.codeFactory.createParameterUnit();
+		final ParameterUnit puMain = TestPackageStructure.codeFactory.createParameterUnit();
 		puMain.setName("args");
 		puMain.setType(tCharArrayType);
-		puShowA = TestPackageStructure.codeFactory.createParameterUnit();
+		final ParameterUnit puShowA = TestPackageStructure.codeFactory.createParameterUnit();
 		puShowA.setName("count");
 		puShowA.setType(tIntegerType);
-		puShowB1 = TestPackageStructure.codeFactory.createParameterUnit();
+		final ParameterUnit puShowB1 = TestPackageStructure.codeFactory.createParameterUnit();
 		puShowB1.setName("letter");
 		puShowB1.setType(tCharType);
-		puShowB2 = TestPackageStructure.codeFactory.createParameterUnit();
+		final ParameterUnit puShowB2 = TestPackageStructure.codeFactory.createParameterUnit();
 		puShowB2.setName("count");
 		puShowB2.setType(tIntegerType);
-		puSet = TestPackageStructure.codeFactory.createParameterUnit();
+		final ParameterUnit puSet = TestPackageStructure.codeFactory.createParameterUnit();
 		puSet.setName("item");
 		puSet.setType(tItemType);
-		puOpen1 = TestPackageStructure.codeFactory.createParameterUnit();
+		final ParameterUnit puOpen1 = TestPackageStructure.codeFactory.createParameterUnit();
 		puOpen1.setName("name");
 		puOpen1.setType(tCharArrayType);
-		puOpen2 = TestPackageStructure.codeFactory.createParameterUnit();
+		final ParameterUnit puOpen2 = TestPackageStructure.codeFactory.createParameterUnit();
 		puOpen2.setName("count");
 		puOpen2.setType(tIntegerType);
-		puGlobalMethodNext = TestPackageStructure.codeFactory.createParameterUnit();
+		final ParameterUnit puGlobalMethodNext = TestPackageStructure.codeFactory.createParameterUnit();
 		puGlobalMethodNext.setName("letter");
 		puGlobalMethodNext.setType(iPrintable);
 
 		// Attributes
-		StorableUnit suISetable1, suISetable2, suISetable3;
-		Attribute attrSuISetable1, attrSuISetable2, attrSuISetable3;
 
-		attrSuISetable1 = TestPackageStructure.kdmFactory.createAttribute();
+		final Attribute attrSuISetable1 = TestPackageStructure.kdmFactory.createAttribute();
 		attrSuISetable1.setTag("export");
 		attrSuISetable1.setValue("private");
-		suISetable1 = TestPackageStructure.codeFactory.createStorableUnit();
+		final StorableUnit suISetable1 = TestPackageStructure.codeFactory.createStorableUnit();
 		suISetable1.setKind(StorableKind.LOCAL);
 		suISetable1.setName("length");
 		suISetable1.setType(tIntegerType);
 		suISetable1.getAttribute().add(attrSuISetable1);
 
-		attrSuISetable2 = TestPackageStructure.kdmFactory.createAttribute();
+		final Attribute attrSuISetable2 = TestPackageStructure.kdmFactory.createAttribute();
 		attrSuISetable2.setTag("export");
 		attrSuISetable2.setValue("protected");
-		suISetable2 = TestPackageStructure.codeFactory.createStorableUnit();
+		final StorableUnit suISetable2 = TestPackageStructure.codeFactory.createStorableUnit();
 		suISetable2.setKind(StorableKind.GLOBAL);
 		suISetable2.setName("letter");
 		suISetable2.setType(tCharArrayType);
 		suISetable2.getAttribute().add(attrSuISetable2);
 
-		attrSuISetable3 = TestPackageStructure.kdmFactory.createAttribute();
+		final Attribute attrSuISetable3 = TestPackageStructure.kdmFactory.createAttribute();
 		attrSuISetable3.setTag("export");
 		attrSuISetable3.setValue("public final");
-		suISetable3 = TestPackageStructure.codeFactory.createStorableUnit();
+		final StorableUnit suISetable3 = TestPackageStructure.codeFactory.createStorableUnit();
 		suISetable3.setKind(StorableKind.STATIC);
 		suISetable3.setName("dings");
 		suISetable3.setType(cFoo);

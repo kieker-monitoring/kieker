@@ -1,3 +1,19 @@
+/***************************************************************************
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.test.tools.junit.kdm.util;
 
 import java.util.Iterator;
@@ -107,7 +123,7 @@ public class PackageNameIteratorTest {
 
 	@Test
 	public void testWithPetStore() {
-		final KDMModelManager modelManager = new KDMModelManager("..\\testdata\\outJPetStore.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("../examples/JavaEEServletContainerExample/JPetStore-KDM.xmi");
 		try {
 			// First level
 			final Iterator<String> itOrg = modelManager.iteratePackages();
@@ -132,8 +148,14 @@ public class PackageNameIteratorTest {
 				l.add(p);
 			}
 
-			Assert.assertArrayEquals(new String[] { "org.mybatis.jpetstore.domain", "org.mybatis.jpetstore.exclude", "org.mybatis.jpetstore.persistence",
-				"org.mybatis.jpetstore.service", "org.mybatis.jpetstore.web" }, l.toArray());
+			Assert.assertArrayEquals(
+					new String[] {
+						"org.mybatis.jpetstore.domain",
+						"org.mybatis.jpetstore.exclude",
+						"org.mybatis.jpetstore.persistence",
+						"org.mybatis.jpetstore.service",
+						"org.mybatis.jpetstore.web",
+					}, l.toArray());
 		} catch (final InvalidPackageException e) {
 			e.printStackTrace();
 		}
@@ -141,7 +163,7 @@ public class PackageNameIteratorTest {
 
 	@Test
 	public void testBasePackagesWithPetStore() {
-		final KDMModelManager modelManager = new KDMModelManager("..\\testdata\\outJPetStore.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("../examples/JavaEEServletContainerExample/JPetStore-KDM.xmi");
 		final Iterator<String> it = modelManager.iteratePackages();
 		final List<String> l = new LinkedList<String>();
 		while (it.hasNext()) {
@@ -165,7 +187,15 @@ public class PackageNameIteratorTest {
 			l.add(p);
 		}
 
-		Assert.assertArrayEquals(new String[] { "test.zwei.drei", "test.zwei.fuenf", "test.zwei.sechs", "test.zwei.sieben", "test.zwei.acht", "test.zwei.neun",
-			"test.zwei.zehn" }, l.toArray());
+		Assert.assertArrayEquals(
+				new String[] {
+					"test.zwei.drei",
+					"test.zwei.fuenf",
+					"test.zwei.sechs",
+					"test.zwei.sieben",
+					"test.zwei.acht",
+					"test.zwei.neun",
+					"test.zwei.zehn",
+				}, l.toArray());
 	}
 }

@@ -34,7 +34,7 @@
 	<classpathentry kind="lib" path="lib/org.eclipse.emf.common_2.8.0.v20120606-0717.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore.xmi_2.8.0.v20120606-0717.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore_2.8.0.v20120606-0717.jar"/>
-	<classpathentry kind="lib" path="lib/org.eclipse.gmt.modisco.omg.kdm_0.9.2.v201202151138.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.gmt.modisco.omg.kdm_0.10.0.v201206130817.jar"/>
 	<classpathentry kind="lib" path="lib/org.springframework.context-3.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/org.springframework.web-3.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/sigar-1.6.4.jar"/>

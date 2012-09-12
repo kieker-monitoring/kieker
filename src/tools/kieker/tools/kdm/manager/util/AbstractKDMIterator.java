@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,8 +29,6 @@ import org.eclipse.gmt.modisco.omg.kdm.core.ModelElement;
  *            The type of the iterator.
  * 
  * @author Benjamin Harms
- * 
- * @version 1.0
  */
 public abstract class AbstractKDMIterator<T> implements Iterator<T> {
 	/**
@@ -112,12 +106,7 @@ public abstract class AbstractKDMIterator<T> implements Iterator<T> {
 		return name;
 	}
 
-	/**
-	 * Not implemented.
-	 */
-	// @Override
-	public void remove() { // NOPMD (Not necessary)
-		// Not necessary
+	public void remove() {
+		throw new UnsupportedOperationException();
 	}
-
 }

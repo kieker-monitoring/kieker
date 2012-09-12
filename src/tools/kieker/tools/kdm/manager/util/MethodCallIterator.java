@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,8 +34,6 @@ import org.eclipse.gmt.modisco.omg.kdm.core.KDMEntity;
  * This class provides an iterator for all method calls from the given {@link MethodUnit}.
  * 
  * @author Benjamin Harms
- * @version 1.0
- * 
  */
 public class MethodCallIterator extends AbstractKDMIterator<String> {
 	/**
@@ -60,7 +54,6 @@ public class MethodCallIterator extends AbstractKDMIterator<String> {
 	 * @return
 	 *         True if the iterator has more elements.
 	 */
-	// @Override
 	public boolean hasNext() {
 		// If a current element exist there is one
 		if (this.currentElement != null) {
@@ -90,7 +83,7 @@ public class MethodCallIterator extends AbstractKDMIterator<String> {
 					// Else try again
 					cond = true;
 					// Reset current element!!
-					this.currentElement = null; // NOPMD (ensure this element is not used again)
+					this.currentElement = null;
 				}
 			} while (cond && this.currentIterator.hasNext());
 		}
@@ -108,7 +101,6 @@ public class MethodCallIterator extends AbstractKDMIterator<String> {
 	 *             If no other element exists.
 	 * @see #hasNext()
 	 */
-	// @Override
 	public String next() throws NoSuchElementException {
 		if (this.currentElement == null) {
 			throw new NoSuchElementException("No more elements");
@@ -131,7 +123,7 @@ public class MethodCallIterator extends AbstractKDMIterator<String> {
 		relationship.append(toMethod.getName());
 
 		// Reset current element!!
-		this.currentElement = null; // NOPMD (ensure this element is not used again)
+		this.currentElement = null;
 
 		return relationship.toString();
 	}
@@ -171,7 +163,7 @@ public class MethodCallIterator extends AbstractKDMIterator<String> {
 				// Get the next container
 				currentElement = interfaze.eContainer();
 			} else {
-				currentElement = null; // NOPMD (avoid infinite loop)
+				currentElement = null;
 			}
 		}
 		// Keep the wrong order in mind

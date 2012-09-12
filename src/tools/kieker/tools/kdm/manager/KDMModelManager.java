@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -108,9 +104,8 @@ import kieker.tools.kdm.manager.util.descriptions.ParameterDescription;
  * has mostly been developed to store Java-Code within the Code-Model of the instance.
  * 
  * @author Nils Christian Ehmke, Benjamin Harms
- * @version 1.0
  */
-public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck, ClassFanOutComplexityCheck)
+public final class KDMModelManager {
 
 	/***************************************************************************************************************************************************************
 	 * The following part should only contain the members of the class.
@@ -344,12 +339,12 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 		} catch (final IOException ex) {
 			final IOException newEx = new IOException("Error loading file '" + file.getAbsolutePath() + "'.");
 			newEx.initCause(ex);
-			throw newEx; // NOPMD (cause is set above)
-		} catch (final Exception ex) { // NOPMD NOCS (illegal catch)
+			throw newEx;
+		} catch (final Exception ex) {
 			// Some exceptions like the XMIException can be thrown during loading although it cannot be seen. Catch this situation.
 			final IOException newEx = new IOException("The given file '" + file.getAbsolutePath() + "' is not a valid model file.");
 			newEx.initCause(ex);
-			throw newEx; // NOPMD (cause is set above)
+			throw newEx;
 		}
 	}
 
@@ -385,7 +380,7 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 		resource.getContents().add(this.segment);
 
 		// Make sure that the method uses utf8 instead of ascii.
-		final Map<String, String> options = new HashMap<String, String>(); // NOPMD (No concurrent access)
+		final Map<String, String> options = new HashMap<String, String>();
 		options.put(XMLResource.OPTION_ENCODING, "UTF-8");
 
 		// Now try to save the resource.
@@ -475,7 +470,7 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 	 * @param packageName
 	 *            The name of the package. This can be empty, but <b>not</b> null.
 	 */
-	public void addClass(final String[] className, final String[] packageName) { // NOCS (JavaNCSSCheck, CyclomaticComplexityCheck)
+	public void addClass(final String[] className, final String[] packageName) {
 		// What we do:
 		// 1) We try to find a package with the given name. If it doesn't exist, we throw an exception.
 		// 2) We run through the class-array and add the nested classes to the model if necessary. Keep in mind that a class can be either in a package, a class or
@@ -584,7 +579,7 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 	 * @param packageName
 	 *            The name of the package.
 	 */
-	public void addInterface(final String[] interfaceName, final String[] packageName) { // NOCS (JavaNCSSCheck, CyclomaticComplexityCheck)
+	public void addInterface(final String[] interfaceName, final String[] packageName) {
 		// Compute full package name
 		final String fullPackageName = KDMModelManager.assembleFullQualifiedName(packageName);
 		final Package pack;
@@ -779,8 +774,8 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 	 * @param packageName
 	 *            The name of the package. Multiple entries within the array are interpreted as nested packages.
 	 */
-	public void addMethod(final boolean isStatic, final boolean isConstructor, final String returnType, // NOCS (JavaNCSSCheck, CyclomaticComplexityCheck)
-			final String visibilityModifier, final String[] parameters, final String methodName, final String[] className, final String[] packageName) {
+	public void addMethod(final boolean isStatic, final boolean isConstructor, final String returnType, final String visibilityModifier, final String[] parameters,
+			final String methodName, final String[] className, final String[] packageName) {
 		// Assemble the full class name
 		final String fullClassName = KDMModelManager.assembleFullQualifiedName(className);
 		ClassUnit clazz;
@@ -792,7 +787,7 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 			final String fullClassQualifier = KDMModelManager.assembleFullQualifiedName(packageName, className);
 			clazz = this.classes.get(fullClassQualifier);
 		} else {
-			clazz = null; // NOPMD
+			clazz = null;
 		}
 
 		// Looks like we could add the method. Check whether it exists already by using the parameters and everything to identify the method uniquely.
@@ -1720,7 +1715,7 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 	 *             If no such attribute exist.
 	 */
 	private static String getValueFromAttribute(final CodeItem item, final String tag) throws NoSuchElementException {
-		if ((tag != null) && !tag.isEmpty()) {
+		if ((tag != null) && (tag.length() > 0)) {
 			for (final Attribute attribute : item.getAttribute()) {
 				if (attribute.getTag().equals(tag)) {
 					return attribute.getValue();
@@ -1841,7 +1836,7 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 	 * @param typeName
 	 *            The typeName to be created.
 	 */
-	private void createDatatype(final String typeName) { // NOCS (JavaNCSSCheck, CyclomaticComplexityCheck)
+	private void createDatatype(final String typeName) {
 		final String pureTypeName;
 
 		if (typeName.contains("[]")) {
@@ -1936,7 +1931,7 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 	 * @param cModel
 	 *            Elements from this {@link CodeModel} will be added to the hash maps.
 	 */
-	private void initializeHashMaps(final CodeModel cModel) { // NOCS (JavaNCSSCheck, CyclomaticComplexityCheck)
+	private void initializeHashMaps(final CodeModel cModel) {
 		// Check the model first
 		if ((cModel == null) || (cModel.getCodeElement() == null)) {
 			KDMModelManager.LOG.severe("Hash map initialization faild because the code model is null.");
@@ -2245,7 +2240,7 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 				// Get the next container
 				currentElement = interfaze.eContainer();
 			} else {
-				currentElement = null; // NOPMD (avoid infinite loop)
+				currentElement = null;
 			}
 		}
 		// Keep the wrong order in mind
@@ -2285,7 +2280,7 @@ public final class KDMModelManager { // NOCS (ClassDataAbstractionCouplingCheck,
 				} else if (currentItem instanceof InterfaceUnit) {
 					currentItem = currentItem.eContainer();
 				} else {
-					currentItem = null; // NOPMD (avoid infinite loop)
+					currentItem = null;
 				}
 			}
 			// Keep the wrong order in mind

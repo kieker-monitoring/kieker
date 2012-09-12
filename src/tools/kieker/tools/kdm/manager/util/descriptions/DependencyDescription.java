@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -205,7 +201,7 @@ public class DependencyDescription {
 				parts.add(interfaceUnit.getName());
 				parentElement = parentElement.eContainer();
 			} else {
-				parentElement = null; // NOPMD (avoid infinite loop)
+				parentElement = null;
 			}
 		}
 
@@ -291,7 +287,7 @@ public class DependencyDescription {
 	public String getFullName() {
 		final StringBuilder fullName = new StringBuilder();
 		// Assemble full name
-		if (!this.fullParentName.isEmpty()) {
+		if (this.fullParentName.length() > 0) {
 			fullName.append(this.fullParentName);
 			if (!this.fullParentName.endsWith(".")) {
 				fullName.append('.');

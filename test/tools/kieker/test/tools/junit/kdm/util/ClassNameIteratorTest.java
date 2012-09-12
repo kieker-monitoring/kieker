@@ -1,3 +1,19 @@
+/***************************************************************************
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.test.tools.junit.kdm.util;
 
 import java.util.Iterator;
@@ -15,15 +31,12 @@ import kieker.tools.kdm.manager.exception.InvalidNamespaceException;
 import kieker.tools.kdm.manager.util.ClassNameIterator;
 
 /**
- * 
- * 
  * @author Benjamin Harms
- * 
  */
 public class ClassNameIteratorTest {
 	private final CodeModel codeModel = TestPackageStructure.getCodeModel();
 	private final Map<String, Package> packages = TestPackageStructure.getPackages();
-	private final KDMModelManager modelManager = new KDMModelManager("..\\testdata\\NAnt-p1.xmi");
+	private final KDMModelManager modelManager = new KDMModelManager("tmp/NAnt-p1.xmi");
 
 	/**
 	 * Default constructor.
@@ -170,10 +183,18 @@ public class ClassNameIteratorTest {
 				final String name = it.next();
 				l.add(name);
 			}
-			final String[] values = new String[] { "NAnt.SourceControl.Tasks.AbstractCvsTask", "NAnt.SourceControl.Tasks.AbstractSourceControlTask",
-				"NAnt.SourceControl.Tasks.ChangeLogTask", "NAnt.SourceControl.Tasks.CheckoutTask", "NAnt.SourceControl.Tasks.CvsPass",
-				"NAnt.SourceControl.Tasks.CvsTask", "NAnt.SourceControl.Tasks.ExportTask", "NAnt.SourceControl.Tasks.RTagTask", "NAnt.SourceControl.Tasks.TagTask",
-				"NAnt.SourceControl.Tasks.UpdateTask" };
+			final String[] values = new String[] {
+				"NAnt.SourceControl.Tasks.AbstractCvsTask",
+				"NAnt.SourceControl.Tasks.AbstractSourceControlTask",
+				"NAnt.SourceControl.Tasks.ChangeLogTask",
+				"NAnt.SourceControl.Tasks.CheckoutTask",
+				"NAnt.SourceControl.Tasks.CvsPass",
+				"NAnt.SourceControl.Tasks.CvsTask",
+				"NAnt.SourceControl.Tasks.ExportTask",
+				"NAnt.SourceControl.Tasks.RTagTask",
+				"NAnt.SourceControl.Tasks.TagTask",
+				"NAnt.SourceControl.Tasks.UpdateTask",
+			};
 
 			Assert.assertArrayEquals(values, l.toArray());
 		} catch (final InvalidNamespaceException e) {

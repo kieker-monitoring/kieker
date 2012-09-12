@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +24,7 @@ import java.util.StringTokenizer;
 
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
@@ -49,10 +46,15 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
  * The received data won't be filtered, which means there is no reason for forwarding the data.
  * 
  * @author Benjamin Harms, Nils Christian Ehmke
- * @version 1.0
  */
-@Plugin(name = "Dynamic KDM Extractor", description = "A plugin extracting information for an instance of the KDM from monitored data",
-		repositoryPorts = @RepositoryPort(name = KDMExtractorFilter.REPOSITORY_PORT_NAME_KDM_MODEL, repositoryType = KDMRepository.class))
+@Plugin(name = "Dynamic KDM Extractor",
+		description = "A plugin extracting information for an instance of the KDM from monitored data",
+		repositoryPorts = @RepositoryPort(name = KDMExtractorFilter.REPOSITORY_PORT_NAME_KDM_MODEL, repositoryType = KDMRepository.class),
+		configuration = @Property(
+				name = KDMExtractorFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILE,
+				defaultValue = "", // no default output file
+				description = "This is the name of the output file, which will be used to save the resulting KDM instance."
+		))
 public final class KDMExtractorFilter extends AbstractFilterPlugin {
 	/**
 	 * This is the name of the configuration used to determine the output file, which will be used to save the resulting KDM instance.
@@ -75,13 +77,9 @@ public final class KDMExtractorFilter extends AbstractFilterPlugin {
 	 */
 	private static final Log LOG = LogFactory.getLog(KDMExtractorFilter.class);
 	/**
-	 * This is the default value for the output file property.
-	 */
-	private static final String DEFAULT_PROPERTY_FILE_NAME = "";
-	/**
 	 * This field contains the repository to be enriched, directly after the method {@link #init()} has been called.
 	 */
-	private KDMRepository repository;
+	private volatile KDMRepository repository;
 	/**
 	 * This is the output file used to save the resulting model.
 	 */
@@ -95,8 +93,7 @@ public final class KDMExtractorFilter extends AbstractFilterPlugin {
 	 */
 	public KDMExtractorFilter(final Configuration configuration) {
 		super(configuration);
-
-		this.outputFileName = configuration.getStringProperty(KDMExtractorFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILE);
+		this.outputFileName = configuration.getPathProperty(KDMExtractorFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILE);
 	}
 
 	/**
@@ -104,26 +101,9 @@ public final class KDMExtractorFilter extends AbstractFilterPlugin {
 	 * 
 	 * @return A configuration object with the current configuration.
 	 */
-	// @Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-
 		configuration.setProperty(KDMExtractorFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILE, this.outputFileName);
-
-		return configuration;
-	}
-
-	/**
-	 * Delivers the default configuration of this class. This is usually an empty configuration.
-	 * 
-	 * @return A configuration object with the default configuration.
-	 */
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-
-		configuration.setProperty(KDMExtractorFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILE, KDMExtractorFilter.DEFAULT_PROPERTY_FILE_NAME);
-
 		return configuration;
 	}
 
@@ -148,12 +128,14 @@ public final class KDMExtractorFilter extends AbstractFilterPlugin {
 	 */
 	@Override
 	public void terminate(final boolean error) {
-		try {
-			if (this.outputFileName.length() > 0) {
-				this.repository.saveToFile(this.outputFileName);
+		if (!error) {
+			try {
+				if (this.outputFileName.length() > 0) {
+					this.repository.saveToFile(this.outputFileName);
+				}
+			} catch (final IOException ex) {
+				KDMExtractorFilter.LOG.error("Could not save repository state.", ex);
 			}
-		} catch (final IOException ex) {
-			KDMExtractorFilter.LOG.error("Could not save repository state.", ex);
 		}
 	}
 
@@ -229,7 +211,6 @@ public final class KDMExtractorFilter extends AbstractFilterPlugin {
 	 * {@link KDMExtractorFilter} we can use it without getter-methods.
 	 * 
 	 * @author Nils Christian Ehmke
-	 * @version 1.0
 	 */
 	private static final class MethodInformation {
 		/**
@@ -441,6 +422,5 @@ public final class KDMExtractorFilter extends AbstractFilterPlugin {
 
 			return new MethodInformation(packageNames, classNames, parameters, methodName, returnType, isStatic, isConstructor, visibilityModifier);
 		}
-
 	}
 }
