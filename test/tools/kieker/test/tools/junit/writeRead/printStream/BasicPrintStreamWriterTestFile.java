@@ -83,11 +83,7 @@ public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTes
 			}
 		} finally {
 			if (f != null) {
-				try {
-					f.close();
-				} catch (final IOException ignored) {
-					Assert.fail("Failed to close stream for file " + theFile.getAbsolutePath());
-				}
+				f.close();
 			}
 		}
 		return new String(buffer, BasicPrintStreamWriterTestFile.ENCODING);

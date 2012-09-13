@@ -107,16 +107,12 @@ public abstract class AbstractTraceWriterFilterTest {
 		return execTrace;
 	}
 
-	private InvalidExecutionTrace createInvalidExecutionTrace() {
+	private InvalidExecutionTrace createInvalidExecutionTrace() throws InvalidTraceException {
 		final ExecutionTrace execTrace = new ExecutionTrace(AbstractTraceWriterFilterTest.TRACE_ID_VALID_EXEC_TRACE);
-		try {
-			execTrace.add(this.execFactory.createBookstoreExecution_exec1_1__catalog_getBook(AbstractTraceWriterFilterTest.TRACE_ID_INVALID_EXEC_TRACE,
-					AbstractTraceWriterFilterTest.SESSION_ID, AbstractTraceWriterFilterTest.HOSTNAME,
-					AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_INVALID_EXEC_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry1_1__catalog_getBook,
-					AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_INVALID_EXEC_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit1_1__catalog_getBook));
-		} catch (final InvalidTraceException e) { // this must not happen here
-			Assert.fail("Test invalid: failed to add record");
-		}
+		execTrace.add(this.execFactory.createBookstoreExecution_exec1_1__catalog_getBook(AbstractTraceWriterFilterTest.TRACE_ID_INVALID_EXEC_TRACE,
+				AbstractTraceWriterFilterTest.SESSION_ID, AbstractTraceWriterFilterTest.HOSTNAME,
+				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_INVALID_EXEC_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry1_1__catalog_getBook,
+				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_INVALID_EXEC_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit1_1__catalog_getBook));
 
 		try {
 			execTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
@@ -166,11 +162,7 @@ public abstract class AbstractTraceWriterFilterTest {
 			}
 		} finally {
 			if (f != null) {
-				try {
-					f.close();
-				} catch (final IOException ignored) {
-					Assert.fail("Failed to close stream for file " + this.outputFile.getAbsolutePath());
-				}
+				f.close();
 			}
 		}
 		return new String(buffer, AbstractTraceWriterFilterTest.ENCODING);
