@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.eclipse.gmt.modisco.omg.kdm.code.InterfaceUnit;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.tools.kdm.manager.KDMModelManager;
@@ -29,10 +30,13 @@ import kieker.tools.kdm.manager.exception.InvalidClassException;
 import kieker.tools.kdm.manager.util.AttributeIterator;
 import kieker.tools.kdm.manager.util.descriptions.AttributeDescription;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.tools.util.kdm.ProvidePackageStructure;
+
 /**
  * @author Nils Christian Ehmke, Benjamin Harms
  */
-public class AttributeIteratorTest {
+public class AttributeIteratorTest extends AbstractKiekerTest {
 
 	public AttributeIteratorTest() {
 		// Not necessary
@@ -40,7 +44,7 @@ public class AttributeIteratorTest {
 
 	@Test
 	public void testAttributesFromClass() throws InvalidClassException {
-		final String path = "../examples/JavaEEServletContainerExample/JPetStore-KDM.xmi";
+		final String path = "examples/kdm/JPetStore.xmi";
 		final KDMModelManager modelManager = new KDMModelManager(path);
 		final String className = "org.mybatis.jpetstore.domain.Signon";
 		final Iterator<AttributeDescription> it = modelManager.iterateAttributesFromClass(className);
@@ -56,7 +60,7 @@ public class AttributeIteratorTest {
 	@Test
 	public void testAttributesFromInterface() {
 		final String key = "test.zwei.zehn.ISetable";
-		final InterfaceUnit interfaze = TestPackageStructure.getInterfaces().get(key);
+		final InterfaceUnit interfaze = ProvidePackageStructure.getInterfaces().get(key);
 		final Iterator<AttributeDescription> it = new AttributeIterator(interfaze);
 		final List<String> l = new LinkedList<String>();
 		while (it.hasNext()) {
@@ -67,9 +71,10 @@ public class AttributeIteratorTest {
 		Assert.assertArrayEquals(values, l.toArray());
 	}
 
+	@Ignore
 	@Test
 	public void testAttributeFromCSharpClassOnlyStorableUnits() throws InvalidClassException {
-		final String path = "tmp/SharpDevelop.xmi";
+		final String path = "examples/kdm/SharpDevelop.xmi";
 		final KDMModelManager modelManager = new KDMModelManager(path);
 		final String key = "ICSharpCode.CodeAnalysis.SuppressMessageCommand";
 		final Iterator<AttributeDescription> it = modelManager.iterateAttributesFromClass(key);
@@ -82,9 +87,10 @@ public class AttributeIteratorTest {
 		Assert.assertArrayEquals(values, l.toArray());
 	}
 
+	@Ignore
 	@Test
 	public void testAttributeFromCSharpClassOnlyMemberUnits() throws InvalidClassException {
-		final String path = "tmp/SharpDevelop.xmi";
+		final String path = "examples/kdm/SharpDevelop.xmi";
 		final KDMModelManager modelManager = new KDMModelManager(path);
 		final String key = "Mono.Cecil.EventReference";
 		final Iterator<AttributeDescription> it = modelManager.iterateAttributesFromClass(key);

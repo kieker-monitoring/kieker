@@ -24,6 +24,7 @@ import java.util.Map;
 import org.eclipse.gmt.modisco.omg.kdm.code.MethodUnit;
 import org.eclipse.gmt.modisco.omg.kdm.code.Signature;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.tools.kdm.manager.KDMModelManager;
@@ -33,13 +34,14 @@ import kieker.tools.kdm.manager.util.ParameterIterator;
 import kieker.tools.kdm.manager.util.descriptions.MethodDescription;
 import kieker.tools.kdm.manager.util.descriptions.ParameterDescription;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.tools.util.kdm.ProvidePackageStructure;
+
 /**
- * 
  * @author Benjamin Harms
- * 
  */
-public class ParameterIteratorTest {
-	private final Map<String, MethodUnit> methods = TestPackageStructure.getMethods();
+public class ParameterIteratorTest extends AbstractKiekerTest {
+	private final Map<String, MethodUnit> methods = ProvidePackageStructure.getMethods();
 
 	public ParameterIteratorTest() {
 		// Not necessary
@@ -136,7 +138,7 @@ public class ParameterIteratorTest {
 
 	@Test
 	public void testWithJPetStore() throws InvalidClassException, InvalidMethodException {
-		final KDMModelManager modelManager = new KDMModelManager("../examples/JavaEEServletContainerExample/JPetStore-KDM.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("examples/kdm/JPetStore.xmi");
 		// Get some methods
 		Iterator<MethodDescription> methodIterator = modelManager.iterateMethodsFromClass("org.mybatis.jpetstore.domain.Signon");
 		Assert.assertTrue(methodIterator.hasNext());
@@ -193,9 +195,10 @@ public class ParameterIteratorTest {
 		Assert.assertArrayEquals(new Object[] { "char[] name", "int count", }, l.toArray());
 	}
 
+	@Ignore
 	@Test
 	public void testParameterFromCSharpMethod() throws InvalidClassException, InvalidMethodException {
-		final KDMModelManager modelManager = new KDMModelManager("tmp/SharpDevelop.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("examples/kdm/SharpDevelop.xmi");
 		// Get some methods
 		final String key = "ICSharpCode.SharpDevelop.ProjectActiveConditionEvaluator";
 		final Iterator<MethodDescription> it = modelManager.iterateMethodsFromClass(key);

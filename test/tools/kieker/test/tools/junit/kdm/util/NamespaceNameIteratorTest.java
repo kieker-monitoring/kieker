@@ -21,23 +21,27 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.tools.kdm.manager.KDMModelManager;
 import kieker.tools.kdm.manager.exception.InvalidNamespaceException;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * @author Nils Christian Ehmke, Benjamin Harms
  */
-public class NamespaceNameIteratorTest {
+public class NamespaceNameIteratorTest extends AbstractKiekerTest {
 
 	public NamespaceNameIteratorTest() {
 		// empty default constructor
 	}
 
+	@Ignore
 	@Test
 	public void testGlobalNamespaces() {
-		final KDMModelManager modelManager = new KDMModelManager("tmp/NAnt-p1.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("examples/kdm/NAnt-p1.xmi");
 		final Iterator<String> it = modelManager.iterateNamespaces();
 		final List<String> l = new LinkedList<String>();
 		while (it.hasNext()) {
@@ -48,9 +52,10 @@ public class NamespaceNameIteratorTest {
 		Assert.assertArrayEquals(values, l.toArray());
 	}
 
+	@Ignore
 	@Test
 	public void testNoNamespaces() throws InvalidNamespaceException {
-		final KDMModelManager modelManager = new KDMModelManager("tmp/NAnt-p1.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("examples/kdm/NAnt-p1.xmi");
 		final String key = "NDoc.Documenter.NAnt";
 		final Iterator<String> it = modelManager.iterateNamespaces(key);
 		final List<String> l = new LinkedList<String>();
@@ -62,9 +67,10 @@ public class NamespaceNameIteratorTest {
 		Assert.assertArrayEquals(values, l.toArray());
 	}
 
+	@Ignore
 	@Test
 	public void testSimpleNamespace() throws InvalidNamespaceException {
-		final KDMModelManager modelManager = new KDMModelManager("tmp/NAnt-p1.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("examples/kdm/NAnt-p1.xmi");
 		final String key = "NAnt.MSNet";
 		final Iterator<String> it = modelManager.iterateNamespaces(key);
 		final List<String> l = new LinkedList<String>();
@@ -76,9 +82,10 @@ public class NamespaceNameIteratorTest {
 		Assert.assertArrayEquals(values, l.toArray());
 	}
 
+	@Ignore
 	@Test
 	public void testMultipleNamespaces() throws InvalidNamespaceException {
-		final KDMModelManager modelManager = new KDMModelManager("tmp/NAnt-p1.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("examples/kdm/NAnt-p1.xmi");
 		final String key = "NAnt.Core";
 		final Iterator<String> it = modelManager.iterateNamespaces(key);
 		final List<String> l = new LinkedList<String>();

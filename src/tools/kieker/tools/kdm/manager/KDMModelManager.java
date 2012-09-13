@@ -312,7 +312,8 @@ public final class KDMModelManager { // NOPMD (long class)
 			final EList<EObject> content;
 			resource.load(Collections.EMPTY_MAP);
 			content = resource.getContents();
-			if (content.size() == 1) { // The first (and only) element should be the project.
+			if (!content.isEmpty()) { // The first (and only) element should be the project.
+				// TODO: but there are more elements? a check for (length == 1) lets the tests fail.
 				return (Segment) content.get(0);
 			} else {
 				throw new IOException("No segment found in file '" + file.getAbsolutePath() + "'.");

@@ -16,6 +16,7 @@
 
 package kieker.test.tools.junit.kdm.util;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.Map;
 import org.eclipse.gmt.modisco.omg.kdm.code.ClassUnit;
 import org.eclipse.gmt.modisco.omg.kdm.code.InterfaceUnit;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.tools.kdm.manager.KDMModelManager;
@@ -34,12 +36,15 @@ import kieker.tools.kdm.manager.exception.InvalidPackageException;
 import kieker.tools.kdm.manager.util.DependencyIterator;
 import kieker.tools.kdm.manager.util.descriptions.DependencyDescription;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.tools.util.kdm.ProvidePackageStructure;
+
 /**
  * @author Nils Christian Ehmke, Benjamin Harms
  */
-public class DependencyIteratorTest {
-	private final Map<String, ClassUnit> classes = TestPackageStructure.getClasses();
-	private final Map<String, InterfaceUnit> interfaces = TestPackageStructure.getInterfaces();
+public class DependencyIteratorTest extends AbstractKiekerTest {
+	private final Map<String, ClassUnit> classes = ProvidePackageStructure.getClasses();
+	private final Map<String, InterfaceUnit> interfaces = ProvidePackageStructure.getInterfaces();
 
 	public DependencyIteratorTest() {
 		// Not necessary
@@ -90,8 +95,8 @@ public class DependencyIteratorTest {
 	}
 
 	@Test
-	public void testSimpleExtends2() throws InvalidInterfaceException {
-		final KDMModelManager modelManager = new KDMModelManager("tmp/InterfaceExtends.xml");
+	public void testSimpleExtends2() throws InvalidInterfaceException, IOException {
+		final KDMModelManager modelManager = new KDMModelManager("examples/kdm/InterfaceExtends.xml");
 		final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromInterface("test.Iterator");
 		final List<String> l = new LinkedList<String>();
 		while (it.hasNext()) {
@@ -136,7 +141,7 @@ public class DependencyIteratorTest {
 
 	@Test
 	public void testWithJPetStore() throws InvalidClassException, InvalidInterfaceException {
-		final KDMModelManager modelManager = new KDMModelManager("../examples/JavaEEServletContainerExample/JPetStore-KDM.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("examples/kdm/JPetStore.xmi");
 		// Class
 		final String classKey = "org.mybatis.jpetstore.domain.Signon";
 		Iterator<DependencyDescription> dependencyIterator = modelManager.iterateDependenciesFromClass(classKey);
@@ -156,9 +161,10 @@ public class DependencyIteratorTest {
 		Assert.assertArrayEquals(new String[] { "IMPORTS UNKNOWN java.util.List<E>", "IMPORTS CLASS org.mybatis.jpetstore.domain.Category" }, l.toArray());
 	}
 
+	@Ignore
 	@Test
 	public void testParentPackageImport() throws InvalidPackageException {
-		final KDMModelManager modelManager = new KDMModelManager("tmp/PackageDependecyTest_kdm.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("examples/kdm/PackageDependecyTest_kdm.xmi");
 		final String key = "count.impl";
 
 		final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromPackage(key);
@@ -171,9 +177,10 @@ public class DependencyIteratorTest {
 		Assert.assertArrayEquals(values, l.toArray());
 	}
 
+	@Ignore
 	@Test
 	public void testMultiPackageSingleElementImport() throws InvalidPackageException {
-		final KDMModelManager modelManager = new KDMModelManager("tmp/PackageDependecyTest_kdm.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("examples/kdm/PackageDependecyTest_kdm.xmi");
 		final String key = "string.impl";
 
 		final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromPackage(key);
@@ -186,9 +193,10 @@ public class DependencyIteratorTest {
 		Assert.assertArrayEquals(values, l.toArray());
 	}
 
+	@Ignore
 	@Test
 	public void testMultiPackageImportWithSingleElementAndPackage() throws InvalidPackageException {
-		final KDMModelManager modelManager = new KDMModelManager("tmp/PackageDependecyTest_kdm.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("examples/kdm/PackageDependecyTest_kdm.xmi");
 		final String key = "object.impl";
 
 		final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromPackage(key);
@@ -201,9 +209,10 @@ public class DependencyIteratorTest {
 		Assert.assertArrayEquals(values, l.toArray());
 	}
 
+	@Ignore
 	@Test
 	public void testDependeciesFromCSharpClassImplements() throws InvalidClassException {
-		final KDMModelManager modelManager = new KDMModelManager("tmp/SharpDevelop.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("examples/kdm/SharpDevelop.xmi");
 		final String key = "ICSharpCode.CodeQualityAnalysis.Controls.DependencyIconVertexConverter";
 		final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromClass(key);
 		final List<String> l = new LinkedList<String>();
@@ -221,9 +230,10 @@ public class DependencyIteratorTest {
 		Assert.assertArrayEquals(values, l.toArray());
 	}
 
+	@Ignore
 	@Test
 	public void testDependeciesFromCSharpClassExtends() throws InvalidClassException {
-		final KDMModelManager modelManager = new KDMModelManager("tmp/SharpDevelop.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("examples/kdm/SharpDevelop.xmi");
 		final String key = "XmlEditor.Tests.Schema.AbstractElementTestFixture";
 		final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromClass(key);
 		final List<String> l = new LinkedList<String>();
@@ -241,9 +251,10 @@ public class DependencyIteratorTest {
 		Assert.assertArrayEquals(values, l.toArray());
 	}
 
+	@Ignore
 	@Test
 	public void testDependeciesFromCSharpInterfaceExtends() throws InvalidInterfaceException {
-		final KDMModelManager modelManager = new KDMModelManager("tmp/SharpDevelop.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("examples/kdm/SharpDevelop.xmi");
 		final String key = "ICSharpCode.SharpDevelop.Editor.CodeCompletion.IFancyCompletionItem";
 		final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromInterface(key);
 		final List<String> l = new LinkedList<String>();
@@ -255,9 +266,10 @@ public class DependencyIteratorTest {
 		Assert.assertArrayEquals(values, l.toArray());
 	}
 
+	@Ignore
 	@Test
 	public void testDependeciesFromCSharpNamespace() throws InvalidNamespaceException {
-		final KDMModelManager modelManager = new KDMModelManager("tmp/SharpDevelop.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("examples/kdm/SharpDevelop.xmi");
 		final String key = "ICSharpCode.AvalonEdit";
 		final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromNamespace(key);
 		final List<String> l = new LinkedList<String>();

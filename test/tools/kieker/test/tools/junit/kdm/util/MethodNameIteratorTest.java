@@ -25,6 +25,7 @@ import org.eclipse.gmt.modisco.omg.kdm.code.ClassUnit;
 import org.eclipse.gmt.modisco.omg.kdm.code.CodeModel;
 import org.eclipse.gmt.modisco.omg.kdm.code.InterfaceUnit;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.tools.kdm.manager.KDMModelManager;
@@ -33,15 +34,16 @@ import kieker.tools.kdm.manager.exception.InvalidInterfaceException;
 import kieker.tools.kdm.manager.util.MethodNameIterator;
 import kieker.tools.kdm.manager.util.descriptions.MethodDescription;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.tools.util.kdm.ProvidePackageStructure;
+
 /**
- * 
  * @author Benjamin Harms
- * 
  */
-public class MethodNameIteratorTest {
-	private final CodeModel codeModel = TestPackageStructure.getCodeModel();
-	private final Map<String, ClassUnit> classes = TestPackageStructure.getClasses();
-	private final Map<String, InterfaceUnit> interfaces = TestPackageStructure.getInterfaces();
+public class MethodNameIteratorTest extends AbstractKiekerTest {
+	private final CodeModel codeModel = ProvidePackageStructure.getCodeModel();
+	private final Map<String, ClassUnit> classes = ProvidePackageStructure.getClasses();
+	private final Map<String, InterfaceUnit> interfaces = ProvidePackageStructure.getInterfaces();
 
 	/**
 	 * Default constructor.
@@ -134,7 +136,7 @@ public class MethodNameIteratorTest {
 
 	@Test
 	public void testWithJPetStore() throws InvalidClassException, InvalidInterfaceException {
-		final KDMModelManager modelManager = new KDMModelManager("../examples/JavaEEServletContainerExample/JPetStore-KDM.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("examples/kdm/JPetStore.xmi");
 		// Get some methods
 		Iterator<MethodDescription> methodIterator = modelManager.iterateMethodsFromInterface("org.mybatis.jpetstore.persistence.AccountMapper");
 		Assert.assertTrue(methodIterator.hasNext());
@@ -170,9 +172,10 @@ public class MethodNameIteratorTest {
 		Assert.assertArrayEquals(new Object[] { "public void showA()", "public void showB()", "public int showC()", "public void set()" }, l.toArray());
 	}
 
+	@Ignore
 	@Test
 	public void testMethodsFromCSharpClass() throws InvalidClassException {
-		final KDMModelManager modelManager = new KDMModelManager("tmp/SharpDevelop.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("examples/kdm/SharpDevelop.xmi");
 		// Get some methods
 		final String key = "ICSharpCode.FormsDesigner.Services.ImageResourceEditor";
 		final Iterator<MethodDescription> it = modelManager.iterateMethodsFromClass(key);
@@ -190,10 +193,11 @@ public class MethodNameIteratorTest {
 		Assert.assertArrayEquals(values, l.toArray());
 	}
 
+	@Ignore
 	@Test
 	public void testMethodsFromCSharpInterface() throws InvalidClassException {
 		// More then one million lines of code and no InterfaceUnit containing some attributes or methods...so test another class...
-		final KDMModelManager modelManager = new KDMModelManager("tmp/SharpDevelop.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("examples/kdm/SharpDevelop.xmi");
 		final String key = "ICSharpCode.XamlBinding.PowerToys.Dialogs.DragDropMarkerAdorner";
 		// Get some methods
 		final Iterator<MethodDescription> it = modelManager.iterateMethodsFromClass(key);

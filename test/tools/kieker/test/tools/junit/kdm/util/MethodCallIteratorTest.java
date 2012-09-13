@@ -27,11 +27,14 @@ import org.junit.Test;
 
 import kieker.tools.kdm.manager.util.MethodCallIterator;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.tools.util.kdm.ProvidePackageStructure;
+
 /**
  * @author Nils Christian Ehmke, Benjamin Harms
  */
-public class MethodCallIteratorTest {
-	private final Map<String, MethodUnit> methodCalls = TestPackageStructure.getMethods();
+public class MethodCallIteratorTest extends AbstractKiekerTest {
+	private final Map<String, MethodUnit> methodCalls = ProvidePackageStructure.getMethods();
 
 	public MethodCallIteratorTest() {
 		// No code necessary

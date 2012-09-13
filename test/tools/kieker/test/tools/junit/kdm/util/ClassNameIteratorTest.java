@@ -24,23 +24,23 @@ import java.util.Map;
 import org.eclipse.gmt.modisco.omg.kdm.code.CodeModel;
 import org.eclipse.gmt.modisco.omg.kdm.code.Package;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.tools.kdm.manager.KDMModelManager;
 import kieker.tools.kdm.manager.exception.InvalidNamespaceException;
 import kieker.tools.kdm.manager.util.ClassNameIterator;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.tools.util.kdm.ProvidePackageStructure;
+
 /**
  * @author Benjamin Harms
  */
-public class ClassNameIteratorTest {
-	private final CodeModel codeModel = TestPackageStructure.getCodeModel();
-	private final Map<String, Package> packages = TestPackageStructure.getPackages();
-	private final KDMModelManager modelManager = new KDMModelManager("tmp/NAnt-p1.xmi");
+public class ClassNameIteratorTest extends AbstractKiekerTest {
+	private final CodeModel codeModel = ProvidePackageStructure.getCodeModel();
+	private final Map<String, Package> packages = ProvidePackageStructure.getPackages();
 
-	/**
-	 * Default constructor.
-	 */
 	public ClassNameIteratorTest() {
 		// No code necessary.
 	}
@@ -139,10 +139,12 @@ public class ClassNameIteratorTest {
 		Assert.assertArrayEquals(new Object[] { "test.zwei.sieben.Foo", "test.zwei.sieben.Foo.Bar" }, l.toArray());
 	}
 
+	@Ignore
 	@Test
 	public void testSimpleClassFromNamespace() throws InvalidNamespaceException {
+		final KDMModelManager modelManager = new KDMModelManager("examples/kdm/NAnt-p1.xmi");
 		final String key = "NAnt.Win32.Functions";
-		final Iterator<String> it = this.modelManager.iterateClassesFromNamespace(key);
+		final Iterator<String> it = modelManager.iterateClassesFromNamespace(key);
 		final List<String> l = new LinkedList<String>();
 		while (it.hasNext()) {
 			final String name = it.next();
@@ -152,10 +154,12 @@ public class ClassNameIteratorTest {
 		Assert.assertArrayEquals(values, l.toArray());
 	}
 
+	@Ignore
 	@Test
 	public void testMultipleClassesFromNamespace() throws InvalidNamespaceException {
+		final KDMModelManager modelManager = new KDMModelManager("examples/kdm/NAnt-p1.xmi");
 		final String key = "NAnt.SourceControl.Tasks";
-		final Iterator<String> it = this.modelManager.iterateClassesFromNamespace(key);
+		final Iterator<String> it = modelManager.iterateClassesFromNamespace(key);
 		final List<String> l = new LinkedList<String>();
 		while (it.hasNext()) {
 			final String name = it.next();

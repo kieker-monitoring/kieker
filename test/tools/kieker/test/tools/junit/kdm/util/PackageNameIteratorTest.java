@@ -30,14 +30,15 @@ import kieker.tools.kdm.manager.KDMModelManager;
 import kieker.tools.kdm.manager.exception.InvalidPackageException;
 import kieker.tools.kdm.manager.util.PackageNameIterator;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.tools.util.kdm.ProvidePackageStructure;
+
 /**
- * 
  * @author Benjamin Harms
- * 
  */
-public class PackageNameIteratorTest {
-	private final CodeModel codeModel = TestPackageStructure.getCodeModel();
-	private final Map<String, Package> packages = TestPackageStructure.getPackages();
+public class PackageNameIteratorTest extends AbstractKiekerTest {
+	private final CodeModel codeModel = ProvidePackageStructure.getCodeModel();
+	private final Map<String, Package> packages = ProvidePackageStructure.getPackages();
 
 	public PackageNameIteratorTest() {
 		// No code necessary.
@@ -111,7 +112,7 @@ public class PackageNameIteratorTest {
 
 	@Test
 	public void testWithPetStore() throws InvalidPackageException {
-		final KDMModelManager modelManager = new KDMModelManager("../examples/JavaEEServletContainerExample/JPetStore-KDM.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("examples/kdm/JPetStore.xmi");
 
 		// First level
 		final Iterator<String> itOrg = modelManager.iteratePackages();
@@ -147,7 +148,7 @@ public class PackageNameIteratorTest {
 
 	@Test
 	public void testBasePackagesWithPetStore() {
-		final KDMModelManager modelManager = new KDMModelManager("../examples/JavaEEServletContainerExample/JPetStore-KDM.xmi");
+		final KDMModelManager modelManager = new KDMModelManager("examples/kdm/JPetStore.xmi");
 		final Iterator<String> it = modelManager.iteratePackages();
 		final List<String> l = new LinkedList<String>();
 		while (it.hasNext()) {

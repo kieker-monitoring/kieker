@@ -32,16 +32,13 @@ import kieker.tools.kdm.manager.exception.InvalidClassException;
 import kieker.tools.kdm.manager.exception.InvalidPackageException;
 import kieker.tools.kdm.manager.util.descriptions.MethodDescription;
 
-/**
- * 
- * @author Nils Christian Ehmke, Benjamin Harms
- * 
- */
-public class KDMModelManagerTest {
+import kieker.test.common.junit.AbstractKiekerTest;
 
-	/**
-	 * Default constructor.
-	 */
+/**
+ * @author Nils Christian Ehmke, Benjamin Harms
+ */
+public class KDMModelManagerTest extends AbstractKiekerTest {
+
 	public KDMModelManagerTest() {
 		// No code necessary
 	}
