@@ -27,10 +27,7 @@ import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
  * 
  * @author Holger Knoche
  * 
- * @param <V>
- *            The type of the graph's vertices
- * @param <E>
- *            The type of the graph's edges
+ * @param <T>
  */
 public abstract class AbstractDependencyGraphFormatterVisitor<T extends ISystemModelElement> implements
 		IGraphVisitor<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>> {

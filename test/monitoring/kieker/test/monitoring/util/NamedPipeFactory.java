@@ -23,7 +23,6 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import kieker.analysis.plugin.reader.namedRecordPipe.PipeReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.namedRecordPipe.Broker;
 import kieker.common.namedRecordPipe.IPipeReader;
@@ -37,7 +36,7 @@ import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
 /**
  * Provides factory methods for {@link MonitoringController}s configured to write to a {@link Pipe} and a convenient collector facility to access the records
  * received in a {@link List}. Note that, in contrast to the similar class {@link NamedPipeFactory}, doesn't use the {@link PipeWriter} directly, but uses an *
- * {@link IMonitoringController}. Also, the {@link PipeReader} is used.
+ * {@link IMonitoringController}. Also, the {@link kieker.analysis.plugin.reader.namedRecordPipe.PipeReader} is used.
  * 
  * @author Andre van Hoorn
  * 

@@ -16,18 +16,16 @@
 
 package kieker.monitoring.probe.cxf;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.SoapHeaderInterceptor;
-import org.apache.cxf.common.logging.LogUtils;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.helpers.DOMUtils;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.message.Message;
 import org.w3c.dom.Element;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -57,7 +55,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 
 	protected static final String VM_NAME = CTRL_INST.getHostname(); // NOCS (decl. order)
 
-	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPResponseInInterceptor.class);
+	private static final Log LOG = LogFactory.getLog(OperationExecutionSOAPResponseInInterceptor.class);
 
 	private static final String SIGNATURE = "public void " + OperationExecutionSOAPResponseInInterceptor.class.getName()
 			+ ".handleMessage(org.apache.cxf.message.Message)";
@@ -87,8 +85,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 				 * No Kieker eoi in header.
 				 * This may happen for responses from callees w/o Kieker instrumentation.
 				 */
-				LOG.log(Level.FINE, "Found no Kieker eoi in response header. "
-						+ "Will unset all threadLocal variables");
+				LOG.info("Found no Kieker eoi in response header. Will unset all threadLocal variables");
 				this.unsetKiekerThreadLocalData();
 				return;
 			}
@@ -96,8 +93,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			try {
 				eoi = Integer.parseInt(eoiStr);
 			} catch (final NumberFormatException exc) {
-				/* invalid eoi! */
-				LOG.log(Level.WARNING, exc.getMessage(), exc);
+				LOG.warn("Invalid EOI", exc);
 				this.unsetKiekerThreadLocalData();
 				return;
 			}
@@ -114,8 +110,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 				 * No Kieker trace Id in header.
 				 * This may happen for responses from callees w/o Kieker instrumentation.
 				 */
-				LOG.log(Level.FINE, "Found no Kieker traceId in response header. "
-						+ "Will unset all threadLocal variables");
+				LOG.info("Found no Kieker traceId in response header. Will unset all threadLocal variables");
 				this.unsetKiekerThreadLocalData();
 				return;
 			}
@@ -123,8 +118,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			try {
 				traceId = Long.parseLong(traceIdStr);
 			} catch (final NumberFormatException exc) {
-				/* Invalid trace id! */
-				LOG.log(Level.WARNING, exc.getMessage(), exc);
+				LOG.warn("Invalid trace id", exc);
 				this.unsetKiekerThreadLocalData();
 				return;
 			}
@@ -138,13 +132,11 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			final long myTout = TIMESOURCE.getTime();
 
 			if (myTraceId != traceId) {
-				LOG.log(Level.WARNING, "Inconsistency between traceId before and after SOAP request:\n" + myTraceId
-						+ "(before) != " + traceId + "(after)");
+				LOG.warn("Inconsistency between traceId before and after SOAP request:\n" + myTraceId + "(before) != " + traceId + "(after)");
 			}
 
 			// Log this execution
-			final OperationExecutionRecord rec = new OperationExecutionRecord(SIGNATURE, mySessionId, myTraceId, myTin,
-					myTout, VM_NAME, myEoi, myEss);
+			final OperationExecutionRecord rec = new OperationExecutionRecord(SIGNATURE, mySessionId, myTraceId, myTin, myTout, VM_NAME, myEoi, myEss);
 			CTRL_INST.newMonitoringRecord(rec);
 
 			/*
