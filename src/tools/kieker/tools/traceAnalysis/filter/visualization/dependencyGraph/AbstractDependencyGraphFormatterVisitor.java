@@ -74,7 +74,7 @@ public abstract class AbstractDependencyGraphFormatterVisitor<T extends ISystemM
 		if (this.includeWeights) {
 			this.builder.append(DotFactory.createConnection("", AbstractDependencyGraphFormatter.createNodeId(sourceNode),
 					AbstractDependencyGraphFormatter.createNodeId(destinationNode),
-					Integer.toString(edge.getTargetWeight().getValue()), lineStyle, DotFactory.DOT_ARROWHEAD_OPEN, color));
+					Integer.toString(edge.getTargetWeight().get()), lineStyle, DotFactory.DOT_ARROWHEAD_OPEN, color));
 		} else {
 			this.builder.append(DotFactory.createConnection("", AbstractDependencyGraphFormatter.createNodeId(sourceNode),
 					AbstractDependencyGraphFormatter.createNodeId(destinationNode), lineStyle,

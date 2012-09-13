@@ -159,7 +159,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 			final int childId = nodeIds.get(child.getTarget());
 			strBuild.append('\n').append(thisId).append("->").append(childId).append("[style=solid,arrowhead=none");
 			if (includeWeights) {
-				strBuild.append(",label=\"").append(child.getTargetWeight().getValue()).append('"');
+				strBuild.append(",label=\"").append(child.getTargetWeight().get()).append('"');
 			} else if (eoiCounter != null) {
 				strBuild.append(",label=\"").append(eoiCounter.getAndIncValue()).append(".\"");
 			}
