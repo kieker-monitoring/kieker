@@ -37,18 +37,18 @@ public class JoinEvent extends AbstractTraceEvent {
 		this.joinedTraceId = joinedTraceId;
 	}
 
-	public JoinEvent(final Object[] values) {
+	public JoinEvent(final Object[] values) { // NOPMD (values stored directly)
 		super(values, TYPES); // values[0..2]
 		this.joinedTraceId = (Long) values[3];
 	}
 
-	public JoinEvent(final Object[] values, final Class<?>[] valueTypes) {
+	public JoinEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes); // values[0..2]
 		this.joinedTraceId = (Long) values[3];
 	}
 
 	public Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this, this.getJoinedTraceId(), };
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getJoinedTraceId(), };
 	}
 
 	public Class<?>[] getValueTypes() {

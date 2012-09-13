@@ -48,13 +48,13 @@ public final class CallOperationObjectEvent extends CallOperationEvent implement
 		this.calleeObjectId = calleeObjectId;
 	}
 
-	public CallOperationObjectEvent(final Object[] values) {
+	public CallOperationObjectEvent(final Object[] values) { // NOPMD (values stored directly)
 		super(values, TYPES); // values[0..6]
 		this.callerObjectId = (Integer) values[7];
 		this.calleeObjectId = (Integer) values[8];
 	}
 
-	protected CallOperationObjectEvent(final Object[] values, final Class<?>[] types) {
+	protected CallOperationObjectEvent(final Object[] values, final Class<?>[] types) { // NOPMD (values stored directly)
 		super(values, types); // values[0..6]
 		this.callerObjectId = (Integer) values[7];
 		this.calleeObjectId = (Integer) values[8];
@@ -84,4 +84,10 @@ public final class CallOperationObjectEvent extends CallOperationEvent implement
 	public final int getCalleeObjectId() {
 		return this.calleeObjectId;
 	}
+
+	// TODO include objectIds?
+	// @Override
+	// public final boolean callsReferencedOperationOf(final IOperationRecord record) {
+	// return this.getCalleeOperationSignature().equals(record.getOperationSignature()) && this.getCalleeClassSignature().equals(record.getClassSignature());
+	// }
 }

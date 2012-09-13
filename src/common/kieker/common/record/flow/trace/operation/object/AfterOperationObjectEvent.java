@@ -41,12 +41,12 @@ public class AfterOperationObjectEvent extends AfterOperationEvent implements IO
 		this.objectId = objectId;
 	}
 
-	public AfterOperationObjectEvent(final Object[] values) {
+	public AfterOperationObjectEvent(final Object[] values) { // NOPMD (values stored directly)
 		super(values, TYPES); // values[0..4]
 		this.objectId = (Integer) values[5];
 	}
 
-	protected AfterOperationObjectEvent(final Object[] values, final Class<?>[] types) {
+	protected AfterOperationObjectEvent(final Object[] values, final Class<?>[] types) { // NOPMD (values stored directly)
 		super(values, types); // values[0..4]
 		this.objectId = (Integer) values[5];
 	}

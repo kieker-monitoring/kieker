@@ -41,12 +41,12 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 		this.objectId = objectId;
 	}
 
-	public BeforeOperationObjectEvent(final Object[] values) {
+	public BeforeOperationObjectEvent(final Object[] values) { // NOPMD (values stored directly)
 		super(values, TYPES); // values[0..4]
 		this.objectId = (Integer) values[5];
 	}
 
-	protected BeforeOperationObjectEvent(final Object[] values, final Class<?>[] types) {
+	protected BeforeOperationObjectEvent(final Object[] values, final Class<?>[] types) { // NOPMD (values stored directly)
 		super(values, types); // values[0..4]
 		this.objectId = (Integer) values[5];
 	}
