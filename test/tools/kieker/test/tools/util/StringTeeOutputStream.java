@@ -14,16 +14,14 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.writeRead.util;
+package kieker.test.tools.util;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringWriter;
 
 /**
- * 
  * @author Andre van Hoorn
- * 
  */
 public class StringTeeOutputStream extends OutputStream {
 	private final StringWriter stringWriter = new StringWriter();

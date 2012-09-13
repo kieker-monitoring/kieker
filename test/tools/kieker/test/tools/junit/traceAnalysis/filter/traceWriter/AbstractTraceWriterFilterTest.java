@@ -41,6 +41,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.analysis.util.plugin.reader.SimpleListReader;
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.util.BookstoreExecutionFactory;
 
 /**
@@ -48,7 +49,7 @@ import kieker.test.tools.util.BookstoreExecutionFactory;
  * @author Andre van Hoorn
  * 
  */
-public abstract class AbstractTraceWriterFilterTest {
+public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 
 	protected static final String SYSTEM_NEWLINE_STRING = System.getProperty("line.separator");
 
@@ -73,7 +74,7 @@ public abstract class AbstractTraceWriterFilterTest {
 
 	private final BookstoreExecutionFactory execFactory = new BookstoreExecutionFactory(this.modelRepo);
 
-	private volatile File outputFile = null;
+	private volatile File outputFile = null; // NOPMD (init for fb)
 
 	@Before
 	public void setUp() throws Exception {

@@ -14,36 +14,29 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.traceAnalysis.filter.visualization.util;
+package kieker.test.tools.util;
+
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 
 /**
- * 
  * @author Andre van Hoorn
  */
-public class IntContainer {
+public class StringTeePrintStream extends PrintStream {
+	private static final String ENCODING = "UTF-8";
 
-	private int value;
+	private final StringTeeOutputStream stringTeeOutputStream;
 
-	public IntContainer(final int initVal) {
-		this.value = initVal;
+	public StringTeePrintStream(final PrintStream originalStream) throws UnsupportedEncodingException {
+		super(new StringTeeOutputStream(originalStream), false, StringTeePrintStream.ENCODING);
+		this.stringTeeOutputStream = (StringTeeOutputStream) this.out;
 	}
 
-	/**
-	 * @return the i
-	 */
-	public final int getValue() {
-		return this.value;
-	}
+	public String getString() {
+		if (this.stringTeeOutputStream == null) {
+			return null;
+		}
 
-	/**
-	 * @param value
-	 *            the i to set
-	 */
-	public final void setValue(final int value) {
-		this.value = value;
-	}
-
-	public final int getAndIncValue() {
-		return this.value++;
+		return this.stringTeeOutputStream.getString();
 	}
 }

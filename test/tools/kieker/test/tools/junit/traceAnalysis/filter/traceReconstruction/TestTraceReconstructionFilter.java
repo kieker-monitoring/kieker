@@ -36,13 +36,14 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.analysis.util.plugin.reader.SimpleListReader;
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.util.ExecutionFactory;
 
 /**
  * 
  * @author Andre van Hoorn
  */
-public class TestTraceReconstructionFilter {
+public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 
 	private static final Log LOG = LogFactory.getLog(TestTraceReconstructionFilter.class);
 	private static final long TRACE_ID = 62298L;

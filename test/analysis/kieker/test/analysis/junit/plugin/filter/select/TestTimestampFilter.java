@@ -28,12 +28,13 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.analysis.util.plugin.reader.SimpleListReader;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-public final class TestTimestampFilter {
+public final class TestTimestampFilter extends AbstractKiekerTest {
 
 	private static final AbstractTraceEvent EVENT = new AbstractTraceEvent(34556L, 324440L, 0) {
 		private static final long serialVersionUID = 1L;

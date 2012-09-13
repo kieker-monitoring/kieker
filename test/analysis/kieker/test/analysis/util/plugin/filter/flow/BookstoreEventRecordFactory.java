@@ -28,7 +28,7 @@ import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
 
 /**
  * A starter method for this factory is implemented in
- * kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactoryStarter.
+ * kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactoryStarter
  * 
  * @author Andre van Hoorn, Holger Knoche, Jan Waller
  */
@@ -506,7 +506,8 @@ public final class BookstoreEventRecordFactory {
 						BookstoreOperationExecutionRecordFactory.FQ_CLASS_CRM);
 		call3_2__catalog_getBook =
 				new CallOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook,
-						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS,
+						traceId, curOrderIndex++,
+						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS,
 						BookstoreOperationExecutionRecordFactory.FQ_CLASS_CRM,
 						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK,
 						BookstoreOperationExecutionRecordFactory.FQ_CLASS_CATALOG);

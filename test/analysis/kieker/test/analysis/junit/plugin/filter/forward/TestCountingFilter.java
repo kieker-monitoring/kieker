@@ -26,13 +26,14 @@ import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.common.configuration.Configuration;
 
 import kieker.test.analysis.util.plugin.reader.SimpleListReader;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * This test is for the class {@link CountingFilter}.
  * 
  * @author Nils Christian Ehmke, Jan Waller
  */
-public class TestCountingFilter {
+public class TestCountingFilter extends AbstractKiekerTest {
 
 	private AnalysisController analysisController;
 	private SimpleListReader<Object> simpleListReader;

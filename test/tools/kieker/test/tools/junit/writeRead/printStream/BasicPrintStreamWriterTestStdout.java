@@ -27,7 +27,7 @@ import org.junit.Before;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writer.PrintStreamWriter;
 
-import kieker.test.tools.junit.writeRead.util.StringTeePrintStream;
+import kieker.test.tools.util.StringTeePrintStream;
 
 /**
  * TODO: introduce abstract intermediate class with {@link BasicPrintStreamWriterTestStdout},

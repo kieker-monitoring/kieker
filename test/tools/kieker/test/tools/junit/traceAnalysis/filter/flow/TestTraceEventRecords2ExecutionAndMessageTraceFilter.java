@@ -33,12 +33,13 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.analysis.util.plugin.reader.SimpleListReader;
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.util.BookstoreExecutionFactory;
 
 /**
  * @author Andre van Hoorn
  */
-public class TestTraceEventRecords2ExecutionAndMessageTraceFilter {
+public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractKiekerTest {
 	// private static final Log LOG = LogFactory.getLog(TestEventTrace2ExecutionTraceFilter.class);
 
 	private static final long TRACE_ID = 4563L;

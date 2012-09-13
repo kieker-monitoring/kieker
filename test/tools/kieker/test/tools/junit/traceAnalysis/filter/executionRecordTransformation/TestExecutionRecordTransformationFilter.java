@@ -33,15 +33,14 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 import kieker.test.analysis.util.plugin.reader.SimpleListReader;
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
 import kieker.test.tools.util.filter.ExecutionSinkClass;
 
 /**
- * 
  * @author Andre van Hoorn
- * 
  */
-public class TestExecutionRecordTransformationFilter {
+public class TestExecutionRecordTransformationFilter extends AbstractKiekerTest {
 
 	public TestExecutionRecordTransformationFilter() {
 		// empty default constructor

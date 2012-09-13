@@ -31,6 +31,7 @@ import kieker.tools.currentTimeEventGenerator.CurrentTimeEventGenerationFilter;
 
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.analysis.util.plugin.reader.SimpleListReader;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * Each test is executed for both input ports, {@link CurrentTimeEventGenerationFilter#inputTimestamp(Long)} and
@@ -39,7 +40,7 @@ import kieker.test.analysis.util.plugin.reader.SimpleListReader;
  * @author Andre van Hoorn
  */
 // TODO: Test filter output port OUTPUT_PORT_NAME_CURRENT_TIME_VALUE
-public class TestCurrentTimeEventGeneratorFilter { // NOCS
+public class TestCurrentTimeEventGeneratorFilter extends AbstractKiekerTest { // NOCS
 
 	@Test
 	public void testFirstRecordGeneratesEvent() throws IllegalStateException, AnalysisConfigurationException { // NOPMD (assert in method)

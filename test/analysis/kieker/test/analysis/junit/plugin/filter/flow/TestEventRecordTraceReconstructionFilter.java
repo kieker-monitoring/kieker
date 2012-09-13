@@ -29,11 +29,12 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.analysis.util.plugin.reader.SimpleListReader;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Andre van Hoorn, Jan Waller
  */
-public class TestEventRecordTraceReconstructionFilter { // NOCS (test class without constructor)
+public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest { // NOCS (test class without constructor)
 
 	private static final String SESSION_ID = "8yWpCvrJ2";
 	private static final String HOSTNAME = "srv55";

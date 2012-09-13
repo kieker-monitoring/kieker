@@ -28,6 +28,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.namedRecordPipe.IPipeWriter;
 import kieker.common.record.misc.EmptyRecord;
 
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.util.namedRecordPipe.NamedPipeWriterFactory;
 
 /**
@@ -35,7 +36,7 @@ import kieker.test.common.util.namedRecordPipe.NamedPipeWriterFactory;
  * 
  * @author Andre van Hoorn
  */
-public class TestPipeReader { // NOCS (MissingCtorCheck)
+public class TestPipeReader extends AbstractKiekerTest { // NOCS (MissingCtorCheck)
 	// private static final Log log = LogFactory.getLog(TestPipeReader.class);
 
 	@Test
