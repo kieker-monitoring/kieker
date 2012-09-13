@@ -16,14 +16,13 @@
 
 package kieker.common.record.flow.trace.operation.object;
 
+import kieker.common.record.flow.ICallObjectRecord;
 import kieker.common.record.flow.trace.operation.CallOperationEvent;
 
 /**
- * TODO: IObjectRecord ?
- * 
  * @author Jan Waller
  */
-public final class CallObjectOperationEvent extends CallOperationEvent {
+public final class CallOperationObjectEvent extends CallOperationEvent implements ICallObjectRecord {
 	private static final long serialVersionUID = 5099289901643589844L;
 	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
@@ -40,7 +39,7 @@ public final class CallObjectOperationEvent extends CallOperationEvent {
 	private final int callerObjectId;
 	private final int calleeObjectId;
 
-	public CallObjectOperationEvent(final long timestamp, final long traceId, final int orderIndex,
+	public CallOperationObjectEvent(final long timestamp, final long traceId, final int orderIndex,
 			final String callerOperationSignature, final String callerClassSignature,
 			final String calleeOperationSignature, final String calleeClassSignature,
 			final int callerObjectId, final int calleeObjectId) {
@@ -49,13 +48,13 @@ public final class CallObjectOperationEvent extends CallOperationEvent {
 		this.calleeObjectId = calleeObjectId;
 	}
 
-	public CallObjectOperationEvent(final Object[] values) {
+	public CallOperationObjectEvent(final Object[] values) {
 		super(values, TYPES); // values[0..6]
 		this.callerObjectId = (Integer) values[7];
 		this.calleeObjectId = (Integer) values[8];
 	}
 
-	protected CallObjectOperationEvent(final Object[] values, final Class<?>[] types) {
+	protected CallOperationObjectEvent(final Object[] values, final Class<?>[] types) {
 		super(values, types); // values[0..6]
 		this.callerObjectId = (Integer) values[7];
 		this.calleeObjectId = (Integer) values[8];
@@ -72,6 +71,10 @@ public final class CallObjectOperationEvent extends CallOperationEvent {
 	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES.clone();
+	}
+
+	public int getObjectId() {
+		return this.callerObjectId;
 	}
 
 	public final int getCallerObjectId() {

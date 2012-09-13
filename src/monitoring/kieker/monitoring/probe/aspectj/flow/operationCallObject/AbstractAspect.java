@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.probe.aspectj.flow.objectCall;
+package kieker.monitoring.probe.aspectj.flow.operationCallObject;
 
 import org.aspectj.lang.JoinPoint.EnclosingStaticPart;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -24,7 +24,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
 import kieker.common.record.flow.trace.Trace;
-import kieker.common.record.flow.trace.operation.object.CallObjectOperationEvent;
+import kieker.common.record.flow.trace.operation.object.CallOperationObjectEvent;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.TraceRegistry;
@@ -67,7 +67,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final String calleeClazz = targetObject.getClass().getName();
 		final int calleeObject = System.identityHashCode(targetObject);
 		// measure before call
-		CTRLINST.newMonitoringRecord(new CallObjectOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
+		CTRLINST.newMonitoringRecord(new CallOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
 				caller, callerClazz, callee, calleeClazz, callerObject, calleeObject));
 		// call of the called method
 		final Object retval;
@@ -104,7 +104,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final String calleeClazz = targetObject.getClass().getName();
 		final int calleeObject = System.identityHashCode(targetObject);
 		// measure before call
-		CTRLINST.newMonitoringRecord(new CallObjectOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
+		CTRLINST.newMonitoringRecord(new CallOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
 				caller, callerClazz, callee, calleeClazz, 0, calleeObject));
 		// call of the called method
 		final Object retval;
@@ -141,7 +141,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final String callee = calleeSig.toLongString();
 		final String calleeClazz = calleeSig.getDeclaringTypeName();
 		// measure before call
-		CTRLINST.newMonitoringRecord(new CallObjectOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
+		CTRLINST.newMonitoringRecord(new CallOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
 				caller, callerClazz, callee, calleeClazz, callerObject, 0));
 		// call of the called method
 		final Object retval;
@@ -178,7 +178,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final String callee = calleeSig.toLongString();
 		final String calleeClazz = calleeSig.getDeclaringTypeName();
 		// measure before call
-		CTRLINST.newMonitoringRecord(new CallObjectOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
+		CTRLINST.newMonitoringRecord(new CallOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
 				caller, callerClazz, callee, calleeClazz, 0, 0));
 		// call of the called method
 		final Object retval;
