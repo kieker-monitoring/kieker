@@ -36,7 +36,9 @@
 		<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotation" />
 		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotationServlet"/> -->
 		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFull"/> -->
+		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoGetterAndSetter"/> -->
 		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullServlet"/> -->
+		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoGetterAndSetterServlet"/> -->
 		
 		<!-- KiekerFlow Aspects -->
 		<!-- ################## -->
@@ -59,14 +61,17 @@
 		
 		<!-- OperationExecution -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.FullInstrumentation" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.FullInstrumentationNoGetterAndSetter" /> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.Annotation" /> -->
 
 		<!-- OperationCall -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.FullInstrumentation" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.FullInstrumentationNoGetterAndSetter" /> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.Annotation" /> -->
 		
 		<!-- ObjectOperationCall -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.objectCall.FullInstrumentation" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.objectCall.FullInstrumentationNoGetterAndSetter" /> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.objectCall.Annotation" /> -->
 		
 		<!-- Definition of additional targeted aspects (example for a single additional getter) -->

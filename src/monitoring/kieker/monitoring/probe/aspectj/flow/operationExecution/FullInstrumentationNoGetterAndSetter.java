@@ -23,14 +23,14 @@ import org.aspectj.lang.annotation.Pointcut;
  * @author Jan Waller
  */
 @Aspect
-public final class FullInstrumentation extends AbstractAspect {
+public final class FullInstrumentationNoGetterAndSetter extends AbstractAspect {
 
-	public FullInstrumentation() {
+	public FullInstrumentationNoGetterAndSetter() {
 		// empty default constructor
 	}
 
 	@Override
-	@Pointcut("execution(* *(..))")
+	@Pointcut("execution(* *(..)) && noGetterAndSetter()")
 	public final void monitoredOperation() {
 		// Aspect Declaration (MUST be empty)
 	}

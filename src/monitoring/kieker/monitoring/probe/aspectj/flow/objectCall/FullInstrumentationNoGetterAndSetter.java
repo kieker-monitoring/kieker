@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.probe.aspectj.flow.operationExecution;
+package kieker.monitoring.probe.aspectj.flow.objectCall;
 
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -23,14 +23,14 @@ import org.aspectj.lang.annotation.Pointcut;
  * @author Jan Waller
  */
 @Aspect
-public final class FullInstrumentation extends AbstractAspect {
+public final class FullInstrumentationNoGetterAndSetter extends AbstractAspect {
 
-	public FullInstrumentation() {
+	public FullInstrumentationNoGetterAndSetter() {
 		// empty default constructor
 	}
 
 	@Override
-	@Pointcut("execution(* *(..))")
+	@Pointcut("call(* *(..)) && noGetterAndSetter()")
 	public final void monitoredOperation() {
 		// Aspect Declaration (MUST be empty)
 	}
