@@ -16,8 +16,6 @@
 
 package kieker.common.record.flow;
 
-
-
 /**
  * Interface for all flow records that describe information in traces.
  * 
