@@ -64,7 +64,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 
 	public static final String CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE = "equivalenceMode";
 
-	public static TraceEquivalenceClassModes defaultEquivalenceMode = TraceEquivalenceClassModes.DISABLED;
+	public static final TraceEquivalenceClassModes defaultEquivalenceMode = TraceEquivalenceClassModes.DISABLED;
 
 	private static final Log LOG = LogFactory.getLog(TraceEquivalenceClassFilter.class);
 
