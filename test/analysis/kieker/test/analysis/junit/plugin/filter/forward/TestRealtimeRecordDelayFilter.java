@@ -42,13 +42,14 @@ import kieker.common.util.SimpleImmutableEntry;
 
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.analysis.util.plugin.reader.SimpleListReader;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * This test is for the class {@link RealtimeRecordDelayFilter}.
  * 
  * @author Andre van Hoorn
  */
-public class TestRealtimeRecordDelayFilter {
+public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 
 	private static final Log LOG = LogFactory.getLog(TestRealtimeRecordDelayFilter.class);
 
@@ -209,6 +210,7 @@ public class TestRealtimeRecordDelayFilter {
 		Assert.assertEquals(0, this.sinkPlugin.size());
 
 		this.analysisController.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.analysisController.getState());
 
 		/*
 		 * Make sure that all events have been provided to the delay filter (otherwise the test make no sense)

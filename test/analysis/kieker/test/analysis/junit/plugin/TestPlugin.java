@@ -31,13 +31,14 @@ import kieker.test.analysis.util.plugin.filter.SimpleForwardFilterWithRepository
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.analysis.util.plugin.reader.SimpleListReader;
 import kieker.test.analysis.util.repository.SimpleRepository;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * A simple test for the plugins in general. It tests for example if the chaining of different plugins does work.
  * 
  * @author Nils Christian Ehmke, Jan Waller
  */
-public class TestPlugin {
+public class TestPlugin extends AbstractKiekerTest {
 
 	public TestPlugin() {
 		// empty default constructor
@@ -98,6 +99,7 @@ public class TestPlugin {
 		analysisController.connect(simpleFilter, SimpleForwardFilterWithRepository.REPOSITORY_PORT_NAME, simpleRepository);
 
 		analysisController.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, analysisController.getState());
 
 		final List<Object> list = simpleSinkPlugin.getList();
 		Assert.assertEquals(2, list.size());

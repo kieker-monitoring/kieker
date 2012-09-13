@@ -14,32 +14,29 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.writeRead.util;
+package kieker.tools.traceAnalysis.systemModel;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.StringWriter;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
 
 /**
+ * Specific subtype for the root execution container.
  * 
- * @author Andre van Hoorn
+ * @author Holger Knoche
  * 
  */
-public class StringTeeOutputStream extends OutputStream {
-	private final StringWriter stringWriter = new StringWriter();
-	private final OutputStream interceptedStream;
+public class RootExecutionContainer extends ExecutionContainer {
 
-	public StringTeeOutputStream(final OutputStream teeStream) {
-		this.interceptedStream = teeStream;
+	private static final String ROOT_EXECUTION_CONTAINER_NAME = "$";
+
+	/**
+	 * Creates a new root execution container.
+	 */
+	public RootExecutionContainer() {
+		super(AbstractSystemSubRepository.ROOT_ELEMENT_ID, null, ROOT_EXECUTION_CONTAINER_NAME);
 	}
 
 	@Override
-	public void write(final int b) throws IOException {
-		this.stringWriter.write(b);
-		this.interceptedStream.write(b);
-	}
-
-	public String getString() {
-		return this.stringWriter.getBuffer().toString();
+	public boolean isRootContainer() {
+		return true;
 	}
 }

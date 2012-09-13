@@ -26,13 +26,14 @@ import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.common.configuration.Configuration;
 
 import kieker.test.analysis.util.plugin.reader.SimpleListReader;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * This test is for the class {@link CountingFilter}.
  * 
  * @author Nils Christian Ehmke, Jan Waller
  */
-public class TestCountingFilter {
+public class TestCountingFilter extends AbstractKiekerTest {
 
 	private AnalysisController analysisController;
 	private SimpleListReader<Object> simpleListReader;
@@ -59,6 +60,7 @@ public class TestCountingFilter {
 		this.simpleListReader.addObject(new Object());
 		Assert.assertEquals(0, this.countingFilter.getMessageCount());
 		this.analysisController.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.analysisController.getState());
 		Assert.assertEquals(3, this.countingFilter.getMessageCount());
 	}
 
@@ -76,6 +78,7 @@ public class TestCountingFilter {
 		reader3.addObject(new Object());
 		Assert.assertEquals(0, this.countingFilter.getMessageCount());
 		this.analysisController.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.analysisController.getState());
 		Assert.assertEquals(3, this.countingFilter.getMessageCount());
 	}
 
@@ -86,6 +89,7 @@ public class TestCountingFilter {
 		this.simpleListReader.addObject("");
 		Assert.assertEquals(0, this.countingFilter.getMessageCount());
 		this.analysisController.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.analysisController.getState());
 		Assert.assertEquals(2, this.countingFilter.getMessageCount());
 	}
 }

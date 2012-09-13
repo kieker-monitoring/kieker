@@ -67,6 +67,16 @@ public class Color {
 	}
 
 	/**
+	 * Creates a new color with the given RGB value.
+	 * 
+	 * @param rgb
+	 *            The RGB value of the new color (see {@link #getRGB()} for more information)
+	 */
+	public Color(final int rgb) {
+		this.rgb = rgb;
+	}
+
+	/**
 	 * Returns this color's RGB value as an {@code int}. The blue value is stored in (the least
 	 * significant) byte 0, green in byte 1, and red in byte 2.
 	 * 

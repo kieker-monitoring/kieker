@@ -21,8 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -34,10 +33,12 @@ import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * @author Jan Waller
  */
-public class TestLegacyExecutionRecordReader {
+public class TestLegacyExecutionRecordReader extends AbstractKiekerTest {
 
 	private static final String ENCODING = "UTF-8";
 
@@ -86,6 +87,7 @@ public class TestLegacyExecutionRecordReader {
 		analysisController.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, sink, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
 		analysisController.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, analysisController.getState());
 		Assert.assertEquals(5L, sink.getMessageCount()); // 5 records are expected
 	}
 }

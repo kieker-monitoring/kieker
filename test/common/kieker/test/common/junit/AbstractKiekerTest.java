@@ -14,36 +14,19 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.traceAnalysis.filter.visualization.util;
+package kieker.test.common.junit;
+
+import kieker.common.logging.LogFactory;
 
 /**
- * 
- * @author Andre van Hoorn
+ * @author Jan Waller
  */
-public class IntContainer {
-
-	private int value;
-
-	public IntContainer(final int initVal) {
-		this.value = initVal;
-	}
+public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 
 	/**
-	 * @return the i
+	 * Log the currently executing class before any test is executed!
 	 */
-	public final int getValue() {
-		return this.value;
-	}
-
-	/**
-	 * @param value
-	 *            the i to set
-	 */
-	public final void setValue(final int value) {
-		this.value = value;
-	}
-
-	public final int getAndIncValue() {
-		return this.value++;
+	public AbstractKiekerTest() {
+		LogFactory.getLog(this.getClass()).info(this.getClass().getName());
 	}
 }

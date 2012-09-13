@@ -37,16 +37,21 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
 		repositoryPorts = {
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 		})
+// TODO: don't we have to redefine the configuration properties from the super class here?
 public class AggregatedAllocationComponentOperationCallTreeFilter extends AbstractAggregatedCallTreeFilter<AllocationComponentOperationPair> {
 
 	public AggregatedAllocationComponentOperationCallTreeFilter(final Configuration configuration) {
 		super(configuration);
 	}
 
-	// TODO: resolve (http://kieker.uni-kiel.de/trac/ticket/411)
-	public void setAllocationComponentOperationPairFactory(final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory) {
-		super.setRoot(new AggregatedAllocationComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-				AllocationComponentOperationPairFactory.ROOT_PAIR, true, null));
+	@Override
+	public boolean init() {
+		final boolean success = super.init();
+		if (success) {
+			super.setRoot(new AggregatedAllocationComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+					AllocationComponentOperationPairFactory.ROOT_PAIR, true, null));
+		}
+		return success;
 	}
 
 	@Override
@@ -85,7 +90,12 @@ class AggregatedAllocationComponentOperationCallTreeNode extends AbstractAggrega
 			this.childMap.put(destination.getId(), e);
 			super.appendChildEdge(e);
 		}
-		e.getTargetWeight().increase();
+		e.getTargetWeight().incrementAndGet();
 		return n;
+	}
+
+	@Override
+	public String getIdentifier() {
+		return null;
 	}
 }

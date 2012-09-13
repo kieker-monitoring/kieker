@@ -16,8 +16,7 @@
 
 package kieker.test.tools.junit.traceAnalysis.filter.flow;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
@@ -33,14 +32,14 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
+import kieker.test.analysis.util.plugin.reader.SimpleListReader;
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.util.BookstoreExecutionFactory;
 
 /**
- * 
  * @author Andre van Hoorn
- * 
  */
-public class TestTraceEventRecords2ExecutionAndMessageTraceFilter {
+public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractKiekerTest {
 	// private static final Log LOG = LogFactory.getLog(TestEventTrace2ExecutionTraceFilter.class);
 
 	private static final long TRACE_ID = 4563L;
@@ -381,8 +380,82 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter {
 		this.checkTrace(traceEvents, expectedExecutionTrace);
 	}
 
+	/**
+	 * Generates an a modified version of the the "well-known" bookstore trace, which includes the execution of <code>Bookstore.searchBook(..)<code> 
+	 * with a nested execution of <code>CRM.getOrder(..)</code> which again wraps the nested execution of <code>Catalog.getBook(..)</code>.
+	 * 
+	 * Borrowed from {@link kieker.test.tools.junit.traceAnalysis.filter.TestTraceReconstructionFilter}.
+	 * 
+	 * @return
+	 * @throws InvalidTraceException
+	 */
+	// see ticket: https://kieker.uni-kiel.de/trac/ticket/595
+	// private ExecutionTrace genValidSyncTraceSimpleCallCall() throws InvalidTraceException {
+	// /*
+	// * Create an Execution Trace and add Executions in
+	// * arbitrary order
+	// */
+	// final ExecutionTrace executionTrace =
+	// new ExecutionTrace(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID);
+	//
+	// final long initialTimestamp = this.exec0_0__bookstore_searchBook.getTin();
+	//
+	// /* Manually create Executions for a trace */
+	// executionTrace.add(
+	// this.bookstoreExecutionFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
+	// TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
+	// /* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders,
+	// /* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook));
+	// executionTrace.add(
+	// this.bookstoreExecutionFactory.createBookstoreExecution_crm_getOrders(
+	// TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
+	// TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
+	// /* The assumed entry timestamp is the exit timestamp of the previous call */
+	// /* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders,
+	// /*
+	// * We will only have a (before) call to CRM.getOrder(..), hence the assumed return timestamp is
+	// * the return time of the wrapping Bookstore.searchBook(..) execution:
+	// */
+	// /* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook,
+	// /* eoi: */1, /* ess: */1));
+	// executionTrace.add(
+	// this.bookstoreExecutionFactory.createBookstoreExecution_catalog_getBook(
+	// TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
+	// TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
+	// /* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook,
+	// /* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook,
+	// /* eoi: */2, /* ess: */2));
+	//
+	// // just to make sure that this trace is valid
+	// executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
+	//
+	// return executionTrace;
+	// }
+	//
+	// @Test
+	// public void testValidSyncTraceSimpleCallCall() throws InvalidTraceException, IllegalStateException, AnalysisConfigurationException { // NOPMD
+	//
+	// /*
+	// * Create an EventRecordTrace, containing only Before- and AfterOperation events.
+	// */
+	// final TraceEventRecords traceEvents =
+	// BookstoreEventRecordFactory.validSyncTraceSimpleCallCall(this.exec0_0__bookstore_searchBook.getTin(),
+	// TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID,
+	// TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME);
+	// final ExecutionTrace expectedExecutionTrace = this.genValidSyncTraceSimpleCallCall();
+	//
+	// this.checkTrace(traceEvents, expectedExecutionTrace);
+	// }
+
 	private void checkTrace(final TraceEventRecords traceEvents, final ExecutionTrace expectedExecutionTrace) throws InvalidTraceException,
 			IllegalStateException, AnalysisConfigurationException {
+
+		/*
+		 * Create the SimpleListReader
+		 */
+		final Configuration readerConfiguration = new Configuration();
+		final SimpleListReader<TraceEventRecords> reader = new SimpleListReader<TraceEventRecords>(readerConfiguration);
+		reader.addObject(traceEvents);
 
 		/*
 		 * Create the transformation filter
@@ -396,15 +469,15 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter {
 		final SimpleSinkFilter<ExecutionTrace> executionTraceSinkPlugin = new SimpleSinkFilter<ExecutionTrace>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 
+		controller.registerReader(reader);
 		controller.registerFilter(filter);
 		controller.registerFilter(executionTraceSinkPlugin);
 		controller.registerRepository(this.systemEntityFactory);
+		controller.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, filter, TraceEventRecords2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME_EVENT_TRACE);
 		controller.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
 		controller.connect(filter, TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSinkPlugin,
 				SimpleSinkFilter.INPUT_PORT_NAME);
-
-		// TODO: dirty. Use reader + controller.run()
-		filter.inputTraceEvents(traceEvents);
+		controller.run();
 
 		Assert.assertEquals("Unexpected number of received execution traces", 1, executionTraceSinkPlugin.getList().size());
 

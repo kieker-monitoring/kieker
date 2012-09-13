@@ -18,20 +18,20 @@ package kieker.test.monitoring.junit.writer.namedRecordPipe;
 
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.NamedPipeFactory;
 
 /**
  * @author Andre van Hoorn
  */
-public class TestPipeWriter { // NOCS
+public class TestPipeWriter extends AbstractKiekerTest { // NOCS
 
 	/**
 	 * Tests whether the {@link kieker.monitoring.writer.namedRecordPipe.PipeWriter} correctly passes received {@link IMonitoringRecord}s to the

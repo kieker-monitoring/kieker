@@ -26,11 +26,11 @@ import kieker.common.record.IMonitoringRecord;
 /**
  * @author Andre van Hoorn
  */
-public final class NamedPipeFactory {
+public final class NamedPipeWriterFactory {
 	private static final AtomicInteger NEXT_PIPE_ID = new AtomicInteger(0);
-	private static final String PIPE_NAME_PREFIX = "pipeName_" + NamedPipeFactory.class.getName() + "_";
+	private static final String PIPE_NAME_PREFIX = "pipeName_" + NamedPipeWriterFactory.class.getName() + "_";
 
-	private NamedPipeFactory() {}
+	private NamedPipeWriterFactory() {}
 
 	/**
 	 * This method should be used in tests to generate unique names for {@link kieker.monitoring.core.configuration.Configuration}s with
@@ -40,7 +40,7 @@ public final class NamedPipeFactory {
 	 * @return a unique name
 	 */
 	public static final String createPipeName() {
-		return NamedPipeFactory.PIPE_NAME_PREFIX + NamedPipeFactory.NEXT_PIPE_ID.getAndIncrement();
+		return NamedPipeWriterFactory.PIPE_NAME_PREFIX + NamedPipeWriterFactory.NEXT_PIPE_ID.getAndIncrement();
 	}
 
 	/**

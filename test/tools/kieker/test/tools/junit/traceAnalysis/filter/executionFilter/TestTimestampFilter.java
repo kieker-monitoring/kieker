@@ -16,8 +16,7 @@
 
 package kieker.test.tools.junit.traceAnalysis.filter.executionFilter;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
@@ -28,13 +27,15 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
+import kieker.test.analysis.util.plugin.reader.SimpleListReader;
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.util.ExecutionFactory;
 
 /**
  * 
  * @author Andre van Hoorn
  */
-public class TestTimestampFilter { // NOCS
+public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 
 	// private static final Log LOG = LogFactory.getLog(TestTimestampFilter.class);
 
@@ -71,6 +72,7 @@ public class TestTimestampFilter { // NOCS
 	 */
 	@Test
 	public void testRecordTinBeforeToutWithinIgnored() throws IllegalStateException, AnalysisConfigurationException {
+		final SimpleListReader<Execution> reader = new SimpleListReader<Execution>(new Configuration());
 		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
 		final AnalysisController controller = new AnalysisController();
@@ -80,14 +82,19 @@ public class TestTimestampFilter { // NOCS
 				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP - 1, // tin
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP - 1, // tout
 				0, 0); // eoi, ess
+		reader.addObject(exec);
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
+		controller.registerReader(reader);
 		controller.registerFilter(filter);
 		controller.registerFilter(sinkPlugin);
 
+		controller.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, filter, TimestampFilter.INPUT_PORT_NAME_EXECUTION);
 		controller.connect(filter, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
-		filter.inputExecution(exec);
+
+		controller.run();
+
 		Assert.assertTrue("Filter passed execution " + exec + " although tin timestamp before" + TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP
 				, sinkPlugin.getList().isEmpty());
 
@@ -103,6 +110,7 @@ public class TestTimestampFilter { // NOCS
 	 */
 	@Test
 	public void testRecordTinWithinToutAfterIgnored() throws IllegalStateException, AnalysisConfigurationException {
+		final SimpleListReader<Execution> reader = new SimpleListReader<Execution>(new Configuration());
 		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
 		final SimpleSinkFilter<Execution> sinkPlugin = new SimpleSinkFilter<Execution>(new Configuration());
@@ -112,15 +120,19 @@ public class TestTimestampFilter { // NOCS
 				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP + 1, // tin
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP + 1, // tout
 				0, 0); // eoi, ess
+		reader.addObject(exec);
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
+		controller.registerReader(reader);
 		controller.registerFilter(filter);
 		controller.registerFilter(sinkPlugin);
 
+		controller.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, filter, TimestampFilter.INPUT_PORT_NAME_EXECUTION);
 		controller.connect(filter, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
 
-		filter.inputExecution(exec);
+		controller.run();
+
 		Assert.assertTrue("Filter passed execution " + exec + " although tin timestamp before" + TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP
 				, sinkPlugin.getList().isEmpty());
 	}
@@ -135,6 +147,7 @@ public class TestTimestampFilter { // NOCS
 	 */
 	@Test
 	public void testRecordTinToutOnBordersPassed() throws IllegalStateException, AnalysisConfigurationException {
+		final SimpleListReader<Execution> reader = new SimpleListReader<Execution>(new Configuration());
 		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
 		final SimpleSinkFilter<Execution> sinkPlugin = new SimpleSinkFilter<Execution>(new Configuration());
@@ -144,14 +157,18 @@ public class TestTimestampFilter { // NOCS
 				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP, // tin
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP, // tout
 				0, 0); // eoi, ess
+		reader.addObject(exec);
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
+		controller.registerReader(reader);
 		controller.registerFilter(filter);
 		controller.registerFilter(sinkPlugin);
 
+		controller.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, filter, TimestampFilter.INPUT_PORT_NAME_EXECUTION);
 		controller.connect(filter, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
-		filter.inputExecution(exec);
+
+		controller.run();
 
 		Assert.assertFalse("Filter didn't pass execution " + exec + " although timestamps within range [" + TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP
 				+ "," + TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP + "]", sinkPlugin.getList().isEmpty());
@@ -170,6 +187,7 @@ public class TestTimestampFilter { // NOCS
 	 */
 	@Test
 	public void testRecordTinToutWithinRangePassed() throws IllegalStateException, AnalysisConfigurationException {
+		final SimpleListReader<Execution> reader = new SimpleListReader<Execution>(new Configuration());
 		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
 		final SimpleSinkFilter<Execution> sinkPlugin = new SimpleSinkFilter<Execution>(new Configuration());
@@ -179,14 +197,19 @@ public class TestTimestampFilter { // NOCS
 				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP + 1, // tin
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP - 1, // tout
 				0, 0); // eoi, ess
+		reader.addObject(exec);
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
+		controller.registerReader(reader);
 		controller.registerFilter(filter);
 		controller.registerFilter(sinkPlugin);
 
+		controller.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, filter, TimestampFilter.INPUT_PORT_NAME_EXECUTION);
 		controller.connect(filter, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
-		filter.inputExecution(exec);
+
+		controller.run();
+
 		Assert.assertFalse("Filter didn't pass execution " + exec + " although timestamps within range [" + TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP
 				+ "," + TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP + "]", sinkPlugin.getList().isEmpty());
 

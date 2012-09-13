@@ -22,9 +22,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertex;
+import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractPayloadedVertex;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertexDecoration;
+import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
 
 /**
  * 
@@ -32,9 +34,12 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
  * 
  * @author Andre van Hoorn
  */
-public class DependencyGraphNode<T> extends AbstractVertex<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, MessageTrace> {
+public class DependencyGraphNode<T extends ISystemModelElement> extends
+		AbstractPayloadedVertex<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, MessageTrace, T> {
 
-	private final T entity;
+	public static final int ROOT_NODE_ID = AbstractSystemSubRepository.ROOT_ELEMENT_ID;
+	public static final String ROOT_NODE_NAME = "$";
+
 	private final int id;
 	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> incomingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD(UseConcurrentHashMap)//NOCS
 	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> outgoingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD(UseConcurrentHashMap)//NOCS
@@ -45,13 +50,17 @@ public class DependencyGraphNode<T> extends AbstractVertex<DependencyGraphNode<T
 	private volatile boolean assumed; // false
 
 	public DependencyGraphNode(final int id, final T entity, final MessageTrace origin) {
-		super(origin);
+		super(origin, entity);
 		this.id = id;
-		this.entity = entity;
 	}
 
 	public final T getEntity() {
-		return this.entity;
+		return this.getPayload();
+	}
+
+	@Override
+	public String getIdentifier() {
+		return this.getEntity().getIdentifier();
 	}
 
 	public final Collection<WeightedBidirectionalDependencyGraphEdge<T>> getIncomingDependencies() {
@@ -96,8 +105,10 @@ public class DependencyGraphNode<T> extends AbstractVertex<DependencyGraphNode<T
 				}
 
 				relevantDependencies.put(destination.getId(), e);
+			} else {
+				e.addOrigin(origin);
 			}
-			e.getTargetWeight().increase();
+			e.getTargetWeight().incrementAndGet();
 		}
 	}
 
@@ -114,8 +125,10 @@ public class DependencyGraphNode<T> extends AbstractVertex<DependencyGraphNode<T
 			if (e == null) {
 				e = new WeightedBidirectionalDependencyGraphEdge<T>(this, source, origin);
 				relevantDependencies.put(source.getId(), e);
+			} else {
+				e.addOrigin(origin);
 			}
-			e.getSourceWeight().increase();
+			e.getSourceWeight().incrementAndGet();
 		}
 	}
 

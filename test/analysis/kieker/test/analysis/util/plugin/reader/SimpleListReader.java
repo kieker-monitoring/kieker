@@ -16,8 +16,8 @@
 
 package kieker.test.analysis.util.plugin.reader;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.plugin.annotation.OutputPort;
@@ -56,7 +56,7 @@ public class SimpleListReader<T> extends AbstractReaderPlugin {
 	private final boolean awaitTermination;
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
 
-	private final List<T> objects = new ArrayList<T>();
+	private final List<T> objects = new CopyOnWriteArrayList<T>();
 
 	public SimpleListReader(final Configuration configuration) {
 		super(configuration);

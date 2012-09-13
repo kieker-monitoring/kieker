@@ -14,31 +14,26 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.writeRead.util;
+package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
+import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPair;
 
 /**
+ * This class represents operation dependency graphs on the assembly level.
  * 
- * @author Andre van Hoorn
+ * @author Holger Knoche
  * 
  */
-public class StringTeePrintStream extends PrintStream {
-	private static final String ENCODING = "UTF-8";
+public class OperationAssemblyDependencyGraph extends AbstractDependencyGraph<AssemblyComponentOperationPair> {
 
-	private final StringTeeOutputStream stringTeeOutputStream;
-
-	public StringTeePrintStream(final PrintStream originalStream) throws UnsupportedEncodingException {
-		super(new StringTeeOutputStream(originalStream), false, StringTeePrintStream.ENCODING);
-		this.stringTeeOutputStream = (StringTeeOutputStream) this.out;
+	/**
+	 * Creates a new graph with the given root entity.
+	 * 
+	 * @param rootEntity
+	 *            The root entity to use for this graph
+	 */
+	public OperationAssemblyDependencyGraph(final AssemblyComponentOperationPair rootEntity) {
+		super(rootEntity);
 	}
 
-	public String getString() {
-		if (this.stringTeeOutputStream == null) {
-			return null;
-		}
-
-		return this.stringTeeOutputStream.getString();
-	}
 }

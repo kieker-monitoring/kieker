@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package kieker.analysis.model.analysisMetaModel;
 
@@ -363,22 +359,13 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int PROPERTY__VALUE = 1;
 
 	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PROPERTY__DESCRIPTION = 2;
-
-	/**
 	 * The number of structural features of the '<em>Property</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROPERTY_FEATURE_COUNT = 3;
+	int PROPERTY_FEATURE_COUNT = 2;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MFilter <em>Filter</em>}' class.
@@ -646,7 +633,6 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 */
 	int REPOSITORY_CONNECTOR_FEATURE_COUNT = 2;
 
-
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDisplay <em>Display</em>}' class.
 	 * <!-- begin-user-doc -->
@@ -729,7 +715,6 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int VIEW_FEATURE_COUNT = 3;
-
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDisplayConnector <em>Display Connector</em>}' class.
@@ -1026,17 +1011,6 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getProperty_Value();
-
-	/**
-	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIProperty#getDescription <em>Description</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Description</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.MIProperty#getDescription()
-	 * @see #getProperty()
-	 * @generated
-	 */
-	EAttribute getProperty_Description();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIFilter <em>Filter</em>}'.
@@ -1497,14 +1471,6 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PROPERTY__VALUE = eINSTANCE.getProperty_Value();
-
-		/**
-		 * The meta object literal for the '<em><b>Description</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PROPERTY__DESCRIPTION = eINSTANCE.getProperty_Description();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MFilter <em>Filter</em>}' class.

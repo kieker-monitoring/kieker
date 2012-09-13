@@ -17,11 +17,10 @@
 package kieker.test.tools.junit.writeRead.database;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
@@ -66,11 +65,13 @@ public abstract class AbstractTestDbWriterReader extends AbstractWriterReaderTes
 	}
 
 	@Override
-	protected void inspectRecords(final List<IMonitoringRecord> eventsPassedToController, final List<IMonitoringRecord> eventFromMonitoringLog) throws Exception {
+	protected void inspectRecords(final List<IMonitoringRecord> eventsPassedToController, final List<IMonitoringRecord> eventsFromMonitoringLog) throws Exception {
 		// TODO currently the reader screws the order completely
-		Collections.sort(eventsPassedToController);
-		Collections.sort(eventFromMonitoringLog);
-		Assert.assertEquals("Unexpected set of records", eventsPassedToController, eventFromMonitoringLog);
+		final IMonitoringRecord[] eventsPassed = eventsPassedToController.toArray(new IMonitoringRecord[eventsPassedToController.size()]);
+		Arrays.sort(eventsPassed);
+		final IMonitoringRecord[] eventsFrom = eventsFromMonitoringLog.toArray(new IMonitoringRecord[eventsFromMonitoringLog.size()]);
+		Arrays.sort(eventsFrom);
+		Assert.assertArrayEquals("Unexpected set of records", eventsPassed, eventsFrom);
 	}
 
 	@Override
