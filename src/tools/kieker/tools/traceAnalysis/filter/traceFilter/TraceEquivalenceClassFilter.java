@@ -64,7 +64,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 
 	public static final String CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE = "equivalenceMode";
 
-	public static final TraceEquivalenceClassModes defaultEquivalenceMode = TraceEquivalenceClassModes.DISABLED;
+	public static final TraceEquivalenceClassModes DEFAULT_EQUIVALENCE_MODE = TraceEquivalenceClassModes.DISABLED;
 
 	private static final Log LOG = LogFactory.getLog(TraceEquivalenceClassFilter.class);
 
@@ -98,7 +98,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 			extractedEquivalenceMode = TraceEquivalenceClassModes.valueOf(traceEquivalenceCallModeString);
 		} catch (final IllegalArgumentException exc) {
 			LOG.error("Error extracting enum value from String: '" + traceEquivalenceCallModeString + "'", exc);
-			extractedEquivalenceMode = defaultEquivalenceMode;
+			extractedEquivalenceMode = DEFAULT_EQUIVALENCE_MODE;
 		}
 		return extractedEquivalenceMode;
 	}
