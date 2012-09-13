@@ -64,7 +64,7 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 			DependencyGraphNode<AllocationComponent> receiverNode = this.getGraph().getNode(receiverComponent.getId());
 
 			if (senderNode == null) {
-				senderNode = new DependencyGraphNode<AllocationComponent>(senderComponent.getId(), senderComponent, t);
+				senderNode = new DependencyGraphNode<AllocationComponent>(senderComponent.getId(), senderComponent, t.getTraceInformation());
 
 				if (m.getSendingExecution().isAssumed()) {
 					senderNode.setAssumed();
@@ -72,11 +72,11 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 
 				this.getGraph().addNode(senderNode.getId(), senderNode);
 			} else {
-				senderNode.addOrigin(t);
+				senderNode.addOrigin(t.getTraceInformation());
 			}
 
 			if (receiverNode == null) {
-				receiverNode = new DependencyGraphNode<AllocationComponent>(receiverComponent.getId(), receiverComponent, t);
+				receiverNode = new DependencyGraphNode<AllocationComponent>(receiverComponent.getId(), receiverComponent, t.getTraceInformation());
 
 				if (m.getReceivingExecution().isAssumed()) {
 					receiverNode.setAssumed();
@@ -84,13 +84,13 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 
 				this.getGraph().addNode(receiverNode.getId(), receiverNode);
 			} else {
-				receiverNode.addOrigin(t);
+				receiverNode.addOrigin(t.getTraceInformation());
 			}
 
 			final boolean assumed = this.isDependencyAssumed(senderNode, receiverNode);
 
-			senderNode.addOutgoingDependency(receiverNode, assumed, t);
-			receiverNode.addIncomingDependency(senderNode, assumed, t);
+			senderNode.addOutgoingDependency(receiverNode, assumed, t.getTraceInformation());
+			receiverNode.addIncomingDependency(senderNode, assumed, t.getTraceInformation());
 
 			this.invokeDecorators(m, senderNode, receiverNode);
 		}

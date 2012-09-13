@@ -70,21 +70,21 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 			DependencyGraphNode<ExecutionContainer> receiverNode = this.getGraph().getNode(receiverContainer.getId());
 
 			if (senderNode == null) {
-				senderNode = new DependencyGraphNode<ExecutionContainer>(senderContainer.getId(), senderContainer, t);
+				senderNode = new DependencyGraphNode<ExecutionContainer>(senderContainer.getId(), senderContainer, t.getTraceInformation());
 				this.getGraph().addNode(senderContainer.getId(), senderNode);
 			} else {
-				senderNode.addOrigin(t);
+				senderNode.addOrigin(t.getTraceInformation());
 			}
 
 			if (receiverNode == null) {
-				receiverNode = new DependencyGraphNode<ExecutionContainer>(receiverContainer.getId(), receiverContainer, t);
+				receiverNode = new DependencyGraphNode<ExecutionContainer>(receiverContainer.getId(), receiverContainer, t.getTraceInformation());
 				this.getGraph().addNode(receiverContainer.getId(), receiverNode);
 			} else {
-				receiverNode.addOrigin(t);
+				receiverNode.addOrigin(t.getTraceInformation());
 			}
 
-			senderNode.addOutgoingDependency(receiverNode, t);
-			receiverNode.addIncomingDependency(senderNode, t);
+			senderNode.addOutgoingDependency(receiverNode, t.getTraceInformation());
+			receiverNode.addIncomingDependency(senderNode, t.getTraceInformation());
 		}
 		this.reportSuccess(t.getTraceId());
 	}

@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractPayloadedVertex;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertexDecoration;
 import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
-import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+import kieker.tools.traceAnalysis.systemModel.TraceInformation;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
 
 /**
@@ -35,7 +35,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubReposi
  * @author Andre van Hoorn
  */
 public class DependencyGraphNode<T extends ISystemModelElement> extends
-		AbstractPayloadedVertex<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, MessageTrace, T> {
+		AbstractPayloadedVertex<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, TraceInformation, T> {
 
 	public static final int ROOT_NODE_ID = AbstractSystemSubRepository.ROOT_ELEMENT_ID;
 	public static final String ROOT_NODE_NAME = "$";
@@ -49,7 +49,7 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 
 	private volatile boolean assumed; // false
 
-	public DependencyGraphNode(final int id, final T entity, final MessageTrace origin) {
+	public DependencyGraphNode(final int id, final T entity, final TraceInformation origin) {
 		super(origin, entity);
 		this.id = id;
 	}
@@ -87,11 +87,11 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 		return this.assumed;
 	}
 
-	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final MessageTrace origin) {
+	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final TraceInformation origin) {
 		this.addOutgoingDependency(destination, false, origin);
 	}
 
-	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final boolean isAssumed, final MessageTrace origin) {
+	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final boolean isAssumed, final TraceInformation origin) {
 		synchronized (this) {
 			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = // NOPMD(UseConcurrentHashMap)
 			isAssumed ? this.assumedOutgoingDependencies : this.outgoingDependencies; // NOCS (inline ?)
@@ -112,11 +112,11 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 		}
 	}
 
-	public void addIncomingDependency(final DependencyGraphNode<T> source, final MessageTrace origin) {
+	public void addIncomingDependency(final DependencyGraphNode<T> source, final TraceInformation origin) {
 		this.addIncomingDependency(source, false, origin);
 	}
 
-	public void addIncomingDependency(final DependencyGraphNode<T> source, final boolean isAssumed, final MessageTrace origin) {
+	public void addIncomingDependency(final DependencyGraphNode<T> source, final boolean isAssumed, final TraceInformation origin) {
 		synchronized (this) {
 			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = // NOPMD(UseConcurrentHashMap)
 			isAssumed ? this.assumedIncomingDependencies : this.incomingDependencies; // NOCS (inline ?)
