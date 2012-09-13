@@ -69,7 +69,7 @@ public class AttributeIteratorTest {
 
 	@Test
 	public void testAttributeFromCSharpClassOnlyStorableUnits() throws InvalidClassException {
-		final String path = "tmp/SharpDevelop.xmi"; // FIXME: correct file?
+		final String path = "tmp/SharpDevelop.xmi";
 		final KDMModelManager modelManager = new KDMModelManager(path);
 		final String key = "ICSharpCode.CodeAnalysis.SuppressMessageCommand";
 		final Iterator<AttributeDescription> it = modelManager.iterateAttributesFromClass(key);
@@ -84,7 +84,7 @@ public class AttributeIteratorTest {
 
 	@Test
 	public void testAttributeFromCSharpClassOnlyMemberUnits() throws InvalidClassException {
-		final String path = "tmp/SharpDevelop.xmi"; // FIXME: correct file?
+		final String path = "tmp/SharpDevelop.xmi";
 		final KDMModelManager modelManager = new KDMModelManager(path);
 		final String key = "Mono.Cecil.EventReference";
 		final Iterator<AttributeDescription> it = modelManager.iterateAttributesFromClass(key);

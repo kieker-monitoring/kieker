@@ -124,8 +124,6 @@ public class DependencyIteratorTest {
 		final Iterator<DependencyDescription> it = new DependencyIterator(classUnit);
 		final List<String> l = new LinkedList<String>();
 		while (it.hasNext()) {
-			// A simple call of it.hasNext() may be useful sometimes, so test it
-			it.hasNext();
 			l.add(this.print(it.next()));
 		}
 		Assert.assertArrayEquals(

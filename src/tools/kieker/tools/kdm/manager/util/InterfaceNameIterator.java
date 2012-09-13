@@ -171,7 +171,7 @@ public final class InterfaceNameIterator extends AbstractKDMIterator<String> {
 					// Else try again
 					cond = true;
 					// Reset current element!!
-					this.currentElement = null;
+					this.currentElement = null; // NOPMD (null)
 					this.stepBack();
 				}
 			} while (cond && this.currentIterator.hasNext() && !this.iteratorStack.isEmpty());
@@ -193,13 +193,10 @@ public final class InterfaceNameIterator extends AbstractKDMIterator<String> {
 		if (this.currentElement == null) {
 			throw new NoSuchElementException("No more elements");
 		}
-
 		final InterfaceUnit interfaze = (InterfaceUnit) this.currentElement;
-
 		// Assemble name
 		final StringBuilder parentName = new StringBuilder(this.getLastName());
 		parentName.append(interfaze.getName());
-
 		// perform depth-first search?
 		if (this.performDepthFirstSearch) {
 			this.nameStak.push(parentName.toString());
@@ -209,8 +206,7 @@ public final class InterfaceNameIterator extends AbstractKDMIterator<String> {
 			this.currentIterator = iterator;
 		}
 		// Reset current element!!
-		this.currentElement = null;
-
+		this.currentElement = null; // NOPMD (null)
 		return parentName.toString();
 	}
 }

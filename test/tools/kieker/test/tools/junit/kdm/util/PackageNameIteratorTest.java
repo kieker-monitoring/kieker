@@ -164,10 +164,7 @@ public class PackageNameIteratorTest {
 		final Iterator<String> it = new PackageNameIterator(pack, key, false);
 		final List<String> l = new LinkedList<String>();
 		while (it.hasNext()) {
-			// A simple call of it.hasNext() may be useful sometimes, so test it
-			it.hasNext();
-			final String p = it.next();
-			l.add(p);
+			l.add(it.next());
 		}
 		Assert.assertArrayEquals(
 				new String[] {

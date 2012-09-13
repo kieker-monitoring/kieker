@@ -201,7 +201,7 @@ public class DependencyDescription {
 				parts.add(interfaceUnit.getName());
 				parentElement = parentElement.eContainer();
 			} else {
-				parentElement = null;
+				break;
 			}
 		}
 
@@ -221,7 +221,6 @@ public class DependencyDescription {
 		} else {
 			namespaceName = "";
 		}
-
 		return namespaceName;
 	}
 

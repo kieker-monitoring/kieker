@@ -136,8 +136,6 @@ public class InterfaceNameIteratorTest {
 		final Iterator<String> it = new InterfaceNameIterator(clazz, key, true);
 		final List<String> l = new LinkedList<String>();
 		while (it.hasNext()) {
-			// A simple call of it.hasNext() may be useful sometimes, so test it
-			it.hasNext();
 			l.add(it.next());
 		}
 		Assert.assertArrayEquals(new Object[] { "test.zwei.acht.IPrintable", "test.zwei.acht.IPrintable.IWritable" }, l.toArray());

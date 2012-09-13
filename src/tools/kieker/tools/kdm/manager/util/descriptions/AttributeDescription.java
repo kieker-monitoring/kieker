@@ -39,7 +39,6 @@ import org.eclipse.gmt.modisco.omg.kdm.kdm.Attribute;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.monitoring.core.controller.ProbeController;
 import kieker.tools.kdm.manager.KDMModelManager;
 import kieker.tools.kdm.manager.util.ElementType;
 
@@ -50,7 +49,7 @@ import kieker.tools.kdm.manager.util.ElementType;
  * 
  */
 public class AttributeDescription {
-	private static final Log LOG = LogFactory.getLog(ProbeController.class);
+	private static final Log LOG = LogFactory.getLog(AttributeDescription.class);
 
 	/**
 	 * The name of the attribute.

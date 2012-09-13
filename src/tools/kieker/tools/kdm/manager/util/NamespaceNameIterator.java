@@ -152,7 +152,7 @@ public class NamespaceNameIterator extends AbstractKDMIterator<String> {
 					// Else try again
 					cond = true;
 					// Reset current element!!
-					this.currentElement = null;
+					this.currentElement = null; // NOPMD (null)
 					this.stepBack();
 				}
 			} while (cond && this.currentIterator.hasNext() && !this.iteratorStack.isEmpty());
@@ -192,8 +192,7 @@ public class NamespaceNameIterator extends AbstractKDMIterator<String> {
 			this.currentIterator = iterator;
 		}
 		// Reset current element!!
-		this.currentElement = null;
-
+		this.currentElement = null; // NOPMD (null)
 		return name;
 	}
 

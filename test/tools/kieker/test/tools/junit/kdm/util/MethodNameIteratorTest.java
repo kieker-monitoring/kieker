@@ -165,8 +165,6 @@ public class MethodNameIteratorTest {
 		final Iterator<MethodDescription> it = new MethodNameIterator(clazz, key);
 		final List<String> l = new LinkedList<String>();
 		while (it.hasNext()) {
-			// A simple call of it.hasNext() may be useful sometimes, so test it
-			it.hasNext();
 			l.add(this.print(it.next()));
 		}
 		Assert.assertArrayEquals(new Object[] { "public void showA()", "public void showB()", "public int showC()", "public void set()" }, l.toArray());

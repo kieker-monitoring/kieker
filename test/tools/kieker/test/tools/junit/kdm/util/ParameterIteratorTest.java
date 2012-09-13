@@ -188,8 +188,6 @@ public class ParameterIteratorTest {
 		final Iterator<ParameterDescription> it = new ParameterIterator(methodUnit);
 		final List<String> l = new LinkedList<String>();
 		while (it.hasNext()) {
-			// A simple call of it.hasNext() may be useful sometimes, so test it
-			it.hasNext();
 			l.add(this.print(it.next()));
 		}
 		Assert.assertArrayEquals(new Object[] { "char[] name", "int count", }, l.toArray());
@@ -201,13 +199,14 @@ public class ParameterIteratorTest {
 		// Get some methods
 		final String key = "ICSharpCode.SharpDevelop.ProjectActiveConditionEvaluator";
 		final Iterator<MethodDescription> it = modelManager.iterateMethodsFromClass(key);
-		it.hasNext();
-		final String methodKey = it.next().getMethodQualifier();
-		final Iterator<ParameterDescription> parameterIterator = modelManager.iterateParameter(methodKey);
 		final List<String> l = new LinkedList<String>();
-		while (parameterIterator.hasNext()) {
-			final String p = this.print(parameterIterator.next());
-			l.add(p);
+		if (it.hasNext()) {
+			final String methodKey = it.next().getMethodQualifier();
+			final Iterator<ParameterDescription> parameterIterator = modelManager.iterateParameter(methodKey);
+			while (parameterIterator.hasNext()) {
+				final String p = this.print(parameterIterator.next());
+				l.add(p);
+			}
 		}
 		final String[] values = new String[] { "object caller", "ICSharpCode.Cor.Condition condition", };
 		Assert.assertArrayEquals(values, l.toArray());

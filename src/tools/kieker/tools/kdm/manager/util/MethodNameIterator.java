@@ -101,7 +101,7 @@ public final class MethodNameIterator extends AbstractKDMIterator<MethodDescript
 					// Else try again
 					cond = true;
 					// Reset current element!!
-					this.currentElement = null;
+					this.currentElement = null; // NOPMD (null)
 					this.stepBack();
 				}
 			} while (cond && this.currentIterator.hasNext() && !this.iteratorStack.isEmpty());
@@ -130,8 +130,7 @@ public final class MethodNameIterator extends AbstractKDMIterator<MethodDescript
 		final MethodDescription description = new MethodDescription(methodUnit, qualifier);
 
 		// Reset current element!!
-		this.currentElement = null;
-
+		this.currentElement = null; // NOPMD (null)
 		return description;
 	}
 }

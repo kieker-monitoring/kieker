@@ -134,8 +134,6 @@ public class ClassNameIteratorTest {
 		final Iterator<String> it = new ClassNameIterator(pack, key, true);
 		final List<String> l = new LinkedList<String>();
 		while (it.hasNext()) {
-			// A simple call of it.hasNext() may be useful sometimes, so test it
-			it.hasNext();
 			l.add(it.next());
 		}
 		Assert.assertArrayEquals(new Object[] { "test.zwei.sieben.Foo", "test.zwei.sieben.Foo.Bar" }, l.toArray());

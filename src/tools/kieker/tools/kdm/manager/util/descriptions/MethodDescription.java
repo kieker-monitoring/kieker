@@ -34,7 +34,6 @@ import org.eclipse.gmt.modisco.omg.kdm.kdm.Attribute;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.monitoring.core.controller.SamplingController;
 import kieker.tools.kdm.manager.KDMModelManager;
 
 /**
@@ -44,7 +43,7 @@ import kieker.tools.kdm.manager.KDMModelManager;
  * 
  */
 public class MethodDescription {
-	private static final Log LOG = LogFactory.getLog(SamplingController.class);
+	private static final Log LOG = LogFactory.getLog(MethodDescription.class);
 
 	/**
 	 * The original method unit from kdm model.

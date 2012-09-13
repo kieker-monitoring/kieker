@@ -83,11 +83,10 @@ public class MethodCallIterator extends AbstractKDMIterator<String> {
 					// Else try again
 					cond = true;
 					// Reset current element!!
-					this.currentElement = null;
+					this.currentElement = null; // NOPMD (null)
 				}
 			} while (cond && this.currentIterator.hasNext());
 		}
-
 		return this.currentIterator.hasNext();
 	}
 
@@ -105,7 +104,6 @@ public class MethodCallIterator extends AbstractKDMIterator<String> {
 		if (this.currentElement == null) {
 			throw new NoSuchElementException("No more elements");
 		}
-
 		final CodeRelationship codeRelationship = (CodeRelationship) this.currentElement;
 
 		// Get the methods
@@ -123,8 +121,7 @@ public class MethodCallIterator extends AbstractKDMIterator<String> {
 		relationship.append(toMethod.getName());
 
 		// Reset current element!!
-		this.currentElement = null;
-
+		this.currentElement = null; // NOPMD (null)
 		return relationship.toString();
 	}
 
@@ -163,7 +160,7 @@ public class MethodCallIterator extends AbstractKDMIterator<String> {
 				// Get the next container
 				currentElement = interfaze.eContainer();
 			} else {
-				currentElement = null;
+				break;
 			}
 		}
 		// Keep the wrong order in mind
@@ -172,7 +169,6 @@ public class MethodCallIterator extends AbstractKDMIterator<String> {
 		for (final String part : parts) {
 			fullName.append(part).append('.');
 		}
-
 		return fullName.toString();
 	}
 }

@@ -172,7 +172,7 @@ public final class ClassNameIterator extends AbstractKDMIterator<String> {
 					// Else try again
 					cond = true;
 					// Reset current element!!
-					this.currentElement = null;
+					this.currentElement = null; // NOPMD (null)
 					this.stepBack();
 				}
 			} while (cond && this.currentIterator.hasNext() && !this.iteratorStack.isEmpty());
@@ -210,8 +210,7 @@ public final class ClassNameIterator extends AbstractKDMIterator<String> {
 			this.currentIterator = iterator;
 		}
 		// Reset current element!!
-		this.currentElement = null;
-
+		this.currentElement = null; // NOPMD (null)
 		return parentName.toString();
 	}
 }

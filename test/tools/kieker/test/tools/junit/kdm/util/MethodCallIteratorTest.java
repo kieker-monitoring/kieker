@@ -33,16 +33,8 @@ import kieker.tools.kdm.manager.util.MethodCallIterator;
 public class MethodCallIteratorTest {
 	private final Map<String, MethodUnit> methodCalls = TestPackageStructure.getMethods();
 
-	/**
-	 * Default constructor.
-	 */
 	public MethodCallIteratorTest() {
 		// No code necessary
-	}
-
-	@Test
-	public void testLoad() {
-		// Just to load the data and correct the runtime for the next method.
 	}
 
 	@Test
@@ -54,7 +46,6 @@ public class MethodCallIteratorTest {
 		while (it.hasNext()) {
 			l.add(it.next());
 		}
-
 		Assert.assertArrayEquals(l.toArray(), new String[] {});
 	}
 
@@ -67,7 +58,6 @@ public class MethodCallIteratorTest {
 		while (it.hasNext()) {
 			l.add(it.next());
 		}
-
 		Assert.assertArrayEquals(new String[] { "org.emf.kdm.Demo.showB() org.emf.abc.Input.Stream.open()", }, l.toArray());
 	}
 
@@ -80,7 +70,6 @@ public class MethodCallIteratorTest {
 		while (it.hasNext()) {
 			l.add(it.next());
 		}
-
 		Assert.assertArrayEquals(
 				new String[] {
 					"test.zwei.fuenf.Main.main() org.emf.kdm.Demo.showA()",
@@ -96,11 +85,8 @@ public class MethodCallIteratorTest {
 		final Iterator<String> it = new MethodCallIterator(methodUnit);
 		final List<String> l = new LinkedList<String>();
 		while (it.hasNext()) {
-			// A simple call of it.hasNext() may be useful sometimes, so test it
-			it.hasNext();
 			l.add(it.next());
 		}
-
 		Assert.assertArrayEquals(
 				new String[] {
 					"test.zwei.fuenf.Main.main() org.emf.kdm.Demo.showA()",

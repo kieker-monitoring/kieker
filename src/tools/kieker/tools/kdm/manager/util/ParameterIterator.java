@@ -101,11 +101,10 @@ public class ParameterIterator extends AbstractKDMIterator<ParameterDescription>
 					// Else try again
 					cond = true;
 					// Reset current element!!
-					this.currentElement = null;
+					this.currentElement = null; // NOPMD (null)
 				}
 			} while (cond && this.currentIterator.hasNext());
 		}
-
 		return this.currentIterator.hasNext();
 	}
 
@@ -127,8 +126,7 @@ public class ParameterIterator extends AbstractKDMIterator<ParameterDescription>
 		final ParameterDescription description = new ParameterDescription(parameterUnit);
 
 		// Reset current element!!
-		this.currentElement = null;
-
+		this.currentElement = null; // NOPMD (null)
 		return description;
 	}
 }

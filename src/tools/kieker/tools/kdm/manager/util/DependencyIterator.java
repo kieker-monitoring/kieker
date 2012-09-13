@@ -199,7 +199,7 @@ public class DependencyIterator extends AbstractKDMIterator<DependencyDescriptio
 					// Else try again
 					cond = true;
 					// Reset current element!!
-					this.currentElement = null;
+					this.currentElement = null; // NOPMD (null)
 					this.stepBack();
 				}
 			} while (cond && this.currentIterator.hasNext() && !this.iteratorStack.isEmpty());
@@ -217,19 +217,18 @@ public class DependencyIterator extends AbstractKDMIterator<DependencyDescriptio
 	private void tryGetParentCompilationUnit(final Datatype type) {
 		EObject parent = type.eContainer();
 		while (parent != null) {
-			// Stop at the CodeModel
 			if (parent instanceof CodeModel) {
-				parent = null;
+				break; // Stop at the CodeModel
 			} else if (parent instanceof CompilationUnit) { // We have found the target
 				final CompilationUnit cUnit = (CompilationUnit) parent;
 				final Iterator<AbstractCodeRelationship> relationIterator = cUnit.getCodeRelation().iterator();
 				this.iteratorStack.push(relationIterator);
 				this.currentIterator = relationIterator;
 				break;
-			} else if (parent instanceof Package) { // We can stop here, because we are in a Java model
-				parent = null;
-			} else { // Use the next parent
-				parent = parent.eContainer();
+			} else if (parent instanceof Package) {
+				break; // We can stop here, because we are in a Java model
+			} else {
+				parent = parent.eContainer(); // Use the next parent
 			}
 		}
 	}
@@ -247,7 +246,6 @@ public class DependencyIterator extends AbstractKDMIterator<DependencyDescriptio
 		if (this.currentElement == null) {
 			throw new NoSuchElementException("No more elements");
 		}
-
 		// Create new description object...
 		DependencyDescription description = null;
 		// On the right way
@@ -262,8 +260,7 @@ public class DependencyIterator extends AbstractKDMIterator<DependencyDescriptio
 			description = new DependencyDescription(ext);
 		}
 		// Reset current element!!
-		this.currentElement = null;
-
+		this.currentElement = null; // NOPMD (null)
 		return description;
 	}
 }

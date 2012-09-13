@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.kdm.manager;
+package kieker.tools.kdm.manager; // NOPMD (long class)
 
 import java.io.File;
 import java.io.IOException;
@@ -105,7 +105,7 @@ import kieker.tools.kdm.manager.util.descriptions.ParameterDescription;
  * 
  * @author Nils Christian Ehmke, Benjamin Harms
  */
-public final class KDMModelManager {
+public final class KDMModelManager { // NOPMD (long class)
 	private static final Log LOG = LogFactory.getLog(KDMModelManager.class);
 
 	/***************************************************************************************************************************************************************
@@ -769,7 +769,7 @@ public final class KDMModelManager {
 			final String fullClassQualifier = KDMModelManager.assembleFullQualifiedName(packageName, className);
 			clazz = this.classes.get(fullClassQualifier);
 		} else {
-			clazz = null;
+			clazz = null; // NOPMD (null) // this smells...
 		}
 
 		// Looks like we could add the method. Check whether it exists already by using the parameters and everything to identify the method uniquely.
@@ -2221,7 +2221,7 @@ public final class KDMModelManager {
 				// Get the next container
 				currentElement = interfaze.eContainer();
 			} else {
-				currentElement = null;
+				break;
 			}
 		}
 		// Keep the wrong order in mind
@@ -2260,8 +2260,8 @@ public final class KDMModelManager {
 					currentItem = currentItem.eContainer();
 				} else if (currentItem instanceof InterfaceUnit) {
 					currentItem = currentItem.eContainer();
-				} else {
-					currentItem = null;
+				} else { // TODO: This is no check on != null but != any of the above!
+					break;
 				}
 			}
 			// Keep the wrong order in mind

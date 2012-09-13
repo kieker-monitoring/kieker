@@ -82,7 +82,7 @@ public class AttributeIterator extends AbstractKDMIterator<AttributeDescription>
 					// Else try again
 					cond = true;
 					// Reset current element!!
-					this.currentElement = null;
+					this.currentElement = null; // NOPMD (null)
 					this.stepBack();
 				}
 			} while (cond && this.currentIterator.hasNext() && !this.iteratorStack.isEmpty());
@@ -117,9 +117,7 @@ public class AttributeIterator extends AbstractKDMIterator<AttributeDescription>
 			// Should not happen
 			throw new NoSuchElementException("Wrong type of current element.");
 		}
-
-		this.currentElement = null;
-
+		this.currentElement = null; // NOPMD (null)
 		return description;
 	}
 }

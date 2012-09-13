@@ -41,7 +41,6 @@ public final class PackageNameIterator extends AbstractKDMIterator<String> {
 	 */
 	public PackageNameIterator(final CodeModel codeModel) throws NullPointerException {
 		super(codeModel.getCodeElement());
-
 		this.performDepthFirstSearch = false;
 	}
 
@@ -55,13 +54,11 @@ public final class PackageNameIterator extends AbstractKDMIterator<String> {
 	 */
 	public PackageNameIterator(final List<List<AbstractCodeElement>> elementList) throws NullPointerException {
 		super(elementList.get(0));
-
 		for (int i = 1; i < elementList.size(); i++) {
 			final Iterator<AbstractCodeElement> iterator = elementList.get(i).iterator();
 			this.iteratorStack.push(iterator);
 			this.currentIterator = iterator;
 		}
-
 		this.performDepthFirstSearch = false;
 	}
 
@@ -95,7 +92,6 @@ public final class PackageNameIterator extends AbstractKDMIterator<String> {
 	 */
 	public PackageNameIterator(final Package pack, final String fullPackageName, final boolean depthFirstSearch) throws NullPointerException {
 		this(pack.getCodeElement(), depthFirstSearch);
-
 		this.nameStak.push(fullPackageName);
 	}
 
@@ -127,12 +123,11 @@ public final class PackageNameIterator extends AbstractKDMIterator<String> {
 					// Else try again
 					cond = true;
 					// Reset current element!!
-					this.currentElement = null;
+					this.currentElement = null; // NOPMD (null)
 					this.stepBack();
 				}
 			} while (cond && this.currentIterator.hasNext() && !this.iteratorStack.isEmpty());
 		}
-
 		return this.currentIterator.hasNext();
 	}
 
@@ -163,8 +158,7 @@ public final class PackageNameIterator extends AbstractKDMIterator<String> {
 			this.currentIterator = iterator;
 		}
 		// Reset current element!!
-		this.currentElement = null;
-
+		this.currentElement = null; // NOPMD (null)
 		return parentName.toString();
 	}
 }
