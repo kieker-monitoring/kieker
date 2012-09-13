@@ -31,10 +31,12 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * @author Jan Waller
  */
-public final class TestPluginShutdown {
+public final class TestPluginShutdown extends AbstractKiekerTest {
 
 	private static final AtomicInteger SHUTDOWNORDER = new AtomicInteger();
 

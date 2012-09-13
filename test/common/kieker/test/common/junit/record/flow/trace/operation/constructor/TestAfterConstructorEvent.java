@@ -21,10 +21,12 @@ import org.junit.Test;
 
 import kieker.common.record.flow.trace.operation.constructor.AfterConstructorEvent;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * @author Jan Waller
  */
-public class TestAfterConstructorEvent {
+public class TestAfterConstructorEvent extends AbstractKiekerTest {
 
 	private static final long TSTAMP = 987998L;
 	private static final long TRACE_ID = 23444L;

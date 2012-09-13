@@ -22,12 +22,14 @@ import org.junit.Test;
 import kieker.common.util.ClassOperationSignaturePair;
 import kieker.common.util.Signature;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * 
  * @author Andre van Hoorn
  * 
  */
-public class TestClassOperationSignaturePair {
+public class TestClassOperationSignaturePair extends AbstractKiekerTest {
 
 	public TestClassOperationSignaturePair() {
 		// empty default constructor

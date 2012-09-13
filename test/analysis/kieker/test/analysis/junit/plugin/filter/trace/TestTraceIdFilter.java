@@ -32,11 +32,12 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.analysis.util.plugin.reader.SimpleListReader;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Andre van Hoorn
  */
-public class TestTraceIdFilter {
+public class TestTraceIdFilter extends AbstractKiekerTest {
 
 	private static final String SESSION_ID = "sv7w1ifhK";
 	private static final String HOSTNAME = "srv098";

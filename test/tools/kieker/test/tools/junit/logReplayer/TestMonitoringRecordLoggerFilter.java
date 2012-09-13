@@ -47,6 +47,7 @@ import kieker.tools.logReplayer.MonitoringRecordLoggerFilter;
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.analysis.util.plugin.reader.SimpleListReader;
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.junit.writeRead.filesystem.KiekerLogDirFilter;
 
 /**
@@ -55,7 +56,7 @@ import kieker.test.tools.junit.writeRead.filesystem.KiekerLogDirFilter;
  * @author Andre van Hoorn
  * 
  */
-public class TestMonitoringRecordLoggerFilter {
+public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 	private static final Log LOG = LogFactory.getLog(TestMonitoringRecordLoggerFilter.class);
 
 	// parameters for the default list of events to use in the test

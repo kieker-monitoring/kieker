@@ -1,6 +1,11 @@
 <FindBugsFilter>
 	<!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
 
+  <Match>
+		<Class name="kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory" />
+		<Bug pattern="DLS_DEAD_LOCAL_STORE" />
+	</Match>
+
 	<Match>
 		<Class name="kieker.tools.traceAnalysis.repository.DescriptionRepository" />
 		<Method name="splitLine" params="java.lang.String" returns="java.lang.String[]" />

@@ -14,37 +14,30 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.common.junit.configuration;
+package kieker.test.tools.util;
 
-import org.junit.Assert;
-import org.junit.Test;
-
-import kieker.common.configuration.Configuration;
-
-import kieker.test.common.junit.AbstractKiekerTest;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.StringWriter;
 
 /**
- * @author Jan Waller
+ * @author Andre van Hoorn
  */
-public class TestConfigurationPath extends AbstractKiekerTest {
+public class StringTeeOutputStream extends OutputStream {
+	private final StringWriter stringWriter = new StringWriter();
+	private final OutputStream interceptedStream;
 
-	private static String[] paths = {
-		".", "",
-		"a", "a",
-		"./x", "x",
-		"../x\\y\\.././x", "../x/x",
-		"C:\\Temp\\x.txt", "C:/Temp/x.txt",
-	};
-
-	public TestConfigurationPath() {
-		// empty default constructor
+	public StringTeeOutputStream(final OutputStream teeStream) {
+		this.interceptedStream = teeStream;
 	}
 
-	@Test
-	public void testPath() {
-		Assert.assertTrue((paths.length % 2) == 0);
-		for (int i = 0; i < paths.length; i += 2) {
-			Assert.assertEquals(paths[i + 1], Configuration.convertToPath(paths[i]));
-		}
+	@Override
+	public void write(final int b) throws IOException {
+		this.stringWriter.write(b);
+		this.interceptedStream.write(b);
+	}
+
+	public String getString() {
+		return this.stringWriter.getBuffer().toString();
 	}
 }
