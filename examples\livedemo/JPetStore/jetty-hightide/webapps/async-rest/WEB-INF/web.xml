@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" version="2.4"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+  <display-name>Async REST Webservice Example</display-name>
+
+ 
+ <servlet>
+ 	<display-name>AsyncRestServlet</display-name>
+ 	<servlet-name>AsyncRestServlet</servlet-name>
+ 	<servlet-class>org.mortbay.demo.AsyncRestServlet</servlet-class>
+ </servlet>
+ <servlet>
+ 	<description>
+ 	</description>
+ 	<display-name>
+ 	SerialRestServlet</display-name>
+ 	<servlet-name>SerialRestServlet</servlet-name>
+ 	<servlet-class>
+ 	org.mortbay.demo.SerialRestServlet</servlet-class>
+ </servlet>
+
+ <servlet-mapping>
+ 	<servlet-name>AsyncRestServlet</servlet-name>
+ 	<url-pattern>/testAsync</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+ 	<servlet-name>SerialRestServlet</servlet-name>
+ 	<url-pattern>/testSerial</url-pattern>
+ </servlet-mapping>
+</web-app>

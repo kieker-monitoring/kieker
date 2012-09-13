@@ -1,0 +1,46 @@
+<html>
+ <head>
+  <style type='text/css'>
+    iframe {border: 0px}
+    table, tr, td {border: 0px}
+  </style>
+</head>
+<body>
+<h1>Blocking vs Asynchronous REST</h1>
+<p>
+This webapp demonstrates the advantages of calling webservices using 
+Asynchronous APIs.   In this case it calls the EBay REST API using
+the jetty async HTTP Client and Jetty Continuations to free the servlet
+thread while waiting for the response.   The results are compared to a 
+normal synchronous call and both the total and thread times are charted
+below.
+<p>
+It can be seen that for the synchronous case, the thread is held for the
+entire waiting time and that multiple requests are performed serially.
+For the asynchronous case, the thread is only held for a short periods
+and multiple requests can be handled in parallel.
+</p>
+
+<table width='100%'>
+	
+<tr>
+<td>
+  <iframe id="f1" width='100%' height='175px' src="testSerial?items=kayak"></iframe>
+</td>
+<td>
+  <iframe id="f3" width='100%' height='175px' src="testSerial?items=mouse,beer,gnome"></iframe>
+</td>
+</tr>
+ 
+<tr>
+<td>
+  <iframe id="f2" width='100%' height='175px' src="testAsync?items=kayak"/></iframe>
+</td>
+<td>
+  <iframe id="f4" width='100%' height='175px' src="testAsync?items=mouse,beer,gnome"/></iframe>
+</td>
+</tr>
+
+</table>
+</body>
+</html>
