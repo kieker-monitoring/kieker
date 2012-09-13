@@ -27,6 +27,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.analysis.repository.annotation.Repository;
 import kieker.common.configuration.Configuration;
@@ -40,7 +41,10 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.Color;
  * 
  */
 @Repository(name = "Trace color repository",
-		description = "Provides color information for trace coloring")
+		description = "Provides color information for trace coloring",
+		configuration = {
+			@Property(name = TraceColorRepositoryConfiguration.CONFIG_PROPERTY_NAME_TRACE_COLOR_FILE_NAME, defaultValue = "")
+		})
 public class TraceColorRepository extends AbstractRepository {
 
 	private static final String DEFAULT_KEYWORD = "default";

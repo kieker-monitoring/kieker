@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.analysis.repository.annotation.Repository;
 import kieker.common.configuration.Configuration;
@@ -36,7 +37,10 @@ import kieker.common.configuration.Configuration;
  * 
  */
 @Repository(name = "Description repository",
-		description = "Stores descriptions for names")
+		description = "Stores descriptions for names",
+		configuration = {
+			@Property(name = DescriptionRepositoryConfiguration.CONFIG_PROPERTY_NAME_DESCRIPTION_FILE_NAME, defaultValue = "")
+		})
 public class DescriptionRepository extends AbstractRepository {
 
 	private static final char DELIMITER = '=';
