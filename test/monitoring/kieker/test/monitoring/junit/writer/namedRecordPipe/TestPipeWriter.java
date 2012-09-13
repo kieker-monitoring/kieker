@@ -18,8 +18,7 @@ package kieker.test.monitoring.junit.writer.namedRecordPipe;
 
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.IMonitoringRecord;

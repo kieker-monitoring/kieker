@@ -16,8 +16,7 @@
 
 package kieker.test.common.junit.record.flow.trace.operation;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;

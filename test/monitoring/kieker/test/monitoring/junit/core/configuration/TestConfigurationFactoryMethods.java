@@ -16,8 +16,7 @@
 
 package kieker.test.monitoring.junit.core.configuration;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
@@ -119,13 +118,9 @@ public class TestConfigurationFactoryMethods { // NOCS
 		/*
 		 * { // NOCS (adding properties file in default location)
 		 * final String fn = "build/tests/" + Configuration.CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
-		 * try {
 		 * final PrintWriter pw = new PrintWriter(new FileOutputStream(fn, false));
 		 * pw.println(Configuration.CONTROLLER_NAME + "=KIEKER-SINGLETON-PROPERTIES-FILE-DEFAULT");
 		 * pw.close();
-		 * } catch (final FileNotFoundException e) {
-		 * Assert.fail("Failed to create file " + fn);
-		 * }
 		 * final Configuration configuration = Configuration.createSingletonConfiguration();
 		 * Assert.assertEquals("KIEKER-SINGLETON-PROPERTIES-FILE-DEFAULT", configuration.getStringProperty(Configuration.CONTROLLER_NAME));
 		 * }

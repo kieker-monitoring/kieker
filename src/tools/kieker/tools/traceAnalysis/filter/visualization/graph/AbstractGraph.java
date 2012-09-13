@@ -46,7 +46,7 @@ public abstract class AbstractGraph<V extends AbstractVertex<V, E, O>, E extends
 	 * @param visitor
 	 *            The visitor to call during traversal
 	 */
-	public void traverse(final Visitor<V, E> visitor) {
+	public void traverse(final IGraphVisitor<V, E> visitor) {
 		for (final V vertex : this.getVertices()) {
 			visitor.visitVertex(vertex);
 
@@ -62,7 +62,7 @@ public abstract class AbstractGraph<V extends AbstractVertex<V, E, O>, E extends
 	 * @param visitor
 	 *            The visitor to call during traversal
 	 */
-	public void traverseWithVerticesFirst(final Visitor<V, E> visitor) {
+	public void traverseWithVerticesFirst(final IGraphVisitor<V, E> visitor) {
 		for (final V vertex : this.getVertices()) {
 			visitor.visitVertex(vertex);
 		}
@@ -85,7 +85,7 @@ public abstract class AbstractGraph<V extends AbstractVertex<V, E, O>, E extends
 	 * @param <E>
 	 *            The type of the graph's edges
 	 */
-	public interface Visitor<V, E> {
+	public interface IGraphVisitor<V, E> {
 
 		/**
 		 * Call-back operation that is invoked when a vertex is encountered during graph traversal.

@@ -17,7 +17,7 @@
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
 import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFormatter;
-import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph.Visitor;
+import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph.IGraphVisitor;
 import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
 
@@ -27,13 +27,10 @@ import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
  * 
  * @author Holger Knoche
  * 
- * @param <V>
- *            The type of the graph's vertices
- * @param <E>
- *            The type of the graph's edges
+ * @param <T>
  */
 public abstract class AbstractDependencyGraphFormatterVisitor<T extends ISystemModelElement> implements
-		Visitor<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>> {
+		IGraphVisitor<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>> {
 
 	protected final StringBuilder builder; // NOPMD (AvoidStringBufferField)
 

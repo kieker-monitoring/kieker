@@ -613,8 +613,10 @@
         <!-- Checks for imports from a set of illegal packages. !-->
         <!-- See http://checkstyle.sf.net/config_import.html !-->
         <module name="IllegalImport">
+            <property name="illegalPkgs" value="junit.framework"/>
             <property name="illegalPkgs" value="sun"/>
             <property name="illegalPkgs" value="org.apache.commons.logging"/>
+            <property name="illegalPkgs" value="java.util.logging"/>
         </module>
 
         <!-- Controls what can be imported in each package. Useful for ensuring that application layering rules !-->
@@ -850,7 +852,7 @@
         </module>
         <module name="TodoComment">
             <property name="format" value="FIXME"/>
-            <property name="severity" value="warning"/>
+            <property name="severity" value="error"/>
         </module>
 
         <!-- The check to ensure that requires that comments be the only thing on a line. !-->

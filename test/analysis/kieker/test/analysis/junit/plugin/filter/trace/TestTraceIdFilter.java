@@ -19,8 +19,7 @@ package kieker.test.analysis.junit.plugin.filter.trace;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;

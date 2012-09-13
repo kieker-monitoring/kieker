@@ -18,8 +18,7 @@ package kieker.test.tools.junit.writeRead.namedPipe;
 
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 
 import kieker.analysis.AnalysisController;

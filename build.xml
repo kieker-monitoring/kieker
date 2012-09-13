@@ -10,7 +10,7 @@
 		<property name="kieker.name" value="Kieker Framework" />
 		<property name="kieker.version" value="1.6-SNAPSHOT" />
 		<property name="year" value="2012" />
-		<property name="copyright" value="the Kieker Project" />
+		<property name="copyright" value="Kieker Project" />
 		<property name="dist.kieker.monitoring.servlet.war" value="${kieker.monitoring.servlet.packagenamebase}-${kieker.version}.war" />
 		
 		<property name="dist.kieker.main.jar" value="${kieker.main.packagenamebase}-${kieker.version}.jar" />
@@ -147,7 +147,7 @@
 		<war destfile="${dist.dir}/${dist.kieker.monitoring.servlet.war}" webxml="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/WEB-INF/web.xml">
 			<classes dir="${build.kieker.monitoring.servlet.dir}" />
 			<zipfileset dir="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/images" prefix="images" />
-			<zipfileset file="LICENSE" prefix="" />
+			<zipfileset file="${license.file}" prefix="" />
 		</war>
 	</target>
 
@@ -186,7 +186,7 @@
 			<fileset dir="${build.kieker.analysis.model.dir}" />
 			<fileset dir="${build.kieker.monitoring.dir}" />
 			<fileset dir="${build.kieker.tools.dir}" />
-			<fileset dir="." includes="LICENSE" />
+			<fileset dir="." includes="${license.file}" />
 			<manifest>
 				<section name="kieker">
 					<attribute name="Specification-Title" value="${kieker.name}" />
@@ -309,7 +309,7 @@
 			<fileset dir="${build.kieker.analysis.model.dir}" />
 			<fileset dir="${src.kieker.monitoring.dir}" />
 			<fileset dir="${src.kieker.tools.dir}" />
-			<fileset dir="." includes="LICENSE" />
+			<fileset dir="." includes="${license.file}" />
 		</jar>
 	</target>
 
@@ -359,20 +359,20 @@
 
 	<target name="dist-kieker-sources" depends="-init" description="Packages the source archives (.zip|.tar.gz) for a release">
 		<patternset id="dist_src_files-nonbinmode">
-			<include name="bin/log4j.properties" />
-			<include name="bin/*.bat" />
+			<include name="${bin.dir}/log4j.properties" />
+			<include name="${bin.dir}/*.bat" />
 			<include name="${src.userguide.dir}/**/*" />
 			<exclude name="${src.userguide.dir}/**/*.sh" /> <!-- will be added in bin mode -->
 			<exclude name="META-INF/" /><!-- not required in source release release -->
-			<include name="src/**/*.java" />
-			<include name="src/**/META-INF/*" />
+			<include name="${src.dir}/**/*.java" />
+			<include name="${src.dir}/**/META-INF/*" />
 			<include name="${src.gen}/**/*.java" />
 			<include name="${src.model.dir}/*.ecore" />
-			<include name="test/**/*.java" />
-			<include name="test/**/META-INF/*" />
+			<include name="${test.dir}/**/*.java" />
+			<include name="${test.dir}/**/META-INF/*" />
 			<include name="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/WEB-INF/**" />
 			<include name="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/images/**" />
-			<include name="lib/**" />
+			<include name="${lib.dir}/**" />
 			<include name="${examples.dir}/**/*" />
 			<exclude name="${examples.dir}/**/lib/*" />
 			<exclude name="${examples.dir}/**/**/*.jar" />
@@ -385,11 +385,11 @@
 			<include name="kieker-eclipse-formatter.xml" />
 			<include name="build.xml" />
 			<include name="build.properties" />
-			<include name="HISTORY" />
-			<include name="LICENSE" />
+			<include name="${history.file}" />
+			<include name="${license.file}" />
 		</patternset>
 		<patternset id="dist_src_files-binmode">
-			<include name="bin/**/*.sh" /> <!-- including subdirs (e.g., bin/dev/) here -->
+			<include name="${bin.dir}/**/*.sh" /> <!-- including subdirs (e.g., ${bin.dir}/dev/) here -->
 			<include name="${src.userguide.dir}/**/*.sh" />
 		</patternset>
 
@@ -421,15 +421,15 @@
 		<echo message="${src.userguide.pdf}" />
 
 		<patternset id="dist_bin_files-nonbinmode">
-			<include name="bin/log4j.properties" />
-			<include name="bin/*.bat" />
-			<include name="dist/*.jar" />
-			<include name="dist/*.war" />
+			<include name="${bin.dir}/log4j.properties" />
+			<include name="${bin.dir}/*.bat" />
+			<include name="${dist.dir}/*.jar" />
+			<include name="${dist.dir}/*.war" />
 
-			<include name="lib/*" />
-			<include name="lib/sigar-native-libs/*" />
-			<include name="HISTORY" />
-			<include name="LICENSE" />
+			<include name="${lib.dir}/*" />
+			<include name="${lib.sigar-native.dir}/*" />
+			<include name="${history.file}" />
+			<include name="${license.file}" />
 			<include name="${src.userguide.dist.pdf}" />
 			<include name="${examples.dir}/**/*" />
 			<exclude name="${examples.dir}/**/*.sh" /> <!-- added in bin mode below -->
@@ -437,7 +437,7 @@
 			<exclude name="${example.jpetstoreservlet.dir}/" />
 		</patternset>
 		<patternset id="dist_bin_files-binmode">
-			<include name="bin/*.sh" /> <!-- excluding subdirs (e.g., bin/dev/) here -->
+			<include name="${bin.dir}/*.sh" /> <!-- excluding subdirs (e.g., ${bin.dir}/dev/) here -->
 			<include name="${examples.dir}/**/*.sh" />
 			<exclude name="${example.jpetstoreservlet.dir}/**/bin/*.sh" />
 		</patternset>
@@ -473,7 +473,7 @@
 		<property name="jpetstore.dir" value="JPetStore-5.0-instrumented" />
 		<patternset id="dist_jpetstoreExample_files-nonbinmode">
 			<include name="${example.jpetstoreservlet.dir}/README" />
-			<include name="${example.jpetstoreservlet.dir}/LICENSE" />
+			<include name="${example.jpetstoreservlet.dir}/${license.file}" />
 			<include name="${example.jpetstoreservlet.dir}/kieker-testdata/**" />
 			<include name="${example.jpetstoreservlet.dir}/${tomcat.dir}/**" />
 			<exclude name="${example.jpetstoreservlet.dir}/${tomcat.dir}/bin/*.sh" />
@@ -623,7 +623,7 @@
 		<echo message="Also, in order to run with the source archive, you'll additionally need to extract the 'kieker-${kieker.version}_examples-JavaEEServletContainerExample'.{zip|tar.gz} archive" />
 
 		<echo message="Checking release archives ..." /> 
-		<exec executable="bin/dev/check-release-archives.sh" failonerror="true">
+		<exec executable="${tests.release-script.sh}" failonerror="true">
 			<arg value="-C" />
 			<arg value="." />
 		</exec>

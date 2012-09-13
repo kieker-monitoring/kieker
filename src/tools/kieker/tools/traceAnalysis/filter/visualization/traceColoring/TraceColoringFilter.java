@@ -26,7 +26,7 @@ import kieker.tools.traceAnalysis.filter.IGraphOutputtingFilter;
 import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFilter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractEdge;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
-import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph.Visitor;
+import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph.IGraphVisitor;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraphElement;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertex;
 import kieker.tools.traceAnalysis.filter.visualization.graph.Color;
@@ -50,7 +50,7 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 		repositoryPorts = @RepositoryPort(name = TraceColoringFilter.COLOR_REPOSITORY_NAME, repositoryType = TraceColorRepository.class),
 		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
 public class TraceColoringFilter<V extends AbstractVertex<V, E, MessageTrace>, E extends AbstractEdge<V, E, MessageTrace>> extends
-		AbstractGraphFilter<AbstractGraph<V, E, MessageTrace>, V, E, MessageTrace> implements Visitor<V, E> {
+		AbstractGraphFilter<AbstractGraph<V, E, MessageTrace>, V, E, MessageTrace> implements IGraphVisitor<V, E> {
 
 	public static final String COLOR_REPOSITORY_NAME = "colorRepository";
 
@@ -81,7 +81,14 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, MessageTrace>, E
 		} else {
 			final MessageTrace trace = element.getOrigins().iterator().next();
 			final long traceId = trace.getTraceId();
-			final Color color = (this.colorMap.containsKey(traceId)) ? this.colorMap.get(traceId) : this.defaultColor;
+
+			final Color color;
+			if (this.colorMap.containsKey(traceId)) {
+				color = this.colorMap.get(traceId);
+			} else {
+				color = this.defaultColor;
+			}
+
 			element.setColor(color);
 		}
 	}

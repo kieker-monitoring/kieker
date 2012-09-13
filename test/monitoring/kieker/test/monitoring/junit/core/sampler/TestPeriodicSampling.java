@@ -19,8 +19,7 @@ package kieker.test.monitoring.junit.core.sampler;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;

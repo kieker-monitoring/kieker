@@ -24,8 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -79,11 +78,7 @@ public class TestMonitoringRecordLoggerFilter {
 		final String asyncFsWriterPropertyPrefix = AsyncFsWriter.class.getName() + ".";
 
 		config.setProperty(asyncFsWriterPropertyPrefix + AbstractAsyncFSWriter.CONFIG_TEMP, Boolean.FALSE.toString());
-		try {
-			config.setProperty(AsyncFsWriter.class.getName() + "." + AbstractAsyncFSWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
-		} catch (final IOException e) {
-			Assert.fail(e.getMessage());
-		}
+		config.setProperty(AsyncFsWriter.class.getName() + "." + AbstractAsyncFSWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
 
 		// Write configuration to tmp file
 		LOG.info("Writing monitoring.properties to file '" + monitoringPropertiesFn + "'");
@@ -97,7 +92,6 @@ public class TestMonitoringRecordLoggerFilter {
 				os.close();
 			}
 		}
-
 	}
 
 	/**

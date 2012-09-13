@@ -74,6 +74,10 @@ public class AssemblyComponent implements ISystemModelElement {
 	}
 
 	public String getIdentifier() {
-		return (this.getType() == null) ? this.getName() : this.getType().getFullQualifiedName();
+		if (this.getType() == null) {
+			return this.getName();
+		} else {
+			return this.getType().getFullQualifiedName();
+		}
 	}
 }

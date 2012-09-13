@@ -31,13 +31,4 @@ public abstract class AbstractExecutionTraceProcessingFilter extends AbstractTra
 	public AbstractExecutionTraceProcessingFilter(final Configuration configuration) {
 		super(configuration);
 	}
-
-	@Deprecated
-	/**
-	 * To be removed in Kieker 1.7
-	 * 
-	 * @return
-	 */
-	public abstract String getExecutionTraceInputPortName();
-
 }

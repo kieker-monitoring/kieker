@@ -480,4 +480,42 @@ public final class BookstoreEventRecordFactory {
 		};
 		return new TraceEventRecords(trace, events);
 	}
+
+	public static TraceEventRecords validSyncTraceSimpleCallCall(final long firstTimestamp, final long traceId, final String sessionId, final String hostname) {
+		int curOrderIndex = 0;
+
+		// assumed to be uninstrumented: final BeforeOperationEvent entry0_0__bookstore_searchBook; // NOCS
+		// assumed to be uninstrumented: final CallOperationEvent call1_1__catalog_getBook; // NOCS
+		// assumed to be uninstrumented: final BeforeOperationEvent entry1_1__catalog_getBook; // NOCS
+		// assumed to be uninstrumented: final AfterOperationEvent exit1_1__catalog_getBook; // NOCS
+		final CallOperationEvent call2_1__crm_getOrders; // NOCS
+		// assumed to be uninstrumented: final BeforeOperationEvent entry2_1__crm_getOrders; // NOCS
+		final CallOperationEvent call3_2__catalog_getBook; // NOCS
+		// assumed to be uninstrumented: final BeforeOperationEvent entry3_2__catalog_getBook; // NOCS
+		// assumed to be uninstrumented: final AfterOperationEvent exit3_2__catalog_getBook; // NOCS
+		// assumed to be uninstrumented: final AfterOperationEvent exit2_1__crm_getOrders; // NOCS
+		// assumed to be uninstrumented: final AfterOperationEvent exit0_0__bookstore_searchBook; // NOCS
+
+		call2_1__crm_getOrders =
+				new CallOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders,
+						/* note that we are using the timestamp of the omitted event here! */
+						traceId, curOrderIndex++,
+						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
+						BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
+						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS,
+						BookstoreOperationExecutionRecordFactory.FQ_CLASS_CRM);
+		call3_2__catalog_getBook =
+				new CallOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook,
+						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS,
+						BookstoreOperationExecutionRecordFactory.FQ_CLASS_CRM,
+						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK,
+						BookstoreOperationExecutionRecordFactory.FQ_CLASS_CATALOG);
+
+		final Trace trace = new Trace(traceId, -1, sessionId, hostname, -1, -1);
+		final AbstractTraceEvent[] events = new AbstractTraceEvent[] {
+			call2_1__crm_getOrders,
+			call3_2__catalog_getBook,
+		};
+		return new TraceEventRecords(trace, events);
+	}
 }

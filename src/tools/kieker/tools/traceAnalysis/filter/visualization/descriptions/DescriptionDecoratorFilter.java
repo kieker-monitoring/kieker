@@ -26,7 +26,7 @@ import kieker.tools.traceAnalysis.filter.IGraphOutputtingFilter;
 import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFilter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractEdge;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
-import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph.Visitor;
+import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph.IGraphVisitor;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractPayloadedVertex;
 import kieker.tools.traceAnalysis.repository.DescriptionRepository;
 import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
@@ -48,7 +48,7 @@ import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
 		repositoryPorts = @RepositoryPort(name = DescriptionDecoratorFilter.DESCRIPTION_REPOSITORY_NAME, repositoryType = DescriptionRepository.class),
 		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
 public class DescriptionDecoratorFilter<V extends AbstractPayloadedVertex<V, E, O, ISystemModelElement>, E extends AbstractEdge<V, E, O>, O> extends
-		AbstractGraphFilter<AbstractGraph<V, E, O>, V, E, O> implements Visitor<V, E> {
+		AbstractGraphFilter<AbstractGraph<V, E, O>, V, E, O> implements IGraphVisitor<V, E> {
 
 	public static final String DESCRIPTION_REPOSITORY_NAME = "descriptionRepository";
 

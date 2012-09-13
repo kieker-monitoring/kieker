@@ -16,8 +16,7 @@
 
 package kieker.test.analysis.junit.plugin.reader.namedRecordPipe;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
@@ -29,7 +28,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.namedRecordPipe.IPipeWriter;
 import kieker.common.record.misc.EmptyRecord;
 
-import kieker.test.common.util.namedRecordPipe.NamedPipeFactory;
+import kieker.test.common.util.namedRecordPipe.NamedPipeWriterFactory;
 
 /**
  * A simple test for the class <code>PipeReader</code>.
@@ -42,7 +41,7 @@ public class TestPipeReader { // NOCS (MissingCtorCheck)
 	@Test
 	public void testNamedPipeReaderReceivesFromPipe() throws IllegalStateException, AnalysisConfigurationException {
 		// the pipe
-		final String pipeName = NamedPipeFactory.createPipeName();
+		final String pipeName = NamedPipeWriterFactory.createPipeName();
 
 		// the reader
 		final Configuration readerConfiguration = new Configuration();
@@ -54,7 +53,7 @@ public class TestPipeReader { // NOCS (MissingCtorCheck)
 		final CountingFilter countingFilter = new CountingFilter(countinConfiguration);
 
 		// the writer
-		final IPipeWriter writer = NamedPipeFactory.createAndRegisterNamedPipeRecordWriter(pipeName);
+		final IPipeWriter writer = NamedPipeWriterFactory.createAndRegisterNamedPipeRecordWriter(pipeName);
 
 		// the analysis controller
 		final AnalysisController analysis = new AnalysisController();

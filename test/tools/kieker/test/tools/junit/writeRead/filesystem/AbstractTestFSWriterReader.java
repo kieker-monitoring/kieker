@@ -22,8 +22,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
@@ -69,16 +68,13 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 	}
 
 	@Override
-	protected IMonitoringController createController(final int numRecordsWritten) {
+	protected IMonitoringController createController(final int numRecordsWritten) throws IOException {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, this.testedWriterClazz.getName());
 		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncFSWriter.CONFIG_TEMP, Boolean.FALSE.toString());
-		try {
-			config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncFSWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
-		} catch (final IOException e) {
-			Assert.fail(e.getMessage());
-		}
+		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncFSWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
+
 		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractTestFSWriterReader.CONFIG_ASYNC_WRITER_QUEUESIZE,
 				Integer.toString(numRecordsWritten * 2));
 		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractTestFSWriterReader.CONFIG_ASYNC_WRITER_BEHAVIOR, "0");

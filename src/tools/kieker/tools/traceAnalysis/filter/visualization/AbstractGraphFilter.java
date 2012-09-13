@@ -28,10 +28,12 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertex;
 /**
  * Abstract superclass for all graph filters.
  * 
+ * @param <G>
+ * @param <V>
+ * @param <E>
+ * @param <O>
  * @author Holger Knoche
- * 
  */
-
 @Plugin
 public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V extends AbstractVertex<V, E, O>, E extends AbstractEdge<V, E, O>, O> extends
 		AbstractFilterPlugin implements IGraphOutputtingFilter<G> {

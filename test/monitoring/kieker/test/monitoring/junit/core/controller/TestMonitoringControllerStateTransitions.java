@@ -16,8 +16,7 @@
 
 package kieker.test.monitoring.junit.core.controller;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
