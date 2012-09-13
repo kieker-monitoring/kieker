@@ -48,11 +48,6 @@ public class InterfaceNameIteratorTest {
 	}
 
 	@Test
-	public void testLoad() {
-		// Just to load the data and correct the runtime for the next method.
-	}
-
-	@Test
 	public void testNoInterface() {
 		final String key = "test.zwei.drei";
 		final Package clazz = this.packages.get(key);
@@ -61,7 +56,6 @@ public class InterfaceNameIteratorTest {
 		while (it.hasNext()) {
 			l.add(it.next());
 		}
-
 		Assert.assertArrayEquals(new Object[] {}, l.toArray());
 	}
 
@@ -74,7 +68,6 @@ public class InterfaceNameIteratorTest {
 		while (it.hasNext()) {
 			l.add(it.next());
 		}
-
 		Assert.assertArrayEquals(new Object[] {}, l.toArray());
 	}
 
@@ -87,7 +80,6 @@ public class InterfaceNameIteratorTest {
 		while (it.hasNext()) {
 			l.add(it.next());
 		}
-
 		Assert.assertArrayEquals(new Object[] { "test.zwei.sechs.IIterator" }, l.toArray());
 	}
 
@@ -105,7 +97,6 @@ public class InterfaceNameIteratorTest {
 		while (itDepthSearch.hasNext()) {
 			lDepthSearch.add(itDepthSearch.next());
 		}
-
 		Assert.assertArrayEquals(new Object[] { "test.zwei.acht.IPrintable" }, l.toArray());
 		Assert.assertArrayEquals(new Object[] { "test.zwei.acht.IPrintable", "test.zwei.acht.IPrintable.IWritable" }, lDepthSearch.toArray());
 	}
@@ -124,7 +115,6 @@ public class InterfaceNameIteratorTest {
 		while (itDepthSearch.hasNext()) {
 			lDepthSearch.add(itDepthSearch.next());
 		}
-
 		Assert.assertArrayEquals(new Object[] {}, l.toArray());
 		Assert.assertArrayEquals(new Object[] { "test.zwei.neun.InterfaceClass.IGetable" }, lDepthSearch.toArray());
 	}
@@ -136,7 +126,6 @@ public class InterfaceNameIteratorTest {
 		while (it.hasNext()) {
 			l.add(it.next());
 		}
-
 		Assert.assertArrayEquals(new Object[] { "IGlobalInterface" }, l.toArray());
 	}
 
@@ -151,43 +140,32 @@ public class InterfaceNameIteratorTest {
 			it.hasNext();
 			l.add(it.next());
 		}
-
 		Assert.assertArrayEquals(new Object[] { "test.zwei.acht.IPrintable", "test.zwei.acht.IPrintable.IWritable" }, l.toArray());
 	}
 
 	@Test
-	public void testSimpleInterfaceFromNamespace() {
-		try {
-			final String key = "NAnt.NUnit1.Types";
-			final Iterator<String> it = this.modelManager.iterateInterfacesFromNamespace(key);
-			final List<String> l = new LinkedList<String>();
-			while (it.hasNext()) {
-				final String name = it.next();
-				l.add(name);
-			}
-			final String[] values = new String[] { "NAnt.NUnit1.Types.IResultFormatter" };
-
-			Assert.assertArrayEquals(values, l.toArray());
-		} catch (final InvalidNamespaceException e) {
-			e.printStackTrace();
+	public void testSimpleInterfaceFromNamespace() throws InvalidNamespaceException {
+		final String key = "NAnt.NUnit1.Types";
+		final Iterator<String> it = this.modelManager.iterateInterfacesFromNamespace(key);
+		final List<String> l = new LinkedList<String>();
+		while (it.hasNext()) {
+			final String name = it.next();
+			l.add(name);
 		}
+		final String[] values = new String[] { "NAnt.NUnit1.Types.IResultFormatter" };
+		Assert.assertArrayEquals(values, l.toArray());
 	}
 
 	@Test
-	public void testMultipleInterfacesFromNamespace() {
-		try {
-			final String key = "NAnt.Core";
-			final Iterator<String> it = this.modelManager.iterateInterfacesFromNamespace(key);
-			final List<String> l = new LinkedList<String>();
-			while (it.hasNext()) {
-				final String name = it.next();
-				l.add(name);
-			}
-			final String[] values = new String[] { "NAnt.Core.IAttributeSetter", "NAnt.Core.IBuildListener", "NAnt.Core.IBuildLogger" };
-
-			Assert.assertArrayEquals(values, l.toArray());
-		} catch (final InvalidNamespaceException e) {
-			e.printStackTrace();
+	public void testMultipleInterfacesFromNamespace() throws InvalidNamespaceException {
+		final String key = "NAnt.Core";
+		final Iterator<String> it = this.modelManager.iterateInterfacesFromNamespace(key);
+		final List<String> l = new LinkedList<String>();
+		while (it.hasNext()) {
+			final String name = it.next();
+			l.add(name);
 		}
+		final String[] values = new String[] { "NAnt.Core.IAttributeSetter", "NAnt.Core.IBuildListener", "NAnt.Core.IBuildLogger" };
+		Assert.assertArrayEquals(values, l.toArray());
 	}
 }

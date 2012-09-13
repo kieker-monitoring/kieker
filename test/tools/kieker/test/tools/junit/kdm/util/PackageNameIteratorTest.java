@@ -39,16 +39,8 @@ public class PackageNameIteratorTest {
 	private final CodeModel codeModel = TestPackageStructure.getCodeModel();
 	private final Map<String, Package> packages = TestPackageStructure.getPackages();
 
-	/**
-	 * Default constructor.
-	 */
 	public PackageNameIteratorTest() {
 		// No code necessary.
-	}
-
-	@Test
-	public void testLoad() {
-		// Just to load the data and correct the runtime for the next method.
 	}
 
 	@Test
@@ -60,7 +52,6 @@ public class PackageNameIteratorTest {
 		while (it.hasNext()) {
 			l.add(it.next());
 		}
-
 		Assert.assertArrayEquals(new String[] {}, l.toArray());
 	}
 
@@ -71,8 +62,7 @@ public class PackageNameIteratorTest {
 		while (it.hasNext()) {
 			l.add(it.next());
 		}
-
-		Assert.assertArrayEquals(new String[] { "test", "org" }, l.toArray());
+		Assert.assertArrayEquals(new String[] { "test", "org", }, l.toArray());
 	}
 
 	@Test
@@ -84,8 +74,7 @@ public class PackageNameIteratorTest {
 		while (it.hasNext()) {
 			l.add(it.next());
 		}
-
-		Assert.assertArrayEquals(new String[] { "test.zwei.drei.vier" }, l.toArray());
+		Assert.assertArrayEquals(new String[] { "test.zwei.drei.vier", }, l.toArray());
 	}
 
 	@Test
@@ -117,48 +106,43 @@ public class PackageNameIteratorTest {
 		while (it.hasNext()) {
 			l.add(it.next());
 		}
-
 		Assert.assertArrayEquals(new String[] {}, l.toArray());
 	}
 
 	@Test
-	public void testWithPetStore() {
+	public void testWithPetStore() throws InvalidPackageException {
 		final KDMModelManager modelManager = new KDMModelManager("../examples/JavaEEServletContainerExample/JPetStore-KDM.xmi");
-		try {
-			// First level
-			final Iterator<String> itOrg = modelManager.iteratePackages();
-			Assert.assertTrue(itOrg.hasNext());
-			final String orgNext = itOrg.next();
-			Assert.assertEquals("org", orgNext);
-			// Second level
-			final Iterator<String> itMybatis = modelManager.iteratePackages(orgNext);
-			Assert.assertTrue(itMybatis.hasNext());
-			final String mybatisNext = itMybatis.next();
-			Assert.assertEquals("org.mybatis", mybatisNext);
-			// Third level
-			final Iterator<String> itJpetstore = modelManager.iteratePackages(mybatisNext);
-			Assert.assertTrue(itJpetstore.hasNext());
-			final String jpetstoreNext = itJpetstore.next();
-			Assert.assertEquals("org.mybatis.jpetstore", jpetstoreNext);
-			// Fourth level
-			final Iterator<String> it = modelManager.iteratePackages(jpetstoreNext);
-			final List<String> l = new LinkedList<String>();
-			while (it.hasNext()) {
-				final String p = it.next();
-				l.add(p);
-			}
 
-			Assert.assertArrayEquals(
-					new String[] {
-						"org.mybatis.jpetstore.domain",
-						"org.mybatis.jpetstore.exclude",
-						"org.mybatis.jpetstore.persistence",
-						"org.mybatis.jpetstore.service",
-						"org.mybatis.jpetstore.web",
-					}, l.toArray());
-		} catch (final InvalidPackageException e) {
-			e.printStackTrace();
+		// First level
+		final Iterator<String> itOrg = modelManager.iteratePackages();
+		Assert.assertTrue(itOrg.hasNext());
+		final String orgNext = itOrg.next();
+		Assert.assertEquals("org", orgNext);
+		// Second level
+		final Iterator<String> itMybatis = modelManager.iteratePackages(orgNext);
+		Assert.assertTrue(itMybatis.hasNext());
+		final String mybatisNext = itMybatis.next();
+		Assert.assertEquals("org.mybatis", mybatisNext);
+		// Third level
+		final Iterator<String> itJpetstore = modelManager.iteratePackages(mybatisNext);
+		Assert.assertTrue(itJpetstore.hasNext());
+		final String jpetstoreNext = itJpetstore.next();
+		Assert.assertEquals("org.mybatis.jpetstore", jpetstoreNext);
+		// Fourth level
+		final Iterator<String> it = modelManager.iteratePackages(jpetstoreNext);
+		final List<String> l = new LinkedList<String>();
+		while (it.hasNext()) {
+			final String p = it.next();
+			l.add(p);
 		}
+		Assert.assertArrayEquals(
+				new String[] {
+					"org.mybatis.jpetstore.domain",
+					"org.mybatis.jpetstore.exclude",
+					"org.mybatis.jpetstore.persistence",
+					"org.mybatis.jpetstore.service",
+					"org.mybatis.jpetstore.web",
+				}, l.toArray());
 	}
 
 	@Test
@@ -170,8 +154,7 @@ public class PackageNameIteratorTest {
 			final String p = it.next();
 			l.add(p);
 		}
-
-		Assert.assertArrayEquals(new String[] { "java", "net", "javax", "org" }, l.toArray());
+		Assert.assertArrayEquals(new String[] { "java", "net", "javax", "org", }, l.toArray());
 	}
 
 	@Test
@@ -186,7 +169,6 @@ public class PackageNameIteratorTest {
 			final String p = it.next();
 			l.add(p);
 		}
-
 		Assert.assertArrayEquals(
 				new String[] {
 					"test.zwei.drei",

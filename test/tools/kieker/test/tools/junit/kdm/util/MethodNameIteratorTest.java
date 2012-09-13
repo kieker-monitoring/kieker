@@ -28,6 +28,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.tools.kdm.manager.KDMModelManager;
+import kieker.tools.kdm.manager.exception.InvalidClassException;
+import kieker.tools.kdm.manager.exception.InvalidInterfaceException;
 import kieker.tools.kdm.manager.util.MethodNameIterator;
 import kieker.tools.kdm.manager.util.descriptions.MethodDescription;
 
@@ -49,11 +51,6 @@ public class MethodNameIteratorTest {
 	}
 
 	@Test
-	public void testLoad() {
-		// Just to load the data and correct the runtime for the next method.
-	}
-
-	@Test
 	public void testNoMethods() {
 		final String key = "test.zwei.sieben.Foo.Bar";
 		final ClassUnit clazz = this.classes.get(key);
@@ -62,7 +59,6 @@ public class MethodNameIteratorTest {
 		while (it.hasNext()) {
 			l.add(this.print(it.next()));
 		}
-
 		Assert.assertArrayEquals(new Object[] {}, l.toArray());
 	}
 
@@ -75,7 +71,6 @@ public class MethodNameIteratorTest {
 		while (it.hasNext()) {
 			l.add(this.print(it.next()));
 		}
-
 		Assert.assertArrayEquals(new Object[] { "public void main()" }, l.toArray());
 	}
 
@@ -88,9 +83,7 @@ public class MethodNameIteratorTest {
 		while (it.hasNext()) {
 			l.add(this.print(it.next()));
 		}
-
-		Assert.assertArrayEquals(new Object[] { "public void showA()", "public void showB()", "public int showC()", "public void set()" },
-				l.toArray());
+		Assert.assertArrayEquals(new Object[] { "public void showA()", "public void showB()", "public int showC()", "public void set()" }, l.toArray());
 	}
 
 	@Test
@@ -102,7 +95,6 @@ public class MethodNameIteratorTest {
 		while (it.hasNext()) {
 			l.add(this.print(it.next()));
 		}
-
 		Assert.assertArrayEquals(new Object[] {}, l.toArray());
 	}
 
@@ -115,7 +107,6 @@ public class MethodNameIteratorTest {
 		while (it.hasNext()) {
 			l.add(this.print(it.next()));
 		}
-
 		Assert.assertArrayEquals(new Object[] { "public int iterate()" }, l.toArray());
 	}
 
@@ -126,7 +117,6 @@ public class MethodNameIteratorTest {
 		while (it.hasNext()) {
 			l.add(this.print(it.next()));
 		}
-
 		Assert.assertArrayEquals(new Object[] { "public void globalMethod()", "protected void globalMethodNext()" }, l.toArray());
 	}
 
@@ -139,38 +129,33 @@ public class MethodNameIteratorTest {
 		while (it.hasNext()) {
 			l.add(this.print(it.next()));
 		}
-
 		Assert.assertArrayEquals(new Object[] { "public Manager()" }, l.toArray());
 	}
 
 	@Test
-	public void testWithJPetStore() {
+	public void testWithJPetStore() throws InvalidClassException, InvalidInterfaceException {
 		final KDMModelManager modelManager = new KDMModelManager("../examples/JavaEEServletContainerExample/JPetStore-KDM.xmi");
-		try {
-			// Get some methods
-			Iterator<MethodDescription> methodIterator = modelManager.iterateMethodsFromInterface("org.mybatis.jpetstore.persistence.AccountMapper");
-			Assert.assertTrue(methodIterator.hasNext());
-			Assert.assertEquals("public org.mybatis.jpetstore.domain.SubAccount getSubAccountByUsername", this.print(methodIterator.next()));
-			Assert.assertTrue(methodIterator.hasNext());
-			Assert.assertEquals("public org.mybatis.jpetstore.domain.Profile getProfile", this.print(methodIterator.next()));
-			Assert.assertTrue(methodIterator.hasNext());
-			Assert.assertEquals("public org.mybatis.jpetstore.domain.Banner getBannerData", this.print(methodIterator.next()));
-			Assert.assertTrue(methodIterator.hasNext());
-			Assert.assertEquals("public org.mybatis.jpetstore.domain.Signon getSignon", this.print(methodIterator.next()));
-			Assert.assertTrue(methodIterator.hasNext());
-			Assert.assertEquals("public org.mybatis.jpetstore.domain.Account getAccountByUsername", this.print(methodIterator.next()));
-			Assert.assertTrue(methodIterator.hasNext());
-			Assert.assertEquals("public org.mybatis.jpetstore.domain.Account getAccountByUsernameAndPassword", this.print(methodIterator.next()));
-			// ...
-			// Get a constructor
-			methodIterator = modelManager.iterateMethodsFromClass("org.mybatis.jpetstore.service.AccountService");
-			Assert.assertTrue(methodIterator.hasNext());
-			final MethodDescription description = methodIterator.next();
-			Assert.assertTrue(description.isConstructor());
-			Assert.assertEquals("protected AccountService", this.print(description));
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
+		// Get some methods
+		Iterator<MethodDescription> methodIterator = modelManager.iterateMethodsFromInterface("org.mybatis.jpetstore.persistence.AccountMapper");
+		Assert.assertTrue(methodIterator.hasNext());
+		Assert.assertEquals("public org.mybatis.jpetstore.domain.SubAccount getSubAccountByUsername", this.print(methodIterator.next()));
+		Assert.assertTrue(methodIterator.hasNext());
+		Assert.assertEquals("public org.mybatis.jpetstore.domain.Profile getProfile", this.print(methodIterator.next()));
+		Assert.assertTrue(methodIterator.hasNext());
+		Assert.assertEquals("public org.mybatis.jpetstore.domain.Banner getBannerData", this.print(methodIterator.next()));
+		Assert.assertTrue(methodIterator.hasNext());
+		Assert.assertEquals("public org.mybatis.jpetstore.domain.Signon getSignon", this.print(methodIterator.next()));
+		Assert.assertTrue(methodIterator.hasNext());
+		Assert.assertEquals("public org.mybatis.jpetstore.domain.Account getAccountByUsername", this.print(methodIterator.next()));
+		Assert.assertTrue(methodIterator.hasNext());
+		Assert.assertEquals("public org.mybatis.jpetstore.domain.Account getAccountByUsernameAndPassword", this.print(methodIterator.next()));
+		// ...
+		// Get a constructor
+		methodIterator = modelManager.iterateMethodsFromClass("org.mybatis.jpetstore.service.AccountService");
+		Assert.assertTrue(methodIterator.hasNext());
+		final MethodDescription description = methodIterator.next();
+		Assert.assertTrue(description.isConstructor());
+		Assert.assertEquals("protected AccountService", this.print(description));
 	}
 
 	@Test
@@ -184,61 +169,49 @@ public class MethodNameIteratorTest {
 			it.hasNext();
 			l.add(this.print(it.next()));
 		}
-
-		Assert.assertArrayEquals(new Object[] { "public void showA()", "public void showB()", "public int showC()", "public void set()" },
-				l.toArray());
+		Assert.assertArrayEquals(new Object[] { "public void showA()", "public void showB()", "public int showC()", "public void set()" }, l.toArray());
 	}
 
 	@Test
-	public void testMethodsFromCSharpClass() {
+	public void testMethodsFromCSharpClass() throws InvalidClassException {
 		final KDMModelManager modelManager = new KDMModelManager("tmp/SharpDevelop.xmi");
-		try {
-			// Get some methods
-			final String key = "ICSharpCode.FormsDesigner.Services.ImageResourceEditor";
-			final Iterator<MethodDescription> it = modelManager.iterateMethodsFromClass(key);
-			final List<String> l = new LinkedList<String>();
-			while (it.hasNext()) {
-				final String p = this.print(it.next());
-				l.add(p);
-			}
-
-			final String[] values = new String[] {
-				"public System.Drawing.Desig.UITypeEditorEditStyle GetEditStyle",
-				"public object EditValue",
-				"public bool GetPaintValueSupported",
-				"public void PaintValue",
-			};
-			Assert.assertArrayEquals(values, l.toArray());
-		} catch (final Exception e) {
-			e.printStackTrace();
+		// Get some methods
+		final String key = "ICSharpCode.FormsDesigner.Services.ImageResourceEditor";
+		final Iterator<MethodDescription> it = modelManager.iterateMethodsFromClass(key);
+		final List<String> l = new LinkedList<String>();
+		while (it.hasNext()) {
+			final String p = this.print(it.next());
+			l.add(p);
 		}
+		final String[] values = new String[] {
+			"public System.Drawing.Desig.UITypeEditorEditStyle GetEditStyle",
+			"public object EditValue",
+			"public bool GetPaintValueSupported",
+			"public void PaintValue",
+		};
+		Assert.assertArrayEquals(values, l.toArray());
 	}
 
 	@Test
-	public void testMethodsFromCSharpInterface() {
+	public void testMethodsFromCSharpInterface() throws InvalidClassException {
 		// More then one million lines of code and no InterfaceUnit containing some attributes or methods...so test another class...
 		final KDMModelManager modelManager = new KDMModelManager("tmp/SharpDevelop.xmi");
-		try {
-			final String key = "ICSharpCode.XamlBinding.PowerToys.Dialogs.DragDropMarkerAdorner";
-			// Get some methods
-			final Iterator<MethodDescription> it = modelManager.iterateMethodsFromClass(key);
-			final List<String> l = new LinkedList<String>();
-			while (it.hasNext()) {
-				final String p = this.print(it.next());
-				l.add(p);
-			}
-
-			final String[] values = new String[] {
-				"protected void OnRender",
-				"protected System.Window.Size MeasureOverride",
-				"protected System.Window.Size ArrangeOverride",
-				"public ICSharpCode.XamlBinding.PowerToys.Dialog.DragDropMarkerAdorner CreateAdornerContentMove",
-				"public ICSharpCode.XamlBinding.PowerToys.Dialog.DragDropMarkerAdorner CreateAdornerCellMove",
-			};
-			Assert.assertArrayEquals(values, l.toArray());
-		} catch (final Exception e) {
-			e.printStackTrace();
+		final String key = "ICSharpCode.XamlBinding.PowerToys.Dialogs.DragDropMarkerAdorner";
+		// Get some methods
+		final Iterator<MethodDescription> it = modelManager.iterateMethodsFromClass(key);
+		final List<String> l = new LinkedList<String>();
+		while (it.hasNext()) {
+			final String p = this.print(it.next());
+			l.add(p);
 		}
+		final String[] values = new String[] {
+			"protected void OnRender",
+			"protected System.Window.Size MeasureOverride",
+			"protected System.Window.Size ArrangeOverride",
+			"public ICSharpCode.XamlBinding.PowerToys.Dialog.DragDropMarkerAdorner CreateAdornerContentMove",
+			"public ICSharpCode.XamlBinding.PowerToys.Dialog.DragDropMarkerAdorner CreateAdornerCellMove",
+		};
+		Assert.assertArrayEquals(values, l.toArray());
 	}
 
 	private String print(final MethodDescription description) {
@@ -248,7 +221,6 @@ public class MethodNameIteratorTest {
 			line.append(description.getReturnType()).append(' ');
 		}
 		line.append(description.getName());
-
 		return line.toString();
 	}
 }

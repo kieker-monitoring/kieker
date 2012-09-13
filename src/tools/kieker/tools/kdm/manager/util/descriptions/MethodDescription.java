@@ -16,11 +16,8 @@
 
 package kieker.tools.kdm.manager.util.descriptions;
 
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
 
 import org.eclipse.gmt.modisco.omg.kdm.code.AbstractCodeElement;
 import org.eclipse.gmt.modisco.omg.kdm.code.ArrayType;
@@ -35,20 +32,20 @@ import org.eclipse.gmt.modisco.omg.kdm.code.PrimitiveType;
 import org.eclipse.gmt.modisco.omg.kdm.code.Signature;
 import org.eclipse.gmt.modisco.omg.kdm.kdm.Attribute;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
+import kieker.monitoring.core.controller.SamplingController;
 import kieker.tools.kdm.manager.KDMModelManager;
 
 /**
- * This class provides a description of a {@link MethodUnit}. It also contains the unique method qualifier necessary to use other iterators form the
- * KDMModelManager.
+ * This class provides a description of a {@link MethodUnit}. It also contains the unique method qualifier necessary to use other iterators form the KDMModelManager.
  * 
  * @author Benjamin Harms
  * 
  */
 public class MethodDescription {
-	/**
-	 * This is the logger which can be used to log messages. The logged messages will be written into a suitable log file.
-	 */
-	private static final Logger LOG = Logger.getLogger(MethodDescription.class.getName());
+	private static final Log LOG = LogFactory.getLog(SamplingController.class);
+
 	/**
 	 * The original method unit from kdm model.
 	 */
@@ -65,17 +62,6 @@ public class MethodDescription {
 	 * The full name of the return type.
 	 */
 	private String fullReturnTypeName;
-
-	static {
-		// Initialize the logger by using a file-handler to store the log-messages.
-		try {
-			MethodDescription.LOG.addHandler(new FileHandler(MethodDescription.class.getSimpleName() + ".log"));
-		} catch (final SecurityException ex) {
-			ex.printStackTrace();
-		} catch (final IOException ex) {
-			ex.printStackTrace();
-		}
-	}
 
 	/**
 	 * Creates a new instance of this class from the given {@link MethodUnit} and the method qualifier used within the KDMModelManager.
@@ -104,7 +90,7 @@ public class MethodDescription {
 			}
 
 			if ("".equals(this.fullReturnTypeName)) {
-				MethodDescription.LOG.severe("The return type of the method couldn't be found.");
+				MethodDescription.LOG.error("The return type of the method couldn't be found.");
 			}
 		} else {
 			this.arrayReturnType = false;

@@ -46,16 +46,10 @@ public class DependencyIteratorTest {
 	}
 
 	@Test
-	public void testLoad() {
-		// Just to load the data and correct the runtime for the next method.
-	}
-
-	@Test
 	public void testNoDependencies() {
 		final String key = "test.zwei.sieben.Foo.Bar";
 		final ClassUnit classUnit = this.classes.get(key);
 		final Iterator<DependencyDescription> it = new DependencyIterator(classUnit);
-
 		Assert.assertFalse(it.hasNext());
 	}
 
@@ -68,7 +62,6 @@ public class DependencyIteratorTest {
 		while (it.hasNext()) {
 			l.add(this.print(it.next()));
 		}
-
 		Assert.assertArrayEquals(new String[] { "EXTENDS INTERFACE test.zwei.sechs.IIterator" }, l.toArray());
 	}
 
@@ -81,7 +74,6 @@ public class DependencyIteratorTest {
 		while (it.hasNext()) {
 			l.add(this.print(it.next()));
 		}
-
 		Assert.assertArrayEquals(new String[] { "IMPORTS INTERFACE test.zwei.acht.IPrintable" }, l.toArray());
 	}
 
@@ -94,25 +86,18 @@ public class DependencyIteratorTest {
 		while (it.hasNext()) {
 			l.add(this.print(it.next()));
 		}
-
 		Assert.assertArrayEquals(new String[] { "EXTENDS CLASS test.zwei.sieben.Foo" }, l.toArray());
 	}
 
 	@Test
-	public void testSimpleExtends2() {
+	public void testSimpleExtends2() throws InvalidInterfaceException {
 		final KDMModelManager modelManager = new KDMModelManager("tmp/InterfaceExtends.xml");
-
-		try {
-			final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromInterface("test.Iterator");
-			final List<String> l = new LinkedList<String>();
-			while (it.hasNext()) {
-				l.add(this.print(it.next()));
-			}
-
-			Assert.assertArrayEquals(new String[] { "EXTENDS INTERFACE test.Iterable", }, l.toArray());
-		} catch (final Exception ex) {
-			ex.printStackTrace();
+		final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromInterface("test.Iterator");
+		final List<String> l = new LinkedList<String>();
+		while (it.hasNext()) {
+			l.add(this.print(it.next()));
 		}
+		Assert.assertArrayEquals(new String[] { "EXTENDS INTERFACE test.Iterable", }, l.toArray());
 	}
 
 	@Test
@@ -124,7 +109,6 @@ public class DependencyIteratorTest {
 		while (it.hasNext()) {
 			l.add(this.print(it.next()));
 		}
-
 		Assert.assertArrayEquals(
 				new String[] {
 					"IMPORTS CLASS org.emf.abc.Input.Stream",
@@ -144,7 +128,6 @@ public class DependencyIteratorTest {
 			it.hasNext();
 			l.add(this.print(it.next()));
 		}
-
 		Assert.assertArrayEquals(
 				new String[] {
 					"IMPORTS CLASS org.emf.abc.Input.Stream",
@@ -154,197 +137,159 @@ public class DependencyIteratorTest {
 	}
 
 	@Test
-	public void testWithJPetStore() {
+	public void testWithJPetStore() throws InvalidClassException, InvalidInterfaceException {
 		final KDMModelManager modelManager = new KDMModelManager("../examples/JavaEEServletContainerExample/JPetStore-KDM.xmi");
-		try {
-			// Class
-			final String classKey = "org.mybatis.jpetstore.domain.Signon";
-			Iterator<DependencyDescription> dependencyIterator = modelManager.iterateDependenciesFromClass(classKey);
-			List<String> l = new LinkedList<String>();
-			while (dependencyIterator.hasNext()) {
-				l.add(this.print(dependencyIterator.next()));
-			}
-
-			Assert.assertArrayEquals(new String[] { "IMPORTS INTERFACE java.io.Serializable", "IMPLEMENTS INTERFACE java.io.Serializable" }, l.toArray());
-
-			// Interface
-			final String interfaceKey = "org.mybatis.jpetstore.persistence.CategoryMapper";
-			dependencyIterator = modelManager.iterateDependenciesFromInterface(interfaceKey);
-			l = new LinkedList<String>();
-			while (dependencyIterator.hasNext()) {
-				l.add(this.print(dependencyIterator.next()));
-			}
-
-			Assert.assertArrayEquals(new String[] { "IMPORTS UNKNOWN java.util.List<E>", "IMPORTS CLASS org.mybatis.jpetstore.domain.Category" }, l.toArray());
-		} catch (final Exception e) {
-			e.printStackTrace();
+		// Class
+		final String classKey = "org.mybatis.jpetstore.domain.Signon";
+		Iterator<DependencyDescription> dependencyIterator = modelManager.iterateDependenciesFromClass(classKey);
+		List<String> l = new LinkedList<String>();
+		while (dependencyIterator.hasNext()) {
+			l.add(this.print(dependencyIterator.next()));
 		}
+		Assert.assertArrayEquals(new String[] { "IMPORTS INTERFACE java.io.Serializable", "IMPLEMENTS INTERFACE java.io.Serializable" }, l.toArray());
+
+		// Interface
+		final String interfaceKey = "org.mybatis.jpetstore.persistence.CategoryMapper";
+		dependencyIterator = modelManager.iterateDependenciesFromInterface(interfaceKey);
+		l = new LinkedList<String>();
+		while (dependencyIterator.hasNext()) {
+			l.add(this.print(dependencyIterator.next()));
+		}
+		Assert.assertArrayEquals(new String[] { "IMPORTS UNKNOWN java.util.List<E>", "IMPORTS CLASS org.mybatis.jpetstore.domain.Category" }, l.toArray());
 	}
 
 	@Test
-	public void testParentPackageImport() {
+	public void testParentPackageImport() throws InvalidPackageException {
 		final KDMModelManager modelManager = new KDMModelManager("tmp/PackageDependecyTest_kdm.xmi");
 		final String key = "count.impl";
-		try {
-			final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromPackage(key);
-			final List<String> l = new LinkedList<String>();
-			while (it.hasNext()) {
-				final String d = this.print(it.next());
-				l.add(d);
-			}
-			final String[] values = new String[] { "IMPORTS PACKAGE count" };
 
-			Assert.assertArrayEquals(values, l.toArray());
-		} catch (final InvalidPackageException e) {
-			e.printStackTrace();
+		final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromPackage(key);
+		final List<String> l = new LinkedList<String>();
+		while (it.hasNext()) {
+			final String d = this.print(it.next());
+			l.add(d);
 		}
+		final String[] values = new String[] { "IMPORTS PACKAGE count" };
+		Assert.assertArrayEquals(values, l.toArray());
 	}
 
 	@Test
-	public void testMultiPackageSingleElementImport() {
+	public void testMultiPackageSingleElementImport() throws InvalidPackageException {
 		final KDMModelManager modelManager = new KDMModelManager("tmp/PackageDependecyTest_kdm.xmi");
 		final String key = "string.impl";
-		try {
-			final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromPackage(key);
-			final List<String> l = new LinkedList<String>();
-			while (it.hasNext()) {
-				final String d = this.print(it.next());
-				l.add(d);
-			}
-			final String[] values = new String[] { "IMPORTS INTERFACE count.Countable", "IMPORTS INTERFACE string.Comparable" };
 
-			Assert.assertArrayEquals(values, l.toArray());
-		} catch (final InvalidPackageException e) {
-			e.printStackTrace();
+		final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromPackage(key);
+		final List<String> l = new LinkedList<String>();
+		while (it.hasNext()) {
+			final String d = this.print(it.next());
+			l.add(d);
 		}
+		final String[] values = new String[] { "IMPORTS INTERFACE count.Countable", "IMPORTS INTERFACE string.Comparable" };
+		Assert.assertArrayEquals(values, l.toArray());
 	}
 
 	@Test
-	public void testMultiPackageImportWithSingleElementAndPackage() {
+	public void testMultiPackageImportWithSingleElementAndPackage() throws InvalidPackageException {
 		final KDMModelManager modelManager = new KDMModelManager("tmp/PackageDependecyTest_kdm.xmi");
 		final String key = "object.impl";
-		try {
-			final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromPackage(key);
-			final List<String> l = new LinkedList<String>();
-			while (it.hasNext()) {
-				final String d = this.print(it.next());
-				l.add(d);
-			}
-			final String[] values = new String[] { "IMPORTS INTERFACE object.Printable", "IMPORTS CLASS string.impl.StringImpl", "IMPORTS PACKAGE count" };
 
-			Assert.assertArrayEquals(values, l.toArray());
-		} catch (final InvalidPackageException e) {
-			e.printStackTrace();
+		final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromPackage(key);
+		final List<String> l = new LinkedList<String>();
+		while (it.hasNext()) {
+			final String d = this.print(it.next());
+			l.add(d);
 		}
+		final String[] values = new String[] { "IMPORTS INTERFACE object.Printable", "IMPORTS CLASS string.impl.StringImpl", "IMPORTS PACKAGE count" };
+		Assert.assertArrayEquals(values, l.toArray());
 	}
 
 	@Test
-	public void testDependeciesFromCSharpClassImplements() {
+	public void testDependeciesFromCSharpClassImplements() throws InvalidClassException {
 		final KDMModelManager modelManager = new KDMModelManager("tmp/SharpDevelop.xmi");
 		final String key = "ICSharpCode.CodeQualityAnalysis.Controls.DependencyIconVertexConverter";
-		try {
-			final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromClass(key);
-			final List<String> l = new LinkedList<String>();
-			while (it.hasNext()) {
-				final String d = this.print(it.next());
-				l.add(d);
-			}
-			final String[] values = new String[] {
-				"IMPORTS NAMESPACE System",
-				"IMPORTS NAMESPACE System.Windows.Data",
-				"IMPORTS NAMESPACE System.Globalization",
-				"IMPORTS NAMESPACE System.Windows.Media.Imaging",
-				"IMPLEMENTS INTERFACE System.Windows.Data.IValueConverter",
-			};
-
-			Assert.assertArrayEquals(values, l.toArray());
-		} catch (final InvalidClassException e) {
-			e.printStackTrace();
+		final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromClass(key);
+		final List<String> l = new LinkedList<String>();
+		while (it.hasNext()) {
+			final String d = this.print(it.next());
+			l.add(d);
 		}
+		final String[] values = new String[] {
+			"IMPORTS NAMESPACE System",
+			"IMPORTS NAMESPACE System.Windows.Data",
+			"IMPORTS NAMESPACE System.Globalization",
+			"IMPORTS NAMESPACE System.Windows.Media.Imaging",
+			"IMPLEMENTS INTERFACE System.Windows.Data.IValueConverter",
+		};
+		Assert.assertArrayEquals(values, l.toArray());
 	}
 
 	@Test
-	public void testDependeciesFromCSharpClassExtends() {
+	public void testDependeciesFromCSharpClassExtends() throws InvalidClassException {
 		final KDMModelManager modelManager = new KDMModelManager("tmp/SharpDevelop.xmi");
 		final String key = "XmlEditor.Tests.Schema.AbstractElementTestFixture";
-		try {
-			final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromClass(key);
-			final List<String> l = new LinkedList<String>();
-			while (it.hasNext()) {
-				final String d = this.print(it.next());
-				l.add(d);
-			}
-			final String[] values = new String[] {
-				"IMPORTS NAMESPACE System",
-				"IMPORTS NAMESPACE ICSharpCode.SharpDevelop.Editor.CodeCompletion",
-				"IMPORTS NAMESPACE ICSharpCode.XmlEditor",
-				"IMPORTS NAMESPACE NUnit.Framework",
-				"EXTENDS CLASS XmlEditor.Tests.Schema.SchemaTestFixtureBase",
-			};
-
-			Assert.assertArrayEquals(values, l.toArray());
-		} catch (final InvalidClassException e) {
-			e.printStackTrace();
+		final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromClass(key);
+		final List<String> l = new LinkedList<String>();
+		while (it.hasNext()) {
+			final String d = this.print(it.next());
+			l.add(d);
 		}
+		final String[] values = new String[] {
+			"IMPORTS NAMESPACE System",
+			"IMPORTS NAMESPACE ICSharpCode.SharpDevelop.Editor.CodeCompletion",
+			"IMPORTS NAMESPACE ICSharpCode.XmlEditor",
+			"IMPORTS NAMESPACE NUnit.Framework",
+			"EXTENDS CLASS XmlEditor.Tests.Schema.SchemaTestFixtureBase",
+		};
+		Assert.assertArrayEquals(values, l.toArray());
 	}
 
 	@Test
-	public void testDependeciesFromCSharpInterfaceExtends() {
+	public void testDependeciesFromCSharpInterfaceExtends() throws InvalidInterfaceException {
 		final KDMModelManager modelManager = new KDMModelManager("tmp/SharpDevelop.xmi");
 		final String key = "ICSharpCode.SharpDevelop.Editor.CodeCompletion.IFancyCompletionItem";
-		try {
-			final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromInterface(key);
-			final List<String> l = new LinkedList<String>();
-			while (it.hasNext()) {
-				final String d = this.print(it.next());
-				l.add(d);
-			}
-			final String[] values = new String[] { "IMPORTS NAMESPACE System", "EXTENDS INTERFACE ICSharpCode.SharpDevelop.Editor.CodeCompletion.ICompletionItem", };
-
-			Assert.assertArrayEquals(values, l.toArray());
-		} catch (final InvalidInterfaceException e) {
-			e.printStackTrace();
+		final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromInterface(key);
+		final List<String> l = new LinkedList<String>();
+		while (it.hasNext()) {
+			final String d = this.print(it.next());
+			l.add(d);
 		}
+		final String[] values = new String[] { "IMPORTS NAMESPACE System", "EXTENDS INTERFACE ICSharpCode.SharpDevelop.Editor.CodeCompletion.ICompletionItem", };
+		Assert.assertArrayEquals(values, l.toArray());
 	}
 
 	@Test
-	public void testDependeciesFromCSharpNamespace() {
+	public void testDependeciesFromCSharpNamespace() throws InvalidNamespaceException {
 		final KDMModelManager modelManager = new KDMModelManager("tmp/SharpDevelop.xmi");
 		final String key = "ICSharpCode.AvalonEdit";
-		try {
-			final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromNamespace(key);
-			final List<String> l = new LinkedList<String>();
-			while (it.hasNext()) {
-				final String d = this.print(it.next());
-				l.add(d);
-			}
-			final String[] values = new String[] {
-				"IMPORTS NAMESPACE System",
-				"IMPORTS NAMESPACE System.Windows.Input",
-				"IMPORTS NAMESPACE System.ComponentModel",
-				"IMPORTS NAMESPACE System.IO",
-				"IMPORTS NAMESPACE System.Linq",
-				"IMPORTS NAMESPACE System.Text",
-				"IMPORTS NAMESPACE System.Windows",
-				"IMPORTS NAMESPACE System.Windows.Controls",
-				"IMPORTS NAMESPACE System.Windows.Controls.Primitives",
-				"IMPORTS NAMESPACE System.Windows.Data",
-				"IMPORTS NAMESPACE System.Windows.Markup",
-				"IMPORTS NAMESPACE System.Windows.Media",
-				"IMPORTS NAMESPACE System.Windows.Shapes",
-				"IMPORTS NAMESPACE System.Windows.Threading",
-				"IMPORTS NAMESPACE ICSharpCode.AvalonEdit.Document",
-				"IMPORTS NAMESPACE ICSharpCode.AvalonEdit.Editing",
-				"IMPORTS NAMESPACE ICSharpCode.AvalonEdit.Highlighting",
-				"IMPORTS NAMESPACE ICSharpCode.AvalonEdit.Rendering",
-				"IMPORTS NAMESPACE ICSharpCode.AvalonEdit.Utils",
-				"IMPLEMENTS INTERFACE ICSharpCode.AvalonEdit.ITextEditorComponent",
-			};
-
-			Assert.assertArrayEquals(values, l.toArray());
-		} catch (final InvalidNamespaceException e) {
-			e.printStackTrace();
+		final Iterator<DependencyDescription> it = modelManager.iterateDependenciesFromNamespace(key);
+		final List<String> l = new LinkedList<String>();
+		while (it.hasNext()) {
+			final String d = this.print(it.next());
+			l.add(d);
 		}
+		final String[] values = new String[] {
+			"IMPORTS NAMESPACE System",
+			"IMPORTS NAMESPACE System.Windows.Input",
+			"IMPORTS NAMESPACE System.ComponentModel",
+			"IMPORTS NAMESPACE System.IO",
+			"IMPORTS NAMESPACE System.Linq",
+			"IMPORTS NAMESPACE System.Text",
+			"IMPORTS NAMESPACE System.Windows",
+			"IMPORTS NAMESPACE System.Windows.Controls",
+			"IMPORTS NAMESPACE System.Windows.Controls.Primitives",
+			"IMPORTS NAMESPACE System.Windows.Data",
+			"IMPORTS NAMESPACE System.Windows.Markup",
+			"IMPORTS NAMESPACE System.Windows.Media",
+			"IMPORTS NAMESPACE System.Windows.Shapes",
+			"IMPORTS NAMESPACE System.Windows.Threading",
+			"IMPORTS NAMESPACE ICSharpCode.AvalonEdit.Document",
+			"IMPORTS NAMESPACE ICSharpCode.AvalonEdit.Editing",
+			"IMPORTS NAMESPACE ICSharpCode.AvalonEdit.Highlighting",
+			"IMPORTS NAMESPACE ICSharpCode.AvalonEdit.Rendering",
+			"IMPORTS NAMESPACE ICSharpCode.AvalonEdit.Utils",
+			"IMPLEMENTS INTERFACE ICSharpCode.AvalonEdit.ITextEditorComponent",
+		};
+		Assert.assertArrayEquals(values, l.toArray());
 	}
 
 	private String print(final DependencyDescription description) {

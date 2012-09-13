@@ -37,6 +37,9 @@ import org.eclipse.gmt.modisco.omg.kdm.code.StorableUnit;
 import org.eclipse.gmt.modisco.omg.kdm.code.Value;
 import org.eclipse.gmt.modisco.omg.kdm.kdm.Attribute;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
+import kieker.monitoring.core.controller.ProbeController;
 import kieker.tools.kdm.manager.KDMModelManager;
 import kieker.tools.kdm.manager.util.ElementType;
 
@@ -47,6 +50,8 @@ import kieker.tools.kdm.manager.util.ElementType;
  * 
  */
 public class AttributeDescription {
+	private static final Log LOG = LogFactory.getLog(ProbeController.class);
+
 	/**
 	 * The name of the attribute.
 	 */
@@ -255,7 +260,7 @@ public class AttributeDescription {
 				this.hasValue = true;
 			} else {
 				this.hasValue = false;
-				// System.out.println(target.getClass());
+				LOG.error("Failed to get default value for " + target.getClass());
 			}
 		} catch (final NoSuchElementException ex) {
 			this.hasValue = false;

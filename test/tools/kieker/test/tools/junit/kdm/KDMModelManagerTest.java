@@ -50,7 +50,6 @@ public class KDMModelManagerTest {
 	public void testThreads() throws InterruptedException {
 		final int quantityElements = 10000;
 		final int quantityThreads = 10;
-
 		final List<String> compList = new ArrayList<String>();
 		final List<String> resList = new ArrayList<String>();
 		final Queue<String> queue = new ConcurrentLinkedQueue<String>();
@@ -99,31 +98,25 @@ public class KDMModelManagerTest {
 		final KDMModelManager manager = new KDMModelManager();
 		manager.addMethod(false, false, "", "", new String[0], "myMethod", new String[] { "class1", "class2" }, new String[] { "pack1", "pack2", "pack3" });
 
-		try {
-			final Iterator<String> packIter = manager.iteratePackages("pack1", true);
-			final Iterator<String> classIter = manager.iterateClasses("pack1.pack2.pack3", true);
-			final Iterator<MethodDescription> methodIter = manager.iterateMethodsFromClass("pack1.pack2.pack3.class1.class2");
+		final Iterator<String> packIter = manager.iteratePackages("pack1", true);
+		final Iterator<String> classIter = manager.iterateClasses("pack1.pack2.pack3", true);
+		final Iterator<MethodDescription> methodIter = manager.iterateMethodsFromClass("pack1.pack2.pack3.class1.class2");
 
-			Assert.assertTrue(packIter.hasNext());
-			Assert.assertEquals("pack1.pack2", packIter.next());
-			Assert.assertTrue(packIter.hasNext());
-			Assert.assertEquals("pack1.pack2.pack3", packIter.next());
-			Assert.assertFalse(packIter.hasNext());
+		Assert.assertTrue(packIter.hasNext());
+		Assert.assertEquals("pack1.pack2", packIter.next());
+		Assert.assertTrue(packIter.hasNext());
+		Assert.assertEquals("pack1.pack2.pack3", packIter.next());
+		Assert.assertFalse(packIter.hasNext());
 
-			Assert.assertTrue(classIter.hasNext());
-			Assert.assertEquals("pack1.pack2.pack3.class1", classIter.next());
-			Assert.assertTrue(classIter.hasNext());
-			Assert.assertEquals("pack1.pack2.pack3.class1.class2", classIter.next());
-			Assert.assertFalse(classIter.hasNext());
+		Assert.assertTrue(classIter.hasNext());
+		Assert.assertEquals("pack1.pack2.pack3.class1", classIter.next());
+		Assert.assertTrue(classIter.hasNext());
+		Assert.assertEquals("pack1.pack2.pack3.class1.class2", classIter.next());
+		Assert.assertFalse(classIter.hasNext());
 
-			Assert.assertTrue(methodIter.hasNext());
-			Assert.assertEquals("myMethod", methodIter.next().getName());
-			Assert.assertFalse(methodIter.hasNext());
-		} catch (final InvalidPackageException e) {
-			e.printStackTrace();
-		} catch (final InvalidClassException ex) {
-
-		}
+		Assert.assertTrue(methodIter.hasNext());
+		Assert.assertEquals("myMethod", methodIter.next().getName());
+		Assert.assertFalse(methodIter.hasNext());
 	}
 
 	@Test
@@ -132,7 +125,6 @@ public class KDMModelManagerTest {
 		manager.addPackage(new String[0]);
 		manager.addPackage(new String[] {});
 		manager.addPackage(new String[] { "" });
-
 		final Iterator<String> packIter = manager.iteratePackages();
 
 		Assert.assertFalse(packIter.hasNext());
@@ -152,61 +144,49 @@ public class KDMModelManagerTest {
 	}
 
 	@Test
-	public void testAddClassToInterface() {
+	public void testAddClassToInterface() throws InvalidPackageException {
 		final KDMModelManager modelManager = new KDMModelManager();
 		modelManager.addInterface(new String[] { "ISetable" }, new String[] { "test", "zwei", "zehn" });
 		modelManager.addClass(new String[] { "ISetable", "ClassInterface" }, new String[] { "test", "zwei", "zehn" });
-		try {
-			final Iterator<String> iterator = modelManager.iterateClasses("test.zwei.zehn", true);
-			Assert.assertTrue(iterator.hasNext());
-			Assert.assertEquals(iterator.next(), "test.zwei.zehn.ISetable.ClassInterface");
-			Assert.assertFalse(iterator.hasNext());
-		} catch (final InvalidPackageException e) {
-		}
+		final Iterator<String> iterator = modelManager.iterateClasses("test.zwei.zehn", true);
+		Assert.assertTrue(iterator.hasNext());
+		Assert.assertEquals(iterator.next(), "test.zwei.zehn.ISetable.ClassInterface");
+		Assert.assertFalse(iterator.hasNext());
 	}
 
 	@Test
-	public void testAddClassToNonexistingInterface() {
+	public void testAddClassToNonexistingInterface() throws InvalidPackageException {
 		final KDMModelManager modelManager = new KDMModelManager();
 		modelManager.addClass(new String[] { "ISetable", "ClassInterface" }, new String[] { "test", "zwei", "zehn" });
-		try {
-			final Iterator<String> iterator = modelManager.iterateClasses("test.zwei.zehn", true);
-			Assert.assertTrue(iterator.hasNext());
-			Assert.assertEquals(iterator.next(), "test.zwei.zehn.ISetable");
-			Assert.assertTrue(iterator.hasNext());
-			Assert.assertEquals(iterator.next(), "test.zwei.zehn.ISetable.ClassInterface");
-			Assert.assertFalse(iterator.hasNext());
-		} catch (final InvalidPackageException e) {
-		}
+		final Iterator<String> iterator = modelManager.iterateClasses("test.zwei.zehn", true);
+		Assert.assertTrue(iterator.hasNext());
+		Assert.assertEquals(iterator.next(), "test.zwei.zehn.ISetable");
+		Assert.assertTrue(iterator.hasNext());
+		Assert.assertEquals(iterator.next(), "test.zwei.zehn.ISetable.ClassInterface");
+		Assert.assertFalse(iterator.hasNext());
 	}
 
 	@Test
-	public void testAddInterfaceToClass() {
+	public void testAddInterfaceToClass() throws InvalidPackageException {
 		final KDMModelManager modelManager = new KDMModelManager();
 		modelManager.addClass(new String[] { "InterfaceClass" }, new String[] { "test", "zwei", "neun" });
 		modelManager.addInterface(new String[] { "InterfaceClass", "IGetable" }, new String[] { "test", "zwei", "neun" });
-		try {
-			final Iterator<String> iterator = modelManager.iterateInterfaces("test.zwei.neun", true);
-			Assert.assertTrue(iterator.hasNext());
-			Assert.assertEquals(iterator.next(), "test.zwei.neun.InterfaceClass.IGetable");
-			Assert.assertFalse(iterator.hasNext());
-		} catch (final InvalidPackageException e) {
-		}
+		final Iterator<String> iterator = modelManager.iterateInterfaces("test.zwei.neun", true);
+		Assert.assertTrue(iterator.hasNext());
+		Assert.assertEquals(iterator.next(), "test.zwei.neun.InterfaceClass.IGetable");
+		Assert.assertFalse(iterator.hasNext());
 	}
 
 	@Test
-	public void testAddInterfaceToNonexistingClass() {
+	public void testAddInterfaceToNonexistingClass() throws InvalidPackageException {
 		final KDMModelManager modelManager = new KDMModelManager();
 		modelManager.addInterface(new String[] { "InterfaceClass", "IGetable" }, new String[] { "test", "zwei", "neun" });
-		try {
-			final Iterator<String> iterator = modelManager.iterateInterfaces("test.zwei.neun", true);
-			Assert.assertTrue(iterator.hasNext());
-			Assert.assertEquals(iterator.next(), "test.zwei.neun.InterfaceClass");
-			Assert.assertTrue(iterator.hasNext());
-			Assert.assertEquals(iterator.next(), "test.zwei.neun.InterfaceClass.IGetable");
-			Assert.assertFalse(iterator.hasNext());
-		} catch (final InvalidPackageException e) {
-		}
+		final Iterator<String> iterator = modelManager.iterateInterfaces("test.zwei.neun", true);
+		Assert.assertTrue(iterator.hasNext());
+		Assert.assertEquals(iterator.next(), "test.zwei.neun.InterfaceClass");
+		Assert.assertTrue(iterator.hasNext());
+		Assert.assertEquals(iterator.next(), "test.zwei.neun.InterfaceClass.IGetable");
+		Assert.assertFalse(iterator.hasNext());
 	}
 
 	@Test

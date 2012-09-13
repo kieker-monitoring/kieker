@@ -30,8 +30,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -79,6 +77,8 @@ import org.eclipse.gmt.modisco.omg.kdm.source.Directory;
 import org.eclipse.gmt.modisco.omg.kdm.source.InventoryModel;
 import org.eclipse.gmt.modisco.omg.kdm.source.SourceFile;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.tools.kdm.manager.exception.InvalidClassException;
 import kieker.tools.kdm.manager.exception.InvalidInterfaceException;
 import kieker.tools.kdm.manager.exception.InvalidMethodException;
@@ -106,15 +106,12 @@ import kieker.tools.kdm.manager.util.descriptions.ParameterDescription;
  * @author Nils Christian Ehmke, Benjamin Harms
  */
 public final class KDMModelManager {
+	private static final Log LOG = LogFactory.getLog(KDMModelManager.class);
 
 	/***************************************************************************************************************************************************************
 	 * The following part should only contain the members of the class.
 	 **************************************************************************************************************************************************************/
 
-	/**
-	 * This is the logger which can be used to log messages. The logged messages will be written into a suitable log file.
-	 */
-	private static final Logger LOG = Logger.getLogger(KDMModelManager.class.getName());
 	/**
 	 * The factory which should be used to create new model instances of the KDM-package.
 	 */
@@ -170,21 +167,6 @@ public final class KDMModelManager {
 	 * This hash map contains all namespaces used in C#-models, making shure that we can check very fast whether a namespace exists already.
 	 */
 	private final ConcurrentHashMap<String, Namespace> namespaces = new ConcurrentHashMap<String, Namespace>();
-
-	/***************************************************************************************************************************************************************
-	 * The following part should only contain the static constructor
-	 **************************************************************************************************************************************************************/
-
-	static {
-		// Initialize the logger by using a file-handler to store the log-messages.
-		try {
-			KDMModelManager.LOG.addHandler(new FileHandler(KDMModelManager.class.getSimpleName() + ".log"));
-		} catch (final SecurityException ex) {
-			ex.printStackTrace();
-		} catch (final IOException ex) {
-			ex.printStackTrace();
-		}
-	}
 
 	/***************************************************************************************************************************************************************
 	 * The following part should only contain constructors
@@ -243,13 +225,13 @@ public final class KDMModelManager {
 
 		} catch (final IOException ex) {
 			// Something went wrong - log the error
-			KDMModelManager.LOG.severe("The file with the name '" + file.getAbsolutePath() + "' could not be loaded.");
+			KDMModelManager.LOG.error("The file with the name '" + file.getAbsolutePath() + "' could not be loaded.", ex);
 		} catch (final ArrayIndexOutOfBoundsException ex) {
 			// Something went wrong - log the error
-			KDMModelManager.LOG.severe("The loaded file doesn't contain a CodeModel.");
+			KDMModelManager.LOG.error("The loaded file doesn't contain a CodeModel.", ex);
 		} catch (final ClassCastException ex) {
 			// Something went wrong - log the error
-			KDMModelManager.LOG.severe("The loaded file doesn't contain a CodeModel.");
+			KDMModelManager.LOG.error("The loaded file doesn't contain a CodeModel.", ex);
 		}
 
 		// Assign whatever value we have now for the instances
@@ -330,21 +312,21 @@ public final class KDMModelManager {
 			final EList<EObject> content;
 			resource.load(Collections.EMPTY_MAP);
 			content = resource.getContents();
-			if (!content.isEmpty()) {
-				// The first (and only) element should be the project.
+			if (content.size() == 1) { // The first (and only) element should be the project.
 				return (Segment) content.get(0);
 			} else {
 				throw new IOException("No segment found in file '" + file.getAbsolutePath() + "'.");
 			}
+			// RuntimeException org.eclipse.emf.common.util.WrappedException
 		} catch (final IOException ex) {
 			final IOException newEx = new IOException("Error loading file '" + file.getAbsolutePath() + "'.");
 			newEx.initCause(ex);
-			throw newEx;
-		} catch (final Exception ex) {
+			throw newEx; // NOPMD (stack trace preserved)
+		} catch (final Exception ex) { // NOCS NOPMD (catch Exception)
 			// Some exceptions like the XMIException can be thrown during loading although it cannot be seen. Catch this situation.
 			final IOException newEx = new IOException("The given file '" + file.getAbsolutePath() + "' is not a valid model file.");
 			newEx.initCause(ex);
-			throw newEx;
+			throw newEx; // NOPMD (stack trace preserved)
 		}
 	}
 
@@ -540,7 +522,7 @@ public final class KDMModelManager {
 							interfaceUnit.getCodeElement().add(clazz);
 						}
 					} else {
-						KDMModelManager.LOG.severe("Invalid parent type '" + parent.getClass().toString() + "' while adding a class.");
+						KDMModelManager.LOG.error("Invalid parent type '" + parent.getClass().toString() + "' while adding a class.");
 					}
 				}
 			}
@@ -644,7 +626,7 @@ public final class KDMModelManager {
 							classUnit.getCodeElement().add(interfaze);
 						}
 					} else {
-						KDMModelManager.LOG.severe("Invalid parent type '" + parent.getClass().toString() + "' while adding an interface.");
+						KDMModelManager.LOG.error("Invalid parent type '" + parent.getClass().toString() + "' while adding an interface.");
 					}
 				}
 			}
@@ -1934,7 +1916,7 @@ public final class KDMModelManager {
 	private void initializeHashMaps(final CodeModel cModel) {
 		// Check the model first
 		if ((cModel == null) || (cModel.getCodeElement() == null)) {
-			KDMModelManager.LOG.severe("Hash map initialization faild because the code model is null.");
+			KDMModelManager.LOG.error("Hash map initialization faild because the code model is null.");
 			return;
 		}
 		// Fill them again
@@ -2085,8 +2067,7 @@ public final class KDMModelManager {
 						final String nameAttrValue = KDMModelManager.getValueFromAttribute(namespace, nameAttributeKey);
 						this.namespaces.put(nameAttrValue, namespace);
 					} catch (final NoSuchElementException ex) {
-						KDMModelManager.LOG
-								.severe("The attribute '" + nameAttributeKey + "' of the namespace with the name '" + namespaceName + "' does not exist.");
+						KDMModelManager.LOG.error("The attribute '" + nameAttributeKey + "' of the namespace with the name '" + namespaceName + "' does not exist.");
 					}
 				}
 				// Keep the flat order in mind and don't look for child elements

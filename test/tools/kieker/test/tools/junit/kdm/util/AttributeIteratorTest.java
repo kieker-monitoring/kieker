@@ -39,25 +39,18 @@ public class AttributeIteratorTest {
 	}
 
 	@Test
-	public void testAttributesFromClass() {
+	public void testAttributesFromClass() throws InvalidClassException {
 		final String path = "../examples/JavaEEServletContainerExample/JPetStore-KDM.xmi";
 		final KDMModelManager modelManager = new KDMModelManager(path);
-
-		try {
-			final String className = "org.mybatis.jpetstore.domain.Signon";
-			final Iterator<AttributeDescription> it = modelManager.iterateAttributesFromClass(className);
-			final List<String> l = new LinkedList<String>();
-			while (it.hasNext()) {
-				final String desc = this.print(it.next());
-				l.add(desc);
-			}
-
-			final String[] values = new String[] { "private static long serialVersionUID = 5054687760345121163L", "CLASS private java.lang.String username", };
-
-			Assert.assertArrayEquals(values, l.toArray());
-		} catch (final InvalidClassException e) {
-			e.printStackTrace();
+		final String className = "org.mybatis.jpetstore.domain.Signon";
+		final Iterator<AttributeDescription> it = modelManager.iterateAttributesFromClass(className);
+		final List<String> l = new LinkedList<String>();
+		while (it.hasNext()) {
+			final String desc = this.print(it.next());
+			l.add(desc);
 		}
+		final String[] values = new String[] { "private static long serialVersionUID = 5054687760345121163L", "CLASS private java.lang.String username", };
+		Assert.assertArrayEquals(values, l.toArray());
 	}
 
 	@Test
@@ -70,63 +63,46 @@ public class AttributeIteratorTest {
 			final String desc = this.print(it.next());
 			l.add(desc);
 		}
-
 		final String[] values = new String[] { "private int length", "protected char[] letter", "CLASS public static test.zwei.sieben.Foo dings", };
-
 		Assert.assertArrayEquals(values, l.toArray());
 	}
 
 	@Test
-	public void testAttributeFromCSharpClassOnlyStorableUnits() {
+	public void testAttributeFromCSharpClassOnlyStorableUnits() throws InvalidClassException {
 		final String path = "tmp/SharpDevelop.xmi"; // FIXME: correct file?
 		final KDMModelManager modelManager = new KDMModelManager(path);
 		final String key = "ICSharpCode.CodeAnalysis.SuppressMessageCommand";
-		try {
-			final Iterator<AttributeDescription> it = modelManager.iterateAttributesFromClass(key);
-			final List<String> l = new LinkedList<String>();
-
-			while (it.hasNext()) {
-				final String p = this.print(it.next());
-				l.add(p);
-			}
-
-			final String[] values = new String[] { "unknown string NamespaceName", "unknown string AttributeName", };
-
-			Assert.assertArrayEquals(values, l.toArray());
-		} catch (final InvalidClassException e) {
-			e.printStackTrace();
+		final Iterator<AttributeDescription> it = modelManager.iterateAttributesFromClass(key);
+		final List<String> l = new LinkedList<String>();
+		while (it.hasNext()) {
+			final String p = this.print(it.next());
+			l.add(p);
 		}
+		final String[] values = new String[] { "unknown string NamespaceName", "unknown string AttributeName", };
+		Assert.assertArrayEquals(values, l.toArray());
 	}
 
 	@Test
-	public void testAttributeFromCSharpClassOnlyMemberUnits() {
+	public void testAttributeFromCSharpClassOnlyMemberUnits() throws InvalidClassException {
 		final String path = "tmp/SharpDevelop.xmi"; // FIXME: correct file?
 		final KDMModelManager modelManager = new KDMModelManager(path);
 		final String key = "Mono.Cecil.EventReference";
-		try {
-			final Iterator<AttributeDescription> it = modelManager.iterateAttributesFromClass(key);
-			final List<String> l = new LinkedList<String>();
-
-			while (it.hasNext()) {
-				final String p = this.print(it.next());
-				l.add(p);
-			}
-
-			final String[] values = new String[] {
-				"CLASS public Mono.Cecil.TypeReference event_type",
-				"CLASS public Mono.Cecil.TypeReference EventType",
-				"public string FullName",
-			};
-
-			Assert.assertArrayEquals(values, l.toArray());
-		} catch (final InvalidClassException e) {
-			e.printStackTrace();
+		final Iterator<AttributeDescription> it = modelManager.iterateAttributesFromClass(key);
+		final List<String> l = new LinkedList<String>();
+		while (it.hasNext()) {
+			final String p = this.print(it.next());
+			l.add(p);
 		}
+		final String[] values = new String[] {
+			"CLASS public Mono.Cecil.TypeReference event_type",
+			"CLASS public Mono.Cecil.TypeReference EventType",
+			"public string FullName",
+		};
+		Assert.assertArrayEquals(values, l.toArray());
 	}
 
 	private String print(final AttributeDescription description) {
 		final StringBuilder result = new StringBuilder();
-
 		if (description != null) {
 			if (!description.isPrimitiveType()) {
 				result.append(description.getElementType()).append(' ');
@@ -146,7 +122,6 @@ public class AttributeIteratorTest {
 				result.append(" = ").append(description.getDefaultValue());
 			}
 		}
-
 		return result.toString();
 	}
 }
