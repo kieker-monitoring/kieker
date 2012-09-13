@@ -36,6 +36,8 @@ org.eclipse.emf.common-$.jar	The Eclipse EMF framework.
 org.eclipse.emf.ecore-$.jar	The Eclipse EMF framework. (Ecore Components)
 org.eclipse.emf.ecore.xmi-$.jar	The Eclipse EMF framework. (XMI serialization)
 
+org.eclipse.gmt.modisco.omg.kdm\_$.jar The MoDisco KDM model.
+
 derby-$.jar	??? (TODO: Please provide description)
 
 // Not included are:
