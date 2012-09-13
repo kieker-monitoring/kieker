@@ -469,6 +469,24 @@ public final class AnalysisController {
 		plugin.connect(repositoryPort, repository); // throws AnalysisConfigurationException
 	}
 
+	private static List<MIProperty> convertProperties(final Configuration configuration, final MAnalysisMetaModelFactory factory) {
+		if (configuration == null) {
+			return Collections.emptyList();
+		}
+
+		final List<MIProperty> properties = new ArrayList<MIProperty>();
+
+		for (final Enumeration<?> e = configuration.propertyNames(); e.hasMoreElements();) {
+			final String key = (String) e.nextElement();
+			final MIProperty property = factory.createProperty();
+			property.setName(key);
+			property.setValue(configuration.getStringProperty(key));
+			properties.add(property);
+		}
+
+		return properties;
+	}
+
 	/**
 	 * This method delivers the current configuration of this instance as an instance of <code>MIProject</code>.
 	 * 
@@ -490,6 +508,9 @@ public final class AnalysisController {
 			for (final AbstractRepository repo : this.repos) {
 				final MIRepository mRepo = factory.createRepository();
 				mRepo.setClassname(repo.getClass().getName());
+
+				mRepo.getProperties().addAll(AnalysisController.convertProperties(repo.getCurrentConfiguration(), factory));
+
 				mProject.getRepositories().add(mRepo);
 				repositoryMap.put(repo, mRepo);
 			}
@@ -510,18 +531,8 @@ public final class AnalysisController {
 				mPlugin.setClassname(plugin.getClass().getName());
 				mPlugin.setName(plugin.getName());
 				// Extract the configuration.
-				Configuration configuration = plugin.getCurrentConfiguration();
-				if (null == configuration) { // should not happen, but better safe than sorry
-					configuration = new Configuration();
-				}
-				final EList<MIProperty> properties = mPlugin.getProperties();
-				for (final Enumeration<?> e = configuration.propertyNames(); e.hasMoreElements();) {
-					final String key = (String) e.nextElement();
-					final MIProperty property = factory.createProperty();
-					property.setName(key);
-					property.setValue(configuration.getStringProperty(key));
-					properties.add(property);
-				}
+				mPlugin.getProperties().addAll(AnalysisController.convertProperties(plugin.getCurrentConfiguration(), factory));
+
 				// Extract the repositories.
 				for (final Entry<String, AbstractRepository> repoEntry : plugin.getCurrentRepositories().entrySet()) {
 					// Try to find the repository within our map.
