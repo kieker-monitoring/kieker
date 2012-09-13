@@ -45,10 +45,22 @@ public class DescriptionRepository extends AbstractRepository {
 
 	private final ConcurrentMap<String, String> descriptionMap;
 
-	public DescriptionRepository(final Configuration configuration, final ConcurrentMap<String, String> descriptionMap) {
+	/**
+	 * Creates a new description repository using the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 * @throws IOException
+	 *             If an I/O error occurs during initialization
+	 */
+	public DescriptionRepository(final Configuration configuration) throws IOException {
+		this(configuration, DescriptionRepository.readDataFromFile(new DescriptionRepositoryConfiguration(configuration).getDescriptionFileName()));
+	}
+
+	private DescriptionRepository(final Configuration configuration, final DescriptionRepositoryData descriptionData) {
 		super(configuration);
 
-		this.descriptionMap = descriptionMap;
+		this.descriptionMap = descriptionData.getDescriptionMap();
 	}
 
 	public Configuration getCurrentConfiguration() {
@@ -72,7 +84,23 @@ public class DescriptionRepository extends AbstractRepository {
 		return returnValue;
 	}
 
+	/**
+	 * Initializes a new description repository from the given file.
+	 * 
+	 * @param fileName
+	 *            The name of the file to use
+	 * @return The initialized description repository
+	 * @throws IOException
+	 *             If an I/O error occurs
+	 */
 	public static DescriptionRepository createFromFile(final String fileName) throws IOException {
+		final DescriptionRepositoryConfiguration configuration = new DescriptionRepositoryConfiguration(new Configuration());
+		configuration.setDescriptionFileName(fileName);
+
+		return new DescriptionRepository(configuration.getWrappedConfiguration(), DescriptionRepository.readDataFromFile(fileName));
+	}
+
+	private static DescriptionRepositoryData readDataFromFile(final String fileName) throws IOException {
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), ENCODING));
@@ -93,11 +121,25 @@ public class DescriptionRepository extends AbstractRepository {
 				final String description = parts[1];
 				descriptionMap.put(key, description);
 			}
-			return new DescriptionRepository(new Configuration(), descriptionMap);
+			return new DescriptionRepositoryData(descriptionMap);
 		} finally {
 			if (reader != null) {
 				reader.close();
 			}
 		}
+	}
+
+	private static class DescriptionRepositoryData {
+
+		private final ConcurrentMap<String, String> descriptionMap;
+
+		public DescriptionRepositoryData(final ConcurrentMap<String, String> descriptionMap) {
+			this.descriptionMap = descriptionMap;
+		}
+
+		public ConcurrentMap<String, String> getDescriptionMap() {
+			return this.descriptionMap;
+		}
+
 	}
 }
