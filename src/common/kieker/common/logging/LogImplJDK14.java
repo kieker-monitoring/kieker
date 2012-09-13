@@ -16,23 +16,20 @@
 
 package kieker.common.logging;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  * 
  * @author Jan Waller
  */
 public final class LogImplJDK14 implements Log {
-	private final Logger logger; // NOPMD (Implementation of an logger)
+	private final java.util.logging.Logger logger; // NOPMD (Implementation of an logger)
 	private final String name;
 
 	protected LogImplJDK14(final String name) {
 		this.name = name;
-		this.logger = Logger.getLogger(name);
+		this.logger = java.util.logging.Logger.getLogger(name);
 	}
 
-	private final void log(final Level level, final String message, final Throwable t) {
+	private final void log(final java.util.logging.Level level, final String message, final Throwable t) {
 		if (this.logger.isLoggable(level)) {
 			final String sourceClass;
 			final String sourceMethod;
@@ -55,39 +52,38 @@ public final class LogImplJDK14 implements Log {
 	}
 
 	public boolean isDebugEnabled() {
-		return this.logger.isLoggable(Level.FINE);
+		return this.logger.isLoggable(java.util.logging.Level.FINE);
 	}
 
 	public final void debug(final String message) {
-		this.log(Level.FINE, message, null);
+		this.log(java.util.logging.Level.FINE, message, null);
 	}
 
 	public final void debug(final String message, final Throwable t) {
-		this.log(Level.FINE, message, t);
+		this.log(java.util.logging.Level.FINE, message, t);
 	}
 
 	public final void info(final String message) {
-		this.log(Level.INFO, message, null);
-
+		this.log(java.util.logging.Level.INFO, message, null);
 	}
 
 	public final void info(final String message, final Throwable t) {
-		this.log(Level.INFO, message, t);
+		this.log(java.util.logging.Level.INFO, message, t);
 	}
 
 	public final void warn(final String message) {
-		this.log(Level.WARNING, message, null);
+		this.log(java.util.logging.Level.WARNING, message, null);
 	}
 
 	public final void warn(final String message, final Throwable t) {
-		this.log(Level.WARNING, message, t);
+		this.log(java.util.logging.Level.WARNING, message, t);
 	}
 
 	public final void error(final String message) {
-		this.log(Level.SEVERE, message, null);
+		this.log(java.util.logging.Level.SEVERE, message, null);
 	}
 
 	public final void error(final String message, final Throwable t) {
-		this.log(Level.SEVERE, message, t);
+		this.log(java.util.logging.Level.SEVERE, message, t);
 	}
 }

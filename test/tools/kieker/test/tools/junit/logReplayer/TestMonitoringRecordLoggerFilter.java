@@ -78,11 +78,7 @@ public class TestMonitoringRecordLoggerFilter {
 		final String asyncFsWriterPropertyPrefix = AsyncFsWriter.class.getName() + ".";
 
 		config.setProperty(asyncFsWriterPropertyPrefix + AbstractAsyncFSWriter.CONFIG_TEMP, Boolean.FALSE.toString());
-		try {
-			config.setProperty(AsyncFsWriter.class.getName() + "." + AbstractAsyncFSWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
-		} catch (final IOException e) {
-			Assert.fail(e.getMessage());
-		}
+		config.setProperty(AsyncFsWriter.class.getName() + "." + AbstractAsyncFSWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
 
 		// Write configuration to tmp file
 		LOG.info("Writing monitoring.properties to file '" + monitoringPropertiesFn + "'");
@@ -96,7 +92,6 @@ public class TestMonitoringRecordLoggerFilter {
 				os.close();
 			}
 		}
-
 	}
 
 	/**
