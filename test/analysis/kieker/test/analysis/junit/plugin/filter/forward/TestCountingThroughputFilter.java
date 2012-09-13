@@ -16,7 +16,6 @@
 
 package kieker.test.analysis.junit.plugin.filter.forward;
 
-import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -213,7 +212,7 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 		final List<Entry<Long, Long>> throughputListFromFilterAndCurrentInterval = new ArrayList<Map.Entry<Long, Long>>();
 		{ // We'll need to append the value for the current (pending) interval // NOCS (nested block)
 			throughputListFromFilterAndCurrentInterval.addAll(throughputListFromFilter);
-			throughputListFromFilterAndCurrentInterval.add(new SimpleImmutableEntry<Long, Long>(
+			throughputListFromFilterAndCurrentInterval.add(new ImmutableEntry<Long, Long>(
 					this.throughputFilter.getLastTimestampInCurrentInterval() + 1, this.throughputFilter.getCurrentCountForCurrentInterval()));
 		}
 

@@ -16,7 +16,6 @@
 
 package kieker.test.analysis.junit.plugin.filter.forward;
 
-import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -164,7 +163,7 @@ public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 		for (final long eventDelaySeconds : TestRealtimeRecordDelayFilter.EVENT_TIME_OFFSETS_SECONDS) {
 			curNumRecords++;
 			currentTimeSeconds = START_TIME_SECONDS + eventDelaySeconds;
-			final Entry<Long, Integer> curEntry = new SimpleImmutableEntry<Long, Integer>(eventDelaySeconds, curNumRecords);
+			final Entry<Long, Integer> curEntry = new ImmutableEntry<Long, Integer>(eventDelaySeconds, curNumRecords);
 			eventList.add(curEntry);
 			final EmptyRecord r = new EmptyRecord();
 			r.setLoggingTimestamp(TimeUnit.NANOSECONDS.convert(currentTimeSeconds, TimeUnit.SECONDS));
