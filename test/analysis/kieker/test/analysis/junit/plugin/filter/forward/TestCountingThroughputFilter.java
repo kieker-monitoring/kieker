@@ -16,6 +16,7 @@
 
 package kieker.test.analysis.junit.plugin.filter.forward;
 
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -32,7 +33,7 @@ import kieker.analysis.plugin.filter.forward.CountingThroughputFilter;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
-import kieker.common.util.SimpleImmutableEntry;
+import kieker.common.util.ImmutableEntry;
 
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.analysis.util.plugin.reader.SimpleListReader;
@@ -181,7 +182,7 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 				reader.addObject(r);
 			}
 
-			this.expectedThroughputValues.add(new SimpleImmutableEntry<Long, Long>(stopTimeOfCurInterval + 1, (long) countForCurInterval));
+			this.expectedThroughputValues.add(new ImmutableEntry<Long, Long>(stopTimeOfCurInterval + 1, (long) countForCurInterval));
 		}
 	}
 

@@ -16,6 +16,7 @@
 
 package kieker.test.analysis.junit.plugin.filter.forward;
 
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -38,7 +39,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
-import kieker.common.util.SimpleImmutableEntry;
+import kieker.common.util.ImmutableEntry;
 
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.analysis.util.plugin.reader.SimpleListReader;
@@ -84,10 +85,10 @@ public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 	private SimpleSinkFilter<EmptyRecord> sinkPlugin;
 
 	static {
-		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new SimpleImmutableEntry<Long, Long>((long) 5, (long) 3)); // i.e., in interval (0,5(
-		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new SimpleImmutableEntry<Long, Long>((long) 10, (long) 1)); // i.e., in interval (5,10(
-		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new SimpleImmutableEntry<Long, Long>((long) 15, (long) 0)); // i.e., in interval (10,15(
-		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new SimpleImmutableEntry<Long, Long>((long) 20, (long) 2)); // i.e., in interval (15,20(
+		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new ImmutableEntry<Long, Long>((long) 5, (long) 3)); // i.e., in interval (0,5(
+		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new ImmutableEntry<Long, Long>((long) 10, (long) 1)); // i.e., in interval (5,10(
+		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new ImmutableEntry<Long, Long>((long) 15, (long) 0)); // i.e., in interval (10,15(
+		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new ImmutableEntry<Long, Long>((long) 20, (long) 2)); // i.e., in interval (15,20(
 	}
 
 	public TestRealtimeRecordDelayFilter() {
@@ -179,7 +180,7 @@ public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 		final List<Entry<Long, Long>> throughputListFromFilterAndCurrentInterval = new ArrayList<Map.Entry<Long, Long>>();
 		{ // We'll need to append the value for the current (pending) interval // NOCS (nested block)
 			throughputListFromFilterAndCurrentInterval.addAll(throughputListFromFilter);
-			throughputListFromFilterAndCurrentInterval.add(new SimpleImmutableEntry<Long, Long>(
+			throughputListFromFilterAndCurrentInterval.add(new ImmutableEntry<Long, Long>(
 					this.throughputFilter.getLastTimestampInCurrentInterval() + 1, this.throughputFilter.getCurrentCountForCurrentInterval()));
 		}
 
