@@ -27,10 +27,12 @@ import org.junit.rules.TemporaryFolder;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * @author Jan Waller
  */
-public abstract class AbstractTestLogRotationMaxLogFiles {
+public abstract class AbstractTestLogRotationMaxLogFiles extends AbstractKiekerTest {
 
 	private static final int MAXENTRIESINFILE = 2;
 

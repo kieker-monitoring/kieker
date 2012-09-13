@@ -21,10 +21,12 @@ import org.junit.Test;
 
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * @author Jan Waller
  */
-public class TestBeforeOperationEvent {
+public class TestBeforeOperationEvent extends AbstractKiekerTest {
 
 	private static final long TSTAMP = 987998L;
 	private static final long TRACE_ID = 23444L;

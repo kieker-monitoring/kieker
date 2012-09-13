@@ -27,6 +27,7 @@ import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.NamedPipeFactory;
 
 /**
@@ -35,7 +36,7 @@ import kieker.test.monitoring.util.NamedPipeFactory;
  * @author Andre van Hoorn
  * 
  */
-public class TestAutoSetLoggingTimestamp { // NOCS
+public class TestAutoSetLoggingTimestamp extends AbstractKiekerTest { // NOCS
 
 	private void executeTestSetLoggingTimestamp(final boolean setLoggingTimestampEnabled) {
 		final String pipeName = NamedPipeFactory.createPipeName();

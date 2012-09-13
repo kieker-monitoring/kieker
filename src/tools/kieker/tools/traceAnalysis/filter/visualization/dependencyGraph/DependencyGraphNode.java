@@ -108,7 +108,7 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 			} else {
 				e.addOrigin(origin);
 			}
-			e.getTargetWeight().increase();
+			e.getTargetWeight().incrementAndGet();
 		}
 	}
 
@@ -128,7 +128,7 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 			} else {
 				e.addOrigin(origin);
 			}
-			e.getSourceWeight().increase();
+			e.getSourceWeight().incrementAndGet();
 		}
 	}
 

@@ -14,32 +14,29 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.writeRead.util;
+package kieker.test.tools.util;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.StringWriter;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 
 /**
- * 
  * @author Andre van Hoorn
- * 
  */
-public class StringTeeOutputStream extends OutputStream {
-	private final StringWriter stringWriter = new StringWriter();
-	private final OutputStream interceptedStream;
+public class StringTeePrintStream extends PrintStream {
+	private static final String ENCODING = "UTF-8";
 
-	public StringTeeOutputStream(final OutputStream teeStream) {
-		this.interceptedStream = teeStream;
-	}
+	private final StringTeeOutputStream stringTeeOutputStream;
 
-	@Override
-	public void write(final int b) throws IOException {
-		this.stringWriter.write(b);
-		this.interceptedStream.write(b);
+	public StringTeePrintStream(final PrintStream originalStream) throws UnsupportedEncodingException {
+		super(new StringTeeOutputStream(originalStream), false, StringTeePrintStream.ENCODING);
+		this.stringTeeOutputStream = (StringTeeOutputStream) this.out;
 	}
 
 	public String getString() {
-		return this.stringWriter.getBuffer().toString();
+		if (this.stringTeeOutputStream == null) {
+			return null;
+		}
+
+		return this.stringTeeOutputStream.getString();
 	}
 }

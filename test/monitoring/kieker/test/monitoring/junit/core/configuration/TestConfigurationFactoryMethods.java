@@ -23,6 +23,7 @@ import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
 
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.DefaultConfigurationFactory;
 
 /**
@@ -31,9 +32,13 @@ import kieker.test.monitoring.util.DefaultConfigurationFactory;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-public class TestConfigurationFactoryMethods { // NOCS
+public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 
 	private static final String EXAMPLE_CONFIG_FILE_IN_TRUNK = "test/monitoring/META-INF/kieker.monitoring.test.properties";
+
+	public TestConfigurationFactoryMethods() {
+		// empty default constructor
+	}
 
 	@SuppressWarnings("deprecation")
 	private void executeTestValues(final Configuration configuration) {

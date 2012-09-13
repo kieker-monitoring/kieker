@@ -28,6 +28,7 @@ import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.DefaultConfigurationFactory;
 
 /**
@@ -35,7 +36,7 @@ import kieker.test.monitoring.util.DefaultConfigurationFactory;
  * @author Andre van Hoorn
  * 
  */
-public class TestPeriodicSampling { // NOCS
+public class TestPeriodicSampling extends AbstractKiekerTest { // NOCS
 
 	@Test
 	public void testNoSamplingWhenMonitoringDisabled() throws InterruptedException {

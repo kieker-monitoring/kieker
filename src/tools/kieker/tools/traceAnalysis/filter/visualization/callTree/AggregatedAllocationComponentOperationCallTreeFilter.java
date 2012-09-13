@@ -90,7 +90,7 @@ class AggregatedAllocationComponentOperationCallTreeNode extends AbstractAggrega
 			this.childMap.put(destination.getId(), e);
 			super.appendChildEdge(e);
 		}
-		e.getTargetWeight().increase();
+		e.getTargetWeight().incrementAndGet();
 		return n;
 	}
 

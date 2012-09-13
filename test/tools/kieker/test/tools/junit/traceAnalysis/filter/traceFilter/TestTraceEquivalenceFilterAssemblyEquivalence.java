@@ -25,12 +25,13 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.util.ExecutionFactory;
 
 /**
  * @author Andre van Hoorn
  */
-public class TestTraceEquivalenceFilterAssemblyEquivalence { // NOCS
+public class TestTraceEquivalenceFilterAssemblyEquivalence extends AbstractKiekerTest { // NOCS
 
 	private static final String SESSION_ID = "j8tVhvDPYL";
 

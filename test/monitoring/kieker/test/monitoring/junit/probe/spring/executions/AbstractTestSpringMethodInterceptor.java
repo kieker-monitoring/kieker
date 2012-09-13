@@ -44,13 +44,15 @@ import kieker.monitoring.probe.spring.executions.OperationExecutionMethodInvocat
 import kieker.monitoring.writer.filesystem.AbstractAsyncFSWriter;
 import kieker.monitoring.writer.filesystem.AsyncFsWriter;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * Tests the {@link kieker.monitoring.probe.spring.executions.OperationExecutionMethodInvocationInterceptor}
  * 
  * @author Andre van Hoorn
  * 
  */
-public abstract class AbstractTestSpringMethodInterceptor { // NOPMD (AbstractClassWithoutAbstractMethod)
+public abstract class AbstractTestSpringMethodInterceptor extends AbstractKiekerTest { // NOPMD (AbstractClassWithoutAbstractMethod)
 
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)

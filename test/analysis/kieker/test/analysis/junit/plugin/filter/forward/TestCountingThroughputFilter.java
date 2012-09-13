@@ -36,6 +36,7 @@ import kieker.common.util.SimpleImmutableEntry;
 
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.analysis.util.plugin.reader.SimpleListReader;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * Tests the {@link CountingThroughputFilter}.
@@ -45,7 +46,7 @@ import kieker.test.analysis.util.plugin.reader.SimpleListReader;
  * @author Andre van Hoorn
  * 
  */
-public class TestCountingThroughputFilter {
+public class TestCountingThroughputFilter extends AbstractKiekerTest {
 
 	private static final long START_TIME_NANOS = 246561L; // just a non-trivial number
 	private static final long INTERVAL_SIZE_NANOS = 100; // just a non-trivial number

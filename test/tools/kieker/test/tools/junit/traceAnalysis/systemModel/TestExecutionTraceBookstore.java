@@ -36,13 +36,14 @@ import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.util.ExecutionFactory;
 
 /**
  * 
  * @author Andre van Hoorn
  */
-public class TestExecutionTraceBookstore {
+public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	private static final long TRACE_ID = 69898L;
 	private static final String SESSION_ID = "iXsnm70o4N";
 

@@ -24,12 +24,13 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.DefaultConfigurationFactory;
 
 /**
  * @author Andre van Hoorn, Jan Waller
  */
-public class TestControllerConstruction { // NOCS
+public class TestControllerConstruction extends AbstractKiekerTest { // NOCS
 
 	@Test
 	public void testConstructionFromConfig() {

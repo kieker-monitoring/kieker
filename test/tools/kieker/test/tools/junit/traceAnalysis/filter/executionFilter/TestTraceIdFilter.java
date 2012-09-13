@@ -33,13 +33,14 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.analysis.util.plugin.reader.SimpleListReader;
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.util.ExecutionFactory;
 
 /**
  * 
  * @author Andre van Hoorn
  */
-public class TestTraceIdFilter { // NOCS
+public class TestTraceIdFilter extends AbstractKiekerTest { // NOCS
 
 	// private static final Log log = LogFactory.getLog(TestTraceIdFilter.class);
 

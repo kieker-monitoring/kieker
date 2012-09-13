@@ -14,31 +14,19 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.writeRead.util;
+package kieker.test.common.junit;
 
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
+import kieker.common.logging.LogFactory;
 
 /**
- * 
- * @author Andre van Hoorn
- * 
+ * @author Jan Waller
  */
-public class StringTeePrintStream extends PrintStream {
-	private static final String ENCODING = "UTF-8";
+public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 
-	private final StringTeeOutputStream stringTeeOutputStream;
-
-	public StringTeePrintStream(final PrintStream originalStream) throws UnsupportedEncodingException {
-		super(new StringTeeOutputStream(originalStream), false, StringTeePrintStream.ENCODING);
-		this.stringTeeOutputStream = (StringTeeOutputStream) this.out;
-	}
-
-	public String getString() {
-		if (this.stringTeeOutputStream == null) {
-			return null;
-		}
-
-		return this.stringTeeOutputStream.getString();
+	/**
+	 * Log the currently executing class before any test is executed!
+	 */
+	public AbstractKiekerTest() {
+		LogFactory.getLog(this.getClass()).info(this.getClass().getName());
 	}
 }
