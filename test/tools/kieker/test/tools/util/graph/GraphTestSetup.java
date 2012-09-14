@@ -16,6 +16,7 @@
 package kieker.test.tools.util.graph;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.exception.AnalysisConfigurationException;
 
 /**
  * Data transfer class for a graph test setup. It contains of a prepared analysis controller (which just
@@ -40,6 +41,16 @@ public class GraphTestSetup {
 	public GraphTestSetup(final AnalysisController analysisController, final GraphReceiverPlugin graphReceiverPlugin) {
 		this.analysisController = analysisController;
 		this.graphReceiverPlugin = graphReceiverPlugin;
+	}
+
+	/**
+	 * Runs the setup by starting the enclosed analysis controller.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 *             If an invalid configuration is detected
+	 */
+	public void run() throws AnalysisConfigurationException {
+		this.getAnalysisController().run();
 	}
 
 	/**
