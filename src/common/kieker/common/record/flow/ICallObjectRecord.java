@@ -14,24 +14,14 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.probe.aspectj.flow.operationExecution;
-
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
+package kieker.common.record.flow;
 
 /**
  * @author Jan Waller
  */
-@Aspect
-public final class FullInstrumentation extends AbstractAspect {
+public interface ICallObjectRecord extends IObjectRecord {
 
-	public FullInstrumentation() {
-		// empty default constructor
-	}
+	public abstract int getCallerObjectId();
 
-	@Override
-	@Pointcut("execution(* *(..))")
-	public final void monitoredOperation() {
-		// Aspect Declaration (MUST be empty)
-	}
+	public abstract int getCalleeObjectId();
 }

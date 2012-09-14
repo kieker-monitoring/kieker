@@ -27,7 +27,7 @@ public class ConstructionEvent extends AbstractTraceEvent implements IObjectReco
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
-		String.class, // className
+		String.class, // classSignature
 		int.class, // objectId
 	};
 
@@ -58,7 +58,7 @@ public class ConstructionEvent extends AbstractTraceEvent implements IObjectReco
 	}
 
 	public Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.classSignature, this.objectId, };
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getClassSignature(), this.getObjectId(), };
 	}
 
 	public Class<?>[] getValueTypes() {

@@ -63,6 +63,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 	private final long maxTraceDuration;
 	private final long maxTraceTimeout;
+	private final boolean timeout;
 	private long maxEncounteredLoggingTimestamp = -1;
 
 	private final Map<Long, TraceBuffer> traceId2trace;
@@ -71,6 +72,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		super(configuration);
 		this.maxTraceDuration = configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION);
 		this.maxTraceTimeout = configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT);
+		this.timeout = !((this.maxTraceTimeout == Long.MAX_VALUE) && (this.maxTraceDuration == Long.MAX_VALUE)); // NOPMD (bitwise conversion makes code unreadable)
 		this.traceId2trace = new ConcurrentHashMap<Long, TraceBuffer>();
 	}
 
@@ -119,12 +121,14 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 			}
 			super.deliver(OUTPUT_PORT_NAME_TRACE_VALID, traceBuffer.toTraceEvents());
 		}
-		synchronized (this) {
-			if (loggingTimestamp > this.maxEncounteredLoggingTimestamp) { // can we assume a rough order of logging timestamps?
-				this.maxEncounteredLoggingTimestamp = loggingTimestamp;
+		if (this.timeout) {
+			synchronized (this) {
+				// can we assume a rough order of logging timestamps? (yes, except with DB reader)
+				if (loggingTimestamp > this.maxEncounteredLoggingTimestamp) {
+					this.maxEncounteredLoggingTimestamp = loggingTimestamp;
+				}
+				this.processTimeoutQueue(this.maxEncounteredLoggingTimestamp);
 			}
-			// every time or only if the max encountered ts changes?
-			this.processTimeoutQueue(this.maxEncounteredLoggingTimestamp);
 		}
 	}
 
@@ -144,12 +148,13 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		}
 	}
 
+	// only called within synchronized! We assume timestamps >= 0
 	private void processTimeoutQueue(final long timestamp) {
 		final long duration = timestamp - this.maxTraceDuration;
-		final long timeout = timestamp - this.maxTraceTimeout;
+		final long traceTimeout = timestamp - this.maxTraceTimeout;
 		for (final Iterator<Entry<Long, TraceBuffer>> iterator = this.traceId2trace.entrySet().iterator(); iterator.hasNext();) {
 			final TraceBuffer traceBuffer = iterator.next().getValue();
-			if ((traceBuffer.getMaxLoggingTimestamp() <= timeout) // long time no see
+			if ((traceBuffer.getMaxLoggingTimestamp() <= traceTimeout) // long time no see
 					|| (traceBuffer.getMinLoggingTimestamp() <= duration)) { // max duration is gone
 				if (traceBuffer.isInvalid()) {
 					super.deliver(OUTPUT_PORT_NAME_TRACE_INVALID, traceBuffer.toTraceEvents());

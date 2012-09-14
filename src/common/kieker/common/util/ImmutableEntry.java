@@ -49,25 +49,15 @@ public class ImmutableEntry<K, V> implements Map.Entry<K, V> {
 		throw new UnsupportedOperationException("This entry is immutable");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((this.key == null) ? 0 : this.key.hashCode());
-		result = prime * result + ((this.value == null) ? 0 : this.value.hashCode());
+		result = (prime * result) + ((this.key == null) ? 0 : this.key.hashCode()); // NOCS
+		result = (prime * result) + ((this.value == null) ? 0 : this.value.hashCode()); // NOCS
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj) {
