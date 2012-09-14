@@ -63,7 +63,7 @@ public class Color {
 	 *            The color's blue value
 	 */
 	public Color(final byte red, final byte green, final byte blue) {
-		this.rgb = (red << 16) | (green << 8) | blue;
+		this.rgb = ((red << 16) | (green << 8) | blue) & 0x00FFFFFF;
 	}
 
 	/**
