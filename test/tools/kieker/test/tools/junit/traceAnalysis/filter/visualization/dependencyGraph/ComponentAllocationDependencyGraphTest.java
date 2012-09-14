@@ -24,7 +24,6 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
@@ -42,14 +41,14 @@ import kieker.test.tools.util.graph.GraphReceiverPlugin;
 import kieker.test.tools.util.graph.GraphTestSetup;
 
 /**
- * Test suite for the creation of component allocation dependency graphs.
+ * Test suite for the creation of component allocation dependency graphs ({@link ComponentDependencyGraphAllocationFilter}).
  * 
  * @author Holger Knoche
  * 
  */
 public class ComponentAllocationDependencyGraphTest extends AbstractKiekerTest {
 
-	private static final long TRACE_ID = 1L;
+	private static final long TRACE_ID = 1;
 	private static final String SESSION_ID = "1234";
 	private static final String HOSTNAME = "test";
 
@@ -97,8 +96,7 @@ public class ComponentAllocationDependencyGraphTest extends AbstractKiekerTest {
 
 	@Test
 	public void testGraphCreation() throws AnalysisConfigurationException {
-		final AnalysisController analysisController = testSetup.getAnalysisController();
-		analysisController.run();
+		testSetup.run();
 		final GraphReceiverPlugin graphReceiver = testSetup.getGraphReceiverPlugin();
 
 		// Check number of produced graphs
