@@ -18,7 +18,7 @@ package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractWeightedEdge;
 import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
-import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+import kieker.tools.traceAnalysis.systemModel.TraceInformation;
 
 /**
  * 
@@ -27,11 +27,11 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
  * @author Andre van Hoorn
  */
 public class WeightedBidirectionalDependencyGraphEdge<T extends ISystemModelElement> extends
-		AbstractWeightedEdge<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, MessageTrace> {
+		AbstractWeightedEdge<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, TraceInformation> {
 
 	private boolean assumed; // false
 
-	public WeightedBidirectionalDependencyGraphEdge(final DependencyGraphNode<T> source, final DependencyGraphNode<T> target, final MessageTrace origin) {
+	public WeightedBidirectionalDependencyGraphEdge(final DependencyGraphNode<T> source, final DependencyGraphNode<T> target, final TraceInformation origin) {
 		super(source, target, origin);
 	}
 

@@ -23,8 +23,7 @@ public abstract class AbstractTrace {
 
 	public static final String NO_TRACE_ID = "N/A";
 
-	private final String sessionId; // convenience field. All executions have this sessionId.
-	private final long traceId; // convenience field. All executions have this traceId.
+	private final TraceInformation traceInformation;
 
 	protected AbstractTrace() {
 		this(-1, NO_TRACE_ID);
@@ -35,19 +34,27 @@ public abstract class AbstractTrace {
 	}
 
 	public AbstractTrace(final long traceId, final String sessionId) {
-		this.traceId = traceId;
-		this.sessionId = sessionId;
+		this.traceInformation = new TraceInformation(traceId, sessionId);
+	}
+
+	/**
+	 * Returns information about this trace.
+	 * 
+	 * @return See above
+	 */
+	public TraceInformation getTraceInformation() {
+		return this.traceInformation;
 	}
 
 	public long getTraceId() {
-		return this.traceId;
+		return this.traceInformation.getTraceId();
 	}
 
 	/**
 	 * @return the sessionId
 	 */
 	public String getSessionId() {
-		return this.sessionId;
+		return this.traceInformation.getSessionId();
 	}
 
 	/*
@@ -58,7 +65,7 @@ public abstract class AbstractTrace {
 	@Override
 	public int hashCode() {
 		/* On purpose, we are not considering the sessionId here */
-		return (int) (this.traceId ^ (this.traceId >>> 32));
+		return (int) (this.getTraceId() ^ (this.getTraceId() >>> 32));
 	}
 
 	@Override

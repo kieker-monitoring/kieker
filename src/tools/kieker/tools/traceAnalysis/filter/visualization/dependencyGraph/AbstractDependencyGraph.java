@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
 import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
-import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+import kieker.tools.traceAnalysis.systemModel.TraceInformation;
 
 /**
  * 
@@ -31,7 +31,7 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
  * @author Andre van Hoorn, Lena St&ouml;ver
  */
 public abstract class AbstractDependencyGraph<T extends ISystemModelElement> extends
-		AbstractGraph<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, MessageTrace> {
+		AbstractGraph<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, TraceInformation> {
 
 	// private static final Log LOG = LogFactory.getLog(DependencyGraph.class);
 

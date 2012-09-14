@@ -31,7 +31,7 @@ import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.SimpleImmutableEntry;
+import kieker.common.util.ImmutableEntry;
 
 /**
  * An instance of this class computes the throughput in terms of the number of events received per time unit.
@@ -120,7 +120,7 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 			if (endOfTimestampsInterval > this.lastTimestampInCurrentInterval) {
 				if (this.firstTimestampInCurrentInterval >= 0) { // don't do this for the first record
 					this.eventCountsPerInterval.add(
-							new SimpleImmutableEntry<Long, Long>(this.lastTimestampInCurrentInterval + 1, this.currentCountForCurrentInterval.get())
+							new ImmutableEntry<Long, Long>(this.lastTimestampInCurrentInterval + 1, this.currentCountForCurrentInterval.get())
 							);
 				}
 
