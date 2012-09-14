@@ -470,12 +470,10 @@ public final class AnalysisController {
 	}
 
 	private static List<MIProperty> convertProperties(final Configuration configuration, final MAnalysisMetaModelFactory factory) {
-		if (configuration == null) {
+		if (null == configuration) { // should not happen, but better safe than sorry
 			return Collections.emptyList();
 		}
-
 		final List<MIProperty> properties = new ArrayList<MIProperty>();
-
 		for (final Enumeration<?> e = configuration.propertyNames(); e.hasMoreElements();) {
 			final String key = (String) e.nextElement();
 			final MIProperty property = factory.createProperty();
@@ -483,7 +481,6 @@ public final class AnalysisController {
 			property.setValue(configuration.getStringProperty(key));
 			properties.add(property);
 		}
-
 		return properties;
 	}
 
@@ -508,9 +505,7 @@ public final class AnalysisController {
 			for (final AbstractRepository repo : this.repos) {
 				final MIRepository mRepo = factory.createRepository();
 				mRepo.setClassname(repo.getClass().getName());
-
 				mRepo.getProperties().addAll(AnalysisController.convertProperties(repo.getCurrentConfiguration(), factory));
-
 				mProject.getRepositories().add(mRepo);
 				repositoryMap.put(repo, mRepo);
 			}
