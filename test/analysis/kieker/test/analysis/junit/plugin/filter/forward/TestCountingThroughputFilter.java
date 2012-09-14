@@ -32,7 +32,7 @@ import kieker.analysis.plugin.filter.forward.CountingThroughputFilter;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
-import kieker.common.util.SimpleImmutableEntry;
+import kieker.common.util.ImmutableEntry;
 
 import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.analysis.util.plugin.reader.SimpleListReader;
@@ -181,7 +181,7 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 				reader.addObject(r);
 			}
 
-			this.expectedThroughputValues.add(new SimpleImmutableEntry<Long, Long>(stopTimeOfCurInterval + 1, (long) countForCurInterval));
+			this.expectedThroughputValues.add(new ImmutableEntry<Long, Long>(stopTimeOfCurInterval + 1, (long) countForCurInterval));
 		}
 	}
 
@@ -212,7 +212,7 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 		final List<Entry<Long, Long>> throughputListFromFilterAndCurrentInterval = new ArrayList<Map.Entry<Long, Long>>();
 		{ // We'll need to append the value for the current (pending) interval // NOCS (nested block)
 			throughputListFromFilterAndCurrentInterval.addAll(throughputListFromFilter);
-			throughputListFromFilterAndCurrentInterval.add(new SimpleImmutableEntry<Long, Long>(
+			throughputListFromFilterAndCurrentInterval.add(new ImmutableEntry<Long, Long>(
 					this.throughputFilter.getLastTimestampInCurrentInterval() + 1, this.throughputFilter.getCurrentCountForCurrentInterval()));
 		}
 

@@ -14,36 +14,24 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.traceAnalysis.filter.visualization.util;
+package kieker.monitoring.probe.aspectj.flow.operationExecutionObject;
+
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 
 /**
- * 
- * @author Andre van Hoorn
+ * @author Jan Waller
  */
-public class IntContainer {
+@Aspect
+public final class FullInstrumentationNoGetterAndSetter extends AbstractAspect {
 
-	private int value;
-
-	public IntContainer(final int initVal) {
-		this.value = initVal;
+	public FullInstrumentationNoGetterAndSetter() {
+		// empty default constructor
 	}
 
-	/**
-	 * @return the i
-	 */
-	public final int getValue() {
-		return this.value;
-	}
-
-	/**
-	 * @param value
-	 *            the i to set
-	 */
-	public final void setValue(final int value) {
-		this.value = value;
-	}
-
-	public final int getAndIncValue() {
-		return this.value++;
+	@Override
+	@Pointcut("execution(* *(..)) && noGetterAndSetter()")
+	public final void monitoredOperation() {
+		// Aspect Declaration (MUST be empty)
 	}
 }

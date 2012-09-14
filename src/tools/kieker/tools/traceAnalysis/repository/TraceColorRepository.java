@@ -21,11 +21,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.analysis.repository.annotation.Repository;
 import kieker.common.configuration.Configuration;
@@ -39,7 +41,10 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.Color;
  * 
  */
 @Repository(name = "Trace color repository",
-		description = "Provides color information for trace coloring")
+		description = "Provides color information for trace coloring",
+		configuration = {
+			@Property(name = TraceColorRepositoryConfiguration.CONFIG_PROPERTY_NAME_TRACE_COLOR_FILE_NAME, defaultValue = "")
+		})
 public class TraceColorRepository extends AbstractRepository {
 
 	private static final String DEFAULT_KEYWORD = "default";
@@ -52,27 +57,35 @@ public class TraceColorRepository extends AbstractRepository {
 
 	private static final String ENCODING = "UTF-8";
 
-	private final Map<Long, Color> colorMap;
+	private final ConcurrentMap<Long, Color> colorMap;
 	private final Color defaultColor;
 	private final Color collisionColor;
+
+	/**
+	 * Creates a new trace color repository using the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 * @throws IOException
+	 *             If an I/O error occurs during initialization
+	 */
+	public TraceColorRepository(final Configuration configuration) throws IOException {
+		this(configuration, TraceColorRepository.readDataFromFile(new TraceColorRepositoryConfiguration(configuration).getTraceColorFileName()));
+	}
 
 	/**
 	 * Creates a new color repository with the given data.
 	 * 
 	 * @param configuration
 	 *            The configuration to use
-	 * @param colorMap
-	 *            The color map, which associates colors to trace IDs
-	 * @param defaultColor
-	 *            The color to use for traces which have no specific color
-	 * @param collisionColor
-	 *            The color to use for elements which can not be associated to a single trace
+	 * @param colorData
+	 *            The color data to use for this repository
 	 */
-	public TraceColorRepository(final Configuration configuration, final Map<Long, Color> colorMap, final Color defaultColor, final Color collisionColor) {
+	private TraceColorRepository(final Configuration configuration, final TraceColorRepositoryData colorData) {
 		super(configuration);
-		this.colorMap = colorMap;
-		this.defaultColor = defaultColor;
-		this.collisionColor = collisionColor;
+		this.colorMap = colorData.getColorMap();
+		this.defaultColor = colorData.getDefaultColor();
+		this.collisionColor = colorData.getCollisionColor();
 	}
 
 	public Configuration getCurrentConfiguration() {
@@ -124,11 +137,27 @@ public class TraceColorRepository extends AbstractRepository {
 		return new Color(rgbValue);
 	}
 
+	/**
+	 * Initializes a trace color repository from a given file.
+	 * 
+	 * @param fileName
+	 *            The name of the file to read from
+	 * @return The initialized trace color repository
+	 * @throws IOException
+	 *             If an I/O error occurs
+	 */
 	public static TraceColorRepository createFromFile(final String fileName) throws IOException {
+		final TraceColorRepositoryConfiguration configuration = new TraceColorRepositoryConfiguration(new Configuration());
+		configuration.setTraceColorFileName(fileName);
+
+		return new TraceColorRepository(configuration.getWrappedConfiguration(), TraceColorRepository.readDataFromFile(fileName));
+	}
+
+	private static TraceColorRepositoryData readDataFromFile(final String fileName) throws IOException {
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), ENCODING));
-			final Map<Long, Color> colorMap = new HashMap<Long, Color>(); // NOPMD ( UseConcurrentHashMap), returned as Collections.unmodifiableMap
+			final ConcurrentMap<Long, Color> colorMap = new ConcurrentHashMap<Long, Color>();
 			Color defaultColor = Color.BLACK;
 			Color collisionColor = Color.GRAY;
 
@@ -165,11 +194,37 @@ public class TraceColorRepository extends AbstractRepository {
 				}
 			}
 
-			return new TraceColorRepository(new Configuration(), colorMap, defaultColor, collisionColor);
+			return new TraceColorRepositoryData(colorMap, defaultColor, collisionColor);
 		} finally {
 			if (reader != null) {
 				reader.close();
 			}
 		}
 	}
+
+	private static class TraceColorRepositoryData {
+		private final ConcurrentMap<Long, Color> colorMap;
+		private final Color defaultColor;
+		private final Color collisionColor;
+
+		public TraceColorRepositoryData(final ConcurrentMap<Long, Color> colorMap, final Color defaultColor, final Color collisionColor) {
+			this.colorMap = colorMap;
+			this.defaultColor = defaultColor;
+			this.collisionColor = collisionColor;
+		}
+
+		public ConcurrentMap<Long, Color> getColorMap() {
+			return this.colorMap;
+		}
+
+		public Color getDefaultColor() {
+			return this.defaultColor;
+		}
+
+		public Color getCollisionColor() {
+			return this.collisionColor;
+		}
+
+	}
+
 }

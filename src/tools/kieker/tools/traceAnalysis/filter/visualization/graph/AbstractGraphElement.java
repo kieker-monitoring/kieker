@@ -94,10 +94,10 @@ public abstract class AbstractGraphElement<O> {
 	 * @param origin
 	 *            The origin object
 	 */
-	// final because this method is called in constructor (PMD's ConstructorCallsOverridableMethod check)
-	public final void addOrigin(final O origin) { // TODO: Remove this NOPMD (EmptyMethodInAbstractClassShouldBeAbstract) marker after 583 resolved
-		// TODO: Deactivated due to memory issues: http://kieker.uni-kiel.de/trac/ticket/583
-		// this.origins.add(origin);
+	public final void addOrigin(final O origin) {
+		if (origin != null) {
+			this.origins.add(origin);
+		}
 	}
 
 	/**

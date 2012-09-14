@@ -14,7 +14,10 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.probe.aspectj.flow.operationExecution;
+package kieker.monitoring.probe.aspectj.operationExecution;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -23,14 +26,20 @@ import org.aspectj.lang.annotation.Pointcut;
  * @author Jan Waller
  */
 @Aspect
-public final class FullInstrumentation extends AbstractAspect {
+public final class OperationExecutionAspectFullNoGetterAndSetterServlet extends AbstractOperationExecutionAspectServlet {
 
-	public FullInstrumentation() {
+	public OperationExecutionAspectFullNoGetterAndSetterServlet() {
 		// empty default constructor
 	}
 
 	@Override
-	@Pointcut("execution(* *(..))")
+	@Pointcut("execution(* *.do*(..)) && args(request,response)")
+	public final void monitoredServlet(final HttpServletRequest request, final HttpServletResponse response) {
+		// Aspect Declaration (MUST be empty)
+	}
+
+	@Override
+	@Pointcut("(execution(* *(..)) && noGetterAndSetter()) || execution(new(..))")
 	public final void monitoredOperation() {
 		// Aspect Declaration (MUST be empty)
 	}

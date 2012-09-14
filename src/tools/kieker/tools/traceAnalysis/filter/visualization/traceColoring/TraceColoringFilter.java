@@ -31,7 +31,7 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraphElemen
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertex;
 import kieker.tools.traceAnalysis.filter.visualization.graph.Color;
 import kieker.tools.traceAnalysis.repository.TraceColorRepository;
-import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+import kieker.tools.traceAnalysis.systemModel.TraceInformation;
 
 /**
  * This filter sets the color of nodes and edges which belong to a single trace according to a trace
@@ -49,8 +49,8 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 		description = "Colors graph elements that can uniquely associated to a trace according to the color repository",
 		repositoryPorts = @RepositoryPort(name = TraceColoringFilter.COLOR_REPOSITORY_NAME, repositoryType = TraceColorRepository.class),
 		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
-public class TraceColoringFilter<V extends AbstractVertex<V, E, MessageTrace>, E extends AbstractEdge<V, E, MessageTrace>> extends
-		AbstractGraphFilter<AbstractGraph<V, E, MessageTrace>, V, E, MessageTrace> implements IGraphVisitor<V, E> {
+public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation>, E extends AbstractEdge<V, E, TraceInformation>> extends
+		AbstractGraphFilter<AbstractGraph<V, E, TraceInformation>, V, E, TraceInformation> implements IGraphVisitor<V, E> {
 
 	public static final String COLOR_REPOSITORY_NAME = "colorRepository";
 
@@ -75,12 +75,12 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, MessageTrace>, E
 		this.collisionColor = colorRepository.getCollisionColor();
 	}
 
-	private void handleGraphElement(final AbstractGraphElement<MessageTrace> element) {
+	private void handleGraphElement(final AbstractGraphElement<TraceInformation> element) {
 		if (element.getOrigins().size() != 1) {
 			element.setColor(this.collisionColor);
 		} else {
-			final MessageTrace trace = element.getOrigins().iterator().next();
-			final long traceId = trace.getTraceId();
+			final TraceInformation traceInformation = element.getOrigins().iterator().next();
+			final long traceId = traceInformation.getTraceId();
 
 			final Color color;
 			if (this.colorMap.containsKey(traceId)) {
@@ -102,7 +102,7 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, MessageTrace>, E
 	}
 
 	@Override
-	protected AbstractGraph<V, E, MessageTrace> performConcreteGraphProcessing(final AbstractGraph<V, E, MessageTrace> graph) {
+	protected AbstractGraph<V, E, TraceInformation> performConcreteGraphProcessing(final AbstractGraph<V, E, TraceInformation> graph) {
 		this.initialize();
 
 		graph.traverse(this);

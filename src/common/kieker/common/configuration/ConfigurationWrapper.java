@@ -14,24 +14,33 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.probe.aspectj.flow.operationExecution;
-
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
+package kieker.common.configuration;
 
 /**
- * @author Jan Waller
+ * Base class for plugin-specific configuration wrappers. These wrappers are commonly used to provide a
+ * convenient access to configuration properties, e.g. via accessor methods.
+ * 
+ * @author Holger Knoche
+ * 
  */
-@Aspect
-public final class FullInstrumentation extends AbstractAspect {
+public class ConfigurationWrapper {
 
-	public FullInstrumentation() {
-		// empty default constructor
+	private final Configuration wrappedConfiguration;
+
+	/**
+	 * Creates a new wrapper around the given configuration.
+	 */
+	protected ConfigurationWrapper(final Configuration configuration) {
+		this.wrappedConfiguration = configuration;
 	}
 
-	@Override
-	@Pointcut("execution(* *(..))")
-	public final void monitoredOperation() {
-		// Aspect Declaration (MUST be empty)
+	/**
+	 * Returns the wrapped configuration.
+	 * 
+	 * @return See above
+	 */
+	public Configuration getWrappedConfiguration() {
+		return this.wrappedConfiguration;
 	}
+
 }

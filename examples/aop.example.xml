@@ -1,7 +1,7 @@
 <!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.aspectj.org/dtd/aspectj_1_5_0.dtd">
 
 <aspectj>
-	<weaver options=""> <!-- options="-verbose" -->
+	<weaver options=""> <!-- options="-verbose -showWeaveInfo" -->
 
 		<!-- Use the exclude/include directives to specify which classes are (not) to be considered for weaving.
 		     Some examples are given below. -->
@@ -11,6 +11,8 @@
 
 		<!-- Use * to consider all classes. In this case, you typically need some additional excludes. -->
 		<!-- <include within="*"/> -->
+		<!-- This would cause problems with * ?!? -->
+		<!-- <exclude within="org.apache.commons.logging..*" />  -->
 
 		<!-- Example instrumentation for the iBATIS JPetStore -->
 		<!--<include within="com.ibatis.jpetstore..*"/> -->
@@ -34,9 +36,13 @@
 		<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotation" />
 		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotationServlet"/> -->
 		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFull"/> -->
+		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoGetterAndSetter"/> -->
 		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullServlet"/> -->
+		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoGetterAndSetterServlet"/> -->
 		
-		<!-- KiekerFlow Aspects-->
+		<!-- KiekerFlow Aspects -->
+		<!-- ################## -->
+		
 		<!-- Concurrency -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.concurrency.ThreadingAspect" /> -->
 		
@@ -54,11 +60,23 @@
 		
 		<!-- OperationExecution -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.FullInstrumentation" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.FullInstrumentationNoGetterAndSetter" /> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.Annotation" /> -->
+
+		<!-- OperationExecutionObject -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecutionObject.FullInstrumentation" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecutionObject.FullInstrumentationNoGetterAndSetter" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecutionObject.Annotation" /> -->
 
 		<!-- OperationCall -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.FullInstrumentation" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.FullInstrumentationNoGetterAndSetter" /> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.Annotation" /> -->
+		
+		<!-- ObjectOperationCall -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCallObject.FullInstrumentation" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCallObject.FullInstrumentationNoGetterAndSetter" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCallObject.Annotation" /> -->
 		
 		<!-- Definition of additional targeted aspects (example for a single additional getter) -->
 		<!--  
