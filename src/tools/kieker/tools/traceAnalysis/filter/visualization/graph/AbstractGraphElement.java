@@ -95,7 +95,9 @@ public abstract class AbstractGraphElement<O> {
 	 *            The origin object
 	 */
 	public final void addOrigin(final O origin) {
-		this.origins.add(origin);
+		if (origin != null) {
+			this.origins.add(origin);
+		}
 	}
 
 	/**
