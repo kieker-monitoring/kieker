@@ -135,7 +135,7 @@ public class TraceColoringFilterTest extends AbstractKiekerTest {
 		Assert.assertEquals(1, graphReceiver.getNumberOfReceivedGraphs());
 
 		// Prepare the produced graph
-		final ComponentAllocationDependencyGraph graph = graphReceiver.getFirstGraph();
+		final ComponentAllocationDependencyGraph graph = graphReceiver.<ComponentAllocationDependencyGraph> getFirstGraph();
 		final Map<String, DependencyGraphNode<AllocationComponent>> nodeMap = DependencyGraphTestUtil.createNodeLookupTable(graph);
 
 		final DependencyGraphNode<AllocationComponent> component1Node = nodeMap.get(EXPECTED_ALLOCATION_COMPONENT_NAME_1);

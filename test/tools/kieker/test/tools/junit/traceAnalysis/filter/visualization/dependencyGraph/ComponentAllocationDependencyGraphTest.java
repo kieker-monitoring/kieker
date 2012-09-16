@@ -103,7 +103,7 @@ public class ComponentAllocationDependencyGraphTest extends AbstractKiekerTest {
 		Assert.assertEquals(1, graphReceiver.getNumberOfReceivedGraphs());
 
 		// Inspect the graph itself
-		final ComponentAllocationDependencyGraph graph = graphReceiver.getFirstGraph();
+		final ComponentAllocationDependencyGraph graph = graphReceiver.<ComponentAllocationDependencyGraph> getFirstGraph();
 		final Map<String, DependencyGraphNode<AllocationComponent>> nodeMap = DependencyGraphTestUtil.createNodeLookupTable(graph);
 
 		// Obtain the expected allocation components
