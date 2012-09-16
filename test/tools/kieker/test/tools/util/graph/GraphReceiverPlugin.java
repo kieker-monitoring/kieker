@@ -79,7 +79,7 @@ public class GraphReceiverPlugin extends AbstractFilterPlugin {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends AbstractGraph<?, ?, ?>> T getFirstGraph() {
-		return (T) this.receivedGraphs.get(0);
+		return (T) this.receivedGraphs.get(0); // using getGraphAt leads to a compile error, probably caused by a javac bug
 	}
 
 	/**
