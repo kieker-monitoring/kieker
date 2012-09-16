@@ -77,8 +77,9 @@ public class GraphReceiverPlugin extends AbstractFilterPlugin {
 	 * 
 	 * @return See above
 	 */
+	@SuppressWarnings("unchecked")
 	public <T extends AbstractGraph<?, ?, ?>> T getFirstGraph() {
-		return this.getGraphAt(0);
+		return (T) this.receivedGraphs.get(0);
 	}
 
 	/**
