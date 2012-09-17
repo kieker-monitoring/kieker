@@ -31,6 +31,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
@@ -40,7 +41,6 @@ import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
-import kieker.test.analysis.util.plugin.reader.SimpleListReader;
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.util.BookstoreExecutionFactory;
 
@@ -136,7 +136,7 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 	public void testIt() throws Exception {
 		final AbstractTraceProcessingFilter filter = this.provideWriterFilter(this.outputFile.getAbsolutePath());
 
-		final SimpleListReader<Object> reader = new SimpleListReader<Object>(new Configuration());
+		final ListReader<Object> reader = new ListReader<Object>(new Configuration());
 		final List<Object> eventList = this.createTraces();
 		reader.addAllObjects(eventList);
 
@@ -144,7 +144,7 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 		analysisController.registerFilter(filter);
 		analysisController.registerReader(reader);
 		analysisController.registerRepository(this.modelRepo);
-		analysisController.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, filter, this.provideFilterInputName());
+		analysisController.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, this.provideFilterInputName());
 		analysisController.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.modelRepo);
 		analysisController.run();
 

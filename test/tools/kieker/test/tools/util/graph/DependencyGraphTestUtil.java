@@ -23,6 +23,7 @@ import java.util.Map;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
@@ -37,8 +38,6 @@ import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.WeightedB
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraphElement;
 import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
-
-import kieker.test.analysis.util.plugin.reader.SimpleListReader;
 
 /**
  * This class provides utility functions for dependency graph tests.
@@ -123,7 +122,7 @@ public class DependencyGraphTestUtil {
 
 		final SystemModelRepository systemModelRepository = new SystemModelRepository(new Configuration());
 
-		final SimpleListReader<OperationExecutionRecord> readerPlugin = new SimpleListReader<OperationExecutionRecord>(new Configuration());
+		final ListReader<OperationExecutionRecord> readerPlugin = new ListReader<OperationExecutionRecord>(new Configuration());
 		readerPlugin.addAllObjects(executionRecords);
 
 		final ExecutionRecordTransformationFilter transformationFilter = new ExecutionRecordTransformationFilter(new Configuration());
@@ -149,7 +148,7 @@ public class DependencyGraphTestUtil {
 		}
 
 		// Connect plugins
-		analysisController.connect(readerPlugin, SimpleListReader.OUTPUT_PORT_NAME,
+		analysisController.connect(readerPlugin, ListReader.OUTPUT_PORT_NAME,
 				transformationFilter, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
 		analysisController.connect(transformationFilter, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS,
 				traceReconstructionFilter, TraceReconstructionFilter.INPUT_PORT_NAME_EXECUTIONS);

@@ -29,13 +29,13 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.analysis.plugin.filter.forward.CountingThroughputFilter;
+import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
+import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.common.util.ImmutableEntry;
 
-import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
-import kieker.test.analysis.util.plugin.reader.SimpleListReader;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
@@ -54,7 +54,7 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 	private AnalysisController analysisController;
 
 	/** Provides the list of {@link IMonitoringRecord}s to be processed */
-	private SimpleListReader<IMonitoringRecord> simpleListReader; // initialized in #prepareConfiguration()
+	private ListReader<IMonitoringRecord> simpleListReader; // initialized in #prepareConfiguration()
 
 	/** Provides the (current) number of {@link IMonitoringRecord}s provided by the {@link #simpleListReader} */
 	private CountingFilter countingFilterReader; // initialized in #prepareConfiguration()
@@ -63,7 +63,7 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 	private CountingThroughputFilter throughputFilter; // initialized in #prepareConfiguration()
 
 	/** Simply collects all {@link IMonitoringRecord}s processed by the tested filter */
-	private SimpleSinkFilter<EmptyRecord> sinkPlugin; // initialized in #prepareConfiguration()
+	private ListCollectionFilter<EmptyRecord> sinkPlugin; // initialized in #prepareConfiguration()
 
 	private volatile boolean intervalsBasedOn1stTstamp; // will be set by the @Test's
 
@@ -84,8 +84,8 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 		 * Reader
 		 */
 		final Configuration readerConfiguration = new Configuration();
-		readerConfiguration.setProperty(SimpleListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		this.simpleListReader = new SimpleListReader<IMonitoringRecord>(new Configuration());
+		readerConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
+		this.simpleListReader = new ListReader<IMonitoringRecord>(new Configuration());
 		this.analysisController.registerReader(this.simpleListReader);
 
 		/*
@@ -93,7 +93,7 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 		 */
 		this.countingFilterReader = new CountingFilter(new Configuration());
 		this.analysisController.registerFilter(this.countingFilterReader);
-		this.analysisController.connect(this.simpleListReader, SimpleListReader.OUTPUT_PORT_NAME,
+		this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME,
 				this.countingFilterReader, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
 		/*
@@ -111,10 +111,10 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 		/*
 		 * Sink plugin
 		 */
-		this.sinkPlugin = new SimpleSinkFilter<EmptyRecord>(new Configuration());
+		this.sinkPlugin = new ListCollectionFilter<EmptyRecord>(new Configuration());
 		this.analysisController.registerFilter(this.sinkPlugin);
 		this.analysisController.connect(this.throughputFilter, CountingThroughputFilter.OUTPUT_PORT_NAME_RELAYED_OBJECTS,
-				this.sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
+				this.sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 	}
 
 	/**
@@ -154,7 +154,7 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 		return retList;
 	}
 
-	private void createInputEvents(final SimpleListReader<IMonitoringRecord> reader) {
+	private void createInputEvents(final ListReader<IMonitoringRecord> reader) {
 		final long startTimeOfFirstInterval;
 		if (this.intervalsBasedOn1stTstamp) {
 			startTimeOfFirstInterval = START_TIME_NANOS;

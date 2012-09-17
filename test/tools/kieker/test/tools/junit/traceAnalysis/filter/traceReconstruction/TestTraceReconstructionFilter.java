@@ -21,6 +21,8 @@ import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
+import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
+import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -34,8 +36,6 @@ import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
-import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
-import kieker.test.analysis.util.plugin.reader.SimpleListReader;
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.util.ExecutionFactory;
 
@@ -112,7 +112,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		validExecutionTrace = this.genValidBookstoreTrace();
 		validMessageTrace = validExecutionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 
-		final SimpleListReader<Execution> reader = new SimpleListReader<Execution>(new Configuration());
+		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration());
 		for (final Execution curExec : validExecutionTrace.getTraceAsSortedExecutionSet()) {
 			reader.addObject(curExec);
 		}
@@ -127,9 +127,9 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout", validExecutionTrace.getDurationInNanos() <= filter
 				.getMaxTraceDurationNanos());
 
-		final SimpleSinkFilter<ExecutionTrace> executionTraceSinkPlugin = new SimpleSinkFilter<ExecutionTrace>(new Configuration());
-		final SimpleSinkFilter<MessageTrace> messageTraceSinkPlugin = new SimpleSinkFilter<MessageTrace>(new Configuration());
-		final SimpleSinkFilter<InvalidExecutionTrace> invalidExecutionTraceSinkPlugin = new SimpleSinkFilter<InvalidExecutionTrace>(new Configuration());
+		final ListCollectionFilter<ExecutionTrace> executionTraceSinkPlugin = new ListCollectionFilter<ExecutionTrace>(new Configuration());
+		final ListCollectionFilter<MessageTrace> messageTraceSinkPlugin = new ListCollectionFilter<MessageTrace>(new Configuration());
+		final ListCollectionFilter<InvalidExecutionTrace> invalidExecutionTraceSinkPlugin = new ListCollectionFilter<InvalidExecutionTrace>(new Configuration());
 		controller.registerReader(reader);
 		controller.registerFilter(executionTraceSinkPlugin);
 		controller.registerFilter(messageTraceSinkPlugin);
@@ -139,20 +139,20 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		controller.registerRepository(this.systemEntityFactory);
 		controller.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
 
-		controller.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, filter, TraceReconstructionFilter.INPUT_PORT_NAME_EXECUTIONS);
+		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, TraceReconstructionFilter.INPUT_PORT_NAME_EXECUTIONS);
 		/*
 		 * Register a handler for reconstructed (valid) execution traces. This handler MUST receive exactly this trace (and no other).
 		 */
-		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
+		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 		/*
 		 * Register a handler for reconstructed (valid) message traces. This handler MUST receive exactly this trace (and no other).
 		 */
-		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, messageTraceSinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
+		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, messageTraceSinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 		/*
 		 * Register a handler for invalid execution traces. This handler MUST not be invoked.
 		 */
 		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, invalidExecutionTraceSinkPlugin,
-				SimpleSinkFilter.INPUT_PORT_NAME);
+				ListCollectionFilter.INPUT_PORT_NAME);
 
 		controller.run();
 
@@ -218,7 +218,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		final AnalysisController controller = new AnalysisController();
 		invalidExecutionTrace = this.genBrokenBookstoreTraceEssSkip();
 
-		final SimpleListReader<Execution> reader = new SimpleListReader<Execution>(new Configuration());
+		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration());
 		for (final Execution curExec : invalidExecutionTrace.getTraceAsSortedExecutionSet()) {
 			reader.addObject(curExec);
 		}
@@ -232,9 +232,9 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout", invalidExecutionTrace.getDurationInNanos() <= filter
 				.getMaxTraceDurationNanos());
 
-		final SimpleSinkFilter<ExecutionTrace> executionTraceSinkPlugin = new SimpleSinkFilter<ExecutionTrace>(new Configuration());
-		final SimpleSinkFilter<MessageTrace> messageTraceSinkPlugin = new SimpleSinkFilter<MessageTrace>(new Configuration());
-		final SimpleSinkFilter<InvalidExecutionTrace> invalidExecutionTraceSinkPlugin = new SimpleSinkFilter<InvalidExecutionTrace>(new Configuration());
+		final ListCollectionFilter<ExecutionTrace> executionTraceSinkPlugin = new ListCollectionFilter<ExecutionTrace>(new Configuration());
+		final ListCollectionFilter<MessageTrace> messageTraceSinkPlugin = new ListCollectionFilter<MessageTrace>(new Configuration());
+		final ListCollectionFilter<InvalidExecutionTrace> invalidExecutionTraceSinkPlugin = new ListCollectionFilter<InvalidExecutionTrace>(new Configuration());
 		controller.registerReader(reader);
 		controller.registerFilter(filter);
 		controller.registerFilter(invalidExecutionTraceSinkPlugin);
@@ -244,20 +244,20 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		controller.registerRepository(this.systemEntityFactory);
 		controller.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
 
-		controller.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, filter, TraceReconstructionFilter.INPUT_PORT_NAME_EXECUTIONS);
+		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, TraceReconstructionFilter.INPUT_PORT_NAME_EXECUTIONS);
 		/*
 		 * Register a handler for reconstructed (valid) execution traces. This handler MUST not be invoked.
 		 */
-		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
+		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 		/*
 		 * Register a handler for reconstructed (valid) message traces. This handler MUST not be invoked.
 		 */
-		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, messageTraceSinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
+		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, messageTraceSinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 		/*
 		 * Register a handler for invalid execution traces. This handler MUST receive exactly this trace (and no other).
 		 */
 		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, invalidExecutionTraceSinkPlugin,
-				SimpleSinkFilter.INPUT_PORT_NAME);
+				ListCollectionFilter.INPUT_PORT_NAME);
 
 		TestTraceReconstructionFilter.LOG.info("This test triggers a FATAL warning about an ess skip <0,3> which can simply be ignored because it is desired");
 
@@ -341,7 +341,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		 * Instantiate reconstruction filter with timeout.
 		 */
 		final AnalysisController controller = new AnalysisController();
-		final SimpleListReader<Execution> reader = new SimpleListReader<Execution>(new Configuration());
+		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration());
 		for (final Execution curExec : incompleteExecutionTrace.getTraceAsSortedExecutionSet()) {
 			reader.addObject(curExec);
 		}
@@ -352,9 +352,9 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 				.toString(((triggerExecutionTrace.getMaxTout() - incompleteExecutionTrace.getMinTin()) / (1000 * 1000)) - 1));
 		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration);
 
-		final SimpleSinkFilter<ExecutionTrace> executionTraceSink = new SimpleSinkFilter<ExecutionTrace>(new Configuration());
-		final SimpleSinkFilter<MessageTrace> messageTraceSink = new SimpleSinkFilter<MessageTrace>(new Configuration());
-		final SimpleSinkFilter<InvalidExecutionTrace> invalidExecutionTraceSink = new SimpleSinkFilter<InvalidExecutionTrace>(new Configuration());
+		final ListCollectionFilter<ExecutionTrace> executionTraceSink = new ListCollectionFilter<ExecutionTrace>(new Configuration());
+		final ListCollectionFilter<MessageTrace> messageTraceSink = new ListCollectionFilter<MessageTrace>(new Configuration());
+		final ListCollectionFilter<InvalidExecutionTrace> invalidExecutionTraceSink = new ListCollectionFilter<InvalidExecutionTrace>(new Configuration());
 
 		Assert.assertTrue("Test invalid: NOT (tout of trigger trace - tin of incomplete > filter max. duration)\n" + "triggerExecutionTrace.getMaxTout()"
 				+ triggerExecutionTrace.getMaxTout() + "\n" + "incompleteExecutionTrace.getMinTin()" + incompleteExecutionTrace.getMinTin() + "\n"
@@ -369,23 +369,24 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		controller.registerRepository(this.systemEntityFactory);
 		controller.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
 
-		controller.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, filter, TraceReconstructionFilter.INPUT_PORT_NAME_EXECUTIONS);
+		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, TraceReconstructionFilter.INPUT_PORT_NAME_EXECUTIONS);
 		/*
 		 * Register a handler for reconstructed (valid) execution traces. This handler MUST not be invoked.
 		 */
-		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSink, SimpleSinkFilter.INPUT_PORT_NAME);
+		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSink, ListCollectionFilter.INPUT_PORT_NAME);
 		Assert.assertTrue(executionTraceSink.getList().isEmpty());
 
 		/*
 		 * Register a handler for reconstructed (valid) message traces. This handler MUST not be invoked.
 		 */
-		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, messageTraceSink, SimpleSinkFilter.INPUT_PORT_NAME);
+		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, messageTraceSink, ListCollectionFilter.INPUT_PORT_NAME);
 		Assert.assertTrue(messageTraceSink.getList().isEmpty());
 
 		/*
 		 * Register a handler for invalid execution traces. This handler MUST receive exactly this trace (and no other).
 		 */
-		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, invalidExecutionTraceSink, SimpleSinkFilter.INPUT_PORT_NAME);
+		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, invalidExecutionTraceSink,
+				ListCollectionFilter.INPUT_PORT_NAME);
 		Assert.assertTrue(invalidExecutionTraceSink.getList().isEmpty());
 
 		/**

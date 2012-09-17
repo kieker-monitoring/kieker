@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.analysis.util.plugin.reader;
+package kieker.analysis.plugin.reader.list;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -38,27 +38,26 @@ import kieker.common.logging.LogFactory;
  * @author Andre van Hoorn, Jan Waller
  */
 @Plugin(programmaticOnly = true,
-		outputPorts = {
-			@OutputPort(name = SimpleListReader.OUTPUT_PORT_NAME, eventTypes = { Object.class })
-		},
+		description = "A reader that can be prefilled programmatically and that provides these records (mostly used in testing scenarios)",
+		outputPorts = @OutputPort(name = ListReader.OUTPUT_PORT_NAME, eventTypes = { Object.class }),
 		configuration = {
-			@Property(name = SimpleListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, defaultValue = "false",
+			@Property(name = ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, defaultValue = "false",
 					description = "Determines whether the read()-method returns immediately or whether it awaits the termination via AnalysisController.terminate()")
 		})
-public class SimpleListReader<T> extends AbstractReaderPlugin {
+public class ListReader<T> extends AbstractReaderPlugin {
 
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 
 	public static final String CONFIG_PROPERTY_NAME_AWAIT_TERMINATION = "awaitTermination";
 
-	private static final Log LOG = LogFactory.getLog(SimpleListReader.class);
+	private static final Log LOG = LogFactory.getLog(ListReader.class);
 
 	private final boolean awaitTermination;
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
 
 	private final List<T> objects = new CopyOnWriteArrayList<T>();
 
-	public SimpleListReader(final Configuration configuration) {
+	public ListReader(final Configuration configuration) {
 		super(configuration);
 		this.awaitTermination = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_AWAIT_TERMINATION);
 		if (!this.awaitTermination) {
@@ -76,7 +75,7 @@ public class SimpleListReader<T> extends AbstractReaderPlugin {
 
 	public boolean read() {
 		for (final T obj : this.objects) {
-			super.deliver(SimpleListReader.OUTPUT_PORT_NAME, obj);
+			super.deliver(ListReader.OUTPUT_PORT_NAME, obj);
 		}
 		try {
 			if (this.awaitTermination) {
