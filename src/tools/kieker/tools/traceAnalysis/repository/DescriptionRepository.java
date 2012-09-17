@@ -61,7 +61,15 @@ public class DescriptionRepository extends AbstractRepository {
 		this(configuration, DescriptionRepository.readDataFromFile(new DescriptionRepositoryConfiguration(configuration).getDescriptionFileName()));
 	}
 
-	private DescriptionRepository(final Configuration configuration, final DescriptionRepositoryData descriptionData) {
+	/**
+	 * Creates a new description repository using the given data.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 * @param descriptionData
+	 *            The description data to use
+	 */
+	public DescriptionRepository(final Configuration configuration, final DescriptionRepositoryData descriptionData) {
 		super(configuration);
 
 		this.descriptionMap = descriptionData.getDescriptionMap();
@@ -133,7 +141,7 @@ public class DescriptionRepository extends AbstractRepository {
 		}
 	}
 
-	private static class DescriptionRepositoryData {
+	public static class DescriptionRepositoryData {
 
 		private final ConcurrentMap<String, String> descriptionMap;
 
