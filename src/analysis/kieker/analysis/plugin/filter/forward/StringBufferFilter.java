@@ -37,7 +37,7 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @author Jan Waller
  */
-@Plugin(
+@Plugin(description = "A filter to reduce the memory footprint of strings used in records",
 		outputPorts = @OutputPort(
 				name = StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
 				description = "Provides each incoming object",

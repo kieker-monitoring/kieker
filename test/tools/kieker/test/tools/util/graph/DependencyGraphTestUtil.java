@@ -16,13 +16,14 @@
 
 package kieker.test.tools.util.graph;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
@@ -34,11 +35,8 @@ import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFilter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.AbstractDependencyGraph;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.DependencyGraphNode;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.WeightedBidirectionalDependencyGraphEdge;
-import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraphElement;
 import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
-
-import kieker.test.analysis.util.plugin.reader.SimpleListReader;
 
 /**
  * This class provides utility functions for dependency graph tests.
@@ -46,17 +44,22 @@ import kieker.test.analysis.util.plugin.reader.SimpleListReader;
  * @author Holger Knoche
  * 
  */
-public class DependencyGraphTestUtil {
+public final class DependencyGraphTestUtil {
+
+	private DependencyGraphTestUtil() {
+		// private constructor for static class
+	}
 
 	/**
 	 * Utility function to create a node lookup table for a given dependency graph.
 	 * 
 	 * @param graph
 	 *            The graph whose nodes shall be indexed
-	 * @return A map which associates the node's identifier (see {@link AbstractGraphElement#getIdentifier()}) to the actual identifier
+	 * @return A map which associates the node's identifier (see {@link kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraphElement#getIdentifier()})
+	 *         to the actual identifier
 	 */
-	public static <T extends ISystemModelElement> Map<String, DependencyGraphNode<T>> createNodeLookupTable(final AbstractDependencyGraph<T> graph) {
-		final Map<String, DependencyGraphNode<T>> map = new HashMap<String, DependencyGraphNode<T>>();
+	public static <T extends ISystemModelElement> ConcurrentMap<String, DependencyGraphNode<T>> createNodeLookupTable(final AbstractDependencyGraph<T> graph) {
+		final ConcurrentMap<String, DependencyGraphNode<T>> map = new ConcurrentHashMap<String, DependencyGraphNode<T>>();
 
 		for (final DependencyGraphNode<T> node : graph.getNodes()) {
 			map.put(node.getIdentifier(), node);
@@ -123,7 +126,7 @@ public class DependencyGraphTestUtil {
 
 		final SystemModelRepository systemModelRepository = new SystemModelRepository(new Configuration());
 
-		final SimpleListReader<OperationExecutionRecord> readerPlugin = new SimpleListReader<OperationExecutionRecord>(new Configuration());
+		final ListReader<OperationExecutionRecord> readerPlugin = new ListReader<OperationExecutionRecord>(new Configuration());
 		readerPlugin.addAllObjects(executionRecords);
 
 		final ExecutionRecordTransformationFilter transformationFilter = new ExecutionRecordTransformationFilter(new Configuration());
@@ -149,7 +152,7 @@ public class DependencyGraphTestUtil {
 		}
 
 		// Connect plugins
-		analysisController.connect(readerPlugin, SimpleListReader.OUTPUT_PORT_NAME,
+		analysisController.connect(readerPlugin, ListReader.OUTPUT_PORT_NAME,
 				transformationFilter, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
 		analysisController.connect(transformationFilter, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS,
 				traceReconstructionFilter, TraceReconstructionFilter.INPUT_PORT_NAME_EXECUTIONS);
@@ -170,8 +173,7 @@ public class DependencyGraphTestUtil {
 		for (final AbstractGraphFilter<?, ?, ?, ?> filter : graphFilters) {
 			if (lastFilter == null) {
 				analysisController.connect(producer, producer.getGraphOutputPortName(), filter, filter.getGraphInputPortName());
-			}
-			else {
+			} else {
 				analysisController.connect(lastFilter, lastFilter.getGraphOutputPortName(), filter, filter.getGraphInputPortName());
 			}
 			lastFilter = filter;
@@ -180,8 +182,7 @@ public class DependencyGraphTestUtil {
 		// Attach the graph receiver at the appropriate position
 		if (lastFilter == null) {
 			DependencyGraphTestUtil.attachGraphReceiver(analysisController, producer, graphReceiver);
-		}
-		else {
+		} else {
 			DependencyGraphTestUtil.attachGraphReceiver(analysisController, lastFilter, graphReceiver);
 		}
 	}

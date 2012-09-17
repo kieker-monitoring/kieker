@@ -18,7 +18,7 @@ package kieker.test.tools.junit.traceAnalysis.filter.visualization.dependencyGra
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -69,6 +69,10 @@ public class ComponentAllocationDependencyGraphTest extends AbstractKiekerTest {
 
 	private static GraphTestSetup testSetup;
 
+	public ComponentAllocationDependencyGraphTest() {
+		// default empty constructor
+	}
+
 	@BeforeClass
 	public static void prepareSetup() throws AnalysisConfigurationException {
 		final ComponentDependencyGraphAllocationFilter filter = new ComponentDependencyGraphAllocationFilter(new Configuration());
@@ -103,8 +107,8 @@ public class ComponentAllocationDependencyGraphTest extends AbstractKiekerTest {
 		Assert.assertEquals(1, graphReceiver.getNumberOfReceivedGraphs());
 
 		// Inspect the graph itself
-		final ComponentAllocationDependencyGraph graph = graphReceiver.<ComponentAllocationDependencyGraph> getFirstGraph();
-		final Map<String, DependencyGraphNode<AllocationComponent>> nodeMap = DependencyGraphTestUtil.createNodeLookupTable(graph);
+		final ComponentAllocationDependencyGraph graph = graphReceiver.<ComponentAllocationDependencyGraph> getFirstGraph(); // NOCS (generic)
+		final ConcurrentMap<String, DependencyGraphNode<AllocationComponent>> nodeMap = DependencyGraphTestUtil.createNodeLookupTable(graph);
 
 		// Obtain the expected allocation components
 		final AllocationComponent allocationComponent1 = nodeMap.get(EXPECTED_ALLOCATION_COMPONENT_NAME_1).getEntity();

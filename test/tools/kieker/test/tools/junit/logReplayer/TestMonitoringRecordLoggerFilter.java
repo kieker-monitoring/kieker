@@ -31,8 +31,10 @@ import org.junit.rules.TemporaryFolder;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
+import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
+import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -44,9 +46,7 @@ import kieker.monitoring.writer.filesystem.AbstractAsyncFSWriter;
 import kieker.monitoring.writer.filesystem.AsyncFsWriter;
 import kieker.tools.logReplayer.MonitoringRecordLoggerFilter;
 
-import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
-import kieker.test.analysis.util.plugin.reader.SimpleListReader;
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.junit.writeRead.filesystem.KiekerLogDirFilter;
 
@@ -130,11 +130,11 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, "false");
 		final AbstractReaderPlugin reader = new FSReader(readerConfiguration);
-		final SimpleSinkFilter<IMonitoringRecord> sinkPlugin = new SimpleSinkFilter<IMonitoringRecord>(new Configuration());
+		final ListCollectionFilter<IMonitoringRecord> sinkPlugin = new ListCollectionFilter<IMonitoringRecord>(new Configuration());
 
 		analysisController.registerReader(reader);
 		analysisController.registerFilter(sinkPlugin);
-		analysisController.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
+		analysisController.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 		analysisController.run();
 		Assert.assertEquals(AnalysisController.STATE.TERMINATED, analysisController.getState());
 
@@ -164,7 +164,7 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 
 		final AnalysisController analysisController = new AnalysisController();
 
-		final SimpleListReader<IMonitoringRecord> reader = new SimpleListReader<IMonitoringRecord>(new Configuration());
+		final ListReader<IMonitoringRecord> reader = new ListReader<IMonitoringRecord>(new Configuration());
 		reader.addAllObjects(eventsToWrite);
 		analysisController.registerReader(reader);
 
@@ -178,11 +178,12 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 				Boolean.toString(!keepLoggingTimestamps));
 		final MonitoringRecordLoggerFilter loggerFilter = new MonitoringRecordLoggerFilter(recordLoggingFilterConfiguration);
 		analysisController.registerFilter(loggerFilter);
-		analysisController.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, loggerFilter, MonitoringRecordLoggerFilter.INPUT_PORT_NAME_RECORD);
+		analysisController.connect(reader, ListReader.OUTPUT_PORT_NAME, loggerFilter, MonitoringRecordLoggerFilter.INPUT_PORT_NAME_RECORD);
 
-		final SimpleSinkFilter<IMonitoringRecord> simpleSinkFilter = new SimpleSinkFilter<IMonitoringRecord>(new Configuration());
+		final ListCollectionFilter<IMonitoringRecord> simpleSinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration());
 		analysisController.registerFilter(simpleSinkFilter);
-		analysisController.connect(loggerFilter, MonitoringRecordLoggerFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, simpleSinkFilter, SimpleSinkFilter.INPUT_PORT_NAME);
+		analysisController.connect(loggerFilter, MonitoringRecordLoggerFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, simpleSinkFilter,
+				ListCollectionFilter.INPUT_PORT_NAME);
 
 		analysisController.run();
 		Assert.assertEquals(AnalysisController.STATE.TERMINATED, analysisController.getState());

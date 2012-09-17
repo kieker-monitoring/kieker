@@ -14,38 +14,43 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.analysis.util.plugin.filter;
+package kieker.analysis.plugin.filter.forward;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.analysis.plugin.annotation.InputPort;
+import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
 /**
- * TODO: Could additionally be a relay/forward filter, i.e., forward incoming events to an output port
- * 
  * @param <T>
  * 
  * @author Nils Ehmke, Jan Waller
  */
-@Plugin(programmaticOnly = true)
-public class SimpleSinkFilter<T> extends AbstractFilterPlugin {
+@Plugin(programmaticOnly = true,
+		description = "A filter collecting incoming objects in a list (mostly used in testing scenarios)",
+		outputPorts = @OutputPort(name = ListCollectionFilter.OUTPUT_PORT_NAME, eventTypes = { Object.class }, description = "Provides each incoming object"))
+public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME = "inputObject";
+	public static final String OUTPUT_PORT_NAME = "outputObjects";
 
-	private final List<T> list = new CopyOnWriteArrayList<T>();
+	private final List<T> list = Collections.synchronizedList(new ArrayList<T>());
 
-	public SimpleSinkFilter(final Configuration configuration) {
+	public ListCollectionFilter(final Configuration configuration) {
 		super(configuration);
 	}
 
-	@InputPort(name = SimpleSinkFilter.INPUT_PORT_NAME)
+	@InputPort(name = ListCollectionFilter.INPUT_PORT_NAME)
 	@SuppressWarnings("unchecked")
 	public void input(final Object data) {
 		this.list.add((T) data);
+		super.deliver(OUTPUT_PORT_NAME, data);
 	}
 
 	public void clear() {

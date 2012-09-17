@@ -25,13 +25,13 @@ import org.junit.Test;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.flow.TraceEventRecords;
+import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.filter.trace.TraceIdFilter;
+import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 
-import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
-import kieker.test.analysis.util.plugin.reader.SimpleListReader;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
@@ -63,12 +63,12 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		idsToPass.add(1 + traceIdNotToPass);
 		idsToPass.add(2 + traceIdNotToPass);
 
-		final SimpleListReader<AbstractTraceEvent> reader = new SimpleListReader<AbstractTraceEvent>(new Configuration());
+		final ListReader<AbstractTraceEvent> reader = new ListReader<AbstractTraceEvent>(new Configuration());
 		final Configuration filterConfig = new Configuration();
 		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.FALSE.toString());
 		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, Configuration.toProperty(idsToPass.toArray(new Long[idsToPass.size()])));
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig);
-		final SimpleSinkFilter<AbstractTraceEvent> sinkPlugin = new SimpleSinkFilter<AbstractTraceEvent>(new Configuration());
+		final ListCollectionFilter<AbstractTraceEvent> sinkPlugin = new ListCollectionFilter<AbstractTraceEvent>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 
 		final TraceEventRecords traceEvents =
@@ -81,8 +81,8 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		controller.registerFilter(filter);
 		controller.registerFilter(sinkPlugin);
 
-		controller.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, filter, TraceIdFilter.INPUT_PORT_NAME_FLOW);
-		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
+		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, TraceIdFilter.INPUT_PORT_NAME_FLOW);
+		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 
 		for (final AbstractTraceEvent e : traceEvents.getTraceEvents()) {
 			Assert.assertTrue("Testcase invalid", !idsToPass.contains(e.getTraceId()));
@@ -115,12 +115,12 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		idsToPass.add(0 + traceIdToPass);
 		idsToPass.add(1 + traceIdToPass);
 
-		final SimpleListReader<AbstractTraceEvent> reader = new SimpleListReader<AbstractTraceEvent>(new Configuration());
+		final ListReader<AbstractTraceEvent> reader = new ListReader<AbstractTraceEvent>(new Configuration());
 		final Configuration filterConfig = new Configuration();
 		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.FALSE.toString());
 		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, Configuration.toProperty(idsToPass.toArray(new Long[idsToPass.size()])));
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig);
-		final SimpleSinkFilter<AbstractTraceEvent> sinkPlugin = new SimpleSinkFilter<AbstractTraceEvent>(new Configuration());
+		final ListCollectionFilter<AbstractTraceEvent> sinkPlugin = new ListCollectionFilter<AbstractTraceEvent>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 
 		final TraceEventRecords trace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID,
@@ -132,8 +132,8 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		controller.registerFilter(filter);
 		controller.registerFilter(sinkPlugin);
 
-		controller.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, filter, TraceIdFilter.INPUT_PORT_NAME_FLOW);
-		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
+		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, TraceIdFilter.INPUT_PORT_NAME_FLOW);
+		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 
 		for (final AbstractTraceEvent e : trace.getTraceEvents()) {
 			Assert.assertTrue("Testcase invalid", idsToPass.contains(e.getTraceId()));
@@ -159,11 +159,11 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		final long firstTimestamp = 53222; // any number fits
 		final long traceIdToPass = 11L; // (must be element of idsToPass)
 
-		final SimpleListReader<AbstractTraceEvent> reader = new SimpleListReader<AbstractTraceEvent>(new Configuration());
+		final ListReader<AbstractTraceEvent> reader = new ListReader<AbstractTraceEvent>(new Configuration());
 		final Configuration filterConfig = new Configuration();
 		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.TRUE.toString()); // i.e., pass all
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig);
-		final SimpleSinkFilter<AbstractTraceEvent> sinkPlugin = new SimpleSinkFilter<AbstractTraceEvent>(new Configuration());
+		final ListCollectionFilter<AbstractTraceEvent> sinkPlugin = new ListCollectionFilter<AbstractTraceEvent>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 
 		final TraceEventRecords trace =
@@ -175,8 +175,8 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		controller.registerFilter(filter);
 		controller.registerFilter(sinkPlugin);
 
-		controller.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, filter, TraceIdFilter.INPUT_PORT_NAME_FLOW);
-		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
+		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, TraceIdFilter.INPUT_PORT_NAME_FLOW);
+		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 
 		for (final AbstractTraceEvent e : trace.getTraceEvents()) {
 			reader.addObject(e);

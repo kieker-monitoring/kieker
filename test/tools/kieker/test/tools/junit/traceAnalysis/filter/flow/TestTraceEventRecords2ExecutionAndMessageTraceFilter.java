@@ -22,6 +22,8 @@ import org.junit.Test;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.flow.TraceEventRecords;
+import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
+import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.flow.TraceEventRecords2ExecutionAndMessageTraceFilter;
@@ -30,9 +32,7 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
-import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
-import kieker.test.analysis.util.plugin.reader.SimpleListReader;
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.util.BookstoreExecutionFactory;
 
@@ -454,7 +454,7 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 		 * Create the SimpleListReader
 		 */
 		final Configuration readerConfiguration = new Configuration();
-		final SimpleListReader<TraceEventRecords> reader = new SimpleListReader<TraceEventRecords>(readerConfiguration);
+		final ListReader<TraceEventRecords> reader = new ListReader<TraceEventRecords>(readerConfiguration);
 		reader.addObject(traceEvents);
 
 		/*
@@ -466,17 +466,17 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 		 * Create and connect a sink plugin which collects the transformed
 		 * ExecutionTraces
 		 */
-		final SimpleSinkFilter<ExecutionTrace> executionTraceSinkPlugin = new SimpleSinkFilter<ExecutionTrace>(new Configuration());
+		final ListCollectionFilter<ExecutionTrace> executionTraceSinkPlugin = new ListCollectionFilter<ExecutionTrace>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 
 		controller.registerReader(reader);
 		controller.registerFilter(filter);
 		controller.registerFilter(executionTraceSinkPlugin);
 		controller.registerRepository(this.systemEntityFactory);
-		controller.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, filter, TraceEventRecords2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME_EVENT_TRACE);
+		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, TraceEventRecords2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME_EVENT_TRACE);
 		controller.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
 		controller.connect(filter, TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTraceSinkPlugin,
-				SimpleSinkFilter.INPUT_PORT_NAME);
+				ListCollectionFilter.INPUT_PORT_NAME);
 		controller.run();
 
 		Assert.assertEquals("Unexpected number of received execution traces", 1, executionTraceSinkPlugin.getList().size());
