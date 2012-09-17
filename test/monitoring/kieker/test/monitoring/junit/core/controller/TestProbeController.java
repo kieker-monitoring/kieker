@@ -62,13 +62,13 @@ public class TestProbeController {
 		// generate test signature
 		// signature must be valid and in this project
 		final String signature =
-				"private java.util.List<java.util.Calendar> kieker.test.monitoring.junit.core.controller.TestProbeController.getToken(java.lang.String, java.util.Calendar)";
+				"private java.util.List kieker.test.monitoring.junit.core.controller.TestProbeController.getToken(java.lang.String, java.util.Calendar)";
 
 		// test methods
-		final String pattern = "* kieker.*(*)";
+		final String pattern = "* ..* kieker..*(..)";
 		Assert.assertTrue(MC.activateProbe(pattern));
 		Assert.assertTrue(MC.isActive(signature));
-		Assert.assertFalse(MC.activateProbe(pattern)); // because it is already active
+		Assert.assertFalse(MC.activateProbe(pattern)); // should return false because it is already active
 		Assert.assertTrue(MC.deactivateProbe(pattern));
 		Assert.assertFalse(MC.isActive(signature));
 		Assert.assertFalse(MC.deactivateProbe(pattern));

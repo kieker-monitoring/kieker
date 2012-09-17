@@ -21,6 +21,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -43,24 +45,28 @@ public class FileWatcher extends Thread {
 	 * The delay between every check.
 	 */
 	protected long delay;
-	private final CopyOnWriteArrayList<NamePattern> patterns;
+	private final CopyOnWriteArrayList<Pair<Matcher, Boolean>> matcherList;
+	private final CopyOnWriteArrayList<Pair<String, Boolean>> updateList;
 	private final ConcurrentHashMap<String, Boolean> signatureCache;
+	private final Parser parser = new Parser();
 
 	File file;
 	long lastModif = 0;
 	boolean warnedAlready = false;
 	boolean interrupted = false;
 
-	public FileWatcher(final File file, final long delay, final CopyOnWriteArrayList<NamePattern> patterns,
+	public FileWatcher(final File file, final long delay, final CopyOnWriteArrayList<Pair<Matcher, Boolean>> matcherList,
+			final CopyOnWriteArrayList<Pair<String, Boolean>> updateList,
 			final ConcurrentHashMap<String, Boolean> signatureCache) {
 		this.file = file;
 		this.pathname = this.file.getPath();
-		this.patterns = patterns;
+		this.matcherList = matcherList;
 		this.signatureCache = signatureCache;
+		this.updateList = updateList;
 
 		this.setDaemon(true);
 		this.checkAndConfigure();
-		this.setDelay(this.delay);
+		this.setDelay(delay);
 	}
 
 	/**
@@ -79,6 +85,7 @@ public class FileWatcher extends Thread {
 		// read proprietary pattern file
 		try {
 			this.readFile();
+			this.updatePatternList();
 		} catch (final Exception e) {
 			LOG.debug("Reading pattern file failed.", e);
 		}
@@ -86,7 +93,8 @@ public class FileWatcher extends Thread {
 	}
 
 	private void readFile() throws Exception {
-		this.patterns.clear();
+		this.updateList.clear();
+		this.matcherList.clear();
 		this.signatureCache.clear();
 		final FileReader fr = new FileReader(this.pathname);
 		final BufferedReader br = new BufferedReader(fr);
@@ -94,18 +102,42 @@ public class FileWatcher extends Thread {
 		while (br.ready()) {
 			currentLine = br.readLine();
 			System.out.println(currentLine);
-			NamePattern namePattern;
+			Pair<String, Boolean> pattern;
 			if (currentLine.startsWith("+")) {
 				currentLine = currentLine.replaceFirst("\\+", "").trim();
-				namePattern = new NamePattern(currentLine, true);
-				this.patterns.add(namePattern);
+				pattern = new Pair<String, Boolean>(currentLine, true);
+				this.updateList.add(pattern);
 			} else if (currentLine.startsWith("-")) {
 				currentLine = currentLine.replaceFirst("\\-", "").trim();
-				namePattern = new NamePattern(currentLine, false);
-				this.patterns.add(namePattern);
+				pattern = new Pair<String, Boolean>(currentLine, false);
+				this.updateList.add(pattern);
 			}
 		}
 		br.close();
+	}
+
+	private void updatePatternList() {
+		final int size = this.updateList.size();
+		this.matcherList.clear();
+		for (int i = 1; i <= size; i++) {
+			final Pair<String, Boolean> pair = this.updateList.get(size - i);
+			try {
+				final Pattern pattern = this.parser.parseToPattern(pair.getPattern());
+				final Matcher matcher = pattern.matcher("");
+				this.matcherList.add(new Pair<Matcher, Boolean>(matcher, pair.isActive()));
+			} catch (final InvalidPatternException e) {
+				LOG.error(pair.getPattern() + " is not a valid pattern.");
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public long getLastModified() {
+		return this.lastModif;
+	}
+
+	public void setLastModified(final long lastModified) {
+		this.lastModif = lastModified;
 	}
 
 	protected void checkAndConfigure() {
