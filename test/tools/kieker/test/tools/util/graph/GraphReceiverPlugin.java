@@ -17,10 +17,9 @@
 package kieker.test.tools.util.graph;
 
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
-
-import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 
 /**
  * A plugin which receives one or more graphs and stores them for later access. This plugin is primarily
@@ -30,12 +29,12 @@ import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
  * 
  */
 @Plugin(description = "A plugin that receives one or more graphs and provides access them via methods.")
-public class GraphReceiverPlugin extends SimpleSinkFilter<AbstractGraph<?, ?, ?>> {
+public class GraphReceiverPlugin extends ListCollectionFilter<AbstractGraph<?, ?, ?>> {
 
 	/**
 	 * The name of the input port which receives graphs.
 	 */
-	public static final String INPUT_PORT_NAME_GRAPHS = SimpleSinkFilter.INPUT_PORT_NAME;
+	public static final String INPUT_PORT_NAME_GRAPHS = ListCollectionFilter.INPUT_PORT_NAME;
 
 	/**
 	 * Creates a new receiver plugin with the given configuration.
