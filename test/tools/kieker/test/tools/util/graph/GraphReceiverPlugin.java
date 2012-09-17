@@ -16,14 +16,11 @@
 
 package kieker.test.tools.util.graph;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
-import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
+
+import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 
 /**
  * A plugin which receives one or more graphs and stores them for later access. This plugin is primarily
@@ -33,14 +30,12 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
  * 
  */
 @Plugin(description = "A plugin that receives one or more graphs and provides access them via methods.")
-public class GraphReceiverPlugin extends AbstractFilterPlugin {
+public class GraphReceiverPlugin extends SimpleSinkFilter<AbstractGraph<?, ?, ?>> {
 
 	/**
 	 * The name of the input port which receives graphs.
 	 */
-	public static final String INPUT_PORT_NAME_GRAPHS = "inputGraph";
-
-	private final List<AbstractGraph<?, ?, ?>> receivedGraphs = new CopyOnWriteArrayList<AbstractGraph<?, ?, ?>>();
+	public static final String INPUT_PORT_NAME_GRAPHS = SimpleSinkFilter.INPUT_PORT_NAME;
 
 	/**
 	 * Creates a new receiver plugin with the given configuration.
@@ -52,24 +47,13 @@ public class GraphReceiverPlugin extends AbstractFilterPlugin {
 		super(configuration);
 	}
 
-	public Configuration getCurrentConfiguration() {
-		return null;
-	}
-
-	@InputPort(name = INPUT_PORT_NAME_GRAPHS,
-			description = "Receives graphs to store them",
-			eventTypes = { AbstractGraph.class })
-	public void receiveGraph(final AbstractGraph<?, ?, ?> graph) {
-		this.receivedGraphs.add(graph);
-	}
-
 	/**
 	 * Returns the number of graphs received so far.
 	 * 
 	 * @return See above
 	 */
 	public int getNumberOfReceivedGraphs() {
-		return this.receivedGraphs.size();
+		return this.size();
 	}
 
 	/**
@@ -79,7 +63,7 @@ public class GraphReceiverPlugin extends AbstractFilterPlugin {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends AbstractGraph<?, ?, ?>> T getFirstGraph() {
-		return (T) this.receivedGraphs.get(0); // using getGraphAt leads to a compile error, probably caused by a javac bug
+		return (T) this.getList().get(0); // using getGraphAt leads to a compile error, probably caused by a javac bug
 	}
 
 	/**
@@ -91,7 +75,7 @@ public class GraphReceiverPlugin extends AbstractFilterPlugin {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends AbstractGraph<?, ?, ?>> T getGraphAt(final int index) {
-		return (T) this.receivedGraphs.get(index);
+		return (T) this.getList().get(index);
 	}
 
 }
