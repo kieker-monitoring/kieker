@@ -99,7 +99,8 @@ final class FSDirectoryReader implements Runnable {
 		if (inputFiles == null) {
 			LOG.error("Directory '" + this.inputDir + "' does not exist or an I/O error occured.");
 		} else if (inputFiles.length == 0) {
-			LOG.error("Directory '" + this.inputDir + "' contains no files starting with '" + this.filePrefix + "' and ending with '"
+			// level 'warn' for this case, because this is not unusual for large monitoring logs including a number of directories
+			LOG.warn("Directory '" + this.inputDir + "' contains no files starting with '" + this.filePrefix + "' and ending with '"
 					+ NORMAL_FILE_POSTFIX + "' or '" + BINARY_FILE_POSTFIX + "'.");
 		} else { // everything ok, we process the files
 			Arrays.sort(inputFiles, new Comparator<File>() {
