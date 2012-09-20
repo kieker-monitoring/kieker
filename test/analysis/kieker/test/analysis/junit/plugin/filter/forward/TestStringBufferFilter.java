@@ -29,13 +29,14 @@ import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.common.record.misc.EmptyRecord;
 
 /**
  * Andre van Hoorn
  */
 public class TestStringBufferFilter {
 	@Test
-	public void testLoggingTimestampRemains() throws IllegalStateException, AnalysisConfigurationException {
+	public void testRecordsWithStringEqualButNeverSame() throws IllegalStateException, AnalysisConfigurationException {
 		final AnalysisController analysisController = new AnalysisController();
 
 		long timestamp = 3268936l;
@@ -60,11 +61,37 @@ public class TestStringBufferFilter {
 		final List<IMonitoringRecord> records = collectionFilter.getList();
 		Assert.assertEquals("Unexpected number of records", 2, records.size());
 		final IMonitoringRecord recordOut1 = records.get(0);
-		final IMonitoringRecord recordOut2 = records.get(0);
-		Assert.assertNotSame("First output record same as first input record", recordIn2, recordOut2); // includes String, hence NOT "as-is"
+		final IMonitoringRecord recordOut2 = records.get(1);
+		Assert.assertNotSame("First output record same as first input record", recordIn1, recordOut1); // includes String, hence NOT "as-is"
 		Assert.assertEquals("First output record doesn't equal first input record", recordIn1, recordOut1); // ... but must be equal
 		Assert.assertNotSame("Second output record same as second input record", recordIn2, recordOut2); // includes String, hence NOT "as-is"
 		Assert.assertEquals("Second output record doesn't equal second input record", recordIn2, recordOut2); // ... but must be equal
+	}
+
+	@Test
+	public void testRecordsWithoutStringSame() throws IllegalStateException, AnalysisConfigurationException {
+		final AnalysisController analysisController = new AnalysisController();
+
+		final IMonitoringRecord recordIn1 = new EmptyRecord();
+
+		final ListReader<IMonitoringRecord> reader = new ListReader<IMonitoringRecord>(new Configuration());
+		reader.addObject(recordIn1);
+		analysisController.registerReader(reader);
+
+		final StringBufferFilter stringBufferFilter = new StringBufferFilter(new Configuration());
+		analysisController.registerFilter(stringBufferFilter);
+		analysisController.connect(reader, ListReader.OUTPUT_PORT_NAME, stringBufferFilter, StringBufferFilter.INPUT_PORT_NAME_EVENTS);
+
+		final ListCollectionFilter<IMonitoringRecord> collectionFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration());
+		analysisController.registerFilter(collectionFilter);
+		analysisController.connect(stringBufferFilter, StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, collectionFilter, ListCollectionFilter.INPUT_PORT_NAME);
+
+		analysisController.run();
+
+		final List<IMonitoringRecord> records = collectionFilter.getList();
+		Assert.assertEquals("Unexpected number of records", 1, records.size());
+		final IMonitoringRecord recordOut1 = records.get(0);
+		Assert.assertSame("First output record not same as first input record", recordIn1, recordOut1); // includes no String, hence "as-is"
 	}
 
 	private static OperationExecutionRecord createOperationExecutionRecord(final long loggingTimestamp) {
