@@ -28,7 +28,7 @@ import kieker.analysis.plugin.filter.forward.StringBufferFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.misc.EmptyRecord;
+import kieker.common.record.controlflow.OperationExecutionRecord;
 
 /**
  * Andre van Hoorn
@@ -38,12 +38,13 @@ public class TestStringBufferFilter {
 	public void testLoggingTimestampRemains() throws IllegalStateException, AnalysisConfigurationException {
 		final AnalysisController analysisController = new AnalysisController();
 
-		final long timestamp = 3268936l;
-		final IMonitoringRecord recordIn = new EmptyRecord();
-		recordIn.setLoggingTimestamp(timestamp);
+		long timestamp = 3268936l;
+		final IMonitoringRecord recordIn1 = TestStringBufferFilter.createOperationExecutionRecord(timestamp++);
+		final IMonitoringRecord recordIn2 = TestStringBufferFilter.createOperationExecutionRecord(timestamp++);
 
 		final ListReader<IMonitoringRecord> reader = new ListReader<IMonitoringRecord>(new Configuration());
-		reader.addObject(recordIn);
+		reader.addObject(recordIn1);
+		reader.addObject(recordIn2);
 		analysisController.registerReader(reader);
 
 		final StringBufferFilter stringBufferFilter = new StringBufferFilter(new Configuration());
@@ -57,8 +58,20 @@ public class TestStringBufferFilter {
 		analysisController.run();
 
 		final List<IMonitoringRecord> records = collectionFilter.getList();
-		Assert.assertEquals("Unexpected number of records", 1, records.size());
-		final IMonitoringRecord recordOut = records.get(0);
-		Assert.assertEquals("Unexpected logging timestamp", timestamp, recordOut.getLoggingTimestamp());
+		Assert.assertEquals("Unexpected number of records", 2, records.size());
+		final IMonitoringRecord recordOut1 = records.get(0);
+		final IMonitoringRecord recordOut2 = records.get(0);
+		Assert.assertNotSame("First output record same as first input record", recordIn2, recordOut2); // includes String, hence NOT "as-is"
+		Assert.assertEquals("First output record doesn't equal first input record", recordIn1, recordOut1); // ... but must be equal
+		Assert.assertNotSame("Second output record same as second input record", recordIn2, recordOut2); // includes String, hence NOT "as-is"
+		Assert.assertEquals("Second output record doesn't equal second input record", recordIn2, recordOut2); // ... but must be equal
+	}
+
+	private static OperationExecutionRecord createOperationExecutionRecord(final long loggingTimestamp) {
+		final OperationExecutionRecord opRec = new OperationExecutionRecord("mySignatureStringWhichShouldBeCached", OperationExecutionRecord.NO_SESSION_ID,
+				OperationExecutionRecord.NO_TRACEID, OperationExecutionRecord.NO_TIMESTAMP, OperationExecutionRecord.NO_TIMESTAMP,
+				OperationExecutionRecord.NO_HOSTNAME, OperationExecutionRecord.NO_EOI_ESS, OperationExecutionRecord.NO_EOI_ESS);
+		opRec.setLoggingTimestamp(loggingTimestamp);
+		return opRec;
 	}
 }
