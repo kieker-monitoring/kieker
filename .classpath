@@ -37,6 +37,5 @@
 	<classpathentry kind="lib" path="lib/org.springframework.context-3.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/org.springframework.web-3.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/sigar-1.6.4.jar"/>
-	<classpathentry kind="lib" path="lib/aspectjweaver-1.7.0.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>

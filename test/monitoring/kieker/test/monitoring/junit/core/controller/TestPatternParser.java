@@ -9,7 +9,9 @@ import org.junit.Test;
 import kieker.monitoring.core.helper.InvalidPatternException;
 import kieker.monitoring.core.helper.PatternParser;
 
-public class TestPatternParser { // TODO: extends AbstractKiekerTest
+import kieker.test.common.junit.AbstractKiekerTest;
+
+public class TestPatternParser extends AbstractKiekerTest {
 
 	PatternParser parser = new PatternParser();
 
