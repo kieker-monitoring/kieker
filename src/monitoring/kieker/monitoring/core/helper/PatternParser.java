@@ -217,7 +217,7 @@ public class PatternParser {
 			} else if (modifierList[0].equals("non_static")) {
 				sb.append("((public|private|protected)\\s)?(native\\s)?");
 			} else if (modifierList[0].equals("native")) {
-				sb.append("((public|private|protected)\\s)?(static\\s)?native");
+				sb.append("((public|private|protected)\\s)?(static\\s)?native\\s");
 			} else if (modifierList[0].equals("non_native")) {
 				sb.append("((public|private|protected)\\s)?(static\\s)?");
 			} else {

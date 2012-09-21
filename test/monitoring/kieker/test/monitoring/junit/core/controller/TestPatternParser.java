@@ -22,6 +22,105 @@ public class TestPatternParser { // TODO: extends AbstractKiekerTest
 		Assert.assertTrue(m.matches());
 	}
 
+	private int i = 0;
+
+	private void checkCombination(final String patternStr, final String visibility, final String staticNonStatic, final String nativeNonNative,
+			final String returnTypeOrNew, final String fqClassName, final String operationName, final String paramList) throws InvalidPatternException {
+
+		final StringBuilder signatureBuilder = new StringBuilder();
+
+		/* Visibility */
+		if ("public".equals(visibility)) {
+			signatureBuilder.append("public").append(' ');
+		} else if ("private".equals(visibility)) {
+			signatureBuilder.append("private").append(' ');
+		} else if ("package".equals(visibility)) {
+		} else if ("protected".equals(visibility)) {
+			signatureBuilder.append("protected").append(' ');
+		} else if ("".equals(visibility)) {
+		} else {
+			Assert.fail("Invalid visibility: " + visibility);
+		}
+
+		/* Static/Non-static */
+		if ("static".equals(staticNonStatic)) {
+			signatureBuilder.append("static").append(' ');
+		} else if ("non_static".equals(staticNonStatic)) {
+		} else if ("".equals(staticNonStatic)) {
+		} else {
+			Assert.fail("Invalid staticNonStatic: " + staticNonStatic);
+		}
+
+		/* Static/Non-static */
+		if ("native".equals(nativeNonNative)) {
+			signatureBuilder.append("native").append(' ');
+		} else if ("non_native".equals(nativeNonNative)) {
+		} else if ("".equals(nativeNonNative)) {
+		} else {
+			Assert.fail("Invalid nativeNonNative: " + nativeNonNative);
+		}
+
+		/* Return type/Constructor */
+		if ("new".equals(returnTypeOrNew)) {
+		} else if ("*".equals(returnTypeOrNew)) {
+			signatureBuilder.append("void").append(' ');
+		} else if ("..*".equals(returnTypeOrNew)) {
+			signatureBuilder.append("java.util.List").append(' ');
+		} else if ("java.lang.String".equals(returnTypeOrNew)) {
+			signatureBuilder.append("java.lang.String").append(' ');
+		} else {
+			Assert.fail("Invalid returnTypeOrNew: " + returnTypeOrNew);
+		}
+
+		/* classname */
+		if ("a.b.C".equals(fqClassName)) {
+			signatureBuilder.append("a.b.C");
+		} else if ("a.b.*".equals(fqClassName)) {
+			signatureBuilder.append("a.b.C");
+		} else if ("*".equals(fqClassName)) {
+			signatureBuilder.append("C");
+		} else if ("..*".equals(fqClassName)) {
+			signatureBuilder.append("a.b.C");
+		} else {
+			Assert.fail("Invalid fqClassName: " + fqClassName);
+		}
+		signatureBuilder.append('.');
+
+		/* Operation name */
+		if ("doIt".equals(operationName)) {
+			signatureBuilder.append("doIt");
+		} else if ("get*".equals(operationName)) {
+			signatureBuilder.append("getBlup");
+		} else if ("*".equals(operationName)) {
+			signatureBuilder.append("foo");
+		} else {
+			Assert.fail("Invalid operationName: " + operationName);
+		}
+		signatureBuilder.append('(');
+
+		/* Parameter list */
+		if ("".equals(paramList)) {
+		} else if ("*".equals(paramList)) {
+			signatureBuilder.append("boolean");
+		} else if ("A, B".equals(paramList)) {
+			signatureBuilder.append("A, B");
+		} else if ("..".equals(paramList)) {
+			signatureBuilder.append("long, java.lang.und.short");
+		} else {
+			Assert.fail("Invalid paramList: " + paramList);
+		}
+		signatureBuilder.append(')');
+
+		final String signature = signatureBuilder.toString();
+
+		final PatternParser myParser = new PatternParser();
+		final Pattern pattern = myParser.parseToPattern(patternStr);
+		final Matcher m = pattern.matcher(signature);
+
+		Assert.assertTrue((this.i++) + "Unexpected match result.\nregExp: " + pattern.toString() + "\npattern: " + pattern
+				+ "\nsignature: " + signature, m.matches());
+	}
+
 	@Test
 	public void testBasic() throws InvalidPatternException {
 		final PatternParser myParser = new PatternParser();
@@ -36,14 +135,15 @@ public class TestPatternParser { // TODO: extends AbstractKiekerTest
 		final String[] whites = { " ", "  ", "\t" };
 		final String[] whiteAndNoWhite = { " ", "  ", "\t", /* in addition to whites: */"" };
 
-		final String signature01 = "public static void package.Class.method(A, B)";
-		final boolean[] visibilityMatches = { true, false, false, false, true };
-		final boolean[] staticNonStaticMatches = { true, false, true };
-		final boolean[] nativeNonNativeMatches = { true, false, true };
-		final boolean[] returnTypeOrNewMatches = { false, false, true, true };
-		final boolean[] fqClassNameMatches = { false, false, false, true };
-		final boolean[] operationNameMatches = { false, false, true };
-		final boolean[] paramListMatches = { false, false, true, true };
+		// works
+		// final String signature01 = "public static void package.Class.method(A, B)";
+		// final boolean[] visibilityMatches = { true, false, false, false, true };
+		// final boolean[] staticNonStaticMatches = { true, false, true };
+		// final boolean[] nativeNonNativeMatches = { false, true, true };
+		// final boolean[] returnTypeOrNewMatches = { false, false, true, true };
+		// final boolean[] fqClassNameMatches = { false, false, false, true };
+		// final boolean[] operationNameMatches = { false, false, true };
+		// final boolean[] paramListMatches = { false, false, true, true };
 
 		// Bug: * in param list should not match empty:
 		// final String signature01 = "public static native void package.Class.method()";
@@ -55,19 +155,16 @@ public class TestPatternParser { // TODO: extends AbstractKiekerTest
 		// final boolean[] operationNameMatches = { false, false, true };
 		// final boolean[] paramListMatches = { true, false, false, true };
 
-		// java.lang.AssertionError: 98472Unexpected match result.
-		// pattern: native * ..*.* ( A, B )
-		// signature: public static native void package.Class.method(A, B) expected:<true> but was:<false>
-		// final String signature01 = "public static native void package.Class.method(A, B)";
-		// final boolean[] visibilityMatches = { true, false, false, false, true };
-		// final boolean[] staticNonStaticMatches = { true, false, true };
-		// final boolean[] nativeNonNativeMatches = { true, false, true };
-		// final boolean[] returnTypeOrNewMatches = { false, false, true, true };
-		// final boolean[] fqClassNameMatches = { false, false, false, true };
-		// final boolean[] operationNameMatches = { false, false, true };
-		// final boolean[] paramListMatches = { false, false, true, true };
+		// works
+		final String signature01 = "public static native void package.Class.method(A, B)";
+		final boolean[] visibilityMatches = { true, false, false, false, true };
+		final boolean[] staticNonStaticMatches = { true, false, true };
+		final boolean[] nativeNonNativeMatches = { true, false, true };
+		final boolean[] returnTypeOrNewMatches = { false, false, true, true };
+		final boolean[] fqClassNameMatches = { false, false, false, true };
+		final boolean[] operationNameMatches = { false, false, true };
+		final boolean[] paramListMatches = { false, false, true, true };
 
-		int i = 0;
 		for (int visibilityIdy = 0; visibilityIdy < visibilities.length; visibilityIdy++) {
 			for (int staticNonStaticIdx = 0; staticNonStaticIdx < staticNonStatics.length; staticNonStaticIdx++) {
 				for (int nativeNonNativeIdx = 0; nativeNonNativeIdx < nativeNonNatives.length; nativeNonNativeIdx++) {
@@ -77,26 +174,26 @@ public class TestPatternParser { // TODO: extends AbstractKiekerTest
 								for (int paramListIdx = 0; paramListIdx < paramLists.length; paramListIdx++) {
 									for (final String white : whites) {
 										for (final String whiteOrEmpty : whiteAndNoWhite) {
-											final StringBuilder strB = new StringBuilder();
-											strB.append(whiteOrEmpty);
+											final StringBuilder patternBuilder = new StringBuilder();
+											patternBuilder.append(whiteOrEmpty);
 											if (visibilities[visibilityIdy].length() > 0) {
-												strB.append(visibilities[visibilityIdy]).append(white);
+												patternBuilder.append(visibilities[visibilityIdy]).append(white);
 											}
 											if (staticNonStatics[staticNonStaticIdx].length() > 0) {
-												strB.append(staticNonStatics[staticNonStaticIdx]).append(white);
+												patternBuilder.append(staticNonStatics[staticNonStaticIdx]).append(white);
 											}
 											if (nativeNonNatives[nativeNonNativeIdx].length() > 0) {
-												strB.append(nativeNonNatives[nativeNonNativeIdx]).append(white);
+												patternBuilder.append(nativeNonNatives[nativeNonNativeIdx]).append(white);
 											}
-											strB.append(returnTypesOrNews[returnTypeOrNewIdx]).append(white);
-											strB.append(fqClassNames[fqClassNameIdx]).append('.');
-											strB.append(operationNames[operationNameIdx]).append(whiteOrEmpty).append('(').append(whiteOrEmpty);
+											patternBuilder.append(returnTypesOrNews[returnTypeOrNewIdx]).append(white);
+											patternBuilder.append(fqClassNames[fqClassNameIdx]).append('.');
+											patternBuilder.append(operationNames[operationNameIdx]).append(whiteOrEmpty).append('(').append(whiteOrEmpty);
 											if (paramLists[paramListIdx].length() > 0) {
-												strB.append(paramLists[paramListIdx]).append(whiteOrEmpty);
+												patternBuilder.append(paramLists[paramListIdx]).append(whiteOrEmpty);
 											}
-											strB.append(')').append(whiteOrEmpty);
+											patternBuilder.append(')').append(whiteOrEmpty);
 
-											final String pattern = strB.toString();
+											final String patternStr = patternBuilder.toString();
 
 											// System.out.println(i++ + ": " + pattern);
 
@@ -109,10 +206,15 @@ public class TestPatternParser { // TODO: extends AbstractKiekerTest
 															&& operationNameMatches[operationNameIdx]
 															&& paramListMatches[paramListIdx];
 
-											final Matcher m = myParser.parseToPattern(pattern).matcher(signature01);
+											this.checkCombination(patternStr, visibilities[visibilityIdy], staticNonStatics[staticNonStaticIdx]
+													, nativeNonNatives[nativeNonNativeIdx]
+													, returnTypesOrNews[returnTypeOrNewIdx]
+													, fqClassNames[fqClassNameIdx]
+													, operationNames[operationNameIdx]
+													, paramLists[paramListIdx]);
 
-											Assert.assertEquals((i++) + "Unexpected match result.\npattern: " + pattern + "\nsignature: " + signature01,
-													expected, m.matches());
+											final Pattern pattern = myParser.parseToPattern(patternStr);
+											final Matcher m = pattern.matcher(signature01);
 										}
 									}
 								}
@@ -122,6 +224,7 @@ public class TestPatternParser { // TODO: extends AbstractKiekerTest
 				}
 			}
 		}
+		System.out.println("i: " + this.i);
 	}
 
 	@Test
