@@ -148,7 +148,8 @@ public final class DotFactory {
 	 * @return graph node as dot code
 	 */
 	public static StringBuilder createNode(final String prefix, final String nodeId, final String label, final String shape, final String style,
-			final String framecolor, final String fillcolor, final String fontcolor, final double fontsize, final String imageFilename, final String misc) {
+			final String framecolor, final String fillcolor, final String fontcolor, final double fontsize, final String imageFilename, final String misc,
+			final String tooltip) {
 		final StringBuilder dot = new StringBuilder(128);
 		boolean addComma = false;
 		if (prefix != null) {
@@ -226,6 +227,16 @@ public final class DotFactory {
 			dot.append('"');
 			addComma = true;
 		}
+		if (tooltip != null) {
+			if (addComma) {
+				dot.append(',');
+			}
+			dot.append("tooltip=\"");
+			dot.append(tooltip);
+			dot.append('"');
+			addComma = true;
+		}
+
 		if (misc != null) {
 			if (addComma) {
 				dot.append(',');
@@ -318,24 +329,40 @@ public final class DotFactory {
 	 * @param to
 	 * @return graph connection as dot code
 	 */
-	public static String createConnection(final String prefix, final String from, final String to, final String style, final String arrowhead) {
+	public static String createConnection(final String prefix, final String from, final String to, final String style, final String arrowhead, final String color) {
 		final StringBuilder dot = new StringBuilder(128);
 		dot.append(prefix);
 		dot.append(from);
 		dot.append("->");
 		dot.append(to);
+
+		boolean firstFlag = true;
+
 		if (style != null) {
 			dot.append("style=\"");
 			dot.append(style);
 			dot.append('"');
+			firstFlag = false;
 		}
 		if (arrowhead != null) {
-			if (style != null) {
+			if (!firstFlag) {
 				dot.append(',');
 			}
+
 			dot.append(" arrowhead=\"");
 			dot.append(arrowhead);
 			dot.append('"');
+			firstFlag = false;
+		}
+		if (color != null) {
+			if (!firstFlag) {
+				dot.append(',');
+			}
+
+			dot.append(" color=\"");
+			dot.append(color);
+			dot.append('"');
+			firstFlag = false;
 		}
 		dot.append(']');
 		return dot.toString();
@@ -351,7 +378,8 @@ public final class DotFactory {
 	 * @param label
 	 * @return graph connection as dot code
 	 */
-	public static String createConnection(final String prefix, final String from, final String to, final String label, final String style, final String arrowhead) {
+	public static String createConnection(final String prefix, final String from, final String to, final String label, final String style, final String arrowhead,
+			final String color) {
 		final StringBuilder dot = new StringBuilder(128);
 		dot.append(prefix);
 		dot.append(from);
@@ -365,11 +393,13 @@ public final class DotFactory {
 			dot.append('"');
 		}
 		if (arrowhead != null) {
-			if (style != null) {
-				dot.append(',');
-			}
-			dot.append(" arrowhead=\"");
+			dot.append(", arrowhead=\"");
 			dot.append(arrowhead);
+			dot.append('"');
+		}
+		if (color != null) {
+			dot.append(", color=\"");
+			dot.append(color);
 			dot.append('"');
 		}
 		dot.append(']');

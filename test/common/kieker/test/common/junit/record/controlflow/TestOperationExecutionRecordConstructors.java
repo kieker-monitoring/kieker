@@ -16,12 +16,12 @@
 
 package kieker.test.common.junit.record.controlflow;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.controlflow.OperationExecutionRecord;
 
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
 
 /**
@@ -31,7 +31,7 @@ import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
  * @author Andre van Hoorn
  * 
  */
-public class TestOperationExecutionRecordConstructors {
+public class TestOperationExecutionRecordConstructors extends AbstractKiekerTest {
 
 	public TestOperationExecutionRecordConstructors() {
 		// empty default constructor

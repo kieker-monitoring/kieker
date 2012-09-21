@@ -34,6 +34,9 @@ import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
 
 /**
+ * Provides factory methods for {@link MonitoringController}s configured to write to a {@link Pipe} and a convenient collector facility to access the records
+ * received in a {@link List}. Note that, in contrast to the similar class {@link NamedPipeFactory}, doesn't use the {@link PipeWriter} directly, but uses an *
+ * {@link IMonitoringController}. Also, the {@link kieker.analysis.plugin.reader.namedRecordPipe.PipeReader} is used.
  * 
  * @author Andre van Hoorn
  * 
@@ -107,7 +110,7 @@ public final class NamedPipeFactory {
 			}
 
 			public void notifyPipeClosed() {
-				// nothign to do
+				// nothing to do
 			}
 		});
 		return receivedRecords;

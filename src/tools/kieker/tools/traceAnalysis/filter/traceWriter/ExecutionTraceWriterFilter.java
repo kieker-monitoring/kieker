@@ -84,11 +84,6 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 		}
 	}
 
-	@Override
-	public String getExecutionTraceInputPortName() {
-		return INPUT_PORT_NAME_EXECUTION_TRACES;
-	}
-
 	@InputPort(
 			name = INPUT_PORT_NAME_EXECUTION_TRACES,
 			description = "Receives the execution traces to be written",

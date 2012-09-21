@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package kieker.analysis.model.analysisMetaModel.impl;
 
@@ -21,8 +17,8 @@ import kieker.analysis.model.analysisMetaModel.MIProperty;
 import kieker.analysis.model.analysisMetaModel.MIReader;
 import kieker.analysis.model.analysisMetaModel.MIRepository;
 import kieker.analysis.model.analysisMetaModel.MIRepositoryConnector;
-
 import kieker.analysis.model.analysisMetaModel.MIView;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;

@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package kieker.analysis.model.analysisMetaModel;
 
@@ -637,7 +633,6 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 */
 	int REPOSITORY_CONNECTOR_FEATURE_COUNT = 2;
 
-
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDisplay <em>Display</em>}' class.
 	 * <!-- begin-user-doc -->
@@ -720,7 +715,6 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int VIEW_FEATURE_COUNT = 3;
-
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDisplayConnector <em>Display Connector</em>}' class.

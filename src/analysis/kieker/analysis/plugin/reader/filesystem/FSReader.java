@@ -82,7 +82,9 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	public boolean read() {
 		// start all reader
 		for (final String inputDir : this.inputDirs) {
-			new Thread(new FSDirectoryReader(inputDir, this, this.ignoreUnknownRecordTypes)).start();
+			final Thread readerThread = new Thread(new FSDirectoryReader(inputDir, this, this.ignoreUnknownRecordTypes));
+			readerThread.setDaemon(true);
+			readerThread.start();
 		}
 		// consume incoming records
 		int readingReaders = this.inputDirs.length;
@@ -112,7 +114,6 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	/**
 	 * This method is called for each new record by each ReaderThread.
 	 */
-
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		synchronized (record) { // with read()
 			synchronized (this.recordQueue) { // with read()

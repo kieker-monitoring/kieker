@@ -147,7 +147,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 			super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE, executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION));
 			super.reportSuccess(executionTrace.getTraceId());
 		} catch (final InvalidTraceException ex) {
-			LOG.warn("Failed to convert to message trace.", ex);
+			LOG.warn("Failed to convert to message trace: " + ex.getMessage()); // do not pass 'ex' to LOG.warn because this makes the output verbose (#584)
 			// TODO: send to new output port for defect traces
 		}
 	}

@@ -53,17 +53,11 @@ public class MyPipeReader extends AbstractReaderPlugin {
 
 		this.pipeName = configuration.getStringProperty(MyPipeReader.CONFIG_PROPERTY_NAME_PIPE_NAME);
 
-		this.init();
-	}
-
-	private boolean init() {
 		try {
 			this.pipe = MyNamedPipeManager.getInstance().acquirePipe(this.pipeName);
 		} catch (final Exception ex) {
 			MyPipeReader.LOG.error("Failed to acquire pipe '" + this.pipeName + "'", ex);
-			return false;
 		}
-		return true;
 	}
 
 	public boolean read() {

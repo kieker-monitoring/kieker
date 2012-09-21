@@ -16,19 +16,20 @@
 
 package kieker.test.common.junit.util;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.util.ClassOperationSignaturePair;
 import kieker.common.util.Signature;
+
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * 
  * @author Andre van Hoorn
  * 
  */
-public class TestClassOperationSignaturePair {
+public class TestClassOperationSignaturePair extends AbstractKiekerTest {
 
 	public TestClassOperationSignaturePair() {
 		// empty default constructor
@@ -112,23 +113,18 @@ public class TestClassOperationSignaturePair {
 		Assert.assertEquals("Signatures not equal", inputSignature.toString(), compSigPair.getSignature().toString());
 	}
 
-	@Test
+	@Test(expected = IllegalArgumentException.class)
 	public void testModifierButNoReturnType() {
 		final String fqClassName = "a.b.c.D";
 		final String opName = "op1";
 		final String[] modifiers = { "public" };
 		final String[] paramTypes = { Boolean.class.getName(), Integer.class.getName() };
 		final Signature inputSignature = new Signature(opName, modifiers, null, paramTypes);
-
 		/*
 		 * Obtain operation signature string based on class name and signature.
 		 * In this case, we expect an exception to be thrown
 		 */
-		try {
-			final String opSignatureString = ClassOperationSignaturePair.createOperationSignatureString(fqClassName, inputSignature);
-			Assert.fail("Expected IllegalArgumentException to be thrown because modifiers but no return type; result: " + opSignatureString);
-		} catch (final IllegalArgumentException ex) { // NOPMD (ignore exception)
-		}
+		ClassOperationSignaturePair.createOperationSignatureString(fqClassName, inputSignature);
 	}
 
 	@Test

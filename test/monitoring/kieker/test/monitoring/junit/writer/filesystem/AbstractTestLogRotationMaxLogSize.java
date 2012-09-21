@@ -19,8 +19,7 @@ package kieker.test.monitoring.junit.writer.filesystem;
 import java.io.File;
 import java.io.IOException;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -28,10 +27,12 @@ import org.junit.rules.TemporaryFolder;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * @author Jan Waller
  */
-public abstract class AbstractTestLogRotationMaxLogSize {
+public abstract class AbstractTestLogRotationMaxLogSize extends AbstractKiekerTest {
 
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (Rule has to be public)

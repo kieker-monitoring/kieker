@@ -18,20 +18,20 @@ package kieker.test.monitoring.junit.core.controller;
 
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.NamedPipeFactory;
 
 /**
  * @author Andre van Hoorn, Jan Waller
  */
-public class TestMonitoringControllerRecordsPassedInMonitoringStates { // NOCS
+public class TestMonitoringControllerRecordsPassedInMonitoringStates extends AbstractKiekerTest { // NOCS
 
 	@Test
 	public void testRecordsPassedToWriterWhenEnabled() {

@@ -113,7 +113,9 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 			throw new IllegalArgumentException("Expecting array with " + valueTypes.length + " elements but found " + values.length + " elements.");
 		}
 		for (int curIdx = 0; curIdx < valueTypes.length; curIdx++) {
-			if ((valueTypes[curIdx] == int.class) || (valueTypes[curIdx] == Integer.class)) {
+			if (values[curIdx] == null) {
+				throw new IllegalArgumentException("Expecting " + valueTypes[curIdx].getName() + " but found null at position " + curIdx + " of the array.");
+			} else if ((valueTypes[curIdx] == int.class) || (valueTypes[curIdx] == Integer.class)) {
 				if (values[curIdx] instanceof Integer) {
 					continue;
 				}

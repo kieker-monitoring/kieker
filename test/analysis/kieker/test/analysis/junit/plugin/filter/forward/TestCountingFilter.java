@@ -23,19 +23,20 @@ import org.junit.Test;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.CountingFilter;
+import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 
-import kieker.test.analysis.util.plugin.reader.SimpleListReader;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * This test is for the class {@link CountingFilter}.
  * 
  * @author Nils Christian Ehmke, Jan Waller
  */
-public class TestCountingFilter {
+public class TestCountingFilter extends AbstractKiekerTest {
 
 	private AnalysisController analysisController;
-	private SimpleListReader<Object> simpleListReader;
+	private ListReader<Object> simpleListReader;
 	private CountingFilter countingFilter;
 
 	public TestCountingFilter() {
@@ -46,10 +47,10 @@ public class TestCountingFilter {
 	public void before() throws IllegalStateException, AnalysisConfigurationException {
 		this.analysisController = new AnalysisController();
 		this.countingFilter = new CountingFilter(new Configuration());
-		this.simpleListReader = new SimpleListReader<Object>(new Configuration());
+		this.simpleListReader = new ListReader<Object>(new Configuration());
 		this.analysisController.registerReader(this.simpleListReader);
 		this.analysisController.registerFilter(this.countingFilter);
-		this.analysisController.connect(this.simpleListReader, SimpleListReader.OUTPUT_PORT_NAME, this.countingFilter, CountingFilter.INPUT_PORT_NAME_EVENTS);
+		this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME, this.countingFilter, CountingFilter.INPUT_PORT_NAME_EVENTS);
 	}
 
 	@Test
@@ -59,6 +60,7 @@ public class TestCountingFilter {
 		this.simpleListReader.addObject(new Object());
 		Assert.assertEquals(0, this.countingFilter.getMessageCount());
 		this.analysisController.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.analysisController.getState());
 		Assert.assertEquals(3, this.countingFilter.getMessageCount());
 	}
 
@@ -66,16 +68,17 @@ public class TestCountingFilter {
 	public void testConcurrently() throws IllegalStateException, AnalysisConfigurationException {
 		this.simpleListReader.addObject(new Object());
 		// register multiple readers (they fire concurrently)
-		final SimpleListReader<Object> reader2 = new SimpleListReader<Object>(new Configuration());
+		final ListReader<Object> reader2 = new ListReader<Object>(new Configuration());
 		this.analysisController.registerReader(reader2);
-		this.analysisController.connect(reader2, SimpleListReader.OUTPUT_PORT_NAME, this.countingFilter, CountingFilter.INPUT_PORT_NAME_EVENTS);
+		this.analysisController.connect(reader2, ListReader.OUTPUT_PORT_NAME, this.countingFilter, CountingFilter.INPUT_PORT_NAME_EVENTS);
 		reader2.addObject(new Object());
-		final SimpleListReader<Object> reader3 = new SimpleListReader<Object>(new Configuration());
+		final ListReader<Object> reader3 = new ListReader<Object>(new Configuration());
 		this.analysisController.registerReader(reader3);
-		this.analysisController.connect(reader3, SimpleListReader.OUTPUT_PORT_NAME, this.countingFilter, CountingFilter.INPUT_PORT_NAME_EVENTS);
+		this.analysisController.connect(reader3, ListReader.OUTPUT_PORT_NAME, this.countingFilter, CountingFilter.INPUT_PORT_NAME_EVENTS);
 		reader3.addObject(new Object());
 		Assert.assertEquals(0, this.countingFilter.getMessageCount());
 		this.analysisController.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.analysisController.getState());
 		Assert.assertEquals(3, this.countingFilter.getMessageCount());
 	}
 
@@ -86,6 +89,7 @@ public class TestCountingFilter {
 		this.simpleListReader.addObject("");
 		Assert.assertEquals(0, this.countingFilter.getMessageCount());
 		this.analysisController.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.analysisController.getState());
 		Assert.assertEquals(2, this.countingFilter.getMessageCount());
 	}
 }
