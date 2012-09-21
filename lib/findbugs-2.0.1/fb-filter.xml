@@ -2,8 +2,8 @@
 	<!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
 
   <Match>
-		<Class name="kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory" />
-		<Bug pattern="DLS_DEAD_LOCAL_STORE" />
+		<Class name="kieker.test.analysis.junit.plugin.filter.forward.TestStringBufferFilter" />
+		<Bug pattern="DM_STRING_CTOR" />
 	</Match>
 
 	<Match>

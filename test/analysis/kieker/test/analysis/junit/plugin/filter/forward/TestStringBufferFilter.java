@@ -55,9 +55,10 @@ public class TestStringBufferFilter extends AbstractKiekerTest {
 		analysisController.connect(reader, ListReader.OUTPUT_PORT_NAME, stringBufferFilter, StringBufferFilter.INPUT_PORT_NAME_EVENTS);
 		analysisController.connect(stringBufferFilter, StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, collectionFilter, ListCollectionFilter.INPUT_PORT_NAME);
 
-		long timestamp = 3268936l;
-		final IMonitoringRecord recordIn1 = TestStringBufferFilter.createOperationExecutionRecord(timestamp++);
-		final IMonitoringRecord recordIn2 = TestStringBufferFilter.createOperationExecutionRecord(timestamp++);
+		long timestamp = 3268936L;
+		final IMonitoringRecord recordIn1 = TestStringBufferFilter.createOperationExecutionRecord(timestamp);
+		timestamp++;
+		final IMonitoringRecord recordIn2 = TestStringBufferFilter.createOperationExecutionRecord(timestamp);
 		reader.addObject(recordIn1);
 		reader.addObject(recordIn2);
 
@@ -114,7 +115,7 @@ public class TestStringBufferFilter extends AbstractKiekerTest {
 
 		final Object objectIn = new Object();
 		final String stringIn1 = "In-String";
-		final String stringIn2 = new String(stringIn1);
+		final String stringIn2 = new String(stringIn1); // NOPMD (new String)
 		Assert.assertNotSame(stringIn1, stringIn2);
 		Assert.assertEquals(stringIn1, stringIn2);
 		reader.addObject(objectIn);
@@ -128,13 +129,13 @@ public class TestStringBufferFilter extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected number of records", 3, records.size());
 		final Object objectOut = records.get(0);
 		Assert.assertSame("Input object not same as output object", objectIn, objectOut);
-		final String StringOut1 = (String) records.get(1);
-		final String StringOut2 = (String) records.get(2);
-		Assert.assertSame("Input string 1 not same as output string 1", stringIn1, StringOut1); // first occurrence of a string should remain same
-		Assert.assertEquals("Input string not equal to output string", stringIn1, StringOut1);
-		Assert.assertNotSame("Input string 2 same as output string 2", stringIn2, StringOut2); // next occurrence should be cached
-		Assert.assertSame("Input string 1 not same as output string 2", stringIn1, StringOut2);
-		Assert.assertEquals("Input string not equal to output string", stringIn2, StringOut2);
+		final String stringOut1 = (String) records.get(1);
+		final String stringOut2 = (String) records.get(2);
+		Assert.assertSame("Input string 1 not same as output string 1", stringIn1, stringOut1); // first occurrence of a string should remain same
+		Assert.assertEquals("Input string not equal to output string", stringIn1, stringOut1);
+		Assert.assertNotSame("Input string 2 same as output string 2", stringIn2, stringOut2); // next occurrence should be cached
+		Assert.assertSame("Input string 1 not same as output string 2", stringIn1, stringOut2);
+		Assert.assertEquals("Input string not equal to output string", stringIn2, stringOut2);
 	}
 
 	@Test
@@ -153,9 +154,9 @@ public class TestStringBufferFilter extends AbstractKiekerTest {
 		final String inString1a = "inString1a";
 		final String inString1b = "inString1b";
 		final String inString1c = "inString1c";
-		final String inString2a = new String(inString1a);
-		final String inString2b = new String(inString1b);
-		final String inString2c = new String(inString1c);
+		final String inString2a = new String(inString1a); // NOPMD (new String)
+		final String inString2b = new String(inString1b); // NOPMD (new String)
+		final String inString2c = new String(inString1c); // NOPMD (new String)
 		Assert.assertNotSame(inString1a, inString2a);
 		Assert.assertEquals(inString1a, inString2a);
 		Assert.assertNotSame(inString1b, inString2b);

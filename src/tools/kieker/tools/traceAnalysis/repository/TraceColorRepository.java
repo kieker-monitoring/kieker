@@ -202,6 +202,9 @@ public class TraceColorRepository extends AbstractRepository {
 		}
 	}
 
+	/**
+	 * @author Holger Knoche
+	 */
 	public static class TraceColorRepositoryData {
 		private final ConcurrentMap<Long, Color> colorMap;
 		private final Color defaultColor;

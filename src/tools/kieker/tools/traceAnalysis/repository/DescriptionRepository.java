@@ -34,7 +34,6 @@ import kieker.common.configuration.Configuration;
  * Implementation of a description repository which stores descriptions for names.
  * 
  * @author Holger Knoche
- * 
  */
 @Repository(name = "Description repository",
 		description = "Stores descriptions for names",
@@ -141,6 +140,9 @@ public class DescriptionRepository extends AbstractRepository {
 		}
 	}
 
+	/**
+	 * @author Holger Knoche
+	 */
 	public static class DescriptionRepositoryData {
 
 		private final ConcurrentMap<String, String> descriptionMap;
