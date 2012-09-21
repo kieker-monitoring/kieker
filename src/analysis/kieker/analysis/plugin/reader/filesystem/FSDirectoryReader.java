@@ -256,14 +256,17 @@ final class FSDirectoryReader implements Runnable {
 						System.arraycopy(recordFields, 1, recordFieldsReduced, 0, recordFields.length - 1);
 						record = AbstractMonitoringRecord.createFromStringArray(OperationExecutionRecord.class, recordFieldsReduced);
 					}
-				} catch (final Exception ex) { // NOPMD NOCS (illegal catch)
+				} catch (final MonitoringRecordException ex) {
 					if (abortDueToUnknownRecordType) {
 						this.terminated = true; // at least it doesn't hurt to set it
 						final IOException newEx = new IOException("Error processing line: " + line);
 						newEx.initCause(ex);
 						throw newEx; // NOPMD (cause is set above)
 					} else {
-						LOG.warn("Error processing line: " + line, ex); // print only if we continue here
+						final StringBuilder sb = new StringBuilder();
+						sb.append("Error processing line: ").append(line);
+						// FIXME: print errorMsg
+						LOG.warn(sb.toString(), ex); // print only if we continue here
 						continue; // skip this record
 					}
 				}
@@ -272,7 +275,7 @@ final class FSDirectoryReader implements Runnable {
 					break; // we got the signal to stop processing
 				}
 			}
-		} catch (final IOException ex) {
+		} catch (final Exception ex) { // NOCS NOPMD (gonna catch them all)
 			LOG.error("Error reading " + inputFile, ex);
 		} finally {
 			if (in != null) {
