@@ -1103,4 +1103,29 @@
 		</checkstyle>
 		<echo message="Checkstyle report written to '${tmp.dir}/cs_report.xml'" />
 	</target>
+	
+	<target name="-compile-build-tools" description="Compiles the Kieker build tools">
+		<delete dir="${build.kieker.buildtools.dir}" />
+		<mkdir dir="${build.kieker.buildtools.dir}" />
+		<javac destDir="${build.kieker.buildtools.dir}" source="1.6" target="1.6" srcdir="${src.kieker.buildtools.dir}" debug="true" includeAntRuntime="false">
+			<compilerarg value="-Xlint:all" />
+		</javac>
+	</target>
+	
+	<target name="build-build-tools" depends="-compile-build-tools" description="Builds the Kieker build tools">			
+		<!-- Copy META-INF recursively -->		
+		<copy todir="${build.kieker.buildtools.dir}/META-INF">
+			<fileset dir="${src.kieker.buildtools.dir}/META-INF">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+		
+		<!-- Create the JAR -->
+		<jar destfile="${buildtools.jar}">
+			<fileset dir="${build.kieker.buildtools.dir}">
+				<include name="**/*" />
+			</fileset>
+		</jar>		
+	</target>
+	
 </project>
