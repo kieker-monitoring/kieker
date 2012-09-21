@@ -16,6 +16,7 @@
 
 package kieker.monitoring.core.controller;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import kieker.common.configuration.Configuration;
@@ -24,6 +25,7 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.Version;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.helper.Pair;
 import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 import kieker.monitoring.timer.ITimeSource;
@@ -249,6 +251,10 @@ public final class MonitoringController extends AbstractController implements IM
 
 	public boolean isActive(final String signature) {
 		return this.probeController.isActive(signature);
+	}
+
+	public void replacePatternList(final List<Pair<String, Boolean>> patternList) {
+		this.replacePatternList(patternList);
 	}
 
 	// GET SINGLETON INSTANCE

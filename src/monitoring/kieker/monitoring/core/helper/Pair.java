@@ -22,15 +22,13 @@ public class Pair<P, I> {
 	public boolean equals(final Object other) {
 		if (other instanceof Pair) {
 			final Pair<?, ?> otherPair = (Pair<?, ?>) other;
-			return (((this.pattern == otherPair.pattern) || ((this.pattern != null) && (otherPair.pattern != null) && this.pattern.equals(otherPair.pattern))));
+			return (this.pattern.equals(otherPair.pattern) && this.active.equals(otherPair.active));
 		}
-
 		return false;
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "(" + this.pattern + ", " + this.active + ")";
 	}
 

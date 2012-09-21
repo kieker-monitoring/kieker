@@ -20,11 +20,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.Calendar;
-import java.util.List;
 
 import junit.framework.Assert;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
@@ -37,50 +37,57 @@ import kieker.monitoring.core.controller.MonitoringController;
  */
 public class TestProbeController {
 
-	@Test
-	public void testIt() {
+	File file = null;
+	IMonitoringController MC;
+
+	@Before
+	public void init() {
 		// generating config file, may not exist when starting the test
 		String pathname = "META-INF/";
 		final URL url = ClassLoader.getSystemResource(pathname);
 		final String path = url.getFile();
-		File file = null;
+
 		try {
 			pathname = URLDecoder.decode(path, "UTF-8") + "kieker.monitoring.adaptiveMonitoring.configFile";
 			new File(pathname).createNewFile();
-			file = new File(pathname);
-		} catch (final IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			this.file = new File(pathname);
+		} catch (final IOException e) {
+			e.printStackTrace();
 		}
-		Assert.assertNotNull(file);
-		Assert.assertTrue(file.exists());
 
 		// load properties
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
-		final IMonitoringController MC = MonitoringController.createInstance(configuration);
+		this.MC = MonitoringController.createInstance(configuration);
 
-		// generate test signature
-		// signature must be valid and in this project
-		final String signature =
-				"private java.util.List kieker.test.monitoring.junit.core.controller.TestProbeController.getToken(java.lang.String, java.util.Calendar)";
-
-		// test methods
-		final String pattern = "* ..* kieker..*(..)";
-		Assert.assertTrue(MC.activateProbe(pattern));
-		Assert.assertTrue(MC.isActive(signature));
-		Assert.assertFalse(MC.activateProbe(pattern)); // should return false because it is already active
-		Assert.assertTrue(MC.deactivateProbe(pattern));
-		Assert.assertFalse(MC.isActive(signature));
-		Assert.assertFalse(MC.deactivateProbe(pattern));
-
-		file.delete();
-		Assert.assertFalse(file.exists());
 	}
 
-	public List<Calendar> getToken(String name, Calendar calendar) {
-		name = "";
-		calendar = null;
-		return null;
+	@Test
+	public void testInitialization() {
+		Assert.assertNotNull(this.file);
+		Assert.assertTrue(this.file.exists());
+		Assert.assertNotNull(this.MC);
+	}
+
+	@Test
+	public void testIt() {
+
+		// generate test signature
+		final String signature = "public void kieker.test.monitoring.junit.core.controller.TestProbeController.testIt()";
+
+		// test methods
+		final String pattern = "..* kieker..*.*(..)";
+		Assert.assertFalse(this.MC.activateProbe("ungültiges Pattern"));
+		Assert.assertTrue(this.MC.activateProbe(pattern));
+		Assert.assertTrue(this.MC.isActive(signature));
+		Assert.assertTrue(this.MC.deactivateProbe(pattern));
+		Assert.assertFalse(this.MC.isActive(signature));
+
+	}
+
+	@After
+	public void cleanup() {
+		this.file.delete();
+		Assert.assertFalse(this.file.exists());
 	}
 
 }

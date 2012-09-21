@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -36,7 +37,7 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.helper.FileWatcher;
 import kieker.monitoring.core.helper.InvalidPatternException;
 import kieker.monitoring.core.helper.Pair;
-import kieker.monitoring.core.helper.Parser;
+import kieker.monitoring.core.helper.PatternParser;
 
 /**
  * @author Jan Waller, Björn Weißenfels
@@ -44,16 +45,15 @@ import kieker.monitoring.core.helper.Parser;
 public class ProbeController extends AbstractController implements IProbeController {
 	private static final Log LOG = LogFactory.getLog(ProbeController.class);
 
-	private static final CopyOnWriteArrayList<Pair<Matcher, Boolean>> MATCHER_LIST = new CopyOnWriteArrayList<Pair<Matcher, Boolean>>();
-	private static final CopyOnWriteArrayList<Pair<String, Boolean>> UPDATE_LIST = new CopyOnWriteArrayList<Pair<String, Boolean>>();
-	private static final ConcurrentHashMap<String, Boolean> SIGNATURE_CACHE = new ConcurrentHashMap<String, Boolean>();
-
+	private final CopyOnWriteArrayList<Pair<Matcher, Boolean>> matcherList = new CopyOnWriteArrayList<Pair<Matcher, Boolean>>();
+	private final CopyOnWriteArrayList<Pair<String, Boolean>> patternList = new CopyOnWriteArrayList<Pair<String, Boolean>>();
+	private final ConcurrentHashMap<String, Boolean> signatureCache = new ConcurrentHashMap<String, Boolean>();
+	private final PatternParser parser = new PatternParser();
 	private boolean updateConfigFile;
 	private final long readIntervall;
 	private String pathname;
 	private FileWatcher fileWatcher;
 	private File file;
-	private final Parser parser = new Parser();
 
 	protected ProbeController(final Configuration configuration) {
 		super(configuration);
@@ -69,15 +69,21 @@ public class ProbeController extends AbstractController implements IProbeControl
 			this.pathname = URLDecoder.decode(url.getFile(), "UTF-8");
 		} catch (final UnsupportedEncodingException e) {
 			LOG.info("Decoding pathname failed.");
-			e.printStackTrace();
 		}
 		this.file = new File(this.pathname);
 		if (this.file.exists()) {
-			this.fileWatcher = new FileWatcher(this.file, this.readIntervall * 1000, MATCHER_LIST, UPDATE_LIST, SIGNATURE_CACHE);
+			this.fileWatcher = new FileWatcher(this.file, this.readIntervall * 1000, this);
 			this.fileWatcher.start();
 		} else {
 			LOG.info("Config file did not exist. " + this.pathname);
 			this.updateConfigFile = false;
+			try {
+				final Matcher matcher = this.parser.parseToPattern("*").matcher("");
+				this.matcherList.add(new Pair<Matcher, Boolean>(matcher, true));
+			} catch (final InvalidPatternException e) {
+				LOG.error(e.getMessage()); // In this case, nothing will be monitored.
+				e.printStackTrace();
+			}
 
 		}
 	}
@@ -107,83 +113,48 @@ public class ProbeController extends AbstractController implements IProbeControl
 	}
 
 	public boolean activateProbe(final String pattern) {
-		final boolean clearCache = !ProbeController.SIGNATURE_CACHE.containsKey(pattern);
-		if (clearCache) {
-			ProbeController.SIGNATURE_CACHE.clear();
-		} else {
-			ProbeController.SIGNATURE_CACHE.put(pattern, true);
-		}
-
-		Pattern regex;
-		try {
-			regex = this.parser.parseToPattern(pattern);
-		} catch (final InvalidPatternException e) {
-			LOG.error(pattern + " is not a valid pattern.");
-			e.printStackTrace();
-			return false;
-		}
-		final Matcher matcher = regex.matcher("");
-		ProbeController.MATCHER_LIST.add(0, new Pair<Matcher, Boolean>(matcher, true));
-		if (this.updateConfigFile) {
-			this.updatePatternFile();
-		}
-
-		final Pair<String, Boolean> pair = new Pair<String, Boolean>(pattern, true);
-		if (ProbeController.UPDATE_LIST.contains(pair)) {
-			final int index = ProbeController.UPDATE_LIST.indexOf(pair);
-			final Pair<String, Boolean> existingPattern = ProbeController.UPDATE_LIST.get(index);
-			final boolean result = !existingPattern.isActive();
-			if (result) {
-				existingPattern.setActive(true);
-			}
-			return result;
-		} else {
-			ProbeController.UPDATE_LIST.add(pair);
-			return true;
-		}
+		return this.de_activateProbe(pattern, true);
 	}
 
 	public boolean deactivateProbe(final String pattern) {
-		final boolean clearCache = !ProbeController.SIGNATURE_CACHE.containsKey(pattern);
+		return this.de_activateProbe(pattern, false);
+	}
+
+	private boolean de_activateProbe(final String pattern, final boolean activate) {
+		final boolean clearCache = !this.signatureCache.containsKey(pattern);
 		if (clearCache) {
-			ProbeController.SIGNATURE_CACHE.clear();
+			this.signatureCache.clear();
 		} else {
-			ProbeController.SIGNATURE_CACHE.put(pattern, false);
+			this.signatureCache.put(pattern, activate);
 		}
 
 		Pattern regex;
 		try {
 			regex = this.parser.parseToPattern(pattern);
 		} catch (final InvalidPatternException e) {
-			LOG.error(pattern + " is not a valid pattern.");
-			e.printStackTrace();
+			LOG.error(pattern + " is not a valid pattern: " + e.getMessage());
 			return false;
 		}
 		final Matcher matcher = regex.matcher("");
-		ProbeController.MATCHER_LIST.add(0, new Pair<Matcher, Boolean>(matcher, false));
+		this.matcherList.add(0, new Pair<Matcher, Boolean>(matcher, activate));
+
+		final Pair<String, Boolean> pair = new Pair<String, Boolean>(pattern, activate);
+		if (this.patternList.contains(pair)) {
+			final int index = this.patternList.indexOf(pair);
+			this.patternList.remove(index);
+		}
+		this.patternList.add(pair);
 		if (this.updateConfigFile) {
 			this.updatePatternFile();
 		}
+		return true;
 
-		final Pair<String, Boolean> pair = new Pair<String, Boolean>(pattern, false);
-		if (ProbeController.UPDATE_LIST.contains(pair)) {
-			final int index = ProbeController.UPDATE_LIST.indexOf(pair);
-			final Pair<String, Boolean> existingPattern = ProbeController.UPDATE_LIST.get(index);
-			final boolean result = existingPattern.isActive();
-			if (result) {
-				existingPattern.setActive(false);
-			}
-			return result;
-		} else {
-			ProbeController.UPDATE_LIST.add(pair);
-			return true;
-		}
 	}
 
 	public boolean isActive(final String signature) {
 		if (this.monitoringController.isMonitoringEnabled()) {
-			if (ProbeController.SIGNATURE_CACHE.containsKey(signature)) {
-				return ProbeController.SIGNATURE_CACHE.get(signature);
+			if (this.signatureCache.containsKey(signature)) {
+				return this.signatureCache.get(signature);
 			} else {
 				return this.matchesIncludePattern(signature);
 			}
@@ -194,18 +165,16 @@ public class ProbeController extends AbstractController implements IProbeControl
 
 	/*
 	 * tests if signature matches a pattern
-	 * and completes accordingly the SIGNATURE HashMap
-	 * 
-	 * will be replaced
+	 * and completes accordingly the SIGNATURE_CACHE HashMap
 	 */
 	private boolean matchesIncludePattern(final String signature) {
-		final ListIterator<Pair<Matcher, Boolean>> patternList = ProbeController.MATCHER_LIST.listIterator();
+		final ListIterator<Pair<Matcher, Boolean>> patternList = this.matcherList.listIterator();
 		Pair<Matcher, Boolean> pair;
 		while (patternList.hasNext()) {
 			pair = patternList.next();
 			if (pair.getPattern().reset(signature).matches()) {
 				final boolean value = pair.isActive();
-				ProbeController.SIGNATURE_CACHE.put(signature, value);
+				this.signatureCache.put(signature, value);
 				return value;
 			}
 		}
@@ -216,7 +185,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 		try {
 			final FileWriter fw = new FileWriter(this.pathname);
 			final BufferedWriter bw = new BufferedWriter(fw);
-			final ListIterator<Pair<String, Boolean>> patternList = ProbeController.UPDATE_LIST.listIterator();
+			final ListIterator<Pair<String, Boolean>> patternList = this.patternList.listIterator();
 			String prefix;
 			while (patternList.hasNext()) {
 				prefix = "+ ";
@@ -234,8 +203,29 @@ public class ProbeController extends AbstractController implements IProbeControl
 			}
 			LOG.info("updating config file succeed");
 		} catch (final IOException e) {
-			LOG.info("updating config file failed");
+			LOG.error("updating config file failed");
 			e.printStackTrace();
+		}
+	}
+
+	public void replacePatternList(final List<Pair<String, Boolean>> patternList) {
+		this.patternList.clear();
+		this.matcherList.clear();
+		this.signatureCache.clear();
+		if (patternList == null) {
+			return;
+		}
+		this.patternList.addAll(patternList);
+		final int size = this.patternList.size();
+		for (int i = 1; i <= size; i++) {
+			final Pair<String, Boolean> pair = this.patternList.get(size - i);
+			try {
+				final Pattern pattern = this.parser.parseToPattern(pair.getPattern());
+				final Matcher matcher = pattern.matcher("");
+				this.matcherList.add(new Pair<Matcher, Boolean>(matcher, pair.isActive()));
+			} catch (final InvalidPatternException e) {
+				LOG.error(pair.getPattern() + " is not a valid pattern: " + e.getMessage());
+			}
 		}
 	}
 

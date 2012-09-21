@@ -16,6 +16,10 @@
 
 package kieker.monitoring.core.controller;
 
+import java.util.List;
+
+import kieker.monitoring.core.helper.Pair;
+
 /**
  * @author Jan Waller
  */
@@ -48,4 +52,12 @@ public interface IProbeController {
 	 *         true if the probe with this signature is active
 	 */
 	public boolean isActive(final String signature);
+
+	/**
+	 * @param patternList
+	 *            list of string boolean pairs,
+	 *            where the string is a pattern and the boolean describes its state
+	 */
+	public void replacePatternList(final List<Pair<String, Boolean>> patternList);
+
 }
