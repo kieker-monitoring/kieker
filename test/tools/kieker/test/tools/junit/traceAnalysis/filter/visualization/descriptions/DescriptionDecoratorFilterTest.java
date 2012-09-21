@@ -69,6 +69,10 @@ public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
 
 	private static GraphTestSetup testSetup;
 
+	public DescriptionDecoratorFilterTest() {
+		// empty default constructor
+	}
+
 	@BeforeClass
 	public static void prepareSetup() throws AnalysisConfigurationException {
 		final ComponentDependencyGraphAllocationFilter filter = new ComponentDependencyGraphAllocationFilter(new Configuration());
@@ -93,11 +97,11 @@ public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
 
 	private static List<OperationExecutionRecord> createExecutionRecords() {
 		final List<OperationExecutionRecord> records = new ArrayList<OperationExecutionRecord>();
-		int eoi = 0;
+		int eoi = -1;
 		int time = 0;
 
-		records.add(DescriptionDecoratorFilterTest.createExecutionRecord(OPERATION_SIGNATURE_1, ++time, ++time, eoi++, 0));
-		records.add(DescriptionDecoratorFilterTest.createExecutionRecord(OPERATION_SIGNATURE_2, ++time, ++time, eoi++, 1));
+		records.add(DescriptionDecoratorFilterTest.createExecutionRecord(OPERATION_SIGNATURE_1, ++time, ++time, ++eoi, 0));
+		records.add(DescriptionDecoratorFilterTest.createExecutionRecord(OPERATION_SIGNATURE_2, ++time, ++time, ++eoi, 1));
 
 		return records;
 	}
@@ -121,7 +125,7 @@ public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
 		Assert.assertEquals(1, graphReceiver.getNumberOfReceivedGraphs());
 
 		// Prepare the produced graph
-		final ComponentAllocationDependencyGraph graph = graphReceiver.<ComponentAllocationDependencyGraph> getFirstGraph();
+		final ComponentAllocationDependencyGraph graph = graphReceiver.<ComponentAllocationDependencyGraph> getFirstGraph(); // NOCS (generic)
 		final Map<String, DependencyGraphNode<AllocationComponent>> nodeMap = DependencyGraphTestUtil.createNodeLookupTable(graph);
 
 		final DependencyGraphNode<AllocationComponent> component1Node = nodeMap.get(EXPECTED_ALLOCATION_COMPONENT_NAME_1);
