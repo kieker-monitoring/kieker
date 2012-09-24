@@ -81,7 +81,7 @@ public class TraceColorRepository extends AbstractRepository {
 	 * @param colorData
 	 *            The color data to use for this repository
 	 */
-	private TraceColorRepository(final Configuration configuration, final TraceColorRepositoryData colorData) {
+	public TraceColorRepository(final Configuration configuration, final TraceColorRepositoryData colorData) {
 		super(configuration);
 		this.colorMap = colorData.getColorMap();
 		this.defaultColor = colorData.getDefaultColor();
@@ -202,7 +202,10 @@ public class TraceColorRepository extends AbstractRepository {
 		}
 	}
 
-	private static class TraceColorRepositoryData {
+	/**
+	 * @author Holger Knoche
+	 */
+	public static class TraceColorRepositoryData {
 		private final ConcurrentMap<Long, Color> colorMap;
 		private final Color defaultColor;
 		private final Color collisionColor;

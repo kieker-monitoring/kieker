@@ -29,6 +29,7 @@ import org.junit.rules.TemporaryFolder;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
+import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
@@ -40,7 +41,6 @@ import kieker.monitoring.writer.IMonitoringWriter;
 import kieker.monitoring.writer.filesystem.AbstractAsyncFSWriter;
 import kieker.monitoring.writer.filesystem.AsyncFsWriter;
 
-import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 import kieker.test.tools.junit.writeRead.printStream.BasicPrintStreamWriterTestFile;
 
@@ -167,11 +167,11 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, "false");
 		this.refineFSReaderConfiguration(readerConfiguration);
 		final AbstractReaderPlugin reader = new FSReader(readerConfiguration);
-		final SimpleSinkFilter<IMonitoringRecord> sinkPlugin = new SimpleSinkFilter<IMonitoringRecord>(new Configuration());
+		final ListCollectionFilter<IMonitoringRecord> sinkPlugin = new ListCollectionFilter<IMonitoringRecord>(new Configuration());
 
 		analysisController.registerReader(reader);
 		analysisController.registerFilter(sinkPlugin);
-		analysisController.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
+		analysisController.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 		analysisController.run();
 
 		return sinkPlugin.getList();

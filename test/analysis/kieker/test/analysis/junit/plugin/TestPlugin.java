@@ -24,12 +24,12 @@ import org.junit.Test;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
+import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 
 import kieker.test.analysis.util.plugin.filter.SimpleForwardFilterWithRepository;
-import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
-import kieker.test.analysis.util.plugin.reader.SimpleListReader;
 import kieker.test.analysis.util.repository.SimpleRepository;
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -76,11 +76,11 @@ public class TestPlugin extends AbstractKiekerTest {
 		final Object testObject2 = new Object();
 
 		final SimpleRepository simpleRepository = new SimpleRepository(new Configuration());
-		final SimpleListReader<Object> simpleListReader = new SimpleListReader<Object>(new Configuration());
+		final ListReader<Object> simpleListReader = new ListReader<Object>(new Configuration());
 		simpleListReader.addObject(testObject1);
 		simpleListReader.addObject(testObject2);
 		final SimpleForwardFilterWithRepository simpleFilter = new SimpleForwardFilterWithRepository(new Configuration());
-		final SimpleSinkFilter<Object> simpleSinkPlugin = new SimpleSinkFilter<Object>(new Configuration());
+		final ListCollectionFilter<Object> simpleSinkPlugin = new ListCollectionFilter<Object>(new Configuration());
 
 		final AnalysisController analysisController = new AnalysisController();
 		analysisController.registerRepository(simpleRepository);
@@ -90,11 +90,11 @@ public class TestPlugin extends AbstractKiekerTest {
 
 		/* Connect the plugins. */
 		analysisController.connect(
-				simpleListReader, SimpleListReader.OUTPUT_PORT_NAME,
+				simpleListReader, ListReader.OUTPUT_PORT_NAME,
 				simpleFilter, SimpleForwardFilterWithRepository.INPUT_PORT_NAME);
 		analysisController.connect(
 				simpleFilter, SimpleForwardFilterWithRepository.OUTPUT_PORT_NAME,
-				simpleSinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
+				simpleSinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 
 		analysisController.connect(simpleFilter, SimpleForwardFilterWithRepository.REPOSITORY_PORT_NAME, simpleRepository);
 

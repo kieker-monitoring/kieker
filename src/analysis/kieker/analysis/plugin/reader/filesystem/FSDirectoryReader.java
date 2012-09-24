@@ -99,7 +99,8 @@ final class FSDirectoryReader implements Runnable {
 		if (inputFiles == null) {
 			LOG.error("Directory '" + this.inputDir + "' does not exist or an I/O error occured.");
 		} else if (inputFiles.length == 0) {
-			LOG.error("Directory '" + this.inputDir + "' contains no files starting with '" + this.filePrefix + "' and ending with '"
+			// level 'warn' for this case, because this is not unusual for large monitoring logs including a number of directories
+			LOG.warn("Directory '" + this.inputDir + "' contains no files starting with '" + this.filePrefix + "' and ending with '"
 					+ NORMAL_FILE_POSTFIX + "' or '" + BINARY_FILE_POSTFIX + "'.");
 		} else { // everything ok, we process the files
 			Arrays.sort(inputFiles, new Comparator<File>() {
@@ -255,14 +256,22 @@ final class FSDirectoryReader implements Runnable {
 						System.arraycopy(recordFields, 1, recordFieldsReduced, 0, recordFields.length - 1);
 						record = AbstractMonitoringRecord.createFromStringArray(OperationExecutionRecord.class, recordFieldsReduced);
 					}
-				} catch (final Exception ex) { // NOPMD NOCS (illegal catch)
+				} catch (final MonitoringRecordException ex) { // NOPMD (exception as flow control)
 					if (abortDueToUnknownRecordType) {
 						this.terminated = true; // at least it doesn't hurt to set it
 						final IOException newEx = new IOException("Error processing line: " + line);
 						newEx.initCause(ex);
 						throw newEx; // NOPMD (cause is set above)
 					} else {
-						LOG.warn("Error processing line: " + line, ex); // print only if we continue here
+						// final StringBuilder sb = new StringBuilder();
+						// sb.append("Error processing line: ").append(line);
+						// Throwable t = ex;
+						// do {
+						// sb.append('\n').append(t.getLocalizedMessage());
+						// t = t.getCause();
+						// } while (t != null);
+						// LOG.warn(sb.toString());
+						LOG.warn("Error processing line: " + line, ex);
 						continue; // skip this record
 					}
 				}
@@ -271,7 +280,7 @@ final class FSDirectoryReader implements Runnable {
 					break; // we got the signal to stop processing
 				}
 			}
-		} catch (final IOException ex) {
+		} catch (final Exception ex) { // NOCS NOPMD (gonna catch them all)
 			LOG.error("Error reading " + inputFile, ex);
 		} finally {
 			if (in != null) {

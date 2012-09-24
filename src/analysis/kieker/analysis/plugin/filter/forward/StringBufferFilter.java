@@ -37,7 +37,7 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @author Jan Waller
  */
-@Plugin(
+@Plugin(description = "A filter to reduce the memory footprint of strings used in records",
 		outputPorts = @OutputPort(
 				name = StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
 				description = "Provides each incoming object",
@@ -115,8 +115,9 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 			}
 			if (stringBuffered) {
 				try {
-					super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
-							AbstractMonitoringRecord.createFromArray((Class<? extends IMonitoringRecord>) object.getClass(), objects));
+					final IMonitoringRecord newRecord = AbstractMonitoringRecord.createFromArray((Class<? extends IMonitoringRecord>) object.getClass(), objects);
+					newRecord.setLoggingTimestamp(((IMonitoringRecord) object).getLoggingTimestamp());
+					super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, newRecord);
 				} catch (final MonitoringRecordException ex) {
 					LOG.warn("Failed to recreate buffered monitoring record: " + object.toString(), ex);
 				}

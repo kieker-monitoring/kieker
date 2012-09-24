@@ -34,7 +34,6 @@ import kieker.common.configuration.Configuration;
  * Implementation of a description repository which stores descriptions for names.
  * 
  * @author Holger Knoche
- * 
  */
 @Repository(name = "Description repository",
 		description = "Stores descriptions for names",
@@ -61,7 +60,15 @@ public class DescriptionRepository extends AbstractRepository {
 		this(configuration, DescriptionRepository.readDataFromFile(new DescriptionRepositoryConfiguration(configuration).getDescriptionFileName()));
 	}
 
-	private DescriptionRepository(final Configuration configuration, final DescriptionRepositoryData descriptionData) {
+	/**
+	 * Creates a new description repository using the given data.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 * @param descriptionData
+	 *            The description data to use
+	 */
+	public DescriptionRepository(final Configuration configuration, final DescriptionRepositoryData descriptionData) {
 		super(configuration);
 
 		this.descriptionMap = descriptionData.getDescriptionMap();
@@ -133,7 +140,10 @@ public class DescriptionRepository extends AbstractRepository {
 		}
 	}
 
-	private static class DescriptionRepositoryData {
+	/**
+	 * @author Holger Knoche
+	 */
+	public static class DescriptionRepositoryData {
 
 		private final ConcurrentMap<String, String> descriptionMap;
 
