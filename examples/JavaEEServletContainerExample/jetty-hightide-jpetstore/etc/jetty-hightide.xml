@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
+
+<Configure id="Server" class="org.eclipse.jetty.server.Server">
+    <!-- =========================================================== -->
+    <!-- Define some SystemProperties                                -->
+    <!-- =========================================================== -->
+    <Call class="java.lang.System" name="setProperty">
+      <Arg>derby.system.home</Arg>
+      <Arg><SystemProperty name="java.io.tmpdir"/></Arg>
+    </Call>
+
+    <!-- =========================================================== -->
+    <!-- Configure container scoped jndi resources                   -->
+    <!-- =========================================================== -->
+    <!-- Define an Atomikos transaction manager -->
+    <New id="tx" class="org.eclipse.jetty.plus.jndi.Transaction">
+      <Arg>
+        <New class="com.atomikos.icatch.jta.UserTransactionImp"/>
+      </Arg>
+    </New>
+
+</Configure>
