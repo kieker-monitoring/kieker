@@ -46,5 +46,4 @@ public interface ISamplingController {
 	 * @return true if the sensor is not registered
 	 */
 	public abstract boolean removeScheduledSampler(final ScheduledSamplerJob sampler);
-
 }
