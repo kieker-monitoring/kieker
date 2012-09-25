@@ -22,14 +22,14 @@ import java.util.Map;
 
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.ComponentType;
+import kieker.tools.traceAnalysis.systemModel.RootAssemblyComponent;
 
 /**
  * 
  * @author Andre van Hoorn
  */
 public class AssemblyRepository extends AbstractSystemSubRepository {
-	public static final AssemblyComponent ROOT_ASSEMBLY_COMPONENT =
-			new AssemblyComponent(AbstractSystemSubRepository.ROOT_ELEMENT_ID, "$", TypeRepository.ROOT_COMPONENT);
+	public static final AssemblyComponent ROOT_ASSEMBLY_COMPONENT = new RootAssemblyComponent();
 
 	private final Map<String, AssemblyComponent> assemblyComponentInstancesByName = new Hashtable<String, AssemblyComponent>(); // NOPMD (UseConcurrentHashMap)
 	private final Map<Integer, AssemblyComponent> assemblyComponentInstancesById = new Hashtable<Integer, AssemblyComponent>(); // NOPMD (UseConcurrentHashMap)

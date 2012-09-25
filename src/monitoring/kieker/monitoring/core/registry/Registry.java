@@ -326,7 +326,7 @@ public final class Registry<E> implements IRegistry<E> {
 				if (e != null) {
 					// All entries following removed node can stay in list, but all preceding ones need to be cloned.
 					HashEntry<E> newFirst = e.next;
-					for (HashEntry<E> p = first; p != e; p = p.next) { // NOPMD (=== istead of equals)
+					for (HashEntry<E> p = first; p != e; p = p.next) { // NOPMD (=== instead of equals)
 						newFirst = new HashEntry<E>(p.value, p.hash, p.id, newFirst);
 					}
 					tab[index] = newFirst;

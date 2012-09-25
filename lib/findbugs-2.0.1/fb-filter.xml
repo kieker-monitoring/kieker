@@ -1,6 +1,22 @@
 <FindBugsFilter>
 	<!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
 
+  <Match>
+		<Class name="kieker.test.analysis.junit.plugin.filter.forward.TestStringBufferFilter" />
+		<Bug pattern="DM_STRING_CTOR" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.tools.traceAnalysis.repository.DescriptionRepository" />
+		<Method name="splitLine" params="java.lang.String" returns="java.lang.String[]" />
+		<Bug pattern="PZLA_PREFER_ZERO_LENGTH_ARRAYS" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.filter.forward.StringBufferFilter$Segment" />
+		<Bug pattern="SE_BAD_FIELD" />
+	</Match>
+
 	<Match>
 		<Class name="kieker.analysis.AnalysisController" />
 		<Method name="getCurrentConfiguration" params="" returns="kieker.analysis.model.analysisMetaModel.MIProject" />
@@ -40,7 +56,7 @@
 
 	<Match>
 		<Class name="kieker.analysis.plugin.filter.flow.TraceEventRecords" />
-    <!--<Method name="&lt;init&gt;" params="kieker.common.record.flow.trace.Trace,kieker.common.record.flow.trace.AbstractTraceEvent" returns="void" />-->
+		<!--<Method name="&lt;init&gt;" params="kieker.common.record.flow.trace.Trace,kieker.common.record.flow.trace.AbstractTraceEvent" returns="void" />-->
 		<Bug pattern="EI_EXPOSE_REP2" />
 	</Match>
 

@@ -31,9 +31,9 @@
 	<classpathentry kind="lib" path="lib/javax.servlet-3.0.jar"/>
 	<classpathentry kind="lib" path="lib/jgraphx-1.10.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.10.jar"/>
-	<classpathentry kind="lib" path="lib/org.eclipse.emf.common-2.7.0.v20120127-1122.jar"/>
-	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore.xmi-2.7.0.v20120127-1122.jar"/>
-	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore-2.7.0.v20120127-1122.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.emf.common_2.8.0.v20120606-0717.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore.xmi_2.8.0.v20120606-0717.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore_2.8.0.v20120606-0717.jar"/>
 	<classpathentry kind="lib" path="lib/org.springframework.context-3.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/org.springframework.web-3.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/sigar-1.6.4.jar"/>

@@ -24,7 +24,7 @@ import java.util.Collections;
  * 
  * @author Andre van Hoorn
  */
-public class ExecutionContainer {
+public class ExecutionContainer implements ISystemModelElement {
 	private final int id;
 	private final String name;
 	private final ExecutionContainer parent;
@@ -68,5 +68,18 @@ public class ExecutionContainer {
 		}
 		final ExecutionContainer other = (ExecutionContainer) obj;
 		return other.id == this.id;
+	}
+
+	/**
+	 * Returns whether this container is a root container.
+	 * 
+	 * @return See above
+	 */
+	public boolean isRootContainer() {
+		return false;
+	}
+
+	public String getIdentifier() {
+		return this.getName();
 	}
 }

@@ -237,7 +237,7 @@ The Java~EE Servlet container example described in Appendix~\ref{appendix:JavaEE
 \lstinputlisting[firstline=32,lastline=39,firstnumber=32,%
 caption=\class{OperationExecutionRegistrationAndLoggingFilter} in a \file{web.xml} file,%
 label=lst:OperationExecutionRegistrationAndLoggingFilterInWebXML]%
-{\JavaEEServletExampleDir/JPetStore-5.0-instrumented/web/WEB-INF/web.xml}
+{\JavaEEServletExampleDir/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/web.xml}
 
 
 \subsection{Spring}\label{sec:traceAnalysis:instr:spring}
@@ -288,6 +288,7 @@ In order to use this tool, it is necessary to install two third-party programs:
 \begin{enumerate}
 \item \textbf{Graphviz} A graph visualization software which can be downloaded from \url{http://www.graphviz.org/}.
 \item \textbf{GNU PlotUtils} A set of tools for generating 2D plot graphics which can be downloaded from \url{http://www.gnu.org/software/plotutils/} (for Linux) and from \url{http://gnuwin32.sourceforge.net/packages/plotutils.htm} (for Windows).
+\item \textbf{ps2pdf} The \file{ps2pdf} tool is used to convert ps files to pdf files.
 \end{enumerate}
 Under Windows it is recommended to add the \dir{bin/} directories of both tools to the ``path'' environment variable.
 }

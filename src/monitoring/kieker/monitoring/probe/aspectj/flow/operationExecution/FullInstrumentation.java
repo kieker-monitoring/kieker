@@ -30,7 +30,7 @@ public final class FullInstrumentation extends AbstractAspect {
 	}
 
 	@Override
-	@Pointcut("execution(* *(..)) && noGetterAndSetter()")
+	@Pointcut("execution(* *(..))")
 	public final void monitoredOperation() {
 		// Aspect Declaration (MUST be empty)
 	}

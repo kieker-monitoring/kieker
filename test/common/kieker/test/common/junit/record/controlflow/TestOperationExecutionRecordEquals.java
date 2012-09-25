@@ -16,16 +16,17 @@
 
 package kieker.test.common.junit.record.controlflow;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.controlflow.OperationExecutionRecord;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * @author Andre van Hoorn, Jan Waller
  */
-public class TestOperationExecutionRecordEquals { // NOCS (MissingCtorCheck)
+public class TestOperationExecutionRecordEquals extends AbstractKiekerTest { // NOCS (MissingCtorCheck)
 
 	/**
 	 * Tests the toArray(..) and initFromArray(..) methods of OperationExecutionRecord.

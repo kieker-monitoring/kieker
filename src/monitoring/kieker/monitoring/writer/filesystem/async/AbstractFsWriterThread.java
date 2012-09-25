@@ -89,9 +89,9 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 			this.sameFilenameCounter = 0;
 			this.previousFileDate = date;
 		}
-		final StringBuilder sb = new StringBuilder(this.filenamePrefix.length() + threadName.length() + this.fileExtension.length() + 33);
+		final StringBuilder sb = new StringBuilder(this.filenamePrefix.length() + threadName.length() + this.fileExtension.length() + 27);
 		sb.append(this.filenamePrefix).append(this.dateFormat.format(new java.util.Date(date))).append("-UTC-") // NOPMD (Date)
-				.append('-').append(String.format("%03d", this.sameFilenameCounter)).append('-')
+				.append(String.format("%03d", this.sameFilenameCounter)).append('-')
 				.append(threadName).append(this.fileExtension);
 		return sb.toString();
 	}
@@ -106,24 +106,28 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 				final String filename = this.getFilename();
 				this.prepareFile(filename);
 				if (this.listOfLogFiles != null) {
-					final FileNameSize fns = this.listOfLogFiles.getLast();
-					final long filesize = new File(fns.name).length();
-					fns.size = filesize;
-					this.totalLogSize += filesize;
+					if (!this.listOfLogFiles.isEmpty()) {
+						final FileNameSize fns = this.listOfLogFiles.getLast();
+						final long filesize = new File(fns.name).length();
+						fns.size = filesize;
+						this.totalLogSize += filesize;
+					}
 					this.listOfLogFiles.add(new FileNameSize(filename));
-					if (this.listOfLogFiles.size() > this.maxLogFiles) { // too many files (at most one!)
+					if ((this.maxLogFiles > 0) && (this.listOfLogFiles.size() > this.maxLogFiles)) { // too many files (at most one!)
 						final FileNameSize removeFile = this.listOfLogFiles.removeFirst();
 						if (!new File(removeFile.name).delete()) { // NOCS (nested if)
 							throw new IOException("Failed to delete file " + removeFile.name);
 						}
 						this.totalLogSize -= removeFile.size;
 					}
-					while ((this.listOfLogFiles.size() > 1) && (this.totalLogSize > this.maxLogSize)) {
-						final FileNameSize removeFile = this.listOfLogFiles.removeFirst();
-						if (!new File(removeFile.name).delete()) {
-							throw new IOException("Failed to delete file " + removeFile.name);
+					if (this.maxLogSize > 0) {
+						while ((this.listOfLogFiles.size() > 1) && (this.totalLogSize > this.maxLogSize)) {
+							final FileNameSize removeFile = this.listOfLogFiles.removeFirst();
+							if (!new File(removeFile.name).delete()) { // NOCS (nested if)
+								throw new IOException("Failed to delete file " + removeFile.name);
+							}
+							this.totalLogSize -= removeFile.size;
 						}
-						this.totalLogSize -= removeFile.size;
 					}
 				}
 			}

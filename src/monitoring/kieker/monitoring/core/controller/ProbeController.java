@@ -56,4 +56,8 @@ public class ProbeController extends AbstractController implements IProbeControl
 	public boolean deactivateProbe(final String signature) {
 		return false;
 	}
+
+	public boolean isProbeActive(final String signature) {
+		return this.monitoringController.isMonitoringEnabled();
+	}
 }

@@ -62,12 +62,13 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	public static final String CONFIG_PATH = PREFIX + "customStoragePath"; // NOCS (afterPREFIX)
 	public static final String CONFIG_TEMP = PREFIX + "storeInJavaIoTmpdir"; // NOCS (afterPREFIX)
 	public static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile"; // NOCS (afterPREFIX)
-	public static final String CONFIG_MAXLOGSIZE = "maxLogSize"; // NOCS (afterPREFIX)
-	public static final String CONFIG_MAXLOGFILES = "maxLogFiles"; // NOCS (afterPREFIX)
+	public static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // NOCS (afterPREFIX)
+	public static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles"; // NOCS (afterPREFIX)
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
 
 	private static final Log LOG = LogFactory.getLog(SyncFsWriter.class);
 
+	private static final String FILE_PREFIX = "kieker-";
 	private static final String ENCODING = "UTF-8";
 
 	// internal variables
@@ -86,6 +87,11 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private String filenamePrefix;
 	private String path;
 	private PrintWriter pos;
+
+	private final DateFormat dateFormat;
+
+	private long previousFileDate; // only used in synchronized
+	private long sameFilenameCounter; // only used in synchronized
 
 	public SyncFsWriter(final Configuration configuration) throws IllegalArgumentException {
 		super(configuration);
@@ -107,6 +113,9 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			this.listOfLogFiles = null; // NOPMD (set explicitly to null)
 		}
 		this.entriesInCurrentFileCounter = this.maxEntriesInFile;
+		// initialize Date
+		this.dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
+		this.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 	}
 
 	@Override
@@ -124,11 +133,9 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		}
 		// Determine directory for files
 		final String ctrlName = super.monitoringController.getHostname() + "-" + super.monitoringController.getName();
-		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
-		date.setTimeZone(TimeZone.getTimeZone("UTC"));
-		final String dateStr = date.format(new java.util.Date()); // NOPMD (Date)
-		final StringBuffer sb = new StringBuffer(pathTmp.length() + ctrlName.length() + 32);
-		sb.append(pathTmp).append(File.separatorChar).append("kieker-").append(dateStr).append("-UTC-").append(ctrlName).append(File.separatorChar);
+		final String dateStr = this.dateFormat.format(new java.util.Date()); // NOPMD (Date)
+		final StringBuffer sb = new StringBuffer(pathTmp.length() + FILE_PREFIX.length() + ctrlName.length() + 25);
+		sb.append(pathTmp).append(File.separatorChar).append(FILE_PREFIX).append(dateStr).append("-UTC-").append(ctrlName).append(File.separatorChar);
 		pathTmp = sb.toString();
 		f = new File(pathTmp);
 		if (!f.mkdir()) {
@@ -136,7 +143,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		}
 		synchronized (this) { // visibility
 			this.path = f.getAbsolutePath();
-			this.filenamePrefix = this.path + File.separatorChar + "kieker";
+			this.filenamePrefix = this.path + File.separatorChar + FILE_PREFIX;
 			this.mappingFileWriter = new MappingFileWriter(this.path);
 		}
 	}
@@ -166,24 +173,28 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 						final String filename = this.getFilename();
 						this.prepareFile(filename); // may throw FileNotFoundException
 						if (this.listOfLogFiles != null) {
-							final FileNameSize fns = this.listOfLogFiles.getLast();
-							final long filesize = new File(fns.name).length();
-							fns.size = filesize;
-							this.totalLogSize += filesize;
+							if (!this.listOfLogFiles.isEmpty()) {
+								final FileNameSize fns = this.listOfLogFiles.getLast();
+								final long filesize = new File(fns.name).length();
+								fns.size = filesize;
+								this.totalLogSize += filesize;
+							}
 							this.listOfLogFiles.add(new FileNameSize(filename));
-							if (this.listOfLogFiles.size() > this.maxLogFiles) { // too many files (at most one!)
+							if ((this.maxLogFiles > 0) && (this.listOfLogFiles.size() > this.maxLogFiles)) { // too many files (at most one!)
 								final FileNameSize removeFile = this.listOfLogFiles.removeFirst();
 								if (!new File(removeFile.name).delete()) { // NOCS (nested if)
 									throw new IOException("Failed to delete file " + removeFile.name);
 								}
 								this.totalLogSize -= removeFile.size;
 							}
-							while ((this.listOfLogFiles.size() > 1) && (this.totalLogSize > this.maxLogSize)) {
-								final FileNameSize removeFile = this.listOfLogFiles.removeFirst();
-								if (!new File(removeFile.name).delete()) {
-									throw new IOException("Failed to delete file " + removeFile.name);
+							if (this.maxLogSize > 0) {
+								while ((this.listOfLogFiles.size() > 1) && (this.totalLogSize > this.maxLogSize)) {
+									final FileNameSize removeFile = this.listOfLogFiles.removeFirst();
+									if (!new File(removeFile.name).delete()) { // NOCS (nested if)
+										throw new IOException("Failed to delete file " + removeFile.name);
+									}
+									this.totalLogSize -= removeFile.size;
 								}
-								this.totalLogSize -= removeFile.size;
 							}
 						}
 					}
@@ -215,11 +226,22 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		this.pos.flush();
 	}
 
+	/**
+	 * May only be used in synchronized blocks!
+	 * 
+	 * @return
+	 */
 	private final String getFilename() {
-		final DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
-		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-		final StringBuilder sb = new StringBuilder(this.filenamePrefix.length() + 27);
-		sb.append(this.filenamePrefix).append('-').append(dateFormat.format(new java.util.Date())).append("-UTC.dat"); // NOPMD (Date)
+		final long date = System.currentTimeMillis();
+		if (this.previousFileDate == date) {
+			this.sameFilenameCounter++;
+		} else {
+			this.sameFilenameCounter = 0;
+			this.previousFileDate = date;
+		}
+		final StringBuilder sb = new StringBuilder(this.filenamePrefix.length() + 30);
+		sb.append(this.filenamePrefix).append(this.dateFormat.format(new java.util.Date(date))).append("-UTC-") // NOPMD (Date)
+				.append(String.format("%03d", this.sameFilenameCounter)).append(".dat");
 		return sb.toString();
 	}
 

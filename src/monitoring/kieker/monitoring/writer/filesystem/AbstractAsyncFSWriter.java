@@ -39,6 +39,8 @@ public abstract class AbstractAsyncFSWriter extends AbstractAsyncWriter {
 	public static final String CONFIG_MAXLOGSIZE = "maxLogSize"; // in MiB
 	public static final String CONFIG_MAXLOGFILES = "maxLogFiles";
 
+	private static final String PATH_PREFIX = "kieker-";
+
 	protected AbstractAsyncFSWriter(final Configuration configuration) {
 		super(configuration);
 	}
@@ -77,8 +79,8 @@ public abstract class AbstractAsyncFSWriter extends AbstractAsyncWriter {
 		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
 		date.setTimeZone(TimeZone.getTimeZone("UTC"));
 		final String dateStr = date.format(new java.util.Date()); // NOPMD (Date)
-		final StringBuffer sb = new StringBuffer(path.length() + ctrlName.length() + 32);
-		sb.append(path).append(File.separatorChar).append("kieker-").append(dateStr).append("-UTC-").append(ctrlName).append(File.separatorChar);
+		final StringBuffer sb = new StringBuffer(path.length() + PATH_PREFIX.length() + ctrlName.length() + 25);
+		sb.append(path).append(File.separatorChar).append(PATH_PREFIX).append(dateStr).append("-UTC-").append(ctrlName).append(File.separatorChar);
 		path = sb.toString();
 		f = new File(path);
 		if (!f.mkdir()) {
