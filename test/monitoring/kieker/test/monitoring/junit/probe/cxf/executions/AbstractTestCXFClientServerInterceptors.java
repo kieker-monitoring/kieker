@@ -18,6 +18,8 @@ package kieker.test.monitoring.junit.probe.cxf.executions;
 
 import java.util.List;
 
+import junit.framework.Assert;
+
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.junit.After;
@@ -66,7 +68,7 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 	 */
 	private volatile String serviceAddress;
 
-	private volatile String LIST_NAME;
+	private volatile String listName;
 	private volatile List<IMonitoringRecord> recordListFilledByListWriter;
 
 	private final JaxWsServerFactoryBean srvFactory = new JaxWsServerFactoryBean();
@@ -80,8 +82,8 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 	public void setup() throws Exception {
 		final int curIdx = this.getPortDigit();
 		this.serviceAddress = SERVICE_ADDRESS_TEMPLATE.replace("X", Integer.toString(curIdx));
-		this.LIST_NAME = AbstractTestCXFClientServerInterceptors.class.getName() + "-" + curIdx;
-		this.recordListFilledByListWriter = NamedListWriter.createNamedList(this.LIST_NAME);
+		this.listName = AbstractTestCXFClientServerInterceptors.class.getName() + "-" + curIdx;
+		this.recordListFilledByListWriter = NamedListWriter.createNamedList(this.listName);
 
 		this.unsetKiekerThreadLocalData();
 		this.clientMonitoringController = this.createMonitoringController(CLIENT_HOSTNAME);
@@ -101,7 +103,7 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 	private IMonitoringController createMonitoringController(final String hostname) {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, NamedListWriter.class.getName());
-		config.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.LIST_NAME);
+		config.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.listName);
 		config.setProperty(ConfigurationFactory.HOST_NAME, hostname);
 		return MonitoringController.createInstance(config);
 	}
@@ -153,8 +155,8 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 	@Test
 	public final void testIt() {
 		this.beforeRequest();
-		final String reply = this.client.searchBook("any");
-		System.out.println("Server found: " + reply);
+		final String retVal = this.client.searchBook("any"); // we could use the return value
+		Assert.assertEquals("Unexpected return value", "any", retVal);
 		this.afterRequest();
 
 		this.checkRecordList(this.recordListFilledByListWriter);
