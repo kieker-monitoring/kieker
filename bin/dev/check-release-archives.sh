@@ -135,7 +135,7 @@ function assert_files_exist_common {
     done
 }
 
-# Asserts the existence of files common to the src and bin releases
+# Asserts the existence of files in the src release
 function assert_files_exist_src {
     assert_files_exist_common
     assert_dir_exists "model/"
@@ -144,13 +144,16 @@ function assert_files_exist_src {
     assert_dir_exists "test/"
     assert_file_NOT_exists "dist/"
     assert_file_NOT_exists "META-INF/"
+    assert_file_NOT_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/classes/META-INF/kieker.monitoring.properties"
+    assert_file_NOT_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/aspectjweaver-*"
+    assert_file_NOT_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kieker-*.jar"
     assert_file_exists_regular "kieker-eclipse-cleanup.xml"
     assert_file_exists_regular "kieker-eclipse-formatter.xml"
     assert_file_exists_regular ".project"
     assert_file_exists_regular ".classpath"
 }
 
-# Asserts the existence of files common to the src and bin releases
+# Asserts the existence of files in the bin release
 function assert_files_exist_bin {
     assert_files_exist_common
     assert_file_exists_regular "doc/kieker-"*"_userguide.pdf"
@@ -160,6 +163,9 @@ function assert_files_exist_bin {
     assert_file_exists_regular "dist/kieker-"*"_aspectj.jar"
     assert_file_exists_regular "dist/kieker-"*"_emf.jar"
     assert_file_exists_regular "dist/kieker-monitoring-servlet-"*".war"
+    assert_file_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/classes/META-INF/kieker.monitoring.properties"
+    assert_file_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/aspectjweaver-*"
+    assert_file_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kieker-*.jar"
     assert_file_NOT_exists "dist/release/"
     assert_file_NOT_exists "bin/dev/"
     assert_file_NOT_exists "doc/userguide/"
@@ -367,17 +373,6 @@ DIR=$(pwd)
 BINTGZ=$(ls ../../dist/release/*_binaries.tar.gz)
 assert_file_exists_regular ${BINTGZ}
 check_bin_archive "${BINTGZ}"
-rm -rf ${DIR}
-
-change_dir "${BASE_TMP_DIR_ABS}"
-create_subdir_n_cd
-DIR=$(pwd)
-JEEEXAMPLETGZ=$(ls ../../dist/release/*_examples-JavaEEServletContainerExample.tar.gz)
-JEEEXAMPLEZIP=$(ls ../../dist/release/*_examples-JavaEEServletContainerExample.zip)
-BINTGZ=$(ls ../../dist/release/*_binaries.tar.gz)
-BINZIP=$(ls ../../dist/release/*_binaries.zip)
-assert_no_common_files_in_archives ${BINTGZ} ${JEEEXAMPLETGZ}
-assert_no_common_files_in_archives ${BINZIP} ${JEEEXAMPLEZIP}
 rm -rf ${DIR}
 
 # TOOD: check contents of remaining archives
