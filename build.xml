@@ -22,10 +22,7 @@
 		<property name="dist.kieker.srcBaseName" value="${kieker.dist.name}_${kieker-src.suffix}" />
 		<property name="dist.kieker.binBaseName" value="${kieker.dist.name}_${kieker-bin.suffix}" />
 		<property name="dist.kieker.apiBaseName" value="${kieker.dist.name}_${kieker-api.suffix}" />
-
 		<property name="dist.kieker.userguide.pdf" value="${kieker.dist.name}_${kieker-userguide.suffix}.pdf" />
-		<property name="dist.kieker.example.myjmsexample" value="${kieker.dist.name}_${kieker-examples.suffix}-MySimpleKiekerJMSExample" />
-		<property name="dist.kieker.example.jpetstoreservlet" value="${kieker.dist.name}_${kieker-examples.suffix}-JavaEEServletContainerExample" />
 	</target>
 
 	<target name="-update-version" unless="version.noupdate" depends="-init-version" description="Updates the version number contained in the Kieker sources">
@@ -360,7 +357,13 @@
 			<include name="${examples.dir}/**/*" />
 			<exclude name="${examples.dir}/**/lib/*" />
 			<exclude name="${examples.dir}/**/**/*.jar" />
-			<exclude name="${example.jpetstoreservlet.dir}/" />
+			<include name="${example.jpetstoreservlet.dir}/README" />
+			<include name="${example.jpetstoreservlet.dir}/${license.file}" />
+			<!-- (re-)enable as soon as existent <include name="${example.jpetstoreservlet.dir}/kieker-testdata/**" /> -->
+			<include name="${example.jpetstoreservlet.jetty.dir}/**" />
+			<exclude name="${example.jpetstoreservlet.jetty.dir}/logs/**/*" />
+			<exclude name="${example.jpetstoreservlet.jetty.dir}/**/kieker*.jar" />
+			<exclude name="${example.jpetstoreservlet.jetty.dir}/**/aspectj*.jar" />
 			<include name=".checkstyle" />
 			<include name=".classpath" />
 			<include name=".pmd" />
@@ -371,6 +374,7 @@
 			<include name="build.properties" />
 			<include name="${history.file}" />
 			<include name="${license.file}" />
+			<exclude name="**/build-eclipse/**" />
 		</patternset>
 		<patternset id="dist_src_files-binmode">
 			<include name="${bin.dir}/**/*.sh" /> <!-- including subdirs (e.g., ${bin.dir}/dev/) here -->
@@ -418,7 +422,14 @@
 			<include name="${examples.dir}/**/*" />
 			<exclude name="${examples.dir}/**/*.sh" /> <!-- added in bin mode below -->
 			<exclude name="${examples.dir}/**/lib/*" />
-			<exclude name="${example.jpetstoreservlet.dir}/" />
+			<include name="${example.jpetstoreservlet.dir}/README" />
+			<include name="${example.jpetstoreservlet.dir}/${license.file}" />
+			<!-- (re-)enable as soon as existent <include name="${example.jpetstoreservlet.dir}/kieker-testdata/**" /> -->
+			<include name="${example.jpetstoreservlet.jetty.dir}/**" />
+			<exclude name="${example.jpetstoreservlet.jetty.dir}/logs/**/*" />
+			<exclude name="${example.jpetstoreservlet.jetty.dir}/**/kieker*.jar" />
+			<exclude name="${example.jpetstoreservlet.jetty.dir}/**/aspectj*.jar" />
+			<exclude name="**/build-eclipse/**" />
 		</patternset>
 		<patternset id="dist_bin_files-binmode">
 			<include name="${bin.dir}/*.sh" /> <!-- excluding subdirs (e.g., ${bin.dir}/dev/) here -->
@@ -434,6 +445,12 @@
 			<tarfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
 				<patternset refid="dist_bin_files-binmode" />
 			</tarfileset>
+			<tarfileset file="${kieker.monitoring.default.properties}" 
+				    fullpath="${kieker.dist.name}/${example.jpetstoreservlet.jetty.dir}/webapps/jpetstore/WEB-INF/classes/META-INF/kieker.monitoring.properties" />
+			<tarfileset file="${dist.dir}/${dist.kieker.main.jar}" 
+				    prefix="${kieker.dist.name}/${example.jpetstoreservlet.jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
+			<tarfileset file="${lib.dir}/aspectjweaver-*" 
+				    prefix="${kieker.dist.name}/${example.jpetstoreservlet.jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
 		</tar>
 		<gzip zipfile="${release.dir}/${dist.kieker.binBaseName}.tar.gz" src="${release.dir}/${dist.kieker.binBaseName}.tar" />
 		<!-- tar file no longer needed -->
@@ -448,40 +465,12 @@
 			<zipfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
 				<patternset refid="dist_bin_files-binmode" />
 			</zipfileset>
-		</zip>
-	</target>
-
-	<target name="dist-example-JPetStoreExample" depends="-init" description="Packages the JPetStore example archives (.zip|.tar.gz) for a release">
-		<property name="jetty.dir" value="jetty-hightide-jpetstore" />
-		<patternset id="dist_jpetstoreExample_files-nonbinmode">
-			<include name="${example.jpetstoreservlet.dir}/README" />
-			<include name="${example.jpetstoreservlet.dir}/${license.file}" />
-			<!-- (re-)enable as soon as existent <include name="${example.jpetstoreservlet.dir}/kieker-testdata/**" /> -->
-			<include name="${example.jpetstoreservlet.dir}/${jetty.dir}/**" />
-			<exclude name="${example.jpetstoreservlet.dir}/${jetty.dir}/logs/**/*" />
-			<exclude name="${example.jpetstoreservlet.dir}/${jetty.dir}/**/kieker*.jar" />
-			<exclude name="${example.jpetstoreservlet.dir}/${jetty.dir}/**/aspectj*.jar" />
-		</patternset>
-		
-		<tar destfile="${release.dir}/${dist.kieker.example.jpetstoreservlet}.tar" longfile="gnu">
-			<tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
-				<patternset refid="dist_jpetstoreExample_files-nonbinmode" />
-			</tarfileset>
-			<tarfileset file="${kieker.monitoring.default.properties}" fullpath="${kieker.dist.name}/${example.jpetstoreservlet.dir}/${jetty.dir}/webapps/jpetstore/WEB-INF/classes/META-INF/kieker.monitoring.properties" />
-			<tarfileset file="${dist.dir}/${dist.kieker.main.jar}" prefix="${kieker.dist.name}/${example.jpetstoreservlet.dir}/${jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
-			<tarfileset file="${lib.dir}/aspectjweaver-*" prefix="${kieker.dist.name}/${example.jpetstoreservlet.dir}/${jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
-		</tar>
-		<gzip zipfile="${release.dir}/${dist.kieker.example.jpetstoreservlet}.tar.gz" src="${release.dir}/${dist.kieker.example.jpetstoreservlet}.tar" />
-		<!-- tar file no longer needed -->
-		<delete file="${release.dir}/${dist.kieker.example.jpetstoreservlet}.tar" />
-
-		<zip zipfile="${release.dir}/${dist.kieker.example.jpetstoreservlet}.zip">
-			<zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
-				<patternset refid="dist_jpetstoreExample_files-nonbinmode" />
-			</zipfileset>
-			<zipfileset file="${kieker.monitoring.default.properties}" fullpath="${kieker.dist.name}/${example.jpetstoreservlet.dir}/${jetty.dir}/webapps/jpetstore/WEB-INF/classes/META-INF/kieker.monitoring.properties" />
-			<zipfileset file="${dist.dir}/${dist.kieker.main.jar}" prefix="${kieker.dist.name}/${example.jpetstoreservlet.dir}/${jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
-			<zipfileset file="${lib.dir}/aspectjweaver-*" prefix="${kieker.dist.name}/${example.jpetstoreservlet.dir}/${jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
+			<zipfileset file="${kieker.monitoring.default.properties}" 
+				    fullpath="${kieker.dist.name}/${example.jpetstoreservlet.jetty.dir}/webapps/jpetstore/WEB-INF/classes/META-INF/kieker.monitoring.properties" />
+			<zipfileset file="${dist.dir}/${dist.kieker.main.jar}" 
+				    prefix="${kieker.dist.name}/${example.jpetstoreservlet.jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
+			<zipfileset file="${lib.dir}/aspectjweaver-*" 
+				    prefix="${kieker.dist.name}/${example.jpetstoreservlet.jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
 		</zip>
 	</target>
 
@@ -563,7 +552,7 @@
 		<replaceregexp file="${src.userguide.example.sigar.dir}/.classpath" match="kieker-\S*.jar" replace="${dist.kieker.main.jar}" flags="g" />
 	</target>
 
-	<target name="dist-examples" depends="-update-version.examples,dist-example-JPetStoreExample" description="Packages the example archives (.zip|.tar.gz) for a release">
+	<target name="dist-examples" depends="-update-version.examples" description="Packages the example archives (.zip|.tar.gz) for a release">
 
 	</target>
 
@@ -650,6 +639,7 @@
 			<fileset dir="${lib.dir}">
 				<include name="junit-*.jar" />
 				<include name="aopalliance-*.jar" />
+				<include name="cxf-*.jar" />
 			</fileset>
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />
@@ -981,6 +971,18 @@
 				<include name="junit-*.jar" />
 				<include name="org.eclipse.emf.*.jar" />
 				<include name="derby-*.jar" />
+				<include name="javax.servlet-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="cxf-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="xmlschema-core-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="neethi-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="wsdl4j-*.jar" /> <!-- needed for the cxf tests -->
+			</fileset>
+			<fileset dir="${example.jpetstoreservlet.jetty.lib.dir}">
+				<include name="jetty-util-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="jetty-http-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="jetty-server-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="jetty-io-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="jetty-continuation-*.jar" /> <!-- needed for the cxf tests -->
 			</fileset>
 			<pathelement location="${build.tests.dir}/" />
 			<fileset dir="${dist.dir}">
