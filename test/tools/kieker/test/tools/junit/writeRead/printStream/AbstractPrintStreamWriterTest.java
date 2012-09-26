@@ -16,7 +16,7 @@
 
 package kieker.test.tools.junit.writeRead.printStream;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;

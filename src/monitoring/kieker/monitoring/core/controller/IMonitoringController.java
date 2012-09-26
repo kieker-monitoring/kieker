@@ -20,11 +20,19 @@ package kieker.monitoring.core.controller;
  * @author Jan Waller, Robert von Massow
  */
 public interface IMonitoringController extends
+		IJMXController,
+		IProbeController,
+		IRegistryController,
+		ISamplingController,
 		IStateController,
 		ITimeSourceController,
-		IWriterController,
-		ISamplingController,
-		IJMXController,
-		IRegistryController,
-		IProbeController {
+		IWriterController {
+
+	/**
+	 * This method is used to log the status of the controllers to the console.
+	 * It is included in this interface to ensure its publication over JMX.
+	 * 
+	 * @return a String representation of the current controller
+	 */
+	public String toString();
 }

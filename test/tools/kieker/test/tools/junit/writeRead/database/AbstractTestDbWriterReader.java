@@ -17,21 +17,20 @@
 package kieker.test.tools.junit.writeRead.database;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.database.DbReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 
-import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 /**
@@ -56,21 +55,23 @@ public abstract class AbstractTestDbWriterReader extends AbstractWriterReaderTes
 		dbReaderConfig.setProperty(DbReader.CONFIG_PROPERTY_NAME_CONNECTIONSTRING, this.getConnectionString());
 		dbReaderConfig.setProperty(DbReader.CONFIG_PROPERTY_NAME_TABLEPREFIX, TABLEPREFIX);
 		final DbReader dbReader = new DbReader(dbReaderConfig);
-		final SimpleSinkFilter<IMonitoringRecord> sinkFilter = new SimpleSinkFilter<IMonitoringRecord>(new Configuration());
+		final ListCollectionFilter<IMonitoringRecord> sinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration());
 		final AnalysisController analysisController = new AnalysisController();
 		analysisController.registerReader(dbReader);
 		analysisController.registerFilter(sinkFilter);
-		analysisController.connect(dbReader, DbReader.OUTPUT_PORT_NAME_RECORDS, sinkFilter, SimpleSinkFilter.INPUT_PORT_NAME);
+		analysisController.connect(dbReader, DbReader.OUTPUT_PORT_NAME_RECORDS, sinkFilter, ListCollectionFilter.INPUT_PORT_NAME);
 		analysisController.run();
 		return sinkFilter.getList();
 	}
 
 	@Override
-	protected void inspectRecords(final List<IMonitoringRecord> eventsPassedToController, final List<IMonitoringRecord> eventFromMonitoringLog) throws Exception {
+	protected void inspectRecords(final List<IMonitoringRecord> eventsPassedToController, final List<IMonitoringRecord> eventsFromMonitoringLog) throws Exception {
 		// TODO currently the reader screws the order completely
-		Collections.sort(eventsPassedToController);
-		Collections.sort(eventFromMonitoringLog);
-		Assert.assertEquals("Unexpected set of records", eventsPassedToController, eventFromMonitoringLog);
+		final IMonitoringRecord[] eventsPassed = eventsPassedToController.toArray(new IMonitoringRecord[eventsPassedToController.size()]);
+		Arrays.sort(eventsPassed);
+		final IMonitoringRecord[] eventsFrom = eventsFromMonitoringLog.toArray(new IMonitoringRecord[eventsFromMonitoringLog.size()]);
+		Arrays.sort(eventsFrom);
+		Assert.assertArrayEquals("Unexpected set of records", eventsPassed, eventsFrom);
 	}
 
 	@Override

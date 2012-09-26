@@ -18,6 +18,8 @@ package kieker.test.monitoring.junit.core.controller;
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * This test is now included in {@link kieker.test.tools.junit.writeRead.jmx.BasicJMXWriterReaderTest}
  * 
@@ -25,7 +27,7 @@ import org.junit.Test;
  * 
  * @author Jan Waller
  */
-public final class TestJMXInterface { // NOPMD NOCS
+public final class TestJMXInterface extends AbstractKiekerTest { // NOPMD NOCS
 
 	@Test
 	public void testIt() {

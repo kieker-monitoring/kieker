@@ -68,5 +68,19 @@
 	<classpathentry kind="lib" path="lib/spring-tests/org.springframework.web.servlet-3.1.2.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/spring-tests/org.springframework.web.struts-3.1.2.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/spring-tests/aspectjweaver-1.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/neethi-3.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/wsdl4j-1.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/xmlschema-core-2.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/cxf-rt-frontend-jaxws-2.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/cxf-rt-frontend-simple-2.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/cxf-rt-core-2.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/cxf-rt-databinding-jaxb-2.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/cxf-rt-transports-http-2.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/cxf-rt-transports-http-jetty-2.6.2.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-continuation-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-http-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-io-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-server-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-util-7.6.7.v20120910.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>

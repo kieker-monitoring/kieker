@@ -29,5 +29,4 @@ public interface ITimeSourceController {
 	 * @return ITimeSource
 	 */
 	public abstract ITimeSource getTimeSource();
-
 }

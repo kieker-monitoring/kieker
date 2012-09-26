@@ -16,16 +16,17 @@
 
 package kieker.test.common.junit.record.flow.trace.operation.constructor;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.operation.constructor.BeforeConstructorEvent;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * @author Jan Waller
  */
-public class TestBeforeConstructorEvent {
+public class TestBeforeConstructorEvent extends AbstractKiekerTest {
 
 	private static final long TSTAMP = 987998L;
 	private static final long TRACE_ID = 23444L;

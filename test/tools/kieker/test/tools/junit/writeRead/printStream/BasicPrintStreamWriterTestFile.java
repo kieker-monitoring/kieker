@@ -23,9 +23,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Assert;
-
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
@@ -84,11 +83,7 @@ public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTes
 			}
 		} finally {
 			if (f != null) {
-				try {
-					f.close();
-				} catch (final IOException ignored) {
-					Assert.fail("Failed to close stream for file " + theFile.getAbsolutePath());
-				}
+				f.close();
 			}
 		}
 		return new String(buffer, BasicPrintStreamWriterTestFile.ENCODING);

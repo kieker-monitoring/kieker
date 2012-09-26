@@ -26,9 +26,7 @@ import kieker.common.configuration.Configuration;
  * Convenience class for plugins filtering by trace IDs.
  * 
  * @author Andre van Hoorn
- * 
  */
-// FIXME: Provide default properties. Abstract in this class might be better?
 public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 	/**
 	 * List of trace IDs to accept. Set null to accept any ID.
@@ -102,7 +100,6 @@ public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);
-
 		if (this.selectedTraceIds != null) {
 			configuration.setProperty(this.getConfigurationPropertySelectAllTraces(), Boolean.toString(true));
 			configuration.setProperty(this.getConfigurationPropertySelectedTraces(),

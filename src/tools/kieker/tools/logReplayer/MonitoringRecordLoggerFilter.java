@@ -87,6 +87,12 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 		this.monitoringController = MonitoringController.createInstance(flatConfiguration);
 	}
 
+	@Override
+	public void terminate(final boolean error) {
+		super.terminate(error);
+		this.monitoringController.terminateMonitoring();
+	}
+
 	public Configuration getCurrentConfiguration() {
 		// clone again, so no one can change anything
 		return (Configuration) this.configuration.clone();

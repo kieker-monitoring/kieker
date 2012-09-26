@@ -21,7 +21,6 @@ import java.lang.reflect.Method;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -63,6 +62,11 @@ public abstract class AbstractPlugin implements IPlugin {
 	private final Map<String, InputPort> inputPorts;
 	private final String name;
 
+	// Shutdown mechanism
+	private final List<AbstractPlugin> incomingPlugins;
+	private final List<AbstractPlugin> outgoingPlugins;
+	private volatile STATE state = STATE.READY;
+
 	/**
 	 * Each Plugin requires a constructor with a single Configuration object and an array of repositories!
 	 */
@@ -81,8 +85,8 @@ public abstract class AbstractPlugin implements IPlugin {
 		/* KEEP IN MIND: Although we use "this" in the following code, it points to the actual class. Not to AbstractPlugin!! */
 
 		/* Get all repository and output ports. */
-		this.repositoryPorts = new HashMap<String, RepositoryPort>();
-		this.outputPorts = new HashMap<String, OutputPort>();
+		this.repositoryPorts = new ConcurrentHashMap<String, RepositoryPort>();
+		this.outputPorts = new ConcurrentHashMap<String, OutputPort>();
 		final Plugin annotation = this.getClass().getAnnotation(Plugin.class);
 		for (final RepositoryPort repoPort : annotation.repositoryPorts()) {
 			if (this.repositoryPorts.put(repoPort.name(), repoPort) != null) {
@@ -95,15 +99,16 @@ public abstract class AbstractPlugin implements IPlugin {
 			}
 		}
 		/* Get all input ports. */
-		this.inputPorts = new HashMap<String, InputPort>();
-		final Method[] allMethods = this.getClass().getMethods();
-		for (final Method method : allMethods) {
-			final InputPort inputPort = method.getAnnotation(InputPort.class);
-			if ((inputPort != null) && (this.inputPorts.put(inputPort.name(), inputPort) != null)) {
-				LOG.error("Two InputPorts use the same name: " + inputPort.name());
+		this.inputPorts = new ConcurrentHashMap<String, InputPort>();
+		// ignore possible inputPorts for IReaderPlugins
+		if (!(this instanceof IReaderPlugin)) {
+			for (final Method method : this.getClass().getMethods()) {
+				final InputPort inputPort = method.getAnnotation(InputPort.class);
+				if ((inputPort != null) && (this.inputPorts.put(inputPort.name(), inputPort) != null)) {
+					LOG.error("Two InputPorts use the same name: " + inputPort.name());
+				}
 			}
 		}
-
 		this.registeredRepositories = new ConcurrentHashMap<String, AbstractRepository>(this.repositoryPorts.size());
 
 		/* Now create a linked queue for every output port of the class, to store the registered methods. */
@@ -111,55 +116,9 @@ public abstract class AbstractPlugin implements IPlugin {
 		for (final OutputPort outputPort : annotation.outputPorts()) {
 			this.registeredMethods.put(outputPort.name(), new ConcurrentLinkedQueue<PluginInputPortReference>());
 		}
-	}
-
-	/**
-	 * This method delivers an instance of {@code Configuration} containing the default properties for this class.
-	 * 
-	 * @return The default properties.
-	 */
-	protected final Configuration getDefaultConfiguration() {
-		final Configuration defaultConfiguration = new Configuration();
-		// Get the annotation from the class
-		final Plugin pluginAnnotation = this.getClass().getAnnotation(Plugin.class);
-		final Property[] propertyAnnotations = pluginAnnotation.configuration();
-		// Run through all properties within the annotation and add them to the configuration object
-		for (final Property property : propertyAnnotations) {
-			defaultConfiguration.setProperty(property.name(), property.defaultValue());
-		}
-		return defaultConfiguration;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getName()
-	 */
-	public final String getName() {
-		return this.name;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getPluginName()
-	 */
-	public final String getPluginName() {
-		final String pluginName = this.getClass().getAnnotation(Plugin.class).name();
-		if (pluginName.equals(Plugin.NO_NAME)) {
-			return this.getClass().getSimpleName();
-		} else {
-			return pluginName;
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getPluginDescription()
-	 */
-	public final String getPluginDescription() {
-		return this.getClass().getAnnotation(Plugin.class).description();
+		/* and a List for every incoming and outgoing plugin */
+		this.incomingPlugins = new ArrayList<AbstractPlugin>(1); // usually only one incoming
+		this.outgoingPlugins = new ArrayList<AbstractPlugin>(1); // usually only one outgoing
 	}
 
 	/**
@@ -172,7 +131,7 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * @return true if and only if the given output port does exist and if the data is not null and if it suits the port's event types.
 	 */
 	protected final boolean deliver(final String outputPortName, final Object data) {
-		if (data == null) {
+		if (((this.state != STATE.RUNNING) && (this.state != STATE.TERMINATING)) || (data == null)) {
 			return false;
 		}
 
@@ -236,6 +195,78 @@ public abstract class AbstractPlugin implements IPlugin {
 		return true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#connect(java.lang.String, kieker.analysis.repository.AbstractRepository)
+	 */
+	public final void connect(final String reponame, final AbstractRepository repository) throws AnalysisConfigurationException {
+		if (this.state != STATE.READY) {
+			throw new AnalysisConfigurationException("Plugin: " + this.getClass().getName() + " final not in " + STATE.READY + " this.state, but final in state "
+					+ this.state + ".");
+		}
+		final RepositoryPort port = this.repositoryPorts.get(reponame);
+		if (port == null) {
+			throw new AnalysisConfigurationException("Failed to connect plugin '" + this.getName() + "' (" + this.getPluginName() + ") to repository '"
+					+ repository.getName() + "' (" + repository.getRepositoryName() + "). Unknown repository port: " + reponame);
+		}
+		final Class<? extends AbstractRepository> repositoryType = port.repositoryType();
+		if (!repositoryType.isAssignableFrom(repository.getClass())) {
+			throw new AnalysisConfigurationException("Failed to connect plugin '" + this.getName() + "' (" + this.getPluginName() + ") to repository '"
+					+ repository.getName() + "' (" + repository.getRepositoryName() + "). Expected RepositoryType: " + repositoryType.getName() + " Found: "
+					+ repository.getClass().getName());
+		}
+		synchronized (this) {
+			if (this.registeredRepositories.containsKey(reponame)) {
+				throw new AnalysisConfigurationException("Failed to connect plugin '" + this.getName() + "' (" + this.getPluginName() + ") to repository '"
+						+ repository.getName() + "' (" + repository.getRepositoryName() + "). RepositoryPort already connected: " + reponame);
+			}
+			this.registeredRepositories.put(reponame, repository);
+		}
+	}
+
+	/**
+	 * This method connects two plugins. <b>DO NOT USE THIS METHOD!</b> Use <code>AnalysisController.connect</code> instead!
+	 * 
+	 * @param src
+	 *            The source plugin.
+	 * @param outputPortName
+	 *            The output port of the source plugin.
+	 * @param dst
+	 *            The destination plugin.
+	 * @param inputPortName
+	 *            The input port of the destination port.
+	 * @throws AnalysisConfigurationException
+	 *             if any given plugin is invalid, any output or input port doesn't exist or if they are incompatible.
+	 *             Furthermore the destination plugin must not be a reader.
+	 */
+	public static final void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName)
+			throws AnalysisConfigurationException {
+		if (!AbstractPlugin.isConnectionAllowed(src, outputPortName, dst, inputPortName)) {
+			throw new AnalysisConfigurationException("Failed to connect plugin '" + src.getName() + "' (" + src.getPluginName() + ") to plugin '"
+					+ dst.getName() + "' (" + dst.getPluginName() + ").");
+		}
+		// Connect the ports.
+		// TODO: add a better check for the parameter of the method (currently only if 1 parameter present)
+		for (final Method m : dst.getClass().getMethods()) {
+			final InputPort ip = m.getAnnotation(InputPort.class);
+			if ((ip != null) && (m.getParameterTypes().length == 1) && ip.name().equals(inputPortName)) {
+				java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
+					public Object run() {
+						m.setAccessible(true);
+						return null;
+					}
+				});
+				src.registeredMethods.get(outputPortName).add(new PluginInputPortReference(dst, inputPortName, m, dst.inputPorts.get(inputPortName).eventTypes()));
+				src.outgoingPlugins.add(dst);
+				dst.incomingPlugins.add(src);
+				return;
+			}
+		}
+		throw new AnalysisConfigurationException("Failed to connect plugin '" + src.getName() + "' (" + src.getPluginName() + ") to plugin '"
+				+ dst.getName() + "' (" + dst.getPluginName() + ").");
+	}
+
 	/**
 	 * This method checks whether two plugins can be connected.
 	 * 
@@ -254,6 +285,14 @@ public abstract class AbstractPlugin implements IPlugin {
 		/* First step: Check whether the plugins are valid. */
 		if ((src == null) || (dst == null) || (dst instanceof IReaderPlugin)) {
 			LOG.warn("Plugins are invalid or null.");
+			return false;
+		}
+		if (src.state != STATE.READY) {
+			LOG.warn("Plugin: " + src.getClass().getName() + " not in " + STATE.READY + " state, but in state " + src.state + ".");
+			return false;
+		}
+		if (dst.state != STATE.READY) {
+			LOG.warn("Plugin: " + dst.getClass().getName() + " not in " + STATE.READY + " state, but in state " + dst.state + ".");
 			return false;
 		}
 
@@ -300,6 +339,55 @@ public abstract class AbstractPlugin implements IPlugin {
 	}
 
 	/**
+	 * This method delivers an instance of {@code Configuration} containing the default properties for this class.
+	 * 
+	 * @return The default properties.
+	 */
+	private final Configuration getDefaultConfiguration() {
+		final Configuration defaultConfiguration = new Configuration();
+		// Get the annotation from the class
+		final Plugin pluginAnnotation = this.getClass().getAnnotation(Plugin.class);
+		final Property[] propertyAnnotations = pluginAnnotation.configuration();
+		// Run through all properties within the annotation and add them to the configuration object
+		for (final Property property : propertyAnnotations) {
+			defaultConfiguration.setProperty(property.name(), property.defaultValue());
+		}
+		return defaultConfiguration;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#getName()
+	 */
+	public final String getName() {
+		return this.name;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#getPluginName()
+	 */
+	public final String getPluginName() {
+		final String pluginName = this.getClass().getAnnotation(Plugin.class).name();
+		if (pluginName.equals(Plugin.NO_NAME)) {
+			return this.getClass().getSimpleName();
+		} else {
+			return pluginName;
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#getPluginDescription()
+	 */
+	public final String getPluginDescription() {
+		return this.getClass().getAnnotation(Plugin.class).description();
+	}
+
+	/**
 	 * This method checks whether all repository ports of the current plugin are connected.
 	 * 
 	 * @return true if and only if all plugin ports (defined in the annotation) are connected to a repository.
@@ -319,32 +407,6 @@ public abstract class AbstractPlugin implements IPlugin {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see kieker.analysis.plugin.IPlugin#connect(java.lang.String, kieker.analysis.repository.AbstractRepository)
-	 */
-	public final void connect(final String reponame, final AbstractRepository repository) throws AnalysisConfigurationException {
-		final RepositoryPort port = this.repositoryPorts.get(reponame);
-		if (port == null) {
-			throw new AnalysisConfigurationException("Failed to connect plugin '" + this.getName() + "' (" + this.getPluginName() + ") to repository '"
-					+ repository.getName() + "' (" + repository.getRepositoryName() + "). Unknown repository port: " + reponame);
-		}
-		final Class<? extends AbstractRepository> repositoryType = port.repositoryType();
-		if (!repositoryType.isAssignableFrom(repository.getClass())) {
-			throw new AnalysisConfigurationException("Failed to connect plugin '" + this.getName() + "' (" + this.getPluginName() + ") to repository '"
-					+ repository.getName() + "' (" + repository.getRepositoryName() + "). Expected RepositoryType: " + repositoryType.getName() + " Found: "
-					+ repository.getClass().getName());
-		}
-		synchronized (this) {
-			if (this.registeredRepositories.containsKey(reponame)) {
-				throw new AnalysisConfigurationException("Failed to connect plugin '" + this.getName() + "' (" + this.getPluginName() + ") to repository '"
-						+ repository.getName() + "' (" + repository.getRepositoryName() + "). RepositoryPort already connected: " + reponame);
-			}
-			this.registeredRepositories.put(reponame, repository);
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see kieker.analysis.plugin.IPlugin#getCurrentRepositories()
 	 */
 	public final Map<String, AbstractRepository> getCurrentRepositories() {
@@ -353,46 +415,6 @@ public abstract class AbstractPlugin implements IPlugin {
 
 	protected final AbstractRepository getRepository(final String reponame) {
 		return this.registeredRepositories.get(reponame);
-	}
-
-	/**
-	 * This method connects two plugins. <b>DO NOT USE THIS METHOD!</b> Use <code>AnalysisController.connect</code> instead!
-	 * 
-	 * @param src
-	 *            The source plugin.
-	 * @param outputPortName
-	 *            The output port of the source plugin.
-	 * @param dst
-	 *            The destination plugin.
-	 * @param inputPortName
-	 *            The input port of the destination port.
-	 * @throws AnalysisConfigurationException
-	 *             if any given plugin is invalid, any output or input port doesn't exist or if they are incompatible.
-	 *             Furthermore the destination plugin must not be a reader.
-	 */
-	public static final void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName)
-			throws AnalysisConfigurationException {
-		if (!AbstractPlugin.isConnectionAllowed(src, outputPortName, dst, inputPortName)) {
-			throw new AnalysisConfigurationException("Failed to connect plugin '" + src.getName() + "' (" + src.getPluginName() + ") to plugin '"
-					+ dst.getName() + "' (" + dst.getPluginName() + ").");
-		}
-		// Connect the ports.
-		// TODO: add a better check for the parameter of the method (currently only if 1 parameter present)
-		for (final Method m : dst.getClass().getMethods()) {
-			final InputPort ip = m.getAnnotation(InputPort.class);
-			if ((ip != null) && (m.getParameterTypes().length == 1) && ip.name().equals(inputPortName)) {
-				java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
-					public Object run() {
-						m.setAccessible(true);
-						return null;
-					}
-				});
-				src.registeredMethods.get(outputPortName).add(new PluginInputPortReference(dst, inputPortName, m, dst.inputPorts.get(inputPortName).eventTypes()));
-				return;
-			}
-		}
-		throw new AnalysisConfigurationException("Failed to connect plugin '" + src.getName() + "' (" + src.getPluginName() + ") to plugin '"
-				+ dst.getName() + "' (" + dst.getPluginName() + ").");
 	}
 
 	/*
@@ -466,14 +488,47 @@ public abstract class AbstractPlugin implements IPlugin {
 		if (outputPort == null) {
 			return null;
 		}
-
 		/* Now get the connections. */
-		final ConcurrentLinkedQueue<PluginInputPortReference> currRegisteredMethods = this.registeredMethods.get(outputPortName);
 		final List<PluginInputPortReference> result = new ArrayList<PluginInputPortReference>();
-		for (final PluginInputPortReference ref : currRegisteredMethods) {
+		for (final PluginInputPortReference ref : this.registeredMethods.get(outputPortName)) {
 			result.add(ref);
 		}
-
 		return result;
+	}
+
+	public final STATE getState() {
+		return this.state;
+	}
+
+	public final boolean start() {
+		if (this.state != STATE.READY) {
+			return false;
+		}
+		this.state = STATE.RUNNING;
+		return this.init();
+	}
+
+	public final void shutdown(final boolean error) {
+		if ((this.state != STATE.READY) && (this.state != STATE.RUNNING)) { // we terminate only once
+			return;
+		}
+		if (error) {
+			this.state = STATE.FAILING;
+		} else {
+			this.state = STATE.TERMINATING;
+		}
+		for (final AbstractPlugin plugin : this.incomingPlugins) {
+			plugin.shutdown(error);
+		}
+		// when we arrive here, all incoming plugins are terminated!
+		this.terminate(error);
+		if (error) {
+			this.state = STATE.FAILED;
+		} else {
+			this.state = STATE.TERMINATED;
+		}
+		for (final AbstractPlugin plugin : this.outgoingPlugins) {
+			plugin.shutdown(error);
+		}
 	}
 }

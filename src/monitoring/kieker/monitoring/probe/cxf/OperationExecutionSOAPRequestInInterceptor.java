@@ -16,18 +16,17 @@
 
 package kieker.monitoring.probe.cxf;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.SoapHeaderInterceptor;
-import org.apache.cxf.common.logging.LogUtils;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.helpers.DOMUtils;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.message.Message;
 import org.w3c.dom.Element;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
+import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
@@ -38,11 +37,9 @@ import kieker.monitoring.timer.ITimeSource;
 /**
  * CXF InInterceptor to get the sessionIdentifier header from an incoming soap message
  * and associate it with the current thread id.
- *   
+ * 
  * Look here how to add it to your server config: http://cwiki.apache.org/CXF20DOC/interceptors.html
- */
-
-/**
+ * 
  * @author Dennis Kieselhorst, Andre van Hoorn
  */
 public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterceptor implements IMonitoringProbe {
@@ -57,22 +54,25 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 	 * corresponding other CXF probes. Depending on the configuration, the time may
 	 * differ from Kieker's default timer (SystemNanoTimer).
 	 */
-	protected static final IMonitoringController CTRL = MonitoringController.getInstance();
-	protected static final ITimeSource TIMESOURCE = CTRL.getTimeSource();
+	protected final IMonitoringController monitoringController;
+	protected final ITimeSource timeSource;
 
-	// the CXF logger uses java.util.logging by default, look here how to change it to log4j: http://cwiki.apache.org/CXF20DOC/debugging.html
-	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPRequestInInterceptor.class);
+	private static final Log LOG = LogFactory.getLog(OperationExecutionSOAPRequestInInterceptor.class);
 
-	private static final String NULL_SESSION_STR = "NULL";
-	private static final String NULL_SESSIONASYNCTRACE_STR = "NULL-ASYNCIN";
+	public static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCIN";
 
 	public OperationExecutionSOAPRequestInInterceptor() {
-		// nothing to do
+		this(MonitoringController.getInstance());
+	}
+
+	public OperationExecutionSOAPRequestInInterceptor(final IMonitoringController monitoringCtrl) {
+		this.monitoringController = monitoringCtrl;
+		this.timeSource = this.monitoringController.getTimeSource();
 	}
 
 	@Override
 	public void handleMessage(final Message msg) throws Fault {
-		if (!CTRL.isMonitoringEnabled()) {
+		if (!this.monitoringController.isMonitoringEnabled()) {
 			return;
 		}
 		if (msg instanceof SoapMessage) {
@@ -83,7 +83,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 			 * This value will be used by the corresponding invocation of the
 			 * ResponseOutProbe.
 			 */
-			final long tin = TIMESOURCE.getTime();
+			final long tin = this.timeSource.getTime();
 			boolean isEntryCall = false; // set true below if is entry call
 
 			/* 1.) Extract sessionId from SOAP header */
@@ -91,7 +91,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 			String sessionId = this.getStringContentFromHeader(hdr); // null if hdr==null
 			if (sessionId == null) {
 				/* no Kieker session id in header */
-				sessionId = NULL_SESSION_STR;
+				sessionId = OperationExecutionRecord.NO_SESSION_ID;
 			}
 
 			/* 2.) Extract eoi from SOAP header */
@@ -102,8 +102,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 				try {
 					eoi = 1 + Integer.parseInt(eoiStr);
 				} catch (final NumberFormatException exc) {
-					/* invalid eoi! */
-					LOG.log(Level.WARNING, exc.getMessage(), exc);
+					LOG.warn("Invalid eoi", exc);
 				}
 			}
 
@@ -115,8 +114,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 				try {
 					ess = Integer.parseInt(essStr);
 				} catch (final NumberFormatException exc) {
-					/* invalid ess! */
-					LOG.log(Level.WARNING, exc.getMessage(), exc);
+					LOG.warn("Invalid ess", exc);
 				}
 			}
 
@@ -128,8 +126,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 				try {
 					traceId = Long.parseLong(traceIdStr);
 				} catch (final NumberFormatException exc) {
-					/* Invalid trace id! */
-					LOG.log(Level.WARNING, exc.getMessage(), exc);
+					LOG.warn("Invalid trace id", exc);
 				}
 			} else {
 				/*
@@ -140,7 +137,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 				 * in the thread local variable!
 				 */
 				traceId = CF_REGISTRY.getUniqueTraceId();
-				sessionId = NULL_SESSIONASYNCTRACE_STR;
+				sessionId = SESSION_ID_ASYNC_TRACE;
 				isEntryCall = true;
 				eoi = 0; // EOI of this execution
 				ess = 0; // ESS of this execution

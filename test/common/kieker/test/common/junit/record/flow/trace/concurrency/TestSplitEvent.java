@@ -16,16 +16,17 @@
 
 package kieker.test.common.junit.record.flow.trace.concurrency;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.concurrency.SplitEvent;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * @author Jan Waller
  */
-public class TestSplitEvent {
+public class TestSplitEvent extends AbstractKiekerTest {
 
 	private static final long TSTAMP = 987998L;
 	private static final long TRACE_ID = 23444L;

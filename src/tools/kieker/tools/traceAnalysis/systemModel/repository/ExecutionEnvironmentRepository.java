@@ -21,13 +21,14 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
+import kieker.tools.traceAnalysis.systemModel.RootExecutionContainer;
 
 /**
  * 
  * @author Andre van Hoorn
  */
 public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository {
-	public static final ExecutionContainer ROOT_EXECUTION_CONTAINER = new ExecutionContainer(AbstractSystemSubRepository.ROOT_ELEMENT_ID, null, "$");;
+	public static final ExecutionContainer ROOT_EXECUTION_CONTAINER = new RootExecutionContainer();
 
 	private final Map<String, ExecutionContainer> executionContainersByName = new Hashtable<String, ExecutionContainer>(); // NOPMD (UseConcurrentHashMap)
 	private final Map<Integer, ExecutionContainer> executionContainersById = new Hashtable<Integer, ExecutionContainer>(); // NOPMD (UseConcurrentHashMap)

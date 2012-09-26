@@ -41,7 +41,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Pointcut
 	public abstract void monitoredConstructor();
 
-	// FIXME: this may be logged multiple times due to super constructor calls...
+	// TODO: this may be logged multiple times due to super constructor calls...
 	@AfterReturning("monitoredConstructor() && this(thisObject) && notWithinKieker()")
 	public void afterConstruction(final Object thisObject, final JoinPoint.StaticPart jp) {
 		if (!CTRLINST.isMonitoringEnabled()) {

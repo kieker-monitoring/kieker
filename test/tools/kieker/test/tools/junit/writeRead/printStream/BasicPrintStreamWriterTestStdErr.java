@@ -20,15 +20,14 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Assert;
-
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writer.PrintStreamWriter;
 
-import kieker.test.tools.junit.writeRead.util.StringTeePrintStream;
+import kieker.test.tools.util.StringTeePrintStream;
 
 /**
  * TODO: introduce abstract intermediate class with {@link BasicPrintStreamWriterTestStdout},

@@ -247,6 +247,10 @@ public final class MonitoringController extends AbstractController implements IM
 		return this.probeController.deactivateProbe(signature);
 	}
 
+	public boolean isProbeActive(final String signature) {
+		return this.probeController.isProbeActive(signature);
+	}
+
 	// GET SINGLETON INSTANCE
 	// #############################
 	public static final IMonitoringController getInstance() {

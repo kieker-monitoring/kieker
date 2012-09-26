@@ -16,16 +16,17 @@
 
 package kieker.test.common.junit.configuration;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * @author Jan Waller
  */
-public class TestConfigurationPath {
+public class TestConfigurationPath extends AbstractKiekerTest {
 
 	private static String[] paths = {
 		".", "",

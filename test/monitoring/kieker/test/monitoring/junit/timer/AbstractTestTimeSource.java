@@ -18,14 +18,16 @@ package kieker.test.monitoring.junit.timer;
 
 import java.util.concurrent.TimeUnit;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import kieker.monitoring.timer.ITimeSource;
+
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Jan Waller
  */
-public abstract class AbstractTestTimeSource { // NOPMD (no abstract methods)
+public abstract class AbstractTestTimeSource extends AbstractKiekerTest { // NOPMD (no abstract methods)
 
 	public final void testTime(final ITimeSource timesource, final TimeUnit timeunit) { // NOPMD (only used by other tests)
 		final long before = System.currentTimeMillis();

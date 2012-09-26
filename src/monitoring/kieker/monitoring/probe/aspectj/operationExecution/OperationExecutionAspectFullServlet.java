@@ -39,7 +39,7 @@ public final class OperationExecutionAspectFullServlet extends AbstractOperation
 	}
 
 	@Override
-	@Pointcut("(execution(* *(..)) && noGetterAndSetter()) || execution(new(..))")
+	@Pointcut("execution(* *(..)) || execution(new(..))")
 	public final void monitoredOperation() {
 		// Aspect Declaration (MUST be empty)
 	}
