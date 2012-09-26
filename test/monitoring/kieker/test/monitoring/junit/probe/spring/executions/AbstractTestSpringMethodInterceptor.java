@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.aopalliance.intercept.AttributeRegistry;
 import org.aopalliance.intercept.Invocation;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -254,10 +253,6 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 		}
 
 		public void setArgument(final int arg0, final Object arg1) {
-			throw new UnsupportedOperationException();
-		}
-
-		public AttributeRegistry getAttributeRegistry() {
 			throw new UnsupportedOperationException();
 		}
 

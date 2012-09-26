@@ -20,7 +20,6 @@
 	<classpathentry kind="src" path="examples/SPECjEnterprise2010/src"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
-	<classpathentry kind="lib" path="lib/aopalliance-alpha1.jar"/>
 	<classpathentry kind="lib" path="lib/aspectjrt-1.7.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons-cli-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
@@ -39,35 +38,6 @@
 	<classpathentry kind="lib" path="lib/sigar-1.6.4.jar"/>
 	<classpathentry kind="lib" path="lib/org.springframework.beans-3.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/org.springframework.core-3.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/jetty-ajp-7.6.5.v20120716.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/jetty-annotations-7.6.5.v20120716.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/jetty-client-7.6.5.v20120716.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/jetty-continuation-7.6.5.v20120716.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/jetty-deploy-7.6.5.v20120716.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/jetty-http-7.6.5.v20120716.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/jetty-io-7.6.5.v20120716.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/jetty-jmx-7.6.5.v20120716.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/jetty-jndi-7.6.5.v20120716.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/jetty-overlay-deployer-7.6.5.v20120716.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/jetty-plus-7.6.5.v20120716.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/jetty-policy-7.6.5.v20120716.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/jetty-rewrite-7.6.5.v20120716.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/jetty-security-7.6.5.v20120716.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/jetty-server-7.6.5.v20120716.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/jetty-servlet-7.6.5.v20120716.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/jetty-servlets-7.6.5.v20120716.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/jetty-util-7.6.5.v20120716.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/jetty-webapp-7.6.5.v20120716.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/jetty-websocket-7.6.5.v20120716.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/jetty-xml-7.6.5.v20120716.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/org.springframework.aop-3.1.2.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/org.springframework.asm-3.1.2.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/org.springframework.expression-3.1.2.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/org.springframework.instrument-3.1.2.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/org.springframework.web.portlet-3.1.2.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/org.springframework.web.servlet-3.1.2.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/org.springframework.web.struts-3.1.2.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tests/aspectjweaver-1.7.0.jar"/>
 	<classpathentry kind="lib" path="lib/neethi-3.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/wsdl4j-1.6.2.jar"/>
 	<classpathentry kind="lib" path="lib/xmlschema-core-2.0.2.jar"/>
@@ -82,5 +52,32 @@
 	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-io-7.6.7.v20120910.jar"/>
 	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-server-7.6.7.v20120910.jar"/>
 	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-util-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="lib/aspectjweaver-1.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/org.springframework.aop-3.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/org.springframework.asm-3.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/org.springframework.expression-3.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/org.springframework.instrument-3.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/org.springframework.web.portlet-3.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/org.springframework.web.servlet-3.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/org.springframework.web.struts-3.1.2.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-ajp-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-annotations-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-client-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-deploy-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-jmx-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-jndi-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-overlay-deployer-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-plus-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-policy-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-rewrite-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-security-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-servlet-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-servlets-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-webapp-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-websocket-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-xml-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/aopalliance-1.0.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/asm-3.1.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/cglib-2.2.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>

@@ -29,12 +29,14 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * 
  * @author Andre van Hoorn
  * 
  */
-public class TestSpringMethodInterceptor {
+public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	private static final Log LOG = LogFactory.getLog(TestSpringMethodInterceptor.class);
 
 	private volatile FileSystemXmlApplicationContext ctx;
