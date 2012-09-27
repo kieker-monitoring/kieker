@@ -40,7 +40,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	private volatile FileSystemXmlApplicationContext ctx;
 
 	@Before
-	public void setup() {
+	public void startServer() {
 		// start the server
 		this.ctx = new FileSystemXmlApplicationContext("test/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml");
 	}
@@ -71,6 +71,8 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 
 	@After
 	public void cleanup() {
-		this.ctx.destroy(); // TODO: is this shutting down the server?
+		if (this.ctx != null) {
+			this.ctx.destroy(); // TODO: is this shutting down the server?
+		}
 	}
 }

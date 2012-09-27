@@ -20,10 +20,6 @@ public class Book {
 
 	private String title;
 
-	public Book() {
-
-	}
-
 	public Book(final String title) {
 		this.title = title;
 	}

@@ -78,7 +78,7 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 	private volatile IBookstore client;
 
 	@Before
-	public void setup() throws Exception {
+	public void prepare() throws Exception {
 		final int curIdx = this.getPortDigit();
 		this.serviceAddress = SERVICE_ADDRESS_TEMPLATE.replace("X", Integer.toString(curIdx));
 		this.listName = AbstractTestCXFClientServerInterceptors.class.getName() + "-" + curIdx;
