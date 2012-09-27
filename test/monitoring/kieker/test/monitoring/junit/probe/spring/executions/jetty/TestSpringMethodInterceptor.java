@@ -47,6 +47,12 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 		this.ctx = new FileSystemXmlApplicationContext("test/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml");
 	}
 
+	/*
+	 * TODO: We need to refine the test to really test not only whether the configuration works but also
+	 * to test what is being logged. This should be implemented similar to the tests in
+	 * 'kieker.test.monitoring.junit.probe.cxf.executions'. One challenge is that the
+	 * Spring interceptors use the singleton instance of the MonitoringController.
+	 */
 	@Test
 	public void testIt() throws IOException {
 		for (int i = 0; i < 5; i++) {
