@@ -22,12 +22,10 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
-
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -37,7 +35,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * 
  */
 public class TestSpringMethodInterceptor extends AbstractKiekerTest {
-	private static final Log LOG = LogFactory.getLog(TestSpringMethodInterceptor.class);
+	// private static final Log LOG = LogFactory.getLog(TestSpringMethodInterceptor.class);
 
 	private volatile FileSystemXmlApplicationContext ctx;
 
@@ -56,11 +54,18 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	@Test
 	public void testIt() throws IOException {
 		for (int i = 0; i < 5; i++) {
-			System.out.println("BookstoreClient: Starting HTTP GET request: " + i);
 			final URL url = new URL("http://localhost:9293/bookstore/search/any/");
-			final BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-			LOG.info(in.readLine());
-			in.close();
+			BufferedReader in = null;
+			try {
+				in = new BufferedReader(new InputStreamReader(url.openStream(), "UTF8"));
+				final String result = in.readLine();
+				Assert.assertNotNull("Result is null", result);
+				Assert.assertTrue("Result is empty", result.length() > 0);
+			} finally {
+				if (in != null) {
+					in.close();
+				}
+			}
 		}
 	}
 

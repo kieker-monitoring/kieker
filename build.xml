@@ -639,7 +639,12 @@
 			<fileset dir="${lib.dir}">
 				<include name="junit-*.jar" />
 				<include name="aopalliance-*.jar" />
+				<include name="org.springframework.beans-*.jar" />
+				<include name="org.springframework.context-*.jar" />
+				<include name="org.springframework.core-*.jar" />
+				<include name="org.springframework.web-*.jar" />
 				<include name="cxf-*.jar" />
+				<include name="geronimo-ws-metadata_2.0_spec-" /> <!-- needed for the cxf tests -->
 			</fileset>
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />
@@ -968,21 +973,25 @@
 		<path id="kieker.test-junit-run-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="aopalliance-*.jar" />
+				<include name="aspectjweaver-*.jar" /> <!-- needed for the spring tests -->
 				<include name="junit-*.jar" />
 				<include name="org.eclipse.emf.*.jar" />
 				<include name="derby-*.jar" />
-				<include name="javax.servlet-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="javax.servlet-*.jar" /> <!-- needed for the cxf, spring? tests -->
 				<include name="cxf-*.jar" /> <!-- needed for the cxf tests -->
 				<include name="xmlschema-core-*.jar" /> <!-- needed for the cxf tests -->
 				<include name="neethi-*.jar" /> <!-- needed for the cxf tests -->
 				<include name="wsdl4j-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="org.springframework*.jar" /> <!-- needed for the spring tests -->
+				<include name="commons-logging-*.jar" /> <!-- needed for the spring tests -->
+				<include name="geronimo-ws-metadata_2.0_spec-" /> <!-- needed for the cxf tests -->
 			</fileset>
 			<fileset dir="${example.javaee.jetty.lib.dir}">
-				<include name="jetty-util-*.jar" /> <!-- needed for the cxf tests -->
-				<include name="jetty-http-*.jar" /> <!-- needed for the cxf tests -->
-				<include name="jetty-server-*.jar" /> <!-- needed for the cxf tests -->
-				<include name="jetty-io-*.jar" /> <!-- needed for the cxf tests -->
-				<include name="jetty-continuation-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="jetty-*.jar" /> <!-- needed for the cxf, spring tests -->
+			</fileset>
+			<fileset dir="${example.javaee.jpetstore.lib.dir}">
+				<include name="asm-*.jar" /> <!-- needed for the spring tests -->
+				<include name="cglib-*.jar" /> <!-- needed for the spring tests -->
 			</fileset>
 			<pathelement location="${build.tests.dir}/" />
 			<fileset dir="${dist.dir}">
@@ -1011,7 +1020,7 @@
 
 			<batchtest fork="false" todir="${tests.junit-results.dir}">
 				<fileset dir="${build.tests.dir}/">
-					<include name="**/junit/**/*Test*.class" />
+					<include name="**/junit/**/spring/**/*Test*.class" />
 					<exclude name="**/junit/**/Abstract*.class" />
 					<exclude name="**/*$*.class" />
 				</fileset>

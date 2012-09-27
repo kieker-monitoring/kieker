@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,25 +27,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/bookstore/*")
 public final class BookstoreController {
-	
+
 	@Autowired
 	private Bookstore bookstore;
-	
+
 	@RequestMapping(value = "/")
 	public String home() {
 		return "home";
 	}
-	
 
 	@RequestMapping(value = "/search/{term}", method = RequestMethod.GET)
-	public String search1(@PathVariable String term, Model model) {
-		model.addAttribute("result", bookstore.searchBook(term));
+	public String search1(@PathVariable("term") final String term, final Model model) {
+		model.addAttribute("result", this.bookstore.searchBook(term));
 		return "search";
 	}
-	
+
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
-	public String search2(@RequestParam String term, Model model) {
-		model.addAttribute("result", bookstore.searchBook(term));
+	public String search2(@RequestParam final String term, final Model model) {
+		model.addAttribute("result", this.bookstore.searchBook(term));
 		return "search";
 	}
 }

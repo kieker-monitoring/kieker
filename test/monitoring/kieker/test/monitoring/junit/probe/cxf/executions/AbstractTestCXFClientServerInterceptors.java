@@ -18,11 +18,10 @@ package kieker.test.monitoring.junit.probe.cxf.executions;
 
 import java.util.List;
 
-import junit.framework.Assert;
-
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 

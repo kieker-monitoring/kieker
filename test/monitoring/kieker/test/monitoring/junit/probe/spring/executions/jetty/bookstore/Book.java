@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2012 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,26 +17,27 @@
 package kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore;
 
 public class Book {
-	
+
 	private String title;
-	
+
 	public Book() {
-		
+
 	}
-	
-	public Book(String tile) {
-		this.title = tile;
+
+	public Book(final String title) {
+		this.title = title;
 	}
 
 	public String getTitle() {
-		return title;
+		return this.title;
 	}
 
-	public void setTitle(String tile) {
+	public void setTitle(final String tile) {
 		this.title = tile;
 	}
-	
+
+	@Override
 	public String toString() {
-		return title;
+		return this.title;
 	}
 }
