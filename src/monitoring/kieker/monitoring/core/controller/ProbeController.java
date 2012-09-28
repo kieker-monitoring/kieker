@@ -227,6 +227,9 @@ public class ProbeController extends AbstractController implements IProbeControl
 				LOG.error(pair.getPattern() + " is not a valid pattern: " + e.getMessage());
 			}
 		}
+		if (this.updateConfigFile) {
+			this.updatePatternFile();
+		}
 	}
 
 }

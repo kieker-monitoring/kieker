@@ -85,6 +85,7 @@ public class TestProbeController {
 	}
 
 	@After
+	@Test
 	public void cleanup() {
 		this.file.delete();
 		Assert.assertFalse(this.file.exists());

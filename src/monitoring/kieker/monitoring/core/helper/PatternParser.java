@@ -6,7 +6,7 @@ public class PatternParser {
 
 	public Pattern parseToPattern(final String pattern) throws InvalidPatternException {
 		final StringBuilder sb = new StringBuilder();
-		if (pattern.equals("*")) {
+		if ("*".equals(pattern)) {
 			sb.append(".*");
 		} else {
 			String[] array = pattern.trim().split("[\\(\\)]");
@@ -25,8 +25,7 @@ public class PatternParser {
 			String fq_name;
 			String[] modifierList = null;
 
-			final int length = array.length;
-			switch (length) {
+			switch (array.length) {
 			case 2:
 				ret_type = array[0];
 				fq_name = array[1];
@@ -87,37 +86,73 @@ public class PatternParser {
 	}
 
 	private String parseParameterList(final String[] paramList) throws InvalidPatternException {
-		if (paramList[0].equals("")) {
-			return "";
-		}
-		final StringBuilder sb = new StringBuilder();
 		final int length = paramList.length;
-		if (paramList[0].trim().equals("..")) {
-			sb.append("(\\s)?([\\p{javaJavaIdentifierPart}\\.]|((\\s)?,(\\s)?))*(\\s)?");
+		if (length == 1) {
+			if (paramList[0].trim().length() == 0) {
+				return "";
+			} else if ("..".equals(paramList[0].trim())) {
+				return ".*";
+			}
+		}
+
+		final StringBuilder sb = new StringBuilder();
+		boolean startsWithDotdot = false;
+		int start = 1;
+
+		if ("..".equals(paramList[0].trim())) {
+			sb.append("(((\\s)?[\\p{javaJavaIdentifierPart}\\.])*\\p{javaJavaIdentifierPart}+(\\s)?,)*");
+			startsWithDotdot = true;
+		} else if ("*".equals(paramList[0].trim())) {
+			sb.append("(\\s)?(\\p{javaJavaIdentifierPart})+(\\s)?");
+		} else if (paramList[0].trim().length() == 0) {
+			throw new InvalidPatternException("Invalid parameter list.");
 		} else {
-			sb.append("(\\s)?");
 			try {
+				sb.append("(\\s)?");
 				sb.append(this.parseFQType(paramList[0].trim()));
+				sb.append("(\\s)?");
 			} catch (final InvalidPatternException e) {
 				throw new InvalidPatternException("Invalid parameter list. -> " + e.getMessage());
 			}
-			sb.append("(\\s)?");
 		}
-		for (int i = 1; i < length; i++) {
-			if (paramList[i].trim().equals("..")) {
-				sb.append(",(\\s)?([\\p{javaJavaIdentifierPart}\\.]|((\\s)?,(\\s)?))*(\\s)?");
-			} else if (paramList[i].equals("")) {
+
+		if ((length > 1) && startsWithDotdot) {
+			start = 2;
+			if ("..".equals(paramList[1].trim())) {
+				sb.append("(((\\s)?[\\p{javaJavaIdentifierPart}\\.])*\\p{javaJavaIdentifierPart}+(\\s)?)*");
+			} else if ("*".equals(paramList[1].trim())) {
+				sb.append("(\\s)?(\\p{javaJavaIdentifierPart})+(\\s)?");
+			} else if (paramList[1].trim().length() == 0) {
 				throw new InvalidPatternException("Invalid parameter list.");
 			} else {
-				sb.append(",(\\s)?");
 				try {
-					sb.append(this.parseFQType(paramList[i].trim()));
+					sb.append("(\\s)?");
+					sb.append(this.parseFQType(paramList[1].trim()));
+					sb.append("(\\s)?");
 				} catch (final InvalidPatternException e) {
 					throw new InvalidPatternException("Invalid parameter list. -> " + e.getMessage());
 				}
-				sb.append("(\\s)?");
 			}
 		}
+
+		for (int i = start; i < length; i++) {
+			if ("..".equals(paramList[i].trim())) {
+				sb.append("(,((\\s)?[\\p{javaJavaIdentifierPart}\\.])*\\p{javaJavaIdentifierPart}+(\\s)?)*");
+			} else if ("*".equals(paramList[i].trim())) {
+				sb.append(",(\\s)?(\\p{javaJavaIdentifierPart})+(\\s)?");
+			} else if (paramList[i].trim().length() == 0) {
+				throw new InvalidPatternException("Invalid parameter list.");
+			} else {
+				try {
+					sb.append(",(\\s)?");
+					sb.append(this.parseFQType(paramList[i].trim()));
+					sb.append("(\\s)?");
+				} catch (final InvalidPatternException e) {
+					throw new InvalidPatternException("Invalid parameter list. -> " + e.getMessage());
+				}
+			}
+		}
+
 		return sb.toString();
 	}
 
@@ -144,7 +179,7 @@ public class PatternParser {
 	}
 
 	private String parseFQType(final String fq_type) throws InvalidPatternException {
-		if (fq_type.contains("...") || fq_type.endsWith(".") || fq_type.equals("")) {
+		if (fq_type.contains("...") || fq_type.endsWith(".") || (fq_type.length() == 0)) {
 			throw new InvalidPatternException("Invalid fully qualified type.");
 		}
 		final String[] array = fq_type.split("\\.");
@@ -159,14 +194,14 @@ public class PatternParser {
 		int start = 0;
 		final StringBuilder sb = new StringBuilder();
 		// test if fq_type starts with ..
-		if (array[0].equals("") && array[1].equals("")) {
+		if ((array[0].length() == 0) && (array[1].length() == 0)) {
 			sb.append("(([\\p{javaJavaIdentifierPart}\\.])*\\.)?");
 			start = 2;
-		} else if (array[0].equals("")) {
+		} else if (array[0].length() == 0) {
 			throw new InvalidPatternException("Invalid fully qualified type: leading dot");
 		}
 		for (int i = start; i < (length - 1); i++) {
-			if (array[i].equals("")) {
+			if (array[i].length() == 0) {
 				sb.append("(([\\p{javaJavaIdentifierPart}\\.])*\\.)?");
 			} else {
 				try {
@@ -186,7 +221,7 @@ public class PatternParser {
 	}
 
 	private String parseRetType(final String ret_type) throws InvalidPatternException {
-		if (ret_type.equals("new")) {
+		if ("new".equals(ret_type)) {
 			return "";
 		} else {
 			try {
@@ -204,86 +239,86 @@ public class PatternParser {
 		final StringBuilder sb = new StringBuilder();
 		final int number = modifierList.length;
 		if (number == 1) {
-			if (modifierList[0].equals("public")) {
+			if ("public".equals(modifierList[0])) {
 				sb.append("public\\s(static\\s)?(native\\s)?");
-			} else if (modifierList[0].equals("private")) {
+			} else if ("private".equals(modifierList[0])) {
 				sb.append("private\\s(static\\s)?(native\\s)?");
-			} else if (modifierList[0].equals("protected")) {
+			} else if ("protected".equals(modifierList[0])) {
 				sb.append("protected\\s(static\\s)?(native\\s)?");
-			} else if (modifierList[0].equals("package")) {
+			} else if ("package".equals(modifierList[0])) {
 				sb.append("(static\\s)?(native\\s)?");
-			} else if (modifierList[0].equals("static")) {
+			} else if ("static".equals(modifierList[0])) {
 				sb.append("((public|private|protected)\\s)?static\\s(native\\s)?");
-			} else if (modifierList[0].equals("non_static")) {
+			} else if ("non_static".equals(modifierList[0])) {
 				sb.append("((public|private|protected)\\s)?(native\\s)?");
-			} else if (modifierList[0].equals("native")) {
+			} else if ("native".equals(modifierList[0])) {
 				sb.append("((public|private|protected)\\s)?(static\\s)?native\\s");
-			} else if (modifierList[0].equals("non_native")) {
+			} else if ("non_native".equals(modifierList[0])) {
 				sb.append("((public|private|protected)\\s)?(static\\s)?");
 			} else {
 				throw new InvalidPatternException("Invalid modifier.");
 			}
 		} else if (number == 2) {
-			if (modifierList[0].equals("public")) {
-				if (modifierList[1].equals("static")) {
+			if ("public".equals(modifierList[0])) {
+				if ("static".equals(modifierList[1])) {
 					sb.append("public\\sstatic\\s(native\\s)?");
-				} else if (modifierList[1].equals("non_static")) {
+				} else if ("non_static".equals(modifierList[1])) {
 					sb.append("public\\s(native\\s)?");
-				} else if (modifierList[1].equals("native")) {
+				} else if ("native".equals(modifierList[1])) {
 					sb.append("public\\s(static\\s)?native\\s");
-				} else if (modifierList[1].equals("non_native")) {
+				} else if ("non_native".equals(modifierList[1])) {
 					sb.append("public\\s(static\\s)?");
 				} else {
 					throw new InvalidPatternException("Invalid modifier.");
 				}
-			} else if (modifierList[0].equals("private")) {
-				if (modifierList[1].equals("static")) {
+			} else if ("private".equals(modifierList[0])) {
+				if ("static".equals(modifierList[1])) {
 					sb.append("private\\sstatic\\s(native\\s)?");
-				} else if (modifierList[1].equals("non_static")) {
+				} else if ("non_static".equals(modifierList[1])) {
 					sb.append("private\\s(native\\s)?");
-				} else if (modifierList[1].equals("native")) {
+				} else if ("native".equals(modifierList[1])) {
 					sb.append("private\\s(static\\s)?native\\s");
-				} else if (modifierList[1].equals("non_native")) {
+				} else if ("non_native".equals(modifierList[1])) {
 					sb.append("private\\s(static\\s)?");
 				} else {
 					throw new InvalidPatternException("Invalid modifier.");
 				}
-			} else if (modifierList[0].equals("protected")) {
-				if (modifierList[1].equals("static")) {
+			} else if ("protected".equals(modifierList[0])) {
+				if ("static".equals(modifierList[1])) {
 					sb.append("protected\\sstatic\\s(native\\s)?");
-				} else if (modifierList[1].equals("non_static")) {
+				} else if ("non_static".equals(modifierList[1])) {
 					sb.append("protected\\s(native\\s)?");
-				} else if (modifierList[1].equals("native")) {
+				} else if ("native".equals(modifierList[1])) {
 					sb.append("protected\\s(static\\s)?native\\s");
-				} else if (modifierList[1].equals("non_native")) {
+				} else if ("non_native".equals(modifierList[1])) {
 					sb.append("protected\\s(static\\s)?");
 				} else {
 					throw new InvalidPatternException("Invalid modifier.");
 				}
-			} else if (modifierList[0].equals("package")) {
-				if (modifierList[1].equals("static")) {
+			} else if ("package".equals(modifierList[0])) {
+				if ("static".equals(modifierList[1])) {
 					sb.append("static\\s(native\\s)?");
-				} else if (modifierList[1].equals("non_static")) {
+				} else if ("non_static".equals(modifierList[1])) {
 					sb.append("(native\\s)?");
-				} else if (modifierList[1].equals("native")) {
+				} else if ("native".equals(modifierList[1])) {
 					sb.append("(static\\s)?native\\s");
-				} else if (modifierList[1].equals("non_native")) {
+				} else if ("non_native".equals(modifierList[1])) {
 					sb.append("(static\\s)?");
 				} else {
 					throw new InvalidPatternException("Invalid modifier.");
 				}
-			} else if (modifierList[0].equals("static")) {
-				if (modifierList[1].equals("native")) {
+			} else if ("static".equals(modifierList[0])) {
+				if ("native".equals(modifierList[1])) {
 					sb.append("((public|private|protected)\\s)?static\\snative\\s");
-				} else if (modifierList[1].equals("non_native")) {
+				} else if ("non_native".equals(modifierList[1])) {
 					sb.append("((public|private|protected)\\s)?static\\s");
 				} else {
 					throw new InvalidPatternException("Invalid modifier.");
 				}
-			} else if (modifierList[0].equals("non_static")) {
-				if (modifierList[1].equals("native")) {
+			} else if ("non_static".equals(modifierList[0])) {
+				if ("native".equals(modifierList[1])) {
 					sb.append("((public|private|protected)\\s)?native\\s");
-				} else if (modifierList[1].equals("non_native")) {
+				} else if ("non_native".equals(modifierList[1])) {
 					sb.append("((public|private|protected)\\s)?");
 				} else {
 					throw new InvalidPatternException("Invalid modifier.");
@@ -292,27 +327,27 @@ public class PatternParser {
 				throw new InvalidPatternException("Invalid modifier.");
 			}
 		} else if (number == 3) {
-			if (modifierList[0].equals("public")) {
+			if ("public".equals(modifierList[0])) {
 				sb.append("public\\s");
-			} else if (modifierList[0].equals("private")) {
+			} else if ("private".equals(modifierList[0])) {
 				sb.append("private\\s");
-			} else if (modifierList[0].equals("protected")) {
+			} else if ("protected".equals(modifierList[0])) {
 				sb.append("protected\\s");
-			} else if (modifierList[0].equals("package")) {
+			} else if ("package".equals(modifierList[0])) {
 				// nothing to do
 			} else {
 				throw new InvalidPatternException("Invalid modifier.");
 			}
-			if (modifierList[1].equals("static")) {
+			if ("static".equals(modifierList[1])) {
 				sb.append("static\\s");
-			} else if (modifierList[1].equals("non_static")) {
+			} else if ("non_static".equals(modifierList[1])) {
 				// nothing to do
 			} else {
 				throw new InvalidPatternException("Invalid modifier.");
 			}
-			if (modifierList[2].equals("native")) {
+			if ("native".equals(modifierList[2])) {
 				sb.append("native\\s");
-			} else if (modifierList[2].equals("non_native")) {
+			} else if ("non_native".equals(modifierList[2])) {
 				// nothing to do
 			} else {
 				throw new InvalidPatternException("Invalid modifier.");
