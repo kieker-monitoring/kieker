@@ -20,9 +20,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.ConcurrentHashMap;
@@ -40,7 +37,7 @@ import kieker.monitoring.core.helper.Pair;
 import kieker.monitoring.core.helper.PatternParser;
 
 /**
- * @author Jan Waller, Björn Weißenfels
+ * @author Jan Waller, Bjoern Weissenfels
  */
 public class ProbeController extends AbstractController implements IProbeController {
 	private static final Log LOG = LogFactory.getLog(ProbeController.class);
@@ -51,7 +48,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 	private final PatternParser parser = new PatternParser();
 	private boolean updateConfigFile;
 	private final long readIntervall;
-	private String pathname;
+	private final String pathname;
 	private FileWatcher fileWatcher;
 	private File file;
 
@@ -64,12 +61,16 @@ public class ProbeController extends AbstractController implements IProbeControl
 
 	@Override
 	protected void init() {
-		final URL url = ClassLoader.getSystemResource(this.pathname);
-		try {
-			this.pathname = URLDecoder.decode(url.getFile(), "UTF-8");
-		} catch (final UnsupportedEncodingException e) {
-			LOG.info("Decoding pathname failed.");
-		}
+		// InputStream is = null;
+		// try {
+		// is = new FileInputStream(this.pathname);
+		// } catch (final FileNotFoundException e1) {
+		// is = MonitoringController.class.getClassLoader().getResourceAsStream(this.pathname);
+		// if (is == null) {
+		// LOG.warn("File '" + this.pathname + "' not found");
+		// }
+		// }
+
 		this.file = new File(this.pathname);
 		if (this.file.exists()) {
 			this.fileWatcher = new FileWatcher(this.file, this.readIntervall * 1000, this);
@@ -151,7 +152,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 
 	}
 
-	public boolean isActive(final String signature) {
+	public boolean isProbeActive(final String signature) {
 		if (this.monitoringController.isMonitoringEnabled()) {
 			if (this.signatureCache.containsKey(signature)) {
 				return this.signatureCache.get(signature);
@@ -208,7 +209,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 		}
 	}
 
-	public void replacePatternList(final List<Pair<String, Boolean>> patternList) {
+	public void replaceProbePatternList(final List<Pair<String, Boolean>> patternList) {
 		this.patternList.clear();
 		this.matcherList.clear();
 		this.signatureCache.clear();

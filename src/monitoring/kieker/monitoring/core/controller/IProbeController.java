@@ -51,13 +51,12 @@ public interface IProbeController {
 	 * @return
 	 *         true if the probe with this signature is active
 	 */
-	public boolean isActive(final String signature);
+	public boolean isProbeActive(final String signature);
 
 	/**
 	 * @param patternList
 	 *            list of string boolean pairs,
 	 *            where the string is a pattern and the boolean describes its state
 	 */
-	public void replacePatternList(final List<Pair<String, Boolean>> patternList);
-
+	public void replaceProbePatternList(final List<Pair<String, Boolean>> patternList);
 }

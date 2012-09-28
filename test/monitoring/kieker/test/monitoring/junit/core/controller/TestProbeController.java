@@ -18,14 +18,14 @@ package kieker.test.monitoring.junit.core.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLDecoder;
 
 import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
@@ -33,62 +33,55 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 
 /**
- * @author Björn Weißenfels
+ * @author Bjï¿½rn Weiï¿½enfels
  */
 public class TestProbeController {
 
-	File file = null;
-	IMonitoringController MC;
+	File configFile = null;
+
+	@Rule
+	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
 	@Before
-	public void init() {
-		// generating config file, may not exist when starting the test
-		String pathname = "META-INF/";
-		final URL url = ClassLoader.getSystemResource(pathname);
-		final String path = url.getFile();
+	public void init() throws IOException {
+		this.configFile = this.tmpFolder.newFile("adaptiveMonitoring.configFile");
+	}
 
-		try {
-			pathname = URLDecoder.decode(path, "UTF-8") + "kieker.monitoring.adaptiveMonitoring.configFile";
-			new File(pathname).createNewFile();
-			this.file = new File(pathname);
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
-
-		// load properties
-		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
-		this.MC = MonitoringController.createInstance(configuration);
-
+	@After
+	public void cleanup() {
+		this.tmpFolder.delete();
 	}
 
 	@Test
 	public void testInitialization() {
-		Assert.assertNotNull(this.file);
-		Assert.assertTrue(this.file.exists());
-		Assert.assertNotNull(this.MC);
+		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
+		configuration.setProperty(ConfigurationFactory.CUSTOM_CONFIG_FILE_LOCATION, this.configFile.getAbsolutePath());
+		configuration.setProperty(ConfigurationFactory.ACTIVATE_UPDATE_CONFIG_FILE, "true");
+		configuration.setProperty(ConfigurationFactory.READ_INTERVALL, "10");
+		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
+		Assert.assertNotNull(this.configFile);
+		Assert.assertTrue(this.configFile.exists());
+		Assert.assertNotNull(ctrl);
+		ctrl.terminateMonitoring();
 	}
 
 	@Test
 	public void testIt() {
+		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
+		configuration.setProperty(ConfigurationFactory.CUSTOM_CONFIG_FILE_LOCATION, this.configFile.getAbsolutePath());
+		configuration.setProperty(ConfigurationFactory.ACTIVATE_UPDATE_CONFIG_FILE, "true");
+		configuration.setProperty(ConfigurationFactory.READ_INTERVALL, "10");
+		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
 
 		// generate test signature
 		final String signature = "public void kieker.test.monitoring.junit.core.controller.TestProbeController.testIt()";
 
 		// test methods
 		final String pattern = "..* kieker..*.*(..)";
-		Assert.assertFalse(this.MC.activateProbe("ungültiges Pattern"));
-		Assert.assertTrue(this.MC.activateProbe(pattern));
-		Assert.assertTrue(this.MC.isActive(signature));
-		Assert.assertTrue(this.MC.deactivateProbe(pattern));
-		Assert.assertFalse(this.MC.isActive(signature));
-
+		Assert.assertFalse(ctrl.activateProbe("invalid pattern"));
+		Assert.assertTrue(ctrl.activateProbe(pattern));
+		Assert.assertTrue(ctrl.isProbeActive(signature));
+		Assert.assertTrue(ctrl.deactivateProbe(pattern));
+		Assert.assertFalse(ctrl.isProbeActive(signature));
 	}
-
-	@After
-	@Test
-	public void cleanup() {
-		this.file.delete();
-		Assert.assertFalse(this.file.exists());
-	}
-
 }

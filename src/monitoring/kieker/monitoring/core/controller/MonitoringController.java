@@ -249,12 +249,12 @@ public final class MonitoringController extends AbstractController implements IM
 		return this.probeController.deactivateProbe(signature);
 	}
 
-	public boolean isActive(final String signature) {
-		return this.probeController.isActive(signature);
+	public boolean isProbeActive(final String signature) {
+		return this.probeController.isProbeActive(signature);
 	}
 
-	public void replacePatternList(final List<Pair<String, Boolean>> patternList) {
-		this.replacePatternList(patternList);
+	public void replaceProbePatternList(final List<Pair<String, Boolean>> patternList) {
+		this.probeController.replaceProbePatternList(patternList);
 	}
 
 	// GET SINGLETON INSTANCE

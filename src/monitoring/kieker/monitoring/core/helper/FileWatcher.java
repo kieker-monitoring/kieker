@@ -28,9 +28,9 @@ import kieker.monitoring.core.controller.ProbeController;
 
 /**
  * Based upon the Apache log4j helpers class FileWatchdog written by
- * Ceki Gülcü and Mathias Bogaert.
+ * Ceki Gï¿½lcï¿½ and Mathias Bogaert.
  * 
- * @author Björn Weißenfels
+ * @author Bjï¿½rn Weiï¿½enfels
  */
 
 public class FileWatcher extends Thread {
@@ -110,7 +110,7 @@ public class FileWatcher extends Thread {
 			}
 		}
 		br.close();
-		this.probeController.replacePatternList(patternList);
+		this.probeController.replaceProbePatternList(patternList);
 	}
 
 	public long getLastModified() {

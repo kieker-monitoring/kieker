@@ -50,7 +50,7 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 	@Around("monitoredOperation() && notWithinKieker()")
 	public Object operation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
 		final String signature = thisJoinPoint.getSignature().toLongString();
-		if (!CTRLINST.isActive(signature)) {
+		if (!CTRLINST.isProbeActive(signature)) {
 			return thisJoinPoint.proceed();
 		}
 		// collect data
