@@ -29,14 +29,16 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
- * 
  * @author Andre van Hoorn
- * 
  */
 public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	// private static final Log LOG = LogFactory.getLog(TestSpringMethodInterceptor.class);
 
 	private volatile FileSystemXmlApplicationContext ctx;
+
+	public TestSpringMethodInterceptor() {
+		// empty default constructor
+	}
 
 	@Before
 	public void startServer() {

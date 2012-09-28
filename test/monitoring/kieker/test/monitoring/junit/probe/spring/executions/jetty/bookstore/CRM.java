@@ -19,6 +19,9 @@ package kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * @author Andre van Hoorn
+ */
 @Service
 public class CRM {
 	private final Catalog catalog;

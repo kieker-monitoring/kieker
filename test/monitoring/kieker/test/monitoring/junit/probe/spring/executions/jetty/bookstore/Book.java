@@ -16,6 +16,9 @@
 
 package kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore;
 
+/**
+ * @author Andre van Hoorn
+ */
 public class Book {
 
 	private String title;

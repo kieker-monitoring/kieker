@@ -34,6 +34,10 @@ import kieker.monitoring.probe.cxf.OperationExecutionSOAPResponseOutInterceptor;
  */
 public class TestCXFClientServerInterceptorsNoSessionRegisteredBefore extends AbstractTestCXFClientServerInterceptors {
 
+	public TestCXFClientServerInterceptorsNoSessionRegisteredBefore() {
+		// empty default constructor
+	}
+
 	@Override
 	protected void beforeRequest() {
 		// do nothing

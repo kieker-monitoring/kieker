@@ -19,6 +19,9 @@ package kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * @author Andre van Hoorn
+ */
 @Service
 public class Bookstore {
 
@@ -26,6 +29,10 @@ public class Bookstore {
 	private Catalog catalog;
 	@Autowired
 	private CRM crm;
+
+	public Bookstore() {
+		// empty default constructor
+	}
 
 	public Book searchBook(final String term) {
 		this.catalog.getBook(false);
