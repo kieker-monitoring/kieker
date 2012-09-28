@@ -55,9 +55,9 @@ public class TestProbeController {
 	@Test
 	public void testInitialization() {
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
-		configuration.setProperty(ConfigurationFactory.CUSTOM_CONFIG_FILE_LOCATION, this.configFile.getAbsolutePath());
-		configuration.setProperty(ConfigurationFactory.ACTIVATE_UPDATE_CONFIG_FILE, "true");
-		configuration.setProperty(ConfigurationFactory.READ_INTERVALL, "10");
+		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE, this.configFile.getAbsolutePath());
+		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE, "true");
+		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL, "10");
 		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
 		Assert.assertNotNull(this.configFile);
 		Assert.assertTrue(this.configFile.exists());
@@ -68,9 +68,9 @@ public class TestProbeController {
 	@Test
 	public void testIt() {
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
-		configuration.setProperty(ConfigurationFactory.CUSTOM_CONFIG_FILE_LOCATION, this.configFile.getAbsolutePath());
-		configuration.setProperty(ConfigurationFactory.ACTIVATE_UPDATE_CONFIG_FILE, "true");
-		configuration.setProperty(ConfigurationFactory.READ_INTERVALL, "10");
+		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE, this.configFile.getAbsolutePath());
+		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE, "true");
+		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL, "10");
 		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
 
 		// generate test signature

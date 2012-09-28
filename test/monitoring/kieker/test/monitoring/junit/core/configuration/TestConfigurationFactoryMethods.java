@@ -46,9 +46,10 @@ public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 		// Monitoring controller
 		Assert.assertNotNull(ConfigurationFactory.MONITORING_ENABLED + " must not be empty", configuration.getProperty(ConfigurationFactory.MONITORING_ENABLED));
 		Assert.assertNotNull(ConfigurationFactory.CONTROLLER_NAME + " must not be empty", configuration.getProperty(ConfigurationFactory.CONTROLLER_NAME));
-		Assert.assertTrue(ConfigurationFactory.USE_SHUTDOWN_HOOK + " must be true", configuration.getBooleanProperty(ConfigurationFactory.USE_SHUTDOWN_HOOK));
 		// HostName may be empty!
 		Assert.assertNotNull(ConfigurationFactory.EXPERIMENT_ID + " must not be empty", configuration.getProperty(ConfigurationFactory.EXPERIMENT_ID));
+		Assert.assertNotNull(ConfigurationFactory.USE_SHUTDOWN_HOOK + " must not be empty", configuration.getProperty(ConfigurationFactory.USE_SHUTDOWN_HOOK));
+		Assert.assertNotNull(ConfigurationFactory.DEBUG + " must not be empty", configuration.getProperty(ConfigurationFactory.DEBUG));
 		// JMX controller
 		Assert.assertNotNull(ConfigurationFactory.ACTIVATE_JMX + " must not be empty", configuration.getProperty(ConfigurationFactory.ACTIVATE_JMX));
 		// Writer controller
@@ -60,6 +61,13 @@ public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 		// Sampling controller
 		Assert.assertNotNull(ConfigurationFactory.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE + " must not be empty",
 				configuration.getProperty(ConfigurationFactory.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE));
+		// Probe controller
+		Assert.assertNotNull(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE + " must not be empty",
+				configuration.getProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE));
+		Assert.assertNotNull(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE + " must not be empty",
+				configuration.getProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE));
+		Assert.assertNotNull(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL + " must not be empty",
+				configuration.getProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL));
 	}
 
 	/**
@@ -103,6 +111,10 @@ public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 		Assert.assertEquals("kieker.monitoring.timer.SystemNanoTimer", configuration.getStringProperty(ConfigurationFactory.TIMER_CLASSNAME));
 		// Sampling controller
 		Assert.assertEquals(1, configuration.getIntProperty(ConfigurationFactory.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE));
+		// Probe controller
+		Assert.assertEquals("META-INF/kieker.monitoring.adaptive", configuration.getPathProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE));
+		Assert.assertEquals(false, configuration.getBooleanProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE));
+		Assert.assertEquals(0, configuration.getIntProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL));
 	}
 
 	/**

@@ -54,9 +54,9 @@ public class ProbeController extends AbstractController implements IProbeControl
 
 	protected ProbeController(final Configuration configuration) {
 		super(configuration);
-		this.updateConfigFile = configuration.getBooleanProperty(ConfigurationFactory.ACTIVATE_UPDATE_CONFIG_FILE);
-		this.readIntervall = configuration.getLongProperty(ConfigurationFactory.READ_INTERVALL);
-		this.pathname = configuration.getStringProperty(ConfigurationFactory.CUSTOM_CONFIG_FILE_LOCATION);
+		this.updateConfigFile = configuration.getBooleanProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE);
+		this.readIntervall = configuration.getLongProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL);
+		this.pathname = configuration.getStringProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE);
 	}
 
 	@Override
