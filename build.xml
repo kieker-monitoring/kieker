@@ -990,6 +990,7 @@
 				<include name="jaxb-api-*.jar" /> <!-- needed for the cxf tests -->
 				<include name="jaxb-impl-*.jar" /> <!-- needed for the cxf tests -->
 				<include name="stax-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="javaee-api-*.jar" /> <!-- needed for the cxf tests --> 
 			</fileset>
 			<fileset dir="${example.javaee.jetty.lib.dir}">
 				<include name="jetty-*.jar" /> <!-- needed for the cxf, spring tests -->
