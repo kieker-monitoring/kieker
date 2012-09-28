@@ -232,5 +232,4 @@ public class ProbeController extends AbstractController implements IProbeControl
 			this.updatePatternFile();
 		}
 	}
-
 }

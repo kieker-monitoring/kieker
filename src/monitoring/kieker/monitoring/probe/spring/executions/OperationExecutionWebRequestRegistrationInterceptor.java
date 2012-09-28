@@ -20,33 +20,29 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.WebRequestInterceptor;
 
-import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 
 /**
+ * 
  * @author Andre van Hoorn
  */
+// TODO: We should extend this filter by an optional mode, allowing to log executions; just like the SessionAndTraceRegistrationFilter for Servlets
 public class OperationExecutionWebRequestRegistrationInterceptor implements WebRequestInterceptor {
 
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
-	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
+
+	// protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 
 	public OperationExecutionWebRequestRegistrationInterceptor() {
 		// nothing to do
 	}
 
 	public void preHandle(final WebRequest request) throws Exception {
-		CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
 		SESSION_REGISTRY.storeThreadLocalSessionId(request.getSessionId());
-		CF_REGISTRY.storeThreadLocalEOI(0);
-		CF_REGISTRY.storeThreadLocalESS(1);
 	}
 
 	public void postHandle(final WebRequest request, final ModelMap map) throws Exception {
-		CF_REGISTRY.unsetThreadLocalTraceId();
 		SESSION_REGISTRY.unsetThreadLocalSessionId();
-		CF_REGISTRY.unsetThreadLocalEOI();
-		CF_REGISTRY.unsetThreadLocalESS();
 	}
 
 	public void afterCompletion(final WebRequest request, final Exception map) throws Exception {
