@@ -1018,7 +1018,7 @@
 			<jvmarg line="-javaagent:${lib.dir}/serenity-0.4/serenity.jar" />
 			-->
 
-			<batchtest fork="false" todir="${tests.junit-results.dir}">
+			<batchtest fork="true" todir="${tests.junit-results.dir}">
 				<fileset dir="${build.tests.dir}/">
 					<include name="**/junit/**/*Test*.class" />
 					<exclude name="**/junit/**/Abstract*.class" />
