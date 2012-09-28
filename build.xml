@@ -984,7 +984,12 @@
 				<include name="wsdl4j-*.jar" /> <!-- needed for the cxf tests -->
 				<include name="org.springframework*.jar" /> <!-- needed for the spring tests -->
 				<include name="commons-logging-*.jar" /> <!-- needed for the spring tests -->
-				<include name="geronimo-ws-metadata_2.0_spec-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="geronimo-ws-metadata_*_spec-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="geronimo-jaxws_*_spec-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="geronimo-jaxws_*_spec-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="jaxb-api-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="jaxb-impl-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="stax-*.jar" /> <!-- needed for the cxf tests -->
 			</fileset>
 			<fileset dir="${example.javaee.jetty.lib.dir}">
 				<include name="jetty-*.jar" /> <!-- needed for the cxf, spring tests -->
