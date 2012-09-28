@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.core.helper;
+package kieker.monitoring.core.signaturePattern;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -27,29 +27,22 @@ import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.controller.ProbeController;
 
 /**
- * Based upon the Apache log4j helpers class FileWatchdog written by
- * Ceki G�lc� and Mathias Bogaert.
+ * Based upon the Apache log4j helpers class 'org.apache.log4j.helpers.FileWatchdog'
+ * written by Ceki G&uuml;lc&uuml; and Mathias Bogaert.
  * 
- * @author Bj�rn Wei�enfels
+ * @author Bjoern Weissenfels, Jan Waller
  */
-
-public class FileWatcher extends Thread {
+public final class FileWatcher extends Thread {
 	private static final Log LOG = LogFactory.getLog(FileWatcher.class);
-	/**
-	 * The name of the file whose changes will be observed.
-	 */
-	protected String pathname;
 
-	/**
-	 * The delay between every check.
-	 */
-	protected long delay;
+	private final String pathname;
+	private long delay;
 	private final ProbeController probeController;
 
-	File file;
-	long lastModif = 0;
-	boolean warnedAlready = false;
-	boolean interrupted = false;
+	private final File file;
+	private long lastModif = 0;
+	private boolean warnedAlready = false;
+	private boolean interrupted = false;
 
 	public FileWatcher(final File file, final long delay, final ProbeController probeController) {
 		this.file = file;
@@ -73,7 +66,6 @@ public class FileWatcher extends Thread {
 	}
 
 	protected void doOnChange() {
-
 		// read proprietary pattern file
 		try {
 			this.readFile();
@@ -84,7 +76,7 @@ public class FileWatcher extends Thread {
 	}
 
 	private void readFile() throws Exception {
-		final List<Pair<String, Boolean>> patternList = new ArrayList<Pair<String, Boolean>>();
+		final List<PatternEntry> patternList = new ArrayList<PatternEntry>();
 		boolean includeAll = true;
 		final FileReader fr = new FileReader(this.pathname);
 		final BufferedReader br = new BufferedReader(fr);
@@ -92,21 +84,21 @@ public class FileWatcher extends Thread {
 		while (br.ready()) {
 			currentLine = br.readLine();
 			System.out.println(currentLine);
-			Pair<String, Boolean> pattern;
+			PatternEntry pattern;
 			if (currentLine.startsWith("+")) {
 				includeAll = false;
 				currentLine = currentLine.replaceFirst("\\+", "").trim();
-				pattern = new Pair<String, Boolean>(currentLine, true);
+				pattern = new PatternEntry(currentLine, true);
 				patternList.add(pattern);
 			} else if (currentLine.startsWith("-")) {
 				currentLine = currentLine.replaceFirst("\\-", "").trim();
-				pattern = new Pair<String, Boolean>(currentLine, false);
+				pattern = new PatternEntry(currentLine, false);
 				patternList.add(pattern);
 			} else if (!currentLine.startsWith("#")) {
 				LOG.info("Adaptive monitoring config file: Please start every line with a '+' for an 'include', a '-' for an 'exclude' and a '#' for a comment.");
 			}
 			if (includeAll) {
-				patternList.add(0, new Pair<String, Boolean>("*", true));
+				patternList.add(0, new PatternEntry("*", true));
 			}
 		}
 		br.close();
@@ -126,8 +118,7 @@ public class FileWatcher extends Thread {
 		try {
 			fileExists = this.file.exists();
 		} catch (final SecurityException e) {
-			LOG.warn("Was not allowed to read check file existance, file:[" +
-					this.pathname + "].");
+			LOG.warn("Was not allowed to read check file existance, file:[" + this.pathname + "].");
 			this.interrupted = true; // there is no point in continuing
 			return;
 		}
@@ -153,11 +144,10 @@ public class FileWatcher extends Thread {
 			try {
 				Thread.currentThread();
 				Thread.sleep(this.delay);
-			} catch (final InterruptedException e) {
+			} catch (final InterruptedException ignored) {
 				// no interruption expected
 			}
 			this.checkAndConfigure();
 		}
 	}
-
 }

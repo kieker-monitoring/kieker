@@ -25,9 +25,9 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.Version;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.helper.Pair;
 import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
+import kieker.monitoring.core.signaturePattern.PatternEntry;
 import kieker.monitoring.timer.ITimeSource;
 
 /**
@@ -249,11 +249,11 @@ public final class MonitoringController extends AbstractController implements IM
 		return this.probeController.deactivateProbe(signature);
 	}
 
-	public boolean isProbeActive(final String signature) {
-		return this.probeController.isProbeActive(signature);
+	public boolean isProbeActivated(final String signature) {
+		return this.probeController.isProbeActivated(signature);
 	}
 
-	public void replaceProbePatternList(final List<Pair<String, Boolean>> patternList) {
+	public void replaceProbePatternList(final List<PatternEntry> patternList) {
 		this.probeController.replaceProbePatternList(patternList);
 	}
 
@@ -269,5 +269,4 @@ public final class MonitoringController extends AbstractController implements IM
 	private static final class LazyHolder { // NOCS
 		private static final IMonitoringController INSTANCE = MonitoringController.createInstance(ConfigurationFactory.createSingletonConfiguration());
 	}
-
 }

@@ -16,76 +16,72 @@
 
 package kieker.monitoring.core.controller;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.helper.FileWatcher;
-import kieker.monitoring.core.helper.InvalidPatternException;
-import kieker.monitoring.core.helper.Pair;
-import kieker.monitoring.core.helper.PatternParser;
+import kieker.monitoring.core.signaturePattern.InvalidPatternException;
+import kieker.monitoring.core.signaturePattern.PatternEntry;
+import kieker.monitoring.core.signaturePattern.PatternParser;
 
 /**
  * @author Jan Waller, Bjoern Weissenfels
  */
 public class ProbeController extends AbstractController implements IProbeController {
 	private static final Log LOG = LogFactory.getLog(ProbeController.class);
+	private static final PatternEntry defaultPattern = new PatternEntry("*", PatternParser.parseToPattern("*"), true);
 
-	private final CopyOnWriteArrayList<Pair<Matcher, Boolean>> matcherList = new CopyOnWriteArrayList<Pair<Matcher, Boolean>>();
-	private final CopyOnWriteArrayList<Pair<String, Boolean>> patternList = new CopyOnWriteArrayList<Pair<String, Boolean>>();
-	private final ConcurrentHashMap<String, Boolean> signatureCache = new ConcurrentHashMap<String, Boolean>();
-	private final PatternParser parser = new PatternParser();
-	private boolean updateConfigFile;
-	private final long readIntervall;
-	private final String pathname;
-	private FileWatcher fileWatcher;
-	private File file;
+	private final String configFilePathname;
+	private final long configFileReadIntervall;
+	private final boolean configFileUpdate;
+
+	private final ConcurrentMap<String, Boolean> signatureCache = new ConcurrentHashMap<String, Boolean>();
+
+	private final CopyOnWriteArrayList<PatternEntry> patternList = new CopyOnWriteArrayList<PatternEntry>();
+
+	// private FileWatcher fileWatcher;
+	// private File file;
 
 	protected ProbeController(final Configuration configuration) {
 		super(configuration);
-		this.updateConfigFile = configuration.getBooleanProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE);
-		this.readIntervall = configuration.getLongProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL);
-		this.pathname = configuration.getStringProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE);
+		this.configFilePathname = configuration.getPathProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE);
+		this.configFileUpdate = configuration.getBooleanProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE);
+		this.configFileReadIntervall = configuration.getLongProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL);
 	}
 
 	@Override
 	protected void init() {
-		// InputStream is = null;
-		// try {
-		// is = new FileInputStream(this.pathname);
-		// } catch (final FileNotFoundException e1) {
-		// is = MonitoringController.class.getClassLoader().getResourceAsStream(this.pathname);
-		// if (is == null) {
-		// LOG.warn("File '" + this.pathname + "' not found");
-		// }
-		// }
-
-		this.file = new File(this.pathname);
-		if (this.file.exists()) {
-			this.fileWatcher = new FileWatcher(this.file, this.readIntervall * 1000, this);
-			this.fileWatcher.start();
-		} else {
-			LOG.info("Config file did not exist. " + this.pathname);
-			this.updateConfigFile = false;
+		InputStream is = null;
+		try {
 			try {
-				final Matcher matcher = this.parser.parseToPattern("*").matcher("");
-				this.matcherList.add(new Pair<Matcher, Boolean>(matcher, true));
-			} catch (final InvalidPatternException e) {
-				LOG.error(e.getMessage()); // In this case, nothing will be monitored.
-				e.printStackTrace();
+				is = new FileInputStream(this.configFilePathname);
+			} catch (final FileNotFoundException ex) {
+				is = MonitoringController.class.getClassLoader().getResourceAsStream(this.configFilePathname);
+				if (is == null) {
+					LOG.warn("Failed to read file: " + this.configFilePathname);
+				}
 			}
-
+			// TODO actually read file into List
+			this.replaceProbePatternList(null);
+		} finally {
+			if (null != is) {
+				try {
+					is.close();
+				} catch (final IOException ex) {
+					LOG.error("Failed to close file: " + this.configFilePathname, ex);
+				}
+			}
 		}
 	}
 
@@ -94,87 +90,70 @@ public class ProbeController extends AbstractController implements IProbeControl
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Shutting down Probe Controller");
 		}
+		// TODO cleanup the fileWatcher
 	}
 
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("ProbeController: ");
-		if (this.readIntervall > 0) {
-			sb.append(" The pattern file will be checked every " + this.readIntervall + " seconds (readIntervall = " + this.readIntervall + ").\n");
+		sb.append("ProbeController: \'");
+		sb.append(this.configFilePathname).append("\'\n");
+		sb.append("\tTime intervall for update checks of pattern file (in seconds): ");
+		if (this.configFileReadIntervall > 0) {
+			sb.append(this.configFileReadIntervall);
 		} else {
-			sb.append(" The pattern file won't be checked. (readIntervall = " + this.readIntervall + ").\n");
+			sb.append("deactivated");
 		}
-		if (this.updateConfigFile) {
-			sb.append("\tThe pattern file will be updated after de/activateProbe method (updateConfigFile = " + this.updateConfigFile + ").\n");
-		} else {
-			sb.append("\tThe pattern file won't be updated after de/activateProbe method (updateConfigFile = " + this.updateConfigFile + ").\n");
-		}
+		sb.append("\n\tUpdate pattern file with additional patterns: ");
+		sb.append(this.configFileUpdate);
+		sb.append('\n');
 		return sb.toString();
 	}
 
 	public boolean activateProbe(final String pattern) {
-		return this.de_activateProbe(pattern, true);
+		return this.addPattern(pattern, true);
 	}
 
 	public boolean deactivateProbe(final String pattern) {
-		return this.de_activateProbe(pattern, false);
+		return this.addPattern(pattern, false);
 	}
 
-	private boolean de_activateProbe(final String pattern, final boolean activate) {
-		final boolean clearCache = !this.signatureCache.containsKey(pattern);
-		if (clearCache) {
-			this.signatureCache.clear();
-		} else {
-			this.signatureCache.put(pattern, activate);
-		}
-
-		Pattern regex;
-		try {
-			regex = this.parser.parseToPattern(pattern);
-		} catch (final InvalidPatternException e) {
-			LOG.error(pattern + " is not a valid pattern: " + e.getMessage());
+	public boolean isProbeActivated(final String signature) {
+		if (!this.monitoringController.isMonitoringEnabled()) {
 			return false;
 		}
-		final Matcher matcher = regex.matcher("");
-		this.matcherList.add(0, new Pair<Matcher, Boolean>(matcher, activate));
-
-		final Pair<String, Boolean> pair = new Pair<String, Boolean>(pattern, activate);
-		if (this.patternList.contains(pair)) {
-			final int index = this.patternList.indexOf(pair);
-			this.patternList.remove(index);
+		final Boolean active = this.signatureCache.get(signature);
+		if (null == active) {
+			return this.matchesPattern(signature);
+		} else {
+			return active;
 		}
-		this.patternList.add(pair);
-		if (this.updateConfigFile) {
-			this.updatePatternFile();
-		}
-		return true;
-
 	}
 
-	public boolean isProbeActive(final String signature) {
-		if (this.monitoringController.isMonitoringEnabled()) {
-			if (this.signatureCache.containsKey(signature)) {
-				return this.signatureCache.get(signature);
-			} else {
-				return this.matchesIncludePattern(signature);
+	public void replaceProbePatternList(final List<PatternEntry> patternList) {
+		synchronized (this) {
+			this.patternList.clear();
+			this.signatureCache.clear(); // TODO: maybe rebuild
+			this.patternList.add(ProbeController.defaultPattern);
+			if (patternList == null) {
+				return;
 			}
-		} else {
-			return false;
+			this.patternList.addAll(0, patternList);
+			if (this.configFileUpdate) {
+				this.updatePatternFile();
+			}
 		}
 	}
 
-	/*
-	 * tests if signature matches a pattern
-	 * and completes accordingly the SIGNATURE_CACHE HashMap
+	/**
+	 * tests if signature matches a pattern and completes accordingly the signatureCache map
 	 */
-	private boolean matchesIncludePattern(final String signature) {
-		final ListIterator<Pair<Matcher, Boolean>> patternList = this.matcherList.listIterator();
-		Pair<Matcher, Boolean> pair;
+	private boolean matchesPattern(final String signature) {
+		final ListIterator<PatternEntry> patternList = this.patternList.listIterator();
 		while (patternList.hasNext()) {
-			pair = patternList.next();
-			if (pair.getPattern().reset(signature).matches()) {
-				final boolean value = pair.isActive();
+			final PatternEntry pair = patternList.next();
+			if (pair.getPattern().matcher(signature).matches()) {
+				final boolean value = pair.isActivated();
 				this.signatureCache.put(signature, value);
 				return value;
 			}
@@ -182,54 +161,50 @@ public class ProbeController extends AbstractController implements IProbeControl
 		return false;
 	}
 
-	private void updatePatternFile() {
-		try {
-			final FileWriter fw = new FileWriter(this.pathname);
-			final BufferedWriter bw = new BufferedWriter(fw);
-			final ListIterator<Pair<String, Boolean>> patternList = this.patternList.listIterator();
-			String prefix;
-			while (patternList.hasNext()) {
-				prefix = "+ ";
-				final Pair<String, Boolean> namePattern = patternList.next();
-				if (!namePattern.isActive()) {
-					prefix = "- ";
-				}
-				bw.write(prefix + namePattern.getPattern());
-				bw.newLine();
-			}
-			bw.close();
-			fw.close();
-			if (this.fileWatcher != null) {
-				this.fileWatcher.setLastModified(this.file.lastModified());
-			}
-			LOG.info("updating config file succeed");
-		} catch (final IOException e) {
-			LOG.error("updating config file failed");
-			e.printStackTrace();
-		}
-	}
+	private boolean addPattern(final String strPattern, final boolean activated) {
+		// we must always clear the cache!
+		this.signatureCache.clear(); // TODO maybe not clear but rebuild?
 
-	public void replaceProbePatternList(final List<Pair<String, Boolean>> patternList) {
-		this.patternList.clear();
-		this.matcherList.clear();
-		this.signatureCache.clear();
-		if (patternList == null) {
-			return;
+		final Pattern pattern;
+		try {
+			pattern = PatternParser.parseToPattern(strPattern);
+		} catch (final InvalidPatternException ex) {
+			LOG.error("'" + strPattern + "' is not a valid pattern.", ex);
+			return false;
 		}
-		this.patternList.addAll(patternList);
-		final int size = this.patternList.size();
-		for (int i = 1; i <= size; i++) {
-			final Pair<String, Boolean> pair = this.patternList.get(size - i);
-			try {
-				final Pattern pattern = this.parser.parseToPattern(pair.getPattern());
-				final Matcher matcher = pattern.matcher("");
-				this.matcherList.add(new Pair<Matcher, Boolean>(matcher, pair.isActive()));
-			} catch (final InvalidPatternException e) {
-				LOG.error(pair.getPattern() + " is not a valid pattern: " + e.getMessage());
-			}
-		}
-		if (this.updateConfigFile) {
+		this.patternList.add(0, new PatternEntry(strPattern, pattern, activated));
+
+		if (this.configFileUpdate) {
+			// TODO remove double entries in list? Use modified(?) CopyOnWriteArraySet
 			this.updatePatternFile();
 		}
+		return true;
+	}
+
+	private void updatePatternFile() {
+		// try {
+		// final FileWriter fw = new FileWriter(this.configFilePathname);
+		// final BufferedWriter bw = new BufferedWriter(fw);
+		// final ListIterator<Pair<String, Boolean>> patternList = this.patternList.listIterator();
+		// String prefix;
+		// while (patternList.hasNext()) {
+		// prefix = "+ ";
+		// final Pair<String, Boolean> namePattern = patternList.next();
+		// if (!namePattern.isActive()) {
+		// prefix = "- ";
+		// }
+		// bw.write(prefix + namePattern.getPattern());
+		// bw.newLine();
+		// }
+		// bw.close();
+		// fw.close();
+		// if (this.fileWatcher != null) {
+		// this.fileWatcher.setLastModified(this.file.lastModified());
+		// }
+		// LOG.info("updating config file succeed");
+		// } catch (final IOException e) {
+		// LOG.error("updating config file failed");
+		// e.printStackTrace();
+		// }
 	}
 }

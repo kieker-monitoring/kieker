@@ -7,8 +7,8 @@ import java.util.regex.Pattern;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.monitoring.core.helper.InvalidPatternException;
-import kieker.monitoring.core.helper.PatternParser;
+import kieker.monitoring.core.signaturePattern.InvalidPatternException;
+import kieker.monitoring.core.signaturePattern.PatternParser;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.PatternConstructor;

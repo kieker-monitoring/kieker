@@ -80,8 +80,8 @@ public class TestProbeController {
 		final String pattern = "..* kieker..*.*(..)";
 		Assert.assertFalse(ctrl.activateProbe("invalid pattern"));
 		Assert.assertTrue(ctrl.activateProbe(pattern));
-		Assert.assertTrue(ctrl.isProbeActive(signature));
+		Assert.assertTrue(ctrl.isProbeActivated(signature));
 		Assert.assertTrue(ctrl.deactivateProbe(pattern));
-		Assert.assertFalse(ctrl.isProbeActive(signature));
+		Assert.assertFalse(ctrl.isProbeActivated(signature));
 	}
 }

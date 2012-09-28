@@ -1,10 +1,35 @@
-package kieker.monitoring.core.helper;
+/***************************************************************************
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
+package kieker.monitoring.core.signaturePattern;
 
 import java.util.regex.Pattern;
 
-public class PatternParser {
+/**
+ * TODO: review and restructure this class
+ * 
+ * @author Bjoern Weissenfels, Jan Waller
+ */
+public final class PatternParser {
 
-	public Pattern parseToPattern(final String pattern) throws InvalidPatternException {
+	private PatternParser() {
+		// private default constructor
+	}
+
+	public static final Pattern parseToPattern(final String pattern) throws InvalidPatternException {
 		final StringBuilder sb = new StringBuilder();
 		if ("*".equals(pattern)) {
 			sb.append(".*");
@@ -21,71 +46,70 @@ public class PatternParser {
 			}
 
 			array = prefix.trim().split("\\s+");
-			String ret_type;
-			String fq_name;
+			String retType;
+			String fqName;
 			String[] modifierList = null;
 
 			switch (array.length) {
 			case 2:
-				ret_type = array[0];
-				fq_name = array[1];
+				retType = array[0];
+				fqName = array[1];
 				break;
 			case 3:
 				modifierList = new String[1];
 				modifierList[0] = array[0];
-				ret_type = array[1];
-				fq_name = array[2];
+				retType = array[1];
+				fqName = array[2];
 				break;
 			case 4:
 				modifierList = new String[2];
 				modifierList[0] = array[0];
 				modifierList[1] = array[1];
-				ret_type = array[2];
-				fq_name = array[3];
+				retType = array[2];
+				fqName = array[3];
 				break;
 			case 5:
 				modifierList = new String[3];
 				modifierList[0] = array[0];
 				modifierList[1] = array[1];
 				modifierList[2] = array[2];
-				ret_type = array[3];
-				fq_name = array[4];
+				retType = array[3];
+				fqName = array[4];
 				break;
 			default:
 				throw new InvalidPatternException("invalid pattern");
 			}
 
-			final int index = fq_name.lastIndexOf(".");
-			if ((index == -1) || (index == (fq_name.length() - 1))) {
+			final int index = fqName.lastIndexOf('.');
+			if ((index == -1) || (index == (fqName.length() - 1))) {
 				throw new InvalidPatternException("Invalid fully qualified type or method name.");
 			}
-			final String fq_type = fq_name.substring(0, index);
-			final String method_name = fq_name.substring(index + 1);
+			final String fqType = fqName.substring(0, index);
+			final String methodName = fqName.substring(index + 1);
 
-			sb.append(this.parseModifierConstraintList(modifierList));
-			sb.append(this.parseRetType(ret_type));
-			sb.append(this.parseFQType(fq_type));
+			sb.append(PatternParser.parseModifierConstraintList(modifierList));
+			sb.append(PatternParser.parseRetType(retType));
+			sb.append(PatternParser.parseFQType(fqType));
 			sb.append("\\.");
-			sb.append(this.parseMethodName(method_name));
+			sb.append(PatternParser.parseMethodName(methodName));
 			sb.append("\\(");
 			if (params != null) {
-				sb.append(this.parseParameterList(params.trim().split(",")));
+				sb.append(PatternParser.parseParameterList(params.trim().split(",")));
 			}
 			sb.append("\\)");
 		}
-		final Pattern result = Pattern.compile(sb.toString());
-		return result;
+		return Pattern.compile(sb.toString());
 	}
 
-	private String parseMethodName(final String methodName) throws InvalidPatternException {
+	private static final String parseMethodName(final String methodName) throws InvalidPatternException {
 		try {
-			return this.parseIdentifier(methodName);
-		} catch (final InvalidPatternException e) {
-			throw new InvalidPatternException("Invalid method name. -> " + e.getMessage());
+			return PatternParser.parseIdentifier(methodName);
+		} catch (final InvalidPatternException ex) {
+			throw new InvalidPatternException("Invalid method name.", ex);
 		}
 	}
 
-	private String parseParameterList(final String[] paramList) throws InvalidPatternException {
+	private static final String parseParameterList(final String[] paramList) throws InvalidPatternException {
 		final int length = paramList.length;
 		if (length == 1) {
 			if (paramList[0].trim().length() == 0) {
@@ -109,10 +133,10 @@ public class PatternParser {
 		} else {
 			try {
 				sb.append("(\\s)?");
-				sb.append(this.parseFQType(paramList[0].trim()));
+				sb.append(PatternParser.parseFQType(paramList[0].trim()));
 				sb.append("(\\s)?");
-			} catch (final InvalidPatternException e) {
-				throw new InvalidPatternException("Invalid parameter list. -> " + e.getMessage());
+			} catch (final InvalidPatternException ex) {
+				throw new InvalidPatternException("Invalid parameter list.", ex);
 			}
 		}
 
@@ -127,10 +151,10 @@ public class PatternParser {
 			} else {
 				try {
 					sb.append("(\\s)?");
-					sb.append(this.parseFQType(paramList[1].trim()));
+					sb.append(PatternParser.parseFQType(paramList[1].trim()));
 					sb.append("(\\s)?");
-				} catch (final InvalidPatternException e) {
-					throw new InvalidPatternException("Invalid parameter list. -> " + e.getMessage());
+				} catch (final InvalidPatternException ex) {
+					throw new InvalidPatternException("Invalid parameter list.", ex);
 				}
 			}
 		}
@@ -145,10 +169,10 @@ public class PatternParser {
 			} else {
 				try {
 					sb.append(",(\\s)?");
-					sb.append(this.parseFQType(paramList[i].trim()));
+					sb.append(PatternParser.parseFQType(paramList[i].trim()));
 					sb.append("(\\s)?");
-				} catch (final InvalidPatternException e) {
-					throw new InvalidPatternException("Invalid parameter list. -> " + e.getMessage());
+				} catch (final InvalidPatternException ex) {
+					throw new InvalidPatternException("Invalid parameter list.", ex);
 				}
 			}
 		}
@@ -156,7 +180,7 @@ public class PatternParser {
 		return sb.toString();
 	}
 
-	private String parseIdentifier(final String identifier) throws InvalidPatternException {
+	private static final String parseIdentifier(final String identifier) throws InvalidPatternException {
 		final char[] array = identifier.toCharArray();
 		final StringBuilder sb = new StringBuilder();
 		if (Character.isJavaIdentifierStart(array[0])) {
@@ -178,17 +202,17 @@ public class PatternParser {
 		return sb.toString();
 	}
 
-	private String parseFQType(final String fq_type) throws InvalidPatternException {
-		if (fq_type.contains("...") || fq_type.endsWith(".") || (fq_type.length() == 0)) {
+	private static final String parseFQType(final String fqType) throws InvalidPatternException {
+		if (fqType.contains("...") || fqType.endsWith(".") || (fqType.length() == 0)) {
 			throw new InvalidPatternException("Invalid fully qualified type.");
 		}
-		final String[] array = fq_type.split("\\.");
+		final String[] array = fqType.split("\\.");
 		final int length = array.length;
 		if (length == 1) {
 			try {
-				return this.parseIdentifier(fq_type);
-			} catch (final InvalidPatternException e) {
-				throw new InvalidPatternException("Invalid fully qualified type. -> " + e.getMessage());
+				return PatternParser.parseIdentifier(fqType);
+			} catch (final InvalidPatternException ex) {
+				throw new InvalidPatternException("Invalid fully qualified type.", ex);
 			}
 		}
 		int start = 0;
@@ -205,34 +229,35 @@ public class PatternParser {
 				sb.append("(([\\p{javaJavaIdentifierPart}\\.])*\\.)?");
 			} else {
 				try {
-					sb.append(this.parseIdentifier(array[i]));
-				} catch (final InvalidPatternException e) {
-					throw new InvalidPatternException("Invalid fully qualified type. -> " + e.getMessage());
+					sb.append(PatternParser.parseIdentifier(array[i]));
+				} catch (final InvalidPatternException ex) {
+					throw new InvalidPatternException("Invalid fully qualified type.", ex);
 				}
 				sb.append("\\.");
 			}
 		}
 		try {
-			sb.append(this.parseIdentifier(array[length - 1]));
-		} catch (final InvalidPatternException e) {
-			throw new InvalidPatternException("Invalid fully qualified type. -> " + e.getMessage());
+			sb.append(PatternParser.parseIdentifier(array[length - 1]));
+		} catch (final InvalidPatternException ex) {
+			final InvalidPatternException newEx = new InvalidPatternException("Invalid fully qualified type.");
+			throw (InvalidPatternException) newEx.initCause(ex);
 		}
 		return sb.toString();
 	}
 
-	private String parseRetType(final String ret_type) throws InvalidPatternException {
-		if ("new".equals(ret_type)) {
+	private static final String parseRetType(final String retType) throws InvalidPatternException {
+		if ("new".equals(retType)) {
 			return "";
 		} else {
 			try {
-				return this.parseFQType(ret_type) + "\\s";
-			} catch (final InvalidPatternException e) {
-				throw new InvalidPatternException("Invalid return type. -> " + e.getMessage());
+				return PatternParser.parseFQType(retType) + "\\s";
+			} catch (final InvalidPatternException ex) {
+				throw new InvalidPatternException("Invalid return type.", ex);
 			}
 		}
 	}
 
-	private String parseModifierConstraintList(final String[] modifierList) throws InvalidPatternException {
+	private static final String parseModifierConstraintList(final String[] modifierList) throws InvalidPatternException {
 		if (modifierList == null) {
 			return "((public|private|protected)\\s)?((static)\\s)?((native)\\s)?";
 		}
@@ -333,21 +358,21 @@ public class PatternParser {
 				sb.append("private\\s");
 			} else if ("protected".equals(modifierList[0])) {
 				sb.append("protected\\s");
-			} else if ("package".equals(modifierList[0])) {
+			} else if ("package".equals(modifierList[0])) { // NOPMD NOCS (nothing to do)
 				// nothing to do
 			} else {
 				throw new InvalidPatternException("Invalid modifier.");
 			}
 			if ("static".equals(modifierList[1])) {
 				sb.append("static\\s");
-			} else if ("non_static".equals(modifierList[1])) {
+			} else if ("non_static".equals(modifierList[1])) { // NOPMD NOCS (nothing to do)
 				// nothing to do
 			} else {
 				throw new InvalidPatternException("Invalid modifier.");
 			}
 			if ("native".equals(modifierList[2])) {
 				sb.append("native\\s");
-			} else if ("non_native".equals(modifierList[2])) {
+			} else if ("non_native".equals(modifierList[2])) { // NOPMD NOCS (nothing to do)
 				// nothing to do
 			} else {
 				throw new InvalidPatternException("Invalid modifier.");
