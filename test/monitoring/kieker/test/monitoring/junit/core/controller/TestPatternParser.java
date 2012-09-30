@@ -19,7 +19,6 @@ public class TestPatternParser extends AbstractKiekerTest {
 	@Test
 	// works : 810.000 tests
 	public void whitespaceTest() throws InvalidPatternException {
-		final PatternParser parser = new PatternParser();
 		final String signature = "public static void default.package.Clazz.getVal(int, java.lang.String)";
 
 		final PatternConstructor positivePattern = new PatternConstructor();
@@ -34,14 +33,13 @@ public class TestPatternParser extends AbstractKiekerTest {
 
 		final List<String> positivePatternList = positivePattern.getPattern();
 		for (final String pattern : positivePatternList) {
-			Assert.assertTrue("pattern: " + pattern + "; signature: " + signature, parser.parseToPattern(pattern).matcher(signature).matches());
+			Assert.assertTrue("pattern: " + pattern + "; signature: " + signature, PatternParser.parseToPattern(pattern).matcher(signature).matches());
 		}
 	}
 
 	@Test
 	// 55.296 tests
 	public void parameterListTest() throws InvalidPatternException {
-		final PatternParser parser = new PatternParser();
 		final String signature = "public static void default.package.Clazz.getVal(int, java.lang.String)";
 
 		final PatternConstructor positivePattern = new PatternConstructor();
@@ -59,14 +57,13 @@ public class TestPatternParser extends AbstractKiekerTest {
 
 		final List<String> positivePatternList = positivePattern.getPattern();
 		for (final String pattern : positivePatternList) {
-			Assert.assertTrue(parser.parseToPattern(pattern).matcher(signature).matches());
+			Assert.assertTrue(PatternParser.parseToPattern(pattern).matcher(signature).matches());
 		}
 	}
 
 	@Test
 	// 104.448 tests
 	public void signatureTest() throws InvalidPatternException {
-		final PatternParser parser = new PatternParser();
 		final String signature = "public static void default.package.Clazz.getVal(int, java.lang.String)";
 
 		final PatternConstructor positivePattern = new PatternConstructor();
@@ -84,7 +81,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 
 		final List<String> positivePatternList = positivePattern.getPattern();
 		for (final String pattern : positivePatternList) {
-			Assert.assertTrue(parser.parseToPattern(pattern).matcher(signature).matches());
+			Assert.assertTrue(PatternParser.parseToPattern(pattern).matcher(signature).matches());
 		}
 
 		final PatternConstructor wrongVisibilityPattern = new PatternConstructor();
@@ -99,7 +96,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addwhitespaceVariant(" ");
 		final List<String> wrongVisibilityPatternList = wrongVisibilityPattern.getPattern();
 		for (final String pattern : wrongVisibilityPatternList) {
-			Assert.assertFalse(parser.parseToPattern(pattern).matcher(signature).matches());
+			Assert.assertFalse(PatternParser.parseToPattern(pattern).matcher(signature).matches());
 		}
 
 		final PatternConstructor wrongStaticPattern = new PatternConstructor();
@@ -114,7 +111,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addwhitespaceVariant(" ");
 		final List<String> wrongStaticPatternList = wrongStaticPattern.getPattern();
 		for (final String pattern : wrongStaticPatternList) {
-			Assert.assertFalse(parser.parseToPattern(pattern).matcher(signature).matches());
+			Assert.assertFalse(PatternParser.parseToPattern(pattern).matcher(signature).matches());
 		}
 
 		final PatternConstructor wrongNativePattern = new PatternConstructor();
@@ -129,16 +126,15 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addwhitespaceVariant(" ");
 		final List<String> wrongNativePatternList = wrongNativePattern.getPattern();
 		for (final String pattern : wrongNativePatternList) {
-			Assert.assertFalse(parser.parseToPattern(pattern).matcher(signature).matches());
+			Assert.assertFalse(PatternParser.parseToPattern(pattern).matcher(signature).matches());
 		}
 	}
 
 	@Test
 	// 160 tests
 	public void patternTest() throws InvalidPatternException {
-		final PatternParser parser = new PatternParser();
 		final String pattern = "public void ..Clazz.get*(int, ..)";
-		final Matcher matcher = parser.parseToPattern(pattern).matcher("");
+		final Matcher matcher = PatternParser.parseToPattern(pattern).matcher("");
 
 		final SignatureConstructor positiveSignature = new SignatureConstructor();
 		positiveSignature.addVisibilityVariant("public")
@@ -310,8 +306,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 
 		final String signature = signatureBuilder.toString();
 
-		final PatternParser myParser = new PatternParser();
-		final Pattern pattern = myParser.parseToPattern(patternStr);
+		final Pattern pattern = PatternParser.parseToPattern(patternStr);
 		final Matcher m = pattern.matcher(signature);
 
 		Assert.assertTrue((this.i++) + "Unexpected match result.\nregExp: " + pattern.toString() + "\npattern: " + pattern
@@ -321,8 +316,6 @@ public class TestPatternParser extends AbstractKiekerTest {
 	@Test
 	// 103.680 tests
 	public void testBasic() throws InvalidPatternException {
-		final PatternParser myParser = new PatternParser();
-
 		final String[] visibilities = { "public", "private", "package", "protected", "" };
 		final String[] staticNonStatics = { "static", "non_static", "" };
 		final String[] nativeNonNatives = { "native", "non_native", "" };
@@ -411,10 +404,10 @@ public class TestPatternParser extends AbstractKiekerTest {
 													, operationNames[operationNameIdx]
 													, paramLists[paramListIdx]);
 
-											// final Pattern pattern = myParser.parseToPattern(patternStr);
-											// final Matcher m = pattern.matcher(signature01);
-											// final boolean result = m.matches();
-											// Assert.assertEquals("expected: " + expected + ", but was: " + result, expected, result);
+											final Pattern pattern = PatternParser.parseToPattern(patternStr);
+											final Matcher m = pattern.matcher(signature01);
+											final boolean result = m.matches();
+											Assert.assertEquals("expected: " + expected + ", but was: " + result, expected, result);
 										}
 									}
 								}
@@ -428,13 +421,12 @@ public class TestPatternParser extends AbstractKiekerTest {
 
 	@Test
 	public void constructorTest() throws InvalidPatternException {
-		final PatternParser parser = new PatternParser();
 		final String constructorPattern = "new ..*.*(..)"; // should match all constructors and nothing else
 
 		final String constructorSignature = "public package.Class.constructor()";
 		final String methodSignature = "public void package.Class.method()";
 
-		final Matcher constructorMatcher = parser.parseToPattern(constructorPattern).matcher("");
+		final Matcher constructorMatcher = PatternParser.parseToPattern(constructorPattern).matcher("");
 		Assert.assertTrue(constructorMatcher.reset(constructorSignature).matches());
 		Assert.assertFalse(constructorMatcher.reset(methodSignature).matches());
 

@@ -16,15 +16,21 @@
 
 package kieker.monitoring.core.controller;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import kieker.common.configuration.Configuration;
@@ -43,46 +49,34 @@ public class ProbeController extends AbstractController implements IProbeControl
 	private static final PatternEntry defaultPattern = new PatternEntry("*", PatternParser.parseToPattern("*"), true);
 
 	private final String configFilePathname;
-	private final long configFileReadIntervall;
 	private final boolean configFileUpdate;
+	private final int configFileReadIntervall;
+
+	private final ScheduledExecutorService scheduler;
+	private final ScheduledFuture<?> configFileReaderSchedule;
 
 	private final ConcurrentMap<String, Boolean> signatureCache = new ConcurrentHashMap<String, Boolean>();
-
 	private final CopyOnWriteArrayList<PatternEntry> patternList = new CopyOnWriteArrayList<PatternEntry>();
-
-	// private FileWatcher fileWatcher;
-	// private File file;
 
 	protected ProbeController(final Configuration configuration) {
 		super(configuration);
 		this.configFilePathname = configuration.getPathProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE);
 		this.configFileUpdate = configuration.getBooleanProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE);
-		this.configFileReadIntervall = configuration.getLongProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL);
+		this.configFileReadIntervall = configuration.getIntProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL);
+
+		if (this.configFileReadIntervall > 0) {
+			this.scheduler = Executors.newScheduledThreadPool(0); // TODO use Scheduling Controller
+			final Runnable configFileReader = new ConfigFileReader(this.configFilePathname);
+			this.configFileReaderSchedule = this.scheduler.scheduleWithFixedDelay(configFileReader, 0, this.configFileReadIntervall, TimeUnit.SECONDS);
+		} else {
+			this.scheduler = null;
+			this.configFileReaderSchedule = null;
+		}
 	}
 
 	@Override
 	protected void init() {
-		InputStream is = null;
-		try {
-			try {
-				is = new FileInputStream(this.configFilePathname);
-			} catch (final FileNotFoundException ex) {
-				is = MonitoringController.class.getClassLoader().getResourceAsStream(this.configFilePathname);
-				if (is == null) {
-					LOG.warn("Failed to read file: " + this.configFilePathname);
-				}
-			}
-			// TODO actually read file into List
-			this.replaceProbePatternList(null);
-		} finally {
-			if (null != is) {
-				try {
-					is.close();
-				} catch (final IOException ex) {
-					LOG.error("Failed to close file: " + this.configFilePathname, ex);
-				}
-			}
-		}
+		// currently nothing to do?
 	}
 
 	@Override
@@ -90,7 +84,12 @@ public class ProbeController extends AbstractController implements IProbeControl
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Shutting down Probe Controller");
 		}
-		// TODO cleanup the fileWatcher
+		if (null != this.configFileReaderSchedule) {
+			this.configFileReaderSchedule.cancel(true);
+		}
+		if (null != this.scheduler) {
+			this.scheduler.shutdown();
+		}
 	}
 
 	@Override
@@ -206,5 +205,102 @@ public class ProbeController extends AbstractController implements IProbeControl
 		// LOG.error("updating config file failed");
 		// e.printStackTrace();
 		// }
+	}
+
+	private final class ConfigFileReader implements Runnable {
+		private final String configFilePathname;
+		private volatile long lastModifiedTimestamp;
+
+		public ConfigFileReader(final String configFilePathname) {
+			this.configFilePathname = configFilePathname;
+		}
+
+		public void run() {
+			InputStream is = null;
+			try {
+				try {
+					final long lastModified;
+					final File file = new File(this.configFilePathname);
+					if (file.canRead() && ((lastModified = file.lastModified()) > 0L)) {
+						if (lastModified > this.lastModifiedTimestamp) {
+							this.lastModifiedTimestamp = lastModified;
+							is = new FileInputStream(file);
+						} else {
+							return; // nothing do this time
+						}
+					} else { // file not found or not accessible
+						// is = null
+					}
+				} catch (final SecurityException ex) {
+					// is = null;
+				} catch (final FileNotFoundException ex) {
+					// is = null;
+				}
+				if (null == is) {
+					final long lastModified;
+					final File file = new File(MonitoringController.class.getClassLoader().getResource(this.configFilePathname).toURI());
+					if (file.canRead() && ((lastModified = file.lastModified()) > 0L)) {
+						if (lastModified > this.lastModifiedTimestamp) {
+							this.lastModifiedTimestamp = lastModified;
+							is = new FileInputStream(file);
+						} else {
+							return; // nothing do this time
+						}
+					} else { // no file found ...
+						if (LOG.isDebugEnabled()) {
+							LOG.debug("Adaptive monitoring config file not found: " + this.configFilePathname);
+						}
+						return;
+					}
+				}
+				// if we are here (is != null)
+				// TODO actually read file into List from is
+				// this.replaceProbePatternList(null);
+			} catch (final URISyntaxException ex) {
+				LOG.warn("Adaptive monitoring config file not found: " + this.configFilePathname, ex);
+			} catch (final SecurityException ex) {
+				LOG.warn("Adaptive monitoring config file not found: " + this.configFilePathname, ex);
+			} catch (final FileNotFoundException ex) {
+				LOG.warn("Adaptive monitoring config file not found: " + this.configFilePathname, ex);
+			} finally {
+				if (null != is) {
+					try {
+						is.close();
+					} catch (final IOException ex) {
+						LOG.error("Failed to close file: " + this.configFilePathname, ex);
+					}
+				}
+			}
+		}
+
+		private void readFile() throws Exception {
+			// final List<PatternEntry> patternList = new ArrayList<PatternEntry>();
+			// boolean includeAll = true;
+			// final FileReader fr = new FileReader(this.pathname);
+			// final BufferedReader br = new BufferedReader(fr);
+			// String currentLine;
+			// while (br.ready()) {
+			// currentLine = br.readLine();
+			// System.out.println(currentLine);
+			// PatternEntry pattern;
+			// if (currentLine.startsWith("+")) {
+			// includeAll = false;
+			// currentLine = currentLine.replaceFirst("\\+", "").trim();
+			// pattern = new PatternEntry(currentLine, true);
+			// patternList.add(pattern);
+			// } else if (currentLine.startsWith("-")) {
+			// currentLine = currentLine.replaceFirst("\\-", "").trim();
+			// pattern = new PatternEntry(currentLine, false);
+			// patternList.add(pattern);
+			// } else if (!currentLine.startsWith("#")) {
+			// LOG.info("Adaptive monitoring config file: Please start every line with a '+' for an 'include', a '-' for an 'exclude' and a '#' for a comment.");
+			// }
+			// if (includeAll) {
+			// patternList.add(0, new PatternEntry("*", true));
+			// }
+			// }
+			// br.close();
+			// this.probeController.replaceProbePatternList(patternList);
+		}
 	}
 }
