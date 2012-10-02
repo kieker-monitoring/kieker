@@ -14,27 +14,32 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
-
-import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPolicy;
-import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPair;
+package kieker.tools.traceAnalysis.filter.visualization.graph;
 
 /**
- * This class represents operation dependency graphs on the assembly level.
+ * Abstract superclass for all origin retention policies.
  * 
  * @author Holger Knoche
  * 
  */
-public class OperationAssemblyDependencyGraph extends AbstractDependencyGraph<AssemblyComponentOperationPair> {
+public abstract class AbstractOriginRetentionPolicy implements IOriginRetentionPolicy {
 
-	/**
-	 * Creates a new graph with the given root entity.
-	 * 
-	 * @param rootEntity
-	 *            The root entity to use for this graph
-	 */
-	public OperationAssemblyDependencyGraph(final AssemblyComponentOperationPair rootEntity, final IOriginRetentionPolicy originPolicy) {
-		super(rootEntity, originPolicy);
+	private final OriginRetentionPolicyKind kind;
+
+	protected AbstractOriginRetentionPolicy(final OriginRetentionPolicyKind kind) {
+		this.kind = kind;
+	}
+
+	public OriginRetentionPolicyKind getKind() {
+		return this.kind;
+	}
+
+	public boolean isCompatibleWith(final IOriginRetentionPolicy policy) {
+		return true;
+	}
+
+	public boolean dependsOn(final IOriginRetentionPolicy policy) {
+		return (this == policy);
 	}
 
 }

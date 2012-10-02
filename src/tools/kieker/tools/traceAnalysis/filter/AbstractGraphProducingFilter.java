@@ -16,9 +16,13 @@
 
 package kieker.tools.traceAnalysis.filter;
 
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
+import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraphElement;
+import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPolicy;
+import kieker.tools.traceAnalysis.filter.visualization.graph.NoOriginRetentionPolicy;
 
 /**
  * Abstract superclass for graph-producing filters.
@@ -30,9 +34,12 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
  */
 @Plugin
 public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?, ?>> extends AbstractMessageTraceProcessingFilter implements
-		IGraphOutputtingFilter<G> {
+		IGraphProducingFilter<G> {
+
+	private static final String INCOMPATIBLE_RETENTION_ERROR_TEMPLATE = "%s: The current retention policy %s is incompatible with the requested retention policy %s.";
 
 	private final G graph;
+	private IOriginRetentionPolicy originRetentionPolicy = NoOriginRetentionPolicy.createInstance();
 
 	public AbstractGraphProducingFilter(final Configuration configuration, final G graph) {
 		super(configuration);
@@ -59,6 +66,22 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 
 	protected G getGraph() {
 		return this.graph;
+	}
+
+	protected IOriginRetentionPolicy getOriginRetentionPolicy() {
+		return this.originRetentionPolicy;
+	}
+
+	public void requestOriginRetentionPolicy(final IOriginRetentionPolicy policy) throws AnalysisConfigurationException {
+		if (!this.originRetentionPolicy.isCompatibleWith(policy)) {
+			throw new AnalysisConfigurationException(String.format(INCOMPATIBLE_RETENTION_ERROR_TEMPLATE, this, this.originRetentionPolicy, policy));
+		}
+
+		this.originRetentionPolicy = this.originRetentionPolicy.uniteWith(policy);
+	}
+
+	protected <T> void handleOrigin(final AbstractGraphElement<T> element, final T origin) {
+		this.getOriginRetentionPolicy().handleOrigin(element, origin);
 	}
 
 }

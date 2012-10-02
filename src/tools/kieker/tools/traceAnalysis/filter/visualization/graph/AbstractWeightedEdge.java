@@ -45,8 +45,8 @@ public abstract class AbstractWeightedEdge<V extends AbstractVertex<V, E, O>, E 
 	 * @param target
 	 *            The target vertex of the edge
 	 */
-	public AbstractWeightedEdge(final V source, final V target, final O origin) {
-		super(source, target, origin);
+	public AbstractWeightedEdge(final V source, final V target, final O origin, final IOriginRetentionPolicy originPolicy) {
+		super(source, target, origin, originPolicy);
 	}
 
 	/**

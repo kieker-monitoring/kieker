@@ -28,6 +28,8 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractEdge;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph.IGraphVisitor;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractPayloadedVertex;
+import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPolicy;
+import kieker.tools.traceAnalysis.filter.visualization.graph.NoOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.repository.DescriptionRepository;
 import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
 
@@ -84,6 +86,11 @@ public class DescriptionDecoratorFilter<V extends AbstractPayloadedVertex<V, E, 
 		graph.traverse(this);
 
 		return graph;
+	}
+
+	@Override
+	protected IOriginRetentionPolicy getDesiredOriginRetentionPolicy() {
+		return NoOriginRetentionPolicy.createInstance();
 	}
 
 }

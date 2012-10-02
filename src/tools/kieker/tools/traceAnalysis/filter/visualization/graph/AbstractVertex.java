@@ -38,8 +38,8 @@ public abstract class AbstractVertex<V extends AbstractVertex<V, E, O>, E extend
 
 	private final Map<Class<? extends AbstractVertexDecoration>, AbstractVertexDecoration> decorations = new ConcurrentHashMap<Class<? extends AbstractVertexDecoration>, AbstractVertexDecoration>(); // NOPMD(UseConcurrentHashMap)//NOCS
 
-	protected AbstractVertex(final O origin) {
-		super(origin);
+	protected AbstractVertex(final O origin, final IOriginRetentionPolicy originPolicy) {
+		super(origin, originPolicy);
 	}
 
 	/**

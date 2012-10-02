@@ -14,27 +14,38 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.traceAnalysis.filter;
-
-import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
+package kieker.tools.traceAnalysis.filter.visualization.graph;
 
 /**
- * Interface for graph-outputting filters.
+ * The no-origin-retention policy represents the intention that no origins should be retained at all
+ * and corresponds to the kind {@link OriginRetentionPolicyKind#NONE}.
  * 
  * @author Holger Knoche
  * 
- * @param <G>
- *            The type of the output graph
  */
-public interface IGraphOutputtingFilter<G extends AbstractGraph<?, ?, ?>> {
+public class NoOriginRetentionPolicy extends AbstractOriginRetentionPolicy {
 
-	public static final String OUTPUT_PORT_NAME_GRAPH = "graphs";
+	private static final NoOriginRetentionPolicy INSTANCE = new NoOriginRetentionPolicy();
 
 	/**
-	 * Returns the name of the port this filter uses to emit the graph.
+	 * Factory method for the no-origin-retention policy.
 	 * 
 	 * @return See above
 	 */
-	public String getGraphOutputPortName();
+	public static NoOriginRetentionPolicy createInstance() {
+		return INSTANCE;
+	}
+
+	private NoOriginRetentionPolicy() {
+		super(OriginRetentionPolicyKind.NONE);
+	}
+
+	public IOriginRetentionPolicy uniteWith(final IOriginRetentionPolicy other) {
+		return other;
+	}
+
+	public <T> void handleOrigin(final AbstractGraphElement<T> element, final T origin) {
+		// Do nothing
+	}
 
 }

@@ -26,6 +26,7 @@ import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
+import kieker.tools.traceAnalysis.filter.visualization.graph.NoOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
@@ -48,7 +49,7 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 	private static final String CONFIGURATION_NAME = Constants.PLOTALLOCATIONCOMPONENTDEPGRAPH_COMPONENT_NAME;
 
 	public ComponentDependencyGraphAllocationFilter(final Configuration configuration) {
-		super(configuration, new ComponentAllocationDependencyGraph(AllocationRepository.ROOT_ALLOCATION_COMPONENT));
+		super(configuration, new ComponentAllocationDependencyGraph(AllocationRepository.ROOT_ALLOCATION_COMPONENT, NoOriginRetentionPolicy.createInstance()));
 	}
 
 	@Override
@@ -64,7 +65,8 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 			DependencyGraphNode<AllocationComponent> receiverNode = this.getGraph().getNode(receiverComponent.getId());
 
 			if (senderNode == null) {
-				senderNode = new DependencyGraphNode<AllocationComponent>(senderComponent.getId(), senderComponent, t.getTraceInformation());
+				senderNode = new DependencyGraphNode<AllocationComponent>(senderComponent.getId(), senderComponent, t.getTraceInformation(),
+						this.getOriginRetentionPolicy());
 
 				if (m.getSendingExecution().isAssumed()) {
 					senderNode.setAssumed();
@@ -72,11 +74,12 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 
 				this.getGraph().addNode(senderNode.getId(), senderNode);
 			} else {
-				senderNode.addOrigin(t.getTraceInformation());
+				this.handleOrigin(senderNode, t.getTraceInformation());
 			}
 
 			if (receiverNode == null) {
-				receiverNode = new DependencyGraphNode<AllocationComponent>(receiverComponent.getId(), receiverComponent, t.getTraceInformation());
+				receiverNode = new DependencyGraphNode<AllocationComponent>(receiverComponent.getId(), receiverComponent, t.getTraceInformation(),
+						this.getOriginRetentionPolicy());
 
 				if (m.getReceivingExecution().isAssumed()) {
 					receiverNode.setAssumed();
@@ -84,13 +87,13 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 
 				this.getGraph().addNode(receiverNode.getId(), receiverNode);
 			} else {
-				receiverNode.addOrigin(t.getTraceInformation());
+				this.handleOrigin(receiverNode, t.getTraceInformation());
 			}
 
 			final boolean assumed = this.isDependencyAssumed(senderNode, receiverNode);
 
-			senderNode.addOutgoingDependency(receiverNode, assumed, t.getTraceInformation());
-			receiverNode.addIncomingDependency(senderNode, assumed, t.getTraceInformation());
+			senderNode.addOutgoingDependency(receiverNode, assumed, t.getTraceInformation(), this.getOriginRetentionPolicy());
+			receiverNode.addIncomingDependency(senderNode, assumed, t.getTraceInformation(), this.getOriginRetentionPolicy());
 
 			this.invokeDecorators(m, senderNode, receiverNode);
 		}

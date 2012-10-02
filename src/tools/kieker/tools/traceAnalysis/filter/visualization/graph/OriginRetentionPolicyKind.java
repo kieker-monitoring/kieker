@@ -14,27 +14,27 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
-
-import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPolicy;
-import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPair;
+package kieker.tools.traceAnalysis.filter.visualization.graph;
 
 /**
- * This class represents operation dependency graphs on the assembly level.
+ * This enumeration contains origin retention policy kinds, i.e. types of origin retention policies.
+ * These policies are implemented by subtypes of {@link AbstractOriginRetentionPolicy}, this enum just
+ * serves as the basis for the order relation.
  * 
  * @author Holger Knoche
  * 
  */
-public class OperationAssemblyDependencyGraph extends AbstractDependencyGraph<AssemblyComponentOperationPair> {
-
+public enum OriginRetentionPolicyKind {
 	/**
-	 * Creates a new graph with the given root entity.
-	 * 
-	 * @param rootEntity
-	 *            The root entity to use for this graph
+	 * Value to denote that no origins should be retained.
 	 */
-	public OperationAssemblyDependencyGraph(final AssemblyComponentOperationPair rootEntity, final IOriginRetentionPolicy originPolicy) {
-		super(rootEntity, originPolicy);
-	}
-
+	NONE,
+	/**
+	 * Value to denote that only specific origins should be retained.
+	 */
+	SPECIFIC,
+	/**
+	 * Value to denote that all origins should be retained.
+	 */
+	ALL;
 }

@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
+import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
 import kieker.tools.traceAnalysis.systemModel.TraceInformation;
 
@@ -38,8 +39,8 @@ public abstract class AbstractDependencyGraph<T extends ISystemModelElement> ext
 	private final Map<Integer, DependencyGraphNode<T>> nodes = new ConcurrentHashMap<Integer, DependencyGraphNode<T>>(); // NOPMD (UseConcurrentHashMap)
 	private final DependencyGraphNode<T> rootNode;
 
-	public AbstractDependencyGraph(final T rootEntity) {
-		this.rootNode = new DependencyGraphNode<T>(DependencyGraphNode.ROOT_NODE_ID, rootEntity, null);
+	public AbstractDependencyGraph(final T rootEntity, final IOriginRetentionPolicy originPolicy) {
+		this.rootNode = new DependencyGraphNode<T>(DependencyGraphNode.ROOT_NODE_ID, rootEntity, null, originPolicy);
 		this.nodes.put(DependencyGraphNode.ROOT_NODE_ID, this.rootNode);
 	}
 

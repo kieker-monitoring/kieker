@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractPayloadedVertex;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertexDecoration;
+import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
 import kieker.tools.traceAnalysis.systemModel.TraceInformation;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
@@ -49,8 +50,8 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 
 	private volatile boolean assumed; // false
 
-	public DependencyGraphNode(final int id, final T entity, final TraceInformation origin) {
-		super(origin, entity);
+	public DependencyGraphNode(final int id, final T entity, final TraceInformation origin, final IOriginRetentionPolicy originPolicy) {
+		super(origin, originPolicy, entity);
 		this.id = id;
 	}
 
@@ -87,18 +88,19 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 		return this.assumed;
 	}
 
-	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final TraceInformation origin) {
-		this.addOutgoingDependency(destination, false, origin);
+	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final TraceInformation origin, final IOriginRetentionPolicy originPolicy) {
+		this.addOutgoingDependency(destination, false, origin, originPolicy);
 	}
 
-	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final boolean isAssumed, final TraceInformation origin) {
+	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final boolean isAssumed, final TraceInformation origin,
+			final IOriginRetentionPolicy originPolicy) {
 		synchronized (this) {
 			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = // NOPMD(UseConcurrentHashMap)
 			isAssumed ? this.assumedOutgoingDependencies : this.outgoingDependencies; // NOCS (inline ?)
 
 			WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(destination.getId());
 			if (e == null) {
-				e = new WeightedBidirectionalDependencyGraphEdge<T>(this, destination, origin);
+				e = new WeightedBidirectionalDependencyGraphEdge<T>(this, destination, origin, originPolicy);
 
 				if (isAssumed) {
 					e.setAssumed();
@@ -106,27 +108,28 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 
 				relevantDependencies.put(destination.getId(), e);
 			} else {
-				e.addOrigin(origin);
+				originPolicy.handleOrigin(e, origin);
 			}
 			e.getTargetWeight().incrementAndGet();
 		}
 	}
 
-	public void addIncomingDependency(final DependencyGraphNode<T> source, final TraceInformation origin) {
-		this.addIncomingDependency(source, false, origin);
+	public void addIncomingDependency(final DependencyGraphNode<T> source, final TraceInformation origin, final IOriginRetentionPolicy originPolicy) {
+		this.addIncomingDependency(source, false, origin, originPolicy);
 	}
 
-	public void addIncomingDependency(final DependencyGraphNode<T> source, final boolean isAssumed, final TraceInformation origin) {
+	public void addIncomingDependency(final DependencyGraphNode<T> source, final boolean isAssumed, final TraceInformation origin,
+			final IOriginRetentionPolicy originPolicy) {
 		synchronized (this) {
 			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = // NOPMD(UseConcurrentHashMap)
 			isAssumed ? this.assumedIncomingDependencies : this.incomingDependencies; // NOCS (inline ?)
 
 			WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(source.getId());
 			if (e == null) {
-				e = new WeightedBidirectionalDependencyGraphEdge<T>(this, source, origin);
+				e = new WeightedBidirectionalDependencyGraphEdge<T>(this, source, origin, originPolicy);
 				relevantDependencies.put(source.getId(), e);
 			} else {
-				e.addOrigin(origin);
+				originPolicy.handleOrigin(e, origin);
 			}
 			e.getSourceWeight().incrementAndGet();
 		}

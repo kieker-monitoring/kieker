@@ -30,6 +30,7 @@ import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceProcessingException;
 import kieker.tools.traceAnalysis.filter.visualization.callTree.AbstractCallTreeFilter.IPairFactory;
+import kieker.tools.traceAnalysis.filter.visualization.graph.NoOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.Operation;
@@ -107,7 +108,8 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 	public void inputMessageTraces(final MessageTrace mt) {
 		try {
 			final TraceCallTreeNode rootNode =
-					new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, AllocationComponentOperationPairFactory.ROOT_PAIR, true, mt); // rootNode
+					new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, AllocationComponentOperationPairFactory.ROOT_PAIR, true, mt,
+							NoOriginRetentionPolicy.createInstance()); // rootNode
 			AbstractCallTreeFilter.writeDotForMessageTrace(rootNode, new IPairFactory() {
 
 				public Object createPair(final SynchronousCallMessage callMsg) {

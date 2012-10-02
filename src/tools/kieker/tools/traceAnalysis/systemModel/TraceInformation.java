@@ -59,4 +59,20 @@ public class TraceInformation {
 		return this.sessionId;
 	}
 
+	@Override
+	public int hashCode() {
+		return (int) this.getTraceId();
+	}
+
+	@Override
+	public boolean equals(final Object other) {
+		if (!(other instanceof TraceInformation)) {
+			return false;
+		}
+
+		// The equality currently relies only on the trace ID to facilitate trace coloring.
+		final TraceInformation otherTraceInformation = (TraceInformation) other;
+		return (this.getTraceId() == otherTraceInformation.getTraceId());
+	}
+
 }

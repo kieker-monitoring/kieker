@@ -26,6 +26,7 @@ import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
+import kieker.tools.traceAnalysis.filter.visualization.graph.NoOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
@@ -49,7 +50,7 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 	private static final String CONFIGURATION_NAME = Constants.PLOTCONTAINERDEPGRAPH_COMPONENT_NAME;
 
 	public ContainerDependencyGraphFilter(final Configuration configuration) {
-		super(configuration, new ContainerDependencyGraph(ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER));
+		super(configuration, new ContainerDependencyGraph(ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER, NoOriginRetentionPolicy.createInstance()));
 	}
 
 	@Override
@@ -70,21 +71,23 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 			DependencyGraphNode<ExecutionContainer> receiverNode = this.getGraph().getNode(receiverContainer.getId());
 
 			if (senderNode == null) {
-				senderNode = new DependencyGraphNode<ExecutionContainer>(senderContainer.getId(), senderContainer, t.getTraceInformation());
+				senderNode = new DependencyGraphNode<ExecutionContainer>(senderContainer.getId(), senderContainer, t.getTraceInformation(),
+						this.getOriginRetentionPolicy());
 				this.getGraph().addNode(senderContainer.getId(), senderNode);
 			} else {
-				senderNode.addOrigin(t.getTraceInformation());
+				this.handleOrigin(senderNode, t.getTraceInformation());
 			}
 
 			if (receiverNode == null) {
-				receiverNode = new DependencyGraphNode<ExecutionContainer>(receiverContainer.getId(), receiverContainer, t.getTraceInformation());
+				receiverNode = new DependencyGraphNode<ExecutionContainer>(receiverContainer.getId(), receiverContainer, t.getTraceInformation(),
+						this.getOriginRetentionPolicy());
 				this.getGraph().addNode(receiverContainer.getId(), receiverNode);
 			} else {
-				receiverNode.addOrigin(t.getTraceInformation());
+				this.handleOrigin(receiverNode, t.getTraceInformation());
 			}
 
-			senderNode.addOutgoingDependency(receiverNode, t.getTraceInformation());
-			receiverNode.addIncomingDependency(senderNode, t.getTraceInformation());
+			senderNode.addOutgoingDependency(receiverNode, t.getTraceInformation(), this.getOriginRetentionPolicy());
+			receiverNode.addIncomingDependency(senderNode, t.getTraceInformation(), this.getOriginRetentionPolicy());
 		}
 		this.reportSuccess(t.getTraceId());
 	}

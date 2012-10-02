@@ -14,27 +14,30 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
+package kieker.tools.traceAnalysis.filter;
 
+import kieker.analysis.exception.AnalysisConfigurationException;
+import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
 import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPolicy;
-import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPair;
 
 /**
- * This class represents operation dependency graphs on the assembly level.
+ * Interface for graph-producing filters.
  * 
  * @author Holger Knoche
  * 
+ * @param <G>
+ *            The type of the produced graph
  */
-public class OperationAssemblyDependencyGraph extends AbstractDependencyGraph<AssemblyComponentOperationPair> {
+public interface IGraphProducingFilter<G extends AbstractGraph<?, ?, ?>> extends IGraphOutputtingFilter<G> {
 
 	/**
-	 * Creates a new graph with the given root entity.
+	 * Requests that the given retention policy is used by this graph producer. Note that the producer may
+	 * choose to use a more liberal, compatible retention policy to satisfy the needs of other graph consumers
+	 * (see {@link IOriginRetentionPolicy#isCompatibleWith(IOriginRetentionPolicy)}).
 	 * 
-	 * @param rootEntity
-	 *            The root entity to use for this graph
+	 * @param policy
+	 *            The requested policy
 	 */
-	public OperationAssemblyDependencyGraph(final AssemblyComponentOperationPair rootEntity, final IOriginRetentionPolicy originPolicy) {
-		super(rootEntity, originPolicy);
-	}
+	public void requestOriginRetentionPolicy(IOriginRetentionPolicy policy) throws AnalysisConfigurationException;
 
 }
