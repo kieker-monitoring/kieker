@@ -474,13 +474,14 @@
 		</zip>
 	</target>
 
-	<target name="clean-userguide-examples" description="Removes artifacts from previous builds">
+	<target name="clean-userguide-examples" description="Removes artifacts from previous builds and manually changed configuration files">
 		<ant antfile="build.xml" dir="${src.userguide.example.bookstore.dir}" target="clean" />
 		<ant antfile="build.xml" dir="${src.userguide.example.manual.dir}" target="clean" />
 		<ant antfile="build.xml" dir="${src.userguide.example.extended.dir}" target="clean" />
 		<ant antfile="build.xml" dir="${src.userguide.example.aspectj.dir}" target="clean" />
 		<ant antfile="build.xml" dir="${src.userguide.example.jms.dir}" target="clean" />
 		<ant antfile="build.xml" dir="${src.userguide.example.sigar.dir}" target="clean" />
+		<copy file="${kieker.monitoring.default.properties}" tofile="${src.userguide.example.aspectj.dir}/META-INF/kieker.monitoring.properties" />
 	</target>
 
 	<target name="-build-userguide-examples" depends="-init,build-all,clean-userguide-examples" description="Builds all userguide examples">
