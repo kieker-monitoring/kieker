@@ -339,7 +339,8 @@
 	</target>
 
 	<target name="dist-kieker-sources" depends="-init" description="Packages the source archives (.zip|.tar.gz) for a release">
-		<patternset id="dist_src_files-nonbinmode">
+	  <echo message="${test.dir}/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml" />
+	  <patternset id="dist_src_files-nonbinmode"> <!-- NOTE that the order of includes/excludes seems to have no effect. So be careful with excludes --> 
 			<include name="${bin.dir}/log4j.properties" />
 			<include name="${bin.dir}/*.bat" />
 			<include name="${src.userguide.dir}/**/*" />
@@ -351,16 +352,18 @@
 			<include name="${src.model.dir}/*.ecore" />
 			<include name="${test.dir}/**/*.java" />
 			<include name="${test.dir}/**/META-INF/*" />
+			<include name="${test.dir}/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml" />
+			<include name="${test.dir}/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/webapp/**" />
 			<include name="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/WEB-INF/**" />
 			<include name="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/images/**" />
 			<include name="${lib.dir}/**" />
 			<include name="${examples.dir}/**/*" />
-			<exclude name="${examples.dir}/**/lib/*" />
-			<exclude name="${examples.dir}/**/**/*.jar" />
+			<exclude name="${src.userguide.examples.dir}/**/lib/**/*" />
+			<exclude name="${src.userguide.examples.dir}/**/**/*.jar" />
 			<include name="${example.javaee.dir}/README" />
 			<include name="${example.javaee.dir}/${license.file}" />
 			<!-- (re-)enable as soon as existent <include name="${example.javaee.dir}/kieker-testdata/**" /> -->
-			<include name="${example.javaee.jetty.dir}/**" />
+			<include name="${example.javaee.jetty.dir}/**/*" />
 			<exclude name="${example.javaee.jetty.dir}/logs/**/*" />
 			<exclude name="${example.javaee.jetty.dir}/**/kieker*.jar" />
 			<exclude name="${example.javaee.jetty.dir}/**/aspectj*.jar" />
@@ -406,9 +409,8 @@
 	</target>
 
 	<target name="dist-kieker-binaries" depends="build-all,-build-userguide,-build-userguide-examples" description="Packages the binary archives (.zip|.tar.gz) for a release">
-		<echo message="${src.userguide.pdf}" />
 
-		<patternset id="dist_bin_files-nonbinmode">
+		<patternset id="dist_bin_files-nonbinmode"> <!-- NOTE that the order of includes/excludes seems to have no effect. So be careful with excludes --> 
 			<include name="${bin.dir}/log4j.properties" />
 			<include name="${bin.dir}/*.bat" />
 			<include name="${dist.dir}/*.jar" />
@@ -421,7 +423,7 @@
 			<include name="${src.userguide.dist.pdf}" />
 			<include name="${examples.dir}/**/*" />
 			<exclude name="${examples.dir}/**/*.sh" /> <!-- added in bin mode below -->
-			<exclude name="${examples.dir}/**/lib/*" />
+			<exclude name="${src.userguide.examples.dir}/**/lib/**/*" />
 			<include name="${example.javaee.dir}/README" />
 			<include name="${example.javaee.dir}/${license.file}" />
 			<!-- (re-)enable as soon as existent <include name="${example.javaee.dir}/kieker-testdata/**" /> -->

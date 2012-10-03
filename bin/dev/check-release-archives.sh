@@ -118,6 +118,11 @@ function assert_files_exist_common {
     assert_dir_exists "doc/"
     assert_dir_exists "examples/"
     assert_dir_exists "lib/"
+    assert_file_exists_regular "lib/sigar-native-libs/libsigar-x86-linux.so"
+    assert_file_exists_regular "lib/sigar-native-libs/libsigar-amd64-linux.so"
+    assert_file_exists_regular "lib/sigar-native-libs/sigar-amd64-winnt.dll"
+    assert_file_exists_regular "lib/sigar-native-libs/sigar-x86-winnt.dll"
+    assert_file_exists_regular "lib/sigar-native-libs/sigar-x86-winnt.lib"
     assert_file_exists_regular "HISTORY"
     assert_file_exists_regular "LICENSE"
     assert_file_NOT_exists "build/"
@@ -220,6 +225,11 @@ function check_src_archive {
 
     # now execute junt tests (which compiles the sources again ...)
     run_ant run-tests-junit
+    # make sure that no errors occured 
+    if ! grep "100.00\%" tmp/junit-results/report/overview-summary.html; then
+      echo "The JUnit tests didn't return with 100% success"
+      exit 1
+    fi
 
     # now execute junt tests (which compiles the sources again ...)
     run_ant static-analysis
