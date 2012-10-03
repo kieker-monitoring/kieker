@@ -85,16 +85,16 @@ of the \class{MemSwapUsageSampler} which can be used to monitor memory %
 and swap usage employing the Sigar library~\cite{HypericSigarWebsite}. %
 Likewise to other monitoring probes described in this user guide (see for %
 example Sections~\ref{sec:monitoring:probe} and \ref{sec:example:monitoring}),
-it collects the data of interest (lines~57--58), creates a monitoring record~%
-(lines~59--62), and passes this monitoring record to the monitoring controller~%
-(line~63). %
+it collects the data of interest (lines~53--54), creates a monitoring record~%
+(lines~55--58), and passes this monitoring record to the monitoring controller~%
+(line~59). %
 The available Sigar-based samplers for monitoring system-level monitoring %
 data, such as CPU and memory usage, are discussed in Appendix~\ref{appendix:SigarBasedSamplers}. %
 
 \pagebreak
 
 \setJavaCodeListing
-\lstinputlisting[firstline=51, lastline=64, firstnumber=51, caption=Method \method{sample} from MemSwapUsageSampler.java, label=listing:sigarSamplerMethod]{\kiekerSrcDir/monitoring/kieker/monitoring/probe/sigar/samplers/MemSwapUsageSampler.java}
+\lstinputlisting[firstline=47, lastline=60, firstnumber=47, caption=Method \method{sample} from MemSwapUsageSampler.java, label=listing:sigarSamplerMethod]{\kiekerSrcDir/monitoring/kieker/monitoring/probe/sigar/samplers/MemSwapUsageSampler.java}
 
 \subsection{Controlling the Monitoring State}\label{sec:componentsMonitoring:monitoringController:controState}
 
@@ -246,7 +246,7 @@ an immutable type, i.e., it includes only final fields. %
 \ % pushing the method initFromArray in the listing to the following page
 
 \setJavaCodeListing
-\lstinputlisting[caption=MyResponseTimeRecord.java, label=listing:MyRecord,firstline=26,firstnumber=26]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeRecord.java}
+\lstinputlisting[caption=MyResponseTimeRecord.java, label=listing:MyRecord,firstline=22,firstnumber=22]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeRecord.java}
 
 % \pagebreak
 
@@ -261,13 +261,13 @@ shows a similar manual monitoring probe which uses the monitoring record type %
 
 % Make sure that this listing will be modified, once the sourcecode changes!!!
 % It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
-\lstinputlisting[firstline=35, lastline=42, firstnumber=35, caption=Excerpt from Bookstore.java, label=listing:cuttingBookstore]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/Bookstore.java}
+\lstinputlisting[firstline=32, lastline=39, firstnumber=32, caption=Excerpt from Bookstore.java, label=listing:cuttingBookstore]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/Bookstore.java}
 
 \noindent In order to avoid multiple calls to the \method{getInstance} method of the %
 \class{MonitoringController} class, singleton instances should be stored %
 in a final static variable, as shown in Listing~\ref{listing:cuttingBookstore:finalStaticController}.
 
-\lstinputlisting[firstline=28, lastline=29, firstnumber=28, caption=Singleton instance of the monitoring controller stored in a final static variable (excerpt from Bookstore.java), label=listing:cuttingBookstore:finalStaticController]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/Bookstore.java}
+\lstinputlisting[firstline=24, lastline=25, firstnumber=24, caption=Singleton instance of the monitoring controller stored in a final static variable (excerpt from Bookstore.java), label=listing:cuttingBookstore:finalStaticController]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/Bookstore.java}
 
 \noindent When manually instrumenting an application, the monitoring probe is implemented %
 by mixing monitoring logic with business logic, which is often not desired since %
@@ -333,7 +333,7 @@ write the given records into a buffer located in the memory. The source code of 
 the class \class{MyPipe} is listed in Appendix~\ref{appendix:pipeListings}. %
 
 \setJavaCodeListing
-\lstinputlisting[caption=MyPipeWriter.java, label=listing:MyWriter,float,firstline=27,firstnumber=27]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeWriter.java}
+\lstinputlisting[caption=MyPipeWriter.java, label=listing:MyWriter,float,firstline=23,firstnumber=23]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeWriter.java}
 
 \noindent The monitoring writer to be used is selected by the %
 \KiekerMonitoringPart{} configuration property (Section~\ref{chap:componentsMonitoring}) %
@@ -344,7 +344,7 @@ writer \class{MyPipeWriter} defined above. In this example, the pipe name is %
 passed as the property value \textit{pipeName}.
 
 \setPropertiesListing
-\lstinputlisting[caption={Configuration of the custom writer \class{MyPipeWriter}},label=lst:monitoringwriter:MyWriter,firstline=89,firstnumber=89,lastline=97]%
+\lstinputlisting[caption={Configuration of the custom writer \class{MyPipeWriter}},label=lst:monitoringwriter:MyWriter,firstline=5,firstnumber=5,lastline=6]%
 {\customComponentsBookstoreApplicationDir/META-INF/kieker.monitoring.properties}
 
 \enlargethispage{1cm}
