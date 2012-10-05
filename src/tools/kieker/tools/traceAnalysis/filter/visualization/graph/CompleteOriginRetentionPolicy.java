@@ -23,7 +23,7 @@ package kieker.tools.traceAnalysis.filter.visualization.graph;
  * @author Holger Knoche
  * 
  */
-public class CompleteOriginRetentionPolicy extends AbstractOriginRetentionPolicy {
+public final class CompleteOriginRetentionPolicy extends AbstractOriginRetentionPolicy {
 
 	private static final CompleteOriginRetentionPolicy INSTANCE = new CompleteOriginRetentionPolicy();
 

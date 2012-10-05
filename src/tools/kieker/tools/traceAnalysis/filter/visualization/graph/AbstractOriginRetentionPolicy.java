@@ -34,7 +34,7 @@ public abstract class AbstractOriginRetentionPolicy implements IOriginRetentionP
 		return this.kind;
 	}
 
-	public boolean isCompatibleWith(final IOriginRetentionPolicy policy) {
+	public boolean isCompatibleWith(final IOriginRetentionPolicy policy) { // NOPMD, for some reason, PMD regards this function as empty
 		return true;
 	}
 

@@ -576,7 +576,7 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * @throws AnalysisConfigurationException
 	 *             If an error occurs while processing of this notification
 	 */
-	protected void notifyNewIncomingConnection(final String inputPortName, final AbstractPlugin connectedPlugin, final String outputPortName)
+	protected void notifyNewIncomingConnection(final String inputPortName, final AbstractPlugin connectedPlugin, final String outputPortName) // NOPMD
 			throws AnalysisConfigurationException {
 		// Do nothing by default
 	}
@@ -593,7 +593,7 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * @throws AnalysisConfigurationException
 	 *             If an error occurs while processing of this notification
 	 */
-	protected void notifyNewOutgoingConnection(final String outputPortName, final AbstractPlugin connectedPlugin, final String inputPortName)
+	protected void notifyNewOutgoingConnection(final String outputPortName, final AbstractPlugin connectedPlugin, final String inputPortName) // NOPMD
 			throws AnalysisConfigurationException {
 		// Do nothing by default
 	}

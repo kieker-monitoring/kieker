@@ -71,7 +71,7 @@ public class SpecificOriginRetentionPolicy extends AbstractOriginRetentionPolicy
 
 		// Do not add a default case to the following switch to avoid the suppression of warnings
 		// about missing enum values.
-		switch (other.getKind()) {
+		switch (other.getKind()) { // NOPMD
 		case NONE:
 			return this;
 		case SPECIFIC:
