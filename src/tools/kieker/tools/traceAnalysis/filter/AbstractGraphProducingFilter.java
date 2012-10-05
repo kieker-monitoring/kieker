@@ -41,6 +41,14 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 	private final G graph;
 	private IOriginRetentionPolicy originRetentionPolicy = NoOriginRetentionPolicy.createInstance();
 
+	/**
+	 * Creates a new graph-producing filter using the given configuration and the given graph.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 * @param graph
+	 *            The (usually empty) graph to produce / extend
+	 */
 	public AbstractGraphProducingFilter(final Configuration configuration, final G graph) {
 		super(configuration);
 
@@ -51,6 +59,11 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 		return this.configuration;
 	}
 
+	/**
+	 * Returns this filter's configuration name.
+	 * 
+	 * @return See above
+	 */
 	public abstract String getConfigurationName();
 
 	@Override

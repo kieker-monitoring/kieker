@@ -37,6 +37,8 @@ public interface IGraphProducingFilter<G extends AbstractGraph<?, ?, ?>> extends
 	 * 
 	 * @param policy
 	 *            The requested policy
+	 * @throws AnalysisConfigurationException
+	 *             If an error occurs during the request
 	 */
 	public void requestOriginRetentionPolicy(IOriginRetentionPolicy policy) throws AnalysisConfigurationException;
 

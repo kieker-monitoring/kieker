@@ -21,26 +21,32 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
-import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPolicy;
+import kieker.tools.traceAnalysis.filter.visualization.graph.NoOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
 import kieker.tools.traceAnalysis.systemModel.TraceInformation;
 
 /**
+ * Abstract superclass for dependency graphs.
  * 
  * @param <T>
+ *            The type of the nodes' payload
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver
  */
 public abstract class AbstractDependencyGraph<T extends ISystemModelElement> extends
 		AbstractGraph<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, TraceInformation> {
 
-	// private static final Log LOG = LogFactory.getLog(DependencyGraph.class);
-
 	private final Map<Integer, DependencyGraphNode<T>> nodes = new ConcurrentHashMap<Integer, DependencyGraphNode<T>>(); // NOPMD (UseConcurrentHashMap)
 	private final DependencyGraphNode<T> rootNode;
 
-	public AbstractDependencyGraph(final T rootEntity, final IOriginRetentionPolicy originPolicy) {
-		this.rootNode = new DependencyGraphNode<T>(DependencyGraphNode.ROOT_NODE_ID, rootEntity, null, originPolicy);
+	/**
+	 * Creates a new dependency graph with the given root entity.
+	 * 
+	 * @param rootEntity
+	 *            The entity from which the root node originates
+	 */
+	public AbstractDependencyGraph(final T rootEntity) {
+		this.rootNode = new DependencyGraphNode<T>(DependencyGraphNode.ROOT_NODE_ID, rootEntity, null, NoOriginRetentionPolicy.createInstance());
 		this.nodes.put(DependencyGraphNode.ROOT_NODE_ID, this.rootNode);
 	}
 
@@ -52,15 +58,29 @@ public abstract class AbstractDependencyGraph<T extends ISystemModelElement> ext
 		this.nodes.put(i, node);
 	}
 
+	/**
+	 * Returns this graph's root node.
+	 * 
+	 * @return See above
+	 */
 	public final DependencyGraphNode<T> getRootNode() {
 		return this.rootNode;
 	}
 
+	/**
+	 * Returns all nodes contained in this graph.
+	 * 
+	 * @return See above
+	 */
 	public Collection<DependencyGraphNode<T>> getNodes() {
 		return this.nodes.values();
 	}
 
-	/** Return number of nodes */
+	/**
+	 * Returns the number of nodes contained in this graph.
+	 * 
+	 * @return See above
+	 */
 	public int size() {
 		return this.nodes.size();
 	}

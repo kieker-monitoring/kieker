@@ -16,7 +16,6 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
-import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 
 /**
@@ -33,8 +32,8 @@ public class ContainerDependencyGraph extends AbstractDependencyGraph<ExecutionC
 	 * @param rootEntity
 	 *            The root entity to use for this graph
 	 */
-	public ContainerDependencyGraph(final ExecutionContainer rootEntity, final IOriginRetentionPolicy originPolicy) {
-		super(rootEntity, originPolicy);
+	public ContainerDependencyGraph(final ExecutionContainer rootEntity) {
+		super(rootEntity);
 	}
 
 }

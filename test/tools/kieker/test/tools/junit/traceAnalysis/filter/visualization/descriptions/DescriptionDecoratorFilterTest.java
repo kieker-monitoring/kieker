@@ -88,7 +88,7 @@ public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
 
 		final AnalysisController analysisController = testSetup.getAnalysisController();
 		analysisController.registerRepository(descriptionRepository);
-		analysisController.connect(descriptionDecoratorFilter, DescriptionDecoratorFilter.DESCRIPTION_REPOSITORY_NAME, descriptionRepository);
+		analysisController.connect(descriptionDecoratorFilter, DescriptionDecoratorFilter.DESCRIPTION_REPOSITORY_PORT_NAME, descriptionRepository);
 	}
 
 	private static OperationExecutionRecord createExecutionRecord(final String signature, final int tIn, final int tOut, final int eoi, final int ess) {

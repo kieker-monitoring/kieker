@@ -39,9 +39,13 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPol
  * Abstract superclass for all graph filters.
  * 
  * @param <G>
+ *            The graph that is processed by this filter
  * @param <V>
+ *            The vertex type of the graph
  * @param <E>
+ *            The edge type of the graph
  * @param <O>
+ *            The type of the graph's elements origins
  * @author Holger Knoche
  */
 @Plugin
@@ -112,6 +116,12 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 		return this.configuration;
 	}
 
+	/**
+	 * Processes the given graph.
+	 * 
+	 * @param graph
+	 *            The graph to process
+	 */
 	@InputPort(name = INPUT_PORT_NAME_GRAPH,
 			description = "Graphs to process",
 			eventTypes = { AbstractGraph.class })
@@ -124,6 +134,11 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 		return OUTPUT_PORT_NAME_GRAPH;
 	}
 
+	/**
+	 * Returns the name of the port this filter accepts graphs on.
+	 * 
+	 * @return See above
+	 */
 	public String getGraphInputPortName() {
 		return INPUT_PORT_NAME_GRAPH;
 	}

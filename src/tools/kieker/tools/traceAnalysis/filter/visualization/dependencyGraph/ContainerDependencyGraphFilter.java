@@ -26,7 +26,6 @@ import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
-import kieker.tools.traceAnalysis.filter.visualization.graph.NoOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
@@ -49,8 +48,14 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 
 	private static final String CONFIGURATION_NAME = Constants.PLOTCONTAINERDEPGRAPH_COMPONENT_NAME;
 
+	/**
+	 * Creates a new filter using the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 */
 	public ContainerDependencyGraphFilter(final Configuration configuration) {
-		super(configuration, new ContainerDependencyGraph(ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER, NoOriginRetentionPolicy.createInstance()));
+		super(configuration, new ContainerDependencyGraph(ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER));
 	}
 
 	@Override

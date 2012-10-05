@@ -20,6 +20,9 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertexDecor
 import kieker.tools.traceAnalysis.systemModel.Execution;
 
 /**
+ * Response time decoration for graph vertices. This decoration extracts response times from executions
+ * and keeps track of the minimal, maximal and average response time.
+ * 
  * @author Holger Knoche
  */
 public class ResponseTimeDecoration extends AbstractVertexDecoration {
@@ -32,10 +35,19 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 	private int minimalResponseTime = Integer.MAX_VALUE;
 	private int maximalResponseTime;
 
+	/**
+	 * Creates a new response time decoration.
+	 */
 	public ResponseTimeDecoration() {
 		// empty default constructor
 	}
 
+	/**
+	 * Registers a given execution for the decorated vertex.
+	 * 
+	 * @param execution
+	 *            The execution to register
+	 */
 	public void registerExecution(final Execution execution) {
 		final int responseTime = (int) ((execution.getTout() / 1000000) - (execution.getTin() / 1000000));
 
@@ -50,14 +62,29 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 		}
 	}
 
+	/**
+	 * Returns the minimal response time (in ms) registered by this decoration.
+	 * 
+	 * @return See above
+	 */
 	public int getMinimalResponseTime() {
 		return this.minimalResponseTime;
 	}
 
+	/**
+	 * Returns the maximal response time (in ms) registered by this decoration.
+	 * 
+	 * @return See above
+	 */
 	public int getMaximalResponseTime() {
 		return this.maximalResponseTime;
 	}
 
+	/**
+	 * Returns the average response time (in ms) registered by this decoration.
+	 * 
+	 * @return See above
+	 */
 	public double getAverageResponseTime() {
 		return (this.executionCount == 0) ? 0 : ((double) this.responseTimeSum / (double) this.executionCount); // NOCS (inline ?)
 	}

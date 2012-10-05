@@ -29,6 +29,7 @@ import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.analysis.repository.annotation.Repository;
 import kieker.common.configuration.Configuration;
+import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraphElement;
 
 /**
  * Implementation of a description repository which stores descriptions for names.
@@ -78,6 +79,11 @@ public class DescriptionRepository extends AbstractRepository {
 		return this.configuration;
 	}
 
+	/**
+	 * Returns the description map (node id -> description) contained in this repository-
+	 * 
+	 * @return See above
+	 */
 	public Map<String, String> getDescriptionMap() {
 		return Collections.unmodifiableMap(this.descriptionMap);
 	}
@@ -141,17 +147,25 @@ public class DescriptionRepository extends AbstractRepository {
 	}
 
 	/**
+	 * This class groups the data required for a {@link DescriptionRepository}.
+	 * 
 	 * @author Holger Knoche
 	 */
 	public static class DescriptionRepositoryData {
 
 		private final ConcurrentMap<String, String> descriptionMap;
 
+		/**
+		 * Creates a new data object using the given description map.
+		 * 
+		 * @param descriptionMap
+		 *            The description map (node id, see {@link AbstractGraphElement#getIdentifier()} -> description) to use
+		 */
 		public DescriptionRepositoryData(final ConcurrentMap<String, String> descriptionMap) {
 			this.descriptionMap = descriptionMap;
 		}
 
-		public ConcurrentMap<String, String> getDescriptionMap() {
+		private ConcurrentMap<String, String> getDescriptionMap() {
 			return this.descriptionMap;
 		}
 

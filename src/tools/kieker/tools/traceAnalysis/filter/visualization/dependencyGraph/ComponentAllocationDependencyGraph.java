@@ -16,7 +16,6 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
-import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 
 /**
@@ -33,8 +32,8 @@ public class ComponentAllocationDependencyGraph extends AbstractDependencyGraph<
 	 * @param rootEntity
 	 *            The root entity to use for this graph
 	 */
-	public ComponentAllocationDependencyGraph(final AllocationComponent rootEntity, final IOriginRetentionPolicy originPolicy) {
-		super(rootEntity, originPolicy);
+	public ComponentAllocationDependencyGraph(final AllocationComponent rootEntity) {
+		super(rootEntity);
 	}
 
 }

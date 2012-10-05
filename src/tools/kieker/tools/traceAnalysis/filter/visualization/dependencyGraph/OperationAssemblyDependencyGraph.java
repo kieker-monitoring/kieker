@@ -16,7 +16,6 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
-import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPair;
 
 /**
@@ -33,8 +32,8 @@ public class OperationAssemblyDependencyGraph extends AbstractDependencyGraph<As
 	 * @param rootEntity
 	 *            The root entity to use for this graph
 	 */
-	public OperationAssemblyDependencyGraph(final AssemblyComponentOperationPair rootEntity, final IOriginRetentionPolicy originPolicy) {
-		super(rootEntity, originPolicy);
+	public OperationAssemblyDependencyGraph(final AssemblyComponentOperationPair rootEntity) {
+		super(rootEntity);
 	}
 
 }

@@ -203,6 +203,8 @@ public class TraceColorRepository extends AbstractRepository {
 	}
 
 	/**
+	 * This class groups the data required for a {@link TraceColorRepository}.
+	 * 
 	 * @author Holger Knoche
 	 */
 	public static class TraceColorRepositoryData {
@@ -210,21 +212,31 @@ public class TraceColorRepository extends AbstractRepository {
 		private final Color defaultColor;
 		private final Color collisionColor;
 
+		/**
+		 * Creates a new data object using the given data.
+		 * 
+		 * @param colorMap
+		 *            The color map (trace id -> color) to use
+		 * @param defaultColor
+		 *            The default color to use
+		 * @param collisionColor
+		 *            The collision color to use
+		 */
 		public TraceColorRepositoryData(final ConcurrentMap<Long, Color> colorMap, final Color defaultColor, final Color collisionColor) {
 			this.colorMap = colorMap;
 			this.defaultColor = defaultColor;
 			this.collisionColor = collisionColor;
 		}
 
-		public ConcurrentMap<Long, Color> getColorMap() {
+		private ConcurrentMap<Long, Color> getColorMap() {
 			return this.colorMap;
 		}
 
-		public Color getDefaultColor() {
+		private Color getDefaultColor() {
 			return this.defaultColor;
 		}
 
-		public Color getCollisionColor() {
+		private Color getCollisionColor() {
 			return this.collisionColor;
 		}
 

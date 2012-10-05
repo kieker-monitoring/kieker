@@ -28,6 +28,9 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
  */
 public interface IGraphOutputtingFilter<G extends AbstractGraph<?, ?, ?>> {
 
+	/**
+	 * The default name for graph output ports.
+	 */
 	public static final String OUTPUT_PORT_NAME_GRAPH = "graphs";
 
 	/**

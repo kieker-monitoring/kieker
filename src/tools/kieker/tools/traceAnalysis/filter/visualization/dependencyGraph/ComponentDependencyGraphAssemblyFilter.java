@@ -25,7 +25,6 @@ import kieker.tools.traceAnalysis.Constants;
 import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
-import kieker.tools.traceAnalysis.filter.visualization.graph.NoOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
@@ -47,8 +46,14 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 
 	private static final String CONFIGURATION_NAME = Constants.PLOTASSEMBLYCOMPONENTDEPGRAPH_COMPONENT_NAME;
 
+	/**
+	 * Creates a new filter using the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 */
 	public ComponentDependencyGraphAssemblyFilter(final Configuration configuration) {
-		super(configuration, new ComponentAssemblyDependencyGraph(AssemblyRepository.ROOT_ASSEMBLY_COMPONENT, NoOriginRetentionPolicy.createInstance()));
+		super(configuration, new ComponentAssemblyDependencyGraph(AssemblyRepository.ROOT_ASSEMBLY_COMPONENT));
 	}
 
 	@Override

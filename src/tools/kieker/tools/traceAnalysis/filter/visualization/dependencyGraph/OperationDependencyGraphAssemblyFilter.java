@@ -26,7 +26,6 @@ import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
-import kieker.tools.traceAnalysis.filter.visualization.graph.NoOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
@@ -62,7 +61,7 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 		/* Call the mandatory "default" constructor. */
 		super(configuration, new OperationAssemblyDependencyGraph(new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 				OperationRepository.ROOT_OPERATION,
-				AssemblyRepository.ROOT_ASSEMBLY_COMPONENT), NoOriginRetentionPolicy.createInstance()));
+				AssemblyRepository.ROOT_ASSEMBLY_COMPONENT)));
 	}
 
 	@Override

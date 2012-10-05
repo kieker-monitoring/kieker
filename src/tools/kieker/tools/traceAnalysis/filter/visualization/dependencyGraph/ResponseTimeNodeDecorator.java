@@ -19,12 +19,16 @@ package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 
 /**
+ * Decorator to attach response time data to graph nodes.
  * 
  * @author Holger Knoche
  * 
  */
 public class ResponseTimeNodeDecorator extends AbstractNodeDecorator {
 
+	/**
+	 * Creates a new response time decorator.
+	 */
 	public ResponseTimeNodeDecorator() {
 		// empty default constructor
 	}

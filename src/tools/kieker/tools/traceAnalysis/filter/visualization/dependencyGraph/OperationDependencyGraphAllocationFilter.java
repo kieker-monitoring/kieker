@@ -26,7 +26,6 @@ import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
-import kieker.tools.traceAnalysis.filter.visualization.graph.NoOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
@@ -63,7 +62,7 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 		/* Call the mandatory "default" constructor. */
 		super(configuration, new OperationAllocationDependencyGraph(new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 				OperationRepository.ROOT_OPERATION,
-				AllocationRepository.ROOT_ALLOCATION_COMPONENT), NoOriginRetentionPolicy.createInstance()));
+				AllocationRepository.ROOT_ALLOCATION_COMPONENT)));
 	}
 
 	@Override

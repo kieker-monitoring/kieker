@@ -94,7 +94,7 @@ public class TraceColoringFilterTest extends AbstractKiekerTest {
 
 		final AnalysisController analysisController = testSetup.getAnalysisController();
 		analysisController.registerRepository(traceColorRepository);
-		analysisController.connect(traceColoringFilter, TraceColoringFilter.COLOR_REPOSITORY_NAME, traceColorRepository);
+		analysisController.connect(traceColoringFilter, TraceColoringFilter.COLOR_REPOSITORY_PORT_NAME, traceColorRepository);
 	}
 
 	private static TraceColorRepository prepareTraceColorRepository() {

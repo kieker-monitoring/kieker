@@ -26,7 +26,6 @@ import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
-import kieker.tools.traceAnalysis.filter.visualization.graph.NoOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
@@ -48,8 +47,14 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 
 	private static final String CONFIGURATION_NAME = Constants.PLOTALLOCATIONCOMPONENTDEPGRAPH_COMPONENT_NAME;
 
+	/**
+	 * Creates a new filter using the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 */
 	public ComponentDependencyGraphAllocationFilter(final Configuration configuration) {
-		super(configuration, new ComponentAllocationDependencyGraph(AllocationRepository.ROOT_ALLOCATION_COMPONENT, NoOriginRetentionPolicy.createInstance()));
+		super(configuration, new ComponentAllocationDependencyGraph(AllocationRepository.ROOT_ALLOCATION_COMPONENT));
 	}
 
 	@Override
