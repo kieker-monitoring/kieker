@@ -35,9 +35,11 @@
     </jdbc:embedded-database>
 
     <!-- Kieker's instrumentation probes based on the Spring AOP interception framework -->
-    <bean id="opEMII" class="kieker.monitoring.probe.spring.executions.OperationExecutionMethodInvocationInterceptor" /> 
+    <bean id="opEMII" 
+          class="kieker.monitoring.probe.spring.executions.OperationExecutionMethodInvocationInterceptor" /> 
     <aop:config>
-        <aop:advisor advice-ref="opEMII" pointcut="execution(public * org.mybatis.jpetstore..*.*(..))"/>
+        <aop:advisor advice-ref="opEMII" 
+	             pointcut="execution(public * org.mybatis.jpetstore..*.*(..))"/>
     </aop:config>
 
     <!-- transaction manager, use JtaTransactionManager for global tx -->
