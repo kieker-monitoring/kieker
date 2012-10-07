@@ -167,7 +167,7 @@ function assert_files_exist_bin {
     assert_file_exists_regular ${MAIN_JAR}
     assert_file_exists_regular "dist/kieker-"*"_aspectj.jar"
     assert_file_exists_regular "dist/kieker-"*"_emf.jar"
-    assert_file_exists_regular "dist/kieker-monitoring-servlet-"*".war"
+    assert_file_NOT_exists "dist/kieker-monitoring-servlet-"*".war"
     assert_file_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/classes/META-INF/kieker.monitoring.properties"
     assert_file_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/aspectjweaver-*"
     assert_file_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kieker-*.jar"
@@ -209,7 +209,7 @@ function check_src_archive {
     assert_file_exists_regular $(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj ) # the core jar
     assert_file_exists_regular "dist/kieker-"*"_aspectj.jar"
     assert_file_exists_regular "dist/kieker-"*"_emf.jar"
-    assert_file_exists_regular "dist/kieker-monitoring-servlet-"*".war"
+    assert_file_NOT_exists "dist/kieker-monitoring-servlet-"*".war"
 
     # check bytecode version of classes contained in jar
     echo -n "Making sure that bytecode version of class in jar is 49.0 (Java 1.5)"
