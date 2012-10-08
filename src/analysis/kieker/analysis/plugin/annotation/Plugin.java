@@ -48,6 +48,13 @@ public @interface Plugin {
 	String description() default "";
 
 	/**
+	 * This field can contain an additional text to give an impression of the needed dependencies.
+	 * 
+	 * @return The dependencies for the current plugin as a human-readable description.
+	 */
+	String dependencies() default "";
+
+	/**
 	 * The name which is used to identify this plugin.
 	 * 
 	 * @return The name of this plugin.

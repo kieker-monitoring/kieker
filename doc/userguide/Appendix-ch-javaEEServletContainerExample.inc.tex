@@ -1,10 +1,51 @@
-The \Kieker{} download site\footnote{\KiekerDownloadURL{}} includes an additional %
-example \file{\JavaEEServletExampleName}. Using the sample Java Web application %
-iBATIS JPetStore\footnote{\url{http://ibatis.apache.org/}}, this example %
+Using the sample Java Web application %
+MyBatis JPetStore\footnote{\url{http://www.mybatis.org/spring/sample.html}}, this example %
 demonstrates how to employ \KiekerMonitoringPart{} for monitoring a Java application %
-running in a Java~EE container---in this case, Apache Tomcat\footnote{\url{http://tomcat.apache.org/}}. %
-Monitoring probes based on the Java~EE Servlet API %
-and AspectJ are used to monitor execution, trace, and session data (see Section~\ref{chap:aspectJ}).
+running in a Java~EE container---in this case Jetty\footnote{\url{http://www.eclipse.org/jetty/}}. %
+Monitoring probes based on the Java~EE Servlet API, Spring, %
+and AspectJ are used to monitor execution, trace, and session data (see Section~\ref{chap:aspectJ}). %
+The directory \dir{\JavaEEServletExampleDistro/} contains the files used in this %
+example. 
+
+\section{Setting}
+
+The subdirectory \file{jetty-hightide-jpetstore/} of the example includes the %
+Jetty server with the JPetStore application already deployed to the server's %
+\file{webapps} directory. In order to instrument the JPetStore with %
+\KiekerMonitoringPart{}, the following files are relevant:
+
+\begin{compactenum}
+ \item \file{\aspectJWeaverJar{}}, \file{\mainJar}: These files are already %
+included in the webapps's \dir{WEB-INF/lib/} directory.
+ \item \file{\monitoringPropertiesFile}: The Kieker configuration file is %
+already included in the webapps's \dir{WEB-INF/classes/META-INF} directory, %
+where it is considered for configuration by \KiekerMonitoringPart{}. 
+ \item \file{start.ini}: This file, located in Jetty's root directory, allows %
+to pass various JVM arguments, JVM system properties, and other options to the %
+server on startup. When using AspectJ for instrumentation, the respective %
+JVM argument is configured in this file: %
+
+\setPropertiesListing
+\lstinputlisting[firstline=33,lastline=35, linewidth=0.94\textwidth,caption=Enabling the AspectJ weaver in Jetty's \file{start.ini}]{\JavaEEServletExampleDir/jetty-hightide-jpetstore/start.KiekerAspectJActivated.ini}
+
+ \item \file{aop.xml}: The AspectJ configuration is located in the %
+webapps's \dir{WEB-INF/classes/META-INF} directory, configured to instrument %
+the JPetStore classes with Kieker's \class{OperationExecutionAspectFull} aspect %
+(Section~\ref{chap:aspectJ}).
+\item \file{applicationContext.xml}: In this file, located in the webapps's %
+\dir{WEB-INF} directory, Kieker's Spring interceptor can be enabled: 
+
+\setXMLListing
+\lstinputlisting[firstline=38,lastline=43, numbers=none, linewidth=0.94\textwidth, caption=Enabling the Spring interceptor in \file{applicationContext.xml}]{\JavaEEServletExampleDir/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/applicationContext.KiekerSpringProbesActivated.xml}
+
+ \item \file{web.xml}: In this file, located in the webapps's %
+\dir{WEB-INF} directory, Kieker's Servlet filters are enabled: 
+
+\setXMLListing
+\lstinputlisting[firstline=50,lastline=61, numbers=none, linewidth=0.94\textwidth, caption=Enabling the Servlet filter in \file{applicationContext.xml}]{\JavaEEServletExampleDir/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/web.xml}
+\end{compactenum}
+
+
 
 \section{Preparation of the Tomcat Servlet Container}
 
@@ -13,8 +54,8 @@ and AspectJ are used to monitor execution, trace, and session data (see Section~
 \begin{compactenum}
 \item Copy the files \file{\mainJar} and \file{\aspectJWeaverJar} from %
 \Kieker{}'s binary distribution to the Tomcat's \dir{lib/} directory.
-\item Copy the file \file{\servletWar} from \Kieker{}'s %
-binary distribution to the Tomcat's \dir{webapps/} directory.
+% \item Copy the file \file{\servletWar} from \Kieker{}'s %
+% binary distribution to the Tomcat's \dir{webapps/} directory.
 \item Tomcat's \dir{lib/} directory contains the files \file{kieker.monitoring.properties} %
 and \file{aop.xml} --- the configuration of \KiekerMonitoringPart{} and the %
 AspectJ-based instrumentation. %

@@ -118,6 +118,11 @@ function assert_files_exist_common {
     assert_dir_exists "doc/"
     assert_dir_exists "examples/"
     assert_dir_exists "lib/"
+    assert_file_exists_regular "lib/sigar-native-libs/libsigar-x86-linux.so"
+    assert_file_exists_regular "lib/sigar-native-libs/libsigar-amd64-linux.so"
+    assert_file_exists_regular "lib/sigar-native-libs/sigar-amd64-winnt.dll"
+    assert_file_exists_regular "lib/sigar-native-libs/sigar-x86-winnt.dll"
+    assert_file_exists_regular "lib/sigar-native-libs/sigar-x86-winnt.lib"
     assert_file_exists_regular "HISTORY"
     assert_file_exists_regular "LICENSE"
     assert_file_NOT_exists "build/"
@@ -162,7 +167,7 @@ function assert_files_exist_bin {
     assert_file_exists_regular ${MAIN_JAR}
     assert_file_exists_regular "dist/kieker-"*"_aspectj.jar"
     assert_file_exists_regular "dist/kieker-"*"_emf.jar"
-    assert_file_exists_regular "dist/kieker-monitoring-servlet-"*".war"
+    assert_file_NOT_exists "dist/kieker-monitoring-servlet-"*".war"
     assert_file_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/classes/META-INF/kieker.monitoring.properties"
     assert_file_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/aspectjweaver-*"
     assert_file_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kieker-*.jar"
@@ -204,7 +209,7 @@ function check_src_archive {
     assert_file_exists_regular $(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj ) # the core jar
     assert_file_exists_regular "dist/kieker-"*"_aspectj.jar"
     assert_file_exists_regular "dist/kieker-"*"_emf.jar"
-    assert_file_exists_regular "dist/kieker-monitoring-servlet-"*".war"
+    assert_file_NOT_exists "dist/kieker-monitoring-servlet-"*".war"
 
     # check bytecode version of classes contained in jar
     echo -n "Making sure that bytecode version of class in jar is 49.0 (Java 1.5)"
@@ -220,6 +225,11 @@ function check_src_archive {
 
     # now execute junt tests (which compiles the sources again ...)
     run_ant run-tests-junit
+    # make sure that no errors occured 
+    if ! grep "100.00\%" tmp/junit-results/report/overview-summary.html; then
+      echo "The JUnit tests didn't return with 100% success"
+      exit 1
+    fi
 
     # now execute junt tests (which compiles the sources again ...)
     run_ant static-analysis

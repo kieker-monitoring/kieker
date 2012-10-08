@@ -32,7 +32,11 @@ import kieker.monitoring.probe.cxf.OperationExecutionSOAPResponseOutInterceptor;
  * 
  */
 public class TestCXFClientServerInterceptorsSessionRegisteredBefore extends AbstractTestCXFClientServerInterceptors {
-	private final static String SESSION_ID = "SESSION-KQ8wFM0U";
+	private static final String SESSION_ID = "SESSION-KQ8wFM0U";
+
+	public TestCXFClientServerInterceptorsSessionRegisteredBefore() {
+		// empty default constructor
+	}
 
 	@Override
 	protected void beforeRequest() {
@@ -86,7 +90,7 @@ public class TestCXFClientServerInterceptorsSessionRegisteredBefore extends Abst
 
 	@Override
 	protected int getPortDigit() {
-		return 0;
+		return 2;
 	}
 
 }

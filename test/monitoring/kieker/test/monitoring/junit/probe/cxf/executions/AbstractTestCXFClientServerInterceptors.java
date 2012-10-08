@@ -51,8 +51,6 @@ import kieker.test.monitoring.util.NamedListWriter;
  * 
  */
 public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKiekerTest {
-	private static final Log LOG = LogFactory.getLog(AbstractTestCXFClientServerInterceptors.class);
-
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
@@ -61,6 +59,8 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 	protected static final String CLIENT_HOSTNAME = "client";
 
 	private static final String SERVICE_ADDRESS_TEMPLATE = "http://localhost:909X/bookstore";
+
+	private static final Log LOG = LogFactory.getLog(AbstractTestCXFClientServerInterceptors.class);
 
 	/**
 	 * Each instance of this class increments the port number by 1

@@ -18,8 +18,15 @@ package kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore;
 
 import org.springframework.stereotype.Service;
 
+/**
+ * @author Andre van Hoorn
+ */
 @Service
 public class Catalog {
+
+	public Catalog() {
+		// empty default constructor
+	}
 
 	public Book getBook(final boolean complexQuery) {
 		return new Book("Kieker 1.5 User Guide");

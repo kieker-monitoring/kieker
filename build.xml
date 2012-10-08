@@ -11,7 +11,6 @@
 		<property name="kieker.version" value="1.6-SNAPSHOT" />
 		<property name="year" value="2012" />
 		<property name="copyright" value="Kieker Project" />
-		<property name="dist.kieker.monitoring.servlet.war" value="${kieker.monitoring.servlet.packagenamebase}-${kieker.version}.war" />
 		
 		<property name="dist.kieker.main.jar" value="${kieker.main.packagenamebase}-${kieker.version}.jar" />
 		<property name="dist.kieker.main.aspectj.jar" value="${kieker.main.packagenamebase}-${kieker.version}_aspectj.jar" />
@@ -29,7 +28,7 @@
 		<replaceregexp file="${src.kieker.common.dir}/kieker/common/util/Version.java" match="VERSION = &quot;.*?&quot;" replace="VERSION = &quot;${kieker.version}&quot;" />
 	</target>
 
-	<target name="build-all" depends="clean,-init,build-kieker.main,build-kieker.main.aspectj,build-kieker.main.emf,build-kieker.monitoring-servlet" description="Compiles and packages the Kieker Jar and War files (calls the 'build-kieker-*' targets)">
+	<target name="build-all" depends="clean,-init,build-kieker.main,build-kieker.main.aspectj,build-kieker.main.emf" description="Compiles and packages the Kieker Jar and War files (calls the 'build-kieker-*' targets)">
 	</target>
 
 	<target name="-init" depends="clean,-update-version,-init-compile-classpaths" description="Initializes variables and creates directories">
@@ -53,14 +52,6 @@
 			<fileset dir="${lib.dir}">
 				<include name="commons-logging-*.jar" />
 			</fileset>
-		</path>
-
-		<path id="kieker.monitoring-servlet-compile-classpath">
-			<fileset dir="${lib.dir}">
-				<include name="javax.servlet-*.jar" />
-			</fileset>
-			<pathelement location="${build.kieker.common.dir}/" />
-			<pathelement location="${build.kieker.monitoring.dir}/" />
 		</path>
 
 		<path id="kieker.monitoring-compile-classpath">
@@ -133,17 +124,6 @@
 			</sourceroots>
 		</iajc>
 		<copy file="${kieker.monitoring.default.properties}" tofile="${build.kieker.monitoring.dir}/META-INF/kieker.monitoring.default.properties" />
-	</target>
-
-	<target name="build-kieker.monitoring-servlet" depends="-init,-compile-kieker.common,-compile-kieker.monitoring" description="Compiles and packages the Kieker.Monitoring Control Servlet War file">
-		<delete dir="${build.kieker.monitoring.servlet.dir}" />
-		<mkdir dir="${build.kieker.monitoring.servlet.dir}" />
-		<javac source="1.5" target="1.5" destDir="${build.kieker.monitoring.servlet.dir}" classpathref="kieker.monitoring-servlet-compile-classpath" srcdir="${src.kieker.monitoring-servlet.dir}" debug="true" includeAntRuntime="false" />
-		<war destfile="${dist.dir}/${dist.kieker.monitoring.servlet.war}" webxml="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/WEB-INF/web.xml">
-			<classes dir="${build.kieker.monitoring.servlet.dir}" />
-			<zipfileset dir="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/images" prefix="images" />
-			<zipfileset file="${license.file}" prefix="" />
-		</war>
 	</target>
 
 	<target name="-compile-kieker.analysis.model" depends="-init" description="Compiles the sources of the Analysis Meta-Model">
@@ -320,7 +300,6 @@
 				<include name="${src.kieker.analysis.dir}" />
 				<include name="${src.gen.kieker.analysis.dir}" />
 				<include name="${src.kieker.monitoring.dir}" />
-				<include name="${src.kieker.monitoring-servlet.dir}" />
 				<include name="${src.kieker.tools.dir}" />
 			</dirset>
 		</path>
@@ -329,7 +308,6 @@
 			<classpath refid="kieker.analysis-compile-classpath" />
 			<classpath refid="kieker.monitoring-compile-classpath" />
 			<classpath refid="kieker.monitoring-ajc-compile-classpath" />
-			<classpath refid="kieker.monitoring-servlet-compile-classpath" />
 			<classpath refid="kieker.tools-compile-classpath" />
 			<link href="http://docs.oracle.com/javase/1.5.0/docs/api/" />
 			<tag name="generated" /> 
@@ -339,7 +317,8 @@
 	</target>
 
 	<target name="dist-kieker-sources" depends="-init" description="Packages the source archives (.zip|.tar.gz) for a release">
-		<patternset id="dist_src_files-nonbinmode">
+	  <echo message="${test.dir}/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml" />
+	  <patternset id="dist_src_files-nonbinmode"> <!-- NOTE that the order of includes/excludes seems to have no effect. So be careful with excludes --> 
 			<include name="${bin.dir}/log4j.properties" />
 			<include name="${bin.dir}/*.bat" />
 			<include name="${src.userguide.dir}/**/*" />
@@ -351,16 +330,16 @@
 			<include name="${src.model.dir}/*.ecore" />
 			<include name="${test.dir}/**/*.java" />
 			<include name="${test.dir}/**/META-INF/*" />
-			<include name="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/WEB-INF/**" />
-			<include name="${src.kieker.monitoring-servlet.dir}/kieker/monitoring/servlet/images/**" />
+			<include name="${test.dir}/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml" />
+			<include name="${test.dir}/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/webapp/**" />
 			<include name="${lib.dir}/**" />
 			<include name="${examples.dir}/**/*" />
-			<exclude name="${examples.dir}/**/lib/*" />
-			<exclude name="${examples.dir}/**/**/*.jar" />
+			<exclude name="${src.userguide.examples.dir}/**/lib/**/*" />
+			<exclude name="${src.userguide.examples.dir}/**/**/*.jar" />
 			<include name="${example.javaee.dir}/README" />
 			<include name="${example.javaee.dir}/${license.file}" />
 			<!-- (re-)enable as soon as existent <include name="${example.javaee.dir}/kieker-testdata/**" /> -->
-			<include name="${example.javaee.jetty.dir}/**" />
+			<include name="${example.javaee.jetty.dir}/**/*" />
 			<exclude name="${example.javaee.jetty.dir}/logs/**/*" />
 			<exclude name="${example.javaee.jetty.dir}/**/kieker*.jar" />
 			<exclude name="${example.javaee.jetty.dir}/**/aspectj*.jar" />
@@ -406,9 +385,8 @@
 	</target>
 
 	<target name="dist-kieker-binaries" depends="build-all,-build-userguide,-build-userguide-examples" description="Packages the binary archives (.zip|.tar.gz) for a release">
-		<echo message="${src.userguide.pdf}" />
 
-		<patternset id="dist_bin_files-nonbinmode">
+		<patternset id="dist_bin_files-nonbinmode"> <!-- NOTE that the order of includes/excludes seems to have no effect. So be careful with excludes --> 
 			<include name="${bin.dir}/log4j.properties" />
 			<include name="${bin.dir}/*.bat" />
 			<include name="${dist.dir}/*.jar" />
@@ -421,7 +399,7 @@
 			<include name="${src.userguide.dist.pdf}" />
 			<include name="${examples.dir}/**/*" />
 			<exclude name="${examples.dir}/**/*.sh" /> <!-- added in bin mode below -->
-			<exclude name="${examples.dir}/**/lib/*" />
+			<exclude name="${src.userguide.examples.dir}/**/lib/**/*" />
 			<include name="${example.javaee.dir}/README" />
 			<include name="${example.javaee.dir}/${license.file}" />
 			<!-- (re-)enable as soon as existent <include name="${example.javaee.dir}/kieker-testdata/**" /> -->
@@ -474,13 +452,14 @@
 		</zip>
 	</target>
 
-	<target name="clean-userguide-examples" description="Removes artifacts from previous builds">
+	<target name="clean-userguide-examples" description="Removes artifacts from previous builds and manually changed configuration files">
 		<ant antfile="build.xml" dir="${src.userguide.example.bookstore.dir}" target="clean" />
 		<ant antfile="build.xml" dir="${src.userguide.example.manual.dir}" target="clean" />
 		<ant antfile="build.xml" dir="${src.userguide.example.extended.dir}" target="clean" />
 		<ant antfile="build.xml" dir="${src.userguide.example.aspectj.dir}" target="clean" />
 		<ant antfile="build.xml" dir="${src.userguide.example.jms.dir}" target="clean" />
 		<ant antfile="build.xml" dir="${src.userguide.example.sigar.dir}" target="clean" />
+		<copy file="${kieker.monitoring.default.properties}" tofile="${src.userguide.example.aspectj.dir}/META-INF/kieker.monitoring.properties" />
 	</target>
 
 	<target name="-build-userguide-examples" depends="-init,build-all,clean-userguide-examples" description="Builds all userguide examples">
@@ -984,7 +963,13 @@
 				<include name="wsdl4j-*.jar" /> <!-- needed for the cxf tests -->
 				<include name="org.springframework*.jar" /> <!-- needed for the spring tests -->
 				<include name="commons-logging-*.jar" /> <!-- needed for the spring tests -->
-				<include name="geronimo-ws-metadata_2.0_spec-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="geronimo-ws-metadata_*_spec-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="geronimo-jaxws_*_spec-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="geronimo-jaxws_*_spec-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="jaxb-api-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="jaxb-impl-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="stax-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="javaee-api-*.jar" /> <!-- needed for the cxf tests --> 
 			</fileset>
 			<fileset dir="${example.javaee.jetty.lib.dir}">
 				<include name="jetty-*.jar" /> <!-- needed for the cxf, spring tests -->

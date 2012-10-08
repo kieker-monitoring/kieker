@@ -46,18 +46,18 @@ import kieker.monitoring.timer.ITimeSource;
 public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInterceptor implements IMonitoringProbe {
 	// the CXF logger uses java.util.logging by default, look here how to change it to log4j: http://cwiki.apache.org/CXF20DOC/debugging.html
 
+	public static final String SIGNATURE = "public void " + OperationExecutionSOAPResponseInInterceptor.class.getName()
+			+ ".handleMessage(org.apache.cxf.message.Message)";
+
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
 
+	private static final Log LOG = LogFactory.getLog(OperationExecutionSOAPResponseInInterceptor.class);
+
 	protected final IMonitoringController monitoringController;
 	protected final ITimeSource timeSource;
 	protected final String vmName;
-
-	private static final Log LOG = LogFactory.getLog(OperationExecutionSOAPResponseInInterceptor.class);
-
-	public static final String SIGNATURE = "public void " + OperationExecutionSOAPResponseInInterceptor.class.getName()
-			+ ".handleMessage(org.apache.cxf.message.Message)";
 
 	public OperationExecutionSOAPResponseInInterceptor() {
 		this(MonitoringController.getInstance());
