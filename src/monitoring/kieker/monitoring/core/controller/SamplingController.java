@@ -35,7 +35,7 @@ public final class SamplingController extends AbstractController implements ISam
 	private static final Log LOG = LogFactory.getLog(SamplingController.class);
 
 	/** Executes the {@link kieker.monitoring.probe.sigar.samplers.AbstractSigarSampler}s. */
-	private final ScheduledThreadPoolExecutor periodicSensorsPoolExecutor;
+	final ScheduledThreadPoolExecutor periodicSensorsPoolExecutor; // NOPMD NOCS (package visible)
 
 	protected SamplingController(final Configuration configuration) {
 		super(configuration);

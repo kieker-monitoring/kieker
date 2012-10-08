@@ -19,9 +19,8 @@ package kieker.test.monitoring.junit.core.controller;
 import java.io.File;
 import java.io.IOException;
 
-import junit.framework.Assert;
-
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -32,15 +31,21 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 
-/**
- * @author Bj�rn Wei�enfels
- */
-public class TestProbeController {
+import kieker.test.common.junit.AbstractKiekerTest;
 
-	File configFile = null;
+/**
+ * @author Bjoern Weissenfels
+ */
+public class TestProbeController extends AbstractKiekerTest {
 
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
+
+	private File configFile = null;
+
+	public TestProbeController() {
+		// empty default consstructor
+	}
 
 	@Before
 	public void init() throws IOException {

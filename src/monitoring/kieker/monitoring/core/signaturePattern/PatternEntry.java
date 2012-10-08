@@ -47,8 +47,8 @@ public class PatternEntry implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = (prime * result) + ((this.pattern == null) ? 0 : this.pattern.hashCode());
-		result = (prime * result) + ((this.strPattern == null) ? 0 : this.strPattern.hashCode());
+		result = (prime * result) + ((this.pattern == null) ? 0 : this.pattern.hashCode()); // NOCS
+		result = (prime * result) + ((this.strPattern == null) ? 0 : this.strPattern.hashCode()); // NOCS
 		return result;
 	}
 

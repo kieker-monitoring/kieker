@@ -62,6 +62,8 @@ public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 		Assert.assertNotNull(ConfigurationFactory.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE + " must not be empty",
 				configuration.getProperty(ConfigurationFactory.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE));
 		// Probe controller
+		Assert.assertNotNull(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED + " must not be empty",
+				configuration.getProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED));
 		Assert.assertNotNull(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE + " must not be empty",
 				configuration.getProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE));
 		Assert.assertNotNull(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE + " must not be empty",
@@ -112,6 +114,7 @@ public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 		// Sampling controller
 		Assert.assertEquals(1, configuration.getIntProperty(ConfigurationFactory.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE));
 		// Probe controller
+		Assert.assertEquals(false, configuration.getBooleanProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED));
 		Assert.assertEquals("META-INF/kieker.monitoring.adaptive", configuration.getPathProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE));
 		Assert.assertEquals(false, configuration.getBooleanProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE));
 		Assert.assertEquals(0, configuration.getIntProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL));

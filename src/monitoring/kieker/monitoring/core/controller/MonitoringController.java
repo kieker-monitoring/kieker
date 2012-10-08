@@ -37,9 +37,9 @@ public final class MonitoringController extends AbstractController implements IM
 	private static final Log LOG = LogFactory.getLog(MonitoringController.class);
 
 	private final StateController stateController;
+	private final SamplingController samplingController;
 	private final JMXController jmxController;
 	private final WriterController writerController;
-	private final SamplingController samplingController;
 	private final TimeSourceController timeSourceController;
 	private final RegistryController registryController;
 	private final ProbeController probeController;
@@ -48,9 +48,9 @@ public final class MonitoringController extends AbstractController implements IM
 	private MonitoringController(final Configuration configuration) {
 		super(configuration);
 		this.stateController = new StateController(configuration);
+		this.samplingController = new SamplingController(configuration);
 		this.jmxController = new JMXController(configuration);
 		this.writerController = new WriterController(configuration);
-		this.samplingController = new SamplingController(configuration);
 		this.timeSourceController = new TimeSourceController(configuration);
 		this.registryController = new RegistryController(configuration);
 		this.probeController = new ProbeController(configuration);
@@ -65,13 +65,13 @@ public final class MonitoringController extends AbstractController implements IM
 			monitoringController.terminate();
 			return monitoringController;
 		}
-		monitoringController.jmxController.setMonitoringController(monitoringController);
-		if (monitoringController.jmxController.isTerminated()) {
+		monitoringController.samplingController.setMonitoringController(monitoringController);
+		if (monitoringController.samplingController.isTerminated()) {
 			monitoringController.terminate();
 			return monitoringController;
 		}
-		monitoringController.samplingController.setMonitoringController(monitoringController);
-		if (monitoringController.samplingController.isTerminated()) {
+		monitoringController.jmxController.setMonitoringController(monitoringController);
+		if (monitoringController.jmxController.isTerminated()) {
 			monitoringController.terminate();
 			return monitoringController;
 		}
@@ -141,13 +141,13 @@ public final class MonitoringController extends AbstractController implements IM
 	@Override
 	protected final void cleanup() {
 		LOG.info("Shutting down Monitoring Controller (" + this.getName() + ")");
-		this.stateController.terminate();
-		this.jmxController.terminate();
-		this.timeSourceController.terminate();
-		this.samplingController.terminate();
-		this.writerController.terminate();
-		this.registryController.terminate();
 		this.probeController.terminate();
+		this.registryController.terminate();
+		this.timeSourceController.terminate();
+		this.writerController.terminate();
+		this.jmxController.terminate();
+		this.samplingController.terminate();
+		this.stateController.terminate();
 	}
 
 	@Override
@@ -164,6 +164,10 @@ public final class MonitoringController extends AbstractController implements IM
 		sb.append(this.writerController.toString());
 		sb.append(this.samplingController.toString());
 		return sb.toString();
+	}
+
+	protected SamplingController getSamplingController() {
+		return this.samplingController;
 	}
 
 	// DELEGATE TO OTHER CONTROLLERS

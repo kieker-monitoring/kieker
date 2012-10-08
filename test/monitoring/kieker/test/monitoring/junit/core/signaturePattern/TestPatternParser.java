@@ -1,4 +1,20 @@
-package kieker.test.monitoring.junit.core.controller;
+/***************************************************************************
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
+package kieker.test.monitoring.junit.core.signaturePattern;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -11,10 +27,17 @@ import kieker.monitoring.core.signaturePattern.InvalidPatternException;
 import kieker.monitoring.core.signaturePattern.PatternParser;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.monitoring.util.PatternConstructor;
-import kieker.test.monitoring.util.SignatureConstructor;
+import kieker.test.monitoring.util.signaturePattern.PatternConstructor;
+import kieker.test.monitoring.util.signaturePattern.SignatureConstructor;
 
+/**
+ * @author Bjoern Weissenfels, Andre van Hoorn, Jan Waller
+ */
 public class TestPatternParser extends AbstractKiekerTest {
+
+	public TestPatternParser() {
+		// empty default constructor
+	}
 
 	@Test
 	// works : 810.000 tests
@@ -215,8 +238,6 @@ public class TestPatternParser extends AbstractKiekerTest {
 		}
 	}
 
-	private int i = 0;
-
 	private void checkCombination(final String patternStr, final String visibility, final String staticNonStatic, final String nativeNonNative,
 			final String returnTypeOrNew, final String fqClassName, final String operationName, final String paramList) throws InvalidPatternException {
 
@@ -227,10 +248,12 @@ public class TestPatternParser extends AbstractKiekerTest {
 			signatureBuilder.append("public").append(' ');
 		} else if ("private".equals(visibility)) {
 			signatureBuilder.append("private").append(' ');
-		} else if ("package".equals(visibility)) {
+		} else if ("package".equals(visibility)) { // NOPMD NOCS
+			// nothing to do
 		} else if ("protected".equals(visibility)) {
 			signatureBuilder.append("protected").append(' ');
-		} else if ("".equals(visibility)) {
+		} else if ("".equals(visibility)) { // NOPMD NOCS
+			// nothing to do
 		} else {
 			Assert.fail("Invalid visibility: " + visibility);
 		}
@@ -238,8 +261,10 @@ public class TestPatternParser extends AbstractKiekerTest {
 		/* Static/Non-static */
 		if ("static".equals(staticNonStatic)) {
 			signatureBuilder.append("static").append(' ');
-		} else if ("non_static".equals(staticNonStatic)) {
-		} else if ("".equals(staticNonStatic)) {
+		} else if ("non_static".equals(staticNonStatic)) { // NOPMD NOCS
+			// nothing to do
+		} else if ("".equals(staticNonStatic)) { // NOPMD NOCS
+			// nothing to do
 		} else {
 			Assert.fail("Invalid staticNonStatic: " + staticNonStatic);
 		}
@@ -247,14 +272,17 @@ public class TestPatternParser extends AbstractKiekerTest {
 		/* Static/Non-static */
 		if ("native".equals(nativeNonNative)) {
 			signatureBuilder.append("native").append(' ');
-		} else if ("non_native".equals(nativeNonNative)) {
-		} else if ("".equals(nativeNonNative)) {
+		} else if ("non_native".equals(nativeNonNative)) { // NOPMD NOCS
+			// nothing to do
+		} else if ("".equals(nativeNonNative)) { // NOPMD NOCS
+			// nothing to do
 		} else {
 			Assert.fail("Invalid nativeNonNative: " + nativeNonNative);
 		}
 
 		/* Return type/Constructor */
-		if ("new".equals(returnTypeOrNew)) {
+		if ("new".equals(returnTypeOrNew)) { // NOPMD NOCS
+			// nothing to do
 		} else if ("*".equals(returnTypeOrNew)) {
 			signatureBuilder.append("void").append(' ');
 		} else if ("..*".equals(returnTypeOrNew)) {
@@ -292,7 +320,8 @@ public class TestPatternParser extends AbstractKiekerTest {
 		signatureBuilder.append('(');
 
 		/* Parameter list */
-		if ("".equals(paramList)) {
+		if ("".equals(paramList)) { // NOPMD NOCS
+			// nothing to do
 		} else if ("*".equals(paramList)) {
 			signatureBuilder.append("boolean");
 		} else if ("A, B".equals(paramList)) {
@@ -309,7 +338,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 		final Pattern pattern = PatternParser.parseToPattern(patternStr);
 		final Matcher m = pattern.matcher(signature);
 
-		Assert.assertTrue((this.i++) + "Unexpected match result.\nregExp: " + pattern.toString() + "\npattern: " + pattern
+		Assert.assertTrue("Unexpected match result.\nregExp: " + pattern.toString() + "\npattern: " + pattern
 				+ "\nsignature: " + signature, m.matches());
 	}
 
@@ -357,14 +386,14 @@ public class TestPatternParser extends AbstractKiekerTest {
 		// final boolean[] paramListMatches = { false, false, true, true };
 
 		for (int visibilityIdy = 0; visibilityIdy < visibilities.length; visibilityIdy++) {
-			for (int staticNonStaticIdx = 0; staticNonStaticIdx < staticNonStatics.length; staticNonStaticIdx++) {
-				for (int nativeNonNativeIdx = 0; nativeNonNativeIdx < nativeNonNatives.length; nativeNonNativeIdx++) {
-					for (int returnTypeOrNewIdx = 0; returnTypeOrNewIdx < returnTypesOrNews.length; returnTypeOrNewIdx++) {
-						for (int fqClassNameIdx = 0; fqClassNameIdx < fqClassNames.length; fqClassNameIdx++) {
-							for (int operationNameIdx = 0; operationNameIdx < operationNames.length; operationNameIdx++) {
-								for (int paramListIdx = 0; paramListIdx < paramLists.length; paramListIdx++) {
-									for (final String white : whites) {
-										for (final String whiteOrEmpty : whiteAndNoWhite) {
+			for (int staticNonStaticIdx = 0; staticNonStaticIdx < staticNonStatics.length; staticNonStaticIdx++) { // NOCS
+				for (int nativeNonNativeIdx = 0; nativeNonNativeIdx < nativeNonNatives.length; nativeNonNativeIdx++) { // NOCS
+					for (int returnTypeOrNewIdx = 0; returnTypeOrNewIdx < returnTypesOrNews.length; returnTypeOrNewIdx++) { // NOCS
+						for (int fqClassNameIdx = 0; fqClassNameIdx < fqClassNames.length; fqClassNameIdx++) { // NOCS
+							for (int operationNameIdx = 0; operationNameIdx < operationNames.length; operationNameIdx++) { // NOCS
+								for (int paramListIdx = 0; paramListIdx < paramLists.length; paramListIdx++) { // NOCS
+									for (final String white : whites) { // NOCS
+										for (final String whiteOrEmpty : whiteAndNoWhite) { // NOCS
 											final StringBuilder patternBuilder = new StringBuilder();
 											patternBuilder.append(whiteOrEmpty);
 											if (visibilities[visibilityIdy].length() > 0) {
