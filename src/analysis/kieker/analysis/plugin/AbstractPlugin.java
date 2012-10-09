@@ -547,19 +547,16 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * @return A set of plugins which directly or indirectly (see above) provide data for this plugin
 	 */
 	public Set<AbstractPlugin> getIncomingPlugins(final boolean transitive) {
-		final Set<AbstractPlugin> providers = new HashSet<AbstractPlugin>();
-
-		this.addIncomingPlugins(providers, transitive);
-
-		return providers;
+		final Set<AbstractPlugin> knownIncomingPlugins = new HashSet<AbstractPlugin>();
+		this.addIncomingPlugins(knownIncomingPlugins, transitive);
+		return knownIncomingPlugins;
 	}
 
-	private void addIncomingPlugins(final Set<AbstractPlugin> providers, final boolean transitive) {
+	private void addIncomingPlugins(final Set<AbstractPlugin> knownIncomingPlugins, final boolean transitive) {
 		for (final AbstractPlugin plugin : this.incomingPlugins) {
-			providers.add(plugin);
-
+			knownIncomingPlugins.add(plugin);
 			if (transitive) {
-				plugin.addIncomingPlugins(providers, transitive);
+				plugin.addIncomingPlugins(knownIncomingPlugins, transitive);
 			}
 		}
 	}
