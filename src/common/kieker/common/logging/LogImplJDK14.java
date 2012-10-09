@@ -17,7 +17,6 @@
 package kieker.common.logging;
 
 /**
- * 
  * @author Jan Waller
  */
 public final class LogImplJDK14 implements Log {

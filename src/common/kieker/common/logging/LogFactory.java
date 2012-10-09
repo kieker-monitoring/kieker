@@ -17,30 +17,21 @@
 package kieker.common.logging;
 
 /**
- * 
  * @author Jan Waller
  */
 public final class LogFactory { // NOPMD (Implementation of an logger)
 
-	private static final Logger DETECTED_LOGGER;
+	public static final String CUSTOM_LOGGER_JVM = "kieker.common.logging.Log";
+
+	private static final Logger DETECTED_LOGGER = LogFactory.detectLogger();
 
 	private static enum Logger {
-		JDK, COMMONS,
+		JDK, COMMONS, WEBGUI,
 	}
 
-	static {
-		Logger logselectiontemp = Logger.JDK; // default to JDK logging
-
-		try {
-			if (Class.forName("org.apache.commons.logging.Log") != null) {
-				logselectiontemp = Logger.COMMONS; // use commons logging
-			}
-		} catch (final Exception ex2) { // NOPMD NOCS (catch Exception)
-			// use default ...
-		}
-
-		DETECTED_LOGGER = logselectiontemp; // NOCS (missing this)
-	}
+	// static {
+	// System.out.println(DETECTED_LOGGER.toString());
+	// }
 
 	private LogFactory() {
 		// Nothing to do
@@ -52,11 +43,33 @@ public final class LogFactory { // NOPMD (Implementation of an logger)
 
 	public static final Log getLog(final String name) {
 		switch (DETECTED_LOGGER) { // NOPMD (no break needed)
+		case WEBGUI:
+			return new LogImplWebguiLogging(name);
 		case COMMONS:
 			return new LogImplCommonsLogging(name);
 		case JDK:
 		default:
 			return new LogImplJDK14(name);
 		}
+	}
+
+	private static final Logger detectLogger() {
+		final String systemPropertyLogger = System.getProperty(CUSTOM_LOGGER_JVM);
+		if (null != systemPropertyLogger) {
+			final String strLogger = systemPropertyLogger.trim().toUpperCase();
+			try {
+				return Enum.valueOf(Logger.class, strLogger);
+			} catch (final IllegalArgumentException ex) { // NOPMD NOCS
+				// TODO: How to notify of incorrectly chosen logger?
+			}
+		}
+		try {
+			if (Class.forName("org.apache.commons.logging.Log") != null) {
+				return Logger.COMMONS; // use commons logging
+			}
+		} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
+			// use default in case of errors ...
+		}
+		return Logger.JDK;
 	}
 }
