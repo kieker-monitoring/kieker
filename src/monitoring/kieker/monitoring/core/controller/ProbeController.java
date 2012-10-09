@@ -109,12 +109,12 @@ public class ProbeController extends AbstractController implements IProbeControl
 
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(255);
 		sb.append("ProbeController: ");
 		if (this.enabled) {
 			sb.append('\'');
-			sb.append(this.configFilePathname).append("\'\n");
-			sb.append("\tTime intervall for update checks of pattern file (in seconds): ");
+			sb.append(this.configFilePathname);
+			sb.append("'\n\tTime intervall for update checks of pattern file (in seconds): ");
 			if (this.configFileReadIntervall > 0) {
 				sb.append(this.configFileReadIntervall);
 			} else {

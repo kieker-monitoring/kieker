@@ -56,7 +56,7 @@ public class TestProbeController extends AbstractKiekerTest {
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
-	private File configFile = null;
+	private File configFile;
 
 	public TestProbeController() {
 		// empty default consstructor

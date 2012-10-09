@@ -36,7 +36,6 @@ public final class PatternParser {
 			sb.append(".*");
 		} else {
 			String[] array = trimPattern.split("[\\(\\)]");
-			final String prefix = array[0];
 			final String params;
 			if (array.length == 1) {
 				params = null;
@@ -45,8 +44,7 @@ public final class PatternParser {
 			} else {
 				throw new InvalidPatternException("Invalid number of brackets.");
 			}
-
-			array = prefix.trim().split("\\s+");
+			array = array[0].trim().split("\\s+");
 			String retType;
 			String fqName;
 			String[] modifierList = null;
@@ -120,10 +118,9 @@ public final class PatternParser {
 			}
 		}
 
-		final StringBuilder sb = new StringBuilder();
 		boolean startsWithDotdot = false;
 		int start = 1;
-
+		final StringBuilder sb = new StringBuilder(255);
 		if ("..".equals(paramList[0].trim())) {
 			sb.append("(((\\s)?[\\p{javaJavaIdentifierPart}\\.])*\\p{javaJavaIdentifierPart}+(\\s)?,)*");
 			startsWithDotdot = true;
@@ -183,7 +180,7 @@ public final class PatternParser {
 
 	private static final String parseIdentifier(final String identifier) throws InvalidPatternException {
 		final char[] array = identifier.toCharArray();
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(128);
 		if (Character.isJavaIdentifierStart(array[0])) {
 			sb.append(Character.toString(array[0]));
 		} else if (array[0] == '*') {
@@ -217,7 +214,7 @@ public final class PatternParser {
 			}
 		}
 		int start = 0;
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(128);
 		// test if fq_type starts with ..
 		if ((array[0].length() == 0) && (array[1].length() == 0)) {
 			sb.append("(([\\p{javaJavaIdentifierPart}\\.])*\\.)?");

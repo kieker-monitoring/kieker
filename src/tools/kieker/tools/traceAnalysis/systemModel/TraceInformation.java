@@ -72,7 +72,7 @@ public class TraceInformation {
 
 		// The equality currently relies only on the trace ID to facilitate trace coloring.
 		final TraceInformation otherTraceInformation = (TraceInformation) other;
-		return (this.getTraceId() == otherTraceInformation.getTraceId());
+		return this.getTraceId() == otherTraceInformation.getTraceId();
 	}
 
 }

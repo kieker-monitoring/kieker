@@ -82,12 +82,11 @@ public final class SamplingController extends AbstractController implements ISam
 	}
 
 	public final ScheduledSamplerJob schedulePeriodicSampler(final ISampler sensor, final long initialDelay, final long period, final TimeUnit timeUnit) {
-		final ScheduledSamplerJob job;
 		if (null == this.periodicSensorsPoolExecutor) {
 			LOG.warn("Won't schedule periodic sensor since Periodic Sampling is deactivated.");
 			return null;
 		}
-		job = new ScheduledSamplerJob(super.monitoringController, sensor);
+		final ScheduledSamplerJob job = new ScheduledSamplerJob(super.monitoringController, sensor);
 		// we need to keep the future for later cancellation/removal
 		final ScheduledFuture<?> future = this.periodicSensorsPoolExecutor.scheduleAtFixedRate(job, initialDelay, period, timeUnit);
 		job.setFuture(future);

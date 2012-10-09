@@ -21,20 +21,10 @@ package kieker.tools.traceAnalysis.filter.visualization.graph;
  * and corresponds to the kind {@link OriginRetentionPolicyKind#NONE}.
  * 
  * @author Holger Knoche
- * 
  */
 public final class NoOriginRetentionPolicy extends AbstractOriginRetentionPolicy {
 
 	private static final NoOriginRetentionPolicy INSTANCE = new NoOriginRetentionPolicy();
-
-	/**
-	 * Factory method for the no-origin-retention policy.
-	 * 
-	 * @return See above
-	 */
-	public static NoOriginRetentionPolicy createInstance() {
-		return INSTANCE;
-	}
 
 	private NoOriginRetentionPolicy() {
 		super(OriginRetentionPolicyKind.NONE);
@@ -48,4 +38,12 @@ public final class NoOriginRetentionPolicy extends AbstractOriginRetentionPolicy
 		// Do nothing
 	}
 
+	/**
+	 * Factory method for the no-origin-retention policy.
+	 * 
+	 * @return See above
+	 */
+	public static NoOriginRetentionPolicy createInstance() {
+		return INSTANCE;
+	}
 }

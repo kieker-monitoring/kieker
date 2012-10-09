@@ -52,12 +52,12 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPol
 public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V extends AbstractVertex<V, E, O>, E extends AbstractEdge<V, E, O>, O> extends
 		AbstractFilterPlugin implements IGraphOutputtingFilter<G> {
 
-	private static final Log LOG = LogFactory.getLog(AbstractGraphFilter.class);
-
 	/**
 	 * The name of the filter's graph input port.
 	 */
 	public static final String INPUT_PORT_NAME_GRAPH = "graphs";
+
+	private static final Log LOG = LogFactory.getLog(AbstractGraphFilter.class);
 
 	private final Configuration configuration;
 

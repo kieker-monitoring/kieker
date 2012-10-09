@@ -27,24 +27,12 @@ import java.util.Set;
  * higher flexibility.
  * 
  * @author Holger Knoche
- * 
  */
 public class SpecificOriginRetentionPolicy extends AbstractOriginRetentionPolicy {
 
 	private final Set<Object> selectedOrigins = new HashSet<Object>();
 
 	private IOriginRetentionPolicy successor;
-
-	/**
-	 * Factory method for the specific origin retention policy.
-	 * 
-	 * @param selectedOrigins
-	 *            The origins to retain
-	 * @return See above
-	 */
-	public static SpecificOriginRetentionPolicy createInstance(final Set<?> selectedOrigins) {
-		return new SpecificOriginRetentionPolicy(selectedOrigins);
-	}
 
 	protected SpecificOriginRetentionPolicy(final Set<?> selectedOrigins) {
 		super(OriginRetentionPolicyKind.SPECIFIC);
@@ -55,12 +43,10 @@ public class SpecificOriginRetentionPolicy extends AbstractOriginRetentionPolicy
 	public boolean dependsOn(final IOriginRetentionPolicy policy) {
 		if (this == policy) {
 			return true;
-		}
-		else if (this.successor == null) {
+		} else if (this.successor == null) {
 			return false;
-		}
-		else {
-			return (this.successor.equals(policy) || this.successor.dependsOn(policy));
+		} else {
+			return this.successor.equals(policy) || this.successor.dependsOn(policy);
 		}
 	}
 
@@ -71,7 +57,7 @@ public class SpecificOriginRetentionPolicy extends AbstractOriginRetentionPolicy
 
 		// Do not add a default case to the following switch to avoid the suppression of warnings
 		// about missing enum values.
-		switch (other.getKind()) { // NOPMD
+		switch (other.getKind()) { // NOPMD NOCS
 		case NONE:
 			return this;
 		case SPECIFIC:
@@ -98,4 +84,14 @@ public class SpecificOriginRetentionPolicy extends AbstractOriginRetentionPolicy
 		}
 	}
 
+	/**
+	 * Factory method for the specific origin retention policy.
+	 * 
+	 * @param selectedOrigins
+	 *            The origins to retain
+	 * @return See above
+	 */
+	public static SpecificOriginRetentionPolicy createInstance(final Set<?> selectedOrigins) {
+		return new SpecificOriginRetentionPolicy(selectedOrigins);
+	}
 }

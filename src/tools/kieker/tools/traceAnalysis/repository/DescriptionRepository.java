@@ -29,7 +29,6 @@ import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.analysis.repository.annotation.Repository;
 import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraphElement;
 
 /**
  * Implementation of a description repository which stores descriptions for names.
@@ -159,7 +158,8 @@ public class DescriptionRepository extends AbstractRepository {
 		 * Creates a new data object using the given description map.
 		 * 
 		 * @param descriptionMap
-		 *            The description map (node id, see {@link AbstractGraphElement#getIdentifier()} -> description) to use
+		 *            The description map (node id, see {@link kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraphElement#getIdentifier()} ->
+		 *            description) to use
 		 */
 		public DescriptionRepositoryData(final ConcurrentMap<String, String> descriptionMap) {
 			this.descriptionMap = descriptionMap;

@@ -20,7 +20,6 @@ package kieker.tools.traceAnalysis.filter.visualization.graph;
  * Abstract superclass for all origin retention policies.
  * 
  * @author Holger Knoche
- * 
  */
 public abstract class AbstractOriginRetentionPolicy implements IOriginRetentionPolicy {
 
@@ -39,7 +38,6 @@ public abstract class AbstractOriginRetentionPolicy implements IOriginRetentionP
 	}
 
 	public boolean dependsOn(final IOriginRetentionPolicy policy) {
-		return (this == policy);
+		return this == policy;
 	}
-
 }

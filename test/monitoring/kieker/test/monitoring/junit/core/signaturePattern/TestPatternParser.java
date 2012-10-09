@@ -241,17 +241,17 @@ public class TestPatternParser extends AbstractKiekerTest {
 	private void checkCombination(final String patternStr, final String visibility, final String staticNonStatic, final String nativeNonNative,
 			final String returnTypeOrNew, final String fqClassName, final String operationName, final String paramList) throws InvalidPatternException {
 
-		final StringBuilder signatureBuilder = new StringBuilder();
+		final StringBuilder signatureBuilder = new StringBuilder(128);
 
 		/* Visibility */
 		if ("public".equals(visibility)) {
-			signatureBuilder.append("public").append(' ');
+			signatureBuilder.append("public ");
 		} else if ("private".equals(visibility)) {
-			signatureBuilder.append("private").append(' ');
+			signatureBuilder.append("private ");
 		} else if ("package".equals(visibility)) { // NOPMD NOCS
 			// nothing to do
 		} else if ("protected".equals(visibility)) {
-			signatureBuilder.append("protected").append(' ');
+			signatureBuilder.append("protected ");
 		} else if ("".equals(visibility)) { // NOPMD NOCS
 			// nothing to do
 		} else {
@@ -260,7 +260,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 
 		/* Static/Non-static */
 		if ("static".equals(staticNonStatic)) {
-			signatureBuilder.append("static").append(' ');
+			signatureBuilder.append("static ");
 		} else if ("non_static".equals(staticNonStatic)) { // NOPMD NOCS
 			// nothing to do
 		} else if ("".equals(staticNonStatic)) { // NOPMD NOCS
@@ -271,7 +271,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 
 		/* Static/Non-static */
 		if ("native".equals(nativeNonNative)) {
-			signatureBuilder.append("native").append(' ');
+			signatureBuilder.append("native ");
 		} else if ("non_native".equals(nativeNonNative)) { // NOPMD NOCS
 			// nothing to do
 		} else if ("".equals(nativeNonNative)) { // NOPMD NOCS
@@ -284,11 +284,11 @@ public class TestPatternParser extends AbstractKiekerTest {
 		if ("new".equals(returnTypeOrNew)) { // NOPMD NOCS
 			// nothing to do
 		} else if ("*".equals(returnTypeOrNew)) {
-			signatureBuilder.append("void").append(' ');
+			signatureBuilder.append("void ");
 		} else if ("..*".equals(returnTypeOrNew)) {
-			signatureBuilder.append("java.util.List").append(' ');
+			signatureBuilder.append("java.util.List ");
 		} else if ("java.lang.String".equals(returnTypeOrNew)) {
-			signatureBuilder.append("java.lang.String").append(' ');
+			signatureBuilder.append("java.lang.String ");
 		} else {
 			Assert.fail("Invalid returnTypeOrNew: " + returnTypeOrNew);
 		}
@@ -299,7 +299,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 		} else if ("a.b.*".equals(fqClassName)) {
 			signatureBuilder.append("a.b.C");
 		} else if ("*".equals(fqClassName)) {
-			signatureBuilder.append("C");
+			signatureBuilder.append('C');
 		} else if ("..*".equals(fqClassName)) {
 			signatureBuilder.append("a.b.C");
 		} else {

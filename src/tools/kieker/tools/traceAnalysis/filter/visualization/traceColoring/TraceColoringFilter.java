@@ -103,8 +103,7 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation
 		// Choose the color depending on the number of relevant origins
 		if (relevantOrigins == 0) {
 			element.setColor(this.defaultColor);
-		}
-		else if (relevantOrigins > 1) {
+		} else if (relevantOrigins > 1) {
 			element.setColor(this.collisionColor);
 		} else {
 			final long traceId = relevantTraceInformation.getTraceId();

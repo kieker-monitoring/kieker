@@ -21,20 +21,10 @@ package kieker.tools.traceAnalysis.filter.visualization.graph;
  * Be aware that this policy may lead to extensive resource consumption when processing vast logs.
  * 
  * @author Holger Knoche
- * 
  */
 public final class CompleteOriginRetentionPolicy extends AbstractOriginRetentionPolicy {
 
 	private static final CompleteOriginRetentionPolicy INSTANCE = new CompleteOriginRetentionPolicy();
-
-	/**
-	 * Factory method for the complete origin retention policy.
-	 * 
-	 * @return See above
-	 */
-	public static CompleteOriginRetentionPolicy createInstance() {
-		return INSTANCE;
-	}
 
 	private CompleteOriginRetentionPolicy() {
 		super(OriginRetentionPolicyKind.ALL);
@@ -48,4 +38,12 @@ public final class CompleteOriginRetentionPolicy extends AbstractOriginRetention
 		element.addOrigin(origin);
 	}
 
+	/**
+	 * Factory method for the complete origin retention policy.
+	 * 
+	 * @return See above
+	 */
+	public static CompleteOriginRetentionPolicy createInstance() {
+		return INSTANCE;
+	}
 }

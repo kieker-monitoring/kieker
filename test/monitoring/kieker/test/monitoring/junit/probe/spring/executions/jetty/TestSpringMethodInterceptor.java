@@ -22,6 +22,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
@@ -54,6 +55,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testIt() throws IOException {
+		Assert.assertNotNull(this.ctx);
 		for (int i = 0; i < 5; i++) {
 			final URL url = new URL("http://localhost:9293/bookstore/search/any/");
 			BufferedReader in = null;
