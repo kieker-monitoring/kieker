@@ -93,15 +93,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="928"
+     inkscape:window-width="1366"
+     inkscape:window-height="748"
      id="namedview465"
      showgrid="false"
      inkscape:zoom="1.566922"
-     inkscape:cx="326.0672"
-     inkscape:cy="64.745964"
-     inkscape:window-x="-2"
-     inkscape:window-y="35"
+     inkscape:cx="233.91456"
+     inkscape:cy="153.9994"
+     inkscape:window-x="-3"
+     inkscape:window-y="-3"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
      showguides="true"
@@ -592,14 +592,6 @@
            inkscape:connector-curvature="0" />
       </clipPath>
       <clipPath
-         id="clipPath33"
-         clipPathUnits="userSpaceOnUse">
-        <path
-           id="path155"
-           d="m 122,38 178,0 0,16 -178,0 0,-16 z"
-           inkscape:connector-curvature="0" />
-      </clipPath>
-      <clipPath
          id="clipPath34"
          clipPathUnits="userSpaceOnUse">
         <path
@@ -1059,6 +1051,14 @@
          id="path182-37-2"
          d="m -1,-1 428,0 0,280 -428,0 0,-280 z" />
     </clipPath>
+    <clipPath
+       id="clipPath4-59"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path68-3"
+         d="m 120,123 186,0 0,16 -186,0 0,-16 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
   </defs>
   <text
      x="181"
@@ -1126,14 +1126,14 @@
      sodipodi:linespacing="125%"
      transform="translate(-34.218501,-12.27518)">IMonitoringRecordReceiver</text>
   <text
+     x="121"
+     y="135"
+     clip-path="url(#clipPath4-59)"
      xml:space="preserve"
-     x="123"
-     y="50"
-     clip-path="url(#clipPath33)"
-     id="text375"
-     style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
+     id="text217-7"
+     style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
      sodipodi:linespacing="125%"
-     transform="translate(-32.592771,-12.27518)">(from kieker::monitoring::core</text>
+     transform="translate(-30.592771,-97.27518)">(from kieker::monitoring::core)</text>
   <text
      xml:space="preserve"
      x="29"
