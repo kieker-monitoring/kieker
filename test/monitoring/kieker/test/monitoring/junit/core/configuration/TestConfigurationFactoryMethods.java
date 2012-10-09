@@ -115,9 +115,10 @@ public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 		Assert.assertEquals(1, configuration.getIntProperty(ConfigurationFactory.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE));
 		// Probe controller
 		Assert.assertEquals(false, configuration.getBooleanProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED));
-		Assert.assertEquals("META-INF/kieker.monitoring.adaptive", configuration.getPathProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE));
+		Assert.assertEquals("META-INF/kieker.monitoring.adaptiveMonitoring.default.conf",
+				configuration.getPathProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE));
 		Assert.assertEquals(false, configuration.getBooleanProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE));
-		Assert.assertEquals(0, configuration.getIntProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL));
+		Assert.assertEquals(30, configuration.getIntProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL));
 	}
 
 	/**

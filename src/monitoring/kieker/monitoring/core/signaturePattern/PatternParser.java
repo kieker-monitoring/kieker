@@ -30,11 +30,12 @@ public final class PatternParser {
 	}
 
 	public static final Pattern parseToPattern(final String pattern) throws InvalidPatternException {
+		final String trimPattern = pattern.trim();
 		final StringBuilder sb = new StringBuilder();
-		if ("*".equals(pattern)) {
+		if ("*".equals(trimPattern)) {
 			sb.append(".*");
 		} else {
-			String[] array = pattern.trim().split("[\\(\\)]");
+			String[] array = trimPattern.split("[\\(\\)]");
 			final String prefix = array[0];
 			final String params;
 			if (array.length == 1) {

@@ -18,8 +18,6 @@ package kieker.monitoring.core.controller;
 
 import java.util.List;
 
-import kieker.monitoring.core.signaturePattern.PatternEntry;
-
 /**
  * @author Jan Waller
  */
@@ -29,21 +27,21 @@ public interface IProbeController {
 	 * Activates a probe.
 	 * 
 	 * @param string
-	 *            signature of the probe
+	 *            pattern for the probe
 	 * @return
 	 *         true on success
 	 */
-	public boolean activateProbe(final String signature);
+	public boolean activateProbe(final String pattern);
 
 	/**
 	 * Deactivates a probe.
 	 * 
 	 * @param string
-	 *            signature of the probe
+	 *            pattern for the probe
 	 * @return
 	 *         true on success
 	 */
-	public boolean deactivateProbe(final String signature);
+	public boolean deactivateProbe(final String pattern);
 
 	/**
 	 * @param string
@@ -55,8 +53,15 @@ public interface IProbeController {
 
 	/**
 	 * @param patternList
-	 *            list of string boolean pairs,
-	 *            where the string is a pattern and the boolean describes its state
+	 *            list of strings with patterns
+	 *            where each string starts either with a + or -
 	 */
-	public void replaceProbePatternList(final List<PatternEntry> patternList);
+	public void setProbePatternList(final List<String> patternList);
+
+	/**
+	 * @return
+	 *         list of strings with patterns
+	 *         where each string starts either with a + or -
+	 */
+	public List<String> getProbePatternList();
 }

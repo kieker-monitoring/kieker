@@ -27,7 +27,6 @@ import kieker.common.util.Version;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
-import kieker.monitoring.core.signaturePattern.PatternEntry;
 import kieker.monitoring.timer.ITimeSource;
 
 /**
@@ -245,20 +244,24 @@ public final class MonitoringController extends AbstractController implements IM
 		return this.registryController.getIdForString(string);
 	}
 
-	public final boolean activateProbe(final String signature) {
-		return this.probeController.activateProbe(signature);
+	public final boolean activateProbe(final String pattern) {
+		return this.probeController.activateProbe(pattern);
 	}
 
-	public final boolean deactivateProbe(final String signature) {
-		return this.probeController.deactivateProbe(signature);
+	public final boolean deactivateProbe(final String pattern) {
+		return this.probeController.deactivateProbe(pattern);
 	}
 
 	public boolean isProbeActivated(final String signature) {
 		return this.probeController.isProbeActivated(signature);
 	}
 
-	public void replaceProbePatternList(final List<PatternEntry> patternList) {
-		this.probeController.replaceProbePatternList(patternList);
+	public void setProbePatternList(final List<String> patternList) {
+		this.probeController.setProbePatternList(patternList);
+	}
+
+	public List<String> getProbePatternList() {
+		return this.probeController.getProbePatternList();
 	}
 
 	// GET SINGLETON INSTANCE

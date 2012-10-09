@@ -16,8 +16,19 @@
 
 package kieker.test.monitoring.junit.core.controller;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -34,7 +45,11 @@ import kieker.monitoring.core.controller.MonitoringController;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
- * @author Bjoern Weissenfels
+ * TODO: missing test:
+ * * periodic reading of config file
+ * * writing of config file
+ * 
+ * @author Bjoern Weissenfels, Jan Waller
  */
 public class TestProbeController extends AbstractKiekerTest {
 
@@ -58,24 +73,88 @@ public class TestProbeController extends AbstractKiekerTest {
 	}
 
 	@Test
-	public void testInitialization() {
+	public void testInitializationDefaultConfigLocation() {
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
-		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE, this.configFile.getAbsolutePath());
-		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE, "true");
-		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL, "10");
+		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "true");
 		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
-		Assert.assertNotNull(this.configFile);
-		Assert.assertTrue(this.configFile.exists());
-		Assert.assertNotNull(ctrl);
+		Assert.assertFalse(ctrl.isMonitoringTerminated());
+		final List<String> list = ctrl.getProbePatternList();
+		Assert.assertTrue(list.isEmpty());
 		ctrl.terminateMonitoring();
 	}
 
 	@Test
-	public void testIt() {
+	public void testInitializationWithCustomConfiguration() throws UnsupportedEncodingException, FileNotFoundException {
+		final PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.configFile, false), "UTF-8")));
+		pw.print("## Adaptive Monitoring Config File: ");
+		pw.println(this.configFile.getAbsolutePath());
+		pw.print("## written on: ");
+		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
+		date.setTimeZone(TimeZone.getTimeZone("UTC"));
+		pw.println(date.format(new java.util.Date()));
+		pw.println('#');
+		// write different pattern
+		pw.println("+ *");
+		pw.println("- * test.Test()");
+		pw.println("test invalid line in config file");
+		pw.println("- InvalidPatternException expected");
+		pw.close();
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
+		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "true");
 		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE, this.configFile.getAbsolutePath());
-		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE, "true");
-		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL, "10");
+		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
+		Assert.assertTrue(this.configFile.exists());
+		final List<String> list = ctrl.getProbePatternList();
+		Assert.assertFalse(list.isEmpty());
+		Assert.assertArrayEquals(new String[] { "+*", "-* test.Test()", }, list.toArray());
+		// add manual entries to list
+		ctrl.activateProbe("void test.Test()");
+		final List<String> list2 = ctrl.getProbePatternList();
+		Assert.assertArrayEquals(new String[] { "+*", "-* test.Test()", "+void test.Test()", }, list2.toArray());
+		Assert.assertFalse(ctrl.isMonitoringTerminated());
+		ctrl.terminateMonitoring();
+	}
+
+	@Test
+	public void testEnabledDisabledMatching() {
+		{ // NOCS // adaptive enabled
+			final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
+			configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "true");
+			final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
+			Assert.assertTrue(ctrl.isMonitoringEnabled());
+			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
+			ctrl.disableMonitoring();
+			Assert.assertFalse(ctrl.isMonitoringEnabled());
+			Assert.assertFalse(ctrl.isProbeActivated("void test.Test()"));
+			ctrl.enableMonitoring();
+			Assert.assertTrue(ctrl.isMonitoringEnabled());
+			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
+			ctrl.deactivateProbe("*");
+			Assert.assertFalse(ctrl.isProbeActivated("void test.Test()"));
+			ctrl.terminateMonitoring();
+		}
+		{ // NOCS // adaptive disabled
+			final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
+			configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "false");
+			final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
+			ctrl.deactivateProbe("*");
+			Assert.assertTrue(ctrl.isMonitoringEnabled());
+			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
+			ctrl.disableMonitoring();
+			Assert.assertFalse(ctrl.isMonitoringEnabled());
+			Assert.assertFalse(ctrl.isProbeActivated("void test.Test()"));
+			ctrl.enableMonitoring();
+			Assert.assertTrue(ctrl.isMonitoringEnabled());
+			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
+			ctrl.terminateMonitoring();
+		}
+	}
+
+	@Test
+	public void testMatching() {
+		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
+		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "true");
+		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE, this.configFile.getAbsolutePath());
 		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
 
 		// generate test signature
@@ -83,7 +162,7 @@ public class TestProbeController extends AbstractKiekerTest {
 
 		// test methods
 		final String pattern = "..* kieker..*.*(..)";
-		Assert.assertFalse(ctrl.activateProbe("invalid pattern"));
+		Assert.assertFalse(ctrl.activateProbe("InvalidPatternException expected"));
 		Assert.assertTrue(ctrl.activateProbe(pattern));
 		Assert.assertTrue(ctrl.isProbeActivated(signature));
 		Assert.assertTrue(ctrl.deactivateProbe(pattern));
