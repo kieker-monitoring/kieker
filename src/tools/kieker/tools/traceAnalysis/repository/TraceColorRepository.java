@@ -43,9 +43,14 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.Color;
 @Repository(name = "Trace color repository",
 		description = "Provides color information for trace coloring",
 		configuration = {
-			@Property(name = TraceColorRepositoryConfiguration.CONFIG_PROPERTY_NAME_TRACE_COLOR_FILE_NAME, defaultValue = "")
+			@Property(name = TraceColorRepository.CONFIG_PROPERTY_NAME_TRACE_COLOR_FILE_NAME, defaultValue = "")
 		})
 public class TraceColorRepository extends AbstractRepository {
+
+	/**
+	 * Name of the configuration property that contains the file name of the trace color file.
+	 */
+	public static final String CONFIG_PROPERTY_NAME_TRACE_COLOR_FILE_NAME = "traceColorFileName";
 
 	private static final String DEFAULT_KEYWORD = "default";
 	private static final String COLLISION_KEYWORD = "collision";
@@ -70,7 +75,7 @@ public class TraceColorRepository extends AbstractRepository {
 	 *             If an I/O error occurs during initialization
 	 */
 	public TraceColorRepository(final Configuration configuration) throws IOException {
-		this(configuration, TraceColorRepository.readDataFromFile(new TraceColorRepositoryConfiguration(configuration).getTraceColorFileName()));
+		this(configuration, TraceColorRepository.readDataFromFile(configuration.getStringProperty(CONFIG_PROPERTY_NAME_TRACE_COLOR_FILE_NAME)));
 	}
 
 	/**
@@ -147,10 +152,9 @@ public class TraceColorRepository extends AbstractRepository {
 	 *             If an I/O error occurs
 	 */
 	public static TraceColorRepository createFromFile(final String fileName) throws IOException {
-		final TraceColorRepositoryConfiguration configuration = new TraceColorRepositoryConfiguration(new Configuration());
-		configuration.setTraceColorFileName(fileName);
-
-		return new TraceColorRepository(configuration.getWrappedConfiguration(), TraceColorRepository.readDataFromFile(fileName));
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(CONFIG_PROPERTY_NAME_TRACE_COLOR_FILE_NAME, fileName);
+		return new TraceColorRepository(configuration, TraceColorRepository.readDataFromFile(fileName));
 	}
 
 	private static TraceColorRepositoryData readDataFromFile(final String fileName) throws IOException {
