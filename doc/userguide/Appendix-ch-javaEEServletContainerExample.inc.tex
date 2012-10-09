@@ -1,5 +1,5 @@
 Using the sample Java web application %
-MyBatis JPetStore\footnote{\url{http://www.mybatis.org/spring/sample.html}}, this example %
+MyBatis JPetStore,\footnote{\url{http://www.mybatis.org/spring/sample.html}} this example %
 demonstrates how to employ \KiekerMonitoringPart{} for monitoring a Java application %
 running in a Java~EE container---in this case Jetty.\footnote{\url{http://www.eclipse.org/jetty/}} %
 Monitoring probes based on the Java~EE Servlet API, Spring, %
@@ -45,6 +45,8 @@ AspectJ-based instrumentation mode.
 
 \paragraph{AspectJ-based Instrumentation}
 
+\enlargethispage{1cm}
+
 In order to use AspectJ-based instrumentation, the following changes need to 
 be performed. The file \file{start.ini}, located in Jetty's root directory, %
 allows to pass various JVM arguments, JVM system properties, and other options %
@@ -54,10 +56,12 @@ JVM argument needs to be activated in this file: %
 \setPropertiesListing
 \lstinputlisting[firstline=33,lastline=33, linewidth=1\textwidth,caption=Enabling the AspectJ weaver in Jetty's \file{start.ini}]{\JavaEEServletExampleDir/jetty-hightide-jpetstore/start.KiekerAspectJActivated.ini}
 
-The AspectJ configuration file \file{aop.xml} is already located in the %
+\noindent The AspectJ configuration file \file{aop.xml} is already located in the %
 webapps's \dir{WEB-INF/classes/META-INF/} directory and configured to instrument %
 the JPetStore classes with \Kieker{}'s \class{OperationExecutionAspectFull} aspect %
 (Section~\ref{chap:aspectJ}). 
+
+\
 
 When using the AspectJ-based instrumentation, make sure to disable the Spring %
 interceptor in the file \file{applicationContext.xml}, mentioned above. %
@@ -68,7 +72,7 @@ interceptor in the file \file{applicationContext.xml}, mentioned above. %
    the console output that appears during server startup.  
 \item Now, you can access the JPetStore application by opening the URL
    \url{http://localhost:8080/jpetstore/} (Figure~\ref{fig:jpetstore}). %
-   \Kieker{} intialization messages should appear in the console output. %
+   \Kieker{} initialization messages should appear in the console output. %
    The output includes the information where the monitoring data is written to
    (should be a \dir{kieker-<DATE-TIME>/} directory) located in the default %
    temporary directory.
@@ -77,7 +81,9 @@ interceptor in the file \file{applicationContext.xml}, mentioned above. %
    as described in Chapter~\ref{chap:aspectJ}.
 \end{compactenum}
 
+\medskip
+
 \begin{figure}[h]\centering
-\includegraphics[width=0.45\textwidth]{images/jpetstore-example-FFscrsh}
+\includegraphics[width=0.8\textwidth]{images/jpetstore-example-FFscrsh}
 \caption{MyBatis JPetStore}\label{fig:jpetstore}%
 \end{figure}
