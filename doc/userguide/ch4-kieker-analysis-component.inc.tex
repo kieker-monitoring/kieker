@@ -52,10 +52,13 @@ print the received records to the standard output stream.
 
 \noindent Figure~\ref{fig:analysisController:classdiagram} shows the class diagram %
 with the important \KiekerAnalysisPart{} classes and their relationships. %
+Note that only the most important methods are included. 
 An analysis with \KiekerAnalysisPart{} is set up and executed employing %
 the class \class{AnalysisController}. %
 Setting up and running an analysis with \KiekerAnalysisPart{} requires the %
 following steps to be performed, as sketched in Section~\ref{sec:example:analysis} already:
+
+\enlargethispage{1cm}
 
 \medskip
 
@@ -339,10 +342,10 @@ configuration and connects to the named pipe. Optionally, the reader can overrid
 \method{init} method.
 
 \setJavaCodeListing
-\lstinputlisting[firstline=54, firstnumber=54, lastline=60, caption={Example reader's initialization in the constructor (excerpt)}, label=listing:MyPipeReaderInit]%
+\lstinputlisting[firstline=54, firstnumber=54, lastline=61, caption={Example reader's initialization in the constructor (excerpt)}, label=listing:MyPipeReaderInit]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
 
-\pagebreak
+% \pagebreak
 
 \noindent Listing~\ref{listing:MyPipeReaderRead} shows the \class{MyPipeReader}'s %
 \method{read} method. In this case, the reader polls the pipe for new records %
@@ -379,7 +382,7 @@ of the input port provided by the example plugin \class{MyResponseTimeFilter}. %
 The body of this method was shown in Listing~%
 \ref{listing:MyResponseTimeFilterPluginAnnotationOutputs} already.
 
-\pagebreak
+% \pagebreak
 
 \setJavaCodeListing
 \lstinputlisting[firstline=55, firstnumber=55, lastline=59, caption={@InputPort annotation for the example plugin's input method}, label=listing:MyResponseTimeFilterInputPort]%

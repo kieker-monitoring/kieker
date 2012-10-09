@@ -48,15 +48,16 @@ public class MyPipeReader extends AbstractReaderPlugin {
 	private final String pipeName;
 	private volatile MyPipe pipe;
 
-	public MyPipeReader(final Configuration configuration) {
-		super(configuration);
+	public MyPipeReader(final Configuration config) {
+		super(config);
 
-		this.pipeName = configuration.getStringProperty(MyPipeReader.CONFIG_PROPERTY_NAME_PIPE_NAME);
+		this.pipeName =
+				config.getStringProperty(MyPipeReader.CONFIG_PROPERTY_NAME_PIPE_NAME);
 
 		try {
 			this.pipe = MyNamedPipeManager.getInstance().acquirePipe(this.pipeName);
 		} catch (final Exception ex) {
-			MyPipeReader.LOG.error("Failed to acquire pipe '" + this.pipeName + "'", ex);
+			LOG.error("Failed to acquire pipe '" + this.pipeName + "'", ex);
 		}
 	}
 

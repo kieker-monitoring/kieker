@@ -26,7 +26,7 @@
    height="139.58255"
    font-weight="normal"
    id="svg2"
-   inkscape:version="0.48.1 r9760"
+   inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="kieker_readerimplsuserguide-modified.svg"
    style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog">
   <g
@@ -62,7 +62,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -75,15 +75,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1366"
-     inkscape:window-height="713"
+     inkscape:window-width="1280"
+     inkscape:window-height="928"
      id="namedview490"
      showgrid="false"
      inkscape:zoom="1.9925636"
-     inkscape:cx="444.52066"
+     inkscape:cx="299.268"
      inkscape:cy="-5.2175406"
-     inkscape:window-x="-4"
-     inkscape:window-y="32"
+     inkscape:window-x="-2"
+     inkscape:window-y="35"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
      fit-margin-top="0"
@@ -309,14 +309,6 @@
         <path
            id="path57"
            d="m 364,190 169,0 0,16 -169,0 0,-16 z"
-           inkscape:connector-curvature="0" />
-      </clipPath>
-      <clipPath
-         id="clipPath3"
-         clipPathUnits="userSpaceOnUse">
-        <path
-           id="path60"
-           d="m 360,203 177,0 0,16 -177,0 0,-16 z"
            inkscape:connector-curvature="0" />
       </clipPath>
       <clipPath
@@ -911,7 +903,7 @@
   <text
      x="361"
      y="215"
-     clip-path="url(#clipPath3)"
+     clip-path="none"
      font-style="normal"
      font-weight="normal"
      xml:space="preserve"
