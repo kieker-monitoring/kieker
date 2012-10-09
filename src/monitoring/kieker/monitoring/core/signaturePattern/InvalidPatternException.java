@@ -14,28 +14,19 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+package kieker.monitoring.core.signaturePattern;
 
 /**
- * @author Andre van Hoorn
+ * @author Bjoern Weissenfels, Jan Waller
  */
-@Service
-public class Bookstore {
+public class InvalidPatternException extends Exception {
+	private static final long serialVersionUID = 7568907124941706485L;
 
-	@Autowired
-	private Catalog catalog;
-	@Autowired
-	private CRM crm;
-
-	public Bookstore() {
-		// empty default constructor
+	public InvalidPatternException(final String reason) {
+		super(reason);
 	}
 
-	public Book searchBook(final String term) {
-		this.catalog.getBook(false);
-		return this.crm.getOffers();
+	public InvalidPatternException(final String reason, final Throwable cause) {
+		super(reason, cause);
 	}
 }

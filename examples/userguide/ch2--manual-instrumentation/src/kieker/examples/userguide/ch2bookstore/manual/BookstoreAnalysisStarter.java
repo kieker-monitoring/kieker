@@ -38,7 +38,8 @@ public final class BookstoreAnalysisStarter {
 
 			/* Set filesystem monitoring log input directory for our analysis */
 			final Configuration fsReaderConfig = new Configuration();
-			fsReaderConfig.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, args[0]);
+			fsReaderConfig
+				.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, args[0]);
 			final FSReader reader = new FSReader(fsReaderConfig);
 			analysisInstance.registerReader(reader);
 

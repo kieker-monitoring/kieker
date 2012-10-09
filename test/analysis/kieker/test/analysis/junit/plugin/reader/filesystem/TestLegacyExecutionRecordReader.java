@@ -61,7 +61,7 @@ public class TestLegacyExecutionRecordReader extends AbstractKiekerTest {
 	}
 
 	@Before
-	public void setup() throws IOException {
+	public void setUp() throws IOException {
 		final File mapFile = this.tmpFolder.newFile("kieker.map");
 		final PrintStream mapStream = new PrintStream(new FileOutputStream(mapFile), false, ENCODING);
 		mapStream.print(MAP_FILE);

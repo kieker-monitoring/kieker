@@ -17,9 +17,9 @@
 package kieker.test.monitoring.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.Map;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -28,16 +28,41 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
 /**
- * 
  * @author Andre van Hoorn
- * 
  */
 public class NamedListWriter extends AbstractMonitoringWriter {
-	private static final Log LOG = LogFactory.getLog(NamedListWriter.class);
-
-	private static final ConcurrentMap<String, List<IMonitoringRecord>> NAMED_LISTS = new ConcurrentHashMap<String, List<IMonitoringRecord>>();
 
 	public static final String CONFIG_PROPERTY_NAME_LIST_NAME = NamedListWriter.class.getName() + ".listName";
+
+	private static final Log LOG = LogFactory.getLog(NamedListWriter.class);
+
+	private static final Map<String, List<IMonitoringRecord>> NAMED_LISTS = new HashMap<String, List<IMonitoringRecord>>(); // NOPMD (synchronized)
+
+	private final List<IMonitoringRecord> myNamedList;
+
+	public NamedListWriter(final Configuration configuration) {
+		super(configuration);
+		final String name = configuration.getStringProperty(CONFIG_PROPERTY_NAME_LIST_NAME);
+		if (name.length() == 0) {
+			LOG.error("No name given as property");
+		}
+		this.myNamedList = NamedListWriter.createNamedList(name);
+	}
+
+	public boolean newMonitoringRecord(final IMonitoringRecord record) {
+		synchronized (this.myNamedList) {
+			return this.myNamedList.add(record);
+		}
+	}
+
+	public void terminate() {
+		// no need to do anything
+	}
+
+	@Override
+	protected void init() throws Exception {
+		// no need to do anything
+	}
 
 	/**
 	 * Returns the list with the given name, which is newly created in case it doesn't exist, yet.
@@ -66,31 +91,5 @@ public class NamedListWriter extends AbstractMonitoringWriter {
 		synchronized (NAMED_LISTS) {
 			return NAMED_LISTS.get(name);
 		}
-	}
-
-	private final List<IMonitoringRecord> myNamedList;
-
-	public NamedListWriter(final Configuration configuration) {
-		super(configuration);
-		final String name = configuration.getStringProperty(CONFIG_PROPERTY_NAME_LIST_NAME);
-		if (name == null) {
-			LOG.error("No name given as property");
-		}
-		this.myNamedList = NamedListWriter.createNamedList(name);
-	}
-
-	public boolean newMonitoringRecord(final IMonitoringRecord record) {
-		synchronized (this.myNamedList) {
-			return this.myNamedList.add(record);
-		}
-	}
-
-	public void terminate() {
-		// no need to do anything
-	}
-
-	@Override
-	protected void init() throws Exception {
-		// no need to do anything
 	}
 }

@@ -44,9 +44,13 @@ import kieker.monitoring.timer.ITimeSource;
  */
 public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterceptor implements IMonitoringProbe {
 
+	public static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCIN";
+
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
+
+	private static final Log LOG = LogFactory.getLog(OperationExecutionSOAPRequestInInterceptor.class);
 
 	/**
 	 * Note we are using this IMonitoringController only to access ITimeSource which
@@ -56,10 +60,6 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 	 */
 	protected final IMonitoringController monitoringController;
 	protected final ITimeSource timeSource;
-
-	private static final Log LOG = LogFactory.getLog(OperationExecutionSOAPRequestInInterceptor.class);
-
-	public static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCIN";
 
 	public OperationExecutionSOAPRequestInInterceptor() {
 		this(MonitoringController.getInstance());

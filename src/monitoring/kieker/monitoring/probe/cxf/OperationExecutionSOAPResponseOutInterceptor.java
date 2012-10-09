@@ -45,18 +45,19 @@ import kieker.monitoring.timer.ITimeSource;
  * @author Dennis Kieselhorst, Andre van Hoorn
  */
 public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutFilterInterceptor implements IMonitoringProbe {
-	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
-	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
-	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
-
-	protected final IMonitoringController monitoringController;
-	protected final ITimeSource timeSource;
-	protected final String vmName;
 
 	public static final String SIGNATURE = "public void " + OperationExecutionSOAPResponseOutInterceptor.class.getName()
 			+ ".handleMessage(org.apache.cxf.binding.soap.SoapMessage)";
 
+	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
+	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
+	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
+
 	private static final Log LOG = LogFactory.getLog(OperationExecutionSOAPResponseOutInterceptor.class);
+
+	protected final IMonitoringController monitoringController;
+	protected final ITimeSource timeSource;
+	protected final String vmName;
 
 	public OperationExecutionSOAPResponseOutInterceptor() {
 		this(MonitoringController.getInstance());

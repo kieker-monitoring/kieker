@@ -24,12 +24,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/**
+ * @author Andre van Hoorn
+ */
 @Controller
 @RequestMapping("/bookstore/*")
 public final class BookstoreController {
 
 	@Autowired
 	private Bookstore bookstore;
+
+	public BookstoreController() {
+		// empty default constructor
+	}
 
 	@RequestMapping(value = "/")
 	public String home() {

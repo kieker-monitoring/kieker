@@ -3,7 +3,6 @@
 	<classpathentry kind="src" path="src/common"/>
 	<classpathentry kind="src" path="src/analysis"/>
 	<classpathentry kind="src" path="src/monitoring"/>
-	<classpathentry kind="src" path="src/monitoring-servlet"/>
 	<classpathentry kind="src" path="src/tools"/>
 	<classpathentry kind="src" path="src-gen/analysis"/>
 	<classpathentry kind="src" path="test/common"/>
