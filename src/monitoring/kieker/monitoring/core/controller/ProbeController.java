@@ -20,14 +20,12 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.URISyntaxException;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -75,7 +73,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 			this.configFileReadIntervall = configuration.getIntProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL);
 			this.configFileReader = new ConfigFileReader(this.configFilePathname);
 			// run once to get the initial file contents
-			this.configFileReader.run();
+			this.configFileReader.readFile(true);
 		} else {
 			this.configFilePathname = null; // NOPMD (null)
 			this.configFileUpdate = false;
@@ -285,76 +283,78 @@ public class ProbeController extends AbstractController implements IProbeControl
 			this.configFilePathname = configFilePathname;
 		}
 
-		public void run() {
-			InputStream is = null;
+		private List<String> readConfigFile(final BufferedReader reader) throws IOException {
+			final List<String> strPatternList = new LinkedList<String>();
+			String line;
+			while ((line = reader.readLine()) != null) { // NOPMD (assign)
+				strPatternList.add(line);
+			}
+			return strPatternList;
+		}
+
+		public void readFile(final boolean fallbackToResource) {
+			BufferedReader reader = null;
+			final long lastModified;
+			final File file = new File(this.configFilePathname);
 			try {
-				try {
-					final long lastModified;
-					final File file = new File(this.configFilePathname);
-					if (file.canRead() && ((lastModified = file.lastModified()) > 0L)) { // NOPMD NOCS
-						if (lastModified > this.lastModifiedTimestamp) {
-							this.lastModifiedTimestamp = lastModified;
-							is = new FileInputStream(file);
-						} else {
-							return; // nothing do this time
+				if (file.canRead() && ((lastModified = file.lastModified()) > 0L)) { // NOPMD NOCS
+					if (lastModified > this.lastModifiedTimestamp) {
+						this.lastModifiedTimestamp = lastModified;
+						reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), ENCODING));
+						try {
+							ProbeController.this.setProbePatternList(this.readConfigFile(reader));
+							return;
+						} catch (final IOException ex) {
+							LOG.warn("Error reading adaptive monitoring config file: " + this.configFilePathname, ex);
 						}
-					} // else { // file not found or not accessible
-						// is = null;
-					// }
-				} catch (final SecurityException ex) { // NOPMD
-					// is = null;
-				} catch (final FileNotFoundException ex) { // NOPMD
-					// is = null;
-				}
-				if (null == is) {
-					final long lastModified;
-					final File file = new File(MonitoringController.class.getClassLoader().getResource(this.configFilePathname).toURI());
-					if (file.canRead() && ((lastModified = file.lastModified()) > 0L)) { // NOPMD NOCS
-						if (lastModified > this.lastModifiedTimestamp) {
-							this.lastModifiedTimestamp = lastModified;
-							is = new FileInputStream(file);
-						} else {
-							return; // nothing do this time
-						}
-					} else { // no file found ...
-						if (LOG.isDebugEnabled()) {
-							LOG.debug("Adaptive monitoring config file not found: " + this.configFilePathname);
-						}
-						return;
+					} else {
+						return; // nothing do this time
 					}
 				}
-				// if we are here (is != null)
-				BufferedReader in = null;
-				final List<String> strPatternList = new LinkedList<String>();
-				try {
-					in = new BufferedReader(new InputStreamReader(is, ENCODING));
-					String line;
-					while ((line = in.readLine()) != null) { // NOPMD (assign)
-						strPatternList.add(line);
-					}
-				} finally {
-					if (in != null) {
-						in.close();
-					}
-				}
-				ProbeController.this.setProbePatternList(strPatternList);
-			} catch (final URISyntaxException ex) {
-				LOG.warn("Adaptive monitoring config file not found: " + this.configFilePathname, ex);
-			} catch (final SecurityException ex) {
-				LOG.warn("Adaptive monitoring config file not found: " + this.configFilePathname, ex);
-			} catch (final FileNotFoundException ex) {
-				LOG.warn("Adaptive monitoring config file not found: " + this.configFilePathname, ex);
-			} catch (final IOException ex) {
-				LOG.warn("Error reading adaptive monitoring config file: " + this.configFilePathname, ex);
+			} catch (final SecurityException ex) { // NOPMD NOCS
+				// file not found or not readable
+			} catch (final IOException ex) { // NOPMD NOCS
+				// file not found or not readable
 			} finally {
-				if (null != is) {
+				if (reader != null) {
 					try {
-						is.close();
+						reader.close();
 					} catch (final IOException ex) {
 						LOG.error("Failed to close file: " + this.configFilePathname, ex);
 					}
 				}
 			}
+			if (fallbackToResource) {
+				try {
+					final URL configFileAsResource = MonitoringController.class.getClassLoader().getResource(this.configFilePathname);
+					if (null != configFileAsResource) {
+						reader = new BufferedReader(new InputStreamReader(configFileAsResource.openStream(), ENCODING));
+						try {
+							ProbeController.this.setProbePatternList(this.readConfigFile(reader));
+							return;
+						} catch (final IOException ex) {
+							LOG.warn("Error reading adaptive monitoring config file: " + this.configFilePathname, ex);
+						}
+					}
+				} catch (final SecurityException ex) { // NOPMD NOCS
+					// file not found or not readable
+				} catch (final IOException ex) { // NOPMD NOCS
+					// file not found or not readable
+				} finally {
+					if (reader != null) {
+						try {
+							reader.close();
+						} catch (final IOException ex) {
+							LOG.error("Failed to close file: " + this.configFilePathname, ex);
+						}
+					}
+				}
+			}
+			LOG.warn("Adaptive monitoring config file not found: " + this.configFilePathname);
+		}
+
+		public void run() {
+			this.readFile(false);
 		}
 	}
 }

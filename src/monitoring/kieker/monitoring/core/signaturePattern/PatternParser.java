@@ -44,7 +44,7 @@ public final class PatternParser {
 			} else {
 				throw new InvalidPatternException("Invalid number of brackets.");
 			}
-			array = array[0].trim().split("\\s+");
+			array = array[0].trim().split("\\s+"); // NOPMD
 			String retType;
 			String fqName;
 			String[] modifierList = null;
@@ -119,7 +119,6 @@ public final class PatternParser {
 		}
 
 		boolean startsWithDotdot = false;
-		int start = 1;
 		final StringBuilder sb = new StringBuilder(255);
 		if ("..".equals(paramList[0].trim())) {
 			sb.append("(((\\s)?[\\p{javaJavaIdentifierPart}\\.])*\\p{javaJavaIdentifierPart}+(\\s)?,)*");
@@ -137,7 +136,7 @@ public final class PatternParser {
 				throw new InvalidPatternException("Invalid parameter list.", ex);
 			}
 		}
-
+		int start = 1;
 		if ((length > 1) && startsWithDotdot) {
 			start = 2;
 			if ("..".equals(paramList[1].trim())) {

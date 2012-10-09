@@ -60,7 +60,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 			final URL url = new URL("http://localhost:9293/bookstore/search/any/");
 			BufferedReader in = null;
 			try {
-				in = new BufferedReader(new InputStreamReader(url.openStream(), "UTF8"));
+				in = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
 				// final String result = in.readLine(); // the result is currently an empty string.
 			} finally {
 				if (in != null) {

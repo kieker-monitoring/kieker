@@ -41,6 +41,7 @@ import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.writer.DummyWriter;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -75,6 +76,7 @@ public class TestProbeController extends AbstractKiekerTest {
 	@Test
 	public void testInitializationDefaultConfigLocation() {
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
+		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, DummyWriter.class.getName());
 		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "true");
 		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
 		Assert.assertFalse(ctrl.isMonitoringTerminated());
@@ -100,6 +102,7 @@ public class TestProbeController extends AbstractKiekerTest {
 		pw.println("- InvalidPatternException expected");
 		pw.close();
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
+		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, DummyWriter.class.getName());
 		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "true");
 		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE, this.configFile.getAbsolutePath());
 		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
@@ -119,6 +122,7 @@ public class TestProbeController extends AbstractKiekerTest {
 	public void testEnabledDisabledMatching() {
 		{ // NOCS // adaptive enabled
 			final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
+			configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, DummyWriter.class.getName());
 			configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "true");
 			final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
 			Assert.assertTrue(ctrl.isMonitoringEnabled());
@@ -135,6 +139,7 @@ public class TestProbeController extends AbstractKiekerTest {
 		}
 		{ // NOCS // adaptive disabled
 			final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
+			configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, DummyWriter.class.getName());
 			configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "false");
 			final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
 			ctrl.deactivateProbe("*");
@@ -153,6 +158,7 @@ public class TestProbeController extends AbstractKiekerTest {
 	@Test
 	public void testMatching() {
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
+		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, DummyWriter.class.getName());
 		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "true");
 		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE, this.configFile.getAbsolutePath());
 		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
