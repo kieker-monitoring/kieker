@@ -247,14 +247,19 @@ shows how the methods are implemented for the example filter \class{MyResponseTi
 \lstinputlisting[firstline=67, firstnumber=67, lastline=72, caption={Plugin returning its default and current configurations}, label=listing:MyResponseTimeFilterEventsToOutput]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
 
-The declaration of the available properties and their default values within a plugin is shown in section~\ref{sec:analysis:pluginAnnotation}, as this is done with annotations.
+\noindent The declaration of the available properties and their default values within a plugin is shown in section~\ref{sec:analysis:pluginAnnotation}, as this is done with annotations.
+
+\pagebreak
 
 \subsection{@Plugin Annotation and Output Ports}\label{sec:analysis:pluginAnnotation}
 
 \noindent The \class{@Plugin} class annotation is used to define a %
-plugin name, a description, and the list of output ports. %
+plugin name, a description, and the lists of output ports and configuration %
+properties with default values. %
 Listing~\ref{listing:MyResponseTimeFilterPluginAnnotationOutputs} shows the %
 \class{@Plugin} annotation for the example filter.
+
+\enlargethispage{1cm}
 
 If the \class{@Plugin} annotation is not present for a plugin, the \method{name} %
 defaults to the plugin's (simple) classname, the \method{description} defaults %
@@ -299,7 +304,8 @@ The @Plugin annotation (as well as the later introduced @Repository annotation) 
 furthermore the two fields \method{dependencies} and \method{programmaticOnly}. The first %
 one offers the possibility to give a description of the needed dependencies for a plugin %
 (other libraries e.g.). The latter marks whether the current plugin (or repository) is for %
- programmatic purposes only. Such a plugin shouldn't be used directly in an analysis.
+programmatic purposes only, i.e., they are of little use in graphical analysis %
+tools.
 
 \subsection{Developing Monitoring Reader Plugins}\label{sec:analysis:reader}
 
@@ -309,9 +315,9 @@ and implement the methods \method{init}, \method{read}, and \method{terminate}, 
 which are called by the \class{AnalysisController} to trigger the reader's initialization, %
 reading, and termination. Like each plugin (Section~\ref{sec:analysis:configuration}), %
 readers are configured via a constructor accepting a \class{Configuration} object %
-as its only argument; they must provide the default and current configurations %
-via the implemented \method{getDefaultConfiguration} and \method{getCurrentConfiguration} %
-methods. Readers start reading on invocation of the \method{read} method, %
+as its only argument; they must provide the current configuration %
+via the implemented \method{getCurrentConfiguration} %
+method. Readers start reading on invocation of the \method{read} method, %
 providing the obtained records to connected filters via the output port(s) %
 declared in the \class{@Plugin} annotation (Section~\ref{sec:analysis:pluginAnnotation}). %
 The \method{read} method should be implemented synchronously, i.e., it should %
@@ -337,6 +343,8 @@ constructor. In this case, the reader reads the pipe name from the %
 configuration and connects to the named pipe. Optionally, the reader can override the 
 \method{init} method.
 
+\pagebreak
+
 \setJavaCodeListing
 \lstinputlisting[firstline=54, firstnumber=54, lastline=61, caption={Example reader's initialization in the constructor (excerpt)}, label=listing:MyPipeReaderInit]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
@@ -348,7 +356,7 @@ configuration and connects to the named pipe. Optionally, the reader can overrid
 and forwards these to its output port.
 
 \setJavaCodeListing
-\lstinputlisting[firstline=63, firstnumber=63, lastline=82, caption={Example reader's \method{read} method}, label=listing:MyPipeReaderRead]%
+\lstinputlisting[firstline=63, firstnumber=63, lastline=83, caption={Example reader's \method{read} method}, label=listing:MyPipeReaderRead]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
 
 \subsection{Developing Filter Plugins}\label{sec:analysis:filters}
@@ -392,6 +400,8 @@ and a \method{description} for a repository type. %
 Listing~\ref{listing:RepositoryAnnotation} shows the \class{@Repository} annotation %
 of the \class{SystemModelRepository} which as included in Kieker, as part of the %
 \KiekerTraceAnalysis{} tool. %
+
+\enlargethispage{1cm}
 
 \setJavaCodeListing
 \lstinputlisting[firstline=39, firstnumber=39, lastline=42, caption={\class{@Respository} annotation of Kieker's \class{SystemModelRepository}}, label=listing:RepositoryAnnotation]%
