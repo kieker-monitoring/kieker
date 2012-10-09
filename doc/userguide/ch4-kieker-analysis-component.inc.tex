@@ -236,10 +236,10 @@ configuration.
 \lstinputlisting[firstline=43, firstnumber=43, lastline=51, caption={Plugin constructor accepting a \class{Configuration} object}, label=listing:MyResponseTimeFilterConstructor]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
 
-\noindent Additionally, a default configuration and the %
-current configuration must be provided via the methods \method{getDefaultConfiguration} and %
+\noindent Additionally, the %
+current configuration must be provided via the method %
 \method{getCurrentConfiguration}. Please note that the returned configuration %
-must be sufficient to initialize the plugin or repository via the mentioned constructor. %
+should be sufficient to initialize the plugin or repository via the mentioned constructor. %
 The \class{AnalysisController} uses the \method{getCurrentConfiguration} to %
 save the pipe-and-filter configuration. Listing~\ref{listing:MyResponseTimeFilterEventsToOutput} %
 shows how the methods are implemented for the example filter \class{MyResponseTimeFilter}. %
@@ -248,6 +248,7 @@ shows how the methods are implemented for the example filter \class{MyResponseTi
 \lstinputlisting[firstline=67, firstnumber=67, lastline=72, caption={Plugin returning its default and current configurations}, label=listing:MyResponseTimeFilterEventsToOutput]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
 
+The declaration of the available properties and their default values within a plugin is shown in section~\ref{sec:analysis:pluginAnnotation}, as this is done with annotations.
 
 \subsection{@Plugin Annotation and Output Ports}\label{sec:analysis:pluginAnnotation}
 
@@ -290,6 +291,16 @@ to its two output ports declared in the \class{@Plugin} annotation.
 \lstinputlisting[firstline=60, firstnumber=60, lastline=64, caption={Plugin sending events to output ports}, label=listing:MyResponseTimeFilterDelivers]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
 
+Listing~\ref{listing:MyResponseTimeFilterPluginAnnotationOutputs} shows also how %
+the properties are declared. Using the @Property annotation, it is possible to declare %
+the existing properties. Each property has a default value which should be sufficient %
+to initialize the plugin.%
+
+The @Plugin annotation (as well as the later introduced @Repository annotation) contains %
+furthermore the two fields \method{dependencies} and \method{programmaticOnly}. The first %
+one offers the possibility to give a description of the needed dependencies for a plugin %
+(other libraries e.g.). The latter marks whether the current plugin (or repository) is for %
+ programmatic purposes only. Such a plugin shouldn't be used directly in an analysis.
 
 \subsection{Developing Monitoring Reader Plugins}\label{sec:analysis:reader}
 
