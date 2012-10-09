@@ -142,10 +142,6 @@ of monitoring logs/streams, readers deserialize monitoring data and provide it a
 \noindent There are already some readers implemented in \Kieker,  as shown in the %
 class diagram in Figure \ref{Figure:ReaderHierarchy}. %
 The \class{FSReader} has already been used in Section~\ref{sec:example:analysis}. %
-The \class{FSReaderRealtime} can be used to simulate continuous monitoring of a %
-production system. It adds delays between the delivery of the monitoring records %
-to its consumers according to the original delays reconstructed from the logging %
-timestamps (Section~\ref{sec:componentsMonitoring:monitoringRecords}).
 A brief description of how to use the \class{JMSReader} can be found in Appendix~%
 \ref{appendix:usingJMS}. Please note that the database reader (\class{DBReader}) %
 is currently in a prototype stage and that it should be used with care. %
