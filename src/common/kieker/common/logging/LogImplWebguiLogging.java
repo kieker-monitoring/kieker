@@ -16,10 +16,13 @@
 
 package kieker.common.logging;
 
-import java.util.GregorianCalendar;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Queue;
+import java.util.TimeZone;
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
@@ -33,6 +36,7 @@ public final class LogImplWebguiLogging implements Log {
 	private static final int MAX_ENTRIES = 100;
 	private static final Map<String, Queue<String>> QUEUES = new HashMap<String, Queue<String>>(); // NOPMD (sync needed)
 
+	private final DateFormat date;
 	private final String name;
 
 	/**
@@ -43,6 +47,8 @@ public final class LogImplWebguiLogging implements Log {
 	 */
 	protected LogImplWebguiLogging(final String name) {
 		this.name = name;
+		this.date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
+		this.date.setTimeZone(TimeZone.getTimeZone("UTC"));
 	}
 
 	public boolean isDebugEnabled() {
@@ -58,32 +64,31 @@ public final class LogImplWebguiLogging implements Log {
 	}
 
 	public void info(final String message) {
-		this.addMessage("[Info] " + message);
+		this.addMessage(message, "[Info]", null);
 	}
 
 	public void info(final String message, final Throwable t) {
-		this.addMessage("[Info] " + message);
+		this.addMessage(message, "[Info]", t);
 	}
 
 	public void warn(final String message) {
-		this.addMessage("[Warn] " + message);
+		this.addMessage(message, "[Warn]", null);
 	}
 
 	public void warn(final String message, final Throwable t) {
-		this.addMessage("[Warn] " + message);
+		this.addMessage(message, "[Warn]", t);
 	}
 
 	public void error(final String message) {
-		this.addMessage("[Crit] " + message);
+		this.addMessage(message, "[Crit]", null);
 	}
 
 	public void error(final String message, final Throwable t) {
-		this.addMessage("[Crit] " + message);
+		this.addMessage(message, "[Crit]", t);
 	}
 
-	private void addMessage(final String message) {
+	private void addMessage(final String message, final String severity, final Throwable t) {
 		Queue<String> queue;
-
 		synchronized (LogImplWebguiLogging.QUEUES) {
 			// Get the right queue and create it if necessary.
 			queue = LogImplWebguiLogging.QUEUES.get(this.name);
@@ -92,15 +97,19 @@ public final class LogImplWebguiLogging implements Log {
 				LogImplWebguiLogging.QUEUES.put(this.name, queue);
 			}
 		}
-
 		synchronized (queue) {
 			// Is the queue full?
 			if (queue.size() >= MAX_ENTRIES) {
 				// Yes, remove the oldest entry.
 				queue.poll(); // ignore the return value
 			}
-			final String timestamp = new GregorianCalendar().getTime().toString();
-			queue.add(timestamp + ": " + message);
+			final StringBuilder sb = new StringBuilder(255);
+			sb.append(this.date.format(new java.util.Date())); // this has to be within synchronized
+			sb.append(": ");
+			sb.append(severity);
+			sb.append(' ');
+			sb.append(message);
+			queue.add(sb.toString());
 		}
 	}
 
