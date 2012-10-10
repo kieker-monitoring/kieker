@@ -20,14 +20,24 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
+
 import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore.Bookstore;
+import kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore.Catalog;
+import kieker.test.monitoring.util.NamedListWriter;
 
 /**
  * @author Andre van Hoorn
@@ -35,24 +45,37 @@ import kieker.test.common.junit.AbstractKiekerTest;
 public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	// private static final Log LOG = LogFactory.getLog(TestSpringMethodInterceptor.class);
 
+	@Rule
+	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
+
+	private static final String HOSTNAME = "SRV-W4W7E9pN";
+
 	private volatile FileSystemXmlApplicationContext ctx;
+	private volatile List<IMonitoringRecord> recordListFilledByListWriter;
 
 	public TestSpringMethodInterceptor() {
 		// empty default constructor
 	}
 
 	@Before
-	public void startServer() {
+	public void startServer() throws IOException {
+		this.tmpFolder.create();
+		final String listName = NamedListWriter.FALLBACK_LIST_NAME;
+		this.recordListFilledByListWriter = NamedListWriter.createNamedList(listName);
+		System.setProperty(ConfigurationFactory.WRITER_CLASSNAME, NamedListWriter.class.getName());
+		// Doesn't work because property not known to Kieker: System.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.listName);
+		System.setProperty(ConfigurationFactory.HOST_NAME, HOSTNAME);
+
 		// start the server
 		this.ctx = new FileSystemXmlApplicationContext("test/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml");
+
+		/*
+		 * Note that the Spring interceptor is configure in
+		 * test/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/webapp/WEB-INF/spring/servlet-context.xml
+		 * to only instrument Bookstore.searchBook and Catalog.getBook
+		 */
 	}
 
-	/*
-	 * TODO: We need to refine the test to really test not only whether the configuration works but also
-	 * to test what is being logged. This should be implemented similar to the tests in
-	 * 'kieker.test.monitoring.junit.probe.cxf.executions'. One challenge is that the
-	 * Spring interceptors use the singleton instance of the MonitoringController.
-	 */
 	@Test
 	public void testIt() throws IOException {
 		Assert.assertNotNull(this.ctx);
@@ -68,6 +91,47 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 				}
 			}
 		}
+
+		this.checkRecordList(this.recordListFilledByListWriter);
+	}
+
+	/**
+	 * Performs some basic tests on the received records.
+	 * 
+	 * @param records
+	 */
+	private void checkRecordList(final List<IMonitoringRecord> records) {
+		Assert.assertFalse("No records in List", records.isEmpty());
+
+		/*
+		 * Note that the Spring interceptor is configured in
+		 * test/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/webapp/WEB-INF/spring/servlet-context.xml
+		 * to only instrument Bookstore.searchBook and Catalog.getBook
+		 */
+
+		for (final IMonitoringRecord record : records) {
+			final OperationExecutionRecord opRec = (OperationExecutionRecord) record;
+
+			Assert.assertEquals("Unexpected hostname", HOSTNAME, opRec.getHostname());
+			switch (opRec.getEoi()) {
+			case 0:
+				this.assertSignatureIncludesString(opRec.getOperationSignature(), Bookstore.class.getName());
+				Assert.assertEquals("Unexpected ess", 0, opRec.getEss());
+				break;
+			case 1: // fall through two case 2
+			case 2:
+				this.assertSignatureIncludesString(opRec.getOperationSignature(), Catalog.class.getName());
+				Assert.assertEquals("Unexpected ess", 1, opRec.getEss());
+				break;
+			default:
+				Assert.fail("Record with unexpected eoi" + opRec);
+			}
+		}
+	}
+
+	private void assertSignatureIncludesString(final String signatureString, final String stringIncluded) {
+		final boolean included = signatureString.contains(stringIncluded);
+		Assert.assertTrue("Expected string '" + stringIncluded + "' not included in signature '" + signatureString + "'", included);
 	}
 
 	@After
@@ -75,5 +139,6 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 		if (this.ctx != null) {
 			this.ctx.destroy(); // TODO: is this shutting down the server?
 		}
+		this.tmpFolder.delete();
 	}
 }

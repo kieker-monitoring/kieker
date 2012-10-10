@@ -33,6 +33,7 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
 public class NamedListWriter extends AbstractMonitoringWriter {
 
 	public static final String CONFIG_PROPERTY_NAME_LIST_NAME = NamedListWriter.class.getName() + ".listName";
+	public static final String FALLBACK_LIST_NAME = "VbDt0E7Aqv";
 
 	private static final Log LOG = LogFactory.getLog(NamedListWriter.class);
 
@@ -42,9 +43,10 @@ public class NamedListWriter extends AbstractMonitoringWriter {
 
 	public NamedListWriter(final Configuration configuration) {
 		super(configuration);
-		final String name = configuration.getStringProperty(CONFIG_PROPERTY_NAME_LIST_NAME);
+		String name = configuration.getStringProperty(CONFIG_PROPERTY_NAME_LIST_NAME);
 		if (name.length() == 0) {
-			LOG.error("No name given as property");
+			name = FALLBACK_LIST_NAME;
+			LOG.warn("No list name given as property. Falling back to the list with name '" + name + "'");
 		}
 		this.myNamedList = NamedListWriter.createNamedList(name);
 	}
