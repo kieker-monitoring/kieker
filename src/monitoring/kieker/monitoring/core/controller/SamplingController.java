@@ -74,9 +74,9 @@ public final class SamplingController extends AbstractController implements ISam
 			sb.append(this.periodicSensorsPoolExecutor.getPoolSize());
 			sb.append("'; Scheduled Tasks: '");
 			sb.append(this.periodicSensorsPoolExecutor.getTaskCount());
-			sb.append("'\n");
+			sb.append('\''); // no \n in last controller
 		} else {
-			sb.append("No periodic Sensor available\n");
+			sb.append("No periodic Sensor available"); // no \n in last controller
 		}
 		return sb.toString();
 	}

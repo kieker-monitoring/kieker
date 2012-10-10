@@ -16,6 +16,11 @@
 
 package kieker.test.common.junit;
 
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.TestName;
+
+import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
 /**
@@ -23,10 +28,17 @@ import kieker.common.logging.LogFactory;
  */
 public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 
-	/**
-	 * Log the currently executing class before any test is executed!
-	 */
+	private static final Log LOG = LogFactory.getLog(AbstractKiekerTest.class);
+
+	@Rule
+	public TestName nameOfCurrentTest = new TestName();
+
 	public AbstractKiekerTest() {
-		LogFactory.getLog(this.getClass()).info(this.getClass().getName());
+		// empty default constructor
+	}
+
+	@Before
+	public final void printNameOfCurrentTest() {
+		LOG.info("Executing test: " + this.getClass().getName() + "." + this.nameOfCurrentTest.getMethodName() + "()\n\n");
 	}
 }

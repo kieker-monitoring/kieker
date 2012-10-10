@@ -25,15 +25,28 @@ public final class LogFactory { // NOPMD (Implementation of an logger)
 
 	public static final String CUSTOM_LOGGER_JVM = "kieker.common.logging.Log";
 
-	private static final Logger DETECTED_LOGGER = LogFactory.detectLogger();
+	private static final String JVM_LOGGER;
+	private static final Logger DETECTED_LOGGER;
 
 	private static enum Logger {
-		JDK, COMMONS, WEBGUI,
+		NONE, JDK, COMMONS, WEBGUI, JUNIT,
 	}
 
-	// static {
-	// System.out.println(DETECTED_LOGGER.toString());
-	// }
+	static {
+		final String systemPropertyLogger = System.getProperty(CUSTOM_LOGGER_JVM);
+		if (null != systemPropertyLogger) {
+			JVM_LOGGER = systemPropertyLogger.trim().toUpperCase(Locale.US);
+		} else {
+			JVM_LOGGER = null;
+		}
+		DETECTED_LOGGER = LogFactory.detectLogger();
+		if ((null != JVM_LOGGER) && !DETECTED_LOGGER.name().equals(JVM_LOGGER)) {
+			LogFactory.getLog(LogFactory.class).warn(
+					"Failed to load Logger with property " + CUSTOM_LOGGER_JVM + "=" + JVM_LOGGER + ", using " + DETECTED_LOGGER.name() + " instead.");
+		}
+		// DEBUG
+		// System.out.println(DETECTED_LOGGER.toString());
+	}
 
 	private LogFactory() {
 		// Nothing to do
@@ -49,6 +62,9 @@ public final class LogFactory { // NOPMD (Implementation of an logger)
 			return new LogImplWebguiLogging(name);
 		case COMMONS:
 			return new LogImplCommonsLogging(name);
+		case NONE:
+			return new LogImplNone(name);
+		case JUNIT:
 		case JDK:
 		default:
 			return new LogImplJDK14(name);
@@ -56,13 +72,11 @@ public final class LogFactory { // NOPMD (Implementation of an logger)
 	}
 
 	private static final Logger detectLogger() {
-		final String systemPropertyLogger = System.getProperty(CUSTOM_LOGGER_JVM);
-		if (null != systemPropertyLogger) {
-			final String strLogger = systemPropertyLogger.trim().toUpperCase(Locale.US);
+		if (null != JVM_LOGGER) {
 			try {
-				return Enum.valueOf(Logger.class, strLogger);
+				return Enum.valueOf(Logger.class, JVM_LOGGER);
 			} catch (final IllegalArgumentException ex) { // NOPMD NOCS
-				// TODO: How to notify of incorrectly chosen logger?
+				// Notify is handled above.
 			}
 		}
 		try {
