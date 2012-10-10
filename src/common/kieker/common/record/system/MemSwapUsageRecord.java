@@ -37,7 +37,7 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 		long.class,
 		long.class,
 	};
-	private static final String DEFAULT_VALUE = "N/A";
+	public static final String DEFAULT_VALUE = "N/A";
 
 	private final long memUsed;
 	private final long memFree;
