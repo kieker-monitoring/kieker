@@ -16,6 +16,8 @@
 
 package kieker.common.logging;
 
+import java.util.Locale;
+
 /**
  * @author Jan Waller
  */
@@ -56,7 +58,7 @@ public final class LogFactory { // NOPMD (Implementation of an logger)
 	private static final Logger detectLogger() {
 		final String systemPropertyLogger = System.getProperty(CUSTOM_LOGGER_JVM);
 		if (null != systemPropertyLogger) {
-			final String strLogger = systemPropertyLogger.trim().toUpperCase();
+			final String strLogger = systemPropertyLogger.trim().toUpperCase(Locale.US);
 			try {
 				return Enum.valueOf(Logger.class, strLogger);
 			} catch (final IllegalArgumentException ex) { // NOPMD NOCS

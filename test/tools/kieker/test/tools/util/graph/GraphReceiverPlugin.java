@@ -61,7 +61,7 @@ public class GraphReceiverPlugin extends ListCollectionFilter<AbstractGraph<?, ?
 	 * @return See above
 	 */
 	public <T extends AbstractGraph<?, ?, ?>> T getFirstGraph() {
-		return this.<T> getGraphAt(0); // Explicit bound is required to work around a possible javac bug
+		return this.<T> getGraphAt(0); // NOCS Explicit bound is required to work around a possible javac bug
 	}
 
 	/**

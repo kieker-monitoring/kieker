@@ -121,7 +121,7 @@
 
 	<Match>
 		<Class name="kieker.common.logging.LogImplWebguiLogging" />
-		<Method name="addMessage" params="java.lang.String" returns="void" />
+		<Method name="addMessage" params="java.lang.String,java.lang.String,java.lang.Throwable" returns="void" />
 		<Bug pattern="RV_RETURN_VALUE_IGNORED" />
 	</Match>
 

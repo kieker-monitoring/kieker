@@ -87,7 +87,7 @@ public final class LogImplWebguiLogging implements Log {
 		this.addMessage(message, "[Crit]", t);
 	}
 
-	private void addMessage(final String message, final String severity, final Throwable t) {
+	private void addMessage(final String message, final String severity, final Throwable throwable) {
 		Queue<String> queue;
 		synchronized (LogImplWebguiLogging.QUEUES) {
 			// Get the right queue and create it if necessary.
@@ -101,7 +101,7 @@ public final class LogImplWebguiLogging implements Log {
 			// Is the queue full?
 			if (queue.size() >= MAX_ENTRIES) {
 				// Yes, remove the oldest entry.
-				queue.poll(); // ignore the return value
+				queue.poll(); // NOFB (ignore the return value)
 			}
 			final StringBuilder sb = new StringBuilder(255);
 			sb.append(this.date.format(new java.util.Date())); // this has to be within synchronized
@@ -109,6 +109,8 @@ public final class LogImplWebguiLogging implements Log {
 			sb.append(severity);
 			sb.append(' ');
 			sb.append(message);
+			sb.append('\n');
+			sb.append(throwable.toString());
 			queue.add(sb.toString());
 		}
 	}
