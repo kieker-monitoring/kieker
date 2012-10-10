@@ -40,12 +40,14 @@ public final class LogFactory { // NOPMD (Implementation of an logger)
 			JVM_LOGGER = null;
 		}
 		DETECTED_LOGGER = LogFactory.detectLogger();
+		final Log log = LogFactory.getLog(LogFactory.class);
 		if ((null != JVM_LOGGER) && !DETECTED_LOGGER.name().equals(JVM_LOGGER)) {
-			LogFactory.getLog(LogFactory.class).warn(
-					"Failed to load Logger with property " + CUSTOM_LOGGER_JVM + "=" + JVM_LOGGER + ", using " + DETECTED_LOGGER.name() + " instead.");
+			log.warn("Failed to load Logger with property " + CUSTOM_LOGGER_JVM + "=" + JVM_LOGGER + ", using " + DETECTED_LOGGER.name() + " instead.");
 		}
-		// DEBUG
 		// System.out.println(DETECTED_LOGGER.toString());
+		if (log.isDebugEnabled()) {
+			log.debug(DETECTED_LOGGER.toString());
+		}
 	}
 
 	private LogFactory() {
@@ -65,6 +67,7 @@ public final class LogFactory { // NOPMD (Implementation of an logger)
 		case NONE:
 			return new LogImplNone(name);
 		case JUNIT:
+			return new LogImplJUnit(name);
 		case JDK:
 		default:
 			return new LogImplJDK14(name);

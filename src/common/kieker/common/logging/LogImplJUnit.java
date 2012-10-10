@@ -16,14 +16,21 @@
 
 package kieker.common.logging;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author Jan Waller
  */
-public final class LogImplJDK14 implements Log {
+public final class LogImplJUnit implements Log {
+
+	private static final Log LOG = LogFactory.getLog(LogImplJUnit.class);
+	private static final Set<Class<? extends Throwable>> DISABLED_THROWABLES = new HashSet<Class<? extends Throwable>>();
+
 	private final java.util.logging.Logger logger; // NOPMD (Implementation of an logger)
 	private final String name;
 
-	protected LogImplJDK14(final String name) {
+	protected LogImplJUnit(final String name) {
 		this.name = name;
 		this.logger = java.util.logging.Logger.getLogger(name);
 	}
@@ -67,6 +74,14 @@ public final class LogImplJDK14 implements Log {
 	}
 
 	public final void info(final String message, final Throwable t) {
+		synchronized (DISABLED_THROWABLES) {
+			for (final Class<? extends Throwable> clazz : DISABLED_THROWABLES) {
+				if (clazz.isInstance(t)) {
+					this.log(java.util.logging.Level.FINE, message, t);
+					return;
+				}
+			}
+		}
 		this.log(java.util.logging.Level.INFO, message, t);
 	}
 
@@ -75,6 +90,15 @@ public final class LogImplJDK14 implements Log {
 	}
 
 	public final void warn(final String message, final Throwable t) {
+		synchronized (DISABLED_THROWABLES) {
+			for (final Class<? extends Throwable> clazz : DISABLED_THROWABLES) {
+				if (clazz.isInstance(t)) {
+					this.debug(message, t);
+					this.log(java.util.logging.Level.FINE, message, t);
+					return;
+				}
+			}
+		}
 		this.log(java.util.logging.Level.WARNING, message, t);
 	}
 
@@ -83,6 +107,30 @@ public final class LogImplJDK14 implements Log {
 	}
 
 	public final void error(final String message, final Throwable t) {
+		synchronized (DISABLED_THROWABLES) {
+			for (final Class<? extends Throwable> clazz : DISABLED_THROWABLES) {
+				if (clazz.isInstance(t)) {
+					this.log(java.util.logging.Level.FINE, message, t);
+					return;
+				}
+			}
+		}
 		this.log(java.util.logging.Level.SEVERE, message, t);
+	}
+
+	public static final void disableThrowable(final Class<? extends Throwable> clazz) {
+		synchronized (DISABLED_THROWABLES) {
+			DISABLED_THROWABLES.add(clazz);
+		}
+		LOG.info("Logging " + clazz.getName() + " only to DEBUG log level.");
+	}
+
+	public static final void reset() {
+		synchronized (DISABLED_THROWABLES) {
+			if (DISABLED_THROWABLES.size() > 0) {
+				DISABLED_THROWABLES.clear();
+				LOG.info("Logging all messaged to default log level.");
+			}
+		}
 	}
 }

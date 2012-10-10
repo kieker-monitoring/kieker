@@ -45,10 +45,10 @@ import kieker.test.monitoring.util.NamedListWriter;
 public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	// private static final Log LOG = LogFactory.getLog(TestSpringMethodInterceptor.class);
 
+	private static final String HOSTNAME = "SRV-W4W7E9pN";
+
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
-
-	private static final String HOSTNAME = "SRV-W4W7E9pN";
 
 	private volatile FileSystemXmlApplicationContext ctx;
 	private volatile List<IMonitoringRecord> recordListFilledByListWriter;

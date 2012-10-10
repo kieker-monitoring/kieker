@@ -16,22 +16,31 @@
 
 package kieker.test.common.junit;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestName;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.logging.LogImplJUnit;
 
 /**
  * @author Jan Waller
  */
 public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 
-	private static final Log LOG = LogFactory.getLog(AbstractKiekerTest.class);
+	private static final Log LOG;
+
+	static {
+		if (System.getProperty("kieker.common.logging.Log") == null) {
+			System.setProperty("kieker.common.logging.Log", "JUNIT");
+		}
+		LOG = LogFactory.getLog(AbstractKiekerTest.class);
+	}
 
 	@Rule
-	public TestName nameOfCurrentTest = new TestName();
+	public TestName nameOfCurrentTest = new TestName(); // NOCS
 
 	public AbstractKiekerTest() {
 		// empty default constructor
@@ -40,5 +49,10 @@ public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 	@Before
 	public final void printNameOfCurrentTest() {
 		LOG.info("Executing test: " + this.getClass().getName() + "." + this.nameOfCurrentTest.getMethodName() + "()\n\n");
+	}
+
+	@After
+	public final void resetStateOfJUnitLogger() {
+		LogImplJUnit.reset();
 	}
 }

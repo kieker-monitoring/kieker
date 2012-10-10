@@ -22,6 +22,8 @@ import org.junit.Assert;
 
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
+import kieker.common.exception.MonitoringRecordException;
+import kieker.common.logging.LogImplJUnit;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writer.IMonitoringWriter;
 import kieker.monitoring.writer.filesystem.AsyncFsWriter;
@@ -41,6 +43,7 @@ public class ContinueAfterUnknownTypeRegularFileTest extends AbstractUnknownType
 	protected void refineWriterConfiguration(final Configuration config, final int numRecordsWritten) {
 		config.setProperty(this.getClass().getName() + "." + AsyncFsWriter.CONFIG_FLUSH, Boolean.TRUE.toString());
 		// TODO: additional configuration parameters
+		LogImplJUnit.disableThrowable(MonitoringRecordException.class);
 	}
 
 	@Override
@@ -49,6 +52,7 @@ public class ContinueAfterUnknownTypeRegularFileTest extends AbstractUnknownType
 		Assert.assertEquals("Expected one record", 2, eventFromMonitoringLog.size());
 		Assert.assertEquals("Unexpected record", EVENT0_KNOWN_TYPE, eventFromMonitoringLog.get(0));
 		Assert.assertEquals("Unexpected record", EVENT2_KNOWN_TYPE, eventFromMonitoringLog.get(1));
+		LogImplJUnit.reset();
 	}
 
 	/**
