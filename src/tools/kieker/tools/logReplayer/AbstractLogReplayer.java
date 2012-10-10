@@ -68,7 +68,7 @@ public abstract class AbstractLogReplayer {
 	}
 
 	/**
-	 * Replays the monitoring log terminates after the last record was passed to the configured {@link kieker.common.record.IMonitoringRecordReceiver}.
+	 * Replays the monitoring log terminates after the last record was passed to the configured {@link kieker.monitoring.core.controller.IMonitoringController}.
 	 * 
 	 * @return true on success; false otherwise
 	 */

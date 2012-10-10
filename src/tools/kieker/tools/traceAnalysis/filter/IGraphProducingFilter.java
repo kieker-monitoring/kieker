@@ -33,7 +33,7 @@ public interface IGraphProducingFilter<G extends AbstractGraph<?, ?, ?>> extends
 	/**
 	 * Requests that the given retention policy is used by this graph producer. Note that the producer may
 	 * choose to use a more liberal, compatible retention policy to satisfy the needs of other graph consumers
-	 * (see {@link IOriginRetentionPolicy#isCompatibleWith(IOriginRetentionPolicy)}).
+	 * (see {@link kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPolicy#isCompatibleWith(IOriginRetentionPolicy)}).
 	 * 
 	 * @param policy
 	 *            The requested policy

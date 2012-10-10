@@ -64,8 +64,6 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 
 	/**
 	 * Returns the current number of collected objects.
-	 * 
-	 * @return
 	 */
 	public int size() {
 		return this.list.size();

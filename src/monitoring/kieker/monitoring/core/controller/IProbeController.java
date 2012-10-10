@@ -26,7 +26,7 @@ public interface IProbeController {
 	/**
 	 * Activates a probe.
 	 * 
-	 * @param string
+	 * @param pattern
 	 *            pattern for the probe
 	 * @return
 	 *         true on success
@@ -36,7 +36,7 @@ public interface IProbeController {
 	/**
 	 * Deactivates a probe.
 	 * 
-	 * @param string
+	 * @param pattern
 	 *            pattern for the probe
 	 * @return
 	 *         true on success
@@ -44,7 +44,7 @@ public interface IProbeController {
 	public boolean deactivateProbe(final String pattern);
 
 	/**
-	 * @param string
+	 * @param signature
 	 *            signature of the probe
 	 * @return
 	 *         true if the probe with this signature is active

@@ -17,7 +17,7 @@ package kieker.tools.traceAnalysis.filter.visualization.graph;
 
 /**
  * The complete origin retention policy represents the intention that every origin should be
- * retained in the graph model and corresponds to the kind {@link OriginRetentionPolicyKind#ALL}.
+ * retained in the graph model and corresponds to the kind {@link kieker.tools.traceAnalysis.filter.visualization.graph.OriginRetentionPolicyKind#ALL}.
  * Be aware that this policy may lead to extensive resource consumption when processing vast logs.
  * 
  * @author Holger Knoche

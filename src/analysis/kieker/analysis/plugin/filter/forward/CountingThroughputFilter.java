@@ -156,12 +156,7 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 		return TimeUnit.NANOSECONDS.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
 	}
 
-	/**
-	 * 
-	 * TODO: is this correct? it probably makes more sense to provide a copy.
-	 * 
-	 * @return
-	 */
+	// TODO: is this correct? it probably makes more sense to provide a copy.
 	public Collection<Entry<Long, Long>> getCountsPerInterval() {
 		return Collections.unmodifiableCollection(this.eventCountsPerInterval);
 	}

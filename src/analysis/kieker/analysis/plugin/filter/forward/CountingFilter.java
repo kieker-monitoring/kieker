@@ -61,8 +61,6 @@ public final class CountingFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Returns the number of objects received until now.
-	 * 
-	 * @return
 	 */
 	public final long getMessageCount() {
 		return this.counter.get();
@@ -77,8 +75,7 @@ public final class CountingFilter extends AbstractFilterPlugin {
 
 	/**
 	 * This method is being used to display the currently stored value within this counter.
-	 * 
-	 * @return The current text within an instance of {@link PlainText}.
+	 * It sets the current text within the given instance of {@link PlainText}.
 	 */
 	@Display(name = "Counter Display")
 	public final void countDisplay(final PlainText plainText) {

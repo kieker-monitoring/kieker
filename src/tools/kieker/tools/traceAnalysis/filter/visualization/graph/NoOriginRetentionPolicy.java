@@ -18,7 +18,7 @@ package kieker.tools.traceAnalysis.filter.visualization.graph;
 
 /**
  * The no-origin-retention policy represents the intention that no origins should be retained at all
- * and corresponds to the kind {@link OriginRetentionPolicyKind#NONE}.
+ * and corresponds to the kind {@link kieker.tools.traceAnalysis.filter.visualization.graph.OriginRetentionPolicyKind#NONE}.
  * 
  * @author Holger Knoche
  */

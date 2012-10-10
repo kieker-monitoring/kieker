@@ -21,7 +21,7 @@ import java.util.Set;
 
 /**
  * The specific origin retention policy represents the intention that only specific origins should
- * be retained and corresponds to the kind {@link OriginRetentionPolicyKind#SPECIFIC}. Two specific
+ * be retained and corresponds to the kind {@link kieker.tools.traceAnalysis.filter.visualization.graph.OriginRetentionPolicyKind#SPECIFIC}. Two specific
  * retention policies are united by uniting the underlying sets. Instead of calculating the union set,
  * however, the two policies are chained together using an implicit union/or operator to provide a
  * higher flexibility.
