@@ -24,7 +24,7 @@ import java.util.Set;
  */
 public final class LogImplJUnit implements Log {
 
-	private static final Log LOG = LogFactory.getLog(LogImplJUnit.class);
+	private static final Log LOG = LogFactory.getLog(LogImplJUnit.class); // NOPMD
 	private static final Set<Class<? extends Throwable>> DISABLED_THROWABLES = new HashSet<Class<? extends Throwable>>();
 
 	private final java.util.logging.Logger logger; // NOPMD (Implementation of an logger)
@@ -127,7 +127,7 @@ public final class LogImplJUnit implements Log {
 
 	public static final void reset() {
 		synchronized (DISABLED_THROWABLES) {
-			if (DISABLED_THROWABLES.size() > 0) {
+			if (!DISABLED_THROWABLES.isEmpty()) {
 				DISABLED_THROWABLES.clear();
 				LOG.info("Logging all messaged to default log level.");
 			}

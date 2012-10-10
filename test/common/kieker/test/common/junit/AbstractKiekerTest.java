@@ -30,7 +30,7 @@ import kieker.common.logging.LogImplJUnit;
  */
 public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 
-	private static final Log LOG;
+	private static final Log LOG; // NOPMD
 
 	static {
 		if (System.getProperty("kieker.common.logging.Log") == null) {
@@ -40,7 +40,7 @@ public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 	}
 
 	@Rule
-	public TestName nameOfCurrentTest = new TestName(); // NOCS
+	public TestName nameOfCurrentTest = new TestName(); // NOPMD NOCS
 
 	public AbstractKiekerTest() {
 		// empty default constructor

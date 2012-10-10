@@ -45,9 +45,8 @@ import kieker.test.monitoring.util.NamedListWriter;
  * Tests the {@link AbstractLogReplayer}.
  * 
  * @author Andre van Hoorn
- * 
  */
-public class TestLogReplayer extends AbstractKiekerTest { // NOCS (no constructor)
+public class TestLogReplayer extends AbstractKiekerTest {
 
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
@@ -55,7 +54,9 @@ public class TestLogReplayer extends AbstractKiekerTest { // NOCS (no constructo
 	private volatile File monitoringConfigurationFile;
 	private volatile List<IMonitoringRecord> recordListFilledByListWriter;
 	private final List<IMonitoringRecord> replayList = new ArrayList<IMonitoringRecord>();
-	{ /* Adding arbitrary records */
+
+	public TestLogReplayer() {
+		/* Adding arbitrary records */
 		this.replayList.add(new EmptyRecord());
 		this.replayList.add(
 				new MemSwapUsageRecord(1, "myHost", /* memTotal: */17, /* memUsed */3, /* memFree: */14, /* swapTotal: */100, /* swapUsed: */0, /* swapFree: */100));
@@ -102,7 +103,10 @@ public class TestLogReplayer extends AbstractKiekerTest { // NOCS (no constructo
 	}
 }
 
-class ListReplayer extends AbstractLogReplayer {
+/**
+ * @author Andre van Hoorn
+ */
+class ListReplayer extends AbstractLogReplayer { // NOPMD
 	private final List<IMonitoringRecord> replayList = new ArrayList<IMonitoringRecord>();
 
 	public ListReplayer(final String monitoringConfigurationFile, final boolean realtimeMode, final boolean keepOriginalLoggingTimestamps,

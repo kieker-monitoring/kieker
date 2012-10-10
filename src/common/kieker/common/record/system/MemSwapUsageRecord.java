@@ -26,6 +26,9 @@ import kieker.common.record.IMonitoringRecord;
  * @author Andre van Hoorn, Jan Waller
  */
 public final class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+
+	public static final String DEFAULT_VALUE = "N/A";
+
 	private static final long serialVersionUID = 8072422694598002383L;
 	private static final Class<?>[] TYPES = {
 		long.class,
@@ -37,7 +40,6 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 		long.class,
 		long.class,
 	};
-	public static final String DEFAULT_VALUE = "N/A";
 
 	private final long memUsed;
 	private final long memFree;
