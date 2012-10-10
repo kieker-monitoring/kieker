@@ -147,7 +147,8 @@ public class Execution {
 		}
 		final Execution other = (Execution) obj;
 		return this.allocationComponent.equals(other.allocationComponent) && this.operation.equals(other.operation) && this.sessionId.equals(other.sessionId)
-				&& (this.traceId == other.traceId) && (this.eoi == other.eoi) && (this.ess == other.ess) && (this.tin == other.tin) && (this.tout == other.tout);
+				&& (this.traceId == other.traceId) && (this.eoi == other.eoi) && (this.ess == other.ess) && (this.tin == other.tin) && (this.tout == other.tout)
+				&& (this.assumed == other.assumed);
 	}
 
 	@Override
@@ -161,6 +162,7 @@ public class Execution {
 		hash = (43 * hash) + this.ess;
 		hash = (43 * hash) + (int) (this.tin ^ (this.tin >>> 32));
 		hash = (43 * hash) + (int) (this.tout ^ (this.tout >>> 32));
+		hash = (43 * hash) + (this.assumed ? 5643 : 5648); // NOCS (inline ?)
 		return hash;
 	}
 
@@ -174,6 +176,10 @@ public class Execution {
 		strBuild.append(this.operation.getSignature().getName()).append(' ');
 
 		strBuild.append((this.sessionId != null) ? this.sessionId : NO_SESSION_ID); // NOCS
+
+		if (this.assumed) {
+			strBuild.append(" (assumed)");
+		}
 
 		return strBuild.toString();
 	}
