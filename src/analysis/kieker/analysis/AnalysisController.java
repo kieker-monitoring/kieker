@@ -473,7 +473,7 @@ public final class AnalysisController {
 		if (null == configuration) { // should not happen, but better safe than sorry
 			return Collections.emptyList();
 		}
-		final List<MIProperty> properties = new ArrayList<MIProperty>();
+		final List<MIProperty> properties = new ArrayList<MIProperty>(configuration.size());
 		for (final Enumeration<?> e = configuration.propertyNames(); e.hasMoreElements();) {
 			final String key = (String) e.nextElement();
 			final MIProperty property = factory.createProperty();
@@ -525,7 +525,6 @@ public final class AnalysisController {
 				pluginMap.put(plugin, mPlugin);
 				mPlugin.setClassname(plugin.getClass().getName());
 				mPlugin.setName(plugin.getName());
-				// Extract the configuration.
 				mPlugin.getProperties().addAll(AnalysisController.convertProperties(plugin.getCurrentConfiguration(), factory));
 
 				// Extract the repositories.
