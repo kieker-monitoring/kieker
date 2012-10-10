@@ -109,8 +109,10 @@ public final class LogImplWebguiLogging implements Log {
 			sb.append(severity);
 			sb.append(' ');
 			sb.append(message);
-			sb.append('\n');
-			sb.append(throwable.toString());
+			if (null != throwable) {
+				sb.append('\n');
+				sb.append(throwable.toString());
+			}
 			queue.add(sb.toString());
 		}
 	}

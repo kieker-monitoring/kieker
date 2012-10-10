@@ -168,7 +168,7 @@ public class Execution {
 
 	@Override
 	public String toString() {
-		final StringBuilder strBuild = new StringBuilder();
+		final StringBuilder strBuild = new StringBuilder(128);
 		strBuild.append(this.traceId);
 		strBuild.append('[').append(this.eoi).append(',').append(this.ess).append("] ");
 		strBuild.append(this.tin).append('-').append(this.tout).append(' ');

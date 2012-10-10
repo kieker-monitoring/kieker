@@ -162,7 +162,7 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 				TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID,
 				TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME);
 		final ExecutionTrace expectedExecutionTrace;
-		{
+		{ // NOCS
 			/*
 			 * Create an Execution Trace and add Executions in arbitrary order
 			 */
@@ -240,7 +240,7 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME);
 		final ExecutionTrace expectedExecutionTrace;
 
-		{
+		{ // NOCS
 			expectedExecutionTrace = new ExecutionTrace(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 					TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID);
 
