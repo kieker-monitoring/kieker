@@ -29,7 +29,7 @@ public final class LogFactory { // NOPMD (Implementation of an logger)
 	private static final Logger DETECTED_LOGGER;
 
 	private static enum Logger {
-		NONE, JDK, COMMONS, WEBGUI, JUNIT,
+		NONE, JDK, COMMONS, SLF4J, WEBGUI, JUNIT,
 	}
 
 	static {
@@ -60,15 +60,18 @@ public final class LogFactory { // NOPMD (Implementation of an logger)
 
 	public static final Log getLog(final String name) {
 		switch (DETECTED_LOGGER) { // NOPMD (no break needed)
-		case WEBGUI:
-			return new LogImplWebguiLogging(name);
-		case COMMONS:
-			return new LogImplCommonsLogging(name);
 		case NONE:
 			return new LogImplNone(name);
+		case JDK:
+			return new LogImplJDK14(name);
+		case COMMONS:
+			return new LogImplCommonsLogging(name);
+		case SLF4J:
+			return new LogImplSLF4JLogging(name);
+		case WEBGUI:
+			return new LogImplWebguiLogging(name);
 		case JUNIT:
 			return new LogImplJUnit(name);
-		case JDK:
 		default:
 			return new LogImplJDK14(name);
 		}
@@ -81,6 +84,13 @@ public final class LogFactory { // NOPMD (Implementation of an logger)
 			} catch (final IllegalArgumentException ex) { // NOPMD NOCS
 				// Notify is handled above.
 			}
+		}
+		try {
+			if (Class.forName("org.slf4j.impl.StaticLoggerBinder") != null) {
+				return Logger.SLF4J; // use SLF4J logging
+			}
+		} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
+			// use default in case of errors ...
 		}
 		try {
 			if (Class.forName("org.apache.commons.logging.Log") != null) {
