@@ -62,38 +62,36 @@ public final class MonitoringController extends AbstractController implements IM
 		monitoringController.stateController.setMonitoringController(monitoringController);
 		if (monitoringController.stateController.isTerminated()) {
 			monitoringController.terminate();
-			return monitoringController;
 		}
 		monitoringController.samplingController.setMonitoringController(monitoringController);
 		if (monitoringController.samplingController.isTerminated()) {
 			monitoringController.terminate();
-			return monitoringController;
 		}
 		monitoringController.jmxController.setMonitoringController(monitoringController);
 		if (monitoringController.jmxController.isTerminated()) {
 			monitoringController.terminate();
-			return monitoringController;
 		}
 		monitoringController.writerController.setMonitoringController(monitoringController);
 		if (monitoringController.writerController.isTerminated()) {
 			monitoringController.terminate();
-			return monitoringController;
 		}
 		monitoringController.timeSourceController.setMonitoringController(monitoringController);
 		if (monitoringController.timeSourceController.isTerminated()) {
 			monitoringController.terminate();
-			return monitoringController;
 		}
 		monitoringController.registryController.setMonitoringController(monitoringController);
 		if (monitoringController.registryController.isTerminated()) {
 			monitoringController.terminate();
-			return monitoringController;
 		}
 		monitoringController.probeController.setMonitoringController(monitoringController);
 		if (monitoringController.probeController.isTerminated()) {
 			monitoringController.terminate();
+		}
+
+		if (monitoringController.isTerminated()) {
 			return monitoringController;
 		}
+
 		if (configuration.getBooleanProperty(ConfigurationFactory.USE_SHUTDOWN_HOOK)) {
 			/*
 			 * This ensures that the terminateMonitoring() method is always called
