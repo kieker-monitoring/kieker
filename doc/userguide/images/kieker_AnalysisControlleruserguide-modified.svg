@@ -185,14 +185,14 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1280"
-     inkscape:window-height="928"
+     inkscape:window-height="1004"
      id="namedview509"
      showgrid="false"
      inkscape:zoom="1.5694556"
      inkscape:cx="351.63083"
      inkscape:cy="207.83337"
-     inkscape:window-x="-2"
-     inkscape:window-y="35"
+     inkscape:window-x="1278"
+     inkscape:window-y="-3"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
      fit-margin-top="0"
@@ -1366,7 +1366,7 @@
      clip-path="none"
      xml:space="preserve"
      id="text267-1-5-2"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">+ connect ( srcPlugin : AbstractPlugin, outputPort : dstPlugin : String, AbstractPlugin, inputPort : String )</text>
+     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">+ connect ( srcPlugin : AbstractPlugin, outputPort : String, dstPlugin : AbstractPlugin, inputPort : String )</text>
   <line
      clip-path="url(#clipPath45)"
      x1="270"
