@@ -1103,9 +1103,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.49497475"
-     inkscape:cx="496.13948"
-     inkscape:cy="332.59744"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="1065.5945"
+     inkscape:cy="407.72641"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -1128,7 +1128,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -5442,7 +5442,7 @@
          x="-2133.2798"
          y="802.37329"
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
-         id="tspan3781-2-6-2-2-3-4-2-7-2-9-7">Java Messaging Servcie (JMS)</tspan></text>
+         id="tspan3781-2-6-2-2-3-4-2-7-2-9-7">Java Messaging Service (JMS)</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Arial;-inkscape-font-specification:Arial"
