@@ -44,7 +44,7 @@ public final class ThreadingAspect extends AbstractAspectJProbe {
 	// Must be @Before
 	@Before("call(void java.lang.Thread.start()) && target(thread) && notWithinKieker()")
 	public final void beforeNewThread(final Thread thread) {
-		if (!CTRLINST.isMonitoringEnabled()) {
+		if (!CTRLINST.isMonitoringEnabled()) { // we don't want adaptive monitoring here
 			return;
 		}
 		final Trace trace = TRACEREGISTRY.getTrace();
