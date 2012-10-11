@@ -71,7 +71,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 
 	@Override
 	public void handleMessage(final Message msg) throws Fault {
-		if (!this.monitoringController.isMonitoringEnabled()) {
+		if (!this.monitoringController.isProbeActivated(SIGNATURE)) {
 			return;
 		}
 		if (msg instanceof SoapMessage) {

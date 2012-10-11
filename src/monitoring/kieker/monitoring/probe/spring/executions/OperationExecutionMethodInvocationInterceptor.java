@@ -62,11 +62,12 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 	 * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
 	 */
 	public Object invoke(final MethodInvocation invocation) throws Throwable { // NOCS (IllegalThrowsCheck)
-		if (!this.monitoringCtrl.isMonitoringEnabled()) {
+		final String signature = invocation.getMethod().toString();
+
+		if (!this.monitoringCtrl.isProbeActivated(signature)) {
 			return invocation.proceed();
 		}
 
-		final String signature = invocation.getMethod().toString();
 		final String sessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
 		final int eoi; // this is executionOrderIndex-th execution in this trace
 		final int ess; // this is the height in the dynamic call tree of this execution

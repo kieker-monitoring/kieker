@@ -72,7 +72,7 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
 
 	@Override
 	public void handleMessage(final SoapMessage msg) throws Fault {
-		if (!this.monitoringController.isMonitoringEnabled()) {
+		if (!this.monitoringController.isProbeActivated(OperationExecutionSOAPResponseInInterceptor.SIGNATURE)) {
 			return;
 		}
 
