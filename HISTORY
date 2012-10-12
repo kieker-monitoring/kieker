@@ -13,13 +13,16 @@ Please refer to the Kieker User Guide for details on using Kieker.
   - Restructured and extended graph/visualization filters (trace coloring, 
     tooltips etc.)
   - Log rotation for file system writer
-  - Java EE example: Now included in core binary release archive and based 
-    on MyBatis JPetStore deployed to Jetty server
+  - Logging API: SLF4J support and logger selection via JVM argument
+  - Many new AspectJ-based probes to for detailed event-based tracing
   - Refactored realtime replayer based on new re-usable filters (realtime delay,
     record logger etc.)
+  - Java EE example: Now included in core binary release archive and based 
+    on MyBatis JPetStore deployed to Jetty server
   - Definition of configuration properties and default values for analysis 
     plugins and repositories now annotation-based
   - Removed legacy control servlet (JMX interface should be used instead)
+  - Kieker releases available via central Maven repository
 - Quality
   - Bug fixes
   - Added a number of (JUnit) tests
