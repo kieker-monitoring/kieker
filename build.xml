@@ -265,17 +265,6 @@
 		</jar>
 	</target>
 
-	<target name="kieker-src-jar" description="Creates a Jar which contains the Kieker source code"> <!-- used by serenity --> 
-		<jar destfile="${tmp.dir}/${src.jar}">
-			<fileset dir="${src.kieker.common.dir}" />
-			<fileset dir="${src.kieker.analysis.dir}" />
-			<fileset dir="${build.kieker.analysis.model.dir}" />
-			<fileset dir="${src.kieker.monitoring.dir}" />
-			<fileset dir="${src.kieker.tools.dir}" />
-			<fileset dir="." includes="${license.file}" />
-		</jar>
-	</target>
-
 	<target name="dist-kieker-javadoc" depends="-init,-generate-javadoc" description="Packages the Javadoc API documentation archives">
 		<tar destfile="${release.dir}/${dist.kieker.apiBaseName}.tar" longfile="gnu">
 			<tarfileset dir="${build.api.dir}" prefix="" defaultexcludes="yes" />
@@ -898,7 +887,7 @@
 	<target name="run-tests-integration" depends="run-test-compileTimeWeaving-bookstore, run-test-compileTimeWeaving-bookstore-synchronized, run-test-compileTimeWeaving-twoConcurrentMethodsExample, run-test-loadTimeWeaving-bookstoreDifferentRecordTypes, run-test-loadTimeWeaving-bookstoreFullInstrumentation, run-test-loadTimeWeaving-executionOrderTest, run-test-storage" description="Runs the collection of integration tests (takes quite a while)">
 	</target>
 
-	<target name="run-tests-junit" depends="compile-tests,kieker-src-jar" description="Runs the JUnit tests">
+	<target name="run-tests-junit" depends="compile-tests" description="Runs the JUnit tests">
 		<path id="kieker.test-junit-run-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="aopalliance-*.jar" />
@@ -941,17 +930,6 @@
 			<classpath refid="kieker.test-junit-run-classpath" />
 
 			<formatter type="xml" />
-
-			<!-- Serenity system properties. -->
-			<!-- Serenity deactivated
-			<sysproperty key="included.packages" value="kieker" />
-			<sysproperty key="included.adapters" value="coverage,complexity,dependency" />
-			<sysproperty key="included.jars" value="${tmp.dir}/${src.jar}" />
-			-->
-			<!-- Serenity JVM command line. -->
-			<!-- Serenity deactivated
-			<jvmarg line="-javaagent:${lib.dir}/serenity-0.4/serenity.jar" />
-			-->
 
 			<batchtest fork="true" todir="${tests.junit-results.dir}">
 				<fileset dir="${build.tests.dir}/">
