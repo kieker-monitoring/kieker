@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -33,6 +34,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.controller.MonitoringController;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore.Bookstore;
@@ -46,6 +48,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	// private static final Log LOG = LogFactory.getLog(TestSpringMethodInterceptor.class);
 
 	private static final String HOSTNAME = "SRV-W4W7E9pN";
+	private static final String CTRLNAME = "MonitoringController-TestSpringMethodInterceptor";
 
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
@@ -62,8 +65,9 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 		this.tmpFolder.create();
 		final String listName = NamedListWriter.FALLBACK_LIST_NAME;
 		this.recordListFilledByListWriter = NamedListWriter.createNamedList(listName);
+		System.setProperty(ConfigurationFactory.CONTROLLER_NAME, CTRLNAME);
 		System.setProperty(ConfigurationFactory.WRITER_CLASSNAME, NamedListWriter.class.getName());
-		// Doesn't work because property not known to Kieker: System.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.listName);
+		// Doesn't work because property not starting with kieker.monitoring: System.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.listName);
 		System.setProperty(ConfigurationFactory.HOST_NAME, HOSTNAME);
 
 		// start the server
@@ -78,6 +82,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 
 	@Test
 	public void testIt() throws IOException {
+		Assume.assumeTrue(CTRLNAME.equals(MonitoringController.getInstance().getName()));
 		Assert.assertNotNull(this.ctx);
 		for (int i = 0; i < 5; i++) {
 			final URL url = new URL("http://localhost:9293/bookstore/search/any/");
@@ -140,5 +145,8 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 			this.ctx.destroy(); // TODO: is this shutting down the server?
 		}
 		this.tmpFolder.delete();
+		System.clearProperty(ConfigurationFactory.CONTROLLER_NAME);
+		System.clearProperty(ConfigurationFactory.WRITER_CLASSNAME);
+		System.clearProperty(ConfigurationFactory.HOST_NAME);
 	}
 }
