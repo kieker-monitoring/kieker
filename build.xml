@@ -51,6 +51,7 @@
 		<path id="kieker.common-compile-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="commons-logging-*.jar" />
+				<include name="slf4j-api-*.jar" />
 			</fileset>
 		</path>
 
