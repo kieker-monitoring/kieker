@@ -5,7 +5,7 @@ http://kieker-monitoring.net) contains details on the changes.
 
 Please refer to the Kieker User Guide for details on using Kieker.
 
-* 1.6 (October 16, 2012)
+* 1.6 (October 17, 2012)
 - Major changes
   - Web-based UI for editing and running analysis projects (beta version)
   - Adaptive monitoring: (De)activate monitoring on method signature level 
