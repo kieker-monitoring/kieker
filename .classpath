@@ -19,8 +19,8 @@
 	<classpathentry kind="src" path="examples/SPECjEnterprise2010/src"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
-	<classpathentry kind="lib" path="lib/aspectjrt-1.7.0.jar"/>
-  <classpathentry kind="lib" path="lib/aspectjweaver-1.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/aspectjrt-1.7.1.jar"/>
+  <classpathentry kind="lib" path="lib/aspectjweaver-1.7.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-cli-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/cxf-api-2.6.2.jar"/>
@@ -42,9 +42,9 @@
 	<classpathentry kind="lib" path="lib/jgraphx-1.10.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.10.jar"/>
 	<classpathentry kind="lib" path="lib/neethi-3.0.2.jar"/>
-	<classpathentry kind="lib" path="lib/org.eclipse.emf.common_2.8.0.v20120606-0717.jar"/>
-	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore.xmi_2.8.0.v20120606-0717.jar"/>
-	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore_2.8.0.v20120606-0717.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.emf.common_2.8.0.v20120911-0500.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore.xmi_2.8.0.v20120911-0500.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore_2.8.1.v20120911-0500.jar"/>
 	<classpathentry kind="lib" path="lib/org.springframework.aop-3.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/org.springframework.asm-3.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/org.springframework.beans-3.1.2.jar"/>
