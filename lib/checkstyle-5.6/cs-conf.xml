@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
-<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.1//EN" "http://www.puppycrawl.com/dtds/configuration_1_1.dtd">
+<!DOCTYPE module PUBLIC
+          "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+          "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 
 <module name="Checker">
 
@@ -14,7 +16,11 @@
     </module>
 
     <!--
-    <property name="basedir"        value=""/>
+      If you set the basedir property below, then all reported file
+      names will be relative to the specified directory. See
+      http://checkstyle.sourceforge.net/5.x/config.html#Checker
+
+    <property name="basedir"        value="${basedir}"/>
     <property name="localeCountry"  value=""/> JVM locale country
     <property name="localeLanguage" value=""/> JVM locale language
     <property name="charset"        value=""/> JVM file.encoding property
@@ -48,7 +54,7 @@
     <!-- See http://checkstyle.sf.net/config_header.html   !-->
     <!-- KIEKER !-->
     <module name="Header">
-        <!--<property name="headerFile"     value="lib/checkstyle-5.4/header.txt"/>-->
+        <!--<property name="headerFile"     value=""/>-->
         <!--<property name="charset"        value=""/>-->
         <property name="header"         value="/***************************************************************************\n * Copyright 2012 Kieker Project (http://kieker-monitoring.net)\n *\n * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);\n * you may not use this file except in compliance with the License.\n * You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n ***************************************************************************/\n"/>
         <property name="ignoreLines"    value="2"/>
@@ -106,7 +112,7 @@
     <!-- See http://checkstyle.sourceforge.net/config_regexp.html#RegexpSingleline !-->
     <!-- Default: OFF
     <module name="RegexpSingleline">
-        <property name="format"         value=""/>
+        <property name="format"         value="\s+$"/>
         <property name="message"        value=""/>
         <property name="ignoreCase"     value="false"/>
         <property name="minimum"        value="0"/>
@@ -145,7 +151,7 @@
     <!-- See http://checkstyle.sf.net/config_sizes.html !-->
     <module name="FileLength">
         <property name="max"            value="2000"/>
-        <property name="fileExtensions" value=""/>
+        <property name="fileExtensions" value="java"/>
     </module>
 
 
@@ -349,7 +355,7 @@
 
         <!-- The "double-checked locking" idiom (DCL) tries to avoid the runtime cost of synchronization. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
-        <module name="DoubleCheckedLocking"/>
+        <!--<module name="DoubleCheckedLocking"/>-->
 
         <!-- Detects empty statements (standalone ;). !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
@@ -368,7 +374,7 @@
         <!-- KIEKER off
         <module name="ExplicitInitialization"/>
         !-->
-
+        
         <!-- Checks for fall through in switch statements Finds locations where a case contains Java code ... !-->
         <!-- but lacks a break, return, throw or continue statement. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
@@ -693,9 +699,7 @@
         <module name="JavadocType">
             <property name="severity" value="info"/>
             <property name="scope"                 value="private"/>
-            <!--
-            <property name="excludeScope"          value=""/>
-            !-->
+            <!--<property name="excludeScope"          value=""/>!-->
             <property name="authorFormat"          value=""/>
             <!--<property name="versionFormat"         value=""/>!-->
             <property name="allowMissingParamTags" value="false"/>
@@ -762,7 +766,7 @@
         <!-- Checks cyclomatic complexity against a specified limit. !-->
         <!-- See http://checkstyle.sf.net/config_metrics.html !-->
         <module name="CyclomaticComplexity">
-            <property name="severity" value="info"/>
+            <property name="severity" value="ignore"/>
             <property name="max" value="10"/>
         </module>
 
