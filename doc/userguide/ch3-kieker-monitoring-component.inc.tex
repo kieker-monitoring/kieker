@@ -142,7 +142,31 @@ The \file{\monitoringPropertiesFile} includes additional JMX-related configurati
 kieker.monitoring.MBean=true
 \end{lstlisting}
 
+\subsection{Adaptive Monitoring}
 
+The \class{MonitoringController} provides an API to activate and deactivate %
+probes at runtime. By passing a method signature---e.g., %
+\texttt{"public void Bookstore.getBook()"}---to the method %
+\method{isProbeActivated}, probes can check whether or not monitoring for the %
+method with the given signature is active. %
+Monitoring can be (de)activated for single signature \textit{patterns}---e.g., %
+\texttt{"public void Bookstore.*(..)"}--- via the methods %
+\method{activateProbe} and \method{deactivateProbe}. The current list of %
+(de)activated patterns can be obtained via the method \method{getProbePatternList}. %
+The entire list can be replaced using the method \method{setProbePatternList}. %
+Alternatively, a file with include and exclude patterns can be used. This file %
+can be polled in regular intervals. %
+A default configuration file, including a description of the pattern syntax, is provided %
+by the file \file{kieker.monitoring.adaptive\-Monitoring.\-default.conf} in the %
+\dir{META-INF/} directory of the binary release. %
+
+By default, \Kieker{}'s adaptive monitoring feature is deactivated. It can be %
+enabled by setting the value of the configuration property %
+\lstinline{kieker.monitoring.adaptiveMonitoring.enabled} %
+in the \file{\monitoringPropertiesFile} file to \textit{true}. The %
+kieker.monitoring.properties includes additional properties to configure the %
+adaptive monitoring, e.g., the location of the afore-mentioned file with %
+include/exclude patterns and the polling interval for this file. 
 
 \section{\KiekerMonitoringPart{} Configuration}\label{sec:monitoring:configuration}
 
