@@ -406,6 +406,7 @@
 		</patternset>
 
 		<tar destfile="${release.dir}/${dist.kieker.binBaseName}.tar" longfile="gnu">
+			<tarfileset file="${kieker.monitoring.adaptiveMonitoring.default.conf}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.adaptiveMonitoring.conf" />
 			<tarfileset file="${kieker.monitoring.default.properties}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.properties" />
 			<tarfileset file="${src.userguide.pdf}" fullpath="${kieker.dist.name}/doc/${dist.kieker.userguide.pdf}" />
 			<tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
