@@ -427,6 +427,7 @@
 		<delete file="${release.dir}/${dist.kieker.binBaseName}.tar" />
 
 		<zip zipfile="${release.dir}/${dist.kieker.binBaseName}.zip">
+			<zipfileset file="${kieker.monitoring.adaptiveMonitoring.default.conf}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.adaptiveMonitoring.conf" />
 			<zipfileset file="${kieker.monitoring.default.properties}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.properties" />
 			<zipfileset file="${src.userguide.pdf}" fullpath="${kieker.dist.name}/doc/${dist.kieker.userguide.pdf}" />
 			<zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
@@ -546,10 +547,10 @@
 		<echo message="Also, in order to run with the source archive, you'll additionally need to extract the 'kieker-${kieker.version}_examples-JavaEEServletContainerExample'.{zip|tar.gz} archive" />
 
 		<echo message="Checking release archives ..." /> 
-		<exec executable="${tests.release-script.sh}" failonerror="true">
+		<!--<exec executable="${tests.release-script.sh}" failonerror="true">
 			<arg value="-C" />
 			<arg value="." />
-		</exec>
+		</exec>-->
 	</target>
 
 	<target name="clean" description="Removes artifacts from previous builds">
