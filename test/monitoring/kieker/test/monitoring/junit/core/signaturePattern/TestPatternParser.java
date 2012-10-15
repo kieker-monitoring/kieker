@@ -21,6 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.monitoring.core.signaturePattern.InvalidPatternException;
@@ -39,27 +40,29 @@ public class TestPatternParser extends AbstractKiekerTest {
 		// empty default constructor
 	}
 
-	// @Test
-	// // works : 810.000 tests 2.531.250.000
-	// public void whitespaceTest() throws InvalidPatternException {
-	// final String signature = "public static void default.package.Clazz.getVal(int, java.lang.String)";
-	//
-	// final PatternConstructor positivePattern = new PatternConstructor();
-	// positivePattern.addVisibilityVariant("public")
-	// .addStaticNonStaticVariant("static")
-	// .addNativeNonNativeVariant("non_native")
-	// .addreturnTypeVariant("void")
-	// .addfqClassNameVariant("default.package.Clazz")
-	// .addoperationNameVariant("getVal")
-	// .addparameterListVariant("int, java.lang.String")
-	// .addwhitespaceVariant(" ").addwhitespaceVariant("\t").addwhitespaceVariant("\f").addwhitespaceVariant("\r").addwhitespaceVariant("\n");
-	//
-	// final List<String> positivePatternList = positivePattern.getPattern();
-	// for (final String pattern : positivePatternList) {
-	// Assert.assertTrue("pattern: " + pattern + "; signature: " + signature, PatternParser.parseToPattern(pattern).matcher(signature).matches());
-	// }
-	// }
+	@Ignore("taking too long")
+	@Test
+	// works : 810.000 tests 2.531.250.000
+	public void whitespaceTest() throws InvalidPatternException {
+		final String signature = "public static void default.package.Clazz.getVal(int, java.lang.String)";
 
+		final PatternConstructor positivePattern = new PatternConstructor();
+		positivePattern.addVisibilityVariant("public")
+				.addStaticNonStaticVariant("static")
+				.addNativeNonNativeVariant("non_native")
+				.addreturnTypeVariant("void")
+				.addfqClassNameVariant("default.package.Clazz")
+				.addoperationNameVariant("getVal")
+				.addparameterListVariant("int, java.lang.String")
+				.addwhitespaceVariant(" ").addwhitespaceVariant("\t").addwhitespaceVariant("\f").addwhitespaceVariant("\r").addwhitespaceVariant("\n");
+
+		final List<String> positivePatternList = positivePattern.getPattern();
+		for (final String pattern : positivePatternList) {
+			Assert.assertTrue("pattern: " + pattern + "; signature: " + signature, PatternParser.parseToPattern(pattern).matcher(signature).matches());
+		}
+	}
+
+	@Ignore("taking too long")
 	@Test
 	// 442.368 tests
 	public void parameterListTest() throws InvalidPatternException {
@@ -88,6 +91,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 		}
 	}
 
+	@Ignore("taking too long")
 	@Test
 	// 3.932.160 tests
 	public void signatureTest() throws InvalidPatternException {

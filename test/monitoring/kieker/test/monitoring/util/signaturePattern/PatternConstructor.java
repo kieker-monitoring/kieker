@@ -99,23 +99,23 @@ public final class PatternConstructor {
 		for (final String visibility : this.visibilityList) {
 			for (final String abstractNonAbstract : this.abstractNonAbstractList) {
 				for (final String staticNonStatic : this.staticNonStaticList) { // NOCS
-					for (final String finalNonFinal : this.finalNonFinalList) {
-						for (final String synchronizedNonSynchronized : this.synchronizedNonSynchronizedList) {
+					for (final String finalNonFinal : this.finalNonFinalList) { // NOCS
+						for (final String synchronizedNonSynchronized : this.synchronizedNonSynchronizedList) { // NOCS
 							for (final String nativeNonNative : this.nativeNonNativeList) { // NOCS
 								for (final String returnType : this.returnTypeList) { // NOCS
 									for (final String fqClassName : this.fqClassNameList) { // NOCS
 										for (final String operationName : this.operationNameList) { // NOCS
 											for (final String paramList : this.parameterListList) { // NOCS
-												for (final String throwsList : this.throwsListList) {
+												for (final String throwsList : this.throwsListList) { // NOCS
 													for (final String white1 : this.whiteSpaceList) { // NOCS
 														for (final String white2 : this.whiteSpaceList) { // NOCS
 															for (final String white3 : this.whiteSpaceList) { // NOCS
 																for (final String white4 : this.whiteSpaceList) { // NOCS
-																	for (final String white5 : this.whiteSpaceList) {
-																		for (final String white6 : this.whiteSpaceList) {
-																			for (final String white7 : this.whiteSpaceList) {
-																				for (final String white8 : this.whiteSpaceList) {
-																					for (final String white9 : this.whiteSpaceList) {
+																	for (final String white5 : this.whiteSpaceList) { // NOCS
+																		for (final String white6 : this.whiteSpaceList) { // NOCS
+																			for (final String white7 : this.whiteSpaceList) { // NOCS
+																				for (final String white8 : this.whiteSpaceList) { // NOCS
+																					for (final String white9 : this.whiteSpaceList) { // NOCS
 																						for (final String opWhite1 : this.optionalWhitespaceList) { // NOCS
 																							for (final String opWhite2 : this.optionalWhitespaceList) { // NOCS
 																								for (final String opWhite3 : this.optionalWhitespaceList) { // NOCS
