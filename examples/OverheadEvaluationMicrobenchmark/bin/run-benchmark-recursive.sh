@@ -49,7 +49,7 @@ JAVAARGS="${JAVAARGS} -verbose:gc -XX:+PrintCompilation"
 JAR="-jar dist/OverheadEvaluationMicrobenchmark.jar"
 
 JAVAARGS_NOINSTR="${JAVAARGS}"
-JAVAARGS_LTW="${JAVAARGS} -javaagent:${BASEDIR}lib/kieker-1.6-SNAPSHOT_aspectj.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
+JAVAARGS_LTW="${JAVAARGS} -javaagent:${BASEDIR}lib/kieker-1.6_aspectj.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
 JAVAARGS_KIEKER="-Djava.util.logging.config.file=${BASEDIR}configuration/logging.properties -Dkieker.monitoring.configuration=${KIEKER_MONITORING_CONF}"
 JAVAARGS_KIEKER_DEACTV="${JAVAARGS_LTW} ${AOPXML_INSTR_DEACTPROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
 JAVAARGS_KIEKER_NOLOGGING="${JAVAARGS_LTW} ${AOPXML_INSTR_PROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
