@@ -250,7 +250,8 @@ class \class{AbstractMonitoringRecord}, and a custom monitoring record type %
 \noindent In order to use the abstract class for implementing your own monitoring record type, you need to:
 
 \begin{enumerate}
-\item Create a class that extends \class{AbstractMonitoringRecord}  and
+\item Create a class that extends \class{AbstractMonitoringRecord}
+\item  and
 \begin{enumerate}
 \item Override the methods \method{initFromArray}, \method{toArray}, \method{getValueTypes}
 \item For immutable record types: implement \class{IMonitoringRecord.Factory}, a constructor %
@@ -266,6 +267,8 @@ Listing~\ref{listing:MyRecord}, is an example of a custom monitoring record type
 that can be used to monitor response times of method executions. %
 Implementing \class{IMonitoringRecord.Factory}, \class{MyResponseTimeRecord} is %
 an immutable type, i.e., it includes only final fields. %
+
+\pagebreak 
 
 \ % pushing the method initFromArray in the listing to the following page
 
@@ -351,13 +354,18 @@ can be found in Appendix~\ref{appendix:usingJMS}. %
 \end{centering}
 \end{figure}
 
-\noindent Listing~\ref{listing:MyWriter} on page~\pageref{listing:MyWriter} shows %
+\noindent Listing~\ref{listing:MyWriter} %on page~\pageref{listing:MyWriter} 
+shows %
 a custom writer \class{MyPipeWriter} which uses a named pipe to %
 write the given records into a buffer located in the memory. The source code of %
 the class \class{MyPipe} is listed in Appendix~\ref{appendix:pipeListings}. %
 
+\enlargethispage{1cm}
+
+\
+
 \setJavaCodeListing
-\lstinputlisting[caption=MyPipeWriter.java, label=listing:MyWriter,float,firstline=23,firstnumber=23]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeWriter.java}
+\lstinputlisting[caption=MyPipeWriter.java, label=listing:MyWriter,firstline=23,firstnumber=23]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeWriter.java}
 
 \noindent The monitoring writer to be used is selected by the %
 \KiekerMonitoringPart{} configuration property (Section~\ref{chap:componentsMonitoring}) %
