@@ -22,7 +22,6 @@ Please refer to the Kieker User Guide for details on using Kieker.
   - Definition of configuration properties and default values for analysis 
     plugins and repositories now annotation-based
   - Removed legacy control servlet (JMX interface should be used instead)
-  - Kieker releases available via central Maven repository
 - Quality
   - Bug fixes
   - Added a number of (JUnit) tests
