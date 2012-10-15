@@ -168,7 +168,7 @@ function assert_files_exist_bin {
     assert_dir_exists "dist/"
     MAIN_JAR=$(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj )
     assert_file_exists_regular "META-INF/kieker.monitoring.properties"
-    assert_file_exists_regular "META-INF/kieker.monitoring.adaptiveMonitoring.default.conf"
+    assert_file_exists_regular "META-INF/kieker.monitoring.adaptiveMonitoring.conf"
     assert_file_exists_regular ${MAIN_JAR}
     assert_file_exists_regular "dist/kieker-"*"_aspectj.jar"
     assert_file_exists_regular "dist/kieker-"*"_emf.jar"
