@@ -151,7 +151,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 		}
 	}
 
-	public void setProbePatternList(final List<String> strPatternList) {
+	protected void setProbePatternList(final List<String> strPatternList, final boolean updateConfig) {
 		if (!this.enabled) {
 			LOG.warn("Adapative Monitoring is disabled!");
 			return;
@@ -181,10 +181,15 @@ public class ProbeController extends AbstractController implements IProbeControl
 					}
 				}
 			}
-			if (this.configFileUpdate) {
+			if (updateConfig && this.configFileUpdate) {
 				this.updatePatternFile();
 			}
 		}
+
+	}
+
+	public void setProbePatternList(final List<String> strPatternList) {
+		this.setProbePatternList(strPatternList, true);
 	}
 
 	public List<String> getProbePatternList() {
@@ -302,7 +307,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 						this.lastModifiedTimestamp = lastModified;
 						reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), ENCODING));
 						try {
-							ProbeController.this.setProbePatternList(this.readConfigFile(reader));
+							ProbeController.this.setProbePatternList(this.readConfigFile(reader), false);
 							return;
 						} catch (final IOException ex) {
 							LOG.warn("Error reading adaptive monitoring config file: " + this.configFilePathname, ex);
@@ -330,7 +335,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 					if (null != configFileAsResource) {
 						reader = new BufferedReader(new InputStreamReader(configFileAsResource.openStream(), ENCODING));
 						try {
-							ProbeController.this.setProbePatternList(this.readConfigFile(reader));
+							ProbeController.this.setProbePatternList(this.readConfigFile(reader), true);
 							return;
 						} catch (final IOException ex) {
 							LOG.warn("Error reading adaptive monitoring config file: " + this.configFilePathname, ex);
@@ -349,8 +354,8 @@ public class ProbeController extends AbstractController implements IProbeControl
 						}
 					}
 				}
+				LOG.warn("Adaptive monitoring config file not found: " + this.configFilePathname);
 			}
-			LOG.warn("Adaptive monitoring config file not found: " + this.configFilePathname);
 		}
 
 		public void run() {

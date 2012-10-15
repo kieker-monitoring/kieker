@@ -39,35 +39,38 @@ public class TestPatternParser extends AbstractKiekerTest {
 		// empty default constructor
 	}
 
+	// @Test
+	// // works : 810.000 tests 2.531.250.000
+	// public void whitespaceTest() throws InvalidPatternException {
+	// final String signature = "public static void default.package.Clazz.getVal(int, java.lang.String)";
+	//
+	// final PatternConstructor positivePattern = new PatternConstructor();
+	// positivePattern.addVisibilityVariant("public")
+	// .addStaticNonStaticVariant("static")
+	// .addNativeNonNativeVariant("non_native")
+	// .addreturnTypeVariant("void")
+	// .addfqClassNameVariant("default.package.Clazz")
+	// .addoperationNameVariant("getVal")
+	// .addparameterListVariant("int, java.lang.String")
+	// .addwhitespaceVariant(" ").addwhitespaceVariant("\t").addwhitespaceVariant("\f").addwhitespaceVariant("\r").addwhitespaceVariant("\n");
+	//
+	// final List<String> positivePatternList = positivePattern.getPattern();
+	// for (final String pattern : positivePatternList) {
+	// Assert.assertTrue("pattern: " + pattern + "; signature: " + signature, PatternParser.parseToPattern(pattern).matcher(signature).matches());
+	// }
+	// }
+
 	@Test
-	// works : 810.000 tests
-	public void whitespaceTest() throws InvalidPatternException {
-		final String signature = "public static void default.package.Clazz.getVal(int, java.lang.String)";
-
-		final PatternConstructor positivePattern = new PatternConstructor();
-		positivePattern.addVisibilityVariant("public")
-				.addStaticNonStaticVariant("static")
-				.addNativeNonNativeVariant("non_native")
-				.addreturnTypeVariant("void")
-				.addfqClassNameVariant("default.package.Clazz")
-				.addoperationNameVariant("getVal")
-				.addparameterListVariant("int, java.lang.String")
-				.addwhitespaceVariant(" ").addwhitespaceVariant("\t").addwhitespaceVariant("\f").addwhitespaceVariant("\r").addwhitespaceVariant("\n");
-
-		final List<String> positivePatternList = positivePattern.getPattern();
-		for (final String pattern : positivePatternList) {
-			Assert.assertTrue("pattern: " + pattern + "; signature: " + signature, PatternParser.parseToPattern(pattern).matcher(signature).matches());
-		}
-	}
-
-	@Test
-	// 55.296 tests
+	// 442.368 tests
 	public void parameterListTest() throws InvalidPatternException {
 		final String signature = "public static void default.package.Clazz.getVal(int, java.lang.String)";
 
 		final PatternConstructor positivePattern = new PatternConstructor();
 		positivePattern.addVisibilityVariant("").addVisibilityVariant("public")
+				.addAbstractNonAbstractVariant("").addAbstractNonAbstractVariant("non_abstract")
 				.addStaticNonStaticVariant("").addStaticNonStaticVariant("static")
+				.addFinalNonFinalVariant("").addFinalNonFinalVariant("non_final")
+				.addSynchronizedNonSynchronizedVariant("").addSynchronizedNonSynchronizedVariant("non_synchronized")
 				.addNativeNonNativeVariant("").addNativeNonNativeVariant("non_native")
 				.addreturnTypeVariant("*").addreturnTypeVariant("..*").addreturnTypeVariant("void").addreturnTypeVariant("v*d")
 				.addfqClassNameVariant("..*").addfqClassNameVariant("default.package.Clazz").addfqClassNameVariant("default..Clazz")
@@ -76,6 +79,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addparameterListVariant("..").addparameterListVariant("int, java.lang.String").addparameterListVariant("int,..").addparameterListVariant("*,..*")
 				.addparameterListVariant(".., int, java.lang.String").addparameterListVariant("int, java.lang.String, ..").addparameterListVariant(".., ..")
 				.addparameterListVariant("int,.., java.lang.String").addparameterListVariant("int,..,.., java.lang.String, ..")
+				.addthrowsListVariant("")
 				.addwhitespaceVariant(" ");
 
 		final List<String> positivePatternList = positivePattern.getPattern();
@@ -85,13 +89,17 @@ public class TestPatternParser extends AbstractKiekerTest {
 	}
 
 	@Test
-	// 104.448 tests
+	// 3.932.160 tests
 	public void signatureTest() throws InvalidPatternException {
-		final String signature = "public static void default.package.Clazz.getVal(int, java.lang.String)";
+		int i = 0;
+		final String signature = "public static void default.package.Clazz.getVal(int, java.lang.String) throws Exception";
 
 		final PatternConstructor positivePattern = new PatternConstructor();
 		positivePattern.addVisibilityVariant("").addVisibilityVariant("public")
+				.addAbstractNonAbstractVariant("").addAbstractNonAbstractVariant("non_abstract")
 				.addStaticNonStaticVariant("").addStaticNonStaticVariant("static")
+				.addFinalNonFinalVariant("").addFinalNonFinalVariant("non_final")
+				.addSynchronizedNonSynchronizedVariant("").addSynchronizedNonSynchronizedVariant("non_synchronized")
 				.addNativeNonNativeVariant("").addNativeNonNativeVariant("non_native")
 				.addreturnTypeVariant("*").addreturnTypeVariant("..*").addreturnTypeVariant("void").addreturnTypeVariant("v*d")
 				.addfqClassNameVariant("..*").addfqClassNameVariant("default.package.Clazz").addfqClassNameVariant("default..Clazz")
@@ -100,80 +108,263 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addparameterListVariant("..").addparameterListVariant("int, java.lang.String").addparameterListVariant("int,..").addparameterListVariant("*,..*")
 				.addparameterListVariant(".., int, java.lang.String").addparameterListVariant("int, java.lang.String, ..")
 				.addparameterListVariant("int,.., java.lang.String")
+				.addthrowsListVariant("Exception").addthrowsListVariant("..")
 				.addwhitespaceVariant(" ");
 
 		final List<String> positivePatternList = positivePattern.getPattern();
 		for (final String pattern : positivePatternList) {
-			Assert.assertTrue(PatternParser.parseToPattern(pattern).matcher(signature).matches());
+			i++;
+			Assert.assertTrue(i + ": " + pattern, PatternParser.parseToPattern(pattern).matcher(signature).matches());
 		}
 
 		final PatternConstructor wrongVisibilityPattern = new PatternConstructor();
 		wrongVisibilityPattern.addVisibilityVariant("private").addVisibilityVariant("protected").addVisibilityVariant("package")
+				.addAbstractNonAbstractVariant("").addAbstractNonAbstractVariant("non_abstract")
 				.addStaticNonStaticVariant("").addStaticNonStaticVariant("static")
+				.addFinalNonFinalVariant("").addFinalNonFinalVariant("non_final")
+				.addSynchronizedNonSynchronizedVariant("").addSynchronizedNonSynchronizedVariant("non_synchronized")
 				.addNativeNonNativeVariant("").addNativeNonNativeVariant("non_native")
 				.addreturnTypeVariant("*").addreturnTypeVariant("..*").addreturnTypeVariant("void").addreturnTypeVariant("v*d")
 				.addfqClassNameVariant("..*").addfqClassNameVariant("default.package.Clazz").addfqClassNameVariant("default..Clazz")
 				.addfqClassNameVariant("..package.C*z")
 				.addoperationNameVariant("*").addoperationNameVariant("getVal").addoperationNameVariant("get*")
 				.addparameterListVariant("..").addparameterListVariant("int, java.lang.String").addparameterListVariant("int,..").addparameterListVariant("..*,..*")
+				.addthrowsListVariant("Exception").addthrowsListVariant("..")
 				.addwhitespaceVariant(" ");
 		final List<String> wrongVisibilityPatternList = wrongVisibilityPattern.getPattern();
 		for (final String pattern : wrongVisibilityPatternList) {
-			Assert.assertFalse(PatternParser.parseToPattern(pattern).matcher(signature).matches());
+			i++;
+			Assert.assertFalse(i + ": " + pattern, PatternParser.parseToPattern(pattern).matcher(signature).matches());
+		}
+
+		final PatternConstructor wrongAbstractPattern = new PatternConstructor();
+		wrongAbstractPattern.addVisibilityVariant("").addVisibilityVariant("public")
+				.addAbstractNonAbstractVariant("abstract")
+				.addStaticNonStaticVariant("").addStaticNonStaticVariant("static")
+				.addFinalNonFinalVariant("").addFinalNonFinalVariant("non_final")
+				.addSynchronizedNonSynchronizedVariant("").addSynchronizedNonSynchronizedVariant("non_synchronized")
+				.addNativeNonNativeVariant("").addNativeNonNativeVariant("non_native")
+				.addreturnTypeVariant("*").addreturnTypeVariant("..*").addreturnTypeVariant("void").addreturnTypeVariant("v*d")
+				.addfqClassNameVariant("..*").addfqClassNameVariant("default.package.Clazz").addfqClassNameVariant("default..Clazz")
+				.addfqClassNameVariant("..package.C*z")
+				.addoperationNameVariant("*").addoperationNameVariant("getVal").addoperationNameVariant("get*")
+				.addparameterListVariant("..").addparameterListVariant("int, java.lang.String").addparameterListVariant("int,..").addparameterListVariant("..*,..*")
+				.addthrowsListVariant("Exception").addthrowsListVariant("..")
+				.addwhitespaceVariant(" ");
+		final List<String> wrongAbstractPatternList = wrongAbstractPattern.getPattern();
+		for (final String pattern : wrongAbstractPatternList) {
+			i++;
+			Assert.assertFalse(i + ": " + pattern, PatternParser.parseToPattern(pattern).matcher(signature).matches());
 		}
 
 		final PatternConstructor wrongStaticPattern = new PatternConstructor();
 		wrongStaticPattern.addVisibilityVariant("").addVisibilityVariant("public")
+				.addAbstractNonAbstractVariant("").addAbstractNonAbstractVariant("non_abstract")
 				.addStaticNonStaticVariant("non_static")
+				.addFinalNonFinalVariant("").addFinalNonFinalVariant("non_final")
+				.addSynchronizedNonSynchronizedVariant("").addSynchronizedNonSynchronizedVariant("non_synchronized")
 				.addNativeNonNativeVariant("").addNativeNonNativeVariant("non_native")
 				.addreturnTypeVariant("*").addreturnTypeVariant("..*").addreturnTypeVariant("void").addreturnTypeVariant("v*d")
 				.addfqClassNameVariant("..*").addfqClassNameVariant("default.package.Clazz").addfqClassNameVariant("default..Clazz")
 				.addfqClassNameVariant("..package.C*z")
 				.addoperationNameVariant("*").addoperationNameVariant("getVal").addoperationNameVariant("get*")
 				.addparameterListVariant("..").addparameterListVariant("int, java.lang.String").addparameterListVariant("int,..").addparameterListVariant("..*,..*")
+				.addthrowsListVariant("Exception").addthrowsListVariant("..")
 				.addwhitespaceVariant(" ");
 		final List<String> wrongStaticPatternList = wrongStaticPattern.getPattern();
 		for (final String pattern : wrongStaticPatternList) {
-			Assert.assertFalse(PatternParser.parseToPattern(pattern).matcher(signature).matches());
+			i++;
+			Assert.assertFalse(i + ": " + pattern, PatternParser.parseToPattern(pattern).matcher(signature).matches());
+		}
+
+		final PatternConstructor wrongFinalPattern = new PatternConstructor();
+		wrongFinalPattern.addVisibilityVariant("").addVisibilityVariant("public")
+				.addAbstractNonAbstractVariant("").addAbstractNonAbstractVariant("non_abstract")
+				.addStaticNonStaticVariant("").addStaticNonStaticVariant("static")
+				.addFinalNonFinalVariant("final")
+				.addSynchronizedNonSynchronizedVariant("").addSynchronizedNonSynchronizedVariant("non_synchronized")
+				.addNativeNonNativeVariant("").addNativeNonNativeVariant("non_native")
+				.addreturnTypeVariant("*").addreturnTypeVariant("..*").addreturnTypeVariant("void").addreturnTypeVariant("v*d")
+				.addfqClassNameVariant("..*").addfqClassNameVariant("default.package.Clazz").addfqClassNameVariant("default..Clazz")
+				.addfqClassNameVariant("..package.C*z")
+				.addoperationNameVariant("*").addoperationNameVariant("getVal").addoperationNameVariant("get*")
+				.addparameterListVariant("..").addparameterListVariant("int, java.lang.String").addparameterListVariant("int,..").addparameterListVariant("..*,..*")
+				.addthrowsListVariant("Exception").addthrowsListVariant("..")
+				.addwhitespaceVariant(" ");
+		final List<String> wrongFinalPatternList = wrongFinalPattern.getPattern();
+		for (final String pattern : wrongFinalPatternList) {
+			i++;
+			Assert.assertFalse(i + ": " + pattern, PatternParser.parseToPattern(pattern).matcher(signature).matches());
+		}
+
+		final PatternConstructor wrongSynchronizedPattern = new PatternConstructor();
+		wrongSynchronizedPattern.addVisibilityVariant("").addVisibilityVariant("public")
+				.addAbstractNonAbstractVariant("").addAbstractNonAbstractVariant("non_abstract")
+				.addStaticNonStaticVariant("").addStaticNonStaticVariant("static")
+				.addFinalNonFinalVariant("").addFinalNonFinalVariant("non_final")
+				.addSynchronizedNonSynchronizedVariant("synchronized")
+				.addNativeNonNativeVariant("").addNativeNonNativeVariant("non_native")
+				.addreturnTypeVariant("*").addreturnTypeVariant("..*").addreturnTypeVariant("void").addreturnTypeVariant("v*d")
+				.addfqClassNameVariant("..*").addfqClassNameVariant("default.package.Clazz").addfqClassNameVariant("default..Clazz")
+				.addfqClassNameVariant("..package.C*z")
+				.addoperationNameVariant("*").addoperationNameVariant("getVal").addoperationNameVariant("get*")
+				.addparameterListVariant("..").addparameterListVariant("int, java.lang.String").addparameterListVariant("int,..").addparameterListVariant("..*,..*")
+				.addthrowsListVariant("Exception").addthrowsListVariant("..")
+				.addwhitespaceVariant(" ");
+		final List<String> wrongSynchronizedPatternList = wrongSynchronizedPattern.getPattern();
+		for (final String pattern : wrongSynchronizedPatternList) {
+			i++;
+			Assert.assertFalse(i + ": " + pattern, PatternParser.parseToPattern(pattern).matcher(signature).matches());
 		}
 
 		final PatternConstructor wrongNativePattern = new PatternConstructor();
 		wrongNativePattern.addVisibilityVariant("").addVisibilityVariant("public")
+				.addAbstractNonAbstractVariant("").addAbstractNonAbstractVariant("non_abstract")
 				.addStaticNonStaticVariant("").addStaticNonStaticVariant("static")
+				.addFinalNonFinalVariant("").addFinalNonFinalVariant("non_final")
+				.addSynchronizedNonSynchronizedVariant("").addSynchronizedNonSynchronizedVariant("non_synchronized")
 				.addNativeNonNativeVariant("native")
 				.addreturnTypeVariant("*").addreturnTypeVariant("..*").addreturnTypeVariant("void").addreturnTypeVariant("v*d")
 				.addfqClassNameVariant("..*").addfqClassNameVariant("default.package.Clazz").addfqClassNameVariant("default..Clazz")
 				.addfqClassNameVariant("..package.C*z")
 				.addoperationNameVariant("*").addoperationNameVariant("getVal").addoperationNameVariant("get*")
 				.addparameterListVariant("..").addparameterListVariant("int, java.lang.String").addparameterListVariant("int,..").addparameterListVariant("..*,..*")
+				.addthrowsListVariant("Exception").addthrowsListVariant("..")
 				.addwhitespaceVariant(" ");
 		final List<String> wrongNativePatternList = wrongNativePattern.getPattern();
 		for (final String pattern : wrongNativePatternList) {
-			Assert.assertFalse(PatternParser.parseToPattern(pattern).matcher(signature).matches());
+			i++;
+			Assert.assertFalse(i + ": " + pattern, PatternParser.parseToPattern(pattern).matcher(signature).matches());
 		}
+
+		final PatternConstructor wrongRetTypePattern = new PatternConstructor();
+		wrongRetTypePattern.addVisibilityVariant("").addVisibilityVariant("public")
+				.addAbstractNonAbstractVariant("").addAbstractNonAbstractVariant("non_abstract")
+				.addStaticNonStaticVariant("").addStaticNonStaticVariant("static")
+				.addFinalNonFinalVariant("").addFinalNonFinalVariant("non_final")
+				.addSynchronizedNonSynchronizedVariant("").addSynchronizedNonSynchronizedVariant("non_synchronized")
+				.addNativeNonNativeVariant("").addNativeNonNativeVariant("non_native")
+				.addreturnTypeVariant("new").addreturnTypeVariant("int")
+				.addfqClassNameVariant("..*").addfqClassNameVariant("default.package.Clazz").addfqClassNameVariant("default..Clazz")
+				.addfqClassNameVariant("..package.C*z")
+				.addoperationNameVariant("*").addoperationNameVariant("getVal").addoperationNameVariant("get*")
+				.addparameterListVariant("..").addparameterListVariant("int, java.lang.String").addparameterListVariant("int,..").addparameterListVariant("..*,..*")
+				.addthrowsListVariant("Exception").addthrowsListVariant("..")
+				.addwhitespaceVariant(" ");
+		final List<String> wrongRetTypePatternList = wrongRetTypePattern.getPattern();
+		for (final String pattern : wrongRetTypePatternList) {
+			i++;
+			Assert.assertFalse(i + ": " + pattern, PatternParser.parseToPattern(pattern).matcher(signature).matches());
+		}
+
+		final PatternConstructor wrongClassNamePattern = new PatternConstructor();
+		wrongClassNamePattern.addVisibilityVariant("").addVisibilityVariant("public")
+				.addAbstractNonAbstractVariant("").addAbstractNonAbstractVariant("non_abstract")
+				.addStaticNonStaticVariant("").addStaticNonStaticVariant("static")
+				.addFinalNonFinalVariant("").addFinalNonFinalVariant("non_final")
+				.addSynchronizedNonSynchronizedVariant("").addSynchronizedNonSynchronizedVariant("non_synchronized")
+				.addNativeNonNativeVariant("").addNativeNonNativeVariant("non_native")
+				.addreturnTypeVariant("*").addreturnTypeVariant("..*").addreturnTypeVariant("void").addreturnTypeVariant("v*d")
+				.addfqClassNameVariant("Clazz").addfqClassNameVariant("package.Clazz").addfqClassNameVariant("default.Clazz")
+				.addoperationNameVariant("*").addoperationNameVariant("getVal").addoperationNameVariant("get*")
+				.addparameterListVariant("..").addparameterListVariant("int, java.lang.String").addparameterListVariant("int,..").addparameterListVariant("..*,..*")
+				.addthrowsListVariant("Exception").addthrowsListVariant("..")
+				.addwhitespaceVariant(" ");
+		final List<String> wrongClassNamePatternList = wrongClassNamePattern.getPattern();
+		for (final String pattern : wrongClassNamePatternList) {
+			i++;
+			Assert.assertFalse(i + ": " + pattern, PatternParser.parseToPattern(pattern).matcher(signature).matches());
+		}
+
+		final PatternConstructor wrongOperationNamePattern = new PatternConstructor();
+		wrongOperationNamePattern.addVisibilityVariant("").addVisibilityVariant("public")
+				.addAbstractNonAbstractVariant("").addAbstractNonAbstractVariant("non_abstract")
+				.addStaticNonStaticVariant("").addStaticNonStaticVariant("static")
+				.addFinalNonFinalVariant("").addFinalNonFinalVariant("non_final")
+				.addSynchronizedNonSynchronizedVariant("").addSynchronizedNonSynchronizedVariant("non_synchronized")
+				.addNativeNonNativeVariant("").addNativeNonNativeVariant("non_native")
+				.addreturnTypeVariant("*").addreturnTypeVariant("..*").addreturnTypeVariant("void").addreturnTypeVariant("v*d")
+				.addfqClassNameVariant("..*").addfqClassNameVariant("default.package.Clazz").addfqClassNameVariant("default..Clazz")
+				.addfqClassNameVariant("..package.C*z")
+				.addoperationNameVariant("setVal").addoperationNameVariant("get").addoperationNameVariant("getValue")
+				.addparameterListVariant("..").addparameterListVariant("int, java.lang.String").addparameterListVariant("int,..").addparameterListVariant("..*,..*")
+				.addthrowsListVariant("Exception").addthrowsListVariant("..")
+				.addwhitespaceVariant(" ");
+		final List<String> wrongOperationNamePatternList = wrongOperationNamePattern.getPattern();
+		for (final String pattern : wrongOperationNamePatternList) {
+			i++;
+			Assert.assertFalse(i + ": " + pattern, PatternParser.parseToPattern(pattern).matcher(signature).matches());
+		}
+
+		final PatternConstructor wrongParamListPattern = new PatternConstructor();
+		wrongParamListPattern.addVisibilityVariant("").addVisibilityVariant("public")
+				.addAbstractNonAbstractVariant("").addAbstractNonAbstractVariant("non_abstract")
+				.addStaticNonStaticVariant("").addStaticNonStaticVariant("static")
+				.addFinalNonFinalVariant("").addFinalNonFinalVariant("non_final")
+				.addSynchronizedNonSynchronizedVariant("").addSynchronizedNonSynchronizedVariant("non_synchronized")
+				.addNativeNonNativeVariant("").addNativeNonNativeVariant("non_native")
+				.addreturnTypeVariant("*").addreturnTypeVariant("..*").addreturnTypeVariant("void").addreturnTypeVariant("v*d")
+				.addfqClassNameVariant("..*").addfqClassNameVariant("default.package.Clazz").addfqClassNameVariant("default..Clazz")
+				.addfqClassNameVariant("..package.C*z")
+				.addoperationNameVariant("*").addoperationNameVariant("getVal").addoperationNameVariant("get*")
+				.addparameterListVariant("").addparameterListVariant("int").addparameterListVariant("int,String").addparameterListVariant("java.lang.String")
+				.addthrowsListVariant("Exception").addthrowsListVariant("..")
+				.addwhitespaceVariant(" ");
+		final List<String> wrongParamListPatternList = wrongParamListPattern.getPattern();
+		for (final String pattern : wrongParamListPatternList) {
+			i++;
+			Assert.assertFalse(i + ": " + pattern, PatternParser.parseToPattern(pattern).matcher(signature).matches());
+		}
+
+		final PatternConstructor wrongThrowsListPattern = new PatternConstructor();
+		wrongThrowsListPattern.addVisibilityVariant("").addVisibilityVariant("public")
+				.addAbstractNonAbstractVariant("").addAbstractNonAbstractVariant("non_abstract")
+				.addStaticNonStaticVariant("").addStaticNonStaticVariant("static")
+				.addFinalNonFinalVariant("").addFinalNonFinalVariant("non_final")
+				.addSynchronizedNonSynchronizedVariant("").addSynchronizedNonSynchronizedVariant("non_synchronized")
+				.addNativeNonNativeVariant("").addNativeNonNativeVariant("non_native")
+				.addreturnTypeVariant("*").addreturnTypeVariant("..*").addreturnTypeVariant("void").addreturnTypeVariant("v*d")
+				.addfqClassNameVariant("..*").addfqClassNameVariant("default.package.Clazz").addfqClassNameVariant("default..Clazz")
+				.addfqClassNameVariant("..package.C*z")
+				.addoperationNameVariant("*").addoperationNameVariant("getVal").addoperationNameVariant("get*")
+				.addparameterListVariant("..").addparameterListVariant("int, java.lang.String").addparameterListVariant("int,..").addparameterListVariant("..*,..*")
+				.addthrowsListVariant("").addthrowsListVariant("SpecialException")
+				.addwhitespaceVariant(" ");
+		final List<String> wrongThrowsListPatternList = wrongThrowsListPattern.getPattern();
+		for (final String pattern : wrongThrowsListPatternList) {
+			i++;
+			Assert.assertFalse(i + ": " + pattern, PatternParser.parseToPattern(pattern).matcher(signature).matches());
+		}
+		System.out.println(i);
 	}
 
 	@Test
 	// 160 tests
 	public void patternTest() throws InvalidPatternException {
-		final String pattern = "public void ..Clazz.get*(int, ..)";
+		int i = 0;
+		final String pattern = "public void ..Clazz.get*(int, ..) throws ..";
 		final Matcher matcher = PatternParser.parseToPattern(pattern).matcher("");
 
 		final SignatureConstructor positiveSignature = new SignatureConstructor();
 		positiveSignature.addVisibilityVariant("public")
+				.addAbstractNonAbstractVariant("").addAbstractNonAbstractVariant("abstract")
 				.addStaticNonStaticVariant("").addStaticNonStaticVariant("static")
+				.addFinalNonFinalVariant("").addFinalNonFinalVariant("final")
+				.addSynchronizedNonSynchronizedVariant("").addSynchronizedNonSynchronizedVariant("synchronized")
 				.addNativeNonNativeVariant("").addNativeNonNativeVariant("native")
 				.addreturnTypeVariant("void")
 				.addfqClassNameVariant("default.package.Clazz")
 				.addoperationNameVariant("getVal").addoperationNameVariant("get")
-				.addparameterListVariant("int, java.lang.String").addparameterListVariant("int");
+				.addparameterListVariant("int, java.lang.String").addparameterListVariant("int")
+				.addthrowsListVariant("").addthrowsListVariant("Exception").addthrowsListVariant("OtherException");
 		final List<String> positiveSignatureList = positiveSignature.getSignatures();
 		for (final String signature : positiveSignatureList) {
-			Assert.assertTrue(matcher.reset(signature).matches());
+			i++;
+			Assert.assertTrue(i + ": " + signature, matcher.reset(signature).matches());
 		}
 
 		final SignatureConstructor wrongVisibilitySignature = new SignatureConstructor();
-		wrongVisibilitySignature.addVisibilityVariant("private").addVisibilityVariant("protected").addVisibilityVariant("")
+		wrongVisibilitySignature.addVisibilityVariant("private").addVisibilityVariant("protected").addVisibilityVariant("").addVisibilityVariant("..")
 				.addStaticNonStaticVariant("").addStaticNonStaticVariant("static")
 				.addNativeNonNativeVariant("").addNativeNonNativeVariant("native")
 				.addreturnTypeVariant("void")
@@ -182,6 +373,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addparameterListVariant("int,int").addparameterListVariant("int, java.lang.String");
 		final List<String> wrongVisibilitySignatureList = wrongVisibilitySignature.getSignatures();
 		for (final String signature : wrongVisibilitySignatureList) {
+			i++;
 			Assert.assertFalse(matcher.reset(signature).matches());
 		}
 
@@ -195,6 +387,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addparameterListVariant("int,int").addparameterListVariant("int, java.lang.String");
 		final List<String> wrongRetTypeSignatureList = wrongRetTypeSignature.getSignatures();
 		for (final String signature : wrongRetTypeSignatureList) {
+			i++;
 			Assert.assertFalse(matcher.reset(signature).matches());
 		}
 
@@ -208,6 +401,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addparameterListVariant("int,int").addparameterListVariant("int, java.lang.String");
 		final List<String> wrongFQClassNameSignatureList = wrongFQClassNameSignature.getSignatures();
 		for (final String signature : wrongFQClassNameSignatureList) {
+			i++;
 			Assert.assertFalse(matcher.reset(signature).matches());
 		}
 
@@ -221,6 +415,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addparameterListVariant("int,int").addparameterListVariant("int, java.lang.String");
 		final List<String> wrongOperationNameSignatureList = wrongOperationNameSignature.getSignatures();
 		for (final String signature : wrongOperationNameSignatureList) {
+			i++;
 			Assert.assertFalse(matcher.reset(signature).matches());
 		}
 
@@ -234,8 +429,10 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addparameterListVariant("java.lang.String, int").addparameterListVariant("");
 		final List<String> wrongParamListSignatureList = wrongParamListSignature.getSignatures();
 		for (final String signature : wrongParamListSignatureList) {
+			i++;
 			Assert.assertFalse(matcher.reset(signature).matches());
 		}
+		System.out.println(i);
 	}
 
 	private void checkCombination(final String patternStr, final String visibility, final String staticNonStatic, final String nativeNonNative,

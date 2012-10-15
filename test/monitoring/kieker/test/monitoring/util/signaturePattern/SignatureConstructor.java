@@ -25,20 +25,28 @@ import java.util.List;
 public final class SignatureConstructor {
 
 	private static final String DEFAULT_VISIBILITY = "";
+	private static final String DEFAULT_ABSTRACT_NON_ABSTRACT = "";
 	private static final String DEFAULT_STATIC_NON_STATIC = "";
+	private static final String DEFAULT_FINAL_NON_FINAL = "";
+	private static final String DEFAULT_SYNCHRONIZED_NON_SYNCHRONIZED = "";
 	private static final String DEFAULT_NATIVE_NON_NATIVE = "";
 	private static final String DEFAULT_RETRUN_TYPE = "void";
 	private static final String DEFAULT_FQ_CLASSNAME = "Clazz";
 	private static final String DEFAULT_OPERATIONNAME = "get";
 	private static final String DEFAULT_PARAMETERLIST = "";
+	private static final String DEFAULT_THROWS_LIST = "";
 
 	private final List<String> visibilityList = new ArrayList<String>();
+	private final List<String> abstractNonAbstractList = new ArrayList<String>();
 	private final List<String> staticNonStaticList = new ArrayList<String>();
+	private final List<String> finalNonFinalList = new ArrayList<String>();
+	private final List<String> synchronizedNonSynchronizedList = new ArrayList<String>();
 	private final List<String> nativeNonNativeList = new ArrayList<String>();
 	private final List<String> returnTypeList = new ArrayList<String>();
 	private final List<String> fqClassNameList = new ArrayList<String>();
 	private final List<String> operationNameList = new ArrayList<String>();
 	private final List<String> parameterListList = new ArrayList<String>();
+	private final List<String> throwsListList = new ArrayList<String>();
 
 	public SignatureConstructor() {
 		// empty default constructor
@@ -48,8 +56,17 @@ public final class SignatureConstructor {
 		if (this.visibilityList.isEmpty()) {
 			this.visibilityList.add(SignatureConstructor.DEFAULT_VISIBILITY);
 		}
+		if (this.abstractNonAbstractList.isEmpty()) {
+			this.abstractNonAbstractList.add(SignatureConstructor.DEFAULT_ABSTRACT_NON_ABSTRACT);
+		}
 		if (this.staticNonStaticList.isEmpty()) {
 			this.staticNonStaticList.add(SignatureConstructor.DEFAULT_STATIC_NON_STATIC);
+		}
+		if (this.finalNonFinalList.isEmpty()) {
+			this.finalNonFinalList.add(SignatureConstructor.DEFAULT_FINAL_NON_FINAL);
+		}
+		if (this.synchronizedNonSynchronizedList.isEmpty()) {
+			this.synchronizedNonSynchronizedList.add(SignatureConstructor.DEFAULT_SYNCHRONIZED_NON_SYNCHRONIZED);
 		}
 		if (this.nativeNonNativeList.isEmpty()) {
 			this.nativeNonNativeList.add(SignatureConstructor.DEFAULT_NATIVE_NON_NATIVE);
@@ -66,29 +83,52 @@ public final class SignatureConstructor {
 		if (this.parameterListList.isEmpty()) {
 			this.parameterListList.add(SignatureConstructor.DEFAULT_PARAMETERLIST);
 		}
+		if (this.throwsListList.isEmpty()) {
+			this.throwsListList.add(SignatureConstructor.DEFAULT_THROWS_LIST);
+		}
 		final List<String> result = new ArrayList<String>();
 		for (final String visibility : this.visibilityList) { // NOCS
-			for (final String staticNonStatic : this.staticNonStaticList) { // NOCS
-				for (final String nativeNonNative : this.nativeNonNativeList) { // NOCS
-					for (final String returnType : this.returnTypeList) { // NOCS
-						for (final String fqClassName : this.fqClassNameList) { // NOCS
-							for (final String operationName : this.operationNameList) { // NOCS
-								for (final String paramList : this.parameterListList) { // NOCS
-									final StringBuilder sb = new StringBuilder();
-									if (visibility.length() > 0) {
-										sb.append(visibility).append(' ');
+			for (final String abstractNonAbstract : this.abstractNonAbstractList) {
+				for (final String staticNonStatic : this.staticNonStaticList) { // NOCS
+					for (final String finalNonFinal : this.finalNonFinalList) {
+						for (final String synchronizedNonSynchronized : this.synchronizedNonSynchronizedList) {
+							for (final String nativeNonNative : this.nativeNonNativeList) { // NOCS
+								for (final String returnType : this.returnTypeList) { // NOCS
+									for (final String fqClassName : this.fqClassNameList) { // NOCS
+										for (final String operationName : this.operationNameList) { // NOCS
+											for (final String paramList : this.parameterListList) { // NOCS
+												for (final String throwsList : this.throwsListList) {
+													final StringBuilder sb = new StringBuilder();
+													if (visibility.length() > 0) {
+														sb.append(visibility).append(' ');
+													}
+													if (abstractNonAbstract.length() > 0) {
+														sb.append(abstractNonAbstract).append(' ');
+													}
+													if (staticNonStatic.length() > 0) {
+														sb.append(staticNonStatic).append(' ');
+													}
+													if (finalNonFinal.length() > 0) {
+														sb.append(finalNonFinal).append(' ');
+													}
+													if (synchronizedNonSynchronized.length() > 0) {
+														sb.append(synchronizedNonSynchronized).append(' ');
+													}
+													if (nativeNonNative.length() > 0) {
+														sb.append(nativeNonNative).append(' ');
+													}
+													if (returnType.length() > 0) {
+														sb.append(returnType).append(' ');
+													}
+													sb.append(fqClassName).append('.').append(operationName).append('(').append(paramList).append(')');
+													if (throwsList.length() > 0) {
+														sb.append(" throws ").append(throwsList);
+													}
+													result.add(sb.toString());
+												}
+											}
+										}
 									}
-									if (staticNonStatic.length() > 0) {
-										sb.append(staticNonStatic).append(' ');
-									}
-									if (nativeNonNative.length() > 0) {
-										sb.append(nativeNonNative).append(' ');
-									}
-									if (returnType.length() > 0) {
-										sb.append(returnType).append(' ');
-									}
-									sb.append(fqClassName).append('.').append(operationName).append('(').append(paramList).append(')');
-									result.add(sb.toString());
 								}
 							}
 						}
@@ -104,8 +144,23 @@ public final class SignatureConstructor {
 		return this;
 	}
 
+	public SignatureConstructor addAbstractNonAbstractVariant(final String abstractNonAbstract) {
+		this.abstractNonAbstractList.add(abstractNonAbstract);
+		return this;
+	}
+
 	public SignatureConstructor addStaticNonStaticVariant(final String staticNonStatic) {
 		this.staticNonStaticList.add(staticNonStatic);
+		return this;
+	}
+
+	public SignatureConstructor addFinalNonFinalVariant(final String finalNonFinal) {
+		this.finalNonFinalList.add(finalNonFinal);
+		return this;
+	}
+
+	public SignatureConstructor addSynchronizedNonSynchronizedVariant(final String synchronizedNonSynchronized) {
+		this.synchronizedNonSynchronizedList.add(synchronizedNonSynchronized);
 		return this;
 	}
 
@@ -131,6 +186,11 @@ public final class SignatureConstructor {
 
 	public SignatureConstructor addparameterListVariant(final String parameterList) {
 		this.parameterListList.add(parameterList);
+		return this;
+	}
+
+	public SignatureConstructor addthrowsListVariant(final String throwsList) {
+		this.throwsListList.add(throwsList);
 		return this;
 	}
 

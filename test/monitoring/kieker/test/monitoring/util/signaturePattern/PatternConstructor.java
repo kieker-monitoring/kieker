@@ -25,16 +25,23 @@ import java.util.List;
 public final class PatternConstructor {
 
 	private static final String DEFAULT_VISIBILITY = "";
+	private static final String DEFAULT_ABSTRACT_NON_ABSTRACT = "";
 	private static final String DEFAULT_STATIC_NON_STATIC = "";
+	private static final String DEFAULT_FINAL_NON_FINAL = "";
+	private static final String DEFAULT_SYNCHRONIZED_NON_SYNCHRONIZED = "";
 	private static final String DEFAULT_NATIVE_NON_NATIVE = "";
 	private static final String DEFAULT_RETRUN_TYPE = "..*";
 	private static final String DEFAULT_FQ_CLASSNAME = "..*";
 	private static final String DEFAULT_OPERATIONNAME = "*";
 	private static final String DEFAULT_PARAMETERLIST = "..";
+	private static final String DEFAULT_THROWS_LIST = "";
 	private static final String DEFAULT_WHITESPACE = " ";
 
 	private final List<String> visibilityList = new ArrayList<String>();
+	private final List<String> abstractNonAbstractList = new ArrayList<String>();
 	private final List<String> staticNonStaticList = new ArrayList<String>();
+	private final List<String> finalNonFinalList = new ArrayList<String>();
+	private final List<String> synchronizedNonSynchronizedList = new ArrayList<String>();
 	private final List<String> nativeNonNativeList = new ArrayList<String>();
 	private final List<String> returnTypeList = new ArrayList<String>();
 	private final List<String> fqClassNameList = new ArrayList<String>();
@@ -42,6 +49,7 @@ public final class PatternConstructor {
 	private final List<String> parameterListList = new ArrayList<String>();
 	private final List<String> whiteSpaceList = new ArrayList<String>();
 	private final List<String> optionalWhitespaceList = new ArrayList<String>();
+	private final List<String> throwsListList = new ArrayList<String>();
 
 	public PatternConstructor() {
 		// empty default constructor
@@ -51,8 +59,17 @@ public final class PatternConstructor {
 		if (this.visibilityList.isEmpty()) {
 			this.visibilityList.add(PatternConstructor.DEFAULT_VISIBILITY);
 		}
+		if (this.abstractNonAbstractList.isEmpty()) {
+			this.abstractNonAbstractList.add(PatternConstructor.DEFAULT_ABSTRACT_NON_ABSTRACT);
+		}
 		if (this.staticNonStaticList.isEmpty()) {
 			this.staticNonStaticList.add(PatternConstructor.DEFAULT_STATIC_NON_STATIC);
+		}
+		if (this.finalNonFinalList.isEmpty()) {
+			this.finalNonFinalList.add(PatternConstructor.DEFAULT_FINAL_NON_FINAL);
+		}
+		if (this.synchronizedNonSynchronizedList.isEmpty()) {
+			this.synchronizedNonSynchronizedList.add(PatternConstructor.DEFAULT_SYNCHRONIZED_NON_SYNCHRONIZED);
 		}
 		if (this.nativeNonNativeList.isEmpty()) {
 			this.nativeNonNativeList.add(PatternConstructor.DEFAULT_NATIVE_NON_NATIVE);
@@ -69,6 +86,9 @@ public final class PatternConstructor {
 		if (this.parameterListList.isEmpty()) {
 			this.parameterListList.add(PatternConstructor.DEFAULT_PARAMETERLIST);
 		}
+		if (this.throwsListList.isEmpty()) {
+			this.throwsListList.add(PatternConstructor.DEFAULT_THROWS_LIST);
+		}
 		if (this.whiteSpaceList.isEmpty()) {
 			this.whiteSpaceList.add(PatternConstructor.DEFAULT_WHITESPACE);
 		}
@@ -77,46 +97,82 @@ public final class PatternConstructor {
 		final List<String> result = new ArrayList<String>();
 
 		for (final String visibility : this.visibilityList) {
-			for (final String staticNonStatic : this.staticNonStaticList) { // NOCS
-				for (final String nativeNonNative : this.nativeNonNativeList) { // NOCS
-					for (final String returnType : this.returnTypeList) { // NOCS
-						for (final String fqClassName : this.fqClassNameList) { // NOCS
-							for (final String operationName : this.operationNameList) { // NOCS
-								for (final String paramList : this.parameterListList) { // NOCS
-									for (final String white1 : this.whiteSpaceList) { // NOCS
-										for (final String white2 : this.whiteSpaceList) { // NOCS
-											for (final String white3 : this.whiteSpaceList) { // NOCS
-												for (final String white4 : this.whiteSpaceList) { // NOCS
-													for (final String opWhite1 : this.optionalWhitespaceList) { // NOCS
-														for (final String opWhite2 : this.optionalWhitespaceList) { // NOCS
-															for (final String opWhite3 : this.optionalWhitespaceList) { // NOCS
-																for (final String opWhite4 : this.optionalWhitespaceList) { // NOCS
-																	final StringBuilder sb = new StringBuilder();
-																	sb.append(opWhite1);
-																	if (visibility.length() > 0) {
-																		sb.append(visibility)
-																				.append(white1);
+			for (final String abstractNonAbstract : this.abstractNonAbstractList) {
+				for (final String staticNonStatic : this.staticNonStaticList) { // NOCS
+					for (final String finalNonFinal : this.finalNonFinalList) {
+						for (final String synchronizedNonSynchronized : this.synchronizedNonSynchronizedList) {
+							for (final String nativeNonNative : this.nativeNonNativeList) { // NOCS
+								for (final String returnType : this.returnTypeList) { // NOCS
+									for (final String fqClassName : this.fqClassNameList) { // NOCS
+										for (final String operationName : this.operationNameList) { // NOCS
+											for (final String paramList : this.parameterListList) { // NOCS
+												for (final String throwsList : this.throwsListList) {
+													for (final String white1 : this.whiteSpaceList) { // NOCS
+														for (final String white2 : this.whiteSpaceList) { // NOCS
+															for (final String white3 : this.whiteSpaceList) { // NOCS
+																for (final String white4 : this.whiteSpaceList) { // NOCS
+																	for (final String white5 : this.whiteSpaceList) {
+																		for (final String white6 : this.whiteSpaceList) {
+																			for (final String white7 : this.whiteSpaceList) {
+																				for (final String white8 : this.whiteSpaceList) {
+																					for (final String white9 : this.whiteSpaceList) {
+																						for (final String opWhite1 : this.optionalWhitespaceList) { // NOCS
+																							for (final String opWhite2 : this.optionalWhitespaceList) { // NOCS
+																								for (final String opWhite3 : this.optionalWhitespaceList) { // NOCS
+																									for (final String opWhite4 : this.optionalWhitespaceList) { // NOCS
+																										final StringBuilder sb = new StringBuilder();
+																										sb.append(opWhite1);
+																										if (visibility.length() > 0) {
+																											sb.append(visibility)
+																													.append(white1);
+																										}
+																										if (abstractNonAbstract.length() > 0) {
+																											sb.append(abstractNonAbstract)
+																													.append(white2);
+																										}
+																										if (staticNonStatic.length() > 0) {
+																											sb.append(staticNonStatic)
+																													.append(white3);
+																										}
+																										if (finalNonFinal.length() > 0) {
+																											sb.append(finalNonFinal)
+																													.append(white4);
+																										}
+																										if (synchronizedNonSynchronized.length() > 0) {
+																											sb.append(synchronizedNonSynchronized)
+																													.append(white5);
+																										}
+																										if (nativeNonNative.length() > 0) {
+																											sb.append(nativeNonNative)
+																													.append(white6);
+																										}
+																										sb.append(returnType)
+																												.append(white7)
+																												.append(fqClassName)
+																												.append('.')
+																												.append(operationName)
+																												.append(opWhite2)
+																												.append('(')
+																												.append(opWhite3)
+																												.append(paramList)
+																												.append(opWhite4)
+																												.append(')');
+																										if (throwsList.length() > 0) {
+																											sb.append(white8)
+																													.append("throws")
+																													.append(white9)
+																													.append(throwsList);
+																										}
+																										result.add(sb.toString());
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
 																	}
-																	if (staticNonStatic.length() > 0) {
-																		sb.append(staticNonStatic)
-																				.append(white2);
-																	}
-																	if (nativeNonNative.length() > 0) {
-																		sb.append(nativeNonNative)
-																				.append(white3);
-																	}
-																	sb.append(returnType)
-																			.append(white4)
-																			.append(fqClassName)
-																			.append('.')
-																			.append(operationName)
-																			.append(opWhite2)
-																			.append('(')
-																			.append(opWhite3)
-																			.append(paramList)
-																			.append(opWhite4)
-																			.append(')');
-																	result.add(sb.toString());
 																}
 															}
 														}
@@ -140,8 +196,23 @@ public final class PatternConstructor {
 		return this;
 	}
 
+	public PatternConstructor addAbstractNonAbstractVariant(final String abstractNonAbstract) {
+		this.abstractNonAbstractList.add(abstractNonAbstract);
+		return this;
+	}
+
 	public PatternConstructor addStaticNonStaticVariant(final String staticNonStatic) {
 		this.staticNonStaticList.add(staticNonStatic);
+		return this;
+	}
+
+	public PatternConstructor addFinalNonFinalVariant(final String finalNonFinal) {
+		this.finalNonFinalList.add(finalNonFinal);
+		return this;
+	}
+
+	public PatternConstructor addSynchronizedNonSynchronizedVariant(final String synchronizedNonSynchronized) {
+		this.synchronizedNonSynchronizedList.add(synchronizedNonSynchronized);
 		return this;
 	}
 
@@ -167,6 +238,11 @@ public final class PatternConstructor {
 
 	public PatternConstructor addparameterListVariant(final String parameterList) {
 		this.parameterListList.add(parameterList);
+		return this;
+	}
+
+	public PatternConstructor addthrowsListVariant(final String throwsList) {
+		this.throwsListList.add(throwsList);
 		return this;
 	}
 
