@@ -318,6 +318,8 @@
 			<include name="${src.dir}/**/META-INF/*" />
 			<include name="${src.gen}/**/*.java" />
 			<include name="${src.model.dir}/*.ecore" />
+			<include name="${src.model.dir}/*.ecorediag" />
+			<include name="${src.model.dir}/*.genmodel" />
 			<include name="${test.dir}/**/*.java" />
 			<include name="${test.dir}/**/META-INF/*" />
 			<include name="${test.dir}/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml" />
@@ -383,6 +385,9 @@
 			<include name="${dist.dir}/*.war" />
 
 			<include name="${lib.dir}/*" />
+			<exclude name="${lib.dir}/checkstyle-*" />
+			<exclude name="${lib.dir}/findbugs-*" />
+			<exclude name="${lib.dir}/pmd-*" />
 			<include name="${lib.sigar-native.dir}/*" />
 			<include name="${history.file}" />
 			<include name="${license.file}" />

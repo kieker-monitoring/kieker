@@ -94,6 +94,15 @@ function assert_file_NOT_exists {
     echo OK
 }
 
+function assert_dir_NOT_exists {
+    echo -n "Asserting '$1' is a directory ..."
+    if test -d "$1"; then
+	echo "Directory '$1' should not exist"
+	exit 1
+    fi
+    echo OK
+}
+
 function assert_dir_exists {
     echo -n "Asserting '$1' is a directory ..."
     if ! test -d "$1"; then
@@ -118,6 +127,9 @@ function assert_files_exist_common {
     assert_dir_exists "doc/"
     assert_dir_exists "examples/"
     assert_dir_exists "lib/"
+    assert_dir_NOT_exists "lib/checkstyle-*"
+    assert_dir_NOT_exists "lib/findbugs-*"
+    assert_dir_NOT_exists "lib/pmd-*"
     assert_file_exists_regular "lib/sigar-native-libs/libsigar-x86-linux.so"
     assert_file_exists_regular "lib/sigar-native-libs/libsigar-amd64-linux.so"
     assert_file_exists_regular "lib/sigar-native-libs/sigar-amd64-winnt.dll"
@@ -144,11 +156,13 @@ function assert_files_exist_common {
 function assert_files_exist_src {
     assert_files_exist_common
     assert_dir_exists "model/"
+    assert_file_exists_regular "AnalysisMetaModel.ecore"
+    assert_file_exists_regular "AnalysisMetaModel.ecorediag"
+    assert_file_exists_regular "AnalysisMetaModel.genmodel"
     assert_dir_exists "src/"
     assert_dir_exists "src-gen/"
     assert_dir_exists "test/"
     assert_file_exists_regular "src/monitoring/META-INF/kieker.monitoring.default.properties"
-    assert_file_exists_regular ""
     assert_file_NOT_exists "dist/"
     assert_file_NOT_exists "META-INF/"
     assert_file_NOT_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/classes/META-INF/kieker.monitoring.properties"
