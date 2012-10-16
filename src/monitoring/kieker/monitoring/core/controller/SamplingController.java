@@ -18,8 +18,10 @@ package kieker.monitoring.core.controller;
 
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -41,7 +43,7 @@ public final class SamplingController extends AbstractController implements ISam
 		super(configuration);
 		final int threadPoolSize = configuration.getIntProperty(ConfigurationFactory.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE);
 		if (threadPoolSize > 0) {
-			this.periodicSensorsPoolExecutor = new ScheduledThreadPoolExecutor(threadPoolSize, new RejectedExecutionHandler());
+			this.periodicSensorsPoolExecutor = new ScheduledThreadPoolExecutor(threadPoolSize, new DaemonThreadFactory(), new RejectedExecutionHandler());
 			// this.periodicSensorsPoolExecutor.setMaximumPoolSize(threadPoolSize); // not used in this class
 			this.periodicSensorsPoolExecutor.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
 			this.periodicSensorsPoolExecutor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
@@ -113,6 +115,7 @@ public final class SamplingController extends AbstractController implements ISam
 	 * @author Jan Waller
 	 */
 	private static final class RejectedExecutionHandler implements java.util.concurrent.RejectedExecutionHandler {
+		private static final Log LOG = LogFactory.getLog(RejectedExecutionHandler.class);
 
 		public RejectedExecutionHandler() {
 			// empty default constructor
@@ -120,6 +123,35 @@ public final class SamplingController extends AbstractController implements ISam
 
 		public void rejectedExecution(final Runnable r, final ThreadPoolExecutor executor) {
 			LOG.error("Exception caught by RejectedExecutionHandler for Runnable " + r + " and ThreadPoolExecutor " + executor);
+		}
+	}
+
+	/**
+	 * The default thread factory by Doug Lea modified to create daemon threads
+	 * 
+	 * @see java.util.concurrent.Executors.DefaultThreadFactory
+	 * 
+	 * @Author Jan Waller
+	 */
+	private static final class DaemonThreadFactory implements ThreadFactory {
+		private static final AtomicInteger POOLNUMBER = new AtomicInteger(1);
+		private final ThreadGroup group;
+		private final AtomicInteger threadNumber = new AtomicInteger(1);
+		private final String namePrefix;
+
+		public DaemonThreadFactory() {
+			final SecurityManager s = System.getSecurityManager();
+			this.group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup(); // NOCS NOPMD
+			this.namePrefix = "pool-" + POOLNUMBER.getAndIncrement() + "-thread-";
+		}
+
+		public Thread newThread(final Runnable r) {
+			final Thread t = new Thread(this.group, r, this.namePrefix + this.threadNumber.getAndIncrement(), 0);
+			t.setDaemon(true);
+			if (t.getPriority() != Thread.NORM_PRIORITY) {
+				t.setPriority(Thread.NORM_PRIORITY);
+			}
+			return t;
 		}
 	}
 }
