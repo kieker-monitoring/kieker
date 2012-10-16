@@ -148,7 +148,6 @@ function assert_files_exist_src {
     assert_dir_exists "src-gen/"
     assert_dir_exists "test/"
     assert_file_exists_regular "src/monitoring/META-INF/kieker.monitoring.default.properties"
-    assert_file_exists_regular "src/monitoring/META-INF/kieker.monitoring.adaptiveMonitoring.default.conf"
     assert_file_exists_regular ""
     assert_file_NOT_exists "dist/"
     assert_file_NOT_exists "META-INF/"
