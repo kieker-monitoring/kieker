@@ -1,5 +1,6 @@
 The Apache Software License - ASL - v2.0
 Project: http://www.springsource.org/spring-framework
+Description: Spring Framework (The Instrumentation module provides class instrumentation support and classloader implementations to be used in certain application servers)
 License: http://www.apache.org/licenses/LICENSE-2.0.txt
 
                                  Apache License

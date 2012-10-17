@@ -1,5 +1,6 @@
 The Apache Software License - ASL - v2.0
 Project: http://ws.apache.org/commons/xmlschema20/xmlschema-core/
+Description: Apache XMLSchema is a lightweight Java object model that can be used to manipulate and generate XML schema representations.
 License: http://www.apache.org/licenses/LICENSE-2.0.txt
 
                                  Apache License
