@@ -529,18 +529,40 @@
 	</target>
 
 	<target name="dist-examples" depends="-update-version.examples" description="Packages the example archives (.zip|.tar.gz) for a release">
-
 	</target>
 
-	<target name="-build-userguide" description="Creates the Kieker user guide PDF from the LaTeX sources">
+	<target name="-build-userguide" depends="-init-version" description="Creates the Kieker user guide PDF from the LaTeX sources">
 		<replaceregexp file="${src.userguide.dir}/Macros.tex" match="newcommand\{\\version\}\{.*\}" replace="newcommand\{\\\\\\version\}\{${kieker.version}\}" flags="g" />
 		<replaceregexp file="${src.userguide.dir}/Macros.tex" match="newcommand\{\\mainJar\}\{.*\}" replace="newcommand\{\\\\\\mainJar\}\{${dist.kieker.main.jar}\}" flags="g" />
 		<replaceregexp file="${src.userguide.dir}/Macros.tex" match="newcommand\{\\mainJarEMF\}\{.*\}" replace="newcommand\{\\\\\\mainJarEMF\}\{${dist.kieker.main.emf.jar.latex}\}" flags="g" />
 		<replaceregexp file="${src.userguide.dir}/Macros.tex" match="newcommand\{\\mainJarWeaver\}\{.*\}" replace="newcommand\{\\\\\\mainJarWeaver\}\{${dist.kieker.main.aspectj.jar.latex}\}" flags="g" />
-		<exec executable="make" failonerror="true">
-			<arg value="-C" />
-			<arg value="${src.userguide.dir}" />
+		<exec executable="pdflatex" dir="${src.userguide.dir}" failonerror="false">
+			<arg value="kieker-userguide" />
 		</exec>
+		<exec executable="bibtex" dir="${src.userguide.dir}" failonerror="false">
+			<arg value="kieker-userguide" />
+		</exec>
+		<exec executable="pdflatex" dir="${src.userguide.dir}" failonerror="false">
+			<arg value="kieker-userguide" />
+		</exec>
+		<exec executable="pdflatex" dir="${src.userguide.dir}" failonerror="true">
+			<arg value="kieker-userguide" />
+		</exec>
+		<delete>
+		    <fileset dir="${src.userguide.dir}" includes="*.aux"/>
+		    <fileset dir="${src.userguide.dir}" includes="*.bbl"/>
+		    <fileset dir="${src.userguide.dir}" includes="*.blg"/>
+		    <fileset dir="${src.userguide.dir}" includes="*.glo"/>
+		    <fileset dir="${src.userguide.dir}" includes="*.idx"/>
+		    <fileset dir="${src.userguide.dir}" includes="*.log"/>
+		    <fileset dir="${src.userguide.dir}" includes="*.toc"/>
+		    <fileset dir="${src.userguide.dir}" includes="*.snm"/>
+		    <fileset dir="${src.userguide.dir}" includes="*.out"/>
+		    <fileset dir="${src.userguide.dir}" includes="*.nav"/>
+		    <fileset dir="${src.userguide.dir}" includes="*.bak"/>
+		    <fileset dir="${src.userguide.dir}" includes="*.vrb"/>
+		    <fileset dir="${src.userguide.dir}" includes="*.backup"/>
+  		</delete>
 	</target>
 
 	<target name="release" depends="build-all,dist-kieker-sources,dist-kieker-binaries,dist-kieker-javadoc,dist-examples,dist-kieker-userguide" description="Packages the release files (calling all dist- targets)">
