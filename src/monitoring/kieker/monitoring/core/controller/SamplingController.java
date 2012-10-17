@@ -16,8 +16,10 @@
 
 package kieker.monitoring.core.controller;
 
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -41,7 +43,7 @@ public final class SamplingController extends AbstractController implements ISam
 		super(configuration);
 		final int threadPoolSize = configuration.getIntProperty(ConfigurationFactory.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE);
 		if (threadPoolSize > 0) {
-			this.periodicSensorsPoolExecutor = new ScheduledThreadPoolExecutor(threadPoolSize, new RejectedExecutionHandler());
+			this.periodicSensorsPoolExecutor = new ScheduledThreadPoolExecutor(threadPoolSize, new DaemonThreadFactory(), new RejectedExecutionHandler());
 			// this.periodicSensorsPoolExecutor.setMaximumPoolSize(threadPoolSize); // not used in this class
 			this.periodicSensorsPoolExecutor.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
 			this.periodicSensorsPoolExecutor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
@@ -113,6 +115,7 @@ public final class SamplingController extends AbstractController implements ISam
 	 * @author Jan Waller
 	 */
 	private static final class RejectedExecutionHandler implements java.util.concurrent.RejectedExecutionHandler {
+		private static final Log LOG = LogFactory.getLog(RejectedExecutionHandler.class);
 
 		public RejectedExecutionHandler() {
 			// empty default constructor
@@ -120,6 +123,27 @@ public final class SamplingController extends AbstractController implements ISam
 
 		public void rejectedExecution(final Runnable r, final ThreadPoolExecutor executor) {
 			LOG.error("Exception caught by RejectedExecutionHandler for Runnable " + r + " and ThreadPoolExecutor " + executor);
+		}
+	}
+
+	/**
+	 * A thread factory to create daemon threads
+	 * 
+	 * @see java.util.concurrent.Executors.DefaultThreadFactory
+	 * 
+	 * @Author Jan Waller
+	 */
+	private static final class DaemonThreadFactory implements ThreadFactory {
+		private final ThreadFactory defaultThreadFactory = Executors.defaultThreadFactory();
+
+		public DaemonThreadFactory() {
+			// empty default constructor
+		}
+
+		public Thread newThread(final Runnable r) {
+			final Thread t = this.defaultThreadFactory.newThread(r);
+			t.setDaemon(true);
+			return t;
 		}
 	}
 }
