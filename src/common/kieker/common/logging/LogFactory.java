@@ -16,30 +16,38 @@
 
 package kieker.common.logging;
 
+import java.util.Locale;
+
 /**
- * 
  * @author Jan Waller
  */
 public final class LogFactory { // NOPMD (Implementation of an logger)
 
+	public static final String CUSTOM_LOGGER_JVM = "kieker.common.logging.Log";
+
+	private static final String JVM_LOGGER;
 	private static final Logger DETECTED_LOGGER;
 
 	private static enum Logger {
-		JDK, COMMONS,
+		NONE, JDK, COMMONS, SLF4J, WEBGUI, JUNIT,
 	}
 
 	static {
-		Logger logselectiontemp = Logger.JDK; // default to JDK logging
-
-		try {
-			if (Class.forName("org.apache.commons.logging.Log") != null) {
-				logselectiontemp = Logger.COMMONS; // use commons logging
-			}
-		} catch (final Exception ex2) { // NOPMD NOCS (catch Exception)
-			// use default ...
+		final String systemPropertyLogger = System.getProperty(CUSTOM_LOGGER_JVM);
+		if (null != systemPropertyLogger) {
+			JVM_LOGGER = systemPropertyLogger.trim().toUpperCase(Locale.US);
+		} else {
+			JVM_LOGGER = null;
 		}
-
-		DETECTED_LOGGER = logselectiontemp; // NOCS (missing this)
+		DETECTED_LOGGER = LogFactory.detectLogger();
+		final Log log = LogFactory.getLog(LogFactory.class);
+		if ((null != JVM_LOGGER) && !DETECTED_LOGGER.name().equals(JVM_LOGGER)) {
+			log.warn("Failed to load Logger with property " + CUSTOM_LOGGER_JVM + "=" + JVM_LOGGER + ", using " + DETECTED_LOGGER.name() + " instead.");
+		}
+		// System.out.println(DETECTED_LOGGER.toString());
+		if (log.isDebugEnabled()) {
+			log.debug(DETECTED_LOGGER.toString());
+		}
 	}
 
 	private LogFactory() {
@@ -52,11 +60,45 @@ public final class LogFactory { // NOPMD (Implementation of an logger)
 
 	public static final Log getLog(final String name) {
 		switch (DETECTED_LOGGER) { // NOPMD (no break needed)
+		case NONE:
+			return new LogImplNone(name);
+		case JDK:
+			return new LogImplJDK14(name);
 		case COMMONS:
 			return new LogImplCommonsLogging(name);
-		case JDK:
+		case SLF4J:
+			return new LogImplSLF4JLogging(name);
+		case WEBGUI:
+			return new LogImplWebguiLogging(name);
+		case JUNIT:
+			return new LogImplJUnit(name);
 		default:
 			return new LogImplJDK14(name);
 		}
+	}
+
+	private static final Logger detectLogger() {
+		if (null != JVM_LOGGER) {
+			try {
+				return Enum.valueOf(Logger.class, JVM_LOGGER);
+			} catch (final IllegalArgumentException ex) { // NOPMD NOCS
+				// Notify is handled above.
+			}
+		}
+		try {
+			if (Class.forName("org.slf4j.impl.StaticLoggerBinder") != null) {
+				return Logger.SLF4J; // use SLF4J logging
+			}
+		} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
+			// use default in case of errors ...
+		}
+		try {
+			if (Class.forName("org.apache.commons.logging.Log") != null) {
+				return Logger.COMMONS; // use commons logging
+			}
+		} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
+			// use default in case of errors ...
+		}
+		return Logger.JDK;
 	}
 }

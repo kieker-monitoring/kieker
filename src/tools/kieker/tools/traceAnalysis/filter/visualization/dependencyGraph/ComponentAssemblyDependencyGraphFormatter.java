@@ -31,6 +31,9 @@ public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponent
 
 	private static final String DEFAULT_FILE_NAME = Constants.ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX + Constants.DOT_FILE_SUFFIX;
 
+	/**
+	 * Creates a new formatter.
+	 */
 	public ComponentAssemblyDependencyGraphFormatter() {
 		// empty default constructor
 	}

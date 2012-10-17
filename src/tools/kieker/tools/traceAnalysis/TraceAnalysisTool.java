@@ -338,7 +338,7 @@ public final class TraceAnalysisTool {
 		@SuppressWarnings("rawtypes")
 		final TraceColoringFilter<?, ?> coloringFilter = new TraceColoringFilter(new Configuration());
 		TraceAnalysisTool.connectGraphFilters(predecessor, coloringFilter, controller);
-		controller.connect(coloringFilter, TraceColoringFilter.COLOR_REPOSITORY_NAME, colorRepository);
+		controller.connect(coloringFilter, TraceColoringFilter.COLOR_REPOSITORY_PORT_NAME, colorRepository);
 
 		return coloringFilter;
 	}
@@ -352,7 +352,7 @@ public final class TraceAnalysisTool {
 		@SuppressWarnings("rawtypes")
 		final DescriptionDecoratorFilter<?, ?, ?> descriptionFilter = new DescriptionDecoratorFilter(new Configuration());
 		TraceAnalysisTool.connectGraphFilters(predecessor, descriptionFilter, controller);
-		controller.connect(descriptionFilter, DescriptionDecoratorFilter.DESCRIPTION_REPOSITORY_NAME, descriptionRepository);
+		controller.connect(descriptionFilter, DescriptionDecoratorFilter.DESCRIPTION_REPOSITORY_PORT_NAME, descriptionRepository);
 
 		return descriptionFilter;
 	}

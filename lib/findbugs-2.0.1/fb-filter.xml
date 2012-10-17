@@ -1,7 +1,7 @@
 <FindBugsFilter>
 	<!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
 
-  <Match>
+	<Match>
 		<Class name="kieker.test.analysis.junit.plugin.filter.forward.TestStringBufferFilter" />
 		<Bug pattern="DM_STRING_CTOR" />
 	</Match>
@@ -121,7 +121,7 @@
 
 	<Match>
 		<Class name="kieker.common.logging.LogImplWebguiLogging" />
-		<Method name="addMessage" params="java.lang.String" returns="void" />
+		<Method name="addMessage" params="java.lang.String,java.lang.String,java.lang.Throwable" returns="void" />
 		<Bug pattern="RV_RETURN_VALUE_IGNORED" />
 	</Match>
 

@@ -46,6 +46,12 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 
 	private static final String CONFIGURATION_NAME = Constants.PLOTASSEMBLYCOMPONENTDEPGRAPH_COMPONENT_NAME;
 
+	/**
+	 * Creates a new filter using the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 */
 	public ComponentDependencyGraphAssemblyFilter(final Configuration configuration) {
 		super(configuration, new ComponentAssemblyDependencyGraph(AssemblyRepository.ROOT_ASSEMBLY_COMPONENT));
 	}
@@ -65,7 +71,8 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 			DependencyGraphNode<AssemblyComponent> senderNode = this.getGraph().getNode(senderComponent.getId());
 			DependencyGraphNode<AssemblyComponent> receiverNode = this.getGraph().getNode(receiverComponent.getId());
 			if (senderNode == null) {
-				senderNode = new DependencyGraphNode<AssemblyComponent>(senderComponent.getId(), senderComponent, t.getTraceInformation());
+				senderNode = new DependencyGraphNode<AssemblyComponent>(senderComponent.getId(), senderComponent, t.getTraceInformation(),
+						this.getOriginRetentionPolicy());
 
 				if (m.getSendingExecution().isAssumed()) {
 					senderNode.setAssumed();
@@ -73,11 +80,12 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 
 				this.getGraph().addNode(senderNode.getId(), senderNode);
 			} else {
-				senderNode.addOrigin(t.getTraceInformation());
+				this.handleOrigin(senderNode, t.getTraceInformation());
 			}
 
 			if (receiverNode == null) {
-				receiverNode = new DependencyGraphNode<AssemblyComponent>(receiverComponent.getId(), receiverComponent, t.getTraceInformation());
+				receiverNode = new DependencyGraphNode<AssemblyComponent>(receiverComponent.getId(), receiverComponent, t.getTraceInformation(),
+						this.getOriginRetentionPolicy());
 
 				if (m.getReceivingExecution().isAssumed()) {
 					receiverNode.setAssumed();
@@ -85,13 +93,13 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 
 				this.getGraph().addNode(receiverNode.getId(), receiverNode);
 			} else {
-				receiverNode.addOrigin(t.getTraceInformation());
+				this.handleOrigin(receiverNode, t.getTraceInformation());
 			}
 
 			final boolean assumed = this.isDependencyAssumed(senderNode, receiverNode);
 
-			senderNode.addOutgoingDependency(receiverNode, assumed, t.getTraceInformation());
-			receiverNode.addIncomingDependency(senderNode, assumed, t.getTraceInformation());
+			senderNode.addOutgoingDependency(receiverNode, assumed, t.getTraceInformation(), this.getOriginRetentionPolicy());
+			receiverNode.addIncomingDependency(senderNode, assumed, t.getTraceInformation(), this.getOriginRetentionPolicy());
 
 			this.invokeDecorators(m, senderNode, receiverNode);
 		}

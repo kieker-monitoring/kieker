@@ -32,7 +32,7 @@ import kieker.common.record.misc.TimestampRecord;
  * incoming {@link kieker.common.record.IMonitoringRecord}s.
  * 
  * <ol>
- * <li>The first record received via {@link #inputTimestamp(Long)} immediately leads to a new {@link TimestampEvent} with the given timestamp.</li>
+ * <li>The first record received via {@link #inputTimestamp(Long)} immediately leads to a new {@link TimestampRecord} with the given timestamp.</li>
  * <li>The timestamp of the first record is stored as {@link #firstTimestamp} and future events are generated at {@link #firstTimestamp} + i *
  * {@link #timerResolution}.</li>
  * <li>Future {@link kieker.common.record.IMonitoringRecord} may lead to future {@link TimestampRecord} as follows:

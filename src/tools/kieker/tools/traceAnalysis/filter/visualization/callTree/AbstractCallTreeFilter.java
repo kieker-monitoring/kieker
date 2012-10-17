@@ -33,6 +33,7 @@ import kieker.common.util.Signature;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceProcessingException;
+import kieker.tools.traceAnalysis.filter.visualization.graph.NoOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
@@ -54,7 +55,7 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * @author Andre van Hoorn
  */
 @Plugin(repositoryPorts = {
-		@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 })
 public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProcessingFilter {
 
@@ -203,7 +204,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 			if (m instanceof SynchronousCallMessage) {
 				curNode = curStack.peek();
 				AbstractCallTreeNode<?> child;
-				child = curNode.newCall(pairFactory.createPair((SynchronousCallMessage) m), t);
+				child = curNode.newCall(pairFactory.createPair((SynchronousCallMessage) m), t, NoOriginRetentionPolicy.createInstance());
 				curNode = child;
 				curStack.push(curNode);
 			} else if (m instanceof SynchronousReplyMessage) {

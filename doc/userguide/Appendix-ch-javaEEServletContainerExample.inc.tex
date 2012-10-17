@@ -1,107 +1,89 @@
-The \Kieker{} download site\footnote{\KiekerDownloadURL{}} includes an additional %
-example \file{\JavaEEServletExampleName}. Using the sample Java Web application %
-iBATIS JPetStore\footnote{\url{http://ibatis.apache.org/}}, this example %
+Using the sample Java web application %
+MyBatis JPetStore,\footnote{\url{http://www.mybatis.org/spring/sample.html}} this example %
 demonstrates how to employ \KiekerMonitoringPart{} for monitoring a Java application %
-running in a Java~EE container---in this case, Apache Tomcat\footnote{\url{http://tomcat.apache.org/}}. %
-Monitoring probes based on the Java~EE Servlet API %
-and AspectJ are used to monitor execution, trace, and session data (see Section~\ref{chap:aspectJ}).
+running in a Java~EE container---in this case Jetty.\footnote{\url{http://www.eclipse.org/jetty/}} %
+Monitoring probes based on the Java~EE Servlet API, Spring, %
+and AspectJ are used to monitor execution, trace, and session data (see Section~\ref{chap:aspectJ}). %
+The directory \dir{\JavaEEServletExampleDistro/} contains the prepared Jetty %
+server with the MyBatis JPetStore application. %
 
-\section{Preparation of the Tomcat Servlet Container}
+\section{Setting}
 
-\TODO{update}
+The subdirectory \file{jetty-hightide-jpetstore/} includes the %
+Jetty server with the JPetStore application already deployed to the server's %
+\file{webapps/} directory. The example is prepared to use two alternative %
+types of \Kieker{} probes: either the \Kieker{} Spring interceptor (default) or the 
+\Kieker{} AspectJ aspects. Both alternatives additionally use \Kieker{}'s Servlet 
+filter. %
 
-\begin{compactenum}
-\item Copy the files \file{\mainJar} and \file{\aspectJWeaverJar} from %
-\Kieker{}'s binary distribution to the Tomcat's \dir{lib/} directory.
-\item Copy the file \file{\servletWar} from \Kieker{}'s %
-binary distribution to the Tomcat's \dir{webapps/} directory.
-\item Tomcat's \dir{lib/} directory contains the files \file{kieker.monitoring.properties} %
-and \file{aop.xml} --- the configuration of \KiekerMonitoringPart{} and the %
-AspectJ-based instrumentation. %
-\item
- Tomcat's start script \file{bin/catalina.\{sh|bat\}} file was modified to add the location %
-of the \file{kieker.\-moni\-toring.properties} and the AspectJ agent to the argument %
-list of the JVM call:
-\end{compactenum}
+\paragraph{Required Libraries and \KiekerMonitoringPart{} Configuration}
+
+Both settings require the files \file{\aspectJWeaverJar{}} and \file{\mainJar}, %
+which are already included in the webapps's \dir{WEB-INF/lib/} directory. %
+Also, the \Kieker{} configuration file is already included in the webapps's 
+\dir{WEB-INF/classes/META-INF/} directory, where it is considered for %
+configuration by \KiekerMonitoringPart{} in both modes. 
+
+\paragraph{Servlet Filter (Default)}
+
+The file \file{web.xml} is located in the webapps's %
+\dir{WEB-INF/} directory. \Kieker{}'s Servlet filters are already enabled: 
+
+\setXMLListing
+\lstinputlisting[firstline=50,lastline=61, numbers=none, linewidth=1\textwidth, caption=Enabling the Servlet filter in \file{web.xml}]{\JavaEEServletExampleDir/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/web.xml}
+
+\noindent This filter can be used with both the Spring-based and the %
+AspectJ-based instrumentation mode.
+
+\paragraph{Spring-based Instrumentation (Default)}
+
+\Kieker{}'s Spring interceptor are already enabled in the file 
+\file{applicationContext.xml}, located in the webapps's \dir{WEB-INF/} directory: 
+
+\setXMLListing
+\lstinputlisting[firstline=38,lastline=43, numbers=none, linewidth=1\textwidth, caption=Enabling the Spring interceptor in \file{applicationContext.xml}]{\JavaEEServletExampleDir/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/applicationContext.xml}
+
+\paragraph{AspectJ-based Instrumentation}
 
 \enlargethispage{1cm}
 
-% \setPropertiesListing
-% \lstinputlisting[firstline=188,firstnumber=188,lastline=190,caption={Excerpt from catalina.sh (for \UnixLikeSystems)},numbers=left]{\JavaEEServletExampleDir/Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore/bin/catalina.sh}
-% 
-% \setPropertiesListing
-% \lstinputlisting[firstline=121,firstnumber=121,lastline=123,caption={Excerpt from catalina.bat (for Windows)},numbers=left]{\JavaEEServletExampleDir/Tomcat6.0.18WithJpetStore-withInstrumentedJPetStore/bin/catalina.bat}
+In order to use AspectJ-based instrumentation, the following changes need to 
+be performed. The file \file{start.ini}, located in Jetty's root directory, %
+allows to pass various JVM arguments, JVM system properties, and other options %
+to the server on startup. When using AspectJ for instrumentation, the respective %
+JVM argument needs to be activated in this file: %
 
-%% BEGIN: Windoof
-% set JAVA_HOME=%ProgramFiles%\Java\jdk1.6.0_23
-% start bin/startup.bat
-%% END: Windoof
+\setPropertiesListing
+\lstinputlisting[firstline=33,lastline=33, linewidth=1\textwidth,caption=Enabling the AspectJ weaver in Jetty's \file{start.ini}]{\JavaEEServletExampleDir/jetty-hightide-jpetstore/start.KiekerAspectJActivated.ini}
 
-\begin{compactenum}\setcounter{enumi}{4}
-\item  A prepared \file{jpetstore.war} file is already located in the %
-   Tomcat's \dir{webapps/} directory. If you want to rebuild the sources, %
-   for example to modify the instrumentation, see Section~\ref{sec:Appendix:JPetStoreExample:rebuild}. 
-\end{compactenum}
-
-
-\section{JPetStore and \KiekerMonitoringPart{} Control Servlet}
-
-\noindent We will now start the Tomcat server and generate some monitoring data by manually %
-accessing the JPetStore web application. 
+\noindent The AspectJ configuration file \file{aop.xml} is already located in the %
+webapps's \dir{WEB-INF/classes/META-INF/} directory and configured to instrument %
+the JPetStore classes with \Kieker{}'s \class{OperationExecutionAspectFull} aspect %
+(Section~\ref{chap:aspectJ}). 
 
 \
 
-\enlargethispage{1.5cm}
+When using the AspectJ-based instrumentation, make sure to disable the Spring %
+interceptor in the file \file{applicationContext.xml}, mentioned above. %
 
 \begin{compactenum}
-\item Start the Tomcat server using the \file{bin/startup.sh} or \file{bin/startup.bat} (\UnixLikeSystems/Windows) %
-   script in the Tomcat's \dir{bin/} directory.
-
-   You should make sure, that the Tomcat started properly, by taking 
-   a look at the \file{logs/catalina.out} file, \file{logs/catalina.<date>.log} file respectively. %
-   On error, the file \file{logs/localhost.<date>.log} may contain details % 
-   to resolve the issue.
+\item Start the Jetty server using the \file{start.jar} file. You should make %
+   sure that the server started properly by taking a look at %
+   the console output that appears during server startup.  
 \item Now, you can access the JPetStore application by opening the URL
    \url{http://localhost:8080/jpetstore/} (Figure~\ref{fig:jpetstore}). %
-   \Kieker{} intialization messages should appear in \file{logs/catalina.out}, \file{logs/catalina.<date>.log} respectively. %
+   \Kieker{} initialization messages should appear in the console output. %
    The output includes the information where the monitoring data is written to
-   (should be Tomcat's \dir{temp/kieker-<DATE-TIME>/} directory).
+   (should be a \dir{kieker-<DATE-TIME>/} directory) located in the default %
+   temporary directory.
 \item  Browse through the application to generate some monitoring data. %
    This data can be analyzed and visualized using \KiekerTraceAnalysis{}, %
    as described in Chapter~\ref{chap:aspectJ}.
-\item \Kieker{} includes a servlet to control the status of \KiekerMonitoringPart{}. %
-   It can be accessed via \url{http://localhost:8080/kieker-monitoring-servlet-\version/} %
-   (Figure~\ref{fig:controlServlet}).
 \end{compactenum}
+
+\medskip
 
 \begin{figure}[h]\centering
-\hfill
-\subfigure[iBATIS JPetStore]{\label{fig:jpetstore}%
-\includegraphics[width=0.45\textwidth]{images/jpetstore-example-FFscrsh}}
-\hfill
-\subfigure[\KiekerMonitoringPart{} control servlet]{\label{fig:controlServlet}%
-\includegraphics[width=0.45\textwidth]{images/kieker-servlet-FFscrsh-version-obfuscated}}
-\hfill
-\caption{}
+\includegraphics[width=0.8\textwidth]{images/jpetstore-example-FFscrsh}
+\caption{MyBatis JPetStore}\label{fig:jpetstore}%
 \end{figure}
-
-\newpage
-
-\section{Rebuilding the JPetStore Application}\label{sec:Appendix:JPetStoreExample:rebuild}
-
-\noindent In order to rebuild the JPetStore sources (located in \dir{JPetStore-5.0-instrumented/}), 
-the following steps are required:
-
-\
-
-\begin{compactenum}
-\item Copy the \file{\mainJar{}} from \Kieker{}'s
-   binary distribution to the JPetStore's \dir{devlib/} directory. %
-   It is required for the annotation-based instrumentation %
-   (\texttt{@Ope\-rationExecutionMonitoringProbe}), as described in Chapter~\ref{chap:aspectJ}
-\item Build the JPetStore with the \file{build.xml} by calling \texttt{ant} from %
-    within \dir{build/} directory. 
-\item You'll find the packaged JPetStore \file{.war}-file in \dir{build/wars/}.
-\item Copy the file to the Tomcat's \dir{webapps/} directory.
-\end{compactenum}
-

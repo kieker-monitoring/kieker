@@ -13,7 +13,7 @@
    height="732.51648"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.1 r9760"
+   inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="framework-figure.svg">
   <defs
      id="defs4">
@@ -1103,15 +1103,15 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.35"
-     inkscape:cx="754.21161"
-     inkscape:cy="647.45184"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="1065.5945"
+     inkscape:cy="407.72641"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1280"
      inkscape:window-height="1004"
-     inkscape:window-x="1362"
+     inkscape:window-x="1278"
      inkscape:window-y="-3"
      inkscape:window-maximized="1"
      fit-margin-top="0"
@@ -5062,16 +5062,16 @@
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Arial;-inkscape-font-specification:Arial"
-       x="-2079.3164"
+       x="-2085.3164"
        y="156.46829"
        id="text3777-8-0-8-3-1-7-2-1-2-9"
        sodipodi:linespacing="100%"
        transform="matrix(0,-1,1,0,0,0)"><tspan
          sodipodi:role="line"
-         x="-2079.3164"
+         x="-2085.3164"
          y="156.46829"
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
-         id="tspan3781-2-6-2-2-3-4-2-7-2-9">Java Messaging Servcice (JMS)</tspan></text>
+         id="tspan3781-2-6-2-2-3-4-2-7-2-9">Java Messaging Service (JMS)</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Arial;-inkscape-font-specification:Arial"
@@ -5442,7 +5442,7 @@
          x="-2133.2798"
          y="802.37329"
          style="font-size:24px;text-align:center;line-height:100%;text-anchor:middle"
-         id="tspan3781-2-6-2-2-3-4-2-7-2-9-7">Java Messaging Servcie (JMS)</tspan></text>
+         id="tspan3781-2-6-2-2-3-4-2-7-2-9-7">Java Messaging Service (JMS)</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Arial;-inkscape-font-specification:Arial"

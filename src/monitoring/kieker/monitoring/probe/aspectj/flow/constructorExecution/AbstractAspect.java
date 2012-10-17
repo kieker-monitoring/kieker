@@ -45,7 +45,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 
 	@Around("monitoredConstructor() && this(thisObject) && notWithinKieker()")
 	public Object constructor(final Object thisObject, final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
-		if (!CTRLINST.isMonitoringEnabled()) {
+		final String signature = thisJoinPoint.getSignature().toLongString();
+		if (!CTRLINST.isProbeActivated(signature)) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
@@ -56,7 +57,6 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			CTRLINST.newMonitoringRecord(trace);
 		}
 		final long traceId = trace.getTraceId();
-		final String signature = thisJoinPoint.getSignature().toLongString();
 		final String clazz = thisObject.getClass().getName();
 		// measure before execution
 		CTRLINST.newMonitoringRecord(new BeforeConstructorEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz));

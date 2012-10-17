@@ -146,7 +146,9 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 
 	/**
 	 * Formats a given graph and saves the generated specification to disk. The file name to save the
-	 * output to is specified by the configuration option {@link #CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME}.
+	 * output to is specified by a the configuration options
+	 * {@link kieker.tools.traceAnalysis.filter.visualization.GraphWriterConfiguration#CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME} and
+	 * {@link kieker.tools.traceAnalysis.filter.visualization.GraphWriterConfiguration#CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME}.
 	 * 
 	 * @param graph
 	 *            The graph to save

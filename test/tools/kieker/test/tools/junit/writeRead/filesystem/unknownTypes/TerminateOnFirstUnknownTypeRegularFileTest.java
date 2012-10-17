@@ -16,12 +16,14 @@
 
 package kieker.test.tools.junit.writeRead.filesystem.unknownTypes;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.Assert;
 
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.LogImplJUnit;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writer.IMonitoringWriter;
 import kieker.monitoring.writer.filesystem.AsyncFsWriter;
@@ -54,6 +56,7 @@ public class TerminateOnFirstUnknownTypeRegularFileTest extends AbstractUnknownT
 	@Override
 	protected void refineFSReaderConfiguration(final Configuration config) {
 		config.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, Boolean.FALSE.toString());
+		LogImplJUnit.disableThrowable(IOException.class);
 	}
 
 	@Override
@@ -61,5 +64,6 @@ public class TerminateOnFirstUnknownTypeRegularFileTest extends AbstractUnknownT
 		// we expect that reading abort on the occurrence of EVENT1_UNKNOWN_TYPE, i.e., the remaining lines weren't processed
 		Assert.assertEquals("Expected one record", 1, eventFromMonitoringLog.size());
 		Assert.assertEquals("Unexpected record", EVENT0_KNOWN_TYPE, eventFromMonitoringLog.get(0));
+		LogImplJUnit.reset();
 	}
 }

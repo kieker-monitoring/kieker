@@ -53,7 +53,6 @@ public class MessageTrace extends AbstractTrace {
 	}
 
 	// Explicit delegation to super method to make FindBugs happy
-
 	@Override
 	public int hashCode() { // NOPMD (forward hashcode)
 		// TODO either this or equals might not be correct! both should consider traceId

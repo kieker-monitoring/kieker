@@ -37,8 +37,8 @@ public abstract class AbstractGraphElement<O> {
 
 	private final Set<O> origins = new HashSet<O>();
 
-	protected AbstractGraphElement(final O origin) {
-		this.addOrigin(origin);
+	protected AbstractGraphElement(final O origin, final IOriginRetentionPolicy originPolicy) {
+		originPolicy.handleOrigin(this, origin);
 	}
 
 	/**

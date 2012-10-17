@@ -30,7 +30,7 @@ public final class MonitoringStarter {
 	private MonitoringStarter() {}
 
 	public static void main(final String[] args) throws InterruptedException {
-		System.out.println("Monitoring CPU and Mem/Swap for 30 seconds in 5 seconds steps () with an offset of two seconds");
+		System.out.println("Monitoring CPU and Mem/Swap for 30 seconds in 5 seconds steps with an offset of two seconds");
 
 		final IMonitoringController monitoringController =
 				MonitoringController.getInstance();

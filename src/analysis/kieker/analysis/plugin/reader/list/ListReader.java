@@ -29,7 +29,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
 /**
- * Helper class that reads records added using the method {@link #addAllRecords(List)}.
+ * Helper class that reads records added using the methods {@link #addAllObjects(List)} or {@link #addObject(Object)}.
  * Depending on the value of the {@link Configuration} variable {@value #CONFIG_PROPERTY_NAME_AWAIT_TERMINATION},
  * either the {@link #read()} method returns immediately, or awaits a termination via {@link kieker.analysis.AnalysisController#terminate()}.
  * 

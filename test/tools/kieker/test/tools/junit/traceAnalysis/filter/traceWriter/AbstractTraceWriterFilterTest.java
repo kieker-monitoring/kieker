@@ -93,7 +93,8 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 		execTrace.add(this.execFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(AbstractTraceWriterFilterTest.TRACE_ID_VALID_EXEC_TRACE,
 				AbstractTraceWriterFilterTest.SESSION_ID, AbstractTraceWriterFilterTest.HOSTNAME,
 				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_VALID_EXEC_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
-				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_VALID_EXEC_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook));
+				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_VALID_EXEC_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
+				/* assumed: */false));
 		execTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION); // just to make sure this trace is really valid
 		return execTrace;
 	}
@@ -103,7 +104,8 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 		execTrace.add(this.execFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(AbstractTraceWriterFilterTest.TRACE_ID_VALID_MSG_TRACE,
 				AbstractTraceWriterFilterTest.SESSION_ID, AbstractTraceWriterFilterTest.HOSTNAME,
 				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_VALID_MESSAGE_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
-				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_VALID_MESSAGE_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook));
+				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_VALID_MESSAGE_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
+				/* assumed: */false));
 		execTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION); // just to make sure this trace is really valid
 		return execTrace;
 	}
@@ -113,7 +115,8 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 		execTrace.add(this.execFactory.createBookstoreExecution_exec1_1__catalog_getBook(AbstractTraceWriterFilterTest.TRACE_ID_INVALID_EXEC_TRACE,
 				AbstractTraceWriterFilterTest.SESSION_ID, AbstractTraceWriterFilterTest.HOSTNAME,
 				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_INVALID_EXEC_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry1_1__catalog_getBook,
-				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_INVALID_EXEC_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit1_1__catalog_getBook));
+				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_INVALID_EXEC_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit1_1__catalog_getBook,
+				/* assumed: */false));
 
 		try {
 			execTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);

@@ -26,6 +26,7 @@ import org.w3c.dom.Element;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
@@ -43,9 +44,13 @@ import kieker.monitoring.timer.ITimeSource;
  */
 public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterceptor implements IMonitoringProbe {
 
+	public static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCIN";
+
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
+
+	private static final Log LOG = LogFactory.getLog(OperationExecutionSOAPRequestInInterceptor.class);
 
 	/**
 	 * Note we are using this IMonitoringController only to access ITimeSource which
@@ -53,21 +58,21 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 	 * corresponding other CXF probes. Depending on the configuration, the time may
 	 * differ from Kieker's default timer (SystemNanoTimer).
 	 */
-	protected static final IMonitoringController CTRL = MonitoringController.getInstance();
-	protected static final ITimeSource TIMESOURCE = CTRL.getTimeSource();
-
-	private static final Log LOG = LogFactory.getLog(OperationExecutionSOAPRequestInInterceptor.class);
-
-	private static final String NULL_SESSION_STR = "NULL";
-	private static final String NULL_SESSIONASYNCTRACE_STR = "NULL-ASYNCIN";
+	protected final IMonitoringController monitoringController;
+	protected final ITimeSource timeSource;
 
 	public OperationExecutionSOAPRequestInInterceptor() {
-		// nothing to do
+		this(MonitoringController.getInstance());
+	}
+
+	public OperationExecutionSOAPRequestInInterceptor(final IMonitoringController monitoringCtrl) {
+		this.monitoringController = monitoringCtrl;
+		this.timeSource = this.monitoringController.getTimeSource();
 	}
 
 	@Override
 	public void handleMessage(final Message msg) throws Fault {
-		if (!CTRL.isMonitoringEnabled()) {
+		if (!this.monitoringController.isProbeActivated(OperationExecutionSOAPResponseOutInterceptor.SIGNATURE)) {
 			return;
 		}
 		if (msg instanceof SoapMessage) {
@@ -78,7 +83,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 			 * This value will be used by the corresponding invocation of the
 			 * ResponseOutProbe.
 			 */
-			final long tin = TIMESOURCE.getTime();
+			final long tin = this.timeSource.getTime();
 			boolean isEntryCall = false; // set true below if is entry call
 
 			/* 1.) Extract sessionId from SOAP header */
@@ -86,7 +91,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 			String sessionId = this.getStringContentFromHeader(hdr); // null if hdr==null
 			if (sessionId == null) {
 				/* no Kieker session id in header */
-				sessionId = NULL_SESSION_STR;
+				sessionId = OperationExecutionRecord.NO_SESSION_ID;
 			}
 
 			/* 2.) Extract eoi from SOAP header */
@@ -132,7 +137,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 				 * in the thread local variable!
 				 */
 				traceId = CF_REGISTRY.getUniqueTraceId();
-				sessionId = NULL_SESSIONASYNCTRACE_STR;
+				sessionId = SESSION_ID_ASYNC_TRACE;
 				isEntryCall = true;
 				eoi = 0; // EOI of this execution
 				ess = 0; // ESS of this execution

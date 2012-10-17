@@ -5,6 +5,27 @@ http://kieker-monitoring.net) contains details on the changes.
 
 Please refer to the Kieker User Guide for details on using Kieker.
 
+* 1.6 (October 17, 2012)
+- Major changes
+  - Web-based UI for editing and running analysis projects (beta version)
+  - Adaptive monitoring: (De)activate monitoring on method signature level 
+    at runtime based on signature patterns
+  - Restructured and extended graph/visualization filters (trace coloring, 
+    tooltips etc.)
+  - Log rotation for file system writer
+  - Logging API: SLF4J support and logger selection via JVM argument
+  - Many new AspectJ-based probes for detailed event-based tracing
+  - Refactored realtime replayer based on new re-usable filters (realtime delay,
+    record logger etc.)
+  - Java EE example: Now included in core binary release archive and based 
+    on MyBatis JPetStore deployed to Jetty server
+  - Definition of configuration properties and default values for analysis 
+    plugins and repositories now annotation-based
+  - Removed legacy control servlet (JMX interface should be used instead)
+- Quality
+  - Bug fixes
+  - Added a number of (JUnit) tests
+
 * 1.5 (April 13, 2012)
 - Major new features
   - Completely reworked pipe-and-filter framework in Kieker.Analysis
@@ -106,7 +127,7 @@ Please refer to the Kieker User Guide for details on using Kieker.
 - Aspects are in @Aspect style
 - Adapted to operate with Java 6
 - Maven build support
-- Monitoring support for the spring framework with soap, XFC WebService stuff
+- Monitoring support for the spring framework with soap, CXF WebService stuff
 - More efficient internal data structures and processing
 - Distributed monitoring
 

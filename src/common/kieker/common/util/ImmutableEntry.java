@@ -19,7 +19,7 @@ package kieker.common.util;
 import java.util.Map;
 
 /**
- * Java's SimpleImmutableEntry, as in implementation of {@link Map.Entry}, is available for Java 1.6 or higher.
+ * Java's SimpleImmutableEntry, as in implementation of {@link java.util.Map.Entry}, is available for Java 1.6 or higher.
  * Hence, we provide our own implementation here.
  * 
  * @author Andre van Hoorn

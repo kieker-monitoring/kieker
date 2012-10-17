@@ -69,6 +69,7 @@ public class TraceColoringFilterTest extends AbstractKiekerTest {
 	private static final String EXPECTED_ALLOCATION_COMPONENT_NAME_3 = "@3";
 
 	private static final Color HIGHLIGHT_COLOR = Color.BLUE;
+	private static final Color HIGHLIGHT_COLOR_2 = Color.GREEN;
 	private static final Color DEFAULT_COLOR = Color.BLACK;
 	private static final Color COLLISION_COLOR = Color.GRAY;
 
@@ -93,12 +94,13 @@ public class TraceColoringFilterTest extends AbstractKiekerTest {
 
 		final AnalysisController analysisController = testSetup.getAnalysisController();
 		analysisController.registerRepository(traceColorRepository);
-		analysisController.connect(traceColoringFilter, TraceColoringFilter.COLOR_REPOSITORY_NAME, traceColorRepository);
+		analysisController.connect(traceColoringFilter, TraceColoringFilter.COLOR_REPOSITORY_PORT_NAME, traceColorRepository);
 	}
 
 	private static TraceColorRepository prepareTraceColorRepository() {
 		final ConcurrentMap<Long, Color> colorMap = new ConcurrentHashMap<Long, Color>();
 		colorMap.put(TRACE_ID_1, HIGHLIGHT_COLOR);
+		colorMap.put(TRACE_ID_2, HIGHLIGHT_COLOR_2);
 
 		final TraceColorRepositoryData repositoryData = new TraceColorRepositoryData(colorMap, DEFAULT_COLOR, COLLISION_COLOR);
 		return new TraceColorRepository(new Configuration(), repositoryData);

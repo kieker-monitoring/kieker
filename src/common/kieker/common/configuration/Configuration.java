@@ -42,7 +42,7 @@ public final class Configuration extends Properties {
 	}
 
 	public final String getStringProperty(final String key) {
-		final String s = this.getProperty(key);
+		final String s = super.getProperty(key);
 		return (s == null) ? "" : s.trim(); // NOCS
 	}
 
@@ -157,7 +157,7 @@ public final class Configuration extends Properties {
 		while (keys.hasMoreElements()) {
 			final String property = (String) keys.nextElement();
 			if (property.startsWith(prefix)) {
-				configuration.setProperty(property, this.getProperty(property));
+				configuration.setProperty(property, super.getProperty(property));
 			}
 		}
 		return configuration;
@@ -214,6 +214,6 @@ public final class Configuration extends Properties {
 	@Override
 	@Deprecated
 	public final String getProperty(final String key, final String defaultValue) {
-		return super.getProperty(key);
+		return super.getProperty(key, defaultValue);
 	}
 }

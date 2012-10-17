@@ -42,8 +42,8 @@ public abstract class AbstractPayloadedVertex<V extends AbstractPayloadedVertex<
 	 * @param payload
 	 *            The vertex' payload
 	 */
-	protected AbstractPayloadedVertex(final O origin, final P payload) {
-		super(origin);
+	protected AbstractPayloadedVertex(final O origin, final IOriginRetentionPolicy originPolicy, final P payload) {
+		super(origin, originPolicy);
 		this.payload = payload;
 	}
 

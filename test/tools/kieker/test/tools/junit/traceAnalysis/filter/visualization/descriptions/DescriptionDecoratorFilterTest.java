@@ -18,7 +18,6 @@ package kieker.test.tools.junit.traceAnalysis.filter.visualization.descriptions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -88,7 +87,7 @@ public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
 
 		final AnalysisController analysisController = testSetup.getAnalysisController();
 		analysisController.registerRepository(descriptionRepository);
-		analysisController.connect(descriptionDecoratorFilter, DescriptionDecoratorFilter.DESCRIPTION_REPOSITORY_NAME, descriptionRepository);
+		analysisController.connect(descriptionDecoratorFilter, DescriptionDecoratorFilter.DESCRIPTION_REPOSITORY_PORT_NAME, descriptionRepository);
 	}
 
 	private static OperationExecutionRecord createExecutionRecord(final String signature, final int tIn, final int tOut, final int eoi, final int ess) {
@@ -126,7 +125,7 @@ public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
 
 		// Prepare the produced graph
 		final ComponentAllocationDependencyGraph graph = graphReceiver.<ComponentAllocationDependencyGraph> getFirstGraph(); // NOCS (generic)
-		final Map<String, DependencyGraphNode<AllocationComponent>> nodeMap = DependencyGraphTestUtil.createNodeLookupTable(graph);
+		final ConcurrentMap<String, DependencyGraphNode<AllocationComponent>> nodeMap = DependencyGraphTestUtil.createNodeLookupTable(graph);
 
 		final DependencyGraphNode<AllocationComponent> component1Node = nodeMap.get(EXPECTED_ALLOCATION_COMPONENT_NAME_1);
 		final DependencyGraphNode<AllocationComponent> component2Node = nodeMap.get(EXPECTED_ALLOCATION_COMPONENT_NAME_2);

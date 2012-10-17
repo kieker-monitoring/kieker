@@ -50,6 +50,13 @@ public @interface Repository {
 	String description() default "";
 
 	/**
+	 * This field can contain an additional text to give an impression of the needed dependencies.
+	 * 
+	 * @return The dependencies for the current repository as a human-readable description.
+	 */
+	String dependencies() default "";
+
+	/**
 	 * The name which is used to identify this repository type.
 	 * 
 	 * @return The name of this repository type.

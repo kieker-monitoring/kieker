@@ -46,7 +46,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 
 	@Around("monitoredOperation() && this(thisObject) && notWithinKieker()")
 	public Object operation(final Object thisObject, final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
-		if (!CTRLINST.isMonitoringEnabled()) {
+		final String signature = thisJoinPoint.getSignature().toLongString();
+		if (!CTRLINST.isProbeActivated(signature)) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
@@ -57,7 +58,6 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			CTRLINST.newMonitoringRecord(trace);
 		}
 		final long traceId = trace.getTraceId();
-		final String signature = thisJoinPoint.getSignature().toLongString();
 		final String clazz = thisObject.getClass().getName();
 		// measure before execution
 		CTRLINST.newMonitoringRecord(new BeforeOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz));
@@ -82,7 +82,9 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 
 	@Around("monitoredOperation() && !this(java.lang.Object) && notWithinKieker()")
 	public Object staticOperation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
-		if (!CTRLINST.isMonitoringEnabled()) {
+		final Signature sig = thisJoinPoint.getSignature();
+		final String signature = sig.toLongString();
+		if (!CTRLINST.isProbeActivated(signature)) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
@@ -93,8 +95,6 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			CTRLINST.newMonitoringRecord(trace);
 		}
 		final long traceId = trace.getTraceId();
-		final Signature sig = thisJoinPoint.getSignature();
-		final String signature = sig.toLongString();
 		final String clazz = sig.getDeclaringTypeName();
 		// measure before execution
 		CTRLINST.newMonitoringRecord(new BeforeOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz));

@@ -38,9 +38,14 @@ import kieker.common.configuration.Configuration;
 @Repository(name = "Description repository",
 		description = "Stores descriptions for names",
 		configuration = {
-			@Property(name = DescriptionRepositoryConfiguration.CONFIG_PROPERTY_NAME_DESCRIPTION_FILE_NAME, defaultValue = "")
+			@Property(name = DescriptionRepository.CONFIG_PROPERTY_NAME_DESCRIPTION_FILE_NAME, defaultValue = "")
 		})
 public class DescriptionRepository extends AbstractRepository {
+
+	/**
+	 * Name of the configuration property that contains the file name of the description file.
+	 */
+	public static final String CONFIG_PROPERTY_NAME_DESCRIPTION_FILE_NAME = "descriptionFileName";
 
 	private static final char DELIMITER = '=';
 
@@ -57,7 +62,7 @@ public class DescriptionRepository extends AbstractRepository {
 	 *             If an I/O error occurs during initialization
 	 */
 	public DescriptionRepository(final Configuration configuration) throws IOException {
-		this(configuration, DescriptionRepository.readDataFromFile(new DescriptionRepositoryConfiguration(configuration).getDescriptionFileName()));
+		this(configuration, DescriptionRepository.readDataFromFile(configuration.getStringProperty(CONFIG_PROPERTY_NAME_DESCRIPTION_FILE_NAME)));
 	}
 
 	/**
@@ -70,7 +75,6 @@ public class DescriptionRepository extends AbstractRepository {
 	 */
 	public DescriptionRepository(final Configuration configuration, final DescriptionRepositoryData descriptionData) {
 		super(configuration);
-
 		this.descriptionMap = descriptionData.getDescriptionMap();
 	}
 
@@ -78,6 +82,11 @@ public class DescriptionRepository extends AbstractRepository {
 		return this.configuration;
 	}
 
+	/**
+	 * Returns the description map (node id -> description) contained in this repository-
+	 * 
+	 * @return See above
+	 */
 	public Map<String, String> getDescriptionMap() {
 		return Collections.unmodifiableMap(this.descriptionMap);
 	}
@@ -105,10 +114,9 @@ public class DescriptionRepository extends AbstractRepository {
 	 *             If an I/O error occurs
 	 */
 	public static DescriptionRepository createFromFile(final String fileName) throws IOException {
-		final DescriptionRepositoryConfiguration configuration = new DescriptionRepositoryConfiguration(new Configuration());
-		configuration.setDescriptionFileName(fileName);
-
-		return new DescriptionRepository(configuration.getWrappedConfiguration(), DescriptionRepository.readDataFromFile(fileName));
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(CONFIG_PROPERTY_NAME_DESCRIPTION_FILE_NAME, fileName);
+		return new DescriptionRepository(configuration, DescriptionRepository.readDataFromFile(fileName));
 	}
 
 	private static DescriptionRepositoryData readDataFromFile(final String fileName) throws IOException {
@@ -141,17 +149,26 @@ public class DescriptionRepository extends AbstractRepository {
 	}
 
 	/**
+	 * This class groups the data required for a {@link DescriptionRepository}.
+	 * 
 	 * @author Holger Knoche
 	 */
 	public static class DescriptionRepositoryData {
 
 		private final ConcurrentMap<String, String> descriptionMap;
 
+		/**
+		 * Creates a new data object using the given description map.
+		 * 
+		 * @param descriptionMap
+		 *            The description map (node id, see {@link kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraphElement#getIdentifier()} ->
+		 *            description) to use
+		 */
 		public DescriptionRepositoryData(final ConcurrentMap<String, String> descriptionMap) {
 			this.descriptionMap = descriptionMap;
 		}
 
-		public ConcurrentMap<String, String> getDescriptionMap() {
+		private ConcurrentMap<String, String> getDescriptionMap() {
 			return this.descriptionMap;
 		}
 

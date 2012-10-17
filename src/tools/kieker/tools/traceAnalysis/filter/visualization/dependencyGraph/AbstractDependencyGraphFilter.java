@@ -40,10 +40,24 @@ public abstract class AbstractDependencyGraphFilter<T extends ISystemModelElemen
 
 	private final List<AbstractNodeDecorator> decorators = new ArrayList<AbstractNodeDecorator>();
 
+	/**
+	 * Creates a new abstract dependency graph filter using the given data.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 * @param graph
+	 *            The graph to produce / extend
+	 */
 	public AbstractDependencyGraphFilter(final Configuration configuration, final AbstractDependencyGraph<T> graph) {
 		super(configuration, graph);
 	}
 
+	/**
+	 * Adds a node decorator to this graph.
+	 * 
+	 * @param decorator
+	 *            The decorator to add
+	 */
 	public void addDecorator(final AbstractNodeDecorator decorator) {
 		this.decorators.add(decorator);
 	}

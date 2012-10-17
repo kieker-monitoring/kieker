@@ -19,15 +19,18 @@ package kieker.tools.traceAnalysis.filter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
 
 /**
- * Interface for graph-producing filters.
+ * Interface for graph-outputting filters.
  * 
  * @author Holger Knoche
  * 
  * @param <G>
- *            The type of the produced graph
+ *            The type of the output graph
  */
 public interface IGraphOutputtingFilter<G extends AbstractGraph<?, ?, ?>> {
 
+	/**
+	 * The default name for graph output ports.
+	 */
 	public static final String OUTPUT_PORT_NAME_GRAPH = "graphs";
 
 	/**

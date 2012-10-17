@@ -38,6 +38,9 @@ public class ComponentAllocationDependencyGraphFormatter extends AbstractCompone
 
 	private static final String DEFAULT_FILE_NAME = Constants.ALLOCATION_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX + Constants.DOT_FILE_SUFFIX;
 
+	/**
+	 * Creates a new formatter.
+	 */
 	public ComponentAllocationDependencyGraphFormatter() {
 		// empty default Constructor
 	}

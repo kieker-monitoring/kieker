@@ -17,7 +17,6 @@
 package kieker.common.logging;
 
 /**
- * 
  * @author Jan Waller
  */
 public final class LogImplJDK14 implements Log {
@@ -51,7 +50,7 @@ public final class LogImplJDK14 implements Log {
 		}
 	}
 
-	public boolean isDebugEnabled() {
+	public final boolean isDebugEnabled() {
 		return this.logger.isLoggable(java.util.logging.Level.FINE);
 	}
 

@@ -60,9 +60,8 @@ public class GraphReceiverPlugin extends ListCollectionFilter<AbstractGraph<?, ?
 	 * 
 	 * @return See above
 	 */
-	@SuppressWarnings("unchecked")
 	public <T extends AbstractGraph<?, ?, ?>> T getFirstGraph() {
-		return (T) this.getList().get(0); // using getGraphAt leads to a compile error, probably caused by a javac bug
+		return this.<T> getGraphAt(0); // NOCS Explicit bound is required to work around a possible javac bug
 	}
 
 	/**
