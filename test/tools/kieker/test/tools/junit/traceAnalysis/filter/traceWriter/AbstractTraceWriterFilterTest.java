@@ -31,6 +31,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
@@ -40,7 +41,6 @@ import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
-import kieker.test.analysis.util.plugin.reader.SimpleListReader;
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.util.BookstoreExecutionFactory;
 
@@ -93,7 +93,8 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 		execTrace.add(this.execFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(AbstractTraceWriterFilterTest.TRACE_ID_VALID_EXEC_TRACE,
 				AbstractTraceWriterFilterTest.SESSION_ID, AbstractTraceWriterFilterTest.HOSTNAME,
 				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_VALID_EXEC_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
-				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_VALID_EXEC_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook));
+				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_VALID_EXEC_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
+				/* assumed: */false));
 		execTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION); // just to make sure this trace is really valid
 		return execTrace;
 	}
@@ -103,7 +104,8 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 		execTrace.add(this.execFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(AbstractTraceWriterFilterTest.TRACE_ID_VALID_MSG_TRACE,
 				AbstractTraceWriterFilterTest.SESSION_ID, AbstractTraceWriterFilterTest.HOSTNAME,
 				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_VALID_MESSAGE_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
-				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_VALID_MESSAGE_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook));
+				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_VALID_MESSAGE_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
+				/* assumed: */false));
 		execTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION); // just to make sure this trace is really valid
 		return execTrace;
 	}
@@ -113,7 +115,8 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 		execTrace.add(this.execFactory.createBookstoreExecution_exec1_1__catalog_getBook(AbstractTraceWriterFilterTest.TRACE_ID_INVALID_EXEC_TRACE,
 				AbstractTraceWriterFilterTest.SESSION_ID, AbstractTraceWriterFilterTest.HOSTNAME,
 				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_INVALID_EXEC_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry1_1__catalog_getBook,
-				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_INVALID_EXEC_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit1_1__catalog_getBook));
+				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_INVALID_EXEC_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit1_1__catalog_getBook,
+				/* assumed: */false));
 
 		try {
 			execTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
@@ -136,7 +139,7 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 	public void testIt() throws Exception {
 		final AbstractTraceProcessingFilter filter = this.provideWriterFilter(this.outputFile.getAbsolutePath());
 
-		final SimpleListReader<Object> reader = new SimpleListReader<Object>(new Configuration());
+		final ListReader<Object> reader = new ListReader<Object>(new Configuration());
 		final List<Object> eventList = this.createTraces();
 		reader.addAllObjects(eventList);
 
@@ -144,7 +147,7 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 		analysisController.registerFilter(filter);
 		analysisController.registerReader(reader);
 		analysisController.registerRepository(this.modelRepo);
-		analysisController.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, filter, this.provideFilterInputName());
+		analysisController.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, this.provideFilterInputName());
 		analysisController.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.modelRepo);
 		analysisController.run();
 

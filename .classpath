@@ -3,7 +3,6 @@
 	<classpathentry kind="src" path="src/common"/>
 	<classpathentry kind="src" path="src/analysis"/>
 	<classpathentry kind="src" path="src/monitoring"/>
-	<classpathentry kind="src" path="src/monitoring-servlet"/>
 	<classpathentry kind="src" path="src/tools"/>
 	<classpathentry kind="src" path="src-gen/analysis"/>
 	<classpathentry kind="src" path="test/common"/>
@@ -20,23 +19,72 @@
 	<classpathentry kind="src" path="examples/SPECjEnterprise2010/src"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
-	<classpathentry kind="lib" path="lib/aopalliance-alpha1.jar"/>
-	<classpathentry kind="lib" path="lib/aspectjrt-1.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/aspectjrt-1.7.1.jar"/>
+	<classpathentry kind="lib" path="lib/aspectjweaver-1.7.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-cli-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/cxf-api-2.6.2.jar"/>
 	<classpathentry kind="lib" path="lib/cxf-rt-bindings-soap-2.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/cxf-rt-core-2.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/cxf-rt-databinding-jaxb-2.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/cxf-rt-frontend-jaxws-2.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/cxf-rt-frontend-simple-2.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/cxf-rt-transports-http-2.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/cxf-rt-transports-http-jetty-2.6.2.jar"/>
 	<classpathentry kind="lib" path="lib/derby-10.9.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/geronimo-jaxws_2.1_spec-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/geronimo-ws-metadata_2.0_spec-1.1.3.jar"/>
+	<classpathentry kind="lib" path="lib/javaee-api-5.0.5.jar"/>
 	<classpathentry kind="lib" path="lib/javax.jms-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/javax.servlet-3.0.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb-api-2.0.5.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb-impl-2.0.5.jar"/>
 	<classpathentry kind="lib" path="lib/jgraphx-1.10.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.10.jar"/>
-	<classpathentry kind="lib" path="lib/org.eclipse.emf.common_2.8.0.v20120606-0717.jar"/>
-	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore.xmi_2.8.0.v20120606-0717.jar"/>
-	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore_2.8.0.v20120606-0717.jar"/>
+	<classpathentry kind="lib" path="lib/neethi-3.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.emf.common_2.8.0.v20120911-0500.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore.xmi_2.8.0.v20120911-0500.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore_2.8.1.v20120911-0500.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.gmt.modisco.omg.kdm_0.10.0.v201206130817.jar"/>
+	<classpathentry kind="lib" path="lib/org.springframework.aop-3.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/org.springframework.asm-3.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/org.springframework.beans-3.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/org.springframework.context-3.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/org.springframework.core-3.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/org.springframework.expression-3.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/org.springframework.instrument-3.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/org.springframework.web-3.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/org.springframework.web.portlet-3.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/org.springframework.web.servlet-3.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/org.springframework.web.struts-3.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/sigar-1.6.4.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.7.1.jar"/>
+	<classpathentry kind="lib" path="lib/stax-1.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/wsdl4j-1.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/xmlschema-core-2.0.2.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-continuation-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-http-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-io-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-server-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-util-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-ajp-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-annotations-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-client-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-deploy-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-jmx-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-jndi-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-overlay-deployer-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-plus-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-policy-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-rewrite-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-security-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-servlet-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-servlets-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-webapp-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-websocket-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-xml-7.6.7.v20120910.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/aopalliance-1.0.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/asm-3.1.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/cglib-2.2.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>

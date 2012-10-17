@@ -25,15 +25,11 @@ public interface IOperationRecord {
 
 	/**
 	 * Get the actual OperationSignature
-	 * 
-	 * @return
 	 */
 	public abstract String getOperationSignature();
 
 	/**
 	 * Get the actually executing class
-	 * 
-	 * @return
 	 */
 	public abstract String getClassSignature();
 

@@ -24,13 +24,13 @@ import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
+import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
+import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.common.record.misc.TimestampRecord;
 import kieker.tools.currentTimeEventGenerator.CurrentTimeEventGenerationFilter;
 
-import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
-import kieker.test.analysis.util.plugin.reader.SimpleListReader;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
@@ -111,22 +111,22 @@ public class TestCurrentTimeEventGeneratorFilter extends AbstractKiekerTest { //
 	 */
 	private void compareInputAndOutput(final long timerResolution, final long[] inputTimestamps, final long[] expectedOutputTimerEvents, final boolean rawTimestamp)
 			throws IllegalStateException, AnalysisConfigurationException {
-		final SimpleListReader<Object> reader = new SimpleListReader<Object>(new Configuration());
+		final ListReader<Object> reader = new ListReader<Object>(new Configuration());
 		final Configuration filterConfiguration = new Configuration();
 		filterConfiguration.setProperty(CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_NAME_TIME_RESOLUTION, Long.toString(timerResolution));
 		final CurrentTimeEventGenerationFilter filter = new CurrentTimeEventGenerationFilter(filterConfiguration);
 
-		final SimpleSinkFilter<TimestampRecord> sink = new SimpleSinkFilter<TimestampRecord>(new Configuration());
+		final ListCollectionFilter<TimestampRecord> sink = new ListCollectionFilter<TimestampRecord>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
 		controller.registerReader(reader);
 		controller.registerFilter(filter);
 		controller.registerFilter(sink);
 		if (rawTimestamp) {
-			controller.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, filter, CurrentTimeEventGenerationFilter.INPUT_PORT_NAME_NEW_TIMESTAMP);
+			controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, CurrentTimeEventGenerationFilter.INPUT_PORT_NAME_NEW_TIMESTAMP);
 		} else {
-			controller.connect(reader, SimpleListReader.OUTPUT_PORT_NAME, filter, CurrentTimeEventGenerationFilter.INPUT_PORT_NAME_NEW_RECORD);
+			controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, CurrentTimeEventGenerationFilter.INPUT_PORT_NAME_NEW_RECORD);
 		}
-		controller.connect(filter, CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_RECORD, sink, SimpleSinkFilter.INPUT_PORT_NAME);
+		controller.connect(filter, CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_RECORD, sink, ListCollectionFilter.INPUT_PORT_NAME);
 
 		for (final long timestamp : inputTimestamps) {
 			if (rawTimestamp) { // pass raw timestamp as long

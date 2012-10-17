@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.List;
 
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertex;
+import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 
 /**
@@ -39,8 +40,8 @@ public abstract class AbstractCallTreeNode<T> extends AbstractVertex<AbstractCal
 
 	private final List<WeightedDirectedCallTreeEdge<T>> childEdges = Collections.synchronizedList(new ArrayList<WeightedDirectedCallTreeEdge<T>>());
 
-	public AbstractCallTreeNode(final int id, final T entity, final boolean rootNode, final MessageTrace origin) {
-		super(origin);
+	public AbstractCallTreeNode(final int id, final T entity, final boolean rootNode, final MessageTrace origin, final IOriginRetentionPolicy originPolicy) {
+		super(origin, originPolicy);
 		this.id = id;
 		this.rootNode = rootNode;
 		this.entity = entity;
@@ -60,7 +61,7 @@ public abstract class AbstractCallTreeNode<T> extends AbstractVertex<AbstractCal
 	}
 
 	// TODO: Dirty hack, Object should be T.
-	public abstract AbstractCallTreeNode<T> newCall(Object destination, MessageTrace origin);
+	public abstract AbstractCallTreeNode<T> newCall(Object destination, MessageTrace origin, IOriginRetentionPolicy originPolicy);
 
 	public final int getId() {
 		return this.id;

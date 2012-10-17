@@ -1,7 +1,0 @@
-The sigar-<version>.jar is the platform-independent Java binding of the Sigar 
-library which is required to compile Kieker. At runtime, it is required to 
-place an additional platform-specific object file for the operating system and
-system architecture, e.g., libsigar-x86-linux.so, which should be downloaded 
-from the Sigar web site (http://support.hyperic.com/display/SIGAR/). The 
-platform-specific object files for some common architectures on linux and
-windows are already included in the Kieker' lib/sigar-native-libs/ directory.

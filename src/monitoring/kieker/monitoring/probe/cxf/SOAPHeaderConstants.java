@@ -26,7 +26,7 @@ import javax.xml.namespace.QName;
  * @author Dennis Kieselhorst
  */
 public interface SOAPHeaderConstants { // NOPMD NOCS (constants interface)
-	public static final String NAMESPACE_URI = "http://kieker.sf.net";
+	public static final String NAMESPACE_URI = "http://kieker-monitoring.net";
 	public static final String SESSION_QUALIFIED_NAME = "sessionId";
 	public static final String TRACE_QUALIFIED_NAME = "traceId";
 	public static final String EOI_QUALIFIED_NAME = "eoi";

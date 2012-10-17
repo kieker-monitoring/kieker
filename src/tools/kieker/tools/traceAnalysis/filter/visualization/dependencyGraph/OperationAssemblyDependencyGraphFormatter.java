@@ -40,6 +40,9 @@ public class OperationAssemblyDependencyGraphFormatter extends AbstractOperation
 
 	private static final String DEFAULT_FILE_NAME = Constants.ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX + Constants.DOT_FILE_SUFFIX;
 
+	/**
+	 * Creates a new formatter.
+	 */
 	public OperationAssemblyDependencyGraphFormatter() {
 		// default empty constructor
 	}

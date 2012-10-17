@@ -96,7 +96,7 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 
 	/**
 	 * Constructs a new {@link CPUUtilizationRecord} with the given values. If
-	 * certain values shall remain undefined, use the constant {@link #UNDEFINED_DOUBLE}.
+	 * certain {@link String} values shall remain undefined, use the constant {@link #DEFAULT_VALUE}.
 	 * 
 	 * @param timestamp
 	 * @param hostname

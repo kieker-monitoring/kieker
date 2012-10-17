@@ -28,6 +28,8 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractEdge;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph.IGraphVisitor;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractPayloadedVertex;
+import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPolicy;
+import kieker.tools.traceAnalysis.filter.visualization.graph.NoOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.repository.DescriptionRepository;
 import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
 
@@ -44,16 +46,25 @@ import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
  *            The type of the origin of the graph's elements
  */
 @Plugin(name = "",
-		description = "",
-		repositoryPorts = @RepositoryPort(name = DescriptionDecoratorFilter.DESCRIPTION_REPOSITORY_NAME, repositoryType = DescriptionRepository.class),
+		description = "This filter attaches decorations to graph entities",
+		repositoryPorts = @RepositoryPort(name = DescriptionDecoratorFilter.DESCRIPTION_REPOSITORY_PORT_NAME, repositoryType = DescriptionRepository.class),
 		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
 public class DescriptionDecoratorFilter<V extends AbstractPayloadedVertex<V, E, O, ISystemModelElement>, E extends AbstractEdge<V, E, O>, O> extends
 		AbstractGraphFilter<AbstractGraph<V, E, O>, V, E, O> implements IGraphVisitor<V, E> {
 
-	public static final String DESCRIPTION_REPOSITORY_NAME = "descriptionRepository";
+	/**
+	 * Port name at which the description repository must be connected.
+	 */
+	public static final String DESCRIPTION_REPOSITORY_PORT_NAME = "descriptionRepository";
 
 	private Map<String, String> decorationsMap;
 
+	/**
+	 * Creates a new description decorator filter using the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 */
 	public DescriptionDecoratorFilter(final Configuration configuration) {
 		super(configuration);
 	}
@@ -73,7 +84,7 @@ public class DescriptionDecoratorFilter<V extends AbstractPayloadedVertex<V, E, 
 	}
 
 	private void initialize() {
-		final DescriptionRepository repository = (DescriptionRepository) this.getRepository(DESCRIPTION_REPOSITORY_NAME);
+		final DescriptionRepository repository = (DescriptionRepository) this.getRepository(DESCRIPTION_REPOSITORY_PORT_NAME);
 		this.decorationsMap = repository.getDescriptionMap();
 	}
 
@@ -84,6 +95,11 @@ public class DescriptionDecoratorFilter<V extends AbstractPayloadedVertex<V, E, 
 		graph.traverse(this);
 
 		return graph;
+	}
+
+	@Override
+	protected IOriginRetentionPolicy getDesiredOriginRetentionPolicy() {
+		return NoOriginRetentionPolicy.createInstance();
 	}
 
 }

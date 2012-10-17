@@ -21,7 +21,7 @@ continuous monitoring in production systems inducing only a very low overhead. F
 
 \Kieker{} is a Java-based application performance monitoring and dynamic software analysis framework~\cite{KiekerICPE2012}. %
 Monitoring adapters for other platforms, such as Visual Basic~6~(VB6), .NET, and COBOL are currently under development.%
-\footnote{\href{http://kieker-monitoring.net/support}{Contact us} directly if you are interested in \Kieker{} support for other platforms} %
+\footnote{\href{http://kieker-monitoring.net/support/}{Contact us} directly if you are interested in \Kieker{} support for other platforms} %
 Figure \ref{fig:KiekerComponentDiagram} shows the framework's composition based %
 on the two main components \KiekerMonitoringPart{} and \KiekerAnalysisPart{}. %
 
@@ -121,9 +121,28 @@ the license at \url{http://www.apache.org/licenses/LICENSE-2.0}.
 
 The \Kieker{} source and binary release archives include a number of third-party %
 libraries. %
-Appendix~\ref{appendix:libraries} lists these libraries along with information %
-on the licenses. The \dir{lib/} directory of the release archives contains a %
+% Appendix~\ref{appendix:libraries} lists these libraries along with information %
+% on the licenses. 
+The \dir{lib/} directory of the release archives contains a %
 \file{.LICENSE} file for each third-party library, pointing to the respective license text.
+
+\section{Citing Kieker}\label{sec:ch1:citingKieker}
+
+When referencing Kieker resources in your publications, we would be happy if you %
+respected the following guide lines:
+
+\begin{itemize}
+\item When referencing the Kieker project, please cite our %
+ICPE~2012~\cite{KiekerICPE2012} paper and/or our 2009 technical report~\cite{vanHoornRohrHasselbringWallerEhlersFreyKieselhorst2009TRContinuousMonitoringOfSoftwareServicesDesignAndApplicationOfTheKiekerFramework}. %
+Also, you might want to add a reference to our web site (\url{http://kieker-monitoring.net/}) %
+like~\cite{KiekerWebSite}. 
+\item When referencing this user guide, e.g., when reprinting contents, please %
+use a citation like~\cite{Kieker1.7UserGuide}.
+\end{itemize}
+
+\noindent At \url{http://kieker-monitoring.net/documentation/} we provide %
+entries for $\mathrm{B\scriptstyle IB}\!$\TeX{} and other bibliography %
+systems.
 
 \section{Structure of this User Guide}
 

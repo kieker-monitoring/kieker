@@ -43,9 +43,14 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.Color;
 @Repository(name = "Trace color repository",
 		description = "Provides color information for trace coloring",
 		configuration = {
-			@Property(name = TraceColorRepositoryConfiguration.CONFIG_PROPERTY_NAME_TRACE_COLOR_FILE_NAME, defaultValue = "")
+			@Property(name = TraceColorRepository.CONFIG_PROPERTY_NAME_TRACE_COLOR_FILE_NAME, defaultValue = "")
 		})
 public class TraceColorRepository extends AbstractRepository {
+
+	/**
+	 * Name of the configuration property that contains the file name of the trace color file.
+	 */
+	public static final String CONFIG_PROPERTY_NAME_TRACE_COLOR_FILE_NAME = "traceColorFileName";
 
 	private static final String DEFAULT_KEYWORD = "default";
 	private static final String COLLISION_KEYWORD = "collision";
@@ -70,7 +75,7 @@ public class TraceColorRepository extends AbstractRepository {
 	 *             If an I/O error occurs during initialization
 	 */
 	public TraceColorRepository(final Configuration configuration) throws IOException {
-		this(configuration, TraceColorRepository.readDataFromFile(new TraceColorRepositoryConfiguration(configuration).getTraceColorFileName()));
+		this(configuration, TraceColorRepository.readDataFromFile(configuration.getStringProperty(CONFIG_PROPERTY_NAME_TRACE_COLOR_FILE_NAME)));
 	}
 
 	/**
@@ -81,7 +86,7 @@ public class TraceColorRepository extends AbstractRepository {
 	 * @param colorData
 	 *            The color data to use for this repository
 	 */
-	private TraceColorRepository(final Configuration configuration, final TraceColorRepositoryData colorData) {
+	public TraceColorRepository(final Configuration configuration, final TraceColorRepositoryData colorData) {
 		super(configuration);
 		this.colorMap = colorData.getColorMap();
 		this.defaultColor = colorData.getDefaultColor();
@@ -147,10 +152,9 @@ public class TraceColorRepository extends AbstractRepository {
 	 *             If an I/O error occurs
 	 */
 	public static TraceColorRepository createFromFile(final String fileName) throws IOException {
-		final TraceColorRepositoryConfiguration configuration = new TraceColorRepositoryConfiguration(new Configuration());
-		configuration.setTraceColorFileName(fileName);
-
-		return new TraceColorRepository(configuration.getWrappedConfiguration(), TraceColorRepository.readDataFromFile(fileName));
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(CONFIG_PROPERTY_NAME_TRACE_COLOR_FILE_NAME, fileName);
+		return new TraceColorRepository(configuration, TraceColorRepository.readDataFromFile(fileName));
 	}
 
 	private static TraceColorRepositoryData readDataFromFile(final String fileName) throws IOException {
@@ -202,26 +206,41 @@ public class TraceColorRepository extends AbstractRepository {
 		}
 	}
 
-	private static class TraceColorRepositoryData {
+	/**
+	 * This class groups the data required for a {@link TraceColorRepository}.
+	 * 
+	 * @author Holger Knoche
+	 */
+	public static class TraceColorRepositoryData {
 		private final ConcurrentMap<Long, Color> colorMap;
 		private final Color defaultColor;
 		private final Color collisionColor;
 
+		/**
+		 * Creates a new data object using the given data.
+		 * 
+		 * @param colorMap
+		 *            The color map (trace id -> color) to use
+		 * @param defaultColor
+		 *            The default color to use
+		 * @param collisionColor
+		 *            The collision color to use
+		 */
 		public TraceColorRepositoryData(final ConcurrentMap<Long, Color> colorMap, final Color defaultColor, final Color collisionColor) {
 			this.colorMap = colorMap;
 			this.defaultColor = defaultColor;
 			this.collisionColor = collisionColor;
 		}
 
-		public ConcurrentMap<Long, Color> getColorMap() {
+		private ConcurrentMap<Long, Color> getColorMap() {
 			return this.colorMap;
 		}
 
-		public Color getDefaultColor() {
+		private Color getDefaultColor() {
 			return this.defaultColor;
 		}
 
-		public Color getCollisionColor() {
+		private Color getCollisionColor() {
 			return this.collisionColor;
 		}
 

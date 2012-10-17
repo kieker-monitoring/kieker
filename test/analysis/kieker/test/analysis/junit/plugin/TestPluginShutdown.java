@@ -200,7 +200,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 		}
 
 		public boolean read() {
-			// don't send anything (else wo would fail in loop!)
+			// don't send anything (else we would fail in loop!)
 			// super.deliver(OUTPUT_PORT_NAME, new Object());
 			return true;
 		}

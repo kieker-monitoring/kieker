@@ -17,6 +17,7 @@
 package kieker.monitoring.probe.aspectj.flow.construction;
 
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -44,7 +45,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	// TODO: this may be logged multiple times due to super constructor calls...
 	@AfterReturning("monitoredConstructor() && this(thisObject) && notWithinKieker()")
 	public void afterConstruction(final Object thisObject, final JoinPoint.StaticPart jp) {
-		if (!CTRLINST.isMonitoringEnabled()) {
+		final Signature signature = jp.getSignature();
+		if (!CTRLINST.isProbeActivated(signature.toLongString())) {
 			return;
 		}
 		// common fields
@@ -55,7 +57,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			CTRLINST.newMonitoringRecord(trace);
 		}
 		final ConstructionEvent crecord = new ConstructionEvent(TIME.getTime(), trace.getTraceId(), trace.getNextOrderId(),
-				jp.getSignature().getDeclaringTypeName(), System.identityHashCode(thisObject));
+				signature.getDeclaringTypeName(), System.identityHashCode(thisObject));
 		CTRLINST.newMonitoringRecord(crecord);
 	}
 }

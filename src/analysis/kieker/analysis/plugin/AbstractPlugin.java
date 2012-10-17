@@ -21,10 +21,12 @@ import java.lang.reflect.Method;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -260,6 +262,11 @@ public abstract class AbstractPlugin implements IPlugin {
 				src.registeredMethods.get(outputPortName).add(new PluginInputPortReference(dst, inputPortName, m, dst.inputPorts.get(inputPortName).eventTypes()));
 				src.outgoingPlugins.add(dst);
 				dst.incomingPlugins.add(src);
+
+				// Fire notification events
+				src.notifyNewOutgoingConnection(outputPortName, dst, inputPortName);
+				dst.notifyNewIncomingConnection(inputPortName, src, outputPortName);
+
 				return;
 			}
 		}
@@ -531,4 +538,61 @@ public abstract class AbstractPlugin implements IPlugin {
 			plugin.shutdown(error);
 		}
 	}
+
+	/**
+	 * Returns the plugins which provide data to this plugin.
+	 * 
+	 * @param transitive
+	 *            Denotes whether indirect (i.e. non-immediate) providers should be returned
+	 * @return A set of plugins which directly or indirectly (see above) provide data for this plugin
+	 */
+	public Set<AbstractPlugin> getIncomingPlugins(final boolean transitive) {
+		final Set<AbstractPlugin> knownIncomingPlugins = new HashSet<AbstractPlugin>();
+		this.addIncomingPlugins(knownIncomingPlugins, transitive);
+		return knownIncomingPlugins;
+	}
+
+	private void addIncomingPlugins(final Set<AbstractPlugin> knownIncomingPlugins, final boolean transitive) {
+		for (final AbstractPlugin plugin : this.incomingPlugins) {
+			knownIncomingPlugins.add(plugin);
+			if (transitive) {
+				plugin.addIncomingPlugins(knownIncomingPlugins, transitive);
+			}
+		}
+	}
+
+	/**
+	 * Notification method which is called when a new incoming connection to this plugin is established.
+	 * 
+	 * @param inputPortName
+	 *            The input port name to which the connection was established
+	 * @param connectedPlugin
+	 *            The plugin that was connected
+	 * @param outputPortName
+	 *            The opposing plugin's output port from which the connection was established
+	 * @throws AnalysisConfigurationException
+	 *             If an error occurs while processing of this notification
+	 */
+	protected void notifyNewIncomingConnection(final String inputPortName, final AbstractPlugin connectedPlugin, final String outputPortName) // NOPMD
+			throws AnalysisConfigurationException {
+		// Do nothing by default
+	}
+
+	/**
+	 * Notification method which is called when a new outgoing connection from this plugin is established.
+	 * 
+	 * @param outputPortName
+	 *            The output port name to which the connection was established
+	 * @param connectedPlugin
+	 *            The plugin that was connected
+	 * @param inputPortName
+	 *            The opposing plugin's input port from which the connection was established
+	 * @throws AnalysisConfigurationException
+	 *             If an error occurs while processing of this notification
+	 */
+	protected void notifyNewOutgoingConnection(final String outputPortName, final AbstractPlugin connectedPlugin, final String inputPortName) // NOPMD
+			throws AnalysisConfigurationException {
+		// Do nothing by default
+	}
+
 }

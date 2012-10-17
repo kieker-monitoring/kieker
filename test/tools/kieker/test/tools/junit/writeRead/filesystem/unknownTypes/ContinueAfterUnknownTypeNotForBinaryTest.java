@@ -22,6 +22,8 @@ import org.junit.Assert;
 
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
+import kieker.common.exception.MonitoringRecordException;
+import kieker.common.logging.LogImplJUnit;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writer.IMonitoringWriter;
 import kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter;
@@ -46,6 +48,7 @@ public class ContinueAfterUnknownTypeNotForBinaryTest extends AbstractUnknownTyp
 	@Override
 	protected void refineWriterConfiguration(final Configuration config, final int numRecordsWritten) {
 		// TODO: additional configuration parameters
+		LogImplJUnit.disableThrowable(MonitoringRecordException.class);
 	}
 
 	@Override
@@ -53,6 +56,7 @@ public class ContinueAfterUnknownTypeNotForBinaryTest extends AbstractUnknownTyp
 		// we expect that reading abort on the occurrence of EVENT1_UNKNOWN_TYPE, i.e., the remaining lines weren't processed
 		Assert.assertEquals("Expected one record", 1, eventFromMonitoringLog.size());
 		Assert.assertEquals("Unexpected record", EVENT0_KNOWN_TYPE, eventFromMonitoringLog.get(0));
+		LogImplJUnit.reset();
 	}
 
 	/**

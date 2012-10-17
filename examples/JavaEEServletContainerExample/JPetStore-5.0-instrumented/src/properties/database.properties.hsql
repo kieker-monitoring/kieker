@@ -1,9 +1,0 @@
-####################################
-# Database Connectivity Properties
-####################################
-
-driver=org.hsqldb.jdbcDriver
-url=jdbc:hsqldb:mem:jpetstore
-username=sa
-password=
-

@@ -20,13 +20,20 @@ import kieker.tools.traceAnalysis.Constants;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 
 /**
+ * Abstract superclass for all node decorators.
  * 
  * @author Holger Knoche
  * 
  */
-
 public abstract class AbstractNodeDecorator {
 
+	/**
+	 * Creates a node decorator from its option name.
+	 * 
+	 * @param optionName
+	 *            The option name to create a decorator for
+	 * @return An appropriate node decorator or {@code null} if none can be determined
+	 */
 	public static AbstractNodeDecorator createFromName(final String optionName) {
 		if (Constants.RESPONSE_TIME_DECORATOR_FLAG.equals(optionName)) {
 			return new ResponseTimeNodeDecorator();
@@ -35,6 +42,16 @@ public abstract class AbstractNodeDecorator {
 		return null;
 	}
 
+	/**
+	 * Processes a message sent from the given source to the given target node.
+	 * 
+	 * @param message
+	 *            The sent message
+	 * @param sourceNode
+	 *            The source node sending the message
+	 * @param targetNode
+	 *            The target node receiving the message
+	 */
 	public abstract void processMessage(AbstractMessage message, DependencyGraphNode<?> sourceNode, DependencyGraphNode<?> targetNode);
 
 }

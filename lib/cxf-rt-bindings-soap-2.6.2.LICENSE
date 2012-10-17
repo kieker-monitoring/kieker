@@ -1,5 +1,6 @@
 The Apache Software License - ASL - v2.0
 Project: http://cxf.apache.org/
+Description: This package contains necessary files to use Apache CXF as well with the Simple Object Access Protocol (SOAP).
 License: http://www.apache.org/licenses/LICENSE-2.0.txt
 
                                  Apache License

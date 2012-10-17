@@ -30,15 +30,15 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 
 /**
- * Forwards incoming {@link IMonitoringRecord}s with delays computed from the {@link IMonitoringRecord#getLoggingTimestamp()} value (assumed to be in nanoseconds
- * resolution). For example, after initialization, if records with logging timestamps 3000 and 4500 nanos are received, the first record is forwarded immediately;
- * the second will be forwarded 1500 nanos later.
+ * Forwards incoming {@link IMonitoringRecord}s with delays computed from the {@link kieker.common.record.IMonitoringRecord#getLoggingTimestamp()} value
+ * (assumed to be in nanoseconds resolution). For example, after initialization, if records with logging timestamps 3000 and 4500 nanos are received, the
+ * first record is forwarded immediately; the second will be forwarded 1500 nanos later.
  * 
- * TODO: Timer with higher precision (Currently milliseconds)?
  * 
  * @author Andre van Hoorn, Robert von Massow
  * 
  */
+// TODO: Timer with higher precision (Currently milliseconds)?
 @Plugin(
 		description = "Forwards incoming records with delays computed from the timestamp values",
 		outputPorts = {

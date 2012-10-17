@@ -48,6 +48,12 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 
 	private static final String CONFIGURATION_NAME = Constants.PLOTCONTAINERDEPGRAPH_COMPONENT_NAME;
 
+	/**
+	 * Creates a new filter using the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 */
 	public ContainerDependencyGraphFilter(final Configuration configuration) {
 		super(configuration, new ContainerDependencyGraph(ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER));
 	}
@@ -70,21 +76,23 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 			DependencyGraphNode<ExecutionContainer> receiverNode = this.getGraph().getNode(receiverContainer.getId());
 
 			if (senderNode == null) {
-				senderNode = new DependencyGraphNode<ExecutionContainer>(senderContainer.getId(), senderContainer, t.getTraceInformation());
+				senderNode = new DependencyGraphNode<ExecutionContainer>(senderContainer.getId(), senderContainer, t.getTraceInformation(),
+						this.getOriginRetentionPolicy());
 				this.getGraph().addNode(senderContainer.getId(), senderNode);
 			} else {
-				senderNode.addOrigin(t.getTraceInformation());
+				this.handleOrigin(senderNode, t.getTraceInformation());
 			}
 
 			if (receiverNode == null) {
-				receiverNode = new DependencyGraphNode<ExecutionContainer>(receiverContainer.getId(), receiverContainer, t.getTraceInformation());
+				receiverNode = new DependencyGraphNode<ExecutionContainer>(receiverContainer.getId(), receiverContainer, t.getTraceInformation(),
+						this.getOriginRetentionPolicy());
 				this.getGraph().addNode(receiverContainer.getId(), receiverNode);
 			} else {
-				receiverNode.addOrigin(t.getTraceInformation());
+				this.handleOrigin(receiverNode, t.getTraceInformation());
 			}
 
-			senderNode.addOutgoingDependency(receiverNode, t.getTraceInformation());
-			receiverNode.addIncomingDependency(senderNode, t.getTraceInformation());
+			senderNode.addOutgoingDependency(receiverNode, t.getTraceInformation(), this.getOriginRetentionPolicy());
+			receiverNode.addIncomingDependency(senderNode, t.getTraceInformation(), this.getOriginRetentionPolicy());
 		}
 		this.reportSuccess(t.getTraceId());
 	}

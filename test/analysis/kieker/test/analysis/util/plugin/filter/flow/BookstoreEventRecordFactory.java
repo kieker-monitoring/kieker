@@ -482,7 +482,7 @@ public final class BookstoreEventRecordFactory {
 	}
 
 	public static TraceEventRecords validSyncTraceSimpleCallCall(final long firstTimestamp, final long traceId, final String sessionId, final String hostname) {
-		int curOrderIndex = 0;
+		int curOrderIndex = -1;
 
 		// assumed to be uninstrumented: final BeforeOperationEvent entry0_0__bookstore_searchBook; // NOCS
 		// assumed to be uninstrumented: final CallOperationEvent call1_1__catalog_getBook; // NOCS
@@ -499,14 +499,14 @@ public final class BookstoreEventRecordFactory {
 		call2_1__crm_getOrders =
 				new CallOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders,
 						/* note that we are using the timestamp of the omitted event here! */
-						traceId, curOrderIndex++,
+						traceId, ++curOrderIndex,
 						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
 						BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
 						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS,
 						BookstoreOperationExecutionRecordFactory.FQ_CLASS_CRM);
 		call3_2__catalog_getBook =
 				new CallOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook,
-						traceId, curOrderIndex++,
+						traceId, ++curOrderIndex,
 						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS,
 						BookstoreOperationExecutionRecordFactory.FQ_CLASS_CRM,
 						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK,

@@ -37,8 +37,7 @@ public class BookstoreExecutionFactory {
 	}
 
 	public Execution createBookstoreExecution_exec0_0__bookstore_searchBook(// NOPMD (MethodNamingConventions) // NOCS (MethodNameCheck)
-			final long traceId, final String sessionId, final String hostname, final long tin, final long tout) {
-		final boolean assumed = false; // currently not relevant
+			final long traceId, final String sessionId, final String hostname, final long tin, final long tout, final boolean assumed) {
 
 		final ClassOperationSignaturePair classOpSignaturePair = ClassOperationSignaturePair
 				.splitOperationSignatureStr(BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
@@ -51,9 +50,7 @@ public class BookstoreExecutionFactory {
 	}
 
 	public Execution createBookstoreExecution_exec1_1__catalog_getBook(// NOPMD (MethodNamingConventions) // NOCS (MethodNameCheck)
-			final long traceId, final String sessionId, final String hostname, final long tin, final long tout) {
-		final boolean assumed = false; // currently not relevant
-
+			final long traceId, final String sessionId, final String hostname, final long tin, final long tout, final boolean assumed) {
 		final ClassOperationSignaturePair classOpSignaturePair = ClassOperationSignaturePair
 				.splitOperationSignatureStr(BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
 
@@ -65,9 +62,7 @@ public class BookstoreExecutionFactory {
 	}
 
 	public Execution createBookstoreExecution_crm_getOrders(// NOPMD (MethodNamingConventions) // NOCS (MethodNameCheck)
-			final long traceId, final String sessionId, final String hostname, final long tin, final long tout, final int eoi, final int ess) {
-		final boolean assumed = false; // currently not relevant
-
+			final long traceId, final String sessionId, final String hostname, final long tin, final long tout, final int eoi, final int ess, final boolean assumed) {
 		final ClassOperationSignaturePair classOpSignaturePair = ClassOperationSignaturePair
 				.splitOperationSignatureStr(BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
 
@@ -77,14 +72,13 @@ public class BookstoreExecutionFactory {
 	}
 
 	public Execution createBookstoreExecution_exec2_1__crm_getOrders(// NOPMD (MethodNamingConventions) // NOCS (MethodNameCheck)
-			final long traceId, final String sessionId, final String hostname, final long tin, final long tout) {
+			final long traceId, final String sessionId, final String hostname, final long tin, final long tout, final boolean assumed) {
 		return this.createBookstoreExecution_crm_getOrders(traceId, sessionId, hostname, tin, tout,
-				BookstoreOperationExecutionRecordFactory.EXEC2_1__CRM_GETORDERS_EOI, BookstoreOperationExecutionRecordFactory.EXEC2_1__CRM_GETORDERS_ESS);
+				BookstoreOperationExecutionRecordFactory.EXEC2_1__CRM_GETORDERS_EOI, BookstoreOperationExecutionRecordFactory.EXEC2_1__CRM_GETORDERS_ESS, assumed);
 	}
 
 	public Execution createBookstoreExecution_catalog_getBook(// NOPMD (MethodNamingConventions) // NOCS (MethodNameCheck)
-			final long traceId, final String sessionId, final String hostname, final long tin, final long tout, final int eoi, final int ess) {
-		final boolean assumed = false; // currently not relevant
+			final long traceId, final String sessionId, final String hostname, final long tin, final long tout, final int eoi, final int ess, final boolean assumed) {
 
 		final ClassOperationSignaturePair classOpSignaturePair = ClassOperationSignaturePair
 				.splitOperationSignatureStr(BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
@@ -94,8 +88,9 @@ public class BookstoreExecutionFactory {
 	}
 
 	public Execution createBookstoreExecution_exec3_2__catalog_getBook(// NOPMD (MethodNamingConventions) // NOCS (MethodNameCheck)
-			final long traceId, final String sessionId, final String hostname, final long tin, final long tout) {
+			final long traceId, final String sessionId, final String hostname, final long tin, final long tout, final boolean assumed) {
 		return this.createBookstoreExecution_catalog_getBook(traceId, sessionId, hostname, tin, tout,
-				BookstoreOperationExecutionRecordFactory.EXEC3_2__CATALOG_GETBOOK_EOI, BookstoreOperationExecutionRecordFactory.EXEC3_2__CATALOG_GETBOOK_ESS);
+				BookstoreOperationExecutionRecordFactory.EXEC3_2__CATALOG_GETBOOK_EOI, BookstoreOperationExecutionRecordFactory.EXEC3_2__CATALOG_GETBOOK_ESS,
+				assumed);
 	}
 }

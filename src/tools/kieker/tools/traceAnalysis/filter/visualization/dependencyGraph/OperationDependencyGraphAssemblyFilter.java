@@ -99,7 +99,8 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 			DependencyGraphNode<AssemblyComponentOperationPair> senderNode = this.getGraph().getNode(senderPair.getId());
 			DependencyGraphNode<AssemblyComponentOperationPair> receiverNode = this.getGraph().getNode(receiverPair.getId());
 			if (senderNode == null) {
-				senderNode = new DependencyGraphNode<AssemblyComponentOperationPair>(senderPair.getId(), senderPair, t.getTraceInformation());
+				senderNode = new DependencyGraphNode<AssemblyComponentOperationPair>(senderPair.getId(), senderPair, t.getTraceInformation(),
+						this.getOriginRetentionPolicy());
 
 				if (m.getSendingExecution().isAssumed()) {
 					senderNode.setAssumed();
@@ -107,11 +108,12 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 
 				this.getGraph().addNode(senderNode.getId(), senderNode);
 			} else {
-				senderNode.addOrigin(t.getTraceInformation());
+				this.handleOrigin(senderNode, t.getTraceInformation());
 			}
 
 			if (receiverNode == null) {
-				receiverNode = new DependencyGraphNode<AssemblyComponentOperationPair>(receiverPair.getId(), receiverPair, t.getTraceInformation());
+				receiverNode = new DependencyGraphNode<AssemblyComponentOperationPair>(receiverPair.getId(), receiverPair, t.getTraceInformation(),
+						this.getOriginRetentionPolicy());
 
 				if (m.getReceivingExecution().isAssumed()) {
 					receiverNode.setAssumed();
@@ -119,13 +121,13 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 
 				this.getGraph().addNode(receiverNode.getId(), receiverNode);
 			} else {
-				receiverNode.addOrigin(t.getTraceInformation());
+				this.handleOrigin(receiverNode, t.getTraceInformation());
 			}
 
 			final boolean assumed = this.isDependencyAssumed(senderNode, receiverNode);
 
-			senderNode.addOutgoingDependency(receiverNode, assumed, t.getTraceInformation());
-			receiverNode.addIncomingDependency(senderNode, assumed, t.getTraceInformation());
+			senderNode.addOutgoingDependency(receiverNode, assumed, t.getTraceInformation(), this.getOriginRetentionPolicy());
+			receiverNode.addIncomingDependency(senderNode, assumed, t.getTraceInformation(), this.getOriginRetentionPolicy());
 
 			this.invokeDecorators(m, senderNode, receiverNode);
 		}

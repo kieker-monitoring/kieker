@@ -63,4 +63,10 @@ interface Keys { // NOPMD NOCS (static list)
 
 	// Sampling Controller
 	public static final String PERIODIC_SENSORS_EXECUTOR_POOL_SIZE = PREFIX + "periodicSensorsExecutorPoolSize";
+
+	// Probe Controller
+	public static final String ADAPTIVE_MONITORING_ENABLED = PREFIX + "adaptiveMonitoring.enabled";
+	public static final String ADAPTIVE_MONITORING_CONFIG_FILE = PREFIX + "adaptiveMonitoring.configFile";
+	public static final String ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE = PREFIX + "adaptiveMonitoring.updateConfigFile";
+	public static final String ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL = PREFIX + "adaptiveMonitoring.readInterval";
 }

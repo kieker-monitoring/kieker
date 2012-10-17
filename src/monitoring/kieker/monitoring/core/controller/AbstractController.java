@@ -39,7 +39,9 @@ public abstract class AbstractController {
 		synchronized (this) {
 			if (this.monitoringController == null) {
 				this.monitoringController = monitoringController;
-				this.init();
+				if (!this.monitoringController.isTerminated()) {
+					this.init();
+				}
 			}
 		}
 	}

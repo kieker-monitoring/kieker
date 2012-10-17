@@ -47,7 +47,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Around("monitoredOperation() && this(thisObject) && target(targetObject) && notWithinKieker()")
 	public Object member2memberOperation(final Object thisObject, final Object targetObject, final ProceedingJoinPoint thisJoinPoint,
 			final EnclosingStaticPart thisEnclosingJoinPoint) throws Throwable { // NOCS
-		if (!CTRLINST.isMonitoringEnabled()) {
+		final String callee = thisJoinPoint.getSignature().toLongString();
+		if (!CTRLINST.isProbeActivated(callee)) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
@@ -63,7 +64,6 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final String callerClazz = thisObject.getClass().getName();
 		final int callerObject = System.identityHashCode(thisObject);
 		// callee
-		final String callee = thisJoinPoint.getSignature().toLongString();
 		final String calleeClazz = targetObject.getClass().getName();
 		final int calleeObject = System.identityHashCode(targetObject);
 		// measure before call
@@ -84,7 +84,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Around("monitoredOperation() && !this(java.lang.Object) && target(targetObject) && notWithinKieker()")
 	public Object static2memberOperation(final Object targetObject, final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint)
 			throws Throwable { // NOCS
-		if (!CTRLINST.isMonitoringEnabled()) {
+		final String callee = thisJoinPoint.getSignature().toLongString();
+		if (!CTRLINST.isProbeActivated(callee)) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
@@ -100,7 +101,6 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final String caller = callerSig.toLongString();
 		final String callerClazz = callerSig.getDeclaringTypeName();
 		// callee
-		final String callee = thisJoinPoint.getSignature().toLongString();
 		final String calleeClazz = targetObject.getClass().getName();
 		final int calleeObject = System.identityHashCode(targetObject);
 		// measure before call
@@ -121,7 +121,9 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Around("monitoredOperation() && this(thisObject) && !target(java.lang.Object) && notWithinKieker()")
 	public Object member2staticOperation(final Object thisObject, final ProceedingJoinPoint thisJoinPoint,
 			final EnclosingStaticPart thisEnclosingJoinPoint) throws Throwable { // NOCS
-		if (!CTRLINST.isMonitoringEnabled()) {
+		final Signature calleeSig = thisJoinPoint.getSignature();
+		final String callee = calleeSig.toLongString();
+		if (!CTRLINST.isProbeActivated(callee)) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
@@ -137,8 +139,6 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final String callerClazz = thisObject.getClass().getName();
 		final int callerObject = System.identityHashCode(thisObject);
 		// callee
-		final Signature calleeSig = thisJoinPoint.getSignature();
-		final String callee = calleeSig.toLongString();
 		final String calleeClazz = calleeSig.getDeclaringTypeName();
 		// measure before call
 		CTRLINST.newMonitoringRecord(new CallOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
@@ -158,7 +158,9 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Around("monitoredOperation() && !this(java.lang.Object) && !target(java.lang.Object) && notWithinKieker()")
 	public Object static2staticOperation(final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint)
 			throws Throwable { // NOCS
-		if (!CTRLINST.isMonitoringEnabled()) {
+		final Signature calleeSig = thisJoinPoint.getSignature();
+		final String callee = calleeSig.toLongString();
+		if (!CTRLINST.isProbeActivated(callee)) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
@@ -174,8 +176,6 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final String caller = callerSig.toLongString();
 		final String callerClazz = callerSig.getDeclaringTypeName();
 		// callee
-		final Signature calleeSig = thisJoinPoint.getSignature();
-		final String callee = calleeSig.toLongString();
 		final String calleeClazz = calleeSig.getDeclaringTypeName();
 		// measure before call
 		CTRLINST.newMonitoringRecord(new CallOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(),

@@ -17,6 +17,7 @@
 package kieker.tools.traceAnalysis.filter.visualization.callTree;
 
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractWeightedEdge;
+import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 
 /**
@@ -27,7 +28,8 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
  */
 public class WeightedDirectedCallTreeEdge<T> extends AbstractWeightedEdge<AbstractCallTreeNode<T>, WeightedDirectedCallTreeEdge<T>, MessageTrace> {
 
-	public WeightedDirectedCallTreeEdge(final AbstractCallTreeNode<T> source, final AbstractCallTreeNode<T> target, final MessageTrace origin) {
-		super(source, target, origin);
+	public WeightedDirectedCallTreeEdge(final AbstractCallTreeNode<T> source, final AbstractCallTreeNode<T> target, final MessageTrace origin,
+			final IOriginRetentionPolicy originPolicy) {
+		super(source, target, origin, originPolicy);
 	}
 }

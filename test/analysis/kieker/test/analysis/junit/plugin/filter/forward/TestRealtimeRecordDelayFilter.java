@@ -32,7 +32,9 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.analysis.plugin.filter.forward.CountingThroughputFilter;
+import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.filter.forward.RealtimeRecordDelayFilter;
+import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -40,8 +42,6 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.common.util.ImmutableEntry;
 
-import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
-import kieker.test.analysis.util.plugin.reader.SimpleListReader;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
@@ -66,7 +66,7 @@ public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 	private final List<EmptyRecord> inputRecords = new ArrayList<EmptyRecord>();
 
 	/** Provides the list of {@link IMonitoringRecord}s to be delayed */
-	private SimpleListReader<IMonitoringRecord> simpleListReader;
+	private ListReader<IMonitoringRecord> simpleListReader;
 
 	/** The filter actually tested: */
 	private RealtimeRecordDelayFilter delayFilter; // NOPMD (SingularField) // We want to have all filters declared here
@@ -81,7 +81,7 @@ public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 	private CountingThroughputFilter throughputFilter;
 
 	/** Simply collects all delayed {@link IMonitoringRecord}s */
-	private SimpleSinkFilter<EmptyRecord> sinkPlugin;
+	private ListCollectionFilter<EmptyRecord> sinkPlugin;
 
 	static {
 		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new ImmutableEntry<Long, Long>((long) 5, (long) 3)); // i.e., in interval (0,5(
@@ -105,8 +105,8 @@ public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 		 * Reader
 		 */
 		final Configuration readerConfiguration = new Configuration();
-		readerConfiguration.setProperty(SimpleListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.FALSE.toString());
-		this.simpleListReader = new SimpleListReader<IMonitoringRecord>(readerConfiguration);
+		readerConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.FALSE.toString());
+		this.simpleListReader = new ListReader<IMonitoringRecord>(readerConfiguration);
 		this.analysisController.registerReader(this.simpleListReader);
 
 		/*
@@ -114,7 +114,7 @@ public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 		 */
 		this.countingFilterReader = new CountingFilter(new Configuration());
 		this.analysisController.registerFilter(this.countingFilterReader);
-		this.analysisController.connect(this.simpleListReader, SimpleListReader.OUTPUT_PORT_NAME,
+		this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME,
 				this.countingFilterReader, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
 		/*
@@ -148,13 +148,13 @@ public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 		/*
 		 * Sink plugin
 		 */
-		this.sinkPlugin = new SimpleSinkFilter<EmptyRecord>(new Configuration());
+		this.sinkPlugin = new ListCollectionFilter<EmptyRecord>(new Configuration());
 		this.analysisController.registerFilter(this.sinkPlugin);
 		this.analysisController.connect(this.countingFilterDelayed, CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
-				this.sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
+				this.sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 	}
 
-	private List<Entry<Long, Integer>> passEventListToReader(final SimpleListReader<IMonitoringRecord> reader) {
+	private List<Entry<Long, Integer>> passEventListToReader(final ListReader<IMonitoringRecord> reader) {
 		long currentTimeSeconds;
 		int curNumRecords = 0;
 

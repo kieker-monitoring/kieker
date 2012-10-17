@@ -16,9 +16,10 @@
 
 package kieker.monitoring.core.controller;
 
-import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -36,25 +37,19 @@ public final class SamplingController extends AbstractController implements ISam
 	private static final Log LOG = LogFactory.getLog(SamplingController.class);
 
 	/** Executes the {@link kieker.monitoring.probe.sigar.samplers.AbstractSigarSampler}s. */
-	private final ScheduledThreadPoolExecutor periodicSensorsPoolExecutor;
+	final ScheduledThreadPoolExecutor periodicSensorsPoolExecutor; // NOPMD NOCS (package visible)
 
-	/**
-	 * 
-	 * @param configuration
-	 */
 	protected SamplingController(final Configuration configuration) {
 		super(configuration);
 		final int threadPoolSize = configuration.getIntProperty(ConfigurationFactory.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE);
-		this.periodicSensorsPoolExecutor = new ScheduledThreadPoolExecutor(threadPoolSize,
-				// Handler for failed sensor executions that simply logs notifications.
-				new RejectedExecutionHandler() {
-
-					public void rejectedExecution(final Runnable r, final ThreadPoolExecutor executor) {
-						LOG.error("Exception caught by RejectedExecutionHandler for Runnable " + r + " and ThreadPoolExecutor " + executor);
-					}
-				});
-		this.periodicSensorsPoolExecutor.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
-		this.periodicSensorsPoolExecutor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
+		if (threadPoolSize > 0) {
+			this.periodicSensorsPoolExecutor = new ScheduledThreadPoolExecutor(threadPoolSize, new DaemonThreadFactory(), new RejectedExecutionHandler());
+			// this.periodicSensorsPoolExecutor.setMaximumPoolSize(threadPoolSize); // not used in this class
+			this.periodicSensorsPoolExecutor.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
+			this.periodicSensorsPoolExecutor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
+		} else {
+			this.periodicSensorsPoolExecutor = null; // NOPMD
+		}
 	}
 
 	@Override
@@ -77,43 +72,78 @@ public final class SamplingController extends AbstractController implements ISam
 		final StringBuilder sb = new StringBuilder(128);
 		sb.append("Sampling Controller: ");
 		if (this.periodicSensorsPoolExecutor != null) {
-			sb.append("Periodic Sensor available: Current Poolsize: '");
+			sb.append("Periodic Sensor available: Poolsize: '");
 			sb.append(this.periodicSensorsPoolExecutor.getPoolSize());
 			sb.append("'; Scheduled Tasks: '");
 			sb.append(this.periodicSensorsPoolExecutor.getTaskCount());
-			sb.append("'\n");
+			sb.append('\''); // no \n in last controller
 		} else {
-			sb.append("No periodic Sensor available\n");
+			sb.append("No periodic Sensor available"); // no \n in last controller
 		}
 		return sb.toString();
 	}
 
 	public final ScheduledSamplerJob schedulePeriodicSampler(final ISampler sensor, final long initialDelay, final long period, final TimeUnit timeUnit) {
-		final ScheduledSamplerJob job;
-		synchronized (this) {
-			if (this.periodicSensorsPoolExecutor.getCorePoolSize() < 1) {
-				LOG.warn("Won't schedule periodic sensor since core pool size <1: " + this.periodicSensorsPoolExecutor.getCorePoolSize());
-				return null;
-			}
-			job = new ScheduledSamplerJob(super.monitoringController, sensor);
-			// we need to keep the future for later cancellation/removal
-			final ScheduledFuture<?> future = this.periodicSensorsPoolExecutor.scheduleAtFixedRate(job, initialDelay, period, timeUnit);
-			job.setFuture(future);
+		if (null == this.periodicSensorsPoolExecutor) {
+			LOG.warn("Won't schedule periodic sensor since Periodic Sampling is deactivated.");
+			return null;
 		}
+		final ScheduledSamplerJob job = new ScheduledSamplerJob(super.monitoringController, sensor);
+		// we need to keep the future for later cancellation/removal
+		final ScheduledFuture<?> future = this.periodicSensorsPoolExecutor.scheduleAtFixedRate(job, initialDelay, period, timeUnit);
+		job.setFuture(future);
 		return job;
 	}
 
 	public final boolean removeScheduledSampler(final ScheduledSamplerJob sensorJob) {
-		synchronized (this) {
-			final ScheduledFuture<?> future = sensorJob.getFuture();
-			if (future != null) {
-				future.cancel(false); // do not interrupt when running
-			} else {
-				LOG.warn("ScheduledFuture of ScheduledSamplerJob null: " + sensorJob);
-			}
-			final boolean success = this.periodicSensorsPoolExecutor.remove(sensorJob);
-			this.periodicSensorsPoolExecutor.purge();
-			return success;
+		if (null == this.periodicSensorsPoolExecutor) {
+			LOG.warn("Won't schedule periodic sensor since Periodic Sampling is deactivated.");
+			return false;
+		}
+		final ScheduledFuture<?> future = sensorJob.getFuture();
+		if (future != null) {
+			future.cancel(false); // do not interrupt when running
+		} else {
+			LOG.warn("ScheduledFuture of ScheduledSamplerJob null: " + sensorJob);
+		}
+		final boolean success = this.periodicSensorsPoolExecutor.remove(sensorJob);
+		this.periodicSensorsPoolExecutor.purge();
+		return success;
+	}
+
+	/**
+	 * @author Jan Waller
+	 */
+	private static final class RejectedExecutionHandler implements java.util.concurrent.RejectedExecutionHandler {
+		private static final Log LOG = LogFactory.getLog(RejectedExecutionHandler.class);
+
+		public RejectedExecutionHandler() {
+			// empty default constructor
+		}
+
+		public void rejectedExecution(final Runnable r, final ThreadPoolExecutor executor) {
+			LOG.error("Exception caught by RejectedExecutionHandler for Runnable " + r + " and ThreadPoolExecutor " + executor);
+		}
+	}
+
+	/**
+	 * A thread factory to create daemon threads
+	 * 
+	 * @see java.util.concurrent.Executors.DefaultThreadFactory
+	 * 
+	 * @Author Jan Waller
+	 */
+	private static final class DaemonThreadFactory implements ThreadFactory {
+		private final ThreadFactory defaultThreadFactory = Executors.defaultThreadFactory();
+
+		public DaemonThreadFactory() {
+			// empty default constructor
+		}
+
+		public Thread newThread(final Runnable r) {
+			final Thread t = this.defaultThreadFactory.newThread(r);
+			t.setDaemon(true);
+			return t;
 		}
 	}
 }

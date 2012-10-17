@@ -30,6 +30,7 @@ import org.junit.Assert;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.exception.AnalysisConfigurationException;
+import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.jmx.JMXReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
@@ -38,7 +39,6 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.jmx.JMXWriter;
 
-import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 /**
@@ -51,7 +51,7 @@ public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 	private static final String PORT = "59999";
 	private static final String LOGNAME = "MonitoringLog";
 
-	private volatile SimpleSinkFilter<IMonitoringRecord> sinkFilter = null; // NOPMD (init for findbugs)
+	private volatile ListCollectionFilter<IMonitoringRecord> sinkFilter = null; // NOPMD (init for findbugs)
 
 	@Override
 	protected IMonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException, InterruptedException {
@@ -77,11 +77,11 @@ public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SERVICEURL, "");
 		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SILENT, "false");
 		final JMXReader jmxReader = new JMXReader(jmxReaderConfig);
-		this.sinkFilter = new SimpleSinkFilter<IMonitoringRecord>(new Configuration());
+		this.sinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration());
 		final AnalysisController analysisController = new AnalysisController();
 		analysisController.registerReader(jmxReader);
 		analysisController.registerFilter(this.sinkFilter);
-		analysisController.connect(jmxReader, JMXReader.OUTPUT_PORT_NAME_RECORDS, this.sinkFilter, SimpleSinkFilter.INPUT_PORT_NAME);
+		analysisController.connect(jmxReader, JMXReader.OUTPUT_PORT_NAME_RECORDS, this.sinkFilter, ListCollectionFilter.INPUT_PORT_NAME);
 		final AnalysisControllerThread analysisThread = new AnalysisControllerThread(analysisController);
 		analysisThread.start();
 		Thread.sleep(1000);

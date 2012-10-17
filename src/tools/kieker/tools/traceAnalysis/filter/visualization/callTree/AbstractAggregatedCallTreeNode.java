@@ -19,6 +19,7 @@ package kieker.tools.traceAnalysis.filter.visualization.callTree;
 import java.util.Map;
 import java.util.TreeMap;
 
+import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 
 /**
@@ -32,7 +33,7 @@ public abstract class AbstractAggregatedCallTreeNode<T> extends AbstractCallTree
 	/** For faster lookup of existing children */
 	protected final Map<Integer, WeightedDirectedCallTreeEdge<T>> childMap = new TreeMap<Integer, WeightedDirectedCallTreeEdge<T>>(); // NOPMD (not synchronized)
 
-	public AbstractAggregatedCallTreeNode(final int id, final T entity, final boolean rootNode, final MessageTrace origin) {
-		super(id, entity, rootNode, origin);
+	public AbstractAggregatedCallTreeNode(final int id, final T entity, final boolean rootNode, final MessageTrace origin, final IOriginRetentionPolicy originPolicy) {
+		super(id, entity, rootNode, origin, originPolicy);
 	}
 }
