@@ -20,7 +20,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
-import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Stack;
@@ -197,7 +196,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 			throws TraceProcessingException {
 		final Stack<AbstractCallTreeNode<?>> curStack = new Stack<AbstractCallTreeNode<?>>();
 
-		final Collection<AbstractMessage> msgTraceVec = t.getSequenceAsVector();
+		final Iterable<AbstractMessage> msgTraceVec = t.getSequenceAsVector();
 		AbstractCallTreeNode<?> curNode = root;
 		curStack.push(curNode);
 		for (final AbstractMessage m : msgTraceVec) {

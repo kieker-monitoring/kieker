@@ -24,7 +24,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
-import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -212,7 +211,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	private static void picFromMessageTrace(final MessageTrace messageTrace, final SDModes sdMode,
 			final PrintStream ps, final boolean shortLabels) {
 		// dot node ID x component instance
-		final Collection<AbstractMessage> messages = messageTrace.getSequenceAsVector();
+		final Iterable<AbstractMessage> messages = messageTrace.getSequenceAsVector();
 		// preamble:
 		ps.print(".PS" + "\n");
 		ps.print(SEQUENCE_PIC_CONTENT + "\n");

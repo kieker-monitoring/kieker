@@ -21,18 +21,35 @@ package kieker.tools.traceAnalysis.systemModel;
  */
 public abstract class AbstractTrace {
 
-	public static final String NO_TRACE_ID = "N/A";
+	/**
+	 * Default value for the session ID.
+	 */
+	public static final String DEFAULT_SESSION_ID = "N/A";
 
 	private final TraceInformation traceInformation;
 
 	protected AbstractTrace() {
-		this(-1, NO_TRACE_ID);
+		this(-1, DEFAULT_SESSION_ID);
 	}
 
+	/**
+	 * Creates a new abstract trace with the given trace ID and a default session ID.
+	 * 
+	 * @param traceId
+	 *            The trace ID to use for the new trace
+	 */
 	public AbstractTrace(final long traceId) {
-		this(traceId, NO_TRACE_ID);
+		this(traceId, DEFAULT_SESSION_ID);
 	}
 
+	/**
+	 * Creates a new abstract trace with the given parameters.
+	 * 
+	 * @param traceId
+	 *            The trace ID to use for the new trace
+	 * @param sessionId
+	 *            The session ID to use for the new trace
+	 */
 	public AbstractTrace(final long traceId, final String sessionId) {
 		this.traceInformation = new TraceInformation(traceId, sessionId);
 	}
@@ -46,6 +63,11 @@ public abstract class AbstractTrace {
 		return this.traceInformation;
 	}
 
+	/**
+	 * Returns this trace's trace ID.
+	 * 
+	 * @return See above
+	 */
 	public long getTraceId() {
 		return this.traceInformation.getTraceId();
 	}
@@ -70,4 +92,18 @@ public abstract class AbstractTrace {
 
 	@Override
 	public abstract boolean equals(Object obj);
+
+	/**
+	 * Returns this trace's start timestamp.
+	 * 
+	 * @return See above
+	 */
+	public abstract long getStartTimestamp();
+
+	/**
+	 * Returns this trace's end timestamp.
+	 * 
+	 * @return See above
+	 */
+	public abstract long getEndTimestamp();
 }

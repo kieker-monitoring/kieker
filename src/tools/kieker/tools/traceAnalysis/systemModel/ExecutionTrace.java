@@ -289,6 +289,16 @@ public class ExecutionTrace extends AbstractTrace {
 		}
 	}
 
+	@Override
+	public long getStartTimestamp() {
+		return this.getMinTin();
+	}
+
+	@Override
+	public long getEndTimestamp() {
+		return this.getMaxTout();
+	}
+
 	// Explicit delegation to super method to make FindBugs happy
 	@Override
 	public int hashCode() { // NOPMD (forward hashcode)

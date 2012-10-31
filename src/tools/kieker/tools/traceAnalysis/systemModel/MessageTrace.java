@@ -16,6 +16,7 @@
 
 package kieker.tools.traceAnalysis.systemModel;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -26,17 +27,58 @@ public class MessageTrace extends AbstractTrace {
 
 	private final List<AbstractMessage> messages;
 
+	private final long startTimestamp;
+	private final long endTimestamp;
+
+	/**
+	 * Creates a new message trace from the given data.
+	 * 
+	 * @param traceId
+	 *            The trace ID for this message trace
+	 * @param seq
+	 *            The messages contained in this message trace
+	 */
 	public MessageTrace(final long traceId, final List<AbstractMessage> seq) {
-		this(traceId, AbstractTrace.NO_TRACE_ID, seq);
+		this(traceId, AbstractTrace.DEFAULT_SESSION_ID, seq);
 	}
 
+	/**
+	 * Creates a new message trace from the given data.
+	 * 
+	 * @param traceId
+	 *            The trace ID for this message trace
+	 * @param sessionId
+	 *            The session ID for this message trace
+	 * @param seq
+	 *            The messages contained in this message trace
+	 */
 	public MessageTrace(final long traceId, final String sessionId, final List<AbstractMessage> seq) {
 		super(traceId, sessionId);
 		this.messages = seq;
+
+		// Calculate start and end timestamp
+		long minTimestamp = Long.MAX_VALUE;
+		long maxTimestamp = Long.MIN_VALUE;
+		for (final AbstractMessage message : seq) {
+			if (message.getTimestamp() < minTimestamp) {
+				minTimestamp = message.getTimestamp();
+			}
+			if (message.getTimestamp() > maxTimestamp) {
+				maxTimestamp = message.getTimestamp();
+			}
+		}
+
+		this.startTimestamp = minTimestamp;
+		this.endTimestamp = maxTimestamp;
 	}
 
+	/**
+	 * Returns the message sequence contained in this trace as an (unmodifiable) list.
+	 * 
+	 * @return See above
+	 */
 	public final List<AbstractMessage> getSequenceAsVector() {
-		return this.messages;
+		return Collections.unmodifiableList(this.messages);
 	}
 
 	@Override
@@ -57,6 +99,16 @@ public class MessageTrace extends AbstractTrace {
 	public int hashCode() { // NOPMD (forward hashcode)
 		// TODO either this or equals might not be correct! both should consider traceId
 		return super.hashCode();
+	}
+
+	@Override
+	public long getStartTimestamp() {
+		return this.startTimestamp;
+	}
+
+	@Override
+	public long getEndTimestamp() {
+		return this.endTimestamp;
 	}
 
 	@Override
