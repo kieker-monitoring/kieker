@@ -91,7 +91,7 @@ public class SessionReconstructionFilter extends AbstractFilterPlugin {
 		super(configuration);
 
 		this.configuration = new SessionReconstructionFilterConfiguration(configuration);
-		this.maxThinkTime = this.configuration.getMaxThinkTime();
+		this.maxThinkTime = this.configuration.getMaxThinkTime() * 1000000L;
 	}
 
 	public Configuration getCurrentConfiguration() {

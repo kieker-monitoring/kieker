@@ -39,7 +39,8 @@ import kieker.test.tools.util.filter.sessionReconstruction.SessionReconstruction
  */
 public class TestSessionReconstructionFilter extends AbstractKiekerTest {
 
-	private static final int MAX_THINK_TIME = 1000;
+	private static final long MAX_THINK_TIME_MILLIS = 1;
+	private static final long MAX_THINK_TIME_NANOS = MAX_THINK_TIME_MILLIS * 1000000L;
 
 	private static final String HOST_NAME = "test";
 	private static final String NO_PARAMETERS = "()";
@@ -73,7 +74,7 @@ public class TestSessionReconstructionFilter extends AbstractKiekerTest {
 		long traceId = 0;
 
 		records.add(TestSessionReconstructionFilter.createOperationExecutionRecord(OPERATION_SIGNATURE, SESSION_ID_1, traceId, time++, time++, 0, 0));
-		time += (MAX_THINK_TIME + 1);
+		time += (MAX_THINK_TIME_NANOS + 1);
 		records.add(TestSessionReconstructionFilter.createOperationExecutionRecord(OPERATION_SIGNATURE, SESSION_ID_1, ++traceId, time++, time++, 0, 0));
 
 		return records;
@@ -99,7 +100,7 @@ public class TestSessionReconstructionFilter extends AbstractKiekerTest {
 	@Test
 	public void testSimpleExecutionTraceSession() throws AnalysisConfigurationException {
 		final List<OperationExecutionRecord> records = TestSessionReconstructionFilter.createSimpleExecutionTrace();
-		final SessionReconstructionTestSetup<ExecutionTraceBasedSession> setup = SessionReconstructionTestUtil.createSetup(records, MAX_THINK_TIME);
+		final SessionReconstructionTestSetup<ExecutionTraceBasedSession> setup = SessionReconstructionTestUtil.createSetup(records, MAX_THINK_TIME_MILLIS);
 
 		setup.run();
 
@@ -120,7 +121,7 @@ public class TestSessionReconstructionFilter extends AbstractKiekerTest {
 	@Test
 	public void testExecutionTraceSessionSplit() throws AnalysisConfigurationException {
 		final List<OperationExecutionRecord> records = TestSessionReconstructionFilter.createSplitSessionExecutionTrace();
-		final SessionReconstructionTestSetup<ExecutionTraceBasedSession> setup = SessionReconstructionTestUtil.createSetup(records, MAX_THINK_TIME);
+		final SessionReconstructionTestSetup<ExecutionTraceBasedSession> setup = SessionReconstructionTestUtil.createSetup(records, MAX_THINK_TIME_MILLIS);
 
 		setup.run();
 
@@ -143,7 +144,7 @@ public class TestSessionReconstructionFilter extends AbstractKiekerTest {
 	@Test
 	public void testExecutionTraceTwoSessions() throws AnalysisConfigurationException {
 		final List<OperationExecutionRecord> records = TestSessionReconstructionFilter.createTwoSessionsExecutionTrace();
-		final SessionReconstructionTestSetup<ExecutionTraceBasedSession> setup = SessionReconstructionTestUtil.createSetup(records, MAX_THINK_TIME);
+		final SessionReconstructionTestSetup<ExecutionTraceBasedSession> setup = SessionReconstructionTestUtil.createSetup(records, MAX_THINK_TIME_MILLIS);
 
 		setup.run();
 

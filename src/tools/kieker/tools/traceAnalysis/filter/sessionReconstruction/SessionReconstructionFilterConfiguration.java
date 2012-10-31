@@ -54,7 +54,7 @@ public class SessionReconstructionFilterConfiguration {
 	}
 
 	/**
-	 * Returns the value of the maximum think time property.
+	 * Returns the value of the maximum think time property. The maximum think time is measured in milliseconds.
 	 * 
 	 * @return See above
 	 */
@@ -63,7 +63,7 @@ public class SessionReconstructionFilterConfiguration {
 	}
 
 	/**
-	 * Sets the value of the maximum think time property.
+	 * Sets the value of the maximum think time property. The maximum think time is measured in milliseconds.
 	 * 
 	 * @param value
 	 *            The value to set
