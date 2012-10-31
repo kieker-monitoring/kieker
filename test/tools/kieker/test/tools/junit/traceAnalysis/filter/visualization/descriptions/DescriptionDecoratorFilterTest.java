@@ -118,7 +118,7 @@ public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
 	@Test
 	public void testDescriptionDecorator() throws AnalysisConfigurationException {
 		testSetup.run();
-		final GraphReceiverPlugin graphReceiver = testSetup.getGraphReceiverPlugin();
+		final GraphReceiverPlugin graphReceiver = testSetup.getResultCollectionPlugin();
 
 		// Check number of produced graphs
 		Assert.assertEquals(1, graphReceiver.getNumberOfReceivedGraphs());

@@ -16,7 +16,9 @@
 package kieker.test.tools.util.graph;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.exception.AnalysisConfigurationException;
+import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
+
+import kieker.test.tools.util.GenericTestSetup;
 
 /**
  * Data transfer class for a graph test setup. It contains of a prepared analysis controller (which just
@@ -25,50 +27,18 @@ import kieker.analysis.exception.AnalysisConfigurationException;
  * @author Holger Knoche
  * 
  */
-public class GraphTestSetup {
-
-	private final AnalysisController analysisController;
-	private final GraphReceiverPlugin graphReceiverPlugin;
+public class GraphTestSetup extends GenericTestSetup<AbstractGraph<?, ?, ?>, GraphReceiverPlugin> {
 
 	/**
-	 * Creates a new graph test setup from the given data.
+	 * Creates a new graph test setup with the given data.
 	 * 
 	 * @param analysisController
-	 *            A prepared analysis controller for the setup
-	 * @param graphReceiverPlugin
-	 *            The plugin that collects the graphs produced by the controller
+	 *            The analysis controller to use
+	 * @param resultCollectionPlugin
+	 *            The graph receiver plugin to use
 	 */
-	public GraphTestSetup(final AnalysisController analysisController, final GraphReceiverPlugin graphReceiverPlugin) {
-		this.analysisController = analysisController;
-		this.graphReceiverPlugin = graphReceiverPlugin;
-	}
-
-	/**
-	 * Runs the setup by starting the enclosed analysis controller.
-	 * 
-	 * @throws AnalysisConfigurationException
-	 *             If an invalid configuration is detected
-	 */
-	public void run() throws AnalysisConfigurationException {
-		this.getAnalysisController().run();
-	}
-
-	/**
-	 * Returns the analysis controller for this setup.
-	 * 
-	 * @return See above
-	 */
-	public AnalysisController getAnalysisController() {
-		return this.analysisController;
-	}
-
-	/**
-	 * Returns the graph receiver plugin for this setup.
-	 * 
-	 * @return See above
-	 */
-	public GraphReceiverPlugin getGraphReceiverPlugin() {
-		return this.graphReceiverPlugin;
+	public GraphTestSetup(final AnalysisController analysisController, final GraphReceiverPlugin resultCollectionPlugin) {
+		super(analysisController, resultCollectionPlugin);
 	}
 
 }

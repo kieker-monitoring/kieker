@@ -101,7 +101,7 @@ public class ComponentAllocationDependencyGraphTest extends AbstractKiekerTest {
 	@Test
 	public void testGraphCreation() throws AnalysisConfigurationException {
 		testSetup.run();
-		final GraphReceiverPlugin graphReceiver = testSetup.getGraphReceiverPlugin();
+		final GraphReceiverPlugin graphReceiver = testSetup.getResultCollectionPlugin();
 
 		// Check number of produced graphs
 		Assert.assertEquals(1, graphReceiver.getNumberOfReceivedGraphs());
