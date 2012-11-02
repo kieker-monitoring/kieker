@@ -6,13 +6,13 @@
 		<!-- Use the exclude/include directives to specify which classes are (not) to be considered for weaving.
 		     Some examples are given below. -->
 
-		<!-- instrument the kieker.tests -->
-		<include within="kieker.tests..*" />
-
 		<!-- Use * to consider all classes. In this case, you typically need some additional excludes. -->
-		<!-- <include within="*"/> -->
+		<include within="*"/>
 		<!-- This would cause problems with * ?!? -->
 		<!-- <exclude within="org.apache.commons.logging..*" />  -->
+
+		<!-- instrument the kieker.tests -->
+		<!-- <include within="kieker.tests..*" /> -->
 
 		<!-- Example instrumentation for the iBATIS JPetStore -->
 		<!--<include within="com.ibatis.jpetstore..*"/> -->
@@ -33,9 +33,9 @@
 	<aspects>
 		<!-- Use the aspect directives to specify the aspect(s) to use (typically only one). -->
 
-		<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotation" />
+		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotation" /> -->
 		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotationServlet"/> -->
-		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFull"/> -->
+		<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFull"/>
 		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoGetterAndSetter"/> -->
 		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullServlet"/> -->
 		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoGetterAndSetterServlet"/> -->
