@@ -17,8 +17,12 @@
 package kieker.evaluation.benchmark;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.concurrent.CountDownLatch;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -42,6 +46,14 @@ public final class Benchmark {
 	private static long methodTime = 0;
 	private static int recursionDepth = 0;
 
+	static {
+		try {
+			LogManager.getLogManager().readConfiguration(Benchmark.class.getClassLoader().getResourceAsStream("META-INF/logging.properties"));
+		} catch (final IOException ex) {
+			Logger.getAnonymousLogger().log(Level.SEVERE, "Could not load default logging.properties file", ex);
+		}
+	}
+
 	private Benchmark() {}
 
 	public static void main(final String[] args) throws InterruptedException {
@@ -54,6 +66,7 @@ public final class Benchmark {
 		System.out.println(" # 2. Recursion Depth " + Benchmark.recursionDepth); // NOPMD (System.out)
 		System.out.println(" # 3. Threads " + Benchmark.totalThreads); // NOPMD (System.out)
 		System.out.println(" # 4. Total-Calls " + Benchmark.totalCalls); // NOPMD (System.out)
+		System.out.println(" # 5. Method-Time " + Benchmark.methodTime); // NOPMD (System.out)
 
 		/* 2. Initialize Threads and Classes */
 		final CountDownLatch doneSignal = new CountDownLatch(Benchmark.totalThreads);
@@ -78,6 +91,7 @@ public final class Benchmark {
 			}
 			Thread.sleep(5000);
 		}
+		System.out.print(" # 6. Starting benchmark ... "); // NOPMD (System.out)
 		/* 3. Starting Threads */
 		for (int i = 0; i < Benchmark.totalThreads; i++) {
 			threads[i].start();
@@ -90,9 +104,10 @@ public final class Benchmark {
 			e.printStackTrace(); // NOPMD (Stacktrace)
 			System.exit(-1);
 		}
+		System.out.println("done"); // NOPMD (System.out)
 
 		/* 5. Print experiment statistics */
-		System.out.print(" # 5. Writing results ... "); // NOPMD (System.out)
+		System.out.print(" # 7. Writing results ... "); // NOPMD (System.out)
 		// CSV Format: configuration;order_index;Thread-ID;duration_nsec
 		long[] timings;
 		for (int h = 0; h < Benchmark.totalThreads; h++) {

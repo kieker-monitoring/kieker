@@ -1,4 +1,4 @@
-This example contains micro benchmarks to quantify the performance
+This example contains micro-benchmarks to quantify the performance
 overhead caused by the Kieker framework components. 
 
 All experiments employ AspectJ for weaving the monitoring probes 
@@ -12,8 +12,6 @@ This can be changed in the respective .sh scripts.
 
 Files required in /lib:
   kieker-*_aspectj.jar         (a current build of Kieker)
-  aspectjrt-*.jar
-  aspectjtools-*.jar
   commons-cli-1.2.jar
 
 Initially, the following steps are required:
@@ -24,11 +22,11 @@ Initially, the following steps are required:
    generate the results.
 3. Compile the application by calling ant.
 
-Execution of Microbenchmark:
+Execution of the micro-benchmark:
 All benchmarks are started with calls of .sh scripts in the /bin folder.
 The top of the files include some possibilities for configuration, such as
 * SLEEPTIME between executions
-* NUM_LOOPS number of repetions
+* NUM_LOOPS number of repetitions
 * THREADS concurrent benchmarking threads
 * MAXRECURSIONDEPTH recursion up to this depth
 * TOTALCALLS the duration of the benchmark
@@ -40,7 +38,7 @@ Experiments:
 Different recursion depth (with MAXRECURSIONDEPTH=1 one can test without recursion)
 -> bin/run-benchmark-recursive.sh
 
-To check for a linear rise in monitoring overhead, this benchmark increses the 
+To check for a linear rise in monitoring overhead, this benchmark increases the 
 recursion depth up to 2^MAXRECURSIONDEPTH in logarithmic steps
 -> bin/run-benchmark-recursive-linear.sh
 
@@ -51,7 +49,7 @@ The experiments run-cycle*.sh and their used files run-benchmark-cycle-*.sh are
 currently only supporting Solaris environments and require pfexec permissions to
 assign subsets of cores to the benchmarking system.
 
-Analysing the data:
+Analyzing the data:
 in the folder /bin/r-scripts are some R scripts provided to generate graphs to
-visualiaze the results. In the top the files, one can configure the required paths
+visualize the results. In the top the files, one can configure the required paths
 and the configuration used to analyze the data.
