@@ -30,13 +30,9 @@ mkdir ${RESULTSDIR}stat/
 
 # Clear kieker.log and initialize logging
 rm -f ${BASEDIR}kieker.log
+touch ${BASEDIR}kieker.log
 
-RESULTSFN="${RESULTSDIR}results"
-
-AOPXML_INSTR_DEACTPROBE="-Dorg.aspectj.weaver.loadtime.configuration=META-INF/aop-deactivatedProbe.xml"
-AOPXML_INSTR_PROBE="-Dorg.aspectj.weaver.loadtime.configuration=META-INF/aop-probe.xml"
-
-KIEKER_MONITORING_CONF="${BASEDIR}configuration/kieker.monitoring.properties"
+RESULTSFN="${RESULTSDIR}results.csv"
 
 JAVAARGS="-server"
 JAVAARGS="${JAVAARGS} -d64"
@@ -49,9 +45,9 @@ JAR="-jar dist/OverheadEvaluationMicrobenchmark.jar"
 
 JAVAARGS_NOINSTR="${JAVAARGS}"
 JAVAARGS_LTW="${JAVAARGS} -javaagent:${BASEDIR}lib/kieker-1.7-SNAPSHOT_aspectj.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
-JAVAARGS_KIEKER="-Djava.util.logging.config.file=${BASEDIR}configuration/logging.properties -Dkieker.monitoring.configuration=${KIEKER_MONITORING_CONF}"
-JAVAARGS_KIEKER_NOLOGGING="${JAVAARGS_LTW} ${AOPXML_INSTR_PROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
-JAVAARGS_KIEKER_LOGGING="${JAVAARGS_LTW} ${AOPXML_INSTR_PROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.jmx=true -Dkieker.monitoring.jmx.remote=true -Dkieker.monitoring.writer=kieker.monitoring.writer.jmx.JMXWriter"
+JAVAARGS_KIEKER_DEACTV="${JAVAARGS_LTW} -Dkieker.monitoring.adaptiveMonitoring.configFile=META-INF/kieker.monitoring.adaptiveMonitoring.disabled.conf -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
+JAVAARGS_KIEKER_NOLOGGING="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
+JAVAARGS_KIEKER_LOGGING="${JAVAARGS_LTW} -Dkieker.monitoring.jmx=true -Dkieker.monitoring.jmx.remote=true -Dkieker.monitoring.writer=kieker.monitoring.writer.jmx.JMXWriter""
 
 ## Write configuration
 uname -a >${RESULTSDIR}configuration.txt

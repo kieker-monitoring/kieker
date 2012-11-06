@@ -10,7 +10,7 @@ if [ ! -z "$(uname | grep -i WIN)" ]; then CPSEPCHAR=";"; fi
 
 RESULTSDIR="${BASEDIR}tmp/results-benchmark-recursive/"
 echo "Removing and recreating '$RESULTSDIR'"
-(pfexec rm -rf ${RESULTSDIR}) && mkdir ${RESULTSDIR}
+(${SUDOCMD} rm -rf ${RESULTSDIR}) && mkdir ${RESULTSDIR}
 mkdir ${RESULTSDIR}stat/
 
 # Clear kieker.log and initialize logging
@@ -18,11 +18,6 @@ rm -f ${BASEDIR}kieker.log
 touch ${BASEDIR}kieker.log
 
 RESULTSFN="${RESULTSDIR}results.csv"
-
-AOPXML_INSTR_DEACTPROBE="-Dorg.aspectj.weaver.loadtime.configuration=META-INF/aop-deactivatedProbe.xml"
-AOPXML_INSTR_PROBE="-Dorg.aspectj.weaver.loadtime.configuration=META-INF/aop-probe.xml"
-
-KIEKER_MONITORING_CONF="${BASEDIR}configuration/kieker.monitoring.properties"
 
 JAVAARGS="-server"
 JAVAARGS="${JAVAARGS} -d64"
@@ -35,10 +30,9 @@ JAR="-jar dist/OverheadEvaluationMicrobenchmark.jar"
 
 JAVAARGS_NOINSTR="${JAVAARGS}"
 JAVAARGS_LTW="${JAVAARGS} -javaagent:${BASEDIR}lib/kieker-1.7-SNAPSHOT_aspectj.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
-JAVAARGS_KIEKER="-Djava.util.logging.config.file=${BASEDIR}configuration/logging.properties -Dkieker.monitoring.configuration=${KIEKER_MONITORING_CONF}"
-JAVAARGS_KIEKER_DEACTV="${JAVAARGS_LTW} ${AOPXML_INSTR_DEACTPROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
-JAVAARGS_KIEKER_NOLOGGING="${JAVAARGS_LTW} ${AOPXML_INSTR_PROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
-JAVAARGS_KIEKER_LOGGING="${JAVAARGS_LTW} ${AOPXML_INSTR_PROBE} ${JAVAARGS_KIEKER} -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncFsWriter -Dkieker.monitoring.writer.filesystem.AsyncFsWriter.storeInJavaIoTmpdir=false -Dkieker.monitoring.writer.filesystem.AsyncFsWriter.QueueSize=100000 -Dkieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=${BASEDIR}tmp"
+JAVAARGS_KIEKER_DEACTV="${JAVAARGS_LTW} -Dkieker.monitoring.adaptiveMonitoring.configFile=META-INF/kieker.monitoring.adaptiveMonitoring.disabled.conf -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
+JAVAARGS_KIEKER_NOLOGGING="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
+JAVAARGS_KIEKER_LOGGING="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncFsWriter -Dkieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=${BASEDIR}tmp"
 
 ## Write configuration
 uname -a >${RESULTSDIR}configuration.txt
@@ -147,7 +141,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
 
 done
 tar cf ${RESULTSDIR}kiekerlog.tar ${RESULTSDIR}kiekerlog
-pfexec rm -rf ${RESULTSDIR}kiekerlog/
+${SUDOCMD} rm -rf ${RESULTSDIR}kiekerlog/
 gzip -9 ${RESULTSDIR}kiekerlog.tar
 tar cf ${RESULTSDIR}stat.tar ${RESULTSDIR}stat
 rm -rf ${RESULTSDIR}stat/

@@ -90,7 +90,6 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         sync
         sleep ${SLEEPTIME}
 
-
         # 2 Deactivated probe
         echo " # ${i}.2 Deactivated probe"
         mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${j}-2.txt &
