@@ -7,7 +7,7 @@ output_fn=paste(data_fn,folder_fn,"/results-bars.pdf",sep="")
 outtxt_fn=paste(data_fn,folder_fn,"/results-text.txt",sep="")
 
 configs.threads=1
-configs.loop=1
+configs.loop=10
 configs.recursion=c(1)
 #configs.recursion=c(1,2,3,4,5,6,7,8,9,10)
 configs.labels=c("No Probe","Inactive Probe","Collecting Data","Writing Data")

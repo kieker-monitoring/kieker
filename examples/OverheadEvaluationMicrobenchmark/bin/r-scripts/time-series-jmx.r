@@ -1,3 +1,5 @@
+rm(list=ls(all=TRUE))
+
 data_fn="tmp/"
 folder_fn="results-benchmark-recursive"
 results_fn=paste(data_fn,folder_fn,"/results.csv",sep="")
