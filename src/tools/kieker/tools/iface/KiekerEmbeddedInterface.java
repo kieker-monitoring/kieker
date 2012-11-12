@@ -16,11 +16,16 @@
 
 package kieker.tools.iface;
 
+import java.util.List;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
+import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
+import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
+import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
 import kieker.tools.traceAnalysis.filter.sessionReconstruction.SessionReconstructionFilter;
@@ -40,36 +45,34 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 public class KiekerEmbeddedInterface {
 
 	/**
-	 * Prepares a runnable Kieker setup which reads execution traces from the given directories using the given
-	 * trace reconstruction parameters.
+	 * Produces a runnable Kieker setup which reads execution traces using the given reader.
 	 * 
+	 * @param reader
+	 *            The reader to read the execution records from
+	 * @param outputPortName
+	 *            The reader's output port name
 	 * @param maxTraceDuration
-	 *            The maximum trace duration (in ms) to use for trace reconstruction
-	 * @param inputPaths
-	 *            The input directories to use
-	 * @return A runnable Kieker setup which produces execution traces from the input files
+	 *            The maximal trace duration (in ms) to use for trace reconstruction
+	 * @return A runnable Kieker setup using the given reader
 	 * @throws AnalysisConfigurationException
 	 *             If an erroneous configuration is detected
 	 */
-	public static RunnableKiekerSetup<ExecutionTrace> readExecutionTracesFromFilesystem(final int maxTraceDuration, final String... inputPaths)
-			throws AnalysisConfigurationException {
+	private static RunnableKiekerSetup<ExecutionTrace> readExecutionTraces(final AbstractReaderPlugin reader, final String outputPortName,
+			final int maxTraceDuration) throws AnalysisConfigurationException {
 		final AnalysisController analysisController = new AnalysisController();
 
 		// Initialize and register the system model repository
 		final SystemModelRepository systemModelRepository = new SystemModelRepository(new Configuration());
 		analysisController.registerRepository(systemModelRepository);
 
-		// Initialize and register the file system reader
-		final Configuration fileSystemReaderConfiguration = new Configuration();
-		fileSystemReaderConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(inputPaths));
-		final FSReader fileSystemReader = new FSReader(fileSystemReaderConfiguration);
-		analysisController.registerReader(fileSystemReader);
+		// Register the given reader
+		analysisController.registerReader(reader);
 
 		// Initialize, register, and connect the execution record reader
 		final ExecutionRecordTransformationFilter executionRecordFilter = new ExecutionRecordTransformationFilter(new Configuration());
 		analysisController.registerFilter(executionRecordFilter);
 		analysisController.connect(executionRecordFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemModelRepository);
-		analysisController.connect(fileSystemReader, FSReader.OUTPUT_PORT_NAME_RECORDS,
+		analysisController.connect(reader, outputPortName,
 				executionRecordFilter, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
 
 		// Initialize, register, and connect the trace reconstruction filter
@@ -91,28 +94,68 @@ public class KiekerEmbeddedInterface {
 	}
 
 	/**
-	 * Prepares a runnable Kieker setup which reads execution trace-based sessions from the given directories using the given
-	 * reconstruction parameters.
+	 * Prepares a runnable Kieker setup which reads execution traces from the given directories using the given
+	 * trace reconstruction parameters.
 	 * 
 	 * @param maxTraceDuration
-	 *            The maximum trace duration (in ms) to use for trace reconstruction
-	 * @param maxThinkTime
-	 *            The maximum think time (in ms) to use for session reconstruction
+	 *            The maximal trace duration (in ms) to use for trace reconstruction
 	 * @param inputPaths
 	 *            The input directories to use
-	 * @return A runnable Kieker setup which produces execution trace-based sessions from the input files
+	 * @return A runnable Kieker setup which produces execution traces from the input files
 	 * @throws AnalysisConfigurationException
 	 *             If an erroneous configuration is detected
 	 */
-	public static RunnableKiekerSetup<ExecutionTraceBasedSession> readExecutionBasedSessionsFromFilesystem(final int maxTraceDuration, final long maxThinkTime,
-			final String... inputPaths) throws AnalysisConfigurationException {
-		final AnalysisController analysisController = new AnalysisController();
-
-		// Initialize and register the file system reader
+	public static RunnableKiekerSetup<ExecutionTrace> readExecutionTracesFromFilesystem(final int maxTraceDuration, final String... inputPaths)
+			throws AnalysisConfigurationException {
+		// Initialize the file system reader
 		final Configuration fileSystemReaderConfiguration = new Configuration();
 		fileSystemReaderConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(inputPaths));
 		final FSReader fileSystemReader = new FSReader(fileSystemReaderConfiguration);
-		analysisController.registerReader(fileSystemReader);
+
+		return KiekerEmbeddedInterface.readExecutionTraces(fileSystemReader, FSReader.OUTPUT_PORT_NAME_RECORDS, maxTraceDuration);
+	}
+
+	/**
+	 * Prepares a runnable Kieker setup which reads execution traces from the given list of operation execution
+	 * records using the given trace reconstruction parameters.
+	 * 
+	 * @param maxTraceDuration
+	 *            The maximal trace duration (in ms) to use for trace reconstruction
+	 * @param records
+	 *            The operation execution records to process
+	 * @return A runnable Kieker setup which produces execution traces from the given records
+	 * @throws AnalysisConfigurationException
+	 *             If an erroneous configuration is detected
+	 */
+	public static RunnableKiekerSetup<ExecutionTrace> readExecutionTracesFromList(final int maxTraceDuration, final List<OperationExecutionRecord> records)
+			throws AnalysisConfigurationException {
+		final ListReader<OperationExecutionRecord> listReader = new ListReader<OperationExecutionRecord>(new Configuration());
+		listReader.addAllObjects(records);
+
+		return KiekerEmbeddedInterface.readExecutionTraces(listReader, ListReader.OUTPUT_PORT_NAME, maxTraceDuration);
+	}
+
+	/**
+	 * Prepares a runnable Kieker setup which reads execution trace-based sessions using the given reader.
+	 * 
+	 * @param reader
+	 *            The reader to read the operation execution records from
+	 * @param outputPortName
+	 *            The reader's output port name
+	 * @param maxTraceDuration
+	 *            The maximal trace duration (in ms) to use for trace reconstruction
+	 * @param maxThinkTime
+	 *            The maximal think time (in ms) to use for session reconstruction
+	 * @return A runnable Kieker setup using the given reader
+	 * @throws AnalysisConfigurationException
+	 *             If an erroneous configuration is detected
+	 */
+	private static RunnableKiekerSetup<ExecutionTraceBasedSession> readExecutionBasedSessions(final AbstractReaderPlugin reader, final String outputPortName,
+			final int maxTraceDuration, final long maxThinkTime) throws AnalysisConfigurationException {
+		final AnalysisController analysisController = new AnalysisController();
+
+		// Register the reader
+		analysisController.registerReader(reader);
 
 		// Initialize and register the system model repository
 		final SystemModelRepository systemModelRepository = new SystemModelRepository(new Configuration());
@@ -123,7 +166,7 @@ public class KiekerEmbeddedInterface {
 		analysisController.registerFilter(executionRecordTransformationFilter);
 		analysisController.connect(executionRecordTransformationFilter,
 				AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemModelRepository);
-		analysisController.connect(fileSystemReader, FSReader.OUTPUT_PORT_NAME_RECORDS,
+		analysisController.connect(reader, outputPortName,
 				executionRecordTransformationFilter, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
 
 		// Initialize, register and connect the trace reconstruction filter
@@ -160,4 +203,50 @@ public class KiekerEmbeddedInterface {
 		return new RunnableKiekerSetup<ExecutionTraceBasedSession>(analysisController, listCollectionFilter);
 	}
 
+	/**
+	 * Prepares a runnable Kieker setup which reads execution trace-based sessions from the given directories using the given
+	 * reconstruction parameters.
+	 * 
+	 * @param maxTraceDuration
+	 *            The maximal trace duration (in ms) to use for trace reconstruction
+	 * @param maxThinkTime
+	 *            The maximal think time (in ms) to use for session reconstruction
+	 * @param inputPaths
+	 *            The input directories to use
+	 * @return A runnable Kieker setup which produces execution trace-based sessions from the input files
+	 * @throws AnalysisConfigurationException
+	 *             If an erroneous configuration is detected
+	 */
+	public static RunnableKiekerSetup<ExecutionTraceBasedSession> readExecutionBasedSessionsFromFilesystem(final int maxTraceDuration, final long maxThinkTime,
+			final String... inputPaths) throws AnalysisConfigurationException {
+		// Initialize the file system reader
+		final Configuration fileSystemReaderConfiguration = new Configuration();
+		fileSystemReaderConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(inputPaths));
+		final FSReader fileSystemReader = new FSReader(fileSystemReaderConfiguration);
+
+		return KiekerEmbeddedInterface.readExecutionBasedSessions(fileSystemReader, FSReader.OUTPUT_PORT_NAME_RECORDS, maxTraceDuration, maxThinkTime);
+	}
+
+	/**
+	 * Prepares a runnable Kieker setup which reads execution trace-based sessios from the given list of operation execution records
+	 * and using the given session reconstruction parameters.
+	 * 
+	 * @param maxTraceDuration
+	 *            The maximal trace duration (in ms) to use for trace reconstruction
+	 * @param maxThinkTime
+	 *            The maximal think time (in ms) to use for session reconstruction
+	 * @param records
+	 *            The operation execution records to process
+	 * @return A runnable Kieker setup which produces execution trace-based sessions from the given records
+	 * @throws AnalysisConfigurationException
+	 *             If an erroneous configuration is detected
+	 */
+	public static RunnableKiekerSetup<ExecutionTraceBasedSession> readExecutionBasedSessionsFromList(final int maxTraceDuration, final long maxThinkTime,
+			final List<OperationExecutionRecord> records) throws AnalysisConfigurationException {
+		// Initialize the list reader
+		final ListReader<OperationExecutionRecord> listReader = new ListReader<OperationExecutionRecord>(new Configuration());
+		listReader.addAllObjects(records);
+
+		return KiekerEmbeddedInterface.readExecutionBasedSessions(listReader, ListReader.OUTPUT_PORT_NAME, maxTraceDuration, maxThinkTime);
+	}
 }
