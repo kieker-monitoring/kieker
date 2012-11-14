@@ -64,8 +64,8 @@ public class TestProbeController extends AbstractKiekerTest {
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
-	private File configFile;
-	private String ENCODING;
+	private volatile File configFile;
+	private final static String ENCODING = "UTF-8";
 
 	public TestProbeController() {
 		// empty default constructor
@@ -74,7 +74,6 @@ public class TestProbeController extends AbstractKiekerTest {
 	@Before
 	public void init() throws IOException {
 		this.configFile = this.tmpFolder.newFile("adaptiveMonitoring.configFile");
-		this.ENCODING = "UTF-8";
 	}
 
 	@After
@@ -95,7 +94,7 @@ public class TestProbeController extends AbstractKiekerTest {
 	}
 
 	@Test
-	public void testInitializationWithCustomConfiguration() throws UnsupportedEncodingException, FileNotFoundException {
+	public void testInitializationWithCustomConfiguration() throws UnsupportedEncodingException, FileNotFoundException, InterruptedException {
 		this.writeToConfigFile(new String[] { "+ *", "- * test.Test()", "test invalid line in config file", "- InvalidPatternException expected", });
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
 		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, DummyWriter.class.getName());
@@ -165,9 +164,7 @@ public class TestProbeController extends AbstractKiekerTest {
 		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL, Integer.toString(READ_INTERVALL));
 
 		this.writeToConfigFile(new String[] { "+ *", "- * test.Test()", });
-		LogImplJUnit.disableThrowable(InvalidPatternException.class);
 		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
-		LogImplJUnit.reset();
 
 		Assert.assertTrue(this.configFile.exists());
 
@@ -176,12 +173,12 @@ public class TestProbeController extends AbstractKiekerTest {
 		Assert.assertArrayEquals(new String[] { "+*", "-* test.Test()", }, list.toArray());
 
 		this.writeToConfigFile(new String[] { "- *", "+ * test.Test(..)", });
-		Thread.sleep(READ_INTERVALL * 1000 + 500);
+		Thread.sleep((READ_INTERVALL * 1000) + 1000);
 		final List<String> list2 = ctrl.getProbePatternList();
 		Assert.assertArrayEquals(new String[] { "-*", "+* test.Test(..)", }, list2.toArray());
 
 		this.writeToConfigFile(new String[] { "- * test.Test(..)", "+ public void test.Test()", });// new content
-		Thread.sleep(READ_INTERVALL * 1000);
+		Thread.sleep((READ_INTERVALL * 1000) + 1000);
 		final List<String> list3 = ctrl.getProbePatternList();
 		Assert.assertArrayEquals(new String[] { "-* test.Test(..)", "+public void test.Test()", }, list3.toArray());
 
@@ -228,7 +225,7 @@ public class TestProbeController extends AbstractKiekerTest {
 	 * Reads the significant content of the config file.
 	 */
 	private List<String> readFromConfigFile() throws IOException {
-		final BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(this.configFile), this.ENCODING));
+		final BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(this.configFile), TestProbeController.ENCODING));
 		final List<String> strPatternList = new LinkedList<String>();
 		String line;
 		while ((line = reader.readLine()) != null) {
@@ -242,8 +239,10 @@ public class TestProbeController extends AbstractKiekerTest {
 	/*
 	 * Replaces the old content of the config file with the given pattern and a few additional information.
 	 */
-	private void writeToConfigFile(final String[] pattern) throws UnsupportedEncodingException, FileNotFoundException {
-		final PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.configFile, false), this.ENCODING)));
+	private void writeToConfigFile(final String[] pattern) throws UnsupportedEncodingException, FileNotFoundException, InterruptedException {
+		Thread.sleep(1000); // enforce last modified timestamp to be different than before
+		final PrintWriter pw = new PrintWriter(
+				new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.configFile, false), TestProbeController.ENCODING)));
 		pw.print("## Adaptive Monitoring Config File: ");
 		pw.println(this.configFile.getAbsolutePath());
 		pw.print("## written on: ");

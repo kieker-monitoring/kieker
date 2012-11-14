@@ -156,6 +156,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 			LOG.warn("Adapative Monitoring is disabled!");
 			return;
 		}
+
 		synchronized (this) {
 			this.patternList.clear();
 			this.signatureCache.clear();
