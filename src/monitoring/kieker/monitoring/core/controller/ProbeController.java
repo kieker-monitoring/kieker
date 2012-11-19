@@ -47,6 +47,8 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.signaturePattern.InvalidPatternException;
 import kieker.monitoring.core.signaturePattern.PatternEntry;
 import kieker.monitoring.core.signaturePattern.PatternParser;
+import kieker.monitoring.probe.AbstractProbeInfo;
+import kieker.monitoring.probe.IAdaptiveProbe;
 
 /**
  * @author Jan Waller, Bjoern Weissenfels
@@ -63,6 +65,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 
 	private final ConcurrentMap<String, Boolean> signatureCache = new ConcurrentHashMap<String, Boolean>();
 	private final List<PatternEntry> patternList = new ArrayList<PatternEntry>(); // only accessed synchronized
+	private final ConcurrentMap<String, List<String>> specialProbes = new ConcurrentHashMap<String, List<String>>();
 
 	protected ProbeController(final Configuration configuration) {
 		super(configuration);
@@ -151,6 +154,12 @@ public class ProbeController extends AbstractController implements IProbeControl
 		}
 	}
 
+	public boolean isProbeActivated(final AbstractProbeInfo abstractProbeInfo, final IAdaptiveProbe iAdaptiveProbe) {
+		final String probeId = abstractProbeInfo.getProbeId();
+		final List<String> probePatterns = this.specialProbes.get(probeId);
+		return iAdaptiveProbe.isProbeActivated(probePatterns, abstractProbeInfo);
+	}
+
 	protected void setProbePatternList(final List<String> strPatternList, final boolean updateConfig) {
 		if (!this.enabled) {
 			LOG.warn("Adapative Monitoring is disabled!");
@@ -160,15 +169,46 @@ public class ProbeController extends AbstractController implements IProbeControl
 		synchronized (this) {
 			this.patternList.clear();
 			this.signatureCache.clear();
+			this.specialProbes.clear();
 			for (final String string : strPatternList) {
 				if (string.length() > 0) { // ignore empty lines
 					try {
 						switch (string.charAt(0)) {
 						case '+':
-							this.patternList.add(new PatternEntry(string.substring(1).trim(), true));
+							if (string.contains("::")) {
+								final int endIndex = string.indexOf("::");
+								final String key = string.substring(1, endIndex).trim();
+								final String value = "+".concat(string.substring(endIndex + 2).trim());
+								List<String> list = this.specialProbes.get(key);
+								if (list == null) {
+									list = new ArrayList<String>();
+									list.add(value);
+									this.specialProbes.put(key, list);
+								} else {
+									list.add(value);
+									this.specialProbes.replace(key, list);
+								}
+							} else {
+								this.patternList.add(new PatternEntry(string.substring(1).trim(), true));
+							}
 							break;
 						case '-':
-							this.patternList.add(new PatternEntry(string.substring(1).trim(), false));
+							if (string.contains("::")) {
+								final int endIndex = string.indexOf("::");
+								final String key = string.substring(1, endIndex).trim();
+								final String value = "-".concat(string.substring(endIndex + 2).trim());
+								List<String> list = this.specialProbes.get(key);
+								if (list == null) {
+									list = new ArrayList<String>();
+									list.add(value);
+									this.specialProbes.put(key, list);
+								} else {
+									list.add(value);
+									this.specialProbes.replace(key, list);
+								}
+							} else {
+								this.patternList.add(new PatternEntry(string.substring(1).trim(), false));
+							}
 							break;
 						case '#':
 							// ignore comment

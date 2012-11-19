@@ -18,6 +18,9 @@ package kieker.monitoring.core.controller;
 
 import java.util.List;
 
+import kieker.monitoring.probe.AbstractProbeInfo;
+import kieker.monitoring.probe.IAdaptiveProbe;
+
 /**
  * @author Jan Waller
  */
@@ -50,6 +53,14 @@ public interface IProbeController {
 	 *         true if the probe with this signature is active
 	 */
 	public boolean isProbeActivated(final String signature);
+
+	/**
+	 * @param abstractProbeInfo
+	 *            includes probeId
+	 * @param iAdaptiveProbe
+	 *            object for callback
+	 */
+	public boolean isProbeActivated(final AbstractProbeInfo abstractProbeInfo, final IAdaptiveProbe iAdaptiveProbe);
 
 	/**
 	 * @param patternList
