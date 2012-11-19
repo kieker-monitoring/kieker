@@ -44,6 +44,8 @@ public interface IProbeController {
 	public boolean deactivateProbe(final String pattern);
 
 	/**
+	 * Tests if a probe is active.
+	 * 
 	 * @param signature
 	 *            signature of the probe
 	 * @return
@@ -52,6 +54,8 @@ public interface IProbeController {
 	public boolean isProbeActivated(final String signature);
 
 	/**
+	 * Overwrites the current list of patterns with a new pattern list.
+	 * 
 	 * @param patternList
 	 *            list of strings with patterns
 	 *            where each string starts either with a + or -
@@ -59,6 +63,8 @@ public interface IProbeController {
 	public void setProbePatternList(final List<String> patternList);
 
 	/**
+	 * Returns the current list of patterns with a prefix indicating whether the pattern is active or not.
+	 * 
 	 * @return
 	 *         list of strings with patterns
 	 *         where each string starts either with a + or -
