@@ -1,12 +1,12 @@
 rm(list=ls(all=TRUE))
 
 data_fn="tmp/"
-folder_fn="results-benchmark-recursive"
+folder_fn="results-benchmark-recursive-linear"
 results_fn=paste(data_fn,folder_fn,"/results.csv",sep="")
 output_fn=paste(data_fn,folder_fn,"/results-timeseries.pdf",sep="")
 
-configs.loop=10
-configs.recursion=1
+configs.loop=2
+configs.recursion=10
 configs.count=4
 configs.labels=c("No Probe","Deactivated Probe","Collecting Data","Writing Data")
 configs.colors=c("black","red","blue","green")
@@ -37,7 +37,7 @@ for (cr in (1:configs.recursion)) {
       ts(results.ts[2,],end=results.count,deltat=buckets.size),
       ts(results.ts[3,],end=results.count,deltat=buckets.size),
       ts(results.ts[4,],end=results.count,deltat=buckets.size),
-      gpars=list(ylim=c(500,600),col=configs.colors,xlab="Executions"))
+      gpars=list(ylim=c(500,700),col=configs.colors,xlab="Executions"))
     legend("topright",inset=c(0.01,0.01),legend=c(rev(configs.labels)),lty="solid",col=rev(configs.colors),bg="white",title="Mean execution time of ...",ncol=2)
     title(main=paste("Iteration: ", cl, "  Recursion Depth: ", cr),ylab="Execution Time (µs)")
   }

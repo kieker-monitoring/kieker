@@ -131,7 +131,7 @@ public final class SamplingController extends AbstractController implements ISam
 	 * 
 	 * @see java.util.concurrent.Executors.DefaultThreadFactory
 	 * 
-	 * @Author Jan Waller
+	 * @author Jan Waller
 	 */
 	private static final class DaemonThreadFactory implements ThreadFactory {
 		private final ThreadFactory defaultThreadFactory = Executors.defaultThreadFactory();
