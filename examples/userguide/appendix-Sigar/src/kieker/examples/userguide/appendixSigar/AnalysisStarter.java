@@ -19,6 +19,7 @@ package kieker.examples.userguide.appendixSigar;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
+import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
@@ -34,7 +35,8 @@ public final class AnalysisStarter {
 	public static void main(final String[] args) {
 
 		if (args.length == 0) {
-			return;
+			System.err.println("No directory given as argument");
+			System.exit(1);
 		}
 
 		/* Create Kieker.Analysis instance */
@@ -61,6 +63,7 @@ public final class AnalysisStarter {
 	}
 }
 
+@Plugin
 class StdOutDumpConsumer extends AbstractFilterPlugin {
 	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
 
