@@ -8,11 +8,12 @@
 
 		<!-- Use * to consider all classes. In this case, you typically need some additional excludes. -->
 		<include within="*"/>
-		<!-- This would cause problems with * ?!? -->
-		<!-- <exclude within="org.apache.commons.logging..*" />  -->
 
 		<!-- instrument the kieker.tests -->
 		<!-- <include within="kieker.tests..*" /> -->
+
+		<!-- This would cause problems with * ?!? -->
+		<!-- <exclude within="org.apache.commons.logging..*" />  -->
 
 		<!-- Example instrumentation for the iBATIS JPetStore -->
 		<!--<include within="com.ibatis.jpetstore..*"/> -->
@@ -33,7 +34,7 @@
 	<aspects>
 		<!-- Use the aspect directives to specify the aspect(s) to use (typically only one). -->
 
-		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotation" /> -->
+		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotation" />-->
 		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotationServlet"/> -->
 		<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFull"/>
 		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoGetterAndSetter"/> -->
