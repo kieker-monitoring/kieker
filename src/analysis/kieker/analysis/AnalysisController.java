@@ -442,6 +442,9 @@ public final class AnalysisController {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect readers and filters after starting analysis.");
 		}
+		if ((src == null) || (dst == null) || (inputPortName == null) || (outputPortName == null)) {
+			throw new AnalysisConfigurationException("Unable to connect null values.");
+		}
 		// check whether dst is a reader
 		if (dst instanceof IReaderPlugin) {
 			throw new AnalysisConfigurationException("The plugin '" + dst.getName() + "' (" + dst.getPluginName() + ") is a reader and can not be connected to.");
