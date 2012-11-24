@@ -390,6 +390,8 @@ public final class AnalysisController {
 	 * This method can be used to store the current configuration of this analysis controller in a specified file.
 	 * The file can later be used to initialize the analysis controller.
 	 * 
+	 * @see AnalysisController#saveToFile(String)
+	 * 
 	 * @param file
 	 *            The file in which the configuration will be stored.
 	 * @throws IOException
@@ -400,6 +402,23 @@ public final class AnalysisController {
 	public final void saveToFile(final File file) throws IOException, AnalysisConfigurationException {
 		final MIProject mProject = this.getCurrentConfiguration();
 		AnalysisController.saveToFile(file, mProject);
+	}
+
+	/**
+	 * This method can be used to store the current configuration of this analysis controller in a specified file. It is just a convenient method which does the same
+	 * as {@code AnalysisController.saveToFile(new File(pathname))}.
+	 * 
+	 * @see AnalysisController#saveToFile(File)
+	 * 
+	 * @param pathname
+	 *            The pathname of the file in which the configuration will be stored.
+	 * @throws IOException
+	 *             If an exception during the storage occurred.
+	 * @throws AnalysisConfigurationException
+	 *             If the current configuration is somehow invalid.
+	 */
+	public final void saveToFile(final String pathname) throws IOException, AnalysisConfigurationException {
+		this.saveToFile(new File(pathname));
 	}
 
 	/**
