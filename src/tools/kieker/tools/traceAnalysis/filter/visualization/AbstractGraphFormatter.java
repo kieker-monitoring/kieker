@@ -43,8 +43,9 @@ public abstract class AbstractGraphFormatter<G extends AbstractGraph<?, ?, ?>> {
 	 * @return A formatted representation of the graph
 	 */
 	@SuppressWarnings("unchecked")
-	public String createFormattedRepresentation(final AbstractGraph<?, ?, ?> graph, final GraphWriterConfiguration configuration) {
-		return this.formatGraph((G) graph, configuration);
+	public String createFormattedRepresentation(final AbstractGraph<?, ?, ?> graph, final boolean includeWeights, final boolean useShortLabels,
+			final boolean plotLoops) {
+		return this.formatGraph((G) graph, includeWeights, useShortLabels, plotLoops);
 	}
 
 	/**
@@ -56,7 +57,7 @@ public abstract class AbstractGraphFormatter<G extends AbstractGraph<?, ?, ?>> {
 	 *            The configuration to use for formatting
 	 * @return A textual specification of the input graph
 	 */
-	protected abstract String formatGraph(G graph, GraphWriterConfiguration configuration);
+	protected abstract String formatGraph(G graph, final boolean includeWeights, final boolean useShortLabels, final boolean plotLoops);
 
 	private static String getFormattedDecorations(final AbstractVertex<?, ?, ?> vertex) {
 		synchronized (vertex) {

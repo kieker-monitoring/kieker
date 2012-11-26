@@ -56,11 +56,32 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
 @Plugin(name = "Graph writer plugin",
 		description = "Generic plugin for writing graphs to files",
 		configuration = {
-			@Property(name = GraphWriterConfiguration.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, defaultValue = "true"),
-			@Property(name = GraphWriterConfiguration.CONFIG_PROPERTY_NAME_SHORTLABELS, defaultValue = "true"),
-			@Property(name = GraphWriterConfiguration.CONFIG_PROPERTY_NAME_SELFLOOPS, defaultValue = "false")
+			@Property(name = GraphWriterPlugin.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, defaultValue = "true"),
+			@Property(name = GraphWriterPlugin.CONFIG_PROPERTY_NAME_SHORTLABELS, defaultValue = "true"),
+			@Property(name = GraphWriterPlugin.CONFIG_PROPERTY_NAME_SELFLOOPS, defaultValue = "false")
 		})
 public class GraphWriterPlugin extends AbstractFilterPlugin {
+
+	/**
+	 * Name of the configuration property containing the output file name.
+	 */
+	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME = "dotOutputFn";
+	/**
+	 * Name of the configuration property containing the output path name.
+	 */
+	public static final String CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME = "outputPath";
+	/**
+	 * Name of the configuration property indicating that weights should be included.
+	 */
+	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
+	/**
+	 * Name of the configuration property indicating that short labels should be used.
+	 */
+	public static final String CONFIG_PROPERTY_NAME_SHORTLABELS = "shortLabels";
+	/**
+	 * Name of the configuration property indicating that self-loops should be displayed.
+	 */
+	public static final String CONFIG_PROPERTY_NAME_SELFLOOPS = "selfLoops";
 	/**
 	 * Name of the plugin's graph input port.
 	 */
@@ -77,7 +98,11 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 	private static final ConcurrentMap<Class<? extends AbstractGraph<?, ?, ?>>, Class<? extends AbstractGraphFormatter<?>>> FORMATTER_REGISTRY =
 			new ConcurrentHashMap<Class<? extends AbstractGraph<?, ?, ?>>, Class<? extends AbstractGraphFormatter<?>>>();
 
-	private final GraphWriterConfiguration gConfiguration;
+	private final String outputPathName;
+	private final String outputFileName;
+	private final boolean includeWeights;
+	private final boolean useShortLabels;
+	private final boolean plotLoops;
 
 	static {
 		FORMATTER_REGISTRY.put(ComponentAllocationDependencyGraph.class, ComponentAllocationDependencyGraphFormatter.class);
@@ -95,11 +120,21 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 	 */
 	public GraphWriterPlugin(final Configuration configuration) {
 		super(configuration);
-		this.gConfiguration = new GraphWriterConfiguration(configuration);
+		this.outputPathName = configuration.getPathProperty(CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME);
+		this.outputFileName = configuration.getPathProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME);
+		this.includeWeights = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
+		this.useShortLabels = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORTLABELS);
+		this.plotLoops = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SELFLOOPS);
 	}
 
 	public Configuration getCurrentConfiguration() {
-		return this.gConfiguration.getConfiguration();
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME, this.outputPathName);
+		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME, this.outputFileName);
+		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, String.valueOf(this.includeWeights));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORTLABELS, String.valueOf(this.useShortLabels));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_SELFLOOPS, String.valueOf(this.plotLoops));
+		return configuration;
 	}
 
 	private static void handleInstantiationException(final Class<?> graphClass, final Class<?> formatterClass, final Exception exception) {
@@ -135,13 +170,11 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 	}
 
 	private String getOutputFileName(final AbstractGraphFormatter<?> formatter) {
-		String outputFileName = this.gConfiguration.getOutputFileName();
-
-		if (outputFileName.length() == 0) { // outputFileName cannot be null (getOutputFileName never returns null)
-			outputFileName = formatter.getDefaultFileName();
+		if (this.outputFileName.length() == 0) { // outputFileName cannot be null
+			return formatter.getDefaultFileName();
+		} else {
+			return this.outputFileName;
 		}
-
-		return outputFileName;
 	}
 
 	/**
@@ -156,26 +189,156 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 	@InputPort(name = INPUT_PORT_NAME_GRAPHS, eventTypes = { AbstractGraph.class })
 	public void writeGraph(final AbstractGraph<?, ?, ?> graph) {
 		final AbstractGraphFormatter<?> graphFormatter = GraphWriterPlugin.createFormatter(graph);
-
-		final String specification = graphFormatter.createFormattedRepresentation(graph, this.gConfiguration);
-		final String outputFileName = this.gConfiguration.getOutputPath() + this.getOutputFileName(graphFormatter);
-
+		final String specification = graphFormatter.createFormattedRepresentation(graph, this.includeWeights, this.useShortLabels, this.plotLoops);
+		final String fileName = this.outputPathName + this.getOutputFileName(graphFormatter);
 		BufferedWriter writer = null;
 		try {
-			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFileName), ENCODING));
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), ENCODING));
 			writer.write(specification);
 			writer.flush();
 		} catch (final IOException e) {
-			throw new GraphFormattingException(String.format(WRITE_ERROR_MESSAGE_TEMPLATE, outputFileName), e);
+			throw new GraphFormattingException(String.format(WRITE_ERROR_MESSAGE_TEMPLATE, fileName), e);
 		} finally {
 			if (writer != null) {
 				try {
 					writer.close();
 				} catch (final IOException e) {
-					LOG.error(String.format(WRITE_ERROR_MESSAGE_TEMPLATE, outputFileName), e);
+					LOG.error(String.format(WRITE_ERROR_MESSAGE_TEMPLATE, fileName), e);
 				}
 			}
 		}
 	}
 
+	/**
+	 * Configuration class for the graph writer plugin (see {@link GraphWriterPlugin}).
+	 * 
+	 * @author Holger Knoche
+	 * @Deprectaed (not used anymore)
+	 */
+	@Deprecated
+	public static final class GraphWriterConfiguration {
+
+		private final Configuration configuration;
+
+		/**
+		 * Creates a new, empty graph writer configuration.
+		 */
+		public GraphWriterConfiguration() {
+			this.configuration = new Configuration();
+		}
+
+		/**
+		 * Creates a new graph writer configuration that wraps the given configuration.
+		 * 
+		 * @param configuration
+		 *            The configuration to wrap
+		 */
+		public GraphWriterConfiguration(final Configuration configuration) {
+			this.configuration = configuration;
+		}
+
+		/**
+		 * Returns the configuration wrapped by this configuration.
+		 * 
+		 * @return See above
+		 */
+		public Configuration getConfiguration() {
+			return this.configuration;
+		}
+
+		/**
+		 * Returns the output file name specified by this configuration.
+		 * 
+		 * @return See above
+		 */
+		public String getOutputFileName() {
+			return this.configuration.getStringProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME); // never null
+		}
+
+		/**
+		 * Sets the output file name specified by this configuration.
+		 * 
+		 * @param outputFileName
+		 *            The output file name to set
+		 */
+		public void setOutputFileName(final String outputFileName) {
+			this.configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME, outputFileName);
+		}
+
+		/**
+		 * Returns the output path specified by this configuration.
+		 * 
+		 * @return See above
+		 */
+		public String getOutputPath() {
+			return this.configuration.getStringProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME);
+		}
+
+		/**
+		 * Sets the output path specified by this configuration.
+		 * 
+		 * @param outputPath
+		 *            The output path to set
+		 */
+		public void setOutputPath(final String outputPath) {
+			this.configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME, outputPath);
+		}
+
+		/**
+		 * Returns whether edge weights should be included.
+		 * 
+		 * @return See above
+		 */
+		public boolean doIncludeWeights() {
+			return this.configuration.getBooleanProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
+		}
+
+		/**
+		 * Specifies whether edge weights should be included.
+		 * 
+		 * @param value
+		 *            The value to set
+		 */
+		public void setIncludeWeights(final boolean value) {
+			this.configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, String.valueOf(value));
+		}
+
+		/**
+		 * Returns whether short labels should be used.
+		 * 
+		 * @return See above
+		 */
+		public boolean doUseShortLabels() {
+			return this.configuration.getBooleanProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_SHORTLABELS);
+		}
+
+		/**
+		 * Specifies whether short labels should be used.
+		 * 
+		 * @param value
+		 *            THe value to set
+		 */
+		public void setUseShortLabels(final boolean value) {
+			this.configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_SHORTLABELS, String.valueOf(value));
+		}
+
+		/**
+		 * Returns whether immediate loops should be plotted.
+		 * 
+		 * @return See above
+		 */
+		public boolean doPlotLoops() {
+			return this.configuration.getBooleanProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_SELFLOOPS);
+		}
+
+		/**
+		 * Specifies whether immediate loops should be plotted.
+		 * 
+		 * @param value
+		 *            The value to set
+		 */
+		public void setPlotLoops(final boolean value) {
+			this.configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_SELFLOOPS, String.valueOf(value));
+		}
+	}
 }

@@ -67,7 +67,6 @@ import kieker.tools.traceAnalysis.filter.traceWriter.ExecutionTraceWriterFilter;
 import kieker.tools.traceAnalysis.filter.traceWriter.InvalidExecutionTraceWriterFilter;
 import kieker.tools.traceAnalysis.filter.traceWriter.MessageTraceWriterFilter;
 import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFilter;
-import kieker.tools.traceAnalysis.filter.visualization.GraphWriterConfiguration;
 import kieker.tools.traceAnalysis.filter.visualization.GraphWriterPlugin;
 import kieker.tools.traceAnalysis.filter.visualization.callTree.AbstractAggregatedCallTreeFilter;
 import kieker.tools.traceAnalysis.filter.visualization.callTree.AggregatedAllocationComponentOperationCallTreeFilter;
@@ -287,17 +286,6 @@ public final class TraceAnalysisTool {
 		}
 	}
 
-	private static GraphWriterConfiguration createGraphWriterConfiguration() {
-		final GraphWriterConfiguration configuration = new GraphWriterConfiguration();
-
-		configuration.setOutputPath(outputDir + File.separator + outputFnPrefix);
-		configuration.setIncludeWeights(true);
-		configuration.setUseShortLabels(shortLabels);
-		configuration.setPlotLoops(includeSelfLoops);
-
-		return configuration;
-	}
-
 	/**
 	 * Attaches a graph writer plugin to the given plugin.
 	 * 
@@ -315,13 +303,15 @@ public final class TraceAnalysisTool {
 	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> void attachGraphWriter(final P plugin,
 			final AbstractGraphProducingFilter<?> producer, final AnalysisController controller) throws IllegalStateException, AnalysisConfigurationException {
 
-		final GraphWriterConfiguration gConfiguration = TraceAnalysisTool.createGraphWriterConfiguration();
-		final Configuration configuration = gConfiguration.getConfiguration();
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME, outputDir + File.separator + outputFnPrefix);
+		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, String.valueOf(true));
+		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_SHORTLABELS, String.valueOf(shortLabels));
+		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_SELFLOOPS, String.valueOf(includeSelfLoops));
 		configuration.setProperty(AbstractPlugin.CONFIG_NAME, producer.getConfigurationName());
 		final GraphWriterPlugin graphWriter = new GraphWriterPlugin(configuration);
 		controller.registerFilter(graphWriter);
-		controller.connect(plugin, plugin.getGraphOutputPortName(),
-				graphWriter, GraphWriterPlugin.INPUT_PORT_NAME_GRAPHS);
+		controller.connect(plugin, plugin.getGraphOutputPortName(), graphWriter, GraphWriterPlugin.INPUT_PORT_NAME_GRAPHS);
 	}
 
 	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> void connectGraphFilters(final P predecessor,
