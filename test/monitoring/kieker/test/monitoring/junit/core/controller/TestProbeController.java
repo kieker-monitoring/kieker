@@ -233,6 +233,7 @@ public class TestProbeController extends AbstractKiekerTest {
 				strPatternList.add(line);
 			}
 		}
+		reader.close();
 		return strPatternList;
 	}
 
