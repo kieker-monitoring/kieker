@@ -44,22 +44,22 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
  * @author Jan Waller
  */
 @Plugin(
-		name = "Trace Reconstruction Filter",
+		name = "Trace Reconstruction Filter (Event)",
 		description = "Filter to reconstruct event based (flow) traces",
 		outputPorts = {
 			@OutputPort(name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID, description = "Outputs valid traces", eventTypes = { TraceEventRecords.class }),
 			@OutputPort(name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID, description = "Outputs traces missing crucial records", eventTypes = { TraceEventRecords.class }) },
 		configuration = {
-			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME),
-			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME) })
+			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_NANOS, defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME_NANOS),
+			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT_NANOS, defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME_NANOS) })
 public final class EventRecordTraceReconstructionFilter extends AbstractFilterPlugin {
 	public static final String OUTPUT_PORT_NAME_TRACE_VALID = "validTraces";
 	public static final String OUTPUT_PORT_NAME_TRACE_INVALID = "invalidTraces";
 	public static final String INPUT_PORT_NAME_TRACE_RECORDS = "traceRecords";
 
-	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION = "maxTraceDuration";
-	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT = "maxTraceTimeout";
-	public static final String CONFIG_PROPERTY_VALUE_MAX_TIME = "9223372036854775807"; // String.valueOf(Long.MAX_VALUE)
+	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_NANOS = "maxTraceDuration";
+	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT_NANOS = "maxTraceTimeout";
+	public static final String CONFIG_PROPERTY_VALUE_MAX_TIME_NANOS = "9223372036854775807"; // String.valueOf(Long.MAX_VALUE)
 
 	private final long maxTraceDuration;
 	private final long maxTraceTimeout;
@@ -70,8 +70,8 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 	public EventRecordTraceReconstructionFilter(final Configuration configuration) {
 		super(configuration);
-		this.maxTraceDuration = configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION);
-		this.maxTraceTimeout = configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT);
+		this.maxTraceDuration = configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_NANOS);
+		this.maxTraceTimeout = configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT_NANOS);
 		this.timeout = !((this.maxTraceTimeout == Long.MAX_VALUE) && (this.maxTraceDuration == Long.MAX_VALUE)); // NOPMD (bitwise conversion makes code unreadable)
 		this.traceId2trace = new ConcurrentHashMap<Long, TraceBuffer>();
 	}
@@ -168,8 +168,8 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, String.valueOf(this.maxTraceDuration));
-		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, String.valueOf(this.maxTraceTimeout));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_NANOS, String.valueOf(this.maxTraceDuration));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT_NANOS, String.valueOf(this.maxTraceTimeout));
 		return configuration;
 	}
 

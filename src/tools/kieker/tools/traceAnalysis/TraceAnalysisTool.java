@@ -33,6 +33,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -515,8 +516,8 @@ public final class TraceAnalysisTool {
 				final Configuration configurationEventRecordTraceGenerationFilter = new Configuration();
 				configurationEventRecordTraceGenerationFilter.setProperty(AbstractPlugin.CONFIG_NAME,
 						Constants.EVENTRECORDTRACERECONSTR_COMPONENT_NAME);
-				configurationEventRecordTraceGenerationFilter.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
-						Integer.toString(TraceAnalysisTool.maxTraceDurationMillis));
+				configurationEventRecordTraceGenerationFilter.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_NANOS,
+						Long.toString(TimeUnit.NANOSECONDS.convert(TraceAnalysisTool.maxTraceDurationMillis, TimeUnit.MILLISECONDS)));
 				eventTraceReconstructionFilter = new EventRecordTraceReconstructionFilter(configurationEventRecordTraceGenerationFilter);
 				analysisInstance.registerFilter(eventTraceReconstructionFilter);
 				analysisInstance.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH,
