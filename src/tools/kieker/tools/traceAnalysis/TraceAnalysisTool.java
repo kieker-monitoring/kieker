@@ -58,6 +58,7 @@ import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.IGraphOutputtingFilter;
 import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
+import kieker.tools.traceAnalysis.filter.flow.EventRecordTraceCounter;
 import kieker.tools.traceAnalysis.filter.flow.TraceEventRecords2ExecutionAndMessageTraceFilter;
 import kieker.tools.traceAnalysis.filter.systemModel.SystemModel2FileFilter;
 import kieker.tools.traceAnalysis.filter.traceFilter.TraceEquivalenceClassFilter;
@@ -399,6 +400,7 @@ public final class TraceAnalysisTool {
 		int numRequestedTasks = 0;
 
 		TraceReconstructionFilter mtReconstrFilter = null;
+		EventRecordTraceCounter eventRecordTraceCounter = null;
 		EventRecordTraceReconstructionFilter eventTraceReconstructionFilter = null;
 		TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter = null;
 		try {
@@ -512,6 +514,22 @@ public final class TraceAnalysisTool {
 				analysisInstance.registerFilter(eventTraceReconstructionFilter);
 				analysisInstance.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH,
 						eventTraceReconstructionFilter, EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
+			}
+
+			{ // NOCS (nested block)
+				/*
+				 * Create the counter for valid/invalid event record traces
+				 */
+				final Configuration configurationEventRecordTraceCounter = new Configuration();
+				configurationEventRecordTraceCounter.setProperty(AbstractPlugin.CONFIG_NAME, Constants.EXECEVENTRACESFROMEVENTTRACES_COMPONENT_NAME);
+				eventRecordTraceCounter = new EventRecordTraceCounter(configurationEventRecordTraceCounter);
+				analysisInstance.registerFilter(eventRecordTraceCounter);
+				analysisInstance.connect(
+						eventTraceReconstructionFilter, EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID,
+						eventRecordTraceCounter, EventRecordTraceCounter.INPUT_PORT_NAME_VALID);
+				analysisInstance.connect(
+						eventTraceReconstructionFilter, EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID,
+						eventRecordTraceCounter, EventRecordTraceCounter.INPUT_PORT_NAME_INVALID);
 			}
 
 			{ // NOCS (nested block)
@@ -925,10 +943,9 @@ public final class TraceAnalysisTool {
 				if (mtReconstrFilter != null) {
 					mtReconstrFilter.printStatusMessage();
 				}
-				// if (eventTraceReconstructionFilter != null) {
-				// TODO add status message
-				// eventTraceReconstructionFilter.printStatusMessage();
-				// }
+				if (eventRecordTraceCounter != null) {
+					eventRecordTraceCounter.printStatusMessage();
+				}
 				if (traceEvents2ExecutionAndMessageTraceFilter != null) {
 					traceEvents2ExecutionAndMessageTraceFilter.printStatusMessage();
 				}
