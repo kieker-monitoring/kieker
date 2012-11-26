@@ -38,6 +38,7 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.common.util.StringUtils;
 
 /**
  * Reads the contents of a single file system log directory and passes the records to the registered receiver of type {@link IMonitoringRecordReceiver}.
@@ -164,7 +165,7 @@ final class FSDirectoryReader implements Runnable {
 					continue; // continue on errors
 				}
 				final String key = line.substring(0, split);
-				final String value = line.substring(split + 1);
+				final String value = StringUtils.decodeNewline(line.substring(split + 1));
 				// the leading $ is optional
 				final Integer id;
 				try {
