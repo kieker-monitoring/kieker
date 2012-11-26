@@ -21,6 +21,10 @@ package kieker.common.util;
  */
 public final class StringUtils {
 
+	private StringUtils() {
+		// empty private constructor
+	}
+
 	public static final String encodeNewline(final String str) {
 		final int length = str.length();
 		final StringBuilder sb = new StringBuilder(length + 16);
@@ -29,16 +33,16 @@ public final class StringUtils {
 			final char c = str.charAt(i);
 			if (c == '\\') {
 				changed = true;
-				sb.append('\\');
-				sb.append('\\');
+				sb.append('\\'); // NOPMD (double append is faster)
+				sb.append('\\'); // NOPMD (double append is faster)
 			} else if (c == '\r') {
 				changed = true;
-				sb.append('\\');
-				sb.append('r');
+				sb.append('\\'); // NOPMD (double append is faster)
+				sb.append('r'); // NOPMD (double append is faster)
 			} else if (c == '\n') {
 				changed = true;
-				sb.append('\\');
-				sb.append('n');
+				sb.append('\\'); // NOPMD (double append is faster)
+				sb.append('n'); // NOPMD (double append is faster)
 			} else {
 				sb.append(c);
 			}
@@ -57,7 +61,7 @@ public final class StringUtils {
 		for (int i = 0; i < length; i++) {
 			final char c = str.charAt(i);
 			if (c == '\\') {
-				final char d = str.charAt(++i);
+				final char d = str.charAt(++i); // NOCS
 				if (d == '\\') {
 					changed = true;
 					sb.append('\\');

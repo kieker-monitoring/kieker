@@ -73,7 +73,7 @@ import kieker.common.logging.LogFactory;
  * 
  * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke, Jan Waller
  */
-public final class AnalysisController {
+public final class AnalysisController { // NOPMD (really long class)
 	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
 
 	private final String projectName;

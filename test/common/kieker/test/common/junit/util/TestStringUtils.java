@@ -28,32 +28,36 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public class TestStringUtils extends AbstractKiekerTest {
 
-	private static final String decodedString = "Hallo\nTest\r asjd \\ asd \t";
-	private static final String encodedString = "Hallo\\nTest\\r asjd \\\\ asd \t";
-	private static final String irrelevantString = "Hallo Test asjd asd \t";
+	private static final String DECODED_STRING = "Hallo\nTest\r asjd \\ asd \t";
+	private static final String ENCODED_STRING = "Hallo\\nTest\\r asjd \\\\ asd \t";
+	private static final String IRRELEVANT_STRING = "Hallo Test asjd asd \t";
+
+	public TestStringUtils() {
+		// empty default constructor
+	}
 
 	@Test
 	public final void testEncodeNewline() {
 		Assert.assertSame("", StringUtils.encodeNewline(""));
-		Assert.assertSame(irrelevantString, StringUtils.encodeNewline(irrelevantString));
-		Assert.assertEquals(encodedString, StringUtils.encodeNewline(decodedString));
-		Assert.assertNotSame(encodedString, StringUtils.encodeNewline(decodedString));
+		Assert.assertSame(IRRELEVANT_STRING, StringUtils.encodeNewline(IRRELEVANT_STRING));
+		Assert.assertEquals(ENCODED_STRING, StringUtils.encodeNewline(DECODED_STRING));
+		Assert.assertNotSame(ENCODED_STRING, StringUtils.encodeNewline(DECODED_STRING));
 	}
 
 	@Test
 	public final void testDecodeNewline() {
 		Assert.assertSame("", StringUtils.encodeNewline(""));
-		Assert.assertSame(irrelevantString, StringUtils.encodeNewline(irrelevantString));
-		Assert.assertEquals(decodedString, StringUtils.decodeNewline(encodedString));
-		Assert.assertNotSame(decodedString, StringUtils.decodeNewline(encodedString));
-		Assert.assertSame(decodedString, StringUtils.decodeNewline(decodedString));
+		Assert.assertSame(IRRELEVANT_STRING, StringUtils.encodeNewline(IRRELEVANT_STRING));
+		Assert.assertEquals(DECODED_STRING, StringUtils.decodeNewline(ENCODED_STRING));
+		Assert.assertNotSame(DECODED_STRING, StringUtils.decodeNewline(ENCODED_STRING));
+		Assert.assertSame(DECODED_STRING, StringUtils.decodeNewline(DECODED_STRING));
 	}
 
 	@Test
 	public final void testEncodeDecodeNewline() {
-		Assert.assertEquals(decodedString, StringUtils.decodeNewline(StringUtils.encodeNewline(decodedString)));
-		Assert.assertNotSame(decodedString, StringUtils.decodeNewline(StringUtils.encodeNewline(decodedString)));
-		Assert.assertEquals(encodedString, StringUtils.decodeNewline(StringUtils.encodeNewline(encodedString)));
-		Assert.assertNotSame(encodedString, StringUtils.decodeNewline(StringUtils.encodeNewline(encodedString)));
+		Assert.assertEquals(DECODED_STRING, StringUtils.decodeNewline(StringUtils.encodeNewline(DECODED_STRING)));
+		Assert.assertNotSame(DECODED_STRING, StringUtils.decodeNewline(StringUtils.encodeNewline(DECODED_STRING)));
+		Assert.assertEquals(ENCODED_STRING, StringUtils.decodeNewline(StringUtils.encodeNewline(ENCODED_STRING)));
+		Assert.assertNotSame(ENCODED_STRING, StringUtils.decodeNewline(StringUtils.encodeNewline(ENCODED_STRING)));
 	}
 }

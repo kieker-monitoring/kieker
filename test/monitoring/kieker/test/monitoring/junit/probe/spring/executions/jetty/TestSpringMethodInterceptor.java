@@ -91,7 +91,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 				in = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
 				// final String result = in.readLine(); // the result is currently an empty string.
 			} finally {
-				if (in != null) {
+				if (null != in) {
 					in.close();
 				}
 			}

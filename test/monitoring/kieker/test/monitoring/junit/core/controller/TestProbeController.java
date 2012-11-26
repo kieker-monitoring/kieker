@@ -61,11 +61,12 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public class TestProbeController extends AbstractKiekerTest {
 
+	private static final String ENCODING = "UTF-8";
+
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
 	private volatile File configFile;
-	private final static String ENCODING = "UTF-8";
 
 	public TestProbeController() {
 		// empty default constructor
@@ -156,12 +157,12 @@ public class TestProbeController extends AbstractKiekerTest {
 
 	@Test
 	public void testAutomatedReadingFromConfigFile() throws UnsupportedEncodingException, FileNotFoundException, InterruptedException {
-		final int READ_INTERVALL = 2;
+		final int readIntervall = 2;
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
 		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, DummyWriter.class.getName());
 		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "true");
 		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE, this.configFile.getAbsolutePath());
-		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL, Integer.toString(READ_INTERVALL));
+		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL, Integer.toString(readIntervall));
 
 		this.writeToConfigFile(new String[] { "+ *", "- * test.Test()", });
 		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
@@ -173,12 +174,12 @@ public class TestProbeController extends AbstractKiekerTest {
 		Assert.assertArrayEquals(new String[] { "+*", "-* test.Test()", }, list.toArray());
 
 		this.writeToConfigFile(new String[] { "- *", "+ * test.Test(..)", });
-		Thread.sleep((READ_INTERVALL * 1000) + 1000);
+		Thread.sleep((readIntervall * 1000) + 1000);
 		final List<String> list2 = ctrl.getProbePatternList();
 		Assert.assertArrayEquals(new String[] { "-*", "+* test.Test(..)", }, list2.toArray());
 
-		this.writeToConfigFile(new String[] { "- * test.Test(..)", "+ public void test.Test()", });// new content
-		Thread.sleep((READ_INTERVALL * 1000) + 1000);
+		this.writeToConfigFile(new String[] { "- * test.Test(..)", "+ public void test.Test()", }); // new content
+		Thread.sleep((readIntervall * 1000) + 1000);
 		final List<String> list3 = ctrl.getProbePatternList();
 		Assert.assertArrayEquals(new String[] { "-* test.Test(..)", "+public void test.Test()", }, list3.toArray());
 
@@ -225,16 +226,22 @@ public class TestProbeController extends AbstractKiekerTest {
 	 * Reads the significant content of the config file.
 	 */
 	private List<String> readFromConfigFile() throws IOException {
-		final BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(this.configFile), TestProbeController.ENCODING));
-		final List<String> strPatternList = new LinkedList<String>();
-		String line;
-		while ((line = reader.readLine()) != null) {
-			if ((line.charAt(0) == '+') || (line.charAt(0) == '-')) {
-				strPatternList.add(line);
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new InputStreamReader(new FileInputStream(this.configFile), TestProbeController.ENCODING));
+			final List<String> strPatternList = new LinkedList<String>();
+			String line;
+			while ((line = reader.readLine()) != null) { // NOPMD
+				if ((line.charAt(0) == '+') || (line.charAt(0) == '-')) {
+					strPatternList.add(line);
+				}
+			}
+			return strPatternList;
+		} finally {
+			if (null != reader) {
+				reader.close();
 			}
 		}
-		reader.close();
-		return strPatternList;
 	}
 
 	/*

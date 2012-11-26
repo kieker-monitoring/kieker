@@ -20,9 +20,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.concurrent.CountDownLatch;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -48,9 +45,9 @@ public final class Benchmark {
 
 	static {
 		try {
-			LogManager.getLogManager().readConfiguration(Benchmark.class.getClassLoader().getResourceAsStream("META-INF/logging.properties"));
+			java.util.logging.LogManager.getLogManager().readConfiguration(Benchmark.class.getClassLoader().getResourceAsStream("META-INF/logging.properties"));
 		} catch (final IOException ex) {
-			Logger.getAnonymousLogger().log(Level.SEVERE, "Could not load default logging.properties file", ex);
+			java.util.logging.Logger.getAnonymousLogger().log(java.util.logging.Level.SEVERE, "Could not load default logging.properties file", ex);
 		}
 	}
 
