@@ -17,7 +17,6 @@
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
 import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFormatter;
-import kieker.tools.traceAnalysis.filter.visualization.GraphWriterConfiguration;
 import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
@@ -43,11 +42,7 @@ public abstract class AbstractDependencyGraphFormatter<G extends AbstractDepende
 	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
 
 	@Override
-	protected String formatGraph(final G graph, final GraphWriterConfiguration configuration) {
-		final boolean includeWeights = configuration.doIncludeWeights();
-		final boolean useShortLabels = configuration.doUseShortLabels();
-		final boolean plotLoops = configuration.doPlotLoops();
-
+	protected String formatGraph(final G graph, final boolean includeWeights, final boolean useShortLabels, final boolean plotLoops) {
 		return this.formatDependencyGraph(graph, includeWeights, useShortLabels, plotLoops);
 	}
 

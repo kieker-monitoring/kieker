@@ -19,17 +19,25 @@ package kieker.common.record.flow;
 /**
  * Interface for all flow records that describe operation calls.
  * 
+ * All call records have a <code>calleeClassSignature</code> and an <code>calleeOperationSignature</code> field of type <code>String</code>.
+ * 
  * @author Jan Waller
  */
 public interface ICallRecord extends IOperationRecord {
 
-	public abstract String getCallerOperationSignature();
-
+	/**
+	 * @see {@link IOperationRecord#getClassSignature()}
+	 */
 	public abstract String getCallerClassSignature();
 
-	public abstract String getCalleeOperationSignature();
+	/**
+	 * @see {@link IOperationRecord#getOperationSignature()}
+	 */
+	public abstract String getCallerOperationSignature();
 
 	public abstract String getCalleeClassSignature();
+
+	public abstract String getCalleeOperationSignature();
 
 	public abstract boolean callsReferencedOperationOf(final IOperationRecord record);
 }

@@ -24,6 +24,7 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.filter.flow.EventRecordTraceReconstructionFilter;
 import kieker.analysis.plugin.filter.forward.CountingFilter;
+import kieker.analysis.plugin.filter.forward.StringBufferFilter;
 import kieker.analysis.plugin.filter.forward.TeeFilter;
 import kieker.analysis.plugin.filter.select.TimestampFilter;
 import kieker.analysis.plugin.filter.select.TypeFilter;
@@ -37,7 +38,6 @@ import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.IGraphOutputtingFilter;
 import kieker.tools.traceAnalysis.filter.flow.TraceEventRecords2ExecutionAndMessageTraceFilter;
 import kieker.tools.traceAnalysis.filter.systemModel.SystemModel2FileFilter;
-import kieker.tools.traceAnalysis.filter.visualization.GraphWriterConfiguration;
 import kieker.tools.traceAnalysis.filter.visualization.GraphWriterPlugin;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentDependencyGraphAllocationFilter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationDependencyGraphAllocationFilter;
@@ -51,30 +51,34 @@ public final class TestAnalysis {
 	private static final Log LOG = LogFactory.getLog(TestAnalysis.class);
 	private static final boolean LOADCONFIG = false;
 
-	private static final String FILENAME = "tmp/testproject.kax";
+	private static final String KAX_FILENAME = "tmp/testproject.kax";
+	private static final String SRC_FILENAME = "tmp/testdata-ascii/";
 
 	private TestAnalysis() {}
 
 	public static void main(final String[] args) {
 		final AnalysisController analysisController;
-		final SystemModelRepository traceRepo = new SystemModelRepository(new Configuration());
 		if (TestAnalysis.LOADCONFIG) {
 			try {
-				analysisController = new AnalysisController(new File(TestAnalysis.FILENAME));
+				analysisController = new AnalysisController(new File(TestAnalysis.KAX_FILENAME));
 			} catch (final IOException ex) {
-				TestAnalysis.LOG.error("Failed to load " + TestAnalysis.FILENAME, ex);
+				TestAnalysis.LOG.error("Failed to load " + TestAnalysis.KAX_FILENAME, ex);
 				return;
 			} catch (final AnalysisConfigurationException ex) {
-				TestAnalysis.LOG.error("Failed to load " + TestAnalysis.FILENAME, ex);
+				TestAnalysis.LOG.error("Failed to load " + TestAnalysis.KAX_FILENAME, ex);
 				return;
 			}
 		} else {
 			analysisController = new AnalysisController("TestProject");
+			final SystemModelRepository traceRepo = new SystemModelRepository(new Configuration());
 
 			/* Reader */
 			final Configuration confFSReader = new Configuration();
-			confFSReader.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, "tmp/testdata-ascii/");
+			confFSReader.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, SRC_FILENAME);
 			final FSReader reader = new FSReader(confFSReader);
+
+			/* String Buffer */
+			final StringBufferFilter buffer = new StringBufferFilter(new Configuration());
 
 			/* TypeFilter */
 			final Configuration confTypeFilter = new Configuration();
@@ -83,15 +87,18 @@ public final class TestAnalysis {
 			/* TeeFilter */
 			final Configuration confTeeFilter1 = new Configuration();
 			confTeeFilter1.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM, TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDOUT);
+			// confTeeFilter1.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM, TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_NULL);
 			final TeeFilter teeFilter1 = new TeeFilter(confTeeFilter1);
 
 			final Configuration confTeeFilter2 = new Configuration();
 			confTeeFilter2.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM, TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDERR);
+			// confTeeFilter2.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM, TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_NULL);
 			confTeeFilter2.setProperty(AbstractPlugin.CONFIG_NAME, "CountBegin");
 			final TeeFilter teeFilter2 = new TeeFilter(confTeeFilter2);
 
 			final Configuration confTeeFilter3 = new Configuration();
 			confTeeFilter3.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM, TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDERR);
+			// confTeeFilter3.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM, TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_NULL);
 			confTeeFilter3.setProperty(AbstractPlugin.CONFIG_NAME, "CountAfter");
 			final TeeFilter teeFilter3 = new TeeFilter(confTeeFilter3);
 
@@ -124,17 +131,19 @@ public final class TestAnalysis {
 
 			final ComponentDependencyGraphAllocationFilter componentDependencyGraphAllocationFilter =
 					new ComponentDependencyGraphAllocationFilter(new Configuration());
-			final GraphWriterConfiguration componentAllocationWriterConfiguration = new GraphWriterConfiguration();
-			componentAllocationWriterConfiguration.setOutputPath("tmp/");
-			componentAllocationWriterConfiguration.setOutputFileName("dependency.dot");
-			final GraphWriterPlugin componentAllocationGraphWriter = new GraphWriterPlugin(componentAllocationWriterConfiguration.getConfiguration());
+
+			final Configuration componentAllocationWriterConfiguration = new Configuration();
+			componentAllocationWriterConfiguration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME, "tmp/");
+			componentAllocationWriterConfiguration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME, "dependency.dot");
+			final GraphWriterPlugin componentAllocationGraphWriter = new GraphWriterPlugin(componentAllocationWriterConfiguration);
 
 			final OperationDependencyGraphAllocationFilter operationDependencyGraphAllocationFilter =
 					new OperationDependencyGraphAllocationFilter(new Configuration());
-			final GraphWriterConfiguration operationAllocationWriterConfiguration = new GraphWriterConfiguration();
-			operationAllocationWriterConfiguration.setOutputPath("tmp/");
-			operationAllocationWriterConfiguration.setOutputFileName("dependency-operation.dot");
-			final GraphWriterPlugin operationAllocationGraphWriter = new GraphWriterPlugin(operationAllocationWriterConfiguration.getConfiguration());
+
+			final Configuration operationAllocationWriterConfiguration = new Configuration();
+			operationAllocationWriterConfiguration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME, "tmp/");
+			operationAllocationWriterConfiguration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME, "dependency-operation.dot");
+			final GraphWriterPlugin operationAllocationGraphWriter = new GraphWriterPlugin(operationAllocationWriterConfiguration);
 
 			/* Visualization */
 			final Configuration confSystemModel2FileFilter = new Configuration();
@@ -147,8 +156,11 @@ public final class TestAnalysis {
 
 				analysisController.registerReader(reader);
 
+				analysisController.registerFilter(buffer);
+				analysisController.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, buffer, StringBufferFilter.INPUT_PORT_NAME_EVENTS);
+
 				analysisController.registerFilter(countingFilter1);
-				analysisController.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, countingFilter1, CountingFilter.INPUT_PORT_NAME_EVENTS);
+				analysisController.connect(buffer, StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, countingFilter1, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
 				analysisController.registerFilter(typeFilter);
 				analysisController.connect(countingFilter1, CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, typeFilter, TypeFilter.INPUT_PORT_NAME_EVENTS);
@@ -169,55 +181,61 @@ public final class TestAnalysis {
 				analysisController.connect(countingFilter2, CountingFilter.OUTPUT_PORT_NAME_COUNT, teeFilter3, TeeFilter.INPUT_PORT_NAME_EVENTS);
 
 				analysisController.registerFilter(eventTraceReconstructionFilter);
-				analysisController.connect(countingFilter2, CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, eventTraceReconstructionFilter,
+				analysisController.connect(
+						countingFilter2, CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, eventTraceReconstructionFilter,
 						EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
-				// analysisController.connect(eventTraceReconstructionFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, traceRepo);
 
 				analysisController.registerFilter(traceEvents2ExecutionAndMessageTraceFilter);
-				analysisController.connect(eventTraceReconstructionFilter, EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID,
-						traceEvents2ExecutionAndMessageTraceFilter, TraceEventRecords2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME_EVENT_TRACE);
 				analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, traceRepo);
+				analysisController.connect(
+						eventTraceReconstructionFilter, EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID,
+						traceEvents2ExecutionAndMessageTraceFilter, TraceEventRecords2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME_EVENT_TRACE);
 
 				analysisController.registerFilter(teeFilter1);
-				analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						teeFilter1,
-						TeeFilter.INPUT_PORT_NAME_EVENTS);
+				analysisController.connect(
+						traceEvents2ExecutionAndMessageTraceFilter, TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+						teeFilter1, TeeFilter.INPUT_PORT_NAME_EVENTS);
 
 				analysisController.registerFilter(sequenceDiagramFilter);
-				analysisController.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, sequenceDiagramFilter,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				analysisController.connect(sequenceDiagramFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, traceRepo);
+				analysisController.connect(
+						teeFilter1, TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
+						sequenceDiagramFilter, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 
 				analysisController.registerFilter(componentDependencyGraphAllocationFilter);
-				analysisController.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, componentDependencyGraphAllocationFilter,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				analysisController.connect(componentDependencyGraphAllocationFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, traceRepo);
+				analysisController.connect(
+						teeFilter1, TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
+						componentDependencyGraphAllocationFilter, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 
 				analysisController.registerFilter(operationDependencyGraphAllocationFilter);
-				analysisController.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, operationDependencyGraphAllocationFilter,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				analysisController.connect(operationDependencyGraphAllocationFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, traceRepo);
+				analysisController.connect(
+						teeFilter1, TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
+						operationDependencyGraphAllocationFilter, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 
 				analysisController.registerFilter(componentAllocationGraphWriter);
-				analysisController.connect(componentDependencyGraphAllocationFilter, IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH,
+				analysisController.connect(
+						componentDependencyGraphAllocationFilter, IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH,
 						componentAllocationGraphWriter, GraphWriterPlugin.INPUT_PORT_NAME_GRAPHS);
 
 				analysisController.registerFilter(operationAllocationGraphWriter);
-				analysisController.connect(operationDependencyGraphAllocationFilter, IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH,
+				analysisController.connect(
+						operationDependencyGraphAllocationFilter, IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH,
 						operationAllocationGraphWriter, GraphWriterPlugin.INPUT_PORT_NAME_GRAPHS);
 
 				analysisController.registerFilter(systemModel2FileFilter);
 				analysisController.connect(systemModel2FileFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, traceRepo);
+
 			} catch (final AnalysisConfigurationException ex) {
 				TestAnalysis.LOG.error("Failed to wire the example project.", ex);
 			}
 			try {
-				analysisController.saveToFile(new File(TestAnalysis.FILENAME));
+				analysisController.saveToFile(new File(TestAnalysis.KAX_FILENAME));
 			} catch (final IOException ex) {
-				TestAnalysis.LOG.error("Failed to save configuration to " + TestAnalysis.FILENAME, ex);
+				TestAnalysis.LOG.error("Failed to save configuration to " + TestAnalysis.KAX_FILENAME, ex);
 			} catch (final AnalysisConfigurationException ex) {
-				TestAnalysis.LOG.error("Failed to save configuration to " + TestAnalysis.FILENAME, ex);
+				TestAnalysis.LOG.error("Failed to save configuration to " + TestAnalysis.KAX_FILENAME, ex);
 			}
 		}
 		try {

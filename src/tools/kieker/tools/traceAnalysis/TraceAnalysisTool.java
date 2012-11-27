@@ -33,6 +33,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -57,6 +58,7 @@ import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.IGraphOutputtingFilter;
 import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
+import kieker.tools.traceAnalysis.filter.flow.EventRecordTraceCounter;
 import kieker.tools.traceAnalysis.filter.flow.TraceEventRecords2ExecutionAndMessageTraceFilter;
 import kieker.tools.traceAnalysis.filter.systemModel.SystemModel2FileFilter;
 import kieker.tools.traceAnalysis.filter.traceFilter.TraceEquivalenceClassFilter;
@@ -66,7 +68,6 @@ import kieker.tools.traceAnalysis.filter.traceWriter.ExecutionTraceWriterFilter;
 import kieker.tools.traceAnalysis.filter.traceWriter.InvalidExecutionTraceWriterFilter;
 import kieker.tools.traceAnalysis.filter.traceWriter.MessageTraceWriterFilter;
 import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFilter;
-import kieker.tools.traceAnalysis.filter.visualization.GraphWriterConfiguration;
 import kieker.tools.traceAnalysis.filter.visualization.GraphWriterPlugin;
 import kieker.tools.traceAnalysis.filter.visualization.callTree.AbstractAggregatedCallTreeFilter;
 import kieker.tools.traceAnalysis.filter.visualization.callTree.AggregatedAllocationComponentOperationCallTreeFilter;
@@ -286,17 +287,6 @@ public final class TraceAnalysisTool {
 		}
 	}
 
-	private static GraphWriterConfiguration createGraphWriterConfiguration() {
-		final GraphWriterConfiguration configuration = new GraphWriterConfiguration();
-
-		configuration.setOutputPath(outputDir + File.separator + outputFnPrefix);
-		configuration.setIncludeWeights(true);
-		configuration.setUseShortLabels(shortLabels);
-		configuration.setPlotLoops(includeSelfLoops);
-
-		return configuration;
-	}
-
 	/**
 	 * Attaches a graph writer plugin to the given plugin.
 	 * 
@@ -314,13 +304,15 @@ public final class TraceAnalysisTool {
 	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> void attachGraphWriter(final P plugin,
 			final AbstractGraphProducingFilter<?> producer, final AnalysisController controller) throws IllegalStateException, AnalysisConfigurationException {
 
-		final GraphWriterConfiguration gConfiguration = TraceAnalysisTool.createGraphWriterConfiguration();
-		final Configuration configuration = gConfiguration.getConfiguration();
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME, outputDir + File.separator + outputFnPrefix);
+		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, String.valueOf(true));
+		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_SHORTLABELS, String.valueOf(shortLabels));
+		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_SELFLOOPS, String.valueOf(includeSelfLoops));
 		configuration.setProperty(AbstractPlugin.CONFIG_NAME, producer.getConfigurationName());
 		final GraphWriterPlugin graphWriter = new GraphWriterPlugin(configuration);
 		controller.registerFilter(graphWriter);
-		controller.connect(plugin, plugin.getGraphOutputPortName(),
-				graphWriter, GraphWriterPlugin.INPUT_PORT_NAME_GRAPHS);
+		controller.connect(plugin, plugin.getGraphOutputPortName(), graphWriter, GraphWriterPlugin.INPUT_PORT_NAME_GRAPHS);
 	}
 
 	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> void connectGraphFilters(final P predecessor,
@@ -408,6 +400,7 @@ public final class TraceAnalysisTool {
 		int numRequestedTasks = 0;
 
 		TraceReconstructionFilter mtReconstrFilter = null;
+		EventRecordTraceCounter eventRecordTraceCounter = null;
 		EventRecordTraceReconstructionFilter eventTraceReconstructionFilter = null;
 		TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter = null;
 		try {
@@ -515,12 +508,28 @@ public final class TraceAnalysisTool {
 				final Configuration configurationEventRecordTraceGenerationFilter = new Configuration();
 				configurationEventRecordTraceGenerationFilter.setProperty(AbstractPlugin.CONFIG_NAME,
 						Constants.EVENTRECORDTRACERECONSTR_COMPONENT_NAME);
-				configurationEventRecordTraceGenerationFilter.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
-						Integer.toString(TraceAnalysisTool.maxTraceDurationMillis));
+				configurationEventRecordTraceGenerationFilter.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_NANOS,
+						Long.toString(TimeUnit.NANOSECONDS.convert(TraceAnalysisTool.maxTraceDurationMillis, TimeUnit.MILLISECONDS)));
 				eventTraceReconstructionFilter = new EventRecordTraceReconstructionFilter(configurationEventRecordTraceGenerationFilter);
 				analysisInstance.registerFilter(eventTraceReconstructionFilter);
 				analysisInstance.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH,
 						eventTraceReconstructionFilter, EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
+			}
+
+			{ // NOCS (nested block)
+				/*
+				 * Create the counter for valid/invalid event record traces
+				 */
+				final Configuration configurationEventRecordTraceCounter = new Configuration();
+				configurationEventRecordTraceCounter.setProperty(AbstractPlugin.CONFIG_NAME, Constants.EXECEVENTRACESFROMEVENTTRACES_COMPONENT_NAME);
+				eventRecordTraceCounter = new EventRecordTraceCounter(configurationEventRecordTraceCounter);
+				analysisInstance.registerFilter(eventRecordTraceCounter);
+				analysisInstance.connect(
+						eventTraceReconstructionFilter, EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID,
+						eventRecordTraceCounter, EventRecordTraceCounter.INPUT_PORT_NAME_VALID);
+				analysisInstance.connect(
+						eventTraceReconstructionFilter, EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID,
+						eventRecordTraceCounter, EventRecordTraceCounter.INPUT_PORT_NAME_INVALID);
 			}
 
 			{ // NOCS (nested block)
@@ -934,10 +943,9 @@ public final class TraceAnalysisTool {
 				if (mtReconstrFilter != null) {
 					mtReconstrFilter.printStatusMessage();
 				}
-				// if (eventTraceReconstructionFilter != null) {
-				// TODO add status message
-				// eventTraceReconstructionFilter.printStatusMessage();
-				// }
+				if (eventRecordTraceCounter != null) {
+					eventRecordTraceCounter.printStatusMessage();
+				}
 				if (traceEvents2ExecutionAndMessageTraceFilter != null) {
 					traceEvents2ExecutionAndMessageTraceFilter.printStatusMessage();
 				}

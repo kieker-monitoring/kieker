@@ -41,7 +41,7 @@ import kieker.common.logging.LogFactory;
 		outputPorts = @OutputPort(name = TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming object", eventTypes = { Object.class }),
 		configuration = {
 			@Property(name = TeeFilter.CONFIG_PROPERTY_NAME_STREAM, defaultValue = TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDOUT,
-					description = "The name of the stream used to print the incoming data (valid values are STDOUT, STDERR, and STDLOG)."),
+					description = "The name of the stream used to print the incoming data (special values are STDOUT, STDERR, STDLOG, and NULL; other values are interpreted as filenames)."),
 			@Property(name = TeeFilter.CONFIG_PROPERTY_NAME_ENCODING, defaultValue = TeeFilter.CONFIG_PROPERTY_VALUE_DEFAULT_ENCODING,
 					description = "The used encoding for the selected stream.")
 		})
@@ -57,12 +57,14 @@ public final class TeeFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDOUT = "STDOUT";
 	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDERR = "STDERR";
 	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDLOG = "STDLOG";
+	public static final String CONFIG_PROPERTY_VALUE_STREAM_NULL = "NULL";
 	public static final String CONFIG_PROPERTY_VALUE_DEFAULT_ENCODING = "UTF-8";
 
 	private static final Log LOG = LogFactory.getLog(TeeFilter.class);
 
 	private final PrintStream printStream;
 	private final String printStreamName;
+	private final boolean active;
 	private final String encoding;
 
 	public TeeFilter(final Configuration configuration) {
@@ -77,12 +79,19 @@ public final class TeeFilter extends AbstractFilterPlugin {
 		if (CONFIG_PROPERTY_VALUE_STREAM_STDLOG.equals(printStreamNameConfig)) {
 			this.printStream = null; // NOPMD (null)
 			this.printStreamName = null; // NOPMD (null)
+			this.active = true;
 		} else if (CONFIG_PROPERTY_VALUE_STREAM_STDOUT.equals(printStreamNameConfig)) {
 			this.printStream = System.out;
 			this.printStreamName = null; // NOPMD (null)
+			this.active = true;
 		} else if (CONFIG_PROPERTY_VALUE_STREAM_STDERR.equals(printStreamNameConfig)) {
 			this.printStream = System.err;
 			this.printStreamName = null; // NOPMD (null)
+			this.active = true;
+		} else if (CONFIG_PROPERTY_VALUE_STREAM_NULL.equals(printStreamNameConfig)) {
+			this.printStream = null; // NOPMD (null)
+			this.printStreamName = null; // NOPMD (null)
+			this.active = false;
 		} else {
 			PrintStream tmpPrintStream;
 			try {
@@ -96,6 +105,7 @@ public final class TeeFilter extends AbstractFilterPlugin {
 			}
 			this.printStream = tmpPrintStream;
 			this.printStreamName = printStreamNameConfig;
+			this.active = true;
 		}
 	}
 
@@ -111,7 +121,11 @@ public final class TeeFilter extends AbstractFilterPlugin {
 		configuration.setProperty(CONFIG_PROPERTY_NAME_ENCODING, this.encoding);
 		/* We reverse the if-decisions within the constructor. */
 		if (this.printStream == null) {
-			configuration.setProperty(CONFIG_PROPERTY_NAME_STREAM, CONFIG_PROPERTY_VALUE_STREAM_STDLOG);
+			if (this.active) {
+				configuration.setProperty(CONFIG_PROPERTY_NAME_STREAM, CONFIG_PROPERTY_VALUE_STREAM_STDLOG);
+			} else {
+				configuration.setProperty(CONFIG_PROPERTY_NAME_STREAM, CONFIG_PROPERTY_VALUE_STREAM_NULL);
+			}
 		} else if (this.printStream == System.out) {
 			configuration.setProperty(CONFIG_PROPERTY_NAME_STREAM, CONFIG_PROPERTY_VALUE_STREAM_STDOUT);
 		} else if (this.printStream == System.err) {
@@ -124,14 +138,16 @@ public final class TeeFilter extends AbstractFilterPlugin {
 
 	@InputPort(name = INPUT_PORT_NAME_EVENTS, description = "Receives incoming objects to be logged and forwarded", eventTypes = { Object.class })
 	public final void inputEvent(final Object object) {
-		final StringBuilder sb = new StringBuilder(128);
-		sb.append(this.getName());
-		sb.append('(').append(object.getClass().getSimpleName()).append(") ").append(object.toString());
-		final String record = sb.toString();
-		if (this.printStream != null) {
-			this.printStream.println(record);
-		} else {
-			LOG.info(record);
+		if (this.active) {
+			final StringBuilder sb = new StringBuilder(128);
+			sb.append(this.getName());
+			sb.append('(').append(object.getClass().getSimpleName()).append(") ").append(object.toString());
+			final String record = sb.toString();
+			if (this.printStream != null) {
+				this.printStream.println(record);
+			} else {
+				LOG.info(record);
+			}
 		}
 		super.deliver(OUTPUT_PORT_NAME_RELAYED_EVENTS, object);
 	}

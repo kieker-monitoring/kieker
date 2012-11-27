@@ -22,7 +22,7 @@ import kieker.common.record.IMonitoringRecord;
 /**
  * @author Jan Waller
  */
-public abstract class AbstractEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IFlowRecord, IEventRecord {
+public abstract class AbstractEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IEventRecord {
 	private static final long serialVersionUID = 1L;
 
 	private final long timestamp;

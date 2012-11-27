@@ -17,10 +17,17 @@
 package kieker.common.record.flow;
 
 /**
+ * Interface for all flow records that describe operation calls on objects.
+ * 
+ * All call records have a <code>calleeObjectId</code> field of type <code>int</code>.
+ * 
  * @author Jan Waller
  */
-public interface ICallObjectRecord extends IObjectRecord {
+public interface ICallObjectRecord extends ICallRecord, IObjectRecord {
 
+	/**
+	 * @see {@link IObjectRecord#getObjectId()}
+	 */
 	public abstract int getCallerObjectId();
 
 	public abstract int getCalleeObjectId();

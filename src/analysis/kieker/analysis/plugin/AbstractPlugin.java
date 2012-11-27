@@ -20,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -337,7 +338,9 @@ public abstract class AbstractPlugin implements IPlugin {
 					}
 				}
 			}
-			LOG.warn("Ports are not comaptible with eachother.");
+			final String allowedOutputTypes = Arrays.toString(outputPort.eventTypes());
+			final String allowedInputTypes = Arrays.toString(inputPort.eventTypes());
+			LOG.warn("Output port '" + output + "' (" + allowedOutputTypes + ") is not compatible with input port '" + input + "' (" + allowedInputTypes + ").");
 			return false;
 		}
 

@@ -1,12 +1,13 @@
-data_fn="C:\\Users\\jwa\\Projects\\Monitoring\\OverheadEvaluation\\blade6\\experiment1\\"
-#data_fn="tmp/"
-folder_fn="results-A5"
+rm(list=ls(all=TRUE))
+
+data_fn="tmp/"
+folder_fn="results-benchmark-recursive"
 results_fn=paste(data_fn,folder_fn,"/results.csv",sep="")
 output_fn=paste(data_fn,folder_fn,"/results-bars.pdf",sep="")
 outtxt_fn=paste(data_fn,folder_fn,"/results-text.txt",sep="")
 
 configs.threads=1
-configs.loop=10
+configs.loop=1
 configs.recursion=c(1)
 #configs.recursion=c(1,2,3,4,5,6,7,8,9,10)
 configs.labels=c("No Probe","Inactive Probe","Collecting Data","Writing Data")

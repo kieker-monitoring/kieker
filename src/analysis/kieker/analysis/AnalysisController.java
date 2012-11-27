@@ -73,7 +73,7 @@ import kieker.common.logging.LogFactory;
  * 
  * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke, Jan Waller
  */
-public final class AnalysisController {
+public final class AnalysisController { // NOPMD (really long class)
 	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
 
 	private final String projectName;
@@ -390,6 +390,8 @@ public final class AnalysisController {
 	 * This method can be used to store the current configuration of this analysis controller in a specified file.
 	 * The file can later be used to initialize the analysis controller.
 	 * 
+	 * @see AnalysisController#saveToFile(String)
+	 * 
 	 * @param file
 	 *            The file in which the configuration will be stored.
 	 * @throws IOException
@@ -400,6 +402,23 @@ public final class AnalysisController {
 	public final void saveToFile(final File file) throws IOException, AnalysisConfigurationException {
 		final MIProject mProject = this.getCurrentConfiguration();
 		AnalysisController.saveToFile(file, mProject);
+	}
+
+	/**
+	 * This method can be used to store the current configuration of this analysis controller in a specified file. It is just a convenient method which does the same
+	 * as {@code AnalysisController.saveToFile(new File(pathname))}.
+	 * 
+	 * @see AnalysisController#saveToFile(File)
+	 * 
+	 * @param pathname
+	 *            The pathname of the file in which the configuration will be stored.
+	 * @throws IOException
+	 *             If an exception during the storage occurred.
+	 * @throws AnalysisConfigurationException
+	 *             If the current configuration is somehow invalid.
+	 */
+	public final void saveToFile(final String pathname) throws IOException, AnalysisConfigurationException {
+		this.saveToFile(new File(pathname));
 	}
 
 	/**
@@ -422,6 +441,9 @@ public final class AnalysisController {
 			throws IllegalStateException, AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect readers and filters after starting analysis.");
+		}
+		if ((src == null) || (dst == null) || (inputPortName == null) || (outputPortName == null)) {
+			throw new AnalysisConfigurationException("Unable to connect null values.");
 		}
 		// check whether dst is a reader
 		if (dst instanceof IReaderPlugin) {

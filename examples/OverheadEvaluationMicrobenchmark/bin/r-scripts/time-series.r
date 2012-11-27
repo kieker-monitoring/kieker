@@ -1,10 +1,12 @@
+rm(list=ls(all=TRUE))
+
 data_fn="tmp/"
 folder_fn="results-benchmark-recursive"
 results_fn=paste(data_fn,folder_fn,"/results.csv",sep="")
 output_fn=paste(data_fn,folder_fn,"/results-timeseries.pdf",sep="")
 
 configs.loop=10
-configs.recursion=10
+configs.recursion=1
 configs.count=4
 configs.labels=c("No Probe","Deactivated Probe","Collecting Data","Writing Data")
 configs.colors=c("black","red","blue","green")

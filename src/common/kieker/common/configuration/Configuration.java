@@ -84,6 +84,19 @@ public final class Configuration extends Properties {
 	}
 
 	/**
+	 * Sets a property to the given string array. Note that the values <b>must not</b> contain the
+	 * separator character '|'.
+	 * 
+	 * @param key
+	 *            The key of the property to change
+	 * @param value
+	 *            The array to set
+	 */
+	public final void setStringArrayProperty(final String key, final String[] value) {
+		this.setProperty(key, Configuration.toProperty(value));
+	}
+
+	/**
 	 * Property values have to be split by 'split'.
 	 * 
 	 * @param split
