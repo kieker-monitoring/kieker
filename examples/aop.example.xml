@@ -1,7 +1,7 @@
 <!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.aspectj.org/dtd/aspectj_1_5_0.dtd">
 
 <aspectj>
-	<weaver options=""> <!-- options="-verbose -showWeaveInfo" -->
+	<weaver options=""> <!-- options="-verbose -showWeaveInfo -Xjoinpoints:synchronization" -->
 
 		<!-- Use the exclude/include directives to specify which classes are (not) to be considered for weaving.
 		     Some examples are given below. -->
