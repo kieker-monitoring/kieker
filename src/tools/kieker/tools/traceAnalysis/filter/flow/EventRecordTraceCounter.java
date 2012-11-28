@@ -26,7 +26,6 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.Trace;
 import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
-import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceReconstructionFilter;
 
 /**
  * Counts and reports the number of incoming valid/invalid {@link TraceEventRecords}.
@@ -48,7 +47,7 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 
 	private static final long TRACE_ID_IF_NONE = -1;
 
-	private static final Log LOG = LogFactory.getLog(TraceReconstructionFilter.class);
+	private static final Log LOG = LogFactory.getLog(EventRecordTraceCounter.class);
 
 	private final boolean logInvalidTraces;
 

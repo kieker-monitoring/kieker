@@ -2,6 +2,12 @@
 	<!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
 
 	<Match>
+		<Class name="kieker.test.monitoring.junit.probe.spring.executions.jetty.TestSpringMethodInterceptor" />
+		<Method name="testIt" params="" returns="void" />
+		<Bug pattern="NP_LOAD_OF_KNOWN_NULL_VALUE" />
+	</Match>
+
+	<Match>
 		<Class name="kieker.test.analysis.junit.plugin.filter.forward.TestStringBufferFilter" />
 		<Bug pattern="DM_STRING_CTOR" />
 	</Match>

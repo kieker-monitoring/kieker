@@ -1,11 +1,34 @@
+/***************************************************************************
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.monitoring.core.signaturePattern;
 
-public class SignatureFactory {
+/**
+ * @author Bjoern Weissenfels, Jan Waller
+ */
+public final class SignatureFactory {
 
 	public static final String CPU = "%CPU";
 
+	private SignatureFactory() {
+		// private default constructor
+	}
+
 	public static String createCPUSignature(final int cpuid) {
-		return CPU + cpuid;
+		return new StringBuilder(6).append(CPU).append(cpuid).toString();
 	}
 
 	/**
@@ -36,46 +59,47 @@ public class SignatureFactory {
 	 */
 	public static String createMethodSignature(final String[] modList, final String retType,
 			final String fqName, final String method, final String[] params, final String[] exceptions) throws InvalidPatternException {
-		final StringBuilder signature = new StringBuilder();
+		// TODO: trim() really needed? Maybe this method gets called a lot by manual probes? removed for now!
+		final StringBuilder signature = new StringBuilder(512);
 		if (modList != null) {
 			for (final String element : modList) {
-				signature.append(element.trim());
-				signature.append(" ");
+				signature.append(element);
+				signature.append(' ');
 			}
 		}
 		if (retType != null) {
-			signature.append(retType.trim());
-			signature.append(" ");
+			signature.append(retType);
+			signature.append(' ');
 		} else {
 			throw new InvalidPatternException("return type is requiered");
 		}
 		if (fqName != null) {
-			signature.append(fqName.trim());
-			signature.append(".");
+			signature.append(fqName);
+			signature.append('.');
 		} else {
 			throw new InvalidPatternException("return type is requiered");
 		}
 		if (method != null) {
-			signature.append(method.trim());
-			signature.append("(");
+			signature.append(method);
+			signature.append('(');
 		} else {
 			throw new InvalidPatternException("return type is requiered");
 		}
 		if (params != null) {
 			for (final String element : params) {
-				signature.append(element.trim());
-				signature.append(",");
+				signature.append(element);
+				signature.append(',');
 			}
-			signature.deleteCharAt(signature.length() - 1);
+			signature.deleteCharAt(signature.length() - 1); // TODO: better otherwise
 		}
-		signature.append(")");
+		signature.append(')');
 		if (exceptions != null) {
 			signature.append(" throws ");
 			for (final String element : exceptions) {
-				signature.append(element.trim());
-				signature.append(",");
+				signature.append(element);
+				signature.append(',');
 			}
-			signature.deleteCharAt(signature.length() - 1);
+			signature.deleteCharAt(signature.length() - 1); // TODO: better otherwise
 		}
 		return signature.toString();
 	}

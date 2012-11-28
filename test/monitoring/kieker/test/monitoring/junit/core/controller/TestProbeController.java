@@ -291,12 +291,12 @@ public class TestProbeController extends AbstractKiekerTest {
 
 	@Test
 	public void testSpecialProbes() throws UnsupportedEncodingException, FileNotFoundException, InterruptedException {
-		final int READ_INTERVALL = 2;
+		final int readIntervall = 2;
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
 		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, DummyWriter.class.getName());
 		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "true");
 		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE, this.configFile.getAbsolutePath());
-		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL, Integer.toString(READ_INTERVALL));
+		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL, Integer.toString(readIntervall));
 		configuration.setProperty(ConfigurationFactory.HOST_NAME, "srv0");
 
 		this.writeToConfigFile(new String[] { "- CPUsDetailedPercSampler :: srv0-1", "- * test.Test()", });

@@ -295,7 +295,7 @@ public final class PatternParser {
 		if (modifierList == null) {
 			return "((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?";
 		}
-		final Map<String, Integer> allowedModifiersWithOrder = new HashMap<String, Integer>();
+		final Map<String, Integer> allowedModifiersWithOrder = new HashMap<String, Integer>(); // NOPMD (no conc. access)
 		allowedModifiersWithOrder.put("public", 0);
 		allowedModifiersWithOrder.put("private", 0);
 		allowedModifiersWithOrder.put("protected", 0);
