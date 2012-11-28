@@ -16,17 +16,13 @@
 
 package kieker.monitoring.probe.sigar.samplers;
 
-import java.util.List;
-import java.util.ListIterator;
-
 import org.hyperic.sigar.CpuPerc;
 import org.hyperic.sigar.SigarException;
 import org.hyperic.sigar.SigarProxy;
 
 import kieker.common.record.system.CPUUtilizationRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.probe.AbstractProbeInfo;
-import kieker.monitoring.probe.IAdaptiveProbe;
+import kieker.monitoring.core.signaturePattern.SignatureFactory;
 import kieker.monitoring.timer.ITimeSource;
 
 /**
@@ -37,7 +33,7 @@ import kieker.monitoring.timer.ITimeSource;
  * @author Andre van Hoorn
  * 
  */
-public final class CPUsDetailedPercSampler extends AbstractSigarSampler implements IAdaptiveProbe {
+public final class CPUsDetailedPercSampler extends AbstractSigarSampler {
 
 	/**
 	 * Constructs a new {@link AbstractSigarSampler} with given {@link SigarProxy} instance used to retrieve the sensor data. Users
@@ -58,8 +54,7 @@ public final class CPUsDetailedPercSampler extends AbstractSigarSampler implemen
 		final CpuPerc[] cpus = this.sigar.getCpuPercList();
 		final ITimeSource timesource = monitoringController.getTimeSource();
 		for (int i = 0; i < cpus.length; i++) {
-			final CPUInfo cpuInfo = new CPUInfo("CPUsDetailedPercSampler", monitoringController.getHostname(), i);
-			if (monitoringController.isProbeActivated(cpuInfo, this)) {
+			if (monitoringController.isProbeActivated(SignatureFactory.createCPUSignature(i))) {
 				final CpuPerc curCPU = cpus[i];
 				// final double combinedUtilization = curCPU.getCombined();
 				final CPUUtilizationRecord r = new CPUUtilizationRecord(timesource.getTime(), monitoringController.getHostname(), Integer.toString(i),
@@ -70,62 +65,5 @@ public final class CPUsDetailedPercSampler extends AbstractSigarSampler implemen
 				// combinedUtilization + "; " + " Record: " + r);
 			}
 		}
-	}
-
-	public boolean isProbeActivated(final List<String> probePatterns, final AbstractProbeInfo abstractProbeInfo) {
-		final ListIterator<String> iterator = probePatterns.listIterator(probePatterns.size());
-		final String cpuSignature = ((CPUInfo) abstractProbeInfo).getCpuSignature();
-		while (iterator.hasPrevious()) {
-			final String patternWithPrefix = iterator.previous();
-			final char prefix = patternWithPrefix.charAt(0);
-			final String pattern = patternWithPrefix.substring(1);
-			if (pattern.equals(cpuSignature)) {
-				switch (prefix) {
-				case '+':
-					return true;
-				case '-':
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-}
-
-class CPUInfo extends AbstractProbeInfo {
-	private final String hostname;
-	private final int cpuId;
-	private final String cpuSignature;
-
-	/**
-	 * @param hostname
-	 * @param cpuId
-	 */
-	public CPUInfo(final String probeId, final String hostname, final int cpuId) {
-		super(probeId);
-		this.hostname = hostname;
-		this.cpuId = cpuId;
-		this.cpuSignature = hostname + "-" + cpuId;
-	}
-
-	/**
-	 * @return the hostname
-	 */
-	public String getHostname() {
-		return this.hostname;
-	}
-
-	/**
-	 * @return the cpuId
-	 */
-	public int getCpuId() {
-		return this.cpuId;
-	}
-
-	/**
-	 * @return the cpuSignature
-	 */
-	public String getCpuSignature() {
-		return this.cpuSignature;
 	}
 }

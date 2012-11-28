@@ -27,8 +27,6 @@ import kieker.common.util.Version;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
-import kieker.monitoring.probe.AbstractProbeInfo;
-import kieker.monitoring.probe.IAdaptiveProbe;
 import kieker.monitoring.timer.ITimeSource;
 
 /**
@@ -254,10 +252,6 @@ public final class MonitoringController extends AbstractController implements IM
 
 	public boolean isProbeActivated(final String signature) {
 		return this.probeController.isProbeActivated(signature);
-	}
-
-	public boolean isProbeActivated(final AbstractProbeInfo abstractProbeInfo, final IAdaptiveProbe iAdaptiveProbe) {
-		return this.probeController.isProbeActivated(abstractProbeInfo, iAdaptiveProbe);
 	}
 
 	public void setProbePatternList(final List<String> patternList) {
