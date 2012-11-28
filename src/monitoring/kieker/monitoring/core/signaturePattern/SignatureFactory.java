@@ -21,12 +21,23 @@ package kieker.monitoring.core.signaturePattern;
  */
 public final class SignatureFactory {
 
+	/**
+	 * Prefix of a cpu signature.
+	 */
 	public static final String CPU = "%CPU";
 
 	private SignatureFactory() {
 		// private default constructor
 	}
 
+	/**
+	 * Creates a cpu signature with a given cpu id.
+	 * 
+	 * @param cpuid
+	 *            The id of the cpu.
+	 * @return
+	 *         A signature for the cpu.
+	 */
 	public static String createCPUSignature(final int cpuid) {
 		return new StringBuilder(6).append(CPU).append(cpuid).toString();
 	}
@@ -42,7 +53,7 @@ public final class SignatureFactory {
 	 *            4. final, non_final
 	 *            5. synchronized, non_synchronized
 	 *            6. native, non_native
-	 *            null for any modifier.
+	 *            One or none of each sub-point is allowed, modList=null stands for any modifiers.
 	 * @param retType
 	 *            primitive type ,fully qualified class name or pattern
 	 * @param fqName
@@ -77,13 +88,13 @@ public final class SignatureFactory {
 			signature.append(fqName);
 			signature.append('.');
 		} else {
-			throw new InvalidPatternException("return type is requiered");
+			throw new InvalidPatternException("fully qualified name is requiered");
 		}
 		if (method != null) {
 			signature.append(method);
 			signature.append('(');
 		} else {
-			throw new InvalidPatternException("return type is requiered");
+			throw new InvalidPatternException("method name is requiered");
 		}
 		if (params != null) {
 			for (final String element : params) {

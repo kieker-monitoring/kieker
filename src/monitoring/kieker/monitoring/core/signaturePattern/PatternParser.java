@@ -33,6 +33,9 @@ public final class PatternParser {
 
 	public static final Pattern parseToPattern(final String strPattern) throws InvalidPatternException {
 		final String trimPattern = strPattern.trim();
+		if (trimPattern.startsWith("%")) {
+			return Pattern.compile(trimPattern.substring(1));
+		}
 		final StringBuilder sb = new StringBuilder();
 		if ("*".equals(trimPattern)) {
 			sb.append(".*");

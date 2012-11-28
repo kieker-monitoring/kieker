@@ -53,10 +53,6 @@ import kieker.monitoring.writer.DummyWriter;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
- * TODO: missing test:
- * * periodic reading of config file
- * * writing of config file
- * 
  * @author Bjoern Weissenfels, Jan Waller
  */
 public class TestProbeController extends AbstractKiekerTest {
@@ -111,9 +107,9 @@ public class TestProbeController extends AbstractKiekerTest {
 		Assert.assertFalse(list.isEmpty());
 		Assert.assertArrayEquals(new String[] { "+*", "-* test.Test()", }, list.toArray());
 		// add manual entries to list
-		ctrl.activateProbe("void test.Test()");
+		ctrl.activateProbe("void test.$1.Test()");
 		final List<String> list2 = ctrl.getProbePatternList();
-		Assert.assertArrayEquals(new String[] { "+*", "-* test.Test()", "+void test.Test()", }, list2.toArray());
+		Assert.assertArrayEquals(new String[] { "+*", "-* test.Test()", "+void test.$1.Test()", }, list2.toArray());
 		Assert.assertFalse(ctrl.isMonitoringTerminated());
 		ctrl.terminateMonitoring();
 	}
@@ -299,12 +295,12 @@ public class TestProbeController extends AbstractKiekerTest {
 		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL, Integer.toString(readIntervall));
 		configuration.setProperty(ConfigurationFactory.HOST_NAME, "srv0");
 
-		this.writeToConfigFile(new String[] { "- CPUsDetailedPercSampler :: srv0-1", "- * test.Test()", });
+		this.writeToConfigFile(new String[] { "-%CPU*", "- * test.Test()", });
 		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
 
 		Assert.assertTrue(this.configFile.exists());
 
-		// TODO : test returned signatures, here: "-srv0-1"
+		// TODO : test returned signatures
 
 		Assert.assertFalse(ctrl.isMonitoringTerminated());
 		ctrl.terminateMonitoring();
