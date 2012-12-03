@@ -122,3 +122,4 @@ gzip -9 ${RESULTSDIR}stat.tar
 mv ${BASEDIR}kieker.log ${RESULTSDIR}kieker.log
 [ -f ${RESULTSDIR}hotspot-1-1-1.log ] && grep "<task " ${RESULTSDIR}hotspot-*.log >${RESULTSDIR}log.log
 [ -f ${BASEDIR}nohup.out ] && mv ${BASEDIR}nohup.out ${RESULTSDIR}
+[ -f ${BASEDIR}errorlog.txt ] && mv ${BASEDIR}errorlog.txt ${RESULTSDIR}
