@@ -22,6 +22,7 @@ import org.hyperic.sigar.SigarProxy;
 
 import kieker.common.record.system.ResourceUtilizationRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.signaturePattern.SignatureFactory;
 import kieker.monitoring.timer.ITimeSource;
 
 /**
@@ -48,19 +49,21 @@ public class CPUsCombinedPercSampler extends AbstractSigarSampler {
 	}
 
 	public void sample(final IMonitoringController monitoringController) throws SigarException {
-		if (!monitoringController.isMonitoringEnabled()) {
+		if (!monitoringController.isProbeActivated(SignatureFactory.createCPUSignature())) {
 			return;
 		}
 
 		final CpuPerc[] cpus = this.sigar.getCpuPercList();
 		final ITimeSource timesource = monitoringController.getTimeSource();
 		for (int i = 0; i < cpus.length; i++) {
-			final CpuPerc curCPU = cpus[i];
-			final double combinedUtilization = curCPU.getCombined();
-			final ResourceUtilizationRecord r = new ResourceUtilizationRecord(timesource.getTime(), monitoringController.getHostname(),
-					CPU_RESOURCE_NAME_PREFIX + i, combinedUtilization);
-			monitoringController.newMonitoringRecord(r);
-			// CPUsCombinedPercSampler.log.info("Sigar utilization: " + combinedUtilization + "; " + " Record: " + r);
+			if (monitoringController.isProbeActivated(SignatureFactory.createCPUSignature(i))) {
+				final CpuPerc curCPU = cpus[i];
+				final double combinedUtilization = curCPU.getCombined();
+				final ResourceUtilizationRecord r = new ResourceUtilizationRecord(timesource.getTime(), monitoringController.getHostname(),
+						CPU_RESOURCE_NAME_PREFIX + i, combinedUtilization);
+				monitoringController.newMonitoringRecord(r);
+				// CPUsCombinedPercSampler.log.info("Sigar utilization: " + combinedUtilization + "; " + " Record: " + r);
+			}
 		}
 	}
 }

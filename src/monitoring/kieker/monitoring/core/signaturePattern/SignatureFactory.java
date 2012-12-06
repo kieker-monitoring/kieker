@@ -21,10 +21,18 @@ package kieker.monitoring.core.signaturePattern;
  */
 public final class SignatureFactory {
 
+	public static final char PATTERN_PREFIX = '%';
+
+	public static final String COLONS = "::";
+
 	/**
 	 * Prefix of a cpu signature.
 	 */
-	public static final String CPU = "%CPU";
+	public static final String PATTERN_PREFIX_CPU = new StringBuilder(4)
+			.append(PATTERN_PREFIX).append("CPU").toString();
+
+	public static final String PATTERN_PREFIX_MEM_SWAP = new StringBuilder(9)
+			.append(PATTERN_PREFIX).append("MEM_SWAP").toString();;
 
 	private SignatureFactory() {
 		// private default constructor
@@ -39,7 +47,20 @@ public final class SignatureFactory {
 	 *         A signature for the cpu.
 	 */
 	public static String createCPUSignature(final int cpuid) {
-		return new StringBuilder(6).append(CPU).append(cpuid).toString();
+		return new StringBuilder(8)
+				.append(PATTERN_PREFIX_CPU)
+				.append(COLONS)
+				.append(cpuid)
+				.toString();
+	}
+
+	public static String createCPUSignature() {
+		// TODO: Sonderfall beachten
+		return PATTERN_PREFIX_CPU;
+	}
+
+	public static String createMemSwapSignature() {
+		return PATTERN_PREFIX_MEM_SWAP;
 	}
 
 	/**
@@ -53,24 +74,26 @@ public final class SignatureFactory {
 	 *            4. final, non_final
 	 *            5. synchronized, non_synchronized
 	 *            6. native, non_native
-	 *            One or none of each sub-point is allowed, modList=null stands for any modifiers.
+	 *            One or none of each sub-point is allowed.
+	 *            Null or empty list stands for any modifiers.
 	 * @param retType
-	 *            primitive type ,fully qualified class name or pattern
+	 *            Primitive type ,fully qualified class name or pattern.
 	 * @param fqName
-	 *            fully qualified class name or pattern
+	 *            Fully qualified class name or pattern.
 	 * @param method
-	 *            method name or pattern
+	 *            Method name or pattern.
 	 * @param params
-	 *            list of primitive types, fully qualified class names or pattern
+	 *            List of primitive types, fully qualified class names or pattern.
+	 *            Null or empty list, if no parameters are required.
 	 * @param exceptions
-	 *            list of exceptions or pattern
+	 *            List of exceptions or pattern.
+	 *            Null or empty list, if no exceptions are required.
 	 * @return
 	 *         A signature which has been generated from the inputs.
 	 * @throws InvalidPatternException
 	 */
 	public static String createMethodSignature(final String[] modList, final String retType,
 			final String fqName, final String method, final String[] params, final String[] exceptions) throws InvalidPatternException {
-		// TODO: trim() really needed? Maybe this method gets called a lot by manual probes? removed for now!
 		final StringBuilder signature = new StringBuilder(512);
 		if (modList != null) {
 			for (final String element : modList) {
@@ -97,20 +120,20 @@ public final class SignatureFactory {
 			throw new InvalidPatternException("method name is requiered");
 		}
 		if (params != null) {
-			for (final String element : params) {
-				signature.append(element);
+			signature.append(params[0]);
+			for (int i = 1; i < params.length; i++) {
 				signature.append(',');
+				signature.append(params[i]);
 			}
-			signature.deleteCharAt(signature.length() - 1); // TODO: better otherwise
 		}
 		signature.append(')');
 		if (exceptions != null) {
 			signature.append(" throws ");
-			for (final String element : exceptions) {
-				signature.append(element);
+			signature.append(exceptions[0]);
+			for (int i = 1; i < exceptions.length; i++) {
 				signature.append(',');
+				signature.append(exceptions[i]);
 			}
-			signature.deleteCharAt(signature.length() - 1); // TODO: better otherwise
 		}
 		return signature.toString();
 	}

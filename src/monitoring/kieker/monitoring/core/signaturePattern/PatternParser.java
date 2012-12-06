@@ -19,6 +19,7 @@ package kieker.monitoring.core.signaturePattern;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * TODO: review and restructure this class
@@ -33,8 +34,12 @@ public final class PatternParser {
 
 	public static final Pattern parseToPattern(final String strPattern) throws InvalidPatternException {
 		final String trimPattern = strPattern.trim();
-		if (trimPattern.startsWith("%")) {
-			return Pattern.compile(trimPattern.substring(1));
+		if (trimPattern.charAt(0) == SignatureFactory.PATTERN_PREFIX) {
+			try {
+				return Pattern.compile(trimPattern);
+			} catch (final PatternSyntaxException pse) {
+				throw new InvalidPatternException("Invalid regular expression", pse);
+			}
 		}
 		final StringBuilder sb = new StringBuilder();
 		if ("*".equals(trimPattern)) {

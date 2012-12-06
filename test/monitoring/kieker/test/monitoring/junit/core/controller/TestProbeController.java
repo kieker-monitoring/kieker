@@ -48,6 +48,7 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.signaturePattern.InvalidPatternException;
+import kieker.monitoring.core.signaturePattern.SignatureFactory;
 import kieker.monitoring.writer.DummyWriter;
 
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -286,21 +287,32 @@ public class TestProbeController extends AbstractKiekerTest {
 	}
 
 	@Test
-	public void testSpecialProbes() throws UnsupportedEncodingException, FileNotFoundException, InterruptedException {
-		final int readIntervall = 2;
+	public void testSpecialProbes() {
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
 		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, DummyWriter.class.getName());
 		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "true");
-		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE, this.configFile.getAbsolutePath());
-		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL, Integer.toString(readIntervall));
-		configuration.setProperty(ConfigurationFactory.HOST_NAME, "srv0");
 
-		this.writeToConfigFile(new String[] { "-%CPU*", "- * test.Test()", });
 		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
 
-		Assert.assertTrue(this.configFile.exists());
+		final String memSwapSignature = SignatureFactory.createMemSwapSignature(); // %MEM_SWAP
+		final String cpuSignature = SignatureFactory.createCPUSignature(); // %CPU
 
-		// TODO : test returned signatures
+		Assert.assertTrue(ctrl.isProbeActivated(memSwapSignature)); // default is true
+		ctrl.deactivateProbe(memSwapSignature); // this entry deactivates the MemSwapProbe
+		Assert.assertFalse(ctrl.isProbeActivated(memSwapSignature));
+
+		Assert.assertTrue(ctrl.isProbeActivated(cpuSignature)); // default is true
+		ctrl.deactivateProbe(cpuSignature); // this entry deactivates the CpuProbe
+		Assert.assertFalse(ctrl.isProbeActivated(cpuSignature));
+
+		// Independent of 'cpuSignature' all specific signatures are active by default.
+		Assert.assertTrue(ctrl.isProbeActivated(SignatureFactory.createCPUSignature(0))); // %CPU::0
+		ctrl.deactivateProbe(SignatureFactory.createCPUSignature(0));
+		Assert.assertFalse(ctrl.isProbeActivated(SignatureFactory.createCPUSignature(0)));
+		Assert.assertTrue(ctrl.isProbeActivated(SignatureFactory.createCPUSignature(1))); // %CPU::1
+		ctrl.deactivateProbe("%CPU::.*"); // regular expressions also allowed, this one deactivates all probes
+		Assert.assertFalse(ctrl.isProbeActivated(SignatureFactory.createCPUSignature(0)));
+		Assert.assertFalse(ctrl.isProbeActivated(SignatureFactory.createCPUSignature(1)));
 
 		Assert.assertFalse(ctrl.isMonitoringTerminated());
 		ctrl.terminateMonitoring();
