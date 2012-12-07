@@ -22,17 +22,19 @@ package kieker.monitoring.core.signaturePattern;
 public final class SignatureFactory {
 
 	public static final char PATTERN_PREFIX = '%';
-
 	public static final String COLONS = "::";
+
+	// Note: for static final String it is better to use "+" to help the compiler to resolve them at compile time!
 
 	/**
 	 * Prefix of a cpu signature.
 	 */
-	public static final String PATTERN_PREFIX_CPU = new StringBuilder(4)
-			.append(PATTERN_PREFIX).append("CPU").toString();
+	public static final String PATTERN_PREFIX_CPU = PATTERN_PREFIX + "CPU";
 
-	public static final String PATTERN_PREFIX_MEM_SWAP = new StringBuilder(9)
-			.append(PATTERN_PREFIX).append("MEM_SWAP").toString();;
+	/**
+	 * Prefix of a memory signature.
+	 */
+	public static final String PATTERN_PREFIX_MEM_SWAP = PATTERN_PREFIX + "MEM_SWAP";
 
 	private SignatureFactory() {
 		// private default constructor
@@ -48,14 +50,13 @@ public final class SignatureFactory {
 	 */
 	public static String createCPUSignature(final int cpuid) {
 		return new StringBuilder(8)
-				.append(PATTERN_PREFIX_CPU)
-				.append(COLONS)
-				.append(cpuid)
+				.append(PATTERN_PREFIX_CPU) // 4
+				.append(COLONS) // 2
+				.append(cpuid) // 2(?)
 				.toString();
 	}
 
 	public static String createCPUSignature() {
-		// TODO: Sonderfall beachten
 		return PATTERN_PREFIX_CPU;
 	}
 
