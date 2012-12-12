@@ -141,7 +141,7 @@ public final class TraceAnalysisTool {
 	}
 
 	private static void printUsage() {
-		Constants.CMD_HELP_FORMATTER.printHelp(200, TraceAnalysisTool.class.getName(), "", Constants.CMDL_OPTIONS, "", true);
+		Constants.CMD_HELP_FORMATTER.printHelp(80, TraceAnalysisTool.class.getName(), "", Constants.CMDL_OPTIONS, "", true);
 	}
 
 	private static boolean initFromArgs() {
