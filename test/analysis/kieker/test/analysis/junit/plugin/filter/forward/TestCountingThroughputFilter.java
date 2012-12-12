@@ -100,7 +100,7 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 		 * The CountingThroughputFilter to be tested
 		 */
 		final Configuration throughputFilterConfiguration = new Configuration();
-		throughputFilterConfiguration.setProperty(CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE_NANOS, Long.toString(INTERVAL_SIZE_NANOS));
+		throughputFilterConfiguration.setProperty(CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE, Long.toString(INTERVAL_SIZE_NANOS));
 		throughputFilterConfiguration.setProperty(CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVALS_BASED_ON_1ST_TSTAMP,
 				Boolean.toString(this.intervalsBasedOn1stTstamp));
 		this.throughputFilter = new CountingThroughputFilter(throughputFilterConfiguration);

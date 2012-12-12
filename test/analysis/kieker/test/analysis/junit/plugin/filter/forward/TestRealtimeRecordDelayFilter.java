@@ -129,7 +129,7 @@ public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 		 * The CountingThroughputFilter to be tested
 		 */
 		final Configuration throughputFilterConfiguration = new Configuration();
-		throughputFilterConfiguration.setProperty(CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE_NANOS, Long.toString(INTERVAL_SIZE_NANOS));
+		throughputFilterConfiguration.setProperty(CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE, Long.toString(INTERVAL_SIZE_NANOS));
 		// We use the following property because this is way easier to test:
 		throughputFilterConfiguration.setProperty(CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVALS_BASED_ON_1ST_TSTAMP, Boolean.TRUE.toString());
 		this.throughputFilter = new CountingThroughputFilter(throughputFilterConfiguration);
@@ -183,7 +183,7 @@ public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 					this.throughputFilter.getLastTimestampInCurrentInterval() + 1, this.throughputFilter.getCurrentCountForCurrentInterval()));
 		}
 
-		final long filterStartTimeNanos = throughputListFromFilterAndCurrentInterval.get(0).getKey() - this.throughputFilter.getIntervalSizeNanos();
+		final long filterStartTimeNanos = throughputListFromFilterAndCurrentInterval.get(0).getKey() - this.throughputFilter.getIntervalSize();
 
 		// Init array with worst-case size! (we actually expect an array of EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.size())
 		final long[] counts = new long[(int) this.countingFilterReader.getMessageCount()];
@@ -192,7 +192,7 @@ public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 			final long curIntervalEndOffsetNanos = countAtIntervalEnd.getKey() - filterStartTimeNanos;
 			final long curCount = countAtIntervalEnd.getValue();
 			// Example: First value for interval size 500: (500-1) / 500 = 0:
-			final int curCountIdx = (int) ((curIntervalEndOffsetNanos - 1) / this.throughputFilter.getIntervalSizeNanos());
+			final int curCountIdx = (int) ((curIntervalEndOffsetNanos - 1) / this.throughputFilter.getIntervalSize());
 			counts[curCountIdx] = curCount;
 		}
 

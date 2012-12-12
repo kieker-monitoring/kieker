@@ -122,8 +122,8 @@ public final class TraceAnalysisTool {
 	private static boolean includeSelfLoops; // false
 	private static boolean ignoreInvalidTraces; // false
 	private static int maxTraceDurationMillis = 10 * 60 * 1000; // 10 minutes default
-	private static long ignoreExecutionsBeforeTimestamp = TimestampFilter.CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP;
-	private static long ignoreExecutionsAfterTimestamp = TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP;
+	private static long ignoreExecutionsBeforeTimestamp = Long.parseLong(TimestampFilter.CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP);
+	private static long ignoreExecutionsAfterTimestamp = Long.parseLong(TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP);
 
 	private static final String ENCODING = "UTF-8";
 

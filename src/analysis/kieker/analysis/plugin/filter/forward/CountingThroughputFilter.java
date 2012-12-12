@@ -40,10 +40,9 @@ import kieker.common.util.ImmutableEntry;
  * 
  * TODO: In future versions, this filter should provide an output port in addition to the existing relay port.
  * TODO: In future versions, the throughput computation could (additionally) be triggered by external timer events
- * TODO: In future, introduce TimeUnits for resolution (currently assumed to be TimeUnit.NANOSECOND)
  * TODO: Introduce bounding capacity (Circular Buffer)
  * 
- * @author Andre van Hoorn
+ * @author Andre van Hoorn, Jan Waller
  */
 @Plugin(
 		description = "A filter computing the throughput in terms of the number of events received per time unit",
@@ -51,7 +50,8 @@ import kieker.common.util.ImmutableEntry;
 			@OutputPort(name = CountingThroughputFilter.OUTPUT_PORT_NAME_RELAYED_OBJECTS, eventTypes = { Object.class }, description = "Provides each incoming object")
 		},
 		configuration = {
-			@Property(name = CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE_NANOS, defaultValue = CountingThroughputFilter.CONFIG_PROPERTY_VALUE_INTERVAL_SIZE_ONE_MINUTE),
+			@Property(name = CountingThroughputFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = CountingThroughputFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
+			@Property(name = CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE, defaultValue = CountingThroughputFilter.CONFIG_PROPERTY_VALUE_INTERVAL_SIZE_ONE_MINUTE),
 			@Property(name = CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVALS_BASED_ON_1ST_TSTAMP, defaultValue = "true")
 		})
 public final class CountingThroughputFilter extends AbstractFilterPlugin {
@@ -61,32 +61,34 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 
 	public static final String OUTPUT_PORT_NAME_RELAYED_OBJECTS = "relayedEvents";
 
-	public static final String CONFIG_PROPERTY_NAME_INTERVAL_SIZE_NANOS = "intervalSizeNanos";
+	public static final String CONFIG_PROPERTY_NAME_TIMEUNIT = "timeunit";
+	public static final String CONFIG_PROPERTY_NAME_INTERVAL_SIZE = "intervalSize";
+	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "NANOSECONDS"; // TimeUnit.NANOSECONDS.name()
 
 	/**
-	 * If the value is set to false, the intervals are computed based on nanosecond 0 since 1970-1-1
+	 * If the value is set to false, the intervals are computed based on time since 1970-1-1
 	 */
 	public static final String CONFIG_PROPERTY_NAME_INTERVALS_BASED_ON_1ST_TSTAMP = "intervalsBasedOn1stTstamp";
 
 	/**
-	 * The configuration property value for {@link #CONFIG_PROPERTY_NAME_INTERVAL_SIZE_NANOS}, leading to a bin size of 1 minute
+	 * The configuration property value for {@link #CONFIG_PROPERTY_NAME_INTERVAL_SIZE}, leading to a bin size of 1 minute
 	 */
 	public static final String CONFIG_PROPERTY_VALUE_INTERVAL_SIZE_ONE_MINUTE = "60000000000";
 
 	private volatile long firstIntervalStart = -1;
 	private final boolean intervalsBasedOn1stTstamp;
+	private final TimeUnit timeunit = TimeUnit.NANOSECONDS; // TODO: should be inferred from used records?!
 
 	// TODO: Introduce bounded capacity
 	/**
 	 * For a key <i>k</i>, the {@link Queue} stores the number of events observed in the time interval <i>(k-intervalSizeNanos,k(</i>, i.e.,
 	 * the interval <b>excludes</b> the value <i>k</i>.
-	 * 
 	 */
 	private final Queue<Entry<Long, Long>> eventCountsPerInterval = new ConcurrentLinkedQueue<Entry<Long, Long>>();
 
 	// TODO: additional TreeMap for accumulated values?
 
-	private final long intervalSizeNanos;
+	private final long intervalSize;
 
 	private final AtomicLong currentCountForCurrentInterval = new AtomicLong(0);
 
@@ -98,13 +100,20 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	 */
 	public CountingThroughputFilter(final Configuration configuration) {
 		super(configuration);
-		this.intervalSizeNanos = configuration.getLongProperty(CONFIG_PROPERTY_NAME_INTERVAL_SIZE_NANOS);
+		TimeUnit configTimeunit;
+		try {
+			configTimeunit = TimeUnit.valueOf(configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT));
+		} catch (final IllegalArgumentException ex) {
+			configTimeunit = this.timeunit;
+		}
+		this.intervalSize = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_INTERVAL_SIZE), configTimeunit);
 		this.intervalsBasedOn1stTstamp = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INTERVALS_BASED_ON_1ST_TSTAMP);
 	}
 
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_INTERVAL_SIZE_NANOS, Long.toString(this.intervalSizeNanos));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMEUNIT, this.timeunit.name());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_INTERVAL_SIZE, Long.toString(this.intervalSize));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_INTERVALS_BASED_ON_1ST_TSTAMP, Boolean.toString(this.intervalsBasedOn1stTstamp));
 		return configuration;
 	}
@@ -142,18 +151,18 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 
 	@InputPort(name = INPUT_PORT_NAME_OBJECTS, eventTypes = { Object.class }, description = "Receives incoming objects to be considered for the throughput computation and uses the current system time")
 	public final void inputObjects(final Object object) {
-		this.processEvent(object, this.currentTimeNanos());
+		this.processEvent(object, this.currentTime());
 	}
 
 	/**
-	 * Returns the current time in nanoseconds since 1970.
+	 * Returns the current time in since 1970.
 	 * 
 	 * TODO: Note that we only have a timer resolution of milliseconds here!
 	 * 
 	 * @return
 	 */
-	private long currentTimeNanos() {
-		return TimeUnit.NANOSECONDS.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+	private long currentTime() {
+		return this.timeunit.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
 	}
 
 	// TODO: is this correct? it probably makes more sense to provide a copy.
@@ -180,7 +189,7 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 			referenceTimePoint = 0; // 1970-1-1 in nanos
 		}
 
-		return referenceTimePoint + (((timestamp - referenceTimePoint) / this.intervalSizeNanos) * this.intervalSizeNanos);
+		return referenceTimePoint + (((timestamp - referenceTimePoint) / this.intervalSize) * this.intervalSize);
 	}
 
 	/**
@@ -197,14 +206,14 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 			referenceTimePoint = 0; // 1970-1-1 in nanos
 		}
 
-		return referenceTimePoint + (((((timestamp - referenceTimePoint) / this.intervalSizeNanos) + 1) * this.intervalSizeNanos) - 1);
+		return referenceTimePoint + (((((timestamp - referenceTimePoint) / this.intervalSize) + 1) * this.intervalSize) - 1);
 	}
 
 	/**
-	 * @return the intervalSizeNanos
+	 * @return the intervalSize
 	 */
-	public long getIntervalSizeNanos() {
-		return this.intervalSizeNanos;
+	public long getIntervalSize() {
+		return this.intervalSize;
 	}
 
 	/**

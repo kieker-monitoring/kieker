@@ -34,9 +34,7 @@ import kieker.common.record.IMonitoringRecord;
  * (assumed to be in nanoseconds resolution). For example, after initialization, if records with logging timestamps 3000 and 4500 nanos are received, the
  * first record is forwarded immediately; the second will be forwarded 1500 nanos later.
  * 
- * 
- * @author Andre van Hoorn, Robert von Massow
- * 
+ * @author Andre van Hoorn, Robert von Massow, Jan Waller
  */
 // TODO: Timer with higher precision (Currently milliseconds)?
 @Plugin(
@@ -64,24 +62,27 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS = "additionalShutdownDelaySeconds";
 
 	private static final Log LOG = LogFactory.getLog(RealtimeRecordDelayFilter.class);
+
+	private final TimeUnit timeunit = TimeUnit.NANOSECONDS; // TODO: should be inferred from the monitoring log
+
 	// TODO: Way might want to provide this property as a configuration property
-	private static final long WARN_ON_NEGATIVE_SCHED_TIME_NANOS = TimeUnit.NANOSECONDS.convert(2, TimeUnit.SECONDS);
+	private final long warnOnNegativeSchedTime = this.timeunit.convert(2, TimeUnit.SECONDS);
 
 	private final int numWorkers;
 
 	private final ScheduledThreadPoolExecutor executor;
-	private final long shutdownDelayNanos;
+	private final long shutdownDelay;
 
 	private volatile long startTime = -1;
 	private volatile long firstLoggingTimestamp;
 
-	private volatile long latestSchedulingTimeNanos = -1;
+	private volatile long latestSchedulingTime = -1;
 
 	public RealtimeRecordDelayFilter(final Configuration configuration) {
 		super(configuration);
 		this.numWorkers = configuration.getIntProperty(CONFIG_PROPERTY_NAME_NUM_WORKERS);
-		this.shutdownDelayNanos =
-				TimeUnit.NANOSECONDS.convert(this.configuration.getLongProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS), TimeUnit.SECONDS);
+		this.shutdownDelay =
+				this.timeunit.convert(this.configuration.getLongProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS), TimeUnit.SECONDS);
 
 		this.executor = new ScheduledThreadPoolExecutor(this.numWorkers);
 		this.executor.setExecuteExistingDelayedTasksAfterShutdownPolicy(true);
@@ -90,30 +91,31 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 
 	@InputPort(name = INPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Receives the records to be delayed")
 	public final void inputRecord(final IMonitoringRecord monitoringRecord) {
-		final long currentTimeNanos = this.currentTimeNanos();
+		final long currentTime = this.currentTime();
 
 		synchronized (this) {
 			if (this.startTime == -1) { // init on first record
 				this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp();
-				this.startTime = currentTimeNanos;
+				this.startTime = currentTime;
 			}
 
 			/*
 			 * Compute scheduling time
 			 */
-			long schedTimeNanosFromNow = (monitoringRecord.getLoggingTimestamp() - this.firstLoggingTimestamp) // relative to 1st record
-					- (currentTimeNanos - this.startTime); // substract elapsed time
-			if (schedTimeNanosFromNow < -WARN_ON_NEGATIVE_SCHED_TIME_NANOS) {
-				final long schedTimeSeconds = TimeUnit.SECONDS.convert(schedTimeNanosFromNow, TimeUnit.NANOSECONDS);
-				LOG.warn("negative scheduling time: " + schedTimeNanosFromNow + " (nanos) / " + schedTimeSeconds + " (seconds)-> scheduling with a delay of 0");
+			long schedTimeFromNow = (monitoringRecord.getLoggingTimestamp() - this.firstLoggingTimestamp) // relative to 1st record
+					- (currentTime - this.startTime); // substract elapsed time
+			if (schedTimeFromNow < -this.warnOnNegativeSchedTime) {
+				final long schedTimeSeconds = TimeUnit.SECONDS.convert(schedTimeFromNow, this.timeunit);
+				LOG.warn("negative scheduling time: " + schedTimeFromNow + " (" + this.timeunit.toString() + ") / " + schedTimeSeconds
+						+ " (seconds)-> scheduling with a delay of 0");
 			}
-			if (schedTimeNanosFromNow < 0) {
-				schedTimeNanosFromNow = 0; // i.e., schedule immediately
+			if (schedTimeFromNow < 0) {
+				schedTimeFromNow = 0; // i.e., schedule immediately
 			}
 
-			final long absSchedTime = currentTimeNanos + schedTimeNanosFromNow;
-			if (absSchedTime > this.latestSchedulingTimeNanos) {
-				this.latestSchedulingTimeNanos = absSchedTime;
+			final long absSchedTime = currentTime + schedTimeFromNow;
+			if (absSchedTime > this.latestSchedulingTime) {
+				this.latestSchedulingTime = absSchedTime;
 			}
 
 			/*
@@ -124,7 +126,7 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 				public void run() {
 					RealtimeRecordDelayFilter.this.deliver(OUTPUT_PORT_NAME_RECORDS, monitoringRecord);
 				}
-			}, schedTimeNanosFromNow, TimeUnit.NANOSECONDS);
+			}, schedTimeFromNow, this.timeunit);
 		}
 	}
 
@@ -135,8 +137,8 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	 * 
 	 * @return
 	 */
-	private long currentTimeNanos() {
-		return TimeUnit.NANOSECONDS.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+	private long currentTime() {
+		return this.timeunit.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
 	}
 
 	@Override
@@ -145,7 +147,7 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 
 		if (!error) {
 			long shutdownDelaySecondsFromNow =
-					TimeUnit.SECONDS.convert((this.latestSchedulingTimeNanos - this.currentTimeNanos()) + this.shutdownDelayNanos, TimeUnit.NANOSECONDS);
+					TimeUnit.SECONDS.convert((this.latestSchedulingTime - this.currentTime()) + this.shutdownDelay, this.timeunit);
 			if (shutdownDelaySecondsFromNow < 0) {
 				shutdownDelaySecondsFromNow = 0;
 			}
@@ -163,8 +165,8 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_NUM_WORKERS, Integer.toString(this.numWorkers));
-		configuration.setProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS, Long.toString(this.shutdownDelayNanos));
+		configuration
+				.setProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS, Long.toString(TimeUnit.SECONDS.convert(this.shutdownDelay, this.timeunit)));
 		return configuration;
 	}
-
 }

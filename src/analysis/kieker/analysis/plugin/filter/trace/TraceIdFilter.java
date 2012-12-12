@@ -27,6 +27,8 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.common.record.flow.IFlowRecord;
+import kieker.common.record.flow.ITraceRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.Trace;
 
@@ -87,24 +89,24 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 	}
 
 	@InputPort(name = INPUT_PORT_NAME_COMBINED, description = "Receives execution and trace events to be selected by trace ID",
-			eventTypes = { AbstractTraceEvent.class, Trace.class, OperationExecutionRecord.class })
+			eventTypes = { ITraceRecord.class, Trace.class, OperationExecutionRecord.class })
 	public void inputCombined(final IMonitoringRecord record) {
 		if (record instanceof OperationExecutionRecord) {
 			this.inputOperationExecutionRecord((OperationExecutionRecord) record);
-		} else if ((record instanceof AbstractTraceEvent) || (record instanceof Trace)) {
-			this.inputTraceEvent(record);
+		} else if ((record instanceof ITraceRecord) || (record instanceof Trace)) {
+			this.inputTraceEvent((IFlowRecord) record);
 		} // else discard it, we should never have gotten it anyhow
 	}
 
 	@InputPort(name = INPUT_PORT_NAME_FLOW, description = "Receives trace events to be selected by trace ID",
-			eventTypes = { AbstractTraceEvent.class, Trace.class })
-	public void inputTraceEvent(final IMonitoringRecord record) {
+			eventTypes = { ITraceRecord.class, Trace.class })
+	public void inputTraceEvent(final IFlowRecord record) {
 		final long traceId;
 
 		if (record instanceof Trace) {
 			traceId = ((Trace) record).getTraceId();
 		} else if (record instanceof AbstractTraceEvent) {
-			traceId = ((AbstractTraceEvent) record).getTraceId();
+			traceId = ((ITraceRecord) record).getTraceId();
 		} else {
 			// should not happen given the accepted type
 			return;

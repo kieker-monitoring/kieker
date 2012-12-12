@@ -16,6 +16,8 @@
 
 package kieker.analysis.plugin.filter.select;
 
+import java.util.concurrent.TimeUnit;
+
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -24,7 +26,8 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.record.flow.IEventRecord;
+import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.Trace;
 
 /**
@@ -42,8 +45,9 @@ import kieker.common.record.flow.trace.Trace;
 			@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_OUTSIDE_PERIOD, description = "Forwards records out of the timeperiod", eventTypes = { IMonitoringRecord.class })
 		},
 		configuration = {
-			@Property(name = TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, defaultValue = TimestampFilter.CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP_S),
-			@Property(name = TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, defaultValue = TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP_S)
+			@Property(name = TimestampFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = TimestampFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
+			@Property(name = TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, defaultValue = TimestampFilter.CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP),
+			@Property(name = TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, defaultValue = TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP)
 		})
 public final class TimestampFilter extends AbstractFilterPlugin {
 
@@ -55,26 +59,33 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 	public static final String OUTPUT_PORT_NAME_WITHIN_PERIOD = "recordsWithinTimePeriod";
 	public static final String OUTPUT_PORT_NAME_OUTSIDE_PERIOD = "recordsOutsidePeriod";
 
+	public static final String CONFIG_PROPERTY_NAME_TIMEUNIT = "timeunit";
 	public static final String CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP = "ignoreBeforeTimestamp";
 	public static final String CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP = "ignoreAfterTimestamp";
 
-	public static final String CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP_S = "9223372036854775807"; // Long.toString(Long.MAX_VALUE)
-	public static final String CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP_S = "0"; // Long.toString(0)
+	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "NANOSECONDS"; // TimeUnit.NANOSECONDS.name()
+	public static final String CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP = "9223372036854775807"; // Long.toString(Long.MAX_VALUE)
+	public static final String CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP = "0"; // Long.toString(0)
 
-	public static final long CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP = Long.parseLong(CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP_S);
-	public static final long CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP = Long.parseLong(CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP_S);
-
+	private final TimeUnit timeunit = TimeUnit.NANOSECONDS; // TODO: should be inferred from monitoring log
 	private final long ignoreBeforeTimestamp;
 	private final long ignoreAfterTimestamp;
 
 	public TimestampFilter(final Configuration configuration) {
 		super(configuration);
-		this.ignoreBeforeTimestamp = configuration.getLongProperty(CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP);
-		this.ignoreAfterTimestamp = configuration.getLongProperty(CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP);
+		TimeUnit configTimeunit;
+		try {
+			configTimeunit = TimeUnit.valueOf(configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT));
+		} catch (final IllegalArgumentException ex) {
+			configTimeunit = this.timeunit;
+		}
+		this.ignoreBeforeTimestamp = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP), configTimeunit);
+		this.ignoreAfterTimestamp = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP), configTimeunit);
 	}
 
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
+		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMEUNIT, this.timeunit.name());
 		configuration.setProperty(CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, Long.toString(this.ignoreBeforeTimestamp));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, Long.toString(this.ignoreAfterTimestamp));
 		return configuration;
@@ -88,8 +99,8 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 	public void inputCombined(final IMonitoringRecord record) {
 		if (record instanceof OperationExecutionRecord) {
 			this.inputOperationExecutionRecord((OperationExecutionRecord) record);
-		} else if (record instanceof AbstractTraceEvent) {
-			this.inputTraceEvent(record);
+		} else if (record instanceof IEventRecord) {
+			this.inputTraceEvent((IEventRecord) record);
 		} else {
 			this.inputIMonitoringRecord(record);
 		}
@@ -105,14 +116,14 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 	}
 
 	@InputPort(name = INPUT_PORT_NAME_FLOW, description = "Receives trace events to be selected by a specific timestamp selector",
-			eventTypes = { AbstractTraceEvent.class, Trace.class })
-	public final void inputTraceEvent(final IMonitoringRecord record) {
+			eventTypes = { IEventRecord.class, Trace.class })
+	public final void inputTraceEvent(final IFlowRecord record) {
 		final long timestamp;
 
 		if (record instanceof Trace) {
 			timestamp = ((Trace) record).getLoggingTimestamp();
-		} else if (record instanceof AbstractTraceEvent) {
-			timestamp = ((AbstractTraceEvent) record).getTimestamp();
+		} else if (record instanceof IEventRecord) {
+			timestamp = ((IEventRecord) record).getTimestamp();
 		} else {
 			// should not happen given the accepted type
 			return;
