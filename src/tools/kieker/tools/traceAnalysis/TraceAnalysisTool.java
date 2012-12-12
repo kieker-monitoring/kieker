@@ -141,7 +141,7 @@ public final class TraceAnalysisTool {
 	}
 
 	private static void printUsage() {
-		Constants.CMD_HELP_FORMATTER.printHelp(80, TraceAnalysisTool.class.getName(), "", Constants.CMDL_OPTIONS, "", true);
+		Constants.CMD_HELP_FORMATTER.printHelp(200, TraceAnalysisTool.class.getName(), "", Constants.CMDL_OPTIONS, "", true);
 	}
 
 	private static boolean initFromArgs() {
@@ -506,10 +506,11 @@ public final class TraceAnalysisTool {
 				 * Create the event record trace generation filter and connect to the trace ID filter's output port
 				 */
 				final Configuration configurationEventRecordTraceGenerationFilter = new Configuration();
-				configurationEventRecordTraceGenerationFilter.setProperty(AbstractPlugin.CONFIG_NAME,
-						Constants.EVENTRECORDTRACERECONSTR_COMPONENT_NAME);
-				configurationEventRecordTraceGenerationFilter.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_NANOS,
-						Long.toString(TimeUnit.NANOSECONDS.convert(TraceAnalysisTool.maxTraceDurationMillis, TimeUnit.MILLISECONDS)));
+				configurationEventRecordTraceGenerationFilter.setProperty(AbstractPlugin.CONFIG_NAME, Constants.EVENTRECORDTRACERECONSTR_COMPONENT_NAME);
+				configurationEventRecordTraceGenerationFilter.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
+						TimeUnit.MILLISECONDS.name());
+				configurationEventRecordTraceGenerationFilter.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
+						Long.toString(TraceAnalysisTool.maxTraceDurationMillis));
 				eventTraceReconstructionFilter = new EventRecordTraceReconstructionFilter(configurationEventRecordTraceGenerationFilter);
 				analysisInstance.registerFilter(eventTraceReconstructionFilter);
 				analysisInstance.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH,

@@ -24,6 +24,7 @@ import java.util.Map.Entry;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
@@ -50,17 +51,24 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 			@OutputPort(name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID, description = "Outputs valid traces", eventTypes = { TraceEventRecords.class }),
 			@OutputPort(name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID, description = "Outputs traces missing crucial records", eventTypes = { TraceEventRecords.class }) },
 		configuration = {
-			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_NANOS, defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME_NANOS),
-			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT_NANOS, defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME_NANOS) })
+			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
+			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME),
+			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME) })
 public final class EventRecordTraceReconstructionFilter extends AbstractFilterPlugin {
 	public static final String OUTPUT_PORT_NAME_TRACE_VALID = "validTraces";
 	public static final String OUTPUT_PORT_NAME_TRACE_INVALID = "invalidTraces";
 	public static final String INPUT_PORT_NAME_TRACE_RECORDS = "traceRecords";
 
-	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_NANOS = "maxTraceDuration";
-	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT_NANOS = "maxTraceTimeout";
-	public static final String CONFIG_PROPERTY_VALUE_MAX_TIME_NANOS = "9223372036854775807"; // String.valueOf(Long.MAX_VALUE)
+	public static final String CONFIG_PROPERTY_NAME_TIMEUNIT = "timeunit";
+	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION = "maxTraceDuration";
+	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT = "maxTraceTimeout";
+	public static final String CONFIG_PROPERTY_VALUE_MAX_TIME = "9223372036854775807"; // String.valueOf(Long.MAX_VALUE)
+	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "NANOSECONDS"; // TimeUnit.NANOSECONDS.name()
 
+	// internally we will assume nanosecond precision
+	// TODO: it would be better to use the actual precision of the records (we assume records use nanoseconds)
+	// TODO: log meta-information on monitoring logs somewhere? e.g. used timesource
+	private final TimeUnit timeunit = TimeUnit.NANOSECONDS;
 	private final long maxTraceDuration;
 	private final long maxTraceTimeout;
 	private final boolean timeout;
@@ -70,8 +78,15 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 	public EventRecordTraceReconstructionFilter(final Configuration configuration) {
 		super(configuration);
-		this.maxTraceDuration = configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_NANOS);
-		this.maxTraceTimeout = configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT_NANOS);
+		TimeUnit configTimeunit;
+		try {
+			configTimeunit = TimeUnit.valueOf(configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT));
+		} catch (final IllegalArgumentException ex) {
+			configTimeunit = this.timeunit;
+		}
+
+		this.maxTraceDuration = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION), configTimeunit);
+		this.maxTraceTimeout = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT), configTimeunit);
 		this.timeout = !((this.maxTraceTimeout == Long.MAX_VALUE) && (this.maxTraceDuration == Long.MAX_VALUE)); // NOPMD (bitwise conversion makes code unreadable)
 		this.traceId2trace = new ConcurrentHashMap<Long, TraceBuffer>();
 	}
@@ -168,8 +183,9 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_NANOS, String.valueOf(this.maxTraceDuration));
-		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT_NANOS, String.valueOf(this.maxTraceTimeout));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMEUNIT, this.timeunit.name());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, String.valueOf(this.maxTraceDuration));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, String.valueOf(this.maxTraceTimeout));
 		return configuration;
 	}
 

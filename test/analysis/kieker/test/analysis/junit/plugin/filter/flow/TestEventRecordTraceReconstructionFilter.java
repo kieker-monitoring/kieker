@@ -57,8 +57,8 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 		final ListReader<Object> reader = new ListReader<Object>(new Configuration());
 
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_NANOS, Long.toString(maxTraceDuration));
-		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT_NANOS, Long.toString(maxTraceTimeout));
+		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, Long.toString(maxTraceDuration));
+		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, Long.toString(maxTraceTimeout));
 		final EventRecordTraceReconstructionFilter traceFilter = new EventRecordTraceReconstructionFilter(configuration);
 
 		final ListCollectionFilter<TraceEventRecords> sinkPlugin = new ListCollectionFilter<TraceEventRecords>(new Configuration());
@@ -89,8 +89,8 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 		final ListReader<Object> reader = new ListReader<Object>(new Configuration());
 
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_NANOS, Long.toString(maxTraceDuration));
-		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT_NANOS, Long.toString(maxTraceTimeout));
+		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, Long.toString(maxTraceDuration));
+		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, Long.toString(maxTraceTimeout));
 		final EventRecordTraceReconstructionFilter traceFilter = new EventRecordTraceReconstructionFilter(configuration);
 
 		final ListCollectionFilter<TraceEventRecords> sinkPlugin = new ListCollectionFilter<TraceEventRecords>(new Configuration());
