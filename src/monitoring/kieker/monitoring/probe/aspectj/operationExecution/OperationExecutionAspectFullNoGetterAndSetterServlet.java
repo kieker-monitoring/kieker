@@ -26,7 +26,7 @@ import org.aspectj.lang.annotation.Pointcut;
  * @author Jan Waller
  */
 @Aspect
-public final class OperationExecutionAspectFullNoGetterAndSetterServlet extends AbstractOperationExecutionAspectServlet {
+public class OperationExecutionAspectFullNoGetterAndSetterServlet extends AbstractOperationExecutionAspectServlet {
 
 	public OperationExecutionAspectFullNoGetterAndSetterServlet() {
 		// empty default constructor
@@ -34,13 +34,13 @@ public final class OperationExecutionAspectFullNoGetterAndSetterServlet extends 
 
 	@Override
 	@Pointcut("execution(* *.do*(..)) && args(request,response)")
-	public final void monitoredServlet(final HttpServletRequest request, final HttpServletResponse response) {
+	public void monitoredServlet(final HttpServletRequest request, final HttpServletResponse response) {
 		// Aspect Declaration (MUST be empty)
 	}
 
 	@Override
 	@Pointcut("(execution(* *(..)) && noGetterAndSetter()) || execution(new(..))")
-	public final void monitoredOperation() {
+	public void monitoredOperation() {
 		// Aspect Declaration (MUST be empty)
 	}
 }
