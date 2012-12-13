@@ -25,6 +25,8 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
+import kieker.analysis.plugin.reader.AbstractReaderPlugin;
+import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
@@ -68,6 +70,16 @@ public class TestPlugin extends AbstractKiekerTest {
 		// Test if name and description from the annotation are returned correctly
 		Assert.assertEquals("Unexpected repository type name", SimpleRepository.REPOSITORY_NAME, myRepo.getRepositoryName());
 		Assert.assertEquals("Unexpected repository description", SimpleRepository.REPOSITORY_DESCRIPTION, myRepo.getRepositoryDescription());
+	}
+
+	@Test
+	public void testGlobalProperties() {
+		final AbstractReaderPlugin plugin = new FSReader(new Configuration());
+		final AnalysisController controller = new AnalysisController();
+
+		controller.registerReader(plugin);
+		// This access must not result in a NullPointerException
+		plugin.getGlobalConfiguration();
 	}
 
 	@Test

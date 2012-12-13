@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import kieker.analysis.AnalysisController;
 import kieker.analysis.display.annotation.Display;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
@@ -58,6 +59,10 @@ public abstract class AbstractPlugin implements IPlugin {
 	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
 
 	protected final Configuration configuration;
+	// This is the "parent", the containing analysis controller. Currently it will be set via reflection to avoid that other objects can access this field. Is is
+	// possible that this will be changed later.
+	private AnalysisController parent;
+
 	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<PluginInputPortReference>> registeredMethods;
 	private final ConcurrentHashMap<String, AbstractRepository> registeredRepositories;
 	private final Map<String, RepositoryPort> repositoryPorts;
@@ -363,6 +368,15 @@ public abstract class AbstractPlugin implements IPlugin {
 			defaultConfiguration.setProperty(property.name(), property.defaultValue());
 		}
 		return defaultConfiguration;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#getGlobalConfiguration()
+	 */
+	public final Configuration getGlobalConfiguration() {
+		return this.parent.getGlobalConfiguration();
 	}
 
 	/*

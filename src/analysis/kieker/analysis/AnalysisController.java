@@ -18,6 +18,8 @@ package kieker.analysis;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -235,6 +237,15 @@ public final class AnalysisController { // NOPMD (really long class)
 		for (final IStateObserver observer : this.stateObservers) {
 			observer.update(this, currState);
 		}
+	}
+
+	/**
+	 * Delivers the current configuration of the analysis.
+	 * 
+	 * @return The configuration containing global properties.
+	 */
+	public Configuration getGlobalConfiguration() {
+		return new Configuration();
 	}
 
 	/**
@@ -729,6 +740,28 @@ public final class AnalysisController { // NOPMD (really long class)
 		}
 	}
 
+	private void injectParent(final AbstractPlugin plugin) {
+		// TODO Do something better than a warning
+		try {
+			final Field parentField = AbstractPlugin.class.getDeclaredField("parent");
+			java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
+				public Object run() {
+					parentField.setAccessible(true);
+					return null;
+				}
+			});
+			parentField.set(plugin, this);
+		} catch (final NoSuchFieldException e) {
+			LOG.warn("Plugin " + plugin.getName() + " could not be registered.");
+		} catch (final SecurityException e) {
+			LOG.warn("Plugin " + plugin.getName() + " could not be registered.");
+		} catch (final IllegalArgumentException e) {
+			LOG.warn("Plugin " + plugin.getName() + " could not be registered.");
+		} catch (final IllegalAccessException e) {
+			LOG.warn("Plugin " + plugin.getName() + " could not be registered.");
+		}
+	}
+
 	/**
 	 * Registers a log reader used as a source for monitoring records.
 	 * 
@@ -747,6 +780,7 @@ public final class AnalysisController { // NOPMD (really long class)
 				return;
 			}
 			this.readers.add(reader);
+			this.injectParent(reader);
 		}
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Registered reader " + reader);
@@ -773,6 +807,7 @@ public final class AnalysisController { // NOPMD (really long class)
 				return;
 			}
 			this.filters.add(filter);
+			this.injectParent(filter);
 		}
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Registered plugin " + filter);

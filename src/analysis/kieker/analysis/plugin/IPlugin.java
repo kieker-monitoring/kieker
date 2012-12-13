@@ -49,6 +49,13 @@ public interface IPlugin {
 	public void terminate(final boolean error);
 
 	/**
+	 * This method can be used to receive the global configuration for the analysis or in other words: The configuration of the analysis controller.
+	 * 
+	 * @return The configuration for the current analysis.
+	 */
+	public Configuration getGlobalConfiguration();
+
+	/**
 	 * This method should deliver a {@code Configuration} object containing the current configuration of this instance. In other words: The constructor should be
 	 * able to use the given object to initialize a new instance of this class with the same intern properties.
 	 * 
