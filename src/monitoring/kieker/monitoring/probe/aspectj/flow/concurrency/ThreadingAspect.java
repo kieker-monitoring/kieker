@@ -31,7 +31,7 @@ import kieker.monitoring.timer.ITimeSource;
  * @author Jan Waller
  */
 @Aspect
-public final class ThreadingAspect extends AbstractAspectJProbe {
+public class ThreadingAspect extends AbstractAspectJProbe {
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
@@ -43,8 +43,8 @@ public final class ThreadingAspect extends AbstractAspectJProbe {
 	// TODO: what about other forms of executions? ThreadPool, ...?
 	// Must be @Before
 	@Before("call(void java.lang.Thread.start()) && target(thread) && notWithinKieker()")
-	public final void beforeNewThread(final Thread thread) {
-		if (!CTRLINST.isMonitoringEnabled()) {
+	public void beforeNewThread(final Thread thread) {
+		if (!CTRLINST.isProbeActivated("public synchronized void java.lang.Thread.start()")) {
 			return;
 		}
 		final Trace trace = TRACEREGISTRY.getTrace();

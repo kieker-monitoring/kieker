@@ -16,21 +16,16 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
+import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
-import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
+import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
@@ -41,90 +36,28 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
-public abstract class AbstractDependencyGraphFilter<T> extends AbstractMessageTraceProcessingFilter {
-
-	// private static final Log log = LogFactory.getLog(AbstractDependencyGraphPlugin.class);
-
-	public static final String STEREOTYPE_EXECUTION_CONTAINER = "<<execution container>>";
-	public static final String STEREOTYPE_ASSEMBLY_COMPONENT = "<<assembly component>>";
-	public static final String STEREOTYPE_ALLOCATION_COMPONENT = "<<deployment component>>";
-
-	private static final String NODE_PREFIX = "depNode_";
-
-	private static final String ENCODING = "UTF-8";
-
-	protected final DependencyGraph<T> dependencyGraph;
-	private int numGraphsSaved = 0;
+public abstract class AbstractDependencyGraphFilter<T extends ISystemModelElement> extends AbstractGraphProducingFilter<AbstractDependencyGraph<T>> {
 
 	private final List<AbstractNodeDecorator> decorators = new ArrayList<AbstractNodeDecorator>();
 
-	public AbstractDependencyGraphFilter(final Configuration configuration, final DependencyGraph<T> dependencyGraph) {
-		super(configuration);
-		this.dependencyGraph = dependencyGraph;
+	/**
+	 * Creates a new abstract dependency graph filter using the given data.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 * @param graph
+	 *            The graph to produce / extend
+	 */
+	public AbstractDependencyGraphFilter(final Configuration configuration, final AbstractDependencyGraph<T> graph) {
+		super(configuration, graph);
 	}
 
-	protected abstract void dotEdges(Collection<DependencyGraphNode<T>> nodes, PrintStream ps, final boolean shortLabels);
-
-	protected final String getNodeId(final DependencyGraphNode<T> n) {
-		return NODE_PREFIX + n.getId();
-	}
-
-	protected void createEdgesForNode(final DependencyGraphNode<T> node, final Collection<WeightedBidirectionalDependencyGraphEdge<T>> edges, final PrintStream ps,
-			final boolean includeWeights,
-			final boolean plotSelfLoops) {
-
-		for (final WeightedBidirectionalDependencyGraphEdge<T> currentEdge : edges) {
-			final String lineStyle = (currentEdge.isAssumed()) ? DotFactory.DOT_STYLE_DASHED : DotFactory.DOT_STYLE_SOLID; // NOCS (inline ?)
-
-			final DependencyGraphNode<T> destNode = currentEdge.getTarget();
-			if ((node.equals(destNode)) && !plotSelfLoops) {
-				continue;
-			}
-			final StringBuilder strBuild = new StringBuilder(1024);
-			if (includeWeights) {
-				strBuild.append(DotFactory.createConnection("", this.getNodeId(node), this.getNodeId(destNode),
-						Integer.toString(currentEdge.getTargetWeight().getValue()), lineStyle, DotFactory.DOT_ARROWHEAD_OPEN));
-			} else {
-				strBuild.append(DotFactory.createConnection("", this.getNodeId(node), this.getNodeId(destNode), lineStyle,
-						DotFactory.DOT_ARROWHEAD_OPEN));
-			}
-			ps.println(strBuild.toString());
-		}
-	}
-
-	protected void dotVertices(final Collection<DependencyGraphNode<T>> nodes, final PrintStream ps, final boolean includeWeights, final boolean plotSelfLoops) {
-		for (final DependencyGraphNode<T> curNode : nodes) {
-			this.createEdgesForNode(curNode, curNode.getOutgoingDependencies(), ps, includeWeights, plotSelfLoops);
-			this.createEdgesForNode(curNode, curNode.getAssumedOutgoingDependencies(), ps, includeWeights, plotSelfLoops);
-		}
-	}
-
-	private void graphToDot(final PrintStream ps, final boolean includeWeights, final boolean shortLabels, final boolean plotSelfLoops) {
-		// preamble:
-		ps.println("digraph G {\n rankdir=" + DotFactory.DOT_DOT_RANKDIR_LR + ";");
-
-		this.dotEdges(this.dependencyGraph.getNodes(), ps, shortLabels);
-		this.dotVertices(this.dependencyGraph.getNodes(), ps, includeWeights, plotSelfLoops);
-		ps.println("}");
-	}
-
-	public final void saveToDotFile(final String outputFnBase, final boolean includeWeights, final boolean shortLabels, final boolean plotSelfLoops)
-			throws FileNotFoundException, UnsupportedEncodingException {
-		final PrintStream ps = new PrintStream(new FileOutputStream(outputFnBase + ".dot"), false, ENCODING);
-		this.graphToDot(ps, includeWeights, shortLabels, plotSelfLoops);
-		ps.flush();
-		ps.close();
-		this.numGraphsSaved++;
-		this.printMessage(new String[] { "Wrote dependency graph to file '" + outputFnBase + ".dot" + "'", "Dot file can be converted using the dot tool",
-			"Example: dot -T svg " + outputFnBase + ".dot" + " > " + outputFnBase + ".svg", });
-	}
-
-	@Override
-	public void printStatusMessage() {
-		super.printStatusMessage();
-		this.stdOutPrintln("Saved " + this.numGraphsSaved + " dependency graph" + (this.numGraphsSaved > 1 ? "s" : "")); // NOCS
-	}
-
+	/**
+	 * Adds a node decorator to this graph.
+	 * 
+	 * @param decorator
+	 *            The decorator to add
+	 */
 	public void addDecorator(final AbstractNodeDecorator decorator) {
 		this.decorators.add(decorator);
 	}
@@ -133,20 +66,6 @@ public abstract class AbstractDependencyGraphFilter<T> extends AbstractMessageTr
 		for (final AbstractNodeDecorator currentDecorator : this.decorators) {
 			currentDecorator.processMessage(message, sourceNode, targetNode);
 		}
-	}
-
-	protected StringBuilder addDecorationText(final StringBuilder output, final DependencyGraphNode<?> node) {
-		final String decorations = node.getFormattedDecorations();
-		if (decorations.length() != 0) {
-			output.append("\\n");
-			output.append(decorations);
-		}
-
-		return output;
-	}
-
-	protected String getNodeFillColor(final DependencyGraphNode<?> node) {
-		return (node.isAssumed()) ? DotFactory.DOT_FILLCOLOR_GRAY : DotFactory.DOT_FILLCOLOR_WHITE; // NOCS (inline ?)
 	}
 
 	protected boolean isDependencyAssumed(final DependencyGraphNode<?> source, final DependencyGraphNode<?> target) {

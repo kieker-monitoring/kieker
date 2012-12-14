@@ -16,8 +16,7 @@
 
 package kieker.test.monitoring.junit.core.controller;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
@@ -25,12 +24,13 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.DefaultConfigurationFactory;
 
 /**
  * @author Andre van Hoorn, Jan Waller
  */
-public class TestMonitoringControllerStateTransitions { // NOCS
+public class TestMonitoringControllerStateTransitions extends AbstractKiekerTest { // NOCS
 	@Test
 	public void testMonitoringEnabledToDisabled() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();

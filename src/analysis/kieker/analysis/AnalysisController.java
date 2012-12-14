@@ -73,7 +73,7 @@ import kieker.common.logging.LogFactory;
  * 
  * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke, Jan Waller
  */
-public final class AnalysisController {
+public final class AnalysisController { // NOPMD (really long class)
 	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
 
 	private final String projectName;
@@ -333,7 +333,6 @@ public final class AnalysisController {
 	private static void checkPorts(final MIPlugin mPlugin, final AbstractPlugin plugin) throws AnalysisConfigurationException {
 		// Get all ports.
 		final EList<MIOutputPort> mOutputPorts = mPlugin.getOutputPorts();
-		final EList<MIInputPort> mInputPorts = (mPlugin instanceof MIFilter) ? ((MIFilter) mPlugin).getInputPorts() : new BasicEList<MIInputPort>(); // NOCS
 		final Set<String> outputPorts = new HashSet<String>();
 		for (final String outputPort : plugin.getAllOutputPortNames()) {
 			outputPorts.add(outputPort);
@@ -349,6 +348,7 @@ public final class AnalysisController {
 						+ ") does not exist.");
 			}
 		}
+		final EList<MIInputPort> mInputPorts = (mPlugin instanceof MIFilter) ? ((MIFilter) mPlugin).getInputPorts() : new BasicEList<MIInputPort>(); // NOCS
 		for (final MIInputPort mInputPort : mInputPorts) {
 			if (!inputPorts.contains(mInputPort.getName())) {
 				throw new AnalysisConfigurationException("The input port '" + mInputPort.getName() + "' of '" + mPlugin.getName() + "' (" + mPlugin.getClassname()
@@ -390,6 +390,8 @@ public final class AnalysisController {
 	 * This method can be used to store the current configuration of this analysis controller in a specified file.
 	 * The file can later be used to initialize the analysis controller.
 	 * 
+	 * @see AnalysisController#saveToFile(String)
+	 * 
 	 * @param file
 	 *            The file in which the configuration will be stored.
 	 * @throws IOException
@@ -400,6 +402,23 @@ public final class AnalysisController {
 	public final void saveToFile(final File file) throws IOException, AnalysisConfigurationException {
 		final MIProject mProject = this.getCurrentConfiguration();
 		AnalysisController.saveToFile(file, mProject);
+	}
+
+	/**
+	 * This method can be used to store the current configuration of this analysis controller in a specified file. It is just a convenient method which does the same
+	 * as {@code AnalysisController.saveToFile(new File(pathname))}.
+	 * 
+	 * @see AnalysisController#saveToFile(File)
+	 * 
+	 * @param pathname
+	 *            The pathname of the file in which the configuration will be stored.
+	 * @throws IOException
+	 *             If an exception during the storage occurred.
+	 * @throws AnalysisConfigurationException
+	 *             If the current configuration is somehow invalid.
+	 */
+	public final void saveToFile(final String pathname) throws IOException, AnalysisConfigurationException {
+		this.saveToFile(new File(pathname));
 	}
 
 	/**
@@ -418,10 +437,13 @@ public final class AnalysisController {
 	 * @throws AnalysisConfigurationException
 	 *             If the port names or the given plugins are invalid or not compatible.
 	 */
-	public void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName) throws IllegalStateException,
-			AnalysisConfigurationException {
+	public void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName)
+			throws IllegalStateException, AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect readers and filters after starting analysis.");
+		}
+		if ((src == null) || (dst == null) || (inputPortName == null) || (outputPortName == null)) {
+			throw new AnalysisConfigurationException("Unable to connect null values.");
 		}
 		// check whether dst is a reader
 		if (dst instanceof IReaderPlugin) {
@@ -469,6 +491,21 @@ public final class AnalysisController {
 		plugin.connect(repositoryPort, repository); // throws AnalysisConfigurationException
 	}
 
+	private static List<MIProperty> convertProperties(final Configuration configuration, final MAnalysisMetaModelFactory factory) {
+		if (null == configuration) { // should not happen, but better safe than sorry
+			return Collections.emptyList();
+		}
+		final List<MIProperty> properties = new ArrayList<MIProperty>(configuration.size());
+		for (final Enumeration<?> e = configuration.propertyNames(); e.hasMoreElements();) {
+			final String key = (String) e.nextElement();
+			final MIProperty property = factory.createProperty();
+			property.setName(key);
+			property.setValue(configuration.getStringProperty(key));
+			properties.add(property);
+		}
+		return properties;
+	}
+
 	/**
 	 * This method delivers the current configuration of this instance as an instance of <code>MIProject</code>.
 	 * 
@@ -490,6 +527,7 @@ public final class AnalysisController {
 			for (final AbstractRepository repo : this.repos) {
 				final MIRepository mRepo = factory.createRepository();
 				mRepo.setClassname(repo.getClass().getName());
+				mRepo.getProperties().addAll(AnalysisController.convertProperties(repo.getCurrentConfiguration(), factory));
 				mProject.getRepositories().add(mRepo);
 				repositoryMap.put(repo, mRepo);
 			}
@@ -509,19 +547,8 @@ public final class AnalysisController {
 				pluginMap.put(plugin, mPlugin);
 				mPlugin.setClassname(plugin.getClass().getName());
 				mPlugin.setName(plugin.getName());
-				// Extract the configuration.
-				Configuration configuration = plugin.getCurrentConfiguration();
-				if (null == configuration) { // should not happen, but better safe than sorry
-					configuration = new Configuration();
-				}
-				final EList<MIProperty> properties = mPlugin.getProperties();
-				for (final Enumeration<?> e = configuration.propertyNames(); e.hasMoreElements();) {
-					final String key = (String) e.nextElement();
-					final MIProperty property = factory.createProperty();
-					property.setName(key);
-					property.setValue(configuration.getStringProperty(key));
-					properties.add(property);
-				}
+				mPlugin.getProperties().addAll(AnalysisController.convertProperties(plugin.getCurrentConfiguration(), factory));
+
 				// Extract the repositories.
 				for (final Entry<String, AbstractRepository> repoEntry : plugin.getCurrentRepositories().entrySet()) {
 					// Try to find the repository within our map.
@@ -605,14 +632,25 @@ public final class AnalysisController {
 			this.terminate(true);
 			throw new AnalysisConfigurationException("No log reader registered.");
 		}
-		// Call execute() method of all plug-ins.
+		// Call init() method of all plug-ins.
+		for (final AbstractReaderPlugin reader : this.readers) {
+			/* Make also sure that all repository ports of all plugins are connected. */
+			if (!reader.areAllRepositoryPortsConnected()) {
+				this.terminate(true);
+				throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") has unconnected repositories.");
+			}
+			if (!reader.start()) {
+				this.terminate(true);
+				throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") failed to initialize.");
+			}
+		}
 		for (final AbstractFilterPlugin filter : this.filters) {
 			/* Make also sure that all repository ports of all plugins are connected. */
 			if (!filter.areAllRepositoryPortsConnected()) {
 				this.terminate(true);
 				throw new AnalysisConfigurationException("Plugin '" + filter.getName() + "' (" + filter.getPluginName() + ") has unconnected repositories.");
 			}
-			if (!filter.init()) {
+			if (!filter.start()) {
 				this.terminate(true);
 				throw new AnalysisConfigurationException("Plugin '" + filter.getName() + "' (" + filter.getPluginName() + ") failed to initialize.");
 			}
@@ -620,19 +658,20 @@ public final class AnalysisController {
 		// Start reading
 		final CountDownLatch readerLatch = new CountDownLatch(this.readers.size());
 		for (final AbstractReaderPlugin reader : this.readers) {
-			/* Make also sure that all repository ports of all plugins are connected. */
-			if (!reader.areAllRepositoryPortsConnected()) {
-				this.terminate(true);
-				throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") has unconnected repositories.");
-			}
 			new Thread(new Runnable() {
 				public void run() {
-					if (!reader.read()) {
-						// here we started and won't throw any exceptions!
-						LOG.error("Calling read() on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ")  returned false.");
+					try {
+						if (!reader.read()) {
+							// here we started and won't throw any exceptions!
+							LOG.error("Calling read() on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ")  returned false.");
+							AnalysisController.this.terminate(true);
+						}
+					} catch (final Throwable t) { // NOPMD NOCS (we also want errors)
+						LOG.error("Exception while reading on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ").", t);
 						AnalysisController.this.terminate(true);
+					} finally {
+						readerLatch.countDown();
 					}
-					readerLatch.countDown();
 				}
 			}).start();
 		}
@@ -682,12 +721,11 @@ public final class AnalysisController {
 				this.notifyStateObservers();
 			}
 		}
-		// TODO: Later we will want to introduce a topological order to terminate connected plugins.
 		for (final AbstractReaderPlugin reader : this.readers) {
-			reader.terminate(error);
+			reader.shutdown(error);
 		}
 		for (final AbstractFilterPlugin filter : this.filters) {
-			filter.terminate(error);
+			filter.shutdown(error);
 		}
 	}
 

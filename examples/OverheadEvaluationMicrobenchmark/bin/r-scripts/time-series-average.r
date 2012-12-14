@@ -1,3 +1,5 @@
+rm(list=ls(all=TRUE))
+
 data_fn="tmp/"
 folder_fn="results-benchmark-recursive"
 results_fn=paste(data_fn,folder_fn,"/results.csv",sep="")
@@ -41,7 +43,7 @@ for (cr in (1:configs.recursion)) {
     ts(results.ts[2,],end=results.count,deltat=buckets.size),
     ts(results.ts[3,],end=results.count,deltat=buckets.size),
     ts(results.ts[4,],end=results.count,deltat=buckets.size),
-    gpars=list(ylim=c(500,515),col=configs.colors),xlab="Executions")
+    gpars=list(ylim=c(500,510),col=configs.colors),xlab="Executions")
   legend("topright",inset=c(0.01,0.01),legend=c(rev(configs.labels)),lty="solid",col=rev(configs.colors),bg="white",title="Mean execution time of ...",ncol=2)
   title(main=paste("Recursion Depth: ", cr),ylab="Execution Time (µs)")
 }

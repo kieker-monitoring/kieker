@@ -75,7 +75,7 @@ public final class WriterController extends AbstractController implements IWrite
 
 	@Override
 	public final String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(256);
 		sb.append("WriterController:\n\tNumber of Inserts: '");
 		sb.append(this.getNumberOfInserts());
 		sb.append("'\n\tAutomatic assignment of logging timestamps: '");
@@ -86,7 +86,7 @@ public final class WriterController extends AbstractController implements IWrite
 		} else {
 			sb.append("\tNo Monitoring Writer available");
 		}
-		sb.append("\n");
+		sb.append('\n');
 		return sb.toString();
 	}
 

@@ -28,7 +28,7 @@ public class ScheduledSamplerJob implements Runnable {
 
 	private final IMonitoringController monitoringController;
 	private final ISampler sampler;
-	private volatile ScheduledFuture<?> future = null;
+	private volatile ScheduledFuture<?> future;
 
 	/**
 	 * Constructs a new {@link ScheduledSamplerJob} with the given parameters.

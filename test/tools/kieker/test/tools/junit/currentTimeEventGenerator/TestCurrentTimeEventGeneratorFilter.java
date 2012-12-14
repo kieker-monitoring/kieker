@@ -17,20 +17,21 @@
 package kieker.test.tools.junit.currentTimeEventGenerator;
 
 import java.util.Arrays;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.plugin.annotation.InputPort;
-import kieker.analysis.plugin.filter.AbstractFilterPlugin;
+import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
+import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.common.record.misc.TimestampRecord;
 import kieker.tools.currentTimeEventGenerator.CurrentTimeEventGenerationFilter;
+
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * Each test is executed for both input ports, {@link CurrentTimeEventGenerationFilter#inputTimestamp(Long)} and
@@ -39,7 +40,7 @@ import kieker.tools.currentTimeEventGenerator.CurrentTimeEventGenerationFilter;
  * @author Andre van Hoorn
  */
 // TODO: Test filter output port OUTPUT_PORT_NAME_CURRENT_TIME_VALUE
-public class TestCurrentTimeEventGeneratorFilter { // NOCS
+public class TestCurrentTimeEventGeneratorFilter extends AbstractKiekerTest { // NOCS
 
 	@Test
 	public void testFirstRecordGeneratesEvent() throws IllegalStateException, AnalysisConfigurationException { // NOPMD (assert in method)
@@ -110,30 +111,44 @@ public class TestCurrentTimeEventGeneratorFilter { // NOCS
 	 */
 	private void compareInputAndOutput(final long timerResolution, final long[] inputTimestamps, final long[] expectedOutputTimerEvents, final boolean rawTimestamp)
 			throws IllegalStateException, AnalysisConfigurationException {
+		final ListReader<Object> reader = new ListReader<Object>(new Configuration());
 		final Configuration filterConfiguration = new Configuration();
 		filterConfiguration.setProperty(CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_NAME_TIME_RESOLUTION, Long.toString(timerResolution));
 		final CurrentTimeEventGenerationFilter filter = new CurrentTimeEventGenerationFilter(filterConfiguration);
 
-		final DstClass dst = new DstClass();
+		final ListCollectionFilter<TimestampRecord> sink = new ListCollectionFilter<TimestampRecord>(new Configuration());
 		final AnalysisController controller = new AnalysisController();
+		controller.registerReader(reader);
 		controller.registerFilter(filter);
-		controller.registerFilter(dst);
-		controller.connect(filter, CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_RECORD, dst, DstClass.INPUT_PORT_NAME);
-		// TODO: Use list reader and actually run the controller
+		controller.registerFilter(sink);
+		if (rawTimestamp) {
+			controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, CurrentTimeEventGenerationFilter.INPUT_PORT_NAME_NEW_TIMESTAMP);
+		} else {
+			controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, CurrentTimeEventGenerationFilter.INPUT_PORT_NAME_NEW_RECORD);
+		}
+		controller.connect(filter, CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_RECORD, sink, ListCollectionFilter.INPUT_PORT_NAME);
 
 		for (final long timestamp : inputTimestamps) {
 			if (rawTimestamp) { // pass raw timestamp as long
-				filter.inputTimestamp(timestamp);
+				reader.addObject(timestamp);
 			} else { // wrap timestamp in dummy record
 				final EmptyRecord r = new EmptyRecord();
 				r.setLoggingTimestamp(timestamp);
-				filter.inputRecord(r);
+				reader.addObject(r);
 			}
 		}
 
-		final Long[] receivedTimestampsArr = dst.getList().toArray(new Long[dst.getList().size()]);
+		controller.run();
 
-		if (expectedOutputTimerEvents.length != dst.getList().size()) {
+		final List<TimestampRecord> listRecords = sink.getList();
+		final long[] receivedTimestampsArr = new long[sink.size()];
+		for (int i = 0; i < receivedTimestampsArr.length; i++) {
+			receivedTimestampsArr[i] = listRecords.get(i).getTimestamp();
+		}
+
+		// final Long[] receivedTimestampsArr = dst.getList().toArray(new Long[dst.getList().size()]);
+
+		if (expectedOutputTimerEvents.length != sink.size()) {
 			Assert.fail("Mismatach in sequence length while comparing timer event sequences" + "Expected: " + Arrays.toString(expectedOutputTimerEvents)
 					+ " Found: " + Arrays.toString(receivedTimestampsArr));
 		}
@@ -149,40 +164,6 @@ public class TestCurrentTimeEventGeneratorFilter { // NOCS
 		if (firstMismatchIdx >= 0) {
 			Assert.fail("Mismatch at index " + firstMismatchIdx + " while comparing timer event sequences" + "Expected: "
 					+ Arrays.toString(expectedOutputTimerEvents) + " Found: " + Arrays.toString(receivedTimestampsArr));
-		}
-	}
-
-	// TODO: Don't we have a general sink for this already? (see kieker.test.analysis.util.plugin..)
-	/**
-	 * @author Andre van Hoorn
-	 */
-	static class DstClass extends AbstractFilterPlugin {
-
-		public static final String INPUT_PORT_NAME = "doJob";
-		private final ConcurrentLinkedQueue<Long> receivedTimestamps = new ConcurrentLinkedQueue<Long>();
-
-		public DstClass() {
-			super(new Configuration());
-		}
-
-		@Override
-		protected Configuration getDefaultConfiguration() {
-			return null;
-		}
-
-		public Configuration getCurrentConfiguration() {
-			return null;
-		}
-
-		@InputPort(
-				name = DstClass.INPUT_PORT_NAME,
-				eventTypes = { TimestampRecord.class })
-		public void doJob(final Object data) {
-			this.receivedTimestamps.add(((TimestampRecord) data).getTimestamp());
-		}
-
-		public ConcurrentLinkedQueue<Long> getList() {
-			return this.receivedTimestamps;
 		}
 	}
 }

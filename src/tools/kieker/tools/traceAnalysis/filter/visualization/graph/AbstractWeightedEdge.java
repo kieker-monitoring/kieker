@@ -16,7 +16,7 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.graph;
 
-import kieker.common.util.MutableInteger;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Abstract superclass for weighted edges in the visualization package. This class provides weights for the
@@ -33,9 +33,9 @@ import kieker.common.util.MutableInteger;
  */
 public abstract class AbstractWeightedEdge<V extends AbstractVertex<V, E, O>, E extends AbstractEdge<V, E, O>, O> extends AbstractEdge<V, E, O> {
 
-	private final MutableInteger sourceWeight = new MutableInteger();
-	private final MutableInteger targetWeight = new MutableInteger();
-	private final MutableInteger weight = new MutableInteger();
+	private final AtomicInteger sourceWeight = new AtomicInteger();
+	private final AtomicInteger targetWeight = new AtomicInteger();
+	private final AtomicInteger weight = new AtomicInteger();
 
 	/**
 	 * Creates a new weighted edge between the given vertices.
@@ -44,9 +44,13 @@ public abstract class AbstractWeightedEdge<V extends AbstractVertex<V, E, O>, E 
 	 *            The source vertex of the edge
 	 * @param target
 	 *            The target vertex of the edge
+	 * @param origin
+	 *            The edge's origin object
+	 * @param originPolicy
+	 *            The origin policy to use for storing the origin object
 	 */
-	public AbstractWeightedEdge(final V source, final V target, final O origin) {
-		super(source, target, origin);
+	public AbstractWeightedEdge(final V source, final V target, final O origin, final IOriginRetentionPolicy originPolicy) {
+		super(source, target, origin, originPolicy);
 	}
 
 	/**
@@ -54,7 +58,7 @@ public abstract class AbstractWeightedEdge<V extends AbstractVertex<V, E, O>, E 
 	 * 
 	 * @return See above
 	 */
-	public MutableInteger getSourceWeight() {
+	public AtomicInteger getSourceWeight() {
 		return this.sourceWeight;
 	}
 
@@ -63,7 +67,7 @@ public abstract class AbstractWeightedEdge<V extends AbstractVertex<V, E, O>, E 
 	 * 
 	 * @return See above
 	 */
-	public MutableInteger getTargetWeight() {
+	public AtomicInteger getTargetWeight() {
 		return this.targetWeight;
 	}
 
@@ -72,7 +76,7 @@ public abstract class AbstractWeightedEdge<V extends AbstractVertex<V, E, O>, E 
 	 * 
 	 * @return See above
 	 */
-	public MutableInteger getWeight() {
+	public AtomicInteger getWeight() {
 		return this.weight;
 	}
 

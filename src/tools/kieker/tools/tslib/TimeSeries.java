@@ -24,7 +24,6 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.collections.buffer.CircularFifoBuffer;
 
 /**
- * 
  * @author Andre van Hoorn
  * 
  * @param <T>
@@ -36,19 +35,16 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	private final TimeUnit deltaTimeUnit;
 	private final int capacity;
 	private final CircularFifoBuffer points;
-	// approach of avh private final CopyOnWriteArrayList<ITimeSeriesPoint<T>>
-	// points;
+	// approach of avh: private final CopyOnWriteArrayList<ITimeSeriesPoint<T>> points;
 	private long oneStepMillis;
 
 	/**
-	 * 
 	 * @param startTime
 	 * @param deltaTime
 	 * @param deltaTimeUnit
 	 * @param capacity
 	 */
-	public TimeSeries(final Date startTime, final long deltaTime,
-			final TimeUnit deltaTimeUnit, final int capacity) {
+	public TimeSeries(final Date startTime, final long deltaTime, final TimeUnit deltaTimeUnit, final int capacity) {
 		this.startTime = (Date) startTime.clone();
 		this.deltaTime = deltaTime;
 		this.deltaTimeUnit = deltaTimeUnit;
@@ -65,14 +61,10 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 		this.setNextTime();
 	}
 
-	public TimeSeries(final Date startTime, final long deltaTime,
-			final TimeUnit deltaTimeUnit) {
+	public TimeSeries(final Date startTime, final long deltaTime, final TimeUnit deltaTimeUnit) {
 		this(startTime, deltaTime, deltaTimeUnit, ITimeSeries.INFINITE_CAPACITY);
 	}
 
-	/**
-	 * @return the startTime
-	 */
 	public Date getStartTime() {
 		return this.startTime;
 	}
@@ -86,18 +78,12 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	}
 
 	public synchronized ITimeSeriesPoint<T> append(final T value) {
-		final ITimeSeriesPoint<T> point = new TimeSeriesPoint<T>(this.nextTime,
-				value);
-
+		final ITimeSeriesPoint<T> point = new TimeSeriesPoint<T>(this.nextTime, value);
 		this.points.add(point);
-
 		this.setNextTime();
 		return point;
 	}
 
-	/**
-	 * 
-	 */
 	private void setNextTime() {
 		this.nextTime.setTime(this.nextTime.getTime() + this.oneStepMillis);
 	}
@@ -112,7 +98,6 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 		for (final ITimeSeriesPoint<T> curPoint : pointsCopy) {
 			retVals.add(curPoint.getValue());
 		}
-
 		return retVals;
 	}
 
@@ -125,17 +110,14 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	}
 
 	public Date getEndTime() {
-		return new Date(this.getStartTime().getTime() + (this.oneStepMillis
-				* this.size()));
+		return new Date(this.getStartTime().getTime() + (this.oneStepMillis * this.size()));
 	}
 
 	public List<ITimeSeriesPoint<T>> appendAll(final T[] values) {
 		final List<ITimeSeriesPoint<T>> retVals = new ArrayList<ITimeSeriesPoint<T>>(values.length);
-
 		for (final T value : values) {
 			retVals.add(this.append(value));
 		}
-
 		return retVals;
 	}
 
@@ -146,8 +128,6 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 		for (final ITimeSeriesPoint<T> curPoint : this.getPoints()) {
 			buf.append(curPoint);
 		}
-
 		return buf.toString();
 	}
-
 }

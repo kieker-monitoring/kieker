@@ -16,14 +16,15 @@
 
 package kieker.tools.traceAnalysis.filter.traceFilter;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -43,22 +44,34 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  */
 @Plugin(description = "Puts the incoming traces into equivalence classes",
 		outputPorts = {
-			@OutputPort(
-					name = TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE_REPRESENTATIVES,
-					description = "Message Traces",
-					eventTypes = { MessageTrace.class }),
-			@OutputPort(
-					name = TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_REPRESENTATIVES,
-					description = "Execution Traces",
-					eventTypes = { ExecutionTrace.class }) },
-		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
+			@OutputPort(name = TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE_REPRESENTATIVES, description = "Message Traces", eventTypes = { MessageTrace.class }),
+			@OutputPort(name = TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_REPRESENTATIVES, description = "Execution Traces", eventTypes = { ExecutionTrace.class })
+		},
+		repositoryPorts = {
+			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+		},
+		configuration =
+		@Property(
+				name = TraceEquivalenceClassFilter.CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE,
+				description = "The trace equivalence criteria: DISABLED (default value), ASSEMBLY (assembly-level equivalence), or ALLOCATION (allocation-level equivalence)",
+				defaultValue = "DISABLED") // one of TraceEquivalenceClassFilter.TraceEquivalenceClassModes
+)
 public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessingFilter {
 	public static final String INPUT_PORT_NAME_EXECUTION_TRACE = "executionTraces";
 
 	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE_REPRESENTATIVES = "messageTraceRepresentatives";
 	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE_REPRESENTATIVES = "executionTraceRepresentatives";
 
+	public static final String CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE = "equivalenceMode";
+
+	public static final TraceEquivalenceClassModes DEFAULT_EQUIVALENCE_MODE = TraceEquivalenceClassModes.DISABLED;
+
 	private static final Log LOG = LogFactory.getLog(TraceEquivalenceClassFilter.class);
+
+	private final TraceEquivalenceClassModes equivalenceMode;
+
+	/** Representative x # of equivalents */
+	private final ConcurrentMap<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap = new ConcurrentHashMap<AbstractExecutionTraceHashContainer, AtomicInteger>();
 
 	/**
 	 * @author Andre van Hoorn
@@ -66,10 +79,6 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	public static enum TraceEquivalenceClassModes {
 		DISABLED, ASSEMBLY, ALLOCATION
 	}
-
-	private TraceEquivalenceClassModes equivalenceMode;
-	/** Representative x # of equivalents */
-	private final Map<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap = new HashMap<AbstractExecutionTraceHashContainer, AtomicInteger>(); // NOPMD
 
 	/**
 	 * Creates a new instance of this class using the given configuration object. Keep in mind that the Trace-Equivalence-Class-Mode has to be set via the method
@@ -80,10 +89,18 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	 */
 	public TraceEquivalenceClassFilter(final Configuration configuration) {
 		super(configuration);
+		this.equivalenceMode = this.extractTraceEquivalenceClassMode(this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE));
 	}
 
-	public void setTraceEquivalenceCallMode(final TraceEquivalenceClassModes traceEquivalenceCallMode) {
-		this.equivalenceMode = traceEquivalenceCallMode;
+	private TraceEquivalenceClassModes extractTraceEquivalenceClassMode(final String traceEquivalenceCallModeString) {
+		TraceEquivalenceClassModes extractedEquivalenceMode;
+		try {
+			extractedEquivalenceMode = TraceEquivalenceClassModes.valueOf(traceEquivalenceCallModeString);
+		} catch (final IllegalArgumentException exc) {
+			LOG.error("Error extracting enum value from String: '" + traceEquivalenceCallModeString + "'", exc);
+			extractedEquivalenceMode = DEFAULT_EQUIVALENCE_MODE;
+		}
+		return extractedEquivalenceMode;
 	}
 
 	@InputPort(
@@ -120,33 +137,22 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 			}
 			this.reportSuccess(et.getTraceId());
 		} catch (final InvalidTraceException ex) {
-			LOG.error("InvalidTraceException", ex);
+			LOG.error("InvalidTraceException: " + ex.getMessage()); // do not pass 'ex' to LOG.error because this makes the output verbose (#584)
 			this.reportError(et.getTraceId());
 		}
 	}
 
-	public Map<ExecutionTrace, Integer> getEquivalenceClassMap() {
-		final Map<ExecutionTrace, Integer> map = new HashMap<ExecutionTrace, Integer>(); // NOPMD (UseConcurrentHashMap)
+	public ConcurrentMap<ExecutionTrace, Integer> getEquivalenceClassMap() {
+		final ConcurrentMap<ExecutionTrace, Integer> map = new ConcurrentHashMap<ExecutionTrace, Integer>();
 		for (final Entry<AbstractExecutionTraceHashContainer, AtomicInteger> entry : this.eTracesEquivClassesMap.entrySet()) {
 			map.put(entry.getKey().getExecutionTrace(), entry.getValue().intValue());
 		}
 		return map;
 	}
 
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		// TODO: equivalenceMode
-		return new Configuration();
-	}
-
 	public Configuration getCurrentConfiguration() {
-		// TODO: equivalenceMode
-		return new Configuration();
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE, this.equivalenceMode.toString());
+		return configuration;
 	}
-
-	@Override
-	public String getExecutionTraceInputPortName() {
-		return INPUT_PORT_NAME_EXECUTION_TRACE;
-	}
-
 }

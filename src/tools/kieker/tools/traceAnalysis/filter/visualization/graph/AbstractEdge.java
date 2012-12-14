@@ -29,7 +29,7 @@ package kieker.tools.traceAnalysis.filter.visualization.graph;
  *            The type of object from which the graph's elements originate
  */
 
-public abstract class AbstractEdge<V extends AbstractVertex<V, E, O>, E extends AbstractEdge<V, E, O>, O> extends GraphElement<O> {
+public abstract class AbstractEdge<V extends AbstractVertex<V, E, O>, E extends AbstractEdge<V, E, O>, O> extends AbstractGraphElement<O> {
 
 	private final V source;
 	private final V target;
@@ -41,9 +41,13 @@ public abstract class AbstractEdge<V extends AbstractVertex<V, E, O>, E extends 
 	 *            The source vertex of the edge
 	 * @param target
 	 *            The target vertex of the edge
+	 * @param origin
+	 *            The origin of the edge
+	 * @param originPolicy
+	 *            The origin policy to use
 	 */
-	public AbstractEdge(final V source, final V target, final O origin) {
-		super(origin);
+	public AbstractEdge(final V source, final V target, final O origin, final IOriginRetentionPolicy originPolicy) {
+		super(origin, originPolicy);
 		this.source = source;
 		this.target = target;
 	}
@@ -66,4 +70,8 @@ public abstract class AbstractEdge<V extends AbstractVertex<V, E, O>, E extends 
 		return this.target;
 	}
 
+	@Override
+	public String getIdentifier() { // NOPMD ( EmptyMethodInAbstractClassShouldBeAbstract)
+		return null;
+	}
 }

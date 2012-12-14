@@ -29,7 +29,7 @@ public final class HelloWorld {
 	private HelloWorld() {}
 
 	public static void main(final String[] args) {
-		System.out.println("Hello");
+		System.out.println("Hello"); // NOPMD (System.out)
 
 		final IMonitoringController monitoringController = MonitoringController.getInstance();
 		final ITimeSource timeSource = monitoringController.getTimeSource();
@@ -42,7 +42,7 @@ public final class HelloWorld {
 	}
 
 	private static void doSomething() {
-		System.out.println("doing something");
+		System.out.println("doing something"); // NOPMD (System.out)
 		/* .. some application logic does something meaningful .. */
 	}
 

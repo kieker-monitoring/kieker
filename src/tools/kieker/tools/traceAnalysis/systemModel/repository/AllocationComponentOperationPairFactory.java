@@ -71,12 +71,11 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubRe
 
 	private final AllocationComponentOperationPair createAndRegisterPair(final String namedIdentifier, final Operation operation,
 			final AllocationComponent allocationComponent) {
-		AllocationComponentOperationPair newInst;
 		if (this.pairsByName.containsKey(namedIdentifier)) {
 			throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
 		}
 		final int id = this.getAndIncrementNextId();
-		newInst = new AllocationComponentOperationPair(id, operation, allocationComponent);
+		final AllocationComponentOperationPair newInst = new AllocationComponentOperationPair(id, operation, allocationComponent);
 		this.pairsById.put(id, newInst);
 		this.pairsByName.put(namedIdentifier, newInst);
 		return newInst;

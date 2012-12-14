@@ -21,13 +21,12 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 
  * @author Andre van Hoorn
  * 
  * @param <T>
- * 
  */
 public interface ITimeSeries<T> {
+
 	public static final int INFINITE_CAPACITY = -1;
 
 	/**

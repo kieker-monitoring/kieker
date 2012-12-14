@@ -55,14 +55,7 @@ public class NameFilter extends AbstractFilterPlugin {
 	}
 
 	public Configuration getCurrentConfiguration() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Configuration();
 	}
 
 	@InputPort(eventTypes = { INamedElement.class }, name = NameFilter.INPUT_PORT_NAME_VALUE)

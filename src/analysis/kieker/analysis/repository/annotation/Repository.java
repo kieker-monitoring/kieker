@@ -22,6 +22,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import kieker.analysis.plugin.annotation.Property;
+
 /**
  * This type annotation can be used to mark repositories.
  * 
@@ -35,6 +37,12 @@ public @interface Repository {
 	public static final String NO_NAME = "";
 
 	/**
+	 * This flag determines whether the annotated repository should only be used for programmatic purposes or not. This can for example be used by tools to ignore
+	 * specific repositories.
+	 */
+	boolean programmaticOnly() default false;
+
+	/**
 	 * The human-readable description of this repository type.
 	 * 
 	 * @return The description for this repository type.
@@ -42,9 +50,23 @@ public @interface Repository {
 	String description() default "";
 
 	/**
+	 * This field can contain an additional text to give an impression of the needed dependencies.
+	 * 
+	 * @return The dependencies for the current repository as a human-readable description.
+	 */
+	String dependencies() default "";
+
+	/**
 	 * The name which is used to identify this repository type.
 	 * 
 	 * @return The name of this repository type.
 	 */
 	String name() default NO_NAME;
+
+	/**
+	 * The list of possible properties for this repository.
+	 * 
+	 * @return A list of properties.
+	 */
+	Property[] configuration() default {};
 }

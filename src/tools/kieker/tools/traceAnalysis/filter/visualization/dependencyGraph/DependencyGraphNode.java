@@ -22,9 +22,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertex;
+import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractPayloadedVertex;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertexDecoration;
-import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPolicy;
+import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
+import kieker.tools.traceAnalysis.systemModel.TraceInformation;
+import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
 
 /**
  * 
@@ -32,9 +35,12 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
  * 
  * @author Andre van Hoorn
  */
-public class DependencyGraphNode<T> extends AbstractVertex<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, MessageTrace> {
+public class DependencyGraphNode<T extends ISystemModelElement> extends
+		AbstractPayloadedVertex<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, TraceInformation, T> {
 
-	private final T entity;
+	public static final int ROOT_NODE_ID = AbstractSystemSubRepository.ROOT_ELEMENT_ID;
+	public static final String ROOT_NODE_NAME = "$";
+
 	private final int id;
 	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> incomingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD(UseConcurrentHashMap)//NOCS
 	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> outgoingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD(UseConcurrentHashMap)//NOCS
@@ -42,16 +48,20 @@ public class DependencyGraphNode<T> extends AbstractVertex<DependencyGraphNode<T
 	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedIncomingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD(UseConcurrentHashMap)//NOCS
 	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedOutgoingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD(UseConcurrentHashMap)//NOCS
 
-	private volatile boolean assumed = false;
+	private volatile boolean assumed; // false
 
-	public DependencyGraphNode(final int id, final T entity, final MessageTrace origin) {
-		super(origin);
+	public DependencyGraphNode(final int id, final T entity, final TraceInformation origin, final IOriginRetentionPolicy originPolicy) {
+		super(origin, originPolicy, entity);
 		this.id = id;
-		this.entity = entity;
 	}
 
 	public final T getEntity() {
-		return this.entity;
+		return this.getPayload();
+	}
+
+	@Override
+	public String getIdentifier() {
+		return this.getEntity().getIdentifier();
 	}
 
 	public final Collection<WeightedBidirectionalDependencyGraphEdge<T>> getIncomingDependencies() {
@@ -78,44 +88,50 @@ public class DependencyGraphNode<T> extends AbstractVertex<DependencyGraphNode<T
 		return this.assumed;
 	}
 
-	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final MessageTrace origin) {
-		this.addOutgoingDependency(destination, false, origin);
+	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final TraceInformation origin, final IOriginRetentionPolicy originPolicy) {
+		this.addOutgoingDependency(destination, false, origin, originPolicy);
 	}
 
-	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final boolean isAssumed, final MessageTrace origin) {
+	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final boolean isAssumed, final TraceInformation origin,
+			final IOriginRetentionPolicy originPolicy) {
 		synchronized (this) {
 			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = // NOPMD(UseConcurrentHashMap)
 			isAssumed ? this.assumedOutgoingDependencies : this.outgoingDependencies; // NOCS (inline ?)
 
 			WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(destination.getId());
 			if (e == null) {
-				e = new WeightedBidirectionalDependencyGraphEdge<T>(this, destination, origin);
+				e = new WeightedBidirectionalDependencyGraphEdge<T>(this, destination, origin, originPolicy);
 
 				if (isAssumed) {
 					e.setAssumed();
 				}
 
 				relevantDependencies.put(destination.getId(), e);
+			} else {
+				originPolicy.handleOrigin(e, origin);
 			}
-			e.getTargetWeight().increase();
+			e.getTargetWeight().incrementAndGet();
 		}
 	}
 
-	public void addIncomingDependency(final DependencyGraphNode<T> source, final MessageTrace origin) {
-		this.addIncomingDependency(source, false, origin);
+	public void addIncomingDependency(final DependencyGraphNode<T> source, final TraceInformation origin, final IOriginRetentionPolicy originPolicy) {
+		this.addIncomingDependency(source, false, origin, originPolicy);
 	}
 
-	public void addIncomingDependency(final DependencyGraphNode<T> source, final boolean isAssumed, final MessageTrace origin) {
+	public void addIncomingDependency(final DependencyGraphNode<T> source, final boolean isAssumed, final TraceInformation origin,
+			final IOriginRetentionPolicy originPolicy) {
 		synchronized (this) {
 			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = // NOPMD(UseConcurrentHashMap)
 			isAssumed ? this.assumedIncomingDependencies : this.incomingDependencies; // NOCS (inline ?)
 
 			WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(source.getId());
 			if (e == null) {
-				e = new WeightedBidirectionalDependencyGraphEdge<T>(this, source, origin);
+				e = new WeightedBidirectionalDependencyGraphEdge<T>(this, source, origin, originPolicy);
 				relevantDependencies.put(source.getId(), e);
+			} else {
+				originPolicy.handleOrigin(e, origin);
 			}
-			e.getSourceWeight().increase();
+			e.getSourceWeight().incrementAndGet();
 		}
 	}
 

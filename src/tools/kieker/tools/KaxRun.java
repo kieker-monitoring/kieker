@@ -60,7 +60,7 @@ public final class KaxRun {
 			final CommandLine line = parser.parse(options, args);
 			kaxFilename = line.getOptionValue('i');
 		} catch (final ParseException ex) {
-			System.out.println(ex.getMessage());
+			System.out.println(ex.getMessage()); // NOPMD (System.out)
 			final HelpFormatter formatter = new HelpFormatter();
 			formatter.printHelp(KaxRun.class.getName(), options, true);
 			return;

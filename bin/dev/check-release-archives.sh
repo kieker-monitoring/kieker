@@ -26,10 +26,9 @@ function run_ant {
 	exit 1
     fi
     if ! ant $1; then
-	echo "Build failed"
+	echo "Ant build failed"
 	exit 1
     fi
-    echo "Execution of ant failed"
 }
 
 # provide content list of archive
@@ -95,6 +94,15 @@ function assert_file_NOT_exists {
     echo OK
 }
 
+function assert_dir_NOT_exists {
+    echo -n "Asserting '$1' is a directory ..."
+    if test -d "$1"; then
+	echo "Directory '$1' should not exist"
+	exit 1
+    fi
+    echo OK
+}
+
 function assert_dir_exists {
     echo -n "Asserting '$1' is a directory ..."
     if ! test -d "$1"; then
@@ -119,6 +127,14 @@ function assert_files_exist_common {
     assert_dir_exists "doc/"
     assert_dir_exists "examples/"
     assert_dir_exists "lib/"
+    assert_dir_NOT_exists "lib/checkstyle-*"
+    assert_dir_NOT_exists "lib/findbugs-*"
+    assert_dir_NOT_exists "lib/pmd-*"
+    assert_file_exists_regular "lib/sigar-native-libs/libsigar-x86-linux.so"
+    assert_file_exists_regular "lib/sigar-native-libs/libsigar-amd64-linux.so"
+    assert_file_exists_regular "lib/sigar-native-libs/sigar-amd64-winnt.dll"
+    assert_file_exists_regular "lib/sigar-native-libs/sigar-x86-winnt.dll"
+    assert_file_exists_regular "lib/sigar-native-libs/sigar-x86-winnt.lib"
     assert_file_exists_regular "HISTORY"
     assert_file_exists_regular "LICENSE"
     assert_file_NOT_exists "build/"
@@ -136,31 +152,43 @@ function assert_files_exist_common {
     done
 }
 
-# Asserts the existence of files common to the src and bin releases
+# Asserts the existence of files in the src release
 function assert_files_exist_src {
     assert_files_exist_common
     assert_dir_exists "model/"
+    assert_file_exists_regular "AnalysisMetaModel.ecore"
+    assert_file_exists_regular "AnalysisMetaModel.ecorediag"
+    assert_file_exists_regular "AnalysisMetaModel.genmodel"
     assert_dir_exists "src/"
     assert_dir_exists "src-gen/"
     assert_dir_exists "test/"
+    assert_file_exists_regular "src/monitoring/META-INF/kieker.monitoring.default.properties"
     assert_file_NOT_exists "dist/"
     assert_file_NOT_exists "META-INF/"
+    assert_file_NOT_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/classes/META-INF/kieker.monitoring.properties"
+    assert_file_NOT_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/aspectjweaver-*"
+    assert_file_NOT_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kieker-*.jar"
     assert_file_exists_regular "kieker-eclipse-cleanup.xml"
     assert_file_exists_regular "kieker-eclipse-formatter.xml"
     assert_file_exists_regular ".project"
     assert_file_exists_regular ".classpath"
 }
 
-# Asserts the existence of files common to the src and bin releases
+# Asserts the existence of files in the bin release
 function assert_files_exist_bin {
     assert_files_exist_common
     assert_file_exists_regular "doc/kieker-"*"_userguide.pdf"
     assert_dir_exists "dist/"
     MAIN_JAR=$(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj )
+    assert_file_exists_regular "META-INF/kieker.monitoring.properties"
+    assert_file_exists_regular "META-INF/kieker.monitoring.adaptiveMonitoring.conf"
     assert_file_exists_regular ${MAIN_JAR}
     assert_file_exists_regular "dist/kieker-"*"_aspectj.jar"
     assert_file_exists_regular "dist/kieker-"*"_emf.jar"
-    assert_file_exists_regular "dist/kieker-monitoring-servlet-"*".war"
+    assert_file_NOT_exists "dist/kieker-monitoring-servlet-"*".war"
+    assert_file_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/classes/META-INF/kieker.monitoring.properties"
+    assert_file_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/aspectjweaver-*"
+    assert_file_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kieker-*.jar"
     assert_file_NOT_exists "dist/release/"
     assert_file_NOT_exists "bin/dev/"
     assert_file_NOT_exists "doc/userguide/"
@@ -199,7 +227,7 @@ function check_src_archive {
     assert_file_exists_regular $(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj ) # the core jar
     assert_file_exists_regular "dist/kieker-"*"_aspectj.jar"
     assert_file_exists_regular "dist/kieker-"*"_emf.jar"
-    assert_file_exists_regular "dist/kieker-monitoring-servlet-"*".war"
+    assert_file_NOT_exists "dist/kieker-monitoring-servlet-"*".war"
 
     # check bytecode version of classes contained in jar
     echo -n "Making sure that bytecode version of class in jar is 49.0 (Java 1.5)"
@@ -215,6 +243,11 @@ function check_src_archive {
 
     # now execute junt tests (which compiles the sources again ...)
     run_ant run-tests-junit
+    # make sure that no errors occured 
+    if ! grep "100.00\%" tmp/junit-results/report/overview-summary.html; then
+      echo "The JUnit tests didn't return with 100% success"
+      exit 1
+    fi
 
     # now execute junt tests (which compiles the sources again ...)
     run_ant static-analysis
@@ -368,17 +401,6 @@ DIR=$(pwd)
 BINTGZ=$(ls ../../dist/release/*_binaries.tar.gz)
 assert_file_exists_regular ${BINTGZ}
 check_bin_archive "${BINTGZ}"
-rm -rf ${DIR}
-
-change_dir "${BASE_TMP_DIR_ABS}"
-create_subdir_n_cd
-DIR=$(pwd)
-JEEEXAMPLETGZ=$(ls ../../dist/release/*_examples-JavaEEServletContainerExample.tar.gz)
-JEEEXAMPLEZIP=$(ls ../../dist/release/*_examples-JavaEEServletContainerExample.zip)
-BINTGZ=$(ls ../../dist/release/*_binaries.tar.gz)
-BINZIP=$(ls ../../dist/release/*_binaries.zip)
-assert_no_common_files_in_archives ${BINTGZ} ${JEEEXAMPLETGZ}
-assert_no_common_files_in_archives ${BINZIP} ${JEEEXAMPLEZIP}
 rm -rf ${DIR}
 
 # TOOD: check contents of remaining archives

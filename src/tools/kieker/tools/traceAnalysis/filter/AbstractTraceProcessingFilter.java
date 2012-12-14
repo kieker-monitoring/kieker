@@ -30,9 +30,9 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 
 	public static final long MAX_DURATION_MILLIS = Integer.MAX_VALUE;
 
-	private int numTracesProcessed = 0;
-	private int numTracesSucceeded = 0;
-	private int numTracesFailed = 0;
+	private int numTracesProcessed;
+	private int numTracesSucceeded;
+	private int numTracesFailed;
 
 	private long lastTraceIdSuccess = -1;
 	private long lastTraceIdError = -1;

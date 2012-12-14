@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
+import kieker.common.util.StringUtils;
 import kieker.monitoring.core.registry.RegistryRecord;
 
 /**
@@ -54,8 +55,7 @@ public class MappingFileWriter {
 				pw.write(String.valueOf(hashRecord.getId()));
 				pw.write('=');
 				pw.write("");
-				final String value = String.valueOf(hashRecord.getObject());
-				// value = value.replace("\\", "\\\\").replace("\r", "\\r").replace("\n", "\\n");
+				final String value = StringUtils.encodeNewline(String.valueOf(hashRecord.getObject()));
 				pw.write(value);
 				pw.write('\n');
 				if (pw.checkError()) {

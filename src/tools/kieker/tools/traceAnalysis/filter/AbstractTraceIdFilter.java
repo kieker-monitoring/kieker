@@ -26,7 +26,6 @@ import kieker.common.configuration.Configuration;
  * Convenience class for plugins filtering by trace IDs.
  * 
  * @author Andre van Hoorn
- * 
  */
 public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 	/**
@@ -67,13 +66,6 @@ public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 		}
 	}
 
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration defaultConfiguration = new Configuration();
-		// FIXME: Provide default properties. Abstract in this class might be better?
-		return defaultConfiguration;
-	}
-
 	/**
 	 * Returns true iff the given trace ID is in the set of IDs to accept.
 	 * This method is a convenience function to inheriting filters.
@@ -108,7 +100,6 @@ public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);
-
 		if (this.selectedTraceIds != null) {
 			configuration.setProperty(this.getConfigurationPropertySelectAllTraces(), Boolean.toString(true));
 			configuration.setProperty(this.getConfigurationPropertySelectedTraces(),

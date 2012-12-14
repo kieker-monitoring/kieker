@@ -16,18 +16,16 @@
 
 package kieker.monitoring.probe.cxf;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.SoapHeaderOutFilterInterceptor;
-import org.apache.cxf.common.logging.LogUtils;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.helpers.DOMUtils;
 import org.apache.cxf.interceptor.Fault;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -43,34 +41,37 @@ import kieker.monitoring.timer.ITimeSource;
  * 
  * Setting the soap header with jaxb or aegis databinding didn't work yet:
  * http://www.nabble.com/Add-%22out-of-band%22-soap-header-using-simple-frontend-td19380093.html
- */
-
-/**
  * 
  * @author Dennis Kieselhorst, Andre van Hoorn
  */
 public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutFilterInterceptor implements IMonitoringProbe {
+
+	public static final String SIGNATURE = "public void " + OperationExecutionSOAPResponseOutInterceptor.class.getName()
+			+ ".handleMessage(org.apache.cxf.binding.soap.SoapMessage)";
+
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
 
-	private static final IMonitoringController CRTR_INST = MonitoringController.getInstance();
-	protected static final ITimeSource TIMESOURCE = CRTR_INST.getTimeSource(); // NOCS (decl. order)
+	private static final Log LOG = LogFactory.getLog(OperationExecutionSOAPResponseOutInterceptor.class);
 
-	protected static final String VM_NAME = CRTR_INST.getHostname(); // NOCS (decl. order)
-
-	private static final String SIGNATURE = "public void " + OperationExecutionSOAPResponseOutInterceptor.class.getName()
-			+ ".handleMessage(org.apache.cxf.binding.soap.SoapMessage)";
-
-	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPResponseOutInterceptor.class);
+	protected final IMonitoringController monitoringController;
+	protected final ITimeSource timeSource;
+	protected final String vmName;
 
 	public OperationExecutionSOAPResponseOutInterceptor() {
-		// nothing to do
+		this(MonitoringController.getInstance());
+	}
+
+	public OperationExecutionSOAPResponseOutInterceptor(final IMonitoringController monitoringCtrl) {
+		this.monitoringController = monitoringCtrl;
+		this.timeSource = this.monitoringController.getTimeSource();
+		this.vmName = this.monitoringController.getHostname();
 	}
 
 	@Override
 	public void handleMessage(final SoapMessage msg) throws Fault {
-		if (!CRTR_INST.isMonitoringEnabled()) {
+		if (!this.monitoringController.isProbeActivated(SIGNATURE)) {
 			return;
 		}
 		String sessionID;
@@ -88,8 +89,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 			 * Kieker trace Id not registered.
 			 * Should not happen, since this is a response message!
 			 */
-			LOG.log(Level.WARNING, "Kieker traceId not registered. "
-					+ "Will unset all threadLocal variables and return.");
+			LOG.warn("Kieker traceId not registered. Will unset all threadLocal variables and return.");
 			this.unsetKiekerThreadLocalData(); // unset all variables
 			return;
 		} else {
@@ -102,7 +102,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 			myEoi = SOAP_REGISTRY.recallThreadLocalInRequestEOI();
 			myEss = SOAP_REGISTRY.recallThreadLocalInRequestESS();
 			tin = SOAP_REGISTRY.recallThreadLocalInRequestTin();
-			tout = TIMESOURCE.getTime();
+			tout = this.timeSource.getTime();
 			isEntryCall = SOAP_REGISTRY.recallThreadLocalInRequestIsEntryCall();
 		}
 
@@ -110,9 +110,8 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 		this.unsetKiekerThreadLocalData();
 
 		/* Log this execution */
-		final OperationExecutionRecord rec = new OperationExecutionRecord(SIGNATURE, sessionID, traceId, tin, tout,
-				VM_NAME, myEoi, myEss);
-		CRTR_INST.newMonitoringRecord(rec);
+		final OperationExecutionRecord rec = new OperationExecutionRecord(SIGNATURE, sessionID, traceId, tin, tout, this.vmName, myEoi, myEss);
+		this.monitoringController.newMonitoringRecord(rec);
 
 		/*
 		 * We don't put Kieker data into response header if request didn't

@@ -28,11 +28,11 @@ public final class HelloWorld {
 	private HelloWorld() {}
 
 	public static void main(final String[] args) {
-		System.out.println("Hello");
+		System.out.println("Hello"); // NOPMD (System.out)
 		HelloWorld.doSomething();
 	}
 
 	public static void doSomething() {
-		System.out.println("doing something");
+		System.out.println("doing something"); // NOPMD (System.out)
 	}
 }

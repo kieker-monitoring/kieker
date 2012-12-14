@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Trace Analysis and Monitoring
-% 
+%
 % $Date$
 % $Rev$:
 % $Author$
@@ -99,7 +99,7 @@ binary release.}
 % analyses. The result of both will be diagrams similar to sFigure~\ref{fig:bookstore:classAndSequenceDiagrams}.
 
 % The idea of weaving the monitoring-code into the ``plain'' code
-% during compile-time seems to suggest itself, but 
+% during compile-time seems to suggest itself, but
 % in this chapter it
 % is only shown how to perform the so called load-time-weaving - the
 % weaving during runtime.%, which is more flexible than the compile-time-weaving.
@@ -114,7 +114,7 @@ binary release.}
 .5 \DirInDirTree{META-INF/}.
 .4 \DirInDirTree{META-INF/} \DTcomment{Directory for the configuration files}.
 .5 \newFileDirInDirTree{\aopConfigFile}.
-.5 \kiekerMonitoringProperties{}. 
+.5 \kiekerMonitoringProperties{}.
 .4 \DirInDirTree{lib/} \DTcomment{Directory for the needed libraries}.
 .5 \newFileDirInDirTree{\mainJarWeaver}.
 .4 \DirInDirTree{src/}\DTcomment{Directory for the source code files}.
@@ -122,7 +122,7 @@ binary release.}
 .6 Bookstore.java.
 .6 BookstoreStarter.java.
 .6 Catalog.java.
-.6 CRM.java.  
+.6 CRM.java.
 }
 \end{graybox}
 
@@ -139,13 +139,13 @@ example's \dir{META-INF/} directory. Instead of registering the \file{\mainJarWe
 as an agent to the JVM, the \file{\aspectJWeaverJar} can be used. In this case, %
 the \file{\mainJar} needs to be added to the classpath.
 
-Once the necessary files have been copied to the example directory, the source code can be instrumented with the annotation 
+Once the necessary files have been copied to the example directory, the source code can be instrumented with the annotation
 \class{OperationExecutionMonitoringProbe}. Listing~\ref{lst:BookstoreAspectJ} shows how the annotation is used.
 
 \setJavaCodeListing
 \lstinputlisting[caption=Bookstore.java, label=lst:BookstoreAspectJ,firstline=21,firstnumber=21]{\aspectJBookstoreApplicationDir/src/kieker/examples/userguide/ch5bookstore/Bookstore.java}
 
-\noindent As a first example, each method of the Bookstore application will be annotated. The annotation can be used to instrument all methods except for constructors. 
+\noindent As a first example, each method of the Bookstore application will be annotated. The annotation can be used to instrument all methods except for constructors.
 
 The \file{\aopConfigFile} file has to be modified to specify the classes to be considered for instrumentation by the AspectJ weaver. Listing~\ref{lst:aopConfigFileAnnotations} shows the modified configuration file.
 
@@ -155,12 +155,12 @@ The \file{\aopConfigFile} file has to be modified to specify the classes to be c
 \noindent Line~5 tells the AspectJ weaver to consider all classes inside the example package. %
 AspectJ allows to use wild-cards for the definition of classes to %
 include---e.g., \lstinline$<include within="bookstoreTracing.Bookstore*"/>$ to weave all %
-classes with the prefix \class{Bookstore} located in a package \class{bookstoreTracing}. 
+classes with the prefix \class{Bookstore} located in a package \class{bookstoreTracing}.
 
 Line~9 specifies the aspect to be woven into the classes. In this case, the \Kieker{} %
 probe \class{OperationExecutionAspectAnnotation} is used. It requires that %
 methods intended to be instrumented are annotated by %
-\lstinline[language=Java]{@OperationExecutionMonitoringProbe}, as mentioned before. 
+\lstinline[language=Java]{@OperationExecutionMonitoringProbe}, as mentioned before.
 
 Listings~\ref{lst:traceAnalysisCompileRunExample1} and %
 \ref{lst:traceAnalysisCompileRunExample1Win} show how to compile and run the annotated %
@@ -196,7 +196,7 @@ in Listing~\ref{lst:aopConfigFileFull}.
 activated in line~9. As indicated by its name, this aspect makes sure that every %
 method within the included classes/packages will be instrumented and monitored. %
 % The exact behavior can be controlled very exactly by using appropriate includes and excludes within the weaver-part of the configuration file. %
-% For example, 
+% For example,
 Listing \ref{lst:aopConfigFileFull} demonstrates how to limit the %
 instrumented methods to those of the class \class{BookstoreStarter}.
 
@@ -226,18 +226,18 @@ invocation of the filter and passes it to the \class{MonitoringController}.
 
 Listing~\ref{lst:OperationExecutionRegistrationAndLoggingFilterInWebXML} %
 demonstrates how to integrate the \class{SessionAndTraceRegistrationFilter} %
-in the \file{web.xml} file of a web application. 
+in the \file{web.xml} file of a web application.
 
-The Java~EE Servlet container example described in Appendix~\label{appendix:JavaEEServletExample} employs the %
+The Java~EE Servlet container example described in Appendix~\ref{appendix:JavaEEServletExample} employs the %
 \class{SessionAndTraceRegistrationFilter}.
 
 \pagebreak
 
 \setXMLListing
-\lstinputlisting[firstline=32,lastline=39,firstnumber=32,%
+\lstinputlisting[firstline=50,lastline=61,firstnumber=50,%
 caption=\class{OperationExecutionRegistrationAndLoggingFilter} in a \file{web.xml} file,%
 label=lst:OperationExecutionRegistrationAndLoggingFilterInWebXML]%
-{\JavaEEServletExampleDir/JPetStore-5.0-instrumented/web/WEB-INF/web.xml}
+{\JavaEEServletExampleDir/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/web.xml}
 
 
 \subsection{Spring}\label{sec:traceAnalysis:instr:spring}
@@ -279,18 +279,21 @@ to the server configuration.
 
 \section{Trace Analysis and Visualization}\label{sec:traceAnalysisTool}
 
-% \enlargethispage{1.5cm}
+\enlargethispage{0.5cm}
 
 Monitoring data including trace information can be analyzed and visualized with the \KiekerTraceAnalysis{} tool which is included in the \Kieker{} binary as well.\\
 
 \WARNBOX{
 In order to use this tool, it is necessary to install two third-party programs:
 \begin{enumerate}
-\item \textbf{Graphviz} A graph visualization software which can be downloaded from \url{http://www.graphviz.org/}. 
+\item \textbf{Graphviz} A graph visualization software which can be downloaded from \url{http://www.graphviz.org/}.
 \item \textbf{GNU PlotUtils} A set of tools for generating 2D plot graphics which can be downloaded from \url{http://www.gnu.org/software/plotutils/} (for Linux) and from \url{http://gnuwin32.sourceforge.net/packages/plotutils.htm} (for Windows).
+\item \textbf{ps2pdf} The \file{ps2pdf} tool is used to convert ps files to pdf files.
 \end{enumerate}
 Under Windows it is recommended to add the \dir{bin/} directories of both tools to the ``path'' environment variable.
-} \vspace{3mm}
+}
+
+\vspace{3mm}
 
 \noindent Once both programs have been installed, the \KiekerTraceAnalysis{} tool can be used. It can be accessed via the wrapper-script \file{trace-analysis.sh} or \file{trace-analysis.bat} (Windows) in the \dir{bin/} directory. Non-parameterized calls of the scripts print all possible options on the screen, as listed in Appendix~\ref{appendix:wrapperScripts:traceAnalysis}.
 
@@ -310,7 +313,7 @@ the \dir{bin/} directory.
 \pagebreak
 
 The resulting contents of the \dir{out/} directory should be similar to %
-the following tree: 
+the following tree:
 
 \begin{figure}[H]
 \begin{graybox}
@@ -329,26 +332,26 @@ such as \file{.pdf}, by using the \textit{Graphviz} and \textit{PlotUtils} tools
 The following Listing~\ref{lst:traceAnalysis:convertDiagrams} demonstrates this. %
 
 % The generated diagrams are shown in the following %
-% Figures~\ref{fig:traceAnalysis:callTree} and~\ref{fig:traceAnalysis:allocSeqDiagr}. 
+% Figures~\ref{fig:traceAnalysis:callTree} and~\ref{fig:traceAnalysis:allocSeqDiagr}.
 
 \input{ch5-trace-analysis_Convert_Diagrams.inc}
 
 % \begin{figure}[H]\centering
-% 	\subfigure[]{\label{fig:traceAnalysis:callTree}%
-% 	\includegraphics[height=0.4\textheight]{images/callTree}
-% 	}%
-% 	\subfigure[]{\label{fig:traceAnalysis:allocSeqDiagr}%
-% 	\includegraphics[height=0.4\textheight]{images/allocationSequenceDiagram}
-% 	}%
-% 
-% 	\caption{Call Tree~\subref{fig:traceAnalysis:callTree} and Allocation Sequence Diagram~\subref{fig:traceAnalysis:allocSeqDiagr}}
+%   \subfigure[]{\label{fig:traceAnalysis:callTree}%
+%   \includegraphics[height=0.4\textheight]{images/callTree}
+%   }%
+%   \subfigure[]{\label{fig:traceAnalysis:allocSeqDiagr}%
+%   \includegraphics[height=0.4\textheight]{images/allocationSequenceDiagram}
+%   }%
+%
+%   \caption{Call Tree~\subref{fig:traceAnalysis:callTree} and Allocation Sequence Diagram~\subref{fig:traceAnalysis:allocSeqDiagr}}
 % \end{figure}
 
 \NOTIFYBOX{The scripts \file{dotPic-fileConverter.sh} and \file{dotPic-fileConverter.bat} %
 convert all \file{.pic} and \file{.dot} in a specified directory. %
 See Appendix~\ref{appendix:wrapperScripts:dotPicFileConverter} for details.}
 
-\
+\vspace{5mm}
 
 Examples of all available visualization are presented in the following %
 Section~\ref{sec:traceAnalysisExamples}.

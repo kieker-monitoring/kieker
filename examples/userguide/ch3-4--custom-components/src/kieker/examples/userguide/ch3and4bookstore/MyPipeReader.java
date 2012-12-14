@@ -18,6 +18,7 @@ package kieker.examples.userguide.ch3and4bookstore;
 
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -32,6 +33,10 @@ import kieker.common.record.IMonitoringRecord;
 				name = MyPipeReader.OUTPUT_PORT_NAME,
 				description = "Outputs any received record",
 				eventTypes = { IMonitoringRecord.class })
+		},
+		configuration = { @Property(
+				name = MyPipeReader.CONFIG_PROPERTY_NAME_PIPE_NAME,
+				defaultValue = "kieker-pipe")
 		})
 public class MyPipeReader extends AbstractReaderPlugin {
 
@@ -43,22 +48,17 @@ public class MyPipeReader extends AbstractReaderPlugin {
 	private final String pipeName;
 	private volatile MyPipe pipe;
 
-	public MyPipeReader(final Configuration configuration) {
-		super(configuration);
+	public MyPipeReader(final Configuration config) {
+		super(config);
 
-		this.pipeName = configuration.getStringProperty(MyPipeReader.CONFIG_PROPERTY_NAME_PIPE_NAME);
+		this.pipeName =
+				config.getStringProperty(MyPipeReader.CONFIG_PROPERTY_NAME_PIPE_NAME);
 
-		this.init();
-	}
-
-	private boolean init() {
 		try {
 			this.pipe = MyNamedPipeManager.getInstance().acquirePipe(this.pipeName);
 		} catch (final Exception ex) {
-			MyPipeReader.LOG.error("Failed to acquire pipe '" + this.pipeName + "'", ex);
-			return false;
+			LOG.error("Failed to acquire pipe '" + this.pipeName + "'", ex);
 		}
-		return true;
 	}
 
 	public boolean read() {
@@ -88,15 +88,6 @@ public class MyPipeReader extends AbstractReaderPlugin {
 		configuration.setProperty(MyPipeReader.CONFIG_PROPERTY_NAME_PIPE_NAME, this.pipeName);
 
 		return configuration;
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration defaultConfiguration = new Configuration();
-
-		defaultConfiguration.setProperty(MyPipeReader.CONFIG_PROPERTY_NAME_PIPE_NAME, "kieker-pipe");
-
-		return defaultConfiguration;
 	}
 
 	public void terminate(final boolean error) {

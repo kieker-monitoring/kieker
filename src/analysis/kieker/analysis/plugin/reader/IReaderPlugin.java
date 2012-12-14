@@ -16,6 +16,7 @@
 
 package kieker.analysis.plugin.reader;
 
+
 /**
  * @author Andre van Hoorn
  */
@@ -26,20 +27,10 @@ public interface IReaderPlugin {
 	 * i.e., it is assumed that reading has finished before this method returns.
 	 * The method should indicate an error by the return value false.
 	 * 
-	 * In asynchronous scenarios, the {@link #terminate(boolean)} method can be used
+	 * In asynchronous scenarios, the {@link kieker.analysis.plugin.IPlugin#terminate(boolean)} method can be used
 	 * to initiate the termination of this method.
 	 * 
 	 * @return true if reading was successful; false if an error occurred
 	 */
 	public boolean read();
-
-	/**
-	 * Initiates a termination of the reader. This method is only used by the
-	 * framework and should not be called manually to register a receiver. Use
-	 * the method {@link kieker.analysis.AnalysisController#terminate(boolean)} instead.
-	 * 
-	 * After receiving this notification,
-	 * the reader should terminate its {@link #read()} method.
-	 */
-	public void terminate(final boolean error);
 }

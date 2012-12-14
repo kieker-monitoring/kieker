@@ -19,7 +19,6 @@ package kieker.tools.tslib;
 import java.util.Date;
 
 /**
- * 
  * @author Andre van Hoorn
  * 
  * @param <T>

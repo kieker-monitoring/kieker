@@ -49,21 +49,21 @@ public abstract class AbstractMessage {
 		final StringBuilder strBuild = new StringBuilder();
 
 		if (this instanceof SynchronousCallMessage) {
-			strBuild.append("SYNC-CALL").append(" ");
+			strBuild.append("SYNC-CALL ");
 		} else {
-			strBuild.append("SYNC-RPLY").append(" ");
+			strBuild.append("SYNC-RPLY ");
 		}
 
 		strBuild.append(this.timestamp);
-		strBuild.append(" ");
+		strBuild.append(' ');
 		if (this.getSendingExecution().getOperation().getId() == Operation.ROOT_OPERATION_ID) {
-			strBuild.append("$");
+			strBuild.append('$');
 		} else {
 			strBuild.append(this.getSendingExecution());
 		}
 		strBuild.append(" --> ");
 		if (this.getReceivingExecution().getOperation().getId() == Operation.ROOT_OPERATION_ID) {
-			strBuild.append("$");
+			strBuild.append('$');
 		} else {
 			strBuild.append(this.getReceivingExecution());
 		}

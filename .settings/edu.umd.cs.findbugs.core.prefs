@@ -1,5 +1,5 @@
 #FindBugs User Preferences
-#Fri Aug 24 11:13:25 CEST 2012
+#Fri Oct 12 13:15:29 CEST 2012
 cloud_id=edu.umd.cs.findbugs.cloud.doNothingCloud
 detectorAppendingToAnObjectOutputStream=AppendingToAnObjectOutputStream|true
 detectorAtomicityProblem=AtomicityProblem|true
@@ -9,7 +9,7 @@ detectorBadSyntaxForRegularExpression=BadSyntaxForRegularExpression|true
 detectorBadUseOfReturnValue=BadUseOfReturnValue|true
 detectorBadlyOverriddenAdapter=BadlyOverriddenAdapter|true
 detectorBooleanReturnNull=BooleanReturnNull|true
-detectorCallToUnsupportedMethod=CallToUnsupportedMethod|false
+detectorCallToUnsupportedMethod=CallToUnsupportedMethod|true
 detectorCheckExpectedWarnings=CheckExpectedWarnings|false
 detectorCheckImmutableAnnotation=CheckImmutableAnnotation|true
 detectorCheckTypeQualifiers=CheckTypeQualifiers|true

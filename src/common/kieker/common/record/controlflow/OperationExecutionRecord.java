@@ -76,8 +76,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	private final int ess;
 
 	/**
-	 * Creates a new {@link OperationExecutionRecord} with the given parameters. The fields {@link #getRetVal()} is set
-	 * to null; {@link #isEntryPoint()} is set to false.
+	 * Creates a new {@link OperationExecutionRecord} with the given parameters.
 	 * 
 	 * @param operationSignature
 	 *            an operation string, as defined in {@link kieker.common.util.ClassOperationSignaturePair#splitOperationSignatureStr(String)}.

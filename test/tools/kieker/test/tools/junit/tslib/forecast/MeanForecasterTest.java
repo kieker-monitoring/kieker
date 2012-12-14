@@ -30,9 +30,7 @@ import kieker.tools.tslib.forecast.IForecastResult;
 import kieker.tools.tslib.forecast.mean.MeanForecaster;
 
 /**
- * 
  * @author Tillmann Carlos Bielefeld
- * 
  */
 public class MeanForecasterTest {
 	private TimeSeries<Double> ts;
@@ -59,7 +57,6 @@ public class MeanForecasterTest {
 
 	/**
 	 * @param timeUnit
-	 * 
 	 */
 	private void initForecastWithTimeUnit(final TimeUnit timeUnit) {
 		this.ts = new TimeSeries<Double>(this.startTime, this.deltaTime, timeUnit);
@@ -89,41 +86,34 @@ public class MeanForecasterTest {
 	 * Compute the starting point with a different time unit
 	 */
 	@Test
-	public void testForecastStartingIsAccordingToLastAppendDayTU() {
-		this.initForecastWithTimeUnit(TimeUnit.DAYS);
+	public void testForecastStartingIsAccordingToLastAppendSecondsTU() {
+		this.initForecastWithTimeUnit(TimeUnit.SECONDS);
 
-		final long expectedStartTime = this.startTime.getTime()
-				+ TimeUnit.MILLISECONDS.convert(this.deltaTime * 4, TimeUnit.DAYS);
+		final long expectedStartTime = this.startTime.getTime() + TimeUnit.MILLISECONDS.convert(this.deltaTime * 4, TimeUnit.SECONDS);
 		Assert.assertEquals(new Date(expectedStartTime), this.forecastSeries.getStartTime());
 	}
 
 	@Test
 	public void testMeanCalculationOneStep() {
-
 		Assert.assertEquals(this.steps, this.forecastSeries.size());
 
-		final ITimeSeriesPoint<Double> stepFC = this.forecast.getForecast()
-				.getPoints().get(0);
+		final ITimeSeriesPoint<Double> stepFC = this.forecast.getForecast().getPoints().get(0);
 		Assert.assertEquals(this.mean, stepFC.getValue());
 	}
 
 	@Test
 	public void testLowerCalculationOneStep() {
-
 		Assert.assertEquals(this.steps, this.lowerSeries.size());
 
-		final ITimeSeriesPoint<Double> stepFC = this.forecast.getLower()
-				.getPoints().get(0);
+		final ITimeSeriesPoint<Double> stepFC = this.forecast.getLower().getPoints().get(0);
 		Assert.assertTrue(this.mean > stepFC.getValue());
 	}
 
 	@Test
 	public void testUpperCalculationOneStep() {
-
 		Assert.assertEquals(this.steps, this.upperSeries.size());
 
-		final ITimeSeriesPoint<Double> stepFC = this.forecast.getUpper()
-				.getPoints().get(0);
+		final ITimeSeriesPoint<Double> stepFC = this.forecast.getUpper().getPoints().get(0);
 		Assert.assertTrue(this.mean < stepFC.getValue());
 	}
 }

@@ -1,4 +1,4 @@
-\documentclass[a4paper, oneside, 11pt, pointlessnumbers, headsepline, bibtotoc]{scrbook}
+\documentclass[paper=a4,twoside=false,fontsize=11pt,numbers=noenddot,version=first,bibliography=totoc,headsepline]{scrbook}
 
 % Get the necessary packages for the document.
 \input{Packages}
@@ -9,30 +9,31 @@
 \clearscrheadfoot
 
 \ifoot[\hrule\sffamily Kieker \version{} User Guide]{\hrule\sffamily Kieker \version{} User Guide}
-\ofoot[\hrule\sffamily\pagemark]{\hrule\sffamily\pagemark} 
+\ofoot[\hrule\sffamily\pagemark]{\hrule\sffamily\pagemark}
 
 % Set the title and everything.
 \titlehead{
-	\begin{center}
-		\includegraphics[height=25mm]{./images/kieker-logo}\\
+  \begin{center}
+    \includegraphics[height=25mm]{./images/20120511-kieker-logo-1-6}\\
 \href{http://kieker-monitoring.net}{\sffamily\Large http://kieker-monitoring.net}
-	\end{center}
+  \end{center}
 }
 
 \title{%
 \Huge\Kieker{} \version{} User Guide%
+\footnote{\sffamily \textit{For guide lines on how to cite Kieker and this document, please see~Section~\ref{sec:ch1:citingKieker}.}}
 }
 
-\author{\sffamily Nils Christian Ehmke, Andr\'e van Hoorn%
-\footnote{\sffamily Corresponding author; e-mail: \texttt{avh@informatik.uni-kiel.de}}%
-, and Reiner Jung} % , and contributors
+\author{\sffamily Kieker Project%
+% , and contributors
+}
 \date{\sffamily\today}
 % \date{\sffamily May 19, 2011}
 \publishers{\normalsize\sffamily
 %\flushleft
 \includegraphics[height=2.5cm]{./images/caulogo}\\[0.5ex]
 Software Engineering Group, \url{http://se.informatik.uni-kiel.de}\\ %
-Dept.\ Computer Science, Christian Albrechts University of Kiel, Germany
+Kiel University, Dept.\ Computer Science, Kiel, Germany
 }
 
 \hypersetup
@@ -55,7 +56,7 @@ pdfauthor = {Nils Ehmke, Andr\'e van Hoorn, and Reiner Jung}
   \input{ch3-kieker-monitoring-component.inc.tex}
   \input{ch4-kieker-analysis-component.inc.tex}
   \input{ch5-trace-analysis.inc.tex}
-  
+
   \input{Appendix}
   % suppress appendix chapters in toc:
   \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
@@ -63,4 +64,4 @@ pdfauthor = {Nils Ehmke, Andr\'e van Hoorn, and Reiner Jung}
 \bibliographystyle{abbrvnatAvanhoorn} % alpha
 \bibliography{bibliography}
 \end{document}
- 
+

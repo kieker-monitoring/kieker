@@ -20,7 +20,8 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
+
+import org.junit.Test;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -29,15 +30,16 @@ import kieker.tools.tslib.TimeSeries;
 import kieker.tools.tslib.forecast.IForecastResult;
 import kieker.tools.tslib.forecast.windowstart.WindowStartForecaster;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
- * 
  * @author Tillmann Carlos Bielefeld
- * 
  */
-public class WindowStartForecasterTest extends TestCase {
+public class WindowStartForecasterTest extends AbstractKiekerTest {
 
 	private static final Log LOG = LogFactory.getLog(WindowStartForecasterTest.class);
 
+	@Test
 	public void testWindowOfADay() {
 
 		// Time: 2011-12-19 10:05:00 Unix: 1324285500000
@@ -48,8 +50,7 @@ public class WindowStartForecasterTest extends TestCase {
 		final long startTime = 0;
 		final long endTime = startTime + (windowLength * delta);
 
-		final TimeSeries<Double> ts =
-				new TimeSeries<Double>(new Date(startTime), 1, TimeUnit.HOURS);
+		final TimeSeries<Double> ts = new TimeSeries<Double>(new Date(startTime), 60 * 60, TimeUnit.SECONDS);
 		LOG.info("TS so far: " + ts);
 		Assert.assertEquals(new Date(startTime), ts.getStartTime());
 

@@ -24,15 +24,6 @@ package kieker.monitoring.core.controller;
 public interface IJMXController {
 
 	/**
-	 * This method is used to log the status of the controllers to the console.
-	 * It is included in this interface to ensure its publication over JMX.
-	 * 
-	 * @return a String representation of the current controller
-	 */
-
-	public String toString();
-
-	/**
 	 * @return the JMX domain used
 	 */
 	public String getJMXDomain();

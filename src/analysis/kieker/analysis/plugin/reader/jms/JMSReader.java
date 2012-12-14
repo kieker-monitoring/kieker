@@ -37,6 +37,7 @@ import javax.naming.NameNotFoundException;
 
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -50,7 +51,15 @@ import kieker.common.record.IMonitoringRecord;
  * @author Andre van Hoorn, Matthias Rohr
  */
 @Plugin(description = "A reader which reads records from a (remove or local) JMS queue",
-		outputPorts = @OutputPort(name = JMSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMSReader"))
+		dependencies = "This plugin needs the file 'javax.jms-*.jar'.",
+		outputPorts = {
+			@OutputPort(name = JMSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMSReader")
+		},
+		configuration = {
+			@Property(name = JMSReader.CONFIG_PROPERTY_NAME_PROVIDERURL, defaultValue = "tcp://127.0.0.1:61616/"),
+			@Property(name = JMSReader.CONFIG_PROPERTY_NAME_DESTINATION, defaultValue = "queue1"),
+			@Property(name = JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, defaultValue = "org.apache.activemq.jndi.ActiveMQInitialContextFactory")
+		})
 public final class JMSReader extends AbstractReaderPlugin {
 
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
@@ -92,16 +101,6 @@ public final class JMSReader extends AbstractReaderPlugin {
 			throw new IllegalArgumentException("JMSReader has not sufficient parameters. jmsProviderUrl ('" + this.jmsProviderUrl + "'), jmsDestination ('"
 					+ this.jmsDestination + "'), or factoryLookupName ('" + this.jmsFactoryLookupName + "') is null");
 		}
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		// we return the default values for an ActiveMQ setup
-		final Configuration defaultConfiguration = new Configuration();
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_PROVIDERURL, "tcp://127.0.0.1:61616/");
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_DESTINATION, "queue1");
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_FACTORYLOOKUP, "org.apache.activemq.jndi.ActiveMQInitialContextFactory");
-		return defaultConfiguration;
 	}
 
 	/**

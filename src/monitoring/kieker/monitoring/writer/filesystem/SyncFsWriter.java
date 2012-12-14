@@ -26,6 +26,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.LinkedList;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -54,11 +55,6 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  * The AsyncFsWriter should usually be used instead of this class to avoid the
  * outliers described above.
  * 
- * The asyncFsWriter is not(!) faster (but also it shouldn't be much slower)
- * because only one thread is used for writing into a single file. To tune it,
- * it might be an option to write to multiple files, while writing with more
- * than one thread into a single file is not considered a save option.
- * 
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  */
 public final class SyncFsWriter extends AbstractMonitoringWriter {
@@ -66,21 +62,36 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	public static final String CONFIG_PATH = PREFIX + "customStoragePath"; // NOCS (afterPREFIX)
 	public static final String CONFIG_TEMP = PREFIX + "storeInJavaIoTmpdir"; // NOCS (afterPREFIX)
 	public static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile"; // NOCS (afterPREFIX)
+	public static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // NOCS (afterPREFIX)
+	public static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles"; // NOCS (afterPREFIX)
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
 
 	private static final Log LOG = LogFactory.getLog(SyncFsWriter.class);
 
+	private static final String FILE_PREFIX = "kieker-";
 	private static final String ENCODING = "UTF-8";
 
 	// internal variables
 	private final boolean autoflush;
 	private final int maxEntriesInFile;
+	private final long maxLogSize;
+	private final int maxLogFiles;
+
 	// only access within synchronized
 	private int entriesInCurrentFileCounter;
+
+	private final LinkedList<FileNameSize> listOfLogFiles; // NOCS NOPMD (we explicitly need LinekdList here)
+	private long totalLogSize;
+
 	private MappingFileWriter mappingFileWriter;
 	private String filenamePrefix;
 	private String path;
-	private PrintWriter pos = null;
+	private PrintWriter pos;
+
+	private final DateFormat dateFormat;
+
+	private long previousFileDate; // only used in synchronized
+	private long sameFilenameCounter; // only used in synchronized
 
 	public SyncFsWriter(final Configuration configuration) throws IllegalArgumentException {
 		super(configuration);
@@ -90,7 +101,21 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		if (this.maxEntriesInFile < 1) {
 			throw new IllegalArgumentException(CONFIG_MAXENTRIESINFILE + " must be greater than 0 but is '" + this.maxEntriesInFile + "'");
 		}
+		final int configMaxLogSize = configuration.getIntProperty(CONFIG_MAXLOGSIZE);
+		final int configMaxLogFiles = configuration.getIntProperty(CONFIG_MAXLOGFILES);
+		if ((configMaxLogSize > 0) || (configMaxLogFiles > 0)) {
+			this.maxLogSize = configMaxLogSize * 1024L * 1024L; // convert from MiBytes to Bytes
+			this.maxLogFiles = configMaxLogFiles;
+			this.listOfLogFiles = new LinkedList<FileNameSize>();
+		} else {
+			this.maxLogSize = -1;
+			this.maxLogFiles = -1;
+			this.listOfLogFiles = null; // NOPMD (set explicitly to null)
+		}
 		this.entriesInCurrentFileCounter = this.maxEntriesInFile;
+		// initialize Date
+		this.dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
+		this.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 	}
 
 	@Override
@@ -108,11 +133,9 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		}
 		// Determine directory for files
 		final String ctrlName = super.monitoringController.getHostname() + "-" + super.monitoringController.getName();
-		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
-		date.setTimeZone(TimeZone.getTimeZone("UTC"));
-		final String dateStr = date.format(new java.util.Date()); // NOPMD (Date)
-		final StringBuffer sb = new StringBuffer(pathTmp.length() + ctrlName.length() + 32);
-		sb.append(pathTmp).append(File.separatorChar).append("kieker-").append(dateStr).append("-UTC-").append(ctrlName).append(File.separatorChar);
+		final String dateStr = this.dateFormat.format(new java.util.Date()); // NOPMD (Date)
+		final StringBuffer sb = new StringBuffer(pathTmp.length() + FILE_PREFIX.length() + ctrlName.length() + 25);
+		sb.append(pathTmp).append(File.separatorChar).append(FILE_PREFIX).append(dateStr).append("-UTC-").append(ctrlName).append(File.separatorChar);
 		pathTmp = sb.toString();
 		f = new File(pathTmp);
 		if (!f.mkdir()) {
@@ -120,7 +143,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		}
 		synchronized (this) { // visibility
 			this.path = f.getAbsolutePath();
-			this.filenamePrefix = this.path + File.separatorChar + "kieker";
+			this.filenamePrefix = this.path + File.separatorChar + FILE_PREFIX;
 			this.mappingFileWriter = new MappingFileWriter(this.path);
 		}
 	}
@@ -146,7 +169,35 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			}
 			try {
 				synchronized (this) { // we must not synch on pos, it changes within!
-					this.prepareFile(); // may throw FileNotFoundException
+					if (++this.entriesInCurrentFileCounter > this.maxEntriesInFile) { // NOPMD
+						final String filename = this.getFilename();
+						this.prepareFile(filename); // may throw FileNotFoundException
+						if (this.listOfLogFiles != null) {
+							if (!this.listOfLogFiles.isEmpty()) {
+								final FileNameSize fns = this.listOfLogFiles.getLast();
+								final long filesize = new File(fns.name).length();
+								fns.size = filesize;
+								this.totalLogSize += filesize;
+							}
+							this.listOfLogFiles.add(new FileNameSize(filename));
+							if ((this.maxLogFiles > 0) && (this.listOfLogFiles.size() > this.maxLogFiles)) { // too many files (at most one!)
+								final FileNameSize removeFile = this.listOfLogFiles.removeFirst();
+								if (!new File(removeFile.name).delete()) { // NOCS (nested if)
+									throw new IOException("Failed to delete file " + removeFile.name);
+								}
+								this.totalLogSize -= removeFile.size;
+							}
+							if (this.maxLogSize > 0) {
+								while ((this.listOfLogFiles.size() > 1) && (this.totalLogSize > this.maxLogSize)) {
+									final FileNameSize removeFile = this.listOfLogFiles.removeFirst();
+									if (!new File(removeFile.name).delete()) { // NOCS (nested if)
+										throw new IOException("Failed to delete file " + removeFile.name);
+									}
+									this.totalLogSize -= removeFile.size;
+								}
+							}
+						}
+					}
 					this.pos.println(sb.toString());
 				}
 			} catch (final IOException ex) {
@@ -162,26 +213,35 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	 * 
 	 * @throws UnsupportedEncodingException
 	 */
-	private final void prepareFile() throws FileNotFoundException, UnsupportedEncodingException {
-		if (++this.entriesInCurrentFileCounter > this.maxEntriesInFile) {
-			this.entriesInCurrentFileCounter = 1;
-			if (this.pos != null) {
-				this.pos.close();
-			}
-			if (this.autoflush) {
-				this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.getFilename()), ENCODING), true);
-			} else {
-				this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.getFilename()), ENCODING)), false);
-			}
-			this.pos.flush();
+	private final void prepareFile(final String filename) throws FileNotFoundException, UnsupportedEncodingException {
+		this.entriesInCurrentFileCounter = 1;
+		if (this.pos != null) {
+			this.pos.close();
 		}
+		if (this.autoflush) {
+			this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename), ENCODING), true);
+		} else {
+			this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), ENCODING)), false);
+		}
+		this.pos.flush();
 	}
 
+	/**
+	 * May only be used in synchronized blocks!
+	 * 
+	 * @return
+	 */
 	private final String getFilename() {
-		final DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
-		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-		final StringBuilder sb = new StringBuilder(this.filenamePrefix.length() + 27);
-		sb.append(this.filenamePrefix).append('-').append(dateFormat.format(new java.util.Date())).append("-UTC.dat"); // NOPMD (Date)
+		final long date = System.currentTimeMillis();
+		if (this.previousFileDate == date) {
+			this.sameFilenameCounter++;
+		} else {
+			this.sameFilenameCounter = 0;
+			this.previousFileDate = date;
+		}
+		final StringBuilder sb = new StringBuilder(this.filenamePrefix.length() + 30);
+		sb.append(this.filenamePrefix).append(this.dateFormat.format(new java.util.Date(date))).append("-UTC-") // NOPMD (Date)
+				.append(String.format("%03d", this.sameFilenameCounter)).append(".dat");
 		return sb.toString();
 	}
 
@@ -196,11 +256,20 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 
 	@Override
 	public final String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(128);
 		sb.append(super.toString());
 		sb.append("\n\tWriting to Directory: '");
 		sb.append(this.path);
 		sb.append('\'');
 		return sb.toString();
+	}
+
+	private static final class FileNameSize {
+		public final String name; // NOCS
+		public long size; // NOCS
+
+		public FileNameSize(final String name) {
+			this.name = name;
+		}
 	}
 }

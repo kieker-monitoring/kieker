@@ -284,8 +284,8 @@ public final class Registry<E> implements IRegistry<E> {
 			if (e == null) { // not yet present, but have to repeat search
 				this.lock();
 				try {
-					int c = this.count;
-					if (c++ > this.threshold) {
+					final int c = this.count + 1;
+					if (c >= this.threshold) {
 						this.rehash();
 						this.count = c; // write volatile
 					}
@@ -326,7 +326,7 @@ public final class Registry<E> implements IRegistry<E> {
 				if (e != null) {
 					// All entries following removed node can stay in list, but all preceding ones need to be cloned.
 					HashEntry<E> newFirst = e.next;
-					for (HashEntry<E> p = first; p != e; p = p.next) { // NOPMD (=== istead of equals)
+					for (HashEntry<E> p = first; p != e; p = p.next) { // NOPMD (=== instead of equals)
 						newFirst = new HashEntry<E>(p.value, p.hash, p.id, newFirst);
 					}
 					tab[index] = newFirst;

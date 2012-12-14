@@ -19,6 +19,7 @@ package kieker.tools.currentTimeEventGenerator;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -31,7 +32,7 @@ import kieker.common.record.misc.TimestampRecord;
  * incoming {@link kieker.common.record.IMonitoringRecord}s.
  * 
  * <ol>
- * <li>The first record received via {@link #inputTimestamp(Long)} immediately leads to a new {@link TimestampEvent} with the given timestamp.</li>
+ * <li>The first record received via {@link #inputTimestamp(Long)} immediately leads to a new {@link TimestampRecord} with the given timestamp.</li>
  * <li>The timestamp of the first record is stored as {@link #firstTimestamp} and future events are generated at {@link #firstTimestamp} + i *
  * {@link #timerResolution}.</li>
  * <li>Future {@link kieker.common.record.IMonitoringRecord} may lead to future {@link TimestampRecord} as follows:
@@ -48,10 +49,13 @@ import kieker.common.record.misc.TimestampRecord;
  * @author Andre van Hoorn
  * 
  */
-@Plugin(outputPorts =
-		{
+@Plugin(description = "Generates time events with a given resolution based on the timestamps of incoming IMonitoringRecords",
+		outputPorts = {
 			@OutputPort(name = CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_RECORD, eventTypes = { TimestampRecord.class }, description = "Provides current time events"),
 			@OutputPort(name = CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_VALUE, eventTypes = { Long.class }, description = "Provides current time values")
+		},
+		configuration = {
+			@Property(name = CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_NAME_TIME_RESOLUTION, defaultValue = "1000")
 		})
 public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	public static final String INPUT_PORT_NAME_NEW_TIMESTAMP = "inputNewTimestamp";
@@ -134,15 +138,6 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 				this.mostRecentEventFired = nextTimerEventAt;
 			}
 		}
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-
-		configuration.setProperty(CONFIG_PROPERTY_NAME_TIME_RESOLUTION, Long.toString(1000L));
-
-		return configuration;
 	}
 
 	public Configuration getCurrentConfiguration() {

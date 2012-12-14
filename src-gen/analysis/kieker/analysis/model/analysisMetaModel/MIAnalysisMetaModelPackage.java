@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package kieker.analysis.model.analysisMetaModel;
 
@@ -124,6 +120,52 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int PROJECT_FEATURE_COUNT = 5;
 
 	/**
+	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MAnalysisComponent <em>Analysis Component</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisComponent
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getAnalysisComponent()
+	 * @generated
+	 */
+	int ANALYSIS_COMPONENT = 14;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYSIS_COMPONENT__NAME = 0;
+
+	/**
+	 * The feature id for the '<em><b>Classname</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYSIS_COMPONENT__CLASSNAME = 1;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYSIS_COMPONENT__PROPERTIES = 2;
+
+	/**
+	 * The number of structural features of the '<em>Analysis Component</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYSIS_COMPONENT_FEATURE_COUNT = 3;
+
+	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MPlugin <em>Plugin</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -140,7 +182,7 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLUGIN__NAME = 0;
+	int PLUGIN__NAME = ANALYSIS_COMPONENT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Classname</b></em>' attribute.
@@ -149,7 +191,7 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLUGIN__CLASSNAME = 1;
+	int PLUGIN__CLASSNAME = ANALYSIS_COMPONENT__CLASSNAME;
 
 	/**
 	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
@@ -158,7 +200,7 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLUGIN__PROPERTIES = 2;
+	int PLUGIN__PROPERTIES = ANALYSIS_COMPONENT__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Repositories</b></em>' containment reference list.
@@ -167,7 +209,7 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLUGIN__REPOSITORIES = 3;
+	int PLUGIN__REPOSITORIES = ANALYSIS_COMPONENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Output Ports</b></em>' containment reference list.
@@ -176,7 +218,7 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLUGIN__OUTPUT_PORTS = 4;
+	int PLUGIN__OUTPUT_PORTS = ANALYSIS_COMPONENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Displays</b></em>' containment reference list.
@@ -185,7 +227,7 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLUGIN__DISPLAYS = 5;
+	int PLUGIN__DISPLAYS = ANALYSIS_COMPONENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Plugin</em>' class.
@@ -194,7 +236,7 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLUGIN_FEATURE_COUNT = 6;
+	int PLUGIN_FEATURE_COUNT = ANALYSIS_COMPONENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MPort <em>Port</em>}' class.
@@ -537,13 +579,13 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int REPOSITORY = 8;
 
 	/**
-	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int REPOSITORY__PROPERTIES = 0;
+	int REPOSITORY__NAME = ANALYSIS_COMPONENT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Classname</b></em>' attribute.
@@ -552,16 +594,16 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int REPOSITORY__CLASSNAME = 1;
+	int REPOSITORY__CLASSNAME = ANALYSIS_COMPONENT__CLASSNAME;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int REPOSITORY__NAME = 2;
+	int REPOSITORY__PROPERTIES = ANALYSIS_COMPONENT__PROPERTIES;
 
 	/**
 	 * The number of structural features of the '<em>Repository</em>' class.
@@ -570,7 +612,7 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int REPOSITORY_FEATURE_COUNT = 3;
+	int REPOSITORY_FEATURE_COUNT = ANALYSIS_COMPONENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDependency <em>Dependency</em>}' class.
@@ -636,7 +678,6 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int REPOSITORY_CONNECTOR_FEATURE_COUNT = 2;
-
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDisplay <em>Display</em>}' class.
@@ -720,7 +761,6 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int VIEW_FEATURE_COUNT = 3;
-
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDisplayConnector <em>Display Connector</em>}' class.
@@ -834,39 +874,6 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getPlugin();
-
-	/**
-	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.MIPlugin#getName()
-	 * @see #getPlugin()
-	 * @generated
-	 */
-	EAttribute getPlugin_Name();
-
-	/**
-	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getClassname <em>Classname</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Classname</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.MIPlugin#getClassname()
-	 * @see #getPlugin()
-	 * @generated
-	 */
-	EAttribute getPlugin_Classname();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getProperties <em>Properties</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Properties</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.MIPlugin#getProperties()
-	 * @see #getPlugin()
-	 * @generated
-	 */
-	EReference getPlugin_Properties();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getRepositories <em>Repositories</em>}'.
@@ -1060,39 +1067,6 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	EClass getRepository();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIRepository#getProperties <em>Properties</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Properties</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.MIRepository#getProperties()
-	 * @see #getRepository()
-	 * @generated
-	 */
-	EReference getRepository_Properties();
-
-	/**
-	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIRepository#getClassname <em>Classname</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Classname</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.MIRepository#getClassname()
-	 * @see #getRepository()
-	 * @generated
-	 */
-	EAttribute getRepository_Classname();
-
-	/**
-	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIRepository#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.MIRepository#getName()
-	 * @see #getRepository()
-	 * @generated
-	 */
-	EAttribute getRepository_Name();
-
-	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIDependency <em>Dependency</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1253,6 +1227,49 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	EReference getDisplayConnector_Display();
 
 	/**
+	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIAnalysisComponent <em>Analysis Component</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Analysis Component</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisComponent
+	 * @generated
+	 */
+	EClass getAnalysisComponent();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIAnalysisComponent#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisComponent#getName()
+	 * @see #getAnalysisComponent()
+	 * @generated
+	 */
+	EAttribute getAnalysisComponent_Name();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIAnalysisComponent#getClassname <em>Classname</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Classname</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisComponent#getClassname()
+	 * @see #getAnalysisComponent()
+	 * @generated
+	 */
+	EAttribute getAnalysisComponent_Classname();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIAnalysisComponent#getProperties <em>Properties</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Properties</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisComponent#getProperties()
+	 * @see #getAnalysisComponent()
+	 * @generated
+	 */
+	EReference getAnalysisComponent_Properties();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1333,30 +1350,6 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EClass PLUGIN = eINSTANCE.getPlugin();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PLUGIN__NAME = eINSTANCE.getPlugin_Name();
-
-		/**
-		 * The meta object literal for the '<em><b>Classname</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PLUGIN__CLASSNAME = eINSTANCE.getPlugin_Classname();
-
-		/**
-		 * The meta object literal for the '<em><b>Properties</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PLUGIN__PROPERTIES = eINSTANCE.getPlugin_Properties();
 
 		/**
 		 * The meta object literal for the '<em><b>Repositories</b></em>' containment reference list feature.
@@ -1517,30 +1510,6 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		EClass REPOSITORY = eINSTANCE.getRepository();
 
 		/**
-		 * The meta object literal for the '<em><b>Properties</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference REPOSITORY__PROPERTIES = eINSTANCE.getRepository_Properties();
-
-		/**
-		 * The meta object literal for the '<em><b>Classname</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute REPOSITORY__CLASSNAME = eINSTANCE.getRepository_Classname();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute REPOSITORY__NAME = eINSTANCE.getRepository_Name();
-
-		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDependency <em>Dependency</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1669,6 +1638,40 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference DISPLAY_CONNECTOR__DISPLAY = eINSTANCE.getDisplayConnector_Display();
+
+		/**
+		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MAnalysisComponent <em>Analysis Component</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisComponent
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getAnalysisComponent()
+		 * @generated
+		 */
+		EClass ANALYSIS_COMPONENT = eINSTANCE.getAnalysisComponent();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ANALYSIS_COMPONENT__NAME = eINSTANCE.getAnalysisComponent_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Classname</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ANALYSIS_COMPONENT__CLASSNAME = eINSTANCE.getAnalysisComponent_Classname();
+
+		/**
+		 * The meta object literal for the '<em><b>Properties</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ANALYSIS_COMPONENT__PROPERTIES = eINSTANCE.getAnalysisComponent_Properties();
 
 	}
 

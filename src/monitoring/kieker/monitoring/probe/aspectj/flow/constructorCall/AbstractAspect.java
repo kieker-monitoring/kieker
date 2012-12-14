@@ -48,7 +48,9 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Around("monitoredConstructor() && this(thisObject) && notWithinKieker()")
 	public Object member2constructor(final Object thisObject, final ProceedingJoinPoint thisJoinPoint,
 			final EnclosingStaticPart thisEnclosingJoinPoint) throws Throwable { // NOCS
-		if (!CTRLINST.isMonitoringEnabled()) {
+		final Signature calleeSig = thisJoinPoint.getSignature();
+		final String callee = calleeSig.toLongString();
+		if (!CTRLINST.isProbeActivated(callee)) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
@@ -63,8 +65,6 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final String caller = thisEnclosingJoinPoint.getSignature().toLongString();
 		final String callerClazz = thisObject.getClass().getName();
 		// callee
-		final Signature calleeSig = thisJoinPoint.getSignature();
-		final String callee = calleeSig.toLongString();
 		final String calleeClazz = calleeSig.getDeclaringTypeName();
 		// measure before call
 		CTRLINST.newMonitoringRecord(new CallConstructorEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
@@ -84,7 +84,9 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Around("monitoredConstructor() && !this(java.lang.Object) && notWithinKieker()")
 	public Object static2constructor(final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint)
 			throws Throwable { // NOCS
-		if (!CTRLINST.isMonitoringEnabled()) {
+		final Signature calleeSig = thisJoinPoint.getSignature();
+		final String callee = calleeSig.toLongString();
+		if (!CTRLINST.isProbeActivated(callee)) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
@@ -100,8 +102,6 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final String caller = callerSig.toLongString();
 		final String callerClazz = callerSig.getDeclaringTypeName();
 		// callee
-		final Signature calleeSig = thisJoinPoint.getSignature();
-		final String callee = calleeSig.toLongString();
 		final String calleeClazz = calleeSig.getDeclaringTypeName();
 		// measure before call
 		CTRLINST.newMonitoringRecord(new CallConstructorEvent(TIME.getTime(), traceId, trace.getNextOrderId(),

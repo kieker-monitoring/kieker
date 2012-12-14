@@ -32,23 +32,24 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.analysis.plugin.filter.forward.CountingThroughputFilter;
+import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.filter.forward.RealtimeRecordDelayFilter;
+import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
-import kieker.common.util.SimpleImmutableEntry;
+import kieker.common.util.ImmutableEntry;
 
-import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
-import kieker.test.analysis.util.plugin.reader.SimpleListReader;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * This test is for the class {@link RealtimeRecordDelayFilter}.
  * 
  * @author Andre van Hoorn
  */
-public class TestRealtimeRecordDelayFilter {
+public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 
 	private static final Log LOG = LogFactory.getLog(TestRealtimeRecordDelayFilter.class);
 
@@ -57,13 +58,6 @@ public class TestRealtimeRecordDelayFilter {
 	private static final long START_TIME_SECONDS = 246561L;
 	private static final long[] EVENT_TIME_OFFSETS_SECONDS = { 0, 1, 2, 7, 17, 19 }; // relative to the start time
 	private static final List<Entry<Long, Long>> EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS = new ArrayList<Entry<Long, Long>>(); // intervals relative to start time
-	static {
-		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new SimpleImmutableEntry<Long, Long>((long) 5, (long) 3)); // i.e., in interval (0,5(
-		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new SimpleImmutableEntry<Long, Long>((long) 10, (long) 1)); // i.e., in interval (5,10(
-		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new SimpleImmutableEntry<Long, Long>((long) 15, (long) 0)); // i.e., in interval (10,15(
-		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new SimpleImmutableEntry<Long, Long>((long) 20, (long) 2)); // i.e., in interval (15,20(
-	}
-
 	private AnalysisController analysisController;
 
 	/**
@@ -72,7 +66,7 @@ public class TestRealtimeRecordDelayFilter {
 	private final List<EmptyRecord> inputRecords = new ArrayList<EmptyRecord>();
 
 	/** Provides the list of {@link IMonitoringRecord}s to be delayed */
-	private SimpleListReader<IMonitoringRecord> simpleListReader;
+	private ListReader<IMonitoringRecord> simpleListReader;
 
 	/** The filter actually tested: */
 	private RealtimeRecordDelayFilter delayFilter; // NOPMD (SingularField) // We want to have all filters declared here
@@ -87,7 +81,14 @@ public class TestRealtimeRecordDelayFilter {
 	private CountingThroughputFilter throughputFilter;
 
 	/** Simply collects all delayed {@link IMonitoringRecord}s */
-	private SimpleSinkFilter<EmptyRecord> sinkPlugin;
+	private ListCollectionFilter<EmptyRecord> sinkPlugin;
+
+	static {
+		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new ImmutableEntry<Long, Long>((long) 5, (long) 3)); // i.e., in interval (0,5(
+		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new ImmutableEntry<Long, Long>((long) 10, (long) 1)); // i.e., in interval (5,10(
+		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new ImmutableEntry<Long, Long>((long) 15, (long) 0)); // i.e., in interval (10,15(
+		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new ImmutableEntry<Long, Long>((long) 20, (long) 2)); // i.e., in interval (15,20(
+	}
 
 	public TestRealtimeRecordDelayFilter() {
 		// empty default constructor
@@ -104,8 +105,8 @@ public class TestRealtimeRecordDelayFilter {
 		 * Reader
 		 */
 		final Configuration readerConfiguration = new Configuration();
-		readerConfiguration.setProperty(SimpleListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.FALSE.toString());
-		this.simpleListReader = new SimpleListReader<IMonitoringRecord>(readerConfiguration);
+		readerConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.FALSE.toString());
+		this.simpleListReader = new ListReader<IMonitoringRecord>(readerConfiguration);
 		this.analysisController.registerReader(this.simpleListReader);
 
 		/*
@@ -113,7 +114,7 @@ public class TestRealtimeRecordDelayFilter {
 		 */
 		this.countingFilterReader = new CountingFilter(new Configuration());
 		this.analysisController.registerFilter(this.countingFilterReader);
-		this.analysisController.connect(this.simpleListReader, SimpleListReader.OUTPUT_PORT_NAME,
+		this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME,
 				this.countingFilterReader, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
 		/*
@@ -128,7 +129,7 @@ public class TestRealtimeRecordDelayFilter {
 		 * The CountingThroughputFilter to be tested
 		 */
 		final Configuration throughputFilterConfiguration = new Configuration();
-		throughputFilterConfiguration.setProperty(CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE_NANOS, Long.toString(INTERVAL_SIZE_NANOS));
+		throughputFilterConfiguration.setProperty(CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE, Long.toString(INTERVAL_SIZE_NANOS));
 		// We use the following property because this is way easier to test:
 		throughputFilterConfiguration.setProperty(CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVALS_BASED_ON_1ST_TSTAMP, Boolean.TRUE.toString());
 		this.throughputFilter = new CountingThroughputFilter(throughputFilterConfiguration);
@@ -147,13 +148,13 @@ public class TestRealtimeRecordDelayFilter {
 		/*
 		 * Sink plugin
 		 */
-		this.sinkPlugin = new SimpleSinkFilter<EmptyRecord>(new Configuration());
+		this.sinkPlugin = new ListCollectionFilter<EmptyRecord>(new Configuration());
 		this.analysisController.registerFilter(this.sinkPlugin);
 		this.analysisController.connect(this.countingFilterDelayed, CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
-				this.sinkPlugin, SimpleSinkFilter.INPUT_PORT_NAME);
+				this.sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 	}
 
-	private List<Entry<Long, Integer>> passEventListToReader(final SimpleListReader<IMonitoringRecord> reader) {
+	private List<Entry<Long, Integer>> passEventListToReader(final ListReader<IMonitoringRecord> reader) {
 		long currentTimeSeconds;
 		int curNumRecords = 0;
 
@@ -162,7 +163,7 @@ public class TestRealtimeRecordDelayFilter {
 		for (final long eventDelaySeconds : TestRealtimeRecordDelayFilter.EVENT_TIME_OFFSETS_SECONDS) {
 			curNumRecords++;
 			currentTimeSeconds = START_TIME_SECONDS + eventDelaySeconds;
-			final Entry<Long, Integer> curEntry = new SimpleImmutableEntry<Long, Integer>(eventDelaySeconds, curNumRecords);
+			final Entry<Long, Integer> curEntry = new ImmutableEntry<Long, Integer>(eventDelaySeconds, curNumRecords);
 			eventList.add(curEntry);
 			final EmptyRecord r = new EmptyRecord();
 			r.setLoggingTimestamp(TimeUnit.NANOSECONDS.convert(currentTimeSeconds, TimeUnit.SECONDS));
@@ -178,11 +179,11 @@ public class TestRealtimeRecordDelayFilter {
 		final List<Entry<Long, Long>> throughputListFromFilterAndCurrentInterval = new ArrayList<Map.Entry<Long, Long>>();
 		{ // We'll need to append the value for the current (pending) interval // NOCS (nested block)
 			throughputListFromFilterAndCurrentInterval.addAll(throughputListFromFilter);
-			throughputListFromFilterAndCurrentInterval.add(new SimpleImmutableEntry<Long, Long>(
+			throughputListFromFilterAndCurrentInterval.add(new ImmutableEntry<Long, Long>(
 					this.throughputFilter.getLastTimestampInCurrentInterval() + 1, this.throughputFilter.getCurrentCountForCurrentInterval()));
 		}
 
-		final long filterStartTimeNanos = throughputListFromFilterAndCurrentInterval.get(0).getKey() - this.throughputFilter.getIntervalSizeNanos();
+		final long filterStartTimeNanos = throughputListFromFilterAndCurrentInterval.get(0).getKey() - this.throughputFilter.getIntervalSize();
 
 		// Init array with worst-case size! (we actually expect an array of EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.size())
 		final long[] counts = new long[(int) this.countingFilterReader.getMessageCount()];
@@ -191,7 +192,7 @@ public class TestRealtimeRecordDelayFilter {
 			final long curIntervalEndOffsetNanos = countAtIntervalEnd.getKey() - filterStartTimeNanos;
 			final long curCount = countAtIntervalEnd.getValue();
 			// Example: First value for interval size 500: (500-1) / 500 = 0:
-			final int curCountIdx = (int) ((curIntervalEndOffsetNanos - 1) / this.throughputFilter.getIntervalSizeNanos());
+			final int curCountIdx = (int) ((curIntervalEndOffsetNanos - 1) / this.throughputFilter.getIntervalSize());
 			counts[curCountIdx] = curCount;
 		}
 
@@ -209,6 +210,7 @@ public class TestRealtimeRecordDelayFilter {
 		Assert.assertEquals(0, this.sinkPlugin.size());
 
 		this.analysisController.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.analysisController.getState());
 
 		/*
 		 * Make sure that all events have been provided to the delay filter (otherwise the test make no sense)

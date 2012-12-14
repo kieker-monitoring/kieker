@@ -16,6 +16,8 @@
 
 package kieker.monitoring.core.controller;
 
+import java.util.List;
+
 /**
  * @author Jan Waller
  */
@@ -24,20 +26,48 @@ public interface IProbeController {
 	/**
 	 * Activates a probe.
 	 * 
-	 * @param string
-	 *            signature of the probe
+	 * @param pattern
+	 *            pattern for the probe
 	 * @return
 	 *         true on success
 	 */
-	public boolean activateProbe(final String signature);
+	public boolean activateProbe(final String pattern);
 
 	/**
 	 * Deactivates a probe.
 	 * 
-	 * @param string
-	 *            signature of the probe
+	 * @param pattern
+	 *            pattern for the probe
 	 * @return
 	 *         true on success
 	 */
-	public boolean deactivateProbe(final String signature);
+	public boolean deactivateProbe(final String pattern);
+
+	/**
+	 * Tests if a probe is active.
+	 * 
+	 * @param signature
+	 *            signature of the probe
+	 * @return
+	 *         true if the probe with this signature is active
+	 */
+	public boolean isProbeActivated(final String signature);
+
+	/**
+	 * Overwrites the current list of patterns with a new pattern list.
+	 * 
+	 * @param patternList
+	 *            list of strings with patterns
+	 *            where each string starts either with a + or -
+	 */
+	public void setProbePatternList(final List<String> patternList);
+
+	/**
+	 * Returns the current list of patterns with a prefix indicating whether the pattern is active or not.
+	 * 
+	 * @return
+	 *         list of strings with patterns
+	 *         where each string starts either with a + or -
+	 */
+	public List<String> getProbePatternList();
 }

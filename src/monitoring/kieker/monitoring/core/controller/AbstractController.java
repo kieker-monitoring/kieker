@@ -28,7 +28,7 @@ import kieker.common.logging.LogFactory;
 public abstract class AbstractController {
 	private static final Log LOG = LogFactory.getLog(AbstractController.class);
 
-	protected volatile MonitoringController monitoringController = null;
+	protected volatile MonitoringController monitoringController;
 	private final AtomicBoolean terminated = new AtomicBoolean(false);
 
 	protected AbstractController(final Configuration configuration) { // NOPMD (unused parameter)
@@ -39,7 +39,9 @@ public abstract class AbstractController {
 		synchronized (this) {
 			if (this.monitoringController == null) {
 				this.monitoringController = monitoringController;
-				this.init();
+				if (!this.monitoringController.isTerminated()) {
+					this.init();
+				}
 			}
 		}
 	}

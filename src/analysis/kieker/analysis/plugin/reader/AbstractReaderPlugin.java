@@ -37,4 +37,8 @@ public abstract class AbstractReaderPlugin extends AbstractPlugin implements IRe
 	public AbstractReaderPlugin(final Configuration configuration) {
 		super(configuration);
 	}
+
+	public boolean init() { // NOPMD (default implementation)
+		return true;
+	}
 }

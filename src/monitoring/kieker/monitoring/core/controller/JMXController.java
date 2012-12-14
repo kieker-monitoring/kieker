@@ -50,11 +50,11 @@ public final class JMXController extends AbstractController implements IJMXContr
 	private final ServerNotificationListener serverNotificationListener;
 	private final String port;
 
+	private final JMXImplementation usedJMXImplementation;
+
 	private static enum JMXImplementation {
 		Fallback, Sun
 	}
-
-	private final JMXImplementation usedJMXImplementation;
 
 	// The error handling in this block is corrent, see ticket #293
 	protected JMXController(final Configuration configuration) {
@@ -188,7 +188,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 
 	@Override
 	public final String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(255);
 		sb.append("JMXController: ");
 		if (this.jmxEnabled) {
 			sb.append("JMX enabled (Domain: '");
@@ -203,8 +203,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 			sb.append("'\n");
 		}
 		if ((this.server != null) && this.server.isActive()) {
-			sb.append("\tJMX remote access available:\n");
-			sb.append("\t\tService URL: '");
+			sb.append("\tJMX remote access available:\n\t\tService URL: '");
 			final JMXServiceURL url = this.server.getAddress();
 			switch (this.usedJMXImplementation) { // NOPMD (extend in the future)
 			case Sun:

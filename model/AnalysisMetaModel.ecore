@@ -13,12 +13,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="views" upperBound="-1"
         eType="#//View" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Plugin" abstract="true">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="classname" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
-        eType="#//Property" containment="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Plugin" abstract="true" eSuperTypes="#//AnalysisComponent">
     <eStructuralFeatures xsi:type="ecore:EReference" name="repositories" upperBound="-1"
         eType="#//RepositoryConnector" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="outputPorts" upperBound="-1"
@@ -50,13 +45,7 @@
         eType="#//InputPort" containment="true" eOpposite="#//InputPort/parent"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Reader" eSuperTypes="#//Plugin"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Repository">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
-        eType="#//Property" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="classname" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Repository" eSuperTypes="#//AnalysisComponent"/>
   <eClassifiers xsi:type="ecore:EClass" name="Dependency">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="filePath" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -81,5 +70,12 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="display" lowerBound="1"
         eType="#//Display"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AnalysisComponent" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="classname" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//Property" containment="true"/>
   </eClassifiers>
 </ecore:EPackage>

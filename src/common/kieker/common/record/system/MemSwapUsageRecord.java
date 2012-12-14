@@ -26,6 +26,9 @@ import kieker.common.record.IMonitoringRecord;
  * @author Andre van Hoorn, Jan Waller
  */
 public final class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+
+	public static final String DEFAULT_VALUE = "N/A";
+
 	private static final long serialVersionUID = 8072422694598002383L;
 	private static final Class<?>[] TYPES = {
 		long.class,
@@ -37,7 +40,6 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 		long.class,
 		long.class,
 	};
-	private static final String DEFAULT_VALUE = "N/A";
 
 	private final long memUsed;
 	private final long memFree;
@@ -59,7 +61,7 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 
 	/**
 	 * Constructs a new {@link MemSwapUsageRecord} with the given values. If
-	 * certain values shall remain undefined, use the constants {@link #DEFAULT_VALUE} and {@link #UNDEFINED_LONG}.
+	 * certain {@link String} values shall remain undefined, use the constants {@link #DEFAULT_VALUE}.
 	 * 
 	 */
 	public MemSwapUsageRecord(final long timestamp, final String hostname, final long memTotal, final long memUsed, final long memFree, final long swapTotal,

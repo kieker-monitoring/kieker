@@ -23,7 +23,7 @@ import org.aspectj.lang.annotation.Pointcut;
  * @author Jan Waller
  */
 @Aspect
-public final class Annotation extends AbstractAspect {
+public class Annotation extends AbstractAspect {
 
 	public Annotation() {
 		// empty default constructor

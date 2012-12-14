@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+
+    <!-- Scans within the base package of the application for @Components to configure as beans -->
+    <!-- @Controller, @Service, @Configuration, etc. -->
+    <context:component-scan base-package="kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore" />
+
+    <!-- Enables the Spring MVC @Controller programming model -->
+    <mvc:annotation-driven />
+    <!-- Kieker probes -->
+    <mvc:interceptors>
+        <bean class="kieker.monitoring.probe.spring.executions.OperationExecutionWebRequestRegistrationInterceptor" />
+        <!--<bean class="kieker.examples.userguide.spring.TestProbe" />-->
+    </mvc:interceptors>
+
+    <bean id="opEMII" class="kieker.monitoring.probe.spring.executions.OperationExecutionMethodInvocationInterceptor" />
+ 
+    <aop:config>
+        <aop:advisor advice-ref="opEMII" pointcut="execution(public * kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore.Bookstore.searchBook(..))"/>
+        <aop:advisor advice-ref="opEMII" pointcut="execution(public * kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore.Catalog.getBook(..))"/>
+    </aop:config>
+  
+    <!-- Resolve logical view names to .jsp resources in the /WEB-INF/views directory -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/views/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+</beans>

@@ -59,9 +59,4 @@ public class ResponseTimeExtractionFilter extends AbstractFilterPlugin {
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
-	}
 }

@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Stack;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
@@ -32,7 +33,7 @@ import kieker.common.util.Signature;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceProcessingException;
-import kieker.tools.traceAnalysis.filter.visualization.util.IntContainer;
+import kieker.tools.traceAnalysis.filter.visualization.graph.NoOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
@@ -53,7 +54,9 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * 
  * @author Andre van Hoorn
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
+@Plugin(repositoryPorts = {
+	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+})
 public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProcessingFilter {
 
 	private static final String ENCODING = "UTF-8";
@@ -72,7 +75,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 
 		final StringBuilder strBuild = new StringBuilder(assemblyComponentName).append(":");
 		if (!shortLabels) {
-			strBuild.append(componentTypePackagePrefx).append(".");
+			strBuild.append(componentTypePackagePrefx).append('.');
 		} else {
 			strBuild.append("..");
 		}
@@ -80,12 +83,12 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 
 		final Signature sig = operation.getSignature();
 		final StringBuilder opLabel = new StringBuilder(sig.getName());
-		opLabel.append("(");
+		opLabel.append('(');
 		final String[] paramList = sig.getParamTypeList();
 		if (paramList.length > 0) {
 			opLabel.append("..");
 		}
-		opLabel.append(")");
+		opLabel.append(')');
 
 		strBuild.append(opLabel.toString());
 		return strBuild.toString();
@@ -103,7 +106,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 
 		final StringBuilder strBuild = new StringBuilder(resourceContainerName).append("::\\n").append(assemblyComponentName).append(":");
 		if (!shortLabels) {
-			strBuild.append(componentTypePackagePrefx).append(".");
+			strBuild.append(componentTypePackagePrefx).append('.');
 		} else {
 			strBuild.append("..");
 		}
@@ -111,12 +114,12 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 
 		final Signature sig = operation.getSignature();
 		final StringBuilder opLabel = new StringBuilder(sig.getName());
-		opLabel.append("(");
+		opLabel.append('(');
 		final String[] paramList = sig.getParamTypeList();
 		if (paramList.length > 0) {
 			opLabel.append("..");
 		}
-		opLabel.append(")");
+		opLabel.append(')');
 
 		strBuild.append(opLabel.toString());
 
@@ -137,10 +140,10 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 
 	/** Traverse tree recursively and generate dot code for edges. */
 	private static void dotEdgesFromSubTree(final AbstractCallTreeNode<?> n,
-			final Map<AbstractCallTreeNode<?>, Integer> nodeIds, final IntContainer nextNodeId, final PrintStream ps, final boolean shortLabels) {
-		final StringBuilder strBuild = new StringBuilder();
-		nodeIds.put(n, nextNodeId.getValue());
-		strBuild.append(nextNodeId.getAndIncValue()).append("[label =\"").append(n.isRootNode() ? "$" : AbstractCallTreeFilter.nodeLabel(n, shortLabels)) // NOCS
+			final Map<AbstractCallTreeNode<?>, Integer> nodeIds, final AtomicInteger nextNodeId, final PrintStream ps, final boolean shortLabels) {
+		final StringBuilder strBuild = new StringBuilder(64);
+		nodeIds.put(n, nextNodeId.get());
+		strBuild.append(nextNodeId.getAndIncrement()).append("[label =\"").append(n.isRootNode() ? "$" : AbstractCallTreeFilter.nodeLabel(n, shortLabels)) // NOCS
 				.append("\",shape=" + DotFactory.DOT_SHAPE_NONE + "];");
 		ps.println(strBuild.toString());
 		for (final WeightedDirectedCallTreeEdge<?> child : n.getChildEdges()) {
@@ -149,17 +152,17 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 	}
 
 	/** Traverse tree recursively and generate dot code for vertices. */
-	private static void dotVerticesFromSubTree(final AbstractCallTreeNode<?> n, final IntContainer eoiCounter,
+	private static void dotVerticesFromSubTree(final AbstractCallTreeNode<?> n, final AtomicInteger eoiCounter,
 			final Map<AbstractCallTreeNode<?>, Integer> nodeIds, final PrintStream ps, final boolean includeWeights) {
 		final int thisId = nodeIds.get(n);
 		for (final WeightedDirectedCallTreeEdge<?> child : n.getChildEdges()) {
 			final StringBuilder strBuild = new StringBuilder(1024);
 			final int childId = nodeIds.get(child.getTarget());
-			strBuild.append("\n").append(thisId).append("->").append(childId).append("[style=solid,arrowhead=none");
+			strBuild.append('\n').append(thisId).append("->").append(childId).append("[style=solid,arrowhead=none");
 			if (includeWeights) {
-				strBuild.append(",label=\"").append(child.getTargetWeight().getValue()).append("\"");
+				strBuild.append(",label=\"").append(child.getTargetWeight().get()).append('"');
 			} else if (eoiCounter != null) {
-				strBuild.append(",label=\"").append(eoiCounter.getAndIncValue()).append(".\"");
+				strBuild.append(",label=\"").append(eoiCounter.getAndIncrement()).append(".\"");
 			}
 			strBuild.append(" ]");
 			ps.println(strBuild.toString());
@@ -175,8 +178,8 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 
 		final Map<AbstractCallTreeNode<?>, Integer> nodeIds = new Hashtable<AbstractCallTreeNode<?>, Integer>(); // NOPMD (not synchronized)
 
-		AbstractCallTreeFilter.dotEdgesFromSubTree(root, nodeIds, new IntContainer(0), ps, shortLabels);
-		AbstractCallTreeFilter.dotVerticesFromSubTree(root, includeEois ? new IntContainer(1) : null, nodeIds, ps, includeWeights); // NOPMD NOCS (null)
+		AbstractCallTreeFilter.dotEdgesFromSubTree(root, nodeIds, new AtomicInteger(0), ps, shortLabels);
+		AbstractCallTreeFilter.dotVerticesFromSubTree(root, includeEois ? new AtomicInteger(1) : null, nodeIds, ps, includeWeights); // NOPMD NOCS (null)
 
 		ps.println(edgestringBuilder.toString());
 		ps.println("}");
@@ -201,7 +204,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 			if (m instanceof SynchronousCallMessage) {
 				curNode = curStack.peek();
 				AbstractCallTreeNode<?> child;
-				child = curNode.newCall(pairFactory.createPair((SynchronousCallMessage) m), t);
+				child = curNode.newCall(pairFactory.createPair((SynchronousCallMessage) m), t, NoOriginRetentionPolicy.createInstance());
 				curNode = child;
 				curStack.push(curNode);
 			} else if (m instanceof SynchronousReplyMessage) {

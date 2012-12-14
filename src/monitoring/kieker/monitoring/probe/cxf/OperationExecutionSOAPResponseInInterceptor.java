@@ -16,18 +16,16 @@
 
 package kieker.monitoring.probe.cxf;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.SoapHeaderInterceptor;
-import org.apache.cxf.common.logging.LogUtils;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.helpers.DOMUtils;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.message.Message;
 import org.w3c.dom.Element;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -48,31 +46,36 @@ import kieker.monitoring.timer.ITimeSource;
 public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInterceptor implements IMonitoringProbe {
 	// the CXF logger uses java.util.logging by default, look here how to change it to log4j: http://cwiki.apache.org/CXF20DOC/debugging.html
 
+	public static final String SIGNATURE = "public void " + OperationExecutionSOAPResponseInInterceptor.class.getName()
+			+ ".handleMessage(org.apache.cxf.message.Message)";
+
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
 
-	private static final IMonitoringController CTRL_INST = MonitoringController.getInstance();
-	protected static final ITimeSource TIMESOURCE = CTRL_INST.getTimeSource(); // NOCS (decl. order)
+	private static final Log LOG = LogFactory.getLog(OperationExecutionSOAPResponseInInterceptor.class);
 
-	protected static final String VM_NAME = CTRL_INST.getHostname(); // NOCS (decl. order)
-
-	private static final Logger LOG = LogUtils.getL7dLogger(OperationExecutionSOAPResponseInInterceptor.class);
-
-	private static final String SIGNATURE = "public void " + OperationExecutionSOAPResponseInInterceptor.class.getName()
-			+ ".handleMessage(org.apache.cxf.message.Message)";
+	protected final IMonitoringController monitoringController;
+	protected final ITimeSource timeSource;
+	protected final String vmName;
 
 	public OperationExecutionSOAPResponseInInterceptor() {
-		// nothing to do
+		this(MonitoringController.getInstance());
+	}
+
+	public OperationExecutionSOAPResponseInInterceptor(final IMonitoringController monitoringCtrl) {
+		this.monitoringController = monitoringCtrl;
+		this.timeSource = this.monitoringController.getTimeSource();
+		this.vmName = this.monitoringController.getHostname();
 	}
 
 	@Override
 	public void handleMessage(final Message msg) throws Fault {
-		if (!CTRL_INST.isMonitoringEnabled()) {
+		if (!this.monitoringController.isProbeActivated(SIGNATURE)) {
 			return;
 		}
 		if (msg instanceof SoapMessage) {
-			final boolean isEntryCall = SOAP_REGISTRY.recallThreadLocalOutRequestIsEntryCall();
+			final boolean isEntryCall = SOAP_REGISTRY.recallThreadLocalOutRequestIsEntryCall(); // NOPMD (must be requerst here!)
 			final SoapMessage soapMsg = (SoapMessage) msg;
 
 			/* 1.) Extract sessionId from SOAP header */
@@ -87,8 +90,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 				 * No Kieker eoi in header.
 				 * This may happen for responses from callees w/o Kieker instrumentation.
 				 */
-				LOG.log(Level.FINE, "Found no Kieker eoi in response header. "
-						+ "Will unset all threadLocal variables");
+				LOG.info("Found no Kieker eoi in response header. Will unset all threadLocal variables");
 				this.unsetKiekerThreadLocalData();
 				return;
 			}
@@ -96,8 +98,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			try {
 				eoi = Integer.parseInt(eoiStr);
 			} catch (final NumberFormatException exc) {
-				/* invalid eoi! */
-				LOG.log(Level.WARNING, exc.getMessage(), exc);
+				LOG.warn("Invalid EOI", exc);
 				this.unsetKiekerThreadLocalData();
 				return;
 			}
@@ -114,8 +115,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 				 * No Kieker trace Id in header.
 				 * This may happen for responses from callees w/o Kieker instrumentation.
 				 */
-				LOG.log(Level.FINE, "Found no Kieker traceId in response header. "
-						+ "Will unset all threadLocal variables");
+				LOG.info("Found no Kieker traceId in response header. Will unset all threadLocal variables");
 				this.unsetKiekerThreadLocalData();
 				return;
 			}
@@ -123,8 +123,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			try {
 				traceId = Long.parseLong(traceIdStr);
 			} catch (final NumberFormatException exc) {
-				/* Invalid trace id! */
-				LOG.log(Level.WARNING, exc.getMessage(), exc);
+				LOG.warn("Invalid trace id", exc);
 				this.unsetKiekerThreadLocalData();
 				return;
 			}
@@ -135,17 +134,16 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			final int myEoi = CF_REGISTRY.recallThreadLocalEOI();
 			final int myEss = CF_REGISTRY.recallThreadLocalESS();
 			final long myTin = SOAP_REGISTRY.recallThreadLocalOutRequestTin();
-			final long myTout = TIMESOURCE.getTime();
+			final long myTout = this.timeSource.getTime();
 
 			if (myTraceId != traceId) {
-				LOG.log(Level.WARNING, "Inconsistency between traceId before and after SOAP request:\n" + myTraceId
-						+ "(before) != " + traceId + "(after)");
+				LOG.warn("Inconsistency between traceId before and after SOAP request:\n" + myTraceId + "(before) != " + traceId + "(after)");
 			}
 
 			// Log this execution
 			final OperationExecutionRecord rec = new OperationExecutionRecord(SIGNATURE, mySessionId, myTraceId, myTin,
-					myTout, VM_NAME, myEoi, myEss);
-			CTRL_INST.newMonitoringRecord(rec);
+					myTout, this.vmName, myEoi, myEss);
+			this.monitoringController.newMonitoringRecord(rec);
 
 			/*
 			 * Store received Kieker EOI

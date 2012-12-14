@@ -53,9 +53,9 @@ public final class Main {
 
 	@OperationExecutionMonitoringProbe
 	public static void helloKieker(final boolean throwException) throws Exception {
-		System.out.println("Hello World (look at your monitoring log ...)." + Thread.currentThread().getId() + " ");
+		System.out.println("Hello World (look at your monitoring log ...)." + Thread.currentThread().getId() + " "); // NOPMD (System.out)
 		if (throwException) {
-			System.out.println("For test purposes, I will throw an exception now");
+			System.out.println("For test purposes, I will throw an exception now"); // NOPMD (System.out)
 			throw new Exception("Test Exception"); // NOPMD NOCS (Exception)
 		}
 	}

@@ -45,7 +45,7 @@ public class MessageTrace extends AbstractTrace {
 		final Iterator<AbstractMessage> it = this.messages.iterator();
 		while (it.hasNext()) {
 			final AbstractMessage m = it.next();
-			strBuild.append("<");
+			strBuild.append('<');
 			strBuild.append(m.toString());
 			strBuild.append(">\n");
 		}
@@ -53,7 +53,6 @@ public class MessageTrace extends AbstractTrace {
 	}
 
 	// Explicit delegation to super method to make FindBugs happy
-
 	@Override
 	public int hashCode() { // NOPMD (forward hashcode)
 		// TODO either this or equals might not be correct! both should consider traceId

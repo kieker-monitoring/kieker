@@ -20,7 +20,7 @@ The general procedure for each example is the following:
 
 \
 
-\WARNBOX{Due to a bug in the JMS-server some executions of the following examples could be problematic if paths with space characters are used. Try to avoid such paths.}
+\WARNBOX{\quad\\Due to a bug in some JMS servers, avoid paths including white spaces.}
 
 \section{ActiveMQ}\label{example:jms:activemq}
 
@@ -74,10 +74,10 @@ is already configured to use the \class{AsyncJMSWriter} via ActiveMQ. The import
 the definition of the provider URL and the context factory:
 
 \setPropertiesListing
-\lstinputlisting[firstline=143,lastline=143,caption=Excerpt from \file{kieker.monitoring.properties-activemq} configuring the provider URL of the JMS writer via ActiveMQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-activemq}
+\lstinputlisting[firstline=12,lastline=12,caption=Excerpt from \file{kieker.monitoring.properties-activemq} configuring the provider URL of the JMS writer via ActiveMQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-activemq}
 
 \setPropertiesListing
-\lstinputlisting[firstline=152,lastline=152,caption=Excerpt from \file{kieker.monitoring.properties-activemq} configuring the context factory of the JMS writer via ActiveMQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-activemq}
+\lstinputlisting[firstline=21,lastline=21,caption=Excerpt from \file{kieker.monitoring.properties-activemq} configuring the context factory of the JMS writer via ActiveMQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-activemq}
 
 \subsection{Running the Example}
 
@@ -145,6 +145,7 @@ Copy the following files from the HornetQ \dir{lib/} folder to the %
 
 \begin{compactenum}
 \item \file{hornetq-jms-client.jar}
+\item \file{hornetq-commons.jar} (if available)
 \item \file{hornetq-core-client.jar}
 \item \file{jboss-jms-api.jar}
 \item \file{jnp-client.jar}
@@ -158,10 +159,10 @@ is already configured to use the \class{AsyncJMSWriter} via HornetQ. The importa
 the definition of the provider URL, the context factory, and the queue:
 
 \setPropertiesListing
-\lstinputlisting[firstline=143,lastline=143,caption=Excerpt from \file{kieker.monitoring.properties-hornetq} configuring the provider URL of the JMS writer via HornetQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-hornetq}
+\lstinputlisting[firstline=12,lastline=12,caption=Excerpt from \file{kieker.monitoring.properties-hornetq} configuring the provider URL of the JMS writer via HornetQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-hornetq}
 
 \setPropertiesListing
-\lstinputlisting[firstline=152,lastline=152,caption=Excerpt from \file{kieker.monitoring.properties-hornetq} configuring the context factory of the JMS writer via HornetQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-hornetq}
+\lstinputlisting[firstline=21,lastline=21,caption=Excerpt from \file{kieker.monitoring.properties-hornetq} configuring the context factory of the JMS writer via HornetQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-hornetq}
 
 \subsection{Running the Example}
 
@@ -236,10 +237,10 @@ is already configured to use the \class{AsyncJMSWriter} via OpenJMS. The importa
 the definition of the provider URL and the context factory:
 
 \setPropertiesListing
-\lstinputlisting[firstline=143,lastline=143,caption=Excerpt from \file{kieker.monitoring.properties-openjms} configuring the provider URL of the JMS writer via OpenJMS]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-openjms}
+\lstinputlisting[firstline=12,lastline=12,caption=Excerpt from \file{kieker.monitoring.properties-openjms} configuring the provider URL of the JMS writer via OpenJMS]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-openjms}
 
 \setPropertiesListing
-\lstinputlisting[firstline=152,lastline=152,caption=Excerpt from \file{kieker.monitoring.properties-openjms} configuring the context factory of the JMS writer via OpenJMS]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-openjms}
+\lstinputlisting[firstline=21,lastline=21,caption=Excerpt from \file{kieker.monitoring.properties-openjms} configuring the context factory of the JMS writer via OpenJMS]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-openjms}
 
 \subsection{Running the Example}
 

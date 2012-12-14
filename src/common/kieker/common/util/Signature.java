@@ -81,21 +81,21 @@ public class Signature {
 		final StringBuilder strBuild = new StringBuilder();
 		for (final String t : this.modifierList) {
 			strBuild.append(t);
-			strBuild.append(" ");
+			strBuild.append(' ');
 		}
-		strBuild.append(this.name).append("(");
+		strBuild.append(this.name).append('(');
 		boolean first = true;
 		for (final String t : this.paramTypeList) {
 			if (!first) {
-				strBuild.append(",");
+				strBuild.append(',');
 			} else {
 				first = false;
 			}
 			strBuild.append(t);
 		}
-		strBuild.append(")");
+		strBuild.append(')');
 		if (this.hasReturnType()) {
-			strBuild.append(":").append(this.returnType);
+			strBuild.append(':').append(this.returnType);
 		}
 		return strBuild.toString();
 	}

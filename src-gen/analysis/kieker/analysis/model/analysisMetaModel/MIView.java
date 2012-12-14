@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package kieker.analysis.model.analysisMetaModel;
 
@@ -86,7 +82,7 @@ public interface MIView extends EObject {
 	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.MIDisplayConnector}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Display Connectors</em>' reference list isn't clear,
+	 * If the meaning of the '<em>Display Connectors</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->

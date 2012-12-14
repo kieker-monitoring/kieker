@@ -30,8 +30,6 @@ import kieker.common.configuration.Configuration;
 @Plugin
 public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFilterPlugin {
 
-	protected static final String SYSTEM_NEWLINE_STRING = System.getProperty("line.separator");
-
 	/**
 	 * The constructor for the plugin. Every plugin must have this constructor.
 	 * 

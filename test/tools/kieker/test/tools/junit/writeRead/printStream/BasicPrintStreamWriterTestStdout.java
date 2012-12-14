@@ -20,27 +20,26 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Assert;
-
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writer.PrintStreamWriter;
 
-import kieker.test.tools.junit.writeRead.util.StringTeePrintStream;
+import kieker.test.tools.util.StringTeePrintStream;
 
 /**
  * TODO: introduce abstract intermediate class with {@link BasicPrintStreamWriterTestStdout},
  * because a lot of code is shared.
  * 
  * @author Andre van Hoorn
- * 
  */
 public class BasicPrintStreamWriterTestStdout extends AbstractPrintStreamWriterTest { // NOCS (test class without a constructor)
-	private volatile PrintStream originalPrintStream = null;
 
-	private volatile StringTeePrintStream stringTeePrintStream = null;
+	private volatile PrintStream originalPrintStream;
+
+	private volatile StringTeePrintStream stringTeePrintStream = null; // NOPMD (init for findbugs)
 
 	@Before
 	public void setUp() throws Exception {

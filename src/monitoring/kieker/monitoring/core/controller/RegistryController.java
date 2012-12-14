@@ -49,7 +49,7 @@ public final class RegistryController extends AbstractController implements IReg
 
 	@Override
 	public final String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(48);
 		sb.append("RegistryController: ");
 		sb.append(this.stringRegistry.getSize());
 		sb.append(" strings registered.\n");

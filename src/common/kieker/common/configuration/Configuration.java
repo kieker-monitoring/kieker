@@ -42,7 +42,7 @@ public final class Configuration extends Properties {
 	}
 
 	public final String getStringProperty(final String key) {
-		final String s = this.getProperty(key);
+		final String s = super.getProperty(key);
 		return (s == null) ? "" : s.trim(); // NOCS
 	}
 
@@ -81,6 +81,19 @@ public final class Configuration extends Properties {
 	 */
 	public final String[] getStringArrayProperty(final String key) {
 		return this.getStringArrayProperty(key, "\\|");
+	}
+
+	/**
+	 * Sets a property to the given string array. Note that the values <b>must not</b> contain the
+	 * separator character '|'.
+	 * 
+	 * @param key
+	 *            The key of the property to change
+	 * @param value
+	 *            The array to set
+	 */
+	public final void setStringArrayProperty(final String key, final String[] value) {
+		this.setProperty(key, Configuration.toProperty(value));
 	}
 
 	/**
@@ -157,7 +170,7 @@ public final class Configuration extends Properties {
 		while (keys.hasMoreElements()) {
 			final String property = (String) keys.nextElement();
 			if (property.startsWith(prefix)) {
-				configuration.setProperty(property, this.getProperty(property));
+				configuration.setProperty(property, super.getProperty(property));
 			}
 		}
 		return configuration;
@@ -194,7 +207,7 @@ public final class Configuration extends Properties {
 	 */
 	@Override
 	@Deprecated
-	public final synchronized Object get(final Object key) {
+	public final synchronized Object get(final Object key) { // NOPMD
 		return super.get(key);
 	}
 
@@ -214,6 +227,6 @@ public final class Configuration extends Properties {
 	@Override
 	@Deprecated
 	public final String getProperty(final String key, final String defaultValue) {
-		return super.getProperty(key);
+		return super.getProperty(key, defaultValue);
 	}
 }

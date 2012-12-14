@@ -27,12 +27,11 @@ import org.junit.Test;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.exception.AnalysisConfigurationException;
+import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
+import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.tools.opad.filter.AnomalyDetectionFilter;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
-
-import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
-import kieker.test.analysis.util.plugin.reader.SimpleListReader;
 
 /**
  * 
@@ -48,11 +47,11 @@ import kieker.test.analysis.util.plugin.reader.SimpleListReader;
 public class AnomalyDetectionFilterTest {
 
 	// private NameFilter nameFilter;
-	private SimpleListReader<NamedDoubleTimeSeriesPoint> theReader;
+	private ListReader<NamedDoubleTimeSeriesPoint> theReader;
 	private AnomalyDetectionFilter anomalyDetectionFilter;
 
-	private SimpleSinkFilter<NamedDoubleTimeSeriesPoint> sinkPluginIfAnomaly;
-	private SimpleSinkFilter<NamedDoubleTimeSeriesPoint> sinkPluginElse;
+	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPluginIfAnomaly;
+	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPluginElse;
 	private AnalysisController controller;
 
 	private static final String OP_SIGNATURE_A = "a.A.opA";
@@ -76,8 +75,8 @@ public class AnomalyDetectionFilterTest {
 
 		// READER
 		final Configuration readerConfiguration = new Configuration();
-		readerConfiguration.setProperty(SimpleListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		this.theReader = new SimpleListReader<NamedDoubleTimeSeriesPoint>(readerConfiguration);
+		readerConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
+		this.theReader = new ListReader<NamedDoubleTimeSeriesPoint>(readerConfiguration);
 		this.theReader.addAllObjects(this.createInputEventSet());
 		this.controller.registerReader(this.theReader);
 
@@ -88,20 +87,20 @@ public class AnomalyDetectionFilterTest {
 		this.controller.registerFilter(this.anomalyDetectionFilter);
 
 		// SINK 1
-		this.sinkPluginIfAnomaly = new SimpleSinkFilter<NamedDoubleTimeSeriesPoint>(new Configuration());
+		this.sinkPluginIfAnomaly = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration());
 		this.controller.registerFilter(this.sinkPluginIfAnomaly);
 
 		// SINK 2
-		this.sinkPluginElse = new SimpleSinkFilter<NamedDoubleTimeSeriesPoint>(new Configuration());
+		this.sinkPluginElse = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration());
 		this.controller.registerFilter(this.sinkPluginElse);
 
 		// CONNECT the filters
-		this.controller.connect(this.theReader, SimpleListReader.OUTPUT_PORT_NAME,
-								this.anomalyDetectionFilter, AnomalyDetectionFilter.INPUT_PORT_ANOMALY_SCORE);
+		this.controller.connect(this.theReader, ListReader.OUTPUT_PORT_NAME,
+				this.anomalyDetectionFilter, AnomalyDetectionFilter.INPUT_PORT_ANOMALY_SCORE);
 		this.controller.connect(this.anomalyDetectionFilter, AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY,
-								this.sinkPluginIfAnomaly, SimpleSinkFilter.INPUT_PORT_NAME);
+				this.sinkPluginIfAnomaly, ListCollectionFilter.INPUT_PORT_NAME);
 		this.controller.connect(this.anomalyDetectionFilter, AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_ELSE,
-								this.sinkPluginElse, SimpleSinkFilter.INPUT_PORT_NAME);
+				this.sinkPluginElse, ListCollectionFilter.INPUT_PORT_NAME);
 
 		Assert.assertTrue(this.sinkPluginIfAnomaly.getList().isEmpty());
 	}

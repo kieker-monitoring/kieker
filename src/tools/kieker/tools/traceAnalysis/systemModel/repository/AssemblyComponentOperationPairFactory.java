@@ -70,12 +70,11 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepo
 	}
 
 	private AssemblyComponentOperationPair createAndRegisterPair(final String namedIdentifier, final Operation operation, final AssemblyComponent assemblyComponent) {
-		AssemblyComponentOperationPair newInst;
 		if (this.pairsByName.containsKey(namedIdentifier)) {
 			throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
 		}
 		final int id = this.getAndIncrementNextId();
-		newInst = new AssemblyComponentOperationPair(id, operation, assemblyComponent);
+		final AssemblyComponentOperationPair newInst = new AssemblyComponentOperationPair(id, operation, assemblyComponent);
 		this.pairsById.put(id, newInst);
 		this.pairsByName.put(namedIdentifier, newInst);
 		return newInst;

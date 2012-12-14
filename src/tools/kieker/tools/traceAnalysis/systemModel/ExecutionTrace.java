@@ -198,16 +198,16 @@ public class ExecutionTrace extends AbstractTrace {
 
 	@Override
 	public String toString() {
-		final StringBuilder strBuild = new StringBuilder();
+		final StringBuilder strBuild = new StringBuilder(512);
 		synchronized (this) {
 			strBuild.append("TraceId ").append(this.getTraceId());
 			strBuild.append(" (minTin=").append(this.minTin);
-			strBuild.append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTin)).append(")");
-			strBuild.append("; maxTout=").append(this.maxTout);
-			strBuild.append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTout)).append(")");
-			strBuild.append("; maxEss=").append(this.maxEss).append("):\n");
+			strBuild.append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTin));
+			strBuild.append("); maxTout=").append(this.maxTout);
+			strBuild.append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTout));
+			strBuild.append("); maxEss=").append(this.maxEss).append("):\n");
 			for (final Execution e : this.set) {
-				strBuild.append("<");
+				strBuild.append('<');
 				strBuild.append(e.toString()).append(">\n");
 			}
 		}
@@ -290,7 +290,6 @@ public class ExecutionTrace extends AbstractTrace {
 	}
 
 	// Explicit delegation to super method to make FindBugs happy
-
 	@Override
 	public int hashCode() { // NOPMD (forward hashcode)
 		return super.hashCode();

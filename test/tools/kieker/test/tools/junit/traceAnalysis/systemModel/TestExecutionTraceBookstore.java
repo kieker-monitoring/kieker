@@ -20,8 +20,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,13 +36,14 @@ import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.util.ExecutionFactory;
 
 /**
  * 
  * @author Andre van Hoorn
  */
-public class TestExecutionTraceBookstore {
+public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	private static final long TRACE_ID = 69898L;
 	private static final String SESSION_ID = "iXsnm70o4N";
 
@@ -67,22 +67,22 @@ public class TestExecutionTraceBookstore {
 		final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration());
 		this.eFactory = new ExecutionFactory(systemEntityFactory);
 
-		int numExecutions_l = 0;
+		int myNumExecutions = 0;
 
 		/* Manually create Executions for a trace */
-		numExecutions_l++;
+		myNumExecutions++;
 		this.exec0_0__bookstore_searchBook = this.eFactory.genExecution("Bookstore", "bookstore", "searchBook", TestExecutionTraceBookstore.TRACE_ID,
 				TestExecutionTraceBookstore.SESSION_ID, 1, 10, 0, 0);
 		this.minTin = this.exec0_0__bookstore_searchBook.getTin();
 		this.maxTout = this.exec0_0__bookstore_searchBook.getTout();
 
-		numExecutions_l++;
+		myNumExecutions++;
 		this.exec1_1__catalog_getBook = this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID,
 				TestExecutionTraceBookstore.SESSION_ID, 2, 4, 1, 1);
-		numExecutions_l++;
+		myNumExecutions++;
 		this.exec2_1__crm_getOrders = this.eFactory.genExecution("CRM", "crm", "getOrders", TestExecutionTraceBookstore.TRACE_ID,
 				TestExecutionTraceBookstore.SESSION_ID, 5, 8, 2, 1);
-		numExecutions_l++;
+		myNumExecutions++;
 		this.exec3_2__catalog_getBook = this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID,
 				TestExecutionTraceBookstore.SESSION_ID, 6, 7, 3, 2);
 
@@ -90,7 +90,7 @@ public class TestExecutionTraceBookstore {
 		Assert.assertNotSame(this.exec3_2__catalog_getBook.getOperation(), this.exec2_1__crm_getOrders.getOperation());
 		Assert.assertNotSame(this.exec0_0__bookstore_searchBook.getAllocationComponent(), this.exec1_1__catalog_getBook.getAllocationComponent());
 
-		this.numExecutions = numExecutions_l;
+		this.numExecutions = myNumExecutions;
 	}
 
 	private ExecutionTrace genValidBookstoreTrace() throws InvalidTraceException {

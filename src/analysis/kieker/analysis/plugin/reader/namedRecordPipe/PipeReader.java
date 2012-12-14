@@ -20,6 +20,7 @@ import java.util.concurrent.CountDownLatch;
 
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -30,11 +31,17 @@ import kieker.common.namedRecordPipe.Pipe;
 import kieker.common.record.IMonitoringRecord;
 
 /**
- * 
  * @author Andre van Hoorn
  */
 @Plugin(description = "A reader which reads records via an in-memory pipe",
-		outputPorts = @OutputPort(name = PipeReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the PipeReader"))
+		outputPorts = {
+			@OutputPort(name = PipeReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class },
+					description = "Output Port of the PipeReader")
+		},
+		configuration = {
+			@Property(name = PipeReader.CONFIG_PROPERTY_NAME_PIPENAME, defaultValue = PipeReader.CONFIG_PROPERTY_VALUE_PIPENAME_DEFAULT,
+					description = "The name of the pipe used to read data.")
+		})
 public final class PipeReader extends AbstractReaderPlugin implements IPipeReader {
 
 	/**
@@ -78,13 +85,6 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 		}
 		// TODO: escaping this in constructor! very bad practice!
 		this.pipe.setPipeReader(this);
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration defaultConfiguration = new Configuration();
-		defaultConfiguration.setProperty(CONFIG_PROPERTY_NAME_PIPENAME, CONFIG_PROPERTY_VALUE_PIPENAME_DEFAULT);
-		return defaultConfiguration;
 	}
 
 	/**

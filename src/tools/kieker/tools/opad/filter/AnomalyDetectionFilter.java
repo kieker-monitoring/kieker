@@ -63,12 +63,6 @@ public class AnomalyDetectionFilter extends AbstractFilterPlugin {
 		return new Configuration();
 	}
 
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		// TODO: set default configuration
-		return new Configuration();
-	}
-
 	@InputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = AnomalyDetectionFilter.INPUT_PORT_ANOMALY_SCORE)
 	public void inputForecastAndMeasurement(final NamedDoubleTimeSeriesPoint anomalyScore) {
 

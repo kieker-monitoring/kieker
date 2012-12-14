@@ -24,13 +24,12 @@ import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
+import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.common.configuration.Configuration;
 import kieker.tools.opad.filter.ForecastingFilter;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 import kieker.tools.tslib.ITimeSeriesPoint;
 import kieker.tools.tslib.forecast.IForecastResult;
-
-import kieker.test.analysis.util.plugin.filter.SimpleSinkFilter;
 
 /**
  * 
@@ -41,7 +40,7 @@ public class AnomalyScoreCalculationFilterTest {
 
 	private ForecastingFilter forecasting;
 	private AnalysisController controller;
-	private SimpleSinkFilter<IForecastResult<Double>> sinkPlugin;
+	private ListCollectionFilter<IForecastResult<Double>> sinkPlugin;
 
 	@Before
 	public void setUp() throws IllegalStateException,
@@ -54,7 +53,7 @@ public class AnomalyScoreCalculationFilterTest {
 
 		this.forecasting = new ForecastingFilter(config);
 
-		this.sinkPlugin = new SimpleSinkFilter<IForecastResult<Double>>(new Configuration());
+		this.sinkPlugin = new ListCollectionFilter<IForecastResult<Double>>(new Configuration());
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
 
 		this.controller = new AnalysisController();
@@ -62,7 +61,7 @@ public class AnomalyScoreCalculationFilterTest {
 		this.controller.registerFilter(this.sinkPlugin);
 		this.controller.connect(this.forecasting,
 				ForecastingFilter.OUTPUT_PORT_NAME_FORECAST, this.sinkPlugin,
-				SimpleSinkFilter.INPUT_PORT_NAME);
+				ListCollectionFilter.INPUT_PORT_NAME);
 	}
 
 	@Test

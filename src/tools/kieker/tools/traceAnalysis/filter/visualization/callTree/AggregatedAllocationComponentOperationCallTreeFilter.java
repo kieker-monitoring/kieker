@@ -20,6 +20,8 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
+import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPolicy;
+import kieker.tools.traceAnalysis.filter.visualization.graph.NoOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.Operation;
@@ -34,17 +36,24 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * @author Andre van Hoorn
  */
 @Plugin(description = "Uses the incoming data to enrich the connected repository with data for the aggregated allocation component operation call tree",
-		repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
+		repositoryPorts = {
+			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+		})
+// TODO: don't we have to redefine the configuration properties from the super class here?
 public class AggregatedAllocationComponentOperationCallTreeFilter extends AbstractAggregatedCallTreeFilter<AllocationComponentOperationPair> {
 
 	public AggregatedAllocationComponentOperationCallTreeFilter(final Configuration configuration) {
 		super(configuration);
 	}
 
-	// TODO: resolve (http://kieker.uni-kiel.de/trac/ticket/411)
-	public void setAllocationComponentOperationPairFactory(final AllocationComponentOperationPairFactory allocationComponentOperationPairFactory) {
-		super.setRoot(new AggregatedAllocationComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-				AllocationComponentOperationPairFactory.ROOT_PAIR, true, null));
+	@Override
+	public boolean init() {
+		final boolean success = super.init();
+		if (success) {
+			super.setRoot(new AggregatedAllocationComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+					AllocationComponentOperationPairFactory.ROOT_PAIR, true, null, NoOriginRetentionPolicy.createInstance()));
+		}
+		return success;
 	}
 
 	@Override
@@ -63,27 +72,32 @@ public class AggregatedAllocationComponentOperationCallTreeFilter extends Abstra
 class AggregatedAllocationComponentOperationCallTreeNode extends AbstractAggregatedCallTreeNode<AllocationComponentOperationPair> {
 
 	public AggregatedAllocationComponentOperationCallTreeNode(final int id, final AllocationComponentOperationPair entity, final boolean rootNode,
-			final MessageTrace origin) {
-		super(id, entity, rootNode, origin);
+			final MessageTrace origin, final IOriginRetentionPolicy originPolicy) {
+		super(id, entity, rootNode, origin, originPolicy);
 	}
 
 	@Override
-	public AbstractCallTreeNode<AllocationComponentOperationPair> newCall(final Object dstObj, final MessageTrace origin) {
+	public AbstractCallTreeNode<AllocationComponentOperationPair> newCall(final Object dstObj, final MessageTrace origin, final IOriginRetentionPolicy originPolicy) {
 		final AllocationComponentOperationPair destination = (AllocationComponentOperationPair) dstObj;
 		WeightedDirectedCallTreeEdge<AllocationComponentOperationPair> e = this.childMap.get(destination.getId());
 		AbstractCallTreeNode<AllocationComponentOperationPair> n;
 		if (e != null) {
 			n = e.getTarget();
-			e.addOrigin(origin);
-			n.addOrigin(origin);
+			originPolicy.handleOrigin(e, origin);
+			originPolicy.handleOrigin(n, origin);
 		} else {
-			n = new AggregatedAllocationComponentOperationCallTreeNode(destination.getId(), destination, false, origin); // !
+			n = new AggregatedAllocationComponentOperationCallTreeNode(destination.getId(), destination, false, origin, originPolicy); // !
 			// rootNode
-			e = new WeightedDirectedCallTreeEdge<AllocationComponentOperationPair>(this, n, origin);
+			e = new WeightedDirectedCallTreeEdge<AllocationComponentOperationPair>(this, n, origin, originPolicy);
 			this.childMap.put(destination.getId(), e);
 			super.appendChildEdge(e);
 		}
-		e.getTargetWeight().increase();
+		e.getTargetWeight().incrementAndGet();
 		return n;
+	}
+
+	@Override
+	public String getIdentifier() {
+		return null;
 	}
 }

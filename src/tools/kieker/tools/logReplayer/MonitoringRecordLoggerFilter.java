@@ -19,6 +19,7 @@ package kieker.tools.logReplayer;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -38,8 +39,14 @@ import kieker.monitoring.core.controller.MonitoringController;
  */
 // TODO: We should move this class to another package
 @Plugin(description = "A filter which passes received records to the configured monitoring controller",
-		outputPorts = @OutputPort(name = MonitoringRecordLoggerFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming monitoring record", eventTypes = { IMonitoringRecord.class }))
+		outputPorts = {
+			@OutputPort(name = MonitoringRecordLoggerFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming monitoring record", eventTypes = { IMonitoringRecord.class })
+		},
+		configuration = {
+			@Property(name = MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, defaultValue = "")
+		})
 public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
+
 	public static final String INPUT_PORT_NAME_RECORD = "monitoringRecords";
 
 	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayedEvents";
@@ -54,22 +61,16 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 	private final IMonitoringController monitoringController;
 
 	/**
-	 * Path to the {@link Configuration} to be used to create {@link #monitoringController}.
-	 * If <code>null</code>, the {@link ConfigurationFactory#createDefaultConfiguration()} is used.
-	 */
-	private final String monitoringPropertiesFn;
-
-	/**
 	 * Used to cache the configuration.
 	 */
-	final Configuration configuration;
+	private final Configuration configuration;
 
 	public MonitoringRecordLoggerFilter(final Configuration configuration) {
 		super(configuration);
 		final Configuration controllerConfiguration;
-		this.monitoringPropertiesFn = configuration.getStringProperty(CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN);
-		if (this.monitoringPropertiesFn.length() > 0) {
-			controllerConfiguration = ConfigurationFactory.createConfigurationFromFile(this.monitoringPropertiesFn);
+		final String monitoringPropertiesFn = configuration.getPathProperty(CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN);
+		if (monitoringPropertiesFn.length() > 0) {
+			controllerConfiguration = ConfigurationFactory.createConfigurationFromFile(monitoringPropertiesFn);
 		} else {
 			LOG.info("No path to a 'monitoring.properties' file passed; using default configuration");
 			controllerConfiguration = ConfigurationFactory.createDefaultConfiguration();
@@ -81,21 +82,20 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 		try {
 			flatConfiguration.setDefaultConfiguration(controllerConfiguration);
 		} catch (final IllegalAccessException ex) {
-			throw new RuntimeException(ex); // cannot happen (due to flatten)!
+			throw new RuntimeException(ex); // NOPMD(cannot happen (due to flatten)!)
 		}
 		this.monitoringController = MonitoringController.createInstance(flatConfiguration);
+	}
+
+	@Override
+	public void terminate(final boolean error) {
+		super.terminate(error);
+		this.monitoringController.terminateMonitoring();
 	}
 
 	public Configuration getCurrentConfiguration() {
 		// clone again, so no one can change anything
 		return (Configuration) this.configuration.clone();
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, "");
-		return configuration;
 	}
 
 	@InputPort(name = INPUT_PORT_NAME_RECORD, description = "Receives records to be passed to the controller", eventTypes = { IMonitoringRecord.class })

@@ -22,14 +22,14 @@ import java.util.Map;
 
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.ComponentType;
+import kieker.tools.traceAnalysis.systemModel.RootAssemblyComponent;
 
 /**
  * 
  * @author Andre van Hoorn
  */
 public class AssemblyRepository extends AbstractSystemSubRepository {
-	public static final AssemblyComponent ROOT_ASSEMBLY_COMPONENT =
-			new AssemblyComponent(AbstractSystemSubRepository.ROOT_ELEMENT_ID, "$", TypeRepository.ROOT_COMPONENT);
+	public static final AssemblyComponent ROOT_ASSEMBLY_COMPONENT = new RootAssemblyComponent();
 
 	private final Map<String, AssemblyComponent> assemblyComponentInstancesByName = new Hashtable<String, AssemblyComponent>(); // NOPMD (UseConcurrentHashMap)
 	private final Map<Integer, AssemblyComponent> assemblyComponentInstancesById = new Hashtable<Integer, AssemblyComponent>(); // NOPMD (UseConcurrentHashMap)
@@ -55,12 +55,11 @@ public class AssemblyRepository extends AbstractSystemSubRepository {
 	}
 
 	public final AssemblyComponent createAndRegisterAssemblyComponentInstance(final String namedIdentifier, final ComponentType componentType) {
-		AssemblyComponent newInst;
 		if (this.assemblyComponentInstancesByName.containsKey(namedIdentifier)) {
 			throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
 		}
 		final int id = this.getAndIncrementNextId();
-		newInst = new AssemblyComponent(id, "@" + id, componentType);
+		final AssemblyComponent newInst = new AssemblyComponent(id, "@" + id, componentType);
 		this.assemblyComponentInstancesById.put(id, newInst);
 		this.assemblyComponentInstancesByName.put(namedIdentifier, newInst);
 		return newInst;

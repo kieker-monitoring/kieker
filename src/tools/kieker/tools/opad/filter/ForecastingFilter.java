@@ -40,8 +40,8 @@ import kieker.tools.tslib.forecast.IForecaster;
  * 
  */
 @Plugin(name = "Forecast Filter", outputPorts = {
-		@OutputPort(eventTypes = { IForecastResult.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECAST),
-		@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT) })
+	@OutputPort(eventTypes = { IForecastResult.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECAST),
+	@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT) })
 public class ForecastingFilter extends AbstractFilterPlugin {
 
 	private final IForecaster<Double> forecaster;
@@ -76,12 +76,7 @@ public class ForecastingFilter extends AbstractFilterPlugin {
 	private NamedDoubleTimeSeriesPoint lastPoint;
 
 	public Configuration getCurrentConfiguration() {
-		return null;
-	}
-
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		return null;
+		return new Configuration();
 	}
 
 	private static final Object TRIGGER = new Object();
@@ -104,10 +99,10 @@ public class ForecastingFilter extends AbstractFilterPlugin {
 		super.deliver(OUTPUT_PORT_NAME_FORECAST, result);
 
 		final ForecastMeasurementPair fmp = new ForecastMeasurementPair(
-					this.lastPoint.getName(),
-					result.getForecast().getPoints().get(0).getValue(),
-					this.lastPoint.getValue(),
-					this.lastPoint.getTime());
+				this.lastPoint.getName(),
+				result.getForecast().getPoints().get(0).getValue(),
+				this.lastPoint.getValue(),
+				this.lastPoint.getTime());
 		super.deliver(OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, fmp);
 	}
 

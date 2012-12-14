@@ -16,9 +16,10 @@
 
 package kieker.common.record.flow;
 
-
 /**
  * Interface for all flow records that describe information in traces.
+ * 
+ * All trace records have a <code>traceId</code> field of type <code>long</code> and an <code>orderIndex</code> field of type <code>int</code>.
  * 
  * @author Jan Waller
  */

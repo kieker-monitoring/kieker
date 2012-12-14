@@ -30,7 +30,7 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 public final class StateController extends AbstractController implements IStateController {
 	private static final Log LOG = LogFactory.getLog(StateController.class);
 
-	private volatile boolean monitoringEnabled = false;
+	private volatile boolean monitoringEnabled;
 	private final String name;
 	private final String hostname;
 	private final AtomicInteger experimentId = new AtomicInteger(0);
@@ -68,7 +68,7 @@ public final class StateController extends AbstractController implements IStateC
 
 	@Override
 	public final String toString() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(128);
 		sb.append("Status: '");
 		if (this.isMonitoringTerminated()) {
 			sb.append("terminated");
@@ -77,8 +77,7 @@ public final class StateController extends AbstractController implements IStateC
 		} else {
 			sb.append("disabled");
 		}
-		sb.append("'\n");
-		sb.append("\tName: '");
+		sb.append("'\n\tName: '");
 		sb.append(this.name);
 		sb.append("'; Hostname: '");
 		sb.append(this.hostname);

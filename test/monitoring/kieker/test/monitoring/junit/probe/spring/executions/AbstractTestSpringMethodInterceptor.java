@@ -23,13 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import junit.framework.Assert;
-
-import org.aopalliance.intercept.AttributeRegistry;
 import org.aopalliance.intercept.Invocation;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -45,13 +43,15 @@ import kieker.monitoring.probe.spring.executions.OperationExecutionMethodInvocat
 import kieker.monitoring.writer.filesystem.AbstractAsyncFSWriter;
 import kieker.monitoring.writer.filesystem.AsyncFsWriter;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * Tests the {@link kieker.monitoring.probe.spring.executions.OperationExecutionMethodInvocationInterceptor}
  * 
  * @author Andre van Hoorn
  * 
  */
-public abstract class AbstractTestSpringMethodInterceptor { // NOPMD (AbstractClassWithoutAbstractMethod)
+public abstract class AbstractTestSpringMethodInterceptor extends AbstractKiekerTest { // NOPMD (AbstractClassWithoutAbstractMethod)
 
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
@@ -253,10 +253,6 @@ public abstract class AbstractTestSpringMethodInterceptor { // NOPMD (AbstractCl
 		}
 
 		public void setArgument(final int arg0, final Object arg1) {
-			throw new UnsupportedOperationException();
-		}
-
-		public AttributeRegistry getAttributeRegistry() {
 			throw new UnsupportedOperationException();
 		}
 

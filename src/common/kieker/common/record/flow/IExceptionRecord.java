@@ -19,9 +19,11 @@ package kieker.common.record.flow;
 /**
  * Interface for all flow records that describe exceptions.
  * 
+ * All exception records have a <code>cause</code> field of type <code>String</code>.
+ * 
  * @author Jan Waller
  */
-public interface IExceptionRecord {
+public interface IExceptionRecord extends IFlowRecord {
 
 	public abstract String getCause();
 }

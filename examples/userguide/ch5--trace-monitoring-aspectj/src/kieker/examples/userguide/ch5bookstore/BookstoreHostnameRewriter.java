@@ -123,11 +123,6 @@ class HostNameRewriterPlugin extends AbstractFilterPlugin {
 		HostNameRewriterPlugin.MONITORING_CTRL.newMonitoringRecord(newExec);
 	}
 
-	@Override
-	protected Configuration getDefaultConfiguration() {
-		return new Configuration();
-	}
-
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

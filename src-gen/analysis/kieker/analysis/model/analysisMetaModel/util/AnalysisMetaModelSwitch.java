@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package kieker.analysis.model.analysisMetaModel.util;
 
@@ -79,6 +75,7 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 			case MIAnalysisMetaModelPackage.PLUGIN: {
 				MIPlugin plugin = (MIPlugin)theEObject;
 				T result = casePlugin(plugin);
+				if (result == null) result = caseAnalysisComponent(plugin);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -112,6 +109,7 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 				MIFilter filter = (MIFilter)theEObject;
 				T result = caseFilter(filter);
 				if (result == null) result = casePlugin(filter);
+				if (result == null) result = caseAnalysisComponent(filter);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -119,12 +117,14 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 				MIReader reader = (MIReader)theEObject;
 				T result = caseReader(reader);
 				if (result == null) result = casePlugin(reader);
+				if (result == null) result = caseAnalysisComponent(reader);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case MIAnalysisMetaModelPackage.REPOSITORY: {
 				MIRepository repository = (MIRepository)theEObject;
 				T result = caseRepository(repository);
+				if (result == null) result = caseAnalysisComponent(repository);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -155,6 +155,12 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 			case MIAnalysisMetaModelPackage.DISPLAY_CONNECTOR: {
 				MIDisplayConnector displayConnector = (MIDisplayConnector)theEObject;
 				T result = caseDisplayConnector(displayConnector);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT: {
+				MIAnalysisComponent analysisComponent = (MIAnalysisComponent)theEObject;
+				T result = caseAnalysisComponent(analysisComponent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -369,6 +375,21 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseDisplayConnector(MIDisplayConnector object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Analysis Component</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Analysis Component</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAnalysisComponent(MIAnalysisComponent object) {
 		return null;
 	}
 
