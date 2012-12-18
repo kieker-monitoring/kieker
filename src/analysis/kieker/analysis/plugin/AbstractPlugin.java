@@ -31,7 +31,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import kieker.analysis.AnalysisController;
+import kieker.analysis.IProjectContext;
+import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.display.annotation.Display;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
@@ -52,23 +53,15 @@ import kieker.common.logging.LogFactory;
  * @author Nils Christian Ehmke, Jan Waller
  */
 @Plugin
-public abstract class AbstractPlugin implements IPlugin {
-
-	public static final String CONFIG_NAME = "name-hiddenAndNeverExportedProperty";
+public abstract class AbstractPlugin extends AbstractAnalysisComponent implements IPlugin {
 
 	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
-
-	protected final Configuration configuration;
-	// This is the "parent", the containing analysis controller. Currently it will be set via reflection to avoid that other objects can access this field. Is is
-	// possible that this will be changed later.
-	private AnalysisController parent;
 
 	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<PluginInputPortReference>> registeredMethods;
 	private final ConcurrentHashMap<String, AbstractRepository> registeredRepositories;
 	private final Map<String, RepositoryPort> repositoryPorts;
 	private final Map<String, OutputPort> outputPorts;
 	private final Map<String, InputPort> inputPorts;
-	private final String name;
 
 	// Shutdown mechanism
 	private final List<AbstractPlugin> incomingPlugins;
@@ -77,22 +70,33 @@ public abstract class AbstractPlugin implements IPlugin {
 
 	/**
 	 * Each Plugin requires a constructor with a single Configuration object and an array of repositories!
+	 * 
+	 * @param configuration
+	 *            The configuration for this repository.
+	 * @deprecated
 	 */
+	@Deprecated
 	public AbstractPlugin(final Configuration configuration) {
-		try {
-			// TODO: somewhat dirty hack...
-			configuration.setDefaultConfiguration(this.getDefaultConfiguration());
-		} catch (final IllegalAccessException ex) {
-			LOG.error("Unable to set plugin default properties", ex);
-		}
-		this.configuration = configuration;
+		this(configuration, null);
+	}
 
-		/* try to determine name */
-		this.name = configuration.getStringProperty(CONFIG_NAME);
+	/**
+	 * The second "default constructor".
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component. The component will <b>not</b> be registered.
+	 * 
+	 * @since 1.7
+	 */
+	public AbstractPlugin(final Configuration configuration, final IProjectContext context) {
+		// Registering will happen in the subclass
+		super(configuration, context);
 
-		/* KEEP IN MIND: Although we use "this" in the following code, it points to the actual class. Not to AbstractPlugin!! */
+		// KEEP IN MIND: Although we use "this" in the following code, it points to the actual class. Not to AbstractPlugin!!
 
-		/* Get all repository and output ports. */
+		// Get all repository and output ports.
 		this.repositoryPorts = new ConcurrentHashMap<String, RepositoryPort>();
 		this.outputPorts = new ConcurrentHashMap<String, OutputPort>();
 		final Plugin annotation = this.getClass().getAnnotation(Plugin.class);
@@ -358,7 +362,8 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * 
 	 * @return The default properties.
 	 */
-	private final Configuration getDefaultConfiguration() {
+	@Override
+	protected final Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
 		// Get the annotation from the class
 		final Plugin pluginAnnotation = this.getClass().getAnnotation(Plugin.class);
@@ -368,24 +373,6 @@ public abstract class AbstractPlugin implements IPlugin {
 			defaultConfiguration.setProperty(property.name(), property.defaultValue());
 		}
 		return defaultConfiguration;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getGlobalConfiguration()
-	 */
-	public final Configuration getGlobalConfiguration() {
-		return this.parent.getGlobalConfiguration();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getName()
-	 */
-	public final String getName() {
-		return this.name;
 	}
 
 	/*

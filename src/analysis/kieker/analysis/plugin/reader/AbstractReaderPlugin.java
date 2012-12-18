@@ -16,6 +16,9 @@
 
 package kieker.analysis.plugin.reader;
 
+import kieker.analysis.AnalysisController;
+import kieker.analysis.IProjectContext;
+import kieker.analysis.exception.InvalidProjectContextException;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
@@ -33,9 +36,32 @@ public abstract class AbstractReaderPlugin extends AbstractPlugin implements IRe
 	 * 
 	 * @param configuration
 	 *            The configuration which should be used to initialize the object.
+	 * @deprecated
 	 */
+	@Deprecated
 	public AbstractReaderPlugin(final Configuration configuration) {
 		super(configuration);
+	}
+
+	/**
+	 * The second "default constructor".
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component. The component will be registered.
+	 * 
+	 * @since 1.7
+	 */
+	public AbstractReaderPlugin(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
+		// Register the reader
+		if (projectContext instanceof AnalysisController) {
+			((AnalysisController) projectContext).registerReader(this);
+		} else {
+			throw new InvalidProjectContextException("Invalid analysis controller in constructor");
+		}
 	}
 
 	public boolean init() { // NOPMD (default implementation)

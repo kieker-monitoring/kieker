@@ -14,27 +14,22 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.repository;
-
-import kieker.analysis.analysisComponent.IAnalysisComponent;
+package kieker.analysis.exception;
 
 /**
- * @author Andre van Hoorn, Nils Christian Ehmke, Jan Waller
+ * @author Nils Christian Ehmke
+ * 
+ * @since 1.7
  */
-public interface IRepository extends IAnalysisComponent {
+public class InvalidProjectContextException extends RuntimeException {
 
-	/**
-	 * This method delivers the repository name of this repository type. The name should be unique, e.g., the classname.
-	 * 
-	 * @return The name of the repository type.
-	 */
-	public abstract String getRepositoryName();
+	private static final long serialVersionUID = 2392057148925416274L;
 
-	/**
-	 * This method delivers the description of this repository type.
-	 * 
-	 * @return The description of the repository type.
-	 */
-	public abstract String getRepositoryDescription();
+	public InvalidProjectContextException(final String message, final Throwable cause) {
+		super(message, cause);
+	}
 
+	public InvalidProjectContextException(final String message) {
+		super(message);
+	}
 }

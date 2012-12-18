@@ -16,39 +16,49 @@
 
 package kieker.analysis.repository;
 
+import kieker.analysis.AnalysisController;
+import kieker.analysis.IProjectContext;
+import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
+import kieker.analysis.exception.InvalidProjectContextException;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.repository.annotation.Repository;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
 /**
  * @author Nils Christian Ehmke?
  */
 @Repository
-public abstract class AbstractRepository implements IRepository {
-
-	public static final String CONFIG_NAME = "name-hiddenAndNeverExportedProperty";
-
-	private static final Log LOG = LogFactory.getLog(AbstractRepository.class);
-	protected final Configuration configuration;
-
-	private final String name;
+public abstract class AbstractRepository extends AbstractAnalysisComponent implements IRepository {
 
 	/**
 	 * Each Repository requires a constructor with a single Configuration object!
+	 * 
+	 * @param configuration
+	 *            The configuration for this repository.
 	 */
 	public AbstractRepository(final Configuration configuration) {
-		try {
-			// TODO: somewhat dirty hack...
-			configuration.setDefaultConfiguration(this.getDefaultConfiguration());
-		} catch (final IllegalAccessException ex) {
-			LOG.error("Unable to set repository default properties"); // ok to ignore ex here
-		}
-		this.configuration = configuration;
+		super(configuration);
+	}
 
-		/* try to determine name */
-		this.name = configuration.getStringProperty(CONFIG_NAME);
+	/**
+	 * The second "default constructor".
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component. The component will be registered.
+	 * 
+	 * @since 1.7
+	 */
+	public AbstractRepository(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
+		// Register the repository
+		if (projectContext instanceof AnalysisController) {
+			((AnalysisController) projectContext).registerRepository(this);
+		} else {
+			throw new InvalidProjectContextException("Invalid analysis controller in constructor");
+		}
 	}
 
 	/**
@@ -56,6 +66,7 @@ public abstract class AbstractRepository implements IRepository {
 	 * 
 	 * @return The default properties.
 	 */
+	@Override
 	protected final Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
 		// Get the annotation from the class
@@ -89,14 +100,5 @@ public abstract class AbstractRepository implements IRepository {
 	 */
 	public final String getRepositoryDescription() {
 		return this.getClass().getAnnotation(Repository.class).description();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.repository.IRepository#getCurrentConfiguration()
-	 */
-	public final String getName() {
-		return this.name;
 	}
 }

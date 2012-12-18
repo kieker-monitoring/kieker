@@ -19,6 +19,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
+import kieker.analysis.analysisComponent.IAnalysisComponent;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
@@ -26,7 +27,7 @@ import kieker.common.configuration.Configuration;
 /**
  * @author Nils Christian Ehmke, Jan Waller
  */
-public interface IPlugin {
+public interface IPlugin extends IAnalysisComponent {
 
 	/**
 	 * Initiates the start of a component.
@@ -47,13 +48,6 @@ public interface IPlugin {
 	 * methods, e.g., read for readers.
 	 */
 	public void terminate(final boolean error);
-
-	/**
-	 * This method can be used to receive the global configuration for the analysis or in other words: The configuration of the analysis controller.
-	 * 
-	 * @return The configuration for the current analysis.
-	 */
-	public Configuration getGlobalConfiguration();
 
 	/**
 	 * This method should deliver a {@code Configuration} object containing the current configuration of this instance. In other words: The constructor should be

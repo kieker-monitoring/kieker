@@ -18,8 +18,6 @@ package kieker.analysis;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -75,7 +73,8 @@ import kieker.common.logging.LogFactory;
  * 
  * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke, Jan Waller
  */
-public final class AnalysisController { // NOPMD (really long class)
+public final class AnalysisController implements IAnalysisController { // NOPMD (really long class)
+
 	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
 
 	private final String projectName;
@@ -206,22 +205,19 @@ public final class AnalysisController { // NOPMD (really long class)
 		}
 	}
 
-	/**
-	 * Registers the given instance as a new state observer. All instances are informed when the state (Running, Terminated etc) changes and get the new state as
-	 * an object.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param stateObserver
-	 *            The observer to be registered.
+	 * @see kieker.analysis.IAnalysisController#registerStateObserver(kieker.analysis.AnalysisController.IStateObserver)
 	 */
 	public final void registerStateObserver(final IStateObserver stateObserver) {
 		this.stateObservers.add(stateObserver);
 	}
 
-	/**
-	 * Unregisters the given instance from the state observers.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param stateObserver
-	 *            The observer to be unregistered.
+	 * @see kieker.analysis.IAnalysisController#unregisterStateObserver(kieker.analysis.AnalysisController.IStateObserver)
 	 */
 	public final void unregisterStateObserver(final IStateObserver stateObserver) {
 		this.stateObservers.remove(stateObserver);
@@ -239,13 +235,13 @@ public final class AnalysisController { // NOPMD (really long class)
 		}
 	}
 
-	/**
-	 * Delivers the current configuration of the analysis.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return The configuration containing global properties.
+	 * @see kieker.analysis.IAnalysisController#getProperty(java.lang.String)
 	 */
-	public Configuration getGlobalConfiguration() {
-		return new Configuration();
+	public final String getProperty(final String key) {
+		return null;
 	}
 
 	/**
@@ -397,58 +393,31 @@ public final class AnalysisController { // NOPMD (really long class)
 		}
 	}
 
-	/**
-	 * This method can be used to store the current configuration of this analysis controller in a specified file.
-	 * The file can later be used to initialize the analysis controller.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @see AnalysisController#saveToFile(String)
-	 * 
-	 * @param file
-	 *            The file in which the configuration will be stored.
-	 * @throws IOException
-	 *             If an exception during the storage occurred.
-	 * @throws AnalysisConfigurationException
-	 *             If the current configuration is somehow invalid.
+	 * @see kieker.analysis.IAnalysisController#saveToFile(java.io.File)
 	 */
 	public final void saveToFile(final File file) throws IOException, AnalysisConfigurationException {
 		final MIProject mProject = this.getCurrentConfiguration();
 		AnalysisController.saveToFile(file, mProject);
 	}
 
-	/**
-	 * This method can be used to store the current configuration of this analysis controller in a specified file. It is just a convenient method which does the same
-	 * as {@code AnalysisController.saveToFile(new File(pathname))}.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @see AnalysisController#saveToFile(File)
-	 * 
-	 * @param pathname
-	 *            The pathname of the file in which the configuration will be stored.
-	 * @throws IOException
-	 *             If an exception during the storage occurred.
-	 * @throws AnalysisConfigurationException
-	 *             If the current configuration is somehow invalid.
+	 * @see kieker.analysis.IAnalysisController#saveToFile(java.lang.String)
 	 */
 	public final void saveToFile(final String pathname) throws IOException, AnalysisConfigurationException {
 		this.saveToFile(new File(pathname));
 	}
 
-	/**
-	 * This method should be used to connect two plugins. The plugins have to be registered within this controller instance.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param src
-	 *            The source plugin.
-	 * @param outputPortName
-	 *            The output port of the source plugin.
-	 * @param dst
-	 *            The destination plugin.
-	 * @param inputPortName
-	 *            The input port of the destination port.
-	 * @throws IllegalStateException
-	 *             If this instance has already been started or has already been terminated.
-	 * @throws AnalysisConfigurationException
-	 *             If the port names or the given plugins are invalid or not compatible.
+	 * @see kieker.analysis.IAnalysisController#connect(AbstractPlugin, String, AbstractPlugin, String)
 	 */
-	public void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName)
+	public final void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName)
 			throws IllegalStateException, AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect readers and filters after starting analysis.");
@@ -471,21 +440,12 @@ public final class AnalysisController { // NOPMD (really long class)
 		AbstractPlugin.connect(src, outputPortName, dst, inputPortName); // throws AnalysisConfigurationException
 	}
 
-	/**
-	 * Connects the given repository to this plugin via the given name.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param plugin
-	 *            The plugin to be connected.
-	 * @param repositoryPort
-	 *            The name of the port to connect the repository.
-	 * @param repository
-	 *            The repository which should be used.
-	 * @throws IllegalStateException
-	 *             If this instance has already been started or has already been terminated.
-	 * @throws AnalysisConfigurationException
-	 *             If the port names or the given objects are invalid or not compatible.
+	 * @see kieker.analysis.IAnalysisController#connect(kieker.analysis.plugin.AbstractPlugin, java.lang.String, kieker.analysis.repository.AbstractRepository)
 	 */
-	public void connect(final AbstractPlugin plugin, final String repositoryPort, final AbstractRepository repository) throws IllegalStateException,
+	public final void connect(final AbstractPlugin plugin, final String repositoryPort, final AbstractRepository repository) throws IllegalStateException,
 			AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect repositories after starting analysis.");
@@ -517,12 +477,10 @@ public final class AnalysisController { // NOPMD (really long class)
 		return properties;
 	}
 
-	/**
-	 * This method delivers the current configuration of this instance as an instance of <code>MIProject</code>.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return A filled meta model instance.
-	 * @throws AnalysisConfigurationException
-	 *             If the current configuration is somehow invalid.
+	 * @see kieker.analysis.IProjectContext#getCurrentConfiguration()
 	 */
 	public final MIProject getCurrentConfiguration() throws AnalysisConfigurationException {
 		try {
@@ -619,16 +577,10 @@ public final class AnalysisController { // NOPMD (really long class)
 		}
 	}
 
-	/**
-	 * Starts an {@link AnalysisController} instance.
-	 * The method returns after all configured readers finished reading and all analysis plug-ins terminated
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * On errors during the initialization, Exceptions are thrown.
-	 * 
-	 * @throws IllegalStateException
-	 *             If the current instance has already been started or already been terminated.
-	 * @throws AnalysisConfigurationException
-	 *             If plugins with mandatory repositories have not been connected properly or couldn't be initialized.
+	 * @see kieker.analysis.IAnalysisController#run()
 	 */
 	public final void run() throws IllegalStateException, AnalysisConfigurationException {
 		synchronized (this) {
@@ -704,18 +656,19 @@ public final class AnalysisController { // NOPMD (really long class)
 		}
 	}
 
-	/**
-	 * Initiates a termination of the analysis.
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.IAnalysisController#terminate()
 	 */
 	public final void terminate() {
 		this.terminate(false);
 	}
 
-	/**
-	 * Initiates a termination of the analysis.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param error
-	 *            Determines whether this is a normal termination or an termination due to an error during the analysis.
+	 * @see kieker.analysis.IAnalysisController#terminate(boolean)
 	 */
 	public final void terminate(final boolean error) {
 		synchronized (this) {
@@ -740,35 +693,10 @@ public final class AnalysisController { // NOPMD (really long class)
 		}
 	}
 
-	private void injectParent(final AbstractPlugin plugin) {
-		// TODO Do something better than a warning
-		try {
-			final Field parentField = AbstractPlugin.class.getDeclaredField("parent");
-			java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
-				public Object run() {
-					parentField.setAccessible(true);
-					return null;
-				}
-			});
-			parentField.set(plugin, this);
-		} catch (final NoSuchFieldException e) {
-			LOG.warn("Plugin " + plugin.getName() + " could not be registered.");
-		} catch (final SecurityException e) {
-			LOG.warn("Plugin " + plugin.getName() + " could not be registered.");
-		} catch (final IllegalArgumentException e) {
-			LOG.warn("Plugin " + plugin.getName() + " could not be registered.");
-		} catch (final IllegalAccessException e) {
-			LOG.warn("Plugin " + plugin.getName() + " could not be registered.");
-		}
-	}
-
-	/**
-	 * Registers a log reader used as a source for monitoring records.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param reader
-	 *            The reader to be registered.
-	 * @throws IllegalStateException
-	 *             If the controller is already running or has already been terminated.
+	 * @see kieker.analysis.IAnalysisController#registerReader(kieker.analysis.plugin.reader.AbstractReaderPlugin)
 	 */
 	public final void registerReader(final AbstractReaderPlugin reader) throws IllegalStateException {
 		if (this.state != STATE.READY) {
@@ -780,22 +708,16 @@ public final class AnalysisController { // NOPMD (really long class)
 				return;
 			}
 			this.readers.add(reader);
-			this.injectParent(reader);
 		}
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Registered reader " + reader);
 		}
 	}
 
-	/**
-	 * Registers the passed plugin.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * All plugins which have been registered before calling the <i>run</i>-method, will be started once the analysis is started.
-	 * 
-	 * @param filter
-	 *            The filter to be registered.
-	 * @throws IllegalStateException
-	 *             If the controller is already running or has already been terminated.
+	 * @see kieker.analysis.IAnalysisController#registerFilter(kieker.analysis.plugin.filter.AbstractFilterPlugin)
 	 */
 	public final void registerFilter(final AbstractFilterPlugin filter) throws IllegalStateException {
 		if (this.state != STATE.READY) {
@@ -807,20 +729,16 @@ public final class AnalysisController { // NOPMD (really long class)
 				return;
 			}
 			this.filters.add(filter);
-			this.injectParent(filter);
 		}
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Registered plugin " + filter);
 		}
 	}
 
-	/**
-	 * Registers the passed repository.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param repository
-	 *            The repository to be registered.
-	 * @throws IllegalStateException
-	 *             If the controller is already running or has already been terminated.
+	 * @see kieker.analysis.IAnalysisController#registerRepository(kieker.analysis.repository.AbstractRepository)
 	 */
 	public final void registerRepository(final AbstractRepository repository) throws IllegalStateException {
 		if (this.state != STATE.READY) {
@@ -838,46 +756,46 @@ public final class AnalysisController { // NOPMD (really long class)
 		}
 	}
 
-	/**
-	 * Delivers the current name of the project.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return The current project name.
+	 * @see kieker.analysis.IProjectContext#getProjectName()
 	 */
 	public final String getProjectName() {
 		return this.projectName;
 	}
 
-	/**
-	 * Delivers an unmodifiable collection of all readers.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return All registered readers.
+	 * @see kieker.analysis.IAnalysisController#getReaders()
 	 */
 	public final Collection<AbstractReaderPlugin> getReaders() {
 		return Collections.unmodifiableCollection(this.readers);
 	}
 
-	/**
-	 * Delivers an unmodifiable collection of all filters.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return All registered filters.
+	 * @see kieker.analysis.IAnalysisController#getFilters()
 	 */
 	public final Collection<AbstractFilterPlugin> getFilters() {
 		return Collections.unmodifiableCollection(this.filters);
 	}
 
-	/**
-	 * Delivers an unmodifiable collection of all repositories.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return All registered repositories.
+	 * @see kieker.analysis.IAnalysisController#getRepositories()
 	 */
 	public final Collection<AbstractRepository> getRepositories() {
 		return Collections.unmodifiableCollection(this.repos);
 	}
 
-	/**
-	 * Delivers the current state of the analysis controller.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return The current state.
+	 * @see kieker.analysis.IProjectContext#getState()
 	 */
 	public final STATE getState() {
 		return this.state;
