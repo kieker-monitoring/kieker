@@ -16,6 +16,7 @@
 
 package kieker.tools.currentTimeEventGenerator;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -87,15 +88,34 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	private final long timerResolution;
 
 	/**
-	 * Creates an event generator which generates time events with the given
-	 * resolution in nanoseconds via the output port {@link #OUTPUT_PORT_NAME_CURRENT_TIME_RECORD}.
+	 * Creates an event generator which generates time events with the given resolution in nanoseconds via the output port
+	 * {@link #OUTPUT_PORT_NAME_CURRENT_TIME_RECORD}.
 	 * 
 	 * @param configuration
 	 *            The configuration to be used for this plugin.
+	 * @param projectContext
+	 *            The project context to be used for this plugin.
+	 * 
+	 * @since 1.7
 	 */
-	public CurrentTimeEventGenerationFilter(final Configuration configuration) {
-		super(configuration);
+	public CurrentTimeEventGenerationFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		this.timerResolution = configuration.getLongProperty(CONFIG_PROPERTY_NAME_TIME_RESOLUTION);
+	}
+
+	/**
+	 * Creates an event generator which generates time events with the given resolution in nanoseconds via the output port
+	 * {@link #OUTPUT_PORT_NAME_CURRENT_TIME_RECORD}.
+	 * 
+	 * @param configuration
+	 *            The configuration to be used for this plugin.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public CurrentTimeEventGenerationFilter(final Configuration configuration) {
+		this(configuration, null);
 	}
 
 	@InputPort(name = INPUT_PORT_NAME_NEW_RECORD, eventTypes = { IMonitoringRecord.class },
@@ -140,6 +160,11 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 

@@ -16,6 +16,7 @@
 
 package kieker.tools.traceAnalysis.filter.executionRecordTransformation;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -49,8 +50,31 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 
 	public static final String OUTPUT_PORT_NAME_EXECUTIONS = "transformedExecutions";
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public ExecutionRecordTransformationFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+	}
+
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
 	public ExecutionRecordTransformationFilter(final Configuration configuration) {
-		super(configuration);
+		this(configuration, null);
 	}
 
 	@InputPort(
@@ -67,6 +91,11 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 		return true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		// filter has no configuration properties

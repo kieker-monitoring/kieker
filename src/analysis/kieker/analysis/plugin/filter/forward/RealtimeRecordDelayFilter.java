@@ -19,6 +19,7 @@ package kieker.analysis.plugin.filter.forward;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -78,8 +79,19 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 
 	private volatile long latestSchedulingTime = -1;
 
-	public RealtimeRecordDelayFilter(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public RealtimeRecordDelayFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		this.numWorkers = configuration.getIntProperty(CONFIG_PROPERTY_NAME_NUM_WORKERS);
 		this.shutdownDelay =
 				this.timeunit.convert(this.configuration.getLongProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS), TimeUnit.SECONDS);
@@ -87,6 +99,19 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 		this.executor = new ScheduledThreadPoolExecutor(this.numWorkers);
 		this.executor.setExecuteExistingDelayedTasksAfterShutdownPolicy(true);
 		this.executor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
+	}
+
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public RealtimeRecordDelayFilter(final Configuration configuration) {
+		this(configuration, null);
 	}
 
 	@InputPort(name = INPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Receives the records to be delayed")
@@ -162,6 +187,11 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_NUM_WORKERS, Integer.toString(this.numWorkers));

@@ -19,6 +19,7 @@ package kieker.tools.traceAnalysis.filter.visualization.callTree;
 import java.io.File;
 import java.io.IOException;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -68,12 +69,35 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	private final boolean shortLabels;
 	private int numGraphsSaved; // no need for volatile, only used in synchronized blocks
 
-	public AbstractAggregatedCallTreeFilter(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public AbstractAggregatedCallTreeFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 
 		this.includeWeights = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
 		this.shortLabels = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS);
 		this.dotOutputFile = configuration.getPathProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILENAME);
+	}
+
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public AbstractAggregatedCallTreeFilter(final Configuration configuration) {
+		this(configuration, null);
 	}
 
 	protected void setRoot(final AbstractAggregatedCallTreeNode<T> root) {
@@ -106,7 +130,6 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	 * 
 	 * @param error
 	 */
-
 	@Override
 	public void terminate(final boolean error) {
 		synchronized (this) {
@@ -120,6 +143,11 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));

@@ -19,6 +19,7 @@ package kieker.analysis.plugin.filter.select;
 import java.util.LinkedList;
 import java.util.List;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -57,8 +58,19 @@ public final class TypeFilter extends AbstractFilterPlugin {
 
 	private final Class<?>[] acceptedClasses;
 
-	public TypeFilter(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public TypeFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		final String[] classes = configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_TYPES);
 		final List<Class<?>> listOfClasses = new LinkedList<Class<?>>();
 		for (final String clazz : classes) {
@@ -71,6 +83,24 @@ public final class TypeFilter extends AbstractFilterPlugin {
 		this.acceptedClasses = listOfClasses.toArray(new Class<?>[listOfClasses.size()]);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public TypeFilter(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	 */
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		final String[] acceptedClassesConfig = new String[this.acceptedClasses.length];

@@ -1,3 +1,19 @@
+/***************************************************************************
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.analysis.analysisComponent;
 
 import kieker.analysis.AnalysisController;
@@ -78,22 +94,26 @@ public abstract class AbstractAnalysisComponent {
 	}
 
 	/**
-	 * Sets the project context of this component to a new value. This property can only be set once. Every additional setting will be ignored but logged. <b>Do not
-	 * call this method manually. A component will not be registered just by calling this method. Instead use the register methods of the {@link AnalysisController}.
-	 * </b>
+	 * Sets the project context atomically of this component to a new value. This property can only be set once. Every additional setting will be ignored but logged.
+	 * <b>Do not call this method manually. A component will not be registered just by calling this method. Instead use the register methods of the
+	 * {@link AnalysisController}. </b>
 	 * 
 	 * @param context
 	 *            The new project context of this component.
 	 * 
+	 * @return true iff the project context of this plugin was not null and has been set to the given value.
+	 * 
 	 * @since 1.7
 	 */
 	// TODO Remove this method in 1.8 together with the register methods
-	public final void setProjectContext(final IProjectContext context) {
+	public final boolean setProjectContext(final IProjectContext context) {
 		synchronized (this) {
 			if (this.projectContext == null) {
 				this.projectContext = context;
+				return true;
 			} else {
 				LOG.warn("Project context of component already set.");
+				return false;
 			}
 		}
 	}

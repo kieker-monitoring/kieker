@@ -22,6 +22,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -66,8 +67,19 @@ public class DbReader extends AbstractReaderPlugin {
 
 	private volatile boolean running = true;
 
-	public DbReader(final Configuration configuration) throws Exception {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public DbReader(final Configuration configuration, final IProjectContext projectContext) throws Exception {
+		super(configuration, projectContext);
+
 		this.driverClassname = configuration.getStringProperty(CONFIG_PROPERTY_NAME_DRIVERCLASSNAME);
 		this.connectionString = configuration.getStringProperty(CONFIG_PROPERTY_NAME_CONNECTIONSTRING);
 		this.tablePrefix = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TABLEPREFIX);
@@ -78,6 +90,24 @@ public class DbReader extends AbstractReaderPlugin {
 		}
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public DbReader(final Configuration configuration) throws Exception {
+		this(configuration, null);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.reader.IReaderPlugin#read()
+	 */
 	public boolean read() {
 		Connection connection = null;
 		try {
@@ -154,11 +184,21 @@ public class DbReader extends AbstractReaderPlugin {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#terminate(boolean)
+	 */
 	public void terminate(final boolean error) {
 		LOG.info("Shutdown of DBReader requested.");
 		this.running = false;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_DRIVERCLASSNAME, this.driverClassname);

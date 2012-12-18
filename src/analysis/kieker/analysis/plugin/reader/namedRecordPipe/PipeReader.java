@@ -18,6 +18,7 @@ package kieker.analysis.plugin.reader.namedRecordPipe;
 
 import java.util.concurrent.CountDownLatch;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -31,6 +32,8 @@ import kieker.common.namedRecordPipe.Pipe;
 import kieker.common.record.IMonitoringRecord;
 
 /**
+ * This reader can be used to read records via an in-memory pipe.
+ * 
  * @author Andre van Hoorn
  */
 @Plugin(description = "A reader which reads records via an in-memory pipe",
@@ -63,15 +66,18 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
 
 	/**
-	 * Creates a new instance of this class using the given parameter.
+	 * Creates a new instance of this class using the given parameters.
 	 * 
 	 * @param configuration
-	 *            The configuration used to load the pipe name. It <b>must</b> contain the property {@link #CONFIG_PROPERTY_NAME_PIPENAME}.
-	 * @throws IllegalArgumentException
-	 *             If the pipe name was invalid.
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
 	 */
-	public PipeReader(final Configuration configuration) throws IllegalArgumentException {
-		super(configuration);
+	public PipeReader(final Configuration configuation, final IProjectContext projectContext) {
+		super(configuation, projectContext);
+
 		final String pipeNameConfig = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_PIPENAME);
 
 		this.pipeName = pipeNameConfig;
@@ -88,9 +94,23 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	}
 
 	/**
+	 * Creates a new instance of this class using the given parameter.
+	 * 
+	 * @param configuration
+	 *            The configuration used to load the pipe name. It <b>must</b> contain the property {@link #CONFIG_PROPERTY_NAME_PIPENAME}.
+	 * @throws IllegalArgumentException
+	 *             If the pipe name was invalid.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public PipeReader(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/**
 	 * Blocks until the associated pipe is being closed.
 	 */
-
 	public boolean read() {
 		// No need to initialize since we receive asynchronously
 		try {
@@ -112,6 +132,11 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 		this.terminationLatch.countDown();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#terminate(boolean)
+	 */
 	public void terminate(final boolean error) {
 		// will lead to notifyPipeClosed() and the subsequent termination of read()
 		if (this.pipe != null) {
@@ -119,6 +144,11 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);
 

@@ -16,6 +16,7 @@
 
 package kieker.tools.traceAnalysis.filter.executionFilter;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -43,8 +44,31 @@ public class TraceIdFilter extends AbstractTraceIdFilter {
 	public static final String CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES = "selectedAll";
 	public static final String CONFIG_PROPERTY_NAME_SELECTED_TRACES = "selectedTraces";
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public TraceIdFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+	}
+
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
 	public TraceIdFilter(final Configuration configuration) {
-		super(configuration);
+		this(configuration, null);
 	}
 
 	@InputPort(name = INPUT_PORT_NAME_EXECUTION, description = "Receives execution events to be selected by trace ID", eventTypes = { Execution.class })

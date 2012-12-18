@@ -59,7 +59,7 @@ public abstract class AbstractReaderPlugin extends AbstractPlugin implements IRe
 		// Register the reader
 		if (projectContext instanceof AnalysisController) {
 			((AnalysisController) projectContext).registerReader(this);
-		} else {
+		} else if (projectContext != null) {
 			throw new InvalidProjectContextException("Invalid analysis controller in constructor");
 		}
 	}

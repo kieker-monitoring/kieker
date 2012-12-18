@@ -19,6 +19,7 @@ package kieker.tools.traceAnalysis.filter;
 import java.util.Set;
 import java.util.TreeSet;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
@@ -34,13 +35,33 @@ public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 	private final Set<Long> selectedTraceIds;
 
 	/**
+	 * Creates a new instance of this class using the given parameters.
 	 * 
 	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
 	 */
-	public AbstractTraceIdFilter(final Configuration configuration) {
-		super(configuration);
+	public AbstractTraceIdFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		this.selectedTraceIds = AbstractTraceIdFilter.extractIDsFromConfiguration(configuration, this.getConfigurationPropertySelectAllTraces(),
 				this.getConfigurationPropertySelectedTraces());
+	}
+
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public AbstractTraceIdFilter(final Configuration configuration) {
+		this(configuration, null);
 	}
 
 	/**

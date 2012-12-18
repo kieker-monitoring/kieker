@@ -19,6 +19,7 @@ package kieker.tools.traceAnalysis.filter.systemModel;
 import java.io.File;
 import java.io.IOException;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
@@ -58,17 +59,51 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 
 	private final String outputFnHTML;
 
-	public SystemModel2FileFilter(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public SystemModel2FileFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		this.outputFnHTML = configuration.getPathProperty(CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public SystemModel2FileFilter(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration currentConfiguration = new Configuration();
 		currentConfiguration.setProperty(CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN, this.outputFnHTML);
 		return currentConfiguration;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.filter.AbstractFilterPlugin#terminate(boolean)
+	 */
 	@Override
 	public void terminate(final boolean errorBeforeTermination) {
 		String outputFnHTMLCanonical = this.outputFnHTML; // not yet canonical here

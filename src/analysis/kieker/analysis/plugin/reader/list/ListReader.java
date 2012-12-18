@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -57,12 +58,36 @@ public class ListReader<T> extends AbstractReaderPlugin {
 
 	private final List<T> objects = new CopyOnWriteArrayList<T>();
 
-	public ListReader(final Configuration configuration) {
-		super(configuration);
-		this.awaitTermination = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_AWAIT_TERMINATION);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public ListReader(final Configuration configuation, final IProjectContext projectContext) {
+		super(configuation, projectContext);
+
+		this.awaitTermination = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_AWAIT_TERMINATION);
 		if (!this.awaitTermination) {
 			this.terminationLatch.countDown(); // just to be sure that a call to await() would return immediately
 		}
+	}
+
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public ListReader(final Configuration configuration) {
+		this(configuration, null);
 	}
 
 	public void addAllObjects(final List<T> records) {
@@ -73,6 +98,11 @@ public class ListReader<T> extends AbstractReaderPlugin {
 		this.objects.add(object);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.reader.IReaderPlugin#read()
+	 */
 	public boolean read() {
 		for (final T obj : this.objects) {
 			super.deliver(ListReader.OUTPUT_PORT_NAME, obj);
@@ -90,10 +120,20 @@ public class ListReader<T> extends AbstractReaderPlugin {
 		return true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#terminate(boolean)
+	 */
 	public void terminate(final boolean error) {
 		this.terminationLatch.countDown();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.toString(this.awaitTermination));

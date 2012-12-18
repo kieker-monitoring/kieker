@@ -16,6 +16,7 @@
 
 package kieker.tools.traceAnalysis.filter.executionFilter;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -50,14 +51,31 @@ public class TimestampFilter extends AbstractTimestampFilter {
 	public static final String CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP = "ignoreExecutionsAfterTimestamp";
 
 	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public TimestampFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+	}
+
+	/**
 	 * Creates a new instance of the class {@link TimestampFilter} with the given parameters.
 	 * 
 	 * @param configuration
 	 *            The configuration used to initialize this instance. It should
 	 *            contain the properties for the minimum and maximum timestamp.
+	 * 
+	 * @deprecated
 	 */
+	@Deprecated
 	public TimestampFilter(final Configuration configuration) {
-		super(configuration);
+		this(configuration, null);
 	}
 
 	@InputPort(name = INPUT_PORT_NAME_EXECUTION, description = "Receives executions to be selected by their logging timestamps", eventTypes = { Execution.class })

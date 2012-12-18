@@ -19,6 +19,7 @@ package kieker.analysis.plugin.filter.forward;
 import java.lang.ref.SoftReference;
 import java.util.concurrent.locks.ReentrantLock;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -70,8 +71,19 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 	 */
 	private final Segment[] segments;
 
-	public StringBufferFilter(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public StringBufferFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		// Find power-of-two sizes best matching arguments
 		int sshift = 0;
 		int ssize = 1;
@@ -93,6 +105,20 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 		for (int i = 0; i < this.segments.length; ++i) {
 			this.segments[i] = new Segment(cap, LOAD_FACTOR);
 		}
+	}
+
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public StringBufferFilter(final Configuration configuration) {
+		this(configuration, null);
+
 	}
 
 	public final Configuration getCurrentConfiguration() {

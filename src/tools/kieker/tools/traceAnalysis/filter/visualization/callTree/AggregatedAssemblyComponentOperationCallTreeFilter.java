@@ -16,6 +16,7 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.callTree;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
@@ -42,10 +43,38 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
 // TODO: don't we have to redefine the configuration properties from the super class here?
 public class AggregatedAssemblyComponentOperationCallTreeFilter extends AbstractAggregatedCallTreeFilter<AssemblyComponentOperationPair> {
 
-	public AggregatedAssemblyComponentOperationCallTreeFilter(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public AggregatedAssemblyComponentOperationCallTreeFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public AggregatedAssemblyComponentOperationCallTreeFilter(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.filter.AbstractFilterPlugin#init()
+	 */
 	@Override
 	public boolean init() {
 		final boolean success = super.init();

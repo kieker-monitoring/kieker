@@ -32,6 +32,7 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -42,6 +43,7 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 
 /**
+ * This is a reader which reads the records from a JMX queue.
  * 
  * @author Jan Waller
  */
@@ -85,8 +87,22 @@ public final class JMXReader extends AbstractReaderPlugin {
 	private final int port;
 	private final String server;
 
-	public JMXReader(final Configuration configuation) throws IllegalArgumentException {
-		super(configuation);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @throws IllegalArgumentException
+	 *             If the arguments are invalid.
+	 * 
+	 * @since 1.7
+	 */
+	public JMXReader(final Configuration configuation, final IProjectContext projectContext) throws IllegalArgumentException {
+		super(configuation, projectContext);
+
 		this.server = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_SERVER);
 		this.port = this.configuration.getIntProperty(CONFIG_PROPERTY_NAME_PORT);
 		final String tmpServiceURL;
@@ -111,11 +127,37 @@ public final class JMXReader extends AbstractReaderPlugin {
 		this.silentreconnect = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SILENT);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @throws IllegalArgumentException
+	 *             If the arguments are invalid.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public JMXReader(final Configuration configuation) throws IllegalArgumentException {
+		this(configuation, null);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#terminate(boolean)
+	 */
 	public void terminate(final boolean error) {
 		LOG.info("Shutdown of JMXReader requested.");
 		this.unblock();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.reader.IReaderPlugin#read()
+	 */
 	public final boolean read() {
 		if (this.silentreconnect) {
 			return this.read2();
@@ -258,6 +300,11 @@ public final class JMXReader extends AbstractReaderPlugin {
 		this.cdLatch.countDown();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 

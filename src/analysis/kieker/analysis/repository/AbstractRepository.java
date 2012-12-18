@@ -35,7 +35,10 @@ public abstract class AbstractRepository extends AbstractAnalysisComponent imple
 	 * 
 	 * @param configuration
 	 *            The configuration for this repository.
+	 * 
+	 * @deprecated
 	 */
+	@Deprecated
 	public AbstractRepository(final Configuration configuration) {
 		super(configuration);
 	}

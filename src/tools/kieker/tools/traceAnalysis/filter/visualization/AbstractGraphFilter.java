@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
@@ -68,11 +69,28 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 	 * 
 	 * @param configuration
 	 *            The filter configuration to use
+	 * @param projectContext
+	 *            The project context to use.
+	 * 
+	 * @since 1.7
 	 */
-	public AbstractGraphFilter(final Configuration configuration) {
-		super(configuration);
+	public AbstractGraphFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 
 		this.configuration = configuration;
+	}
+
+	/**
+	 * Creates a new filter with the given configuration;
+	 * 
+	 * @param configuration
+	 *            The filter configuration to use
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public AbstractGraphFilter(final Configuration configuration) {
+		this(configuration, null);
 	}
 
 	@Override
