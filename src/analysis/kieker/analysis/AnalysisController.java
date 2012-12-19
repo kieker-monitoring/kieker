@@ -44,6 +44,7 @@ import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 
+import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.model.analysisMetaModel.MIDependency;
 import kieker.analysis.model.analysisMetaModel.MIFilter;
@@ -283,7 +284,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			// Extract the necessary informations to create the plugin.
 			final Configuration configuration = AnalysisController.modelPropertiesToConfiguration(mPlugin.getProperties());
 			final String pluginClassname = mPlugin.getClassname();
-			configuration.setProperty(AbstractPlugin.CONFIG_NAME, mPlugin.getName());
+			configuration.setProperty(AbstractAnalysisComponent.CONFIG_NAME, mPlugin.getName());
 			// Create the plugin and put it into our map. */
 			final AbstractPlugin plugin = AnalysisController.createAndInitialize(AbstractPlugin.class, pluginClassname, configuration, classLoader);
 			pluginMap.put(mPlugin, plugin);
@@ -386,7 +387,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		// Run through all used keys in the given configuration.
 		for (final Enumeration<?> e = configuration.propertyNames(); e.hasMoreElements();) {
 			final String key = (String) e.nextElement();
-			if (!possibleKeys.contains(key) && !(key.equals(AbstractPlugin.CONFIG_NAME))) {
+			if (!possibleKeys.contains(key) && !(key.equals(AbstractAnalysisComponent.CONFIG_NAME))) {
 				// Found an invalid key.
 				throw new AnalysisConfigurationException("Invalid property of '" + plugin.getName() + "' (" + plugin.getPluginName() + ") found: '" + key + "'.");
 			}
@@ -702,11 +703,17 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register filter after starting analysis.");
 		}
+		// Try to register the current analysis controller for the given component
+		if (!reader.setProjectContext(this)) {
+			// Seems like it failed
+			LOG.warn("Reader " + reader.getName() + " already registered with other AnalysisController.");
+			return;
+		}
+		if (this.readers.contains(reader)) {
+			LOG.warn("Reader " + reader.getName() + " already registered.");
+			return;
+		}
 		synchronized (this) {
-			if (this.readers.contains(reader)) {
-				LOG.warn("Readers " + reader.getName() + " already registered.");
-				return;
-			}
 			this.readers.add(reader);
 		}
 		if (LOG.isDebugEnabled()) {
@@ -723,11 +730,17 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register filter after starting analysis.");
 		}
+		// Try to register the current analysis controller for the given component
+		if (!filter.setProjectContext(this)) {
+			// Seems like it failed
+			LOG.warn("Filter " + filter.getName() + " already registered with other AnalysisController.");
+			return;
+		}
+		if (this.filters.contains(filter)) {
+			LOG.warn("Filter '" + filter.getName() + "' (" + filter.getPluginName() + ") already registered.");
+			return;
+		}
 		synchronized (this) {
-			if (this.filters.contains(filter)) {
-				LOG.warn("Filter '" + filter.getName() + "' (" + filter.getPluginName() + ") already registered.");
-				return;
-			}
 			this.filters.add(filter);
 		}
 		if (LOG.isDebugEnabled()) {
@@ -744,11 +757,17 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register respository after starting analysis.");
 		}
+		// Try to register the current analysis controller for the given component
+		if (!repository.setProjectContext(this)) {
+			// Seems like it failed
+			LOG.warn("Repository " + repository.getName() + "' (" + repository.getRepositoryName() + ") already registered with other AnalysisController.");
+			return;
+		}
+		if (this.repos.contains(repository)) {
+			LOG.warn("Repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ") already registered.");
+			return;
+		}
 		synchronized (this) {
-			if (this.repos.contains(repository)) {
-				LOG.warn("Repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ") already registered.");
-				return;
-			}
 			this.repos.add(repository);
 		}
 		if (LOG.isDebugEnabled()) {

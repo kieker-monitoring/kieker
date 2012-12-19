@@ -17,6 +17,7 @@
 package kieker.examples.userguide.appendixSigar;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IProjectContext;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -39,23 +40,21 @@ public final class AnalysisStarter {
 			System.exit(1);
 		}
 
-		/* Create Kieker.Analysis instance */
+		// Create Kieker.Analysis instance
 		final AnalysisController analysisInstance = new AnalysisController();
-		/* Create a register our own consumer */
-		final StdOutDumpConsumer consumer = new StdOutDumpConsumer(new Configuration());
-		analysisInstance.registerFilter(consumer);
+		// Create and register our own consumer
+		final StdOutDumpConsumer consumer = new StdOutDumpConsumer(new Configuration(), analysisInstance);
 
-		/* Set filesystem monitoring log input directory for our analysis */
+		// Set filesystem monitoring log input directory for our analysis
 		final Configuration readerConfiguration = new Configuration();
 		final String[] inputDirs = { args[0] };
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(inputDirs));
-		final FSReader fsReader = new FSReader(readerConfiguration);
-		analysisInstance.registerReader(fsReader);
+		final FSReader fsReader = new FSReader(readerConfiguration, analysisInstance);
 
 		try {
-			/* Connect both components. */
+			// Connect both components.
 			analysisInstance.connect(fsReader, FSReader.OUTPUT_PORT_NAME_RECORDS, consumer, StdOutDumpConsumer.INPUT_PORT_NAME);
-			/* Start the analysis */
+			// Start the analysis
 			analysisInstance.run();
 		} catch (final AnalysisConfigurationException e) {
 			e.printStackTrace();
@@ -67,8 +66,31 @@ public final class AnalysisStarter {
 class StdOutDumpConsumer extends AbstractFilterPlugin {
 	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public StdOutDumpConsumer(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+	}
+
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
 	public StdOutDumpConsumer(final Configuration configuration) {
-		super(configuration);
+		this(configuration, null);
 	}
 
 	@InputPort(
@@ -108,6 +130,11 @@ class StdOutDumpConsumer extends AbstractFilterPlugin {
 		} // else Unexpected record type
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	 */
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

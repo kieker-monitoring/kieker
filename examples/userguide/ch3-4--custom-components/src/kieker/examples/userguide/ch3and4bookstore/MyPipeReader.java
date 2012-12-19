@@ -16,6 +16,7 @@
 
 package kieker.examples.userguide.ch3and4bookstore;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -26,6 +27,11 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 
+/**
+ * The class {@link MyPipeReader} uses a registered and configured in-memory pipe to receive monitoring records.
+ * 
+ * @author Nils Christian Ehmke
+ */
 @Plugin(
 		name = "Pipe reader",
 		description = "Reads records from a configured pipe",
@@ -48,11 +54,20 @@ public class MyPipeReader extends AbstractReaderPlugin {
 	private final String pipeName;
 	private volatile MyPipe pipe;
 
-	public MyPipeReader(final Configuration config) {
-		super(config);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public MyPipeReader(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 
-		this.pipeName =
-				config.getStringProperty(MyPipeReader.CONFIG_PROPERTY_NAME_PIPE_NAME);
+		this.pipeName = configuration.getStringProperty(MyPipeReader.CONFIG_PROPERTY_NAME_PIPE_NAME);
 
 		try {
 			this.pipe = MyNamedPipeManager.getInstance().acquirePipe(this.pipeName);
@@ -61,6 +76,23 @@ public class MyPipeReader extends AbstractReaderPlugin {
 		}
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param config
+	 *            The configuration for this component.
+	 * @deprecated
+	 */
+	@Deprecated
+	public MyPipeReader(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.reader.IReaderPlugin#read()
+	 */
 	public boolean read() {
 		try {
 			/* Wait max. 4 seconds for the next data. */
@@ -82,6 +114,11 @@ public class MyPipeReader extends AbstractReaderPlugin {
 		return true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);
 
@@ -90,6 +127,11 @@ public class MyPipeReader extends AbstractReaderPlugin {
 		return configuration;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#terminate(boolean)
+	 */
 	public void terminate(final boolean error) {
 		// nothing to do
 	}

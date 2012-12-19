@@ -29,6 +29,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
+import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
@@ -124,10 +125,10 @@ class ListReplayer extends AbstractLogReplayer { // NOPMD
 	}
 
 	@Override
-	protected AbstractReaderPlugin createReader() {
+	protected AbstractReaderPlugin createReader(final AnalysisController analysisController) {
 		final Configuration listReaderConfig = new Configuration();
 		listReaderConfig.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.toString(Boolean.FALSE));
-		final ListReader<IMonitoringRecord> listReader = new ListReader<IMonitoringRecord>(listReaderConfig);
+		final ListReader<IMonitoringRecord> listReader = new ListReader<IMonitoringRecord>(listReaderConfig, analysisController);
 		listReader.addAllObjects(this.replayList);
 		return listReader;
 	}

@@ -16,6 +16,7 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -51,12 +52,34 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 	 * Creates a new filter using the given configuration.
 	 * 
 	 * @param configuration
-	 *            The configuration to use
+	 *            The configuration to use.
+	 * @param projectContext
+	 *            The project context to use.
+	 * 
+	 * @since 1.7
 	 */
-	public ComponentDependencyGraphAllocationFilter(final Configuration configuration) {
-		super(configuration, new ComponentAllocationDependencyGraph(AllocationRepository.ROOT_ALLOCATION_COMPONENT));
+	public ComponentDependencyGraphAllocationFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext, new ComponentAllocationDependencyGraph(AllocationRepository.ROOT_ALLOCATION_COMPONENT));
 	}
 
+	/**
+	 * Creates a new filter using the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public ComponentDependencyGraphAllocationFilter(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter#inputMessageTraces(kieker.tools.traceAnalysis.systemModel.MessageTrace)
+	 */
 	@Override
 	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Message traces", eventTypes = { MessageTrace.class })
 	public void inputMessageTraces(final MessageTrace t) {
@@ -106,6 +129,11 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 		this.reportSuccess(t.getTraceId());
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter#getConfigurationName()
+	 */
 	@Override
 	public String getConfigurationName() {
 		return CONFIGURATION_NAME;

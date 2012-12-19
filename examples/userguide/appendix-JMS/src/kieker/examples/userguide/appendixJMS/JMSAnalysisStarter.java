@@ -63,12 +63,10 @@ public final class JMSAnalysisStarter {
 		logReaderConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, connectionFactory);
 		logReaderConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_DESTINATION, queue);
 
-		final JMSReader logReader = new JMSReader(logReaderConfiguration);
-		analysisInstance.registerReader(logReader);
+		final JMSReader logReader = new JMSReader(logReaderConfiguration, analysisInstance);
 
-		/* Create and register a simple output writer. */
-		final TeeFilter teeFilter = new TeeFilter(new Configuration());
-		analysisInstance.registerFilter(teeFilter);
+		// Create and register a simple output writer.
+		final TeeFilter teeFilter = new TeeFilter(new Configuration(), analysisInstance);
 
 		try {
 			analysisInstance.connect(logReader, JMSReader.OUTPUT_PORT_NAME_RECORDS, teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);

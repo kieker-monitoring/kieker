@@ -16,6 +16,7 @@
 
 package kieker.examples.userguide.ch3and4bookstore;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -23,6 +24,11 @@ import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
+/**
+ * This filter uses its configuration to filter the incoming response times based on a threshold.
+ * 
+ * @author Nils Christian Ehmke
+ */
 @Plugin(
 		name = "Response time filter",
 		description = "Filters incoming response times based on a threshold",
@@ -44,10 +50,33 @@ public class MyResponseTimeFilter extends AbstractFilterPlugin {
 
 	private final long rtThresholdNanos; // the configured threshold for this filter instance
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public MyResponseTimeFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
+		this.rtThresholdNanos = configuration.getLongProperty(CONFIG_PROPERTY_NAME_TS_NANOS);
+	}
+
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
 	public MyResponseTimeFilter(final Configuration configuration) {
-		super(configuration);
-		this.rtThresholdNanos =
-				configuration.getLongProperty(CONFIG_PROPERTY_NAME_TS_NANOS);
+		this(configuration, null);
 	}
 
 	public static final String INPUT_PORT_NAME_RESPONSE_TIMES = "newResponseTime";
@@ -64,6 +93,11 @@ public class MyResponseTimeFilter extends AbstractFilterPlugin {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_TS_NANOS,
