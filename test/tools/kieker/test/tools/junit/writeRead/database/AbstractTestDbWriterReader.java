@@ -50,15 +50,16 @@ public abstract class AbstractTestDbWriterReader extends AbstractWriterReaderTes
 
 	@Override
 	protected List<IMonitoringRecord> readEvents() throws Exception {
+		final AnalysisController analysisController = new AnalysisController();
+
 		final Configuration dbReaderConfig = new Configuration();
 		dbReaderConfig.setProperty(DbReader.CONFIG_PROPERTY_NAME_DRIVERCLASSNAME, DRIVERCLASSNAME);
 		dbReaderConfig.setProperty(DbReader.CONFIG_PROPERTY_NAME_CONNECTIONSTRING, this.getConnectionString());
 		dbReaderConfig.setProperty(DbReader.CONFIG_PROPERTY_NAME_TABLEPREFIX, TABLEPREFIX);
-		final DbReader dbReader = new DbReader(dbReaderConfig);
-		final ListCollectionFilter<IMonitoringRecord> sinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration());
-		final AnalysisController analysisController = new AnalysisController();
-		analysisController.registerReader(dbReader);
-		analysisController.registerFilter(sinkFilter);
+
+		final DbReader dbReader = new DbReader(dbReaderConfig, analysisController);
+		final ListCollectionFilter<IMonitoringRecord> sinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), analysisController);
+
 		analysisController.connect(dbReader, DbReader.OUTPUT_PORT_NAME_RECORDS, sinkFilter, ListCollectionFilter.INPUT_PORT_NAME);
 		analysisController.run();
 		return sinkFilter.getList();

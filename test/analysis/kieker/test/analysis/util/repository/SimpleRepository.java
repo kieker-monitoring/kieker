@@ -16,11 +16,14 @@
 
 package kieker.test.analysis.util.repository;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.analysis.repository.annotation.Repository;
 import kieker.common.configuration.Configuration;
 
 /**
+ * A simple repository, used only for test purposes.
+ * 
  * @author Nils Christian Ehmke, Jan Waller
  */
 @Repository(programmaticOnly = true, name = SimpleRepository.REPOSITORY_NAME, description = SimpleRepository.REPOSITORY_DESCRIPTION)
@@ -30,10 +33,38 @@ public class SimpleRepository extends AbstractRepository { // NOPMD (SubClassOfT
 
 	public static final String REPOSITORY_DESCRIPTION = "repoDescription-DEYmVN6sEp";
 
-	public SimpleRepository(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this repository.
+	 * @param projectContext
+	 *            The project context for this repository.
+	 * 
+	 * @since 1.7
+	 */
+	public SimpleRepository(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this repository.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public SimpleRepository(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.analysisComponent.IAnalysisComponent#getCurrentConfiguration()
+	 */
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

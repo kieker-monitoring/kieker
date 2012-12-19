@@ -16,6 +16,7 @@
 
 package kieker.test.tools.util.graph;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.common.configuration.Configuration;
@@ -41,9 +42,26 @@ public class GraphReceiverPlugin extends ListCollectionFilter<AbstractGraph<?, ?
 	 * 
 	 * @param configuration
 	 *            The configuration to use
+	 * @param projectContext
+	 *            The project context to use.
+	 * 
+	 * @since 1.7
 	 */
+	public GraphReceiverPlugin(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+	}
+
+	/**
+	 * Creates a new receiver plugin with the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
 	public GraphReceiverPlugin(final Configuration configuration) {
-		super(configuration);
+		this(configuration, null);
 	}
 
 	/**

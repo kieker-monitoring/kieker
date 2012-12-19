@@ -50,30 +50,12 @@ public class MyResponseTimeFilter extends AbstractFilterPlugin {
 
 	private final long rtThresholdNanos; // the configured threshold for this filter instance
 
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * @param projectContext
-	 *            The project context for this component.
-	 * 
-	 * @since 1.7
-	 */
 	public MyResponseTimeFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
 		this.rtThresholdNanos = configuration.getLongProperty(CONFIG_PROPERTY_NAME_TS_NANOS);
 	}
 
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated
-	 */
 	@Deprecated
 	public MyResponseTimeFilter(final Configuration configuration) {
 		this(configuration, null);
@@ -93,11 +75,6 @@ public class MyResponseTimeFilter extends AbstractFilterPlugin {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
-	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_TS_NANOS,

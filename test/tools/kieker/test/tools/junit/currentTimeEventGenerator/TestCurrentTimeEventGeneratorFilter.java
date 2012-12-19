@@ -111,16 +111,15 @@ public class TestCurrentTimeEventGeneratorFilter extends AbstractKiekerTest { //
 	 */
 	private void compareInputAndOutput(final long timerResolution, final long[] inputTimestamps, final long[] expectedOutputTimerEvents, final boolean rawTimestamp)
 			throws IllegalStateException, AnalysisConfigurationException {
-		final ListReader<Object> reader = new ListReader<Object>(new Configuration());
+		final AnalysisController controller = new AnalysisController();
+
+		final ListReader<Object> reader = new ListReader<Object>(new Configuration(), controller);
 		final Configuration filterConfiguration = new Configuration();
 		filterConfiguration.setProperty(CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_NAME_TIME_RESOLUTION, Long.toString(timerResolution));
-		final CurrentTimeEventGenerationFilter filter = new CurrentTimeEventGenerationFilter(filterConfiguration);
+		final CurrentTimeEventGenerationFilter filter = new CurrentTimeEventGenerationFilter(filterConfiguration, controller);
 
-		final ListCollectionFilter<TimestampRecord> sink = new ListCollectionFilter<TimestampRecord>(new Configuration());
-		final AnalysisController controller = new AnalysisController();
-		controller.registerReader(reader);
-		controller.registerFilter(filter);
-		controller.registerFilter(sink);
+		final ListCollectionFilter<TimestampRecord> sink = new ListCollectionFilter<TimestampRecord>(new Configuration(), controller);
+
 		if (rawTimestamp) {
 			controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, CurrentTimeEventGenerationFilter.INPUT_PORT_NAME_NEW_TIMESTAMP);
 		} else {

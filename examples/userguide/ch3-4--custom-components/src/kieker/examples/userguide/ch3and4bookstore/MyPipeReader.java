@@ -54,16 +54,6 @@ public class MyPipeReader extends AbstractReaderPlugin {
 	private final String pipeName;
 	private volatile MyPipe pipe;
 
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * @param projectContext
-	 *            The project context for this component.
-	 * 
-	 * @since 1.7
-	 */
 	public MyPipeReader(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
@@ -76,13 +66,6 @@ public class MyPipeReader extends AbstractReaderPlugin {
 		}
 	}
 
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param config
-	 *            The configuration for this component.
-	 * @deprecated
-	 */
 	@Deprecated
 	public MyPipeReader(final Configuration configuration) {
 		this(configuration, null);
@@ -114,11 +97,6 @@ public class MyPipeReader extends AbstractReaderPlugin {
 		return true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
-	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);
 
@@ -127,11 +105,6 @@ public class MyPipeReader extends AbstractReaderPlugin {
 		return configuration;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#terminate(boolean)
-	 */
 	public void terminate(final boolean error) {
 		// nothing to do
 	}

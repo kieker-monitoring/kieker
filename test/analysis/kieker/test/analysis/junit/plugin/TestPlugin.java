@@ -49,7 +49,7 @@ public class TestPlugin extends AbstractKiekerTest {
 		// Set a name in order to test the getName() function below
 		final String myPluginName = "name-ieuIyxLG";
 		myPluginConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, myPluginName);
-		final SimpleForwardFilterWithRepository sourcePlugin = new SimpleForwardFilterWithRepository(myPluginConfig);
+		final SimpleForwardFilterWithRepository sourcePlugin = new SimpleForwardFilterWithRepository(myPluginConfig, null);
 		Assert.assertEquals("Unexpected plugin name", myPluginName, sourcePlugin.getName());
 		// Test if name and description from the annotation are returned correctly
 		Assert.assertEquals("Unexpected plugin type name", SimpleForwardFilterWithRepository.FILTER_NAME, sourcePlugin.getPluginName());
@@ -62,7 +62,7 @@ public class TestPlugin extends AbstractKiekerTest {
 		// Set a name in order to test the getName() function below
 		final String myRepoName = "name-22db22rLQ";
 		myRepoConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, myRepoName);
-		final SimpleRepository myRepo = new SimpleRepository(myRepoConfig);
+		final SimpleRepository myRepo = new SimpleRepository(myRepoConfig, null);
 		Assert.assertEquals("Unexpected repository name", myRepoName, myRepo.getName());
 		// Test if name and description from the annotation are returned correctly
 		Assert.assertEquals("Unexpected repository type name", SimpleRepository.REPOSITORY_NAME, myRepo.getRepositoryName());
@@ -76,16 +76,12 @@ public class TestPlugin extends AbstractKiekerTest {
 
 		final AnalysisController analysisController = new AnalysisController();
 
-		final SimpleRepository simpleRepository = new SimpleRepository(new Configuration());
+		final SimpleRepository simpleRepository = new SimpleRepository(new Configuration(), analysisController);
 		final ListReader<Object> simpleListReader = new ListReader<Object>(new Configuration(), analysisController);
 		simpleListReader.addObject(testObject1);
 		simpleListReader.addObject(testObject2);
-		final SimpleForwardFilterWithRepository simpleFilter = new SimpleForwardFilterWithRepository(new Configuration());
+		final SimpleForwardFilterWithRepository simpleFilter = new SimpleForwardFilterWithRepository(new Configuration(), analysisController);
 		final ListCollectionFilter<Object> simpleSinkPlugin = new ListCollectionFilter<Object>(new Configuration(), analysisController);
-
-		analysisController.registerRepository(simpleRepository);
-
-		analysisController.registerFilter(simpleFilter);
 
 		/* Connect the plugins. */
 		analysisController.connect(

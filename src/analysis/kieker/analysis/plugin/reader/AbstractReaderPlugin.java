@@ -24,7 +24,8 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
 
 /**
- * This class should be used as a base for every reader used within <i>Kieker</i>.
+ * This class should be used as a base for every reader used within <i>Kieker</i>. For filter plugins, the class
+ * {@link kieker.analysis.plugin.filter.AbstractFilterPlugin} should be used instead.
  * 
  * @author Nils Christian Ehmke
  */
@@ -54,7 +55,7 @@ public abstract class AbstractReaderPlugin extends AbstractPlugin implements IRe
 	 * @since 1.7
 	 */
 	public AbstractReaderPlugin(final Configuration configuration, final IProjectContext projectContext) {
-		super(configuration, projectContext);
+		super(configuration);
 
 		// Register the reader
 		if (projectContext instanceof AnalysisController) {
@@ -64,6 +65,11 @@ public abstract class AbstractReaderPlugin extends AbstractPlugin implements IRe
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#init()
+	 */
 	public boolean init() { // NOPMD (default implementation)
 		return true;
 	}

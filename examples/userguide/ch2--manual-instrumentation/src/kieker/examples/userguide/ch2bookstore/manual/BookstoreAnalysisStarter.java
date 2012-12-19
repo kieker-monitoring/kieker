@@ -17,6 +17,7 @@
 package kieker.examples.userguide.ch2bookstore.manual;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.plugin.filter.forward.TeeFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
@@ -34,7 +35,7 @@ public final class BookstoreAnalysisStarter {
 
 		try {
 			// Create Kieker.Analysis instance
-			final AnalysisController analysisInstance = new AnalysisController();
+			final IAnalysisController analysisInstance = new AnalysisController();
 
 			// Set filesystem monitoring log input directory for our analysis
 			final Configuration fsReaderConfig = new Configuration();

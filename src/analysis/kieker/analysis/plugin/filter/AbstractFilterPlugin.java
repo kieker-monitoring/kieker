@@ -24,8 +24,8 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
 
 /**
- * This class should be used as a base for every analysis plugin used within <i>Kieker</i>.
- * For reader plugins, the class {@link kieker.analysis.plugin.reader.AbstractReaderPlugin} should be used instead.
+ * This class should be used as a base for every analysis plugin used within <i>Kieker</i>. For reader plugins, the class
+ * {@link kieker.analysis.plugin.reader.AbstractReaderPlugin} should be used instead.
  * 
  * @author Nils Christian Ehmke
  */
@@ -55,7 +55,7 @@ public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFi
 	 * @since 1.7
 	 */
 	public AbstractFilterPlugin(final Configuration configuration, final IProjectContext projectContext) {
-		super(configuration, projectContext);
+		super(configuration);
 
 		// Register the filter
 		if (projectContext instanceof AnalysisController) {
@@ -65,10 +65,20 @@ public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFi
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#init()
+	 */
 	public boolean init() { // NOPMD (default implementation)
 		return true; // do nothing
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.IPlugin#terminate(boolean)
+	 */
 	public void terminate(final boolean error) { // NOPMD (default implementation)
 		// do nothing
 	}

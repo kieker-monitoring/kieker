@@ -72,11 +72,12 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 	 */
 	@Test
 	public void testRecordTinBeforeToutWithinIgnored() throws IllegalStateException, AnalysisConfigurationException {
-		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration());
+		final AnalysisController controller = new AnalysisController();
+
+		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration(), controller);
 		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP);
-		final AnalysisController controller = new AnalysisController();
-		final ListCollectionFilter<Execution> sinkPlugin = new ListCollectionFilter<Execution>(new Configuration());
+		final ListCollectionFilter<Execution> sinkPlugin = new ListCollectionFilter<Execution>(new Configuration(), controller);
 		final Execution exec = this.eFactory.genExecution(77, // traceId (value not important)
 				TestTimestampFilter.SESSION_ID,
 				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP - 1, // tin
@@ -86,9 +87,7 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
-		controller.registerReader(reader);
 		controller.registerFilter(filter);
-		controller.registerFilter(sinkPlugin);
 
 		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, TimestampFilter.INPUT_PORT_NAME_EXECUTION);
 		controller.connect(filter, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);

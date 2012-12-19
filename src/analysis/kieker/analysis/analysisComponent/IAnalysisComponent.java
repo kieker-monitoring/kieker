@@ -19,6 +19,8 @@ package kieker.analysis.analysisComponent;
 import kieker.common.configuration.Configuration;
 
 /**
+ * This is the interface for an analysis component in Kieker.
+ * 
  * @author Nils Christian Ehmke
  * 
  * @since 1.7

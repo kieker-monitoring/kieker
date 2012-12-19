@@ -28,18 +28,20 @@ public class Bookstore {
 	private final CRM crm = new CRM(this.catalog);
 
 	public void searchBook() {
-		{ /* 1. Invoke catalog.getBook() and monitor response time */
+		{
+			// 1. Invoke catalog.getBook() and monitor response time
 			final long tin = MONITORING_CONTROLLER.getTimeSource().getTime();
 			this.catalog.getBook(false);
 			final long tout = MONITORING_CONTROLLER.getTimeSource().getTime();
-			/* Create a new record and set values */
+			// Create a new record and set values
 			final MyResponseTimeRecord e = new MyResponseTimeRecord(
 					"mySimpleKiekerExample.bookstoreTracing.Catalog", "getBook(..)", tout - tin);
-			/* Pass the record to the monitoring controller */
+			// Pass the record to the monitoring controller
 			MONITORING_CONTROLLER.newMonitoringRecord(e);
 		}
 
-		{ /* 2. Invoke crm.getOffers() (without monitoring) */
+		{
+			// 2. Invoke crm.getOffers() (without monitoring)
 			this.crm.getOffers();
 		}
 	}

@@ -23,30 +23,12 @@ public class MyResponseTimeOutputPrinter extends AbstractFilterPlugin {
 
 	private final boolean validOutput;
 
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * @param projectContext
-	 *            The project context for this component.
-	 * 
-	 * @since 1.7
-	 */
 	public MyResponseTimeOutputPrinter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
 		this.validOutput = configuration.getBooleanProperty(MyResponseTimeOutputPrinter.CONFIG_PROPERTY_NAME_VALID_OUTPUT);
 	}
 
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated
-	 */
 	@Deprecated
 	public MyResponseTimeOutputPrinter(final Configuration configuration) {
 		this(configuration, null);
@@ -67,11 +49,6 @@ public class MyResponseTimeOutputPrinter extends AbstractFilterPlugin {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
-	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 

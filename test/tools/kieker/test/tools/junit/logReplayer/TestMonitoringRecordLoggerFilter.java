@@ -129,11 +129,9 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, "false");
-		final AbstractReaderPlugin reader = new FSReader(readerConfiguration);
-		final ListCollectionFilter<IMonitoringRecord> sinkPlugin = new ListCollectionFilter<IMonitoringRecord>(new Configuration());
+		final AbstractReaderPlugin reader = new FSReader(readerConfiguration, analysisController);
+		final ListCollectionFilter<IMonitoringRecord> sinkPlugin = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), analysisController);
 
-		analysisController.registerReader(reader);
-		analysisController.registerFilter(sinkPlugin);
 		analysisController.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 		analysisController.run();
 		Assert.assertEquals(AnalysisController.STATE.TERMINATED, analysisController.getState());
@@ -164,9 +162,8 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 
 		final AnalysisController analysisController = new AnalysisController();
 
-		final ListReader<IMonitoringRecord> reader = new ListReader<IMonitoringRecord>(new Configuration());
+		final ListReader<IMonitoringRecord> reader = new ListReader<IMonitoringRecord>(new Configuration(), analysisController);
 		reader.addAllObjects(eventsToWrite);
-		analysisController.registerReader(reader);
 
 		final File monitoringProperties = this.tmpFolder.newFile();
 		this.createControllerConfiguration(monitoringProperties.getAbsolutePath());
@@ -176,12 +173,12 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 		recordLoggingFilterConfiguration.setProperty(
 				ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP,
 				Boolean.toString(!keepLoggingTimestamps));
-		final MonitoringRecordLoggerFilter loggerFilter = new MonitoringRecordLoggerFilter(recordLoggingFilterConfiguration);
-		analysisController.registerFilter(loggerFilter);
+		final MonitoringRecordLoggerFilter loggerFilter = new MonitoringRecordLoggerFilter(recordLoggingFilterConfiguration, analysisController);
+
 		analysisController.connect(reader, ListReader.OUTPUT_PORT_NAME, loggerFilter, MonitoringRecordLoggerFilter.INPUT_PORT_NAME_RECORD);
 
-		final ListCollectionFilter<IMonitoringRecord> simpleSinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration());
-		analysisController.registerFilter(simpleSinkFilter);
+		final ListCollectionFilter<IMonitoringRecord> simpleSinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), analysisController);
+
 		analysisController.connect(loggerFilter, MonitoringRecordLoggerFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, simpleSinkFilter,
 				ListCollectionFilter.INPUT_PORT_NAME);
 

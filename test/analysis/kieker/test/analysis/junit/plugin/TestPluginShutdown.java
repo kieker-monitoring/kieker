@@ -23,6 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IProjectContext;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
@@ -52,8 +53,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 	@Test
 	public void testOnlyReader() throws IllegalStateException, AnalysisConfigurationException {
 		final AnalysisController ctrl = new AnalysisController();
-		final ShutdownReader r1 = new ShutdownReader(new Configuration());
-		ctrl.registerReader(r1);
+		final ShutdownReader r1 = new ShutdownReader(new Configuration(), ctrl);
 		ctrl.run();
 		Assert.assertEquals(0, r1.shutdownNr);
 		Assert.assertEquals(AnalysisController.STATE.TERMINATED, ctrl.getState());
@@ -62,10 +62,9 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 	@Test
 	public void testReaderWithConnectedFilter() throws IllegalStateException, AnalysisConfigurationException {
 		final AnalysisController ctrl = new AnalysisController();
-		final ShutdownReader r1 = new ShutdownReader(new Configuration());
-		final ShutdownFilter f1 = new ShutdownFilter(new Configuration());
-		ctrl.registerReader(r1);
-		ctrl.registerFilter(f1);
+		final ShutdownReader r1 = new ShutdownReader(new Configuration(), ctrl);
+		final ShutdownFilter f1 = new ShutdownFilter(new Configuration(), ctrl);
+
 		ctrl.connect(r1, ShutdownReader.OUTPUT_PORT_NAME, f1, ShutdownFilter.INPUT_PORT_NAME);
 		ctrl.run();
 		Assert.assertEquals(0, r1.shutdownNr);
@@ -76,10 +75,9 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 	@Test
 	public void testReaderWithUnconnectedFilter() throws IllegalStateException, AnalysisConfigurationException {
 		final AnalysisController ctrl = new AnalysisController();
-		final ShutdownReader r1 = new ShutdownReader(new Configuration());
-		final ShutdownFilter f1 = new ShutdownFilter(new Configuration());
-		ctrl.registerReader(r1);
-		ctrl.registerFilter(f1);
+		final ShutdownReader r1 = new ShutdownReader(new Configuration(), ctrl);
+		final ShutdownFilter f1 = new ShutdownFilter(new Configuration(), ctrl);
+
 		ctrl.run();
 		Assert.assertEquals(0, r1.shutdownNr);
 		Assert.assertEquals(1, f1.shutdownNr);
@@ -89,16 +87,12 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 	@Test
 	public void testChainOfFilters() throws IllegalStateException, AnalysisConfigurationException {
 		final AnalysisController ctrl = new AnalysisController();
-		final ShutdownReader r1 = new ShutdownReader(new Configuration());
-		final ShutdownFilter f1 = new ShutdownFilter(new Configuration());
-		final ShutdownFilter f2 = new ShutdownFilter(new Configuration());
-		final ShutdownFilter f3 = new ShutdownFilter(new Configuration());
-		final ShutdownFilter f4 = new ShutdownFilter(new Configuration());
-		ctrl.registerReader(r1);
-		ctrl.registerFilter(f1);
-		ctrl.registerFilter(f2);
-		ctrl.registerFilter(f3);
-		ctrl.registerFilter(f4);
+		final ShutdownReader r1 = new ShutdownReader(new Configuration(), ctrl);
+		final ShutdownFilter f1 = new ShutdownFilter(new Configuration(), ctrl);
+		final ShutdownFilter f2 = new ShutdownFilter(new Configuration(), ctrl);
+		final ShutdownFilter f3 = new ShutdownFilter(new Configuration(), ctrl);
+		final ShutdownFilter f4 = new ShutdownFilter(new Configuration(), ctrl);
+
 		ctrl.connect(r1, ShutdownReader.OUTPUT_PORT_NAME, f1, ShutdownFilter.INPUT_PORT_NAME);
 		ctrl.connect(f1, ShutdownFilter.OUTPUT_PORT_NAME, f2, ShutdownFilter.INPUT_PORT_NAME);
 		ctrl.connect(f2, ShutdownFilter.OUTPUT_PORT_NAME, f3, ShutdownFilter.INPUT_PORT_NAME);
@@ -115,12 +109,10 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 	@Test
 	public void testTwoReadersOneFilter() throws IllegalStateException, AnalysisConfigurationException {
 		final AnalysisController ctrl = new AnalysisController();
-		final ShutdownReader r1 = new ShutdownReader(new Configuration());
-		final ShutdownReader r2 = new ShutdownReader(new Configuration());
-		final ShutdownFilter f1 = new ShutdownFilter(new Configuration());
-		ctrl.registerReader(r1);
-		ctrl.registerReader(r2);
-		ctrl.registerFilter(f1);
+		final ShutdownReader r1 = new ShutdownReader(new Configuration(), ctrl);
+		final ShutdownReader r2 = new ShutdownReader(new Configuration(), ctrl);
+		final ShutdownFilter f1 = new ShutdownFilter(new Configuration(), ctrl);
+
 		ctrl.connect(r1, ShutdownReader.OUTPUT_PORT_NAME, f1, ShutdownFilter.INPUT_PORT_NAME);
 		ctrl.connect(r2, ShutdownReader.OUTPUT_PORT_NAME, f1, ShutdownFilter.INPUT_PORT_NAME);
 		ctrl.run();
@@ -136,16 +128,12 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 	@Test
 	public void testLongWayShortWay() throws IllegalStateException, AnalysisConfigurationException {
 		final AnalysisController ctrl = new AnalysisController();
-		final ShutdownReader r1 = new ShutdownReader(new Configuration());
-		final ShutdownReader r2 = new ShutdownReader(new Configuration());
-		final ShutdownFilter f1 = new ShutdownFilter(new Configuration());
-		final ShutdownFilter f2 = new ShutdownFilter(new Configuration());
-		final ShutdownFilter f3 = new ShutdownFilter(new Configuration());
-		ctrl.registerReader(r1);
-		ctrl.registerReader(r2);
-		ctrl.registerFilter(f1);
-		ctrl.registerFilter(f2);
-		ctrl.registerFilter(f3);
+		final ShutdownReader r1 = new ShutdownReader(new Configuration(), ctrl);
+		final ShutdownReader r2 = new ShutdownReader(new Configuration(), ctrl);
+		final ShutdownFilter f1 = new ShutdownFilter(new Configuration(), ctrl);
+		final ShutdownFilter f2 = new ShutdownFilter(new Configuration(), ctrl);
+		final ShutdownFilter f3 = new ShutdownFilter(new Configuration(), ctrl);
+
 		ctrl.connect(r1, ShutdownReader.OUTPUT_PORT_NAME, f1, ShutdownFilter.INPUT_PORT_NAME);
 		ctrl.connect(r2, ShutdownReader.OUTPUT_PORT_NAME, f3, ShutdownFilter.INPUT_PORT_NAME);
 		ctrl.connect(f1, ShutdownFilter.OUTPUT_PORT_NAME, f2, ShutdownFilter.INPUT_PORT_NAME);
@@ -165,12 +153,10 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 	@Test
 	public void testLoop() throws IllegalStateException, AnalysisConfigurationException {
 		final AnalysisController ctrl = new AnalysisController();
-		final ShutdownReader r1 = new ShutdownReader(new Configuration());
-		final ShutdownFilter f1 = new ShutdownFilter(new Configuration());
-		final ShutdownFilter f2 = new ShutdownFilter(new Configuration());
-		ctrl.registerReader(r1);
-		ctrl.registerFilter(f1);
-		ctrl.registerFilter(f2);
+		final ShutdownReader r1 = new ShutdownReader(new Configuration(), ctrl);
+		final ShutdownFilter f1 = new ShutdownFilter(new Configuration(), ctrl);
+		final ShutdownFilter f2 = new ShutdownFilter(new Configuration(), ctrl);
+
 		ctrl.connect(r1, ShutdownReader.OUTPUT_PORT_NAME, f1, ShutdownFilter.INPUT_PORT_NAME);
 		ctrl.connect(f1, ShutdownFilter.OUTPUT_PORT_NAME, f2, ShutdownFilter.INPUT_PORT_NAME);
 		ctrl.connect(f2, ShutdownFilter.OUTPUT_PORT_NAME, f1, ShutdownFilter.INPUT_PORT_NAME);
@@ -187,18 +173,33 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 
 		private int shutdownNr = -1;
 
-		public ShutdownReader(final Configuration configuration) {
-			super(configuration);
+		public ShutdownReader(final Configuration configuration, final IProjectContext projectContext) {
+			super(configuration, projectContext);
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see kieker.analysis.plugin.IPlugin#terminate(boolean)
+		 */
 		public void terminate(final boolean error) {
 			this.shutdownNr = SHUTDOWNORDER.getAndIncrement();
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+		 */
 		public Configuration getCurrentConfiguration() {
 			return new Configuration();
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see kieker.analysis.plugin.reader.IReaderPlugin#read()
+		 */
 		public boolean read() {
 			// don't send anything (else we would fail in loop!)
 			// super.deliver(OUTPUT_PORT_NAME, new Object());
@@ -213,8 +214,8 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 
 		private int shutdownNr = -1;
 
-		public ShutdownFilter(final Configuration configuration) {
-			super(configuration);
+		public ShutdownFilter(final Configuration configuration, final IProjectContext projectContext) {
+			super(configuration, projectContext);
 		}
 
 		public Configuration getCurrentConfiguration() {

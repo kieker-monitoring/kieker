@@ -52,22 +52,21 @@ public final class BookstoreHostnameRewriter {
 			return;
 		}
 
-		/* Create Kieker.Analysis instance */
+		// Create Kieker.Analysis instance
 		final AnalysisController analysisInstance = new AnalysisController();
 
-		final HostNameRewriterPlugin plugin = new HostNameRewriterPlugin(new Configuration());
-		analysisInstance.registerFilter(plugin);
+		final HostNameRewriterPlugin plugin = new HostNameRewriterPlugin(new Configuration(), analysisInstance);
 
-		/* Set filesystem monitoring log input directory for our analysis */
+		// Set filesystem monitoring log input directory for our analysis
 		final String[] inputDirs = { args[0] };
 		final Configuration configuration = new Configuration(null);
 		configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(inputDirs));
 		final FSReader reader = new FSReader(configuration, analysisInstance);
 
 		try {
-			/* Connect the reader with the plugin. */
+			// Connect the reader with the plugin.
 			analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, plugin, HostNameRewriterPlugin.INPUT_PORT_NAME);
-			/* Start the analysis */
+			// Start the analysis
 			analysisInstance.run();
 		} catch (final AnalysisConfigurationException e) {
 			e.printStackTrace();

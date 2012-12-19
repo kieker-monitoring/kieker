@@ -23,6 +23,10 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
 /**
+ * <b>Do not</b> inherit directly from this class! Instead inherit from the class {@link kieker.analysis.plugin.filter.AbstractFilterPlugin},
+ * {@link kieker.analysis.plugin.reader.AbstractReaderPlugin} or {@link kieker.analysis.repository.AbstractRepository}. This is the base class for all other analysis
+ * components within Kieker, like repositories or plugins. It should therefore <b>only</b> be used by the Kieker components itself as a base.
+ * 
  * @author Nils Christian Ehmke
  * 
  * @since 1.7
@@ -44,9 +48,8 @@ public abstract class AbstractAnalysisComponent {
 	 * @param configuration
 	 *            The configuration for this component.
 	 * 
-	 * @deprecated
+	 * @since 1.7
 	 */
-	@Deprecated
 	public AbstractAnalysisComponent(final Configuration configuration) {
 		try {
 			// TODO: somewhat dirty hack...
@@ -58,23 +61,6 @@ public abstract class AbstractAnalysisComponent {
 
 		// Try to determine the name
 		this.name = configuration.getStringProperty(CONFIG_NAME);
-	}
-
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * @param projectContext
-	 *            The project context for this component. The component will <b>not</b> be registered.
-	 * 
-	 * @since 1.7
-	 */
-	public AbstractAnalysisComponent(final Configuration configuration, final IProjectContext projectContext) {
-		this(configuration);
-
-		// Remember the project context. The registering will be done in the subclasses
-		this.projectContext = projectContext;
 	}
 
 	/**
@@ -105,7 +91,7 @@ public abstract class AbstractAnalysisComponent {
 	 * 
 	 * @since 1.7
 	 */
-	// TODO Remove this method in 1.8 together with the register methods
+	// TODO Remove this method in 1.8
 	public final boolean setProjectContext(final IProjectContext context) {
 		synchronized (this) {
 			if (this.projectContext == null) {

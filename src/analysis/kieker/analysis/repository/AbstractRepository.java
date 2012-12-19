@@ -25,6 +25,8 @@ import kieker.analysis.repository.annotation.Repository;
 import kieker.common.configuration.Configuration;
 
 /**
+ * This class should be used as a base for every repository used within <i>Kieker</i>.
+ * 
  * @author Nils Christian Ehmke?
  */
 @Repository
@@ -54,12 +56,12 @@ public abstract class AbstractRepository extends AbstractAnalysisComponent imple
 	 * @since 1.7
 	 */
 	public AbstractRepository(final Configuration configuration, final IProjectContext projectContext) {
-		super(configuration, projectContext);
+		super(configuration);
 
 		// Register the repository
 		if (projectContext instanceof AnalysisController) {
 			((AnalysisController) projectContext).registerRepository(this);
-		} else {
+		} else if (projectContext != null) {
 			throw new InvalidProjectContextException("Invalid analysis controller in constructor");
 		}
 	}

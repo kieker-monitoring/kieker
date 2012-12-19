@@ -31,7 +31,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import kieker.analysis.IProjectContext;
 import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.display.annotation.Display;
 import kieker.analysis.exception.AnalysisConfigurationException;
@@ -73,26 +72,10 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	 * 
 	 * @param configuration
 	 *            The configuration for this repository.
-	 * @deprecated
 	 */
-	@Deprecated
 	public AbstractPlugin(final Configuration configuration) {
-		this(configuration, null);
-	}
-
-	/**
-	 * The second "default constructor".
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * @param projectContext
-	 *            The project context for this component. The component will <b>not</b> be registered.
-	 * 
-	 * @since 1.7
-	 */
-	public AbstractPlugin(final Configuration configuration, final IProjectContext context) {
 		// Registering will happen in the subclass
-		super(configuration, context);
+		super(configuration);
 
 		// KEEP IN MIND: Although we use "this" in the following code, it points to the actual class. Not to AbstractPlugin!!
 

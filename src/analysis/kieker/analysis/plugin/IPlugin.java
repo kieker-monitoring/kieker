@@ -25,6 +25,8 @@ import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 
 /**
+ * This is the interface for plugins within Kieker.
+ * 
  * @author Nils Christian Ehmke, Jan Waller
  */
 public interface IPlugin extends IAnalysisComponent {
@@ -121,15 +123,29 @@ public interface IPlugin extends IAnalysisComponent {
 	public abstract STATE getState();
 
 	/**
+	 * This simple class represents a container for the reference between a plugin, its input port and the corresponding method.
 	 * 
 	 * @author Nils Christian Ehmke
 	 */
 	public static final class PluginInputPortReference {
+
 		private final IPlugin plugin;
 		private final String inputPortName;
 		private final Method inputPortMethod;
 		private final Class<?>[] eventTypes;
 
+		/**
+		 * Creates a new instance of this class using the given parameters.
+		 * 
+		 * @param plugin
+		 *            The plugin to store in this container.
+		 * @param inputPortName
+		 *            The name of the input port of the plugin.
+		 * @param inputPortMethod
+		 *            The corresponding method which is the input port.
+		 * @param eventTypes
+		 *            The event types of the port.
+		 */
 		public PluginInputPortReference(final IPlugin plugin, final String inputPortName, final Method inputPortMethod, final Class<?>[] eventTypes) {
 			this.plugin = plugin;
 			this.inputPortName = inputPortName;
@@ -137,18 +153,38 @@ public interface IPlugin extends IAnalysisComponent {
 			this.eventTypes = eventTypes.clone();
 		}
 
+		/**
+		 * Getter for the attribute {@link PluginInputPortReference#plugin}.
+		 * 
+		 * @return The current value of the attribute.
+		 */
 		public final IPlugin getPlugin() {
 			return this.plugin;
 		}
 
+		/**
+		 * Getter for the attribute {@link PluginInputPortReference#inputPortMethod}.
+		 * 
+		 * @return The current value of the attribute.
+		 */
 		public final Method getInputPortMethod() {
 			return this.inputPortMethod;
 		}
 
+		/**
+		 * Getter for the attribute {@link PluginInputPortReference#eventTypes}.
+		 * 
+		 * @return The current value of the attribute.
+		 */
 		public final Class<?>[] getEventTypes() {
 			return this.eventTypes.clone();
 		}
 
+		/**
+		 * Getter for the attribute {@link PluginInputPortReference#inputPortName}.
+		 * 
+		 * @return The current value of the attribute.
+		 */
 		public final String getInputPortName() {
 			return this.inputPortName;
 		}
