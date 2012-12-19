@@ -116,6 +116,12 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		this(configuration, null);
 	}
 
+	/**
+	 * This method is the input port for the new events for this filter.
+	 * 
+	 * @param record
+	 *            The new record to handle.
+	 */
 	@InputPort(
 			name = INPUT_PORT_NAME_TRACE_RECORDS,
 			description = "Reconstruct traces from incoming flow records",
@@ -172,6 +178,11 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.plugin.filter.AbstractFilterPlugin#terminate(boolean)
+	 */
 	@Override
 	public void terminate(final boolean error) {
 		super.terminate(error);
@@ -241,6 +252,9 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 		private long traceId = -1;
 
+		/**
+		 * Creates a new instance of this class.
+		 */
 		public TraceBuffer() {
 			// default empty constructor
 		}
@@ -336,6 +350,9 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		private static final class TraceEventComperator implements Comparator<AbstractTraceEvent>, Serializable {
 			private static final long serialVersionUID = 8920737343446332517L;
 
+			/**
+			 * Creates a new instance of this class.
+			 */
 			public TraceEventComperator() {
 				// default empty constructor
 			}

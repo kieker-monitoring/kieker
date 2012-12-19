@@ -16,6 +16,7 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -47,15 +48,37 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	private static final String CONFIGURATION_NAME = Constants.PLOTASSEMBLYCOMPONENTDEPGRAPH_COMPONENT_NAME;
 
 	/**
+	 * Creates a new filter using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration to use.
+	 * @param projectContext
+	 *            The project context to use.
+	 * 
+	 * @since 1.7
+	 */
+	public ComponentDependencyGraphAssemblyFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext, new ComponentAssemblyDependencyGraph(AssemblyRepository.ROOT_ASSEMBLY_COMPONENT));
+	}
+
+	/**
 	 * Creates a new filter using the given configuration.
 	 * 
 	 * @param configuration
 	 *            The configuration to use
+	 * 
+	 * @deprecated
 	 */
+	@Deprecated
 	public ComponentDependencyGraphAssemblyFilter(final Configuration configuration) {
-		super(configuration, new ComponentAssemblyDependencyGraph(AssemblyRepository.ROOT_ASSEMBLY_COMPONENT));
+		this(configuration, null);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter#inputMessageTraces(kieker.tools.traceAnalysis.systemModel.MessageTrace)
+	 */
 	@Override
 	@InputPort(
 			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES,
@@ -107,6 +130,11 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 		this.reportSuccess(t.getTraceId());
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter#getConfigurationName()
+	 */
 	@Override
 	public String getConfigurationName() {
 		return CONFIGURATION_NAME;

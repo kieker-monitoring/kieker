@@ -46,10 +46,9 @@ public class TestCountingFilter extends AbstractKiekerTest {
 	@Before
 	public void before() throws IllegalStateException, AnalysisConfigurationException {
 		this.analysisController = new AnalysisController();
-		this.countingFilter = new CountingFilter(new Configuration());
-		this.simpleListReader = new ListReader<Object>(new Configuration());
-		this.analysisController.registerReader(this.simpleListReader);
-		this.analysisController.registerFilter(this.countingFilter);
+		this.countingFilter = new CountingFilter(new Configuration(), this.analysisController);
+		this.simpleListReader = new ListReader<Object>(new Configuration(), this.analysisController);
+
 		this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME, this.countingFilter, CountingFilter.INPUT_PORT_NAME_EVENTS);
 	}
 
@@ -68,12 +67,10 @@ public class TestCountingFilter extends AbstractKiekerTest {
 	public void testConcurrently() throws IllegalStateException, AnalysisConfigurationException {
 		this.simpleListReader.addObject(new Object());
 		// register multiple readers (they fire concurrently)
-		final ListReader<Object> reader2 = new ListReader<Object>(new Configuration());
-		this.analysisController.registerReader(reader2);
+		final ListReader<Object> reader2 = new ListReader<Object>(new Configuration(), this.analysisController);
 		this.analysisController.connect(reader2, ListReader.OUTPUT_PORT_NAME, this.countingFilter, CountingFilter.INPUT_PORT_NAME_EVENTS);
 		reader2.addObject(new Object());
-		final ListReader<Object> reader3 = new ListReader<Object>(new Configuration());
-		this.analysisController.registerReader(reader3);
+		final ListReader<Object> reader3 = new ListReader<Object>(new Configuration(), this.analysisController);
 		this.analysisController.connect(reader3, ListReader.OUTPUT_PORT_NAME, this.countingFilter, CountingFilter.INPUT_PORT_NAME_EVENTS);
 		reader3.addObject(new Object());
 		Assert.assertEquals(0, this.countingFilter.getMessageCount());

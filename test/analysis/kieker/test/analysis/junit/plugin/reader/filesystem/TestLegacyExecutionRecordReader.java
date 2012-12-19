@@ -78,12 +78,10 @@ public class TestLegacyExecutionRecordReader extends AbstractKiekerTest {
 
 		final Configuration configurationFSReader = new Configuration();
 		configurationFSReader.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, this.tmpFolder.getRoot().getCanonicalPath());
-		final FSReader reader = new FSReader(configurationFSReader);
+		final FSReader reader = new FSReader(configurationFSReader, analysisController);
 
-		final CountingFilter sink = new CountingFilter(new Configuration());
+		final CountingFilter sink = new CountingFilter(new Configuration(), analysisController);
 
-		analysisController.registerReader(reader);
-		analysisController.registerFilter(sink);
 		analysisController.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, sink, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
 		analysisController.run();

@@ -699,6 +699,9 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * 
 	 * @see kieker.analysis.IAnalysisController#registerReader(kieker.analysis.plugin.reader.AbstractReaderPlugin)
 	 */
+	// TODO This is not really deprecated, but we have to make sure that only AbstractComponent can use this method. Maybe we should remove the method just from the
+	// interface?
+	@Deprecated
 	public final void registerReader(final AbstractReaderPlugin reader) throws IllegalStateException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register filter after starting analysis.");
@@ -726,6 +729,9 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * 
 	 * @see kieker.analysis.IAnalysisController#registerFilter(kieker.analysis.plugin.filter.AbstractFilterPlugin)
 	 */
+	// TODO This is not really deprecated, but we have to make sure that only AbstractComponent can use this method. Maybe we should remove the method just from the
+	// interface?
+	@Deprecated
 	public final void registerFilter(final AbstractFilterPlugin filter) throws IllegalStateException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register filter after starting analysis.");
@@ -753,6 +759,9 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * 
 	 * @see kieker.analysis.IAnalysisController#registerRepository(kieker.analysis.repository.AbstractRepository)
 	 */
+	// TODO This is not really deprecated, but we have to make sure that only AbstractComponent can use this method. Maybe we should remove the method just from the
+	// interface?
+	@Deprecated
 	public final void registerRepository(final AbstractRepository repository) throws IllegalStateException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register respository after starting analysis.");

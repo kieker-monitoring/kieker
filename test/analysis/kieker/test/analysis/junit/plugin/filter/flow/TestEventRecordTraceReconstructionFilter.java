@@ -54,19 +54,16 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 			throws IllegalStateException, AnalysisConfigurationException {
 		final AnalysisController controller = new AnalysisController();
 
-		final ListReader<Object> reader = new ListReader<Object>(new Configuration());
+		final ListReader<Object> reader = new ListReader<Object>(new Configuration(), controller);
 
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, Long.toString(maxTraceDuration));
 		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, Long.toString(maxTraceTimeout));
-		final EventRecordTraceReconstructionFilter traceFilter = new EventRecordTraceReconstructionFilter(configuration);
+		final EventRecordTraceReconstructionFilter traceFilter = new EventRecordTraceReconstructionFilter(configuration, controller);
 
-		final ListCollectionFilter<TraceEventRecords> sinkPlugin = new ListCollectionFilter<TraceEventRecords>(new Configuration());
+		final ListCollectionFilter<TraceEventRecords> sinkPlugin = new ListCollectionFilter<TraceEventRecords>(new Configuration(), controller);
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
-		controller.registerReader(reader);
-		controller.registerFilter(traceFilter);
-		controller.registerFilter(sinkPlugin);
 		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, traceFilter, EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
 		controller.connect(traceFilter, EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 
@@ -86,19 +83,16 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 			throws IllegalStateException, AnalysisConfigurationException {
 		final AnalysisController controller = new AnalysisController();
 
-		final ListReader<Object> reader = new ListReader<Object>(new Configuration());
+		final ListReader<Object> reader = new ListReader<Object>(new Configuration(), controller);
 
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, Long.toString(maxTraceDuration));
 		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, Long.toString(maxTraceTimeout));
-		final EventRecordTraceReconstructionFilter traceFilter = new EventRecordTraceReconstructionFilter(configuration);
+		final EventRecordTraceReconstructionFilter traceFilter = new EventRecordTraceReconstructionFilter(configuration, controller);
 
-		final ListCollectionFilter<TraceEventRecords> sinkPlugin = new ListCollectionFilter<TraceEventRecords>(new Configuration());
+		final ListCollectionFilter<TraceEventRecords> sinkPlugin = new ListCollectionFilter<TraceEventRecords>(new Configuration(), controller);
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
-		controller.registerReader(reader);
-		controller.registerFilter(traceFilter);
-		controller.registerFilter(sinkPlugin);
 		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, traceFilter, EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
 		controller.connect(traceFilter, EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 
