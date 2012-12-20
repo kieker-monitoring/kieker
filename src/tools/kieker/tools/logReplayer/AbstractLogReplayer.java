@@ -17,6 +17,7 @@
 package kieker.tools.logReplayer;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.filter.forward.RealtimeRecordDelayFilter;
@@ -77,7 +78,7 @@ public abstract class AbstractLogReplayer {
 
 		try {
 
-			final AnalysisController analysisInstance = new AnalysisController();
+			final IAnalysisController analysisInstance = new AnalysisController();
 
 			/*
 			 * Initializing the reader
@@ -169,5 +170,5 @@ public abstract class AbstractLogReplayer {
 	 * 
 	 * @return
 	 */
-	protected abstract AbstractReaderPlugin createReader(final AnalysisController analysisInstance);
+	protected abstract AbstractReaderPlugin createReader(final IAnalysisController analysisInstance);
 }

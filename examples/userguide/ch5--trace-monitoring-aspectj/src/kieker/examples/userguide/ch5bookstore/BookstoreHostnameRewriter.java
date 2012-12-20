@@ -19,6 +19,7 @@ package kieker.examples.userguide.ch5bookstore;
 import java.util.Random;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.IProjectContext;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.exception.MonitoringReaderException;
@@ -53,7 +54,7 @@ public final class BookstoreHostnameRewriter {
 		}
 
 		// Create Kieker.Analysis instance
-		final AnalysisController analysisInstance = new AnalysisController();
+		final IAnalysisController analysisInstance = new AnalysisController();
 
 		final HostNameRewriterPlugin plugin = new HostNameRewriterPlugin(new Configuration(), analysisInstance);
 

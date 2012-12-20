@@ -34,13 +34,20 @@ import kieker.test.analysis.util.repository.SimpleRepository;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
- * A simple test for the plugins in general. It tests for example if the chaining of different plugins does work.
+ * This test bases on {@link TestPlugin} and tests the legacy (deprecated) methods of the {@link AnalysisController}, which doesn't use the new constructor.
  * 
  * @author Nils Christian Ehmke, Jan Waller
+ * 
+ * @since 1.7
  */
-public class TestPlugin extends AbstractKiekerTest {
+public final class TestPluginLegacy extends AbstractKiekerTest {
 
-	public TestPlugin() {
+	/**
+	 * Creates a new instance of this test class.
+	 * 
+	 * @since 1.7
+	 */
+	public TestPluginLegacy() {
 		// empty default constructor
 	}
 
@@ -50,7 +57,7 @@ public class TestPlugin extends AbstractKiekerTest {
 		// Set a name in order to test the getName() function below
 		final String myPluginName = "name-ieuIyxLG";
 		myPluginConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, myPluginName);
-		final SimpleForwardFilterWithRepository sourcePlugin = new SimpleForwardFilterWithRepository(myPluginConfig, null);
+		final SimpleForwardFilterWithRepository sourcePlugin = new SimpleForwardFilterWithRepository(myPluginConfig);
 		Assert.assertEquals("Unexpected plugin name", myPluginName, sourcePlugin.getName());
 		// Test if name and description from the annotation are returned correctly
 		Assert.assertEquals("Unexpected plugin type name", SimpleForwardFilterWithRepository.FILTER_NAME, sourcePlugin.getPluginName());
@@ -63,7 +70,7 @@ public class TestPlugin extends AbstractKiekerTest {
 		// Set a name in order to test the getName() function below
 		final String myRepoName = "name-22db22rLQ";
 		myRepoConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, myRepoName);
-		final SimpleRepository myRepo = new SimpleRepository(myRepoConfig, null);
+		final SimpleRepository myRepo = new SimpleRepository(myRepoConfig);
 		Assert.assertEquals("Unexpected repository name", myRepoName, myRepo.getName());
 		// Test if name and description from the annotation are returned correctly
 		Assert.assertEquals("Unexpected repository type name", SimpleRepository.REPOSITORY_NAME, myRepo.getRepositoryName());
@@ -77,14 +84,20 @@ public class TestPlugin extends AbstractKiekerTest {
 
 		final IAnalysisController analysisController = new AnalysisController();
 
-		final SimpleRepository simpleRepository = new SimpleRepository(new Configuration(), analysisController);
-		final ListReader<Object> simpleListReader = new ListReader<Object>(new Configuration(), analysisController);
+		final SimpleRepository simpleRepository = new SimpleRepository(new Configuration());
+		final ListReader<Object> simpleListReader = new ListReader<Object>(new Configuration());
 		simpleListReader.addObject(testObject1);
 		simpleListReader.addObject(testObject2);
-		final SimpleForwardFilterWithRepository simpleFilter = new SimpleForwardFilterWithRepository(new Configuration(), analysisController);
-		final ListCollectionFilter<Object> simpleSinkPlugin = new ListCollectionFilter<Object>(new Configuration(), analysisController);
+		final SimpleForwardFilterWithRepository simpleFilter = new SimpleForwardFilterWithRepository(new Configuration());
+		final ListCollectionFilter<Object> simpleSinkPlugin = new ListCollectionFilter<Object>(new Configuration());
 
-		/* Connect the plugins. */
+		// Register everything
+		analysisController.registerFilter(simpleFilter);
+		analysisController.registerFilter(simpleSinkPlugin);
+		analysisController.registerReader(simpleListReader);
+		analysisController.registerRepository(simpleRepository);
+
+		// Connect the plugins.
 		analysisController.connect(
 				simpleListReader, ListReader.OUTPUT_PORT_NAME,
 				simpleFilter, SimpleForwardFilterWithRepository.INPUT_PORT_NAME);
@@ -94,6 +107,48 @@ public class TestPlugin extends AbstractKiekerTest {
 
 		analysisController.connect(simpleFilter, SimpleForwardFilterWithRepository.REPOSITORY_PORT_NAME, simpleRepository);
 
+		analysisController.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, analysisController.getState());
+
+		final List<Object> list = simpleSinkPlugin.getList();
+		Assert.assertEquals(2, list.size());
+		Assert.assertEquals(testObject1, list.get(0));
+		Assert.assertEquals(testObject2, list.get(1));
+	}
+
+	@Test
+	public void testCompatibleConstructor() throws IllegalStateException, AnalysisConfigurationException {
+		// Some test objects
+		final Object testObject1 = new Object();
+		final Object testObject2 = new Object();
+
+		// The controller for the analysis
+		final IAnalysisController analysisController = new AnalysisController();
+
+		// The analysis components
+		final ListReader<Object> simpleListReader = new ListReader<Object>(new Configuration(), null);
+		simpleListReader.addObject(testObject1);
+		simpleListReader.addObject(testObject2);
+		final SimpleForwardFilterWithRepository simpleFilter = new SimpleForwardFilterWithRepository(new Configuration(), null);
+		final ListCollectionFilter<Object> simpleSinkPlugin = new ListCollectionFilter<Object>(new Configuration(), null);
+		final SimpleRepository simpleRepository = new SimpleRepository(new Configuration(), null);
+
+		// Now register the components
+		analysisController.registerFilter(simpleFilter);
+		analysisController.registerFilter(simpleSinkPlugin);
+		analysisController.registerReader(simpleListReader);
+		analysisController.registerRepository(simpleRepository);
+
+		// Connect the plugins.
+		analysisController.connect(
+				simpleListReader, ListReader.OUTPUT_PORT_NAME,
+				simpleFilter, SimpleForwardFilterWithRepository.INPUT_PORT_NAME);
+		analysisController.connect(
+				simpleFilter, SimpleForwardFilterWithRepository.OUTPUT_PORT_NAME,
+				simpleSinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
+		analysisController.connect(simpleFilter, SimpleForwardFilterWithRepository.REPOSITORY_PORT_NAME, simpleRepository);
+
+		// Execute the tests
 		analysisController.run();
 		Assert.assertEquals(AnalysisController.STATE.TERMINATED, analysisController.getState());
 

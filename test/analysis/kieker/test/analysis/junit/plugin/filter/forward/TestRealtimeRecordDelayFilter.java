@@ -29,6 +29,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.analysis.plugin.filter.forward.CountingThroughputFilter;
@@ -58,7 +59,7 @@ public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 	private static final long START_TIME_SECONDS = 246561L;
 	private static final long[] EVENT_TIME_OFFSETS_SECONDS = { 0, 1, 2, 7, 17, 19 }; // relative to the start time
 	private static final List<Entry<Long, Long>> EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS = new ArrayList<Entry<Long, Long>>(); // intervals relative to start time
-	private AnalysisController analysisController;
+	private IAnalysisController analysisController;
 
 	/**
 	 * List of all {@link EmptyRecord}s to be read by the {@link #simpleListReader}

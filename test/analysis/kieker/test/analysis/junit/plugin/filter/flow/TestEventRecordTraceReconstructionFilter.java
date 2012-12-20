@@ -20,6 +20,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.flow.EventRecordTraceReconstructionFilter;
 import kieker.analysis.plugin.filter.flow.TraceEventRecords;
@@ -52,7 +53,7 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 	 */
 	private void runTest(final TraceEventRecords records, final long maxTraceDuration, final long maxTraceTimeout)
 			throws IllegalStateException, AnalysisConfigurationException {
-		final AnalysisController controller = new AnalysisController();
+		final IAnalysisController controller = new AnalysisController();
 
 		final ListReader<Object> reader = new ListReader<Object>(new Configuration(), controller);
 
@@ -81,7 +82,7 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 
 	private void runTestFailed(final TraceEventRecords records, final long maxTraceDuration, final long maxTraceTimeout)
 			throws IllegalStateException, AnalysisConfigurationException {
-		final AnalysisController controller = new AnalysisController();
+		final IAnalysisController controller = new AnalysisController();
 
 		final ListReader<Object> reader = new ListReader<Object>(new Configuration(), controller);
 

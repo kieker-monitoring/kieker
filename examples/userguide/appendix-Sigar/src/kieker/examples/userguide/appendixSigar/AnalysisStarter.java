@@ -17,6 +17,7 @@
 package kieker.examples.userguide.appendixSigar;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.IProjectContext;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
@@ -41,7 +42,7 @@ public final class AnalysisStarter {
 		}
 
 		// Create Kieker.Analysis instance
-		final AnalysisController analysisInstance = new AnalysisController();
+		final IAnalysisController analysisInstance = new AnalysisController();
 		// Create and register our own consumer
 		final StdOutDumpConsumer consumer = new StdOutDumpConsumer(new Configuration(), analysisInstance);
 

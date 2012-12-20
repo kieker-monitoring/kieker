@@ -16,7 +16,7 @@
 
 package kieker.tools.logReplayer;
 
-import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.jms.JMSReader;
 import kieker.common.configuration.Configuration;
@@ -59,7 +59,7 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 	 * @see kieker.tools.logReplayer.AbstractLogReplayer#createReader(kieker.analysis.AnalysisController)
 	 */
 	@Override
-	protected AbstractReaderPlugin createReader(final AnalysisController analysisController) {
+	protected AbstractReaderPlugin createReader(final IAnalysisController analysisController) {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_PROVIDERURL, this.jmsProviderUrl);
 		configuration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_DESTINATION, this.jmsDestination);

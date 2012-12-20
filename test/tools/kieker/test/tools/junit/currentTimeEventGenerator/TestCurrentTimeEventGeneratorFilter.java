@@ -23,6 +23,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
@@ -111,7 +112,7 @@ public class TestCurrentTimeEventGeneratorFilter extends AbstractKiekerTest { //
 	 */
 	private void compareInputAndOutput(final long timerResolution, final long[] inputTimestamps, final long[] expectedOutputTimerEvents, final boolean rawTimestamp)
 			throws IllegalStateException, AnalysisConfigurationException {
-		final AnalysisController controller = new AnalysisController();
+		final IAnalysisController controller = new AnalysisController();
 
 		final ListReader<Object> reader = new ListReader<Object>(new Configuration(), controller);
 		final Configuration filterConfiguration = new Configuration();

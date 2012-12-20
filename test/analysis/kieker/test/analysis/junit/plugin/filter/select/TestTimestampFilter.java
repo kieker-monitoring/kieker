@@ -21,6 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.filter.select.TimestampFilter;
@@ -50,7 +51,7 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 
 	private ListReader<AbstractTraceEvent> reader;
 	private ListCollectionFilter<AbstractTraceEvent> sinkPlugin;
-	private AnalysisController controller;
+	private IAnalysisController controller;
 
 	public TestTimestampFilter() {
 		// empty default constructor

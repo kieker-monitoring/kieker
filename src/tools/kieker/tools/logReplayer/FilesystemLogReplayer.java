@@ -16,7 +16,7 @@
 
 package kieker.tools.logReplayer;
 
-import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
@@ -50,7 +50,7 @@ public class FilesystemLogReplayer extends AbstractLogReplayer {
 	 * @see kieker.tools.logReplayer.AbstractLogReplayer#createReader(kieker.analysis.AnalysisController)
 	 */
 	@Override
-	protected AbstractReaderPlugin createReader(final AnalysisController analysisInstance) {
+	protected AbstractReaderPlugin createReader(final IAnalysisController analysisInstance) {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(this.inputDirs));
 		// TODO: we might want to pull this out as a property

@@ -21,6 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
@@ -35,7 +36,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public class TestCountingFilter extends AbstractKiekerTest {
 
-	private AnalysisController analysisController;
+	private IAnalysisController analysisController;
 	private ListReader<Object> simpleListReader;
 	private CountingFilter countingFilter;
 

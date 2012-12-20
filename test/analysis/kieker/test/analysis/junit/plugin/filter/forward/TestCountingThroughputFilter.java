@@ -26,6 +26,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.analysis.plugin.filter.forward.CountingThroughputFilter;
@@ -51,7 +52,7 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 	private static final long START_TIME_NANOS = 246561L; // just a non-trivial number
 	private static final long INTERVAL_SIZE_NANOS = 100; // just a non-trivial number
 
-	private AnalysisController analysisController;
+	private IAnalysisController analysisController;
 
 	/** Provides the list of {@link IMonitoringRecord}s to be processed */
 	private ListReader<IMonitoringRecord> simpleListReader; // initialized in #prepareConfiguration()

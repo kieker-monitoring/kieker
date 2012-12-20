@@ -35,7 +35,7 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends AbstractKieke
 
 	private static final String SESSION_ID = "j8tVhvDPYL";
 
-	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration());
+	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), null);
 	private final ExecutionFactory executionFactory = new ExecutionFactory(this.systemEntityFactory);
 
 	@Test

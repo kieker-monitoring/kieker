@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.flow.EventRecordTraceReconstructionFilter;
@@ -57,7 +58,7 @@ public final class TestAnalysis {
 	private TestAnalysis() {}
 
 	public static void main(final String[] args) {
-		final AnalysisController analysisController;
+		final IAnalysisController analysisController;
 		if (TestAnalysis.LOADCONFIG) {
 			try {
 				analysisController = new AnalysisController(new File(TestAnalysis.KAX_FILENAME));

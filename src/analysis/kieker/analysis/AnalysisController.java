@@ -60,6 +60,7 @@ import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.IPlugin;
 import kieker.analysis.plugin.IPlugin.PluginInputPortReference;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.IReaderPlugin;
@@ -74,7 +75,11 @@ import kieker.common.logging.LogFactory;
  * 
  * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke, Jan Waller
  */
+@kieker.analysis.annotation.AnalysisController(configuration =
+		@Property(name = AnalysisController.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, defaultValue = "seconds"))
 public final class AnalysisController implements IAnalysisController { // NOPMD (really long class)
+
+	public static final String CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT = "recordsTimeUnit";
 
 	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
 
@@ -119,10 +124,15 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	private volatile STATE state = STATE.READY;
 
 	/**
+	 * This field contains the global configuration for the analysis.
+	 */
+	private final Configuration globalConfiguration;
+
+	/**
 	 * Constructs an {@link AnalysisController} instance.
 	 */
 	public AnalysisController() {
-		this.projectName = "AnalysisProject";
+		this(new Configuration());
 	}
 
 	/**
@@ -132,7 +142,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *            The name of the project.
 	 */
 	public AnalysisController(final String projectName) {
-		this.projectName = projectName;
+		this(projectName, new Configuration());
 	}
 
 	/**
@@ -201,8 +211,64 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		if (project == null) {
 			throw new NullPointerException("Can not load project null.");
 		} else {
+			this.globalConfiguration = new Configuration();
+
+			// Make sure that we can supply the plugins with the default global properties
+			this.initializeDefaultConfiguration();
+
 			this.loadFromModelProject(project, classLoader);
 			this.projectName = project.getName();
+		}
+	}
+
+	/**
+	 * Constructs an {@link AnalysisController} instance using the given parameter.
+	 * 
+	 * @param globalConfiguration
+	 *            The global configuration of this analysis. All plugins can indirectly access it.
+	 * 
+	 * @since 1.7
+	 */
+	public AnalysisController(final Configuration globalConfiguration) {
+		this("AnalysisProject", globalConfiguration);
+	}
+
+	/**
+	 * Constructs an {@link AnalysisController} instance using the given parameter.
+	 * 
+	 * @param projectName
+	 *            The name of the project.
+	 * @param globalConfiguration
+	 *            The global configuration of this analysis. All plugins can indirectly access it.
+	 * 
+	 * @since 1.7
+	 */
+	public AnalysisController(final String projectName, final Configuration globalConfiguration) {
+		this.projectName = projectName;
+		this.globalConfiguration = globalConfiguration;
+
+		// Make sure that we can supply the plugins with the default global properties
+		this.initializeDefaultConfiguration();
+	}
+
+	/**
+	 * This method can be used to fill the already initialized field {@link AnalysisController#globalConfiguration} with the default properties, as supplied by the
+	 * annotation.
+	 * 
+	 * @since 1.7
+	 */
+	private void initializeDefaultConfiguration() {
+		// Get the (potential) annotation
+		final kieker.analysis.annotation.AnalysisController annotation = AnalysisController.class.getAnnotation(kieker.analysis.annotation.AnalysisController.class);
+
+		if (annotation != null) {
+			// Run through the available properties and put them into our configuration
+			for (final Property property : annotation.configuration()) {
+				// Make sure that we do not overwrite already defined properties. This is for the case that someone overwrites our default configuration
+				if (!this.globalConfiguration.containsKey(property.name())) {
+					this.globalConfiguration.setProperty(property.name(), property.defaultValue());
+				}
+			}
 		}
 	}
 
@@ -242,7 +308,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * @see kieker.analysis.IAnalysisController#getProperty(java.lang.String)
 	 */
 	public final String getProperty(final String key) {
-		return null;
+		return this.globalConfiguration.getStringProperty(key);
 	}
 
 	/**
@@ -318,6 +384,11 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 					this.connect(srcPlugin, outputPortName, dstPlugin, inputPortName);
 				}
 			}
+		}
+
+		// Now load our global configuration from the model instance
+		for (final MIProperty mProperty : mProject.getProperties()) {
+			this.globalConfiguration.setProperty(mProperty.getName(), mProperty.getValue());
 		}
 
 		// Remember the mapping!
@@ -571,6 +642,17 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 					}
 				}
 			}
+
+			// Now put our global configuration into the model instance
+			final Set<Entry<Object, Object>> properties = this.globalConfiguration.entrySet();
+			for (final Entry<Object, Object> property : properties) {
+				final MIProperty mProperty = factory.createProperty();
+				mProperty.setName((String) property.getKey());
+				mProperty.setValue((String) property.getValue());
+
+				mProject.getProperties().add(mProperty);
+			}
+
 			// We are finished. Return the finished project.
 			return mProject;
 		} catch (final Exception ex) { // NOPMD NOCS (catch any remaining problems)

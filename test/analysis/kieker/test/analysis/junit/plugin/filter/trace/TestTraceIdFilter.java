@@ -23,6 +23,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.flow.TraceEventRecords;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
@@ -63,7 +64,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		idsToPass.add(1 + traceIdNotToPass);
 		idsToPass.add(2 + traceIdNotToPass);
 
-		final AnalysisController controller = new AnalysisController();
+		final IAnalysisController controller = new AnalysisController();
 
 		final ListReader<AbstractTraceEvent> reader = new ListReader<AbstractTraceEvent>(new Configuration(), controller);
 		final Configuration filterConfig = new Configuration();
@@ -112,7 +113,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		idsToPass.add(0 + traceIdToPass);
 		idsToPass.add(1 + traceIdToPass);
 
-		final AnalysisController controller = new AnalysisController();
+		final IAnalysisController controller = new AnalysisController();
 
 		final ListReader<AbstractTraceEvent> reader = new ListReader<AbstractTraceEvent>(new Configuration(), controller);
 		final Configuration filterConfig = new Configuration();
@@ -153,7 +154,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		final long firstTimestamp = 53222; // any number fits
 		final long traceIdToPass = 11L; // (must be element of idsToPass)
 
-		final AnalysisController controller = new AnalysisController();
+		final IAnalysisController controller = new AnalysisController();
 
 		final ListReader<AbstractTraceEvent> reader = new ListReader<AbstractTraceEvent>(new Configuration(), controller);
 		final Configuration filterConfig = new Configuration();

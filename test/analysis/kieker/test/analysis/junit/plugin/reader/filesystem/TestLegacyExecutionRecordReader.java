@@ -28,6 +28,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
@@ -74,7 +75,7 @@ public class TestLegacyExecutionRecordReader extends AbstractKiekerTest {
 
 	@Test
 	public void testRecords() throws IOException, IllegalStateException, AnalysisConfigurationException {
-		final AnalysisController analysisController = new AnalysisController();
+		final IAnalysisController analysisController = new AnalysisController();
 
 		final Configuration configurationFSReader = new Configuration();
 		configurationFSReader.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, this.tmpFolder.getRoot().getCanonicalPath());

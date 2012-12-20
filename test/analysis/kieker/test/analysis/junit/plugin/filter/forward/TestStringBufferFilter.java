@@ -22,6 +22,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.filter.forward.StringBufferFilter;
@@ -44,7 +45,7 @@ public class TestStringBufferFilter extends AbstractKiekerTest {
 
 	@Test
 	public void testRecordsWithStringEqualButNeverSame() throws IllegalStateException, AnalysisConfigurationException {
-		final AnalysisController analysisController = new AnalysisController();
+		final IAnalysisController analysisController = new AnalysisController();
 		final ListReader<IMonitoringRecord> reader = new ListReader<IMonitoringRecord>(new Configuration(), analysisController);
 		final StringBufferFilter stringBufferFilter = new StringBufferFilter(new Configuration(), analysisController);
 		final ListCollectionFilter<IMonitoringRecord> collectionFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), analysisController);

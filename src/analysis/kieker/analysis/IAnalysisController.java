@@ -54,7 +54,7 @@ public interface IAnalysisController extends IProjectContext {
 	/**
 	 * Delivers the value for the given (global) property within the analysis.
 	 * 
-	 * @return The value for the given property if it exists, null otherwise.
+	 * @return The value for the given property if it exists, an empty string otherwise.
 	 */
 	public String getProperty(final String key);
 

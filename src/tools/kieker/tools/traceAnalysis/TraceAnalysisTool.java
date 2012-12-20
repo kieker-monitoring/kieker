@@ -107,12 +107,13 @@ import kieker.tools.util.LoggingTimestampConverter;
  * dependencies low.
  * 
  * 
- * @author Andre van Hoorn, Matthias Rohr
+ * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke
  */
 public final class TraceAnalysisTool {
 	public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
 	private static final Log LOG = LogFactory.getLog(TraceAnalysisTool.class);
-	private static final SystemModelRepository SYSTEM_ENTITY_FACTORY = new SystemModelRepository(new Configuration());
+	private static final AnalysisController analysisInstance = new AnalysisController();
+	private static final SystemModelRepository SYSTEM_ENTITY_FACTORY = new SystemModelRepository(new Configuration(), analysisInstance);
 	private static final CommandLineParser CMDL_PARSER = new BasicParser();
 	private static CommandLine cmdl;
 	private static String[] inputDirs;
@@ -400,8 +401,6 @@ public final class TraceAnalysisTool {
 		EventRecordTraceReconstructionFilter eventTraceReconstructionFilter = null;
 		TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter = null;
 		try {
-			final AnalysisController analysisInstance = new AnalysisController();
-
 			FSReader reader;
 			{ // NOCS (NestedBlock)
 				final Configuration conf = new Configuration(null);
@@ -420,7 +419,6 @@ public final class TraceAnalysisTool {
 			 * This map can be used within the constructor for all following plugins which use the repository with the name defined in the
 			 * AbstractTraceAnalysisPlugin.
 			 */
-			analysisInstance.registerRepository(SYSTEM_ENTITY_FACTORY);
 
 			final TimestampFilter timestampFilter;
 			{ // NOCS (nested block)

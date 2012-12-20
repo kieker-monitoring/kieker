@@ -23,6 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.IProjectContext;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
@@ -52,7 +53,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 
 	@Test
 	public void testOnlyReader() throws IllegalStateException, AnalysisConfigurationException {
-		final AnalysisController ctrl = new AnalysisController();
+		final IAnalysisController ctrl = new AnalysisController();
 		final ShutdownReader r1 = new ShutdownReader(new Configuration(), ctrl);
 		ctrl.run();
 		Assert.assertEquals(0, r1.shutdownNr);
@@ -61,7 +62,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 
 	@Test
 	public void testReaderWithConnectedFilter() throws IllegalStateException, AnalysisConfigurationException {
-		final AnalysisController ctrl = new AnalysisController();
+		final IAnalysisController ctrl = new AnalysisController();
 		final ShutdownReader r1 = new ShutdownReader(new Configuration(), ctrl);
 		final ShutdownFilter f1 = new ShutdownFilter(new Configuration(), ctrl);
 
@@ -74,7 +75,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 
 	@Test
 	public void testReaderWithUnconnectedFilter() throws IllegalStateException, AnalysisConfigurationException {
-		final AnalysisController ctrl = new AnalysisController();
+		final IAnalysisController ctrl = new AnalysisController();
 		final ShutdownReader r1 = new ShutdownReader(new Configuration(), ctrl);
 		final ShutdownFilter f1 = new ShutdownFilter(new Configuration(), ctrl);
 
@@ -86,7 +87,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 
 	@Test
 	public void testChainOfFilters() throws IllegalStateException, AnalysisConfigurationException {
-		final AnalysisController ctrl = new AnalysisController();
+		final IAnalysisController ctrl = new AnalysisController();
 		final ShutdownReader r1 = new ShutdownReader(new Configuration(), ctrl);
 		final ShutdownFilter f1 = new ShutdownFilter(new Configuration(), ctrl);
 		final ShutdownFilter f2 = new ShutdownFilter(new Configuration(), ctrl);
@@ -108,7 +109,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 
 	@Test
 	public void testTwoReadersOneFilter() throws IllegalStateException, AnalysisConfigurationException {
-		final AnalysisController ctrl = new AnalysisController();
+		final IAnalysisController ctrl = new AnalysisController();
 		final ShutdownReader r1 = new ShutdownReader(new Configuration(), ctrl);
 		final ShutdownReader r2 = new ShutdownReader(new Configuration(), ctrl);
 		final ShutdownFilter f1 = new ShutdownFilter(new Configuration(), ctrl);
@@ -127,7 +128,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testLongWayShortWay() throws IllegalStateException, AnalysisConfigurationException {
-		final AnalysisController ctrl = new AnalysisController();
+		final IAnalysisController ctrl = new AnalysisController();
 		final ShutdownReader r1 = new ShutdownReader(new Configuration(), ctrl);
 		final ShutdownReader r2 = new ShutdownReader(new Configuration(), ctrl);
 		final ShutdownFilter f1 = new ShutdownFilter(new Configuration(), ctrl);
@@ -152,7 +153,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testLoop() throws IllegalStateException, AnalysisConfigurationException {
-		final AnalysisController ctrl = new AnalysisController();
+		final IAnalysisController ctrl = new AnalysisController();
 		final ShutdownReader r1 = new ShutdownReader(new Configuration(), ctrl);
 		final ShutdownFilter f1 = new ShutdownFilter(new Configuration(), ctrl);
 		final ShutdownFilter f2 = new ShutdownFilter(new Configuration(), ctrl);

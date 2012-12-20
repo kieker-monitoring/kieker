@@ -24,6 +24,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
@@ -43,8 +44,7 @@ import kieker.test.tools.util.graph.GraphTestSetup;
 /**
  * Test suite for the creation of component allocation dependency graphs ({@link ComponentDependencyGraphAllocationFilter}).
  * 
- * @author Holger Knoche
- * 
+ * @author Holger Knoche, Nils Christian Ehmke *
  */
 public class ComponentAllocationDependencyGraphTest extends AbstractKiekerTest {
 
@@ -75,11 +75,13 @@ public class ComponentAllocationDependencyGraphTest extends AbstractKiekerTest {
 
 	@BeforeClass
 	public static void prepareSetup() throws AnalysisConfigurationException {
-		final ComponentDependencyGraphAllocationFilter filter = new ComponentDependencyGraphAllocationFilter(new Configuration());
+		final AnalysisController analysisController = new AnalysisController();
+
+		final ComponentDependencyGraphAllocationFilter filter = new ComponentDependencyGraphAllocationFilter(new Configuration(), analysisController);
 		final String inputPortName = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES;
 		final String repositoryPortName = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL;
 
-		testSetup = DependencyGraphTestUtil.prepareEnvironmentForProducerTest(filter, inputPortName, repositoryPortName,
+		testSetup = DependencyGraphTestUtil.prepareEnvironmentForProducerTest(analysisController, filter, inputPortName, repositoryPortName,
 				ComponentAllocationDependencyGraphTest.createExecutionRecords());
 	}
 

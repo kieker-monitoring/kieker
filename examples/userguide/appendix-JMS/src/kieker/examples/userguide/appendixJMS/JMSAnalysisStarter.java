@@ -17,6 +17,7 @@
 package kieker.examples.userguide.appendixJMS;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.TeeFilter;
 import kieker.analysis.plugin.reader.jms.JMSReader;
@@ -56,7 +57,7 @@ public final class JMSAnalysisStarter {
 			System.exit(1);
 		}
 
-		final AnalysisController analysisInstance = new AnalysisController();
+		final IAnalysisController analysisInstance = new AnalysisController();
 
 		final Configuration logReaderConfiguration = new Configuration();
 		logReaderConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_PROVIDERURL, providerUrl);
