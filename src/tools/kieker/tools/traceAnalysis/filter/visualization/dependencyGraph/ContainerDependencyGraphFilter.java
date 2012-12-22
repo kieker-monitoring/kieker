@@ -76,10 +76,8 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 		this(configuration, null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter#inputMessageTraces(kieker.tools.traceAnalysis.systemModel.MessageTrace)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	@InputPort(
@@ -120,10 +118,8 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 		this.reportSuccess(t.getTraceId());
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter#getConfigurationName()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String getConfigurationName() {

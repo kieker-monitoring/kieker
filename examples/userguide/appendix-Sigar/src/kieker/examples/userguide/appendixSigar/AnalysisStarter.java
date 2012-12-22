@@ -65,30 +65,13 @@ public final class AnalysisStarter {
 
 @Plugin
 class StdOutDumpConsumer extends AbstractFilterPlugin {
+
 	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
 
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * @param projectContext
-	 *            The project context for this component.
-	 * 
-	 * @since 1.7
-	 */
 	public StdOutDumpConsumer(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 	}
 
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated
-	 */
 	@Deprecated
 	public StdOutDumpConsumer(final Configuration configuration) {
 		this(configuration, null);
@@ -131,11 +114,6 @@ class StdOutDumpConsumer extends AbstractFilterPlugin {
 		} // else Unexpected record type
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
-	 */
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

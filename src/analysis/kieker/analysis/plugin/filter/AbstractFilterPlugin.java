@@ -65,19 +65,15 @@ public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFi
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#init()
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean init() { // NOPMD (default implementation)
 		return true; // do nothing
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#terminate(boolean)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void terminate(final boolean error) { // NOPMD (default implementation)
 		// do nothing

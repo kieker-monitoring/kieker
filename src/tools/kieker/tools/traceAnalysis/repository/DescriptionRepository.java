@@ -102,10 +102,8 @@ public class DescriptionRepository extends AbstractRepository {
 		this(configuration, descriptionData, null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.analysisComponent.IAnalysisComponent#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Configuration getCurrentConfiguration() {
 		return this.configuration;

@@ -143,20 +143,16 @@ public final class JMXReader extends AbstractReaderPlugin {
 		this(configuation, null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#terminate(boolean)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void terminate(final boolean error) {
 		LOG.info("Shutdown of JMXReader requested.");
 		this.unblock();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.reader.IReaderPlugin#read()
+	/**
+	 * {@inheritDoc}
 	 */
 	public final boolean read() {
 		if (this.silentreconnect) {
@@ -300,10 +296,8 @@ public final class JMXReader extends AbstractReaderPlugin {
 		this.cdLatch.countDown();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();

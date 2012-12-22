@@ -178,10 +178,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 		return this.maxTout;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.filter.AbstractFilterPlugin#init()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean init() {
@@ -362,10 +360,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();

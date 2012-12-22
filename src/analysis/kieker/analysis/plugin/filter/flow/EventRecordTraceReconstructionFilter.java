@@ -178,10 +178,8 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.filter.AbstractFilterPlugin#terminate(boolean)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void terminate(final boolean error) {
@@ -217,10 +215,8 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();

@@ -139,11 +139,8 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation
 		this.handleGraphElement(edge);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFilter#performConcreteGraphProcessing(kieker.tools.traceAnalysis.filter.visualization.graph.
-	 * AbstractGraph)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected AbstractGraph<V, E, TraceInformation> performConcreteGraphProcessing(final AbstractGraph<V, E, TraceInformation> graph) {
@@ -154,10 +151,8 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation
 		return graph;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFilter#getDesiredOriginRetentionPolicy()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected IOriginRetentionPolicy getDesiredOriginRetentionPolicy() throws AnalysisConfigurationException {

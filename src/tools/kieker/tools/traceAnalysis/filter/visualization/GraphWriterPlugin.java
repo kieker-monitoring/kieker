@@ -146,10 +146,8 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 		this(configuration, null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();

@@ -91,10 +91,8 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 		return true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();

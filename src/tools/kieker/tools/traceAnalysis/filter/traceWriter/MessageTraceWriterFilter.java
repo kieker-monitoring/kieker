@@ -88,10 +88,8 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 		this.stdOutPrintln("Wrote " + numTraces + " trace" + (numTraces > 1 ? "s" : "") + " to file '" + this.outputFn + "'"); // NOCS
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.filter.AbstractFilterPlugin#terminate(boolean)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void terminate(final boolean error) {
@@ -100,10 +98,8 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();

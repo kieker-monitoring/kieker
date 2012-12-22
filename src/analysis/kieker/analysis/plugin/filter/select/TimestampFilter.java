@@ -108,10 +108,8 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 		this(configuration, null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();

@@ -76,10 +76,8 @@ public final class CountingFilter extends AbstractFilterPlugin {
 		this(configuration, null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public final Configuration getCurrentConfiguration() {
 		return new Configuration();

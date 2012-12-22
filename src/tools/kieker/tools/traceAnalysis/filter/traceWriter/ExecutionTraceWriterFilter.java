@@ -92,10 +92,8 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 		this.stdOutPrintln("Wrote " + numTraces + " execution trace" + (numTraces > 1 ? "s" : "") + " to file '" + this.outputFn + "'"); // NOCS
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.filter.AbstractFilterPlugin#terminate(boolean)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void terminate(final boolean error) {
@@ -113,10 +111,8 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 		ExecutionTraceWriterFilter.this.reportSuccess(et.getTraceId());
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();

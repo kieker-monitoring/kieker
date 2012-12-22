@@ -117,10 +117,8 @@ public class TraceColorRepository extends AbstractRepository {
 		this(configuration, colorData, null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.analysisComponent.IAnalysisComponent#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Configuration getCurrentConfiguration() {
 		return this.configuration;

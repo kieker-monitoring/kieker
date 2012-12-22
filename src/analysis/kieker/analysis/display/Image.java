@@ -23,6 +23,9 @@ package kieker.analysis.display;
  */
 public class Image extends AbstractDisplay {
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public Image() {
 		// No code necessary
 	}

@@ -132,10 +132,8 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 		this.terminationLatch.countDown();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#terminate(boolean)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void terminate(final boolean error) {
 		// will lead to notifyPipeClosed() and the subsequent termination of read()
@@ -144,10 +142,8 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);

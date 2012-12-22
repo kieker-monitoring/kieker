@@ -74,10 +74,8 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 		this(configuration, null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter#inputMessageTraces(kieker.tools.traceAnalysis.systemModel.MessageTrace)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	@InputPort(
@@ -130,10 +128,8 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 		this.reportSuccess(t.getTraceId());
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter#getConfigurationName()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String getConfigurationName() {

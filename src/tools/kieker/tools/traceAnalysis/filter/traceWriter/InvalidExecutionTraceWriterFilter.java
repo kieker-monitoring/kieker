@@ -89,10 +89,8 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 		this.stdOutPrintln("Wrote " + numTraces + " execution trace artifact" + (numTraces > 1 ? "s" : "") + " to file '" + this.outputFn + "'"); // NOCS
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.filter.AbstractFilterPlugin#terminate(boolean)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void terminate(final boolean error) {
@@ -114,10 +112,8 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 		InvalidExecutionTraceWriterFilter.this.reportSuccess(et.getInvalidExecutionTraceArtifacts().getTraceId());
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();

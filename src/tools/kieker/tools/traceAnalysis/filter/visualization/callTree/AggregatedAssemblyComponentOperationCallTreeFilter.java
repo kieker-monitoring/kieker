@@ -70,10 +70,8 @@ public class AggregatedAssemblyComponentOperationCallTreeFilter extends Abstract
 		this(configuration, null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.filter.AbstractFilterPlugin#init()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean init() {
@@ -85,6 +83,9 @@ public class AggregatedAssemblyComponentOperationCallTreeFilter extends Abstract
 		return success;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected AssemblyComponentOperationPair concreteCreatePair(final SynchronousCallMessage callMsg) {
 		final AssemblyComponent assemblyComponent = callMsg.getReceivingExecution().getAllocationComponent().getAssemblyComponent();

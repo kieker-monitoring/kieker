@@ -81,10 +81,8 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 		this(configuration, null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter#inputMessageTraces(kieker.tools.traceAnalysis.systemModel.MessageTrace)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed", eventTypes = { MessageTrace.class })
@@ -154,10 +152,8 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 		this.reportSuccess(t.getTraceId());
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter#getConfigurationName()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String getConfigurationName() {

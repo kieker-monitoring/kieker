@@ -75,10 +75,8 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 		this(configuration, null, graph);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Configuration getCurrentConfiguration() {
 		return this.configuration;

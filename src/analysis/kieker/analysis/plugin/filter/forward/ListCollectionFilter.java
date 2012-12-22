@@ -96,10 +96,8 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 		return this.list.size();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();

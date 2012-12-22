@@ -162,10 +162,8 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 		this(configuration, null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter#printStatusMessage()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void printStatusMessage() {

@@ -23,6 +23,9 @@ package kieker.analysis.display;
  */
 public abstract class AbstractDisplay { // NOPMD (remove when abstract methods are added)
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public AbstractDisplay() {
 		// No code necessary
 	}

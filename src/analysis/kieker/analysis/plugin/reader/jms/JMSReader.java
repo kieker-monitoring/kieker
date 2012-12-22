@@ -226,20 +226,16 @@ public final class JMSReader extends AbstractReaderPlugin {
 		this.cdLatch.countDown();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#terminate(boolean)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void terminate(final boolean error) {
 		LOG.info("Shutdown of JMSReader requested.");
 		this.unblock();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();

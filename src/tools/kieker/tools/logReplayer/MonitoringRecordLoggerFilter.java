@@ -112,10 +112,8 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 		this(configuration, null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.filter.AbstractFilterPlugin#terminate(boolean)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void terminate(final boolean error) {
@@ -123,10 +121,8 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 		this.monitoringController.terminateMonitoring();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Configuration getCurrentConfiguration() {
 		// clone again, so no one can change anything

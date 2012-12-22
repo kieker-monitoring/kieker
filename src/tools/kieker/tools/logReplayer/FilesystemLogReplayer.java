@@ -44,10 +44,8 @@ public class FilesystemLogReplayer extends AbstractLogReplayer {
 		// this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.tools.logReplayer.AbstractLogReplayer#createReader(kieker.analysis.AnalysisController)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected AbstractReaderPlugin createReader(final IAnalysisController analysisInstance) {
@@ -58,10 +56,8 @@ public class FilesystemLogReplayer extends AbstractLogReplayer {
 		return new FSReader(configuration, analysisInstance);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.tools.logReplayer.AbstractLogReplayer#readerOutputPortName()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected String readerOutputPortName() {

@@ -65,10 +65,8 @@ public abstract class AbstractReaderPlugin extends AbstractPlugin implements IRe
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#init()
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean init() { // NOPMD (default implementation)
 		return true;

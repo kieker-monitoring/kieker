@@ -90,10 +90,8 @@ public abstract class AbstractTimestampFilter extends AbstractFilterPlugin {
 	 */
 	protected abstract String getConfigurationPropertyIgnoreAfterTimestamp();
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);

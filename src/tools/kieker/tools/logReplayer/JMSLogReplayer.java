@@ -53,10 +53,8 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 		this.jmsFactoryLookupName = jmsFactoryLookupName;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.tools.logReplayer.AbstractLogReplayer#createReader(kieker.analysis.AnalysisController)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected AbstractReaderPlugin createReader(final IAnalysisController analysisController) {
@@ -67,10 +65,8 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 		return new JMSReader(configuration, analysisController);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.tools.logReplayer.AbstractLogReplayer#readerOutputPortName()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected String readerOutputPortName() {

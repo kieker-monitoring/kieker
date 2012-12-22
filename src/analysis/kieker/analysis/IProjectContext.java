@@ -21,6 +21,9 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.model.analysisMetaModel.MIProject;
 
 /**
+ * This is the interface which allows the analysis components a slimmed-down access to an instance of the {@link kieker.analysis.AnalysisController}. The methods in
+ * this interface should not allow any modifications.
+ * 
  * @author Nils Christian Ehmke
  * 
  * @since 1.7
@@ -30,7 +33,9 @@ public interface IProjectContext {
 	/**
 	 * Delivers the value for the given (global) property within the analysis.
 	 * 
-	 * @return The value for the given property if it exists, null otherwise.
+	 * @param key
+	 *            The key of the property.
+	 * @return The value for the given property if it exists, an empty string otherwise.
 	 * 
 	 * @since 1.7
 	 */

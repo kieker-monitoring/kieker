@@ -16,7 +16,6 @@
 
 package kieker.analysis.analysisComponent;
 
-import kieker.analysis.AnalysisController;
 import kieker.analysis.IProjectContext;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -37,7 +36,13 @@ public abstract class AbstractAnalysisComponent {
 
 	private static final Log LOG = LogFactory.getLog(AbstractAnalysisComponent.class);
 
+	/**
+	 * The project context of this component.
+	 */
 	protected volatile IProjectContext projectContext;
+	/**
+	 * The current configuration of this component.
+	 */
 	protected final Configuration configuration;
 
 	private final String name;
@@ -82,7 +87,7 @@ public abstract class AbstractAnalysisComponent {
 	/**
 	 * Sets the project context atomically of this component to a new value. This property can only be set once. Every additional setting will be ignored but logged.
 	 * <b>Do not call this method manually. A component will not be registered just by calling this method. Instead use the register methods of the
-	 * {@link AnalysisController}. </b>
+	 * {@link kieker.analysis.AnalysisController}. </b>
 	 * 
 	 * @param context
 	 *            The new project context of this component.

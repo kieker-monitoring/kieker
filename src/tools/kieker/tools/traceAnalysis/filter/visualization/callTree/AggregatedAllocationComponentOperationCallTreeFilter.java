@@ -70,10 +70,8 @@ public class AggregatedAllocationComponentOperationCallTreeFilter extends Abstra
 		this(configuration, null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.filter.AbstractFilterPlugin#init()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean init() {

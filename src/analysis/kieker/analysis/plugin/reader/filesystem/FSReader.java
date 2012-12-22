@@ -99,20 +99,16 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 		this(configuration, null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#terminate(boolean)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void terminate(final boolean error) {
 		LOG.info("Shutting down reader.");
 		this.running = false;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.reader.IReaderPlugin#read()
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean read() {
 		// start all reader
@@ -164,10 +160,8 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 		return this.running;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();

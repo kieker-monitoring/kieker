@@ -70,15 +70,21 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
 /**
- * The <code>AnalysisController</code> can be used to configure and control an analysis instance. It is responsible for the life cycle of the readers, filters and
- * repositories.
+ * The <code>AnalysisController</code> can be used to configure, control, save and load an analysis instance. It is responsible for the life cycle of the readers,
+ * filters and repositories.
  * 
  * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke, Jan Waller
  */
+// TODO Use the new constructor in the reflection calls as well
 @kieker.analysis.annotation.AnalysisController(configuration =
 		@Property(name = AnalysisController.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, defaultValue = "seconds"))
 public final class AnalysisController implements IAnalysisController { // NOPMD (really long class)
 
+	/**
+	 * This is the name of the property containing the time unit for the monitoring records.
+	 * 
+	 * @since 1.7
+	 */
 	public static final String CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT = "recordsTimeUnit";
 
 	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
@@ -272,19 +278,15 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.IAnalysisController#registerStateObserver(kieker.analysis.AnalysisController.IStateObserver)
+	/**
+	 * {@inheritDoc}
 	 */
 	public final void registerStateObserver(final IStateObserver stateObserver) {
 		this.stateObservers.add(stateObserver);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.IAnalysisController#unregisterStateObserver(kieker.analysis.AnalysisController.IStateObserver)
+	/**
+	 * {@inheritDoc}
 	 */
 	public final void unregisterStateObserver(final IStateObserver stateObserver) {
 		this.stateObservers.remove(stateObserver);
@@ -302,10 +304,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.IAnalysisController#getProperty(java.lang.String)
+	/**
+	 * {@inheritDoc}
 	 */
 	public final String getProperty(final String key) {
 		return this.globalConfiguration.getStringProperty(key);
@@ -465,32 +465,26 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.IAnalysisController#saveToFile(java.io.File)
+	/**
+	 * {@inheritDoc}
 	 */
 	public final void saveToFile(final File file) throws IOException, AnalysisConfigurationException {
 		final MIProject mProject = this.getCurrentConfiguration();
 		AnalysisController.saveToFile(file, mProject);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.IAnalysisController#saveToFile(java.lang.String)
+	/**
+	 * {@inheritDoc}
 	 */
 	public final void saveToFile(final String pathname) throws IOException, AnalysisConfigurationException {
 		this.saveToFile(new File(pathname));
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.IAnalysisController#connect(AbstractPlugin, String, AbstractPlugin, String)
+	/**
+	 * {@inheritDoc}
 	 */
-	public final void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName)
-			throws IllegalStateException, AnalysisConfigurationException {
+	public final void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst,
+			final String inputPortName) throws IllegalStateException, AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect readers and filters after starting analysis.");
 		}
@@ -512,10 +506,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		AbstractPlugin.connect(src, outputPortName, dst, inputPortName); // throws AnalysisConfigurationException
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.IAnalysisController#connect(kieker.analysis.plugin.AbstractPlugin, java.lang.String, kieker.analysis.repository.AbstractRepository)
+	/**
+	 * {@inheritDoc}
 	 */
 	public final void connect(final AbstractPlugin plugin, final String repositoryPort, final AbstractRepository repository) throws IllegalStateException,
 			AnalysisConfigurationException {
@@ -534,8 +526,17 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		plugin.connect(repositoryPort, repository); // throws AnalysisConfigurationException
 	}
 
+	/**
+	 * Converts the given configuration into a list of {@link MIProperty}s using the given factory.
+	 * 
+	 * @param configuration
+	 *            The configuration to be converted.
+	 * @param factory
+	 *            The factory to be used to create the model instances.
+	 * @return A list of model instances.
+	 */
 	private static List<MIProperty> convertProperties(final Configuration configuration, final MAnalysisMetaModelFactory factory) {
-		if (null == configuration) { // should not happen, but better safe than sorry
+		if (null == configuration) { // should not happen, but better be safe than sorry
 			return Collections.emptyList();
 		}
 		final List<MIProperty> properties = new ArrayList<MIProperty>(configuration.size());
@@ -549,10 +550,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		return properties;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.IProjectContext#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public final MIProject getCurrentConfiguration() throws AnalysisConfigurationException {
 		try {
@@ -660,10 +659,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.IAnalysisController#run()
+	/**
+	 * {@inheritDoc}
 	 */
 	public final void run() throws IllegalStateException, AnalysisConfigurationException {
 		synchronized (this) {
@@ -731,6 +728,9 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		this.terminate();
 	}
 
+	/**
+	 * Causes the calling thread to wait until the analysis controller has been initialized.
+	 */
 	protected final void awaitInitialization() {
 		try {
 			this.initializationLatch.await();
@@ -739,19 +739,15 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.IAnalysisController#terminate()
+	/**
+	 * {@inheritDoc}
 	 */
 	public final void terminate() {
 		this.terminate(false);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.IAnalysisController#terminate(boolean)
+	/**
+	 * {@inheritDoc}
 	 */
 	public final void terminate(final boolean error) {
 		synchronized (this) {
@@ -776,10 +772,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.IAnalysisController#registerReader(kieker.analysis.plugin.reader.AbstractReaderPlugin)
+	/**
+	 * {@inheritDoc}
 	 */
 	// TODO This is not really deprecated, but we have to make sure that only AbstractComponent can use this method. Maybe we should remove the method just from the
 	// interface?
@@ -806,10 +800,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.IAnalysisController#registerFilter(kieker.analysis.plugin.filter.AbstractFilterPlugin)
+	/**
+	 * {@inheritDoc}
 	 */
 	// TODO This is not really deprecated, but we have to make sure that only AbstractComponent can use this method. Maybe we should remove the method just from the
 	// interface?
@@ -836,10 +828,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.IAnalysisController#registerRepository(kieker.analysis.repository.AbstractRepository)
+	/**
+	 * {@inheritDoc}
 	 */
 	// TODO This is not really deprecated, but we have to make sure that only AbstractComponent can use this method. Maybe we should remove the method just from the
 	// interface?
@@ -866,46 +856,36 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.IProjectContext#getProjectName()
+	/**
+	 * {@inheritDoc}
 	 */
 	public final String getProjectName() {
 		return this.projectName;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.IAnalysisController#getReaders()
+	/**
+	 * {@inheritDoc}
 	 */
 	public final Collection<AbstractReaderPlugin> getReaders() {
 		return Collections.unmodifiableCollection(this.readers);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.IAnalysisController#getFilters()
+	/**
+	 * {@inheritDoc}
 	 */
 	public final Collection<AbstractFilterPlugin> getFilters() {
 		return Collections.unmodifiableCollection(this.filters);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.IAnalysisController#getRepositories()
+	/**
+	 * {@inheritDoc}
 	 */
 	public final Collection<AbstractRepository> getRepositories() {
 		return Collections.unmodifiableCollection(this.repos);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.IProjectContext#getState()
+	/**
+	 * {@inheritDoc}
 	 */
 	public final STATE getState() {
 		return this.state;
@@ -1040,9 +1020,28 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		return null;
 	}
 
+	/**
+	 * Creates and initializes the given class with the given configuration via reflection.
+	 * 
+	 * @param c
+	 *            The base class of the class to be created ({@link AbstractRepository}, {@link AbstractPlugin}).
+	 * @param classname
+	 *            The name of the class to be created.
+	 * @param configuration
+	 *            The configuration to be used to initialize the class.
+	 * @param classLoader
+	 *            The classloader which will be used to initialize the class.
+	 * 
+	 * @param <C>
+	 *            The type of the class.
+	 * 
+	 * @return A fully initialized class.
+	 * @throws AnalysisConfigurationException
+	 *             If the class could not be found or the class doesn't implement the correct classloader.
+	 */
 	@SuppressWarnings("unchecked")
-	protected static final <C> C createAndInitialize(final Class<C> c, final String classname, final Configuration configuration, final ClassLoader classLoader)
-			throws AnalysisConfigurationException {
+	private static final <C extends AbstractAnalysisComponent> C createAndInitialize(final Class<C> c, final String classname, final Configuration configuration,
+			final ClassLoader classLoader) throws AnalysisConfigurationException {
 		try {
 			final Class<?> clazz = Class.forName(classname, true, classLoader);
 			if (c.isAssignableFrom(clazz)) {
@@ -1083,6 +1082,9 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	}
 
 	/**
+	 * This is a wrapper for the {@link AnalysisController} which contains a mapping between the model instances and the actual objects as well. This is necessary if
+	 * one wants to create an analysis based on an instance of {@link MIProject} and needs to map from the model instances to the actual created objects.
+	 * 
 	 * @author Andre van Hoorn, Nils Christian Ehmke, Jan Waller
 	 */
 	public static final class AnalysisControllerWithMapping {
@@ -1091,6 +1093,16 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		private final Map<MIRepository, AbstractRepository> repositoryMap;
 		private final AnalysisController controller;
 
+		/**
+		 * Creates a new instance of this class using the given parameters.
+		 * 
+		 * @param controller
+		 *            The analysis controller to be stored in this container.
+		 * @param pluginMap
+		 *            The mapping between actual plugins and their model counterparts.
+		 * @param repositoryMap
+		 *            The mapping between actual repositories and their model counterparts.
+		 */
 		public AnalysisControllerWithMapping(final AnalysisController controller, final Map<MIPlugin, AbstractPlugin> pluginMap,
 				final Map<MIRepository, AbstractRepository> repositoryMap) {
 			this.controller = controller;
@@ -1098,14 +1110,29 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			this.repositoryMap = repositoryMap;
 		}
 
+		/**
+		 * Getter for the property {@link AnalysisControllerWithMapping#pluginMap}.
+		 * 
+		 * @return The current value of the property.
+		 */
 		public Map<MIPlugin, AbstractPlugin> getPluginMap() {
 			return this.pluginMap;
 		}
 
+		/**
+		 * Getter for the property {@link AnalysisControllerWithMapping#repositoryMap}.
+		 * 
+		 * @return The current value of the property.
+		 */
 		public Map<MIRepository, AbstractRepository> getRepositoryMap() {
 			return this.repositoryMap;
 		}
 
+		/**
+		 * Getter for the property {@link AnalysisControllerWithMapping#controller}.
+		 * 
+		 * @return The current value of the property.
+		 */
 		public AnalysisController getController() {
 			return this.controller;
 		}

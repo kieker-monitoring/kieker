@@ -178,28 +178,22 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 			super(configuration, projectContext);
 		}
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see kieker.analysis.plugin.IPlugin#terminate(boolean)
+		/**
+		 * {@inheritDoc}
 		 */
 		public void terminate(final boolean error) {
 			this.shutdownNr = SHUTDOWNORDER.getAndIncrement();
 		}
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+		/**
+		 * {@inheritDoc}
 		 */
 		public Configuration getCurrentConfiguration() {
 			return new Configuration();
 		}
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see kieker.analysis.plugin.reader.IReaderPlugin#read()
+		/**
+		 * {@inheritDoc}
 		 */
 		public boolean read() {
 			// don't send anything (else we would fail in loop!)

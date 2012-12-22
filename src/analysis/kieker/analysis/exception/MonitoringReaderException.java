@@ -26,11 +26,25 @@ public class MonitoringReaderException extends MonitoringRecordReceiverException
 
 	private static final long serialVersionUID = 14537L;
 
-	public MonitoringReaderException(final String messString) {
-		super(messString);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param message
+	 *            The message of the exception.
+	 * @param cause
+	 *            The cause of the exception.
+	 */
+	public MonitoringReaderException(final String message, final Throwable cause) {
+		super(message, cause);
 	}
 
-	public MonitoringReaderException(final String messString, final Throwable cause) {
-		super(messString, cause);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param message
+	 *            The message of the exception.
+	 */
+	public MonitoringReaderException(final String message) {
+		super(message);
 	}
 }

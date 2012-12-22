@@ -140,10 +140,8 @@ public final class TeeFilter extends AbstractFilterPlugin {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();

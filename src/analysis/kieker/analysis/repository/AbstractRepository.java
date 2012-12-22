@@ -84,10 +84,8 @@ public abstract class AbstractRepository extends AbstractAnalysisComponent imple
 		return defaultConfiguration;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.repository.IRepository#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public final String getRepositoryName() {
 		final String repositoryName = this.getClass().getAnnotation(Repository.class).name();
@@ -98,10 +96,8 @@ public abstract class AbstractRepository extends AbstractAnalysisComponent imple
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.repository.IRepository#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public final String getRepositoryDescription() {
 		return this.getClass().getAnnotation(Repository.class).description();

@@ -17,6 +17,8 @@
 package kieker.analysis.exception;
 
 /**
+ * An exception to show that a plugin received an invalid project context.
+ * 
  * @author Nils Christian Ehmke
  * 
  * @since 1.7
@@ -25,10 +27,24 @@ public class InvalidProjectContextException extends RuntimeException {
 
 	private static final long serialVersionUID = 2392057148925416274L;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param message
+	 *            The message of the exception.
+	 * @param cause
+	 *            The cause of the exception.
+	 */
 	public InvalidProjectContextException(final String message, final Throwable cause) {
 		super(message, cause);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param message
+	 *            The message of the exception.
+	 */
 	public InvalidProjectContextException(final String message) {
 		super(message);
 	}

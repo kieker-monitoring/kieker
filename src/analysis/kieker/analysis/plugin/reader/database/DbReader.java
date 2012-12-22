@@ -103,10 +103,8 @@ public class DbReader extends AbstractReaderPlugin {
 		this(configuration, null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.reader.IReaderPlugin#read()
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean read() {
 		Connection connection = null;
@@ -184,20 +182,16 @@ public class DbReader extends AbstractReaderPlugin {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#terminate(boolean)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void terminate(final boolean error) {
 		LOG.info("Shutdown of DBReader requested.");
 		this.running = false;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();

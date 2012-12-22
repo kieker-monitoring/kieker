@@ -28,6 +28,8 @@ import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.repository.AbstractRepository;
 
 /**
+ * This is the interface to {@link kieker.analysis.AnalysisController}, allowing not only to access read-methods but also to modify the analysis itself.
+ * 
  * @author Nils Christian Ehmke
  * 
  * @since 1.7
@@ -50,13 +52,6 @@ public interface IAnalysisController extends IProjectContext {
 	 *            The observer to be unregistered.
 	 */
 	public void unregisterStateObserver(final IStateObserver stateObserver);
-
-	/**
-	 * Delivers the value for the given (global) property within the analysis.
-	 * 
-	 * @return The value for the given property if it exists, an empty string otherwise.
-	 */
-	public String getProperty(final String key);
 
 	/**
 	 * This method can be used to store the current configuration of this analysis controller in a specified file.
@@ -104,8 +99,8 @@ public interface IAnalysisController extends IProjectContext {
 	 * @throws AnalysisConfigurationException
 	 *             If the port names or the given plugins are invalid or not compatible.
 	 */
-	public void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName)
-			throws IllegalStateException, AnalysisConfigurationException;
+	public void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst,
+			final String inputPortName) throws IllegalStateException, AnalysisConfigurationException;
 
 	/**
 	 * Connects the given repository to this plugin via the given name.
@@ -157,7 +152,7 @@ public interface IAnalysisController extends IProjectContext {
 	 *            The reader to be registered.
 	 * @throws IllegalStateException
 	 *             If the controller is already running or has already been terminated.
-	 * @deprecated
+	 * @deprecated The registering of a plugin should be done via the constructor.
 	 */
 	@Deprecated
 	public void registerReader(final AbstractReaderPlugin reader) throws IllegalStateException;
@@ -171,7 +166,7 @@ public interface IAnalysisController extends IProjectContext {
 	 *            The filter to be registered.
 	 * @throws IllegalStateException
 	 *             If the controller is already running or has already been terminated.
-	 * @deprecated
+	 * @deprecated The registering of a filter should be done via the constructor.
 	 */
 	@Deprecated
 	public void registerFilter(final AbstractFilterPlugin filter) throws IllegalStateException;
@@ -183,7 +178,7 @@ public interface IAnalysisController extends IProjectContext {
 	 *            The repository to be registered.
 	 * @throws IllegalStateException
 	 *             If the controller is already running or has already been terminated.
-	 * @deprecated
+	 * @deprecated The registering of a repository should be done via the constructor.
 	 */
 	@Deprecated
 	public void registerRepository(final AbstractRepository repository) throws IllegalStateException;

@@ -75,10 +75,8 @@ public class SimpleForwardFilterWithRepository extends AbstractFilterPlugin {
 		super.deliver(OUTPUT_PORT_NAME, event);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();

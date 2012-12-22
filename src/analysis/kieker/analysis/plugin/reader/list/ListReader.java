@@ -98,10 +98,8 @@ public class ListReader<T> extends AbstractReaderPlugin {
 		this.objects.add(object);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.reader.IReaderPlugin#read()
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean read() {
 		for (final T obj : this.objects) {
@@ -120,19 +118,15 @@ public class ListReader<T> extends AbstractReaderPlugin {
 		return true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#terminate(boolean)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void terminate(final boolean error) {
 		this.terminationLatch.countDown();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();

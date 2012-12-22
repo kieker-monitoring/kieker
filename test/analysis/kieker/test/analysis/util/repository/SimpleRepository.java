@@ -60,10 +60,8 @@ public class SimpleRepository extends AbstractRepository { // NOPMD (SubClassOfT
 		this(configuration, null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.analysisComponent.IAnalysisComponent#getCurrentConfiguration()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();

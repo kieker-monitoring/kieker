@@ -71,11 +71,6 @@ public class MyPipeReader extends AbstractReaderPlugin {
 		this(configuration, null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.reader.IReaderPlugin#read()
-	 */
 	public boolean read() {
 		try {
 			/* Wait max. 4 seconds for the next data. */
