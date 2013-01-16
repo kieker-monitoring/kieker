@@ -1,0 +1,34 @@
+<html xmlns="http://www.w3c.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    
+<h:head>
+    <link type="text/css" rel="StyleSheet" href="css/style.css" />
+</h:head>
+<h:body>
+<a href="../index.jsf">Return to Main Menu</a>
+
+<h:form>
+<p:lineChart id="category" value="#{countingBean.categoryModel}" legendPosition="e"  
+     title="Method Counts Per Minute" minY="0" maxY="#{countingBean.maxCounts}" style="height:300px;margin-top:20px"/>
+<p:poll interval="60" update="category" />
+</h:form>
+<br></br>
+<h:form>  
+    <p:dataTable var="entry" id="ent" value="#{countingBean.counts}">
+    	
+    	<p:column headerText="Time">  
+            <h:outputText value="#{entry.key}" />  
+        </p:column>  
+        
+        <p:column headerText="Count">  
+            <h:outputText value="#{entry.value}" />  
+        </p:column>  
+          
+    </p:dataTable>
+    <p:poll interval="60" update="ent" />  
+</h:form>   
+
+</h:body>
+</html>

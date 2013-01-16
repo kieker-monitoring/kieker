@@ -1,0 +1,32 @@
+<html xmlns="http://www.w3c.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    
+<h:head>
+    <link type="text/css" rel="StyleSheet" href="css/style.css" />
+</h:head>
+<h:body>
+<a href="../index.jsf">Return to Main Menu</a>
+<h:form>  
+    <p:dataTable var="record" id="rec" value="#{recordBean.records}">
+    	
+    	<p:column headerText="Trace Id">  
+            <h:outputText value="#{record.traceId}" />  
+        </p:column>  
+        
+        <p:column headerText="Signature">  
+            <h:outputText value="#{record.operationSignature}" />  
+        </p:column>  
+        
+        <p:column headerText="Response Time in ms">  
+            <h:outputText value="#{(record.tout - record.tin)/1000000}" />  
+        </p:column>
+        
+          
+    </p:dataTable>
+    <p:poll interval="3" update="rec" />  
+</h:form>   
+
+</h:body>
+</html>
