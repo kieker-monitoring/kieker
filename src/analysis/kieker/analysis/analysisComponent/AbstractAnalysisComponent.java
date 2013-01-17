@@ -30,7 +30,7 @@ import kieker.common.logging.LogFactory;
  * 
  * @since 1.7
  */
-public abstract class AbstractAnalysisComponent {
+public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 
 	public static final String CONFIG_NAME = "name-hiddenAndNeverExportedProperty";
 
@@ -40,6 +40,7 @@ public abstract class AbstractAnalysisComponent {
 	 * The project context of this component.
 	 */
 	protected volatile IProjectContext projectContext;
+
 	/**
 	 * The current configuration of this component.
 	 */
@@ -76,9 +77,12 @@ public abstract class AbstractAnalysisComponent {
 	protected abstract Configuration getDefaultConfiguration();
 
 	/**
-	 * Delivers the current name of this component.
-	 * 
-	 * @return The name.
+	 * {@inheritDoc}
+	 */
+	public abstract Configuration getCurrentConfiguration();
+
+	/**
+	 * {@inheritDoc}
 	 */
 	public final String getName() {
 		return this.name;
@@ -94,9 +98,11 @@ public abstract class AbstractAnalysisComponent {
 	 * 
 	 * @return true iff the project context of this plugin was not null and has been set to the given value.
 	 * 
+	 * @Deprecated
 	 * @since 1.7
 	 */
-	// TODO Remove this method in 1.8
+	// TODO Remove this method in 1.8 (so mark it as deprecated)
+	@Deprecated
 	public final boolean setProjectContext(final IProjectContext context) {
 		synchronized (this) {
 			if (this.projectContext == null) {

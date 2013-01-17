@@ -70,14 +70,16 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
 /**
- * The <code>AnalysisController</code> can be used to configure, control, save and load an analysis instance. It is responsible for the life cycle of the readers,
- * filters and repositories.
+ * The <code>AnalysisController</code> can be used to configure, control, save and load an analysis instance.
+ * It is responsible for the life cycle of the readers, filters and repositories.
  * 
  * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke, Jan Waller
  */
 // TODO Use the new constructor in the reflection calls as well
-@kieker.analysis.annotation.AnalysisController(configuration =
-		@Property(name = AnalysisController.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, defaultValue = "seconds"))
+@kieker.analysis.annotation.AnalysisController(configuration = {
+	@Property(name = AnalysisController.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, defaultValue = "NANOSECONDS"),
+	@Property(name = AnalysisController.CONFIG_PROPERTY_NAME_PROJECT_NAME, defaultValue = "AnalysisProject"),
+})
 public final class AnalysisController implements IAnalysisController { // NOPMD (really long class)
 
 	/**
@@ -86,10 +88,17 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * @since 1.7
 	 */
 	public static final String CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT = "recordsTimeUnit";
+	/**
+	 * This is the name of the property containing the project name.
+	 * 
+	 * @since 1.7
+	 */
+	public static final String CONFIG_PROPERTY_NAME_PROJECT_NAME = "projectName";
 
 	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
 
 	private final String projectName;
+
 	/**
 	 * This list contains the dependencies of the project. Currently this field is only being used when loading an instance of the model.
 	 */
@@ -148,7 +157,13 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *            The name of the project.
 	 */
 	public AnalysisController(final String projectName) {
-		this(projectName, new Configuration());
+		this(AnalysisController.createConfigurationWithProjectName(projectName));
+	}
+
+	private static final Configuration createConfigurationWithProjectName(final String projectName) {
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(CONFIG_PROPERTY_NAME_PROJECT_NAME, projectName);
+		return configuration;
 	}
 
 	/**
@@ -217,11 +232,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		if (project == null) {
 			throw new NullPointerException("Can not load project null.");
 		} else {
-			this.globalConfiguration = new Configuration();
-
-			// Make sure that we can supply the plugins with the default global properties
-			this.initializeDefaultConfiguration();
-
+			this.globalConfiguration = new Configuration(this.getDefaultConfiguration());
 			this.loadFromModelProject(project, classLoader);
 			this.projectName = project.getName();
 		}
@@ -235,47 +246,27 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * 
 	 * @since 1.7
 	 */
-	public AnalysisController(final Configuration globalConfiguration) {
-		this("AnalysisProject", globalConfiguration);
+	public AnalysisController(final Configuration configuration) {
+		this.globalConfiguration = configuration.flatten(this.getDefaultConfiguration());
+		this.projectName = this.getProperty(CONFIG_PROPERTY_NAME_PROJECT_NAME);
 	}
 
 	/**
-	 * Constructs an {@link AnalysisController} instance using the given parameter.
-	 * 
-	 * @param projectName
-	 *            The name of the project.
-	 * @param globalConfiguration
-	 *            The global configuration of this analysis. All plugins can indirectly access it.
+	 * This method provides the default properties, as supplied by the annotation.
 	 * 
 	 * @since 1.7
 	 */
-	public AnalysisController(final String projectName, final Configuration globalConfiguration) {
-		this.projectName = projectName;
-		this.globalConfiguration = globalConfiguration;
-
-		// Make sure that we can supply the plugins with the default global properties
-		this.initializeDefaultConfiguration();
-	}
-
-	/**
-	 * This method can be used to fill the already initialized field {@link AnalysisController#globalConfiguration} with the default properties, as supplied by the
-	 * annotation.
-	 * 
-	 * @since 1.7
-	 */
-	private void initializeDefaultConfiguration() {
-		// Get the (potential) annotation
-		final kieker.analysis.annotation.AnalysisController annotation = AnalysisController.class.getAnnotation(kieker.analysis.annotation.AnalysisController.class);
-
-		if (annotation != null) {
+	private final Configuration getDefaultConfiguration() {
+		final Configuration defaultConfiguration = new Configuration();
+		// Get the (potential) annotation of our class
+		final kieker.analysis.annotation.AnalysisController annotation = this.getClass().getAnnotation(kieker.analysis.annotation.AnalysisController.class);
+		if (null != annotation) {
 			// Run through the available properties and put them into our configuration
 			for (final Property property : annotation.configuration()) {
-				// Make sure that we do not overwrite already defined properties. This is for the case that someone overwrites our default configuration
-				if (!this.globalConfiguration.containsKey(property.name())) {
-					this.globalConfiguration.setProperty(property.name(), property.defaultValue());
-				}
+				defaultConfiguration.setProperty(property.name(), property.defaultValue());
 			}
 		}
+		return defaultConfiguration;
 	}
 
 	/**
@@ -776,7 +767,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@inheritDoc}
 	 */
 	// TODO This is not really deprecated, but we have to make sure that only AbstractComponent can use this method. Maybe we should remove the method just from the
-	// interface?
+	// interface? sounds good!
 	@Deprecated
 	public final void registerReader(final AbstractReaderPlugin reader) throws IllegalStateException {
 		if (this.state != STATE.READY) {
@@ -792,9 +783,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			LOG.warn("Reader " + reader.getName() + " already registered.");
 			return;
 		}
-		synchronized (this) {
-			this.readers.add(reader);
-		}
+		this.readers.add(reader);
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Registered reader " + reader);
 		}
@@ -804,7 +793,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@inheritDoc}
 	 */
 	// TODO This is not really deprecated, but we have to make sure that only AbstractComponent can use this method. Maybe we should remove the method just from the
-	// interface?
+	// interface? sounds good!
 	@Deprecated
 	public final void registerFilter(final AbstractFilterPlugin filter) throws IllegalStateException {
 		if (this.state != STATE.READY) {
@@ -820,9 +809,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			LOG.warn("Filter '" + filter.getName() + "' (" + filter.getPluginName() + ") already registered.");
 			return;
 		}
-		synchronized (this) {
-			this.filters.add(filter);
-		}
+		this.filters.add(filter);
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Registered plugin " + filter);
 		}
@@ -832,7 +819,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@inheritDoc}
 	 */
 	// TODO This is not really deprecated, but we have to make sure that only AbstractComponent can use this method. Maybe we should remove the method just from the
-	// interface?
+	// interface? sounds good!
 	@Deprecated
 	public final void registerRepository(final AbstractRepository repository) throws IllegalStateException {
 		if (this.state != STATE.READY) {
@@ -848,9 +835,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			LOG.warn("Repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ") already registered.");
 			return;
 		}
-		synchronized (this) {
-			this.repos.add(repository);
-		}
+		this.repos.add(repository);
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Registered Repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ")");
 		}
