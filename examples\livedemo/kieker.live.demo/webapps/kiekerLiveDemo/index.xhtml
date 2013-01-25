@@ -4,13 +4,17 @@
     xmlns:p="http://primefaces.org/ui">
     
 <h:head>
-    <link type="text/css" rel="StyleSheet" href="css/style.css" />
-    <h1>Kieker Live Demo</h1>
+    <link type="text/css" rel="StyleSheet" href="css/theme.css" />
+    <title>Kieker Live Demo</title>
 </h:head>
 <h:body>
-
-<a href="resources/recordList.jsf">Signature List</a><br></br>
-<a href="resources/counting.jsf">Live Chart</a>
-
+	<div id="body"  class="title ui-widget-header ui-corner-all">
+		<h1 align="center">Kieker Live Demo</h1>
+	
+		<ul style="list-style-type:none;" id="main">
+        	<li><h2><a href="resources/recordList.jsf">Record List</a></h2></li>
+        	<li><h2><a href="resources/counting.jsf">Counting</a></h2></li>
+		</ul>
+	</div>   
 </h:body>
 </html>

@@ -29,7 +29,7 @@
 
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
-		<param-value>aristo</param-value>
+		<param-value>afternoon</param-value>
 	</context-param>
 	
 	<!-- <listener>

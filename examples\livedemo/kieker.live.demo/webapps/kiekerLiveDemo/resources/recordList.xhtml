@@ -4,29 +4,29 @@
     xmlns:p="http://primefaces.org/ui">
     
 <h:head>
-    <link type="text/css" rel="StyleSheet" href="css/style.css" />
+    <link type="text/css" rel="StyleSheet" href="css/theme.css" />
+    <title>Kieker Live Demo</title>
 </h:head>
 <h:body>
-<a href="../index.jsf">Return to Main Menu</a>
-<h:form>  
-    <p:dataTable var="record" id="rec" value="#{recordBean.records}">
-    	
-    	<p:column headerText="Trace Id">  
-            <h:outputText value="#{record.traceId}" />  
-        </p:column>  
-        
-        <p:column headerText="Signature">  
-            <h:outputText value="#{record.operationSignature}" />  
-        </p:column>  
-        
-        <p:column headerText="Response Time in ms">  
-            <h:outputText value="#{(record.tout - record.tin)/1000000}" />  
-        </p:column>
-        
-          
-    </p:dataTable>
-    <p:poll interval="3" update="rec" />  
-</h:form>   
-
+	<div class="title ui-widget-header ui-corner-all">
+		<h1 align="center">List Of Records</h1>
+		<div align="right">
+			<a href="../index.jsf" align="left">Return to Main Menu</a>
+		</div>
+	</div>
+	<h:form>  
+    	<p:dataTable var="record" id="rec" value="#{recordBean.records}">
+    		<p:column headerText="Trace Id">  
+            	<h:outputText value="#{record.traceId}" />  
+	        </p:column>
+    	    <p:column headerText="Signature">  
+        	    <h:outputText value="#{record.operationSignature}" />  
+	        </p:column>
+    	    <p:column headerText="Response Time in ms">  
+        	    <h:outputText value="#{(record.tout - record.tin)/1000000}" />  
+	        </p:column>
+    	</p:dataTable>
+    	<p:poll interval="3" update="rec" />  
+	</h:form>   
 </h:body>
 </html>

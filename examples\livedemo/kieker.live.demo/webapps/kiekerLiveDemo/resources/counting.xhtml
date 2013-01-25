@@ -4,31 +4,31 @@
     xmlns:p="http://primefaces.org/ui">
     
 <h:head>
-    <link type="text/css" rel="StyleSheet" href="css/style.css" />
+    <link type="text/css" rel="StyleSheet" href="css/theme.css" />
+    <title>Kieker Live Demo</title>
 </h:head>
 <h:body>
-<a href="../index.jsf">Return to Main Menu</a>
-
-<h:form>
-<p:lineChart id="category" value="#{countingBean.categoryModel}" legendPosition="e"  
-     title="Method Counts Per Minute" minY="0" maxY="#{countingBean.maxCounts}" style="height:300px;margin-top:20px"/>
-<p:poll interval="60" update="category" />
-</h:form>
-<br></br>
-<h:form>  
-    <p:dataTable var="entry" id="ent" value="#{countingBean.counts}">
-    	
-    	<p:column headerText="Time">  
-            <h:outputText value="#{entry.key}" />  
-        </p:column>  
-        
-        <p:column headerText="Count">  
-            <h:outputText value="#{entry.value}" />  
-        </p:column>  
-          
-    </p:dataTable>
-    <p:poll interval="60" update="ent" />  
-</h:form>   
-
+	<div class="title ui-widget-header ui-corner-all">
+		<h1 align="center">Counts per Minute</h1>
+		<div align="right">
+			<a href="../index.jsf" align="left">Return to Main Menu</a>
+		</div>
+	</div>
+	<h:form>
+		<p:lineChart id="category" value="#{countingBean.categoryModel}" legendPosition="e"  
+     		title="Method Counts Per Minute" minY="0" maxY="#{countingBean.maxCounts}" style="height:300px;margin-top:20px"/>
+		<p:poll interval="60" update="category" />
+	</h:form>
+	<h:form>  
+    	<p:dataTable var="entry" id="ent" value="#{countingBean.counts}">
+    		<p:column headerText="Time">  
+            	<h:outputText value="#{entry.key}" />  
+        	</p:column>
+        	<p:column headerText="Count">  
+            	<h:outputText value="#{entry.value}" />  
+        	</p:column>
+    	</p:dataTable>
+    	<p:poll interval="60" update="ent" />  
+	</h:form>
 </h:body>
 </html>
