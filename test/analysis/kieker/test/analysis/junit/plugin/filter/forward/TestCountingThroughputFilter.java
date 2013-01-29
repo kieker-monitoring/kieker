@@ -164,21 +164,19 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 
 		final long stopTimeOfFirstInterval = (startTimeOfFirstInterval + INTERVAL_SIZE_NANOS) - 1;
 
-		final int[] expectedCountsForIntervals = { 24, 4, 0, 11, 55, 1, 0 };
+		final int[] expectedCountsForIntervals = { 24, 4, 0, 11, 55, 0, 1 };
 
 		for (int i = 0; i < expectedCountsForIntervals.length; i++) {
 			final int countForCurInterval = expectedCountsForIntervals[i];
 
-			if (countForCurInterval == 0) {
-				continue;
-			}
-
 			final long startTimeOfCurInterval = startTimeOfFirstInterval + (i * INTERVAL_SIZE_NANOS);
 			final long stopTimeOfCurInterval = stopTimeOfFirstInterval + (i * INTERVAL_SIZE_NANOS);
 
-			final List<IMonitoringRecord> recordsForInterval = this.createRecordsForInterval(startTimeOfCurInterval, stopTimeOfCurInterval, countForCurInterval);
-			for (final IMonitoringRecord r : recordsForInterval) {
-				reader.addObject(r);
+			if (countForCurInterval > 0) {
+				final List<IMonitoringRecord> recordsForInterval = this.createRecordsForInterval(startTimeOfCurInterval, stopTimeOfCurInterval, countForCurInterval);
+				for (final IMonitoringRecord r : recordsForInterval) {
+					reader.addObject(r);
+				}
 			}
 
 			this.expectedThroughputValues.add(new ImmutableEntry<Long, Long>(stopTimeOfCurInterval + 1, (long) countForCurInterval));

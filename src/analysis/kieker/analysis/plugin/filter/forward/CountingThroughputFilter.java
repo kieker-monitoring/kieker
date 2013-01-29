@@ -127,10 +127,23 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 			 * Check if we need to close the current interval.
 			 */
 			if (endOfTimestampsInterval > this.lastTimestampInCurrentInterval) {
-				if (this.firstTimestampInCurrentInterval >= 0) { // don't do this for the first record
+				if (this.firstTimestampInCurrentInterval >= 0) { // don't do this for the first record (only used for initialization of variables)
 					this.eventCountsPerInterval.add(
-							new ImmutableEntry<Long, Long>(this.lastTimestampInCurrentInterval + 1, this.currentCountForCurrentInterval.get())
+							new ImmutableEntry<Long, Long>(
+									this.lastTimestampInCurrentInterval + 1,
+									this.currentCountForCurrentInterval.get())
 							);
+
+					long numIntervalsElapsed = 1; // refined below
+					numIntervalsElapsed = (endOfTimestampsInterval - this.lastTimestampInCurrentInterval) / this.intervalSize;
+					if (numIntervalsElapsed > 1) {
+						for (int i = 1; i < (numIntervalsElapsed); i++) {
+							this.eventCountsPerInterval.add(
+									new ImmutableEntry<Long, Long>((this.lastTimestampInCurrentInterval + (i * this.intervalSize)) + 1, 0l)
+									);
+						}
+					}
+
 				}
 
 				this.firstTimestampInCurrentInterval = startOfTimestampsInterval;
