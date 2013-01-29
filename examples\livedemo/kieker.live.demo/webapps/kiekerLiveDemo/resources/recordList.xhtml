@@ -11,7 +11,7 @@
 	<div class="title ui-widget-header ui-corner-all">
 		<h1 align="center">List Of Records</h1>
 		<div align="right">
-			<a href="../index.jsf" align="left">Return to Main Menu</a>
+			<a href="../index.jsf">Return to Main Menu</a>
 		</div>
 	</div>
 	<h:form>  
@@ -26,7 +26,7 @@
         	    <h:outputText value="#{(record.tout - record.tin)/1000000}" />  
 	        </p:column>
     	</p:dataTable>
-    	<p:poll interval="3" update="rec" />  
+    	<p:poll interval="2" update="rec" />  
 	</h:form>   
 </h:body>
 </html>

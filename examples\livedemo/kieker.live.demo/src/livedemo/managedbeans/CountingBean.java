@@ -22,6 +22,7 @@ public class CountingBean {
 	List<Entry<Date,Long>> countsPerInterval = new ArrayList<Entry<Date,Long>>();
 	CartesianChartModel categoryModel = new CartesianChartModel();
 	Long maxCounts = 200L;
+	int numberOfCounts = 10;
 	
 	@ManagedProperty(value = "#{startingBean}")
 	StartingBean startingBean;
@@ -53,7 +54,7 @@ public class CountingBean {
 	}
 	
 	public CartesianChartModel getCategoryModel() {
-		return getCategoryModel(10);
+		return getCategoryModel(this.numberOfCounts);
 	}
 	
 	private CartesianChartModel getCategoryModel(int number) {
@@ -65,6 +66,9 @@ public class CountingBean {
 		int toIndex = countsPerInterval.size();
 		if(toIndex > number){
 			fromIndex = toIndex-number;
+		}else if(toIndex < number){
+			fromIndex = 0;
+			counts.set("start", 0);
 		}else{
 			fromIndex = 0;
 		}
