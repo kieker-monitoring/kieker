@@ -136,8 +136,8 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 
 					long numIntervalsElapsed = 1; // refined below
 					numIntervalsElapsed = (endOfTimestampsInterval - this.lastTimestampInCurrentInterval) / this.intervalSize;
-					if (numIntervalsElapsed > 1) {
-						for (int i = 1; i < (numIntervalsElapsed); i++) {
+					if (numIntervalsElapsed > 1) { // NOPMD (AvoidDeeplyNestedIfStmts)
+						for (int i = 1; i < numIntervalsElapsed; i++) {
 							this.eventCountsPerInterval.add(
 									new ImmutableEntry<Long, Long>((this.lastTimestampInCurrentInterval + (i * this.intervalSize)) + 1, 0l)
 									);
