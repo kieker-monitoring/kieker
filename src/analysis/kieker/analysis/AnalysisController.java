@@ -78,7 +78,7 @@ import kieker.common.logging.LogFactory;
 // TODO Use the new constructor in the reflection calls as well
 @kieker.analysis.annotation.AnalysisController(configuration = {
 	@Property(name = AnalysisController.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, defaultValue = "NANOSECONDS"),
-	@Property(name = AnalysisController.CONFIG_PROPERTY_NAME_PROJECT_NAME, defaultValue = "AnalysisProject"),
+	@Property(name = AnalysisController.CONFIG_PROPERTY_NAME_PROJECT_NAME, defaultValue = "AnalysisProject")
 })
 public final class AnalysisController implements IAnalysisController { // NOPMD (really long class)
 
