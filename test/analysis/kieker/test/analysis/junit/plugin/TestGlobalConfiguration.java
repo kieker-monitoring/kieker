@@ -59,18 +59,18 @@ public class TestGlobalConfiguration {
 
 		final PropertyFilter filter = new PropertyFilter(new Configuration(), analysisController);
 
-		Assert.assertEquals("seconds", filter.getProperty(AnalysisController.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT));
+		Assert.assertEquals("NANOSECONDS", filter.getProperty(AnalysisController.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT));
 	}
 
 	@Test
 	public void testOverwrittenDefaultGlobalConfiguration() {
 		final Configuration globalConfiguration = new Configuration();
-		globalConfiguration.setProperty(AnalysisController.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, "nanoseconds");
+		globalConfiguration.setProperty(AnalysisController.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, "seconds");
 		final IAnalysisController analysisController = new AnalysisController(globalConfiguration);
 
 		final PropertyFilter filter = new PropertyFilter(new Configuration(), analysisController);
 
-		Assert.assertEquals("nanoseconds", filter.getProperty(AnalysisController.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT));
+		Assert.assertEquals("seconds", filter.getProperty(AnalysisController.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT));
 	}
 
 	private static class PropertyFilter extends AbstractFilterPlugin {
@@ -79,6 +79,7 @@ public class TestGlobalConfiguration {
 			super(configuration, projectContext);
 		}
 
+		@Override
 		public Configuration getCurrentConfiguration() {
 			return null;
 		}
