@@ -111,13 +111,22 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int PROJECT__VIEWS = 4;
 
 	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROJECT__PROPERTIES = 5;
+
+	/**
 	 * The number of structural features of the '<em>Project</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROJECT_FEATURE_COUNT = 5;
+	int PROJECT_FEATURE_COUNT = 6;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MAnalysisComponent <em>Analysis Component</em>}' class.
@@ -866,6 +875,17 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	EReference getProject_Views();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIProject#getProperties <em>Properties</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Properties</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIProject#getProperties()
+	 * @see #getProject()
+	 * @generated
+	 */
+	EReference getProject_Properties();
+
+	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIPlugin <em>Plugin</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1340,6 +1360,14 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PROJECT__VIEWS = eINSTANCE.getProject_Views();
+
+		/**
+		 * The meta object literal for the '<em><b>Properties</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PROJECT__PROPERTIES = eINSTANCE.getProject_Properties();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MPlugin <em>Plugin</em>}' class.

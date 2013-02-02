@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -67,15 +68,25 @@ public final class TeeFilter extends AbstractFilterPlugin {
 	private final boolean active;
 	private final String encoding;
 
-	public TeeFilter(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public TeeFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 
-		/* Get the name of the stream. */
+		// Get the name of the stream.
 		final String printStreamNameConfig = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_STREAM);
-		/* Get the encoding. */
+		// Get the encoding.
 		this.encoding = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_ENCODING);
 
-		/* Decide which stream to be used - but remember the name! */
+		// Decide which stream to be used - but remember the name!
 		if (CONFIG_PROPERTY_VALUE_STREAM_STDLOG.equals(printStreamNameConfig)) {
 			this.printStream = null; // NOPMD (null)
 			this.printStreamName = null; // NOPMD (null)
@@ -109,6 +120,19 @@ public final class TeeFilter extends AbstractFilterPlugin {
 		}
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public TeeFilter(final Configuration configuration) {
+		this(configuration, null);
+	}
+
 	@Override
 	public final void terminate(final boolean error) {
 		if ((this.printStream != null) && (this.printStream != System.out) && (this.printStream != System.err)) {
@@ -116,6 +140,9 @@ public final class TeeFilter extends AbstractFilterPlugin {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_ENCODING, this.encoding);

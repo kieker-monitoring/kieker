@@ -16,6 +16,7 @@
 
 package kieker.examples.userguide.ch3and4bookstore;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -23,6 +24,11 @@ import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
+/**
+ * This filter uses its configuration to filter the incoming response times based on a threshold.
+ * 
+ * @author Nils Christian Ehmke
+ */
 @Plugin(
 		name = "Response time filter",
 		description = "Filters incoming response times based on a threshold",
@@ -44,10 +50,15 @@ public class MyResponseTimeFilter extends AbstractFilterPlugin {
 
 	private final long rtThresholdNanos; // the configured threshold for this filter instance
 
+	public MyResponseTimeFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
+		this.rtThresholdNanos = configuration.getLongProperty(CONFIG_PROPERTY_NAME_TS_NANOS);
+	}
+
+	@Deprecated
 	public MyResponseTimeFilter(final Configuration configuration) {
-		super(configuration);
-		this.rtThresholdNanos =
-				configuration.getLongProperty(CONFIG_PROPERTY_NAME_TS_NANOS);
+		this(configuration, null);
 	}
 
 	public static final String INPUT_PORT_NAME_RESPONSE_TIMES = "newResponseTime";

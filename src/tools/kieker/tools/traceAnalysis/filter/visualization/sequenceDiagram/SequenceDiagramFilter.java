@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -131,13 +132,39 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 		ASSEMBLY, ALLOCATION
 	}
 
-	public SequenceDiagramFilter(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration to use for this filter.
+	 * @param projectContext
+	 *            The project context to use for this filter.
+	 * 
+	 * @since 1.7
+	 */
+	public SequenceDiagramFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		this.sdmode = SDModes.valueOf(configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_SDMODE));
 		this.outputFnBase = configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE);
 		this.shortLabels = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration to use for this filter.
+	 * @deprecated
+	 */
+	@Deprecated
+	public SequenceDiagramFilter(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void printStatusMessage() {
 		super.printStatusMessage();

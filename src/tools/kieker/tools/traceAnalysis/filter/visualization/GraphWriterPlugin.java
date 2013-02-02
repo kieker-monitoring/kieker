@@ -25,6 +25,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -113,13 +114,18 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 	}
 
 	/**
-	 * Creates a new writer plugin using the given configuration.
+	 * Creates a new instance of this class using the given parameters.
 	 * 
 	 * @param configuration
-	 *            The configuration to use
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
 	 */
-	public GraphWriterPlugin(final Configuration configuration) {
-		super(configuration);
+	public GraphWriterPlugin(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		this.outputPathName = configuration.getPathProperty(CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME);
 		this.outputFileName = configuration.getPathProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME);
 		this.includeWeights = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS);
@@ -127,6 +133,22 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 		this.plotLoops = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SELFLOOPS);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public GraphWriterPlugin(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME, this.outputPathName);

@@ -16,11 +16,14 @@
 
 package kieker.analysis.plugin.reader;
 
+import kieker.analysis.plugin.IPlugin;
 
 /**
+ * This is the interface for reader plugins.
+ * 
  * @author Andre van Hoorn
  */
-public interface IReaderPlugin {
+public interface IReaderPlugin extends IPlugin {
 
 	/**
 	 * Starts the reader. This method is intended to be a blocking operation,

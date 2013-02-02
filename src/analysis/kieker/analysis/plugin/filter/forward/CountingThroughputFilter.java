@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -96,10 +97,18 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	private volatile long lastTimestampInCurrentInterval = -1; // initialized with the first incoming event
 
 	/**
-	 * Constructs a {@link CountingThroughputFilter}.
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
 	 */
-	public CountingThroughputFilter(final Configuration configuration) {
-		super(configuration);
+	public CountingThroughputFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		TimeUnit configTimeunit;
 		try {
 			configTimeunit = TimeUnit.valueOf(configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT));
@@ -110,6 +119,22 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 		this.intervalsBasedOn1stTstamp = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INTERVALS_BASED_ON_1ST_TSTAMP);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public CountingThroughputFilter(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMEUNIT, this.timeunit.name());

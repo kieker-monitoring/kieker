@@ -16,6 +16,7 @@
 
 package kieker.tools.logReplayer;
 
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.jms.JMSReader;
 import kieker.common.configuration.Configuration;
@@ -33,6 +34,8 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 	private final String jmsFactoryLookupName;
 
 	/**
+	 * Creates a new JMS log replayer.
+	 * 
 	 * @param jmsProviderUrl
 	 *            = for instance "tcp://127.0.0.1:3035/"
 	 * @param jmsDestination
@@ -50,15 +53,21 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 		this.jmsFactoryLookupName = jmsFactoryLookupName;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	protected AbstractReaderPlugin createReader() {
+	protected AbstractReaderPlugin createReader(final IAnalysisController analysisController) {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_PROVIDERURL, this.jmsProviderUrl);
 		configuration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_DESTINATION, this.jmsDestination);
 		configuration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, this.jmsFactoryLookupName);
-		return new JMSReader(configuration);
+		return new JMSReader(configuration, analysisController);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected String readerOutputPortName() {
 		return JMSReader.OUTPUT_PORT_NAME_RECORDS;

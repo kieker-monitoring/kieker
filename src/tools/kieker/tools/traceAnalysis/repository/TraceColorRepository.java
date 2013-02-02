@@ -27,6 +27,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.analysis.repository.annotation.Repository;
@@ -73,9 +74,12 @@ public class TraceColorRepository extends AbstractRepository {
 	 *            The configuration to use
 	 * @throws IOException
 	 *             If an I/O error occurs during initialization
+	 * 
+	 * @deprecated
 	 */
+	@Deprecated
 	public TraceColorRepository(final Configuration configuration) throws IOException {
-		this(configuration, TraceColorRepository.readDataFromFile(configuration.getStringProperty(CONFIG_PROPERTY_NAME_TRACE_COLOR_FILE_NAME)));
+		this(configuration, TraceColorRepository.readDataFromFile(configuration.getStringProperty(CONFIG_PROPERTY_NAME_TRACE_COLOR_FILE_NAME)), null);
 	}
 
 	/**
@@ -85,14 +89,37 @@ public class TraceColorRepository extends AbstractRepository {
 	 *            The configuration to use
 	 * @param colorData
 	 *            The color data to use for this repository
+	 * @param projectContext
+	 *            The project context to use for this repository.
+	 * 
+	 * @since 1.7
 	 */
-	public TraceColorRepository(final Configuration configuration, final TraceColorRepositoryData colorData) {
-		super(configuration);
+	public TraceColorRepository(final Configuration configuration, final TraceColorRepositoryData colorData, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		this.colorMap = colorData.getColorMap();
 		this.defaultColor = colorData.getDefaultColor();
 		this.collisionColor = colorData.getCollisionColor();
 	}
 
+	/**
+	 * Creates a new color repository with the given data.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 * @param colorData
+	 *            The color data to use for this repository
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public TraceColorRepository(final Configuration configuration, final TraceColorRepositoryData colorData) {
+		this(configuration, colorData, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public Configuration getCurrentConfiguration() {
 		return this.configuration;
 	}
@@ -150,11 +177,31 @@ public class TraceColorRepository extends AbstractRepository {
 	 * @return The initialized trace color repository
 	 * @throws IOException
 	 *             If an I/O error occurs
+	 * @deprecated
 	 */
+	@Deprecated
 	public static TraceColorRepository createFromFile(final String fileName) throws IOException {
+		return TraceColorRepository.createFromFile(fileName, null);
+	}
+
+	/**
+	 * Initializes a trace color repository from a given file.
+	 * 
+	 * @param fileName
+	 *            The name of the file to read from
+	 * @param projectContext
+	 *            The project context to use.
+	 * @return The initialized trace color repository
+	 * 
+	 * @throws IOException
+	 *             If an I/O error occurs
+	 * 
+	 * @since 1.7
+	 */
+	public static TraceColorRepository createFromFile(final String fileName, final IProjectContext projectContext) throws IOException {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_TRACE_COLOR_FILE_NAME, fileName);
-		return new TraceColorRepository(configuration, TraceColorRepository.readDataFromFile(fileName));
+		return new TraceColorRepository(configuration, TraceColorRepository.readDataFromFile(fileName), projectContext);
 	}
 
 	private static TraceColorRepositoryData readDataFromFile(final String fileName) throws IOException {

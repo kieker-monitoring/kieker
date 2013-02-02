@@ -16,6 +16,7 @@
 
 package kieker.tools.logReplayer;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -65,8 +66,19 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 	 */
 	private final Configuration configuration;
 
-	public MonitoringRecordLoggerFilter(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public MonitoringRecordLoggerFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		final Configuration controllerConfiguration;
 		final String monitoringPropertiesFn = configuration.getPathProperty(CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN);
 		if (monitoringPropertiesFn.length() > 0) {
@@ -87,12 +99,31 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 		this.monitoringController = MonitoringController.createInstance(flatConfiguration);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public MonitoringRecordLoggerFilter(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void terminate(final boolean error) {
 		super.terminate(error);
 		this.monitoringController.terminateMonitoring();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Configuration getCurrentConfiguration() {
 		// clone again, so no one can change anything
 		return (Configuration) this.configuration.clone();

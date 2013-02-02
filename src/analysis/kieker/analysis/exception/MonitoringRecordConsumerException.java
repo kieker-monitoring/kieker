@@ -24,11 +24,25 @@ public class MonitoringRecordConsumerException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	public MonitoringRecordConsumerException(final String messString) {
-		super(messString);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param message
+	 *            The message of the exception.
+	 * @param cause
+	 *            The cause of the exception.
+	 */
+	public MonitoringRecordConsumerException(final String message, final Throwable cause) {
+		super(message, cause);
 	}
 
-	public MonitoringRecordConsumerException(final String messString, final Throwable cause) {
-		super(messString, cause);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param message
+	 *            The message of the exception.
+	 */
+	public MonitoringRecordConsumerException(final String message) {
+		super(message);
 	}
 }

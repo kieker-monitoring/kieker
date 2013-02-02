@@ -16,22 +16,14 @@
 
 package kieker.analysis.repository;
 
-import kieker.common.configuration.Configuration;
+import kieker.analysis.analysisComponent.IAnalysisComponent;
 
 /**
+ * This is the interface for repositories within Kieker.
  * 
  * @author Andre van Hoorn, Nils Christian Ehmke, Jan Waller
- * 
  */
-public interface IRepository {
-
-	/**
-	 * This method should deliver a {@code Configuration} object containing the current configuration of this instance. In other words: The constructor should be
-	 * able to use the given object to initialize a new instance of this class with the same intern properties.
-	 * 
-	 * @return A completely filled configuration object.
-	 */
-	public abstract Configuration getCurrentConfiguration();
+public interface IRepository extends IAnalysisComponent {
 
 	/**
 	 * This method delivers the repository name of this repository type. The name should be unique, e.g., the classname.
@@ -47,10 +39,4 @@ public interface IRepository {
 	 */
 	public abstract String getRepositoryDescription();
 
-	/**
-	 * This method delivers the current name of this repository instance. The name does not have to be unique.
-	 * 
-	 * @return The current name of the repository instance.
-	 */
-	public abstract String getName();
 }

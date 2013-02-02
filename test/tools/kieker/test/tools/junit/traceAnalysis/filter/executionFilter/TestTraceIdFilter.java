@@ -25,6 +25,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
@@ -37,8 +38,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.util.ExecutionFactory;
 
 /**
+ * A test for the {@link TraceIdFilter}.
  * 
- * @author Andre van Hoorn
+ * @author Andre van Hoorn, Nils christian Ehmke
  */
 public class TestTraceIdFilter extends AbstractKiekerTest { // NOCS
 
@@ -46,7 +48,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest { // NOCS
 
 	private static final String SESSION_ID = "LKHnuibfV"; // Session ID not relevant here
 
-	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration());
+	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), null);
 	private final ExecutionFactory eFactory = new ExecutionFactory(this.systemEntityFactory);
 
 	/**
@@ -57,7 +59,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest { // NOCS
 	 * @param ignoreExecutionsAfterTimestamp
 	 * @return
 	 */
-	private static TraceIdFilter createTraceIdFilter(final Set<Long> selectedTraces) {
+	private static TraceIdFilter createTraceIdFilter(final Set<Long> selectedTraces, final IAnalysisController analysisController) {
 		final Configuration cfg = new Configuration();
 
 		if (selectedTraces != null) {
@@ -74,7 +76,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest { // NOCS
 			cfg.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, "");
 		}
 
-		return new TraceIdFilter(cfg);
+		return new TraceIdFilter(cfg, analysisController);
 	}
 
 	/**
@@ -91,10 +93,10 @@ public class TestTraceIdFilter extends AbstractKiekerTest { // NOCS
 		idsToPass.add(5L);
 		idsToPass.add(7L);
 
-		final AnalysisController controller = new AnalysisController();
-		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration());
-		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(idsToPass);
-		final ListCollectionFilter<Execution> sinkPlugin = new ListCollectionFilter<Execution>(new Configuration());
+		final IAnalysisController controller = new AnalysisController();
+		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration(), controller);
+		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(idsToPass, controller);
+		final ListCollectionFilter<Execution> sinkPlugin = new ListCollectionFilter<Execution>(new Configuration(), controller);
 		final Execution exec = this.eFactory.genExecution(11L, // traceId (must not be element of idsToPass)
 				TestTraceIdFilter.SESSION_ID,
 				5, // tin (value not important)
@@ -103,10 +105,6 @@ public class TestTraceIdFilter extends AbstractKiekerTest { // NOCS
 		Assert.assertTrue("Testcase invalid", !idsToPass.contains(exec.getTraceId()));
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
-
-		controller.registerReader(reader);
-		controller.registerFilter(filter);
-		controller.registerFilter(sinkPlugin);
 
 		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, TraceIdFilter.INPUT_PORT_NAME_EXECUTION);
 		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
@@ -131,10 +129,10 @@ public class TestTraceIdFilter extends AbstractKiekerTest { // NOCS
 		final SortedSet<Long> idsToPass = new TreeSet<Long>();
 		idsToPass.add(5L);
 		idsToPass.add(7L);
-		final AnalysisController controller = new AnalysisController();
-		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration());
-		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(idsToPass);
-		final ListCollectionFilter<Execution> sinkPlugin = new ListCollectionFilter<Execution>(new Configuration());
+		final IAnalysisController controller = new AnalysisController();
+		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration(), controller);
+		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(idsToPass, controller);
+		final ListCollectionFilter<Execution> sinkPlugin = new ListCollectionFilter<Execution>(new Configuration(), controller);
 		final Execution exec = this.eFactory.genExecution(7L, // traceId (must be element of idsToPass)
 				TestTraceIdFilter.SESSION_ID,
 				5, // tin (value not important)
@@ -143,10 +141,6 @@ public class TestTraceIdFilter extends AbstractKiekerTest { // NOCS
 		Assert.assertTrue("Testcase invalid", idsToPass.contains(exec.getTraceId()));
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
-
-		controller.registerReader(reader);
-		controller.registerFilter(filter);
-		controller.registerFilter(sinkPlugin);
 
 		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, TraceIdFilter.INPUT_PORT_NAME_EXECUTION);
 		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
@@ -170,10 +164,11 @@ public class TestTraceIdFilter extends AbstractKiekerTest { // NOCS
 	 */
 	@Test
 	public void testAssertPassTraceIdWhenPassAll() throws IllegalStateException, AnalysisConfigurationException {
-		final AnalysisController controller = new AnalysisController();
-		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration());
-		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(null); // i.e., pass all
-		final ListCollectionFilter<Execution> sinkPlugin = new ListCollectionFilter<Execution>(new Configuration());
+		final IAnalysisController controller = new AnalysisController();
+
+		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration(), controller);
+		final TraceIdFilter filter = TestTraceIdFilter.createTraceIdFilter(null, controller); // i.e., pass all
+		final ListCollectionFilter<Execution> sinkPlugin = new ListCollectionFilter<Execution>(new Configuration(), controller);
 		final Execution exec = this.eFactory.genExecution(7L, // traceId (must be element of idsToPass)
 				TestTraceIdFilter.SESSION_ID,
 				5, // tin (value not important)
@@ -181,10 +176,6 @@ public class TestTraceIdFilter extends AbstractKiekerTest { // NOCS
 				0, 0); // eoi, ess (values not important)
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
-
-		controller.registerReader(reader);
-		controller.registerFilter(filter);
-		controller.registerFilter(sinkPlugin);
 
 		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, TraceIdFilter.INPUT_PORT_NAME_EXECUTION);
 		controller.connect(filter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);

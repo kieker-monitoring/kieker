@@ -18,6 +18,7 @@ package kieker.analysis.plugin.filter.forward;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.display.PlainText;
 import kieker.analysis.display.annotation.Display;
 import kieker.analysis.plugin.annotation.InputPort;
@@ -49,12 +50,35 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	private final AtomicLong counter = new AtomicLong();
 
 	/**
-	 * Constructs a {@link CountingFilter}.
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
 	 */
-	public CountingFilter(final Configuration configuration) {
-		super(configuration);
+	public CountingFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public CountingFilter(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public final Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

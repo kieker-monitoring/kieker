@@ -259,6 +259,15 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getProject_Properties() {
+		return (EReference)projectEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getPlugin() {
 		return pluginEClass;
 	}
@@ -630,6 +639,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 		createEReference(projectEClass, PROJECT__REPOSITORIES);
 		createEReference(projectEClass, PROJECT__DEPENDENCIES);
 		createEReference(projectEClass, PROJECT__VIEWS);
+		createEReference(projectEClass, PROJECT__PROPERTIES);
 
 		pluginEClass = createEClass(PLUGIN);
 		createEReference(pluginEClass, PLUGIN__REPOSITORIES);
@@ -726,6 +736,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 		initEReference(getProject_Repositories(), this.getRepository(), null, "repositories", null, 0, -1, MIProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getProject_Dependencies(), this.getDependency(), null, "dependencies", null, 0, -1, MIProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getProject_Views(), this.getView(), null, "views", null, 0, -1, MIProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getProject_Properties(), this.getProperty(), null, "properties", null, 0, -1, MIProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(pluginEClass, MIPlugin.class, "Plugin", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPlugin_Repositories(), this.getRepositoryConnector(), null, "repositories", null, 0, -1, MIPlugin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

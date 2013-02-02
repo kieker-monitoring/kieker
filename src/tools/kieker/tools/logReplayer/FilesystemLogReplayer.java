@@ -16,6 +16,7 @@
 
 package kieker.tools.logReplayer;
 
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
@@ -43,15 +44,21 @@ public class FilesystemLogReplayer extends AbstractLogReplayer {
 		// this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	protected AbstractReaderPlugin createReader() {
+	protected AbstractReaderPlugin createReader(final IAnalysisController analysisInstance) {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(this.inputDirs));
 		// TODO: we might want to pull this out as a property
 		configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, Boolean.toString(true));
-		return new FSReader(configuration);
+		return new FSReader(configuration, analysisInstance);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected String readerOutputPortName() {
 		return FSReader.OUTPUT_PORT_NAME_RECORDS;

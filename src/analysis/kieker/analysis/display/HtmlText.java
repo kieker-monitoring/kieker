@@ -23,6 +23,9 @@ package kieker.analysis.display;
  */
 public class HtmlText extends AbstractDisplay {
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public HtmlText() {
 		// No code necessary
 	}

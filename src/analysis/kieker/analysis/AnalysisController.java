@@ -44,6 +44,7 @@ import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 
+import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.model.analysisMetaModel.MIDependency;
 import kieker.analysis.model.analysisMetaModel.MIFilter;
@@ -59,6 +60,7 @@ import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.IPlugin;
 import kieker.analysis.plugin.IPlugin.PluginInputPortReference;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.IReaderPlugin;
@@ -68,15 +70,35 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
 /**
- * The <code>AnalysisController</code> can be used to configure and control an analysis instance. It is responsible for the life cycle of the readers, filters and
- * repositories.
+ * The <code>AnalysisController</code> can be used to configure, control, save and load an analysis instance.
+ * It is responsible for the life cycle of the readers, filters and repositories.
  * 
  * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke, Jan Waller
  */
-public final class AnalysisController { // NOPMD (really long class)
+// TODO Use the new constructor in the reflection calls as well
+@kieker.analysis.annotation.AnalysisController(configuration = {
+	@Property(name = AnalysisController.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, defaultValue = "NANOSECONDS"),
+	@Property(name = AnalysisController.CONFIG_PROPERTY_NAME_PROJECT_NAME, defaultValue = "AnalysisProject"),
+})
+public final class AnalysisController implements IAnalysisController { // NOPMD (really long class)
+
+	/**
+	 * This is the name of the property containing the time unit for the monitoring records.
+	 * 
+	 * @since 1.7
+	 */
+	public static final String CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT = "recordsTimeUnit";
+	/**
+	 * This is the name of the property containing the project name.
+	 * 
+	 * @since 1.7
+	 */
+	public static final String CONFIG_PROPERTY_NAME_PROJECT_NAME = "projectName";
+
 	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
 
 	private final String projectName;
+
 	/**
 	 * This list contains the dependencies of the project. Currently this field is only being used when loading an instance of the model.
 	 */
@@ -117,10 +139,15 @@ public final class AnalysisController { // NOPMD (really long class)
 	private volatile STATE state = STATE.READY;
 
 	/**
+	 * This field contains the global configuration for the analysis.
+	 */
+	private final Configuration globalConfiguration;
+
+	/**
 	 * Constructs an {@link AnalysisController} instance.
 	 */
 	public AnalysisController() {
-		this.projectName = "AnalysisProject";
+		this(new Configuration());
 	}
 
 	/**
@@ -130,7 +157,13 @@ public final class AnalysisController { // NOPMD (really long class)
 	 *            The name of the project.
 	 */
 	public AnalysisController(final String projectName) {
-		this.projectName = projectName;
+		this(AnalysisController.createConfigurationWithProjectName(projectName));
+	}
+
+	private static final Configuration createConfigurationWithProjectName(final String projectName) {
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(CONFIG_PROPERTY_NAME_PROJECT_NAME, projectName);
+		return configuration;
 	}
 
 	/**
@@ -199,27 +232,52 @@ public final class AnalysisController { // NOPMD (really long class)
 		if (project == null) {
 			throw new NullPointerException("Can not load project null.");
 		} else {
+			this.globalConfiguration = new Configuration(this.getDefaultConfiguration());
 			this.loadFromModelProject(project, classLoader);
 			this.projectName = project.getName();
 		}
 	}
 
 	/**
-	 * Registers the given instance as a new state observer. All instances are informed when the state (Running, Terminated etc) changes and get the new state as
-	 * an object.
+	 * Constructs an {@link AnalysisController} instance using the given parameter.
 	 * 
-	 * @param stateObserver
-	 *            The observer to be registered.
+	 * @param globalConfiguration
+	 *            The global configuration of this analysis. All plugins can indirectly access it.
+	 * 
+	 * @since 1.7
+	 */
+	public AnalysisController(final Configuration configuration) {
+		this.globalConfiguration = configuration.flatten(this.getDefaultConfiguration());
+		this.projectName = this.getProperty(CONFIG_PROPERTY_NAME_PROJECT_NAME);
+	}
+
+	/**
+	 * This method provides the default properties, as supplied by the annotation.
+	 * 
+	 * @since 1.7
+	 */
+	private final Configuration getDefaultConfiguration() {
+		final Configuration defaultConfiguration = new Configuration();
+		// Get the (potential) annotation of our class
+		final kieker.analysis.annotation.AnalysisController annotation = this.getClass().getAnnotation(kieker.analysis.annotation.AnalysisController.class);
+		if (null != annotation) {
+			// Run through the available properties and put them into our configuration
+			for (final Property property : annotation.configuration()) {
+				defaultConfiguration.setProperty(property.name(), property.defaultValue());
+			}
+		}
+		return defaultConfiguration;
+	}
+
+	/**
+	 * {@inheritDoc}
 	 */
 	public final void registerStateObserver(final IStateObserver stateObserver) {
 		this.stateObservers.add(stateObserver);
 	}
 
 	/**
-	 * Unregisters the given instance from the state observers.
-	 * 
-	 * @param stateObserver
-	 *            The observer to be unregistered.
+	 * {@inheritDoc}
 	 */
 	public final void unregisterStateObserver(final IStateObserver stateObserver) {
 		this.stateObservers.remove(stateObserver);
@@ -235,6 +293,13 @@ public final class AnalysisController { // NOPMD (really long class)
 		for (final IStateObserver observer : this.stateObservers) {
 			observer.update(this, currState);
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public final String getProperty(final String key) {
+		return this.globalConfiguration.getStringProperty(key);
 	}
 
 	/**
@@ -276,7 +341,7 @@ public final class AnalysisController { // NOPMD (really long class)
 			// Extract the necessary informations to create the plugin.
 			final Configuration configuration = AnalysisController.modelPropertiesToConfiguration(mPlugin.getProperties());
 			final String pluginClassname = mPlugin.getClassname();
-			configuration.setProperty(AbstractPlugin.CONFIG_NAME, mPlugin.getName());
+			configuration.setProperty(AbstractAnalysisComponent.CONFIG_NAME, mPlugin.getName());
 			// Create the plugin and put it into our map. */
 			final AbstractPlugin plugin = AnalysisController.createAndInitialize(AbstractPlugin.class, pluginClassname, configuration, classLoader);
 			pluginMap.put(mPlugin, plugin);
@@ -310,6 +375,11 @@ public final class AnalysisController { // NOPMD (really long class)
 					this.connect(srcPlugin, outputPortName, dstPlugin, inputPortName);
 				}
 			}
+		}
+
+		// Now load our global configuration from the model instance
+		for (final MIProperty mProperty : mProject.getProperties()) {
+			this.globalConfiguration.setProperty(mProperty.getName(), mProperty.getValue());
 		}
 
 		// Remember the mapping!
@@ -379,7 +449,7 @@ public final class AnalysisController { // NOPMD (really long class)
 		// Run through all used keys in the given configuration.
 		for (final Enumeration<?> e = configuration.propertyNames(); e.hasMoreElements();) {
 			final String key = (String) e.nextElement();
-			if (!possibleKeys.contains(key) && !(key.equals(AbstractPlugin.CONFIG_NAME))) {
+			if (!possibleKeys.contains(key) && !(key.equals(AbstractAnalysisComponent.CONFIG_NAME))) {
 				// Found an invalid key.
 				throw new AnalysisConfigurationException("Invalid property of '" + plugin.getName() + "' (" + plugin.getPluginName() + ") found: '" + key + "'.");
 			}
@@ -387,17 +457,7 @@ public final class AnalysisController { // NOPMD (really long class)
 	}
 
 	/**
-	 * This method can be used to store the current configuration of this analysis controller in a specified file.
-	 * The file can later be used to initialize the analysis controller.
-	 * 
-	 * @see AnalysisController#saveToFile(String)
-	 * 
-	 * @param file
-	 *            The file in which the configuration will be stored.
-	 * @throws IOException
-	 *             If an exception during the storage occurred.
-	 * @throws AnalysisConfigurationException
-	 *             If the current configuration is somehow invalid.
+	 * {@inheritDoc}
 	 */
 	public final void saveToFile(final File file) throws IOException, AnalysisConfigurationException {
 		final MIProject mProject = this.getCurrentConfiguration();
@@ -405,40 +465,17 @@ public final class AnalysisController { // NOPMD (really long class)
 	}
 
 	/**
-	 * This method can be used to store the current configuration of this analysis controller in a specified file. It is just a convenient method which does the same
-	 * as {@code AnalysisController.saveToFile(new File(pathname))}.
-	 * 
-	 * @see AnalysisController#saveToFile(File)
-	 * 
-	 * @param pathname
-	 *            The pathname of the file in which the configuration will be stored.
-	 * @throws IOException
-	 *             If an exception during the storage occurred.
-	 * @throws AnalysisConfigurationException
-	 *             If the current configuration is somehow invalid.
+	 * {@inheritDoc}
 	 */
 	public final void saveToFile(final String pathname) throws IOException, AnalysisConfigurationException {
 		this.saveToFile(new File(pathname));
 	}
 
 	/**
-	 * This method should be used to connect two plugins. The plugins have to be registered within this controller instance.
-	 * 
-	 * @param src
-	 *            The source plugin.
-	 * @param outputPortName
-	 *            The output port of the source plugin.
-	 * @param dst
-	 *            The destination plugin.
-	 * @param inputPortName
-	 *            The input port of the destination port.
-	 * @throws IllegalStateException
-	 *             If this instance has already been started or has already been terminated.
-	 * @throws AnalysisConfigurationException
-	 *             If the port names or the given plugins are invalid or not compatible.
+	 * {@inheritDoc}
 	 */
-	public void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName)
-			throws IllegalStateException, AnalysisConfigurationException {
+	public final void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst,
+			final String inputPortName) throws IllegalStateException, AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect readers and filters after starting analysis.");
 		}
@@ -461,20 +498,9 @@ public final class AnalysisController { // NOPMD (really long class)
 	}
 
 	/**
-	 * Connects the given repository to this plugin via the given name.
-	 * 
-	 * @param plugin
-	 *            The plugin to be connected.
-	 * @param repositoryPort
-	 *            The name of the port to connect the repository.
-	 * @param repository
-	 *            The repository which should be used.
-	 * @throws IllegalStateException
-	 *             If this instance has already been started or has already been terminated.
-	 * @throws AnalysisConfigurationException
-	 *             If the port names or the given objects are invalid or not compatible.
+	 * {@inheritDoc}
 	 */
-	public void connect(final AbstractPlugin plugin, final String repositoryPort, final AbstractRepository repository) throws IllegalStateException,
+	public final void connect(final AbstractPlugin plugin, final String repositoryPort, final AbstractRepository repository) throws IllegalStateException,
 			AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect repositories after starting analysis.");
@@ -491,8 +517,17 @@ public final class AnalysisController { // NOPMD (really long class)
 		plugin.connect(repositoryPort, repository); // throws AnalysisConfigurationException
 	}
 
+	/**
+	 * Converts the given configuration into a list of {@link MIProperty}s using the given factory.
+	 * 
+	 * @param configuration
+	 *            The configuration to be converted.
+	 * @param factory
+	 *            The factory to be used to create the model instances.
+	 * @return A list of model instances.
+	 */
 	private static List<MIProperty> convertProperties(final Configuration configuration, final MAnalysisMetaModelFactory factory) {
-		if (null == configuration) { // should not happen, but better safe than sorry
+		if (null == configuration) { // should not happen, but better be safe than sorry
 			return Collections.emptyList();
 		}
 		final List<MIProperty> properties = new ArrayList<MIProperty>(configuration.size());
@@ -507,11 +542,7 @@ public final class AnalysisController { // NOPMD (really long class)
 	}
 
 	/**
-	 * This method delivers the current configuration of this instance as an instance of <code>MIProject</code>.
-	 * 
-	 * @return A filled meta model instance.
-	 * @throws AnalysisConfigurationException
-	 *             If the current configuration is somehow invalid.
+	 * {@inheritDoc}
 	 */
 	public final MIProject getCurrentConfiguration() throws AnalysisConfigurationException {
 		try {
@@ -601,6 +632,17 @@ public final class AnalysisController { // NOPMD (really long class)
 					}
 				}
 			}
+
+			// Now put our global configuration into the model instance
+			final Set<Entry<Object, Object>> properties = this.globalConfiguration.entrySet();
+			for (final Entry<Object, Object> property : properties) {
+				final MIProperty mProperty = factory.createProperty();
+				mProperty.setName((String) property.getKey());
+				mProperty.setValue((String) property.getValue());
+
+				mProject.getProperties().add(mProperty);
+			}
+
 			// We are finished. Return the finished project.
 			return mProject;
 		} catch (final Exception ex) { // NOPMD NOCS (catch any remaining problems)
@@ -609,15 +651,7 @@ public final class AnalysisController { // NOPMD (really long class)
 	}
 
 	/**
-	 * Starts an {@link AnalysisController} instance.
-	 * The method returns after all configured readers finished reading and all analysis plug-ins terminated
-	 * 
-	 * On errors during the initialization, Exceptions are thrown.
-	 * 
-	 * @throws IllegalStateException
-	 *             If the current instance has already been started or already been terminated.
-	 * @throws AnalysisConfigurationException
-	 *             If plugins with mandatory repositories have not been connected properly or couldn't be initialized.
+	 * {@inheritDoc}
 	 */
 	public final void run() throws IllegalStateException, AnalysisConfigurationException {
 		synchronized (this) {
@@ -685,6 +719,9 @@ public final class AnalysisController { // NOPMD (really long class)
 		this.terminate();
 	}
 
+	/**
+	 * Causes the calling thread to wait until the analysis controller has been initialized.
+	 */
 	protected final void awaitInitialization() {
 		try {
 			this.initializationLatch.await();
@@ -694,17 +731,14 @@ public final class AnalysisController { // NOPMD (really long class)
 	}
 
 	/**
-	 * Initiates a termination of the analysis.
+	 * {@inheritDoc}
 	 */
 	public final void terminate() {
 		this.terminate(false);
 	}
 
 	/**
-	 * Initiates a termination of the analysis.
-	 * 
-	 * @param error
-	 *            Determines whether this is a normal termination or an termination due to an error during the analysis.
+	 * {@inheritDoc}
 	 */
 	public final void terminate(final boolean error) {
 		synchronized (this) {
@@ -730,119 +764,113 @@ public final class AnalysisController { // NOPMD (really long class)
 	}
 
 	/**
-	 * Registers a log reader used as a source for monitoring records.
-	 * 
-	 * @param reader
-	 *            The reader to be registered.
-	 * @throws IllegalStateException
-	 *             If the controller is already running or has already been terminated.
+	 * {@inheritDoc}
 	 */
+	// TODO This is not really deprecated, but we have to make sure that only AbstractComponent can use this method. Maybe we should remove the method just from the
+	// interface? sounds good!
+	@Deprecated
 	public final void registerReader(final AbstractReaderPlugin reader) throws IllegalStateException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register filter after starting analysis.");
 		}
-		synchronized (this) {
-			if (this.readers.contains(reader)) {
-				LOG.warn("Readers " + reader.getName() + " already registered.");
-				return;
-			}
-			this.readers.add(reader);
+		// Try to register the current analysis controller for the given component
+		if (!reader.setProjectContext(this)) {
+			// Seems like it failed
+			LOG.warn("Reader " + reader.getName() + " already registered with other AnalysisController.");
+			return;
 		}
+		if (this.readers.contains(reader)) {
+			LOG.warn("Reader " + reader.getName() + " already registered.");
+			return;
+		}
+		this.readers.add(reader);
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Registered reader " + reader);
 		}
 	}
 
 	/**
-	 * Registers the passed plugin.
-	 * 
-	 * All plugins which have been registered before calling the <i>run</i>-method, will be started once the analysis is started.
-	 * 
-	 * @param filter
-	 *            The filter to be registered.
-	 * @throws IllegalStateException
-	 *             If the controller is already running or has already been terminated.
+	 * {@inheritDoc}
 	 */
+	// TODO This is not really deprecated, but we have to make sure that only AbstractComponent can use this method. Maybe we should remove the method just from the
+	// interface? sounds good!
+	@Deprecated
 	public final void registerFilter(final AbstractFilterPlugin filter) throws IllegalStateException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register filter after starting analysis.");
 		}
-		synchronized (this) {
-			if (this.filters.contains(filter)) {
-				LOG.warn("Filter '" + filter.getName() + "' (" + filter.getPluginName() + ") already registered.");
-				return;
-			}
-			this.filters.add(filter);
+		// Try to register the current analysis controller for the given component
+		if (!filter.setProjectContext(this)) {
+			// Seems like it failed
+			LOG.warn("Filter " + filter.getName() + " already registered with other AnalysisController.");
+			return;
 		}
+		if (this.filters.contains(filter)) {
+			LOG.warn("Filter '" + filter.getName() + "' (" + filter.getPluginName() + ") already registered.");
+			return;
+		}
+		this.filters.add(filter);
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Registered plugin " + filter);
 		}
 	}
 
 	/**
-	 * Registers the passed repository.
-	 * 
-	 * @param repository
-	 *            The repository to be registered.
-	 * @throws IllegalStateException
-	 *             If the controller is already running or has already been terminated.
+	 * {@inheritDoc}
 	 */
+	// TODO This is not really deprecated, but we have to make sure that only AbstractComponent can use this method. Maybe we should remove the method just from the
+	// interface? sounds good!
+	@Deprecated
 	public final void registerRepository(final AbstractRepository repository) throws IllegalStateException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register respository after starting analysis.");
 		}
-		synchronized (this) {
-			if (this.repos.contains(repository)) {
-				LOG.warn("Repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ") already registered.");
-				return;
-			}
-			this.repos.add(repository);
+		// Try to register the current analysis controller for the given component
+		if (!repository.setProjectContext(this)) {
+			// Seems like it failed
+			LOG.warn("Repository " + repository.getName() + "' (" + repository.getRepositoryName() + ") already registered with other AnalysisController.");
+			return;
 		}
+		if (this.repos.contains(repository)) {
+			LOG.warn("Repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ") already registered.");
+			return;
+		}
+		this.repos.add(repository);
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Registered Repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ")");
 		}
 	}
 
 	/**
-	 * Delivers the current name of the project.
-	 * 
-	 * @return The current project name.
+	 * {@inheritDoc}
 	 */
 	public final String getProjectName() {
 		return this.projectName;
 	}
 
 	/**
-	 * Delivers an unmodifiable collection of all readers.
-	 * 
-	 * @return All registered readers.
+	 * {@inheritDoc}
 	 */
 	public final Collection<AbstractReaderPlugin> getReaders() {
 		return Collections.unmodifiableCollection(this.readers);
 	}
 
 	/**
-	 * Delivers an unmodifiable collection of all filters.
-	 * 
-	 * @return All registered filters.
+	 * {@inheritDoc}
 	 */
 	public final Collection<AbstractFilterPlugin> getFilters() {
 		return Collections.unmodifiableCollection(this.filters);
 	}
 
 	/**
-	 * Delivers an unmodifiable collection of all repositories.
-	 * 
-	 * @return All registered repositories.
+	 * {@inheritDoc}
 	 */
 	public final Collection<AbstractRepository> getRepositories() {
 		return Collections.unmodifiableCollection(this.repos);
 	}
 
 	/**
-	 * Delivers the current state of the analysis controller.
-	 * 
-	 * @return The current state.
+	 * {@inheritDoc}
 	 */
 	public final STATE getState() {
 		return this.state;
@@ -977,9 +1005,28 @@ public final class AnalysisController { // NOPMD (really long class)
 		return null;
 	}
 
+	/**
+	 * Creates and initializes the given class with the given configuration via reflection.
+	 * 
+	 * @param c
+	 *            The base class of the class to be created ({@link AbstractRepository}, {@link AbstractPlugin}).
+	 * @param classname
+	 *            The name of the class to be created.
+	 * @param configuration
+	 *            The configuration to be used to initialize the class.
+	 * @param classLoader
+	 *            The classloader which will be used to initialize the class.
+	 * 
+	 * @param <C>
+	 *            The type of the class.
+	 * 
+	 * @return A fully initialized class.
+	 * @throws AnalysisConfigurationException
+	 *             If the class could not be found or the class doesn't implement the correct classloader.
+	 */
 	@SuppressWarnings("unchecked")
-	protected static final <C> C createAndInitialize(final Class<C> c, final String classname, final Configuration configuration, final ClassLoader classLoader)
-			throws AnalysisConfigurationException {
+	private static final <C extends AbstractAnalysisComponent> C createAndInitialize(final Class<C> c, final String classname, final Configuration configuration,
+			final ClassLoader classLoader) throws AnalysisConfigurationException {
 		try {
 			final Class<?> clazz = Class.forName(classname, true, classLoader);
 			if (c.isAssignableFrom(clazz)) {
@@ -1020,6 +1067,9 @@ public final class AnalysisController { // NOPMD (really long class)
 	}
 
 	/**
+	 * This is a wrapper for the {@link AnalysisController} which contains a mapping between the model instances and the actual objects as well. This is necessary if
+	 * one wants to create an analysis based on an instance of {@link MIProject} and needs to map from the model instances to the actual created objects.
+	 * 
 	 * @author Andre van Hoorn, Nils Christian Ehmke, Jan Waller
 	 */
 	public static final class AnalysisControllerWithMapping {
@@ -1028,6 +1078,16 @@ public final class AnalysisController { // NOPMD (really long class)
 		private final Map<MIRepository, AbstractRepository> repositoryMap;
 		private final AnalysisController controller;
 
+		/**
+		 * Creates a new instance of this class using the given parameters.
+		 * 
+		 * @param controller
+		 *            The analysis controller to be stored in this container.
+		 * @param pluginMap
+		 *            The mapping between actual plugins and their model counterparts.
+		 * @param repositoryMap
+		 *            The mapping between actual repositories and their model counterparts.
+		 */
 		public AnalysisControllerWithMapping(final AnalysisController controller, final Map<MIPlugin, AbstractPlugin> pluginMap,
 				final Map<MIRepository, AbstractRepository> repositoryMap) {
 			this.controller = controller;
@@ -1035,14 +1095,29 @@ public final class AnalysisController { // NOPMD (really long class)
 			this.repositoryMap = repositoryMap;
 		}
 
+		/**
+		 * Getter for the property {@link AnalysisControllerWithMapping#pluginMap}.
+		 * 
+		 * @return The current value of the property.
+		 */
 		public Map<MIPlugin, AbstractPlugin> getPluginMap() {
 			return this.pluginMap;
 		}
 
+		/**
+		 * Getter for the property {@link AnalysisControllerWithMapping#repositoryMap}.
+		 * 
+		 * @return The current value of the property.
+		 */
 		public Map<MIRepository, AbstractRepository> getRepositoryMap() {
 			return this.repositoryMap;
 		}
 
+		/**
+		 * Getter for the property {@link AnalysisControllerWithMapping#controller}.
+		 * 
+		 * @return The current value of the property.
+		 */
 		public AnalysisController getController() {
 			return this.controller;
 		}

@@ -19,6 +19,7 @@ package kieker.test.tools.junit.traceAnalysis.filter.traceWriter;
 import java.io.IOException;
 import java.util.List;
 
+import kieker.analysis.AnalysisController;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.AbstractExecutionTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.traceWriter.ExecutionTraceWriterFilter;
@@ -36,11 +37,11 @@ public class BasicExecutionTraceWriterFilterTest extends AbstractTraceWriterFilt
 	}
 
 	@Override
-	protected AbstractExecutionTraceProcessingFilter provideWriterFilter(final String filename) throws IOException {
+	protected AbstractExecutionTraceProcessingFilter provideWriterFilter(final String filename, final AnalysisController analysisController) throws IOException {
 		final Configuration filterConfiguration = new Configuration();
 		filterConfiguration.setProperty(ExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, filename);
 
-		return new ExecutionTraceWriterFilter(filterConfiguration);
+		return new ExecutionTraceWriterFilter(filterConfiguration, analysisController);
 	}
 
 	@Override

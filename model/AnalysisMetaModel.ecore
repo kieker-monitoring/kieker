@@ -12,6 +12,8 @@
         eType="#//Dependency" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="views" upperBound="-1"
         eType="#//View" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//Property" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Plugin" abstract="true" eSuperTypes="#//AnalysisComponent">
     <eStructuralFeatures xsi:type="ecore:EReference" name="repositories" upperBound="-1"

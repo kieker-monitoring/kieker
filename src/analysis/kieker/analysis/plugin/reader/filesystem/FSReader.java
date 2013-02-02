@@ -18,6 +18,7 @@ package kieker.analysis.plugin.reader.filesystem;
 
 import java.util.PriorityQueue;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -61,8 +62,19 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 
 	private volatile boolean running = true;
 
-	public FSReader(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public FSReader(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		this.inputDirs = this.configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_INPUTDIRS);
 		for (int i = 0; i < this.inputDirs.length; i++) {
 			this.inputDirs[i] = Configuration.convertToPath(this.inputDirs[i]);
@@ -74,11 +86,30 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 		this.ignoreUnknownRecordTypes = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public FSReader(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public void terminate(final boolean error) {
 		LOG.info("Shutting down reader.");
 		this.running = false;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean read() {
 		// start all reader
 		for (final String inputDir : this.inputDirs) {
@@ -129,6 +160,9 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 		return this.running;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(this.inputDirs));

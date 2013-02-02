@@ -26,6 +26,7 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -76,8 +77,19 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 	private final Map<Long, TraceBuffer> traceId2trace;
 
-	public EventRecordTraceReconstructionFilter(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public EventRecordTraceReconstructionFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		TimeUnit configTimeunit;
 		try {
 			configTimeunit = TimeUnit.valueOf(configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT));
@@ -91,6 +103,25 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		this.traceId2trace = new ConcurrentHashMap<Long, TraceBuffer>();
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public EventRecordTraceReconstructionFilter(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/**
+	 * This method is the input port for the new events for this filter.
+	 * 
+	 * @param record
+	 *            The new record to handle.
+	 */
 	@InputPort(
 			name = INPUT_PORT_NAME_TRACE_RECORDS,
 			description = "Reconstruct traces from incoming flow records",
@@ -147,6 +178,9 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void terminate(final boolean error) {
 		super.terminate(error);
@@ -181,6 +215,9 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMEUNIT, this.timeunit.name());
@@ -211,6 +248,9 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 		private long traceId = -1;
 
+		/**
+		 * Creates a new instance of this class.
+		 */
 		public TraceBuffer() {
 			// default empty constructor
 		}
@@ -306,6 +346,9 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		private static final class TraceEventComperator implements Comparator<AbstractTraceEvent>, Serializable {
 			private static final long serialVersionUID = 8920737343446332517L;
 
+			/**
+			 * Creates a new instance of this class.
+			 */
 			public TraceEventComperator() {
 				// default empty constructor
 			}

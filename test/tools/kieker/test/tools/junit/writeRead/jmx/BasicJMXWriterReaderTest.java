@@ -55,6 +55,8 @@ public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 
 	@Override
 	protected IMonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException, InterruptedException {
+		final AnalysisController analysisController = new AnalysisController();
+
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(ConfigurationFactory.ACTIVATE_JMX, "true");
 		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_CONTROLLER, "true");
@@ -76,11 +78,10 @@ public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_PORT, BasicJMXWriterReaderTest.PORT);
 		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SERVICEURL, "");
 		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SILENT, "false");
-		final JMXReader jmxReader = new JMXReader(jmxReaderConfig);
-		this.sinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration());
-		final AnalysisController analysisController = new AnalysisController();
-		analysisController.registerReader(jmxReader);
-		analysisController.registerFilter(this.sinkFilter);
+
+		final JMXReader jmxReader = new JMXReader(jmxReaderConfig, analysisController);
+		this.sinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), analysisController);
+
 		analysisController.connect(jmxReader, JMXReader.OUTPUT_PORT_NAME_RECORDS, this.sinkFilter, ListCollectionFilter.INPUT_PORT_NAME);
 		final AnalysisControllerThread analysisThread = new AnalysisControllerThread(analysisController);
 		analysisThread.start();

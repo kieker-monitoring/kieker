@@ -19,6 +19,7 @@ package kieker.test.tools.util.filter;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
@@ -46,11 +47,31 @@ public class ExecutionSinkClass extends AbstractFilterPlugin {
 	 * 
 	 * @param configuration
 	 *            The configuration for this plugin. It will not be used.
+	 * @param projectContext
+	 *            The project context for this plugin. It will not be used.
+	 * 
+	 * @since 1.7
 	 */
-	public ExecutionSinkClass(final Configuration configuration) {
-		super(configuration);
+	public ExecutionSinkClass(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this plugin. It will not be used.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public ExecutionSinkClass(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

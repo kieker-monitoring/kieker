@@ -28,13 +28,13 @@ public class Bookstore {
 	private final CRM crm = new CRM(this.catalog);
 
 	public void searchBook() {
-		/* 1.) Call Catalog.getBook() and log its entry and exit timestamps. */
+		// 1.) Call Catalog.getBook() and log its entry and exit timestamps.
 		final long tin = MONITORING_CONTROLLER.getTimeSource().getTime();
 		this.catalog.getBook(false); // <-- the monitored execution
 		final long tout = MONITORING_CONTROLLER.getTimeSource().getTime();
 
 		final OperationExecutionRecord e = new OperationExecutionRecord(
-				"public void "+this.catalog.getClass().getName()+".getBook(boolean)",
+				"public void " + this.catalog.getClass().getName() + ".getBook(boolean)",
 				OperationExecutionRecord.NO_SESSION_ID,
 				OperationExecutionRecord.NO_TRACEID,
 				tin, tout, "myHost",
@@ -42,7 +42,7 @@ public class Bookstore {
 				OperationExecutionRecord.NO_EOI_ESS);
 		MONITORING_CONTROLLER.newMonitoringRecord(e);
 
-		/* 2.) Call the CRM catalog's getOffers() method (without monitoring). */
+		// 2.) Call the CRM catalog's getOffers() method (without monitoring).
 		this.crm.getOffers();
 	}
 }

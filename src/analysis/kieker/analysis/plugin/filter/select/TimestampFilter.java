@@ -18,6 +18,7 @@ package kieker.analysis.plugin.filter.select;
 
 import java.util.concurrent.TimeUnit;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -71,8 +72,19 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 	private final long ignoreBeforeTimestamp;
 	private final long ignoreAfterTimestamp;
 
-	public TimestampFilter(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public TimestampFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		TimeUnit configTimeunit;
 		try {
 			configTimeunit = TimeUnit.valueOf(configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT));
@@ -83,6 +95,22 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 		this.ignoreAfterTimestamp = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP), configTimeunit);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public TimestampFilter(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMEUNIT, this.timeunit.name());

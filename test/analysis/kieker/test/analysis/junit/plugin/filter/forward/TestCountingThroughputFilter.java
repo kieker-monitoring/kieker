@@ -26,6 +26,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.analysis.plugin.filter.forward.CountingThroughputFilter;
@@ -51,7 +52,7 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 	private static final long START_TIME_NANOS = 246561L; // just a non-trivial number
 	private static final long INTERVAL_SIZE_NANOS = 100; // just a non-trivial number
 
-	private AnalysisController analysisController;
+	private IAnalysisController analysisController;
 
 	/** Provides the list of {@link IMonitoringRecord}s to be processed */
 	private ListReader<IMonitoringRecord> simpleListReader; // initialized in #prepareConfiguration()
@@ -85,14 +86,12 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 		 */
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		this.simpleListReader = new ListReader<IMonitoringRecord>(new Configuration());
-		this.analysisController.registerReader(this.simpleListReader);
+		this.simpleListReader = new ListReader<IMonitoringRecord>(new Configuration(), this.analysisController);
 
 		/*
 		 * Counting filter (before delay)
 		 */
-		this.countingFilterReader = new CountingFilter(new Configuration());
-		this.analysisController.registerFilter(this.countingFilterReader);
+		this.countingFilterReader = new CountingFilter(new Configuration(), this.analysisController);
 		this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME,
 				this.countingFilterReader, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
@@ -103,16 +102,14 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 		throughputFilterConfiguration.setProperty(CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE, Long.toString(INTERVAL_SIZE_NANOS));
 		throughputFilterConfiguration.setProperty(CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVALS_BASED_ON_1ST_TSTAMP,
 				Boolean.toString(this.intervalsBasedOn1stTstamp));
-		this.throughputFilter = new CountingThroughputFilter(throughputFilterConfiguration);
-		this.analysisController.registerFilter(this.throughputFilter);
+		this.throughputFilter = new CountingThroughputFilter(throughputFilterConfiguration, this.analysisController);
 		this.analysisController.connect(this.countingFilterReader, CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
 				this.throughputFilter, CountingThroughputFilter.INPUT_PORT_NAME_RECORDS); // we use this input port because it's easier to test!
 
 		/*
 		 * Sink plugin
 		 */
-		this.sinkPlugin = new ListCollectionFilter<EmptyRecord>(new Configuration());
-		this.analysisController.registerFilter(this.sinkPlugin);
+		this.sinkPlugin = new ListCollectionFilter<EmptyRecord>(new Configuration(), this.analysisController);
 		this.analysisController.connect(this.throughputFilter, CountingThroughputFilter.OUTPUT_PORT_NAME_RELAYED_OBJECTS,
 				this.sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 	}

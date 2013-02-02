@@ -16,6 +16,7 @@
 
 package kieker.tools.traceAnalysis.filter;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
@@ -46,15 +47,37 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 	 * 
 	 * @param configuration
 	 *            The configuration to use
+	 * @param projectContext
+	 *            The project context to use.
 	 * @param graph
 	 *            The (usually empty) graph to produce / extend
+	 * 
+	 * @since 1.7
 	 */
-	public AbstractGraphProducingFilter(final Configuration configuration, final G graph) {
-		super(configuration);
+	public AbstractGraphProducingFilter(final Configuration configuration, final IProjectContext projectContext, final G graph) {
+		super(configuration, projectContext);
 
 		this.graph = graph;
 	}
 
+	/**
+	 * Creates a new graph-producing filter using the given configuration and the given graph.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 * @param graph
+	 *            The (usually empty) graph to produce / extend
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public AbstractGraphProducingFilter(final Configuration configuration, final G graph) {
+		this(configuration, null, graph);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public Configuration getCurrentConfiguration() {
 		return this.configuration;
 	}

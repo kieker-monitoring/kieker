@@ -16,6 +16,7 @@
 
 package kieker.tools.traceAnalysis.filter.flow;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -51,9 +52,33 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 
 	private final boolean logInvalidTraces;
 
-	public EventRecordTraceCounter(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public EventRecordTraceCounter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		this.logInvalidTraces = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_LOG_INVALID);
+	}
+
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public EventRecordTraceCounter(final Configuration configuration) {
+		this(configuration, null);
 	}
 
 	public Configuration getCurrentConfiguration() {

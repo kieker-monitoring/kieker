@@ -19,6 +19,7 @@ package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 import java.util.ArrayList;
 import java.util.List;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
@@ -44,12 +45,31 @@ public abstract class AbstractDependencyGraphFilter<T extends ISystemModelElemen
 	 * Creates a new abstract dependency graph filter using the given data.
 	 * 
 	 * @param configuration
+	 *            The configuration to use for this filter.
+	 * @param projectContext
+	 *            The project context to use for this filter.
+	 * @param graph
+	 *            The graph to produce / extend
+	 * 
+	 * @since 1.7
+	 */
+	public AbstractDependencyGraphFilter(final Configuration configuration, final IProjectContext projectContext, final AbstractDependencyGraph<T> graph) {
+		super(configuration, projectContext, graph);
+	}
+
+	/**
+	 * Creates a new abstract dependency graph filter using the given data.
+	 * 
+	 * @param configuration
 	 *            The configuration to use
 	 * @param graph
 	 *            The graph to produce / extend
+	 * 
+	 * @deprecated
 	 */
+	@Deprecated
 	public AbstractDependencyGraphFilter(final Configuration configuration, final AbstractDependencyGraph<T> graph) {
-		super(configuration, graph);
+		this(configuration, null, graph);
 	}
 
 	/**

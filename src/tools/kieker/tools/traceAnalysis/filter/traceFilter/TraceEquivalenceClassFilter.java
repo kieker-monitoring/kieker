@@ -21,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -81,15 +82,34 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	}
 
 	/**
+	 * Creates a new instance of this class using the given parameters. Keep in mind that the Trace-Equivalence-Class-Mode has to be set via the method
+	 * <i>setTraceEquivalenceCallMode</i> before using this component!
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public TraceEquivalenceClassFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
+		this.equivalenceMode = this.extractTraceEquivalenceClassMode(this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE));
+	}
+
+	/**
 	 * Creates a new instance of this class using the given configuration object. Keep in mind that the Trace-Equivalence-Class-Mode has to be set via the method
 	 * <i>setTraceEquivalenceCallMode</i> before using this component!
 	 * 
 	 * @param configuration
 	 *            The configuration object used to initialize this object.
+	 * 
+	 * @deprecated
 	 */
+	@Deprecated
 	public TraceEquivalenceClassFilter(final Configuration configuration) {
-		super(configuration);
-		this.equivalenceMode = this.extractTraceEquivalenceClassMode(this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE));
+		this(configuration, null);
 	}
 
 	private TraceEquivalenceClassModes extractTraceEquivalenceClassMode(final String traceEquivalenceCallModeString) {
@@ -150,6 +170,9 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 		return map;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE, this.equivalenceMode.toString());

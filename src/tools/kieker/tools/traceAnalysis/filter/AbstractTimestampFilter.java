@@ -16,6 +16,7 @@
 
 package kieker.tools.traceAnalysis.filter;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
@@ -33,14 +34,34 @@ public abstract class AbstractTimestampFilter extends AbstractFilterPlugin {
 	private final long ignoreAfterTimestamp;
 
 	/**
+	 * Creates a new instance of this class using the given parameters.
 	 * 
 	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
 	 */
-	public AbstractTimestampFilter(final Configuration configuration) {
-		super(configuration);
-		/* Load the content for the fields from the given configuration. */
+	public AbstractTimestampFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
+		// Load the content for the fields from the given configuration.
 		this.ignoreBeforeTimestamp = configuration.getLongProperty(this.getConfigurationPropertyIgnoreBeforeTimestamp());
 		this.ignoreAfterTimestamp = configuration.getLongProperty(this.getConfigurationPropertyIgnoreAfterTimestamp());
+	}
+
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public AbstractTimestampFilter(final Configuration configuration) {
+		this(configuration, null);
 	}
 
 	/**
@@ -69,6 +90,9 @@ public abstract class AbstractTimestampFilter extends AbstractFilterPlugin {
 	 */
 	protected abstract String getConfigurationPropertyIgnoreAfterTimestamp();
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);
 

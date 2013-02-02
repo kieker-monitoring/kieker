@@ -24,9 +24,8 @@ import kieker.common.logging.LogFactory;
 
 /**
  * Allows spawn the execution of an {@link AnalysisController} into a separate {@link Thread}. The thread with the {@link AnalysisController} instance
- * provided in the constructor {@link #AnalysisControllerThread(AnalysisController)} is started by calling
- * the {@link #start()} method. The analysis can be terminated by calling the {@link #terminate()} method which delegates the call to the
- * {@link kieker.analysis.AnalysisController#terminate()} method.
+ * provided in the constructor {@link #AnalysisControllerThread(AnalysisController)} is started by calling the {@link #start()} method. The analysis can be
+ * terminated by calling the {@link #terminate()} method which delegates the call to the {@link kieker.analysis.AnalysisController#terminate()} method.
  * 
  * @author Andre van Hoorn, Jan Waller
  */
@@ -36,11 +35,20 @@ public final class AnalysisControllerThread extends Thread {
 	private final AnalysisController analysisController;
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param analysisController
+	 *            The analysis controller to be managed by this thread.
+	 */
 	public AnalysisControllerThread(final AnalysisController analysisController) {
 		super();
 		this.analysisController = analysisController;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void start() {
 		synchronized (this) {
@@ -49,6 +57,9 @@ public final class AnalysisControllerThread extends Thread {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void run() {
 		try {
@@ -63,9 +74,12 @@ public final class AnalysisControllerThread extends Thread {
 	 * Awaits (with timeout) the termination of the contained {@link AnalysisController}.
 	 * 
 	 * @param timeout
+	 *            The maximum time to wait
 	 * @param unit
+	 *            The time unit of the timeout.
 	 * @return see {@link CountDownLatch#await(long, TimeUnit)}
 	 * @throws InterruptedException
+	 *             If the current thread has been interrupted while waiting.
 	 */
 	public boolean awaitTermination(final long timeout, final TimeUnit unit) throws InterruptedException {
 		return this.terminationLatch.await(timeout, unit);
@@ -75,6 +89,7 @@ public final class AnalysisControllerThread extends Thread {
 	 * Awaits the termination of the contained {@link AnalysisController}.
 	 * 
 	 * @throws InterruptedException
+	 *             If the current thread has been interrupted while waiting.
 	 */
 	public void awaitTermination() throws InterruptedException {
 		this.terminationLatch.await();

@@ -29,6 +29,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.analysis.plugin.filter.forward.CountingThroughputFilter;
@@ -58,7 +59,7 @@ public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 	private static final long START_TIME_SECONDS = 246561L;
 	private static final long[] EVENT_TIME_OFFSETS_SECONDS = { 0, 1, 2, 7, 17, 19 }; // relative to the start time
 	private static final List<Entry<Long, Long>> EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS = new ArrayList<Entry<Long, Long>>(); // intervals relative to start time
-	private AnalysisController analysisController;
+	private IAnalysisController analysisController;
 
 	/**
 	 * List of all {@link EmptyRecord}s to be read by the {@link #simpleListReader}
@@ -106,22 +107,19 @@ public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 		 */
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.FALSE.toString());
-		this.simpleListReader = new ListReader<IMonitoringRecord>(readerConfiguration);
-		this.analysisController.registerReader(this.simpleListReader);
+		this.simpleListReader = new ListReader<IMonitoringRecord>(readerConfiguration, this.analysisController);
 
 		/*
 		 * Counting filter (before delay)
 		 */
-		this.countingFilterReader = new CountingFilter(new Configuration());
-		this.analysisController.registerFilter(this.countingFilterReader);
+		this.countingFilterReader = new CountingFilter(new Configuration(), this.analysisController);
 		this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME,
 				this.countingFilterReader, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
 		/*
 		 * Delay filter
 		 */
-		this.delayFilter = new RealtimeRecordDelayFilter(new Configuration());
-		this.analysisController.registerFilter(this.delayFilter);
+		this.delayFilter = new RealtimeRecordDelayFilter(new Configuration(), this.analysisController);
 		this.analysisController.connect(this.countingFilterReader, CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
 				this.delayFilter, RealtimeRecordDelayFilter.INPUT_PORT_NAME_RECORDS);
 
@@ -132,24 +130,21 @@ public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 		throughputFilterConfiguration.setProperty(CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE, Long.toString(INTERVAL_SIZE_NANOS));
 		// We use the following property because this is way easier to test:
 		throughputFilterConfiguration.setProperty(CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVALS_BASED_ON_1ST_TSTAMP, Boolean.TRUE.toString());
-		this.throughputFilter = new CountingThroughputFilter(throughputFilterConfiguration);
-		this.analysisController.registerFilter(this.throughputFilter);
+		this.throughputFilter = new CountingThroughputFilter(throughputFilterConfiguration, this.analysisController);
 		this.analysisController.connect(this.delayFilter, RealtimeRecordDelayFilter.OUTPUT_PORT_NAME_RECORDS,
 				this.throughputFilter, CountingThroughputFilter.INPUT_PORT_NAME_OBJECTS); // NOT: INPUT_PORT_NAME_RECORDS because we need "real time"
 
 		/*
 		 * Counting filter (after delay)
 		 */
-		this.countingFilterDelayed = new CountingFilter(new Configuration());
-		this.analysisController.registerFilter(this.countingFilterDelayed);
+		this.countingFilterDelayed = new CountingFilter(new Configuration(), this.analysisController);
 		this.analysisController.connect(this.throughputFilter, CountingThroughputFilter.OUTPUT_PORT_NAME_RELAYED_OBJECTS,
 				this.countingFilterDelayed, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
 		/*
 		 * Sink plugin
 		 */
-		this.sinkPlugin = new ListCollectionFilter<EmptyRecord>(new Configuration());
-		this.analysisController.registerFilter(this.sinkPlugin);
+		this.sinkPlugin = new ListCollectionFilter<EmptyRecord>(new Configuration(), this.analysisController);
 		this.analysisController.connect(this.countingFilterDelayed, CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
 				this.sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 	}

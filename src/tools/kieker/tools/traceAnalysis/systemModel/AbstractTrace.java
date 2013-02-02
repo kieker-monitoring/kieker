@@ -57,10 +57,8 @@ public abstract class AbstractTrace {
 		return this.traceInformation.getSessionId();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {

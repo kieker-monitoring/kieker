@@ -145,20 +145,7 @@ public final class Configuration extends Properties {
 	}
 
 	/**
-	 * Flattens the Properties hierarchies and returns an Configuration object containing only keys starting with the prefix.
-	 * 
-	 * <p>
-	 * Any implementation should probably be this: (where Configuration is the concrete class)
-	 * <p>
-	 * <blockquote>
-	 * 
-	 * <pre>
-	 * public final Configuration getPropertiesStartingWith(final String prefix) {
-	 * 	return (Configuration) getPropertiesStartingWith(new Configuration(), prefix);
-	 * }
-	 * </pre>
-	 * 
-	 * </blockquote>
+	 * Flattens the Properties hierarchies and returns a Configuration object containing only keys starting with the prefix.
 	 * 
 	 * @param prefix
 	 */
@@ -174,6 +161,30 @@ public final class Configuration extends Properties {
 			}
 		}
 		return configuration;
+	}
+
+	/**
+	 * Flattens the Properties hierarchies and returns a new Configuration object.
+	 * 
+	 * @param defaultConfiguration
+	 */
+	public final Configuration flatten(final Configuration defaultConfiguration) {
+		final Configuration configuration = new Configuration(defaultConfiguration);
+		// for Java 1.6 simply (also adjust below)
+		// final Set<String> keys = this.stringPropertyNames();
+		final Enumeration<?> keys = this.propertyNames();
+		while (keys.hasMoreElements()) {
+			final String property = (String) keys.nextElement();
+			configuration.setProperty(property, super.getProperty(property));
+		}
+		return configuration;
+	}
+
+	/**
+	 * Flattens the Properties hierarchies and returns a new Configuration object.
+	 */
+	public final Configuration flatten() {
+		return this.flatten(null);
 	}
 
 	/**

@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.analysis.repository.annotation.Repository;
@@ -60,9 +61,12 @@ public class DescriptionRepository extends AbstractRepository {
 	 *            The configuration to use
 	 * @throws IOException
 	 *             If an I/O error occurs during initialization
+	 * 
+	 * @deprecated
 	 */
+	@Deprecated
 	public DescriptionRepository(final Configuration configuration) throws IOException {
-		this(configuration, DescriptionRepository.readDataFromFile(configuration.getStringProperty(CONFIG_PROPERTY_NAME_DESCRIPTION_FILE_NAME)));
+		this(configuration, DescriptionRepository.readDataFromFile(configuration.getStringProperty(CONFIG_PROPERTY_NAME_DESCRIPTION_FILE_NAME)), null);
 	}
 
 	/**
@@ -72,12 +76,35 @@ public class DescriptionRepository extends AbstractRepository {
 	 *            The configuration to use
 	 * @param descriptionData
 	 *            The description data to use
+	 * @param projectContext
+	 *            The project context to use.
+	 * 
+	 * @since 1.7
 	 */
-	public DescriptionRepository(final Configuration configuration, final DescriptionRepositoryData descriptionData) {
-		super(configuration);
+	public DescriptionRepository(final Configuration configuration, final DescriptionRepositoryData descriptionData, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		this.descriptionMap = descriptionData.getDescriptionMap();
 	}
 
+	/**
+	 * Creates a new description repository using the given data.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 * @param descriptionData
+	 *            The description data to use
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
+	public DescriptionRepository(final Configuration configuration, final DescriptionRepositoryData descriptionData) {
+		this(configuration, descriptionData, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public Configuration getCurrentConfiguration() {
 		return this.configuration;
 	}
@@ -112,11 +139,32 @@ public class DescriptionRepository extends AbstractRepository {
 	 * @return The initialized description repository
 	 * @throws IOException
 	 *             If an I/O error occurs
+	 * 
+	 * @deprecated
 	 */
+	@Deprecated
 	public static DescriptionRepository createFromFile(final String fileName) throws IOException {
+		return DescriptionRepository.createFromFile(fileName, null);
+	}
+
+	/**
+	 * Initializes a new description repository from the given file.
+	 * 
+	 * @param fileName
+	 *            The name of the file to use.
+	 * @param projectContext
+	 *            The project context to use.
+	 * @return The initialized description repository
+	 * 
+	 * @throws IOException
+	 *             If an I/O error occurs
+	 * 
+	 * @since 1.7
+	 */
+	public static DescriptionRepository createFromFile(final String fileName, final IProjectContext projectContext) throws IOException {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_DESCRIPTION_FILE_NAME, fileName);
-		return new DescriptionRepository(configuration, DescriptionRepository.readDataFromFile(fileName));
+		return new DescriptionRepository(configuration, DescriptionRepository.readDataFromFile(fileName), projectContext);
 	}
 
 	private static DescriptionRepositoryData readDataFromFile(final String fileName) throws IOException {
