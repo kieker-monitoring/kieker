@@ -81,7 +81,7 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 	 * @param configuration
 	 *            The configuration for this component.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public SystemModel2FileFilter(final Configuration configuration) {
@@ -91,6 +91,7 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration currentConfiguration = new Configuration();
 		currentConfiguration.setProperty(CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN, this.outputFnHTML);

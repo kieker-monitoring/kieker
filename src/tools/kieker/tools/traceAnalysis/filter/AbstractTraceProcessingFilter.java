@@ -58,7 +58,7 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 	 * @param configuration
 	 *            The configuration for this component.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public AbstractTraceProcessingFilter(final Configuration configuration) {

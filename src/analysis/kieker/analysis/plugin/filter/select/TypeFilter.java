@@ -89,7 +89,7 @@ public final class TypeFilter extends AbstractFilterPlugin {
 	 * @param configuration
 	 *            The configuration for this component.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public TypeFilter(final Configuration configuration) {
@@ -99,6 +99,7 @@ public final class TypeFilter extends AbstractFilterPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		final String[] acceptedClassesConfig = new String[this.acceptedClasses.length];

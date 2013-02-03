@@ -105,7 +105,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	 * @param configuration
 	 *            The configuration object used to initialize this object.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public TraceEquivalenceClassFilter(final Configuration configuration) {
@@ -173,6 +173,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE, this.equivalenceMode.toString());

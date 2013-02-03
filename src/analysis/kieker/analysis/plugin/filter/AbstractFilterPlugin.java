@@ -37,7 +37,7 @@ public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFi
 	 * 
 	 * @param configuration
 	 *            The configuration to use for this plugin.
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public AbstractFilterPlugin(final Configuration configuration) {

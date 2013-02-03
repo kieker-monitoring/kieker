@@ -160,12 +160,6 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		this(AnalysisController.createConfigurationWithProjectName(projectName));
 	}
 
-	private static final Configuration createConfigurationWithProjectName(final String projectName) {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_PROJECT_NAME, projectName);
-		return configuration;
-	}
-
 	/**
 	 * This constructors creates an {@link AnalysisController} instance, using the given file to load an analysis model. The given file should therefore be an
 	 * instance of the analysis meta model.
@@ -241,7 +235,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * Constructs an {@link AnalysisController} instance using the given parameter.
 	 * 
-	 * @param globalConfiguration
+	 * @param configuration
 	 *            The global configuration of this analysis. All plugins can indirectly access it.
 	 * 
 	 * @since 1.7
@@ -252,7 +246,22 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	}
 
 	/**
+	 * This simple helper method create a new configuration object which is empty except for an entry containing the given project name.
+	 * 
+	 * @param projectName
+	 *            The project name to be stored in the new configuration object.
+	 * @return The configuration object.
+	 */
+	private static final Configuration createConfigurationWithProjectName(final String projectName) {
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(CONFIG_PROPERTY_NAME_PROJECT_NAME, projectName);
+		return configuration;
+	}
+
+	/**
 	 * This method provides the default properties, as supplied by the annotation.
+	 * 
+	 * @return The default configuration.
 	 * 
 	 * @since 1.7
 	 */

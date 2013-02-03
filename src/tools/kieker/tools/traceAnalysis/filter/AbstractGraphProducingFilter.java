@@ -68,7 +68,7 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 	 * @param graph
 	 *            The (usually empty) graph to produce / extend
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public AbstractGraphProducingFilter(final Configuration configuration, final G graph) {
@@ -78,6 +78,7 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return this.configuration;
 	}

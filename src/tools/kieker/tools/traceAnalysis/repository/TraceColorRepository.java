@@ -75,7 +75,7 @@ public class TraceColorRepository extends AbstractRepository {
 	 * @throws IOException
 	 *             If an I/O error occurs during initialization
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public TraceColorRepository(final Configuration configuration) throws IOException {
@@ -120,6 +120,7 @@ public class TraceColorRepository extends AbstractRepository {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return this.configuration;
 	}

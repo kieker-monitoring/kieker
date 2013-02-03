@@ -136,7 +136,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 	 * @throws IllegalArgumentException
 	 *             If the arguments are invalid.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public JMXReader(final Configuration configuation) throws IllegalArgumentException {
@@ -299,6 +299,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 

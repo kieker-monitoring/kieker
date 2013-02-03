@@ -105,7 +105,7 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 	 * @param configuration
 	 *            The configuration for this component.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public MonitoringRecordLoggerFilter(final Configuration configuration) {
@@ -124,6 +124,7 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		// clone again, so no one can change anything
 		return (Configuration) this.configuration.clone();

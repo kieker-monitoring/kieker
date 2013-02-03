@@ -100,10 +100,25 @@ public interface IPlugin extends IAnalysisComponent {
 	 */
 	public abstract Map<String, AbstractRepository> getCurrentRepositories();
 
+	/**
+	 * Delivers an array containing all output port names.
+	 * 
+	 * @return An array with all available output port names.
+	 */
 	public abstract String[] getAllOutputPortNames();
 
+	/**
+	 * Delivers an array containing all input port names.
+	 * 
+	 * @return An array with all available input port names.
+	 */
 	public abstract String[] getAllInputPortNames();
 
+	/**
+	 * Delivers an array containing all display names.
+	 * 
+	 * @return An array with all available display names.
+	 */
 	public abstract String[] getAllDisplayNames();
 
 	/**

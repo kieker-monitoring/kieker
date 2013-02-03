@@ -80,7 +80,7 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	 * @param configuration
 	 *            The configuration for this component.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public AbstractTraceAnalysisFilter(final Configuration configuration) {

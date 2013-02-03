@@ -86,7 +86,7 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 	 * @param configuration
 	 *            The filter configuration to use
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public AbstractGraphFilter(final Configuration configuration) {
@@ -130,6 +130,7 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 
 	protected abstract IOriginRetentionPolicy getDesiredOriginRetentionPolicy() throws AnalysisConfigurationException;
 
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return this.configuration;
 	}

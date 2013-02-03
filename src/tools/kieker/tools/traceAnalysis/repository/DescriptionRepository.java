@@ -62,7 +62,7 @@ public class DescriptionRepository extends AbstractRepository {
 	 * @throws IOException
 	 *             If an I/O error occurs during initialization
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public DescriptionRepository(final Configuration configuration) throws IOException {
@@ -105,6 +105,7 @@ public class DescriptionRepository extends AbstractRepository {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return this.configuration;
 	}

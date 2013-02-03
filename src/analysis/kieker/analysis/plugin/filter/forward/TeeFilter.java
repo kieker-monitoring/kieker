@@ -126,7 +126,7 @@ public final class TeeFilter extends AbstractFilterPlugin {
 	 * @param configuration
 	 *            The configuration for this component.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public TeeFilter(final Configuration configuration) {
@@ -143,6 +143,7 @@ public final class TeeFilter extends AbstractFilterPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_ENCODING, this.encoding);

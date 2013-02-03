@@ -57,9 +57,18 @@ import kieker.common.util.ImmutableEntry;
 		})
 public final class CountingThroughputFilter extends AbstractFilterPlugin {
 
+	/**
+	 * The name of the input port receiving the records.
+	 */
 	public static final String INPUT_PORT_NAME_RECORDS = "inputRecords";
+	/**
+	 * The name of the input port receiving other objects.
+	 */
 	public static final String INPUT_PORT_NAME_OBJECTS = "inputObjects";
 
+	/**
+	 * The name of the output port delivering the received objects.
+	 */
 	public static final String OUTPUT_PORT_NAME_RELAYED_OBJECTS = "relayedEvents";
 
 	public static final String CONFIG_PROPERTY_NAME_TIMEUNIT = "timeunit";
@@ -125,7 +134,7 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	 * @param configuration
 	 *            The configuration for this component.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public CountingThroughputFilter(final Configuration configuration) {
@@ -135,6 +144,7 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMEUNIT, this.timeunit.name());
@@ -164,7 +174,7 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 					if (numIntervalsElapsed > 1) { // NOPMD (AvoidDeeplyNestedIfStmts)
 						for (int i = 1; i < numIntervalsElapsed; i++) {
 							this.eventCountsPerInterval.add(
-									new ImmutableEntry<Long, Long>((this.lastTimestampInCurrentInterval + (i * this.intervalSize)) + 1, 0l)
+									new ImmutableEntry<Long, Long>((this.lastTimestampInCurrentInterval + (i * this.intervalSize)) + 1, 0L)
 									);
 						}
 					}

@@ -71,7 +71,7 @@ public class TimestampFilter extends AbstractTimestampFilter {
 	 *            The configuration used to initialize this instance. It should
 	 *            contain the properties for the minimum and maximum timestamp.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public TimestampFilter(final Configuration configuration) {

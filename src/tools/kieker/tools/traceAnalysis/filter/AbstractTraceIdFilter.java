@@ -57,7 +57,7 @@ public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 	 * @param configuration
 	 *            The configuration for this component.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public AbstractTraceIdFilter(final Configuration configuration) {
@@ -119,6 +119,7 @@ public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 	 */
 	protected abstract String getConfigurationPropertySelectedTraces();
 
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);
 		if (this.selectedTraceIds != null) {

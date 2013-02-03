@@ -49,19 +49,47 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 		name = "Trace Reconstruction Filter (Event)",
 		description = "Filter to reconstruct event based (flow) traces",
 		outputPorts = {
-			@OutputPort(name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID, description = "Outputs valid traces", eventTypes = { TraceEventRecords.class }),
-			@OutputPort(name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID, description = "Outputs traces missing crucial records", eventTypes = { TraceEventRecords.class }) },
+			@OutputPort(
+					name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID,
+					description = "Outputs valid traces", eventTypes = { TraceEventRecords.class }),
+			@OutputPort(
+					name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID,
+					description = "Outputs traces missing crucial records", eventTypes = { TraceEventRecords.class }) },
 		configuration = {
-			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
-			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME),
-			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME) })
+			@Property(
+					name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
+					defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
+			@Property(
+					name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
+					defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME),
+			@Property(
+					name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT,
+					defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME) })
 public final class EventRecordTraceReconstructionFilter extends AbstractFilterPlugin {
+	/**
+	 * The name of the output port delivering the valid traces.
+	 */
 	public static final String OUTPUT_PORT_NAME_TRACE_VALID = "validTraces";
+	/**
+	 * The name of the output port delivering the invalid traces.
+	 */
 	public static final String OUTPUT_PORT_NAME_TRACE_INVALID = "invalidTraces";
+	/**
+	 * The name of the input port receiving the trace records.
+	 */
 	public static final String INPUT_PORT_NAME_TRACE_RECORDS = "traceRecords";
 
+	/**
+	 * The name of the property determining the time unit.
+	 */
 	public static final String CONFIG_PROPERTY_NAME_TIMEUNIT = "timeunit";
+	/**
+	 * The name of the property determining the maximal trace duration.
+	 */
 	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION = "maxTraceDuration";
+	/**
+	 * The name of the property determining the maximal trace timeout.
+	 */
 	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT = "maxTraceTimeout";
 	public static final String CONFIG_PROPERTY_VALUE_MAX_TIME = "9223372036854775807"; // String.valueOf(Long.MAX_VALUE)
 	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "NANOSECONDS"; // TimeUnit.NANOSECONDS.name()
@@ -109,7 +137,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	 * @param configuration
 	 *            The configuration for this component.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public EventRecordTraceReconstructionFilter(final Configuration configuration) {
@@ -218,6 +246,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMEUNIT, this.timeunit.name());

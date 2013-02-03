@@ -113,7 +113,7 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 	 * @param configuration
 	 *            The configuration for this component.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public StringBufferFilter(final Configuration configuration) {
@@ -121,6 +121,7 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 
 	}
 
+	@Override
 	public final Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

@@ -88,7 +88,7 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation
 	 * @param configuration
 	 *            The configuration to use for this filter
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public TraceColoringFilter(final Configuration configuration) {

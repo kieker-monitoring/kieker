@@ -42,9 +42,18 @@ import kieker.common.configuration.Configuration;
 		})
 public final class CountingFilter extends AbstractFilterPlugin {
 
+	/**
+	 * The name of the input port receiving the incoming events.
+	 */
 	public static final String INPUT_PORT_NAME_EVENTS = "inputEvents";
 
+	/**
+	 * The name of the output port passing the incoming events.
+	 */
 	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayedEvents";
+	/**
+	 * The name of the output port which delivers the current counter value.
+	 */
 	public static final String OUTPUT_PORT_NAME_COUNT = "currentEventCount";
 
 	private final AtomicLong counter = new AtomicLong();
@@ -69,7 +78,7 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	 * @param configuration
 	 *            The configuration for this component.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public CountingFilter(final Configuration configuration) {
@@ -79,12 +88,15 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}
 
 	/**
 	 * Returns the number of objects received until now.
+	 * 
+	 * @return The current counter value.
 	 */
 	public final long getMessageCount() {
 		return this.counter.get();

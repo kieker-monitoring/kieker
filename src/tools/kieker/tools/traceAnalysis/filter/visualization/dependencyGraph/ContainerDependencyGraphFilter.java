@@ -69,7 +69,7 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 	 * @param configuration
 	 *            The configuration to use
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public ContainerDependencyGraphFilter(final Configuration configuration) {

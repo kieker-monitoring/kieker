@@ -83,7 +83,7 @@ public class SystemModelRepository extends AbstractRepository {
 	 * @param configuration
 	 *            The configuration to use for this repository.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public SystemModelRepository(final Configuration configuration) {
@@ -253,6 +253,7 @@ public class SystemModelRepository extends AbstractRepository {
 		ps.close();
 	}
 
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

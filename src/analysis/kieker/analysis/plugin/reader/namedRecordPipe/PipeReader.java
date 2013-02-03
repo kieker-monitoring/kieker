@@ -101,7 +101,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	 * @throws IllegalArgumentException
 	 *             If the pipe name was invalid.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public PipeReader(final Configuration configuration) {
@@ -145,6 +145,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);
 

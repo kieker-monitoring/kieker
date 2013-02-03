@@ -65,7 +65,7 @@ public abstract class AbstractDependencyGraphFilter<T extends ISystemModelElemen
 	 * @param graph
 	 *            The graph to produce / extend
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public AbstractDependencyGraphFilter(final Configuration configuration, final AbstractDependencyGraph<T> graph) {

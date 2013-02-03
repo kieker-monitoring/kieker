@@ -78,7 +78,7 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 	 * @param configuration
 	 *            The configuration for this component.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public ExecutionTraceWriterFilter(final Configuration configuration) throws IOException {
@@ -114,6 +114,7 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN, this.outputFn);

@@ -155,7 +155,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	 * 
 	 * @param configuration
 	 *            The configuration to use for this filter.
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public SequenceDiagramFilter(final Configuration configuration) {
@@ -355,6 +355,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 		ps.close();
 	}
 
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE, this.outputFnBase);

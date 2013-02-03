@@ -66,7 +66,7 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 	 * @param configuration
 	 *            The configuration for this component.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public ListCollectionFilter(final Configuration configuration) {
@@ -99,6 +99,7 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

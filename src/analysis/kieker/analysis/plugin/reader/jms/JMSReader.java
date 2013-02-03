@@ -122,7 +122,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 	 * @throws IllegalArgumentException
 	 *             If one of the properties is empty.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public JMSReader(final Configuration configuration) throws IllegalArgumentException {
@@ -237,6 +237,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 

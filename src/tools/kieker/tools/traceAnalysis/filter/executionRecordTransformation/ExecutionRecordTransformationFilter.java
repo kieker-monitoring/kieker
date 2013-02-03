@@ -70,7 +70,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 	 * @param configuration
 	 *            The configuration for this component.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public ExecutionRecordTransformationFilter(final Configuration configuration) {
@@ -94,6 +94,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		// filter has no configuration properties

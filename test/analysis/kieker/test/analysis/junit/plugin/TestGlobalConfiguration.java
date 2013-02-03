@@ -33,6 +33,10 @@ import kieker.common.configuration.Configuration;
  */
 public class TestGlobalConfiguration {
 
+	public TestGlobalConfiguration() {
+		// No code necessary
+	}
+
 	@Test
 	public void testGlobalConfiguration() {
 		final Configuration globalConfiguration = new Configuration();

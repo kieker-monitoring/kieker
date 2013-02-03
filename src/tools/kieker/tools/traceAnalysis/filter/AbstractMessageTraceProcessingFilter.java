@@ -53,7 +53,7 @@ public abstract class AbstractMessageTraceProcessingFilter extends AbstractTrace
 	 * @param configuration
 	 *            The configuration for this component.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public AbstractMessageTraceProcessingFilter(final Configuration configuration) {
