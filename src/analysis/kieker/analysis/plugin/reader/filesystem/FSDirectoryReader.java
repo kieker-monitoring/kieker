@@ -67,8 +67,12 @@ final class FSDirectoryReader implements Runnable {
 	private final Set<String> unknownTypesObserved = new HashSet<String>();
 
 	/**
+	 * Creates a new instance of this class.
 	 * 
 	 * @param inputDirName
+	 *            The name of the input directory.
+	 * @param recordReceiver
+	 *            The receiver handling the records.
 	 * @param ignoreUnknownRecordTypes
 	 *            select only records of this type; null selects all
 	 */
@@ -196,6 +200,7 @@ final class FSDirectoryReader implements Runnable {
 	 * Reads the records contained in the given normal file and passes them to the registered {@link #recordReceiver}.
 	 * 
 	 * @param inputFile
+	 *            The input file which should be processed.
 	 */
 	private final void processNormalInputFile(final File inputFile) {
 		boolean abortDueToUnknownRecordType = false;
@@ -298,6 +303,7 @@ final class FSDirectoryReader implements Runnable {
 	 * Reads the records contained in the given binary file and passes them to the registered {@link #recordReceiver}.
 	 * 
 	 * @param inputFile
+	 *            The input file which should be processed.
 	 */
 	private final void processBinaryInputFile(final File inputFile) {
 		DataInputStream in = null;

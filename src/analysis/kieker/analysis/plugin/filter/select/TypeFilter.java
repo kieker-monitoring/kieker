@@ -47,11 +47,24 @@ import kieker.common.logging.LogFactory;
 		})
 public final class TypeFilter extends AbstractFilterPlugin {
 
+	/**
+	 * The name of the input port receiving new events.
+	 */
 	public static final String INPUT_PORT_NAME_EVENTS = "events";
 
+	/**
+	 * The name of the output port where the incoming matching objects will be sent to.
+	 */
 	public static final String OUTPUT_PORT_NAME_TYPE_MATCH = "eventsMatchingType";
+
+	/**
+	 * The name of the output port where the incoming objects will be sent to, which do not match the configured types.
+	 */
 	public static final String OUTPUT_PORT_NAME_TYPE_MISMATCH = "eventsNotMatchingType";
 
+	/**
+	 * The name of the property determining which types will be filtered.
+	 */
 	public static final String CONFIG_PROPERTY_NAME_TYPES = "types";
 
 	private static final Log LOG = LogFactory.getLog(TypeFilter.class);
@@ -110,6 +123,12 @@ public final class TypeFilter extends AbstractFilterPlugin {
 		return configuration;
 	}
 
+	/**
+	 * This method represents the input port for the incoming objects.
+	 * 
+	 * @param event
+	 *            The new incoming object.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_EVENTS, eventTypes = { Object.class }, description = "all objects with matching types are forwarded")
 	public final void inputEvents(final Object event) {
 		final Class<?> eventClass = event.getClass();

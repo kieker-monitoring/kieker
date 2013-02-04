@@ -48,17 +48,38 @@ import kieker.common.logging.LogFactory;
 		})
 public final class TeeFilter extends AbstractFilterPlugin {
 
+	/**
+	 * The name of the input port for incoming events.
+	 */
 	public static final String INPUT_PORT_NAME_EVENTS = "receivedEvents";
 
+	/**
+	 * The name of the output port delivering the incoming events.
+	 */
 	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayedEvents";
 
 	public static final String CONFIG_PROPERTY_NAME_STREAM = "stream";
 	public static final String CONFIG_PROPERTY_NAME_ENCODING = "characterEncoding";
 
+	/**
+	 * The value of the stream property which determines that the filter uses the standard output.
+	 */
 	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDOUT = "STDOUT";
+	/**
+	 * The value of the stream property which determines that the filter uses the standard error output.
+	 */
 	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDERR = "STDERR";
+	/**
+	 * The value of the stream property which determines that the filter uses the standard log.
+	 */
 	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDLOG = "STDLOG";
+	/**
+	 * The value of the stream property which determines that the filter doesn't print anything.
+	 */
 	public static final String CONFIG_PROPERTY_VALUE_STREAM_NULL = "NULL";
+	/**
+	 * The default value of the encoding property which determines that the filter uses utf-8.
+	 */
 	public static final String CONFIG_PROPERTY_VALUE_DEFAULT_ENCODING = "UTF-8";
 
 	private static final Log LOG = LogFactory.getLog(TeeFilter.class);
@@ -164,6 +185,13 @@ public final class TeeFilter extends AbstractFilterPlugin {
 		return configuration;
 	}
 
+	/**
+	 * This method is the input port of the filter receiving incoming objects. Every object will be printed into a stream (based on the configuration) before the
+	 * filter sends it to the output port.
+	 * 
+	 * @param object
+	 *            The new object.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_EVENTS, description = "Receives incoming objects to be logged and forwarded", eventTypes = { Object.class })
 	public final void inputEvent(final Object object) {
 		if (this.active) {

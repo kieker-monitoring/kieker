@@ -143,7 +143,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	}
 
 	/**
-	 * This method is called for each new record by each ReaderThread.
+	 * {@inheritDoc}
 	 */
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		synchronized (record) { // with read()
@@ -173,8 +173,19 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 }
 
 /**
+ * This is a simple interface showing that the {@link FSReader} can receive records. This is mostly a relict from an older version.
+ * 
  * @author Andre van Hoorn, Jan Waller
  */
 interface IMonitoringRecordReceiver {
+
+	/**
+	 * This method is called for each new record by each ReaderThread.
+	 * 
+	 * @param record
+	 *            The record to be processed.
+	 * @return true if and only if the record has been handled correctly.
+	 */
 	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
+
 }

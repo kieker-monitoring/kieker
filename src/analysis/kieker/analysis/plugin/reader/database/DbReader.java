@@ -75,6 +75,9 @@ public class DbReader extends AbstractReaderPlugin {
 	 * @param projectContext
 	 *            The project context for this component.
 	 * 
+	 * @throws Exception
+	 *             If the driver for the database could not be found.
+	 * 
 	 * @since 1.7
 	 */
 	public DbReader(final Configuration configuration, final IProjectContext projectContext) throws Exception {
@@ -95,6 +98,8 @@ public class DbReader extends AbstractReaderPlugin {
 	 * 
 	 * @param configuration
 	 *            The configuration for this component.
+	 * @throws Exception
+	 *             If the driver for the database could not be found.
 	 * 
 	 * @deprecated To be removed in Kieker 1.8.
 	 */
@@ -152,6 +157,20 @@ public class DbReader extends AbstractReaderPlugin {
 		return true;
 	}
 
+	/**
+	 * This method uses the given table to read records and sends them to the output port.
+	 * 
+	 * @param connection
+	 *            The connection to the database which will be used.
+	 * @param tablename
+	 *            The name of the table containing records.
+	 * @param clazz
+	 *            The class of the monitoring records. This will be used to convert the array into the record.
+	 * @throws SQLException
+	 *             If something went wrong during the database access.
+	 * @throws MonitoringRecordException
+	 *             If the data within the table could not be converted into a valid record.
+	 */
 	private void table2record(final Connection connection, final String tablename, final Class<? extends IMonitoringRecord> clazz)
 			throws SQLException, MonitoringRecordException {
 		Statement selectRecord = null;

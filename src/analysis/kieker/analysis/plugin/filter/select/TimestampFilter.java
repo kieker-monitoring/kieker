@@ -120,6 +120,13 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 		return configuration;
 	}
 
+	/**
+	 * A simple helper method which checks whether the given timestamp is in the configured limits.
+	 * 
+	 * @param timestamp
+	 *            The timestamp to be checked.
+	 * @return true if and only if the given timestamp is between or equals ignoreBeforeTimestamp and ignoreAfterTimestamp.
+	 */
 	private final boolean inRange(final long timestamp) {
 		return (timestamp >= this.ignoreBeforeTimestamp) && (timestamp <= this.ignoreAfterTimestamp);
 	}
@@ -144,6 +151,12 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 		}
 	}
 
+	/**
+	 * This method represents the input port receiving trace events to be selected by a specific timestamp selector.
+	 * 
+	 * @param record
+	 *            The new incoming record.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_FLOW, description = "Receives trace events to be selected by a specific timestamp selector",
 			eventTypes = { IEventRecord.class, Trace.class })
 	public final void inputTraceEvent(final IFlowRecord record) {
@@ -165,6 +178,12 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 		}
 	}
 
+	/**
+	 * This method represents the input port receiving trace events to be selected by a specific timestamp selector (based on tin and tout).
+	 * 
+	 * @param execution
+	 *            The new incoming execution object.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_EXECUTION, description = "Receives trace events to be selected by a specific timestamp selector (based on tin and tout)", eventTypes = { OperationExecutionRecord.class })
 	public final void inputOperationExecutionRecord(final OperationExecutionRecord execution) {
 		if (this.inRange(execution.getTin()) && this.inRange(execution.getTout())) {
