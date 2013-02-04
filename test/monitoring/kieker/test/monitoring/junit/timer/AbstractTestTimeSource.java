@@ -34,7 +34,7 @@ public abstract class AbstractTestTimeSource extends AbstractKiekerTest { // NOP
 		final long measured = timesource.getTime();
 		final long after = System.currentTimeMillis();
 
-		final long beforeTU = timeunit.convert(before - 1, TimeUnit.MILLISECONDS);
+		final long beforeTU = timeunit.convert(before - 2, TimeUnit.MILLISECONDS);
 		final long afterTU = timeunit.convert(after + 2, TimeUnit.MILLISECONDS); // choosing 2 because 1 occasionally fails on some machines (with nanos)
 
 		Assert.assertTrue("Measured time (" + measured + ") has to be >= " + beforeTU, beforeTU <= measured);
