@@ -68,8 +68,8 @@ public class ListReader<T> extends AbstractReaderPlugin {
 	 * 
 	 * @since 1.7
 	 */
-	public ListReader(final Configuration configuation, final IProjectContext projectContext) {
-		super(configuation, projectContext);
+	public ListReader(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 
 		this.awaitTermination = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_AWAIT_TERMINATION);
 		if (!this.awaitTermination) {
@@ -90,10 +90,22 @@ public class ListReader<T> extends AbstractReaderPlugin {
 		this(configuration, null);
 	}
 
+	/**
+	 * This method adds all given records to our list.
+	 * 
+	 * @param records
+	 *            The records to be added.
+	 */
 	public void addAllObjects(final List<T> records) {
 		this.objects.addAll(records);
 	}
 
+	/**
+	 * This method adds the given object to our list.
+	 * 
+	 * @param object
+	 *            The object to be added.
+	 */
 	public void addObject(final T object) {
 		this.objects.add(object);
 	}

@@ -71,17 +71,24 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	 */
 	public static final String OUTPUT_PORT_NAME_RELAYED_OBJECTS = "relayedEvents";
 
+	/**
+	 * The name of the property determining the time unit.
+	 */
 	public static final String CONFIG_PROPERTY_NAME_TIMEUNIT = "timeunit";
 	public static final String CONFIG_PROPERTY_NAME_INTERVAL_SIZE = "intervalSize";
+
+	/**
+	 * The default value of the time unit property (nanoseconds).
+	 */
 	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "NANOSECONDS"; // TimeUnit.NANOSECONDS.name()
 
 	/**
-	 * If the value is set to false, the intervals are computed based on time since 1970-1-1
+	 * If the value is set to false, the intervals are computed based on time since 1970-1-1.
 	 */
 	public static final String CONFIG_PROPERTY_NAME_INTERVALS_BASED_ON_1ST_TSTAMP = "intervalsBasedOn1stTstamp";
 
 	/**
-	 * The configuration property value for {@link #CONFIG_PROPERTY_NAME_INTERVAL_SIZE}, leading to a bin size of 1 minute
+	 * The configuration property value for {@link #CONFIG_PROPERTY_NAME_INTERVAL_SIZE}, leading to a bin size of 1 minute.
 	 */
 	public static final String CONFIG_PROPERTY_VALUE_INTERVAL_SIZE_ONE_MINUTE = "60000000000";
 

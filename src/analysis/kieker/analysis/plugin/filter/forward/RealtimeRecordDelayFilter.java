@@ -58,7 +58,7 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_NAME_NUM_WORKERS = "numWorkers";
 
 	/**
-	 * The number of additional seconds to wait before execute the termination (after all records have been forwarded)
+	 * The number of additional seconds to wait before execute the termination (after all records have been forwarded).
 	 */
 	public static final String CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS = "additionalShutdownDelaySeconds";
 

@@ -100,8 +100,8 @@ public final class JMXReader extends AbstractReaderPlugin {
 	 * 
 	 * @since 1.7
 	 */
-	public JMXReader(final Configuration configuation, final IProjectContext projectContext) throws IllegalArgumentException {
-		super(configuation, projectContext);
+	public JMXReader(final Configuration configuration, final IProjectContext projectContext) throws IllegalArgumentException {
+		super(configuration, projectContext);
 
 		this.server = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_SERVER);
 		this.port = this.configuration.getIntProperty(CONFIG_PROPERTY_NAME_PORT);
@@ -139,8 +139,8 @@ public final class JMXReader extends AbstractReaderPlugin {
 	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
-	public JMXReader(final Configuration configuation) throws IllegalArgumentException {
-		this(configuation, null);
+	public JMXReader(final Configuration configuration) throws IllegalArgumentException {
+		this(configuration, null);
 	}
 
 	/**

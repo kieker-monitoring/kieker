@@ -91,7 +91,13 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	 * The name of the property determining the maximal trace timeout.
 	 */
 	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT = "maxTraceTimeout";
+	/**
+	 * The default value of the properties for the maximal trace duration and timeout.
+	 */
 	public static final String CONFIG_PROPERTY_VALUE_MAX_TIME = "9223372036854775807"; // String.valueOf(Long.MAX_VALUE)
+	/**
+	 * The default value of the time unit property (nanoseconds).
+	 */
 	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "NANOSECONDS"; // TimeUnit.NANOSECONDS.name()
 
 	// internally we will assume nanosecond precision

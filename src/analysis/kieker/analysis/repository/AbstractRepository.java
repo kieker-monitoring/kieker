@@ -38,7 +38,7 @@ public abstract class AbstractRepository extends AbstractAnalysisComponent imple
 	 * @param configuration
 	 *            The configuration for this repository.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public AbstractRepository(final Configuration configuration) {

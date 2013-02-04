@@ -32,6 +32,9 @@ import kieker.common.logging.LogFactory;
  */
 public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 
+	/**
+	 * The name of the property for the name. This should normally only be used by Kieker.
+	 */
 	public static final String CONFIG_NAME = "name-hiddenAndNeverExportedProperty";
 
 	private static final Log LOG = LogFactory.getLog(AbstractAnalysisComponent.class);
@@ -98,10 +101,10 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 	 * 
 	 * @return true iff the project context of this plugin was not null and has been set to the given value.
 	 * 
-	 * @Deprecated
+	 * @deprecated To be removed in 1.8
+	 * 
 	 * @since 1.7
 	 */
-	// TODO Remove this method in 1.8 (so mark it as deprecated)
 	@Deprecated
 	public final boolean setProjectContext(final IProjectContext context) {
 		synchronized (this) {

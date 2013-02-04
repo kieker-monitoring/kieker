@@ -32,6 +32,23 @@ public class FilesystemLogReplayer extends AbstractLogReplayer {
 
 	private final String[] inputDirs;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param monitoringConfigurationFile
+	 *            The name of the monitoring configuration file.
+	 * @param realtimeMode
+	 *            Whether realtime mode should be used.
+	 * @param keepOriginalLoggingTimestamps
+	 * @param numRealtimeWorkerThreads
+	 *            The number of realtime worker threads to be used.
+	 * @param ignoreRecordsBeforeTimestamp
+	 *            The lower limit for the timestamps.
+	 * @param ignoreRecordsAfterTimestamp
+	 *            The upper limit for the timestamps.
+	 * @param inputDirs
+	 *            The array containing the input directories.
+	 */
 	public FilesystemLogReplayer(final String monitoringConfigurationFile, final boolean realtimeMode, final boolean keepOriginalLoggingTimestamps,
 			final int numRealtimeWorkerThreads, final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp,
 			final String[] inputDirs) {

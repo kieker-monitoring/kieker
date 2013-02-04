@@ -75,8 +75,8 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	 * 
 	 * @since 1.7
 	 */
-	public PipeReader(final Configuration configuation, final IProjectContext projectContext) {
-		super(configuation, projectContext);
+	public PipeReader(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 
 		final String pipeNameConfig = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_PIPENAME);
 
@@ -98,8 +98,6 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	 * 
 	 * @param configuration
 	 *            The configuration used to load the pipe name. It <b>must</b> contain the property {@link #CONFIG_PROPERTY_NAME_PIPENAME}.
-	 * @throws IllegalArgumentException
-	 *             If the pipe name was invalid.
 	 * 
 	 * @deprecated To be removed in Kieker 1.8.
 	 */
@@ -110,6 +108,8 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 
 	/**
 	 * Blocks until the associated pipe is being closed.
+	 * 
+	 * @return true if the reading terminated in a "normal" way. If an interrupt terminates the wait-method too early, false will be returned.
 	 */
 	public boolean read() {
 		// No need to initialize since we receive asynchronously
@@ -123,12 +123,19 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 		return true;
 	}
 
+	/**
+	 * This method sends a given records directly to the output port.
+	 * 
+	 * @param rec
+	 *            The new record object.
+	 * @return true if and only if the record has been delivered.
+	 */
 	public boolean newMonitoringRecord(final IMonitoringRecord rec) {
 		return super.deliver(OUTPUT_PORT_NAME_RECORDS, rec);
 	}
 
 	public void notifyPipeClosed() {
-		/* Notify main thread */
+		// Notify main thread
 		this.terminationLatch.countDown();
 	}
 

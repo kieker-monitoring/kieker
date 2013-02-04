@@ -37,7 +37,7 @@ public abstract class AbstractReaderPlugin extends AbstractPlugin implements IRe
 	 * 
 	 * @param configuration
 	 *            The configuration which should be used to initialize the object.
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public AbstractReaderPlugin(final Configuration configuration) {
