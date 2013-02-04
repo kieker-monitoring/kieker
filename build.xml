@@ -1017,12 +1017,7 @@
 	</target>
 
 	<target name="checkstyle" depends="build-all,compile-tests" description="Uses Checkstyle to find potential problems">
-    <path id="checkstyle.libs">
-			<fileset dir="${lib.cs.dir}/lib">
-				<include name="checkstyle-*.jar" />
-			</fileset>
-		</path>
-		<taskdef resource="checkstyletask.properties" classpath="checkstyle.libs" />
+		<taskdef resource="checkstyletask.properties" classpath="${lib.cs.dir}/lib/checkstyle-all.jar" />
 		<checkstyle config="${lib.cs.dir}/cs-conf.xml" failOnViolation="false">
 			<classpath>
 				<fileset dir="${lib.dir}">
