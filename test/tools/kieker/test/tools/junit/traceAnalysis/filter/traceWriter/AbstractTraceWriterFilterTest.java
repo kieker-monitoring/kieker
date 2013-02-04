@@ -83,7 +83,7 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 		this.outputFile = this.tmpFolder.newFile(AbstractTraceWriterFilterTest.OUTPUT_BASE_FN);
 	}
 
-	protected abstract AbstractTraceProcessingFilter provideWriterFilter(String filename, AnalysisController analysisController) throws IOException;
+	protected abstract AbstractTraceProcessingFilter provideWriterFilter(String filename, AnalysisController ctrl) throws IOException;
 
 	protected abstract String provideFilterInputName();
 
