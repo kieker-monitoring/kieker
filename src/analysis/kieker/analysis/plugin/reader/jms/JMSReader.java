@@ -35,7 +35,6 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 
-import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -77,7 +76,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 	private final CountDownLatch cdLatch = new CountDownLatch(1);
 
 	/**
-	 * Creates a new instance of this class using the given parameters.
+	 * Creates a new instance of this class using the given parameters to configure the reader.
 	 * 
 	 * @param configuration
 	 *            The configuration used to initialize the whole reader. Keep in mind that the configuration should contain the following properties:
@@ -86,18 +85,14 @@ public final class JMSReader extends AbstractReaderPlugin {
 	 *            <li>The property {@link #CONFIG_PROPERTY_NAME_DESTINATION}, e.g. {@code queue1}
 	 *            <li>The property {@link #CONFIG_PROPERTY_NAME_FACTORYLOOKUP}, e.g. {@code org.exolab.jms.jndi.InitialContextFactory}
 	 *            </ul>
-	 * @param projectContext
-	 *            The project context for this component.
 	 * 
 	 * @throws IllegalArgumentException
 	 *             If one of the properties is empty.
-	 * 
-	 * @since 1.7
 	 */
-	public JMSReader(final Configuration configuration, final IProjectContext projectContext) throws IllegalArgumentException {
-		super(configuration, projectContext);
-
-		// Initialize the reader bases on the given configuration.
+	public JMSReader(final Configuration configuration) throws IllegalArgumentException {
+		/* Call the inherited constructor. */
+		super(configuration);
+		/* Initialize the reader bases on the given configuration. */
 		this.jmsProviderUrl = configuration.getStringProperty(CONFIG_PROPERTY_NAME_PROVIDERURL);
 		this.jmsDestination = configuration.getStringProperty(CONFIG_PROPERTY_NAME_DESTINATION);
 		this.jmsFactoryLookupName = configuration.getStringProperty(CONFIG_PROPERTY_NAME_FACTORYLOOKUP);
@@ -109,31 +104,10 @@ public final class JMSReader extends AbstractReaderPlugin {
 	}
 
 	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration used to initialize the whole reader. Keep in mind that the configuration should contain the following properties:
-	 *            <ul>
-	 *            <li>The property {@link #CONFIG_PROPERTY_NAME_PROVIDERURL}, e.g. {@code tcp://localhost:3035/}
-	 *            <li>The property {@link #CONFIG_PROPERTY_NAME_DESTINATION}, e.g. {@code queue1}
-	 *            <li>The property {@link #CONFIG_PROPERTY_NAME_FACTORYLOOKUP}, e.g. {@code org.exolab.jms.jndi.InitialContextFactory}
-	 *            </ul>
-	 * 
-	 * @throws IllegalArgumentException
-	 *             If one of the properties is empty.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public JMSReader(final Configuration configuration) throws IllegalArgumentException {
-		this(configuration, null);
-	}
-
-	/**
 	 * A call to this method is a blocking call.
 	 */
 	public boolean read() {
-		boolean retVal = false;
+		boolean retVal = true;
 		Connection connection = null;
 		try {
 			final Hashtable<String, String> properties = new Hashtable<String, String>(); // NOPMD NOCS (InitialContext expects Hashtable)
@@ -226,18 +200,11 @@ public final class JMSReader extends AbstractReaderPlugin {
 		this.cdLatch.countDown();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public void terminate(final boolean error) {
 		LOG.info("Shutdown of JMSReader requested.");
 		this.unblock();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
