@@ -23,6 +23,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
@@ -98,26 +99,23 @@ public class TestExecutionRecordTransformationFilter extends AbstractKiekerTest 
  * 
  */
 class ExecRecordTransformationFilterChecker { // NOPMD (subclass of TestCase)
-	private final SystemModelRepository systemModelRepository = new SystemModelRepository(new Configuration());
-	private final AnalysisController analysisController = new AnalysisController();
-	private final ListReader<Object> listReader = new ListReader<Object>(new Configuration());
-	private final ExecutionRecordTransformationFilter execRecFilter = new ExecutionRecordTransformationFilter(new Configuration());
-	private final ExecutionSinkClass sinkPlugin = new ExecutionSinkClass(new Configuration());
+	private final IAnalysisController analysisController = new AnalysisController();
+
+	private final SystemModelRepository systemModelRepository = new SystemModelRepository(new Configuration(), this.analysisController);
+	private final ListReader<Object> listReader = new ListReader<Object>(new Configuration(), this.analysisController);
+	private final ExecutionRecordTransformationFilter execRecFilter = new ExecutionRecordTransformationFilter(new Configuration(), this.analysisController);
+	private final ExecutionSinkClass sinkPlugin = new ExecutionSinkClass(new Configuration(), this.analysisController);
 
 	public ExecRecordTransformationFilterChecker(final List<OperationExecutionRecord> records) throws IllegalStateException, AnalysisConfigurationException {
 		for (final OperationExecutionRecord record : records) { // the reader will provide these records via its output port
 			this.listReader.addObject(record);
 		}
-		this.analysisController.registerReader(this.listReader);
-		this.analysisController.registerFilter(this.execRecFilter);
-		this.analysisController.registerFilter(this.sinkPlugin);
-		this.analysisController.registerRepository(this.systemModelRepository);
+
 		this.analysisController.connect(this.listReader, ListReader.OUTPUT_PORT_NAME, this.execRecFilter,
 				ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
 		this.analysisController.connect(this.execRecFilter, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS,
 				this.sinkPlugin, ExecutionSinkClass.INPUT_PORT_NAME);
 		this.analysisController.connect(this.execRecFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemModelRepository);
-
 	}
 
 	public SystemModelRepository getSystemModelRepository() {

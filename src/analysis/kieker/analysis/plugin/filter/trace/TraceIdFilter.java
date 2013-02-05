@@ -19,6 +19,7 @@ package kieker.analysis.plugin.filter.trace;
 import java.util.Set;
 import java.util.TreeSet;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -65,8 +66,19 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 	private final boolean acceptAllTraces;
 	private final Set<Long> selectedTraceIds;
 
-	public TraceIdFilter(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public TraceIdFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		this.acceptAllTraces = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES);
 		this.selectedTraceIds = new TreeSet<Long>();
 		for (final String id : configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_SELECTED_TRACES)) {
@@ -74,6 +86,23 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 		}
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
+	 */
+	@Deprecated
+	public TraceIdFilter(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.toString(this.acceptAllTraces));

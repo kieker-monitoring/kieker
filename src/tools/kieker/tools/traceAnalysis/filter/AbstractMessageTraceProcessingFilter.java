@@ -16,6 +16,7 @@
 
 package kieker.tools.traceAnalysis.filter;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
@@ -32,8 +33,31 @@ public abstract class AbstractMessageTraceProcessingFilter extends AbstractTrace
 
 	public static final String INPUT_PORT_NAME_MESSAGE_TRACES = "messageTraces";
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public AbstractMessageTraceProcessingFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+	}
+
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
+	 */
+	@Deprecated
 	public AbstractMessageTraceProcessingFilter(final Configuration configuration) {
-		super(configuration);
+		this(configuration, null);
 	}
 
 	@InputPort(name = INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed", eventTypes = { MessageTrace.class })

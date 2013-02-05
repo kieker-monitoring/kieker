@@ -30,13 +30,13 @@ public class CRM {
 	}
 
 	public void getOffers() {
-		/* Invoke catalog.getBook() and monitor response time */
+		// Invoke catalog.getBook() and monitor response time
 		final long tin = CRM.MONITORING_CONTROLLER.getTimeSource().getTime();
 		this.catalog.getBook(false);
 		final long tout = CRM.MONITORING_CONTROLLER.getTimeSource().getTime();
-		/* Create a new record and set values */
+		// Create a new record and set values
 		final MyResponseTimeRecord e = new MyResponseTimeRecord(new Object[] { "mySimpleKiekerExample.bookstoreTracing.Catalog", "getBook(..)", tout - tin });
-		/* Pass the record to the monitoring controller */
+		// Pass the record to the monitoring controller
 		CRM.MONITORING_CONTROLLER.newMonitoringRecord(e);
 	}
 }

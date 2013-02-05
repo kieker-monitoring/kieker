@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.display.annotation.Display;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
@@ -51,19 +52,15 @@ import kieker.common.logging.LogFactory;
  * @author Nils Christian Ehmke, Jan Waller
  */
 @Plugin
-public abstract class AbstractPlugin implements IPlugin {
-
-	public static final String CONFIG_NAME = "name-hiddenAndNeverExportedProperty";
+public abstract class AbstractPlugin extends AbstractAnalysisComponent implements IPlugin {
 
 	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
 
-	protected final Configuration configuration;
 	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<PluginInputPortReference>> registeredMethods;
 	private final ConcurrentHashMap<String, AbstractRepository> registeredRepositories;
 	private final Map<String, RepositoryPort> repositoryPorts;
 	private final Map<String, OutputPort> outputPorts;
 	private final Map<String, InputPort> inputPorts;
-	private final String name;
 
 	// Shutdown mechanism
 	private final List<AbstractPlugin> incomingPlugins;
@@ -72,22 +69,17 @@ public abstract class AbstractPlugin implements IPlugin {
 
 	/**
 	 * Each Plugin requires a constructor with a single Configuration object and an array of repositories!
+	 * 
+	 * @param configuration
+	 *            The configuration for this repository.
 	 */
 	public AbstractPlugin(final Configuration configuration) {
-		try {
-			// TODO: somewhat dirty hack...
-			configuration.setDefaultConfiguration(this.getDefaultConfiguration());
-		} catch (final IllegalAccessException ex) {
-			LOG.error("Unable to set plugin default properties", ex);
-		}
-		this.configuration = configuration;
+		// Registering will happen in the subclass
+		super(configuration);
 
-		/* try to determine name */
-		this.name = configuration.getStringProperty(CONFIG_NAME);
+		// KEEP IN MIND: Although we use "this" in the following code, it points to the actual class. Not to AbstractPlugin!!
 
-		/* KEEP IN MIND: Although we use "this" in the following code, it points to the actual class. Not to AbstractPlugin!! */
-
-		/* Get all repository and output ports. */
+		// Get all repository and output ports.
 		this.repositoryPorts = new ConcurrentHashMap<String, RepositoryPort>();
 		this.outputPorts = new ConcurrentHashMap<String, OutputPort>();
 		final Plugin annotation = this.getClass().getAnnotation(Plugin.class);
@@ -198,10 +190,8 @@ public abstract class AbstractPlugin implements IPlugin {
 		return true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#connect(java.lang.String, kieker.analysis.repository.AbstractRepository)
+	/**
+	 * {@inheritDoc}
 	 */
 	public final void connect(final String reponame, final AbstractRepository repository) throws AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
@@ -353,7 +343,8 @@ public abstract class AbstractPlugin implements IPlugin {
 	 * 
 	 * @return The default properties.
 	 */
-	private final Configuration getDefaultConfiguration() {
+	@Override
+	protected final Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
 		// Get the annotation from the class
 		final Plugin pluginAnnotation = this.getClass().getAnnotation(Plugin.class);
@@ -365,19 +356,8 @@ public abstract class AbstractPlugin implements IPlugin {
 		return defaultConfiguration;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getName()
-	 */
-	public final String getName() {
-		return this.name;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getPluginName()
+	/**
+	 * {@inheritDoc}
 	 */
 	public final String getPluginName() {
 		final String pluginName = this.getClass().getAnnotation(Plugin.class).name();
@@ -388,10 +368,8 @@ public abstract class AbstractPlugin implements IPlugin {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getPluginDescription()
+	/**
+	 * {@inheritDoc}
 	 */
 	public final String getPluginDescription() {
 		return this.getClass().getAnnotation(Plugin.class).description();
@@ -414,23 +392,26 @@ public abstract class AbstractPlugin implements IPlugin {
 		return true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getCurrentRepositories()
+	/**
+	 * {@inheritDoc}
 	 */
 	public final Map<String, AbstractRepository> getCurrentRepositories() {
 		return Collections.unmodifiableMap(this.registeredRepositories);
 	}
 
+	/**
+	 * Delivers the registered repository for the given name or null, if it doesn't exist.
+	 * 
+	 * @param reponame
+	 *            The name (key) of the repository.
+	 * @return The registered repository instance.
+	 */
 	protected final AbstractRepository getRepository(final String reponame) {
 		return this.registeredRepositories.get(reponame);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getAllOutputPortNames()
+	/**
+	 * {@inheritDoc}
 	 */
 	public final String[] getAllOutputPortNames() {
 		final List<String> outputNames = new LinkedList<String>();
@@ -441,10 +422,8 @@ public abstract class AbstractPlugin implements IPlugin {
 		return outputNames.toArray(new String[outputNames.size()]);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getAllInputPortNames()
+	/**
+	 * {@inheritDoc}
 	 */
 	public final String[] getAllInputPortNames() {
 		final List<String> inputNames = new LinkedList<String>();
@@ -457,10 +436,8 @@ public abstract class AbstractPlugin implements IPlugin {
 		return inputNames.toArray(new String[inputNames.size()]);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getAllDisplayNames()
+	/**
+	 * {@inheritDoc}
 	 */
 	public final String[] getAllDisplayNames() {
 		final List<String> displayNames = new LinkedList<String>();
@@ -473,10 +450,8 @@ public abstract class AbstractPlugin implements IPlugin {
 		return displayNames.toArray(new String[displayNames.size()]);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getAllOutputPortNames()
+	/**
+	 * {@inheritDoc}
 	 */
 	public final String[] getAllRepositoryPortNames() {
 		final List<String> repositoryNames = new LinkedList<String>();
@@ -487,10 +462,8 @@ public abstract class AbstractPlugin implements IPlugin {
 		return repositoryNames.toArray(new String[repositoryNames.size()]);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.analysis.plugin.IPlugin#getConnectedPlugins(java.lang.String)
+	/**
+	 * {@inheritDoc}
 	 */
 	public final List<PluginInputPortReference> getConnectedPlugins(final String outputPortName) {
 		/* Make sure that the output port exists */
@@ -506,10 +479,18 @@ public abstract class AbstractPlugin implements IPlugin {
 		return result;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final STATE getState() {
 		return this.state;
 	}
 
+	/**
+	 * Starts this plugin.
+	 * 
+	 * @return true if and only if the start procedure was sucesful.
+	 */
 	public final boolean start() {
 		if (this.state != STATE.READY) {
 			return false;
@@ -518,6 +499,12 @@ public abstract class AbstractPlugin implements IPlugin {
 		return this.init();
 	}
 
+	/**
+	 * Initializes a shutdown of this and all incoming plugins.
+	 * 
+	 * @param error
+	 *            A flag determining whether this plugin has to be shutdown due to an error or not.
+	 */
 	public final void shutdown(final boolean error) {
 		if ((this.state != STATE.READY) && (this.state != STATE.RUNNING)) { // we terminate only once
 			return;

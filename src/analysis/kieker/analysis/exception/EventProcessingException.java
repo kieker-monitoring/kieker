@@ -21,13 +21,28 @@ package kieker.analysis.exception;
  * @author Andre van Hoorn
  */
 public class EventProcessingException extends Exception {
+
 	private static final long serialVersionUID = 345L;
 
-	public EventProcessingException(final String msg) {
-		super(msg);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param message
+	 *            The message of the exception.
+	 * @param cause
+	 *            The cause of the exception.
+	 */
+	public EventProcessingException(final String message, final Throwable cause) {
+		super(message, cause);
 	}
 
-	public EventProcessingException(final String msg, final Throwable t) {
-		super(msg, t);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param message
+	 *            The message of the exception.
+	 */
+	public EventProcessingException(final String message) {
+		super(message);
 	}
 }

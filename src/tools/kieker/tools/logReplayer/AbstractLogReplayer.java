@@ -17,6 +17,7 @@
 package kieker.tools.logReplayer;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.filter.forward.RealtimeRecordDelayFilter;
@@ -77,13 +78,12 @@ public abstract class AbstractLogReplayer {
 
 		try {
 
-			final AnalysisController analysisInstance = new AnalysisController();
+			final IAnalysisController analysisInstance = new AnalysisController();
 
 			/*
 			 * Initializing the reader
 			 */
-			final AbstractReaderPlugin reader = this.createReader();
-			analysisInstance.registerReader(reader);
+			final AbstractReaderPlugin reader = this.createReader(analysisInstance);
 
 			// These two variables will be updated while plugging together the configuration
 			AbstractPlugin lastFilter = reader;
@@ -108,8 +108,7 @@ public abstract class AbstractLogReplayer {
 				}
 
 				if (atLeastOneTimestampGiven) {
-					final TimestampFilter timestampFilter = new TimestampFilter(timestampFilterConfiguration);
-					analysisInstance.registerFilter(timestampFilter);
+					final TimestampFilter timestampFilter = new TimestampFilter(timestampFilterConfiguration, analysisInstance);
 
 					analysisInstance.connect(lastFilter, lastOutputPortName, timestampFilter, TimestampFilter.INPUT_PORT_NAME_ANY_RECORD);
 					lastFilter = timestampFilter;
@@ -125,8 +124,8 @@ public abstract class AbstractLogReplayer {
 			if (this.realtimeMode) {
 				final Configuration delayFilterConfiguration = new Configuration();
 				delayFilterConfiguration.setProperty(RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_NUM_WORKERS, Integer.toString(this.numRealtimeWorkerThreads));
-				final RealtimeRecordDelayFilter rtFilter = new RealtimeRecordDelayFilter(delayFilterConfiguration);
-				analysisInstance.registerFilter(rtFilter);
+				final RealtimeRecordDelayFilter rtFilter = new RealtimeRecordDelayFilter(delayFilterConfiguration, analysisInstance);
+
 				analysisInstance.connect(lastFilter, lastOutputPortName, rtFilter, RealtimeRecordDelayFilter.INPUT_PORT_NAME_RECORDS);
 				lastFilter = rtFilter;
 				lastOutputPortName = RealtimeRecordDelayFilter.OUTPUT_PORT_NAME_RECORDS;
@@ -142,8 +141,8 @@ public abstract class AbstractLogReplayer {
 			recordLoggerConfig.setProperty(
 					ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP,
 					Boolean.toString(!this.keepOriginalLoggingTimestamps));
-			final MonitoringRecordLoggerFilter recordLogger = new MonitoringRecordLoggerFilter(recordLoggerConfig);
-			analysisInstance.registerFilter(recordLogger);
+			final MonitoringRecordLoggerFilter recordLogger = new MonitoringRecordLoggerFilter(recordLoggerConfig, analysisInstance);
+
 			analysisInstance.connect(lastFilter, lastOutputPortName, recordLogger, MonitoringRecordLoggerFilter.INPUT_PORT_NAME_RECORD);
 
 			analysisInstance.run();
@@ -167,7 +166,9 @@ public abstract class AbstractLogReplayer {
 	/**
 	 * Implementing classes return the reader to be used for reading the monitoring log.
 	 * 
+	 * @param analysisInstance
+	 * 
 	 * @return
 	 */
-	protected abstract AbstractReaderPlugin createReader();
+	protected abstract AbstractReaderPlugin createReader(final IAnalysisController analysisInstance);
 }

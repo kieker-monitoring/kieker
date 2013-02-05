@@ -28,15 +28,33 @@ public final class TraceEventRecords {
 	private final Trace trace;
 	private final AbstractTraceEvent[] traceEvents;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param trace
+	 *            The trace to be stored in this object.
+	 * @param traceEvents
+	 *            The trace events to be stored in this object.
+	 */
 	public TraceEventRecords(final Trace trace, final AbstractTraceEvent[] traceEvents) { // NOPMD (stored directly)
 		this.trace = trace;
 		this.traceEvents = traceEvents;
 	}
 
+	/**
+	 * Delivers the stored traces.
+	 * 
+	 * @return The traces currently stored in this object.
+	 */
 	public Trace getTrace() {
 		return this.trace;
 	}
 
+	/**
+	 * Delivers the stored trace events.
+	 * 
+	 * @return The trace events currently stored in this object.
+	 */
 	public AbstractTraceEvent[] getTraceEvents() {
 		return this.traceEvents; // NOPMD (internal array exposed)
 	}

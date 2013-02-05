@@ -25,31 +25,62 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
 /**
- * A Configuration
+ * This class represents a configuration object within the Kieker project. Technically it is a property list with some additional methods and possibilities.
  * 
  * @author Jan Waller
  */
 public final class Configuration extends Properties {
+
 	private static final long serialVersionUID = 3364877592243422259L;
 	private static final Log LOG = LogFactory.getLog(Configuration.class);
 
+	/**
+	 * Creates a new (empty) configuration.
+	 */
 	public Configuration() {
 		this(null);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param defaults
+	 *            The property object which delivers the default values for the new configuration.
+	 */
 	public Configuration(final Properties defaults) {
 		super(defaults);
 	}
 
+	/**
+	 * Reads the given property from the configuration and interprets it as a string.
+	 * 
+	 * @param key
+	 *            The key of the property.
+	 * @return A string with the value of the given property or null, if the property does not exist.
+	 */
 	public final String getStringProperty(final String key) {
 		final String s = super.getProperty(key);
 		return (s == null) ? "" : s.trim(); // NOCS
 	}
 
+	/**
+	 * Reads the given property from the configuration and interprets it as a boolean.
+	 * 
+	 * @param key
+	 *            The key of the property.
+	 * @return A boolean with the value of the given property or null, if the property does not exist.
+	 */
 	public final boolean getBooleanProperty(final String key) {
 		return Boolean.parseBoolean(this.getStringProperty(key));
 	}
 
+	/**
+	 * Reads the given property from the configuration and interprets it as an integer.
+	 * 
+	 * @param key
+	 *            The key of the property.
+	 * @return An integer with the value of the given property or null, if the property does not exist.
+	 */
 	public final int getIntProperty(final String key) {
 		final String s = this.getStringProperty(key);
 		try {
@@ -60,6 +91,13 @@ public final class Configuration extends Properties {
 		}
 	}
 
+	/**
+	 * Reads the given property from the configuration and interprets it as a long.
+	 * 
+	 * @param key
+	 *            The key of the property.
+	 * @return A long with the value of the given property or null, if the property does not exist.
+	 */
 	public final long getLongProperty(final String key) {
 		final String s = this.getStringProperty(key);
 		try {
@@ -78,6 +116,7 @@ public final class Configuration extends Properties {
 	 * Property values have to be split by '|'.
 	 * 
 	 * @param key
+	 *            The key of the property.
 	 */
 	public final String[] getStringArrayProperty(final String key) {
 		return this.getStringArrayProperty(key, "\\|");
@@ -102,6 +141,7 @@ public final class Configuration extends Properties {
 	 * @param split
 	 *            a regular expression
 	 * @param key
+	 *            The key of the property.
 	 */
 	public final String[] getStringArrayProperty(final String key, final String split) {
 		final String s = this.getStringProperty(key);
@@ -145,20 +185,7 @@ public final class Configuration extends Properties {
 	}
 
 	/**
-	 * Flattens the Properties hierarchies and returns an Configuration object containing only keys starting with the prefix.
-	 * 
-	 * <p>
-	 * Any implementation should probably be this: (where Configuration is the concrete class)
-	 * <p>
-	 * <blockquote>
-	 * 
-	 * <pre>
-	 * public final Configuration getPropertiesStartingWith(final String prefix) {
-	 * 	return (Configuration) getPropertiesStartingWith(new Configuration(), prefix);
-	 * }
-	 * </pre>
-	 * 
-	 * </blockquote>
+	 * Flattens the Properties hierarchies and returns a Configuration object containing only keys starting with the prefix.
 	 * 
 	 * @param prefix
 	 */
@@ -174,6 +201,34 @@ public final class Configuration extends Properties {
 			}
 		}
 		return configuration;
+	}
+
+	/**
+	 * Flattens the Properties hierarchies and returns a new Configuration object.
+	 * 
+	 * @param defaultConfiguration
+	 * 
+	 * @return A new configuration object with a flatten properties hierarchy.
+	 */
+	public final Configuration flatten(final Configuration defaultConfiguration) {
+		final Configuration configuration = new Configuration(defaultConfiguration);
+		// for Java 1.6 simply (also adjust below)
+		// final Set<String> keys = this.stringPropertyNames();
+		final Enumeration<?> keys = this.propertyNames();
+		while (keys.hasMoreElements()) {
+			final String property = (String) keys.nextElement();
+			configuration.setProperty(property, super.getProperty(property));
+		}
+		return configuration;
+	}
+
+	/**
+	 * Flattens the Properties hierarchies and returns a new Configuration object.
+	 * 
+	 * @return A new configuration object with a flatten properties hierarchy.
+	 */
+	public final Configuration flatten() {
+		return this.flatten(null);
 	}
 
 	/**

@@ -64,7 +64,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration());
+		final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), null);
 		this.eFactory = new ExecutionFactory(systemEntityFactory);
 
 		int myNumExecutions = 0;

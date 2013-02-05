@@ -68,7 +68,9 @@ public final class FilesystemLogReplayerStarter {
 	private static long ignoreRecordsBeforeTimestamp = FilesystemLogReplayer.MIN_TIMESTAMP;
 	private static long ignoreRecordsAfterTimestamp = FilesystemLogReplayer.MAX_TIMESTAMP;
 
-	// Avoid instantiation by setting the constructor's visibility to private
+	/**
+	 * Avoid instantiation by setting the constructor's visibility to private.
+	 */
 	private FilesystemLogReplayerStarter() {}
 
 	static {
@@ -95,6 +97,13 @@ public final class FilesystemLogReplayerStarter {
 				.withDescription("Records logged after this date (UTC timezone) are ignored (disabled by default).").create());
 	}
 
+	/**
+	 * This method parses the given arguments.
+	 * 
+	 * @param args
+	 *            The command line arguments.
+	 * @return true if and only if the given arguments could be parsed.
+	 */
 	private static boolean parseArgs(final String[] args) {
 		try {
 			FilesystemLogReplayerStarter.cmdl = CMDL_PARSER.parse(CMDL_OPTS, args);
@@ -110,6 +119,11 @@ public final class FilesystemLogReplayerStarter {
 		CMD_HELP_FORMATTER.printHelp(FilesystemLogReplayerStarter.class.getName(), CMDL_OPTS);
 	}
 
+	/**
+	 * Initializes the tool with the command line arguments.
+	 * 
+	 * @return true if and only if the tool has been initialized correctly.
+	 */
 	private static boolean initFromArgs() {
 		boolean retVal = true;
 
@@ -215,6 +229,12 @@ public final class FilesystemLogReplayerStarter {
 
 	}
 
+	/**
+	 * The main method of the tool.
+	 * 
+	 * @param args
+	 *            The command line arguments.
+	 */
 	public static void main(final String[] args) {
 		if (!FilesystemLogReplayerStarter.parseArgs(args) || !FilesystemLogReplayerStarter.initFromArgs()) {
 			System.exit(1);

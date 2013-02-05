@@ -16,6 +16,7 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -52,18 +53,37 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	private static final String CONFIGURATION_NAME = Constants.PLOTASSEMBLYOPERATIONDEPGRAPH_COMPONENT_NAME;
 
 	/**
-	 * Creates a new instance of this class using the given configuration.
+	 * Creates a new filter using the given parameters.
 	 * 
 	 * @param configuration
-	 *            The configuration used to initialize this instance.
+	 *            The configuration to use.
+	 * @param projectContext
+	 *            The project context to use.
+	 * 
+	 * @since 1.7
 	 */
-	public OperationDependencyGraphAssemblyFilter(final Configuration configuration) {
-		/* Call the mandatory "default" constructor. */
-		super(configuration, new OperationAssemblyDependencyGraph(new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+	public OperationDependencyGraphAssemblyFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext, new OperationAssemblyDependencyGraph(new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 				OperationRepository.ROOT_OPERATION,
 				AssemblyRepository.ROOT_ASSEMBLY_COMPONENT)));
 	}
 
+	/**
+	 * Creates a new filter using the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
+	 */
+	@Deprecated
+	public OperationDependencyGraphAssemblyFilter(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	@InputPort(
 			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES,
@@ -134,6 +154,9 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 		this.reportSuccess(t.getTraceId());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getConfigurationName() {
 		return CONFIGURATION_NAME;

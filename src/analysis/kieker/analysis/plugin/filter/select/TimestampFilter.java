@@ -18,6 +18,7 @@ package kieker.analysis.plugin.filter.select;
 
 import java.util.concurrent.TimeUnit;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -71,8 +72,19 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 	private final long ignoreBeforeTimestamp;
 	private final long ignoreAfterTimestamp;
 
-	public TimestampFilter(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public TimestampFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		TimeUnit configTimeunit;
 		try {
 			configTimeunit = TimeUnit.valueOf(configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT));
@@ -83,6 +95,23 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 		this.ignoreAfterTimestamp = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP), configTimeunit);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
+	 */
+	@Deprecated
+	public TimestampFilter(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMEUNIT, this.timeunit.name());
@@ -91,6 +120,13 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 		return configuration;
 	}
 
+	/**
+	 * A simple helper method which checks whether the given timestamp is in the configured limits.
+	 * 
+	 * @param timestamp
+	 *            The timestamp to be checked.
+	 * @return true if and only if the given timestamp is between or equals ignoreBeforeTimestamp and ignoreAfterTimestamp.
+	 */
 	private final boolean inRange(final long timestamp) {
 		return (timestamp >= this.ignoreBeforeTimestamp) && (timestamp <= this.ignoreAfterTimestamp);
 	}
@@ -115,6 +151,12 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 		}
 	}
 
+	/**
+	 * This method represents the input port receiving trace events to be selected by a specific timestamp selector.
+	 * 
+	 * @param record
+	 *            The new incoming record.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_FLOW, description = "Receives trace events to be selected by a specific timestamp selector",
 			eventTypes = { IEventRecord.class, Trace.class })
 	public final void inputTraceEvent(final IFlowRecord record) {
@@ -136,6 +178,12 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 		}
 	}
 
+	/**
+	 * This method represents the input port receiving trace events to be selected by a specific timestamp selector (based on tin and tout).
+	 * 
+	 * @param execution
+	 *            The new incoming execution object.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_EXECUTION, description = "Receives trace events to be selected by a specific timestamp selector (based on tin and tout)", eventTypes = { OperationExecutionRecord.class })
 	public final void inputOperationExecutionRecord(final OperationExecutionRecord execution) {
 		if (this.inRange(execution.getTin()) && this.inRange(execution.getTout())) {

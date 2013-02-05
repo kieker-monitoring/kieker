@@ -22,6 +22,7 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.analysis.repository.annotation.Repository;
 import kieker.common.configuration.Configuration;
@@ -54,8 +55,19 @@ public class SystemModelRepository extends AbstractRepository {
 	private final AllocationComponentOperationPairFactory allocationPairFactory;
 	private final AssemblyComponentOperationPairFactory assemblyPairFactory;
 
-	public SystemModelRepository(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration to use for this repository.
+	 * @param projectContext
+	 *            The project context to use for this repository.
+	 * 
+	 * @since 1.7
+	 */
+	public SystemModelRepository(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		this.typeRepositoryFactory = new TypeRepository(this);
 		this.assemblyFactory = new AssemblyRepository(this);
 		this.executionEnvironmentFactory = new ExecutionEnvironmentRepository(this);
@@ -63,6 +75,19 @@ public class SystemModelRepository extends AbstractRepository {
 		this.operationFactory = new OperationRepository(this);
 		this.allocationPairFactory = new AllocationComponentOperationPairFactory(this);
 		this.assemblyPairFactory = new AssemblyComponentOperationPairFactory(this);
+	}
+
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration to use for this repository.
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
+	 */
+	@Deprecated
+	public SystemModelRepository(final Configuration configuration) {
+		this(configuration, null);
 	}
 
 	public final AllocationRepository getAllocationFactory() {
@@ -228,6 +253,7 @@ public class SystemModelRepository extends AbstractRepository {
 		ps.close();
 	}
 
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

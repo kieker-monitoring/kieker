@@ -41,8 +41,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 /**
  * This class provides utility functions for dependency graph tests.
  * 
- * @author Holger Knoche
- * 
+ * @author Holger Knoche, Nils Christian Ehmke
  */
 public final class DependencyGraphTestUtil {
 
@@ -87,9 +86,10 @@ public final class DependencyGraphTestUtil {
 	 * @throws AnalysisConfigurationException
 	 *             If the process yields an invalid analysis configuration
 	 */
-	public static GraphTestSetup prepareEnvironmentForProducerTest(final AbstractGraphProducingFilter<?> graphProducer, final String inputPortName,
-			final String systemModelRepositoryPortName, final List<OperationExecutionRecord> executionRecords) throws AnalysisConfigurationException {
-		return DependencyGraphTestUtil.prepareEnvironment(graphProducer, inputPortName, systemModelRepositoryPortName, executionRecords);
+	public static GraphTestSetup prepareEnvironmentForProducerTest(final AnalysisController analysisController, final AbstractGraphProducingFilter<?> graphProducer,
+			final String inputPortName, final String systemModelRepositoryPortName, final List<OperationExecutionRecord> executionRecords)
+			throws AnalysisConfigurationException {
+		return DependencyGraphTestUtil.prepareEnvironment(analysisController, graphProducer, inputPortName, systemModelRepositoryPortName, executionRecords);
 	}
 
 	/**
@@ -113,36 +113,25 @@ public final class DependencyGraphTestUtil {
 	 * @throws AnalysisConfigurationException
 	 *             If the process yields an invalid analysis configuration
 	 */
-	public static GraphTestSetup prepareEnvironmentForGraphFilterTest(final AbstractGraphProducingFilter<?> graphProducer, final String inputPortName,
-			final String systemModelRepositoryPortName, final List<OperationExecutionRecord> executionRecords, final AbstractGraphFilter<?, ?, ?, ?>... graphFilters)
-			throws AnalysisConfigurationException {
-		return DependencyGraphTestUtil.prepareEnvironment(graphProducer, inputPortName, systemModelRepositoryPortName, executionRecords, graphFilters);
+	public static GraphTestSetup prepareEnvironmentForGraphFilterTest(final AnalysisController analysisController,
+			final AbstractGraphProducingFilter<?> graphProducer, final String inputPortName, final String systemModelRepositoryPortName,
+			final List<OperationExecutionRecord> executionRecords, final AbstractGraphFilter<?, ?, ?, ?>... graphFilters) throws AnalysisConfigurationException {
+		return DependencyGraphTestUtil.prepareEnvironment(analysisController, graphProducer, inputPortName, systemModelRepositoryPortName, executionRecords,
+				graphFilters);
 	}
 
-	private static GraphTestSetup prepareEnvironment(final AbstractGraphProducingFilter<?> graphProducer, final String inputPortName,
-			final String systemModelRepositoryPortName, final List<OperationExecutionRecord> executionRecords, final AbstractGraphFilter<?, ?, ?, ?>... graphFilters)
-			throws AnalysisConfigurationException {
-		final AnalysisController analysisController = new AnalysisController();
+	private static GraphTestSetup prepareEnvironment(final AnalysisController analysisController, final AbstractGraphProducingFilter<?> graphProducer,
+			final String inputPortName, final String systemModelRepositoryPortName, final List<OperationExecutionRecord> executionRecords,
+			final AbstractGraphFilter<?, ?, ?, ?>... graphFilters) throws AnalysisConfigurationException {
 
-		final SystemModelRepository systemModelRepository = new SystemModelRepository(new Configuration());
+		final SystemModelRepository systemModelRepository = new SystemModelRepository(new Configuration(), analysisController);
 
-		final ListReader<OperationExecutionRecord> readerPlugin = new ListReader<OperationExecutionRecord>(new Configuration());
+		final ListReader<OperationExecutionRecord> readerPlugin = new ListReader<OperationExecutionRecord>(new Configuration(), analysisController);
 		readerPlugin.addAllObjects(executionRecords);
 
-		final ExecutionRecordTransformationFilter transformationFilter = new ExecutionRecordTransformationFilter(new Configuration());
-		final TraceReconstructionFilter traceReconstructionFilter = new TraceReconstructionFilter(new Configuration());
-		final GraphReceiverPlugin graphReceiver = new GraphReceiverPlugin(new Configuration());
-
-		// Register repositories and plugins
-		analysisController.registerRepository(systemModelRepository);
-		analysisController.registerReader(readerPlugin);
-		analysisController.registerFilter(transformationFilter);
-		analysisController.registerFilter(traceReconstructionFilter);
-		analysisController.registerFilter(graphProducer);
-		for (final AbstractGraphFilter<?, ?, ?, ?> graphFilter : graphFilters) {
-			analysisController.registerFilter(graphFilter);
-		}
-		analysisController.registerFilter(graphReceiver);
+		final ExecutionRecordTransformationFilter transformationFilter = new ExecutionRecordTransformationFilter(new Configuration(), analysisController);
+		final TraceReconstructionFilter traceReconstructionFilter = new TraceReconstructionFilter(new Configuration(), analysisController);
+		final GraphReceiverPlugin graphReceiver = new GraphReceiverPlugin(new Configuration(), analysisController);
 
 		// Connect repositories
 		analysisController.connect(transformationFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemModelRepository);
@@ -164,9 +153,8 @@ public final class DependencyGraphTestUtil {
 		return new GraphTestSetup(analysisController, graphReceiver);
 	}
 
-	private static void connectGraphFilters(final AnalysisController analysisController,
-			final AbstractGraphProducingFilter<?> producer, final AbstractGraphFilter<?, ?, ?, ?>[] graphFilters, final GraphReceiverPlugin graphReceiver)
-			throws AnalysisConfigurationException {
+	private static void connectGraphFilters(final AnalysisController analysisController, final AbstractGraphProducingFilter<?> producer,
+			final AbstractGraphFilter<?, ?, ?, ?>[] graphFilters, final GraphReceiverPlugin graphReceiver) throws AnalysisConfigurationException {
 		AbstractGraphFilter<?, ?, ?, ?> lastFilter = null;
 
 		// Connect graph filters

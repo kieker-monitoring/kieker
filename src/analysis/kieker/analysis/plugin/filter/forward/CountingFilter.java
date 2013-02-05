@@ -18,6 +18,7 @@ package kieker.analysis.plugin.filter.forward;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.display.PlainText;
 import kieker.analysis.display.annotation.Display;
 import kieker.analysis.plugin.annotation.InputPort;
@@ -41,26 +42,61 @@ import kieker.common.configuration.Configuration;
 		})
 public final class CountingFilter extends AbstractFilterPlugin {
 
+	/**
+	 * The name of the input port receiving the incoming events.
+	 */
 	public static final String INPUT_PORT_NAME_EVENTS = "inputEvents";
 
+	/**
+	 * The name of the output port passing the incoming events.
+	 */
 	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayedEvents";
+	/**
+	 * The name of the output port which delivers the current counter value.
+	 */
 	public static final String OUTPUT_PORT_NAME_COUNT = "currentEventCount";
 
 	private final AtomicLong counter = new AtomicLong();
 
 	/**
-	 * Constructs a {@link CountingFilter}.
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
 	 */
-	public CountingFilter(final Configuration configuration) {
-		super(configuration);
+	public CountingFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
+	 */
+	@Deprecated
+	public CountingFilter(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public final Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}
 
 	/**
 	 * Returns the number of objects received until now.
+	 * 
+	 * @return The current counter value.
 	 */
 	public final long getMessageCount() {
 		return this.counter.get();

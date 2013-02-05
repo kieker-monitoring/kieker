@@ -48,8 +48,7 @@ import kieker.test.tools.util.graph.GraphTestSetup;
 /**
  * Test suite for the graph coloring filter.
  * 
- * @author Holger Knoche
- * 
+ * @author Holger Knoche, Nils Christian Ehmke *
  */
 public class TraceColoringFilterTest extends AbstractKiekerTest {
 
@@ -81,29 +80,29 @@ public class TraceColoringFilterTest extends AbstractKiekerTest {
 
 	@BeforeClass
 	public static void prepareSetup() throws AnalysisConfigurationException {
-		final ComponentDependencyGraphAllocationFilter filter = new ComponentDependencyGraphAllocationFilter(new Configuration());
+		final AnalysisController analysisController = new AnalysisController();
+
+		final ComponentDependencyGraphAllocationFilter filter = new ComponentDependencyGraphAllocationFilter(new Configuration(), analysisController);
 		final String inputPortName = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES;
 		final String repositoryPortName = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL;
 
 		@SuppressWarnings("rawtypes")
-		final TraceColoringFilter<?, ?> traceColoringFilter = new TraceColoringFilter(new Configuration());
-		final TraceColorRepository traceColorRepository = TraceColoringFilterTest.prepareTraceColorRepository();
+		final TraceColoringFilter<?, ?> traceColoringFilter = new TraceColoringFilter(new Configuration(), analysisController);
+		final TraceColorRepository traceColorRepository = TraceColoringFilterTest.prepareTraceColorRepository(analysisController);
 
-		testSetup = DependencyGraphTestUtil.prepareEnvironmentForGraphFilterTest(filter, inputPortName, repositoryPortName,
+		testSetup = DependencyGraphTestUtil.prepareEnvironmentForGraphFilterTest(analysisController, filter, inputPortName, repositoryPortName,
 				TraceColoringFilterTest.createExecutionRecords(), traceColoringFilter);
 
-		final AnalysisController analysisController = testSetup.getAnalysisController();
-		analysisController.registerRepository(traceColorRepository);
 		analysisController.connect(traceColoringFilter, TraceColoringFilter.COLOR_REPOSITORY_PORT_NAME, traceColorRepository);
 	}
 
-	private static TraceColorRepository prepareTraceColorRepository() {
+	private static TraceColorRepository prepareTraceColorRepository(final AnalysisController analysisController) {
 		final ConcurrentMap<Long, Color> colorMap = new ConcurrentHashMap<Long, Color>();
 		colorMap.put(TRACE_ID_1, HIGHLIGHT_COLOR);
 		colorMap.put(TRACE_ID_2, HIGHLIGHT_COLOR_2);
 
 		final TraceColorRepositoryData repositoryData = new TraceColorRepositoryData(colorMap, DEFAULT_COLOR, COLLISION_COLOR);
-		return new TraceColorRepository(new Configuration(), repositoryData);
+		return new TraceColorRepository(new Configuration(), repositoryData, analysisController);
 	}
 
 	private static OperationExecutionRecord createExecutionRecord(final String signature, final long traceId, final int tIn, final int tOut, final int eoi,

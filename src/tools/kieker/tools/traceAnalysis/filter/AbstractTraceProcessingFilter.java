@@ -16,6 +16,7 @@
 
 package kieker.tools.traceAnalysis.filter;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
@@ -37,8 +38,31 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 	private long lastTraceIdSuccess = -1;
 	private long lastTraceIdError = -1;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public AbstractTraceProcessingFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+	}
+
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
+	 */
+	@Deprecated
 	public AbstractTraceProcessingFilter(final Configuration configuration) {
-		super(configuration);
+		this(configuration, null);
 	}
 
 	protected final void reportSuccess(final long traceId) {

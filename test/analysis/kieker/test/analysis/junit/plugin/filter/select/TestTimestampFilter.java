@@ -21,6 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.filter.select.TimestampFilter;
@@ -50,7 +51,7 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 
 	private ListReader<AbstractTraceEvent> reader;
 	private ListCollectionFilter<AbstractTraceEvent> sinkPlugin;
-	private AnalysisController controller;
+	private IAnalysisController controller;
 
 	public TestTimestampFilter() {
 		// empty default constructor
@@ -71,8 +72,7 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		final Configuration cfg = new Configuration();
 		cfg.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, Long.toString(ignoreExecutionsBeforeTimestamp));
 		cfg.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, Long.toString(ignoreExecutionsAfterTimestamp));
-		final TimestampFilter filter = new TimestampFilter(cfg);
-		this.controller.registerFilter(filter);
+		final TimestampFilter filter = new TimestampFilter(cfg, this.controller);
 		this.controller.connect(this.reader, ListReader.OUTPUT_PORT_NAME, filter, TimestampFilter.INPUT_PORT_NAME_FLOW);
 		this.controller.connect(filter, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, this.sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 	}
@@ -80,10 +80,8 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	@Before
 	public void before() {
 		this.controller = new AnalysisController();
-		this.reader = new ListReader<AbstractTraceEvent>(new Configuration());
-		this.sinkPlugin = new ListCollectionFilter<AbstractTraceEvent>(new Configuration());
-		this.controller.registerReader(this.reader);
-		this.controller.registerFilter(this.sinkPlugin);
+		this.reader = new ListReader<AbstractTraceEvent>(new Configuration(), this.controller);
+		this.sinkPlugin = new ListCollectionFilter<AbstractTraceEvent>(new Configuration(), this.controller);
 	}
 
 	/**

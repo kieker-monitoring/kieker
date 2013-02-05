@@ -20,6 +20,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -54,10 +55,34 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 	private final String outputFn;
 	private final PrintStream ps;
 
-	public ExecutionTraceWriterFilter(final Configuration configuration) throws IOException {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public ExecutionTraceWriterFilter(final Configuration configuration, final IProjectContext projectContext) throws IOException {
+		super(configuration, projectContext);
+
 		this.outputFn = configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN);
 		this.ps = new PrintStream(new FileOutputStream(this.outputFn), false, ENCODING);
+	}
+
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
+	 */
+	@Deprecated
+	public ExecutionTraceWriterFilter(final Configuration configuration) throws IOException {
+		this(configuration, null);
 	}
 
 	@Override
@@ -67,6 +92,9 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 		this.stdOutPrintln("Wrote " + numTraces + " execution trace" + (numTraces > 1 ? "s" : "") + " to file '" + this.outputFn + "'"); // NOCS
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void terminate(final boolean error) {
 		if (this.ps != null) {
@@ -83,6 +111,10 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 		ExecutionTraceWriterFilter.this.reportSuccess(et.getTraceId());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN, this.outputFn);

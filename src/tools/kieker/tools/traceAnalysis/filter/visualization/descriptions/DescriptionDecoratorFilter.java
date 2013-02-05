@@ -18,6 +18,7 @@ package kieker.tools.traceAnalysis.filter.visualization.descriptions;
 
 import java.util.Map;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
@@ -63,10 +64,27 @@ public class DescriptionDecoratorFilter<V extends AbstractPayloadedVertex<V, E, 
 	 * Creates a new description decorator filter using the given configuration.
 	 * 
 	 * @param configuration
-	 *            The configuration to use
+	 *            The configuration to use for this filter.
+	 * @param projectContext
+	 *            The project context to use for this filter.
+	 * 
+	 * @since 1.7
 	 */
+	public DescriptionDecoratorFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+	}
+
+	/**
+	 * Creates a new description decorator filter using the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
+	 */
+	@Deprecated
 	public DescriptionDecoratorFilter(final Configuration configuration) {
-		super(configuration);
+		this(configuration, null);
 	}
 
 	public void visitVertex(final V vertex) {

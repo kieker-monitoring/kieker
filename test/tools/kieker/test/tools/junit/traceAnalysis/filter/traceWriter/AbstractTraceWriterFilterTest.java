@@ -70,7 +70,8 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
-	private final SystemModelRepository modelRepo = new SystemModelRepository(new Configuration());
+	private final AnalysisController analysisController = new AnalysisController();
+	private final SystemModelRepository modelRepo = new SystemModelRepository(new Configuration(), this.analysisController);
 
 	private final BookstoreExecutionFactory execFactory = new BookstoreExecutionFactory(this.modelRepo);
 
@@ -82,7 +83,7 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 		this.outputFile = this.tmpFolder.newFile(AbstractTraceWriterFilterTest.OUTPUT_BASE_FN);
 	}
 
-	protected abstract AbstractTraceProcessingFilter provideWriterFilter(String filename) throws IOException;
+	protected abstract AbstractTraceProcessingFilter provideWriterFilter(String filename, AnalysisController ctrl) throws IOException;
 
 	protected abstract String provideFilterInputName();
 
@@ -137,19 +138,15 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 
 	@Test
 	public void testIt() throws Exception {
-		final AbstractTraceProcessingFilter filter = this.provideWriterFilter(this.outputFile.getAbsolutePath());
+		final AbstractTraceProcessingFilter filter = this.provideWriterFilter(this.outputFile.getAbsolutePath(), this.analysisController);
 
-		final ListReader<Object> reader = new ListReader<Object>(new Configuration());
+		final ListReader<Object> reader = new ListReader<Object>(new Configuration(), this.analysisController);
 		final List<Object> eventList = this.createTraces();
 		reader.addAllObjects(eventList);
 
-		final AnalysisController analysisController = new AnalysisController();
-		analysisController.registerFilter(filter);
-		analysisController.registerReader(reader);
-		analysisController.registerRepository(this.modelRepo);
-		analysisController.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, this.provideFilterInputName());
-		analysisController.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.modelRepo);
-		analysisController.run();
+		this.analysisController.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, this.provideFilterInputName());
+		this.analysisController.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.modelRepo);
+		this.analysisController.run();
 
 		final String actualFileContent = this.readOutputFileAsString();
 		final String expectedFileContent = this.provideExpectedFileContent(eventList);

@@ -29,6 +29,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
@@ -110,8 +111,7 @@ class ListReplayer extends AbstractLogReplayer { // NOPMD
 	private final List<IMonitoringRecord> replayList = new ArrayList<IMonitoringRecord>();
 
 	public ListReplayer(final String monitoringConfigurationFile, final boolean realtimeMode, final boolean keepOriginalLoggingTimestamps,
-			final int numRealtimeWorkerThreads,
-			final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp,
+			final int numRealtimeWorkerThreads, final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp,
 			final List<IMonitoringRecord> replayList) {
 		super(monitoringConfigurationFile, realtimeMode, keepOriginalLoggingTimestamps, numRealtimeWorkerThreads, ignoreRecordsBeforeTimestamp,
 				ignoreRecordsAfterTimestamp);
@@ -124,10 +124,10 @@ class ListReplayer extends AbstractLogReplayer { // NOPMD
 	}
 
 	@Override
-	protected AbstractReaderPlugin createReader() {
+	protected AbstractReaderPlugin createReader(final IAnalysisController analysisController) {
 		final Configuration listReaderConfig = new Configuration();
 		listReaderConfig.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.toString(Boolean.FALSE));
-		final ListReader<IMonitoringRecord> listReader = new ListReader<IMonitoringRecord>(listReaderConfig);
+		final ListReader<IMonitoringRecord> listReader = new ListReader<IMonitoringRecord>(listReaderConfig, analysisController);
 		listReader.addAllObjects(this.replayList);
 		return listReader;
 	}

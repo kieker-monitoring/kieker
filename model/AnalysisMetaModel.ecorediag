@@ -566,4 +566,17 @@
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_dj9lwEIcEeKRgKR2kECaoA" id="(0.5,0.0)"/>
     <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_dj9lwUIcEeKRgKR2kECaoA" id="(0.7482517482517482,1.0)"/>
   </edges>
+  <edges xmi:type="notation:Edge" xmi:id="_MmJnQEUxEeKZU5NKpEWWGA" type="3002" source="_7v3roOqkEeGghJo8FZ_45A" target="_7wDR0OqkEeGghJo8FZ_45A">
+    <children xmi:type="notation:Node" xmi:id="_MmJnREUxEeKZU5NKpEWWGA" type="4011">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_MmJnRUUxEeKZU5NKpEWWGA" x="-10" y="-10"/>
+    </children>
+    <children xmi:type="notation:Node" xmi:id="_MmJnRkUxEeKZU5NKpEWWGA" type="4012">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_MmJnR0UxEeKZU5NKpEWWGA" x="10" y="10"/>
+    </children>
+    <styles xmi:type="notation:ConnectorStyle" xmi:id="_MmJnQUUxEeKZU5NKpEWWGA" lineColor="4210752"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_MmJnQkUxEeKZU5NKpEWWGA" fontColor="4210752" fontName="Segoe UI" fontHeight="10"/>
+    <element xmi:type="ecore:EReference" href="AnalysisMetaModel.ecore#//Project/properties"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_MmJnQ0UxEeKZU5NKpEWWGA" points="[2, -18, -33, 446]$[36, -472, 1, -8]"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_MmciMEUxEeKZU5NKpEWWGA" id="(0.24347826086956523,0.16176470588235295)"/>
+  </edges>
 </notation:Diagram>

@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -71,10 +72,27 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation
 	 * Creates a new filter using the given configuration.
 	 * 
 	 * @param configuration
-	 *            The configuration to use for this filter
+	 *            The configuration to use for this filter.
+	 * @param projectContext
+	 *            The project context to use for this filter.
+	 * 
+	 * @since 1.7
 	 */
+	public TraceColoringFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+	}
+
+	/**
+	 * Creates a new filter using the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration to use for this filter
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
+	 */
+	@Deprecated
 	public TraceColoringFilter(final Configuration configuration) {
-		super(configuration);
+		this(configuration, null);
 	}
 
 	private void initialize() {
@@ -121,6 +139,9 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation
 		this.handleGraphElement(edge);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected AbstractGraph<V, E, TraceInformation> performConcreteGraphProcessing(final AbstractGraph<V, E, TraceInformation> graph) {
 		this.initialize();
@@ -130,6 +151,9 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation
 		return graph;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected IOriginRetentionPolicy getDesiredOriginRetentionPolicy() throws AnalysisConfigurationException {
 		final TraceColorRepository colorRepository = (TraceColorRepository) super.getRepository(COLOR_REPOSITORY_PORT_NAME);

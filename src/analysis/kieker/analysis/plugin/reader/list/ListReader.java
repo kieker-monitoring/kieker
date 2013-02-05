@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -57,22 +58,61 @@ public class ListReader<T> extends AbstractReaderPlugin {
 
 	private final List<T> objects = new CopyOnWriteArrayList<T>();
 
-	public ListReader(final Configuration configuration) {
-		super(configuration);
-		this.awaitTermination = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_AWAIT_TERMINATION);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public ListReader(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
+		this.awaitTermination = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_AWAIT_TERMINATION);
 		if (!this.awaitTermination) {
 			this.terminationLatch.countDown(); // just to be sure that a call to await() would return immediately
 		}
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
+	 */
+	@Deprecated
+	public ListReader(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/**
+	 * This method adds all given records to our list.
+	 * 
+	 * @param records
+	 *            The records to be added.
+	 */
 	public void addAllObjects(final List<T> records) {
 		this.objects.addAll(records);
 	}
 
+	/**
+	 * This method adds the given object to our list.
+	 * 
+	 * @param object
+	 *            The object to be added.
+	 */
 	public void addObject(final T object) {
 		this.objects.add(object);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean read() {
 		for (final T obj : this.objects) {
 			super.deliver(ListReader.OUTPUT_PORT_NAME, obj);
@@ -90,10 +130,17 @@ public class ListReader<T> extends AbstractReaderPlugin {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void terminate(final boolean error) {
 		this.terminationLatch.countDown();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.toString(this.awaitTermination));

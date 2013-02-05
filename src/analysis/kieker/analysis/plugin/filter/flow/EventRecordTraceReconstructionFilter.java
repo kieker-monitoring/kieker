@@ -26,6 +26,7 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -48,21 +49,55 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 		name = "Trace Reconstruction Filter (Event)",
 		description = "Filter to reconstruct event based (flow) traces",
 		outputPorts = {
-			@OutputPort(name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID, description = "Outputs valid traces", eventTypes = { TraceEventRecords.class }),
-			@OutputPort(name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID, description = "Outputs traces missing crucial records", eventTypes = { TraceEventRecords.class }) },
+			@OutputPort(
+					name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID,
+					description = "Outputs valid traces", eventTypes = { TraceEventRecords.class }),
+			@OutputPort(
+					name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID,
+					description = "Outputs traces missing crucial records", eventTypes = { TraceEventRecords.class }) },
 		configuration = {
-			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
-			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME),
-			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME) })
+			@Property(
+					name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
+					defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
+			@Property(
+					name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
+					defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME),
+			@Property(
+					name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT,
+					defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME) })
 public final class EventRecordTraceReconstructionFilter extends AbstractFilterPlugin {
+	/**
+	 * The name of the output port delivering the valid traces.
+	 */
 	public static final String OUTPUT_PORT_NAME_TRACE_VALID = "validTraces";
+	/**
+	 * The name of the output port delivering the invalid traces.
+	 */
 	public static final String OUTPUT_PORT_NAME_TRACE_INVALID = "invalidTraces";
+	/**
+	 * The name of the input port receiving the trace records.
+	 */
 	public static final String INPUT_PORT_NAME_TRACE_RECORDS = "traceRecords";
 
+	/**
+	 * The name of the property determining the time unit.
+	 */
 	public static final String CONFIG_PROPERTY_NAME_TIMEUNIT = "timeunit";
+	/**
+	 * The name of the property determining the maximal trace duration.
+	 */
 	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION = "maxTraceDuration";
+	/**
+	 * The name of the property determining the maximal trace timeout.
+	 */
 	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT = "maxTraceTimeout";
+	/**
+	 * The default value of the properties for the maximal trace duration and timeout.
+	 */
 	public static final String CONFIG_PROPERTY_VALUE_MAX_TIME = "9223372036854775807"; // String.valueOf(Long.MAX_VALUE)
+	/**
+	 * The default value of the time unit property (nanoseconds).
+	 */
 	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "NANOSECONDS"; // TimeUnit.NANOSECONDS.name()
 
 	// internally we will assume nanosecond precision
@@ -76,8 +111,19 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 	private final Map<Long, TraceBuffer> traceId2trace;
 
-	public EventRecordTraceReconstructionFilter(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public EventRecordTraceReconstructionFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		TimeUnit configTimeunit;
 		try {
 			configTimeunit = TimeUnit.valueOf(configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT));
@@ -91,6 +137,25 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		this.traceId2trace = new ConcurrentHashMap<Long, TraceBuffer>();
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
+	 */
+	@Deprecated
+	public EventRecordTraceReconstructionFilter(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/**
+	 * This method is the input port for the new events for this filter.
+	 * 
+	 * @param record
+	 *            The new record to handle.
+	 */
 	@InputPort(
 			name = INPUT_PORT_NAME_TRACE_RECORDS,
 			description = "Reconstruct traces from incoming flow records",
@@ -147,6 +212,9 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void terminate(final boolean error) {
 		super.terminate(error);
@@ -181,6 +249,10 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMEUNIT, this.timeunit.name());
@@ -211,6 +283,9 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 		private long traceId = -1;
 
+		/**
+		 * Creates a new instance of this class.
+		 */
 		public TraceBuffer() {
 			// default empty constructor
 		}
@@ -306,6 +381,9 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		private static final class TraceEventComperator implements Comparator<AbstractTraceEvent>, Serializable {
 			private static final long serialVersionUID = 8920737343446332517L;
 
+			/**
+			 * Creates a new instance of this class.
+			 */
 			public TraceEventComperator() {
 				// default empty constructor
 			}

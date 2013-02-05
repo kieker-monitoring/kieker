@@ -17,6 +17,7 @@
 package kieker.examples.userguide.ch2bookstore.manual;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.plugin.filter.forward.TeeFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
@@ -33,27 +34,24 @@ public final class BookstoreAnalysisStarter {
 		}
 
 		try {
-			/* Create Kieker.Analysis instance */
-			final AnalysisController analysisInstance = new AnalysisController();
+			// Create Kieker.Analysis instance
+			final IAnalysisController analysisInstance = new AnalysisController();
 
-			/* Set filesystem monitoring log input directory for our analysis */
+			// Set filesystem monitoring log input directory for our analysis
 			final Configuration fsReaderConfig = new Configuration();
-			fsReaderConfig
-				.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, args[0]);
-			final FSReader reader = new FSReader(fsReaderConfig);
-			analysisInstance.registerReader(reader);
+			fsReaderConfig.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, args[0]);
+			final FSReader reader = new FSReader(fsReaderConfig, analysisInstance);
 
-			/* Create and register a simple output writer. */
+			// Create and register a simple output writer.
 			final Configuration teeFilterConfig = new Configuration();
 			teeFilterConfig.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM,
 					TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDOUT);
-			final TeeFilter teeFilter = new TeeFilter(teeFilterConfig);
-			analysisInstance.registerFilter(teeFilter);
+			final TeeFilter teeFilter = new TeeFilter(teeFilterConfig, analysisInstance);
 
-			/* Connect the output of the reader with the input of the filter. */
+			// Connect the output of the reader with the input of the filter.
 			analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS,
 					teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
-			/* Start the analysis */
+			// Start the analysis
 			analysisInstance.run();
 		} catch (final Exception e) {
 			System.out.println("An error occurred: " + e.getMessage());

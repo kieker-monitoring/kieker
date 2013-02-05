@@ -32,6 +32,9 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface Plugin {
 
+	/**
+	 * The default value to show that a plugin has no name.
+	 */
 	public static final String NO_NAME = "";
 
 	/**

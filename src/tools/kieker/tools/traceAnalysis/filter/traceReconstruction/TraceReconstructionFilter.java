@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -109,8 +110,18 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 		}
 	});
 
-	public TraceReconstructionFilter(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public TraceReconstructionFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 
 		/* Load from the configuration. */
 		this.maxTraceDurationMillis = configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS);
@@ -124,6 +135,20 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 		} else {
 			this.maxTraceDurationNanos = this.maxTraceDurationMillis * (1000 * 1000);
 		}
+	}
+
+	/**
+	 * Creates a new instance of this class using the given parameters. Keep in mind that the Trace-Equivalence-Class-Mode has to be set via the method
+	 * <i>setTraceEquivalenceCallMode</i> before using this component!
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
+	 */
+	@Deprecated
+	public TraceReconstructionFilter(final Configuration configuration) {
+		this(configuration, null);
 	}
 
 	/**
@@ -153,6 +178,9 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 		return this.maxTout;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean init() {
 		return true; // no need to do anything here
@@ -297,7 +325,6 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	 * 
 	 * @param error
 	 */
-
 	@Override
 	public void terminate(final boolean error) {
 		synchronized (this) {
@@ -333,6 +360,10 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 

@@ -41,25 +41,24 @@ public class TestPipeReader extends AbstractKiekerTest { // NOCS (MissingCtorChe
 
 	@Test
 	public void testNamedPipeReaderReceivesFromPipe() throws IllegalStateException, AnalysisConfigurationException {
+		// the analysis controller
+		final AnalysisController analysis = new AnalysisController();
+
 		// the pipe
 		final String pipeName = NamedPipeWriterFactory.createPipeName();
 
 		// the reader
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(PipeReader.CONFIG_PROPERTY_NAME_PIPENAME, pipeName);
-		final PipeReader pipeReader = new PipeReader(readerConfiguration);
+		final PipeReader pipeReader = new PipeReader(readerConfiguration, analysis);
 
 		// the consumer
 		final Configuration countinConfiguration = new Configuration();
-		final CountingFilter countingFilter = new CountingFilter(countinConfiguration);
+		final CountingFilter countingFilter = new CountingFilter(countinConfiguration, analysis);
 
 		// the writer
 		final IPipeWriter writer = NamedPipeWriterFactory.createAndRegisterNamedPipeRecordWriter(pipeName);
 
-		// the analysis controller
-		final AnalysisController analysis = new AnalysisController();
-		analysis.registerReader(pipeReader);
-		analysis.registerFilter(countingFilter);
 		analysis.connect(pipeReader, PipeReader.OUTPUT_PORT_NAME_RECORDS, countingFilter, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
 		final AnalysisControllerThread analysisThread = new AnalysisControllerThread(analysis);

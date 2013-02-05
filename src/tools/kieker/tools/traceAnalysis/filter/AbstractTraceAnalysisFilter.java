@@ -18,6 +18,7 @@ package kieker.tools.traceAnalysis.filter;
 
 import java.io.PrintStream;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
@@ -59,8 +60,31 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 
 	private volatile SystemModelRepository systemEntityFactory;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public AbstractTraceAnalysisFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+	}
+
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
+	 */
+	@Deprecated
 	public AbstractTraceAnalysisFilter(final Configuration configuration) {
-		super(configuration);
+		this(configuration, null);
 	}
 
 	public static final Execution createExecutionByEntityNames(final SystemModelRepository systemModelRepository,

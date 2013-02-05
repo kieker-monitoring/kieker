@@ -40,17 +40,15 @@ import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.util.ExecutionFactory;
 
 /**
+ * A test for the {@link TraceReconstructionFilter}.
  * 
- * @author Andre van Hoorn
+ * @author Andre van Hoorn, Nils Christian Ehmke
  */
 public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 
 	private static final Log LOG = LogFactory.getLog(TestTraceReconstructionFilter.class);
 	private static final long TRACE_ID = 62298L;
 	private static final String SESSION_ID = "Y2zm6CRc";
-
-	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration());
-	private final ExecutionFactory executionFactory = new ExecutionFactory(this.systemEntityFactory);
 
 	/* Executions of a valid trace */
 	private final Execution exec0_0__bookstore_searchBook; // NOCS
@@ -59,15 +57,18 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 	private final Execution exec3_2__catalog_getBook; // NOCS
 
 	public TestTraceReconstructionFilter() {
+		final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), null);
+		final ExecutionFactory executionFactory = new ExecutionFactory(systemEntityFactory);
+
 		/* Manually create Executions for a trace */
-		this.exec0_0__bookstore_searchBook = this.executionFactory.genExecution("Bookstore", "bookstore", "searchBook", TestTraceReconstructionFilter.TRACE_ID,
+		this.exec0_0__bookstore_searchBook = executionFactory.genExecution("Bookstore", "bookstore", "searchBook", TestTraceReconstructionFilter.TRACE_ID,
 				TestTraceReconstructionFilter.SESSION_ID, 1 * (1000 * 1000), 10 * (1000 * 1000), 0, 0);
 
-		this.exec1_1__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", TestTraceReconstructionFilter.TRACE_ID,
+		this.exec1_1__catalog_getBook = executionFactory.genExecution("Catalog", "catalog", "getBook", TestTraceReconstructionFilter.TRACE_ID,
 				TestTraceReconstructionFilter.SESSION_ID, 2 * (1000 * 1000), 4 * (1000 * 1000), 1, 1);
-		this.exec2_1__crm_getOrders = this.executionFactory.genExecution("CRM", "crm", "getOrders", TestTraceReconstructionFilter.TRACE_ID,
+		this.exec2_1__crm_getOrders = executionFactory.genExecution("CRM", "crm", "getOrders", TestTraceReconstructionFilter.TRACE_ID,
 				TestTraceReconstructionFilter.SESSION_ID, 5 * (1000 * 1000), 8 * (1000 * 1000), 2, 1);
-		this.exec3_2__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", TestTraceReconstructionFilter.TRACE_ID,
+		this.exec3_2__catalog_getBook = executionFactory.genExecution("Catalog", "catalog", "getBook", TestTraceReconstructionFilter.TRACE_ID,
 				TestTraceReconstructionFilter.SESSION_ID, 6 * (1000 * 1000), 7 * (1000 * 1000), 3, 2);
 	}
 
@@ -112,7 +113,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		validExecutionTrace = this.genValidBookstoreTrace();
 		validMessageTrace = validExecutionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 
-		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration());
+		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration(), controller);
 		for (final Execution curExec : validExecutionTrace.getTraceAsSortedExecutionSet()) {
 			reader.addObject(curExec);
 		}
@@ -122,22 +123,19 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, "true");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long
 				.toString(AbstractTraceProcessingFilter.MAX_DURATION_MILLIS));
-		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration);
+		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, controller);
 
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout", validExecutionTrace.getDurationInNanos() <= filter
 				.getMaxTraceDurationNanos());
 
-		final ListCollectionFilter<ExecutionTrace> executionTraceSinkPlugin = new ListCollectionFilter<ExecutionTrace>(new Configuration());
-		final ListCollectionFilter<MessageTrace> messageTraceSinkPlugin = new ListCollectionFilter<MessageTrace>(new Configuration());
-		final ListCollectionFilter<InvalidExecutionTrace> invalidExecutionTraceSinkPlugin = new ListCollectionFilter<InvalidExecutionTrace>(new Configuration());
-		controller.registerReader(reader);
-		controller.registerFilter(executionTraceSinkPlugin);
-		controller.registerFilter(messageTraceSinkPlugin);
-		controller.registerFilter(invalidExecutionTraceSinkPlugin);
-		controller.registerFilter(filter);
+		final ListCollectionFilter<ExecutionTrace> executionTraceSinkPlugin = new ListCollectionFilter<ExecutionTrace>(new Configuration(), controller);
+		final ListCollectionFilter<MessageTrace> messageTraceSinkPlugin = new ListCollectionFilter<MessageTrace>(new Configuration(), controller);
+		final ListCollectionFilter<InvalidExecutionTrace> invalidExecutionTraceSinkPlugin = new ListCollectionFilter<InvalidExecutionTrace>(new Configuration(),
+				controller);
 
-		controller.registerRepository(this.systemEntityFactory);
-		controller.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
+		final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), controller);
+
+		controller.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
 
 		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, TraceReconstructionFilter.INPUT_PORT_NAME_EXECUTIONS);
 		/*
@@ -184,12 +182,12 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 	 * @return
 	 * @throws InvalidTraceException
 	 */
-	private ExecutionTrace genBrokenBookstoreTraceEssSkip() throws InvalidTraceException {
+	private ExecutionTrace genBrokenBookstoreTraceEssSkip(final ExecutionFactory executionFactory) throws InvalidTraceException {
 		/*
 		 * Create an Execution Trace and add Executions in arbitrary order
 		 */
 		final ExecutionTrace executionTrace = new ExecutionTrace(TestTraceReconstructionFilter.TRACE_ID, TestTraceReconstructionFilter.SESSION_ID);
-		final Execution exec1_1__catalog_getBook__broken = this.executionFactory.genExecution("Catalog", "catalog", "getBook", // NOCS
+		final Execution exec1_1__catalog_getBook__broken = executionFactory.genExecution("Catalog", "catalog", "getBook", // NOCS
 				TestTraceReconstructionFilter.TRACE_ID, TestTraceReconstructionFilter.SESSION_ID, 2 * (1000 * 1000), 4 * (1000 * 1000), 1, 3); // NOCS
 		// (MagicNumberCheck)
 		Assert.assertFalse("Invalid test", exec1_1__catalog_getBook__broken.equals(this.exec1_1__catalog_getBook));
@@ -216,9 +214,13 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		 */
 		final ExecutionTrace invalidExecutionTrace;
 		final AnalysisController controller = new AnalysisController();
-		invalidExecutionTrace = this.genBrokenBookstoreTraceEssSkip();
 
-		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration());
+		final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), controller);
+		final ExecutionFactory executionFactory = new ExecutionFactory(systemEntityFactory);
+
+		invalidExecutionTrace = this.genBrokenBookstoreTraceEssSkip(executionFactory);
+
+		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration(), controller);
 		for (final Execution curExec : invalidExecutionTrace.getTraceAsSortedExecutionSet()) {
 			reader.addObject(curExec);
 		}
@@ -228,21 +230,16 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, "true");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long
 				.toString(AbstractTraceProcessingFilter.MAX_DURATION_MILLIS));
-		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration);
+		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, controller);
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout", invalidExecutionTrace.getDurationInNanos() <= filter
 				.getMaxTraceDurationNanos());
 
-		final ListCollectionFilter<ExecutionTrace> executionTraceSinkPlugin = new ListCollectionFilter<ExecutionTrace>(new Configuration());
-		final ListCollectionFilter<MessageTrace> messageTraceSinkPlugin = new ListCollectionFilter<MessageTrace>(new Configuration());
-		final ListCollectionFilter<InvalidExecutionTrace> invalidExecutionTraceSinkPlugin = new ListCollectionFilter<InvalidExecutionTrace>(new Configuration());
-		controller.registerReader(reader);
-		controller.registerFilter(filter);
-		controller.registerFilter(invalidExecutionTraceSinkPlugin);
-		controller.registerFilter(messageTraceSinkPlugin);
-		controller.registerFilter(executionTraceSinkPlugin);
+		final ListCollectionFilter<ExecutionTrace> executionTraceSinkPlugin = new ListCollectionFilter<ExecutionTrace>(new Configuration(), controller);
+		final ListCollectionFilter<MessageTrace> messageTraceSinkPlugin = new ListCollectionFilter<MessageTrace>(new Configuration(), controller);
+		final ListCollectionFilter<InvalidExecutionTrace> invalidExecutionTraceSinkPlugin = new ListCollectionFilter<InvalidExecutionTrace>(new Configuration(),
+				controller);
 
-		controller.registerRepository(this.systemEntityFactory);
-		controller.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
+		controller.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
 
 		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, TraceReconstructionFilter.INPUT_PORT_NAME_EXECUTIONS);
 		/*
@@ -324,12 +321,17 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		Assert.assertTrue("Test invalid (traceIds not matching)", this.exec0_0__bookstore_searchBook.getTraceId() == completingExecutionTrace.getTraceId());
 		completingExecutionTrace.add(this.exec0_0__bookstore_searchBook);
 
+		final AnalysisController controller = new AnalysisController();
+
+		final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), controller);
+		final ExecutionFactory executionFactory = new ExecutionFactory(systemEntityFactory);
+
 		/*
 		 * We will use this execution to trigger the timeout check for pending traces within the filter.
 		 */
 		final int triggerTraceLengthMillis = 1;
 		final long triggerTraceId = TestTraceReconstructionFilter.TRACE_ID + 1;
-		final Execution exec0_0__bookstore_searchBook__trigger = this.executionFactory.genExecution("Bookstore", "bookstore", "searchBook", triggerTraceId, // NOCS
+		final Execution exec0_0__bookstore_searchBook__trigger = executionFactory.genExecution("Bookstore", "bookstore", "searchBook", triggerTraceId, // NOCS
 				TestTraceReconstructionFilter.SESSION_ID, incompleteExecutionTrace.getMaxTout(), incompleteExecutionTrace.getMaxTout()
 						+ (triggerTraceLengthMillis * (1000 * 1000)), 0, 0); // NOCS
 		final ExecutionTrace triggerExecutionTrace = new ExecutionTrace(triggerTraceId, TestTraceReconstructionFilter.SESSION_ID);
@@ -340,8 +342,8 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		/**
 		 * Instantiate reconstruction filter with timeout.
 		 */
-		final AnalysisController controller = new AnalysisController();
-		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration());
+
+		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration(), controller);
 		for (final Execution curExec : incompleteExecutionTrace.getTraceAsSortedExecutionSet()) {
 			reader.addObject(curExec);
 		}
@@ -350,24 +352,19 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, "true");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long
 				.toString(((triggerExecutionTrace.getMaxTout() - incompleteExecutionTrace.getMinTin()) / (1000 * 1000)) - 1));
-		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration);
+		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, controller);
 
-		final ListCollectionFilter<ExecutionTrace> executionTraceSink = new ListCollectionFilter<ExecutionTrace>(new Configuration());
-		final ListCollectionFilter<MessageTrace> messageTraceSink = new ListCollectionFilter<MessageTrace>(new Configuration());
-		final ListCollectionFilter<InvalidExecutionTrace> invalidExecutionTraceSink = new ListCollectionFilter<InvalidExecutionTrace>(new Configuration());
+		final ListCollectionFilter<ExecutionTrace> executionTraceSink = new ListCollectionFilter<ExecutionTrace>(new Configuration(), controller);
+		final ListCollectionFilter<MessageTrace> messageTraceSink = new ListCollectionFilter<MessageTrace>(new Configuration(), controller);
+		final ListCollectionFilter<InvalidExecutionTrace> invalidExecutionTraceSink = new ListCollectionFilter<InvalidExecutionTrace>(new Configuration(),
+				controller);
 
 		Assert.assertTrue("Test invalid: NOT (tout of trigger trace - tin of incomplete > filter max. duration)\n" + "triggerExecutionTrace.getMaxTout()"
 				+ triggerExecutionTrace.getMaxTout() + "\n" + "incompleteExecutionTrace.getMinTin()" + incompleteExecutionTrace.getMinTin() + "\n"
 				+ "filter.getMaxTraceDurationNanos()" + filter.getMaxTraceDurationNanos(), (triggerExecutionTrace.getMaxTout() - incompleteExecutionTrace
 				.getMinTin()) > filter.getMaxTraceDurationNanos());
-		controller.registerReader(reader);
-		controller.registerFilter(filter);
-		controller.registerFilter(invalidExecutionTraceSink);
-		controller.registerFilter(messageTraceSink);
-		controller.registerFilter(executionTraceSink);
 
-		controller.registerRepository(this.systemEntityFactory);
-		controller.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
+		controller.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
 
 		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, TraceReconstructionFilter.INPUT_PORT_NAME_EXECUTIONS);
 		/*

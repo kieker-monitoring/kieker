@@ -16,6 +16,7 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -53,18 +54,36 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 	private static final String CONFIGURATION_NAME = Constants.PLOTALLOCATIONOPERATIONDEPGRAPH_COMPONENT_NAME;
 
 	/**
-	 * Creates a new instance of this class using the given configuration.
+	 * Creates a new filter using the given parameters.
 	 * 
 	 * @param configuration
-	 *            The configuration used to initialize this instance.
+	 *            The configuration to use.
+	 * @param projectContext
+	 *            The project context to use.
+	 * 
+	 * @since 1.7
 	 */
-	public OperationDependencyGraphAllocationFilter(final Configuration configuration) {
-		/* Call the mandatory "default" constructor. */
-		super(configuration, new OperationAllocationDependencyGraph(new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-				OperationRepository.ROOT_OPERATION,
-				AllocationRepository.ROOT_ALLOCATION_COMPONENT)));
+	public OperationDependencyGraphAllocationFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext, new OperationAllocationDependencyGraph(new AllocationComponentOperationPair(
+				AbstractSystemSubRepository.ROOT_ELEMENT_ID, OperationRepository.ROOT_OPERATION, AllocationRepository.ROOT_ALLOCATION_COMPONENT)));
 	}
 
+	/**
+	 * Creates a new filter using the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
+	 */
+	@Deprecated
+	public OperationDependencyGraphAllocationFilter(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed", eventTypes = { MessageTrace.class })
 	public void inputMessageTraces(final MessageTrace t) {
@@ -133,6 +152,9 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 		this.reportSuccess(t.getTraceId());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getConfigurationName() {
 		return CONFIGURATION_NAME;

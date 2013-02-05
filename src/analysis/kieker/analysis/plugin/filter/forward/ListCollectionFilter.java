@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -28,7 +29,10 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
 /**
+ * This filter collects the incoming objects in a simple synchronized list. It is mostly used for test purposes.
+ * 
  * @param <T>
+ *            The type of the list.
  * 
  * @author Nils Ehmke, Jan Waller
  */
@@ -42,8 +46,31 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 
 	private final List<T> list = Collections.synchronizedList(new ArrayList<T>());
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @since 1.7
+	 */
+	public ListCollectionFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+	}
+
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
+	 */
+	@Deprecated
 	public ListCollectionFilter(final Configuration configuration) {
-		super(configuration);
+		this(configuration, null);
 	}
 
 	@InputPort(name = ListCollectionFilter.INPUT_PORT_NAME)
@@ -69,6 +96,10 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 		return this.list.size();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

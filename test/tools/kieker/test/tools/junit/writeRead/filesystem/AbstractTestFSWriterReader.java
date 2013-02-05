@@ -166,11 +166,9 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, "false");
 		this.refineFSReaderConfiguration(readerConfiguration);
-		final AbstractReaderPlugin reader = new FSReader(readerConfiguration);
-		final ListCollectionFilter<IMonitoringRecord> sinkPlugin = new ListCollectionFilter<IMonitoringRecord>(new Configuration());
+		final AbstractReaderPlugin reader = new FSReader(readerConfiguration, analysisController);
+		final ListCollectionFilter<IMonitoringRecord> sinkPlugin = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), analysisController);
 
-		analysisController.registerReader(reader);
-		analysisController.registerFilter(sinkPlugin);
 		analysisController.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 		analysisController.run();
 

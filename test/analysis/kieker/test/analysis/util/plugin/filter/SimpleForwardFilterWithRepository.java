@@ -16,6 +16,7 @@
 
 package kieker.test.analysis.util.plugin.filter;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -26,6 +27,8 @@ import kieker.common.configuration.Configuration;
 import kieker.test.analysis.util.repository.SimpleRepository;
 
 /**
+ * A simple filter, used only for test purposes.
+ * 
  * @author Nils Christian Ehmke, Jan Waller
  */
 @Plugin(programmaticOnly = true,
@@ -40,8 +43,31 @@ public class SimpleForwardFilterWithRepository extends AbstractFilterPlugin {
 	public static final String OUTPUT_PORT_NAME = "output";
 	public static final String INPUT_PORT_NAME = "input";
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this filter.
+	 * @param projectContext
+	 *            The project context for this filter.
+	 * 
+	 * @since 1.7
+	 */
+	public SimpleForwardFilterWithRepository(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+	}
+
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this filter.
+	 * 
+	 * @deprecated
+	 */
+	@Deprecated
 	public SimpleForwardFilterWithRepository(final Configuration configuration) {
-		super(configuration);
+		this(configuration, null);
 	}
 
 	@InputPort(name = INPUT_PORT_NAME, eventTypes = { Object.class })
@@ -49,6 +75,9 @@ public class SimpleForwardFilterWithRepository extends AbstractFilterPlugin {
 		super.deliver(OUTPUT_PORT_NAME, event);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}
