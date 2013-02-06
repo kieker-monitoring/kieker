@@ -61,9 +61,10 @@ public class Bookstore extends Thread {
 	 * by the local variables above the method.
 	 * (default: 100 requests; interRequestTime 5 (millisecs))
 	 * 
-	 * This will be monitored by Kieker, since it has the
+	 * This will be monitored by Kieker, since it has the @OperationExecutionMonitoringProbe() annotation.
 	 * 
-	 * @OperationExecutionMonitoringProbe() annotation.
+	 * @param args
+	 *            The command line arguments. They have currently no effect.
 	 */
 	@OperationExecutionMonitoringProbe
 	public static void main(final String[] args) throws InterruptedException {

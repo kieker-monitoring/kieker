@@ -48,6 +48,9 @@ public class Bookstore extends Thread {
 	 * Both the number of requests and arrival rate are defined
 	 * by the local variables above the method.
 	 * (default: 100 requests; interRequestTime 5 (millisecs))
+	 * 
+	 * @param args
+	 *            The command line arguments. They have currently no effect.
 	 */
 	public static void main(final String[] args) throws InterruptedException {
 		for (int i = 0; i < Bookstore.NUM_REQUESTS; i++) {

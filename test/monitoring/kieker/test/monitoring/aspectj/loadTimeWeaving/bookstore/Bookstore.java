@@ -52,6 +52,9 @@ public class Bookstore extends Thread {
 	 * 
 	 * This will be monitored by Kieker, since it has the
 	 * OperationExecutionMonitoringProbe annotation.
+	 * 
+	 * @param args
+	 *            The command line arguments. They have currently no effect.
 	 */
 	@OperationExecutionMonitoringProbe
 	public static void main(final String[] args) {

@@ -51,6 +51,8 @@ public class BookstoreWA extends Thread {
 	 * by the local variables above the method.
 	 * (default: 100 requests; interRequestTime 5 (millisecs))
 	 * 
+	 * @param args
+	 *            The command line arguments. They have currently no effect.
 	 */
 	public static void main(final String[] args) throws InterruptedException {
 		for (int i = 0; i < BookstoreWA.NUM_REQUESTS; i++) {

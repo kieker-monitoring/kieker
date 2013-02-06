@@ -29,10 +29,26 @@ import java.io.Serializable;
  */
 public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringRecord> {
 
+	/**
+	 * Delivers the current timestamp of the record.
+	 * 
+	 * @return The timestamp.
+	 */
 	public long getLoggingTimestamp();
 
+	/**
+	 * Sets the logging timestamp to a new value.
+	 * 
+	 * @param timestamp
+	 *            The new timestamp for the record.
+	 */
 	public void setLoggingTimestamp(long timestamp);
 
+	/**
+	 * This method should deliver an array containing the content of the record. It should be possible to convert this array later into a record again.
+	 * 
+	 * @return An array with the values of the record.
+	 */
 	public Object[] toArray();
 
 	/**
@@ -42,8 +58,22 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 */
 	public String toString();
 
+	/**
+	 * This method should initialize the record based on the given values. The array should be one of those resulting from a call to
+	 * {@link IMonitoringRecord#toArray()}.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 */
 	public void initFromArray(Object[] values);
 
+	/**
+	 * This method should deliver an array with the classes of the single values for the record.
+	 * 
+	 * @return The types of the values.
+	 * 
+	 * @see #toArray()
+	 */
 	public Class<?>[] getValueTypes();
 
 	/**

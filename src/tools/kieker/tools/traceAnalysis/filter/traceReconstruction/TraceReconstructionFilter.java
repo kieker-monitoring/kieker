@@ -323,6 +323,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	 * Terminates the filter (internally, all pending traces are processed).
 	 * 
 	 * @param error
+	 *            Determines whether the plugin is terminated due to an error or not.
 	 */
 	@Override
 	public void terminate(final boolean error) {

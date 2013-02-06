@@ -48,6 +48,9 @@ public interface IPlugin extends IAnalysisComponent {
 	 * 
 	 * After receiving this notification, the plugin should terminate any running
 	 * methods, e.g., read for readers.
+	 * 
+	 * @param error
+	 *            Determines whether the plugin is terminated due to an error or not.
 	 */
 	public void terminate(final boolean error);
 

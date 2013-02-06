@@ -129,6 +129,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	 * Saves the call tree to the dot file if error is not true.
 	 * 
 	 * @param error
+	 *            Determines whether the plugin terminated due to an error or not.
 	 */
 	@Override
 	public void terminate(final boolean error) {
@@ -146,6 +147,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));

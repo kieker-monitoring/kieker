@@ -167,8 +167,9 @@ public abstract class AbstractLogReplayer {
 	 * Implementing classes return the reader to be used for reading the monitoring log.
 	 * 
 	 * @param analysisInstance
+	 *            The analysis controller which will be the parent of the reader.
 	 * 
-	 * @return
+	 * @return The reader which can be used to read the monitoring log.
 	 */
 	protected abstract AbstractReaderPlugin createReader(final IAnalysisController analysisInstance);
 }

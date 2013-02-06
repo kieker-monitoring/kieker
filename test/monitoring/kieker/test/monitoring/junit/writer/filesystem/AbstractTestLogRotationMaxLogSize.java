@@ -127,11 +127,13 @@ public abstract class AbstractTestLogRotationMaxLogSize extends AbstractKiekerTe
 	protected abstract IMonitoringController createController(final String path, final int maxEntriesInFile, final int maxLogSize);
 
 	/**
-	 * Integer division rounding up!
+	 * This is a simple integer division which rounds up.
 	 * 
 	 * @param num
+	 *            The dividend of the operation.
 	 * @param div
-	 * @return
+	 *            The divisor of the operation.
+	 * @return The quotient of the given parameters, but rounded up.
 	 */
 	private static final int div(final int num, final int div) {
 		return ((num + div) - 1) / div;
