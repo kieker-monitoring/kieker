@@ -21,7 +21,7 @@ import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFormatter;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 
 /**
- * Abstract for formatters for operation-level dependency graph
+ * Abstract for formatters for operation-level dependency graph.
  * 
  * @author Holger Knoche
  * 

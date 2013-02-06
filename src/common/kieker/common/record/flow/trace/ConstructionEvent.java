@@ -32,7 +32,7 @@ public class ConstructionEvent extends AbstractTraceEvent implements IObjectReco
 	};
 
 	/**
-	 * This field should not be exported, because it makes little sense to have no associated class
+	 * This field should not be exported, because it makes little sense to have no associated class.
 	 */
 	private static final String NO_CLASSNAME = "<no-classname>";
 

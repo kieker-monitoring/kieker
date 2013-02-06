@@ -19,7 +19,7 @@ package kieker.test.monitoring.aspectj.loadTimeWeaving.executionOrderTest;
 import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 /**
- * A simple test to test the execution ordering mechanism monitoring in distributed systems
+ * A simple test to test the execution ordering mechanism monitoring in distributed systems.
  * 
  * @author Matthias Rohr
  *         History:

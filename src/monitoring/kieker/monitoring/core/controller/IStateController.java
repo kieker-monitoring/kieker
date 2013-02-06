@@ -22,7 +22,7 @@ package kieker.monitoring.core.controller;
 public interface IStateController {
 
 	/**
-	 * Permanently terminates monitoring
+	 * Permanently terminates monitoring.
 	 * 
 	 * @see #isMonitoringTerminated()
 	 * @return true if now terminated; false if already terminated

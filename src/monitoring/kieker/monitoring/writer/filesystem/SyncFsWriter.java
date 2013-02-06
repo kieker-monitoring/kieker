@@ -209,9 +209,12 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	}
 
 	/**
-	 * Determines and sets a new filename
+	 * Determines and sets a new filename.
 	 * 
+	 * @param filename
+	 *            The name of the file to prepare.
 	 * @throws UnsupportedEncodingException
+	 *             If the encoding is not supported.
 	 */
 	private final void prepareFile(final String filename) throws FileNotFoundException, UnsupportedEncodingException {
 		this.entriesInCurrentFileCounter = 1;

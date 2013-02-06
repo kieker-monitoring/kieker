@@ -93,7 +93,10 @@ public class Bookstore extends Thread {
 	}
 
 	/**
-	 * Only encapsulates Thread.sleep()
+	 * This method encapsulates only Thread.sleep().
+	 * 
+	 * @param waittime
+	 *            The time to wait in milliseconds.
 	 */
 	public static void waitabit(final long waittime) {
 		if (waittime > 0) {

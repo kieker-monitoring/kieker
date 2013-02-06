@@ -45,7 +45,7 @@ public class CallTreeNode {
 		return this.children;
 	}
 
-	/** Creates a new child and adds it to the nodes list of children */
+	/** Creates a new child and adds it to the nodes list of children. */
 	public final CallTreeNode createNewChild(final AllocationComponent allocationComponent, final Operation operation) {
 		final CallTreeOperationHashKey k = new CallTreeOperationHashKey(allocationComponent, operation);
 		final CallTreeNode node = new CallTreeNode(this, k);

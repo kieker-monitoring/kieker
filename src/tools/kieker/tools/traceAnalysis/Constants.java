@@ -26,7 +26,7 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
 /**
- * Externalized Strings from {@link TraceAnalysisTool}
+ * Externalized Strings from {@link TraceAnalysisTool}.
  * 
  * @author Robert von Massow
  * 

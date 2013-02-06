@@ -23,15 +23,15 @@ package kieker.monitoring.core.configuration;
  * @author Andre van Hoorn, Jan Waller
  */
 interface Keys { // NOPMD NOCS (static list)
-	/** prefix used for all kieker.monitoring components */
+	/** prefix used for all kieker.monitoring components. */
 	public static final String PREFIX = "kieker.monitoring.";
 
-	/** Location of the custom properties file (in classpath) */
+	/** Location of the custom properties file (in classpath). */
 	public static final String CUSTOM_PROPERTIES_LOCATION_CLASSPATH = "META-INF/" + PREFIX + "properties";
-	/** Location of the default properties file (in classpath) */
+	/** Location of the default properties file (in classpath). */
 	public static final String DEFAULT_PROPERTIES_LOCATION_CLASSPATH = "META-INF/" + PREFIX + "default.properties";
 
-	/** JVM-parameter to specify a custom properties file */
+	/** JVM-parameter to specify a custom properties file. */
 	public static final String CUSTOM_PROPERTIES_LOCATION_JVM = PREFIX + "configuration";
 
 	// these MUST be declared in the file DEFAULT_PROPERTIES_LOCATION_CLASSPATH

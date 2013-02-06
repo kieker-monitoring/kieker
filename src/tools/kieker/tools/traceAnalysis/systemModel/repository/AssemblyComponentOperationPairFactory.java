@@ -40,7 +40,7 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepo
 		super(systemFactory);
 	}
 
-	/** Returns a corresponding pair instance (existing or newly created) */
+	/** Returns a corresponding pair instance (existing or newly created). */
 	public final AssemblyComponentOperationPair getPairInstanceByPair(final AssemblyComponent assemblyComponent, final Operation operation) {
 		final AssemblyComponentOperationPair inst = this.getPairByNamedIdentifier(assemblyComponent.getId() + "-" + operation.getId());
 		if (inst == null) {

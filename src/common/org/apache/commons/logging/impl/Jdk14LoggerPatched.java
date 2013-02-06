@@ -18,7 +18,7 @@ package org.apache.commons.logging.impl;
 
 /**
  * Based upon the Apache commons logging class Jdk14Logger
- * Used to determine the correct calling method
+ * Used to determine the correct calling method.
  * 
  * @author Jan Waller
  */

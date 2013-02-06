@@ -50,7 +50,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	public static final int NO_EOI_ESS = -1;
 
 	/**
-	 * This field should not be exported, because it makes little sense to have no associated operation
+	 * This field should not be exported, because it makes little sense to have no associated operation.
 	 */
 	private static final String NO_OPERATION_SIGNATURE = "noOperation";
 

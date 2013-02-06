@@ -111,7 +111,7 @@ public class DescriptionRepository extends AbstractRepository {
 	}
 
 	/**
-	 * Returns the description map (node id -> description) contained in this repository-
+	 * Returns the description map (node id -> description) contained in this repository.
 	 * 
 	 * @return See above
 	 */

@@ -20,7 +20,7 @@ import java.io.Serializable;
 import java.util.regex.Pattern;
 
 /**
- * the activated state is ignored for purposes of equals() and hashcode()
+ * the activated state is ignored for purposes of equals() and hashcode().
  * 
  * @author Bjoern Weissenfels, Jan Waller
  */

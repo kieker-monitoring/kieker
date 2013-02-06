@@ -38,7 +38,7 @@ public class TestOperationExecutionRecordConstructors extends AbstractKiekerTest
 	}
 
 	/**
-	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long, long, long, String, int, int)}
+	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long, long, long, String, int, int)}.
 	 */
 	@Test
 	public void testSignatureStringSessionIDTraceIDTinToutEoiEss() { // NOPMD (assert missing)

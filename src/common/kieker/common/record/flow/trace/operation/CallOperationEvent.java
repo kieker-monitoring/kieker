@@ -35,7 +35,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	};
 
 	/**
-	 * This field should not be exported, because it makes little sense to have no associated class
+	 * This field should not be exported, because it makes little sense to have no associated class.
 	 */
 	private static final String NO_CALLEEOPERATIONSIGANTURE = "<no-calleeOperationSiganture>";
 	private static final String NO_CALLEECLASSSIGANTURE = ""; // default is empty

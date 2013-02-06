@@ -54,25 +54,28 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 
 	private IAnalysisController analysisController;
 
-	/** Provides the list of {@link IMonitoringRecord}s to be processed */
+	/** Provides the list of {@link IMonitoringRecord}s to be processed. */
 	private ListReader<IMonitoringRecord> simpleListReader; // initialized in #prepareConfiguration()
 
-	/** Provides the (current) number of {@link IMonitoringRecord}s provided by the {@link #simpleListReader} */
+	/** Provides the (current) number of {@link IMonitoringRecord}s provided by the {@link #simpleListReader}. */
 	private CountingFilter countingFilterReader; // initialized in #prepareConfiguration()
 
-	/** The filter to be tested */
+	/** The filter to be tested. */
 	private CountingThroughputFilter throughputFilter; // initialized in #prepareConfiguration()
 
-	/** Simply collects all {@link IMonitoringRecord}s processed by the tested filter */
+	/** Simply collects all {@link IMonitoringRecord}s processed by the tested filter. */
 	private ListCollectionFilter<EmptyRecord> sinkPlugin; // initialized in #prepareConfiguration()
 
 	private volatile boolean intervalsBasedOn1stTstamp; // will be set by the @Test's
 
 	/**
-	 * Will be filled by {@link #createInputEvents(SimpleListReader)}
+	 * Will be filled by {@link #createInputEvents(SimpleListReader)}.
 	 */
 	private final List<Entry<Long, Long>> expectedThroughputValues = new ArrayList<Entry<Long, Long>>();
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public TestCountingThroughputFilter() {
 		// empty default constructor
 	}

@@ -32,11 +32,11 @@ import kieker.monitoring.writer.IMonitoringWriter;
 public final class WriterController extends AbstractController implements IWriterController {
 	private static final Log LOG = LogFactory.getLog(WriterController.class);
 
-	/** the total number of monitoring records received */
+	/** the total number of monitoring records received. */
 	private final AtomicLong numberOfInserts = new AtomicLong(0);
-	/** Monitoring Writer */
+	/** Monitoring Writer. */
 	private final IMonitoringWriter monitoringWriter;
-	/** Whether or not the {@link IMonitoringRecord#setLoggingTimestamp(long)} is automatically set */
+	/** Whether or not the {@link IMonitoringRecord#setLoggingTimestamp(long)} is automatically set. */
 	private final boolean autoSetLoggingTimestamp;
 
 	public WriterController(final Configuration configuration) {

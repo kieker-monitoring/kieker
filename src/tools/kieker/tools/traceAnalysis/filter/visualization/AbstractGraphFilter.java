@@ -65,7 +65,7 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 	private final List<IGraphProducingFilter<?>> producers = new ArrayList<IGraphProducingFilter<?>>();
 
 	/**
-	 * Creates a new filter with the given configuration;
+	 * Creates a new filter with the given configuration.
 	 * 
 	 * @param configuration
 	 *            The filter configuration to use
@@ -81,7 +81,7 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 	}
 
 	/**
-	 * Creates a new filter with the given configuration;
+	 * Creates a new filter with the given configuration.
 	 * 
 	 * @param configuration
 	 *            The filter configuration to use

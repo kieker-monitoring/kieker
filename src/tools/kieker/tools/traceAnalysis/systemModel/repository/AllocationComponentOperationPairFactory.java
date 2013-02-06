@@ -40,7 +40,7 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubRe
 		super(systemFactory);
 	}
 
-	/** Returns a corresponding pair instance (existing or newly created) */
+	/** Returns a corresponding pair instance (existing or newly created). */
 	public final AllocationComponentOperationPair getPairInstanceByPair(final AllocationComponent allocationComponent, final Operation operation) {
 		final AllocationComponentOperationPair inst = this.getPairByNamedIdentifier(allocationComponent.getId() + "-" + operation.getId());
 		if (inst == null) {

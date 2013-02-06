@@ -52,17 +52,17 @@ public final class Registry<E> implements IRegistry<E> {
 	private final int segmentShift;
 
 	/**
-	 * The segments, each of which is a specialized hash table
+	 * The segments, each of which is a specialized hash table.
 	 */
 	private final Segment<E>[] segments;
 
 	/**
-	 * The next id used
+	 * The next id used.
 	 */
 	private final AtomicInteger nextId = new AtomicInteger(0);
 
 	/**
-	 * A cached copy of the current assignment of IDs
+	 * A cached copy of the current assignment of IDs.
 	 */
 	private volatile E[] eArrayCached;
 

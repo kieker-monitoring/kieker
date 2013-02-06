@@ -51,10 +51,12 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 
 	/**
 	 * Creates a {@link TimestampFilter} with the given properties
-	 * using the constructor {@link TimestampFilter#TimestampFilter(kieker.common.configuration.Configuration, java.util.Map)}
+	 * using the constructor {@link TimestampFilter#TimestampFilter(kieker.common.configuration.Configuration, java.util.Map)}.
 	 * 
 	 * @param ignoreExecutionsBeforeTimestamp
+	 *            The lower limit for the timestamps.
 	 * @param ignoreExecutionsAfterTimestamp
+	 *            The upper limit for the timestamps.
 	 * @return
 	 */
 	private static TimestampFilter createTimestampFilter(final long ignoreExecutionsBeforeTimestamp, final long ignoreExecutionsAfterTimestamp,

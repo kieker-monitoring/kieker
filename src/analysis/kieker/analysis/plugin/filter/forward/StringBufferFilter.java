@@ -67,7 +67,7 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 	private final int segmentShift;
 
 	/**
-	 * The segments, each of which is a specialized hash table
+	 * The segments, each of which is a specialized hash table.
 	 */
 	private final Segment[] segments;
 

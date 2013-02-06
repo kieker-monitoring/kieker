@@ -71,7 +71,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 
 	private final TraceEquivalenceClassModes equivalenceMode;
 
-	/** Representative x # of equivalents */
+	/** Representative x # of equivalents. */
 	private final ConcurrentMap<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap = new ConcurrentHashMap<AbstractExecutionTraceHashContainer, AtomicInteger>();
 
 	/**

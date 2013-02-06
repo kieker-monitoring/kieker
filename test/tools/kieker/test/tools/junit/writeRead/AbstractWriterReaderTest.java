@@ -33,7 +33,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * TODO: The idea is to make this class independent of FS, i.e., to provide a basic
- * test for each writer/reader
+ * test for each writer/reader.
  * 
  * @author Andre van Hoorn
  * 

@@ -73,12 +73,12 @@ public abstract class AbstractController {
 	}
 
 	/**
-	 * inits
+	 * This method should to the initialization work.
 	 */
 	protected abstract void init();
 
 	/**
-	 * cleans up
+	 * This method should clean up.
 	 */
 	protected abstract void cleanup();
 

@@ -62,26 +62,26 @@ public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 	private IAnalysisController analysisController;
 
 	/**
-	 * List of all {@link EmptyRecord}s to be read by the {@link #simpleListReader}
+	 * List of all {@link EmptyRecord}s to be read by the {@link #simpleListReader}.
 	 */
 	private final List<EmptyRecord> inputRecords = new ArrayList<EmptyRecord>();
 
-	/** Provides the list of {@link IMonitoringRecord}s to be delayed */
+	/** Provides the list of {@link IMonitoringRecord}s to be delayed. */
 	private ListReader<IMonitoringRecord> simpleListReader;
 
-	/** The filter actually tested: */
+	/** The filter actually tested. */
 	private RealtimeRecordDelayFilter delayFilter; // NOPMD (SingularField) // We want to have all filters declared here
 
-	/** Provides the (current) number of {@link IMonitoringRecord}s provided by the {@link #simpleListReader} */
+	/** Provides the (current) number of {@link IMonitoringRecord}s provided by the {@link #simpleListReader}. */
 	private CountingFilter countingFilterReader;
 
-	/** Provides the (current) number of {@link IMonitoringRecord}s provided by the {@link #delayFilter} */
+	/** Provides the (current) number of {@link IMonitoringRecord}s provided by the {@link #delayFilter}. */
 	private CountingFilter countingFilterDelayed;
 
-	/** Records the number of records provided by the {@link RealtimeRecordDelayFilter} */
+	/** Records the number of records provided by the {@link RealtimeRecordDelayFilter}. */
 	private CountingThroughputFilter throughputFilter;
 
-	/** Simply collects all delayed {@link IMonitoringRecord}s */
+	/** Simply collects all delayed {@link IMonitoringRecord}s. */
 	private ListCollectionFilter<EmptyRecord> sinkPlugin;
 
 	static {
@@ -91,6 +91,9 @@ public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new ImmutableEntry<Long, Long>((long) 20, (long) 2)); // i.e., in interval (15,20(
 	}
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public TestRealtimeRecordDelayFilter() {
 		// empty default constructor
 	}

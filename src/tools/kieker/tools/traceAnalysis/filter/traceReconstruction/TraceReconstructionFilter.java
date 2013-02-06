@@ -73,9 +73,9 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 
 	private static final Log LOG = LogFactory.getLog(TraceReconstructionFilter.class);
 
-	/** TraceId x trace */
+	/** TraceId x trace. */
 	private final Map<Long, ExecutionTrace> pendingTraces = new Hashtable<Long, ExecutionTrace>(); // NOPMD (UseConcurrentHashMap)
-	/** We need to keep track of invalid trace's IDs */
+	/** We need to keep track of invalid trace's IDs. */
 	private final Set<Long> invalidTraces = new TreeSet<Long>();
 	private volatile long minTin = -1;
 	private volatile long maxTout = -1;
@@ -86,7 +86,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 
 	private boolean traceProcessingErrorOccured; // false
 
-	/** Pending traces sorted by tin timestamps */
+	/** Pending traces sorted by tin timestamps. */
 	private final SortedSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() {
 
 		/** Order traces by tins */
@@ -309,8 +309,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	}
 
 	/**
-	 * Return the number of nanoseconds after which a pending trace is
-	 * considered to have timed out
+	 * Return the number of nanoseconds after which a pending trace isconsidered to have timed out.
 	 * 
 	 * @return the timeout duration for a pending trace in nanoseconds
 	 */

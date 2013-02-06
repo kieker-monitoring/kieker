@@ -64,9 +64,8 @@ public final class PipeWriter extends AbstractMonitoringWriter implements IPipeW
 	}
 
 	/**
-	 * Nothing to do
+	 * Initializes the pipe writer (at the moment there is nothing to do in here).
 	 */
-
 	@Override
 	protected void init() {
 		// nothing to do

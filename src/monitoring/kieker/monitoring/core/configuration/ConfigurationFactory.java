@@ -29,7 +29,7 @@ import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.controller.MonitoringController;
 
 /**
- * A ConfigurationFactory for kieker.monitoring
+ * A ConfigurationFactory for kieker.monitoring.
  * 
  * @author Andre van Hoorn, Jan Waller
  */

@@ -22,12 +22,15 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
- * TODO: review and restructure this class
+ * TODO: review and restructure this class.
  * 
  * @author Bjoern Weissenfels, Jan Waller
  */
 public final class PatternParser {
 
+	/**
+	 * Private constructor to avoid initialization.
+	 */
 	private PatternParser() {
 		// private default constructor
 	}

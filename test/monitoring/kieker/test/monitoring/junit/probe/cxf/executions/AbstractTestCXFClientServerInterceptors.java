@@ -63,7 +63,7 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 	private static final Log LOG = LogFactory.getLog(AbstractTestCXFClientServerInterceptors.class);
 
 	/**
-	 * Each instance of this class increments the port number by 1
+	 * Each instance of this class increments the port number by 1.
 	 */
 	private volatile String serviceAddress;
 

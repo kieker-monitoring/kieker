@@ -75,14 +75,14 @@ public class CPUsCombinedServletContextListener implements ServletContextListene
 	public static final long DEFAULT_SENSOR_INTERVAL_SECONDS = 15;
 	public static final long DEFAULT_SENSOR_INITIAL_DELAY_SECONDS = 0;
 
-	/** Prefix for parameters used in the web.xml file */
+	/** Prefix for parameters used in the web.xml file. */
 	// NOTE that this declaration must be BEFORE the following public constants!
 	private static final String CONTEXT_PARAM_NAME_PREFIX = CPUsCombinedServletContextListener.class.getSimpleName();
 
-	/** Parameter name for the sampling interval to be used in the web.xml file */
+	/** Parameter name for the sampling interval to be used in the web.xml file. */
 	public static final String CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS = CONTEXT_PARAM_NAME_PREFIX // NOCS (decl. order)
 			+ ".samplingIntervalSeconds";
-	/** Parameter name for the initial delay to be used in the web.xml file */
+	/** Parameter name for the initial delay to be used in the web.xml file. */
 	public static final String CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS = CONTEXT_PARAM_NAME_PREFIX // NOCS (decl. order)
 			+ ".initialSamplingDelaySeconds";
 

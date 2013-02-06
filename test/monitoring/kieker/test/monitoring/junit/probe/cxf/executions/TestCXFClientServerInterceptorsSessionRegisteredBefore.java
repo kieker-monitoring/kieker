@@ -26,7 +26,7 @@ import kieker.monitoring.probe.cxf.OperationExecutionSOAPResponseInInterceptor;
 import kieker.monitoring.probe.cxf.OperationExecutionSOAPResponseOutInterceptor;
 
 /**
- * Tests the CXF interceptors with a previously registered Session ID
+ * Tests the CXF interceptors with a previously registered Session ID.
  * 
  * @author Andre van Hoorn
  * 

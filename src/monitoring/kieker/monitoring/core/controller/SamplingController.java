@@ -127,7 +127,7 @@ public final class SamplingController extends AbstractController implements ISam
 	}
 
 	/**
-	 * A thread factory to create daemon threads
+	 * A thread factory to create daemon threads.
 	 * 
 	 * @see java.util.concurrent.Executors.DefaultThreadFactory
 	 * 

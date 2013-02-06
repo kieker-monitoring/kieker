@@ -26,7 +26,7 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * This field should not be exported, because it makes little sense to have no associated class
+	 * This field should not be exported, because it makes little sense to have no associated class.
 	 */
 	private static final String NO_OPERATIONSIGNATURE = "<no-operationSignature>";
 	private static final String NO_CLASSSIGNATURE = ""; // default is empty

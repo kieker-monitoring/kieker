@@ -214,7 +214,10 @@ public class ProbeController extends AbstractController implements IProbeControl
 	}
 
 	/**
-	 * tests if signature matches a pattern and completes accordingly the signatureCache map
+	 * This method tests if the given signature matches a pattern and completes accordingly the signatureCache map.
+	 * 
+	 * @param signature
+	 *            The signature to match.
 	 */
 	private boolean matchesPattern(final String signature) {
 		synchronized (this) {

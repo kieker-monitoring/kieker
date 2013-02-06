@@ -36,16 +36,16 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 
 	private final AtomicInteger nextTraceId = new AtomicInteger(0);
 	private final long unique = MonitoringController.getInstance().isDebug() ? 0 : ((long) new SecureRandom().nextInt()) << 32; // NOCS
-	/** the hostname is final after the instantiation of the monitoring controller */
+	/** the hostname is final after the instantiation of the monitoring controller. */
 	private final String hostname = MonitoringController.getInstance().getHostname();
 
-	/** the current trace; null if new trace */
+	/** the current trace; null if new trace. */
 	private final ThreadLocal<Trace> traceStorage = new ThreadLocal<Trace>();
 
-	/** used to store the stack of enclosing traces; null if no sub trace created yet */
+	/** used to store the stack of enclosing traces; null if no sub trace created yet. */
 	private final ThreadLocal<Stack<Trace>> enclosingTraceStack = new ThreadLocal<Stack<Trace>>();
 
-	/** store the parent Trace */
+	/** store the parent Trace. */
 	private final WeakHashMap<Thread, TracePoint> parentTrace = new WeakHashMap<Thread, TracePoint>();
 
 	private final long getId() {

@@ -28,7 +28,7 @@ import kieker.monitoring.timer.ITimeSource;
 public final class TimeSourceController extends AbstractController implements ITimeSourceController {
 	private static final Log LOG = LogFactory.getLog(TimeSourceController.class);
 
-	/** the ITimeSource used by this instance */
+	/** the ITimeSource used by this instance. */
 	private final ITimeSource timeSource;
 
 	protected TimeSourceController(final Configuration configuration) {
