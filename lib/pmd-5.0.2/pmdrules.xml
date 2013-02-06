@@ -53,6 +53,8 @@
     <exclude name="UseProperClassLoader"/>
     <exclude name="UselessParentheses"/>
     <exclude name="UseVarargs"/>
+    <!-- Currently buggy! Should be reenabled! -->
+    <exclude name="PrematureDeclaration"/>
   </rule>
 
 </ruleset>

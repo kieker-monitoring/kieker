@@ -48,52 +48,58 @@ public final class DBWriterHelper {
 
 	public DBWriterHelper(final Connection connection, final String indexTablename, final AtomicInteger tableCounter, final boolean overwrite) throws SQLException {
 		this.connection = connection;
-		final ResultSet databaseTypeInfo = connection.getMetaData().getTypeInfo();
-		while (databaseTypeInfo.next()) {
-			final int id = databaseTypeInfo.getInt("DATA_TYPE");
-			final String typeName = databaseTypeInfo.getString("TYPE_NAME");
-			final String typeParams = databaseTypeInfo.getString("CREATE_PARAMS");
-			switch (id) {
-			case Types.VARCHAR: // String
-				if (typeParams != null) {
-					this.createTypeMap.put(String.class, typeName + " (1024)");
-				} else {
-					this.createTypeMap.put(String.class, typeName);
+		ResultSet databaseTypeInfo = null;
+		try {
+			databaseTypeInfo = connection.getMetaData().getTypeInfo();
+			while (databaseTypeInfo.next()) {
+				final int id = databaseTypeInfo.getInt("DATA_TYPE");
+				final String typeName = databaseTypeInfo.getString("TYPE_NAME");
+				final String typeParams = databaseTypeInfo.getString("CREATE_PARAMS");
+				switch (id) {
+				case Types.VARCHAR: // String
+					if (typeParams != null) {
+						this.createTypeMap.put(String.class, typeName + " (1024)");
+					} else {
+						this.createTypeMap.put(String.class, typeName);
+					}
+					break;
+				case Types.INTEGER: // Integer
+					this.createTypeMap.put(int.class, typeName);
+					this.createTypeMap.put(Integer.class, typeName);
+					break;
+				case Types.BIGINT: // Long
+					this.createTypeMap.put(long.class, typeName);
+					this.createTypeMap.put(Long.class, typeName);
+					break;
+				case Types.REAL: // Float
+					this.createTypeMap.put(float.class, typeName);
+					this.createTypeMap.put(Float.class, typeName);
+					break;
+				case Types.DOUBLE: // Double
+					this.createTypeMap.put(double.class, typeName);
+					this.createTypeMap.put(Double.class, typeName);
+					break;
+				case Types.TINYINT: // Byte
+					this.createTypeMap.put(byte.class, typeName);
+					this.createTypeMap.put(Byte.class, typeName);
+					break;
+				case Types.SMALLINT: // Short
+					this.createTypeMap.put(short.class, typeName); // NOPMD (short)
+					this.createTypeMap.put(Short.class, typeName);
+					break;
+				case Types.BIT: // Boolean
+					this.createTypeMap.put(boolean.class, typeName);
+					this.createTypeMap.put(Boolean.class, typeName);
+					break;
+				default: // unneeded
+					break;
 				}
-				break;
-			case Types.INTEGER: // Integer
-				this.createTypeMap.put(int.class, typeName);
-				this.createTypeMap.put(Integer.class, typeName);
-				break;
-			case Types.BIGINT: // Long
-				this.createTypeMap.put(long.class, typeName);
-				this.createTypeMap.put(Long.class, typeName);
-				break;
-			case Types.REAL: // Float
-				this.createTypeMap.put(float.class, typeName);
-				this.createTypeMap.put(Float.class, typeName);
-				break;
-			case Types.DOUBLE: // Double
-				this.createTypeMap.put(double.class, typeName);
-				this.createTypeMap.put(Double.class, typeName);
-				break;
-			case Types.TINYINT: // Byte
-				this.createTypeMap.put(byte.class, typeName);
-				this.createTypeMap.put(Byte.class, typeName);
-				break;
-			case Types.SMALLINT: // Short
-				this.createTypeMap.put(short.class, typeName); // NOPMD (short)
-				this.createTypeMap.put(Short.class, typeName);
-				break;
-			case Types.BIT: // Boolean
-				this.createTypeMap.put(boolean.class, typeName);
-				this.createTypeMap.put(Boolean.class, typeName);
-				break;
-			default: // unneeded
-				break;
+			}
+		} finally {
+			if (null != databaseTypeInfo) {
+				databaseTypeInfo.close();
 			}
 		}
-		databaseTypeInfo.close();
 		this.indexTablename = indexTablename;
 		this.tableCounter = tableCounter;
 		this.overwrite = overwrite;
