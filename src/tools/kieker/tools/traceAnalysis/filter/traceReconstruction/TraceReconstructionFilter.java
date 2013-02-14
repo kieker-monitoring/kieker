@@ -90,7 +90,6 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	private final SortedSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() {
 
 		/** Order traces by tins */
-
 		public int compare(final ExecutionTrace t1, final ExecutionTrace t2) {
 			if (t1 == t2) { // NOPMD (no equals)
 				return 0;
@@ -98,11 +97,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			final long t1LowestTin = t1.getTraceAsSortedExecutionSet().first().getTin();
 			final long t2LowestTin = t2.getTraceAsSortedExecutionSet().first().getTin();
 
-			/**
-			 * Multiple traces may have an equal tin timestamp value.
-			 * In order to provide an absolute ordering of the keys,
-			 * we take the traceId as a second ordering key.
-			 */
+			// Multiple traces may have an equal tin timestamp value. In order to provide an absolute ordering of the keys, we take the traceId as a second ordering
+			// key.
 			if (t1LowestTin != t2LowestTin) {
 				return t1LowestTin < t2LowestTin ? -1 : 1; // NOCS
 			}

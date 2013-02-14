@@ -179,7 +179,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	}
 
 	/**
-	 * HACK
+	 * HACK.
 	 * 
 	 * @param callMsg
 	 * @return

@@ -168,7 +168,6 @@ public final class JMSReader extends AbstractReaderPlugin {
 					if (jmsMessage instanceof TextMessage) {
 						final TextMessage text = (TextMessage) jmsMessage;
 						LOG.info("Received text message: " + text);
-
 					} else {
 						try {
 							final ObjectMessage om = (ObjectMessage) jmsMessage;
