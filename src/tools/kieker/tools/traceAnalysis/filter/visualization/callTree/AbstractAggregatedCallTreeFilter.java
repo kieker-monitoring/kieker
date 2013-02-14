@@ -106,6 +106,13 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 		}
 	}
 
+	/**
+	 * This method tries to convert the current tree into the specified file as a valid dot file, which can later be transformed into a visual representation by dot
+	 * itself.
+	 * 
+	 * @throws IOException
+	 *             If something went wrong during the converting.
+	 */
 	public void saveTreeToDotFile() throws IOException {
 		synchronized (this) {
 			final String outputFn = new File(this.dotOutputFile).getCanonicalPath();

@@ -25,10 +25,25 @@ import kieker.analysis.exception.EventProcessingException;
 public class ExecutionEventProcessingException extends EventProcessingException {
 	private static final long serialVersionUID = 1136L;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param msg
+	 *            The message of this exception.
+	 */
 	public ExecutionEventProcessingException(final String msg) {
 		super(msg);
 	}
 
+	/**
+	 * 
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param msg
+	 *            The message of this exception.
+	 * @param t
+	 *            The cause of this exception.
+	 */
 	public ExecutionEventProcessingException(final String msg, final Throwable t) {
 		super(msg, t);
 	}

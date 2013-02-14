@@ -17,6 +17,7 @@
 package kieker.tools.traceAnalysis.systemModel;
 
 /**
+ * An abstract base for messages which can later be used and combined in a {@link kieker.tools.traceAnalysis.systemModel.MessageTrace}.
  * 
  * @author Andre van Hoorn
  */
@@ -26,20 +27,45 @@ public abstract class AbstractMessage {
 	private final Execution sendingExecution;
 	private final Execution receivingExecution;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param timestamp
+	 *            The timestamp of the message.
+	 * @param sendingExecution
+	 *            The {@link Execution} object which sent the message.
+	 * @param receivingExecution
+	 *            The {@link Execution} object which received the message.
+	 */
 	public AbstractMessage(final long timestamp, final Execution sendingExecution, final Execution receivingExecution) {
 		this.timestamp = timestamp;
 		this.sendingExecution = sendingExecution;
 		this.receivingExecution = receivingExecution;
 	}
 
+	/**
+	 * Delivers the object which received the message.
+	 * 
+	 * @return The receiving object.
+	 */
 	public final Execution getReceivingExecution() {
 		return this.receivingExecution;
 	}
 
+	/**
+	 * Delivers the object which sent the message.
+	 * 
+	 * @return The sending object.
+	 */
 	public final Execution getSendingExecution() {
 		return this.sendingExecution;
 	}
 
+	/**
+	 * Delivers the timestamp at which the message was created.
+	 * 
+	 * @return The timestamp of the message.
+	 */
 	public final long getTimestamp() {
 		return this.timestamp;
 	}

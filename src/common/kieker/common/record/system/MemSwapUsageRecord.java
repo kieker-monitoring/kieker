@@ -60,9 +60,13 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	private final long memTotal;
 
 	/**
-	 * Constructs a new {@link MemSwapUsageRecord} with the given values. If
-	 * certain {@link String} values shall remain undefined, use the constants {@link #DEFAULT_VALUE}.
+	 * Constructs a new {@link MemSwapUsageRecord} with the given values. If certain {@link String} values shall remain undefined, use the constants
+	 * {@link #DEFAULT_VALUE}.
 	 * 
+	 * @param timestamp
+	 *            The timestamp of the measure.
+	 * @param hostname
+	 *            The name of the host.
 	 */
 	public MemSwapUsageRecord(final long timestamp, final String hostname, final long memTotal, final long memUsed, final long memFree, final long swapTotal,
 			final long swapUsed, final long swapFree) {

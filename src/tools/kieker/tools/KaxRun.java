@@ -37,13 +37,16 @@ import kieker.common.logging.LogFactory;
 public final class KaxRun {
 	private static final Log LOG = LogFactory.getLog(KaxRun.class);
 
+	/**
+	 * Private constructor to avoid instantiation.
+	 */
 	private KaxRun() {}
 
 	/**
 	 * Starts an AnalysisController with a .kax file.
 	 * 
 	 * @param args
-	 *            the name of the .kax file
+	 *            The command line arguments (including the name of the .kax file in question).
 	 */
 	public static final void main(final String[] args) {
 		// create cmdline options

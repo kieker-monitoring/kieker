@@ -56,10 +56,16 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 	private final double utilization;
 
 	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
 	 * @param timestamp
+	 *            The timestamp for the record.
 	 * @param hostname
+	 *            The hostname (the resource belongs to) for the record.
 	 * @param resourceName
+	 *            The name of the resource.
 	 * @param utilization
+	 *            The value of utilization. The value should be in the range <code>[0,1]</code>
 	 */
 	public ResourceUtilizationRecord(final long timestamp, final String hostname, final String resourceName, final double utilization) {
 		this.timestamp = timestamp;

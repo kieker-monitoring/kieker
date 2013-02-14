@@ -22,7 +22,6 @@ package kieker.tools.traceAnalysis.filter.visualization.graph;
  * @author Holger Knoche
  * 
  */
-
 public class Color {
 
 	/**

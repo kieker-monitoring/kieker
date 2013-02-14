@@ -19,6 +19,7 @@ package kieker.tools.traceAnalysis.filter.traceReconstruction;
 import kieker.analysis.exception.EventProcessingException;
 
 /**
+ * This exceptions shows that something went wrong during the processing of a trace.
  * 
  * @author Andre van Hoorn
  */

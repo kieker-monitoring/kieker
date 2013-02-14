@@ -17,6 +17,8 @@
 package kieker.tools.traceAnalysis.systemModel;
 
 /**
+ * This is the abstract base for a trace (like a message trace e.g.).
+ * 
  * @author Andre van Hoorn
  */
 public abstract class AbstractTrace {
@@ -25,6 +27,9 @@ public abstract class AbstractTrace {
 
 	private final TraceInformation traceInformation;
 
+	/**
+	 * Default constructor.
+	 */
 	protected AbstractTrace() {
 		this(-1, NO_TRACE_ID);
 	}
@@ -51,7 +56,9 @@ public abstract class AbstractTrace {
 	}
 
 	/**
-	 * @return the sessionId
+	 * Delivers the ID of the session.
+	 * 
+	 * @return The session ID.
 	 */
 	public String getSessionId() {
 		return this.traceInformation.getSessionId();
@@ -62,7 +69,7 @@ public abstract class AbstractTrace {
 	 */
 	@Override
 	public int hashCode() {
-		/* On purpose, we are not considering the sessionId here */
+		// On purpose, we are not considering the sessionId here
 		return (int) (this.getTraceId() ^ (this.getTraceId() >>> 32));
 	}
 

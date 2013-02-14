@@ -26,6 +26,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 /**
+ * This is a utility class which can be used to convert timestamps, for example by transforming a simple timestamp into a human-readable datetime string.
  * 
  * @author Andre van Hoorn
  */
@@ -35,6 +36,9 @@ public final class LoggingTimestampConverter {
 	private static final String DATE_FORMAT_PATTERN = "yyyyMMdd'-'HHmmss";
 	private static final String DATE_FORMAT_PATTERN2 = "EEE, d MMM yyyy HH:mm:ss Z";
 
+	/**
+	 * Private constructor to avoid instantiation.
+	 */
 	private LoggingTimestampConverter() {}
 
 	/**
@@ -46,6 +50,7 @@ public final class LoggingTimestampConverter {
 	 * using the convertDatetimeStringToUTCLoggingTimestamp(..) method.
 	 * 
 	 * @param loggingTimestamp
+	 *            The timestamp to be converted.
 	 * @return a human-readable datetime string (UTC timezone) which represents the passed timestamp
 	 */
 	public static final String convertLoggingTimestampToUTCString(final long loggingTimestamp) {
@@ -65,6 +70,7 @@ public final class LoggingTimestampConverter {
 	 * using the convertDatetimeStringToUTCLoggingTimestamp(..) method.
 	 * 
 	 * @param loggingTimestamp
+	 *            The timestamp to be converted.
 	 * @return a human-readable datetime string (local timezone) which represents the passed timestamp
 	 */
 	public static final String convertLoggingTimestampLocalTimeZoneString(final long loggingTimestamp) {
@@ -80,8 +86,10 @@ public final class LoggingTimestampConverter {
 	 * since Jan 1, 1970 UTC.
 	 * 
 	 * @param utcString
+	 *            The string to be converted.
 	 * @return a timestamp which represents the passed time
 	 * @throws ParseException
+	 *             If the specified string cannot be parsed.
 	 */
 	public static final long convertDatetimeStringToUTCLoggingTimestamp(final String utcString) throws ParseException {
 		final DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_PATTERN, Locale.US);
@@ -94,8 +102,10 @@ public final class LoggingTimestampConverter {
 	 * into a Date object.
 	 * 
 	 * @param utcString
+	 *            The string to be converted.
 	 * @return a Date object which represents the passed time
 	 * @throws ParseException
+	 *             If the specified string cannot be parsed.
 	 */
 	public static final Date convertDatetimeStringToUTCDate(final String utcString) throws ParseException {
 		final DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_PATTERN, Locale.US);

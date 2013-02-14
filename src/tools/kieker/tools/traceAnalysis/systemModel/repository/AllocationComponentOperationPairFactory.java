@@ -69,8 +69,10 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubRe
 	}
 
 	/**
-	 * Returns the instance for the passed ID; null if no instance
-	 * with this ID.
+	 * Returns the instance for the passed ID; null if no instance with this ID is available.
+	 * 
+	 * @param id
+	 *            The ID of the instance in question.
 	 */
 	public final AllocationComponentOperationPair getPairById(final int id) {
 		return this.pairsById.get(id);

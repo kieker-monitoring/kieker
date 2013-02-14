@@ -23,8 +23,10 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPol
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 
 /**
+ * This is an abstract base for a single node within an aggregated call tree.
  * 
  * @param <T>
+ *            The type of the entity to be stored in this node.
  * 
  * @author Andre van Hoorn
  */

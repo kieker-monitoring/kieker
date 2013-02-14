@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
+ * This class represents the type of a component within the trace analysis tool.
  * 
  * @author Andre van Hoorn
  */
@@ -30,12 +31,30 @@ public class ComponentType {
 	private final String typeName;
 	private final Collection<Operation> operations = Collections.synchronizedList(new ArrayList<Operation>());
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param id
+	 *            The ID of the component type.
+	 * @param packageName
+	 *            The package name.
+	 * @param typeName
+	 *            The type name.
+	 */
 	public ComponentType(final int id, final String packageName, final String typeName) {
 		this.id = id;
 		this.packageName = packageName;
 		this.typeName = typeName;
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param id
+	 *            The ID of the component type.
+	 * @param fullqualifiedTypeName
+	 *            The fully qualified name of the type, separated with '.'.
+	 */
 	public ComponentType(final int id, final String fullqualifiedTypeName) {
 		this.id = id;
 		String tmpPackagName;
@@ -58,6 +77,11 @@ public class ComponentType {
 		this.typeName = tmpTypeName;
 	}
 
+	/**
+	 * Delivers the ID of the component type.
+	 * 
+	 * @return The ID.
+	 */
 	public final int getId() {
 		return this.id;
 	}

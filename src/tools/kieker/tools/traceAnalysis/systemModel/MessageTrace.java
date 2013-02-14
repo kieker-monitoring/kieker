@@ -20,21 +20,46 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * This class is a container for a whole trace of messages (represented as actual instances of {@link AbstractMessage}).
+ * 
  * @author Andre van Hoorn
  */
 public class MessageTrace extends AbstractTrace {
 
 	private final List<AbstractMessage> messages;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param traceId
+	 *            The ID for this trace.
+	 * @param seq
+	 *            The list of messages this trace consists of.
+	 */
 	public MessageTrace(final long traceId, final List<AbstractMessage> seq) {
 		this(traceId, AbstractTrace.NO_TRACE_ID, seq);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param traceId
+	 *            The ID for this trace.
+	 * @param sessionId
+	 *            The ID of the current session.
+	 * @param seq
+	 *            The list of messages this trace consists of.
+	 */
 	public MessageTrace(final long traceId, final String sessionId, final List<AbstractMessage> seq) {
 		super(traceId, sessionId);
 		this.messages = seq;
 	}
 
+	/**
+	 * Delivers the sequence stored in this message trace as a vector (a list).
+	 * 
+	 * @return A list containing the whole trace.
+	 */
 	public final List<AbstractMessage> getSequenceAsVector() {
 		return this.messages;
 	}

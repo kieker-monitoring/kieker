@@ -20,29 +20,56 @@ import kieker.common.util.Signature;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
 
 /**
+ * This class represents an operation within the trace analysis tool. It consists of the component type and a signature.
  * 
  * @author Andre van Hoorn
  */
 public class Operation {
+
 	public static final int ROOT_OPERATION_ID = AbstractSystemSubRepository.ROOT_ELEMENT_ID;
 	private final int id;
 	private final ComponentType componentType;
 	private final Signature signature;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param id
+	 *            The ID of this operation.
+	 * @param componentType
+	 *            The type of the component of this operation.
+	 * @param signature
+	 *            The signature of this operation.
+	 */
 	public Operation(final int id, final ComponentType componentType, final Signature signature) {
 		this.id = id;
 		this.componentType = componentType;
 		this.signature = signature;
 	}
 
+	/**
+	 * Delivers the ID of the operation.
+	 * 
+	 * @return The ID.
+	 */
 	public final int getId() {
 		return this.id;
 	}
 
+	/**
+	 * Delivers the component type of the operation.
+	 * 
+	 * @return The component type.
+	 */
 	public final ComponentType getComponentType() {
 		return this.componentType;
 	}
 
+	/**
+	 * Delivers the signature of the operation.
+	 * 
+	 * @return The signature.
+	 */
 	public final Signature getSignature() {
 		return this.signature;
 	}
@@ -51,9 +78,9 @@ public class Operation {
 	 * Two Operation objects are equal if their ids are equal.
 	 * 
 	 * @param obj
+	 *            The object to be compared for equality with this
 	 * @return true if the two objects are equal.
 	 */
-
 	@Override
 	public boolean equals(final Object obj) {
 		if (!(obj instanceof Operation)) {

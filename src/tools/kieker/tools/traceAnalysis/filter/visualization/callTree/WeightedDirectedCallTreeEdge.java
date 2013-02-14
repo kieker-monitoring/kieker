@@ -21,8 +21,10 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPol
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 
 /**
+ * This class represents a weighted and directed edge within a call tree.
  * 
  * @param <T>
+ *            The type of the entity to be stored in the nodes linked by this edge.
  * 
  * @author Andre van Hoorn
  */

@@ -26,8 +26,10 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPol
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 
 /**
+ * This is an abstract base for a single node within a call tree.
  * 
  * @param <T>
+ *            The type of the entity to be stored in the node.
  * 
  * @author Andre van Hoorn
  */
@@ -47,10 +49,20 @@ public abstract class AbstractCallTreeNode<T> extends AbstractVertex<AbstractCal
 		this.entity = entity;
 	}
 
+	/**
+	 * Delivers the stored entity.
+	 * 
+	 * @return The content of this node.
+	 */
 	public final T getEntity() {
 		return this.entity;
 	}
 
+	/**
+	 * Delivers the child edges.
+	 * 
+	 * @return A collection containing the child edges.
+	 */
 	public final Collection<WeightedDirectedCallTreeEdge<T>> getChildEdges() {
 		return this.childEdges;
 	}
@@ -67,6 +79,11 @@ public abstract class AbstractCallTreeNode<T> extends AbstractVertex<AbstractCal
 		return this.id;
 	}
 
+	/**
+	 * Tells whether the current node is a root node.
+	 * 
+	 * @return true if and only if the current node has to be interpreted as a root node.
+	 */
 	public final boolean isRootNode() {
 		return this.rootNode;
 	}

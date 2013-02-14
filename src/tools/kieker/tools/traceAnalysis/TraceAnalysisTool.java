@@ -129,8 +129,18 @@ public final class TraceAnalysisTool {
 
 	private static final String ENCODING = "UTF-8";
 
+	/**
+	 * Private constructor to avoid instantiation. An object of this class should not be created.
+	 */
 	private TraceAnalysisTool() {}
 
+	/**
+	 * This method parses the given command line arguments and stores them in the class field.
+	 * 
+	 * @param args
+	 *            The command line arguments-
+	 * @return true if and only if the arguments have been parsed succesfully.
+	 */
 	private static boolean parseArgs(final String[] args) {
 		try {
 			TraceAnalysisTool.cmdl = CMDL_PARSER.parse(Constants.CMDL_OPTIONS, args);
@@ -142,10 +152,18 @@ public final class TraceAnalysisTool {
 		return true;
 	}
 
+	/**
+	 * This method prints some information to show the user how to use this tool.
+	 */
 	private static void printUsage() {
 		Constants.CMD_HELP_FORMATTER.printHelp(80, TraceAnalysisTool.class.getName(), "", Constants.CMDL_OPTIONS, "", true);
 	}
 
+	/**
+	 * This method uses the (already parsed and stored) command line arguments to initialize the tool.
+	 * 
+	 * @return true if and only if the tool has been initialized correctly.
+	 */
 	private static boolean initFromArgs() {
 		TraceAnalysisTool.inputDirs = TraceAnalysisTool.cmdl.getOptionValues(Constants.CMD_OPT_NAME_INPUTDIRS);
 
@@ -210,6 +228,9 @@ public final class TraceAnalysisTool {
 		return true;
 	}
 
+	/**
+	 * This method dumps the configuration on the screen.
+	 */
 	private static void dumpConfiguration() {
 		System.out.println("#"); // NOPMD (System.out)
 		System.out.println("# Configuration"); // NOPMD (System.out)
@@ -1020,6 +1041,12 @@ public final class TraceAnalysisTool {
 		return true;
 	}
 
+	/**
+	 * This is the main method of the tool.
+	 * 
+	 * @param args
+	 *            The command line arguments.
+	 */
 	public static void main(final String[] args) {
 		try {
 			if (!TraceAnalysisTool.parseArgs(args) || !TraceAnalysisTool.initFromArgs()

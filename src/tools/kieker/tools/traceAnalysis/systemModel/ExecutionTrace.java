@@ -30,6 +30,8 @@ import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceExcepti
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
+ * This class is a container for a whole trace of executions (represented as instances of {@link Execution}).
+ * 
  * @author Andre van Hoorn
  */
 public class ExecutionTrace extends AbstractTrace {
@@ -43,10 +45,24 @@ public class ExecutionTrace extends AbstractTrace {
 	private int maxEss = -1;
 	private final SortedSet<Execution> set = new TreeSet<Execution>(ExecutionTrace.createExecutionTraceComparator());
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param traceId
+	 *            The ID of this trace.
+	 */
 	public ExecutionTrace(final long traceId) {
 		super(traceId);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param traceId
+	 *            The ID of this trace.
+	 * @param sessionId
+	 *            The ID of the current session.
+	 */
 	public ExecutionTrace(final long traceId, final String sessionId) {
 		super(traceId, sessionId);
 	}
@@ -55,9 +71,10 @@ public class ExecutionTrace extends AbstractTrace {
 	 * Adds an execution to the trace.
 	 * 
 	 * @param execution
+	 *            The execution object which will be added to this trace.
+	 * 
 	 * @throws InvalidTraceException
-	 *             if the traceId of the passed Execution
-	 *             object is not the same as the traceId of this ExecutionTrace object.
+	 *             If the traceId of the passed Execution object is not the same as the traceId of this ExecutionTrace object.
 	 */
 	public void add(final Execution execution) throws InvalidTraceException {
 		synchronized (this) {
@@ -80,17 +97,24 @@ public class ExecutionTrace extends AbstractTrace {
 				this.maxEss = execution.getEss();
 			}
 			this.set.add(execution);
-			/* Invalidate the current message trace representation */
+			// Invalidate the current message trace representation
 			this.messageTrace.set(null);
 		}
 	}
 
 	/**
-	 * Returns the message trace representation for this trace.
+	 * Returns the message trace representation for this trace.<br/>
 	 * 
-	 * The transformation to a message trace is only computed during the
-	 * first execution of this method. After this, the stored reference
-	 * is returned --- unless executions are added to the trace afterwards.
+	 * The transformation to a message trace is only computed during the first execution of this method. After this, the stored reference is returned --- unless
+	 * executions are added to the trace afterwards.
+	 * 
+	 * @param rootExecution
+	 *            The root execution object.
+	 * 
+	 * @return The resulting message trace.
+	 * 
+	 * @throws InvalidTraceException
+	 *             If the given execution is somehow inconsistent or invalid.
 	 */
 	public MessageTrace toMessageTrace(final Execution rootExecution) throws InvalidTraceException {
 		synchronized (this) {
@@ -296,14 +320,13 @@ public class ExecutionTrace extends AbstractTrace {
 	}
 
 	/**
-	 * Returns whether this Execution Trace and the passed Object are equal.
-	 * Two execution traces are equal if the set of contained executions is
-	 * equal.
+	 * Returns whether this Execution Trace and the passed Object are equal. Two execution traces are equal if the set of contained executions is equal.
 	 * 
 	 * @param obj
-	 * @return true if the two objects are equal.
+	 *            The object to be compared for equality with this.
+	 * 
+	 * @return true if and only if the two objects are equal.
 	 */
-
 	@Override
 	public boolean equals(final Object obj) {
 		synchronized (this) {

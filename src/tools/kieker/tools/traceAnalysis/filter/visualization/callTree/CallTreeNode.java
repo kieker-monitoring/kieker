@@ -25,6 +25,8 @@ import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 
 /**
+ * This class represents a single node within the call tree.
+ * 
  * @author Andre van Hoorn
  */
 public class CallTreeNode {
@@ -33,6 +35,14 @@ public class CallTreeNode {
 	private final List<CallTreeNode> children = Collections.synchronizedList(new ArrayList<CallTreeNode>());
 	private final CallTreeOperationHashKey opInfo;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param parent
+	 *            The parent of this node. If this is null, the node will be interpreted as a root node.
+	 * @param opInfo
+	 *            The info to be stored in this node.
+	 */
 	public CallTreeNode(final CallTreeNode parent, final CallTreeOperationHashKey opInfo) {
 		this.parent = parent;
 		if (opInfo == null) {
@@ -41,6 +51,11 @@ public class CallTreeNode {
 		this.opInfo = opInfo;
 	}
 
+	/**
+	 * Delivers a collection containing the child nodes.
+	 * 
+	 * @return The children of this node.
+	 */
 	public final Collection<CallTreeNode> getChildren() {
 		return this.children;
 	}
@@ -54,8 +69,7 @@ public class CallTreeNode {
 	}
 
 	/**
-	 * Returns the child node with given operation, name, and vmName.
-	 * The node is created if it doesn't exist.
+	 * Returns the child node with given operation, name, and vmName. The node is created if it doesn't exist.
 	 */
 	public final CallTreeNode getChild(final AllocationComponent allocationComponent, final Operation operation) {
 		final CallTreeOperationHashKey k = new CallTreeOperationHashKey(allocationComponent, operation);
@@ -80,10 +94,20 @@ public class CallTreeNode {
 		return this.opInfo.getOperation();
 	}
 
+	/**
+	 * Delivers the parent of this node.
+	 * 
+	 * @return The parent.
+	 */
 	public final CallTreeNode getParent() {
 		return this.parent;
 	}
 
+	/**
+	 * Tells whether the current node is the root or not.
+	 * 
+	 * @return true if and only if this node should be interpreted as a root.
+	 */
 	public final boolean isRootNode() {
 		return this.parent == null;
 	}

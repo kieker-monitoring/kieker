@@ -29,7 +29,6 @@ import org.apache.commons.cli.Options;
  * Externalized Strings from {@link TraceAnalysisTool}.
  * 
  * @author Robert von Massow
- * 
  */
 @SuppressWarnings("static-access")
 public final class Constants {
@@ -198,6 +197,9 @@ public final class Constants {
 		});
 	}
 
+	/**
+	 * Private constructor to avoid instantiation.
+	 */
 	private Constants() {}
 
 	public static String stringArrToStringList(final String[] strs) {

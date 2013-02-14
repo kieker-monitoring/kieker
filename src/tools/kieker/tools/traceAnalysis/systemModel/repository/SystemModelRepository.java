@@ -34,6 +34,7 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 
 /**
+ * This repository is a model manager for the Kieker's component model.
  * 
  * @author Andre van Hoorn
  */

@@ -63,7 +63,7 @@ public class AggregatedAssemblyComponentOperationCallTreeFilter extends Abstract
 	 * @param configuration
 	 *            The configuration for this component.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public AggregatedAssemblyComponentOperationCallTreeFilter(final Configuration configuration) {

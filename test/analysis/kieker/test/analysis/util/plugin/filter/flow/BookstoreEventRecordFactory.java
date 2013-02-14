@@ -369,6 +369,10 @@ public final class BookstoreEventRecordFactory {
 	 * @param firstTimestamp
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
 	 * @param traceId
+	 *            The ID of the trace.
+	 * @param hostname
+	 *            The name of the host for the trace.
+	 * 
 	 * @return
 	 */
 	public static TraceEventRecords validSyncTraceSimpleEntryCallReturnCallCallExit(final long firstTimestamp, final long traceId, final String sessionId,
@@ -432,6 +436,10 @@ public final class BookstoreEventRecordFactory {
 	 * @param firstTimestamp
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
 	 * @param traceId
+	 *            The ID of the trace.
+	 * @param hostname
+	 *            The name of the host for the trace.
+	 * 
 	 * @return
 	 */
 	public static TraceEventRecords validSyncTraceSimpleEntryCallCallExit(final long firstTimestamp, final long traceId, final String sessionId,

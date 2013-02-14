@@ -40,8 +40,8 @@ import org.w3c.dom.Document;
 
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
-import com.mxgraph.swing.handler.mxRubberband;
 import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.swing.handler.mxRubberband;
 import com.mxgraph.util.mxCellRenderer;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxPoint;
@@ -332,7 +332,7 @@ public final class KaxViz extends JFrame {
 	 * Starts the Visualization of a .kax file.
 	 * 
 	 * @param args
-	 *            the name of the .kax file
+	 *            The command line arguments (including the name of the .kax file in question).
 	 */
 	public static final void main(final String[] args) {
 		// create cmdline options

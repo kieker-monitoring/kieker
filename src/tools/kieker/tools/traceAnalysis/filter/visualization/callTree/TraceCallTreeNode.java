@@ -21,6 +21,7 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationPair;
 
 /**
+ * This class represents a single node within the trace call tree.
  * 
  * @author Andre van Hoorn
  */
