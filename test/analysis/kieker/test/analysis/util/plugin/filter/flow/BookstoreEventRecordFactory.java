@@ -55,6 +55,9 @@ public final class BookstoreEventRecordFactory {
 	 * @param firstTimestamp
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
 	 * @param traceId
+	 *            The id of the trace.
+	 * @param hostname
+	 *            The name of the host to be used for the trace.
 	 * @return
 	 */
 	public static TraceEventRecords validSyncTraceBeforeAfterEvents(final long firstTimestamp, final long traceId, final String sessionId,

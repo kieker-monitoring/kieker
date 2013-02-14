@@ -36,6 +36,13 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubRe
 	private final Map<String, AllocationComponentOperationPair> pairsByName = new Hashtable<String, AllocationComponentOperationPair>(); // NOPMD
 	private final Map<Integer, AllocationComponentOperationPair> pairsById = new Hashtable<Integer, AllocationComponentOperationPair>(); // NOPMD
 
+	/**
+	 * 
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param systemFactory
+	 *            The repository for this component.
+	 */
 	public AllocationComponentOperationPairFactory(final SystemModelRepository systemFactory) {
 		super(systemFactory);
 	}

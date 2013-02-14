@@ -57,7 +57,7 @@ public class GraphReceiverPlugin extends ListCollectionFilter<AbstractGraph<?, ?
 	 * @param configuration
 	 *            The configuration to use
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public GraphReceiverPlugin(final Configuration configuration) {
@@ -77,6 +77,9 @@ public class GraphReceiverPlugin extends ListCollectionFilter<AbstractGraph<?, ?
 	 * Returns the first received graph, if any.
 	 * 
 	 * @return See above
+	 * 
+	 * @param <T>
+	 *            The type of the graph.
 	 */
 	public <T extends AbstractGraph<?, ?, ?>> T getFirstGraph() {
 		return this.<T> getGraphAt(0); // NOCS Explicit bound is required to work around a possible javac bug
@@ -88,6 +91,9 @@ public class GraphReceiverPlugin extends ListCollectionFilter<AbstractGraph<?, ?
 	 * @param index
 	 *            The (zero-based) index of the desired graph
 	 * @return See above
+	 * 
+	 * @param <T>
+	 *            The type of the graph.
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends AbstractGraph<?, ?, ?>> T getGraphAt(final int index) {

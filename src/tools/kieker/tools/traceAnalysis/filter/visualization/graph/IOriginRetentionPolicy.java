@@ -68,6 +68,9 @@ public interface IOriginRetentionPolicy {
 	 *            The graph element to handle the origin for
 	 * @param origin
 	 *            The origin to handle
+	 * 
+	 * @param <T>
+	 *            The type of the entity within the graph element.
 	 */
 	public <T> void handleOrigin(AbstractGraphElement<T> element, T origin);
 

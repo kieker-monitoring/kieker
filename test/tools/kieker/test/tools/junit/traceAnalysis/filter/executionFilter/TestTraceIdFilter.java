@@ -57,6 +57,8 @@ public class TestTraceIdFilter extends AbstractKiekerTest { // NOCS
 	 * 
 	 * @param ignoreExecutionsBeforeTimestamp
 	 * @param ignoreExecutionsAfterTimestamp
+	 * @param analysisController
+	 *            The analysis controller which will be used to register this component.
 	 * @return
 	 */
 	private static TraceIdFilter createTraceIdFilter(final Set<Long> selectedTraces, final IAnalysisController analysisController) {

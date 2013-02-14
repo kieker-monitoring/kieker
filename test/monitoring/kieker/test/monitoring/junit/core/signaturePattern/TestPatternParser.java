@@ -36,6 +36,9 @@ import kieker.test.monitoring.util.signaturePattern.SignatureConstructor;
  */
 public class TestPatternParser extends AbstractKiekerTest {
 
+	/**
+	 * Default constructor.
+	 */
 	public TestPatternParser() {
 		// empty default constructor
 	}

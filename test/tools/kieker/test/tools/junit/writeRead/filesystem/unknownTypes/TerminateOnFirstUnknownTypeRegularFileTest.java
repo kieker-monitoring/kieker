@@ -52,6 +52,9 @@ public class TerminateOnFirstUnknownTypeRegularFileTest extends AbstractUnknownT
 
 	/**
 	 * Here, we make sure that the reader aborts on the first occurrence of an unknown type.
+	 * 
+	 * @param config
+	 *            The configuration to modify.
 	 */
 	@Override
 	protected void refineFSReaderConfiguration(final Configuration config) {

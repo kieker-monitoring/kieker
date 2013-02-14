@@ -36,6 +36,7 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	 * 
 	 * @param IWriterController
 	 * @param configuration
+	 *            The configuration for this component.
 	 */
 	protected AbstractMonitoringWriter(final Configuration configuration) {
 		try {

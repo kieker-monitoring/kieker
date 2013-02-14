@@ -302,6 +302,9 @@ public final class TraceAnalysisTool {
 	 *             If the connection of the plugins is not possible at the moment
 	 * @throws AnalysisConfigurationException
 	 *             If the plugins cannot be connected
+	 * 
+	 * @param <P>
+	 *            The type of the plugin.
 	 */
 	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> void attachGraphWriter(final P plugin,
 			final AbstractGraphProducingFilter<?> producer, final AnalysisController controller) throws IllegalStateException, AnalysisConfigurationException {

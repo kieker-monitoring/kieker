@@ -50,14 +50,16 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 	private final ExecutionFactory eFactory = new ExecutionFactory(this.systemEntityFactory);
 
 	/**
-	 * Creates a {@link TimestampFilter} with the given properties
-	 * using the constructor {@link TimestampFilter#TimestampFilter(kieker.common.configuration.Configuration, java.util.Map)}.
+	 * Creates a {@link TimestampFilter} with the given properties using the constructor
+	 * {@link TimestampFilter#TimestampFilter(kieker.common.configuration.Configuration, java.util.Map)}.
 	 * 
 	 * @param ignoreExecutionsBeforeTimestamp
 	 *            The lower limit for the timestamps.
 	 * @param ignoreExecutionsAfterTimestamp
 	 *            The upper limit for the timestamps.
-	 * @return
+	 * @param analysisController
+	 *            The analysis controller which will be used to register this component.
+	 * @return A suitable instance of {@link TimestampFilter}.
 	 */
 	private static TimestampFilter createTimestampFilter(final long ignoreExecutionsBeforeTimestamp, final long ignoreExecutionsAfterTimestamp,
 			final IAnalysisController analysisController) {

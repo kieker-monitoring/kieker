@@ -38,6 +38,9 @@ public class SkipBrokenRecordsRegularFileTest extends ContinueAfterUnknownTypeRe
 	/**
 	 * Here, we make sure that the reader aborts on the first occurrence of an unknown type
 	 * (a case which does not occur in this test).
+	 * 
+	 * @param config
+	 *            The configuration to modify.
 	 */
 	@Override
 	protected void refineFSReaderConfiguration(final Configuration config) {
