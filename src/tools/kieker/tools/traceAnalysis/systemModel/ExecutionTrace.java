@@ -349,6 +349,8 @@ public class ExecutionTrace extends AbstractTrace {
 	/**
 	 * Returns an instance of the {@link Comparator} used by the internal {@link TreeSet} to
 	 * compare {@link Execution}s.
+	 * 
+	 * @return A comparator instance to compare execution objects.
 	 */
 	public static final Comparator<Execution> createExecutionTraceComparator() {
 		return new Comparator<Execution>() {
@@ -356,6 +358,13 @@ public class ExecutionTrace extends AbstractTrace {
 			/**
 			 * Note that this method is not only used by {@link ExecutionTrace#add(Execution)} but also by {@link TreeSet#equals(Object)} utilized in
 			 * {@link ExecutionTrace#equals(Object)}.
+			 * 
+			 * @param e1
+			 *            The first execution object.
+			 * @param e2
+			 *            The second execution object.
+			 * 
+			 * @return -1 if e1 < e2, 1 if e1 > e2, 0 otherwise.
 			 */
 			public int compare(final Execution e1, final Execution e2) {
 				/*

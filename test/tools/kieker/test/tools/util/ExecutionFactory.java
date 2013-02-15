@@ -28,6 +28,7 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
+ * This factory class can be used to create artificial executions.
  * 
  * @author Andre van Hoorn
  */
@@ -36,16 +37,51 @@ public class ExecutionFactory {
 	private static final String DEFAULT_STRING = "N/A";
 	private final SystemModelRepository systemEntityFactory;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param systemEntityFactory
+	 *            The system model repository.
+	 */
 	public ExecutionFactory(final SystemModelRepository systemEntityFactory) {
 		this.systemEntityFactory = systemEntityFactory;
 	}
 
-	public Execution genExecution(
-			final String componentTypeName, final String componentInstanceName, final String executionContainerName,
-			final String operationName, final String[] modifierList, final String returnType, final String[] paramTypeList,
-			final long traceId,
-			final String sessionId,
-			final long tin, final long tout, final int eoi, final int ess) {
+	/**
+	 * Creates an execution object with the given parameters.
+	 * 
+	 * @param componentTypeName
+	 *            The type name of the component.
+	 * @param componentInstanceName
+	 *            The instance name of the component.
+	 * @param executionContainerName
+	 *            The name of the execution container.
+	 * @param operationName
+	 *            The name of the operation.
+	 * @param modifierList
+	 *            The modifier list for the operation.
+	 * @param returnType
+	 *            The return type of the operation.
+	 * @param paramTypeList
+	 *            The list of parameter types of the operation.
+	 * @param traceId
+	 *            The trace ID.
+	 * @param sessionId
+	 *            The session ID.
+	 * @param tin
+	 *            The time the execution started.
+	 * @param tout
+	 *            The time the execution finished.
+	 * @param eoi
+	 *            The execution order index.
+	 * @param ess
+	 *            The execution stack size.
+	 * 
+	 * @return An artificial execution.
+	 */
+	public Execution genExecution(final String componentTypeName, final String componentInstanceName, final String executionContainerName,
+			final String operationName, final String[] modifierList, final String returnType, final String[] paramTypeList, final long traceId,
+			final String sessionId, final long tin, final long tout, final int eoi, final int ess) {
 		if ((componentTypeName == null) || (componentInstanceName == null) || (operationName == null)) {
 			throw new NullPointerException("None of the String args must be null.");
 		}
@@ -96,39 +132,67 @@ public class ExecutionFactory {
 	}
 
 	/**
-	 * Creates an Execution object initialized with the passed values.
-	 * The remaining values of the Execution object are assigned default
-	 * values.
+	 * Creates an Execution object initialized with the passed values. The remaining values of the Execution object are assigned default values.
 	 * 
 	 * @param componentTypeName
+	 *            The type name of the component in question.
 	 * @param componentInstanceName
+	 *            The instance name of the component in question.
 	 * @param operationName
+	 *            The name of the operation.
 	 * @param traceId
+	 *            The trace ID.
+	 * @param sessionId
+	 *            The session ID.
 	 * @param tin
+	 *            The time the execution started.
 	 * @param tout
+	 *            The time the execution finished.
 	 * @param eoi
+	 *            The execution order index.
 	 * @param ess
-	 * @throws NullPointerException
-	 *             if one of the String args has the value null.
-	 * @return the created Execution object
+	 *            The execution stack size.
+	 * 
+	 * @return The created Execution object
 	 */
 	public Execution genExecution(final String componentTypeName, final String componentInstanceName, final String operationName, final long traceId,
-			final String sessionId,
-			final long tin, final long tout, final int eoi, final int ess) {
+			final String sessionId, final long tin, final long tout, final int eoi, final int ess) {
 		return this.genExecution(componentTypeName, componentInstanceName, ExecutionFactory.DEFAULT_STRING, // hostname
 				operationName, new String[] { ExecutionFactory.DEFAULT_STRING }, ExecutionFactory.DEFAULT_STRING, new String[] { ExecutionFactory.DEFAULT_STRING },
 				traceId, sessionId, tin, tout,
 				eoi, ess);
 	}
 
+	/**
+	 * Creates an Execution object initialized with the passed values. The remaining values of the Execution object are assigned default values.
+	 * 
+	 * @param componentTypeName
+	 *            The type name of the component in question.
+	 * @param componentInstanceName
+	 *            The instance name of the component in question.
+	 * @param hostName
+	 *            The name of the host.
+	 * @param operationName
+	 *            The name of the operation.
+	 * @param traceId
+	 *            The trace ID.
+	 * @param sessionId
+	 *            The session ID.
+	 * @param tin
+	 *            The time the execution started.
+	 * @param tout
+	 *            The time the execution finished.
+	 * @param eoi
+	 *            The execution order index.
+	 * @param ess
+	 *            The execution stack size.
+	 * 
+	 * @return The created Execution object
+	 */
 	public Execution genExecution(final String componentTypeName, final String componentInstanceName, final String hostName, final String operationName,
-			final long traceId,
-			final String sessionId,
-			final long tin, final long tout, final int eoi, final int ess) {
-		return this.genExecution(componentTypeName, componentInstanceName, hostName,
-				operationName, new String[] { ExecutionFactory.DEFAULT_STRING }, ExecutionFactory.DEFAULT_STRING, new String[] { ExecutionFactory.DEFAULT_STRING },
-				traceId, sessionId, tin, tout,
-				eoi, ess);
+			final long traceId, final String sessionId, final long tin, final long tout, final int eoi, final int ess) {
+		return this.genExecution(componentTypeName, componentInstanceName, hostName, operationName, new String[] { ExecutionFactory.DEFAULT_STRING },
+				ExecutionFactory.DEFAULT_STRING, new String[] { ExecutionFactory.DEFAULT_STRING }, traceId, sessionId, tin, tout, eoi, ess);
 	}
 
 	/**
@@ -137,11 +201,19 @@ public class ExecutionFactory {
 	 * values.
 	 * 
 	 * @param traceId
+	 *            The trace ID.
+	 * @param sessionId
+	 *            The session ID.
 	 * @param tin
+	 *            The time the execution started.
 	 * @param tout
+	 *            The time the execution finished.
 	 * @param eoi
+	 *            The execution order index.
 	 * @param ess
-	 * @return the created Execution object
+	 *            The execution stack size.
+	 * 
+	 * @return The created Execution object
 	 */
 	public Execution genExecution(final long traceId, final String sessionId, final long tin, final long tout, final int eoi, final int ess) {
 		return this.genExecution(ExecutionFactory.DEFAULT_STRING, // component type

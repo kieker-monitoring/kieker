@@ -25,6 +25,7 @@ import kieker.tools.traceAnalysis.systemModel.ComponentType;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 
 /**
+ * This is a repository in which the available operations ({@link Operation}) can be stored.
  * 
  * @author Andre van Hoorn
  */
@@ -36,6 +37,12 @@ public class OperationRepository extends AbstractSystemSubRepository {
 	private final Map<String, Operation> operationsByName = new Hashtable<String, Operation>(); // NOPMD (UseConcurrentHashMap)
 	private final Map<Integer, Operation> operationsById = new Hashtable<Integer, Operation>(); // NOPMD (UseConcurrentHashMap)
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param systemFactory
+	 *            The system factory.
+	 */
 	public OperationRepository(final SystemModelRepository systemFactory) {
 		super(systemFactory);
 	}
@@ -59,6 +66,11 @@ public class OperationRepository extends AbstractSystemSubRepository {
 		return newInst;
 	}
 
+	/**
+	 * Delivers a collection containing all available operations.
+	 * 
+	 * @return The already stored operations.
+	 */
 	public final Collection<Operation> getOperations() {
 		return this.operationsById.values();
 	}

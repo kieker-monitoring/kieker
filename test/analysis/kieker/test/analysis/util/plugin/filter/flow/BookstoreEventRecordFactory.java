@@ -318,6 +318,8 @@ public final class BookstoreEventRecordFactory {
 	 * @param firstTimestamp
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
 	 * @param traceId
+	 *            The ID of the trace.
+	 * 
 	 * @return
 	 */
 	public static TraceEventRecords validSyncTraceSimpleEntryCallExit(final long firstTimestamp, final long traceId, final String sessionId,

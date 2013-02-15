@@ -38,8 +38,13 @@ public abstract class AbstractGraphFormatter<G extends AbstractGraph<?, ?, ?>> {
 	 * 
 	 * @param graph
 	 *            The graph to format
-	 * @param configuration
-	 *            The configuration to use for formatting
+	 * @param includeWeights
+	 *            Determines whether to include weights or not.
+	 * @param useShortLabels
+	 *            Determines whether to use short labels or not.
+	 * @param plotLoops
+	 *            Determines whether to plot loops or not.
+	 * 
 	 * @return A formatted representation of the graph
 	 */
 	@SuppressWarnings("unchecked")
@@ -53,8 +58,13 @@ public abstract class AbstractGraphFormatter<G extends AbstractGraph<?, ?, ?>> {
 	 * 
 	 * @param graph
 	 *            The input graph to format
-	 * @param configuration
-	 *            The configuration to use for formatting
+	 * @param includeWeights
+	 *            Determines whether to include weights or not.
+	 * @param useShortLabels
+	 *            Determines whether to use short labels or not.
+	 * @param plotLoops
+	 *            Determines whether to plot loops or not.
+	 * 
 	 * @return A textual specification of the input graph
 	 */
 	protected abstract String formatGraph(G graph, final boolean includeWeights, final boolean useShortLabels, final boolean plotLoops);

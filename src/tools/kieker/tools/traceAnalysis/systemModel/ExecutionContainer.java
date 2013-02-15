@@ -21,7 +21,6 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
- * 
  * @author Andre van Hoorn
  */
 public class ExecutionContainer implements ISystemModelElement {
@@ -30,28 +29,64 @@ public class ExecutionContainer implements ISystemModelElement {
 	private final ExecutionContainer parent;
 	private final Collection<ExecutionContainer> childContainers = Collections.synchronizedList(new ArrayList<ExecutionContainer>());
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param id
+	 *            The ID of this container.
+	 * @param parent
+	 *            The parent of this container.
+	 * @param name
+	 *            The name of this container.
+	 */
 	public ExecutionContainer(final int id, final ExecutionContainer parent, final String name) {
 		this.id = id;
 		this.name = name;
 		this.parent = parent;
 	}
 
+	/**
+	 * Delivers the ID of the container.
+	 * 
+	 * @return The ID.
+	 */
 	public final int getId() {
 		return this.id;
 	}
 
+	/**
+	 * Delivers the name of the container.
+	 * 
+	 * @return The name.
+	 */
 	public final String getName() {
 		return this.name;
 	}
 
+	/**
+	 * Delivers the parent of the container.
+	 * 
+	 * @return The parent.
+	 */
 	public final ExecutionContainer getParent() {
 		return this.parent;
 	}
 
+	/**
+	 * Delivers a collection containing the added child containers.
+	 * 
+	 * @return The child containers.
+	 */
 	public final Collection<ExecutionContainer> getChildContainers() {
 		return this.childContainers;
 	}
 
+	/**
+	 * This method adds a given container to the list of child containers.
+	 * 
+	 * @param container
+	 *            The new child container.
+	 */
 	public final void addChildContainer(final ExecutionContainer container) {
 		this.childContainers.add(this);
 	}
@@ -79,6 +114,11 @@ public class ExecutionContainer implements ISystemModelElement {
 		return false;
 	}
 
+	/**
+	 * Delivers the identifier (name) of this object.
+	 * 
+	 * @return The identifier.
+	 */
 	public String getIdentifier() {
 		return this.getName();
 	}

@@ -30,8 +30,10 @@ import kieker.tools.traceAnalysis.systemModel.TraceInformation;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
 
 /**
+ * This class represents a single node within a dependency graph.
  * 
  * @param <T>
+ *            The type of the entity to be stored in this node.
  * 
  * @author Andre van Hoorn
  */

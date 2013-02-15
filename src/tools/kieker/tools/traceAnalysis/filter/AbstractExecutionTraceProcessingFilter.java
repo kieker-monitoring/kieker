@@ -23,6 +23,7 @@ import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
+ * This is the abstract base for a filter processing execution traces.
  * 
  * @author Andre van Hoorn
  */

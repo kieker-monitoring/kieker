@@ -119,6 +119,12 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		return configuration;
 	}
 
+	/**
+	 * This method represents the input port, processing incoming trace event records.
+	 * 
+	 * @param traceEventRecords
+	 *            The next trace event record.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_EVENT_TRACE, description = "Receives TraceEvents to be transformed", eventTypes = { TraceEventRecords.class })
 	public void inputTraceEvents(final TraceEventRecords traceEventRecords) {
 		final Trace trace = traceEventRecords.getTrace();

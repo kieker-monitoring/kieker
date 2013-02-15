@@ -36,6 +36,12 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepo
 	private final Map<String, AssemblyComponentOperationPair> pairsByName = new Hashtable<String, AssemblyComponentOperationPair>(); // NOPMD (UseConcurrentHashMap)
 	private final Map<Integer, AssemblyComponentOperationPair> pairsById = new Hashtable<Integer, AssemblyComponentOperationPair>(); // NOPMD (UseConcurrentHashMap)
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param systemFactory
+	 *            The system factory.
+	 */
 	public AssemblyComponentOperationPairFactory(final SystemModelRepository systemFactory) {
 		super(systemFactory);
 	}

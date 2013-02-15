@@ -123,6 +123,12 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 		return extractedEquivalenceMode;
 	}
 
+	/**
+	 * This method represents the input port of this filter, processing incoming execution traces.
+	 * 
+	 * @param et
+	 *            The next execution trace.
+	 */
 	@InputPort(
 			name = INPUT_PORT_NAME_EXECUTION_TRACE,
 			description = "Execution traces",

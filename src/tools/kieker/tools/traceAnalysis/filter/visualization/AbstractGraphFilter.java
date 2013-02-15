@@ -149,6 +149,9 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 		this.deliver(this.getGraphOutputPortName(), processedGraph);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getGraphOutputPortName() {
 		return OUTPUT_PORT_NAME_GRAPH;
 	}

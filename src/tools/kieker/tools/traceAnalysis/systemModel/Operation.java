@@ -26,7 +26,9 @@ import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubReposi
  */
 public class Operation {
 
+	/** The ID for the root operation. */
 	public static final int ROOT_OPERATION_ID = AbstractSystemSubRepository.ROOT_ELEMENT_ID;
+
 	private final int id;
 	private final ComponentType componentType;
 	private final Signature signature;

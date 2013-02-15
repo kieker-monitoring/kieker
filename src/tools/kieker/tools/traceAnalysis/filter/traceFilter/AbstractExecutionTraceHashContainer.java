@@ -19,17 +19,27 @@ package kieker.tools.traceAnalysis.filter.traceFilter;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 
 /**
- * 
  * @author Andre van Hoorn
  */
 abstract class AbstractExecutionTraceHashContainer { // NOPMD (abstract class without abstract methods)
 
 	private final ExecutionTrace executionTrace;
 
+	/**
+	 * Abstract constructor to initialize the container.
+	 * 
+	 * @param t
+	 *            The execution trace to be stored in this container.
+	 */
 	public AbstractExecutionTraceHashContainer(final ExecutionTrace t) {
 		this.executionTrace = t;
 	}
 
+	/**
+	 * Delivers the stored execution trace.
+	 * 
+	 * @return The content of this container.
+	 */
 	public ExecutionTrace getExecutionTrace() {
 		return this.executionTrace;
 	}

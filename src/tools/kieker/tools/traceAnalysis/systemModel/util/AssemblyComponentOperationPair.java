@@ -21,6 +21,7 @@ import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 
 /**
+ * This class represents a pair consisting of an {@link Operation} and an {@link AssemblyComponent}.
  * 
  * @author Andre van Hoorn
  */

@@ -23,6 +23,7 @@ package kieker.tools.traceAnalysis.systemModel;
  */
 public abstract class AbstractTrace {
 
+	/** This constant can be used as an ID to show that the trace has no ID. */
 	public static final String NO_TRACE_ID = "N/A";
 
 	private final TraceInformation traceInformation;

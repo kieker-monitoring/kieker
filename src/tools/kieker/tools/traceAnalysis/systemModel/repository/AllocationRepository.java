@@ -36,6 +36,12 @@ public class AllocationRepository extends AbstractSystemSubRepository {
 	private final Map<String, AllocationComponent> allocationComponentInstancesByName = new Hashtable<String, AllocationComponent>(); // NOPMD (UseConcurrentHashMap)
 	private final Map<Integer, AllocationComponent> allocationComponentInstancesById = new Hashtable<Integer, AllocationComponent>(); // NOPMD (UseConcurrentHashMap)
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param systemFactory
+	 *            The system factory.
+	 */
 	public AllocationRepository(final SystemModelRepository systemFactory) {
 		super(systemFactory);
 	}

@@ -34,7 +34,7 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 
 /**
- * This repository is a model manager for the Kieker's component model.
+ * This repository is a model manager for the Kieker's component model. It consists of multiple "sub"repositories.
  * 
  * @author Andre van Hoorn
  */
@@ -103,10 +103,20 @@ public class SystemModelRepository extends AbstractRepository {
 		return this.executionEnvironmentFactory;
 	}
 
+	/**
+	 * Delivering the factory managing the available operations.
+	 * 
+	 * @return The operation factory.
+	 */
 	public final OperationRepository getOperationFactory() {
 		return this.operationFactory;
 	}
 
+	/**
+	 * Delivering the factory managing the available component types.
+	 * 
+	 * @return The types factory.
+	 */
 	public final TypeRepository getTypeRepositoryFactory() {
 		return this.typeRepositoryFactory;
 	}

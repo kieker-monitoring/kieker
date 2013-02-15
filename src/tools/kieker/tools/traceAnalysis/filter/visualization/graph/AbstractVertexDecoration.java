@@ -17,9 +17,9 @@
 package kieker.tools.traceAnalysis.filter.visualization.graph;
 
 /**
+ * This is an abstract base for vertex decorations.
  * 
  * @author Holger Knoche
- * 
  */
 public abstract class AbstractVertexDecoration {
 

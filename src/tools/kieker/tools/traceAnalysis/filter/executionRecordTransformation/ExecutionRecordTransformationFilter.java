@@ -77,6 +77,14 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 		this(configuration, null);
 	}
 
+	/**
+	 * This method represents the input port, processing incoming operation execution records.
+	 * 
+	 * @param execRec
+	 *            The next operation execution record.
+	 * 
+	 * @return Always true.
+	 */
 	@InputPort(
 			name = INPUT_PORT_NAME_RECORDS,
 			description = "Receives operation execution records to be transformed",
@@ -88,6 +96,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 				fqComponentNameSignaturePair.getSignature(),
 				execRec.getTraceId(), execRec.getSessionId(), execRec.getEoi(), execRec.getEss(), execRec.getTin(), execRec.getTout(), false);
 		super.deliver(OUTPUT_PORT_NAME_EXECUTIONS, execution);
+		// TODO Why to we return true here? Is the return value necessary?
 		return true;
 	}
 

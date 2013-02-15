@@ -21,9 +21,9 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
 /**
+ * This is an abstract base for components which filter elements based on the timestamp.
  * 
  * @author Andre van Hoorn
- * 
  */
 public abstract class AbstractTimestampFilter extends AbstractFilterPlugin {
 
@@ -68,7 +68,8 @@ public abstract class AbstractTimestampFilter extends AbstractFilterPlugin {
 	 * Returns true iff the given timestamp is within the configured time period.
 	 * 
 	 * @param timestamp
-	 * @return
+	 *            The timestamp to check.
+	 * @return true if and only if the timestamp is within the time period.
 	 */
 	protected boolean inRange(final long timestamp) {
 		return (timestamp >= this.ignoreBeforeTimestamp) && (timestamp <= this.ignoreAfterTimestamp);

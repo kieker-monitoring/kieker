@@ -22,8 +22,10 @@ import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
 import kieker.tools.traceAnalysis.systemModel.TraceInformation;
 
 /**
+ * This class represents a weighted but bidirected edge within a dependency graph.
  * 
  * @param <T>
+ *            The type of the entity stored in the nodes linked by this edge.
  * 
  * @author Andre van Hoorn
  */

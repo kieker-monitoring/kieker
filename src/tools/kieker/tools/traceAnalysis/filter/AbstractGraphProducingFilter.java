@@ -101,6 +101,11 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 		return OUTPUT_PORT_NAME_GRAPH;
 	}
 
+	/**
+	 * Delivers the graph stored in this filter.
+	 * 
+	 * @return The graph.
+	 */
 	protected G getGraph() {
 		return this.graph;
 	}

@@ -21,6 +21,7 @@ import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 
 /**
+ * This class represents a pair consisting of an {@link Operation} and an {@link AllocationComponent}.
  * 
  * @author Andre van Hoorn
  */
@@ -30,6 +31,16 @@ public class AllocationComponentOperationPair implements ISystemModelElement {
 
 	private final AllocationComponent allocationComponent;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param id
+	 *            The ID of this pair.
+	 * @param operation
+	 *            The operation.
+	 * @param allocationComponent
+	 *            The allocation component.
+	 */
 	public AllocationComponentOperationPair(final int id, final Operation operation, final AllocationComponent allocationComponent) {
 		this.id = id;
 		this.operation = operation;

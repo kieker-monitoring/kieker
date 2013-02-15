@@ -33,10 +33,19 @@ import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
  */
 public final class BookstoreEventRecordFactoryStarter {
 
+	/**
+	 * Private constructor to avoid instantiation. *
+	 */
 	private BookstoreEventRecordFactoryStarter() {
 		// nothing to see here ...
 	}
 
+	/**
+	 * This is the main method of this starter.
+	 * 
+	 * @param args
+	 *            The command line arguments. They have currently no effect.
+	 */
 	public static void main(final String[] args) {
 		final IMonitoringController ctrl = MonitoringController.getInstance();
 

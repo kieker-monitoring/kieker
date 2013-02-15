@@ -23,6 +23,7 @@ import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
+ * This is an abstract base for filters processing invalid execution traces.
  * 
  * @author Andre van Hoorn
  */
@@ -56,6 +57,11 @@ public abstract class AbstractInvalidExecutionTraceProcessingFilter extends Abst
 		this(configuration, null);
 	}
 
+	/**
+	 * Implementing classes should return the name of the input port for the invalid executions.
+	 * 
+	 * @return The name of the input port.
+	 */
 	public abstract String getInvalidExecutionTraceInputPortName();
 
 }

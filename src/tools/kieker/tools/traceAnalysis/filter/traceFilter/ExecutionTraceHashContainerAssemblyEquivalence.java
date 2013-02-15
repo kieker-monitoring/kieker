@@ -29,6 +29,12 @@ class ExecutionTraceHashContainerAssemblyEquivalence extends AbstractExecutionTr
 
 	private final int hashCodeBuffer;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param t
+	 *            The execution trace to be stored in this container.
+	 */
 	public ExecutionTraceHashContainerAssemblyEquivalence(final ExecutionTrace t) {
 		super(t);
 		final int prime = 31;
@@ -43,6 +49,16 @@ class ExecutionTraceHashContainerAssemblyEquivalence extends AbstractExecutionTr
 		this.hashCodeBuffer = result;
 	}
 
+	/**
+	 * Checks whether the given executions are equal or not.
+	 * 
+	 * @param r1
+	 *            The first execution object.
+	 * @param r2
+	 *            The second execution object.
+	 * 
+	 * @return true if and only if the executions have the same values.
+	 */
 	private boolean executionsEqual(final Execution r1, final Execution r2) {
 		if (r1 == r2) { // NOPMD (no equals)
 			return true;

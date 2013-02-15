@@ -23,6 +23,7 @@ import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
+ * This is an abstract base for filters processing traces.
  * 
  * @author Andre van Hoorn
  */
@@ -65,34 +66,71 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 		this(configuration, null);
 	}
 
+	/**
+	 * This method can be used to report a trace which has been processed successfully.
+	 * 
+	 * @param traceId
+	 *            The ID of the processed trace.
+	 */
 	protected final void reportSuccess(final long traceId) {
 		this.lastTraceIdSuccess = traceId;
 		this.numTracesSucceeded++;
 		this.numTracesProcessed++;
 	}
 
+	/**
+	 * This method can be used to report a trace which has <b>not</b> been processed successfully.
+	 * 
+	 * @param traceId
+	 *            The ID of the processed trace.
+	 */
 	protected final void reportError(final long traceId) {
 		this.lastTraceIdError = traceId;
 		this.numTracesFailed++;
 		this.numTracesProcessed++;
 	}
 
+	/**
+	 * Delivers the number of traces which have been processed successfully.
+	 * 
+	 * @return The number of traces.
+	 */
 	public final int getSuccessCount() {
 		return this.numTracesSucceeded;
 	}
 
+	/**
+	 * Delivers the number of traces which have <b>not</b> been processed successfully.
+	 * 
+	 * @return The number of traces.
+	 */
 	public final int getErrorCount() {
 		return this.numTracesFailed;
 	}
 
+	/**
+	 * Delivers the total number of traces which have been processed.
+	 * 
+	 * @return The number of traces.
+	 */
 	public final int getTotalCount() {
 		return this.numTracesProcessed;
 	}
 
+	/**
+	 * Delivers the ID of the last trace which has <b>not</b> been processed successfully.
+	 * 
+	 * @return The trace ID.
+	 */
 	public final long getLastTraceIdError() {
 		return this.lastTraceIdError;
 	}
 
+	/**
+	 * Delivers the ID of the last trace which has been processed successfully.
+	 * 
+	 * @return The trace ID.
+	 */
 	public final long getLastTraceIdSuccess() {
 		return this.lastTraceIdSuccess;
 	}

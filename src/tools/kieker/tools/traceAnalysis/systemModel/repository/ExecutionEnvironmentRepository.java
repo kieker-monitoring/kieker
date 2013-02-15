@@ -33,6 +33,12 @@ public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository 
 	private final Map<String, ExecutionContainer> executionContainersByName = new Hashtable<String, ExecutionContainer>(); // NOPMD (UseConcurrentHashMap)
 	private final Map<Integer, ExecutionContainer> executionContainersById = new Hashtable<Integer, ExecutionContainer>(); // NOPMD (UseConcurrentHashMap)
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param systemFactory
+	 *            The system factory.
+	 */
 	public ExecutionEnvironmentRepository(final SystemModelRepository systemFactory) {
 		super(systemFactory);
 	}

@@ -25,6 +25,16 @@ public class AssemblyComponent implements ISystemModelElement {
 	private final String name;
 	private final ComponentType type;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param id
+	 *            The ID of this assembly component.
+	 * @param name
+	 *            The name of this component.
+	 * @param type
+	 *            The type of this component.
+	 */
 	public AssemblyComponent(final int id, final String name, final ComponentType type) {
 		this.id = id;
 		this.name = name;

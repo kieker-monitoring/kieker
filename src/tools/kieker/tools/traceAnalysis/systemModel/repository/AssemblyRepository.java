@@ -34,6 +34,12 @@ public class AssemblyRepository extends AbstractSystemSubRepository {
 	private final Map<String, AssemblyComponent> assemblyComponentInstancesByName = new Hashtable<String, AssemblyComponent>(); // NOPMD (UseConcurrentHashMap)
 	private final Map<Integer, AssemblyComponent> assemblyComponentInstancesById = new Hashtable<Integer, AssemblyComponent>(); // NOPMD (UseConcurrentHashMap)
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param systemFactory
+	 *            The system factory.
+	 */
 	public AssemblyRepository(final SystemModelRepository systemFactory) {
 		super(systemFactory);
 	}

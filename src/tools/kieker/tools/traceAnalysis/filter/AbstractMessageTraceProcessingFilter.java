@@ -25,6 +25,7 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
+ * This is an abstract base for components which process message traces.
  * 
  * @author Andre van Hoorn
  */
@@ -60,6 +61,12 @@ public abstract class AbstractMessageTraceProcessingFilter extends AbstractTrace
 		this(configuration, null);
 	}
 
+	/**
+	 * This is the (abstract) input port for the incoming message traces.
+	 * 
+	 * @param mt
+	 *            The incoming message trace.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed", eventTypes = { MessageTrace.class })
 	public abstract void inputMessageTraces(final MessageTrace mt);
 }

@@ -23,6 +23,7 @@ import java.util.Map;
 import kieker.tools.traceAnalysis.systemModel.ComponentType;
 
 /**
+ * This is a repository in which the different component types ({@link ComponentType}) can be stored.
  * 
  * @author Andre van Hoorn
  */
@@ -33,6 +34,12 @@ public class TypeRepository extends AbstractSystemSubRepository {
 	private final Map<String, ComponentType> componentTypesByName = new Hashtable<String, ComponentType>(); // NOPMD (UseConcurrentHashMap)
 	private final Map<Integer, ComponentType> componentTypesById = new Hashtable<Integer, ComponentType>(); // NOPMD (UseConcurrentHashMap)
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param systemFactory
+	 *            The system factory.
+	 */
 	public TypeRepository(final SystemModelRepository systemFactory) {
 		super(systemFactory);
 	}
@@ -52,10 +59,11 @@ public class TypeRepository extends AbstractSystemSubRepository {
 	 * 
 	 * @param namedIdentifier
 	 * @param fullqualifiedName
+	 * 
 	 * @return the created component type
+	 * 
 	 * @throws IllegalArgumentException
-	 *             if a component type with the given
-	 *             namedIdentifier has already been registered
+	 *             if a component type with the given namedIdentifier has already been registered
 	 */
 	public final ComponentType createAndRegisterComponentType(final String namedIdentifier, final String fullqualifiedName) {
 		final ComponentType newInst;

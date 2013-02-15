@@ -71,6 +71,12 @@ public class TraceIdFilter extends AbstractTraceIdFilter {
 		this(configuration, null);
 	}
 
+	/**
+	 * This method represents the input port of this filter, processing incoming execution objects.
+	 * 
+	 * @param execution
+	 *            The next execution object.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_EXECUTION, description = "Receives execution events to be selected by trace ID", eventTypes = { Execution.class })
 	public void inputExecution(final Execution execution) {
 		if (super.passId(execution.getTraceId())) {

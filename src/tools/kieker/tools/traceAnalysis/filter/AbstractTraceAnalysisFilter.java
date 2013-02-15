@@ -156,6 +156,7 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	 * header which includes the name of this plugin instance.
 	 * 
 	 * @param lines
+	 *            The lines to be printed.
 	 */
 	protected void printMessage(final String[] lines) {
 		this.stdOutPrintln("");
@@ -208,6 +209,7 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	 * Writes a line to the configured standard output stream for this plugin.
 	 * 
 	 * @param message
+	 *            The message to be printed.
 	 */
 	protected void stdOutPrintln(final String message) {
 		synchronized (this) {
@@ -221,6 +223,7 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	 * Writes a line to the configured error output stream for this plugin.
 	 * 
 	 * @param message
+	 *            The message to be printed.
 	 */
 	protected void errOutPrintln(final String message) {
 		synchronized (this) {

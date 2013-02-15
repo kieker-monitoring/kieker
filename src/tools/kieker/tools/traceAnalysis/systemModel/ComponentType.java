@@ -90,10 +90,20 @@ public class ComponentType {
 		return this.typeName;
 	}
 
+	/**
+	 * Delivers the package name of this type.
+	 * 
+	 * @return The package name.
+	 */
 	public final String getPackageName() {
 		return this.packageName;
 	}
 
+	/**
+	 * Delivers the full qualified name of this type (the packages are separated with '.').
+	 * 
+	 * @return The full qualified name.
+	 */
 	public final String getFullQualifiedName() {
 		if ((this.packageName == null) || (this.packageName.length() == 0)) {
 			return this.typeName;
@@ -101,10 +111,23 @@ public class ComponentType {
 		return this.packageName + "." + this.typeName;
 	}
 
+	/**
+	 * Delivers a collection containing the available operations within this component type.
+	 * 
+	 * @return The operations.
+	 */
 	public final Collection<Operation> getOperations() {
 		return this.operations;
 	}
 
+	/**
+	 * This method adds a given operation to the list of available operations.
+	 * 
+	 * @param op
+	 *            The operation to be added.
+	 * 
+	 * @return The added operation.
+	 */
 	public final Operation addOperation(final Operation op) {
 		this.operations.add(op);
 		return op;
