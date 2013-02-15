@@ -121,22 +121,28 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		try {
 			switch (this.queueFullBehavior) {
 			case 1: // blocks when queue full
-				this.blockingQueue.put(monitoringRecord);
-				break;
+				for (int i = 0; i < 10; i++) { // drop out if more than 10 times interrupted
+					try {
+						this.blockingQueue.put(monitoringRecord);
+						return true;
+					} catch (final InterruptedException ignore) {
+						LOG.warn("Interupted when adding new monitoring record to queue. Try: " + i);
+					}
+				}
+				return false;
 			case 2: // does nothing if queue is full
 				if (!this.blockingQueue.offer(monitoringRecord) && ((this.missedRecords.getAndIncrement() % 1000) == 0)) { // NOCS
 					LOG.warn("Queue is full, dropping records.");
 				}
-				break;
+				return true;
 			default: // tries to add immediately (error if full)
 				this.blockingQueue.add(monitoringRecord);
-				break;
+				return true;
 			}
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
-			LOG.error("Failed to retrieve new monitoring record.", ex);
+			LOG.error("Failed to add new monitoring record to queue.", ex);
 			return false;
 		}
-		return true;
 	}
 
 	@Override
