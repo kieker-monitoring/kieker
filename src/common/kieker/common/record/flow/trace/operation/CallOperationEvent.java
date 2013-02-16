@@ -63,12 +63,18 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		this.calleeClassSignature = (String) values[6];
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(),
 			this.getCallerOperationSignature(), this.getCallerClassSignature(),
 			this.getCalleeOperationSignature(), this.getCalleeClassSignature(), };
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES.clone();
 	}

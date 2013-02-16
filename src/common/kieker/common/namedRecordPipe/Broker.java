@@ -23,6 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Andre van Hoorn, Jan Waller
  */
 public enum Broker { // Singleton pattern (Effective Java #3)
+	/** This is the singleton instance. */
 	INSTANCE;
 
 	/**
@@ -31,8 +32,16 @@ public enum Broker { // Singleton pattern (Effective Java #3)
 	private final transient ConcurrentHashMap<String, Pipe> pipeMap = new ConcurrentHashMap<String, Pipe>();
 
 	/**
-	 * Returns a connection with name @a pipeName. If a connection with this
+	 * Returns a connection with name {@code pipeName}. If a connection with this
 	 * name does not exist prior to the call, it is created.
+	 * 
+	 * @param pipeName
+	 *            The name of the pipe.
+	 * 
+	 * @return The acquired pipe.
+	 * 
+	 * @throws IllegalArgumentException
+	 *             If the pipe name is null or empty.
 	 */
 	public Pipe acquirePipe(final String pipeName) throws IllegalArgumentException {
 		Pipe conn;

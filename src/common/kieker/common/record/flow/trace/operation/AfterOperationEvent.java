@@ -41,10 +41,16 @@ public class AfterOperationEvent extends AbstractOperationEvent {
 		super(values, types); // values[0..4]
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.getClassSignature(), };
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES.clone();
 	}

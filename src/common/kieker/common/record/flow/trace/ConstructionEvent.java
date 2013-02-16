@@ -57,10 +57,16 @@ public class ConstructionEvent extends AbstractTraceEvent implements IObjectReco
 		this.objectId = (Integer) values[4];
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getClassSignature(), this.getObjectId(), };
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES.clone();
 	}

@@ -17,6 +17,7 @@
 package kieker.common.exception;
 
 /**
+ * This exception can be used to show that something in context with a monitoring record receiver failed.
  * 
  * @author Andre van Hoorn
  */
@@ -24,10 +25,24 @@ public class MonitoringRecordReceiverException extends Exception {
 
 	private static final long serialVersionUID = 76576L;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param messString
+	 *            The message of this exception.
+	 */
 	public MonitoringRecordReceiverException(final String messString) {
 		super(messString);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param messString
+	 *            The message of this exception.
+	 * @param cause
+	 *            The cause of this exception.
+	 */
 	public MonitoringRecordReceiverException(final String messString, final Throwable cause) {
 		super(messString, cause);
 	}

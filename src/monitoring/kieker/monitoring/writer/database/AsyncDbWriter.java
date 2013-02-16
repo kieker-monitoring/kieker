@@ -100,9 +100,29 @@ final class DbWriterThread extends AbstractAsyncThread {
 	private final Map<Class<? extends IMonitoringRecord>, PreparedStatement> recordTypeInformation = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, PreparedStatement>(); // NOPMD
 	private final AtomicLong recordId;
 
-	public DbWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> blockingQueue,
-			final String connectionString, final String tablePrefix, final AtomicInteger tableCounter, final AtomicLong recordId, final boolean overwrite)
-			throws SQLException {
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param monitoringController
+	 *            The monitoring controller which will be the parent of this writer.
+	 * @param blockingQueue
+	 *            The writing queue.
+	 * @param connectionString
+	 *            The string determining how to connect to the database.
+	 * @param tablePrefix
+	 *            The prefix of the tables.
+	 * @param tableCounter
+	 *            The counter for the tables.
+	 * @param recordId
+	 *            The ID to be used for records.
+	 * @param overwrite
+	 *            Determines whether existing tables will be overwritten.
+	 * 
+	 * @throws SQLException
+	 *             If something went wrong during the establishing of the connection.
+	 */
+	public DbWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> blockingQueue, final String connectionString,
+			final String tablePrefix, final AtomicInteger tableCounter, final AtomicLong recordId, final boolean overwrite) throws SQLException {
 		super(monitoringController, blockingQueue);
 		this.recordId = recordId;
 		this.connection = DriverManager.getConnection(connectionString);

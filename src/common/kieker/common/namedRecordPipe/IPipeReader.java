@@ -19,6 +19,7 @@ package kieker.common.namedRecordPipe;
 import kieker.common.record.IMonitoringRecord;
 
 /**
+ * This is a simple interface for a reader that works on a pipe.
  * 
  * @author Andre van Hoorn
  */

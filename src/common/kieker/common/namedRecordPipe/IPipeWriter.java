@@ -19,6 +19,8 @@ package kieker.common.namedRecordPipe;
 import kieker.common.record.IMonitoringRecord;
 
 /**
+ * This is a simple interface for a writer that works on a pipe.
+ * 
  * @author Andre van Hoorn
  */
 public interface IPipeWriter {

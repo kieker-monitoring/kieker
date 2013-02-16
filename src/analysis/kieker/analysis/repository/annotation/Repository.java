@@ -34,6 +34,7 @@ import kieker.analysis.plugin.annotation.Property;
 @Inherited
 public @interface Repository {
 
+	/** This constant can be used as a value to show that the component has no name. */
 	public static final String NO_NAME = "";
 
 	/**

@@ -52,9 +52,12 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	public Object[] toArray();
 
 	/**
-	 * Creates a string representation of this record.
+	 * Creates a string representation of this record.<br/>
+	 * <br/>
 	 * 
 	 * This method should not be used for serialization purposes since this is not the purpose of Object's toString method.
+	 * 
+	 * @return A (human readable) string of this record.
 	 */
 	public String toString();
 

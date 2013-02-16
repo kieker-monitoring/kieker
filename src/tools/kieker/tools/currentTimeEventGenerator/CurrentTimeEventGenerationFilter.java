@@ -124,8 +124,14 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 		this(configuration, null);
 	}
 
+	/**
+	 * This method represents the input port for new records.
+	 * 
+	 * @param record
+	 *            The next record.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_NEW_RECORD, eventTypes = { IMonitoringRecord.class },
-			description = "Receives a new timestamp and extracts the logging timestamp as a time event")
+			description = "Receives a new record and extracts the logging timestamp as a time event")
 	public void inputRecord(final IMonitoringRecord record) {
 		if (record != null) {
 			this.inputTimestamp(record.getLoggingTimestamp());
@@ -135,6 +141,9 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	/**
 	 * Evaluates the given timestamp internal current time which may lead to
 	 * newly generated events via {@link #OUTPUT_PORT_NAME_CURRENT_TIME_RECORD}.
+	 * 
+	 * @param timestamp
+	 *            The next timestamp.
 	 */
 	@InputPort(name = INPUT_PORT_NAME_NEW_TIMESTAMP, description = "Receives a new timestamp as a time event", eventTypes = { Long.class })
 	public void inputTimestamp(final Long timestamp) {

@@ -56,11 +56,17 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		this.cause = (String) values[5];
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.getClassSignature(), this.getCause(), };
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES.clone();

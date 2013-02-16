@@ -90,6 +90,8 @@ public final class ConfigurationFactory implements Keys {
 	 * the default configuration is returned.
 	 * 
 	 * @param configurationFile
+	 *            The file which contains the configuration.
+	 * 
 	 * @return The created Configuration
 	 */
 	public static final Configuration createConfigurationFromFile(final String configurationFile) {
@@ -111,7 +113,10 @@ public final class ConfigurationFactory implements Keys {
 	 * the default configuration is returned.
 	 * 
 	 * @param propertiesFn
+	 *            The file which contains the properties.
 	 * @param defaultValues
+	 *            The configuration containing the default values.
+	 * 
 	 * @return The created Configuration
 	 */
 	private static final Configuration loadConfigurationFromFile(final String propertiesFn, final Configuration defaultValues) {
@@ -150,7 +155,10 @@ public final class ConfigurationFactory implements Keys {
 	 * the default configuration is returned.
 	 * 
 	 * @param propertiesFn
+	 *            The resource name which contains the properties.
 	 * @param defaultValues
+	 *            The configuration containing the default values.
+	 * 
 	 * @return The created Configuration
 	 */
 	private static final Configuration loadConfigurationFromResource(final String propertiesFn, final Configuration defaultValues) {
@@ -176,10 +184,13 @@ public final class ConfigurationFactory implements Keys {
 	}
 
 	/**
-	 * Returns the system properties starting with prefix.
+	 * Returns the system properties starting with the given prefix.
 	 * 
 	 * @param prefix
+	 *            The prefix to search for.
 	 * @param defaultValues
+	 *            The configuration containing the default values.
+	 * 
 	 * @return The created Configuration
 	 */
 	private static final Configuration getSystemPropertiesStartingWith(final String prefix, final Configuration defaultValues) {

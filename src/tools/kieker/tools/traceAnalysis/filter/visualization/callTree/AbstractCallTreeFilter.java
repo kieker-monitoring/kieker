@@ -175,7 +175,20 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		}
 	}
 
-	/** Traverse tree recursively and generate dot code for vertices. */
+	/**
+	 * Traverse tree recursively and generate dot code for vertices.
+	 * 
+	 * @param n
+	 *            The root node.
+	 * @param eoiCounter
+	 *            The counter for the execution order index.
+	 * @param nodeIds
+	 *            The map containing the node IDs.
+	 * @param ps
+	 *            The stream on which the generated code will be printed.
+	 * @param includeWeights
+	 *            Determines whether to include weights or not.
+	 */
 	private static void dotVerticesFromSubTree(final AbstractCallTreeNode<?> n, final AtomicInteger eoiCounter,
 			final Map<AbstractCallTreeNode<?>, Integer> nodeIds, final PrintStream ps, final boolean includeWeights) {
 		final int thisId = nodeIds.get(n);
@@ -209,6 +222,25 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		ps.println("}");
 	}
 
+	/**
+	 * This method saves the given tree as valid dot code into the given file.
+	 * 
+	 * @param root
+	 *            The root of the tree.
+	 * @param outputFn
+	 *            The file in which the code will be written.
+	 * @param includeWeights
+	 *            Determines whether to include weights or not.
+	 * @param includeEois
+	 *            Determines whether to include the execution order indices or not.
+	 * @param shortLabels
+	 *            Determines whether to use short labels or not.
+	 * @throws FileNotFoundException
+	 *             If the given file is somehow invalid.
+	 * 
+	 * @throws UnsupportedEncodingException
+	 *             If the default encoding is not supported.
+	 */
 	protected static void saveTreeToDotFile(final AbstractCallTreeNode<?> root, final String outputFn,
 			final boolean includeWeights, final boolean includeEois, final boolean shortLabels) throws FileNotFoundException, UnsupportedEncodingException {
 		final PrintStream ps = new PrintStream(new FileOutputStream(outputFn), false, ENCODING);

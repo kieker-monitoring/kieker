@@ -17,19 +17,33 @@
 package kieker.common.namedRecordPipe;
 
 /**
+ * This exception shows that something with respective to a pipe failed.
  * 
  * @author Andre van Hoorn
  */
+// TODO It seems to me that there is no reference to this exception in Kieker. Do we need it?
 public class PipeException extends Exception {
-	/**
-	 * 
-	 */
+	/** The UID. */
 	private static final long serialVersionUID = 56L;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param msg
+	 *            The message of this exception.
+	 */
 	public PipeException(final String msg) {
 		super(msg);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param msg
+	 *            The message of this exception.
+	 * @param thrw
+	 *            The cause of this exception.
+	 */
 	public PipeException(final String msg, final Throwable thrw) {
 		super(msg, thrw);
 	}

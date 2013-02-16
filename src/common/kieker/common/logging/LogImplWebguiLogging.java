@@ -51,38 +51,65 @@ public final class LogImplWebguiLogging implements Log {
 		this.date.setTimeZone(TimeZone.getTimeZone("UTC"));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean isDebugEnabled() {
 		return false;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void debug(final String message) {
 		// Ignore
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void debug(final String message, final Throwable t) {
 		// Ignore
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void info(final String message) {
 		this.addMessage(message, "[Info]", null);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void info(final String message, final Throwable t) {
 		this.addMessage(message, "[Info]", t);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void warn(final String message) {
 		this.addMessage(message, "[Warn]", null);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void warn(final String message, final Throwable t) {
 		this.addMessage(message, "[Warn]", t);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void error(final String message) {
 		this.addMessage(message, "[Crit]", null);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void error(final String message, final Throwable t) {
 		this.addMessage(message, "[Crit]", t);
 	}

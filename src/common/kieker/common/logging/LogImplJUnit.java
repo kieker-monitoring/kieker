@@ -20,6 +20,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * 
+ * This is an actual implementation of the logging interface used by the JUnit logger.
+ * 
  * @author Jan Waller
  */
 public final class LogImplJUnit implements Log {
@@ -30,6 +33,12 @@ public final class LogImplJUnit implements Log {
 	private final java.util.logging.Logger logger; // NOPMD (Implementation of an logger)
 	private final String name;
 
+	/**
+	 * Creates a new instance of this class.
+	 * 
+	 * @param name
+	 *            The name of the logger.
+	 */
 	protected LogImplJUnit(final String name) {
 		this.name = name;
 		this.logger = java.util.logging.Logger.getLogger(name);
@@ -57,22 +66,37 @@ public final class LogImplJUnit implements Log {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final boolean isDebugEnabled() {
 		return this.logger.isLoggable(java.util.logging.Level.FINE);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void debug(final String message) {
 		this.log(java.util.logging.Level.FINE, message, null);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void debug(final String message, final Throwable t) {
 		this.log(java.util.logging.Level.FINE, message, t);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void info(final String message) {
 		this.log(java.util.logging.Level.INFO, message, null);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void info(final String message, final Throwable t) {
 		synchronized (DISABLED_THROWABLES) {
 			for (final Class<? extends Throwable> clazz : DISABLED_THROWABLES) {
@@ -85,10 +109,16 @@ public final class LogImplJUnit implements Log {
 		this.log(java.util.logging.Level.INFO, message, t);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void warn(final String message) {
 		this.log(java.util.logging.Level.WARNING, message, null);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void warn(final String message, final Throwable t) {
 		synchronized (DISABLED_THROWABLES) {
 			for (final Class<? extends Throwable> clazz : DISABLED_THROWABLES) {
@@ -102,10 +132,16 @@ public final class LogImplJUnit implements Log {
 		this.log(java.util.logging.Level.WARNING, message, t);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void error(final String message) {
 		this.log(java.util.logging.Level.SEVERE, message, null);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void error(final String message, final Throwable t) {
 		synchronized (DISABLED_THROWABLES) {
 			for (final Class<? extends Throwable> clazz : DISABLED_THROWABLES) {

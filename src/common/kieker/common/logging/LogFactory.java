@@ -19,10 +19,13 @@ package kieker.common.logging;
 import java.util.Locale;
 
 /**
+ * This factory class should be used to get new logger instances. It initializes the logging system based on the available classes.
+ * 
  * @author Jan Waller
  */
 public final class LogFactory { // NOPMD (Implementation of an logger)
 
+	/** This constant should point to the fully qualified class name of the custom JVM logger. */
 	public static final String CUSTOM_LOGGER_JVM = "kieker.common.logging.Log";
 
 	private static final String JVM_LOGGER;
@@ -50,14 +53,33 @@ public final class LogFactory { // NOPMD (Implementation of an logger)
 		}
 	}
 
+	/**
+	 * Private constructor to avoid instantiation.
+	 */
 	private LogFactory() {
 		// Nothing to do
 	}
 
+	/**
+	 * Delivers the log for the given class or creates a new one if it doesn't exist already.
+	 * 
+	 * @param clazz
+	 *            The corresponding class.
+	 * 
+	 * @return A logger for the given class.
+	 */
 	public static final Log getLog(final Class<?> clazz) {
 		return LogFactory.getLog(clazz.getName());
 	}
 
+	/**
+	 * Delivers the log for the given name or creates a new one if it doesn't exist already.
+	 * 
+	 * @param name
+	 *            The corresponding name.
+	 * 
+	 * @return A logger for the given name.
+	 */
 	public static final Log getLog(final String name) {
 		switch (DETECTED_LOGGER) { // NOPMD (no break needed)
 		case NONE:
@@ -77,6 +99,11 @@ public final class LogFactory { // NOPMD (Implementation of an logger)
 		}
 	}
 
+	/**
+	 * This method tries to detect the available loggers.
+	 * 
+	 * @return The found logger.
+	 */
 	private static final Logger detectLogger() {
 		if (null != JVM_LOGGER) {
 			try {

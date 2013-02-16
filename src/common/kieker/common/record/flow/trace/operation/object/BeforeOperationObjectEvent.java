@@ -51,12 +51,18 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 		this.objectId = (Integer) values[5];
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.getClassSignature(),
 			this.getObjectId(), };
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES.clone();

@@ -96,6 +96,9 @@ public final class CallOperationObjectEvent extends CallOperationEvent implement
 		this.calleeObjectId = (Integer) values[8];
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(),
@@ -104,6 +107,9 @@ public final class CallOperationObjectEvent extends CallOperationEvent implement
 			this.callerObjectId, this.calleeObjectId, };
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES.clone();

@@ -47,7 +47,16 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubRe
 		super(systemFactory);
 	}
 
-	/** Returns a corresponding pair instance (existing or newly created). */
+	/**
+	 * Returns a corresponding pair instance (existing or newly created).
+	 * 
+	 * @param allocationComponent
+	 *            The first element of the pair (the allocation component).
+	 * @param operation
+	 *            The second element of the pair (the operation).
+	 * 
+	 * @return A (possible new) pair containing both elements.
+	 */
 	public final AllocationComponentOperationPair getPairInstanceByPair(final AllocationComponent allocationComponent, final Operation operation) {
 		final AllocationComponentOperationPair inst = this.getPairByNamedIdentifier(allocationComponent.getId() + "-" + operation.getId());
 		if (inst == null) {
@@ -56,13 +65,27 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubRe
 		return inst;
 	}
 
+	/**
+	 * Creates a new pair using both elements and registers it was well.
+	 * 
+	 * @param operation
+	 *            The second element of the pair (the operation).
+	 * @param allocationComponent
+	 *            The first element of the pair (the allocation component).
+	 * 
+	 * @return The newly created pair.
+	 */
 	private final AllocationComponentOperationPair createAndRegisterPair(final Operation operation, final AllocationComponent allocationComponent) {
 		return this.createAndRegisterPair(allocationComponent.getId() + "-" + operation.getId(), operation, allocationComponent);
 	}
 
 	/**
-	 * Returns the instance for the passed factory name; null if no instance
-	 * with this factory name.
+	 * Returns the instance for the passed factory name; null if no instance with this factory name exists.
+	 * 
+	 * @param namedIdentifier
+	 *            The identifier to search for.
+	 * 
+	 * @return The corresponding pair to the given identifier if it exists, null otherwise.
 	 */
 	private final AllocationComponentOperationPair getPairByNamedIdentifier(final String namedIdentifier) {
 		return this.pairsByName.get(namedIdentifier);
@@ -73,6 +96,8 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubRe
 	 * 
 	 * @param id
 	 *            The ID of the instance in question.
+	 * 
+	 * @return The corresponding pair to the given ID if it exists, null otherwise.
 	 */
 	public final AllocationComponentOperationPair getPairById(final int id) {
 		return this.pairsById.get(id);
@@ -90,6 +115,11 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubRe
 		return newInst;
 	}
 
+	/**
+	 * Delivers all available allocation-component-operation pairs.
+	 * 
+	 * @return A collection containing all available pairs.
+	 */
 	public final Collection<AllocationComponentOperationPair> getPairs() {
 		return this.pairsById.values();
 	}

@@ -17,48 +17,84 @@
 package kieker.common.logging;
 
 /**
+ * 
+ * This is an actual implementation of the logging interface used by SLF4J logger.
+ * 
  * @author Jan Waller
  */
 public class LogImplSLF4JLogging implements Log {
 
 	private final org.slf4j.Logger log;
 
+	/**
+	 * Creates a new instance of this class.
+	 * 
+	 * @param name
+	 *            The name of the logger.
+	 */
 	public LogImplSLF4JLogging(final String name) {
 		this.log = org.slf4j.LoggerFactory.getLogger(name);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean isDebugEnabled() {
 		return this.log.isDebugEnabled();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void debug(final String message) {
 		this.log.debug(message);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void debug(final String message, final Throwable t) {
 		this.log.debug(message, t);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void info(final String message) {
 		this.log.info(message);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void info(final String message, final Throwable t) {
 		this.log.info(message, t);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void warn(final String message) {
 		this.log.warn(message);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void warn(final String message, final Throwable t) {
 		this.log.warn(message, t);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void error(final String message) {
 		this.log.error(message);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void error(final String message, final Throwable t) {
 		this.log.error(message, t);
 	}

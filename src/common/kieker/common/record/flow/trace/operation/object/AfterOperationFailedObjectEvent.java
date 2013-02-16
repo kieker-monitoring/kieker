@@ -58,12 +58,18 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 		this.objectId = (Integer) values[6];
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.getClassSignature(), this.getCause(),
 			this.getObjectId(), };
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES.clone();

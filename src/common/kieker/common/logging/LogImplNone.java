@@ -20,7 +20,12 @@ package kieker.common.logging;
  * @author Jan Waller
  */
 public final class LogImplNone implements Log {
-
+	/**
+	 * Creates a new instance of this class.
+	 * 
+	 * @param name
+	 *            The name of the logger.
+	 */
 	protected LogImplNone(final String name) { // NOPMD (does nothing)
 		// nothing to do here
 	}
@@ -29,19 +34,43 @@ public final class LogImplNone implements Log {
 		return false;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void debug(final String message) {} // NOPMD (does nothing)
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void debug(final String message, final Throwable t) {} // NOPMD (does nothing)
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void info(final String message) {} // NOPMD (does nothing)
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void info(final String message, final Throwable t) {} // NOPMD (does nothing)
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void warn(final String message) {} // NOPMD (does nothing)
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void warn(final String message, final Throwable t) {} // NOPMD (does nothing)
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void error(final String message) {} // NOPMD (does nothing)
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void error(final String message, final Throwable t) {} // NOPMD (does nothing)
 }

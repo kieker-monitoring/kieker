@@ -36,6 +36,9 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 		this.timestamp = (Long) values[0];
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Deprecated
 	public final void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
