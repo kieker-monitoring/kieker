@@ -47,15 +47,24 @@ public final class BranchingRecord extends AbstractMonitoringRecord implements I
 		this.branchingOutcome = (Integer) values[2];
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Object[] toArray() {
 		return new Object[] { this.timestamp, this.branchID, this.branchingOutcome, };
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES.clone();
 	}

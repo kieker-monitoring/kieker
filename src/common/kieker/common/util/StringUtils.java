@@ -17,10 +17,15 @@
 package kieker.common.util;
 
 /**
+ * This class contains some convenient utility methods to handle strings.
+ * 
  * @author Jan Waller
  */
 public final class StringUtils {
 
+	/**
+	 * Private constructor to avoid instantiation.
+	 */
 	private StringUtils() {
 		// empty private constructor
 	}

@@ -36,6 +36,9 @@ import kieker.monitoring.core.controller.MonitoringController;
 public final class ConfigurationFactory implements Keys {
 	private static final Log LOG = LogFactory.getLog(ConfigurationFactory.class);
 
+	/**
+	 * Private constructor to avoid instantiation.
+	 */
 	private ConfigurationFactory() {}
 
 	/*
@@ -87,7 +90,7 @@ public final class ConfigurationFactory implements Keys {
 	 * the default configuration is returned.
 	 * 
 	 * @param configurationFile
-	 * @return the created Configuration
+	 * @return The created Configuration
 	 */
 	public static final Configuration createConfigurationFromFile(final String configurationFile) {
 		return ConfigurationFactory.loadConfigurationFromFile(configurationFile, ConfigurationFactory.defaultConfiguration());
@@ -96,7 +99,7 @@ public final class ConfigurationFactory implements Keys {
 	/**
 	 * Returns a properties map with the default configuration.
 	 * 
-	 * @return
+	 * @return The created Configuration
 	 */
 	private static final Configuration defaultConfiguration() {
 		return ConfigurationFactory.loadConfigurationFromResource(Keys.DEFAULT_PROPERTIES_LOCATION_CLASSPATH, null);
@@ -109,7 +112,7 @@ public final class ConfigurationFactory implements Keys {
 	 * 
 	 * @param propertiesFn
 	 * @param defaultValues
-	 * @return
+	 * @return The created Configuration
 	 */
 	private static final Configuration loadConfigurationFromFile(final String propertiesFn, final Configuration defaultValues) {
 		final Configuration properties = new Configuration(defaultValues);
@@ -148,7 +151,7 @@ public final class ConfigurationFactory implements Keys {
 	 * 
 	 * @param propertiesFn
 	 * @param defaultValues
-	 * @return
+	 * @return The created Configuration
 	 */
 	private static final Configuration loadConfigurationFromResource(final String propertiesFn, final Configuration defaultValues) {
 		final InputStream is = MonitoringController.class.getClassLoader().getResourceAsStream(propertiesFn);
@@ -177,7 +180,7 @@ public final class ConfigurationFactory implements Keys {
 	 * 
 	 * @param prefix
 	 * @param defaultValues
-	 * @return
+	 * @return The created Configuration
 	 */
 	private static final Configuration getSystemPropertiesStartingWith(final String prefix, final Configuration defaultValues) {
 		final Configuration configuration = new Configuration(defaultValues);

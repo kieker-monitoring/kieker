@@ -115,6 +115,9 @@ public final class FilesystemLogReplayerStarter {
 		return true;
 	}
 
+	/**
+	 * This method prints some information on the screen to help the user understand how to use this tool.
+	 */
 	private static void printUsage() {
 		CMD_HELP_FORMATTER.printHelp(FilesystemLogReplayerStarter.class.getName(), CMDL_OPTS);
 	}

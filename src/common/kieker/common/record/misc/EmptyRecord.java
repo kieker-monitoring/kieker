@@ -20,13 +20,19 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 
 /**
+ * This class represents an (always) empty record.
+ * 
  * @author Andre van Hoorn, Jan Waller
  */
 public final class EmptyRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+
 	private static final long serialVersionUID = -9106270301270791630L;
 
 	private static final Class<?>[] TYPES = {};
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public EmptyRecord() {
 		// nothing to do
 	}
@@ -35,15 +41,24 @@ public final class EmptyRecord extends AbstractMonitoringRecord implements IMoni
 		// nothing to do
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Object[] toArray() {
 		return new Object[] {};
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES.clone();
 	}

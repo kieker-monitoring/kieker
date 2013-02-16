@@ -46,6 +46,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 		})
 public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessingFilter {
 
+	/** This is the name of the input port receiving new execution traces. */
 	public static final String INPUT_PORT_NAME_EXECUTION_TRACES = "executionTraces";
 
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN = "outputFn";
@@ -102,6 +103,12 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 		}
 	}
 
+	/**
+	 * This method represents the input port of this filter.
+	 * 
+	 * @param et
+	 *            The next execution trace.
+	 */
 	@InputPort(
 			name = INPUT_PORT_NAME_EXECUTION_TRACES,
 			description = "Receives the execution traces to be written",

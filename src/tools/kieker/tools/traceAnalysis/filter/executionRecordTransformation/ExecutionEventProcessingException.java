@@ -23,6 +23,7 @@ import kieker.analysis.exception.EventProcessingException;
  * @author Andre van Hoorn
  */
 public class ExecutionEventProcessingException extends EventProcessingException {
+
 	private static final long serialVersionUID = 1136L;
 
 	/**

@@ -19,14 +19,13 @@ package kieker.common.util;
 import java.util.Arrays;
 
 /**
- * A signature for a software operation. Note that this is just an operation
- * signature declaration which is not bound to an implementing class
- * or interface.
+ * A signature for a software operation. Note that this is just an operation signature declaration which is not bound to an implementing class or interface.
  * 
  * @author Andre van Hoorn
  */
 public class Signature {
 
+	/** This constant can be used to mark that a signature has no return type. */
 	public static final String NO_RETURN_TYPE = "<NO-RETURN-TYPE>";
 
 	private final String name;
@@ -40,10 +39,13 @@ public class Signature {
 	 * Please use the constant {@link #NO_RETURN_TYPE} to indicate that the Signature contains no return type.
 	 * 
 	 * @param name
+	 *            The name of the operation.
 	 * @param modifierList
+	 *            The list of modifiers of the operation.
 	 * @param returnType
-	 *            if null, the return type will be set to {@link #NO_RETURN_TYPE}
+	 *            The return type of the operation. If this parameter is null, the return type will be set to {@link #NO_RETURN_TYPE}
 	 * @param paramTypeList
+	 *            The list of parameters of the operation.s
 	 */
 	public Signature(final String name, final String[] modifierList, final String returnType, final String[] paramTypeList) {
 		this.name = name;
@@ -72,6 +74,11 @@ public class Signature {
 		return this.returnType;
 	}
 
+	/**
+	 * Tells whether the current signature has a return type or not.
+	 * 
+	 * @return true if and only if the signature has a return type.
+	 */
 	public final boolean hasReturnType() {
 		return this.returnType != NO_RETURN_TYPE;
 	}

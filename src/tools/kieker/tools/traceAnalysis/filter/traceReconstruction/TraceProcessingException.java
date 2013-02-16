@@ -26,10 +26,24 @@ import kieker.analysis.exception.EventProcessingException;
 public class TraceProcessingException extends EventProcessingException {
 	private static final long serialVersionUID = 189899L;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param msg
+	 *            The message of this exception.
+	 */
 	public TraceProcessingException(final String msg) {
 		super(msg);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param msg
+	 *            The message of this exception.
+	 * @param t
+	 *            The cause of this exception.
+	 */
 	public TraceProcessingException(final String msg, final Throwable t) {
 		super(msg, t);
 	}

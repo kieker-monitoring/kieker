@@ -41,15 +41,24 @@ public final class TimestampRecord extends AbstractMonitoringRecord implements I
 		this.timestamp = (Long) values[0];
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Object[] toArray() {
 		return new Object[] { this.timestamp, };
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES.clone();
 	}

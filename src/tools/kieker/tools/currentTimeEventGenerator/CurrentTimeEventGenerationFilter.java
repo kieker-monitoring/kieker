@@ -59,12 +59,18 @@ import kieker.common.record.misc.TimestampRecord;
 			@Property(name = CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_NAME_TIME_RESOLUTION, defaultValue = "1000")
 		})
 public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
+
+	/** This is the name of the input port receiving new timestamps. */
 	public static final String INPUT_PORT_NAME_NEW_TIMESTAMP = "inputNewTimestamp";
+	/** This is the name of the input port receiving new records. */
 	public static final String INPUT_PORT_NAME_NEW_RECORD = "inputNewRecord";
 
+	/** This is the name of the output port delivering the timestamp records. */
 	public static final String OUTPUT_PORT_NAME_CURRENT_TIME_RECORD = "currentTimeRecord";
+	/** This is the name of the output port delivering the timestamps. */
 	public static final String OUTPUT_PORT_NAME_CURRENT_TIME_VALUE = "currentTimeValue";
 
+	/** This is the name of the property to determine the time resolution. */
 	public static final String CONFIG_PROPERTY_NAME_TIME_RESOLUTION = "timeResolution";
 
 	private static final Log LOG = LogFactory.getLog(CurrentTimeEventGenerationFilter.class);
@@ -151,8 +157,8 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 			/**
 			 * Fire timer event(s) if required.
 			 */
-			for (long nextTimerEventAt = this.mostRecentEventFired + this.timerResolution; timestamp >= nextTimerEventAt; nextTimerEventAt = this.mostRecentEventFired
-					+ this.timerResolution) {
+			for (long nextTimerEventAt = this.mostRecentEventFired + this.timerResolution; timestamp >= nextTimerEventAt; nextTimerEventAt =
+					this.mostRecentEventFired + this.timerResolution) {
 				super.deliver(OUTPUT_PORT_NAME_CURRENT_TIME_RECORD, new TimestampRecord(nextTimerEventAt));
 				super.deliver(OUTPUT_PORT_NAME_CURRENT_TIME_VALUE, nextTimerEventAt);
 				this.mostRecentEventFired = nextTimerEventAt;

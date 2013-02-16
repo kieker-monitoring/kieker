@@ -48,8 +48,10 @@ import kieker.monitoring.core.controller.MonitoringController;
 		})
 public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 
+	/** This is the name of the input port receiving new records. */
 	public static final String INPUT_PORT_NAME_RECORD = "monitoringRecords";
 
+	/** This is the name of the output port delivering the relayed events. */
 	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayedEvents";
 
 	public static final String CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN = "monitoringPropertiesFilename";
@@ -130,6 +132,12 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 		return (Configuration) this.configuration.clone();
 	}
 
+	/**
+	 * This method represents the input port. The new records are send to the monitoring controller before they are delivered via the output port.
+	 * 
+	 * @param record
+	 *            The next record.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_RECORD, description = "Receives records to be passed to the controller", eventTypes = { IMonitoringRecord.class })
 	public final void inputIMonitoringRecord(final IMonitoringRecord record) {
 		this.monitoringController.newMonitoringRecord(record);

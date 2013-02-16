@@ -112,6 +112,9 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 
 	/**
 	 * Used to explicitly register an curEoi. The thread is responsible for invalidating the stored curTraceId using the method unsetThreadLocalEOI()!
+	 * 
+	 * @param eoi
+	 *            The execution order index to register.
 	 */
 	public final void storeThreadLocalEOI(final int eoi) {
 		this.threadLocalEoi.set(eoi);
@@ -119,6 +122,8 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 
 	/**
 	 * Since this method accesses a ThreadLocal variable, it is not (necessary to be) thread-safe.
+	 * 
+	 * @return Increments the thread local execution order index and returns it.
 	 */
 	public final int incrementAndRecallThreadLocalEOI() {
 		final Integer curEoi = this.threadLocalEoi.get();
@@ -155,6 +160,9 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 	/**
 	 * Used to explicitly register a execution stack size (ess) value. The thread is responsible for invalidating the stored value
 	 * using the method {@link #unsetThreadLocalESS()}!
+	 * 
+	 * @param ess
+	 *            The execution stack size to store.
 	 */
 	public final void storeThreadLocalESS(final int ess) {
 		this.threadLocalEss.set(ess);
@@ -162,6 +170,8 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 
 	/**
 	 * Since this method accesses a ThreadLocal variable, it is not (necessary to be) thread-safe.
+	 * 
+	 * @return The current execution stack size, before the incrementation.
 	 */
 	public final int recallAndIncrementThreadLocalESS() {
 		final Integer curEss = this.threadLocalEss.get();

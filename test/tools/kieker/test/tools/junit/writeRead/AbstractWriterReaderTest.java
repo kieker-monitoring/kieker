@@ -58,6 +58,8 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 	 * the records to the controller.
 	 * 
 	 * @param monitoringController
+	 *            The monitoring controller in question.
+	 * 
 	 * @throws Exception
 	 */
 	protected abstract void checkControllerStateAfterRecordsPassedToController(IMonitoringController monitoringController) throws Exception;
@@ -67,6 +69,8 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 	 * the records to the controller.
 	 * 
 	 * @param monitoringController
+	 *            The monitoring controller in question.
+	 * 
 	 * @throws Exception
 	 */
 	protected abstract void checkControllerStateBeforeRecordsPassedToController(IMonitoringController monitoringController) throws Exception;
@@ -75,6 +79,7 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 	 * Check if the given set of records is as expected.
 	 * 
 	 * @param monitoringRecords
+	 *            The monitoring records in question.
 	 */
 	protected abstract void inspectRecords(List<IMonitoringRecord> eventsPassedToController, List<IMonitoringRecord> eventFromMonitoringLog) throws Exception;
 

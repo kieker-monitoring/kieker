@@ -38,7 +38,10 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
 		})
 public class TraceIdFilter extends AbstractTraceIdFilter {
 
+	/** This is the name of the input port receiving new executions. */
 	public static final String INPUT_PORT_NAME_EXECUTION = "executions";
+
+	/** This is the name of the output port delivering the accepted executions. */
 	public static final String OUTPUT_PORT_NAME_MATCH = "executionsMatchingId";
 
 	public static final String CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES = "selectedAll";

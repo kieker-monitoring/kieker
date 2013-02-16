@@ -25,6 +25,9 @@ import kieker.monitoring.core.controller.IMonitoringController;
  */
 public interface IMonitoringWriter extends IMonitoringRecordReceiver {
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
 
 	/**
@@ -37,9 +40,17 @@ public interface IMonitoringWriter extends IMonitoringRecordReceiver {
 	 * Set the <code>IMonitoringController</code> controlling this writer.
 	 * 
 	 * @param monitoringController
+	 *            The monitoring controller which will be the new parent of this writer.
+	 * 
 	 * @throws Exception
+	 *             If something went wrong.
 	 */
 	public abstract void setController(final IMonitoringController monitoringController) throws Exception;
 
+	/**
+	 * Delivers a string representation of this writer.
+	 * 
+	 * @return A string.
+	 */
 	public abstract String toString();
 }

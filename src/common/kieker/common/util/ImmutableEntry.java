@@ -25,13 +25,23 @@ import java.util.Map;
  * @author Andre van Hoorn
  * 
  * @param <K>
+ *            The type of the key.
  * @param <V>
+ *            The type of the value.
  */
 public class ImmutableEntry<K, V> implements Map.Entry<K, V> {
 
 	private final K key;
 	private final V value;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param key
+	 *            The key to be stored in the entry.
+	 * @param value
+	 *            The valeu to be stored in the entry.
+	 */
 	public ImmutableEntry(final K key, final V value) {
 		this.key = key;
 		this.value = value;

@@ -92,18 +92,24 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 		this.swapFree = (Long) values[7];
 	}
 
-	/*
-	 * {@inheritdoc}
+	/**
+	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
 		return new Object[] { this.timestamp, this.hostname, this.memTotal, this.memUsed, this.memFree, this.swapTotal, this.swapUsed, this.swapFree, };
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES.clone();
 	}

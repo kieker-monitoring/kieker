@@ -43,6 +43,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 		})
 public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionTraceProcessingFilter {
 
+	/** This is the name of the input port receiving new (invalid) execution traces. */
 	public static final String INPUT_PORT_NAME_INVALID_EXECUTION_TRACES = "invalidExecutionTraces";
 
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN = "outputFn";
@@ -104,6 +105,12 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 		return INPUT_PORT_NAME_INVALID_EXECUTION_TRACES;
 	}
 
+	/**
+	 * This method represents the input port of this filter.
+	 * 
+	 * @param et
+	 *            The next execution trace.
+	 */
 	@InputPort(
 			name = INPUT_PORT_NAME_INVALID_EXECUTION_TRACES,
 			description = "Receives the invalid execution traces to be written", eventTypes = { InvalidExecutionTrace.class })

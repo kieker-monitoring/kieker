@@ -20,20 +20,31 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 /**
- * Accepts kieker.map files.
+ * This filter accepts only kieker.map files. All other files are declined.
  * 
  * @author Andre van Hoorn
- * 
  */
 class KiekerMapFileFilter implements FilenameFilter { // NOPMD (TestClassWithoutTestCases)
+
+	/** This constant determines the name of the kieker.map file. */
 	public static final String MAP_FILENAME = "kieker.map"; // TODO: do we have this constant in the FS Writer(s)?
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public KiekerMapFileFilter() {
 		// empty default constructor
 	}
 
 	/**
 	 * Accepts the {@value #MAP_FILENAME} file in a monitoring log directory.
+	 * 
+	 * @param dir
+	 *            The directory of the file to be checked - it is currently not really used.
+	 * @param name
+	 *            the name of the file to be checked.
+	 * 
+	 * @return true if and only if the given file name is equals to the name of a kieker.map file.
 	 */
 	public boolean accept(final File dir, final String name) {
 		return MAP_FILENAME.equals(name);

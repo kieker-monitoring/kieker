@@ -41,7 +41,9 @@ import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
 		})
 public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 
+	/** This is the name of the input port receiving valid record traces. */
 	public static final String INPUT_PORT_NAME_VALID = "validEventRecordTraces";
+	/** This is the name of the input port receiving invalid record traces. */
 	public static final String INPUT_PORT_NAME_INVALID = "invalidEventRecordTraces";
 
 	public static final String CONFIG_PROPERTY_NAME_LOG_INVALID = "logInvalidTraces";
@@ -81,6 +83,7 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 		this(configuration, null);
 	}
 
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration config = new Configuration();
 		config.setProperty(CONFIG_PROPERTY_NAME_LOG_INVALID, Boolean.toString(this.logInvalidTraces));

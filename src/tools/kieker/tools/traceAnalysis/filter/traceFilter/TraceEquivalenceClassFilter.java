@@ -58,13 +58,17 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 				defaultValue = "DISABLED") // one of TraceEquivalenceClassFilter.TraceEquivalenceClassModes
 )
 public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessingFilter {
+
+	/** This is the name of the input port receiving new execution traces. */
 	public static final String INPUT_PORT_NAME_EXECUTION_TRACE = "executionTraces";
 
 	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE_REPRESENTATIVES = "messageTraceRepresentatives";
 	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE_REPRESENTATIVES = "executionTraceRepresentatives";
 
+	/** This is the name of the property determining the equivalence mode. */
 	public static final String CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE = "equivalenceMode";
 
+	/** This constant determines the default equivalence mode (the default value is disabled). */
 	public static final TraceEquivalenceClassModes DEFAULT_EQUIVALENCE_MODE = TraceEquivalenceClassModes.DISABLED;
 
 	private static final Log LOG = LogFactory.getLog(TraceEquivalenceClassFilter.class);
@@ -72,13 +76,21 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	private final TraceEquivalenceClassModes equivalenceMode;
 
 	/** Representative x # of equivalents. */
-	private final ConcurrentMap<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap = new ConcurrentHashMap<AbstractExecutionTraceHashContainer, AtomicInteger>();
+	private final ConcurrentMap<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap =
+			new ConcurrentHashMap<AbstractExecutionTraceHashContainer, AtomicInteger>();
 
 	/**
+	 * This enum represents the different trace equivalence class modes.
+	 * 
 	 * @author Andre van Hoorn
 	 */
 	public static enum TraceEquivalenceClassModes {
-		DISABLED, ASSEMBLY, ALLOCATION
+		/** Disabled equivalence mode */
+		DISABLED,
+		/** Assembly-level equivalence */
+		ASSEMBLY,
+		/** Allocation-level equivalence */
+		ALLOCATION
 	}
 
 	/**

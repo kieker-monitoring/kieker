@@ -66,8 +66,12 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 		})
 public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTraceProcessingFilter {
 
+	/** This is the name of the input port receiving new trace events. */
 	public static final String INPUT_PORT_NAME_EVENT_TRACE = "traceEvents";
+
+	/** This is the name of the output port delivering the execution traces. */
 	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE = "executionTrace";
+	/** This is the name of the output port delivering the message traces. */
 	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE = "messageTrace";
 
 	public static final String CONFIG_ENHANCE_JAVA_CONSTRUCTORS = "enhanceJavaConstructors";
@@ -213,6 +217,11 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 			this.enhanceCallDetection = enhanceCallDetection;
 		}
 
+		/**
+		 * This method delivers the object on top of the stack without removing it, if it exists and null otherwise.
+		 * 
+		 * @return The object on top if it exists or null otherwise.
+		 */
 		private AbstractTraceEvent peekEvent() {
 			if (this.eventStack.isEmpty()) {
 				return null;
@@ -399,6 +408,14 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 			private final int eoi;
 			private final int ess;
 
+			/**
+			 * Creates a new instance of this class using the given parameters.
+			 * 
+			 * @param executionIndex
+			 *            The execution order index.
+			 * @param stackDepth
+			 *            The execution stack size.
+			 */
 			public ExecutionInformation(final int executionIndex, final int stackDepth) {
 				this.eoi = executionIndex;
 				this.ess = stackDepth;

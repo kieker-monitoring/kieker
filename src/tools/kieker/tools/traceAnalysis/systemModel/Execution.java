@@ -49,7 +49,9 @@ public class Execution {
 	 * @param sessionId
 	 *            The ID of the session.
 	 * @param eoi
+	 *            The execution order index.
 	 * @param ess
+	 *            The execution stack size.
 	 * @param tin
 	 *            The timestamp the execution started.
 	 * @param tout
@@ -91,7 +93,9 @@ public class Execution {
 	 * @param traceId
 	 *            The ID of the trace.
 	 * @param eoi
+	 *            The execution order index.
 	 * @param ess
+	 *            The execution stack size.
 	 * @param tin
 	 *            The timestamp the execution started.
 	 * @param tout

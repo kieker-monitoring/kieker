@@ -173,6 +173,9 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES.clone();
 	}

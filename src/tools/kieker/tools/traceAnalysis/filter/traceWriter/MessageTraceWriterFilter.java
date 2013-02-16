@@ -59,6 +59,9 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 	 * @param projectContext
 	 *            The project context for this component.
 	 * 
+	 * @throws IOException
+	 *             If either the default encoding is not supported or the given file is somehow invalid.
+	 * 
 	 * @since 1.7
 	 */
 	public MessageTraceWriterFilter(final Configuration configuration, final IProjectContext projectContext) throws IOException {
@@ -73,6 +76,9 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 	 * 
 	 * @param configuration
 	 *            The configuration for this component.
+	 * 
+	 * @throws IOException
+	 *             If either the default encoding is not supported or the given file is somehow invalid.
 	 * 
 	 * @deprecated To be removed in Kieker 1.8.
 	 */
@@ -108,6 +114,9 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 		return configuration;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	@InputPort(
 			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES,

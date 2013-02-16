@@ -119,6 +119,9 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 		this.ess = (Integer) values[7];
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final Object[] toArray() {
 		return new Object[] {
 			this.operationSignature,
@@ -131,11 +134,17 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 			this.ess, };
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES.clone();
 	}

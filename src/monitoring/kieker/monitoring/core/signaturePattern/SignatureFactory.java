@@ -17,10 +17,13 @@
 package kieker.monitoring.core.signaturePattern;
 
 /**
+ * This class can be used to create signatures (for example a string containing the whole signature of a method).
+ * 
  * @author Bjoern Weissenfels, Jan Waller
  */
 public final class SignatureFactory {
 
+	/** This constant contains the necessary prefix for patterns. */
 	public static final char PATTERN_PREFIX = '%';
 	public static final String COLONS = "::";
 
@@ -36,6 +39,9 @@ public final class SignatureFactory {
 	 */
 	public static final String PATTERN_PREFIX_MEM_SWAP = PATTERN_PREFIX + "MEM_SWAP";
 
+	/**
+	 * Private constructor to avoid instantiation.
+	 */
 	private SignatureFactory() {
 		// private default constructor
 	}

@@ -86,6 +86,11 @@ public class ComponentType {
 		return this.id;
 	}
 
+	/**
+	 * Delivers the name of the type.
+	 * 
+	 * @return The type name.
+	 */
 	public final String getTypeName() {
 		return this.typeName;
 	}

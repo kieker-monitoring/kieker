@@ -60,10 +60,14 @@ import kieker.tools.util.LoggingTimestampConverter;
 		})
 public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 
+	/** This is the name of the input port receiving new executions. */
 	public static final String INPUT_PORT_NAME_EXECUTIONS = "executions";
 
+	/** This is the name of the output port delivering the reconstructed message traces. */
 	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE = "messageTraces";
+	/** This is the name of the output port delivering the reconstructed execution traces. */
 	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE = "executionTraces";
+	/** This is the name of the output port delivering the reconstructed, but invalid executions traces. */
 	public static final String OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE = "invalidExecutionTraces";
 
 	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS = "maxTraceDurationMillis";
@@ -182,6 +186,12 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 		return true; // no need to do anything here
 	}
 
+	/**
+	 * This method represents the input port of this filter.
+	 * 
+	 * @param execution
+	 *            The next execution.
+	 */
 	@InputPort(
 			name = INPUT_PORT_NAME_EXECUTIONS,
 			description = "Receives the executions to be processed",
@@ -228,6 +238,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	 * execution trace output port respectively).
 	 * 
 	 * @param executionTrace
+	 *            The execution trace to transform.
+	 * 
 	 * @throws ExecutionEventProcessingException
 	 *             if the passed execution trace is
 	 *             invalid and this filter is configured to fail on the occurrence of invalid

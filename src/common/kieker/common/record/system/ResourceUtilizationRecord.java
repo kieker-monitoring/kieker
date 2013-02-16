@@ -82,15 +82,24 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 		this.utilization = (Double) values[3];
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Object[] toArray() {
 		return new Object[] { this.timestamp, this.hostname, this.resourceName, this.utilization, };
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES.clone();
 	}

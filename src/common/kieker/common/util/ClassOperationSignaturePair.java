@@ -19,17 +19,23 @@ package kieker.common.util;
 import java.util.StringTokenizer;
 
 /**
+ * This class represents a pair containing the classname and the signature of an operation.
+ * 
  * @author Andre van Hoorn, Jan Waller
  */
 public class ClassOperationSignaturePair {
+
 	private final int lastDot;
 	private final String fqClassname;
 	private final Signature signature;
 
 	/**
+	 * Creates a new instance of this class using the given parameters.
 	 * 
 	 * @param fqClassname
+	 *            The fully qualified name of the class.
 	 * @param signature
+	 *            The signature.
 	 */
 	public ClassOperationSignaturePair(final String fqClassname, final Signature signature) {
 		this.fqClassname = fqClassname;
@@ -39,6 +45,8 @@ public class ClassOperationSignaturePair {
 	}
 
 	/**
+	 * Delivers the fully qualified class name.
+	 * 
 	 * @return the fqClassname
 	 */
 	public String getFqClassname() {
@@ -46,12 +54,20 @@ public class ClassOperationSignaturePair {
 	}
 
 	/**
+	 * Delivers the signature.
+	 * 
 	 * @return the signature
 	 */
 	public Signature getSignature() {
 		return this.signature;
 	}
 
+	/**
+	 * This method delivers a simplified version of the fully qualified class name. In other words: The string behind the last '.' of the fully qualified name (this
+	 * is usually just the name of the class and nothing else).
+	 * 
+	 * @return The simple class name.
+	 */
 	public String getSimpleClassname() {
 		if (this.lastDot == -1) {
 			return this.fqClassname;
@@ -60,6 +76,11 @@ public class ClassOperationSignaturePair {
 		}
 	}
 
+	/**
+	 * This method delivers the package name of the class. In other words: This method returns everything before the last '.' of the fully qualified name.
+	 * 
+	 * @return The package name.
+	 */
 	public String getPackageName() {
 		if (this.lastDot == -1) {
 			return "";
@@ -68,6 +89,11 @@ public class ClassOperationSignaturePair {
 		}
 	}
 
+	/**
+	 * This method assembles an operation signature string from the current fields.
+	 * 
+	 * @return An operation signature string.
+	 */
 	public String toOperationSignatureString() {
 		return ClassOperationSignaturePair.createOperationSignatureString(this.fqClassname, this.signature);
 	}
@@ -144,7 +170,9 @@ public class ClassOperationSignaturePair {
 	 * returns an operation signature string (e.g., <code>public static Boolean a.b.c.D.op1(Integer, Long)</code>).
 	 * 
 	 * @param fqClassName
+	 *            The fully qualified class name.
 	 * @param signature
+	 *            The signature string.
 	 */
 	public static String createOperationSignatureString(final String fqClassName, final Signature signature) {
 		if ((signature.getModifier().length != 0) && (!signature.hasReturnType())) {
@@ -181,6 +209,8 @@ public class ClassOperationSignaturePair {
 
 	/**
 	 * Returns a String representation of this {@link ClassOperationSignaturePair} using the {@link #createOperationSignatureString(String, Signature)} method.
+	 * 
+	 * @return A string representation of this object.
 	 */
 	@Override
 	public String toString() {

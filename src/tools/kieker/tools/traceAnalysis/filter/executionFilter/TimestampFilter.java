@@ -43,6 +43,7 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
 		})
 public class TimestampFilter extends AbstractTimestampFilter {
 
+	/** This is the name of the input port receiving new executions. */
 	public static final String INPUT_PORT_NAME_EXECUTION = "executions";
 
 	public static final String OUTPUT_PORT_NAME_WITHIN_PERIOD = "executionsWithinTimePeriod";

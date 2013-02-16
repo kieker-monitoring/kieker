@@ -68,9 +68,13 @@ public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 	 * Convenience function for inheriting filters.
 	 * 
 	 * @param configuration
+	 *            The configuration which will be used to extract the IDs.
 	 * @param configurationPropertySelectAllTraces
+	 *            The property name to select all traces.
 	 * @param configurationPropertySelectedTraces
-	 * @return
+	 *            The property name of the selected traces.
+	 * 
+	 * @return A set containing the IDs of the traces to pass.
 	 */
 	private static Set<Long> extractIDsFromConfiguration(final Configuration configuration, final String configurationPropertySelectAllTraces,
 			final String configurationPropertySelectedTraces) {
@@ -92,6 +96,7 @@ public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 	 * This method is a convenience function to inheriting filters.
 	 * 
 	 * @param traceId
+	 *            The trace ID to check.
 	 * @return
 	 */
 	protected boolean passId(final long traceId) {
@@ -107,7 +112,7 @@ public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 	 * Inheriting properties must provide the name of the configuration
 	 * property used to indicate whether or not to select any ID.
 	 * 
-	 * @return
+	 * @return The property name.
 	 */
 	protected abstract String getConfigurationPropertySelectAllTraces();
 
@@ -115,7 +120,7 @@ public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 	 * Inheriting properties must provide the name of the configuration
 	 * property used to store the set of selected trace IDs.
 	 * 
-	 * @return
+	 * @return The property name.
 	 */
 	protected abstract String getConfigurationPropertySelectedTraces();
 

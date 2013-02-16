@@ -122,13 +122,18 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 	/**
 	 * Replaces the given search String by the given replacement String in all given files.
 	 * 
-	 * @param monitoringLogDirs
+	 * @param dirs
+	 *            The directories containing the files in question.
 	 * @param findString
+	 *            The string to search for.
 	 * @param replaceByString
+	 *            The string that will be used as a substitution.
+	 * 
 	 * @throws IOException
+	 *             If something during the file accesses went wrong.
 	 */
-	protected void replaceStringInMapFiles(final String[] monitoringLogDirs, final String findString, final String replaceByString) throws IOException {
-		for (final String curLogDir : monitoringLogDirs) {
+	protected void replaceStringInMapFiles(final String[] dirs, final String findString, final String replaceByString) throws IOException {
+		for (final String curLogDir : dirs) {
 			final String[] mapFilesInDir = new File(curLogDir).list(new KiekerMapFileFilter());
 			Assert.assertEquals("Unexpected number of map files", 1, mapFilesInDir.length);
 
@@ -139,6 +144,19 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 
 	}
 
+	/**
+	 * Replaces the given search String by the given replacement String in the given file.
+	 * 
+	 * @param filename
+	 *            The name of the file to be modified.
+	 * @param findString
+	 *            The string to search for.
+	 * @param replaceByString
+	 *            The string that will be used as a substitution.
+	 * 
+	 * @throws IOException
+	 *             If something during the file access went wrong.
+	 */
 	private void searchReplaceInFile(final String filename, final String findString, final String replaceByString) throws IOException {
 		final String mapFileContent = BasicPrintStreamWriterTestFile.readOutputFileAsString(new File(filename));
 		final String manipulatedContent = mapFileContent.replaceAll(findString, replaceByString);
@@ -160,6 +178,16 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 
 	protected abstract void refineFSReaderConfiguration(Configuration config);
 
+	/**
+	 * This method can be used to read monitoring records from the given directories.
+	 * 
+	 * @param monitoringLogDirs
+	 *            The directories containing the monitoring logs.
+	 * @return A list containing all monitoring records.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 *             If something went wrong during the reading.
+	 */
 	private List<IMonitoringRecord> readLog(final String[] monitoringLogDirs) throws AnalysisConfigurationException {
 		final AnalysisController analysisController = new AnalysisController();
 		final Configuration readerConfiguration = new Configuration();
