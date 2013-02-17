@@ -46,6 +46,9 @@ public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository 
 	/**
 	 * Returns the instance for the passed namedIdentifier; null if no instance
 	 * with this namedIdentifier.
+	 * 
+	 * @param namedIdentifier
+	 *            The identifier to search for.
 	 */
 	public final ExecutionContainer lookupExecutionContainerByNamedIdentifier(final String namedIdentifier) {
 		return this.executionContainersByName.get(namedIdentifier);
@@ -54,11 +57,26 @@ public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository 
 	/**
 	 * Returns the instance for the passed container ID; null if no instance
 	 * with this ID.
+	 * 
+	 * @param containerId
+	 *            The ID to search for.
+	 * 
+	 * @return The container for the given ID if it exists; null otherwise.
 	 */
 	public final ExecutionContainer lookupExecutionContainerByContainerId(final int containerId) {
 		return this.executionContainersById.get(containerId);
 	}
 
+	/**
+	 * This method creates a new execution container and registers it as well.
+	 * 
+	 * @param namedIdentifier
+	 *            The identifier of the new container.
+	 * @param name
+	 *            The name of the new container.
+	 * 
+	 * @return The newly created execution container.
+	 */
 	public final ExecutionContainer createAndRegisterExecutionContainer(final String namedIdentifier, final String name) {
 		if (this.executionContainersByName.containsKey(namedIdentifier)) {
 			throw new IllegalArgumentException("Element with name " + namedIdentifier + "exists already");
@@ -70,6 +88,11 @@ public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository 
 		return newInst;
 	}
 
+	/**
+	 * Delivers all available execution containers.
+	 * 
+	 * @return A collection containing the available containers.
+	 */
 	public final Collection<ExecutionContainer> getExecutionContainers() {
 		return this.executionContainersById.values();
 	}

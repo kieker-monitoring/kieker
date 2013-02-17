@@ -45,7 +45,9 @@ public final class CallOperationObjectEvent extends CallOperationEvent implement
 	 * @param timestamp
 	 *            The timestamp.
 	 * @param traceId
+	 *            The trace ID.
 	 * @param orderIndex
+	 *            The order index.
 	 * @param callerOperationSignature
 	 *            The operation signature of the caller.
 	 * @param callerClassSignature

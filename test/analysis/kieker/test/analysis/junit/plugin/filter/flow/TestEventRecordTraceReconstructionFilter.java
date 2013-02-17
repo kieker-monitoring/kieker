@@ -49,7 +49,9 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 	 * @param maxTraceTimeout
 	 * @return
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internally assembled analysis is in an invalid state.
 	 */
 	private void runTest(final TraceEventRecords records, final long maxTraceDuration, final long maxTraceTimeout)
 			throws IllegalStateException, AnalysisConfigurationException {

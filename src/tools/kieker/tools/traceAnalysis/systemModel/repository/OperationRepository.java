@@ -50,6 +50,9 @@ public class OperationRepository extends AbstractSystemSubRepository {
 	/**
 	 * Returns the instance for the passed namedIdentifier; null if no instance
 	 * with this namedIdentifier.
+	 * 
+	 * @param namedIdentifier
+	 *            The identifier to search for.
 	 */
 	public final Operation lookupOperationByNamedIdentifier(final String namedIdentifier) {
 		return this.operationsByName.get(namedIdentifier);

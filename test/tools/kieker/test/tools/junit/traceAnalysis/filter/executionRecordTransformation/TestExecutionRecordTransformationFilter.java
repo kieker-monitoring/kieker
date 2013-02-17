@@ -52,6 +52,7 @@ public class TestExecutionRecordTransformationFilter extends AbstractKiekerTest 
 	 * translated into a corresponding {@link Execution}.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
 	 */
 	@Test
@@ -128,7 +129,9 @@ class ExecRecordTransformationFilterChecker { // NOPMD (subclass of TestCase)
 	 * 
 	 * @param expectedExecutions
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internally assembled analysis is in an invalid state.
 	 */
 	public void doTestFilter(final List<Execution> expectedExecutions) throws IllegalStateException, AnalysisConfigurationException {
 		this.analysisController.run();

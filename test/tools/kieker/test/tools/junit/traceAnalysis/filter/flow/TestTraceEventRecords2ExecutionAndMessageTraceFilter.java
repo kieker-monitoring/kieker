@@ -533,6 +533,16 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	// this.checkTrace(traceEvents, expectedExecutionTrace);
 	// }
 
+	/**
+	 * 
+	 * @param traceEvents
+	 * @param expectedExecutionTrace
+	 * @throws InvalidTraceException
+	 * @throws IllegalStateException
+	 *             If the internally assembled analysis is in an invalid state.
+	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
+	 */
 	private void checkTrace(final TraceEventRecords traceEvents, final ExecutionTrace expectedExecutionTrace) throws InvalidTraceException,
 			IllegalStateException, AnalysisConfigurationException {
 		/*

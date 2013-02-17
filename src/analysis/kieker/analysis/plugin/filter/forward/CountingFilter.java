@@ -102,6 +102,12 @@ public final class CountingFilter extends AbstractFilterPlugin {
 		return this.counter.get();
 	}
 
+	/**
+	 * This method represents the input port of this filter.
+	 * 
+	 * @param event
+	 *            The next event.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_EVENTS, eventTypes = { Object.class }, description = "Receives incoming objects to be counted and forwarded")
 	public final void inputEvent(final Object event) {
 		final Long count = CountingFilter.this.counter.incrementAndGet();
@@ -112,6 +118,9 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	/**
 	 * This method is being used to display the currently stored value within this counter.
 	 * It sets the current text within the given instance of {@link PlainText}.
+	 * 
+	 * @param plainText
+	 *            The text object to be filled with the current counter value.
 	 */
 	@Display(name = "Counter Display")
 	public final void countDisplay(final PlainText plainText) {

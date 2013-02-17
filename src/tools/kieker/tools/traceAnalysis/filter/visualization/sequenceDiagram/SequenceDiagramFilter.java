@@ -230,11 +230,14 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	 * linebreak by printing the character \n. The pic2plot tool can only
 	 * process pic files with UNIX line breaks.
 	 * 
-	 * @param systemEntityFactory
 	 * @param messageTrace
+	 *            The message trace to convert.
 	 * @param sdMode
+	 *            The mode of the sequence diagram (allocation, assembly).
 	 * @param ps
+	 *            The print stream which will be used to print the pic code.
 	 * @param shortLabels
+	 *            Determines whether to use short labels or not.
 	 */
 	private static void picFromMessageTrace(final MessageTrace messageTrace, final SDModes sdMode,
 			final PrintStream ps, final boolean shortLabels) {
@@ -347,6 +350,23 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 		ps.print(".PE\n");
 	}
 
+	/**
+	 * This method writes the pic code for the given message trace into the given file.
+	 * 
+	 * @param msgTrace
+	 *            The message trace to convert.
+	 * @param sdMode
+	 *            The mode of the sequence diagram (allocation, assembly).
+	 * @param shortLabels
+	 *            Determines whether to use short labels or not.
+	 * @param outputFilename
+	 *            The name of the file in which the code will be written.
+	 * 
+	 * @throws FileNotFoundException
+	 *             If the given file is somehow invalid.
+	 * @throws UnsupportedEncodingException
+	 *             If the used default encoding is not supported.
+	 */
 	public static void writePicForMessageTrace(final MessageTrace msgTrace, final SDModes sdMode,
 			final String outputFilename, final boolean shortLabels) throws FileNotFoundException, UnsupportedEncodingException {
 		final PrintStream ps = new PrintStream(new FileOutputStream(outputFilename), false, ENCODING);

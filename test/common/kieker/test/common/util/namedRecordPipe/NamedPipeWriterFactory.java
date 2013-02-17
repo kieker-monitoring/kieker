@@ -48,6 +48,7 @@ public final class NamedPipeWriterFactory {
 	 * to a {@link Pipe} with the given name.
 	 * 
 	 * @param pipeName
+	 *            The name of the pipe to use.
 	 * @return the {@link kieker.common.record.IMonitoringRecordReceiver}
 	 */
 	public static final IPipeWriter createAndRegisterNamedPipeRecordWriter(final String pipeName) {

@@ -109,8 +109,11 @@ public final class BookstoreOperationExecutionRecordFactory {
 	 * Example: <code>Catalog.searchBook</code>.
 	 * 
 	 * @param sessionId
+	 *            The session ID.
 	 * @param traceId
-	 * @return
+	 *            The trace ID.
+	 * 
+	 * @return The list of operation execution records.
 	 */
 	public static List<OperationExecutionRecord> genValidBookstoreTraceFullSignature(final String sessionId, final long traceId) {
 		final String hostname = "srv9786";

@@ -108,7 +108,9 @@ public class TestCurrentTimeEventGeneratorFilter extends AbstractKiekerTest { //
 	 * @param inputTimestamps
 	 * @param expectedOutputTimerEvents
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internally assembled analysis is in an invalid state.
 	 */
 	private void compareInputAndOutput(final long timerResolution, final long[] inputTimestamps, final long[] expectedOutputTimerEvents, final boolean rawTimestamp)
 			throws IllegalStateException, AnalysisConfigurationException {

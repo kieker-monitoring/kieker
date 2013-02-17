@@ -99,6 +99,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 	 * 
 	 * @throws InvalidTraceException
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
 	 */
 	@Test
@@ -179,8 +180,13 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 	 * The trace is broken in that the eoi/ess values of an execution with eoi/ess [1,1] are replaced by the eoi/ess values [1,3]. Since ess values must only
 	 * increment/decrement by 1, this test must lead to an exception.
 	 * 
-	 * @return
+	 * @param executionFactory
+	 *            The factory to be used to create the executions.
+	 * 
+	 * @return The execution trace in question.
+	 * 
 	 * @throws InvalidTraceException
+	 *             If the traceIds of the execution trace and the executions are incompatible.
 	 */
 	private ExecutionTrace genBrokenBookstoreTraceEssSkip(final ExecutionFactory executionFactory) throws InvalidTraceException {
 		/*
@@ -205,6 +211,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 	 * 
 	 * @throws InvalidTraceException
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
 	 */
 	@Test
@@ -302,7 +309,9 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 	 * 
 	 * @throws InvalidTraceException
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internally assembled analysis is in an invalid state.
 	 */
 	@Test
 	public void testIncompleteTraceDueToTimeout() throws InvalidTraceException, IllegalStateException, AnalysisConfigurationException {

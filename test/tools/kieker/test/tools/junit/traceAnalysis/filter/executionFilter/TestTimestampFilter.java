@@ -75,6 +75,7 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 	 * &gt; a </i>, <i>r.tout &lt; b</i> does not pass the filter.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
 	 */
 	@Test
@@ -110,6 +111,7 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 	 * &lt; b</i> and <i>r.tout &gt; b </i> does not pass the filter.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
 	 */
 	@Test
@@ -145,6 +147,7 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 	 * does pass the filter.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
 	 */
 	@Test
@@ -183,7 +186,9 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 	 * and <i>r.tout &lt; b </i>, <i>r.tout &gt; a </i> does pass the filter.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internally assembled analysis is in an invalid state.
 	 */
 	@Test
 	public void testRecordTinToutWithinRangePassed() throws IllegalStateException, AnalysisConfigurationException {

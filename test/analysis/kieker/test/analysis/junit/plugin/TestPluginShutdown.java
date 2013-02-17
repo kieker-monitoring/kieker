@@ -125,6 +125,9 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 
 	/**
 	 * This test would have more than one correct answer!
+	 * 
+	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 */
 	@Test
 	public void testLongWayShortWay() throws IllegalStateException, AnalysisConfigurationException {
@@ -150,6 +153,11 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 
 	/**
 	 * This test would have more than one correct answer!
+	 * 
+	 * @throws IllegalStateException
+	 *             If the internally assembled analysis is in an invalid state.
+	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 */
 	@Test
 	public void testLoop() throws IllegalStateException, AnalysisConfigurationException {
@@ -188,6 +196,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public Configuration getCurrentConfiguration() {
 			return new Configuration();
 		}
@@ -213,6 +222,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 			super(configuration, projectContext);
 		}
 
+		@Override
 		public Configuration getCurrentConfiguration() {
 			return new Configuration();
 		}

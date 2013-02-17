@@ -36,6 +36,7 @@ public abstract class AbstractSigarSampler implements ISampler {
 	 * data.
 	 * 
 	 * @param sigar
+	 *            The sigar proxy which will be used to retrieve the data.
 	 */
 	public AbstractSigarSampler(final SigarProxy sigar) {
 		this.sigar = sigar;

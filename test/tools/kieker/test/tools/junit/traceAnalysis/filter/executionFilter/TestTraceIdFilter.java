@@ -87,6 +87,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest { // NOCS
 	 * <i>idsToPass</i> is not passed through the filter.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
 	 */
 	@Test
@@ -124,6 +125,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest { // NOCS
 	 * <i>idsToPass</i> is passed through the filter.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
 	 */
 	@Test
@@ -162,7 +164,9 @@ public class TestTraceIdFilter extends AbstractKiekerTest { // NOCS
 	 * object <i>exec</i> is passed through the filter.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internally assembled analysis is in an invalid state.
 	 */
 	@Test
 	public void testAssertPassTraceIdWhenPassAll() throws IllegalStateException, AnalysisConfigurationException {

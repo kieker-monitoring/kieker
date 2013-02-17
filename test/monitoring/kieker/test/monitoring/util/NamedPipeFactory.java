@@ -63,6 +63,7 @@ public final class NamedPipeFactory {
 	 * being a {@link PipeWriter} with the given name.
 	 * 
 	 * @param pipeName
+	 *            The name of the pipe to use.
 	 * @return the created IMonitoringController instance
 	 */
 	public static IMonitoringController createMonitoringControllerWithNamedPipe(final String pipeName) {
@@ -75,6 +76,7 @@ public final class NamedPipeFactory {
 	 * properties can be passed.
 	 * 
 	 * @param pipeName
+	 *            The name of the pipe to use.
 	 * @param additionalProperties
 	 *            additional configuration properties; null is allowed
 	 * @return the created IMonitoringController instance
@@ -98,6 +100,7 @@ public final class NamedPipeFactory {
 	 * Creates an {@link kieker.monitoring.writer.IMonitoringWriter} that collects records from a {@link Pipe} and collects these in the returned {@link List}.
 	 * 
 	 * @param pipeName
+	 *            The name of the pipe to use.
 	 * @return a list which contains the collected records
 	 */
 	public static List<IMonitoringRecord> createAndRegisterNamedPipeRecordCollector(final String pipeName) {

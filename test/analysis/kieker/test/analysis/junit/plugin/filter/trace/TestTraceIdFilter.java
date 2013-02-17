@@ -53,6 +53,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 	 * <i>idsToPass</i> is NOT passed through the filter.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
 	 */
 	@Test
@@ -102,6 +103,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 	 * <i>idsToPass</i> IS passed through the filter.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
 	 */
 	@Test
@@ -147,7 +149,9 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 	 * Given a TraceIdFilter that passes all traceIds, assert that an {@link AbstractTraceEvent} object <i>exec</i> is passed through the filter.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internally assembled analysis is in an invalid state.
 	 */
 	@Test
 	public void testAssertPassTraceIdWhenPassAll() throws IllegalStateException, AnalysisConfigurationException {

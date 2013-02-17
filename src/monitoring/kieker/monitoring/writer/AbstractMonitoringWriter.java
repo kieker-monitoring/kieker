@@ -96,10 +96,10 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	}
 
 	/**
-	 * Implementing classes should indicate an initialization
-	 * error by throwing an {@link Exception}.
+	 * Implementing classes should indicate an initialization error by throwing an {@link Exception}.
 	 * 
 	 * @throws Exception
+	 *             If something during the initialization went wrong.
 	 */
 	protected abstract void init() throws Exception;
 }

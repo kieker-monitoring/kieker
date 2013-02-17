@@ -41,11 +41,15 @@ public final class CPUsDetailedPercSampler extends AbstractSigarSampler {
 	 * instance rather than calling this constructor directly.
 	 * 
 	 * @param sigar
+	 *            The sigar proxy which will be used to retrieve the data.
 	 */
 	public CPUsDetailedPercSampler(final SigarProxy sigar) {
 		super(sigar);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void sample(final IMonitoringController monitoringController) throws SigarException {
 		if (!monitoringController.isProbeActivated(SignatureFactory.createCPUSignature())) {
 			return;

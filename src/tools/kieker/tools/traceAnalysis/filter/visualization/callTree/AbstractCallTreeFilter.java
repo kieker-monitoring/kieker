@@ -162,7 +162,20 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		}
 	}
 
-	/** Traverse tree recursively and generate dot code for edges. */
+	/**
+	 * Traverse tree recursively and generate dot code for edges.
+	 * 
+	 * @param n
+	 *            The root node to start with.
+	 * @param nodeIds
+	 *            The map containing the node IDs.
+	 * @param nextNodeId
+	 *            The counter for the IDs of the nodes.
+	 * @param ps
+	 *            The stream in which the dot code will be written.
+	 * @param shortLabels
+	 *            Determines whether to use short labels or not.
+	 */
 	private static void dotEdgesFromSubTree(final AbstractCallTreeNode<?> n,
 			final Map<AbstractCallTreeNode<?>, Integer> nodeIds, final AtomicInteger nextNodeId, final PrintStream ps, final boolean shortLabels) {
 		final StringBuilder strBuild = new StringBuilder(64);
@@ -207,6 +220,20 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		}
 	}
 
+	/**
+	 * This method converts the given tree completely into dot code.
+	 * 
+	 * @param root
+	 *            The root of the tree.
+	 * @param ps
+	 *            The stream in which the dot code will be written.
+	 * @param includeWeights
+	 *            Determines whether to include weights or not.
+	 * @param includeEois
+	 *            Determines whether to include the execution order indices or not.
+	 * @param shortLabels
+	 *            Determines whether to use short labels or not.
+	 */
 	private static void dotFromCallingTree(final AbstractCallTreeNode<?> root, final PrintStream ps,
 			final boolean includeWeights, final boolean includeEois, final boolean shortLabels) {
 		// preamble:

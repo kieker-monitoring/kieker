@@ -65,6 +65,7 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	 * @param ignoreExecutionsAfterTimestamp
 	 * @return
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
 	 */
 	private void createTimestampFilter(final long ignoreExecutionsBeforeTimestamp, final long ignoreExecutionsAfterTimestamp)
@@ -89,6 +90,7 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	 * assert that a {@link AbstractTraceEvent} <i>e</i> with <i>e.timestamp &lt; a</i> does not pass the filter.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
 	 */
 	@Test
@@ -111,6 +113,7 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	 * pass the filter.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
 	 */
 	@Test
@@ -131,6 +134,7 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	 * assert that an event <i>e</i> with <i>e.timestamp == a</i> does pass the filter.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
 	 */
 	@Test
@@ -153,6 +157,7 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	 * assert that an event <i>e</i> with <i>e.timestamp == b</i> does pass the filter.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
 	 */
 	@Test
@@ -176,7 +181,9 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	 * &gt; a </i> does pass the filter.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internally assembled analysis is in an invalid state.
 	 */
 	@Test
 	public void testRecordTinToutWithinRangePassed() throws IllegalStateException, AnalysisConfigurationException {

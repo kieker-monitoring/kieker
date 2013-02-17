@@ -56,6 +56,8 @@ public final class BookstoreEventRecordFactory {
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
 	 * @param traceId
 	 *            The id of the trace.
+	 * @param sessionId
+	 *            The session ID.
 	 * @param hostname
 	 *            The name of the host to be used for the trace.
 	 * @return
@@ -128,6 +130,11 @@ public final class BookstoreEventRecordFactory {
 	 * @param firstTimestamp
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
 	 * @param traceId
+	 *            The trace ID.
+	 * @param sessionId
+	 *            The session ID.
+	 * @param hostname
+	 *            The name of the host.
 	 * @return
 	 */
 	public static TraceEventRecords validSyncTraceAdditionalCallEvents(final long firstTimestamp, final long traceId, final String sessionId,
@@ -222,6 +229,12 @@ public final class BookstoreEventRecordFactory {
 	 * @param firstTimestamp
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
 	 * @param traceId
+	 *            The trace ID.
+	 * @param sessionId
+	 *            The session ID.
+	 * @param hostname
+	 *            The name of the host.
+	 * 
 	 * @return
 	 */
 	public static TraceEventRecords validSyncTraceAdditionalCallEventsGap(final long firstTimestamp, final long traceId, final String sessionId,
@@ -318,7 +331,11 @@ public final class BookstoreEventRecordFactory {
 	 * @param firstTimestamp
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
 	 * @param traceId
-	 *            The ID of the trace.
+	 *            The trace ID.
+	 * @param sessionId
+	 *            The session ID.
+	 * @param hostname
+	 *            The name of the host.
 	 * 
 	 * @return
 	 */
@@ -372,6 +389,8 @@ public final class BookstoreEventRecordFactory {
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
 	 * @param traceId
 	 *            The ID of the trace.
+	 * @param sessionId
+	 *            The session ID.
 	 * @param hostname
 	 *            The name of the host for the trace.
 	 * 
@@ -439,6 +458,8 @@ public final class BookstoreEventRecordFactory {
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
 	 * @param traceId
 	 *            The ID of the trace.
+	 * @param sessionId
+	 *            The session ID.
 	 * @param hostname
 	 *            The name of the host for the trace.
 	 * 

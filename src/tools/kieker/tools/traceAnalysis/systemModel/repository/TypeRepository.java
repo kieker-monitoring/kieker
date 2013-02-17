@@ -29,6 +29,7 @@ import kieker.tools.traceAnalysis.systemModel.ComponentType;
  */
 public class TypeRepository extends AbstractSystemSubRepository {
 
+	/** This constant represents the root component. */
 	public static final ComponentType ROOT_COMPONENT = new ComponentType(AbstractSystemSubRepository.ROOT_ELEMENT_ID, "$");
 
 	private final Map<String, ComponentType> componentTypesByName = new Hashtable<String, ComponentType>(); // NOPMD (UseConcurrentHashMap)
@@ -47,6 +48,11 @@ public class TypeRepository extends AbstractSystemSubRepository {
 	/**
 	 * Returns the instance for the passed namedIdentifier; null if no instance
 	 * with this namedIdentifier.
+	 * 
+	 * @param namedIdentifier
+	 *            The identifier to search for.
+	 * 
+	 * @return The corresponding component type if available; null otherwise.
 	 */
 	public final ComponentType lookupComponentTypeByNamedIdentifier(final String namedIdentifier) {
 		synchronized (this) {
@@ -58,12 +64,11 @@ public class TypeRepository extends AbstractSystemSubRepository {
 	 * Creates and registers a component type that has not been registered yet.
 	 * 
 	 * @param namedIdentifier
+	 *            The identifier of the new component type.
 	 * @param fullqualifiedName
+	 *            The fully qualfieid name of the new component type.
 	 * 
 	 * @return the created component type
-	 * 
-	 * @throws IllegalArgumentException
-	 *             if a component type with the given namedIdentifier has already been registered
 	 */
 	public final ComponentType createAndRegisterComponentType(final String namedIdentifier, final String fullqualifiedName) {
 		final ComponentType newInst;

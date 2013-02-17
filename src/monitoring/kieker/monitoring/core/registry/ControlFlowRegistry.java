@@ -27,6 +27,7 @@ import kieker.monitoring.core.controller.MonitoringController;
  * @author Andre van Hoorn, Jan Waller
  */
 public enum ControlFlowRegistry { // Singleton (Effective Java #3)
+	/** The singleton instance. */
 	INSTANCE;
 
 	private static final Log LOG = LogFactory.getLog(ControlFlowRegistry.class); // NOPMD (enum logger)
@@ -85,6 +86,9 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 
 	/**
 	 * This method stores a thread-local curTraceId. The thread is responsible for invalidating the stored curTraceId using the method unsetThreadLocalTraceId()!
+	 * 
+	 * @param traceId
+	 *            The trace ID to store in a thread-local way.
 	 */
 	public final void storeThreadLocalTraceId(final long traceId) {
 		this.threadLocalTraceId.set(traceId);

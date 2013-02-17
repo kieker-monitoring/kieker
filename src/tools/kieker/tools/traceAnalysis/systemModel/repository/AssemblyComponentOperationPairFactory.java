@@ -62,6 +62,9 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepo
 	/**
 	 * Returns the instance for the passed factory name; null if no instance
 	 * with this factory name.
+	 * 
+	 * @param namedIdentifier
+	 *            The identifier to search for.
 	 */
 	private AssemblyComponentOperationPair getPairByNamedIdentifier(final String namedIdentifier) {
 		return this.pairsByName.get(namedIdentifier);
