@@ -61,6 +61,7 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 	 *            The monitoring controller in question.
 	 * 
 	 * @throws Exception
+	 *             If something went wrong during the check.
 	 */
 	protected abstract void checkControllerStateAfterRecordsPassedToController(IMonitoringController monitoringController) throws Exception;
 
@@ -72,14 +73,12 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 	 *            The monitoring controller in question.
 	 * 
 	 * @throws Exception
+	 *             If something went wrong during the check.
 	 */
 	protected abstract void checkControllerStateBeforeRecordsPassedToController(IMonitoringController monitoringController) throws Exception;
 
 	/**
 	 * Check if the given set of records is as expected.
-	 * 
-	 * @param monitoringRecords
-	 *            The monitoring records in question.
 	 */
 	protected abstract void inspectRecords(List<IMonitoringRecord> eventsPassedToController, List<IMonitoringRecord> eventFromMonitoringLog) throws Exception;
 
@@ -107,8 +106,10 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 	/**
 	 * Returns the list of records read from the previously written monitoring log.
 	 * 
-	 * @return
+	 * @return The list of records.
+	 * 
 	 * @throws Exception
+	 *             If something went wrong during the reading.
 	 */
 	protected abstract List<IMonitoringRecord> readEvents() throws Exception;
 
@@ -116,6 +117,7 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 	 * Provides implementing classes to do something before reading the log, e.g., manipulating it.
 	 * 
 	 * @throws IOException
+	 *             If something went wrong during the manipulation of the log.
 	 */
 	protected void doBeforeReading() throws IOException {} // NOPMD (empty default implementation)
 
@@ -123,6 +125,7 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 	 * The actual Test. Note that this should be the only {@link Test} in this class.
 	 * 
 	 * @throws Exception
+	 *             If something went wrong during the test.
 	 */
 	@Test
 	public void testSimpleLog() throws Exception { // NOPMD (JUnitTestsShouldIncludeAssert)

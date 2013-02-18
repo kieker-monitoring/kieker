@@ -42,7 +42,8 @@ import kieker.common.logging.LogFactory;
 		outputPorts = @OutputPort(name = TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming object", eventTypes = { Object.class }),
 		configuration = {
 			@Property(name = TeeFilter.CONFIG_PROPERTY_NAME_STREAM, defaultValue = TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDOUT,
-					description = "The name of the stream used to print the incoming data (special values are STDOUT, STDERR, STDLOG, and NULL; other values are interpreted as filenames)."),
+					description = "The name of the stream used to print the incoming data (special values are STDOUT, STDERR, STDLOG, and NULL; "
+							+ "other values are interpreted as filenames)."),
 			@Property(name = TeeFilter.CONFIG_PROPERTY_NAME_ENCODING, defaultValue = TeeFilter.CONFIG_PROPERTY_VALUE_DEFAULT_ENCODING,
 					description = "The used encoding for the selected stream.")
 		})

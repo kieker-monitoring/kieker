@@ -36,7 +36,8 @@ import kieker.common.record.system.ResourceUtilizationRecord;
  */
 public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	private static final long serialVersionUID = 1L;
-	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> OLD_KIEKERRECORDS = new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>();
+	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> OLD_KIEKERRECORDS =
+			new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>();
 
 	private volatile long loggingTimestamp = -1;
 

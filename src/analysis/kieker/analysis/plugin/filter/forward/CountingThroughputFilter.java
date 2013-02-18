@@ -48,12 +48,16 @@ import kieker.common.util.ImmutableEntry;
 @Plugin(
 		description = "A filter computing the throughput in terms of the number of events received per time unit",
 		outputPorts = {
-			@OutputPort(name = CountingThroughputFilter.OUTPUT_PORT_NAME_RELAYED_OBJECTS, eventTypes = { Object.class }, description = "Provides each incoming object")
+			@OutputPort(name = CountingThroughputFilter.OUTPUT_PORT_NAME_RELAYED_OBJECTS, eventTypes = { Object.class },
+					description = "Provides each incoming object")
 		},
 		configuration = {
-			@Property(name = CountingThroughputFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = CountingThroughputFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
-			@Property(name = CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE, defaultValue = CountingThroughputFilter.CONFIG_PROPERTY_VALUE_INTERVAL_SIZE_ONE_MINUTE),
-			@Property(name = CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVALS_BASED_ON_1ST_TSTAMP, defaultValue = "true")
+			@Property(name = CountingThroughputFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
+					defaultValue = CountingThroughputFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
+			@Property(name = CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE,
+					defaultValue = CountingThroughputFilter.CONFIG_PROPERTY_VALUE_INTERVAL_SIZE_ONE_MINUTE),
+			@Property(name = CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVALS_BASED_ON_1ST_TSTAMP,
+					defaultValue = "true")
 		})
 public final class CountingThroughputFilter extends AbstractFilterPlugin {
 
@@ -199,12 +203,14 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	}
 
 	// TODO: What happens with unordered events (i.e., timestamps before firstTimestampInCurrentInterval)?
-	@InputPort(name = INPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Receives incoming monitoring records to be considered for the throughput computation and uses the record's logging timestamp")
+	@InputPort(name = INPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class },
+			description = "Receives incoming monitoring records to be considered for the throughput computation and uses the record's logging timestamp")
 	public final void inputRecord(final IMonitoringRecord record) {
 		this.processEvent(record, record.getLoggingTimestamp());
 	}
 
-	@InputPort(name = INPUT_PORT_NAME_OBJECTS, eventTypes = { Object.class }, description = "Receives incoming objects to be considered for the throughput computation and uses the current system time")
+	@InputPort(name = INPUT_PORT_NAME_OBJECTS, eventTypes = { Object.class },
+			description = "Receives incoming objects to be considered for the throughput computation and uses the current system time")
 	public final void inputObjects(final Object object) {
 		this.processEvent(object, this.currentTime());
 	}

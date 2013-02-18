@@ -62,9 +62,12 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 		},
 		configuration = {
-			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE, defaultValue = SequenceDiagramFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT),
-			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES, defaultValue = "true"),
-			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE, defaultValue = "ASSEMBLY") // SDModes.ASSEMBLY.toString())
+			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE,
+					defaultValue = SequenceDiagramFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT),
+			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES,
+					defaultValue = "true"),
+			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE,
+					defaultValue = "ASSEMBLY") // SDModes.ASSEMBLY.toString())
 		})
 public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter {
 
@@ -173,13 +176,14 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 		this.stdOutPrintln("Wrote " + numPlots + " sequence diagram" + (numPlots > 1 ? "s" : "") // NOCS (AvoidInlineConditionalsCheck)
 				+ " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '" + this.outputFnBase + "-<traceId>.pic'"); // NOCS (AvoidInlineConditionalsCheck)
 		this.stdOutPrintln("Pic files can be converted using the pic2plot tool (package plotutils)");
-		this.stdOutPrintln("Example: pic2plot -T svg " + this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") // NOCS
-																																		// (AvoidInlineConditionalsCheck)
+		this.stdOutPrintln("Example: pic2plot -T svg " + this.outputFnBase + "-" + ((numPlots > 0)
+				? lastSuccessTracesId : "<traceId>") // NOCS (AvoidInlineConditionalsCheck)
 				+ ".pic > " + this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg"); // NOCS (AvoidInlineConditionalsCheck)
 	}
 
 	@Override
-	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed", eventTypes = { MessageTrace.class })
+	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed",
+			eventTypes = { MessageTrace.class })
 	public void inputMessageTraces(final MessageTrace mt) {
 		try {
 			SequenceDiagramFilter.writePicForMessageTrace(mt,

@@ -54,7 +54,8 @@ public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 	private volatile ListCollectionFilter<IMonitoringRecord> sinkFilter = null; // NOPMD (init for findbugs)
 
 	@Override
-	protected IMonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException, InterruptedException {
+	protected IMonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException,
+			InterruptedException {
 		final AnalysisController analysisController = new AnalysisController();
 
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();

@@ -155,6 +155,7 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 	 * The actual (parameterized) Test.
 	 * 
 	 * @throws Exception
+	 *             If something went wrong during the test.
 	 */
 	private void testIt(final boolean keepLoggingTimestamps) throws Exception { // NOPMD (JUnitTestsShouldIncludeAssert)
 		final List<IMonitoringRecord> eventsToWrite = this.provideEvents();

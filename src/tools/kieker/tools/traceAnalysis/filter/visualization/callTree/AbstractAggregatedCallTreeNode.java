@@ -35,7 +35,8 @@ public abstract class AbstractAggregatedCallTreeNode<T> extends AbstractCallTree
 	/** For faster lookup of existing children. */
 	protected final Map<Integer, WeightedDirectedCallTreeEdge<T>> childMap = new TreeMap<Integer, WeightedDirectedCallTreeEdge<T>>(); // NOPMD (not synchronized)
 
-	public AbstractAggregatedCallTreeNode(final int id, final T entity, final boolean rootNode, final MessageTrace origin, final IOriginRetentionPolicy originPolicy) {
+	public AbstractAggregatedCallTreeNode(final int id, final T entity, final boolean rootNode, final MessageTrace origin,
+			final IOriginRetentionPolicy originPolicy) {
 		super(id, entity, rootNode, origin, originPolicy);
 	}
 }

@@ -45,8 +45,10 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  */
 @Plugin(description = "Puts the incoming traces into equivalence classes",
 		outputPorts = {
-			@OutputPort(name = TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE_REPRESENTATIVES, description = "Message Traces", eventTypes = { MessageTrace.class }),
-			@OutputPort(name = TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_REPRESENTATIVES, description = "Execution Traces", eventTypes = { ExecutionTrace.class })
+			@OutputPort(name = TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE_REPRESENTATIVES, description = "Message Traces",
+					eventTypes = { MessageTrace.class }),
+			@OutputPort(name = TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_REPRESENTATIVES, description = "Execution Traces",
+					eventTypes = { ExecutionTrace.class })
 		},
 		repositoryPorts = {
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
@@ -54,7 +56,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 		configuration =
 		@Property(
 				name = TraceEquivalenceClassFilter.CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE,
-				description = "The trace equivalence criteria: DISABLED (default value), ASSEMBLY (assembly-level equivalence), or ALLOCATION (allocation-level equivalence)",
+				description = "The trace equivalence criteria: DISABLED (default value), ASSEMBLY (assembly-level equivalence), or ALLOCATION"
+						+ " (allocation-level equivalence)",
 				defaultValue = "DISABLED") // one of TraceEquivalenceClassFilter.TraceEquivalenceClassModes
 )
 public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessingFilter {

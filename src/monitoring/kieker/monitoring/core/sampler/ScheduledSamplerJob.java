@@ -62,6 +62,7 @@ public class ScheduledSamplerJob implements Runnable {
 	/**
 	 * 
 	 * @param future
+	 *            The new future object.
 	 */
 	public void setFuture(final ScheduledFuture<?> future) {
 		this.future = future;

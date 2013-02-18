@@ -42,8 +42,6 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 	 *            = for instance "queue1"
 	 * @param jmsFactoryLookupName
 	 *            = for instance "org.exolab.jms.jndi.InitialContextFactory" (OpenJMS)
-	 * @throws IllegalArgumentException
-	 *             if passed parameters are null or empty.
 	 */
 	public JMSLogReplayer(final String monitoringConfigurationFile, final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
 		super(monitoringConfigurationFile, /* realtimeMode */false, /* keepOriginalLoggingTimestamps */true,

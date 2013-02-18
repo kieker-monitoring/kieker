@@ -113,6 +113,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	 * represented as an Execution Trace.
 	 * 
 	 * @throws InvalidTraceException
+	 *             If the internally assembled execution trace is somehow invalid.
 	 */
 	@Test
 	public void testValidExecutionTrace() throws InvalidTraceException {
@@ -129,6 +130,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	 * traces.
 	 * 
 	 * @throws InvalidTraceException
+	 *             If the internally assembled execution trace is somehow invalid.
 	 */
 	@Test
 	public void testEqualMethodEqualTraces() throws InvalidTraceException {
@@ -142,6 +144,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	 * traces.
 	 * 
 	 * @throws InvalidTraceException
+	 *             If the internally assembled execution trace is somehow invalid.
 	 */
 	@Test
 	public void testEqualMethodDifferentTraces() throws InvalidTraceException {
@@ -275,6 +278,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	 * from an Execution Trace representation into a Message Trace representation.
 	 * 
 	 * @throws InvalidTraceException
+	 *             If the internally assembled execution trace is somehow invalid.
 	 */
 	@Test
 	public void testMessageTraceTransformationValidTrace() throws InvalidTraceException {
@@ -309,7 +313,8 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 			Assert.assertTrue("Message is not a call", call1_1___bookstore_searchBook_catalog_getBook instanceof SynchronousCallMessage);
 			Assert.assertEquals(call1_1___bookstore_searchBook_catalog_getBook.getSendingExecution(), this.exec0_0__bookstore_searchBook);
 			Assert.assertEquals(call1_1___bookstore_searchBook_catalog_getBook.getReceivingExecution(), this.exec1_1__catalog_getBook);
-			Assert.assertEquals("Message has wrong timestamp", call1_1___bookstore_searchBook_catalog_getBook.getTimestamp(), this.exec1_1__catalog_getBook.getTin());
+			Assert.assertEquals("Message has wrong timestamp", call1_1___bookstore_searchBook_catalog_getBook.getTimestamp(),
+					this.exec1_1__catalog_getBook.getTin());
 		}
 		{ /* 2.: [1,1].Return catalog.getBook(..)->bookstore.searchBook(..) */// NOCS
 			final AbstractMessage return1_1___catalog_getBook__bookstore_searchBook = msgArray[curIdx++]; // NOCS
@@ -346,7 +351,8 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 			Assert.assertTrue("Message is not a reply", return2_1___crm_getOrders__bookstore_searchBook instanceof SynchronousReplyMessage);
 			Assert.assertEquals(return2_1___crm_getOrders__bookstore_searchBook.getSendingExecution(), this.exec2_1__crm_getOrders);
 			Assert.assertEquals(return2_1___crm_getOrders__bookstore_searchBook.getReceivingExecution(), this.exec0_0__bookstore_searchBook);
-			Assert.assertEquals("Message has wrong timestamp", return2_1___crm_getOrders__bookstore_searchBook.getTimestamp(), this.exec2_1__crm_getOrders.getTout());
+			Assert.assertEquals("Message has wrong timestamp", return2_1___crm_getOrders__bookstore_searchBook.getTimestamp(),
+					this.exec2_1__crm_getOrders.getTout());
 		}
 	}
 
@@ -355,6 +361,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	 * Trace is performed only once.
 	 * 
 	 * @throws InvalidTraceException
+	 *             If the internally assembled execution trace is somehow invalid.
 	 */
 	@Test
 	public void testMessageTraceTransformationOnlyOnce() throws InvalidTraceException {
@@ -373,6 +380,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	 * Trace is performed only once.
 	 * 
 	 * @throws InvalidTraceException
+	 *             If the internally assembled execution trace is somehow invalid.
 	 */
 	@Test
 	public void testMessageTraceTransformationTwiceOnChange() throws InvalidTraceException {
@@ -396,6 +404,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	 * 
 	 * @return
 	 * @throws InvalidTraceException
+	 *             If the internally assembled execution trace is somehow invalid.
 	 */
 	private ExecutionTrace genBrokenBookstoreTraceEssSkip() throws InvalidTraceException {
 		/*
@@ -424,6 +433,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	 * increment/decrement by 1, this test must lead to an exception.
 	 * 
 	 * @throws InvalidTraceException
+	 *             If the internally assembled execution trace is somehow invalid.
 	 */
 	@Test(expected = InvalidTraceException.class)
 	public void testMessageTraceTransformationBrokenTraceEssSkip() throws InvalidTraceException {
@@ -446,6 +456,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	 * 
 	 * @return
 	 * @throws InvalidTraceException
+	 *             If the internally assembled execution trace is somehow invalid.
 	 */
 	private ExecutionTrace genBrokenBookstoreTraceEoiSkip() throws InvalidTraceException {
 		/*
@@ -474,6 +485,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	 * increment by 1, this test must lead to an exception.
 	 * 
 	 * @throws InvalidTraceException
+	 *             If the internally assembled execution trace is somehow invalid.
 	 */
 	@Test(expected = InvalidTraceException.class)
 	public void testMessageTraceTransformationBrokenTraceEoiSkip() throws InvalidTraceException {

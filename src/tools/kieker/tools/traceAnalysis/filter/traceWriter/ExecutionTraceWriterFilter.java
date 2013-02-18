@@ -64,6 +64,9 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 	 * @param projectContext
 	 *            The project context for this component.
 	 * 
+	 * @throws IOException
+	 *             If the write stream could not be prepared.
+	 * 
 	 * @since 1.7
 	 */
 	public ExecutionTraceWriterFilter(final Configuration configuration, final IProjectContext projectContext) throws IOException {
@@ -78,6 +81,9 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 	 * 
 	 * @param configuration
 	 *            The configuration for this component.
+	 * 
+	 * @throws IOException
+	 *             If the write stream could not be prepared.
 	 * 
 	 * @deprecated To be removed in Kieker 1.8.
 	 */

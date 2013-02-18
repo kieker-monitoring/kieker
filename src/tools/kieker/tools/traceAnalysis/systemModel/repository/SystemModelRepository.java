@@ -183,8 +183,11 @@ public class SystemModelRepository extends AbstractRepository {
 	 * 
 	 * @param outputFn
 	 *            file system location of the output file (as accepted by {@link java.io.File#File(String)}).
+	 * 
 	 * @throws FileNotFoundException
+	 *             If the given file is somehow invalid.
 	 * @throws UnsupportedEncodingException
+	 *             If the used default encoding is not supported.
 	 */
 	public void saveSystemToHTMLFile(final String outputFn) throws FileNotFoundException, UnsupportedEncodingException {
 		final PrintStream ps = new PrintStream(new FileOutputStream(outputFn), false, ENCODING);

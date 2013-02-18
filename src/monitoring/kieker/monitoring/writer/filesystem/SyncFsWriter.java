@@ -213,6 +213,9 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	 * 
 	 * @param filename
 	 *            The name of the file to prepare.
+	 * 
+	 * @throws FileNotFoundException
+	 *             If the given file is somehow invalid.
 	 * @throws UnsupportedEncodingException
 	 *             If the encoding is not supported.
 	 */

@@ -54,6 +54,7 @@ public class TestExecutionRecordTransformationFilter extends AbstractKiekerTest 
 	 * @throws AnalysisConfigurationException
 	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internal analysis is in an invalid state.
 	 */
 	@Test
 	public void testAllFieldsComplete() throws IllegalStateException, AnalysisConfigurationException {

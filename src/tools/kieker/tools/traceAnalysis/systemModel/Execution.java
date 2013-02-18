@@ -56,9 +56,8 @@ public class Execution {
 	 *            The timestamp the execution started.
 	 * @param tout
 	 *            The timestamp the execution finished.
-	 * 
-	 * @throws NullPointerException
-	 *             Iff any of the passed mandatory objects (op, allocationComponent, sessionId) is null.
+	 * @param assumed
+	 *            Determines whether the execution is assumed or not.
 	 */
 	public Execution(final Operation op, final AllocationComponent allocationComponent, final long traceId, final String sessionId, final int eoi, final int ess,
 			final long tin, final long tout, final boolean assumed) {
@@ -100,9 +99,8 @@ public class Execution {
 	 *            The timestamp the execution started.
 	 * @param tout
 	 *            The timestamp the execution finished.
-	 * 
-	 * @throws NullPointerException
-	 *             Iff any of the passed mandatory objects (op, allocationComponent) is null.
+	 * @param assumed
+	 *            Determines whether the execution is assumed or not.
 	 */
 	public Execution(final Operation op, final AllocationComponent allocationComponent, final long traceId, final int eoi, final int ess, final long tin,
 			final long tout, final boolean assumed) {

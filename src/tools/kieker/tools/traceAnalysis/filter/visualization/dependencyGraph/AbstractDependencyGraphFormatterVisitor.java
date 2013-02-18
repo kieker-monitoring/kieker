@@ -50,7 +50,8 @@ public abstract class AbstractDependencyGraphFormatterVisitor<T extends ISystemM
 	 * @param useShortLabels
 	 *            Indicates whether short labels should be used
 	 */
-	public AbstractDependencyGraphFormatterVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops, final boolean useShortLabels) {
+	public AbstractDependencyGraphFormatterVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops,
+			final boolean useShortLabels) {
 		this.builder = builder;
 		this.includeWeights = includeWeights;
 		this.plotLoops = plotLoops;

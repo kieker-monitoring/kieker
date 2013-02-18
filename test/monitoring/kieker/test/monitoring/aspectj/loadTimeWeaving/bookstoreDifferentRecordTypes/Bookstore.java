@@ -57,6 +57,9 @@ public class Bookstore extends Thread {
 	 * 
 	 * @param args
 	 *            The command line arguments. They have currently no effect.
+	 * 
+	 * @throws InterruptedException
+	 *             If the main thread has been interrupted.
 	 */
 	public static void main(final String[] args) throws InterruptedException {
 

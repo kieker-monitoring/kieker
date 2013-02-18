@@ -60,7 +60,16 @@ public class CallTreeNode {
 		return this.children;
 	}
 
-	/** Creates a new child and adds it to the nodes list of children. */
+	/**
+	 * Creates a new child and adds it to the nodes list of children.
+	 * 
+	 * @param allocationComponent
+	 *            The allocation component used for the hash key within the new node.
+	 * @param operation
+	 *            The operation used for the hash key within the new node.
+	 * 
+	 * @return The newly created node.
+	 */
 	public final CallTreeNode createNewChild(final AllocationComponent allocationComponent, final Operation operation) {
 		final CallTreeOperationHashKey k = new CallTreeOperationHashKey(allocationComponent, operation);
 		final CallTreeNode node = new CallTreeNode(this, k);
@@ -70,6 +79,13 @@ public class CallTreeNode {
 
 	/**
 	 * Returns the child node with given operation, name, and vmName. The node is created if it doesn't exist.
+	 * 
+	 * @param allocationComponent
+	 *            The allocation component which is used to find the node.
+	 * @param operation
+	 *            The operation which is used to find the node.
+	 * 
+	 * @return The corresponding node to the given parameters if it exists, a new node otherwise.
 	 */
 	public final CallTreeNode getChild(final AllocationComponent allocationComponent, final Operation operation) {
 		final CallTreeOperationHashKey k = new CallTreeOperationHashKey(allocationComponent, operation);
@@ -86,10 +102,20 @@ public class CallTreeNode {
 		return node;
 	}
 
+	/**
+	 * Delivers the allocation component stored within this node.
+	 * 
+	 * @return The allocation component.
+	 */
 	public final AllocationComponent getAllocationComponent() {
 		return this.opInfo.getAllocationComponent();
 	}
 
+	/**
+	 * Delivers the operation stored within this node.
+	 * 
+	 * @return The operation.
+	 */
 	public final Operation getOperation() {
 		return this.opInfo.getOperation();
 	}

@@ -80,7 +80,8 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 		final AtomicLong recordId = new AtomicLong();
 		try {
 			for (int i = 0; i < this.configuration.getIntProperty(CONFIG_NRCONN); i++) {
-				this.addWorker(new DbWriterThread(super.monitoringController, super.blockingQueue, connectionString, tablePrefix, tableCounter, recordId, overwrite));
+				this.addWorker(new DbWriterThread(super.monitoringController, super.blockingQueue, connectionString, tablePrefix, tableCounter, recordId,
+						overwrite));
 			}
 		} catch (final SQLException ex) {
 			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
@@ -97,7 +98,8 @@ final class DbWriterThread extends AbstractAsyncThread {
 	private final Connection connection;
 	private final DBWriterHelper helper;
 
-	private final Map<Class<? extends IMonitoringRecord>, PreparedStatement> recordTypeInformation = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, PreparedStatement>(); // NOPMD
+	private final Map<Class<? extends IMonitoringRecord>, PreparedStatement> recordTypeInformation =
+			new ConcurrentHashMap<Class<? extends IMonitoringRecord>, PreparedStatement>(); // NOPMD
 	private final AtomicLong recordId;
 
 	/**

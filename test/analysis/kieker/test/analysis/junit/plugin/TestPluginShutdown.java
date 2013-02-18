@@ -128,6 +128,8 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 	 * 
 	 * @throws AnalysisConfigurationException
 	 *             If the internally assembled analysis configuration is somehow invalid.
+	 * @throws IllegalStateException
+	 *             If the internal analysis is in an invalid state.
 	 */
 	@Test
 	public void testLongWayShortWay() throws IllegalStateException, AnalysisConfigurationException {

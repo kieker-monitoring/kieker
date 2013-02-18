@@ -135,6 +135,7 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	 * 
 	 * @return
 	 * @throws InvalidTraceException
+	 *             If the internally assembled execution trace is somehow invalid.
 	 */
 	private ExecutionTrace genValidBookstoreTrace() throws InvalidTraceException {
 		/*
@@ -280,6 +281,7 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	 * 
 	 * @return
 	 * @throws InvalidTraceException
+	 *             If the internally assembled execution trace is somehow invalid.
 	 */
 	private ExecutionTrace genValidBookstoreTraceEntryCallExit() throws InvalidTraceException {
 		/*
@@ -338,6 +340,7 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	 * 
 	 * @return
 	 * @throws InvalidTraceException
+	 *             If the internally assembled execution trace is somehow invalid.
 	 */
 	private ExecutionTrace genValidBookstoreTraceSimpleEntryCallReturnCallCallExit() throws InvalidTraceException {
 		/*
@@ -405,6 +408,7 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	 * 
 	 * @return
 	 * @throws InvalidTraceException
+	 *             If the internally assembled execution trace is somehow invalid.
 	 */
 	private ExecutionTrace genValidSyncTraceSimpleEntryCallCallExit() throws InvalidTraceException {
 		/*
@@ -542,6 +546,7 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	 *             If the internally assembled analysis is in an invalid state.
 	 * @throws AnalysisConfigurationException
 	 *             If the internally assembled analysis configuration is somehow invalid.
+	 * 
 	 */
 	private void checkTrace(final TraceEventRecords traceEvents, final ExecutionTrace expectedExecutionTrace) throws InvalidTraceException,
 			IllegalStateException, AnalysisConfigurationException {

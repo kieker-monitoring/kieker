@@ -130,6 +130,13 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 	 * Register thread-local session and trace information, executes the given {@link FilterChain} and unregisters
 	 * the session/trace information. If configured, the execution of this filter is also logged to the {@link IMonitoringController}.
 	 * This method returns immediately if monitoring is not enabled.
+	 * 
+	 * @param request
+	 *            The request.
+	 * @param response
+	 *            The response.
+	 * @param chain
+	 *            The filter chain to be used.
 	 */
 	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
 			throws IOException, ServletException {

@@ -52,8 +52,10 @@ import kieker.common.record.misc.TimestampRecord;
  */
 @Plugin(description = "Generates time events with a given resolution based on the timestamps of incoming IMonitoringRecords",
 		outputPorts = {
-			@OutputPort(name = CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_RECORD, eventTypes = { TimestampRecord.class }, description = "Provides current time events"),
-			@OutputPort(name = CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_VALUE, eventTypes = { Long.class }, description = "Provides current time values")
+			@OutputPort(name = CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_RECORD, eventTypes = { TimestampRecord.class },
+					description = "Provides current time events"),
+			@OutputPort(name = CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_VALUE, eventTypes = { Long.class },
+					description = "Provides current time values")
 		},
 		configuration = {
 			@Property(name = CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_NAME_TIME_RESOLUTION, defaultValue = "1000")

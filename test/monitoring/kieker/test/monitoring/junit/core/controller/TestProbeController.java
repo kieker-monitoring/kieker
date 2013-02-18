@@ -213,7 +213,8 @@ public class TestProbeController extends AbstractKiekerTest {
 		list3.add("+ Test test.Test.getTest()");
 		ctrl.setProbePatternList(list3);
 		final List<String> list4 = this.readFromConfigFile();
-		Assert.assertArrayEquals(new String[] { "-public * test.Test.get*()", "+public void test.Test.getNothing()", "+Test test.Test.getTest()", }, list4.toArray());
+		Assert.assertArrayEquals(new String[] { "-public * test.Test.get*()", "+public void test.Test.getNothing()", "+Test test.Test.getTest()", },
+				list4.toArray());
 
 		Assert.assertFalse(ctrl.isMonitoringTerminated());
 		ctrl.terminateMonitoring();

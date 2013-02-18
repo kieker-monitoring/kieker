@@ -41,7 +41,8 @@ import kieker.monitoring.core.controller.MonitoringController;
 // TODO: We should move this class to another package
 @Plugin(description = "A filter which passes received records to the configured monitoring controller",
 		outputPorts = {
-			@OutputPort(name = MonitoringRecordLoggerFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming monitoring record", eventTypes = { IMonitoringRecord.class })
+			@OutputPort(name = MonitoringRecordLoggerFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming monitoring record",
+					eventTypes = { IMonitoringRecord.class })
 		},
 		configuration = {
 			@Property(name = MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, defaultValue = "")

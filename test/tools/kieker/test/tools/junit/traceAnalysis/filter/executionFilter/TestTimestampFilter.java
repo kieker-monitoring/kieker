@@ -77,6 +77,7 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 	 * @throws AnalysisConfigurationException
 	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internal analysis is in an invalid state.
 	 */
 	@Test
 	public void testRecordTinBeforeToutWithinIgnored() throws IllegalStateException, AnalysisConfigurationException {
@@ -113,6 +114,7 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 	 * @throws AnalysisConfigurationException
 	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internal analysis is in an invalid state.
 	 */
 	@Test
 	public void testRecordTinWithinToutAfterIgnored() throws IllegalStateException, AnalysisConfigurationException {
@@ -149,6 +151,7 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 	 * @throws AnalysisConfigurationException
 	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internal analysis is in an invalid state.
 	 */
 	@Test
 	public void testRecordTinToutOnBordersPassed() throws IllegalStateException, AnalysisConfigurationException {

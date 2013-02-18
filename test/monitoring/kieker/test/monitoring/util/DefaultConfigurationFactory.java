@@ -26,10 +26,19 @@ import kieker.monitoring.writer.DummyWriter;
  */
 public final class DefaultConfigurationFactory {
 
+	/** The name of the writer used for the configuration. */
 	public static final String WRITER_NAME = DummyWriter.class.getName();
 
+	/**
+	 * Private constructor to avoid instantiation.
+	 */
 	private DefaultConfigurationFactory() {}
 
+	/**
+	 * This method creates a simple default configuration containing the dummy writer.
+	 * 
+	 * @return The configuration object.
+	 */
 	public static Configuration createDefaultConfigurationWithDummyWriter() {
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
 		configuration.setProperty(ConfigurationFactory.CONTROLLER_NAME, "Kieker-Test");

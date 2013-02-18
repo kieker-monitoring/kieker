@@ -77,6 +77,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 	 * 
 	 * @return
 	 * @throws InvalidTraceException
+	 *             If the internally assembled execution trace is somehow invalid.
 	 */
 	private ExecutionTrace genValidBookstoreTrace() throws InvalidTraceException {
 		/*
@@ -101,6 +102,9 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 	 * @throws AnalysisConfigurationException
 	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internal analysis is in an invalid state.
+	 * @throws InvalidTraceException
+	 *             If the internally assembled execution trace is somehow invalid.
 	 */
 	@Test
 	public void testValidBookstoreTracePassed() throws InvalidTraceException, IllegalStateException, AnalysisConfigurationException {
@@ -213,6 +217,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 	 * @throws AnalysisConfigurationException
 	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internal analysis is in an invalid state.
 	 */
 	@Test
 	public void testBrokenBookstoreTracePassed() throws InvalidTraceException, IllegalStateException, AnalysisConfigurationException {

@@ -184,16 +184,16 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 	}
 
 	@Test
-	public void testIntervalsBasedOn1stTstamp() throws IllegalStateException, AnalysisConfigurationException, InterruptedException { // NOPMD
-																																		// (JUnitTestsShouldIncludeAssert)
+	public void testIntervalsBasedOn1stTstamp() throws IllegalStateException, AnalysisConfigurationException,
+			InterruptedException { // NOPMD (JUnitTestsShouldIncludeAssert)
 		this.intervalsBasedOn1stTstamp = true;
 		this.prepareConfiguration();
 		this.doTheTest();
 	}
 
 	@Test
-	public void testIntervalsBasedOn1970() throws IllegalStateException, AnalysisConfigurationException, InterruptedException { // NOPMD
-																																// (JUnitTestsShouldIncludeAssert)
+	public void testIntervalsBasedOn1970() throws IllegalStateException, AnalysisConfigurationException,
+			InterruptedException { // NOPMD (JUnitTestsShouldIncludeAssert)
 		this.intervalsBasedOn1stTstamp = false;
 		this.prepareConfiguration();
 		this.doTheTest();

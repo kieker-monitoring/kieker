@@ -53,10 +53,14 @@ import kieker.common.record.IMonitoringRecord;
 		})
 public class DbReader extends AbstractReaderPlugin {
 
+	/** This is the name of the outport port delivering the records from the database. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 
+	/** The name of the property containing the class name of the driver. */
 	public static final String CONFIG_PROPERTY_NAME_DRIVERCLASSNAME = "DriverClassname";
+	/** The name of the property containing the string to connect to the database. */
 	public static final String CONFIG_PROPERTY_NAME_CONNECTIONSTRING = "ConnectionString";
+	/** The name of the property containing the prefix for the tables to read. */
 	public static final String CONFIG_PROPERTY_NAME_TABLEPREFIX = "TablePrefix";
 
 	private static final Log LOG = LogFactory.getLog(DbReader.class);
@@ -171,8 +175,8 @@ public class DbReader extends AbstractReaderPlugin {
 	 * @throws MonitoringRecordException
 	 *             If the data within the table could not be converted into a valid record.
 	 */
-	private void table2record(final Connection connection, final String tablename, final Class<? extends IMonitoringRecord> clazz)
-			throws SQLException, MonitoringRecordException {
+	private void table2record(final Connection connection, final String tablename, final Class<? extends IMonitoringRecord> clazz) throws SQLException,
+			MonitoringRecordException {
 		Statement selectRecord = null;
 		try {
 			selectRecord = connection.createStatement();

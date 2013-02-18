@@ -97,7 +97,9 @@ public final class SignatureFactory {
 	 *            Null or empty list, if no exceptions are required.
 	 * @return
 	 *         A signature which has been generated from the inputs.
+	 * 
 	 * @throws InvalidPatternException
+	 *             If any of the mandatory parameters is null.
 	 */
 	public static String createMethodSignature(final String[] modList, final String retType,
 			final String fqName, final String method, final String[] params, final String[] exceptions) throws InvalidPatternException {

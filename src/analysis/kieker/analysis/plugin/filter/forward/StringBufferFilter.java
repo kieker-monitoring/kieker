@@ -127,7 +127,8 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 	}
 
 	@SuppressWarnings("unchecked")
-	@InputPort(name = StringBufferFilter.INPUT_PORT_NAME_EVENTS, description = "Receives incoming objects to be buffered and forwarded", eventTypes = { Object.class })
+	@InputPort(name = StringBufferFilter.INPUT_PORT_NAME_EVENTS, description = "Receives incoming objects to be buffered and forwarded",
+			eventTypes = { Object.class })
 	public final void inputEvent(final Object object) {
 		if (object instanceof String) {
 			super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, this.get((String) object));

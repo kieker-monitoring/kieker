@@ -43,7 +43,8 @@ public class ContainerDependencyGraphFormatter extends AbstractDependencyGraphFo
 	}
 
 	@Override
-	protected String formatDependencyGraph(final ContainerDependencyGraph graph, final boolean includeWeights, final boolean useShortLabels, final boolean plotLoops) {
+	protected String formatDependencyGraph(final ContainerDependencyGraph graph, final boolean includeWeights, final boolean useShortLabels,
+			final boolean plotLoops) {
 		final StringBuilder builder = new StringBuilder();
 
 		this.appendGraphHeader(builder);

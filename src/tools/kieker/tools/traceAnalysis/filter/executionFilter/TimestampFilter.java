@@ -35,7 +35,8 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  */
 @Plugin(description = "A filter allowing to filter incoming execution objects based on their timestamps",
 		outputPorts = {
-			@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, description = "Fowards records within the timeperiod", eventTypes = { Execution.class })
+			@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, description = "Fowards records within the timeperiod",
+					eventTypes = { Execution.class })
 		},
 		configuration = {
 			@Property(name = TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, defaultValue = "0"),

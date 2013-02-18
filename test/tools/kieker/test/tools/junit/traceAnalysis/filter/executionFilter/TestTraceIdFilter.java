@@ -89,6 +89,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest { // NOCS
 	 * @throws AnalysisConfigurationException
 	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internal analysis is in an invalid state.
 	 */
 	@Test
 	public void testAssertIgnoreTraceId() throws IllegalStateException, AnalysisConfigurationException {
@@ -127,6 +128,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest { // NOCS
 	 * @throws AnalysisConfigurationException
 	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internal analysis is in an invalid state.
 	 */
 	@Test
 	public void testAssertPassTraceId() throws IllegalStateException, AnalysisConfigurationException {

@@ -79,8 +79,8 @@ public class TestPeriodicSampling extends AbstractKiekerTest { // NOCS
 
 		Assert.assertEquals("Unexpected number of triggering events before disabling", 3, numEventsBeforeDisabled);
 		Assert.assertEquals("Unexpected number of triggering events while disabled", 0, numEventsWhileDisabled);
-		Assert.assertTrue("Unexpected at least one triggering events after being re-enabled. Found " + numEventsAfterReEnabled, numEventsAfterReEnabled > 0); // NOCS
-																																								// (MagicNumberCheck)
+		Assert.assertTrue("Unexpected at least one triggering events after being re-enabled. Found " + numEventsAfterReEnabled,
+				numEventsAfterReEnabled > 0); // NOCS (MagicNumberCheck)
 		monitoringController.terminateMonitoring();
 	}
 

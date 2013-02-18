@@ -148,7 +148,8 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 		}
 	}
 
-	@InputPort(name = INPUT_PORT_NAME_EXECUTION, description = "Receives execution events to be selected by trace ID", eventTypes = { OperationExecutionRecord.class })
+	@InputPort(name = INPUT_PORT_NAME_EXECUTION, description = "Receives execution events to be selected by trace ID",
+			eventTypes = { OperationExecutionRecord.class })
 	public void inputOperationExecutionRecord(final OperationExecutionRecord record) {
 		if (this.acceptId(record.getTraceId())) {
 			super.deliver(OUTPUT_PORT_NAME_MATCH, record);

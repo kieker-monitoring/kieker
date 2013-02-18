@@ -104,7 +104,8 @@ class AggregatedAllocationComponentOperationCallTreeNode extends AbstractAggrega
 	}
 
 	@Override
-	public AbstractCallTreeNode<AllocationComponentOperationPair> newCall(final Object dstObj, final MessageTrace origin, final IOriginRetentionPolicy originPolicy) {
+	public AbstractCallTreeNode<AllocationComponentOperationPair> newCall(final Object dstObj, final MessageTrace origin,
+			final IOriginRetentionPolicy originPolicy) {
 		final AllocationComponentOperationPair destination = (AllocationComponentOperationPair) dstObj;
 		WeightedDirectedCallTreeEdge<AllocationComponentOperationPair> e = this.childMap.get(destination.getId());
 		AbstractCallTreeNode<AllocationComponentOperationPair> n;

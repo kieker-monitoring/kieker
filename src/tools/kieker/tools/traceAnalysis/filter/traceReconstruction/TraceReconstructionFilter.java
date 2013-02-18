@@ -47,16 +47,21 @@ import kieker.tools.util.LoggingTimestampConverter;
  */
 @Plugin(description = "Uses the incoming data to enrich the connected repository with the reconstructed traces",
 		outputPorts = {
-			@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Reconstructed Message Traces", eventTypes = { MessageTrace.class }),
-			@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Reconstructed Execution Traces", eventTypes = { ExecutionTrace.class }),
-			@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, description = "Invalid Execution Traces", eventTypes = { InvalidExecutionTrace.class })
+			@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Reconstructed Message Traces",
+					eventTypes = { MessageTrace.class }),
+			@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Reconstructed Execution Traces",
+					eventTypes = { ExecutionTrace.class }),
+			@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, description = "Invalid Execution Traces",
+					eventTypes = { InvalidExecutionTrace.class })
 		},
 		repositoryPorts = {
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 		},
 		configuration = {
-			@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, defaultValue = "2147483647"), // Integer.toString(Integer.MAX_VALUE)
-			@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, defaultValue = "true")
+			@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS,
+					defaultValue = "2147483647"), // Integer.toString(Integer.MAX_VALUE)
+			@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES,
+					defaultValue = "true")
 		})
 public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 

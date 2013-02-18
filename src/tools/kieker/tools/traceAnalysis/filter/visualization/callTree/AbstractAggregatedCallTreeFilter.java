@@ -47,9 +47,12 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 		},
 		configuration = {
-			@Property(name = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, defaultValue = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_VALUE_INCLUDE_WEIGHTS_DEFAULT),
-			@Property(name = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, defaultValue = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT),
-			@Property(name = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, defaultValue = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT)
+			@Property(name = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS,
+					defaultValue = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_VALUE_INCLUDE_WEIGHTS_DEFAULT),
+			@Property(name = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
+					defaultValue = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT),
+			@Property(name = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME,
+					defaultValue = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT)
 		})
 public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTreeFilter<T> {
 

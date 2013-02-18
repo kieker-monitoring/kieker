@@ -67,6 +67,7 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	 * @throws AnalysisConfigurationException
 	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internal analysis is in an invalid state.
 	 */
 	private void createTimestampFilter(final long ignoreExecutionsBeforeTimestamp, final long ignoreExecutionsAfterTimestamp)
 			throws IllegalStateException, AnalysisConfigurationException {
@@ -92,6 +93,7 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	 * @throws AnalysisConfigurationException
 	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internal analysis is in an invalid state.
 	 */
 	@Test
 	public void testEventBeforeIgnored() throws IllegalStateException, AnalysisConfigurationException {
@@ -115,6 +117,7 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	 * @throws AnalysisConfigurationException
 	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internal analysis is in an invalid state.
 	 */
 	@Test
 	public void testEventAfterIgnored() throws IllegalStateException, AnalysisConfigurationException {
@@ -136,6 +139,7 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	 * @throws AnalysisConfigurationException
 	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internal analysis is in an invalid state.
 	 */
 	@Test
 	public void testRecordOnLeftBorderPasses() throws IllegalStateException, AnalysisConfigurationException {
@@ -159,6 +163,7 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	 * @throws AnalysisConfigurationException
 	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internal analysis is in an invalid state.
 	 */
 	@Test
 	public void testRecordOnRightBorderPasses() throws IllegalStateException, AnalysisConfigurationException {

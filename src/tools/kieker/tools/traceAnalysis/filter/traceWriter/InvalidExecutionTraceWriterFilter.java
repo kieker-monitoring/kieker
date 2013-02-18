@@ -61,6 +61,9 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 	 * @param projectContext
 	 *            The project context for this component.
 	 * 
+	 * @throws IOException
+	 *             If the write stream could not be prepared.
+	 * 
 	 * @since 1.7
 	 */
 	public InvalidExecutionTraceWriterFilter(final Configuration configuration, final IProjectContext projectContext) throws IOException {
@@ -75,6 +78,9 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 	 * 
 	 * @param configuration
 	 *            The configuration for this component.
+	 * 
+	 * @throws IOException
+	 *             If the write stream could not be prepared.
 	 * 
 	 * @deprecated To be removed in Kieker 1.8.
 	 */

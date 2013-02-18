@@ -380,14 +380,14 @@ public final class TraceAnalysisTool {
 	 *            The analysis controller to use for the connection of the plugins
 	 * @param commandLine
 	 *            The command line to determine the desired processors
+	 * 
 	 * @throws IllegalStateException
 	 *             If the connection of plugins is not possible at the moment
 	 * @throws AnalysisConfigurationException
 	 *             If some plugins cannot be connected
 	 */
 	private static void attachGraphProcessors(final List<AbstractGraphProducingFilter<?>> graphProducers, final AnalysisController controller,
-			final CommandLine commandLine)
-			throws IllegalStateException, AnalysisConfigurationException, IOException {
+			final CommandLine commandLine) throws IllegalStateException, AnalysisConfigurationException, IOException {
 
 		for (final AbstractGraphProducingFilter<?> producer : graphProducers) {
 			AbstractGraphFilter<?, ?, ?, ?> lastFilter = null;
@@ -590,7 +590,8 @@ public final class TraceAnalysisTool {
 			traceAssemblyEquivClassFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.TRACEASSEMBLYEQUIVCLASS_COMPONENT_NAME);
 			traceAssemblyEquivClassFilterConfig.setProperty(TraceEquivalenceClassFilter.CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE,
 					TraceEquivalenceClassModes.ASSEMBLY.toString());
-			final TraceEquivalenceClassFilter traceAssemblyEquivClassFilter = new TraceEquivalenceClassFilter(traceAssemblyEquivClassFilterConfig, ANALYSIS_INSTANCE);
+			final TraceEquivalenceClassFilter traceAssemblyEquivClassFilter = new TraceEquivalenceClassFilter(traceAssemblyEquivClassFilterConfig,
+					ANALYSIS_INSTANCE);
 			if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT)) {
 				/**
 				 * Currently, this filter is only used to print an equivalence

@@ -61,7 +61,8 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	 */
 	@Override
 	public Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.getClassSignature(), this.getCause(), };
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.getClassSignature(),
+			this.getCause(), };
 	}
 
 	/**

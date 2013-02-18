@@ -35,7 +35,8 @@ public final class Jdk14LoggerPatched extends Jdk14Logger {
 		try {
 			if (commonsFactory instanceof LogFactoryImpl) {
 				final LogFactoryImpl commonsFactoryImpl = (LogFactoryImpl) commonsFactory;
-				if (("org.apache.commons.logging.impl.Jdk14Logger".equals(commonsFactoryImpl.getLogClassName())) && (commonsFactoryImpl.instances.get(name) == null)) {
+				if (("org.apache.commons.logging.impl.Jdk14Logger".equals(commonsFactoryImpl.getLogClassName()))
+						&& (commonsFactoryImpl.instances.get(name) == null)) {
 					// commons using Jdk14Logger and not yet assigned
 					final org.apache.commons.logging.Log instance = new Jdk14LoggerPatched(name);
 					commonsFactoryImpl.instances.put(name, instance);

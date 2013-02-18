@@ -64,8 +64,13 @@ public final class FsWriterThread extends AbstractFsWriterThread {
 	/**
 	 * Prepares a new file if needed.
 	 * 
+	 * @param filename
+	 *            The name of the file to be prepared.
+	 * 
 	 * @throws FileNotFoundException
+	 *             If the given file is somehow invalid.
 	 * @throws UnsupportedEncodingException
+	 *             If the used default encoding is not supported.
 	 */
 	@Override
 	protected final void prepareFile(final String filename) throws FileNotFoundException, UnsupportedEncodingException {

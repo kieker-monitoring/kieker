@@ -55,8 +55,10 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 		},
 		configuration = {
-			@Property(name = TraceCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, defaultValue = TraceCallTreeFilter.CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT),
-			@Property(name = TraceCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, defaultValue = TraceCallTreeFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT)
+			@Property(name = TraceCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
+					defaultValue = TraceCallTreeFilter.CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT),
+			@Property(name = TraceCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME,
+					defaultValue = TraceCallTreeFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT)
 		})
 public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 
@@ -119,6 +121,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
