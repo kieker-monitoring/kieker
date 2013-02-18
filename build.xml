@@ -12,6 +12,12 @@
 		<property name="year" value="2012" />
 		<property name="copyright" value="Kieker Project" />
 		
+		<property name="dist.kieker.main.sources.jar" value="${kieker.main.packagenamebase}-${kieker.version}-${kieker-src.suffix}.jar" />
+		<property name="dist.kieker.main.sources.aspectj.jar" value="${kieker.main.packagenamebase}-${kieker.version}_aspectj-${kieker-src.suffix}.jar" />
+		<property name="dist.kieker.main.sources.emf.jar" value="${kieker.main.packagenamebase}-${kieker.version}_emf-${kieker-src.suffix}.jar" />
+		<property name="dist.kieker.main.javadoc.jar" value="${kieker.main.packagenamebase}-${kieker.version}-${kieker-api.suffix}.jar" />
+		<property name="dist.kieker.main.javadoc.aspectj.jar" value="${kieker.main.packagenamebase}-${kieker.version}_aspectj-${kieker-api.suffix}.jar" />
+		<property name="dist.kieker.main.javadoc.emf.jar" value="${kieker.main.packagenamebase}-${kieker.version}_emf-${kieker-api.suffix}.jar" />
 		<property name="dist.kieker.main.jar" value="${kieker.main.packagenamebase}-${kieker.version}.jar" />
 		<property name="dist.kieker.main.aspectj.jar" value="${kieker.main.packagenamebase}-${kieker.version}_aspectj.jar" />
 		<property name="dist.kieker.main.aspectj.jar.latex" value="${kieker.main.packagenamebase}-${kieker.version}\\\\\\_aspectj.jar" />
@@ -42,6 +48,7 @@
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${dist.dir}" />
 		<mkdir dir="${release.dir}" />
+		<mkdir dir="${maven.dir}" />
 		<mkdir dir="${build.tests.dir}" />
 		<mkdir dir="${tmp.dir}" />
 	</target>
@@ -280,7 +287,7 @@
 	<target name="dist-kieker-userguide" depends="-init,-build-userguide" description="Packages the Kieker user guide">
 		<copy file="${src.userguide.pdf}" tofile="${release.dir}/${dist.kieker.userguide.pdf}" />
 	</target>
-
+	
 	<target name="-generate-javadoc" depends="-init" description="Generate the Javadoc API documentation">
 		<delete dir="${build.api.dir}" />
 		<mkdir dir="${build.api.dir}" />
@@ -376,6 +383,28 @@
 		</zip>
 	</target>
 
+	<target name="dist-maven" depends="-generate-javadoc, build-all" >
+		<!-- The "real" jar files -->
+		<copy file="${dist.dir}/${dist.kieker.main.jar}" tofile="${maven.dir}/${dist.kieker.main.jar}" />
+		<copy file="${dist.dir}/${dist.kieker.main.emf.jar}" tofile="${maven.dir}/${dist.kieker.main.emf.jar}" />
+		<copy file="${dist.dir}/${dist.kieker.main.aspectj.jar}" tofile="${maven.dir}/${dist.kieker.main.aspectj.jar}" />
+	
+		<!-- The source files -->
+		<jar zipfile="${maven.dir}/${dist.kieker.main.sources.jar}">
+			<zipfileset dir="${src.dir}" prefix="src" defaultexcludes="yes" />
+			<zipfileset dir="${src.gen}" prefix="src-gen" defaultexcludes="yes" />
+		</jar>
+		<copy file="${maven.dir}/${dist.kieker.main.sources.jar}" tofile="${maven.dir}/${dist.kieker.main.sources.aspectj.jar}" />
+		<copy file="${maven.dir}/${dist.kieker.main.sources.jar}" tofile="${maven.dir}/${dist.kieker.main.sources.emf.jar}" />
+		
+		<!-- The javadoc files -->
+		<jar zipfile="${maven.dir}/${dist.kieker.main.javadoc.jar}">
+			<zipfileset dir="${build.api.dir}" prefix="" defaultexcludes="yes" />
+		</jar>
+		<copy file="${maven.dir}/${dist.kieker.main.javadoc.jar}" tofile="${maven.dir}/${dist.kieker.main.javadoc.aspectj.jar}" />
+		<copy file="${maven.dir}/${dist.kieker.main.javadoc.jar}" tofile="${maven.dir}/${dist.kieker.main.javadoc.emf.jar}" />
+	</target>
+	
 	<target name="dist-kieker-binaries" depends="build-all,-build-userguide,-build-userguide-examples" description="Packages the binary archives (.zip|.tar.gz) for a release">
 
 		<patternset id="dist_bin_files-nonbinmode"> <!-- NOTE that the order of includes/excludes seems to have no effect. So be careful with excludes --> 
@@ -565,7 +594,7 @@
   		</delete>
 	</target>
 
-	<target name="release" depends="build-all,dist-kieker-sources,dist-kieker-binaries,dist-kieker-javadoc,dist-examples,dist-kieker-userguide" description="Packages the release files (calling all dist- targets)">
+	<target name="release" depends="build-all,dist-kieker-sources,dist-kieker-binaries,dist-kieker-javadoc,dist-examples,dist-kieker-userguide,dist-maven" description="Packages the release files (calling all dist- targets)">
 		<echo message="Sourceforge release instructions can be found at:" />
 		<echo message="https://sourceforge.net/apps/trac/sourceforge/wiki/Release files for download#Createoreditarelease" />
 		<echo message="" />
@@ -583,6 +612,7 @@
 		<!-- <delete dir="tmp"/>-->
 		<delete dir="${dist.dir}" />
 		<delete dir="${release.dir}" />
+		<delete dir="${maven.dir}" />
 		<delete dir="${build.dir}" />
 	</target>
 
