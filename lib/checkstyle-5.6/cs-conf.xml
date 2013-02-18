@@ -869,10 +869,12 @@
 
         <!-- Checks for uncommented main() methods (debugging leftovers). !-->
         <!-- See http://checkstyle.sf.net/config_misc.html !-->
+        <!-- KIEKER do not check for these
         <module name="UncommentedMain">
             <property name="severity" value="info"/> 
             <property name="excludedClasses" value="Main$"/>
         </module>
+        -->
 
         <!-- Checks that long constants are defined with an upper ell. That is 'L' and not 'l'. !-->
         <!-- See http://checkstyle.sf.net/config_misc.html !-->
