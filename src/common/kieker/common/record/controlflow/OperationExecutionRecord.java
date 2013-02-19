@@ -136,6 +136,8 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 
 	/**
 	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
 	public void initFromArray(final Object[] values) {

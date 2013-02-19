@@ -38,6 +38,8 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 
 	/**
 	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
 	public final void initFromArray(final Object[] values) {

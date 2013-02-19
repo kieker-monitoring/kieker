@@ -50,6 +50,8 @@ public final class EmptyRecord extends AbstractMonitoringRecord implements IMoni
 
 	/**
 	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
 	public void initFromArray(final Object[] values) {

@@ -120,6 +120,8 @@ public final class Trace extends AbstractMonitoringRecord implements IMonitoring
 
 	/**
 	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
 	public final void initFromArray(final Object[] values) {

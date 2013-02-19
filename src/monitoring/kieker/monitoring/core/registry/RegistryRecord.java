@@ -54,11 +54,19 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 		return new Object[] { this.id, this.object };
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 */
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES.clone();
 	}
