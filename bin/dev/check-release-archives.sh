@@ -156,9 +156,9 @@ function assert_files_exist_common {
 function assert_files_exist_src {
     assert_files_exist_common
     assert_dir_exists "model/"
-    assert_file_exists_regular "AnalysisMetaModel.ecore"
-    assert_file_exists_regular "AnalysisMetaModel.ecorediag"
-    assert_file_exists_regular "AnalysisMetaModel.genmodel"
+    assert_file_exists_regular "model/AnalysisMetaModel.ecore"
+    assert_file_exists_regular "model/AnalysisMetaModel.ecorediag"
+    assert_file_exists_regular "model/AnalysisMetaModel.genmodel"
     assert_dir_exists "src/"
     assert_dir_exists "src-gen/"
     assert_dir_exists "test/"
