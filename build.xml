@@ -20,9 +20,9 @@
 		<property name="dist.kieker.main.javadoc.aspectj.jar" value="${kieker.main.packagenamebase}-${kieker.version}_aspectj-${kieker-api.suffix}.jar" />
 		<property name="dist.kieker.main.javadoc.emf.jar" value="${kieker.main.packagenamebase}-${kieker.version}_emf-${kieker-api.suffix}.jar" />
 
-		<property name="dist.kieker.main.pom" value="${kieker.main.packagenamebase}-${kieker.version}-${kieker-api.suffix}.pom" />
-		<property name="dist.kieker.main.aspectj.pom" value="${kieker.main.packagenamebase}-${kieker.version}_aspectj-${kieker-api.suffix}.pom" />
-		<property name="dist.kieker.main.emf.pom" value="${kieker.main.packagenamebase}-${kieker.version}_emf-${kieker-api.suffix}.pom" />
+		<property name="dist.kieker.main.pom" value="${kieker.main.packagenamebase}-${kieker.version}.pom" />
+		<property name="dist.kieker.main.aspectj.pom" value="${kieker.main.packagenamebase}-${kieker.version}_aspectj.pom" />
+		<property name="dist.kieker.main.emf.pom" value="${kieker.main.packagenamebase}-${kieker.version}_emf.pom" />
 		
 		<property name="dist.kieker.main.jar" value="${kieker.main.packagenamebase}-${kieker.version}.jar" />
 		<property name="dist.kieker.main.aspectj.jar" value="${kieker.main.packagenamebase}-${kieker.version}_aspectj.jar" />
@@ -412,9 +412,9 @@
 		<copy file="${maven.dir}/${dist.kieker.main.javadoc.jar}" tofile="${maven.dir}/${dist.kieker.main.javadoc.emf.jar}" />
 
 		<!-- The pom files -->
-		<copy file="${pom.xml.kieker.main.aspectj}" tofile="${maven.dir}/${dist.kieker.main.pom}" />
-		<copy file="${pom.xml.kieker.main.emf}" tofile="${maven.dir}/${dist.kieker.main.aspectj.pom}" />
-		<copy file="${pom.xml.kieker.main}" tofile="${maven.dir}/${dist.kieker.main.emf.pom}" />
+		<copy file="${pom.xml.kieker.main}" tofile="${maven.dir}/${dist.kieker.main.pom}" />
+		<copy file="${pom.xml.kieker.main.aspectj}" tofile="${maven.dir}/${dist.kieker.main.aspectj.pom}" />
+		<copy file="${pom.xml.kieker.main.emf}" tofile="${maven.dir}/${dist.kieker.main.emf.pom}" />
 	</target>
 	
 	<target name="dist-kieker-binaries" depends="build-all,-build-userguide,-build-userguide-examples" description="Packages the binary archives (.zip|.tar.gz) for a release">
