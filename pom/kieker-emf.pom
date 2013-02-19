@@ -9,7 +9,7 @@
   <artifactId>kieker-emf</artifactId>
   <packaging>jar</packaging>
   <name>Kieker Monitoring and Analysis Framework</name>
-  <version>1.6</version>
+  <version>KIEKER-VERSION</version><!--Kieker marker comment for automatic version updates; DO NOT REMOVE!-->
   <description>Kieker: Application Performance Monitoring and Dynamic Software Analysis</description>
   <url>http://kieker-monitoring.net</url>
   <licenses>
@@ -36,6 +36,5 @@
       <name>Jan Waller</name>
       <email>jwa@informatik.uni-kiel.de</email>
     </developer>
-    <!-- add further developers as needed -->
   </developers>
 </project>
