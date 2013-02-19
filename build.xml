@@ -383,7 +383,7 @@
 		</zip>
 	</target>
 
-	<target name="dist-maven" depends="-generate-javadoc, build-all" >
+	<target name="dist-maven" depends="-generate-javadoc, build-all" description="Creates the Kieker release artifacts to be uploaded to a Maven repository">
 		<!-- The "real" jar files -->
 		<copy file="${dist.dir}/${dist.kieker.main.jar}" tofile="${maven.dir}/${dist.kieker.main.jar}" />
 		<copy file="${dist.dir}/${dist.kieker.main.emf.jar}" tofile="${maven.dir}/${dist.kieker.main.emf.jar}" />
@@ -600,14 +600,16 @@
 		<echo message="" />
 		<echo message="Note that this target executes only on platforms having 'make' and 'sh' installed" />
 		<echo message="Also, in order to run with the source archive, you'll additionally need to extract the 'kieker-${kieker.version}_examples-JavaEEServletContainerExample'.{zip|tar.gz} archive" />
-
-		<echo message="Checking release archives ..." /> 
-		<!--<exec executable="${tests.release-script.sh}" failonerror="true">
-			<arg value="-C" />
-			<arg value="." />
-		</exec>-->
 	</target>
 
+	<target name="release-with-archive-check" depends="release">
+		<echo message="Checking release archives ..." /> 
+		<exec executable="${tests.release-script.sh}" failonerror="true">
+			<arg value="-C" />
+			<arg value="." />
+		</exec>
+	</target>
+	
 	<target name="clean" description="Removes artifacts from previous builds">
 		<!-- <delete dir="tmp"/>-->
 		<delete dir="${dist.dir}" />
