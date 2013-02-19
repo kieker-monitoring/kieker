@@ -141,7 +141,7 @@ public class DescriptionRepository extends AbstractRepository {
 	 * @throws IOException
 	 *             If an I/O error occurs
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public static DescriptionRepository createFromFile(final String fileName) throws IOException {

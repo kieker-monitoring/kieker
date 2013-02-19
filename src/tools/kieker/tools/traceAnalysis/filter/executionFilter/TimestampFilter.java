@@ -47,9 +47,12 @@ public class TimestampFilter extends AbstractTimestampFilter {
 	/** This is the name of the input port receiving new executions. */
 	public static final String INPUT_PORT_NAME_EXECUTION = "executions";
 
+	/** The name of the output port delivering the executions which are within the defined time limits. */
 	public static final String OUTPUT_PORT_NAME_WITHIN_PERIOD = "executionsWithinTimePeriod";
 
+	/** The name of the property determining the lower limit of the filter. */
 	public static final String CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP = "ignoreExecutionsBeforeTimestamp";
+	/** The name of the property determining the upper limit of the filter. */
 	public static final String CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP = "ignoreExecutionsAfterTimestamp";
 
 	/**

@@ -107,8 +107,6 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 	 * Extending classes may override this method in order to provide an alternative signature. However,
 	 * note that this method is executed on each filter execution. Hence, you should return a final
 	 * value here instead of executing expensive String operations.
-	 * 
-	 * @return
 	 */
 	protected String getFilterOperationSignatureString() {
 		return this.filterOperationSignatureString;
@@ -138,8 +136,7 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 	 * @param chain
 	 *            The filter chain to be used.
 	 */
-	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
-			throws IOException, ServletException {
+	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
 		if (!MONITORING_CTRL.isProbeActivated(this.filterOperationSignatureString)) {
 			chain.doFilter(request, response);
 			return;

@@ -274,7 +274,7 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 
 	/**
 	 * Generates an a modified version of the the "well-known" bookstore
-	 * trace, which included only the execution of <code>Bookstore.searchBook(..)<code> and the 
+	 * trace, which included only the execution of <code>Bookstore.searchBook(..)</code> and the
 	 * nested execution of <code>Catalog.getBook(..)</code>.
 	 * 
 	 * Borrowed from {@link kieker.test.tools.junit.traceAnalysis.filter.TestTraceReconstructionFilter}.
@@ -333,8 +333,8 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	}
 
 	/**
-	 * Generates an a modified version of the the "well-known" bookstore trace, which includes only the execution of <code>Bookstore.searchBook(..)<code> 
-	 * and the nested (i.e., called both by <code>Bookstore.searchBook(..)<code>) executions of <code>Catalog.getBook(..)</code> and <code>CRM.getOrder(..)</code>.
+	 * Generates an a modified version of the the "well-known" bookstore trace, which includes only the execution of <code>Bookstore.searchBook(..)</code> and the
+	 * nested (i.e., called both by <code>Bookstore.searchBook(..)</code>) executions of <code>Catalog.getBook(..)</code> and <code>CRM.getOrder(..)</code>.
 	 * 
 	 * Borrowed from {@link kieker.test.tools.junit.traceAnalysis.filter.TestTraceReconstructionFilter}.
 	 * 
@@ -401,8 +401,8 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	}
 
 	/**
-	 * Generates an a modified version of the the "well-known" bookstore trace, which includes the execution of <code>Bookstore.searchBook(..)<code> 
-	 * with a nested execution of <code>CRM.getOrder(..)</code> which again wraps the nested execution of <code>Catalog.getBook(..)</code>.
+	 * Generates an a modified version of the the "well-known" bookstore trace, which includes the execution of <code>Bookstore.searchBook(..)</code> with a nested
+	 * execution of <code>CRM.getOrder(..)</code> which again wraps the nested execution of <code>Catalog.getBook(..)</code>.
 	 * 
 	 * Borrowed from {@link kieker.test.tools.junit.traceAnalysis.filter.TestTraceReconstructionFilter}.
 	 * 

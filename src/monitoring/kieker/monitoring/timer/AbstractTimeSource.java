@@ -45,7 +45,7 @@ public abstract class AbstractTimeSource implements ITimeSource {
 	 * This method should be overwritten, iff the timer is external to Kieker and
 	 * thus its default configuration is not included in the default config file.
 	 * 
-	 * @return
+	 * @return The configuration object containing the default configuration.
 	 */
 	protected Configuration getDefaultConfiguration() { // NOPMD (default implementation)
 		return null;

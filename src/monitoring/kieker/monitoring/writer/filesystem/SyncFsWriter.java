@@ -234,8 +234,6 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 
 	/**
 	 * May only be used in synchronized blocks!
-	 * 
-	 * @return
 	 */
 	private final String getFilename() {
 		final long date = System.currentTimeMillis();

@@ -62,7 +62,7 @@ public class ExecutionSinkClass extends AbstractFilterPlugin {
 	 * @param configuration
 	 *            The configuration for this plugin. It will not be used.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public ExecutionSinkClass(final Configuration configuration) {
@@ -72,6 +72,7 @@ public class ExecutionSinkClass extends AbstractFilterPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

@@ -112,8 +112,8 @@ public class TestCurrentTimeEventGeneratorFilter extends AbstractKiekerTest { //
 	 * @throws IllegalStateException
 	 *             If the internally assembled analysis is in an invalid state.
 	 */
-	private void compareInputAndOutput(final long timerResolution, final long[] inputTimestamps, final long[] expectedOutputTimerEvents, final boolean rawTimestamp)
-			throws IllegalStateException, AnalysisConfigurationException {
+	private void compareInputAndOutput(final long timerResolution, final long[] inputTimestamps, final long[] expectedOutputTimerEvents,
+			final boolean rawTimestamp) throws IllegalStateException, AnalysisConfigurationException {
 		final IAnalysisController controller = new AnalysisController();
 
 		final ListReader<Object> reader = new ListReader<Object>(new Configuration(), controller);

@@ -161,7 +161,7 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	 * 
 	 * TODO: Note that we only have a timer resolution of milliseconds here!
 	 * 
-	 * @return
+	 * @return The current time.
 	 */
 	private long currentTime() {
 		return this.timeunit.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);

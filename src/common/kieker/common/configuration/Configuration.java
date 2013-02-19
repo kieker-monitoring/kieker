@@ -162,7 +162,7 @@ public final class Configuration extends Properties {
 	 * 
 	 * @return A string array containing the single values of the properties.
 	 * 
-	 * @see Configuration#toProperty(Object[])
+	 * @see #toProperty(Object[])
 	 */
 	public final String[] getStringArrayProperty(final String key, final String split) {
 		final String s = this.getStringProperty(key);
@@ -181,8 +181,8 @@ public final class Configuration extends Properties {
 	 * 
 	 * @return A string representation of the given values array.
 	 * 
-	 * @see Configuration#getStringArrayProperty(String)
-	 * @see Configuration#getStringArrayProperty(String, String)
+	 * @see #getStringArrayProperty(String)
+	 * @see #getStringArrayProperty(String, String)
 	 */
 	public static final String toProperty(final Object[] values) {
 		final StringBuilder sb = new StringBuilder();

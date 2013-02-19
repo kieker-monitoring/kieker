@@ -125,6 +125,13 @@ public interface IPlugin extends IAnalysisComponent {
 	public abstract String[] getAllDisplayNames();
 
 	/**
+	 * Delivers an array containing all repository port names.
+	 * 
+	 * @return An array with all available repository port names.
+	 */
+	public abstract String[] getAllRepositoryPortNames();
+
+	/**
 	 * Delivers the plugins with their ports which are connected with the given output port.
 	 * 
 	 * @param outputPortName

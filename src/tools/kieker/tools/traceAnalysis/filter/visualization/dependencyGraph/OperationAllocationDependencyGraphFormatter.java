@@ -166,8 +166,7 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 							DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 							null, // imagefilename
 							null, // misc
-							node.getDescription() // tooltip
-							));
+							node.getDescription() /* tooltip */));
 				}
 
 				builder.append("}\n");

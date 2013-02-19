@@ -26,12 +26,12 @@ package kieker.common.record.flow;
 public interface ICallRecord extends IOperationRecord {
 
 	/**
-	 * @see {@link IOperationRecord#getClassSignature()}
+	 * @see #getClassSignature()
 	 */
 	public abstract String getCallerClassSignature();
 
 	/**
-	 * @see {@link IOperationRecord#getOperationSignature()}
+	 * @see #getOperationSignature()
 	 */
 	public abstract String getCallerOperationSignature();
 

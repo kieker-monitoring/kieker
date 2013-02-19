@@ -57,7 +57,7 @@ public interface IAnalysisController extends IProjectContext {
 	 * This method can be used to store the current configuration of this analysis controller in a specified file.
 	 * The file can later be used to initialize the analysis controller.
 	 * 
-	 * @see AnalysisController#saveToFile(String)
+	 * @see #saveToFile(String)
 	 * 
 	 * @param file
 	 *            The file in which the configuration will be stored.
@@ -70,9 +70,9 @@ public interface IAnalysisController extends IProjectContext {
 
 	/**
 	 * This method can be used to store the current configuration of this analysis controller in a specified file. It is just a convenient method which does the same
-	 * as {@code AnalysisController.saveToFile(new File(pathname))}.
+	 * as {@code #saveToFile(File)}.
 	 * 
-	 * @see AnalysisController#saveToFile(File)
+	 * @see #saveToFile(File)
 	 * 
 	 * @param pathname
 	 *            The pathname of the file in which the configuration will be stored.

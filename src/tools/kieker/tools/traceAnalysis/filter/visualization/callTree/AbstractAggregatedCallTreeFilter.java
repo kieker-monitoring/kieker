@@ -96,7 +96,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	 * @param configuration
 	 *            The configuration for this component.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public AbstractAggregatedCallTreeFilter(final Configuration configuration) {
@@ -192,7 +192,6 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	 * HACK.
 	 * 
 	 * @param callMsg
-	 * @return
 	 */
 	protected abstract Object concreteCreatePair(SynchronousCallMessage callMsg);
 

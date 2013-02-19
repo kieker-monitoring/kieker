@@ -101,8 +101,7 @@ public class OperationAssemblyDependencyGraphFormatter extends AbstractOperation
 						DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 						null, // imagefilename
 						null, // misc
-						null
-						));
+						null));
 				continue;
 			}
 

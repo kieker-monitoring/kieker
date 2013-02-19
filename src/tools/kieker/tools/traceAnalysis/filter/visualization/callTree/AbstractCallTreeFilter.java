@@ -276,8 +276,8 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		ps.close();
 	}
 
-	protected static void addTraceToTree(final AbstractCallTreeNode<?> root, final MessageTrace t, final IPairFactory pairFactory, final boolean aggregated)
-			throws TraceProcessingException {
+	protected static void addTraceToTree(final AbstractCallTreeNode<?> root, final MessageTrace t, final IPairFactory pairFactory, final boolean aggregated) throws
+			TraceProcessingException {
 		final Stack<AbstractCallTreeNode<?>> curStack = new Stack<AbstractCallTreeNode<?>>();
 
 		final Collection<AbstractMessage> msgTraceVec = t.getSequenceAsVector();

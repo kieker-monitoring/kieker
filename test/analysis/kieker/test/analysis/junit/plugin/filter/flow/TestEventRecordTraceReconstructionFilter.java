@@ -53,8 +53,8 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 	 * @throws IllegalStateException
 	 *             If the internally assembled analysis is in an invalid state.
 	 */
-	private void runTest(final TraceEventRecords records, final long maxTraceDuration, final long maxTraceTimeout)
-			throws IllegalStateException, AnalysisConfigurationException {
+	private void runTest(final TraceEventRecords records, final long maxTraceDuration, final long maxTraceTimeout) throws IllegalStateException,
+			AnalysisConfigurationException {
 		final IAnalysisController controller = new AnalysisController();
 
 		final ListReader<Object> reader = new ListReader<Object>(new Configuration(), controller);
@@ -82,8 +82,8 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 		Assert.assertEquals(records, sinkPlugin.getList().get(0));
 	}
 
-	private void runTestFailed(final TraceEventRecords records, final long maxTraceDuration, final long maxTraceTimeout)
-			throws IllegalStateException, AnalysisConfigurationException {
+	private void runTestFailed(final TraceEventRecords records, final long maxTraceDuration, final long maxTraceTimeout) throws IllegalStateException,
+			AnalysisConfigurationException {
 		final IAnalysisController controller = new AnalysisController();
 
 		final ListReader<Object> reader = new ListReader<Object>(new Configuration(), controller);

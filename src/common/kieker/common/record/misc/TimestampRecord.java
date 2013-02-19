@@ -32,10 +32,23 @@ public final class TimestampRecord extends AbstractMonitoringRecord implements I
 
 	private final long timestamp;
 
+	/**
+	 * 
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param timestamp
+	 *            The timestamp to be stored in this record.
+	 */
 	public TimestampRecord(final long timestamp) {
 		this.timestamp = timestamp;
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param values
+	 *            The array containing the values for the fields of this record.
+	 */
 	public TimestampRecord(final Object[] values) { // NOPMD (direct store of long)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.timestamp = (Long) values[0];

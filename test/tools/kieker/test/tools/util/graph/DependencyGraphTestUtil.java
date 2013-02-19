@@ -94,8 +94,8 @@ public final class DependencyGraphTestUtil {
 	 *             If the process yields an invalid analysis configuration
 	 */
 	public static GraphTestSetup prepareEnvironmentForProducerTest(final AnalysisController analysisController, final AbstractGraphProducingFilter<?> graphProducer,
-			final String inputPortName, final String systemModelRepositoryPortName, final List<OperationExecutionRecord> executionRecords)
-			throws AnalysisConfigurationException {
+			final String inputPortName, final String systemModelRepositoryPortName, final List<OperationExecutionRecord> executionRecords) throws
+			AnalysisConfigurationException {
 		return DependencyGraphTestUtil.prepareEnvironment(analysisController, graphProducer, inputPortName, systemModelRepositoryPortName, executionRecords);
 	}
 

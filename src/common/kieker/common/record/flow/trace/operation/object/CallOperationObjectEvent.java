@@ -72,7 +72,7 @@ public final class CallOperationObjectEvent extends CallOperationEvent implement
 
 	/**
 	 * 
-	 * Creates a new instance of this class using the given array. The array should be the one resulting in a call to {@link CallOperationObjectEvent#toArray()}.
+	 * Creates a new instance of this class using the given array. The array should be the one resulting in a call to {@link #toArray()}.
 	 * 
 	 * @param values
 	 *            The array containing the values.

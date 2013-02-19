@@ -233,8 +233,8 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	 *             if any given plugin is invalid, any output or input port doesn't exist or if they are incompatible.
 	 *             Furthermore the destination plugin must not be a reader.
 	 */
-	public static final void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName)
-			throws AnalysisConfigurationException {
+	public static final void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName) throws
+			AnalysisConfigurationException {
 		if (!AbstractPlugin.isConnectionAllowed(src, outputPortName, dst, inputPortName)) {
 			throw new AnalysisConfigurationException("Failed to connect plugin '" + src.getName() + "' (" + src.getPluginName() + ") to plugin '"
 					+ dst.getName() + "' (" + dst.getPluginName() + ").");
@@ -563,8 +563,8 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	 * @throws AnalysisConfigurationException
 	 *             If an error occurs while processing of this notification
 	 */
-	protected void notifyNewIncomingConnection(final String inputPortName, final AbstractPlugin connectedPlugin, final String outputPortName) // NOPMD
-			throws AnalysisConfigurationException {
+	protected void notifyNewIncomingConnection(final String inputPortName, final AbstractPlugin connectedPlugin, // NOPMD
+			final String outputPortName) throws AnalysisConfigurationException {
 		// Do nothing by default
 	}
 
@@ -580,8 +580,8 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	 * @throws AnalysisConfigurationException
 	 *             If an error occurs while processing of this notification
 	 */
-	protected void notifyNewOutgoingConnection(final String outputPortName, final AbstractPlugin connectedPlugin, final String inputPortName) // NOPMD
-			throws AnalysisConfigurationException {
+	protected void notifyNewOutgoingConnection(final String outputPortName, final AbstractPlugin connectedPlugin, // NOPMD
+			final String inputPortName) throws AnalysisConfigurationException {
 		// Do nothing by default
 	}
 

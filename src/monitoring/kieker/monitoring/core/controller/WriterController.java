@@ -39,6 +39,12 @@ public final class WriterController extends AbstractController implements IWrite
 	/** Whether or not the {@link IMonitoringRecord#setLoggingTimestamp(long)} is automatically set. */
 	private final boolean autoSetLoggingTimestamp;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for the controller.
+	 */
 	public WriterController(final Configuration configuration) {
 		super(configuration);
 		this.autoSetLoggingTimestamp = configuration.getBooleanProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP);
@@ -90,6 +96,9 @@ public final class WriterController extends AbstractController implements IWrite
 		return sb.toString();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		try {
 			// fast lane for RegistryRecords (these must always be delivered!)
@@ -116,6 +125,9 @@ public final class WriterController extends AbstractController implements IWrite
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final long getNumberOfInserts() {
 		return this.numberOfInserts.longValue();
 	}

@@ -53,7 +53,7 @@ public class SimpleRepository extends AbstractRepository { // NOPMD (SubClassOfT
 	 * @param configuration
 	 *            The configuration for this repository.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public SimpleRepository(final Configuration configuration) {
@@ -63,6 +63,7 @@ public class SimpleRepository extends AbstractRepository { // NOPMD (SubClassOfT
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

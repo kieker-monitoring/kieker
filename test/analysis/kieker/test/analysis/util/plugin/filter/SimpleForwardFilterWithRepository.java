@@ -63,7 +63,7 @@ public class SimpleForwardFilterWithRepository extends AbstractFilterPlugin {
 	 * @param configuration
 	 *            The configuration for this filter.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public SimpleForwardFilterWithRepository(final Configuration configuration) {
@@ -78,6 +78,7 @@ public class SimpleForwardFilterWithRepository extends AbstractFilterPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

@@ -97,7 +97,6 @@ public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 	 * 
 	 * @param traceId
 	 *            The trace ID to check.
-	 * @return
 	 */
 	protected boolean passId(final long traceId) {
 		if ((this.selectedTraceIds != null) && !this.selectedTraceIds.contains(traceId)) {

@@ -425,7 +425,7 @@ public final class DotFactory {
 	}
 
 	/**
-	 * Creates dot code for a connection. It is the same as a call to {@link DotFactory#createConnection(String, String, String, String, String, String)} except that
+	 * Creates dot code for a connection. It is the same as a call to {@link #createConnection(String, String, String, String, String, String)} except that
 	 * a label can be added.
 	 * 
 	 * @param prefix
@@ -474,8 +474,8 @@ public final class DotFactory {
 	}
 
 	/**
-	 * This method creates dot code for a connection. It is the same as a call to {@link DotFactory#createConnection(String, String, String, String, String, String)}
-	 * except that color, style and arrowhead cannot be modified and that a headlabel and a taillabel can be added.
+	 * This method creates dot code for a connection. It is the same as a call to {@link #createConnection(String, String, String, String, String, String)} except
+	 * that color, style and arrowhead cannot be modified and that a headlabel and a taillabel can be added.
 	 * 
 	 * @param prefix
 	 *            usually spaces, dependent on hierarchy - only for nice ascii formatting inside the dot code

@@ -238,8 +238,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		}
 
 		private void finishExecution(final String operationSignature, final String classSignature, final long traceId, final String sessionId,
-				final String hostname, final int eoi, final int ess, final long tin, final long tout, final boolean assumed, final boolean constructor)
-				throws InvalidTraceException {
+				final String hostname, final int eoi, final int ess, final long tin, final long tout, final boolean assumed, final boolean constructor) throws
+				InvalidTraceException {
 			final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(operationSignature,
 					constructor && this.enhanceJavaConstructors);
 			final String executionContext;

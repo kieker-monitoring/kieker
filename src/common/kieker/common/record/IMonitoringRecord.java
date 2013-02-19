@@ -62,8 +62,7 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	public String toString();
 
 	/**
-	 * This method should initialize the record based on the given values. The array should be one of those resulting from a call to
-	 * {@link IMonitoringRecord#toArray()}.
+	 * This method should initialize the record based on the given values. The array should be one of those resulting from a call to {@link #toArray()}.
 	 * 
 	 * @param values
 	 *            The values for the record.

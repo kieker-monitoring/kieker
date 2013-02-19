@@ -92,7 +92,7 @@ public final class Trace extends AbstractMonitoringRecord implements IMonitoring
 	 * Creates a new instance of this class using the given parameter.
 	 * 
 	 * @param values
-	 *            The array containing the values for the fields of this class. This should normally be the array resulting in a call to {@link Trace#toArray()}.
+	 *            The array containing the values for the fields of this class. This should normally be the array resulting in a call to {@link #toArray()}.
 	 */
 	public Trace(final Object[] values) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, TYPES);

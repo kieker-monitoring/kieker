@@ -136,8 +136,7 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 	}
 
 	/**
-	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to
-	 * {@link CPUUtilizationRecord#toArray()}.
+	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
 	 * 
 	 * @param values
 	 *            The values for the record.

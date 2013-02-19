@@ -49,17 +49,13 @@ import kieker.common.logging.LogFactory;
 		})
 public final class TeeFilter extends AbstractFilterPlugin {
 
-	/**
-	 * The name of the input port for incoming events.
-	 */
+	/** The name of the input port for incoming events. */
 	public static final String INPUT_PORT_NAME_EVENTS = "receivedEvents";
-
-	/**
-	 * The name of the output port delivering the incoming events.
-	 */
+	/** The name of the output port delivering the incoming events. */
 	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayedEvents";
-
+	/** The name of the property determining the stream in which the incoming data will be printed. */
 	public static final String CONFIG_PROPERTY_NAME_STREAM = "stream";
+	/** The name of the property detemrining the used encoding. */
 	public static final String CONFIG_PROPERTY_NAME_ENCODING = "characterEncoding";
 
 	/**

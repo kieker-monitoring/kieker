@@ -177,16 +177,14 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 					this.eventCountsPerInterval.add(
 							new ImmutableEntry<Long, Long>(
 									this.lastTimestampInCurrentInterval + 1,
-									this.currentCountForCurrentInterval.get())
-							);
+									this.currentCountForCurrentInterval.get()));
 
 					long numIntervalsElapsed = 1; // refined below
 					numIntervalsElapsed = (endOfTimestampsInterval - this.lastTimestampInCurrentInterval) / this.intervalSize;
 					if (numIntervalsElapsed > 1) { // NOPMD (AvoidDeeplyNestedIfStmts)
 						for (int i = 1; i < numIntervalsElapsed; i++) {
 							this.eventCountsPerInterval.add(
-									new ImmutableEntry<Long, Long>((this.lastTimestampInCurrentInterval + (i * this.intervalSize)) + 1, 0L)
-									);
+									new ImmutableEntry<Long, Long>((this.lastTimestampInCurrentInterval + (i * this.intervalSize)) + 1, 0L));
 						}
 					}
 
@@ -220,7 +218,7 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	 * 
 	 * TODO: Note that we only have a timer resolution of milliseconds here!
 	 * 
-	 * @return
+	 * @return The current time.
 	 */
 	private long currentTime() {
 		return this.timeunit.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
@@ -235,7 +233,8 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	 * Returns the first timestamp included in the interval that corresponds to the given timestamp.
 	 * 
 	 * @param timestamp
-	 * @return
+	 * 
+	 * @return The timestamp in question.
 	 */
 	private long computeFirstTimestampInInterval(final long timestamp) {
 		final long referenceTimePoint;
@@ -257,7 +256,7 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	 * Returns the last timestamp included in the interval that corresponds to the given timestamp.
 	 * 
 	 * @param timestamp
-	 * @return
+	 * @return The timestamp in question.
 	 */
 	private long computeLastTimestampInInterval(final long timestamp) {
 		final long referenceTimePoint;

@@ -264,8 +264,8 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		}
 	}
 
-	public static final IMonitoringRecord createFromStringArray(final Class<? extends IMonitoringRecord> clazz, final String[] values)
-			throws MonitoringRecordException {
+	public static final IMonitoringRecord createFromStringArray(final Class<? extends IMonitoringRecord> clazz, final String[] values) throws
+			MonitoringRecordException {
 		try {
 			if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
 				// Factory interface present
