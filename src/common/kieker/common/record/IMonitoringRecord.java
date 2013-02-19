@@ -19,7 +19,6 @@ package kieker.common.record;
 import java.io.Serializable;
 
 /**
- * TODO: further description
  * 
  * <p>
  * <b>Warning:</b> Objects within records should not contain ';', '\n', or '\r' in their respective toString() representation.
@@ -27,6 +26,7 @@ import java.io.Serializable;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
+// TODO: further description
 public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringRecord> {
 
 	/**

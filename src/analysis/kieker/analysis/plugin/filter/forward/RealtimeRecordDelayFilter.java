@@ -159,10 +159,9 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	/**
 	 * Returns the current time in nanoseconds since 1970.
 	 * 
-	 * TODO: Note that we only have a timer resolution of milliseconds here!
-	 * 
 	 * @return The current time.
 	 */
+	// TODO: Note that we only have a timer resolution of milliseconds here!
 	private long currentTime() {
 		return this.timeunit.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
 	}

@@ -92,8 +92,6 @@ import kieker.tools.util.LoggingTimestampConverter;
 
 /**
  * 
- * TODO: Fix JavaDoc comment
- * 
  * This is the main class to start Tpan - the model synthesis and analysis
  * server to process the monitoring data that comes from the instrumented
  * system, or from a file that contains Kieker monitoring data. Tpan can produce
@@ -109,6 +107,7 @@ import kieker.tools.util.LoggingTimestampConverter;
  * 
  * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke
  */
+// TODO: Fix JavaDoc comment
 public final class TraceAnalysisTool {
 	public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
 	private static final Log LOG = LogFactory.getLog(TraceAnalysisTool.class);

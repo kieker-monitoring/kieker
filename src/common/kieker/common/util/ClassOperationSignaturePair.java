@@ -103,10 +103,9 @@ public class ClassOperationSignaturePair {
 	 * Modifier list, return type, and parameter list wrapped by parentheses are optional. But note that
 	 * a return type must be given if one or more modifiers are present.
 	 * 
-	 * TODO: Move this method to the then-extracted class FQComponentNameSignaturePair
-	 * 
 	 * @param operationSignatureStr
 	 */
+	// TODO: Move this method to the then-extracted class FQComponentNameSignaturePair
 	public static ClassOperationSignaturePair splitOperationSignatureStr(final String operationSignatureStr) {
 		return ClassOperationSignaturePair.splitOperationSignatureStr(operationSignatureStr, false);
 	}

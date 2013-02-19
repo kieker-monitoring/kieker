@@ -32,11 +32,9 @@ import org.junit.rules.TemporaryFolder;
 import kieker.common.record.IMonitoringRecord;
 
 /**
- * TODO: introduce abstract intermediate class with {@link BasicPrintStreamWriterTestStdout},
- * because a lot of code is shared.
- * 
  * @author Andre van Hoorn
  */
+// TODO: introduce abstract intermediate class with {@link BasicPrintStreamWriterTestStdout}, because a lot of code is shared.
 public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTest { // NOCS (testClass without constructor)
 	private static final String OUTPUT_BASE_FN = "S0fYvPsI.out"; // the name doesn't matter
 

@@ -30,11 +30,9 @@ import kieker.monitoring.writer.PrintStreamWriter;
 import kieker.test.tools.util.StringTeePrintStream;
 
 /**
- * TODO: introduce abstract intermediate class with {@link BasicPrintStreamWriterTestStdout},
- * because a lot of code is shared.
- * 
  * @author Andre van Hoorn
  */
+// TODO: introduce abstract intermediate class with {@link BasicPrintStreamWriterTestStdout}, because a lot of code is shared.
 public class BasicPrintStreamWriterTestStdout extends AbstractPrintStreamWriterTest { // NOCS (test class without a constructor)
 
 	private volatile PrintStream originalPrintStream;

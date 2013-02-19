@@ -39,12 +39,11 @@ import kieker.common.util.ImmutableEntry;
  * 
  * Note that only one of the input ports should be used in a configuration!
  * 
- * TODO: In future versions, this filter should provide an output port in addition to the existing relay port.
- * TODO: In future versions, the throughput computation could (additionally) be triggered by external timer events
- * TODO: Introduce bounding capacity (Circular Buffer)
- * 
  * @author Andre van Hoorn, Jan Waller
  */
+// TODO: In future versions, this filter should provide an output port in addition to the existing relay port.
+// TODO: In future versions, the throughput computation could (additionally) be triggered by external timer events
+// TODO: Introduce bounding capacity (Circular Buffer)
 @Plugin(
 		description = "A filter computing the throughput in terms of the number of events received per time unit",
 		outputPorts = {
@@ -216,10 +215,9 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	/**
 	 * Returns the current time in since 1970.
 	 * 
-	 * TODO: Note that we only have a timer resolution of milliseconds here!
-	 * 
 	 * @return The current time.
 	 */
+	// TODO: Note that we only have a timer resolution of milliseconds here!
 	private long currentTime() {
 		return this.timeunit.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
 	}

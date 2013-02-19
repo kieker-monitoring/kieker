@@ -42,11 +42,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
 /**
  * Tests the {@link CountingThroughputFilter}.
  * 
- * TODO: Note that currently, we are only testing the {@link CountingThroughputFilter}'s input {@link CountingThroughputFilter#INPUT_PORT_NAME_RECORDS}.
- * 
  * @author Andre van Hoorn
- * 
  */
+// TODO: Note that currently, we are only testing the {@link CountingThroughputFilter}'s input {@link CountingThroughputFilter#INPUT_PORT_NAME_RECORDS}.
 public class TestCountingThroughputFilter extends AbstractKiekerTest {
 
 	private static final long START_TIME_NANOS = 246561L; // just a non-trivial number

@@ -58,11 +58,10 @@ import kieker.monitoring.timer.ITimeSource;
  * <url-pattern>/*</url-pattern>
  * </filter-mapping>
  * 
- * TODO: Properties
- * 
  * @author Andre van Hoorn, Marco Luebcke, Jan Waller
  * 
  */
+// TODO: Properties
 public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringProbe {
 	public static final String CONFIG_PROPERTY_NAME_LOG_FILTER_EXECUTION = "logFilterExecution";
 
