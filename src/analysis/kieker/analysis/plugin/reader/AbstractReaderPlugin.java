@@ -54,6 +54,8 @@ public abstract class AbstractReaderPlugin extends AbstractPlugin implements IRe
 	 * 
 	 * @since 1.7
 	 */
+	// Internal use of the register methods:
+	@SuppressWarnings("deprecation")
 	public AbstractReaderPlugin(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration);
 

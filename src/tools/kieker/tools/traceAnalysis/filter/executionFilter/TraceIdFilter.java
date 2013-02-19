@@ -31,7 +31,10 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * contains the defined traceID, the object is delivered unmodified to the output port.
  * 
  * @author Andre van Hoorn
+ * 
+ * @deprecated To be removed in Kieker 1.8 (Use {@link kieker.analysis.plugin.filter.trace.TraceIdFilter instead}).
  */
+@Deprecated
 @Plugin(description = "A filter allowing to filter incoming execution objects based on their trace ID",
 		outputPorts = {
 			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MATCH, description = "Forwards executions with matching trace IDs", eventTypes = { Execution.class })

@@ -27,7 +27,10 @@ import kieker.common.configuration.Configuration;
  * Convenience class for plugins filtering by trace IDs.
  * 
  * @author Andre van Hoorn
+ * 
+ * @deprecated To be removed in Kieker 1.8
  */
+@Deprecated
 public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 	/**
 	 * List of trace IDs to accept. Set null to accept any ID.

@@ -55,6 +55,8 @@ public abstract class AbstractRepository extends AbstractAnalysisComponent imple
 	 * 
 	 * @since 1.7
 	 */
+	// Internal use of the register methods:
+	@SuppressWarnings("deprecation")
 	public AbstractRepository(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration);
 

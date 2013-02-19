@@ -24,7 +24,10 @@ import kieker.common.configuration.Configuration;
  * This is an abstract base for components which filter elements based on the timestamp.
  * 
  * @author Andre van Hoorn
+ * 
+ * @deprecated To be removed in Kieker 1.8
  */
+@Deprecated
 public abstract class AbstractTimestampFilter extends AbstractFilterPlugin {
 
 	public static final long MAX_TIMESTAMP = Long.MAX_VALUE;

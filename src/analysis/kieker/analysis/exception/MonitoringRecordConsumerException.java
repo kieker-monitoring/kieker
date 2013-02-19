@@ -19,7 +19,10 @@ package kieker.analysis.exception;
 /**
  * 
  * @author Andre van Hoorn
+ * 
+ * @deprecated To be removed in Kieker 1.8
  */
+@Deprecated
 public class MonitoringRecordConsumerException extends Exception {
 
 	private static final long serialVersionUID = 1L;

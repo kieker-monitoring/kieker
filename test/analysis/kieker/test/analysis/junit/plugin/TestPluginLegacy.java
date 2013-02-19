@@ -39,7 +39,11 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * @author Nils Christian Ehmke, Jan Waller
  * 
  * @since 1.7
+ * 
  */
+// TODO Remove in Kieker 1.8
+// Test of deprecated API
+@SuppressWarnings("deprecation")
 public final class TestPluginLegacy extends AbstractKiekerTest {
 
 	/**

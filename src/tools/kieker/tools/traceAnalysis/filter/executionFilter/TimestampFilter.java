@@ -32,7 +32,10 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * the defined timestamps, the object is delivered unmodified to the output port.
  * 
  * @author Andre van Hoorn
+ * 
+ * @deprecated To be removed in Kieker 1.8 (Use {@link kieker.analysis.plugin.filter.select.TimestampFilter} instead)
  */
+@Deprecated
 @Plugin(description = "A filter allowing to filter incoming execution objects based on their timestamps",
 		outputPorts = {
 			@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, description = "Fowards records within the timeperiod",

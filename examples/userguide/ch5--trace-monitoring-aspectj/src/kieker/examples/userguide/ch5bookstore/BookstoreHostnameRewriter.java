@@ -22,8 +22,6 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.IProjectContext;
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.exception.MonitoringReaderException;
-import kieker.analysis.exception.MonitoringRecordConsumerException;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
@@ -46,8 +44,7 @@ public final class BookstoreHostnameRewriter {
 
 	private BookstoreHostnameRewriter() {}
 
-	public static void main(final String[] args)
-			throws MonitoringReaderException, MonitoringRecordConsumerException {
+	public static void main(final String[] args) {
 
 		if (args.length == 0) {
 			return;
@@ -146,6 +143,7 @@ class HostNameRewriterPlugin extends AbstractFilterPlugin {
 		HostNameRewriterPlugin.MONITORING_CTRL.newMonitoringRecord(newExec);
 	}
 
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

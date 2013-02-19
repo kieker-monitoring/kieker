@@ -21,7 +21,10 @@ import kieker.common.exception.MonitoringRecordReceiverException;
 /**
  * 
  * @author Andre van Hoorn
+ * 
+ * @deprecated To be removed in Kieker 1.8
  */
+@Deprecated
 public class MonitoringReaderException extends MonitoringRecordReceiverException {
 
 	private static final long serialVersionUID = 14537L;
