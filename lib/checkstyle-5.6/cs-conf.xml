@@ -572,7 +572,8 @@
 
         <!-- Checks for overly complicated boolean expressions. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
-        <module name="SimplifyBooleanExpression"/>
+        <!--  KIEKER Off -->
+        <!--  <module name="SimplifyBooleanExpression"/> -->
 
         <!-- Checks for overly complicated boolean return statements. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
@@ -751,17 +752,19 @@
 
         <!-- This metric measures the number of instantiations of other classes within the given class. !-->
         <!-- See http://checkstyle.sf.net/config_metrics.html !-->
-        <module name="ClassDataAbstractionCoupling">
+        <!--  KIEKER Off -->
+        <!-- <module name="ClassDataAbstractionCoupling">
             <property name="severity" value="info"/>
             <property name="max" value="7"/>
-        </module>
+        </module> -->
 
         <!-- The number of other classes a given class relies on. !-->
         <!-- See http://checkstyle.sf.net/config_metrics.html !-->
-        <module name="ClassFanOutComplexity">
+         <!--  KIEKER Off -->
+        <!--<module name="ClassFanOutComplexity">
             <property name="severity" value="info"/>
             <property name="max" value="20"/>
-        </module>
+        </module> -->
 
         <!-- Checks cyclomatic complexity against a specified limit. !-->
         <!-- See http://checkstyle.sf.net/config_metrics.html !-->
@@ -772,19 +775,21 @@
 
         <!-- Determines complexity of methods, classes and files by counting the Non Commenting Source Statements (NCSS). !-->
         <!-- See http://checkstyle.sourceforge.net/config_metrics.html#JavaNCSS !-->
-        <module name="JavaNCSS">
+        <!--  KIEKER Off -->
+        <!--<module name="JavaNCSS">
             <property name="severity" value="info"/>
             <property name="methodMaximum" value="50"/>
             <property name="classMaximum"  value="1500"/>
             <property name="fileMaximum"   value="2000"/>
-        </module>
+        </module> -->
 
         <!-- The NPATH metric computes the number of possible execution paths through a function. !-->
         <!-- See http://checkstyle.sf.net/config_metrics.html !-->
-        <module name="NPathComplexity">
+         <!--  KIEKER Off -->
+         <!--<module name="NPathComplexity">
             <property name="severity" value="info"/>
             <property name="max" value="200"/>
-        </module>
+        </module> -->
 
 
         <!--
@@ -1053,9 +1058,10 @@
          !-->
         <!-- Checks for long anonymous inner classes. !-->
         <!-- See http://checkstyle.sf.net/config_sizes.html !-->
+        <!--  KIEKER Set to 50 instead of 20 -->
         <module name="AnonInnerLength">
             <property name="severity" value="info"/>
-            <property name="max" value="20"/>
+            <property name="max" value="50"/>
         </module>
 
         <!-- Restricts the number of executable statements to a specified limit. !-->

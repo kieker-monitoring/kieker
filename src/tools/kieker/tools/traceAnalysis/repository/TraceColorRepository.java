@@ -110,7 +110,7 @@ public class TraceColorRepository extends AbstractRepository {
 	 * @param colorData
 	 *            The color data to use for this repository
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public TraceColorRepository(final Configuration configuration, final TraceColorRepositoryData colorData) {
