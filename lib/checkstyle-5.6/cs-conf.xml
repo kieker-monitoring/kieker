@@ -175,7 +175,10 @@
 		<module name="kieker.test.common.cs.AnalysisComponentConstructorCheck">
 			<property name="ignoreAbstractClasses" value="true"/>
 		</module>
-	
+		<module name="kieker.test.common.cs.MonitoringRecordFactoryConvenctionCheck">
+			<property name="ignoreAbstractClasses" value="true"/>
+		</module>
+		
         <!-- KIEKER -->
         <property name="tabWidth" value="4"/>
         <module name="FileContentsHolder"/>

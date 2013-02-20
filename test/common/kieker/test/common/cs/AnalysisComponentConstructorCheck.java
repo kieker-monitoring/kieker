@@ -53,6 +53,8 @@ public class AnalysisComponentConstructorCheck extends Check {
 
 	/**
 	 * Creates a new instance of this class.
+	 * 
+	 * @since 1.7
 	 */
 	public AnalysisComponentConstructorCheck() {
 		// Nothing to do here
@@ -96,19 +98,7 @@ public class AnalysisComponentConstructorCheck extends Check {
 	private static boolean isAbstract(final DetailAST clazz) {
 		final DetailAST modifiers = clazz.findFirstToken(TokenTypes.MODIFIERS);
 
-		DetailAST modifier = modifiers.getFirstChild();
-		// Run through the modifiers
-		while (modifier != null) {
-			// Check whether the modifier tells us that the class is abstract
-			if (modifier.getType() == TokenTypes.ABSTRACT) {
-				return true;
-			}
-
-			modifier = modifier.getNextSibling();
-		}
-
-		// No modifier found
-		return false;
+		return modifiers.findFirstToken(TokenTypes.ABSTRACT) != null;
 	}
 
 	/**
@@ -170,7 +160,7 @@ public class AnalysisComponentConstructorCheck extends Check {
 	}
 
 	/**
-	 * Setter for the property {@link AnalysisComponentConstructorCheck#ignoreAbstractClasses}.
+	 * Setter for the property {@link #ignoreAbstractClasses}.
 	 * 
 	 * @param ignoreAbstractClasses
 	 *            The new value of the property.
