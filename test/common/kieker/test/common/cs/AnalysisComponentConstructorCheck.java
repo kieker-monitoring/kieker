@@ -49,7 +49,7 @@ public class AnalysisComponentConstructorCheck extends Check {
 	private static final String CONSTRUCTOR_SND_PARAMETER = IProjectContext.class.getSimpleName();
 	private static final String CONSTRUCTOR_FST_PARAMETER = Configuration.class.getSimpleName();
 
-	private boolean ignoreAbstractClasses = false;
+	private boolean ignoreAbstractClasses;
 
 	/**
 	 * Creates a new instance of this class.
@@ -72,11 +72,9 @@ public class AnalysisComponentConstructorCheck extends Check {
 			// Now check the constructors
 			DetailAST child = ast.findFirstToken(TokenTypes.OBJBLOCK).findFirstToken(TokenTypes.CTOR_DEF);
 			while (child != null) {
-				if (child.getType() == TokenTypes.CTOR_DEF) {
-					if (AnalysisComponentConstructorCheck.isValidConstructor(child)) {
-						// We found a valid constructor
-						return;
-					}
+				if ((child.getType() == TokenTypes.CTOR_DEF) && AnalysisComponentConstructorCheck.isValidConstructor(child)) {
+					// We found a valid constructor
+					return;
 				}
 
 				child = child.getNextSibling();
