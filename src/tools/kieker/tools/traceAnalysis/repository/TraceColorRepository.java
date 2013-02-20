@@ -93,7 +93,10 @@ public class TraceColorRepository extends AbstractRepository {
 	 *            The project context to use for this repository.
 	 * 
 	 * @since 1.7
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
+	@Deprecated
 	public TraceColorRepository(final Configuration configuration, final TraceColorRepositoryData colorData, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 

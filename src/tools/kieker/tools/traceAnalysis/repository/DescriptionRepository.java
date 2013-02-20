@@ -80,7 +80,10 @@ public class DescriptionRepository extends AbstractRepository {
 	 *            The project context to use.
 	 * 
 	 * @since 1.7
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
+	@Deprecated
 	public DescriptionRepository(final Configuration configuration, final DescriptionRepositoryData descriptionData, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 

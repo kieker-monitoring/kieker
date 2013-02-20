@@ -85,5 +85,6 @@
 	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/aopalliance-1.0.jar"/>
 	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/asm-3.1.jar"/>
 	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/cglib-2.2.jar"/>
+	<classpathentry kind="lib" path="lib/checkstyle-5.6/lib/checkstyle-all.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>

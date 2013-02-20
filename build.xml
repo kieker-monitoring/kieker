@@ -672,6 +672,10 @@
 			<fileset dir="${lib.dir}">
 				<include name="junit-*.jar" />
 			</fileset>
+			<!-- This part is necessary for the additional checkstyle checks - to compile them. -->
+			<fileset dir="${lib.cs.dir}">
+				<include name="**/*.jar" />
+			</fileset>
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />
 			</fileset>
@@ -1066,7 +1070,9 @@
 	</target>
 
 	<target name="checkstyle" depends="build-all,compile-tests" description="Uses Checkstyle to find potential problems">
-		<taskdef resource="checkstyletask.properties" classpath="${lib.cs.dir}/lib/checkstyle-all.jar" />
+		<!-- We have to add the test directory from the build to the classpath as it contains some checkstyle checks. Checkstyle has to know these classes. As the 
+             checks need some classes from the analysis and the common part, we have to add those build directories as well. -->
+		<taskdef resource="checkstyletask.properties" classpath="${lib.cs.dir}/lib/checkstyle-all.jar;${build.tests.dir};${build.kieker.analysis.dir};${build.kieker.common.dir}" />
 		<checkstyle config="${lib.cs.dir}/cs-conf.xml" failOnViolation="false">
 			<classpath>
 				<fileset dir="${lib.dir}">

@@ -171,6 +171,11 @@
     -->
 
     <module name="TreeWalker">
+		<!-- KIEKER -->
+		<module name="kieker.test.common.cs.AnalysisComponentConstructorCheck">
+			<property name="ignoreAbstractClasses" value="true"/>
+		</module>
+	
         <!-- KIEKER -->
         <property name="tabWidth" value="4"/>
         <module name="FileContentsHolder"/>
