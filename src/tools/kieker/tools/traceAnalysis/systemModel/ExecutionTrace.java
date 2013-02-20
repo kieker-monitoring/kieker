@@ -16,6 +16,7 @@
 
 package kieker.tools.traceAnalysis.systemModel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -356,7 +357,17 @@ public class ExecutionTrace extends AbstractTrace {
 		return new ExecutionTraceComparator();
 	}
 
-	private static class ExecutionTraceComparator implements Comparator<Execution> {
+	private static class ExecutionTraceComparator implements Comparator<Execution>, Serializable {
+
+		private static final long serialVersionUID = -6334359132236475506L;
+
+		/**
+		 * Creates a new instance of this class.
+		 */
+		public ExecutionTraceComparator() {
+			// Nothing to do here
+			super();
+		}
 
 		/**
 		 * Note that this method is not only used by {@link ExecutionTrace#add(Execution)} but also by {@link TreeSet#equals(Object)} utilized in

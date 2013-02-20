@@ -76,10 +76,11 @@ import kieker.common.logging.LogFactory;
  * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke, Jan Waller
  */
 // TODO Use the new constructor in the reflection calls as well
-@kieker.analysis.annotation.AnalysisController(configuration = {
-	@Property(name = AnalysisController.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, defaultValue = "NANOSECONDS"),
-	@Property(name = AnalysisController.CONFIG_PROPERTY_NAME_PROJECT_NAME, defaultValue = "AnalysisProject")
-})
+@kieker.analysis.annotation.AnalysisController(
+		configuration = {
+			@Property(name = AnalysisController.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, defaultValue = "NANOSECONDS"),
+			@Property(name = AnalysisController.CONFIG_PROPERTY_NAME_PROJECT_NAME, defaultValue = "AnalysisProject")
+		})
 public final class AnalysisController implements IAnalysisController { // NOPMD (really long class)
 
 	/**
@@ -774,6 +775,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 
 	/**
 	 * {@inheritDoc}
+	 * 
+	 * @deprecated This method will not be for public use in Kieker 1.8. Use the new constructor instead.
 	 */
 	// TODO This is not really deprecated, but we have to make sure that only AbstractComponent can use this method. Maybe we should remove the method just from the
 	// interface? sounds good!
@@ -800,6 +803,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 
 	/**
 	 * {@inheritDoc}
+	 * 
+	 * @deprecated This method will not be for public use in Kieker 1.8. Use the new constructor instead.
 	 */
 	// TODO This is not really deprecated, but we have to make sure that only AbstractComponent can use this method. Maybe we should remove the method just from the
 	// interface? sounds good!
@@ -826,6 +831,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 
 	/**
 	 * {@inheritDoc}
+	 * 
+	 * @deprecated This method will not be for public use in Kieker 1.8. Use the new constructor instead.
 	 */
 	// TODO This is not really deprecated, but we have to make sure that only AbstractComponent can use this method. Maybe we should remove the method just from the
 	// interface? sounds good!

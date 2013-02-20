@@ -92,8 +92,7 @@ public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponent
 						DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 						null, // imagefilename
 						null, // misc
-						null // tooltip
-						));
+						null)); // tooltip
 			} else {
 				this.builder.append(DotFactory.createNode("", AbstractDependencyGraphFormatter.createNodeId(vertex),
 						this.createNodeLabel(vertex, component), // NOCS
@@ -105,8 +104,7 @@ public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponent
 						DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 						null, // imagefilename
 						null, // misc
-						vertex.getDescription() // tooltip
-						));
+						vertex.getDescription())); // tooltip
 			}
 
 			this.builder.append("\n");

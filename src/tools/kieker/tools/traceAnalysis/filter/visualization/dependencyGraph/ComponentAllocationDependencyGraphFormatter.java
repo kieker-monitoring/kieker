@@ -78,8 +78,7 @@ public class ComponentAllocationDependencyGraphFormatter extends AbstractCompone
 					DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 					null, // imagefilename
 					null, // misc
-					null // tooltip
-					));
+					null)); // tooltip
 		} else {
 			builder.append(DotFactory.createCluster("", AbstractDependencyGraphFormatter.createContainerId(container),
 					AbstractDependencyGraphFormatter.STEREOTYPE_EXECUTION_CONTAINER + "\\n" + container.getName(), DotFactory.DOT_SHAPE_BOX, // shape
@@ -88,8 +87,7 @@ public class ComponentAllocationDependencyGraphFormatter extends AbstractCompone
 					DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
 					null, // fontcolor
 					DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
-					null // misc
-					));
+					null)); // misc
 			// dot code for contained components
 			for (final DependencyGraphNode<AllocationComponent> node : entry.getValue()) {
 				builder.append(DotFactory.createNode("",
@@ -104,8 +102,7 @@ public class ComponentAllocationDependencyGraphFormatter extends AbstractCompone
 						DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 						null, // imagefilename
 						null, // misc
-						node.getDescription() // tooltip
-						));
+						node.getDescription())); // tooltip
 			}
 			builder.append("}\n");
 		}

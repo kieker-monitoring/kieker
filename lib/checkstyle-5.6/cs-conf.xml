@@ -580,8 +580,8 @@
 
         <!-- Checks for overly complicated boolean expressions. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
-        <!--  KIEKER Off -->
-        <!--  <module name="SimplifyBooleanExpression"/> -->
+        
+        <module name="SimplifyBooleanExpression"/> 
 
         <!-- Checks for overly complicated boolean return statements. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
@@ -752,11 +752,12 @@
          !-->
         <!-- Restrict the number of number of &&, || and ^ in an expression. !-->
         <!-- See http://checkstyle.sf.net/config_metrics.html !-->
-        <module name="BooleanExpressionComplexity">
+        <!--  KIEKER Off -->
+        <!-- <module name="BooleanExpressionComplexity">
             <property name="severity" value="info"/>
             <property name="max"    value="3"/>
             <property name="tokens" value="LAND, BAND, LOR, BOR, BXOR"/>
-        </module>
+        </module> -->
 
         <!-- This metric measures the number of instantiations of other classes within the given class. !-->
         <!-- See http://checkstyle.sf.net/config_metrics.html !-->

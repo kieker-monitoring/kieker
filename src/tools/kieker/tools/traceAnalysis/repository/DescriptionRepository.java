@@ -98,7 +98,7 @@ public class DescriptionRepository extends AbstractRepository {
 	 * @param descriptionData
 	 *            The description data to use
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public DescriptionRepository(final Configuration configuration, final DescriptionRepositoryData descriptionData) {

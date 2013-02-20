@@ -181,7 +181,7 @@ public class TraceColorRepository extends AbstractRepository {
 	 * @return The initialized trace color repository
 	 * @throws IOException
 	 *             If an I/O error occurs
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public static TraceColorRepository createFromFile(final String fileName) throws IOException {
