@@ -1,3 +1,19 @@
+/***************************************************************************
+ * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.test.common.cs;
 
 import com.puppycrawl.tools.checkstyle.api.Check;
@@ -5,19 +21,20 @@ import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 import kieker.analysis.IProjectContext;
-import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.repository.annotation.Repository;
 import kieker.common.configuration.Configuration;
 
 /**
  * This is an additional checkstyle check which makes sure that all analysis components supply the default constructor (using a {@link Configuration} and an
- * {@link IProjectContext} object) we need for the framework.</br></br>
+ * {@link IProjectContext} object) we need for the framework.<br>
+ * </br>
  * 
  * Keep in mind that the check is not perfect, as checkstyle has some limitations. The main drawback is that we cannot check types. We can therefore not recognize
- * whether a class inherits directly or indirectly from {@link AbstractAnalysisComponent}. Instead we use the annotations {@link Plugin} and {@link Repository} to
- * check whether a class is an analysis component or not. This can lead to false positives. Furthermore we cannot check the types of the parameters for the
- * constructors either. We use the names of the types to check this. This can lead to false positives as well.</br></br>
+ * whether a class inherits directly or indirectly from {@link kieker.analysis.analysisComponent.AbstractAnalysisComponent}. Instead we use the annotations
+ * {@link Plugin} and {@link Repository} to check whether a class is an analysis component or not. This can lead to false positives. Furthermore we cannot check the
+ * types of the parameters for the constructors either. We use the names of the types to check this. This can lead to false positives as well.<br>
+ * </br>
  * 
  * The check provides a property to ignore abstract classes.
  * 
@@ -33,6 +50,14 @@ public class AnalysisComponentConstructorCheck extends Check {
 	private static final String CONSTRUCTOR_FST_PARAMETER = Configuration.class.getSimpleName();
 
 	private boolean ignoreAbstractClasses = false;
+
+	/**
+	 * Creates a new instance of this class.
+	 */
+	public AnalysisComponentConstructorCheck() {
+		// Nothing to do here
+		super();
+	}
 
 	@Override
 	public int[] getDefaultTokens() {
@@ -108,7 +133,7 @@ public class AnalysisComponentConstructorCheck extends Check {
 			final DetailAST fstParIdent = fstParType.findFirstToken(TokenTypes.IDENT);
 			final DetailAST sndParIdent = sndParType.findFirstToken(TokenTypes.IDENT);
 
-			return (fstParIdent.getText().equals(CONSTRUCTOR_FST_PARAMETER) && sndParIdent.getText().equals(CONSTRUCTOR_SND_PARAMETER));
+			return fstParIdent.getText().equals(CONSTRUCTOR_FST_PARAMETER) && sndParIdent.getText().equals(CONSTRUCTOR_SND_PARAMETER);
 		}
 
 		return false;
