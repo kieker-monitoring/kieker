@@ -426,7 +426,7 @@
 		<replaceregexp file="${maven.dir}/${dist.kieker.main.emf.pom}" match="&lt;version&gt;.*&lt;/version&gt;&lt;!--Kieker.*" replace="&lt;version&gt;${kieker.version}&lt;/version&gt;" />
 	</target>
 	
-    <target name="deploy-maven" depends="dist-maven" description="deploy snapshot version to Maven snapshot repository">
+    <target name="deploy-maven-snapshot" depends="dist-maven" description="deploy snapshot version to Maven snapshot repository">
 	<artifact:mvn>
 		<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
 		<arg value="-Durl=${maven-snapshots-repository-url}" />
@@ -434,6 +434,20 @@
 		<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.pom}" />
 		<arg value="-Dfile=${maven.dir}/${dist.kieker.main.jar}" />
 	</artifact:mvn>
+    <artifact:mvn>
+    	<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
+    	<arg value="-Durl=${maven-snapshots-repository-url}" />
+    	<arg value="-DrepositoryId=${maven-snapshots-repository-id}" />
+    	<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.emf.pom}" />
+    	<arg value="-Dfile=${maven.dir}/${dist.kieker.main.emf.jar}" />
+    </artifact:mvn>
+    <artifact:mvn>
+       	<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
+       	<arg value="-Durl=${maven-snapshots-repository-url}" />
+      	<arg value="-DrepositoryId=${maven-snapshots-repository-id}" />
+       	<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.aspectj.pom}" />
+       	<arg value="-Dfile=${maven.dir}/${dist.kieker.main.aspectj.jar}" />
+    </artifact:mvn>
     </target>
 	
 	<target name="dist-kieker-binaries" depends="build-all,-build-userguide,-build-userguide-examples" description="Packages the binary archives (.zip|.tar.gz) for a release">
