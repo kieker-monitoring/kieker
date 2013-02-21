@@ -42,6 +42,7 @@ import kieker.test.tools.util.ExecutionFactory;
  * 
  * @author Andre van Hoorn, Nils christian Ehmke
  */
+@SuppressWarnings("deprecation")
 public class TestTraceIdFilter extends AbstractKiekerTest { // NOCS
 
 	// private static final Log log = LogFactory.getLog(TestTraceIdFilter.class);

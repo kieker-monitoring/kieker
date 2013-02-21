@@ -37,6 +37,7 @@ import kieker.test.tools.util.ExecutionFactory;
  * 
  * @author Andre van Hoorn, Nils Christian Ehmke
  */
+@SuppressWarnings("deprecation")
 public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 
 	// private static final Log LOG = LogFactory.getLog(TestTimestampFilter.class);

@@ -357,7 +357,7 @@ public class ExecutionTrace extends AbstractTrace {
 		return new ExecutionTraceComparator();
 	}
 
-	private static class ExecutionTraceComparator implements Comparator<Execution>, Serializable {
+	private static final class ExecutionTraceComparator implements Comparator<Execution>, Serializable {
 
 		private static final long serialVersionUID = -6334359132236475506L;
 
@@ -366,7 +366,6 @@ public class ExecutionTrace extends AbstractTrace {
 		 */
 		public ExecutionTraceComparator() {
 			// Nothing to do here
-			super();
 		}
 
 		/**
@@ -380,7 +379,7 @@ public class ExecutionTrace extends AbstractTrace {
 		 * 
 		 * @return -1 if e1 < e2, 1 if e1 > e2, 0 otherwise.
 		 */
-		public int compare(final Execution e1, final Execution e2) {
+		public final int compare(final Execution e1, final Execution e2) {
 			/*
 			 * If executions equal, return immediately
 			 */
