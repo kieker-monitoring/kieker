@@ -7,7 +7,6 @@ import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.CountingThroughputFilter;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
-import kieker.analysis.plugin.filter.forward.TeeFilter;
 import kieker.analysis.plugin.reader.jmx.JMXReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
@@ -60,26 +59,27 @@ public class StartingBean {
 	}
 	
 	private void init() throws IllegalStateException, AnalysisConfigurationException{
+	
 		final Configuration jmxReaderConfig = new Configuration();
 		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SILENT, "true");
 		final JMXReader reader = new JMXReader(jmxReaderConfig);
 		analysisInstance.registerReader(reader);
 
 		
-		final Configuration teeFilterConfig = new Configuration();
-		teeFilterConfig.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM,
-		TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDOUT);
-		final TeeFilter teeFilter = new TeeFilter(teeFilterConfig);
-
-		analysisInstance.registerFilter(teeFilter);
+//		final Configuration teeFilterConfig = new Configuration();
+//		teeFilterConfig.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM,
+//		TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDOUT);
+//		final TeeFilter teeFilter = new TeeFilter(teeFilterConfig);
+//
+//		analysisInstance.registerFilter(teeFilter);
 		analysisInstance.registerFilter(listCollectionFilter);
 		analysisInstance.registerFilter(ctFilter);
 
 		analysisInstance.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS,
 				listCollectionFilter, ListCollectionFilter.INPUT_PORT_NAME);
-		analysisInstance.connect(listCollectionFilter, ListCollectionFilter.OUTPUT_PORT_NAME,
-				teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
-		analysisInstance.connect(teeFilter, TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, 
+//		analysisInstance.connect(listCollectionFilter, ListCollectionFilter.OUTPUT_PORT_NAME,
+//				teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
+		analysisInstance.connect(listCollectionFilter, ListCollectionFilter.OUTPUT_PORT_NAME, 
 				ctFilter, CountingThroughputFilter.INPUT_PORT_NAME_RECORDS);
 		
 	
@@ -105,7 +105,7 @@ public class StartingBean {
 
 		Configuration writerConfig = new Configuration();
 		writerConfig.setProperty(GraphWriterConfiguration.CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME, "C:\\IDE\\Eclipse Indigo EE\\workspace\\kieker.examples\\kieker.live.demo\\webapps\\kiekerLiveDemo\\resources\\");
-		writerConfig.setProperty(GraphWriterConfiguration.CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME, "testgraph");
+		writerConfig.setProperty(GraphWriterConfiguration.CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME, "graphzahl");
 		GraphWriterPlugin graphWriter = new GraphWriterPlugin(writerConfig);
 		analysisInstance.registerFilter(graphWriter);
 		analysisInstance.connect(dependencyGraphFilter, IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, 

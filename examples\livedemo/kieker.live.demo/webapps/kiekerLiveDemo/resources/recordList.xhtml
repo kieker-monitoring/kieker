@@ -8,25 +8,37 @@
     <title>Kieker Live Demo</title>
 </h:head>
 <h:body>
-	<div class="title ui-widget-header ui-corner-all">
-		<h1 align="center">List Of Records</h1>
-		<div align="right">
-			<a href="../index.jsf">Return to Main Menu</a>
-		</div>
+	<div  class="title ui-widget-header ui-corner-all">
+		<h1 align="center">List Of Records</h1>	
+		<table width="100%">
+			<tr>
+			<!-- 	<td align="left"><p:commandButton id="basic" value="freeze" onclick="dlg1.show();" type="button" /></td> -->
+				<td align="right"><a href="../index.jsf">Return to Main Menu</a></td>
+			</tr>
+		</table>
 	</div>
+	
 	<h:form>  
     	<p:dataTable var="record" id="rec" value="#{recordBean.records}">
+    		<p:column headerText="Session Id">  
+            	<h:outputText value="#{record.sessionId}" />  
+	        </p:column>
     		<p:column headerText="Trace Id">  
-            	<h:outputText value="#{record.traceId}" />  
+            	<h:outputText id="trace" value="#{record.traceId}"/>  
+            	<p:tooltip for="trace" value="#{record.wholeRecord}" showEffect="fade" hideEffect="fade"/>
 	        </p:column>
     	    <p:column headerText="Signature">  
-        	    <h:outputText value="#{record.operationSignature}" />  
+        	    <h:outputText id="signature" value="#{record.shortSignature}" />  
+        	    <p:tooltip for="signature" value="#{record.operationSignature}" showEffect="fade" hideEffect="fade"/>
 	        </p:column>
-    	    <p:column headerText="Response Time in ms">  
-        	    <h:outputText value="#{(record.tout - record.tin)/1000000}" />  
+    	    <p:column headerText="Response Time">  
+        	    <h:outputText value="#{record.responseTime} ms" />  
 	        </p:column>
     	</p:dataTable>
     	<p:poll interval="2" update="rec" />  
+    	<p:dialog id="basicDialog" header="Basic Dialog" widgetVar="dlg1">  
+    		<h:outputText value="Resistance to PrimeFaces is futile!" />  
+		</p:dialog> 
 	</h:form>   
 </h:body>
 </html>

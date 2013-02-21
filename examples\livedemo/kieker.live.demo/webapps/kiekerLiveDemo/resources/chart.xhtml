@@ -1,0 +1,40 @@
+<html xmlns="http://www.w3c.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+<h:head>
+    <link type="text/css" rel="StyleSheet" href="css/theme.css" />
+    <title>Kieker Live Demo</title>
+</h:head>
+<h:body>
+	<div class="title ui-widget-header ui-corner-all">
+		<h1 align="center">Counts per Minute</h1>
+		<div align="right">
+			<a href="../index.jsf">Return to Main Menu</a>
+		</div>
+	</div>
+	
+	<h:form>
+		<p:selectCheckboxMenu id="select" value="#{chartBean.selectedMethods}" label="Select Methods" 
+		filter="true" filterText="Filter" filterMatchMode="contains">  
+	        <f:selectItems value="#{chartBean.availableMethods}" />  
+	    </p:selectCheckboxMenu>
+	    <p:poll interval="30" update="select" />
+	    <p:commandButton value="Submit" update="select"/>
+	</h:form>
+	
+	<h:form>  
+		<p:lineChart id="count" value="#{chartBean.countingModel}" legendPosition="e"  
+     		title="Method Calls Per Minute" minY="0" style="height:300px;margin-top:20px"
+     		xaxisLabel="Time" yaxisLabel="Number of calls"/>
+	
+		<p:barChart id="resp" value="#{chartBean.responsetimeModel}" legendPosition="e"  
+     		title="Average Responsetime" minY="0" style="height:300px;margin-top:20px"
+     		xaxisLabel="Time" yaxisLabel="Responsetime in ms"/>
+		<p:poll interval="5" update="count,resp" />
+	</h:form>
+	
+</h:body>
+</html>
