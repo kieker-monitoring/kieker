@@ -14,7 +14,7 @@
 		<tstamp />
 		<property name="kieker.name" value="Kieker Framework" />
 		<property name="kieker.version" value="1.7-SNAPSHOT" />
-		<property name="year" value="2012" />
+		<property name="year" value="2013" />
 		<property name="copyright" value="Kieker Project" />
 		
 		<property name="dist.kieker.main.sources.jar" value="${kieker.main.packagenamebase}-${kieker.version}-${kieker-src.suffix}.jar" />
@@ -403,8 +403,11 @@
 	
 		<!-- The source files -->
 		<jar zipfile="${maven.dir}/${dist.kieker.main.sources.jar}">
-			<zipfileset dir="${src.dir}" prefix="src" defaultexcludes="yes" />
-			<zipfileset dir="${src.gen}" prefix="src-gen" defaultexcludes="yes" />
+			<zipfileset dir="${src.kieker.common.dir}" defaultexcludes="yes" />
+			<zipfileset dir="${src.kieker.monitoring.dir}" defaultexcludes="yes" />
+			<zipfileset dir="${src.kieker.analysis.dir}" defaultexcludes="yes" />
+			<zipfileset dir="${src.kieker.tools.dir}" defaultexcludes="yes" />
+			<zipfileset dir="${src.gen.kieker.analysis.dir}" defaultexcludes="yes" />
 		</jar>
 		<copy file="${maven.dir}/${dist.kieker.main.sources.jar}" tofile="${maven.dir}/${dist.kieker.main.sources.aspectj.jar}" />
 		<copy file="${maven.dir}/${dist.kieker.main.sources.jar}" tofile="${maven.dir}/${dist.kieker.main.sources.emf.jar}" />
@@ -427,6 +430,7 @@
 	</target>
 	
     <target name="deploy-maven-snapshot" depends="dist-maven" description="deploy snapshot version to Maven snapshot repository">
+               <!-- deploy the main artifacts -->
 		<artifact:mvn>
 			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
 			<arg value="-Durl=${maven-snapshots-repository-url}" />
@@ -434,47 +438,47 @@
 			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.pom}" />
 			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.jar}" />
 		</artifact:mvn>
-	    <artifact:mvn>
-	    	<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
-	    	<arg value="-Durl=${maven-snapshots-repository-url}" />
-	    	<arg value="-DrepositoryId=${maven-snapshots-repository-id}" />
-	    	<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.emf.pom}" />
-	    	<arg value="-Dfile=${maven.dir}/${dist.kieker.main.emf.jar}" />
-	    </artifact:mvn>
-	    <artifact:mvn>
-	       	<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
-	       	<arg value="-Durl=${maven-snapshots-repository-url}" />
-	      	<arg value="-DrepositoryId=${maven-snapshots-repository-id}" />
-	       	<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.aspectj.pom}" />
-	       	<arg value="-Dfile=${maven.dir}/${dist.kieker.main.aspectj.jar}" />
-	    </artifact:mvn>
+		<artifact:mvn>
+		  <arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
+		  <arg value="-Durl=${maven-snapshots-repository-url}" />
+		  <arg value="-DrepositoryId=${maven-snapshots-repository-id}" />
+		  <arg value="-DpomFile=${maven.dir}/${dist.kieker.main.emf.pom}" />
+		  <arg value="-Dfile=${maven.dir}/${dist.kieker.main.emf.jar}" />
+		</artifact:mvn>
+		<artifact:mvn>
+		  <arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
+		  <arg value="-Durl=${maven-snapshots-repository-url}" />
+		  <arg value="-DrepositoryId=${maven-snapshots-repository-id}" />
+		  <arg value="-DpomFile=${maven.dir}/${dist.kieker.main.aspectj.pom}" />
+		  <arg value="-Dfile=${maven.dir}/${dist.kieker.main.aspectj.jar}" />
+		</artifact:mvn>
     </target>
 	
-    <target name="deploy-maven-release" depends="dist-maven" description="deploy release version to Maven snapshot repository">
-    	<!-- sign and deploy the main artifacts -->
+    <target name="deploy-maven-release" depends="-update-version" description="deploy release version to Maven snapshot repository">
+               <!-- sign and deploy the main artifacts -->
 		<artifact:mvn>
 			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.3:sign-and-deploy-file" />
 			<arg value="-Durl=${maven-staging-repository-url}" />
 			<arg value="-DrepositoryId=${maven-staging-repository-id}" />
 			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.pom}" />
 			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.jar}" />
-	        <arg value="-Pgpg" />
+			<arg value="-Pgpg" />
 		</artifact:mvn>
 		<artifact:mvn>
 			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.3:sign-and-deploy-file" />
 			<arg value="-Durl=${maven-staging-repository-url}" />
 			<arg value="-DrepositoryId=${maven-staging-repository-id}" />
-	    	<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.emf.pom}" />
-	    	<arg value="-Dfile=${maven.dir}/${dist.kieker.main.emf.jar}" />
-	        <arg value="-Pgpg" />
+			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.emf.pom}" />
+			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.emf.jar}" />
+			<arg value="-Pgpg" />
 		</artifact:mvn>
 		<artifact:mvn>
 			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.3:sign-and-deploy-file" />
 			<arg value="-Durl=${maven-staging-repository-url}" />
 			<arg value="-DrepositoryId=${maven-staging-repository-id}" />
-		    <arg value="-DpomFile=${maven.dir}/${dist.kieker.main.aspectj.pom}" />
-		    <arg value="-Dfile=${maven.dir}/${dist.kieker.main.aspectj.jar}" />
-		    <arg value="-Pgpg" />
+			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.aspectj.pom}" />
+			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.aspectj.jar}" />
+			<arg value="-Pgpg" />
 		</artifact:mvn>
     	
 		<!-- sign and deploy the sources artifacts -->
@@ -482,28 +486,28 @@
 			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.3:sign-and-deploy-file" />
 			<arg value="-Durl=${maven-staging-repository-url}" />
 			<arg value="-DrepositoryId=${maven-staging-repository-id}" />
-		    <arg value="-DpomFile=${maven.dir}/${dist.kieker.main.pom}" />
-		    <arg value="-Dfile=${maven.dir}/${dist.kieker.main.sources.jar}" />
+			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.pom}" />
+			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.sources.jar}" />
 			<arg value="-Dclassifier=sources" />
-            <arg value="-Pgpg" />
+			<arg value="-Pgpg" />
 		</artifact:mvn>
 		<artifact:mvn>
 			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.3:sign-and-deploy-file" />
 			<arg value="-Durl=${maven-staging-repository-url}" />
 			<arg value="-DrepositoryId=${maven-staging-repository-id}" />
-		    <arg value="-DpomFile=${maven.dir}/${dist.kieker.main.emf.pom}" />
-		    <arg value="-Dfile=${maven.dir}/${dist.kieker.main.sources.emf.jar}" />
+			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.emf.pom}" />
+			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.sources.emf.jar}" />
 			<arg value="-Dclassifier=sources" />
-            <arg value="-Pgpg" />
+			<arg value="-Pgpg" />
 		</artifact:mvn>
 		<artifact:mvn>
 			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.3:sign-and-deploy-file" />
 			<arg value="-Durl=${maven-staging-repository-url}" />
 			<arg value="-DrepositoryId=${maven-staging-repository-id}" />
-		    <arg value="-DpomFile=${maven.dir}/${dist.kieker.main.aspectj.pom}" />
-		    <arg value="-Dfile=${maven.dir}/${dist.kieker.main.sources.aspectj.jar}" />
+			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.aspectj.pom}" />
+			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.sources.aspectj.jar}" />
 			<arg value="-Dclassifier=sources" />
-            <arg value="-Pgpg" />
+			<arg value="-Pgpg" />
 		</artifact:mvn>
     	
 		<!-- sign and deploy the javadoc artifacts -->
@@ -511,28 +515,28 @@
 			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.3:sign-and-deploy-file" />
 			<arg value="-Durl=${maven-staging-repository-url}" />
 			<arg value="-DrepositoryId=${maven-staging-repository-id}" />
-		    <arg value="-DpomFile=${maven.dir}/${dist.kieker.main.pom}" />
-		    <arg value="-Dfile=${maven.dir}/${dist.kieker.main.javadoc.jar}" />
+			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.pom}" />
+			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.javadoc.jar}" />
 			<arg value="-Dclassifier=javadoc" />
-            <arg value="-Pgpg" />
+			<arg value="-Pgpg" />
 		</artifact:mvn>
 		<artifact:mvn>
 			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.3:sign-and-deploy-file" />
 			<arg value="-Durl=${maven-staging-repository-url}" />
 			<arg value="-DrepositoryId=${maven-staging-repository-id}" />
-		    <arg value="-DpomFile=${maven.dir}/${dist.kieker.main.emf.pom}" />
-		    <arg value="-Dfile=${maven.dir}/${dist.kieker.main.javadoc.emf.jar}" />
+			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.emf.pom}" />
+			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.javadoc.emf.jar}" />
 			<arg value="-Dclassifier=javadoc" />
-            <arg value="-Pgpg" />
+			<arg value="-Pgpg" />
 		</artifact:mvn>
 		<artifact:mvn>
 			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.3:sign-and-deploy-file" />
 			<arg value="-Durl=${maven-staging-repository-url}" />
 			<arg value="-DrepositoryId=${maven-staging-repository-id}" />
-		    <arg value="-DpomFile=${maven.dir}/${dist.kieker.main.aspectj.pom}" />
-		    <arg value="-Dfile=${maven.dir}/${dist.kieker.main.javadoc.aspectj.jar}" />
+			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.aspectj.pom}" />
+			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.javadoc.aspectj.jar}" />
 			<arg value="-Dclassifier=javadoc" />
-            <arg value="-Pgpg" />
+			<arg value="-Pgpg" />
 		</artifact:mvn>
     </target>
 	
