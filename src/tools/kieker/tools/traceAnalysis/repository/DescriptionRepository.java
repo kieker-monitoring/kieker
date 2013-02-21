@@ -59,6 +59,7 @@ public class DescriptionRepository extends AbstractRepository {
 	 * 
 	 * @param configuration
 	 *            The configuration to use
+	 * 
 	 * @throws IOException
 	 *             If an I/O error occurs during initialization
 	 * 
@@ -67,6 +68,23 @@ public class DescriptionRepository extends AbstractRepository {
 	@Deprecated
 	public DescriptionRepository(final Configuration configuration) throws IOException {
 		this(configuration, DescriptionRepository.readDataFromFile(configuration.getStringProperty(CONFIG_PROPERTY_NAME_DESCRIPTION_FILE_NAME)), null);
+	}
+
+	/**
+	 * Creates a new description repository using the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 * @param projectContext
+	 *            The project context for this plugin.
+	 * 
+	 * @throws IOException
+	 *             If an I/O error occurs during initialization
+	 * 
+	 * @since 1.7
+	 */
+	public DescriptionRepository(final Configuration configuration, final IProjectContext projectContext) throws IOException {
+		this(configuration, DescriptionRepository.readDataFromFile(configuration.getStringProperty(CONFIG_PROPERTY_NAME_DESCRIPTION_FILE_NAME)), projectContext);
 	}
 
 	/**
@@ -80,10 +98,7 @@ public class DescriptionRepository extends AbstractRepository {
 	 *            The project context to use.
 	 * 
 	 * @since 1.7
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
 	 */
-	@Deprecated
 	public DescriptionRepository(final Configuration configuration, final DescriptionRepositoryData descriptionData, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 

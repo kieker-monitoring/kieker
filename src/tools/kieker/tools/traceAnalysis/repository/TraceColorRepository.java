@@ -83,6 +83,23 @@ public class TraceColorRepository extends AbstractRepository {
 	}
 
 	/**
+	 * Creates a new description repository using the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 * @param projectContext
+	 *            The project context for this plugin.
+	 * 
+	 * @throws IOException
+	 *             If an I/O error occurs during initialization
+	 * 
+	 * @since 1.7
+	 */
+	public TraceColorRepository(final Configuration configuration, final IProjectContext projectContext) throws IOException {
+		this(configuration, TraceColorRepository.readDataFromFile(configuration.getStringProperty(CONFIG_PROPERTY_NAME_TRACE_COLOR_FILE_NAME)), projectContext);
+	}
+
+	/**
 	 * Creates a new color repository with the given data.
 	 * 
 	 * @param configuration
@@ -93,10 +110,7 @@ public class TraceColorRepository extends AbstractRepository {
 	 *            The project context to use for this repository.
 	 * 
 	 * @since 1.7
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
 	 */
-	@Deprecated
 	public TraceColorRepository(final Configuration configuration, final TraceColorRepositoryData colorData, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
