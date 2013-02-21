@@ -73,9 +73,11 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 	 *            The ID of the processed trace.
 	 */
 	protected final void reportSuccess(final long traceId) {
-		this.lastTraceIdSuccess = traceId;
-		this.numTracesSucceeded++;
-		this.numTracesProcessed++;
+		synchronized (this) {
+			this.lastTraceIdSuccess = traceId;
+			this.numTracesSucceeded++;
+			this.numTracesProcessed++;
+		}
 	}
 
 	/**
@@ -85,9 +87,11 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 	 *            The ID of the processed trace.
 	 */
 	protected final void reportError(final long traceId) {
-		this.lastTraceIdError = traceId;
-		this.numTracesFailed++;
-		this.numTracesProcessed++;
+		synchronized (this) {
+			this.lastTraceIdError = traceId;
+			this.numTracesFailed++;
+			this.numTracesProcessed++;
+		}
 	}
 
 	/**
@@ -96,7 +100,9 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 	 * @return The number of traces.
 	 */
 	public final int getSuccessCount() {
-		return this.numTracesSucceeded;
+		synchronized (this) {
+			return this.numTracesSucceeded;
+		}
 	}
 
 	/**
@@ -105,7 +111,9 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 	 * @return The number of traces.
 	 */
 	public final int getErrorCount() {
-		return this.numTracesFailed;
+		synchronized (this) {
+			return this.numTracesFailed;
+		}
 	}
 
 	/**
@@ -114,7 +122,9 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 	 * @return The number of traces.
 	 */
 	public final int getTotalCount() {
-		return this.numTracesProcessed;
+		synchronized (this) {
+			return this.numTracesProcessed;
+		}
 	}
 
 	/**
@@ -123,7 +133,9 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 	 * @return The trace ID.
 	 */
 	public final long getLastTraceIdError() {
-		return this.lastTraceIdError;
+		synchronized (this) {
+			return this.lastTraceIdError;
+		}
 	}
 
 	/**
@@ -132,7 +144,9 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 	 * @return The trace ID.
 	 */
 	public final long getLastTraceIdSuccess() {
-		return this.lastTraceIdSuccess;
+		synchronized (this) {
+			return this.lastTraceIdSuccess;
+		}
 	}
 
 	/**
@@ -141,7 +155,9 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 	 * 
 	 */
 	public void printStatusMessage() {
-		this.printMessage(new String[] { "Trace processing summary: " + this.numTracesProcessed + " total; "
-				+ this.numTracesSucceeded + " succeeded; " + this.numTracesFailed + " failed.", });
+		synchronized (this) {
+			this.printMessage(new String[] { "Trace processing summary: " + this.numTracesProcessed + " total; "
+					+ this.numTracesSucceeded + " succeeded; " + this.numTracesFailed + " failed.", });
+		}
 	}
 }
