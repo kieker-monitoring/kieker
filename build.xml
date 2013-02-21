@@ -5,10 +5,10 @@
 
 	<taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" />
 
-	<path id="maven-ant-tasks.classpath" path="lib/maven/maven-ant-tasks-2.1.3.jar" />
-		<typedef resource="org/apache/maven/artifact/ant/antlib.xml"
-						 uri="antlib:org.apache.maven.artifact.ant"
-						 classpathref="maven-ant-tasks.classpath" />
+	<path id="maven-ant-tasks.classpath" path="lib/maven-ant-tasks-2.1.3.jar" />
+  <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+           uri="antlib:org.apache.maven.artifact.ant"
+           classpathref="maven-ant-tasks.classpath" />
 
 	<target name="-init-version" description="Initializes variables based on the Kieker version number">
 		<tstamp />
@@ -429,8 +429,8 @@
 		<replaceregexp file="${maven.dir}/${dist.kieker.main.emf.pom}" match="&lt;version&gt;.*&lt;/version&gt;&lt;!--Kieker.*" replace="&lt;version&gt;${kieker.version}&lt;/version&gt;" />
 	</target>
 
-	 <!-- Note that this target just uploads but does NOT build! -->
-		<target name="deploy-maven-snapshot" depends="-update-version" description="deploy snapshot version to Maven snapshot repository">
+	<!-- Note that this target just uploads but does NOT build! -->
+  <target name="deploy-maven-snapshot" depends="-update-version" description="deploy snapshot version to Maven snapshot repository">
 		<!-- deploy the main artifacts -->
 		<artifact:mvn>
 			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
@@ -453,10 +453,10 @@
 			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.aspectj.pom}" />
 			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.aspectj.jar}" />
 		</artifact:mvn>
-		</target>
+  </target>
 
-		<!-- Note that this target just uploads but does NOT build! -->
-		<target name="deploy-maven-release" depends="-update-version" description="deploy release version to Maven snapshot repository">
+  <!-- Note that this target just uploads but does NOT build! -->
+  <target name="deploy-maven-release" depends="-update-version" description="deploy release version to Maven snapshot repository">
 		<!-- sign and deploy the main artifacts -->
 		<artifact:mvn>
 			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.3:sign-and-deploy-file" />
@@ -540,10 +540,9 @@
 			<arg value="-Dclassifier=javadoc" />
 			<arg value="-Pgpg" />
 		</artifact:mvn>
-		</target>
+  </target>
 
 	<target name="dist-kieker-binaries" depends="build-all,-build-userguide,-build-userguide-examples" description="Packages the binary archives (.zip|.tar.gz) for a release">
-
 		<patternset id="dist_bin_files-nonbinmode"> <!-- NOTE that the order of includes/excludes seems to have no effect. So be careful with excludes -->
 			<include name="${bin.dir}/log4j.properties" />
 			<include name="${bin.dir}/*.bat" />
