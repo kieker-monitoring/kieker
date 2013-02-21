@@ -429,7 +429,8 @@
 		<replaceregexp file="${maven.dir}/${dist.kieker.main.emf.pom}" match="&lt;version&gt;.*&lt;/version&gt;&lt;!--Kieker.*" replace="&lt;version&gt;${kieker.version}&lt;/version&gt;" />
 	</target>
 	
-    <target name="deploy-maven-snapshot" depends="dist-maven" description="deploy snapshot version to Maven snapshot repository">
+   <!-- Note that this target just uploads but does NOT build! -->
+    <target name="deploy-maven-snapshot" depends="-update-version" description="deploy snapshot version to Maven snapshot repository">
                <!-- deploy the main artifacts -->
 		<artifact:mvn>
 			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
@@ -454,6 +455,7 @@
 		</artifact:mvn>
     </target>
 	
+   <!-- Note that this target just uploads but does NOT build! -->
     <target name="deploy-maven-release" depends="-update-version" description="deploy release version to Maven snapshot repository">
                <!-- sign and deploy the main artifacts -->
 		<artifact:mvn>
