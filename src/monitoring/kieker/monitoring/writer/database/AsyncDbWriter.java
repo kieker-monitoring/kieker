@@ -20,9 +20,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -98,7 +98,7 @@ final class DbWriterThread extends AbstractAsyncThread {
 	private final Connection connection;
 	private final DBWriterHelper helper;
 
-	private final Map<Class<? extends IMonitoringRecord>, PreparedStatement> recordTypeInformation =
+	private final ConcurrentMap<Class<? extends IMonitoringRecord>, PreparedStatement> recordTypeInformation =
 			new ConcurrentHashMap<Class<? extends IMonitoringRecord>, PreparedStatement>();
 	private final AtomicLong recordId;
 
