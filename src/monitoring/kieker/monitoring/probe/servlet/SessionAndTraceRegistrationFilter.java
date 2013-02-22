@@ -49,14 +49,18 @@ import kieker.monitoring.timer.ITimeSource;
  * 
  * The filter can be integrated into the web.xml as follows:
  * 
+ * <pre>
+ * {@code
  * <filter>
- * <filter-name>sessionAndTraceRegistrationFilter</filter-name>
- * <filter-class>SessionAndTraceRegistrationFilter</filter-class>
+ *   <filter-name>sessionAndTraceRegistrationFilter</filter-name>
+ *   <filter-class>SessionAndTraceRegistrationFilter</filter-class>
  * </filter>
  * <filter-mapping>
- * <filter-name>sessionAndTraceRegistrationFilter</filter-name>
- * <url-pattern>/*</url-pattern>
+ *   <filter-name>sessionAndTraceRegistrationFilter</filter-name>
+ *   <url-pattern>/*</url-pattern>
  * </filter-mapping>
+ * }
+ * </pre>
  * 
  * @author Andre van Hoorn, Marco Luebcke, Jan Waller
  * 

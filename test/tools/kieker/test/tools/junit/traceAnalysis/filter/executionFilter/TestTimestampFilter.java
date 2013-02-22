@@ -50,6 +50,10 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), null);
 	private final ExecutionFactory eFactory = new ExecutionFactory(this.systemEntityFactory);
 
+	public TestTimestampFilter() {
+		// empty default constructor
+	}
+
 	/**
 	 * Creates a {@link TimestampFilter} with the given properties using the constructor
 	 * {@link TimestampFilter#TimestampFilter(kieker.common.configuration.Configuration, java.util.Map)}.

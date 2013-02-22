@@ -52,6 +52,10 @@ public class TestTraceIdFilter extends AbstractKiekerTest { // NOCS
 	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), null);
 	private final ExecutionFactory eFactory = new ExecutionFactory(this.systemEntityFactory);
 
+	public TestTraceIdFilter() {
+		// empty default constructor
+	}
+
 	/**
 	 * Creates a {@link TraceIdFilter} with the given properties
 	 * using the constructor {@link TraceIdFilter#TraceIdFilter(Configuration, java.util.Map)}.

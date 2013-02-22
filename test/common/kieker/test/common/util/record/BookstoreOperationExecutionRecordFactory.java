@@ -120,8 +120,7 @@ public final class BookstoreOperationExecutionRecordFactory {
 
 		final List<OperationExecutionRecord> retList = new ArrayList<OperationExecutionRecord>(/* # executions: */4);
 
-		final OperationExecutionRecord exec0_0__bookstore_searchBook = // NOCS (LocalFinalVariableNameCheck)
-		new OperationExecutionRecord(
+		final OperationExecutionRecord exec0_0__bookstore_searchBook = new OperationExecutionRecord( // NOCS (LocalFinalVariableNameCheck)
 				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
 				sessionId, traceId, /* tin: */1, /* tout: */10,
 				hostname,
@@ -129,8 +128,7 @@ public final class BookstoreOperationExecutionRecordFactory {
 				BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_ESS);
 		retList.add(exec0_0__bookstore_searchBook);
 
-		final OperationExecutionRecord exec1_1__catalog_getBook = // NOCS (LocalFinalVariableNameCheck)
-		new OperationExecutionRecord(
+		final OperationExecutionRecord exec1_1__catalog_getBook = new OperationExecutionRecord( // NOCS (LocalFinalVariableNameCheck)
 				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK,
 				sessionId, traceId, /* tin: */2, /* tout: */4,
 				hostname,
@@ -138,16 +136,14 @@ public final class BookstoreOperationExecutionRecordFactory {
 				BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_ESS);
 		retList.add(exec1_1__catalog_getBook);
 
-		final OperationExecutionRecord exec2_1__crm_getOrders = // NOCS (LocalFinalVariableNameCheck)
-		new OperationExecutionRecord(
+		final OperationExecutionRecord exec2_1__crm_getOrders = new OperationExecutionRecord( // NOCS (LocalFinalVariableNameCheck)
 				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS,
 				sessionId, traceId, /* tin: */5, /* tout: */8, hostname,
 				BookstoreOperationExecutionRecordFactory.EXEC2_1__CRM_GETORDERS_EOI,
 				BookstoreOperationExecutionRecordFactory.EXEC2_1__CRM_GETORDERS_ESS);
 		retList.add(exec2_1__crm_getOrders);
 
-		final OperationExecutionRecord exec3_2__catalog_getBook = // NOCS (LocalFinalVariableNameCheck)
-		new OperationExecutionRecord(
+		final OperationExecutionRecord exec3_2__catalog_getBook = new OperationExecutionRecord( // NOCS (LocalFinalVariableNameCheck)
 				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK,
 				sessionId, traceId, /* tin: */6, /* tout: */7, hostname,
 				BookstoreOperationExecutionRecordFactory.EXEC3_2__CATALOG_GETBOOK_EOI,

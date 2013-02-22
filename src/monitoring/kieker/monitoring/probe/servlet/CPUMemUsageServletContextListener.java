@@ -67,6 +67,7 @@ import kieker.monitoring.probe.sigar.samplers.MemSwapUsageSampler;
  * 
  * ... 
  * </web-app>}
+ * }
  * </pre>
  * 
  * </p>

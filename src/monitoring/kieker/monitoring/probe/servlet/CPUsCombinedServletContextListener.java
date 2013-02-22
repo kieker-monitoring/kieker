@@ -65,6 +65,7 @@ import kieker.monitoring.probe.sigar.samplers.CPUsCombinedPercSampler;
  * 
  * ... 
  * </web-app>}
+ * }
  * </pre>
  * 
  * </p>

@@ -1,8 +1,8 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module PUBLIC
-          "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
-          "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
-
+    "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+    "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+    
 <module name="Checker">
 
     <!-- KIEKER default is warning instead of error -->
@@ -171,16 +171,21 @@
     -->
 
     <module name="TreeWalker">
-		<!-- KIEKER -->
-		<module name="kieker.test.common.cs.AnalysisComponentConstructorCheck">
-			<property name="ignoreAbstractClasses" value="true"/>
-		</module>
-		<module name="kieker.test.common.cs.MonitoringRecordFactoryConvenctionCheck">
-			<property name="ignoreAbstractClasses" value="true"/>
-		</module>
-		
         <!-- KIEKER -->
         <property name="tabWidth" value="4"/>
+        <!-- KIEKER -->
+        <!--
+        <module name="kieker.test.common.cs.AnalysisComponentConstructorCheck">
+            <property name="ignoreAbstractClasses" value="true"/>
+        </module>
+        -->
+        <!-- KIEKER -->
+        <!--
+        <module name="kieker.test.common.cs.MonitoringRecordFactoryConvenctionCheck">
+            <property name="ignoreAbstractClasses" value="true"/>
+        </module>
+        -->
+		
         <module name="FileContentsHolder"/>
 
         <!--
@@ -682,7 +687,7 @@
             <property name="allowMissingThrowsTags"       value="false"/>
             <property name="allowMissingReturnTag"        value="false"/>
             <property name="allowMissingJavadoc"          value="false"/>
-            <property name="allowMissingPropertyJavadoc"  value="false"/>
+            <property name="allowMissingPropertyJavadoc"  value="true"/>
             <property name="logLoadErrors"                value="true"/>
             <property name="suppressLoadErrors"           value="false"/>
             <property name="tokens"                       value="METHOD_DEF, CTOR_DEF"/>
@@ -691,7 +696,7 @@
         <!-- Validates Javadoc comments to help ensure they are well formed. !-->
         <!-- See http://checkstyle.sf.net/config_javadoc.html#JavadocStyle !-->
         <module name="JavadocStyle">
-            <property name="severity" value="info"/>
+            <property name="severity"            value="info"/>
             <property name="scope"               value="private"/>
             <!--
             <property name="excludeScope"        value=""/>
@@ -699,7 +704,7 @@
             <property name="checkFirstSentence"  value="true"/>
 <!--TODO:            <property name="endOfSentenceFormat" value="([.?!][ \t\n\r\f<])|([.?!]$)"/> !-->
             <property name="checkEmptyJavadoc"   value="false"/>
-            <property name="checkHtml"           value="true"/>
+            <property name="checkHtml"           value="false"/>
             <property name="tokens"              value="INTERFACE_DEF, CLASS_DEF, METHOD_DEF, CTOR_DEF, VARIABLE_DEF"/>
         </module>
 
@@ -850,7 +855,7 @@
         <!-- See http://checkstyle.sf.net/config_misc.html !-->
         <!-- KIEKER -->
         <module name="Indentation">
-            <property name="severity" value="info"/>        
+            <property name="severity"        value="info"/>        
             <property name="basicOffset"     value="4"/>
             <property name="braceAdjustment" value="0"/>
             <property name="caseIndent"      value="0"/>
