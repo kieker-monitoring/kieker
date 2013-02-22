@@ -36,7 +36,7 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @since 1.7
  */
-public class MonitoringRecordFactoryConvenctionCheck extends Check {
+public class MonitoringRecordFactoryConventionCheck extends Check {
 
 	/** This field contains the (constant) tree to detect the type (this is necessary as this is a little bit more nested). */
 	private static final DetailAST TYPE_AST;
@@ -92,7 +92,7 @@ public class MonitoringRecordFactoryConvenctionCheck extends Check {
 	 * 
 	 * @since 1.7
 	 */
-	public MonitoringRecordFactoryConvenctionCheck() {
+	public MonitoringRecordFactoryConventionCheck() {
 		// Nothing to do here
 		super();
 	}
@@ -106,8 +106,8 @@ public class MonitoringRecordFactoryConvenctionCheck extends Check {
 	@Override
 	public void visitToken(final DetailAST ast) {
 		// Check whether we are interested in the class (whether it is an analysis component or not)
-		if (!(this.ignoreAbstractClasses && MonitoringRecordFactoryConvenctionCheck.isAbstract(ast))
-				&& MonitoringRecordFactoryConvenctionCheck.implementsFactory(ast)) {
+		if (!(this.ignoreAbstractClasses && MonitoringRecordFactoryConventionCheck.isAbstract(ast))
+				&& MonitoringRecordFactoryConventionCheck.implementsFactory(ast)) {
 			this.checkConstructors(ast);
 			this.checkFields(ast);
 		}
@@ -122,7 +122,7 @@ public class MonitoringRecordFactoryConvenctionCheck extends Check {
 	private void checkFields(final DetailAST ast) {
 		DetailAST child = ast.findFirstToken(TokenTypes.OBJBLOCK).findFirstToken(TokenTypes.VARIABLE_DEF);
 		while (child != null) {
-			if ((child.getType() == TokenTypes.VARIABLE_DEF) && MonitoringRecordFactoryConvenctionCheck.isValidTypeField(child)) {
+			if ((child.getType() == TokenTypes.VARIABLE_DEF) && MonitoringRecordFactoryConventionCheck.isValidTypeField(child)) {
 				// We found a valid field
 				return;
 			}
@@ -143,7 +143,7 @@ public class MonitoringRecordFactoryConvenctionCheck extends Check {
 	private void checkConstructors(final DetailAST ast) {
 		DetailAST child = ast.findFirstToken(TokenTypes.OBJBLOCK).findFirstToken(TokenTypes.CTOR_DEF);
 		while (child != null) {
-			if ((child.getType() == TokenTypes.CTOR_DEF) && MonitoringRecordFactoryConvenctionCheck.isValidConstructor(child)) {
+			if ((child.getType() == TokenTypes.CTOR_DEF) && MonitoringRecordFactoryConventionCheck.isValidConstructor(child)) {
 				// We found a valid constructor
 				return;
 			}
@@ -186,7 +186,7 @@ public class MonitoringRecordFactoryConvenctionCheck extends Check {
 
 			// Check whether the field is static and final
 			if (modifiers.branchContains(TokenTypes.LITERAL_STATIC) && modifiers.branchContains(TokenTypes.FINAL)) {
-				return MonitoringRecordFactoryConvenctionCheck.treeCompare(field.findFirstToken(TokenTypes.TYPE), TYPE_AST);
+				return MonitoringRecordFactoryConventionCheck.treeCompare(field.findFirstToken(TokenTypes.TYPE), TYPE_AST);
 			}
 		}
 
@@ -216,7 +216,7 @@ public class MonitoringRecordFactoryConvenctionCheck extends Check {
 
 			while (actChild != null) {
 				// The treeCompare method checks whether one of the children is null (we recognize therefore if the parents have different number of children).
-				if (!MonitoringRecordFactoryConvenctionCheck.treeCompare(actChild, expChild)) {
+				if (!MonitoringRecordFactoryConventionCheck.treeCompare(actChild, expChild)) {
 					return false;
 				}
 

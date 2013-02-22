@@ -181,7 +181,7 @@
         -->
         <!-- KIEKER -->
         <!--
-        <module name="kieker.test.common.cs.MonitoringRecordFactoryConvenctionCheck">
+        <module name="kieker.test.common.cs.MonitoringRecordFactoryConventionCheck">
             <property name="ignoreAbstractClasses" value="true"/>
         </module>
         -->
