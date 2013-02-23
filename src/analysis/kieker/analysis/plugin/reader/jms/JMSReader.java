@@ -202,7 +202,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 		this.cdLatch.countDown();
 	}
 
-	final boolean deliverIndirect(final String outputPortName, final Object data) {// NOPMD (package visible for inner class)
+	final boolean deliverIndirect(final String outputPortName, final Object data) { // NOPMD (package visible for inner class)
 		return super.deliver(outputPortName, data);
 	}
 
@@ -232,6 +232,11 @@ public final class JMSReader extends AbstractReaderPlugin {
 	 * The MessageListener will read onMessage each time a message comes in.
 	 */
 	private final class JMSMessageListener implements MessageListener {
+
+		public JMSMessageListener() {
+			// empty default constructor
+		}
+
 		public void onMessage(final Message jmsMessage) {
 			if (jmsMessage instanceof TextMessage) {
 				final TextMessage text = (TextMessage) jmsMessage;

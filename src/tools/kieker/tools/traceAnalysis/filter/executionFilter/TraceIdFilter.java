@@ -39,6 +39,7 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
 		outputPorts = {
 			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MATCH, description = "Forwards executions with matching trace IDs", eventTypes = { Execution.class })
 		})
+@SuppressWarnings("deprecation")
 public class TraceIdFilter extends AbstractTraceIdFilter {
 
 	/** This is the name of the input port receiving new executions. */

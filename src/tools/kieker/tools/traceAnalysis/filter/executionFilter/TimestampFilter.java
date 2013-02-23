@@ -45,6 +45,7 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
 			@Property(name = TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, defaultValue = "0"),
 			@Property(name = TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, defaultValue = "9223372036854775807") // Long.toString(Long.MAX_VALUE)
 		})
+@SuppressWarnings("deprecation")
 public class TimestampFilter extends AbstractTimestampFilter {
 
 	/** This is the name of the input port receiving new executions. */

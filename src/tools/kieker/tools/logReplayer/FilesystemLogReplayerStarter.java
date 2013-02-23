@@ -39,7 +39,7 @@ import kieker.common.logging.LogFactory;
  * 
  * @author Andre van Hoorn
  */
-@SuppressWarnings("static-access")
+@SuppressWarnings({ "static-access", "static" })
 public final class FilesystemLogReplayerStarter {
 	private static final Log LOG = LogFactory.getLog(FilesystemLogReplayerStarter.class);
 

@@ -296,7 +296,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 		this.cdLatch.countDown();
 	}
 
-	final boolean deliverIndirect(final String outputPortName, final Object data) {// NOPMD (package visible for inner class)
+	final boolean deliverIndirect(final String outputPortName, final Object data) { // NOPMD (package visible for inner class)
 		return super.deliver(outputPortName, data);
 	}
 

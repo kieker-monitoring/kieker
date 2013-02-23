@@ -69,7 +69,7 @@ public final class Registry<E> implements IRegistry<E> {
 	/**
 	 * Creates a new, empty registry with a default initial capacity (32), load factor (0.75) and concurrencyLevel (8).
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Registry() {
 		// Find power-of-two sizes best matching arguments
 		int sshift = 0;
@@ -238,7 +238,7 @@ public final class Registry<E> implements IRegistry<E> {
 		 */
 		private transient IMonitoringRecordReceiver recordReceiver;
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		protected Segment(final int initialCapacity, final double lf) {
 			this.table = new HashEntry[initialCapacity];
 			this.threshold = (int) (initialCapacity * lf);
@@ -369,7 +369,7 @@ public final class Registry<E> implements IRegistry<E> {
 			if (oldCapacity >= MAXIMUM_CAPACITY) {
 				return;
 			}
-			@SuppressWarnings("unchecked")
+			@SuppressWarnings({ "unchecked", "rawtypes" })
 			final HashEntry<E>[] newTable = new HashEntry[oldCapacity << 1];
 			this.threshold = (int) (newTable.length * LOAD_FACTOR);
 			final int sizeMask = newTable.length - 1;

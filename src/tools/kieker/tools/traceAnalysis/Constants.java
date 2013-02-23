@@ -30,7 +30,7 @@ import org.apache.commons.cli.Options;
  * 
  * @author Robert von Massow
  */
-@SuppressWarnings("static-access")
+@SuppressWarnings({ "static-access", "static" })
 public final class Constants {
 
 	public static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";
