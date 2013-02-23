@@ -19,7 +19,6 @@ package kieker.test.common.cs;
 import com.puppycrawl.tools.checkstyle.api.Check;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.FullIdent;
-import com.puppycrawl.tools.checkstyle.api.SeverityLevel;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -73,7 +72,6 @@ public class JUnitTestsExtendingAbstractKiekerTestCheck extends Check {
 			return;
 		}
 
-		this.setSeverity(SeverityLevel.WARNING.name());
 		this.log(ast.getLineNo(), "JUnit test has to extend AbstractKiekerTest");
 	}
 
