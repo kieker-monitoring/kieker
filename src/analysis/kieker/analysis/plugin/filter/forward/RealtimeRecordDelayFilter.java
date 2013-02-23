@@ -150,10 +150,14 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 			this.executor.schedule(new Runnable() {
 
 				public void run() {
-					RealtimeRecordDelayFilter.this.deliver(OUTPUT_PORT_NAME_RECORDS, monitoringRecord);
+					RealtimeRecordDelayFilter.this.deliverIndirect(OUTPUT_PORT_NAME_RECORDS, monitoringRecord);
 				}
 			}, schedTimeFromNow, this.timeunit);
 		}
+	}
+
+	final boolean deliverIndirect(final String outputPortName, final Object data) { // NOPMD package for inner class
+		return this.deliver(outputPortName, data);
 	}
 
 	/**

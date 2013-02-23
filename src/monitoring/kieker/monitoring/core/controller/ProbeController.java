@@ -52,7 +52,7 @@ import kieker.monitoring.core.signaturePattern.PatternParser;
  * @author Jan Waller, Bjoern Weissenfels
  */
 public class ProbeController extends AbstractController implements IProbeController {
-	private static final Log LOG = LogFactory.getLog(ProbeController.class);
+	static final Log LOG = LogFactory.getLog(ProbeController.class); // NOPMD package for inner class
 	private static final String ENCODING = "UTF-8";
 
 	private final boolean enabled;

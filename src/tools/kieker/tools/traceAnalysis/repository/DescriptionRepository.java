@@ -235,7 +235,7 @@ public class DescriptionRepository extends AbstractRepository {
 			this.descriptionMap = descriptionMap;
 		}
 
-		private ConcurrentMap<String, String> getDescriptionMap() {
+		ConcurrentMap<String, String> getDescriptionMap() { // NOPMD package for outer class
 			return this.descriptionMap;
 		}
 

@@ -34,12 +34,12 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * 
  * @deprecated To be removed in Kieker 1.8 (Use {@link kieker.analysis.plugin.filter.trace.TraceIdFilter instead}).
  */
+@SuppressWarnings("deprecation")
 @Deprecated
 @Plugin(description = "A filter allowing to filter incoming execution objects based on their trace ID",
 		outputPorts = {
 			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MATCH, description = "Forwards executions with matching trace IDs", eventTypes = { Execution.class })
 		})
-@SuppressWarnings("deprecation")
 public class TraceIdFilter extends AbstractTraceIdFilter {
 
 	/** This is the name of the input port receiving new executions. */

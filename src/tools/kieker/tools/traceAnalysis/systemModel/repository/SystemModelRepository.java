@@ -130,9 +130,8 @@ public class SystemModelRepository extends AbstractRepository {
 	}
 
 	private static enum EntityType {
-
 		COMPONENT_TYPE, OPERATION, ASSEMBLY_COMPONENT, ALLOCATION_COMPONENT, EXECUTION_CONTAINER
-	};
+	}
 
 	private String htmlEntityLabel(final int id, final String caption, final EntityType entityType) {
 		final StringBuilder strBuild = new StringBuilder(64);

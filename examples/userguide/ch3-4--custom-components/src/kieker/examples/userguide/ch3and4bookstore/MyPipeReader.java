@@ -92,6 +92,7 @@ public class MyPipeReader extends AbstractReaderPlugin {
 		return true;
 	}
 
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);
 

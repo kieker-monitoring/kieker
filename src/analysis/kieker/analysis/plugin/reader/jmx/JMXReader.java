@@ -76,7 +76,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 	public static final String CONFIG_PROPERTY_NAME_LOGNAME = "logname";
 	public static final String CONFIG_PROPERTY_NAME_SILENT = "silentReconnect";
 
-	private static final Log LOG = LogFactory.getLog(JMXReader.class);
+	static final Log LOG = LogFactory.getLog(JMXReader.class); // NOPMD package for inner class
 
 	final boolean silentreconnect; // NOPMD NOCS (package visible for inner class)
 	private final JMXServiceURL serviceURL;

@@ -44,7 +44,7 @@ public final class LoggingTimestampConverterTool {
 	private static final CommandLineParser CMDL_PARSER = new BasicParser();
 	private static final HelpFormatter CMD_HELP_FORMATTER = new HelpFormatter();
 	private static final Options CMDL_OPTS = new Options();
-	private static final List<Option> OPTIONS = new CopyOnWriteArrayList<Option>();
+	static final List<Option> OPTIONS = new CopyOnWriteArrayList<Option>(); // NOPMD package for inner class
 	private static final String CMD_OPT_NAME_TIMESTAMPS = "timestamps";
 	private static CommandLine cmdl;
 	private static String[] timestampsStr;

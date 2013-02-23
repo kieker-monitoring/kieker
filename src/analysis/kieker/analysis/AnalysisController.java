@@ -96,7 +96,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 */
 	public static final String CONFIG_PROPERTY_NAME_PROJECT_NAME = "projectName";
 
-	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
+	static final Log LOG = LogFactory.getLog(AnalysisController.class); // NOPMD package for inner class
 
 	private final String projectName;
 

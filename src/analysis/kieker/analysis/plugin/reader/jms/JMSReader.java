@@ -69,7 +69,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 	public static final String CONFIG_PROPERTY_NAME_DESTINATION = "jmsDestination";
 	public static final String CONFIG_PROPERTY_NAME_FACTORYLOOKUP = "jmsFactoryLookupName";
 
-	private static final Log LOG = LogFactory.getLog(JMSReader.class);
+	static final Log LOG = LogFactory.getLog(JMSReader.class); // NOPMD package for inner class
 
 	private final String jmsProviderUrl;
 	private final String jmsDestination;

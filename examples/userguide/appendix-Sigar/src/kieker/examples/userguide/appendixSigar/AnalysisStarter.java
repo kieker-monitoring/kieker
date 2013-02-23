@@ -114,6 +114,7 @@ class StdOutDumpConsumer extends AbstractFilterPlugin {
 		} // else Unexpected record type
 	}
 
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

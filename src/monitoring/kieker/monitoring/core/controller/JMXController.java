@@ -40,7 +40,7 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
  * @author Jan Waller
  */
 public final class JMXController extends AbstractController implements IJMXController {
-	private static final Log LOG = LogFactory.getLog(JMXController.class);
+	static final Log LOG = LogFactory.getLog(JMXController.class); // NOPMD package for inner class
 
 	private final boolean jmxEnabled;
 	private final String domain;

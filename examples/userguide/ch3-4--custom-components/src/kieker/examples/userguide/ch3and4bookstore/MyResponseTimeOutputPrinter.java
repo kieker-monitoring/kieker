@@ -49,6 +49,7 @@ public class MyResponseTimeOutputPrinter extends AbstractFilterPlugin {
 		}
 	}
 
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 

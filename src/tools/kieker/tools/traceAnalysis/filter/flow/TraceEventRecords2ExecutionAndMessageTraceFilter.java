@@ -79,7 +79,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 	public static final String CONFIG_ENHANCE_JAVA_CONSTRUCTORS = "enhanceJavaConstructors";
 	public static final String CONFIG_ENHANCE_CALL_DETECTION = "enhanceCallDetection";
 
-	private static final Log LOG = LogFactory.getLog(TraceEventRecords2ExecutionAndMessageTraceFilter.class);
+	static final Log LOG = LogFactory.getLog(TraceEventRecords2ExecutionAndMessageTraceFilter.class); // NOPMD package for inner class
 
 	private final boolean enhanceJavaConstructors;
 	private final boolean enhanceCallDetection;

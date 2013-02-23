@@ -33,7 +33,7 @@ import kieker.monitoring.timer.ITimeSource;
  * @author Jan Waller
  */
 public final class MonitoringController extends AbstractController implements IMonitoringController {
-	private static final Log LOG = LogFactory.getLog(MonitoringController.class);
+	static final Log LOG = LogFactory.getLog(MonitoringController.class); // NOPMD package for inner class
 
 	private final StateController stateController;
 	private final SamplingController samplingController;
@@ -272,6 +272,6 @@ public final class MonitoringController extends AbstractController implements IM
 	 * SINGLETON.
 	 */
 	private static final class LazyHolder { // NOCS
-		private static final IMonitoringController INSTANCE = MonitoringController.createInstance(ConfigurationFactory.createSingletonConfiguration());
+		static final IMonitoringController INSTANCE = MonitoringController.createInstance(ConfigurationFactory.createSingletonConfiguration()); // NOPMD package
 	}
 }

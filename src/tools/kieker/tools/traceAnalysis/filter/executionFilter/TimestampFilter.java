@@ -35,6 +35,7 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * 
  * @deprecated To be removed in Kieker 1.8 (Use {@link kieker.analysis.plugin.filter.select.TimestampFilter} instead)
  */
+@SuppressWarnings("deprecation")
 @Deprecated
 @Plugin(description = "A filter allowing to filter incoming execution objects based on their timestamps",
 		outputPorts = {
@@ -45,7 +46,6 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
 			@Property(name = TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, defaultValue = "0"),
 			@Property(name = TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, defaultValue = "9223372036854775807") // Long.toString(Long.MAX_VALUE)
 		})
-@SuppressWarnings("deprecation")
 public class TimestampFilter extends AbstractTimestampFilter {
 
 	/** This is the name of the input port receiving new executions. */

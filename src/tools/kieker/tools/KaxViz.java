@@ -40,8 +40,8 @@ import org.w3c.dom.Document;
 
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
-import com.mxgraph.swing.handler.mxRubberband;
 import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.swing.handler.mxRubberband;
 import com.mxgraph.util.mxCellRenderer;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxPoint;
@@ -66,7 +66,7 @@ import kieker.common.logging.LogFactory;
  */
 public final class KaxViz extends JFrame {
 	private static final long serialVersionUID = 1969467089938687452L;
-	private static final Log LOG = LogFactory.getLog(KaxViz.class);
+	static final Log LOG = LogFactory.getLog(KaxViz.class); // NOPMD package for inner class
 
 	private static final int FILTER_HEIGHT = 80;
 	private static final int FILTER_WIDTH = 200;
@@ -194,7 +194,7 @@ public final class KaxViz extends JFrame {
 		graphComponent.setConnectable(false); // Inhibit edge creation in the graph.
 		graphComponent.setGridVisible(true); // Show the grid
 		graphComponent.setFoldingEnabled(false); // prevent folding of vertexes
-		new mxRubberband(graphComponent); // add rubberband selection
+		new mxRubberband(graphComponent).isEnabled(); // add rubberband selection
 		this.getContentPane().add(graphComponent);
 
 		// add the actual graph

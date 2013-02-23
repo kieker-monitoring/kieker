@@ -155,7 +155,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 
 	private enum VariationPoint {
 		OPERATION, ALLOCATION, TRACE_ID, SESSION_ID, EOI, ESS, TIN, TOUT
-	};
+	}
 
 	/**
 	 * Returns an {@link Execution} with each field being equal to that of <i>executionTemplate</i> except for the value

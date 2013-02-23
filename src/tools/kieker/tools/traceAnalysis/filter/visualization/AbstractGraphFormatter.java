@@ -100,7 +100,7 @@ public abstract class AbstractGraphFormatter<G extends AbstractGraph<?, ?, ?>> {
 	 * @param vertex
 	 *            The vertex to work with
 	 */
-	protected static void formatDecorations(final StringBuilder builder, final AbstractVertex<?, ?, ?> vertex) {
+	public static void formatDecorations(final StringBuilder builder, final AbstractVertex<?, ?, ?> vertex) {
 		final String decorations = AbstractGraphFormatter.getFormattedDecorations(vertex);
 		if (decorations.length() != 0) { // decorations cannot be null (getFormattedDecorations never returns null)
 			builder.append("\\n");

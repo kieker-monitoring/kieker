@@ -297,15 +297,15 @@ public class TraceColorRepository extends AbstractRepository {
 			this.collisionColor = collisionColor;
 		}
 
-		private ConcurrentMap<Long, Color> getColorMap() {
+		ConcurrentMap<Long, Color> getColorMap() { // NOPMD package for outer class
 			return this.colorMap;
 		}
 
-		private Color getDefaultColor() {
+		Color getDefaultColor() { // NOPMD package for outer class
 			return this.defaultColor;
 		}
 
-		private Color getCollisionColor() {
+		Color getCollisionColor() { // NOPMD package for outer class
 			return this.collisionColor;
 		}
 

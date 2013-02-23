@@ -50,11 +50,9 @@ public final class AnalysisControllerThread extends Thread {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void start() {
-		synchronized (this) {
-			super.start();
-			this.analysisController.awaitInitialization();
-		}
+	public synchronized void start() {
+		super.start();
+		this.analysisController.awaitInitialization();
 	}
 
 	/**

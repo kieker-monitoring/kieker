@@ -75,6 +75,7 @@ public class MyResponseTimeFilter extends AbstractFilterPlugin {
 		}
 	}
 
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_TS_NANOS,

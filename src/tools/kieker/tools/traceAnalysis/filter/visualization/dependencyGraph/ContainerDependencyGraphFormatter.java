@@ -38,7 +38,7 @@ public class ContainerDependencyGraphFormatter extends AbstractDependencyGraphFo
 		// empty default constructor
 	}
 
-	private static String createExecutionContainerNodeLabel(final ExecutionContainer container) {
+	static String createExecutionContainerNodeLabel(final ExecutionContainer container) { // NOPMD package for outer class
 		return AbstractDependencyGraphFormatter.STEREOTYPE_EXECUTION_CONTAINER + "\\n" + container.getName();
 	}
 
