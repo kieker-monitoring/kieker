@@ -185,6 +185,12 @@
             <property name="ignoreAbstractClasses" value="true"/>
         </module>
         -->
+		<!-- KIEKER -->
+        <!--
+		 <module name="kieker.test.common.cs.JUnitTestsExtendingAbstractKiekerTestCheck">
+            <property name="ignoreAbstractClasses" value="true"/>
+        </module>
+		-->
 		
         <module name="FileContentsHolder"/>
 

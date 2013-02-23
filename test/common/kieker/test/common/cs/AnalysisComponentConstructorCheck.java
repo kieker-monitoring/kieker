@@ -18,6 +18,7 @@ package kieker.test.common.cs;
 
 import com.puppycrawl.tools.checkstyle.api.Check;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
+import com.puppycrawl.tools.checkstyle.api.SeverityLevel;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 import kieker.analysis.IProjectContext;
@@ -83,6 +84,7 @@ public class AnalysisComponentConstructorCheck extends Check {
 			}
 
 			// Seems like there is no valid constructor
+			this.setSeverity(SeverityLevel.WARNING.name());
 			this.log(ast.getLineNo(), "invalid analysis component constructor");
 		}
 	}
