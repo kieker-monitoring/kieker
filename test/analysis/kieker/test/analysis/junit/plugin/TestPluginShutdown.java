@@ -182,7 +182,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 	private static final class ShutdownReader extends AbstractReaderPlugin {
 		public static final String OUTPUT_PORT_NAME = "out";
 
-		int shutdownNr = -1; // NOPMD package for inner class
+		int shutdownNr = -1; // NOPMD NOCS package for inner class
 
 		public ShutdownReader(final Configuration configuration, final IProjectContext projectContext) {
 			super(configuration, projectContext);
@@ -218,7 +218,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 		public static final String OUTPUT_PORT_NAME = "out";
 		public static final String INPUT_PORT_NAME = "in";
 
-		int shutdownNr = -1; // NOPMD package for inner class
+		int shutdownNr = -1; // NOPMD NOCS package for inner class
 
 		public ShutdownFilter(final Configuration configuration, final IProjectContext projectContext) {
 			super(configuration, projectContext);

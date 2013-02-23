@@ -92,7 +92,7 @@ public final class SystemNanoTimer extends AbstractTimeSource {
 	 * SINGLETON.
 	 */
 	private static final class LazyHolder { // NOCS (MissingCtorCheck)
-		static final ITimeSource INSTANCE = new SystemNanoTimer(ConfigurationFactory.createDefaultConfiguration().getPropertiesStartingWith( // NOPMD package
+		static final ITimeSource INSTANCE = new SystemNanoTimer(ConfigurationFactory.createDefaultConfiguration().getPropertiesStartingWith(// NOPMD package
 				SystemNanoTimer.class.getName()));
 	}
 }

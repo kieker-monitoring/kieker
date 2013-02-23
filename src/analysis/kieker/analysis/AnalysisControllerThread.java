@@ -50,7 +50,7 @@ public final class AnalysisControllerThread extends Thread {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public synchronized void start() {
+	public synchronized void start() { // NOPMD (here we net method level synchronization (inheritance))
 		super.start();
 		this.analysisController.awaitInitialization();
 	}
