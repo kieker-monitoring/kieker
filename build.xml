@@ -1166,6 +1166,7 @@
 			<auxClasspath>
 				<fileset dir="${lib.dir}" includes="*.jar" />
 				<fileset dir="${lib.fb.dir}/auxlib" includes="*.jar" />
+				<fileset dir="${lib.cs.dir}/lib/" includes="checkstyle-all.jar" />
 			</auxClasspath>
 			<sourcePath path="${src.dir}" />
 			<sourcePath path="${test.dir}" />
