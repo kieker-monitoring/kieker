@@ -296,6 +296,10 @@ public final class JMXReader extends AbstractReaderPlugin {
 		this.cdLatch.countDown();
 	}
 
+	final boolean deliverIndirect(final String outputPortName, final Object data) {// NOPMD (package visible for inner class)
+		return super.deliver(outputPortName, data);
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -320,7 +324,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 		}
 
 		public final void handleNotification(final Notification notification, final Object handback) {
-			JMXReader.super.deliver(OUTPUT_PORT_NAME_RECORDS, notification.getUserData());
+			JMXReader.this.deliverIndirect(OUTPUT_PORT_NAME_RECORDS, notification.getUserData());
 		}
 	}
 

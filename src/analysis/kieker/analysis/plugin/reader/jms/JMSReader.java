@@ -161,30 +161,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 
 			LOG.info("Listening to destination:" + destination + " at " + this.jmsProviderUrl + " !\n***\n\n");
 			final MessageConsumer receiver = session.createConsumer(destination);
-			receiver.setMessageListener(new MessageListener() {
-				// the MessageListener will read onMessage each time a message comes in
-
-				public void onMessage(final Message jmsMessage) {
-					if (jmsMessage instanceof TextMessage) {
-						final TextMessage text = (TextMessage) jmsMessage;
-						LOG.info("Received text message: " + text);
-					} else {
-						try {
-							final ObjectMessage om = (ObjectMessage) jmsMessage;
-							final Serializable omo = om.getObject();
-							if ((omo instanceof IMonitoringRecord) && (!JMSReader.super.deliver(OUTPUT_PORT_NAME_RECORDS, omo))) {
-								LOG.error("deliverRecord returned false");
-							}
-						} catch (final MessageFormatException ex) {
-							LOG.error("Error delivering record", ex);
-						} catch (final JMSException ex) {
-							LOG.error("Error delivering record", ex);
-						} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
-							LOG.error("Error delivering record", ex);
-						}
-					}
-				}
-			});
+			receiver.setMessageListener(new JMSMessageListener());
 
 			// start the connection to enable message delivery
 			connection.start();
@@ -225,6 +202,10 @@ public final class JMSReader extends AbstractReaderPlugin {
 		this.cdLatch.countDown();
 	}
 
+	final boolean deliverIndirect(final String outputPortName, final Object data) {// NOPMD (package visible for inner class)
+		return super.deliver(outputPortName, data);
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -245,5 +226,31 @@ public final class JMSReader extends AbstractReaderPlugin {
 		configuration.setProperty(CONFIG_PROPERTY_NAME_FACTORYLOOKUP, this.jmsFactoryLookupName);
 
 		return configuration;
+	}
+
+	/**
+	 * The MessageListener will read onMessage each time a message comes in.
+	 */
+	private final class JMSMessageListener implements MessageListener {
+		public void onMessage(final Message jmsMessage) {
+			if (jmsMessage instanceof TextMessage) {
+				final TextMessage text = (TextMessage) jmsMessage;
+				LOG.info("Received text message: " + text);
+			} else {
+				try {
+					final ObjectMessage om = (ObjectMessage) jmsMessage;
+					final Serializable omo = om.getObject();
+					if ((omo instanceof IMonitoringRecord) && (!JMSReader.this.deliverIndirect(OUTPUT_PORT_NAME_RECORDS, omo))) {
+						LOG.error("deliverRecord returned false");
+					}
+				} catch (final MessageFormatException ex) {
+					LOG.error("Error delivering record", ex);
+				} catch (final JMSException ex) {
+					LOG.error("Error delivering record", ex);
+				} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
+					LOG.error("Error delivering record", ex);
+				}
+			}
+		}
 	}
 }
