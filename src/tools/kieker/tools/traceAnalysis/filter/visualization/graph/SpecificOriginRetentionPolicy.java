@@ -27,6 +27,8 @@ import java.util.Set;
  * higher flexibility.
  * 
  * @author Holger Knoche
+ * 
+ * @since 1.6
  */
 public class SpecificOriginRetentionPolicy extends AbstractOriginRetentionPolicy {
 

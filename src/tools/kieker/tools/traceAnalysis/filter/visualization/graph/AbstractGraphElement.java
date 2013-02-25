@@ -28,8 +28,8 @@ import java.util.Set;
  * @param <O>
  *            The type of the objects which caused the creation of this graph element
  * 
+ * @since 1.6
  */
-
 public abstract class AbstractGraphElement<O> {
 
 	private volatile Color color = Color.BLACK;

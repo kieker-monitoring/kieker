@@ -30,6 +30,8 @@ import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public final class BookstoreEventRecordFactoryStarter {
 

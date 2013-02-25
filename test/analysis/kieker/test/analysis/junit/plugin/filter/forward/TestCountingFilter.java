@@ -33,6 +33,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * This test is for the class {@link CountingFilter}.
  * 
  * @author Nils Christian Ehmke, Jan Waller
+ * 
+ * @since 1.6
  */
 public class TestCountingFilter extends AbstractKiekerTest {
 

@@ -32,6 +32,8 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.NoOriginRetentionPo
  * 
  * @param <G>
  *            The graph type created by this filter
+ * 
+ * @since 1.6
  */
 @Plugin
 public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?, ?>> extends AbstractMessageTraceProcessingFilter implements

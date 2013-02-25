@@ -30,6 +30,8 @@ import kieker.test.analysis.util.repository.SimpleRepository;
  * A simple filter, used only for test purposes.
  * 
  * @author Nils Christian Ehmke, Jan Waller
+ * 
+ * @since 1.6
  */
 @Plugin(programmaticOnly = true,
 		name = SimpleForwardFilterWithRepository.FILTER_NAME, description = SimpleForwardFilterWithRepository.FILTER_DESCRIPTION,

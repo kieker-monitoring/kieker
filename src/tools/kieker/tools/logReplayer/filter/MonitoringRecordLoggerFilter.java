@@ -36,6 +36,8 @@ import kieker.monitoring.core.controller.MonitoringController;
  * Additionally, incoming records are relayed via the output port {@link #OUTPUT_PORT_NAME_RELAYED_EVENTS}.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.6
  */
 @Plugin(description = "A filter which passes received records to the configured monitoring controller",
 		outputPorts = {

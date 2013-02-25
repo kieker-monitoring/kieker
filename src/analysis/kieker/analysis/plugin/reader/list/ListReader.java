@@ -37,6 +37,8 @@ import kieker.common.logging.LogFactory;
  * @param <T>
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.6
  */
 @Plugin(
 		programmaticOnly = true,

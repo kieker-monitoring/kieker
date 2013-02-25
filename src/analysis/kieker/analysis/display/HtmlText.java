@@ -20,6 +20,8 @@ package kieker.analysis.display;
  * This is a display type used for html text. It provides methods to modify and read the contained html text and is thread safe.
  * 
  * @author Nils Christian Ehmke
+ * 
+ * @since 1.6
  */
 public class HtmlText extends AbstractDisplay {
 

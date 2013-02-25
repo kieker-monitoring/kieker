@@ -49,6 +49,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * This test is for the class {@link RealtimeRecordDelayFilter}.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.6
  */
 public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 

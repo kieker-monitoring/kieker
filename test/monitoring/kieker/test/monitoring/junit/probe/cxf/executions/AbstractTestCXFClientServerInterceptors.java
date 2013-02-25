@@ -49,6 +49,7 @@ import kieker.test.monitoring.util.NamedListWriter;
  * 
  * @author Andre van Hoorn, Marius Loewe
  * 
+ * @since 1.6
  */
 public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKiekerTest {
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;

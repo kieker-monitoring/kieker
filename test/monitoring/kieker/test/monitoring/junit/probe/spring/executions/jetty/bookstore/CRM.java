@@ -21,6 +21,8 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.6
  */
 @Service
 public class CRM {

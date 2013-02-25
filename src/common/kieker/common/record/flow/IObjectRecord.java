@@ -22,10 +22,18 @@ package kieker.common.record.flow;
  * All object records have a <code>classSignature</code> field of type <code>String</code> and an <code>objectId</code>field of type <code>int</code>.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public interface IObjectRecord extends IFlowRecord {
 
+	/**
+	 * @since 1.6
+	 */
 	public abstract String getClassSignature();
 
+	/**
+	 * @since 1.6
+	 */
 	public abstract int getObjectId();
 }

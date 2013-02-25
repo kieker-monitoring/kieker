@@ -20,6 +20,8 @@ package kieker.tools.traceAnalysis.filter.visualization.graph;
  * Abstract superclass for all origin retention policies.
  * 
  * @author Holger Knoche
+ * 
+ * @since 1.6
  */
 public abstract class AbstractOriginRetentionPolicy implements IOriginRetentionPolicy {
 

@@ -30,6 +30,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  *            The type of the graph's edges
  * @param <O>
  *            The type of object from which the graph's elements originate
+ * 
+ * @since 1.6
  */
 public abstract class AbstractWeightedEdge<V extends AbstractVertex<V, E, O>, E extends AbstractEdge<V, E, O>, O> extends AbstractEdge<V, E, O> {
 

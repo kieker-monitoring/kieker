@@ -20,6 +20,8 @@ import java.util.List;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public interface IProbeController {
 
@@ -30,6 +32,8 @@ public interface IProbeController {
 	 *            pattern for the probe
 	 * @return
 	 *         true on success
+	 * 
+	 * @since 1.6
 	 */
 	public boolean activateProbe(final String pattern);
 
@@ -40,6 +44,8 @@ public interface IProbeController {
 	 *            pattern for the probe
 	 * @return
 	 *         true on success
+	 * 
+	 * @since 1.6
 	 */
 	public boolean deactivateProbe(final String pattern);
 
@@ -50,6 +56,8 @@ public interface IProbeController {
 	 *            signature of the probe
 	 * @return
 	 *         true if the probe with this signature is active
+	 * 
+	 * @since 1.6
 	 */
 	public boolean isProbeActivated(final String signature);
 
@@ -59,6 +67,8 @@ public interface IProbeController {
 	 * @param patternList
 	 *            list of strings with patterns
 	 *            where each string starts either with a + or -
+	 * 
+	 * @since 1.6
 	 */
 	public void setProbePatternList(final List<String> patternList);
 
@@ -68,6 +78,8 @@ public interface IProbeController {
 	 * @return
 	 *         list of strings with patterns
 	 *         where each string starts either with a + or -
+	 * 
+	 * @since 1.6
 	 */
 	public List<String> getProbePatternList();
 }

@@ -23,6 +23,8 @@ import java.util.regex.Pattern;
  * the activated state is ignored for purposes of equals() and hashcode().
  * 
  * @author Bjoern Weissenfels, Jan Waller
+ * 
+ * @since 1.6
  */
 public class PatternEntry implements Serializable {
 	private static final long serialVersionUID = 6225456449265043944L;

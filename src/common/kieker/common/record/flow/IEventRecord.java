@@ -22,8 +22,13 @@ package kieker.common.record.flow;
  * All events records have a <code>timestamp</code> field of type <code>long</code>.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public interface IEventRecord extends IFlowRecord {
 
+	/**
+	 * @since 1.6
+	 */
 	public abstract long getTimestamp();
 }

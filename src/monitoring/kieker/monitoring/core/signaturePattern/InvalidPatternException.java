@@ -18,6 +18,8 @@ package kieker.monitoring.core.signaturePattern;
 
 /**
  * @author Bjoern Weissenfels, Jan Waller
+ * 
+ * @since 1.6
  */
 public class InvalidPatternException extends Exception {
 	private static final long serialVersionUID = 7568907124941706485L;

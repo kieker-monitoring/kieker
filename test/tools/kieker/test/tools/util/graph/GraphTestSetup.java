@@ -24,6 +24,7 @@ import kieker.analysis.exception.AnalysisConfigurationException;
  * 
  * @author Holger Knoche
  * 
+ * @since 1.6
  */
 public class GraphTestSetup {
 

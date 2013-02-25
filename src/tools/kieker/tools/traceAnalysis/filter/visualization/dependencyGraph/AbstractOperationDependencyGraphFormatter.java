@@ -27,6 +27,8 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
  * 
  * @param <T>
  *            The type of graph this formatter is for
+ * 
+ * @since 1.6
  */
 public abstract class AbstractOperationDependencyGraphFormatter<T extends AbstractDependencyGraph<?>> extends AbstractDependencyGraphFormatter<T> {
 

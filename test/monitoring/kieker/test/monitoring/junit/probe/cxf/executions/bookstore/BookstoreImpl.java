@@ -19,9 +19,9 @@ package kieker.test.monitoring.junit.probe.cxf.executions.bookstore;
 import javax.jws.WebService;
 
 /**
- * 
  * @author Marius Loewe
  * 
+ * @since 1.6
  */
 @WebService(endpointInterface = "kieker.test.monitoring.junit.probe.cxf.executions.bookstore.IBookstore", serviceName = "Bookstore")
 public class BookstoreImpl implements IBookstore {

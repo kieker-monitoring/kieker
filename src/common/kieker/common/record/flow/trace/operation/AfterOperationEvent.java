@@ -18,6 +18,8 @@ package kieker.common.record.flow.trace.operation;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public class AfterOperationEvent extends AbstractOperationEvent {
 	private static final long serialVersionUID = -1072024765497556058L;

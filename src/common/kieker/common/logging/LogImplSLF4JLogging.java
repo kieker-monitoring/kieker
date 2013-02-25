@@ -21,6 +21,8 @@ package kieker.common.logging;
  * This is an actual implementation of the logging interface used by SLF4J logger.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public class LogImplSLF4JLogging implements Log {
 

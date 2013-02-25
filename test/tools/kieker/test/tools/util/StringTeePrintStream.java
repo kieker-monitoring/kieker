@@ -26,6 +26,8 @@ import java.io.UnsupportedEncodingException;
  * @see StringTeePrintStream
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.6
  */
 public class StringTeePrintStream extends PrintStream {
 

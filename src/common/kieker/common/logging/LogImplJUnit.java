@@ -24,6 +24,8 @@ import java.util.Set;
  * This is an actual implementation of the logging interface used by the JUnit logger.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public final class LogImplJUnit implements Log {
 

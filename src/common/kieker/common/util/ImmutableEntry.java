@@ -28,6 +28,8 @@ import java.util.Map;
  *            The type of the key.
  * @param <V>
  *            The type of the value.
+ * 
+ * @since 1.6
  */
 public class ImmutableEntry<K, V> implements Map.Entry<K, V> {
 

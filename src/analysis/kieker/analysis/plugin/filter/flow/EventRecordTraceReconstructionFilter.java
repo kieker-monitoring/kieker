@@ -44,6 +44,8 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 @Plugin(
 		name = "Trace Reconstruction Filter (Event)",

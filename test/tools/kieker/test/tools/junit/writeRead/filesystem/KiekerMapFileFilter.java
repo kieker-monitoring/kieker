@@ -23,6 +23,8 @@ import java.io.FilenameFilter;
  * This filter accepts only kieker.map files. All other files are declined.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.6
  */
 class KiekerMapFileFilter implements FilenameFilter { // NOPMD (TestClassWithoutTestCases)
 

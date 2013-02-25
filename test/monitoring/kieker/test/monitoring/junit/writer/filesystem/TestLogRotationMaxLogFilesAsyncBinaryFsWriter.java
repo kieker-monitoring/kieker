@@ -25,6 +25,8 @@ import kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public class TestLogRotationMaxLogFilesAsyncBinaryFsWriter extends AbstractTestLogRotationMaxLogFiles {
 

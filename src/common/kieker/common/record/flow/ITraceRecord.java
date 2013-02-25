@@ -22,10 +22,18 @@ package kieker.common.record.flow;
  * All trace records have a <code>traceId</code> field of type <code>long</code> and an <code>orderIndex</code> field of type <code>int</code>.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public interface ITraceRecord extends IFlowRecord {
 
+	/**
+	 * @since 1.6
+	 */
 	public abstract long getTraceId();
 
+	/**
+	 * @since 1.6
+	 */
 	public abstract int getOrderIndex();
 }

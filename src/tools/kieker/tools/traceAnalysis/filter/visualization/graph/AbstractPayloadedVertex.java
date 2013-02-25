@@ -29,6 +29,8 @@ package kieker.tools.traceAnalysis.filter.visualization.graph;
  *            The type of the graph's elements origin
  * @param <P>
  *            The type of the payload
+ * 
+ * @since 1.6
  */
 public abstract class AbstractPayloadedVertex<V extends AbstractPayloadedVertex<V, E, O, P>, E extends AbstractEdge<V, E, O>, O, P> extends AbstractVertex<V, E, O> {
 

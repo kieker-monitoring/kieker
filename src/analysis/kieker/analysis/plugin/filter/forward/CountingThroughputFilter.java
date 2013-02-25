@@ -42,6 +42,8 @@ import kieker.common.util.ImmutableEntry;
  * Note that only one of the input ports should be used in a configuration!
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.6
  */
 // TODO: In future versions, this filter should provide an output port in addition to the existing relay port.
 // TODO: In future versions, the throughput computation could (additionally) be triggered by external timer events

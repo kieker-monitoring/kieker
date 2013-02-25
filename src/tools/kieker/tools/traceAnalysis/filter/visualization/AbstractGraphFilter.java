@@ -47,7 +47,10 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPol
  *            The edge type of the graph
  * @param <O>
  *            The type of the graph's elements origins
+ * 
  * @author Holger Knoche
+ * 
+ * @since 1.6
  */
 @Plugin
 public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V extends AbstractVertex<V, E, O>, E extends AbstractEdge<V, E, O>, O> extends

@@ -53,6 +53,7 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
  * 
  * @author Holger Knoche
  * 
+ * @since 1.6
  */
 @Plugin(name = "Graph writer plugin",
 		description = "Generic plugin for writing graphs to files",
@@ -233,6 +234,8 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 	 * 
 	 * @author Holger Knoche
 	 * @deprecated (not used anymore)
+	 * 
+	 * @since 1.6
 	 */
 	@Deprecated
 	public static final class GraphWriterConfiguration {

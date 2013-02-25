@@ -24,6 +24,7 @@ import java.io.FilenameFilter;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.6
  */
 public class KiekerLogDirFilter implements FilenameFilter { // NOPMD (TestClassWithoutTestCases)
 	public static final String LOG_DIR_PREFIX = "kieker-"; // TODO: do we have this constant in the FS Writer(s)?

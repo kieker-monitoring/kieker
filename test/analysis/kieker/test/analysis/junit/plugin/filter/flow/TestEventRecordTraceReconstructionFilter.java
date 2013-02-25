@@ -34,6 +34,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.6
  */
 public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest { // NOCS (test class without constructor)
 

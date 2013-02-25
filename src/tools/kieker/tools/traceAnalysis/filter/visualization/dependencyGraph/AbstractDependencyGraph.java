@@ -32,6 +32,8 @@ import kieker.tools.traceAnalysis.systemModel.TraceInformation;
  *            The type of the nodes' payload
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver
+ * 
+ * @since 1.6
  */
 public abstract class AbstractDependencyGraph<T extends ISystemModelElement> extends
 		AbstractGraph<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, TraceInformation> {

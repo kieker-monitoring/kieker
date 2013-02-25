@@ -48,7 +48,9 @@ import kieker.test.tools.util.graph.GraphTestSetup;
 /**
  * Test suite for the graph coloring filter.
  * 
- * @author Holger Knoche, Nils Christian Ehmke *
+ * @author Holger Knoche, Nils Christian Ehmke
+ * 
+ * @since 1.6
  */
 public class TraceColoringFilterTest extends AbstractKiekerTest {
 
@@ -139,7 +141,7 @@ public class TraceColoringFilterTest extends AbstractKiekerTest {
 		Assert.assertEquals(1, graphReceiver.getNumberOfReceivedGraphs());
 
 		// Prepare the produced graph
-		final ComponentAllocationDependencyGraph graph = graphReceiver.<ComponentAllocationDependencyGraph> getFirstGraph(); // NOCS (generic)
+		final ComponentAllocationDependencyGraph graph = graphReceiver.<ComponentAllocationDependencyGraph>getFirstGraph(); // NOCS (generic)
 		final ConcurrentMap<String, DependencyGraphNode<AllocationComponent>> nodeMap = DependencyGraphTestUtil.createNodeLookupTable(graph);
 
 		final DependencyGraphNode<AllocationComponent> component1Node = nodeMap.get(EXPECTED_ALLOCATION_COMPONENT_NAME_1);

@@ -36,6 +36,8 @@ import kieker.common.record.IMonitoringRecord;
  * first record is forwarded immediately; the second will be forwarded 1500 nanos later.
  * 
  * @author Andre van Hoorn, Robert von Massow, Jan Waller
+ * 
+ * @since 1.6
  */
 // TODO: Timer with higher precision (Currently milliseconds)?
 @Plugin(

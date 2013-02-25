@@ -22,18 +22,27 @@ package kieker.common.record.flow;
  * All operation records have a <code>classSignature</code> and an <code>operationSignature</code> field of type <code>String</code>.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public interface IOperationRecord extends IFlowRecord {
 
 	/**
 	 * Get the actually executing class.
+	 * 
+	 * @since 1.6
 	 */
 	public abstract String getClassSignature();
 
 	/**
 	 * Get the actual OperationSignature.
+	 * 
+	 * @since 1.6
 	 */
 	public abstract String getOperationSignature();
 
+	/**
+	 * @since 1.6
+	 */
 	public abstract boolean refersToSameOperationAs(final IOperationRecord record);
 }

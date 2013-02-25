@@ -43,6 +43,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * Tests the {@link CountingThroughputFilter}.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.6
  */
 // TODO: Note that currently, we are only testing the {@link CountingThroughputFilter}'s input {@link CountingThroughputFilter#INPUT_PORT_NAME_RECORDS}.
 public class TestCountingThroughputFilter extends AbstractKiekerTest {

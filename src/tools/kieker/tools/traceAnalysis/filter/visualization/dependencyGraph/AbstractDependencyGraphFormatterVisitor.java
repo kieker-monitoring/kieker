@@ -28,6 +28,8 @@ import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
  * @author Holger Knoche
  * 
  * @param <T>
+ * 
+ * @since 1.6
  */
 public abstract class AbstractDependencyGraphFormatterVisitor<T extends ISystemModelElement> implements
 		IGraphVisitor<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>> {

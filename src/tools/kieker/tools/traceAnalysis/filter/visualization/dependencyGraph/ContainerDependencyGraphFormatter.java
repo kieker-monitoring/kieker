@@ -26,6 +26,7 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
  * 
  * @author Holger Knoche
  * 
+ * @since 1.6
  */
 public class ContainerDependencyGraphFormatter extends AbstractDependencyGraphFormatter<ContainerDependencyGraph> {
 

@@ -35,6 +35,8 @@ import kieker.common.configuration.Configuration;
  * Implementation of a description repository which stores descriptions for names.
  * 
  * @author Holger Knoche
+ * 
+ * @since 1.6
  */
 @Repository(name = "Description repository",
 		description = "Stores descriptions for names",

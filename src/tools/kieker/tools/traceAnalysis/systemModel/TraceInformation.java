@@ -22,6 +22,7 @@ package kieker.tools.traceAnalysis.systemModel;
  * 
  * @author Holger Knoche
  * 
+ * @since 1.6
  */
 public class TraceInformation {
 

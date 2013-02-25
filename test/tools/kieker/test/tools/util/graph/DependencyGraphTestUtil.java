@@ -42,6 +42,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * This class provides utility functions for dependency graph tests.
  * 
  * @author Holger Knoche, Nils Christian Ehmke
+ * 
+ * @since 1.6
  */
 public final class DependencyGraphTestUtil {
 

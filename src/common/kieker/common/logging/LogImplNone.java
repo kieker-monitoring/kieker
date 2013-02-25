@@ -18,6 +18,8 @@ package kieker.common.logging;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public final class LogImplNone implements Log {
 	/**

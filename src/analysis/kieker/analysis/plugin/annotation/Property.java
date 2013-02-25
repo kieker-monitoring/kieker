@@ -20,6 +20,8 @@ package kieker.analysis.plugin.annotation;
  * This annotation can be used to describe a single property for a plugin or a repository.
  * 
  * @author Nils Christian Ehmke
+ * 
+ * @since 1.6
  */
 public @interface Property {
 

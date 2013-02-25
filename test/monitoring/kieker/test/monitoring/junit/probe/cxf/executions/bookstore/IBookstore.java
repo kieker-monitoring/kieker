@@ -20,13 +20,16 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 
 /**
- * 
  * @author Marius Loewe
  * 
+ * @since 1.6
  */
 @WebService
 public interface IBookstore {
 
+	/**
+	 * @since 1.6
+	 */
 	public abstract String searchBook(@WebParam(name = "term") String term);
 
 }

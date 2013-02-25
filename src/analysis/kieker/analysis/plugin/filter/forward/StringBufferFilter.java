@@ -37,6 +37,8 @@ import kieker.common.record.IMonitoringRecord;
  * Every record received is cloned and each detected String is buffered in a shared area in order so save memory.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 @Plugin(description = "A filter to reduce the memory footprint of strings used in records",
 		outputPorts = @OutputPort(

@@ -20,6 +20,8 @@ import kieker.common.record.flow.trace.operation.CallOperationEvent;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public final class CallConstructorEvent extends CallOperationEvent {
 	private static final long serialVersionUID = -997689498521033735L;

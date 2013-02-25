@@ -28,6 +28,7 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
  * 
  * @author Holger Knoche
  * 
+ * @since 1.6
  */
 @Plugin(description = "A plugin that receives one or more graphs and provides access them via methods.")
 public class GraphReceiverPlugin extends ListCollectionFilter<AbstractGraph<?, ?, ?>> {

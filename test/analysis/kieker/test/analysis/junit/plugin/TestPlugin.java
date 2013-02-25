@@ -37,6 +37,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * A simple test for the plugins in general. It tests for example if the chaining of different plugins does work.
  * 
  * @author Nils Christian Ehmke, Jan Waller
+ * 
+ * @since 1.6
  */
 public class TestPlugin extends AbstractKiekerTest {
 

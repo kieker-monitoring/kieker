@@ -52,6 +52,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * @author Andre van Hoorn, Holger Knoche, Jan Waller
+ * 
+ * @since 1.6
  */
 @Plugin(description = "Transforms incoming TraceEventRecords into execution and message traces",
 		outputPorts = {

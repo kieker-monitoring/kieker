@@ -24,6 +24,8 @@ import kieker.monitoring.writer.filesystem.SyncFsWriter;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public class TestLogRotationMaxLogFilesSyncFsWriter extends AbstractTestLogRotationMaxLogFiles {
 

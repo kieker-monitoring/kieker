@@ -20,6 +20,8 @@ package kieker.analysis.display;
  * This is a display type used for images. It is thread safe.
  * 
  * @author Nils Christian Ehmke
+ * 
+ * @since 1.6
  */
 public class Image extends AbstractDisplay {
 

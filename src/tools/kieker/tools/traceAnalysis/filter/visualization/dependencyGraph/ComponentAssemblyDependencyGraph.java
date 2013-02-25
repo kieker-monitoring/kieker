@@ -23,6 +23,7 @@ import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
  * 
  * @author Holger Knoche
  * 
+ * @since 1.6
  */
 public class ComponentAssemblyDependencyGraph extends AbstractDependencyGraph<AssemblyComponent> {
 

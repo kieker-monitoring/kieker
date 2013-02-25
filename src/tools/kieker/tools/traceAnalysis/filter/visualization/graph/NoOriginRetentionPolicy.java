@@ -21,6 +21,8 @@ package kieker.tools.traceAnalysis.filter.visualization.graph;
  * and corresponds to the kind {@link kieker.tools.traceAnalysis.filter.visualization.graph.OriginRetentionPolicyKind#NONE}.
  * 
  * @author Holger Knoche
+ * 
+ * @since 1.6
  */
 public final class NoOriginRetentionPolicy extends AbstractOriginRetentionPolicy {
 

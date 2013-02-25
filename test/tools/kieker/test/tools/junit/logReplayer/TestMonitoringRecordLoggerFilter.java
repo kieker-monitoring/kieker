@@ -55,6 +55,7 @@ import kieker.test.tools.junit.writeRead.filesystem.KiekerLogDirFilter;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.6
  */
 public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 	private static final Log LOG = LogFactory.getLog(TestMonitoringRecordLoggerFilter.class);

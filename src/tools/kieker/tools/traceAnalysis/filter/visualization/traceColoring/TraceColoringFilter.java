@@ -51,6 +51,8 @@ import kieker.tools.traceAnalysis.systemModel.TraceInformation;
  *            The type of the graph's vertices
  * @param <E>
  *            The type of the graph's edges
+ * 
+ * @since 1.6
  */
 @Plugin(name = "Trace coloring filter",
 		description = "Colors graph elements that can uniquely associated to a trace according to the color repository",

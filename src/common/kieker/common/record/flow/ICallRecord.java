@@ -22,22 +22,37 @@ package kieker.common.record.flow;
  * All call records have a <code>calleeClassSignature</code> and an <code>calleeOperationSignature</code> field of type <code>String</code>.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public interface ICallRecord extends IOperationRecord {
 
 	/**
 	 * @see #getClassSignature()
+	 * 
+	 * @since 1.6
 	 */
 	public abstract String getCallerClassSignature();
 
 	/**
 	 * @see #getOperationSignature()
+	 * 
+	 * @since 1.6
 	 */
 	public abstract String getCallerOperationSignature();
 
+	/**
+	 * @since 1.6
+	 */
 	public abstract String getCalleeClassSignature();
 
+	/**
+	 * @since 1.6
+	 */
 	public abstract String getCalleeOperationSignature();
 
+	/**
+	 * @since 1.6
+	 */
 	public abstract boolean callsReferencedOperationOf(final IOperationRecord record);
 }

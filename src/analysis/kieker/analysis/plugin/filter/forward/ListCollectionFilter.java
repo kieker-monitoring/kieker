@@ -35,6 +35,8 @@ import kieker.common.configuration.Configuration;
  *            The type of the list.
  * 
  * @author Nils Ehmke, Jan Waller
+ * 
+ * @since 1.6
  */
 @Plugin(programmaticOnly = true,
 		description = "A filter collecting incoming objects in a list (mostly used in testing scenarios)",

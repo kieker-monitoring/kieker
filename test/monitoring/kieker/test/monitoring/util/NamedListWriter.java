@@ -29,6 +29,8 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.6
  */
 public class NamedListWriter extends AbstractMonitoringWriter {
 

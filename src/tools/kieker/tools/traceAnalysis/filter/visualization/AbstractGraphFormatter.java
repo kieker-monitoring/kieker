@@ -30,6 +30,8 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.Color;
  * 
  * @param <G>
  *            The graph type this formatter is for
+ * 
+ * @since 1.6
  */
 public abstract class AbstractGraphFormatter<G extends AbstractGraph<?, ?, ?>> {
 

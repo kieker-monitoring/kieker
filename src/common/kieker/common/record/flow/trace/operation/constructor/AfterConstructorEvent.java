@@ -20,6 +20,8 @@ import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public class AfterConstructorEvent extends AfterOperationEvent {
 	private static final long serialVersionUID = 5346337856547267118L;

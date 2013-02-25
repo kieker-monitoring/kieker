@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.6
  */
 @Controller
 @RequestMapping("/bookstore/*")

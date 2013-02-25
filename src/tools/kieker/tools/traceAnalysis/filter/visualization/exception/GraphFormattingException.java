@@ -21,6 +21,7 @@ package kieker.tools.traceAnalysis.filter.visualization.exception;
  * 
  * @author Holger Knoche
  * 
+ * @since 1.6
  */
 public class GraphFormattingException extends RuntimeException {
 

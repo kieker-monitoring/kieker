@@ -25,6 +25,8 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.6
  */
 public final class NamedPipeWriterFactory {
 	private static final AtomicInteger NEXT_PIPE_ID = new AtomicInteger(0);

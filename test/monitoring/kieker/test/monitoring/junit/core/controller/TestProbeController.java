@@ -55,6 +55,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Bjoern Weissenfels, Jan Waller
+ * 
+ * @since 1.6
  */
 public class TestProbeController extends AbstractKiekerTest {
 

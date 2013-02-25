@@ -27,6 +27,8 @@ import kieker.common.logging.LogImplJUnit;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 

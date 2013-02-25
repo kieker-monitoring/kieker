@@ -50,6 +50,8 @@ import kieker.monitoring.core.signaturePattern.PatternParser;
 
 /**
  * @author Jan Waller, Bjoern Weissenfels
+ * 
+ * @since 1.6
  */
 public class ProbeController extends AbstractController implements IProbeController {
 	static final Log LOG = LogFactory.getLog(ProbeController.class); // NOPMD package for inner class

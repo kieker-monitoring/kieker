@@ -21,6 +21,8 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public class BeforeOperationObjectEvent extends BeforeOperationEvent implements IObjectRecord {
 	private static final long serialVersionUID = -2751765888429165898L;

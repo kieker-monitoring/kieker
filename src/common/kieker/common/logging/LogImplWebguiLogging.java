@@ -30,6 +30,8 @@ import java.util.concurrent.ArrayBlockingQueue;
  * removed for new entries. As the entries have to be accessible from outside, the queues are stored statically.
  * 
  * @author Jan Waller, Nils Christian Ehmke
+ * 
+ * @since 1.6
  */
 public final class LogImplWebguiLogging implements Log {
 

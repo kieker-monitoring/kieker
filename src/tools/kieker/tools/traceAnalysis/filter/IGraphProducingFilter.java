@@ -27,6 +27,8 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPol
  * 
  * @param <G>
  *            The type of the produced graph
+ * 
+ * @since 1.6
  */
 public interface IGraphProducingFilter<G extends AbstractGraph<?, ?, ?>> extends IGraphOutputtingFilter<G> {
 
@@ -39,6 +41,8 @@ public interface IGraphProducingFilter<G extends AbstractGraph<?, ?, ?>> extends
 	 *            The requested policy
 	 * @throws AnalysisConfigurationException
 	 *             If an error occurs during the request
+	 * 
+	 * @since 1.6
 	 */
 	public void requestOriginRetentionPolicy(IOriginRetentionPolicy policy) throws AnalysisConfigurationException;
 

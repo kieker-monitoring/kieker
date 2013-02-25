@@ -27,6 +27,8 @@ import kieker.monitoring.writer.filesystem.AsyncFsWriter;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public class TestLogRotationMaxLogSizeAsyncFsWriter extends AbstractTestLogRotationMaxLogSize {
 

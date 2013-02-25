@@ -26,6 +26,8 @@ import java.lang.annotation.Target;
  * This annotation can be used for methods which are able to deliver display objects. Plugins with such methods can display their content.
  * 
  * @author Nils Christian Ehmke
+ * 
+ * @since 1.6
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

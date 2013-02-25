@@ -20,6 +20,8 @@ import kieker.common.record.flow.IExceptionRecord;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public class AfterConstructorFailedEvent extends AfterConstructorEvent implements IExceptionRecord {
 

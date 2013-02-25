@@ -22,13 +22,21 @@ package kieker.common.record.flow;
  * All call records have a <code>calleeObjectId</code> field of type <code>int</code>.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public interface ICallObjectRecord extends ICallRecord, IObjectRecord {
 
 	/**
 	 * @see #getObjectId()
+	 * 
+	 * @since 1.6
 	 */
 	public abstract int getCallerObjectId();
 
+	/**
+	 * @since 1.6
+	 */
 	public abstract int getCalleeObjectId();
+
 }

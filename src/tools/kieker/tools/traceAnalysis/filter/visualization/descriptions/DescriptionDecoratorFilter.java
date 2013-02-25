@@ -45,6 +45,8 @@ import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
  *            The type of the graph's edges
  * @param <O>
  *            The type of the origin of the graph's elements
+ * 
+ * @since 1.6
  */
 @Plugin(name = "",
 		description = "This filter attaches decorations to graph entities",

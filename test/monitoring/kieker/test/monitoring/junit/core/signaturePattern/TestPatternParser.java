@@ -33,6 +33,8 @@ import kieker.test.monitoring.util.signaturePattern.SignatureConstructor;
 
 /**
  * @author Bjoern Weissenfels, Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.6
  */
 public class TestPatternParser extends AbstractKiekerTest {
 

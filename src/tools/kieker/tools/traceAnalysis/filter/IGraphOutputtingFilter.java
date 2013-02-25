@@ -25,11 +25,15 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
  * 
  * @param <G>
  *            The type of the output graph
+ * 
+ * @since 1.6
  */
 public interface IGraphOutputtingFilter<G extends AbstractGraph<?, ?, ?>> {
 
 	/**
 	 * The default name for graph output ports.
+	 * 
+	 * @since 1.6
 	 */
 	public static final String OUTPUT_PORT_NAME_GRAPH = "graphs";
 
@@ -37,6 +41,8 @@ public interface IGraphOutputtingFilter<G extends AbstractGraph<?, ?, ?>> {
 	 * Returns the name of the port this filter uses to emit the graph.
 	 * 
 	 * @return See above
+	 * 
+	 * @since 1.6
 	 */
 	public String getGraphOutputPortName();
 

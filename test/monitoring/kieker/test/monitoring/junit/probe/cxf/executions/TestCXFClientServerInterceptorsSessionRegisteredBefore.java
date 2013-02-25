@@ -30,6 +30,7 @@ import kieker.monitoring.probe.cxf.OperationExecutionSOAPResponseOutInterceptor;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.6
  */
 public class TestCXFClientServerInterceptorsSessionRegisteredBefore extends AbstractTestCXFClientServerInterceptors {
 	private static final String SESSION_ID = "SESSION-KQ8wFM0U";

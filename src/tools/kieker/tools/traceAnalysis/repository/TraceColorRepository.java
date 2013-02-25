@@ -40,6 +40,7 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.Color;
  * 
  * @author Holger Knoche
  * 
+ * @since 1.6
  */
 @Repository(name = "Trace color repository",
 		description = "Provides color information for trace coloring",

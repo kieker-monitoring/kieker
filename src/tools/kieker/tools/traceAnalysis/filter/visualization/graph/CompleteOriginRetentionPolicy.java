@@ -21,6 +21,8 @@ package kieker.tools.traceAnalysis.filter.visualization.graph;
  * Be aware that this policy may lead to extensive resource consumption when processing vast logs.
  * 
  * @author Holger Knoche
+ * 
+ * @since 1.6
  */
 public final class CompleteOriginRetentionPolicy extends AbstractOriginRetentionPolicy {
 

@@ -21,6 +21,8 @@ import java.util.List;
 
 /**
  * @author Bjoern Weissenfels, Jan Waller
+ * 
+ * @since 1.6
  */
 public final class PatternConstructor {
 

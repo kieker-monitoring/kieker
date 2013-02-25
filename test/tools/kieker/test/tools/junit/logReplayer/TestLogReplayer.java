@@ -46,6 +46,8 @@ import kieker.test.monitoring.util.NamedListWriter;
  * Tests the {@link AbstractLogReplayer}.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.6
  */
 public class TestLogReplayer extends AbstractKiekerTest {
 

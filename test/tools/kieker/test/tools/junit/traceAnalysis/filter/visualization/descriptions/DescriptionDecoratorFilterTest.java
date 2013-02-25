@@ -48,6 +48,8 @@ import kieker.test.tools.util.graph.GraphTestSetup;
  * Test suite for the description decorator filter.
  * 
  * @author Holger Knoche, Nils Christian Ehmke
+ * 
+ * @since 1.6
  */
 public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
 
@@ -123,7 +125,7 @@ public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
 		Assert.assertEquals(1, graphReceiver.getNumberOfReceivedGraphs());
 
 		// Prepare the produced graph
-		final ComponentAllocationDependencyGraph graph = graphReceiver.<ComponentAllocationDependencyGraph> getFirstGraph(); // NOCS (generic)
+		final ComponentAllocationDependencyGraph graph = graphReceiver.<ComponentAllocationDependencyGraph>getFirstGraph(); // NOCS (generic)
 		final ConcurrentMap<String, DependencyGraphNode<AllocationComponent>> nodeMap = DependencyGraphTestUtil.createNodeLookupTable(graph);
 
 		final DependencyGraphNode<AllocationComponent> component1Node = nodeMap.get(EXPECTED_ALLOCATION_COMPONENT_NAME_1);
