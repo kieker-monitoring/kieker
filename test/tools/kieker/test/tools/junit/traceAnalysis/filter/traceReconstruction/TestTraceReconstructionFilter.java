@@ -364,7 +364,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		configuration.setProperty(TraceReconstructionFilter.class.getName() + ".name", "TraceReconstructionFilter");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, "true");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, Long
-				.toString(((triggerExecutionTrace.getMaxTout() - incompleteExecutionTrace.getMinTin()) / (1000 * 1000)) - 1));
+				.toString((triggerExecutionTrace.getMaxTout() - incompleteExecutionTrace.getMinTin()) - 1));
 		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, controller);
 
 		final ListCollectionFilter<ExecutionTrace> executionTraceSink = new ListCollectionFilter<ExecutionTrace>(new Configuration(), controller);
