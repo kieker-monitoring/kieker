@@ -48,7 +48,7 @@ import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.filter.flow.EventRecordTraceReconstructionFilter;
 import kieker.analysis.plugin.filter.forward.StringBufferFilter;
 import kieker.analysis.plugin.filter.select.TimestampFilter;
-import kieker.analysis.plugin.filter.trace.TraceIdFilter;
+import kieker.analysis.plugin.filter.select.TraceIdFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;

@@ -70,7 +70,7 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP = "9223372036854775807"; // Long.toString(Long.MAX_VALUE)
 	public static final String CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP = "0"; // Long.toString(0)
 
-	private final TimeUnit timeunit = TimeUnit.NANOSECONDS; // TODO: should be inferred from monitoring log
+	private final TimeUnit timeunit;
 	private final long ignoreBeforeTimestamp;
 	private final long ignoreAfterTimestamp;
 
@@ -86,6 +86,14 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 	 */
 	public TimestampFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
+
+		TimeUnit recordTimeunit;
+		try {
+			recordTimeunit = TimeUnit.valueOf(projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT));
+		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
+			recordTimeunit = TimeUnit.NANOSECONDS;
+		}
+		this.timeunit = recordTimeunit;
 
 		TimeUnit configTimeunit;
 		try {

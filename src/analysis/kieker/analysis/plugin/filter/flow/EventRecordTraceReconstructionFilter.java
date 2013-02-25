@@ -100,10 +100,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	 */
 	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "NANOSECONDS"; // TimeUnit.NANOSECONDS.name()
 
-	// internally we will assume nanosecond precision
-	// TODO: it would be better to use the actual precision of the records (we assume records use nanoseconds)
-	// TODO: log meta-information on monitoring logs somewhere? e.g. used timesource
-	private final TimeUnit timeunit = TimeUnit.NANOSECONDS;
+	private final TimeUnit timeunit;
 	private final long maxTraceDuration;
 	private final long maxTraceTimeout;
 	private final boolean timeout;
@@ -123,6 +120,14 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	 */
 	public EventRecordTraceReconstructionFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
+
+		TimeUnit recordTimeunit;
+		try {
+			recordTimeunit = TimeUnit.valueOf(projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT));
+		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
+			recordTimeunit = TimeUnit.NANOSECONDS;
+		}
+		this.timeunit = recordTimeunit;
 
 		TimeUnit configTimeunit;
 		try {

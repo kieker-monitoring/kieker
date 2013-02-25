@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.plugin.filter.trace;
+package kieker.analysis.plugin.filter.select;
 
 import java.util.Set;
 import java.util.TreeSet;

@@ -97,11 +97,11 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 
 	private volatile long firstIntervalStart = -1;
 	private final boolean intervalsBasedOn1stTstamp;
-	private final TimeUnit timeunit = TimeUnit.NANOSECONDS; // TODO: should be inferred from used records?!
+	private final TimeUnit timeunit;
 
 	// TODO: Introduce bounded capacity
 	/**
-	 * For a key <i>k</i>, the {@link Queue} stores the number of events observed in the time interval <i>(k-intervalSizeNanos,k(</i>, i.e.,
+	 * For a key <i>k</i>, the {@link Queue} stores the number of events observed in the time interval <i>(k-intervalSize,k(</i>, i.e.,
 	 * the interval <b>excludes</b> the value <i>k</i>.
 	 */
 	private final Queue<Entry<Long, Long>> eventCountsPerInterval = new ConcurrentLinkedQueue<Entry<Long, Long>>();
@@ -127,6 +127,14 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	 */
 	public CountingThroughputFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
+
+		TimeUnit recordTimeunit;
+		try {
+			recordTimeunit = TimeUnit.valueOf(projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT));
+		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
+			recordTimeunit = TimeUnit.NANOSECONDS;
+		}
+		this.timeunit = recordTimeunit;
 
 		TimeUnit configTimeunit;
 		try {
@@ -163,9 +171,9 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 		return configuration;
 	}
 
-	private void processEvent(final Object event, final long currentTimeNanos) {
-		final long startOfTimestampsInterval = this.computeFirstTimestampInInterval(currentTimeNanos);
-		final long endOfTimestampsInterval = this.computeLastTimestampInInterval(currentTimeNanos);
+	private void processEvent(final Object event, final long currentTime) {
+		final long startOfTimestampsInterval = this.computeFirstTimestampInInterval(currentTime);
+		final long endOfTimestampsInterval = this.computeLastTimestampInInterval(currentTime);
 
 		synchronized (this) {
 			/*
@@ -244,7 +252,7 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 		if (this.intervalsBasedOn1stTstamp) {
 			referenceTimePoint = this.firstIntervalStart;
 		} else {
-			referenceTimePoint = 0; // 1970-1-1 in nanos
+			referenceTimePoint = 0;
 		}
 
 		return referenceTimePoint + (((timestamp - referenceTimePoint) / this.intervalSize) * this.intervalSize);
@@ -261,7 +269,7 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 		if (this.intervalsBasedOn1stTstamp) {
 			referenceTimePoint = this.firstIntervalStart;
 		} else {
-			referenceTimePoint = 0; // 1970-1-1 in nanos
+			referenceTimePoint = 0;
 		}
 
 		return referenceTimePoint + (((((timestamp - referenceTimePoint) / this.intervalSize) + 1) * this.intervalSize) - 1);

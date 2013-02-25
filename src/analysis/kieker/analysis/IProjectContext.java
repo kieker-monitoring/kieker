@@ -31,6 +31,19 @@ import kieker.analysis.model.analysisMetaModel.MIProject;
 public interface IProjectContext {
 
 	/**
+	 * This is the name of the property containing the time unit for the monitoring records.
+	 * 
+	 * @since 1.7
+	 */
+	public static final String CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT = "recordsTimeUnit";
+	/**
+	 * This is the name of the property containing the project name.
+	 * 
+	 * @since 1.7
+	 */
+	public static final String CONFIG_PROPERTY_NAME_PROJECT_NAME = "projectName";
+
+	/**
 	 * Delivers the value for the given (global) property within the analysis.
 	 * 
 	 * @param key

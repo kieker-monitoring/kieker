@@ -27,7 +27,7 @@ import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.flow.TraceEventRecords;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
-import kieker.analysis.plugin.filter.trace.TraceIdFilter;
+import kieker.analysis.plugin.filter.select.TraceIdFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;

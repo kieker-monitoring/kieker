@@ -32,7 +32,7 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * Forwards incoming {@link IMonitoringRecord}s with delays computed from the {@link kieker.common.record.IMonitoringRecord#getLoggingTimestamp()} value
- * (assumed to be in nanoseconds resolution). For example, after initialization, if records with logging timestamps 3000 and 4500 nanos are received, the
+ * (assumed to be in the configured resolution). For example, after initialization, if records with logging timestamps 3000 and 4500 nanos are received, the
  * first record is forwarded immediately; the second will be forwarded 1500 nanos later.
  * 
  * @author Andre van Hoorn, Robert von Massow, Jan Waller
@@ -65,9 +65,9 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 
 	private static final Log LOG = LogFactory.getLog(RealtimeRecordDelayFilter.class);
 
-	private final TimeUnit timeunit = TimeUnit.NANOSECONDS; // TODO: should be inferred from the monitoring log
+	private final TimeUnit timeunit;
 
-	// TODO: Way might want to provide this property as a configuration property
+	// TODO: We might want to provide this property as a configuration property
 	private final long warnOnNegativeSchedTime = this.timeunit.convert(2, TimeUnit.SECONDS);
 
 	private final int numWorkers;
@@ -93,9 +93,16 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	public RealtimeRecordDelayFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
+		TimeUnit recordTimeunit;
+		try {
+			recordTimeunit = TimeUnit.valueOf(projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT));
+		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
+			recordTimeunit = TimeUnit.NANOSECONDS;
+		}
+		this.timeunit = recordTimeunit;
+
 		this.numWorkers = configuration.getIntProperty(CONFIG_PROPERTY_NAME_NUM_WORKERS);
-		this.shutdownDelay =
-				this.timeunit.convert(this.configuration.getLongProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS), TimeUnit.SECONDS);
+		this.shutdownDelay = this.timeunit.convert(this.configuration.getLongProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS), TimeUnit.SECONDS);
 
 		this.executor = new ScheduledThreadPoolExecutor(this.numWorkers);
 		this.executor.setExecuteExistingDelayedTasksAfterShutdownPolicy(true);
@@ -161,7 +168,7 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	}
 
 	/**
-	 * Returns the current time in nanoseconds since 1970.
+	 * Returns the current time in the selected timeunit since 1970.
 	 * 
 	 * @return The current time.
 	 */

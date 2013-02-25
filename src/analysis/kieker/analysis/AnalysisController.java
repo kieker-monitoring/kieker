@@ -30,6 +30,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
@@ -78,23 +79,10 @@ import kieker.common.logging.LogFactory;
 // TODO Use the new constructor in the reflection calls as well
 @kieker.analysis.annotation.AnalysisController(
 		configuration = {
-			@Property(name = AnalysisController.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, defaultValue = "NANOSECONDS"),
-			@Property(name = AnalysisController.CONFIG_PROPERTY_NAME_PROJECT_NAME, defaultValue = "AnalysisProject")
+			@Property(name = IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, defaultValue = "NANOSECONDS"),
+			@Property(name = IProjectContext.CONFIG_PROPERTY_NAME_PROJECT_NAME, defaultValue = "AnalysisProject")
 		})
 public final class AnalysisController implements IAnalysisController { // NOPMD (really long class)
-
-	/**
-	 * This is the name of the property containing the time unit for the monitoring records.
-	 * 
-	 * @since 1.7
-	 */
-	public static final String CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT = "recordsTimeUnit";
-	/**
-	 * This is the name of the property containing the project name.
-	 * 
-	 * @since 1.7
-	 */
-	public static final String CONFIG_PROPERTY_NAME_PROJECT_NAME = "projectName";
 
 	static final Log LOG = LogFactory.getLog(AnalysisController.class); // NOPMD package for inner class
 
@@ -227,7 +215,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		if (project == null) {
 			throw new NullPointerException("Can not load project null.");
 		} else {
-			this.globalConfiguration = new Configuration(this.getDefaultConfiguration());
+			this.globalConfiguration = this.validateConfiguration(new Configuration(this.getDefaultConfiguration()));
 			this.loadFromModelProject(project, classLoader);
 			this.projectName = project.getName();
 		}
@@ -242,8 +230,28 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * @since 1.7
 	 */
 	public AnalysisController(final Configuration configuration) {
-		this.globalConfiguration = configuration.flatten(this.getDefaultConfiguration());
+		this.globalConfiguration = this.validateConfiguration(configuration.flatten(this.getDefaultConfiguration()));
 		this.projectName = this.getProperty(CONFIG_PROPERTY_NAME_PROJECT_NAME);
+	}
+
+	/**
+	 * This simple helper method validates the configuration object.
+	 * 
+	 * @param configuration
+	 *            The configuration object to check and (perhaps) update.
+	 * @return The configuration object.
+	 * 
+	 * @since 1.7
+	 */
+	private Configuration validateConfiguration(final Configuration configuration) {
+		final String stringProperty = configuration.getStringProperty(CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
+		try {
+			TimeUnit.valueOf(stringProperty);
+		} catch (final IllegalArgumentException ignore) {
+			LOG.warn(stringProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			configuration.setProperty(CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, TimeUnit.NANOSECONDS.name());
+		}
+		return configuration;
 	}
 
 	/**
