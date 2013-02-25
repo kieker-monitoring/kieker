@@ -24,6 +24,8 @@ import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * This test makes sure that the "global configuration" of an analysis instance works.
  * 
@@ -31,7 +33,7 @@ import kieker.common.configuration.Configuration;
  * 
  * @since 1.7
  */
-public class TestGlobalConfiguration {
+public class TestGlobalConfiguration extends AbstractKiekerTest {
 
 	public TestGlobalConfiguration() {
 		// No code necessary
@@ -69,12 +71,23 @@ public class TestGlobalConfiguration {
 	@Test
 	public void testOverwrittenDefaultGlobalConfiguration() {
 		final Configuration globalConfiguration = new Configuration();
-		globalConfiguration.setProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, "seconds");
+		globalConfiguration.setProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, "SECONDS");
 		final IAnalysisController analysisController = new AnalysisController(globalConfiguration);
 
 		final PropertyFilter filter = new PropertyFilter(new Configuration(), analysisController);
 
-		Assert.assertEquals("seconds", filter.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT));
+		Assert.assertEquals("SECONDS", filter.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT));
+	}
+
+	@Test
+	public void testOverwrittenDefaultGlobalConfigurationInvalidValue() {
+		final Configuration globalConfiguration = new Configuration();
+		globalConfiguration.setProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, "NOTIMEUNITVALUE");
+		final IAnalysisController analysisController = new AnalysisController(globalConfiguration);
+
+		final PropertyFilter filter = new PropertyFilter(new Configuration(), analysisController);
+
+		Assert.assertEquals("NANOSECONDS", filter.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT));
 	}
 
 	private static class PropertyFilter extends AbstractFilterPlugin {
