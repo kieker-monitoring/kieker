@@ -61,8 +61,6 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 	 * 
 	 * @throws IOException
 	 *             If either the default encoding is not supported or the given file is somehow invalid.
-	 * 
-	 * @since 1.7
 	 */
 	public MessageTraceWriterFilter(final Configuration configuration, final IProjectContext projectContext) throws IOException {
 		super(configuration, projectContext);

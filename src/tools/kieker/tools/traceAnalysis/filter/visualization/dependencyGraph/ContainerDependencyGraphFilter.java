@@ -56,8 +56,6 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 	 *            The configuration to use.
 	 * @param projectContext
 	 *            The project context to use.
-	 * 
-	 * @since 1.7
 	 */
 	public ContainerDependencyGraphFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext, new ContainerDependencyGraph(ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER));

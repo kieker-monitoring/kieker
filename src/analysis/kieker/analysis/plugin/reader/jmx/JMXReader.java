@@ -97,8 +97,6 @@ public final class JMXReader extends AbstractReaderPlugin {
 	 * 
 	 * @throws IllegalArgumentException
 	 *             If the arguments are invalid.
-	 * 
-	 * @since 1.7
 	 */
 	public JMXReader(final Configuration configuration, final IProjectContext projectContext) throws IllegalArgumentException {
 		super(configuration, projectContext);

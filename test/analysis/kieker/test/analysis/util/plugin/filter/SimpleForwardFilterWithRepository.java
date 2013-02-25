@@ -50,8 +50,6 @@ public class SimpleForwardFilterWithRepository extends AbstractFilterPlugin {
 	 *            The configuration for this filter.
 	 * @param projectContext
 	 *            The project context for this filter.
-	 * 
-	 * @since 1.7
 	 */
 	public SimpleForwardFilterWithRepository(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);

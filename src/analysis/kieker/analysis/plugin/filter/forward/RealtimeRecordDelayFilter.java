@@ -86,8 +86,6 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
-	 * @since 1.7
 	 */
 	public RealtimeRecordDelayFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);

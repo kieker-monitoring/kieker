@@ -112,8 +112,6 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	 *            The configuration to be used for this plugin.
 	 * @param projectContext
 	 *            The project context to be used for this plugin.
-	 * 
-	 * @since 1.7
 	 */
 	public CurrentTimeEventGenerationFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);

@@ -39,6 +39,8 @@ public @interface AnalysisController {
 	 * The list of possible properties for the analysis controller.
 	 * 
 	 * @return A list of properties.
+	 * 
+	 * @since 1.7
 	 */
 	Property[] configuration() default {};
 }

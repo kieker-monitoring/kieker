@@ -27,8 +27,6 @@ import kieker.common.logging.LogFactory;
  * components within Kieker, like repositories or plugins. It should therefore <b>only</b> be used by the Kieker components itself as a base.
  * 
  * @author Nils Christian Ehmke
- * 
- * @since 1.7
  */
 public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 
@@ -56,8 +54,6 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 	 * 
 	 * @param configuration
 	 *            The configuration for this component.
-	 * 
-	 * @since 1.7
 	 */
 	public AbstractAnalysisComponent(final Configuration configuration) {
 		try {
@@ -102,8 +98,6 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 	 * @return true iff the project context of this plugin was not null and has been set to the given value.
 	 * 
 	 * @deprecated To be removed in 1.8
-	 * 
-	 * @since 1.7
 	 */
 	@Deprecated
 	public final boolean setProjectContext(final IProjectContext context) {

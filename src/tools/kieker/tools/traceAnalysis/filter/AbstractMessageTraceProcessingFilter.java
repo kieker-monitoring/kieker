@@ -41,8 +41,6 @@ public abstract class AbstractMessageTraceProcessingFilter extends AbstractTrace
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
-	 * @since 1.7
 	 */
 	public AbstractMessageTraceProcessingFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);

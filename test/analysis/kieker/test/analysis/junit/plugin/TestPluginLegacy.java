@@ -48,8 +48,6 @@ public final class TestPluginLegacy extends AbstractKiekerTest {
 
 	/**
 	 * Creates a new instance of this test class.
-	 * 
-	 * @since 1.7
 	 */
 	public TestPluginLegacy() {
 		// empty default constructor

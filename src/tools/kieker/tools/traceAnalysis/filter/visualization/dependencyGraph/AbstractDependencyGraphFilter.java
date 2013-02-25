@@ -50,8 +50,6 @@ public abstract class AbstractDependencyGraphFilter<T extends ISystemModelElemen
 	 *            The project context to use for this filter.
 	 * @param graph
 	 *            The graph to produce / extend
-	 * 
-	 * @since 1.7
 	 */
 	public AbstractDependencyGraphFilter(final Configuration configuration, final IProjectContext projectContext, final AbstractDependencyGraph<T> graph) {
 		super(configuration, projectContext, graph);

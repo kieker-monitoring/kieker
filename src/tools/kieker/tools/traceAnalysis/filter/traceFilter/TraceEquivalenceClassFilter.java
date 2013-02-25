@@ -104,8 +104,6 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
-	 * @since 1.7
 	 */
 	public TraceEquivalenceClassFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);

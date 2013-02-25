@@ -37,8 +37,6 @@ public abstract class AbstractInvalidExecutionTraceProcessingFilter extends Abst
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
-	 * @since 1.7
 	 */
 	public AbstractInvalidExecutionTraceProcessingFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);

@@ -40,8 +40,6 @@ public class SimpleRepository extends AbstractRepository { // NOPMD (SubClassOfT
 	 *            The configuration for this repository.
 	 * @param projectContext
 	 *            The project context for this repository.
-	 * 
-	 * @since 1.7
 	 */
 	public SimpleRepository(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);

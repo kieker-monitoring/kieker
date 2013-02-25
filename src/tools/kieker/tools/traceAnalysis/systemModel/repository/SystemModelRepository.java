@@ -63,8 +63,6 @@ public class SystemModelRepository extends AbstractRepository {
 	 *            The configuration to use for this repository.
 	 * @param projectContext
 	 *            The project context to use for this repository.
-	 * 
-	 * @since 1.7
 	 */
 	public SystemModelRepository(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);

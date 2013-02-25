@@ -59,8 +59,6 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	 *            The configuration to use.
 	 * @param projectContext
 	 *            The project context to use.
-	 * 
-	 * @since 1.7
 	 */
 	public OperationDependencyGraphAssemblyFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext, new OperationAssemblyDependencyGraph(new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,

@@ -32,6 +32,8 @@ public interface IAnalysisComponent {
 	 * able to use the given object to initialize a new instance of this class with the same intern properties.
 	 * 
 	 * @return A completely filled configuration object.
+	 * 
+	 * @since 1.7
 	 */
 	public abstract Configuration getCurrentConfiguration();
 
@@ -39,6 +41,8 @@ public interface IAnalysisComponent {
 	 * This method delivers the current name of this component instance. The name does not have to be unique.
 	 * 
 	 * @return The current name of the component instance.
+	 * 
+	 * @since 1.7
 	 */
 	public abstract String getName();
 

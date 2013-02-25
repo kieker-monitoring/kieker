@@ -54,8 +54,6 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	 *            The configuration to use.
 	 * @param projectContext
 	 *            The project context to use.
-	 * 
-	 * @since 1.7
 	 */
 	public ComponentDependencyGraphAssemblyFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext, new ComponentAssemblyDependencyGraph(AssemblyRepository.ROOT_ASSEMBLY_COMPONENT));

@@ -63,8 +63,6 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 	 * 
 	 * @throws IOException
 	 *             If the write stream could not be prepared.
-	 * 
-	 * @since 1.7
 	 */
 	public InvalidExecutionTraceWriterFilter(final Configuration configuration, final IProjectContext projectContext) throws IOException {
 		super(configuration, projectContext);

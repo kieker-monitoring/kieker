@@ -38,7 +38,8 @@ import kieker.common.logging.LogFactory;
  * 
  * @author Andre van Hoorn, Jan Waller
  */
-@Plugin(programmaticOnly = true,
+@Plugin(
+		programmaticOnly = true,
 		description = "A reader that can be prefilled programmatically and that provides these records (mostly used in testing scenarios)",
 		outputPorts = @OutputPort(name = ListReader.OUTPUT_PORT_NAME, eventTypes = { Object.class }),
 		configuration = {
@@ -65,8 +66,6 @@ public class ListReader<T> extends AbstractReaderPlugin {
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
-	 * @since 1.7
 	 */
 	public ListReader(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);

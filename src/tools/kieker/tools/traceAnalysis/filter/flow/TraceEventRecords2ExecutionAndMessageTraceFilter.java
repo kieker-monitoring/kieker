@@ -91,8 +91,6 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
-	 * @since 1.7
 	 */
 	public TraceEventRecords2ExecutionAndMessageTraceFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);

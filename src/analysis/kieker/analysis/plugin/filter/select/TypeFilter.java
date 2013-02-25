@@ -37,7 +37,8 @@ import kieker.common.logging.LogFactory;
  * 
  * @author Jan Waller
  */
-@Plugin(description = "Filters incoming objects based on their type",
+@Plugin(
+		description = "Filters incoming objects based on their type",
 		outputPorts = {
 			@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH, eventTypes = { Object.class }, description = "Forwards events matching the configured types"),
 			@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_TYPE_MISMATCH, eventTypes = {}, description = "Forwards events not matching the configured types")
@@ -78,8 +79,6 @@ public final class TypeFilter extends AbstractFilterPlugin {
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
-	 * @since 1.7
 	 */
 	public TypeFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);

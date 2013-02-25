@@ -75,8 +75,6 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation
 	 *            The configuration to use for this filter.
 	 * @param projectContext
 	 *            The project context to use for this filter.
-	 * 
-	 * @since 1.7
 	 */
 	public TraceColoringFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);

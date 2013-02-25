@@ -72,8 +72,6 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
-	 * @since 1.7
 	 */
 	public PipeReader(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);

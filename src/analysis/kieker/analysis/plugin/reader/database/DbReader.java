@@ -81,8 +81,6 @@ public class DbReader extends AbstractReaderPlugin {
 	 * 
 	 * @throws Exception
 	 *             If the driver for the database could not be found.
-	 * 
-	 * @since 1.7
 	 */
 	public DbReader(final Configuration configuration, final IProjectContext projectContext) throws Exception {
 		super(configuration, projectContext);

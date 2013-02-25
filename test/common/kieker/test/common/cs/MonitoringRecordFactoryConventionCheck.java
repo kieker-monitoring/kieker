@@ -89,8 +89,6 @@ public class MonitoringRecordFactoryConventionCheck extends Check {
 
 	/**
 	 * Creates a new instance of this class.
-	 * 
-	 * @since 1.7
 	 */
 	public MonitoringRecordFactoryConventionCheck() {
 		// Nothing to do here
@@ -290,8 +288,6 @@ public class MonitoringRecordFactoryConventionCheck extends Check {
 	 * 
 	 * @param ignoreAbstractClasses
 	 *            The new value of the property.
-	 * 
-	 * @since 1.7
 	 */
 	public void setIgnoreAbstractClasses(final boolean ignoreAbstractClasses) {
 		this.ignoreAbstractClasses = ignoreAbstractClasses;

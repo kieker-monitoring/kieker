@@ -49,8 +49,6 @@ public class ExecutionSinkClass extends AbstractFilterPlugin {
 	 *            The configuration for this plugin. It will not be used.
 	 * @param projectContext
 	 *            The project context for this plugin. It will not be used.
-	 * 
-	 * @since 1.7
 	 */
 	public ExecutionSinkClass(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);

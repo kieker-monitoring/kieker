@@ -78,8 +78,6 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
-	 * @since 1.7
 	 */
 	public StringBufferFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);

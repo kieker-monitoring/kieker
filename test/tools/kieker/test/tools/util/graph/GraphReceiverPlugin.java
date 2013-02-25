@@ -44,8 +44,6 @@ public class GraphReceiverPlugin extends ListCollectionFilter<AbstractGraph<?, ?
 	 *            The configuration to use
 	 * @param projectContext
 	 *            The project context to use.
-	 * 
-	 * @since 1.7
 	 */
 	public GraphReceiverPlugin(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -82,7 +80,7 @@ public class GraphReceiverPlugin extends ListCollectionFilter<AbstractGraph<?, ?
 	 *            The type of the graph.
 	 */
 	public <T extends AbstractGraph<?, ?, ?>> T getFirstGraph() {
-		return this.<T> getGraphAt(0); // NOCS Explicit bound is required to work around a possible javac bug
+		return this.<T>getGraphAt(0); // NOCS Explicit bound is required to work around a possible javac bug
 	}
 
 	/**

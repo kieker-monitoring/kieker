@@ -91,8 +91,6 @@ public final class JMSReader extends AbstractReaderPlugin {
 	 * 
 	 * @throws IllegalArgumentException
 	 *             If one of the properties is empty.
-	 * 
-	 * @since 1.7
 	 */
 	public JMSReader(final Configuration configuration, final IProjectContext projectContext) throws IllegalArgumentException {
 		super(configuration, projectContext);

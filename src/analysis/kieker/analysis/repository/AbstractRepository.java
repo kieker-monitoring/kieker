@@ -52,8 +52,6 @@ public abstract class AbstractRepository extends AbstractAnalysisComponent imple
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component. The component will be registered.
-	 * 
-	 * @since 1.7
 	 */
 	// Internal use of the register methods:
 	@SuppressWarnings("deprecation")

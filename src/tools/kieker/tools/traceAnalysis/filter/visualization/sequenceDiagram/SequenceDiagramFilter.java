@@ -142,8 +142,6 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	 *            The configuration to use for this filter.
 	 * @param projectContext
 	 *            The project context to use for this filter.
-	 * 
-	 * @since 1.7
 	 */
 	public SequenceDiagramFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);

@@ -226,8 +226,6 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * 
 	 * @param configuration
 	 *            The global configuration of this analysis. All plugins can indirectly access it.
-	 * 
-	 * @since 1.7
 	 */
 	public AnalysisController(final Configuration configuration) {
 		this.globalConfiguration = this.validateConfiguration(configuration.flatten(this.getDefaultConfiguration()));
@@ -240,8 +238,6 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * @param configuration
 	 *            The configuration object to check and (perhaps) update.
 	 * @return The configuration object.
-	 * 
-	 * @since 1.7
 	 */
 	private Configuration validateConfiguration(final Configuration configuration) {
 		final String stringProperty = configuration.getStringProperty(CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
@@ -271,8 +267,6 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * This method provides the default properties, as supplied by the annotation.
 	 * 
 	 * @return The default configuration.
-	 * 
-	 * @since 1.7
 	 */
 	private final Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();

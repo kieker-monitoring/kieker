@@ -52,8 +52,6 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 	 *            The project context to use.
 	 * @param graph
 	 *            The (usually empty) graph to produce / extend
-	 * 
-	 * @since 1.7
 	 */
 	public AbstractGraphProducingFilter(final Configuration configuration, final IProjectContext projectContext, final G graph) {
 		super(configuration, projectContext);

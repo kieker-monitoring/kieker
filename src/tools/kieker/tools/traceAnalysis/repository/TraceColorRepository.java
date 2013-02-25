@@ -92,8 +92,6 @@ public class TraceColorRepository extends AbstractRepository {
 	 * 
 	 * @throws IOException
 	 *             If an I/O error occurs during initialization
-	 * 
-	 * @since 1.7
 	 */
 	public TraceColorRepository(final Configuration configuration, final IProjectContext projectContext) throws IOException {
 		this(configuration, TraceColorRepository.readDataFromFile(configuration.getStringProperty(CONFIG_PROPERTY_NAME_TRACE_COLOR_FILE_NAME)), projectContext);
@@ -108,8 +106,6 @@ public class TraceColorRepository extends AbstractRepository {
 	 *            The color data to use for this repository
 	 * @param projectContext
 	 *            The project context to use for this repository.
-	 * 
-	 * @since 1.7
 	 */
 	public TraceColorRepository(final Configuration configuration, final TraceColorRepositoryData colorData, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -213,8 +209,6 @@ public class TraceColorRepository extends AbstractRepository {
 	 * 
 	 * @throws IOException
 	 *             If an I/O error occurs
-	 * 
-	 * @since 1.7
 	 */
 	public static TraceColorRepository createFromFile(final String fileName, final IProjectContext projectContext) throws IOException {
 		final Configuration configuration = new Configuration();

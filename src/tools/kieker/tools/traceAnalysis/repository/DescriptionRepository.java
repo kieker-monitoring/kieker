@@ -80,8 +80,6 @@ public class DescriptionRepository extends AbstractRepository {
 	 * 
 	 * @throws IOException
 	 *             If an I/O error occurs during initialization
-	 * 
-	 * @since 1.7
 	 */
 	public DescriptionRepository(final Configuration configuration, final IProjectContext projectContext) throws IOException {
 		this(configuration, DescriptionRepository.readDataFromFile(configuration.getStringProperty(CONFIG_PROPERTY_NAME_DESCRIPTION_FILE_NAME)), projectContext);
@@ -96,8 +94,6 @@ public class DescriptionRepository extends AbstractRepository {
 	 *            The description data to use
 	 * @param projectContext
 	 *            The project context to use.
-	 * 
-	 * @since 1.7
 	 */
 	public DescriptionRepository(final Configuration configuration, final DescriptionRepositoryData descriptionData, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -177,8 +173,6 @@ public class DescriptionRepository extends AbstractRepository {
 	 * 
 	 * @throws IOException
 	 *             If an I/O error occurs
-	 * 
-	 * @since 1.7
 	 */
 	public static DescriptionRepository createFromFile(final String fileName, final IProjectContext projectContext) throws IOException {
 		final Configuration configuration = new Configuration();

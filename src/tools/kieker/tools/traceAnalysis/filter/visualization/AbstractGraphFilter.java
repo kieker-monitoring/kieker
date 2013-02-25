@@ -71,8 +71,6 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 	 *            The filter configuration to use
 	 * @param projectContext
 	 *            The project context to use.
-	 * 
-	 * @since 1.7
 	 */
 	public AbstractGraphFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);

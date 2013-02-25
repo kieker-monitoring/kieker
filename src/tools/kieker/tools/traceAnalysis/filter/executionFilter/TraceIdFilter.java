@@ -58,8 +58,6 @@ public class TraceIdFilter extends AbstractTraceIdFilter {
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
-	 * @since 1.7
 	 */
 	public TraceIdFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);

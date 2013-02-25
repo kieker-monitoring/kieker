@@ -61,8 +61,6 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
-	 * @since 1.7
 	 */
 	public EventRecordTraceCounter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);

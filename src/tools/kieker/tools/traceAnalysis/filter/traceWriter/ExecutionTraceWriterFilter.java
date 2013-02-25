@@ -66,8 +66,6 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 	 * 
 	 * @throws IOException
 	 *             If the write stream could not be prepared.
-	 * 
-	 * @since 1.7
 	 */
 	public ExecutionTraceWriterFilter(final Configuration configuration, final IProjectContext projectContext) throws IOException {
 		super(configuration, projectContext);
