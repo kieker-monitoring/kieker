@@ -123,15 +123,19 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	public EventRecordTraceReconstructionFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
-		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
-		TimeUnit recordTimeunit;
-		try {
-			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
-		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
-			recordTimeunit = TimeUnit.NANOSECONDS;
+		if (null != projectContext) { // TODO: remove non-null check and else case in Kieker 1.8)
+			final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
+			TimeUnit recordTimeunit;
+			try {
+				recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
+			} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
+				LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+				recordTimeunit = TimeUnit.NANOSECONDS;
+			}
+			this.timeunit = recordTimeunit;
+		} else {
+			this.timeunit = TimeUnit.NANOSECONDS;
 		}
-		this.timeunit = recordTimeunit;
 
 		final String configTimeunitProperty = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT);
 		TimeUnit configTimeunit;

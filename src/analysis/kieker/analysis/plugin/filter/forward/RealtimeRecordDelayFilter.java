@@ -67,8 +67,7 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 
 	private final TimeUnit timeunit;
 
-	// TODO: We might want to provide this property as a configuration property
-	private final long warnOnNegativeSchedTime = this.timeunit.convert(2, TimeUnit.SECONDS);
+	private final long warnOnNegativeSchedTime;
 
 	private final int numWorkers;
 
@@ -93,15 +92,22 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	public RealtimeRecordDelayFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
-		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
-		TimeUnit recordTimeunit;
-		try {
-			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
-		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
-			recordTimeunit = TimeUnit.NANOSECONDS;
+		if (null != projectContext) { // TODO: remove non-null check and else case in Kieker 1.8)
+			final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
+			TimeUnit recordTimeunit;
+			try {
+				recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
+			} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
+				LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+				recordTimeunit = TimeUnit.NANOSECONDS;
+			}
+			this.timeunit = recordTimeunit;
+		} else {
+			this.timeunit = TimeUnit.NANOSECONDS;
 		}
-		this.timeunit = recordTimeunit;
+
+		// TODO: We might want to provide this property as a configuration property
+		this.warnOnNegativeSchedTime = this.timeunit.convert(2, TimeUnit.SECONDS);
 
 		this.numWorkers = configuration.getIntProperty(CONFIG_PROPERTY_NAME_NUM_WORKERS);
 		this.shutdownDelay = this.timeunit.convert(this.configuration.getLongProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS), TimeUnit.SECONDS);
