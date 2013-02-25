@@ -20,6 +20,8 @@ package kieker.common.util;
  * This class contains some convenient utility methods to handle strings.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.7
  */
 public final class StringUtils {
 

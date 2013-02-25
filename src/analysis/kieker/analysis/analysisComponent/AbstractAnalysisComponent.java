@@ -27,6 +27,8 @@ import kieker.common.logging.LogFactory;
  * components within Kieker, like repositories or plugins. It should therefore <b>only</b> be used by the Kieker components itself as a base.
  * 
  * @author Nils Christian Ehmke
+ * 
+ * @since 1.7
  */
 public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 

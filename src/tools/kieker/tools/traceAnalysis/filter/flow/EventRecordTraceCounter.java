@@ -33,6 +33,7 @@ import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.7
  */
 @Plugin(
 		description = "Counts and reports the number of incoming valid/invalid event record traces",

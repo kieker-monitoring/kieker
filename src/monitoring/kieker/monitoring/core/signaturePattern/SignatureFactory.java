@@ -20,6 +20,8 @@ package kieker.monitoring.core.signaturePattern;
  * This class can be used to create signatures (for example a string containing the whole signature of a method).
  * 
  * @author Bjoern Weissenfels, Jan Waller
+ * 
+ * @since 1.7
  */
 public final class SignatureFactory {
 
