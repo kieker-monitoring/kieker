@@ -27,6 +27,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.tools.logReplayer.filter.MonitoringRecordLoggerFilter;
 
 /**
  * Replays a monitoring log to a {@link kieker.monitoring.core.controller.IMonitoringController} with a given {@link Configuration}.
