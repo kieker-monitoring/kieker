@@ -93,10 +93,12 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	public RealtimeRecordDelayFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
+		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
 		TimeUnit recordTimeunit;
 		try {
-			recordTimeunit = TimeUnit.valueOf(projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT));
+			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
 		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
+			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
 			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
 		this.timeunit = recordTimeunit;

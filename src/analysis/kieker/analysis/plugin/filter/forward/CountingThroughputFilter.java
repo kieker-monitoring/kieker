@@ -31,6 +31,8 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.ImmutableEntry;
 
@@ -95,6 +97,8 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	 */
 	public static final String CONFIG_PROPERTY_VALUE_INTERVAL_SIZE_ONE_MINUTE = "60000000000";
 
+	private static final Log LOG = LogFactory.getLog(CountingThroughputFilter.class);
+
 	private volatile long firstIntervalStart = -1;
 	private final boolean intervalsBasedOn1stTstamp;
 	private final TimeUnit timeunit;
@@ -128,20 +132,25 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	public CountingThroughputFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
+		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
 		TimeUnit recordTimeunit;
 		try {
-			recordTimeunit = TimeUnit.valueOf(projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT));
+			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
 		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
+			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
 			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
 		this.timeunit = recordTimeunit;
 
+		final String configTimeunitProperty = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT);
 		TimeUnit configTimeunit;
 		try {
-			configTimeunit = TimeUnit.valueOf(configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT));
+			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
 		} catch (final IllegalArgumentException ex) {
+			LOG.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
 			configTimeunit = this.timeunit;
 		}
+
 		this.intervalSize = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_INTERVAL_SIZE), configTimeunit);
 		this.intervalsBasedOn1stTstamp = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INTERVALS_BASED_ON_1ST_TSTAMP);
 	}

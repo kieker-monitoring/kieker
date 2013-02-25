@@ -100,6 +100,8 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	 */
 	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "NANOSECONDS"; // TimeUnit.NANOSECONDS.name()
 
+	private static final Log LOG = LogFactory.getLog(EventRecordTraceReconstructionFilter.class);
+
 	private final TimeUnit timeunit;
 	private final long maxTraceDuration;
 	private final long maxTraceTimeout;
@@ -121,18 +123,22 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	public EventRecordTraceReconstructionFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
+		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
 		TimeUnit recordTimeunit;
 		try {
-			recordTimeunit = TimeUnit.valueOf(projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT));
+			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
 		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
+			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
 			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
 		this.timeunit = recordTimeunit;
 
+		final String configTimeunitProperty = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT);
 		TimeUnit configTimeunit;
 		try {
-			configTimeunit = TimeUnit.valueOf(configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT));
+			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
 		} catch (final IllegalArgumentException ex) {
+			LOG.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
 			configTimeunit = this.timeunit;
 		}
 
