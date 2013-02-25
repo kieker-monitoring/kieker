@@ -500,7 +500,9 @@ public final class TraceAnalysisTool {
 				 */
 				final Configuration mtReconstrFilterConfig = new Configuration();
 				mtReconstrFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.TRACERECONSTR_COMPONENT_NAME);
-				mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS,
+				mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
+						TimeUnit.MILLISECONDS.name());
+				mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
 						Integer.toString(TraceAnalysisTool.maxTraceDurationMillis));
 				mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES,
 						Boolean.toString(TraceAnalysisTool.ignoreInvalidTraces));

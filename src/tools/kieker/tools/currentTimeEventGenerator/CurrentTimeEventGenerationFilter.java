@@ -16,6 +16,8 @@
 
 package kieker.tools.currentTimeEventGenerator;
 
+import java.util.concurrent.TimeUnit;
+
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
@@ -58,6 +60,8 @@ import kieker.common.record.misc.TimestampRecord;
 					description = "Provides current time values")
 		},
 		configuration = {
+			@Property(name = CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
+					defaultValue = CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
 			@Property(name = CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_NAME_TIME_RESOLUTION, defaultValue = "1000")
 		})
 public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
@@ -74,6 +78,9 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 
 	/** This is the name of the property to determine the time resolution. */
 	public static final String CONFIG_PROPERTY_NAME_TIME_RESOLUTION = "timeResolution";
+
+	public static final String CONFIG_PROPERTY_NAME_TIMEUNIT = "timeunit";
+	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "NANOSECONDS"; // TimeUnit.NANOSECONDS.name()
 
 	private static final Log LOG = LogFactory.getLog(CurrentTimeEventGenerationFilter.class);
 
@@ -95,8 +102,10 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 
 	private final long timerResolution;
 
+	private final TimeUnit timeunit;
+
 	/**
-	 * Creates an event generator which generates time events with the given resolution in nanoseconds via the output port
+	 * Creates an event generator which generates time events with the given resolution in timeunits via the output port
 	 * {@link #OUTPUT_PORT_NAME_CURRENT_TIME_RECORD}.
 	 * 
 	 * @param configuration
@@ -109,11 +118,34 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	public CurrentTimeEventGenerationFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
-		this.timerResolution = configuration.getLongProperty(CONFIG_PROPERTY_NAME_TIME_RESOLUTION);
+		if (null != projectContext) { // TODO: remove non-null check and else case in Kieker 1.8)
+			final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
+			TimeUnit recordTimeunit;
+			try {
+				recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
+			} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
+				LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+				recordTimeunit = TimeUnit.NANOSECONDS;
+			}
+			this.timeunit = recordTimeunit;
+		} else {
+			this.timeunit = TimeUnit.NANOSECONDS;
+		}
+
+		final String configTimeunitProperty = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT);
+		TimeUnit configTimeunit;
+		try {
+			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
+		} catch (final IllegalArgumentException ex) {
+			LOG.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
+			configTimeunit = this.timeunit;
+		}
+
+		this.timerResolution = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_TIME_RESOLUTION), configTimeunit);
 	}
 
 	/**
-	 * Creates an event generator which generates time events with the given resolution in nanoseconds via the output port
+	 * Creates an event generator which generates time events with the given resolution in timeunits via the output port
 	 * {@link #OUTPUT_PORT_NAME_CURRENT_TIME_RECORD}.
 	 * 
 	 * @param configuration
@@ -135,7 +167,7 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	@InputPort(name = INPUT_PORT_NAME_NEW_RECORD, eventTypes = { IMonitoringRecord.class },
 			description = "Receives a new record and extracts the logging timestamp as a time event")
 	public void inputRecord(final IMonitoringRecord record) {
-		if (record != null) {
+		if (record != null) { // TODO: can we get null?
 			this.inputTimestamp(record.getLoggingTimestamp());
 		}
 	}
@@ -155,9 +187,7 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 		}
 
 		if (this.firstTimestamp == -1) {
-			/**
-			 * Initial record
-			 */
+			// Initial record
 			this.maxTimestamp = timestamp;
 			this.firstTimestamp = timestamp;
 			super.deliver(OUTPUT_PORT_NAME_CURRENT_TIME_RECORD, new TimestampRecord(timestamp));
@@ -165,9 +195,7 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 			this.mostRecentEventFired = timestamp;
 		} else if (timestamp > this.maxTimestamp) {
 			this.maxTimestamp = timestamp;
-			/**
-			 * Fire timer event(s) if required.
-			 */
+			// Fire timer event(s) if required.
 			for (long nextTimerEventAt = this.mostRecentEventFired + this.timerResolution; timestamp >= nextTimerEventAt; nextTimerEventAt =
 					this.mostRecentEventFired + this.timerResolution) {
 				super.deliver(OUTPUT_PORT_NAME_CURRENT_TIME_RECORD, new TimestampRecord(nextTimerEventAt));
@@ -183,9 +211,8 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-
+		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMEUNIT, this.timeunit.name());
 		configuration.setProperty(CONFIG_PROPERTY_NAME_TIME_RESOLUTION, Long.toString(this.timerResolution));
-
 		return configuration;
 	}
 }

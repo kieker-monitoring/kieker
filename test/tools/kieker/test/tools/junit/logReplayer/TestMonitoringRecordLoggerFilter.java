@@ -44,7 +44,7 @@ import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.writer.filesystem.AbstractAsyncFSWriter;
 import kieker.monitoring.writer.filesystem.AsyncFsWriter;
-import kieker.tools.logReplayer.MonitoringRecordLoggerFilter;
+import kieker.tools.logReplayer.filter.MonitoringRecordLoggerFilter;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.common.junit.AbstractKiekerTest;

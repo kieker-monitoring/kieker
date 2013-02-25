@@ -35,13 +35,11 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
- * 
  * @author Andre van Hoorn
  */
 @Plugin(repositoryPorts = { @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
 public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
-	public static final String REPOSITORY_PORT_NAME_SYSTEM_MODEL =
-			"systemModelRepository";
+	public static final String REPOSITORY_PORT_NAME_SYSTEM_MODEL = "systemModelRepository";
 
 	// Please leave the logger here, because the "composition" above is used in the user guide
 	private static final Log LOG = LogFactory.getLog(AbstractTraceAnalysisFilter.class);

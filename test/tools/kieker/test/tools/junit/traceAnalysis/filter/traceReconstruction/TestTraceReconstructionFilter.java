@@ -27,7 +27,6 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
-import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceReconstructionFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
@@ -126,12 +125,12 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(TraceReconstructionFilter.class.getName() + ".name", "TraceReconstructionFilter");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, "true");
-		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long
-				.toString(AbstractTraceProcessingFilter.MAX_DURATION_MILLIS));
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
+				TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TRACE_DURATION);
 		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, controller);
 
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout", validExecutionTrace.getDurationInNanos() <= filter
-				.getMaxTraceDurationNanos());
+				.getMaxTraceDuration());
 
 		final ListCollectionFilter<ExecutionTrace> executionTraceSinkPlugin = new ListCollectionFilter<ExecutionTrace>(new Configuration(), controller);
 		final ListCollectionFilter<MessageTrace> messageTraceSinkPlugin = new ListCollectionFilter<MessageTrace>(new Configuration(), controller);
@@ -240,11 +239,11 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(TraceReconstructionFilter.class.getName() + ".name", "TraceReconstructionFilter");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, "true");
-		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long
-				.toString(AbstractTraceProcessingFilter.MAX_DURATION_MILLIS));
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
+				TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TRACE_DURATION);
 		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, controller);
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout", invalidExecutionTrace.getDurationInNanos() <= filter
-				.getMaxTraceDurationNanos());
+				.getMaxTraceDuration());
 
 		final ListCollectionFilter<ExecutionTrace> executionTraceSinkPlugin = new ListCollectionFilter<ExecutionTrace>(new Configuration(), controller);
 		final ListCollectionFilter<MessageTrace> messageTraceSinkPlugin = new ListCollectionFilter<MessageTrace>(new Configuration(), controller);
@@ -364,7 +363,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(TraceReconstructionFilter.class.getName() + ".name", "TraceReconstructionFilter");
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, "true");
-		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION_MILLIS, Long
+		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, Long
 				.toString(((triggerExecutionTrace.getMaxTout() - incompleteExecutionTrace.getMinTin()) / (1000 * 1000)) - 1));
 		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, controller);
 
@@ -375,8 +374,8 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 
 		Assert.assertTrue("Test invalid: NOT (tout of trigger trace - tin of incomplete > filter max. duration)\n" + "triggerExecutionTrace.getMaxTout()"
 				+ triggerExecutionTrace.getMaxTout() + "\n" + "incompleteExecutionTrace.getMinTin()" + incompleteExecutionTrace.getMinTin() + "\n"
-				+ "filter.getMaxTraceDurationNanos()" + filter.getMaxTraceDurationNanos(), (triggerExecutionTrace.getMaxTout() - incompleteExecutionTrace
-				.getMinTin()) > filter.getMaxTraceDurationNanos());
+				+ "filter.getMaxTraceDurationNanos()" + filter.getMaxTraceDuration(), (triggerExecutionTrace.getMaxTout() - incompleteExecutionTrace
+				.getMinTin()) > filter.getMaxTraceDuration());
 
 		controller.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
 

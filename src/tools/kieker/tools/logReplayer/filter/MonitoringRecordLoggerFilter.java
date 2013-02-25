@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.logReplayer;
+package kieker.tools.logReplayer.filter;
 
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
@@ -36,9 +36,7 @@ import kieker.monitoring.core.controller.MonitoringController;
  * Additionally, incoming records are relayed via the output port {@link #OUTPUT_PORT_NAME_RELAYED_EVENTS}.
  * 
  * @author Andre van Hoorn
- * 
  */
-// TODO: We should move this class to another package
 @Plugin(description = "A filter which passes received records to the configured monitoring controller",
 		outputPorts = {
 			@OutputPort(name = MonitoringRecordLoggerFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming monitoring record",
@@ -91,7 +89,7 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 			controllerConfiguration = ConfigurationFactory.createDefaultConfiguration();
 		}
 		// flatten submitted properties
-		final Configuration flatConfiguration = configuration.getPropertiesStartingWith("");
+		final Configuration flatConfiguration = configuration.flatten();
 		// save before adding the defaults
 		this.configuration = (Configuration) flatConfiguration.clone();
 		try {
@@ -121,7 +119,7 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 	@Override
 	public void terminate(final boolean error) {
 		super.terminate(error);
-		this.monitoringController.terminateMonitoring();
+		this.monitoringController.terminateMonitoring(); // TODO in this order?
 	}
 
 	/**

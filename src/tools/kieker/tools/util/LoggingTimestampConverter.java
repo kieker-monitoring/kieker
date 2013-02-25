@@ -50,7 +50,7 @@ public final class LoggingTimestampConverter {
 	 * using the convertDatetimeStringToUTCLoggingTimestamp(..) method.
 	 * 
 	 * @param loggingTimestamp
-	 *            The timestamp to be converted.
+	 *            The timestamp to be converted in nanoseconds.
 	 * @return a human-readable datetime string (UTC timezone) which represents the passed timestamp
 	 */
 	public static final String convertLoggingTimestampToUTCString(final long loggingTimestamp) {
