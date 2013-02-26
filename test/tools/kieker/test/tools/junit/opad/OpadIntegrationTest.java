@@ -17,7 +17,6 @@
 package kieker.test.tools.junit.opad;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
@@ -30,9 +29,11 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
+import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.tools.opad.filter.AnomalyDetectionFilter;
 import kieker.tools.opad.filter.AnomalyScoreCalculationFilter;
 import kieker.tools.opad.filter.ForecastingFilter;
+import kieker.tools.opad.filter.ResponseTimeExtractionFilter;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 
 /**
@@ -42,24 +43,33 @@ import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 public class OpadIntegrationTest {
 
 	private AnalysisController controller;
+	private static final String OP_SIGNATURE_A = "a.A.opA";
+	private static final String SESSION_ID_TEST = "TestId";
+	private static final String HOST_ID_TEST = "TestRechner";
+	private static final long TRACE_ID_TEST = (long) 0.1;
 
-	// Variables ForecastingFilter
-	private ListReader<NamedDoubleTimeSeriesPoint> theReaderForecast;
-	private ForecastingFilter forecasting;
+	// Variables Mockup OperationExecutionReader
+	private ListReader<OperationExecutionRecord> theReaderOperationExecutionRecords;
 
-	// HelperMethods ForecastingFilter
-	private List<NamedDoubleTimeSeriesPoint> createInputEventSetForecast() {
-		final List<NamedDoubleTimeSeriesPoint> retList = new ArrayList<NamedDoubleTimeSeriesPoint>();
-		retList.add(this.createNDTSP(OP_SIGNATURE_A, 0.3));
-		retList.add(this.createNDTSP(OP_SIGNATURE_A, 6.0));
-		retList.add(this.createNDTSP(OP_SIGNATURE_A, 0.5));
+	// HelperMethods Mockup OperationExecutionReader
+	private List<OperationExecutionRecord> createInputEventSetOER() {
+		final List<OperationExecutionRecord> retList = new ArrayList<OperationExecutionRecord>();
+		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 1001, 1002));
+		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 4000, 22243));
+		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 4021, 5057));
 		return retList;
 	}
 
-	private NamedDoubleTimeSeriesPoint createNDTSP(final String signature, final double value) {
-		final NamedDoubleTimeSeriesPoint r = new NamedDoubleTimeSeriesPoint(new Date(), value, signature);
-		return r;
+	private OperationExecutionRecord createOER(final String signature, final String sessionid, final long traceid, final long tin, final long tout) {
+		final OperationExecutionRecord oer = new OperationExecutionRecord(signature, sessionid, traceid, tin, tout, HOST_ID_TEST, -1, -1);
+		return oer;
 	}
+
+	// Variables ResponsetimeExtractionFilter
+	private ResponseTimeExtractionFilter responsetimeExtr;
+
+	// Variables ForecastingFilter
+	private ForecastingFilter forecasting;
 
 	// Variables AnomalyScoreCalculationFilter
 	private AnomalyScoreCalculationFilter scoreCalc;
@@ -68,21 +78,28 @@ public class OpadIntegrationTest {
 	private AnomalyDetectionFilter anomalyDetectionFilter;
 	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPluginIfAnomaly;
 	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPluginElse;
-	private static final String OP_SIGNATURE_A = "a.A.opA";
 
 	@Before
 	public void setUp() throws IllegalStateException,
 			AnalysisConfigurationException {
 		this.controller = new AnalysisController();
 
-		// Start - ForecastingFilter
-		// READER with Mock-up Data
-		final Configuration readerForecastConfiguration = new Configuration();
-		readerForecastConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		this.theReaderForecast = new ListReader<NamedDoubleTimeSeriesPoint>(readerForecastConfiguration);
-		this.theReaderForecast.addAllObjects(this.createInputEventSetForecast());
-		this.controller.registerReader(this.theReaderForecast);
+		// Start - Read OperationExecutionRecords
+		final Configuration readerOERConfiguration = new Configuration();
+		readerOERConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
+		this.theReaderOperationExecutionRecords = new ListReader<OperationExecutionRecord>(readerOERConfiguration);
+		this.theReaderOperationExecutionRecords.addAllObjects(this.createInputEventSetOER());
+		this.controller.registerReader(this.theReaderOperationExecutionRecords);
+		// End - Read OperationExecutionRecords
 
+		// Start - ResponseTimeExtractionFilter Configuration
+		// ResponseTimeExtractionFilter Configuration
+		final Configuration ResponseTimeExtractionConfiguration = new Configuration();
+		this.responsetimeExtr = new ResponseTimeExtractionFilter(ResponseTimeExtractionConfiguration);
+		this.controller.registerFilter(this.responsetimeExtr);
+		// End - ResponseTimeExtractionFilter
+
+		// Start - ForecastingFilter
 		// ForecastingFilter Configuration
 		final Configuration forecastConfiguration = new Configuration();
 		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_DELTA_TIME, "1000");
@@ -116,9 +133,14 @@ public class OpadIntegrationTest {
 		// End - AnomalyDetectionFilter
 
 		// CONNECT the filters
-		// Mock-up Reader -> Forecast Input
+		// Mock-up Reader (OperationExecutionRecords) -> ResponseTimeExtractionFIlter
 		this.controller
-				.connect(this.theReaderForecast, ListReader.OUTPUT_PORT_NAME, this.forecasting, ForecastingFilter.INPUT_PORT_NAME_TSPOINT);
+				.connect(this.theReaderOperationExecutionRecords, ListReader.OUTPUT_PORT_NAME, this.responsetimeExtr,
+						ResponseTimeExtractionFilter.INPUT_PORT_NAME_VALUE);
+		// ResponseTimeExtractionFilter -> Forecast Input
+		this.controller
+				.connect(this.responsetimeExtr, ResponseTimeExtractionFilter.OUTPUT_PORT_NAME_VALUE, this.forecasting,
+						ForecastingFilter.INPUT_PORT_NAME_TSPOINT);
 		// Forecast Output -> AnomalyScoreCalculation Input
 		this.controller
 				.connect(this.forecasting, ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, this.scoreCalc,

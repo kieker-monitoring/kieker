@@ -70,7 +70,6 @@ public class AnomalyScoreCalculationFilterTest {
 		this.controller = new AnalysisController();
 
 		// READER
-		final Configuration config = new Configuration();
 		final Configuration readerScoreCalcConfiguration = new Configuration();
 		readerScoreCalcConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
 		this.theReaderScoreCalc = new ListReader<ForecastMeasurementPair>(readerScoreCalcConfiguration);
