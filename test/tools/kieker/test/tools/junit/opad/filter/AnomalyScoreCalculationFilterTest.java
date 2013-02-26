@@ -16,64 +16,96 @@
 
 package kieker.test.tools.junit.opad.filter;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
+import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
-import kieker.tools.opad.filter.ForecastingFilter;
+import kieker.tools.opad.filter.AnomalyScoreCalculationFilter;
+import kieker.tools.opad.record.ForecastMeasurementPair;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
-import kieker.tools.tslib.ITimeSeriesPoint;
-import kieker.tools.tslib.forecast.IForecastResult;
 
 /**
  * 
- * @author Tillmann Carlos Bielefeld
+ * @author Tom Frotscher
  * 
  */
 public class AnomalyScoreCalculationFilterTest {
 
-	private ForecastingFilter forecasting;
 	private AnalysisController controller;
-	private ListCollectionFilter<IForecastResult<Double>> sinkPlugin;
+
+	// Variables AnomalyScoreCalculationFilter
+	private AnomalyScoreCalculationFilter scoreCalc;
+	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkAnomalyScore;
+	private ListReader<ForecastMeasurementPair> theReaderScoreCalc;
+	private static final String OP_SIGNATURE_A = "a.A.opA";
+
+	// HelperMethods AnomalyScoreCalculation
+	private ForecastMeasurementPair createFMP(final String name, final Double forecast,
+			final Double measurement) {
+		final ForecastMeasurementPair r = new ForecastMeasurementPair(name, forecast, measurement, new Date());
+		return r;
+	}
+
+	private List<ForecastMeasurementPair> createInputEventSetScoreCalc() {
+		final List<ForecastMeasurementPair> retList = new ArrayList<ForecastMeasurementPair>();
+		retList.add(this.createFMP(OP_SIGNATURE_A, 0.6, 0.4));
+		retList.add(this.createFMP(OP_SIGNATURE_A, 0.3, 0.4));
+		retList.add(this.createFMP(OP_SIGNATURE_A, 0.5, 0.5));
+		return retList;
+	}
 
 	@Before
 	public void setUp() throws IllegalStateException,
 			AnalysisConfigurationException {
-		final Configuration config = new Configuration();
-		config.setProperty(ForecastingFilter.CONFIG_PROPERTY_DELTA_TIME, "1000");
-		config.setProperty(ForecastingFilter.CONFIG_PROPERTY_DELTA_UNIT,
-				"MINUTES");
-		config.setProperty(ForecastingFilter.CONFIG_PROPERTY_FC_METHOD, "MEAN");
-
-		this.forecasting = new ForecastingFilter(config);
-
-		this.sinkPlugin = new ListCollectionFilter<IForecastResult<Double>>(new Configuration());
-		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
-
 		this.controller = new AnalysisController();
-		this.controller.registerFilter(this.forecasting);
-		this.controller.registerFilter(this.sinkPlugin);
-		this.controller.connect(this.forecasting,
-				ForecastingFilter.OUTPUT_PORT_NAME_FORECAST, this.sinkPlugin,
-				ListCollectionFilter.INPUT_PORT_NAME);
+
+		// READER
+		final Configuration config = new Configuration();
+		final Configuration readerScoreCalcConfiguration = new Configuration();
+		readerScoreCalcConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
+		this.theReaderScoreCalc = new ListReader<ForecastMeasurementPair>(readerScoreCalcConfiguration);
+		this.theReaderScoreCalc.addAllObjects(this.createInputEventSetScoreCalc());
+		this.controller.registerReader(this.theReaderScoreCalc);
+
+		final Configuration scoreConfiguration = new Configuration();
+		this.scoreCalc = new AnomalyScoreCalculationFilter(scoreConfiguration);
+		this.controller.registerFilter(this.scoreCalc);
+
+		// SINK 1
+		this.sinkAnomalyScore = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration());
+		this.controller.registerFilter(this.sinkAnomalyScore);
+
+		// CONNECTION
+		this.controller
+				.connect(this.theReaderScoreCalc, ListReader.OUTPUT_PORT_NAME, this.scoreCalc, AnomalyScoreCalculationFilter.INPUT_PORT_CURRENT_FORECAST_PAIR);
+		this.controller
+				.connect(this.scoreCalc, AnomalyScoreCalculationFilter.OUTPUT_PORT_ANOMALY_SCORE, this.sinkAnomalyScore, ListCollectionFilter.INPUT_PORT_NAME);
 	}
 
+	// Test for the AnomalyScoreCalculation Filter
 	@Test
-	public void testFilterOnly() {
-		this.forecasting.inputEvent(new NamedDoubleTimeSeriesPoint(new Date(), 0.3, "a"));
-		this.forecasting.inputEvent(new NamedDoubleTimeSeriesPoint(new Date(), 0.4, "a"));
-		this.forecasting.inputEvent(new NamedDoubleTimeSeriesPoint(new Date(), 0.5, "a"));
+	public void testAnomalyScoreCalculationOnly() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
 
-		Assert.assertEquals(3, this.sinkPlugin.getList().size());
-		final IForecastResult<Double> lastresult = this.sinkPlugin.getList().get(2);
-		final ITimeSeriesPoint<Double> nextMeanFC = lastresult.getForecast().getPoints().get(0);
-		Assert.assertEquals(new Double(0.4), nextMeanFC.getValue());
+		final AnalysisControllerThread thread = new AnalysisControllerThread(this.controller);
+		thread.start();
+
+		Thread.sleep(1000);
+		thread.terminate();
+
+		Assert.assertEquals(3, this.sinkAnomalyScore.getList().size());
+		Assert.assertTrue(this.sinkAnomalyScore.getList().get(0).getValue().equals(new Double(0.19999999999999996)));
+		Assert.assertTrue(this.sinkAnomalyScore.getList().get(1).getValue().equals(new Double(0.1428571428571429)));
+		Assert.assertTrue(this.sinkAnomalyScore.getList().get(2).getValue().equals(new Double(0.0)));
 	}
 
 }
