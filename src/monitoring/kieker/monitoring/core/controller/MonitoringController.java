@@ -119,7 +119,7 @@ public final class MonitoringController extends AbstractController implements IM
 			LOG.warn("Shutdown Hook is disabled, loss of monitoring data might occur.");
 		}
 		LOG.info(monitoringController.toString());
-		monitoringController.saveMetadataAsRecord();
+		// monitoringController.saveMetadataAsRecord();
 		return monitoringController;
 	}
 
@@ -140,7 +140,7 @@ public final class MonitoringController extends AbstractController implements IM
 	@Override
 	protected final void cleanup() {
 		LOG.info("Shutting down Monitoring Controller (" + this.getName() + ")");
-		this.saveMetadataAsRecord();
+		// this.saveMetadataAsRecord();
 		this.probeController.terminate();
 		this.registryController.terminate();
 		this.timeSourceController.terminate();
