@@ -23,6 +23,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.common.util.Version;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.sampler.ISampler;
@@ -87,7 +88,7 @@ public final class MonitoringController extends AbstractController implements IM
 		if (monitoringController.probeController.isTerminated()) {
 			monitoringController.terminate();
 		}
-
+		monitoringController.setMonitoringController(monitoringController);
 		if (monitoringController.isTerminated()) {
 			return monitoringController;
 		}
@@ -118,6 +119,7 @@ public final class MonitoringController extends AbstractController implements IM
 			LOG.warn("Shutdown Hook is disabled, loss of monitoring data might occur.");
 		}
 		LOG.info(monitoringController.toString());
+		monitoringController.saveMetadataAsRecord();
 		return monitoringController;
 	}
 
@@ -138,6 +140,7 @@ public final class MonitoringController extends AbstractController implements IM
 	@Override
 	protected final void cleanup() {
 		LOG.info("Shutting down Monitoring Controller (" + this.getName() + ")");
+		this.saveMetadataAsRecord();
 		this.probeController.terminate();
 		this.registryController.terminate();
 		this.timeSourceController.terminate();
@@ -161,6 +164,17 @@ public final class MonitoringController extends AbstractController implements IM
 		sb.append(this.writerController.toString());
 		sb.append(this.samplingController.toString());
 		return sb.toString();
+	}
+
+	public final boolean saveMetadataAsRecord() {
+		return this.newMonitoringRecord(new KiekerMetadataRecord(
+				this.getName(), // controllerName
+				this.getHostname(), // hostname
+				this.getExperimentId(), // experimentId
+				this.getTimeSource().toString(), // timeSource
+				this.isDebug(), // debugMode
+				this.getNumberOfInserts() // numberOfRecords
+				));
 	}
 
 	protected SamplingController getSamplingController() {

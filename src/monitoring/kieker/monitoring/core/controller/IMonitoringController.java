@@ -35,4 +35,14 @@ public interface IMonitoringController extends
 	 * @return a String representation of the current controller
 	 */
 	public String toString();
+
+	/**
+	 * This method is used to log the status of the controllers to the configured writer.
+	 * The {@link kieker.common.record.misc.KiekerMetadataRecord} record is used.
+	 * 
+	 * @return true if successful
+	 * 
+	 * @since 1.7
+	 */
+	public boolean saveMetadataAsRecord();
 }
