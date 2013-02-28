@@ -28,7 +28,9 @@ import kieker.monitoring.writer.filesystem.async.FsWriterThread;
  * @author Matthias Rohr, Robert von Massow, Andre van Hoorn, Jan Waller
  */
 public final class AsyncFsWriter extends AbstractAsyncFSWriter {
-	public static final String CONFIG_FLUSH = AsyncFsWriter.class.getName() + ".flush";
+	private static final String PREFIX = AsyncFsWriter.class.getName() + ".";
+	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
+	public static final String CONFIG_BUFFER = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
 
 	public AsyncFsWriter(final Configuration configuration) {
 		super(configuration);
@@ -38,6 +40,6 @@ public final class AsyncFsWriter extends AbstractAsyncFSWriter {
 	protected final AbstractFsWriterThread initWorker(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
 			final MappingFileWriter mappingFileWriter, final String path, final int maxEntiresInFile, final int maxlogSize, final int maxLogFiles) {
 		return new FsWriterThread(monitoringController, writeQueue, mappingFileWriter, path, maxEntiresInFile, maxlogSize, maxLogFiles,
-				this.configuration.getBooleanProperty(CONFIG_FLUSH));
+				this.configuration.getBooleanProperty(CONFIG_FLUSH), this.configuration.getIntProperty(CONFIG_BUFFER));
 	}
 }

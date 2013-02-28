@@ -29,6 +29,8 @@ import kieker.monitoring.writer.filesystem.async.BinaryFsWriterThread;
  */
 public final class AsyncBinaryFsWriter extends AbstractAsyncFSWriter {
 
+	public static final String CONFIG_BUFFER = AsyncBinaryFsWriter.class.getName() + ".bufferSize"; // NOCS (afterPREFIX)
+
 	public AsyncBinaryFsWriter(final Configuration configuration) {
 		super(configuration);
 	}
@@ -36,6 +38,7 @@ public final class AsyncBinaryFsWriter extends AbstractAsyncFSWriter {
 	@Override
 	protected final AbstractFsWriterThread initWorker(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
 			final MappingFileWriter mappingFileWriter, final String path, final int maxEntiresInFile, final int maxlogSize, final int maxLogFiles) {
-		return new BinaryFsWriterThread(monitoringController, writeQueue, mappingFileWriter, path, maxEntiresInFile, maxlogSize, maxLogFiles);
+		return new BinaryFsWriterThread(monitoringController, writeQueue, mappingFileWriter, path, maxEntiresInFile, maxlogSize, maxLogFiles,
+				this.configuration.getIntProperty(CONFIG_BUFFER));
 	}
 }

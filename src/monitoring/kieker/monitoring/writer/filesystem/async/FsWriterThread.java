@@ -38,12 +38,14 @@ public final class FsWriterThread extends AbstractFsWriterThread {
 
 	private PrintWriter pos = null; // NOPMD (init for findbugs)
 	private final boolean autoflush;
+	private final int bufferSize;
 
 	public FsWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
 			final MappingFileWriter mappingFileWriter, final String path, final int maxEntiresInFile, final int maxLogSize, final int maxLogFiles,
-			final boolean autoflush) {
+			final boolean autoflush, final int bufferSize) {
 		super(monitoringController, writeQueue, mappingFileWriter, path, maxEntiresInFile, maxLogSize, maxLogFiles);
 		this.autoflush = autoflush;
+		this.bufferSize = bufferSize;
 	}
 
 	@Override
@@ -80,7 +82,7 @@ public final class FsWriterThread extends AbstractFsWriterThread {
 		if (this.autoflush) {
 			this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename), ENCODING), true);
 		} else {
-			this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), ENCODING)), false);
+			this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), ENCODING), this.bufferSize), false);
 		}
 		this.pos.flush();
 	}

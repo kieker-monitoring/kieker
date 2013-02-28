@@ -65,6 +65,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	public static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // NOCS (afterPREFIX)
 	public static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles"; // NOCS (afterPREFIX)
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
+	public static final String CONFIG_BUFFER = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
 
 	private static final Log LOG = LogFactory.getLog(SyncFsWriter.class);
 
@@ -73,6 +74,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 
 	// internal variables
 	private final boolean autoflush;
+	private final int bufferSize;
 	private final int maxEntriesInFile;
 	private final long maxLogSize;
 	private final int maxLogFiles;
@@ -96,6 +98,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	public SyncFsWriter(final Configuration configuration) throws IllegalArgumentException {
 		super(configuration);
 		this.autoflush = this.configuration.getBooleanProperty(CONFIG_FLUSH);
+		this.bufferSize = this.configuration.getIntProperty(CONFIG_BUFFER);
 		// get number of entries per file
 		this.maxEntriesInFile = this.configuration.getIntProperty(CONFIG_MAXENTRIESINFILE);
 		if (this.maxEntriesInFile < 1) {
@@ -227,7 +230,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		if (this.autoflush) {
 			this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename), ENCODING), true);
 		} else {
-			this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), ENCODING)), false);
+			this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), ENCODING), this.bufferSize), false);
 		}
 		this.pos.flush();
 	}
