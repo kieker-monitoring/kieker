@@ -22,7 +22,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -45,7 +45,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	private final List<AbstractAsyncThread> workers = new CopyOnWriteArrayList<AbstractAsyncThread>();
 	private final int queueFullBehavior;
 	private final int maxShutdownDelay;
-	private final AtomicInteger missedRecords;
+	private final AtomicLong missedRecords;
 
 	protected AbstractAsyncWriter(final Configuration configuration) {
 		super(configuration);
@@ -58,7 +58,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		} else {
 			this.queueFullBehavior = queueFullBehaviorTmp;
 		}
-		this.missedRecords = new AtomicInteger(0);
+		this.missedRecords = new AtomicLong(0);
 		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.configuration.getIntProperty(prefix + CONFIG_QUEUESIZE));
 		this.maxShutdownDelay = this.configuration.getIntProperty(prefix + CONFIG_SHUTDOWNDELAY);
 	}
@@ -136,8 +136,11 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 				}
 				return false;
 			case 2: // does nothing if queue is full
-				if (!this.blockingQueue.offer(monitoringRecord) && ((this.missedRecords.getAndIncrement() % 1000) == 0)) { // NOCS
-					LOG.warn("Queue is full, dropping records. Number of already dropped records: " + this.missedRecords.get());
+				if (!this.blockingQueue.offer(monitoringRecord)) {
+					final long tmpMissedRecords = this.missedRecords.getAndIncrement();
+					if ((tmpMissedRecords % 1000) == 0) {
+						LOG.warn("Queue is full, dropping records. Number of already dropped records: " + tmpMissedRecords);
+					}
 				}
 				return true;
 			default: // tries to add immediately (error if full)
