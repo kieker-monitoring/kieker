@@ -57,6 +57,7 @@ public class AnomalyDetectionFilter extends AbstractFilterPlugin {
 	private final double threshold;
 	public Double inputAnomalyScore;
 
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration config = new Configuration();
 		config.setProperty(CONFIG_PROPERTY_THRESHOLD, Double.toString(this.threshold));
@@ -68,9 +69,9 @@ public class AnomalyDetectionFilter extends AbstractFilterPlugin {
 
 		// TODO check for null value?!
 		if (anomalyScore.getDoubleValue() > this.threshold) {
-			super.deliver(OUTPUT_PORT_ANOMALY_SCORE_ELSE, anomalyScore);
-		} else {
 			super.deliver(OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY, anomalyScore);
+		} else {
+			super.deliver(OUTPUT_PORT_ANOMALY_SCORE_ELSE, anomalyScore);
 		}
 	}
 
