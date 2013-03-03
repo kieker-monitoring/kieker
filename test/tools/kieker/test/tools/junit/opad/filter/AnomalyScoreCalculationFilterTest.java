@@ -35,6 +35,8 @@ import kieker.tools.opad.record.ForecastMeasurementPair;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 
 /**
+ * Test for the AnomalyScoreCalculationFilter. Therefore comparing the result of the Filter with some
+ * previous calculated Results.
  * 
  * @author Tom Frotscher
  * 

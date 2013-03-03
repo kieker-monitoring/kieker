@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.opad;
+package kieker.test.tools.junit.opad.filter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,19 +30,20 @@ import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.tools.opad.filter.AnomalyDetectionFilter;
-import kieker.tools.opad.filter.AnomalyScoreCalculationFilter;
-import kieker.tools.opad.filter.ForecastingFilter;
 import kieker.tools.opad.filter.ResponseTimeExtractionFilter;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 
 /**
- * This test creates some OperationExecutionRecords and let them run through all currently
- * available OPAD Filter.
+ * This Filter creates some OperationExecutionRecords and let them run trough the
+ * ResponseTimeExtractionFilter. We assume that the Output corresponds to tin - tout, here:
+ * 1002 - 1001 = 1.0
+ * 22243 - 4000 = 18243.0
+ * 5057 - 4021 = 1036.0
  * 
  * @author Tom Frotscher
+ * 
  */
-public class OpadIntegrationTest {
+public class ResponseTimeExtractionFilterTest {
 
 	private AnalysisController controller;
 	private static final String OP_SIGNATURE_A = "a.A.opA";
@@ -69,17 +70,7 @@ public class OpadIntegrationTest {
 
 	// Variables ResponsetimeExtractionFilter
 	private ResponseTimeExtractionFilter responsetimeExtr;
-
-	// Variables ForecastingFilter
-	private ForecastingFilter forecasting;
-
-	// Variables AnomalyScoreCalculationFilter
-	private AnomalyScoreCalculationFilter scoreCalc;
-
-	// Variables AnomalyDetectionFilter
-	private AnomalyDetectionFilter anomalyDetectionFilter;
-	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPluginIfAnomaly;
-	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPluginElse;
+	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPlugin;
 
 	@Before
 	public void setUp() throws IllegalStateException,
@@ -95,72 +86,26 @@ public class OpadIntegrationTest {
 		// End - Read OperationExecutionRecords
 
 		// Start - ResponseTimeExtractionFilter Configuration
-		// ResponseTimeExtractionFilter Configuration
 		final Configuration ResponseTimeExtractionConfiguration = new Configuration();
 		this.responsetimeExtr = new ResponseTimeExtractionFilter(ResponseTimeExtractionConfiguration);
 		this.controller.registerFilter(this.responsetimeExtr);
 		// End - ResponseTimeExtractionFilter
 
-		// Start - ForecastingFilter
-		// ForecastingFilter Configuration
-		final Configuration forecastConfiguration = new Configuration();
-		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_DELTA_TIME, "1000");
-		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_DELTA_UNIT,
-				"MILLISECONDS");
-		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_FC_METHOD, "MEAN");
-		this.forecasting = new ForecastingFilter(forecastConfiguration);
-		this.controller.registerFilter(this.forecasting);
-		// End - ForecastingFilter
-
-		// Start - AnomalyScoreCalculatorFilter
-		final Configuration scoreConfiguration = new Configuration();
-		this.scoreCalc = new AnomalyScoreCalculationFilter(scoreConfiguration);
-		this.controller.registerFilter(this.scoreCalc);
-		// End - AnomalyScoreCalculatorFilter
-
-		// Start - AnomalyDetectionFilter
-		// AnomalyDetectionFilter Configuration
-		final Configuration configAnomaly = new Configuration();
-		configAnomaly.setProperty(AnomalyDetectionFilter.CONFIG_PROPERTY_THRESHOLD, "0.6");
-		this.anomalyDetectionFilter = new AnomalyDetectionFilter(configAnomaly);
-		this.controller.registerFilter(this.anomalyDetectionFilter);
-
-		// SINK 1 Mock-up
-		this.sinkPluginIfAnomaly = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration());
-		this.controller.registerFilter(this.sinkPluginIfAnomaly);
-
-		// SINK 2 Mock-up
-		this.sinkPluginElse = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration());
-		this.controller.registerFilter(this.sinkPluginElse);
-		// End - AnomalyDetectionFilter
+		// SINK Mock-up
+		this.sinkPlugin = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration());
+		this.controller.registerFilter(this.sinkPlugin);
 
 		// CONNECT the filters
 		// Mock-up Reader (OperationExecutionRecords) -> ResponseTimeExtractionFIlter
 		this.controller
 				.connect(this.theReaderOperationExecutionRecords, ListReader.OUTPUT_PORT_NAME, this.responsetimeExtr,
 						ResponseTimeExtractionFilter.INPUT_PORT_NAME_VALUE);
-		// ResponseTimeExtractionFilter -> Forecast Input
+		// ResponseTimeExtractionFilter -> SinkPlugin Mock-up
 		this.controller
-				.connect(this.responsetimeExtr, ResponseTimeExtractionFilter.OUTPUT_PORT_NAME_VALUE, this.forecasting,
-						ForecastingFilter.INPUT_PORT_NAME_TSPOINT);
-		// Forecast Output -> AnomalyScoreCalculation Input
-		this.controller
-				.connect(this.forecasting, ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, this.scoreCalc,
-						AnomalyScoreCalculationFilter.INPUT_PORT_CURRENT_FORECAST_PAIR);
-		// ScoreCalculation Output -> AnomalyDetection Input
-		this.controller
-				.connect(this.scoreCalc, AnomalyScoreCalculationFilter.OUTPUT_PORT_ANOMALY_SCORE, this.anomalyDetectionFilter,
-						AnomalyDetectionFilter.INPUT_PORT_ANOMALY_SCORE);
-
-		// AnomalyDetection Output -> Mock-up Sinks
-		this.controller
-				.connect(this.anomalyDetectionFilter, AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY, this.sinkPluginIfAnomaly,
-						ListCollectionFilter.INPUT_PORT_NAME);
-		this.controller
-				.connect(this.anomalyDetectionFilter, AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_ELSE, this.sinkPluginElse,
+				.connect(this.responsetimeExtr, ResponseTimeExtractionFilter.OUTPUT_PORT_NAME_VALUE, this.sinkPlugin,
 						ListCollectionFilter.INPUT_PORT_NAME);
 
-		Assert.assertTrue(this.sinkPluginIfAnomaly.getList().isEmpty());
+		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
 
 	}
 
@@ -174,9 +119,10 @@ public class OpadIntegrationTest {
 		Thread.sleep(2000);
 		thread.terminate();
 
-		Assert.assertEquals(1, this.sinkPluginIfAnomaly.getList().size());
-		Assert.assertEquals(2, this.sinkPluginElse.getList().size());
+		Assert.assertEquals(3, this.sinkPlugin.getList().size());
+		Assert.assertEquals(1.0, this.sinkPlugin.getList().get(0).getDoubleValue(), 0);
+		Assert.assertEquals(18243.0, this.sinkPlugin.getList().get(1).getDoubleValue(), 0);
+		Assert.assertEquals(1036.0, this.sinkPlugin.getList().get(2).getDoubleValue(), 0);
 
 	}
-
 }
