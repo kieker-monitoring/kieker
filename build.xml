@@ -617,7 +617,9 @@
 			<tarfileset file="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated"
 						fullpath="${kieker.dist.name}/${src.userguide.example.aspectj.dir}/.classpath" />
 			<tarfileset file="${src.userguide.example.jms.dir}/.classpath-binrelease.generated"
-						fullpath="${kieker.dist.name}/${src.userguide.example.jms.dir}/.classpath" />			
+						fullpath="${kieker.dist.name}/${src.userguide.example.jms.dir}/.classpath" />
+			<tarfileset file="${src.userguide.example.sigar.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.userguide.example.sigar.dir}/.classpath" />
 		</tar>
 		<gzip zipfile="${release.dir}/${dist.kieker.binBaseName}.tar.gz" src="${release.dir}/${dist.kieker.binBaseName}.tar" />
 		<!-- tar file no longer needed -->
@@ -652,6 +654,8 @@
 						fullpath="${kieker.dist.name}/${src.userguide.example.aspectj.dir}/.classpath" />
 			<zipfileset file="${src.userguide.example.jms.dir}/.classpath-binrelease.generated"
 						fullpath="${kieker.dist.name}/${src.userguide.example.jms.dir}/.classpath" />
+			<zipfileset file="${src.userguide.example.sigar.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.userguide.example.sigar.dir}/.classpath" />
 		</zip>
 	</target>
 
@@ -670,6 +674,7 @@
 		<copy file="${src.userguide.example.extended.dir}/.classpath" tofile="${src.userguide.example.extended.dir}/.classpath-binrelease.generated" overwrite="true"/>
 		<copy file="${src.userguide.example.aspectj.dir}/.classpath" tofile="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated" overwrite="true"/>
 		<copy file="${src.userguide.example.jms.dir}/.classpath" tofile="${src.userguide.example.jms.dir}/.classpath-binrelease.generated" overwrite="true"/>
+		<copy file="${src.userguide.example.sigar.dir}/.classpath" tofile="${src.userguide.example.sigar.dir}/.classpath-binrelease.generated" overwrite="true"/>
 		
 		<!-- Examples using the plain Jar -->
 		<replaceregexp byline="true" flags="g">
@@ -707,6 +712,7 @@
 		  <fileset dir=".">
 		    <include name="${example.microbenchmark.dir}/.classpath-binrelease.generated"/>
 		    <include name="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated"/>
+		  	<include name="${src.userguide.example.sigar.dir}/.classpath-binrelease.generated"/>
 		  </fileset>
 		</replaceregexp>
 	</target>
