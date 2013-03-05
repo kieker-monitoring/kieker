@@ -358,6 +358,7 @@
 			<include name="${test.dir}/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/webapp/**" />
 			<include name="${lib.dir}/**" />
 			<include name="${examples.dir}/**/*" />
+			<exclude name="${examples.dir}/**/.classpath-binrelease.generated" />
 			<exclude name="${src.userguide.examples.dir}/**/lib/**/*" />
 			<exclude name="${src.userguide.examples.dir}/**/**/*.jar" />
 			<include name="${example.javaee.dir}/README" />
@@ -572,6 +573,7 @@
 			<include name="${src.userguide.dist.pdf}" />
 			<include name="${examples.dir}/**/*" />
 			<exclude name="${examples.dir}/**/*.sh" /> <!-- added in bin mode below -->
+			<exclude name="${examples.dir}/**/.classpath*" />
 			<exclude name="${src.userguide.examples.dir}/**/lib/**/*" />
 			<include name="${example.javaee.dir}/README" />
 			<include name="${example.javaee.dir}/${license.file}" />
@@ -603,6 +605,19 @@
 						prefix="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
 			<tarfileset file="${lib.dir}/aspectjweaver-*"
 						prefix="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
+
+			<tarfileset file="${example.microbenchmark.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${example.microbenchmark.dir}/.classpath" />
+			<tarfileset file="${src.userguide.example.bookstore.dir}/.classpath"
+						fullpath="${kieker.dist.name}/${src.userguide.example.bookstore.dir}/.classpath" /> <!-- leave "as-is" -->
+			<tarfileset file="${src.userguide.example.manual.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.userguide.example.manual.dir}/.classpath" />
+			<tarfileset file="${src.userguide.example.extended.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.userguide.example.extended.dir}/.classpath" />
+			<tarfileset file="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.userguide.example.aspectj.dir}/.classpath" />
+			<tarfileset file="${src.userguide.example.jms.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.userguide.example.jms.dir}/.classpath" />			
 		</tar>
 		<gzip zipfile="${release.dir}/${dist.kieker.binBaseName}.tar.gz" src="${release.dir}/${dist.kieker.binBaseName}.tar" />
 		<!-- tar file no longer needed -->
@@ -624,6 +639,19 @@
 						prefix="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
 			<zipfileset file="${lib.dir}/aspectjweaver-*"
 						prefix="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
+			
+			<zipfileset file="${example.microbenchmark.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${example.microbenchmark.dir}/.classpath" />
+			<zipfileset file="${src.userguide.example.bookstore.dir}/.classpath"
+						fullpath="${kieker.dist.name}/${src.userguide.example.bookstore.dir}/.classpath" /> <!-- leave "as-is" -->
+			<zipfileset file="${src.userguide.example.manual.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.userguide.example.manual.dir}/.classpath" />
+			<zipfileset file="${src.userguide.example.extended.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.userguide.example.extended.dir}/.classpath" />
+			<zipfileset file="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.userguide.example.aspectj.dir}/.classpath" />
+			<zipfileset file="${src.userguide.example.jms.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.userguide.example.jms.dir}/.classpath" />
 		</zip>
 	</target>
 
@@ -635,6 +663,52 @@
 		<ant antfile="build.xml" dir="${src.userguide.example.jms.dir}" target="clean" />
 		<ant antfile="build.xml" dir="${src.userguide.example.sigar.dir}" target="clean" />
 		<copy file="${kieker.monitoring.default.properties}" tofile="${src.userguide.example.aspectj.dir}/META-INF/kieker.monitoring.properties" />
+		
+		<!-- Create .classpath variant for binary release(#710) -->
+		<copy file="${example.microbenchmark.dir}/.classpath" tofile="${example.microbenchmark.dir}/.classpath-binrelease.generated" overwrite="true"/>
+		<copy file="${src.userguide.example.manual.dir}/.classpath" tofile="${src.userguide.example.manual.dir}/.classpath-binrelease.generated" overwrite="true"/>
+		<copy file="${src.userguide.example.extended.dir}/.classpath" tofile="${src.userguide.example.extended.dir}/.classpath-binrelease.generated" overwrite="true"/>
+		<copy file="${src.userguide.example.aspectj.dir}/.classpath" tofile="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated" overwrite="true"/>
+		<copy file="${src.userguide.example.jms.dir}/.classpath" tofile="${src.userguide.example.jms.dir}/.classpath-binrelease.generated" overwrite="true"/>
+		
+		<!-- Examples using the plain Jar -->
+		<replaceregexp byline="true" flags="g">
+		  <regexp pattern="&lt;classpathentry .*/Kieker&quot;.*"/>
+		  <substitution expression="&lt;classpathentry kind=&quot;lib&quot; path=&quot;lib/${dist.kieker.main.jar}&quot;/&gt;"/>
+		  <fileset dir=".">
+		  	<include name="${src.userguide.example.jms.dir}/.classpath-binrelease.generated"/>
+		  </fileset>
+		</replaceregexp>
+		
+		<!-- Examples using the EMF Jar -->
+		<replaceregexp byline="true" flags="g">
+		  <regexp pattern="&lt;classpathentry .*/Kieker&quot;.*"/>
+		  <substitution expression="&lt;classpathentry kind=&quot;lib&quot; path=&quot;lib/${dist.kieker.main.emf.jar}&quot;/&gt;"/>
+		  <fileset dir=".">
+		    <include name="${src.userguide.example.manual.dir}/.classpath-binrelease.generated"/>
+		  	<include name="${src.userguide.example.extended.dir}/.classpath-binrelease.generated"/>
+		  </fileset>
+		</replaceregexp>
+		
+		<!-- Examples using the AspectJ Jar -->
+		<replaceregexp byline="true" flags="g">
+		  <regexp pattern="&lt;classpathentry .*/Kieker&quot;.*"/>
+		  <substitution expression="&lt;classpathentry kind=&quot;lib&quot; path=&quot;lib//${dist.kieker.main.aspectj.jar}&quot;/&gt;"/>
+		  <fileset dir=".">
+		    <include name="${example.microbenchmark.dir}/.classpath-binrelease.generated"/>
+		    <include name="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated"/>
+		  </fileset>
+		</replaceregexp>
+		
+		<!-- Examples referencing libs from /Kieker/lib/ -->
+		<replaceregexp byline="true" flags="g">
+		  <regexp pattern="(&lt;classpathentry .*)/Kieker/lib/(.*&quot;.*)"/>
+		  <substitution expression="\1lib/\2"/>
+		  <fileset dir=".">
+		    <include name="${example.microbenchmark.dir}/.classpath-binrelease.generated"/>
+		    <include name="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated"/>
+		  </fileset>
+		</replaceregexp>
 	</target>
 
 	<target name="-build-userguide-examples" depends="-init,build-all,clean-userguide-examples" description="Builds all userguide examples">

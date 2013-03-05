@@ -156,6 +156,14 @@ function assert_files_exist_common {
     assert_file_exists_regular "lib/aspectjrt-${aspectjversion}.jar"
     assert_file_exists_regular "lib/aspectjtools-${aspectjversion}.jar"
     assert_file_exists_regular "lib/aspectjweaver-${aspectjversion}.jar"
+    
+	assert_file_exists_regular "examples/OverheadEvaluationMicrobenchmark/.classpath"
+	assert_file_exists_regular "examples/userguide/appendix-JMS/.classpath"
+	assert_file_exists_regular "examples/userguide/ch2--manual-instrumentation/.classpath"
+	assert_file_exists_regular "examples/userguide/ch2--bookstore-application/.classpath"
+	assert_file_exists_regular "examples/userguide/appendix-Sigar/.classpath"
+	assert_file_exists_regular "examples/userguide/ch5--trace-monitoring-aspectj/.classpath"
+	assert_file_exists_regular "examples/userguide/ch3-4--custom-components/.classpath"
 }
 
 # Asserts the existence of files in the src release
