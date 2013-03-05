@@ -22,7 +22,6 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.filter.AbstractTimestampFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 
 /**
@@ -46,7 +45,7 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
 			@Property(name = TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, defaultValue = "0"),
 			@Property(name = TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, defaultValue = "9223372036854775807") // Long.toString(Long.MAX_VALUE)
 		})
-public class TimestampFilter extends AbstractTimestampFilter {
+public class TimestampFilter extends kieker.tools.traceAnalysis.filter.AbstractTimestampFilter {
 
 	/** This is the name of the input port receiving new executions. */
 	public static final String INPUT_PORT_NAME_EXECUTION = "executions";

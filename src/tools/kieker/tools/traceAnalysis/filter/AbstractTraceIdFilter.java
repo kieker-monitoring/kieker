@@ -20,7 +20,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import kieker.analysis.IProjectContext;
-import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
 /**
@@ -31,7 +30,7 @@ import kieker.common.configuration.Configuration;
  * @deprecated To be removed in Kieker 1.8
  */
 @Deprecated
-public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
+public abstract class AbstractTraceIdFilter extends kieker.analysis.plugin.filter.AbstractFilterPlugin {
 	/**
 	 * List of trace IDs to accept. Set null to accept any ID.
 	 */
