@@ -153,7 +153,6 @@ function assert_files_exist_common {
     done
     
     # make sure that specified AspectJ version matches the present files
-    aspectjversion="$(grep "lib.aspectj.version=" build.properties | sed s/.*=//g)"
     assert_file_exists_regular "lib/aspectjrt-${aspectjversion}.jar"
     assert_file_exists_regular "lib/aspectjtools-${aspectjversion}.jar"
     assert_file_exists_regular "lib/aspectjweaver-${aspectjversion}.jar"
@@ -373,6 +372,8 @@ function assert_no_common_files_in_archives {
 ##
 ## "main" 
 ##
+
+aspectjversion="$(grep "lib.aspectj.version=" build.properties | sed s/.*=//g)"
 
 assert_dir_exists ${BASE_TMP_DIR}
 change_dir "${BASE_TMP_DIR}"
