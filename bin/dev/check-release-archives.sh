@@ -151,6 +151,12 @@ function assert_files_exist_common {
 	JAR_BASE=$(echo ${jar} | sed 's/\(.*\)\..*/\1/') # remove file extension
 	assert_file_exists_regular "${JAR_BASE}.LICENSE"
     done
+    
+    # make sure that specified AspectJ version matches the present files
+    aspectjversion="$(grep "lib.aspectj.version=" build.properties | sed s/.*=//g)"
+    assert_file_exists_regular "lib/aspectjrt-${aspectjversion}.jar"
+    assert_file_exists_regular "lib/aspectjtools-${aspectjversion}.jar"
+    assert_file_exists_regular "lib/aspectjweaver-${aspectjversion}.jar"
 }
 
 # Asserts the existence of files in the src release

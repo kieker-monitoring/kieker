@@ -44,6 +44,19 @@
 
 	<target name="-update-version" unless="version.noupdate" depends="-init-version" description="Updates the version number contained in the Kieker sources">
 		<replaceregexp file="${src.kieker.common.dir}/kieker/common/util/Version.java" match="VERSION = &quot;.*?&quot;" replace="VERSION = &quot;${kieker.version}&quot;" />
+		
+		<!-- Update the AspectJ version in various files -->
+		<replaceregexp byline="true" flags="g">
+		  <regexp pattern="(aspectj.*)-.*.jar"/>
+		  <substitution expression="\1-${lib.aspectj.version}.jar"/>
+		  <fileset dir=".">
+		    <include name="${src.userguide.dir}/Macros.tex"/>
+		  	<include name="${example.javaee.jetty.dir}/start.ini"/>
+	    	<include name="${example.javaee.jetty.dir}/start.KiekerAspectJActivated.ini"/>
+		  	<include name="${src.userguide.example.aspectj.dir}/BookstoreStarter.launch"/>
+    		<include name=".classpath"/>
+		  </fileset>
+		</replaceregexp>
 	</target>
 
 	<target name="build-all" depends="clean,-init,build-kieker.main,build-kieker.main.aspectj,build-kieker.main.emf" description="Compiles and packages the Kieker Jar and War files (calls the 'build-kieker-*' targets)">
