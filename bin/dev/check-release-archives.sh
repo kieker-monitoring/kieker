@@ -124,6 +124,7 @@ function assert_file_exists_regular {
 # Asserts the existence of files common to the src and bin releases
 function assert_files_exist_common {
     assert_dir_exists "bin/"
+    assert_file_exists_regular "bin/log4j.properties"
     assert_dir_exists "doc/"
     assert_dir_exists "examples/"
     assert_dir_exists "lib/"
