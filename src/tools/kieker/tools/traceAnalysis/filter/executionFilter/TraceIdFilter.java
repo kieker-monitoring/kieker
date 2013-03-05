@@ -21,7 +21,6 @@ import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.filter.AbstractTraceIdFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 
 /**
@@ -40,7 +39,7 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
 		outputPorts = {
 			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MATCH, description = "Forwards executions with matching trace IDs", eventTypes = { Execution.class })
 		})
-public class TraceIdFilter extends AbstractTraceIdFilter {
+public class TraceIdFilter extends kieker.tools.traceAnalysis.filter.AbstractTraceIdFilter {
 
 	/** This is the name of the input port receiving new executions. */
 	public static final String INPUT_PORT_NAME_EXECUTION = "executions";
