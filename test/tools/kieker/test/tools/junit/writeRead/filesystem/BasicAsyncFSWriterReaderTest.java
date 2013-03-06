@@ -22,7 +22,7 @@ import kieker.monitoring.writer.filesystem.AsyncFsWriter;
 
 /**
  * 
- * @author André van Hoorn
+ * @author Andre van Hoorn
  * 
  */
 public class BasicAsyncFSWriterReaderTest extends AbstractTestFSWriterReader { // NOPMD (TestClassWithoutTestCases) // NOCS (MissingCtorCheck)
@@ -40,8 +40,7 @@ public class BasicAsyncFSWriterReaderTest extends AbstractTestFSWriterReader { /
 
 	@Override
 	protected void refineWriterConfiguration(final Configuration config, final int numRecordsWritten) {
-		config.setProperty(this.getClass().getName() + "." + AsyncFsWriter.CONFIG_FLUSH, Boolean.toString(BasicAsyncFSWriterReaderTest.FLUSH));
-		// TODO: additional configuration parameters
+		config.setProperty(AsyncFsWriter.CONFIG_FLUSH, Boolean.toString(BasicAsyncFSWriterReaderTest.FLUSH));
 	}
 
 	@Override

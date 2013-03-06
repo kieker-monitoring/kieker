@@ -17,13 +17,14 @@
 package kieker.test.tools.junit.writeRead.filesystem;
 
 import kieker.common.configuration.Configuration;
+import kieker.common.util.filesystem.BinaryCompressionMethod;
 import kieker.monitoring.writer.IMonitoringWriter;
 import kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter;
 
 /**
- * @author Andre van Hoorn
+ * @author Jan Waller
  */
-public class BasicAsyncBinaryFSWriterReaderTest extends AbstractTestFSWriterReader { // NOPMD (TestClassWithoutTestCases) // NOCS (MissingCtorCheck)
+public class ZipAsyncBinaryFSWriterReaderTest extends AbstractTestFSWriterReader { // NOPMD (TestClassWithoutTestCases) // NOCS (MissingCtorCheck)
 
 	@Override
 	protected Class<? extends IMonitoringWriter> getTestedWriterClazz() {
@@ -32,12 +33,12 @@ public class BasicAsyncBinaryFSWriterReaderTest extends AbstractTestFSWriterRead
 
 	@Override
 	protected void refineWriterConfiguration(final Configuration config, final int numRecordsWritten) {
-		// not needed
+		config.setProperty(AsyncBinaryFsWriter.CONFIG_COMPRESS, BinaryCompressionMethod.ZIP.name());
 	}
 
 	@Override
 	protected boolean terminateBeforeLogInspection() {
-		return true; // because the AsyncBinaryFsWriter does not flush
+		return true; // because the AsyncBinaryFsWriter doesn't flush
 	}
 
 	@Override

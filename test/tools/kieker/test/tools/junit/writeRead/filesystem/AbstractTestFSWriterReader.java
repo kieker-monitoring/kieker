@@ -37,6 +37,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.writer.AbstractAsyncWriter;
 import kieker.monitoring.writer.IMonitoringWriter;
 import kieker.monitoring.writer.filesystem.AbstractAsyncFSWriter;
 import kieker.monitoring.writer.filesystem.AsyncFsWriter;
@@ -48,10 +49,6 @@ import kieker.test.tools.junit.writeRead.printStream.BasicPrintStreamWriterTestF
  * @author Andre van Hoorn
  */
 public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTest {
-	// TODO: constants are private in AbstractAsyncWriter ... why?
-	private static final String CONFIG_ASYNC_WRITER_QUEUESIZE = "QueueSize";
-	private static final String CONFIG_ASYNC_WRITER_BEHAVIOR = "QueueFullBehavior";
-	private static final String CONFIG_ASYNC_WRITER_SHUTDOWNDELAY = "MaxShutdownDelay";
 
 	private static final String ENCODING = "UTF-8";
 
@@ -75,10 +72,9 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncFSWriter.CONFIG_TEMP, Boolean.FALSE.toString());
 		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncFSWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
 
-		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractTestFSWriterReader.CONFIG_ASYNC_WRITER_QUEUESIZE,
-				Integer.toString(numRecordsWritten * 2));
-		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractTestFSWriterReader.CONFIG_ASYNC_WRITER_BEHAVIOR, "0");
-		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractTestFSWriterReader.CONFIG_ASYNC_WRITER_SHUTDOWNDELAY, "-1");
+		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncWriter.CONFIG_QUEUESIZE, Integer.toString(numRecordsWritten * 2));
+		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncWriter.CONFIG_BEHAVIOR, "0");
+		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncWriter.CONFIG_SHUTDOWNDELAY, "-1");
 
 		// Give extending classes the chance to refine the configuration
 		this.refineWriterConfiguration(config, numRecordsWritten);

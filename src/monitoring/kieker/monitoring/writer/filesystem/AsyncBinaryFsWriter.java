@@ -19,7 +19,10 @@ package kieker.monitoring.writer.filesystem;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.filesystem.BinaryCompressionMethod;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.writer.filesystem.async.AbstractFsWriterThread;
 import kieker.monitoring.writer.filesystem.async.BinaryFsWriterThread;
@@ -29,7 +32,11 @@ import kieker.monitoring.writer.filesystem.async.BinaryFsWriterThread;
  */
 public final class AsyncBinaryFsWriter extends AbstractAsyncFSWriter {
 
-	public static final String CONFIG_BUFFER = AsyncBinaryFsWriter.class.getName() + ".bufferSize"; // NOCS (afterPREFIX)
+	private static final String PREFIX = AsyncBinaryFsWriter.class.getName() + ".";
+	public static final String CONFIG_BUFFER = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
+	public static final String CONFIG_COMPRESS = PREFIX + "compress";
+
+	private static final Log LOG = LogFactory.getLog(AsyncBinaryFsWriter.class);
 
 	public AsyncBinaryFsWriter(final Configuration configuration) {
 		super(configuration);
@@ -38,7 +45,14 @@ public final class AsyncBinaryFsWriter extends AbstractAsyncFSWriter {
 	@Override
 	protected final AbstractFsWriterThread initWorker(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
 			final MappingFileWriter mappingFileWriter, final String path, final int maxEntiresInFile, final int maxlogSize, final int maxLogFiles) {
+		BinaryCompressionMethod method;
+		try {
+			method = BinaryCompressionMethod.valueOf(this.configuration.getStringProperty(CONFIG_COMPRESS));
+		} catch (final IllegalArgumentException ex) {
+			LOG.warn("Failed to select compression method. Using NONE instead. " + ex.getMessage());
+			method = BinaryCompressionMethod.NONE;
+		}
 		return new BinaryFsWriterThread(monitoringController, writeQueue, mappingFileWriter, path, maxEntiresInFile, maxlogSize, maxLogFiles,
-				this.configuration.getIntProperty(CONFIG_BUFFER));
+				this.configuration.getIntProperty(CONFIG_BUFFER), method);
 	}
 }

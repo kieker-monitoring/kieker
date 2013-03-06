@@ -16,7 +16,6 @@
 
 package kieker.analysis.plugin.reader.filesystem;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.EOFException;
@@ -39,6 +38,7 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.util.StringUtils;
+import kieker.common.util.filesystem.BinaryCompressionMethod;
 
 /**
  * Reads the contents of a single file system log directory and passes the records to the registered receiver of type {@link IMonitoringRecordReceiver}.
@@ -51,7 +51,6 @@ final class FSDirectoryReader implements Runnable {
 	private static final String LEGACY_FILE_PREFIX = "tpmon";
 	private static final String NORMAL_FILE_PREFIX = "kieker";
 	private static final String NORMAL_FILE_POSTFIX = ".dat";
-	private static final String BINARY_FILE_POSTFIX = ".bin";
 
 	private static final String ENCODING = "UTF-8";
 
@@ -96,17 +95,17 @@ final class FSDirectoryReader implements Runnable {
 		final File[] inputFiles = this.inputDir.listFiles(new FileFilter() {
 
 			public boolean accept(final File pathname) {
+				final String name = pathname.getName();
 				return pathname.isFile()
-						&& pathname.getName().startsWith(FSDirectoryReader.this.filePrefix)
-						&& (pathname.getName().endsWith(NORMAL_FILE_POSTFIX) || pathname.getName().endsWith(BINARY_FILE_POSTFIX));
+						&& name.startsWith(FSDirectoryReader.this.filePrefix)
+						&& (name.endsWith(NORMAL_FILE_POSTFIX) || BinaryCompressionMethod.hasValidFileExtension(name));
 			}
 		});
 		if (inputFiles == null) {
 			LOG.error("Directory '" + this.inputDir + "' does not exist or an I/O error occured.");
 		} else if (inputFiles.length == 0) {
 			// level 'warn' for this case, because this is not unusual for large monitoring logs including a number of directories
-			LOG.warn("Directory '" + this.inputDir + "' contains no files starting with '" + this.filePrefix + "' and ending with '"
-					+ NORMAL_FILE_POSTFIX + "' or '" + BINARY_FILE_POSTFIX + "'.");
+			LOG.warn("Directory '" + this.inputDir + "' contains no files starting with '" + this.filePrefix + "' and ending with a valid file extension.");
 		} else { // everything ok, we process the files
 			Arrays.sort(inputFiles, new Comparator<File>() {
 
@@ -122,12 +121,18 @@ final class FSDirectoryReader implements Runnable {
 				LOG.info("< Loading " + inputFile.getAbsolutePath());
 				if (inputFile.getName().endsWith(NORMAL_FILE_POSTFIX)) {
 					this.processNormalInputFile(inputFile);
-				} else if (inputFile.getName().endsWith(BINARY_FILE_POSTFIX)) {
+				} else {
 					if (this.ignoreUnknownRecordTypes) {
 						LOG.warn("The property '" + FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES
 								+ "' is not supported for binary files. But trying to read '" + inputFile + "'");
 					}
-					this.processBinaryInputFile(inputFile);
+					try {
+						final BinaryCompressionMethod method = BinaryCompressionMethod.getByFileExtension(inputFile.getName());
+						this.processBinaryInputFile(inputFile, method);
+					} catch (final IllegalArgumentException ex) {
+						LOG.warn("Unknown file extension for file " + inputFile);
+						continue;
+					}
 				}
 			}
 		}
@@ -304,11 +309,13 @@ final class FSDirectoryReader implements Runnable {
 	 * 
 	 * @param inputFile
 	 *            The input file which should be processed.
+	 * @param compressionMethod
+	 *            Whether the input file is compressed.
 	 */
-	private final void processBinaryInputFile(final File inputFile) {
+	private final void processBinaryInputFile(final File inputFile, final BinaryCompressionMethod method) {
 		DataInputStream in = null;
 		try {
-			in = new DataInputStream(new BufferedInputStream(new FileInputStream(inputFile), 1048576)); // 1 MB buffer
+			in = method.getDataInputStream(inputFile, 1048576); // 1 MB buffer
 			while (true) {
 				final Integer id;
 				try {
