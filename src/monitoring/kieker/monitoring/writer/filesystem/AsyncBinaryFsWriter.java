@@ -34,7 +34,7 @@ public final class AsyncBinaryFsWriter extends AbstractAsyncFSWriter {
 
 	private static final String PREFIX = AsyncBinaryFsWriter.class.getName() + ".";
 	public static final String CONFIG_BUFFER = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
-	public static final String CONFIG_COMPRESS = PREFIX + "compress";
+	public static final String CONFIG_COMPRESS = PREFIX + "compress"; // NOCS (afterPREFIX)
 
 	private static final Log LOG = LogFactory.getLog(AsyncBinaryFsWriter.class);
 

@@ -86,7 +86,7 @@
 
 	<Match>
 		<Class name="kieker.analysis.plugin.reader.filesystem.FSDirectoryReader" />
-		<Method name="processBinaryInputFile" params="java.io.File" returns="void" />
+		<Method name="processBinaryInputFile" params="java.io.File,kieker.common.util.filesystem.BinaryCompressionMethod" returns="void" />
 		<Bug pattern="REC_CATCH_EXCEPTION" />
 	</Match>
 
