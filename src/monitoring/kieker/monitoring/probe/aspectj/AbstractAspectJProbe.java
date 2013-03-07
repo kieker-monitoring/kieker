@@ -16,8 +16,13 @@
 
 package kieker.monitoring.probe.aspectj;
 
+import java.lang.reflect.Modifier;
+
+import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.ConstructorSignature;
+import org.aspectj.lang.reflect.MethodSignature;
 
 import kieker.monitoring.probe.IMonitoringProbe;
 
@@ -40,4 +45,92 @@ public abstract class AbstractAspectJProbe implements IMonitoringProbe {
 
 	@Pointcut("!getter() && !setter()")
 	public void noGetterAndSetter() {} // NOPMD (Aspect)
+
+	/**
+	 * Better handling of AspectJ Signature.toLongString (especially with constructors)
+	 * 
+	 * @param sig
+	 *            an AspectJ Signature
+	 * @return LongString representation of the signature
+	 */
+	protected String signatureToLongString(final Signature sig) {
+		if (sig instanceof MethodSignature) {
+			final MethodSignature signature = (MethodSignature) sig;
+			final StringBuilder sb = new StringBuilder(256);
+			// modifiers
+			final String modString = Modifier.toString(signature.getModifiers());
+			sb.append(modString);
+			if (modString.length() > 0) {
+				sb.append(' ');
+			}
+			// return
+			this.addType(sb, signature.getReturnType());
+			sb.append(' ');
+			// component
+			sb.append(signature.getDeclaringTypeName());
+			sb.append('.');
+			// name
+			sb.append(signature.getName());
+			// parameters
+			sb.append('(');
+			this.addTypeList(sb, signature.getParameterTypes());
+			sb.append(')');
+			// throws
+			// this.addTypeList(sb, signature.getExceptionTypes());
+			return sb.toString();
+		} else if (sig instanceof ConstructorSignature) {
+			final ConstructorSignature signature = (ConstructorSignature) sig;
+			final StringBuilder sb = new StringBuilder(256);
+			// modifiers
+			final String modString = Modifier.toString(signature.getModifiers());
+			sb.append(modString);
+			if (modString.length() > 0) {
+				sb.append(' ');
+			}
+			// component
+			sb.append(signature.getDeclaringTypeName());
+			sb.append('.');
+			// name
+			sb.append(signature.getName());
+			// parameters
+			sb.append('(');
+			this.addTypeList(sb, signature.getParameterTypes());
+			sb.append(')');
+			// throws
+			// this.addTypeList(sb, signature.getExceptionTypes());
+			return sb.toString();
+		} else {
+			return sig.toLongString();
+		}
+	}
+
+	private final StringBuilder addTypeList(final StringBuilder sb, final Class<?>[] clazzes) {
+		if (null != clazzes) {
+			boolean first = true;
+			for (final Class<?> clazz : clazzes) {
+				if (first) {
+					first = false;
+				} else {
+					sb.append(',');
+					sb.append(' ');
+				}
+				this.addType(sb, clazz);
+			}
+		}
+		return sb;
+	}
+
+	private final StringBuilder addType(final StringBuilder sb, final Class<?> clazz) {
+		if (null == clazz) {
+			sb.append("ANONYMOUS"); // TODO something better than this?
+		} else if (clazz.isArray()) {
+			final Class<?> componentType = clazz.getComponentType();
+			this.addType(sb, componentType);
+			sb.append('[');
+			sb.append(']');
+		} else {
+			sb.append(clazz.getName());
+		}
+		return sb;
+	}
 }

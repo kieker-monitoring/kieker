@@ -51,7 +51,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	public Object member2constructor(final Object thisObject, final ProceedingJoinPoint thisJoinPoint,
 			final EnclosingStaticPart thisEnclosingJoinPoint) throws Throwable { // NOCS
 		final Signature calleeSig = thisJoinPoint.getSignature();
-		final String callee = calleeSig.toLongString();
+		final String callee = this.signatureToLongString(calleeSig);
 		if (!CTRLINST.isProbeActivated(callee)) {
 			return thisJoinPoint.proceed();
 		}
@@ -64,7 +64,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		}
 		final long traceId = trace.getTraceId();
 		// caller
-		final String caller = thisEnclosingJoinPoint.getSignature().toLongString();
+		final String caller = this.signatureToLongString(thisEnclosingJoinPoint.getSignature());
 		final String callerClazz = thisObject.getClass().getName();
 		// callee
 		final String calleeClazz = calleeSig.getDeclaringTypeName();
@@ -87,7 +87,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	public Object static2constructor(final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint)
 			throws Throwable { // NOCS
 		final Signature calleeSig = thisJoinPoint.getSignature();
-		final String callee = calleeSig.toLongString();
+		final String callee = this.signatureToLongString(calleeSig);
 		if (!CTRLINST.isProbeActivated(callee)) {
 			return thisJoinPoint.proceed();
 		}
@@ -101,7 +101,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final long traceId = trace.getTraceId();
 		// caller
 		final Signature callerSig = thisEnclosingJoinPoint.getSignature();
-		final String caller = callerSig.toLongString();
+		final String caller = this.signatureToLongString(callerSig);
 		final String callerClazz = callerSig.getDeclaringTypeName();
 		// callee
 		final String calleeClazz = calleeSig.getDeclaringTypeName();

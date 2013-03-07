@@ -46,7 +46,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@AfterReturning("monitoredConstructor() && this(thisObject) && notWithinKieker()")
 	public void afterConstruction(final Object thisObject, final JoinPoint.StaticPart jp) {
 		final Signature signature = jp.getSignature();
-		if (!CTRLINST.isProbeActivated(signature.toLongString())) {
+		if (!CTRLINST.isProbeActivated(this.signatureToLongString(signature))) {
 			return;
 		}
 		// common fields

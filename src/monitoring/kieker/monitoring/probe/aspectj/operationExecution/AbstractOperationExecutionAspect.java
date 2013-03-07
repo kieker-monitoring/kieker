@@ -49,7 +49,7 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 
 	@Around("monitoredOperation() && notWithinKieker()")
 	public Object operation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
-		final String signature = thisJoinPoint.getSignature().toLongString();
+		final String signature = this.signatureToLongString(thisJoinPoint.getSignature());
 		if (!CTRLINST.isProbeActivated(signature)) {
 			return thisJoinPoint.proceed();
 		}
@@ -85,8 +85,7 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 		} finally {
 			// measure after
 			final long tout = TIME.getTime();
-			CTRLINST.newMonitoringRecord(
-					new OperationExecutionRecord(signature, sessionId, traceId, tin, tout, hostname, eoi, ess));
+			CTRLINST.newMonitoringRecord(new OperationExecutionRecord(signature, sessionId, traceId, tin, tout, hostname, eoi, ess));
 			// cleanup
 			if (entrypoint) {
 				CFREGISTRY.unsetThreadLocalTraceId();

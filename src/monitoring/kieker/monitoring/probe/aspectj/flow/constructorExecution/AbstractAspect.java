@@ -47,7 +47,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 
 	@Around("monitoredConstructor() && this(thisObject) && notWithinKieker()")
 	public Object constructor(final Object thisObject, final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
-		final String signature = thisJoinPoint.getSignature().toLongString();
+		final String signature = this.signatureToLongString(thisJoinPoint.getSignature());
 		if (!CTRLINST.isProbeActivated(signature)) {
 			return thisJoinPoint.proceed();
 		}
