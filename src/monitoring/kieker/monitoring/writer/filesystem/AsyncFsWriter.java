@@ -36,6 +36,17 @@ public final class AsyncFsWriter extends AbstractAsyncFSWriter {
 		super(configuration);
 	}
 
+	/**
+	 * Make sure that the required properties always have default values!
+	 */
+	@Override
+	protected Configuration getDefaultConfiguration() {
+		final Configuration configuration = new Configuration(super.getDefaultConfiguration());
+		configuration.setProperty(CONFIG_BUFFER, "8192");
+		configuration.setProperty(CONFIG_FLUSH, "true");
+		return configuration;
+	}
+
 	@Override
 	protected final AbstractFsWriterThread initWorker(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
 			final MappingFileWriter mappingFileWriter, final String path, final int maxEntiresInFile, final int maxlogSize, final int maxLogFiles) {

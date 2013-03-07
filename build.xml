@@ -6,9 +6,9 @@
 	<taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" />
 
 	<path id="maven-ant-tasks.classpath" path="lib/maven-ant-tasks-2.1.3.jar" />
-  <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
-           uri="antlib:org.apache.maven.artifact.ant"
-           classpathref="maven-ant-tasks.classpath" />
+	<typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+					 uri="antlib:org.apache.maven.artifact.ant"
+					 classpathref="maven-ant-tasks.classpath" />
 
 	<target name="-init-version" description="Initializes variables based on the Kieker version number">
 		<tstamp />
@@ -47,15 +47,15 @@
 		
 		<!-- Update the AspectJ version in various files -->
 		<replaceregexp byline="true" flags="g">
-		  <regexp pattern="(aspectj.*)-.*.jar"/>
-		  <substitution expression="\1-${lib.aspectj.version}.jar"/>
-		  <fileset dir=".">
-		    <include name="${src.userguide.dir}/Macros.tex"/>
-		  	<include name="${example.javaee.jetty.dir}/start.ini"/>
-	    	<include name="${example.javaee.jetty.dir}/start.KiekerAspectJActivated.ini"/>
-		  	<include name="${src.userguide.example.aspectj.dir}/BookstoreStarter.launch"/>
-    		<include name=".classpath"/>
-		  </fileset>
+			<regexp pattern="(aspectj.*)-.*.jar"/>
+			<substitution expression="\1-${lib.aspectj.version}.jar"/>
+			<fileset dir=".">
+				<include name="${src.userguide.dir}/Macros.tex"/>
+				<include name="${example.javaee.jetty.dir}/start.ini"/>
+				<include name="${example.javaee.jetty.dir}/start.KiekerAspectJActivated.ini"/>
+				<include name="${src.userguide.example.aspectj.dir}/BookstoreStarter.launch"/>
+				<include name=".classpath"/>
+			</fileset>
 		</replaceregexp>
 	</target>
 
@@ -444,7 +444,7 @@
 	</target>
 
 	<!-- Note that this target just uploads but does NOT build! -->
-  <target name="deploy-maven-snapshot" depends="-update-version" description="deploy snapshot version to Maven snapshot repository">
+	<target name="deploy-maven-snapshot" depends="-update-version" description="deploy snapshot version to Maven snapshot repository">
 		<!-- deploy the main artifacts -->
 		<artifact:mvn>
 			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
@@ -467,10 +467,10 @@
 			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.aspectj.pom}" />
 			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.aspectj.jar}" />
 		</artifact:mvn>
-  </target>
+	</target>
 
-  <!-- Note that this target just uploads but does NOT build! -->
-  <target name="deploy-maven-release" depends="-update-version" description="deploy release version to Maven snapshot repository">
+	<!-- Note that this target just uploads but does NOT build! -->
+	<target name="deploy-maven-release" depends="-update-version" description="deploy release version to Maven snapshot repository">
 		<!-- sign and deploy the main artifacts -->
 		<artifact:mvn>
 			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.3:sign-and-deploy-file" />
@@ -554,7 +554,7 @@
 			<arg value="-Dclassifier=javadoc" />
 			<arg value="-Pgpg" />
 		</artifact:mvn>
-  </target>
+	</target>
 
 	<target name="dist-kieker-binaries" depends="build-all,-build-userguide,-build-userguide-examples" description="Packages the binary archives (.zip|.tar.gz) for a release">
 		<patternset id="dist_bin_files-nonbinmode"> <!-- NOTE that the order of includes/excludes seems to have no effect. So be careful with excludes -->
@@ -678,42 +678,42 @@
 		
 		<!-- Examples using the plain Jar -->
 		<replaceregexp byline="true" flags="g">
-		  <regexp pattern="&lt;classpathentry .*/Kieker&quot;.*"/>
-		  <substitution expression="&lt;classpathentry kind=&quot;lib&quot; path=&quot;lib/${dist.kieker.main.jar}&quot;/&gt;"/>
-		  <fileset dir=".">
-		  	<include name="${src.userguide.example.jms.dir}/.classpath-binrelease.generated"/>
-		  </fileset>
+			<regexp pattern="&lt;classpathentry .*/Kieker&quot;.*"/>
+			<substitution expression="&lt;classpathentry kind=&quot;lib&quot; path=&quot;lib/${dist.kieker.main.jar}&quot;/&gt;"/>
+			<fileset dir=".">
+				<include name="${src.userguide.example.jms.dir}/.classpath-binrelease.generated"/>
+			</fileset>
 		</replaceregexp>
 		
 		<!-- Examples using the EMF Jar -->
 		<replaceregexp byline="true" flags="g">
-		  <regexp pattern="&lt;classpathentry .*/Kieker&quot;.*"/>
-		  <substitution expression="&lt;classpathentry kind=&quot;lib&quot; path=&quot;lib/${dist.kieker.main.emf.jar}&quot;/&gt;"/>
-		  <fileset dir=".">
-		    <include name="${src.userguide.example.manual.dir}/.classpath-binrelease.generated"/>
-		  	<include name="${src.userguide.example.extended.dir}/.classpath-binrelease.generated"/>
-		  </fileset>
+			<regexp pattern="&lt;classpathentry .*/Kieker&quot;.*"/>
+			<substitution expression="&lt;classpathentry kind=&quot;lib&quot; path=&quot;lib/${dist.kieker.main.emf.jar}&quot;/&gt;"/>
+			<fileset dir=".">
+				<include name="${src.userguide.example.manual.dir}/.classpath-binrelease.generated"/>
+				<include name="${src.userguide.example.extended.dir}/.classpath-binrelease.generated"/>
+			</fileset>
 		</replaceregexp>
 		
 		<!-- Examples using the AspectJ Jar -->
 		<replaceregexp byline="true" flags="g">
-		  <regexp pattern="&lt;classpathentry .*/Kieker&quot;.*"/>
-		  <substitution expression="&lt;classpathentry kind=&quot;lib&quot; path=&quot;lib//${dist.kieker.main.aspectj.jar}&quot;/&gt;"/>
-		  <fileset dir=".">
-		    <include name="${example.microbenchmark.dir}/.classpath-binrelease.generated"/>
-		    <include name="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated"/>
-		  </fileset>
+			<regexp pattern="&lt;classpathentry .*/Kieker&quot;.*"/>
+			<substitution expression="&lt;classpathentry kind=&quot;lib&quot; path=&quot;lib//${dist.kieker.main.aspectj.jar}&quot;/&gt;"/>
+			<fileset dir=".">
+				<include name="${example.microbenchmark.dir}/.classpath-binrelease.generated"/>
+				<include name="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated"/>
+			</fileset>
 		</replaceregexp>
 		
 		<!-- Examples referencing libs from /Kieker/lib/ -->
 		<replaceregexp byline="true" flags="g">
-		  <regexp pattern="(&lt;classpathentry .*)/Kieker/lib/(.*&quot;.*)"/>
-		  <substitution expression="\1lib/\2"/>
-		  <fileset dir=".">
-		    <include name="${example.microbenchmark.dir}/.classpath-binrelease.generated"/>
-		    <include name="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated"/>
-		  	<include name="${src.userguide.example.sigar.dir}/.classpath-binrelease.generated"/>
-		  </fileset>
+			<regexp pattern="(&lt;classpathentry .*)/Kieker/lib/(.*&quot;.*)"/>
+			<substitution expression="\1lib/\2"/>
+			<fileset dir=".">
+				<include name="${example.microbenchmark.dir}/.classpath-binrelease.generated"/>
+				<include name="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated"/>
+				<include name="${src.userguide.example.sigar.dir}/.classpath-binrelease.generated"/>
+			</fileset>
 		</replaceregexp>
 	</target>
 
@@ -893,7 +893,8 @@
 				<include name="${dist.kieker.main.jar}" />
 			</fileset>
 		</path>
-		<javac source="1.5" target="1.5" destDir="${build.tests.dir}" classpathref="common-test-compile-classpath" srcdir="${test.kieker.common.dir}" includeAntRuntime="false">
+		<javac source="1.5" target="1.5" destDir="${build.tests.dir}" classpathref="common-test-compile-classpath" srcdir="${test.kieker.common.dir}" debug="true" includeAntRuntime="false">
+			<compilerarg value="-Xlint:all" />
 		</javac>
 	</target>
 
@@ -914,7 +915,8 @@
 			</fileset>
 		</path>
 		<copy file="${kieker.monitoring.test.properties}" tofile="${build.tests.dir}/META-INF/kieker.monitoring.test.properties" overwrite="true" />
-		<javac source="1.5" target="1.5" destDir="${build.tests.dir}" classpathref="monitoring-test-compile-classpath" srcdir="${test.kieker.monitoring.dir}" excludes="kieker/test/monitoring/aspectj/compileTimeWeaving/" includeAntRuntime="false">
+		<javac source="1.5" target="1.5" destDir="${build.tests.dir}" classpathref="monitoring-test-compile-classpath" srcdir="${test.kieker.monitoring.dir}" excludes="kieker/test/monitoring/aspectj/compileTimeWeaving/" debug="true" includeAntRuntime="false">
+			<compilerarg value="-Xlint:all" />
 		</javac>
 	</target>
 
@@ -927,7 +929,8 @@
 				<include name="${dist.kieker.main.jar}" />
 			</fileset>
 		</path>
-		<javac source="1.5" target="1.5" destDir="${build.tests.dir}" classpathref="analysis-test-compile-classpath" srcdir="${test.kieker.analysis.dir}" includeAntRuntime="false">
+		<javac source="1.5" target="1.5" destDir="${build.tests.dir}" classpathref="analysis-test-compile-classpath" srcdir="${test.kieker.analysis.dir}" debug="true" includeAntRuntime="false">
+			<compilerarg value="-Xlint:all" />
 		</javac>
 	</target>
 
@@ -940,7 +943,8 @@
 				<include name="${dist.kieker.main.jar}" />
 			</fileset>
 		</path>
-		<javac source="1.5" target="1.5" destDir="${build.tests.dir}" classpathref="tools-test-compile-classpath" srcdir="${test.kieker.tools.dir}" includeAntRuntime="false">
+		<javac source="1.5" target="1.5" destDir="${build.tests.dir}" classpathref="tools-test-compile-classpath" srcdir="${test.kieker.tools.dir}" debug="true" includeAntRuntime="false">
+			<compilerarg value="-Xlint:all" />
 		</javac>
 	</target>
 
@@ -1285,7 +1289,7 @@
 
 	<target name="checkstyle" depends="build-all,compile-tests" description="Uses Checkstyle to find potential problems">
 		<!-- We have to add the test directory from the build to the classpath as it contains some checkstyle checks. Checkstyle has to know these classes. As the
-		     checks need some classes from the analysis and the common part, we have to add those build directories as well. -->
+				 checks need some classes from the analysis and the common part, we have to add those build directories as well. -->
 		<taskdef resource="checkstyletask.properties" classpath="${lib.cs.dir}/lib/checkstyle-all.jar;${build.tests.dir};${build.kieker.analysis.dir};${build.kieker.common.dir}" />
 		<checkstyle config="${lib.cs.dir}/cs-conf.xml" failOnViolation="false">
 			<classpath>

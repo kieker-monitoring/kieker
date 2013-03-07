@@ -77,10 +77,12 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 		for (int i = 0; i < this.inputDirs.length; i++) {
 			this.inputDirs[i] = Configuration.convertToPath(this.inputDirs[i]);
 		}
-		if (this.inputDirs.length == 0) {
+		int nDirs = this.inputDirs.length;
+		if (nDirs == 0) {
 			LOG.warn("The list of input dirs passed to the " + FSReader.class.getSimpleName() + " is empty");
+			nDirs = 1;
 		}
-		this.recordQueue = new PriorityQueue<IMonitoringRecord>(this.inputDirs.length);
+		this.recordQueue = new PriorityQueue<IMonitoringRecord>(nDirs);
 		this.ignoreUnknownRecordTypes = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES);
 	}
 
