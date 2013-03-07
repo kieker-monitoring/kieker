@@ -29,7 +29,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.registry.RegistryRecord;
 import kieker.monitoring.writer.AbstractAsyncThread;
-import kieker.monitoring.writer.filesystem.MappingFileWriter;
+import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
 
 /**
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller

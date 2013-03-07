@@ -16,25 +16,28 @@
 
 package kieker.monitoring.writer.filesystem;
 
+import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.writer.filesystem.async.AbstractFsWriterThread;
-import kieker.monitoring.writer.filesystem.async.FsWriterThread;
-import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
+import kieker.monitoring.writer.filesystem.async.AbstractZipWriterThread;
+import kieker.monitoring.writer.filesystem.async.BinaryZipWriterThread;
+import kieker.monitoring.writer.filesystem.map.StringMappingFileWriter;
 
 /**
- * @author Matthias Rohr, Robert von Massow, Andre van Hoorn, Jan Waller
+ * @author Jan Waller
  */
-public final class AsyncFsWriter extends AbstractAsyncFSWriter {
-	private static final String PREFIX = AsyncFsWriter.class.getName() + ".";
-	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
+public final class AsyncBinaryZipWriter extends AbstractAsyncZipWriter {
+	private static final String PREFIX = AsyncBinaryZipWriter.class.getName() + ".";
 	public static final String CONFIG_BUFFER = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
 
-	public AsyncFsWriter(final Configuration configuration) {
+	private final StringMappingFileWriter mappingFileWriter;
+
+	public AsyncBinaryZipWriter(final Configuration configuration) throws IOException {
 		super(configuration);
+		this.mappingFileWriter = new StringMappingFileWriter();
 	}
 
 	/**
@@ -44,14 +47,13 @@ public final class AsyncFsWriter extends AbstractAsyncFSWriter {
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration(super.getDefaultConfiguration());
 		configuration.setProperty(CONFIG_BUFFER, "8192");
-		configuration.setProperty(CONFIG_FLUSH, "true");
 		return configuration;
 	}
 
 	@Override
-	protected final AbstractFsWriterThread initWorker(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
-			final MappingFileWriter mappingFileWriter, final String path, final int maxEntiresInFile, final int maxlogSize, final int maxLogFiles) {
-		return new FsWriterThread(monitoringController, writeQueue, mappingFileWriter, path, maxEntiresInFile, maxlogSize, maxLogFiles,
-				this.configuration.getBooleanProperty(CONFIG_FLUSH), this.configuration.getIntProperty(CONFIG_BUFFER));
+	protected AbstractZipWriterThread initWorker(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
+			final String path, final int maxEntiresInFile) throws Exception {
+		return new BinaryZipWriterThread(monitoringController, writeQueue, this.mappingFileWriter, path, maxEntiresInFile,
+				this.configuration.getIntProperty(CONFIG_BUFFER));
 	}
 }

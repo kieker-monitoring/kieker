@@ -26,6 +26,7 @@ import kieker.common.util.filesystem.BinaryCompressionMethod;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.writer.filesystem.async.AbstractFsWriterThread;
 import kieker.monitoring.writer.filesystem.async.BinaryFsWriterThread;
+import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
 
 /**
  * @author Jan Waller

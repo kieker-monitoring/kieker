@@ -16,36 +16,30 @@
 
 package kieker.monitoring.writer.filesystem.async;
 
+import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.filesystem.BinaryCompressionMethod;
 import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
+import kieker.monitoring.writer.filesystem.map.StringMappingFileWriter;
 
 /**
  * @author Jan Waller
  */
-public class BinaryFsWriterThread extends AbstractFsWriterThread {
-	private static final Log LOG = LogFactory.getLog(BinaryFsWriterThread.class);
+public class BinaryZipWriterThread extends AbstractZipWriterThread {
+	private static final Log LOG = LogFactory.getLog(BinaryZipWriterThread.class);
 
-	private DataOutputStream out;
+	private final DataOutputStream out;
 
-	private final int bufferSize;
-	private final BinaryCompressionMethod compressionMethod;
-
-	public BinaryFsWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
-			final MappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile, final int maxLogSize, final int maxLogFiles,
-			final int bufferSize, final BinaryCompressionMethod compressionMethod) {
-		super(monitoringController, writeQueue, mappingFileWriter, path, maxEntriesInFile, maxLogSize, maxLogFiles);
-		this.compressionMethod = compressionMethod;
-		this.fileExtension = compressionMethod.getFileExtension();
-		this.bufferSize = bufferSize;
+	public BinaryZipWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
+			final StringMappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile, final int bufferSize) throws IOException {
+		super(monitoringController, writeQueue, mappingFileWriter, path, maxEntriesInFile);
+		super.fileExtension = ".bin";
+		this.out = new DataOutputStream(new BufferedOutputStream(super.zipOutputStream, bufferSize));
 	}
 
 	@Override
@@ -100,21 +94,12 @@ public class BinaryFsWriterThread extends AbstractFsWriterThread {
 	}
 
 	@Override
-	protected void prepareFile(final String filename) throws IOException {
-		if (null != this.out) {
-			this.out.close();
-		}
-		this.out = this.compressionMethod.getDataOutputStream(new File(filename), this.bufferSize);
+	protected void cleanupForNextEntry() throws IOException {
+		this.out.flush();
 	}
 
 	@Override
-	protected void cleanup() {
-		if (this.out != null) {
-			try {
-				this.out.close();
-			} catch (final IOException ex) {
-				LOG.error("Failed to close channel.", ex);
-			}
-		}
+	protected void cleanupFinal() throws IOException {
+		this.out.close();
 	}
 }

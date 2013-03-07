@@ -27,7 +27,7 @@ import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.writer.filesystem.MappingFileWriter;
+import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
 
 /**
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller

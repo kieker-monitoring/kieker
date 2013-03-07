@@ -17,33 +17,23 @@
 package kieker.monitoring.writer.filesystem;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-import java.util.TimeZone;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.writer.AbstractAsyncWriter;
-import kieker.monitoring.writer.filesystem.async.AbstractFsWriterThread;
-import kieker.monitoring.writer.filesystem.map.FSMappingFileWriter;
-import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
+import kieker.monitoring.writer.filesystem.async.AbstractZipWriterThread;
 
 /**
- * @author Matthias Rohr, Robert von Massow, Andre van Hoorn, Jan Waller
+ * @author Jan Waller
  */
-public abstract class AbstractAsyncFSWriter extends AbstractAsyncWriter {
+public abstract class AbstractAsyncZipWriter extends AbstractAsyncWriter {
 	public static final String CONFIG_PATH = "customStoragePath";
 	public static final String CONFIG_TEMP = "storeInJavaIoTmpdir";
 	public static final String CONFIG_MAXENTRIESINFILE = "maxEntriesInFile";
-	public static final String CONFIG_MAXLOGSIZE = "maxLogSize"; // in MiB
-	public static final String CONFIG_MAXLOGFILES = "maxLogFiles";
 
-	private static final String PATH_PREFIX = "kieker-";
-
-	protected AbstractAsyncFSWriter(final Configuration configuration) {
+	public AbstractAsyncZipWriter(final Configuration configuration) {
 		super(configuration);
 	}
 
@@ -57,13 +47,11 @@ public abstract class AbstractAsyncFSWriter extends AbstractAsyncWriter {
 		configuration.setProperty(prefix + CONFIG_PATH, ".");
 		configuration.setProperty(prefix + CONFIG_TEMP, "true");
 		configuration.setProperty(prefix + CONFIG_MAXENTRIESINFILE, "25000");
-		configuration.setProperty(prefix + CONFIG_MAXLOGSIZE, "-1");
-		configuration.setProperty(prefix + CONFIG_MAXLOGFILES, "-1");
 		return configuration;
 	}
 
 	@Override
-	protected final void init() throws Exception {
+	protected void init() throws Exception {
 		final String prefix = this.getClass().getName() + '.';
 		// Determine path
 		String path;
@@ -72,36 +60,21 @@ public abstract class AbstractAsyncFSWriter extends AbstractAsyncWriter {
 		} else {
 			path = this.configuration.getStringProperty(prefix + CONFIG_PATH);
 		}
-		File f = new File(path);
+		final File f = new File(path);
 		if (!f.isDirectory()) {
 			throw new IllegalArgumentException("'" + path + "' is not a directory.");
-		}
-		// Determine directory for files
-		final String ctrlName = super.monitoringController.getHostname() + "-" + super.monitoringController.getName();
-		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
-		date.setTimeZone(TimeZone.getTimeZone("UTC"));
-		final String dateStr = date.format(new java.util.Date()); // NOPMD (Date)
-		final StringBuffer sb = new StringBuffer(path.length() + PATH_PREFIX.length() + ctrlName.length() + 25);
-		sb.append(path).append(File.separatorChar).append(PATH_PREFIX).append(dateStr).append("-UTC-").append(ctrlName).append(File.separatorChar);
-		path = sb.toString();
-		f = new File(path);
-		if (!f.mkdir()) {
-			throw new IllegalArgumentException("Failed to create directory '" + path + "'");
 		}
 		// get number of entries per file
 		final int maxEntriesInFile = this.configuration.getIntProperty(prefix + CONFIG_MAXENTRIESINFILE);
 		if (maxEntriesInFile < 1) {
 			throw new IllegalArgumentException(prefix + CONFIG_MAXENTRIESINFILE + " must be greater than 0 but is '" + maxEntriesInFile + "'");
 		}
-		// get values for size limitations
-		final int maxlogSize = this.configuration.getIntProperty(prefix + CONFIG_MAXLOGSIZE);
-		final int maxLogFiles = this.configuration.getIntProperty(prefix + CONFIG_MAXLOGFILES);
 		// Mapping file
-		final MappingFileWriter mappingFileWriter = new FSMappingFileWriter(path);
+		// FIXME: final MappingFileWriter mappingFileWriter = new MappingFileWriter(path);
 		// Create writer thread
-		this.addWorker(this.initWorker(super.monitoringController, this.blockingQueue, mappingFileWriter, path, maxEntriesInFile, maxlogSize, maxLogFiles));
+		this.addWorker(this.initWorker(super.monitoringController, this.blockingQueue, path, maxEntriesInFile));
 	}
 
-	protected abstract AbstractFsWriterThread initWorker(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
-			final MappingFileWriter mappingFileWriter, final String path, final int maxEntiresInFile, final int maxlogSize, final int maxLogFiles);
+	protected abstract AbstractZipWriterThread initWorker(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
+			final String path, final int maxEntiresInFile) throws Exception;
 }

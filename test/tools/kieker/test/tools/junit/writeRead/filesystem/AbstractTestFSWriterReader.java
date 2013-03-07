@@ -184,7 +184,7 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 	 * @throws AnalysisConfigurationException
 	 *             If something went wrong during the reading.
 	 */
-	private List<IMonitoringRecord> readLog(final String[] monitoringLogDirs) throws AnalysisConfigurationException {
+	protected List<IMonitoringRecord> readLog(final String[] monitoringLogDirs) throws AnalysisConfigurationException {
 		final AnalysisController analysisController = new AnalysisController();
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));

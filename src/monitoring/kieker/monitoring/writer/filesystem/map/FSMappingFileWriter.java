@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.writer.filesystem;
+package kieker.monitoring.writer.filesystem.map;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,17 +28,15 @@ import kieker.monitoring.core.registry.RegistryRecord;
 /**
  * @author Andre van Hoorn, Jan Waller
  */
-public class MappingFileWriter {
+public final class FSMappingFileWriter implements MappingFileWriter {
 
 	private static final String ENCODING = "UTF-8";
 
-	// private static final Pattern pattern = Pattern.compile("[\r\n]");
-
 	private final File mappingFile;
 
-	public MappingFileWriter(final String path) throws IOException {
-		final StringBuffer sbm = new StringBuffer(path.length() + 11);
-		sbm.append(path).append(File.separatorChar).append("kieker.map");
+	public FSMappingFileWriter(final String path) throws IOException {
+		final StringBuilder sbm = new StringBuilder(path.length() + 11);
+		sbm.append(path).append(File.separatorChar).append(KIEKER_MAP_FN);
 		final String mappingFileFn = sbm.toString();
 		this.mappingFile = new File(mappingFileFn);
 		if (!this.mappingFile.createNewFile()) {
@@ -54,9 +52,7 @@ public class MappingFileWriter {
 				pw.write('$');
 				pw.write(String.valueOf(hashRecord.getId()));
 				pw.write('=');
-				pw.write("");
-				final String value = StringUtils.encodeNewline(String.valueOf(hashRecord.getObject()));
-				pw.write(value);
+				pw.write(StringUtils.encodeNewline(String.valueOf(hashRecord.getObject())));
 				pw.write('\n');
 				if (pw.checkError()) {
 					throw new IOException("Error writing to mappingFile " + this.mappingFile.toString());
