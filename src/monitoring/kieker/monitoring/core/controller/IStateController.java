@@ -106,6 +106,11 @@ public interface IStateController {
 	/**
 	 * Is the debug mode enabled?
 	 * 
+	 * <p>
+	 * Debug mode is for internal use only and changes a few internal id generation mechanisms to enable easier debugging. Additionally, it is possible to enable
+	 * debug logging in the settings of the used logger.
+	 * </p>
+	 * 
 	 * @return debug mode
 	 */
 	public abstract boolean isDebug();
