@@ -32,7 +32,6 @@ import kieker.test.tools.util.StringTeePrintStream;
 /**
  * @author Andre van Hoorn
  */
-// TODO: introduce abstract intermediate class with {@link BasicPrintStreamWriterTestStdout}, because a lot of code is shared.
 public class BasicPrintStreamWriterTestStdout extends AbstractPrintStreamWriterTest { // NOCS (test class without a constructor)
 
 	private volatile PrintStream originalPrintStream;
@@ -80,10 +79,5 @@ public class BasicPrintStreamWriterTestStdout extends AbstractPrintStreamWriterT
 			Assert.assertTrue("Record '" + curLine + "' not found in output stream: '" + outputString + "'",
 					outputString.indexOf(curLine) != -1);
 		}
-	}
-
-	@Override
-	protected boolean terminateBeforeLogInspection() {
-		return false;
 	}
 }

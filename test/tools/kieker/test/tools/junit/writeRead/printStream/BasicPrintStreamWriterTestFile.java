@@ -34,8 +34,7 @@ import kieker.common.record.IMonitoringRecord;
 /**
  * @author Andre van Hoorn
  */
-// TODO: introduce abstract intermediate class with {@link BasicPrintStreamWriterTestStdout}, because a lot of code is shared.
-public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTest { // NOCS (testClass without constructor)
+public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTest {
 	private static final String OUTPUT_BASE_FN = "S0fYvPsI.out"; // the name doesn't matter
 
 	private static final String ENCODING = "UTF-8";
@@ -44,6 +43,10 @@ public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTes
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (must be public)
 
 	private volatile File outputFile = null; // NOPMD (init for findbugs)
+
+	public BasicPrintStreamWriterTestFile() {
+		// empty default constructor
+	}
 
 	@Before
 	public void setUp() throws Exception {
@@ -103,10 +106,5 @@ public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTes
 			Assert.assertTrue("Record '" + curLine + "' not found in output stream: '" + outputString + "'",
 					outputString.indexOf(curLine) != -1);
 		}
-	}
-
-	@Override
-	protected boolean terminateBeforeLogInspection() {
-		return false;
 	}
 }

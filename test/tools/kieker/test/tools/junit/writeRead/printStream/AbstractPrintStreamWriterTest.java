@@ -27,10 +27,9 @@ import kieker.monitoring.writer.PrintStreamWriter;
 import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 /**
- * 
  * @author Andre van Hoorn
- * 
  */
+// TODO include further code from subclasses here
 public abstract class AbstractPrintStreamWriterTest extends AbstractWriterReaderTest {
 
 	protected static final String SYSTEM_NEWLINE_STRING = System.getProperty("line.separator");
@@ -59,5 +58,10 @@ public abstract class AbstractPrintStreamWriterTest extends AbstractWriterReader
 	@Override
 	protected void checkControllerStateAfterRecordsPassedToController(final IMonitoringController monitoringController) {
 		Assert.assertTrue(monitoringController.isMonitoringEnabled());
+	}
+
+	@Override
+	protected boolean terminateBeforeLogInspection() {
+		return false;
 	}
 }
