@@ -64,8 +64,7 @@ following steps to be performed, as sketched in Section~\ref{sec:example:analysi
 
 \begin{compactenum}
 \item Creating an instance of the \class{AnalysisController} class
-\item Creating and registering monitoring readers (\method{registerReader}),
-filters (\method{registerFilter}), and repositories (\method{registerRepository}).
+\item Creating monitoring readers, filters, and repositories.
 \item Connecting plugins to other plugins and to repositories (\method{connect})
 \item Starting the analysis instance (\method{run}).
 \end{compactenum}
@@ -98,11 +97,10 @@ instantiation, configuration, and connection of plugins, Listing~\ref{listing:St
 demonstrates this procedure for the example, using \class{MyPipeReader} and %
 \class{MyResponseTimeFilter}, according to Figure~\ref{fig:example:pipe-and-filter}.
 
-The configuration for the \class{MyPipeReader} is created in lines~50--52. %
-Using this configuration, the reader is created in line~53, and registered to %
-the \class{AnalysisController} in line~54. Similarly, lines~57--64 initialize %
-and register the \class{MyResponseTimeFilter}. The reader's output is connected %
-to the filter's input in line~65. %
+The configuration for the \class{MyPipeReader} is created in lines~51--52. %
+Using this configuration, the reader is created in line~53. Similarly, %
+lines~56--62 initialize the \class{MyResponseTimeFilter}. The reader's output is connected %
+to the filter's input in line~63. %
 The entire programmatic creation of the pipe-and-filter architecture shown %
 in Figure~\ref{fig:example:pipe-and-filter}, can be found in the example  %
 file \file{Starter.java}.
@@ -110,7 +108,7 @@ file \file{Starter.java}.
 \medskip
 
 \setJavaCodeListing
-\lstinputlisting[caption=Initializing and connecting the example reader and filter (Starter.java),label=listing:StarterInitConnect,firstline=49, lastline=66, firstnumber=49]%
+\lstinputlisting[caption=Initializing and connecting the example reader and filter (Starter.java),label=listing:StarterInitConnect,firstline=48, lastline=66, firstnumber=48]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/Starter.java}
 
 \enlargethispage{0.5cm}
@@ -221,8 +219,8 @@ are given in Sections~\ref{sec:analysis:filters}--\ref{sec:analysis:repositories
 \noindent According to the %
 configuration of the \KiekerMonitoringPart{} components (see Section~\ref{sec:monitoring:configuration}),
 plugins and repositories are configured via \class{Configuration} objects. Classes must %
-provide a public constructor, accepting a \class{Configuration} object as %
-its only argument. It is important to invoke the constructor of the super class. %
+provide a public constructor, accepting a \class{Configuration} and an \class{IProjectContext} (normally the \class{IAnalysisController} instance) object as %
+its only arguments. It is important to invoke the constructor of the super class. %
 The configuration properties accepted by a plugin or repository should be provided via \class{public static} %
 constants with prefix \method{CONFIG\_PROPERTY\_NAME\_} in order to ease the %
 programmatic initialization of plugins (Section~\ref{sec:analysis:programmaticCreation}). %
