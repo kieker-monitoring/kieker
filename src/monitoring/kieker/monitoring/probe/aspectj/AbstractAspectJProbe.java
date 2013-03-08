@@ -111,8 +111,7 @@ public abstract class AbstractAspectJProbe implements IMonitoringProbe {
 				if (first) {
 					first = false;
 				} else {
-					sb.append(',');
-					sb.append(' ');
+					sb.append(", ");
 				}
 				this.addType(sb, clazz);
 			}
@@ -126,8 +125,7 @@ public abstract class AbstractAspectJProbe implements IMonitoringProbe {
 		} else if (clazz.isArray()) {
 			final Class<?> componentType = clazz.getComponentType();
 			this.addType(sb, componentType);
-			sb.append('[');
-			sb.append(']');
+			sb.append("[]");
 		} else {
 			sb.append(clazz.getName());
 		}

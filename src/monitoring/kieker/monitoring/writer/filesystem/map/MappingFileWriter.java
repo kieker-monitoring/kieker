@@ -16,15 +16,53 @@
 
 package kieker.monitoring.writer.filesystem.map;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 
+import kieker.common.util.StringUtils;
 import kieker.monitoring.core.registry.RegistryRecord;
 
 /**
  * @author Andre van Hoorn, Jan Waller
  */
-public interface MappingFileWriter {
+public final class MappingFileWriter {
 	public static final String KIEKER_MAP_FN = "kieker.map";
 
-	public abstract void write(RegistryRecord hashRecord) throws IOException;
+	private static final String ENCODING = "UTF-8";
+
+	private final File mappingFile;
+
+	public MappingFileWriter(final String path) throws IOException {
+		final StringBuilder sbm = new StringBuilder(path.length() + 11);
+		sbm.append(path).append(File.separatorChar).append(KIEKER_MAP_FN);
+		final String mappingFileFn = sbm.toString();
+		this.mappingFile = new File(mappingFileFn);
+		if (!this.mappingFile.createNewFile()) {
+			throw new IOException("Mapping File '" + mappingFileFn + "' already exists.");
+		}
+	}
+
+	public final void write(final RegistryRecord hashRecord) throws IOException {
+		synchronized (this.mappingFile) {
+			PrintWriter pw = null;
+			try {
+				pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.mappingFile, true), ENCODING));
+				pw.write('$');
+				pw.write(String.valueOf(hashRecord.getId()));
+				pw.write('=');
+				pw.write(StringUtils.encodeNewline(String.valueOf(hashRecord.getObject())));
+				pw.write('\n');
+				if (pw.checkError()) {
+					throw new IOException("Error writing to mappingFile " + this.mappingFile.toString());
+				}
+			} finally {
+				if (pw != null) {
+					pw.close();
+				}
+			}
+		}
+	}
 }

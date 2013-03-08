@@ -24,12 +24,12 @@ import kieker.monitoring.core.registry.RegistryRecord;
 /**
  * @author Andre van Hoorn, Jan Waller
  */
-public final class StringMappingFileWriter implements MappingFileWriter {
+public final class StringMappingFileWriter {
 
-	private final StringBuilder sb;
+	private final StringBuilder sb; // NOPMD (we need this buffer here)
 
 	public StringMappingFileWriter() {
-		this.sb = new StringBuilder();
+		this.sb = new StringBuilder(1024 * 1024); // reserve 1 MiB space
 	}
 
 	public final void write(final RegistryRecord hashRecord) throws IOException {

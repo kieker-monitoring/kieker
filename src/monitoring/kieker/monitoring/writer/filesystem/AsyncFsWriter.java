@@ -19,6 +19,8 @@ package kieker.monitoring.writer.filesystem;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.writer.filesystem.async.AbstractFsWriterThread;
@@ -32,6 +34,8 @@ public final class AsyncFsWriter extends AbstractAsyncFSWriter {
 	private static final String PREFIX = AsyncFsWriter.class.getName() + ".";
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
 	public static final String CONFIG_BUFFER = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
+
+	private static final Log LOG = LogFactory.getLog(AsyncFsWriter.class);
 
 	public AsyncFsWriter(final Configuration configuration) {
 		super(configuration);
@@ -51,7 +55,12 @@ public final class AsyncFsWriter extends AbstractAsyncFSWriter {
 	@Override
 	protected final AbstractFsWriterThread initWorker(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
 			final MappingFileWriter mappingFileWriter, final String path, final int maxEntiresInFile, final int maxlogSize, final int maxLogFiles) {
+		int buffersize = this.configuration.getIntProperty(CONFIG_BUFFER);
+		if (buffersize <= 0) {
+			LOG.warn("Buffer size has to be greater than zero. Using 8192 instead.");
+			buffersize = 8192;
+		}
 		return new FsWriterThread(monitoringController, writeQueue, mappingFileWriter, path, maxEntiresInFile, maxlogSize, maxLogFiles,
-				this.configuration.getBooleanProperty(CONFIG_FLUSH), this.configuration.getIntProperty(CONFIG_BUFFER));
+				this.configuration.getBooleanProperty(CONFIG_FLUSH), buffersize);
 	}
 }

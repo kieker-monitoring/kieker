@@ -18,12 +18,16 @@ package kieker.monitoring.writer.filesystem;
 
 import java.io.File;
 import java.util.concurrent.BlockingQueue;
+import java.util.zip.Deflater;
 
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.writer.AbstractAsyncWriter;
 import kieker.monitoring.writer.filesystem.async.AbstractZipWriterThread;
+import kieker.monitoring.writer.filesystem.map.StringMappingFileWriter;
 
 /**
  * @author Jan Waller
@@ -32,9 +36,17 @@ public abstract class AbstractAsyncZipWriter extends AbstractAsyncWriter {
 	public static final String CONFIG_PATH = "customStoragePath";
 	public static final String CONFIG_TEMP = "storeInJavaIoTmpdir";
 	public static final String CONFIG_MAXENTRIESINFILE = "maxEntriesInFile";
+	public static final String CONFIG_BUFFER = "bufferSize";
+	public static final String CONFIG_COMPRESS_LEVEL = "compressionLevel";
+
+	private static final Log LOG = LogFactory.getLog(AbstractAsyncZipWriter.class);
+
+	private final StringMappingFileWriter mappingFileWriter;
 
 	public AbstractAsyncZipWriter(final Configuration configuration) {
 		super(configuration);
+		// Mapping file can be create here (no (real) side effects)
+		this.mappingFileWriter = new StringMappingFileWriter();
 	}
 
 	/**
@@ -47,11 +59,13 @@ public abstract class AbstractAsyncZipWriter extends AbstractAsyncWriter {
 		configuration.setProperty(prefix + CONFIG_PATH, ".");
 		configuration.setProperty(prefix + CONFIG_TEMP, "true");
 		configuration.setProperty(prefix + CONFIG_MAXENTRIESINFILE, "25000");
+		configuration.setProperty(prefix + CONFIG_BUFFER, "8192");
+		configuration.setProperty(prefix + CONFIG_COMPRESS_LEVEL, Integer.toString(Deflater.DEFAULT_COMPRESSION));
 		return configuration;
 	}
 
 	@Override
-	protected void init() throws Exception {
+	protected final void init() throws Exception {
 		final String prefix = this.getClass().getName() + '.';
 		// Determine path
 		String path;
@@ -69,12 +83,22 @@ public abstract class AbstractAsyncZipWriter extends AbstractAsyncWriter {
 		if (maxEntriesInFile < 1) {
 			throw new IllegalArgumentException(prefix + CONFIG_MAXENTRIESINFILE + " must be greater than 0 but is '" + maxEntriesInFile + "'");
 		}
-		// Mapping file
-		// FIXME: final MappingFileWriter mappingFileWriter = new MappingFileWriter(path);
-		// Create writer thread
-		this.addWorker(this.initWorker(super.monitoringController, this.blockingQueue, path, maxEntriesInFile));
+		int buffersize = this.configuration.getIntProperty(prefix + CONFIG_BUFFER);
+		if (buffersize <= 0) {
+			LOG.warn("Buffer size has to be greater than zero. Using 8192 instead.");
+			buffersize = 8192;
+		}
+		// check compression level and method
+		int level = this.configuration.getIntProperty(prefix + CONFIG_COMPRESS_LEVEL);
+		if ((level != Deflater.DEFAULT_COMPRESSION) && (level != Deflater.NO_COMPRESSION)
+				&& !((level >= Deflater.BEST_SPEED) && (level <= Deflater.BEST_COMPRESSION))) {
+			LOG.warn("Illegal compression level. Using default compression level instead.");
+			level = Deflater.DEFAULT_COMPRESSION;
+		}
+		// Create writer thread (should be only one to get a single consistent mapping file)
+		this.addWorker(this.initWorker(super.monitoringController, this.blockingQueue, this.mappingFileWriter, path, maxEntriesInFile, buffersize, level));
 	}
 
 	protected abstract AbstractZipWriterThread initWorker(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
-			final String path, final int maxEntiresInFile) throws Exception;
+			final StringMappingFileWriter mappingFileWriter, final String path, final int maxEntiresInFile, final int bufferSize, final int level) throws Exception;
 }

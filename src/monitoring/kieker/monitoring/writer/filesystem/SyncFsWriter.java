@@ -36,7 +36,6 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.registry.RegistryRecord;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
-import kieker.monitoring.writer.filesystem.map.FSMappingFileWriter;
 import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
 
 /**
@@ -149,7 +148,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		synchronized (this) { // visibility
 			this.path = f.getAbsolutePath();
 			this.filenamePrefix = this.path + File.separatorChar + FILE_PREFIX;
-			this.mappingFileWriter = new FSMappingFileWriter(this.path);
+			this.mappingFileWriter = new MappingFileWriter(this.path);
 		}
 	}
 

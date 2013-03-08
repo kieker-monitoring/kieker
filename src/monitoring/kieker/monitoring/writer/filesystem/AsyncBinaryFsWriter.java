@@ -64,7 +64,12 @@ public final class AsyncBinaryFsWriter extends AbstractAsyncFSWriter {
 			LOG.warn("Failed to select compression method. Using NONE instead. " + ex.getMessage());
 			method = BinaryCompressionMethod.NONE;
 		}
+		int buffersize = this.configuration.getIntProperty(CONFIG_BUFFER);
+		if (buffersize <= 0) {
+			LOG.warn("Buffer size has to be greater than zero. Using 8192 instead.");
+			buffersize = 8192;
+		}
 		return new BinaryFsWriterThread(monitoringController, writeQueue, mappingFileWriter, path, maxEntiresInFile, maxlogSize, maxLogFiles,
-				this.configuration.getIntProperty(CONFIG_BUFFER), method);
+				buffersize, method);
 	}
 }

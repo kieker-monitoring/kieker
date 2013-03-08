@@ -28,7 +28,6 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.writer.AbstractAsyncWriter;
 import kieker.monitoring.writer.filesystem.async.AbstractFsWriterThread;
-import kieker.monitoring.writer.filesystem.map.FSMappingFileWriter;
 import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
 
 /**
@@ -97,7 +96,7 @@ public abstract class AbstractAsyncFSWriter extends AbstractAsyncWriter {
 		final int maxlogSize = this.configuration.getIntProperty(prefix + CONFIG_MAXLOGSIZE);
 		final int maxLogFiles = this.configuration.getIntProperty(prefix + CONFIG_MAXLOGFILES);
 		// Mapping file
-		final MappingFileWriter mappingFileWriter = new FSMappingFileWriter(path);
+		final MappingFileWriter mappingFileWriter = new MappingFileWriter(path);
 		// Create writer thread
 		this.addWorker(this.initWorker(super.monitoringController, this.blockingQueue, mappingFileWriter, path, maxEntriesInFile, maxlogSize, maxLogFiles));
 	}

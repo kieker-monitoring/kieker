@@ -63,7 +63,7 @@ public abstract class AbstractZipWriterThread extends AbstractAsyncThread {
 	private long sameFilenameCounter;
 
 	public AbstractZipWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
-			final StringMappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile) throws IOException {
+			final StringMappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile, final int level) throws IOException {
 		super(monitoringController, writeQueue);
 		this.mappingFileWriter = mappingFileWriter;
 		this.maxEntriesInFile = maxEntriesInFile;
@@ -77,6 +77,8 @@ public abstract class AbstractZipWriterThread extends AbstractAsyncThread {
 				+ this.dateFormat.format(new java.util.Date(System.currentTimeMillis())) + "-UTC-" // NOPMD (Date)
 				+ monitoringController.getHostname() + "-" + monitoringController.getName() + "-" + this.getName() + FILE_EXTENSION_ZIP;
 		this.zipOutputStream = new ZipOutputStream(new FileOutputStream(this.zipFileName));
+		this.zipOutputStream.setLevel(level);
+		this.zipOutputStream.closeEntry();
 	}
 
 	@Override
@@ -86,6 +88,7 @@ public abstract class AbstractZipWriterThread extends AbstractAsyncThread {
 			this.cleanupForNextEntry();
 			this.zipOutputStream.putNextEntry(new ZipEntry(MappingFileWriter.KIEKER_MAP_FN));
 			pw = new PrintWriter(new OutputStreamWriter(this.zipOutputStream, ENCODING));
+			// if there is more than one writer thread we might miss some entries here!
 			pw.print(this.mappingFileWriter.toString());
 			pw.flush();
 			this.cleanupFinal();

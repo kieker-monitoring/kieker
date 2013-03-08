@@ -36,8 +36,9 @@ public class BinaryZipWriterThread extends AbstractZipWriterThread {
 	private final DataOutputStream out;
 
 	public BinaryZipWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
-			final StringMappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile, final int bufferSize) throws IOException {
-		super(monitoringController, writeQueue, mappingFileWriter, path, maxEntriesInFile);
+			final StringMappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile, final int bufferSize, final int level)
+			throws IOException {
+		super(monitoringController, writeQueue, mappingFileWriter, path, maxEntriesInFile, level);
 		super.fileExtension = ".bin";
 		this.out = new DataOutputStream(new BufferedOutputStream(super.zipOutputStream, bufferSize));
 	}

@@ -26,7 +26,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writer.IMonitoringWriter;
 import kieker.monitoring.writer.filesystem.AbstractAsyncZipWriter;
-import kieker.monitoring.writer.filesystem.AsyncBinaryZipWriter;
+import kieker.monitoring.writer.filesystem.AsyncAsciiZipWriter;
 
 /**
  * @author Jan Waller
@@ -34,30 +34,29 @@ import kieker.monitoring.writer.filesystem.AsyncBinaryZipWriter;
  * @since 1.7
  */
 @Ignore
-public class BasicAsyncBinaryZipWriterReaderTest extends AbstractTestFSWriterReader { // NOPMD (TestClassWithoutTestCases) // NOCS (MissingCtorCheck)
+public class BasicAsyncAsciiZipWriterReaderTest extends AbstractTestFSWriterReader { // NOPMD (TestClassWithoutTestCases) // NOCS (MissingCtorCheck)
 
-	public BasicAsyncBinaryZipWriterReaderTest() {
+	public BasicAsyncAsciiZipWriterReaderTest() {
 		// empty default constructor
 	}
 
 	@Override
 	protected Class<? extends IMonitoringWriter> getTestedWriterClazz() {
-		return AsyncBinaryZipWriter.class;
+		return AsyncAsciiZipWriter.class;
 	}
 
 	@Override
 	protected void refineWriterConfiguration(final Configuration config, final int numRecordsWritten) {
-		config.setProperty(AsyncBinaryZipWriter.class.getName() + '.' + AbstractAsyncZipWriter.CONFIG_MAXENTRIESINFILE, "1");
+		config.setProperty(AsyncAsciiZipWriter.class.getName() + '.' + AbstractAsyncZipWriter.CONFIG_MAXENTRIESINFILE, "1");
 	}
 
 	@Override
 	protected boolean terminateBeforeLogInspection() {
-		return true; // because the AsyncBinaryZipWriter does not flush
+		return true; // because the AsyncAsciiZipWriter does not flush
 	}
 
 	@Override
 	protected void doSomethingBeforeReading(final String[] monitoringLogs) {
-		System.exit(-1);
 		// we'll keep the log untouched
 	}
 
