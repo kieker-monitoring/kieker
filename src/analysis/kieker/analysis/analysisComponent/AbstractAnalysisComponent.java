@@ -16,6 +16,8 @@
 
 package kieker.analysis.analysisComponent;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import kieker.analysis.IProjectContext;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -42,6 +44,7 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 	/**
 	 * The project context of this component.
 	 */
+	// TODO #819 can be final in Kieker 1.8
 	protected volatile IProjectContext projectContext;
 
 	/**
@@ -51,13 +54,31 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 
 	private final String name;
 
+	private static final AtomicInteger anonInstanceCounter = new AtomicInteger(0);
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
 	 * @param configuration
 	 *            The configuration for this component.
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
+	@Deprecated
 	public AbstractAnalysisComponent(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/**
+	 * Each AnalysisComponent requires a constructor with a Configuration object and a IProjectContext.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component. The component will be registered.
+	 */
+	public AbstractAnalysisComponent(final Configuration configuration, final IProjectContext projectContext) {
+		this.projectContext = projectContext;
 		try {
 			// somewhat dirty hack...
 			configuration.setDefaultConfiguration(this.getDefaultConfiguration());
@@ -67,7 +88,11 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 		this.configuration = configuration;
 
 		// Try to determine the name
-		this.name = configuration.getStringProperty(CONFIG_NAME);
+		String name = configuration.getStringProperty(CONFIG_NAME);
+		if (name.isEmpty()) {
+			name = this.getClass().getSimpleName() + '-' + anonInstanceCounter.incrementAndGet();
+		}
+		this.name = name;
 	}
 
 	/**

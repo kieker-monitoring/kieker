@@ -76,7 +76,6 @@ import kieker.common.logging.LogFactory;
  * 
  * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke, Jan Waller
  */
-// TODO #818 Use the new constructor in the reflection calls as well
 @kieker.analysis.annotation.AnalysisController(
 		configuration = {
 			@Property(name = IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, defaultValue = "NANOSECONDS"),
@@ -337,10 +336,9 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		for (final MIRepository mRepository : mProject.getRepositories()) {
 			// Extract the necessary informations to create the repository.
 			final Configuration configuration = AnalysisController.modelPropertiesToConfiguration(mRepository.getProperties());
-			final AbstractRepository repository = AnalysisController.createAndInitialize(AbstractRepository.class, mRepository.getClassname(), configuration,
+			final AbstractRepository repository = AnalysisController.createAndInitialize(AbstractRepository.class, mRepository.getClassname(), configuration, this,
 					classLoader); // throws AnalysisConfigurationException on errors
 			repositoryMap.put(mRepository, repository);
-			this.registerRepository(repository);
 		}
 		/*
 		 * We run through the project and collect all plugins. As we create an actual object for every plugin within the model, we have to remember the mapping
@@ -355,16 +353,10 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			final String pluginClassname = mPlugin.getClassname();
 			configuration.setProperty(AbstractAnalysisComponent.CONFIG_NAME, mPlugin.getName());
 			// Create the plugin and put it into our map. */
-			final AbstractPlugin plugin = AnalysisController.createAndInitialize(AbstractPlugin.class, pluginClassname, configuration, classLoader);
+			final AbstractPlugin plugin = AnalysisController.createAndInitialize(AbstractPlugin.class, pluginClassname, configuration, this, classLoader);
 			pluginMap.put(mPlugin, plugin);
 			// Check the used configuration against the actual available configuration keys.
 			AnalysisController.checkConfiguration(plugin, configuration);
-			// Add the plugin to our controller instance.
-			if (plugin instanceof AbstractReaderPlugin) {
-				this.registerReader((AbstractReaderPlugin) plugin);
-			} else {
-				this.registerFilter((AbstractFilterPlugin) plugin);
-			}
 		}
 		// Now we have all plugins. We can start to assemble the wiring.
 		for (final MIPlugin mPlugin : mPlugins) {
@@ -785,12 +777,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register filter after starting analysis.");
 		}
-		// Try to register the current analysis controller for the given component
-		if (!reader.setProjectContext(this)) {
-			// Seems like it failed
-			LOG.warn("Reader " + reader.getName() + " already registered with other AnalysisController.");
-			return;
-		}
+		reader.setProjectContext(this);
 		if (this.readers.contains(reader)) {
 			LOG.warn("Reader " + reader.getName() + " already registered.");
 			return;
@@ -811,12 +798,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register filter after starting analysis.");
 		}
-		// Try to register the current analysis controller for the given component
-		if (!filter.setProjectContext(this)) {
-			// Seems like it failed
-			LOG.warn("Filter " + filter.getName() + " already registered with other AnalysisController.");
-			return;
-		}
+		filter.setProjectContext(this); // just to make sure!
 		if (this.filters.contains(filter)) {
 			LOG.warn("Filter '" + filter.getName() + "' (" + filter.getPluginName() + ") already registered.");
 			return;
@@ -837,12 +819,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register respository after starting analysis.");
 		}
-		// Try to register the current analysis controller for the given component
-		if (!repository.setProjectContext(this)) {
-			// Seems like it failed
-			LOG.warn("Repository " + repository.getName() + "' (" + repository.getRepositoryName() + ") already registered with other AnalysisController.");
-			return;
-		}
+		repository.setProjectContext(this); // just to make sure
 		if (this.repos.contains(repository)) {
 			LOG.warn("Repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ") already registered.");
 			return;
@@ -1038,11 +1015,11 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 */
 	@SuppressWarnings("unchecked")
 	private static final <C extends AbstractAnalysisComponent> C createAndInitialize(final Class<C> c, final String classname, final Configuration configuration,
-			final ClassLoader classLoader) throws AnalysisConfigurationException {
+			final IProjectContext projectContext, final ClassLoader classLoader) throws AnalysisConfigurationException {
 		try {
 			final Class<?> clazz = Class.forName(classname, true, classLoader);
 			if (c.isAssignableFrom(clazz)) {
-				return (C) clazz.getConstructor(Configuration.class).newInstance(configuration);
+				return (C) clazz.getConstructor(Configuration.class, IProjectContext.class).newInstance(configuration, projectContext);
 			} else {
 				throw new AnalysisConfigurationException("Class '" + classname + "' has to implement or extend '" + c.getSimpleName() + "'");
 			}

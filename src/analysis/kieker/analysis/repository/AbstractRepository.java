@@ -42,7 +42,7 @@ public abstract class AbstractRepository extends AbstractAnalysisComponent imple
 	 */
 	@Deprecated
 	public AbstractRepository(final Configuration configuration) {
-		super(configuration);
+		this(configuration, null);
 	}
 
 	/**
@@ -56,7 +56,7 @@ public abstract class AbstractRepository extends AbstractAnalysisComponent imple
 	// Internal use of the register methods:
 	@SuppressWarnings("deprecation")
 	public AbstractRepository(final Configuration configuration, final IProjectContext projectContext) {
-		super(configuration);
+		super(configuration, projectContext);
 
 		// Register the repository
 		if (projectContext instanceof AnalysisController) {

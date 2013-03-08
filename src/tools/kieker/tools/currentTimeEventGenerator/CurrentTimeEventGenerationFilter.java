@@ -116,7 +116,7 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	public CurrentTimeEventGenerationFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
-		if (null != projectContext) { // TODO: remove non-null check and else case in Kieker 1.8)
+		if (null != projectContext) { // TODO #819 remove non-null check and else case in Kieker 1.8)
 			final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
 			TimeUnit recordTimeunit;
 			try {
@@ -165,9 +165,7 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	@InputPort(name = INPUT_PORT_NAME_NEW_RECORD, eventTypes = { IMonitoringRecord.class },
 			description = "Receives a new record and extracts the logging timestamp as a time event")
 	public void inputRecord(final IMonitoringRecord record) {
-		if (record != null) { // TODO: can we get null?
-			this.inputTimestamp(record.getLoggingTimestamp());
-		}
+		this.inputTimestamp(record.getLoggingTimestamp());
 	}
 
 	/**

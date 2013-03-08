@@ -76,8 +76,6 @@ public final class BookstoreEventRecordFactoryStarter {
 		allRecords.add(new Trace(traceId, traceId, sessionId, hostname, Trace.NO_PARENT_TRACEID, Trace.NO_PARENT_ORDER_INDEX));
 		allRecords.addAll(Arrays.asList(validSyncTraceAdditionalCallEventsGap.getTraceEvents()));
 
-		// TODO: currently not all of the trace generation methods in this class are used
-
 		for (final IMonitoringRecord r : allRecords) {
 			ctrl.newMonitoringRecord(r);
 		}

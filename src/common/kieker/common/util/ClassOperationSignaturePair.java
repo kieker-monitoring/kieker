@@ -40,8 +40,7 @@ public class ClassOperationSignaturePair {
 	public ClassOperationSignaturePair(final String fqClassname, final Signature signature) {
 		this.fqClassname = fqClassname;
 		this.signature = signature;
-		final int tmpLastDot = fqClassname.lastIndexOf('.');
-		this.lastDot = (tmpLastDot + 1) > fqClassname.length() ? -1 : tmpLastDot; // NOCS (?:)
+		this.lastDot = fqClassname.lastIndexOf('.');
 	}
 
 	/**
@@ -105,7 +104,6 @@ public class ClassOperationSignaturePair {
 	 * 
 	 * @param operationSignatureStr
 	 */
-	// TODO: Move this method to the then-extracted class FQComponentNameSignaturePair
 	public static ClassOperationSignaturePair splitOperationSignatureStr(final String operationSignatureStr) {
 		return ClassOperationSignaturePair.splitOperationSignatureStr(operationSignatureStr, false);
 	}

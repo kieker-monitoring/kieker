@@ -41,11 +41,11 @@ public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFi
 	 */
 	@Deprecated
 	public AbstractFilterPlugin(final Configuration configuration) {
-		super(configuration);
+		this(configuration, null);
 	}
 
 	/**
-	 * The second "default constructor".
+	 * Each Plugin requires a constructor with a Configuration object and a IProjectContext.
 	 * 
 	 * @param configuration
 	 *            The configuration for this component.
@@ -55,7 +55,7 @@ public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFi
 	// Internal use of the register methods:
 	@SuppressWarnings("deprecation")
 	public AbstractFilterPlugin(final Configuration configuration, final IProjectContext projectContext) {
-		super(configuration);
+		super(configuration, projectContext);
 
 		// Register the filter
 		if (projectContext instanceof AnalysisController) {

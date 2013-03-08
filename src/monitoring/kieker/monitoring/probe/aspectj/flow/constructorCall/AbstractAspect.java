@@ -45,7 +45,6 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Pointcut
 	public abstract void monitoredConstructor();
 
-	// TODO #820 the detection of the caller with EnclosingStaticPart might be wrong!
 	@Around("monitoredConstructor() && this(thisObject) && notWithinKieker()")
 	public Object member2constructor(final Object thisObject, final ProceedingJoinPoint thisJoinPoint,
 			final EnclosingStaticPart thisEnclosingJoinPoint) throws Throwable { // NOCS

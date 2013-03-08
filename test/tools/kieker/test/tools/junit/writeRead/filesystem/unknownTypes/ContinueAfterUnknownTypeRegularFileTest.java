@@ -42,7 +42,6 @@ public class ContinueAfterUnknownTypeRegularFileTest extends AbstractUnknownType
 	@Override
 	protected void refineWriterConfiguration(final Configuration config, final int numRecordsWritten) {
 		config.setProperty(this.getClass().getName() + "." + AsyncFsWriter.CONFIG_FLUSH, Boolean.TRUE.toString());
-		// TODO: additional configuration parameters
 		LogImplJUnit.disableThrowable(MonitoringRecordException.class);
 	}
 

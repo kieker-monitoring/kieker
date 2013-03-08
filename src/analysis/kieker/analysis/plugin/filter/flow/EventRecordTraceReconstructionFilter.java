@@ -123,7 +123,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	public EventRecordTraceReconstructionFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
-		if (null != projectContext) { // TODO: #819 remove non-null check and else case in Kieker 1.8
+		if (null != projectContext) { // TODO #819 remove non-null check and else case in Kieker 1.8
 			final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
 			TimeUnit recordTimeunit;
 			try {

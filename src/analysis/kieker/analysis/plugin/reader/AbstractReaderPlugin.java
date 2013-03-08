@@ -41,11 +41,11 @@ public abstract class AbstractReaderPlugin extends AbstractPlugin implements IRe
 	 */
 	@Deprecated
 	public AbstractReaderPlugin(final Configuration configuration) {
-		super(configuration);
+		this(configuration, null);
 	}
 
 	/**
-	 * The second "default constructor".
+	 * Each Plugin requires a constructor with a Configuration object and a IProjectContext.
 	 * 
 	 * @param configuration
 	 *            The configuration for this component.
@@ -55,7 +55,7 @@ public abstract class AbstractReaderPlugin extends AbstractPlugin implements IRe
 	// Internal use of the register methods:
 	@SuppressWarnings("deprecation")
 	public AbstractReaderPlugin(final Configuration configuration, final IProjectContext projectContext) {
-		super(configuration);
+		super(configuration, projectContext);
 
 		// Register the reader
 		if (projectContext instanceof AnalysisController) {

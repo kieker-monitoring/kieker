@@ -34,7 +34,7 @@ public class BasicPrintStreamWriterTestStdErr extends AbstractPrintStreamWriterT
 
 	private volatile PrintStream originalPrintStream;
 
-	volatile StringTeePrintStream stringTeePrintStream = null; // NOPMD (init for findbugs)
+	private volatile StringTeePrintStream stringTeePrintStream = null; // NOPMD (init for findbugs)
 
 	public BasicPrintStreamWriterTestStdErr() {
 		// empty default constructor

@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.display.annotation.Display;
 import kieker.analysis.exception.AnalysisConfigurationException;
@@ -72,10 +73,25 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	 * 
 	 * @param configuration
 	 *            The configuration for this repository.
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
+	@Deprecated
 	public AbstractPlugin(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	/**
+	 * Each Plugin requires a constructor with a Configuration object and a IProjectContext.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component. The component will be registered.
+	 */
+	public AbstractPlugin(final Configuration configuration, final IProjectContext projectContext) {
 		// Registering will happen in the subclass
-		super(configuration);
+		super(configuration, projectContext);
 
 		// Get all repository and output ports.
 		this.repositoryPorts = new ConcurrentHashMap<String, RepositoryPort>();

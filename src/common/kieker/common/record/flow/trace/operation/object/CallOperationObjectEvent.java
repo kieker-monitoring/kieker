@@ -146,7 +146,8 @@ public final class CallOperationObjectEvent extends CallOperationEvent implement
 		return this.calleeObjectId;
 	}
 
-	// TODO include objectIds?
+	// Currently, we do not override this method to include a comparison of object ids. So, these events stay downward compatible and just provide additional
+	// information.
 	// @Override
 	// public final boolean callsReferencedOperationOf(final IOperationRecord record) {
 	// return this.getCalleeOperationSignature().equals(record.getOperationSignature()) && this.getCalleeClassSignature().equals(record.getClassSignature());
