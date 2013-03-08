@@ -41,6 +41,8 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 
 	private static final Log LOG = LogFactory.getLog(AbstractAnalysisComponent.class);
 
+	private static final AtomicInteger UNNAMED_COUNTER = new AtomicInteger(0);
+
 	/**
 	 * The project context of this component.
 	 */
@@ -53,8 +55,6 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 	protected final Configuration configuration;
 
 	private final String name;
-
-	private static final AtomicInteger anonInstanceCounter = new AtomicInteger(0);
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -88,11 +88,11 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 		this.configuration = configuration;
 
 		// Try to determine the name
-		String name = configuration.getStringProperty(CONFIG_NAME);
-		if (name.length() == 0) {
-			name = this.getClass().getSimpleName() + '-' + anonInstanceCounter.incrementAndGet();
+		String tmpName = configuration.getStringProperty(CONFIG_NAME);
+		if (tmpName.length() == 0) {
+			tmpName = this.getClass().getSimpleName() + '-' + UNNAMED_COUNTER.incrementAndGet();
 		}
-		this.name = name;
+		this.name = tmpName;
 	}
 
 	/**
