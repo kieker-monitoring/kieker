@@ -89,7 +89,7 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 
 		// Try to determine the name
 		String name = configuration.getStringProperty(CONFIG_NAME);
-		if (name.isEmpty()) {
+		if (name.length() == 0) {
 			name = this.getClass().getSimpleName() + '-' + anonInstanceCounter.incrementAndGet();
 		}
 		this.name = name;
