@@ -16,6 +16,7 @@
 
 package kieker.analysis.plugin.reader.filesystem;
 
+import java.io.File;
 import java.util.PriorityQueue;
 
 import kieker.analysis.IProjectContext;
@@ -112,8 +113,17 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	 */
 	public boolean read() {
 		// start all reader
-		for (final String inputDir : this.inputDirs) {
-			final Thread readerThread = new Thread(new FSDirectoryReader(inputDir, this, this.ignoreUnknownRecordTypes));
+		for (final String inputDirFn : this.inputDirs) {
+			final File inputDir = new File(inputDirFn);
+			final Thread readerThread;
+			if (inputDir.isDirectory()) {
+				readerThread = new Thread(new FSDirectoryReader(inputDir, this, this.ignoreUnknownRecordTypes));
+			} else if (inputDir.isFile() && inputDirFn.endsWith(".zip")) {
+				readerThread = new Thread(new FSZipReader(inputDir, this, this.ignoreUnknownRecordTypes));
+			} else {
+				LOG.warn("Invalid Directory or filename (no Kieker log): " + inputDirFn);
+				continue;
+			}
 			readerThread.setDaemon(true);
 			readerThread.start();
 		}

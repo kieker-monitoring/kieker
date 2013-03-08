@@ -19,8 +19,6 @@ package kieker.test.tools.junit.writeRead.filesystem;
 import java.io.File;
 import java.util.List;
 
-import org.junit.Ignore;
-
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
@@ -33,7 +31,6 @@ import kieker.monitoring.writer.filesystem.AsyncAsciiZipWriter;
  * 
  * @since 1.7
  */
-@Ignore
 public class BasicAsyncAsciiZipWriterReaderTest extends AbstractTestFSWriterReader { // NOPMD (TestClassWithoutTestCases) // NOCS (MissingCtorCheck)
 
 	public BasicAsyncAsciiZipWriterReaderTest() {

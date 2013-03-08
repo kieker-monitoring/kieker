@@ -100,5 +100,5 @@ public abstract class AbstractAsyncZipWriter extends AbstractAsyncWriter {
 	}
 
 	protected abstract AbstractZipWriterThread initWorker(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
-			final StringMappingFileWriter mappingFileWriter, final String path, final int maxEntiresInFile, final int bufferSize, final int level) throws Exception;
+			final StringMappingFileWriter strMappingFileWriter, final String path, final int maxEntiresInFile, final int bufferSize, final int level) throws Exception;
 }

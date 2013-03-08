@@ -57,38 +57,37 @@ final class FSDirectoryReader implements Runnable {
 	String filePrefix = NORMAL_FILE_PREFIX; // NOPMD NOCS (package visible for inner class)
 
 	private final Map<Integer, String> stringRegistry = new HashMap<Integer, String>(); // NOPMD (no synchronization needed)
-	// This set of classes is used to filter only records of a specific type. The value null means all record types are read.
+
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final File inputDir;
 	private boolean terminated;
 
 	private final boolean ignoreUnknownRecordTypes;
+	// This set of classes is used to filter only records of a specific type. The value null means all record types are read.
 	private final Set<String> unknownTypesObserved = new HashSet<String>();
 
 	/**
 	 * Creates a new instance of this class.
 	 * 
-	 * @param inputDirName
-	 *            The name of the input directory.
+	 * @param inputDir
+	 *            The File object for the input directory.
 	 * @param recordReceiver
 	 *            The receiver handling the records.
 	 * @param ignoreUnknownRecordTypes
 	 *            select only records of this type; null selects all
 	 */
-	public FSDirectoryReader(final String inputDirName, final IMonitoringRecordReceiver recordReceiver,
+	public FSDirectoryReader(final File inputDir, final IMonitoringRecordReceiver recordReceiver,
 			final boolean ignoreUnknownRecordTypes) {
-		if ((inputDirName == null) || (inputDirName.length() == 0)) {
-			throw new IllegalArgumentException("Invalid or empty inputDir: " + inputDirName);
+		if ((inputDir == null) || !inputDir.isDirectory()) {
+			throw new IllegalArgumentException("Invalid or empty inputDir");
 		}
-		this.inputDir = new File(inputDirName);
+		this.inputDir = inputDir;
 		this.recordReceiver = recordReceiver;
 		this.ignoreUnknownRecordTypes = ignoreUnknownRecordTypes;
 	}
 
 	/**
 	 * Starts reading and returns after each record has been passed to the registered {@link #recordReceiver}.
-	 * 
-	 * Errors must be indicated by throwing an {@link RuntimeException}.
 	 */
 	public final void run() {
 		this.readMappingFile(); // must be the first line to set filePrefix!
@@ -141,8 +140,6 @@ final class FSDirectoryReader implements Runnable {
 
 	/**
 	 * Reads the mapping file located in the directory.
-	 * 
-	 * @throws IOException
 	 */
 	private final void readMappingFile() {
 		File mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + "kieker.map");
@@ -274,14 +271,6 @@ final class FSDirectoryReader implements Runnable {
 						newEx.initCause(ex);
 						throw newEx; // NOPMD (cause is set above)
 					} else {
-						// final StringBuilder sb = new StringBuilder();
-						// sb.append("Error processing line: ").append(line);
-						// Throwable t = ex;
-						// do {
-						// sb.append('\n').append(t.getLocalizedMessage());
-						// t = t.getCause();
-						// } while (t != null);
-						// LOG.warn(sb.toString());
 						LOG.warn("Error processing line: " + line, ex);
 						continue; // skip this record
 					}
@@ -315,7 +304,7 @@ final class FSDirectoryReader implements Runnable {
 	private final void processBinaryInputFile(final File inputFile, final BinaryCompressionMethod method) {
 		DataInputStream in = null;
 		try {
-			in = method.getDataInputStream(inputFile, 1048576); // 1 MB buffer
+			in = method.getDataInputStream(inputFile, 1024 * 1024); // 1 MiB buffer
 			while (true) {
 				final Integer id;
 				try {

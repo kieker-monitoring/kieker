@@ -79,6 +79,18 @@
 	</Match>
 
 	<Match>
+		<Class name="kieker.analysis.plugin.reader.filesystem.FSZipReader" />
+		<Method name="readBinaryFile" params="java.io.DataInputStream" returns="void" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.reader.filesystem.FSZipReader" />
+		<Method name="readAsciiFile" params="java.io.BufferedReader" returns="void" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
+
+	<Match>
 		<Class name="kieker.analysis.plugin.reader.filesystem.FSDirectoryReader" />
 		<Method name="processNormalInputFile" params="java.io.File" returns="void" />
 		<Bug pattern="REC_CATCH_EXCEPTION" />
