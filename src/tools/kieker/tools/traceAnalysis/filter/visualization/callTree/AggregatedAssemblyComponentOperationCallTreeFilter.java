@@ -33,14 +33,13 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPair;
 
 /**
- * 
  * @author Andre van Hoorn
  */
 @Plugin(description = "Uses the incoming data to enrich the connected repository with data for the aggregated assembly component operation call tree",
 		repositoryPorts = {
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 		})
-// TODO: don't we have to redefine the configuration properties from the super class here?
+// TODO #821 don't we have to redefine the configuration properties from the super class here?
 public class AggregatedAssemblyComponentOperationCallTreeFilter extends AbstractAggregatedCallTreeFilter<AssemblyComponentOperationPair> {
 
 	/**
@@ -103,8 +102,9 @@ class AggregatedAssemblyComponentOperationCallTreeNode extends AbstractAggregate
 	}
 
 	@Override
-	public AbstractCallTreeNode<AssemblyComponentOperationPair> newCall(final Object dstObj, final MessageTrace origin, final IOriginRetentionPolicy originPolicy) {
-		final AssemblyComponentOperationPair destination = (AssemblyComponentOperationPair) dstObj;
+	public AbstractCallTreeNode<AssemblyComponentOperationPair> newCall(final AssemblyComponentOperationPair dstObj, final MessageTrace origin,
+			final IOriginRetentionPolicy originPolicy) {
+		final AssemblyComponentOperationPair destination = dstObj;
 		WeightedDirectedCallTreeEdge<AssemblyComponentOperationPair> e = this.childMap.get(destination.getId());
 		AbstractCallTreeNode<AssemblyComponentOperationPair> n;
 		if (e != null) {

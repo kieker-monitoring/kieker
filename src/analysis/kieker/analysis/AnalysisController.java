@@ -76,7 +76,7 @@ import kieker.common.logging.LogFactory;
  * 
  * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke, Jan Waller
  */
-// TODO Use the new constructor in the reflection calls as well
+// TODO #818 Use the new constructor in the reflection calls as well
 @kieker.analysis.annotation.AnalysisController(
 		configuration = {
 			@Property(name = IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, defaultValue = "NANOSECONDS"),
@@ -780,8 +780,6 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * 
 	 * @deprecated This method will not be for public use in Kieker 1.8. Use the new constructor instead.
 	 */
-	// TODO This is not really deprecated, but we have to make sure that only AbstractComponent can use this method. Maybe we should remove the method just from the
-	// interface? sounds good!
 	@Deprecated
 	public final void registerReader(final AbstractReaderPlugin reader) throws IllegalStateException {
 		if (this.state != STATE.READY) {
@@ -808,8 +806,6 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * 
 	 * @deprecated This method will not be for public use in Kieker 1.8. Use the new constructor instead.
 	 */
-	// TODO This is not really deprecated, but we have to make sure that only AbstractComponent can use this method. Maybe we should remove the method just from the
-	// interface? sounds good!
 	@Deprecated
 	public final void registerFilter(final AbstractFilterPlugin filter) throws IllegalStateException {
 		if (this.state != STATE.READY) {
@@ -836,8 +832,6 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * 
 	 * @deprecated This method will not be for public use in Kieker 1.8. Use the new constructor instead.
 	 */
-	// TODO This is not really deprecated, but we have to make sure that only AbstractComponent can use this method. Maybe we should remove the method just from the
-	// interface? sounds good!
 	@Deprecated
 	public final void registerRepository(final AbstractRepository repository) throws IllegalStateException {
 		if (this.state != STATE.READY) {
@@ -918,7 +912,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 				return resource;
 			}
 		});
-		// Try to load the ressource.
+		// Try to load the resource
 		try {
 			final XMIResource resource = (XMIResource) resourceSet.getResource(URI.createFileURI(file.toString()), true);
 			final EList<EObject> content;
@@ -953,15 +947,15 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *             In case of errors.
 	 */
 	public static final void saveToFile(final File file, final MIProject project) throws IOException {
-		/* Create a resource and put the given project into it. */
+		// Create a resource and put the given project into it
 		final ResourceSet resourceSet = new ResourceSetImpl();
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 		final Resource resource = resourceSet.createResource(URI.createFileURI(file.getAbsolutePath()));
 		resource.getContents().add(project);
-		/* Make sure that the controller uses utf8 instead of ascii. */
+		// Make sure that the controller uses utf8 instead of ascii.
 		final Map<String, String> options = new HashMap<String, String>(); // NOPMD (no concurrent access)
 		options.put(XMLResource.OPTION_ENCODING, "UTF-8");
-		/* Now try to save the resource. */
+		// Now try to save the resource
 		try {
 			resource.save(options);
 		} catch (final IOException ex) {
@@ -980,7 +974,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 */
 	private static final Configuration modelPropertiesToConfiguration(final EList<MIProperty> mProperties) {
 		final Configuration configuration = new Configuration();
-		/* Run through the properties and convert every single of them. */
+		// Run through the properties and convert every single of them
 		for (final MIProperty mProperty : mProperties) {
 			configuration.setProperty(mProperty.getName(), mProperty.getValue());
 		}

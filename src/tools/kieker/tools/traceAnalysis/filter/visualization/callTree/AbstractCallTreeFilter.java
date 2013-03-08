@@ -272,17 +272,18 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		ps.close();
 	}
 
-	protected static void addTraceToTree(final AbstractCallTreeNode<?> root, final MessageTrace t, final IPairFactory pairFactory, final boolean aggregated) throws
+	protected static <T> void addTraceToTree(final AbstractCallTreeNode<T> root, final MessageTrace t, final IPairFactory<T> pairFactory, final boolean aggregated)
+			throws
 			TraceProcessingException {
-		final Stack<AbstractCallTreeNode<?>> curStack = new Stack<AbstractCallTreeNode<?>>();
+		final Stack<AbstractCallTreeNode<T>> curStack = new Stack<AbstractCallTreeNode<T>>();
 
 		final Collection<AbstractMessage> msgTraceVec = t.getSequenceAsVector();
-		AbstractCallTreeNode<?> curNode = root;
+		AbstractCallTreeNode<T> curNode = root;
 		curStack.push(curNode);
 		for (final AbstractMessage m : msgTraceVec) {
 			if (m instanceof SynchronousCallMessage) {
 				curNode = curStack.peek();
-				AbstractCallTreeNode<?> child;
+				AbstractCallTreeNode<T> child;
 				child = curNode.newCall(pairFactory.createPair((SynchronousCallMessage) m), t, NoOriginRetentionPolicy.createInstance());
 				curNode = child;
 				curStack.push(curNode);
@@ -297,18 +298,18 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		}
 	}
 
-	public static void writeDotForMessageTrace(final AbstractCallTreeNode<?> root, final IPairFactory pairFactory, final MessageTrace msgTrace,
+	public static <T> void writeDotForMessageTrace(final AbstractCallTreeNode<T> root, final IPairFactory<T> pairFactory, final MessageTrace msgTrace,
 			final String outputFilename, final boolean includeWeights, final boolean shortLabels) throws FileNotFoundException, TraceProcessingException,
 			UnsupportedEncodingException {
 
-		AbstractCallTreeFilter.addTraceToTree(root, msgTrace, pairFactory, false); // false: no aggregation
+		AbstractCallTreeFilter.<T>addTraceToTree(root, msgTrace, pairFactory, false); // false: no aggregation
 		AbstractCallTreeFilter.saveTreeToDotFile(root, outputFilename, includeWeights, true, shortLabels); // includeEois
 	}
 
 	/**
 	 * @author Andre van Hoorn
 	 */
-	public interface IPairFactory {
-		public Object createPair(final SynchronousCallMessage callMsg);
+	public interface IPairFactory<T> {
+		public T createPair(final SynchronousCallMessage callMsg);
 	}
 }

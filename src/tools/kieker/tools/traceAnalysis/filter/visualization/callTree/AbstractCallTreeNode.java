@@ -72,8 +72,7 @@ public abstract class AbstractCallTreeNode<T> extends AbstractVertex<AbstractCal
 		this.childEdges.add(destination);
 	}
 
-	// TODO: Dirty hack, Object should be T.
-	public abstract AbstractCallTreeNode<T> newCall(Object destination, MessageTrace origin, IOriginRetentionPolicy originPolicy);
+	public abstract AbstractCallTreeNode<T> newCall(T destination, MessageTrace origin, IOriginRetentionPolicy originPolicy);
 
 	public final int getId() {
 		return this.id;

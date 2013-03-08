@@ -172,9 +172,9 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	public void inputMessageTraces(final MessageTrace t) {
 		synchronized (this) {
 			try {
-				AbstractCallTreeFilter.addTraceToTree(this.root, t, new IPairFactory() {
+				AbstractCallTreeFilter.addTraceToTree(this.root, t, new IPairFactory<T>() {
 
-					public Object createPair(final SynchronousCallMessage callMsg) {
+					public T createPair(final SynchronousCallMessage callMsg) {
 						return AbstractAggregatedCallTreeFilter.this.concreteCreatePair(callMsg);
 					}
 				}, true); // aggregated
@@ -191,6 +191,6 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	 * 
 	 * @param callMsg
 	 */
-	protected abstract Object concreteCreatePair(SynchronousCallMessage callMsg);
+	protected abstract T concreteCreatePair(SynchronousCallMessage callMsg);
 
 }

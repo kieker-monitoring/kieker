@@ -22,7 +22,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.IAnalysisController;
 import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
@@ -84,7 +83,7 @@ public final class TestPluginLegacy extends AbstractKiekerTest {
 		final Object testObject1 = new Object();
 		final Object testObject2 = new Object();
 
-		final IAnalysisController analysisController = new AnalysisController();
+		final AnalysisController analysisController = new AnalysisController();
 
 		final SimpleRepository simpleRepository = new SimpleRepository(new Configuration());
 		final ListReader<Object> simpleListReader = new ListReader<Object>(new Configuration());
@@ -125,7 +124,7 @@ public final class TestPluginLegacy extends AbstractKiekerTest {
 		final Object testObject2 = new Object();
 
 		// The controller for the analysis
-		final IAnalysisController analysisController = new AnalysisController();
+		final AnalysisController analysisController = new AnalysisController();
 
 		// The analysis components
 		final ListReader<Object> simpleListReader = new ListReader<Object>(new Configuration(), null);

@@ -33,9 +33,9 @@ public class TraceCallTreeNode extends AbstractCallTreeNode<AllocationComponentO
 	}
 
 	@Override
-	public AbstractCallTreeNode<AllocationComponentOperationPair> newCall(final Object destination, final MessageTrace origin,
+	public AbstractCallTreeNode<AllocationComponentOperationPair> newCall(final AllocationComponentOperationPair destination, final MessageTrace origin,
 			final IOriginRetentionPolicy originPolicy) {
-		final AllocationComponentOperationPair destPair = (AllocationComponentOperationPair) destination;
+		final AllocationComponentOperationPair destPair = destination;
 		final TraceCallTreeNode destNode = new TraceCallTreeNode(destPair.getId(), destPair, false, origin, originPolicy);
 		final WeightedDirectedCallTreeEdge<AllocationComponentOperationPair> e = new WeightedDirectedCallTreeEdge<AllocationComponentOperationPair>(this, destNode,
 				origin, originPolicy);

@@ -102,6 +102,24 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 				if ((inputPort != null) && (this.inputPorts.put(inputPort.name(), inputPort) != null)) {
 					LOG.error("Two InputPorts use the same name: " + inputPort.name());
 				}
+				if (inputPort != null) {
+					final Class<?>[] parameters = method.getParameterTypes();
+					if (parameters.length != 1) {
+						LOG.error("The input port " + inputPort.name() + " has to provide exactly one parameter of the correct type.");
+					} else {
+						Class<?>[] eventTypes = inputPort.eventTypes();
+						if (eventTypes.length == 0) {
+							eventTypes = new Class<?>[] { Object.class };
+						}
+						for (final Class<?> event : eventTypes) {
+							if (!parameters[0].isAssignableFrom(event)) {
+								LOG.error("The event type " + event.getName() + " of the input port " + inputPort.name()
+										+ " is not accepted by the parameter of type "
+										+ parameters[0].getName());
+							}
+						}
+					}
+				}
 			}
 		}
 		this.registeredRepositories = new ConcurrentHashMap<String, AbstractRepository>(this.repositoryPorts.size());
@@ -240,10 +258,10 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 					+ dst.getName() + "' (" + dst.getPluginName() + ").");
 		}
 		// Connect the ports.
-		// TODO: add a better check for the parameter of the method (currently only if 1 parameter present)
 		for (final Method m : dst.getClass().getMethods()) {
 			final InputPort ip = m.getAnnotation(InputPort.class);
 			if ((ip != null) && (m.getParameterTypes().length == 1) && ip.name().equals(inputPortName)) {
+				src.outputPorts.get(outputPortName).eventTypes();
 				java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
 					public Object run() {
 						m.setAccessible(true);

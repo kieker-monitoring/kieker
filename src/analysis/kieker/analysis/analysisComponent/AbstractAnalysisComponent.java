@@ -59,7 +59,7 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 	 */
 	public AbstractAnalysisComponent(final Configuration configuration) {
 		try {
-			// TODO: somewhat dirty hack...
+			// somewhat dirty hack...
 			configuration.setDefaultConfiguration(this.getDefaultConfiguration());
 		} catch (final IllegalAccessException ex) {
 			LOG.error("Unable to set repository default properties"); // ok to ignore ex here

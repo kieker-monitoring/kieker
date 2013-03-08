@@ -121,7 +121,7 @@ public abstract class AbstractAspectJProbe implements IMonitoringProbe {
 
 	private final StringBuilder addType(final StringBuilder sb, final Class<?> clazz) {
 		if (null == clazz) {
-			sb.append("ANONYMOUS"); // TODO something better than this?
+			sb.append("ANONYMOUS");
 		} else if (clazz.isArray()) {
 			final Class<?> componentType = clazz.getComponentType();
 			this.addType(sb, componentType);

@@ -67,7 +67,7 @@ public abstract class AbstractTestDbWriterReader extends AbstractWriterReaderTes
 
 	@Override
 	protected void inspectRecords(final List<IMonitoringRecord> eventsPassedToController, final List<IMonitoringRecord> eventsFromMonitoringLog) throws Exception {
-		// TODO currently the reader screws the order completely
+		// the reader screws the order completely, so we have to sort for the test
 		final IMonitoringRecord[] eventsPassed = eventsPassedToController.toArray(new IMonitoringRecord[eventsPassedToController.size()]);
 		Arrays.sort(eventsPassed);
 		final IMonitoringRecord[] eventsFrom = eventsFromMonitoringLog.toArray(new IMonitoringRecord[eventsFromMonitoringLog.size()]);

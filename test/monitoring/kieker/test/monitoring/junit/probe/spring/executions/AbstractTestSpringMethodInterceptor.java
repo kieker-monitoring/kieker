@@ -88,7 +88,6 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 
 	@After
 	public void cleanup() {
-		// TODO: unset session ID
 		this.controlFlowRegistry.unsetThreadLocalEOI();
 		this.controlFlowRegistry.unsetThreadLocalESS();
 		this.controlFlowRegistry.unsetThreadLocalTraceId();

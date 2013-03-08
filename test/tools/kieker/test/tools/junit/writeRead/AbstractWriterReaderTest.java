@@ -34,7 +34,6 @@ import kieker.test.common.junit.AbstractKiekerTest;
 /**
  * @author Andre van Hoorn
  */
-// TODO: The idea is to make this class independent of FS, i.e., to provide a basic test for each writer/reader.
 public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 
 	// parameters for the default list of events to use in the test

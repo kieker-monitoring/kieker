@@ -137,9 +137,9 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 			final TraceCallTreeNode rootNode =
 					new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, AllocationComponentOperationPairFactory.ROOT_PAIR, true, mt,
 							NoOriginRetentionPolicy.createInstance()); // rootNode
-			AbstractCallTreeFilter.writeDotForMessageTrace(rootNode, new IPairFactory() {
+			AbstractCallTreeFilter.writeDotForMessageTrace(rootNode, new IPairFactory<AllocationComponentOperationPair>() {
 
-				public Object createPair(final SynchronousCallMessage callMsg) {
+				public AllocationComponentOperationPair createPair(final SynchronousCallMessage callMsg) {
 					final AllocationComponent allocationComponent = callMsg.getReceivingExecution().getAllocationComponent();
 					final Operation op = callMsg.getReceivingExecution().getOperation();
 					final AllocationComponentOperationPair destination = TraceCallTreeFilter.this.getSystemEntityFactory().getAllocationPairFactory()
