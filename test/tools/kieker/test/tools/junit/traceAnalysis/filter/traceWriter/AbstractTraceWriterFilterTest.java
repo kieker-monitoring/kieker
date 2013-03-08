@@ -16,9 +16,7 @@
 
 package kieker.test.tools.junit.traceAnalysis.filter.traceWriter;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +41,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.util.BookstoreExecutionFactory;
+import kieker.test.tools.util.StringUtils;
 
 /**
  * 
@@ -54,7 +53,6 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 	protected static final String SYSTEM_NEWLINE_STRING = System.getProperty("line.separator");
 
 	private static final String OUTPUT_BASE_FN = "NLdQ3wsS.out"; // the name doesn't matter
-	private static final String ENCODING = "UTF-8";
 
 	private static final String SESSION_ID = "Kzx7Gd5zMF"; // the value doesn't matter
 	private static final String HOSTNAME = "srv-FtfN0uwban"; // the value doesn't matter
@@ -148,25 +146,9 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 		this.analysisController.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.modelRepo);
 		this.analysisController.run();
 
-		final String actualFileContent = this.readOutputFileAsString();
+		final String actualFileContent = StringUtils.readOutputFileAsString(this.outputFile);
 		final String expectedFileContent = this.provideExpectedFileContent(eventList);
 		Assert.assertEquals("Unexpected file content", expectedFileContent, actualFileContent);
-	}
-
-	private String readOutputFileAsString() throws IOException {
-		final byte[] buffer = new byte[(int) this.outputFile.length()];
-		BufferedInputStream f = null;
-		try {
-			f = new BufferedInputStream(new FileInputStream(this.outputFile));
-			if (f.read(buffer) == -1) {
-				Assert.fail("Failed to read file into buffer: " + this.outputFile.getAbsolutePath());
-			}
-		} finally {
-			if (f != null) {
-				f.close();
-			}
-		}
-		return new String(buffer, AbstractTraceWriterFilterTest.ENCODING);
 	}
 
 	@After

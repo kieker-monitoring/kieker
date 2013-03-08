@@ -23,7 +23,7 @@ import java.io.UnsupportedEncodingException;
  * This simple helper class wraps a given {@link PrintStream} but intercepts everything that is written to this instance.
  * The written content can later be accessed.
  * 
- * @see StringTeePrintStream
+ * @see StringTeeOutputStream
  * 
  * @author Andre van Hoorn
  * 

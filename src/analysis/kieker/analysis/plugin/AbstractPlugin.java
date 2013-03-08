@@ -77,8 +77,6 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		// Registering will happen in the subclass
 		super(configuration);
 
-		// KEEP IN MIND: Although we use "this" in the following code, it points to the actual class. Not to AbstractPlugin!!
-
 		// Get all repository and output ports.
 		this.repositoryPorts = new ConcurrentHashMap<String, RepositoryPort>();
 		this.outputPorts = new ConcurrentHashMap<String, OutputPort>();
@@ -108,11 +106,11 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 						LOG.error("The input port " + inputPort.name() + " has to provide exactly one parameter of the correct type.");
 					} else {
 						Class<?>[] eventTypes = inputPort.eventTypes();
-						if (eventTypes.length == 0) {
+						if (eventTypes.length == 0) { // NOPMD (nested if)
 							eventTypes = new Class<?>[] { Object.class };
 						}
 						for (final Class<?> event : eventTypes) {
-							if (!parameters[0].isAssignableFrom(event)) {
+							if (!parameters[0].isAssignableFrom(event)) { // NOPMD (nested if)
 								LOG.error("The event type " + event.getName() + " of the input port " + inputPort.name()
 										+ " is not accepted by the parameter of type "
 										+ parameters[0].getName());

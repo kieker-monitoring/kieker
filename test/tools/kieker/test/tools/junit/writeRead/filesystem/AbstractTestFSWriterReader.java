@@ -43,7 +43,7 @@ import kieker.monitoring.writer.filesystem.AbstractAsyncFSWriter;
 import kieker.monitoring.writer.filesystem.AsyncFsWriter;
 
 import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
-import kieker.test.tools.junit.writeRead.printStream.BasicPrintStreamWriterTestFile;
+import kieker.test.tools.util.StringUtils;
 
 /**
  * @author Andre van Hoorn
@@ -154,7 +154,7 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 	 *             If something during the file access went wrong.
 	 */
 	private void searchReplaceInFile(final String filename, final String findString, final String replaceByString) throws IOException {
-		final String mapFileContent = BasicPrintStreamWriterTestFile.readOutputFileAsString(new File(filename));
+		final String mapFileContent = StringUtils.readOutputFileAsString(new File(filename));
 		final String manipulatedContent = mapFileContent.replaceAll(findString, replaceByString);
 		PrintStream printStream = null;
 		try {

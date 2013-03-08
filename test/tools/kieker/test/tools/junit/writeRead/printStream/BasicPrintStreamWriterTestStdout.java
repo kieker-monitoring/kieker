@@ -17,11 +17,9 @@
 package kieker.test.tools.junit.writeRead.printStream;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 
 import kieker.common.record.IMonitoringRecord;
@@ -32,11 +30,15 @@ import kieker.test.tools.util.StringTeePrintStream;
 /**
  * @author Andre van Hoorn
  */
-public class BasicPrintStreamWriterTestStdout extends AbstractPrintStreamWriterTest { // NOCS (test class without a constructor)
+public class BasicPrintStreamWriterTestStdout extends AbstractPrintStreamWriterTest {
 
 	private volatile PrintStream originalPrintStream;
 
 	private volatile StringTeePrintStream stringTeePrintStream = null; // NOPMD (init for findbugs)
+
+	public BasicPrintStreamWriterTestStdout() {
+		// empty default constructor
+	}
 
 	@Before
 	public void setUp() throws Exception {
@@ -56,28 +58,7 @@ public class BasicPrintStreamWriterTestStdout extends AbstractPrintStreamWriterT
 	}
 
 	@Override
-	protected List<IMonitoringRecord> readEvents() {
-		/*
-		 * we cannot do anything meaningful here, because there's nothing like a PrintStreamReader.
-		 * We'll return an empty List and use our own buffer when evaluating the result.
-		 */
-		return new ArrayList<IMonitoringRecord>();
-	}
-
-	@Override
 	protected void inspectRecords(final List<IMonitoringRecord> eventsPassedToController, final List<IMonitoringRecord> eventFromMonitoringLog) {
-		final String outputString = this.stringTeePrintStream.getString();
-
-		for (final IMonitoringRecord rec : eventsPassedToController) {
-			final StringBuilder inputRecordStringBuilder = new StringBuilder();
-			inputRecordStringBuilder
-					// note that this format needs to be adjusted if the writer's format changes
-					.append(rec.getClass().getSimpleName())
-					.append(": ")
-					.append(rec).append(AbstractPrintStreamWriterTest.SYSTEM_NEWLINE_STRING);
-			final String curLine = inputRecordStringBuilder.toString();
-			Assert.assertTrue("Record '" + curLine + "' not found in output stream: '" + outputString + "'",
-					outputString.indexOf(curLine) != -1);
-		}
+		this.checkRecords(this.stringTeePrintStream.getString(), eventsPassedToController);
 	}
 }
