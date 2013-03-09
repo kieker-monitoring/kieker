@@ -29,6 +29,8 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.4
  */
 public final class JMXWriter extends AbstractMonitoringWriter {
 	private static final String PREFIX = JMXWriter.class.getName() + ".";

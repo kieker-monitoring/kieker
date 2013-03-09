@@ -28,6 +28,8 @@ import kieker.common.logging.LogFactory;
  * terminated by calling the {@link #terminate()} method which delegates the call to the {@link kieker.analysis.AnalysisController#terminate()} method.
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.4
  */
 public final class AnalysisControllerThread extends Thread {
 	private static final Log LOG = LogFactory.getLog(AnalysisControllerThread.class);

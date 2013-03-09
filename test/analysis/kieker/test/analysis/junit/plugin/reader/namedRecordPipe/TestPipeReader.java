@@ -35,6 +35,8 @@ import kieker.test.common.util.namedRecordPipe.NamedPipeWriterFactory;
  * A simple test for the class <code>PipeReader</code>.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.4
  */
 public class TestPipeReader extends AbstractKiekerTest { // NOCS (MissingCtorCheck)
 	// private static final Log log = LogFactory.getLog(TestPipeReader.class);

@@ -46,6 +46,8 @@ import kieker.common.record.IMonitoringRecord;
  * This is a reader which reads the records from a JMX queue.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.4
  */
 @Plugin(description = "A reader which reads records from a JMX queue",
 		outputPorts = {

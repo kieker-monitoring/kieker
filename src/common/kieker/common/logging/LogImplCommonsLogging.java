@@ -20,6 +20,8 @@ package kieker.common.logging;
  * This is an actual implementation of the logging interface used by the common logger of the JVM.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class LogImplCommonsLogging implements Log {
 

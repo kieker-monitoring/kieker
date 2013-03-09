@@ -28,6 +28,8 @@ import kieker.analysis.plugin.annotation.Property;
  * This type annotation can be used to mark repositories.
  * 
  * @author Nils Christian Ehmke, Andre van Hoorn
+ * 
+ * @since 1.5
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

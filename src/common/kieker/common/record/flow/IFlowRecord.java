@@ -22,6 +22,8 @@ import kieker.common.record.IMonitoringRecord;
  * Marker interface to collect all kieker.common.record.flow..* records.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public interface IFlowRecord extends IMonitoringRecord {
 }

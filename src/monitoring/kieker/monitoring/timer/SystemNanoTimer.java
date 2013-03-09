@@ -29,6 +29,8 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
  * A timer implementation, counting in nanoseconds since a specified offset.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class SystemNanoTimer extends AbstractTimeSource {
 	public static final String CONFIG_OFFSET = SystemNanoTimer.class.getName() + ".offset";

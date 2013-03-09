@@ -22,6 +22,8 @@ import kieker.common.record.IMonitoringRecord;
  * This is a simple interface for a writer that works on a pipe.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.5
  */
 public interface IPipeWriter {
 
@@ -31,6 +33,8 @@ public interface IPipeWriter {
 	 * @param record
 	 *            the record.
 	 * @return true on success; false in case of an error.
+	 * 
+	 * @since 1.5
 	 */
 	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
 }

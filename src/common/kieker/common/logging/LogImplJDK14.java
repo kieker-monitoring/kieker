@@ -20,6 +20,8 @@ package kieker.common.logging;
  * This is an actual implementation of the logging interface used by the JDK 14 logger.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class LogImplJDK14 implements Log {
 	private final java.util.logging.Logger logger; // NOPMD (Implementation of an logger)

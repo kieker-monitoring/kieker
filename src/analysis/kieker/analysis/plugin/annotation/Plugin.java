@@ -26,6 +26,8 @@ import java.lang.annotation.Target;
  * This type annotation can be used to mark plugins and to describe the corresponding output ports.
  * 
  * @author Nils Christian Ehmke
+ * 
+ * @since 1.5
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

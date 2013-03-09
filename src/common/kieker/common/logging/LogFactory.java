@@ -22,6 +22,8 @@ import java.util.Locale;
  * This factory class should be used to get new logger instances. It initializes the logging system based on the available classes.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class LogFactory { // NOPMD (Implementation of an logger)
 

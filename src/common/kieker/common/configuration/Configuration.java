@@ -32,6 +32,8 @@ import kieker.common.logging.LogFactory;
  * be removed nor get a lower visibility modificator.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class Configuration extends Properties {
 

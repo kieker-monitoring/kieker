@@ -22,6 +22,8 @@ import kieker.analysis.analysisComponent.IAnalysisComponent;
  * This is the interface for repositories within Kieker.
  * 
  * @author Andre van Hoorn, Nils Christian Ehmke, Jan Waller
+ * 
+ * @since 1.5
  */
 public interface IRepository extends IAnalysisComponent {
 

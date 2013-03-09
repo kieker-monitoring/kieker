@@ -28,6 +28,8 @@ import kieker.common.configuration.Configuration;
  * This class should be used as a base for every repository used within <i>Kieker</i>.
  * 
  * @author Nils Christian Ehmke?
+ * 
+ * @since 1.5
  */
 @Repository
 public abstract class AbstractRepository extends AbstractAnalysisComponent implements IRepository {

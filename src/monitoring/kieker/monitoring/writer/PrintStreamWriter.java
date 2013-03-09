@@ -30,6 +30,8 @@ import kieker.common.record.IMonitoringRecord;
  * A writer that prints incoming records to the specified PrintStream.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public class PrintStreamWriter extends AbstractMonitoringWriter {
 	private static final Log LOG = LogFactory.getLog(PrintStreamWriter.class);

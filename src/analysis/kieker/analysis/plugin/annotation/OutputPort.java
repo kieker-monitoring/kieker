@@ -27,6 +27,8 @@ import java.lang.annotation.Target;
  * output port and the corresponding event types. There is also a field for a human-readable description available.
  * 
  * @author Nils Christian Ehmke
+ * 
+ * @since 1.5
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.ANNOTATION_TYPE)

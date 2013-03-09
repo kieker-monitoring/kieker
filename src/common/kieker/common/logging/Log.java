@@ -32,6 +32,8 @@ package kieker.common.logging;
  * </p>
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public interface Log { // NOCS (Name of Interface)
 

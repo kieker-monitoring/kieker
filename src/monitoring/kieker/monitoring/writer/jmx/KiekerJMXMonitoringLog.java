@@ -24,6 +24,8 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.4
  */
 public final class KiekerJMXMonitoringLog extends NotificationBroadcasterSupport implements KiekerJMXMonitoringLogMBean {
 

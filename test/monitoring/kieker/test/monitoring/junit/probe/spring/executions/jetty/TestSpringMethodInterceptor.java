@@ -43,6 +43,8 @@ import kieker.test.monitoring.util.NamedListWriter;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.5
  */
 public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	// private static final Log LOG = LogFactory.getLog(TestSpringMethodInterceptor.class);

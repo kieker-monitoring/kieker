@@ -28,6 +28,8 @@ import kieker.common.logging.LogFactory;
  * A timer implementation, counting in milliseconds since a specified offset.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class SystemMilliTimer extends AbstractTimeSource {
 	public static final String CONFIG_OFFSET = SystemMilliTimer.class.getName() + ".offset";

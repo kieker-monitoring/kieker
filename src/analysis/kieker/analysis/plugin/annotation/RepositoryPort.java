@@ -30,6 +30,8 @@ import kieker.analysis.repository.AbstractRepository;
  * repository port and the corresponding repository type. There is also a field for a human-readable description available.
  * 
  * @author Nils Christian Ehmke
+ * 
+ * @since 1.5
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.ANNOTATION_TYPE)

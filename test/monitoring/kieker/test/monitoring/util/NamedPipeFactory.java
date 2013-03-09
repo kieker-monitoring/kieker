@@ -40,6 +40,7 @@ import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.4
  */
 public final class NamedPipeFactory {
 

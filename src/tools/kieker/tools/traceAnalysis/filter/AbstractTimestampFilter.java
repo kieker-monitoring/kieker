@@ -25,6 +25,8 @@ import kieker.common.configuration.Configuration;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.5
+ * 
  * @deprecated To be removed in Kieker 1.8
  */
 @Deprecated

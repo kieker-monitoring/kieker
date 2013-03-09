@@ -20,11 +20,15 @@ package kieker.monitoring.core.controller;
  * This controller publishes all interface methods of IMonitoringController as a MBean.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.4
  */
 public interface IJMXController {
 
 	/**
 	 * @return the JMX domain used
+	 * 
+	 * @since 1.4
 	 */
 	public String getJMXDomain();
 }

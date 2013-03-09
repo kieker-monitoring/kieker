@@ -21,6 +21,8 @@ package org.apache.commons.logging.impl;
  * Used to determine the correct calling method.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class Jdk14LoggerPatched extends Jdk14Logger {
 	private static final long serialVersionUID = 1L;

@@ -51,6 +51,8 @@ import kieker.common.logging.LogFactory;
  * {@link kieker.analysis.plugin.reader.AbstractReaderPlugin}.
  * 
  * @author Nils Christian Ehmke, Jan Waller
+ * 
+ * @since 1.5
  */
 @Plugin
 public abstract class AbstractPlugin extends AbstractAnalysisComponent implements IPlugin {

@@ -25,6 +25,8 @@ import kieker.monitoring.core.IMonitoringRecordReceiver;
  *            the type of the objects
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public interface IRegistry<E> {
 

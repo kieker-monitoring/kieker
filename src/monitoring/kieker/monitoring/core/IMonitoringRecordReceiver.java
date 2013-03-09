@@ -20,6 +20,8 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.5
  */
 public interface IMonitoringRecordReceiver {
 
@@ -31,6 +33,8 @@ public interface IMonitoringRecordReceiver {
 	 * @param record
 	 *            the record.
 	 * @return true on success; false in case of an error.
+	 * 
+	 * @since 1.5
 	 */
 	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
 }

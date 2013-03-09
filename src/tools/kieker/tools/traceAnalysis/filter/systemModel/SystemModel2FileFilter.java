@@ -35,6 +35,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.5
  */
 @Plugin(
 		description = "Prints the contents of a connected SystemModelRepository to an HTML file",

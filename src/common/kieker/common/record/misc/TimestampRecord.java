@@ -23,6 +23,8 @@ import kieker.common.record.IMonitoringRecord;
  * Record type which can be used to store a timestamp.
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.5
  */
 public final class TimestampRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 	private static final long serialVersionUID = 4673929935358689920L;

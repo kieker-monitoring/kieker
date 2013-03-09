@@ -32,6 +32,8 @@ import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
 
 /**
  * @author Matthias Rohr, Robert von Massow, Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.5
  */
 public abstract class AbstractAsyncFSWriter extends AbstractAsyncWriter {
 	public static final String CONFIG_PATH = "customStoragePath";

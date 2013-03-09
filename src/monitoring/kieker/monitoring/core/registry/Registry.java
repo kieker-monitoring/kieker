@@ -34,6 +34,8 @@ import kieker.monitoring.core.IMonitoringRecordReceiver;
  *            the type of registered objects
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class Registry<E> implements IRegistry<E> {
 	private static final int INITIAL_CAPACITY = 16;

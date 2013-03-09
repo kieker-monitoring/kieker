@@ -29,6 +29,8 @@ import java.lang.annotation.Target;
  * field for a human-readable description available.
  * 
  * @author Nils Christian Ehmke
+ * 
+ * @since 1.5
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

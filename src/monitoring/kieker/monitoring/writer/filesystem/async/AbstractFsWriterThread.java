@@ -33,6 +33,8 @@ import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
 
 /**
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.5
  */
 public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 

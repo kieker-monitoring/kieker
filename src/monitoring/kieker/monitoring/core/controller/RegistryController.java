@@ -24,6 +24,8 @@ import kieker.monitoring.core.registry.Registry;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class RegistryController extends AbstractController implements IRegistryController {
 	private static final Log LOG = LogFactory.getLog(RegistryController.class);
