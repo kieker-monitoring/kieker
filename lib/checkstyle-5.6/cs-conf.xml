@@ -193,9 +193,15 @@
 		-->
 		<!-- KIEKER -->
 		<!--
-		 <module name="kieker.test.common.cs.CorrectSinceUsageCheck">
+		<module name="kieker.test.common.cs.MissingSinceTagCheck">
         </module>
 		-->
+		<!-- KIEKER -->
+		 <!--
+		<module name="kieker.test.common.cs.NotAllowedSinceTagCheck">
+        </module>
+		-->
+	
         <module name="FileContentsHolder"/>
 
         <!--

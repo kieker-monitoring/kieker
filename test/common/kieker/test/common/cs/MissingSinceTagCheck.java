@@ -18,33 +18,23 @@ package kieker.test.common.cs;
 
 import com.puppycrawl.tools.checkstyle.api.Check;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
-import com.puppycrawl.tools.checkstyle.api.FileContents;
-import com.puppycrawl.tools.checkstyle.api.TextBlock;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTag;
-import com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTags;
-import com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocUtils;
-import com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocUtils.JavadocTagType;
 
 /**
- * This is an additional checkstyle check which makes sure that the since tag is used in a correct way. This means more precisely that a since tags is used for a
- * element if and only if the element is a class, an interface, an annotation or a method within an interface. All other appearances (or not appearances) will be
- * reported.<br>
- * </br>
- * 
- * The current version of this check checks only whether the since tags are there or not. It doesn't check the other direction.
+ * This is an additional checkstyle check which makes sure that classes, interfaces, annotations and methods within interfaces have a since tag.
  * 
  * @author Nils Christian Ehmke
  * 
  * @since 1.7
+ * 
+ * @see NotAllowedSinceTagCheck
  */
-// TODO Check the other direction as well
-public class CorrectSinceUsageCheck extends Check {
+public class MissingSinceTagCheck extends Check {
 
 	/**
 	 * Creates a new instance of this class.
 	 */
-	public CorrectSinceUsageCheck() {
+	public MissingSinceTagCheck() {
 		// Nothing to do here
 		super();
 	}
@@ -58,7 +48,7 @@ public class CorrectSinceUsageCheck extends Check {
 	@Override
 	public void visitToken(final DetailAST ast) {
 		// Check whether the since tag is there
-		if (!this.sinceTagAvailable(ast)) {
+		if (!CSUtility.sinceTagAvailable(this, ast)) {
 			this.log(ast.getLineNo(), "@since tag missing");
 		}
 
@@ -74,29 +64,6 @@ public class CorrectSinceUsageCheck extends Check {
 				child = child.getNextSibling();
 			}
 		}
-	}
-
-	/**
-	 * Checks whether the given component has a since tag in its javadoc comment.
-	 * 
-	 * @param ast
-	 *            The component to check for the tag.
-	 * 
-	 * @return true if and only if there is a since tag in the javadoc comment of the given component.
-	 */
-	private boolean sinceTagAvailable(final DetailAST ast) {
-		final FileContents contents = this.getFileContents();
-		final TextBlock cmt = contents.getJavadocBefore(ast.getFirstChild().getLineNo());
-
-		final JavadocTags tags = JavadocUtils.getJavadocTags(cmt, JavadocTagType.ALL);
-
-		for (final JavadocTag tag : tags.getValidTags()) {
-			if ("since".equals(tag.getTagName())) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 }
