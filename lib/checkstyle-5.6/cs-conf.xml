@@ -191,7 +191,11 @@
             <property name="ignoreAbstractClasses" value="true"/>
         </module>
 		-->
-		
+		<!-- KIEKER -->
+		<!--
+		 <module name="kieker.test.common.cs.CorrectSinceUsageCheck">
+        </module>
+		-->
         <module name="FileContentsHolder"/>
 
         <!--
