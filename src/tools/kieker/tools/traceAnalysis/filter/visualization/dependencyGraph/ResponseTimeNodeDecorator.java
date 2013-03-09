@@ -16,6 +16,8 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
+import java.util.concurrent.TimeUnit;
+
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 
 /**
@@ -34,7 +36,8 @@ public class ResponseTimeNodeDecorator extends AbstractNodeDecorator {
 	}
 
 	@Override
-	public void processMessage(final AbstractMessage message, final DependencyGraphNode<?> sourceNode, final DependencyGraphNode<?> targetNode) {
+	public void processMessage(final AbstractMessage message, final DependencyGraphNode<?> sourceNode, final DependencyGraphNode<?> targetNode,
+			final TimeUnit timeunit) {
 		// Ignore internal executions
 		if (sourceNode.equals(targetNode)) {
 			return;
@@ -43,7 +46,7 @@ public class ResponseTimeNodeDecorator extends AbstractNodeDecorator {
 		ResponseTimeDecoration timeDecoration = targetNode.getDecoration(ResponseTimeDecoration.class);
 
 		if (timeDecoration == null) {
-			timeDecoration = new ResponseTimeDecoration();
+			timeDecoration = new ResponseTimeDecoration(timeunit);
 			targetNode.addDecoration(timeDecoration);
 		}
 

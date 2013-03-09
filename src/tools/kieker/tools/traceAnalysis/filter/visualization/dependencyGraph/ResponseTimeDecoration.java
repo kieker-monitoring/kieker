@@ -16,6 +16,8 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
+import java.util.concurrent.TimeUnit;
+
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertexDecoration;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 
@@ -29,7 +31,10 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 
 	private static final String OUTPUT_TEMPLATE = "min: %dms, avg: %.2fms, max: %dms";
 
-	// TODO Use TimeUnit instead (currently, we use milliseconds)
+	private static final TimeUnit DISPLAY_TIMEUNIT = TimeUnit.MILLISECONDS;
+
+	private final TimeUnit executionTimeunit;
+
 	private long responseTimeSum;
 	private int executionCount;
 	private int minimalResponseTime = Integer.MAX_VALUE;
@@ -38,8 +43,8 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 	/**
 	 * Creates a new response time decoration.
 	 */
-	public ResponseTimeDecoration() {
-		// empty default constructor
+	public ResponseTimeDecoration(final TimeUnit executionTimeunit) {
+		this.executionTimeunit = executionTimeunit;
 	}
 
 	/**
@@ -49,7 +54,7 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 	 *            The execution to register
 	 */
 	public void registerExecution(final Execution execution) {
-		final int responseTime = (int) ((execution.getTout() / 1000000) - (execution.getTin() / 1000000));
+		final int responseTime = (int) DISPLAY_TIMEUNIT.convert(execution.getTout() - execution.getTin(), this.executionTimeunit);
 
 		this.responseTimeSum = this.responseTimeSum + responseTime;
 		this.executionCount++;

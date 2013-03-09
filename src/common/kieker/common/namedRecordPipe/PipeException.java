@@ -21,7 +21,6 @@ package kieker.common.namedRecordPipe;
  * 
  * @author Andre van Hoorn
  */
-// TODO It seems to me that there is no reference to this exception in Kieker. Do we need it?
 public class PipeException extends Exception {
 	/** The UID. */
 	private static final long serialVersionUID = 56L;

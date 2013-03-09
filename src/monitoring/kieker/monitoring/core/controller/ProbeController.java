@@ -253,7 +253,6 @@ public class ProbeController extends AbstractController implements IProbeControl
 			}
 			this.patternList.add(new PatternEntry(strPattern, pattern, activated));
 			if (this.configFileUpdate) {
-				// TODO remove double entries in list? Use modified(?) CopyOnWriteArraySet
 				this.updatePatternFile();
 			}
 		}

@@ -57,7 +57,7 @@ public class TestClassOperationSignaturePair extends AbstractKiekerTest {
 		 */
 		final ClassOperationSignaturePair compSigPair = ClassOperationSignaturePair.splitOperationSignatureStr(expectedOpSignatureString);
 		Assert.assertEquals("FQ classnames not equal", fqClassName, compSigPair.getFqClassname());
-		// TODO: Comparing Signature.toString() results as long as no implementation of Signature.equals
+		// Comparing Signature.toString() results as long as no implementation of Signature.equals
 		Assert.assertEquals("Signatures not equal", inputSignature.toString(), compSigPair.getSignature().toString());
 	}
 
@@ -84,7 +84,7 @@ public class TestClassOperationSignaturePair extends AbstractKiekerTest {
 		 */
 		final ClassOperationSignaturePair compSigPair = ClassOperationSignaturePair.splitOperationSignatureStr(expectedOpSignatureString);
 		Assert.assertEquals("FQ classnames not equal", fqClassName, compSigPair.getFqClassname());
-		// TODO: Comparing Signature.toString() results as long as no implementation of Signature.equals
+		// Comparing Signature.toString() results as long as no implementation of Signature.equals
 		Assert.assertEquals("Signatures not equal", inputSignature.toString(), compSigPair.getSignature().toString());
 	}
 
@@ -109,7 +109,7 @@ public class TestClassOperationSignaturePair extends AbstractKiekerTest {
 		 */
 		final ClassOperationSignaturePair compSigPair = ClassOperationSignaturePair.splitOperationSignatureStr(expectedOpSignatureString);
 		Assert.assertEquals("FQ classnames not equal", fqClassName, compSigPair.getFqClassname());
-		// TODO: Comparing Signature.toString() results as long as no implementation of Signature.equals
+		// Comparing Signature.toString() results as long as no implementation of Signature.equals
 		Assert.assertEquals("Signatures not equal", inputSignature.toString(), compSigPair.getSignature().toString());
 	}
 
@@ -152,7 +152,7 @@ public class TestClassOperationSignaturePair extends AbstractKiekerTest {
 		 */
 		final ClassOperationSignaturePair compSigPair = ClassOperationSignaturePair.splitOperationSignatureStr(expectedOpSignatureString);
 		Assert.assertEquals("FQ classnames not equal", fqClassName, compSigPair.getFqClassname());
-		// TODO: Comparing Signature.toString() results as long as no implementation of Signature.equals
+		// Comparing Signature.toString() results as long as no implementation of Signature.equals
 		Assert.assertEquals("Signatures not equal", inputSignature.toString(), compSigPair.getSignature().toString());
 	}
 }

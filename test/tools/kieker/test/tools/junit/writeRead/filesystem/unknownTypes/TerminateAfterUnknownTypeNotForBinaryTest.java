@@ -47,7 +47,6 @@ public class TerminateAfterUnknownTypeNotForBinaryTest extends AbstractUnknownTy
 
 	@Override
 	protected void refineWriterConfiguration(final Configuration config, final int numRecordsWritten) {
-		// TODO: additional configuration parameters
 		LogImplJUnit.disableThrowable(MonitoringRecordException.class);
 	}
 

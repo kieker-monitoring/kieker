@@ -16,6 +16,8 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
+import java.util.concurrent.TimeUnit;
+
 import kieker.tools.traceAnalysis.Constants;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 
@@ -52,6 +54,6 @@ public abstract class AbstractNodeDecorator {
 	 * @param targetNode
 	 *            The target node receiving the message
 	 */
-	public abstract void processMessage(AbstractMessage message, DependencyGraphNode<?> sourceNode, DependencyGraphNode<?> targetNode);
+	public abstract void processMessage(AbstractMessage message, DependencyGraphNode<?> sourceNode, DependencyGraphNode<?> targetNode, final TimeUnit timeunit);
 
 }

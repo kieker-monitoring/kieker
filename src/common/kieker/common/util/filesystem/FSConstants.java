@@ -21,7 +21,7 @@ package kieker.common.util.filesystem;
  * 
  * @since 1.7
  */
-public interface FSConstants { // NOCS (constants interface)
+public interface FSConstants { // NOCS NOPMD (constants interface)
 
 	public static final String FILE_PREFIX = "kieker";
 	public static final String MAP_FILENAME = "kieker.map";

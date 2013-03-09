@@ -232,7 +232,6 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	 */
 	@Override
 	public void terminate(final boolean error) {
-		super.terminate(error);
 		synchronized (this) {
 			for (final Entry<Long, TraceBuffer> entry : this.traceId2trace.entrySet()) {
 				final TraceBuffer traceBuffer = entry.getValue();

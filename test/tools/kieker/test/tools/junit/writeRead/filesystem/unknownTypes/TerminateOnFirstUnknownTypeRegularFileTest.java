@@ -50,7 +50,6 @@ public class TerminateOnFirstUnknownTypeRegularFileTest extends AbstractUnknownT
 	@Override
 	protected void refineWriterConfiguration(final Configuration config, final int numRecordsWritten) {
 		config.setProperty(this.getClass().getName() + "." + AsyncFsWriter.CONFIG_FLUSH, Boolean.TRUE.toString());
-		// TODO: additional configuration parameters
 	}
 
 	/**

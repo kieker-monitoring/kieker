@@ -84,7 +84,7 @@ public class TestExecutionRecordTransformationFilter extends AbstractKiekerTest 
 					ClassOperationSignaturePair.splitOperationSignatureStr(opExec.getOperationSignature());
 			Assert.assertEquals("Class/Component type names differ", opExecClassOperationSignature.getFqClassname(),
 					exec.getAllocationComponent().getAssemblyComponent().getType().getFullQualifiedName());
-			// TODO: as long as Signature's equal not implemented, compare the strings
+			// as Signature's equal is not implemented, compare the strings
 			Assert.assertEquals("Signatures differ", opExecClassOperationSignature.getSignature().toString(),
 					exec.getOperation().getSignature().toString());
 			// we're not testing the assembly name here, because therefore, we had to transform the class name

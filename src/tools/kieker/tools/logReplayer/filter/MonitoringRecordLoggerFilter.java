@@ -120,8 +120,7 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 	 */
 	@Override
 	public void terminate(final boolean error) {
-		super.terminate(error);
-		this.monitoringController.terminateMonitoring(); // TODO in this order?
+		this.monitoringController.terminateMonitoring();
 	}
 
 	/**

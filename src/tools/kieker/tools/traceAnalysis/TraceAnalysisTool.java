@@ -92,23 +92,16 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
- * 
- * This is the main class to start Tpan - the model synthesis and analysis
- * server to process the monitoring data that comes from the instrumented
- * system, or from a file that contains Kieker monitoring data. Tpan can produce
- * output such as sequence diagrams, dependency graphs on demand. Alternatively
- * it can be used continuously for online performance analysis, anomaly
- * detection or live visualization of system behavior.
- * 
- * A Tpan is started via ant-script or command line. Visualization and output
- * should be implemented as plugins. These plugins must be implemented to be
- * loaded at runtime (Class.forName...) in order to keep compile-time
- * dependencies low.
- * 
+ * This is the main class to start the Kieker TraceAnalysisTool - the model
+ * synthesis and analysis tool to process the monitoring data that comes from
+ * the instrumented system, or from a file that contains Kieker monitoring data.
+ * The Kieker TraceAnalysisTool can produce output such as sequence diagrams,
+ * dependency graphs on demand. Alternatively it can be used continuously for
+ * online performance analysis, anomaly detection or live visualization of
+ * system behavior.
  * 
  * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke
  */
-// TODO: Fix JavaDoc comment
 public final class TraceAnalysisTool {
 	public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
 	private static final Log LOG = LogFactory.getLog(TraceAnalysisTool.class);
