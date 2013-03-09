@@ -29,6 +29,8 @@ import kieker.monitoring.writer.filesystem.map.StringMappingFileWriter;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.7
  */
 public class BinaryZipWriterThread extends AbstractZipWriterThread {
 	private static final Log LOG = LogFactory.getLog(BinaryZipWriterThread.class);

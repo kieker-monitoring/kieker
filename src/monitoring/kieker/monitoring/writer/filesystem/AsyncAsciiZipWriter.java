@@ -28,6 +28,8 @@ import kieker.monitoring.writer.filesystem.map.StringMappingFileWriter;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.7
  */
 public final class AsyncAsciiZipWriter extends AbstractAsyncZipWriter {
 

@@ -23,6 +23,8 @@ import kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.7
  */
 public class DeflateAsyncBinaryFSWriterReaderTest extends AbstractTestFSWriterReader { // NOPMD (TestClassWithoutTestCases) // NOCS (MissingCtorCheck)
 

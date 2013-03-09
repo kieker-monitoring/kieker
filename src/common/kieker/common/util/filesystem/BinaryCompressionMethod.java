@@ -34,6 +34,8 @@ import java.util.zip.ZipOutputStream;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.7
  */
 public enum BinaryCompressionMethod {
 	NONE(".bin") {

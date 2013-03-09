@@ -43,8 +43,9 @@ import kieker.common.util.StringUtils;
  * Reads the contents of a single zip file and passes the records to the registered receiver of type {@link IMonitoringRecordReceiver}.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.7
  */
-
 public final class FSZipReader implements Runnable {
 	private static final Log LOG = LogFactory.getLog(FSZipReader.class);
 

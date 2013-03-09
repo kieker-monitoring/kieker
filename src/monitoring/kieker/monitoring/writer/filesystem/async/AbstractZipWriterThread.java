@@ -40,6 +40,8 @@ import kieker.monitoring.writer.filesystem.map.StringMappingFileWriter;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.7
  */
 public abstract class AbstractZipWriterThread extends AbstractAsyncThread {
 	private static final Log LOG = LogFactory.getLog(AbstractZipWriterThread.class);

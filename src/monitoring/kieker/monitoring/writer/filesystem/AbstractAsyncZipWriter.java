@@ -31,6 +31,8 @@ import kieker.monitoring.writer.filesystem.map.StringMappingFileWriter;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.7
  */
 public abstract class AbstractAsyncZipWriter extends AbstractAsyncWriter {
 	public static final String CONFIG_PATH = "customStoragePath";
@@ -100,5 +102,6 @@ public abstract class AbstractAsyncZipWriter extends AbstractAsyncWriter {
 	}
 
 	protected abstract AbstractZipWriterThread initWorker(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
-			final StringMappingFileWriter strMappingFileWriter, final String path, final int maxEntiresInFile, final int bufferSize, final int level) throws Exception;
+			final StringMappingFileWriter strMappingFileWriter, final String path, final int maxEntiresInFile, final int bufferSize, final int level)
+			throws Exception;
 }

@@ -23,6 +23,8 @@ import kieker.monitoring.core.registry.RegistryRecord;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.7
  */
 public final class StringMappingFileWriter {
 
