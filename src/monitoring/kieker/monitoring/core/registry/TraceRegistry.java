@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -91,7 +91,7 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 			parentOrderId = tp.orderId;
 		} else if (enclosingTrace != null) { // we create a sub trace without a known split point
 			parentTraceId = enclosingTrace.getTraceId();
-			parentOrderId = -1; // TODO: should we instead get the last orderId?
+			parentOrderId = -1; // we could instead get the last orderId ... But this would make it harder to distinguish from known split points
 		} else { // we create a new trace without a parent
 			parentTraceId = traceId;
 			parentOrderId = -1;

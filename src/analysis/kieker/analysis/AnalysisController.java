@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -478,8 +478,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
-	public final void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst,
-			final String inputPortName) throws IllegalStateException, AnalysisConfigurationException {
+	public final void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName)
+			throws IllegalStateException, AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect readers and filters after starting analysis.");
 		}
@@ -504,8 +504,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
-	public final void connect(final AbstractPlugin plugin, final String repositoryPort, final AbstractRepository repository) throws IllegalStateException,
-			AnalysisConfigurationException {
+	public final void connect(final AbstractPlugin plugin, final String repositoryPort, final AbstractRepository repository)
+			throws IllegalStateException, AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect repositories after starting analysis.");
 		}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ public class ThreadingAspect extends AbstractAspectJProbe {
 		// empty default constructor
 	}
 
-	// TODO: what about other forms of executions? ThreadPool, ...?
+	// TODO what about other forms of executions? ThreadPool, ...?
 	// Must be @Before
 	@Before("call(void java.lang.Thread.start()) && target(thread) && notWithinKieker()")
 	public void beforeNewThread(final Thread thread) {
