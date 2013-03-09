@@ -34,7 +34,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.filesystem.FSConstants;
+import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.core.registry.RegistryRecord;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
@@ -59,7 +59,7 @@ import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
  * 
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  */
-public final class SyncFsWriter extends AbstractMonitoringWriter implements FSConstants {
+public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private static final String PREFIX = SyncFsWriter.class.getName() + ".";
 	public static final String CONFIG_PATH = PREFIX + "customStoragePath"; // NOCS (afterPREFIX)
 	public static final String CONFIG_TEMP = PREFIX + "storeInJavaIoTmpdir"; // NOCS (afterPREFIX)
@@ -136,8 +136,9 @@ public final class SyncFsWriter extends AbstractMonitoringWriter implements FSCo
 		// Determine directory for files
 		final String ctrlName = super.monitoringController.getHostname() + "-" + super.monitoringController.getName();
 		final String dateStr = this.dateFormat.format(new java.util.Date()); // NOPMD (Date)
-		final StringBuffer sb = new StringBuffer(pathTmp.length() + FILE_PREFIX.length() + ctrlName.length() + 26);
-		sb.append(pathTmp).append(File.separatorChar).append(FILE_PREFIX).append('-').append(dateStr).append("-UTC-").append(ctrlName).append(File.separatorChar);
+		final StringBuffer sb = new StringBuffer(pathTmp.length() + FSUtil.FILE_PREFIX.length() + ctrlName.length() + 26);
+		sb.append(pathTmp).append(File.separatorChar).append(FSUtil.FILE_PREFIX).append('-').append(dateStr).append("-UTC-").append(ctrlName)
+				.append(File.separatorChar);
 		pathTmp = sb.toString();
 		f = new File(pathTmp);
 		if (!f.mkdir()) {
@@ -145,7 +146,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter implements FSCo
 		}
 		synchronized (this) { // visibility
 			this.path = f.getAbsolutePath();
-			this.filenamePrefix = this.path + File.separatorChar + FILE_PREFIX;
+			this.filenamePrefix = this.path + File.separatorChar + FSUtil.FILE_PREFIX;
 			this.mappingFileWriter = new MappingFileWriter(this.path);
 		}
 	}
@@ -227,9 +228,9 @@ public final class SyncFsWriter extends AbstractMonitoringWriter implements FSCo
 			this.pos.close();
 		}
 		if (this.autoflush) {
-			this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename), ENCODING), true);
+			this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename), FSUtil.ENCODING), true);
 		} else {
-			this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), ENCODING), this.bufferSize), false);
+			this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), FSUtil.ENCODING), this.bufferSize), false);
 		}
 		this.pos.flush();
 	}
@@ -247,7 +248,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter implements FSCo
 		}
 		final StringBuilder sb = new StringBuilder(this.filenamePrefix.length() + 30);
 		sb.append(this.filenamePrefix).append(this.dateFormat.format(new java.util.Date(date))).append("-UTC-") // NOPMD (Date)
-				.append(String.format("%03d", this.sameFilenameCounter)).append(NORMAL_FILE_EXTENSION);
+				.append(String.format("%03d", this.sameFilenameCounter)).append(FSUtil.NORMAL_FILE_EXTENSION);
 		return sb.toString();
 	}
 

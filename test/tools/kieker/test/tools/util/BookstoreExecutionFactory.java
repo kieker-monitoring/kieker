@@ -16,7 +16,7 @@
 
 package kieker.test.tools.util;
 
-import kieker.common.util.ClassOperationSignaturePair;
+import kieker.common.util.signature.ClassOperationSignaturePair;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;

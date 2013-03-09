@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.util;
+package kieker.common.util.signature;
 
 import java.util.StringTokenizer;
 
@@ -212,5 +212,47 @@ public class ClassOperationSignaturePair {
 	@Override
 	public String toString() {
 		return ClassOperationSignaturePair.createOperationSignatureString(this.fqClassname, this.signature);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = (prime * result) + ((this.fqClassname == null) ? 0 : this.fqClassname.hashCode());
+		result = (prime * result) + this.lastDot;
+		result = (prime * result) + ((this.signature == null) ? 0 : this.signature.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (this.getClass() != obj.getClass()) {
+			return false;
+		}
+		final ClassOperationSignaturePair other = (ClassOperationSignaturePair) obj;
+		if (this.fqClassname == null) {
+			if (other.fqClassname != null) {
+				return false;
+			}
+		} else if (!this.fqClassname.equals(other.fqClassname)) {
+			return false;
+		}
+		if (this.lastDot != other.lastDot) {
+			return false;
+		}
+		if (this.signature == null) {
+			if (other.signature != null) {
+				return false;
+			}
+		} else if (!this.signature.equals(other.signature)) {
+			return false;
+		}
+		return true;
 	}
 }

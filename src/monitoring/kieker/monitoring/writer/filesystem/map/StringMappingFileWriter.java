@@ -18,7 +18,7 @@ package kieker.monitoring.writer.filesystem.map;
 
 import java.io.IOException;
 
-import kieker.common.util.StringUtils;
+import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.core.registry.RegistryRecord;
 
 /**
@@ -40,7 +40,7 @@ public final class StringMappingFileWriter {
 			sbl.append('$');
 			sbl.append(hashRecord.getId());
 			sbl.append('=');
-			sbl.append(StringUtils.encodeNewline(String.valueOf(hashRecord.getObject())));
+			sbl.append(FSUtil.encodeNewline(String.valueOf(hashRecord.getObject())));
 			sbl.append('\n');
 		}
 	}

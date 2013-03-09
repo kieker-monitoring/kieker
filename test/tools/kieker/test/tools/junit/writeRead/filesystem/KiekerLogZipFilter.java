@@ -19,7 +19,7 @@ package kieker.test.tools.junit.writeRead.filesystem;
 import java.io.File;
 import java.io.FilenameFilter;
 
-import kieker.common.util.filesystem.FSConstants;
+import kieker.common.util.filesystem.FSUtil;
 
 /**
  * Accepts Kieker file system monitoring logs.
@@ -35,7 +35,7 @@ public class KiekerLogZipFilter implements FilenameFilter { // NOPMD (TestClassW
 	}
 
 	public boolean accept(final File dir, final String name) {
-		if (!dir.isDirectory() || !name.startsWith(FSConstants.FILE_PREFIX) || !name.endsWith(FSConstants.ZIP_FILE_EXTENSION)) {
+		if (!dir.isDirectory() || !name.startsWith(FSUtil.FILE_PREFIX) || !name.endsWith(FSUtil.ZIP_FILE_EXTENSION)) {
 			return false;
 		}
 		final String potentialFn = dir.getAbsolutePath() + File.separatorChar + name;

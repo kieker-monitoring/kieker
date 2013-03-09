@@ -18,7 +18,7 @@ package kieker.test.tools.util;
 
 import org.junit.Assert;
 
-import kieker.common.util.Signature;
+import kieker.common.util.signature.Signature;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.ComponentType;

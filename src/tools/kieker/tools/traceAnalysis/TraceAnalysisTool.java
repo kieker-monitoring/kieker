@@ -53,7 +53,7 @@ import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.common.util.filesystem.FSConstants;
+import kieker.common.util.filesystem.FSUtil;
 import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
@@ -660,10 +660,9 @@ public final class TraceAnalysisTool {
 						componentPrintInvalidTrace, InvalidExecutionTraceWriterFilter.INPUT_PORT_NAME_INVALID_EXECUTION_TRACES);
 				ANALYSIS_INSTANCE.connect(componentPrintInvalidTrace, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						SYSTEM_ENTITY_FACTORY);
-				// TODO: We haven't such port for the EventTrace2ExecutionTraceFilter, yet
-				LOG.warn("EventTrace2ExecutionTraceFilter doesn't provide an output port for invalid execution traces, yet");
-				// AbstractPlugin.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE,
-				// componentPrintInvalidTrace, InvalidExecutionTraceWriterPlugin.INVALID_EXECUTION_TRACES_INPUT_PORT_NAME);
+				ANALYSIS_INSTANCE.connect(traceEvents2ExecutionAndMessageTraceFilter,
+						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE,
+						componentPrintInvalidTrace, InvalidExecutionTraceWriterFilter.INPUT_PORT_NAME_INVALID_EXECUTION_TRACES);
 				allTraceProcessingComponents.add(componentPrintInvalidTrace);
 			}
 			SequenceDiagramFilter componentPlotAllocationSeqDiagr = null;
@@ -1014,8 +1013,8 @@ public final class TraceAnalysisTool {
 				}
 
 				/* check whether inputDirFile contains a (kieker|tpmon).map file; the latter for legacy reasons */
-				final File[] mapFiles = { new File(inputDir + File.separatorChar + FSConstants.MAP_FILENAME),
-					new File(inputDir + File.separatorChar + FSConstants.LEGACY_MAP_FILENAME), };
+				final File[] mapFiles = { new File(inputDir + File.separatorChar + FSUtil.MAP_FILENAME),
+					new File(inputDir + File.separatorChar + FSUtil.LEGACY_MAP_FILENAME), };
 				boolean mapFileExists = false;
 				for (final File potentialMapFile : mapFiles) {
 					if (potentialMapFile.isFile()) {

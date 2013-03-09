@@ -29,7 +29,7 @@ import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.common.util.ClassOperationSignaturePair;
+import kieker.common.util.signature.ClassOperationSignaturePair;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 

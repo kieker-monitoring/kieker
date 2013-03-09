@@ -37,19 +37,18 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.common.util.StringUtils;
 import kieker.common.util.filesystem.BinaryCompressionMethod;
-import kieker.common.util.filesystem.FSConstants;
+import kieker.common.util.filesystem.FSUtil;
 
 /**
  * Reads the contents of a single file system log directory and passes the records to the registered receiver of type {@link IMonitoringRecordReceiver}.
  * 
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  */
-final class FSDirectoryReader implements Runnable, FSConstants {
+final class FSDirectoryReader implements Runnable {
 	private static final Log LOG = LogFactory.getLog(FSDirectoryReader.class);
 
-	String filePrefix = FILE_PREFIX; // NOPMD NOCS (package visible for inner class)
+	String filePrefix = FSUtil.FILE_PREFIX; // NOPMD NOCS (package visible for inner class)
 
 	private final Map<Integer, String> stringRegistry = new HashMap<Integer, String>(); // NOPMD (no synchronization needed)
 
@@ -92,7 +91,7 @@ final class FSDirectoryReader implements Runnable, FSConstants {
 				final String name = pathname.getName();
 				return pathname.isFile()
 						&& name.startsWith(FSDirectoryReader.this.filePrefix)
-						&& (name.endsWith(NORMAL_FILE_EXTENSION) || BinaryCompressionMethod.hasValidFileExtension(name));
+						&& (name.endsWith(FSUtil.NORMAL_FILE_EXTENSION) || BinaryCompressionMethod.hasValidFileExtension(name));
 			}
 		});
 		if (inputFiles == null) {
@@ -113,7 +112,7 @@ final class FSDirectoryReader implements Runnable, FSConstants {
 					break;
 				}
 				LOG.info("< Loading " + inputFile.getAbsolutePath());
-				if (inputFile.getName().endsWith(NORMAL_FILE_EXTENSION)) {
+				if (inputFile.getName().endsWith(FSUtil.NORMAL_FILE_EXTENSION)) {
 					this.processNormalInputFile(inputFile);
 				} else {
 					if (this.ignoreUnknownRecordTypes) {
@@ -137,14 +136,14 @@ final class FSDirectoryReader implements Runnable, FSConstants {
 	 * Reads the mapping file located in the directory.
 	 */
 	private final void readMappingFile() {
-		File mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + MAP_FILENAME);
+		File mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + FSUtil.MAP_FILENAME);
 		if (!mappingFile.exists()) {
 			// No mapping file found. Check whether we find a legacy tpmon.map file!
-			mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + LEGACY_MAP_FILENAME);
+			mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + FSUtil.LEGACY_MAP_FILENAME);
 			if (mappingFile.exists()) {
-				LOG.info("Directory '" + this.inputDir + "' contains no file '" + MAP_FILENAME + "'. Found '" + LEGACY_MAP_FILENAME
+				LOG.info("Directory '" + this.inputDir + "' contains no file '" + FSUtil.MAP_FILENAME + "'. Found '" + FSUtil.LEGACY_MAP_FILENAME
 						+ "' ... switching to legacy mode");
-				this.filePrefix = LEGACY_FILE_PREFIX;
+				this.filePrefix = FSUtil.LEGACY_FILE_PREFIX;
 			} else {
 				// no {kieker|tpmon}.map exists. This is valid for very old monitoring logs. Hence, only dump a log.warn
 				LOG.warn("No mapping file in directory '" + this.inputDir.getAbsolutePath() + "'");
@@ -154,7 +153,7 @@ final class FSDirectoryReader implements Runnable, FSConstants {
 		// found any kind of mapping file
 		BufferedReader in = null;
 		try {
-			in = new BufferedReader(new InputStreamReader(new FileInputStream(mappingFile), ENCODING));
+			in = new BufferedReader(new InputStreamReader(new FileInputStream(mappingFile), FSUtil.ENCODING));
 			String line;
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
 				if (line.length() == 0) {
@@ -167,7 +166,7 @@ final class FSDirectoryReader implements Runnable, FSConstants {
 					continue; // continue on errors
 				}
 				final String key = line.substring(0, split);
-				final String value = StringUtils.decodeNewline(line.substring(split + 1));
+				final String value = FSUtil.decodeNewline(line.substring(split + 1));
 				// the leading $ is optional
 				final Integer id;
 				try {
@@ -204,7 +203,7 @@ final class FSDirectoryReader implements Runnable, FSConstants {
 		boolean abortDueToUnknownRecordType = false;
 		BufferedReader in = null;
 		try {
-			in = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile), ENCODING));
+			in = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile), FSUtil.ENCODING));
 			String line;
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
 				line = line.trim();

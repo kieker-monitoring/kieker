@@ -33,7 +33,7 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
-import kieker.common.util.filesystem.FSConstants;
+import kieker.common.util.filesystem.FSUtil;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -64,12 +64,12 @@ public class TestLegacyExecutionRecordReader extends AbstractKiekerTest {
 
 	@Before
 	public void setUp() throws IOException {
-		final File mapFile = this.tmpFolder.newFile(FSConstants.MAP_FILENAME);
-		final PrintStream mapStream = new PrintStream(new FileOutputStream(mapFile), false, FSConstants.ENCODING);
+		final File mapFile = this.tmpFolder.newFile(FSUtil.MAP_FILENAME);
+		final PrintStream mapStream = new PrintStream(new FileOutputStream(mapFile), false, FSUtil.ENCODING);
 		mapStream.print(MAP_FILE);
 		mapStream.close();
-		final File datFile = this.tmpFolder.newFile(FSConstants.FILE_PREFIX + FSConstants.NORMAL_FILE_EXTENSION);
-		final PrintStream datStream = new PrintStream(new FileOutputStream(datFile), false, FSConstants.ENCODING);
+		final File datFile = this.tmpFolder.newFile(FSUtil.FILE_PREFIX + FSUtil.NORMAL_FILE_EXTENSION);
+		final PrintStream datStream = new PrintStream(new FileOutputStream(datFile), false, FSUtil.ENCODING);
 		datStream.print(DAT_FILE);
 		datStream.close();
 	}

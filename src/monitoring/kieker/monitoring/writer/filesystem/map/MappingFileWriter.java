@@ -22,8 +22,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
-import kieker.common.util.StringUtils;
-import kieker.common.util.filesystem.FSConstants;
+import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.core.registry.RegistryRecord;
 
 /**
@@ -31,13 +30,13 @@ import kieker.monitoring.core.registry.RegistryRecord;
  * 
  * @since 1.7
  */
-public final class MappingFileWriter implements FSConstants {
+public final class MappingFileWriter {
 
 	private final File mappingFile;
 
 	public MappingFileWriter(final String path) throws IOException {
 		final StringBuilder sbm = new StringBuilder(path.length() + 11);
-		sbm.append(path).append(File.separatorChar).append(MAP_FILENAME);
+		sbm.append(path).append(File.separatorChar).append(FSUtil.MAP_FILENAME);
 		final String mappingFileFn = sbm.toString();
 		this.mappingFile = new File(mappingFileFn);
 		if (!this.mappingFile.createNewFile()) {
@@ -49,11 +48,11 @@ public final class MappingFileWriter implements FSConstants {
 		synchronized (this.mappingFile) {
 			PrintWriter pw = null;
 			try {
-				pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.mappingFile, true), ENCODING));
+				pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.mappingFile, true), FSUtil.ENCODING));
 				pw.write('$');
 				pw.write(String.valueOf(hashRecord.getId()));
 				pw.write('=');
-				pw.write(StringUtils.encodeNewline(String.valueOf(hashRecord.getObject())));
+				pw.write(FSUtil.encodeNewline(String.valueOf(hashRecord.getObject())));
 				pw.write('\n');
 				if (pw.checkError()) {
 					throw new IOException("Error writing to mappingFile " + this.mappingFile.toString());

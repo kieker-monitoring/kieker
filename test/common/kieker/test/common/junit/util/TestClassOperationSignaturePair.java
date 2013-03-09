@@ -19,8 +19,8 @@ package kieker.test.common.junit.util;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.common.util.ClassOperationSignaturePair;
-import kieker.common.util.Signature;
+import kieker.common.util.signature.ClassOperationSignaturePair;
+import kieker.common.util.signature.Signature;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -44,21 +44,15 @@ public class TestClassOperationSignaturePair extends AbstractKiekerTest {
 		final String[] paramTypes = { Boolean.class.getName(), Integer.class.getName() };
 		final Signature inputSignature = new Signature(opName, modifiers, returnType, paramTypes);
 
-		/*
-		 * Obtain operation signature string based on class name and signature and compare
-		 * with expected string.
-		 */
+		// Obtain operation signature string based on class name and signature and compare with final expected string.
 		final String opSignatureString = ClassOperationSignaturePair.createOperationSignatureString(fqClassName, inputSignature);
 		final String expectedOpSignatureString = returnType + " " + fqClassName + "." + opName + "(" + paramTypes[0] + ", " + paramTypes[1] + ")";
 		Assert.assertEquals("Unexpected result", expectedOpSignatureString, opSignatureString);
 
-		/*
-		 * Now split expectedOpSignatureString and compare class name and signature
-		 */
+		// Now split expectedOpSignatureString and compare class name and signature
 		final ClassOperationSignaturePair compSigPair = ClassOperationSignaturePair.splitOperationSignatureStr(expectedOpSignatureString);
 		Assert.assertEquals("FQ classnames not equal", fqClassName, compSigPair.getFqClassname());
-		// Comparing Signature.toString() results as long as no implementation of Signature.equals
-		Assert.assertEquals("Signatures not equal", inputSignature.toString(), compSigPair.getSignature().toString());
+		Assert.assertEquals("Signatures not equal", inputSignature, compSigPair.getSignature());
 	}
 
 	@Test
@@ -70,22 +64,16 @@ public class TestClassOperationSignaturePair extends AbstractKiekerTest {
 		final String[] paramTypes = { Boolean.class.getName(), Integer.class.getName() };
 		final Signature inputSignature = new Signature(opName, modifiers, returnType, paramTypes);
 
-		/*
-		 * Obtain operation signature string based on class name and signature and compare
-		 * with expected string.
-		 */
+		// Obtain operation signature string based on class name and signature and compare with expected string.
 		final String opSignatureString = ClassOperationSignaturePair.createOperationSignatureString(fqClassName, inputSignature);
 		final String expectedOpSignatureString =
 				modifiers[0] + " " + modifiers[1] + " " + returnType + " " + fqClassName + "." + opName + "(" + paramTypes[0] + ", " + paramTypes[1] + ")";
 		Assert.assertEquals("Unexpected result", expectedOpSignatureString, opSignatureString);
 
-		/*
-		 * Now split expectedOpSignatureString and compare class name and signature
-		 */
+		// Now split expectedOpSignatureString and compare class name and signature
 		final ClassOperationSignaturePair compSigPair = ClassOperationSignaturePair.splitOperationSignatureStr(expectedOpSignatureString);
 		Assert.assertEquals("FQ classnames not equal", fqClassName, compSigPair.getFqClassname());
-		// Comparing Signature.toString() results as long as no implementation of Signature.equals
-		Assert.assertEquals("Signatures not equal", inputSignature.toString(), compSigPair.getSignature().toString());
+		Assert.assertEquals("Signatures not equal", inputSignature, compSigPair.getSignature());
 	}
 
 	@Test
@@ -96,21 +84,15 @@ public class TestClassOperationSignaturePair extends AbstractKiekerTest {
 		final String[] paramTypes = { Boolean.class.getName(), Integer.class.getName() };
 		final Signature inputSignature = new Signature(opName, modifiers, null, paramTypes);
 
-		/*
-		 * Obtain operation signature string based on class name and signature and compare
-		 * with expected string.
-		 */
+		// Obtain operation signature string based on class name and signature and compare with expected string.
 		final String opSignatureString = ClassOperationSignaturePair.createOperationSignatureString(fqClassName, inputSignature);
 		final String expectedOpSignatureString = fqClassName + "." + opName + "(" + paramTypes[0] + ", " + paramTypes[1] + ")";
 		Assert.assertEquals("Unexpected result", expectedOpSignatureString, opSignatureString);
 
-		/*
-		 * Now split expectedOpSignatureString and compare class name and signature
-		 */
+		// Now split expectedOpSignatureString and compare class name and signature
 		final ClassOperationSignaturePair compSigPair = ClassOperationSignaturePair.splitOperationSignatureStr(expectedOpSignatureString);
 		Assert.assertEquals("FQ classnames not equal", fqClassName, compSigPair.getFqClassname());
-		// Comparing Signature.toString() results as long as no implementation of Signature.equals
-		Assert.assertEquals("Signatures not equal", inputSignature.toString(), compSigPair.getSignature().toString());
+		Assert.assertEquals("Signatures not equal", inputSignature, compSigPair.getSignature());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -120,10 +102,8 @@ public class TestClassOperationSignaturePair extends AbstractKiekerTest {
 		final String[] modifiers = { "public" };
 		final String[] paramTypes = { Boolean.class.getName(), Integer.class.getName() };
 		final Signature inputSignature = new Signature(opName, modifiers, null, paramTypes);
-		/*
-		 * Obtain operation signature string based on class name and signature.
-		 * In this case, we expect an exception to be thrown
-		 */
+		// Obtain operation signature string based on class name and signature.
+		// In this case, we expect an exception to be thrown
 		ClassOperationSignaturePair.createOperationSignatureString(fqClassName, inputSignature);
 	}
 
@@ -136,23 +116,15 @@ public class TestClassOperationSignaturePair extends AbstractKiekerTest {
 		final String[] paramTypes = {};
 		final Signature inputSignature = new Signature(opName, modifiers, returnType, paramTypes);
 
-		/*
-		 * Obtain operation signature string based on class name and signature and compare
-		 * with expected string.
-		 */
-		final String opSignatureString =
-				ClassOperationSignaturePair.createOperationSignatureString(fqClassName, inputSignature);
+		// Obtain operation signature string based on class name and signature and compare with expected string.
+		final String opSignatureString = ClassOperationSignaturePair.createOperationSignatureString(fqClassName, inputSignature);
 
-		final String expectedOpSignatureString =
-				modifiers[0] + " " + returnType + " " + fqClassName + "." + opName + "()";
+		final String expectedOpSignatureString = modifiers[0] + " " + returnType + " " + fqClassName + "." + opName + "()";
 		Assert.assertEquals("Unexpected result", expectedOpSignatureString, opSignatureString);
 
-		/*
-		 * Now split expectedOpSignatureString and compare class name and signature
-		 */
+		// Now split expectedOpSignatureString and compare class name and signature
 		final ClassOperationSignaturePair compSigPair = ClassOperationSignaturePair.splitOperationSignatureStr(expectedOpSignatureString);
 		Assert.assertEquals("FQ classnames not equal", fqClassName, compSigPair.getFqClassname());
-		// Comparing Signature.toString() results as long as no implementation of Signature.equals
-		Assert.assertEquals("Signatures not equal", inputSignature.toString(), compSigPair.getSignature().toString());
+		Assert.assertEquals("Signatures not equal", inputSignature, compSigPair.getSignature());
 	}
 }

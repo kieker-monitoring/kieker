@@ -23,7 +23,6 @@ import org.springframework.web.context.request.WebRequestInterceptor;
 import kieker.monitoring.core.registry.SessionRegistry;
 
 /**
- * 
  * @author Andre van Hoorn
  */
 // TODO: We should extend this filter by an optional mode, allowing to log executions; just like the SessionAndTraceRegistrationFilter for Servlets

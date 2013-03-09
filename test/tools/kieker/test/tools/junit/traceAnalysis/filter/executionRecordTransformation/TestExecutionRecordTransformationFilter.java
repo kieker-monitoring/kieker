@@ -28,7 +28,7 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.common.util.ClassOperationSignaturePair;
+import kieker.common.util.signature.ClassOperationSignaturePair;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
@@ -84,9 +84,7 @@ public class TestExecutionRecordTransformationFilter extends AbstractKiekerTest 
 					ClassOperationSignaturePair.splitOperationSignatureStr(opExec.getOperationSignature());
 			Assert.assertEquals("Class/Component type names differ", opExecClassOperationSignature.getFqClassname(),
 					exec.getAllocationComponent().getAssemblyComponent().getType().getFullQualifiedName());
-			// as Signature's equal is not implemented, compare the strings
-			Assert.assertEquals("Signatures differ", opExecClassOperationSignature.getSignature().toString(),
-					exec.getOperation().getSignature().toString());
+			Assert.assertEquals("Signatures differ", opExecClassOperationSignature.getSignature(), exec.getOperation().getSignature());
 			// we're not testing the assembly name here, because therefore, we had to transform the class name
 			expectedExecs.add(exec);
 		}
@@ -144,7 +142,6 @@ class ExecRecordTransformationFilterChecker { // NOPMD (subclass of TestCase)
 		Assert.assertEquals("Unexpected number of generated executions", expectedExecutions.size(), generatedExecutions.size());
 
 		// note that we assume that the records are processed in FIFO order by the filter
-		Assert.assertEquals("Lists of expected and generated executions not equal",
-				expectedExecutions, generatedExecutions);
+		Assert.assertEquals("Lists of expected and generated executions not equal", expectedExecutions, generatedExecutions);
 	}
 }

@@ -14,22 +14,28 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.util;
+package kieker.common.util.filesystem;
 
 /**
- * This class contains some convenient utility methods to handle strings.
- * 
  * @author Jan Waller
  * 
  * @since 1.7
  */
-public final class StringUtils {
+public final class FSUtil { // NOCS NOPMD (constants interface)
 
-	/**
-	 * Private constructor to avoid instantiation.
-	 */
-	private StringUtils() {
-		// empty private constructor
+	public static final String FILE_PREFIX = "kieker";
+	public static final String MAP_FILENAME = "kieker.map";
+
+	public static final String LEGACY_FILE_PREFIX = "tpmon";
+	public static final String LEGACY_MAP_FILENAME = "tpmon.map";
+
+	public static final String NORMAL_FILE_EXTENSION = ".dat";
+	public static final String ZIP_FILE_EXTENSION = ".zip";
+
+	public static final String ENCODING = "UTF-8";
+
+	private FSUtil() {
+		// private default constructor
 	}
 
 	public static final String encodeNewline(final String str) {

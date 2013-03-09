@@ -23,6 +23,7 @@ import java.io.PrintWriter;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.writer.filesystem.map.StringMappingFileWriter;
 
@@ -37,7 +38,7 @@ public class AsciiZipWriterThread extends AbstractZipWriterThread {
 			final StringMappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile, final int bufferSize, final int level)
 			throws IOException {
 		super(monitoringController, writeQueue, mappingFileWriter, path, maxEntriesInFile, level);
-		this.out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(super.zipOutputStream, ENCODING), bufferSize), false);
+		this.out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(super.zipOutputStream, FSUtil.ENCODING), bufferSize), false);
 	}
 
 	@Override

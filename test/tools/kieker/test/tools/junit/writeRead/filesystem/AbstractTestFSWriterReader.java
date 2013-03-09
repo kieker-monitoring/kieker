@@ -34,7 +34,7 @@ import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.filesystem.FSConstants;
+import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -157,7 +157,7 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 		final String manipulatedContent = mapFileContent.replaceAll(findString, replaceByString);
 		PrintStream printStream = null;
 		try {
-			printStream = new PrintStream(new FileOutputStream(filename), false, FSConstants.ENCODING);
+			printStream = new PrintStream(new FileOutputStream(filename), false, FSUtil.ENCODING);
 			printStream.print(manipulatedContent);
 		} finally {
 			if (printStream != null) {

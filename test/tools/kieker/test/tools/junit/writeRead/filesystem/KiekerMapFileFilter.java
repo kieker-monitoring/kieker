@@ -19,7 +19,7 @@ package kieker.test.tools.junit.writeRead.filesystem;
 import java.io.File;
 import java.io.FilenameFilter;
 
-import kieker.common.util.filesystem.FSConstants;
+import kieker.common.util.filesystem.FSUtil;
 
 /**
  * This filter accepts only kieker.map files. All other files are declined.
@@ -48,6 +48,6 @@ class KiekerMapFileFilter implements FilenameFilter { // NOPMD (TestClassWithout
 	 * @return true if and only if the given file name is equals to the name of a kieker.map file.
 	 */
 	public boolean accept(final File dir, final String name) {
-		return FSConstants.MAP_FILENAME.equals(name);
+		return FSUtil.MAP_FILENAME.equals(name);
 	}
 }

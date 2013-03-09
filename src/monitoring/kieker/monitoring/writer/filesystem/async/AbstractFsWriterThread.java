@@ -26,7 +26,7 @@ import java.util.TimeZone;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.filesystem.FSConstants;
+import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.registry.RegistryRecord;
 import kieker.monitoring.writer.AbstractAsyncThread;
@@ -37,9 +37,9 @@ import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
  * 
  * @since 1.5
  */
-public abstract class AbstractFsWriterThread extends AbstractAsyncThread implements FSConstants {
+public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 
-	protected String fileExtension = NORMAL_FILE_EXTENSION;
+	protected String fileExtension = FSUtil.NORMAL_FILE_EXTENSION;
 
 	private final MappingFileWriter mappingFileWriter;
 	private final String filenamePrefix;
@@ -63,7 +63,7 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread impleme
 		super(monitoringController, writeQueue);
 		this.mappingFileWriter = mappingFileWriter;
 		this.path = new File(path).getAbsolutePath();
-		this.filenamePrefix = path + File.separatorChar + FILE_PREFIX;
+		this.filenamePrefix = path + File.separatorChar + FSUtil.FILE_PREFIX;
 		this.maxEntriesInFile = maxEntriesInFile;
 		if ((maxLogSize > 0) || (maxLogFiles > 0)) {
 			this.maxLogSize = maxLogSize * 1024L * 1024L; // convert from MiBytes to Bytes

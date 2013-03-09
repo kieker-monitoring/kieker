@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.util;
+package kieker.common.util.signature;
 
 import java.util.Arrays;
 
@@ -127,6 +127,7 @@ public class Signature {
 			return false;
 		}
 		final Signature other = (Signature) obj;
+		// could also be checked without order?
 		if (!Arrays.equals(this.modifierList, other.modifierList)) {
 			return false;
 		}
