@@ -77,23 +77,17 @@ public abstract class AbstractLogReplayer {
 	 */
 	public boolean replay() {
 		boolean success = true;
-
 		try {
-
 			final IAnalysisController analysisInstance = new AnalysisController();
 
-			/*
-			 * Initializing the reader
-			 */
+			// Initializing the reader
 			final AbstractReaderPlugin reader = this.createReader(analysisInstance);
 
 			// These two variables will be updated while plugging together the configuration
 			AbstractPlugin lastFilter = reader;
 			String lastOutputPortName = this.readerOutputPortName();
 
-			/*
-			 * (Potentially) initializing the timestamp filter
-			 */
+			// (Potentially) initializing the timestamp filter
 			{ // NOCS (nested Block)
 				final Configuration timestampFilterConfiguration = new Configuration();
 
@@ -120,9 +114,7 @@ public abstract class AbstractLogReplayer {
 				}
 			}
 
-			/*
-			 * (Potentially) initializing delay filter
-			 */
+			// (Potentially) initializing delay filter
 			if (this.realtimeMode) {
 				final Configuration delayFilterConfiguration = new Configuration();
 				delayFilterConfiguration.setProperty(RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_NUM_WORKERS, Integer.toString(this.numRealtimeWorkerThreads));
@@ -133,9 +125,7 @@ public abstract class AbstractLogReplayer {
 				lastOutputPortName = RealtimeRecordDelayFilter.OUTPUT_PORT_NAME_RECORDS;
 			}
 
-			/*
-			 * And finally, we'll add the MonitoringRecordLoggerFilter
-			 */
+			// And finally, we'll add the MonitoringRecordLoggerFilter
 			final Configuration recordLoggerConfig = new Configuration();
 			if (this.monitoringConfigurationFile != null) {
 				recordLoggerConfig.setProperty(MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, this.monitoringConfigurationFile);

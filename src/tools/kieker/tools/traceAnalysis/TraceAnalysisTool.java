@@ -53,6 +53,7 @@ import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.util.filesystem.FSConstants;
 import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
@@ -1020,7 +1021,8 @@ public final class TraceAnalysisTool {
 				}
 
 				/* check whether inputDirFile contains a (kieker|tpmon).map file; the latter for legacy reasons */
-				final File[] mapFiles = { new File(inputDir + "/kieker.map"), new File(inputDir + "/tpmon.map") };
+				final File[] mapFiles = { new File(inputDir + File.separatorChar + FSConstants.MAP_FILENAME),
+					new File(inputDir + File.separatorChar + FSConstants.LEGACY_MAP_FILENAME), };
 				boolean mapFileExists = false;
 				for (final File potentialMapFile : mapFiles) {
 					if (potentialMapFile.isFile()) {

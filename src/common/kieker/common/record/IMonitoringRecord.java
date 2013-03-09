@@ -19,14 +19,16 @@ package kieker.common.record;
 import java.io.Serializable;
 
 /**
+ * All Kieker monitoring records have to implement this minimal interface.
  * 
  * <p>
  * <b>Warning:</b> Objects within records should not contain ';', '\n', or '\r' in their respective toString() representation.
  * </p>
  * 
+ * @see Factory
+ * 
  * @author Andre van Hoorn, Jan Waller
  */
-// TODO: further description
 public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringRecord> {
 
 	/**
@@ -81,9 +83,15 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	/**
 	 * Any record that implements this interface has to conform to certain specifications.
 	 * 
+	 * <p>
+	 * These records can use final fields and thus provide better performance.
+	 * </p>
+	 * 
 	 * <ul>
 	 * <li>a constructor accepting a single Object[] as argument.
-	 * <li>a <code>private static final Class&lt;?&gt;[] TYPES</code> specifying the types of the records, usually returned via {@link #getValueTypes()}.
+	 * <li>a <code>private static final Class&lt;?&gt;[] TYPES</code> specifying the types of the records, usually returned via
+	 * {@link #IMonitoringRecord.getValueTypes()}.
+	 * <li>the {@link #IMonitoringRecord.initFromArray(Object[] values)} method does not have to be implemented
 	 * </ul>
 	 */
 	public static interface Factory { // NOCS (name)

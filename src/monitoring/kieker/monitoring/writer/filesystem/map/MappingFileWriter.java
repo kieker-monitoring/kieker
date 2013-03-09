@@ -23,6 +23,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
 import kieker.common.util.StringUtils;
+import kieker.common.util.filesystem.FSConstants;
 import kieker.monitoring.core.registry.RegistryRecord;
 
 /**
@@ -30,16 +31,13 @@ import kieker.monitoring.core.registry.RegistryRecord;
  * 
  * @since 1.7
  */
-public final class MappingFileWriter {
-	public static final String KIEKER_MAP_FN = "kieker.map";
-
-	private static final String ENCODING = "UTF-8";
+public final class MappingFileWriter implements FSConstants {
 
 	private final File mappingFile;
 
 	public MappingFileWriter(final String path) throws IOException {
 		final StringBuilder sbm = new StringBuilder(path.length() + 11);
-		sbm.append(path).append(File.separatorChar).append(KIEKER_MAP_FN);
+		sbm.append(path).append(File.separatorChar).append(MAP_FILENAME);
 		final String mappingFileFn = sbm.toString();
 		this.mappingFile = new File(mappingFileFn);
 		if (!this.mappingFile.createNewFile()) {

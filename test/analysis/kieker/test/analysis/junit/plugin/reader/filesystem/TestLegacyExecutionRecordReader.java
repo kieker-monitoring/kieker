@@ -33,6 +33,7 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
+import kieker.common.util.filesystem.FSConstants;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -42,8 +43,6 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * @since 1.6
  */
 public class TestLegacyExecutionRecordReader extends AbstractKiekerTest {
-
-	private static final String ENCODING = "UTF-8";
 
 	private static final String MAP_FILE = "$0=kieker.common.record.controlflow.OperationExecutionRecord\n"
 			+ "$1=kieker.common.record.OperationExecutionRecord\n"
@@ -65,12 +64,12 @@ public class TestLegacyExecutionRecordReader extends AbstractKiekerTest {
 
 	@Before
 	public void setUp() throws IOException {
-		final File mapFile = this.tmpFolder.newFile("kieker.map");
-		final PrintStream mapStream = new PrintStream(new FileOutputStream(mapFile), false, ENCODING);
+		final File mapFile = this.tmpFolder.newFile(FSConstants.MAP_FILENAME);
+		final PrintStream mapStream = new PrintStream(new FileOutputStream(mapFile), false, FSConstants.ENCODING);
 		mapStream.print(MAP_FILE);
 		mapStream.close();
-		final File datFile = this.tmpFolder.newFile("kieker.dat");
-		final PrintStream datStream = new PrintStream(new FileOutputStream(datFile), false, ENCODING);
+		final File datFile = this.tmpFolder.newFile(FSConstants.FILE_PREFIX + FSConstants.NORMAL_FILE_EXTENSION);
+		final PrintStream datStream = new PrintStream(new FileOutputStream(datFile), false, FSConstants.ENCODING);
 		datStream.print(DAT_FILE);
 		datStream.close();
 	}

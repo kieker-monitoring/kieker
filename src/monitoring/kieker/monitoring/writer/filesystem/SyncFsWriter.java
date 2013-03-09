@@ -34,6 +34,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.filesystem.FSConstants;
 import kieker.monitoring.core.registry.RegistryRecord;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
@@ -58,7 +59,7 @@ import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
  * 
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  */
-public final class SyncFsWriter extends AbstractMonitoringWriter {
+public final class SyncFsWriter extends AbstractMonitoringWriter implements FSConstants {
 	private static final String PREFIX = SyncFsWriter.class.getName() + ".";
 	public static final String CONFIG_PATH = PREFIX + "customStoragePath"; // NOCS (afterPREFIX)
 	public static final String CONFIG_TEMP = PREFIX + "storeInJavaIoTmpdir"; // NOCS (afterPREFIX)
@@ -69,9 +70,6 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	public static final String CONFIG_BUFFER = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
 
 	private static final Log LOG = LogFactory.getLog(SyncFsWriter.class);
-
-	private static final String FILE_PREFIX = "kieker-";
-	private static final String ENCODING = "UTF-8";
 
 	// internal variables
 	private final boolean autoflush;
@@ -138,8 +136,8 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		// Determine directory for files
 		final String ctrlName = super.monitoringController.getHostname() + "-" + super.monitoringController.getName();
 		final String dateStr = this.dateFormat.format(new java.util.Date()); // NOPMD (Date)
-		final StringBuffer sb = new StringBuffer(pathTmp.length() + FILE_PREFIX.length() + ctrlName.length() + 25);
-		sb.append(pathTmp).append(File.separatorChar).append(FILE_PREFIX).append(dateStr).append("-UTC-").append(ctrlName).append(File.separatorChar);
+		final StringBuffer sb = new StringBuffer(pathTmp.length() + FILE_PREFIX.length() + ctrlName.length() + 26);
+		sb.append(pathTmp).append(File.separatorChar).append(FILE_PREFIX).append('-').append(dateStr).append("-UTC-").append(ctrlName).append(File.separatorChar);
 		pathTmp = sb.toString();
 		f = new File(pathTmp);
 		if (!f.mkdir()) {
@@ -249,7 +247,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		}
 		final StringBuilder sb = new StringBuilder(this.filenamePrefix.length() + 30);
 		sb.append(this.filenamePrefix).append(this.dateFormat.format(new java.util.Date(date))).append("-UTC-") // NOPMD (Date)
-				.append(String.format("%03d", this.sameFilenameCounter)).append(".dat");
+				.append(String.format("%03d", this.sameFilenameCounter)).append(NORMAL_FILE_EXTENSION);
 		return sb.toString();
 	}
 

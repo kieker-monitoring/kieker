@@ -34,6 +34,7 @@ import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.filesystem.FSConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -49,8 +50,6 @@ import kieker.test.tools.util.StringUtils;
  * @author Andre van Hoorn
  */
 public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTest {
-
-	private static final String ENCODING = "UTF-8";
 
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
@@ -158,7 +157,7 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 		final String manipulatedContent = mapFileContent.replaceAll(findString, replaceByString);
 		PrintStream printStream = null;
 		try {
-			printStream = new PrintStream(new FileOutputStream(filename), false, ENCODING);
+			printStream = new PrintStream(new FileOutputStream(filename), false, FSConstants.ENCODING);
 			printStream.print(manipulatedContent);
 		} finally {
 			if (printStream != null) {

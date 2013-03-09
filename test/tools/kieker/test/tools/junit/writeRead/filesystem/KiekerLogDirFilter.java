@@ -19,6 +19,8 @@ package kieker.test.tools.junit.writeRead.filesystem;
 import java.io.File;
 import java.io.FilenameFilter;
 
+import kieker.common.util.filesystem.FSConstants;
+
 /**
  * Accepts Kieker file system monitoring logs.
  * 
@@ -27,15 +29,13 @@ import java.io.FilenameFilter;
  * @since 1.6
  */
 public class KiekerLogDirFilter implements FilenameFilter { // NOPMD (TestClassWithoutTestCases)
-	public static final String LOG_DIR_PREFIX = "kieker-"; // TODO: do we have this constant in the FS Writer(s)?
-	public static final String MAP_FILENAME = "kieker.map"; // TODO: do we have this constant in the FS Writer(s)?
 
 	public KiekerLogDirFilter() {
 		// empty default constructor
 	}
 
 	public boolean accept(final File dir, final String name) {
-		if (!name.startsWith(KiekerLogDirFilter.LOG_DIR_PREFIX)) {
+		if (!name.startsWith(FSConstants.FILE_PREFIX)) {
 			return false;
 		}
 
@@ -52,7 +52,7 @@ public class KiekerLogDirFilter implements FilenameFilter { // NOPMD (TestClassW
 			 * Accepts directories containing a `kieker.map` file.
 			 */
 			public boolean accept(final File dir, final String name) {
-				return name.equals(KiekerLogDirFilter.MAP_FILENAME);
+				return name.equals(FSConstants.MAP_FILENAME);
 			}
 		});
 		return kiekerMapFiles.length == 1;

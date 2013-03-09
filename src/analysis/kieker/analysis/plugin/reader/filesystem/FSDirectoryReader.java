@@ -39,22 +39,17 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.util.StringUtils;
 import kieker.common.util.filesystem.BinaryCompressionMethod;
+import kieker.common.util.filesystem.FSConstants;
 
 /**
  * Reads the contents of a single file system log directory and passes the records to the registered receiver of type {@link IMonitoringRecordReceiver}.
  * 
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  */
-final class FSDirectoryReader implements Runnable {
+final class FSDirectoryReader implements Runnable, FSConstants {
 	private static final Log LOG = LogFactory.getLog(FSDirectoryReader.class);
 
-	private static final String LEGACY_FILE_PREFIX = "tpmon";
-	private static final String NORMAL_FILE_PREFIX = "kieker";
-	private static final String NORMAL_FILE_POSTFIX = ".dat";
-
-	private static final String ENCODING = "UTF-8";
-
-	String filePrefix = NORMAL_FILE_PREFIX; // NOPMD NOCS (package visible for inner class)
+	String filePrefix = FILE_PREFIX; // NOPMD NOCS (package visible for inner class)
 
 	private final Map<Integer, String> stringRegistry = new HashMap<Integer, String>(); // NOPMD (no synchronization needed)
 
@@ -97,7 +92,7 @@ final class FSDirectoryReader implements Runnable {
 				final String name = pathname.getName();
 				return pathname.isFile()
 						&& name.startsWith(FSDirectoryReader.this.filePrefix)
-						&& (name.endsWith(NORMAL_FILE_POSTFIX) || BinaryCompressionMethod.hasValidFileExtension(name));
+						&& (name.endsWith(NORMAL_FILE_EXTENSION) || BinaryCompressionMethod.hasValidFileExtension(name));
 			}
 		});
 		if (inputFiles == null) {
@@ -118,7 +113,7 @@ final class FSDirectoryReader implements Runnable {
 					break;
 				}
 				LOG.info("< Loading " + inputFile.getAbsolutePath());
-				if (inputFile.getName().endsWith(NORMAL_FILE_POSTFIX)) {
+				if (inputFile.getName().endsWith(NORMAL_FILE_EXTENSION)) {
 					this.processNormalInputFile(inputFile);
 				} else {
 					if (this.ignoreUnknownRecordTypes) {
@@ -142,12 +137,13 @@ final class FSDirectoryReader implements Runnable {
 	 * Reads the mapping file located in the directory.
 	 */
 	private final void readMappingFile() {
-		File mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + "kieker.map");
+		File mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + MAP_FILENAME);
 		if (!mappingFile.exists()) {
 			// No mapping file found. Check whether we find a legacy tpmon.map file!
-			mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + "tpmon.map");
+			mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + LEGACY_MAP_FILENAME);
 			if (mappingFile.exists()) {
-				LOG.info("Directory '" + this.inputDir + "' contains no file 'kieker.map'. Found 'tpmon.map' ... switching to legacy mode");
+				LOG.info("Directory '" + this.inputDir + "' contains no file '" + MAP_FILENAME + "'. Found '" + LEGACY_MAP_FILENAME
+						+ "' ... switching to legacy mode");
 				this.filePrefix = LEGACY_FILE_PREFIX;
 			} else {
 				// no {kieker|tpmon}.map exists. This is valid for very old monitoring logs. Hence, only dump a log.warn

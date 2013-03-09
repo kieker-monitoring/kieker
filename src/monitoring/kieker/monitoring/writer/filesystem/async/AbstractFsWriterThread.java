@@ -26,6 +26,7 @@ import java.util.TimeZone;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.filesystem.FSConstants;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.registry.RegistryRecord;
 import kieker.monitoring.writer.AbstractAsyncThread;
@@ -36,11 +37,9 @@ import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
  * 
  * @since 1.5
  */
-public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
+public abstract class AbstractFsWriterThread extends AbstractAsyncThread implements FSConstants {
 
-	private static final String FILE_PREFIX = "kieker-";
-
-	protected String fileExtension = ".dat";
+	protected String fileExtension = NORMAL_FILE_EXTENSION;
 
 	private final MappingFileWriter mappingFileWriter;
 	private final String filenamePrefix;
@@ -91,8 +90,8 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 			this.sameFilenameCounter = 0;
 			this.previousFileDate = date;
 		}
-		final StringBuilder sb = new StringBuilder(this.filenamePrefix.length() + threadName.length() + this.fileExtension.length() + 27);
-		sb.append(this.filenamePrefix).append(this.dateFormat.format(new java.util.Date(date))).append("-UTC-") // NOPMD (Date)
+		final StringBuilder sb = new StringBuilder(this.filenamePrefix.length() + threadName.length() + this.fileExtension.length() + 28);
+		sb.append(this.filenamePrefix).append('-').append(this.dateFormat.format(new java.util.Date(date))).append("-UTC-") // NOPMD (Date)
 				.append(String.format("%03d", this.sameFilenameCounter)).append('-')
 				.append(threadName).append(this.fileExtension);
 		return sb.toString();

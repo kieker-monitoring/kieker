@@ -32,10 +32,10 @@ import java.util.zip.ZipOutputStream;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.filesystem.FSConstants;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.registry.RegistryRecord;
 import kieker.monitoring.writer.AbstractAsyncThread;
-import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
 import kieker.monitoring.writer.filesystem.map.StringMappingFileWriter;
 
 /**
@@ -43,14 +43,10 @@ import kieker.monitoring.writer.filesystem.map.StringMappingFileWriter;
  * 
  * @since 1.7
  */
-public abstract class AbstractZipWriterThread extends AbstractAsyncThread {
+public abstract class AbstractZipWriterThread extends AbstractAsyncThread implements FSConstants {
 	private static final Log LOG = LogFactory.getLog(AbstractZipWriterThread.class);
 
-	private static final String FILE_PREFIX = "kieker-";
-	private static final String FILE_EXTENSION_ZIP = ".zip";
-	private static final String ENCODING = "UTF-8";
-
-	protected String fileExtension = ".dat";
+	protected String fileExtension = NORMAL_FILE_EXTENSION;
 	protected final ZipOutputStream zipOutputStream;
 
 	private final StringMappingFileWriter mappingFileWriter;
@@ -75,9 +71,9 @@ public abstract class AbstractZipWriterThread extends AbstractAsyncThread {
 		this.dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
 		this.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		// create zip file
-		this.zipFileName = new File(path).getAbsolutePath() + File.separatorChar + FILE_PREFIX
+		this.zipFileName = new File(path).getAbsolutePath() + File.separatorChar + FILE_PREFIX + '-'
 				+ this.dateFormat.format(new java.util.Date(System.currentTimeMillis())) + "-UTC-" // NOPMD (Date)
-				+ monitoringController.getHostname() + "-" + monitoringController.getName() + "-" + this.getName() + FILE_EXTENSION_ZIP;
+				+ monitoringController.getHostname() + "-" + monitoringController.getName() + "-" + this.getName() + ZIP_FILE_EXTENSION;
 		this.zipOutputStream = new ZipOutputStream(new FileOutputStream(this.zipFileName));
 		this.zipOutputStream.setLevel(level);
 		this.zipOutputStream.closeEntry();
@@ -88,7 +84,7 @@ public abstract class AbstractZipWriterThread extends AbstractAsyncThread {
 		PrintWriter pw = null;
 		try {
 			this.cleanupForNextEntry();
-			this.zipOutputStream.putNextEntry(new ZipEntry(MappingFileWriter.KIEKER_MAP_FN));
+			this.zipOutputStream.putNextEntry(new ZipEntry(MAP_FILENAME));
 			pw = new PrintWriter(new OutputStreamWriter(this.zipOutputStream, ENCODING));
 			// if there is more than one writer thread we might miss some entries here!
 			pw.print(this.mappingFileWriter.toString());
@@ -112,8 +108,8 @@ public abstract class AbstractZipWriterThread extends AbstractAsyncThread {
 			this.sameFilenameCounter = 0;
 			this.previousFileDate = date;
 		}
-		final StringBuilder sb = new StringBuilder(FILE_PREFIX.length() + this.fileExtension.length() + 26);
-		sb.append(FILE_PREFIX).append(this.dateFormat.format(new java.util.Date(date))).append("-UTC-") // NOPMD (Date)
+		final StringBuilder sb = new StringBuilder(FILE_PREFIX.length() + this.fileExtension.length() + 27);
+		sb.append(FILE_PREFIX).append('-').append(this.dateFormat.format(new java.util.Date(date))).append("-UTC-") // NOPMD (Date)
 				.append(String.format("%03d", this.sameFilenameCounter)).append(this.fileExtension);
 		return sb.toString();
 	}

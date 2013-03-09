@@ -38,6 +38,7 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.util.StringUtils;
+import kieker.common.util.filesystem.FSConstants;
 
 /**
  * Reads the contents of a single zip file and passes the records to the registered receiver of type {@link IMonitoringRecordReceiver}.
@@ -46,10 +47,8 @@ import kieker.common.util.StringUtils;
  * 
  * @since 1.7
  */
-public final class FSZipReader implements Runnable {
+public final class FSZipReader implements Runnable, FSConstants {
 	private static final Log LOG = LogFactory.getLog(FSZipReader.class);
-
-	private static final String ENCODING = "UTF-8";
 
 	private final File zipFile;
 	private final IMonitoringRecordReceiver recordReceiver;
@@ -73,7 +72,7 @@ public final class FSZipReader implements Runnable {
 	 *            select only records of this type; null selects all
 	 */
 	public FSZipReader(final File zipFile, final IMonitoringRecordReceiver recordReceiver, final boolean ignoreUnknownRecordTypes) {
-		if ((zipFile == null) || !zipFile.isFile() || !zipFile.getName().endsWith(".zip")) {
+		if ((zipFile == null) || !zipFile.isFile() || !zipFile.getName().endsWith(ZIP_FILE_EXTENSION)) {
 			throw new IllegalArgumentException("Invalid zip file");
 		}
 		this.zipFile = zipFile;
@@ -89,7 +88,7 @@ public final class FSZipReader implements Runnable {
 		try {
 			zipInputStream = new ZipInputStream(new FileInputStream(this.zipFile));
 			ZipEntry zipEntry;
-			while ((null != (zipEntry = zipInputStream.getNextEntry())) && !zipEntry.getName().equals("kieker.map")) { // NOCS NOPMD
+			while ((null != (zipEntry = zipInputStream.getNextEntry())) && !zipEntry.getName().equals(MAP_FILENAME)) { // NOCS NOPMD
 				// do nothing, just skip to the map file if present
 			}
 			if (null == zipEntry) {
@@ -127,8 +126,8 @@ public final class FSZipReader implements Runnable {
 					break;
 				}
 				final String filename = zipEntry.getName();
-				if (filename.startsWith("kieker")) {
-					if (filename.endsWith(".dat")) {
+				if (filename.startsWith(FILE_PREFIX)) {
+					if (filename.endsWith(NORMAL_FILE_EXTENSION)) {
 						LOG.info("< Loading " + filename);
 						this.readAsciiFile(reader);
 					} else if (filename.endsWith(".bin")) {

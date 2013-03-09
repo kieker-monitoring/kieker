@@ -29,6 +29,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
+import kieker.common.util.filesystem.FSConstants;
 
 // TODO: check correct handling of errors by creating suitable tests in kieker.test.tools.junit.writeRead.filesystem!
 /**
@@ -45,7 +46,7 @@ import kieker.common.record.misc.EmptyRecord;
 			@Property(name = FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, defaultValue = "false",
 					description = "Ignore unknown records? Aborts if encountered and value is false.")
 		})
-public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
+public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver, FSConstants {
 
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 
@@ -118,7 +119,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 			final Thread readerThread;
 			if (inputDir.isDirectory()) {
 				readerThread = new Thread(new FSDirectoryReader(inputDir, this, this.ignoreUnknownRecordTypes));
-			} else if (inputDir.isFile() && inputDirFn.endsWith(".zip")) {
+			} else if (inputDir.isFile() && inputDirFn.endsWith(ZIP_FILE_EXTENSION)) {
 				readerThread = new Thread(new FSZipReader(inputDir, this, this.ignoreUnknownRecordTypes));
 			} else {
 				LOG.warn("Invalid Directory or filename (no Kieker log): " + inputDirFn);

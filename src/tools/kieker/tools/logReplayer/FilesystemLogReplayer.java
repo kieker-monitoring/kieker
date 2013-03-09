@@ -68,7 +68,6 @@ public class FilesystemLogReplayer extends AbstractLogReplayer {
 	protected AbstractReaderPlugin createReader(final IAnalysisController analysisInstance) {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(this.inputDirs));
-		// TODO: we might want to pull this out as a property
 		configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, Boolean.toString(true));
 		return new FSReader(configuration, analysisInstance);
 	}
@@ -80,5 +79,4 @@ public class FilesystemLogReplayer extends AbstractLogReplayer {
 	protected String readerOutputPortName() {
 		return FSReader.OUTPUT_PORT_NAME_RECORDS;
 	}
-
 }

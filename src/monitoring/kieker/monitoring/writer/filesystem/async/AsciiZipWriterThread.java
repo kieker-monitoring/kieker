@@ -31,8 +31,6 @@ import kieker.monitoring.writer.filesystem.map.StringMappingFileWriter;
  */
 public class AsciiZipWriterThread extends AbstractZipWriterThread {
 
-	private static final String ENCODING = "UTF-8";
-
 	private final PrintWriter out;
 
 	public AsciiZipWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,

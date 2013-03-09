@@ -19,6 +19,8 @@ package kieker.test.tools.junit.writeRead.filesystem;
 import java.io.File;
 import java.io.FilenameFilter;
 
+import kieker.common.util.filesystem.FSConstants;
+
 /**
  * This filter accepts only kieker.map files. All other files are declined.
  * 
@@ -27,9 +29,6 @@ import java.io.FilenameFilter;
  * @since 1.6
  */
 class KiekerMapFileFilter implements FilenameFilter { // NOPMD (TestClassWithoutTestCases)
-
-	/** This constant determines the name of the kieker.map file. */
-	public static final String MAP_FILENAME = "kieker.map"; // TODO: do we have this constant in the FS Writer(s)?
 
 	/**
 	 * Creates a new instance of this class.
@@ -49,6 +48,6 @@ class KiekerMapFileFilter implements FilenameFilter { // NOPMD (TestClassWithout
 	 * @return true if and only if the given file name is equals to the name of a kieker.map file.
 	 */
 	public boolean accept(final File dir, final String name) {
-		return MAP_FILENAME.equals(name);
+		return FSConstants.MAP_FILENAME.equals(name);
 	}
 }

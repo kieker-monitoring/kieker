@@ -19,6 +19,7 @@ package kieker.tools.logReplayer;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -218,8 +219,8 @@ public final class FilesystemLogReplayerStarter {
 		return retVal;
 	}
 
-	// TODO: difference to Arrays.toString(..array.)?
 	private static String fromStringArrayToDeliminedString(final String[] array, final char delimiter) {
+		Arrays.toString(array);
 		final StringBuilder arTostr = new StringBuilder();
 		if (array.length > 0) {
 			arTostr.append(array[0]);
@@ -229,7 +230,6 @@ public final class FilesystemLogReplayerStarter {
 			}
 		}
 		return arTostr.toString();
-
 	}
 
 	/**

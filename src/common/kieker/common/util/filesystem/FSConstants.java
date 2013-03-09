@@ -14,35 +14,23 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.writeRead.filesystem;
-
-import java.io.File;
-import java.io.FilenameFilter;
-
-import kieker.common.util.filesystem.FSConstants;
+package kieker.common.util.filesystem;
 
 /**
- * Accepts Kieker file system monitoring logs.
- * 
  * @author Jan Waller
  * 
  * @since 1.7
  */
-public class KiekerLogZipFilter implements FilenameFilter { // NOPMD (TestClassWithoutTestCases)
+public interface FSConstants { // NOCS (constants interface)
 
-	public KiekerLogZipFilter() {
-		// empty default constructor
-	}
+	public static final String FILE_PREFIX = "kieker";
+	public static final String MAP_FILENAME = "kieker.map";
 
-	public boolean accept(final File dir, final String name) {
-		if (!dir.isDirectory() || !name.startsWith(FSConstants.FILE_PREFIX) || !name.endsWith(FSConstants.ZIP_FILE_EXTENSION)) {
-			return false;
-		}
-		final String potentialFn = dir.getAbsolutePath() + File.separatorChar + name;
-		final File potentialFile = new File(potentialFn);
-		if (!potentialFile.isFile()) {
-			return false;
-		}
-		return true;
-	}
+	public static final String LEGACY_FILE_PREFIX = "tpmon";
+	public static final String LEGACY_MAP_FILENAME = "tpmon.map";
+
+	public static final String NORMAL_FILE_EXTENSION = ".dat";
+	public static final String ZIP_FILE_EXTENSION = ".zip";
+
+	public static final String ENCODING = "UTF-8";
 }
