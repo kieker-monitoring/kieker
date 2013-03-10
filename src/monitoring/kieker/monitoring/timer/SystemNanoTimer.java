@@ -85,14 +85,20 @@ public final class SystemNanoTimer extends AbstractTimeSource {
 
 	/**
 	 * @return a singleton instance of SystemNanoTimer
+	 * 
+	 * @deprecated to be removed in Kieker 1.8
 	 */
+	@Deprecated
 	public static final ITimeSource getInstance() {
 		return LazyHolder.INSTANCE;
 	}
 
 	/**
 	 * SINGLETON.
+	 * 
+	 * @deprecated to be removed in Kieker 1.8
 	 */
+	@Deprecated
 	private static final class LazyHolder { // NOCS (MissingCtorCheck)
 		static final ITimeSource INSTANCE = new SystemNanoTimer(ConfigurationFactory.createDefaultConfiguration().getPropertiesStartingWith(// NOPMD package
 				SystemNanoTimer.class.getName()));
