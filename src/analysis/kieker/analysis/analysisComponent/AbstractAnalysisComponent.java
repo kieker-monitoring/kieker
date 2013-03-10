@@ -132,8 +132,10 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 			if (this.projectContext == null) {
 				this.projectContext = context;
 				return true;
+			} else if (this.projectContext == context) {
+				return true;
 			} else {
-				LOG.warn("Project context of component already set.");
+				LOG.warn("Project context of component already set to different project context.");
 				return false;
 			}
 		}

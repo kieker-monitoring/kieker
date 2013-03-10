@@ -790,7 +790,9 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register filter after starting analysis.");
 		}
-		reader.setProjectContext(this);
+		if (!reader.setProjectContext(this)) { // just to make sure
+			return; // already registered elsewhere
+		}
 		if (this.readers.contains(reader)) {
 			LOG.warn("Reader " + reader.getName() + " already registered.");
 			return;
@@ -811,7 +813,9 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register filter after starting analysis.");
 		}
-		filter.setProjectContext(this); // just to make sure!
+		if (!filter.setProjectContext(this)) { // just to make sure
+			return; // already registered elsewhere
+		}
 		if (this.filters.contains(filter)) {
 			LOG.warn("Filter '" + filter.getName() + "' (" + filter.getPluginName() + ") already registered.");
 			return;
@@ -832,7 +836,9 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register respository after starting analysis.");
 		}
-		repository.setProjectContext(this); // just to make sure
+		if (!repository.setProjectContext(this)) { // just to make sure
+			return; // already registered elsewhere
+		}
 		if (this.repos.contains(repository)) {
 			LOG.warn("Repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ") already registered.");
 			return;
