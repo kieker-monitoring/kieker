@@ -20,7 +20,10 @@ package kieker.common.namedRecordPipe;
  * This exception shows that something with respective to a pipe failed.
  * 
  * @author Andre van Hoorn
+ * 
+ * @deprecated to be removed in Kieker 1.8
  */
+@Deprecated
 public class PipeException extends Exception {
 	/** The UID. */
 	private static final long serialVersionUID = 56L;
