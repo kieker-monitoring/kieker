@@ -218,9 +218,9 @@ public class ClassOperationSignaturePair {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = (prime * result) + ((this.fqClassname == null) ? 0 : this.fqClassname.hashCode());
+		result = (prime * result) + ((this.fqClassname == null) ? 0 : this.fqClassname.hashCode()); // NOCS
 		result = (prime * result) + this.lastDot;
-		result = (prime * result) + ((this.signature == null) ? 0 : this.signature.hashCode());
+		result = (prime * result) + ((this.signature == null) ? 0 : this.signature.hashCode()); // NOCS
 		return result;
 	}
 
