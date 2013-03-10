@@ -69,6 +69,7 @@ import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.record.misc.KiekerMetadataRecord;
 
 /**
  * The <code>AnalysisController</code> can be used to configure, control, save and load an analysis instance.
@@ -278,6 +279,18 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			}
 		}
 		return defaultConfiguration;
+	}
+
+	/**
+	 * Called whenever an {@link KiekerMetadataRecord} is found inside the filters network.
+	 * 
+	 * Currently this method only logs all details.
+	 * 
+	 * @param record
+	 *            the KiekerMetadataRecord containing the information
+	 */
+	public final void handleKiekerMetadataRecord(final KiekerMetadataRecord record) {
+		LOG.info(record.toFormattedString());
 	}
 
 	/**

@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import kieker.analysis.AnalysisController;
 import kieker.analysis.IProjectContext;
 import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.display.annotation.Display;
@@ -45,6 +46,7 @@ import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.record.misc.KiekerMetadataRecord;
 
 /**
  * <b>Do not</b> inherit directly from this class! Instead inherit from the class {@link kieker.analysis.plugin.filter.AbstractFilterPlugin} or
@@ -162,6 +164,11 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	protected final boolean deliver(final String outputPortName, final Object data) {
 		if (((this.state != STATE.RUNNING) && (this.state != STATE.TERMINATING)) || (data == null)) {
 			return false;
+		}
+		// discard this kind of record when encountered ...
+		if (data instanceof KiekerMetadataRecord) {
+			((AnalysisController) this.projectContext).handleKiekerMetadataRecord((KiekerMetadataRecord) data);
+			return true;
 		}
 
 		/* First step: Get the output port. */

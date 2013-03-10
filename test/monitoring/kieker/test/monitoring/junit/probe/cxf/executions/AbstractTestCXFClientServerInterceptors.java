@@ -102,6 +102,7 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 
 	private IMonitoringController createMonitoringController(final String hostname) {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
+		config.setProperty(ConfigurationFactory.METADATA, "false");
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, NamedListWriter.class.getName());
 		config.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.listName);
 		config.setProperty(ConfigurationFactory.HOST_NAME, hostname);

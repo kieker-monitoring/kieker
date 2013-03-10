@@ -119,7 +119,6 @@ public final class MonitoringController extends AbstractController implements IM
 			LOG.warn("Shutdown Hook is disabled, loss of monitoring data might occur.");
 		}
 		LOG.info(monitoringController.toString());
-		// monitoringController.saveMetadataAsRecord();
 		return monitoringController;
 	}
 
@@ -166,7 +165,7 @@ public final class MonitoringController extends AbstractController implements IM
 		return sb.toString();
 	}
 
-	public final boolean saveMetadataAsRecord() {
+	public final boolean sendMetadataAsRecord() {
 		return this.newMonitoringRecord(new KiekerMetadataRecord(
 				this.getName(), // controllerName
 				this.getHostname(), // hostname

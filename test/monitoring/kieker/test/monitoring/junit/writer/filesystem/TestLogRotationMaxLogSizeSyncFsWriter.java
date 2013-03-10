@@ -37,6 +37,7 @@ public class TestLogRotationMaxLogSizeSyncFsWriter extends AbstractTestLogRotati
 	@Override
 	protected IMonitoringController createController(final String path, final int maxEntriesInFile, final int maxLogSize) {
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
+		configuration.setProperty(ConfigurationFactory.METADATA, "false");
 		configuration.setProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP, "false"); // needed for constant size
 		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, SyncFsWriter.class.getName());
 		configuration.setProperty(SyncFsWriter.CONFIG_TEMP, "false");

@@ -142,4 +142,22 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	public long getNumberOfRecords() {
 		return this.numberOfRecords;
 	}
+
+	public String toFormattedString() {
+		final StringBuilder sb = new StringBuilder(512);
+		sb.append("Kieker metadata: controllerName='");
+		sb.append(this.controllerName);
+		sb.append("', hostname='");
+		sb.append(this.hostname);
+		sb.append("', experimentId='");
+		sb.append(this.experimentId);
+		sb.append("', timeSource='");
+		sb.append(this.timeSource);
+		sb.append("', debugMode='");
+		sb.append(this.debugMode);
+		sb.append("', numberOfRecords='");
+		sb.append(this.numberOfRecords);
+		sb.append('\'');
+		return sb.toString();
+	}
 }

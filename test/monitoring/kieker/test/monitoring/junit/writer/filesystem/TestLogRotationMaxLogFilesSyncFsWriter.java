@@ -36,6 +36,7 @@ public class TestLogRotationMaxLogFilesSyncFsWriter extends AbstractTestLogRotat
 	@Override
 	protected IMonitoringController createController(final String path, final int maxEntriesInFile, final int maxLogFiles) {
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
+		configuration.setProperty(ConfigurationFactory.METADATA, "false");
 		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, SyncFsWriter.class.getName());
 		configuration.setProperty(SyncFsWriter.CONFIG_TEMP, "false");
 		configuration.setProperty(SyncFsWriter.CONFIG_PATH, path);

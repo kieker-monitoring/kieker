@@ -34,6 +34,7 @@ public final class TestAsyncDbWriterReader extends AbstractTestDbWriterReader { 
 	@Override
 	protected IMonitoringController createController(final int numRecordsWritten) throws Exception {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
+		config.setProperty(ConfigurationFactory.METADATA, "false");
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, AsyncDbWriter.class.getName());
 		config.setProperty(AsyncDbWriter.CONFIG_DRIVERCLASSNAME, DRIVERCLASSNAME);
 		config.setProperty(AsyncDbWriter.CONFIG_CONNECTIONSTRING, this.getConnectionString() + ";create=true");

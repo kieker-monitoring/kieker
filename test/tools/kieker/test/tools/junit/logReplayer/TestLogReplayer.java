@@ -70,6 +70,7 @@ public class TestLogReplayer extends AbstractKiekerTest {
 	public void init() throws IOException {
 		this.tmpFolder.create();
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
+		config.setProperty(ConfigurationFactory.METADATA, "false");
 		final String listName = NamedListWriter.FALLBACK_LIST_NAME;
 		this.recordListFilledByListWriter = NamedListWriter.createNamedList(listName);
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, NamedListWriter.class.getName());

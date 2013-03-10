@@ -84,6 +84,7 @@ public final class NamedPipeFactory {
 	 */
 	public static IMonitoringController createMonitoringControllerWithNamedPipe(final String pipeName, final Properties additionalProperties) {
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
+		configuration.setProperty(ConfigurationFactory.METADATA, "false");
 		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, PipeWriter.class.getName());
 		configuration.setProperty(PipeWriter.CONFIG_PIPENAME, pipeName);
 

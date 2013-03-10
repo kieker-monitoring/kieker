@@ -34,6 +34,7 @@ public final class TestSyncDbWriterReader extends AbstractTestDbWriterReader { /
 	@Override
 	protected IMonitoringController createController(final int numRecordsWritten) throws Exception {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
+		config.setProperty(ConfigurationFactory.METADATA, "false");
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, SyncDbWriter.class.getName());
 		config.setProperty(SyncDbWriter.CONFIG_DRIVERCLASSNAME, DRIVERCLASSNAME);
 		config.setProperty(SyncDbWriter.CONFIG_CONNECTIONSTRING, this.getConnectionString() + ";create=true");

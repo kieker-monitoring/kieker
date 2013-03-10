@@ -55,6 +55,8 @@ public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 		// Writer controller
 		Assert.assertNotNull(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP + " must not be empty",
 				configuration.getProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP));
+		Assert.assertNotNull(ConfigurationFactory.METADATA + " must not be empty",
+				configuration.getProperty(ConfigurationFactory.METADATA));
 		Assert.assertNotNull(ConfigurationFactory.WRITER_CLASSNAME + " must not be empty", configuration.getProperty(ConfigurationFactory.WRITER_CLASSNAME));
 		// TimeSource controller
 		Assert.assertNotNull(ConfigurationFactory.TIMER_CLASSNAME + " must not be empty", configuration.getProperty(ConfigurationFactory.TIMER_CLASSNAME));
@@ -107,6 +109,7 @@ public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 		// JMX controller
 		Assert.assertEquals(false, configuration.getBooleanProperty(ConfigurationFactory.ACTIVATE_JMX));
 		// Writer controller
+		Assert.assertEquals(true, configuration.getBooleanProperty(ConfigurationFactory.METADATA));
 		Assert.assertEquals(true, configuration.getBooleanProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP));
 		Assert.assertEquals("kieker.monitoring.writer.filesystem.AsyncFsWriter", configuration.getStringProperty(ConfigurationFactory.WRITER_CLASSNAME));
 		// TimeSource controller

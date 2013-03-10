@@ -37,6 +37,7 @@ public class TestLogRotationMaxLogFilesAsyncBinaryFsWriter extends AbstractTestL
 	@Override
 	protected IMonitoringController createController(final String path, final int maxEntriesInFile, final int maxLogFiles) {
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
+		configuration.setProperty(ConfigurationFactory.METADATA, "false");
 		final String writer = AsyncBinaryFsWriter.class.getName();
 		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, writer);
 		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_TEMP, "false");
