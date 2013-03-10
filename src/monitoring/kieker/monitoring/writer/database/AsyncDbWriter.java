@@ -152,7 +152,12 @@ final class DbWriterThread extends AbstractAsyncThread {
 				final PreparedStatement preparedStatement = this.connection.prepareStatement("INSERT INTO " + tableName + " VALUES (" + sb.toString() + ")");
 				this.recordTypeInformation.put(recordClass, preparedStatement);
 			} catch (final SQLException ex) {
-				throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
+				if (null == ex.getSQLState()) { // probably an exception by Kieker
+					LOG.error("Unable to log records of type " + recordClass.getName() + ": " + ex.getMessage());
+					return; // we ignore this kind of error
+				} else {
+					throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
+				}
 			}
 		}
 		try {

@@ -102,8 +102,13 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 				final PreparedStatement preparedStatement = this.connection.prepareStatement("INSERT INTO " + tableName + " VALUES (" + sb.toString() + ")");
 				this.recordTypeInformation.put(recordClass, preparedStatement);
 			} catch (final SQLException ex) {
-				LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
-				return false;
+				if (null == ex.getSQLState()) { // probably an exception by Kieker
+					LOG.error("Unable to log records of type " + recordClass.getName() + ": " + ex.getMessage());
+					return true; // we ignore this kind of error
+				} else {
+					LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
+					return false;
+				}
 			}
 		}
 		try {
