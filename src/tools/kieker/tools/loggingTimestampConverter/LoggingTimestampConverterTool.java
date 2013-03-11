@@ -31,6 +31,7 @@ import org.apache.commons.cli.ParseException;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.tools.util.CLIHelpFormatter;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
@@ -43,7 +44,7 @@ public final class LoggingTimestampConverterTool {
 	static final List<Option> OPTIONS = new CopyOnWriteArrayList<Option>(); // NOPMD package for inner class
 	private static final Log LOG = LogFactory.getLog(LoggingTimestampConverterTool.class);
 	private static final CommandLineParser CMDL_PARSER = new BasicParser();
-	private static final HelpFormatter CMD_HELP_FORMATTER = new HelpFormatter();
+	private static final HelpFormatter CMD_HELP_FORMATTER = new CLIHelpFormatter();
 	private static final Options CMDL_OPTS = new Options();
 	private static final String CMD_OPT_NAME_TIMESTAMPS = "timestamps";
 	private static CommandLine cmdl;

@@ -28,6 +28,7 @@ import org.apache.commons.cli.ParseException;
 import kieker.analysis.AnalysisController;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.tools.util.CLIHelpFormatter;
 
 /**
  * A simple execution of Analysis Configurations.
@@ -64,7 +65,7 @@ public final class KaxRun {
 			kaxFilename = line.getOptionValue('i');
 		} catch (final ParseException ex) {
 			System.out.println(ex.getMessage()); // NOPMD (System.out)
-			final HelpFormatter formatter = new HelpFormatter();
+			final HelpFormatter formatter = new CLIHelpFormatter();
 			formatter.printHelp(KaxRun.class.getName(), options, true);
 			return;
 		}

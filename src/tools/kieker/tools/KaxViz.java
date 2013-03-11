@@ -40,8 +40,8 @@ import org.w3c.dom.Document;
 
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
-import com.mxgraph.swing.handler.mxRubberband;
 import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.swing.handler.mxRubberband;
 import com.mxgraph.util.mxCellRenderer;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxPoint;
@@ -58,6 +58,7 @@ import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.tools.util.CLIHelpFormatter;
 
 /**
  * A simple visualization of Analysis Configurations.
@@ -357,7 +358,7 @@ public final class KaxViz extends JFrame {
 			svgFilename = line.getOptionValue("svg");
 		} catch (final ParseException ex) {
 			System.out.println(ex.getMessage()); // NOPMD (System.out)
-			final HelpFormatter formatter = new HelpFormatter();
+			final HelpFormatter formatter = new CLIHelpFormatter();
 			formatter.printHelp(KaxViz.class.getName(), options, true);
 			return;
 		}

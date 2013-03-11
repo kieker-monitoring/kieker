@@ -25,6 +25,8 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
+import kieker.tools.util.CLIHelpFormatter;
+
 /**
  * Externalized Strings from {@link TraceAnalysisTool}.
  * 
@@ -95,7 +97,7 @@ public final class Constants {
 	public static final String PLOTAGGREGATEDALLOCATIONCALLTREE_COMPONENT_NAME = "Aggregated call tree (deployment level)";
 	public static final String PLOTAGGREGATEDASSEMBLYCALLTREE_COMPONENT_NAME = "Aggregated call tree (assembly level)";
 	public static final String PLOTCALLTREE_COMPONENT_NAME = "Trace call trees";
-	public static final HelpFormatter CMD_HELP_FORMATTER = new HelpFormatter();
+	public static final HelpFormatter CMD_HELP_FORMATTER = new CLIHelpFormatter();
 	public static final Options CMDL_OPTIONS = new Options();
 	public static final List<Option> SORTED_OPTION_LIST = new CopyOnWriteArrayList<Option>();
 
@@ -117,39 +119,39 @@ public final class Constants {
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_OUTPUTFNPREFIX).withArgName("prefix").hasArg(true).isRequired(false)
 				.withDescription("Prefix for output filenames\n").withValueSeparator('=').create("p"));
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS).hasArg(false)
-				.withDescription("Generate and store deployment-level sequence diagrams (.pic files)").create());
+				.withDescription("Generate and store deployment-level sequence diagrams (.pic)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS).hasArg(false)
-				.withDescription("Generate and store assembly-level sequence diagrams (.pic files)").create());
+				.withDescription("Generate and store assembly-level sequence diagrams (.pic)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG)
 				.withArgName(DECORATORS_OPTION_NAME)
 				.hasArg(true).hasOptionalArg().withValueSeparator(DECORATOR_SEPARATOR)
-				.withDescription("Generate and store a deployment-level component dependency graph (.dot file)").create());
+				.withDescription("Generate and store a deployment-level component dependency graph (.dot)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG)
 				.withArgName(DECORATORS_OPTION_NAME)
 				.hasArg(true).hasOptionalArg().withValueSeparator(DECORATOR_SEPARATOR)
-				.withDescription("Generate and store an assembly-level component dependency graph (.dot file)").create());
+				.withDescription("Generate and store an assembly-level component dependency graph (.dot)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG).hasArg(false)
 				.withDescription("Generate and store a container dependency graph (.dot file)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG)
 				.withArgName(DECORATORS_OPTION_NAME)
 				.hasArg(true).hasOptionalArg().withValueSeparator(DECORATOR_SEPARATOR)
-				.withDescription("Generate and store a deployment-level operation dependency graph (.dot file)").create());
+				.withDescription("Generate and store a deployment-level operation dependency graph (.dot)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG)
 				.withArgName(DECORATORS_OPTION_NAME)
 				.hasArg(true).hasOptionalArg().withValueSeparator(DECORATOR_SEPARATOR)
-				.withDescription("Generate and store an assembly-level operation dependency graph (.dot file)").create());
+				.withDescription("Generate and store an assembly-level operation dependency graph (.dot)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE).hasArg(false)
-				.withDescription("Generate and store an aggregated deployment-level call tree (.dot files)").create());
+				.withDescription("Generate and store an aggregated deployment-level call tree (.dot)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE).hasArg(false)
-				.withDescription("Generate and store an aggregated assembly-level call tree (.dot files)").create());
+				.withDescription("Generate and store an aggregated assembly-level call tree (.dot)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTCALLTREES).hasArg(false)
-				.withDescription("Generate and store call trees for the selected traces (.dot files)").create());
+				.withDescription("Generate and store call trees for the selected traces (.dot)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTMSGTRACES).hasArg(false)
-				.withDescription("Save message trace representations of valid traces (.txt files)").create());
+				.withDescription("Save message trace representations of valid traces (.txt)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTEXECTRACES).hasArg(false)
-				.withDescription("Save execution trace representations of valid traces (.txt files)").create());
+				.withDescription("Save execution trace representations of valid traces (.txt)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES).hasArg(false)
-				.withDescription("Save a execution trace representations of invalid trace artifacts (.txt files)").create());
+				.withDescription("Save a execution trace representations of invalid trace artifacts (.txt)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT).hasArg(false)
 				.withDescription("Output an overview about the deployment-level trace equivalence classes").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT).hasArg(false)
@@ -159,7 +161,7 @@ public final class Constants {
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNOREINVALIDTRACES).hasArg(false).isRequired(false)
 				.withDescription("If selected, the execution aborts on the occurence of an invalid trace.").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_MAXTRACEDURATION).withArgName("duration in ms").hasArg().isRequired(false)
-				.withDescription("Threshold (in milliseconds) after which an incomplete trace becomes invalid. Defaults to 600000 (10 minutes).").create());
+				.withDescription("Threshold (in ms) after which incomplete traces become invalid. Defaults to 600,000 (i.e, 10 minutes).").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE)
 				.withArgName(TraceAnalysisTool.DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false)
 				.withDescription("Executions starting before this date (UTC timezone) are ignored.").create());

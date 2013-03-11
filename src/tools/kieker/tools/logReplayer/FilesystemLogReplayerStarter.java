@@ -34,6 +34,7 @@ import org.apache.commons.cli.ParseException;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.tools.util.CLIHelpFormatter;
 
 /**
  * Command-line tool for replaying a filesystem monitoring log using the {@link FilesystemLogReplayer}.
@@ -46,7 +47,7 @@ public final class FilesystemLogReplayerStarter {
 
 	private static CommandLine cmdl;
 	private static final CommandLineParser CMDL_PARSER = new BasicParser();
-	private static final HelpFormatter CMD_HELP_FORMATTER = new HelpFormatter();
+	private static final HelpFormatter CMD_HELP_FORMATTER = new CLIHelpFormatter();
 	private static final Options CMDL_OPTS = new Options();
 	private static final String CMD_OPT_NAME_MONITORING_CONFIGURATION = "monitoring.configuration";
 	private static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";

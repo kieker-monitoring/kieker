@@ -24,11 +24,11 @@ import java.util.concurrent.CountDownLatch;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
 import kieker.evaluation.monitoredApplication.MonitoredClass;
+import kieker.tools.util.CLIHelpFormatter;
 
 /**
  * @author Jan Waller
@@ -145,7 +145,7 @@ public final class Benchmark {
 			Benchmark.recursionDepth = Integer.parseInt(cmdl.getOptionValue("recursiondepth"));
 			Benchmark.ps = new PrintStream(new FileOutputStream(Benchmark.outputFn, true), false, Benchmark.ENCODING);
 		} catch (final Exception ex) { // NOCS (e.g., IOException, ParseException, NumberFormatException)
-			new HelpFormatter().printHelp(Benchmark.class.getName(), cmdlOpts);
+			new CLIHelpFormatter().printHelp(Benchmark.class.getName(), cmdlOpts);
 			ex.printStackTrace(); // NOPMD (Stacktrace)
 			System.exit(-1);
 		}
