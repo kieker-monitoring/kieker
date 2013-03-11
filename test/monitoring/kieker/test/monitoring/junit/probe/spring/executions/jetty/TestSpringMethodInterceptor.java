@@ -67,6 +67,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 		this.tmpFolder.create();
 		final String listName = NamedListWriter.FALLBACK_LIST_NAME;
 		this.recordListFilledByListWriter = NamedListWriter.createNamedList(listName);
+		System.setProperty(ConfigurationFactory.METADATA, "false");
 		System.setProperty(ConfigurationFactory.CONTROLLER_NAME, CTRLNAME);
 		System.setProperty(ConfigurationFactory.WRITER_CLASSNAME, NamedListWriter.class.getName());
 		// Doesn't work because property not starting with kieker.monitoring: System.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.listName);
@@ -147,6 +148,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 			this.ctx.destroy(); // TODO: is this shutting down the server?
 		}
 		this.tmpFolder.delete();
+		System.clearProperty(ConfigurationFactory.METADATA);
 		System.clearProperty(ConfigurationFactory.CONTROLLER_NAME);
 		System.clearProperty(ConfigurationFactory.WRITER_CLASSNAME);
 		System.clearProperty(ConfigurationFactory.HOST_NAME);
