@@ -59,7 +59,6 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends AbstractKieke
 		/*
 		 * Register a handler for equivalence class representatives.
 		 */
-		// TODO: Implement the handler for equivalence class representatives.
 		/*
 		 * filter.getExecutionTraceOutputPort().subscribe(new AbstractInputPort("Execution traces", null) {
 		 * 

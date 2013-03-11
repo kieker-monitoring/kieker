@@ -39,7 +39,6 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @since 1.6
  */
-// TODO: Timer with higher precision (Currently milliseconds)?
 @Plugin(
 		description = "Forwards incoming records with delays computed from the timestamp values",
 		outputPorts = {
@@ -48,7 +47,9 @@ import kieker.common.record.IMonitoringRecord;
 		},
 		configuration = {
 			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_NUM_WORKERS, defaultValue = "1"),
-			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS, defaultValue = "5")
+			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS, defaultValue = "5"),
+			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS, defaultValue = "2"),
+			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_TIMER, defaultValue = "MILLISECONDS")
 		})
 public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 
@@ -65,9 +66,21 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	 */
 	public static final String CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS = "additionalShutdownDelaySeconds";
 
+	/**
+	 * The number of seconds of negative scheduling time that produces a warning.
+	 */
+	public static final String CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS = "warnOnNegativeSchedTimeSeconds";
+
+	/**
+	 * The precision of the used timer (MILLISECONDS or NANOSECONDS)
+	 */
+	public static final String CONFIG_PROPERTY_NAME_TIMER = "timerPrecision";
+
 	private static final Log LOG = LogFactory.getLog(RealtimeRecordDelayFilter.class);
 
 	private final TimeUnit timeunit;
+
+	private final Timer timer;
 
 	private final long warnOnNegativeSchedTime;
 
@@ -106,8 +119,17 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 			this.timeunit = TimeUnit.NANOSECONDS;
 		}
 
-		// TODO: We might want to provide this property as a configuration property
-		this.warnOnNegativeSchedTime = this.timeunit.convert(2, TimeUnit.SECONDS);
+		final String strTimer = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMER);
+		Timer tmpTimer;
+		try {
+			tmpTimer = Timer.valueOf(strTimer);
+		} catch (final IllegalArgumentException ex) {
+			LOG.warn(strTimer + " is no valid timer precision! Using MILLISECONDS instead.");
+			tmpTimer = Timer.MILLISECONDS;
+		}
+		this.timer = tmpTimer;
+
+		this.warnOnNegativeSchedTime = this.timeunit.convert(this.configuration.getLongProperty(CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS), TimeUnit.SECONDS);
 
 		this.numWorkers = configuration.getIntProperty(CONFIG_PROPERTY_NAME_NUM_WORKERS);
 		this.shutdownDelay = this.timeunit.convert(this.configuration.getLongProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS), TimeUnit.SECONDS);
@@ -132,7 +154,7 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 
 	@InputPort(name = INPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Receives the records to be delayed")
 	public final void inputRecord(final IMonitoringRecord monitoringRecord) {
-		final long currentTime = this.currentTime();
+		final long currentTime = this.timer.getCurrentTime(this.timeunit);
 
 		synchronized (this) {
 			if (this.startTime == -1) { // init on first record
@@ -175,23 +197,13 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 		return this.deliver(outputPortName, data);
 	}
 
-	/**
-	 * Returns the current time in the selected timeunit since 1970.
-	 * 
-	 * @return The current time.
-	 */
-	// TODO: Note that we only have a timer resolution of milliseconds here!
-	private long currentTime() {
-		return this.timeunit.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
-	}
-
 	@Override
 	public void terminate(final boolean error) {
 		this.executor.shutdown();
 
 		if (!error) {
 			long shutdownDelaySecondsFromNow =
-					TimeUnit.SECONDS.convert((this.latestSchedulingTime - this.currentTime()) + this.shutdownDelay, this.timeunit);
+					TimeUnit.SECONDS.convert((this.latestSchedulingTime - this.timer.getCurrentTime(this.timeunit)) + this.shutdownDelay, this.timeunit);
 			if (shutdownDelaySecondsFromNow < 0) {
 				shutdownDelaySecondsFromNow = 0;
 			}
@@ -216,5 +228,23 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 		configuration
 				.setProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS, Long.toString(TimeUnit.SECONDS.convert(this.shutdownDelay, this.timeunit)));
 		return configuration;
+	}
+
+	public static enum Timer {
+		MILLISECONDS {
+			@Override
+			public long getCurrentTime(final TimeUnit timeunit) {
+				return timeunit.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+			}
+
+		},
+		NANOSECONDS {
+			@Override
+			public long getCurrentTime(final TimeUnit timeunit) {
+				return timeunit.convert(System.nanoTime(), TimeUnit.NANOSECONDS);
+			}
+		};
+
+		public abstract long getCurrentTime(TimeUnit timeunit);
 	}
 }

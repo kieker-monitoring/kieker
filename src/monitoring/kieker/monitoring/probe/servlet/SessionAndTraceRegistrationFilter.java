@@ -65,7 +65,6 @@ import kieker.monitoring.timer.ITimeSource;
  * @author Andre van Hoorn, Marco Luebcke, Jan Waller
  * 
  */
-// TODO: Properties
 public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringProbe {
 	public static final String CONFIG_PROPERTY_NAME_LOG_FILTER_EXECUTION = "logFilterExecution";
 
@@ -87,7 +86,6 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 	private volatile boolean logFilterExecution = true; // default
 
 	public SessionAndTraceRegistrationFilter() {
-		super();
 		final Signature methodSignature =
 				new Signature("doFilter", // operation name
 						new String[] { "public" }, // modifier list

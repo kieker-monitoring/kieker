@@ -39,7 +39,6 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
 		repositoryPorts = {
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 		})
-// TODO #821 don't we have to redefine the configuration properties from the super class here?
 public class AggregatedAllocationComponentOperationCallTreeFilter extends AbstractAggregatedCallTreeFilter<AllocationComponentOperationPair> {
 
 	/**

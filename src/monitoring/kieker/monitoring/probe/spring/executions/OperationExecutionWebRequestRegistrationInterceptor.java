@@ -25,7 +25,6 @@ import kieker.monitoring.core.registry.SessionRegistry;
 /**
  * @author Andre van Hoorn
  */
-// TODO: We should extend this filter by an optional mode, allowing to log executions; just like the SessionAndTraceRegistrationFilter for Servlets
 public class OperationExecutionWebRequestRegistrationInterceptor implements WebRequestInterceptor {
 
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;

@@ -126,7 +126,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 				this.assertSignatureIncludesString(opRec.getOperationSignature(), Bookstore.class.getName());
 				Assert.assertEquals("Unexpected ess", 0, opRec.getEss());
 				break;
-			case 1: // fall through two case 2
+			case 1: // fall through to case 2
 			case 2:
 				this.assertSignatureIncludesString(opRec.getOperationSignature(), Catalog.class.getName());
 				Assert.assertEquals("Unexpected ess", 1, opRec.getEss());
@@ -145,7 +145,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	@After
 	public void cleanup() {
 		if (this.ctx != null) {
-			this.ctx.destroy(); // TODO: is this shutting down the server?
+			this.ctx.destroy();
 		}
 		this.tmpFolder.delete();
 		System.clearProperty(ConfigurationFactory.METADATA);

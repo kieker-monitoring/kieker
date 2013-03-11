@@ -85,10 +85,8 @@ public class TestLogReplayer extends AbstractKiekerTest {
 
 	}
 
-	// TODO: we should add test variants with different initialization values for the AbstractLogReplayer options (realtimeMode, ....).
 	@Test
 	public void testIt() {
-
 		final ListReplayer replayer = new ListReplayer(this.monitoringConfigurationFile.getAbsolutePath(),
 				/* realtimeMode: */false,
 				/* keepOriginalLoggingTimestamps: */true,

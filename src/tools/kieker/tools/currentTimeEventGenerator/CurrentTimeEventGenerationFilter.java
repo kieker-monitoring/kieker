@@ -46,7 +46,6 @@ import kieker.common.record.misc.TimestampRecord;
  * </li>
  * </ol>
  * 
- * 
  * It is guaranteed that the generated timestamps are in ascending order.
  * 
  * @author Andre van Hoorn

@@ -71,6 +71,7 @@ public final class TraceEventRecords {
 			sb.append(": ");
 			sb.append(traceEvent);
 		}
+		sb.append('\n');
 		return sb.toString();
 	}
 

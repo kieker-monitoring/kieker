@@ -204,7 +204,6 @@ public class ExecutionTrace extends AbstractTrace {
 	 */
 	public final SortedSet<Execution> getTraceAsSortedExecutionSet() {
 		synchronized (this) {
-			// TODO #825 copy set? depends on whether later changes should be reflected ...
 			return Collections.unmodifiableSortedSet(this.set);
 		}
 	}

@@ -335,7 +335,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 					this.openEvents--;
 				}
 				if (!this.events.add(event)) {
-					LOG.error("Duplicate entry for orderIndex " + orderIndex + " with tarceId " + myTraceId);
+					LOG.error("Duplicate entry for orderIndex " + orderIndex + " with traceId " + myTraceId);
 					this.damaged = true;
 				}
 			}
@@ -367,7 +367,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 		public boolean isInvalid() {
 			synchronized (this) {
-				return (this.trace == null) || this.damaged || (this.openEvents != 0) || ((this.maxOrderIndex + 1) != this.events.size());
+				return (this.trace == null) || this.damaged || (this.openEvents != 0) || (((this.maxOrderIndex + 1) != this.events.size()) || this.events.isEmpty());
 			}
 		}
 

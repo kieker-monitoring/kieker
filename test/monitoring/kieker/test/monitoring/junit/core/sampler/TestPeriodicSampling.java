@@ -54,8 +54,6 @@ public class TestPeriodicSampling extends AbstractKiekerTest { // NOCS
 		final long period = 1500; // 1500 ms
 		final long offset = 300; // i.e., 1st event after 300 ms
 
-		// TODO: not used
-		// final ScheduledSamplerJob samplerJob =
 		monitoringController.schedulePeriodicSampler(samplingCounter, offset, period, TimeUnit.MILLISECONDS);
 
 		Thread.sleep(3600); // sleep 3.6 seconds
