@@ -38,11 +38,14 @@ import org.apache.commons.cli.Options;
  */
 public class CLIHelpFormatter extends HelpFormatter {
 
+	public CLIHelpFormatter() {
+		super();
+	}
+
 	// we can't do better than suppressing some warnings due to the Common CLI's API:
 	@SuppressWarnings("unchecked")
 	@Override
-	protected StringBuffer renderOptions(final StringBuffer sb, final int width, final Options options, final int leftPad, final int descPad)
-	{
+	protected StringBuffer renderOptions(final StringBuffer sb, final int width, final Options options, final int leftPad, final int descPad) {
 		final String lpad = this.createPadding(leftPad);
 		final String dpad = this.createPadding(8); // we use a fixed value instead of descPad
 
@@ -51,34 +54,25 @@ public class CLIHelpFormatter extends HelpFormatter {
 		final List<Option> optList = new ArrayList<Option>(options.getOptions());
 		Collections.sort(optList, this.getOptionComparator());
 
-		for (final Iterator<Option> i = optList.iterator(); i.hasNext();)
-		{
+		for (final Iterator<Option> i = optList.iterator(); i.hasNext();) {
 			final Option option = i.next();
 
 			optBuf = new StringBuilder(8);
 
-			if (option.getOpt() == null)
-			{
+			if (option.getOpt() == null) {
 				optBuf.append(lpad).append("   ").append(this.getLongOptPrefix()).append(option.getLongOpt());
-			}
-			else
-			{
+			} else {
 				optBuf.append(lpad).append(this.getLongOptPrefix()).append(option.getOpt());
 
-				if (option.hasLongOpt())
-				{
+				if (option.hasLongOpt()) {
 					optBuf.append(',').append(this.getLongOptPrefix()).append(option.getLongOpt());
 				}
 			}
 
-			if (option.hasArg())
-			{
-				if (option.hasArgName())
-				{
-					optBuf.append(" <").append(option.getArgName()).append(">");
-				}
-				else
-				{
+			if (option.hasArg()) {
+				if (option.hasArgName()) {
+					optBuf.append(" <").append(option.getArgName()).append('>');
+				} else {
 					optBuf.append(' ');
 				}
 			}
@@ -88,15 +82,13 @@ public class CLIHelpFormatter extends HelpFormatter {
 			optBuf = new StringBuilder();
 			optBuf.append(dpad);
 
-			if (option.getDescription() != null)
-			{
+			if (option.getDescription() != null) {
 				optBuf.append(option.getDescription());
 			}
 
 			this.renderWrappedText(sb, width, dpad.length(), optBuf.toString());
 
-			if (i.hasNext())
-			{
+			if (i.hasNext()) {
 				sb.append(this.getNewLine());
 				sb.append(this.getNewLine());
 			}
