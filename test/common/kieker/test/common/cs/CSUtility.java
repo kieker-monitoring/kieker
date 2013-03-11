@@ -51,11 +51,12 @@ public final class CSUtility {
 	 * @return true if and only if there is a since tag in the javadoc comment of the given component.
 	 */
 	public static boolean sinceTagAvailable(final Check check, final DetailAST ast) {
-		try {
-			// Get the corresponding javadoc block
-			final FileContents contents = check.getFileContents();
-			final TextBlock cmt = contents.getJavadocBefore(ast.getFirstChild().getLineNo());
+		// Get the corresponding javadoc block
+		final FileContents contents = check.getFileContents();
+		final TextBlock cmt = contents.getJavadocBefore(ast.getFirstChild().getLineNo());
 
+		// Make sure that there is a comment block available
+		if (cmt != null) {
 			// Now extract the tags
 			final JavadocTags tags = JavadocUtils.getJavadocTags(cmt, JavadocTagType.ALL);
 
@@ -65,8 +66,6 @@ public final class CSUtility {
 					return true;
 				}
 			}
-		} catch (final NullPointerException ex) {
-			// Something is not available
 		}
 
 		return false;
