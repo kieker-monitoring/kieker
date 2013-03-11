@@ -80,7 +80,7 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 
 	private final TimeUnit timeunit;
 
-	private final Timer timer;
+	private final TimerWithPrecision timer;
 
 	private final long warnOnNegativeSchedTime;
 
@@ -120,12 +120,12 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 		}
 
 		final String strTimer = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMER);
-		Timer tmpTimer;
+		TimerWithPrecision tmpTimer;
 		try {
-			tmpTimer = Timer.valueOf(strTimer);
+			tmpTimer = TimerWithPrecision.valueOf(strTimer);
 		} catch (final IllegalArgumentException ex) {
 			LOG.warn(strTimer + " is no valid timer precision! Using MILLISECONDS instead.");
-			tmpTimer = Timer.MILLISECONDS;
+			tmpTimer = TimerWithPrecision.MILLISECONDS;
 		}
 		this.timer = tmpTimer;
 
@@ -230,7 +230,10 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 		return configuration;
 	}
 
-	public static enum Timer {
+	/**
+	 * @author Jan Waller
+	 */
+	private static enum TimerWithPrecision {
 		MILLISECONDS {
 			@Override
 			public long getCurrentTime(final TimeUnit timeunit) {
