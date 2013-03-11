@@ -28,7 +28,10 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
  * This class represents a single node within the call tree.
  * 
  * @author Andre van Hoorn
+ * 
+ * @deprecated To be removed in Kieker 1.8.
  */
+@Deprecated
 public class CallTreeNode {
 
 	private final CallTreeNode parent;

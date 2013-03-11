@@ -22,7 +22,10 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
 /**
  * 
  * @author Andre van Hoorn
+ * 
+ * @deprecated To be removed in Kieker 1.8.
  */
+@Deprecated
 public class CallTreeOperationHashKey {
 	private final AllocationComponent allocationComponent;
 	private final Operation operation;
