@@ -42,4 +42,9 @@ public final class TestAsyncDbWriterReader extends AbstractTestDbWriterReader { 
 		config.setProperty(AsyncDbWriter.CONFIG_NRCONN, "2");
 		return MonitoringController.createInstance(config);
 	}
+
+	@Override
+	protected boolean terminateBeforeLogInspection() { // NOPMD (empty method)
+		return true; // might be better to terminate async writers ...
+	}
 }
