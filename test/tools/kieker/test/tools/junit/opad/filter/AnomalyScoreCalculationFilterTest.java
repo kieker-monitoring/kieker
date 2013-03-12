@@ -43,13 +43,14 @@ import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
  */
 public class AnomalyScoreCalculationFilterTest {
 
+	private static final String OP_SIGNATURE_A = "a.A.opA";
+
 	private AnalysisController controller;
 
 	// Variables AnomalyScoreCalculationFilter
 	private AnomalyScoreCalculationFilter scoreCalc;
 	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkAnomalyScore;
 	private ListReader<ForecastMeasurementPair> theReaderScoreCalc;
-	private static final String OP_SIGNATURE_A = "a.A.opA";
 
 	// HelperMethods AnomalyScoreCalculation
 	private ForecastMeasurementPair createFMP(final String name, final Double forecast,

@@ -46,6 +46,8 @@ import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
  */
 public class AnomalyDetectionFilterTest {
 
+	private static final String OP_SIGNATURE_A = "a.A.opA";
+
 	// private NameFilter nameFilter;
 	private ListReader<NamedDoubleTimeSeriesPoint> theReader;
 	private AnomalyDetectionFilter anomalyDetectionFilter;
@@ -53,8 +55,6 @@ public class AnomalyDetectionFilterTest {
 	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPluginIfAnomaly;
 	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPluginElse;
 	private AnalysisController controller;
-
-	private static final String OP_SIGNATURE_A = "a.A.opA";
 
 	private NamedDoubleTimeSeriesPoint createNDTSP(final String signature, final double value) {
 		final NamedDoubleTimeSeriesPoint r = new NamedDoubleTimeSeriesPoint(new Date(), value, signature);

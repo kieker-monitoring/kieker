@@ -44,11 +44,26 @@ import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
  */
 public class OpadIntegrationTest {
 
-	private AnalysisController controller;
 	private static final String OP_SIGNATURE_A = "a.A.opA";
 	private static final String SESSION_ID_TEST = "TestId";
 	private static final String HOST_ID_TEST = "TestRechner";
 	private static final long TRACE_ID_TEST = (long) 0.1;
+
+	private AnalysisController controller;
+
+	// Variables ResponsetimeExtractionFilter
+	private ResponseTimeExtractionFilter responsetimeExtr;
+
+	// Variables ForecastingFilter
+	private ForecastingFilter forecasting;
+
+	// Variables AnomalyScoreCalculationFilter
+	private AnomalyScoreCalculationFilter scoreCalc;
+
+	// Variables AnomalyDetectionFilter
+	private AnomalyDetectionFilter anomalyDetectionFilter;
+	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPluginIfAnomaly;
+	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPluginElse;
 
 	// Variables Mockup OperationExecutionReader
 	private ListReader<OperationExecutionRecord> theReaderOperationExecutionRecords;
@@ -67,20 +82,6 @@ public class OpadIntegrationTest {
 		return oer;
 	}
 
-	// Variables ResponsetimeExtractionFilter
-	private ResponseTimeExtractionFilter responsetimeExtr;
-
-	// Variables ForecastingFilter
-	private ForecastingFilter forecasting;
-
-	// Variables AnomalyScoreCalculationFilter
-	private AnomalyScoreCalculationFilter scoreCalc;
-
-	// Variables AnomalyDetectionFilter
-	private AnomalyDetectionFilter anomalyDetectionFilter;
-	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPluginIfAnomaly;
-	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPluginElse;
-
 	@Before
 	public void setUp() throws IllegalStateException,
 			AnalysisConfigurationException {
@@ -96,8 +97,8 @@ public class OpadIntegrationTest {
 
 		// Start - ResponseTimeExtractionFilter Configuration
 		// ResponseTimeExtractionFilter Configuration
-		final Configuration ResponseTimeExtractionConfiguration = new Configuration();
-		this.responsetimeExtr = new ResponseTimeExtractionFilter(ResponseTimeExtractionConfiguration);
+		final Configuration responseTimeExtractionConfiguration = new Configuration();
+		this.responsetimeExtr = new ResponseTimeExtractionFilter(responseTimeExtractionConfiguration);
 		this.controller.registerFilter(this.responsetimeExtr);
 		// End - ResponseTimeExtractionFilter
 
@@ -170,7 +171,6 @@ public class OpadIntegrationTest {
 
 		final AnalysisControllerThread thread = new AnalysisControllerThread(this.controller);
 		thread.start();
-
 		Thread.sleep(2000);
 		thread.terminate();
 

@@ -86,8 +86,8 @@ public class ResponseTimeExtractionFilterTest {
 		// End - Read OperationExecutionRecords
 
 		// Start - ResponseTimeExtractionFilter Configuration
-		final Configuration ResponseTimeExtractionConfiguration = new Configuration();
-		this.responsetimeExtr = new ResponseTimeExtractionFilter(ResponseTimeExtractionConfiguration);
+		final Configuration responseTimeExtractionConfiguration = new Configuration();
+		this.responsetimeExtr = new ResponseTimeExtractionFilter(responseTimeExtractionConfiguration);
 		this.controller.registerFilter(this.responsetimeExtr);
 		// End - ResponseTimeExtractionFilter
 
