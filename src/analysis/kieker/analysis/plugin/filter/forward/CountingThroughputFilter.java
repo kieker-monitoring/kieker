@@ -45,9 +45,6 @@ import kieker.common.util.ImmutableEntry;
  * 
  * @since 1.6
  */
-// TODO #822 In future versions, this filter should provide an output port in addition to the existing relay port.
-// TODO #822 In future versions, the throughput computation could (additionally) be triggered by external timer events
-// TODO #822 Introduce bounding capacity (Circular Buffer)
 @Plugin(
 		description = "A filter computing the throughput in terms of the number of events received per time unit",
 		outputPorts = {
@@ -105,14 +102,11 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	private final boolean intervalsBasedOn1stTstamp;
 	private final TimeUnit timeunit;
 
-	// TODO #822 Introduce bounded capacity
 	/**
 	 * For a key <i>k</i>, the {@link Queue} stores the number of events observed in the time interval <i>(k-intervalSize,k(</i>, i.e.,
 	 * the interval <b>excludes</b> the value <i>k</i>.
 	 */
 	private final Queue<Entry<Long, Long>> eventCountsPerInterval = new ConcurrentLinkedQueue<Entry<Long, Long>>();
-
-	// TODO #822 additional TreeMap for accumulated values?
 
 	private final long intervalSize;
 
@@ -234,16 +228,15 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	}
 
 	/**
-	 * Returns the current time in since 1970.
+	 * Returns the current time in {@link TimeUnit#MILLISECONDS} since 1970.
 	 * 
-	 * @return The current time.
+	 * @return The current time
 	 */
-	// TODO #822 Note that we only have a timer resolution of milliseconds here!
 	private long currentTime() {
 		return this.timeunit.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
 	}
 
-	// TODO #822 is this correct? it probably makes more sense to provide a copy.
+	// TODO #840 is this correct? it probably makes more sense to provide a copy.
 	public Collection<Entry<Long, Long>> getCountsPerInterval() {
 		return Collections.unmodifiableCollection(this.eventCountsPerInterval);
 	}
