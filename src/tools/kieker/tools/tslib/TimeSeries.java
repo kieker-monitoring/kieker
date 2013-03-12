@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.collections.buffer.CircularFifoBuffer;
+import kieker.tools.tslib.timeSeriesPoints.TimeSeriesPointsBuffer;
 
 /**
  * @author Andre van Hoorn
@@ -34,7 +34,7 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	private final long deltaTime;
 	private final TimeUnit deltaTimeUnit;
 	private final int capacity;
-	private final CircularFifoBuffer points;
+	private final TimeSeriesPointsBuffer points;
 	// approach of avh: private final CopyOnWriteArrayList<ITimeSeriesPoint<T>> points;
 	private long oneStepMillis;
 
@@ -52,9 +52,9 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 		this.oneStepMillis = TimeUnit.MILLISECONDS.convert(this.deltaTime, this.deltaTimeUnit);
 
 		if (ITimeSeries.INFINITE_CAPACITY == capacity) {
-			this.points = new CircularFifoBuffer();
+			this.points = new TimeSeriesPointsBuffer<ITimeSeriesPoint<T>>(capacity);
 		} else {
-			this.points = new CircularFifoBuffer(this.capacity);
+			this.points = new TimeSeriesPointsBuffer<ITimeSeriesPoint<T>>(this.capacity);
 		}
 
 		this.nextTime = (Date) this.startTime.clone();
@@ -89,7 +89,7 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	}
 
 	public List<ITimeSeriesPoint<T>> getPoints() {
-		return new ArrayList<ITimeSeriesPoint<T>>(this.points);
+		return new ArrayList<ITimeSeriesPoint<T>>(this.points.getBuffer());
 	}
 
 	public List<T> getValues() {
@@ -106,7 +106,7 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	}
 
 	public int size() {
-		return this.points.size();
+		return this.points.getSize();
 	}
 
 	public Date getEndTime() {
