@@ -214,7 +214,7 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 		super.deliver(OUTPUT_PORT_NAME_RELAYED_OBJECTS, event);
 	}
 
-	// TODO #822 What happens with unordered events (i.e., timestamps before firstTimestampInCurrentInterval)?
+	// TODO #841 What happens with unordered events (i.e., timestamps before firstTimestampInCurrentInterval)?
 	@InputPort(name = INPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class },
 			description = "Receives incoming monitoring records to be considered for the throughput computation and uses the record's logging timestamp")
 	public final void inputRecord(final IMonitoringRecord record) {
