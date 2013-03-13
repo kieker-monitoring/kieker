@@ -214,7 +214,7 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 		super.deliver(OUTPUT_PORT_NAME_RELAYED_OBJECTS, event);
 	}
 
-	// TODO #841 What happens with unordered events (i.e., timestamps before firstTimestampInCurrentInterval)?
+	// #841 What happens with unordered events (i.e., timestamps before firstTimestampInCurrentInterval)?
 	@InputPort(name = INPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class },
 			description = "Receives incoming monitoring records to be considered for the throughput computation and uses the record's logging timestamp")
 	public final void inputRecord(final IMonitoringRecord record) {
@@ -236,7 +236,7 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 		return this.timeunit.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
 	}
 
-	// TODO #840 is this correct? it probably makes more sense to provide a copy.
+	// #840 is this correct? it probably makes more sense to provide a copy.
 	public Collection<Entry<Long, Long>> getCountsPerInterval() {
 		return Collections.unmodifiableCollection(this.eventCountsPerInterval);
 	}
