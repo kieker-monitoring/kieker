@@ -135,6 +135,9 @@ public class ComponentAllocationDependencyGraphFormatter extends AbstractCompone
 		return DEFAULT_FILE_NAME;
 	}
 
+	/**
+	 * @author Holger Knoche
+	 */
 	private static class EdgeFormattingVisitor extends
 			AbstractDependencyGraphFormatterVisitor<AllocationComponent> {
 

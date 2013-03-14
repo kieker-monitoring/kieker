@@ -235,6 +235,9 @@ public final class JMXController extends AbstractController implements IJMXContr
 		return sb.toString();
 	}
 
+	/**
+	 * @author Jan Waller
+	 */
 	private static final class ServerNotificationListener implements NotificationListener {
 
 		/**

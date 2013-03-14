@@ -691,9 +691,10 @@
          !-->
         <!-- Checks to ensure that the javadoc tags exist (if required) !-->
         <!-- See http://checkstyle.sf.net/config_javadoc.html#JavadocMethod !-->
+        <!-- KIEKER: adapted !-->
         <module name="JavadocMethod">
             <property name="severity" value="info"/>
-            <property name="scope"                        value="private"/>
+            <property name="scope"                        value="protected"/>
             <!--
             <property name="excludeScope"                 value=""/>
             !-->
@@ -747,7 +748,7 @@
         <!-- See http://checkstyle.sf.net/config_javadoc.html#JavadocVariable !-->
         <module name="JavadocVariable">
             <property name="severity" value="info"/>
-            <property name="scope"        value="package"/>
+            <property name="scope"        value="protected"/>
             <!--
             <property name="excludeScope" value=""/>
             !-->
@@ -869,13 +870,14 @@
 
         <!-- Checks correct indentation of Java Code. !-->
         <!-- See http://checkstyle.sf.net/config_misc.html !-->
-        <!-- KIEKER -->
+        <!-- KIEKER deactivated for now 
         <module name="Indentation">
             <property name="severity"        value="info"/>        
             <property name="basicOffset"     value="4"/>
             <property name="braceAdjustment" value="0"/>
             <property name="caseIndent"      value="0"/>
         </module>
+        !-->
 
         <!-- Checks that the outer type name and the file name match. !-->
         <!-- See http://checkstyle.sourceforge.net/config_misc.html#OuterTypeFilename !-->

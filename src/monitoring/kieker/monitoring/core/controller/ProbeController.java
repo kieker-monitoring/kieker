@@ -285,6 +285,9 @@ public class ProbeController extends AbstractController implements IProbeControl
 		LOG.info("Updating Adaptive Monitoring config file succeeded.");
 	}
 
+	/**
+	 * @author Jan Waller
+	 */
 	private final class ConfigFileReader implements Runnable {
 		private final String configFilePathname;
 		volatile long lastModifiedTimestamp; // NOPMD NOCS (package)

@@ -180,6 +180,9 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 		Assert.assertEquals(AnalysisController.STATE.TERMINATED, ctrl.getState());
 	}
 
+	/**
+	 * @author Jan Waller
+	 */
 	@Plugin(programmaticOnly = true, outputPorts = { @OutputPort(name = ShutdownReader.OUTPUT_PORT_NAME) })
 	private static final class ShutdownReader extends AbstractReaderPlugin {
 		public static final String OUTPUT_PORT_NAME = "out";
@@ -215,6 +218,9 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 		}
 	}
 
+	/**
+	 * @author Jan Waller
+	 */
 	@Plugin(programmaticOnly = true, outputPorts = { @OutputPort(name = ShutdownFilter.OUTPUT_PORT_NAME) })
 	private static final class ShutdownFilter extends AbstractFilterPlugin {
 		public static final String OUTPUT_PORT_NAME = "out";

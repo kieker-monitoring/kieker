@@ -56,6 +56,9 @@ public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponent
 		return DEFAULT_FILE_NAME;
 	}
 
+	/**
+	 * @author Holger Knoche
+	 */
 	private static class FormatterVisitor extends AbstractDependencyGraphFormatterVisitor<AssemblyComponent> {
 
 		public FormatterVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops, final boolean useShortLabels) {

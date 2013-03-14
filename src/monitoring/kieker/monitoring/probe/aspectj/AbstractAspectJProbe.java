@@ -47,7 +47,7 @@ public abstract class AbstractAspectJProbe implements IMonitoringProbe {
 	public void noGetterAndSetter() {} // NOPMD (Aspect)
 
 	/**
-	 * Better handling of AspectJ Signature.toLongString (especially with constructors)
+	 * Better handling of AspectJ Signature.toLongString (especially with constructors).
 	 * 
 	 * @param sig
 	 *            an AspectJ Signature

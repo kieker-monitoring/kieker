@@ -72,7 +72,7 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS = "warnOnNegativeSchedTimeSeconds";
 
 	/**
-	 * The precision of the used timer (MILLISECONDS or NANOSECONDS)
+	 * The precision of the used timer (MILLISECONDS or NANOSECONDS).
 	 */
 	public static final String CONFIG_PROPERTY_NAME_TIMER = "timerPrecision";
 

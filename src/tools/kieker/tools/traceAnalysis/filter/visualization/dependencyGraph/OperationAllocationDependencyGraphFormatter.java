@@ -193,6 +193,9 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 		return DEFAULT_FILE_NAME;
 	}
 
+	/**
+	 * @author Holger Knoche
+	 */
 	private static class ElementGrouping {
 
 		private final ConcurrentMap<ExecutionContainer, Set<AllocationComponent>> allocationComponentGrouping;
@@ -214,6 +217,9 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 
 	}
 
+	/**
+	 * @author Holger Knoche
+	 */
 	private static class EdgeVisitor extends AbstractDependencyGraphFormatterVisitor<AllocationComponentOperationPair> {
 
 		public EdgeVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops, final boolean useShortLabels) {

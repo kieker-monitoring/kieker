@@ -147,7 +147,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 				try {
 					this.blockingQueue.add(monitoringRecord);
 				} catch (final IllegalStateException ex) {
-					LOG.error("Failed to add new monitoring record to queue. Queue is full. Either increase 'QueueSize' or change 'QueueFullBehavior' for the configured writer.");
+					LOG.error("Failed to add new monitoring record to queue. Queue is full. Either increase 'QueueSize' or change 'QueueFullBehavior' for the configured writer."); // NOCS
 					return false;
 				}
 				return true;

@@ -90,6 +90,9 @@ public class TestGlobalConfiguration extends AbstractKiekerTest {
 		Assert.assertEquals("NANOSECONDS", filter.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT));
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 */
 	private static class PropertyFilter extends AbstractFilterPlugin {
 
 		public PropertyFilter(final Configuration configuration, final IProjectContext projectContext) {

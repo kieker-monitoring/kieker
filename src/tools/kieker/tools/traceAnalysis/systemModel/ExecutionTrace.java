@@ -356,6 +356,9 @@ public class ExecutionTrace extends AbstractTrace {
 		return new ExecutionTraceComparator();
 	}
 
+	/**
+	 * @author Andre van Hoorn
+	 */
 	private static final class ExecutionTraceComparator implements Comparator<Execution>, Serializable {
 
 		private static final long serialVersionUID = -6334359132236475506L;

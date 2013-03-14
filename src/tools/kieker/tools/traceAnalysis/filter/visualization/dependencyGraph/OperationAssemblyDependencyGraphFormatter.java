@@ -156,6 +156,9 @@ public class OperationAssemblyDependencyGraphFormatter extends AbstractOperation
 		return DEFAULT_FILE_NAME;
 	}
 
+	/**
+	 * @author Holger Knoche
+	 */
 	private static class EdgeVisitor extends AbstractDependencyGraphFormatterVisitor<AssemblyComponentOperationPair> {
 		public EdgeVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops, final boolean useShortLabels) {
 			super(builder, includeWeights, plotLoops, useShortLabels);

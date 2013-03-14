@@ -317,6 +317,9 @@ public final class JMXReader extends AbstractReaderPlugin {
 		return configuration;
 	}
 
+	/**
+	 * @author Jan waller
+	 */
 	private final class LogNotificationListener implements NotificationListener {
 
 		public LogNotificationListener() {
@@ -328,6 +331,9 @@ public final class JMXReader extends AbstractReaderPlugin {
 		}
 	}
 
+	/**
+	 * @author Jan waller
+	 */
 	private final class ServerNotificationListener implements NotificationListener {
 
 		/**

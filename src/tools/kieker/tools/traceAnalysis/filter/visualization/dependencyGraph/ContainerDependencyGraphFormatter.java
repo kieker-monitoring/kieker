@@ -60,6 +60,9 @@ public class ContainerDependencyGraphFormatter extends AbstractDependencyGraphFo
 		return DEFAULT_FILE_NAME;
 	}
 
+	/**
+	 * @author Holger Knoche
+	 */
 	private static class FormatterVisitor extends AbstractDependencyGraphFormatterVisitor<ExecutionContainer> {
 
 		public FormatterVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops, final boolean useShortLabels) {

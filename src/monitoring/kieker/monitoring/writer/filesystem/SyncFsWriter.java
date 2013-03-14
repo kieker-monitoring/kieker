@@ -271,6 +271,9 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		return sb.toString();
 	}
 
+	/**
+	 * @author Jan Waller
+	 */
 	private static final class FileNameSize {
 		public final String name; // NOCS
 		public long size; // NOCS

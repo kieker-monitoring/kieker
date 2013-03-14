@@ -150,6 +150,9 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 		return sb.toString();
 	}
 
+	/**
+	 * @author Jan Waller
+	 */
 	private static final class FileNameSize {
 		public final String name; // NOCS
 		public long size; // NOCS

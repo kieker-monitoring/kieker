@@ -121,16 +121,6 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 		}
 	}
 
-	private static final class TracePoint {
-		public final long traceId; // NOCS (public no setters or getters)
-		public final int orderId; // NOCS (public no setters or getters)
-
-		public TracePoint(final long traceId, final int orderId) {
-			this.traceId = traceId;
-			this.orderId = orderId;
-		}
-	}
-
 	private final TracePoint getAndRemoveParentTraceId(final Thread t) {
 		synchronized (this) {
 			return this.parentTrace.remove(t);
@@ -151,6 +141,19 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 	public final void setParentTraceId(final Thread t, final long traceId, final int orderId) {
 		synchronized (this) {
 			this.parentTrace.put(t, new TracePoint(traceId, orderId));
+		}
+	}
+
+	/**
+	 * @author Jan Waller
+	 */
+	private static final class TracePoint {
+		public final long traceId; // NOCS (public no setters or getters)
+		public final int orderId; // NOCS (public no setters or getters)
+
+		public TracePoint(final long traceId, final int orderId) {
+			this.traceId = traceId;
+			this.orderId = orderId;
 		}
 	}
 }
