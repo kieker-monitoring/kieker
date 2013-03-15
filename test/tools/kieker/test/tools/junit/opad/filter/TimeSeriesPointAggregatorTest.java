@@ -93,7 +93,7 @@ public class TimeSeriesPointAggregatorTest {
 
 	// Test for the Aggregator Filter
 	@Test
-	public void testForecastingOnly() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
+	public void testAggregatorOnly() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
 
 		this.controller = new AnalysisController();
 
@@ -127,8 +127,6 @@ public class TimeSeriesPointAggregatorTest {
 				ListCollectionFilter.INPUT_PORT_NAME);
 		Assert.assertEquals(0, this.sinkPlugin.getList().size());
 		this.controller.run();
-		final NamedDoubleTimeSeriesPoint lastresult = this.sinkPlugin.getList().get(this.sinkPlugin.getList().size() - 1);
-		System.out.println(lastresult.getValue());
 	}
 
 }

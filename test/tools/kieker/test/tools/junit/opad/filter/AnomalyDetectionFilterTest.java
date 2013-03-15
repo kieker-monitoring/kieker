@@ -106,7 +106,7 @@ public class AnomalyDetectionFilterTest {
 	}
 
 	@Test
-	public void testSimpleOPADFlow() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
+	public void testDetectionOnly() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
 
 		final AnalysisControllerThread thread = new AnalysisControllerThread(this.controller);
 		thread.start();

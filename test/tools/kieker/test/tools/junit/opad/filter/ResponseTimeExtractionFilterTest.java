@@ -111,7 +111,7 @@ public class ResponseTimeExtractionFilterTest {
 
 	// Test complete Flow
 	@Test
-	public void testOpadFlow() throws InterruptedException {
+	public void testResponsetimeOnly() throws InterruptedException {
 
 		final AnalysisControllerThread thread = new AnalysisControllerThread(this.controller);
 		thread.start();
