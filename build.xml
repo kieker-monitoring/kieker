@@ -91,15 +91,12 @@
 			<fileset dir="${lib.dir}">
 				<include name="aopalliance-*.jar" />
 				<!--<include name="aspectjrt-*.jar" />-->
-				<include name="cxf-api-*.jar" />
-				<include name="cxf-common-utilities-*.jar" />
-				<include name="cxf-rt-core-*.jar" />
-				<include name="cxf-rt-bindings-soap-*.jar" />
+				<include name="framework-libs/cxf/cxf-*.jar" />
 				<include name="javax.jms-*.jar" />
-				<include name="javax.servlet-*.jar" />
+				<include name="framework-libs/javax.servlet-*.jar" />
 				<include name="sigar-*.jar" />
-				<include name="org.springframework.context-*.jar" />
-				<include name="org.springframework.web-*.jar" />
+				<include name="framework-libs/spring/org.springframework.context-*.jar" />
+				<include name="framework-libs/spring/org.springframework.web-*.jar" />
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
 		</path>
@@ -107,7 +104,7 @@
 		<path id="kieker.monitoring-ajc-compile-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="aspectjrt-*.jar" />
-				<include name="javax.servlet-*.jar" />
+				<include name="framework-libs/javax.servlet-*.jar" />
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
 			<pathelement location="${build.kieker.monitoring.dir}" />
@@ -903,12 +900,8 @@
 			<fileset dir="${lib.dir}">
 				<include name="junit-*.jar" />
 				<include name="aopalliance-*.jar" />
-				<include name="org.springframework.beans-*.jar" />
-				<include name="org.springframework.context-*.jar" />
-				<include name="org.springframework.core-*.jar" />
-				<include name="org.springframework.web-*.jar" />
-				<include name="cxf-*.jar" />
-				<include name="geronimo-ws-metadata_2.0_spec-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="framework-libs/spring/*.jar" />
+				<include name="framework-libs/cxf/*.jar" />
 			</fileset>
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />
@@ -1189,23 +1182,13 @@
 			<fileset dir="${lib.dir}">
 				<include name="aopalliance-*.jar" />
 				<include name="aspectjweaver-*.jar" /> <!-- needed for the spring tests -->
+				<include name="commons-logging-*.jar" /> <!-- needed for the spring tests -->
 				<include name="junit-*.jar" />
 				<include name="org.eclipse.emf.*.jar" />
 				<include name="derby-*.jar" />
-				<include name="javax.servlet-*.jar" /> <!-- needed for the cxf, spring? tests -->
-				<include name="cxf-*.jar" /> <!-- needed for the cxf tests -->
-				<include name="xmlschema-core-*.jar" /> <!-- needed for the cxf tests -->
-				<include name="neethi-*.jar" /> <!-- needed for the cxf tests -->
-				<include name="wsdl4j-*.jar" /> <!-- needed for the cxf tests -->
-				<include name="org.springframework*.jar" /> <!-- needed for the spring tests -->
-				<include name="commons-logging-*.jar" /> <!-- needed for the spring tests -->
-				<include name="geronimo-ws-metadata_*_spec-*.jar" /> <!-- needed for the cxf tests -->
-				<include name="geronimo-jaxws_*_spec-*.jar" /> <!-- needed for the cxf tests -->
-				<include name="geronimo-jaxws_*_spec-*.jar" /> <!-- needed for the cxf tests -->
-				<include name="jaxb-api-*.jar" /> <!-- needed for the cxf tests -->
-				<include name="jaxb-impl-*.jar" /> <!-- needed for the cxf tests -->
-				<include name="stax-*.jar" /> <!-- needed for the cxf tests -->
-				<include name="javaee-api-*.jar" /> <!-- needed for the cxf tests -->
+				<include name="framework-libs/javax.servlet-*.jar" /> <!-- needed for the cxf, spring? tests -->
+				<include name="framework-libs/cxf/*.jar" /> <!-- needed for the cxf tests -->
+				<include name="framework-libs/spring/*.jar" /> <!-- needed for the spring tests -->
 			</fileset>
 			<fileset dir="${example.javaee.jetty.lib.dir}">
 				<include name="jetty-*.jar" /> <!-- needed for the cxf, spring tests -->
