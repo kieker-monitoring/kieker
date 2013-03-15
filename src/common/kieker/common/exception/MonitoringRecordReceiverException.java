@@ -20,7 +20,10 @@ package kieker.common.exception;
  * This exception can be used to show that something in context with a monitoring record receiver failed.
  * 
  * @author Andre van Hoorn
+ * 
+ * @deprecated To be removed in Kieker 1.8
  */
+@Deprecated
 public class MonitoringRecordReceiverException extends Exception {
 
 	private static final long serialVersionUID = 76576L;
