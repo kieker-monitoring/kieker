@@ -87,7 +87,6 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 
 	private String path;
 	private MappingFileWriter mappingFileWriter;
-	private String filenamePrefix;
 	private PrintWriter pos;
 
 	private final DateFormat dateFormat;
@@ -147,7 +146,6 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		}
 		synchronized (this) { // visibility
 			this.path = f.getAbsolutePath();
-			this.filenamePrefix = this.path + File.separatorChar + FSUtil.FILE_PREFIX;
 			this.mappingFileWriter = new MappingFileWriter(this.path);
 		}
 	}
@@ -247,9 +245,9 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			this.sameFilenameCounter = 0;
 			this.previousFileDate = date;
 		}
-		final StringBuilder sb = new StringBuilder(this.filenamePrefix.length() + 30);
-		sb.append(this.filenamePrefix).append(this.dateFormat.format(new java.util.Date(date))).append("-UTC-") // NOPMD (Date)
-				.append(String.format("%03d", this.sameFilenameCounter)).append(FSUtil.NORMAL_FILE_EXTENSION);
+		final StringBuilder sb = new StringBuilder(this.path.length() + FSUtil.FILE_PREFIX.length() + 31);
+		sb.append(this.path).append(File.separatorChar).append(FSUtil.FILE_PREFIX).append(this.dateFormat.format(new java.util.Date(date))). // NOPMD (date)
+				append("-UTC-").append(String.format("%03d", this.sameFilenameCounter)).append(FSUtil.NORMAL_FILE_EXTENSION);
 		return sb.toString();
 	}
 

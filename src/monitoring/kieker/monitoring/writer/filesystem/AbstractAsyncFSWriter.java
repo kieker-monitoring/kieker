@@ -44,9 +44,9 @@ public abstract class AbstractAsyncFSWriter extends AbstractAsyncWriter {
 	public static final String CONFIG_MAXLOGFILES = "maxLogFiles";
 
 	private final String configPath;
-	private final int maxEntriesInFile;
-	private final int maxlogSize;
-	private final int maxLogFiles;
+	private final int configMaxEntriesInFile;
+	private final int configMaxlogSize;
+	private final int configMaxLogFiles;
 
 	protected AbstractAsyncFSWriter(final Configuration configuration) {
 		super(configuration);
@@ -63,13 +63,13 @@ public abstract class AbstractAsyncFSWriter extends AbstractAsyncWriter {
 		}
 		this.configPath = path;
 		// get number of entries per file
-		this.maxEntriesInFile = configuration.getIntProperty(prefix + CONFIG_MAXENTRIESINFILE);
-		if (this.maxEntriesInFile < 1) {
-			throw new IllegalArgumentException(prefix + CONFIG_MAXENTRIESINFILE + " must be greater than 0 but is '" + this.maxEntriesInFile + "'");
+		this.configMaxEntriesInFile = configuration.getIntProperty(prefix + CONFIG_MAXENTRIESINFILE);
+		if (this.configMaxEntriesInFile < 1) {
+			throw new IllegalArgumentException(prefix + CONFIG_MAXENTRIESINFILE + " must be greater than 0 but is '" + this.configMaxEntriesInFile + "'");
 		}
 		// get values for size limitations
-		this.maxlogSize = configuration.getIntProperty(prefix + CONFIG_MAXLOGSIZE);
-		this.maxLogFiles = configuration.getIntProperty(prefix + CONFIG_MAXLOGFILES);
+		this.configMaxlogSize = configuration.getIntProperty(prefix + CONFIG_MAXLOGSIZE);
+		this.configMaxLogFiles = configuration.getIntProperty(prefix + CONFIG_MAXLOGFILES);
 
 	}
 
@@ -106,8 +106,8 @@ public abstract class AbstractAsyncFSWriter extends AbstractAsyncWriter {
 		// Mapping file
 		final MappingFileWriter mappingFileWriter = new MappingFileWriter(path);
 		// Create writer thread
-		this.addWorker(this.initWorker(super.monitoringController, this.blockingQueue, mappingFileWriter, path, this.maxEntriesInFile, this.maxlogSize,
-				this.maxLogFiles));
+		this.addWorker(this.initWorker(super.monitoringController, this.blockingQueue, mappingFileWriter, path, this.configMaxEntriesInFile, this.configMaxlogSize,
+				this.configMaxLogFiles));
 	}
 
 	protected abstract AbstractFsWriterThread initWorker(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,

@@ -44,10 +44,10 @@ public abstract class AbstractAsyncZipWriter extends AbstractAsyncWriter {
 	private static final Log LOG = LogFactory.getLog(AbstractAsyncZipWriter.class);
 
 	private final StringMappingFileWriter mappingFileWriter;
-	private final String path;
-	private final int maxEntriesInFile;
-	private final int buffersize;
-	private final int level;
+	private final String configPath;
+	private final int configMaxEntriesInFile;
+	private final int configBuffersize;
+	private final int configLevel;
 
 	public AbstractAsyncZipWriter(final Configuration configuration) {
 		super(configuration);
@@ -65,18 +65,18 @@ public abstract class AbstractAsyncZipWriter extends AbstractAsyncWriter {
 		if (!(new File(tmpPath)).isDirectory()) {
 			throw new IllegalArgumentException("'" + tmpPath + "' is not a directory.");
 		}
-		this.path = tmpPath;
+		this.configPath = tmpPath;
 		// get number of entries per file
-		this.maxEntriesInFile = configuration.getIntProperty(prefix + CONFIG_MAXENTRIESINFILE);
-		if (this.maxEntriesInFile < 1) {
-			throw new IllegalArgumentException(prefix + CONFIG_MAXENTRIESINFILE + " must be greater than 0 but is '" + this.maxEntriesInFile + "'");
+		this.configMaxEntriesInFile = configuration.getIntProperty(prefix + CONFIG_MAXENTRIESINFILE);
+		if (this.configMaxEntriesInFile < 1) {
+			throw new IllegalArgumentException(prefix + CONFIG_MAXENTRIESINFILE + " must be greater than 0 but is '" + this.configMaxEntriesInFile + "'");
 		}
 		int tmpBuffersize = configuration.getIntProperty(prefix + CONFIG_BUFFER);
 		if (tmpBuffersize <= 0) {
 			LOG.warn("Buffer size has to be greater than zero. Using 8192 instead.");
 			tmpBuffersize = 8192;
 		}
-		this.buffersize = tmpBuffersize;
+		this.configBuffersize = tmpBuffersize;
 		// check compression level and method
 		int tmpLevel = configuration.getIntProperty(prefix + CONFIG_COMPRESS_LEVEL);
 		if ((tmpLevel != Deflater.DEFAULT_COMPRESSION) && (tmpLevel != Deflater.NO_COMPRESSION)
@@ -84,7 +84,7 @@ public abstract class AbstractAsyncZipWriter extends AbstractAsyncWriter {
 			LOG.warn("Illegal compression level. Using default compression level instead.");
 			tmpLevel = Deflater.DEFAULT_COMPRESSION;
 		}
-		this.level = tmpLevel;
+		this.configLevel = tmpLevel;
 	}
 
 	/**
@@ -105,8 +105,8 @@ public abstract class AbstractAsyncZipWriter extends AbstractAsyncWriter {
 	@Override
 	protected final void init() throws Exception {
 		// Create writer thread (should be only one to get a single consistent mapping file)
-		this.addWorker(this.initWorker(super.monitoringController, this.blockingQueue, this.mappingFileWriter, this.path, this.maxEntriesInFile, this.buffersize,
-				this.level));
+		this.addWorker(this.initWorker(super.monitoringController, this.blockingQueue, this.mappingFileWriter, this.configPath, this.configMaxEntriesInFile, this.configBuffersize,
+				this.configLevel));
 	}
 
 	protected abstract AbstractZipWriterThread initWorker(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
