@@ -16,9 +16,11 @@
 
 package kieker.tools.opad.filter;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
@@ -40,14 +42,11 @@ import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 		outputPorts = {
 			@OutputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY),
 			@OutputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_ELSE)
+		},
+		configuration = {
+			@Property(name = AnomalyDetectionFilter.CONFIG_PROPERTY_THRESHOLD, defaultValue = "0.5")
 		})
 public class AnomalyDetectionFilter extends AbstractFilterPlugin {
-
-	public AnomalyDetectionFilter(final Configuration configuration) {
-		super(configuration);
-		final String sThreshold = super.configuration.getStringProperty(CONFIG_PROPERTY_THRESHOLD);
-		this.threshold = Double.parseDouble(sThreshold);
-	}
 
 	public static final String OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY = "anomalyscore_anomaly";
 	public static final String OUTPUT_PORT_ANOMALY_SCORE_ELSE = "anomalyscore_else";
@@ -55,7 +54,17 @@ public class AnomalyDetectionFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_THRESHOLD = "threshold";
 
 	private final double threshold;
-	public Double inputAnomalyScore;
+
+	public AnomalyDetectionFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+		final String sThreshold = super.configuration.getStringProperty(CONFIG_PROPERTY_THRESHOLD);
+		this.threshold = Double.parseDouble(sThreshold);
+	}
+
+	@Deprecated
+	public AnomalyDetectionFilter(final Configuration configuration) {
+		this(configuration, null);
+	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
@@ -68,7 +77,7 @@ public class AnomalyDetectionFilter extends AbstractFilterPlugin {
 	public void inputForecastAndMeasurement(final NamedDoubleTimeSeriesPoint anomalyScore) {
 
 		// TODO check for null value?!
-		if (anomalyScore.getDoubleValue() > this.threshold) {
+		if (anomalyScore.getDoubleValue() >= this.threshold) {
 			super.deliver(OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY, anomalyScore);
 		} else {
 			super.deliver(OUTPUT_PORT_ANOMALY_SCORE_ELSE, anomalyScore);

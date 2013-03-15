@@ -20,9 +20,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -30,30 +32,42 @@ import kieker.common.logging.LogFactory;
 import kieker.tools.opad.record.INamedElement;
 
 /**
- * Filters every incoming events by a given list of names
+ * Filters every incoming events by a given list of names.
  * 
  * @author Tillmann Carlos Bielefeld, Andre van Hoorn
  * 
  */
 @Plugin(name = "Name Filter",
-		outputPorts = { @OutputPort(eventTypes = { INamedElement.class }, name = NameFilter.OUTPUT_PORT_NAME_VALUE) })
+		outputPorts = { @OutputPort(eventTypes = { INamedElement.class }, name = NameFilter.OUTPUT_PORT_NAME_VALUE) },
+		configuration = {
+			@Property(name = NameFilter.CONFIG_PROPERTY_NAME_NAMES, defaultValue = "")
+		})
 public class NameFilter extends AbstractFilterPlugin {
+
+	public static final String INPUT_PORT_NAME_VALUE = "inputValue";
+
+	public static final String OUTPUT_PORT_NAME_VALUE = "outputValue";
+
+	public static final String CONFIG_PROPERTY_NAME_NAMES = "names";
 
 	private static final Log LOG = LogFactory.getLog(NameFilter.class);
 
-	public static final String OUTPUT_PORT_NAME_VALUE = "outputValue";
-	public static final String INPUT_PORT_NAME_VALUE = "inputValue";
-	public static final String CONFIG_PROPERTY_NAME_NAMES = "names";
 	private final Set<String> names = new HashSet<String>();
 
-	public NameFilter(final Configuration configuration) {
-		super(configuration);
+	public NameFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 		final String[] arrNames = configuration.getStringArrayProperty(NameFilter.CONFIG_PROPERTY_NAME_NAMES);
 		this.names.addAll(Arrays.asList(arrNames));
 
 		NameFilter.LOG.info("Started NameFilter filtering for names: " + this.names);
 	}
 
+	@Deprecated
+	public NameFilter(final Configuration configuration) {
+		this(configuration, null);
+	}
+
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

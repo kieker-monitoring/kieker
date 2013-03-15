@@ -19,6 +19,7 @@ package kieker.tools.opad.filter;
 import java.sql.Date;
 import java.util.concurrent.TimeUnit;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -43,8 +44,13 @@ public class ResponseTimeExtractionFilter extends AbstractFilterPlugin {
 
 	// TODO: Add configuration property for Time Unit
 
+	public ResponseTimeExtractionFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+	}
+
+	@Deprecated
 	public ResponseTimeExtractionFilter(final Configuration configuration) {
-		super(configuration);
+		this(configuration, null);
 	}
 
 	@InputPort(name = INPUT_PORT_NAME_VALUE, eventTypes = { OperationExecutionRecord.class })
@@ -56,6 +62,7 @@ public class ResponseTimeExtractionFilter extends AbstractFilterPlugin {
 		super.deliver(OUTPUT_PORT_NAME_VALUE, tspoint);
 	}
 
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

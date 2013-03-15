@@ -45,10 +45,10 @@ public class ForecastingFilterTest {
 	private AnalysisController controller;
 
 	// Variables ForecastingFilter
+	private static final String OP_SIGNATURE_A = "a.A.opA";
 	private ListReader<NamedDoubleTimeSeriesPoint> theReaderForecast;
 	private ForecastingFilter forecasting;
 	private ListCollectionFilter<IForecastResult<Double>> sinkPlugin;
-	private static final String OP_SIGNATURE_A = "a.A.opA";
 
 	// HelperMethods ForecastingFilter
 

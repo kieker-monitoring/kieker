@@ -114,8 +114,8 @@ public class AnomalyDetectionFilterTest {
 		Thread.sleep(1000);
 		thread.terminate();
 
-		Assert.assertEquals(1, this.sinkPluginIfAnomaly.getList().size());
-		Assert.assertEquals(2, this.sinkPluginElse.getList().size());
+		Assert.assertEquals(2, this.sinkPluginIfAnomaly.getList().size());
+		Assert.assertEquals(1, this.sinkPluginElse.getList().size());
 	}
 
 }

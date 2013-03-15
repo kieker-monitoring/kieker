@@ -16,6 +16,7 @@
 
 package kieker.tools.opad.filter;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -39,8 +40,12 @@ public class AnomalyScoreCalculationFilter extends AbstractFilterPlugin {
 	public static final String INPUT_PORT_CURRENT_FORECAST_PAIR = "currentforecast";
 	public static final String OUTPUT_PORT_ANOMALY_SCORE = "anomalyscore";
 
+	public AnomalyScoreCalculationFilter(final Configuration configAnomaly, final IProjectContext projectContext) {
+		super(configAnomaly, projectContext);
+	}
+
 	public AnomalyScoreCalculationFilter(final Configuration configAnomaly) {
-		super(configAnomaly);
+		this(configAnomaly, null);
 	}
 
 	@InputPort(eventTypes = { IForecastMeasurementPair.class }, name = AnomalyScoreCalculationFilter.INPUT_PORT_CURRENT_FORECAST_PAIR)
@@ -62,6 +67,7 @@ public class AnomalyScoreCalculationFilter extends AbstractFilterPlugin {
 		super.deliver(OUTPUT_PORT_ANOMALY_SCORE, new NamedDoubleTimeSeriesPoint(fmp.getTime(), score, fmp.getName()));
 	}
 
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

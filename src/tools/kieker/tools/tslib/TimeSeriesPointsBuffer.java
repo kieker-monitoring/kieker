@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.tslib.timeSeriesPoints;
+package kieker.tools.tslib;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

@@ -19,9 +19,11 @@ package kieker.tools.opad.filter;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.tools.opad.record.ForecastMeasurementPair;
@@ -41,13 +43,34 @@ import kieker.tools.tslib.forecast.IForecaster;
  */
 @Plugin(name = "Forecast Filter", outputPorts = {
 	@OutputPort(eventTypes = { IForecastResult.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECAST),
-	@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT) })
+	@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT) },
+		configuration = {
+			@Property(name = ForecastingFilter.CONFIG_PROPERTY_DELTA_TIME, defaultValue = "1000"),
+			@Property(name = ForecastingFilter.CONFIG_PROPERTY_DELTA_UNIT, defaultValue = "MILLISECONDS"),
+			@Property(name = ForecastingFilter.CONFIG_PROPERTY_FC_METHOD, defaultValue = "MEAN")
+		})
 public class ForecastingFilter extends AbstractFilterPlugin {
+
+	public static final String INPUT_PORT_NAME_TSPOINT = "tspoint";
+	public static final String INPUT_PORT_NAME_TRIGGER = "trigger";
+
+	public static final String OUTPUT_PORT_NAME_FORECAST = "forecast";
+	public static final String OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT = "forecastedcurrent";
+
+	public static final String CONFIG_PROPERTY_DELTA_TIME = "deltatime";
+	public static final String CONFIG_PROPERTY_DELTA_UNIT = "deltaunit";
+	public static final String CONFIG_PROPERTY_FC_METHOD = "fcmethod";
+
+	private static final Object TRIGGER = new Object();
+
+	private final ITimeSeries<Double> timeSeriesWindow;
+	private final ForecastMethod forecastMethod;
+	private NamedDoubleTimeSeriesPoint lastPoint;
 
 	private final IForecaster<Double> forecaster;
 
-	public ForecastingFilter(final Configuration configuration) {
-		super(configuration);
+	public ForecastingFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 
 		final long deltat = configuration.getLongProperty(CONFIG_PROPERTY_DELTA_TIME);
 		final TimeUnit tunit = TimeUnit.valueOf(configuration
@@ -61,25 +84,15 @@ public class ForecastingFilter extends AbstractFilterPlugin {
 		this.forecaster = this.forecastMethod.getForecaster(this.timeSeriesWindow);
 	}
 
-	public static final String INPUT_PORT_NAME_TSPOINT = "tspoint";
-	public static final String INPUT_PORT_NAME_TRIGGER = "trigger";
+	@Deprecated
+	public ForecastingFilter(final Configuration configuration) {
+		this(configuration, null);
+	}
 
-	public static final String OUTPUT_PORT_NAME_FORECAST = "forecast";
-	public static final String OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT = "forecastedcurrent";
-
-	public static final String CONFIG_PROPERTY_DELTA_TIME = "deltatime";
-	public static final String CONFIG_PROPERTY_DELTA_UNIT = "deltaunit";
-	public static final String CONFIG_PROPERTY_FC_METHOD = "fcmethod";
-
-	private final ITimeSeries<Double> timeSeriesWindow;
-	private final ForecastMethod forecastMethod;
-	private NamedDoubleTimeSeriesPoint lastPoint;
-
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}
-
-	private static final Object TRIGGER = new Object();
 
 	@InputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = ForecastingFilter.INPUT_PORT_NAME_TSPOINT)
 	public void inputEvent(final NamedDoubleTimeSeriesPoint input) {
