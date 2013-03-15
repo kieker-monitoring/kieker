@@ -880,6 +880,7 @@
 	<target name="-compile-tests-common" depends="build-kieker.main" description="Compiles the tests for common classes">
 		<path id="common-test-compile-classpath">
 			<fileset dir="${lib.dir}">
+				<include name="hamcrest-core-*.jar" />
 				<include name="junit-*.jar" />
 			</fileset>
 			<!-- This part is necessary for the additional checkstyle checks - to compile them. -->
@@ -898,6 +899,7 @@
 	<target name="-compile-tests-monitoring" depends="-compile-tests-common,build-kieker.main,build-kieker.main.aspectj" description="Compiles the tests for the Kieker.Monitoring component">
 		<path id="monitoring-test-compile-classpath">
 			<fileset dir="${lib.dir}">
+				<include name="hamcrest-core-*.jar" />
 				<include name="junit-*.jar" />
 				<include name="aopalliance-*.jar" />
 				<include name="framework-libs/spring/*.jar" />
@@ -916,6 +918,7 @@
 	<target name="-compile-tests-analysis" depends="-compile-tests-common,build-kieker.main,build-kieker.main.emf" description="Compiles the tests for the Kieker.Analysis component">
 		<path id="analysis-test-compile-classpath">
 			<fileset dir="${lib.dir}">
+				<include name="hamcrest-core-*.jar" />
 				<include name="junit-*.jar" />
 			</fileset>
 			<fileset dir="${dist.dir}">
@@ -930,6 +933,7 @@
 	<target name="-compile-tests-tools" depends="build-kieker.main" description="Compiles the tests for the Kieker tools">
 		<path id="tools-test-compile-classpath">
 			<fileset dir="${lib.dir}">
+				<include name="hamcrest-core-*.jar" />
 				<include name="junit-*.jar" />
 			</fileset>
 			<fileset dir="${dist.dir}">
@@ -1180,10 +1184,11 @@
 	<target name="run-tests-junit" depends="compile-tests" description="Runs the JUnit tests">
 		<path id="kieker.test-junit-run-classpath">
 			<fileset dir="${lib.dir}">
+				<include name="hamcrest-core-*.jar" />
+				<include name="junit-*.jar" />
 				<include name="aopalliance-*.jar" />
 				<include name="aspectjweaver-*.jar" /> <!-- needed for the spring tests -->
 				<include name="commons-logging-*.jar" /> <!-- needed for the spring tests -->
-				<include name="junit-*.jar" />
 				<include name="org.eclipse.emf.*.jar" />
 				<include name="derby-*.jar" />
 				<include name="framework-libs/javax.servlet-*.jar" /> <!-- needed for the cxf, spring? tests -->
@@ -1245,6 +1250,7 @@
 		<findbugs home="${lib.fb.dir}" reportLevel="low" effort="max" maxRank="20" excludeFilter="${lib.fb.dir}/fb-filter.xml" output="xml" outputFile="${tmp.dir}/kieker-fb.xml">
 			<auxClasspath>
 				<fileset dir="${lib.dir}" includes="*.jar" />
+				<fileset dir="${lib.dir}/framework-libs/" includes="**/*.jar" />
 				<fileset dir="${lib.fb.dir}/auxlib" includes="*.jar" />
 				<fileset dir="${lib.cs.dir}/lib/" includes="checkstyle-all.jar" />
 			</auxClasspath>
