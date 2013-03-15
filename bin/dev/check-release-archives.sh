@@ -124,7 +124,7 @@ function assert_file_exists_regular {
 # Asserts the existence of files common to the src and bin releases
 function assert_files_exist_common {
     assert_dir_exists "bin/"
-    assert_file_exists_regular "bin/kieker.logging.properties"
+    assert_file_exists_regular "bin/logging.properties"
     assert_dir_exists "doc/"
     assert_dir_exists "examples/"
     assert_dir_exists "lib/"
