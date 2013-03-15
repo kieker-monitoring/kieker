@@ -246,8 +246,8 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			this.previousFileDate = date;
 		}
 		final StringBuilder sb = new StringBuilder(this.path.length() + FSUtil.FILE_PREFIX.length() + 31);
-		sb.append(this.path).append(File.separatorChar).append(FSUtil.FILE_PREFIX).append(this.dateFormat.format(new java.util.Date(date))). // NOPMD (date)
-				append("-UTC-").append(String.format("%03d", this.sameFilenameCounter)).append(FSUtil.NORMAL_FILE_EXTENSION);
+		sb.append(this.path).append(File.separatorChar).append(FSUtil.FILE_PREFIX).append(this.dateFormat.format(new java.util.Date(date))) // NOPMD (date)
+				.append("-UTC-").append(String.format("%03d", this.sameFilenameCounter)).append(FSUtil.NORMAL_FILE_EXTENSION);
 		return sb.toString();
 	}
 
