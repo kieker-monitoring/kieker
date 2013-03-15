@@ -77,6 +77,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private final int maxEntriesInFile;
 	private final long maxLogSize;
 	private final int maxLogFiles;
+	private final String configPath;
 
 	// only access within synchronized
 	private int entriesInCurrentFileCounter;
@@ -84,9 +85,9 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private final LinkedList<FileNameSize> listOfLogFiles; // NOCS NOPMD (we explicitly need LinekdList here)
 	private long totalLogSize;
 
+	private String path;
 	private MappingFileWriter mappingFileWriter;
 	private String filenamePrefix;
-	private String path;
 	private PrintWriter pos;
 
 	private final DateFormat dateFormat;
@@ -96,10 +97,10 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 
 	public SyncFsWriter(final Configuration configuration) throws IllegalArgumentException {
 		super(configuration);
-		this.autoflush = this.configuration.getBooleanProperty(CONFIG_FLUSH);
-		this.bufferSize = this.configuration.getIntProperty(CONFIG_BUFFER);
+		this.autoflush = configuration.getBooleanProperty(CONFIG_FLUSH);
+		this.bufferSize = configuration.getIntProperty(CONFIG_BUFFER);
 		// get number of entries per file
-		this.maxEntriesInFile = this.configuration.getIntProperty(CONFIG_MAXENTRIESINFILE);
+		this.maxEntriesInFile = configuration.getIntProperty(CONFIG_MAXENTRIESINFILE);
 		if (this.maxEntriesInFile < 1) {
 			throw new IllegalArgumentException(CONFIG_MAXENTRIESINFILE + " must be greater than 0 but is '" + this.maxEntriesInFile + "'");
 		}
@@ -118,29 +119,29 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		// initialize Date
 		this.dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
 		this.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+		// Determine path
+		String pathTmp;
+		if (configuration.getBooleanProperty(CONFIG_TEMP)) {
+			pathTmp = System.getProperty("java.io.tmpdir");
+		} else {
+			pathTmp = configuration.getStringProperty(CONFIG_PATH);
+		}
+		if (!(new File(pathTmp)).isDirectory()) {
+			throw new IllegalArgumentException("'" + pathTmp + "' is not a directory.");
+		}
+		this.configPath = pathTmp;
 	}
 
 	@Override
 	protected void init() throws IllegalArgumentException, IOException {
-		// Determine path
-		String pathTmp;
-		if (this.configuration.getBooleanProperty(CONFIG_TEMP)) {
-			pathTmp = System.getProperty("java.io.tmpdir");
-		} else {
-			pathTmp = this.configuration.getStringProperty(CONFIG_PATH);
-		}
-		File f = new File(pathTmp);
-		if (!f.isDirectory()) {
-			throw new IllegalArgumentException("'" + pathTmp + "' is not a directory.");
-		}
 		// Determine directory for files
 		final String ctrlName = super.monitoringController.getHostname() + "-" + super.monitoringController.getName();
 		final String dateStr = this.dateFormat.format(new java.util.Date()); // NOPMD (Date)
-		final StringBuffer sb = new StringBuffer(pathTmp.length() + FSUtil.FILE_PREFIX.length() + ctrlName.length() + 26);
-		sb.append(pathTmp).append(File.separatorChar).append(FSUtil.FILE_PREFIX).append('-').append(dateStr).append("-UTC-").append(ctrlName)
+		final StringBuffer sb = new StringBuffer(this.configPath.length() + FSUtil.FILE_PREFIX.length() + ctrlName.length() + 26);
+		sb.append(this.configPath).append(File.separatorChar).append(FSUtil.FILE_PREFIX).append('-').append(dateStr).append("-UTC-").append(ctrlName)
 				.append(File.separatorChar);
-		pathTmp = sb.toString();
-		f = new File(pathTmp);
+		final String pathTmp = sb.toString();
+		final File f = new File(pathTmp);
 		if (!f.mkdir()) {
 			throw new IllegalArgumentException("Failed to create directory '" + pathTmp + "'");
 		}

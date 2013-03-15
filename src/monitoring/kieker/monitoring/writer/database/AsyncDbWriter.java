@@ -51,25 +51,31 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 	public static final String CONFIG_NRCONN = PREFIX + "numberOfConnections"; // NOCS (AfterPREFIX)
 	public static final String CONFIG_OVERWRITE = PREFIX + "DropTables"; // NOCS (AfterPREFIX)
 
+	private final String connectionString;
+	private final String tablePrefix;
+	private final boolean overwrite;
+	private final int connections;
+
 	public AsyncDbWriter(final Configuration configuration) throws Exception {
 		super(configuration);
 		try {
-			Class.forName(this.configuration.getStringProperty(CONFIG_DRIVERCLASSNAME)).newInstance();
+			Class.forName(configuration.getStringProperty(CONFIG_DRIVERCLASSNAME)).newInstance();
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 			throw new Exception("DB driver registration failed. Perhaps the driver jar is missing?", ex);
 		}
+		this.connectionString = configuration.getStringProperty(CONFIG_CONNECTIONSTRING);
+		this.tablePrefix = configuration.getStringProperty(CONFIG_TABLEPREFIX);
+		this.overwrite = configuration.getBooleanProperty(CONFIG_OVERWRITE);
+		this.connections = configuration.getIntProperty(CONFIG_NRCONN);
 	}
 
 	@Override
 	public void init() throws Exception {
 		final AtomicInteger tableCounter = new AtomicInteger();
-		final String connectionString = this.configuration.getStringProperty(CONFIG_CONNECTIONSTRING);
-		final String tablePrefix = this.configuration.getStringProperty(CONFIG_TABLEPREFIX);
-		final boolean overwrite = this.configuration.getBooleanProperty(CONFIG_OVERWRITE);
 		Connection connection = null;
 		try {
-			connection = DriverManager.getConnection(connectionString);
-			new DBWriterHelper(connection, tablePrefix, tableCounter, overwrite).createIndexTable();
+			connection = DriverManager.getConnection(this.connectionString);
+			new DBWriterHelper(connection, this.tablePrefix, tableCounter, this.overwrite).createIndexTable();
 		} catch (final SQLException ex) {
 			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 		} finally {
@@ -79,9 +85,9 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 		}
 		final AtomicLong recordId = new AtomicLong();
 		try {
-			for (int i = 0; i < this.configuration.getIntProperty(CONFIG_NRCONN); i++) {
-				this.addWorker(new DbWriterThread(super.monitoringController, super.blockingQueue, connectionString, tablePrefix, tableCounter, recordId,
-						overwrite));
+			for (int i = 0; i < this.connections; i++) {
+				this.addWorker(new DbWriterThread(super.monitoringController, super.blockingQueue, this.connectionString, this.tablePrefix, tableCounter, recordId,
+						this.overwrite));
 			}
 		} catch (final SQLException ex) {
 			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);

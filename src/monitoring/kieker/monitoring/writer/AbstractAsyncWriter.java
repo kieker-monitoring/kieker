@@ -51,7 +51,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		super(configuration);
 		final String prefix = this.getClass().getName() + ".";
 
-		final int queueFullBehaviorTmp = this.configuration.getIntProperty(prefix + CONFIG_BEHAVIOR);
+		final int queueFullBehaviorTmp = configuration.getIntProperty(prefix + CONFIG_BEHAVIOR);
 		if ((queueFullBehaviorTmp < 0) || (queueFullBehaviorTmp > 2)) {
 			LOG.warn("Unknown value '" + queueFullBehaviorTmp + "' for " + prefix + CONFIG_BEHAVIOR + "; using default value 0");
 			this.queueFullBehavior = 0;
@@ -59,14 +59,13 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 			this.queueFullBehavior = queueFullBehaviorTmp;
 		}
 		this.missedRecords = new AtomicLong(0);
-		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.configuration.getIntProperty(prefix + CONFIG_QUEUESIZE));
-		this.maxShutdownDelay = this.configuration.getIntProperty(prefix + CONFIG_SHUTDOWNDELAY);
+		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(configuration.getIntProperty(prefix + CONFIG_QUEUESIZE));
+		this.maxShutdownDelay = configuration.getIntProperty(prefix + CONFIG_SHUTDOWNDELAY);
 	}
 
 	/**
 	 * Make sure that the three required properties always have default values!
 	 */
-
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration(super.getDefaultConfiguration());

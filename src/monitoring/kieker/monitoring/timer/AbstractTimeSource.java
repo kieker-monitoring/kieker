@@ -26,6 +26,10 @@ import kieker.common.logging.LogFactory;
 public abstract class AbstractTimeSource implements ITimeSource {
 	private static final Log LOG = LogFactory.getLog(AbstractTimeSource.class);
 
+	/**
+	 * @deprecated to be removed in Kieker 1.8
+	 */
+	@Deprecated
 	protected final Configuration configuration;
 
 	protected AbstractTimeSource(final Configuration configuration) {

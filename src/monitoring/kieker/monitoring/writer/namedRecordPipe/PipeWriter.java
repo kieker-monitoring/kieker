@@ -36,7 +36,7 @@ public final class PipeWriter extends AbstractMonitoringWriter implements IPipeW
 
 	public PipeWriter(final Configuration configuration) {
 		super(configuration);
-		final String pipeName = this.configuration.getStringProperty(CONFIG_PIPENAME);
+		final String pipeName = configuration.getStringProperty(CONFIG_PIPENAME);
 		if (pipeName.length() == 0) {
 			throw new IllegalArgumentException("Invalid or missing value for property '" + CONFIG_PIPENAME + "': '" + pipeName + "'");
 		}

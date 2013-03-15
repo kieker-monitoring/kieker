@@ -44,11 +44,47 @@ public abstract class AbstractAsyncZipWriter extends AbstractAsyncWriter {
 	private static final Log LOG = LogFactory.getLog(AbstractAsyncZipWriter.class);
 
 	private final StringMappingFileWriter mappingFileWriter;
+	private final String path;
+	private final int maxEntriesInFile;
+	private final int buffersize;
+	private final int level;
 
 	public AbstractAsyncZipWriter(final Configuration configuration) {
 		super(configuration);
 		// Mapping file can be create here (no (real) side effects)
 		this.mappingFileWriter = new StringMappingFileWriter();
+
+		final String prefix = this.getClass().getName() + '.';
+		// Determine path
+		String tmpPath;
+		if (configuration.getBooleanProperty(prefix + CONFIG_TEMP)) {
+			tmpPath = System.getProperty("java.io.tmpdir");
+		} else {
+			tmpPath = configuration.getStringProperty(prefix + CONFIG_PATH);
+		}
+		if (!(new File(tmpPath)).isDirectory()) {
+			throw new IllegalArgumentException("'" + tmpPath + "' is not a directory.");
+		}
+		this.path = tmpPath;
+		// get number of entries per file
+		this.maxEntriesInFile = configuration.getIntProperty(prefix + CONFIG_MAXENTRIESINFILE);
+		if (this.maxEntriesInFile < 1) {
+			throw new IllegalArgumentException(prefix + CONFIG_MAXENTRIESINFILE + " must be greater than 0 but is '" + this.maxEntriesInFile + "'");
+		}
+		int tmpBuffersize = configuration.getIntProperty(prefix + CONFIG_BUFFER);
+		if (tmpBuffersize <= 0) {
+			LOG.warn("Buffer size has to be greater than zero. Using 8192 instead.");
+			tmpBuffersize = 8192;
+		}
+		this.buffersize = tmpBuffersize;
+		// check compression level and method
+		int tmpLevel = configuration.getIntProperty(prefix + CONFIG_COMPRESS_LEVEL);
+		if ((tmpLevel != Deflater.DEFAULT_COMPRESSION) && (tmpLevel != Deflater.NO_COMPRESSION)
+				&& !((tmpLevel >= Deflater.BEST_SPEED) && (tmpLevel <= Deflater.BEST_COMPRESSION))) {
+			LOG.warn("Illegal compression level. Using default compression level instead.");
+			tmpLevel = Deflater.DEFAULT_COMPRESSION;
+		}
+		this.level = tmpLevel;
 	}
 
 	/**
@@ -68,37 +104,9 @@ public abstract class AbstractAsyncZipWriter extends AbstractAsyncWriter {
 
 	@Override
 	protected final void init() throws Exception {
-		final String prefix = this.getClass().getName() + '.';
-		// Determine path
-		String path;
-		if (this.configuration.getBooleanProperty(prefix + CONFIG_TEMP)) {
-			path = System.getProperty("java.io.tmpdir");
-		} else {
-			path = this.configuration.getStringProperty(prefix + CONFIG_PATH);
-		}
-		final File f = new File(path);
-		if (!f.isDirectory()) {
-			throw new IllegalArgumentException("'" + path + "' is not a directory.");
-		}
-		// get number of entries per file
-		final int maxEntriesInFile = this.configuration.getIntProperty(prefix + CONFIG_MAXENTRIESINFILE);
-		if (maxEntriesInFile < 1) {
-			throw new IllegalArgumentException(prefix + CONFIG_MAXENTRIESINFILE + " must be greater than 0 but is '" + maxEntriesInFile + "'");
-		}
-		int buffersize = this.configuration.getIntProperty(prefix + CONFIG_BUFFER);
-		if (buffersize <= 0) {
-			LOG.warn("Buffer size has to be greater than zero. Using 8192 instead.");
-			buffersize = 8192;
-		}
-		// check compression level and method
-		int level = this.configuration.getIntProperty(prefix + CONFIG_COMPRESS_LEVEL);
-		if ((level != Deflater.DEFAULT_COMPRESSION) && (level != Deflater.NO_COMPRESSION)
-				&& !((level >= Deflater.BEST_SPEED) && (level <= Deflater.BEST_COMPRESSION))) {
-			LOG.warn("Illegal compression level. Using default compression level instead.");
-			level = Deflater.DEFAULT_COMPRESSION;
-		}
 		// Create writer thread (should be only one to get a single consistent mapping file)
-		this.addWorker(this.initWorker(super.monitoringController, this.blockingQueue, this.mappingFileWriter, path, maxEntriesInFile, buffersize, level));
+		this.addWorker(this.initWorker(super.monitoringController, this.blockingQueue, this.mappingFileWriter, this.path, this.maxEntriesInFile, this.buffersize,
+				this.level));
 	}
 
 	protected abstract AbstractZipWriterThread initWorker(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,

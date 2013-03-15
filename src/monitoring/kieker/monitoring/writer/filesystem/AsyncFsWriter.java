@@ -37,8 +37,18 @@ public final class AsyncFsWriter extends AbstractAsyncFSWriter {
 
 	private static final Log LOG = LogFactory.getLog(AsyncFsWriter.class);
 
+	private final int buffersize;
+	private final boolean flush;
+
 	public AsyncFsWriter(final Configuration configuration) {
 		super(configuration);
+		int tmpBuffersize = configuration.getIntProperty(CONFIG_BUFFER);
+		if (tmpBuffersize <= 0) {
+			LOG.warn("Buffer size has to be greater than zero. Using 8192 instead.");
+			tmpBuffersize = 8192;
+		}
+		this.buffersize = tmpBuffersize;
+		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH);
 	}
 
 	/**
@@ -55,12 +65,8 @@ public final class AsyncFsWriter extends AbstractAsyncFSWriter {
 	@Override
 	protected final AbstractFsWriterThread initWorker(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
 			final MappingFileWriter mappingFileWriter, final String path, final int maxEntiresInFile, final int maxlogSize, final int maxLogFiles) {
-		int buffersize = this.configuration.getIntProperty(CONFIG_BUFFER);
-		if (buffersize <= 0) {
-			LOG.warn("Buffer size has to be greater than zero. Using 8192 instead.");
-			buffersize = 8192;
-		}
+
 		return new FsWriterThread(monitoringController, writeQueue, mappingFileWriter, path, maxEntiresInFile, maxlogSize, maxLogFiles,
-				this.configuration.getBooleanProperty(CONFIG_FLUSH), buffersize);
+				this.flush, this.buffersize);
 	}
 }

@@ -26,7 +26,10 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 
 	/**
 	 * Constant to be used if no cause required.
+	 * 
+	 * @deprecated to be removed in Kieker 1.8
 	 */
+	@Deprecated
 	public static final String NO_CAUSE = "<no-cause>";
 
 	private static final long serialVersionUID = 8956196561578879420L;

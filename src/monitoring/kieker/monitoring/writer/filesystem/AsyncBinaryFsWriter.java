@@ -41,8 +41,25 @@ public final class AsyncBinaryFsWriter extends AbstractAsyncFSWriter {
 
 	private static final Log LOG = LogFactory.getLog(AsyncBinaryFsWriter.class);
 
+	private final int buffersize;
+	private final BinaryCompressionMethod method;
+
 	public AsyncBinaryFsWriter(final Configuration configuration) {
 		super(configuration);
+		BinaryCompressionMethod tmpMethod;
+		try {
+			tmpMethod = BinaryCompressionMethod.valueOf(configuration.getStringProperty(CONFIG_COMPRESS));
+		} catch (final IllegalArgumentException ex) {
+			LOG.warn("Failed to select compression method. Using NONE instead. " + ex.getMessage());
+			tmpMethod = BinaryCompressionMethod.NONE;
+		}
+		this.method = tmpMethod;
+		int tmpBuffersize = configuration.getIntProperty(CONFIG_BUFFER);
+		if (tmpBuffersize <= 0) {
+			LOG.warn("Buffer size has to be greater than zero. Using 8192 instead.");
+			tmpBuffersize = 8192;
+		}
+		this.buffersize = tmpBuffersize;
 	}
 
 	/**
@@ -59,19 +76,7 @@ public final class AsyncBinaryFsWriter extends AbstractAsyncFSWriter {
 	@Override
 	protected final AbstractFsWriterThread initWorker(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
 			final MappingFileWriter mappingFileWriter, final String path, final int maxEntiresInFile, final int maxlogSize, final int maxLogFiles) {
-		BinaryCompressionMethod method;
-		try {
-			method = BinaryCompressionMethod.valueOf(this.configuration.getStringProperty(CONFIG_COMPRESS));
-		} catch (final IllegalArgumentException ex) {
-			LOG.warn("Failed to select compression method. Using NONE instead. " + ex.getMessage());
-			method = BinaryCompressionMethod.NONE;
-		}
-		int buffersize = this.configuration.getIntProperty(CONFIG_BUFFER);
-		if (buffersize <= 0) {
-			LOG.warn("Buffer size has to be greater than zero. Using 8192 instead.");
-			buffersize = 8192;
-		}
 		return new BinaryFsWriterThread(monitoringController, writeQueue, mappingFileWriter, path, maxEntiresInFile, maxlogSize, maxLogFiles,
-				buffersize, method);
+				this.buffersize, this.method);
 	}
 }

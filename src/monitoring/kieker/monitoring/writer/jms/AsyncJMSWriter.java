@@ -51,15 +51,25 @@ public final class AsyncJMSWriter extends AbstractAsyncWriter {
 	public static final String CONFIG_FACTORYLOOKUPNAME = PREFIX + "FactoryLookupName"; // NOCS (afterPREFIX)
 	public static final String CONFIG_MESSAGETTL = PREFIX + "MessageTimeToLive"; // NOCS (afterPREFIX)
 
+	private final String configContextFactoryType;
+	private final String configProviderUrl;
+	private final String configFactoryLookupName;
+	private final String configTopic;
+	private final long configMessageTimeToLive;
+
 	public AsyncJMSWriter(final Configuration configuration) {
 		super(configuration);
+		this.configContextFactoryType = configuration.getStringProperty(CONFIG_CONTEXTFACTORYTYPE);
+		this.configProviderUrl = configuration.getStringProperty(CONFIG_PROVIDERURL);
+		this.configFactoryLookupName = configuration.getStringProperty(CONFIG_FACTORYLOOKUPNAME);
+		this.configTopic = configuration.getStringProperty(CONFIG_TOPIC);
+		this.configMessageTimeToLive = configuration.getLongProperty(CONFIG_MESSAGETTL);
 	}
 
 	@Override
 	protected void init() throws Exception {
-		this.addWorker(new JMSWriterThread(this.monitoringController, this.blockingQueue, this.configuration.getStringProperty(CONFIG_CONTEXTFACTORYTYPE),
-				this.configuration.getStringProperty(CONFIG_PROVIDERURL), this.configuration.getStringProperty(CONFIG_FACTORYLOOKUPNAME), this.configuration
-						.getStringProperty(CONFIG_TOPIC), this.configuration.getLongProperty(CONFIG_MESSAGETTL)));
+		this.addWorker(new JMSWriterThread(this.monitoringController, this.blockingQueue, this.configContextFactoryType,
+				this.configProviderUrl, this.configFactoryLookupName, this.configTopic, this.configMessageTimeToLive));
 	}
 }
 
